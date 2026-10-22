@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { FolderOpen, LockKeyhole } from 'lucide-react';
+import { FolderOpen, LockKeyhole, Play } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { DashboardCopy } from './dashboard-evidence';
 
@@ -8,15 +8,18 @@ export function ChooseFolder({
   choosing,
   supported,
   copy,
+  variant,
 }: {
   choose: () => void;
   choosing: boolean;
   supported: boolean | null;
   copy: DashboardCopy;
+  variant?: 'outline';
 }) {
   return (
     <Button
       type="button"
+      variant={variant}
       onClick={choose}
       disabled={choosing || supported !== true}
       aria-busy={choosing}
@@ -25,6 +28,38 @@ export function ChooseFolder({
       <FolderOpen aria-hidden="true" />
       {choosing ? copy.choosing : copy.choose}
     </Button>
+  );
+}
+
+/** Replays the recorded Run under public/dashboard-demo/; it needs no folder access, so every browser can open it. */
+export function OpenDemo({ open, choosing, copy }: { open: () => void; choosing: boolean; copy: DashboardCopy }) {
+  return (
+    <Button
+      type="button"
+      onClick={open}
+      disabled={choosing}
+      data-testid="dashboard-demo"
+      className="h-auto min-h-11 min-w-0 max-w-full cursor-pointer whitespace-normal"
+    >
+      <Play aria-hidden="true" />
+      {copy.demo}
+    </Button>
+  );
+}
+
+/** Marks a replayed recording as a demo wherever its Run shows, so nobody reads it as live. */
+export function DemoNotice({ copy }: { copy: DashboardCopy }) {
+  return (
+    <p
+      role="note"
+      data-testid="dashboard-demo-notice"
+      className="flex flex-wrap items-center gap-3 rounded-xl border border-primary/40 bg-primary/5 px-4 py-3 text-caption text-foreground"
+    >
+      <span className="rounded-full bg-primary px-2.5 py-0.5 font-mono text-caption font-semibold uppercase tracking-wider text-primary-foreground">
+        {copy.demoBadge}
+      </span>
+      <span className="min-w-0 flex-1">{copy.demoNote}</span>
+    </p>
   );
 }
 
@@ -63,7 +98,7 @@ export function DashboardEntry({ children, copy }: { children: ReactNode; copy: 
           <FolderOpen aria-hidden="true" className="size-6" />
         </div>
         <h2 className="text-body font-semibold">{copy.emptyTitle}</h2>
-        <p className="max-w-md text-body text-muted-foreground">{copy.emptyBody}</p>
+        <p className="max-w-lg text-body text-muted-foreground">{copy.emptyBody}</p>
         {children}
       </div>
       <ExpectedFiles copy={copy} />

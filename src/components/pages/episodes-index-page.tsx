@@ -2,6 +2,7 @@ import { EpisodeBrowse, type BrowseLabels } from '@/components/landing/episode-b
 import { newestFirst } from '@/components/landing/episode-browse.pure';
 import { cardLabels } from '@/components/landing/episode-card';
 import { episodeCards } from '@/components/landing/episode-cards';
+import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
 import { GalleryHorizontalEnd, Layers, LayoutTemplate } from 'lucide-react';
@@ -70,13 +71,8 @@ export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
   });
 
   return (
-    <main data-testid="episodes-index-page" className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
-      <header className="mb-10 max-w-3xl space-y-3">
-        <h1 className="text-heading font-semibold text-balance">{tPage('title')}</h1>
-        <p data-episodes-intro className="text-body text-muted-foreground text-pretty">
-          {tPage('intro')}
-        </p>
-      </header>
+    <main data-testid="episodes-index-page" className={PAGE_CONTAINER}>
+      <PageHeader title={tPage('title')} intro={<p data-episodes-intro>{tPage('intro')}</p>} />
       <EpisodeBrowse cards={newestFirst(cards)} locale={locale} labels={browseLabels(tLanding)} headingLevel={2} />
       <ReferenceLinks locale={locale} t={tPage} />
     </main>

@@ -3,9 +3,8 @@ import caseStyles from '@/components/landing/fieldnote-case.module.css';
 import { FieldnoteSketch } from '@/components/landing/fieldnote-sketch';
 import styles from '@/components/landing/fieldnotes.module.css';
 import { SocialLinks } from '@/components/social-links';
-import { Button } from '@/components/ui/button';
 import type { Locale } from '@/lib/locale.pure';
-import { ArrowDown, ArrowUpRight, Plus } from 'lucide-react';
+import { ArrowDown, Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 type AboutT = Awaited<ReturnType<typeof getTranslations<'landing.about'>>>;
@@ -122,23 +121,6 @@ function Introduction({ t, locale }: { t: AboutT; locale: Locale }) {
   );
 }
 
-function AboutContact({ t }: { t: AboutT }) {
-  return (
-    <footer className={styles.footer}>
-      <div>
-        <p className={styles.contactTitle}>{t('contactTitle')}</p>
-        <p>{t('closing')}</p>
-      </div>
-      <Button asChild className={styles.contactButton}>
-        <a href="https://calendly.com/hanche2001/30min" target="_blank" rel="noopener noreferrer">
-          {t('contact')} <ArrowUpRight size={18} aria-hidden="true" />
-          <span className="sr-only"> ({t('identity.newTab')})</span>
-        </a>
-      </Button>
-    </footer>
-  );
-}
-
 /** Outcomes stay in each summary; native disclosure reveals the process and its scope. */
 export async function AboutSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.about' });
@@ -160,7 +142,6 @@ export async function AboutSection({ locale }: { locale: Locale }) {
             <CaseNote key={id} id={id} index={index} t={t} />
           ))}
         </div>
-        <AboutContact t={t} />
       </div>
     </section>
   );

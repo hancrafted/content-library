@@ -42,15 +42,14 @@ function agitation(timeline: gsap.core.Timeline, envelope: SVGGElement) {
   }
 }
 
-function indignation(timeline: gsap.core.Timeline, root: HTMLElement) {
+/** The envelope rises and rattles, impatient to be opened; it never changes colour or pulls a face. */
+function impatience(timeline: gsap.core.Timeline, root: HTMLElement) {
   const envelope = root.querySelector('[data-envelope]');
   timeline.to(
     envelope,
     { scaleY: 1, skewX: 0, rotation: 0, y: -35, x: 0, duration: 1, ease: 'power2.inOut' },
     REST_AT + 6,
   );
-  timeline.to(root.querySelectorAll('[data-envelope-red]'), { opacity: 1, duration: 2.5 }, REST_AT + 6);
-  timeline.to(root.querySelector('[data-envelope-face]'), { opacity: 1, duration: 0.7 }, REST_AT + 6.5);
   timeline.to(envelope, { rotation: 4, x: 4, y: -43, duration: 0.07, repeat: 39, yoyo: true }, REST_AT + 7.1);
 }
 
@@ -77,18 +76,7 @@ export function animateEnvelope(timeline: gsap.core.Timeline, root: HTMLElement)
     if (timeline.time() >= REST_AT && timeline.time() < ENVELOPE_BURST_AT) alignTrigger(parts);
   });
   agitation(timeline, parts.envelope);
-  indignation(timeline, root);
-}
-
-/** A reader who opens the envelope before it loses its temper never sees the anger flash past. */
-export function skipIndignation(timeline: gsap.core.Timeline, root: HTMLElement) {
-  const indignation = root.querySelectorAll('[data-envelope-face], [data-envelope-red]');
-  timeline
-    .getTweensOf(indignation)
-    .filter((tween) => tween.startTime() < ENVELOPE_BURST_AT)
-    .forEach((tween) => tween.kill());
-  // A face already fading in would otherwise linger through the burst's own fade-out.
-  gsap.set(indignation, { opacity: 0 });
+  impatience(timeline, root);
 }
 
 function breakSeal(timeline: gsap.core.Timeline, root: HTMLElement) {
@@ -100,11 +88,6 @@ function breakSeal(timeline: gsap.core.Timeline, root: HTMLElement) {
   timeline.to(
     root.querySelector('[data-envelope-seal]'),
     { x: 130, y: -100, rotation: 180, opacity: 0, duration: 0.55 },
-    'burst',
-  );
-  timeline.to(
-    root.querySelectorAll('[data-envelope-face], [data-envelope-red]'),
-    { opacity: 0, duration: 0.3 },
     'burst',
   );
 }

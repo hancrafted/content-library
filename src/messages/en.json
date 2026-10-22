@@ -7,9 +7,10 @@
     "label": "Main",
     "episodes": "Episodes",
     "workshops": "Workshops",
-    "dashboard": "Dashboard",
+    "dashboard": "Content pipeline",
     "contact": "Work with me",
-    "newTab": "opens in a new tab"
+    "newTab": "opens in a new tab",
+    "menu": "Menu"
   },
   "social": {
     "label": "Social profiles",
@@ -162,9 +163,6 @@
       },
       "scope": "Scope & timing",
       "readNote": "See the case evidence",
-      "contactTitle": "Where is the work getting stuck?",
-      "contact": "Let's find the next step",
-      "closing": "Start with the people, the process and the tools. Not another tool in isolation.",
       "provenance": "Selected first-person accounts, cross-checked against my CV and professional profile. These describe my contribution within teams, not independently audited results.",
       "cases": {
         "rib": {
@@ -246,12 +244,20 @@
           "source": "Basis: CV for deployment and pilot scope; professional profile for work on scheduling, OEE dashboards and master data."
         }
       }
+    },
+    "contact": {
+      "title": "Where is the work getting stuck?",
+      "body": "Start with the people, the process and the tools. Not another tool in isolation.",
+      "schedule": "Book a get-to-know call",
+      "emailLabel": "Or write to me",
+      "copy": "Copy email address",
+      "copied": "Copied"
     }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "emptyTitle": "An Episode, straight from your folder.",
-    "emptyBody": "Choose docs/episodes/<slug> to follow its pipeline. Your files stay on this device; nothing is uploaded.",
+    "title": "Content pipeline",
+    "emptyTitle": "Follow one Episode from Brief to pull request.",
+    "emptyBody": "Agents research, specify and build each Episode; I decide at every Gate. This page replays that pipeline from two files. Open the demo to see a finished Run, or choose your own docs/episodes/<slug> folder. Your files stay on this device; nothing is uploaded.",
     "choose": "Choose folder",
     "choosing": "Opening folder…",
     "compatibility": "Folder access needs Chrome or Edge. Choose a folder to grant read-only access for this page.",
@@ -387,12 +393,16 @@
       "previewHelp": "this Job's dev server, opens in a new tab",
       "spec": "Spec :{port}",
       "specHelp": "the Run's Spec server, opens in a new tab"
-    }
+    },
+    "intro": "How an Episode gets made: from Brief to pull request, every agent Job, human Gate and review score in one view.",
+    "demo": "Open the demo",
+    "demoBadge": "Demo",
+    "demoNote": "A recorded Run of the Episode “Onboard AI every time”, replayed from saved files. Nothing here is live, and its output files are not included."
   },
   "meta": {
     "dashboard": {
-      "title": "Pipeline dashboard",
-      "description": "A private, read-only view of an Episode's local pipeline, Runs and review evidence."
+      "title": "Content pipeline",
+      "description": "How an Episode gets made: a read-only view of its pipeline, Runs and review evidence, with a recorded demo Run."
     },
     "episodes": {
       "title": "Episodes",

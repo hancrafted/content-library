@@ -37,7 +37,7 @@ describe('exported landing hero', () => {
     ({ url }) => {
       // ARRANGE
       const $ = exportedPage(url);
-      const booking = 'https://calendly.com/hanche2001/30min';
+      const booking = 'https://calendar.app.google/8KDKbsMjwtDPYTyQ7';
       const target = '_blank';
       const relation = 'noopener noreferrer';
       const section = 'episodes';

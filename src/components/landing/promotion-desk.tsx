@@ -69,7 +69,6 @@ function EnvelopeStock() {
       />
       <path data-envelope-open d="M0 0 139-89 278 0Z" fill="var(--hero-envelope-inner)" />
       <rect width="278" height="167" rx="5" fill="url(#hero-envelope-stock)" stroke="var(--hero-envelope-rule)" />
-      <rect data-envelope-red width="278" height="167" rx="5" fill="var(--hero-envelope-angry)" opacity="0" />
       <path d="M2 2h274M2 165h274" stroke="var(--hero-paper)" strokeOpacity=".55" />
       <path
         d="m0 167 110-93q29-18 58 0l110 93"
@@ -79,7 +78,6 @@ function EnvelopeStock() {
       />
       <g data-envelope-flap opacity="0">
         <path d="m0 0 139 88L278 0Z" fill="var(--hero-envelope-inner)" stroke="var(--hero-envelope-rule)" />
-        <path data-envelope-red d="m0 0 139 88L278 0Z" fill="var(--hero-envelope-angry)" opacity="0" />
       </g>
     </>
   );
@@ -97,9 +95,6 @@ function Envelope({ promotion }: { promotion: string }) {
           strokeWidth="2"
         />
         <EnvelopeDetails promotion={promotion} />
-        <g data-envelope-face opacity="0" stroke="var(--hero-envelope-ink)" strokeWidth="5" strokeLinecap="round">
-          <path d="m96 47 25 11m36 0 25-11m-73 24v7m61-7v7m-48 28q17-17 34 0" />
-        </g>
       </g>
     </g>
   );

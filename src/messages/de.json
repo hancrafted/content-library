@@ -7,9 +7,10 @@
     "label": "Hauptnavigation",
     "episodes": "Episoden",
     "workshops": "Workshops",
-    "dashboard": "Dashboard",
+    "dashboard": "Content-Pipeline",
     "contact": "Mit mir arbeiten",
-    "newTab": "öffnet in einem neuen Tab"
+    "newTab": "öffnet in einem neuen Tab",
+    "menu": "Menü"
   },
   "social": {
     "label": "Profile in sozialen Netzwerken",
@@ -162,9 +163,6 @@
       },
       "scope": "Umfang & Zeitraum",
       "readNote": "Den Fall genauer ansehen",
-      "contactTitle": "Wo kommt die Arbeit ins Stocken?",
-      "contact": "Den nächsten Schritt finden",
-      "closing": "Bei Menschen, Prozessen und Werkzeugen ansetzen. Nicht beim nächsten isolierten Tool.",
       "provenance": "Ausgewählte eigene Erfahrungsberichte, abgeglichen mit meinem Lebenslauf und beruflichen Profil. Sie beschreiben meinen Beitrag im Team, keine unabhängig geprüften Ergebnisse.",
       "cases": {
         "rib": {
@@ -246,12 +244,20 @@
           "source": "Grundlage: Lebenslauf zu Einsatz und Pilotumfang; berufliches Profil zur Arbeit an Planung, OEE-Dashboards und Stammdaten."
         }
       }
+    },
+    "contact": {
+      "title": "Wo kommt die Arbeit ins Stocken?",
+      "body": "Bei Menschen, Prozessen und Werkzeugen ansetzen. Nicht beim nächsten isolierten Tool.",
+      "schedule": "Kennenlerngespräch buchen",
+      "emailLabel": "Oder schreib mir",
+      "copy": "E-Mail-Adresse kopieren",
+      "copied": "Kopiert"
     }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "emptyTitle": "Eine Episode direkt aus deinem Ordner.",
-    "emptyBody": "Wähle docs/episodes/<slug>, um die Pipeline zu verfolgen. Deine Dateien bleiben auf diesem Gerät; nichts wird hochgeladen.",
+    "title": "Content-Pipeline",
+    "emptyTitle": "Eine Episode vom Brief bis zum Pull Request verfolgen.",
+    "emptyBody": "Agenten recherchieren, spezifizieren und bauen jede Episode; an jedem Gate entscheide ich. Diese Seite spielt die Pipeline aus zwei Dateien ab. Öffne die Demo für einen abgeschlossenen Run oder wähle deinen eigenen Ordner docs/episodes/<slug>. Deine Dateien bleiben auf diesem Gerät; nichts wird hochgeladen.",
     "choose": "Ordner wählen",
     "choosing": "Ordner wird geöffnet…",
     "compatibility": "Der Ordnerzugriff benötigt Chrome oder Edge. Die Freigabe gilt nur zum Lesen auf dieser Seite.",
@@ -387,12 +393,16 @@
       "previewHelp": "Dev-Server dieses Jobs, öffnet in einem neuen Tab",
       "spec": "Spec :{port}",
       "specHelp": "Spec-Server dieses Runs, öffnet in einem neuen Tab"
-    }
+    },
+    "intro": "So entsteht eine Episode: vom Brief bis zum Pull Request, jeder Agenten-Job, jedes Gate und jede Review-Bewertung in einer Ansicht.",
+    "demo": "Demo öffnen",
+    "demoBadge": "Demo",
+    "demoNote": "Ein aufgezeichneter Run der Episode „Onboard AI every time“, aus gespeicherten Dateien abgespielt. Nichts davon ist live, und die Ausgabedateien sind nicht enthalten."
   },
   "meta": {
     "dashboard": {
-      "title": "Pipeline-Dashboard",
-      "description": "Eine private, schreibgeschützte Ansicht der lokalen Pipeline, Runs und Reviews einer Episode."
+      "title": "Content-Pipeline",
+      "description": "So entsteht eine Episode: eine schreibgeschützte Ansicht ihrer Pipeline, Runs und Review-Belege, mit einem aufgezeichneten Demo-Run."
     },
     "episodes": {
       "title": "Episoden",

@@ -9,8 +9,7 @@
   margin-inline: auto;
 }
 .masthead,
-.readingKey,
-.footer {
+.readingKey {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -106,28 +105,6 @@
   font:
     0.75rem/1.6 ui-monospace,
     monospace;
-}
-.footer {
-  align-items: center;
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
-}
-.footer p {
-  max-width: 48ch;
-  color: var(--muted-foreground);
-  line-height: 1.6;
-}
-.footer .contactTitle {
-  margin-bottom: 0.5rem;
-  color: var(--foreground);
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.03em;
-}
-.contactButton {
-  min-height: 48px;
-  padding-inline: 1.5rem;
 }
 @media (min-width: 768px) {
   .section {
