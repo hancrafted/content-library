@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { uploadEvent } from './human-in-the-loop-slices.pure';
+import { workflowFor } from './workflow-data';
 import { workflowFile } from './workflow-file.pure';
 import { loadWorkflow } from './workflow.pure';
 import type { Workflow } from './workflow.types';
@@ -86,5 +87,19 @@ describe('edge cases', () => {
     const { name } = workflowFile(odd);
     // ASSERT
     expect(name).toBe('workflow.yml');
+  });
+
+  it('downloads a new-schema file as written and uploads it again as the same Workflow', () => {
+    // ARRANGE
+    const shipped = workflowFor('summer-party', 'en');
+    // ACT
+    const { text } = workflowFile(shipped);
+    const event = uploadEvent(text);
+    // ASSERT
+    expect(text).toContain('templates:');
+    expect(event.type).toBe('upload');
+    expect(event.type === 'upload' && event.workflow.stages.map((stage) => stage.id)).toEqual(
+      shipped.stages.map((stage) => stage.id),
+    );
   });
 });

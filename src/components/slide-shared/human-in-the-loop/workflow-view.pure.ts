@@ -1,5 +1,7 @@
 import { handoffBlocks, parseHandoff, type Handoff } from './handoff.pure';
 import { jobsOf } from './workflow-jobs.pure';
+import { stepsOf as taskStepsOf, type TaskStep } from './workflow-prompts.pure';
+import type { Runtime } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
 import type { Job, Workflow } from './workflow.types';
 
@@ -35,12 +37,23 @@ export type ModalSection =
   | { readonly kind: 'skills'; readonly links: readonly { readonly label: string; readonly href: string }[] }
   | { readonly kind: 'example' };
 
+/** What a new-schema task shows: its steps (do, then review), and why, an example and what good looks like. */
+export interface TaskModalView {
+  readonly steps: readonly TaskStep[];
+  readonly why: string;
+  /** A markdown handoff, drawn by the one generic markdown renderer. */
+  readonly example: string;
+  readonly goodLooksLike: readonly string[];
+}
+
 /** One job inside a stage's modal. */
 export interface JobModalView {
   readonly id: string;
   readonly title: string;
   /** Technical only: the one-time setup block shown with the command. */
   readonly setup?: string;
+  /** A job made from a new-schema task: the popover draws this instead of `steps` and `sections`. */
+  readonly task?: TaskModalView;
   /** The numbered steps, in order: run, check, optional page. */
   readonly steps: readonly StepView[];
   /** The explanation, below the steps. */
@@ -108,11 +121,24 @@ function sectionsOf(job: Job, workflow: Workflow, level: Level): ModalSection[] 
   ];
 }
 
+function taskView(job: Job, workflow: Workflow, level: Level): TaskModalView | undefined {
+  const { task } = job;
+  if (!task || !workflow.file) return undefined;
+  const runtime: Runtime = level === 'technical' ? 'technical' : 'simple';
+  return {
+    steps: taskStepsOf(workflow.file, task, runtime),
+    why: task.details.why,
+    example: task.details.example,
+    goodLooksLike: task.details.goodLooksLike,
+  };
+}
+
 function jobView(job: Job, workflow: Workflow, level: Level): JobModalView {
   const examples = examplesOf(job);
   return {
     id: job.id,
     title: job.title,
+    task: taskView(job, workflow, level),
     setup: level === 'technical' ? workflow.setup : undefined,
     steps: stepsOf(job, level),
     sections: sectionsOf(job, workflow, level),

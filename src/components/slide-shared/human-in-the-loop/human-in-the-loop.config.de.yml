@@ -26,6 +26,13 @@ ui:
   sectionCriteria: So sieht gut aus
   sectionSkills: Skills
   sectionExample: Beispielergebnis
+  doIt: Mach es
+  reviewIt: Prüfe es
+  chatN: 'Chat {n}'
+  sectionWhy: Warum es zählt
+  slotUpload: Markdown-Datei hochladen
+  slotAdd: Weiteren Eintrag hinzufügen
+  tooLong: zu lang für einen Link, daher wird er kopiert und ein leerer Chat geöffnet
   setup: Einmalige Einrichtung
   newTab: öffnet in neuem Tab
 

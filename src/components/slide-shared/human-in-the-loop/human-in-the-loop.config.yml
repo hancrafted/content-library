@@ -26,6 +26,13 @@ ui:
   sectionCriteria: What good looks like
   sectionSkills: Skills
   sectionExample: Example result
+  doIt: Do it
+  reviewIt: Review it
+  chatN: 'Chat {n}'
+  sectionWhy: Why it matters
+  slotUpload: Upload a markdown file
+  slotAdd: Add another entry
+  tooLong: too long for a link, so it is copied and an empty chat opens
   setup: One-time setup
   newTab: opens in a new tab
 

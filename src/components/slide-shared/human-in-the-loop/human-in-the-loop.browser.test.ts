@@ -76,6 +76,12 @@ async function seriousViolations(): Promise<string[]> {
   return result.value;
 }
 
+/** The Vacation Workflow, still on the old schema until it migrates (issue 286): the Short grill and the ticket graph live there. */
+const openVacation = async () => {
+  await press(`${ROOT} [data-control="picker"] button`, /Vacation/);
+  await settle();
+};
+
 const openStage = async (stage: RegExp) => {
   expect(await press(`${ROOT} [data-part="diagram"] button[data-try]`, stage)).toBe(true);
   await settle();
@@ -152,7 +158,7 @@ describe('success cases', () => {
     async () => {
       // ARRANGE
       const copiedWord = 'Copied';
-      const exampleViews = 2;
+      const exampleViews = 1;
       await open('light');
       // ACT
       await openStage(/Requirements/);
@@ -168,14 +174,14 @@ describe('success cases', () => {
       const steps = await js<string[]>(
         `[...document.querySelectorAll('${MODAL} [data-step]')].map((el) => el.dataset.step)`,
       );
-      await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy prompt/);
+      await press(`${MODAL} [data-step="do"] button[aria-label]`, /Copy prompt/);
       await settle();
       const status = await text(`${MODAL} [role="status"]`);
       const copied = await js<string[]>('window.__copied');
       const chatLinks = await js<string[]>(
-        `[...document.querySelectorAll('${MODAL} [data-step="run"] a[target="_blank"]')].map((el) => el.href.split('?')[0])`,
+        `[...document.querySelectorAll('${MODAL} [data-step="do"] a[target="_blank"]')].map((el) => el.href.split('?')[0])`,
       );
-      const exampleSpec = await count(`${MODAL} [data-output="spec"], ${MODAL} [data-output="tickets"]`);
+      const exampleSpec = await count(`${MODAL} [data-output="markdown"]`);
       await js(`document.querySelector('${MODAL}').click()`);
       await settle();
       const afterBackdrop = await count(`${MODAL}`);
@@ -188,10 +194,10 @@ describe('success cases', () => {
       expect(closeIsTopRight).toBe(true);
       expect(prompts).toBe(steps.length);
       expect(expanded).toBe(0);
-      expect(steps).toEqual(['run', 'check', 'page']);
+      expect(steps).toEqual(['do', 'review']);
       expect(status).toBe(copiedWord);
       expect(copied.length).toBe(1);
-      expect(copied[0]).toContain('handoff');
+      expect(copied[0]).toContain('kind: interview');
       expect(copied[0]).not.toContain('{{');
       expect(chatLinks).toEqual(['https://chatgpt.com/', 'https://claude.ai/new']);
       expect(exampleSpec).toBe(exampleViews);
@@ -208,9 +214,11 @@ describe('success cases', () => {
       await open('light');
       await openStage(/Interview/);
       // ACT
-      await press(`${MODAL} [data-step="run"] button[aria-expanded]`, /Prompt/);
+      await press(`${MODAL} [data-step="do"] button[aria-expanded]`, /Prompt/);
       await settle();
-      const shown = await js<boolean>(`!document.querySelector('${MODAL} [data-step="run"] pre').hidden`);
+      const shown = await js<boolean>(
+        `!document.querySelector('${MODAL} [data-step="do"] [data-prompt-text]').parentElement.hidden`,
+      );
       await press(`${MODAL} header button`, /Close/);
       await settle();
       // ASSERT
@@ -225,6 +233,7 @@ describe('success cases', () => {
     async () => {
       // ARRANGE
       await open('light');
+      await openVacation();
       await openStage(/Interview/);
       const copyRun = async () => {
         await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy prompt/);
@@ -252,6 +261,7 @@ describe('success cases', () => {
       await open('light');
       await press(`${ROOT} [data-part="toolbar"] button`, /Technical/);
       await settle();
+      await openVacation();
       await openStage(/Interview/);
       const copyRun = async () => {
         await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy command/);
@@ -336,6 +346,7 @@ describe('success cases', () => {
       // ARRANGE
       const doneStatus = 'done';
       await open('light');
+      await openVacation();
       await openStage(/Requirements/);
       const status = (id: string) =>
         js<string | null>(`document.querySelector('${MODAL} [data-ticket="${id}"]')?.dataset.status ?? null`);

@@ -108,7 +108,7 @@ stages:
     move: B
     tasks:
       - id: pieces
-        title: Break the task into pieces
+        title: Pieces
         output: plan
         template: plan
         slots: []
@@ -185,7 +185,7 @@ stages:
     move: I
     tasks:
       - id: interview
-        title: Let the AI interview you
+        title: AI asks you
         output: interview
         template: interview
         slots:
@@ -374,7 +374,7 @@ stages:
     move: B
     tasks:
       - id: tickets
-        title: Cut the spec into tickets
+        title: Tickets
         output: tickets
         template: tickets
         slots:
@@ -469,7 +469,7 @@ stages:
     move: F
     tasks:
       - id: venue
-        title: Ticket
+        title: Chat
         output: research
         template: research
         fanOut: 3
@@ -562,7 +562,7 @@ stages:
     gate: 2
     tasks:
       - id: compare
-        title: Rank the results
+        title: Rank results
         output: comparison
         template: comparison
         slots:
@@ -734,7 +734,7 @@ stages:
     learningGoal: Close the loop yourself. Read the comparison and decide what goes to the people who sign it off.
     tasks:
       - id: recommend
-        title: Recommendation
+        title: Write-up
         output: recommendation
         template: recommendation
         slots:

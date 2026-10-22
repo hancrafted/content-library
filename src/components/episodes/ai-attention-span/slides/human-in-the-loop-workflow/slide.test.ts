@@ -115,7 +115,7 @@ describe('success cases', () => {
 
   it('draws every stage with its jobs and the fan-out and fan-in of brief the venue', () => {
     // ARRANGE
-    const expected = { jobLists: 7, workers: ['Ticket 1', 'Ticket 2', 'Ticket 3'], card: true, connectors: 6, fans: 2 };
+    const expected = { jobLists: 7, workers: ['Chat 1', 'Chat 2', 'Chat 3'], card: true, connectors: 6, fans: 2 };
     // ACT
     const $ = scene('en');
     const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');

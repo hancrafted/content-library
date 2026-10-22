@@ -5,6 +5,7 @@ import { jobRole } from './diagram-model.pure';
 import summerPartyEn from './summer-party.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import type { WorkflowFile } from './workflow-schema.types';
+import { workflowView } from './workflow-view.pure';
 
 const workflow = workflowOf(parse(summerPartyEn) as WorkflowFile);
 const jobs = workflow.stages.flatMap((stage) => stage.jobs);
@@ -74,5 +75,18 @@ describe('edge cases', () => {
     expect(venue?.task?.fanOut).toBe(chats);
     expect(prompt).toContain('## Your ticket');
     expect(prompt).not.toContain('{{');
+  });
+
+  it('gives the popover of a task its do and review steps, per chat in Simple and one orchestrator in Technical', () => {
+    // ARRANGE
+    const find = (level: 'simple' | 'technical') =>
+      workflowView(workflow, { level }).stages.find((stage) => stage.id === 'research')?.jobs[0]?.task;
+    // ACT
+    const simple = find('simple');
+    const technical = find('technical');
+    // ASSERT
+    expect(simple?.steps.map((step) => step.id)).toEqual(['do', 'do', 'do', 'review']);
+    expect(technical?.steps.map((step) => step.id)).toEqual(['do', 'review']);
+    expect(simple?.goodLooksLike.length).toBeGreaterThan(0);
   });
 });

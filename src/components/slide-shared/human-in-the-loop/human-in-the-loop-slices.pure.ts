@@ -1,4 +1,6 @@
 import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps } from './human-in-the-loop.types';
+import { workflowOf } from './workflow-file-adapter.pure';
+import { isNewSchema, loadWorkflow as loadFile } from './workflow-loader.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
 import type { WorkflowView } from './workflow-view.pure';
 import { loadWorkflow } from './workflow.pure';
@@ -16,10 +18,19 @@ export function shownWorkflow(data: HumanInTheLoopData, state: WorkflowState): W
 
 /** What an uploaded file's text becomes: the event that loads it, or the one that reports its problems. */
 export function uploadEvent(yaml: string): WorkflowEvent {
+  if (isNewSchema(yaml)) return uploadedFile(yaml);
   const result = loadWorkflow(yaml, yaml);
   return 'problems' in result
     ? { type: 'upload-failed', problems: result.problems }
     : { type: 'upload', workflow: result.workflow };
+}
+
+/** An uploaded file in the new schema: the event that loads it, or the one that reports its problems. */
+function uploadedFile(yaml: string): WorkflowEvent {
+  const result = loadFile(yaml);
+  return 'problems' in result
+    ? { type: 'upload-failed', problems: result.problems }
+    : { type: 'upload', workflow: workflowOf(result.file) };
 }
 
 /** The callbacks the parts send events up by. */

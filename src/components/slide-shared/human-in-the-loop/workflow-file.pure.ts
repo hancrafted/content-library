@@ -1,3 +1,4 @@
+import { stringify } from 'yaml';
 import { workflowToYaml } from './workflow-yaml.pure';
 import type { Workflow } from './workflow.types';
 
@@ -12,5 +13,9 @@ export function workflowFile(workflow: Workflow): {
   readonly type: string;
 } {
   const slug = workflow.id.replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '') || 'workflow';
-  return { name: `${slug}.yml`, text: workflowToYaml(workflow), type: WORKFLOW_FILE_TYPE };
+  return {
+    name: `${slug}.yml`,
+    text: workflow.file ? stringify(workflow.file) : workflowToYaml(workflow),
+    type: WORKFLOW_FILE_TYPE,
+  };
 }
