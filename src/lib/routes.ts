@@ -1,4 +1,4 @@
-import { LOCALES, type Locale } from './locale.pure';
+import { LOCALES, localizePath, type Locale } from './locale.pure';
 
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */
 export const ROUTES = {
@@ -63,5 +63,16 @@ export function pageLocales(page: PageRef): readonly Locale[] {
 
 /** The logical path a page is exported at. */
 export function routeOf(page: PageRef): string {
-  return typeof page === 'string' ? ROUTES[page] : episodeRoute(page.episode);
+  return isEpisodePage(page) ? episodeRoute(page.episode) : ROUTES[page];
+}
+
+/** Whether a page is an Episode's, narrowing to the `{ episode }` form. */
+export function isEpisodePage(page: PageRef): page is { readonly episode: EpisodeSlug } {
+  return typeof page !== 'string';
+}
+
+/** The URL a logical path is served at under `siteUrl`: `trailingSlash` makes it the canonical, the origin alone for the home page. */
+export function servedUrl(siteUrl: string, route: string, locale: Locale): string {
+  const path = localizePath(route, locale);
+  return path === '/' ? `${siteUrl}/` : `${siteUrl}${path}/`;
 }

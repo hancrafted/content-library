@@ -33,7 +33,7 @@ function SlideHeader({ card }: { card: MethodCard }) {
 
   return (
     <div>
-      <div className="inline-flex items-center gap-2 mb-3 font-mono text-xs uppercase tracking-widest text-primary font-bold">
+      <div className="inline-flex items-center gap-2 mb-3 font-mono text-xs uppercase tracking-widest font-bold text-[var(--method-fg)]">
         <Icon className="h-3.5 w-3.5" aria-hidden="true" />
         <span>
           STEP {card.step} // {card.title}

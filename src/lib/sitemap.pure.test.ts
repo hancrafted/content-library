@@ -5,6 +5,8 @@ import { robotsFor, sitemapEntries } from './sitemap.pure';
 const SITE = 'https://hancrafted.net';
 const allPublished = () => 'published' as const;
 
+const undated = () => undefined;
+
 describe('success cases', () => {
   it('lists the English page at the bare root and the German one at /de, each with reciprocal alternates', () => {
     // ARRANGE
@@ -16,7 +18,7 @@ describe('success cases', () => {
     };
     const german = { ...expected, url: `${SITE}/de/episodes/` };
     // ACT
-    const entries = sitemapEntries(SITE, allPublished);
+    const entries = sitemapEntries(SITE, allPublished, undated);
     // ASSERT
     expect(entries).toContainEqual(expected);
     expect(entries).toContainEqual(german);
@@ -26,9 +28,19 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [`${SITE}/`, `${SITE}/de/`];
     // ACT
-    const urls = sitemapEntries(SITE, allPublished).map((entry) => entry.url);
+    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
     // ASSERT
     expect(urls).toEqual(expect.arrayContaining(expected));
+  });
+
+  it('dates an Episode entry by its publish date and leaves undated pages without one', () => {
+    // ARRANGE
+    const publishedOn = (slug: string) => (slug === 'ai-attention-span' ? ('2026-10-21' as const) : undefined);
+    // ACT
+    const entries = sitemapEntries(SITE, allPublished, publishedOn);
+    // ASSERT
+    expect(entries.find((e) => e.url === `${SITE}/de/episodes/ai-attention-span/`)?.lastModified).toBe('2026-10-21');
+    expect(entries.find((e) => e.url === `${SITE}/`)?.lastModified).toBeUndefined();
   });
 });
 
@@ -37,7 +49,7 @@ describe('failure cases', () => {
     // ARRANGE
     const dashboard = `${SITE}/dashboard/`;
     // ACT
-    const urls = sitemapEntries(SITE, allPublished).map((entry) => entry.url);
+    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
     // ASSERT
     expect(urls).not.toContain(dashboard);
   });
@@ -50,7 +62,7 @@ describe('edge cases', () => {
     const published = EPISODE_SLUGS[1];
     const statusOf = (slug: string) => (slug === upcoming ? ('upcoming' as const) : ('published' as const));
     // ACT
-    const urls = sitemapEntries(SITE, statusOf).map((entry) => entry.url);
+    const urls = sitemapEntries(SITE, statusOf, undated).map((entry) => entry.url);
     // ASSERT
     expect(urls).not.toContain(`${SITE}/episodes/${upcoming}/`);
     expect(urls).not.toContain(`${SITE}/de/episodes/${upcoming}/`);

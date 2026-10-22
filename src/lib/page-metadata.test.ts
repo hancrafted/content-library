@@ -104,6 +104,51 @@ describe('success cases', () => {
     // ASSERT
     expect(metadata.robots).toBe(expected);
   });
+
+  it('gives the landing page a website Open Graph card at its canonical, with locale and alternate locale', () => {
+    // ARRANGE
+    const expected = {
+      type: 'website',
+      url: '/de',
+      siteName: 'hancrafted',
+      locale: 'de_DE',
+      alternateLocale: ['en_US'],
+    };
+    // ACT
+    const card = pageMetadata('home', 'de').openGraph;
+    // ASSERT
+    expect(card).toMatchObject(expected);
+  });
+
+  it('gives an Episode an article card carrying its publish date', () => {
+    // ARRANGE
+    const copy = { ...COPY, publishedOn: '2026-10-20' as const };
+    // ACT
+    const card = pageMetadata({ episode: 'page-template' }, 'en', copy).openGraph as Record<string, unknown>;
+    // ASSERT
+    expect(card).toMatchObject({ type: 'article', url: '/episodes/page-template', publishedTime: '2026-10-20' });
+  });
+
+  it('repeats title and description on the card and falls back to the site-wide 1200x630 image', () => {
+    // ARRANGE
+    const expectedImage = { url: '/og-image.png', width: 1200, height: 630 };
+    // ACT
+    const metadata = pageMetadata({ episode: 'page-template' }, 'de', COPY);
+    // ASSERT
+    expect(metadata.openGraph).toMatchObject({ title: 'Seitenvorlage', description: 'Diese Episode kopieren.' });
+    expect(metadata.openGraph?.images).toEqual([expect.objectContaining(expectedImage)]);
+    expect(metadata.twitter).toMatchObject({ card: 'summary_large_image', title: 'Seitenvorlage' });
+    expect(metadata.twitter?.images).toEqual(['/og-image.png']);
+  });
+
+  it('names no alternate locale on an English-only page', () => {
+    // ARRANGE
+    const expected = undefined;
+    // ACT
+    const card = pageMetadata('dashboard', 'en').openGraph as Record<string, unknown>;
+    // ASSERT
+    expect(card.alternateLocale).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {

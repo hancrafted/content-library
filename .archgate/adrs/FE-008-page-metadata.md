@@ -4,9 +4,9 @@ id: FE-008
 title: 'Page Metadata'
 domain: frontend
 rules: true
-files: ['src/app/**/*.tsx']
-paths: ['src/app/**/*.{ts,tsx}', 'src/lib/{page-metadata,site-url,sitemap}*.ts']
-description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl Translation files, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only.'
+files: ['src/app/**/*.tsx', 'src/lib/structured-data*.ts']
+paths: ['src/app/**/*.{ts,tsx}', 'src/lib/{page-metadata,site-url,sitemap,structured-data}*.ts']
+description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl Translation files, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only. Indexable pages also carry social cards and structured data.'
 ---
 
 # Page Metadata
@@ -53,6 +53,12 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list `PAGES` minus `isNoindex`, which `pageMetadata` also applies. `not-found.tsx` is a separate UI decision.
 2. An unknown locale prefix is no file in `out/`, so Pages serves its 404. `resolveLocale()`'s `notFound()` only narrows the type; nothing relies on it.
 
+### 6. Indexable pages carry cards and structured data
+
+1. Every indexable page MUST carry social cards and structured data, so a shared link previews and search understands Episodes: the landing page as a person and website, a published Episode as an article, with its recording where one exists.
+2. An upcoming or `noindex` page MUST carry neither.
+3. Each page's card URL and structured-data URL MUST equal its canonical.
+
 ## Do's and Don'ts
 
 ### Do's
@@ -61,7 +67,8 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 2. **DO** add a new page's `PageRef`, title and description in both locales before its route. (Decisions 1 and 2)
 3. **DO** write each locale's title and description for a searcher in that language, not as translations of each other. (Decision 2)
 4. **DO** keep root layouts to `siteMetadata(locale, SITE_URL)`. (Decision 4, 📜 Rule: `layout-holds-site-metadata-only`)
-5. **DO** run `npm run build` then `npm run test:build` after touching metadata, routes or locales. (Decisions 1 and 3)
+5. **DO** give a new indexable page its cards and structured data, and none to an upcoming one. (Decision 6)
+6. **DO** run `npm run build` then `npm run test:build` after touching metadata, routes or locales. (Decisions 1, 3 and 6)
 
 ### Don'ts
 
@@ -70,6 +77,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 3. **DON'T** hard-code the site origin, or read `SITE_URL` outside `src/lib/site-url.ts`. (Decision 3)
 4. **DON'T** rename `SITE_URL` to `NEXT_PUBLIC_SITE_URL`. (Decision 3)
 5. **DON'T** add `not-found.tsx` under this record, nor a hand-kept page list or `noindex` exclusion to the sitemap. (Decision 5)
+6. **DON'T** spell a card or structured-data URL apart from the canonical, nor emit either on a `noindex` page. (Decision 6)
 
 ## Consequences
 
@@ -95,12 +103,10 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 1. **Rules** (archgate, error): `page-exports-metadata` (§1.1), `layout-holds-site-metadata-only` (§4). A comment naming `description` in a layout is a known false positive.
 2. **Types:** a missing Translation key or unknown `PageRef` fails `tsc` (§1.3, §2.1).
-3. **Unit tests:** `pageMetadata` canonical, alternates and `x-default`; `SITE_URL` fallback and throw (§1.2, §3.2).
-4. **Post-build test** (CI and deploy, before upload): one canonical per page equal to its served URL under `SITE_URL`; every alternate resolves to a file in `out/` and links back.
+3. **Unit tests:** `pageMetadata` canonical, alternates, `x-default`, cards; `SITE_URL` fallback and throw; structured data present for a published Episode and absent for an unpublished one (§1.2, §3.2, §6.1, §6.2).
+4. **Post-build test** (CI and deploy, before upload): one canonical per page equal to its served URL under `SITE_URL`; every alternate resolves to a file in `out/` and links back; card and structured-data URLs equal the canonical (§6.3).
 
-**Known gap:** Open Graph and Twitter cards, structured data.
-
-**Manual review duties:** copy reads well to a searcher in its own language (§2); no route spells a URL or copy outside `pageMetadata` (§1); `SITE_URL` stays set on both deploy steps (Risk 1).
+**Manual review duties:** copy reads well to a searcher in its own language (§2); card and structured-data content fits the page (§6.1); no route spells a URL or copy outside `pageMetadata` (§1); `SITE_URL` stays set on both deploy steps (Risk 1).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

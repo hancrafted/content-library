@@ -16,7 +16,7 @@ function NodeSymbol({ isPassed, isCurrent, letter }: NodeSymbolProps) {
 
   const letterClasses = `absolute font-mono text-base sm:text-lg tracking-tight px-1.5 py-0.5 rounded transition-all duration-300 ease-out transform ${
     isPassed ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'
-  } ${isCurrent ? 'font-black scale-110 text-primary' : 'font-bold text-current opacity-75'}`;
+  } ${isCurrent ? 'font-black scale-110 text-[var(--method-fg)]' : 'font-bold text-current opacity-75'}`;
 
   return (
     <div className="relative flex items-center justify-center min-w-[28px] sm:min-w-[32px] h-7 sm:h-8">
@@ -30,7 +30,7 @@ function NodeSymbol({ isPassed, isCurrent, letter }: NodeSymbolProps) {
 
 function NodeWord({ isCurrent, word }: { isCurrent: boolean; word: string }) {
   const wordClasses = `font-mono text-[8px] sm:text-[9px] md:text-[10px] tracking-[0.14em] uppercase transition-all duration-300 ease-out transform ${
-    isCurrent ? 'translate-y-0 opacity-100 font-bold text-primary' : 'translate-y-2 opacity-0'
+    isCurrent ? 'translate-y-0 opacity-100 font-bold text-[var(--method-fg)]' : 'translate-y-2 opacity-0'
   }`;
 
   return (

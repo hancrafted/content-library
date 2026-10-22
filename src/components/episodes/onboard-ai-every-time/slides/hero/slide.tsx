@@ -20,7 +20,7 @@ export const hero = slide({
       <SlideFrame className="mt-10">
         <div className="grid grid-cols-1 items-end gap-8 md:grid-cols-12">
           <ol className="flex items-end justify-center gap-4 md:col-span-9" aria-label={t('badgeRow')}>
-            <li className="w-1/4 -rotate-3 opacity-50">
+            <li className="w-1/4 -rotate-3 opacity-50" data-a11y-decorative>
               <VisitorBadge
                 job={t('badges.monday.job')}
                 weekday={t('badges.monday.weekday')}
@@ -29,7 +29,7 @@ export const hero = slide({
                 ai
               />
             </li>
-            <li className="w-1/4 -rotate-1 opacity-75">
+            <li className="w-1/4 -rotate-1 opacity-75" data-a11y-decorative>
               <VisitorBadge
                 job={t('badges.tuesday.job')}
                 weekday={t('badges.tuesday.weekday')}

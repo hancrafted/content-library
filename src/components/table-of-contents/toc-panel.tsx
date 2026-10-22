@@ -100,7 +100,7 @@ function SectionMarker(props: { view: TocView; section: TocSection; number: stri
     <NumberToggle
       open={view.open.has(section.id)}
       controls={`${view.idPrefix}toc-items-${section.id}`}
-      label={`${props.toggleLabel}: ${section.title}`}
+      label={`${props.number}. ${props.toggleLabel}: ${section.title}`}
       testId={`toc-toggle-${section.id}`}
       settled={view.settled}
       onToggle={() => view.toggle(section.id)}

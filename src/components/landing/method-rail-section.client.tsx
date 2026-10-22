@@ -90,7 +90,7 @@ function useRailScrub(options: ScrubOptions) {
 function RailHeader({ title, hint }: { title: string; hint: string }) {
   return (
     <div className="absolute top-20 sm:top-24 left-0 right-0 z-20 px-8 sm:px-16 flex items-center justify-between pointer-events-none text-[var(--method-fg)]">
-      <div className="font-mono text-xs font-bold tracking-widest uppercase text-primary">{title}</div>
+      <div className="font-mono text-xs font-bold tracking-widest uppercase">{title}</div>
       <div className="font-mono text-xs uppercase opacity-60">{hint}</div>
     </div>
   );

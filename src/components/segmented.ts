@@ -4,4 +4,4 @@ export const SEGMENTED_GROUP = 'inline-flex items-center gap-0.5 rounded-lg bord
 export const segmentedItem = (active: boolean) =>
   active
     ? 'bg-background text-foreground shadow-sm hover:bg-background dark:bg-accent dark:hover:bg-accent'
-    : 'text-muted-foreground';
+    : 'text-foreground/70';
