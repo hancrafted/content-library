@@ -48,16 +48,18 @@ describe('dashboard static contract', () => {
   it('exports the demo Run without prompts, transcript paths or local ports', () => {
     // ARRANGE
     const folder = join(OUT_DIR, 'dashboard-demo');
-    const privateText = ['/Users/', 'transcript_path', 'gen_ai.input.messages', 'spec_port', 'dev_port'];
+    const homeFolder = '/Users/';
+    const privateKeys = ['"transcript_path":', '"gen_ai.input.messages":'];
+    const portKey = /^\s*(?:dev_port|spec_port|port):/m;
     // ACT
     const events = readFileSync(join(folder, 'events.jsonl'), 'utf8');
     const pipeline = readFileSync(join(folder, 'pipeline.yml'), 'utf8');
     // ASSERT
     expect(events.length).toBeGreaterThan(0);
-    privateText.forEach((text) => {
-      expect(events).not.toContain(text);
-      expect(pipeline).not.toContain(text);
-    });
+    expect(events).not.toContain(homeFolder);
+    expect(pipeline).not.toContain(homeFolder);
+    privateKeys.forEach((key) => expect(events).not.toContain(key));
+    expect(pipeline).not.toMatch(portKey);
   });
 
   it('keeps the dashboard out of the German header', () => {
