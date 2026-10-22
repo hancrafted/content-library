@@ -13,7 +13,7 @@ export interface Producer {
 }
 
 /** The names a task hands on, with what each one is. */
-export function namesOf(task: TaskDef, stage: StageDef): ReadonlyMap<string, Producer> {
+export function producersOf(task: TaskDef, stage: StageDef): ReadonlyMap<string, Producer> {
   const names = new Map<string, Producer>();
   if (task.fanOut === undefined) return names.set(task.output, { task, stage, all: false });
   names.set(task.output, { task, stage, all: true });
@@ -22,10 +22,10 @@ export function namesOf(task: TaskDef, stage: StageDef): ReadonlyMap<string, Pro
 }
 
 /** The names handed on by the stages before the `index`th, in order; a later task of the same stage is not earlier. */
-export function namesBefore(file: WorkflowFile, index: number): ReadonlyMap<string, Producer> {
+export function producersBefore(file: WorkflowFile, index: number): ReadonlyMap<string, Producer> {
   const names = new Map<string, Producer>();
   for (const stage of file.stages.slice(0, index)) {
-    for (const task of stage.tasks) for (const [name, producer] of namesOf(task, stage)) names.set(name, producer);
+    for (const task of stage.tasks) for (const [name, producer] of producersOf(task, stage)) names.set(name, producer);
   }
   return names;
 }
@@ -34,8 +34,8 @@ export function namesBefore(file: WorkflowFile, index: number): ReadonlyMap<stri
 export const tasksOf = (file: WorkflowFile): TaskDef[] => file.stages.flatMap((stage) => stage.tasks);
 
 /** The ids of the tasks a task takes from: the producers of its slots, once each. */
-export function sourcesOf(file: WorkflowFile, stageIndex: number, task: TaskDef): string[] {
-  const names = namesBefore(file, stageIndex);
+export function producerIdsOf(file: WorkflowFile, stageIndex: number, task: TaskDef): string[] {
+  const names = producersBefore(file, stageIndex);
   const ids = task.slots.flatMap((slot) => names.get(slot.id)?.task.id ?? []);
   return [...new Set(ids)];
 }

@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import styles from './tip.module.css';
 
 /*
- * The one tooltip of the visual (toolbar icons, BRIEF circles, prompt icons, the Short toggle, the modal X). It shows
+ * The one tooltip of the visual (toolbar icons, BRIEF circles, prompt icons, the modal X). It shows
  * on hover and on keyboard focus, stays while the pointer moves onto it, and Escape dismisses it without moving the
  * pointer or focus (WCAG 1.4.13). The host wraps the control; the control keeps its own accessible name, so the
  * bubble is hidden from assistive technology and never carries information the name does not.

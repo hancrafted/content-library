@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 import { useId, useState } from 'react';
 import { Tip } from '../tip/tip.client';
-import { PromptActions, ShortToggle } from './prompt-actions.client';
+import { PromptActions } from './prompt-actions.client';
 import { PromptBody } from './prompt-body.client';
 import { joinPrompt, type PromptSection, type SlotValues } from './prompt-sections.pure';
 import type { PromptKit, PromptView } from './try-prompt.types';
@@ -13,9 +13,9 @@ export type { PromptSection, PromptSlot, PromptTechnique } from './prompt-sectio
 export type { PromptKit, TryPromptWords } from './try-prompt.types';
 
 /*
- * One prompt as a disclosure, collapsed by default: a row with the label, the Short toggle where there is one and
- * two icon buttons (copy, ChatGPT), and the prompt text below when opened. Whether it is open is local to
- * this leaf (it passes the reload test, FE-001); the Short choice is the parent's.
+ * One prompt as a disclosure, collapsed by default: a row with the label and two
+ * icon buttons (copy, ChatGPT), and the prompt text below when opened. Whether it is open is local to
+ * this leaf (it passes the reload test, FE-001).
  *
  * A prompt may come as sections: opened, each shows its H2 and, when it has a purpose with an explanation, a marker
  * whose tooltip says what that part teaches. Its paste-in slots take a paste or a markdown upload and fill the
@@ -52,10 +52,10 @@ function Toggle({
   );
 }
 
-/** The sections a prompt shows: its own, or its text (the short variant when on) as the one section. */
-function sectionsOf(prompt: PromptView, short: boolean): readonly PromptSection[] {
+/** The sections a prompt shows: its own, or its text as the one section. */
+function sectionsOf(prompt: PromptView): readonly PromptSection[] {
   if (prompt.sections) return prompt.sections;
-  return [{ text: short && prompt.short !== undefined ? prompt.short : prompt.text }];
+  return [{ text: prompt.text }];
 }
 
 interface TryPromptProps {
@@ -87,7 +87,7 @@ function useSlotValues({ values, onChange }: TryPromptProps) {
   return { current, onValue };
 }
 
-/** The row above the text: the disclosure toggle, the Short toggle where there is one, and the icon buttons. */
+/** The row above the text: the disclosure toggle and the icon buttons. */
 function Row({ prompt, kit, open, panel, text, onToggle }: RowProps) {
   const command = prompt.kind === 'command';
   const { words } = kit;
@@ -100,7 +100,6 @@ function Row({ prompt, kit, open, panel, text, onToggle }: RowProps) {
         tip={words.toggleTip ?? (command ? words.commandLabel : words.promptLabel)}
         onToggle={onToggle}
       />
-      {prompt.short !== undefined && <ShortToggle kit={kit} />}
       <PromptActions text={text} copyLabel={command ? words.copyCommand : words.copyPrompt} kit={kit} />
     </div>
   );
@@ -111,7 +110,7 @@ export function TryPrompt(props: TryPromptProps) {
   const [open, setOpen] = useState(false);
   const panel = useId();
   const { current, onValue } = useSlotValues(props);
-  const parts = { sections: sectionsOf(prompt, kit.short), slots: prompt.slots ?? [] };
+  const parts = { sections: sectionsOf(prompt), slots: prompt.slots ?? [] };
   const text = joinPrompt(parts, current);
   return (
     <div className="min-w-0 rounded-xl border border-border bg-background" data-prompt={prompt.kind}>

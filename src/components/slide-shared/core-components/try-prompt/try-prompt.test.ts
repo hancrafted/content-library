@@ -16,8 +16,6 @@ const WORDS: TryPromptWords = {
   copyPrompt: 'Copy prompt',
   copyCommand: 'Copy command',
   openChatgpt: 'Open in ChatGPT',
-  short: 'Short',
-  shortTip: 'Shorter',
   newTab: 'new tab',
   tooLong: 'Too long for a link: copies the prompt and opens an empty chat',
   whatToDo: 'What to do',
@@ -30,7 +28,7 @@ const WORDS: TryPromptWords = {
   sampleHintOne: 'Sample: {title} · 1 line',
 };
 const NOOP = vi.fn();
-const KIT: PromptKit = { short: false, words: WORDS, onShort: NOOP, onCopy: NOOP };
+const KIT: PromptKit = { words: WORDS, onCopy: NOOP };
 const PURPOSES = { role: 'A role steers behaviour.', task: 'The one thing you want done.' };
 const SECTIONS: PromptSection[] = [
   { heading: 'Your role', purpose: 'role', text: 'You are a researcher.' },

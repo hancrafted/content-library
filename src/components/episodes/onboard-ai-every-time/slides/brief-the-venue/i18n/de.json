@@ -26,9 +26,15 @@
         "out": "eine Anforderungskarte, die Du freigibst."
       }
     },
+    "tickets": {
+      "popover": {
+        "in": "Deine freigegebene Anforderungskarte.",
+        "out": "ein Ticket pro Location-Typ, jedes mit seinen Muss-Kriterien."
+      }
+    },
     "research": {
       "popover": {
-        "in": "die Anforderungskarte.",
+        "in": "ein Ticket.",
         "out": "eine Location, gegen jedes Kriterium geprüft."
       }
     },

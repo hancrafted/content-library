@@ -1,7 +1,7 @@
 import { markerCount } from '../core-components/try-prompt/prompt-sections.pure';
 import { handoffProblems, readTemplate } from './markdown-handoff.pure';
 import { unknownMarkers } from './workflow-markers.pure';
-import { namesBefore, namesOf, tasksOf, type Producer } from './workflow-outputs.pure';
+import { producersBefore, producersOf, tasksOf, type Producer } from './workflow-outputs.pure';
 import { slotSample } from './workflow-sample.pure';
 import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
@@ -25,7 +25,7 @@ export function templateProblems(file: WorkflowFile): string[] {
 
 export function idProblems(file: WorkflowFile): string[] {
   const tasks = tasksOf(file);
-  const outputs = file.stages.flatMap((stage) => stage.tasks.flatMap((t) => [...namesOf(t, stage).keys()]));
+  const outputs = file.stages.flatMap((stage) => stage.tasks.flatMap((t) => [...producersOf(t, stage).keys()]));
   return [
     ...dupes(file.stages.map((stage) => stage.id)).map((id) => `The stage id "${id}" is used twice.`),
     ...dupes(tasks.map((task) => task.id)).map((id) => `The task id "${id}" is used twice.`),
@@ -199,7 +199,7 @@ function markerProblems(task: TaskDef, names: ReadonlyMap<string, Producer>): st
 }
 
 function taskProblems(file: WorkflowFile, task: TaskDef, index: number): string[] {
-  const names = namesBefore(file, index);
+  const names = producersBefore(file, index);
   const known =
     task.template in file.templates ? [] : [`Task "${task.id}" names the unknown template "${task.template}".`];
   return [
@@ -212,8 +212,8 @@ function taskProblems(file: WorkflowFile, task: TaskDef, index: number): string[
 }
 
 export function reviewerProblems(file: WorkflowFile): string[] {
-  const place = { reviewer: true, slots: [], fanOut: undefined } as const;
-  return unknownMarkers(file.reviewer.sections, place).map((m) => `The reviewer has the unknown marker {{${m}}}.`);
+  const scope = { reviewer: true, slots: [], fanOut: undefined } as const;
+  return unknownMarkers(file.reviewer.sections, scope).map((m) => `The reviewer has the unknown marker {{${m}}}.`);
 }
 
 export const contentProblems = (file: WorkflowFile): string[] =>

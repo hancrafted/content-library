@@ -16,9 +16,10 @@ const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the UI kit, hooks and lib.
 const SLIDE_SHARED_REACH = ['^src/components/(slide-master|slide-shared|ui)/', '^src/(hooks|lib)/'];
 
-// A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
+// The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2.1).
 const CORE_COMPONENTS = '^src/components/slide-shared/core-components/';
 
+// A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
 const SLIDE_SHARED_CLIENT = '^src/components/slide-shared/([^/]+)/.+\\.client\\.tsx$';
 
 /** @type {import('dependency-cruiser').IConfiguration} */

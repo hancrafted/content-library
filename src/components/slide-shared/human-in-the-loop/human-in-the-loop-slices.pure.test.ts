@@ -43,16 +43,14 @@ describe('success cases', () => {
     // ARRANGE
     const sent: WorkflowEvent[] = [];
     const on = callbacksFor((event) => sent.push(event));
-    const state = { ...createState(start), openStageId: 's', shortJobIds: [job.id] };
+    const state = { ...createState(start), openStageId: 's' };
     // ACT
     const slices = slicesOf(shown(flow('two'), state), on);
     slices.diagram.onOpenStage('s');
-    slices.modal.onShort(job.id);
     slices.modal.onClose();
     // ASSERT
     expect(slices.modal.stage?.id).toBe('s');
-    expect(slices.modal.shortJobIds).toEqual([job.id]);
-    expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'short', jobId: job.id }, { type: 'close' }]);
+    expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'close' }]);
   });
 
   it('gives the modal the pasted values and sends a change up as one slots event', () => {

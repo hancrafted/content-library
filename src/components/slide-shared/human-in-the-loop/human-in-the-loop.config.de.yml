@@ -17,8 +17,6 @@ ui:
   copyPrompt: Prompt kopieren
   copyCommand: Befehl kopieren
   openChatgpt: In ChatGPT öffnen
-  short: Kurz
-  shortTip: Kurze Fassung, nur die 3 wichtigsten Fragen pro Runde
   sectionAbout: Über diesen Schritt
   sectionCriteria: So sieht gut aus
   sectionExample: Beispielergebnis

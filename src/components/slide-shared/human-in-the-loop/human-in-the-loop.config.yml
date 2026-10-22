@@ -17,8 +17,6 @@ ui:
   copyPrompt: Copy prompt
   copyCommand: Copy command
   openChatgpt: Open in ChatGPT
-  short: Short
-  shortTip: Short version, only the 3 most load-bearing questions per round
   sectionAbout: About this step
   sectionCriteria: What good looks like
   sectionExample: Example result
