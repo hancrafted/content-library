@@ -17,7 +17,9 @@ if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episod
   port=${PREVIEW_PORT:-4300}
   node skills/visual-check/scripts/preview.ts </dev/null >/dev/null 2>&1 &
   server=$!
-  trap 'kill "$server" 2>/dev/null' EXIT
+  # Under `sh -e` a failing trap command fails the hook: by now the lane has stopped the server, so this kill may find
+  # no process.
+  trap 'kill "$server" 2>/dev/null || true' EXIT
   for _ in $(seq 1 50); do curl -fs -o /dev/null "http://localhost:$port/" && break; sleep 0.2; done
   npm run test:browser </dev/null || exit 1
   kill "$server" 2>/dev/null
