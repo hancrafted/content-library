@@ -51,8 +51,8 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `slide-shared/core-components/` only from its server files, never from a `*.client.tsx` widget.
 2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `slide-shared/core-components/`, hooks, lib.
-   1. `src/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
-   2. Every `slide-shared` part, its `*.client.tsx` files included, MAY import `core-components/`.
+   1. (§5.2.1) `src/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
+   2. (§5.2.2) Every `slide-shared` part, its `*.client.tsx` files included, MAY import `core-components/`.
 3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing else. §4 holds inside.
 
 ## Do's and Don'ts
@@ -66,7 +66,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 5. **DO** keep `src/lib/**` to `.ts` files that test without a DOM. (Decision 3)
 6. **DO** leave a Slide's internal markup to the visualization it serves; take its colour, size and weight from tokens. (Decision 4)
 7. **DO** move a part two Slides need into `src/components/slide-shared/` and import it from there. (Decision 5)
-8. **DO** put a primitive several `slide-shared` parts share in `slide-shared/core-components/<name>/`, taking its words and data as props. (Decision 5.2)
+8. **DO** put a primitive several `slide-shared` parts share in `slide-shared/core-components/<name>/`, taking its words and data as props. (Decision 5.2.1)
 
 ### Don'ts
 
@@ -77,7 +77,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 5. **DON'T** write `import type { ReactNode } from 'react'` or a `.tsx` file under `src/lib/**`. (Decision 3)
 6. **DON'T** invent a shared Slide type, prop interface or layout contract and route Slides through it. (Decision 4)
 7. **DON'T** import one Slide's folder from another, or an Episode file from a Slide — `import { x } from '../other-slide/part'`. (Decision 5)
-8. **DON'T** import a `slide-shared` part, `ui/` or a Slide from `core-components/`, or `core-components/` from a Slide's `*.client.tsx` widget. (Decision 5.2)
+8. **DON'T** import a `slide-shared` part, `ui/` or a Slide from `core-components/`, or `core-components/` from a Slide's `*.client.tsx` widget. (Decision 5.1, 5.2.1)
 
 ## Consequences
 
@@ -104,12 +104,12 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ## Compliance and Enforcement
 
-1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries`, pre-commit and CI): §1.1, §1.2, §1.4, §2.1–§2.3, §3, §5 including `core-components-are-a-leaf` and the core exception on the client-leaf rule (§5.2) (its message names the allowed locations; probe tests over a throwaway tree).
+1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries`, pre-commit and CI): §1.1, §1.2, §1.4, §2.1–§2.3, §3, §5 including `core-components-are-a-leaf` and the core exception on the client-leaf rule (§5.2.2) (its message names the allowed locations; probe tests over a throwaway tree).
 2. **Unused-file check** (knip, pre-push and CI): an unimported `.tsx` under `src/lib/` (§3).
 
 **Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/lib/` carry no classifier; left for a future lib-tree record.
 
-**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); core components own no words (§5.2); `slide-shared` parts take serializable props and own no words, except a Shared visual's locale pair of data and default words, which a Slide overrides (§5).
+**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); core components own no words (§5.2.1); `slide-shared` parts take serializable props and own no words, except a Shared visual's locale pair of data and default words, which a Slide overrides (§5).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
