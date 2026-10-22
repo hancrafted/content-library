@@ -1,7 +1,7 @@
 'use client';
 
+import { TryPrompt, type PromptKit } from '../core-components/try-prompt/try-prompt.client';
 import type { UiWords } from './human-in-the-loop.types';
-import { PromptBox, type PromptKit } from './prompt-box.client';
 import type { JobModalView, StepView } from './workflow-view.pure';
 
 /*
@@ -11,7 +11,7 @@ import type { JobModalView, StepView } from './workflow-view.pure';
 
 interface StepsProps {
   readonly job: JobModalView;
-  readonly kit: PromptKit;
+  readonly kit: PromptKit & { readonly words: UiWords };
 }
 
 function Setup({ setup, words }: { setup: string; words: UiWords }) {
@@ -43,7 +43,7 @@ function Step({ step, number, setup, kit }: StepProps) {
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <p className="text-body font-medium">{step.todo}</p>
         {running && step.prompt.kind === 'command' && setup ? <Setup setup={setup} words={words} /> : null}
-        <PromptBox prompt={step.prompt} kit={{ ...kit, short: running && kit.short }} />
+        <TryPrompt prompt={step.prompt} kit={{ ...kit, short: running && kit.short }} />
       </div>
     </li>
   );

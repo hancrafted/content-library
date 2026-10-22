@@ -4,11 +4,10 @@ import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Copy } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
-import { ChatGptMark, ClaudeMark } from './chat-icons';
-import type { UiWords } from './human-in-the-loop.types';
-import { IconButton, OUTLINED_ICON } from './icon-button.client';
-import { Tip } from './tip.client';
-import { chatLinks, type PromptView } from './workflow-view.pure';
+import { ChatGptMark, ClaudeMark } from '../chat-icons/chat-icons';
+import { IconButton, OUTLINED_ICON } from '../icon-button/icon-button.client';
+import { Tip } from '../tip/tip.client';
+import { chatLinks } from './chat-links.pure';
 
 /*
  * One prompt as a disclosure, collapsed by default: a row with the label, the Short toggle where there is one and
@@ -16,11 +15,32 @@ import { chatLinks, type PromptView } from './workflow-view.pure';
  * this leaf (it passes the reload test, FE-001); the Short choice is the parent's.
  */
 
+/** The prompt a TryPrompt shows and copies: a prompt, or a one-line command, with an optional short variant. */
+export interface PromptView {
+  readonly kind: 'prompt' | 'command';
+  readonly text: string;
+  /** The short grill of an interview prompt; the Short toggle swaps it for `text`. */
+  readonly short?: string;
+}
+
+/** The words a TryPrompt shows; it owns none (the caller passes them in, in the visitor's language). */
+export interface TryPromptWords {
+  readonly promptLabel: string;
+  readonly commandLabel: string;
+  readonly copyPrompt: string;
+  readonly copyCommand: string;
+  readonly openChatgpt: string;
+  readonly openClaude: string;
+  readonly short: string;
+  readonly shortTip: string;
+  readonly newTab: string;
+}
+
 /** What a prompt box needs from the modal: its words and the two things it can ask for, as one bundle. */
 export interface PromptKit {
   /** The job's short grill is on: the prompt shown and copied is its short variant. */
   readonly short: boolean;
-  readonly words: UiWords;
+  readonly words: TryPromptWords;
   readonly onShort: () => void;
   readonly onCopy: (text: string) => void;
 }
@@ -132,7 +152,7 @@ function PromptText({ id, open, text, label }: { id: string; open: boolean; text
   );
 }
 
-export function PromptBox({ prompt, kit }: { prompt: PromptView; kit: PromptKit }) {
+export function TryPrompt({ prompt, kit }: { prompt: PromptView; kit: PromptKit }) {
   const [open, setOpen] = useState(false);
   const panel = useId();
   const { words } = kit;
