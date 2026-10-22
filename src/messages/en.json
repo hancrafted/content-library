@@ -67,8 +67,6 @@
       "search": "Search Episodes",
       "searchPlaceholder": "Search by title or tag",
       "tagFilter": "Filter by tag",
-      "formatFilter": "Filter by format",
-      "all": "All",
       "showAll": "Show all {count} Episodes",
       "showFewer": "Show fewer",
       "results": {
@@ -405,7 +403,8 @@
     }
   },
   "episodesPage": {
-    "title": "Episodes",
+    "title": "All Episodes",
+    "intro": "Interactive visuals I built because I never wanted to make another PowerPoint.",
     "references": {
       "label": "References",
       "pageTemplate": "Episode Page Template",
