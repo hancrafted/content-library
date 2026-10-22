@@ -11,6 +11,7 @@ import type { ContextWords } from './context-words.types';
 import styles from './context.module.css';
 import type { AttentionLayout } from './context.types';
 import { ControlIcon } from './control-icons';
+import { Moves } from './moves.client';
 
 /*
  * The "⋯" button of the Attention head and its popover: four labelled sliders for the distribution, always summing
@@ -97,7 +98,9 @@ export function AttentionMenu(props: AttentionMenuProps) {
   if (def.type !== 'menu') return null;
   return (
     <>
-      <button
+      <Moves
+        as="button"
+        trigger={anchor !== null}
         type="button"
         className={styles.icon}
         aria-label={props.words[def.label]}
@@ -112,7 +115,7 @@ export function AttentionMenu(props: AttentionMenuProps) {
         }}
       >
         <ControlIcon name={def.icon} />
-      </button>
+      </Moves>
       {anchor && <Popover id={id} anchor={anchor} onClose={close} {...props} />}
     </>
   );

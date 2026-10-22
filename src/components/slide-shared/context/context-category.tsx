@@ -9,6 +9,7 @@ import styles from './context.module.css';
 import { colourOf, simpleOf } from './context.pure';
 import type { Category } from './context.types';
 import { HeadToggles } from './head-toggles';
+import { Moves } from './moves.client';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { Glyph, tint } from './window-bits';
@@ -62,7 +63,9 @@ const Row = memo(function Row({ say, row, windowTokens, on, pressed }: RowProps)
   const Tag = row.key ? 'button' : 'span';
   const press = row.key ? { type: 'button' as const, 'data-part': row.key, 'aria-pressed': pressed } : {};
   return (
-    <Tag
+    <Moves
+      as={Tag}
+      trigger={`${on}|${pressed}|${row.tokens}`}
       {...press}
       data-sub={flag(row.kind === 'cat' && row.sub)}
       data-zero={flag(row.tokens === 0)}
@@ -75,7 +78,7 @@ const Row = memo(function Row({ say, row, windowTokens, on, pressed }: RowProps)
       <span className={say.tech ? `${styles.rowNum} font-mono` : styles.rowNum}>
         {rowNumber(say, row, windowTokens)}
       </span>
-    </Tag>
+    </Moves>
   );
 });
 
@@ -106,7 +109,8 @@ function Messages(props: RowsProps & { readonly group: UsageRow }) {
   const { group, ...rows } = props;
   return (
     <details className={styles.messages} data-on={flag(rowOn(group.key, props.lit, props.litCats))}>
-      <summary
+      <Moves
+        as="summary"
         className={`${styles.row} font-semibold`}
         data-part={group.key}
         data-on={flag(rowOn(group.key, props.lit, props.litCats))}
@@ -114,7 +118,7 @@ function Messages(props: RowsProps & { readonly group: UsageRow }) {
         <ChevronRight aria-hidden="true" className={styles.chevron} />
         <span className={styles.rowName}>{rowLabel(props.say, group)}</span>
         <span className={`${styles.rowNum} font-mono`}>{rowNumber(props.say, group, props.windowTokens)}</span>
-      </summary>
+      </Moves>
       <Rows {...rows} />
     </details>
   );

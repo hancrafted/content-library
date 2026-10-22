@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode } from 'react';
-import { Attention as AttentionList } from './attention';
+import { Attention as AttentionList } from './attention.client';
 import { ContextCategory } from './context-category';
 import { columns } from './context-columns.pure';
 import { CONTROLS, offers, type Flips, type ModePart } from './context-controls.pure';

@@ -1,8 +1,9 @@
 name: Browser nightly
 
-# The browser lane (design-ADR-0014) drives real Chromium against the built export. It is too slow and too flaky-prone
-# for every pull request, so it runs once a night on main instead; a failure emails the repository watchers through
-# GitHub's default notification, which is the only alert. `workflow_dispatch` re-runs it by hand.
+# The browser lane (design-ADR-0014) drives real Chromium against the built export. Pull-request CI opens no browser for
+# now (ARCH-003 §4.2); the nightly first proves the lane on the Linux runner, and moving it onto every pull request is
+# the owner's later call. A failure emails the repository watchers through GitHub's default notification, which is the
+# only alert. `workflow_dispatch` re-runs it by hand.
 on:
   schedule:
     # 03:17 UTC, off the hour so it does not queue with the scheduled jobs everyone else starts at :00.

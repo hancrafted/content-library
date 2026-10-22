@@ -6,6 +6,7 @@ import styles from './context.module.css';
 import type { PlacedBlock } from './context.pure';
 import { colourOf } from './context.pure';
 import { loupeFrame, loupePlacement, loupeRows } from './loupe.pure';
+import { Moves } from './moves.client';
 import { tint, vars } from './window-bits';
 
 /*
@@ -119,7 +120,8 @@ export function Loupe({ p, say, at, bar, onEnter, onLeave }: LoupeProps) {
   if (!rows.length) return null;
   const { y, tail } = loupePlacement({ at, barHeight, height: (rows.length + 1) * 36 });
   return (
-    <div
+    <Moves
+      trigger={`${y}|${cursor}`}
       className={`${styles.loupe} ${styles.surface}`}
       role="group"
       aria-label={say.words.zoom}
@@ -129,7 +131,7 @@ export function Loupe({ p, say, at, bar, onEnter, onLeave }: LoupeProps) {
     >
       <div className={styles.loupeTail} data-part={cursor} aria-hidden="true" />
       <LoupeList p={p} say={say} rows={rows} cursor={cursor} />
-    </div>
+    </Moves>
   );
 }
 
@@ -147,7 +149,8 @@ export function Lens({
   const frame = loupeFrame(rows, p.window.tokens, bar.current?.clientHeight ?? 0);
   if (!frame) return null;
   return (
-    <div
+    <Moves
+      trigger={`${frame.top}|${frame.height}`}
       className={styles.lens}
       aria-hidden="true"
       style={vars({ '--top': `${frame.top}px`, '--h': `${frame.height}px` })}

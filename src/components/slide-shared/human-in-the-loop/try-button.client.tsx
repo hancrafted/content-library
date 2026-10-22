@@ -1,8 +1,8 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { cn } from '@/lib/utils';
 import { Play } from 'lucide-react';
-import { useMotion } from './use-motion.client';
 
 interface TryButtonProps {
   readonly label: string;

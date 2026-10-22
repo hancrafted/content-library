@@ -6,6 +6,7 @@ import styles from './context.module.css';
 import type { Step } from './context.types';
 import { BubbleBody, bubbleName, roleOf } from './conversation-body';
 import { HeadToggles } from './head-toggles';
+import { Moves } from './moves.client';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { vars } from './window-bits';
@@ -36,7 +37,8 @@ const Message = memo(function Message(props: BubbleProps) {
   const chip = roleOf(step) === 'chip';
   const open = chip && pressed;
   return (
-    <div
+    <Moves
+      trigger={`${on}|${gone}|${open}|${hidden}|${units}`}
       role="button"
       tabIndex={0}
       className={say.tech && roleOf(step) === 'you' ? `${styles.msg} font-medium` : styles.msg}
@@ -55,7 +57,7 @@ const Message = memo(function Message(props: BubbleProps) {
     >
       <BubbleBody say={say} step={step} />
       {mayFill ? <span className={styles.note}>{say.words.mayFill}</span> : null}
-    </div>
+    </Moves>
   );
 });
 
@@ -137,9 +139,15 @@ function Head({ say, p }: { readonly say: Say; readonly p: ConversationProps }) 
       <b className="font-semibold">{say.words.parts.chat}</b>
       <div className={styles.headEnd}>
         {p.hint ? (
-          <span className={styles.hint} data-seen={flag(p.hintSeen)} aria-hidden={p.hintSeen || undefined}>
+          <Moves
+            as="span"
+            trigger={p.hintSeen}
+            className={styles.hint}
+            data-seen={flag(p.hintSeen)}
+            aria-hidden={p.hintSeen || undefined}
+          >
             {say.words.hint}
-          </span>
+          </Moves>
         ) : null}
         <HeadToggles toggles={p.toggles} say={say} />
       </div>
@@ -152,7 +160,8 @@ function Column(props: ConversationProps & { readonly say: Say }) {
   const scroll = useNewest(vis, say.tech);
   const handlers = useLighting(props);
   return (
-    <section
+    <Moves
+      as="section"
       className={styles.chat}
       aria-label={say.words.chat}
       data-depth={say.tech ? 'technical' : 'simple'}
@@ -171,7 +180,7 @@ function Column(props: ConversationProps & { readonly say: Say }) {
           <Bubbles {...props} />
         </div>
       </div>
-    </section>
+    </Moves>
   );
 }
 

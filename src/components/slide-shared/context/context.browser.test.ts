@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
+import { hydrated } from '../../../../tests/browser/hydrated';
 import { settled } from '../../../../tests/browser/settled';
 
 /*
@@ -49,9 +50,7 @@ async function open(page: Page, options: OpenOptions = {}): Promise<Opened> {
   await root.scrollIntoViewIfNeeded();
   await expect(root).toBeVisible();
   const range = root.locator('input[type=range]');
-  await expect
-    .poll(() => range.evaluate((el) => Object.keys(el).some((key) => key.startsWith('__reactProps'))))
-    .toBe(true);
+  await hydrated(range);
   if (options.scrub !== false) await scrubBack(root, range);
   return { root };
 }
@@ -159,16 +158,17 @@ test.describe('success cases', () => {
     await page.clock.runFor(paceMs);
     await expect(root.locator(LROW).first()).toBeVisible();
     const row = (await root.locator(LROW).nth(3).boundingBox()) as { x: number; width: number };
-    const closed: number[] = [];
+    let crossings = 0;
     // ACT
     for (let x = bar.x; x < row.x + row.width / 2; x += step) {
       await page.mouse.move(x, bar.y);
       await page.clock.runFor(paceMs);
-      closed.push(await root.locator(LROW).count());
+      // The zoom must still be open after every pace: a closed one never reopens on a paused clock, so this fails.
+      await expect(root.locator(LROW).first()).toBeVisible();
+      crossings += 1;
     }
     // ASSERT
-    expect(closed.length).toBeGreaterThan(1);
-    expect(closed.filter((count) => count === 0)).toEqual([]);
+    expect(crossings).toBeGreaterThan(1);
   });
 
   test('scrolls the related chat bubble into view and lights it when a zoom row is clicked', async ({ page }) => {
@@ -179,6 +179,7 @@ test.describe('success cases', () => {
     const expected = { inView: true, lit: true };
     // ACT
     const row = root.locator(LROW).nth(3);
+    await expect(row).toHaveAttribute('data-part', /\S/);
     const id = ((await row.getAttribute('data-part')) ?? '').split('@')[0] ?? '';
     // The zoom lives only while the pointer is near: Playwright's own scroll-and-retry would close it, so the click lands where the row is.
     await row.click({ force: true });
@@ -199,10 +200,11 @@ test.describe('success cases', () => {
     await rows.nth(4).hover();
     const lit = root.locator('[data-row][data-on]');
     await expect(lit).toHaveCount(1);
+    await expect(lit).toHaveAttribute('data-part', /\S/);
     const part = (await lit.getAttribute('data-part')) ?? '';
-    const kept = await card.evaluate((el) => (el.firstElementChild as unknown as { __mark?: string }).__mark ?? null);
+    const kept = () => card.evaluate((el) => (el.firstElementChild as unknown as { __mark?: string }).__mark ?? null);
     // ASSERT
-    expect(kept).toBe(mark);
+    await expect.poll(kept).toBe(mark);
     await expect(bubbleOf(root, part)).toHaveAttribute('data-on', '');
   });
 
@@ -285,7 +287,6 @@ test.describe('success cases', () => {
       await expect(hovered).toHaveCSS('opacity', shown);
       await rowsAtRest(root);
       const whileHovered = await boxOf();
-      const text = (await hovered.textContent()) ?? '';
       await page.mouse.move(5, 5);
       await expect(root.locator('[data-row] [data-pct]').first()).toHaveCSS('opacity', hidden);
       await rows.nth(middle).locator('button').focus();
@@ -293,7 +294,7 @@ test.describe('success cases', () => {
       await rowsAtRest(root);
       const whileFocused = await boxOf();
       // ASSERT
-      expect(text).toMatch(percent);
+      await expect(rows.nth(middle).locator('[data-pct]')).toHaveText(percent);
       expect(whileHovered).toEqual(resting);
       expect(whileFocused).toEqual(resting);
     });

@@ -2,6 +2,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import axe from 'axe-core';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { hydrated } from '../../../../tests/browser/hydrated';
 import { settled } from '../../../../tests/browser/settled';
 
 /*
@@ -47,9 +48,7 @@ async function open(page: Page, theme: 'light' | 'dark', width = 1440) {
   await expect(root).toBeVisible();
   await root.scrollIntoViewIfNeeded();
   const firstButton = root.locator('button').first();
-  await expect
-    .poll(() => firstButton.evaluate((el) => Object.keys(el).some((key) => key.startsWith('__reactProps'))))
-    .toBe(true);
+  await hydrated(firstButton);
   return {
     root,
     toolbar: root.locator('[data-part="toolbar"]'),
@@ -94,21 +93,21 @@ test.describe('success cases', () => {
     const { root, toolbar } = await open(page, 'light');
     // ACT
     const pillButtons = toolbar.locator('[data-control="picker"] button');
-    const icons = await toolbar
-      .locator('[data-tip-host]')
-      .filter({ has: page.locator('[data-control]:not([data-control=picker])') })
-      .evaluateAll((hosts) =>
-        hosts.map((host) => ({
-          control: host.querySelector('[data-control]')?.getAttribute('data-control'),
-          tip: host.querySelector('[data-tip-text]')?.textContent ?? '',
-        })),
-      );
-    const controls = await toolbar.locator('button, input').count();
+    const icons = () =>
+      toolbar
+        .locator('[data-tip-host]')
+        .filter({ has: page.locator('[data-control]:not([data-control=picker])') })
+        .evaluateAll((hosts) =>
+          hosts.map((host) => ({
+            control: host.querySelector('[data-control]')?.getAttribute('data-control'),
+            tip: host.querySelector('[data-tip-text]')?.textContent ?? '',
+          })),
+        );
     // ASSERT
     await expect(pillButtons).toHaveText(expectedPills);
-    expect(icons.map((icon) => icon.control)).toEqual(expectedIcons);
-    expect(icons.every((icon) => icon.tip.length > 0)).toBe(true);
-    expect(controls).toBe(expectedPills.length + icons.length);
+    await expect.poll(async () => (await icons()).map((icon) => icon.control)).toEqual(expectedIcons);
+    await expect.poll(async () => (await icons()).filter((icon) => icon.tip.length === 0)).toEqual([]);
+    await expect(toolbar.locator('button, input')).toHaveCount(expectedPills.length + expectedIcons.length);
     await expect(root).not.toContainText(/Watch|Try it yourself/);
   });
 
@@ -120,38 +119,39 @@ test.describe('success cases', () => {
     const expectedSteps = ['run', 'check', 'page'];
     const expectedLinks = ['https://chatgpt.com/', 'https://claude.ai/new'];
     const exampleViews = 2;
+    const backdrop = { position: { x: 4, y: 4 } };
+    const handoff = 'handoff';
+    const placeholder = '{{';
+    const copiedStatus = 'Copied';
     const edge = 40;
     const { modal } = await open(page, 'light');
     // ACT
     await openStage(page, 'Requirements');
-    const title = await modal.locator('h2').evaluate((el) => el.textContent);
-    const panel = await modal.locator(':scope > div').boundingBox();
-    const close = await modal.locator('header button[aria-label="Close"]').boundingBox();
-    const prompts = await modal.locator('[data-prompt]').count();
-    const expanded = await modal.locator('[data-prompt] button[aria-expanded="true"]').count();
-    const steps = await modal
-      .locator('[data-step]')
-      .evaluateAll((els) => els.map((el) => el.getAttribute('data-step')));
+    const panel = () => modal.locator(':scope > div').boundingBox();
+    const close = () => modal.locator('header button[aria-label="Close"]').boundingBox();
     await run(modal).getByRole('button', { name: COPY_PROMPT }).click();
-    await expect(modal.getByRole('status')).toHaveText('Copied');
-    const written = await copied(page);
-    const links = await run(modal)
-      .locator('a[target="_blank"]')
-      .evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).href.split('?')[0]));
-    const exampleSpec = await modal.locator('[data-output="spec"], [data-output="tickets"]').count();
-    await modal.click({ position: { x: 4, y: 4 } });
+    await expect(modal.getByRole('status')).toHaveText(copiedStatus);
+    const links = () =>
+      run(modal)
+        .locator('a[target="_blank"]')
+        .evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).href.split('?')[0]));
+    const steps = () =>
+      modal.locator('[data-step]').evaluateAll((els) => els.map((el) => el.getAttribute('data-step')));
     // ASSERT
-    expect(title).toBe(expectedTitle);
-    expect(close!.y - panel!.y).toBeLessThan(edge);
-    expect(panel!.x + panel!.width - (close!.x + close!.width)).toBeLessThan(edge);
-    expect(prompts).toBe(steps.length);
-    expect(expanded).toBe(0);
-    expect(steps).toEqual(expectedSteps);
-    expect(written).toHaveLength(1);
-    expect(written[0]).toContain('handoff');
-    expect(written[0]).not.toContain('{{');
-    expect(links).toEqual(expectedLinks);
-    expect(exampleSpec).toBe(exampleViews);
+    await expect(modal.locator('h2')).toHaveText(expectedTitle);
+    await expect.poll(async () => (await close())!.y - (await panel())!.y).toBeLessThan(edge);
+    await expect
+      .poll(async () => (await panel())!.x + (await panel())!.width - ((await close())!.x + (await close())!.width))
+      .toBeLessThan(edge);
+    await expect.poll(steps).toEqual(expectedSteps);
+    await expect(modal.locator('[data-prompt]')).toHaveCount(expectedSteps.length);
+    await expect(modal.locator('[data-prompt] button[aria-expanded="true"]')).toHaveCount(0);
+    await expect.poll(() => copied(page)).toHaveLength(1);
+    await expect.poll(async () => (await copied(page))[0]).toContain(handoff);
+    await expect.poll(async () => (await copied(page))[0]).not.toContain(placeholder);
+    await expect.poll(links).toEqual(expectedLinks);
+    await expect(modal.locator('[data-output="spec"], [data-output="tickets"]')).toHaveCount(exampleViews);
+    await modal.click(backdrop);
     await expect(modal).toHaveCount(0);
     await openStage(page, 'Requirements');
     await page.keyboard.press('Escape');
@@ -250,11 +250,12 @@ test.describe('success cases', () => {
     // ARRANGE
     const minTarget = 24;
     const { root, modal } = await open(page, 'light');
-    const circles = await root
-      .locator('[data-move]')
-      .evaluateAll((els) =>
-        els.map((el) => Math.min(el.getBoundingClientRect().width, el.getBoundingClientRect().height)),
-      );
+    const circles = () =>
+      root
+        .locator('[data-move]')
+        .evaluateAll((els) =>
+          els.map((el) => Math.min(el.getBoundingClientRect().width, el.getBoundingClientRect().height)),
+        );
     await openStage(page, 'Requirements');
     const tip = modal.locator('header [data-tip-host] > span[data-shown]');
     // ACT
@@ -262,8 +263,8 @@ test.describe('success cases', () => {
     await expect(tip).toHaveAttribute('data-shown', 'true');
     await page.keyboard.press('Escape');
     // ASSERT
-    expect(circles.length).toBeGreaterThan(0);
-    expect(circles.every((size) => size >= minTarget)).toBe(true);
+    await expect.poll(async () => (await circles()).length).toBeGreaterThan(0);
+    await expect.poll(async () => (await circles()).filter((size) => size < minTarget)).toEqual([]);
     await expect(tip).toHaveAttribute('data-shown', 'false');
     await expect(modal).toHaveAttribute('open', '');
     await page.keyboard.press('Escape');
@@ -345,12 +346,11 @@ test.describe('success cases', () => {
       const expected: string[] = [];
       await open(page, theme);
       // ACT
-      const diagram = await seriousViolations(page);
-      await openStage(page, 'Requirements');
-      const modal = await seriousViolations(page);
+      const violations = () => seriousViolations(page);
       // ASSERT
-      expect(diagram).toEqual(expected);
-      expect(modal).toEqual(expected);
+      await expect.poll(violations).toEqual(expected);
+      await openStage(page, 'Requirements');
+      await expect.poll(violations).toEqual(expected);
     });
   }
 });
@@ -377,11 +377,11 @@ test.describe('edge cases', () => {
     const { modal } = await open(page, 'light', phone);
     // ACT
     await openStage(page, 'Requirements');
-    const sideways = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
-    const panel = await modal.locator(':scope > div').boundingBox();
+    const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    const panel = () => modal.locator(':scope > div').boundingBox();
     // ASSERT
-    expect(sideways).toBeLessThanOrEqual(0);
-    expect(panel!.x).toBeGreaterThanOrEqual(0);
-    expect(panel!.x + panel!.width).toBeLessThanOrEqual(phone);
+    await expect.poll(sideways).toBeLessThanOrEqual(0);
+    await expect.poll(async () => (await panel())!.x).toBeGreaterThanOrEqual(0);
+    await expect.poll(async () => (await panel())!.x + (await panel())!.width).toBeLessThanOrEqual(phone);
   });
 });

@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Copy } from 'lucide-react';
@@ -8,7 +9,6 @@ import { ChatGptMark, ClaudeMark } from './chat-icons';
 import type { UiWords } from './human-in-the-loop.types';
 import { IconButton, OUTLINED_ICON } from './icon-button.client';
 import { Tip } from './tip.client';
-import { useMotion } from './use-motion.client';
 import { chatLinks, type PromptView } from './workflow-view.pure';
 
 /*
@@ -30,7 +30,7 @@ const SHORT =
   'inline-flex min-h-9 cursor-pointer items-center rounded-full border border-border px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring';
 
 function ShortToggle({ kit }: { kit: PromptKit }) {
-  const motion = useMotion();
+  const motion = useMotion(kit.short);
   return (
     <Tip text={kit.words.shortTip} place="above" align="end">
       <button
@@ -107,7 +107,7 @@ function Toggle({
   panel: string;
   onToggle: () => void;
 }) {
-  const motion = useMotion();
+  const motion = useMotion(open);
   return (
     <button
       type="button"

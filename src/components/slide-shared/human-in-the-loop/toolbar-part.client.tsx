@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { Code, Download, Upload } from 'lucide-react';
 import { useId, type ButtonHTMLAttributes, type ChangeEvent } from 'react';
 import styles from './human-in-the-loop.module.css';
@@ -7,7 +8,6 @@ import type { ToolbarProps } from './human-in-the-loop.types';
 import { IconButton } from './icon-button.client';
 import { Tip } from './tip.client';
 import { offers } from './toolbar-controls.pure';
-import { useMotion } from './use-motion.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
@@ -26,7 +26,7 @@ function download(workflow: ToolbarProps['workflow']) {
 }
 
 function Pill({ children, ...rest }: ButtonHTMLAttributes<HTMLButtonElement>) {
-  const motion = useMotion();
+  const motion = useMotion(rest['aria-pressed']);
   return (
     <button type="button" {...motion} {...rest}>
       {children}

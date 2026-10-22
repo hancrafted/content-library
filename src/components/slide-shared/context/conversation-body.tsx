@@ -3,6 +3,7 @@ import { plainText } from './context-format.pure';
 import { actOf, catLabel, cliLines, fill, k, outOf, stepCat, storyOf, type Say } from './context-view';
 import styles from './context.module.css';
 import type { Step } from './context.types';
+import { Moves } from './moves.client';
 import { Rich } from './window-bits';
 
 /* What one bubble says: a messenger message in Simple, a line of a Claude Code session in Technical. */
@@ -42,14 +43,14 @@ function ToolCard({ say, step }: { readonly say: Say; readonly step: Step }) {
   const story = storyOf(say, step);
   if (step.kind !== 'tool')
     return (
-      <span className={styles.tool}>
+      <Moves as="span" className={styles.tool}>
         <span className={styles.toolDesc}>
           <Rich text={story.labelTechnical ?? story.label ?? story.event} />
         </span>
-      </span>
+      </Moves>
     );
   return (
-    <span className={styles.tool}>
+    <Moves as="span" className={styles.tool}>
       <span className={styles.toolDesc}>
         <Rich text={story.label ?? story.event} />
       </span>
@@ -61,7 +62,7 @@ function ToolCard({ say, step }: { readonly say: Say; readonly step: Step }) {
         ))}
         <span className={styles.tout}>⎿&nbsp; {outOf(say, step)}</span>
       </span>
-    </span>
+    </Moves>
   );
 }
 
