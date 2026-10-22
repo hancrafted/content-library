@@ -6,7 +6,7 @@ domain: architecture
 rules: true
 files: ['src/**/*.test.ts']
 paths: ['**/*.test.ts', 'src/**/*.pure.ts']
-description: "What a test file may do and how it is shaped: six behavioural Don'ts that keep green meaningful everywhere, plus a three-block suite split, marked test bodies and two import homes under src/."
+description: "What a test file may do and how it is shaped: six behavioural Don'ts that keep green meaningful everywhere, a three-block suite split, marked test bodies and two import homes under src/, and browser tests that wait on the page, never on time."
 ---
 
 # Testing
@@ -36,8 +36,14 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 ### 4. Where a test lives
 
 1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
-2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`; `*.browser.test.ts` only locally, via `npm run test:browser`. CI opens no browser.
+2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. `*.browser.test.ts` drives the built export, locally via `npm run test:browser` and nightly on `main` in CI; the fast suite and pull-request CI open no browser, so neither needs a build.
 3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
+
+### 5. Browser tests wait on the page
+
+1. A browser test MUST NOT wait on time — no `waitForTimeout`, `setTimeout` or `delay`. A sleep passes by being long enough: slow on a fast machine, red on a slow one.
+2. It waits on what the page shows: a retrying assertion, or an animating element reaching `data-motion="settled"`.
+3. An assertion MUST retry: `await expect(drawer).toBeVisible()`, never `expect(await drawer.isVisible()).toBe(true)`, which reads once.
 
 ## Do's and Don'ts
 
@@ -51,6 +57,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
 7. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
 8. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
+9. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
 
 ### Don'ts
 
@@ -62,6 +69,8 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 6. **DON'T** assert an expected value the code under test computed. (Decision 1.2)
 7. **DON'T** inline a magic string or number in the `// ASSERT` block. Strings: by review. (Decision 3, 📜 Rule: `assert-no-magic`)
 8. **DON'T** assert a side effect's absence against a pristine or empty baseline — that measures ambient repository state, and it fails on the very commit that changes the tree it guards. (Decision 1.2)
+9. **DON'T** sleep in a browser test — `page.waitForTimeout(500)`, `await delay(2000)`. (Decision 5)
+10. **DON'T** assert a browser read taken once — `expect(await el.isVisible())`, `expect(await el.textContent())`. (Decision 5)
 
 ## Consequences
 
@@ -69,15 +78,18 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 - **Tests are dependable evidence.** Mocks, skips, assertion-free bodies, and ambient state are mechanically blocked, ensuring green means correctness and red means real breakage.
 - **Missing cases surface immediately.** The mandatory three-block split (`success cases`, `failure cases`, `edge cases`) forces unhandled errors and edge cases to be confronted explicitly.
+- **Browser tests run as fast as the page.** No sleep pads a run, and a timeout names the element that never arrived.
 
 ### Negative
 
 - **Collaborator substitution requires hand-written stand-ins.** In-file test doubles are more verbose than `vi.spyOn`, trading brevity for transparency.
-- **Built-output tests run late.** A `*.build.test.ts` fails on the pull request, not at commit.
+- **Built-output tests run late.** A `*.build.test.ts` fails on the pull request, not at commit; a CI-only browser failure surfaces the next morning, not on the pull request.
+- **Animations carry a contract.** Every animating element a browser test waits on reports `data-motion`; a missing `settled` hangs the test until its timeout.
 
 ### Risks
 
 - **Bans bypassed via helper imports.** Non-deterministic calls or mocks could hide behind local imports. **Mitigation:** dependency-cruiser constrains import graphs and code review inspects test utilities.
+- **A sleep hides behind a helper.** A wrapper named `waitForAnimation` can still sleep. **Mitigation:** lint bans the sleep calls by name in browser tests, and review reads shared browser helpers.
 - **Stand-in complexity creep.** Hand-written doubles could accumulate hidden framework-like behavior. **Mitigation:** stand-ins must stay in the test file, keeping growth visible in diffs.
 
 ## Compliance and Enforcement
@@ -85,11 +97,14 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
 3. **Test config:** the fast suite excludes `*.build.test.ts` and `*.browser.test.ts` (§4.2).
+4. **Lint** (Playwright plugin, from the Playwright browser lane on), over `**/*.browser.test.ts`: no fixed waits, web-first assertions (§5.1, §5.3). Until then §5 is a review duty.
 
-**Manual review duties:** §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3).
+**Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3).
 
 **Exceptions:** amend this record; never an inline suppression.
 
 ## References
 
 - [Vitest Test API](https://vitest.dev/api/) — assertions, runner controls, and test lifecycle.
+- [Playwright — auto-waiting](https://playwright.dev/docs/actionability) and [web-first assertions](https://playwright.dev/docs/test-assertions) — the waits §5 asks for.
+- [eslint-plugin-playwright](https://github.com/mskelton/eslint-plugin-playwright) — `no-wait-for-timeout`, `prefer-web-first-assertions`.

@@ -102,6 +102,29 @@ describe('suite-three-blocks', () => {
     expect(violations).toHaveLength(2);
   });
 
+  it('passes a Playwright suite split by test.describe, its hooks not taken for tests', async () => {
+    // ARRANGE
+    const pw = (name: string) =>
+      `test.describe('${name}', () => {\n  test.beforeEach(async () => {});\n${test('works').replace('  it(', '  test(')}});\n`;
+    const source = [pw('success cases'), pw('failure cases'), pw('edge cases')].join('\n');
+    const { ctx, violations } = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    await ruleSet.rules['test-body-aaa'].check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('fails a fourth top-level test.describe name', async () => {
+    // ARRANGE
+    const source = `${SUITE}\ntest.describe('the drawer', () => {\n${test('works')}});\n`;
+    const { ctx, violations } = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations.map((v) => v.message)).toEqual([expect.stringMatching(/'the drawer' is not one of/)]);
+  });
+
   it('leaves files outside src/**/*.test.ts alone', async () => {
     // ARRANGE
     const source = block('SlideWrapper');
