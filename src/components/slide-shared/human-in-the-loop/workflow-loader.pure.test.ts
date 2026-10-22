@@ -5,7 +5,7 @@ import { isNewSchema, loadWorkflow } from './workflow-loader.pure';
 const PLAN = '---\nkind: plan\n---\n# Plan\n## Pieces\nOne, two.\n';
 const RESEARCH = '---\nkind: research\n---\n# Mill\n## Cost\n140\n';
 const section = { heading: 'Task', purpose: 'task', text: 'Do it.' };
-const details = (example: string) => ({ why: 'Because.', example, goodLooksLike: ['Clear.'] });
+const details = (example: string | string[]) => ({ why: 'Because.', example, goodLooksLike: ['Clear.'] });
 const purposes = Object.fromEntries(['role', 'context', 'task', 'steps', 'template', 'scope'].map((p) => [p, `${p}.`]));
 
 /** A valid two-stage file: Plan hands on `plan`, Research fans out over it into research_1 and research_2. */
@@ -57,7 +57,7 @@ function base() {
               slots: [{ id: 'result', mode: 'single', label: 'Result', sample: RESEARCH }],
               checks: ['One only.'],
             },
-            details: details(RESEARCH),
+            details: details([RESEARCH, RESEARCH]),
           },
         ],
       },
@@ -66,6 +66,26 @@ function base() {
 }
 
 type File = ReturnType<typeof base>;
+
+/** Adds a Compare stage after Research that takes `slot` and prompts with `text`. */
+function later(file: File, slot: object, text: string): void {
+  const task = {
+    ...file.stages[1]!.tasks[0]!,
+    id: 'compare',
+    output: 'compare',
+    fanOut: undefined,
+    review: undefined,
+    details: details(RESEARCH),
+  };
+  file.stages.push({
+    id: 'compare',
+    title: 'Compare',
+    learningGoal: 'Rank.',
+    tasks: [
+      { ...task, template: 'research', slots: [slot], do: { simple: [{ ...section, text }], technical: [section] } },
+    ] as never,
+  });
+}
 const load = (change: (file: File) => void = () => undefined) => {
   const file = base();
   change(file);
@@ -88,29 +108,38 @@ describe('success cases', () => {
   it('resolves the numbered outputs x_1 … x_N of a fan-out for a later single slot and a multiple slot', () => {
     // ARRANGE
     const single = { id: 'research_2', mode: 'single', label: 'R2', sample: RESEARCH };
-    const multiple = { id: 'research', mode: 'multiple', label: 'All', sample: RESEARCH };
-    const later = (slot: object, text: string) => (file: File) => {
-      const task = { ...research(file), id: 'compare', output: 'compare', fanOut: undefined, review: undefined };
-      file.stages.push({
-        id: 'compare',
-        title: 'Compare',
-        learningGoal: 'Rank.',
-        tasks: [
-          {
-            ...task,
-            template: 'research',
-            slots: [slot],
-            do: { simple: [{ ...section, text }], technical: [section] },
-          },
-        ] as never,
-      });
-    };
+    const multiple = { id: 'research', mode: 'multiple', label: 'All', sample: [RESEARCH, RESEARCH] };
+    const after = (slot: object, text: string) => (file: File) => later(file, slot, text);
     // ACT
-    const one = load(later(single, '{{research_2}}'));
-    const many = load(later(multiple, '{{research_1}} {{research_2}}'));
+    const one = load(after(single, '{{research_2}}'));
+    const many = load(after(multiple, '{{research_1}} {{research_2}}'));
     // ASSERT
     expect(problemsOf(one)).toBe('');
     expect(problemsOf(many)).toBe('');
+  });
+
+  it('loads a multiple slot with one sample per marker, and a free input slot that names no output', () => {
+    // ARRANGE
+    const many = { id: 'research', mode: 'multiple', label: 'All', sample: [RESEARCH, RESEARCH] };
+    const free = { id: 'task', mode: 'single', label: 'Your task', sample: 'Plan a party.', free: true };
+    const change = (file: File) => {
+      later(file, many, '{{research_1}} {{research_2}}');
+      file.stages[0]!.tasks[0]!.slots = [free] as never;
+      file.stages[0]!.tasks[0]!.do.simple = [{ ...section, text: 'Task: {{task}}' }];
+    };
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+  });
+
+  it('takes one example per chat of a fan-out', () => {
+    // ARRANGE
+    const change = (file: File) => void (research(file).details.example = [RESEARCH, RESEARCH] as never);
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
   });
 
   it('tells a new-schema file from an old one by its templates', () => {
@@ -126,6 +155,64 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  const many = (sample: unknown) => ({ id: 'research', mode: 'multiple', label: 'All', sample });
+  const add =
+    (slot: object, text = '{{research_1}} {{research_2}}') =>
+    (file: File) =>
+      later(file, slot, text);
+
+  it('rejects a multiple slot whose sample count is not its marker count', () => {
+    // ARRANGE
+    const short = add(many([RESEARCH]));
+    // ACT
+    const problems = problemsOf(load(short));
+    // ASSERT
+    expect(problems).toMatch(/Slot "research" of task "compare" has 1 sample but 2 markers/);
+  });
+
+  it('rejects an entry sample that does not match its template, naming the entry', () => {
+    // ARRANGE
+    const wrong = add(many([RESEARCH, PLAN]));
+    // ACT
+    const problems = problemsOf(load(wrong));
+    // ASSERT
+    expect(problems).toMatch(/entry 2 of slot "research" of task "compare".*kind "research"/);
+  });
+
+  it('rejects a list sample on a single slot and a lone sample on a multiple slot', () => {
+    // ARRANGE
+    const list = (file: File) => void (research(file).slots[0]!.sample = [PLAN, PLAN] as never);
+    const lone = add(many(RESEARCH));
+    // ACT
+    const r0 = problemsOf(load(list));
+    const r1 = problemsOf(load(lone));
+    // ASSERT
+    expect(r0).toMatch(/Slot "plan" of task "research" is single but has a list of samples/);
+    expect(r1).toMatch(/Slot "research" of task "compare" is multiple and needs a list of samples/);
+  });
+
+  it('rejects an example list that is not one per chat, and a list on a task without a fan-out', () => {
+    // ARRANGE
+    const short = (file: File) => void (research(file).details.example = [RESEARCH] as never);
+    const list = (file: File) => void (file.stages[0]!.tasks[0]!.details.example = [PLAN] as never);
+    // ACT
+    const r0 = problemsOf(load(short));
+    const r1 = problemsOf(load(list));
+    // ASSERT
+    expect(r0).toMatch(/example of task "research" needs 2 examples, one per chat, and has 1/);
+    expect(r1).toMatch(/example of task "plan" is a list but the task has no fan-out/);
+  });
+
+  it('still rejects a slot naming no output unless it is a free input', () => {
+    // ARRANGE
+    const free = (file: File) =>
+      void (research(file).slots[0] = { id: 'x', mode: 'single', label: 'X', free: true } as never);
+    // ACT
+    const problems = problemsOf(load(free));
+    // ASSERT
+    expect(problems).toMatch(/Slot "x" of task "research" needs a sample/);
+  });
+
   it('rejects an unknown purpose', () => {
     // ARRANGE
     const change = (file: File) => void (research(file).do.simple[0]!.purpose = 'vibes');

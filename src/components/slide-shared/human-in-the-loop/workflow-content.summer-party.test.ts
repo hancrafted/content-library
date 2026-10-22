@@ -23,6 +23,12 @@ const task = (id: string): TaskDef => {
   if (!found) throw new Error(`no task ${id}`);
   return found;
 };
+/** The one example of a task that has no fan-out. */
+const exampleOf = (id: string): string => {
+  const { example } = task(id).details;
+  if (typeof example !== 'string') throw new Error(`task ${id} has one example per chat`);
+  return example;
+};
 const sampleOf = (taskId: string, slotId: string) => task(taskId).slots.find((slot) => slot.id === slotId)?.sample;
 const instructions = (): SectionDef[] => [
   ...file.reviewer.sections,
@@ -88,8 +94,8 @@ describe('success cases', () => {
           ?.split('## ')[0]
           ?.match(/^- .+$/gm) ?? []
       ).map((line) => line.slice(2));
-    const spec = task('spec').details.example;
-    const tickets = task('tickets').details.example.split(/^## /m).slice(1);
+    const spec = exampleOf('spec');
+    const tickets = exampleOf('tickets').split(/^## /m).slice(1);
     // ACT
     const titles = tickets.map((section) => section.split('\n')[0]);
     const lacking = tickets.filter((section) =>
@@ -113,7 +119,7 @@ describe('success cases', () => {
       ['recommend', 'comparison', 'compare'],
     ] as const;
     // ACT
-    const drift = pairs.filter(([taker, slot, maker]) => sampleOf(taker, slot) !== task(maker).details.example);
+    const drift = pairs.filter(([taker, slot, maker]) => sampleOf(taker, slot) !== exampleOf(maker));
     // ASSERT
     expect(drift).toEqual([]);
   });
@@ -130,8 +136,7 @@ describe('success cases', () => {
     ] as const;
     // ACT
     const drift = own.filter(
-      ([owner, slot, maker]) =>
-        task(owner).review?.slots.find((each) => each.id === slot)?.sample !== task(maker).details.example,
+      ([owner, slot, maker]) => task(owner).review?.slots.find((each) => each.id === slot)?.sample !== exampleOf(maker),
     );
     // ASSERT
     expect(drift).toEqual([]);
@@ -184,7 +189,7 @@ describe('edge cases', () => {
     // ARRANGE
     const samples = ['research_1', 'research_2', 'research_3'].map((id) => sampleOf('compare', id));
     // ACT
-    const heads = samples.map((sample) => sample?.split('\n')[3]);
+    const heads = samples.map((sample) => String(sample).split('\n')[3]);
     // ASSERT
     expect(new Set(heads).size).toBe(samples.length);
   });

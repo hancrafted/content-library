@@ -46,8 +46,14 @@ export interface SlotDef {
   readonly id: string;
   readonly mode: SlotMode;
   readonly label: string;
-  /** Required on a `do` slot; a review slot's sample is optional. Checked against the template `kind` and its H2s. */
-  readonly sample?: string;
+  /**
+   * Required on a `do` slot; a review slot's sample is optional. Checked against the template `kind` and its H2s.
+   * A `multiple` slot carries a list, one sample per entry in marker order, as many as it has markers; a `single`
+   * slot carries one.
+   */
+  readonly sample?: string | readonly string[];
+  /** A free input: the user's own text (the task), not an earlier task's output, so it names no output and its sample is plain text. */
+  readonly free?: boolean;
 }
 
 /** The optional "Review it" pair of a task: runs in a fresh chat, only reports, then writes a fix handoff for the first chat. */
@@ -61,8 +67,8 @@ export interface ReviewDef {
 /** The right column of the popover, for the task in focus. */
 export interface DetailsDef {
   readonly why: string;
-  /** A markdown handoff of the task's template. */
-  readonly example: string;
+  /** A markdown handoff of the task's template; a fan-out task has one per chat, in chat order. */
+  readonly example: string | readonly string[];
   readonly goodLooksLike: readonly string[];
 }
 

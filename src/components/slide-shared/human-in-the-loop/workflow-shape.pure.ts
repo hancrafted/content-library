@@ -7,7 +7,7 @@ import { PURPOSES, RUNTIMES } from './workflow-schema.types';
  */
 
 type Spec =
-  | { readonly t: 'str' | 'int' }
+  | { readonly t: 'str' | 'int' | 'bool' | 'strs' }
   | { readonly t: 'enum'; readonly of: readonly string[] }
   | { readonly t: 'list'; readonly of: Spec; readonly min: number }
   | { readonly t: 'rec'; readonly of: Spec; readonly keys?: readonly string[] }
@@ -15,12 +15,18 @@ type Spec =
 
 const str: Spec = { t: 'str' };
 const int: Spec = { t: 'int' };
+const bool: Spec = { t: 'bool' };
+/** Text, or a non-empty list of texts. */
+const strs: Spec = { t: 'strs' };
 const enumOf = (of: readonly string[]): Spec => ({ t: 'enum', of });
 const list = (of: Spec, min = 0): Spec => ({ t: 'list', of, min });
 const obj = (fields: Record<string, Spec>, optional: readonly string[] = []): Spec => ({ t: 'obj', fields, optional });
 
 const section = obj({ heading: str, purpose: enumOf(PURPOSES), explain: str, text: str }, ['purpose', 'explain']);
-const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: str }, ['sample']);
+const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool }, [
+  'sample',
+  'free',
+]);
 const task = obj(
   {
     id: str,
@@ -31,7 +37,7 @@ const task = obj(
     fanOut: int,
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
     review: obj({ slots: list(slot, 1), checks: list(str, 1) }),
-    details: obj({ why: str, example: str, goodLooksLike: list(str, 1) }),
+    details: obj({ why: str, example: strs, goodLooksLike: list(str, 1) }),
   },
   ['fanOut', 'review'],
 );
@@ -64,8 +70,12 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 
 type Walk = (value: unknown, spec: Spec, path: string) => string[];
 
-const SCALAR: Record<'str' | 'int', (value: unknown) => boolean> = {
-  str: (value) => typeof value === 'string' && value.trim() !== '',
+const isText = (value: unknown): boolean => typeof value === 'string' && value.trim() !== '';
+
+const SCALAR: Record<'str' | 'int' | 'bool' | 'strs', (value: unknown) => boolean> = {
+  str: isText,
+  bool: (value) => typeof value === 'boolean',
+  strs: (value) => isText(value) || (Array.isArray(value) && value.length > 0 && value.every(isText)),
   int: (value) => typeof value === 'number' && Number.isInteger(value) && value >= 1,
 };
 
@@ -108,8 +118,13 @@ function enumProblems(value: unknown, spec: Spec, path: string): string[] {
 }
 
 function scalarProblems(value: unknown, spec: Spec, path: string): string[] {
-  if (spec.t !== 'str' && spec.t !== 'int') return [];
-  const word = spec.t === 'str' ? 'text' : 'a whole number of at least 1';
+  if (spec.t !== 'str' && spec.t !== 'int' && spec.t !== 'bool' && spec.t !== 'strs') return [];
+  const word = {
+    str: 'text',
+    int: 'a whole number of at least 1',
+    bool: 'true or false',
+    strs: 'text or a list of texts',
+  }[spec.t];
   return SCALAR[spec.t](value) ? [] : [`${path} must be ${word}.`];
 }
 

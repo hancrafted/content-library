@@ -41,8 +41,8 @@ export type ModalSection =
 export interface TaskModalView {
   readonly steps: readonly TaskStep[];
   readonly why: string;
-  /** A markdown handoff, drawn by the one generic markdown renderer. */
-  readonly example: string;
+  /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a fan-out one per chat. */
+  readonly examples: readonly string[];
   readonly goodLooksLike: readonly string[];
 }
 
@@ -130,7 +130,7 @@ function taskView(job: Job, workflow: Workflow, level: Level): TaskModalView | u
   return {
     steps: taskStepsOf(workflow.file, task, runtime),
     why: task.details.why,
-    example: task.details.example,
+    examples: typeof task.details.example === 'string' ? [task.details.example] : task.details.example,
     goodLooksLike: task.details.goodLooksLike,
   };
 }

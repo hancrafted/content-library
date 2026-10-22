@@ -109,6 +109,28 @@ describe('success cases', () => {
     expect(text).toContain('A|SAMPLE R|C');
   });
 
+  it('fills each empty entry of a multiple slot with its own sample', () => {
+    // ARRANGE
+    const slot: PromptSlot = { ...SOURCES, sample: ['S1', 'S2', 'S3'] };
+    const props = { sections: MULTI, slots: [slot], values: { research_2: 'B' } };
+    // ACT
+    const text = shown(render(props));
+    // ASSERT
+    expect(text).toContain('S1|B|S3');
+  });
+
+  it('shows the entry its own sample as the placeholder', () => {
+    // ARRANGE
+    const slot: PromptSlot = { ...SOURCES, sample: ['S1', 'S2', 'S3'] };
+    const props = { sections: MULTI, slots: [slot], values: { research_1: 'A', research_2: 'B', research_3: 'C' } };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).toContain('placeholder="S1"');
+    expect(html).toContain('placeholder="S2"');
+    expect(html).toContain('placeholder="S3"');
+  });
+
   it('starts a multiple slot with one entry and a plus button', () => {
     // ARRANGE
     const props = { sections: MULTI, slots: [SOURCES] };
