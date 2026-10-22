@@ -72,6 +72,19 @@ describe('success cases', () => {
     expect(slices.modal.outputWords).toBe(outputWords);
     expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'short', jobId: job.id }, { type: 'close' }]);
   });
+
+  it('gives the modal the pasted values and sends a change up as one slots event', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const state = { ...createState(start), slotValues: { spec: 'S' } };
+    // ACT
+    const { modal } = slicesOf(shown(flow('two'), state), on);
+    modal.onSlots({ spec: 'S2' });
+    // ASSERT
+    expect(modal.slotValues).toEqual({ spec: 'S' });
+    expect(sent).toEqual([{ type: 'slots', values: { spec: 'S2' } }]);
+  });
 });
 
 describe('failure cases', () => {

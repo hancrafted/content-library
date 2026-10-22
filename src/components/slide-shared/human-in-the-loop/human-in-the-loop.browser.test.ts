@@ -422,6 +422,40 @@ describe('success cases', () => {
     TIMEOUT,
   );
 
+  it(
+    'carries a spec pasted in one stage into the copied prompt of a later stage, keeps it across close and reopen, and stores nothing',
+    async () => {
+      // ARRANGE
+      const pasted = '# PASTED SPEC MARKER';
+      await open('light');
+      await js('localStorage.clear(); sessionStorage.clear()');
+      // ACT
+      await openStage(/Tickets/);
+      await js(
+        `(() => { const area = document.querySelector('${MODAL} [data-step="do"] [data-slot-entry="spec"] textarea');
+          const set = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
+          set.call(area, ${JSON.stringify(pasted)}); area.dispatchEvent(new Event('input', { bubbles: true })); })()`,
+      );
+      await settle();
+      await escape();
+      await openStage(/Compare/);
+      await press(`${MODAL} [data-step="do"] button[aria-label]`, /Copy prompt/);
+      await settle();
+      const copied = await js<string[]>('window.__copied');
+      await escape();
+      await openStage(/Tickets/);
+      const kept = await js<string>(
+        `document.querySelector('${MODAL} [data-step="do"] [data-slot-entry="spec"] textarea').value`,
+      );
+      const stored = await js<number>('localStorage.length + sessionStorage.length');
+      // ASSERT
+      expect(copied.at(-1)).toContain(pasted);
+      expect(kept).toBe(pasted);
+      expect(stored).toBe(0);
+    },
+    TIMEOUT,
+  );
+
   it.each(['light', 'dark'] as const)(
     'has no serious or critical axe-core violation in %s, on the diagram and with the modal open',
     async (theme) => {

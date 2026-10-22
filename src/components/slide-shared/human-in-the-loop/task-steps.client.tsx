@@ -11,9 +11,16 @@ import type { TaskModalView } from './workflow-view.pure';
  * through TryPrompt, then why it matters, the example result and what good looks like. Layout polish is issue 284.
  */
 
+/** The Workflow-wide pasted values, owned by the parent, and how a TryPrompt reports a change. */
+export interface SlotState {
+  readonly values: Readonly<Record<string, string>>;
+  readonly onChange: (values: Readonly<Record<string, string>>) => void;
+}
+
 interface TaskProps {
   readonly task: TaskModalView;
   readonly kit: PromptKit & { readonly words: UiWords };
+  readonly slots: SlotState;
 }
 
 function stepLabel(step: TaskModalView['steps'][number], words: UiWords): string {
@@ -21,7 +28,7 @@ function stepLabel(step: TaskModalView['steps'][number], words: UiWords): string
   return step.chat === undefined ? words.doIt : words.chatN.replace('{n}', String(step.chat));
 }
 
-export function TaskSteps({ task, kit }: TaskProps) {
+export function TaskSteps({ task, kit, slots }: TaskProps) {
   const promptKit = { ...kit, words: tryWords(kit.words) };
   return (
     <ol className="flex flex-col gap-4" data-steps="">
@@ -35,7 +42,7 @@ export function TaskSteps({ task, kit }: TaskProps) {
           </span>
           <div className="flex min-w-0 flex-1 flex-col gap-2">
             <p className="text-body font-medium">{stepLabel(step, kit.words)}</p>
-            <TryPrompt prompt={step.prompt} kit={promptKit} />
+            <TryPrompt prompt={step.prompt} kit={promptKit} values={slots.values} onChange={slots.onChange} />
           </div>
         </li>
       ))}
