@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync 
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
-import { isIdle, mainCheckout, parseEndpoint, type Endpoint } from './inspect-page.pure.ts';
+import { chromeFlags, isIdle, mainCheckout, parseEndpoint, type Endpoint } from './inspect-page.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const CACHE = path.join(ROOT, '.cache', 'inspect-page');
@@ -113,7 +113,7 @@ async function startBrowser(): Promise<Endpoint> {
   const profile = path.join(CACHE, 'profile');
   const portFile = path.join(profile, 'DevToolsActivePort');
   rmSync(portFile, { force: true });
-  const flags = ['--remote-debugging-port=0', `--user-data-dir=${profile}`, '--hide-scrollbars', 'about:blank'];
+  const flags = chromeFlags(profile, { platform: process.platform, ci: Boolean(process.env.CI) });
   const browser = spawn(binary, flags, { detached: true, stdio: 'ignore' });
   browser.unref();
   for (let attempt = 0; attempt < 100 && !existsSync(portFile); attempt++) await delay(100);
