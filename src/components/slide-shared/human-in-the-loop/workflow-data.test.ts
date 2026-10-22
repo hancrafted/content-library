@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { UI_FILES, WORKFLOW_IDS, uiWords, workflowFor } from './workflow-data';
+import uiDe from './human-in-the-loop.config.de.yml';
+import uiEn from './human-in-the-loop.config.yml';
+import { WORKFLOW_IDS, uiWords, workflowFor } from './workflow-data';
 
 /** The dotted path of every leaf of a value, sorted. */
 const keyPaths = (value: unknown, prefix = ''): string[] =>
@@ -26,8 +28,8 @@ describe('success cases', () => {
 
   it('keeps the German chrome words under exactly the English keys', () => {
     // ARRANGE
-    const en = parse(UI_FILES.en).ui;
-    const de = parse(UI_FILES.de).ui;
+    const en = parse(uiEn).ui;
+    const de = parse(uiDe).ui;
     // ACT
     const drift = keyPaths(de);
     // ASSERT

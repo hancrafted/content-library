@@ -17,42 +17,47 @@ import type { Workflow } from './workflow.types';
 
 export type WorkflowLocale = 'en' | 'de';
 
-/** The authored Workflow ids, in picker order. A test holds this to the files. */
-export const WORKFLOW_IDS = ['summer-party', 'vacation'] as const;
-export type WorkflowId = (typeof WORKFLOW_IDS)[number];
-
-/** Each Workflow's file in each locale: one language per file, rendered as written. */
-export const FILES: Readonly<Record<WorkflowId, Readonly<Record<WorkflowLocale, string>>>> = {
+/** Each authored Workflow's source text in each locale: one language per file, rendered as written. Key order is picker order. */
+const SOURCES = {
   'summer-party': { en: summerPartyEn, de: summerPartyDe },
   vacation: { en: vacationEn, de: vacationDe },
-};
+} as const satisfies Record<string, Record<WorkflowLocale, string>>;
 
-export const UI_FILES = { en: uiEn, de: uiDe } as const;
+export type WorkflowId = keyof typeof SOURCES;
 
-const cache = new Map<string, Workflow>();
+/** The authored Workflow ids, in picker order. */
+export const WORKFLOW_IDS = Object.keys(SOURCES) as WorkflowId[];
+
+const CHROME_SOURCES = { en: uiEn, de: uiDe } as const;
+
+/** Builds a value once per key and hands the same one back after. */
+function memoized<Args extends unknown[], Value>(keyOf: (...args: Args) => string, build: (...args: Args) => Value) {
+  const built = new Map<string, Value>();
+  return (...args: Args): Value => {
+    const key = keyOf(...args);
+    const hit = built.get(key);
+    if (hit) return hit;
+    const made = build(...args);
+    built.set(key, made);
+    return made;
+  };
+}
 
 /** One authored Workflow in one locale; the build throws every problem of a shipped file. */
-export function workflowFor(id: WorkflowId, locale: WorkflowLocale): Workflow {
-  const key = `${id}:${locale}`;
-  const hit = cache.get(key);
-  if (hit) return hit;
-  const result = loadWorkflow(FILES[id][locale]);
-  if ('problems' in result) throw new Error(`Workflow "${id}" (${locale}):\n${result.problems.join('\n')}`);
-  const workflow = workflowOf(result.file);
-  cache.set(key, workflow);
-  return workflow;
-}
-
-const chrome = new Map<WorkflowLocale, { readonly ui: UiWords }>();
+export const workflowFor = memoized(
+  (id: WorkflowId, locale: WorkflowLocale) => `${id}:${locale}`,
+  (id, locale): Workflow => {
+    const result = loadWorkflow(SOURCES[id][locale]);
+    if ('problems' in result) throw new Error(`Workflow "${id}" (${locale}):\n${result.problems.join('\n')}`);
+    return workflowOf(result.file);
+  },
+);
 
 /** The visual's own file of one locale, parsed once. */
-function chromeOf(locale: WorkflowLocale) {
-  const hit = chrome.get(locale);
-  if (hit) return hit;
-  const doc = parse(UI_FILES[locale]) as { ui: UiWords };
-  chrome.set(locale, doc);
-  return doc;
-}
+const chromeWordsOf = memoized(
+  (locale: WorkflowLocale) => locale,
+  (locale) => parse(CHROME_SOURCES[locale]) as { ui: UiWords },
+);
 
 /** The chrome words of one locale. */
-export const uiWords = (locale: WorkflowLocale): UiWords => chromeOf(locale).ui;
+export const uiWords = (locale: WorkflowLocale): UiWords => chromeWordsOf(locale).ui;
