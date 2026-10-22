@@ -1,19 +1,9 @@
-import type { Accent, TopicIcon } from '@/lib/episode-overview';
-import {
-  Coins,
-  FileText,
-  Handshake,
-  Hourglass,
-  ListPlus,
-  Sparkles,
-  UserRoundPlus,
-  type LucideIcon,
-} from 'lucide-react';
+import type { Accent, TagIcon } from '@/lib/episode-overview';
+import { Coins, FileText, Handshake, Hourglass, ListPlus, Sparkles, type LucideIcon } from 'lucide-react';
 
-/** A Topic names its icon as data; this is the one place the landing turns the name into a drawing. */
-export const TOPIC_ICONS: Record<TopicIcon, LucideIcon> = {
+/** A Tag names its icon as data; this is the one place the landing turns the name into a drawing. */
+export const TAG_ICONS: Record<TagIcon, LucideIcon> = {
   sparkles: Sparkles,
-  'user-round-plus': UserRoundPlus,
   hourglass: Hourglass,
   'list-plus': ListPlus,
   handshake: Handshake,
@@ -33,7 +23,7 @@ export interface AccentClasses {
   readonly edge: string;
 }
 
-export const TOPIC_ACCENTS: Record<Accent, AccentClasses> = {
+export const TAG_ACCENTS: Record<Accent, AccentClasses> = {
   primary: {
     tile: 'bg-primary/10 text-primary',
     ink: 'text-primary',

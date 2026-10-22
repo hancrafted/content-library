@@ -19,11 +19,11 @@ _Avoid_: Episode index, catalog, episode list, manifest
 **Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
-**Topic**: a curated playlist of Episodes, mirrored as a YouTube playlist. Each Episode has one primary Topic, which gives it its icon and colour, and may also appear in other Topics.
-_Avoid_: Category, theme
+**Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
+_Avoid_: Topic, category, theme, label, keyword
 
-**Tag**: an atomic keyword on an Episode, an id whose name and tooltip are translated per locale; an Episode carries many, flat and unranked. A card shows its Tags, and search matches their names.
-_Avoid_: Label, keyword
+**Workshop**: a dated, ordered set of Episodes, run as one event. It lists Episode slugs in the order to follow them and may list an upcoming Episode. It is not a playlist and has no status.
+_Avoid_: Playlist, course, series
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length

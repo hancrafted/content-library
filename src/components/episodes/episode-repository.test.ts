@@ -62,15 +62,14 @@ describe('success cases', () => {
     expect(files).toContain(METADATA_FILE);
   });
 
-  it('registers never-too-early-sales as a published Episode under Sales, with its page and Tags', () => {
+  it('registers never-too-early-sales as a published Episode led by the sales Tag, with its page', () => {
     // ARRANGE
     const slug = 'never-too-early-sales';
     const expected = {
       slug,
       status: 'published',
-      topic: 'sales',
       format: 'foundations',
-      tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'],
+      tags: ['sales'],
       publishedOn: '2026-10-19',
     };
     // ACT
@@ -81,16 +80,14 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it('registers onboard-ai-every-time as a published Episode under AI enablement, with its page', () => {
+  it('registers onboard-ai-every-time as a published Episode led by context-engineering, with its page', () => {
     // ARRANGE
     const slug = 'onboard-ai-every-time';
     const expected = {
       slug,
       status: 'published',
-      topic: 'ai-enablement',
-      look: { accent: 'amber', icon: 'user-round-plus' },
       format: 'foundations',
-      tags: ['agentic-ai', 'context-engineering', 'workflow'],
+      tags: ['context-engineering', 'agentic-ai', 'workflow'],
       publishedOn: '2026-10-20',
     };
     // ACT
@@ -101,16 +98,14 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it('registers ai-attention-span as a published Episode under AI enablement, with its page and Tags', () => {
+  it('registers ai-attention-span as a published Episode led by context-engineering, with its page', () => {
     // ARRANGE
     const slug = 'ai-attention-span';
     const expected = {
       slug,
       status: 'published',
-      topic: 'ai-enablement',
-      look: { accent: 'sky', icon: 'hourglass' },
       format: 'foundations',
-      tags: ['context-engineering', 'workflow', 'context-window'],
+      tags: ['context-engineering', 'workflow'],
       publishedOn: '2026-10-21',
     };
     // ACT
@@ -121,16 +116,14 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it('registers ai-gives-you-more-work as a published Episode under AI enablement, with its page', () => {
+  it('registers ai-gives-you-more-work as a published Episode led by agentic-ai, with its page', () => {
     // ARRANGE
     const slug = 'ai-gives-you-more-work';
     const expected = {
       slug,
       status: 'published',
-      topic: 'ai-enablement',
-      look: { accent: 'rose', icon: 'list-plus' },
       format: 'foundations',
-      tags: ['agentic-ai', 'workflow', 'delegation'],
+      tags: ['agentic-ai', 'workflow'],
       publishedOn: '2026-10-21',
     };
     // ACT

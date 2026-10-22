@@ -9,7 +9,7 @@ import type { Ref } from 'react';
 export interface FilterLabels {
   readonly search: string;
   readonly searchPlaceholder: string;
-  readonly topicFilter: string;
+  readonly tagFilter: string;
   readonly formatFilter: string;
   readonly all: string;
 }
@@ -62,8 +62,8 @@ const PRESSED_CHIP =
   'border-selected bg-selected text-selected-foreground hover:bg-selected hover:text-selected-foreground dark:border-selected dark:bg-selected dark:hover:bg-selected';
 const IDLE_CHIP = 'text-muted-foreground hover:border-foreground/40 hover:bg-background hover:text-foreground';
 
-/** A single-select Topic chip: a toggle button, so its name stays put and `aria-pressed` carries the state. */
-function TopicChip({ label, count, pressed, onPress, buttonRef }: ChipProps) {
+/** A single-select Tag chip: a toggle button, so its name stays put and `aria-pressed` carries the state. */
+function TagChip({ label, count, pressed, onPress, buttonRef }: ChipProps) {
   return (
     <Button
       ref={buttonRef}
@@ -83,8 +83,8 @@ function TopicChip({ label, count, pressed, onPress, buttonRef }: ChipProps) {
   );
 }
 
-/** The Topic filter: the all-chip, then one chip per Topic with its count, wrapping on a narrow screen. */
-export function TopicChips<Id extends string>({
+/** The Tag filter: the all-chip, then one chip per filter Tag with its count, wrapping on a narrow screen. */
+export function TagChips<Id extends string>({
   choices,
   selected,
   labels,
@@ -92,8 +92,8 @@ export function TopicChips<Id extends string>({
   allRef,
 }: FilterProps<Id> & { allRef: Ref<HTMLButtonElement> }) {
   return (
-    <div role="group" aria-label={labels.topicFilter} className="flex flex-wrap gap-2">
-      <TopicChip
+    <div role="group" aria-label={labels.tagFilter} className="flex flex-wrap gap-2">
+      <TagChip
         buttonRef={allRef}
         label={labels.all}
         count={choices.all}
@@ -101,7 +101,7 @@ export function TopicChips<Id extends string>({
         onPress={() => onSelect(ALL)}
       />
       {choices.options.map((option) => (
-        <TopicChip
+        <TagChip
           key={option.id}
           label={option.label}
           count={option.count}

@@ -1,3 +1,4 @@
+import type { TagId } from '@/lib/episode-overview';
 import { describe, expect, it } from 'vitest';
 import {
   ALL,
@@ -8,14 +9,17 @@ import {
   resultsText,
   showsFormat,
   spotlightOf,
-  topicChoices,
+  tagChoices,
   type BrowseSelection,
 } from './episode-browse.pure';
-import type { EpisodeCard } from './episode-card.pure';
+import type { EpisodeCard, TagLabel } from './episode-card.pure';
+
+const tag = (id: TagId, label: string): TagLabel => ({ id, label, tooltip: `About ${label}` });
 
 function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
   const published = over.status !== 'upcoming';
-  const topic = over.topic ?? { id: 'cost', label: 'Cost' };
+  const tags = over.tags ?? [tag('cost', 'Cost')];
+  const lead = tags[0]!;
   return {
     slug,
     route: published ? `/episode/${slug}` : null,
@@ -23,11 +27,9 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
     status: published ? 'published' : 'upcoming',
     title: `Title ${slug}`,
     caption: `Caption ${slug}`,
-    topic,
-    topics: [topic],
+    leadTag: { id: lead.id, label: lead.label },
     format: { id: 'foundations', label: 'Foundations' },
-    tags: [],
-    highlighted: false,
+    tags,
     featuredRank: null,
     accent: 'amber',
     icon: 'coins',
@@ -36,12 +38,12 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
 }
 
 const MIXED: EpisodeCard[] = [
-  card('p1', { topic: { id: 'sales', label: 'Sales' }, featuredRank: 1 }),
-  card('p2', { topic: { id: 'knowledge-base', label: 'Knowledge' }, featuredRank: 2 }),
+  card('p1', { tags: [tag('sales', 'Sales')], featuredRank: 1 }),
+  card('p2', { tags: [tag('markdown', 'Markdown')], featuredRank: 2 }),
   card('p3', { featuredRank: 3 }),
   card('u1', {
     status: 'upcoming',
-    topic: { id: 'sales', label: 'Sales' },
+    tags: [tag('sales', 'Sales')],
     format: { id: 'teardown', label: 'Teardown' },
   }),
   card('u2', { status: 'upcoming', format: { id: 'short', label: 'Short' } }),
@@ -51,9 +53,9 @@ const MIXED: EpisodeCard[] = [
 const SEARCHABLE: EpisodeCard[] = [
   card('by-title', { title: 'Why sales never waits' }),
   card('by-caption', { caption: 'Revenue arrives months after the costs' }),
-  card('by-topic', { topic: { id: 'ai-enablement', label: 'KI-Befähigung' } }),
+  card('by-second-tag', { tags: [tag('cost', 'Kosten'), tag('agentic-ai', 'KI-Befähigung')] }),
   card('by-tag', {
-    tags: [{ id: 'cashflow', label: 'Liquidität', tooltip: 'Geld, das tatsächlich auf dem Konto ist' }],
+    tags: [{ id: 'cost', label: 'Liquidität', tooltip: 'Geld, das tatsächlich auf dem Konto ist' }],
   }),
 ];
 
@@ -79,9 +81,9 @@ describe('success cases', () => {
     expect({ matching: view.matching, overflow: view.overflow, visible: [...view.visible] }).toEqual(expected);
   });
 
-  it('narrows the grid to one topic and counts only its cards', () => {
+  it('narrows the grid to one Tag and counts only its cards', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'sales' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'sales' };
     const expected = ['p1', 'u1'];
     // ACT
     const view = browseView(MIXED, selection, 9);
@@ -89,9 +91,9 @@ describe('success cases', () => {
     expect([...view.visible]).toEqual(expected);
   });
 
-  it('narrows by topic and format together', () => {
+  it('narrows by Tag and format together', () => {
     // ARRANGE
-    const selection: BrowseSelection = { topic: 'sales', format: 'teardown', expanded: false, query: '' };
+    const selection: BrowseSelection = { tag: 'sales', format: 'teardown', expanded: false, query: '' };
     const expected = ['u1'];
     // ACT
     const view = browseView(MIXED, selection, 9);
@@ -99,26 +101,26 @@ describe('success cases', () => {
     expect([...view.visible]).toEqual(expected);
   });
 
-  it('counts each topic chip against the chosen format, in vocabulary order, with the all-chip first', () => {
+  it('counts each Tag chip against the chosen format, in vocabulary order, with the all-chip first', () => {
     // ARRANGE
     const selection: BrowseSelection = { ...INITIAL_SELECTION, format: 'foundations' };
     const expected = {
       all: 3,
       options: [
-        { id: 'sales', label: 'Sales', count: 1 },
-        { id: 'knowledge-base', label: 'Knowledge', count: 1 },
+        { id: 'markdown', label: 'Markdown', count: 1 },
         { id: 'cost', label: 'Cost', count: 1 },
+        { id: 'sales', label: 'Sales', count: 1 },
       ],
     };
     // ACT
-    const choices = topicChoices(MIXED, selection);
+    const choices = tagChoices(MIXED, selection);
     // ASSERT
     expect(choices).toEqual(expected);
   });
 
-  it('counts each format against the chosen topic', () => {
+  it('counts each format against the chosen Tag', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'sales' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'sales' };
     const expected = {
       all: 2,
       options: [
@@ -143,45 +145,43 @@ describe('success cases', () => {
     expect({ lead: lead?.slug, side: slugs(side) }).toEqual(expected);
   });
 
-  it('finds an Episode under each Topic it appears in, and counts it under each', () => {
+  it('finds an Episode under each Tag it carries, and counts it under each', () => {
     // ARRANGE
-    const docs = { id: 'knowledge-base', label: 'Knowledge' } as const;
-    const adoption = { id: 'ai-enablement', label: 'Change' } as const;
-    const overlapping = [...MIXED, card('x', { topic: docs, topics: [docs, adoption] })];
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'ai-enablement' };
+    const overlapping = [...MIXED, card('x', { tags: [tag('markdown', 'Markdown'), tag('agentic-ai', 'Agentic AI')] })];
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'agentic-ai' };
     const expectedVisible = ['x'];
     const expectedCounts = [
-      { id: 'ai-enablement', label: 'Change', count: 1 },
-      { id: 'sales', label: 'Sales', count: 2 },
-      { id: 'knowledge-base', label: 'Knowledge', count: 2 },
+      { id: 'agentic-ai', label: 'Agentic AI', count: 1 },
+      { id: 'markdown', label: 'Markdown', count: 2 },
       { id: 'cost', label: 'Cost', count: 2 },
+      { id: 'sales', label: 'Sales', count: 2 },
     ];
     // ACT
     const view = browseView(overlapping, selection, 9);
-    const { options } = topicChoices(overlapping, INITIAL_SELECTION);
+    const { options } = tagChoices(overlapping, INITIAL_SELECTION);
     // ASSERT
     expect([...view.visible]).toEqual(expectedVisible);
     expect(options).toEqual(expectedCounts);
   });
 
-  it('finds a card by a word in its title, caption, Topic or Tag name, ignoring case', () => {
+  it('finds a card by a word in its title, caption or any Tag name, not only the lead, ignoring case', () => {
     // ARRANGE
     const queries = ['SALES', 'revenue', 'befähigung', 'liquidität'];
-    const expected = [['by-title'], ['by-caption'], ['by-topic'], ['by-tag']];
+    const expected = [['by-title'], ['by-caption'], ['by-second-tag'], ['by-tag']];
     // ACT
     const found = queries.map((query) => [...browseView(SEARCHABLE, { ...INITIAL_SELECTION, query }, 9).visible]);
     // ASSERT
     expect(found).toEqual(expected);
   });
 
-  it('narrows by topic and query together, and counts each topic chip against the query', () => {
+  it('narrows by topic and query together, and counts each Tag chip against the query', () => {
     // ARRANGE
-    const selection: BrowseSelection = { ...INITIAL_SELECTION, topic: 'sales', query: 'Title p' };
+    const selection: BrowseSelection = { ...INITIAL_SELECTION, tag: 'sales', query: 'Title p' };
     const expectedVisible = ['p1'];
     const expectedSales = { id: 'sales', label: 'Sales', count: 1 };
     // ACT
     const view = browseView(MIXED, selection, 9);
-    const sales = topicChoices(MIXED, selection).options.find((option) => option.id === 'sales');
+    const sales = tagChoices(MIXED, selection).options.find((option) => option.id === 'sales');
     // ASSERT
     expect([...view.visible]).toEqual(expectedVisible);
     expect(sales).toEqual(expectedSales);
@@ -229,7 +229,7 @@ describe('failure cases', () => {
 
   it('shows nothing and reports no match when the selection fits no card', () => {
     // ARRANGE
-    const selection: BrowseSelection = { topic: 'ai-enablement', format: ALL, expanded: false, query: '' };
+    const selection: BrowseSelection = { tag: 'agentic-ai', format: ALL, expanded: false, query: '' };
     // ACT
     const view = browseView(MIXED, selection, 9);
     // ASSERT
@@ -258,9 +258,9 @@ describe('failure cases', () => {
   it('leaves a chip in place with a zero count when the other filter empties it', () => {
     // ARRANGE
     const selection: BrowseSelection = { ...INITIAL_SELECTION, format: 'short' };
-    const expected = { id: 'knowledge-base', label: 'Knowledge', count: 0 };
+    const expected = { id: 'markdown', label: 'Markdown', count: 0 };
     // ACT
-    const { options } = topicChoices(MIXED, selection);
+    const { options } = tagChoices(MIXED, selection);
     // ASSERT
     expect(options).toContainEqual(expected);
   });
@@ -331,7 +331,7 @@ describe('edge cases', () => {
   it('ignores accents and surrounding space, so "  befahigung " finds "KI-Befähigung"', () => {
     // ARRANGE
     const selection: BrowseSelection = { ...INITIAL_SELECTION, query: '  befahigung ' };
-    const expected = ['by-topic'];
+    const expected = ['by-second-tag'];
     // ACT
     const view = browseView(SEARCHABLE, selection, 9);
     // ASSERT
@@ -359,9 +359,9 @@ describe('edge cases', () => {
 
   it('only offers a filter that has at least two values to choose between', () => {
     // ARRANGE
-    const oneTopic = [card('a'), card('b')];
+    const oneTag = [card('a'), card('b')];
     // ACT
-    const choices = [topicChoices(oneTopic, INITIAL_SELECTION), topicChoices(MIXED, INITIAL_SELECTION)];
+    const choices = [tagChoices(oneTag, INITIAL_SELECTION), tagChoices(MIXED, INITIAL_SELECTION)];
     // ASSERT
     expect(choices.map(hasChoice)).toEqual([false, true]);
   });
