@@ -40,3 +40,6 @@ docs/claude-project-context/
 # Playwright browser lane output.
 test-results/
 playwright-report/
+
+# playwright-cli: session snapshots and logs.
+.playwright-cli/
