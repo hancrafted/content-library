@@ -74,6 +74,13 @@ function socialCards(
   };
 }
 
+/** The copy of a page that has no record of its own: `meta.<page>` of the Translation file. */
+function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | 'description'> {
+  const { meta } = TRANSLATIONS[locale];
+  if (page === 'dashboard' || page === 'episodes' || page === 'workshops') return meta[page];
+  return meta.home;
+}
+
 /**
  * A page's metadata: its copy, its canonical, and reciprocal hreflang
  * alternates. The landing page's copy is `meta.home` of the site-wide
@@ -81,19 +88,13 @@ function socialCards(
  * reach, so the route hands it in, with its status: an upcoming Episode's page
  * is `noindex`, so the publish flip removes it from search.
  */
-export function pageMetadata(page: 'home' | 'episodes', locale: Locale): Metadata;
+export function pageMetadata(page: 'home' | 'episodes' | 'workshops', locale: Locale): Metadata;
 export function pageMetadata(page: 'dashboard', locale: 'en'): Metadata;
 export function pageMetadata(page: Exclude<PageRef, string>, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {
   const route = routeOf(page);
   const languages = Object.fromEntries(pageLocales(page).map((each) => [each, localizePath(route, each)]));
-  const { title, description } =
-    copy ??
-    (page === 'dashboard'
-      ? TRANSLATIONS[locale].meta.dashboard
-      : page === 'episodes'
-        ? TRANSLATIONS[locale].meta.episodes
-        : TRANSLATIONS[locale].meta.home);
+  const { title, description } = copy ?? listPageCopy(page, locale);
   return {
     title,
     description,

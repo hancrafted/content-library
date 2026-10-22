@@ -20,7 +20,7 @@ const PUBLISHED_SLUGS = [
   'ai-gives-you-more-work',
 ];
 const DRAFT_SLUGS: readonly string[] = [];
-const TAGGED = { slug: 'never-too-early-sales', tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'] };
+const TAGGED = { slug: 'ai-token-economy', tags: ['cost', 'agentic-ai'] };
 
 describe('/episodes index page', () => {
   it.each(LOCALES)('renders the browse grid on the /episodes page for %s', (locale) => {
@@ -57,19 +57,69 @@ describe('/episodes index page', () => {
     expect({ slug: expected.slug, dateTime: date.attr('datetime'), text: date.text() }).toEqual(expected);
   });
 
-  it.each(LOCALES)('offers topic filter chips on the /episodes page for %s', (locale) => {
+  it.each(LOCALES)('offers unpressed multi-select tag chips with counts on the /episodes page for %s', (locale) => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);
     const $ = exportedPage(url);
+    const expected = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales'].length;
 
     // ACT
-    const chips = $('[data-browse-controls] button[aria-pressed]');
+    const chips = $('[data-browse-controls] [role="group"] button[aria-pressed]');
     const pressed = chips.filter('[aria-pressed="true"]');
+    const uncounted = chips.toArray().filter((chip) => !/\d$/.test($(chip).text().trim()));
 
     // ASSERT
-    expect(chips.length).toBeGreaterThan(pressed.length);
-    expect(pressed.length).toBe(1);
-    expect(chips.first().attr('aria-pressed')).toBe('true');
+    expect(chips.length).toBe(expected);
+    expect(pressed.length).toBe(0);
+    expect(uncounted).toEqual([]);
+  });
+
+  it.each([
+    { locale: 'en', title: 'All Episodes' },
+    { locale: 'de', title: 'Alle Episoden' },
+  ] as const)('opens the /episodes page for $locale with one visible h1 and an intro line', ({ locale, title }) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(ROUTES.episodes, locale));
+
+    // ACT
+    const headings = $('h1');
+    const intro = $('[data-episodes-intro]').text().trim();
+
+    // ASSERT
+    expect(headings.length).toBe(1);
+    expect(headings.text()).toBe(title);
+    expect(headings.hasClass('sr-only')).toBe(false);
+    expect(intro.length).toBeGreaterThan(20);
+  });
+
+  it.each(LOCALES)('lists the /episodes cards newest first, upcoming last, for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(ROUTES.episodes, locale));
+
+    // ACT
+    const cards = $('[data-episode-browse] [data-episode-card]').toArray();
+    const dates = cards.map((card) => $(card).find('time[data-episode-date]').attr('datetime') ?? '');
+    const dated = dates.filter((date) => date !== '');
+    const firstUndated = dates.indexOf('');
+
+    // ASSERT
+    expect(dated).toEqual([...dated].sort().reverse());
+    expect(firstUndated === -1 || dates.slice(firstUndated).every((date) => date === '')).toBe(true);
+  });
+
+  it.each(LOCALES)('shows no Format control, Playlist or Topic on the /episodes page for %s', (locale) => {
+    // ARRANGE
+    const url = localizePath(ROUTES.episodes, locale);
+    const $ = exportedPage(url);
+    const absent =
+      '[aria-label="Filter by format"], [aria-label="Nach Format filtern"], [data-playlist], [data-topic], [data-highlight-label]';
+    const expected = 0;
+
+    // ACT
+    const found = $(absent);
+
+    // ASSERT
+    expect(found.length).toBe(expected);
   });
 
   it.each(LOCALES)('puts one search box above the filters on the /episodes page for %s', (locale) => {
@@ -100,6 +150,23 @@ describe('/episodes index page', () => {
     // ASSERT
     expect(linked.sort()).toEqual([...withVideo].sort());
     expect(unsafe.length).toBe(0);
+  });
+
+  it.each(LOCALES)('draws every linked card on the /episodes page with the hover arrow for %s', (locale) => {
+    // ARRANGE
+    const url = localizePath(ROUTES.episodes, locale);
+    const $ = exportedPage(url);
+    const expected = PUBLISHED_SLUGS.length;
+
+    // ACT
+    const linked = $(
+      '[data-episode-browse] [data-episode-card][data-card-variant="compact"]:not([data-episode-status="upcoming"])',
+    );
+    const arrows = linked.find('[data-open-cue="arrow"]');
+
+    // ASSERT
+    expect(linked.length).toBe(expected);
+    expect(arrows.length).toBe(expected);
   });
 
   it.each(LOCALES)('shows each Tag on its card with a tooltip on the /episodes page for %s', (locale) => {

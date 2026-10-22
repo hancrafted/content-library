@@ -1,17 +1,15 @@
-import { ALL, type Facet, type FacetChoices } from '@/components/landing/episode-browse.pure';
-import { SEGMENTED_GROUP, segmentedItem } from '@/components/segmented';
+import type { TagOption } from '@/components/landing/episode-browse.pure';
 import { Button } from '@/components/ui/button';
+import type { TagId } from '@/lib/episode-overview';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import type { Ref } from 'react';
 
-/** The strings the search box and the two filters draw. */
+/** The strings the search box and the Tag filter draw. */
 export interface FilterLabels {
   readonly search: string;
   readonly searchPlaceholder: string;
-  readonly topicFilter: string;
-  readonly formatFilter: string;
-  readonly all: string;
+  readonly tagFilter: string;
 }
 
 /** The search box: a labelled field whose every keystroke narrows the grid below it. */
@@ -19,10 +17,12 @@ export function SearchBox({
   query,
   labels,
   onChange,
+  inputRef,
 }: {
   query: string;
   labels: FilterLabels;
   onChange: (query: string) => void;
+  inputRef?: Ref<HTMLInputElement>;
 }) {
   return (
     <label className="relative block w-full sm:w-72 sm:shrink-0">
@@ -32,6 +32,7 @@ export function SearchBox({
         className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
       />
       <input
+        ref={inputRef}
         type="search"
         data-episode-search
         value={query}
@@ -43,30 +44,21 @@ export function SearchBox({
   );
 }
 
-interface FilterProps<Id extends string> {
-  choices: FacetChoices<Id>;
-  selected: Facet<Id>;
-  labels: FilterLabels;
-  onSelect: (id: Facet<Id>) => void;
-}
-
 interface ChipProps {
   label: string;
   count: number;
   pressed: boolean;
   onPress: () => void;
-  buttonRef?: Ref<HTMLButtonElement>;
 }
 
 const PRESSED_CHIP =
   'border-selected bg-selected text-selected-foreground hover:bg-selected hover:text-selected-foreground dark:border-selected dark:bg-selected dark:hover:bg-selected';
 const IDLE_CHIP = 'text-muted-foreground hover:border-foreground/40 hover:bg-background hover:text-foreground';
 
-/** A single-select Topic chip: a toggle button, so its name stays put and `aria-pressed` carries the state. */
-function TopicChip({ label, count, pressed, onPress, buttonRef }: ChipProps) {
+/** A Tag chip: a toggle button, so its name stays put and `aria-pressed` carries the state. */
+function TagChip({ label, count, pressed, onPress }: ChipProps) {
   return (
     <Button
-      ref={buttonRef}
       type="button"
       variant="outline"
       aria-pressed={pressed}
@@ -83,60 +75,25 @@ function TopicChip({ label, count, pressed, onPress, buttonRef }: ChipProps) {
   );
 }
 
-/** The Topic filter: the all-chip, then one chip per Topic with its count, wrapping on a narrow screen. */
-export function TopicChips<Id extends string>({
-  choices,
-  selected,
-  labels,
-  onSelect,
-  allRef,
-}: FilterProps<Id> & { allRef: Ref<HTMLButtonElement> }) {
+interface TagChipsProps {
+  options: readonly TagOption[];
+  selected: readonly TagId[];
+  labels: FilterLabels;
+  onToggle: (id: TagId) => void;
+}
+
+/** The Tag filter: one multi-select chip per filter Tag with its count, wrapping on a narrow screen; none pressed shows everything. */
+export function TagChips({ options, selected, labels, onToggle }: TagChipsProps) {
   return (
-    <div role="group" aria-label={labels.topicFilter} className="flex flex-wrap gap-2">
-      <TopicChip
-        buttonRef={allRef}
-        label={labels.all}
-        count={choices.all}
-        pressed={selected === ALL}
-        onPress={() => onSelect(ALL)}
-      />
-      {choices.options.map((option) => (
-        <TopicChip
+    <div role="group" aria-label={labels.tagFilter} className="flex flex-wrap gap-2">
+      {options.map((option) => (
+        <TagChip
           key={option.id}
           label={option.label}
           count={option.count}
-          pressed={selected === option.id}
-          onPress={() => onSelect(option.id)}
+          pressed={selected.includes(option.id)}
+          onPress={() => onToggle(option.id)}
         />
-      ))}
-    </div>
-  );
-}
-
-/** The Format filter: a compact segmented control in the header's pill look, one toggle per Format plus all. */
-export function FormatSegments<Id extends string>({ choices, selected, labels, onSelect }: FilterProps<Id>) {
-  const items: { id: Facet<Id>; label: string; count: number }[] = [
-    { id: ALL, label: labels.all, count: choices.all },
-    ...choices.options,
-  ];
-  return (
-    <div role="group" aria-label={labels.formatFilter} className={SEGMENTED_GROUP}>
-      {items.map((item) => (
-        <Button
-          key={item.id}
-          type="button"
-          size="sm"
-          variant="ghost"
-          aria-pressed={selected === item.id}
-          onClick={() => onSelect(item.id)}
-          className={cn(
-            'h-7 px-3 text-xs motion-reduce:transition-none',
-            segmentedItem(selected === item.id),
-            item.count === 0 && selected !== item.id && 'opacity-50',
-          )}
-        >
-          {item.label}
-        </Button>
       ))}
     </div>
   );

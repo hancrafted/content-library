@@ -53,6 +53,36 @@ describe('success cases', () => {
     expect({ title: metadata.title, description: metadata.description }).toEqual(expected);
   });
 
+  it('builds the Workshops list metadata from the Translation file with reciprocal alternates', () => {
+    // ARRANGE
+    const expected = {
+      title: 'Workshops',
+      canonical: '/de/workshops',
+      languages: { en: '/workshops', de: '/de/workshops', 'x-default': '/workshops' },
+    };
+    // ACT
+    const english = pageMetadata('workshops', 'en');
+    const german = pageMetadata('workshops', 'de');
+    // ASSERT
+    expect(english.title).toBe(expected.title);
+    expect(german.alternates?.canonical).toBe(expected.canonical);
+    expect(german.alternates?.languages).toEqual(expected.languages);
+  });
+
+  it("points a Workshop page's canonical at its own slug and locale, with the copy its route hands in", () => {
+    // ARRANGE
+    const slug = 'ai-onboarding-2026-10-23';
+    const expected = { canonical: `/de/workshops/${slug}`, type: 'website', title: COPY.title };
+    // ACT
+    const metadata = pageMetadata({ workshop: slug }, 'de', COPY);
+    // ASSERT
+    expect({
+      canonical: metadata.alternates?.canonical,
+      type: (metadata.openGraph as { type?: string } | null | undefined)?.type,
+      title: metadata.title,
+    }).toEqual(expected);
+  });
+
   it("takes the landing page's title and description from the locale Translation file", () => {
     // ARRANGE
     const expectedTitle = 'Visualised theory · hancrafted';

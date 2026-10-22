@@ -24,6 +24,25 @@ describe('success cases', () => {
     expect(entries).toContainEqual(german);
   });
 
+  it('lists the Workshops page and each Workshop page in both locales with reciprocal alternates', () => {
+    // ARRANGE
+    const slug = 'ai-onboarding-2026-10-23';
+    const route = `/workshops/${slug}/`;
+    const expected = {
+      url: `${SITE}/de${route}`,
+      alternates: {
+        languages: { en: `${SITE}${route}`, de: `${SITE}/de${route}`, 'x-default': `${SITE}${route}` },
+      },
+    };
+    // ACT
+    const entries = sitemapEntries(SITE, allPublished, undated);
+    // ASSERT
+    expect(entries).toContainEqual(expected);
+    expect(entries.map((entry) => entry.url)).toEqual(
+      expect.arrayContaining([`${SITE}/workshops/`, `${SITE}/de/workshops/`, `${SITE}${route}`]),
+    );
+  });
+
   it('writes the home page as the origin with a trailing slash', () => {
     // ARRANGE
     const expected = [`${SITE}/`, `${SITE}/de/`];

@@ -11,9 +11,8 @@ const COPY = { title: 'Your AI token economy', caption: 'Hidden managing respons
 const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
-  topic: 'cost',
   format: 'foundations',
-  tags: ['tokens'],
+  tags: ['cost'],
   publishedOn: '2026-10-09',
 };
 
@@ -23,14 +22,12 @@ const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
 const UPCOMING: UpcomingEpisodeMetadata = {
   slug: 'choosing-the-right-model',
   status: 'upcoming',
-  topic: 'cost',
-  extraTopics: ['sales'],
   format: 'short',
-  tags: [],
+  tags: ['cost', 'sales'],
 };
 
 describe('success cases', () => {
-  it('builds a published card that links to its Episode, takes its copy from its record and its Topic look', () => {
+  it('builds a published card that links to its Episode, takes its copy from its record and its look from its lead Tag', () => {
     // ARRANGE
     const expected = {
       slug: 'ai-token-economy',
@@ -39,15 +36,13 @@ describe('success cases', () => {
       status: 'published',
       title: 'Your AI token economy',
       caption: 'Hidden managing responsibilities.',
-      topic: { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
-      topics: [{ id: 'cost', label: '[landing.episodeOverview.topics.cost]' }],
+      leadTag: { id: 'cost', label: '[landing.episodeOverview.tags.cost.name]' },
       format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
-      highlighted: false,
       tags: [
         {
-          id: 'tokens',
-          label: '[landing.episodeOverview.tags.tokens.name]',
-          tooltip: '[landing.episodeOverview.tags.tokens.tooltip]',
+          id: 'cost',
+          label: '[landing.episodeOverview.tags.cost.name]',
+          tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
         },
       ],
       minutes: 42,
@@ -63,28 +58,14 @@ describe('success cases', () => {
     expect(card).toEqual(expected);
   });
 
-  it("lets an Episode's own look override its Topic's accent and icon, leaving the Topic chip as it is", () => {
+  it('draws the icon and accent of the lead Tag, whatever Tags follow it', () => {
     // ARRANGE
-    const entry = { ...PUBLISHED, look: { accent: 'rose', icon: 'hourglass' } } as const;
-    const expected = {
-      accent: 'rose',
-      icon: 'hourglass',
-      topic: { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
-    };
+    const entry = { ...PUBLISHED, tags: ['markdown', 'cost'] } as const;
+    const expected = { accent: 'rose', icon: 'file-text', leadTag: 'markdown' };
     // ACT
-    const { accent, icon, topic } = episodeCard(entry, { locale: 'en', read });
+    const { accent, icon, leadTag } = episodeCard(entry, { locale: 'en', read });
     // ASSERT
-    expect({ accent, icon, topic }).toEqual(expected);
-  });
-
-  it("overrides only the half of the Topic's look that the Episode's look names", () => {
-    // ARRANGE
-    const entry = { ...PUBLISHED, look: { icon: 'sparkles' } } as const;
-    const expected = { accent: 'amber', icon: 'sparkles' };
-    // ACT
-    const { accent, icon } = episodeCard(entry, { locale: 'en', read });
-    // ASSERT
-    expect({ accent, icon }).toEqual(expected);
+    expect({ accent, icon, leadTag: leadTag.id }).toEqual(expected);
   });
 
   it('prefixes the link with the locale but leaves the route neutral, so a German card opens the German Episode', () => {
@@ -96,7 +77,7 @@ describe('success cases', () => {
     expect({ route, href }).toEqual(expected);
   });
 
-  it('builds an upcoming card with no link, reading its copy from the landing Translation keys and listing every Topic it appears under', () => {
+  it('builds an upcoming card with no link, reading its copy from the landing Translation keys', () => {
     // ARRANGE
     const expected = {
       slug: 'choosing-the-right-model',
@@ -105,14 +86,20 @@ describe('success cases', () => {
       status: 'upcoming',
       title: '[landing.episodeOverview.upcoming.choosing-the-right-model.title]',
       caption: '[landing.episodeOverview.upcoming.choosing-the-right-model.caption]',
-      topic: { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
-      topics: [
-        { id: 'cost', label: '[landing.episodeOverview.topics.cost]' },
-        { id: 'sales', label: '[landing.episodeOverview.topics.sales]' },
-      ],
+      leadTag: { id: 'cost', label: '[landing.episodeOverview.tags.cost.name]' },
       format: { id: 'short', label: '[landing.episodeOverview.formats.short]' },
-      tags: [],
-      highlighted: false,
+      tags: [
+        {
+          id: 'cost',
+          label: '[landing.episodeOverview.tags.cost.name]',
+          tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
+        },
+        {
+          id: 'sales',
+          label: '[landing.episodeOverview.tags.sales.name]',
+          tooltip: '[landing.episodeOverview.tags.sales.tooltip]',
+        },
+      ],
       featuredRank: null,
       accent: 'amber',
       icon: 'coins',
@@ -125,17 +112,17 @@ describe('success cases', () => {
 
   it("labels each Tag with its name and tooltip in the reader's locale, in the order the Episode lists them", () => {
     // ARRANGE
-    const entry = { ...PUBLISHED, tags: ['tokens', 'context-window'] };
+    const entry = { ...PUBLISHED, tags: ['cost', 'workflow'] } as const;
     const expected = [
       {
-        id: 'tokens',
-        label: '[landing.episodeOverview.tags.tokens.name]',
-        tooltip: '[landing.episodeOverview.tags.tokens.tooltip]',
+        id: 'cost',
+        label: '[landing.episodeOverview.tags.cost.name]',
+        tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
       },
       {
-        id: 'context-window',
-        label: '[landing.episodeOverview.tags.context-window.name]',
-        tooltip: '[landing.episodeOverview.tags.context-window.tooltip]',
+        id: 'workflow',
+        label: '[landing.episodeOverview.tags.workflow.name]',
+        tooltip: '[landing.episodeOverview.tags.workflow.tooltip]',
       },
     ];
     // ACT
@@ -160,26 +147,6 @@ describe('success cases', () => {
     const { youtubeUrl } = episodeCard(PUBLISHED, { locale: 'de', read, youtubeId: 'S0Nx4faEebY' });
     // ASSERT
     expect(youtubeUrl).toBe(expected);
-  });
-
-  it('highlights a card listed under AI enablement as an extra Topic', () => {
-    // ARRANGE
-    const entry = { ...PUBLISHED, extraTopics: ['ai-enablement'] as const };
-    const expected = true;
-    // ACT
-    const { highlighted } = episodeCard(entry, { locale: 'en', read });
-    // ASSERT
-    expect(highlighted).toBe(expected);
-  });
-
-  it('highlights a card whose primary Topic is AI enablement', () => {
-    // ARRANGE
-    const entry = { ...PUBLISHED, topic: 'ai-enablement' as const };
-    const expected = true;
-    // ACT
-    const { highlighted } = episodeCard(entry, { locale: 'en', read });
-    // ASSERT
-    expect(highlighted).toBe(expected);
   });
 
   it("draws an unlinked upcoming card from the Episode's own copy, not the landing Translation keys", () => {
@@ -247,15 +214,6 @@ describe('edge cases', () => {
     expect(keys).toEqual(expect.arrayContaining(expectedKeys));
     expect(keys).not.toContain(absent);
     expect(card.featuredRank).toBeNull();
-  });
-
-  it('gives a card whose Episode has no Tags an empty Tag list', () => {
-    // ARRANGE
-    const expected: readonly unknown[] = [];
-    // ACT
-    const { tags } = episodeCard(UPCOMING, { locale: 'en', read });
-    // ASSERT
-    expect(tags).toEqual(expected);
   });
 
   it('names the calendar day as written on New Year, never shifted a day by the time zone', () => {
