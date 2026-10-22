@@ -13,18 +13,17 @@ const RECORD = {
 } as const;
 
 describe('success cases', () => {
-  it('reads the title and description by the Workshop slug and links the card to its page', () => {
+  it('reads the title and description by the Workshop slug and routes the card to its page', () => {
     // ARRANGE
     const expected = {
       title: '«workshopsPage.items.intro-2026-10-23.title»',
       description: '«workshopsPage.items.intro-2026-10-23.description»',
       route: '/workshops/intro-2026-10-23',
-      href: '/workshops/intro-2026-10-23',
     };
     // ACT
     const card = workshopCard(RECORD, 'en', READS);
     // ASSERT
-    expect({ title: card.title, description: card.description, route: card.route, href: card.href }).toEqual(expected);
+    expect({ title: card.title, description: card.description, route: card.route }).toEqual(expected);
   });
 
   it('writes the date in the locale and keeps the machine-readable day', () => {
@@ -44,15 +43,6 @@ describe('success cases', () => {
     const card = workshopCard(RECORD, 'en', READS);
     // ASSERT
     expect({ count: card.episodeCount, label: card.episodeCountLabel }).toEqual(expected);
-  });
-
-  it('localizes the link for the German page', () => {
-    // ARRANGE
-    const expected = '/de/workshops/intro-2026-10-23';
-    // ACT
-    const card = workshopCard(RECORD, 'de', READS);
-    // ASSERT
-    expect(card.href).toBe(expected);
   });
 });
 

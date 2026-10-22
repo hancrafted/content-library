@@ -14,7 +14,7 @@ export async function WorkshopsIndexPage({ locale }: { locale: Locale }) {
       <ul data-workshop-list className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((card) => (
           <li key={card.slug} className="flex">
-            <WorkshopCardView card={card} locale={locale} />
+            <WorkshopCardView card={card} locale={locale} headingLevel={2} />
           </li>
         ))}
       </ul>

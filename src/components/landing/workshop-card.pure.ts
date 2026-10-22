@@ -1,5 +1,5 @@
 import type { IsoDate } from '@/lib/episode-metadata.pure';
-import { localizePath, type Locale } from '@/lib/locale.pure';
+import type { Locale } from '@/lib/locale.pure';
 import { workshopRoute } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
 import type { WorkshopRecord } from '@/lib/workshops.pure';
@@ -19,7 +19,6 @@ export interface WorkshopCard {
   readonly slug: string;
   /** The Workshop's locale-neutral logical path; a JSX `href` must be `localizePath(route, locale)` (FE-003). */
   readonly route: string;
-  readonly href: string;
   readonly title: string;
   readonly description: string;
   readonly date: IsoDate;
@@ -41,11 +40,9 @@ export function workshopCard(
   { read, episodeCount }: WorkshopReads,
 ): WorkshopCard {
   const count = record.episodes.length;
-  const route = workshopRoute(record.slug);
   return {
     slug: record.slug,
-    route,
-    href: localizePath(route, locale),
+    route: workshopRoute(record.slug),
     title: read(`${ITEMS}.${record.slug}.title`),
     description: read(`${ITEMS}.${record.slug}.description`),
     date: record.date,

@@ -4,7 +4,7 @@ import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import type { CardVariant, OpenCue } from './card-variant.pure';
+import type { CardHeadingLevel, CardVariant, OpenCue } from './card-variant.pure';
 
 /*
  * The parts every card is built from, whatever it lists: the frame with its
@@ -104,14 +104,16 @@ interface TitleProps {
   /** The locale-neutral path of what the card opens; `null` draws a plain heading. */
   route: string | null;
   locale: Locale;
+  level: CardHeadingLevel;
 }
 
 /** The title as the one link on a linked card, stretched over the whole card so the card is the target and its name is just the title. */
-export function CardTitle({ variant, title, route, locale }: TitleProps) {
+export function CardTitle({ variant, title, route, locale, level }: TitleProps) {
+  const Heading = `h${level}` as const;
   const classes = `text-foreground ${VARIANTS[variant].title}`;
-  if (route === null) return <h4 className={classes}>{title}</h4>;
+  if (route === null) return <Heading className={classes}>{title}</Heading>;
   return (
-    <h4 className={classes}>
+    <Heading className={classes}>
       <Link
         data-card-link
         href={localizePath(route, locale)}
@@ -119,7 +121,7 @@ export function CardTitle({ variant, title, route, locale }: TitleProps) {
       >
         {title}
       </Link>
-    </h4>
+    </Heading>
   );
 }
 

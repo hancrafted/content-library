@@ -1,4 +1,4 @@
-import { EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
+import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { episodeCards } from '@/components/landing/episode-cards';
 import { agendaOf, startOf, totalMinutes } from '@/components/landing/workshop-agenda.pure';
@@ -22,17 +22,6 @@ export function workshopPageCopy(slug: WorkshopSlug, locale: Locale) {
 }
 
 type WorkshopT = Awaited<ReturnType<typeof getTranslations<'workshopsPage'>>>;
-type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
-
-function cardLabels(t: LandingT): CardLabels {
-  return {
-    open: t('episodeOverview.open'),
-    comingSoon: t('episodeOverview.comingSoon'),
-    watchVideo: t('episodeOverview.watchVideo'),
-    newTab: t('episodeOverview.newTab'),
-  };
-}
-
 function Fact({ icon: Icon, children }: { icon: LucideIcon; children: ReactNode }) {
   return (
     <li className="inline-flex items-center gap-2">
@@ -89,6 +78,18 @@ interface AgendaProps {
   title: string;
 }
 
+function StepNumber({ step, muted }: { step: number; muted: boolean }) {
+  return (
+    <span
+      aria-hidden
+      data-step-number
+      className={`w-10 shrink-0 text-subheading font-semibold tabular-nums sm:w-14 ${muted ? 'text-muted-foreground' : 'text-primary'}`}
+    >
+      {step}
+    </span>
+  );
+}
+
 /** The Episodes in the order the Workshop teaches them; the step number is text beside the card, the list itself says the order. */
 function Agenda({ cards, locale, labels, title }: AgendaProps) {
   return (
@@ -99,16 +100,11 @@ function Agenda({ cards, locale, labels, title }: AgendaProps) {
       <ol data-workshop-agenda role="list" className="mt-6 space-y-4">
         {cards.map((card, index) => (
           <li key={card.slug} data-agenda-step className="flex items-start gap-4 sm:gap-6">
-            <span
-              aria-hidden
-              data-step-number
-              className={`w-10 shrink-0 text-subheading font-semibold tabular-nums sm:w-14 ${card.route === null ? 'text-muted-foreground' : 'text-primary'}`}
-            >
-              {index + 1}
-            </span>
+            <StepNumber step={index + 1} muted={card.route === null} />
             <EpisodeCardView
               card={card}
               variant="compact"
+              headingLevel={3}
               locale={locale}
               labels={labels}
               showFormat={false}

@@ -7,6 +7,9 @@ import type { EpisodeCard } from './episode-card.pure';
  */
 export type CardVariant = 'lead' | 'compact' | 'workshop';
 
+/** The level a card's title is drawn at; the page that places the card picks it so no level is skipped under the heading above. */
+export type CardHeadingLevel = 2 | 3 | 4;
+
 /** The cue that says a card opens: a filled button, a hover-only arrow, or "coming soon" on a card with nowhere to go. */
 export type OpenCue = 'button' | 'arrow' | 'coming-soon';
 
