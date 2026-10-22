@@ -50,6 +50,19 @@ describe('success cases', () => {
     expect(text).not.toContain('{{');
   });
 
+  it('lists each entry of a multiple review slot under its own label and numbered marker, each with its own sample', () => {
+    // ARRANGE
+    const compare = task('compare');
+    // ACT
+    const text = joined(reviewPrompt(file, compare));
+    // ASSERT
+    expect(text).toContain('### Research result of chat 1');
+    expect(text).toContain('### Research result of chat 3');
+    expect(text).toContain('# Old Mill');
+    expect(text).toContain('# Riverside Garden Pavilion');
+    expect(text).not.toContain('{{');
+  });
+
   it('makes one step per chat in Simple and one orchestrator step in Technical, each with its review', () => {
     // ARRANGE
     const research = task('venue');

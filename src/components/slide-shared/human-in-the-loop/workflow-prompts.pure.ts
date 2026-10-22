@@ -1,6 +1,7 @@
 import type { PromptSlot } from '../core-components/try-prompt/prompt-sections.pure';
 import { joinPrompt } from '../core-components/try-prompt/prompt-sections.pure';
 import type { PromptView } from '../core-components/try-prompt/try-prompt.types';
+import { tasksOf } from './workflow-outputs.pure';
 import type { Runtime, SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
@@ -19,9 +20,17 @@ const slotsOf = (slots: readonly SlotDef[]): PromptSlot[] => slots.map((slot) =>
 
 const numbered = (items: readonly string[]): string => items.map((item, at) => `${at + 1}. ${item}`).join('\n');
 
-/** The review's inputs: each slot under its label, its marker in a fenced block. */
-const inputsOf = (slots: readonly SlotDef[]): string =>
-  slots.map((slot) => `### ${slot.label}\n\n${fenced(`{{${slot.id}}}`)}`).join('\n\n');
+/** The review's inputs: each slot under its label, its marker in a fenced block; a multiple slot has one per chat. */
+function inputsOf(slots: readonly SlotDef[], width: (slot: SlotDef) => number): string {
+  const entry = (label: string, marker: string) => `### ${label}\n\n${fenced(`{{${marker}}}`)}`;
+  return slots
+    .flatMap((slot) =>
+      slot.mode === 'single'
+        ? [entry(slot.label, slot.id)]
+        : Array.from({ length: width(slot) }, (_, at) => entry(`${slot.label} ${at + 1}`, `${slot.id}_${at + 1}`)),
+    )
+    .join('\n\n');
+}
 
 function viewOf(sections: readonly SectionDef[], slots: readonly SlotDef[], file: WorkflowFile): PromptView {
   const parts = { sections, slots: slotsOf(slots) };
@@ -42,7 +51,7 @@ export function reviewPrompt(file: WorkflowFile, task: TaskDef): PromptView {
   const fills = {
     template: fenced(file.templates[task.template] ?? ''),
     checks: numbered(review.checks),
-    inputs: inputsOf(review.slots),
+    inputs: inputsOf(review.slots, (slot) => tasksOf(file).find((each) => each.output === slot.id)?.fanOut ?? 0),
   };
   const sections = file.reviewer.sections.map((section) => ({ ...section, text: resolve(section.text, fills) }));
   return viewOf(sections, review.slots, file);
