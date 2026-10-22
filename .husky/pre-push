@@ -10,8 +10,8 @@ changed=$(printf '%s\n' "$refs" | while read -r _ local _ remote; do
   [ -z "$local" ] || [ "$local" = "$zero" ] && continue
   if [ "$remote" = "$zero" ]; then git diff --name-only "origin/main...$local"; else git diff --name-only "$remote" "$local"; fi
 done)
-if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|vitest\.browser\.config\.ts|playwright\.config\.ts|src/components/|src/app/|tests/browser/)'; then
-  # Playwright's webServer and the Vitest lane's globalSetup both serve `out/` on the preview port, so the hook only builds.
+if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|playwright\.config\.ts|src/components/|src/app/|tests/browser/)'; then
+  # Playwright's webServer serves `out/` on the preview port, so the hook only builds.
   # The Chromium browser Playwright drives comes from `npx playwright install chromium` (once per machine and per version).
   echo "push touches the browser lane: building and running test:browser"
   npm run build </dev/null || exit 1

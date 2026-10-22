@@ -3,7 +3,7 @@ import axe from 'axe-core';
 
 /*
  * The browser lane (`npm run test:browser`, local only, never CI): axe-core over the landing page and the three
- * workshop Episodes, light and dark, against the built export served by Playwright's `webServer`. Serious and critical
+ * workshop Episodes and the Slides Episode (every Context Preset), light and dark, against the built export served by Playwright's `webServer`. Serious and critical
  * violations fail; moderate and minor ones are only printed.
  */
 
@@ -12,6 +12,7 @@ const PAGES = [
   '/episodes/onboard-ai-every-time/',
   '/episodes/ai-attention-span/',
   '/episodes/ai-gives-you-more-work/',
+  '/episodes/slides/',
 ];
 const THEMES = ['light', 'dark'] as const;
 const SETTLE = 15_000;

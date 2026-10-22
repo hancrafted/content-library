@@ -58,18 +58,18 @@
   --cs-term-ink: var(--foreground);
   --cs-term-bg: color-mix(in oklch, var(--background) 94%, var(--machine));
 }
-.root[data-motion='crisp'] {
+.root[data-motion-style='crisp'] {
   --in: 120ms;
   --out: 80ms;
   --hov: 100ms;
 }
-.root[data-motion='rise'] {
+.root[data-motion-style='rise'] {
   --in: 180ms;
   --out: 110ms;
   --hov: 140ms;
   --dy: 8px;
 }
-.root[data-motion='spring'] {
+.root[data-motion-style='spring'] {
   --in: 260ms;
   --out: 120ms;
   --hov: 160ms;

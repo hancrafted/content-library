@@ -1,1358 +1,521 @@
-import axe from 'axe-core';
-import { setTimeout as delay } from 'node:timers/promises';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { ensureBrowser } from '../../../../skills/visual-check/scripts/browser';
-import { connect, evaluate, eventName, type Connection, type Send } from '../../../../skills/visual-check/scripts/cdp';
+import { expect, test, type Locator, type Page } from '@playwright/test';
+import { settled } from '../../../../tests/browser/settled';
 
 /*
- * The browser lane (`npm run test:browser`, local only, never CI): the cornerstone in the shared
- * chrome-headless-shell, on the Slides Episode's "Every part and control" Slide (`gallery-full`, every part and
- * control). axe-core checks every Preset on the page in both themes; a scrub stays under 16ms a step. Slide 5's own
- * window switch and compressed start are checked on the AI attention span Episode, its only page. It needs `next dev`:
- * CONTEXT_WINDOW_URL names the Slides Episode, `http://localhost:3000/episodes/slides/` by default
- * (docs/features/context.md); the Episode sits beside it.
+ * The browser seam of Context (`npm run test:browser`, local only until the nightly lands): the Slides Episode's
+ * "Every part and control" Slide (`gallery-full`) in the built export, and Slide 5 on the AI attention span Episode.
+ * Only the behaviours the user corrected after looking at them are pinned here, each titled in the user's words; the
+ * logic under them lives in the `*.pure.test.ts` files beside the parts. Every wait is a retrying assertion or
+ * `data-motion="settled"` (ARCH-003 §5). See docs/features/context.md.
  */
 
-const URL_UNDER_TEST = process.env.CONTEXT_WINDOW_URL ?? 'http://localhost:3000/episodes/slides/';
-/** Slide 5 on its Episode, opened at its anchor: an Episode mounts a Slide only near the viewport. */
-const EPISODE_URL = new URL('../ai-attention-span/#the-ais-attention-span--attention-is-a-budget', URL_UNDER_TEST).href;
-/** The Preset every test drives: the whole cornerstone. */
+const SLIDES = '/episodes/slides/#context-window--every-part-and-control';
+const ATTENTION_SPAN = '/episodes/ai-attention-span/#the-ais-attention-span--attention-is-a-budget';
 const FULL = 'gallery-full';
-const TIMEOUT = 120_000;
-const AXE = axe.source;
-
-let connection: Connection;
-let targetId = '';
-let send: Send;
-
-async function open(theme: 'light' | 'dark', url = URL_UNDER_TEST) {
-  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: theme }] });
-  const loaded = new Promise((resolve) =>
-    connection.events.addEventListener(eventName(sessionOf(send), 'Page.loadEventFired'), resolve, { once: true }),
-  );
-  await send('Page.navigate', { url });
-  await loaded;
-  await delay(1500);
-  await evaluate(send, AXE);
-  // The Preset opens past the compaction (step 25), too few rows for the Attention tests: they scrub back to step 21.
-  if (url !== EPISODE_URL) await commit(FULL, 21);
-  await delay(300);
-}
-
-const sessions = new WeakMap<Send, string>();
-const sessionOf = (s: Send) => sessions.get(s) ?? '';
-
-/*
- * Dimmed on purpose, and so left out of the contrast rule only: an empty category row, a bubble a compaction removed,
- * and the Attention view's bubbles, whose fade is the picture (Spec, Visual language). Every other rule checks them.
- */
-const DIMMED = ['[data-zero]', '[data-gone]', '[data-fade] [data-role]'];
-
-async function run(expression: string): Promise<string[]> {
-  const { result, exceptionDetails } = (await send('Runtime.evaluate', {
-    expression,
-    awaitPromise: true,
-    returnByValue: true,
-  })) as { result: { value: string[] }; exceptionDetails?: { exception?: { description?: string } } };
-  if (exceptionDetails) throw new Error(exceptionDetails.exception?.description ?? 'axe-core failed in the page');
-  return result.value;
-}
-
-/** axe-core's WCAG A and AA violations inside one Preset, as `rule: target` lines. */
-function axeOf(preset: string): Promise<string[]> {
-  const root = `[data-cornerstone="${preset}"]`;
-  const lines = `.then((r) => r.violations.flatMap((v) => v.nodes.map((n) => v.id + ': ' + n.target.join(' '))))`;
-  const tags = `runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] }`;
-  const exclude = JSON.stringify(DIMMED.map((dim) => [`${root}${dim.startsWith('[data-fade') ? '' : ' '}${dim}`]));
-  // axe runs one audit at a time: the contrast pass waits for the rest.
-  return run(`(async () => [
-    ...(await axe.run({ include: [['${root}']] }, { ${tags}, rules: { 'color-contrast': { enabled: false } } })${lines}),
-    ...(await axe.run({ include: [['${root}']], exclude: ${exclude} }, { runOnly: ['color-contrast'] })${lines}),
-  ])()`);
-}
-
-/** Commits one step through the range input, as a keyboard or a drag does, and forces the layout. */
-const commit = (preset: string, step: number) =>
-  evaluate(
-    send,
-    `(() => {
-      const range = document.querySelector('[data-cornerstone="${preset}"] input[type=range]');
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(range, '${step}');
-      range.dispatchEvent(new Event('input', { bubbles: true }));
-      return document.body.offsetHeight;
-    })()`,
-  );
-
-/** The page's main-thread task time in ms, from the DevTools protocol's own counter. */
-async function taskMs(): Promise<number> {
-  const { metrics } = (await send('Performance.getMetrics')) as { metrics: { name: string; value: number }[] };
-  return (metrics.find((m) => m.name === 'TaskDuration')?.value ?? 0) * 1000;
-}
-
-/** The German gallery: the same path under `/de`. */
-const germanOf = (url: string) => {
-  const german = new URL(url);
-  german.pathname = `/de${german.pathname}`;
-  return german.href;
-};
-
-const DEFAULT_WIDTH = 1440;
-const viewport = (width: number) =>
-  send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
-
-/** How far the page scrolls sideways, and every element that pokes out of its cornerstone's card. */
-const overflowOf = () =>
-  evaluate<{ sideways: number; poking: string[] }>(
-    send,
-    `(() => {
-      const poking = [...document.querySelectorAll('[data-cornerstone], [data-bars]')].flatMap((card) => {
-        const box = card.getBoundingClientRect();
-        return [...card.querySelectorAll('*')]
-          .filter((el) => { const r = el.getBoundingClientRect(); return r.width && (r.right > box.right + 0.5 || r.left < box.left - 0.5); })
-          .map((el) => (card.dataset.cornerstone ?? 'mini') + ' ' + el.tagName + ' ' + el.className);
-      });
-      return { sideways: document.documentElement.scrollWidth - innerWidth, poking };
-    })()`,
-  );
-
-const attr = (preset: string, selector: string, name: string) =>
-  evaluate<string | null>(
-    send,
-    `document.querySelector('[data-cornerstone="${preset}"] ${selector}')?.getAttribute('${name}') ?? null`,
-  );
-
-const SLIDE_4 = `[data-cornerstone="${FULL}"]`;
-const BAR = `${SLIDE_4} [data-roving]`;
-const LOUPE_ROW = `${SLIDE_4} button[class*="lrow"]`;
-
-/**
- * Centre of an element in viewport pixels, after scrolling it into view. An Episode page mounts the Slides near the
- * viewport as it scrolls, which moves the layout for a moment, so the centre is read once the scroll has settled.
- */
-const centreOf = async (selector: string, nth = 0) => {
-  const el = `document.querySelectorAll(${JSON.stringify(selector)})[${nth}]`;
-  await evaluate(send, `${el}.scrollIntoView({ block: 'center', behavior: 'instant' })`);
-  await delay(250);
-  await evaluate(send, `${el}.scrollIntoView({ block: 'center', behavior: 'instant' })`);
-  return evaluate<{ x: number; y: number }>(
-    send,
-    `(() => { const r = ${el}.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`,
-  );
-};
-
-const mouseTo = (x: number, y: number) =>
-  send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y, pointerType: 'mouse' });
-const click = async (x: number, y: number) => {
-  await mouseTo(x, y);
-  await send('Input.dispatchMouseEvent', { type: 'mousePressed', x, y, button: 'left', clickCount: 1 });
-  await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x, y, button: 'left', clickCount: 1 });
-};
-
-/** Rests the pointer in the middle of the bar, so the zoom opens. */
-async function openZoom() {
-  await open('light');
-  const bar = await centreOf(BAR);
-  await mouseTo(bar.x, bar.y);
-  await delay(300);
-  return bar;
-}
-
-/** Whether a bubble sits fully inside the chat's scroll box, and whether it is lit. */
-const bubbleState = (id: string) =>
-  evaluate<{ inView: boolean; lit: boolean }>(
-    send,
-    `(() => {
-      const el = document.querySelector('${SLIDE_4} [data-role][data-part="${id}"]');
-      const b = el.parentElement.getBoundingClientRect();
-      const r = el.getBoundingClientRect();
-      return { inView: r.top >= b.top - 1 && r.bottom <= b.bottom + 1, lit: el.hasAttribute('data-on') };
-    })()`,
-  );
-
-/** Scrolls the chat to the top and returns the id of the last bubble then out of view. */
-const scrollChatAway = () =>
-  evaluate<string>(
-    send,
-    `(() => {
-      const box = document.querySelector('${SLIDE_4} [data-role]').parentElement;
-      box.scrollTo({ top: 0, behavior: 'instant' });
-      const b = box.getBoundingClientRect();
-      const out = [...box.querySelectorAll('[data-role]:not([hidden])')].filter((el) => el.getBoundingClientRect().top > b.bottom);
-      return out.at(-1)?.getAttribute('data-part') ?? '';
-    })()`,
-  );
-
-beforeAll(async () => {
-  const endpoint = await ensureBrowser();
-  connection = await connect(endpoint.port);
-  const browser = connection.sender();
-  ({ targetId } = (await browser('Target.createTarget', { url: 'about:blank' })) as { targetId: string });
-  const { sessionId } = (await browser('Target.attachToTarget', { targetId, flatten: true })) as { sessionId: string };
-  send = connection.sender(sessionId);
-  sessions.set(send, sessionId);
-  await send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
-  await send('Page.enable');
-  await send('Performance.enable');
-}, TIMEOUT);
-
-afterAll(async () => {
-  await connection
-    .sender()('Target.closeTarget', { targetId })
-    .catch(() => undefined);
-  connection.socket.close();
-});
-
-describe('success cases', () => {
-  it(
-    'has no axe-core violation in any Preset, light and dark',
-    async () => {
-      // ARRANGE
-      const found: string[] = [];
-      // ACT
-      for (const theme of ['light', 'dark'] as const) {
-        await open(theme);
-        const presets = await evaluate<string[]>(
-          send,
-          `[...document.querySelectorAll('[data-cornerstone]')].map((el) => el.dataset.cornerstone)`,
-        );
-        for (const preset of presets) found.push(...(await axeOf(preset)).map((v) => `${theme} ${preset} ${v}`));
-      }
-      // ASSERT
-      expect(found).toEqual([]);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'scrubs the grid Preset end to end in under 16ms a step',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const preset = FULL;
-      const steps = 21;
-      const budget = 16;
-      // ACT
-      // The protocol round trip itself costs task time: the same number of empty calls is the baseline.
-      const idle = await taskMs();
-      for (let step = 1; step <= steps; step++) await evaluate(send, 'document.body.offsetHeight');
-      const before = await taskMs();
-      for (let step = 1; step <= steps; step++) await commit(preset, step);
-      const perStep = ((await taskMs()) - before - (before - idle)) / steps;
-      // ASSERT
-      expect(perStep).toBeLessThan(budget);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'keeps the zoom open while the pointer crosses from the bar to it at a slow pace',
-    async () => {
-      // ARRANGE
-      const bar = await openZoom();
-      const row = await centreOf(LOUPE_ROW, 3);
-      const samples: boolean[] = [];
-      const minSamples = 5;
-      // ACT
-      for (let x = bar.x; x < row.x; x += 4) {
-        await mouseTo(x, bar.y);
-        await delay(60);
-        samples.push(await evaluate<boolean>(send, `document.querySelector('${LOUPE_ROW}') !== null`));
-      }
-      // ASSERT
-      expect(samples.length).toBeGreaterThan(minSamples);
-      expect(samples.every(Boolean)).toBe(true);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'scrolls the related chat bubble into view and lights it when a zoom row is clicked',
-    async () => {
-      // ARRANGE
-      await openZoom();
-      const away = await scrollChatAway();
-      // ACT
-      const row = await centreOf(LOUPE_ROW, 3);
-      const id = await evaluate<string>(
-        send,
-        `document.querySelectorAll('${LOUPE_ROW}')[3].dataset.part.split('@')[0]`,
-      );
-      await click(row.x, row.y);
-      await delay(900);
-      const bubble = await bubbleState(id);
-      // ASSERT
-      expect(away).not.toBe('');
-      expect(bubble).toEqual({ inView: true, lit: true });
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'draws the lens at half the old stroke and grows the hovered block by transform only',
-    async () => {
-      // ARRANGE
-      await openZoom();
-      // ACT
-      const found = await evaluate<{ stroke: string; hot: number; scaled: string }>(
-        send,
-        `(() => {
-          const lens = document.querySelector('${SLIDE_4} [class*="lens"]');
-          const hot = [...document.querySelectorAll('${BAR} [data-hot]')];
-          return {
-            stroke: getComputedStyle(lens).borderTopWidth,
-            hot: hot.length,
-            scaled: getComputedStyle(hot[0]).transform,
-          };
-        })()`,
-      );
-      // ASSERT
-      expect(found.stroke).toBe('1px');
-      expect(found.hot).toBe(1);
-      expect(found.scaled).not.toBe('none');
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'lists at most two blocks before and two after the hovered one, and the lens spans exactly those rows',
-    async () => {
-      // ARRANGE
-      await openZoom();
-      const expected = { rows: 5, cursorAt: 2 };
-      const tolerance = 4;
-      // ACT
-      const found = await evaluate<{ rows: number; cursorAt: number; lens: number }>(
-        send,
-        `(() => {
-          const rows = [...document.querySelectorAll('${LOUPE_ROW}')];
-          const blocks = [...document.querySelectorAll('${BAR} button[data-part]')];
-          const keys = rows.map((r) => r.dataset.part);
-          // Layout boxes, so the hovered block's grow-by-transform does not count: the lens encloses what the zoom lists.
-          const mine = blocks.filter((b) => keys.includes(b.dataset.part));
-          const origin = blocks[0].offsetParent.getBoundingClientRect().top;
-          const top = origin + Math.min(...mine.map((b) => b.offsetTop));
-          const bottom = origin + Math.max(...mine.map((b) => b.offsetTop + b.offsetHeight));
-          const lens = document.querySelector('${SLIDE_4} [class*="lens"]').getBoundingClientRect();
-          return {
-            rows: rows.length,
-            cursorAt: rows.findIndex((r) => r.hasAttribute('data-cursor')),
-            lens: Math.abs(lens.top - top) + Math.abs(lens.bottom - bottom),
-          };
-        })()`,
-      );
-      // ASSERT
-      expect({ rows: found.rows, cursorAt: found.cursorAt }).toEqual(expected);
-      expect(found.lens).toBeLessThan(tolerance);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'hovers an Attention row without remounting the list, and lights its bubble',
-    async () => {
-      // ARRANGE
-      await open('light');
-      await evaluate(
-        send,
-        `(() => { document.querySelector('${SLIDE_4} [class*="attRow"]').closest('[class*="card"]').firstElementChild.__mark = 'kept'; })()`,
-      );
-      const rows = '[class*="attRow"]';
-      // ACT
-      const first = await centreOf(`${SLIDE_4} ${rows}`, 2);
-      await mouseTo(first.x, first.y);
-      await delay(150);
-      const second = await centreOf(`${SLIDE_4} ${rows}`, 4);
-      await mouseTo(second.x, second.y);
-      await delay(150);
-      const found = await evaluate<{ kept: string | null; bubble: boolean }>(
-        send,
-        `(() => {
-          const btn = document.elementFromPoint(${second.x}, ${second.y}).closest('[data-row]');
-          const bubble = document.querySelector('${SLIDE_4} [data-role][data-part="' + btn.dataset.part + '"]');
-          return {
-            kept: btn.closest('[class*="card"]').firstElementChild.__mark ?? null,
-            bubble: bubble.hasAttribute('data-on'),
-          };
-        })()`,
-      );
-      // ASSERT
-      expect(found).toEqual({ kept: 'kept', bubble: true });
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'shows no Attention percentage at rest in Technical mode, only on hover as in Simple',
-    async () => {
-      // ARRANGE
-      await open('light');
-      await evaluate(
-        send,
-        `document.querySelector('${SLIDE_4} [role="toolbar"] button[data-control="technical"]').click()`,
-      );
-      await mouseTo(5, 5);
-      await delay(450);
-      // ACT
-      const rest = await evaluate<{ numbers: string; visible: number }>(
-        send,
-        `(() => {
-          const rows = [...document.querySelectorAll('${SLIDE_4} [data-row]')];
-          const numbers = rows.flatMap((r) => [...r.children].filter((c) => c.tagName === 'SPAN' && !c.hasAttribute('data-pct')).map((c) => c.textContent)).join('');
-          const visible = rows.filter((r) => Number(getComputedStyle(r.querySelector('[data-pct]')).opacity) > 0).length;
-          return { numbers, visible };
-        })()`,
-      );
-      // ASSERT
-      expect(rest).toEqual({ numbers: '', visible: 0 });
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'shows the percentage at the right of a hovered or focused Attention row in every layout, moving nothing',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const MENU_BUTTON = `${SLIDE_4} button[data-control="attentionMenu"]`;
-      const POP = '#episode-portal-root [data-slot="attention-menu"]';
-      const probe = (index: number) =>
-        evaluate<{ text: string; opacity: number; box: string }>(
-          send,
-          `(() => {
-            const row = document.querySelectorAll('${SLIDE_4} [data-row]')[${index}];
-            const pct = row.querySelector('[data-pct]');
-            const bar = row.querySelector('[class*="attBar"]').getBoundingClientRect();
-            const card = document.querySelector('${SLIDE_4} [class*="attCard"]').getBoundingClientRect();
-            return {
-              text: pct.textContent,
-              opacity: Number(getComputedStyle(pct).opacity),
-              box: [bar.left, bar.width, card.height].map(Math.round).join(','),
-            };
-          })()`,
-        );
-      const rowCount = await evaluate<number>(send, `document.querySelectorAll('${SLIDE_4} [data-row]').length`);
-      const index = Math.floor(rowCount / 2);
-      const seen: Record<string, { rest: number; hover: number; focus: number; shifted: boolean; text: string }> = {};
-      const measure = async (layout: string) => {
-        await evaluate(send, `document.activeElement && document.activeElement.blur()`);
-        await mouseTo(5, 5);
-        await delay(450);
-        const rest = await probe(index);
-        const at = await centreOf(`${SLIDE_4} [data-row]`, index);
-        await mouseTo(at.x, at.y);
-        await delay(450);
-        // The compressed list docks under the pointer, so a neighbour may grow into its place: read the row it is on.
-        const under = await evaluate<number>(
-          send,
-          `[...document.querySelectorAll('${SLIDE_4} [data-row]')].indexOf(document.elementFromPoint(${at.x}, ${at.y})?.closest('[data-row]'))`,
-        );
-        const hover = await probe(under);
-        await mouseTo(5, 5);
-        await delay(450);
-        await evaluate(send, `document.querySelectorAll('${SLIDE_4} [data-row] button')[${index}].focus()`);
-        await delay(450);
-        const focus = await probe(index);
-        seen[layout] = {
-          rest: rest.opacity,
-          hover: hover.opacity,
-          focus: focus.opacity,
-          shifted: rest.box !== hover.box || rest.box !== focus.box,
-          text: hover.text,
-        };
-      };
-      // ACT
-      await measure('compressed');
-      for (const layout of ['pinned', 'list']) {
-        await evaluate(send, `document.querySelector('${MENU_BUTTON}').click()`);
-        await delay(200);
-        await evaluate(send, `document.querySelector('${POP} button[data-layout-option="${layout}"]').click()`);
-        await delay(150);
-        await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape' });
-        await delay(300);
-        await measure(layout);
-      }
-      // ASSERT
-      for (const layout of ['compressed', 'pinned', 'list']) {
-        expect(seen[layout], layout).toMatchObject({ rest: 0, hover: 1, focus: 1, shifted: false });
-        expect(seen[layout]?.text, layout).toMatch(/^\d+%$/);
-      }
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'scrolls the chat to the bubble of a clicked Attention row',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const away = await scrollChatAway();
-      // ACT
-      const row = await centreOf(`${SLIDE_4} [class*="attRow"][data-part="${away}"]`);
-      await click(row.x, row.y);
-      await delay(900);
-      const bubble = await bubbleState(away);
-      // ASSERT
-      expect(away).not.toBe('');
-      expect(bubble).toEqual({ inView: true, lit: true });
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'does not shift the chat or the page when an Attention row is hovered',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const row = await centreOf(`${SLIDE_4} [class*="attRow"]`, 2);
-      const measure = () =>
-        evaluate<string>(
-          send,
-          `(() => {
-            const root = document.querySelector('${SLIDE_4}');
-            const phone = root.querySelector('[class*="phone"]').getBoundingClientRect().height;
-            return [[...root.querySelectorAll('[data-role]:not([hidden])')].map((e) => e.dataset.part + '=' + Math.round(e.getBoundingClientRect().height)).join(), Math.round(phone), Math.round(scrollY), (root.querySelector('[data-layout]').getBoundingClientRect().top - root.getBoundingClientRect().top) | 0].join();
-          })()`,
-        );
-      const before = await measure();
-      // ACT
-      await mouseTo(row.x, row.y);
-      await delay(300);
-      // ASSERT
-      expect(await measure()).toBe(before);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'magnifies the Attention rows under the pointer like a dock, with the total height unchanged',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const list = `${SLIDE_4} [data-layout="compressed"]`;
-      const heights = () =>
-        evaluate<number[]>(
-          send,
-          `[...document.querySelectorAll('${list} [data-row]')].map((r) => r.getBoundingClientRect().height)`,
-        );
-      const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
-      const minRow = 3.5;
-      const reach = 3;
-      const tolerance = 1.5;
-      const slack = 0.5;
-      const resting = await heights();
-      // The thinnest row in the middle, so the growth peaks under the pointer whatever the split is.
-      const middle = resting.slice(reach, -reach);
-      const rowIndex = reach + middle.indexOf(Math.min(...middle));
-      const target = await centreOf(`${list} [data-row]`, rowIndex);
-      // ACT
-      await mouseTo(target.x, target.y);
-      await delay(400);
-      const docked = await heights();
-      const lit = await evaluate<string>(
-        send,
-        `document.querySelector('${list} [data-on]')?.getAttribute('data-part') ?? ''`,
-      );
-      // The magnified rows push each other down, so the peak sits under the pointer, which is the lit row.
-      const litIndex = await evaluate<number>(
-        send,
-        `[...document.querySelectorAll('${list} [data-row]')].findIndex((r) => r.hasAttribute('data-on'))`,
-      );
-      const grown = docked.map((h, i) => h - (resting[i] ?? 0));
-      const peak = grown.indexOf(Math.max(...grown));
-      console.log('DBG', JSON.stringify({ resting, docked, rowIndex, target }));
-      // ASSERT
-      expect(Math.abs(sum(docked) - sum(resting))).toBeLessThan(tolerance);
-      expect(Math.min(...docked)).toBeGreaterThanOrEqual(minRow);
-      expect(Math.abs(peak - litIndex)).toBeLessThanOrEqual(1);
-      expect(grown.slice(peak + reach + 1).every((g) => g <= slack)).toBe(true);
-      expect(lit).not.toBe('');
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'expands a compressed Attention row that takes keyboard focus, as hovering does, and lights it',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const list = `${SLIDE_4} [data-layout="compressed"]`;
-      const rowHeight = (i: number) =>
-        evaluate<number>(send, `document.querySelectorAll('${list} [data-row]')[${i}].getBoundingClientRect().height`);
-      const all = await evaluate<number[]>(
-        send,
-        `[...document.querySelectorAll('${list} [data-row]')].map((r) => r.getBoundingClientRect().height)`,
-      );
-      // The thinnest middle row, whatever height the card gives the list.
-      const middle = all.slice(3, -3);
-      const index = 3 + middle.indexOf(Math.min(...middle));
-      const thin = (all[index] ?? 0) + 2;
-      const resting = await rowHeight(index);
-      // ACT
-      await evaluate(send, `document.querySelectorAll('${list} [data-row] button')[${index}].focus()`);
-      await delay(400);
-      const focused = await rowHeight(index);
-      const lit = await evaluate<string>(
-        send,
-        `document.querySelector('${list} [data-on]')?.getAttribute('data-part') ?? ''`,
-      );
-      // ASSERT
-      expect(resting).toBeLessThan(thin);
-      expect(focused).toBeGreaterThan(thin);
-      expect(lit).not.toBe('');
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'brings the chat message of a hovered compressed Attention row into view and lights it',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const away = await scrollChatAway();
-      const row = await centreOf(`${SLIDE_4} [class*="attRow"][data-part="${away}"]`);
-      // ACT
-      await mouseTo(row.x, row.y);
-      await delay(900);
-      const bubble = await bubbleState(away);
-      // ASSERT
-      expect(away).not.toBe('');
-      expect(bubble.inView).toBe(true);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'snaps the Attention rows under reduced motion, with no height transition',
-    async () => {
-      // ARRANGE
-      const row = `${SLIDE_4} [data-layout="compressed"] [data-row]`;
-      const duration = () =>
-        evaluate<string>(send, `getComputedStyle(document.querySelector('${row}')).transitionDuration`);
-      await open('light');
-      const animated = await duration();
-      // ACT
-      await send('Emulation.setEmulatedMedia', {
-        features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
-      });
-      await delay(100);
-      const snapped = await duration();
-      await send('Emulation.setEmulatedMedia', {
-        features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }],
-      });
-      // ASSERT
-      expect(animated).not.toBe('0s');
-      expect(snapped).toBe('0s');
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'gives the Attention bar about a third of the row',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const about = { min: 0.25, max: 0.4 };
-      // ACT
-      const share = await evaluate<number>(
-        send,
-        `(() => {
-          const bar = document.querySelector('${SLIDE_4} [class*="attBar"]').getBoundingClientRect().width;
-          const name = document.querySelector('${SLIDE_4} [class*="attName"]').getBoundingClientRect().width;
-          return bar / (bar + name);
-        })()`,
-      );
-      // ASSERT
-      expect(share).toBeGreaterThan(about.min);
-      expect(share).toBeLessThan(about.max);
-    },
-    TIMEOUT,
-  );
-  describe('reordering the parts', () => {
-    it(
-      'moves a dragged chip to the place it is dropped on, without toggling the part',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const before = await orderOf();
-        const pressed = () => attr(FULL, `[data-chip="chat"]`, 'aria-pressed');
-        // ACT
-        await dragChip('chat', 'attention');
-        const after = await orderOf();
-        // ASSERT
-        expect(before.chips.at(0)).toBe('chat');
-        expect(after.chips.indexOf('chat')).toBe(before.chips.indexOf('attention'));
-        expect(after.chips.at(0)).toBe('timeline');
-        expect(await pressed()).toBe('true');
-        expect(after.cells.at(-1)).toBe(before.cells[0]);
-      },
-      TIMEOUT,
-    );
-
-    it(
-      'moves the context category on screen when its chip is dragged, as any other part',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const before = await orderOf();
-        const first = (order: { cells: string[] }) => order.cells[0]?.includes('usage');
-        // ACT
-        await dragChip('category', 'chat');
-        const after = await orderOf();
-        // ASSERT
-        expect(first(before)).toBe(false);
-        expect(first(after)).toBe(true);
-      },
-      TIMEOUT,
-    );
-
-    it(
-      'moves the part nodes without remounting them, and keeps the chat scrolled where it was',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3', 'cell-4', 'cell-5'];
-        const scrolled = await evaluate<number>(
-          send,
-          `(() => {
-          const box = document.querySelector('${SLIDE_7} [data-chat-scroll]');
-          box.scrollTo({ top: 0, behavior: 'instant' });
-          box.scrollTo({ top: 120, behavior: 'instant' });
-          const main = box.closest('section').parentElement;
-          [...main.children].forEach((el, i) => { el.__mark = 'cell-' + i; });
-          return box.scrollTop;
-        })()`,
-        );
-        // ACT
-        await dragChip('chat', 'panel');
-        const found = await evaluate<{ marks: string[]; scroll: number; running: number }>(
-          send,
-          `(() => {
-          const box = document.querySelector('${SLIDE_7} [data-chat-scroll]');
-          const main = box.closest('section').parentElement;
-          return {
-            marks: [...main.children].map((el) => el.__mark ?? 'new'),
-            scroll: box.scrollTop,
-            running: document.querySelector('${SLIDE_7}').getAnimations({ subtree: true }).filter((a) => a.playState === 'running').length,
-          };
-        })()`,
-        );
-        // ASSERT
-        expect(scrolled).toBeGreaterThan(0);
-        expect(found.marks.sort()).toEqual(cells);
-        expect(found.scroll).toBe(scrolled);
-        expect(found.running).toBe(0);
-      },
-      TIMEOUT,
-    );
-  });
-});
-
-describe('failure cases', () => {
-  it(
-    'unpins on Escape: a pinned part does not stay lit',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const preset = FULL;
-      // The Preset opens with nothing pinned: pin a category row with one click first.
-      const at = await centreOf(`[data-cornerstone="${preset}"] [aria-label="Usage by category"] button[data-part]`, 1);
-      await click(at.x, at.y);
-      await delay(100);
-      // ACT
-      const pinned = await attr(preset, '', 'data-lit');
-      await evaluate(
-        send,
-        `document.querySelector('[data-cornerstone="${preset}"]').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))`,
-      );
-      await delay(100);
-      const after = await evaluate<boolean>(
-        send,
-        `document.querySelector('[data-cornerstone="${preset}"]').hasAttribute('data-lit')`,
-      );
-      // ASSERT
-      expect(pinned).toBe('');
-      expect(after).toBe(false);
-    },
-    TIMEOUT,
-  );
-});
-
-describe('edge cases', () => {
-  it(
-    'fits a phone, a laptop and a desktop in both locales: no sideways scroll, nothing out of its card',
-    async () => {
-      // ARRANGE
-      const widths = [375, 1100, 1440];
-      const pages = [URL_UNDER_TEST, germanOf(URL_UNDER_TEST)];
-      const found: string[] = [];
-      // ACT
-      for (const width of widths)
-        for (const page of pages) {
-          await viewport(width);
-          await open('light', page);
-          const { sideways, poking } = await overflowOf();
-          found.push(
-            ...(sideways ? [`${width} ${page} scrolls ${sideways}px sideways`] : []),
-            ...poking.map((p) => `${width} ${page} ${p}`),
-          );
-        }
-      await viewport(widths[widths.length - 1]);
-      // ASSERT
-      expect(found).toEqual([]);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'switches Slide 5 to the 1M window: the head reads the same chat against 1M',
-    async () => {
-      // ARRANGE
-      const preset = 'slide-5';
-      await open('light', EPISODE_URL);
-      const expected = { title: 'Context window (13%)', of: '128K of 200K1M' };
-      // ACT
-      await evaluate(
-        send,
-        `document.querySelectorAll('[data-cornerstone="${preset}"] [aria-label="Window size"] button')[1].click()`,
-      );
-      await delay(100);
-      const head = await evaluate<{ title: string; of: string }>(
-        send,
-        `(() => {
-          const head = document.querySelector('[data-cornerstone="${preset}"] section[aria-label="Context window"] > div');
-          return { title: head.firstElementChild.textContent, of: head.lastElementChild.firstElementChild.textContent };
-        })()`,
-      );
-      // ASSERT
-      expect({ title: head.title, of: head.of.replace('200K', '200K') }).toEqual(expected);
-    },
-    TIMEOUT,
-  );
-
-  describe('context-window head', () => {
-    const HEAD = `${SLIDE_4} section[aria-label="Context window"]`;
-    const control = (id: string) => `${HEAD} button[data-control="${id}"]`;
-    const press = (id: string) => evaluate(send, `document.querySelector('${control(id)}').click()`);
-    const pressed = (id: string) =>
-      evaluate<string | null>(send, `document.querySelector('${control(id)}').getAttribute('aria-pressed')`);
-    const count = (selector: string) => evaluate<number>(send, `document.querySelectorAll('${selector}').length`);
-
-    it(
-      'has no eye in the head: the toolbar chip alone hides and shows the context category',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const expected = { eye: 0, before: [1, 'true'], hidden: [0, 'false'], shown: [1, 'true'] };
-        const chip = `${SLIDE_4} [role="toolbar"] [data-chip="category"]`;
-        const chipPressed = () =>
-          evaluate<string | null>(send, `document.querySelector('${chip}').getAttribute('aria-pressed')`);
-        const shownCount = () => count(`${SLIDE_4} [aria-label="Usage by category"]`);
-        // ACT
-        const eye = await count(control('preview'));
-        const before = [await shownCount(), await chipPressed()];
-        await evaluate(send, `document.querySelector('${chip}').click()`);
-        await delay(100);
-        const hidden = [await shownCount(), await chipPressed()];
-        await evaluate(send, `document.querySelector('${chip}').click()`);
-        await delay(100);
-        const shown = [await shownCount(), await chipPressed()];
-        // ASSERT
-        expect({ eye, before, hidden, shown }).toEqual(expected);
-      },
-      TIMEOUT,
-    );
-
-    it(
-      'gives conversation and category their own Technical toggle, and the category stays beside the window in Technical',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const usage = `${SLIDE_4} [aria-label="Usage by category"]`;
-        const top = (selector: string) =>
-          evaluate<number>(send, `document.querySelector('${selector}').getBoundingClientRect().top`);
-        const beside = { window: await top(HEAD), category: await top(usage) };
-        // ACT
-        await evaluate(send, `document.querySelector('${usage} button[data-control="categoryTechnical"]').click()`);
-        await delay(150);
-        const technical = { window: await top(HEAD), category: await top(usage) };
-        const details = await evaluate<boolean>(send, `document.querySelector('${usage} details').open`);
-        const toggles = await count(
-          `${SLIDE_4} section[aria-label="Chat"] button[data-control="conversationTechnical"]`,
-        );
-        // ASSERT
-        expect(Math.abs(beside.category - beside.window)).toBeLessThan(SAME_TOP);
-        expect(Math.abs(technical.category - technical.window)).toBeLessThan(SAME_TOP);
-        expect(details).toBe(false);
-        expect(toggles).toBe(1);
-      },
-      TIMEOUT,
-    );
-
-    it(
-      'fills the compressed Attention list to the last row with no overlapping rows, keeping the first and last three whole',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const edge = 3;
-        const list = `${SLIDE_4} [data-layout="compressed"]`;
-        const tolerance = 1.5;
-        // ACT
-        const found = await evaluate<{
-          list: { top: number; bottom: number };
-          rows: { top: number; bottom: number }[];
-        }>(
-          send,
-          `(() => {
-            const el = document.querySelector('${list}');
-            const box = (n) => { const r = n.getBoundingClientRect(); return { top: r.top, bottom: r.bottom }; };
-            return { list: box(el), rows: [...el.querySelectorAll('[data-row]')].map(box) };
-          })()`,
-        );
-        const heights = found.rows.map((r) => r.bottom - r.top);
-        const gaps = found.rows.slice(1).map((r, i) => r.top - (found.rows[i]?.bottom ?? 0));
-        // ASSERT
-        expect(Math.abs((found.rows.at(-1)?.bottom ?? 0) - found.list.bottom)).toBeLessThan(tolerance);
-        expect(gaps.every((gap) => Math.abs(gap) < tolerance)).toBe(true);
-        expect(new Set(heights.slice(0, edge).map(Math.round)).size).toBe(1);
-        expect(new Set(heights.slice(-edge).map(Math.round)).size).toBe(1);
-        expect(Math.min(...heights.slice(edge, -edge))).toBeLessThan(heights[0] ?? 0);
-      },
-      TIMEOUT,
-    );
-
-    it(
-      'hides the name of a row too thin to read it whole, so no row shows a cut-through sliver of text',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const row = `${SLIDE_4} [data-layout="compressed"] [data-row]`;
-        const readable = 0.85;
-        // ACT
-        const rows = await evaluate<{ tight: boolean; opacity: string; height: number; full: number }[]>(
-          send,
-          `[...document.querySelectorAll('${row}')].map((r) => ({
-            tight: r.hasAttribute('data-tight'),
-            opacity: getComputedStyle(r.querySelector('button')).opacity,
-            height: r.getBoundingClientRect().height,
-            full: parseFloat(getComputedStyle(r).fontSize) * 1.7,
-          }))`,
-        );
-        // ASSERT
-        expect(rows.some((r) => r.tight)).toBe(true);
-        expect(rows.filter((r) => r.tight).every((r) => r.opacity === '0')).toBe(true);
-        expect(rows.filter((r) => !r.tight).every((r) => r.height >= r.full * readable)).toBe(true);
-      },
-      TIMEOUT,
-    );
-
-    describe('the Attention distribution menu', () => {
-      const MENU = `${SLIDE_4} button[data-control="attentionMenu"]`;
-      const POPOVER = '#episode-portal-root [data-slot="attention-menu"]';
-      const sliders = () =>
-        evaluate<Record<string, number>>(
-          send,
-          `Object.fromEntries([...document.querySelectorAll('${POPOVER} input[type=range]')].map((i) => [i.dataset.curve, Number(i.value)]))`,
-        );
-      const setSlider = (name: string, value: number) =>
-        evaluate(
-          send,
-          `(() => {
-            const input = document.querySelector('${POPOVER} input[data-curve="${name}"]');
-            Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, '${value}');
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-            return document.body.offsetHeight;
-          })()`,
-        );
-      const share = (bucket: string) =>
-        evaluate<number>(
-          send,
-          `(() => { const max = Number(document.querySelector('${SLIDE_4} [data-axis-max]').dataset.axisMax); return [...document.querySelectorAll('${SLIDE_4} [data-attention-bucket="${bucket}"] [class*="attBar"] i')].reduce((s, i) => s + parseFloat(i.style.getPropertyValue('--w')) * max / 100, 0); })()`,
-        );
-      const sum = (values: Record<string, number>) => Object.values(values).reduce((a, b) => a + b, 0);
-
-      it(
-        'opens from the ⋯ button in the Episode portal root with four labelled sliders summing to 100',
-        async () => {
-          // ARRANGE
-          await open('light');
-          const expected = { start: 20, recent: 20, middle: 25, newest: 35 };
-          const four = 4;
-          // ACT
-          await evaluate(send, `document.querySelector('${MENU}').click()`);
-          await delay(200);
-          const values = await sliders();
-          const labels = await evaluate<number>(send, `document.querySelectorAll('${POPOVER} label').length`);
-          const expanded = await attr(FULL, 'button[data-control="attentionMenu"]', 'aria-expanded');
-          // ASSERT
-          expect(values).toEqual(expected);
-          expect(labels).toBe(four);
-          expect(expanded).toBe('true');
-        },
-        TIMEOUT,
-      );
-
-      it(
-        'spreads a slider move over the others so all four still sum to 100, and reshapes the rows to it',
-        async () => {
-          // ARRANGE
-          await open('light');
-          await evaluate(send, `document.querySelector('${MENU}').click()`);
-          await delay(200);
-          const moved = 60;
-          const whole = 100;
-          const tolerance = 0.03;
-          // ACT
-          await setSlider('newest', moved);
-          await delay(100);
-          const values = await sliders();
-          const newest = await share('newest');
-          // ASSERT
-          expect(values.newest).toBe(moved);
-          expect(sum(values)).toBe(whole);
-          expect(values.start).toBe(values.recent);
-          expect(Math.abs(newest - moved / whole)).toBeLessThan(tolerance);
-        },
-        TIMEOUT,
-      );
-
-      const typeInto = (name: string, value: string) =>
-        evaluate(
-          send,
-          `(() => {
-            const input = document.querySelector('${POPOVER} input[data-curve-input="${name}"]');
-            Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, '${value}');
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-            return document.body.offsetHeight;
-          })()`,
-        );
-      const click = (selector: string) => evaluate(send, `document.querySelector('${selector}').click()`);
-
-      it(
-        'turns the percentages into number inputs with the pen and normalises them to 100 on save',
-        async () => {
-          // ARRANGE
-          await open('light');
-          await click(MENU);
-          await delay(200);
-          const pen = `${POPOVER} button[data-control="attentionEdit"]`;
-          const save = `${POPOVER} button[data-control="attentionSave"]`;
-          const typed = ['10', '10', '10', '10'];
-          const expected = { start: 25, recent: 25, middle: 25, newest: 25 };
-          // ACT
-          await click(pen);
-          await delay(100);
-          const inputs = await evaluate<number>(
-            send,
-            `document.querySelectorAll('${POPOVER} input[type=number]').length`,
-          );
-          const title = await evaluate<string | null>(send, `document.querySelector('${save}').getAttribute('title')`);
-          for (const [i, name] of ['start', 'recent', 'middle', 'newest'].entries())
-            await typeInto(name, typed[i] ?? '');
-          await click(save);
-          await delay(200);
-          const values = await sliders();
-          // ASSERT
-          expect(inputs).toBe(typed.length);
-          expect(title).toBeNull();
-          expect(values).toEqual(expected);
-        },
-        TIMEOUT,
-      );
-
-      it(
-        'shows the save tooltip once, inside the viewport and the popover, at 1280 and 1440',
-        async () => {
-          const save = `${POPOVER} button[data-control="attentionSave"]`;
-          const tip = 'Your input will be normalized to 100.';
-          for (const width of [1280, 1440]) {
-            // ARRANGE
-            await viewport(width);
-            await open('light');
-            await click(MENU);
-            await delay(200);
-            await click(`${POPOVER} button[data-control="attentionEdit"]`);
-            await delay(100);
-            // ACT
-            await mouseTo(0, 0);
-            await delay(100);
-            await centreOf(MENU);
-            await delay(200);
-            const at = await evaluate<{ x: number; y: number }>(
-              send,
-              `(() => { const r = document.querySelector('${save}').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`,
-            );
-            await mouseTo(at.x + 1, at.y);
-            await mouseTo(at.x, at.y);
-            await delay(600);
-            const state = await evaluate<{
-              left: number;
-              right: number;
-              popLeft: number;
-              popRight: number;
-              width: number;
-              titled: number;
-              text: string;
-            }>(
-              send,
-              `(() => {
-                const b = document.querySelector('${save}');
-                const r = b.getBoundingClientRect();
-                const after = getComputedStyle(b, '::after');
-                const pop = document.querySelector('${POPOVER}').getBoundingClientRect();
-                const w = parseFloat(after.width);
-                // The button is the tip's containing block: its used left/right are resolved px for an absolute box.
-                const left = r.left + parseFloat(after.left);
-                return { left, right: left + w, popLeft: pop.left, popRight: pop.right, width: innerWidth,
-                  titled: document.querySelectorAll('[title="${tip}"]').length, text: after.content };
-              })()`,
-            );
-            // ASSERT
-            expect(state.text).toContain(tip);
-            expect(state.titled).toBe(0);
-            expect(state.left).toBeGreaterThanOrEqual(Math.max(0, state.popLeft) - 1);
-            expect(state.right).toBeLessThanOrEqual(Math.min(state.width, state.popRight) + 1);
-          }
-          await viewport(DEFAULT_WIDTH);
-        },
-        TIMEOUT,
-      );
-
-      it(
-        'switches the Attention layout from the menu, transient',
-        async () => {
-          // ARRANGE
-          await open('light');
-          await click(MENU);
-          await delay(200);
-          const layout = () => attr(FULL, '[data-layout]', 'data-layout');
-          // ACT
-          await click(`${POPOVER} button[data-layout-option="pinned"]`);
-          await delay(100);
-          const pinned = await layout();
-          await click(`${POPOVER} button[data-layout-option="list"]`);
-          await delay(100);
-          const list = await layout();
-          // ASSERT
-          expect([pinned, list]).toEqual(['pinned', 'list']);
-        },
-        TIMEOUT,
-      );
-
-      it(
-        'starts Slide 5 compressed, so the first and the newest rows are always in view',
-        async () => {
-          // ARRANGE
-          await open('light', EPISODE_URL);
-          const expected = 'compressed';
-          // ACT
-          const actual = await attr('slide-5', '[data-layout]', 'data-layout');
-          // ASSERT
-          expect(actual).toBe(expected);
-        },
-        TIMEOUT,
-      );
-
-      it(
-        'labels the axis with its current maximum, 20% when spread out, and steps up as one share grows',
-        async () => {
-          // ARRANGE
-          await open('light');
-          const axis = () => evaluate<string>(send, `document.querySelector('${SLIDE_4} [data-axis-max]').textContent`);
-          const longest = () =>
-            evaluate<number>(
-              send,
-              `Math.max(...[...document.querySelectorAll('${SLIDE_4} [class*="attBar"] i')].map((i) => parseFloat(i.style.getPropertyValue('--w'))))`,
-            );
-          await click(MENU);
-          await delay(200);
-          const floor = '20%';
-          const spread = 60;
-          const long = 0.5;
-          // ACT
-          const before = { label: await axis(), bar: await longest() };
-          await setSlider('newest', spread);
-          await delay(400);
-          const after = { label: await axis(), bar: await longest() };
-          // ASSERT
-          expect(before.label).toBe(floor);
-          expect(before.bar).toBeGreaterThan(long);
-          expect(after.label).not.toBe(floor);
-          expect(after.bar).toBeLessThanOrEqual(1);
-          expect(after.bar).toBeGreaterThan(long);
-        },
-        TIMEOUT,
-      );
-
-      it(
-        'closes on Escape and gives the focus back to the button',
-        async () => {
-          // ARRANGE
-          await open('light');
-          await evaluate(send, `document.querySelector('${MENU}').click()`);
-          await delay(200);
-          // ACT
-          await send('Input.dispatchKeyEvent', {
-            type: 'keyDown',
-            key: 'Escape',
-            code: 'Escape',
-            windowsVirtualKeyCode: 27,
-          });
-          await send('Input.dispatchKeyEvent', {
-            type: 'keyUp',
-            key: 'Escape',
-            code: 'Escape',
-            windowsVirtualKeyCode: 27,
-          });
-          await delay(200);
-          const open1 = await evaluate<number>(send, `document.querySelectorAll('${POPOVER}').length`);
-          // ASSERT
-          expect(open1).toBe(0);
-        },
-        TIMEOUT,
-      );
-
-      it(
-        'marks the middle rows with a stable data-attention-bucket hook',
-        async () => {
-          // ARRANGE
-          await open('light');
-          const edge = 3;
-          const hook = (name: string) => Array.from({ length: edge }, () => name);
-          // ACT
-          const buckets = await evaluate<string[]>(
-            send,
-            `[...document.querySelectorAll('${SLIDE_4} [data-row]')].map((r) => r.getAttribute('data-attention-bucket'))`,
-          );
-          // ASSERT
-          expect(buckets.slice(0, edge)).toEqual(hook('start'));
-          expect(buckets.slice(-edge)).toEqual(hook('newest'));
-          expect(buckets.filter((b) => b === 'middle').length).toBeGreaterThan(0);
-        },
-        TIMEOUT,
-      );
-    });
-
-    it(
-      'hides the smart-zone column and limit label with the side-column button, and the bar widens',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const width = () => evaluate<number>(send, `document.querySelector('${BAR}').getBoundingClientRect().width`);
-        // ACT
-        const before = { labels: await count(`${HEAD} [class*="labelLimit"]`), bar: await width() };
-        await press('zone');
-        await delay(100);
-        const after = {
-          labels: await count(`${HEAD} [class*="labelLimit"]`),
-          bar: await width(),
-          lines: await count(`${HEAD} [class*="line"][aria-hidden]`),
-          pressed: await pressed('zone'),
-        };
-        // ASSERT
-        expect(before.labels).toBe(1);
-        expect(after.labels).toBe(0);
-        expect(after.bar).toBeGreaterThan(before.bar);
-        expect(after.pressed).toBe('false');
-      },
-      TIMEOUT,
-    );
-
-    it(
-      'toggles the window to Technical locally, and the toolbar keeps the last value it set',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const view = () => attr(FULL, 'section[aria-label="Context window"]', 'data-view');
-        const toolbar = `${SLIDE_4} [role="toolbar"] button[data-control="technical"]`;
-        const toolbarPressed = () =>
-          evaluate<string | null>(send, `document.querySelector('${toolbar}').getAttribute('aria-pressed')`);
-        // ACT
-        await press('windowTechnical');
-        await delay(100);
-        const local = [await view(), await pressed('windowTechnical'), await toolbarPressed()];
-        await evaluate(send, `document.querySelector('${toolbar}').click()`);
-        await delay(100);
-        const global = [await view(), await pressed('windowTechnical'), await toolbarPressed()];
-        // ASSERT
-        expect(local).toEqual(['grid', 'true', 'false']);
-        expect(global).toEqual(['grid', 'true', 'true']);
-      },
-      TIMEOUT,
-    );
-
-    it(
-      'lights the bar from a category row and pins it with one click',
-      async () => {
-        // ARRANGE
-        await open('light');
-        const row = `${SLIDE_4} [aria-label="Usage by category"] button[data-part]`;
-        // ACT
-        const at = await centreOf(row, 1);
-        await click(at.x, at.y);
-        await delay(100);
-        const found = await evaluate<{ pinned: string | null; lit: number }>(
-          send,
-          `(() => ({
-          pinned: document.querySelectorAll('${row}')[1].getAttribute('aria-pressed'),
-          lit: document.querySelectorAll('${HEAD} [data-roving] [data-on]').length,
-        }))()`,
-        );
-        // ASSERT
-        expect(found.pinned).toBe('true');
-        expect(found.lit).toBeGreaterThan(0);
-      },
-      TIMEOUT,
-    );
-  });
-});
-
+const SLIDE_5 = 'slide-5';
+/** The Preset opens past the compaction (step 25), too few rows for the Attention cases: they scrub back to this step. */
+const SCRUB_TO = 21;
+/** The page clock's start: virtual time, so the slow-pace case advances it by hand instead of sleeping. */
+const CLOCK_START = new Date('2026-01-01T00:00:00Z');
+const MENU = '[data-control="attentionMenu"]';
+const POPOVER = '#episode-portal-root [data-slot="attention-menu"]';
+const LROW = 'button[class*="lrow"]';
+const ATT_ROW = '[class*="attRow"]';
 /** Two parts on one row start within this many px of each other. */
 const SAME_TOP = 2;
-const SLIDE_7 = SLIDE_4;
-const CHIPS = `${SLIDE_7} [data-chip]`;
+/** Rows pinned at each end of the compressed list, shown whole. */
+const EDGE = 3;
+const HEIGHT_TOLERANCE = 1.5;
 
-/** The part chips' ids in toolbar order, and the grid's children in DOM order (a part's own root class names it). */
-const orderOf = () =>
-  evaluate<{ chips: string[]; cells: string[] }>(
-    send,
-    `(() => {
-      const root = document.querySelector('${SLIDE_7}');
-      const main = root.querySelector('[data-chat-scroll]').closest('section').parentElement;
-      return {
-        chips: [...root.querySelectorAll('[data-chip]')].map((el) => el.dataset.chip),
-        cells: [...main.children].map((el) => el.getAttribute('data-part-cell') ?? el.className.split(' ')[0]),
-      };
-    })()`,
-  );
-
-/** Presses a chip, drags it past the middle of another chip and releases there, as a mouse does. */
-async function dragChip(from: string, onto: string) {
-  const start = await centreOf(`${CHIPS}[data-chip="${from}"]`);
-  const end = await evaluate<{ x: number; y: number }>(
-    send,
-    `(() => {
-      const r = document.querySelector('${CHIPS}[data-chip="${onto}"]').getBoundingClientRect();
-      const from = document.querySelector('${CHIPS}[data-chip="${from}"]').getBoundingClientRect();
-      // On the near-side edge when dragging backwards, the far one when dragging forwards: past the chip's middle.
-      return { x: r.left < from.left ? r.left + 4 : r.right - 4, y: r.top + r.height / 2 };
-    })()`,
-  );
-  await mouseTo(start.x, start.y);
-  await send('Input.dispatchMouseEvent', { type: 'mousePressed', ...start, button: 'left', buttons: 1, clickCount: 1 });
-  const steps = 12;
-  for (let i = 1; i <= steps; i++) {
-    const x = start.x + ((end.x - start.x) * i) / steps;
-    const y = start.y + ((end.y - start.y) * i) / steps;
-    await send('Input.dispatchMouseEvent', {
-      type: 'mouseMoved',
-      x,
-      y,
-      button: 'left',
-      buttons: 1,
-      pointerType: 'mouse',
-    });
-    await delay(20);
-  }
-  await send('Input.dispatchMouseEvent', { type: 'mouseReleased', ...end, button: 'left', clickCount: 1 });
-  await delay(200);
+interface Opened {
+  readonly root: Locator;
 }
+
+/** Opens the Slide mounted and hydrated; the Attention cases scrub back to step 21. */
+interface OpenOptions {
+  readonly url?: string;
+  readonly preset?: string;
+  readonly scrub?: boolean;
+  readonly clock?: boolean;
+}
+
+async function open(page: Page, options: OpenOptions = {}): Promise<Opened> {
+  const { url = SLIDES, preset = FULL } = options;
+  await page.emulateMedia({ colorScheme: 'light' });
+  if (options.clock) await page.clock.install({ time: CLOCK_START });
+  await page.goto(url);
+  // A Slide mounts when it nears the viewport: scroll to the Context, then wait for its hydration.
+  const root = page.locator(`[data-cornerstone="${preset}"]`);
+  await root.scrollIntoViewIfNeeded();
+  await expect(root).toBeVisible();
+  const range = root.locator('input[type=range]');
+  await expect
+    .poll(() => range.evaluate((el) => Object.keys(el).some((key) => key.startsWith('__reactProps'))))
+    .toBe(true);
+  if (options.scrub !== false) await scrubBack(root, range);
+  return { root };
+}
+
+/** Commits step 21 through the range input, as a keyboard or a drag does, and waits for the rows to arrive. */
+async function scrubBack(root: Locator, range: Locator) {
+  await range.fill(String(SCRUB_TO));
+  await expect(root.locator('[data-row]')).toHaveCount(SCRUB_TO);
+  await rowsAtRest(root);
+}
+
+/** Waits until no Attention row is still moving to its height. */
+const rowsAtRest = (root: Locator) => expect(root.locator('[data-row][data-motion="running"]')).toHaveCount(0);
+
+/** The part ids of rows, bubbles and blocks look like `m4` or `m4@2`: the bubble's own id is before the `@`. */
+const bubbleOf = (root: Locator, id: string) => root.locator(`[data-role][data-part="${id}"]`);
+
+/** Whether a bubble sits fully inside the chat's scroll box, and whether it is lit. */
+const bubbleState = (root: Locator, id: string) =>
+  root.evaluate((el, part) => {
+    const bubble = el.querySelector(`[data-role][data-part="${part}"]`) as HTMLElement;
+    const box = (bubble.parentElement as HTMLElement).getBoundingClientRect();
+    const r = bubble.getBoundingClientRect();
+    return { inView: r.top >= box.top - 1 && r.bottom <= box.bottom + 1, lit: bubble.hasAttribute('data-on') };
+  }, id);
+
+/** Scrolls the chat to the top and returns the id of the last bubble then out of view. */
+const scrollChatAway = (root: Locator) =>
+  root.evaluate((el) => {
+    const box = (el.querySelector('[data-role]') as HTMLElement).parentElement as HTMLElement;
+    box.scrollTo({ top: 0, behavior: 'instant' });
+    const edge = box.getBoundingClientRect();
+    const out = [...box.querySelectorAll('[data-role]:not([hidden])')].filter(
+      (bubble) => bubble.getBoundingClientRect().top > edge.bottom,
+    );
+    return out.at(-1)?.getAttribute('data-part') ?? '';
+  });
+
+/** The heights of the compressed list's rows. */
+const heightsOf = (root: Locator) =>
+  root
+    .locator('[data-layout="compressed"] [data-row]')
+    .evaluateAll((rows) => rows.map((r) => r.getBoundingClientRect().height));
+
+/** The reasons of the checks that do not hold, so a failing poll names what is wrong. */
+const failed = (checks: readonly (readonly [boolean, string])[]) =>
+  checks.filter(([holds]) => !holds).map(([, why]) => why);
+
+const sum = (values: readonly number[]) => values.reduce((a, b) => a + b, 0);
+
+/** Switches the Attention layout through the menu, then closes the menu again. */
+async function setLayout(page: Page, root: Locator, layout: string) {
+  await root.locator(MENU).click();
+  await page.locator(`${POPOVER} button[data-layout-option="${layout}"]`).click();
+  await page.keyboard.press('Escape');
+  await expect(page.locator(POPOVER)).toHaveCount(0);
+  await expect(root.locator('[data-layout]')).toHaveAttribute('data-layout', layout);
+  await rowsAtRest(root);
+}
+
+/** Where the save check's tooltip (its `::after`) lies against the viewport and the popover, and its native titles. */
+const tooltipOf = (save: Locator, tip: string) =>
+  save.evaluate((b, text) => {
+    const r = b.getBoundingClientRect();
+    const after = getComputedStyle(b, '::after');
+    const popover = document.querySelector('#episode-portal-root [data-slot="attention-menu"]') as HTMLElement;
+    const pop = popover.getBoundingClientRect();
+    const left = r.left + parseFloat(after.left);
+    return {
+      left,
+      right: left + parseFloat(after.width),
+      popLeft: pop.left,
+      popRight: pop.right,
+      width: innerWidth,
+      titled: document.querySelectorAll(`[title="${text}"]`).length,
+      content: after.content,
+    };
+  }, tip);
+
+/** Rests the pointer in the middle of the bar, the bar centred in the viewport clear of the sticky header. */
+async function restOnBar(page: Page, root: Locator) {
+  const bar = root.locator('[data-roving]').first();
+  await bar.evaluate((el) => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+  const box = (await bar.boundingBox()) as { x: number; y: number; width: number; height: number };
+  const at = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  await page.mouse.move(at.x, at.y);
+  return at;
+}
+
+/** Rests the pointer on the bar and waits for the zoom to open. */
+async function openZoom(page: Page, root: Locator) {
+  const at = await restOnBar(page, root);
+  await expect(root.locator(LROW).first()).toBeVisible();
+  return at;
+}
+
+test.describe('success cases', () => {
+  test('keeps the zoom open while the pointer crosses from the bar to it at a slow pace', async ({ page }) => {
+    // ARRANGE
+    const step = 4;
+    const paceMs = 60;
+    const { root } = await open(page, { clock: true });
+    await page.clock.pauseAt(new Date(CLOCK_START.getTime() + 60_000));
+    const bar = await restOnBar(page, root);
+    await page.clock.runFor(paceMs);
+    await expect(root.locator(LROW).first()).toBeVisible();
+    const row = (await root.locator(LROW).nth(3).boundingBox()) as { x: number; width: number };
+    const closed: number[] = [];
+    // ACT
+    for (let x = bar.x; x < row.x + row.width / 2; x += step) {
+      await page.mouse.move(x, bar.y);
+      await page.clock.runFor(paceMs);
+      closed.push(await root.locator(LROW).count());
+    }
+    // ASSERT
+    expect(closed.length).toBeGreaterThan(1);
+    expect(closed.filter((count) => count === 0)).toEqual([]);
+  });
+
+  test('scrolls the related chat bubble into view and lights it when a zoom row is clicked', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    await openZoom(page, root);
+    const away = await scrollChatAway(root);
+    const expected = { inView: true, lit: true };
+    // ACT
+    const row = root.locator(LROW).nth(3);
+    const id = ((await row.getAttribute('data-part')) ?? '').split('@')[0] ?? '';
+    // The zoom lives only while the pointer is near: Playwright's own scroll-and-retry would close it, so the click lands where the row is.
+    await row.click({ force: true });
+    // ASSERT
+    expect(away).not.toBe('');
+    await expect.poll(() => bubbleState(root, id)).toEqual(expected);
+  });
+
+  test('hovers an Attention row without remounting the list, and lights its bubble', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const mark = 'kept';
+    const rows = root.locator(ATT_ROW);
+    const card = root.locator('[class*="attCard"]');
+    await card.evaluate((el, value) => ((el.firstElementChild as unknown as { __mark: string }).__mark = value), mark);
+    // ACT
+    await rows.nth(2).hover();
+    await rows.nth(4).hover();
+    const lit = root.locator('[data-row][data-on]');
+    await expect(lit).toHaveCount(1);
+    const part = (await lit.getAttribute('data-part')) ?? '';
+    const kept = await card.evaluate((el) => (el.firstElementChild as unknown as { __mark?: string }).__mark ?? null);
+    // ASSERT
+    expect(kept).toBe(mark);
+    await expect(bubbleOf(root, part)).toHaveAttribute('data-on', '');
+  });
+
+  test('scrolls the chat to the bubble of a clicked Attention row', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const away = await scrollChatAway(root);
+    const expected = { inView: true, lit: true };
+    // ACT
+    await root.locator(`${ATT_ROW}[data-part="${away}"]`).click();
+    // ASSERT
+    expect(away).not.toBe('');
+    await expect.poll(() => bubbleState(root, away)).toEqual(expected);
+  });
+
+  test('magnifies the Attention rows under the pointer like a dock, with the total height unchanged', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const minRow = 3.5;
+    const reach = 3;
+    const slack = 0.5;
+    const resting = await heightsOf(root);
+    // The thinnest row in the middle, so the growth peaks under the pointer whatever the split is.
+    const middle = resting.slice(reach, -reach);
+    const index = reach + middle.indexOf(Math.min(...middle));
+    const target = root.locator('[data-layout="compressed"] [data-row]').nth(index);
+    await target.scrollIntoViewIfNeeded();
+    const box = (await target.boundingBox()) as { x: number; y: number; width: number; height: number };
+    const restingAfterScroll = await heightsOf(root);
+    // ACT
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await settled(root.locator('[data-row][data-on]'));
+    // The magnified rows push each other down, so the peak sits under the pointer, which is the lit row.
+    const problems = async () => {
+      const docked = await heightsOf(root);
+      const litIndex = await root
+        .locator('[data-layout="compressed"] [data-row]')
+        .evaluateAll((rows) => rows.findIndex((r) => r.hasAttribute('data-on')));
+      const grown = docked.map((h, i) => h - (restingAfterScroll[i] ?? 0));
+      const peak = grown.indexOf(Math.max(...grown));
+      return failed([
+        [Math.abs(sum(docked) - sum(restingAfterScroll)) < HEIGHT_TOLERANCE, 'the total height changed'],
+        [Math.min(...docked) >= minRow, 'a row fell under the minimum'],
+        [Math.abs(peak - litIndex) <= 1, 'the peak is not under the pointer'],
+        [grown.slice(peak + reach + 1).every((g) => g <= slack), 'rows beyond the reach grew'],
+        [Math.max(...grown) > 1, 'no row grew'],
+      ]);
+    };
+    // ASSERT
+    await expect.poll(problems).toEqual([]);
+  });
+
+  for (const layout of ['compressed', 'pinned', 'list']) {
+    test(`shows the percentage at the right of a hovered or focused Attention row in the ${layout} layout, moving nothing`, async ({
+      page,
+    }) => {
+      // ARRANGE
+      const { root } = await open(page);
+      if (layout !== 'compressed') await setLayout(page, root, layout);
+      const hidden = '0';
+      const shown = '1';
+      const percent = /^\d+%$/;
+      const rows = root.locator('[data-row]');
+      const middle = Math.floor((await rows.count()) / 2);
+      const boxOf = () =>
+        root.evaluate((el) => {
+          const bar = (el.querySelector('[class*="attBar"]') as HTMLElement).getBoundingClientRect();
+          const card = (el.querySelector('[class*="attCard"]') as HTMLElement).getBoundingClientRect();
+          return [bar.left, bar.width, card.height].map(Math.round);
+        });
+      await rows.nth(middle).scrollIntoViewIfNeeded();
+      await page.mouse.move(5, 5);
+      await rowsAtRest(root);
+      const resting = await boxOf();
+      // ACT
+      await rows.nth(middle).hover();
+      const hovered = root.locator('[data-row]:hover [data-pct]');
+      await expect(hovered).toHaveCSS('opacity', shown);
+      await rowsAtRest(root);
+      const whileHovered = await boxOf();
+      const text = (await hovered.textContent()) ?? '';
+      await page.mouse.move(5, 5);
+      await expect(root.locator('[data-row] [data-pct]').first()).toHaveCSS('opacity', hidden);
+      await rows.nth(middle).locator('button').focus();
+      await expect(rows.nth(middle).locator('[data-pct]')).toHaveCSS('opacity', shown);
+      await rowsAtRest(root);
+      const whileFocused = await boxOf();
+      // ASSERT
+      expect(text).toMatch(percent);
+      expect(whileHovered).toEqual(resting);
+      expect(whileFocused).toEqual(resting);
+    });
+  }
+
+  test('gives the Attention bar about a third of the row', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const about = { min: 0.25, max: 0.4 };
+    const share = () =>
+      root.evaluate((el) => {
+        const bar = (el.querySelector('[class*="attBar"]') as HTMLElement).getBoundingClientRect().width;
+        const name = (el.querySelector('[class*="attName"]') as HTMLElement).getBoundingClientRect().width;
+        return bar / (bar + name);
+      });
+    // ACT
+    const actual = await share();
+    // ASSERT
+    expect(actual).toBeGreaterThan(about.min);
+    expect(actual).toBeLessThan(about.max);
+  });
+});
+
+test.describe('failure cases', () => {
+  test('shows no Attention percentage at rest in Technical mode, only on hover as in Simple', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const expected = { numbers: '', visible: 0 };
+    const technical = root.locator('[role="toolbar"] button[data-control="technical"]');
+    // ACT
+    await technical.click();
+    await expect(technical).toHaveAttribute('aria-pressed', 'true');
+    await page.mouse.move(5, 5);
+    await rowsAtRest(root);
+    const rest = () =>
+      root.locator('[data-row]').evaluateAll((rows) => ({
+        numbers: rows
+          .flatMap((r) => [...r.children].filter((c) => c.tagName === 'SPAN' && !c.hasAttribute('data-pct')))
+          .map((c) => c.textContent)
+          .join(''),
+        visible: rows.filter((r) => Number(getComputedStyle(r.querySelector('[data-pct]') as Element).opacity) > 0)
+          .length,
+      }));
+    // ASSERT
+    await expect.poll(rest).toEqual(expected);
+  });
+
+  test('does not shift the chat or the page when an Attention row is hovered', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const row = root.locator(ATT_ROW).nth(2);
+    await row.scrollIntoViewIfNeeded();
+    await page.mouse.move(5, 5);
+    await rowsAtRest(root);
+    const measure = () =>
+      root.evaluate((el) => {
+        const phone = (el.querySelector('[class*="phone"]') as HTMLElement).getBoundingClientRect().height;
+        const bubbles = [...el.querySelectorAll('[data-role]:not([hidden])')]
+          .map((b) => `${b.getAttribute('data-part')}=${Math.round(b.getBoundingClientRect().height)}`)
+          .join();
+        const layout =
+          (el.querySelector('[data-layout]') as HTMLElement).getBoundingClientRect().top -
+          el.getBoundingClientRect().top;
+        return [bubbles, Math.round(phone), Math.round(scrollY), Math.trunc(layout)].join();
+      });
+    const before = await measure();
+    // ACT
+    await row.hover();
+    await expect(root.locator('[data-row][data-on]')).toHaveCount(1);
+    await rowsAtRest(root);
+    // ASSERT
+    await expect.poll(measure).toBe(before);
+  });
+
+  test('hides the name of a row too thin to read it whole, so no row shows a cut-through sliver of text', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const readable = 0.85;
+    const hidden = '0';
+    // ACT
+    const problems = async () => {
+      const rows = await root.locator('[data-layout="compressed"] [data-row]').evaluateAll((all) =>
+        all.map((r) => ({
+          tight: r.hasAttribute('data-tight'),
+          opacity: getComputedStyle(r.querySelector('button') as Element).opacity,
+          height: r.getBoundingClientRect().height,
+          full: parseFloat(getComputedStyle(r).fontSize) * 1.7,
+        })),
+      );
+      return failed([
+        [rows.some((r) => r.tight), 'no row is tight'],
+        [rows.filter((r) => r.tight).every((r) => r.opacity === hidden), 'a tight row shows its name'],
+        [rows.filter((r) => !r.tight).every((r) => r.height >= r.full * readable), 'a thin row is not tight'],
+      ]);
+    };
+    // ASSERT
+    await expect.poll(problems).toEqual([]);
+  });
+
+  test('has no eye in the head: the toolbar chip alone hides and shows the context category', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const chip = root.locator('[role="toolbar"] [data-chip="category"]');
+    const category = root.locator('[aria-label="Usage by category"]');
+    const eye = root.locator('section[aria-label="Context window"] button[data-control="preview"]');
+    const on = 'true';
+    const off = 'false';
+    // ACT
+    await expect(category).toHaveCount(1);
+    await expect(chip).toHaveAttribute('aria-pressed', on);
+    await chip.click();
+    // ASSERT
+    await expect(eye).toHaveCount(0);
+    await expect(category).toHaveCount(0);
+    await expect(chip).toHaveAttribute('aria-pressed', off);
+    await chip.click();
+    await expect(category).toHaveCount(1);
+    await expect(chip).toHaveAttribute('aria-pressed', on);
+  });
+});
+
+test.describe('edge cases', () => {
+  test('draws the lens at half the old stroke and grows the hovered block by transform only', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const stroke = '1px';
+    const unmoved = 'none';
+    // ACT
+    await openZoom(page, root);
+    const hot = root.locator('[data-roving] [data-hot]');
+    // ASSERT
+    await expect(root.locator('[class*="lens"]')).toHaveCSS('border-top-width', stroke);
+    await expect(hot).toHaveCount(1);
+    await expect(hot).not.toHaveCSS('transform', unmoved);
+  });
+
+  test('gives conversation and category their own Technical toggle, and the category stays beside the window in Technical', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const head = root.locator('section[aria-label="Context window"]');
+    const usage = root.locator('[aria-label="Usage by category"]');
+    const topGap = async () => {
+      const window = (await head.boundingBox()) as { y: number };
+      const category = (await usage.boundingBox()) as { y: number };
+      return Math.abs(category.y - window.y);
+    };
+    await expect.poll(topGap).toBeLessThan(SAME_TOP);
+    // ACT
+    await usage.locator('button[data-control="categoryTechnical"]').click();
+    await expect(usage.locator('button[data-control="categoryTechnical"]')).toHaveAttribute('aria-pressed', 'true');
+    // ASSERT
+    await expect.poll(topGap).toBeLessThan(SAME_TOP);
+    await expect(usage.locator('details')).not.toHaveAttribute('open', '');
+    await expect(root.locator('section[aria-label="Chat"] button[data-control="conversationTechnical"]')).toHaveCount(
+      1,
+    );
+  });
+
+  test('fills the compressed Attention list to the last row with no overlapping rows, keeping the first and last three whole', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const { root } = await open(page);
+    const list = root.locator('[data-layout="compressed"]');
+    // ACT
+    const problems = async () => {
+      const found = await list.evaluate((el) => {
+        const box = (n: Element) => {
+          const r = n.getBoundingClientRect();
+          return { top: r.top, bottom: r.bottom };
+        };
+        return { list: box(el), rows: [...el.querySelectorAll('[data-row]')].map(box) };
+      });
+      const heights = found.rows.map((r) => r.bottom - r.top);
+      const gaps = found.rows.slice(1).map((r, i) => r.top - (found.rows[i]?.bottom ?? 0));
+      return failed([
+        [Math.abs((found.rows.at(-1)?.bottom ?? 0) - found.list.bottom) < HEIGHT_TOLERANCE, 'a gap at the end'],
+        [gaps.every((gap) => Math.abs(gap) < HEIGHT_TOLERANCE), 'rows overlap or gap'],
+        [new Set(heights.slice(0, EDGE).map(Math.round)).size === 1, 'the first rows differ'],
+        [new Set(heights.slice(-EDGE).map(Math.round)).size === 1, 'the last rows differ'],
+        [Math.min(...heights.slice(EDGE, -EDGE)) < (heights[0] ?? 0), 'no middle row is compressed'],
+      ]);
+    };
+    // ASSERT
+    await expect.poll(problems).toEqual([]);
+  });
+
+  for (const width of [1280, 1440]) {
+    test(`shows the save tooltip once, inside the viewport and the popover, at ${width}`, async ({ page }) => {
+      // ARRANGE
+      await page.setViewportSize({ width, height: 900 });
+      const { root } = await open(page);
+      const tip = 'Your input will be normalized to 100.';
+      const save = page.locator(`${POPOVER} button[data-control="attentionSave"]`);
+      const slack = 1;
+      await root.locator(MENU).click();
+      await page.locator(`${POPOVER} button[data-control="attentionEdit"]`).click();
+      // ACT
+      await page.mouse.move(0, 0);
+      await root.locator(MENU).scrollIntoViewIfNeeded();
+      await save.hover();
+      const read = () => tooltipOf(save, tip);
+      await expect.poll(async () => (await read()).content).toContain(tip);
+      const state = await read();
+      // ASSERT
+      expect(state.titled).toBe(0);
+      expect(state.left).toBeGreaterThanOrEqual(Math.max(0, state.popLeft) - slack);
+      expect(state.right).toBeLessThanOrEqual(Math.min(state.width, state.popRight) + slack);
+    });
+  }
+
+  test('starts Slide 5 compressed, so the first and the newest rows are always in view', async ({ page }) => {
+    // ARRANGE
+    const expected = 'compressed';
+    const { root } = await open(page, { url: ATTENTION_SPAN, preset: SLIDE_5, scrub: false });
+    // ACT
+    const list = root.locator('[data-layout]');
+    // ASSERT
+    await expect(list).toHaveAttribute('data-layout', expected);
+  });
+});

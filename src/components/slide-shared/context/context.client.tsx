@@ -52,7 +52,7 @@ function useModel(data: ContextViewData, chat: Chat): Model {
 function rootAttrs(m: Model) {
   return {
     'data-cornerstone': m.data.preset.id,
-    'data-motion': m.data.preset.motion,
+    'data-motion-style': m.data.preset.motion,
     'data-fade': m.data.preset.fade || m.state.parts.attention ? '' : undefined,
     'data-lit': m.view.lit || m.view.ghost ? '' : undefined,
   };

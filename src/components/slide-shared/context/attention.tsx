@@ -1,4 +1,5 @@
 import { memo, useMemo, useRef, type FocusEvent, type PointerEvent } from 'react';
+import { useMotion } from '../human-in-the-loop/use-motion.client';
 import { axisMaxOf, bucketOf, EDGE } from './attention-curve.pure';
 import { useDock } from './attention-dock';
 import { AttentionMenu } from './attention-menu.client';
@@ -43,8 +44,10 @@ const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: vars
 const AttentionRow = memo(function AttentionRow({ say, step, units, max, on, pin, bucket }: RowProps) {
   const name = nameOf(say, step);
   const colour = colourOf(stepCat(step), say.tech ? 'technical' : 'simple');
+  const motion = useMotion();
   return (
     <div
+      {...motion}
       className={styles.attRow}
       data-row=""
       data-part={step.id}
