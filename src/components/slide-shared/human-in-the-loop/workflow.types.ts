@@ -29,6 +29,8 @@ export interface JobRun {
   readonly prompt: string;
   /** The short grill (the most load-bearing questions per round); interview jobs only. */
   readonly short?: string;
+  /** The short variant of the Technical `command`, for the same interview job. */
+  readonly shortCommand?: string;
 }
 
 /** The "Make it a page" step: Simple asks for one self-contained HTML file; Technical serves a temp file on localhost. */

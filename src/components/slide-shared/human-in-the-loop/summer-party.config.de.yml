@@ -208,6 +208,7 @@ words:
             F1 <Titel>: <Optionen A und B>. Empfohlen <A oder B>, <Grund>. Meine Antwort: <meine Antwort>.
             F2 <Titel>: <Optionen A und B>. Empfohlen <A oder B>, <Grund>. Meine Antwort: <meine Antwort>.
           ```
+        shortCommand: '/grilling Antworte auf Deutsch. Interviewe mich zu diesem Teil meiner Planung. Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa. Das Teil, das wir mitnehmen: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus. Arbeite in Runden mit nummerierten Fragen, je zwei Optionen und einer empfohlenen Antwort, stelle eine Frage zu dem, was beim letzten Fest schiefging, und wenn ich "fertig" sage, beende mit einem Handoff-Block der Art text, der jede Frage und meine Antwort enthält. Kurze Version: höchstens 3 tragende Fragen pro Runde, höchstens 2 Runden.'
       command: |-
         /grilling Antworte auf Deutsch. Interviewe mich zu diesem Teil meiner Planung. Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa. Das Teil, das wir mitnehmen: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus. Arbeite in Runden mit nummerierten Fragen, je zwei Optionen und einer empfohlenen Antwort, stelle eine Frage zu dem, was beim letzten Fest schiefging, und wenn ich "fertig" sage, beende mit einem Handoff-Block der Art text, der jede Frage und meine Antwort enthält.
       exampleInput: |-
@@ -520,7 +521,7 @@ words:
       title: Location
       description: Ein frischer Chat pro Location. Jeder Chat bekommt nur die Anforderungen und prüft eine Location gegen jedes Kriterium.
       run:
-        todo: 'Öffne für jede Option (Location) einen frischen Chat, also drei, füge den Prompt ein und tausche den Namen aus, den Du prüfen willst. Hast Du noch keinen echten Kandidaten, füge den Prompt unverändert ein: Die KI nennt zuerst drei echte Kandidaten, und Du wählst einen.'
+        todo: 'Öffne für jede Option einen frischen Chat, also drei, füge den Prompt ein und wähle eine der drei echten Locations, die er nennt.'
         prompt: |-
           Antworte auf Deutsch.
 
@@ -550,12 +551,8 @@ words:
             - Sie in eine Rangfolge bringen
           ```
 
-          ## Die Option, die Du prüfst
-          Hafenhalle
-          (Dieser Name ist nur ein Beispiel. Ersetze ihn durch Deinen eigenen Kandidaten. Hast Du keinen, lass ihn stehen.)
-
           ## So arbeitest Du
-          1. Wenn ich noch keinen echten Kandidaten habe (der Name oben ist nur ein Beispiel), nenne zuerst drei echte Locations in der Stadt aus dem Ziel der Spec, die zu den Anforderungen passen, und bitte mich, eine auszuwählen. Prüfe nur die, die ich wähle.
+          1. Nenne zuerst drei echte Locations in der Stadt aus der Spec (im Beispiel: Frankfurt), die zu den Anforderungen passen, mit je einer Zeile, warum sie passen. Lass mich eine wählen und warte auf meine Antwort. Prüfe nur die, die ich wähle.
           2. Gehe die Anforderungen eine nach der anderen durch. Finde für jede den Fakt, der sie entscheidet.
           3. Nutze zuerst Primärquellen: die eigene Website der Option, ihre offiziellen Unterlagen und Preise, eine offizielle Buchungs- oder Behördenseite. Nutze Bewertungen und Vergleichsportale nur, um eine Lücke zu füllen, und sage das dazu.
           4. Nenne zu jedem Fakt, wo Du ihn gefunden hast (Seite oder Dokument) und wie sicher Du bist: sicher, unsicher oder nicht gefunden. Rate nie, um eine Lücke zu füllen: Schreibe "nicht gefunden" und sage, was sie klären würde.
@@ -573,7 +570,7 @@ words:
             - "<Anforderung: geprüfter Fakt (Quelle: wo; sicher | unsicher | nicht gefunden)>"
           ```
       command: |-
-        /research Antworte auf Deutsch. Prüfe Hafenhalle gegen diese Anforderungen: 200 Gäste; Höchstens 150 Euro pro Person; Stufenlos; Vegetarisches Menü; Separater ruhiger Raum. Nutze Primärquellen, nenne die Quelle jedes Fakts und sage, wo Du unsicher bist. Vergleiche nicht mit anderen Optionen. Ist der Name kein echter Kandidat, nenne zuerst drei echte in der Stadt und bitte mich, einen zu wählen.
+        /research Antworte auf Deutsch. Nenne drei echte Locations in Frankfurt, die zu diesen Anforderungen passen: 200 Gäste; Höchstens 150 Euro pro Person; Stufenlos; Vegetarisches Menü; Separater ruhiger Raum. Lass mich eine wählen und prüfe sie dann gegen jede Anforderung. Nutze Primärquellen, nenne die Quelle jedes Fakts und sage, wo Du unsicher bist. Vergleiche nicht mit anderen Optionen.
       exampleInput: |-
         ```handoff
         kind: spec

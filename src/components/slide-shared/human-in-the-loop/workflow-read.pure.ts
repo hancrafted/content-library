@@ -57,7 +57,7 @@ function runOf(words: Tree, id: string, problems: string[]): JobRun {
   const prompt = text(run.prompt);
   if (!todo) problems.push(`Job "${id}" has no words.run.todo.`);
   if (!prompt) problems.push(`Job "${id}" has no words.run.prompt.`);
-  return { todo: todo ?? '', prompt: prompt ?? '', short: text(run.short) };
+  return { todo: todo ?? '', prompt: prompt ?? '', short: text(run.short), shortCommand: text(run.shortCommand) };
 }
 
 function checkOf(words: Tree, id: string, problems: string[]): JobCheck | undefined {

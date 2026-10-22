@@ -30,6 +30,8 @@ export interface UiWords {
   /** The button under a stage column, and the modal title (`{stage}` is the stage's name). */
   readonly tryIt: string;
   readonly tryTitle: string;
+  /** The hidden suffix of the Try it button that says which stage (`{stage}` is its name). */
+  readonly tryFor: string;
   /** The accessible name of a BRIEF letter circle (`{letter}` and `{why}`). */
   readonly moveLabel: string;
   readonly promptLabel: string;
@@ -107,8 +109,6 @@ export interface DiagramProps {
   readonly words: UiWords;
   /** Where the stages show no "Try it" button: a readonly Preset. */
   readonly readonly: boolean;
-  /** The stage whose modal is open, so its button reads as pressed. */
-  readonly openStageId: string | null;
   readonly onOpenStage: (stageId: string) => void;
 }
 

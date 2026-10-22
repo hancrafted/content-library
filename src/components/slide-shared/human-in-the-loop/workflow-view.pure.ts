@@ -74,7 +74,7 @@ function runOf(job: Job, level: Level): StepView {
   const prompt: PromptView =
     command === undefined
       ? { kind: 'prompt', text: job.run.prompt, short: job.run.short }
-      : { kind: 'command', text: command };
+      : { kind: 'command', text: command, short: job.run.shortCommand };
   return { id: 'run', todo: job.run.todo, prompt };
 }
 

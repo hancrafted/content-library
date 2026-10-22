@@ -10,6 +10,7 @@ ui:
   copied: Copied
   tryIt: Try it
   tryTitle: '{stage}: Try it'
+  tryFor: 'for {stage}'
   moveLabel: 'BRIEF {letter}: {why}'
   promptLabel: Prompt
   commandLabel: Command

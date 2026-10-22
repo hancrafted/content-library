@@ -29,7 +29,7 @@ const workflow: Workflow = {
           outputs: [{ id: 'answers', kind: 'text' }],
           fanOut: 3,
           skills: [{ group: 'productivity', name: 'grilling' }],
-          run: { todo: 'Do.', prompt: 'Ask.', short: 'Ask short.' },
+          run: { todo: 'Do.', prompt: 'Ask.', short: 'Ask short.', shortCommand: '/grilling short' },
           command: '/grilling',
           exampleOutput: BLOCK,
           check: { todo: 'Check.', criteria: ['one'], prompt: 'Check.' },

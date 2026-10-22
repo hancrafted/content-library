@@ -1,9 +1,11 @@
 'use client';
 
 import { Code, Download, Upload } from 'lucide-react';
-import { useId, type ChangeEvent, type ReactNode } from 'react';
+import { useId, type ChangeEvent } from 'react';
 import styles from './human-in-the-loop.module.css';
 import type { ToolbarProps } from './human-in-the-loop.types';
+import { IconButton } from './icon-button.client';
+import { Tip } from './tip.client';
 import { offers } from './toolbar-controls.pure';
 import { workflowFile } from './workflow-file.pure';
 
@@ -22,51 +24,24 @@ function download(workflow: ToolbarProps['workflow']) {
   URL.revokeObjectURL(url);
 }
 
-interface IconProps {
-  readonly label: string;
-  /** The tooltip, where it says more than the name. */
-  readonly tip?: string;
-  readonly control: string;
-  readonly pressed?: boolean;
-  readonly onClick: () => void;
-  readonly children: ReactNode;
-}
-
-/** An icon button: the label is its accessible name and its tooltip (`data-tip`, shown on hover and keyboard focus). */
-function IconButton({ label, tip = label, control, pressed, onClick, children }: IconProps) {
+function Pills({ bar }: { readonly bar: ToolbarProps }) {
+  if (!offers(bar.controls, 'picker') || bar.choices.length < 2) return null;
+  const known = bar.choices.some((c) => c.id === bar.workflow.id);
   return (
-    <button
-      type="button"
-      className={styles.icon}
-      aria-label={label}
-      data-tip={tip}
-      data-control={control}
-      aria-pressed={pressed}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-
-function Pills({ v }: { readonly v: ToolbarProps }) {
-  if (!offers(v.controls, 'picker') || v.choices.length < 2) return null;
-  const known = v.choices.some((c) => c.id === v.workflow.id);
-  return (
-    <div className={styles.pills} role="group" aria-label={v.words.workflow} data-control="picker">
+    <div className={styles.pills} role="group" aria-label={bar.words.workflow} data-control="picker">
       {known ? null : (
         <button type="button" aria-pressed="true">
-          {v.workflow.title}
+          {bar.workflow.title}
         </button>
       )}
-      {v.choices.map((c) => (
+      {bar.choices.map((c) => (
         <button
           key={c.id}
           type="button"
           data-workflow={c.id}
-          aria-pressed={known && c.id === v.workflow.id}
-          className={known && c.id === v.workflow.id ? 'font-semibold' : undefined}
-          onClick={() => v.onWorkflow(c.id)}
+          aria-pressed={known && c.id === bar.workflow.id}
+          className={known && c.id === bar.workflow.id ? 'font-semibold' : undefined}
+          onClick={() => bar.onWorkflow(c.id)}
         >
           {c.title}
         </button>
@@ -75,23 +50,25 @@ function Pills({ v }: { readonly v: ToolbarProps }) {
   );
 }
 
-function UploadButton({ v, describedBy }: { readonly v: ToolbarProps; readonly describedBy?: string }) {
+function UploadButton({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
   const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) v.onUpload(await file.text());
+    if (file) bar.onUpload(await file.text());
     event.target.value = '';
   };
   return (
-    <label className={`${styles.icon} ${styles.upload}`} data-tip={v.words.upload} data-control="upload">
-      <Upload aria-hidden="true" />
-      <input
-        type="file"
-        accept=".yml,.yaml,application/x-yaml,text/yaml"
-        aria-label={v.words.upload}
-        aria-describedby={describedBy}
-        onChange={readChosenFile}
-      />
-    </label>
+    <Tip text={bar.words.upload} align="end">
+      <label className={`${styles.icon} ${styles.upload}`} data-control="upload">
+        <Upload aria-hidden="true" />
+        <input
+          type="file"
+          accept=".yml,.yaml,application/x-yaml,text/yaml"
+          aria-label={bar.words.upload}
+          aria-describedby={describedBy}
+          onChange={readChosenFile}
+        />
+      </label>
+    </Tip>
   );
 }
 
@@ -106,23 +83,30 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
 }
 
 /** The icon buttons the registry and the Preset allow, in order: Technical, download, upload. */
-function Icons({ v }: { readonly v: ToolbarProps }) {
-  const { controls, readonly, words, level } = v;
+function Icons({ bar }: { readonly bar: ToolbarProps }) {
+  const { controls, readonly, words, level } = bar;
   return (
     <>
       {offers(controls, 'level', readonly) && (
         <IconButton
+          className={styles.icon}
           label={words.technical}
           tip={words.technicalTip}
-          control="level"
-          pressed={level === 'technical'}
-          onClick={() => v.onLevel(level === 'technical' ? 'simple' : 'technical')}
+          data-control="level"
+          aria-pressed={level === 'technical'}
+          onClick={() => bar.onLevel(level === 'technical' ? 'simple' : 'technical')}
         >
           <Code aria-hidden="true" />
         </IconButton>
       )}
       {offers(controls, 'download') && (
-        <IconButton label={words.download} control="download" onClick={() => download(v.workflow)}>
+        <IconButton
+          className={styles.icon}
+          label={words.download}
+          align="end"
+          data-control="download"
+          onClick={() => download(bar.workflow)}
+        >
           <Download aria-hidden="true" />
         </IconButton>
       )}
@@ -130,35 +114,35 @@ function Icons({ v }: { readonly v: ToolbarProps }) {
   );
 }
 
-const hasPills = (v: ToolbarProps) => offers(v.controls, 'picker') && v.choices.length > 1;
-const hasIcons = (v: ToolbarProps) =>
-  offers(v.controls, 'level', v.readonly) || offers(v.controls, 'download') || offers(v.controls, 'upload');
+const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
+const hasIcons = (bar: ToolbarProps) =>
+  offers(bar.controls, 'level', bar.readonly) || offers(bar.controls, 'download') || offers(bar.controls, 'upload');
 
-function UploadProblems({ v, id }: { readonly v: ToolbarProps; readonly id: string }) {
-  return v.uploadProblems.length > 0 ? <Problems id={id} problems={v.uploadProblems} /> : null;
+function UploadProblems({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
+  return bar.uploadProblems.length > 0 ? <Problems id={id} problems={bar.uploadProblems} /> : null;
 }
 
-export function ToolbarPart(v: ToolbarProps) {
+export function ToolbarPart(bar: ToolbarProps) {
   const problemsId = useId();
-  const pills = hasPills(v);
-  const icons = hasIcons(v);
+  const pills = hasPills(bar);
+  const icons = hasIcons(bar);
   if (!pills && !icons) return null;
-  const describedBy = v.uploadProblems.length > 0 ? problemsId : undefined;
+  const describedBy = bar.uploadProblems.length > 0 ? problemsId : undefined;
   return (
     <>
       <div
         className={styles.toolbar}
         role="toolbar"
-        aria-label={v.words.toolbar}
+        aria-label={bar.words.toolbar}
         data-part="toolbar"
-        data-level={v.level}
+        data-level={bar.level}
       >
-        <Pills v={v} />
+        <Pills bar={bar} />
         {pills && icons ? <span className={styles.sep} aria-hidden="true" /> : null}
-        <Icons v={v} />
-        {offers(v.controls, 'upload') && <UploadButton v={v} describedBy={describedBy} />}
+        <Icons bar={bar} />
+        {offers(bar.controls, 'upload') && <UploadButton bar={bar} describedBy={describedBy} />}
       </div>
-      <UploadProblems v={v} id={problemsId} />
+      <UploadProblems bar={bar} id={problemsId} />
     </>
   );
 }

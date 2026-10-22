@@ -65,7 +65,6 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
     diagram: {
       workflow,
       readonly,
-      openStageId: state.openStageId,
       onOpenStage: on.onOpenStage,
       slots: data.diagram,
       words,

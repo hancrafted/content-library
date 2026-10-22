@@ -6,6 +6,8 @@ import { ChevronRight, Copy } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
 import { ChatGptMark, ClaudeMark } from './chat-icons';
 import type { UiWords } from './human-in-the-loop.types';
+import { IconButton, OUTLINED_ICON } from './icon-button.client';
+import { Tip } from './tip.client';
 import { chatLinks, type PromptView } from './workflow-view.pure';
 
 /*
@@ -14,22 +16,8 @@ import { chatLinks, type PromptView } from './workflow-view.pure';
  * this leaf (it passes the reload test, FE-001); the Short choice is the parent's.
  */
 
-const ICON =
-  'group/tip relative inline-flex size-9 cursor-pointer items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-colors outline-none hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring';
-
-const TIP =
-  'pointer-events-none absolute right-0 bottom-full z-20 mb-1.5 hidden w-max max-w-48 rounded-lg bg-foreground px-2 py-1 text-start text-caption font-normal text-background group-hover/tip:block group-focus-visible/tip:block';
-
-function Tip({ children }: { readonly children: ReactNode }) {
-  return (
-    <span aria-hidden="true" className={TIP}>
-      {children}
-    </span>
-  );
-}
-
-interface PromptBoxProps {
-  readonly prompt: PromptView;
+/** What a prompt box needs from the modal: its words and the two things it can ask for, as one bundle. */
+export interface PromptKit {
   /** The job's short grill is on: the prompt shown and copied is its short variant. */
   readonly short: boolean;
   readonly words: UiWords;
@@ -40,20 +28,21 @@ interface PromptBoxProps {
 const SHORT =
   'inline-flex min-h-9 cursor-pointer items-center rounded-full border border-border px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring';
 
-function ShortToggle({ on, words, onShort }: { on: boolean; words: UiWords; onShort: () => void }) {
+function ShortToggle({ kit }: { kit: PromptKit }) {
   return (
-    <button
-      type="button"
-      aria-pressed={on}
-      title={words.shortTip}
-      onClick={onShort}
-      className={cn(
-        SHORT,
-        on ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground hover:bg-accent',
-      )}
-    >
-      {words.short}
-    </button>
+    <Tip text={kit.words.shortTip} place="above" align="end">
+      <button
+        type="button"
+        aria-pressed={kit.short}
+        onClick={kit.onShort}
+        className={cn(
+          SHORT,
+          kit.short ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground hover:bg-accent',
+        )}
+      >
+        {kit.words.short}
+      </button>
+    </Tip>
   );
 }
 
@@ -69,35 +58,29 @@ function ChatLink({
   children: ReactNode;
 }) {
   return (
-    <a
-      className={ICON}
-      href={externalHref(url)}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${label}, ${newTab}`}
-    >
-      {children}
-      <Tip>{label}</Tip>
-    </a>
+    <Tip text={label} place="above" align="end">
+      <a
+        className={OUTLINED_ICON}
+        href={externalHref(url)}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${label}, ${newTab}`}
+      >
+        {children}
+      </a>
+    </Tip>
   );
 }
 
-interface ActionsProps {
-  readonly text: string;
-  readonly copyLabel: string;
-  readonly words: UiWords;
-  readonly onCopy: (text: string) => void;
-}
-
 /** The three icon buttons of a prompt: copy it, open it in ChatGPT, open it in Claude. */
-function PromptActions({ text, copyLabel, words, onCopy }: ActionsProps) {
+function PromptActions({ text, copyLabel, kit }: { text: string; copyLabel: string; kit: PromptKit }) {
   const links = chatLinks(text);
+  const { words } = kit;
   return (
     <>
-      <button type="button" className={ICON} aria-label={copyLabel} onClick={() => onCopy(text)}>
+      <IconButton label={copyLabel} place="above" align="end" onClick={() => kit.onCopy(text)}>
         <Copy aria-hidden="true" className="size-4" />
-        <Tip>{copyLabel}</Tip>
-      </button>
+      </IconButton>
       <ChatLink url={links.chatgpt} label={words.openChatgpt} newTab={words.newTab}>
         <ChatGptMark className="size-4" />
       </ChatLink>
@@ -133,41 +116,37 @@ function Toggle({
   );
 }
 
-function PromptText({ id, open, text }: { id: string; open: boolean; text: string }) {
+/** The prompt text: focusable and named, so a keyboard user can scroll it. */
+function PromptText({ id, open, text, label }: { id: string; open: boolean; text: string; label: string }) {
   return (
     <pre
       id={id}
       hidden={!open}
-      className="max-h-72 overflow-auto border-t border-border p-3 text-caption whitespace-pre-wrap"
+      tabIndex={0}
+      role="region"
+      aria-label={label}
+      className="max-h-72 overflow-auto border-t border-border p-3 text-caption whitespace-pre-wrap outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       {text}
     </pre>
   );
 }
 
-export function PromptBox({ prompt, short, words, onShort, onCopy }: PromptBoxProps) {
+export function PromptBox({ prompt, kit }: { prompt: PromptView; kit: PromptKit }) {
   const [open, setOpen] = useState(false);
   const panel = useId();
-  const text = short && prompt.short !== undefined ? prompt.short : prompt.text;
+  const { words } = kit;
+  const text = kit.short && prompt.short !== undefined ? prompt.short : prompt.text;
   const command = prompt.kind === 'command';
+  const label = command ? words.commandLabel : words.promptLabel;
   return (
     <div className="rounded-xl border border-border bg-background" data-prompt={prompt.kind}>
       <div className="flex flex-wrap items-center gap-2 p-1.5 pl-2">
-        <Toggle
-          open={open}
-          panel={panel}
-          label={command ? words.commandLabel : words.promptLabel}
-          onToggle={() => setOpen((now) => !now)}
-        />
-        {prompt.short !== undefined && <ShortToggle on={short} words={words} onShort={onShort} />}
-        <PromptActions
-          text={text}
-          copyLabel={command ? words.copyCommand : words.copyPrompt}
-          words={words}
-          onCopy={onCopy}
-        />
+        <Toggle open={open} panel={panel} label={label} onToggle={() => setOpen((now) => !now)} />
+        {prompt.short !== undefined && <ShortToggle kit={kit} />}
+        <PromptActions text={text} copyLabel={command ? words.copyCommand : words.copyPrompt} kit={kit} />
       </div>
-      <PromptText id={panel} open={open} text={text} />
+      <PromptText id={panel} open={open} text={text} label={label} />
     </div>
   );
 }

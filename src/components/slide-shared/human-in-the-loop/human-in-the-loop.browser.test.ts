@@ -134,7 +134,7 @@ describe('success cases', () => {
         `[...document.querySelectorAll('${toolbar} [data-control="picker"] button')].map((el) => el.textContent)`,
       );
       const icons = await js<string[]>(
-        `[...document.querySelectorAll('${toolbar} [data-tip]')].map((el) => el.dataset.control + ':' + el.dataset.tip)`,
+        `[...document.querySelectorAll('${toolbar} [data-tip-host]')].filter((host) => host.querySelector('[data-control]:not([data-control=picker])')).map((host) => host.querySelector('[data-control]').dataset.control + ':' + host.querySelector('[data-tip-text]').textContent)`,
       );
       const buttons = await count(`${toolbar} button, ${toolbar} input`);
       // ASSERT
@@ -241,6 +241,91 @@ describe('success cases', () => {
       expect(copied[0]).not.toContain('SHORT version');
       expect(copied[1]).toContain('SHORT version');
       expect(shortToggles).toBe(1);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'copies the short command of the interview at the Technical level when Short is on',
+    async () => {
+      // ARRANGE
+      await open('light');
+      await press(`${ROOT} [data-part="toolbar"] button`, /Technical/);
+      await settle();
+      await openStage(/Interview/);
+      const copyRun = async () => {
+        await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy command/);
+        await settle();
+      };
+      // ACT
+      await copyRun();
+      await press(`${MODAL} [data-step="run"] button[aria-pressed]`, /Short/);
+      await settle();
+      await copyRun();
+      const copied = await js<string[]>('window.__copied');
+      // ASSERT
+      expect(copied[0]).not.toContain('Short version');
+      expect(copied[1]).toContain('Short version');
+      expect(copied[1]?.startsWith('/')).toBe(true);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'returns focus to the Try it button on every close path: X, Escape and backdrop',
+    async () => {
+      // ARRANGE
+      await open('light');
+      const focused = () => js<string>('document.activeElement?.dataset?.try ?? document.activeElement?.tagName ?? ""');
+      const closers = [
+        () => press(`${MODAL} header button`, /Close/),
+        () => escape(),
+        () => js(`document.querySelector('${MODAL}').click()`),
+      ];
+      const landed: string[] = [];
+      // ACT
+      for (const close of closers) {
+        await openStage(/Requirements/);
+        await close();
+        await settle();
+        landed.push(await focused());
+      }
+      // ASSERT
+      expect(landed).toEqual(['Requirements', 'Requirements', 'Requirements']);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'shows one shared tooltip on focus, dismisses it with Escape before the dialog, and keeps the move circles 24px',
+    async () => {
+      // ARRANGE
+      const minTarget = 24;
+      await open('light');
+      const circles = await js<number[]>(
+        `[...document.querySelectorAll('${ROOT} [data-move]')].map((el) => Math.min(el.getBoundingClientRect().width, el.getBoundingClientRect().height))`,
+      );
+      await openStage(/Requirements/);
+      const tipShown = () =>
+        js<string>(
+          `document.querySelector('${MODAL} header [data-tip-host] > span[data-shown]')?.dataset.shown ?? 'none'`,
+        );
+      // ACT
+      await js(`document.querySelector('${MODAL} header button').focus()`);
+      await settle();
+      const onFocus = await tipShown();
+      await escape();
+      const afterFirstEscape = await tipShown();
+      const stillOpen = await count(`${MODAL}[open]`);
+      await escape();
+      const afterSecondEscape = await count(MODAL);
+      // ASSERT
+      expect(circles.length).toBeGreaterThan(0);
+      expect(circles.every((size) => size >= minTarget)).toBe(true);
+      expect(onFocus).toBe('true');
+      expect(afterFirstEscape).toBe('false');
+      expect(stillOpen).toBe(1);
+      expect(afterSecondEscape).toBe(0);
     },
     TIMEOUT,
   );

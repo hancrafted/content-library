@@ -263,6 +263,7 @@ words:
             Q1 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
             Q2 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
           ```
+        shortCommand: '/grilling Interview me about this piece of my plan. I want to plan a vacation for two people: one week away. The piece we take forward: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it. Work in rounds with numbered questions, two options each and a recommended answer, include one question about what my partner would hate, and when I say "done" end with one handoff block of kind text holding every question and my answer. Short version: at most 3 load-bearing questions per round, at most 2 rounds.'
       command: '/grilling Interview me about this piece of my plan. I want to plan a vacation for two people: one week away. The piece we take forward: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it. Work in rounds with numbered questions, two options each and a recommended answer, include one question about what my partner would hate, and when I say "done" end with one handoff block of kind text holding every question and my answer.'
       exampleInput: |-
         ```handoff
@@ -556,7 +557,7 @@ words:
       title: Stay
       description: One fresh chat per stay. Each chat gets only the requirements, and checks one stay against every criterion.
       run:
-        todo: 'Open a fresh chat for each stay (three in all), paste the prompt and swap in the name you want to check. With no real candidate yet, paste it as it is: the AI first names three real ones and you pick one.'
+        todo: 'Open a fresh chat for each stay (three in all), paste the prompt and pick one of the three real places to stay it names.'
         prompt: |-
           ## Your role
           You are a careful researcher. You check exactly ONE stay against my requirements and report only what you can back up. You do not compare it with any other stay and you do not recommend.
@@ -584,12 +585,8 @@ words:
             - Rank them
           ```
 
-          ## The option to check
-          Casa Blu
-          (This name is only an example. Replace it with your own candidate. If you have none, leave it as it is.)
-
           ## How to work
-          1. If I have no real candidate yet (the name above is only an example), first name three real places to stay in the region from the goal of the spec that fit the requirements, and ask me to pick one. Check only the one I pick.
+          1. Start by naming three real places to stay in the region named in the spec (in the example: the Algarve coast) that fit the requirements, each with one line on why it fits. Let me pick one and wait for my answer. Check only the one I pick.
           2. Go through the requirements one by one. For each one find the fact that settles it.
           3. Use primary sources first: the stay's own website, its official documents and prices, an official booking or authority page. Use reviews and aggregator sites only to fill a gap, and say so.
           4. For every fact name where you found it (page or document) and how sure you are: sure, unsure, or not found. Never guess to fill a gap: write "not found" and say what would settle it.
@@ -607,7 +604,7 @@ words:
             - "<requirement: checked fact (source: where; sure | unsure | not found)>"
           ```
       command: |-
-        /research Check Casa Blu against these requirements: Sleeps 2; At most 1500 euros for the week; At most 10 minutes on foot to the sea; Private bathroom; Airport transfer of at most 60 minutes. Use primary sources, name the source of every fact, and say where you are unsure. Do not compare it with other stays. If that is not a real stay, first name three real ones in the region and ask me to pick one.
+        /research Name three real places to stay in the Algarve coast that fit these requirements: Sleeps 2; At most 1500 euros for the week; At most 10 minutes on foot to the sea; Private bathroom; Airport transfer of at most 60 minutes. Let me pick one, then check it against every requirement. Use primary sources, name the source of every fact, and say where you are unsure. Do not compare it with other stays.
       exampleInput: |-
         ```handoff
         kind: spec

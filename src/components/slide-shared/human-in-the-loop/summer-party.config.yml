@@ -265,6 +265,7 @@ words:
             Q1 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
             Q2 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
           ```
+        shortCommand: '/grilling Interview me about this piece of my plan. I have to plan my company''s next summer party: 200 employees across five offices in Europe. The piece we take forward: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it. Work in rounds with numbered questions, two options each and a recommended answer, include one question about what last year''s party got wrong, and when I say "done" end with one handoff block of kind text holding every question and my answer. Short version: at most 3 load-bearing questions per round, at most 2 rounds.'
       command: '/grilling Interview me about this piece of my plan. I have to plan my company''s next summer party: 200 employees across five offices in Europe. The piece we take forward: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it. Work in rounds with numbered questions, two options each and a recommended answer, include one question about what last year''s party got wrong, and when I say "done" end with one handoff block of kind text holding every question and my answer.'
       exampleInput: |-
         ```handoff
@@ -566,7 +567,7 @@ words:
       title: Venue
       description: One fresh chat per venue. Each chat gets only the requirements, and checks one venue against every criterion.
       run:
-        todo: 'Open a fresh chat for each venue (three in all), paste the prompt and swap in the name you want to check. With no real candidate yet, paste it as it is: the AI first names three real ones and you pick one.'
+        todo: 'Open a fresh chat for each venue (three in all), paste the prompt and pick one of the three real venues it names.'
         prompt: |-
           ## Your role
           You are a careful researcher. You check exactly ONE venue against my requirements and report only what you can back up. You do not compare it with any other venue and you do not recommend.
@@ -594,12 +595,8 @@ words:
             - Rank them
           ```
 
-          ## The option to check
-          Harbour Hall
-          (This name is only an example. Replace it with your own candidate. If you have none, leave it as it is.)
-
           ## How to work
-          1. If I have no real candidate yet (the name above is only an example), first name three real venues in the city from the goal of the spec that fit the requirements, and ask me to pick one. Check only the one I pick.
+          1. Start by naming three real venues in the city named in the spec (in the example: Frankfurt) that fit the requirements, each with one line on why it fits. Let me pick one and wait for my answer. Check only the one I pick.
           2. Go through the requirements one by one. For each one find the fact that settles it.
           3. Use primary sources first: the venue's own website, its official documents and prices, an official booking or authority page. Use reviews and aggregator sites only to fill a gap, and say so.
           4. For every fact name where you found it (page or document) and how sure you are: sure, unsure, or not found. Never guess to fill a gap: write "not found" and say what would settle it.
@@ -617,7 +614,7 @@ words:
             - "<requirement: checked fact (source: where; sure | unsure | not found)>"
           ```
       command: |-
-        /research Check Harbour Hall against these requirements: 200 guests; At most 150 euros per person; Step-free; Vegetarian menu; Separate quiet room. Use primary sources, name the source of every fact, and say where you are unsure. Do not compare it with other venues. If that is not a real venue, first name three real ones in the city and ask me to pick one.
+        /research Name three real venues in Frankfurt that fit these requirements: 200 guests; At most 150 euros per person; Step-free; Vegetarian menu; Separate quiet room. Let me pick one, then check it against every requirement. Use primary sources, name the source of every fact, and say where you are unsure. Do not compare it with other venues.
       exampleInput: |-
         ```handoff
         kind: spec

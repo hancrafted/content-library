@@ -1,7 +1,7 @@
 'use client';
 
 import type { UiWords } from './human-in-the-loop.types';
-import { PromptBox } from './prompt-box.client';
+import { PromptBox, type PromptKit } from './prompt-box.client';
 import type { JobModalView, StepView } from './workflow-view.pure';
 
 /*
@@ -11,10 +11,7 @@ import type { JobModalView, StepView } from './workflow-view.pure';
 
 interface StepsProps {
   readonly job: JobModalView;
-  readonly short: boolean;
-  readonly words: UiWords;
-  readonly onShort: () => void;
-  readonly onCopy: (text: string) => void;
+  readonly kit: PromptKit;
 }
 
 function Setup({ setup, words }: { setup: string; words: UiWords }) {
@@ -32,8 +29,9 @@ interface StepProps extends Omit<StepsProps, 'job'> {
   readonly setup?: string;
 }
 
-function Step({ step, number, setup, short, words, onShort, onCopy }: StepProps) {
+function Step({ step, number, setup, kit }: StepProps) {
   const running = step.id === 'run';
+  const { words } = kit;
   return (
     <li data-step={step.id} className="flex gap-3">
       <span
@@ -45,7 +43,7 @@ function Step({ step, number, setup, short, words, onShort, onCopy }: StepProps)
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <p className="text-body font-medium">{step.todo}</p>
         {running && step.prompt.kind === 'command' && setup ? <Setup setup={setup} words={words} /> : null}
-        <PromptBox prompt={step.prompt} short={running && short} words={words} onShort={onShort} onCopy={onCopy} />
+        <PromptBox prompt={step.prompt} kit={{ ...kit, short: running && kit.short }} />
       </div>
     </li>
   );

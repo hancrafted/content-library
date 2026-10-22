@@ -18,7 +18,6 @@ export function DiagramStages(props: {
   slots?: DiagramSlots;
   words: UiWords;
   readonly: boolean;
-  openStageId: string | null;
   onOpenStage: (stageId: string) => void;
 }) {
   const { workflow, slots = {} } = props;
@@ -44,7 +43,6 @@ interface Context {
   slots: DiagramSlots;
   words: UiWords;
   readonly: boolean;
-  openStageId: string | null;
   onOpenStage: (stageId: string) => void;
 }
 
@@ -70,7 +68,7 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
         <TryButton
           label={ctx.words.tryIt}
           stage={stage.name}
-          pressed={ctx.openStageId === stage.id}
+          forStage={ctx.words.tryFor.replace('{stage}', stage.name)}
           onOpen={() => ctx.onOpenStage(stage.id)}
         />
       )}

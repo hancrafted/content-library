@@ -28,7 +28,7 @@ const flow = (fanOut: number): Workflow => ({
     { id: 'c', name: 'C', moves: [], jobs: [{ ...base, id: 'c' }] },
   ],
 });
-const words = { tryIt: 'Try it', moveLabel: '{letter}: {why}' } as UiWords;
+const words = { tryIt: 'Try it', tryFor: 'for {stage}', moveLabel: '{letter}: {why}' } as UiWords;
 const scene = (workflow: Workflow, slots?: DiagramSlots, readonly = false) =>
   load(
     renderToStaticMarkup(
@@ -37,31 +37,29 @@ const scene = (workflow: Workflow, slots?: DiagramSlots, readonly = false) =>
         slots,
         words,
         readonly,
-        openStageId: null,
         onOpenStage: vi.fn(),
       }),
     ),
   );
 
 describe('success cases', () => {
-  it('puts one "Try it" button under each stage column, pressed for the open stage', () => {
+  it('puts one "Try it" button under each stage column, named for its stage and holding no pressed state', () => {
     // ARRANGE
     const html = renderToStaticMarkup(
       createElement(DiagramPart, {
         workflow: flow(2),
         words,
         readonly: false,
-        openStageId: 'b',
         onOpenStage: vi.fn(),
       }),
     );
     // ACT
     const $ = load(html);
     const tries = $('li[class*="focus-group__item"] > button[data-try]')
-      .map((_, el) => `${$(el).text()}:${$(el).attr('aria-expanded')}`)
+      .map((_, el) => `${$(el).text()}:${$(el).attr('aria-expanded') ?? 'none'}`)
       .get();
     // ASSERT
-    expect(tries).toEqual(['Try it: A:false', 'Try it: B:true', 'Try it: C:false']);
+    expect(tries).toEqual(['Try it for A:none', 'Try it for B:none', 'Try it for C:none']);
   });
 
   it('draws no "Try it" button for a readonly Preset, and the diagram stays', () => {

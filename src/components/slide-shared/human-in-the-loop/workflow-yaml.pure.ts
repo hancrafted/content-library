@@ -24,7 +24,12 @@ const jobWords = (job: Job) => ({
   title: job.title,
   ...opt('detail', job.detail),
   description: job.description,
-  run: { todo: job.run.todo, prompt: job.run.prompt, ...opt('short', job.run.short) },
+  run: {
+    todo: job.run.todo,
+    prompt: job.run.prompt,
+    ...opt('short', job.run.short),
+    ...opt('shortCommand', job.run.shortCommand),
+  },
   ...opt('command', job.command),
   ...opt('exampleInput', job.exampleInput),
   ...opt('exampleOutput', job.exampleOutput),

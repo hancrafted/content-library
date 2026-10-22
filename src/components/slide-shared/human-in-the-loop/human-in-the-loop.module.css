@@ -84,45 +84,48 @@
   width: 1.1rem;
   height: 1.1rem;
 }
-.icon[data-tip]::after {
-  content: attr(data-tip);
+.tipHost {
+  position: relative;
+  display: inline-flex;
+}
+/* The bubble hangs flush from the control (the padding bridges the gap), so the pointer can move onto it. */
+.tip {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  z-index: 20;
+  display: none;
+}
+.tip[data-shown='true'] {
+  display: block;
+}
+.tip[data-place='below'] {
+  top: 100%;
+  padding-top: 0.4rem;
+}
+.tip[data-place='above'] {
+  bottom: 100%;
+  padding-bottom: 0.4rem;
+}
+.tip[data-align='center'] {
   left: 50%;
   translate: -50% 0;
+}
+.tip[data-align='start'] {
+  left: 0;
+}
+.tip[data-align='end'] {
+  right: 0;
+}
+.tipText {
+  display: block;
   width: max-content;
   max-width: 15rem;
-  padding: 0.45rem 0.6rem;
+  padding: 0.4rem 0.6rem;
   border-radius: 0.5rem;
   background: var(--foreground);
   color: var(--background);
   line-height: 1.35;
   text-align: start;
   white-space: normal;
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 20;
-  transition:
-    opacity var(--hl-hov) var(--hl-ease),
-    display var(--hl-hov) allow-discrete;
-}
-/* The last icons sit at the right edge: their tip hangs from the edge inward so it never widens the page. */
-.icon[data-tip]:nth-last-child(-n + 2)::after {
-  left: auto;
-  right: 0;
-  translate: none;
-}
-/* A hidden tip leaves layout: an invisible box still widens the page. */
-.icon[data-tip]:is(:hover, :focus-visible, :focus-within)::after {
-  display: block;
-  opacity: 1;
-  transition-delay: 250ms;
-}
-@starting-style {
-  .icon[data-tip]:is(:hover, :focus-visible, :focus-within)::after {
-    opacity: 0;
-  }
 }
 .upload {
   overflow: visible;

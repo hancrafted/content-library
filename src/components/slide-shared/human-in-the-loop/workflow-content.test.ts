@@ -138,6 +138,29 @@ describe('success cases', () => {
     expect(short).toEqual(['interview']);
   });
 
+  it.each(EACH)('gives the interview of %s in %s a short Technical command that extends its command', (id, locale) => {
+    // ARRANGE
+    const jobs = jobsOf(id, locale);
+    // ACT
+    const withShort = jobs.filter((job) => job.run.shortCommand !== undefined);
+    const interview = jobs.find((job) => job.id === 'interview');
+    const extended = (interview?.run.shortCommand ?? '').startsWith(interview?.command ?? '\0');
+    // ASSERT
+    expect(withShort.map((job) => job.id)).toEqual(['interview']);
+    expect(extended).toBe(true);
+    expect(interview?.run.shortCommand).not.toBe(interview?.command);
+  });
+
+  it.each(EACH)('names no candidate slot in the research prompt of %s in %s', (id, locale) => {
+    // ARRANGE
+    const research = jobsOf(id, locale).find((job) => job.outputs.some((output) => output.kind === 'research'));
+    // ACT
+    const slot = /The option to check|Die Option, die Du prüfst/.test(research?.run.prompt ?? '');
+    // ASSERT
+    expect(research).toBeDefined();
+    expect(slot).toBe(false);
+  });
+
   it.each(EACH)('names the first stage of %s in %s Plan and the last Review, in the locale words', (id, locale) => {
     // ARRANGE
     const stages = workflowFor(id, locale).stages;

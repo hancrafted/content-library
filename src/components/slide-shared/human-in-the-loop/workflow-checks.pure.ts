@@ -61,6 +61,7 @@ function promptTexts(job: Job): [string, string | undefined][] {
   return [
     ['run.prompt', job.run.prompt],
     ['run.short', job.run.short],
+    ['run.shortCommand', job.run.shortCommand],
     ['command', job.command],
     ['check.prompt', job.check?.prompt],
     ['page.simple', job.page?.simple],

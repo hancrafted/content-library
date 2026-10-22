@@ -38,7 +38,7 @@ const WORKFLOW: Workflow = {
           inputs: ['a-out'],
           fanOut: 3,
           skills: [{ group: 'engineering', name: 'research' }],
-          run: { todo: 'Run b.', prompt: 'Prompt of b & more', short: 'Short b' },
+          run: { todo: 'Run b.', prompt: 'Prompt of b & more', short: 'Short b', shortCommand: '/research short' },
           command: '/research [paste it here]',
           exampleInput: TEXT,
           exampleOutput: TEXT,
@@ -104,7 +104,11 @@ describe('success cases', () => {
     const modal = jobOf(workflowView(WORKFLOW, TECHNICAL), 'b');
     // ASSERT
     expect(modal.setup).toBe('install things');
-    expect(modal.steps[0]?.prompt).toEqual({ kind: 'command', text: '/research [paste it here]' });
+    expect(modal.steps[0]?.prompt).toEqual({
+      kind: 'command',
+      text: '/research [paste it here]',
+      short: '/research short',
+    });
     expect(modal.sections.find((s) => s.kind === 'skills')).toMatchObject({
       links: [{ label: 'research', href: docs }],
     });
