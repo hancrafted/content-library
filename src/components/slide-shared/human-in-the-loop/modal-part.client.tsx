@@ -7,7 +7,7 @@ import type { PromptKit } from '../core-components/try-prompt/try-prompt.client'
 import type { ModalProps, UiWords } from './human-in-the-loop.types';
 import { ModalBody, type BodyChrome } from './modal-body';
 import { ModalSteps } from './modal-steps.client';
-import { TaskDetails, TaskSteps } from './task-steps.client';
+import { TaskDetails, TaskSteps, type SlotState } from './task-steps.client';
 import { tryTitle } from './words.pure';
 import type { JobModalView, StageView } from './workflow-view.pure';
 
@@ -56,15 +56,16 @@ interface JobSectionProps {
   readonly several: boolean;
   readonly kit: PromptKit & { readonly words: UiWords };
   readonly chrome: BodyChrome;
+  readonly slots: SlotState;
 }
 
 /** One job of the stage: its numbered steps, then, below them, its explanation. */
-function JobSection({ job, several, kit, chrome }: JobSectionProps) {
+function JobSection({ job, several, kit, chrome, slots }: JobSectionProps) {
   const { task } = job;
   return (
     <section data-job={job.id} aria-label={several ? job.title : undefined} className="flex flex-col gap-6">
       {several && <h3 className="text-body font-semibold">{job.title}</h3>}
-      {task ? <TaskSteps task={task} kit={kit} /> : <ModalSteps job={job} kit={kit} />}
+      {task ? <TaskSteps task={task} kit={kit} slots={slots} /> : <ModalSteps job={job} kit={kit} />}
       {task ? (
         <TaskDetails task={task} words={chrome.words} />
       ) : (
@@ -78,12 +79,13 @@ interface PanelProps {
   readonly stage: StageView;
   readonly shortJobIds: readonly string[];
   readonly chrome: BodyChrome;
+  readonly slots: SlotState;
   readonly onShort: (jobId: string) => void;
   readonly onClose: () => void;
 }
 
 /** The card inside the dialog: the header, then every job of the stage, then the live region a copy announces in. */
-function Panel({ stage, shortJobIds, chrome, onShort, onClose }: PanelProps) {
+function Panel({ stage, shortJobIds, chrome, slots, onShort, onClose }: PanelProps) {
   const [announced, copy] = useCopy(chrome.words.copied);
   const { words } = chrome;
   return (
@@ -97,6 +99,7 @@ function Panel({ stage, shortJobIds, chrome, onShort, onClose }: PanelProps) {
             several={stage.jobs.length > 1}
             kit={{ short: shortJobIds.includes(job.id), words, onShort: () => onShort(job.id), onCopy: copy }}
             chrome={chrome}
+            slots={slots}
           />
         ))}
       </div>
@@ -114,7 +117,7 @@ function Panel({ stage, shortJobIds, chrome, onShort, onClose }: PanelProps) {
  * (collapsed prompts behind copy and chat buttons), then the explanation. A copy announces `words.copied` in a polite
  * live region.
  */
-export function ModalPart({ stage, shortJobIds, onClose, onShort, ...chrome }: ModalProps) {
+export function ModalPart({ stage, shortJobIds, slotValues, onSlots, onClose, onShort, ...chrome }: ModalProps) {
   const dialog = useModalDialog(stage !== null);
   if (!stage) return null;
   const close = () => dialog.current?.close();
@@ -128,7 +131,14 @@ export function ModalPart({ stage, shortJobIds, onClose, onShort, ...chrome }: M
       onClick={(event) => event.target === event.currentTarget && close()}
       className="m-0 h-dvh max-h-none w-full max-w-none items-center justify-center overscroll-contain bg-transparent p-4 text-inherit backdrop:bg-overlay/60 backdrop:backdrop-blur-xs open:flex sm:p-6"
     >
-      <Panel stage={stage} shortJobIds={shortJobIds} chrome={chrome} onShort={onShort} onClose={close} />
+      <Panel
+        stage={stage}
+        shortJobIds={shortJobIds}
+        chrome={chrome}
+        slots={{ values: slotValues, onChange: onSlots }}
+        onShort={onShort}
+        onClose={close}
+      />
     </dialog>
   );
 }

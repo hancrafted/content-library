@@ -6,6 +6,26 @@ const start = { workflowId: 'summer-party', level: 'simple' } as const;
 const uploaded: Workflow = { id: 'mine', title: 'Mine', scenario: 'S', stages: [] };
 
 describe('success cases', () => {
+  it('keeps what is pasted into a slot, shared whatever stage is open, and keeps it when a modal closes', () => {
+    // ARRANGE
+    const pasted = { spec: '# My spec' };
+    const initial = reduce(createState(start), { type: 'open', stageId: 'tickets' });
+    // ACT
+    const filled = reduce(initial, { type: 'slots', values: pasted });
+    const later = reduce(reduce(filled, { type: 'close' }), { type: 'open', stageId: 'compare' });
+    // ASSERT
+    expect(later.slotValues).toEqual(pasted);
+  });
+
+  it('forgets the pasted values when another Workflow is shown', () => {
+    // ARRANGE
+    const filled = reduce(createState(start), { type: 'slots', values: { spec: 'S' } });
+    // ACT
+    const state = reduce(filled, { type: 'workflow', workflowId: 'vacation' });
+    // ASSERT
+    expect(state.slotValues).toEqual({});
+  });
+
   it('starts in the Preset: the chosen Workflow at the Simple level, nothing open, short or ticked', () => {
     // ARRANGE
     const expected: WorkflowState = {
@@ -13,6 +33,7 @@ describe('success cases', () => {
       openStageId: null,
       shortJobIds: [],
       ticked: [],
+      slotValues: {},
       uploaded: null,
       uploadProblems: [],
     };

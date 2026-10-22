@@ -20,6 +20,8 @@ export interface WorkflowState {
   readonly ticked: readonly string[];
   /** A Workflow the viewer uploaded and that is shown instead of an authored one. */
   readonly uploaded: Workflow | null;
+  /** What the viewer pasted into the prompt slots, by marker name (a slot's id, or `id_K`), shared by every stage. Memory only. */
+  readonly slotValues: Readonly<Record<string, string>>;
   /** What was wrong with the last upload; empty when it loaded or none was tried. */
   readonly uploadProblems: readonly string[];
 }
@@ -38,11 +40,20 @@ export type WorkflowEvent =
   | { readonly type: 'close' }
   | { readonly type: 'short'; readonly jobId: string }
   | { readonly type: 'tick'; readonly ticketId: string }
+  | { readonly type: 'slots'; readonly values: Readonly<Record<string, string>> }
   | { readonly type: 'upload'; readonly workflow: Workflow }
   | { readonly type: 'upload-failed'; readonly problems: readonly string[] };
 
 export function createState(start: Start): WorkflowState {
-  return { ...start, openStageId: null, shortJobIds: [], ticked: [], uploaded: null, uploadProblems: [] };
+  return {
+    ...start,
+    openStageId: null,
+    shortJobIds: [],
+    ticked: [],
+    slotValues: {},
+    uploaded: null,
+    uploadProblems: [],
+  };
 }
 
 type Handlers = {
@@ -52,8 +63,15 @@ type Handlers = {
   ) => WorkflowState;
 };
 
-/** What changing the shown Workflow starts over: the open stage, the short grills, the ticks, any upload and its problems. */
-const FRESH = { openStageId: null, shortJobIds: [], ticked: [], uploaded: null, uploadProblems: [] } as const;
+/** What changing the shown Workflow starts over: the open stage, the short grills, the ticks, the pasted values, any upload and its problems. */
+const FRESH = {
+  openStageId: null,
+  shortJobIds: [],
+  ticked: [],
+  slotValues: {},
+  uploaded: null,
+  uploadProblems: [],
+} as const;
 
 const toggled = (ids: readonly string[], id: string): readonly string[] =>
   ids.includes(id) ? ids.filter((each) => each !== id) : [...ids, id];
@@ -65,6 +83,7 @@ const HANDLERS: Handlers = {
   close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null }),
   short: (state, { jobId }) => ({ ...state, shortJobIds: toggled(state.shortJobIds, jobId) }),
   tick: (state, { ticketId }) => ({ ...state, ticked: toggled(state.ticked, ticketId) }),
+  slots: (state, { values }) => ({ ...state, slotValues: values }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
   'upload-failed': (state, { problems }) => ({ ...state, uploadProblems: problems }),
 };
