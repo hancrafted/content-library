@@ -1,4 +1,4 @@
-import { sourcesOf } from './workflow-outputs.pure';
+import { producerIdsOf } from './workflow-outputs.pure';
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 import type { Job, Stage, Workflow } from './workflow.types';
 
@@ -11,7 +11,7 @@ function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
   return {
     id: task.id,
     title: task.title,
-    dependsOn: sourcesOf(file, stageIndex, task),
+    dependsOn: producerIdsOf(file, stageIndex, task),
     inputs: task.slots.map((slot) => slot.id),
     outputs: [{ id: task.output }],
     fanOut: task.fanOut,
