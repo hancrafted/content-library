@@ -1,469 +1,387 @@
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import axe from 'axe-core';
-import { setTimeout as delay } from 'node:timers/promises';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { ensureBrowser } from '../../../../skills/visual-check/scripts/browser';
-import { connect, evaluate, eventName, type Connection, type Send } from '../../../../skills/visual-check/scripts/cdp';
-import { PAIRS } from './workflow-data';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { settled } from '../../../../tests/browser/settled';
 
 /*
- * The browser seam (`npm run test:browser`, local only, never CI): the Slide "Brief the venue" in the shared
- * chrome-headless-shell, walked end to end the way a viewer does it. It needs `next dev` (or `npm run preview`)
- * serving the Episode: HITL_URL names the page, `http://localhost:3000/episodes/onboard-ai-every-time/` by default
- * (docs/features/human-in-the-loop.md).
+ * The browser seam (`npm run test:browser`, local only until the nightly lands): the Slide "Brief the venue" of the
+ * onboard-ai-every-time Episode in the built export, walked end to end the way a viewer does it. Every wait is a
+ * retrying assertion or `data-motion="settled"` (ARCH-003 §5). See docs/features/human-in-the-loop.md.
  */
 
-const URL_UNDER_TEST = process.env.HITL_URL ?? 'http://localhost:3000/episodes/onboard-ai-every-time/';
-const TIMEOUT = 120_000;
-const ROOT = '[data-human-in-the-loop]';
+const EPISODE = '/episodes/onboard-ai-every-time/';
 const SLIDE_ANCHOR = 'five-moves-to-brief-a-freelancer--brief-the-venue';
+const ROOT = '[data-human-in-the-loop]';
 const MODAL = `${ROOT} dialog[data-part="modal"]`;
-
-let connection: Connection;
-let targetId = '';
-let send: Send;
-let session = '';
-
-async function open(theme: 'light' | 'dark', width = 1440) {
-  await send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: width < 600 });
-  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: theme }] });
-  const loaded = new Promise((resolve) =>
-    connection.events.addEventListener(eventName(session, 'Page.loadEventFired'), resolve, { once: true }),
-  );
-  await send('Page.navigate', { url: URL_UNDER_TEST });
-  await loaded;
-  await delay(1200);
-  await evaluate(send, axe.source);
-  // A Slide mounts when it nears the viewport: scroll to its anchor, then wait for the visual.
-  await evaluate(send, `document.getElementById(${JSON.stringify(SLIDE_ANCHOR)})?.scrollIntoView({ block: 'start' })`);
-  for (let tries = 0; tries < 40 && !(await count(ROOT)); tries++) await delay(250);
-  await evaluate(send, `document.querySelector('${ROOT}').scrollIntoView({ block: 'start' })`);
-  await delay(500);
-  // The clipboard of a headless page is not ours to read: record what a copy writes.
-  await evaluate(
-    send,
-    `window.__copied = []; Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async (text) => { window.__copied.push(text); } } })`,
-  );
-}
-
-const js = <T>(expression: string) => evaluate<T>(send, expression);
-
-/** Clicks the first element of the selector whose text or aria-label matches the pattern. */
-const press = (selector: string, pattern: RegExp) =>
-  js<boolean>(
-    `(() => {
-      const el = [...document.querySelectorAll(${JSON.stringify(selector)})]
-        .find((each) => ${pattern}.test((each.getAttribute('aria-label') ?? '') + ' ' + each.textContent));
-      el?.click();
-      return Boolean(el);
-    })()`,
-  );
-
-function count(selector: string) {
-  return js<number>(`document.querySelectorAll(${JSON.stringify(selector)}).length`);
-}
-const text = (selector: string) => js<string>(`document.querySelector(${JSON.stringify(selector)})?.textContent ?? ''`);
-const settle = () => delay(250);
-
-/** axe-core's serious and critical violations inside the visual, as `rule: target` lines. */
-async function seriousViolations(): Promise<string[]> {
-  const { result } = (await send('Runtime.evaluate', {
-    expression: `axe.run({ include: [['${ROOT}']] }, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] } })
-      .then((r) => r.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
-        .flatMap((v) => v.nodes.map((n) => v.id + ': ' + n.target.join(' '))))`,
-    awaitPromise: true,
-    returnByValue: true,
-  })) as { result: { value: string[] } };
-  return result.value;
-}
-
-const openStage = async (stage: RegExp) => {
-  expect(await press(`${ROOT} [data-part="diagram"] button[data-try]`, stage)).toBe(true);
-  await settle();
-};
-const escape = async () => {
-  for (const type of ['keyDown', 'keyUp'])
-    await send('Input.dispatchKeyEvent', { type, key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
-  await settle();
-};
+const COPY_PROMPT = /Copy prompt/;
+const COPY_COMMAND = /Copy command/;
+const SHORT = /Short/;
+const TECHNICAL = /Technical/;
 
 /** A valid Workflow of the viewer's own: the shipped summer party under another id and title. */
-const OWN = PAIRS['summer-party'].config
+const OWN = readFileSync(path.join(__dirname, 'summer-party.config.yml'), 'utf8')
   .replace('id: summer-party', 'id: mine')
   .replace('title: Summer party', 'title: Mine');
 
-/** Chooses a file in the upload control as a viewer does: the input's files, then its change event. */
-const upload = (yaml: string) =>
-  js<boolean>(
-    `(() => {
-      const input = document.querySelector('${ROOT} [data-control="upload"] input[type=file]');
-      const data = new DataTransfer();
-      data.items.add(new File([${JSON.stringify(yaml)}], 'mine.yml', { type: 'text/yaml' }));
-      input.files = data.files;
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-      return true;
-    })()`,
+/** Opens the Episode at the Slide with the clipboard recorded (a headless page's is not ours to read). */
+async function open(page: Page, theme: 'light' | 'dark', width = 1440) {
+  await page.setViewportSize({ width, height: 900 });
+  await page.emulateMedia({ colorScheme: theme });
+  await page.addInitScript(() => {
+    const copied: string[] = [];
+    Object.assign(window, { __copied: copied });
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: async (text: string) => {
+          copied.push(text);
+        },
+      },
+    });
+  });
+  await page.goto(EPISODE);
+  // A Slide mounts when it nears the viewport: scroll to its anchor, then wait for the visual and for its hydration.
+  await page.locator(`#${SLIDE_ANCHOR}`).scrollIntoViewIfNeeded();
+  const root = page.locator(ROOT);
+  await expect(root).toBeVisible();
+  await root.scrollIntoViewIfNeeded();
+  const firstButton = root.locator('button').first();
+  await expect
+    .poll(() => firstButton.evaluate((el) => Object.keys(el).some((key) => key.startsWith('__reactProps'))))
+    .toBe(true);
+  return {
+    root,
+    toolbar: root.locator('[data-part="toolbar"]'),
+    modal: page.locator(MODAL),
+  };
+}
+
+const copied = (page: Page) => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied);
+const copies = (page: Page) => copied(page).then((all) => all.length);
+
+/** Presses a stage's "Try it" button and waits for its modal. */
+async function openStage(page: Page, stage: string) {
+  await page.locator(`${ROOT} [data-part="diagram"] button[data-try="${stage}"]`).click();
+  await expect(page.locator(MODAL)).toBeVisible();
+}
+
+const run = (modal: Locator) => modal.locator('[data-step="run"]');
+
+/** axe-core's serious and critical violations inside the visual, as `rule: target` lines. */
+async function seriousViolations(page: Page): Promise<string[]> {
+  if (!(await page.evaluate(() => 'axe' in window))) await page.addScriptTag({ content: axe.source });
+  return page.evaluate(
+    async (root) =>
+      (window as unknown as { axe: typeof axe }).axe
+        .run({ include: [[root]] }, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] } })
+        .then((r) =>
+          r.violations
+            .filter((v) => v.impact === 'serious' || v.impact === 'critical')
+            .flatMap((v) => v.nodes.map((n) => `${v.id}: ${n.target.join(' ')}`)),
+        ),
+    ROOT,
   );
+}
 
-beforeAll(async () => {
-  const endpoint = await ensureBrowser();
-  connection = await connect(endpoint.port);
-  const browser = connection.sender();
-  ({ targetId } = (await browser('Target.createTarget', { url: 'about:blank' })) as { targetId: string });
-  const attached = (await browser('Target.attachToTarget', { targetId, flatten: true })) as { sessionId: string };
-  session = attached.sessionId;
-  send = connection.sender(session);
-  await send('Page.enable');
-}, TIMEOUT);
+test.describe('success cases', () => {
+  test('has one pill toolbar: the Workflow pills, then Technical, download and upload as icon buttons with tooltips', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const expectedPills = ['Summer party', 'Vacation'];
+    const expectedIcons = ['level', 'download', 'upload'];
+    const { root, toolbar } = await open(page, 'light');
+    // ACT
+    const pillButtons = toolbar.locator('[data-control="picker"] button');
+    const icons = await toolbar
+      .locator('[data-tip-host]')
+      .filter({ has: page.locator('[data-control]:not([data-control=picker])') })
+      .evaluateAll((hosts) =>
+        hosts.map((host) => ({
+          control: host.querySelector('[data-control]')?.getAttribute('data-control'),
+          tip: host.querySelector('[data-tip-text]')?.textContent ?? '',
+        })),
+      );
+    const controls = await toolbar.locator('button, input').count();
+    // ASSERT
+    await expect(pillButtons).toHaveText(expectedPills);
+    expect(icons.map((icon) => icon.control)).toEqual(expectedIcons);
+    expect(icons.every((icon) => icon.tip.length > 0)).toBe(true);
+    expect(controls).toBe(expectedPills.length + icons.length);
+    await expect(root).not.toContainText(/Watch|Try it yourself/);
+  });
 
-afterAll(async () => {
-  await connection
-    .sender()('Target.closeTarget', { targetId })
-    .catch(() => undefined);
-  connection.socket.close();
+  test('opens a stage modal from its Try it button: title, X top right, collapsed prompts, copy, then Escape and backdrop close', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const expectedTitle = 'Requirements: Try it';
+    const expectedSteps = ['run', 'check', 'page'];
+    const expectedLinks = ['https://chatgpt.com/', 'https://claude.ai/new'];
+    const exampleViews = 2;
+    const edge = 40;
+    const { modal } = await open(page, 'light');
+    // ACT
+    await openStage(page, 'Requirements');
+    const title = await modal.locator('h2').evaluate((el) => el.textContent);
+    const panel = await modal.locator(':scope > div').boundingBox();
+    const close = await modal.locator('header button[aria-label="Close"]').boundingBox();
+    const prompts = await modal.locator('[data-prompt]').count();
+    const expanded = await modal.locator('[data-prompt] button[aria-expanded="true"]').count();
+    const steps = await modal
+      .locator('[data-step]')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('data-step')));
+    await run(modal).getByRole('button', { name: COPY_PROMPT }).click();
+    await expect(modal.getByRole('status')).toHaveText('Copied');
+    const written = await copied(page);
+    const links = await run(modal)
+      .locator('a[target="_blank"]')
+      .evaluateAll((els) => els.map((el) => (el as HTMLAnchorElement).href.split('?')[0]));
+    const exampleSpec = await modal.locator('[data-output="spec"], [data-output="tickets"]').count();
+    await modal.click({ position: { x: 4, y: 4 } });
+    // ASSERT
+    expect(title).toBe(expectedTitle);
+    expect(close!.y - panel!.y).toBeLessThan(edge);
+    expect(panel!.x + panel!.width - (close!.x + close!.width)).toBeLessThan(edge);
+    expect(prompts).toBe(steps.length);
+    expect(expanded).toBe(0);
+    expect(steps).toEqual(expectedSteps);
+    expect(written).toHaveLength(1);
+    expect(written[0]).toContain('handoff');
+    expect(written[0]).not.toContain('{{');
+    expect(links).toEqual(expectedLinks);
+    expect(exampleSpec).toBe(exampleViews);
+    await expect(modal).toHaveCount(0);
+    await openStage(page, 'Requirements');
+    await page.keyboard.press('Escape');
+    await expect(modal).toHaveCount(0);
+  });
+
+  test('closes the modal with the X button and expands a prompt on demand', async ({ page }) => {
+    // ARRANGE
+    const { modal } = await open(page, 'light');
+    await openStage(page, 'Interview');
+    // ACT
+    const toggle = run(modal)
+      .locator('button[aria-expanded]')
+      .filter({ hasText: /Prompt/ });
+    await toggle.click();
+    // ASSERT
+    await expect(run(modal).locator('pre')).toBeVisible();
+    await settled(toggle.locator('svg'));
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await expect(modal).toHaveCount(0);
+  });
+
+  test('copies the short grill of the interview when Short is on, and the full prompt when it is off', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const shortMarker = 'SHORT version';
+    const { modal } = await open(page, 'light');
+    await openStage(page, 'Interview');
+    const copy = run(modal).getByRole('button', { name: COPY_PROMPT });
+    const short = run(modal).getByRole('button', { name: SHORT });
+    // ACT
+    await copy.click();
+    await expect.poll(() => copies(page)).toBe(1);
+    await short.click();
+    await expect(short).toHaveAttribute('aria-pressed', 'true');
+    await settled(short);
+    await copy.click();
+    await expect.poll(() => copies(page)).toBe(2);
+    const written = await copied(page);
+    // ASSERT
+    expect(written[0]).not.toContain(shortMarker);
+    expect(written[1]).toContain(shortMarker);
+    await expect(modal.locator('button[aria-pressed]')).toHaveCount(1);
+  });
+
+  test('copies the short command of the interview at the Technical level when Short is on', async ({ page }) => {
+    // ARRANGE
+    const shortMarker = 'Short version';
+    const { toolbar, modal } = await open(page, 'light');
+    const technical = toolbar.getByRole('button', { name: TECHNICAL });
+    await technical.click();
+    await expect(technical).toHaveAttribute('aria-pressed', 'true');
+    await settled(technical);
+    await openStage(page, 'Interview');
+    const copy = run(modal).getByRole('button', { name: COPY_COMMAND });
+    const short = run(modal).getByRole('button', { name: SHORT });
+    // ACT
+    await copy.click();
+    await expect.poll(() => copies(page)).toBe(1);
+    await short.click();
+    await expect(short).toHaveAttribute('aria-pressed', 'true');
+    await settled(short);
+    await copy.click();
+    await expect.poll(() => copies(page)).toBe(2);
+    const written = await copied(page);
+    // ASSERT
+    expect(written[0]).not.toContain(shortMarker);
+    expect(written[1]).toContain(shortMarker);
+    expect(written[1]?.startsWith('/')).toBe(true);
+  });
+
+  test('returns focus to the Try it button on every close path: X, Escape and backdrop', async ({ page }) => {
+    // ARRANGE
+    const stage = 'Requirements';
+    const { modal } = await open(page, 'light');
+    const closers = [
+      () => modal.getByRole('button', { name: 'Close' }).click(),
+      () => page.keyboard.press('Escape'),
+      () => modal.click({ position: { x: 4, y: 4 } }),
+    ];
+    const opener = page.locator(`${ROOT} [data-try="${stage}"]`);
+    // ACT
+    for (const close of closers) {
+      await openStage(page, stage);
+      await close();
+      // ASSERT
+      await expect(modal).toHaveCount(0);
+      await expect(opener).toBeFocused();
+    }
+  });
+
+  test('shows one shared tooltip on focus, dismisses it with Escape before the dialog, and keeps the move circles 24px', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const minTarget = 24;
+    const { root, modal } = await open(page, 'light');
+    const circles = await root
+      .locator('[data-move]')
+      .evaluateAll((els) =>
+        els.map((el) => Math.min(el.getBoundingClientRect().width, el.getBoundingClientRect().height)),
+      );
+    await openStage(page, 'Requirements');
+    const tip = modal.locator('header [data-tip-host] > span[data-shown]');
+    // ACT
+    await modal.locator('header button').focus();
+    await expect(tip).toHaveAttribute('data-shown', 'true');
+    await page.keyboard.press('Escape');
+    // ASSERT
+    expect(circles.length).toBeGreaterThan(0);
+    expect(circles.every((size) => size >= minTarget)).toBe(true);
+    await expect(tip).toHaveAttribute('data-shown', 'false');
+    await expect(modal).toHaveAttribute('open', '');
+    await page.keyboard.press('Escape');
+    await expect(modal).toHaveCount(0);
+  });
+
+  test('ticks a ready ticket of the example graph so its dependent becomes ready', async ({ page }) => {
+    // ARRANGE
+    const doneStatus = 'done';
+    const progress = /^1 of \d+ done$/;
+    const { modal } = await open(page, 'light');
+    await openStage(page, 'Requirements');
+    const ready = modal.locator('[data-ticket][data-status="ready"]');
+    const first = ready.first();
+    const firstId = await first.getAttribute('data-ticket');
+    const waiting = await modal
+      .locator('[data-ticket][data-status="blocked"]')
+      .evaluateAll((els) => els.map((el) => el.getAttribute('data-ticket')));
+    // ACT
+    await first.click();
+    // ASSERT
+    await expect(modal.locator(`[data-ticket="${firstId}"]`)).toHaveAttribute('data-status', doneStatus);
+    expect(waiting.length).toBeGreaterThan(0);
+    await expect
+      .poll(async () => {
+        const now = await ready.evaluateAll((els) => els.map((el) => el.getAttribute('data-ticket')));
+        return now.some((id) => waiting.includes(id));
+      })
+      .toBe(true);
+    await expect(modal.locator('[data-progress]')).toHaveText(progress);
+  });
+
+  test('switches to Vacation with its own card lines, then shows the setup and a copyable /skill command in Technical', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const vacation = 'vacation';
+    const setupCommand = 'claude plugin install';
+    const summerLine = 'At most €150 per person';
+    const vacationLine = 'Sleeps 2';
+    const { root, toolbar, modal } = await open(page, 'light');
+    const diagram = root.locator('[data-part="diagram"]');
+    await expect(diagram).toContainText(summerLine);
+    // ACT
+    const pill = toolbar.locator('[data-control="picker"]').getByRole('button', { name: /Vacation/ });
+    await pill.click();
+    await expect(root).toHaveAttribute('data-human-in-the-loop', vacation);
+    await settled(pill);
+    await toolbar.getByRole('button', { name: TECHNICAL }).click();
+    await openStage(page, 'Interview');
+    await run(modal).getByRole('button', { name: COPY_COMMAND }).click();
+    await expect.poll(() => copies(page)).toBe(1);
+    const written = await copied(page);
+    // ASSERT
+    await expect(diagram).toContainText(vacationLine);
+    await expect(diagram).not.toContainText(summerLine);
+    await expect(modal.locator('section[aria-label="One-time setup"]')).toContainText(setupCommand);
+    expect(written[0]).toMatch(/^\/[a-z-]+/);
+  });
+
+  test('shows a valid uploaded Workflow in place of the authored one', async ({ page }) => {
+    // ARRANGE
+    const mine = 'mine';
+    const { root } = await open(page, 'light');
+    // ACT
+    await root
+      .locator('[data-control="upload"] input[type=file]')
+      .setInputFiles({ name: 'mine.yml', mimeType: 'text/yaml', buffer: Buffer.from(OWN) });
+    // ASSERT
+    await expect(root).toHaveAttribute('data-human-in-the-loop', mine);
+    await expect(root.locator('[data-upload-problems] li')).toHaveCount(0);
+  });
+
+  for (const theme of ['light', 'dark'] as const) {
+    test(`has no serious or critical axe-core violation in ${theme}, on the diagram and with the modal open`, async ({
+      page,
+    }) => {
+      // ARRANGE
+      const expected: string[] = [];
+      await open(page, theme);
+      // ACT
+      const diagram = await seriousViolations(page);
+      await openStage(page, 'Requirements');
+      const modal = await seriousViolations(page);
+      // ASSERT
+      expect(diagram).toEqual(expected);
+      expect(modal).toEqual(expected);
+    });
+  }
 });
 
-describe('success cases', () => {
-  it(
-    'has one pill toolbar: the Workflow pills, then Technical, download and upload as icon buttons with tooltips',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const toolbar = `${ROOT} [data-part="toolbar"]`;
-      // ACT
-      const pills = await js<string[]>(
-        `[...document.querySelectorAll('${toolbar} [data-control="picker"] button')].map((el) => el.textContent)`,
-      );
-      const icons = await js<string[]>(
-        `[...document.querySelectorAll('${toolbar} [data-tip-host]')].filter((host) => host.querySelector('[data-control]:not([data-control=picker])')).map((host) => host.querySelector('[data-control]').dataset.control + ':' + host.querySelector('[data-tip-text]').textContent)`,
-      );
-      const buttons = await count(`${toolbar} button, ${toolbar} input`);
-      // ASSERT
-      expect(pills).toEqual(['Summer party', 'Vacation']);
-      expect(icons.map((icon) => icon.split(':')[0])).toEqual(['level', 'download', 'upload']);
-      expect(icons.every((icon) => icon.split(':')[1]?.length)).toBe(true);
-      expect(buttons).toBe(pills.length + icons.length);
-      expect(await text(`${ROOT}`)).not.toMatch(/Watch|Try it yourself/);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'opens a stage modal from its Try it button: title, X top right, collapsed prompts, copy, then Escape and backdrop close',
-    async () => {
-      // ARRANGE
-      const copiedWord = 'Copied';
-      const exampleViews = 2;
-      await open('light');
-      // ACT
-      await openStage(/Requirements/);
-      const opened = await count(`${MODAL}[open]`);
-      const title = await text(`${MODAL} h2`);
-      const closeIsTopRight = await js<boolean>(
-        `(() => { const panel = document.querySelector('${MODAL} > div').getBoundingClientRect();
-          const x = document.querySelector('${MODAL} header button[aria-label="Close"]').getBoundingClientRect();
-          return x.top - panel.top < 40 && panel.right - x.right < 40; })()`,
-      );
-      const prompts = await count(`${MODAL} [data-prompt]`);
-      const expanded = await count(`${MODAL} [data-prompt] button[aria-expanded="true"]`);
-      const steps = await js<string[]>(
-        `[...document.querySelectorAll('${MODAL} [data-step]')].map((el) => el.dataset.step)`,
-      );
-      await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy prompt/);
-      await settle();
-      const status = await text(`${MODAL} [role="status"]`);
-      const copied = await js<string[]>('window.__copied');
-      const chatLinks = await js<string[]>(
-        `[...document.querySelectorAll('${MODAL} [data-step="run"] a[target="_blank"]')].map((el) => el.href.split('?')[0])`,
-      );
-      const exampleSpec = await count(`${MODAL} [data-output="spec"], ${MODAL} [data-output="tickets"]`);
-      await js(`document.querySelector('${MODAL}').click()`);
-      await settle();
-      const afterBackdrop = await count(`${MODAL}`);
-      await openStage(/Requirements/);
-      await escape();
-      const afterEscape = await count(`${MODAL}`);
-      // ASSERT
-      expect(opened).toBe(1);
-      expect(title).toBe('Requirements: Try it');
-      expect(closeIsTopRight).toBe(true);
-      expect(prompts).toBe(steps.length);
-      expect(expanded).toBe(0);
-      expect(steps).toEqual(['run', 'check', 'page']);
-      expect(status).toBe(copiedWord);
-      expect(copied.length).toBe(1);
-      expect(copied[0]).toContain('handoff');
-      expect(copied[0]).not.toContain('{{');
-      expect(chatLinks).toEqual(['https://chatgpt.com/', 'https://claude.ai/new']);
-      expect(exampleSpec).toBe(exampleViews);
-      expect(afterBackdrop).toBe(0);
-      expect(afterEscape).toBe(0);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'closes the modal with the X button and expands a prompt on demand',
-    async () => {
-      // ARRANGE
-      await open('light');
-      await openStage(/Interview/);
-      // ACT
-      await press(`${MODAL} [data-step="run"] button[aria-expanded]`, /Prompt/);
-      await settle();
-      const shown = await js<boolean>(`!document.querySelector('${MODAL} [data-step="run"] pre').hidden`);
-      await press(`${MODAL} header button`, /Close/);
-      await settle();
-      // ASSERT
-      expect(shown).toBe(true);
-      expect(await count(MODAL)).toBe(0);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'copies the short grill of the interview when Short is on, and the full prompt when it is off',
-    async () => {
-      // ARRANGE
-      await open('light');
-      await openStage(/Interview/);
-      const copyRun = async () => {
-        await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy prompt/);
-        await settle();
-      };
-      // ACT
-      await copyRun();
-      await press(`${MODAL} [data-step="run"] button[aria-pressed]`, /Short/);
-      await settle();
-      await copyRun();
-      const copied = await js<string[]>('window.__copied');
-      const shortToggles = await count(`${MODAL} button[aria-pressed]`);
-      // ASSERT
-      expect(copied[0]).not.toContain('SHORT version');
-      expect(copied[1]).toContain('SHORT version');
-      expect(shortToggles).toBe(1);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'copies the short command of the interview at the Technical level when Short is on',
-    async () => {
-      // ARRANGE
-      await open('light');
-      await press(`${ROOT} [data-part="toolbar"] button`, /Technical/);
-      await settle();
-      await openStage(/Interview/);
-      const copyRun = async () => {
-        await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy command/);
-        await settle();
-      };
-      // ACT
-      await copyRun();
-      await press(`${MODAL} [data-step="run"] button[aria-pressed]`, /Short/);
-      await settle();
-      await copyRun();
-      const copied = await js<string[]>('window.__copied');
-      // ASSERT
-      expect(copied[0]).not.toContain('Short version');
-      expect(copied[1]).toContain('Short version');
-      expect(copied[1]?.startsWith('/')).toBe(true);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'returns focus to the Try it button on every close path: X, Escape and backdrop',
-    async () => {
-      // ARRANGE
-      await open('light');
-      const focused = () => js<string>('document.activeElement?.dataset?.try ?? document.activeElement?.tagName ?? ""');
-      const closers = [
-        () => press(`${MODAL} header button`, /Close/),
-        () => escape(),
-        () => js(`document.querySelector('${MODAL}').click()`),
-      ];
-      const landed: string[] = [];
-      // ACT
-      for (const close of closers) {
-        await openStage(/Requirements/);
-        await close();
-        await settle();
-        landed.push(await focused());
-      }
-      // ASSERT
-      expect(landed).toEqual(['Requirements', 'Requirements', 'Requirements']);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'shows one shared tooltip on focus, dismisses it with Escape before the dialog, and keeps the move circles 24px',
-    async () => {
-      // ARRANGE
-      const minTarget = 24;
-      await open('light');
-      const circles = await js<number[]>(
-        `[...document.querySelectorAll('${ROOT} [data-move]')].map((el) => Math.min(el.getBoundingClientRect().width, el.getBoundingClientRect().height))`,
-      );
-      await openStage(/Requirements/);
-      const tipShown = () =>
-        js<string>(
-          `document.querySelector('${MODAL} header [data-tip-host] > span[data-shown]')?.dataset.shown ?? 'none'`,
-        );
-      // ACT
-      await js(`document.querySelector('${MODAL} header button').focus()`);
-      await settle();
-      const onFocus = await tipShown();
-      await escape();
-      const afterFirstEscape = await tipShown();
-      const stillOpen = await count(`${MODAL}[open]`);
-      await escape();
-      const afterSecondEscape = await count(MODAL);
-      // ASSERT
-      expect(circles.length).toBeGreaterThan(0);
-      expect(circles.every((size) => size >= minTarget)).toBe(true);
-      expect(onFocus).toBe('true');
-      expect(afterFirstEscape).toBe('false');
-      expect(stillOpen).toBe(1);
-      expect(afterSecondEscape).toBe(0);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'ticks a ready ticket of the example graph so its dependent becomes ready',
-    async () => {
-      // ARRANGE
-      const doneStatus = 'done';
-      await open('light');
-      await openStage(/Requirements/);
-      const status = (id: string) =>
-        js<string | null>(`document.querySelector('${MODAL} [data-ticket="${id}"]')?.dataset.status ?? null`);
-      const first = await js<string>(
-        `document.querySelector('${MODAL} [data-ticket][data-status="ready"]').dataset.ticket`,
-      );
-      const waiting = await js<string[]>(
-        `[...document.querySelectorAll('${MODAL} [data-ticket][data-status="blocked"]')].map((el) => el.dataset.ticket)`,
-      );
-      // ACT
-      await js(`document.querySelector('${MODAL} [data-ticket="${first}"]').click()`);
-      await settle();
-      const progress = await text(`${MODAL} [data-progress]`);
-      const nowReady = await js<string[]>(
-        `[...document.querySelectorAll('${MODAL} [data-ticket][data-status="ready"]')].map((el) => el.dataset.ticket)`,
-      );
-      // ASSERT
-      expect(await status(first)).toBe(doneStatus);
-      expect(waiting.length).toBeGreaterThan(0);
-      expect(nowReady.some((id) => waiting.includes(id))).toBe(true);
-      expect(progress).toMatch(/^1 of \d+ done$/);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'switches to Vacation with its own card lines, then shows the setup and a copyable /skill command in Technical',
-    async () => {
-      // ARRANGE
-      const vacation = 'vacation';
-      const setupCommand = 'claude plugin install';
-      await open('light');
-      const card = () => text(`${ROOT} [data-part="diagram"]`);
-      const before = await card();
-      // ACT
-      await press(`${ROOT} [data-control="picker"] button`, /Vacation/);
-      await settle();
-      const workflow = await js<string>(`document.querySelector('${ROOT}').dataset.humanInTheLoop`);
-      const after = await card();
-      await press(`${ROOT} [data-part="toolbar"] button`, /Technical/);
-      await settle();
-      await openStage(/Interview/);
-      const setup = await text(`${MODAL} section[aria-label="One-time setup"]`);
-      await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy command/);
-      await settle();
-      const copied = await js<string[]>('window.__copied');
-      // ASSERT
-      expect(workflow).toBe(vacation);
-      expect(before).toContain('At most €150 per person');
-      expect(after).toContain('Sleeps 2');
-      expect(after).not.toContain('At most €150 per person');
-      expect(setup).toContain(setupCommand);
-      expect(copied[0]).toMatch(/^\/[a-z-]+/);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'shows a valid uploaded Workflow in place of the authored one',
-    async () => {
-      // ARRANGE
-      const mine = 'mine';
-      await open('light');
-      // ACT
-      await upload(OWN);
-      await settle();
-      const shown = await js<string>(`document.querySelector('${ROOT}').dataset.humanInTheLoop`);
-      const problems = await count(`${ROOT} [data-upload-problems] li`);
-      // ASSERT
-      expect(shown).toBe(mine);
-      expect(problems).toBe(0);
-    },
-    TIMEOUT,
-  );
-
-  it.each(['light', 'dark'] as const)(
-    'has no serious or critical axe-core violation in %s, on the diagram and with the modal open',
-    async (theme) => {
-      // ARRANGE
-      await open(theme);
-      // ACT
-      const diagram = await seriousViolations();
-      await openStage(/Requirements/);
-      const modal = await seriousViolations();
-      // ASSERT
-      expect(diagram.join('; ')).toBe('');
-      expect(modal.join('; ')).toBe('');
-    },
-    TIMEOUT,
-  );
+test.describe('failure cases', () => {
+  test('reports the problems of a broken uploaded Workflow and keeps the authored one', async ({ page }) => {
+    // ARRANGE
+    const authored = 'summer-party';
+    const { root } = await open(page, 'light');
+    // ACT
+    await root
+      .locator('[data-control="upload"] input[type=file]')
+      .setInputFiles({ name: 'broken.yml', mimeType: 'text/yaml', buffer: Buffer.from('stages: [') });
+    // ASSERT
+    await expect(root.locator('[data-upload-problems] li').first()).toBeVisible();
+    await expect(root).toHaveAttribute('data-human-in-the-loop', authored);
+  });
 });
 
-describe('failure cases', () => {
-  it(
-    'reports the problems of a broken uploaded Workflow and keeps the authored one',
-    async () => {
-      // ARRANGE
-      const authored = 'summer-party';
-      await open('light');
-      // ACT
-      await upload('stages: [');
-      await settle();
-      const problems = await count(`${ROOT} [data-upload-problems] li`);
-      const shown = await js<string>(`document.querySelector('${ROOT}').dataset.humanInTheLoop`);
-      // ASSERT
-      expect(problems).toBeGreaterThan(0);
-      expect(shown).toBe(authored);
-    },
-    TIMEOUT,
-  );
-});
-
-describe('edge cases', () => {
-  it(
-    'keeps the page from scrolling sideways at phone width with the modal open',
-    async () => {
-      // ARRANGE
-      await open('light', 390);
-      // ACT
-      await openStage(/Requirements/);
-      const sideways = await js<number>('document.documentElement.scrollWidth - innerWidth');
-      const modalFits = await js<boolean>(
-        `(() => { const r = document.querySelector('${MODAL} > div').getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; })()`,
-      );
-      // ASSERT
-      expect(sideways).toBeLessThanOrEqual(0);
-      expect(modalFits).toBe(true);
-    },
-    TIMEOUT,
-  );
+test.describe('edge cases', () => {
+  test('keeps the page from scrolling sideways at phone width with the modal open', async ({ page }) => {
+    // ARRANGE
+    const phone = 390;
+    const { modal } = await open(page, 'light', phone);
+    // ACT
+    await openStage(page, 'Requirements');
+    const sideways = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    const panel = await modal.locator(':scope > div').boundingBox();
+    // ASSERT
+    expect(sideways).toBeLessThanOrEqual(0);
+    expect(panel!.x).toBeGreaterThanOrEqual(0);
+    expect(panel!.x + panel!.width).toBeLessThanOrEqual(phone);
+  });
 });

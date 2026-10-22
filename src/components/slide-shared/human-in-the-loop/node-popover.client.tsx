@@ -4,6 +4,7 @@ import { usePopoverPlacement } from '@/hooks/use-popover-placement';
 import { popoverBox, type PopoverRules } from '@/lib/popover-placement.pure';
 import { useCallback, useId, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { useMotion } from './use-motion.client';
 
 const SLOT = 'venue-popover';
 
@@ -29,6 +30,7 @@ interface NodePopoverProps {
  */
 export function NodePopover({ copy, className, children }: NodePopoverProps) {
   const id = useId();
+  const motion = useMotion();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
   const close = useCallback(() => setAnchor(null), []);
   const toggle = (target: HTMLElement) => setAnchor((now) => (now ? null : target));
@@ -41,6 +43,7 @@ export function NodePopover({ copy, className, children }: NodePopoverProps) {
         aria-controls={anchor ? id : undefined}
         onClick={(event) => toggle(event.currentTarget)}
         className={className}
+        {...motion}
       >
         {children}
       </button>

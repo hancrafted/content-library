@@ -2,6 +2,7 @@
 
 import type { ButtonHTMLAttributes } from 'react';
 import { Tip } from './tip.client';
+import { useMotion } from './use-motion.client';
 
 /** The outlined round icon look shared by the prompt icons, the chat links and the modal X (size-9, a 36px target). */
 export const OUTLINED_ICON =
@@ -17,9 +18,10 @@ interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 
 
 /** An icon-only button: its name is `label`, its tooltip the shared one. */
 export function IconButton({ label, tip = label, place, align, className = OUTLINED_ICON, ...rest }: IconButtonProps) {
+  const motion = useMotion();
   return (
     <Tip text={tip} place={place} align={align}>
-      <button type="button" aria-label={label} className={className} {...rest} />
+      <button type="button" aria-label={label} className={className} {...motion} {...rest} />
     </Tip>
   );
 }

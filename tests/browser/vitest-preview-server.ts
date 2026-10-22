@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 
-// Temporary: the Vitest browser lane (Context and human-in-the-loop, until tickets 295 and 298 port them) needs the
+// Temporary: the Vitest browser lane (Context, until ticket 298 ports it) needs the
 // export served, and Playwright's `webServer` has stopped by then. Serve it for the run unless something already does.
 const PORT = Number(process.env.PREVIEW_PORT ?? 4300);
 const URL = `http://localhost:${PORT}/`;
