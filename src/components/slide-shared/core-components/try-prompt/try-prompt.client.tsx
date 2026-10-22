@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 import { useId, useState } from 'react';
+import { Tip } from '../tip/tip.client';
 import { PromptActions, ShortToggle } from './prompt-actions.client';
 import { PromptBody } from './prompt-body.client';
 import { joinPrompt, type PromptSection, type SlotValues } from './prompt-sections.pure';
@@ -26,24 +27,28 @@ function Toggle({
   open,
   label,
   panel,
+  tip,
   onToggle,
 }: {
   open: boolean;
   label: string;
   panel: string;
+  tip: string;
   onToggle: () => void;
 }) {
   return (
-    <button
-      type="button"
-      aria-expanded={open}
-      aria-controls={panel}
-      onClick={onToggle}
-      className="inline-flex min-h-9 flex-1 cursor-pointer items-center gap-1.5 rounded-lg text-left text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
-    >
-      <ChevronRight aria-hidden="true" className={cn('size-4 transition-transform', open && 'rotate-90')} />
-      {label}
-    </button>
+    <Tip text={tip} place="above" align="start" className="min-w-0 flex-1">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={panel}
+        onClick={onToggle}
+        className="inline-flex min-h-9 w-full cursor-pointer items-center gap-1.5 rounded-lg text-left text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        <ChevronRight aria-hidden="true" className={cn('size-4 transition-transform', open && 'rotate-90')} />
+        {label}
+      </button>
+    </Tip>
   );
 }
 
@@ -88,7 +93,13 @@ function Row({ prompt, kit, open, panel, text, onToggle }: RowProps) {
   const { words } = kit;
   return (
     <div className="flex flex-wrap items-center gap-2 p-1.5 pl-2">
-      <Toggle open={open} panel={panel} label={command ? words.commandLabel : words.promptLabel} onToggle={onToggle} />
+      <Toggle
+        open={open}
+        panel={panel}
+        label={command ? words.commandLabel : words.promptLabel}
+        tip={words.toggleTip ?? (command ? words.commandLabel : words.promptLabel)}
+        onToggle={onToggle}
+      />
       {prompt.short !== undefined && <ShortToggle kit={kit} />}
       <PromptActions text={text} copyLabel={command ? words.copyCommand : words.copyPrompt} kit={kit} />
     </div>

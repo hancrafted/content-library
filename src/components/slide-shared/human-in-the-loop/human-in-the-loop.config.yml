@@ -29,6 +29,8 @@ ui:
   doIt: Do it
   reviewIt: Review it
   chatN: 'Chat {n}'
+  chatTip: 'The prompt for chat {n}: paste it into its own fresh chat'
+  toggleTip: Show or hide the text
   sectionWhy: Why it matters
   slotUpload: Upload a markdown file
   slotAdd: Add another entry
