@@ -95,7 +95,7 @@ const escape = async () => {
 async function popoverProblems(where: string, title: RegExp): Promise<string[]> {
   const heading = await text(`${MODAL} header h2`);
   const prompts = await js<string[]>(
-    `[...document.querySelectorAll('${MODAL} [data-prompt-text]')].map((el) => el.textContent)`,
+    `[...document.querySelectorAll('${MODAL} [data-prompt-text]')].map((el) => el.dataset.promptText)`,
   );
   const checks: [boolean, string][] = [
     [!title.test(heading), `title "${heading}"`],
@@ -157,6 +157,32 @@ afterAll(async () => {
   connection.socket.close();
 });
 
+/** Opens the stage's prompts and panels, as a viewer would, so the longest prompt is on screen. */
+const expandAll = async () => {
+  await js(
+    `document.querySelectorAll('${MODAL} [data-prompt] > div:first-child button[aria-expanded="false"]').forEach((b) => b.click())`,
+  );
+  await settle();
+  await js(
+    `document.querySelectorAll('${MODAL} [data-panel-toggle][aria-expanded="false"]').forEach((b) => b.click())`,
+  );
+  await settle();
+};
+
+/** Elements with a box that sticks out of the modal panel on the right, and whether the scroller ends inside it. */
+const overflowOf = () =>
+  js<{ right: string[]; scrollerBelow: boolean }>(
+    `(() => {
+      const panel = document.querySelector('${MODAL} > div').getBoundingClientRect();
+      const scroller = document.querySelector('${MODAL} [data-scroll]').getBoundingClientRect();
+      const right = [...document.querySelectorAll('${MODAL} > div *')]
+        .filter((el) => el.getClientRects().length > 0 && !el.closest('[hidden]') && !el.closest('[data-tip-text]'))
+        .filter((el) => el.getBoundingClientRect().right > panel.right + 1)
+        .map((el) => el.tagName + ' ' + String(el.className).slice(0, 40));
+      return { right, scrollerBelow: scroller.bottom > panel.bottom + 1 };
+    })()`,
+  );
+
 describe('success cases', () => {
   it(
     'has one pill toolbar: the Workflow pills, then Technical, download and upload as icon buttons with tooltips',
@@ -199,7 +225,7 @@ describe('success cases', () => {
           return x.top - panel.top < 40 && panel.right - x.right < 40; })()`,
       );
       const prompts = await count(`${MODAL} [data-prompt]`);
-      const expanded = await count(`${MODAL} [data-prompt] button[aria-expanded="true"]`);
+      const expanded = await count(`${MODAL} [data-prompt] > div:first-child button[aria-expanded="true"]`);
       const steps = await js<string[]>(
         `[...document.querySelectorAll('${MODAL} [data-step]')].map((el) => el.dataset.step)`,
       );
@@ -228,7 +254,7 @@ describe('success cases', () => {
       expect(copied.length).toBe(1);
       expect(copied[0]).toContain('kind: interview');
       expect(copied[0]).not.toContain('{{');
-      expect(chatLinks).toEqual(['https://chatgpt.com/', 'https://claude.ai/new']);
+      expect(chatLinks).toEqual(['https://chatgpt.com/']);
       expect(exampleSpec).toBe(exampleViews);
       expect(afterBackdrop).toBe(0);
       expect(afterEscape).toBe(0);
@@ -245,9 +271,7 @@ describe('success cases', () => {
       // ACT
       await press(`${MODAL} [data-step="do"] button[aria-expanded]`, /Prompt/);
       await settle();
-      const shown = await js<boolean>(
-        `!document.querySelector('${MODAL} [data-step="do"] [data-prompt-text]').parentElement.hidden`,
-      );
+      const shown = await js<boolean>(`!document.querySelector('${MODAL} [data-step="do"] [data-prompt-text]').hidden`);
       await press(`${MODAL} header button`, /Close/);
       await settle();
       // ASSERT
@@ -362,7 +386,7 @@ describe('success cases', () => {
       }
       const all = await entryCount();
       const placeholders = await js<string[]>(
-        `[...document.querySelectorAll('${slot} textarea')].map((el) => el.placeholder.split('\\n').find((line) => line.startsWith('# ')))`,
+        `[...document.querySelectorAll('${slot} textarea')].map((el) => el.placeholder.replace(/^Sample: (.*) · \\d+ lines$/, '# $1'))`,
       );
       const plus = await count(`${slot} [data-slot-add]`);
       await press(`${MODAL} [data-step="do"] button[aria-label]`, /Copy prompt/);
@@ -617,7 +641,7 @@ describe('success cases', () => {
   );
 
   it(
-    'writes Open in ChatGPT and Open in Claude out on desktop, icons only on a phone, every button with a tooltip',
+    'writes Open in ChatGPT out on desktop, icons only on a phone, every button with a tooltip',
     async () => {
       // ARRANGE
       const visibleText = (selector: string) =>
@@ -626,7 +650,7 @@ describe('success cases', () => {
         );
       const bare = () =>
         js<string[]>(
-          `[...document.querySelectorAll('${MODAL} button, ${MODAL} summary')].filter((b) => !b.closest('[data-tip-host]') && b.tagName === 'BUTTON').map((b) => b.getAttribute('aria-label') ?? b.textContent)`,
+          `[...document.querySelectorAll('${MODAL} button, ${MODAL} summary')].filter((b) => !b.closest('[data-tip-host]') && !b.dataset.panelToggle && b.tagName === 'BUTTON').map((b) => b.getAttribute('aria-label') ?? b.textContent)`,
         );
       // ACT
       await open('light', 1440);
@@ -637,8 +661,8 @@ describe('success cases', () => {
       await openStage(/Requirements/);
       const phone = await visibleText(`${MODAL} [data-step="do"] a[target="_blank"]`);
       // ASSERT
-      expect(desktop).toEqual(['Open in ChatGPT', 'Open in Claude']);
-      expect(phone).toEqual(['', '']);
+      expect(desktop).toEqual(['Open in ChatGPT']);
+      expect(phone).toEqual(['']);
       expect(desktopBare).toEqual([]);
     },
     TIMEOUT,
@@ -660,6 +684,106 @@ describe('success cases', () => {
       // ASSERT
       expect(names).toEqual(chatNames);
       expect(cut).toEqual([]);
+    },
+    TIMEOUT,
+  );
+
+  it.each([
+    [1280, /Review/],
+    [1280, /Compare/],
+    [390, /Review/],
+    [390, /Compare/],
+  ])(
+    'keeps every element inside the modal at %spx with the longest prompts of %s expanded',
+    async (width, stage) => {
+      // ARRANGE
+      await open('light', width);
+      await openStage(stage);
+      // ACT
+      await expandAll();
+      const { right, scrollerBelow } = await overflowOf();
+      // ASSERT
+      expect(right).toEqual([]);
+      expect(scrollerBelow).toBe(false);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'opens What to do and closes Prompt preview by default, with aria-expanded on both',
+    async () => {
+      // ARRANGE
+      await open('light');
+      await openStage(/Compare/);
+      await press(`${MODAL} [data-step="do"] button[aria-expanded]`, /Prompt/);
+      await settle();
+      // ACT
+      const todo = await js<string>(
+        `document.querySelector('${MODAL} [data-step="do"] [data-panel-toggle="todo"]').ariaExpanded`,
+      );
+      const preview = await js<string>(
+        `document.querySelector('${MODAL} [data-step="do"] [data-panel-toggle="preview"]').ariaExpanded`,
+      );
+      // ASSERT
+      expect(todo).toBe('true');
+      expect(preview).toBe('false');
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'keeps every line break of a multi-line paste in a collapsed field when the prompt is copied',
+    async () => {
+      // ARRANGE
+      const pasted = '# Pasted\n\nfirst line\nsecond line';
+      await open('light');
+      await openStage(/Interview/);
+      await press(`${MODAL} [data-step="do"] button[aria-expanded]`, /Prompt/);
+      await settle();
+      // ACT
+      await js(`(() => {
+        const field = document.querySelector('${MODAL} [data-step="do"] [data-slot] textarea');
+        const set = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
+        set.call(field, ${JSON.stringify(pasted)});
+        field.dispatchEvent(new Event('input', { bubbles: true }));
+      })()`);
+      await settle();
+      await press(`${MODAL} [data-step="do"] button[aria-label]`, /Copy prompt/);
+      await settle();
+      const copied = await js<string[]>('window.__copied');
+      const rows = await js<string>(`document.querySelector('${MODAL} [data-step="do"] [data-slot] textarea').rows`);
+      // ASSERT
+      expect(copied.at(-1)).toContain(pasted);
+      expect(rows).toBe(1);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'expands a field with the eye toggle and collapses it again',
+    async () => {
+      // ARRANGE
+      await open('light');
+      await openStage(/Interview/);
+      await press(`${MODAL} [data-step="do"] button[aria-expanded]`, /Prompt/);
+      await settle();
+      const eye = `${MODAL} [data-step="do"] [data-slot] button[aria-pressed]`;
+      const rowsOf = () => js<number>(`document.querySelector('${MODAL} [data-step="do"] [data-slot] textarea').rows`);
+      // ACT
+      const before = await rowsOf();
+      await js(`document.querySelector('${eye}').click()`);
+      await settle();
+      const pressed = await js<string>(`document.querySelector('${eye}').ariaPressed`);
+      const label = await js<string>(`document.querySelector('${eye}').getAttribute('aria-label')`);
+      const expanded = await rowsOf();
+      await js(`document.querySelector('${eye}').click()`);
+      await settle();
+      // ASSERT
+      expect(before).toBe(1);
+      expect(pressed).toBe('true');
+      expect(label).toBe('Collapse');
+      expect(expanded).toBeGreaterThan(1);
+      expect(await rowsOf()).toBe(1);
     },
     TIMEOUT,
   );

@@ -106,7 +106,7 @@ function Panel({ stage, shortJobIds, slots, level, onLevel, onShort, onClose, ..
       <ModalHeader stage={stage} words={words} level={level} onLevel={onLevel} onClose={onClose} />
       <div
         data-scroll=""
-        className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto overscroll-contain md:flex-none md:pr-2"
+        className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto overscroll-contain md:flex-initial md:pr-2"
       >
         {first && <Tasks jobs={stage.jobs} kit={kitOf(first)} words={words} slots={slots} />}
       </div>
