@@ -22,9 +22,11 @@ const TEST_GLOB = 'src/**/*.test.ts';
 const BLOCKS = ['success cases', 'failure cases', 'edge cases'];
 const MARKERS = ['ARRANGE', 'ACT', 'ASSERT'];
 
-const TOP_DESCRIBE_RE = /^describe(?:\.\w+)*\(\s*(['"`])(.*?)\1/;
-const TEST_START_RE = /^\s*(?:it|test)(?:\.\w+)*(?:\([\s\S]*?\))?\s*\(/;
-const BLOCK_START_RE = /^\s*describe(?:\.\w+)*\(/;
+// Playwright spells a block `test.describe(` and a hook `test.beforeEach(`: a block, and no test.
+const TOP_DESCRIBE_RE = /^(?:test\.)?describe(?:\.\w+)*\(\s*(['"`])(.*?)\1/;
+const TEST_START_RE =
+  /^\s*(?:it|test)(?!\.(?:describe|beforeEach|afterEach|beforeAll|afterAll|use|extend)\b)(?:\.\w+)*(?:\([\s\S]*?\))?\s*\(/;
+const BLOCK_START_RE = /^\s*(?:test\.)?describe(?:\.\w+)*\(/;
 // Any comment naming a marker word, in any case — so `// Arrange` and
 // `// ARRANGE / ACT` are seen and judged rather than skipped.
 const MARKER_COMMENT_RE = /^\s*\/\/\s*(arrange|act|assert)\b(.*)$/i;
