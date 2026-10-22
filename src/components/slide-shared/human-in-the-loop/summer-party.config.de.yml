@@ -23,10 +23,10 @@ words:
         label: Anforderungskarte
         lines:
           - 200 Gäste
-          - 150 € pro Person
+          - Höchstens 150 € pro Person
           - Stufenlos
           - Vegetarisches Menü
-          - Ruhig genug zum Reden
+          - Separater ruhiger Raum
         status: Freigegeben
     research:
       name: Recherche
@@ -45,17 +45,30 @@ words:
       parked:
         - Anreise
         - Catering
+        - Programm
         - Einladungen
-        - Budget
       run:
-        todo: Füge das in einen neuen Chat ein und lass die KI die Aufgabe zerlegen.
+        todo: Öffne einen neuen Chat, füge den Prompt ein und lies die Antwort. Behalte den Handoff-Block am Ende.
         prompt: |-
-          Antworte auf Deutsch. Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
-          Zerlege es in fünf unabhängige Teile, die ich nacheinander planen kann. Empfiehl dann das eine Teil, mit dem ich beginne, und begründe es in einem Satz.
-          Beende Deine Antwort mit dem gewählten Teil in genau einem Codeblock, genau so:
+          Antworte auf Deutsch.
+
+          ## Deine Rolle
+          Du bist ein Planungscoach. Du hilfst mir, eine große Aufgabe in Teile zu zerlegen, die ich nacheinander planen kann, und wählst das Teil, mit dem ich beginne.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+
+          ## So arbeitest Du
+          1. Zerlege die Aufgabe in genau fünf Teile. Ein Teil ist etwas, das ich in einem eigenen Chat aus einem kurzen Handoff planen kann. Die Reihenfolge darf eine Rolle spielen, aber jedes Teil muss klein genug sein, um es für sich zu planen.
+          2. Benenne jedes Teil mit ein oder zwei Wörtern und ergänze einen halben Satz dazu, was es entscheidet.
+          3. Empfiehl das eine Teil, mit dem ich beginne: das, das für die anderen am meisten festlegt. Begründe es in einem Satz.
+          4. Plane noch kein Teil und stelle mir keine Fragen.
+
+          ## Ausgabe
+          Zuerst die nummerierte Liste der fünf Teile, dann die Empfehlung. Beende Deine Antwort mit genau einem Codeblock in dieser Form:
           ```handoff
           kind: text
-          text: <das gewählte Teil und die Begründung in einem Satz>
+          text: "<das gewählte Teil, dann die Begründung in einem Satz>"
           ```
       exampleOutput: |-
         ```handoff
@@ -63,15 +76,42 @@ words:
         text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
         ```
       check:
-        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielantwort durch Dein Ergebnis.
+        todo: Öffne einen frischen Chat, füge den Prüf-Prompt ein und behebe das eine, was er nennt.
         criteria:
-          - Es gibt fünf Teile, und jedes lässt sich für sich planen.
+          - Es gibt fünf Teile, und jedes lässt sich in einem eigenen Chat aus einem kurzen Handoff planen (die Reihenfolge darf eine Rolle spielen).
           - Genau ein Teil ist gewählt, mit Begründung in einem Satz.
         prompt: |-
-          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Antwort unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
-          Kriterien: Es gibt fünf Teile, und jedes lässt sich für sich planen; genau ein Teil ist gewählt, mit Begründung in einem Satz.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein strenger Prüfer in einem frischen Chat. Du hast die Arbeit unten nicht geschrieben, Du schuldest ihr nichts, und Du schreibst sie nicht um. Du prüfst sie nur.
+
+          ## Kriterien
+          1. Es gibt fünf Teile, und jedes lässt sich in einem eigenen Chat aus einem kurzen Handoff planen (die Reihenfolge darf eine Rolle spielen).
+          2. Genau ein Teil ist gewählt, mit Begründung in einem Satz.
+
+          ## So arbeitest Du
+          1. Bewerte jedes Kriterium oben einzeln mit BESTANDEN oder DURCHGEFALLEN.
+          2. Belege jede Bewertung: Zitiere oder zeige die genaue Stelle der Arbeit. Wenn Du keinen Beleg findest, ist die Bewertung DURCHGEFALLEN.
+          3. Sei nicht großzügig. Unklar, fehlend oder nur halb wahr zählt als DURCHGEFALLEN.
+          4. Nenne nach den Bewertungen die EINE Korrektur, die am meisten zählt, in ein bis zwei Sätzen, und sage genau, was zu ändern ist.
+          5. Füge nichts anderes hinzu: kein Lob, keine Zusammenfassung, keine umgeschriebene Fassung.
+
+          ## Ausgabe
+          Eine Liste "Kriterium: BESTANDEN oder DURCHGEFALLEN, Beleg", dann "Wichtigste Korrektur: ...".
+
+          ## Die zu prüfende Antwort
+          Das ist die ganze Antwort des ersten Chats, die Liste und der Block. Ersetze sie durch Deine eigene ganze Antwort, wenn Du eine hast.
+
+          Hier sind die fünf Teile:
+          1. Location
+          2. Anreise
+          3. Catering
+          4. Programm
+          5. Einladungen
+
+          Zuerst: Location.
+
           ```handoff
           kind: text
           text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
@@ -81,42 +121,95 @@ words:
       detail: 3 Fragen, 1 vergessen
       description: Die KI interviewt Dich, bevor sie rät, eine Frage nach der anderen, und bringt auf, woran Du nicht gedacht hast. Das ist der Chat aus dem Vortrag.
       run:
-        todo: Füge das in einen neuen Chat ein und beantworte Frage für Frage; sag am Ende "fertig".
+        todo: Öffne einen neuen Chat, füge den Prompt ein und beantworte jede Runde ("Ja" nimmt die Empfehlung an). Wenn das Interview fertig ist, tippe "fertig".
         prompt: |-
-          Antworte auf Deutsch. Interviewe mich unerbittlich zu diesem Teil meiner Planung, bis wir dasselbe Verständnis haben. Das Teil, das wir mitnehmen:
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein unerbittlicher, aber freundlicher Interviewer im Stil der "Grilling"-Methode. Du interviewst mich zum Plan unten, bis wir dasselbe Verständnis haben, bevor jemand rät oder einen Plan schreibt. Du fragst. Du planst noch nicht.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Wir nehmen ein Teil mit. Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: text
           text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
           ```
 
-          Geh die Entscheidungen Frage für Frage durch. Gib zu jeder Frage zwei Optionen (A und B) und Deine empfohlene Antwort, so formuliert, dass mein "Ja" sie annimmt. Warte auf meine Antwort, bevor Du die nächste Frage stellst. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
-          Stelle mindestens eine Frage, an die ich vermutlich nicht gedacht habe, zum Beispiel das Feedback vom letzten Jahr. Frag mich nie nach einem Fakt, den Du selbst wissen könntest. Höre auf, wenn nichts mehr stillschweigend angenommen wird.
-          Wenn ich "fertig" sage, beende mit meinen Antworten in genau einem Codeblock, genau so:
+          ## So arbeitest Du
+          Sieh meinen Plan als Baum von Entscheidungen: Jede Entscheidung öffnet die Entscheidungen, die an ihr hängen. Arbeite den Baum in Runden ab.
+          1. Jetzt beantwortbar sind alle Entscheidungen, deren Voraussetzungen schon geklärt sind: die Fragen, die Du jetzt stellen kannst, ohne Antworten zu raten, die Du noch nicht gehört hast. Stelle alle Fragen, die jetzt schon beantwortbar sind, in einer Runde.
+          2. Nummeriere die Fragen F1, F2, F3 und zähle über die Runden weiter. Formatiere jede Frage genau so:
+
+          ❓ **F1** - **<kurzer Titel>**: <die Frage, ein oder zwei Sätze>
+             A) <Option>
+             B) <Option>
+
+          ➡️ Empfohlen: <A oder B>, weil <ein Satz>. Antworte "Ja", um anzunehmen.
+
+          3. Formuliere jede Frage so, dass mein "Ja" Deine empfohlene Antwort annimmt. Gib immer zwei Optionen und eine Empfehlung.
+          4. Halte nach den Fragen an und warte auf meine Antworten. Antworte nie für mich und starte die nächste Runde nie, bevor ich geantwortet habe.
+          5. Berechne nach jeder Antwort den Baum neu: Geklärte Entscheidungen machen neue Fragen beantwortbar und schalten Fragen frei, die von ihnen abhingen. Eine Frage, die von einer noch offenen abhängt, gehört in eine spätere Runde.
+          6. Fakten sind Deine Aufgabe, Entscheidungen meine. Frag mich nie nach etwas, das Du selbst wissen könntest; nenne es stattdessen als Annahme. Runde 1 darf die Startfakten sammeln, die Du nicht kennen kannst (Budget pro Kopf, Personenzahl, besondere Bedürfnisse), als eine Frage mit sinnvollem Standardwert.
+          7. Stelle mindestens eine Frage zu etwas, woran ich vermutlich nicht gedacht habe, zum Beispiel was beim letzten Fest schiefging.
+          8. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
+          9. Das Interview ist beendet, wenn keine Frage mehr offen ist, die jetzt schon beantwortbar wäre: jeder Ast besucht, nichts stillschweigend angenommen. Sage das dann in zwei Zeilen und bitte mich, "fertig" zu sagen.
+
+          ## Ausgabe
+          Starte jetzt mit Runde 1. Wenn ich "fertig" sage, antworte mit einer kurzen Zeile und danach genau einem Codeblock in dieser Form, mit jeder gestellten Frage und meiner endgültigen Antwort:
           ```handoff
           kind: text
-          text: <jede Frage mit meiner Antwort, eine pro Zeile>
+          text: |-
+            Start: <die Grundfakten, die ich genannt habe>
+            F1 <Titel>: <Optionen A und B>. Empfohlen <A oder B>, <Grund>. Meine Antwort: <meine Antwort>.
+            F2 <Titel>: <Optionen A und B>. Empfohlen <A oder B>, <Grund>. Meine Antwort: <meine Antwort>.
           ```
         short: |-
-          Antworte auf Deutsch. Interviewe mich unerbittlich zu diesem Teil meiner Planung, bis wir dasselbe Verständnis haben. Das Teil, das wir mitnehmen:
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein unerbittlicher, aber freundlicher Interviewer im Stil der "Grilling"-Methode. Du interviewst mich zum Plan unten, bis wir dasselbe Verständnis haben, bevor jemand rät oder einen Plan schreibt. Du fragst. Du planst noch nicht.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Wir nehmen ein Teil mit. Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: text
           text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
           ```
 
-          Halte es kurz: Geh die Entscheidungen in Runden mit höchstens den 3 wichtigsten Fragen durch, nummeriert, und lass alles weg, was den Plan nicht ändern würde. Gib zu jeder Frage zwei Optionen (A und B) und Deine empfohlene Antwort, so formuliert, dass mein "Ja" sie annimmt. Warte auf meine Antworten, bevor Du die nächste Runde beginnst. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
-          Stelle mindestens eine Frage, an die ich vermutlich nicht gedacht habe, zum Beispiel das Feedback vom letzten Jahr. Frag mich nie nach einem Fakt, den Du selbst wissen könntest. Höre auf, wenn nichts mehr stillschweigend angenommen wird.
-          Wenn ich "fertig" sage, beende mit meinen Antworten in genau einem Codeblock, genau so:
+          ## So arbeitest Du
+          Sieh meinen Plan als Baum von Entscheidungen: Jede Entscheidung öffnet die Entscheidungen, die an ihr hängen. Arbeite den Baum in Runden ab.
+          1. Jetzt beantwortbar sind alle Entscheidungen, deren Voraussetzungen schon geklärt sind: die Fragen, die Du jetzt stellen kannst, ohne Antworten zu raten, die Du noch nicht gehört hast. Das ist die KURZE Version für einen 10-Minuten-Slot: Stelle pro Runde nur die höchstens 3 tragenden unter den Fragen, die jetzt schon beantwortbar sind, an denen die meisten anderen Entscheidungen hängen, und mache höchstens 2 Runden.
+          2. Nummeriere die Fragen F1, F2, F3 und zähle über die Runden weiter. Formatiere jede Frage genau so:
+
+          ❓ **F1** - **<kurzer Titel>**: <die Frage, ein oder zwei Sätze>
+             A) <Option>
+             B) <Option>
+
+          ➡️ Empfohlen: <A oder B>, weil <ein Satz>. Antworte "Ja", um anzunehmen.
+
+          3. Formuliere jede Frage so, dass mein "Ja" Deine empfohlene Antwort annimmt. Gib immer zwei Optionen und eine Empfehlung.
+          4. Halte nach den Fragen an und warte auf meine Antworten. Antworte nie für mich und starte die nächste Runde nie, bevor ich geantwortet habe.
+          5. Berechne nach jeder Antwort den Baum neu: Geklärte Entscheidungen machen neue Fragen beantwortbar und schalten Fragen frei, die von ihnen abhingen. Eine Frage, die von einer noch offenen abhängt, gehört in eine spätere Runde.
+          6. Fakten sind Deine Aufgabe, Entscheidungen meine. Frag mich nie nach etwas, das Du selbst wissen könntest; nenne es stattdessen als Annahme. Runde 1 darf die Startfakten sammeln, die Du nicht kennen kannst (Budget pro Kopf, Personenzahl, besondere Bedürfnisse), als eine Frage mit sinnvollem Standardwert.
+          7. Stelle mindestens eine Frage zu etwas, woran ich vermutlich nicht gedacht habe, zum Beispiel was beim letzten Fest schiefging. Sie zählt zu den 3.
+          8. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
+          9. Sage nach Runde 2, oder früher, wenn nichts Tragendes mehr offen ist, in zwei Zeilen Bescheid und bitte mich, "fertig" zu sagen.
+
+          ## Ausgabe
+          Starte jetzt mit Runde 1. Wenn ich "fertig" sage, antworte mit einer kurzen Zeile und danach genau einem Codeblock in dieser Form, mit jeder gestellten Frage und meiner endgültigen Antwort:
           ```handoff
           kind: text
-          text: <jede Frage mit meiner Antwort, eine pro Zeile>
+          text: |-
+            Start: <die Grundfakten, die ich genannt habe>
+            F1 <Titel>: <Optionen A und B>. Empfohlen <A oder B>, <Grund>. Meine Antwort: <meine Antwort>.
+            F2 <Titel>: <Optionen A und B>. Empfohlen <A oder B>, <Grund>. Meine Antwort: <meine Antwort>.
           ```
       command: |-
-        /grilling [füge das gewählte Teil hier ein]
-        Antworte auf Deutsch.
+        /grilling Antworte auf Deutsch. Interviewe mich zu diesem Teil meiner Planung. Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa. Das Teil, das wir mitnehmen: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus. Arbeite in Runden mit nummerierten Fragen, je zwei Optionen und einer empfohlenen Antwort, stelle eine Frage zu dem, was beim letzten Fest schiefging, und wenn ich "fertig" sage, beende mit einem Handoff-Block der Art text, der jede Frage und meine Antwort enthält.
       exampleInput: |-
         ```handoff
         kind: text
@@ -129,62 +222,110 @@ words:
           Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
           F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
           F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
-          F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+          F3 Wo und wann: Frankfurt, von allen fünf Büros gut erreichbar (A), oder Lissabon (B). Empfohlen A, ein zentraler Ort hält die Anreise kurz. Meine Antwort: A, Frankfurt, Ende Juni.
+          F4 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+          F5 Ruhe: ein separater ruhiger Raum (A) oder eine Halle für alles (B). Empfohlen A, so kann man reden, ohne zu schreien. Meine Antwort: A.
         ```
       check:
-        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielantworten durch Deine eigenen.
+        todo: Öffne einen frischen Chat, füge den Prüf-Prompt ein und behebe das eine, was er nennt.
         criteria:
           - Jede Frage kam mit zwei Optionen und einer Empfehlung.
           - Mindestens eine Frage brachte etwas auf, woran Du nicht gedacht hattest.
           - Die Antworten sind aufgeschrieben, nicht nur im Kopf.
         prompt: |-
-          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe das Interview unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
-          Kriterien: Jede Frage hatte zwei Optionen und eine Empfehlung; mindestens eine Frage war neu für mich; meine Antworten sind aufgeschrieben.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein strenger Prüfer in einem frischen Chat. Du hast die Arbeit unten nicht geschrieben, Du schuldest ihr nichts, und Du schreibst sie nicht um. Du prüfst sie nur.
+
+          ## Kriterien
+          1. Jede Frage kam mit zwei Optionen und einer Empfehlung.
+          2. Mindestens eine Frage brachte etwas auf, woran Du nicht gedacht hattest.
+          3. Die Antworten sind aufgeschrieben, nicht nur im Kopf.
+
+          ## So arbeitest Du
+          1. Bewerte jedes Kriterium oben einzeln mit BESTANDEN oder DURCHGEFALLEN.
+          2. Belege jede Bewertung: Zitiere oder zeige die genaue Stelle der Arbeit. Wenn Du keinen Beleg findest, ist die Bewertung DURCHGEFALLEN.
+          3. Sei nicht großzügig. Unklar, fehlend oder nur halb wahr zählt als DURCHGEFALLEN.
+          4. Nenne nach den Bewertungen die EINE Korrektur, die am meisten zählt, in ein bis zwei Sätzen, und sage genau, was zu ändern ist.
+          5. Füge nichts anderes hinzu: kein Lob, keine Zusammenfassung, keine umgeschriebene Fassung.
+
+          ## Ausgabe
+          Eine Liste "Kriterium: BESTANDEN oder DURCHGEFALLEN, Beleg", dann "Wichtigste Korrektur: ...".
+
+          ## Das zu prüfende Interview-Ergebnis
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: text
           text: |-
             Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
             F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
             F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
-            F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+            F3 Wo und wann: Frankfurt, von allen fünf Büros gut erreichbar (A), oder Lissabon (B). Empfohlen A, ein zentraler Ort hält die Anreise kurz. Meine Antwort: A, Frankfurt, Ende Juni.
+            F4 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+            F5 Ruhe: ein separater ruhiger Raum (A) oder eine Halle für alles (B). Empfohlen A, so kann man reden, ohne zu schreien. Meine Antwort: A.
           ```
     spec:
       title: Anforderungskarte
       description: Aus den Antworten wird eine Spezifikation mit einer kurzen Liste von Anforderungen, die Du abzeichnest, und die Arbeit wird in senkrechte Scheiben geschnitten, die für sich erledigt werden können.
       run:
-        todo: Füge das in einen neuen Chat ein, damit Deine Antworten zu einer Spezifikation und Tickets werden.
+        todo: Öffne einen neuen Chat, füge den Prompt ein und lies Spec und Tickets. Verlange Änderungen, bis Du die Anforderungen freigeben kannst.
         prompt: |-
-          Antworte auf Deutsch. Mach aus meinen Interview-Antworten eine Spezifikation. Interviewe mich nicht noch einmal; nutze, was hier steht.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein Spec-Autor. Du machst aus meinen Interview-Antworten eine klare Spezifikation und schneidest die Arbeit dann in Tickets. Du interviewst mich nicht noch einmal: Du fasst zusammen, was unten steht.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: text
           text: |-
             Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
             F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
             F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
-            F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+            F3 Wo und wann: Frankfurt, von allen fünf Büros gut erreichbar (A), oder Lissabon (B). Empfohlen A, ein zentraler Ort hält die Anreise kurz. Meine Antwort: A, Frankfurt, Ende Juni.
+            F4 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+            F5 Ruhe: ein separater ruhiger Raum (A) oder eine Halle für alles (B). Empfohlen A, so kann man reden, ohne zu schreien. Meine Antwort: A.
           ```
 
-          Schreibe das Ziel in einem Satz, die Anforderungen als kurze, prüfbare Kernpunkte, was nicht dazugehört, und die Arbeit als dünne senkrechte Scheiben. Mach dann aus jeder Scheibe ein Ticket: ein schmales, aber vollständiges Stück, das für sich erledigt und geprüft werden kann, mit Akzeptanzkriterien und den Tickets, die vorher fertig sein müssen.
-          Beende mit zwei Codeblöcken, genau so:
+          ## So arbeitest Du
+          Teil 1, die Spec. Schreibe sie im Chat mit genau diesen sieben Überschriften, in dieser Reihenfolge:
+          1. **Problem Statement** (Problem): das Problem aus Sicht der Menschen, die es haben.
+          2. **Solution** (Lösung): die Lösung aus derselben Sicht, in wenigen Sätzen.
+          3. **User Stories**: eine nummerierte Liste mit mindestens 8, jede als "Als <wer> möchte ich <was>, damit <Nutzen>", die alle Aspekte meiner Antworten abdeckt.
+          4. **Decisions** (Entscheidungen): die getroffenen Entscheidungen, je eine Zeile, ohne Markennamen oder Termine, die ich nicht genannt habe.
+          5. **How we will know it worked** (Woran wir merken, dass es klappt): die Prüfungen, die zeigen, dass das Ziel erreicht ist, je eine Zeile, über Beobachtbares und nicht über das Wie.
+          6. **Out of Scope** (Nicht Teil davon): was wir jetzt nicht tun.
+          7. **Further Notes** (Weitere Hinweise): offene Punkte, Annahmen und Risiken.
+
+          Teil 2, die Tickets. Schneide die Arbeit in Tracer-Bullet-Tickets: dünne vertikale Scheiben. Regeln:
+          - Jede Scheibe zieht einen schmalen, aber VOLLSTÄNDIGEN Weg von Anfang bis Ende. Sie ist nicht nur eine Schicht der Arbeit.
+          - Eine fertige Scheibe lässt sich für sich zeigen oder prüfen.
+          - Jede Scheibe ist klein genug für eine Sitzung.
+          - Jedes Ticket nennt seine blockierenden Kanten: die anderen Tickets, die fertig sein müssen, bevor es beginnen kann. Ein Ticket ohne Blocker kann sofort starten. Nenne nur Blocker, die es wirklich aufhalten.
+          Zeige die Aufteilung als nummerierte Liste: Titel, blockiert durch, was es liefert. Warte nicht auf meine Freigabe; ich kann danach Änderungen verlangen, und Du gibst dann die zwei Blöcke erneut aus.
+
+          ## Ausgabe
+          Zuerst Spec und Tickets im Chat. Beende Deine Antwort dann mit genau zwei Codeblöcken, in dieser Reihenfolge und Form. Im Spec-Block ist das Ziel ein Satz, die Anforderungen sind die kurzen, prüfbaren Essenzen aus den Entscheidungen, und die Slices sind die Titel der Tickets in Kurzform. Ticket-IDs sind kurze Wörter in Kleinbuchstaben, und jeder Eintrag in blockedBy ist eine ID aus demselben Block.
           ```handoff
           kind: spec
-          goal: <ein Satz>
-          requirements: [<kurzer Kernpunkt>, ...]
-          outOfScope: [<was wir nicht tun>, ...]
-          slices: [<eine Scheibe>, ...]
+          goal: "<ein Satz>"
+          requirements: ["<kurze, prüfbare Essenz>", "<noch eine>"]
+          outOfScope: ["<was wir nicht tun>"]
+          slices: ["<eine dünne vertikale Scheibe>", "<noch eine>"]
           ```
           ```handoff
           kind: tickets
           tickets:
-            - { id: t1, title: <Titel>, acceptance: [<Kriterium>], blockedBy: [] }
+            - { id: t1, title: "<Titel>", acceptance: ["<Kriterium>"], blockedBy: [] }
+            - { id: t2, title: "<Titel>", acceptance: ["<Kriterium>"], blockedBy: [t1] }
           ```
       command: |-
-        /to-spec [füge Deine Antworten hier ein]
-        Führe danach /to-tickets auf der Spezifikation aus. Antworte auf Deutsch.
+        /to-spec Antworte auf Deutsch. Mach aus diesen Interview-Antworten eine Spec und interviewe mich nicht noch einmal. Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier. F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A. F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten. F3 Wo und wann: Frankfurt, von allen fünf Büros gut erreichbar (A), oder Lissabon (B). Empfohlen A, ein zentraler Ort hält die Anreise kurz. Meine Antwort: A, Frankfurt, Ende Juni. F4 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen. F5 Ruhe: ein separater ruhiger Raum (A) oder eine Halle für alles (B). Empfohlen A, so kann man reden, ohne zu schreien. Meine Antwort: A. Führe danach /to-tickets auf der Spec aus.
       exampleInput: |-
         ```handoff
         kind: text
@@ -192,18 +333,20 @@ words:
           Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
           F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
           F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
-          F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+          F3 Wo und wann: Frankfurt, von allen fünf Büros gut erreichbar (A), oder Lissabon (B). Empfohlen A, ein zentraler Ort hält die Anreise kurz. Meine Antwort: A, Frankfurt, Ende Juni.
+          F4 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+          F5 Ruhe: ein separater ruhiger Raum (A) oder eine Halle für alles (B). Empfohlen A, so kann man reden, ohne zu schreien. Meine Antwort: A.
         ```
       exampleOutput: |-
         ```handoff
         kind: spec
-        goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+        goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
         requirements:
           - 200 Gäste
-          - 150 Euro pro Person
+          - Höchstens 150 Euro pro Person
           - Stufenlos
           - Vegetarisches Menü
-          - Ruhig genug zum Reden
+          - Separater ruhiger Raum
         outOfScope:
           - Anreise zur Location
           - Einladungen
@@ -219,28 +362,48 @@ words:
           - { id: access, title: Stufenlosen Zugang prüfen, acceptance: [Schriftliche Bestätigung pro Location], blockedBy: [shortlist] }
           - { id: menu, title: Vegetarisches Menü prüfen, acceptance: [Eine Beispielkarte pro Location], blockedBy: [shortlist] }
           - { id: price, title: Preis pro Person prüfen, acceptance: [Höchstens 150 Euro pro Person], blockedBy: [shortlist] }
-          - { id: rank, title: Die drei Locations ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [access, menu, price] }
+          - { id: room, title: Separaten ruhigen Raum prüfen, acceptance: [Ein benannter ruhiger Raum pro Location], blockedBy: [shortlist] }
+          - { id: rank, title: Die drei Locations ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [access, menu, price, room] }
         ```
       check:
-        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielspezifikation durch Deine eigene.
+        todo: Öffne einen frischen Chat, füge den Prüf-Prompt ein und behebe das eine, was er nennt, bevor Du freigibst.
         criteria:
           - Das Ziel ist ein Satz.
           - Jede Anforderung ist kurz und prüfbar.
           - Jede Scheibe lässt sich für sich erledigen und prüfen.
         prompt: |-
-          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Spezifikation unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
-          Kriterien: Das Ziel ist ein Satz; jede Anforderung ist kurz und prüfbar; jede Scheibe lässt sich für sich erledigen und prüfen.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein strenger Prüfer in einem frischen Chat. Du hast die Arbeit unten nicht geschrieben, Du schuldest ihr nichts, und Du schreibst sie nicht um. Du prüfst sie nur.
+
+          ## Kriterien
+          1. Das Ziel ist ein Satz.
+          2. Jede Anforderung ist kurz und prüfbar.
+          3. Jede Scheibe lässt sich für sich erledigen und prüfen.
+
+          ## So arbeitest Du
+          1. Bewerte jedes Kriterium oben einzeln mit BESTANDEN oder DURCHGEFALLEN.
+          2. Belege jede Bewertung: Zitiere oder zeige die genaue Stelle der Arbeit. Wenn Du keinen Beleg findest, ist die Bewertung DURCHGEFALLEN.
+          3. Sei nicht großzügig. Unklar, fehlend oder nur halb wahr zählt als DURCHGEFALLEN.
+          4. Nenne nach den Bewertungen die EINE Korrektur, die am meisten zählt, in ein bis zwei Sätzen, und sage genau, was zu ändern ist.
+          5. Füge nichts anderes hinzu: kein Lob, keine Zusammenfassung, keine umgeschriebene Fassung.
+
+          ## Ausgabe
+          Eine Liste "Kriterium: BESTANDEN oder DURCHGEFALLEN, Beleg", dann "Wichtigste Korrektur: ...".
+
+          ## Die zu prüfende Spec samt Tickets
+          Das sind die Ergebnisse der vorigen Schritte. Wenn Du eigene hast, ersetze die Blöcke darunter damit.
+
           ```handoff
           kind: spec
-          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
           requirements:
             - 200 Gäste
-            - 150 Euro pro Person
+            - Höchstens 150 Euro pro Person
             - Stufenlos
             - Vegetarisches Menü
-            - Ruhig genug zum Reden
+            - Separater ruhiger Raum
           outOfScope:
             - Anreise zur Location
             - Einladungen
@@ -248,23 +411,38 @@ words:
             - Drei Locations in die engere Wahl nehmen
             - Jede gegen die Anforderungen prüfen
             - Sie in eine Rangfolge bringen
+          ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: shortlist, title: Drei Locations in die engere Wahl nehmen, acceptance: [Jede Location fasst 200 Gäste], blockedBy: [] }
+            - { id: access, title: Stufenlosen Zugang prüfen, acceptance: [Schriftliche Bestätigung pro Location], blockedBy: [shortlist] }
+            - { id: menu, title: Vegetarisches Menü prüfen, acceptance: [Eine Beispielkarte pro Location], blockedBy: [shortlist] }
+            - { id: price, title: Preis pro Person prüfen, acceptance: [Höchstens 150 Euro pro Person], blockedBy: [shortlist] }
+            - { id: room, title: Separaten ruhigen Raum prüfen, acceptance: [Ein benannter ruhiger Raum pro Location], blockedBy: [shortlist] }
+            - { id: rank, title: Die drei Locations ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [access, menu, price, room] }
           ```
       page:
-        todo: 'Optional: Füge das ein, um aus der Spezifikation eine Seite zum Zeigen zu machen.'
+        todo: Mach eine Seite aus der Spec
         simple: |-
-          Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
-          Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist Frontend-Designer und baust kleine, saubere Seiten für Menschen ohne technischen Hintergrund.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das sind die Ergebnisse der vorigen Schritte. Wenn Du eigene hast, ersetze die Blöcke darunter damit.
+
           ```handoff
           kind: spec
-          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
           requirements:
             - 200 Gäste
-            - 150 Euro pro Person
+            - Höchstens 150 Euro pro Person
             - Stufenlos
             - Vegetarisches Menü
-            - Ruhig genug zum Reden
+            - Separater ruhiger Raum
           outOfScope:
             - Anreise zur Location
             - Einladungen
@@ -273,20 +451,44 @@ words:
             - Jede gegen die Anforderungen prüfen
             - Sie in eine Rangfolge bringen
           ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: shortlist, title: Drei Locations in die engere Wahl nehmen, acceptance: [Jede Location fasst 200 Gäste], blockedBy: [] }
+            - { id: access, title: Stufenlosen Zugang prüfen, acceptance: [Schriftliche Bestätigung pro Location], blockedBy: [shortlist] }
+            - { id: menu, title: Vegetarisches Menü prüfen, acceptance: [Eine Beispielkarte pro Location], blockedBy: [shortlist] }
+            - { id: price, title: Preis pro Person prüfen, acceptance: [Höchstens 150 Euro pro Person], blockedBy: [shortlist] }
+            - { id: room, title: Separaten ruhigen Raum prüfen, acceptance: [Ein benannter ruhiger Raum pro Location], blockedBy: [shortlist] }
+            - { id: rank, title: Die drei Locations ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [access, menu, price, room] }
+          ```
+
+          ## So arbeitest Du
+          Mach aus dieser Spec eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört, die Slices und die Tickets mit dem, was was blockiert.
+          - Nutze nur, was im Handoff oben steht. Erfinde keine Fakten, Namen oder Zahlen.
+          - Schlichtes, lesbares Design: ein klarer Titel, kurze Abschnitte, großzügige Abstände, auf dem Handy lesbar, heller und dunkler Modus.
+          - Keine externen Dateien, Schriften oder Bibliotheken: alles CSS inline in der einen Datei.
+
+          ## Ausgabe
+          Gib mir eine vollständige, in sich geschlossene HTML-Datei in einem einzigen Codeblock, ohne etwas davor oder danach. Sage mir dann in einer Zeile, dass ich sie als page.html speichern und in meinem Browser öffnen soll.
         technical: |-
-          Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
-          Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist Frontend-Designer und baust kleine, saubere Seiten für Menschen ohne technischen Hintergrund.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das sind die Ergebnisse der vorigen Schritte. Wenn Du eigene hast, ersetze die Blöcke darunter damit.
+
           ```handoff
           kind: spec
-          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
           requirements:
             - 200 Gäste
-            - 150 Euro pro Person
+            - Höchstens 150 Euro pro Person
             - Stufenlos
             - Vegetarisches Menü
-            - Ruhig genug zum Reden
+            - Separater ruhiger Raum
           outOfScope:
             - Anreise zur Location
             - Einladungen
@@ -295,331 +497,558 @@ words:
             - Jede gegen die Anforderungen prüfen
             - Sie in eine Rangfolge bringen
           ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: shortlist, title: Drei Locations in die engere Wahl nehmen, acceptance: [Jede Location fasst 200 Gäste], blockedBy: [] }
+            - { id: access, title: Stufenlosen Zugang prüfen, acceptance: [Schriftliche Bestätigung pro Location], blockedBy: [shortlist] }
+            - { id: menu, title: Vegetarisches Menü prüfen, acceptance: [Eine Beispielkarte pro Location], blockedBy: [shortlist] }
+            - { id: price, title: Preis pro Person prüfen, acceptance: [Höchstens 150 Euro pro Person], blockedBy: [shortlist] }
+            - { id: room, title: Separaten ruhigen Raum prüfen, acceptance: [Ein benannter ruhiger Raum pro Location], blockedBy: [shortlist] }
+            - { id: rank, title: Die drei Locations ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [access, menu, price, room] }
+          ```
+
+          ## So arbeitest Du
+          Mach aus dieser Spec eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört, die Slices und die Tickets mit dem, was was blockiert.
+          - Nutze nur, was im Handoff oben steht. Erfinde keine Fakten, Namen oder Zahlen.
+          - Schlichtes, lesbares Design: ein klarer Titel, kurze Abschnitte, großzügige Abstände, auf dem Handy lesbar, heller und dunkler Modus.
+          - Keine externen Dateien, Schriften oder Bibliotheken: alles CSS inline in der einen Datei.
+
+          ## Ausgabe
+          Schreibe die Seite in eine temporäre .html-Datei, starte einen lokalen Webserver für diesen Ordner auf einem freien Port (zum Beispiel mit python3 -m http.server) und öffne die Adresse in meinem Standardbrowser. Nenne mir danach die Adresse und den Dateipfad.
     venue:
       title: Location
       description: Ein frischer Chat pro Location. Jeder Chat bekommt nur die Anforderungen und prüft eine Location gegen jedes Kriterium.
       run:
-        todo: Öffne pro Location einen neuen Chat, füge das ein und trage den Namen der Location dort ein, wo es steht.
+        todo: 'Öffne für jede Option (Location) einen frischen Chat, also drei, füge den Prompt ein und tausche den Namen aus, den Du prüfen willst. Hast Du noch keinen echten Kandidaten, füge den Prompt unverändert ein: Die KI nennt zuerst drei echte Kandidaten, und Du wählst einen.'
         prompt: |-
-          Antworte auf Deutsch. Recherchiere eine Location für unser Sommerfest. Die Anforderungen:
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein sorgfältiger Rechercheur. Du prüfst genau EINE Option (Location) gegen meine Anforderungen und berichtest nur, was Du belegen kannst. Du vergleichst sie nicht mit anderen Optionen und gibst keine Empfehlung.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das ist ein Chat von dreien: Ich öffne für jede Option einen frischen Chat, damit kein Ergebnis ein anderes färbt.
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: spec
-          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
           requirements:
             - 200 Gäste
-            - 150 Euro pro Person
+            - Höchstens 150 Euro pro Person
             - Stufenlos
             - Vegetarisches Menü
-            - Ruhig genug zum Reden
+            - Separater ruhiger Raum
           outOfScope:
             - Anreise zur Location
+            - Einladungen
           slices:
-            - Eine Location gegen die Anforderungen prüfen
+            - Drei Locations in die engere Wahl nehmen
+            - Jede gegen die Anforderungen prüfen
+            - Sie in eine Rangfolge bringen
           ```
 
-          Die zu prüfende Location: [Name der Location hier eintragen]
+          ## Die Option, die Du prüfst
+          Hafenhalle
+          (Dieser Name ist nur ein Beispiel. Ersetze ihn durch Deinen eigenen Kandidaten. Hast Du keinen, lass ihn stehen.)
 
-          Prüfe sie gegen jede Anforderung, nenne zu jedem Fakt die Quelle und sag, wo Du unsicher bist. Bevorzuge die eigenen Seiten der Location vor Bewertungen. Vergleiche sie nicht mit anderen Locations.
-          Beende mit genau einem Codeblock, genau so:
+          ## So arbeitest Du
+          1. Wenn ich noch keinen echten Kandidaten habe (der Name oben ist nur ein Beispiel), nenne zuerst drei echte Locations in der Stadt aus dem Ziel der Spec, die zu den Anforderungen passen, und bitte mich, eine auszuwählen. Prüfe nur die, die ich wähle.
+          2. Gehe die Anforderungen eine nach der anderen durch. Finde für jede den Fakt, der sie entscheidet.
+          3. Nutze zuerst Primärquellen: die eigene Website der Option, ihre offiziellen Unterlagen und Preise, eine offizielle Buchungs- oder Behördenseite. Nutze Bewertungen und Vergleichsportale nur, um eine Lücke zu füllen, und sage das dazu.
+          4. Nenne zu jedem Fakt, wo Du ihn gefunden hast (Seite oder Dokument) und wie sicher Du bist: sicher, unsicher oder nicht gefunden. Rate nie, um eine Lücke zu füllen: Schreibe "nicht gefunden" und sage, was sie klären würde.
+          5. Wenn Du in diesem Chat nicht im Web suchen kannst, sage das ganz oben und markiere jeden Fakt als ungeprüft, aus dem Gedächtnis.
+          6. Zeige mir zuerst die Belege als kurze Tabelle: Anforderung, Fakt, Quelle, Sicherheit.
+          7. Nenne die wichtigste Unsicherheit in der Zusammenfassung.
+
+          ## Ausgabe
+          Zuerst die Belegtabelle, dann beende Deine Antwort mit genau einem Codeblock in dieser Form, ein Fakt pro Anforderung:
           ```handoff
           kind: research
-          subject: <die Location>
-          summary: <zwei Sätze>
-          facts: [<ein geprüfter Fakt pro Anforderung>, ...]
+          subject: "<die Option>"
+          summary: "<zwei Sätze>"
+          facts:
+            - "<Anforderung: geprüfter Fakt (Quelle: wo; sicher | unsicher | nicht gefunden)>"
           ```
       command: |-
-        /research Prüfe [Name der Location] gegen diese Anforderungen: [füge die Spezifikation hier ein]
-        Antworte auf Deutsch.
+        /research Antworte auf Deutsch. Prüfe Hafenhalle gegen diese Anforderungen: 200 Gäste; Höchstens 150 Euro pro Person; Stufenlos; Vegetarisches Menü; Separater ruhiger Raum. Nutze Primärquellen, nenne die Quelle jedes Fakts und sage, wo Du unsicher bist. Vergleiche nicht mit anderen Optionen. Ist der Name kein echter Kandidat, nenne zuerst drei echte in der Stadt und bitte mich, einen zu wählen.
       exampleInput: |-
         ```handoff
         kind: spec
-        goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+        goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
         requirements:
           - 200 Gäste
-          - 150 Euro pro Person
+          - Höchstens 150 Euro pro Person
           - Stufenlos
           - Vegetarisches Menü
-          - Ruhig genug zum Reden
+          - Separater ruhiger Raum
         outOfScope:
           - Anreise zur Location
+          - Einladungen
         slices:
-          - Eine Location gegen die Anforderungen prüfen
+          - Drei Locations in die engere Wahl nehmen
+          - Jede gegen die Anforderungen prüfen
+          - Sie in eine Rangfolge bringen
         ```
       exampleOutput: |-
         ```handoff
         kind: research
         subject: Hafenhalle
-        summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
+        summary: Ein umgebautes Lagerhaus im Frankfurter Osthafen mit Platz für 220 und stufenlosem Eingang. Das vegetarische Menü ist nicht bestätigt.
         facts:
-          - Fasst 220 Gäste
-          - Etwa 140 Euro pro Person mit dem Standardmenü
-          - Stufenlos über den Haupteingang
-          - Vegetarisches Menü auf Anfrage
-          - Der große Saal hallt; der Nebensaal ist ruhig
+          - "200 Gäste: fasst 220 Personen sitzend (Quelle: Website der Location, Kapazitätsseite; sicher)"
+          - "Höchstens 150 Euro pro Person: etwa 140 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+          - "Stufenlos: stufenloser Haupteingang (Quelle: Website der Location, Seite Barrierefreiheit; sicher)"
+          - "Vegetarisches Menü: auf Anfrage möglich, keine Beispielkarte gesehen (Quelle: FAQ der Location; unsicher)"
+          - "Separater ruhiger Raum: ein Nebensaal lässt sich abtrennen (Quelle: Raumplan der Location; sicher)"
         ```
       check:
-        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielrecherche durch Deine eigene.
+        todo: Öffne einen frischen Chat, füge den Prüf-Prompt ein und behebe das eine, was er nennt.
         criteria:
           - Jede Anforderung hat einen geprüften Fakt.
           - Wo die KI unsicher ist, sagt sie es.
         prompt: |-
-          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Recherche unten gegen die Anforderungen und bewerte jede Anforderung mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
+          Antworte auf Deutsch.
 
-          Anforderungen:
-          Die Handoffs unten sind Beispiele. Ersetze sie durch Deine eigenen Handoffs, wenn Du welche hast.
+          ## Deine Rolle
+          Du bist ein strenger Prüfer in einem frischen Chat. Du hast die Arbeit unten nicht geschrieben, Du schuldest ihr nichts, und Du schreibst sie nicht um. Du prüfst sie nur.
+
+          ## Kriterien
+          1. Jede Anforderung hat einen geprüften Fakt.
+          2. Wo die KI unsicher ist, sagt sie es.
+
+          ## So arbeitest Du
+          1. Bewerte jedes Kriterium oben einzeln mit BESTANDEN oder DURCHGEFALLEN.
+          2. Belege jede Bewertung: Zitiere oder zeige die genaue Stelle der Arbeit. Wenn Du keinen Beleg findest, ist die Bewertung DURCHGEFALLEN.
+          3. Sei nicht großzügig. Unklar, fehlend oder nur halb wahr zählt als DURCHGEFALLEN.
+          4. Nenne nach den Bewertungen die EINE Korrektur, die am meisten zählt, in ein bis zwei Sätzen, und sage genau, was zu ändern ist.
+          5. Füge nichts anderes hinzu: kein Lob, keine Zusammenfassung, keine umgeschriebene Fassung.
+
+          ## Ausgabe
+          Eine Liste "Kriterium: BESTANDEN oder DURCHGEFALLEN, Beleg", dann "Wichtigste Korrektur: ...".
+
+          ## Die Anforderungen und die zu prüfende Recherche
+          Das sind die Ergebnisse der vorigen Schritte. Wenn Du eigene hast, ersetze die Blöcke darunter damit.
+
           ```handoff
           kind: spec
-          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
           requirements:
             - 200 Gäste
-            - 150 Euro pro Person
+            - Höchstens 150 Euro pro Person
             - Stufenlos
             - Vegetarisches Menü
-            - Ruhig genug zum Reden
+            - Separater ruhiger Raum
           outOfScope:
             - Anreise zur Location
+            - Einladungen
           slices:
-            - Eine Location gegen die Anforderungen prüfen
+            - Drei Locations in die engere Wahl nehmen
+            - Jede gegen die Anforderungen prüfen
+            - Sie in eine Rangfolge bringen
           ```
-
-          Recherche:
           ```handoff
           kind: research
           subject: Hafenhalle
-          summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
+          summary: Ein umgebautes Lagerhaus im Frankfurter Osthafen mit Platz für 220 und stufenlosem Eingang. Das vegetarische Menü ist nicht bestätigt.
           facts:
-            - Fasst 220 Gäste
-            - Etwa 140 Euro pro Person mit dem Standardmenü
-            - Stufenlos über den Haupteingang
-            - Vegetarisches Menü auf Anfrage
-            - Der große Saal hallt; der Nebensaal ist ruhig
+            - "200 Gäste: fasst 220 Personen sitzend (Quelle: Website der Location, Kapazitätsseite; sicher)"
+            - "Höchstens 150 Euro pro Person: etwa 140 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+            - "Stufenlos: stufenloser Haupteingang (Quelle: Website der Location, Seite Barrierefreiheit; sicher)"
+            - "Vegetarisches Menü: auf Anfrage möglich, keine Beispielkarte gesehen (Quelle: FAQ der Location; unsicher)"
+            - "Separater ruhiger Raum: ein Nebensaal lässt sich abtrennen (Quelle: Raumplan der Location; sicher)"
           ```
       page:
-        todo: 'Optional: Füge das ein, um aus der Recherche eine Seite zum Zeigen zu machen.'
+        todo: Mach eine Seite aus der Recherche
         simple: |-
-          Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Location, die Zusammenfassung und eine Karte pro Fakt.
-          Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist Frontend-Designer und baust kleine, saubere Seiten für Menschen ohne technischen Hintergrund.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: research
           subject: Hafenhalle
-          summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
+          summary: Ein umgebautes Lagerhaus im Frankfurter Osthafen mit Platz für 220 und stufenlosem Eingang. Das vegetarische Menü ist nicht bestätigt.
           facts:
-            - Fasst 220 Gäste
-            - Etwa 140 Euro pro Person mit dem Standardmenü
-            - Stufenlos über den Haupteingang
-            - Vegetarisches Menü auf Anfrage
-            - Der große Saal hallt; der Nebensaal ist ruhig
+            - "200 Gäste: fasst 220 Personen sitzend (Quelle: Website der Location, Kapazitätsseite; sicher)"
+            - "Höchstens 150 Euro pro Person: etwa 140 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+            - "Stufenlos: stufenloser Haupteingang (Quelle: Website der Location, Seite Barrierefreiheit; sicher)"
+            - "Vegetarisches Menü: auf Anfrage möglich, keine Beispielkarte gesehen (Quelle: FAQ der Location; unsicher)"
+            - "Separater ruhiger Raum: ein Nebensaal lässt sich abtrennen (Quelle: Raumplan der Location; sicher)"
           ```
+
+          ## So arbeitest Du
+          Mach aus dieser Recherche eine schöne Seite: die Option, die Zusammenfassung und eine Karte pro Fakt mit Quelle und Sicherheit.
+          - Nutze nur, was im Handoff oben steht. Erfinde keine Fakten, Namen oder Zahlen.
+          - Schlichtes, lesbares Design: ein klarer Titel, kurze Abschnitte, großzügige Abstände, auf dem Handy lesbar, heller und dunkler Modus.
+          - Keine externen Dateien, Schriften oder Bibliotheken: alles CSS inline in der einen Datei.
+
+          ## Ausgabe
+          Gib mir eine vollständige, in sich geschlossene HTML-Datei in einem einzigen Codeblock, ohne etwas davor oder danach. Sage mir dann in einer Zeile, dass ich sie als page.html speichern und in meinem Browser öffnen soll.
         technical: |-
-          Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Location, die Zusammenfassung und eine Karte pro Fakt.
-          Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist Frontend-Designer und baust kleine, saubere Seiten für Menschen ohne technischen Hintergrund.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: research
           subject: Hafenhalle
-          summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
+          summary: Ein umgebautes Lagerhaus im Frankfurter Osthafen mit Platz für 220 und stufenlosem Eingang. Das vegetarische Menü ist nicht bestätigt.
           facts:
-            - Fasst 220 Gäste
-            - Etwa 140 Euro pro Person mit dem Standardmenü
-            - Stufenlos über den Haupteingang
-            - Vegetarisches Menü auf Anfrage
-            - Der große Saal hallt; der Nebensaal ist ruhig
+            - "200 Gäste: fasst 220 Personen sitzend (Quelle: Website der Location, Kapazitätsseite; sicher)"
+            - "Höchstens 150 Euro pro Person: etwa 140 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+            - "Stufenlos: stufenloser Haupteingang (Quelle: Website der Location, Seite Barrierefreiheit; sicher)"
+            - "Vegetarisches Menü: auf Anfrage möglich, keine Beispielkarte gesehen (Quelle: FAQ der Location; unsicher)"
+            - "Separater ruhiger Raum: ein Nebensaal lässt sich abtrennen (Quelle: Raumplan der Location; sicher)"
           ```
+
+          ## So arbeitest Du
+          Mach aus dieser Recherche eine schöne Seite: die Option, die Zusammenfassung und eine Karte pro Fakt mit Quelle und Sicherheit.
+          - Nutze nur, was im Handoff oben steht. Erfinde keine Fakten, Namen oder Zahlen.
+          - Schlichtes, lesbares Design: ein klarer Titel, kurze Abschnitte, großzügige Abstände, auf dem Handy lesbar, heller und dunkler Modus.
+          - Keine externen Dateien, Schriften oder Bibliotheken: alles CSS inline in der einen Datei.
+
+          ## Ausgabe
+          Schreibe die Seite in eine temporäre .html-Datei, starte einen lokalen Webserver für diesen Ordner auf einem freien Port (zum Beispiel mit python3 -m http.server) und öffne die Adresse in meinem Standardbrowser. Nenne mir danach die Adresse und den Dateipfad.
     compare:
       title: 3 Locations ranken
       detail: gemessen an der Karte
       description: Ein Chat bekommt die Anforderungen und alle drei Rechercheergebnisse und rankt die Locations nach Deinen Kriterien.
       run:
-        todo: Füge das in einen neuen Chat ein, um alle drei Ergebnisse gegen die Karte zu ranken.
+        todo: Öffne einen neuen Chat, füge den Prompt ein (tausche Deine drei Rechercheergebnisse ein, falls Du sie hast) und lies Punktetabelle und Gate.
         prompt: |-
-          Antworte auf Deutsch. Ranke diese Locations nach meinen Anforderungen.
+          Antworte auf Deutsch.
 
-          Anforderungen:
-          Die Handoffs unten sind Beispiele. Ersetze sie durch Deine eigenen Handoffs, wenn Du welche hast.
+          ## Deine Rolle
+          Du bist ein Bewerter. Du bewertest jede Option gegen die freigegebenen Anforderungen und wendest ein Gate an, bevor etwas empfohlen wird.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das sind die Ergebnisse der vorigen Schritte. Wenn Du eigene hast, ersetze die Blöcke darunter damit.
+
           ```handoff
           kind: spec
-          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
-          requirements: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
+          requirements: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
           outOfScope: [Anreise zur Location]
           slices: [Die Locations ranken]
           ```
-
-          Recherche, ein Block pro Location:
           ```handoff
           kind: research
           subject: Hafenhalle
-          summary: Platz für 220 und stufenlos. Ruhig nur im Nebensaal.
-          facts: [Fasst 220 Gäste, Etwa 140 Euro pro Person]
+          summary: Platz für 220 und stufenlos. Das vegetarische Menü ist nicht bestätigt.
+          facts:
+            - "200 Gäste: fasst 220 Personen sitzend (Quelle: Website der Location, Kapazitätsseite; sicher)"
+            - "Höchstens 150 Euro pro Person: etwa 140 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+            - "Stufenlos: stufenloser Haupteingang (Quelle: Website der Location, Seite Barrierefreiheit; sicher)"
+            - "Vegetarisches Menü: auf Anfrage möglich, keine Beispielkarte gesehen (Quelle: FAQ der Location; unsicher)"
+            - "Separater ruhiger Raum: ein Nebensaal lässt sich abtrennen (Quelle: Raumplan der Location; sicher)"
           ```
           ```handoff
           kind: research
           subject: Gartenpavillon
-          summary: Platz für 200 auf einer Ebene, ruhig, etwas über dem Budget.
-          facts: [Fasst 200 Gäste, Etwa 160 Euro pro Person]
+          summary: Platz für 200 auf einer Ebene und ruhig, aber über dem Budget.
+          facts:
+            - "200 Gäste: fasst 200 (Quelle: Website der Location; sicher)"
+            - "Höchstens 150 Euro pro Person: etwa 160 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+            - "Stufenlos: eine Ebene, keine Stufen (Quelle: Seite Barrierefreiheit; sicher)"
+            - "Vegetarisches Menü: zwei vegetarische Hauptgerichte (Quelle: Beispielkarte; sicher)"
+            - "Separater ruhiger Raum: ein Gartenzimmer ist ruhig (Quelle: Raumplan; sicher)"
           ```
           ```handoff
           kind: research
           subject: Alte Mühle
           summary: Charmant, aber zwei Treppen und kein Aufzug.
-          facts: [Fasst 180 Gäste, Nicht stufenlos]
+          facts:
+            - "200 Gäste: fasst 180 (Quelle: Website der Location; sicher)"
+            - "Höchstens 150 Euro pro Person: etwa 120 Euro (Quelle: Preisliste der Location; sicher)"
+            - "Stufenlos: zwei Treppen, kein Aufzug (Quelle: Seite Barrierefreiheit; sicher)"
+            - "Vegetarisches Menü: nicht gefunden (Quelle: keine; nicht gefunden)"
+            - "Separater ruhiger Raum: kein separater Raum (Quelle: Raumplan; sicher)"
           ```
 
-          Ranke sie von der besten zur schlechtesten, begründe jede in einem Satz und markiere jede Anforderung, die eine Location verfehlt.
-          Beende mit genau einem Codeblock, genau so:
+          ## So arbeitest Du
+          1. Nimm die Anforderungen der Spec als einzige Kriterien. Füge keine eigenen hinzu.
+          2. Gib für jede Option und jedes Kriterium eine Punktzahl: 2 = erfüllt, 1 = teilweise erfüllt oder unbekannt, 0 = verfehlt. Ergänze ein paar Wörter Beleg aus der Recherche. Wenn die Recherche einen Fakt als unsicher oder nicht gefunden markiert, ist die Punktzahl höchstens 1.
+          3. Zeige die Punktzahlen als Tabelle: Kriterien als Zeilen, Optionen als Spalten, unten die Summe.
+          4. Wende das Gate an. Das Gate ist die zweite Freigabe: Eine Option besteht nur, wenn sie bei jedem Kriterium, das eine harte Grenze ist (Preis, Kapazität, Zugang, Sicherheit), 2 Punkte hat und bei den übrigen mindestens 1. Nenne jede Option, die durchfällt, und warum.
+          5. Wenn keine Option besteht, schreibe "Gate: keine Option besteht" und liste, was als Nächstes zu recherchieren ist. Fülle trotzdem das Ranking.
+          6. Ordne die Optionen von der besten zur schlechtesten. Jedes "why" ist ein Satz und beginnt mit der Summe, etwa "9 von 10." Fällt die Option durch das Gate, folgen direkt nach der Summe "Fällt durch das Gate:" und der Grund.
+          7. Empfiehl noch nicht die endgültige Wahl und ändere die Anforderungen nicht.
+
+          ## Ausgabe
+          Die Punktetabelle, das Ergebnis des Gates in einer Zeile, dann genau ein Codeblock in dieser Form:
           ```handoff
           kind: comparison
-          criteria: [<Anforderung>, ...]
+          criteria: ["<Anforderung>", "<Anforderung>"]
           ranking:
-            - { name: <Location>, why: <ein Satz> }
+            - { name: "<Option>", why: "<Punktzahl und ein Satz>" }
           ```
       exampleInput: |-
         ```handoff
         kind: spec
-        goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
-        requirements: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+        goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
+        requirements: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
         outOfScope: [Anreise zur Location]
         slices: [Die Locations ranken]
         ```
         ```handoff
         kind: research
         subject: Hafenhalle
-        summary: Platz für 220 und stufenlos. Ruhig nur im Nebensaal.
-        facts: [Fasst 220 Gäste, Etwa 140 Euro pro Person]
+        summary: Platz für 220 und stufenlos. Das vegetarische Menü ist nicht bestätigt.
+        facts:
+          - "200 Gäste: fasst 220 Personen sitzend (Quelle: Website der Location, Kapazitätsseite; sicher)"
+          - "Höchstens 150 Euro pro Person: etwa 140 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+          - "Stufenlos: stufenloser Haupteingang (Quelle: Website der Location, Seite Barrierefreiheit; sicher)"
+          - "Vegetarisches Menü: auf Anfrage möglich, keine Beispielkarte gesehen (Quelle: FAQ der Location; unsicher)"
+          - "Separater ruhiger Raum: ein Nebensaal lässt sich abtrennen (Quelle: Raumplan der Location; sicher)"
         ```
         ```handoff
         kind: research
         subject: Gartenpavillon
-        summary: Platz für 200 auf einer Ebene, ruhig, etwas über dem Budget.
-        facts: [Fasst 200 Gäste, Etwa 160 Euro pro Person]
+        summary: Platz für 200 auf einer Ebene und ruhig, aber über dem Budget.
+        facts:
+          - "200 Gäste: fasst 200 (Quelle: Website der Location; sicher)"
+          - "Höchstens 150 Euro pro Person: etwa 160 Euro mit dem Standardmenü (Quelle: Preisliste der Location; sicher)"
+          - "Stufenlos: eine Ebene, keine Stufen (Quelle: Seite Barrierefreiheit; sicher)"
+          - "Vegetarisches Menü: zwei vegetarische Hauptgerichte (Quelle: Beispielkarte; sicher)"
+          - "Separater ruhiger Raum: ein Gartenzimmer ist ruhig (Quelle: Raumplan; sicher)"
         ```
         ```handoff
         kind: research
         subject: Alte Mühle
         summary: Charmant, aber zwei Treppen und kein Aufzug.
-        facts: [Fasst 180 Gäste, Nicht stufenlos]
+        facts:
+          - "200 Gäste: fasst 180 (Quelle: Website der Location; sicher)"
+          - "Höchstens 150 Euro pro Person: etwa 120 Euro (Quelle: Preisliste der Location; sicher)"
+          - "Stufenlos: zwei Treppen, kein Aufzug (Quelle: Seite Barrierefreiheit; sicher)"
+          - "Vegetarisches Menü: nicht gefunden (Quelle: keine; nicht gefunden)"
+          - "Separater ruhiger Raum: kein separater Raum (Quelle: Raumplan; sicher)"
         ```
       exampleOutput: |-
         ```handoff
         kind: comparison
-        criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+        criteria: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
         ranking:
-          - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
-          - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
-          - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
+          - { name: Hafenhalle, why: "9 von 10. Besteht das Gate; das vegetarische Menü ist noch unsicher." }
+          - { name: Gartenpavillon, why: "8 von 10. Fällt durch das Gate: 160 Euro pro Person liegen über dem Limit von 150." }
+          - { name: Alte Mühle, why: "3 von 10. Fällt durch das Gate: Platz nur für 180 und nicht stufenlos." }
         ```
       check:
-        todo: Öffne einen frischen Chat, füge das ein und ersetze das Beispiel-Ranking durch Dein eigenes.
+        todo: Öffne einen frischen Chat, füge den Prüf-Prompt ein und behebe das eine, was er nennt.
         criteria:
           - Jede Location ist mit Begründung gerankt.
           - Jede verfehlte Anforderung ist markiert.
         prompt: |-
-          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe das Ranking unten gegen die Anforderungen und bewerte jedes Kriterium mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
-          Kriterien: Jede Location ist mit Begründung gerankt; jede verfehlte Anforderung ist markiert.
+          Antworte auf Deutsch.
 
-          Anforderungen:
-          Die Handoffs unten sind Beispiele. Ersetze sie durch Deine eigenen Handoffs, wenn Du welche hast.
+          ## Deine Rolle
+          Du bist ein strenger Prüfer in einem frischen Chat. Du hast die Arbeit unten nicht geschrieben, Du schuldest ihr nichts, und Du schreibst sie nicht um. Du prüfst sie nur.
+
+          ## Kriterien
+          1. Jede Location ist mit Begründung gerankt.
+          2. Jede verfehlte Anforderung ist markiert.
+
+          ## So arbeitest Du
+          1. Bewerte jedes Kriterium oben einzeln mit BESTANDEN oder DURCHGEFALLEN.
+          2. Belege jede Bewertung: Zitiere oder zeige die genaue Stelle der Arbeit. Wenn Du keinen Beleg findest, ist die Bewertung DURCHGEFALLEN.
+          3. Sei nicht großzügig. Unklar, fehlend oder nur halb wahr zählt als DURCHGEFALLEN.
+          4. Nenne nach den Bewertungen die EINE Korrektur, die am meisten zählt, in ein bis zwei Sätzen, und sage genau, was zu ändern ist.
+          5. Füge nichts anderes hinzu: kein Lob, keine Zusammenfassung, keine umgeschriebene Fassung.
+
+          ## Ausgabe
+          Eine Liste "Kriterium: BESTANDEN oder DURCHGEFALLEN, Beleg", dann "Wichtigste Korrektur: ...".
+
+          ## Die Anforderungen und das zu prüfende Ranking
+          Das sind die Ergebnisse der vorigen Schritte. Wenn Du eigene hast, ersetze die Blöcke darunter damit.
+
           ```handoff
           kind: spec
-          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
-          requirements: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          goal: Wähle einen Ort in Frankfurt, an dem sich alle 200 Mitarbeitenden an einem Abend Ende Juni treffen können.
+          requirements: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
           outOfScope: [Anreise zur Location]
           slices: [Die Locations ranken]
           ```
-
-          Ranking:
           ```handoff
           kind: comparison
-          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          criteria: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
           ranking:
-            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
-            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
-            - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
+            - { name: Hafenhalle, why: "9 von 10. Besteht das Gate; das vegetarische Menü ist noch unsicher." }
+            - { name: Gartenpavillon, why: "8 von 10. Fällt durch das Gate: 160 Euro pro Person liegen über dem Limit von 150." }
+            - { name: Alte Mühle, why: "3 von 10. Fällt durch das Gate: Platz nur für 180 und nicht stufenlos." }
           ```
       page:
-        todo: 'Optional: Füge das ein, um aus dem Ranking eine Seite zum Zeigen zu machen.'
+        todo: Mach eine Seite mit Rangtabelle
         simple: |-
-          Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meiner Chefin zeigen kann.
-          Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist Frontend-Designer und baust kleine, saubere Seiten für Menschen ohne technischen Hintergrund.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: comparison
-          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          criteria: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
           ranking:
-            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
-            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
-            - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
+            - { name: Hafenhalle, why: "9 von 10. Besteht das Gate; das vegetarische Menü ist noch unsicher." }
+            - { name: Gartenpavillon, why: "8 von 10. Fällt durch das Gate: 160 Euro pro Person liegen über dem Limit von 150." }
+            - { name: Alte Mühle, why: "3 von 10. Fällt durch das Gate: Platz nur für 180 und nicht stufenlos." }
           ```
+
+          ## So arbeitest Du
+          Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meiner Chefin zeigen kann.
+          - Nutze nur, was im Handoff oben steht. Erfinde keine Fakten, Namen oder Zahlen.
+          - Schlichtes, lesbares Design: ein klarer Titel, kurze Abschnitte, großzügige Abstände, auf dem Handy lesbar, heller und dunkler Modus.
+          - Keine externen Dateien, Schriften oder Bibliotheken: alles CSS inline in der einen Datei.
+
+          ## Ausgabe
+          Gib mir eine vollständige, in sich geschlossene HTML-Datei in einem einzigen Codeblock, ohne etwas davor oder danach. Sage mir dann in einer Zeile, dass ich sie als page.html speichern und in meinem Browser öffnen soll.
         technical: |-
-          Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meiner Chefin zeigen kann.
-          Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist Frontend-Designer und baust kleine, saubere Seiten für Menschen ohne technischen Hintergrund.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: comparison
-          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          criteria: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
           ranking:
-            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
-            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
-            - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
+            - { name: Hafenhalle, why: "9 von 10. Besteht das Gate; das vegetarische Menü ist noch unsicher." }
+            - { name: Gartenpavillon, why: "8 von 10. Fällt durch das Gate: 160 Euro pro Person liegen über dem Limit von 150." }
+            - { name: Alte Mühle, why: "3 von 10. Fällt durch das Gate: Platz nur für 180 und nicht stufenlos." }
           ```
+
+          ## So arbeitest Du
+          Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meiner Chefin zeigen kann.
+          - Nutze nur, was im Handoff oben steht. Erfinde keine Fakten, Namen oder Zahlen.
+          - Schlichtes, lesbares Design: ein klarer Titel, kurze Abschnitte, großzügige Abstände, auf dem Handy lesbar, heller und dunkler Modus.
+          - Keine externen Dateien, Schriften oder Bibliotheken: alles CSS inline in der einen Datei.
+
+          ## Ausgabe
+          Schreibe die Seite in eine temporäre .html-Datei, starte einen lokalen Webserver für diesen Ordner auf einem freien Port (zum Beispiel mit python3 -m http.server) und öffne die Adresse in meinem Standardbrowser. Nenne mir danach die Adresse und den Dateipfad.
     plan:
       title: Location-Plan
       detail: bis Freitag
       description: Aus dem Vergleich wird eine einseitige Empfehlung für Deine Chefin.
       run:
-        todo: Füge das in einen neuen Chat ein, damit aus dem Ranking eine einseitige Empfehlung wird.
+        todo: Öffne einen neuen Chat, füge den Prompt ein und lies die eine Seite. Schick sie Deiner Chefin, sobald die Prüfung besteht.
         prompt: |-
-          Antworte auf Deutsch. Schreibe aus diesem Vergleich eine einseitige Empfehlung für meine Chefin.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein Chief of Staff. Du schreibst eine Empfehlung auf einer Seite für meine Chefin, der oder die wenig Zeit hat und die Arbeit nicht verfolgt hat.
+
+          ## Kontext
+          Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: comparison
-          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          criteria: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
           ranking:
-            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
-            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
+            - { name: Hafenhalle, why: "9 von 10. Besteht das Gate; das vegetarische Menü ist noch unsicher." }
+            - { name: Gartenpavillon, why: "8 von 10. Fällt durch das Gate: 160 Euro pro Person liegen über dem Limit von 150." }
           ```
 
-          Empfiehl eine Location, nenne die drei Gründe, die zählen, und das eine Risiko, das zuerst geklärt werden muss.
-          Beende mit genau einem Codeblock, genau so:
+          ## So arbeitest Du
+          1. Schreibe für meine Chefin: einfache Wörter, kein Fachjargon, höchstens 250 Wörter.
+          2. Verwende genau diese Überschriften: **Empfehlung** (eine Option, in einem Satz), **Drei Gründe** (die drei wichtigsten, je eine Zeile, aus dem Vergleich), **Das Risiko, das zuerst zu klären ist** (ein Risiko und die eine Maßnahme, die es klärt), **Was ich von Dir brauche** (die Entscheidung und bis wann sie nützlich ist).
+          3. Nutze nur Fakten aus dem Vergleich. Wenn etwas fehlt, sage das beim Risiko, statt etwas zu erfinden.
+
+          ## Ausgabe
+          Die Seite im Chat, dann beende Deine Antwort mit genau einem Codeblock in dieser Form, der die Seite als reinen Text enthält:
           ```handoff
           kind: text
-          text: <die Empfehlung>
+          text: |-
+            <die Empfehlung auf einer Seite>
           ```
       exampleInput: |-
         ```handoff
         kind: comparison
-        criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+        criteria: [200 Gäste, Höchstens 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Separater ruhiger Raum]
         ranking:
-          - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
-          - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
+          - { name: Hafenhalle, why: "9 von 10. Besteht das Gate; das vegetarische Menü ist noch unsicher." }
+          - { name: Gartenpavillon, why: "8 von 10. Fällt durch das Gate: 160 Euro pro Person liegen über dem Limit von 150." }
         ```
       exampleOutput: |-
         ```handoff
         kind: text
         text: |-
-          Buche die Hafenhalle. Sie fasst alle 200 Gäste, ist stufenlos und bleibt unter 150 Euro pro Person.
-          Zuerst klären: die Reden im Nebensaal halten, damit alle sie hören.
+          **Empfehlung**
+          Buche die Hafenhalle in Frankfurt für das Fest Ende Juni.
+
+          **Drei Gründe**
+          - Sie fasst alle 200 Gäste und ist stufenlos.
+          - Sie bleibt unter 150 Euro pro Person (etwa 140).
+          - Ein Nebensaal lässt sich als separater ruhiger Raum abtrennen.
+
+          **Das Risiko, das zuerst zu klären ist**
+          Das vegetarische Menü ist nicht bestätigt. Bitte die Location noch diese Woche um eine Beispielkarte.
+
+          **Was ich von Dir brauche**
+          Ein Ja zur Hafenhalle bis Freitag, damit wir den Termin halten können.
         ```
       check:
-        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielempfehlung durch Deine eigene.
+        todo: Öffne einen frischen Chat, füge den Prüf-Prompt ein und behebe das eine, was er nennt, bevor Du die Seite schickst.
         criteria:
           - Genau eine Location wird empfohlen.
           - Es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
         prompt: |-
-          Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Empfehlung unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
-          Kriterien: Genau eine Location wird empfohlen; es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
+          Antworte auf Deutsch.
 
-          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ## Deine Rolle
+          Du bist ein strenger Prüfer in einem frischen Chat. Du hast die Arbeit unten nicht geschrieben, Du schuldest ihr nichts, und Du schreibst sie nicht um. Du prüfst sie nur.
+
+          ## Kriterien
+          1. Genau eine Location wird empfohlen.
+          2. Es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
+
+          ## So arbeitest Du
+          1. Bewerte jedes Kriterium oben einzeln mit BESTANDEN oder DURCHGEFALLEN.
+          2. Belege jede Bewertung: Zitiere oder zeige die genaue Stelle der Arbeit. Wenn Du keinen Beleg findest, ist die Bewertung DURCHGEFALLEN.
+          3. Sei nicht großzügig. Unklar, fehlend oder nur halb wahr zählt als DURCHGEFALLEN.
+          4. Nenne nach den Bewertungen die EINE Korrektur, die am meisten zählt, in ein bis zwei Sätzen, und sage genau, was zu ändern ist.
+          5. Füge nichts anderes hinzu: kein Lob, keine Zusammenfassung, keine umgeschriebene Fassung.
+
+          ## Ausgabe
+          Eine Liste "Kriterium: BESTANDEN oder DURCHGEFALLEN, Beleg", dann "Wichtigste Korrektur: ...".
+
+          ## Die zu prüfende Empfehlung
+          Das ist das Ergebnis des vorigen Schritts. Wenn Du ein eigenes Ergebnis aus diesem Schritt hast, ersetze den Block darunter damit.
+
           ```handoff
           kind: text
           text: |-
-            Buche die Hafenhalle. Sie fasst alle 200 Gäste, ist stufenlos und bleibt unter 150 Euro pro Person.
-            Zuerst klären: die Reden im Nebensaal halten, damit alle sie hören.
+            **Empfehlung**
+            Buche die Hafenhalle in Frankfurt für das Fest Ende Juni.
+
+            **Drei Gründe**
+            - Sie fasst alle 200 Gäste und ist stufenlos.
+            - Sie bleibt unter 150 Euro pro Person (etwa 140).
+            - Ein Nebensaal lässt sich als separater ruhiger Raum abtrennen.
+
+            **Das Risiko, das zuerst zu klären ist**
+            Das vegetarische Menü ist nicht bestätigt. Bitte die Location noch diese Woche um eine Beispielkarte.
+
+            **Was ich von Dir brauche**
+            Ein Ja zur Hafenhalle bis Freitag, damit wir den Termin halten können.
           ```

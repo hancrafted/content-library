@@ -238,8 +238,8 @@ describe('success cases', () => {
       const copied = await js<string[]>('window.__copied');
       const shortToggles = await count(`${MODAL} button[aria-pressed]`);
       // ASSERT
-      expect(copied[0]).not.toContain('at most the 3');
-      expect(copied[1]).toContain('at most the 3');
+      expect(copied[0]).not.toContain('SHORT version');
+      expect(copied[1]).toContain('SHORT version');
       expect(shortToggles).toBe(1);
     },
     TIMEOUT,
@@ -299,9 +299,9 @@ describe('success cases', () => {
       const copied = await js<string[]>('window.__copied');
       // ASSERT
       expect(workflow).toBe(vacation);
-      expect(before).toContain('€150 per person');
+      expect(before).toContain('At most €150 per person');
       expect(after).toContain('Sleeps 2');
-      expect(after).not.toContain('€150 per person');
+      expect(after).not.toContain('At most €150 per person');
       expect(setup).toContain(setupCommand);
       expect(copied[0]).toMatch(/^\/[a-z-]+/);
     },

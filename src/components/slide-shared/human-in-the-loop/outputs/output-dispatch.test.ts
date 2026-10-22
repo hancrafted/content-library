@@ -41,8 +41,8 @@ describe('success cases', () => {
   it('draws the ticket graph with one node per ticket and only the unblocked one ready', () => {
     // ARRANGE
     const kind = 'tickets';
-    const tickets = 5;
-    const edges = 6;
+    const tickets = 6;
+    const edges = 8;
     // ACT
     const $ = example(kind);
     // ASSERT
@@ -54,13 +54,13 @@ describe('success cases', () => {
   it('readies the dependents of a ticked blocker', () => {
     // ARRANGE
     const ticked = ['shortlist'];
-    const unlocked = 3;
+    const unlocked = 4;
     // ACT
     const $ = example('tickets', { ticked });
     // ASSERT
     expect($('[data-ticket][data-status=done]')).toHaveLength(1);
     expect($('[data-ticket][data-status=ready]')).toHaveLength(unlocked);
-    expect($('[data-progress]').text()).toBe('1 of 5 done');
+    expect($('[data-progress]').text()).toBe('1 of 6 done');
   });
 
   it('draws research as a card with its subject and facts', () => {

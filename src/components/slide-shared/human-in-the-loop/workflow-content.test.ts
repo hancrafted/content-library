@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import { handoffBlocks, parseHandoff } from './handoff.pure';
 import { WORKFLOW_IDS, workflowFor, type WorkflowId } from './workflow-data';
 import type { Job } from './workflow.types';
 
 const LOCALES = ['en', 'de'] as const;
+const LOCAL_PAGE = /localhost|local web server|lokalen Webserver/;
+const STALE = /Quiet to talk|Ruhig genug zum Reden|Frontier/;
+
+/** Every string anywhere in a value. */
+const strings = (value: unknown): string[] =>
+  typeof value === 'string' ? [value] : value && typeof value === 'object' ? Object.values(value).flatMap(strings) : [];
+
 const EACH = WORKFLOW_IDS.flatMap((id) => LOCALES.map((locale) => [id, locale] as const));
 const jobsOf = (id: WorkflowId, locale: 'en' | 'de'): Job[] =>
   workflowFor(id, locale).stages.flatMap((stage) => stage.jobs);
@@ -42,7 +50,9 @@ describe('success cases', () => {
     // ARRANGE
     const jobs = jobsOf(id, locale);
     // ACT
-    const weak = jobs.filter((job) => !job.check || job.check.criteria.length === 0 || !/pass/i.test(job.check.prompt));
+    const weak = jobs.filter(
+      (job) => !job.check || job.check.criteria.length === 0 || !/pass|bestanden/i.test(job.check.prompt),
+    );
     // ASSERT
     expect(weak.map((job) => job.id)).toEqual([]);
   });
@@ -67,7 +77,7 @@ describe('success cases', () => {
         ({ simple, technical }) =>
           !/HTML/.test(simple) ||
           /localhost/.test(simple) ||
-          !/localhost/.test(technical) ||
+          !LOCAL_PAGE.test(technical) ||
           /Codeblock|code block/.test(technical),
       );
       // ASSERT
@@ -96,14 +106,14 @@ describe('success cases', () => {
     expect(raw).toEqual([]);
   });
 
-  it.each(EACH)('marks where to paste in every %s Technical command in %s that takes an input', (id, locale) => {
+  it.each(EACH)('carries its example data inline in every %s Technical command in %s', (id, locale) => {
     // ARRANGE
     const asking = jobsOf(id, locale).filter((job) => job.command && job.inputs.length > 0);
     // ACT
-    const unmarked = asking.filter((job) => !/\[[^\]]+\]/.test(job.command ?? ''));
+    const unfinished = asking.filter((job) => /\[[^\]]+\]/.test(job.command ?? ''));
     // ASSERT
     expect(asking.length).toBeGreaterThan(0);
-    expect(unmarked.map((job) => job.id)).toEqual([]);
+    expect(unfinished.map((job) => job.id)).toEqual([]);
   });
 
   it.each(EACH)('gives every %s job in %s a todo line for each step and no {{slot}} anywhere', (id, locale) => {
@@ -157,6 +167,26 @@ describe('success cases', () => {
     // ASSERT
     expect(letters).toBe('BIRFE');
     expect(moves.every((move) => move.why.length > shortest)).toBe(true);
+  });
+
+  it.each(EACH)('parses every filled handoff block inside the %s prompts in %s', (id, locale) => {
+    // ARRANGE
+    const blocks = strings(jobsOf(id, locale)).flatMap(handoffBlocks);
+    // ACT
+    const filled = blocks.filter((block) => !block.includes('<'));
+    const broken = filled.filter((block) => 'problem' in parseHandoff(block));
+    // ASSERT
+    expect(filled.length).toBeGreaterThan(0);
+    expect(broken).toEqual([]);
+  });
+
+  it.each(EACH)('keeps the retired wording out of %s in %s', (id, locale) => {
+    // ARRANGE
+    const text = strings(workflowFor(id, locale)).join('\n');
+    // ACT
+    const stale = text.match(STALE);
+    // ASSERT
+    expect(stale).toBeNull();
   });
 });
 
