@@ -60,7 +60,7 @@ The long phone call: primacy, recency, a blurry middle and standout highlights, 
 - Standalone: never names PRICE or BRIEF; uses "break it down" and "fresh start" verbatim.
 - The phone call story fits on one Slide, two to three minutes at most.
 - "Workflow" appears for the first time on Slide 11.
-- The bridge to the promotion Episode is spoken in the workshop only, never on a Slide.
+- The bridge to the short `ai-gives-you-more-work` Episode (standing in for the promotion Episode for now) is spoken in the workshop only, never on a Slide.
 - Attention values (for example 20 units to the start, 30 to the end, 50 spread across the middle) and token counts are illustrative, and every Slide showing them says so.
 - A grounding comes before every mechanism: the viewer feels the problem before a term names it, so the smart and dumb zone appear only after the viewer has seen the middle fade.
 - Slides 3, 4, 5, 7, 8, 9, 10 and 11 are states of one shared visual, the context window cornerstone; each still tells its own story and reads top to bottom without touching a toggle.
@@ -113,5 +113,5 @@ The long phone call: primacy, recency, a blurry middle and standout highlights, 
 - Slides 1 and 2 may reuse the cornerstone's chat bubbles.
 - Rejected: the desk and the meeting-room whiteboard as analogies; click-reveals on the cornerstone ("this is not PowerPoint").
 - Workshop prep: the prepared hands-on prompt makes the specification come out already split into about seven phases, so there is something to review without running it live.
-- Workshop bridge, spoken only: you just managed one agent's attention; more productivity comes from zooming out to the whole workflow, which leads into the promotion Episode.
+- Workshop bridge, spoken only: you just managed one agent's attention; more productivity comes from zooming out to the whole workflow, which leads into the short `ai-gives-you-more-work` Episode, standing in for the promotion Episode for now.
 - Section titles and the title of Slide 4 are Claude's proposals, accepted at gist level.
