@@ -10,6 +10,9 @@ import {
   type TryPromptWords,
 } from './try-prompt.client';
 
+/** The ChatGPT link as the page writes it: an empty chat, never a prefilled one. */
+const EMPTY_CHAT = 'href="https://chatgpt.com/"';
+const PREFILL = '?q=';
 const WORDS: TryPromptWords = {
   promptLabel: 'Prompt',
   commandLabel: 'Command',
@@ -17,7 +20,6 @@ const WORDS: TryPromptWords = {
   copyCommand: 'Copy command',
   openChatgpt: 'Open in ChatGPT',
   newTab: 'new tab',
-  tooLong: 'Too long for a link: copies the prompt and opens an empty chat',
   whatToDo: 'What to do',
   preview: 'Prompt preview',
   showFull: 'Show full text',
@@ -179,13 +181,14 @@ describe('success cases', () => {
     expect(html).toContain('data-slot-add');
   });
 
-  it('prefills the ChatGPT link with the prompt and offers no Claude link', () => {
+  it('opens ChatGPT empty, without the prompt in the link, and offers no Claude link', () => {
     // ARRANGE
     const props = { sections: SECTIONS, slots: [SPEC] };
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain('href="https://chatgpt.com/?q=');
+    expect(html).toContain(EMPTY_CHAT);
+    expect(html).not.toContain(PREFILL);
     expect(html).not.toContain('claude.ai');
     expect(html).not.toContain('Claude');
   });
@@ -319,25 +322,26 @@ describe('failure cases', () => {
     expect(html).not.toContain('data-slot-entry="research_4"');
   });
 
-  it('opens an empty chat and says so in the tooltip when the prompt is too long for a link', () => {
+  it('never carries a long pasted prompt into the link either', () => {
     // ARRANGE
     const props = { sections: SECTIONS, slots: [SPEC], values: { spec: 'x'.repeat(20000) } };
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain('href="https://chatgpt.com/"');
-    expect(html).toContain(WORDS.tooLong);
+    expect(html).toContain(EMPTY_CHAT);
+    expect(html).not.toContain(PREFILL);
   });
 });
 
 describe('edge cases', () => {
-  it('does not mention the fallback while the link fits', () => {
+  it('puts Copy prompt before Open in ChatGPT, the order the viewer follows', () => {
     // ARRANGE
     const props = { sections: SECTIONS, slots: [SPEC] };
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).not.toContain(WORDS.tooLong);
+    expect(html.indexOf(WORDS.copyPrompt)).toBeGreaterThan(-1);
+    expect(html.indexOf(WORDS.copyPrompt)).toBeLessThan(html.indexOf(EMPTY_CHAT));
   });
 
   it('treats a whitespace-only paste as empty and keeps the sample', () => {

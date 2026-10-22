@@ -37,6 +37,7 @@ const task = obj(
   {
     id: str,
     title: str,
+    summary: str,
     output: str,
     template: str,
     slots: list(slot),
@@ -46,7 +47,7 @@ const task = obj(
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
   },
-  ['fanOut', 'review', 'instructions'],
+  ['summary', 'fanOut', 'review', 'instructions'],
 );
 const stage = obj(
   {

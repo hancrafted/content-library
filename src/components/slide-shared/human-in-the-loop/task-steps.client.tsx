@@ -2,7 +2,6 @@
 
 import { cn } from '@/lib/utils';
 import { useId, useState } from 'react';
-import { Tip } from '../core-components/tip/tip.client';
 import { TryPrompt, type PromptKit } from '../core-components/try-prompt/try-prompt.client';
 import type { UiWords } from './human-in-the-loop.types';
 import { MarkdownView } from './markdown-view';
@@ -29,6 +28,8 @@ interface TaskProps {
   /** Called when a press or focus lands on the task, so the details column can follow it. */
   readonly onActive?: () => void;
   readonly slots: SlotState;
+  /** Opens the task's first prompt at first: the first task of a modal. */
+  readonly openFirst?: boolean;
 }
 
 function StepNumber({ at }: { at: number }) {
@@ -55,22 +56,20 @@ interface ChatTabProps {
 
 function ChatTab({ chat, at, selected, id, words, onSelect }: ChatTabProps) {
   return (
-    <Tip text={words.chatTip.replace('{n}', String(chat.chat))} place="above" align="start">
-      <button
-        type="button"
-        role="tab"
-        id={`${id}-tab-${at}`}
-        aria-selected={selected}
-        aria-controls={`${id}-panel-${at}`}
-        onClick={onSelect}
-        className={cn(
-          'inline-flex min-h-9 cursor-pointer items-center rounded-full border border-border px-3 text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring',
-          selected ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground hover:bg-accent',
-        )}
-      >
-        {chatName(words, chat.chat ?? at + 1)}
-      </button>
-    </Tip>
+    <button
+      type="button"
+      role="tab"
+      id={`${id}-tab-${at}`}
+      aria-selected={selected}
+      aria-controls={`${id}-panel-${at}`}
+      onClick={onSelect}
+      className={cn(
+        'inline-flex min-h-9 cursor-pointer items-center rounded-full border border-border px-3 text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        selected ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground hover:bg-accent',
+      )}
+    >
+      {chatName(words, chat.chat ?? at + 1)}
+    </button>
   );
 }
 
@@ -79,10 +78,27 @@ interface ChatTabsProps {
   readonly kit: TaskProps['kit'];
   readonly promptKit: PromptKit;
   readonly slots: SlotState;
+  /** Opens the first chat's prompt at first. */
+  readonly openFirst: boolean;
+}
+
+/** One prompt on the Workflow-wide pasted values, open at first where `open` says so. */
+function SlotPrompt({
+  prompt,
+  kit,
+  slots,
+  open,
+}: {
+  prompt: Step['prompt'];
+  kit: PromptKit;
+  slots: SlotState;
+  open: boolean;
+}) {
+  return <TryPrompt prompt={prompt} kit={kit} values={slots.values} onChange={slots.onChange} defaultOpen={open} />;
 }
 
 /** The chats of a fan-out as tabs; every chat stays mounted, so what is opened or pasted in one survives a switch. */
-function ChatTabs({ chats, kit, promptKit, slots }: ChatTabsProps) {
+function ChatTabs({ chats, kit, promptKit, slots, openFirst }: ChatTabsProps) {
   const [selected, setSelected] = useState(0);
   const id = useId();
   return (
@@ -104,14 +120,14 @@ function ChatTabs({ chats, kit, promptKit, slots }: ChatTabsProps) {
           aria-labelledby={`${id}-tab-${at}`}
           hidden={at !== selected}
         >
-          <TryPrompt prompt={chat.prompt} kit={promptKit} values={slots.values} onChange={slots.onChange} />
+          <SlotPrompt prompt={chat.prompt} kit={promptKit} slots={slots} open={openFirst && at === 0} />
         </div>
       ))}
     </div>
   );
 }
 
-export function TaskSteps({ task, kit, onActive, slots }: TaskProps) {
+export function TaskSteps({ task, kit, onActive, slots, openFirst = false }: TaskProps) {
   const promptKit = { ...kit, words: tryWords(kit.words) };
   const chats = task.steps.filter((step) => step.id === 'do' && step.chat !== undefined);
   const rows = task.steps.filter((step) => !(step.id === 'do' && step.chat !== undefined));
@@ -127,9 +143,9 @@ export function TaskSteps({ task, kit, onActive, slots }: TaskProps) {
             <div className="flex min-w-0 flex-1 flex-col gap-2">
               <p className="text-body font-medium">{id === 'review' ? kit.words.reviewIt : kit.words.doIt}</p>
               {tabs ? (
-                <ChatTabs chats={chats} kit={kit} promptKit={promptKit} slots={slots} />
+                <ChatTabs {...{ chats, kit, promptKit, slots }} openFirst={openFirst && at === 0} />
               ) : (
-                <TryPrompt prompt={step.prompt} kit={promptKit} values={slots.values} onChange={slots.onChange} />
+                <SlotPrompt prompt={step.prompt} kit={promptKit} slots={slots} open={openFirst && at === 0} />
               )}
             </div>
           </li>

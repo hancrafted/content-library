@@ -25,7 +25,7 @@ const BACKDROP = { position: { x: 4, y: 4 } };
 /** A valid Workflow of the viewer's own: the shipped summer party under another id and title. */
 const OWN = readFileSync(path.join(__dirname, 'summer-party.en.yml'), 'utf8')
   .replace('id: summer-party', 'id: mine')
-  .replace('title: Summer party', 'title: Mine');
+  .replace('title: Plan company summer party', 'title: Mine');
 
 /** Opens the Episode at the Slide with the clipboard recorded (a headless page's is not ours to read). */
 async function open(page: Page, theme: 'light' | 'dark', where: { width?: number; url?: string } = {}) {
@@ -61,7 +61,7 @@ async function open(page: Page, theme: 'light' | 'dark', where: { width?: number
 const copied = (page: Page) => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied);
 const copies = (page: Page) => copied(page).then((all) => all.length);
 
-/** Presses a stage's "Try it" button and waits for its modal. */
+/** Presses a stage's column (its "Practice it" button) and waits for its modal. */
 async function openStage(page: Page, stage: string) {
   await page.locator(`${ROOT} [data-part="diagram"] button[data-try="${stage}"]`).click();
   await expect(page.locator(MODAL)).toBeVisible();
@@ -72,10 +72,10 @@ const copyOf = (modal: Locator, step = 'do') => task(modal, step).getByRole('but
 const promptToggle = (modal: Locator, step = 'do') =>
   task(modal, step).locator('[data-prompt] > div:first-child button[aria-expanded]').first();
 
-/** Opens the prompt of a task, where its paste-in fields are. */
+/** Opens the prompt of a task, where its paste-in fields are, unless it opened with the modal. */
 async function showPrompt(modal: Locator, step = 'do') {
   const toggle = promptToggle(modal, step);
-  await toggle.click();
+  if ((await toggle.getAttribute('aria-expanded')) === 'false') await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
 }
 
@@ -116,12 +116,12 @@ async function popoverProblems(page: Page, where: string, title: RegExp): Promis
   return checks.filter(([wrong]) => wrong).map(([, what]) => `${where}: ${what}`);
 }
 
-/** Opens one Workflow by its pill, then every stage of it in turn, and reports what is wrong. */
+/** Opens one Workflow by its use case, then every stage of it in turn, and reports what is wrong. */
 async function stageProblems(page: Page, workflow: { pill: string; id: string; title: RegExp }): Promise<string[]> {
   const { pill, id, title } = workflow;
   const stages = 7;
   const root = page.locator(ROOT);
-  await root.locator(`[data-control="picker"] button[data-workflow="${id}"]`).click();
+  await root.locator('[data-control="picker"] select').selectOption(id);
   await expect(root).toHaveAttribute('data-human-in-the-loop', id);
   const buttons = root.locator('[data-part="diagram"] button[data-try]');
   await expect(buttons).toHaveCount(stages);
@@ -145,15 +145,17 @@ async function expandAll(modal: Locator) {
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the Workflow pills, then Technical, download and upload as icon buttons with tooltips', async ({
+  test('has one pill toolbar: the "Use case" picker, then Technical, download and upload as icon buttons with tooltips', async ({
     page,
   }) => {
     // ARRANGE
-    const expectedPills = ['Summer party', 'Vacation'];
+    const expectedUseCases = ['Plan company summer party', 'Plan personal vacation'];
+    const expectedLabel = 'Use case:';
+    const expectedDefault = 'summer-party';
     const expectedIcons = ['level', 'download', 'upload'];
     const { root, toolbar } = await open(page, 'light');
     // ACT
-    const pillButtons = toolbar.locator('[data-control="picker"] button');
+    const picker = toolbar.locator('[data-control="picker"]');
     const icons = () =>
       toolbar
         .locator('[data-tip-host]')
@@ -165,18 +167,20 @@ test.describe('success cases', () => {
           })),
         );
     // ASSERT
-    await expect(pillButtons).toHaveText(expectedPills);
+    await expect(picker.locator('option')).toHaveText(expectedUseCases);
+    await expect(picker.locator('label')).toHaveText(expectedLabel);
+    await expect(picker.locator('select')).toHaveValue(expectedDefault);
     await expect.poll(async () => (await icons()).map((icon) => icon.control)).toEqual(expectedIcons);
     await expect.poll(async () => (await icons()).filter((icon) => icon.tip.length === 0)).toEqual([]);
-    await expect(toolbar.locator('button, input')).toHaveCount(expectedPills.length + expectedIcons.length);
+    await expect(toolbar.locator('button, input, select')).toHaveCount(1 + expectedIcons.length);
     await expect(root).not.toContainText(/Watch|Try it yourself/);
   });
 
-  test('opens a stage modal from its Try it button: title, X top right, collapsed prompts, copy, then Escape and backdrop close', async ({
+  test('opens a stage modal from its column: title, X top right, the first prompt open, copy, then Escape and backdrop close', async ({
     page,
   }) => {
     // ARRANGE
-    const expectedTitle = 'Requirements: Try it';
+    const expectedTitle = 'Requirements: Practice it';
     const expectedSteps = ['do', 'review'];
     const expectedLinks = ['https://chatgpt.com/'];
     const exampleViews = 1;
@@ -205,7 +209,8 @@ test.describe('success cases', () => {
       .toBeLessThan(edge);
     await expect.poll(steps).toEqual(expectedSteps);
     await expect(modal.locator('[data-prompt]')).toHaveCount(expectedSteps.length);
-    await expect(modal.locator('[data-prompt] > div:first-child button[aria-expanded="true"]')).toHaveCount(0);
+    await expect(modal.locator('[data-prompt] > div:first-child button[aria-expanded="true"]')).toHaveCount(1);
+    await expect(promptToggle(modal)).toHaveAttribute('aria-expanded', 'true');
     await expect.poll(() => copied(page)).toHaveLength(1);
     await expect.poll(async () => (await copied(page))[0]).toContain(interview);
     await expect.poll(async () => (await copied(page))[0]).not.toContain(placeholder);
@@ -218,21 +223,22 @@ test.describe('success cases', () => {
     await expect(modal).toHaveCount(0);
   });
 
-  test('closes the modal with the X button and expands a prompt on demand', async ({ page }) => {
+  test('closes the modal with the X button and folds the open first prompt on demand', async ({ page }) => {
     // ARRANGE
     const { modal } = await open(page, 'light');
     await openStage(page, 'Interview');
-    // ACT
     const toggle = promptToggle(modal);
+    await expect(task(modal).locator('[data-prompt-text]')).toBeVisible();
+    // ACT
     await toggle.click();
     // ASSERT
-    await expect(task(modal).locator('[data-prompt-text]')).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await settled(toggle.locator('svg'));
     await modal.getByRole('button', { name: 'Close' }).click();
     await expect(modal).toHaveCount(0);
   });
 
-  test('returns focus to the Try it button on every close path: X, Escape and backdrop', async ({ page }) => {
+  test('returns focus to the stage column on every close path: X, Escape and backdrop', async ({ page }) => {
     // ARRANGE
     const stage = 'Requirements';
     const { modal } = await open(page, 'light');
@@ -289,10 +295,8 @@ test.describe('success cases', () => {
     const diagram = root.locator('[data-part="diagram"]');
     await expect(diagram).toContainText(summerLine);
     // ACT
-    const pill = toolbar.locator('[data-control="picker"]').getByRole('button', { name: /Vacation/ });
-    await pill.click();
+    await toolbar.locator('[data-control="picker"] select').selectOption(vacation);
     await expect(root).toHaveAttribute('data-human-in-the-loop', vacation);
-    await settled(pill);
     await toolbar.getByRole('button', { name: TECHNICAL }).click();
     await openStage(page, 'Interview');
     await copyOf(modal).click();
@@ -383,14 +387,14 @@ test.describe('success cases', () => {
       {
         name: 'English',
         url: EPISODE,
-        title: /Try it$/,
-        pills: { 'summer-party': 'Summer party', vacation: 'Vacation' },
+        title: /Practice it$/,
+        pills: { 'summer-party': 'Plan company summer party', vacation: 'Plan personal vacation' },
       },
       {
         name: 'German',
         url: GERMAN_EPISODE,
-        title: /Ausprobieren$/,
-        pills: { 'summer-party': 'Sommerfest', vacation: 'Urlaub' },
+        title: /Üben$/,
+        pills: { 'summer-party': 'Firmen-Sommerfest planen', vacation: 'Privaten Urlaub planen' },
       },
     ]) {
       test(`opens every stage of both Workflows in ${language.name} with its goal, prompts and no unfilled marker`, async ({
@@ -482,7 +486,7 @@ test.describe('success cases', () => {
     const toggle = modal.locator('header').getByRole('button', { name: TECHNICAL });
     await toggle.click();
     // ASSERT
-    await expect(modal.locator('header h2')).toHaveText('Plan: Try it');
+    await expect(modal.locator('header h2')).toHaveText('Plan: Practice it');
     await expect(modal.locator('header [data-goal]')).toHaveText(/^Break it down/);
     await expect.poll(buttons).toEqual(expectedButtons);
     await expect(root).toHaveAttribute('data-level', 'technical');
@@ -572,7 +576,7 @@ test.describe('success cases', () => {
     expect(written[technicalCopy]).toContain(orchestrator);
   });
 
-  test('writes Open in ChatGPT out on desktop, icons only on a phone, every button with a tooltip', async ({
+  test('writes Copy prompt and Open in ChatGPT out on desktop, icons only on a phone, and shows no tooltip in a prompt', async ({
     page,
   }) => {
     // ARRANGE
@@ -587,21 +591,17 @@ test.describe('success cases', () => {
             .trim(),
         ),
       );
-    const bare = (modal: Locator) =>
-      modal
-        .locator('button')
-        .evaluateAll((els) =>
-          els
-            .filter((b) => !b.closest('[data-tip-host]') && !b.hasAttribute('data-panel-toggle'))
-            .map((b) => b.getAttribute('aria-label') ?? b.textContent),
-        );
+    const copyWritten = 'Copy prompt';
+    const copyButton = (modal: Locator) => task(modal).getByRole('button', { name: COPY_PROMPT });
+    const promptTips = (modal: Locator) => modal.locator('[data-prompt] [data-tip-host]:not(:has([data-purpose]))');
     const phoneWidth = 390;
     // ACT
     const desktop = await open(page, 'light', { width: 1440 });
     await openStage(page, 'Requirements');
     // ASSERT
     await expect.poll(() => visibleText(link(desktop.modal))).toEqual(['Open in ChatGPT']);
-    await expect.poll(() => bare(desktop.modal)).toEqual([]);
+    await expect.poll(() => visibleText(copyButton(desktop.modal))).toEqual([copyWritten]);
+    await expect(promptTips(desktop.modal)).toHaveCount(0);
     const phone = await open(page, 'light', { width: phoneWidth });
     await openStage(page, 'Requirements');
     await expect.poll(() => visibleText(link(phone.modal))).toEqual(['']);

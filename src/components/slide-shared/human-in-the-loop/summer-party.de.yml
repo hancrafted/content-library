@@ -2,7 +2,7 @@
 # Schreibanleitung: docs/features/agentic-workflow.md. Typen: workflow-schema.types.ts. Das englische Gegenstück ist
 # summer-party.en.yml; ein Test hält beide in derselben Struktur, nur die Texte unterscheiden sich.
 id: summer-party
-title: Sommerfest
+title: Firmen-Sommerfest planen
 
 scenario:
   summary: Plane das nächste Sommerfest Deiner Firma.
@@ -77,9 +77,9 @@ reviewer:
       purpose: scope
       text: |
         Antworte in dieser Reihenfolge, in einfachen Alltagsworten:
-        1. In der ersten Zeile Dein Urteil, fett: entweder **Fertig: weiter zum nächsten Schritt.** oder **Korrektur nötig: Kopiere die Korrektur unten und füge sie in den Chat zurück, der die Arbeit gemacht hat.**
+        1. In der ersten Zeile Dein Urteil, fett: entweder **Fertig: weiter zum nächsten Schritt.** oder **Korrektur nötig: Kopiere das Korrektur-Handoff unten und füge es in den Chat zurück, der die Arbeit gemacht hat.**
         2. Eine Tabelle mit einer Zeile pro Prüfung: die Prüfung in wenigen Worten, BESTANDEN oder DURCHGEFALLEN, und der Beleg in einem kurzen Satz.
-        3. Nur wenn eine Prüfung durchgefallen ist: eine Korrektur in einem Codeblock, an den Chat gerichtet, der die Arbeit gemacht hat. Sage, was zu ändern ist, und bitte ihn dann, das ganze korrigierte Ergebnis noch einmal in derselben Vorlage zu schreiben. Lass Verbesserungen weg, die nur nett wären.
+        3. Nur wenn eine Prüfung durchgefallen ist: ein Korrektur-Handoff in einem Codeblock, an den Chat gerichtet, der die Arbeit gemacht hat. Sage, was zu ändern ist, und bitte ihn dann, das ganze korrigierte Ergebnis noch einmal in derselben Vorlage zu schreiben. Lass Verbesserungen weg, die nur nett wären.
 
         Beurteile nur, was Du sehen kannst: Braucht eine Prüfung Material, das Du nicht bekommen hast, schreibe „nicht prüfbar“ statt BESTANDEN oder DURCHGEFALLEN, und rechne es der Arbeit nicht an. Das Urteil ist Fertig, wenn keine Prüfung durchgefallen ist. Repariere nichts selbst.
 
@@ -127,7 +127,8 @@ stages:
     move: B
     tasks:
       - id: pieces
-        title: Teile
+        title: Zerlegen
+        summary: In kleinere Teile, mit Reihenfolge und Abhängigkeiten
         output: plan
         template: plan
         slots:
@@ -136,7 +137,7 @@ stages:
             free: true
             label: Deine Aufgabe
         details:
-          why: Eine große Aufgabe passt in keinen einzelnen Chat. In Teile geschnitten, kann jedes in einem frischen Chat aus einer kurzen Notiz geplant werden, und ein paar Fragen vorab verhindern, dass die KI rät, worum es geht.
+          why: Eine große Aufgabe passt in keinen einzelnen Chat. In Teile geschnitten, kann jedes in einem frischen Chat aus einem kurzen Handoff geplant werden, und ein paar Fragen vorab verhindern, dass die KI rät, worum es geht.
           techniques: [fresh-context, separate-verification]
           example: &plan_example |
             # Das Sommerfest der Firma planen
@@ -155,7 +156,7 @@ stages:
             ## Warum zuerst
             Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen ergeben sich daraus.
           goodLooksLike:
-            - Jedes Teil ist klein genug, um es in einem eigenen Chat aus einer kurzen Notiz zu planen.
+            - Jedes Teil ist klein genug, um es in einem eigenen Chat aus einem kurzen Handoff zu planen.
             - Die Fakten tragen alles, was ein neuer Chat wissen muss.
             - Genau ein Teil kommt zuerst, mit einem Satz als Begründung.
         instructions: 'Öffne einen neuen Chat (ChatGPT oder ein anderer KI-Chat), füge den Prompt ein und beantworte die wenigen Fragen in Deinen eigenen Worten. Kopiere dann den Plan mit dem Kopier-Knopf an seinem Kasten: Der nächste Schritt braucht ihn.'
@@ -175,7 +176,7 @@ stages:
               text: |
                 1. Stelle mir zuerst höchstens drei kurze Fragen zur Aufgabe, alle in einer Nachricht, und warte auf meine Antworten. Plane noch nicht.
                 2. Schreibe die Fakten auf: was die Aufgabe sagt und was ich geantwortet habe, eine kurze Zeile pro Fakt, damit ein neuer Chat sie ohne dieses Gespräch kennt.
-                3. Zerlege die Aufgabe in etwa fünf Teile. Ein Teil ist etwas, das ich in einem eigenen neuen Chat aus einer kurzen Notiz planen kann.
+                3. Zerlege die Aufgabe in etwa fünf Teile. Ein Teil ist etwas, das ich in einem eigenen neuen Chat aus einem kurzen Handoff planen kann.
                 4. Nenne jedes Teil in ein oder zwei Wörtern und füge einen halben Satz hinzu, was es entscheidet.
                 5. Empfiehl das eine Teil, das zuerst drankommt: dasjenige, das für die anderen am meisten festlegt, mit der Begründung in einem Satz.
             - heading: Umfang
@@ -191,7 +192,7 @@ stages:
             - heading: Aufgabe
               purpose: task
               text: |
-                /grilling Antworte auf Deutsch. Stelle mir zuerst höchstens drei kurze Fragen zu meiner großen Aufgabe, schreibe dann die Fakten auf und zerlege sie: etwa fünf Teile, jedes klein genug, um es in einem eigenen Chat aus einer kurzen Notiz zu planen, und ein Teil als erstes empfohlen, mit einem Satz Begründung. Plane kein Teil. Meine große Aufgabe ist: {{task}}
+                /grilling Antworte auf Deutsch. Stelle mir zuerst höchstens drei kurze Fragen zu meiner großen Aufgabe, schreibe dann die Fakten auf und zerlege sie: etwa fünf Teile, jedes klein genug, um es in einem eigenen Chat aus einem kurzen Handoff zu planen, und ein Teil als erstes empfohlen, mit einem Satz Begründung. Plane kein Teil. Meine große Aufgabe ist: {{task}}
             - heading: Format
               purpose: template
               text: |
@@ -199,7 +200,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge seine Korrektur in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
+          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge sein Korrektur-Handoff in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
           slots:
             - id: plan_result
               mode: single
@@ -207,7 +208,7 @@ stages:
               sample: *plan_example
           checks:
             - Die Fakten sind kurz, einer pro Zeile, und sagen, was die Aufgabe ist, für wen, wo und wann, sodass ein neuer Chat mit ihnen beginnen kann.
-            - Die Aufgabe ist in Teile geschnitten, und jedes könnte in einem eigenen Chat aus einer kurzen Notiz geplant werden.
+            - Die Aufgabe ist in Teile geschnitten, und jedes könnte in einem eigenen Chat aus einem kurzen Handoff geplant werden.
             - Genau ein Teil ist als erstes gewählt, mit einer Begründung in einem Satz, die sagt, was es für die anderen festlegt.
             - Kein Teil ist im Detail geplant.
 
@@ -217,7 +218,8 @@ stages:
     move: I
     tasks:
       - id: interview
-        title: Die KI fragt Dich
+        title: KI löchert Dich
+        summary: In einem Interview, ein paar Fragen auf einmal
         output: interview
         template: interview
         slots:
@@ -301,7 +303,7 @@ stages:
     move: R
     gate: 1
     card:
-      label: Anforderungskarte
+      label: Du gibst frei
       lines:
         - 200 Gäste
         - Höchstens 150 € pro Person
@@ -311,7 +313,8 @@ stages:
       status: Freigegeben
     tasks:
       - id: spec
-        title: Anforderungskarte
+        title: Du gibst frei
+        summary: Die Anforderungen, Zeile für Zeile
         output: spec
         template: spec
         slots:
@@ -391,7 +394,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge seine Korrektur in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
+          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge sein Korrektur-Handoff in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
           slots:
             - id: interview
               mode: single
@@ -413,7 +416,8 @@ stages:
     move: B
     tasks:
       - id: tickets
-        title: Tickets
+        title: Tickets schreiben
+        summary: Ein eigenständiges Ticket pro Option
         output: tickets
         template: tickets
         slots:
@@ -491,7 +495,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge seine Korrektur in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
+          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge sein Korrektur-Handoff in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
           slots:
             - id: spec
               mode: single
@@ -515,6 +519,7 @@ stages:
     tasks:
       - id: venue
         title: Chat
+        summary: Ein frischer Chat pro Ticket, mit Websuche
         output: research
         template: research
         fanOut: 3
@@ -627,7 +632,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge seine Korrektur in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
+          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge sein Korrektur-Handoff in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
           slots:
             - id: tickets
               mode: single
@@ -651,7 +656,8 @@ stages:
     gate: 2
     tasks:
       - id: compare
-        title: Ergebnisse ordnen
+        title: Ergebnisse ranken
+        summary: Gegen Deine Anforderungen; Du wählst an Freigabe 2
         output: comparison
         template: comparison
         slots:
@@ -769,7 +775,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge seine Korrektur in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
+          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge sein Korrektur-Handoff in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
           slots:
             - id: spec
               mode: single
@@ -797,7 +803,8 @@ stages:
     learningGoal: Schließe den Kreis selbst. Lies den Vergleich und entscheide, was an die Menschen geht, die es freigeben.
     tasks:
       - id: recommend
-        title: Zusammenfassung
+        title: Eine empfehlen
+        summary: In einer Minute gelesen, mit nächsten Schritten
         output: recommendation
         template: recommendation
         slots:
@@ -870,7 +877,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge seine Korrektur in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
+          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge sein Korrektur-Handoff in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
           slots:
             - id: comparison
               mode: single

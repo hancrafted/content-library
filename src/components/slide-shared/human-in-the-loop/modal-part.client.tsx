@@ -9,19 +9,25 @@ import { TaskDetails, TaskSteps, type SlotState } from './task-steps.client';
 import { tryTitle } from './words.pure';
 import type { JobModalView, StageView } from './workflow-view.pure';
 
-/** Copies text and returns what a live region should say: `done` on success, nothing when the clipboard refuses. */
-async function copyText(text: string, done: string): Promise<string> {
+/** Copies text; `true` when the clipboard took it. */
+async function copyText(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
-    return done;
+    return true;
   } catch {
-    return '';
+    return false;
   }
 }
 
+/** What the live region says after a copy (`done`, or nothing when the clipboard refused), and the copy itself. */
 function useCopy(done: string) {
   const [announced, setAnnounced] = useState('');
-  return [announced, (text: string) => void copyText(text, done).then(setAnnounced)] as const;
+  const copy = async (text: string): Promise<boolean> => {
+    const ok = await copyText(text);
+    setAnnounced(ok ? done : '');
+    return ok;
+  };
+  return [announced, copy] as const;
 }
 
 function useModalDialog(isOpen: boolean) {
@@ -53,7 +59,7 @@ function TaskColumn({ jobs, kit, words, wide, slots, onActive }: ColumnProps) {
   const several = jobs.length > 1;
   return (
     <div data-column={wide ? 'tasks' : undefined} className="flex min-w-0 flex-col gap-8">
-      {jobs.map((job) => (
+      {jobs.map((job, at) => (
         <section
           key={job.id}
           data-job={job.id}
@@ -61,7 +67,7 @@ function TaskColumn({ jobs, kit, words, wide, slots, onActive }: ColumnProps) {
           className="flex flex-col gap-4"
         >
           {several && <h3 className="text-body font-semibold">{job.title}</h3>}
-          <TaskSteps task={job.task} kit={kit} slots={slots} onActive={() => onActive(job.id)} />
+          <TaskSteps task={job.task} kit={kit} slots={slots} openFirst={at === 0} onActive={() => onActive(job.id)} />
           {!wide && <TaskDetails jobId={job.id} task={job.task} words={words} folded />}
         </section>
       ))}
@@ -134,7 +140,7 @@ export function ModalPart({ stage, slotValues, onSlots, onClose, ...rest }: Moda
       aria-label={tryTitle(rest.words, stage.name)}
       onClose={onClose}
       onClick={(event) => event.target === event.currentTarget && close()}
-      className="m-0 h-dvh max-h-none w-full max-w-none items-center justify-center overscroll-contain bg-transparent p-0 text-inherit backdrop:bg-overlay/60 backdrop:backdrop-blur-xs open:flex md:p-6"
+      className="m-0 h-dvh max-h-none w-full max-w-none items-center justify-center overscroll-contain bg-transparent p-0 text-inherit backdrop:bg-overlay/70 open:flex md:p-6"
     >
       <Panel {...{ stage, ...rest }} slots={{ values: slotValues, onChange: onSlots }} onClose={close} />
     </dialog>

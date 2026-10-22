@@ -14,7 +14,7 @@ const flow = (fanOut: number): Workflow =>
     stage('b', [job({ id: 'b', title: 'Chat', fanOut })]),
     stage('c', [job({ id: 'c' })]),
   ]);
-const words = { tryIt: 'Try it', tryFor: 'for {stage}', moveLabel: '{letter}: {why}' } as UiWords;
+const words = { tryIt: 'Try it', tryFor: 'for {stage}', moveLabel: '{letter}: {why}', gate: 'Gate {n}' } as UiWords;
 const scene = (workflow: Workflow, slots?: DiagramSlots, readonly = false) =>
   load(
     renderToStaticMarkup(
@@ -142,14 +142,14 @@ describe('edge cases', () => {
     const slots = { jobsLabel: '{stage}: jobs', stages: { c: { jobsLabel: 'Last one' } } };
     // ACT
     const $ = scene(flow(2), slots);
-    const labels = $('li[class*="focus-group__item"] > ol')
+    const labels = $('li[class*="focus-group__item"] > div > ol')
       .map((_, el) => $(el).attr('aria-label'))
       .get();
     // ASSERT
     expect(labels).toEqual(['A: jobs', 'B: jobs', 'Last one']);
   });
 
-  it('labels a stage gate with the Slide word, else the bare number', () => {
+  it("labels a stage gate with the Slide word, else the visual's gate word with its number", () => {
     // ARRANGE
     const gated: Workflow = { ...flow(2), stages: flow(2).stages.map((stage) => ({ ...stage, gate: 1 })) };
     // ACT
@@ -159,7 +159,7 @@ describe('edge cases', () => {
     };
     // ASSERT
     expect(stageA({ stages: { a: { gateLabel: 'Gate one' } } })).toContain('Gate one');
-    expect(stageA()).toMatch(/J1$/);
+    expect(stageA()).toMatch(/JGate 1$/);
   });
 
   it('names the whole diagram after the Workflow when the Slide gives no label', () => {

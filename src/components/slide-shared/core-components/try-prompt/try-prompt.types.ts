@@ -24,8 +24,6 @@ export interface TryPromptWords {
   readonly copyCommand: string;
   readonly openChatgpt: string;
   readonly newTab: string;
-  /** The "open in" tooltip when the prompt is too long for a link: it is copied and an empty chat opens. */
-  readonly tooLong?: string;
   /** The name of a slot's upload button, and of its add-entry button; each falls back to the slot's label. */
   readonly upload?: string;
   readonly addEntry?: string;
@@ -40,12 +38,13 @@ export interface TryPromptWords {
   /** The hint of an empty field, with `{title}` and `{lines}` of its sample filled in; `sampleHintOne` for one line. */
   readonly sampleHint: string;
   readonly sampleHintOne: string;
-  /** The tooltip of the prompt's show/hide toggle; the toggle's label where absent. */
-  readonly toggleTip?: string;
+  /** What the copy button says for a moment after a copy succeeded. */
+  readonly copied?: string;
 }
 
 /** What a prompt box needs from its parent: its words and the one thing it can ask for, as one bundle. */
 export interface PromptKit {
   readonly words: TryPromptWords;
-  readonly onCopy: (text: string) => void;
+  /** Copies the text; resolves `true` when the clipboard took it, so the copy button can confirm. */
+  readonly onCopy: (text: string) => Promise<boolean>;
 }

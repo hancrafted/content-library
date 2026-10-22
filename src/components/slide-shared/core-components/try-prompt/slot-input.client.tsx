@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { Eye, EyeOff, Plus, Upload } from 'lucide-react';
 import { useId, useState } from 'react';
 import { IconButton, OUTLINED_ICON } from '../icon-button/icon-button.client';
-import { Tip } from '../tip/tip.client';
 import {
   sampleOf,
   sampleSummary,
@@ -38,22 +37,20 @@ interface EntryProps {
 
 function UploadButton({ label, onValue }: { label: string; onValue: (value: string) => void }) {
   return (
-    <Tip text={label} place="above" align="end">
-      <label className={cn(OUTLINED_ICON, 'focus-within:ring-2 focus-within:ring-ring')}>
-        <Upload aria-hidden="true" className="size-4" />
-        <input
-          type="file"
-          aria-label={label}
-          accept=".md,.markdown,text/markdown,text/plain"
-          className="sr-only"
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) void file.text().then(onValue);
-            event.target.value = '';
-          }}
-        />
-      </label>
-    </Tip>
+    <label className={cn(OUTLINED_ICON, 'focus-within:ring-2 focus-within:ring-ring')}>
+      <Upload aria-hidden="true" className="size-4" />
+      <input
+        type="file"
+        aria-label={label}
+        accept=".md,.markdown,text/markdown,text/plain"
+        className="sr-only"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (file) void file.text().then(onValue);
+          event.target.value = '';
+        }}
+      />
+    </label>
   );
 }
 
@@ -78,7 +75,7 @@ function SlotEntry({ name, label, sample, value, words, uploadLabel, onValue }: 
         </label>
         <div className="flex shrink-0 items-center gap-1.5">
           <UploadButton label={uploadLabel} onValue={onValue} />
-          <IconButton label={tip} place="above" align="end" aria-pressed={full} onClick={() => setFull((now) => !now)}>
+          <IconButton label={tip} tip={false} aria-pressed={full} onClick={() => setFull((now) => !now)}>
             <Icon aria-hidden="true" className="size-4" />
           </IconButton>
         </div>
@@ -125,7 +122,7 @@ export function SlotInput({ slot, sections, values, words, onValue }: SlotInputP
       ))}
       {numbered && keys.length < all.length && (
         <span data-slot-add="">
-          <IconButton label={words.addEntry ?? slot.label} onClick={() => setAdded(keys.length + 1)}>
+          <IconButton label={words.addEntry ?? slot.label} tip={false} onClick={() => setAdded(keys.length + 1)}>
             <Plus aria-hidden="true" className="size-4" />
           </IconButton>
         </span>

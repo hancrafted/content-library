@@ -2,7 +2,7 @@
 # How to write or change one: docs/features/agentic-workflow.md. Types: workflow-schema.types.ts. The German file is
 # summer-party.de.yml; a test holds both to the same structure, only the words differ.
 id: summer-party
-title: Summer party
+title: Plan company summer party
 
 scenario:
   summary: Plan your company's next summer party.
@@ -77,9 +77,9 @@ reviewer:
       purpose: scope
       text: |
         Answer in this order, in plain everyday words:
-        1. On the first line, your verdict in bold: either **Ready: move on to the next step.** or **Needs fixing: copy the fix message below and paste it back into the chat that did the work.**
+        1. On the first line, your verdict in bold: either **Ready: move on to the next step.** or **Needs fixing: copy the fix handoff below and paste it back into the chat that did the work.**
         2. A table with one row per check: the check in a few words, PASS or FAIL, and the evidence in one short sentence.
-        3. Only if a check failed: one fix message in a code block, written to the chat that did the work. Say what to change, then ask it to write the whole corrected result again in the same template. Leave out nice-to-have suggestions.
+        3. Only if a check failed: one fix handoff in a code block, written to the chat that did the work. Say what to change, then ask it to write the whole corrected result again in the same template. Leave out nice-to-have suggestions.
 
         Judge only what you can see: if a check needs material you were not given, write "cannot check" instead of PASS or FAIL, and do not count it against the work. The verdict is Ready when no check failed. Do not fix anything yourself.
 
@@ -127,7 +127,8 @@ stages:
     move: B
     tasks:
       - id: pieces
-        title: Pieces
+        title: Break it up
+        summary: Into smaller pieces, in order, with what depends on what
         output: plan
         template: plan
         slots:
@@ -136,7 +137,7 @@ stages:
             free: true
             label: Your task
         details:
-          why: A big task fits no single chat. Cut into pieces, each one can be planned in a fresh chat from a short note, and a few questions first stop the AI from guessing what the task is.
+          why: A big task fits no single chat. Cut into pieces, each one can be planned in a fresh chat from a short handoff, and a few questions first stop the AI from guessing what the task is.
           techniques: [fresh-context, separate-verification]
           example: &plan_example |
             # Plan the company summer party
@@ -155,7 +156,7 @@ stages:
             ## Why first
             It fixes the date and the city, and travel, catering and invitations all follow from it.
           goodLooksLike:
-            - Each piece is small enough to plan in its own chat from a short note.
+            - Each piece is small enough to plan in its own chat from a short handoff.
             - The facts carry everything a new chat needs to know.
             - Exactly one piece goes first, with a one-sentence reason.
         instructions: 'Open a new chat (ChatGPT or any AI chat), paste the prompt and answer its few questions in your own words. Then copy the plan with the copy button on its box: the next step needs it.'
@@ -175,7 +176,7 @@ stages:
               text: |
                 1. First ask me at most three short questions about the task, all in one message, and wait for my answers. Do not plan yet.
                 2. Write down the facts: what the task says and what I answered, one short line each, so a new chat knows them without this conversation.
-                3. Break the task into about five pieces. A piece is something I can plan in its own new chat from a short note.
+                3. Break the task into about five pieces. A piece is something I can plan in its own new chat from a short handoff.
                 4. Name each piece in one or two words and add half a sentence on what it decides.
                 5. Recommend the single piece to take first: the one that fixes the most for the others, with the reason in one sentence.
             - heading: Scope
@@ -191,7 +192,7 @@ stages:
             - heading: Task
               purpose: task
               text: |
-                /grilling Ask me at most three short questions about my big task first, then write down the facts and break it down: about five pieces, each small enough to plan in its own chat from a short note, and one piece recommended to go first with a one-sentence reason. Do not plan any piece. My big task is: {{task}}
+                /grilling Ask me at most three short questions about my big task first, then write down the facts and break it down: about five pieces, each small enough to plan in its own chat from a short handoff, and one piece recommended to go first with a one-sentence reason. Do not plan any piece. My big task is: {{task}}
             - heading: Format
               purpose: template
               text: |
@@ -199,7 +200,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix message back into your first chat and keep the corrected result.'
+          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into your first chat and keep the corrected result.'
           slots:
             - id: plan_result
               mode: single
@@ -207,7 +208,7 @@ stages:
               sample: *plan_example
           checks:
             - The facts are short, one per line, and say what the task is, for whom, where and when, so a new chat can start from them.
-            - The task is cut into pieces, and each could be planned in its own chat from a short note.
+            - The task is cut into pieces, and each could be planned in its own chat from a short handoff.
             - Exactly one piece is chosen first, with a one-sentence reason that says what it fixes for the others.
             - No piece is planned in detail.
 
@@ -217,7 +218,8 @@ stages:
     move: I
     tasks:
       - id: interview
-        title: AI asks you
+        title: AI grills you
+        summary: In an interactive interview, a few questions at a time
         output: interview
         template: interview
         slots:
@@ -301,7 +303,7 @@ stages:
     move: R
     gate: 1
     card:
-      label: Requirements card
+      label: You sign off
       lines:
         - 200 guests
         - At most €150 per person
@@ -311,7 +313,8 @@ stages:
       status: Signed off
     tasks:
       - id: spec
-        title: Requirements card
+        title: You sign off
+        summary: The requirements card, line by line
         output: spec
         template: spec
         slots:
@@ -391,7 +394,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix message back into your first chat and keep the corrected result.'
+          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into your first chat and keep the corrected result.'
           slots:
             - id: interview
               mode: single
@@ -413,7 +416,8 @@ stages:
     move: B
     tasks:
       - id: tickets
-        title: Tickets
+        title: Write tickets
+        summary: One self-contained ticket per option to research
         output: tickets
         template: tickets
         slots:
@@ -491,7 +495,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix message back into your first chat and keep the corrected result.'
+          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into your first chat and keep the corrected result.'
           slots:
             - id: spec
               mode: single
@@ -515,6 +519,7 @@ stages:
     tasks:
       - id: venue
         title: Chat
+        summary: One fresh chat per ticket, with web search
         output: research
         template: research
         fanOut: 3
@@ -627,7 +632,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix message back into your first chat and keep the corrected result.'
+          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into your first chat and keep the corrected result.'
           slots:
             - id: tickets
               mode: single
@@ -651,7 +656,8 @@ stages:
     gate: 2
     tasks:
       - id: compare
-        title: Rank results
+        title: Rank the results
+        summary: Against your requirements, and you pick at Gate 2
         output: comparison
         template: comparison
         slots:
@@ -769,7 +775,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix message back into your first chat and keep the corrected result.'
+          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into your first chat and keep the corrected result.'
           slots:
             - id: spec
               mode: single
@@ -797,7 +803,8 @@ stages:
     learningGoal: Close the loop yourself. Read the comparison and decide what goes to the people who sign it off.
     tasks:
       - id: recommend
-        title: Write-up
+        title: Recommend one
+        summary: A one-minute read with next steps
         output: recommendation
         template: recommendation
         slots:
@@ -870,7 +877,7 @@ stages:
 
                 {{template}}
         review:
-          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix message back into your first chat and keep the corrected result.'
+          instructions: 'Paste your result into the box below and copy the prompt into another new chat, so the checker has not seen how the work was made. If it says Ready, move on; if it says Needs fixing, paste its fix handoff back into your first chat and keep the corrected result.'
           slots:
             - id: comparison
               mode: single

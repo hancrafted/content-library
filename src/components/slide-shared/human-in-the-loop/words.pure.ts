@@ -13,7 +13,6 @@ export const tryWords = (words: UiWords): TryPromptWords => ({
   copyCommand: words.copyCommand,
   openChatgpt: words.openChatgpt,
   newTab: words.newTab,
-  tooLong: words.tooLong,
   upload: words.slotUpload,
   addEntry: words.slotAdd,
   whatToDo: words.whatToDo,
@@ -24,5 +23,5 @@ export const tryWords = (words: UiWords): TryPromptWords => ({
   tierAdvanced: words.tierAdvanced,
   sampleHint: words.sampleHint,
   sampleHintOne: words.sampleHintOne,
-  toggleTip: words.toggleTip,
+  copied: words.copied,
 });

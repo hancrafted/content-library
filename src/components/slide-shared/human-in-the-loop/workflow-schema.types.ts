@@ -96,7 +96,10 @@ export interface DetailsDef {
 
 export interface TaskDef {
   readonly id: string;
+  /** The job's bold name on the diagram, and its heading in a stage's modal. */
   readonly title: string;
+  /** One short line under the title on the diagram: what the job does, so the diagram reads at rest. */
+  readonly summary?: string;
   /** The id this task hands on; a later slot with this id takes it. A fan-out `x` hands on `x_1` … `x_N`. */
   readonly output: string;
   /** Key into `templates`; shared by the do prompt, the reviewer and the loader. */
