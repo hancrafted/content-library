@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { IDLE_MS, expandJobs, fitScale, isIdle, mainCheckout, parseArgs, parseEndpoint } from './inspect-page.pure.ts';
+import {
+  IDLE_MS,
+  chromeFlags,
+  expandJobs,
+  fitScale,
+  isIdle,
+  mainCheckout,
+  parseArgs,
+  parseEndpoint,
+} from './inspect-page.pure.ts';
 
 describe('parseArgs', () => {
   it('collects repeated --url and a comma-separated --theme', () => {
@@ -63,5 +72,22 @@ describe('mainCheckout', () => {
   });
   it('resolves the relative common dir of the main checkout itself', () => {
     expect(mainCheckout('.git', '/repo')).toBe('/repo');
+  });
+});
+
+describe('chromeFlags', () => {
+  it('keeps the sandbox on a developer machine', () => {
+    expect(chromeFlags('/p', { platform: 'darwin', ci: false })).not.toContain('--no-sandbox');
+  });
+  it('drops the sandbox on a Linux CI runner, whose kernel refuses the user namespace it needs', () => {
+    expect(chromeFlags('/p', { platform: 'linux', ci: true })).toContain('--no-sandbox');
+  });
+  it('always names the profile and an ephemeral debugging port', () => {
+    expect(chromeFlags('/p', { platform: 'linux', ci: false })).toEqual([
+      '--remote-debugging-port=0',
+      '--user-data-dir=/p',
+      '--hide-scrollbars',
+      'about:blank',
+    ]);
   });
 });

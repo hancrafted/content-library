@@ -127,3 +127,12 @@ export function parseEndpoint(text: string): Endpoint | null {
 export function isIdle(lastUse: number, now: number): boolean {
   return now - lastUse >= IDLE_MS;
 }
+
+/**
+ * Chrome's launch flags. A Linux CI runner (Ubuntu 24.04) forbids the unprivileged user namespace Chrome's sandbox
+ * needs, so Chrome exits before it writes its debugging port; there the sandbox goes, as Playwright's own launch does.
+ */
+export function chromeFlags(profile: string, host: { platform: string; ci: boolean }): string[] {
+  const flags = ['--remote-debugging-port=0', `--user-data-dir=${profile}`, '--hide-scrollbars', 'about:blank'];
+  return host.platform === 'linux' && host.ci ? ['--no-sandbox', ...flags] : flags;
+}
