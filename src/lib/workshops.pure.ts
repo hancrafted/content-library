@@ -8,7 +8,7 @@ type IsoDate = `${number}-${number}-${number}`;
  */
 
 export interface WorkshopRecord {
-  /** A readable name and the date, so a shared link says what and when: `ai-onboarding-2026-10-23`. */
+  /** A readable name and the date, so a shared link says what and when: `axel-agentic-workflow-2026-10-23`. */
   readonly slug: string;
   readonly date: IsoDate;
   /** The start as the venue writes it, `09:30`; the same in every locale. */
@@ -21,7 +21,7 @@ export interface WorkshopRecord {
 
 export const WORKSHOPS = [
   {
-    slug: 'ai-onboarding-2026-10-23',
+    slug: 'axel-agentic-workflow-2026-10-23',
     date: '2026-10-23',
     episodes: ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'],
   },

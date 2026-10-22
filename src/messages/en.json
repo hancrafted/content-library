@@ -480,9 +480,9 @@
       "other": "{count} Episodes"
     },
     "items": {
-      "ai-onboarding-2026-10-23": {
-        "title": "AI onboarding",
-        "description": "Get AI up to speed in three Episodes: onboard it every time, manage its attention span, and see why it adds management work."
+      "axel-agentic-workflow-2026-10-23": {
+        "title": "AXEL Seminar: Agentic Workflows",
+        "description": "Working with AI agents in three Episodes: onboard them every time, manage their attention span, and see why they add management work."
       }
     }
   }

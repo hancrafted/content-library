@@ -17,7 +17,7 @@ const WORDS: Record<
   { title: string; date: string; count: string; nav: string; start: string; reading: RegExp }
 > = {
   en: {
-    title: 'AI onboarding',
+    title: 'AXEL Seminar: Agentic Workflows',
     date: 'Oct 23, 2026',
     count: '3 Episodes',
     nav: 'Workshops',
@@ -25,7 +25,7 @@ const WORDS: Record<
     reading: /^\d+ min total reading time$/,
   },
   de: {
-    title: 'KI-Onboarding',
+    title: 'AXEL Seminar: Agentic Workflows',
     date: '23. Okt. 2026',
     count: '3 Episoden',
     nav: 'Workshops',

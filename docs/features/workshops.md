@@ -12,7 +12,7 @@ Read before adding or changing a Workshop, or the `/workshops` pages. A Workshop
 
 Every Workshop is one entry in `WORKSHOPS` in `src/lib/workshops.pure.ts`:
 
-- `slug`: a readable name followed by the date, `ai-onboarding-2026-10-23`, so a shared link says what and when. It must end in `-<date>`.
+- `slug`: a readable name followed by the date, `axel-agentic-workflow-2026-10-23`, so a shared link says what and when. It must end in `-<date>`.
 - `date`: the day, `YYYY-MM-DD`.
 - `time` and `location`, both optional: written as the venue writes them, the same in every locale.
 - `episodes`: Episode slugs in teaching order. An Upcoming Episode may be listed; its card is muted and unlinked, and the Start button goes to the first Episode that has a page.

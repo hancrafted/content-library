@@ -18,7 +18,7 @@ describe('success cases', () => {
   it('keeps the first Workshop in the order its Episodes are taught', () => {
     // ARRANGE
     const expected = {
-      slug: 'ai-onboarding-2026-10-23',
+      slug: 'axel-agentic-workflow-2026-10-23',
       episodes: ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'],
     };
     // ACT
