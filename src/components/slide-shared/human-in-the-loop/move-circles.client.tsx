@@ -1,6 +1,6 @@
 'use client';
 
-import { Tip } from './tip.client';
+import { Tip } from '../core-components/tip/tip.client';
 import type { StageMove } from './workflow.types';
 
 /*

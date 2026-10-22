@@ -84,49 +84,6 @@
   width: 1.1rem;
   height: 1.1rem;
 }
-.tipHost {
-  position: relative;
-  display: inline-flex;
-}
-/* The bubble hangs flush from the control (the padding bridges the gap), so the pointer can move onto it. */
-.tip {
-  position: absolute;
-  z-index: 20;
-  display: none;
-}
-.tip[data-shown='true'] {
-  display: block;
-}
-.tip[data-place='below'] {
-  top: 100%;
-  padding-top: 0.4rem;
-}
-.tip[data-place='above'] {
-  bottom: 100%;
-  padding-bottom: 0.4rem;
-}
-.tip[data-align='center'] {
-  left: 50%;
-  translate: -50% 0;
-}
-.tip[data-align='start'] {
-  left: 0;
-}
-.tip[data-align='end'] {
-  right: 0;
-}
-.tipText {
-  display: block;
-  width: max-content;
-  max-width: 15rem;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.5rem;
-  background: var(--foreground);
-  color: var(--background);
-  line-height: 1.35;
-  text-align: start;
-  white-space: normal;
-}
 .upload {
   overflow: visible;
 }

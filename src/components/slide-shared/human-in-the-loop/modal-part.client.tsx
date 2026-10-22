@@ -2,11 +2,11 @@
 
 import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import type { ModalProps } from './human-in-the-loop.types';
-import { IconButton } from './icon-button.client';
+import { IconButton } from '../core-components/icon-button/icon-button.client';
+import type { PromptKit } from '../core-components/try-prompt/try-prompt.client';
+import type { ModalProps, UiWords } from './human-in-the-loop.types';
 import { ModalBody, type BodyChrome } from './modal-body';
 import { ModalSteps } from './modal-steps.client';
-import type { PromptKit } from './prompt-box.client';
 import { tryTitle } from './words.pure';
 import type { JobModalView, StageView } from './workflow-view.pure';
 
@@ -53,7 +53,7 @@ function useModalDialog(isOpen: boolean) {
 interface JobSectionProps {
   readonly job: JobModalView;
   readonly several: boolean;
-  readonly kit: PromptKit;
+  readonly kit: PromptKit & { readonly words: UiWords };
   readonly chrome: BodyChrome;
 }
 
