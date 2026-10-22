@@ -182,8 +182,24 @@ describe('landing page post-build structure', () => {
       const expected = FEATURED.map((slug) => episodeHref(slug, locale));
 
       expect(hrefsIn($, '#episodes [data-episode-spotlight]')).toEqual(expected);
-      expect($('#episodes [data-episode-spotlight] [data-spotlight="lead"]').length).toBe(1);
+      expect($('#episodes [data-episode-spotlight] [data-card-variant="lead"]').length).toBe(1);
       expect($('#episodes [data-episode-spotlight] [data-episode-status="upcoming"]').length).toBe(0);
+    },
+  );
+
+  it.each(LANDING_PAGES)(
+    'draws the lead card with a button and the cards beside it with the hover arrow, for locale $locale',
+    ({ url }) => {
+      // ARRANGE
+      const $ = getPage(url);
+      const expected = { lead: ['button'], side: ['arrow', 'arrow'] };
+      // ACT
+      const cues = (variant: string) =>
+        $(`#episodes [data-card-variant="${variant}"] [data-open-cue]`)
+          .map((_, el) => $(el).attr('data-open-cue'))
+          .get();
+      // ASSERT
+      expect({ lead: cues('lead'), side: cues('compact') }).toEqual(expected);
     },
   );
 
@@ -194,7 +210,7 @@ describe('landing page post-build structure', () => {
     // ARRANGE
     const $ = getPage(url);
     // ACT
-    const date = $('#episodes [data-spotlight="lead"] time[data-episode-date]');
+    const date = $('#episodes [data-card-variant="lead"] time[data-episode-date]');
     // ASSERT
     expect({ dateTime: date.attr('datetime'), text: date.text() }).toEqual(expected);
   });

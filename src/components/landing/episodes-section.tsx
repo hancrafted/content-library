@@ -1,6 +1,6 @@
 import { LiquidInkTransition } from '@/components/animations/liquid-ink-transition.client';
+import type { CardLabels } from '@/components/landing/episode-card';
 import { episodeCards } from '@/components/landing/episode-cards';
-import type { CardLabels } from '@/components/landing/episode-grid-card';
 import { EpisodeSpotlight } from '@/components/landing/episode-spotlight';
 import { Button } from '@/components/ui/button';
 import { localizePath, type Locale } from '@/lib/locale.pure';
