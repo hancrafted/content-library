@@ -36,3 +36,7 @@ docs/claude-project-context/
 
 # archgate regenerates its rule types on every run (npm ci, archgate check); tracking them dirtied every tree.
 .archgate/rules.d.ts
+
+# Playwright browser lane output.
+test-results/
+playwright-report/

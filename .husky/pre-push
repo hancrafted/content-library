@@ -10,19 +10,13 @@ changed=$(printf '%s\n' "$refs" | while read -r _ local _ remote; do
   [ -z "$local" ] || [ "$local" = "$zero" ] && continue
   if [ "$remote" = "$zero" ]; then git diff --name-only "origin/main...$local"; else git diff --name-only "$remote" "$local"; fi
 done)
-if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|vitest\.browser\.config\.ts|src/components/|src/app/|tests/browser/)'; then
-  # The a11y test drives the served export, so the lane builds it and serves it on the preview port, then stops it.
-  echo "push touches the browser lane: building, serving and running test:browser"
+if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|vitest\.browser\.config\.ts|playwright\.config\.ts|src/components/|src/app/|tests/browser/)'; then
+  # Playwright's webServer and the Vitest lane's globalSetup both serve `out/` on the preview port, so the hook only builds.
+  # The Chromium browser Playwright drives comes from `npx playwright install chromium` (once per machine and per version).
+  echo "push touches the browser lane: building and running test:browser"
   npm run build </dev/null || exit 1
-  port=${PREVIEW_PORT:-4300}
-  node skills/visual-check/scripts/preview.ts </dev/null >/dev/null 2>&1 &
-  server=$!
-  # Under `sh -e` a failing trap command fails the hook: by now the lane has stopped the server, so this kill may find
-  # no process.
-  trap 'kill "$server" 2>/dev/null || true' EXIT
-  for _ in $(seq 1 50); do curl -fs -o /dev/null "http://localhost:$port/" && break; sleep 0.2; done
+  npx playwright install chromium </dev/null >/dev/null || exit 1
   npm run test:browser </dev/null || exit 1
-  kill "$server" 2>/dev/null
 fi
 
 # A push to main triggers the Pages deploy, so it also runs the build lanes
