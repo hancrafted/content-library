@@ -7,12 +7,12 @@ import {
   INITIAL_SELECTION,
   resultsText,
   showsFormat,
-  topicChoices,
+  tagChoices,
   type BrowseSelection,
   type ResultsLabels,
 } from '@/components/landing/episode-browse.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { FormatSegments, SearchBox, TopicChips, type FilterLabels } from '@/components/landing/episode-filters';
+import { FormatSegments, SearchBox, TagChips, type FilterLabels } from '@/components/landing/episode-filters';
 import { EpisodeGridCard, type CardLabels } from '@/components/landing/episode-grid-card';
 import { Button } from '@/components/ui/button';
 import type { Locale } from '@/lib/locale.pure';
@@ -77,20 +77,20 @@ function FoldButton({ expanded, total, labels, onToggle }: FoldProps) {
 /** The visitor's selection, the grid it yields and the handlers that change it; all transient, in memory (FE-001). */
 function useBrowse(cards: readonly EpisodeCard[]) {
   const [selection, setSelection] = useState<BrowseSelection>(INITIAL_SELECTION);
-  const allTopics = useRef<HTMLButtonElement>(null);
+  const allTags = useRef<HTMLButtonElement>(null);
   return {
     selection,
-    allTopics,
+    allTags,
     view: browseView(cards, selection),
-    topics: topicChoices(cards, selection),
+    tags: tagChoices(cards, selection),
     formats: formatChoices(cards, selection),
-    setTopic: (topic: BrowseSelection['topic']) => setSelection((prev) => ({ ...prev, topic })),
+    setTag: (tag: BrowseSelection['tag']) => setSelection((prev) => ({ ...prev, tag })),
     setFormat: (format: BrowseSelection['format']) => setSelection((prev) => ({ ...prev, format })),
     setQuery: (query: string) => setSelection((prev) => ({ ...prev, query })),
     toggleExpanded: () => setSelection((prev) => ({ ...prev, expanded: !prev.expanded })),
     reset: () => {
       setSelection(INITIAL_SELECTION);
-      allTopics.current?.focus();
+      allTags.current?.focus();
     },
   };
 }
@@ -98,17 +98,17 @@ function useBrowse(cards: readonly EpisodeCard[]) {
 type Browse = ReturnType<typeof useBrowse>;
 
 function BrowseControls({ browse, labels }: { browse: Browse; labels: BrowseLabels }) {
-  const { selection, topics, formats } = browse;
+  const { selection, tags, formats } = browse;
   return (
     <div data-browse-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
       <SearchBox query={selection.query} labels={labels} onChange={browse.setQuery} />
-      {hasChoice(topics) && (
-        <TopicChips
-          choices={topics}
-          selected={selection.topic}
+      {hasChoice(tags) && (
+        <TagChips
+          choices={tags}
+          selected={selection.tag}
           labels={labels}
-          allRef={browse.allTopics}
-          onSelect={browse.setTopic}
+          allRef={browse.allTags}
+          onSelect={browse.setTag}
         />
       )}
       {hasChoice(formats) && (
@@ -145,7 +145,7 @@ interface BrowseProps {
 }
 
 /**
- * The Browse block: a search box, Topic chips, a Format control when there is more than one
+ * The Browse block: a search box, Tag chips, a Format control when there is more than one
  * Format, and a grid of every Episode card. The grid is in the server HTML in
  * full; filtering and the cap only toggle `hidden`, so find-in-page and a
  * script-less visit still see all of it. Leaving the page and coming back

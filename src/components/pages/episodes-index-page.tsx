@@ -16,7 +16,7 @@ function browseLabels(t: LandingT): BrowseLabels {
     newTab: t('episodeOverview.newTab'),
     search: t('episodeOverview.search'),
     searchPlaceholder: t('episodeOverview.searchPlaceholder'),
-    topicFilter: t('episodeOverview.topicFilter'),
+    tagFilter: t('episodeOverview.tagFilter'),
     formatFilter: t('episodeOverview.formatFilter'),
     all: t('episodeOverview.all'),
     showAll: t.raw('episodeOverview.showAll') as string,

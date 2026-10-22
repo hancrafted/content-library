@@ -1,4 +1,4 @@
-import type { FormatId, ListedEpisodeSlug, TopicId, TopicLook } from './episode-overview';
+import { TAG_IDS, TAGS, type FormatId, type ListedEpisodeSlug, type TagId, type TagLook } from './episode-overview';
 
 /*
  * What an Episode declares about itself for the Episode overview, in its own
@@ -11,15 +11,9 @@ import type { FormatId, ListedEpisodeSlug, TopicId, TopicLook } from './episode-
 export type IsoDate = `${number}-${number}-${number}`;
 
 interface SharedMetadata {
-  /** The Topic that gives the Episode its icon and colour. */
-  readonly topic: TopicId;
-  /** Further Topics (playlists) the Episode also appears in. */
-  readonly extraTopics?: readonly TopicId[];
-  /** Overrides the Topic's accent and icon on this Episode's card; the Topic chip and filter stay as they are. */
-  readonly look?: Partial<TopicLook>;
   readonly format: FormatId;
-  /** Tag ids, kebab-case, flat and unranked; each is named and explained by id in the landing Translation keys. */
-  readonly tags: readonly string[];
+  /** Tag ids from the closed vocabulary, lead Tag first: it gives the Episode's card its icon and accent. */
+  readonly tags: readonly [TagId, ...TagId[]];
 }
 
 /** An Episode that has a page: its slug is registered. */
@@ -38,9 +32,26 @@ export interface UpcomingEpisodeMetadata extends SharedMetadata {
 export type EpisodeMetadata = PublishedEpisodeMetadata | UpcomingEpisodeMetadata;
 export type EpisodeStatus = EpisodeMetadata['status'];
 
-/** Every Topic an Episode appears under: its primary Topic first, then its extra ones, each once. */
-export function topicsOf(episode: EpisodeMetadata): readonly TopicId[] {
-  return [...new Set([episode.topic, ...(episode.extraTopics ?? [])])];
+/** The Episode's lead Tag: its first, which fixes the look of its card. */
+export function leadTagOf(episode: Pick<SharedMetadata, 'tags'>): TagId {
+  return episode.tags[0];
+}
+
+/** The icon and accent an Episode's card draws, from its lead Tag. */
+export function lookOf(episode: Pick<SharedMetadata, 'tags'>): TagLook {
+  return TAGS[leadTagOf(episode)];
+}
+
+/** What is wrong with the Tags the given Episodes declare: one sentence per problem, none when they are sound. */
+export function tagProblems(episodes: readonly { slug: string; tags: readonly string[] }[]): string[] {
+  const known: readonly string[] = TAG_IDS;
+  return episodes.flatMap(({ slug, tags }) => [
+    ...(tags.length === 0 ? [`${slug}: has no Tag`] : []),
+    ...tags.filter((tag) => !known.includes(tag)).map((tag) => `${slug}: unknown Tag ${tag}`),
+    ...[...new Set(tags.filter((tag, at) => tags.indexOf(tag) !== at))].map(
+      (tag) => `${slug}: lists the Tag ${tag} twice`,
+    ),
+  ]);
 }
 
 function isPublished(episode: EpisodeMetadata): episode is PublishedEpisodeMetadata {

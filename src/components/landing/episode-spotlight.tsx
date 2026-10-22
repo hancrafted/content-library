@@ -1,10 +1,9 @@
 import { showsFormat, spotlightOf } from '@/components/landing/episode-browse.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import type { CardLabels } from '@/components/landing/episode-grid-card';
-import { HighlightLabel } from '@/components/landing/episode-highlight-label';
 import { EpisodeLinks } from '@/components/landing/episode-links';
 import { ReleaseDate } from '@/components/landing/episode-release-date';
-import { TOPIC_ACCENTS, TOPIC_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
+import { TAG_ACCENTS, TAG_ICONS, type AccentClasses } from '@/components/landing/episode-visuals';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -45,7 +44,7 @@ const FRAME =
 
 /** The corner wash and the large faded glyph behind the text; decorative, so they take no clicks and sit under the content. */
 function Art({ card, size, accent }: { card: EpisodeCard; size: Size; accent: AccentClasses }) {
-  const Icon = TOPIC_ICONS[card.icon];
+  const Icon = TAG_ICONS[card.icon];
   return (
     <>
       <span
@@ -67,29 +66,26 @@ interface KickerProps {
   showFormat: boolean;
 }
 
-/** The card's first row: the Topic's icon and name (and Format, once there are two) on the left, the highlighted Topic on the right. */
+/** The card's first row: the lead Tag's icon and name, and the Format once there are two. */
 function Kicker({ card, size, accent, showFormat }: KickerProps) {
-  const Icon = TOPIC_ICONS[card.icon];
+  const Icon = TAG_ICONS[card.icon];
   const { tile, glyph } = SIZES[size];
   return (
-    <div className="flex items-center justify-between gap-3">
-      <div className="flex items-center gap-3">
-        <span className={`flex items-center justify-center rounded-2xl ${accent.tile} ${tile}`}>
-          <Icon aria-hidden className={glyph} />
-        </span>
-        <p className={META}>
-          {card.topic.label}
-          {showFormat && (
-            <>
-              <span aria-hidden className="px-2 opacity-50">
-                /
-              </span>
-              {card.format.label}
-            </>
-          )}
-        </p>
-      </div>
-      <HighlightLabel card={card} className={META} />
+    <div className="flex items-center gap-3">
+      <span className={`flex items-center justify-center rounded-2xl ${accent.tile} ${tile}`}>
+        <Icon aria-hidden className={glyph} />
+      </span>
+      <p className={META}>
+        {card.leadTag.label}
+        {showFormat && (
+          <>
+            <span aria-hidden className="px-2 opacity-50">
+              /
+            </span>
+            {card.format.label}
+          </>
+        )}
+      </p>
     </div>
   );
 }
@@ -126,7 +122,7 @@ interface CardProps {
 
 function SpotlightCard({ card, size, sideCount, locale, labels, showFormat }: CardProps) {
   if (card.route === null) return null;
-  const accent = TOPIC_ACCENTS[card.accent];
+  const accent = TAG_ACCENTS[card.accent];
   const { pad, title, caption } = SIZES[size];
   return (
     <article

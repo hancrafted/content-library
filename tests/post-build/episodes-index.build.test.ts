@@ -20,7 +20,7 @@ const PUBLISHED_SLUGS = [
   'ai-gives-you-more-work',
 ];
 const DRAFT_SLUGS: readonly string[] = [];
-const TAGGED = { slug: 'never-too-early-sales', tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'] };
+const TAGGED = { slug: 'ai-token-economy', tags: ['cost', 'agentic-ai'] };
 
 describe('/episodes index page', () => {
   it.each(LOCALES)('renders the browse grid on the /episodes page for %s', (locale) => {
@@ -57,7 +57,7 @@ describe('/episodes index page', () => {
     expect({ slug: expected.slug, dateTime: date.attr('datetime'), text: date.text() }).toEqual(expected);
   });
 
-  it.each(LOCALES)('offers topic filter chips on the /episodes page for %s', (locale) => {
+  it.each(LOCALES)('offers tag filter chips on the /episodes page for %s', (locale) => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);
     const $ = exportedPage(url);
@@ -70,6 +70,21 @@ describe('/episodes index page', () => {
     expect(chips.length).toBeGreaterThan(pressed.length);
     expect(pressed.length).toBe(1);
     expect(chips.first().attr('aria-pressed')).toBe('true');
+  });
+
+  it.each(LOCALES)('shows no Format control and no Topic on the /episodes page for %s', (locale) => {
+    // ARRANGE
+    const url = localizePath(ROUTES.episodes, locale);
+    const $ = exportedPage(url);
+    const absent =
+      '[aria-label="Filter by format"], [aria-label="Nach Format filtern"], [data-topic], [data-highlight-label]';
+    const expected = 0;
+
+    // ACT
+    const found = $(absent);
+
+    // ASSERT
+    expect(found.length).toBe(expected);
   });
 
   it.each(LOCALES)('puts one search box above the filters on the /episodes page for %s', (locale) => {

@@ -4,8 +4,7 @@ import type { PublishedEpisodeMetadata } from '@/lib/episode-metadata.pure';
 export const episodeMetadata = {
   slug: 'never-too-early-sales',
   status: 'published',
-  topic: 'sales',
   format: 'foundations',
-  tags: ['startups', 'cashflow', 'lead-generation', 'sales-pipeline'],
+  tags: ['sales'],
   publishedOn: '2026-10-19',
 } as const satisfies PublishedEpisodeMetadata;

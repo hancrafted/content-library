@@ -1,8 +1,7 @@
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { HighlightLabel } from '@/components/landing/episode-highlight-label';
 import { EpisodeLinks } from '@/components/landing/episode-links';
 import { ReleaseDate } from '@/components/landing/episode-release-date';
-import { TOPIC_ACCENTS, TOPIC_ICONS } from '@/components/landing/episode-visuals';
+import { TAG_ACCENTS, TAG_ICONS } from '@/components/landing/episode-visuals';
 import type { VideoLabels } from '@/components/landing/episode-youtube-link';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowUpRight } from 'lucide-react';
@@ -63,19 +62,18 @@ interface HeadProps {
   showFormat: boolean;
 }
 
-/** The card's first row: the Topic's icon and name on the left; the highlighted Topic and the Format (once there are two) on the right. */
+/** The card's first row: the lead Tag's icon and name on the left, the Format (once there are two) on the right. */
 function CardHead({ card, tile, showFormat }: HeadProps) {
-  const Icon = TOPIC_ICONS[card.icon];
+  const Icon = TAG_ICONS[card.icon];
   return (
     <div className="flex min-h-9 items-center justify-between gap-3">
       <span className="inline-flex items-center gap-2.5">
         <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${tile}`}>
           <Icon aria-hidden className="h-[1.1rem] w-[1.1rem]" />
         </span>
-        <span className={META}>{card.topic.label}</span>
+        <span className={META}>{card.leadTag.label}</span>
       </span>
       <span className="inline-flex items-center gap-3">
-        <HighlightLabel card={card} className={META} />
         {showFormat && <span className={META}>{card.format.label}</span>}
       </span>
     </div>
@@ -112,7 +110,7 @@ export interface GridCardProps {
 
 export function EpisodeGridCard({ card, locale, labels, showFormat }: GridCardProps) {
   const upcoming = card.route === null;
-  const accent = TOPIC_ACCENTS[card.accent];
+  const accent = TAG_ACCENTS[card.accent];
   const tone = upcoming
     ? 'border-dashed border-border bg-muted/40'
     : `border-border/60 bg-background hover:-translate-y-0.5 hover:shadow-lg motion-reduce:hover:translate-y-0 ${accent.edge}`;
@@ -121,7 +119,7 @@ export function EpisodeGridCard({ card, locale, labels, showFormat }: GridCardPr
       data-episode-card
       data-episode-slug={card.slug}
       data-episode-status={card.status}
-      data-topic={card.topic.id}
+      data-lead-tag={card.leadTag.id}
       data-format={card.format.id}
       className={`${CARD} ${tone}`}
     >

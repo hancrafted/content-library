@@ -86,9 +86,9 @@ page-template/i18n/en.json              title, caption, description
 
 ## Episode overview entries
 
-Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, primary Topic, extra Topics, Format, Tags and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
+Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, Format, Tags (lead Tag first) and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
 
-- `TOPICS`: the curated Topics, each with the icon and accent that every Episode whose primary Topic it is takes.
+- `TAGS`: the closed Tag vocabulary, each Tag with an icon and an accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
 - `FORMATS`: the closed list of Formats.
 - `FEATURED`: exactly three published slugs, lead first.
 
@@ -96,8 +96,8 @@ An entry reads its text from:
 
 - An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry (`findEpisode(slug).messages[locale]`).
 - An Upcoming Episode with no page: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when its page is written.
-- Every Episode: `landing.episodeOverview.topics.<topic>` and `landing.episodeOverview.formats.<format>`, one per id in `TOPICS` and `FORMATS`.
-- Every Tag an Episode lists: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`. A Tag is only an id in the metadata; a test fails when an id in use lacks either key in en or de.
+- Every Episode: `landing.episodeOverview.formats.<format>`, one per id in `FORMATS`. The Format control and label stay hidden until two Formats are in use.
+- Every Tag in the vocabulary: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; a test fails when an Episode lists an id outside `TAGS`, lists none, or when a Tag lacks either key in en or de.
 - Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the overview's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.

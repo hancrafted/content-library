@@ -65,8 +65,8 @@
       "spotlightTitle": "Featured",
       "browseTitle": "Browse all Episodes",
       "search": "Search Episodes",
-      "searchPlaceholder": "Search by title, topic or tag",
-      "topicFilter": "Filter by topic",
+      "searchPlaceholder": "Search by title or tag",
+      "tagFilter": "Filter by tag",
       "formatFilter": "Filter by format",
       "all": "All",
       "showAll": "Show all {count} Episodes",
@@ -78,72 +78,30 @@
       },
       "empty": "No Episodes match these filters yet.",
       "reset": "Reset filters",
-      "topics": {
-        "sales": "Sales",
-        "knowledge-base": "Knowledge base",
-        "cost": "Cost",
-        "ai-enablement": "AI enablement"
-      },
       "tags": {
-        "tokens": {
-          "name": "Tokens",
-          "tooltip": "The units a language model reads and bills by"
-        },
-        "context-window": {
-          "name": "Context window",
-          "tooltip": "How much text a model can hold in view at once"
+        "context-engineering": {
+          "name": "Context engineering",
+          "tooltip": "Giving the AI the right context at the right time"
         },
         "agentic-ai": {
           "name": "Agentic AI",
           "tooltip": "AI that plans and acts in steps, not just answers"
         },
-        "model-tiers": {
-          "name": "Model tiers",
-          "tooltip": "Choosing between small, fast models and large, capable ones"
-        },
         "markdown": {
           "name": "Markdown",
           "tooltip": "Plain-text documents that people and AI both read well"
         },
-        "verification": {
-          "name": "Verification",
-          "tooltip": "Checking that a document is still true"
+        "cost": {
+          "name": "Cost",
+          "tooltip": "What AI really costs, and where the spend goes"
         },
-        "review": {
-          "name": "Review",
-          "tooltip": "A person confirming what an AI or a colleague wrote"
-        },
-        "google-okf": {
-          "name": "Google OKF",
-          "tooltip": "Google's Open Knowledge Format for agent-readable docs"
-        },
-        "startups": {
-          "name": "Startups",
-          "tooltip": "Early-stage companies finding their first customers"
-        },
-        "cashflow": {
-          "name": "Cashflow",
-          "tooltip": "Money actually in the bank, month by month"
-        },
-        "lead-generation": {
-          "name": "Lead generation",
-          "tooltip": "Finding and listing the people who might buy"
-        },
-        "sales-pipeline": {
-          "name": "Sales pipeline",
-          "tooltip": "Every open deal, from first contact to signature"
-        },
-        "context-engineering": {
-          "name": "Context engineering",
-          "tooltip": "Giving the AI the right context at the right time"
+        "sales": {
+          "name": "Sales",
+          "tooltip": "Finding, winning and keeping customers"
         },
         "workflow": {
           "name": "Workflow",
           "tooltip": "How work is split into steps and handed between chats"
-        },
-        "delegation": {
-          "name": "Delegation",
-          "tooltip": "Handing tasks to the AI and keeping hold of what you still own"
         }
       },
       "formats": {

@@ -4,9 +4,7 @@ import type { PublishedEpisodeMetadata } from '@/lib/episode-metadata.pure';
 export const episodeMetadata = {
   slug: 'ai-gives-you-more-work',
   status: 'published',
-  topic: 'ai-enablement',
-  look: { accent: 'rose', icon: 'list-plus' },
   format: 'foundations',
-  tags: ['agentic-ai', 'workflow', 'delegation'],
+  tags: ['agentic-ai', 'workflow'],
   publishedOn: '2026-10-21',
 } as const satisfies PublishedEpisodeMetadata;

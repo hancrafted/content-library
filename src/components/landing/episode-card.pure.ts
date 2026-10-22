@@ -1,19 +1,12 @@
 import {
-  topicsOf,
+  leadTagOf,
+  lookOf,
   type EpisodeStatus,
   type IsoDate,
   type PublishedEpisodeMetadata,
   type UpcomingEpisodeMetadata,
 } from '@/lib/episode-metadata.pure';
-import {
-  HIGHLIGHTED_TOPIC,
-  TOPICS,
-  type Accent,
-  type FormatId,
-  type TopicIcon,
-  type TopicId,
-  type TopicLook,
-} from '@/lib/episode-overview';
+import type { Accent, FormatId, TagIcon, TagId } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
 
@@ -24,13 +17,13 @@ export interface Labelled<Id extends string> {
 }
 
 /** One Tag as a card draws it: its name and the tooltip that explains it, both in the reader's locale. */
-export interface TagLabel extends Labelled<string> {
+export interface TagLabel extends Labelled<TagId> {
   readonly tooltip: string;
 }
 
 /**
  * One Episode as a landing design draws it: the Episode's metadata with its
- * strings read in one locale and its look taken from its primary Topic. Plain
+ * strings read in one locale and its look taken from its lead Tag. Plain
  * values only, so a Server Component can hand it to a `*.client.tsx` leaf
  * (FE-006 §4).
  */
@@ -47,14 +40,10 @@ export interface EpisodeCard {
   readonly status: EpisodeStatus;
   readonly title: string;
   readonly caption: string;
-  /** The primary Topic, which the card names and draws its look from. */
-  readonly topic: Labelled<TopicId>;
-  /** Every Topic the Episode appears under, primary first: what a Topic filter matches. */
-  readonly topics: readonly Labelled<TopicId>[];
+  /** The Episode's first Tag, which the card names and draws its icon and accent from. */
+  readonly leadTag: Labelled<TagId>;
   readonly format: Labelled<FormatId>;
-  /** True when the Episode is under the highlighted Topic, primary or extra, so the card marks it. */
-  readonly highlighted: boolean;
-  /** The Episode's Tags in its own order; a flat list, none ranks above another. */
+  /** The Episode's Tags in its own order, lead Tag first. */
   readonly tags: readonly TagLabel[];
   /** The Episode's video in this locale; left off when it has none or is not published. */
   readonly youtubeUrl?: string;
@@ -66,7 +55,7 @@ export interface EpisodeCard {
   /** Position in the Featured slots, 1 first; `null` for every other card. */
   readonly featuredRank: number | null;
   readonly accent: Accent;
-  readonly icon: TopicIcon;
+  readonly icon: TagIcon;
 }
 
 /** Reads one Translation key by its full dotted path. */
@@ -98,11 +87,6 @@ export interface CardContext {
 }
 
 const OVERVIEW_KEYS = 'landing.episodeOverview';
-
-/** An Episode's own look wins over its primary Topic's, field by field. */
-function lookOf(entry: CardEntry): TopicLook {
-  return { ...TOPICS[entry.topic], ...entry.look };
-}
 
 function copyOf(entry: CardEntry, ctx: CardContext): EpisodeCopy {
   if (entry.copy) return { title: entry.copy.title, caption: entry.copy.caption };
@@ -149,22 +133,20 @@ function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCar
 export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
   const { read } = ctx;
   const copy = copyOf(entry, ctx);
-  const topics = topicsOf(entry).map((id) => ({ id, label: read(`${OVERVIEW_KEYS}.topics.${id}`) }));
+  const tags = entry.tags.map((id) => ({
+    id,
+    label: read(`${OVERVIEW_KEYS}.tags.${id}.name`),
+    tooltip: read(`${OVERVIEW_KEYS}.tags.${id}.tooltip`),
+  }));
   return {
     slug: entry.slug,
     route: null,
     href: null,
     status: entry.status,
     ...copy,
-    topic: topics[0],
-    topics,
+    leadTag: { id: leadTagOf(entry), label: tags[0].label },
     format: { id: entry.format, label: read(`${OVERVIEW_KEYS}.formats.${entry.format}`) },
-    highlighted: topics.some(({ id }) => id === HIGHLIGHTED_TOPIC),
-    tags: entry.tags.map((id) => ({
-      id,
-      label: read(`${OVERVIEW_KEYS}.tags.${id}.name`),
-      tooltip: read(`${OVERVIEW_KEYS}.tags.${id}.tooltip`),
-    })),
+    tags,
     featuredRank: null,
     ...lookOf(entry),
     ...publishedFields(entry, ctx),

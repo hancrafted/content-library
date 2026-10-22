@@ -1,4 +1,4 @@
-import { FORMATS, TOPIC_IDS, type FormatId, type TopicId } from '@/lib/episode-overview';
+import { FILTER_TAGS, FORMATS, type FormatId, type TagId } from '@/lib/episode-overview';
 import { fillTemplate } from '@/lib/template.pure';
 import type { EpisodeCard, Labelled } from './episode-card.pure';
 
@@ -21,7 +21,7 @@ export const SPOTLIGHT_SIZE = 3;
 
 /** The visitor's choices in the Browse grid; transient, held in memory only (FE-001). */
 export interface BrowseSelection {
-  readonly topic: Facet<TopicId>;
+  readonly tag: Facet<TagId>;
   readonly format: Facet<FormatId>;
   /** The text the visitor typed into search; blank lifts the search. */
   readonly query: string;
@@ -29,7 +29,7 @@ export interface BrowseSelection {
   readonly expanded: boolean;
 }
 
-export const INITIAL_SELECTION: BrowseSelection = { topic: ALL, format: ALL, query: '', expanded: false };
+export const INITIAL_SELECTION: BrowseSelection = { tag: ALL, format: ALL, query: '', expanded: false };
 
 export interface Spotlight {
   readonly lead: EpisodeCard | null;
@@ -50,10 +50,9 @@ function fold(text: string): string {
   return text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
 }
 
-/** The text a query searches: only what the card shows in the reader's locale, so a Tag's tooltip is left out. */
+/** The text a query searches: the title, caption and every Tag name in the reader's locale, so a Tag's tooltip is left out. */
 function searchText(card: EpisodeCard): string {
-  const labels = [...card.topics, card.format, ...card.tags].map((value) => value.label);
-  return fold([card.title, card.caption, ...labels].join('\n'));
+  return fold([card.title, card.caption, ...card.tags.map((tag) => tag.label)].join('\n'));
 }
 
 /** What narrows the grid: every choice but the fold. */
@@ -62,7 +61,7 @@ type Narrowing = Omit<BrowseSelection, 'expanded'>;
 function matches(card: EpisodeCard, selection: Narrowing): boolean {
   const query = fold(selection.query);
   return (
-    (selection.topic === ALL || card.topics.some((topic) => topic.id === selection.topic)) &&
+    (selection.tag === ALL || card.tags.some((tag) => tag.id === selection.tag)) &&
     (selection.format === ALL || card.format.id === selection.format) &&
     (query === '' || searchText(card).includes(query))
   );
@@ -127,20 +126,20 @@ function choicesOf<Id extends string>({ cards, vocabulary, read, counted }: Choi
 }
 
 /**
- * One chip per Topic any card appears under, in vocabulary order, counting what
- * each would show under the chosen Format and query; an Episode in two Topics counts in both. A chip the Format empties stays, at zero,
+ * One chip per filter Tag any card carries, in vocabulary order, counting what
+ * each would show under the chosen Format and query; an Episode with two Tags counts in both. A chip the Format empties stays, at zero,
  * so the row does not jump while the visitor narrows.
  */
-export function topicChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): FacetChoices<TopicId> {
+export function tagChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): FacetChoices<TagId> {
   return choicesOf({
     cards,
-    vocabulary: TOPIC_IDS,
-    read: (card) => card.topics,
-    counted: (card) => matches(card, { ...selection, topic: ALL }),
+    vocabulary: FILTER_TAGS,
+    read: (card) => card.tags,
+    counted: (card) => matches(card, { ...selection, tag: ALL }),
   });
 }
 
-/** The Format twin of {@link topicChoices}. */
+/** The Format twin of {@link tagChoices}. */
 export function formatChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): FacetChoices<FormatId> {
   return choicesOf({
     cards,
