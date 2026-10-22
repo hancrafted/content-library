@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { readTemplate } from './markdown-handoff.pure';
+import summerPartyDe from './summer-party.de.yml';
 import summerPartyEn from './summer-party.en.yml';
+import vacationDe from './vacation.de.yml';
+import vacationEn from './vacation.en.yml';
 import { loadWorkflow } from './workflow-loader.pure';
 import { tasksOf } from './workflow-outputs.pure';
 import { slotSample } from './workflow-sample.pure';
@@ -12,8 +15,8 @@ import type { SectionDef, TaskDef, WorkflowFile } from './workflow-schema.types'
  * scenario facts kept out of the general instructions.
  */
 
-function loaded(): WorkflowFile {
-  const result = loadWorkflow(summerPartyEn);
+function loaded(yaml: string = summerPartyEn): WorkflowFile {
+  const result = loadWorkflow(yaml);
   if ('problems' in result) throw new Error(result.problems.join('\n'));
   return result.file;
 }
@@ -235,5 +238,88 @@ describe('edge cases', () => {
     // ASSERT
     expect(slot && slotSample(file, slot)).toMatch(/summer party/i);
     expect(texts.filter((text) => /<describe/.test(text))).toEqual([]);
+  });
+});
+
+/** The four shipped files with the words that mark a scenario fact in their language. */
+const SHIPPED = [
+  [
+    'summer-party en',
+    summerPartyEn,
+    /party|Frankfurt|venue|hall|hotel|guest|euro|€|June|catering|Mill|wheelchair|vegetarian/i,
+  ],
+  [
+    'summer-party de',
+    summerPartyDe,
+    /Sommerfest|Frankfurt|Location|Halle|Hotel|Gäste|Euro|€|Juni|Catering|Mühle|Rollstuhl|vegetar/i,
+  ],
+  ['vacation en', vacationEn, /vacation|Algarve|September|hotel|beach|flight|apartment|week away|budget/i],
+  ['vacation de', vacationDe, /Urlaub|Algarve|September|Hotel|Strand|Flug|Wohnung|Budget/i],
+] as const;
+
+/** The task that makes each slot's output, as the content tests pair them (task, slot, maker). */
+const HANDS_ON = [
+  ['interview', 'plan', 'pieces'],
+  ['spec', 'interview', 'interview'],
+  ['tickets', 'spec', 'spec'],
+  ['venue', 'tickets', 'tickets'],
+  ['compare', 'spec', 'spec'],
+  ['recommend', 'comparison', 'compare'],
+] as const;
+
+describe.each(SHIPPED)('content defects of %s', (_name, yaml, facts) => {
+  const shipped = loaded(yaml);
+  const find = (id: string): TaskDef => {
+    const found = tasksOf(shipped).find((each) => each.id === id);
+    if (!found) throw new Error(`no task ${id}`);
+    return found;
+  };
+  const sections = (): SectionDef[] => [
+    ...shipped.reviewer.sections,
+    ...tasksOf(shipped).flatMap((each) => [...each.do.simple, ...each.do.technical]),
+  ];
+
+  it('has no "technical background" wording in a technical prompt', () => {
+    // ARRANGE
+    const banned = /technical background|technischen Hintergrund/i;
+    // ACT
+    const found = tasksOf(shipped)
+      .flatMap((each) => each.do.technical)
+      .filter((section) => banned.test(`${section.heading}\n${section.text}`));
+    // ASSERT
+    expect(found).toEqual([]);
+  });
+
+  it('shows as a sample exactly what the previous stage hands on as its example', () => {
+    // ARRANGE
+    const sample = (taker: string, slot: string) => find(taker).slots.find((each) => each.id === slot)?.sample;
+    // ACT
+    const drift = HANDS_ON.filter(([taker, slot, maker]) => sample(taker, slot) !== find(maker).details.example);
+    // ASSERT
+    expect(drift).toEqual([]);
+  });
+
+  it('sends the fix handoff of every review back to the first chat, and the reviewer to the chat that did the work', () => {
+    // ARRANGE
+    const back = /first chat|ersten Chat/i;
+    const report = shipped.reviewer.sections.find(
+      (section) => section.purpose === 'scope' && /PASS|BESTANDEN/.test(section.text),
+    );
+    // ACT
+    const reviews = tasksOf(shipped).flatMap((each) => (each.review ? [each.review] : []));
+    const missing = reviews.filter((review) => !back.test(review.instructions ?? ''));
+    // ASSERT
+    expect(reviews.length).toBeGreaterThan(0);
+    expect(missing).toEqual([]);
+    expect(report?.text).toMatch(/chat that did the work|Chat zurückkopiere, der die Arbeit gemacht hat/);
+  });
+
+  it('keeps scenario facts out of every general instruction', () => {
+    // ARRANGE
+    const prose = sections().map((section) => `${section.heading}\n${section.text}`);
+    // ACT
+    const found = prose.filter((text) => facts.test(text));
+    // ASSERT
+    expect(found).toEqual([]);
   });
 });
