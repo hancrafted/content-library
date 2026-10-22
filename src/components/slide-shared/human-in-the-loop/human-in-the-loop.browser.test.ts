@@ -316,7 +316,7 @@ describe('success cases', () => {
   );
 
   it(
-    'switches to Vacation with its own card lines, then copies a /skill prompt in Technical',
+    'switches to Vacation with its own card lines, then copies the /grilling prompt in Technical',
     async () => {
       // ARRANGE
       const vacation = 'vacation';
@@ -339,7 +339,7 @@ describe('success cases', () => {
       expect(before).toContain('At most €150 per person');
       expect(after).toContain('Sleeps 2');
       expect(after).not.toContain('At most €150 per person');
-      expect(copied[0]).toMatch(/^\/[a-z-]+/);
+      expect(copied[0]).toContain('/grilling');
     },
     TIMEOUT,
   );
