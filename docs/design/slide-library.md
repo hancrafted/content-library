@@ -22,7 +22,7 @@ Motion rules and the reasons behind them live in [the design system](design-syst
 
 ## context-reference
 
-- _Shows_: The context window Shared visual in its `reference` Preset: every part (conversation, timeline, window, category, details, attention) and every toolbar and head control switched on, including upload and the 200K | 1M switch.
+- _Shows_: The context window Shared visual in its `reference` Preset: every toolbar and head control switched on (Attention starts hidden: its chip blends it in), including upload and the 200K | 1M switch.
 - _When_: As a lookup of what the cornerstone can offer before a Slide picks a smaller Preset; not for showing to an audience. <!-- draft: Han edits -->
 - _Motion_: `motion: none`. The cornerstone's own entrance and controls run; the Slide adds none.
 

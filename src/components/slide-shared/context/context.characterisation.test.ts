@@ -85,7 +85,7 @@ describe('success cases', () => {
         },
         reference: {
           lit: 0,
-          sections: ['Chat', 'Context window', 'Details', 'Attention'],
+          sections: ['Chat', 'Context window', 'Details'],
           sliders: 1,
           toolbar: [
             'Conversation:true',
@@ -93,7 +93,7 @@ describe('success cases', () => {
             'Context window:true',
             'Context category:true',
             'Details:true',
-            'Attention:true',
+            'Attention:false',
             ':false',
             ':-',
           ],

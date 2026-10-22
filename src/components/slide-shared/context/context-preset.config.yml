@@ -163,10 +163,10 @@ presets:
     show: { chat: false, timeline: false, context: true, category: true, panel: true, attention: false }
     controls: { '*': { show: false }, windowTechnical: { show: true }, categoryTechnical: { show: true } }
     timelineLocked: true
-  # The reference: every part and every control on, so a reader sees the whole toolbar and each head control at once.
+  # The reference: every control on, so a reader sees the whole toolbar and each head control at once. Attention starts hidden, as on Slide 7: all six parts side by side overflow a laptop width, and its chip blends it in.
   reference:
     chat: summer-party
-    show: { chat: true, timeline: true, context: true, category: true, panel: true, attention: true }
+    show: { chat: true, timeline: true, context: true, category: true, panel: true, attention: false }
     controls: { '*': { show: true } }
     windows: [{ size: 200k, lines: [matt] }, { size: 1m, lines: [matt-1m] }]
 
