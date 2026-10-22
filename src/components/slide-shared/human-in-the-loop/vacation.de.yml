@@ -117,7 +117,6 @@ stages:
             mode: single
             free: true
             label: Deine Aufgabe
-            sample: Plane einen Urlaub für zwei. Eine Woche in der ersten Septemberwoche, etwa 1.500 Euro für die Unterkunft, und eine Empfehlung für meinen Partner.
         details:
           why: Eine große Aufgabe passt in keinen einzelnen Chat. In Teile geschnitten, kann jedes in einem frischen Chat aus einem kurzen Handoff geplant werden, und eine kurze Rückfragerunde vorab verhindert, dass die KI rät, worum es geht.
           example: &plan_example |

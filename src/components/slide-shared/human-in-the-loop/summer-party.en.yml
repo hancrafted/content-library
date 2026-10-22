@@ -116,7 +116,6 @@ stages:
             mode: single
             free: true
             label: Your task
-            sample: Plan the company's next summer party. 200 employees from five offices in Europe come together for one evening in late June in Frankfurt.
         details:
           why: A big task fits no single chat. Cut into pieces, each one can be planned in a fresh chat from a short handoff, and a short grill first stops the AI from guessing what the task is.
           example: &plan_example |

@@ -3,6 +3,7 @@ import { readTemplate } from './markdown-handoff.pure';
 import summerPartyEn from './summer-party.en.yml';
 import { loadWorkflow } from './workflow-loader.pure';
 import { tasksOf } from './workflow-outputs.pure';
+import { slotSample } from './workflow-sample.pure';
 import type { SectionDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
@@ -232,7 +233,7 @@ describe('edge cases', () => {
       [...each.do.simple, ...each.do.technical].map((section) => section.text),
     );
     // ASSERT
-    expect(slot?.sample).toMatch(/summer party/i);
+    expect(slot && slotSample(file, slot)).toMatch(/summer party/i);
     expect(texts.filter((text) => /<describe/.test(text))).toEqual([]);
   });
 });

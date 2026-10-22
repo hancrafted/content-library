@@ -116,7 +116,6 @@ stages:
             mode: single
             free: true
             label: Your task
-            sample: Plan a vacation for two. One week in the first week of September, about 1,500 euros for the stay, and a recommendation for my partner.
         details:
           why: A big task fits no single chat. Cut into pieces, each one can be planned in a fresh chat from a short handoff, and a short grill first stops the AI from guessing what the task is.
           example: &plan_example |

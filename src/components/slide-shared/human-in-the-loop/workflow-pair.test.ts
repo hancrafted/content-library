@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { WORKFLOW_IDS, workflowFor } from './workflow-data';
+import { slotSample } from './workflow-sample.pure';
 import type { SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
@@ -73,7 +74,8 @@ describe('success cases', () => {
     const slot = pieces.slots.find((each) => each.id === 'task');
     const texts = [...pieces.do.simple, ...pieces.do.technical].map((section) => section.text);
     // ASSERT
-    expect(slot?.sample).toBeTruthy();
+    expect(slot && slotSample(fileOf(id, locale), slot)).toBeTruthy();
+    expect(slot?.sample).toBeUndefined();
     expect(texts.filter((text) => /<.*>/.test(text))).toEqual([]);
   });
   it.each(EACH)('gives every do and review step instructions of one or two sentences, in %s %s', (id, locale) => {

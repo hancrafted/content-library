@@ -2,6 +2,7 @@ import type { PromptSlot } from '../core-components/try-prompt/prompt-sections.p
 import { joinPrompt } from '../core-components/try-prompt/prompt-sections.pure';
 import type { PromptView } from '../core-components/try-prompt/try-prompt.types';
 import { tasksOf } from './workflow-outputs.pure';
+import { slotSample } from './workflow-sample.pure';
 import type { Runtime, SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
@@ -16,7 +17,8 @@ function resolve(text: string, fills: Readonly<Record<string, string>>): string 
   return text.replace(/\{\{([^{}]+)\}\}/g, (marker, name: string) => fills[name.trim()] ?? marker);
 }
 
-const slotsOf = (slots: readonly SlotDef[]): PromptSlot[] => slots.map((slot) => ({ ...slot }));
+const slotsOf = (file: WorkflowFile, slots: readonly SlotDef[]): PromptSlot[] =>
+  slots.map((slot) => ({ ...slot, sample: slotSample(file, slot) }));
 
 const numbered = (items: readonly string[]): string => items.map((item, at) => `${at + 1}. ${item}`).join('\n');
 
@@ -37,7 +39,7 @@ function viewOf(
   file: WorkflowFile,
 ): PromptView {
   const { sections, instructions } = step;
-  const parts = { sections, slots: slotsOf(step.slots) };
+  const parts = { sections, slots: slotsOf(file, step.slots) };
   return {
     kind: 'prompt',
     text: joinPrompt(parts, {}),
