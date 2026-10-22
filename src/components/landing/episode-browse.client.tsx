@@ -11,9 +11,9 @@ import {
   type BrowseSelection,
   type ResultsLabels,
 } from '@/components/landing/episode-browse.pure';
+import { EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { FormatSegments, SearchBox, TagChips, type FilterLabels } from '@/components/landing/episode-filters';
-import { EpisodeGridCard, type CardLabels } from '@/components/landing/episode-grid-card';
 import { Button } from '@/components/ui/button';
 import type { Locale } from '@/lib/locale.pure';
 import { fillTemplate } from '@/lib/template.pure';
@@ -131,7 +131,7 @@ function BrowseGrid({ cards, visible, locale, labels }: GridProps) {
     <ul data-episode-browse className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <li key={card.slug} data-browse-item hidden={!visible.has(card.slug)} className="flex">
-          <EpisodeGridCard card={card} locale={locale} labels={labels} showFormat={showFormat} />
+          <EpisodeCardView card={card} variant="compact" locale={locale} labels={labels} showFormat={showFormat} />
         </li>
       ))}
     </ul>

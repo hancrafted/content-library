@@ -117,6 +117,23 @@ describe('/episodes index page', () => {
     expect(unsafe.length).toBe(0);
   });
 
+  it.each(LOCALES)('draws every linked card on the /episodes page with the hover arrow for %s', (locale) => {
+    // ARRANGE
+    const url = localizePath(ROUTES.episodes, locale);
+    const $ = exportedPage(url);
+    const expected = PUBLISHED_SLUGS.length;
+
+    // ACT
+    const linked = $(
+      '[data-episode-browse] [data-episode-card][data-card-variant="compact"]:not([data-episode-status="upcoming"])',
+    );
+    const arrows = linked.find('[data-open-cue="arrow"]');
+
+    // ASSERT
+    expect(linked.length).toBe(expected);
+    expect(arrows.length).toBe(expected);
+  });
+
   it.each(LOCALES)('shows each Tag on its card with a tooltip on the /episodes page for %s', (locale) => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);
