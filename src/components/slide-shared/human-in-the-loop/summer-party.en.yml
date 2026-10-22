@@ -1,7 +1,6 @@
-# The summer-party Workflow in the new schema, English. One language per file: what is written is what renders.
-# Types: workflow-schema.types.ts. The German file stays on the old schema (summer-party.config.yml plus its .de
-# twin) until it migrates. Scenario facts live only in `scenario`, the slot samples and the examples; the prompt
-# sections are general, and reach the scenario through the `{{slot}}` markers.
+# The summer-party Workflow, English. One language per file: what is written is what renders.
+# How to write or change one: docs/features/agentic-workflow.md. Types: workflow-schema.types.ts. The German file is
+# summer-party.de.yml; a test holds both to the same structure, only the words differ.
 id: summer-party
 title: Summer party
 

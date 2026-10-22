@@ -6,7 +6,7 @@ stale_after: 2027-04-22T00:00:00Z
 
 # Human-in-the-loop Shared visual
 
-Read before placing, changing or testing the human-in-the-loop Shared visual (`src/components/slide-shared/human-in-the-loop/`) or adding a Workflow to it. Binding rules: [FE-012 Shared Visual Content](../../.archgate/adrs/FE-012-shared-visual-content.md), [FE-006](../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind. A **Workflow** is defined in the [glossary](../../GLOSSARY.md).
+Read before placing, changing or testing the human-in-the-loop Shared visual (`src/components/slide-shared/human-in-the-loop/`). To write a Workflow file, read [agentic-workflow.md](agentic-workflow.md). Binding rules: [FE-012 Shared Visual Content](../../.archgate/adrs/FE-012-shared-visual-content.md), [FE-006](../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind. A **Workflow** is defined in the [glossary](../../GLOSSARY.md).
 
 ## Placing it
 
@@ -24,14 +24,10 @@ The parent owns all state (`workflow-state.pure.ts`), computes `workflowView` on
 
 ## Adding a Workflow
 
-A Workflow is one YAML file per language. What is written renders as written; there is no locale inside a file.
+A Workflow is one YAML file per language; what is written renders as written. The authoring guide is [agentic-workflow.md](agentic-workflow.md): the schema, markers, slots, fan-out, handoff templates and every loader problem. Start from `summer-party.en.yml` and `summer-party.de.yml`.
 
-1. Copy `summer-party.en.yml` to `<id>.en.yml` and `summer-party.de.yml` to `<id>.de.yml`. The shape is `workflow-schema.types.ts`: `scenario`, `purposes` (one explanation per prompt purpose), `techniques` (the catalogue of prompt techniques, `{ id, tier: basic | advanced, title, explain }`, defined once; adding one is a new entry, never a schema change), the general `reviewer`, `templates` (a markdown handoff per `kind`, with the required H1 and H2s) and `stages`, each with `tasks`.
-2. A task has `output`, a `template`, `slots`, a `do` prompt per runtime (`simple`, `technical`; ordered sections with a `purpose`), an optional `instructions` (one or two plain sentences on what the user does, shown in the "What to do" panel; so does `review.instructions`), an optional `review` and `details` (`why`, `example`, `goodLooksLike`, optional `techniques`). A section (also a `reviewer` one) may list `techniques` ids next to its one `purpose`: its purpose tooltip then lists them with their tier. A task's `details.techniques` are listed under "why it matters". The loader rejects an unknown id, a repeated id and an entry without a tier; tag only where a technique genuinely applies. A slot id names the `output` of a task in an earlier stage, and the diagram draws its edges from the slots. A `free: true` slot is the user's own text (Plan's `task`) and names no output; with no `sample` it takes the `scenario` (summary, then the facts as a list) as its sample.
-3. Markers in section text: `{{slot}}`, `{{slot_K}}` for the Kth entry of a `multiple` slot, `{{n}}` in a fan-out, `{{template}}`, and in the `reviewer` `{{inputs}}` and `{{checks}}`. A slot's `sample` stays in the prompt while the slot is empty; a `multiple` slot carries a list, one sample per marker. A `fanOut: N` task makes N chats; its `example` is a list of N, one per chat, and the Compare slot over it carries the same N as its samples.
-4. Keep scenario facts out of the prompt sections: they live in `scenario`, the slot samples and the examples.
-5. Register the pair in `workflow-data.ts` (`FILES`, `WORKFLOW_IDS`). `workflow-pair.test.ts` holds both files of a Workflow to the same structure (FE-012 §1.3: stage, task and slot ids, slot modes, sample and example counts, section purposes), and the loader checks every sample and example against its template. The build throws each problem of a shipped file.
-6. Viewers may also upload a Workflow file (the same shape, in any language); problems are listed under the toolbar and the authored Workflow stays. A download writes the current file as it is; pasted values are not exported.
+1. Register the pair in `workflow-data.ts` (`FILES`, `WORKFLOW_IDS`). `workflow-pair.test.ts` holds both files to one structure (FE-012 §1.3), and the loader checks every sample and example against its template. The build throws each problem of a shipped file.
+2. Viewers may also upload a Workflow file (the same shape, in any language); problems are listed under the toolbar and the authored Workflow stays. A download writes the current file as it is; pasted values are not exported.
 
 ## Testing
 
