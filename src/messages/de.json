@@ -472,6 +472,9 @@
     "title": "Workshops",
     "back": "Alle Workshops",
     "intro": "Begleitete Sessions, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
+    "agenda": "Ablauf",
+    "start": "Mit Episode {step} starten",
+    "readingTime": "{minutes} Min. Lesezeit insgesamt",
     "episodeCount": {
       "one": "1 Episode",
       "other": "{count} Episoden"
