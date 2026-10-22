@@ -11,7 +11,7 @@ changed=$(printf '%s\n' "$refs" | while read -r _ local _ remote; do
   if [ "$remote" = "$zero" ]; then git diff --name-only "origin/main...$local"; else git diff --name-only "$remote" "$local"; fi
 done)
 if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|vitest\.browser\.config\.ts|src/components/|src/app/|tests/browser/)'; then
-  # The a11y and human-in-the-loop tests drive the served export; the context test drives the Slides Episode under next dev. The
+  # The a11y and human-in-the-loop tests drive the served export (the latter on the Slides Episode); the context test drives the Slides Episode under next dev. The
   # lane builds and serves the export, starts `next dev`, both on free ports so another worktree's servers never
   # answer, points every test at them, then stops both. `|| true`: under `sh -e` a kill of a stopped server fails.
   echo "push touches the browser lane: building, serving and running test:browser"
@@ -27,7 +27,7 @@ if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episod
   for _ in $(seq 1 50); do curl -fs -o /dev/null "http://localhost:$port/" && break; sleep 0.2; done
   for _ in $(seq 1 150); do curl -fs -o /dev/null "http://localhost:$dev_port/episodes/slides/" && break; sleep 0.4; done
   A11Y_BASE_URL="http://localhost:$port" \
-    HITL_URL="http://localhost:$port/episodes/onboard-ai-every-time/" \
+    HITL_URL="http://localhost:$port/episodes/slides/" \
     CONTEXT_WINDOW_URL="http://localhost:$dev_port/episodes/slides/" \
     npm run test:browser </dev/null || exit 1
 fi
