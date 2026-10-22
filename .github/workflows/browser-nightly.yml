@@ -1,0 +1,53 @@
+name: Browser nightly
+
+# The browser lane (design-ADR-0014) drives real Chromium against the built export. It is too slow and too flaky-prone
+# for every pull request, so it runs once a night on main instead; a failure emails the repository watchers through
+# GitHub's default notification, which is the only alert. `workflow_dispatch` re-runs it by hand.
+on:
+  schedule:
+    # 03:17 UTC, off the hour so it does not queue with the scheduled jobs everyone else starts at :00.
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # The production origin (FE-008). One of the places to change on a domain move: docs/features/hosting.md.
+  SITE_URL: https://hancrafted.net
+
+jobs:
+  browser:
+    name: browser tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # Build as the Cloudflare Pages deploy does, from the domain root (same as the ci.yml export job).
+      NEXT_PUBLIC_BASE_PATH: ''
+    steps:
+      # Scheduled runs use the default branch; a manual dispatch from another branch tests that branch.
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      # The Chromium download is ~150 MB. Keyed on the installed @playwright/test version, which pins the browser build.
+      - uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('node_modules/@playwright/test/package.json') }}
+      # `--with-deps` also on a cache hit: the cache holds the browser, not the apt packages it links against.
+      - run: npx playwright install --with-deps chromium
+      # Serves out/ itself through the config's webServer. CI=true (set by Actions) turns on forbidOnly, the HTML report
+      # and traces on failure; there are no retries.
+      - run: npm run test:browser
+      - uses: actions/upload-artifact@v7.0.2
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
