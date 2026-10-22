@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Copy } from 'lucide-react';
@@ -29,11 +30,13 @@ const SHORT =
   'inline-flex min-h-9 cursor-pointer items-center rounded-full border border-border px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring';
 
 function ShortToggle({ kit }: { kit: PromptKit }) {
+  const motion = useMotion(kit.short);
   return (
     <Tip text={kit.words.shortTip} place="above" align="end">
       <button
         type="button"
         aria-pressed={kit.short}
+        {...motion}
         onClick={kit.onShort}
         className={cn(
           SHORT,
@@ -57,9 +60,11 @@ function ChatLink({
   newTab: string;
   children: ReactNode;
 }) {
+  const motion = useMotion();
   return (
     <Tip text={label} place="above" align="end">
       <a
+        {...motion}
         className={OUTLINED_ICON}
         href={externalHref(url)}
         target="_blank"
@@ -102,6 +107,7 @@ function Toggle({
   panel: string;
   onToggle: () => void;
 }) {
+  const motion = useMotion(open);
   return (
     <button
       type="button"
@@ -110,7 +116,7 @@ function Toggle({
       onClick={onToggle}
       className="inline-flex min-h-9 flex-1 cursor-pointer items-center gap-1.5 rounded-lg text-left text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <ChevronRight aria-hidden="true" className={cn('size-4 transition-transform', open && 'rotate-90')} />
+      <ChevronRight aria-hidden="true" className={cn('size-4 transition-transform', open && 'rotate-90')} {...motion} />
       {label}
     </button>
   );

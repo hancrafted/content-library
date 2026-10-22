@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { usePopoverPlacement } from '@/hooks/use-popover-placement';
 import { popoverBox, type PopoverRules } from '@/lib/popover-placement.pure';
 import { useCallback, useId, useState, type ReactNode } from 'react';
@@ -30,6 +31,7 @@ interface NodePopoverProps {
 export function NodePopover({ copy, className, children }: NodePopoverProps) {
   const id = useId();
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const motion = useMotion(anchor !== null);
   const close = useCallback(() => setAnchor(null), []);
   const toggle = (target: HTMLElement) => setAnchor((now) => (now ? null : target));
   return (
@@ -41,6 +43,7 @@ export function NodePopover({ copy, className, children }: NodePopoverProps) {
         aria-controls={anchor ? id : undefined}
         onClick={(event) => toggle(event.currentTarget)}
         className={className}
+        {...motion}
       >
         {children}
       </button>

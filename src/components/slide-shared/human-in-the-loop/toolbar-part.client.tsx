@@ -1,7 +1,8 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { Code, Download, Upload } from 'lucide-react';
-import { useId, type ChangeEvent } from 'react';
+import { useId, type ButtonHTMLAttributes, type ChangeEvent } from 'react';
 import styles from './human-in-the-loop.module.css';
 import type { ToolbarProps } from './human-in-the-loop.types';
 import { IconButton } from './icon-button.client';
@@ -24,33 +25,38 @@ function download(workflow: ToolbarProps['workflow']) {
   URL.revokeObjectURL(url);
 }
 
+function Pill({ children, ...rest }: ButtonHTMLAttributes<HTMLButtonElement>) {
+  const motion = useMotion(rest['aria-pressed']);
+  return (
+    <button type="button" {...motion} {...rest}>
+      {children}
+    </button>
+  );
+}
+
 function Pills({ bar }: { readonly bar: ToolbarProps }) {
   if (!offers(bar.controls, 'picker') || bar.choices.length < 2) return null;
   const known = bar.choices.some((c) => c.id === bar.workflow.id);
   return (
     <div className={styles.pills} role="group" aria-label={bar.words.workflow} data-control="picker">
-      {known ? null : (
-        <button type="button" aria-pressed="true">
-          {bar.workflow.title}
-        </button>
-      )}
+      {known ? null : <Pill aria-pressed="true">{bar.workflow.title}</Pill>}
       {bar.choices.map((c) => (
-        <button
+        <Pill
           key={c.id}
-          type="button"
           data-workflow={c.id}
           aria-pressed={known && c.id === bar.workflow.id}
           className={known && c.id === bar.workflow.id ? 'font-semibold' : undefined}
           onClick={() => bar.onWorkflow(c.id)}
         >
           {c.title}
-        </button>
+        </Pill>
       ))}
     </div>
   );
 }
 
 function UploadButton({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
+  const motion = useMotion();
   const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) bar.onUpload(await file.text());
@@ -58,7 +64,7 @@ function UploadButton({ bar, describedBy }: { readonly bar: ToolbarProps; readon
   };
   return (
     <Tip text={bar.words.upload} align="end">
-      <label className={`${styles.icon} ${styles.upload}`} data-control="upload">
+      <label className={`${styles.icon} ${styles.upload}`} data-control="upload" {...motion}>
         <Upload aria-hidden="true" />
         <input
           type="file"

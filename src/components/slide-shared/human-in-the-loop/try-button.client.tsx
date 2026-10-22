@@ -1,5 +1,6 @@
 'use client';
 
+import { useMotion } from '@/hooks/use-motion';
 import { cn } from '@/lib/utils';
 import { Play } from 'lucide-react';
 
@@ -14,10 +15,12 @@ interface TryButtonProps {
 
 /** The one entry to a stage's modal: a "Try it" button under its column. It opens a dialog and holds no state of its own. */
 export function TryButton({ label, stage, forStage, onOpen }: TryButtonProps) {
+  const motion = useMotion();
   return (
     <button
       type="button"
       data-try={stage}
+      {...motion}
       aria-haspopup="dialog"
       onClick={(event) => {
         event.currentTarget.focus();

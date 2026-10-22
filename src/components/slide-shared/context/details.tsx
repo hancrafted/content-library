@@ -3,6 +3,7 @@ import type { Card, DetailsProps } from './context-parts.types';
 import { matcher, panelKey } from './context-state.pure';
 import styles from './context.module.css';
 import { CategoryCard, GhostCard, RestCard, StepCard } from './details-cards';
+import { Moves } from './moves.client';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 
@@ -30,16 +31,16 @@ export function Details(p: DetailsProps) {
   // A new key replays the card's entrance when what it explains changes; stepping alone does not.
   const key = panelKey({ depth: p.renderMode, lit: p.lit, ghost: p.ghost });
   return (
-    <section className={styles.panel} aria-label={say.words.details} {...handlers}>
+    <Moves as="section" trigger={key} className={styles.panel} aria-label={say.words.details} {...handlers}>
       <div className={styles.head}>
         <b className="font-semibold">{say.words.modes.explain}</b>
         <span>{say.tech ? say.words.technical : say.words.simple}</span>
       </div>
       <div className={`${styles.card} ${styles.surface}`}>
-        <div key={key}>
+        <Moves key={key}>
           <ExplainCard card={card} />
-        </div>
+        </Moves>
       </div>
-    </section>
+    </Moves>
   );
 }

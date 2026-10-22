@@ -11,6 +11,7 @@ import { rove } from './context-window-rove';
 import styles from './context.module.css';
 import { colourOf, type Frame, type PlacedBlock } from './context.pure';
 import { loupeRows } from './loupe.pure';
+import { Moves } from './moves.client';
 import { useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { tint, vars } from './window-bits';
@@ -53,7 +54,9 @@ const BlockButton = memo(function BlockButton(props: BlockProps) {
     tokens: fullTokens(at.tokens, say.locale),
   });
   return (
-    <button
+    <Moves
+      as="button"
+      trigger={`${hot}|${inWindow}|${on}|${at.start}|${at.tokens}`}
       type="button"
       className={styles.block}
       data-part={block.key}
@@ -112,7 +115,8 @@ function Outline({ p, places }: { readonly p: ContextWindowProps; readonly place
   if (start === undefined) return null;
   const size = p.ghost ? 0 : own.reduce((sum, b) => sum + b.tokens, 0);
   return (
-    <div
+    <Moves
+      trigger={`${start}|${size}|${p.ghost}`}
       className={styles.outline}
       aria-hidden="true"
       data-ghost={p.ghost ? '' : undefined}
@@ -134,14 +138,15 @@ function Labels({ p, say }: Part) {
   return (
     <div className={styles.labels}>
       {p.window.lines.map((line) => (
-        <div
+        <Moves
           key={line.id}
+          trigger={line.tokens <= p.frame.used}
           className={styles.label}
           data-crossed={line.tokens <= p.frame.used ? '' : undefined}
           style={vars({ '--f': line.tokens / p.window.tokens })}
         >
           {line.label} <b className="font-semibold">{line.short}</b>
-        </div>
+        </Moves>
       ))}
       <div className={styles.labelLimit}>{fill(say.words.limit, { window: k(say, p.window.tokens) })}</div>
     </div>
@@ -198,7 +203,8 @@ export function ContextWindow(p: ContextWindowProps) {
   const say = useSay(p);
   const handlers = useLighting(p);
   return (
-    <section
+    <Moves
+      as="section"
       className={styles.ctx}
       aria-label={say.words.contextWindow}
       data-view={say.tech ? 'grid' : 'bar'}
@@ -210,6 +216,6 @@ export function ContextWindow(p: ContextWindowProps) {
           {say.tech ? <Grid p={p} say={say} onKeyDown={rove} /> : <Bar p={p} say={say} />}
         </div>
       </div>
-    </section>
+    </Moves>
   );
 }

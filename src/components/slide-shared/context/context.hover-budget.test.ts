@@ -2,7 +2,7 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { Attention } from './attention';
+import { Attention } from './attention.client';
 import { contextViewData } from './context';
 import { ContextCategory } from './context-category';
 import { createState } from './context-state.pure';

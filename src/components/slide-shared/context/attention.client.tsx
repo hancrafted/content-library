@@ -1,3 +1,6 @@
+'use client';
+
+import { useMotion } from '@/hooks/use-motion';
 import { memo, useMemo, useRef, type FocusEvent, type PointerEvent } from 'react';
 import { axisMaxOf, bucketOf, EDGE } from './attention-curve.pure';
 import { useDock } from './attention-dock';
@@ -10,6 +13,7 @@ import { colourOf } from './context.pure';
 import type { AttentionLayout, Step } from './context.types';
 import { nameOf } from './conversation-body';
 import { Crossed, crossedText } from './details-cards';
+import { Moves } from './moves.client';
 import { partOf, useLighting } from './use-lighting';
 import { useSay } from './use-say';
 import { tint, vars } from './window-bits';
@@ -43,8 +47,10 @@ const pinAttrs = (pin: Pin | null) => (pin ? { 'data-pin': pin.side, style: vars
 const AttentionRow = memo(function AttentionRow({ say, step, units, max, on, pin, bucket }: RowProps) {
   const name = nameOf(say, step);
   const colour = colourOf(stepCat(step), say.tech ? 'technical' : 'simple');
+  const motion = useMotion(`${units}|${max}|${on}|${pin?.side}${pin?.slot}`);
   return (
     <div
+      {...motion}
       className={styles.attRow}
       data-row=""
       data-part={step.id}
@@ -117,6 +123,18 @@ function AxisLabel({ max }: { readonly max: number }) {
   );
 }
 
+function Head({ say, menu }: { readonly say: Say; readonly menu: AttentionProps['menu'] }) {
+  return (
+    <div className={styles.head}>
+      <b className="font-semibold">{say.words.modes.attention}</b>
+      <div className={styles.headEnd}>
+        <span className={styles.caption}>{say.words.illustrative}</span>
+        {menu && <AttentionMenu words={say.words} menu={menu} />}
+      </div>
+    </div>
+  );
+}
+
 export function Attention(p: AttentionProps) {
   const say = useSay(p);
   const list = useRef<HTMLDivElement>(null);
@@ -126,14 +144,13 @@ export function Attention(p: AttentionProps) {
   const max = axisMaxOf(p.attention.map((a) => a.units));
   const head = fill(say.words.readoutHead, { step: r.step, steps: r.steps });
   return (
-    <section className={`${styles.panel} ${styles.attentionPart}`} aria-label={say.words.modes.attention} {...handlers}>
-      <div className={styles.head}>
-        <b className="font-semibold">{say.words.modes.attention}</b>
-        <div className={styles.headEnd}>
-          <span className={styles.caption}>{say.words.illustrative}</span>
-          {p.menu && <AttentionMenu words={say.words} menu={p.menu} />}
-        </div>
-      </div>
+    <Moves
+      as="section"
+      className={`${styles.panel} ${styles.attentionPart}`}
+      aria-label={say.words.modes.attention}
+      {...handlers}
+    >
+      <Head say={say} menu={p.menu} />
       <div className={`${styles.card} ${styles.surface} ${styles.attCard}`}>
         <div className={styles.kicker}>{fill(say.words.attentionKicker, { head })}</div>
         <p>{say.words.attentionLead}</p>
@@ -143,6 +160,6 @@ export function Attention(p: AttentionProps) {
         </div>
         <Crossed text={crossedText({ words: say.words }, r)} />
       </div>
-    </section>
+    </Moves>
   );
 }

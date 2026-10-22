@@ -3,6 +3,7 @@ import type { TimelineProps } from './context-parts.types';
 import { fill, stepCat, stepSize, storyOf, type Say } from './context-view';
 import styles from './context.module.css';
 import { colourOf } from './context.pure';
+import { Moves } from './moves.client';
 import { useSay } from './use-say';
 import { tint, vars } from './window-bits';
 
@@ -60,10 +61,16 @@ function Preview({ p, say, f }: PartProps) {
       <span className={styles.ghost} aria-hidden="true" style={vars({ '--f': f(preview) })}>
         {preview}
       </span>
-      <span className={`${styles.tip} font-medium`} aria-hidden="true" style={vars({ '--f': f(preview) })}>
+      <Moves
+        as="span"
+        trigger={preview}
+        className={`${styles.tip} font-medium`}
+        aria-hidden="true"
+        style={vars({ '--f': f(preview) })}
+      >
         {storyOf(say, step).event}
         <small className="text-caption">{stepSize(say, step)}</small>
-      </span>
+      </Moves>
     </>
   );
 }
@@ -71,8 +78,10 @@ function Preview({ p, say, f }: PartProps) {
 function Marks({ p, say, f }: PartProps) {
   const depth = say.tech ? 'technical' : 'simple';
   return p.chat.steps.map((step, i) => (
-    <span
+    <Moves
+      as="span"
       key={step.id}
+      trigger={i >= p.step}
       className={styles.mark}
       aria-hidden="true"
       data-big={p.notes[step.id]?.big ? '' : undefined}
@@ -96,6 +105,25 @@ const rangeAttrs = (p: TimelineProps, say: Say) => ({
   onChange: (event: ChangeEvent<HTMLInputElement>) => p.onCommit(Number(event.target.value)),
 });
 
+/** The filled part of the rail and the thumb on it: both travel to the step on a transition. */
+function Fill({ step, at }: { readonly step: number; readonly at: number }) {
+  return <Moves as="span" trigger={step} className={styles.fill} aria-hidden="true" style={vars({ '--f': at })} />;
+}
+
+function Thumb({ step, at }: { readonly step: number; readonly at: number }) {
+  return (
+    <Moves
+      as="span"
+      trigger={step}
+      className={`${styles.thumb} font-semibold`}
+      aria-hidden="true"
+      style={vars({ '--f': at })}
+    >
+      {step}
+    </Moves>
+  );
+}
+
 export function Timeline(p: TimelineProps) {
   const say = useSay(p);
   const { track, handlers } = usePointer(p);
@@ -106,12 +134,10 @@ export function Timeline(p: TimelineProps) {
       <div className={styles.head} aria-hidden="true" />
       <div ref={track} className={styles.track}>
         <span className={styles.railLine} aria-hidden="true" />
-        <span className={styles.fill} aria-hidden="true" style={vars({ '--f': f(p.step) })} />
+        <Fill step={p.step} at={f(p.step)} />
         <Marks p={p} say={say} f={f} />
         <input {...rangeAttrs(p, say)} {...handlers} />
-        <span className={`${styles.thumb} font-semibold`} aria-hidden="true" style={vars({ '--f': f(p.step) })}>
-          {p.step}
-        </span>
+        <Thumb step={p.step} at={f(p.step)} />
         <Preview p={p} say={say} f={f} />
       </div>
       <div className={styles.stepLabel} aria-hidden="true">
