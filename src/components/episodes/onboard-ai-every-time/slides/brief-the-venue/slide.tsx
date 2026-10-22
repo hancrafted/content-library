@@ -54,7 +54,7 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
 type StageId = keyof typeof en.stages;
 
 /**
- * Brief the venue (Spec Option 4a): one task walked through BRIEF as a Workflow drawn in stages. Six stage columns hold their
+ * Brief the venue (Spec Option 4a): one task walked through BRIEF as a Workflow drawn in stages. Seven stage columns hold their
  * jobs, every job a fresh chat; hairlines fan out to three venue chats and back in, and the signed-off requirements
  * card is the one focal point. Static at rest, hover only: pointing at a stage dims the others, every node opens a
  * two-line popover, and the Interview opens its worked chat. The markup reads as an ordered list of stages.
@@ -150,6 +150,7 @@ export const briefTheVenue = slide({
               party: stageSlot('party'),
               interview: { ...stageSlot('interview'), target: target(INTERVIEW) },
               requirements: { ...stageSlot('requirements'), target: target(REQUIREMENTS), gateLabel: t('card.gate') },
+              tickets: stageSlot('tickets'),
               research: {
                 ...stageSlot('research'),
                 target: target(RESEARCH),
