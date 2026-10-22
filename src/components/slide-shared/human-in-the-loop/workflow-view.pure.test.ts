@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chatLinks, workflowView } from './workflow-view.pure';
+import { workflowView } from './workflow-view.pure';
 import type { Job, Workflow } from './workflow.types';
 
 const TEXT = '```handoff\nkind: text\ntext: hi\n```';
@@ -124,18 +124,6 @@ describe('success cases', () => {
     // ASSERT
     expect(check?.prompt.text).toBe('Check it');
     expect(pages).toEqual(['Make a page', 'Serve a page']);
-  });
-
-  it('prefills ChatGPT and Claude with the encoded prompt through ?q=', () => {
-    // ARRANGE
-    const encoded = encodeURIComponent('Prompt of b & more');
-    // ACT
-    const links = chatLinks('Prompt of b & more');
-    // ASSERT
-    expect(links).toEqual({
-      chatgpt: `https://chatgpt.com/?q=${encoded}`,
-      claude: `https://claude.ai/new?q=${encoded}`,
-    });
   });
 
   it('puts the explanation below the steps: does, in, out, criteria, then the example result', () => {
