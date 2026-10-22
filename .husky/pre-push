@@ -13,15 +13,19 @@ done)
 if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|playwright\.config\.ts|src/components/|src/app/|tests/browser/)'; then
   # Playwright's webServer serves `out/` on the preview port, so the hook only builds.
   # The Chromium browser Playwright drives comes from `npx playwright install chromium` (once per machine and per version).
-  echo "push touches the browser lane: building and running test:browser"
+  # The post-build tests read the same `out/`, so they run too: a change to what a page shows
+  # (an Episode's captured text) fails here, not only on the PR.
+  echo "push touches the browser lane: building and running test:build and test:browser"
   npm run build </dev/null || exit 1
+  built=1
+  npm run test:build </dev/null || exit 1
   npx playwright install chromium </dev/null >/dev/null || exit 1
   npm run test:browser </dev/null || exit 1
 fi
 
 # A push to main triggers the Pages deploy, so it also runs the build lanes
 # verify skips. Branch pushes stay fast; CI builds them on the PR.
-if printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
+if [ -z "$built" ] && printf '%s\n' "$refs" | grep -q ' refs/heads/main '; then
   echo "push to main: running build and test:build"
   npm run build </dev/null && npm run test:build </dev/null || exit 1
 fi
