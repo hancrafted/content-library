@@ -3,8 +3,8 @@ import { stringify } from 'yaml';
 import { isNewSchema, loadWorkflow } from './workflow-loader.pure';
 import { slotSample } from './workflow-sample.pure';
 
-const PLAN = '---\nkind: plan\n---\n# Plan\n## Pieces\nOne, two.\n';
-const RESEARCH = '---\nkind: research\n---\n# Mill\n## Cost\n140\n';
+const PLAN = '# Plan\n## Pieces\nOne, two.\n';
+const RESEARCH = '# Mill\n## Cost\n140\n';
 const section = { heading: 'Task', purpose: 'task', text: 'Do it.' };
 const details = (example: string | string[]) => ({ why: 'Because.', example, goodLooksLike: ['Clear.'] });
 const purposes = Object.fromEntries(['role', 'context', 'task', 'steps', 'template', 'scope'].map((p) => [p, `${p}.`]));
@@ -19,8 +19,8 @@ function base() {
     techniques: [{ id: 'delimiters', tier: 'basic', title: 'Delimiters', explain: 'Fence pasted text.' }],
     reviewer: { sections: [{ heading: 'Inputs', purpose: 'context', text: '{{inputs}} {{checks}} {{template}}' }] },
     templates: {
-      plan: '---\nkind: plan\n---\n# <Title>\n## Pieces\n',
-      research: '---\nkind: research\n---\n# <What>\n## Cost\n',
+      plan: '# <Title>\n## Pieces\n',
+      research: '# <What>\n## Cost\n',
     },
     stages: [
       {
@@ -221,7 +221,7 @@ describe('failure cases', () => {
     // ACT
     const problems = problemsOf(load(wrong));
     // ASSERT
-    expect(problems).toMatch(/entry 2 of slot "research" of task "compare".*kind "research"/);
+    expect(problems).toMatch(/entry 2 of slot "research" of task "compare".*H2 sections/);
   });
 
   it('rejects a list sample on a single slot and a lone sample on a multiple slot', () => {
@@ -346,7 +346,7 @@ describe('failure cases', () => {
     expect(problems).toMatch(/Slot "later".*names no output of an earlier stage/);
   });
 
-  it('rejects a sample of the wrong kind or with other H2s than its template', () => {
+  it('rejects a sample of another template or with other H2s than its template', () => {
     // ARRANGE
     const kind = (file: File) => void (research(file).slots[0]!.sample = RESEARCH);
     const h2 = (file: File) => void (research(file).slots[0]!.sample = PLAN.replace('Pieces', 'Parts'));
@@ -354,7 +354,7 @@ describe('failure cases', () => {
     const r0 = problemsOf(load(kind));
     const r1 = problemsOf(load(h2));
     // ASSERT
-    expect(r0).toMatch(/kind "research"/);
+    expect(r0).toMatch(/H2 sections \[Cost\]/);
     expect(r1).toMatch(/H2 sections \[Parts\]/);
   });
 

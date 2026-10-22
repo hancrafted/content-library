@@ -4,7 +4,6 @@ import { useMotion } from '@/hooks/use-motion';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 import { useId, useState } from 'react';
-import { Tip } from '../tip/tip.client';
 import { PromptActions } from './prompt-actions.client';
 import { PromptBody } from './prompt-body.client';
 import { joinPrompt, type PromptSection, type SlotValues } from './prompt-sections.pure';
@@ -14,8 +13,8 @@ export type { PromptSection, PromptSlot, PromptTechnique } from './prompt-sectio
 export type { PromptKit, TryPromptWords } from './try-prompt.types';
 
 /*
- * One prompt as a disclosure, collapsed by default: a row with the label and two
- * icon buttons (copy, ChatGPT), and the prompt text below when opened. Whether it is open is local to
+ * One prompt as a disclosure, collapsed unless `defaultOpen`: a row with the label and two
+ * buttons (copy prompt, open in ChatGPT), and the prompt text below when opened. Whether it is open is local to
  * this leaf (it passes the reload test, FE-001).
  *
  * A prompt may come as sections: opened, each shows its H2 and, when it has a purpose with an explanation, a marker
@@ -35,28 +34,24 @@ function Toggle({
   open,
   label,
   panel,
-  tip,
   onToggle,
 }: {
   open: boolean;
   label: string;
   panel: string;
-  tip: string;
   onToggle: () => void;
 }) {
   return (
-    <Tip text={tip} place="above" align="start" className="min-w-0 flex-1">
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-controls={panel}
-        onClick={onToggle}
-        className="inline-flex min-h-9 w-full cursor-pointer items-center gap-1.5 rounded-lg text-left text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <Chevron open={open} />
-        {label}
-      </button>
-    </Tip>
+    <button
+      type="button"
+      aria-expanded={open}
+      aria-controls={panel}
+      onClick={onToggle}
+      className="inline-flex min-h-9 min-w-0 flex-1 cursor-pointer items-center gap-1.5 rounded-lg text-left text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <Chevron open={open} />
+      {label}
+    </button>
   );
 }
 
@@ -72,6 +67,8 @@ interface TryPromptProps {
   /** Pasted values by marker name; with `values` the parent owns them, otherwise this leaf does. */
   readonly values?: SlotValues;
   readonly onChange?: (values: SlotValues) => void;
+  /** Opens the prompt at first: the first prompt of a modal, so the viewer sees what to do without a click. */
+  readonly defaultOpen?: boolean;
 }
 
 interface RowProps {
@@ -101,13 +98,7 @@ function Row({ prompt, kit, open, panel, text, onToggle }: RowProps) {
   const { words } = kit;
   return (
     <div className="flex flex-wrap items-center gap-2 p-1.5 pl-2">
-      <Toggle
-        open={open}
-        panel={panel}
-        label={command ? words.commandLabel : words.promptLabel}
-        tip={words.toggleTip ?? (command ? words.commandLabel : words.promptLabel)}
-        onToggle={onToggle}
-      />
+      <Toggle open={open} panel={panel} label={command ? words.commandLabel : words.promptLabel} onToggle={onToggle} />
       <PromptActions text={text} copyLabel={command ? words.copyCommand : words.copyPrompt} kit={kit} />
     </div>
   );
@@ -115,7 +106,7 @@ function Row({ prompt, kit, open, panel, text, onToggle }: RowProps) {
 
 export function TryPrompt(props: TryPromptProps) {
   const { prompt, kit } = props;
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(props.defaultOpen === true);
   const panel = useId();
   const { current, onValue } = useSlotValues(props);
   const parts = { sections: sectionsOf(prompt), slots: prompt.slots ?? [] };

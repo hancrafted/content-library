@@ -4,8 +4,7 @@ import { markdownBlocks } from './markdown-blocks.pure';
 describe('success cases', () => {
   it('reads headings, paragraphs and both kinds of list, and leaves the front matter out', () => {
     // ARRANGE
-    const source =
-      '---\nkind: research\n---\n# Old Mill\n## Cost\n140 euros\nper person.\n## Sources\n- Brochure\n- Site\n1. First\n2. Second\n';
+    const source = '# Old Mill\n## Cost\n140 euros\nper person.\n## Sources\n- Brochure\n- Site\n1. First\n2. Second\n';
     // ACT
     const blocks = markdownBlocks(source);
     // ASSERT

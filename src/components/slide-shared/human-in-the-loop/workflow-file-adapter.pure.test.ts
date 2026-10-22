@@ -28,6 +28,23 @@ describe('success cases', () => {
     expect(edges).toEqual(expected);
   });
 
+  it('gives every job its bold title and its one-line summary from the Workflow file', () => {
+    // ARRANGE
+    const expected = [
+      ['Break it up', 'Into smaller pieces, in order, with what depends on what'],
+      ['AI grills you', 'In an interactive interview, a few questions at a time'],
+      ['You sign off', 'The requirements card, line by line'],
+      ['Write tickets', 'One self-contained ticket per option to research'],
+      ['Chat', 'One fresh chat per ticket, with web search'],
+      ['Rank the results', 'Against your requirements, and you pick at Gate 2'],
+      ['Recommend one', 'A one-minute read with next steps'],
+    ];
+    // ACT
+    const shown = jobs.map((job) => [job.title, job.detail]);
+    // ASSERT
+    expect(shown).toEqual(expected);
+  });
+
   it('draws seven columns, the sign-off card as the focal job and the last task as the deliverable', () => {
     // ARRANGE
     const roles = jobs.map((job) => jobRole(workflow, job));

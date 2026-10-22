@@ -11,11 +11,11 @@ import type { GateCard, Job } from './workflow.types';
  * where the Slide gives it one.
  */
 
-/** The `ai` edge on a job the AI does: a fresh chat. */
-const AI_EDGE = 'border border-ai/50 bg-card shadow-md shadow-ai/15';
+/** Every card of the diagram shares one quiet look; the AI's sparkle, not the frame, says the AI does the job. */
+const CARD = 'rounded-xl border border-border bg-card';
 
 const NODE_BUTTON =
-  'cursor-pointer outline-none transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring';
+  'relative z-10 cursor-pointer outline-none transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring';
 
 /** A job node: a button opening its popover where there is one, else a plain box of the same look. */
 function Node({ copy, className, children }: { copy?: NodeCopy; className: string; children: ReactNode }) {
@@ -69,20 +69,20 @@ export function AiJob({ job, slot, gateLabel }: JobViewProps) {
   const detail = slot.detail ?? job.detail;
   return (
     <>
-      <li className={cn('flex flex-col gap-1 rounded-2xl p-3', AI_EDGE)}>
+      <li className={cn('flex flex-col gap-1 p-3', CARD)}>
         <span className="flex items-center gap-1.5 text-caption font-semibold">
-          <Sparkle className="size-3.5" />
+          <Sparkle className="size-3.5 shrink-0" />
           {job.title}
         </span>
         {detail && <span className="text-caption text-muted-foreground">{detail}</span>}
         {gateLabel && (
-          <span className="mt-1 inline-flex items-center gap-1 text-caption font-medium">
+          <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground">
             {gateLabel}
-            {slot.marker}
+            {slot.marker && <span className="relative z-10">{slot.marker}</span>}
           </span>
         )}
       </li>
-      {slot.after && <li className="flex justify-center">{slot.after}</li>}
+      {slot.after && <li className="relative z-10 flex justify-center">{slot.after}</li>}
     </>
   );
 }
@@ -101,30 +101,39 @@ function CardLines({ lines }: { readonly lines: readonly string[] }) {
 /** The focal job as the stage's card, the one focal point: its gate, its lines, its status. */
 export function FocalJob({ job, slot, gateLabel, card }: JobViewProps) {
   const { label, lines, status } = card ?? { label: job.title, lines: [], status: '' };
+  const detail = slot.detail ?? job.detail;
   return (
-    <li className="-rotate-1 rounded-xl border border-border bg-background p-2.5 shadow-md">
-      {gateLabel && <p className="text-caption font-medium text-muted-foreground uppercase">{gateLabel}</p>}
-      <p className="text-caption font-semibold">{label}</p>
+    <li className={cn('p-3 shadow-sm', CARD)}>
+      {gateLabel && (
+        <p className="w-fit rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground">{gateLabel}</p>
+      )}
+      <p className="mt-1.5 text-caption font-semibold">{label}</p>
+      {detail && <p className="text-caption text-muted-foreground">{detail}</p>}
       <CardLines lines={lines} />
-      <div className="mt-3 flex flex-wrap items-center gap-1.5">
-        <p className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-caption font-semibold text-primary-foreground">
-          <Check className="size-3.5" />
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        <p className="inline-flex items-center gap-1 text-caption font-medium text-foreground">
+          <Check className="size-3.5 shrink-0" />
           {status}
         </p>
-        {slot.marker}
+        {slot.marker && <span className="relative z-10">{slot.marker}</span>}
       </div>
     </li>
   );
 }
 
-/** The pills of a fan-out stand in a column of about 85px at 1280px: no icon beside the name, so "Chat 1" fits whole. */
-const CHAT_PILL = 'flex h-12 w-full items-center justify-between gap-1 rounded-full px-2 text-caption font-semibold';
+/** The chats of a fan-out: one card height each, so with the column's gap they stand one fan pitch apart. */
+const CHAT_PILL = 'flex h-12 w-full items-center justify-between gap-1 px-3 text-caption font-semibold';
 
-/** The parallel chats of a fanned-out job, each ticked where the job is checked against its criteria. */
+/**
+ * The parallel chats of a fanned-out job, each ticked where the job is checked against its criteria. The job's summary
+ * hangs under the last chat, out of the flow, so the chats keep standing on the fan's branches.
+ */
 export function ChatJobs({ job, slot, stageName, words }: JobViewProps) {
-  return chatNames(job).map((name) => (
-    <li key={name}>
-      <Node copy={popoverOf(slot.popover, stageName)} className={cn(CHAT_PILL, AI_EDGE)}>
+  const names = chatNames(job);
+  const detail = slot.detail ?? job.detail;
+  return names.map((name, at) => (
+    <li key={name} className="relative">
+      <Node copy={popoverOf(slot.popover, stageName)} className={cn(CHAT_PILL, CARD)}>
         <span className="min-w-0 truncate">{name}</span>
         {job.reviewed && (
           <span className="flex items-center text-muted-foreground">
@@ -133,6 +142,9 @@ export function ChatJobs({ job, slot, stageName, words }: JobViewProps) {
           </span>
         )}
       </Node>
+      {detail && at === names.length - 1 && (
+        <p className="absolute inset-x-1 top-full mt-2 text-caption text-muted-foreground">{detail}</p>
+      )}
     </li>
   ));
 }
@@ -141,7 +153,7 @@ export function ChatJobs({ job, slot, stageName, words }: JobViewProps) {
 export function DeliverableJob({ job, slot }: JobViewProps) {
   const detail = slot.detail ?? job.detail;
   return (
-    <li className="relative rounded-xl border border-foreground bg-background p-3">
+    <li className={cn('relative p-3', CARD)}>
       <svg viewBox="0 0 80 40" className="h-8 w-full" aria-hidden="true">
         <path d="M2 6h60 M2 18h76 M2 30h48" className="fill-none stroke-border" strokeWidth="3" strokeLinecap="round" />
       </svg>

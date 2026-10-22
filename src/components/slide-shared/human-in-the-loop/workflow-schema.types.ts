@@ -65,7 +65,7 @@ export interface SlotDef {
   readonly mode: SlotMode;
   readonly label: string;
   /**
-   * Required on a `do` slot; a review slot's sample is optional. Checked against the template `kind` and its H2s.
+   * Required on a `do` slot; a review slot's sample is optional. Checked against its template's H2s.
    * A `multiple` slot carries a list, one sample per entry in marker order, as many as it has markers; a `single`
    * slot carries one.
    */
@@ -96,7 +96,10 @@ export interface DetailsDef {
 
 export interface TaskDef {
   readonly id: string;
+  /** The job's bold name on the diagram, and its heading in a stage's modal. */
   readonly title: string;
+  /** One short line under the title on the diagram: what the job does, so the diagram reads at rest. */
+  readonly summary?: string;
   /** The id this task hands on; a later slot with this id takes it. A fan-out `x` hands on `x_1` … `x_N`. */
   readonly output: string;
   /** Key into `templates`; shared by the do prompt, the reviewer and the loader. */
@@ -147,7 +150,7 @@ export interface WorkflowFile {
   readonly techniques: readonly TechniqueDef[];
   /** The general reviewer, written once and joined with every task's tailored checks. */
   readonly reviewer: { readonly sections: readonly SectionDef[] };
-  /** Markdown handoff templates by kind: front matter `kind`, an H1, required H2 sections. No `{{…}}` inside. */
+  /** Markdown handoff templates by key: an H1 and the required H2 sections, no front matter. No `{{…}}` inside. */
   readonly templates: Readonly<Record<string, string>>;
   readonly stages: readonly StageDef[];
 }

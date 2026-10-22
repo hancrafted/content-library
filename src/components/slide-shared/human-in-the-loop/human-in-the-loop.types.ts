@@ -14,13 +14,15 @@ import type { Workflow } from './workflow.types';
 
 /** The visual's own labels, one set per locale (human-in-the-loop.config.yml). */
 export interface UiWords {
-  /** The accessible name and tooltip of the Workflow pills. */
+  /** The visible label and accessible name of the Workflow picker: the use case. */
   readonly workflow: string;
   /** The Technical toggle's name, and its tooltip. */
   readonly technical: string;
   readonly technicalTip: string;
   readonly download: string;
   readonly upload: string;
+  /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
+  readonly gate: string;
   /** The toolbar's accessible name. */
   readonly toolbar: string;
   readonly close: string;
@@ -44,9 +46,6 @@ export interface UiWords {
   readonly doIt: string;
   readonly reviewIt: string;
   readonly chatN: string;
-  readonly chatTip: string;
-  /** The tooltip of a prompt's show/hide toggle. */
-  readonly toggleTip: string;
   readonly sectionWhy: string;
   /** The heading of a task's techniques under why it matters, and the names of the two tiers. */
   readonly sectionTechniques: string;
@@ -59,10 +58,9 @@ export interface UiWords {
   readonly collapse: string;
   readonly sampleHint: string;
   readonly sampleHintOne: string;
-  /** A paste-in slot's upload button and its add-entry button; `tooLong` is the "open in" tooltip for a long prompt. */
+  /** A paste-in slot's upload button and its add-entry button. */
   readonly slotUpload: string;
   readonly slotAdd: string;
-  readonly tooLong: string;
   readonly newTab: string;
 }
 

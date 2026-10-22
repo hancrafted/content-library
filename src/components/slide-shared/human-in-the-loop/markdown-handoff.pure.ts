@@ -1,16 +1,18 @@
 /*
- * The markdown handoff: front matter with a `kind`, one H1, then H2 sections. A template is a handoff with the
- * sections left empty; a sample or example is checked against its template's kind and H2 headings. An H2 written
- * `<like this>` in a template stands for one or more sections of any title.
+ * The markdown handoff: one H1, then H2 sections, and no front matter, because a chat app such as ChatGPT cannot be
+ * relied on to write it. A template is a handoff with the sections left empty; a sample or example is checked against
+ * its template's H2 headings. An H2 written `<like this>` in a template stands for one or more sections of any title.
  */
 
 export interface MarkdownHandoff {
-  readonly kind: string | undefined;
   readonly h1: string | undefined;
   readonly h2: readonly string[];
 }
 
-const FRONT = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/;
+const FRONT = /^---\r?\n[\s\S]*?\r?\n---\r?\n?/;
+
+/** Whether the text opens with a YAML front matter block. */
+export const hasFrontMatter = (source: string): boolean => FRONT.test(source);
 
 /** The H1 and H2 headings of a markdown body; headings inside code fences do not count. */
 function headings(body: string): { h1: string[]; h2: string[] } {
@@ -25,12 +27,10 @@ function headings(body: string): { h1: string[]; h2: string[] } {
   return found;
 }
 
-/** The kind, H1 and H2 headings of a markdown handoff. */
+/** The H1 and H2 headings of a markdown handoff. */
 export function readTemplate(source: string): MarkdownHandoff {
-  const front = FRONT.exec(source);
-  const kind = /^kind:\s*(\S+)\s*$/m.exec(front?.[1] ?? '')?.[1];
-  const { h1, h2 } = headings(front ? source.slice(front[0].length) : source);
-  return { kind, h1: h1[0], h2 };
+  const { h1, h2 } = headings(source.replace(FRONT, ''));
+  return { h1: h1[0], h2 };
 }
 
 const isPlaceholder = (heading: string): boolean => /^<.+>$/.test(heading);
@@ -49,10 +49,7 @@ function sectionsMatch(template: readonly string[], sample: readonly string[]): 
 export function handoffProblems(source: string, template: MarkdownHandoff): string[] {
   const read = readTemplate(source);
   const problems: string[] = [];
-  if (!FRONT.test(source)) problems.push('has no front matter with a kind');
-  else if (read.kind !== template.kind) {
-    problems.push(`has the kind "${String(read.kind)}" but its template has the kind "${String(template.kind)}"`);
-  }
+  if (hasFrontMatter(source)) problems.push('has front matter; a handoff starts with its H1');
   if (read.h1 === undefined) problems.push('has no H1 title');
   if (!sectionsMatch(template.h2, read.h2)) {
     problems.push(`has the H2 sections [${read.h2.join(', ')}] where its template has [${template.h2.join(', ')}]`);

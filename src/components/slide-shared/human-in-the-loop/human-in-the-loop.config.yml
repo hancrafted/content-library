@@ -1,6 +1,6 @@
 # The words of the visual's own chrome (not of any Workflow). The German twin holds the same keys.
 ui:
-  workflow: Workflow
+  workflow: Use case
   toolbar: Workflow controls
   technical: Technical
   technicalTip: 'Technical: show the one-time setup and the /skill commands'
@@ -8,8 +8,9 @@ ui:
   upload: Upload your own Workflow
   close: Close
   copied: Copied
-  tryIt: Try it
-  tryTitle: '{stage}: Try it'
+  gate: 'Gate {n}'
+  tryIt: Practice it
+  tryTitle: '{stage}: Practice it'
   tryFor: 'for {stage}'
   moveLabel: 'BRIEF {letter}: {why}'
   promptLabel: Prompt
@@ -23,8 +24,6 @@ ui:
   doIt: Do it
   reviewIt: Review it
   chatN: 'Chat {n}'
-  chatTip: 'The prompt for chat {n}: paste it into its own fresh chat'
-  toggleTip: Show or hide the text
   sectionWhy: Why it matters
   sectionTechniques: Techniques it teaches
   tierBasic: Basic
@@ -37,5 +36,4 @@ ui:
   sampleHintOne: 'Sample: {title} · 1 line'
   slotUpload: Upload a markdown file
   slotAdd: Add another entry
-  tooLong: too long for a link, so it is copied and an empty chat opens
   newTab: opens in a new tab

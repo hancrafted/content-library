@@ -21,7 +21,7 @@ describe('success cases', () => {
     const text = (prompt.sections ?? []).map((section) => section.text).join('\n');
     // ASSERT
     expect(text).toContain(`This is chat ${chat}. Take ticket number ${chat}`);
-    expect(text).toContain('```markdown\n---\nkind: research');
+    expect(text).toContain('```markdown\n# <What was researched>');
     expect(text).toContain('{{tickets}}');
     expect(prompt.slots?.map((slot) => slot.id)).toEqual(['tickets']);
   });
@@ -53,9 +53,9 @@ describe('success cases', () => {
     const prompt = reviewPrompt(file, research);
     const text = joined(prompt);
     // ASSERT
-    expect(text).toContain('1. The result covers exactly one ticket');
+    expect(text).toContain('2. The result covers exactly one ticket');
     expect(text).toContain("### One chat's research result");
-    expect(text).toContain('kind: research');
+    expect(text).toContain('## Fit against the requirements');
     expect(prompt.slots?.map((slot) => slot.id)).toEqual(['tickets', 'research_result']);
     expect(text).not.toContain('{{');
   });

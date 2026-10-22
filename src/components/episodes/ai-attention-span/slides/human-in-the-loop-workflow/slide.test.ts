@@ -120,14 +120,14 @@ describe('success cases', () => {
     const $ = scene('en');
     const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');
     const actual = {
-      jobLists: pipeline.find('> li > ol').length,
+      jobLists: pipeline.find('> li > div > ol').length,
       workers: pipeline
-        .find('> li > ol')
+        .find('> li > div > ol')
         .eq(4)
         .find('li')
-        .map((_, el) => $(el).text().replace('Checked against the card', '').trim())
+        .map((_, el) => $(el).children().first().text().replace('Checked against the card', '').trim())
         .get(),
-      card: pipeline.text().includes('Requirements card'),
+      card: pipeline.text().includes('You sign off'),
       connectors: pipeline.find('> li > [aria-hidden="true"]').length,
       fans: pipeline.find('svg[data-fan]').length,
     };

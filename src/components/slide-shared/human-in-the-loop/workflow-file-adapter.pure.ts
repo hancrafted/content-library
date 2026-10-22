@@ -11,6 +11,7 @@ function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
   return {
     id: task.id,
     title: task.title,
+    detail: task.summary,
     dependsOn: producerIdsOf(file, stageIndex, task),
     inputs: task.slots.map((slot) => slot.id),
     outputs: [{ id: task.output }],

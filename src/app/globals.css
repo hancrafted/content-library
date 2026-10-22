@@ -249,12 +249,15 @@
     border-color: var(--brand-accent);
   }
 
-  /* Items of one group: with `--dim-others`, pointing at one dims its siblings so the audience follows it. */
+  /*
+   * Items of one group: with `--dim-others`, pointing at one dims its siblings so the audience follows it. Keyboard
+   * focus counts; focus a click leaves behind does not, so closing a dialog its item opened dims nothing.
+   */
   .focus-group__item {
     transition: opacity 200ms ease-out;
   }
-  .focus-group--dim-others:has(.focus-group__item:is(:hover, :focus-visible, :focus-within))
-    .focus-group__item:not(:hover, :focus-visible, :focus-within) {
+  .focus-group--dim-others:has(.focus-group__item:is(:hover, :focus-visible, :has(:focus-visible)))
+    .focus-group__item:not(:hover, :focus-visible, :has(:focus-visible)) {
     opacity: 0.4;
   }
 

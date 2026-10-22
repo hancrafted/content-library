@@ -150,7 +150,7 @@ describe('success cases', () => {
     // ACT
     const text = report?.text ?? '';
     // ASSERT
-    expect(text).toMatch(/paste back into the chat that did the work/);
+    expect(text).toMatch(/paste it back into the chat that did the work/);
   });
 });
 
@@ -205,7 +205,7 @@ describe('edge cases', () => {
     // ARRANGE
     const examples = [...task('venue').details.example];
     const chats = 3;
-    const prices = examples.map((each) => /(\d+) euros per person/.exec(each)?.[1]);
+    const prices = examples.map((each) => /(\d+) euros with catering/.exec(each)?.[1]);
     // ACT
     const names = examples.map((each) => /^# (.+)$/m.exec(each)?.[1]);
     // ASSERT
@@ -311,7 +311,7 @@ describe.each(SHIPPED)('content defects of %s', (_name, yaml, facts) => {
     // ASSERT
     expect(reviews.length).toBeGreaterThan(0);
     expect(missing).toEqual([]);
-    expect(report?.text).toMatch(/chat that did the work|Chat zurückkopiere, der die Arbeit gemacht hat/);
+    expect(report?.text).toMatch(/chat that did the work|Chat zurück, der die Arbeit gemacht hat/);
   });
 
   it('keeps scenario facts out of every general instruction', () => {

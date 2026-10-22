@@ -39,12 +39,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('reports a missing template kind as a problem, not a throw', () => {
+  it('reports a template with front matter as a problem, not a throw', () => {
     // ARRANGE
-    const source = fixture().replace('kind: greeting', 'kind: other');
+    const source = fixture().replace(
+      '  greeting: |\n    # <Greeting',
+      '  greeting: |\n    ---\n    kind: greeting\n    ---\n    # <Greeting',
+    );
     // ACT
     const result = loadWorkflow(source);
     // ASSERT
-    expect('problems' in result && result.problems.join('\n')).toContain('front matter kind "greeting"');
+    expect('problems' in result && result.problems.join('\n')).toContain('Template "greeting" has front matter');
   });
 });

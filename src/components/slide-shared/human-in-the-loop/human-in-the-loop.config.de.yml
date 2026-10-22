@@ -1,6 +1,6 @@
 # Die Wörter der Oberfläche des Visuals, mit denselben Schlüsseln wie die englische Datei.
 ui:
-  workflow: Ablauf
+  workflow: Anwendungsfall
   toolbar: Ablauf-Steuerung
   technical: Technisch
   technicalTip: 'Technisch: zeigt die einmalige Einrichtung und die /Skill-Befehle'
@@ -8,8 +8,9 @@ ui:
   upload: Eigenen Ablauf hochladen
   close: Schließen
   copied: Kopiert
-  tryIt: Ausprobieren
-  tryTitle: '{stage}: Ausprobieren'
+  gate: 'Freigabe {n}'
+  tryIt: Jetzt üben
+  tryTitle: '{stage}: Üben'
   tryFor: 'für {stage}'
   moveLabel: 'BRIEF {letter}: {why}'
   promptLabel: Prompt
@@ -23,8 +24,6 @@ ui:
   doIt: Mach es
   reviewIt: Prüfe es
   chatN: 'Chat {n}'
-  chatTip: 'Der Prompt für Chat {n}: in einen eigenen, frischen Chat einfügen'
-  toggleTip: Den Text ein- oder ausblenden
   sectionWhy: Warum es zählt
   sectionTechniques: Diese Techniken übt es
   tierBasic: Basis
@@ -37,5 +36,4 @@ ui:
   sampleHintOne: 'Beispiel: {title} · 1 Zeile'
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
-  tooLong: zu lang für einen Link, daher wird er kopiert und ein leerer Chat geöffnet
   newTab: öffnet in neuem Tab
