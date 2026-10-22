@@ -4,7 +4,7 @@ id: ARCH-003
 title: 'Testing'
 domain: architecture
 rules: true
-files: ['src/**/*.test.ts']
+files: ['src/**/*.test.ts', '{tests/browser,skills}/**/*.browser.test.ts']
 paths: ['**/*.test.ts', 'src/**/*.pure.ts']
 description: "What a test file may do and how it is shaped: six behavioural Don'ts that keep green meaningful everywhere, a three-block suite split, marked test bodies and two import homes under src/, and browser tests that wait on the page, never on time."
 ---
@@ -24,7 +24,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ### 2. Suite structure
 
-1. Under `src/**/*.test.ts`, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. There is no fourth name. (📜 Rule: `suite-three-blocks`)
+1. In every test under `src/` and every browser test, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. There is no fourth name. (📜 Rule: `suite-three-blocks`)
 2. `describe` MUST NOT nest past two levels; a test MUST NOT sit at file top level.
 
 ### 3. Test-body structure
@@ -52,7 +52,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 1. **DO** pass every instant, seed and input a test depends on into the test explicitly. (Decision 1.1)
 2. **DO** write the expected value out by hand, so a reviewer can disagree with it. (Decision 1.2)
 3. **DO** hand-write a stand-in when a collaborator must be substituted, and keep it in the test file where a reader can see what it does. (Decision 1.2)
-4. **DO** split every suite under `src/` into `success cases`, `failure cases` and `edge cases`, with at least one test in each. (Decision 2, 📜 Rule: `suite-three-blocks`)
+4. **DO** split every suite under `src/`, and every browser test, into `success cases`, `failure cases` and `edge cases`, with at least one test in each. (Decision 2, 📜 Rule: `suite-three-blocks`)
 5. **DO** treat a block you cannot fill as a question about the subject, not a rule to route around. (Decision 2.1)
 6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
 7. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
@@ -94,7 +94,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ## Compliance and Enforcement
 
-1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts`.
+1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts` and the browser tests in `tests/browser/` and `skills/`.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
 3. **Test config:** the fast suite excludes `*.build.test.ts` and `*.browser.test.ts` (§4.2).
 4. **Lint** (Playwright plugin, from the Playwright browser lane on), over `**/*.browser.test.ts`: no fixed waits, web-first assertions (§5.1, §5.3). Until then §5 is a review duty.

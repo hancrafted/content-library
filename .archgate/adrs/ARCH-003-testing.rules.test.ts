@@ -15,7 +15,7 @@ interface Reported {
 }
 
 // Stands in for archgate's RuleContext over an in-memory file set. The rules
-// only glob `src/**/*.test.ts`, so the double matches that one shape.
+// glob `src/**/*.test.ts` and the browser tests in `tests/browser/` and `skills/`; the double matches those shapes.
 function makeCtx(files: Record<string, string>) {
   const violations: Reported[] = [];
   const ctx = {
@@ -23,8 +23,13 @@ function makeCtx(files: Record<string, string>) {
     scopedFiles: Object.keys(files),
     changedFiles: [],
     async glob(pattern: string) {
-      if (pattern !== 'src/**/*.test.ts') throw new Error(`unexpected glob ${pattern}`);
-      return Object.keys(files).filter((f) => f.startsWith('src/') && f.endsWith('.test.ts'));
+      const shapes: Record<string, (f: string) => boolean> = {
+        'src/**/*.test.ts': (f) => f.startsWith('src/') && f.endsWith('.test.ts'),
+        'tests/browser/**/*.browser.test.ts': (f) => f.startsWith('tests/browser/') && f.endsWith('.browser.test.ts'),
+        'skills/**/*.browser.test.ts': (f) => f.startsWith('skills/') && f.endsWith('.browser.test.ts'),
+      };
+      if (!(pattern in shapes)) throw new Error(`unexpected glob ${pattern}`);
+      return Object.keys(files).filter(shapes[pattern]);
     },
     async readFile(path: string) {
       if (path in files) return files[path];
@@ -125,7 +130,18 @@ describe('suite-three-blocks', () => {
     expect(violations.map((v) => v.message)).toEqual([expect.stringMatching(/'the drawer' is not one of/)]);
   });
 
-  it('leaves files outside src/**/*.test.ts alone', async () => {
+  it('judges browser tests in tests/browser/ and skills/ like tests under src/', async () => {
+    // ARRANGE
+    const source = block('SlideWrapper');
+    const judged = ['tests/browser/a11y.browser.test.ts', 'skills/x/scripts/y.browser.test.ts'];
+    const { ctx, violations } = makeCtx(Object.fromEntries(judged.map((f) => [f, source])));
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect([...new Set(violations.map((v) => v.file))]).toEqual(judged);
+  });
+
+  it('leaves post-build tests, rules tests and non-test files alone', async () => {
     // ARRANGE
     const source = block('SlideWrapper');
     const { ctx, violations } = makeCtx({
