@@ -16,6 +16,8 @@ interface TipProps {
   readonly place?: 'below' | 'above';
   /** Which edge of the control the bubble lines up with; `end` keeps a control at the right edge from widening the page. */
   readonly align?: 'start' | 'center' | 'end';
+  /** Extra classes for the host, e.g. `flex-1` where the control fills a row. */
+  readonly className?: string;
   readonly children: ReactNode;
 }
 
@@ -34,7 +36,7 @@ function useDismissOnEscape(shown: boolean, dismiss: () => void) {
   }, [shown, dismiss]);
 }
 
-export function Tip({ text, place = 'below', align = 'center', children }: TipProps) {
+export function Tip({ text, place = 'below', align = 'center', className, children }: TipProps) {
   const [hover, setHover] = useState(false);
   const [focus, setFocus] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -42,7 +44,7 @@ export function Tip({ text, place = 'below', align = 'center', children }: TipPr
   useDismissOnEscape(shown, () => setDismissed(true));
   return (
     <span
-      className={styles.tipHost}
+      className={className ? `${styles.tipHost} ${className}` : styles.tipHost}
       data-tip-host=""
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => {

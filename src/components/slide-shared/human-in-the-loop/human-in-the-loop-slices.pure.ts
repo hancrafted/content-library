@@ -86,6 +86,8 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       ticked: state.ticked,
       words,
       outputWords,
+      level: state.level,
+      onLevel: on.onLevel,
       onClose: on.onClose,
       onShort: on.onShort,
       onTick: on.onTick,

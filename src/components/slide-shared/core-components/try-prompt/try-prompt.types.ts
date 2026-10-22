@@ -30,6 +30,8 @@ export interface TryPromptWords {
   /** The name of a slot's upload button, and of its add-entry button; each falls back to the slot's label. */
   readonly upload?: string;
   readonly addEntry?: string;
+  /** The tooltip of the prompt's show/hide toggle; the toggle's label where absent. */
+  readonly toggleTip?: string;
 }
 
 /** What a prompt box needs from its parent: its words and the two things it can ask for, as one bundle. */

@@ -29,6 +29,8 @@ ui:
   doIt: Mach es
   reviewIt: Prüfe es
   chatN: 'Chat {n}'
+  chatTip: 'Der Prompt für Chat {n}: in einen eigenen, frischen Chat einfügen'
+  toggleTip: Den Text ein- oder ausblenden
   sectionWhy: Warum es zählt
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen

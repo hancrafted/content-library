@@ -52,6 +52,9 @@ export interface UiWords {
   readonly doIt: string;
   readonly reviewIt: string;
   readonly chatN: string;
+  readonly chatTip: string;
+  /** The tooltip of a prompt's show/hide toggle. */
+  readonly toggleTip: string;
   readonly sectionWhy: string;
   /** A paste-in slot's upload button and its add-entry button; `tooLong` is the "open in" tooltip for a long prompt. */
   readonly slotUpload: string;
@@ -147,6 +150,8 @@ export interface ModalProps {
   readonly words: UiWords;
   /** The labels of the example result's views. */
   readonly outputWords: OutputWords;
+  readonly level: Level;
+  readonly onLevel: (level: Level) => void;
   readonly onClose: () => void;
   readonly onShort: (jobId: string) => void;
   readonly onTick: (ticketId: string) => void;

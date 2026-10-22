@@ -66,6 +66,8 @@ export interface JobModalView {
 export interface StageView {
   readonly id: string;
   readonly name: string;
+  /** The one-line learning goal under the title; only a stage of the new schema has one. */
+  readonly goal?: string;
   readonly jobs: readonly JobModalView[];
 }
 
@@ -153,6 +155,7 @@ export function workflowView(workflow: Workflow, { level }: ViewOptions): Workfl
     stages: workflow.stages.map((stage) => ({
       id: stage.id,
       name: stage.name,
+      goal: stage.jobs.some((job) => job.task) ? stage.moves[0]?.why : undefined,
       jobs: stage.jobs.map((job) => jobView(job, workflow, level)),
     })),
   };

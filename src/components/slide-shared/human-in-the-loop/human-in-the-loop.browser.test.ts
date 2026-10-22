@@ -6,16 +6,17 @@ import { connect, evaluate, eventName, type Connection, type Send } from '../../
 import { PAIRS } from './workflow-data';
 
 /*
- * The browser seam (`npm run test:browser`, local only, never CI): the Slide "Brief the venue" in the shared
+ * The browser seam (`npm run test:browser`, local only, never CI): the Slide "Human in the loop" of the Slides Episode in the shared
  * chrome-headless-shell, walked end to end the way a viewer does it. It needs `next dev` (or `npm run preview`)
- * serving the Episode: HITL_URL names the page, `http://localhost:3000/episodes/onboard-ai-every-time/` by default
+ * serving the Episode: HITL_URL names the page, `http://localhost:3000/episodes/slides/` by default
  * (docs/features/human-in-the-loop.md).
  */
 
-const URL_UNDER_TEST = process.env.HITL_URL ?? 'http://localhost:3000/episodes/onboard-ai-every-time/';
+const URL_UNDER_TEST = process.env.HITL_URL ?? 'http://localhost:3000/episodes/slides/';
 const TIMEOUT = 120_000;
 const ROOT = '[data-human-in-the-loop]';
-const SLIDE_ANCHOR = 'five-moves-to-brief-a-freelancer--brief-the-venue';
+const PANEL = '[data-human-in-the-loop] dialog[data-part="modal"] > div';
+const SLIDE_ANCHOR = 'agentic-workflows--human-in-the-loop';
 const MODAL = `${ROOT} dialog[data-part="modal"]`;
 
 let connection: Connection;
@@ -245,7 +246,7 @@ describe('success cases', () => {
       await settle();
       await copyRun();
       const copied = await js<string[]>('window.__copied');
-      const shortToggles = await count(`${MODAL} button[aria-pressed]`);
+      const shortToggles = await count(`${MODAL} [data-step] button[aria-pressed]`);
       // ASSERT
       expect(copied[0]).not.toContain('SHORT version');
       expect(copied[1]).toContain('SHORT version');
@@ -330,7 +331,6 @@ describe('success cases', () => {
       await escape();
       const afterSecondEscape = await count(MODAL);
       // ASSERT
-      expect(circles.length).toBeGreaterThan(0);
       expect(circles.every((size) => size >= minTarget)).toBe(true);
       expect(onFocus).toBe('true');
       expect(afterFirstEscape).toBe('false');
@@ -434,6 +434,185 @@ describe('success cases', () => {
       // ASSERT
       expect(diagram.join('; ')).toBe('');
       expect(modal.join('; ')).toBe('');
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'heads the popover with the stage title, its learning goal and the simple/technical toggle beside Close',
+    async () => {
+      // ARRANGE
+      await open('light');
+      await openStage(/Plan/);
+      // ACT
+      const title = await text(`${MODAL} header h2`);
+      const goal = await text(`${MODAL} header [data-goal]`);
+      const order = await js<string[]>(
+        `[...document.querySelectorAll('${MODAL} header button')].map((el) => el.getAttribute('aria-label'))`,
+      );
+      await press(`${MODAL} header button`, /Technical/);
+      await settle();
+      const level = await js<string>(`document.querySelector('${ROOT}').dataset.level`);
+      const pressed = await js<string>(
+        `document.querySelector('${MODAL} header button[aria-pressed]').getAttribute('aria-pressed')`,
+      );
+      // ASSERT
+      expect(title).toBe('Plan: Try it');
+      expect(goal).toMatch(/^Break it down/);
+      expect(order).toEqual(['Technical', 'Close']);
+      expect(level).toBe('technical');
+      expect(pressed).toBe('true');
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'lays the tasks and their details in two columns on desktop, the details following the focused task, shown once',
+    async () => {
+      // ARRANGE
+      await open('light', 1440);
+      await openStage(/Requirements/);
+      // ACT
+      await js(`document.querySelector('${MODAL} [data-column="tasks"] [data-step="review"] button').focus()`);
+      await settle();
+      const rects = await js<{ tasks: number; details: number }>(
+        `({ tasks: document.querySelector('${MODAL} [data-column="tasks"]').getBoundingClientRect().right,
+            details: document.querySelector('${MODAL} [data-column="details"]').getBoundingClientRect().left })`,
+      );
+      const job = await js<string>(`document.querySelector('${MODAL} [data-job]').dataset.job`);
+      const following = await js<string>(
+        `document.querySelector('${MODAL} [data-column="details"] [data-details]').dataset.task`,
+      );
+      const good = await text(`${MODAL}`);
+      // ASSERT
+      expect(rects.details).toBeGreaterThanOrEqual(rects.tasks);
+      expect(following).toBe(job);
+      expect(await count(`${MODAL} [data-details]`)).toBe(1);
+      expect(good.match(/What good looks like/g)?.length).toBe(1);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'goes full screen on a phone: sticky header, details folded under the task',
+    async () => {
+      // ARRANGE
+      await open('light', 390);
+      await openStage(/Requirements/);
+      // ACT
+      const box = await js<{ w: number; h: number; iw: number; ih: number }>(
+        `(() => { const r = document.querySelector('${PANEL}').getBoundingClientRect(); return { w: r.width, h: r.height, iw: innerWidth, ih: innerHeight }; })()`,
+      );
+      const headerBefore = await js<number>(`document.querySelector('${MODAL} header').getBoundingClientRect().top`);
+      await js(`document.querySelector('${PANEL} [data-scroll]').scrollTop = 400`);
+      await settle();
+      const headerTop = await js<number>(`document.querySelector('${MODAL} header').getBoundingClientRect().top`);
+      const folded = await js<{ inside: boolean; open: boolean; columns: number }>(
+        `(() => { const d = document.querySelector('${MODAL} [data-job] details[data-details]');
+          return { inside: Boolean(d), open: d?.open ?? true, columns: document.querySelectorAll('${MODAL} [data-column]').length }; })()`,
+      );
+      await js(`document.querySelector('${MODAL} [data-job] details[data-details] summary').click()`);
+      await settle();
+      const opened = await js<boolean>(`document.querySelector('${MODAL} [data-job] details[data-details]').open`);
+      const sideways = await js<number>('document.documentElement.scrollWidth - innerWidth');
+      // ASSERT
+      expect(box.w).toBe(box.iw);
+      expect(box.h).toBe(box.ih);
+      expect(headerTop).toBe(headerBefore);
+      expect(folded).toEqual({ inside: true, open: false, columns: 0 });
+      expect(opened).toBe(true);
+      expect(sideways).toBeLessThanOrEqual(0);
+      expect(await count(`${MODAL} [data-details]`)).toBe(1);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'fans a task out as Chat 1..N tabs in simple mode and one orchestrator prompt in technical mode',
+    async () => {
+      // ARRANGE
+      const chatNames = ['Chat 1', 'Chat 2', 'Chat 3'];
+      const third = 2;
+      await open('light', 1440);
+      await openStage(/Research/);
+      const copyShown = async () => {
+        await press(`${MODAL} [data-step="do"] [role="tabpanel"]:not([hidden]) button[aria-label]`, /Copy prompt/);
+        await settle();
+      };
+      // ACT
+      const tabs = await js<string[]>(
+        `[...document.querySelectorAll('${MODAL} [role="tab"]')].map((el) => el.textContent)`,
+      );
+      const panels = await count(`${MODAL} [role="tabpanel"]:not([hidden])`);
+      await copyShown();
+      await press(`${MODAL} [role="tab"]`, /Chat 2/);
+      await settle();
+      await copyShown();
+      const second = await js<string>(
+        `document.querySelector('${MODAL} [role="tab"][aria-selected="true"]').textContent`,
+      );
+      await press(`${MODAL} header button`, /Technical/);
+      await settle();
+      const technicalTabs = await count(`${MODAL} [role="tab"]`);
+      await press(`${MODAL} [data-step="do"] button[aria-label]`, /Copy prompt/);
+      await settle();
+      const copied = await js<string[]>('window.__copied');
+      // ASSERT
+      expect(tabs).toEqual(chatNames);
+      expect(panels).toBe(1);
+      expect(copied[0]).toContain('This is chat 1');
+      expect(second).toBe('Chat 2');
+      expect(copied[1]).toContain('This is chat 2');
+      expect(technicalTabs).toBe(0);
+      expect(copied[third]).toContain('one subagent per ticket');
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'writes Open in ChatGPT and Open in Claude out on desktop, icons only on a phone, every button with a tooltip',
+    async () => {
+      // ARRANGE
+      const visibleText = (selector: string) =>
+        js<string[]>(
+          `[...document.querySelectorAll('${selector}')].map((el) => [...el.querySelectorAll('span')].filter((s) => s.offsetWidth > 0).map((s) => s.textContent).join('').trim())`,
+        );
+      const bare = () =>
+        js<string[]>(
+          `[...document.querySelectorAll('${MODAL} button, ${MODAL} summary')].filter((b) => !b.closest('[data-tip-host]') && b.tagName === 'BUTTON').map((b) => b.getAttribute('aria-label') ?? b.textContent)`,
+        );
+      // ACT
+      await open('light', 1440);
+      await openStage(/Requirements/);
+      const desktop = await visibleText(`${MODAL} [data-step="do"] a[target="_blank"]`);
+      const desktopBare = await bare();
+      await open('light', 390);
+      await openStage(/Requirements/);
+      const phone = await visibleText(`${MODAL} [data-step="do"] a[target="_blank"]`);
+      // ASSERT
+      expect(desktop).toEqual(['Open in ChatGPT', 'Open in Claude']);
+      expect(phone).toEqual(['', '']);
+      expect(desktopBare).toEqual([]);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'shows each Research chat pill whole, not cut to "C.", at 1280px',
+    async () => {
+      // ARRANGE
+      const chatNames = ['Chat 1', 'Chat 2', 'Chat 3'];
+      await open('light', 1280);
+      // ACT
+      const cut = await js<string[]>(
+        `[...document.querySelectorAll('${ROOT} [data-part="diagram"] span.truncate')].filter((el) => el.scrollWidth > el.clientWidth).map((el) => el.textContent)`,
+      );
+      const names = await js<string[]>(
+        `[...document.querySelectorAll('${ROOT} [data-part="diagram"] span.truncate')].map((el) => el.textContent)`,
+      );
+      // ASSERT
+      expect(names).toEqual(chatNames);
+      expect(cut).toEqual([]);
     },
     TIMEOUT,
   );

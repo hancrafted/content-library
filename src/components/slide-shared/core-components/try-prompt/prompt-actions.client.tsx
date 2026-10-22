@@ -12,6 +12,9 @@ import type { PromptKit } from './try-prompt.types';
 
 /* The icon buttons of a prompt row: the Short toggle, copy, and the two "open in" links. */
 
+/** The chat link: the icon alone on a phone, the icon and its name from `md` up. */
+const WRITTEN_OUT = cn(OUTLINED_ICON, 'text-caption font-medium', 'md:w-auto md:gap-1.5 md:px-3');
+
 const SHORT =
   'inline-flex min-h-9 cursor-pointer items-center rounded-full border border-border px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring';
 
@@ -46,7 +49,7 @@ function ChatLink({ url, label, tip, newTab, onOpen, children }: ChatLinkProps) 
   return (
     <Tip text={tip} place="above" align="end">
       <a
-        className={OUTLINED_ICON}
+        className={WRITTEN_OUT}
         href={externalHref(url)}
         target="_blank"
         rel="noopener noreferrer"
@@ -54,6 +57,7 @@ function ChatLink({ url, label, tip, newTab, onOpen, children }: ChatLinkProps) 
         onClick={onOpen}
       >
         {children}
+        <span className="hidden md:inline">{label}</span>
       </a>
     </Tip>
   );
