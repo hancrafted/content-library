@@ -37,8 +37,6 @@ export interface UiWords {
   readonly copyPrompt: string;
   readonly copyCommand: string;
   readonly openChatgpt: string;
-  readonly short: string;
-  readonly shortTip: string;
   readonly sectionAbout: string;
   readonly sectionCriteria: string;
   readonly sectionExample: string;
@@ -144,17 +142,15 @@ export interface ToolbarProps {
   readonly onUpload: (yaml: string) => void;
 }
 
-/** What the modal part draws: the open stage's view (null: closed) with the short grills. */
+/** What the modal part draws: the open stage's view (null: closed). */
 export interface ModalProps {
   readonly stage: StageView | null;
-  readonly shortJobIds: readonly string[];
   /** The pasted slot values by marker name, shared by every stage of the Workflow. */
   readonly slotValues: Readonly<Record<string, string>>;
   readonly words: UiWords;
   readonly level: Level;
   readonly onLevel: (level: Level) => void;
   readonly onClose: () => void;
-  readonly onShort: (jobId: string) => void;
   readonly onSlots: (values: Readonly<Record<string, string>>) => void;
 }
 

@@ -10,31 +10,10 @@ import { Tip } from '../tip/tip.client';
 import { openInLinks } from './chat-links.pure';
 import type { PromptKit } from './try-prompt.types';
 
-/* The icon buttons of a prompt row: the Short toggle, copy, and the "open in ChatGPT" link. */
+/* The icon buttons of a prompt row: copy, and the "open in ChatGPT" link. */
 
 /** The chat link: the icon alone on a phone, the icon and its name from `md` up. */
 const WRITTEN_OUT = cn(OUTLINED_ICON, 'text-caption font-medium', 'md:w-auto md:gap-1.5 md:px-3');
-
-const SHORT =
-  'inline-flex min-h-9 cursor-pointer items-center rounded-full border border-border px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring';
-
-export function ShortToggle({ kit }: { kit: PromptKit }) {
-  return (
-    <Tip text={kit.words.shortTip} place="above" align="end">
-      <button
-        type="button"
-        aria-pressed={kit.short}
-        onClick={kit.onShort}
-        className={cn(
-          SHORT,
-          kit.short ? 'bg-primary text-primary-foreground' : 'bg-background text-muted-foreground hover:bg-accent',
-        )}
-      >
-        {kit.words.short}
-      </button>
-    </Tip>
-  );
-}
 
 interface ChatLinkProps {
   readonly url: string;

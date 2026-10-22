@@ -26,12 +26,11 @@ describe('success cases', () => {
     expect(state.slotValues).toEqual({});
   });
 
-  it('starts in the Preset: the chosen Workflow at the Simple level, nothing open or short', () => {
+  it('starts in the Preset: the chosen Workflow at the Simple level, nothing open', () => {
     // ARRANGE
     const expected: WorkflowState = {
       ...start,
       openStageId: null,
-      shortJobIds: [],
       slotValues: {},
       uploaded: null,
       uploadProblems: [],
@@ -63,23 +62,11 @@ describe('success cases', () => {
     expect(closed.openStageId).toBeNull();
   });
 
-  it('turns the short grill of a job on, and off on the second press', () => {
-    // ARRANGE
-    const initial = createState(start);
-    const job = 'interview';
-    // ACT
-    const on = reduce(initial, { type: 'short', jobId: job });
-    const off = reduce(on, { type: 'short', jobId: job });
-    // ASSERT
-    expect(on.shortJobIds).toEqual([job]);
-    expect(off.shortJobIds).toEqual([]);
-  });
-
-  it('switching Workflow resets the open stage, the short grills and any upload', () => {
+  it('switching Workflow resets the open stage, the pasted values and any upload', () => {
     // ARRANGE
     const events: WorkflowEvent[] = [
       { type: 'open', stageId: 'x' },
-      { type: 'short', jobId: 'j' },
+      { type: 'slots', values: { a: 'b' } },
       { type: 'upload', workflow: uploaded },
     ];
     const busy = events.reduce(reduce, createState(start));
@@ -120,10 +107,10 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('never changes the state it is given, and the state survives a JSON round trip', () => {
     // ARRANGE
-    const initial = reduce(createState(start), { type: 'short', jobId: 't' });
+    const initial = reduce(createState(start), { type: 'open', stageId: 't' });
     const before = JSON.stringify(initial);
     // ACT
-    const next = reduce(initial, { type: 'short', jobId: 'u' });
+    const next = reduce(initial, { type: 'open', stageId: 'u' });
     // ASSERT
     expect(JSON.stringify(initial)).toBe(before);
     expect(JSON.parse(JSON.stringify(next))).toEqual(next);

@@ -91,16 +91,14 @@ type PanelProps = Omit<ModalProps, 'stage' | 'slotValues' | 'onSlots'> & {
 };
 
 /** The card inside the dialog: the header, then the stage's jobs, then the live region a copy announces in. Full screen on a phone. */
-function Panel({ stage, shortJobIds, slots, level, onLevel, onShort, onClose, ...chrome }: PanelProps) {
+function Panel({ stage, slots, level, onLevel, onClose, ...chrome }: PanelProps) {
   const [announced, copy] = useCopy(chrome.words.copied);
   const { words } = chrome;
   const first = stage.jobs[0];
-  const kitOf = (job: JobModalView) => ({
-    short: shortJobIds.includes(job.id),
+  const kit = {
     words,
-    onShort: () => onShort(job.id),
     onCopy: copy,
-  });
+  };
   return (
     <div className="flex h-full w-full flex-col gap-4 bg-card p-4 text-foreground md:h-auto md:max-h-full md:max-w-5xl md:rounded-2xl md:border md:border-border md:p-5 md:shadow-lg">
       <ModalHeader stage={stage} words={words} level={level} onLevel={onLevel} onClose={onClose} />
@@ -108,7 +106,7 @@ function Panel({ stage, shortJobIds, slots, level, onLevel, onShort, onClose, ..
         data-scroll=""
         className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto overscroll-contain md:flex-initial md:pr-2"
       >
-        {first && <Tasks jobs={stage.jobs} kit={kitOf(first)} words={words} slots={slots} />}
+        {first && <Tasks jobs={stage.jobs} kit={kit} words={words} slots={slots} />}
       </div>
       <p role="status" aria-live="polite" className="h-5 shrink-0 text-caption text-muted-foreground">
         {announced}

@@ -1,11 +1,9 @@
 import type { PromptSection, PromptSlot, PromptTechnique } from './prompt-sections.pure';
 
-/** The prompt a TryPrompt shows and copies: a prompt, or a one-line command, with an optional short variant. */
+/** The prompt a TryPrompt shows and copies: a prompt, or a one-line command. */
 export interface PromptView {
   readonly kind: 'prompt' | 'command';
   readonly text: string;
-  /** The short grill of an interview prompt; the Short toggle swaps it for `text`. */
-  readonly short?: string;
   /** The prompt as sections; absent: `text` is the one section, without heading or purpose. */
   readonly sections?: readonly PromptSection[];
   /** One or two plain sentences on what the user does with this step; shown first in the "What to do" panel. */
@@ -25,8 +23,6 @@ export interface TryPromptWords {
   readonly copyPrompt: string;
   readonly copyCommand: string;
   readonly openChatgpt: string;
-  readonly short: string;
-  readonly shortTip: string;
   readonly newTab: string;
   /** The "open in" tooltip when the prompt is too long for a link: it is copied and an empty chat opens. */
   readonly tooLong?: string;
@@ -48,11 +44,8 @@ export interface TryPromptWords {
   readonly toggleTip?: string;
 }
 
-/** What a prompt box needs from its parent: its words and the two things it can ask for, as one bundle. */
+/** What a prompt box needs from its parent: its words and the one thing it can ask for, as one bundle. */
 export interface PromptKit {
-  /** The job's short grill is on: the prompt shown and copied is its short variant. */
-  readonly short: boolean;
   readonly words: TryPromptWords;
-  readonly onShort: () => void;
   readonly onCopy: (text: string) => void;
 }
