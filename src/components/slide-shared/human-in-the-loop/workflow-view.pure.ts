@@ -1,5 +1,5 @@
 import { stepsOf, type TaskStep } from './workflow-prompts.pure';
-import type { Runtime } from './workflow-schema.types';
+import type { Runtime, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
 import type { Job, Workflow } from './workflow.types';
 
@@ -20,6 +20,8 @@ export interface TaskModalView {
   /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a fan-out one per chat. */
   readonly examples: readonly string[];
   readonly goodLooksLike: readonly string[];
+  /** The techniques the task's structure teaches, from the file's catalogue, shown under "why it matters". */
+  readonly techniques: readonly TechniqueDef[];
 }
 
 /** One job inside a stage's modal. */
@@ -51,6 +53,9 @@ function taskView({ task }: Job, workflow: Workflow, level: Level): TaskModalVie
     why: task.details.why,
     examples: typeof example === 'string' ? [example] : example,
     goodLooksLike: task.details.goodLooksLike,
+    techniques: (task.details.techniques ?? []).flatMap((id) =>
+      workflow.file.techniques.filter((each) => each.id === id),
+    ),
   };
 }
 

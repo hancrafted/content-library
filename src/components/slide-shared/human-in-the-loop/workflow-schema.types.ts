@@ -11,6 +11,22 @@ export type MoveLetter = 'B' | 'R' | 'I' | 'E' | 'F';
 export const PURPOSES = ['role', 'context', 'task', 'steps', 'template', 'scope'] as const;
 export type Purpose = (typeof PURPOSES)[number];
 
+/** How hard a prompt technique is to pick up: the few every prompt should use, and the ones that come with practice. */
+export const TIERS = ['basic', 'advanced'] as const;
+export type Tier = (typeof TIERS)[number];
+
+/**
+ * One prompt technique of the catalogue. The catalogue is data, written once at the top of a Workflow file: adding a
+ * technique is a new entry, never a schema change. Sections and tasks name techniques by `id`.
+ */
+export interface TechniqueDef {
+  readonly id: string;
+  readonly tier: Tier;
+  readonly title: string;
+  /** One or two plain sentences on what the technique is and why it helps. */
+  readonly explain: string;
+}
+
 /** The two runtimes: a text-only chat, and a coding harness with skills installed. Each carries a full prompt. */
 export const RUNTIMES = ['simple', 'technical'] as const;
 export type Runtime = (typeof RUNTIMES)[number];
@@ -37,6 +53,8 @@ export interface SectionDef {
   readonly purpose?: Purpose;
   /** Overrides the top-level explanation of `purpose` for this section only. */
   readonly explain?: string;
+  /** Ids from the `techniques` catalogue that this section applies; its tooltip lists them with their tier. */
+  readonly techniques?: readonly string[];
   /** Markdown with markers. General instructions only: scenario facts arrive through slots, never written here. */
   readonly text: string;
 }
@@ -72,6 +90,8 @@ export interface DetailsDef {
   /** A markdown handoff of the task's template; a fan-out task has one per chat, in chat order. */
   readonly example: string | readonly string[];
   readonly goodLooksLike: readonly string[];
+  /** Ids from the `techniques` catalogue that the task's structure teaches; shown under "why it matters". */
+  readonly techniques?: readonly string[];
 }
 
 export interface TaskDef {
@@ -123,6 +143,8 @@ export interface WorkflowFile {
   readonly scenario: ScenarioDef;
   /** One explanation per purpose, written once; a section may override it with `explain`. */
   readonly purposes: Readonly<Record<Purpose, string>>;
+  /** The prompt techniques sections and tasks may name, defined once here. */
+  readonly techniques: readonly TechniqueDef[];
   /** The general reviewer, written once and joined with every task's tailored checks. */
   readonly reviewer: { readonly sections: readonly SectionDef[] };
   /** Markdown handoff templates by kind: front matter `kind`, an H1, required H2 sections. No `{{…}}` inside. */

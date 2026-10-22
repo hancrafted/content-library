@@ -147,12 +147,34 @@ interface DetailsProps {
   readonly folded: boolean;
 }
 
+/** The techniques a task teaches, under "why it matters": title, tier and what each is. */
+function Techniques({ task, words }: Pick<DetailsProps, 'task' | 'words'>) {
+  if (task.techniques.length === 0) return null;
+  return (
+    <div className="mt-3" data-techniques="">
+      <h4 className="text-caption font-medium text-muted-foreground">{words.sectionTechniques}</h4>
+      <ul className="mt-1 flex flex-col gap-1">
+        {task.techniques.map((each) => (
+          <li key={each.id} data-technique={each.id} data-tier={each.tier}>
+            <strong>{each.title}</strong>{' '}
+            <span className="rounded-full border border-border px-2 text-caption text-muted-foreground">
+              {each.tier === 'basic' ? words.tierBasic : words.tierAdvanced}
+            </span>
+            <span className="block text-caption">{each.explain}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function Body({ task, words }: Pick<DetailsProps, 'task' | 'words'>) {
   return (
     <div className="flex flex-col gap-4">
       <section>
         <h3 className="text-caption font-medium text-muted-foreground">{words.sectionWhy}</h3>
         <p className="mt-1">{task.why}</p>
+        <Techniques task={task} words={words} />
       </section>
       <section>
         <h3 className="text-caption font-medium text-muted-foreground">{words.sectionExample}</h3>

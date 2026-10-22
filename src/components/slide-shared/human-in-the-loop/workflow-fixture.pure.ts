@@ -45,6 +45,7 @@ const FILE: WorkflowFile = {
   title: 'W',
   scenario: { summary: 'S', facts: ['F'] },
   purposes: { role: 'r', context: 'c', task: 't', steps: 's', template: 'm', scope: 'o' },
+  techniques: [{ id: 'delimiters', tier: 'basic', title: 'Delimiters', explain: 'Fence it.' }],
   reviewer: { sections: [SECTION] },
   templates: {},
   stages: [],

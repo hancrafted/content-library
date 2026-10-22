@@ -1,5 +1,11 @@
 import { parse } from 'yaml';
-import { contentProblems, idProblems, reviewerProblems, templateProblems } from './workflow-loader-checks.pure';
+import {
+  contentProblems,
+  idProblems,
+  reviewerProblems,
+  techniqueProblems,
+  templateProblems,
+} from './workflow-loader-checks.pure';
 import type { WorkflowFile } from './workflow-schema.types';
 import { shapeProblems } from './workflow-shape.pure';
 
@@ -34,6 +40,7 @@ export function loadWorkflow(source: string): FileResult {
   const problems = [
     ...templateProblems(file),
     ...idProblems(file),
+    ...techniqueProblems(file),
     ...reviewerProblems(file),
     ...contentProblems(file),
   ];

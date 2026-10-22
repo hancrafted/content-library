@@ -10,7 +10,22 @@ export interface PromptSection {
   readonly purpose?: string;
   /** Replaces the explanation of `purpose` for this section only. */
   readonly explain?: string;
+  /** Ids into the prompt's technique catalogue; the marker's tooltip lists them. */
+  readonly techniques?: readonly string[];
   readonly text: string;
+}
+
+/** One entry of a technique catalogue: what a section may name, with its tier (`basic`, `advanced`, …). */
+export interface PromptTechnique {
+  readonly id: string;
+  readonly tier: string;
+  readonly title: string;
+  readonly explain: string;
+}
+
+/** The catalogue entries a section names, in the section's order; an id the catalogue lacks is skipped. */
+export function techniquesOf(section: PromptSection, catalogue: readonly PromptTechnique[]): PromptTechnique[] {
+  return (section.techniques ?? []).flatMap((id) => catalogue.filter((entry) => entry.id === id));
 }
 
 /** A paste-in input: `single` fills `{{id}}`; `multiple` fills `{{id_1}}` … `{{id_N}}`, N being the markers in the text. */
