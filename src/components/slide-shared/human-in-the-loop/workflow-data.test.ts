@@ -30,7 +30,7 @@ describe('success cases', () => {
 
   it("shows a Slide's words over the defaults, key by key, and leaves the rest", () => {
     // ARRANGE
-    const id = WORKFLOW_IDS[0];
+    const id = WORKFLOW_IDS[1];
     const said = 'The Slide says so';
     const plain = workflowFor(id, 'en');
     // ACT
@@ -59,7 +59,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('throws every problem of a Slide override that breaks the Workflow', () => {
     // ARRANGE
-    const id = WORKFLOW_IDS[0];
+    const id = WORKFLOW_IDS[1];
     const broken = { jobs: { spec: { run: { prompt: '' } } } };
     // ACT
     const load = () => workflowFor(id, 'en', broken);
