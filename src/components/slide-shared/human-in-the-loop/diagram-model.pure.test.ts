@@ -1,43 +1,23 @@
 import { describe, expect, it } from 'vitest';
 import { chatNames, jobRole, splitParked } from './diagram-model.pure';
-import type { Job, Stage, Workflow } from './workflow.types';
-
-const base: Job = {
-  id: 'j',
-  title: 'J',
-  description: 'D',
-  chat: 'new',
-  dependsOn: [],
-  inputs: [],
-  outputs: [],
-  skills: [],
-  run: { todo: 'Do.', prompt: 'P' },
-};
-const job = (over: Partial<Job>): Job => ({ ...base, ...over });
-const flow = (stages: Stage[], focalJobId?: string): Workflow => ({
-  id: 'w',
-  title: 'W',
-  scenario: 'S',
-  focalJobId,
-  stages,
-});
+import { flow, job, stage } from './workflow-fixture.pure';
 
 describe('success cases', () => {
   it('reads each job role from the Workflow data', () => {
     // ARRANGE
-    const pieces = job({ id: 'pieces', parked: ['A', 'B'], outputs: [{ id: 'piece', kind: 'text' }] });
-    const spec = job({ id: 'spec', dependsOn: ['pieces'], outputs: [{ id: 'spec', kind: 'spec' }] });
+    const pieces = job({ id: 'pieces', parked: ['A', 'B'], outputs: [{ id: 'piece' }] });
+    const spec = job({ id: 'spec', dependsOn: ['pieces'], outputs: [{ id: 'spec' }] });
     const chats = job({
       id: 'venue',
       dependsOn: ['spec'],
       fanOut: 3,
       inputs: ['spec'],
-      outputs: [{ id: 'r', kind: 'research' }],
+      outputs: [{ id: 'r' }],
     });
     const plan = job({ id: 'plan', dependsOn: ['venue'], inputs: ['r'] });
-    const ask = job({ id: 'ask', dependsOn: ['pieces'], inputs: ['piece'], outputs: [{ id: 'a', kind: 'text' }] });
+    const ask = job({ id: 'ask', dependsOn: ['pieces'], inputs: ['piece'], outputs: [{ id: 'a' }] });
     const w = flow(
-      [pieces, ask, spec, chats, plan].map((each) => ({ id: each.id, name: each.id, moves: [], jobs: [each] })),
+      [pieces, ask, spec, chats, plan].map((each) => stage(each.id, [each])),
       'spec',
     );
     // ACT
@@ -69,7 +49,7 @@ describe('failure cases', () => {
   it('reads a job with no parked pieces, no fan-out and no focal id as an AI job', () => {
     // ARRANGE
     const plain = job({ id: 'plain', dependsOn: [], inputs: ['x'] });
-    const w = flow([{ id: 's', name: 's', moves: [], jobs: [plain] }]);
+    const w = flow([stage('s', [plain])]);
     // ACT
     const role = jobRole(w, plain);
     // ASSERT

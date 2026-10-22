@@ -126,7 +126,7 @@ export function ChatJobs({ job, slot, stageName, words }: JobViewProps) {
     <li key={name}>
       <Node copy={popoverOf(slot.popover, stageName)} className={cn(CHAT_PILL, AI_EDGE)}>
         <span className="min-w-0 truncate">{name}</span>
-        {job.check && (
+        {job.reviewed && (
           <span className="flex items-center text-muted-foreground">
             <Check className="size-4" />
             <span className="sr-only">{words.checked}</span>

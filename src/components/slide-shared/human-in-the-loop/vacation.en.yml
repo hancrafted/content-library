@@ -1,5 +1,5 @@
 # The vacation Workflow in the new schema, English. One language per file: what is written is what renders.
-# Types: workflow-schema.types.ts; schema and markers: docs/features/agentic-workflow.md. The German file is
+# Types: workflow-schema.types.ts; schema and markers: docs/features/human-in-the-loop.md. The German file is
 # vacation.de.yml. Scenario facts live only in `scenario`, the slot samples and the examples; the prompt sections are
 # general, and reach the scenario through the `{{slot}}` markers.
 id: vacation

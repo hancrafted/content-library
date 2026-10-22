@@ -1,7 +1,7 @@
 import { HumanInTheLoopClient } from './human-in-the-loop.client';
 import type { DiagramSlots, HumanInTheLoopData, WorkflowSlideWords } from './human-in-the-loop.types';
 import type { ControlMap } from './toolbar-controls.pure';
-import { WORKFLOW_IDS, outputWords, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
+import { WORKFLOW_IDS, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
 import type { Level } from './workflow-state.pure';
 
 /*
@@ -44,7 +44,6 @@ export function humanInTheLoopData({
     workflowId: id,
     locale: lang,
     words: { ...uiWords(lang), ...words?.ui },
-    outputWords: outputWords(lang),
     controls: controls ?? {},
     level,
     readonly,

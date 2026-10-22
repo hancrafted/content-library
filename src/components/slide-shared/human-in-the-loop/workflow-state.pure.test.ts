@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
-import type { Workflow } from './workflow.types';
 
 const start = { workflowId: 'summer-party', level: 'simple' } as const;
-const uploaded: Workflow = { id: 'mine', title: 'Mine', scenario: 'S', stages: [] };
+const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {
   it('keeps what is pasted into a slot, shared whatever stage is open, and keeps it when a modal closes', () => {
@@ -26,13 +26,12 @@ describe('success cases', () => {
     expect(state.slotValues).toEqual({});
   });
 
-  it('starts in the Preset: the chosen Workflow at the Simple level, nothing open, short or ticked', () => {
+  it('starts in the Preset: the chosen Workflow at the Simple level, nothing open or short', () => {
     // ARRANGE
     const expected: WorkflowState = {
       ...start,
       openStageId: null,
       shortJobIds: [],
-      ticked: [],
       slotValues: {},
       uploaded: null,
       uploadProblems: [],
@@ -76,24 +75,11 @@ describe('success cases', () => {
     expect(off.shortJobIds).toEqual([]);
   });
 
-  it('ticks a ticket and unticks it on the second press', () => {
-    // ARRANGE
-    const initial = createState(start);
-    const ticket = 't1';
-    // ACT
-    const once = reduce(initial, { type: 'tick', ticketId: ticket });
-    const twice = reduce(once, { type: 'tick', ticketId: ticket });
-    // ASSERT
-    expect(once.ticked).toEqual([ticket]);
-    expect(twice.ticked).toEqual([]);
-  });
-
-  it('switching Workflow resets the open stage, the short grills, the ticks and any upload', () => {
+  it('switching Workflow resets the open stage, the short grills and any upload', () => {
     // ARRANGE
     const events: WorkflowEvent[] = [
       { type: 'open', stageId: 'x' },
       { type: 'short', jobId: 'j' },
-      { type: 'tick', ticketId: 't' },
       { type: 'upload', workflow: uploaded },
     ];
     const busy = events.reduce(reduce, createState(start));
@@ -115,7 +101,6 @@ describe('success cases', () => {
       uploaded,
       uploadProblems: [],
       openStageId: null,
-      ticked: [],
     });
   });
 });
@@ -135,10 +120,10 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('never changes the state it is given, and the state survives a JSON round trip', () => {
     // ARRANGE
-    const initial = reduce(createState(start), { type: 'tick', ticketId: 't' });
+    const initial = reduce(createState(start), { type: 'short', jobId: 't' });
     const before = JSON.stringify(initial);
     // ACT
-    const next = reduce(initial, { type: 'tick', ticketId: 'u' });
+    const next = reduce(initial, { type: 'short', jobId: 'u' });
     // ASSERT
     expect(JSON.stringify(initial)).toBe(before);
     expect(JSON.parse(JSON.stringify(next))).toEqual(next);

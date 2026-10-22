@@ -5,29 +5,15 @@ import { describe, expect, it, vi } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import { DiagramStages } from './diagram-stages';
 import type { DiagramSlots, UiWords } from './human-in-the-loop.types';
-import type { Job, Workflow } from './workflow.types';
+import { job, stage, flow as workflow } from './workflow-fixture.pure';
+import type { Workflow } from './workflow.types';
 
-const base: Job = {
-  id: 'j',
-  title: 'J',
-  description: 'D',
-  chat: 'new',
-  dependsOn: [],
-  inputs: [],
-  outputs: [],
-  skills: [],
-  run: { todo: 'Do.', prompt: 'P' },
-};
-const flow = (fanOut: number): Workflow => ({
-  id: 'w',
-  title: 'W',
-  scenario: 'S',
-  stages: [
-    { id: 'a', name: 'A', moves: [], jobs: [{ ...base, id: 'a' }] },
-    { id: 'b', name: 'B', moves: [], jobs: [{ ...base, id: 'b', title: 'Chat', fanOut }] },
-    { id: 'c', name: 'C', moves: [], jobs: [{ ...base, id: 'c' }] },
-  ],
-});
+const flow = (fanOut: number): Workflow =>
+  workflow([
+    stage('a', [job({ id: 'a' })]),
+    stage('b', [job({ id: 'b', title: 'Chat', fanOut })]),
+    stage('c', [job({ id: 'c' })]),
+  ]);
 const words = { tryIt: 'Try it', tryFor: 'for {stage}', moveLabel: '{letter}: {why}' } as UiWords;
 const scene = (workflow: Workflow, slots?: DiagramSlots, readonly = false) =>
   load(

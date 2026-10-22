@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { PAIRS, UI_FILES, WORKFLOW_IDS, outputWords, uiWords, workflowFor } from './workflow-data';
-import { keyPaths } from './workflow-words.pure';
+import { UI_FILES, WORKFLOW_IDS, uiWords, workflowFor } from './workflow-data';
+
+/** The dotted path of every leaf of a value, sorted. */
+const keyPaths = (value: unknown, prefix = ''): string[] =>
+  typeof value === 'object' && value !== null
+    ? Object.entries(value)
+        .flatMap(([key, child]) => keyPaths(child, prefix ? `${prefix}.${key}` : key))
+        .sort()
+    : [prefix];
 
 describe('success cases', () => {
   it.each(WORKFLOW_IDS.flatMap((id) => (['en', 'de'] as const).map((locale) => [id, locale] as const)))(
@@ -17,28 +24,14 @@ describe('success cases', () => {
     },
   );
 
-  it('keeps the German words under exactly the English keys, for every Workflow , for the chrome and for the output words', () => {
+  it('keeps the German chrome words under exactly the English keys', () => {
     // ARRANGE
-    const pairs = WORKFLOW_IDS.map((id) => [parse(PAIRS[id].config).words, parse(PAIRS[id].de).words]);
-    const chrome = [parse(UI_FILES.en).ui, parse(UI_FILES.de).ui];
-    const output = [parse(UI_FILES.en).output, parse(UI_FILES.de).output];
+    const en = parse(UI_FILES.en).ui;
+    const de = parse(UI_FILES.de).ui;
     // ACT
-    const drift = [...pairs, chrome, output].map(([en, de]) => [keyPaths(en), keyPaths(de)]);
+    const drift = keyPaths(de);
     // ASSERT
-    for (const [en, de] of drift) expect(de).toEqual(en);
-  });
-
-  it('has every label of the renderers in English from the YAML alone, and the same keys in German', () => {
-    // ARRANGE
-    const keys = Object.keys(parse(UI_FILES.en).output).sort();
-    // ACT
-    const en = outputWords('en');
-    const de = outputWords('de');
-    // ASSERT
-    expect(Object.keys(en).sort()).toEqual(keys);
-    expect(Object.keys(de).sort()).toEqual(keys);
-    expect(en.done).toBe('Done');
-    expect(de.done).not.toBe(en.done);
+    expect(drift).toEqual(keyPaths(en));
   });
 });
 
@@ -64,6 +57,5 @@ describe('edge cases', () => {
     expect(en.tryIt).not.toBe(de.tryIt);
     expect(workflowFor(id, 'en')).toBe(workflowFor(id, 'en'));
     expect(uiWords('en')).toBe(uiWords('en'));
-    expect(outputWords('de')).toBe(outputWords('de'));
   });
 });

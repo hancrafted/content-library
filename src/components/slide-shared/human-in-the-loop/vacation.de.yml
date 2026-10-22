@@ -1,5 +1,5 @@
 # Der Urlaubs-Workflow im neuen Schema, Deutsch. Eine Sprache pro Datei: Was hier steht, wird angezeigt.
-# Schema und Marker: docs/features/agentic-workflow.md. Das englische Gegenstück ist vacation.en.yml; ein Test hält
+# Schema und Marker: docs/features/human-in-the-loop.md. Das englische Gegenstück ist vacation.en.yml; ein Test hält
 # beide in derselben Struktur, nur die Texte unterscheiden sich. Szenariofakten stehen nur in `scenario`, den
 # Slot-Beispielen und den Beispielergebnissen; die Prompt-Abschnitte sind allgemein und erreichen das Szenario über
 # die `{{slot}}`-Marker.
