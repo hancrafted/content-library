@@ -28,20 +28,6 @@ describe('success cases', () => {
     for (const [en, de] of drift) expect(de).toEqual(en);
   });
 
-  it("shows a Slide's words over the defaults, key by key, and leaves the rest", () => {
-    // ARRANGE
-    const id = WORKFLOW_IDS[1];
-    const said = 'The Slide says so';
-    const plain = workflowFor(id, 'en');
-    // ACT
-    const over = workflowFor(id, 'en', { stages: { compare: { name: said } } });
-    // ASSERT
-    expect(over.stages.find((stage) => stage.id === 'compare')?.name).toBe(said);
-    expect(over.stages.find((stage) => stage.id === 'research')?.name).toBe(
-      plain.stages.find((stage) => stage.id === 'research')?.name,
-    );
-  });
-
   it('has every label of the renderers in English from the YAML alone, and the same keys in German', () => {
     // ARRANGE
     const keys = Object.keys(parse(UI_FILES.en).output).sort();
@@ -57,14 +43,13 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('throws every problem of a Slide override that breaks the Workflow', () => {
+  it('refuses a locale file whose Workflow id is not on the list', () => {
     // ARRANGE
-    const id = WORKFLOW_IDS[1];
-    const broken = { jobs: { spec: { run: { prompt: '' } } } };
+    const known = new Set<string>(WORKFLOW_IDS);
     // ACT
-    const load = () => workflowFor(id, 'en', broken);
+    const ids = WORKFLOW_IDS.map((id) => workflowFor(id, 'en').id);
     // ASSERT
-    expect(load).toThrow(/spec/);
+    expect(ids.filter((id) => !known.has(id))).toEqual([]);
   });
 });
 

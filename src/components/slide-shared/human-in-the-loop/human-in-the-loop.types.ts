@@ -5,7 +5,6 @@ import type { OutputWords } from './outputs/output-words';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { Level } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
-import type { DeepPartial } from './workflow-words.pure';
 import type { Workflow } from './workflow.types';
 
 /*
@@ -64,11 +63,9 @@ export interface UiWords {
   readonly newTab: string;
 }
 
-/** A Slide's words, laid over the defaults key by key: the visual's labels, and the shown Workflow's words. */
+/** A Slide's words, laid over the visual's labels key by key. A Workflow has no words to override: it is written in one language. */
 export interface WorkflowSlideWords {
   readonly ui?: Partial<UiWords>;
-  /** The shape of a Workflow's `words:` tree; see workflow-words.pure.ts. */
-  readonly workflow?: DeepPartial<Record<string, unknown>>;
 }
 
 /** What a popover says: the title is the name of the stage it explains, which the diagram fills in. */

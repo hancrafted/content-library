@@ -40,7 +40,7 @@ export function humanInTheLoopData({
 }: HumanInTheLoopProps): HumanInTheLoopData {
   const lang = localeOf(locale);
   return {
-    workflows: WORKFLOW_IDS.map((each) => workflowFor(each, lang, each === id ? words?.workflow : undefined)),
+    workflows: WORKFLOW_IDS.map((each) => workflowFor(each, lang)),
     workflowId: id,
     locale: lang,
     words: { ...uiWords(lang), ...words?.ui },
