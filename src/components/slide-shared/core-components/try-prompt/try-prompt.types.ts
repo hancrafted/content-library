@@ -8,6 +8,8 @@ export interface PromptView {
   readonly short?: string;
   /** The prompt as sections; absent: `text` is the one section, without heading or purpose. */
   readonly sections?: readonly PromptSection[];
+  /** One or two plain sentences on what the user does with this step; shown first in the "What to do" panel. */
+  readonly instructions?: string;
   /** The paste-in inputs the sections' markers name. */
   readonly slots?: readonly PromptSlot[];
   /** One explanation per purpose; a section's marker shows its purpose's, or its own `explain`. */
@@ -21,7 +23,6 @@ export interface TryPromptWords {
   readonly copyPrompt: string;
   readonly copyCommand: string;
   readonly openChatgpt: string;
-  readonly openClaude: string;
   readonly short: string;
   readonly shortTip: string;
   readonly newTab: string;
@@ -30,6 +31,13 @@ export interface TryPromptWords {
   /** The name of a slot's upload button, and of its add-entry button; each falls back to the slot's label. */
   readonly upload?: string;
   readonly addEntry?: string;
+  /** The two panels of an opened prompt, and the slot field's eye toggle (`showFull` when collapsed, `collapse` when open). */
+  readonly whatToDo: string;
+  readonly preview: string;
+  readonly showFull: string;
+  readonly collapse: string;
+  /** The hint of an empty field, with `{title}` and `{lines}` of its sample filled in. */
+  readonly sampleHint: string;
   /** The tooltip of the prompt's show/hide toggle; the toggle's label where absent. */
   readonly toggleTip?: string;
 }

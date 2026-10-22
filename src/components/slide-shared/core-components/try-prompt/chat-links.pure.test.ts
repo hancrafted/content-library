@@ -2,16 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { chatLinks } from './chat-links.pure';
 
 describe('success cases', () => {
-  it('prefills ChatGPT and Claude with the encoded prompt through ?q=', () => {
+  it('prefills ChatGPT with the encoded prompt through ?q=', () => {
     // ARRANGE
     const encoded = encodeURIComponent('Prompt of b & more');
     // ACT
     const links = chatLinks('Prompt of b & more');
     // ASSERT
-    expect(links).toEqual({
-      chatgpt: `https://chatgpt.com/?q=${encoded}`,
-      claude: `https://claude.ai/new?q=${encoded}`,
-    });
+    expect(links).toEqual({ chatgpt: `https://chatgpt.com/?q=${encoded}` });
   });
 });
 
@@ -33,6 +30,6 @@ describe('edge cases', () => {
     // ACT
     const links = chatLinks(text);
     // ASSERT
-    expect(links.claude).toBe('https://claude.ai/new?q=');
+    expect(links.chatgpt).toBe('https://chatgpt.com/?q=');
   });
 });
