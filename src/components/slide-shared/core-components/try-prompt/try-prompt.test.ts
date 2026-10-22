@@ -24,6 +24,7 @@ const WORDS: TryPromptWords = {
   showFull: 'Show full text',
   collapse: 'Collapse',
   sampleHint: 'Sample: {title} · {lines} lines',
+  sampleHintOne: 'Sample: {title} · 1 line',
 };
 const NOOP = vi.fn();
 const KIT: PromptKit = { short: false, words: WORDS, onShort: NOOP, onCopy: NOOP };
@@ -135,9 +136,9 @@ describe('success cases', () => {
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain('placeholder="Sample: S1 · 1 lines"');
-    expect(html).toContain('placeholder="Sample: S2 · 1 lines"');
-    expect(html).toContain('placeholder="Sample: S3 · 1 lines"');
+    expect(html).toContain('placeholder="Sample: S1 · 1 line"');
+    expect(html).toContain('placeholder="Sample: S2 · 1 line"');
+    expect(html).toContain('placeholder="Sample: S3 · 1 line"');
   });
 
   it('starts a multiple slot with one entry and a plus button', () => {

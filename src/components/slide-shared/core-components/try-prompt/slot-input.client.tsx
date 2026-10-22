@@ -61,7 +61,8 @@ function UploadButton({ label, onValue }: { label: string; onValue: (value: stri
 function hintOf(sample: string | undefined, words: TryPromptWords): string | undefined {
   if (sample === undefined) return undefined;
   const { title, lines } = sampleSummary(sample);
-  return words.sampleHint.replace('{title}', title).replace('{lines}', String(lines));
+  const template = lines === 1 ? words.sampleHintOne : words.sampleHint;
+  return template.replace('{title}', title).replace('{lines}', String(lines));
 }
 
 function SlotEntry({ name, label, sample, value, words, uploadLabel, onValue }: EntryProps) {

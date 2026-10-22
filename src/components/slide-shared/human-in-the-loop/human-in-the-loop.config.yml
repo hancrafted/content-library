@@ -33,6 +33,7 @@ ui:
   showFull: Show full text
   collapse: Collapse
   sampleHint: 'Sample: {title} · {lines} lines'
+  sampleHintOne: 'Sample: {title} · 1 line'
   slotUpload: Upload a markdown file
   slotAdd: Add another entry
   tooLong: too long for a link, so it is copied and an empty chat opens

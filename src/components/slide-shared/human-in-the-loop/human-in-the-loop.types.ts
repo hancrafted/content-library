@@ -56,6 +56,7 @@ export interface UiWords {
   readonly showFull: string;
   readonly collapse: string;
   readonly sampleHint: string;
+  readonly sampleHintOne: string;
   /** A paste-in slot's upload button and its add-entry button; `tooLong` is the "open in" tooltip for a long prompt. */
   readonly slotUpload: string;
   readonly slotAdd: string;

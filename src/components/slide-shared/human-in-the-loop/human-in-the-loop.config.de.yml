@@ -33,6 +33,7 @@ ui:
   showFull: Ganzen Text anzeigen
   collapse: Einklappen
   sampleHint: 'Beispiel: {title} · {lines} Zeilen'
+  sampleHintOne: 'Beispiel: {title} · 1 Zeile'
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
   tooLong: zu lang für einen Link, daher wird er kopiert und ein leerer Chat geöffnet

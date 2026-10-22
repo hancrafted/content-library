@@ -36,8 +36,9 @@ export interface TryPromptWords {
   readonly preview: string;
   readonly showFull: string;
   readonly collapse: string;
-  /** The hint of an empty field, with `{title}` and `{lines}` of its sample filled in. */
+  /** The hint of an empty field, with `{title}` and `{lines}` of its sample filled in; `sampleHintOne` for one line. */
   readonly sampleHint: string;
+  readonly sampleHintOne: string;
   /** The tooltip of the prompt's show/hide toggle; the toggle's label where absent. */
   readonly toggleTip?: string;
 }
