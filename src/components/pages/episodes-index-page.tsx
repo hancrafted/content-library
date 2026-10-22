@@ -1,7 +1,10 @@
 import { EpisodeBrowse, type BrowseLabels } from '@/components/landing/episode-browse.client';
 import { episodeCards } from '@/components/landing/episode-cards';
-import type { Locale } from '@/lib/locale.pure';
+import { localizePath, type Locale } from '@/lib/locale.pure';
+import { episodeRoute } from '@/lib/routes';
+import { GalleryHorizontalEnd, Layers, LayoutTemplate } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 
 type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
 
@@ -28,16 +31,37 @@ function browseLabels(t: LandingT): BrowseLabels {
   };
 }
 
-/** Dev only: the Shared visuals' Presets, for the Section jobs that place them. `next build` drops the import. */
-async function DevSharedVisuals({ locale }: { locale: Locale }) {
-  if (process.env.NODE_ENV !== 'development') return null;
-  const { ContextGallery } = await import('@/components/slide-shared/context/context-gallery');
-  return <ContextGallery locale={locale} />;
+type PageT = Awaited<ReturnType<typeof getTranslations<'episodesPage'>>>;
+
+const REFERENCE_LINK =
+  'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
+
+/** The layout references are not content, so they sit under the browse grid: the page template, the Slide master, the Slides gallery. */
+function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
+  const links = [
+    { route: episodeRoute('page-template'), icon: Layers, label: t('references.pageTemplate') },
+    { route: episodeRoute('slide-master'), icon: LayoutTemplate, label: t('references.slideMaster') },
+    { route: episodeRoute('slides'), icon: GalleryHorizontalEnd, label: t('references.slides') },
+  ];
+  return (
+    <nav
+      aria-label={t('references.label')}
+      data-reference-links
+      className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-border/40 pt-6"
+    >
+      {links.map(({ route, icon: Icon, label }) => (
+        <Link key={label} href={localizePath(route, locale)} className={REFERENCE_LINK}>
+          <Icon className="h-3.5 w-3.5" />
+          <span>{label}</span>
+        </Link>
+      ))}
+    </nav>
+  );
 }
 
 /**
  * The /episodes index page (FE-007 §1): lists every published Episode, and in dev mode
- * also lists in-progress staging Episodes as a GUI entry point (#85).
+ * also lists in-progress staging Episodes as a GUI entry point (#85). The layout references close the page.
  */
 export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
   const isDev = process.env.NODE_ENV === 'development';
@@ -52,7 +76,7 @@ export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
     <main data-testid="episodes-index-page" className="mx-auto max-w-6xl px-6 py-12 sm:py-16">
       <h1 className="sr-only">{tPage('title')}</h1>
       <EpisodeBrowse cards={cards} locale={locale} labels={browseLabels(tLanding)} />
-      <DevSharedVisuals locale={locale} />
+      <ReferenceLinks locale={locale} t={tPage} />
     </main>
   );
 }

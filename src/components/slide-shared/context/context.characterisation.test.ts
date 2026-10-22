@@ -102,6 +102,21 @@ describe('success cases', () => {
         'slide-9-after': { lit: 2, sections: ['Context window'], sliders: 0, toolbar: [] },
         'slide-9-before': { lit: 4, sections: ['Context window'], sliders: 0, toolbar: [] },
         'slide-9-chat': { lit: 0, sections: ['Chat'], sliders: 0, toolbar: [] },
+        'gallery-full': {
+          lit: 0,
+          sections: ['Chat', 'Context window', 'Details', 'Attention'],
+          sliders: 1,
+          toolbar: [
+            'Conversation:true',
+            'Timeline:true',
+            'Context window:true',
+            'Context category:true',
+            'Details:true',
+            'Attention:true',
+            ':false',
+            ':-',
+          ],
+        },
       };
       // ACT
       const actual = Object.fromEntries(CONTEXT_PRESETS.map((id) => [id, fingerprint(id)]));

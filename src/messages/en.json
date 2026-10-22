@@ -153,7 +153,6 @@
       },
       "upcoming": {}
     },
-    "templateTitle": "Episode Page Template",
     "method": {
       "title": "How I work",
       "hint": "Scroll to progress →",
@@ -290,8 +289,7 @@
           "source": "Basis: CV for deployment and pilot scope; professional profile for work on scheduling, OEE dashboards and master data."
         }
       }
-    },
-    "slideMasterTitle": "Slide master"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -449,7 +447,13 @@
     }
   },
   "episodesPage": {
-    "title": "Episodes"
+    "title": "Episodes",
+    "references": {
+      "label": "References",
+      "pageTemplate": "Episode Page Template",
+      "slideMaster": "Slide master",
+      "slides": "Slides"
+    }
   },
   "slideHeader": {
     "pageOf": "Page {position} of {count}"

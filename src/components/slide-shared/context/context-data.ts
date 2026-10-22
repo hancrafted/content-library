@@ -40,6 +40,7 @@ export const CONTEXT_PRESETS = [
   'slide-9-before',
   'slide-9-chat',
   'slide-9-after',
+  'gallery-full',
 ] as const;
 /** Every static bar Preset id. */
 export const MINI_PRESETS = ['slide-10-old', 'slide-10-fresh', 'slide-11-before', 'slide-11-after'] as const;

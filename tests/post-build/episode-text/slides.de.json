@@ -1,0 +1,59 @@
+{
+  "title": "Folien · hancrafted",
+  "description": "Die interaktiven Grundpfeiler-Folien der hancrafted-Episoden einzeln: das Kontextfenster und der Human-in-the-Loop-Workflow.",
+  "toc": "Inhalt Wird geladen 1 Kontextfenster Alle Teile und Bedienelemente 2 Agentische Workflows Human-in-the-Loop-Workflow Inhalt öffnen : Inhalt Inhalt 1 Kontextfenster Alle Teile und Bedienelemente 2 Agentische Workflows Human-in-the-Loop-Workflow",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Folien Jede Grundpfeiler-Folie für sich: Probieren Sie die interaktiven Visualisierungen und ihre Einstellungen aus, oder schicken Sie eine einzelne Folie ohne ihre Episode."
+    },
+    {
+      "id": "context-window",
+      "text": "Kontextfenster Der Grundpfeiler Kontextfenster: was das Fenster eines KI-Chats Schritt für Schritt füllt, und wie viel Aufmerksamkeit jeder Teil bekommt."
+    },
+    {
+      "id": "context-window--every-part-and-control",
+      "text": "Kontextfenster (1/1) Seite 1 von 1 Alle Teile und Bedienelemente Der Sommerfest-Chat aus der Episode zur Aufmerksamkeitsspanne der KI bei Schritt 25 von 28, direkt nach der Komprimierung bei Schritt 24. Alle sechs Teile sichtbar, jedes Bedienelement in Werkzeugleiste und Köpfen aktiv. Unterhaltung Zeitleiste Kontextfenster Kontextkategorien Details Aufmerksamkeit Unterhaltung Zeitleiste überfahren oder ziehen, um nachzuspielen Sommerfest Startanweisungen, verborgen Systemprompt · Werkzeuge · MCP · Skills Gedächtnis CLAUDE.md abgerufen Memory-Dateien · CLAUDE.md Plane das nächste Sommerfest unserer Firma: 200 Mitarbeitende an fünf Standorten in Europa, Ende Juni, Budget 30.000 Euro. Verblasst: die KI füllt diese Lücke vielleicht selbst Gern! Drinnen oder draußen? Gibt es Ernährungswünsche, die ich kennen sollte? Draußen, wenn es geht. 60 Gäste essen vegetarisch, bitte denk daran. Notiert: 60 vegetarische Gäste. Soll ich nach Orten suchen? Finde drei Orte in Lissabon. Im Web gesucht Im Web gesucht · 10 Seiten · 1 Wiederholung WebSearch(\"outdoor event venue Lisbon 200 guests\") WebSearch(\"Lisbon garden venue summer party\") WebFetch × 10 ⎿ 10 Seiten abgerufen · 15k Auszüge Drei Optionen: Quinta-Terrasse, LX-Factory-Dachterrasse, Estrela-Gartenpavillon. Die Catering-Angebote liegen im Projektordner. Welches passt? Eine Datei gelesen catering-offers.pdf gelesen · 20 Seiten Glob(\"**/*catering*.pdf\") Read(\"offers/catering-offers.pdf\", pages: \"1-20\") ⎿ 20 Seiten gelesen · 55k Sabor Verde passt am besten: mit vegetarischem Menü für 60. Such Hotels nahe dem Ort für 150 Gäste aus dem Ausland. Im Web gesucht Im Web gesucht · 12 Seiten WebSearch(\"hotels near Estrela Lisbon 27 June\") WebFetch × 12 ⎿ 12 Seiten abgerufen · 14,5k Auszüge Hotel Lumen und Casa do Rio haben beide am 27. Juni 150 Zimmer frei. Die Gästeliste liegt auch dort. Einen Befehl ausgeführt guests.xlsx geöffnet · 200 Zeilen Bash(python3 -c \"import pandas as pd; print(pd.read_excel('guests.xlsx').t…) ⎿ 200 Zeilen · 1,8k Alles klar: 200 Gäste, 150 reisen an, 60 vegetarisch. Super, stell den ganzen Plan zusammen. Einen Befehl ausgeführt Kosten zusammengerechnet Bash(python3 budget.py) ⎿ Summe 42.300 · 350 Tokens Der ganze Plan: Ort 11.800, Catering mit vegetarischem Menü 17.500, Hotels 8.000, Musik 5.000. Summe 42.300 Euro. Das sind 12.300 über dem Budget. Prüf bitte auch den Vertrag mit dem Ort. Eine Datei gelesen venue-contract.pdf gelesen · 21 Seiten Read(\"venue-contract.pdf\", pages: \"1-21\") ⎿ 21 Seiten gelesen · 57k Unterhaltung verdichtet Der Vertrag erlaubt Musik bis 23:00 und verlangt 30 % Anzahlung. Stell den Plan noch einmal zusammen. Einen Befehl ausgeführt Kosten zusammengerechnet Bash(python3 budget.py --limit 30000) ⎿ Summe 30.000 · 350 Tokens Plan: Ort 11.800, Catering mit vegetarischem Menü 10.500, Hotels 5.700, Musik 2.000. Summe 30.000 Euro, im Budget. 25 28 Schritte Kontextfenster ( 22 %) 44,1K von 200K Smart Zone nach Matt Pocock 80K Grenze 200k Kontextkategorien Startanweisungen 34,1k · 17% Gedächtnis 2k · 1% Du 0 · 0% Antworten der KI 16 · 0% Was die KI gelesen hat 0 · 0% Versteckte Notizen der App 0 · 0% Zusammenfassung 8k · 4% Freier Platz 139,4k · 70% Frei gehalten für Zusammenfassungen 16,5k · 8% Erklären Einfach Schritt 25 von 28 Die KI antwortet aus der Zusammenfassung +16 Tokens 22% belegt Eine Blase, einen Teil des Balkens oder eine Kategorie überfahren oder antippen, um zu sehen, was es ist. Aufmerksamkeit zur Veranschaulichung Schritt 25 von 28 · 100 Einheiten Aufmerksamkeit Nur die allerersten Zeilen und die neuesten Nachrichten bleiben scharf. Deine erste Nachricht und der Rest werden dünner. 50% Startanweisungen, verborgen 15% Gedächtnis geladen 0% Zusammenfassung: Unterhaltung verdichtet 45% Antworten der KI: Der Vertrag erlaubt Musik bis 23:00 und verlangt 30 % Anzahlung. 40% Schritt 25 von 28: Die KI antwortet aus der Zusammenfassung, +16 Tokens, 22 % belegt."
+    },
+    {
+      "id": "agentic-workflows",
+      "text": "Agentische Workflows Workflows, in denen KI-Chats die Aufgaben erledigen und Sie steuern: jede Stufe, ihre Übergabe und ihre Prüfung."
+    },
+    {
+      "id": "agentic-workflows--human-in-the-loop",
+      "text": "Agentische Workflows (1/1) Seite 1 von 1 Human-in-the-Loop-Workflow Der Brief-Workflow für das Sommerfest: Ein Planer-Chat bereitet jede Übergabe vor, Worker-Chats erledigen die Aufgaben, und Sie prüfen jedes Ergebnis dazwischen. Sommerfest Urlaub Technisch: zeigt die einmalige Einrichtung und die /Skill-Befehle Diesen Ablauf herunterladen Eigenen Ablauf hochladen Plan Anreise Catering Location Programm Einladungen Ausprobieren für Plan Interview KI fragt Dich 3 Fragen, 1 vergessen Ausprobieren für Interview Anforderungen 1 Anforderungskarte 200 Gäste Höchstens 150 € pro Person Stufenlos Vegetarisches Menü Separater ruhiger Raum Freigegeben Ausprobieren für Anforderungen Recherche Location 1 Location 2 Location 3 Ausprobieren für Recherche Vergleich 3 Locations ranken gemessen an der Karte 2 Ausprobieren für Vergleich Prüfen Location-Plan bis Freitag Ausprobieren für Prüfen"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "context-window", "text": "Kontextfenster Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "context-window--every-part-and-control",
+      "text": "Alle Teile und Bedienelemente Preset gallery-full Aus der Episode zur Aufmerksamkeitsspanne der KI: der Sommerfest-Chat, einen Schritt nach seiner Komprimierung. Alle Teile und Bedienelemente sind an; der Schalter 200K | 1M bleibt aus, da der Chat nur bei 200K komprimiert."
+    },
+    { "id": "agentic-workflows", "text": "Agentische Workflows Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "agentic-workflows--human-in-the-loop",
+      "text": "Human-in-the-Loop-Workflow Die Visualisierung mit eigenen Worten Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Sommerfest-Workflow, Urlaub eine Pille weiter, jedes „Ausprobieren“ offen."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "context-window", "text": "Kontextfenster Kein Sprechtext für diese Folie." },
+    {
+      "id": "context-window--every-part-and-control",
+      "text": "Alle Teile und Bedienelemente Kein Sprechtext für diese Folie."
+    },
+    { "id": "agentic-workflows", "text": "Agentische Workflows Kein Sprechtext für diese Folie." },
+    {
+      "id": "agentic-workflows--human-in-the-loop",
+      "text": "Human-in-the-Loop-Workflow Kein Sprechtext für diese Folie."
+    }
+  ]
+}

@@ -3,16 +3,21 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { ensureBrowser } from '../../../../skills/visual-check/scripts/browser';
 import { connect, evaluate, eventName, type Connection, type Send } from '../../../../skills/visual-check/scripts/cdp';
-import { CONTEXT_PRESETS } from './context-data';
 
 /*
- * The browser lane (`npm run test:browser`, local only, never CI): the cornerstone's dev gallery in the shared
- * chrome-headless-shell. axe-core checks every Preset in both themes; a scrub of the grid Preset stays under 16ms a
- * step. It needs `next dev` serving the gallery: CONTEXT_WINDOW_URL names it, `http://localhost:3000/episodes/` by
- * default (docs/features/context.md).
+ * The browser lane (`npm run test:browser`, local only, never CI): the cornerstone in the shared
+ * chrome-headless-shell, on the Slides Episode's "Every part and control" Slide (`gallery-full`, every part and
+ * control). axe-core checks every Preset on the page in both themes; a scrub stays under 16ms a step. Slide 5's own
+ * window switch and compressed start are checked on the AI attention span Episode, its only page. It needs `next dev`:
+ * CONTEXT_WINDOW_URL names the Slides Episode, `http://localhost:3000/episodes/slides/` by default
+ * (docs/features/context.md); the Episode sits beside it.
  */
 
-const URL_UNDER_TEST = process.env.CONTEXT_WINDOW_URL ?? 'http://localhost:3000/episodes/';
+const URL_UNDER_TEST = process.env.CONTEXT_WINDOW_URL ?? 'http://localhost:3000/episodes/slides/';
+/** Slide 5 on its Episode, opened at its anchor: an Episode mounts a Slide only near the viewport. */
+const EPISODE_URL = new URL('../ai-attention-span/#the-ais-attention-span--attention-is-a-budget', URL_UNDER_TEST).href;
+/** The Preset every test drives: the whole cornerstone. */
+const FULL = 'gallery-full';
 const TIMEOUT = 120_000;
 const AXE = axe.source;
 
@@ -29,8 +34,8 @@ async function open(theme: 'light' | 'dark', url = URL_UNDER_TEST) {
   await loaded;
   await delay(1500);
   await evaluate(send, AXE);
-  // Slide 4 opens on the compaction (step 24), too few rows for the Attention tests: they scrub back to step 21.
-  await commit('slide-4', 21);
+  // The Preset opens past the compaction (step 25), too few rows for the Attention tests: they scrub back to step 21.
+  if (url !== EPISODE_URL) await commit(FULL, 21);
   await delay(300);
 }
 
@@ -116,21 +121,24 @@ const attr = (preset: string, selector: string, name: string) =>
     `document.querySelector('[data-cornerstone="${preset}"] ${selector}')?.getAttribute('${name}') ?? null`,
   );
 
-const SLIDE_4 = '[data-cornerstone="slide-4"]';
+const SLIDE_4 = `[data-cornerstone="${FULL}"]`;
 const BAR = `${SLIDE_4} [data-roving]`;
 const LOUPE_ROW = `${SLIDE_4} button[class*="lrow"]`;
 
-/** Centre of an element in viewport pixels, after scrolling it into view. */
-const centreOf = (selector: string, nth = 0) =>
-  evaluate<{ x: number; y: number }>(
+/**
+ * Centre of an element in viewport pixels, after scrolling it into view. An Episode page mounts the Slides near the
+ * viewport as it scrolls, which moves the layout for a moment, so the centre is read once the scroll has settled.
+ */
+const centreOf = async (selector: string, nth = 0) => {
+  const el = `document.querySelectorAll(${JSON.stringify(selector)})[${nth}]`;
+  await evaluate(send, `${el}.scrollIntoView({ block: 'center', behavior: 'instant' })`);
+  await delay(250);
+  await evaluate(send, `${el}.scrollIntoView({ block: 'center', behavior: 'instant' })`);
+  return evaluate<{ x: number; y: number }>(
     send,
-    `(() => {
-      const el = document.querySelectorAll(${JSON.stringify(selector)})[${nth}];
-      el.scrollIntoView({ block: 'center', behavior: 'instant' });
-      const r = el.getBoundingClientRect();
-      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    })()`,
+    `(() => { const r = ${el}.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`,
   );
+};
 
 const mouseTo = (x: number, y: number) =>
   send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y, pointerType: 'mouse' });
@@ -203,8 +211,11 @@ describe('success cases', () => {
       // ACT
       for (const theme of ['light', 'dark'] as const) {
         await open(theme);
-        for (const preset of CONTEXT_PRESETS)
-          found.push(...(await axeOf(preset)).map((v) => `${theme} ${preset} ${v}`));
+        const presets = await evaluate<string[]>(
+          send,
+          `[...document.querySelectorAll('[data-cornerstone]')].map((el) => el.dataset.cornerstone)`,
+        );
+        for (const preset of presets) found.push(...(await axeOf(preset)).map((v) => `${theme} ${preset} ${v}`));
       }
       // ASSERT
       expect(found).toEqual([]);
@@ -217,7 +228,7 @@ describe('success cases', () => {
     async () => {
       // ARRANGE
       await open('light');
-      const preset = 'slide-7';
+      const preset = FULL;
       const steps = 21;
       const budget = 16;
       // ACT
@@ -430,7 +441,12 @@ describe('success cases', () => {
         const at = await centreOf(`${SLIDE_4} [data-row]`, index);
         await mouseTo(at.x, at.y);
         await delay(450);
-        const hover = await probe(index);
+        // The compressed list docks under the pointer, so a neighbour may grow into its place: read the row it is on.
+        const under = await evaluate<number>(
+          send,
+          `[...document.querySelectorAll('${SLIDE_4} [data-row]')].indexOf(document.elementFromPoint(${at.x}, ${at.y})?.closest('[data-row]'))`,
+        );
+        const hover = await probe(under);
         await mouseTo(5, 5);
         await delay(450);
         await evaluate(send, `document.querySelectorAll('${SLIDE_4} [data-row] button')[${index}].focus()`);
@@ -494,7 +510,7 @@ describe('success cases', () => {
           `(() => {
             const root = document.querySelector('${SLIDE_4}');
             const phone = root.querySelector('[class*="phone"]').getBoundingClientRect().height;
-            return [[...root.querySelectorAll('[data-role]:not([hidden])')].map((e) => e.dataset.part + '=' + Math.round(e.getBoundingClientRect().height)).join(), Math.round(phone), Math.round(scrollY), root.querySelector('[data-layout]').getBoundingClientRect().top | 0].join();
+            return [[...root.querySelectorAll('[data-role]:not([hidden])')].map((e) => e.dataset.part + '=' + Math.round(e.getBoundingClientRect().height)).join(), Math.round(phone), Math.round(scrollY), (root.querySelector('[data-layout]').getBoundingClientRect().top - root.getBoundingClientRect().top) | 0].join();
           })()`,
         );
       const before = await measure();
@@ -658,13 +674,13 @@ describe('success cases', () => {
         // ARRANGE
         await open('light');
         const before = await orderOf();
-        const pressed = () => attr('slide-7', `[data-chip="chat"]`, 'aria-pressed');
+        const pressed = () => attr(FULL, `[data-chip="chat"]`, 'aria-pressed');
         // ACT
-        await dragChip('chat', 'panel');
+        await dragChip('chat', 'attention');
         const after = await orderOf();
         // ASSERT
         expect(before.chips.at(0)).toBe('chat');
-        expect(after.chips.indexOf('chat')).toBe(before.chips.indexOf('panel'));
+        expect(after.chips.indexOf('chat')).toBe(before.chips.indexOf('attention'));
         expect(after.chips.at(0)).toBe('timeline');
         expect(await pressed()).toBe('true');
         expect(after.cells.at(-1)).toBe(before.cells[0]);
@@ -694,7 +710,7 @@ describe('success cases', () => {
       async () => {
         // ARRANGE
         await open('light');
-        const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3', 'cell-4'];
+        const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3', 'cell-4', 'cell-5'];
         const scrolled = await evaluate<number>(
           send,
           `(() => {
@@ -737,7 +753,11 @@ describe('failure cases', () => {
     async () => {
       // ARRANGE
       await open('light');
-      const preset = 'slide-8';
+      const preset = FULL;
+      // The Preset opens with nothing pinned: pin a category row with one click first.
+      const at = await centreOf(`[data-cornerstone="${preset}"] [aria-label="Usage by category"] button[data-part]`, 1);
+      await click(at.x, at.y);
+      await delay(100);
       // ACT
       const pinned = await attr(preset, '', 'data-lit');
       await evaluate(
@@ -787,8 +807,8 @@ describe('edge cases', () => {
     'switches Slide 5 to the 1M window: the head reads the same chat against 1M',
     async () => {
       // ARRANGE
-      await open('light');
       const preset = 'slide-5';
+      await open('light', EPISODE_URL);
       const expected = { title: 'Context window (13%)', of: '128K of 200K1M' };
       // ACT
       await evaluate(
@@ -822,7 +842,7 @@ describe('edge cases', () => {
       async () => {
         // ARRANGE
         await open('light');
-        const expected = { eye: 0, before: [0, 'false'], shown: [1, 'true'], hidden: [0, 'false'] };
+        const expected = { eye: 0, before: [1, 'true'], hidden: [0, 'false'], shown: [1, 'true'] };
         const chip = `${SLIDE_4} [role="toolbar"] [data-chip="category"]`;
         const chipPressed = () =>
           evaluate<string | null>(send, `document.querySelector('${chip}').getAttribute('aria-pressed')`);
@@ -832,10 +852,10 @@ describe('edge cases', () => {
         const before = [await shownCount(), await chipPressed()];
         await evaluate(send, `document.querySelector('${chip}').click()`);
         await delay(100);
-        const shown = [await shownCount(), await chipPressed()];
+        const hidden = [await shownCount(), await chipPressed()];
         await evaluate(send, `document.querySelector('${chip}').click()`);
         await delay(100);
-        const hidden = [await shownCount(), await chipPressed()];
+        const shown = [await shownCount(), await chipPressed()];
         // ASSERT
         expect({ eye, before, hidden, shown }).toEqual(expected);
       },
@@ -847,9 +867,6 @@ describe('edge cases', () => {
       async () => {
         // ARRANGE
         await open('light');
-        const chip = `${SLIDE_4} [role="toolbar"] [data-chip="category"]`;
-        await evaluate(send, `document.querySelector('${chip}').click()`);
-        await delay(100);
         const usage = `${SLIDE_4} [aria-label="Usage by category"]`;
         const top = (selector: string) =>
           evaluate<number>(send, `document.querySelector('${selector}').getBoundingClientRect().top`);
@@ -965,7 +982,7 @@ describe('edge cases', () => {
           await delay(200);
           const values = await sliders();
           const labels = await evaluate<number>(send, `document.querySelectorAll('${POPOVER} label').length`);
-          const expanded = await attr('slide-4', 'button[data-control="attentionMenu"]', 'aria-expanded');
+          const expanded = await attr(FULL, 'button[data-control="attentionMenu"]', 'aria-expanded');
           // ASSERT
           expect(values).toEqual(expected);
           expect(labels).toBe(four);
@@ -1107,7 +1124,7 @@ describe('edge cases', () => {
           await open('light');
           await click(MENU);
           await delay(200);
-          const layout = () => attr('slide-4', '[data-layout]', 'data-layout');
+          const layout = () => attr(FULL, '[data-layout]', 'data-layout');
           // ACT
           await click(`${POPOVER} button[data-layout-option="pinned"]`);
           await delay(100);
@@ -1125,7 +1142,7 @@ describe('edge cases', () => {
         'starts Slide 5 compressed, so the first and the newest rows are always in view',
         async () => {
           // ARRANGE
-          await open('light');
+          await open('light', EPISODE_URL);
           const expected = 'compressed';
           // ACT
           const actual = await attr('slide-5', '[data-layout]', 'data-layout');
@@ -1245,7 +1262,7 @@ describe('edge cases', () => {
       async () => {
         // ARRANGE
         await open('light');
-        const view = () => attr('slide-4', 'section[aria-label="Context window"]', 'data-view');
+        const view = () => attr(FULL, 'section[aria-label="Context window"]', 'data-view');
         const toolbar = `${SLIDE_4} [role="toolbar"] button[data-control="technical"]`;
         const toolbarPressed = () =>
           evaluate<string | null>(send, `document.querySelector('${toolbar}').getAttribute('aria-pressed')`);
@@ -1268,8 +1285,6 @@ describe('edge cases', () => {
       async () => {
         // ARRANGE
         await open('light');
-        await evaluate(send, `document.querySelector('${SLIDE_4} [role="toolbar"] [data-chip="category"]').click()`);
-        await delay(100);
         const row = `${SLIDE_4} [aria-label="Usage by category"] button[data-part]`;
         // ACT
         const at = await centreOf(row, 1);
@@ -1293,7 +1308,7 @@ describe('edge cases', () => {
 
 /** Two parts on one row start within this many px of each other. */
 const SAME_TOP = 2;
-const SLIDE_7 = '[data-cornerstone="slide-7"]';
+const SLIDE_7 = SLIDE_4;
 const CHIPS = `${SLIDE_7} [data-chip]`;
 
 /** The part chips' ids in toolbar order, and the grid's children in DOM order (a part's own root class names it). */

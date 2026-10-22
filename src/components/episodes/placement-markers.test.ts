@@ -20,6 +20,7 @@ const MARKED = [
   'never-too-early-sales',
   'onboard-ai-every-time',
   'ai-attention-span',
+  'slides',
 ] as const;
 
 /** The marker module names of an Episode, without the extension; none when it keeps no `sections/` folder. */

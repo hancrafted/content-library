@@ -1439,6 +1439,16 @@ summary.row:hover {
 }
 
 /* ── Narrow: controls, chat, a row with the timeline and the bar horizontal, usage, panel ── */
+/* A grid too wide for one row (five parts or more, see context-columns.pure.ts) takes its two-row layout on a container
+ * narrower than its one-row minimum; a phone stacks every part in the block below instead. */
+@container (min-width: 48rem) and (max-width: 82rem) {
+  .main[data-wrap] {
+    grid-template-columns: var(--cols-wrap);
+    grid-template-areas: var(--areas-wrap);
+    grid-template-rows: var(--rows-wrap);
+    height: auto;
+  }
+}
 @container (max-width: 47.99rem) {
   .main {
     grid-template-columns: 1fr;

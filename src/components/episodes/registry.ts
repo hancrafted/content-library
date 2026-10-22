@@ -11,6 +11,7 @@ import { onboardAiEveryTime } from './onboard-ai-every-time/onboard-ai-every-tim
 import { pageTemplate } from './page-template/page-template';
 import { slideLayouts } from './slide-layouts/slide-layouts';
 import { slideMaster } from './slide-master/slide-master';
+import { slides } from './slides/slides';
 
 /**
  * Every Episode, by slug (FE-002). Typed against `EPISODE_SLUGS`, so a slug
@@ -27,6 +28,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: 
   'ai-gives-you-more-work': aiGivesYouMoreWork,
   'slide-layouts': slideLayouts,
   'slide-master': slideMaster,
+  slides,
 };
 
 export function findEpisode(slug: string): EpisodeRecord {

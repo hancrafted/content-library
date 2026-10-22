@@ -20,8 +20,10 @@ export const EPISODE_SLUGS = [
   'ai-gives-you-more-work',
   // Unlisted: built and exported, linked from neither the landing page nor the header.
   'slide-layouts',
-  // A catalog of reusable Slide layouts, linked from the landing page beside the page template.
+  // A catalog of reusable Slide layouts, linked from the bottom of /episodes beside the page template.
   'slide-master',
+  // The cornerstone Slides one by one, outside their Episodes: a preview bench and a link to send one Slide.
+  'slides',
 ] as const;
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
