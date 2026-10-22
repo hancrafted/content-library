@@ -470,7 +470,7 @@
   },
   "workshopsPage": {
     "title": "Workshops",
-    "back": "All Workshops",
+    "back": "All workshops",
     "intro": "Guided sessions that walk through a planned set of Episodes, in order.",
     "agenda": "Agenda",
     "start": "Start with Episode {step}",

@@ -22,6 +22,7 @@ describe('success cases', () => {
     // ASSERT
     expect(cue).toBe(expected);
   });
+
   it('shows a workshop card as the quiet arrow', () => {
     // ARRANGE
     const expected = 'arrow';
@@ -33,14 +34,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it.each(['lead', 'compact'] as const)('shows an announced-only Episode as coming soon on a %s card', (variant) => {
-    // ARRANGE
-    const expected = 'coming-soon';
-    // ACT
-    const cue = cueOf(UNLINKED, variant);
-    // ASSERT
-    expect(cue).toBe(expected);
-  });
+  it.each(['lead', 'compact', 'workshop'] as const)(
+    'shows an announced-only Episode as coming soon on a %s card',
+    (variant) => {
+      // ARRANGE
+      const expected = 'coming-soon';
+      // ACT
+      const cue = cueOf(UNLINKED, variant);
+      // ASSERT
+      expect(cue).toBe(expected);
+    },
+  );
 });
 
 describe('edge cases', () => {

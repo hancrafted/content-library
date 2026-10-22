@@ -1,16 +1,29 @@
 import { CardCaption, CardCue, CardShell, CardTitle } from '@/components/landing/card-shell';
-import { cueOf, isLinked, type CardVariant } from '@/components/landing/card-variant.pure';
+import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/components/landing/card-variant.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { EpisodeLinks } from '@/components/landing/episode-links';
 import { ReleaseDate } from '@/components/landing/episode-release-date';
 import { TAG_ICONS } from '@/components/landing/episode-visuals';
 import type { VideoLabels } from '@/components/landing/episode-youtube-link';
 import type { Locale } from '@/lib/locale.pure';
+import type { getTranslations } from 'next-intl/server';
 
 /** The strings a card draws that are not on the card itself. */
 export interface CardLabels extends VideoLabels {
   readonly open: string;
   readonly comingSoon: string;
+}
+
+type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
+
+/** The card's own labels, read from the landing Translation file; the one builder every page that draws cards uses. */
+export function cardLabels(t: LandingT): CardLabels {
+  return {
+    open: t('episodeOverview.open'),
+    comingSoon: t('episodeOverview.comingSoon'),
+    watchVideo: t('episodeOverview.watchVideo'),
+    newTab: t('episodeOverview.newTab'),
+  };
 }
 
 const META = 'text-caption text-muted-foreground';
@@ -58,6 +71,8 @@ function CardFooter({ card, variant, labels, showFormat }: FooterProps) {
 export interface EpisodeCardProps {
   card: EpisodeCard;
   variant: CardVariant;
+  /** The title's heading level, one below the heading the card sits under. */
+  headingLevel: CardHeadingLevel;
   locale: Locale;
   labels: CardLabels;
   /** Whether the card names its Format; see `showsFormat`. */
@@ -66,12 +81,31 @@ export interface EpisodeCardProps {
   className?: string;
 }
 
+/** The card's own data attributes, the hooks tests and probes read. */
+function dataOf(card: EpisodeCard) {
+  return {
+    'data-episode-card': '',
+    'data-episode-slug': card.slug,
+    'data-episode-status': card.status,
+    'data-lead-tag': card.leadTag.id,
+    'data-format': card.format.id,
+  };
+}
+
 /**
  * One Episode as a card, in the landing page's style: the lead Tag's accent and
  * icon, title, caption, Tags, release date and video. A published card is a link
  * as a whole; an announced-only one is muted and goes nowhere.
  */
-export function EpisodeCardView({ card, variant, locale, labels, showFormat, className }: EpisodeCardProps) {
+export function EpisodeCardView({
+  card,
+  variant,
+  headingLevel,
+  locale,
+  labels,
+  showFormat,
+  className,
+}: EpisodeCardProps) {
   return (
     <CardShell
       variant={variant}
@@ -79,15 +113,9 @@ export function EpisodeCardView({ card, variant, locale, labels, showFormat, cla
       accent={card.accent}
       icon={TAG_ICONS[card.icon]}
       className={className}
-      data={{
-        'data-episode-card': '',
-        'data-episode-slug': card.slug,
-        'data-episode-status': card.status,
-        'data-lead-tag': card.leadTag.id,
-        'data-format': card.format.id,
-      }}
+      data={dataOf(card)}
     >
-      <CardTitle variant={variant} title={card.title} route={card.route} locale={locale} />
+      <CardTitle variant={variant} title={card.title} route={card.route} locale={locale} level={headingLevel} />
       <CardCaption variant={variant}>{card.caption}</CardCaption>
       <CardTags card={card} />
       <CardFooter card={card} variant={variant} labels={labels} showFormat={showFormat} />

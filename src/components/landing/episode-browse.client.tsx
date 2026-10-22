@@ -1,5 +1,6 @@
 'use client';
 
+import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
 import {
   browseView,
   hasActiveFilters,
@@ -136,15 +137,23 @@ interface GridProps {
   visible: ReadonlySet<string>;
   locale: Locale;
   labels: BrowseLabels;
+  headingLevel: CardHeadingLevel;
 }
 
-function BrowseGrid({ cards, visible, locale, labels }: GridProps) {
+function BrowseGrid({ cards, visible, locale, labels, headingLevel }: GridProps) {
   const showFormat = showsFormat(cards);
   return (
     <ul data-episode-browse className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((card) => (
         <li key={card.slug} data-browse-item hidden={!visible.has(card.slug)} className="flex">
-          <EpisodeCardView card={card} variant="compact" locale={locale} labels={labels} showFormat={showFormat} />
+          <EpisodeCardView
+            card={card}
+            variant="compact"
+            headingLevel={headingLevel}
+            locale={locale}
+            labels={labels}
+            showFormat={showFormat}
+          />
         </li>
       ))}
     </ul>
@@ -155,6 +164,8 @@ interface BrowseProps {
   cards: EpisodeCard[];
   locale: Locale;
   labels: BrowseLabels;
+  /** The cards' heading level, one below the heading the block sits under. */
+  headingLevel: CardHeadingLevel;
 }
 
 /**
@@ -164,7 +175,7 @@ interface BrowseProps {
  * script-less visit still see all of it. Leaving the page and coming back
  * starts from All again.
  */
-export function EpisodeBrowse({ cards, locale, labels }: BrowseProps) {
+export function EpisodeBrowse({ cards, locale, labels, headingLevel }: BrowseProps) {
   const browse = useBrowse(cards);
   const { view, selection } = browse;
   return (
@@ -174,7 +185,7 @@ export function EpisodeBrowse({ cards, locale, labels }: BrowseProps) {
       </noscript>
       <BrowseControls browse={browse} labels={labels} />
       <ResultsLine browse={browse} labels={labels} />
-      <BrowseGrid cards={cards} visible={view.visible} locale={locale} labels={labels} />
+      <BrowseGrid cards={cards} visible={view.visible} locale={locale} labels={labels} headingLevel={headingLevel} />
       {view.matching === 0 && <EmptyState labels={labels} onReset={browse.reset} />}
       {view.foldable && (
         <FoldButton

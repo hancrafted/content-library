@@ -44,7 +44,7 @@ describe('/workshops page', () => {
     const card = cards.filter(`[data-workshop-slug="${FIRST.slug}"]`);
     // ASSERT
     expect(cards.length).toBe(WORKSHOPS.length);
-    expect(card.find('h4').text()).toBe(expected.title);
+    expect(card.find('h2').text()).toBe(expected.title);
     expect(card.find('time[data-workshop-date]').attr('datetime')).toBe(FIRST.date);
     expect(card.find('time[data-workshop-date]').text()).toBe(expected.date);
     expect(card.find('[data-workshop-episode-count]').text()).toBe(expected.count);
@@ -156,6 +156,31 @@ describe('Workshop page', () => {
     expect(facts.count).toBe(expected.count);
     expect(facts.reading).toMatch(expected.reading);
   });
+});
+
+describe('heading levels', () => {
+  const PAGES = [
+    { name: '/episodes', route: ROUTES.episodes },
+    { name: '/workshops', route: ROUTES.workshops },
+    { name: 'a Workshop page', route: workshopRoute(FIRST.slug) },
+  ];
+
+  it.each(PAGES.flatMap((page) => LOCALES.map((locale) => ({ ...page, locale }))))(
+    'skips no heading level on $name for $locale',
+    ({ route, locale }) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(route, locale));
+      const expected: number[] = [];
+      // ACT
+      const levels = $('main :header')
+        .map((_, heading) => Number(heading.tagName.slice(1)))
+        .get();
+      const jumps = levels.filter((level, index) => level - (levels[index - 1] ?? 0) > 1);
+      // ASSERT
+      expect(levels[0]).toBe(1);
+      expect(jumps).toEqual(expected);
+    },
+  );
 });
 
 describe('header and sitemap', () => {

@@ -1,5 +1,6 @@
 import { EpisodeBrowse, type BrowseLabels } from '@/components/landing/episode-browse.client';
 import { newestFirst } from '@/components/landing/episode-browse.pure';
+import { cardLabels } from '@/components/landing/episode-card';
 import { episodeCards } from '@/components/landing/episode-cards';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
@@ -11,10 +12,7 @@ type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
 
 function browseLabels(t: LandingT): BrowseLabels {
   return {
-    open: t('episodeOverview.open'),
-    comingSoon: t('episodeOverview.comingSoon'),
-    watchVideo: t('episodeOverview.watchVideo'),
-    newTab: t('episodeOverview.newTab'),
+    ...cardLabels(t),
     search: t('episodeOverview.search'),
     searchPlaceholder: t('episodeOverview.searchPlaceholder'),
     tagFilter: t('episodeOverview.tagFilter'),
@@ -79,7 +77,7 @@ export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
           {tPage('intro')}
         </p>
       </header>
-      <EpisodeBrowse cards={newestFirst(cards)} locale={locale} labels={browseLabels(tLanding)} />
+      <EpisodeBrowse cards={newestFirst(cards)} locale={locale} labels={browseLabels(tLanding)} headingLevel={2} />
       <ReferenceLinks locale={locale} t={tPage} />
     </main>
   );

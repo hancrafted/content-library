@@ -4,7 +4,7 @@ type IsoDate = `${number}-${number}-${number}`;
 /*
  * The Workshops: dated, ordered sets of Episodes, listed at /workshops. One
  * record each; a Workshop's title and description are Translation keys by slug
- * (`workshops.items.<slug>`), so nothing a visitor reads is written here (FE-003).
+ * (`workshopsPage.items.<slug>`), so nothing a visitor reads is written here (FE-003).
  */
 
 export interface WorkshopRecord {

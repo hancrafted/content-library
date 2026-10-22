@@ -27,4 +27,4 @@ Topic is dropped. Tags are the only organising idea.
 
 - A new Tag is one edit in the central record plus its two Translation keys.
 - An Episode's card look follows from the order of its Tags; reordering Tags recolours the card.
-- Existing cards and filters keep working, with the lead Tag standing in for the Topic label until the shared Episode card replaces them.
+- The shared Episode card replaces the old cards: its lead Tag fixes the icon and accent colour that the Topic label used to name, and the filters work on Tags.
