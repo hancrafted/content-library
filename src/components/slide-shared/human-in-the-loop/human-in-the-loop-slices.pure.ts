@@ -36,7 +36,7 @@ function uploadedFile(yaml: string): WorkflowEvent {
 /** The callbacks the parts send events up by. */
 export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload'> &
   Pick<DiagramProps, 'onOpenStage'> &
-  Pick<ModalProps, 'onClose' | 'onShort' | 'onTick'>;
+  Pick<ModalProps, 'onClose' | 'onShort' | 'onTick' | 'onSlots'>;
 
 /** The callbacks over one dispatch. */
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
@@ -48,6 +48,7 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
     onClose: () => dispatch({ type: 'close' }),
     onShort: (jobId) => dispatch({ type: 'short', jobId }),
     onTick: (ticketId) => dispatch({ type: 'tick', ticketId }),
+    onSlots: (values) => dispatch({ type: 'slots', values }),
   };
 }
 
@@ -84,6 +85,7 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
       shortJobIds: state.shortJobIds,
       ticked: state.ticked,
+      slotValues: state.slotValues,
       words,
       outputWords,
       level: state.level,
@@ -91,6 +93,7 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       onClose: on.onClose,
       onShort: on.onShort,
       onTick: on.onTick,
+      onSlots: on.onSlots,
     },
   };
 }

@@ -147,6 +147,8 @@ export interface ModalProps {
   readonly stage: StageView | null;
   readonly shortJobIds: readonly string[];
   readonly ticked: readonly string[];
+  /** The pasted slot values by marker name, shared by every stage of the Workflow. */
+  readonly slotValues: Readonly<Record<string, string>>;
   readonly words: UiWords;
   /** The labels of the example result's views. */
   readonly outputWords: OutputWords;
@@ -155,6 +157,7 @@ export interface ModalProps {
   readonly onClose: () => void;
   readonly onShort: (jobId: string) => void;
   readonly onTick: (ticketId: string) => void;
+  readonly onSlots: (values: Readonly<Record<string, string>>) => void;
 }
 
 /** Everything the client parent is given by the server entry: plain and serializable. */
