@@ -26,7 +26,12 @@ const taskShape = (task: TaskDef) => ({
   slots: task.slots.map(slotShape),
   simple: task.do.simple.map((section) => section.purpose),
   technical: task.do.technical.map((section) => section.purpose),
-  review: task.review && { slots: task.review.slots.map(slotShape), checks: task.review.checks.length },
+  instructions: Boolean(task.instructions),
+  review: task.review && {
+    instructions: Boolean(task.review.instructions),
+    slots: task.review.slots.map(slotShape),
+    checks: task.review.checks.length,
+  },
   examples: count(task.details.example),
   good: task.details.goodLooksLike.length,
 });
@@ -71,6 +76,20 @@ describe('success cases', () => {
     expect(slot?.sample).toBeTruthy();
     expect(texts.filter((text) => /<.*>/.test(text))).toEqual([]);
   });
+  it.each(EACH)('gives every do and review step instructions of one or two sentences, in %s %s', (id, locale) => {
+    // ARRANGE
+    const tasks = fileOf(id, locale).stages.flatMap((stage) => stage.tasks);
+    // ACT
+    const texts = tasks.flatMap((task) => [task.instructions, task.review?.instructions]);
+    const longest = 2;
+    const steps = tasks.length + tasks.filter((task) => task.review).length;
+    // ASSERT
+    expect(texts.filter((text) => text !== undefined)).toHaveLength(steps);
+    expect(texts.every((text) => text === undefined || (text.match(/[.!?](\s|$)/g) ?? []).length <= longest)).toBe(
+      true,
+    );
+  });
+
   it.each(WORKFLOW_IDS)('holds the same structure in English and German for %s', (id) => {
     // ARRANGE
     const en = structureOf(fileOf(id, 'en'));

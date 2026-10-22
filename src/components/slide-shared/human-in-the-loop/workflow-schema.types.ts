@@ -62,6 +62,8 @@ export interface ReviewDef {
   readonly slots: readonly SlotDef[];
   /** Tailored layer, joined with the general `reviewer` sections through `{{checks}}`. */
   readonly checks: readonly string[];
+  /** One or two plain sentences on what the user does in this step, e.g. "Open a fresh chat and paste the prompt." */
+  readonly instructions?: string;
 }
 
 /** The right column of the popover, for the task in focus. */
@@ -83,6 +85,8 @@ export interface TaskDef {
   readonly slots: readonly SlotDef[];
   /** N parallel chats from this one template; absent for a single chat. */
   readonly fanOut?: number;
+  /** One or two plain sentences on what the user does in the do step; shown above the slots in the popover. */
+  readonly instructions?: string;
   readonly do: Readonly<Record<Runtime, readonly SectionDef[]>>;
   readonly review?: ReviewDef;
   readonly details: DetailsDef;

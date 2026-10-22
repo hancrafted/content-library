@@ -93,9 +93,28 @@ const load = (change: (file: File) => void = () => undefined) => {
 };
 const problemsOf = (result: ReturnType<typeof loadWorkflow>) =>
   'problems' in result ? result.problems.join('\n') : '';
-const research = (file: File) => file.stages[1]!.tasks[0]!;
+type Research = File['stages'][1]['tasks'][0] & {
+  instructions?: string;
+  review: { instructions?: string };
+};
+const research = (file: File): Research => file.stages[1]!.tasks[0]! as Research;
 
 describe('success cases', () => {
+  it('loads the instructions of a do step and of a review step', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      research(file).instructions = 'Open a fresh chat.';
+      research(file).review.instructions = 'Paste the fix handoff back.';
+    };
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect('file' in result && result.file.stages[1]!.tasks[0]!.instructions).toBe('Open a fresh chat.');
+    expect('file' in result && result.file.stages[1]!.tasks[0]!.review?.instructions).toBe(
+      'Paste the fix handoff back.',
+    );
+  });
+
   it('loads a file with a fan-out, a slot on an earlier output and a review', () => {
     // ARRANGE
     const expected = 'demo';
@@ -155,6 +174,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('rejects instructions that are not text', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      (research(file) as { instructions?: unknown }).instructions = 3;
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[1].tasks[0].instructions must be text.');
+  });
+
   const many = (sample: unknown) => ({ id: 'research', mode: 'multiple', label: 'All', sample });
   const add =
     (slot: object, text = '{{research_1}} {{research_2}}') =>
