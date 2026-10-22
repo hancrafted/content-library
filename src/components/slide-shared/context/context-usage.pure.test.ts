@@ -11,7 +11,7 @@ const CHAT: Chat = {
     {
       id: 'm2',
       kind: 'you',
-      text: 'Budget 40,000.',
+      text: 'Budget 30,000.',
       blocks: [
         { cat: 'user', tokens: 20 },
         { cat: 'reminder', tokens: 30 },

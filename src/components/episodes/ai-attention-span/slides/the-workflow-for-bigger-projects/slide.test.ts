@@ -40,7 +40,7 @@ describe('success cases', () => {
       {
         title: 'One chat is too small',
         script:
-          'Sometimes the project is bigger than one chat can hold: the whole summer party, with venues, catering, hotels and invitations. One chat would fill up, whatever window size you give it.',
+          "Say you are planning your company's next summer party: 200 employees across five offices in Europe. Sometimes the project is bigger than one chat can hold: the whole summer party, with venues, catering, hotels and invitations. One chat would fill up, whatever window size you give it.",
       },
       {
         title: 'Break it down first',

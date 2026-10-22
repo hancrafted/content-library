@@ -3,7 +3,7 @@
   "heading": "One prompt, one polished plan",
   "caption": "It looks finished. Look closer.",
   "promptLabel": "The one prompt",
-  "prompt": "Plan next year's summer party for 200 employees across Europe.",
+  "prompt": "Plan your company's next summer party: 200 employees across five offices in Europe.",
   "stackLabel": "12 documents back, polished",
   "traitsLabel": "What each trait left in the plan",
   "cracks": {
@@ -39,7 +39,7 @@
       "one-prompt-in": {
         "title": "One prompt in",
         "keywords": "",
-        "script": "So what happens if you just hand them one prompt: plan next year's summer party for 200 employees across Europe? You get a plan. A polished one. Look closer."
+        "script": "So what happens if you just hand them one prompt: plan your company's next summer party, 200 employees across five offices in Europe? You get a plan. A polished one. Look closer."
       },
       "probabilistic": {
         "title": "Probabilistic",

@@ -3,9 +3,9 @@
   "caption": "Wenn der Chat das Fenster füllt, bleiben nur der allererste Anfang und das Neueste scharf, der Rest verschwimmt, auch Deine erste Nachricht, ein wiederholtes Detail überlebt, und die Antworten werden schlechter: <b>Context Rot</b>.",
   "strip": {
     "firstKicker": "Deine erste Nachricht",
-    "first": "… Budget <figure>40.000 Euro</figure>.",
+    "first": "… Budget <figure>30.000 Euro</figure>.",
     "planKicker": "Der Plan der KI",
-    "plan": "… Gesamt <figure>52.300 Euro</figure>.",
+    "plan": "… Gesamt <figure>42.300 Euro</figure>.",
     "mayFill": "<marker>die KI füllt diese Lücke vielleicht selbst</marker>",
     "forgotten": "das Budget wurde vergessen",
     "reason": "<marker>Deine erste Nachricht fällt schon ab, und es ist eine kurze Zahl unter vielen ähnlichen</marker>",
@@ -94,12 +94,12 @@
       "the-middle-blurs": {
         "title": "Die Mitte verschwimmt",
         "keywords": "",
-        "script": "Die Mitte verschwimmt. Was du vor einer Stunde gesagt hast, liegt im unscharfen Teil, und die KI behandelt es so, wie du die Renovierung der Nachbarn behandelst: Es war da, aber es ist dünn."
+        "script": "Die Mitte verschwimmt. Was Du vor einer Stunde gesagt hast, liegt im unscharfen Teil, und die KI behandelt es so, wie Du die Renovierung der Nachbarn behandelst: Es war da, aber es ist dünn."
       },
       "a-standout-survives": {
         "title": "Ein Ausreißer überlebt",
         "keywords": "",
-        "script": "Und ein Ausreißer überlebt. Die 12 vegetarischen Gäste, ein Detail, das im Chat immer wieder vorkommt, sind noch da, und der Plan kommt mit einem vegetarischen Menü zurück."
+        "script": "Und ein Ausreißer überlebt. Die 60 vegetarischen Gäste, ein Detail, das im Chat immer wieder vorkommt, sind noch da, und der Plan kommt mit einem vegetarischen Menü zurück."
       },
       "answers-get-worse": {
         "title": "Die Antworten werden schlechter",
@@ -109,7 +109,7 @@
       "the-budget-is-forgotten": {
         "title": "Das Budget ist vergessen",
         "keywords": "",
-        "script": "Schau auf das Budget. Deine allererste Nachricht sagte 40.000 Euro, und jetzt kommt der Plan mit 52.300 zurück. Es war Deine erste Nachricht, aber nur die Startanweisungen halten den allerersten Anfang, also fällt schon Deine erste Nachricht ab. Es ging durch seine Position verloren, und es ist außerdem eine kurze Zahl unter vielen ähnlichen."
+        "script": "Schau auf das Budget. Deine allererste Nachricht sagte 30.000 Euro, und jetzt kommt der Plan mit 42.300 zurück. Es war Deine erste Nachricht, aber nur die Startanweisungen halten den allerersten Anfang, also fällt schon Deine erste Nachricht ab. Es ging durch seine Position verloren, und es ist außerdem eine kurze Zahl unter vielen ähnlichen."
       },
       "filling-the-gap": {
         "title": "Die Lücke füllen",

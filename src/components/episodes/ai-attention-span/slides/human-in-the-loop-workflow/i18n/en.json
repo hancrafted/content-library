@@ -1,10 +1,10 @@
 {
   "title": "Human in the loop workflow",
-  "caption": "You are the captain: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between.",
+  "caption": "Plan your company's next summer party: 200 employees across five offices in Europe. You are the captain: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between.",
   "pipelineLabel": "The steps of a brief, stage by stage",
   "stages": {
     "party": {
-      "name": "Plan a summer party",
+      "name": "Summer party",
       "move": "Break it down"
     },
     "interview": {

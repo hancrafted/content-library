@@ -1,18 +1,18 @@
 {
   "title": "Was wir bisher gelernt haben",
-  "caption": "Lange KI-Chats zeigen dieselben Effekte wie lange Telefonate, denn die Aufmerksamkeitsspanne der KI ist ihr Kontextfenster: eine begrenzte Ressource, die du aktiv verwaltest.",
+  "caption": "Lange KI-Chats zeigen dieselben Effekte wie lange Telefonate, denn die Aufmerksamkeitsspanne der KI ist ihr Kontextfenster: eine begrenzte Ressource, die Du aktiv verwaltest.",
   "call": {
     "kicker": "Menschliche Aufmerksamkeit",
     "label": "Das Telefonat mit Deiner Schwester, die Mitte verblasst",
     "lines": {
       "holidays": "Lass uns die Ferien planen!",
-      "mums-phone": "Ja! Aber erst: Hast du von Mamas neuem Handy gehört?",
+      "mums-phone": "Ja! Aber erst: Hast Du von Mamas neuem Handy gehört?",
       "what-happened": "Nein, was ist passiert?",
       "thumb-photos": "Sie hat mir vierzig Fotos von ihrem Daumen geschickt.",
-      "renovation": "Ha! Hast du die Renovierung der Nachbarn gesehen?",
+      "renovation": "Ha! Hast Du die Renovierung der Nachbarn gesehen?",
       "back-hurts": "Fang bloß nicht davon an. Und mein Rücken tut wieder weh.",
       "pepper": "Und Pepper hat einen ganzen Geburtstagskuchen gefressen, samt Kerzen!",
-      "recipe": "Hast du das neue Rezept probiert?",
+      "recipe": "Hast Du das neue Rezept probiert?",
       "dinner": "Noch nicht. Oh, das Essen ist fertig, ich muss los.",
       "bye": "Bis bald, tschüss!"
     },

@@ -3,9 +3,9 @@
   "caption": "As the chat fills the window, only the very beginning and the newest stay sharp, the rest blurs, your own first message included, one repeated detail survives, and answers get worse: <b>context rot</b>.",
   "strip": {
     "firstKicker": "Your first message",
-    "first": "… budget <figure>40,000 euro</figure>.",
+    "first": "… budget <figure>30,000 euro</figure>.",
     "planKicker": "The AI's plan",
-    "plan": "… Total <figure>52,300 euro</figure>.",
+    "plan": "… Total <figure>42,300 euro</figure>.",
     "mayFill": "<marker>the AI may fill this gap itself</marker>",
     "forgotten": "the budget got forgotten",
     "reason": "<marker>Your first message already falls off, and it is one short number among many similar ones</marker>",
@@ -99,7 +99,7 @@
       "a-standout-survives": {
         "title": "A standout survives",
         "keywords": "",
-        "script": "And one standout survives. The 12 vegetarian guests, a detail the chat keeps repeating, are still there, and the plan comes back with a vegetarian menu."
+        "script": "And one standout survives. The 60 vegetarian guests, a detail the chat keeps repeating, are still there, and the plan comes back with a vegetarian menu."
       },
       "answers-get-worse": {
         "title": "Answers get worse",
@@ -109,7 +109,7 @@
       "the-budget-is-forgotten": {
         "title": "The budget is forgotten",
         "keywords": "",
-        "script": "Look at the budget. Your very first message said 40,000 euro, and now the plan comes back at 52,300. It was your first message, but only the starting instructions hold the very beginning, so even your first message already falls off. It lost attention by its position, and it is also one short number among many similar ones."
+        "script": "Look at the budget. Your very first message said 30,000 euro, and now the plan comes back at 42,300. It was your first message, but only the starting instructions hold the very beginning, so even your first message already falls off. It lost attention by its position, and it is also one short number among many similar ones."
       },
       "filling-the-gap": {
         "title": "Filling the gap",

@@ -6,7 +6,7 @@
   "freshChat": "Neuer Chat: Einladungen",
   "handoff": {
     "title": "Übergabekarte",
-    "text": "Feier für 40, 27. Juni, <budget>Budget 40.000 €</budget>. Ort: Estrela-Pavillon. Caterer: Sabor Verde (12 vegetarisch). Weiter: Einladungen.",
+    "text": "Feier für 200, 27. Juni, <budget>Budget 30.000 €</budget>. Ort: Estrela-Pavillon. Caterer: Sabor Verde (60 vegetarisch). Weiter: Einladungen.",
     "arrow": "erste Nachricht des neuen Chats"
   },
   "habitsLabel": "Sechs Gewohnheiten für jeden Tag",
@@ -71,7 +71,7 @@
       "break-it-down": {
         "title": "Zerleg es",
         "keywords": "",
-        "script": "Zerleg es. Teile das Projekt in Jobs, bevor der erste Chat beginnt: Du teilst eine große Aufgabe in kleine Schritte, und jeder Schritt ist klein genug, um ihn im Blick zu behalten."
+        "script": "Stell Dir vor, Du planst das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. Zerleg es. Teile das Projekt in Jobs, bevor der erste Chat beginnt: Du teilst eine große Aufgabe in kleine Schritte, und jeder Schritt ist klein genug, um ihn im Blick zu behalten."
       },
       "one-chat-one-job": {
         "title": "Neuer Job, neuer Chat",

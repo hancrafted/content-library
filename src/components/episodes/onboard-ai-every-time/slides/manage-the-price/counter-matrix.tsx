@@ -39,11 +39,11 @@ interface CounterMatrixProps {
   };
 }
 
-/** A word with its first letter set off, so the five spell an acronym. */
+/** A word with its first letter set off, so the five spell an acronym; an empty `initial` (German) sets nothing off. */
 function Initialled({ initial, rest, className }: { initial: string; rest: string; className?: string }) {
   return (
     <span>
-      <span className={className ?? 'font-semibold'}>{initial}</span>
+      {initial === '' ? null : <span className={className ?? 'font-semibold'}>{initial}</span>}
       {rest}
     </span>
   );

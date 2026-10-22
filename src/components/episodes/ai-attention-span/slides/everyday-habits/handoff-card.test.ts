@@ -10,9 +10,9 @@ const render = (text: Parameters<typeof HandoffCard>[0]['text']) =>
 describe('success cases', () => {
   it('shows its title above the text it carries into the next chat', () => {
     // ARRANGE
-    const expected = ['Handoff card', 'Party for 40. Next: invitations.'];
+    const expected = ['Handoff card', 'Party for 200. Next: invitations.'];
     // ACT
-    const $ = render('Party for 40. Next: invitations.');
+    const $ = render('Party for 200. Next: invitations.');
     const lines = $('[data-handoff] p')
       .map((_, el) => $(el).text())
       .get();
@@ -26,7 +26,7 @@ describe('failure cases', () => {
     // ARRANGE
     const focusable = 'a, button, input, [tabindex]';
     // ACT
-    const $ = render('Party for 40.');
+    const $ = render('Party for 200.');
     // ASSERT
     expect($(focusable)).toHaveLength(0);
   });
@@ -35,7 +35,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the rich text a Slide hands it, so the budget keeps its tint', () => {
     // ARRANGE
-    const expected = 'budget 40,000 €';
+    const expected = 'budget 30,000 €';
     // ACT
     const $ = render(createElement('span', { 'data-budget': '' }, expected));
     // ASSERT

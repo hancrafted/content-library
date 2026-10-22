@@ -6,7 +6,7 @@
   "freshChat": "Fresh chat: invitations",
   "handoff": {
     "title": "Handoff card",
-    "text": "Party for 40, 27 June, <budget>budget 40,000 €</budget>. Venue: Estrela pavilion. Caterer: Sabor Verde (12 vegetarian). Next: invitations.",
+    "text": "Party for 200, 27 June, <budget>budget 30,000 €</budget>. Venue: Estrela pavilion. Caterer: Sabor Verde (60 vegetarian). Next: invitations.",
     "arrow": "first message of the new chat"
   },
   "habitsLabel": "Six everyday habits",
@@ -71,7 +71,7 @@
       "break-it-down": {
         "title": "Break it down",
         "keywords": "",
-        "script": "Break it down. Split the project into jobs before the first chat: you split a big task into small steps, and each step is small enough to hold in view."
+        "script": "Say you are planning your company's next summer party: 200 employees across five offices in Europe. Break it down. Split the project into jobs before the first chat: you split a big task into small steps, and each step is small enough to hold in view."
       },
       "one-chat-one-job": {
         "title": "New job, fresh chat",
