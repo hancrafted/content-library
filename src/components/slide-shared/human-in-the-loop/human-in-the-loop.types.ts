@@ -1,11 +1,9 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
-import type { OutputWords } from './outputs/output-words';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { Level } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
-import type { DeepPartial } from './workflow-words.pure';
 import type { Workflow } from './workflow.types';
 
 /*
@@ -43,10 +41,7 @@ export interface UiWords {
   readonly short: string;
   readonly shortTip: string;
   readonly sectionAbout: string;
-  readonly sectionIn: string;
-  readonly sectionOut: string;
   readonly sectionCriteria: string;
-  readonly sectionSkills: string;
   readonly sectionExample: string;
   /** The two steps of a task, a fan-out chat's name (`{n}`), and the heading of why a task matters. */
   readonly doIt: string;
@@ -60,15 +55,12 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly tooLong: string;
-  readonly setup: string;
   readonly newTab: string;
 }
 
-/** A Slide's words, laid over the defaults key by key: the visual's labels, and the shown Workflow's words. */
+/** A Slide's words, laid over the visual's labels key by key. A Workflow has no words to override: it is written in one language. */
 export interface WorkflowSlideWords {
   readonly ui?: Partial<UiWords>;
-  /** The shape of a Workflow's `words:` tree; see workflow-words.pure.ts. */
-  readonly workflow?: DeepPartial<Record<string, unknown>>;
 }
 
 /** What a popover says: the title is the name of the stage it explains, which the diagram fills in. */
@@ -142,21 +134,17 @@ export interface ToolbarProps {
   readonly onUpload: (yaml: string) => void;
 }
 
-/** What the modal part draws: the open stage's view (null: closed) with the short grills and ticked ticket ids. */
+/** What the modal part draws: the open stage's view (null: closed) with the short grills. */
 export interface ModalProps {
   readonly stage: StageView | null;
   readonly shortJobIds: readonly string[];
-  readonly ticked: readonly string[];
   /** The pasted slot values by marker name, shared by every stage of the Workflow. */
   readonly slotValues: Readonly<Record<string, string>>;
   readonly words: UiWords;
-  /** The labels of the example result's views. */
-  readonly outputWords: OutputWords;
   readonly level: Level;
   readonly onLevel: (level: Level) => void;
   readonly onClose: () => void;
   readonly onShort: (jobId: string) => void;
-  readonly onTick: (ticketId: string) => void;
   readonly onSlots: (values: Readonly<Record<string, string>>) => void;
 }
 
@@ -167,7 +155,6 @@ export interface HumanInTheLoopData {
   readonly workflowId: string;
   readonly locale: 'en' | 'de';
   readonly words: UiWords;
-  readonly outputWords: OutputWords;
   readonly controls: ControlMap;
   readonly level: Level;
   /** A readonly Preset hides every "Try it" button and the Technical toggle; the diagram stays. */

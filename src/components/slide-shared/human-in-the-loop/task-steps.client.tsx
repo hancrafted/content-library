@@ -156,9 +156,14 @@ function Body({ task, words }: Pick<DetailsProps, 'task' | 'words'>) {
       </section>
       <section>
         <h3 className="text-caption font-medium text-muted-foreground">{words.sectionExample}</h3>
-        <div className="mt-1">
-          <MarkdownView markdown={task.example} />
-        </div>
+        {task.examples.map((example, at) => (
+          <div key={at} className="mt-1" data-example={at + 1}>
+            {task.examples.length > 1 && (
+              <p className="text-caption font-medium text-muted-foreground">{chatName(words, at + 1)}</p>
+            )}
+            <MarkdownView markdown={example} />
+          </div>
+        ))}
       </section>
       <section>
         <h3 className="text-caption font-medium text-muted-foreground">{words.sectionCriteria}</h3>

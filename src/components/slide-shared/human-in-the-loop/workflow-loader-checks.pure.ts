@@ -1,3 +1,4 @@
+import { markerCount } from '../core-components/try-prompt/prompt-sections.pure';
 import { handoffProblems, readTemplate } from './markdown-handoff.pure';
 import { unknownMarkers } from './workflow-markers.pure';
 import { namesBefore, namesOf, tasksOf, type Producer } from './workflow-outputs.pure';
@@ -50,11 +51,66 @@ function againstTemplate(
 /** The slot's id against what earlier stages hand on: unknown, or taken in the wrong mode. */
 function slotNameProblems(slot: SlotDef, task: TaskDef, producer: Producer | undefined): string[] {
   const where = `Slot "${slot.id}" of task "${task.id}"`;
+  if (slot.free) return [];
   if (!producer) return [`${where} names no output of an earlier stage.`];
   if (producer.all && slot.mode === 'single')
     return [`${where} takes all chats of a fan-out; its mode must be multiple.`];
   if (!producer.all && slot.mode === 'multiple') return [`${where} is multiple but its output is not a fan-out.`];
   return [];
+}
+
+/** What a slot's samples are held to: the file and task, its template (none for a free input), its marker count. */
+interface SampleBasis {
+  readonly file: WorkflowFile;
+  readonly task: TaskDef;
+  readonly template: string | undefined;
+  readonly markers: number;
+  /** `slot` or `review slot`, as the problem names it. */
+  readonly noun?: string;
+}
+
+const plural = (count: number, word: string): string => `${count} ${word}${count === 1 ? '' : 's'}`;
+
+/** The entries of a multiple slot's list: their count against its markers, each against the template. */
+function entryProblems(slot: SlotDef, list: readonly string[], basis: SampleBasis): string[] {
+  const { file, task, template } = basis;
+  const where = `Slot "${slot.id}" of task "${task.id}"`;
+  if (list.length !== basis.markers) {
+    return [`${where} has ${plural(list.length, 'sample')} but ${plural(basis.markers, 'marker')}.`];
+  }
+  const noun = basis.noun ?? 'slot';
+  return list.flatMap((source, at) =>
+    template === undefined
+      ? []
+      : againstTemplate(file, template, {
+          source,
+          what: `The sample of entry ${at + 1} of ${noun} "${slot.id}" of task "${task.id}"`,
+        }),
+  );
+}
+
+/** The sample of one slot: a lone text for a single slot, a list of one per marker for a multiple slot. */
+function sampleProblems(slot: SlotDef, basis: SampleBasis): string[] {
+  const { sample } = slot;
+  const { file, task, template } = basis;
+  const where = `Slot "${slot.id}" of task "${task.id}"`;
+  const lone = typeof sample === 'string';
+  if (sample === undefined) return [];
+  if (slot.mode === 'multiple') {
+    return lone
+      ? [`${where} is multiple and needs a list of samples, one per marker.`]
+      : entryProblems(slot, sample, basis);
+  }
+  if (!lone) return [`${where} is single but has a list of samples.`];
+  if (template === undefined) return [];
+  const what = `The sample of ${basis.noun ?? 'slot'} "${slot.id}" of task "${task.id}"`;
+  return againstTemplate(file, template, { source: sample, what });
+}
+
+/** The markers a multiple slot has in a task's prompts: the most any runtime's sections number. */
+function markersOf(slot: SlotDef, task: TaskDef): number {
+  const asSlot = { id: slot.id, mode: slot.mode, label: slot.label };
+  return Math.max(...Object.values(task.do).map((sections) => markerCount(asSlot, sections)));
 }
 
 function doSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<string, Producer>): string[] {
@@ -63,14 +119,17 @@ function doSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<st
     ...task.slots.flatMap((slot) => {
       const producer = names.get(slot.id);
       const named = slotNameProblems(slot, task, producer);
-      const where = `The sample of slot "${slot.id}" of task "${task.id}"`;
       if (slot.sample === undefined) return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
-      return [
-        ...named,
-        ...(producer ? againstTemplate(file, producer.task.template, { source: slot.sample, what: where }) : []),
-      ];
+      const template = slot.free ? undefined : producer?.task.template;
+      return [...named, ...sampleProblems(slot, { file, task, template, markers: markersOf(slot, task) })];
     }),
   ];
+}
+
+/** A review slot that names no output is a fresh id, and may not reuse one. */
+function clashProblems(slot: SlotDef, task: TaskDef, used: ReadonlySet<string>): string[] {
+  const clash = slot.id !== task.output && used.has(slot.id);
+  return clash ? [`Review slot "${slot.id}" of task "${task.id}" clashes with another id.`] : [];
 }
 
 /** One review slot: a fresh id may not clash, a named output is taken in the right mode, a sample fits a template. */
@@ -78,18 +137,35 @@ function reviewSlotOf(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<stri
   const used = new Set(tasksOf(file).flatMap((t) => [t.output, ...t.slots.map((slot) => slot.id)]));
   return (slot: SlotDef): string[] => {
     const producer = names.get(slot.id);
-    const fresh = !producer && slot.id !== task.output;
-    const clash =
-      fresh && used.has(slot.id) ? [`Review slot "${slot.id}" of task "${task.id}" clashes with another id.`] : [];
-    const named = producer ? slotNameProblems(slot, task, producer) : [];
-    const what = `The sample of review slot "${slot.id}" of task "${task.id}"`;
-    const key = producer?.task.template ?? task.template;
-    return [...clash, ...named, ...againstTemplate(file, key, { source: slot.sample, what })];
+    const basis = {
+      file,
+      task,
+      template: producer?.task.template ?? task.template,
+      markers: producer?.task.fanOut ?? 0,
+      noun: 'review slot',
+    };
+    const named = producer ? slotNameProblems(slot, task, producer) : clashProblems(slot, task, used);
+    return [...named, ...sampleProblems(slot, basis)];
   };
 }
 
 function reviewSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<string, Producer>): string[] {
   return (task.review?.slots ?? []).flatMap(reviewSlotOf(file, task, names));
+}
+
+/** The example of a task: one text, or for a fan-out a list with one per chat; each against the task's template. */
+function exampleProblems(file: WorkflowFile, task: TaskDef): string[] {
+  const { example } = task.details;
+  const where = `The example of task "${task.id}"`;
+  const chats = task.fanOut;
+  if (typeof example === 'string') {
+    return againstTemplate(file, task.template, { source: example, what: where });
+  }
+  if (chats === undefined) return [`${where} is a list but the task has no fan-out.`];
+  if (example.length !== chats) return [`${where} needs ${chats} examples, one per chat, and has ${example.length}.`];
+  return example.flatMap((source, at) =>
+    againstTemplate(file, task.template, { source, what: `The example of chat ${at + 1} of task "${task.id}"` }),
+  );
 }
 
 function markerProblems(task: TaskDef, names: ReadonlyMap<string, Producer>): string[] {
@@ -111,7 +187,7 @@ function taskProblems(file: WorkflowFile, task: TaskDef, index: number): string[
     ...doSlotProblems(file, task, names),
     ...reviewSlotProblems(file, task, names),
     ...markerProblems(task, names),
-    ...againstTemplate(file, task.template, { source: task.details.example, what: `The example of task "${task.id}"` }),
+    ...exampleProblems(file, task),
   ];
 }
 

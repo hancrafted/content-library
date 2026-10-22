@@ -16,8 +16,6 @@ export interface WorkflowState {
   readonly openStageId: string | null;
   /** Ids of the jobs whose interview prompt runs as the short grill; the rest run the full one. */
   readonly shortJobIds: readonly string[];
-  /** Ids of the tickets ticked off in the ticket graph. */
-  readonly ticked: readonly string[];
   /** A Workflow the viewer uploaded and that is shown instead of an authored one. */
   readonly uploaded: Workflow | null;
   /** What the viewer pasted into the prompt slots, by marker name (a slot's id, or `id_K`), shared by every stage. Memory only. */
@@ -39,7 +37,6 @@ export type WorkflowEvent =
   | { readonly type: 'open'; readonly stageId: string }
   | { readonly type: 'close' }
   | { readonly type: 'short'; readonly jobId: string }
-  | { readonly type: 'tick'; readonly ticketId: string }
   | { readonly type: 'slots'; readonly values: Readonly<Record<string, string>> }
   | { readonly type: 'upload'; readonly workflow: Workflow }
   | { readonly type: 'upload-failed'; readonly problems: readonly string[] };
@@ -49,7 +46,6 @@ export function createState(start: Start): WorkflowState {
     ...start,
     openStageId: null,
     shortJobIds: [],
-    ticked: [],
     slotValues: {},
     uploaded: null,
     uploadProblems: [],
@@ -63,11 +59,10 @@ type Handlers = {
   ) => WorkflowState;
 };
 
-/** What changing the shown Workflow starts over: the open stage, the short grills, the ticks, the pasted values, any upload and its problems. */
+/** What changing the shown Workflow starts over: the open stage, the short grills, the pasted values, any upload and its problems. */
 const FRESH = {
   openStageId: null,
   shortJobIds: [],
-  ticked: [],
   slotValues: {},
   uploaded: null,
   uploadProblems: [],
@@ -82,7 +77,6 @@ const HANDLERS: Handlers = {
   open: (state, { stageId }) => ({ ...state, openStageId: stageId }),
   close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null }),
   short: (state, { jobId }) => ({ ...state, shortJobIds: toggled(state.shortJobIds, jobId) }),
-  tick: (state, { ticketId }) => ({ ...state, ticked: toggled(state.ticked, ticketId) }),
   slots: (state, { values }) => ({ ...state, slotValues: values }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
   'upload-failed': (state, { problems }) => ({ ...state, uploadProblems: problems }),

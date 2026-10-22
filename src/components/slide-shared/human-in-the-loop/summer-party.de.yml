@@ -1,0 +1,819 @@
+# Der Sommerfest-Workflow im neuen Schema, Deutsch. Eine Sprache pro Datei: Was hier steht, wird angezeigt.
+# Schema und Marker: docs/features/human-in-the-loop.md. Das englische Gegenstück ist summer-party.en.yml; ein Test
+# hält beide in derselben Struktur (Stufen, Aufgaben, Slots, Abschnitte), nur die Texte unterscheiden sich.
+# Szenariofakten stehen nur in `scenario`, den Slot-Beispielen und den Beispielergebnissen; die Prompt-Abschnitte
+# sind allgemein und erreichen das Szenario über die `{{slot}}`-Marker.
+id: summer-party
+title: Sommerfest
+
+scenario:
+  summary: Plane das nächste Sommerfest Deiner Firma.
+  facts:
+    - 200 Mitarbeitende an fünf Standorten in Europa
+    - Ein Abend Ende Juni in Frankfurt
+
+purposes:
+  role: Eine Rolle macht es wahrscheinlicher, dass die KI sich so verhält.
+  context: Was die KI nicht wissen kann, wenn Du es ihr nicht sagst.
+  task: Das Eine, das erledigt werden soll.
+  steps: Die Reihenfolge der Arbeit, damit die KI nichts überspringt oder vertauscht.
+  template: Die genaue Form der Antwort, damit der nächste Chat sie lesen kann.
+  scope: Was dazugehört und was nicht, damit die KI nicht abschweift.
+
+reviewer:
+  sections:
+    - heading: Deine Rolle
+      purpose: role
+      text: Antworte auf Deutsch. Du bist ein strenger Prüfer in einem frischen Chat. Du hast die Arbeit unten nicht geschrieben und schreibst sie nicht um. Du prüfst sie nur.
+    - heading: Was Du bekommst
+      purpose: context
+      text: '{{inputs}}'
+    - heading: Allgemeine Prüfungen
+      purpose: steps
+      text: |
+        1. Die Arbeit folgt genau der Vorlage unten: derselbe Kopfbereich und dieselben H2-Abschnitte.
+        2. Nichts ist erfunden; jede Aussage stützt sich auf etwas, das Du bekommen hast, oder auf eine genannte Quelle.
+        3. Die Arbeit bleibt bei dem, was verlangt war.
+    - heading: Prüfungen für diese Aufgabe
+      purpose: task
+      text: '{{checks}}'
+    - heading: Vorlage
+      purpose: template
+      text: '{{template}}'
+    - heading: Bericht
+      purpose: scope
+      text: |
+        Bewerte jede Prüfung mit BESTANDEN oder DURCHGEFALLEN und belege es. Repariere nichts. Schreibe dann ein kurzes Korrektur-Handoff, das ich in den Chat zurückkopiere, der die Arbeit gemacht hat. Wenn Du keine Dateien erstellen kannst, antworte in rohem Markdown.
+
+templates:
+  plan: |
+    ---
+    kind: plan
+    ---
+    # <Die Aufgabe>
+    ## Teile
+    ## Erstes Teil
+    ## Warum zuerst
+  interview: |
+    ---
+    kind: interview
+    ---
+    # <Das Teil>
+    ## Ausgangsfakten
+    ## Fragen und Antworten
+  spec: |
+    ---
+    kind: spec
+    ---
+    # <Titel>
+    ## Ziel
+    ## Anforderungen
+    ## Optionen zum Erkunden
+    ## Nicht im Umfang
+  tickets: |
+    ---
+    kind: tickets
+    ---
+    # <Titel der Sammlung>
+    ## <Titel des Tickets>
+  research: |
+    ---
+    kind: research
+    ---
+    # <Was recherchiert wurde>
+    ## Passung zu den Anforderungen
+    ## Kosten
+    ## Quellen
+    ## Offene Zweifel
+  comparison: |
+    ---
+    kind: comparison
+    ---
+    # <Titel>
+    ## Kriterien
+    ## Rangfolge
+    ## Zweifel
+  recommendation: |
+    ---
+    kind: recommendation
+    ---
+    # <Titel>
+    ## Empfehlung
+    ## Warum
+    ## Nächste Schritte
+
+stages:
+  - id: party
+    title: Plan
+    learningGoal: 'Zerlege es: Teile die große Aufgabe in Teile und nimm nur eines mit.'
+    move: B
+    tasks:
+      - id: pieces
+        title: Teile
+        output: plan
+        template: plan
+        slots:
+          - id: task
+            mode: single
+            free: true
+            label: Deine Aufgabe
+            sample: Plane das nächste Sommerfest der Firma. 200 Mitarbeitende aus fünf Standorten in Europa kommen für einen Abend Ende Juni in Frankfurt zusammen.
+        details:
+          why: Eine große Aufgabe passt in keinen einzelnen Chat. In Teile geschnitten, kann jedes in einem frischen Chat aus einem kurzen Handoff geplant werden, und eine kurze Rückfragerunde vorab verhindert, dass die KI rät, worum es geht.
+          example: &plan_example |
+            ---
+            kind: plan
+            ---
+            # Das Sommerfest der Firma planen
+            ## Teile
+            1. Location: legt Datum und Stadt fest
+            2. Anreise: wie die fünf Standorte hinkommen
+            3. Catering: Essen und Trinken
+            4. Programm: was am Abend passiert
+            5. Einladungen: wer wann was erfährt
+            ## Erstes Teil
+            Location
+            ## Warum zuerst
+            Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen ergeben sich daraus.
+          goodLooksLike:
+            - Jedes Teil ist klein genug, um es in einem eigenen Chat aus einem kurzen Handoff zu planen.
+            - Genau ein Teil kommt zuerst, mit einem Satz als Begründung.
+        do:
+          simple:
+            - heading: Deine Rolle
+              purpose: role
+              text: Antworte auf Deutsch. Du bist ein Planungscoach. Du hilfst mir, eine große Aufgabe in Teile zu zerlegen, die ich nacheinander planen kann, und wählst das Teil, mit dem ich beginne.
+            - heading: Die Aufgabe
+              purpose: context
+              text: |
+                Meine große Aufgabe ist:
+
+                {{task}}
+            - heading: Schritte
+              purpose: steps
+              text: |
+                1. Stelle mir zuerst höchstens drei kurze Fragen zur Aufgabe, alle in einer Nachricht, und warte auf meine Antworten. Plane noch nicht.
+                2. Zerlege die Aufgabe in etwa fünf Teile. Ein Teil ist etwas, das ich in einem eigenen Chat aus einem kurzen Handoff planen kann.
+                3. Nenne jedes Teil in ein oder zwei Wörtern und füge einen halben Satz hinzu, was es entscheidet.
+                4. Empfiehl das eine Teil, das zuerst drankommt: dasjenige, das für die anderen am meisten festlegt, mit der Begründung in einem Satz.
+            - heading: Umfang
+              purpose: scope
+              text: Plane kein Teil selbst. Zerlege nur die Aufgabe und wähle das erste Teil.
+            - heading: Format
+              purpose: template
+              text: |
+                Wenn Du eine Datei erstellen kannst, schreibe eine Markdown-Datei. Wenn nicht, antworte in rohem Markdown in dieser Vorlage.
+
+                {{template}}
+          technical:
+            - heading: Aufgabe
+              purpose: task
+              text: |
+                /grilling Antworte auf Deutsch. Stelle mir zuerst höchstens drei kurze Fragen zu meiner großen Aufgabe, zerlege sie dann: etwa fünf Teile, jedes klein genug, um es in einem eigenen Chat aus einem kurzen Handoff zu planen, und ein Teil als erstes empfohlen, mit einem Satz Begründung. Plane kein Teil. Meine große Aufgabe ist: {{task}}
+            - heading: Format
+              purpose: template
+              text: |
+                Schreibe das Ergebnis als Markdown-Datei, oder als rohes Markdown, wenn Du keine Dateien erstellen kannst, in dieser Vorlage.
+
+                {{template}}
+        review:
+          slots:
+            - id: plan_result
+              mode: single
+              label: Der Plan zur Prüfung
+              sample: *plan_example
+          checks:
+            - Die Aufgabe ist in Teile geschnitten, und jedes könnte in einem eigenen Chat aus einem kurzen Handoff geplant werden.
+            - Genau ein Teil ist als erstes gewählt, mit einer Begründung in einem Satz, die sagt, was es für die anderen festlegt.
+            - Kein Teil ist im Detail geplant.
+
+  - id: interview
+    title: Interview
+    learningGoal: 'Interviewe Dich mit KI: Die KI fragt, bevor sie rät, Frage für Frage.'
+    move: I
+    tasks:
+      - id: interview
+        title: Die KI fragt Dich
+        output: interview
+        template: interview
+        slots:
+          - id: plan
+            mode: single
+            label: Dein Plan
+            sample: *plan_example
+        details:
+          why: Die KI fragt, bevor sie rät, und sie bringt zur Sprache, woran Du nicht gedacht hattest. Diese Überraschung ist der Sinn des Interviews, denn die Antworten, die Du allein nie aufgeschrieben hättest, bewahren vor einem falschen Start.
+          example: &interview_example |
+            ---
+            kind: interview
+            ---
+            # Location
+            ## Ausgangsfakten
+            - Etwa 150 Euro pro Person, zwei Rollstuhlfahrende, einige Vegetarier
+            ## Fragen und Antworten
+            1. Format: eine Location, zu der alle reisen (A), oder fünf lokale Feste (B). Empfohlen A, der Punkt ist, dass sich die Standorte treffen. Meine Antwort: A.
+            2. Kapazität: eine lange Tafel für 200 auf einmal (A) oder Tische, die wechseln, Platz für etwa 140 (B). Empfohlen A, bei den Reden sitzen alle. Meine Antwort: A, eine lange Tafel.
+            3. Wo und wann: Frankfurt, von allen fünf Standorten gut erreichbar (A), oder Lissabon (B). Empfohlen A, ein Knotenpunkt hält die Anreise kurz. Meine Antwort: A, Frankfurt, Ende Juni.
+            4. Das, was ich vergessen hatte, die Rückmeldungen vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, sie zeigen, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und Leute gingen früh.
+            5. Ruhe: ein eigener ruhiger Raum (A) oder ein Saal für alles (B). Empfohlen A, man kann reden, ohne zu schreien. Meine Antwort: A.
+          goodLooksLike:
+            - Jede Frage kam mit zwei Optionen und einer Empfehlung.
+            - Eine Antwort ist etwas, woran Du vor dem Interview nicht gedacht hattest.
+        do:
+          simple:
+            - heading: Deine Rolle
+              purpose: role
+              text: Antworte auf Deutsch. Du bist ein hartnäckiger, aber freundlicher Interviewer. Du interviewst mich zum Plan unten, bis wir dasselbe Verständnis haben, bevor jemand rät oder einen Plan schreibt. Du fragst. Du planst noch nicht.
+            - heading: Der Plan bisher
+              purpose: context
+              text: |
+                Wir nehmen ein Teil mit. Das ist das Ergebnis des vorherigen Schritts. Wenn Du ein eigenes Ergebnis hast, ersetze den Block unten damit.
+
+                ```markdown
+                {{plan}}
+                ```
+            - heading: Schritte
+              purpose: steps
+              text: |
+                Stell Dir meinen Plan als Baum von Entscheidungen vor: Jede Entscheidung öffnet die Entscheidungen, die an ihr hängen. Arbeite den Baum in Runden ab.
+                1. Stelle alle Fragen, deren Voraussetzungen schon geklärt sind, in einer Runde, nummeriert als Q1, Q2, Q3 und über die Runden weitergezählt.
+                2. Gib jeder Frage zwei Optionen und eine Empfehlung, so formuliert, dass mein „Ja“ Deine empfohlene Antwort annimmt.
+                3. Halte nach den Fragen an und warte auf meine Antworten. Antworte nie für mich.
+                4. Fakten sind Deine Aufgabe, Entscheidungen meine. Frage nie nach etwas, das Du selbst wissen könntest; nenne es als Annahme.
+                5. Nimm mindestens eine Frage zu etwas auf, woran ich vermutlich nicht gedacht habe, zum Beispiel was beim letzten Mal schiefgelaufen ist.
+                6. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frage erneut.
+                7. Wenn nichts mehr zu fragen ist, sage das in zwei Zeilen und bitte mich, „fertig“ zu sagen.
+            - heading: Umfang
+              purpose: scope
+              text: Interviewe mich nur. Plane nicht und empfiehl keine Lösung für die Aufgabe selbst.
+            - heading: Format
+              purpose: template
+              text: |
+                Wenn ich „fertig“ sage, schreibe jede Frage, die Du gestellt hast, und meine endgültige Antwort auf. Wenn Du eine Datei erstellen kannst, schreibe eine Markdown-Datei. Wenn nicht, antworte in rohem Markdown in dieser Vorlage.
+
+                {{template}}
+          technical:
+            - heading: Aufgabe
+              purpose: task
+              text: |
+                /grilling Antworte auf Deutsch. Interviewe mich zu diesem Teil meines Plans, eine Runde nummerierter Fragen nach der anderen, mit je zwei Optionen und einer empfohlenen Antwort, und nimm eine Frage zu etwas auf, woran ich vermutlich nicht gedacht habe. Wenn ich „fertig“ sage, schreibe das Ergebnis.
+
+                ```markdown
+                {{plan}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Schreibe das Ergebnis als Markdown-Datei, oder als rohes Markdown, wenn Du keine Dateien erstellen kannst, in dieser Vorlage.
+
+                {{template}}
+
+  - id: requirements
+    title: Anforderungen
+    learningGoal: 'Erst die Anforderungen: Aus den Antworten wird eine kurze Liste, die Du freigibst, bevor die Arbeit beginnt.'
+    move: R
+    gate: 1
+    card:
+      label: Anforderungskarte
+      lines:
+        - 200 Gäste
+        - Höchstens 150 € pro Person
+        - Stufenlos
+        - Vegetarisches Menü
+        - Separater ruhiger Raum
+      status: Freigegeben
+    tasks:
+      - id: spec
+        title: Anforderungskarte
+        output: spec
+        template: spec
+        slots:
+          - id: interview
+            mode: single
+            label: Deine Interviewantworten
+            sample: *interview_example
+        details:
+          why: Aus den Antworten wird eine Spezifikation mit einer kurzen Liste von Anforderungen, die Du freigibst. Jeder spätere Chat arbeitet gegen diese Liste statt gegen eine Vermutung.
+          example: &spec_example |
+            ---
+            kind: spec
+            ---
+            # Location für das Sommerfest
+            ## Ziel
+            Eine Location in Frankfurt wählen, an der alle 200 Mitarbeitenden an einem Abend Ende Juni zusammenkommen können.
+            ## Anforderungen
+            - 200 Gäste
+            - Höchstens 150 Euro pro Person
+            - Stufenlos
+            - Vegetarisches Menü
+            - Separater ruhiger Raum
+            ## Optionen zum Erkunden
+            - Eine Eventhalle
+            - Ein Hotel mit Tagungsetage
+            - Eine Außen- oder Gartenlocation
+            ## Nicht im Umfang
+            - Anreise, Catering, Programm und Einladungen
+          goodLooksLike:
+            - Jede Anforderung ist kurz und lässt sich mit Ja oder Nein prüfen.
+            - In der Spezifikation steht nichts, was Deine Antworten nicht gesagt haben.
+        do:
+          simple:
+            - heading: Deine Rolle
+              purpose: role
+              text: 'Antworte auf Deutsch. Du bist ein Spezifikationsautor. Du machst aus meinen Interviewantworten eine klare Spezifikation. Du interviewst mich nicht erneut: Du fasst zusammen, was unten steht.'
+            - heading: Meine Interviewantworten
+              purpose: context
+              text: |
+                Das ist das Ergebnis des vorherigen Schritts. Wenn Du ein eigenes Ergebnis hast, ersetze den Block unten damit.
+
+                ```markdown
+                {{interview}}
+                ```
+            - heading: Schritte
+              purpose: steps
+              text: |
+                1. Nenne das Ziel in einem Satz.
+                2. Liste die Anforderungen: die kurzen, prüfbaren Kernpunkte aus meinen Antworten, eine pro Zeile.
+                3. Liste die Optionen zum Erkunden: die verschiedenen Arten von Lösung, die einen Vergleich lohnen.
+                4. Liste, was nicht im Umfang ist.
+            - heading: Umfang
+              purpose: scope
+              text: Schreibe nur die Spezifikation. Schneide keine Tickets und recherchiere keine Option.
+            - heading: Format
+              purpose: template
+              text: |
+                Wenn Du eine Datei erstellen kannst, schreibe eine Markdown-Datei. Wenn nicht, antworte in rohem Markdown in dieser Vorlage.
+
+                {{template}}
+          technical:
+            - heading: Aufgabe
+              purpose: task
+              text: |
+                /to-spec Antworte auf Deutsch. Mach aus diesen Interviewantworten eine Spezifikation. Interviewe mich nicht erneut und schneide noch keine Tickets.
+
+                ```markdown
+                {{interview}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Schreibe die Spezifikation als Markdown-Datei, oder als rohes Markdown, wenn Du keine Dateien erstellen kannst, in dieser Vorlage.
+
+                {{template}}
+        review:
+          slots:
+            - id: interview
+              mode: single
+              label: Deine Interviewantworten
+              sample: *interview_example
+            - id: spec
+              mode: single
+              label: Die Spezifikation zur Prüfung
+              sample: *spec_example
+          checks:
+            - Jedes Muss aus den Interviewantworten ist eine kurze, prüfbare Anforderung.
+            - Das Ziel ist ein Satz.
+            - In der Spezifikation fehlt nichts aus den Antworten, und nichts widerspricht ihnen.
+            - Die Liste „Nicht im Umfang“ ist nicht leer.
+
+  - id: tickets
+    title: Tickets
+    learningGoal: 'Zerlege es noch einmal: Schneide die Spezifikation in Tickets, die sich nicht überschneiden, damit jedes einen eigenen Chat bekommt.'
+    move: B
+    tasks:
+      - id: tickets
+        title: Tickets
+        output: tickets
+        template: tickets
+        slots:
+          - id: spec
+            mode: single
+            label: Deine Spezifikation
+            sample: *spec_example
+        details:
+          why: Ein Ticket pro zu erkundender Option heißt, dass keine zwei Chats dieselbe Arbeit machen und jeder Chat ein kurzes Briefing bekommt, das er abschließen kann.
+          example: &tickets_example |
+            ---
+            kind: tickets
+            ---
+            # Tickets für das Sommerfest
+            ## 1. Eventhalle
+            Finde eine Eventhalle, die zum Fest passt.
+            - Muss: 200 Gäste, höchstens 150 Euro pro Person, stufenlos, vegetarisches Menü, separater ruhiger Raum
+            - Nenne vorab keine Location
+            ## 2. Hotel mit Tagungsetage
+            Finde ein Hotel mit Tagungsetage, das zum Fest passt.
+            - Muss: 200 Gäste, höchstens 150 Euro pro Person, stufenlos, vegetarisches Menü, separater ruhiger Raum
+            - Nenne vorab keine Location
+            ## 3. Außen- oder Gartenlocation
+            Finde eine Außen- oder Gartenlocation, die zum Fest passt.
+            - Muss: 200 Gäste, höchstens 150 Euro pro Person, stufenlos, vegetarisches Menü, separater ruhiger Raum
+            - Nenne vorab keine Location
+          goodLooksLike:
+            - Jedes Ticket deckt eine andere Option ab, sodass sich keine zwei überschneiden.
+            - Jedes Ticket trägt jede Anforderung der Spezifikation.
+        do:
+          simple:
+            - heading: Deine Rolle
+              purpose: role
+              text: Antworte auf Deutsch. Du bist ein Projektplaner. Du schneidest eine Spezifikation in Tickets, dünne Arbeitsscheiben, die jeweils in einem eigenen Chat erledigt werden können.
+            - heading: Die Spezifikation
+              purpose: context
+              text: |
+                Das ist das Ergebnis des vorherigen Schritts. Wenn Du ein eigenes Ergebnis hast, ersetze den Block unten damit.
+
+                ```markdown
+                {{spec}}
+                ```
+            - heading: Schritte
+              purpose: steps
+              text: |
+                1. Mache für jede zu erkundende Option der Spezifikation ein Ticket.
+                2. Gib jedem Ticket dieselben Muss-Punkte: alle Anforderungen der Spezifikation, wörtlich kopiert.
+                3. Achte darauf, dass sich keine zwei Tickets überschneiden, damit keine zwei Chats dieselbe Arbeit machen.
+            - heading: Umfang
+              purpose: scope
+              text: Nenne in keinem Ticket einen Kandidaten und recherchiere nichts. Schreibe nur Tickets.
+            - heading: Format
+              purpose: template
+              text: |
+                Wenn Du eine Datei erstellen kannst, schreibe eine Markdown-Datei. Wenn nicht, antworte in rohem Markdown in dieser Vorlage.
+
+                {{template}}
+          technical:
+            - heading: Aufgabe
+              purpose: task
+              text: |
+                /to-tickets Antworte auf Deutsch. Schneide diese Spezifikation in Tickets, eines pro zu erkundender Option, jedes mit allen Anforderungen der Spezifikation, keine überschneidend, keines mit vorab genanntem Kandidaten.
+
+                ```markdown
+                {{spec}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Schreibe die Tickets als eine Markdown-Datei, oder als rohes Markdown, wenn Du keine Dateien erstellen kannst, in dieser Vorlage.
+
+                {{template}}
+        review:
+          slots:
+            - id: spec
+              mode: single
+              label: Deine Spezifikation
+              sample: *spec_example
+            - id: tickets
+              mode: single
+              label: Die Tickets zur Prüfung
+              sample: *tickets_example
+          checks:
+            - Die Tickets sind überschneidungsfrei, keine zwei decken dieselbe Option ab.
+            - Jedes Ticket trägt jede Anforderung der Spezifikation.
+            - Kein Ticket nennt vorab einen Kandidaten.
+            - Jede zu erkundende Option der Spezifikation hat ein Ticket.
+
+  - id: research
+    title: Recherche
+    learningGoal: Gib jedem Ticket einen eigenen frischen Chat, damit jedes Fenster klein bleibt und keine zwei Chats dieselbe Arbeit machen.
+    move: F
+    tasks:
+      - id: venue
+        title: Chat
+        output: research
+        template: research
+        fanOut: 3
+        slots:
+          - id: tickets
+            mode: single
+            label: Deine Tickets
+            sample: *tickets_example
+        details:
+          why: Ein Ticket pro Chat hält den Kontext klein und die Antwort fokussiert, und nichts aus einem Ergebnis färbt den nächsten Chat.
+          example:
+            - &research_1_example |
+              ---
+              kind: research
+              ---
+              # Alte Mühle
+              ## Passung zu den Anforderungen
+              Eventhalle. Fasst 220 Personen stehend. Stufenlos über den Hofeingang. Vegetarisches Menü auf Anfrage. Ruhiger Raum: der Speicher.
+              ## Kosten
+              140 Euro pro Person mit Catering.
+              ## Quellen
+              - Location-Broschüre, Seite 4
+              ## Offene Zweifel
+              - Kapazität des Speichers nicht angegeben
+            - &research_2_example |
+              ---
+              kind: research
+              ---
+              # Grand Hotel Mainblick
+              ## Passung zu den Anforderungen
+              Hotel mit Tagungsetage. Die Etage fasst 210 Sitzplätze. Stufenlos per Aufzug. Vegetarisches Menü inklusive. Ruhiger Raum: die Bibliothek.
+              ## Kosten
+              165 Euro pro Person mit Catering.
+              ## Quellen
+              - Tagungsbroschüre des Hotels, Seite 2
+              ## Offene Zweifel
+              - Ob die Tagungsetage für einen Abend buchbar ist
+            - &research_3_example |
+              ---
+              kind: research
+              ---
+              # Gartenpavillon am Fluss
+              ## Passung zu den Anforderungen
+              Außenlocation. Pavillon und Wiese fassen 200 Personen. Stufenlose Wege. Vegetarisches Menü über den Caterer. Kein separater ruhiger Raum.
+              ## Kosten
+              120 Euro pro Person mit Catering.
+              ## Quellen
+              - Mietblatt des Pavillons, Seite 1
+              ## Offene Zweifel
+              - Plan bei schlechtem Wetter nicht angegeben
+          goodLooksLike:
+            - Jede Anforderung hat ein eigenes Urteil und eine genannte Quelle.
+            - Was nicht zu finden war, steht als offener Zweifel da.
+        do:
+          simple:
+            - heading: Deine Rolle
+              purpose: role
+              text: Antworte auf Deutsch. Du bist ein sorgfältiger Rechercheur. Du arbeitest an genau einem Ticket und berichtest nur, was Du belegen kannst. Du vergleichst nicht mit anderer Arbeit und sprichst keine Empfehlung aus.
+            - heading: Dein Ticket
+              purpose: context
+              text: |
+                Das ist Chat {{n}}. Nimm Ticket Nummer {{n}} aus den Tickets unten und arbeite nur daran. Andere Chats nehmen die anderen Tickets.
+
+                ```markdown
+                {{tickets}}
+                ```
+            - heading: Schritte
+              purpose: steps
+              text: |
+                1. Finde einen echten Kandidaten, der zum Ticket passt.
+                2. Prüfe ihn gegen jeden Muss-Punkt im Ticket.
+                3. Nenne die Quelle jedes Fakts und sage, wo Du unsicher bist.
+            - heading: Umfang
+              purpose: scope
+              text: Nutze Primärquellen. Recherchiere kein anderes Ticket.
+            - heading: Format
+              purpose: template
+              text: |
+                Wenn Du eine Datei erstellen kannst, schreibe eine Markdown-Datei. Wenn nicht, antworte in rohem Markdown in dieser Vorlage.
+
+                {{template}}
+          technical:
+            - heading: Aufgabe
+              purpose: task
+              text: |
+                /research Antworte auf Deutsch. Recherchiere die Tickets unten mit einem Subagenten pro Ticket, parallel. Jeder Subagent bekommt nur sein eigenes Ticket, prüft einen echten Kandidaten gegen jeden Muss-Punkt, nutzt Primärquellen und nennt die Quelle jedes Fakts.
+
+                ```markdown
+                {{tickets}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Jeder Subagent schreibt seine Antwort als Markdown-Datei, oder als rohes Markdown, wenn er keine Dateien erstellen kann, in dieser Vorlage.
+
+                {{template}}
+        review:
+          slots:
+            - id: tickets
+              mode: single
+              label: Deine Tickets
+              sample: *tickets_example
+            - id: research_result
+              mode: single
+              label: Das Rechercheergebnis eines Chats
+              sample: *research_1_example
+          checks:
+            - Das Ergebnis deckt genau ein Ticket ab und driftet nicht in ein anderes.
+            - Jeder Muss-Punkt im Ticket hat ein Urteil mit Quelle.
+            - Ein Preis weit unter dem, was das beschriebene Angebot üblicherweise kostet, wird als verdächtig markiert und erneut belegt.
+            - Wo ein Fakt nicht gefunden wurde, sagt der Zweifel das, statt zu raten.
+
+  - id: compare
+    title: Vergleich
+    learningGoal: 'Prüfe jeden Schritt: Vergleiche jedes Ergebnis mit der Karte, bevor Du weitermachst.'
+    move: E
+    gate: 2
+    tasks:
+      - id: compare
+        title: Ergebnisse ordnen
+        output: comparison
+        template: comparison
+        slots:
+          - id: spec
+            mode: single
+            label: Deine Spezifikation
+            sample: *spec_example
+          - id: research
+            mode: multiple
+            label: Rechercheergebnis von Chat
+            sample:
+              - *research_1_example
+              - *research_2_example
+              - *research_3_example
+        details:
+          why: Ein Chat, der die Spezifikation und alle Ergebnisse sieht, ordnet sie nach Deinen Kriterien. Er braucht die Fakten jedes Ergebnisses, nicht die Chats, die sie erzeugt haben.
+          example: &comparison_example |
+            ---
+            kind: comparison
+            ---
+            # Vergleich der Locations
+            ## Kriterien
+            - 200 Gäste
+            - Höchstens 150 Euro pro Person
+            - Stufenlos
+            - Vegetarisches Menü
+            - Separater ruhiger Raum
+            ## Rangfolge
+            1. Alte Mühle: erfüllt jedes Kriterium bei 140 Euro pro Person; der ruhige Raum ist der Speicher.
+            2. Gartenpavillon am Fluss: 120 Euro pro Person und stufenlos, aber kein separater ruhiger Raum.
+            3. Grand Hotel Mainblick: erfüllt jedes Kriterium, kostet aber 165 Euro pro Person, über dem Limit.
+            ## Zweifel
+            - Alte Mühle: die Kapazität des Speichers ist nicht angegeben.
+            - Gartenpavillon am Fluss: kein Plan bei schlechtem Wetter.
+          goodLooksLike:
+            - Die Kriterien sind die der Spezifikation, nicht mehr und nicht weniger.
+            - Jeder Platz in der Rangfolge hat eine Begründung aus einem Ergebnis.
+        do:
+          simple:
+            - heading: Deine Rolle
+              purpose: role
+              text: Antworte auf Deutsch. Du bist ein unparteiischer Bewerter. Du ordnest, was Du bekommst, nach den Kriterien und recherchierst nichts Neues.
+            - heading: Die Spezifikation
+              purpose: context
+              text: |
+                Die Kriterien sind die Anforderungen dieser Spezifikation. Wenn Du ein eigenes Ergebnis hast, ersetze den Block unten damit.
+
+                ```markdown
+                {{spec}}
+                ```
+            - heading: Die Ergebnisse
+              purpose: context
+              text: |
+                Ein Ergebnis aus jedem Recherche-Chat. Wenn Du eigene Ergebnisse hast, ersetze die Blöcke unten damit.
+
+                ```markdown
+                {{research_1}}
+                ```
+
+                ```markdown
+                {{research_2}}
+                ```
+
+                ```markdown
+                {{research_3}}
+                ```
+            - heading: Schritte
+              purpose: steps
+              text: |
+                1. Nimm die Anforderungen der Spezifikation als Kriterien.
+                2. Prüfe jedes Ergebnis gegen jedes Kriterium.
+                3. Ordne die Ergebnisse und gib jedem Platz eine Begründung aus einem Ergebnis.
+                4. Liste die Zweifel, die die Ergebnisse offenlassen.
+            - heading: Umfang
+              purpose: scope
+              text: Nutze nur die Fakten in den Ergebnissen. Füge keinen Kandidaten hinzu und triff keine Entscheidung für mich.
+            - heading: Format
+              purpose: template
+              text: |
+                Wenn Du eine Datei erstellen kannst, schreibe eine Markdown-Datei. Wenn nicht, antworte in rohem Markdown in dieser Vorlage.
+
+                {{template}}
+          technical:
+            - heading: Aufgabe
+              purpose: task
+              text: |
+                Antworte auf Deutsch. Ordne die Ergebnisse nach den Anforderungen der Spezifikation, mit einer Begründung aus einem Ergebnis für jeden Platz, und liste die offenen Zweifel. Nutze nur die Fakten in den Ergebnissen.
+
+                ```markdown
+                {{spec}}
+                ```
+
+                ```markdown
+                {{research_1}}
+                ```
+
+                ```markdown
+                {{research_2}}
+                ```
+
+                ```markdown
+                {{research_3}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Schreibe den Vergleich als Markdown-Datei, oder als rohes Markdown, wenn Du keine Dateien erstellen kannst, in dieser Vorlage.
+
+                {{template}}
+        review:
+          slots:
+            - id: spec
+              mode: single
+              label: Deine Spezifikation
+              sample: *spec_example
+            - id: research
+              mode: multiple
+              label: Rechercheergebnis von Chat
+              sample:
+                - *research_1_example
+                - *research_2_example
+                - *research_3_example
+            - id: comparison_result
+              mode: single
+              label: Der Vergleich zur Prüfung
+              sample: *comparison_example
+          checks:
+            - Die Kriterien sind genau die Anforderungen der Spezifikation.
+            - Jeder Platz in der Rangfolge hat eine Begründung, die zum genannten Rechercheergebnis passt.
+            - Ein Ergebnis, das ein Kriterium verfehlt, steht nicht über einem, das alle erfüllt.
+            - Die Zweifel der Ergebnisse sind übernommen, nicht fallen gelassen.
+
+  - id: recommendation
+    title: Prüfen
+    learningGoal: Schließe den Kreis selbst. Lies den Vergleich und entscheide, was an die Menschen geht, die es freigeben.
+    tasks:
+      - id: recommend
+        title: Zusammenfassung
+        output: recommendation
+        template: recommendation
+        slots:
+          - id: comparison
+            mode: single
+            label: Dein Vergleich
+            sample: *comparison_example
+        details:
+          why: Aus dem Vergleich wird eine einseitige Empfehlung für die Person, die entscheidet. Du liest sie und verantwortest sie, bevor sie weitergeht.
+          example: &recommendation_example |
+            ---
+            kind: recommendation
+            ---
+            # Empfehlung für die Location
+            ## Empfehlung
+            Buche die Alte Mühle für den Abend Ende Juni.
+            ## Warum
+            Sie ist die einzige Location, die jedes Kriterium im Budget erfüllt, bei 140 Euro pro Person.
+            ## Nächste Schritte
+            - Frage bei der Alten Mühle die Kapazität des Speichers schriftlich an.
+            - Halte das Datum bis Ende der Woche.
+          goodLooksLike:
+            - Eine klare Wahl, jeder Grund ist im Vergleich nachvollziehbar.
+            - Die nächsten Schritte sind konkret genug, um heute damit zu beginnen.
+        do:
+          simple:
+            - heading: Deine Rolle
+              purpose: role
+              text: Antworte auf Deutsch. Du bist ein Autor für Entscheidende. Du machst aus einem Vergleich eine einseitige Empfehlung.
+            - heading: Der Vergleich
+              purpose: context
+              text: |
+                Das ist das Ergebnis des vorherigen Schritts. Wenn Du ein eigenes Ergebnis hast, ersetze den Block unten damit.
+
+                ```markdown
+                {{comparison}}
+                ```
+            - heading: Schritte
+              purpose: steps
+              text: |
+                1. Gib eine klare Empfehlung in einem Satz.
+                2. Nenne die Gründe, jeder aus dem Vergleich genommen.
+                3. Liste konkrete nächste Schritte, auch wie die offenen Zweifel geklärt werden.
+            - heading: Umfang
+              purpose: scope
+              text: Nutze nur den Vergleich. Füge keine neuen Fakten und keine neuen Kandidaten hinzu.
+            - heading: Format
+              purpose: template
+              text: |
+                Wenn Du eine Datei erstellen kannst, schreibe eine Markdown-Datei. Wenn nicht, antworte in rohem Markdown in dieser Vorlage.
+
+                {{template}}
+          technical:
+            - heading: Aufgabe
+              purpose: task
+              text: |
+                Antworte auf Deutsch. Schreibe aus diesem Vergleich eine einseitige Empfehlung: eine klare Wahl, Gründe nur aus dem Vergleich und konkrete nächste Schritte, die die offenen Zweifel klären.
+
+                ```markdown
+                {{comparison}}
+                ```
+            - heading: Format
+              purpose: template
+              text: |
+                Schreibe die Empfehlung als Markdown-Datei, oder als rohes Markdown, wenn Du keine Dateien erstellen kannst, in dieser Vorlage.
+
+                {{template}}
+        review:
+          slots:
+            - id: comparison
+              mode: single
+              label: Dein Vergleich
+              sample: *comparison_example
+            - id: recommendation
+              mode: single
+              label: Die Empfehlung zur Prüfung
+              sample: *recommendation_example
+          checks:
+            - Die Empfehlung ist eine Wahl und stimmt mit der Spitze der Rangfolge überein.
+            - Jeder Grund lässt sich im Vergleich finden.
+            - Jeder offene Zweifel des Vergleichs hat einen nächsten Schritt.

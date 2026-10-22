@@ -1,36 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { callbacksFor, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
-import type { OutputWords } from './outputs/output-words';
+import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
 import { createState, type WorkflowEvent } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
-const job = {
-  id: 'ask',
-  title: 'Ask',
-  description: 'D',
-  chat: 'new',
-  dependsOn: [],
-  inputs: [],
-  outputs: [],
-  skills: [],
-  run: { todo: 'Do.', prompt: 'P' },
-} as const;
-const flow = (id: string): Workflow => ({
-  id,
-  title: id,
-  scenario: 'S',
-  stages: [{ id: 's', name: 'S', moves: [], jobs: [job] }],
-});
+const job = baseJob({ id: 'ask', title: 'Ask' });
+const flow = (id: string): Workflow => ({ ...baseFlow([stage('s', [job])]), id, title: id });
 const words = {} as UiWords;
-const outputWords = {} as OutputWords;
 const data: HumanInTheLoopData = {
   workflows: [flow('one'), flow('two')],
   workflowId: 'two',
   locale: 'en',
   words,
-  outputWords,
   controls: {},
   level: 'simple',
   readonly: false,
@@ -69,7 +52,6 @@ describe('success cases', () => {
     // ASSERT
     expect(slices.modal.stage?.id).toBe('s');
     expect(slices.modal.shortJobIds).toEqual([job.id]);
-    expect(slices.modal.outputWords).toBe(outputWords);
     expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'short', jobId: job.id }, { type: 'close' }]);
   });
 

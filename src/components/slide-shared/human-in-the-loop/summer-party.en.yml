@@ -111,7 +111,12 @@ stages:
         title: Pieces
         output: plan
         template: plan
-        slots: []
+        slots:
+          - id: task
+            mode: single
+            free: true
+            label: Your task
+            sample: Plan the company's next summer party. 200 employees from five offices in Europe come together for one evening in late June in Frankfurt.
         details:
           why: A big task fits no single chat. Cut into pieces, each one can be planned in a fresh chat from a short handoff, and a short grill first stops the AI from guessing what the task is.
           example: &plan_example |
@@ -140,7 +145,9 @@ stages:
             - heading: The task
               purpose: context
               text: |
-                My big task is: <describe your task in one or two sentences, with the facts the AI cannot know>.
+                My big task is:
+
+                {{task}}
             - heading: Steps
               purpose: steps
               text: |
@@ -161,7 +168,7 @@ stages:
             - heading: Task
               purpose: task
               text: |
-                /grilling Ask me at most three short questions about my big task first, then break it down: about five pieces, each small enough to plan in its own chat from a short handoff, and one piece recommended to go first with a one-sentence reason. Do not plan any piece. My big task is: <describe your task in one or two sentences, with the facts the AI cannot know>.
+                /grilling Ask me at most three short questions about my big task first, then break it down: about five pieces, each small enough to plan in its own chat from a short handoff, and one piece recommended to go first with a one-sentence reason. Do not plan any piece. My big task is: {{task}}
             - heading: Format
               purpose: template
               text: |
@@ -480,19 +487,46 @@ stages:
             sample: *tickets_example
         details:
           why: One ticket per chat keeps the context small and the answer focused, and nothing from one result colours the next chat.
-          example: &research_example |
-            ---
-            kind: research
-            ---
-            # Old Mill
-            ## Fit against the requirements
-            Holds 220 standing. Step-free through the courtyard entrance. Vegetarian menu on request. Quiet room: the loft.
-            ## Cost
-            140 euros per person with catering.
-            ## Sources
-            - Venue brochure, page 4
-            ## Open doubts
-            - Loft capacity not stated
+          example:
+            - &research_1_example |
+              ---
+              kind: research
+              ---
+              # Old Mill
+              ## Fit against the requirements
+              Event hall. Holds 220 standing. Step-free through the courtyard entrance. Vegetarian menu on request. Quiet room: the loft.
+              ## Cost
+              140 euros per person with catering.
+              ## Sources
+              - Venue brochure, page 4
+              ## Open doubts
+              - Loft capacity not stated
+            - &research_2_example |
+              ---
+              kind: research
+              ---
+              # Grand Hotel Mainblick
+              ## Fit against the requirements
+              Hotel with a conference floor. The floor seats 210. Step-free by lift. Vegetarian menu included. Quiet room: the library.
+              ## Cost
+              165 euros per person with catering.
+              ## Sources
+              - Hotel conference brochure, page 2
+              ## Open doubts
+              - Whether the conference floor can be booked for an evening
+            - &research_3_example |
+              ---
+              kind: research
+              ---
+              # Riverside Garden Pavilion
+              ## Fit against the requirements
+              Outdoor venue. Pavilion and lawn hold 200. Step-free paths. Vegetarian menu through the caterer. No separate quiet room.
+              ## Cost
+              120 euros per person with catering.
+              ## Sources
+              - Pavilion hire sheet, page 1
+              ## Open doubts
+              - Wet weather plan not stated
           goodLooksLike:
             - Each must-have has its own verdict and a named source.
             - What could not be found is written down as an open doubt.
@@ -548,7 +582,7 @@ stages:
             - id: research_result
               mode: single
               label: One chat's research result
-              sample: *research_example
+              sample: *research_1_example
           checks:
             - The result covers exactly one ticket and does not drift into another.
             - Every must-have in the ticket has a verdict with a source.
@@ -570,42 +604,13 @@ stages:
             mode: single
             label: Your spec
             sample: *spec_example
-          - id: research_1
-            mode: single
-            label: Research result of chat 1
-            sample: *research_example
-          - id: research_2
-            mode: single
-            label: Research result of chat 2
-            sample: &research_2_example |
-              ---
-              kind: research
-              ---
-              # Grand Hotel Mainblick
-              ## Fit against the requirements
-              Conference floor seats 210. Step-free by lift. Vegetarian menu included. Quiet room: the library.
-              ## Cost
-              165 euros per person with catering.
-              ## Sources
-              - Hotel conference brochure, page 2
-              ## Open doubts
-              - Whether the conference floor can be booked for an evening
-          - id: research_3
-            mode: single
-            label: Research result of chat 3
-            sample: &research_3_example |
-              ---
-              kind: research
-              ---
-              # Riverside Garden Pavilion
-              ## Fit against the requirements
-              Pavilion and lawn hold 200. Step-free paths. Vegetarian menu through the caterer. No separate quiet room.
-              ## Cost
-              120 euros per person with catering.
-              ## Sources
-              - Pavilion hire sheet, page 1
-              ## Open doubts
-              - Wet weather plan not stated
+          - id: research
+            mode: multiple
+            label: Research result of chat
+            sample:
+              - *research_1_example
+              - *research_2_example
+              - *research_3_example
         details:
           why: One chat that sees the spec and all the results ranks them against your criteria. It needs the facts of each result, not the chats that produced them.
           example: &comparison_example |
@@ -707,18 +712,13 @@ stages:
               mode: single
               label: Your spec
               sample: *spec_example
-            - id: research_1
-              mode: single
-              label: Research result of chat 1
-              sample: *research_example
-            - id: research_2
-              mode: single
-              label: Research result of chat 2
-              sample: *research_2_example
-            - id: research_3
-              mode: single
-              label: Research result of chat 3
-              sample: *research_3_example
+            - id: research
+              mode: multiple
+              label: Research result of chat
+              sample:
+                - *research_1_example
+                - *research_2_example
+                - *research_3_example
             - id: comparison_result
               mode: single
               label: The comparison to review

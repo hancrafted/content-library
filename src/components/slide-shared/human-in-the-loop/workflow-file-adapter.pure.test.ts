@@ -64,17 +64,18 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps the file on the Workflow and the task on each job, and hands a simple prompt as pasted in `run`', () => {
+  it('keeps the file on the Workflow and the task on each job, with the review and the stage goal', () => {
     // ARRANGE
     const chats = 3;
     const venue = jobs.find((job) => job.id === 'venue');
+    const interview = jobs.find((job) => job.id === 'interview');
     // ACT
-    const prompt = venue?.run.prompt ?? '';
+    const goal = workflow.stages[0]?.goal;
     // ASSERT
-    expect(workflow.file?.id).toBe('summer-party');
-    expect(venue?.task?.fanOut).toBe(chats);
-    expect(prompt).toContain('## Your ticket');
-    expect(prompt).not.toContain('{{');
+    expect(workflow.file.id).toBe('summer-party');
+    expect(venue?.task.fanOut).toBe(chats);
+    expect([venue?.reviewed, interview?.reviewed]).toEqual([true, false]);
+    expect(goal).toContain('Break it down');
   });
 
   it('gives the popover of a task its do and review steps, per chat in Simple and one orchestrator in Technical', () => {

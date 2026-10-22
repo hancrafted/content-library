@@ -3,7 +3,14 @@
 import { Plus, Upload } from 'lucide-react';
 import { useId, useState } from 'react';
 import { IconButton } from '../icon-button/icon-button.client';
-import { slotKeys, visibleKeys, type PromptSection, type PromptSlot, type SlotValues } from './prompt-sections.pure';
+import {
+  sampleOf,
+  slotKeys,
+  visibleKeys,
+  type PromptSection,
+  type PromptSlot,
+  type SlotValues,
+} from './prompt-sections.pure';
 import type { TryPromptWords } from './try-prompt.types';
 
 /* A paste-in slot: a textarea per entry taking a paste, an upload for a markdown file, and for a multiple slot a plus button. */
@@ -12,9 +19,9 @@ const FIELD =
   'w-full rounded-md border border-border bg-background p-2 text-caption outline-none focus-visible:ring-2 focus-visible:ring-ring';
 
 interface EntryProps {
-  readonly slot: PromptSlot;
   readonly name: string;
   readonly label: string;
+  readonly sample: string | undefined;
   readonly value: string;
   readonly uploadLabel: string;
   readonly onValue: (value: string) => void;
@@ -39,7 +46,7 @@ function UploadButton({ label, onValue }: { label: string; onValue: (value: stri
   );
 }
 
-function SlotEntry({ slot, name, label, value, uploadLabel, onValue }: EntryProps) {
+function SlotEntry({ name, label, sample, value, uploadLabel, onValue }: EntryProps) {
   const id = useId();
   return (
     <div data-slot-entry={name} className="flex flex-col gap-1">
@@ -50,7 +57,7 @@ function SlotEntry({ slot, name, label, value, uploadLabel, onValue }: EntryProp
         id={id}
         rows={3}
         value={value}
-        placeholder={slot.sample}
+        placeholder={sample}
         onChange={(event) => onValue(event.target.value)}
         className={FIELD}
       />
@@ -77,8 +84,8 @@ export function SlotInput({ slot, sections, values, words, onValue }: SlotInputP
       {keys.map((key, at) => (
         <SlotEntry
           key={key}
-          slot={slot}
           name={key}
+          sample={sampleOf(slot, key)}
           label={numbered ? `${slot.label} ${at + 1}` : slot.label}
           value={values[key] ?? ''}
           uploadLabel={words.upload ?? slot.label}

@@ -21,10 +21,7 @@ ui:
   short: Kurz
   shortTip: Kurze Fassung, nur die 3 wichtigsten Fragen pro Runde
   sectionAbout: Über diesen Schritt
-  sectionIn: Was du einfügst
-  sectionOut: Was du zurückbekommst
   sectionCriteria: So sieht gut aus
-  sectionSkills: Skills
   sectionExample: Beispielergebnis
   doIt: Mach es
   reviewIt: Prüfe es
@@ -35,26 +32,4 @@ ui:
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
   tooLong: zu lang für einen Link, daher wird er kopiert und ein leerer Chat geöffnet
-  setup: Einmalige Einrichtung
   newTab: öffnet in neuem Tab
-
-# Die Wörter der Ausgabe-Ansichten (Spezifikation, Tickets, Recherche, Vergleich, Anforderungen), mit denselben Schlüsseln.
-output:
-  goal: Ziel
-  requirements: Anforderungen
-  outOfScope: Nicht dabei
-  slices: Scheiben
-  tickets: Tickets
-  acceptance: Fertig, wenn
-  blockedBy: Nach
-  ready: Bereit
-  done: Erledigt
-  blocked: Wartet
-  progress: '{done} von {total} erledigt'
-  graphHint: Klicke ein bereites Ticket an, um es abzuhaken und freizugeben, was daran hängt.
-  facts: Fakten
-  criteria: Kriterien
-  ranking: Rangfolge
-  rank: '#'
-  option: Option
-  why: Warum

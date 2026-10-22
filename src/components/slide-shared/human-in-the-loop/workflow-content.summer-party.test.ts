@@ -23,6 +23,12 @@ const task = (id: string): TaskDef => {
   if (!found) throw new Error(`no task ${id}`);
   return found;
 };
+/** The one example of a task that has no fan-out. */
+const exampleOf = (id: string): string => {
+  const { example } = task(id).details;
+  if (typeof example !== 'string') throw new Error(`task ${id} has one example per chat`);
+  return example;
+};
 const sampleOf = (taskId: string, slotId: string) => task(taskId).slots.find((slot) => slot.id === slotId)?.sample;
 const instructions = (): SectionDef[] => [
   ...file.reviewer.sections,
@@ -88,8 +94,8 @@ describe('success cases', () => {
           ?.split('## ')[0]
           ?.match(/^- .+$/gm) ?? []
       ).map((line) => line.slice(2));
-    const spec = task('spec').details.example;
-    const tickets = task('tickets').details.example.split(/^## /m).slice(1);
+    const spec = exampleOf('spec');
+    const tickets = exampleOf('tickets').split(/^## /m).slice(1);
     // ACT
     const titles = tickets.map((section) => section.split('\n')[0]);
     const lacking = tickets.filter((section) =>
@@ -109,11 +115,10 @@ describe('success cases', () => {
       ['tickets', 'spec', 'spec'],
       ['venue', 'tickets', 'tickets'],
       ['compare', 'spec', 'spec'],
-      ['compare', 'research_1', 'venue'],
       ['recommend', 'comparison', 'compare'],
     ] as const;
     // ACT
-    const drift = pairs.filter(([taker, slot, maker]) => sampleOf(taker, slot) !== task(maker).details.example);
+    const drift = pairs.filter(([taker, slot, maker]) => sampleOf(taker, slot) !== exampleOf(maker));
     // ASSERT
     expect(drift).toEqual([]);
   });
@@ -124,14 +129,12 @@ describe('success cases', () => {
       ['pieces', 'plan_result', 'pieces'],
       ['spec', 'spec', 'spec'],
       ['tickets', 'tickets', 'tickets'],
-      ['venue', 'research_result', 'venue'],
       ['compare', 'comparison_result', 'compare'],
       ['recommend', 'recommendation', 'recommend'],
     ] as const;
     // ACT
     const drift = own.filter(
-      ([owner, slot, maker]) =>
-        task(owner).review?.slots.find((each) => each.id === slot)?.sample !== task(maker).details.example,
+      ([owner, slot, maker]) => task(owner).review?.slots.find((each) => each.id === slot)?.sample !== exampleOf(maker),
     );
     // ASSERT
     expect(drift).toEqual([]);
@@ -177,15 +180,59 @@ describe('edge cases', () => {
     const slots = task('compare').slots.map((slot) => slot.id);
     // ASSERT
     expect(simple).toMatch(/ticket number \{\{n\}\}/);
-    expect(slots).toEqual(['spec', 'research_1', 'research_2', 'research_3']);
+    expect(slots).toEqual(['spec', 'research']);
   });
 
-  it('gives the three research samples three different candidates', () => {
+  it('gives Compare one multiple research slot whose three samples are the examples of Research chats 1 to 3', () => {
     // ARRANGE
-    const samples = ['research_1', 'research_2', 'research_3'].map((id) => sampleOf('compare', id));
+    const research = task('compare').slots.find((slot) => slot.id === 'research');
+    const examples = task('venue').details.example;
+    const chats = 3;
     // ACT
-    const heads = samples.map((sample) => sample?.split('\n')[3]);
+    const review = task('compare').review?.slots.find((slot) => slot.id === 'research')?.sample;
     // ASSERT
-    expect(new Set(heads).size).toBe(samples.length);
+    expect(research?.mode).toBe('multiple');
+    expect(research?.sample).toEqual(examples);
+    expect(review).toEqual(examples);
+    expect(examples).toHaveLength(chats);
+  });
+
+  it('gives the three research examples three different venues of the three ticket types, differing in fit and price', () => {
+    // ARRANGE
+    const examples = [...task('venue').details.example];
+    const chats = 3;
+    const prices = examples.map((each) => /(\d+) euros per person/.exec(each)?.[1]);
+    // ACT
+    const names = examples.map((each) => /^# (.+)$/m.exec(each)?.[1]);
+    // ASSERT
+    expect(new Set(names).size).toBe(chats);
+    expect(new Set(prices).size).toBe(chats);
+    expect(
+      examples.map((each) =>
+        /^(Event hall|Hotel|Outdoor)/m.test(each.split('## Fit against the requirements\n')[1] ?? ''),
+      ),
+    ).toEqual([true, true, true]);
+  });
+
+  it('keeps the venue names of Research in the comparison and the recommendation', () => {
+    // ARRANGE
+    const names = [...task('venue').details.example].map((each) => /^# (.+)$/m.exec(each)?.[1] ?? '');
+    // ACT
+    const missing = names.filter((name) => !exampleOf('compare').includes(name));
+    // ASSERT
+    expect(missing).toEqual([]);
+    expect(exampleOf('recommend')).toContain(names[0]);
+  });
+
+  it('gives Plan a task slot whose sample is the summer party, and leaves no placeholder in any prompt', () => {
+    // ARRANGE
+    const slot = task('pieces').slots.find((each) => each.id === 'task');
+    // ACT
+    const texts = tasksOf(file).flatMap((each) =>
+      [...each.do.simple, ...each.do.technical].map((section) => section.text),
+    );
+    // ASSERT
+    expect(slot?.sample).toMatch(/summer party/i);
+    expect(texts.filter((text) => /<describe/.test(text))).toEqual([]);
   });
 });

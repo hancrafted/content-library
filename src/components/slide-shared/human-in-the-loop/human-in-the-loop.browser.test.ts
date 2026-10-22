@@ -3,7 +3,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { ensureBrowser } from '../../../../skills/visual-check/scripts/browser';
 import { connect, evaluate, eventName, type Connection, type Send } from '../../../../skills/visual-check/scripts/cdp';
-import { PAIRS } from './workflow-data';
+import summerPartyEn from './summer-party.en.yml';
 
 /*
  * The browser seam (`npm run test:browser`, local only, never CI): the Slide "Human in the loop" of the Slides Episode in the shared
@@ -14,6 +14,7 @@ import { PAIRS } from './workflow-data';
 
 const URL_UNDER_TEST = process.env.HITL_URL ?? 'http://localhost:3000/episodes/slides/';
 const TIMEOUT = 120_000;
+const LONG_TIMEOUT = TIMEOUT * 2;
 const ROOT = '[data-human-in-the-loop]';
 const PANEL = '[data-human-in-the-loop] dialog[data-part="modal"] > div';
 const SLIDE_ANCHOR = 'agentic-workflows--human-in-the-loop';
@@ -24,13 +25,16 @@ let targetId = '';
 let send: Send;
 let session = '';
 
-async function open(theme: 'light' | 'dark', width = 1440) {
+/** The same Slide in German: the locale segment goes in front of `episodes`. */
+const GERMAN_URL = URL_UNDER_TEST.replace('/episodes/', '/de/episodes/');
+
+async function open(theme: 'light' | 'dark', width = 1440, url = URL_UNDER_TEST) {
   await send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: width < 600 });
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: theme }] });
   const loaded = new Promise((resolve) =>
     connection.events.addEventListener(eventName(session, 'Page.loadEventFired'), resolve, { once: true }),
   );
-  await send('Page.navigate', { url: URL_UNDER_TEST });
+  await send('Page.navigate', { url });
   await loaded;
   await delay(1200);
   await evaluate(send, axe.source);
@@ -77,12 +81,6 @@ async function seriousViolations(): Promise<string[]> {
   return result.value;
 }
 
-/** The Vacation Workflow, still on the old schema until it migrates (issue 286): the Short grill and the ticket graph live there. */
-const openVacation = async () => {
-  await press(`${ROOT} [data-control="picker"] button`, /Vacation/);
-  await settle();
-};
-
 const openStage = async (stage: RegExp) => {
   expect(await press(`${ROOT} [data-part="diagram"] button[data-try]`, stage)).toBe(true);
   await settle();
@@ -93,10 +91,40 @@ const escape = async () => {
   await settle();
 };
 
+/** What is wrong with the opened stage's popover: its title, goal, prompts, details and any unfilled marker. */
+async function popoverProblems(where: string, title: RegExp): Promise<string[]> {
+  const heading = await text(`${MODAL} header h2`);
+  const prompts = await js<string[]>(
+    `[...document.querySelectorAll('${MODAL} [data-prompt-text]')].map((el) => el.textContent)`,
+  );
+  const checks: [boolean, string][] = [
+    [!title.test(heading), `title "${heading}"`],
+    [!(await text(`${MODAL} header [data-goal]`)), 'no goal'],
+    [prompts.length === 0 || (await count(`${MODAL} [data-details]`)) !== 1, 'no prompt or details'],
+    [prompts.some((prompt) => prompt.includes('{{')), 'unfilled marker'],
+  ];
+  return checks.filter(([wrong]) => wrong).map(([, what]) => `${where}: ${what}`);
+}
+
+/** Opens one Workflow by its pill, then every stage of it in turn, and reports what is wrong. */
+async function stageProblems(pill: string, title: RegExp): Promise<string[]> {
+  const stages = 7;
+  await press(`${ROOT} [data-control="picker"] button`, new RegExp(pill));
+  await settle();
+  const names = await js<string[]>(
+    `[...document.querySelectorAll('${ROOT} [data-part="diagram"] button[data-try]')].map((el) => el.dataset.try)`,
+  );
+  const problems = names.length === stages ? [] : [`${pill}: ${names.length} stages`];
+  for (const name of names) {
+    await openStage(new RegExp(name));
+    problems.push(...(await popoverProblems(`${pill}/${name}`, title)));
+    await escape();
+  }
+  return problems;
+}
+
 /** A valid Workflow of the viewer's own: the shipped summer party under another id and title. */
-const OWN = PAIRS['summer-party'].config
-  .replace('id: summer-party', 'id: mine')
-  .replace('title: Summer party', 'title: Mine');
+const OWN = summerPartyEn.replace('id: summer-party', 'id: mine').replace('title: Summer party', 'title: Mine');
 
 /** Chooses a file in the upload control as a viewer does: the input's files, then its change event. */
 const upload = (yaml: string) =>
@@ -230,59 +258,6 @@ describe('success cases', () => {
   );
 
   it(
-    'copies the short grill of the interview when Short is on, and the full prompt when it is off',
-    async () => {
-      // ARRANGE
-      await open('light');
-      await openVacation();
-      await openStage(/Interview/);
-      const copyRun = async () => {
-        await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy prompt/);
-        await settle();
-      };
-      // ACT
-      await copyRun();
-      await press(`${MODAL} [data-step="run"] button[aria-pressed]`, /Short/);
-      await settle();
-      await copyRun();
-      const copied = await js<string[]>('window.__copied');
-      const shortToggles = await count(`${MODAL} [data-step] button[aria-pressed]`);
-      // ASSERT
-      expect(copied[0]).not.toContain('SHORT version');
-      expect(copied[1]).toContain('SHORT version');
-      expect(shortToggles).toBe(1);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'copies the short command of the interview at the Technical level when Short is on',
-    async () => {
-      // ARRANGE
-      await open('light');
-      await press(`${ROOT} [data-part="toolbar"] button`, /Technical/);
-      await settle();
-      await openVacation();
-      await openStage(/Interview/);
-      const copyRun = async () => {
-        await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy command/);
-        await settle();
-      };
-      // ACT
-      await copyRun();
-      await press(`${MODAL} [data-step="run"] button[aria-pressed]`, /Short/);
-      await settle();
-      await copyRun();
-      const copied = await js<string[]>('window.__copied');
-      // ASSERT
-      expect(copied[0]).not.toContain('Short version');
-      expect(copied[1]).toContain('Short version');
-      expect(copied[1]?.startsWith('/')).toBe(true);
-    },
-    TIMEOUT,
-  );
-
-  it(
     'returns focus to the Try it button on every close path: X, Escape and backdrop',
     async () => {
       // ARRANGE
@@ -341,43 +316,10 @@ describe('success cases', () => {
   );
 
   it(
-    'ticks a ready ticket of the example graph so its dependent becomes ready',
-    async () => {
-      // ARRANGE
-      const doneStatus = 'done';
-      await open('light');
-      await openVacation();
-      await openStage(/Requirements/);
-      const status = (id: string) =>
-        js<string | null>(`document.querySelector('${MODAL} [data-ticket="${id}"]')?.dataset.status ?? null`);
-      const first = await js<string>(
-        `document.querySelector('${MODAL} [data-ticket][data-status="ready"]').dataset.ticket`,
-      );
-      const waiting = await js<string[]>(
-        `[...document.querySelectorAll('${MODAL} [data-ticket][data-status="blocked"]')].map((el) => el.dataset.ticket)`,
-      );
-      // ACT
-      await js(`document.querySelector('${MODAL} [data-ticket="${first}"]').click()`);
-      await settle();
-      const progress = await text(`${MODAL} [data-progress]`);
-      const nowReady = await js<string[]>(
-        `[...document.querySelectorAll('${MODAL} [data-ticket][data-status="ready"]')].map((el) => el.dataset.ticket)`,
-      );
-      // ASSERT
-      expect(await status(first)).toBe(doneStatus);
-      expect(waiting.length).toBeGreaterThan(0);
-      expect(nowReady.some((id) => waiting.includes(id))).toBe(true);
-      expect(progress).toMatch(/^1 of \d+ done$/);
-    },
-    TIMEOUT,
-  );
-
-  it(
-    'switches to Vacation with its own card lines, then shows the setup and a copyable /skill command in Technical',
+    'switches to Vacation with its own card lines, then copies the /grilling prompt in Technical',
     async () => {
       // ARRANGE
       const vacation = 'vacation';
-      const setupCommand = 'claude plugin install';
       await open('light');
       const card = () => text(`${ROOT} [data-part="diagram"]`);
       const before = await card();
@@ -389,8 +331,7 @@ describe('success cases', () => {
       await press(`${ROOT} [data-part="toolbar"] button`, /Technical/);
       await settle();
       await openStage(/Interview/);
-      const setup = await text(`${MODAL} section[aria-label="One-time setup"]`);
-      await press(`${MODAL} [data-step="run"] button[aria-label]`, /Copy command/);
+      await press(`${MODAL} [data-step="do"] button[aria-label]`, /Copy prompt/);
       await settle();
       const copied = await js<string[]>('window.__copied');
       // ASSERT
@@ -398,10 +339,82 @@ describe('success cases', () => {
       expect(before).toContain('At most €150 per person');
       expect(after).toContain('Sleeps 2');
       expect(after).not.toContain('At most €150 per person');
-      expect(setup).toContain(setupCommand);
-      expect(copied[0]).toMatch(/^\/[a-z-]+/);
+      expect(copied[0]).toContain('/grilling');
     },
     TIMEOUT,
+  );
+
+  it(
+    'gives Compare one research slot: Add entry shows chats 2 and 3, and the copied prompt carries the three venue samples',
+    async () => {
+      // ARRANGE
+      const entries = 3;
+      const venues = ['Old Mill', 'Grand Hotel Mainblick', 'Riverside Garden Pavilion'];
+      await open('light');
+      await openStage(/Compare/);
+      const slot = `${MODAL} [data-step="do"] [data-slot="research"]`;
+      const entryCount = () => count(`${slot} [data-slot-entry]`);
+      // ACT
+      const first = await entryCount();
+      for (let at = 1; at < entries; at++) {
+        await js(`document.querySelector('${slot} [data-slot-add] button').click()`);
+        await settle();
+      }
+      const all = await entryCount();
+      const placeholders = await js<string[]>(
+        `[...document.querySelectorAll('${slot} textarea')].map((el) => el.placeholder.split('\\n').find((line) => line.startsWith('# ')))`,
+      );
+      const plus = await count(`${slot} [data-slot-add]`);
+      await press(`${MODAL} [data-step="do"] button[aria-label]`, /Copy prompt/);
+      await settle();
+      const copied = await js<string[]>('window.__copied');
+      // ASSERT
+      expect(first).toBe(1);
+      expect(all).toBe(entries);
+      expect(plus).toBe(0);
+      expect(placeholders).toEqual(venues.map((name) => `# ${name}`));
+      for (const venue of venues) expect(copied[0]).toContain(`# ${venue}`);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'shows one example per Research chat in the details, and the Plan task slot with the summer party as its sample',
+    async () => {
+      // ARRANGE
+      const chats = 3;
+      await open('light');
+      // ACT
+      await openStage(/Research/);
+      const examples = await count(`${MODAL} [data-details] [data-example]`);
+      await escape();
+      await openStage(/Plan/);
+      const sample = await js<string>(
+        `document.querySelector('${MODAL} [data-slot-entry="task"] textarea').placeholder`,
+      );
+      // ASSERT
+      expect(examples).toBe(chats);
+      expect(sample).toMatch(/summer party/i);
+      expect(sample).not.toMatch(/describe/);
+    },
+    TIMEOUT,
+  );
+
+  it.each([
+    ['English', { url: URL_UNDER_TEST, title: /Try it$/, pills: ['Summer party', 'Vacation'] }],
+    ['German', { url: GERMAN_URL, title: /Ausprobieren$/, pills: ['Sommerfest', 'Urlaub'] }],
+  ] as const)(
+    'opens every stage of both Workflows in %s with its goal, prompts and no unfilled {{marker}}',
+    async (_language, { url, title, pills }) => {
+      // ARRANGE
+      await open('light', 1440, url);
+      const problems: string[] = [];
+      // ACT
+      for (const pill of pills) problems.push(...(await stageProblems(pill, title)));
+      // ASSERT
+      expect(problems).toEqual([]);
+    },
+    LONG_TIMEOUT,
   );
 
   it(

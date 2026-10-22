@@ -21,10 +21,7 @@ ui:
   short: Short
   shortTip: Short version, only the 3 most load-bearing questions per round
   sectionAbout: About this step
-  sectionIn: What you paste in
-  sectionOut: What you get back
   sectionCriteria: What good looks like
-  sectionSkills: Skills
   sectionExample: Example result
   doIt: Do it
   reviewIt: Review it
@@ -35,26 +32,4 @@ ui:
   slotUpload: Upload a markdown file
   slotAdd: Add another entry
   tooLong: too long for a link, so it is copied and an empty chat opens
-  setup: One-time setup
   newTab: opens in a new tab
-
-# The words of the output renderers (spec, tickets, research, comparison, requirements). The German twin holds the same keys.
-output:
-  goal: Goal
-  requirements: Requirements
-  outOfScope: Out of scope
-  slices: Slices
-  tickets: Tickets
-  acceptance: Done when
-  blockedBy: After
-  ready: Ready
-  done: Done
-  blocked: Waiting
-  progress: '{done} of {total} done'
-  graphHint: Click a ready ticket to tick it off and unlock what it blocks.
-  facts: Facts
-  criteria: Criteria
-  ranking: Ranking
-  rank: '#'
-  option: Option
-  why: Why

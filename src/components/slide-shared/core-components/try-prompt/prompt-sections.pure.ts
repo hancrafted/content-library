@@ -18,8 +18,17 @@ export interface PromptSlot {
   readonly id: string;
   readonly mode: 'single' | 'multiple';
   readonly label: string;
-  /** Stays in the prompt while the slot is empty. */
-  readonly sample?: string;
+  /** Stays in the prompt while the slot is empty. A multiple slot may carry one per entry, in marker order. */
+  readonly sample?: string | readonly string[];
+}
+
+/** The sample of the entry `key` of `slot`: its own for a list, the one sample for a single slot. */
+export function sampleOf(slot: PromptSlot, key: string): string | undefined {
+  if (typeof slot.sample !== 'string') {
+    const at = Number(key.slice(slot.id.length + 1)) - 1;
+    return slot.sample?.[at];
+  }
+  return slot.sample;
 }
 
 /** What the visitor typed, keyed by marker name: `id` of a single slot, `id_K` of a multiple one. */
@@ -62,7 +71,7 @@ export function fillMarkers(text: string, parts: PromptParts, values: SlotValues
   const fills = new Map<string, string>();
   for (const slot of parts.slots) {
     for (const key of slotKeys(slot, parts.sections)) {
-      const value = (values[key] ?? '').trim() ? values[key]! : slot.sample;
+      const value = (values[key] ?? '').trim() ? values[key]! : sampleOf(slot, key);
       if (value !== undefined) fills.set(key, value);
     }
   }
