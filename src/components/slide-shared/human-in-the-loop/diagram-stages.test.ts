@@ -2,10 +2,9 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import { DiagramPart } from './diagram-part.client';
+import { DiagramPart } from './diagram-part';
 import { DiagramStages } from './diagram-stages';
 import type { DiagramSlots, UiWords } from './human-in-the-loop.types';
-import { workflowView } from './workflow-view.pure';
 import type { Job, Workflow } from './workflow.types';
 
 const base: Job = {
@@ -17,68 +16,99 @@ const base: Job = {
   inputs: [],
   outputs: [],
   skills: [],
-  prompt: 'P',
+  run: { todo: 'Do.', prompt: 'P' },
 };
 const flow = (fanOut: number): Workflow => ({
   id: 'w',
   title: 'W',
   scenario: 'S',
   stages: [
-    { id: 'a', name: 'A', jobs: [{ ...base, id: 'a' }] },
-    { id: 'b', name: 'B', jobs: [{ ...base, id: 'b', title: 'Chat', fanOut }] },
-    { id: 'c', name: 'C', jobs: [{ ...base, id: 'c' }] },
+    { id: 'a', name: 'A', moves: [], jobs: [{ ...base, id: 'a' }] },
+    { id: 'b', name: 'B', moves: [], jobs: [{ ...base, id: 'b', title: 'Chat', fanOut }] },
+    { id: 'c', name: 'C', moves: [], jobs: [{ ...base, id: 'c' }] },
   ],
 });
-const scene = (workflow: Workflow, slots?: DiagramSlots) =>
+const words = { tryIt: 'Try it', moveLabel: '{letter}: {why}' } as UiWords;
+const scene = (workflow: Workflow, slots?: DiagramSlots, readonly = false) =>
   load(
     renderToStaticMarkup(
       createElement(DiagramStages, {
         workflow,
-        view: workflowView(workflow, { mode: 'watch', level: 'simple' }),
         slots,
-        words: { signedOff: 'Signed off' },
+        words,
+        readonly,
+        openStageId: null,
+        onOpenStage: vi.fn(),
       }),
     ),
   );
 
 describe('success cases', () => {
-  it('numbers every job in drawing order as a button that opens it', () => {
+  it('puts one "Try it" button under each stage column, pressed for the open stage', () => {
     // ARRANGE
-    const words = { signedOff: 'Signed off' } as UiWords;
     const html = renderToStaticMarkup(
       createElement(DiagramPart, {
         workflow: flow(2),
-        view: workflowView(flow(2), { mode: 'try', level: 'simple' }),
         words,
-        openJobId: 'b',
-        onOpenJob: vi.fn(),
+        readonly: false,
+        openStageId: 'b',
+        onOpenStage: vi.fn(),
       }),
     );
     // ACT
     const $ = load(html);
-    const steps = $('button[aria-pressed]')
-      .map((_, el) => `${$(el).attr('aria-label')}:${$(el).attr('aria-pressed')}`)
+    const tries = $('li[class*="focus-group__item"] > button[data-try]')
+      .map((_, el) => `${$(el).text()}:${$(el).attr('aria-expanded')}`)
       .get();
     // ASSERT
-    expect(steps).toEqual(['1 J:false', '2 Chat:true', '3 J:false']);
+    expect(tries).toEqual(['Try it: A:false', 'Try it: B:true', 'Try it: C:false']);
   });
 
-  it('draws no step buttons in Watch mode', () => {
+  it('draws no "Try it" button for a readonly Preset, and the diagram stays', () => {
     // ARRANGE
-    const words = { signedOff: 'Signed off' } as UiWords;
-    const html = renderToStaticMarkup(
-      createElement(DiagramPart, {
-        workflow: flow(2),
-        view: workflowView(flow(2), { mode: 'watch', level: 'simple' }),
-        words,
-        openJobId: null,
-        onOpenJob: vi.fn(),
-      }),
-    );
+    const stages = 3;
+    const $ = scene(flow(2), undefined, true);
     // ACT
-    const buttons = load(html)('button').length;
+    const buttons = $('button').length;
     // ASSERT
     expect(buttons).toBe(0);
+    expect($('li[class*="focus-group__item"]')).toHaveLength(stages);
+  });
+
+  it('lists the BRIEF letters of a stage as circles with their tooltips, only where the Slide shows them', () => {
+    // ARRANGE
+    const moved: Workflow = {
+      ...flow(2),
+      stages: flow(2).stages.map((stage) =>
+        stage.id === 'a' ? { ...stage, moves: [{ letter: 'B' as const, why: 'Split it.' }] } : stage,
+      ),
+    };
+    // ACT
+    const shown = scene(moved, { initials: true });
+    const hidden = scene(moved, { initials: false });
+    // ASSERT
+    expect(
+      shown('[data-move]')
+        .map((_, el) => shown(el).attr('aria-label'))
+        .get(),
+    ).toEqual(['B: Split it.']);
+    expect(hidden('[data-move]')).toHaveLength(0);
+  });
+
+  it('draws the sign-off card of the focal stage from the Workflow, not from the Slide', () => {
+    // ARRANGE
+    const card = { label: 'The card', lines: ['One', 'Two'], status: 'Done' };
+    const carded: Workflow = {
+      ...flow(2),
+      focalJobId: 'a',
+      stages: flow(2).stages.map((stage) => (stage.id === 'a' ? { ...stage, gate: 1, card } : stage)),
+    };
+    // ACT
+    const text = scene(carded)('li[class*="focus-group__item"]').first().text();
+    // ASSERT
+    expect(text).toContain('The card');
+    expect(text).toContain('One');
+    expect(text).toContain('Done');
   });
 
   it.each([2, 4])('draws a fan out and a fan in with %i branches', (n) => {
@@ -106,7 +136,7 @@ describe('failure cases', () => {
     const popover = { in: 'in.', out: 'out.', inLabel: 'In:', outLabel: 'Out:' };
     const $ = scene(flow(2), { stages: { b: { popover } } });
     // ACT
-    const opener = $('button[aria-haspopup="dialog"]');
+    const opener = $('button[aria-haspopup="dialog"]:not([data-try])');
     // ASSERT
     expect(opener).toHaveLength(1);
     expect(opener.text()).toBe('B');

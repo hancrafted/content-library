@@ -1,121 +1,89 @@
 import { handoffBlocks, parseHandoff, type Handoff } from './handoff.pure';
 import { jobsOf } from './workflow-jobs.pure';
-import type { Level, Mode } from './workflow-state.pure';
+import type { Level } from './workflow-state.pure';
 import type { Job, Workflow } from './workflow.types';
 
 /*
- * The view seam: what the diagram and the job modal show for a Workflow in a mode and level. Pure, so Watch vs Try,
- * Simple vs Technical and the modal's order are testable without a browser. It holds no words of its own: every
- * label is the Workflow's, and the parts bring the chrome words.
+ * The view seam: what a stage's "Try it" modal shows for a Workflow at a level. Pure, so the modal's information
+ * architecture (numbered steps first, explanation below) and Simple vs Technical are testable without a browser. It
+ * holds no words of its own: every label is the Workflow's, and the parts bring the chrome words.
  */
 
 export interface ViewOptions {
-  readonly mode: Mode;
   readonly level: Level;
 }
 
-/** A quick action of the modal header: a copy of `text`, or a link `href` that opens a chat tool prefilled. */
-export type ModalAction =
-  | { readonly id: 'copy-prompt' | 'copy-command' | 'copy-example' | 'copy-check' | 'copy-page'; readonly text: string }
-  | { readonly id: 'open-chatgpt' | 'open-claude'; readonly href: string };
+/** What a step copies and opens: a prompt, or at the Technical level the one-line `/skill` command. */
+export interface PromptView {
+  readonly kind: 'prompt' | 'command';
+  readonly text: string;
+  /** The short grill of an interview prompt; the Short toggle swaps it for `text`. */
+  readonly short?: string;
+}
 
+/** One numbered step of a job: one line saying what to do, and the prompt behind it. */
+export interface StepView {
+  readonly id: 'run' | 'check' | 'page';
+  readonly todo: string;
+  readonly prompt: PromptView;
+}
+
+/** The explanation under the steps: what the job does, in and out, what good looks like, skills, the example. */
 export type ModalSection =
   | { readonly kind: 'does'; readonly text: string }
   | { readonly kind: 'in' | 'out' | 'criteria'; readonly items: readonly string[] }
   | { readonly kind: 'skills'; readonly links: readonly { readonly label: string; readonly href: string }[] }
-  | { readonly kind: 'fullPrompt'; readonly text: string }
   | { readonly kind: 'example' };
 
-export interface ModalView {
-  readonly actions: readonly ModalAction[];
-  /** The body, in inverted-pyramid order. */
+/** One job inside a stage's modal. */
+export interface JobModalView {
+  readonly id: string;
+  readonly title: string;
+  /** Technical only: the one-time setup block shown with the command. */
+  readonly setup?: string;
+  /** The numbered steps, in order: run, check, optional page. */
+  readonly steps: readonly StepView[];
+  /** The explanation, below the steps. */
   readonly sections: readonly ModalSection[];
   /** The example output's parsed handoff blocks; blocks that do not parse are left out. */
   readonly examples: readonly Handoff[];
 }
 
-export interface JobCardView {
-  readonly id: string;
-  readonly title: string;
-  readonly detail?: string;
-  readonly fanOut?: number;
-  readonly focal: boolean;
-  readonly parked: readonly string[];
-  /** Try mode only: the position in drawing order, from 1. */
-  readonly step?: number;
-  /** Try mode only: the first sentence of the description. */
-  readonly guide?: string;
-  readonly modal: ModalView;
-}
-
+/** A stage's "Try it" modal: its jobs, in order. */
 export interface StageView {
   readonly id: string;
   readonly name: string;
-  readonly moveLabel?: string;
-  readonly move?: string;
-  readonly gate?: number;
-  readonly jobs: readonly JobCardView[];
+  readonly jobs: readonly JobModalView[];
 }
 
 export interface WorkflowView {
   readonly title: string;
-  readonly scenario: string;
-  /** Technical only. */
-  readonly setup?: string;
-  readonly clickable: boolean;
   readonly stages: readonly StageView[];
 }
 
 const SKILLS_URL = 'https://github.com/mattpocock/skills/tree/main/skills';
 
-const firstSentence = (text: string): string => /^.*?[.!?](?=\s|$)/s.exec(text.trim())?.[0] ?? text.trim();
+/** The links that open a chat tool with the text prefilled in a new tab. */
+export function chatLinks(text: string): { readonly chatgpt: string; readonly claude: string } {
+  const q = encodeURIComponent(text);
+  return { chatgpt: `https://chatgpt.com/?q=${q}`, claude: `https://claude.ai/new?q=${q}` };
+}
 
-const prefill = (base: string, prompt: string): string => `${base}?q=${encodeURIComponent(prompt)}`;
+function runOf(job: Job, level: Level): StepView {
+  const command = level === 'technical' ? job.command : undefined;
+  const prompt: PromptView =
+    command === undefined
+      ? { kind: 'prompt', text: job.run.prompt, short: job.run.short }
+      : { kind: 'command', text: command };
+  return { id: 'run', todo: job.run.todo, prompt };
+}
 
-function actionsOf(job: Job, level: Level): ModalAction[] {
-  const page = job.page?.[level];
-  const useCommand = level === 'technical' && job.command !== undefined;
-  const copy: ModalAction = useCommand
-    ? { id: 'copy-command', text: job.command as string }
-    : { id: 'copy-prompt', text: job.prompt };
-  const optional = (id: 'copy-example' | 'copy-check' | 'copy-page', text: string | undefined): ModalAction[] =>
-    text === undefined ? [] : [{ id, text }];
+function stepsOf(job: Job, level: Level): StepView[] {
+  const { check, page } = job;
   return [
-    copy,
-    { id: 'open-chatgpt', href: prefill('https://chatgpt.com/', copy.text) },
-    { id: 'open-claude', href: prefill('https://claude.ai/new', copy.text) },
-    ...optional('copy-example', job.exampleInput),
-    ...optional('copy-check', job.check?.prompt),
-    ...optional('copy-page', page),
-  ];
-}
-
-interface BodyContext {
-  readonly producers: readonly string[];
-  readonly examples: readonly Handoff[];
-}
-
-function coreSections(job: Job, producers: readonly string[]): ModalSection[] {
-  const sections: ModalSection[] = [{ kind: 'does', text: job.description }];
-  if (producers.length > 0) sections.push({ kind: 'in', items: producers });
-  sections.push({ kind: 'out', items: job.outputs.map((o) => `${o.id} (${o.kind})`) });
-  if (job.check) sections.push({ kind: 'criteria', items: job.check.criteria });
-  return sections;
-}
-
-function technicalSections(job: Job): ModalSection[] {
-  const links = job.skills.map(({ group, name }) => ({ label: name, href: `${SKILLS_URL}/${group}/${name}` }));
-  return [
-    ...(links.length > 0 ? [{ kind: 'skills', links } as const] : []),
-    ...(job.command === undefined ? [] : [{ kind: 'fullPrompt', text: job.prompt } as const]),
-  ];
-}
-
-function sectionsOf(job: Job, level: Level, { producers, examples }: BodyContext): ModalSection[] {
-  return [
-    ...coreSections(job, producers),
-    ...(level === 'technical' ? technicalSections(job) : []),
-    ...(examples.length > 0 ? [{ kind: 'example' } as const] : []),
+    runOf(job, level),
+    ...(check ? [{ id: 'check', todo: check.todo, prompt: { kind: 'prompt', text: check.prompt } } as const] : []),
+    ...(page ? [{ id: 'page', todo: page.todo, prompt: { kind: 'prompt', text: page[level] } } as const] : []),
   ];
 }
 
@@ -132,40 +100,40 @@ function examplesOf(job: Job): Handoff[] {
   });
 }
 
-function cardOf(job: Job, workflow: Workflow, options: ViewOptions & { readonly step: number }): JobCardView {
-  const { mode, level, step } = options;
+function sectionsOf(job: Job, workflow: Workflow, level: Level): ModalSection[] {
   const examples = examplesOf(job);
-  const trying = mode === 'try';
-  const modal = {
-    actions: actionsOf(job, level),
-    sections: sectionsOf(job, level, { producers: producersOf(job, workflow), examples }),
-    examples,
-  };
+  const producers = producersOf(job, workflow);
+  const links = job.skills.map(({ group, name }) => ({ label: name, href: `${SKILLS_URL}/${group}/${name}` }));
+  return [
+    { kind: 'does', text: job.description },
+    ...(producers.length > 0 ? [{ kind: 'in', items: producers } as const] : []),
+    { kind: 'out', items: job.outputs.map((o) => `${o.id} (${o.kind})`) },
+    ...(job.check ? [{ kind: 'criteria', items: job.check.criteria } as const] : []),
+    ...(level === 'technical' && links.length > 0 ? [{ kind: 'skills', links } as const] : []),
+    ...(examples.length > 0 ? [{ kind: 'example' } as const] : []),
+  ];
+}
+
+function jobView(job: Job, workflow: Workflow, level: Level): JobModalView {
+  const examples = examplesOf(job);
   return {
     id: job.id,
     title: job.title,
-    detail: job.detail,
-    fanOut: job.fanOut,
-    focal: job.id === workflow.focalJobId,
-    parked: job.parked ?? [],
-    step: trying ? step : undefined,
-    guide: trying ? firstSentence(job.description) : undefined,
-    modal,
+    setup: level === 'technical' ? workflow.setup : undefined,
+    steps: stepsOf(job, level),
+    sections: sectionsOf(job, workflow, level),
+    examples,
   };
 }
 
-/** The view model of a Workflow for a mode and level. */
-export function workflowView(workflow: Workflow, options: ViewOptions): WorkflowView {
-  const order = jobsOf(workflow.stages).map((job) => job.id);
-  const stages = workflow.stages.map((stage): StageView => ({
-    ...stage,
-    jobs: stage.jobs.map((job) => cardOf(job, workflow, { ...options, step: order.indexOf(job.id) + 1 })),
-  }));
+/** The view model of a Workflow for a level: one modal per stage. */
+export function workflowView(workflow: Workflow, { level }: ViewOptions): WorkflowView {
   return {
     title: workflow.title,
-    scenario: workflow.scenario,
-    setup: options.level === 'technical' ? workflow.setup : undefined,
-    clickable: options.mode === 'try',
-    stages,
+    stages: workflow.stages.map((stage) => ({
+      id: stage.id,
+      name: stage.name,
+      jobs: stage.jobs.map((job) => jobView(job, workflow, level)),
+    })),
   };
 }

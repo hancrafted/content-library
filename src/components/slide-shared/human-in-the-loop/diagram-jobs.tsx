@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 import { Check, FlowStub, ParkedStub, Sparkle } from '../glyphs/glyphs';
-import { chatNames, focalCriteria, splitParked } from './diagram-model.pure';
+import { chatNames, splitParked } from './diagram-model.pure';
 import type { JobSlot, PopoverCopy } from './human-in-the-loop.types';
 import { NodePopover, type NodeCopy } from './node-popover.client';
-import type { Job } from './workflow.types';
+import type { GateCard, Job } from './workflow.types';
 
 /*
  * The job cards of the diagram, one per role, in the look the venue pipeline had. Static: a card opens a popover only
@@ -38,7 +38,9 @@ export interface JobViewProps {
   readonly stageName: string;
   /** The word for this job's stage gate; absent when the stage has none. */
   readonly gateLabel?: string;
-  readonly words: { readonly signedOff: string; readonly checked: string };
+  readonly words: { readonly checked: string };
+  /** The sign-off card of the job's stage, drawn on its focal job. */
+  readonly card?: GateCard;
 }
 
 const PIECE = 'flex h-full min-w-0 flex-1 items-center rounded-full px-3 text-left text-caption';
@@ -85,24 +87,29 @@ export function AiJob({ job, slot, gateLabel }: JobViewProps) {
   );
 }
 
-/** The focal job as a card, the one focal point: its gate, its criteria, signed off. */
-export function FocalJob({ job, slot, gateLabel, words }: JobViewProps) {
-  const criteria = slot.criteria ?? focalCriteria(job);
+function CardLines({ lines }: { readonly lines: readonly string[] }) {
+  if (lines.length === 0) return null;
+  return (
+    <ul className="mt-2 flex flex-col gap-1 border-t border-border pt-2 text-caption text-muted-foreground">
+      {lines.map((line) => (
+        <li key={line}>{line}</li>
+      ))}
+    </ul>
+  );
+}
+
+/** The focal job as the stage's card, the one focal point: its gate, its lines, its status. */
+export function FocalJob({ job, slot, gateLabel, card }: JobViewProps) {
+  const { label, lines, status } = card ?? { label: job.title, lines: [], status: '' };
   return (
     <li className="-rotate-1 rounded-xl border border-border bg-background p-2.5 shadow-md">
       {gateLabel && <p className="text-caption font-medium text-muted-foreground uppercase">{gateLabel}</p>}
-      <p className="text-caption font-semibold">{job.title}</p>
-      {criteria.length > 0 && (
-        <ul className="mt-2 flex flex-col gap-1 border-t border-border pt-2 text-caption text-muted-foreground">
-          {criteria.map((criterion) => (
-            <li key={criterion}>{criterion}</li>
-          ))}
-        </ul>
-      )}
+      <p className="text-caption font-semibold">{label}</p>
+      <CardLines lines={lines} />
       <div className="mt-3 flex flex-wrap items-center gap-1.5">
         <p className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-caption font-semibold text-primary-foreground">
           <Check className="size-3.5" />
-          {words.signedOff}
+          {status}
         </p>
         {slot.marker}
       </div>

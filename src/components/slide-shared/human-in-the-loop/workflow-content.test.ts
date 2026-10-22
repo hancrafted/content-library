@@ -33,7 +33,7 @@ describe('success cases', () => {
     // ARRANGE
     const jobs = jobsOf(id, locale);
     // ACT
-    const without = jobs.filter((job) => !/```handoff\n[\s\S]*\n```$/.test(job.prompt));
+    const without = jobs.filter((job) => !/```handoff\n[\s\S]*\n```$/.test(job.run.prompt));
     // ASSERT
     expect(without.map((job) => job.id)).toEqual([]);
   });
@@ -105,6 +105,59 @@ describe('success cases', () => {
     expect(asking.length).toBeGreaterThan(0);
     expect(unmarked.map((job) => job.id)).toEqual([]);
   });
+
+  it.each(EACH)('gives every %s job in %s a todo line for each step and no {{slot}} anywhere', (id, locale) => {
+    // ARRANGE
+    const jobs = jobsOf(id, locale);
+    // ACT
+    const todoless = jobs.filter(
+      (job) => !job.run.todo || (job.check && !job.check.todo) || (job.page && !job.page.todo),
+    );
+    const slotted = JSON.stringify(workflowFor(id, locale)).includes('{{');
+    // ASSERT
+    expect(todoless.map((job) => job.id)).toEqual([]);
+    expect(slotted).toBe(false);
+  });
+
+  it.each(EACH)('offers the short grill on the interview of %s in %s and on no other job', (id, locale) => {
+    // ARRANGE
+    const jobs = jobsOf(id, locale);
+    // ACT
+    const short = jobs.filter((job) => job.run.short !== undefined).map((job) => job.id);
+    // ASSERT
+    expect(short).toEqual(['interview']);
+  });
+
+  it.each(EACH)('names the first stage of %s in %s Plan and the last Review, in the locale words', (id, locale) => {
+    // ARRANGE
+    const stages = workflowFor(id, locale).stages;
+    // ACT
+    const names = [stages[0]?.name, stages.at(-1)?.name];
+    // ASSERT
+    expect(names).toEqual(['Plan', locale === 'en' ? 'Review' : 'Prüfen']);
+  });
+
+  it.each(WORKFLOW_IDS)('gives %s its own requirements card lines, unlike the other Workflow', (id) => {
+    // ARRANGE
+    const linesOf = (each: WorkflowId) => workflowFor(each, 'en').stages.find((stage) => stage.card)?.card?.lines ?? [];
+    const other = WORKFLOW_IDS.find((each) => each !== id) as WorkflowId;
+    // ACT
+    const lines = linesOf(id);
+    // ASSERT
+    expect(lines.length).toBeGreaterThan(0);
+    expect(lines).not.toEqual(linesOf(other));
+  });
+
+  it.each(EACH)('puts a tooltip on every BRIEF letter of %s in %s', (id, locale) => {
+    // ARRANGE
+    const moves = workflowFor(id, locale).stages.flatMap((stage) => stage.moves);
+    const shortest = 10;
+    // ACT
+    const letters = moves.map((move) => move.letter).join('');
+    // ASSERT
+    expect(letters).toBe('BIRFE');
+    expect(moves.every((move) => move.why.length > shortest)).toBe(true);
+  });
 });
 
 describe('failure cases', () => {
@@ -123,7 +176,7 @@ describe('failure cases', () => {
     const german = (text: string | undefined) => !text || /auf Deutsch/.test(text);
     // ACT
     const silent = jobs.filter(
-      (job) => ![job.prompt, job.check?.prompt, job.page?.simple, job.page?.technical].every(german),
+      (job) => ![job.run.prompt, job.run.short, job.check?.prompt, job.page?.simple, job.page?.technical].every(german),
     );
     // ASSERT
     expect(silent.map((job) => job.id)).toEqual([]);
@@ -149,15 +202,14 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('sets the vacation for two people, one week and a recommendation for your partner', () => {
+  it('sets the vacation for two people and one week', () => {
     // ARRANGE
     const { scenario } = workflowFor('vacation', 'en');
     const last = workflowFor('vacation', 'en').stages.at(-1);
     // ACT
-    const text = `${scenario} ${last?.name} ${last?.moveLabel}`;
+    const text = `${scenario} ${last?.name}`;
     // ASSERT
     expect(text).toMatch(/two/i);
     expect(text).toMatch(/week/i);
-    expect(text).toMatch(/partner/i);
   });
 });

@@ -68,14 +68,6 @@
     }
   },
   "card": {
-    "gate": "Prüfpunkt 1",
-    "criteria": {
-      "guests": "200 Gäste",
-      "budget": "150 € pro Person",
-      "stepFree": "Stufenlos",
-      "vegetarian": "Vegetarisches Menü",
-      "quiet": "Ruhig genug zum Reden"
-    },
-    "signOff": "Freigegeben"
+    "gate": "Prüfpunkt 1"
   }
 }

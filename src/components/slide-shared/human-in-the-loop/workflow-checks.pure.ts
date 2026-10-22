@@ -10,8 +10,6 @@ import type { Job, Stage } from './workflow.types';
  * examples against their handoff kinds. Each answers one sentence per problem.
  */
 
-const SLOT = /\{\{([a-z0-9-]+)\}\}/g;
-
 /** The pipeline graph checks read a job as a pipeline job: `dependsOn` is its `needs`. */
 function asPipelineJobs(stages: readonly Stage[]): PipelineJob[] {
   return stages.flatMap((stage) =>
@@ -58,19 +56,32 @@ function producedTwice(jobs: readonly Job[]): string[] {
     .map((id) => `The output id "${id}" is produced twice; output ids are unique.`);
 }
 
-function slotProblems(job: Job): string[] {
-  const slots = new Set([...job.prompt.matchAll(SLOT)].map((match) => match[1] ?? ''));
+/** Every prompt text of a job, by the words key it came from. */
+function promptTexts(job: Job): [string, string | undefined][] {
   return [
-    ...job.inputs
-      .filter((input) => !slots.has(input))
-      .map((input) => `The prompt of job "${job.id}" has no {{${input}}} slot for its input.`),
-    ...[...slots]
-      .filter((slot) => !job.inputs.includes(slot))
-      .map((slot) => `The prompt of job "${job.id}" has the slot {{${slot}}}, which is not among its inputs.`),
+    ['run.prompt', job.run.prompt],
+    ['run.short', job.run.short],
+    ['command', job.command],
+    ['check.prompt', job.check?.prompt],
+    ['page.simple', job.page?.simple],
+    ['page.technical', job.page?.technical],
   ];
 }
 
-/** Inputs no earlier job produces, outputs produced twice, and prompt slots that do not match the inputs. */
+/** A prompt is complete as pasted: an earlier result is inlined, so a `{{slot}}` is a problem. */
+function slotProblems(job: Job): string[] {
+  return promptTexts(job)
+    .filter(([, value]) => value?.includes('{{'))
+    .map(([key]) => `The words.${key} of job "${job.id}" holds a {{slot}}; inline the example handoff instead.`);
+}
+
+/** The sign-off card, which the focal job's stage must carry. */
+export function cardProblems(stages: readonly Stage[], focal: string | undefined): string[] {
+  const stage = stages.find((each) => each.jobs.some((job) => job.id === focal));
+  return stage && !stage.card ? [`The stage "${stage.id}" holds the focal job but has no card.`] : [];
+}
+
+/** Inputs no earlier job produces, outputs produced twice, and prompts that still hold a `{{slot}}`. */
 export function inputProblems(stages: readonly Stage[], byId: ReadonlyMap<string, PipelineJob>): string[] {
   const jobs = jobsOf(stages);
   const producer = new Map(jobs.flatMap((job) => job.outputs.map((output): [string, string] => [output.id, job.id])));

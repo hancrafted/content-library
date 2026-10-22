@@ -159,7 +159,7 @@ describe('edge cases', () => {
 
   it('names the first stage as the task, in both locales', () => {
     // ARRANGE
-    const expected = ['Summer party', 'Sommerfest'];
+    const expected = ['Plan', 'Plan'];
     // ACT
     const names = (['en', 'de'] as const).map((locale) =>
       scene(locale)('ol[aria-label] > li').first().find('p.font-semibold').first().text().trim(),

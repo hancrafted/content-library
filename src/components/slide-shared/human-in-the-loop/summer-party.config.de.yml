@@ -8,23 +8,36 @@ words:
     Öffne danach einen Ordner für diese Aufgabe und starte Claude Code darin.
   stages:
     party:
-      name: Sommerfest
-      move: Zerlege es
+      name: Plan
+      moves:
+        B: 'Zerlege es: Teile die große Aufgabe in Teile und nimm nur eines mit.'
     interview:
       name: Interview
-      move: Interviewe Dich mit KI
+      moves:
+        I: 'Interviewe Dich mit KI: Die KI fragt, bevor sie rät, Frage für Frage.'
     requirements:
       name: Anforderungen
-      move: Erst die Anforderungen
+      moves:
+        R: 'Erst die Anforderungen: Aus den Antworten wird eine kurze Liste, die Du freigibst, bevor die Arbeit beginnt.'
+      card:
+        label: Anforderungskarte
+        lines:
+          - 200 Gäste
+          - 150 € pro Person
+          - Stufenlos
+          - Vegetarisches Menü
+          - Ruhig genug zum Reden
+        status: Freigegeben
     research:
       name: Recherche
-      move: Frischer Start für jedes Teil
+      moves:
+        F: 'Frischer Start für jedes Teil: Ein neuer Chat pro Location hält jedes Fenster klein.'
     compare:
       name: Vergleich
-      move: Prüfe jeden Schritt
+      moves:
+        E: 'Prüfe jeden Schritt: Vergleiche jedes Ergebnis mit der Karte, bevor Du weitermachst.'
     recommendation:
-      name: Empfehlung
-      move: für Deine Chefin
+      name: Prüfen
   jobs:
     pieces:
       title: Location
@@ -34,20 +47,23 @@ words:
         - Catering
         - Einladungen
         - Budget
-      prompt: |-
-        Antworte auf Deutsch. Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
-        Zerlege es in fünf unabhängige Teile, die ich nacheinander planen kann. Empfiehl dann das eine Teil, mit dem ich beginne, und begründe es in einem Satz.
-        Beende Deine Antwort mit dem gewählten Teil in genau einem Codeblock, genau so:
-        ```handoff
-        kind: text
-        text: <das gewählte Teil und die Begründung in einem Satz>
-        ```
+      run:
+        todo: Füge das in einen neuen Chat ein und lass die KI die Aufgabe zerlegen.
+        prompt: |-
+          Antworte auf Deutsch. Ich muss das nächste Sommerfest meiner Firma planen: 200 Mitarbeitende an fünf Standorten in Europa.
+          Zerlege es in fünf unabhängige Teile, die ich nacheinander planen kann. Empfiehl dann das eine Teil, mit dem ich beginne, und begründe es in einem Satz.
+          Beende Deine Antwort mit dem gewählten Teil in genau einem Codeblock, genau so:
+          ```handoff
+          kind: text
+          text: <das gewählte Teil und die Begründung in einem Satz>
+          ```
       exampleOutput: |-
         ```handoff
         kind: text
         text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
         ```
       check:
+        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielantwort durch Dein Ergebnis.
         criteria:
           - Es gibt fünf Teile, und jedes lässt sich für sich planen.
           - Genau ein Teil ist gewählt, mit Begründung in einem Satz.
@@ -55,23 +71,49 @@ words:
           Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Antwort unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
           Kriterien: Es gibt fünf Teile, und jedes lässt sich für sich planen; genau ein Teil ist gewählt, mit Begründung in einem Satz.
 
-          {{piece}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: text
+          text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
+          ```
     interview:
       title: KI fragt Dich
       detail: 3 Fragen, 1 vergessen
       description: Die KI interviewt Dich, bevor sie rät, eine Frage nach der anderen, und bringt auf, woran Du nicht gedacht hast. Das ist der Chat aus dem Vortrag.
-      prompt: |-
-        Antworte auf Deutsch. Interviewe mich unerbittlich zu diesem Teil meiner Planung, bis wir dasselbe Verständnis haben. Das Teil, das wir mitnehmen:
+      run:
+        todo: Füge das in einen neuen Chat ein und beantworte Frage für Frage; sag am Ende "fertig".
+        prompt: |-
+          Antworte auf Deutsch. Interviewe mich unerbittlich zu diesem Teil meiner Planung, bis wir dasselbe Verständnis haben. Das Teil, das wir mitnehmen:
 
-        {{piece}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: text
+          text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
+          ```
 
-        Geh die Entscheidungen Frage für Frage durch. Gib zu jeder Frage zwei Optionen (A und B) und Deine empfohlene Antwort, so formuliert, dass mein "Ja" sie annimmt. Warte auf meine Antwort, bevor Du die nächste Frage stellst. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
-        Stelle mindestens eine Frage, an die ich vermutlich nicht gedacht habe, zum Beispiel das Feedback vom letzten Jahr. Frag mich nie nach einem Fakt, den Du selbst wissen könntest. Höre auf, wenn nichts mehr stillschweigend angenommen wird.
-        Wenn ich "fertig" sage, beende mit meinen Antworten in genau einem Codeblock, genau so:
-        ```handoff
-        kind: text
-        text: <jede Frage mit meiner Antwort, eine pro Zeile>
-        ```
+          Geh die Entscheidungen Frage für Frage durch. Gib zu jeder Frage zwei Optionen (A und B) und Deine empfohlene Antwort, so formuliert, dass mein "Ja" sie annimmt. Warte auf meine Antwort, bevor Du die nächste Frage stellst. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
+          Stelle mindestens eine Frage, an die ich vermutlich nicht gedacht habe, zum Beispiel das Feedback vom letzten Jahr. Frag mich nie nach einem Fakt, den Du selbst wissen könntest. Höre auf, wenn nichts mehr stillschweigend angenommen wird.
+          Wenn ich "fertig" sage, beende mit meinen Antworten in genau einem Codeblock, genau so:
+          ```handoff
+          kind: text
+          text: <jede Frage mit meiner Antwort, eine pro Zeile>
+          ```
+        short: |-
+          Antworte auf Deutsch. Interviewe mich unerbittlich zu diesem Teil meiner Planung, bis wir dasselbe Verständnis haben. Das Teil, das wir mitnehmen:
+
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: text
+          text: Location. Sie legt Datum und Stadt fest, und Anreise, Catering und Einladungen folgen daraus.
+          ```
+
+          Halte es kurz: Geh die Entscheidungen in Runden mit höchstens den 3 wichtigsten Fragen durch, nummeriert, und lass alles weg, was den Plan nicht ändern würde. Gib zu jeder Frage zwei Optionen (A und B) und Deine empfohlene Antwort, so formuliert, dass mein "Ja" sie annimmt. Warte auf meine Antworten, bevor Du die nächste Runde beginnst. Wenn ich sage, dass ich etwas nicht verstehe, erkläre es mit einem Alltagsvergleich und frag noch einmal.
+          Stelle mindestens eine Frage, an die ich vermutlich nicht gedacht habe, zum Beispiel das Feedback vom letzten Jahr. Frag mich nie nach einem Fakt, den Du selbst wissen könntest. Höre auf, wenn nichts mehr stillschweigend angenommen wird.
+          Wenn ich "fertig" sage, beende mit meinen Antworten in genau einem Codeblock, genau so:
+          ```handoff
+          kind: text
+          text: <jede Frage mit meiner Antwort, eine pro Zeile>
+          ```
       command: |-
         /grilling [füge das gewählte Teil hier ein]
         Antworte auf Deutsch.
@@ -90,6 +132,7 @@ words:
           F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
         ```
       check:
+        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielantworten durch Deine eigenen.
         criteria:
           - Jede Frage kam mit zwei Optionen und einer Empfehlung.
           - Mindestens eine Frage brachte etwas auf, woran Du nicht gedacht hattest.
@@ -98,29 +141,47 @@ words:
           Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe das Interview unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
           Kriterien: Jede Frage hatte zwei Optionen und eine Empfehlung; mindestens eine Frage war neu für mich; meine Antworten sind aufgeschrieben.
 
-          {{answers}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: text
+          text: |-
+            Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
+            F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
+            F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
+            F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+          ```
     spec:
       title: Anforderungskarte
       description: Aus den Antworten wird eine Spezifikation mit einer kurzen Liste von Anforderungen, die Du abzeichnest, und die Arbeit wird in senkrechte Scheiben geschnitten, die für sich erledigt werden können.
-      prompt: |-
-        Antworte auf Deutsch. Mach aus meinen Interview-Antworten eine Spezifikation. Interviewe mich nicht noch einmal; nutze, was hier steht.
+      run:
+        todo: Füge das in einen neuen Chat ein, damit Deine Antworten zu einer Spezifikation und Tickets werden.
+        prompt: |-
+          Antworte auf Deutsch. Mach aus meinen Interview-Antworten eine Spezifikation. Interviewe mich nicht noch einmal; nutze, was hier steht.
 
-        {{answers}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: text
+          text: |-
+            Start: etwa 150 Euro pro Kopf, zwei Rollstuhlfahrer, ein paar Vegetarier.
+            F1 Format: ein Ort, an den alle reisen (A), oder fünf lokale Feiern (B). Empfohlen A, es geht darum, dass sich die Büros treffen. Meine Antwort: A.
+            F2 Kapazität: eine lange Tafel für 200 gleichzeitig (A) oder wechselnde Tische mit Platz für etwa 140 (B). Empfohlen A, zu den Reden sitzen alle. Meine Antwort: A, eine lange Tafel. Den Restaurantvergleich habe ich vorher erbeten.
+            F3 Die, die ich vergessen hatte, das Feedback vom letzten Jahr: zuerst lesen (A) oder neu anfangen (B). Empfohlen A, es zeigt, was zu vermeiden ist. Meine Antwort: A. Es war zu laut zum Reden, und viele sind früh gegangen.
+          ```
 
-        Schreibe das Ziel in einem Satz, die Anforderungen als kurze, prüfbare Kernpunkte, was nicht dazugehört, und die Arbeit als dünne senkrechte Scheiben. Mach dann aus jeder Scheibe ein Ticket: ein schmales, aber vollständiges Stück, das für sich erledigt und geprüft werden kann, mit Akzeptanzkriterien und den Tickets, die vorher fertig sein müssen.
-        Beende mit zwei Codeblöcken, genau so:
-        ```handoff
-        kind: spec
-        goal: <ein Satz>
-        requirements: [<kurzer Kernpunkt>, ...]
-        outOfScope: [<was wir nicht tun>, ...]
-        slices: [<eine Scheibe>, ...]
-        ```
-        ```handoff
-        kind: tickets
-        tickets:
-          - { id: t1, title: <Titel>, acceptance: [<Kriterium>], blockedBy: [] }
-        ```
+          Schreibe das Ziel in einem Satz, die Anforderungen als kurze, prüfbare Kernpunkte, was nicht dazugehört, und die Arbeit als dünne senkrechte Scheiben. Mach dann aus jeder Scheibe ein Ticket: ein schmales, aber vollständiges Stück, das für sich erledigt und geprüft werden kann, mit Akzeptanzkriterien und den Tickets, die vorher fertig sein müssen.
+          Beende mit zwei Codeblöcken, genau so:
+          ```handoff
+          kind: spec
+          goal: <ein Satz>
+          requirements: [<kurzer Kernpunkt>, ...]
+          outOfScope: [<was wir nicht tun>, ...]
+          slices: [<eine Scheibe>, ...]
+          ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: t1, title: <Titel>, acceptance: [<Kriterium>], blockedBy: [] }
+          ```
       command: |-
         /to-spec [füge Deine Antworten hier ein]
         Führe danach /to-tickets auf der Spezifikation aus. Antworte auf Deutsch.
@@ -161,6 +222,7 @@ words:
           - { id: rank, title: Die drei Locations ranken, acceptance: [Eine Rangfolge mit Begründung], blockedBy: [access, menu, price] }
         ```
       check:
+        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielspezifikation durch Deine eigene.
         criteria:
           - Das Ziel ist ein Satz.
           - Jede Anforderung ist kurz und prüfbar.
@@ -169,36 +231,104 @@ words:
           Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Spezifikation unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
           Kriterien: Das Ziel ist ein Satz; jede Anforderung ist kurz und prüfbar; jede Scheibe lässt sich für sich erledigen und prüfen.
 
-          {{spec}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: spec
+          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          requirements:
+            - 200 Gäste
+            - 150 Euro pro Person
+            - Stufenlos
+            - Vegetarisches Menü
+            - Ruhig genug zum Reden
+          outOfScope:
+            - Anreise zur Location
+            - Einladungen
+          slices:
+            - Drei Locations in die engere Wahl nehmen
+            - Jede gegen die Anforderungen prüfen
+            - Sie in eine Rangfolge bringen
+          ```
       page:
+        todo: 'Optional: Füge das ein, um aus der Spezifikation eine Seite zum Zeigen zu machen.'
         simple: |-
           Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
           Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
 
-          {{spec}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: spec
+          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          requirements:
+            - 200 Gäste
+            - 150 Euro pro Person
+            - Stufenlos
+            - Vegetarisches Menü
+            - Ruhig genug zum Reden
+          outOfScope:
+            - Anreise zur Location
+            - Einladungen
+          slices:
+            - Drei Locations in die engere Wahl nehmen
+            - Jede gegen die Anforderungen prüfen
+            - Sie in eine Rangfolge bringen
+          ```
         technical: |-
           Antworte auf Deutsch. Mach aus dieser Spezifikation eine schöne Seite: zuerst das Ziel, dann die Anforderungen, was nicht dazugehört und die Scheiben.
           Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
 
-          {{spec}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: spec
+          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          requirements:
+            - 200 Gäste
+            - 150 Euro pro Person
+            - Stufenlos
+            - Vegetarisches Menü
+            - Ruhig genug zum Reden
+          outOfScope:
+            - Anreise zur Location
+            - Einladungen
+          slices:
+            - Drei Locations in die engere Wahl nehmen
+            - Jede gegen die Anforderungen prüfen
+            - Sie in eine Rangfolge bringen
+          ```
     venue:
       title: Location
       description: Ein frischer Chat pro Location. Jeder Chat bekommt nur die Anforderungen und prüft eine Location gegen jedes Kriterium.
-      prompt: |-
-        Antworte auf Deutsch. Recherchiere eine Location für unser Sommerfest. Die Anforderungen:
+      run:
+        todo: Öffne pro Location einen neuen Chat, füge das ein und trage den Namen der Location dort ein, wo es steht.
+        prompt: |-
+          Antworte auf Deutsch. Recherchiere eine Location für unser Sommerfest. Die Anforderungen:
 
-        {{spec}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: spec
+          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          requirements:
+            - 200 Gäste
+            - 150 Euro pro Person
+            - Stufenlos
+            - Vegetarisches Menü
+            - Ruhig genug zum Reden
+          outOfScope:
+            - Anreise zur Location
+          slices:
+            - Eine Location gegen die Anforderungen prüfen
+          ```
 
-        Die zu prüfende Location: [Name der Location hier eintragen]
+          Die zu prüfende Location: [Name der Location hier eintragen]
 
-        Prüfe sie gegen jede Anforderung, nenne zu jedem Fakt die Quelle und sag, wo Du unsicher bist. Bevorzuge die eigenen Seiten der Location vor Bewertungen. Vergleiche sie nicht mit anderen Locations.
-        Beende mit genau einem Codeblock, genau so:
-        ```handoff
-        kind: research
-        subject: <die Location>
-        summary: <zwei Sätze>
-        facts: [<ein geprüfter Fakt pro Anforderung>, ...]
-        ```
+          Prüfe sie gegen jede Anforderung, nenne zu jedem Fakt die Quelle und sag, wo Du unsicher bist. Bevorzuge die eigenen Seiten der Location vor Bewertungen. Vergleiche sie nicht mit anderen Locations.
+          Beende mit genau einem Codeblock, genau so:
+          ```handoff
+          kind: research
+          subject: <die Location>
+          summary: <zwei Sätze>
+          facts: [<ein geprüfter Fakt pro Anforderung>, ...]
+          ```
       command: |-
         /research Prüfe [Name der Location] gegen diese Anforderungen: [füge die Spezifikation hier ein]
         Antworte auf Deutsch.
@@ -230,6 +360,7 @@ words:
           - Der große Saal hallt; der Nebensaal ist ruhig
         ```
       check:
+        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielrecherche durch Deine eigene.
         criteria:
           - Jede Anforderung hat einen geprüften Fakt.
           - Wo die KI unsicher ist, sagt sie es.
@@ -237,42 +368,115 @@ words:
           Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Recherche unten gegen die Anforderungen und bewerte jede Anforderung mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
 
           Anforderungen:
-          {{spec}}
+          Die Handoffs unten sind Beispiele. Ersetze sie durch Deine eigenen Handoffs, wenn Du welche hast.
+          ```handoff
+          kind: spec
+          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          requirements:
+            - 200 Gäste
+            - 150 Euro pro Person
+            - Stufenlos
+            - Vegetarisches Menü
+            - Ruhig genug zum Reden
+          outOfScope:
+            - Anreise zur Location
+          slices:
+            - Eine Location gegen die Anforderungen prüfen
+          ```
 
           Recherche:
-          {{research}}
+          ```handoff
+          kind: research
+          subject: Hafenhalle
+          summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
+          facts:
+            - Fasst 220 Gäste
+            - Etwa 140 Euro pro Person mit dem Standardmenü
+            - Stufenlos über den Haupteingang
+            - Vegetarisches Menü auf Anfrage
+            - Der große Saal hallt; der Nebensaal ist ruhig
+          ```
       page:
+        todo: 'Optional: Füge das ein, um aus der Recherche eine Seite zum Zeigen zu machen.'
         simple: |-
           Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Location, die Zusammenfassung und eine Karte pro Fakt.
           Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
 
-          {{research}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: research
+          subject: Hafenhalle
+          summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
+          facts:
+            - Fasst 220 Gäste
+            - Etwa 140 Euro pro Person mit dem Standardmenü
+            - Stufenlos über den Haupteingang
+            - Vegetarisches Menü auf Anfrage
+            - Der große Saal hallt; der Nebensaal ist ruhig
+          ```
         technical: |-
           Antworte auf Deutsch. Mach aus dieser Recherche eine schöne Seite: die Location, die Zusammenfassung und eine Karte pro Fakt.
           Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
 
-          {{research}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: research
+          subject: Hafenhalle
+          summary: Ein umgebautes Lagerhaus mit Platz für 220 und stufenlosem Eingang. Ruhig zum Reden nur im Nebensaal.
+          facts:
+            - Fasst 220 Gäste
+            - Etwa 140 Euro pro Person mit dem Standardmenü
+            - Stufenlos über den Haupteingang
+            - Vegetarisches Menü auf Anfrage
+            - Der große Saal hallt; der Nebensaal ist ruhig
+          ```
     compare:
       title: 3 Locations ranken
       detail: gemessen an der Karte
       description: Ein Chat bekommt die Anforderungen und alle drei Rechercheergebnisse und rankt die Locations nach Deinen Kriterien.
-      prompt: |-
-        Antworte auf Deutsch. Ranke diese Locations nach meinen Anforderungen.
+      run:
+        todo: Füge das in einen neuen Chat ein, um alle drei Ergebnisse gegen die Karte zu ranken.
+        prompt: |-
+          Antworte auf Deutsch. Ranke diese Locations nach meinen Anforderungen.
 
-        Anforderungen:
-        {{spec}}
+          Anforderungen:
+          Die Handoffs unten sind Beispiele. Ersetze sie durch Deine eigenen Handoffs, wenn Du welche hast.
+          ```handoff
+          kind: spec
+          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          requirements: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          outOfScope: [Anreise zur Location]
+          slices: [Die Locations ranken]
+          ```
 
-        Recherche, ein Block pro Location:
-        {{research}}
+          Recherche, ein Block pro Location:
+          ```handoff
+          kind: research
+          subject: Hafenhalle
+          summary: Platz für 220 und stufenlos. Ruhig nur im Nebensaal.
+          facts: [Fasst 220 Gäste, Etwa 140 Euro pro Person]
+          ```
+          ```handoff
+          kind: research
+          subject: Gartenpavillon
+          summary: Platz für 200 auf einer Ebene, ruhig, etwas über dem Budget.
+          facts: [Fasst 200 Gäste, Etwa 160 Euro pro Person]
+          ```
+          ```handoff
+          kind: research
+          subject: Alte Mühle
+          summary: Charmant, aber zwei Treppen und kein Aufzug.
+          facts: [Fasst 180 Gäste, Nicht stufenlos]
+          ```
 
-        Ranke sie von der besten zur schlechtesten, begründe jede in einem Satz und markiere jede Anforderung, die eine Location verfehlt.
-        Beende mit genau einem Codeblock, genau so:
-        ```handoff
-        kind: comparison
-        criteria: [<Anforderung>, ...]
-        ranking:
-          - { name: <Location>, why: <ein Satz> }
-        ```
+          Ranke sie von der besten zur schlechtesten, begründe jede in einem Satz und markiere jede Anforderung, die eine Location verfehlt.
+          Beende mit genau einem Codeblock, genau so:
+          ```handoff
+          kind: comparison
+          criteria: [<Anforderung>, ...]
+          ranking:
+            - { name: <Location>, why: <ein Satz> }
+          ```
       exampleInput: |-
         ```handoff
         kind: spec
@@ -309,6 +513,7 @@ words:
           - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
         ```
       check:
+        todo: Öffne einen frischen Chat, füge das ein und ersetze das Beispiel-Ranking durch Dein eigenes.
         criteria:
           - Jede Location ist mit Begründung gerankt.
           - Jede verfehlte Anforderung ist markiert.
@@ -317,36 +522,76 @@ words:
           Kriterien: Jede Location ist mit Begründung gerankt; jede verfehlte Anforderung ist markiert.
 
           Anforderungen:
-          {{spec}}
+          Die Handoffs unten sind Beispiele. Ersetze sie durch Deine eigenen Handoffs, wenn Du welche hast.
+          ```handoff
+          kind: spec
+          goal: Wähle einen Ort, an dem sich alle 200 Mitarbeitenden an einem Sommerabend treffen können.
+          requirements: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          outOfScope: [Anreise zur Location]
+          slices: [Die Locations ranken]
+          ```
 
           Ranking:
-          {{comparison}}
+          ```handoff
+          kind: comparison
+          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          ranking:
+            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
+            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
+            - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
+          ```
       page:
+        todo: 'Optional: Füge das ein, um aus dem Ranking eine Seite zum Zeigen zu machen.'
         simple: |-
           Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meiner Chefin zeigen kann.
           Gib mir eine vollständige, eigenständige HTML-Datei in einem einzigen Codeblock, die ich speichern und öffnen kann.
 
-          {{comparison}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: comparison
+          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          ranking:
+            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
+            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
+            - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
+          ```
         technical: |-
           Antworte auf Deutsch. Mach aus diesem Vergleich eine schöne Seite mit einer Rangtabelle, die ich meiner Chefin zeigen kann.
           Schreibe sie in eine temporäre .html-Datei, stelle sie auf localhost bereit und öffne sie in meinem Browser.
 
-          {{comparison}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: comparison
+          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          ranking:
+            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
+            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
+            - { name: Alte Mühle, why: Nicht stufenlos und zu klein. }
+          ```
     plan:
       title: Location-Plan
       detail: bis Freitag
       description: Aus dem Vergleich wird eine einseitige Empfehlung für Deine Chefin.
-      prompt: |-
-        Antworte auf Deutsch. Schreibe aus diesem Vergleich eine einseitige Empfehlung für meine Chefin.
+      run:
+        todo: Füge das in einen neuen Chat ein, damit aus dem Ranking eine einseitige Empfehlung wird.
+        prompt: |-
+          Antworte auf Deutsch. Schreibe aus diesem Vergleich eine einseitige Empfehlung für meine Chefin.
 
-        {{comparison}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: comparison
+          criteria: [200 Gäste, 150 Euro pro Person, Stufenlos, Vegetarisches Menü, Ruhig genug zum Reden]
+          ranking:
+            - { name: Hafenhalle, why: Erfüllt jede Anforderung, wenn die Reden im Nebensaal stattfinden. }
+            - { name: Gartenpavillon, why: Ruhig und stufenlos, aber 10 Euro pro Person über dem Budget. }
+          ```
 
-        Empfiehl eine Location, nenne die drei Gründe, die zählen, und das eine Risiko, das zuerst geklärt werden muss.
-        Beende mit genau einem Codeblock, genau so:
-        ```handoff
-        kind: text
-        text: <die Empfehlung>
-        ```
+          Empfiehl eine Location, nenne die drei Gründe, die zählen, und das eine Risiko, das zuerst geklärt werden muss.
+          Beende mit genau einem Codeblock, genau so:
+          ```handoff
+          kind: text
+          text: <die Empfehlung>
+          ```
       exampleInput: |-
         ```handoff
         kind: comparison
@@ -363,6 +608,7 @@ words:
           Zuerst klären: die Reden im Nebensaal halten, damit alle sie hören.
         ```
       check:
+        todo: Öffne einen frischen Chat, füge das ein und ersetze die Beispielempfehlung durch Deine eigene.
         criteria:
           - Genau eine Location wird empfohlen.
           - Es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
@@ -370,4 +616,10 @@ words:
           Antworte auf Deutsch. Du bist ein strenger Prüfer. Prüfe die Empfehlung unten gegen diese Kriterien und bewerte jedes mit bestanden oder nicht bestanden (pass oder fail) und einem Satz als Beleg. Nenne dann die eine Korrektur, die am meisten zählt.
           Kriterien: Genau eine Location wird empfohlen; es gibt drei Gründe und ein Risiko, das zuerst geklärt wird.
 
-          {{plan}}
+          Das Handoff unten ist ein Beispiel. Ersetze es durch Dein eigenes Handoff, wenn Du eines hast.
+          ```handoff
+          kind: text
+          text: |-
+            Buche die Hafenhalle. Sie fasst alle 200 Gäste, ist stufenlos und bleibt unter 150 Euro pro Person.
+            Zuerst klären: die Reden im Nebensaal halten, damit alle sie hören.
+          ```

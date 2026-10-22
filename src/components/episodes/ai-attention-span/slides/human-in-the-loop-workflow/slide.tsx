@@ -10,8 +10,6 @@ const CLEAN_WINDOWS = {
 };
 const CONTEXT_LENGTH = { slug: 'du-context-length-alone-hurts', url: 'https://arxiv.org/abs/2510.05381' };
 
-const CRITERIA = ['guests', 'budget', 'stepFree', 'vegetarian', 'quiet'] as const;
-
 const WORKERS = 'workers';
 const LOOP_NOTE = 'loop-note';
 
@@ -63,7 +61,6 @@ export const humanInTheLoopWorkflow = slide({
                   </>
                 ),
               },
-              spec: { criteria: CRITERIA.map((criterion) => t(`card.criteria.${criterion}`)) },
             },
           }}
         />

@@ -1,28 +1,29 @@
 # Die Wörter der Oberfläche des Visuals, mit denselben Schlüsseln wie die englische Datei.
 ui:
-  modeWatch: Zuschauen
-  modeTry: Selbst ausprobieren
-  levelSimple: Einfach
-  levelTechnical: Technisch
   workflow: Ablauf
-  close: Schließen
-  copied: Kopiert
-  signedOff: Freigegeben
+  toolbar: Ablauf-Steuerung
+  technical: Technisch
+  technicalTip: 'Technisch: zeigt die einmalige Einrichtung und die /Skill-Befehle'
   download: Diesen Ablauf herunterladen
   upload: Eigenen Ablauf hochladen
+  close: Schließen
+  copied: Kopiert
+  tryIt: Ausprobieren
+  tryTitle: '{stage}: Ausprobieren'
+  moveLabel: 'BRIEF {letter}: {why}'
+  promptLabel: Prompt
+  commandLabel: Befehl
   copyPrompt: Prompt kopieren
   copyCommand: Befehl kopieren
   openChatgpt: In ChatGPT öffnen
   openClaude: In Claude öffnen
-  copyExample: Beispiel-Übergabe kopieren
-  copyCheck: Prüf-Prompt kopieren
-  copyPage: Als Seite erstellen
-  sectionDoes: Was dieser Schritt tut
+  short: Kurz
+  shortTip: Kurze Fassung, nur die 3 wichtigsten Fragen pro Runde
+  sectionAbout: Über diesen Schritt
   sectionIn: Was du einfügst
   sectionOut: Was du zurückbekommst
-  sectionCriteria: Prüfe es gegen
+  sectionCriteria: So sieht gut aus
   sectionSkills: Skills
-  sectionFullPrompt: Ganzen Prompt zeigen
   sectionExample: Beispielergebnis
   setup: Einmalige Einrichtung
   newTab: öffnet in neuem Tab

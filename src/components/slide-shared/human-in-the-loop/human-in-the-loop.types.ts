@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
 import type { OutputWords } from './outputs/output-words';
 import type { ControlMap } from './toolbar-controls.pure';
-import type { Level, Mode } from './workflow-state.pure';
-import type { JobCardView, WorkflowView } from './workflow-view.pure';
+import type { Level } from './workflow-state.pure';
+import type { StageView } from './workflow-view.pure';
 import type { DeepPartial } from './workflow-words.pure';
 import type { Workflow } from './workflow.types';
 
@@ -16,29 +16,35 @@ import type { Workflow } from './workflow.types';
 
 /** The visual's own labels, one set per locale (human-in-the-loop.config.yml). */
 export interface UiWords {
-  readonly modeWatch: string;
-  readonly modeTry: string;
-  readonly levelSimple: string;
-  readonly levelTechnical: string;
+  /** The accessible name and tooltip of the Workflow pills. */
   readonly workflow: string;
-  readonly close: string;
-  readonly copied: string;
-  readonly signedOff: string;
+  /** The Technical toggle's name, and its tooltip. */
+  readonly technical: string;
+  readonly technicalTip: string;
   readonly download: string;
   readonly upload: string;
+  /** The toolbar's accessible name. */
+  readonly toolbar: string;
+  readonly close: string;
+  readonly copied: string;
+  /** The button under a stage column, and the modal title (`{stage}` is the stage's name). */
+  readonly tryIt: string;
+  readonly tryTitle: string;
+  /** The accessible name of a BRIEF letter circle (`{letter}` and `{why}`). */
+  readonly moveLabel: string;
+  readonly promptLabel: string;
+  readonly commandLabel: string;
   readonly copyPrompt: string;
   readonly copyCommand: string;
   readonly openChatgpt: string;
   readonly openClaude: string;
-  readonly copyExample: string;
-  readonly copyCheck: string;
-  readonly copyPage: string;
-  readonly sectionDoes: string;
+  readonly short: string;
+  readonly shortTip: string;
+  readonly sectionAbout: string;
   readonly sectionIn: string;
   readonly sectionOut: string;
   readonly sectionCriteria: string;
   readonly sectionSkills: string;
-  readonly sectionFullPrompt: string;
   readonly sectionExample: string;
   readonly setup: string;
   readonly newTab: string;
@@ -78,8 +84,6 @@ export interface JobSlot {
   readonly marker?: ReactNode;
   /** Under the job, e.g. the button that opens a worked chat. */
   readonly after?: ReactNode;
-  /** The focal card's criteria, where the Slide words them differently from the Workflow's spec. */
-  readonly criteria?: readonly string[];
 }
 
 /** What a Slide adds to the diagram: its own words, markers, notes and popovers; every part is optional. */
@@ -90,51 +94,52 @@ export interface DiagramSlots {
   readonly jobsLabel?: string;
   /** The hidden text on a job checked against its criteria. */
   readonly checked?: string;
-  /** Bold the first letter of each move, so the moves read as an acronym. The server entry alone drops it for German. */
+  /** Draw the BRIEF letters of each stage as circled capitals; off where the Slide leaves the acronym unnamed. */
   readonly initials?: boolean;
   readonly stages?: Readonly<Record<string, StageSlot>>;
   readonly jobs?: Readonly<Record<string, JobSlot>>;
 }
 
-/** What the diagram part draws: the shown Workflow's view and which job is open. It reports a press on a job card. */
+/** What the diagram part draws: the shown Workflow's stages. It reports a press on a stage's "Try it" button. */
 export interface DiagramProps {
   readonly workflow: Workflow;
-  /** The Workflow's view for the mode and level, computed once by the parent. */
-  readonly view: WorkflowView;
   readonly slots?: DiagramSlots;
   readonly words: UiWords;
-  readonly openJobId: string | null;
-  readonly onOpenJob: (jobId: string) => void;
+  /** Where the stages show no "Try it" button: a readonly Preset. */
+  readonly readonly: boolean;
+  /** The stage whose modal is open, so its button reads as pressed. */
+  readonly openStageId: string | null;
+  readonly onOpenStage: (stageId: string) => void;
 }
 
-/** What the toolbar part draws: the Watch/Try and Simple/Technical switches, the Workflow picker, upload, download. */
+/** What the toolbar part draws: the Workflow pills, the Technical toggle, download and upload in one pill. */
 export interface ToolbarProps {
   readonly workflow: Workflow;
-  /** Every authored Workflow, for the picker. */
+  /** Every authored Workflow, for the pills. */
   readonly choices: readonly { readonly id: string; readonly title: string }[];
-  readonly mode: Mode;
   readonly level: Level;
   /** The Preset's overrides of the control registry. */
   readonly controls: ControlMap;
-  /** The one-time setup block, Technical only; from the parent's view. */
-  readonly setup?: string;
+  /** A readonly Preset: no Technical toggle, since nothing is tried. */
+  readonly readonly: boolean;
   readonly uploadProblems: readonly string[];
   readonly words: UiWords;
-  readonly onMode: (mode: Mode) => void;
   readonly onLevel: (level: Level) => void;
   readonly onWorkflow: (workflowId: string) => void;
   /** The text of a file the viewer chose; the parent validates it with `loadWorkflow`. */
   readonly onUpload: (yaml: string) => void;
 }
 
-/** What the modal part draws: the open job's card (null: closed) with the ticked ticket ids. It reports a close and a tick. */
+/** What the modal part draws: the open stage's view (null: closed) with the short grills and ticked ticket ids. */
 export interface ModalProps {
-  readonly card: JobCardView | null;
+  readonly stage: StageView | null;
+  readonly shortJobIds: readonly string[];
   readonly ticked: readonly string[];
   readonly words: UiWords;
   /** The labels of the example result's views. */
   readonly outputWords: OutputWords;
   readonly onClose: () => void;
+  readonly onShort: (jobId: string) => void;
   readonly onTick: (ticketId: string) => void;
 }
 
@@ -147,8 +152,9 @@ export interface HumanInTheLoopData {
   readonly words: UiWords;
   readonly outputWords: OutputWords;
   readonly controls: ControlMap;
-  readonly mode: Mode;
   readonly level: Level;
+  /** A readonly Preset hides every "Try it" button and the Technical toggle; the diagram stays. */
+  readonly readonly: boolean;
   /** The Slide's additions to the diagram. */
   readonly diagram?: DiagramSlots;
 }

@@ -1,97 +1,164 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import type { ToolbarProps, UiWords } from './human-in-the-loop.types';
-import { offers, type ControlId } from './toolbar-controls.pure';
-import { WorkflowControls } from './workflow-controls.client';
+import { Code, Download, Upload } from 'lucide-react';
+import { useId, type ChangeEvent, type ReactNode } from 'react';
+import styles from './human-in-the-loop.module.css';
+import type { ToolbarProps } from './human-in-the-loop.types';
+import { offers } from './toolbar-controls.pure';
+import { workflowFile } from './workflow-file.pure';
 
-interface SwitchProps<T extends string> {
-  readonly label: string;
-  readonly value: T;
-  readonly options: readonly { readonly value: T; readonly label: string }[];
-  readonly onChange: (value: T) => void;
+/*
+ * The one pill toolbar, as the context window's: the Workflow pills, a separator, then icon buttons (Technical
+ * `</>`, download, upload), each with a tooltip. The control registry says what shows; a readonly Preset also drops
+ * the Technical toggle. The parent validates an upload; this part only reads the chosen file.
+ */
+
+function download(workflow: ToolbarProps['workflow']) {
+  const { name, text, type } = workflowFile(workflow);
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const link = Object.assign(document.createElement('a'), { download: name });
+  link.setAttribute('href', url);
+  link.click();
+  URL.revokeObjectURL(url);
 }
 
-/** A two-way switch of buttons: `aria-pressed` marks the chosen one, and Tab reaches each. */
-function Switch<T extends string>({ label, value, options, onChange }: SwitchProps<T>) {
+interface IconProps {
+  readonly label: string;
+  /** The tooltip, where it says more than the name. */
+  readonly tip?: string;
+  readonly control: string;
+  readonly pressed?: boolean;
+  readonly onClick: () => void;
+  readonly children: ReactNode;
+}
+
+/** An icon button: the label is its accessible name and its tooltip (`data-tip`, shown on hover and keyboard focus). */
+function IconButton({ label, tip = label, control, pressed, onClick, children }: IconProps) {
   return (
-    <div
-      role="group"
+    <button
+      type="button"
+      className={styles.icon}
       aria-label={label}
-      className="inline-flex rounded-lg border border-border bg-card p-0.5 text-muted-foreground"
+      data-tip={tip}
+      data-control={control}
+      aria-pressed={pressed}
+      onClick={onClick}
     >
-      {options.map((option) => (
+      {children}
+    </button>
+  );
+}
+
+function Pills({ v }: { readonly v: ToolbarProps }) {
+  if (!offers(v.controls, 'picker') || v.choices.length < 2) return null;
+  const known = v.choices.some((c) => c.id === v.workflow.id);
+  return (
+    <div className={styles.pills} role="group" aria-label={v.words.workflow} data-control="picker">
+      {known ? null : (
+        <button type="button" aria-pressed="true">
+          {v.workflow.title}
+        </button>
+      )}
+      {v.choices.map((c) => (
         <button
-          key={option.value}
+          key={c.id}
           type="button"
-          aria-pressed={option.value === value}
-          onClick={() => onChange(option.value)}
-          className={cn(
-            'min-h-7 rounded-md px-2.5 text-caption font-medium transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
-            option.value === value
-              ? 'bg-primary text-primary-foreground'
-              : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-          )}
+          data-workflow={c.id}
+          aria-pressed={known && c.id === v.workflow.id}
+          className={known && c.id === v.workflow.id ? 'font-semibold' : undefined}
+          onClick={() => v.onWorkflow(c.id)}
         >
-          {option.label}
+          {c.title}
         </button>
       ))}
     </div>
   );
 }
 
-const modeOptions = (words: UiWords) =>
-  [
-    { value: 'watch', label: words.modeWatch },
-    { value: 'try', label: words.modeTry },
-  ] as const;
-
-const levelOptions = (words: UiWords) =>
-  [
-    { value: 'simple', label: words.levelSimple },
-    { value: 'technical', label: words.levelTechnical },
-  ] as const;
-
-function Setup({ setup, label }: { setup: string; label: string }) {
+function UploadButton({ v, describedBy }: { readonly v: ToolbarProps; readonly describedBy?: string }) {
+  const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) v.onUpload(await file.text());
+    event.target.value = '';
+  };
   return (
-    <section aria-label={label} className="rounded-lg border border-border bg-card p-3">
-      <h3 className="text-caption font-medium text-muted-foreground">{label}</h3>
-      <pre className="mt-1 text-caption whitespace-pre-wrap">{setup}</pre>
-    </section>
+    <label className={`${styles.icon} ${styles.upload}`} data-tip={v.words.upload} data-control="upload">
+      <Upload aria-hidden="true" />
+      <input
+        type="file"
+        accept=".yml,.yaml,application/x-yaml,text/yaml"
+        aria-label={v.words.upload}
+        aria-describedby={describedBy}
+        onChange={readChosenFile}
+      />
+    </label>
   );
 }
 
-/**
- * The toolbar part. In Watch it is only the Watch / Try it yourself switch, so the talk looks as it does today; in Try
- * it adds the Simple / Technical switch, the one-time setup block in Technical, and the picker, download and upload
- * (`WorkflowControls`). The control registry says what shows in which mode and the Slide's Preset can hide any of it.
- * The row keeps its height from Watch to Try, so the diagram stays put.
- */
-export function ToolbarPart(props: ToolbarProps) {
-  const { mode, level, words, controls, setup, onMode, onLevel } = props;
-  const shows = (id: ControlId) => offers(controls, id, mode);
+function Problems({ id, problems }: { readonly id: string; readonly problems: readonly string[] }) {
   return (
-    <div data-part="toolbar" data-mode={mode} className="mb-3 flex flex-col gap-2">
-      <div className="flex min-h-9 flex-wrap items-center gap-x-2 gap-y-1">
-        {shows('mode') ? (
-          <Switch
-            label={`${words.modeWatch} / ${words.modeTry}`}
-            value={mode}
-            options={modeOptions(words)}
-            onChange={onMode}
-          />
-        ) : null}
-        {shows('level') ? (
-          <Switch
-            label={`${words.levelSimple} / ${words.levelTechnical}`}
-            value={level}
-            options={levelOptions(words)}
-            onChange={onLevel}
-          />
-        ) : null}
-        <WorkflowControls {...props} />
+    <ul id={id} role="alert" data-upload-problems="" className="mb-3 list-disc pl-5 text-body text-destructive">
+      {problems.map((problem) => (
+        <li key={problem}>{problem}</li>
+      ))}
+    </ul>
+  );
+}
+
+/** The icon buttons the registry and the Preset allow, in order: Technical, download, upload. */
+function Icons({ v }: { readonly v: ToolbarProps }) {
+  const { controls, readonly, words, level } = v;
+  return (
+    <>
+      {offers(controls, 'level', readonly) && (
+        <IconButton
+          label={words.technical}
+          tip={words.technicalTip}
+          control="level"
+          pressed={level === 'technical'}
+          onClick={() => v.onLevel(level === 'technical' ? 'simple' : 'technical')}
+        >
+          <Code aria-hidden="true" />
+        </IconButton>
+      )}
+      {offers(controls, 'download') && (
+        <IconButton label={words.download} control="download" onClick={() => download(v.workflow)}>
+          <Download aria-hidden="true" />
+        </IconButton>
+      )}
+    </>
+  );
+}
+
+const hasPills = (v: ToolbarProps) => offers(v.controls, 'picker') && v.choices.length > 1;
+const hasIcons = (v: ToolbarProps) =>
+  offers(v.controls, 'level', v.readonly) || offers(v.controls, 'download') || offers(v.controls, 'upload');
+
+function UploadProblems({ v, id }: { readonly v: ToolbarProps; readonly id: string }) {
+  return v.uploadProblems.length > 0 ? <Problems id={id} problems={v.uploadProblems} /> : null;
+}
+
+export function ToolbarPart(v: ToolbarProps) {
+  const problemsId = useId();
+  const pills = hasPills(v);
+  const icons = hasIcons(v);
+  if (!pills && !icons) return null;
+  const describedBy = v.uploadProblems.length > 0 ? problemsId : undefined;
+  return (
+    <>
+      <div
+        className={styles.toolbar}
+        role="toolbar"
+        aria-label={v.words.toolbar}
+        data-part="toolbar"
+        data-level={v.level}
+      >
+        <Pills v={v} />
+        {pills && icons ? <span className={styles.sep} aria-hidden="true" /> : null}
+        <Icons v={v} />
+        {offers(v.controls, 'upload') && <UploadButton v={v} describedBy={describedBy} />}
       </div>
-      {setup && shows('setup') ? <Setup setup={setup} label={words.setup} /> : null}
-    </div>
+      <UploadProblems v={v} id={problemsId} />
+    </>
   );
 }

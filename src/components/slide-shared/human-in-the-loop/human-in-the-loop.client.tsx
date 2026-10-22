@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useReducer } from 'react';
-import { DiagramPart } from './diagram-part.client';
+import { DiagramPart } from './diagram-part';
 import { callbacksFor, shownWorkflow, slicesOf } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData } from './human-in-the-loop.types';
 import { ModalPart } from './modal-part.client';
@@ -15,16 +15,16 @@ import { workflowView } from './workflow-view.pure';
  */
 
 export function HumanInTheLoopClient(data: HumanInTheLoopData) {
-  const start = { workflowId: data.workflowId, mode: data.mode, level: data.level };
+  const start = { workflowId: data.workflowId, level: data.level };
   const [state, dispatch] = useReducer(reduce, start, createState);
   const on = useMemo(() => callbacksFor(dispatch), []);
   const workflow = shownWorkflow(data, state);
-  const { mode, level } = state;
-  const view = useMemo(() => workflow && workflowView(workflow, { mode, level }), [workflow, mode, level]);
+  const { level } = state;
+  const view = useMemo(() => workflow && workflowView(workflow, { level }), [workflow, level]);
   if (!workflow || !view) return null;
   const slices = slicesOf({ data, state, workflow, view }, on);
   return (
-    <div data-human-in-the-loop={workflow.id} data-mode={state.mode} data-level={state.level}>
+    <div data-human-in-the-loop={workflow.id} data-level={state.level}>
       <ToolbarPart {...slices.toolbar} />
       <DiagramPart {...slices.diagram} />
       <ModalPart {...slices.modal} />

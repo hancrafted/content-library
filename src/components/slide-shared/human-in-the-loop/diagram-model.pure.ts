@@ -1,4 +1,3 @@
-import { handoffBlocks, parseHandoff } from './handoff.pure';
 import { jobsOf } from './workflow-jobs.pure';
 import type { Job, Workflow } from './workflow.types';
 
@@ -34,13 +33,4 @@ export function splitParked(parked: readonly string[]): { before: string[]; afte
 /** One name per parallel chat: the title and its number. */
 export function chatNames(job: Job): string[] {
   return Array.from({ length: job.fanOut ?? 1 }, (_, i) => `${job.title} ${i + 1}`);
-}
-
-/** The requirements of the spec a job's example output returns; none where it returns another kind. */
-export function focalCriteria(job: Job): readonly string[] {
-  for (const block of handoffBlocks(job.exampleOutput ?? '')) {
-    const read = parseHandoff(block);
-    if ('handoff' in read && read.handoff.kind === 'spec') return read.handoff.requirements;
-  }
-  return [];
 }

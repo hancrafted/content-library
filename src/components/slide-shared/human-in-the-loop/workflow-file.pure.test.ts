@@ -14,8 +14,8 @@ const workflow: Workflow = {
     {
       id: 'first',
       name: 'First',
-      moveLabel: 'Ask',
-      move: 'I',
+      moves: [{ letter: 'I', why: 'Ask first.' }],
+      card: { label: 'Card', lines: ['One line'], status: 'Signed off' },
       jobs: [
         {
           id: 'ask',
@@ -26,7 +26,8 @@ const workflow: Workflow = {
           inputs: [],
           outputs: [{ id: 'answers', kind: 'text' }],
           skills: [{ group: 'productivity', name: 'grilling' }],
-          prompt: 'Ask.',
+          run: { todo: 'Do.', prompt: 'Ask.', short: 'Ask short.' },
+          check: { todo: 'Check.', criteria: ['Short.'], prompt: 'Check it.' },
           exampleOutput: BLOCK,
         },
       ],

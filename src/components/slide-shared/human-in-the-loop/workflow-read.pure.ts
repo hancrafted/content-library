@@ -1,6 +1,6 @@
 import { HANDOFF_KINDS } from './handoff.pure';
 import { isTree, type Tree } from './workflow-words.pure';
-import type { Job, JobCheck, JobPage, Move, SkillRef, Stage } from './workflow.types';
+import type { GateCard, Job, JobCheck, JobPage, JobRun, Move, SkillRef, Stage, StageMove } from './workflow.types';
 
 /*
  * Reading one stage or job out of the config data and the merged words. Each reader returns what it could read and
@@ -50,25 +50,40 @@ function fanOutOf(value: unknown, id: string, problems: string[]): number | unde
   return undefined;
 }
 
-function checkOf(words: Tree): JobCheck | undefined {
-  if (!isTree(words.check)) return undefined;
-  return { criteria: strings(words.check.criteria), prompt: text(words.check.prompt) ?? '' };
+/** The run step: a `todo` line, the prompt, and for an interview the short variant. */
+function runOf(words: Tree, id: string, problems: string[]): JobRun {
+  const run = treeAt(words, 'run');
+  const todo = text(run.todo);
+  const prompt = text(run.prompt);
+  if (!todo) problems.push(`Job "${id}" has no words.run.todo.`);
+  if (!prompt) problems.push(`Job "${id}" has no words.run.prompt.`);
+  return { todo: todo ?? '', prompt: prompt ?? '', short: text(run.short) };
 }
 
-/** The two page prompts of a job, or a problem for a `page` that lacks one of them. */
+function checkOf(words: Tree, id: string, problems: string[]): JobCheck | undefined {
+  if (words.check === undefined) return undefined;
+  const check = treeAt(words, 'check');
+  const todo = text(check.todo);
+  const prompt = text(check.prompt);
+  if (!todo || !prompt) problems.push(`Job "${id}" has a check without both words.check.todo and words.check.prompt.`);
+  return { todo: todo ?? '', criteria: strings(check.criteria), prompt: prompt ?? '' };
+}
+
+/** The page step of a job, or a problem for a `page` that lacks a todo or one of the two prompts. */
 function pageOf(words: Tree, id: string, problems: string[]): JobPage | undefined {
   if (words.page === undefined) return undefined;
-  const page = isTree(words.page) ? words.page : {};
+  const page = treeAt(words, 'page');
+  const todo = text(page.todo);
   const simple = text(page.simple);
   const technical = text(page.technical);
-  if (simple && technical) return { simple, technical };
-  problems.push(`Job "${id}" has a page without both words.page.simple and words.page.technical.`);
+  if (todo && simple && technical) return { todo, simple, technical };
+  problems.push(`Job "${id}" has a page without all of words.page.todo, words.page.simple and words.page.technical.`);
   return undefined;
 }
 
 /** A job's required word, or a problem. */
 function requiredIn(words: Tree, id: string, problems: string[]) {
-  return (key: 'title' | 'description' | 'prompt'): string => {
+  return (key: 'title' | 'description'): string => {
     const value = text(words[key]);
     if (!value) problems.push(`Job "${id}" has no words.${key}.`);
     return value ?? '';
@@ -94,21 +109,44 @@ function jobOf(data: Tree, words: Tree, problems: string[]): Job | null {
     outputs: outputsOf(data, id, problems),
     fanOut: fanOutOf(data.fanOut, id, problems),
     skills: skillsOf(data, id, problems),
-    prompt: required('prompt'),
+    run: runOf(words, id, problems),
     command: text(words.command),
     exampleInput: text(words.exampleInput),
     exampleOutput: text(words.exampleOutput),
-    check: checkOf(words),
+    check: checkOf(words, id, problems),
     page: pageOf(words, id, problems),
     parked: Array.isArray(words.parked) ? strings(words.parked) : undefined,
   };
 }
 
-function moveOf(value: unknown, id: string, problems: string[]): Move | undefined {
-  const move = MOVES.find((known) => known === value);
-  if (value !== undefined && !move)
-    problems.push(`Stage "${id}" has the move "${String(value)}", not one of ${MOVES.join(', ')}.`);
-  return move;
+/** The BRIEF letters a stage lists, each with its tooltip from `words.stages.<id>.moves.<letter>`. */
+function movesOf(data: Tree, own: Tree, problems: string[]): StageMove[] {
+  const id = text(data.id) ?? '';
+  const listed = data.moves === undefined ? [] : Array.isArray(data.moves) ? data.moves : [data.moves];
+  const tips = treeAt(own, 'moves');
+  const letters = listed.flatMap((value): Move[] => {
+    const move = MOVES.find((known) => known === value);
+    if (!move) problems.push(`Stage "${id}" has the move "${String(value)}", not one of ${MOVES.join(', ')}.`);
+    return move ? [move] : [];
+  });
+  const unique = MOVES.filter((letter) => letters.includes(letter));
+  return unique.flatMap((letter) => {
+    const why = text(tips[letter]);
+    if (!why) problems.push(`Stage "${id}" has the move ${letter} but no words.stages.${id}.moves.${letter}.`);
+    return why ? [{ letter, why }] : [];
+  });
+}
+
+/** The gate card of a stage, from `words.stages.<id>.card`. */
+function cardOf(own: Tree, id: string, problems: string[]): GateCard | undefined {
+  if (own.card === undefined) return undefined;
+  const card = treeAt(own, 'card');
+  const label = text(card.label);
+  const status = text(card.status);
+  const lines = strings(card.lines);
+  if (!label || !status || lines.length === 0)
+    problems.push(`Stage "${id}" has a card without words.stages.${id}.card.label, .lines and .status.`);
+  return { label: label ?? '', lines, status: status ?? '' };
 }
 
 function gateOf(value: unknown, id: string, problems: string[]): number | undefined {
@@ -132,8 +170,8 @@ export function stageOf(data: Tree, words: Tree, problems: string[]): Stage | nu
   return {
     id,
     name: text(own.name) ?? '',
-    moveLabel: text(own.move),
-    move: moveOf(data.move, id, problems),
+    moves: movesOf(data, own, problems),
+    card: cardOf(own, id, problems),
     gate: gateOf(data.gate, id, problems),
     jobs,
   };

@@ -14,8 +14,8 @@ const workflow: Workflow = {
     {
       id: 'first',
       name: 'First',
-      moveLabel: 'Ask',
-      move: 'I',
+      moves: [{ letter: 'I', why: 'Ask first.' }],
+      card: { label: 'Card', lines: ['One line'], status: 'Signed off' },
       gate: 1,
       jobs: [
         {
@@ -29,11 +29,11 @@ const workflow: Workflow = {
           outputs: [{ id: 'answers', kind: 'text' }],
           fanOut: 3,
           skills: [{ group: 'productivity', name: 'grilling' }],
-          prompt: 'Ask.',
+          run: { todo: 'Do.', prompt: 'Ask.', short: 'Ask short.' },
           command: '/grilling',
           exampleOutput: BLOCK,
-          check: { criteria: ['one'], prompt: 'Check.' },
-          page: { simple: 'Page.', technical: 'Page, served.' },
+          check: { todo: 'Check.', criteria: ['one'], prompt: 'Check.' },
+          page: { todo: 'Page.', simple: 'Page.', technical: 'Page, served.' },
           parked: ['Other'],
         },
       ],

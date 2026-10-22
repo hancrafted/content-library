@@ -68,14 +68,6 @@
     }
   },
   "card": {
-    "gate": "Gate 1",
-    "criteria": {
-      "guests": "200 guests",
-      "budget": "€150 per person",
-      "stepFree": "Step-free",
-      "vegetarian": "Vegetarian menu",
-      "quiet": "Quiet to talk"
-    },
-    "signOff": "Signed off"
+    "gate": "Gate 1"
   }
 }

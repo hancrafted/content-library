@@ -1,18 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { CONTROLS, controlOf, defOf, offers, type ControlId } from './toolbar-controls.pure';
 
-const TRY_ONLY: ControlId[] = ['level', 'setup', 'picker', 'download', 'upload'];
-
 describe('success cases', () => {
-  it('shows only the Watch / Try switch in Watch, and every control in Try', () => {
+  it('shows the picker, the Technical toggle, download and upload by default, in that order', () => {
     // ARRANGE
     const none = {};
     // ACT
-    const watch = CONTROLS.filter(({ id }) => offers(none, id, 'watch')).map(({ id }) => id);
-    const trying = CONTROLS.filter(({ id }) => offers(none, id, 'try')).map(({ id }) => id);
+    const shown = CONTROLS.filter(({ id }) => offers(none, id)).map(({ id }) => id);
     // ASSERT
-    expect(watch).toEqual(['mode']);
-    expect(trying).toEqual(['mode', ...TRY_ONLY]);
+    expect(shown).toEqual(['picker', 'level', 'download', 'upload']);
   });
 
   it("lays a Preset's setting over the definition key by key and leaves the rest", () => {
@@ -21,17 +17,26 @@ describe('success cases', () => {
     // ACT
     const picker = controlOf(preset, 'picker');
     // ASSERT
-    expect(picker).toMatchObject({ show: false, type: 'select', modes: ['try'] });
-    expect(offers(preset, 'download', 'try')).toBe(true);
+    expect(picker).toMatchObject({ show: false, type: 'pills' });
+    expect(offers(preset, 'download')).toBe(true);
+  });
+
+  it('hides the Technical toggle, and only it, for a readonly Preset', () => {
+    // ARRANGE
+    const none = {};
+    // ACT
+    const shown = CONTROLS.filter(({ id }) => offers(none, id, true)).map(({ id }) => id);
+    // ASSERT
+    expect(shown).toEqual(['picker', 'download', 'upload']);
   });
 });
 
 describe('failure cases', () => {
-  it('never shows a control the Preset hides, even in the mode it belongs to', () => {
+  it('never shows a control the Preset hides', () => {
     // ARRANGE
-    const preset = { upload: { show: false }, mode: { show: false } };
+    const preset = { upload: { show: false }, level: { show: false } };
     // ACT
-    const shown = [offers(preset, 'upload', 'try'), offers(preset, 'mode', 'watch')];
+    const shown = [offers(preset, 'upload'), offers(preset, 'level')];
     // ASSERT
     expect(shown).toEqual([false, false]);
   });
@@ -47,11 +52,11 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('does not show a Try-only control in Watch even where the Preset says show', () => {
+  it('keeps a hidden Technical toggle hidden even in readonly', () => {
     // ARRANGE
-    const preset = { level: { show: true } };
+    const preset = { level: { show: false } };
     // ACT
-    const shown = offers(preset, 'level', 'watch');
+    const shown = offers(preset, 'level', true);
     // ASSERT
     expect(shown).toBe(false);
   });

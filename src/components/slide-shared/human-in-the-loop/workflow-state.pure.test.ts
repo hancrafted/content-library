@@ -1,39 +1,58 @@
 import { describe, expect, it } from 'vitest';
-import { createState, reduce, type WorkflowState } from './workflow-state.pure';
+import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 import type { Workflow } from './workflow.types';
 
-const start = { workflowId: 'summer-party', mode: 'watch', level: 'simple' } as const;
+const start = { workflowId: 'summer-party', level: 'simple' } as const;
 const uploaded: Workflow = { id: 'mine', title: 'Mine', scenario: 'S', stages: [] };
 
 describe('success cases', () => {
-  it('starts in the Preset: the chosen Workflow in Watch mode at the Simple level, nothing open or ticked', () => {
+  it('starts in the Preset: the chosen Workflow at the Simple level, nothing open, short or ticked', () => {
     // ARRANGE
-    const expected: WorkflowState = { ...start, openJobId: null, ticked: [], uploaded: null, uploadProblems: [] };
+    const expected: WorkflowState = {
+      ...start,
+      openStageId: null,
+      shortJobIds: [],
+      ticked: [],
+      uploaded: null,
+      uploadProblems: [],
+    };
     // ACT
     const state = createState(start);
     // ASSERT
     expect(state).toEqual(expected);
   });
 
-  it('switches mode and level', () => {
+  it('switches the level', () => {
     // ARRANGE
     const initial = createState(start);
     // ACT
-    const state = reduce(reduce(initial, { type: 'mode', mode: 'try' }), { type: 'level', level: 'technical' });
+    const state = reduce(initial, { type: 'level', level: 'technical' });
     // ASSERT
-    expect([state.mode, state.level]).toEqual(['try', 'technical']);
+    expect(state.level).toBe('technical');
   });
 
-  it('opens and closes a job', () => {
+  it('opens and closes the Try it modal of a stage', () => {
+    // ARRANGE
+    const initial = createState(start);
+    const stage = 'interview';
+    // ACT
+    const open = reduce(initial, { type: 'open', stageId: stage });
+    const closed = reduce(open, { type: 'close' });
+    // ASSERT
+    expect(open.openStageId).toBe(stage);
+    expect(closed.openStageId).toBeNull();
+  });
+
+  it('turns the short grill of a job on, and off on the second press', () => {
     // ARRANGE
     const initial = createState(start);
     const job = 'interview';
     // ACT
-    const open = reduce(initial, { type: 'open', jobId: job });
-    const closed = reduce(open, { type: 'close' });
+    const on = reduce(initial, { type: 'short', jobId: job });
+    const off = reduce(on, { type: 'short', jobId: job });
     // ASSERT
-    expect(open.openJobId).toBe(job);
-    expect(closed.openJobId).toBeNull();
+    expect(on.shortJobIds).toEqual([job]);
+    expect(off.shortJobIds).toEqual([]);
   });
 
   it('ticks a ticket and unticks it on the second press', () => {
@@ -48,12 +67,15 @@ describe('success cases', () => {
     expect(twice.ticked).toEqual([]);
   });
 
-  it('switching Workflow resets the open job, the ticks and any upload', () => {
+  it('switching Workflow resets the open stage, the short grills, the ticks and any upload', () => {
     // ARRANGE
-    const busy = reduce(
-      reduce(reduce(createState(start), { type: 'open', jobId: 'x' }), { type: 'tick', ticketId: 't' }),
+    const events: WorkflowEvent[] = [
+      { type: 'open', stageId: 'x' },
+      { type: 'short', jobId: 'j' },
+      { type: 'tick', ticketId: 't' },
       { type: 'upload', workflow: uploaded },
-    );
+    ];
+    const busy = events.reduce(reduce, createState(start));
     const other = 'vacation';
     // ACT
     const state = reduce(busy, { type: 'workflow', workflowId: other });
@@ -67,14 +89,20 @@ describe('success cases', () => {
     // ACT
     const state = reduce(failed, { type: 'upload', workflow: uploaded });
     // ASSERT
-    expect(state).toMatchObject({ workflowId: uploaded.id, uploaded, uploadProblems: [], openJobId: null, ticked: [] });
+    expect(state).toMatchObject({
+      workflowId: uploaded.id,
+      uploaded,
+      uploadProblems: [],
+      openStageId: null,
+      ticked: [],
+    });
   });
 });
 
 describe('failure cases', () => {
   it('a failed upload keeps the shown Workflow and holds the problems', () => {
     // ARRANGE
-    const initial = reduce(createState(start), { type: 'open', jobId: 'x' });
+    const initial = reduce(createState(start), { type: 'open', stageId: 'x' });
     const problems = ['one', 'two'];
     // ACT
     const state = reduce(initial, { type: 'upload-failed', problems });
@@ -95,7 +123,7 @@ describe('edge cases', () => {
     expect(JSON.parse(JSON.stringify(next))).toEqual(next);
   });
 
-  it('ignores opening a job twice and closing when nothing is open', () => {
+  it('ignores closing when nothing is open', () => {
     // ARRANGE
     const initial = createState(start);
     // ACT

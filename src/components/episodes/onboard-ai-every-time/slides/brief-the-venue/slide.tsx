@@ -14,7 +14,6 @@ const RESEARCH = 'research';
 const COMPARE = 'compare';
 const LEGEND = 'legend';
 
-const CRITERIA = ['guests', 'budget', 'stepFree', 'vegetarian', 'quiet'] as const;
 /** Matt Pocock's skills the worked chat invokes: a grilling to interview you, then a spec from the answers. */
 const GRILLING = {
   command: '/grilling',
@@ -172,7 +171,6 @@ export const briefTheVenue = slide({
                 after: chat,
               },
               spec: {
-                criteria: CRITERIA.map((criterion) => t(`card.criteria.${criterion}`)),
                 marker: <Marker note="why-the-sign-off-is-a-gate" placement="beside" />,
               },
               venue: { popover: popover(RESEARCH) },

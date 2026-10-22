@@ -1,5 +1,5 @@
 import { parse } from 'yaml';
-import { exampleProblems, graphProblems, inputProblems } from './workflow-checks.pure';
+import { cardProblems, exampleProblems, graphProblems, inputProblems } from './workflow-checks.pure';
 import { jobById } from './workflow-jobs.pure';
 import { stageOf, text, trees } from './workflow-read.pure';
 import { isTree, mergeWords, parityProblems, type Tree } from './workflow-words.pure';
@@ -60,6 +60,7 @@ function build(config: Tree, locale: Tree, override: unknown): LoadResult {
     ...headProblems(id, words),
     ...(stages.length > 0 ? [] : ['The config lists no stages.']),
     ...focalProblems(focal, stages),
+    ...cardProblems(stages, focal),
     ...graph.problems,
     ...inputProblems(stages, graph.byId),
     ...exampleProblems(stages),

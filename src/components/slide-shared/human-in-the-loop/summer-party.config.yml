@@ -1,10 +1,11 @@
 # The summer-party Workflow: data (stages, jobs, edges, outputs) and the English words. The German twin holds `words:`
-# only, under the same keys. A prompt's {{id}} marks where the handoff of the output `id` is pasted.
+# only, under the same keys. A prompt is complete as pasted: an earlier result is inlined as its example handoff.
 id: summer-party
 focalJob: spec
 stages:
   - id: party
-    move: B
+    moves:
+      - B
     jobs:
       - id: pieces
         chat: new
@@ -13,7 +14,8 @@ stages:
         outputs: [{ id: piece, kind: text }]
         skills: []
   - id: interview
-    move: I
+    moves:
+      - I
     jobs:
       - id: interview
         chat: new
@@ -22,7 +24,8 @@ stages:
         outputs: [{ id: answers, kind: text }]
         skills: [productivity/grilling]
   - id: requirements
-    move: R
+    moves:
+      - R
     gate: 1
     jobs:
       - id: spec
@@ -32,7 +35,8 @@ stages:
         outputs: [{ id: spec, kind: spec }, { id: tickets, kind: tickets }]
         skills: [engineering/to-spec, engineering/to-tickets]
   - id: research
-    move: F
+    moves:
+      - F
     jobs:
       - id: venue
         chat: new
@@ -42,7 +46,8 @@ stages:
         fanOut: 3
         skills: [engineering/research]
   - id: compare
-    move: E
+    moves:
+      - E
     gate: 2
     jobs:
       - id: compare
@@ -67,31 +72,59 @@ words:
     claude plugin install mattpocock-skills@claude-plugins-official
     Then open a folder for this task and start Claude Code in it.
   stages:
-    party: { name: Summer party, move: Break it down }
-    interview: { name: Interview, move: Interview yourself with AI }
-    requirements: { name: Requirements, move: Requirements first }
-    research: { name: Research, move: Fresh start for each piece }
-    compare: { name: Compare, move: Evaluate each step }
-    recommendation: { name: Recommendation, move: for your boss }
+    party:
+      name: Plan
+      moves:
+        B: 'Break it down: split the big task into pieces and take only one forward.'
+    interview:
+      name: Interview
+      moves:
+        I: 'Interview yourself with AI: the AI asks before it guesses, one question at a time.'
+    requirements:
+      name: Requirements
+      moves:
+        R: 'Requirements first: the answers become a short list you sign off before any work starts.'
+      card:
+        label: Requirements card
+        lines:
+          - 200 guests
+          - €150 per person
+          - Step-free
+          - Vegetarian menu
+          - Quiet to talk
+        status: Signed off
+    research:
+      name: Research
+      moves:
+        F: 'Fresh start for each piece: one new chat per venue keeps every window small.'
+    compare:
+      name: Compare
+      moves:
+        E: 'Evaluate each step: check each result against the card before you move on.'
+    recommendation:
+      name: Review
   jobs:
     pieces:
       title: Venue
       description: Split the party into its five pieces and take only one forward, the venue. The other four wait for their turn.
       parked: [Travel, Catering, Invitations, Budget]
-      prompt: |-
-        I have to plan my company's next summer party: 200 employees across five offices in Europe.
-        Break it down into five independent pieces I can plan one after the other. Then recommend which single piece to take first and say why in one sentence.
-        End your answer with the chosen piece in one fenced block, exactly like this:
-        ```handoff
-        kind: text
-        text: <the chosen piece and the one-sentence reason>
-        ```
+      run:
+        todo: Paste this into a new chat and let the AI split the task.
+        prompt: |-
+          I have to plan my company's next summer party: 200 employees across five offices in Europe.
+          Break it down into five independent pieces I can plan one after the other. Then recommend which single piece to take first and say why in one sentence.
+          End your answer with the chosen piece in one fenced block, exactly like this:
+          ```handoff
+          kind: text
+          text: <the chosen piece and the one-sentence reason>
+          ```
       exampleOutput: |-
         ```handoff
         kind: text
         text: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it.
         ```
       check:
+        todo: Open a fresh chat, paste this, and replace the example answer with your result.
         criteria:
           - There are five pieces and each can be planned on its own.
           - Exactly one piece is chosen, with a one-sentence reason.
@@ -99,23 +132,49 @@ words:
           You are a strict reviewer. Check the answer below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
           Criteria: there are five pieces and each can be planned on its own; exactly one piece is chosen, with a one-sentence reason.
 
-          {{piece}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: text
+          text: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it.
+          ```
     interview:
       title: AI asks you
       detail: 3 questions, 1 you forgot
       description: The AI interviews you before it guesses, one question at a time, and brings up what you had not thought of. This is the chat from the talk.
-      prompt: |-
-        Interview me relentlessly about this piece of my plan until we share the same understanding. The piece we take forward:
+      run:
+        todo: Paste this into a new chat and answer one question at a time; say "done" at the end.
+        prompt: |-
+          Interview me relentlessly about this piece of my plan until we share the same understanding. The piece we take forward:
 
-        {{piece}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: text
+          text: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it.
+          ```
 
-        Work through the decisions one question at a time. For each question give two options (A and B) and your recommended answer, worded so that me saying "yes" accepts it. Wait for my answer before you ask the next one. If I say I do not understand, explain it with an everyday analogy and ask again.
-        Include at least one question I probably have not thought about, such as feedback from last year. Never ask me for a fact you could know yourself. Stop when nothing is left silently assumed.
-        When I say "done", end with my answers in one fenced block, exactly like this:
-        ```handoff
-        kind: text
-        text: <every question with my answer, one per line>
-        ```
+          Work through the decisions one question at a time. For each question give two options (A and B) and your recommended answer, worded so that me saying "yes" accepts it. Wait for my answer before you ask the next one. If I say I do not understand, explain it with an everyday analogy and ask again.
+          Include at least one question I probably have not thought about, such as feedback from last year. Never ask me for a fact you could know yourself. Stop when nothing is left silently assumed.
+          When I say "done", end with my answers in one fenced block, exactly like this:
+          ```handoff
+          kind: text
+          text: <every question with my answer, one per line>
+          ```
+        short: |-
+          Interview me relentlessly about this piece of my plan until we share the same understanding. The piece we take forward:
+
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: text
+          text: Venue. It fixes the date and the city, and travel, catering and invitations all follow from it.
+          ```
+
+          Keep it short: work through the decisions in rounds of at most the 3 most load-bearing questions, numbered, and leave out everything that would not change the plan. For each question give two options (A and B) and your recommended answer, worded so that me saying "yes" accepts it. Wait for my answers before you start the next round. If I say I do not understand, explain it with an everyday analogy and ask again.
+          Include at least one question I probably have not thought about, such as feedback from last year. Never ask me for a fact you could know yourself. Stop when nothing is left silently assumed.
+          When I say "done", end with my answers in one fenced block, exactly like this:
+          ```handoff
+          kind: text
+          text: <every question with my answer, one per line>
+          ```
       command: /grilling [paste the chosen piece here]
       exampleInput: |-
         ```handoff
@@ -132,6 +191,7 @@ words:
           Q3 The one I forgot, last year's feedback: read it first (A) or start fresh (B). Recommended A, it shows what to avoid. My answer: A. It was too loud to talk, and people left early.
         ```
       check:
+        todo: Open a fresh chat, paste this, and replace the example answers with your own.
         criteria:
           - Every question came with two options and a recommendation.
           - At least one question surfaced something you had not thought of.
@@ -140,29 +200,47 @@ words:
           You are a strict reviewer. Check the interview below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
           Criteria: every question had two options and a recommendation; at least one question was new to me; my answers are written down.
 
-          {{answers}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: text
+          text: |-
+            Start: about 150 euros each, two wheelchair users, some vegetarians.
+            Q1 Format: one venue where everyone travels (A) or five local parties (B). Recommended A, the point is that the offices meet. My answer: A.
+            Q2 Capacity: one long table for 200 at once (A) or tables that turn over, room for about 140 (B). Recommended A, everyone sits down for the speeches. My answer: A, one long table. I asked for the restaurant comparison first.
+            Q3 The one I forgot, last year's feedback: read it first (A) or start fresh (B). Recommended A, it shows what to avoid. My answer: A. It was too loud to talk, and people left early.
+          ```
     spec:
       title: Requirements card
       description: The answers become a spec with a short list of requirements you sign off, and the work is cut into vertical slices that can be done on their own.
-      prompt: |-
-        Turn my interview answers into a specification. Do not interview me again; use what is written here.
+      run:
+        todo: Paste this into a new chat to turn your answers into a spec and tickets.
+        prompt: |-
+          Turn my interview answers into a specification. Do not interview me again; use what is written here.
 
-        {{answers}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: text
+          text: |-
+            Start: about 150 euros each, two wheelchair users, some vegetarians.
+            Q1 Format: one venue where everyone travels (A) or five local parties (B). Recommended A, the point is that the offices meet. My answer: A.
+            Q2 Capacity: one long table for 200 at once (A) or tables that turn over, room for about 140 (B). Recommended A, everyone sits down for the speeches. My answer: A, one long table. I asked for the restaurant comparison first.
+            Q3 The one I forgot, last year's feedback: read it first (A) or start fresh (B). Recommended A, it shows what to avoid. My answer: A. It was too loud to talk, and people left early.
+          ```
 
-        Write the goal in one sentence, the requirements as short checkable essentials, what is out of scope, and the work as thin vertical slices. Then turn each slice into a ticket: a narrow but complete piece that can be done and checked on its own, with acceptance criteria and the tickets that must be done before it.
-        End with two fenced blocks, exactly like this:
-        ```handoff
-        kind: spec
-        goal: <one sentence>
-        requirements: [<short essential>, ...]
-        outOfScope: [<what we will not do>, ...]
-        slices: [<one slice>, ...]
-        ```
-        ```handoff
-        kind: tickets
-        tickets:
-          - { id: t1, title: <title>, acceptance: [<criterion>], blockedBy: [] }
-        ```
+          Write the goal in one sentence, the requirements as short checkable essentials, what is out of scope, and the work as thin vertical slices. Then turn each slice into a ticket: a narrow but complete piece that can be done and checked on its own, with acceptance criteria and the tickets that must be done before it.
+          End with two fenced blocks, exactly like this:
+          ```handoff
+          kind: spec
+          goal: <one sentence>
+          requirements: [<short essential>, ...]
+          outOfScope: [<what we will not do>, ...]
+          slices: [<one slice>, ...]
+          ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: t1, title: <title>, acceptance: [<criterion>], blockedBy: [] }
+          ```
       command: |-
         /to-spec [paste your answers here]
         Then run /to-tickets on the spec.
@@ -203,6 +281,7 @@ words:
           - { id: rank, title: Rank the three venues, acceptance: [A ranking with reasons], blockedBy: [access, menu, price] }
         ```
       check:
+        todo: Open a fresh chat, paste this, and replace the example spec with your own.
         criteria:
           - The goal is one sentence.
           - Every requirement is short and checkable.
@@ -211,36 +290,104 @@ words:
           You are a strict reviewer. Check the spec below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
           Criteria: the goal is one sentence; every requirement is short and checkable; every slice can be done and checked on its own.
 
-          {{spec}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: spec
+          goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+          requirements:
+            - 200 guests
+            - 150 euros per person
+            - Step-free
+            - Vegetarian menu
+            - Quiet to talk
+          outOfScope:
+            - Travel to the venue
+            - Invitations
+          slices:
+            - Shortlist three venues
+            - Check each against the requirements
+            - Rank them
+          ```
       page:
+        todo: 'Optional: paste this to turn the spec into a page you can show.'
         simple: |-
           Turn this spec into one good-looking page: goal first, then the requirements, what is out of scope and the slices.
           Give me one complete, self-contained HTML file in a single code block that I can save and open.
 
-          {{spec}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: spec
+          goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+          requirements:
+            - 200 guests
+            - 150 euros per person
+            - Step-free
+            - Vegetarian menu
+            - Quiet to talk
+          outOfScope:
+            - Travel to the venue
+            - Invitations
+          slices:
+            - Shortlist three venues
+            - Check each against the requirements
+            - Rank them
+          ```
         technical: |-
           Turn this spec into one good-looking page: goal first, then the requirements, what is out of scope and the slices.
           Write it to a temporary .html file, serve it on localhost and open it in my browser.
 
-          {{spec}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: spec
+          goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+          requirements:
+            - 200 guests
+            - 150 euros per person
+            - Step-free
+            - Vegetarian menu
+            - Quiet to talk
+          outOfScope:
+            - Travel to the venue
+            - Invitations
+          slices:
+            - Shortlist three venues
+            - Check each against the requirements
+            - Rank them
+          ```
     venue:
       title: Venue
       description: One fresh chat per venue. Each chat gets only the requirements, and checks one venue against every criterion.
-      prompt: |-
-        Research one venue for our summer party. The requirements:
+      run:
+        todo: Open one new chat per venue, paste this, and type the venue name where it says so.
+        prompt: |-
+          Research one venue for our summer party. The requirements:
 
-        {{spec}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: spec
+          goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+          requirements:
+            - 200 guests
+            - 150 euros per person
+            - Step-free
+            - Vegetarian menu
+            - Quiet to talk
+          outOfScope:
+            - Travel to the venue
+          slices:
+            - Check one venue against the requirements
+          ```
 
-        The venue to check: [type the venue name here]
+          The venue to check: [type the venue name here]
 
-        Check it against every requirement, name where you got each fact, and say where you are unsure. Prefer the venue's own pages over reviews. Do not compare it with other venues.
-        End with one fenced block, exactly like this:
-        ```handoff
-        kind: research
-        subject: <the venue>
-        summary: <two sentences>
-        facts: [<one checked fact per requirement>, ...]
-        ```
+          Check it against every requirement, name where you got each fact, and say where you are unsure. Prefer the venue's own pages over reviews. Do not compare it with other venues.
+          End with one fenced block, exactly like this:
+          ```handoff
+          kind: research
+          subject: <the venue>
+          summary: <two sentences>
+          facts: [<one checked fact per requirement>, ...]
+          ```
       command: |-
         /research Check [venue name] against these requirements: [paste the spec here]
       exampleInput: |-
@@ -271,6 +418,7 @@ words:
           - The main hall echoes; the side hall is quiet
         ```
       check:
+        todo: Open a fresh chat, paste this, and replace the example research with your own.
         criteria:
           - Every requirement has a checked fact.
           - Where the AI is unsure, it says so.
@@ -278,42 +426,115 @@ words:
           You are a strict reviewer. Check the research below against the requirements and grade each requirement pass or fail with one sentence of evidence. Then name the one fix that matters most.
 
           Requirements:
-          {{spec}}
+          The handoffs below are examples. Replace them with your own handoffs if you have them.
+          ```handoff
+          kind: spec
+          goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+          requirements:
+            - 200 guests
+            - 150 euros per person
+            - Step-free
+            - Vegetarian menu
+            - Quiet to talk
+          outOfScope:
+            - Travel to the venue
+          slices:
+            - Check one venue against the requirements
+          ```
 
           Research:
-          {{research}}
+          ```handoff
+          kind: research
+          subject: Harbour Hall
+          summary: A converted warehouse with room for 220 and a step-free entrance. Quiet to talk only in the side hall.
+          facts:
+            - Fits 220 guests
+            - About 140 euros per person with the standard menu
+            - Step-free through the main entrance
+            - Vegetarian menu on request
+            - The main hall echoes; the side hall is quiet
+          ```
       page:
+        todo: 'Optional: paste this to turn the research into a page you can show.'
         simple: |-
           Turn this research into one good-looking page: the venue, the summary and one card per fact.
           Give me one complete, self-contained HTML file in a single code block that I can save and open.
 
-          {{research}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: research
+          subject: Harbour Hall
+          summary: A converted warehouse with room for 220 and a step-free entrance. Quiet to talk only in the side hall.
+          facts:
+            - Fits 220 guests
+            - About 140 euros per person with the standard menu
+            - Step-free through the main entrance
+            - Vegetarian menu on request
+            - The main hall echoes; the side hall is quiet
+          ```
         technical: |-
           Turn this research into one good-looking page: the venue, the summary and one card per fact.
           Write it to a temporary .html file, serve it on localhost and open it in my browser.
 
-          {{research}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: research
+          subject: Harbour Hall
+          summary: A converted warehouse with room for 220 and a step-free entrance. Quiet to talk only in the side hall.
+          facts:
+            - Fits 220 guests
+            - About 140 euros per person with the standard menu
+            - Step-free through the main entrance
+            - Vegetarian menu on request
+            - The main hall echoes; the side hall is quiet
+          ```
     compare:
       title: Rank 3 venues
       detail: against the card
       description: One chat gets the requirements and all three research results, and ranks the venues against your criteria.
-      prompt: |-
-        Rank these venues against my requirements.
+      run:
+        todo: Paste this into a new chat to rank all three results against the card.
+        prompt: |-
+          Rank these venues against my requirements.
 
-        Requirements:
-        {{spec}}
+          Requirements:
+          The handoffs below are examples. Replace them with your own handoffs if you have them.
+          ```handoff
+          kind: spec
+          goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+          requirements: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+          outOfScope: [Travel to the venue]
+          slices: [Rank the venues]
+          ```
 
-        Research, one block per venue:
-        {{research}}
+          Research, one block per venue:
+          ```handoff
+          kind: research
+          subject: Harbour Hall
+          summary: Room for 220 and step-free. Quiet only in the side hall.
+          facts: [Fits 220 guests, About 140 euros per person]
+          ```
+          ```handoff
+          kind: research
+          subject: Garden Pavilion
+          summary: Room for 200 on one floor, quiet, a little over budget.
+          facts: [Fits 200 guests, About 160 euros per person]
+          ```
+          ```handoff
+          kind: research
+          subject: Old Mill
+          summary: Charming but two flights of stairs and no lift.
+          facts: [Fits 180 guests, Not step-free]
+          ```
 
-        Rank them best to worst, say why in one sentence each, and flag every requirement a venue misses.
-        End with one fenced block, exactly like this:
-        ```handoff
-        kind: comparison
-        criteria: [<requirement>, ...]
-        ranking:
-          - { name: <venue>, why: <one sentence> }
-        ```
+          Rank them best to worst, say why in one sentence each, and flag every requirement a venue misses.
+          End with one fenced block, exactly like this:
+          ```handoff
+          kind: comparison
+          criteria: [<requirement>, ...]
+          ranking:
+            - { name: <venue>, why: <one sentence> }
+          ```
       exampleInput: |-
         ```handoff
         kind: spec
@@ -350,6 +571,7 @@ words:
           - { name: Old Mill, why: Not step-free and too small. }
         ```
       check:
+        todo: Open a fresh chat, paste this, and replace the example ranking with your own.
         criteria:
           - Every venue is ranked with a reason.
           - Every missed requirement is flagged.
@@ -358,36 +580,76 @@ words:
           Criteria: every venue is ranked with a reason; every missed requirement is flagged.
 
           Requirements:
-          {{spec}}
+          The handoffs below are examples. Replace them with your own handoffs if you have them.
+          ```handoff
+          kind: spec
+          goal: Choose one venue where all 200 employees can meet for an evening in the summer.
+          requirements: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+          outOfScope: [Travel to the venue]
+          slices: [Rank the venues]
+          ```
 
           Ranking:
-          {{comparison}}
+          ```handoff
+          kind: comparison
+          criteria: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+          ranking:
+            - { name: Harbour Hall, why: Meets every requirement if the speeches use the side hall. }
+            - { name: Garden Pavilion, why: Quiet and step-free but 10 euros per person over budget. }
+            - { name: Old Mill, why: Not step-free and too small. }
+          ```
       page:
+        todo: 'Optional: paste this to turn the ranking into a page you can show.'
         simple: |-
           Turn this comparison into one good-looking page with a ranked table I can show my boss.
           Give me one complete, self-contained HTML file in a single code block that I can save and open.
 
-          {{comparison}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: comparison
+          criteria: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+          ranking:
+            - { name: Harbour Hall, why: Meets every requirement if the speeches use the side hall. }
+            - { name: Garden Pavilion, why: Quiet and step-free but 10 euros per person over budget. }
+            - { name: Old Mill, why: Not step-free and too small. }
+          ```
         technical: |-
           Turn this comparison into one good-looking page with a ranked table I can show my boss.
           Write it to a temporary .html file, serve it on localhost and open it in my browser.
 
-          {{comparison}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: comparison
+          criteria: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+          ranking:
+            - { name: Harbour Hall, why: Meets every requirement if the speeches use the side hall. }
+            - { name: Garden Pavilion, why: Quiet and step-free but 10 euros per person over budget. }
+            - { name: Old Mill, why: Not step-free and too small. }
+          ```
     plan:
       title: Venue plan
       detail: by Friday
       description: The comparison becomes a one-page recommendation for your boss.
-      prompt: |-
-        Write a one-page recommendation for my boss from this comparison.
+      run:
+        todo: Paste this into a new chat to turn the ranking into a one-page recommendation.
+        prompt: |-
+          Write a one-page recommendation for my boss from this comparison.
 
-        {{comparison}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: comparison
+          criteria: [200 guests, 150 euros per person, Step-free, Vegetarian menu, Quiet to talk]
+          ranking:
+            - { name: Harbour Hall, why: Meets every requirement if the speeches use the side hall. }
+            - { name: Garden Pavilion, why: Quiet and step-free but 10 euros per person over budget. }
+          ```
 
-        Recommend one venue, give the three reasons that matter, and name the one risk to settle first.
-        End with one fenced block, exactly like this:
-        ```handoff
-        kind: text
-        text: <the recommendation>
-        ```
+          Recommend one venue, give the three reasons that matter, and name the one risk to settle first.
+          End with one fenced block, exactly like this:
+          ```handoff
+          kind: text
+          text: <the recommendation>
+          ```
       exampleInput: |-
         ```handoff
         kind: comparison
@@ -404,6 +666,7 @@ words:
           Settle first: hold the speeches in the side hall so everyone can hear.
         ```
       check:
+        todo: Open a fresh chat, paste this, and replace the example recommendation with your own.
         criteria:
           - One venue is recommended.
           - There are three reasons and one risk to settle first.
@@ -411,4 +674,10 @@ words:
           You are a strict reviewer. Check the recommendation below against these criteria and grade each one pass or fail with one sentence of evidence. Then name the one fix that matters most.
           Criteria: one venue is recommended; there are three reasons and one risk to settle first.
 
-          {{plan}}
+          The handoff below is an example. Replace it with your own handoff if you have one.
+          ```handoff
+          kind: text
+          text: |-
+            Book Harbour Hall. It fits all 200 guests, is step-free and stays within 150 euros per person.
+            Settle first: hold the speeches in the side hall so everyone can hear.
+          ```

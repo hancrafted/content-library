@@ -1,5 +1,4 @@
 import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps } from './human-in-the-loop.types';
-import { jobById } from './workflow-jobs.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
 import type { WorkflowView } from './workflow-view.pure';
 import { loadWorkflow } from './workflow.pure';
@@ -24,19 +23,19 @@ export function uploadEvent(yaml: string): WorkflowEvent {
 }
 
 /** The callbacks the parts send events up by. */
-export type Callbacks = Pick<ToolbarProps, 'onMode' | 'onLevel' | 'onWorkflow' | 'onUpload'> &
-  Pick<DiagramProps, 'onOpenJob'> &
-  Pick<ModalProps, 'onClose' | 'onTick'>;
+export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload'> &
+  Pick<DiagramProps, 'onOpenStage'> &
+  Pick<ModalProps, 'onClose' | 'onShort' | 'onTick'>;
 
 /** The callbacks over one dispatch. */
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
   return {
-    onMode: (mode) => dispatch({ type: 'mode', mode }),
     onLevel: (level) => dispatch({ type: 'level', level }),
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
-    onOpenJob: (jobId) => dispatch({ type: 'open', jobId }),
+    onOpenStage: (stageId) => dispatch({ type: 'open', stageId }),
     onClose: () => dispatch({ type: 'close' }),
+    onShort: (jobId) => dispatch({ type: 'short', jobId }),
     onTick: (ticketId) => dispatch({ type: 'tick', ticketId }),
   };
 }
@@ -46,7 +45,7 @@ export interface Shown {
   readonly data: HumanInTheLoopData;
   readonly state: WorkflowState;
   readonly workflow: Workflow;
-  /** `workflowView` of the Workflow for the state's mode and level, computed once per change by the parent. */
+  /** `workflowView` of the Workflow for the state's level, computed once per change by the parent. */
   readonly view: WorkflowView;
 }
 
@@ -59,14 +58,35 @@ export interface Slices {
 /** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
   const { data, state, workflow, view } = shown;
-  const { mode, level, openJobId } = state;
-  const { onMode, onLevel, onWorkflow, onUpload, onOpenJob, onClose, onTick } = on;
-  const choices = data.workflows.map(({ id, title }) => ({ id, title }));
-  const { controls, words, outputWords } = data;
-  const toolbar = { workflow, choices, mode, level, controls, words, setup: view.setup };
+  const { words, outputWords, readonly } = data;
+  const toolbar = toolbarOf(shown, on);
   return {
-    toolbar: { ...toolbar, uploadProblems: state.uploadProblems, onMode, onLevel, onWorkflow, onUpload },
-    diagram: { workflow, view, openJobId, onOpenJob, slots: data.diagram, words },
-    modal: { card: jobById(view.stages, openJobId) ?? null, words, ticked: state.ticked, outputWords, onClose, onTick },
+    toolbar,
+    diagram: {
+      workflow,
+      readonly,
+      openStageId: state.openStageId,
+      onOpenStage: on.onOpenStage,
+      slots: data.diagram,
+      words,
+    },
+    modal: {
+      stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
+      shortJobIds: state.shortJobIds,
+      ticked: state.ticked,
+      words,
+      outputWords,
+      onClose: on.onClose,
+      onShort: on.onShort,
+      onTick: on.onTick,
+    },
   };
+}
+
+function toolbarOf({ data, state, workflow }: Shown, on: Callbacks): ToolbarProps {
+  const choices = data.workflows.map(({ id, title }) => ({ id, title }));
+  const { controls, words, readonly } = data;
+  const { level, uploadProblems } = state;
+  const { onLevel, onWorkflow, onUpload } = on;
+  return { workflow, choices, level, controls, readonly, words, uploadProblems, onLevel, onWorkflow, onUpload };
 }

@@ -1,6 +1,6 @@
 import { stringify } from 'yaml';
 import { jobsOf } from './workflow-jobs.pure';
-import type { Job, Workflow } from './workflow.types';
+import type { Job, Stage, Workflow } from './workflow.types';
 
 /*
  * A Workflow back to YAML, for the download control: the config shape with the current locale's words inline, so the
@@ -24,7 +24,7 @@ const jobWords = (job: Job) => ({
   title: job.title,
   ...opt('detail', job.detail),
   description: job.description,
-  prompt: job.prompt,
+  run: { todo: job.run.todo, prompt: job.run.prompt, ...opt('short', job.run.short) },
   ...opt('command', job.command),
   ...opt('exampleInput', job.exampleInput),
   ...opt('exampleOutput', job.exampleOutput),
@@ -33,24 +33,34 @@ const jobWords = (job: Job) => ({
   ...opt('parked', job.parked),
 });
 
+/** A stage's words: its name, its tooltips by letter and its card. */
+const stageWords = (stage: Stage) => ({
+  name: stage.name,
+  ...opt(
+    'moves',
+    stage.moves.length > 0 ? Object.fromEntries(stage.moves.map(({ letter, why }) => [letter, why])) : undefined,
+  ),
+  ...opt('card', stage.card),
+});
+
+const stageData = (stage: Stage) => ({
+  id: stage.id,
+  ...opt('moves', stage.moves.length > 0 ? stage.moves.map((move) => move.letter) : undefined),
+  ...opt('gate', stage.gate),
+  jobs: stage.jobs.map(jobData),
+});
+
 export function workflowToYaml(workflow: Workflow): string {
   const jobs = jobsOf(workflow.stages);
   return stringify({
     id: workflow.id,
     ...opt('focalJob', workflow.focalJobId),
-    stages: workflow.stages.map((stage) => ({
-      id: stage.id,
-      ...opt('move', stage.move),
-      ...opt('gate', stage.gate),
-      jobs: stage.jobs.map(jobData),
-    })),
+    stages: workflow.stages.map(stageData),
     words: {
       title: workflow.title,
       scenario: workflow.scenario,
       ...opt('setup', workflow.setup),
-      stages: Object.fromEntries(
-        workflow.stages.map((stage) => [stage.id, { name: stage.name, ...opt('move', stage.moveLabel) }]),
-      ),
+      stages: Object.fromEntries(workflow.stages.map((stage) => [stage.id, stageWords(stage)])),
       jobs: Object.fromEntries(jobs.map((job) => [job.id, jobWords(job)])),
     },
   });

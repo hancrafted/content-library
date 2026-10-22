@@ -22,21 +22,32 @@ export interface JobOutput {
   readonly kind: HandoffKind;
 }
 
-/** The "Make it a page" prompt: Simple asks for one self-contained HTML file; Technical serves a temp file on localhost. */
+/** The first step of a job: one line saying what to do, the complete prompt, and for an interview the short variant. */
+export interface JobRun {
+  readonly todo: string;
+  /** Complete and usable as pasted: a result of an earlier job is inlined as its example handoff, never a `{{slot}}`. */
+  readonly prompt: string;
+  /** The short grill (the most load-bearing questions per round); interview jobs only. */
+  readonly short?: string;
+}
+
+/** The "Make it a page" step: Simple asks for one self-contained HTML file; Technical serves a temp file on localhost. */
 export interface JobPage {
+  readonly todo: string;
   readonly simple: string;
   readonly technical: string;
 }
 
-/** The criteria written down before the step, and the prompt that checks a result against them in a fresh chat. */
+/** The check step: what to do, the criteria written down before the step, and the prompt that checks in a fresh chat. */
 export interface JobCheck {
+  readonly todo: string;
   readonly criteria: readonly string[];
   readonly prompt: string;
 }
 
 /**
- * One Workflow job: one chat, or `fanOut` parallel chats from one template. `prompt` carries `{{outputId}}` paste
- * slots, one per entry of `inputs`, and ends by asking for fenced `handoff` blocks, one per output.
+ * One Workflow job: one chat, or `fanOut` parallel chats from one template. Its prompts are complete as pasted (an
+ * earlier result is inlined as the example handoff) and end by asking for fenced `handoff` blocks, one per output.
  */
 export interface Job {
   readonly id: string;
@@ -48,33 +59,47 @@ export interface Job {
   readonly chat: 'new' | 'continue';
   /** Jobs of the same or an earlier stage that must be done first; acyclic. */
   readonly dependsOn: readonly string[];
-  /** Output ids pasted into this job's prompt slots; each is produced by a job this one depends on, directly or not. */
+  /** Output ids this job takes in; each is produced by a job this one depends on, directly or not. */
   readonly inputs: readonly string[];
   readonly outputs: readonly JobOutput[];
   /** N parallel chats from this one template; absent for a single chat. */
   readonly fanOut?: number;
   readonly skills: readonly SkillRef[];
-  /** Simple: the long copy-ready prompt. */
-  readonly prompt: string;
-  /** Technical: the `/skill ...` one-liner; absent when no skill covers the job. Pasted as written: a slot it has to fill is a bracketed placeholder, never a raw `{{id}}`. */
+  /** Simple: the copy-ready prompt of the first step. */
+  readonly run: JobRun;
+  /** Technical: the `/skill ...` one-liner; absent when no skill covers the job. Pasted as written: a slot it has to fill is a bracketed placeholder. */
   readonly command?: string;
   /** Handoff blocks to start from, one per input in input order; absent for a first job. */
   readonly exampleInput?: string;
   /** Handoff blocks the job returns, one per output in output order. */
   readonly exampleOutput?: string;
   readonly check?: JobCheck;
-  /** The "Make it a page" prompts, one per level, if the result is worth a page. */
+  /** The "Make it a page" step, one prompt per level, if the result is worth a page. */
   readonly page?: JobPage;
   /** Labels of the other parts of the task, drawn dimmed beside this job (the party's parked pieces). */
   readonly parked?: readonly string[];
 }
 
+/** One BRIEF letter a stage applies, with the stage's own reason why it applies here (the circle's tooltip). */
+export interface StageMove {
+  readonly letter: Move;
+  readonly why: string;
+}
+
+/** The sign-off card of a gate stage: what is signed off, its lines and its status. */
+export interface GateCard {
+  readonly label: string;
+  readonly lines: readonly string[];
+  readonly status: string;
+}
+
 export interface Stage {
   readonly id: string;
   readonly name: string;
-  /** The move's own words, e.g. "Break it down". */
-  readonly moveLabel?: string;
-  readonly move?: Move;
+  /** The BRIEF letters this stage applies, in BRIEF order. */
+  readonly moves: readonly StageMove[];
+  /** The sign-off card, on the stage that holds the focal job. */
+  readonly card?: GateCard;
   /** Gate number when a human signs off this stage before the next starts. */
   readonly gate?: number;
   readonly jobs: readonly Job[];

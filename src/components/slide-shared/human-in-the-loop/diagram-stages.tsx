@@ -2,11 +2,10 @@ import { cn } from '@/lib/utils';
 import { AiJob, ChatJobs, DeliverableJob, FocalJob, PieceJobs, popoverOf, type JobViewProps } from './diagram-jobs';
 import { connectorInto, fanGeometry, type Connector as ConnectorKind } from './diagram-layout.pure';
 import { jobRole } from './diagram-model.pure';
-import { TryStep, type JobOpener } from './diagram-try.client';
 import type { DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
+import { MoveCircles } from './move-circles.client';
 import { NodePopover } from './node-popover.client';
-import { jobById } from './workflow-jobs.pure';
-import type { WorkflowView } from './workflow-view.pure';
+import { TryButton } from './try-button.client';
 import type { Job, Stage, Workflow } from './workflow.types';
 
 /**
@@ -16,13 +15,14 @@ import type { Job, Stage, Workflow } from './workflow.types';
  */
 export function DiagramStages(props: {
   workflow: Workflow;
-  view: WorkflowView;
   slots?: DiagramSlots;
-  words: Pick<UiWords, 'signedOff'>;
-  opener?: JobOpener;
+  words: UiWords;
+  readonly: boolean;
+  openStageId: string | null;
+  onOpenStage: (stageId: string) => void;
 }) {
-  const { workflow, slots = {}, words } = props;
-  const ctx: Context = { ...props, slots, words: { signedOff: words.signedOff, checked: slots.checked ?? '' } };
+  const { workflow, slots = {} } = props;
+  const ctx: Context = { ...props, slots };
   return (
     <div className="@container">
       <ol
@@ -38,13 +38,14 @@ export function DiagramStages(props: {
   );
 }
 
-/** What every stage column reads: the Workflow, the Slide's slots, the words and, in Try mode, the cards. */
+/** What every stage column reads: the Workflow, the Slide's slots, the words and the "Try it" wiring. */
 interface Context {
   workflow: Workflow;
   slots: DiagramSlots;
-  words: JobViewProps['words'];
-  view: WorkflowView;
-  opener?: JobOpener;
+  words: UiWords;
+  readonly: boolean;
+  openStageId: string | null;
+  onOpenStage: (stageId: string) => void;
 }
 
 function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; previous: Stage | undefined }) {
@@ -53,7 +54,7 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
   return (
     <li {...slot.target} className="focus-group__item relative flex min-w-0 flex-col gap-2 @4xl:grow @4xl:basis-0">
       {previous && <Connector kind={connectorInto(previous, stage)} />}
-      <StageHeader stage={stage} slot={slot} initials={ctx.slots.initials === true} />
+      <StageHeader stage={stage} slot={slot} words={ctx.words} moves={ctx.slots.initials === true} />
       <ol
         aria-label={jobsLabelOf(stage, slot, ctx.slots)}
         className={cn(
@@ -65,6 +66,14 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
           <StageJob key={job.id} ctx={ctx} stage={stage} job={job} gateLabel={gateLabelOf(stage, slot)} />
         ))}
       </ol>
+      {!ctx.readonly && (
+        <TryButton
+          label={ctx.words.tryIt}
+          stage={stage.name}
+          pressed={ctx.openStageId === stage.id}
+          onOpen={() => ctx.onOpenStage(stage.id)}
+        />
+      )}
     </li>
   );
 }
@@ -85,15 +94,10 @@ interface StageJobProps {
 }
 
 function StageJob({ ctx, stage, job, gateLabel }: StageJobProps) {
-  const card = ctx.view.clickable ? jobById(ctx.view.stages, job.id) : undefined;
   const slot = ctx.slots.jobs?.[job.id] ?? {};
-  const props = { job, slot, stageName: stage.name, gateLabel, words: ctx.words };
-  return (
-    <>
-      <JobCard role={jobRole(ctx.workflow, job)} {...props} />
-      {card && ctx.opener && <TryStep card={card} opener={ctx.opener} />}
-    </>
-  );
+  const words = { checked: ctx.slots.checked ?? '' };
+  const props = { job, slot, stageName: stage.name, gateLabel, words, card: stage.card };
+  return <JobCard role={jobRole(ctx.workflow, job)} {...props} />;
 }
 
 function JobCard({ role, ...props }: JobViewProps & { role: ReturnType<typeof jobRole> }) {
@@ -108,14 +112,14 @@ const NAME_BUTTON =
   'cursor-pointer rounded-sm text-left outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring';
 
 /**
- * The stage's name, opening its popover where the Slide gives one, over the move pill: the move's first letter
- * semibold when the initials are on. Across a wide row every pill keeps two lines' height, so a move that wraps lines
- * up with the rest.
+ * The stage's name, opening its popover where the Slide gives one, over its BRIEF letters as circled capitals (each
+ * with its tooltip). Across a wide row every header keeps one height, so a stage without letters lines up with the rest.
  */
-function StageHeader({ stage, slot, initials }: { stage: Stage; slot: StageSlot; initials: boolean }) {
+function StageHeader(props: { stage: Stage; slot: StageSlot; words: UiWords; moves: boolean }) {
+  const { stage, slot, words, moves } = props;
   const popover = popoverOf(slot.popover, stage.name);
   return (
-    <div className="flex flex-col items-start gap-1 @4xl:h-24">
+    <div className="flex flex-col items-start gap-1.5 @4xl:h-14">
       <p className="flex items-center gap-1 text-body font-semibold">
         {popover ? (
           <NodePopover copy={popover} className={NAME_BUTTON}>
@@ -126,30 +130,8 @@ function StageHeader({ stage, slot, initials }: { stage: Stage; slot: StageSlot;
         )}
         {slot.aside}
       </p>
-      <MovePill move={stage.moveLabel} pill={stage.move !== undefined} initials={initials} />
+      {moves && stage.moves.length > 0 && <MoveCircles moves={stage.moves} label={words.moveLabel} />}
     </div>
-  );
-}
-
-function MovePill({ move, pill, initials }: { move: string | undefined; pill: boolean; initials: boolean }) {
-  const words =
-    initials && pill && move ? (
-      <>
-        <b className="font-semibold text-foreground">{move.slice(0, 1)}</b>
-        {move.slice(1)}
-      </>
-    ) : (
-      move
-    );
-  return (
-    <span
-      className={cn(
-        'text-caption text-muted-foreground',
-        pill && 'rounded-2xl border border-border bg-card px-2.5 py-0.5 @4xl:flex @4xl:items-center @4xl:min-h-14',
-      )}
-    >
-      <span>{words}</span>
-    </span>
   );
 }
 
@@ -180,7 +162,7 @@ function Connector({ kind }: { kind: ConnectorKind }) {
   return (
     <div
       aria-hidden="true"
-      className="absolute bottom-full left-8 flex h-6 w-6 items-center justify-center @4xl:top-24 @4xl:right-full @4xl:bottom-0 @4xl:left-auto @4xl:mt-2 @4xl:h-auto @4xl:w-5"
+      className="absolute bottom-full left-8 flex h-6 w-6 items-center justify-center @4xl:top-14 @4xl:right-full @4xl:bottom-0 @4xl:left-auto @4xl:mt-2 @4xl:h-auto @4xl:w-5"
     >
       <div className="rotate-90 @4xl:hidden">{STRAIGHT}</div>
       <div className="hidden @4xl:block">{across}</div>

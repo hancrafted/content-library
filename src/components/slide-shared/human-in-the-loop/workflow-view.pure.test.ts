@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { workflowView } from './workflow-view.pure';
+import { chatLinks, workflowView } from './workflow-view.pure';
 import type { Job, Workflow } from './workflow.types';
 
 const TEXT = '```handoff\nkind: text\ntext: hi\n```';
@@ -14,7 +14,7 @@ function job(id: string, extra: Partial<Job> = {}): Job {
     inputs: [],
     outputs: [{ id: `${id}-out`, kind: 'text' }],
     skills: [],
-    prompt: `Prompt of ${id} & more`,
+    run: { todo: `Run ${id}.`, prompt: `Prompt of ${id} & more` },
     ...extra,
   };
 }
@@ -26,10 +26,11 @@ const WORKFLOW: Workflow = {
   setup: 'install things',
   focalJobId: 'b',
   stages: [
-    { id: 's1', name: 'One', jobs: [job('a', { exampleOutput: TEXT })] },
+    { id: 's1', name: 'One', moves: [], jobs: [job('a', { exampleOutput: TEXT })] },
     {
       id: 's2',
       name: 'Two',
+      moves: [],
       gate: 1,
       jobs: [
         job('b', {
@@ -37,11 +38,12 @@ const WORKFLOW: Workflow = {
           inputs: ['a-out'],
           fanOut: 3,
           skills: [{ group: 'engineering', name: 'research' }],
-          command: '/research {{a-out}}',
+          run: { todo: 'Run b.', prompt: 'Prompt of b & more', short: 'Short b' },
+          command: '/research [paste it here]',
           exampleInput: TEXT,
           exampleOutput: TEXT,
-          check: { criteria: ['It is short.'], prompt: 'Check it' },
-          page: { simple: 'Make a page', technical: 'Serve a page' },
+          check: { todo: 'Check b.', criteria: ['It is short.'], prompt: 'Check it' },
+          page: { todo: 'Page b.', simple: 'Make a page', technical: 'Serve a page' },
         }),
         job('c', { dependsOn: ['a'] }),
       ],
@@ -51,111 +53,90 @@ const WORKFLOW: Workflow = {
 
 const jobOf = (view: ReturnType<typeof workflowView>, id: string) =>
   view.stages.flatMap((stage) => stage.jobs).find((card) => card.id === id)!;
-const actionIds = (view: ReturnType<typeof workflowView>, id: string) =>
-  jobOf(view, id).modal.actions.map((action) => action.id);
+const stepIds = (view: ReturnType<typeof workflowView>, id: string) => jobOf(view, id).steps.map((step) => step.id);
 
-const SIMPLE = { mode: 'try', level: 'simple' } as const;
-const TECHNICAL = { mode: 'try', level: 'technical' } as const;
-const textOf = (view: ReturnType<typeof workflowView>, job: string, id: string) =>
-  jobOf(view, job).modal.actions.find((a) => a.id === id && 'text' in a);
+const SIMPLE = { level: 'simple' } as const;
+const TECHNICAL = { level: 'technical' } as const;
 
 describe('success cases', () => {
-  it('Watch is today diagram: no step numbers, no guide, not clickable, fan-out and focal kept', () => {
+  it('gives one modal per stage with its jobs in order', () => {
     // ARRANGE
-    const fan = 3;
-    // ACT
-    const view = workflowView(WORKFLOW, { mode: 'watch', level: 'simple' });
-    // ASSERT
-    expect(view.clickable).toBe(false);
-    expect(view.stages.flatMap((s) => s.jobs).filter((card) => card.step !== undefined)).toEqual([]);
-    expect(jobOf(view, 'a').guide).toBeUndefined();
-    expect(jobOf(view, 'b')).toMatchObject({ fanOut: fan, focal: true });
-    expect(view.stages[1]).toMatchObject({ gate: 1, name: 'Two' });
-  });
-
-  it('Try numbers the jobs in drawing order, gives each a one-line guide and is clickable', () => {
-    // ARRANGE
-    const ids = ['a', 'b', 'c'];
-    // ACT
-    const view = workflowView(WORKFLOW, SIMPLE);
-    const cards = ids.map((id) => jobOf(view, id));
-    // ASSERT
-    expect(view.clickable).toBe(true);
-    expect(cards.map((card) => card.step)).toEqual(cards.map((_, at) => at + 1));
-    expect(cards[0]?.guide).toBe('Does a.');
-  });
-
-  it('Simple copies the long prompt and hides setup and skill links', () => {
-    // ARRANGE
-    const prompt = 'Prompt of b & more';
+    const expected = [
+      ['One', ['a']],
+      ['Two', ['b', 'c']],
+    ];
     // ACT
     const view = workflowView(WORKFLOW, SIMPLE);
     // ASSERT
-    expect(view.setup).toBeUndefined();
-    expect(textOf(view, 'b', 'copy-prompt')).toMatchObject({ text: prompt });
-    expect(jobOf(view, 'b').modal.sections.map((s) => s.kind)).not.toContain('skills');
+    expect(view.stages.map((stage) => [stage.name, stage.jobs.map((each) => each.id)])).toEqual(expected);
   });
 
-  it('Technical copies the slash command, shows setup once, links skill docs and offers the full prompt', () => {
+  it('lists the steps top to bottom as run, check, page, each with its todo line, and only those a job has', () => {
+    // ARRANGE
+    const view = workflowView(WORKFLOW, SIMPLE);
+    // ACT
+    const full = jobOf(view, 'b').steps.map((step) => [step.id, step.todo]);
+    const bare = stepIds(view, 'c');
+    // ASSERT
+    expect(full).toEqual([
+      ['run', 'Run b.'],
+      ['check', 'Check b.'],
+      ['page', 'Page b.'],
+    ]);
+    expect(bare).toEqual(['run']);
+  });
+
+  it('Simple runs the long prompt with its short variant and shows no setup or skill links', () => {
+    // ARRANGE
+    const view = workflowView(WORKFLOW, SIMPLE);
+    // ACT
+    const modal = jobOf(view, 'b');
+    // ASSERT
+    expect(modal.steps[0]?.prompt).toEqual({ kind: 'prompt', text: 'Prompt of b & more', short: 'Short b' });
+    expect(modal.setup).toBeUndefined();
+    expect(modal.sections.map((s) => s.kind)).not.toContain('skills');
+  });
+
+  it('Technical runs the slash command with the setup and links the skill docs', () => {
     // ARRANGE
     const docs = 'https://github.com/mattpocock/skills/tree/main/skills/engineering/research';
     // ACT
-    const view = workflowView(WORKFLOW, TECHNICAL);
-    const modal = jobOf(view, 'b').modal;
+    const modal = jobOf(workflowView(WORKFLOW, TECHNICAL), 'b');
     // ASSERT
-    expect(view.setup).toBe('install things');
-    expect(modal.actions[0]).toMatchObject({ id: 'copy-command', text: '/research {{a-out}}' });
+    expect(modal.setup).toBe('install things');
+    expect(modal.steps[0]?.prompt).toEqual({ kind: 'command', text: '/research [paste it here]' });
     expect(modal.sections.find((s) => s.kind === 'skills')).toMatchObject({
       links: [{ label: 'research', href: docs }],
     });
-    expect(modal.sections.find((s) => s.kind === 'fullPrompt')).toMatchObject({ text: 'Prompt of b & more' });
   });
 
-  it('offers every quick action a job has, in order, and only those', () => {
+  it('copies the check prompt as written and the page prompt of the level', () => {
     // ARRANGE
-    const view = workflowView(WORKFLOW, SIMPLE);
+    const pageIn = (options: typeof SIMPLE | typeof TECHNICAL) =>
+      jobOf(workflowView(WORKFLOW, options), 'b').steps.find((step) => step.id === 'page')?.prompt.text;
+    const check = jobOf(workflowView(WORKFLOW, SIMPLE), 'b').steps.find((step) => step.id === 'check');
     // ACT
-    const full = actionIds(view, 'b');
-    const bare = actionIds(view, 'c');
+    const pages = [pageIn(SIMPLE), pageIn(TECHNICAL)];
     // ASSERT
-    expect(full).toEqual(['copy-prompt', 'open-chatgpt', 'open-claude', 'copy-example', 'copy-check', 'copy-page']);
-    expect(bare).toEqual(['copy-prompt', 'open-chatgpt', 'open-claude']);
+    expect(check?.prompt.text).toBe('Check it');
+    expect(pages).toEqual(['Make a page', 'Serve a page']);
   });
 
   it('prefills ChatGPT and Claude with the encoded prompt through ?q=', () => {
     // ARRANGE
     const encoded = encodeURIComponent('Prompt of b & more');
     // ACT
-    const actions = jobOf(workflowView(WORKFLOW, SIMPLE), 'b').modal.actions;
+    const links = chatLinks('Prompt of b & more');
     // ASSERT
-    expect(actions.find((a) => a.id === 'open-chatgpt')).toMatchObject({ href: `https://chatgpt.com/?q=${encoded}` });
-    expect(actions.find((a) => a.id === 'open-claude')).toMatchObject({ href: `https://claude.ai/new?q=${encoded}` });
+    expect(links).toEqual({
+      chatgpt: `https://chatgpt.com/?q=${encoded}`,
+      claude: `https://claude.ai/new?q=${encoded}`,
+    });
   });
 
-  it('copies the example input, the check prompt and the page prompt as written', () => {
+  it('puts the explanation below the steps: does, in, out, criteria, then the example result', () => {
     // ARRANGE
-    const view = workflowView(WORKFLOW, SIMPLE);
-    // ACT
-    const texts = ['copy-example', 'copy-check', 'copy-page'].map(
-      (id) => (textOf(view, 'b', id) as { text: string }).text,
-    );
-    // ASSERT
-    expect(texts).toEqual([TEXT, 'Check it', 'Make a page']);
-  });
-
-  it('copies the Simple page prompt in Simple and the Technical one in Technical', () => {
-    // ARRANGE
-    const pageIn = (options: typeof SIMPLE | typeof TECHNICAL) =>
-      (textOf(workflowView(WORKFLOW, options), 'b', 'copy-page') as { text: string }).text;
-    // ACT
-    const pages = [pageIn(SIMPLE), pageIn(TECHNICAL)];
-    // ASSERT
-    expect(pages).toEqual(['Make a page', 'Serve a page']);
-  });
-
-  it('orders the body as inverted pyramid: does, in, out, criteria, then the example result', () => {
-    // ARRANGE
-    const sections = jobOf(workflowView(WORKFLOW, SIMPLE), 'b').modal.sections;
+    const sections = jobOf(workflowView(WORKFLOW, SIMPLE), 'b').sections;
     // ACT
     const kinds = sections.map((s) => s.kind);
     // ASSERT
@@ -168,7 +149,7 @@ describe('success cases', () => {
     // ARRANGE
     const view = workflowView(WORKFLOW, SIMPLE);
     // ACT
-    const examples = jobOf(view, 'b').modal.examples;
+    const examples = jobOf(view, 'b').examples;
     // ASSERT
     expect(examples).toEqual([{ kind: 'text', text: 'hi' }]);
   });
@@ -179,33 +160,32 @@ describe('failure cases', () => {
     // ARRANGE
     const broken: Workflow = {
       ...WORKFLOW,
-      stages: [{ id: 's', name: 'S', jobs: [job('x', { exampleOutput: '```handoff\nkind: nope\n```' })] }],
+      stages: [{ id: 's', name: 'S', moves: [], jobs: [job('x', { exampleOutput: '```handoff\nkind: nope\n```' })] }],
     };
     // ACT
     const view = workflowView(broken, SIMPLE);
     // ASSERT
-    expect(jobOf(view, 'x').modal.examples).toEqual([]);
+    expect(jobOf(view, 'x').examples).toEqual([]);
   });
 });
 
 describe('edge cases', () => {
-  it('Technical falls back to the prompt for a job with no command and offers no full prompt', () => {
+  it('Technical falls back to the prompt for a job with no command', () => {
     // ARRANGE
     const view = workflowView(WORKFLOW, TECHNICAL);
     // ACT
-    const first = actionIds(view, 'a')[0];
+    const run = jobOf(view, 'a').steps[0];
     // ASSERT
-    expect(first).toBe('copy-prompt');
-    expect(jobOf(view, 'a').modal.sections.map((s) => s.kind)).not.toContain('fullPrompt');
+    expect(run?.prompt).toMatchObject({ kind: 'prompt', text: 'Prompt of a & more' });
   });
 
   it('shows no example section for a job without an example output', () => {
     // ARRANGE
     const view = workflowView(WORKFLOW, SIMPLE);
     // ACT
-    const kinds = jobOf(view, 'c').modal.sections.map((s) => s.kind);
+    const kinds = jobOf(view, 'c').sections.map((s) => s.kind);
     // ASSERT
     expect(kinds).not.toContain('example');
-    expect(jobOf(view, 'c').modal.examples).toEqual([]);
+    expect(jobOf(view, 'c').examples).toEqual([]);
   });
 });

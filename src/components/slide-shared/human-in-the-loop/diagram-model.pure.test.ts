@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chatNames, focalCriteria, jobRole, splitParked } from './diagram-model.pure';
+import { chatNames, jobRole, splitParked } from './diagram-model.pure';
 import type { Job, Stage, Workflow } from './workflow.types';
 
 const base: Job = {
@@ -11,7 +11,7 @@ const base: Job = {
   inputs: [],
   outputs: [],
   skills: [],
-  prompt: 'P',
+  run: { todo: 'Do.', prompt: 'P' },
 };
 const job = (over: Partial<Job>): Job => ({ ...base, ...over });
 const flow = (stages: Stage[], focalJobId?: string): Workflow => ({
@@ -37,7 +37,7 @@ describe('success cases', () => {
     const plan = job({ id: 'plan', dependsOn: ['venue'], inputs: ['r'] });
     const ask = job({ id: 'ask', dependsOn: ['pieces'], inputs: ['piece'], outputs: [{ id: 'a', kind: 'text' }] });
     const w = flow(
-      [pieces, ask, spec, chats, plan].map((each) => ({ id: each.id, name: each.id, jobs: [each] })),
+      [pieces, ask, spec, chats, plan].map((each) => ({ id: each.id, name: each.id, moves: [], jobs: [each] })),
       'spec',
     );
     // ACT
@@ -63,28 +63,18 @@ describe('success cases', () => {
     // ASSERT
     expect(names).toEqual(['Venue 1', 'Venue 2', 'Venue 3']);
   });
-
-  it('takes the focal criteria from the requirements of the spec the job returns', () => {
-    // ARRANGE
-    const spec = job({
-      exampleOutput:
-        '```handoff\nkind: spec\ngoal: G\nrequirements:\n  - 200 guests\n  - Step-free\noutOfScope: []\nslices: [S]\n```',
-    });
-    // ACT
-    const criteria = focalCriteria(spec);
-    // ASSERT
-    expect(criteria).toEqual(['200 guests', 'Step-free']);
-  });
 });
 
 describe('failure cases', () => {
-  it('has no focal criteria for a job whose example is not a spec', () => {
+  it('reads a job with no parked pieces, no fan-out and no focal id as an AI job', () => {
     // ARRANGE
-    const text = job({ exampleOutput: '```handoff\nkind: text\ntext: hi\n```' });
+    const plain = job({ id: 'plain', dependsOn: [], inputs: ['x'] });
+    const w = flow([{ id: 's', name: 's', moves: [], jobs: [plain] }]);
     // ACT
-    const criteria = [focalCriteria(text), focalCriteria(job({}))];
+    const role = jobRole(w, plain);
     // ASSERT
-    expect(criteria).toEqual([[], []]);
+    expect(role).not.toBe('focal');
+    expect(role).not.toBe('chats');
   });
 });
 

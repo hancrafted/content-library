@@ -7,12 +7,11 @@ import type { OutputWords } from './outputs/output-words';
 import type { ModalSection } from './workflow-view.pure';
 
 const SECTION_LABEL: Record<ModalSection['kind'], keyof UiWords> = {
-  does: 'sectionDoes',
+  does: 'sectionAbout',
   in: 'sectionIn',
   out: 'sectionOut',
   criteria: 'sectionCriteria',
   skills: 'sectionSkills',
-  fullPrompt: 'sectionFullPrompt',
   example: 'sectionExample',
 };
 
@@ -66,8 +65,6 @@ function bodyOf(section: ModalSection, examples: readonly Handoff[], chrome: Bod
   if (section.kind === 'does') return <p className="mt-1">{section.text}</p>;
   if (section.kind === 'skills') return <Links section={section} />;
   if (section.kind === 'example') return <Example examples={examples} chrome={chrome} />;
-  if (section.kind === 'fullPrompt')
-    return <pre className="mt-1 rounded-md bg-muted p-2 text-caption whitespace-pre-wrap">{section.text}</pre>;
   return <List items={section.items} />;
 }
 
@@ -77,10 +74,10 @@ interface ModalBodyProps {
   readonly chrome: BodyChrome;
 }
 
-/** The modal body in the order the view gives: what it does, in, out, criteria, skills, full prompt, example. */
+/** The explanation under the steps, in the order the view gives: what it does, in, out, criteria, skills, example. */
 export function ModalBody({ sections, examples, chrome }: ModalBodyProps) {
   return (
-    <div className="mt-2 flex min-h-0 flex-col gap-4 overflow-y-auto overscroll-contain pr-2">
+    <div className="flex flex-col gap-4">
       {sections.map((section) => (
         <section key={section.kind}>
           <h3 className="text-caption font-medium text-muted-foreground">

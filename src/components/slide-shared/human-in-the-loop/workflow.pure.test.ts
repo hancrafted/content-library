@@ -18,16 +18,16 @@ interface JobFx {
 interface JobWords {
   title: string;
   description: string;
-  prompt: string;
+  run: { todo: string; prompt: string; short?: string };
   exampleInput?: string;
   exampleOutput?: string;
 }
 interface Fixture {
-  config: { id: string; focalJob: string; stages: { id: string; move?: string; gate?: number; jobs: JobFx[] }[] };
+  config: { id: string; focalJob: string; stages: { id: string; moves?: string[]; gate?: number; jobs: JobFx[] }[] };
   words: {
     title: string;
     scenario: string;
-    stages: Record<string, { name: string; move?: string }>;
+    stages: Record<string, { name: string; moves?: Record<string, string>; card?: object }>;
     jobs: { ask: JobWords; write: JobWords; other?: JobWords };
   };
 }
@@ -39,7 +39,7 @@ function base(): Fixture {
     stages: [
       {
         id: 'first',
-        move: 'I',
+        moves: ['I'],
         jobs: [
           {
             id: 'ask',
@@ -68,14 +68,26 @@ function base(): Fixture {
       },
     ],
   };
-  const job = (prompt: string, extra: object) => ({ title: 'T', description: 'D', prompt, ...extra });
+  const job = (prompt: string, extra: object) => ({
+    title: 'T',
+    description: 'D',
+    run: { todo: 'Do it.', prompt },
+    ...extra,
+  });
   const words = {
     title: 'Demo',
     scenario: 'One sentence.',
-    stages: { first: { name: 'First', move: 'Ask' }, second: { name: 'Second' } },
+    stages: {
+      first: {
+        name: 'First',
+        moves: { I: 'You are asked first.' },
+        card: { label: 'Card', lines: ['One line'], status: 'Signed off' },
+      },
+      second: { name: 'Second' },
+    },
     jobs: {
       ask: job('Ask me. Reply with a handoff block.', { exampleOutput: TEXT }),
-      write: job('Use {{answers}}. Reply with a handoff block.', { exampleInput: TEXT, exampleOutput: TEXT }),
+      write: job('Use the answers. Reply with a handoff block.', { exampleInput: TEXT, exampleOutput: TEXT }),
     },
   };
   return { config, words };
@@ -154,22 +166,49 @@ describe('failure cases', () => {
     // ARRANGE
     const { config, words } = base();
     config.stages[1]!.jobs[0]!.inputs = ['nowhere'];
-    words.jobs.write.prompt = 'Use {{nowhere}}.';
     // ACT
     const problems = problemsOf(load(config, words));
     // ASSERT
     expect(problems.some((problem) => problem.includes('nowhere'))).toBe(true);
   });
 
-  it('reports an input with no paste slot and a slot naming no input', () => {
+  it('reports a prompt that still holds a {{slot}}', () => {
     // ARRANGE
     const { config, words } = base();
-    words.jobs.write.prompt = 'Use {{stranger}}.';
+    words.jobs.write.run.prompt = 'Use {{answers}}.';
     // ACT
     const problems = problemsOf(load(config, words));
     // ASSERT
-    expect(problems.some((problem) => problem.includes('{{answers}}'))).toBe(true);
-    expect(problems.some((problem) => problem.includes('{{stranger}}'))).toBe(true);
+    expect(problems.some((problem) => problem.includes('"write"') && problem.includes('{{slot}}'))).toBe(true);
+  });
+
+  it('reports a move without its tooltip, an unknown move and a focal stage without a card', () => {
+    // ARRANGE
+    const { config, words } = base();
+    config.stages[0]!.moves = ['I', 'R', 'Z'];
+    delete words.stages.first.card;
+    // ACT
+    const problems = problemsOf(load(config, words));
+    // ASSERT
+    expect(problems.some((problem) => problem.includes('moves.R'))).toBe(true);
+    expect(problems.some((problem) => problem.includes('"Z"'))).toBe(true);
+    expect(problems.some((problem) => problem.includes('has no card'))).toBe(true);
+  });
+
+  it('reads the stage moves in BRIEF order with their tooltips, and the card', () => {
+    // ARRANGE
+    const { config, words } = base();
+    config.stages[0]!.moves = ['R', 'B'];
+    words.stages.first.moves = { R: 'Why R', B: 'Why B' };
+    // ACT
+    const result = load(config, words);
+    // ASSERT
+    const first = 'workflow' in result ? result.workflow.stages[0] : undefined;
+    expect(first?.moves).toEqual([
+      { letter: 'B', why: 'Why B' },
+      { letter: 'R', why: 'Why R' },
+    ]);
+    expect(first?.card).toEqual({ label: 'Card', lines: ['One line'], status: 'Signed off' });
   });
 
   it('reports an example that does not parse for its kind', () => {
@@ -195,7 +234,7 @@ describe('failure cases', () => {
   it('reports a page that lacks its Simple or its Technical prompt', () => {
     // ARRANGE
     const { config, words } = base();
-    Object.assign(words.jobs.write, { page: { simple: 'One HTML file.' } });
+    Object.assign(words.jobs.write, { page: { todo: 'Do.', simple: 'One HTML file.' } });
     // ACT
     const problems = problemsOf(load(config, words));
     // ASSERT

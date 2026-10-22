@@ -60,7 +60,7 @@ describe('failure cases', () => {
   it('throws every problem of a Slide override that breaks the Workflow', () => {
     // ARRANGE
     const id = WORKFLOW_IDS[0];
-    const broken = { jobs: { spec: { prompt: '' } } };
+    const broken = { jobs: { spec: { run: { prompt: '' } } } };
     // ACT
     const load = () => workflowFor(id, 'en', broken);
     // ASSERT
@@ -76,7 +76,7 @@ describe('edge cases', () => {
     const en = uiWords('en');
     const de = uiWords('de');
     // ASSERT
-    expect(en.modeTry).not.toBe(de.modeTry);
+    expect(en.tryIt).not.toBe(de.tryIt);
     expect(workflowFor(id, 'en')).toBe(workflowFor(id, 'en'));
     expect(uiWords('en')).toBe(uiWords('en'));
     expect(outputWords('de')).toBe(outputWords('de'));

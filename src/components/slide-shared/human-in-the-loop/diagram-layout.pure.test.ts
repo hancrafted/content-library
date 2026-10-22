@@ -11,9 +11,9 @@ const job = {
   inputs: [],
   outputs: [],
   skills: [],
-  prompt: 'P',
+  run: { todo: 'Do.', prompt: 'P' },
 } as const;
-const stage = (id: string, fanOut?: number): Stage => ({ id, name: id, jobs: [{ ...job, id, fanOut }] });
+const stage = (id: string, fanOut?: number): Stage => ({ id, name: id, moves: [], jobs: [{ ...job, id, fanOut }] });
 
 describe('success cases', () => {
   it('draws the fan of three exactly as the venue pipeline drew it', () => {

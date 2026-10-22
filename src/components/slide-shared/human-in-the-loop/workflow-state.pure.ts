@@ -5,18 +5,17 @@ import type { Workflow } from './workflow.types';
  * component: nothing goes to the URL (FE-001) or to storage.
  */
 
-/** Watch is today's diagram; Try it yourself makes every job open its modal. */
-export type Mode = 'watch' | 'try';
 /** Simple copies long prompts; Technical copies the matching `/skill` command. */
 export type Level = 'simple' | 'technical';
 
 export interface WorkflowState {
   /** The shown Workflow: an authored one, or the uploaded one's id. */
   readonly workflowId: string;
-  readonly mode: Mode;
   readonly level: Level;
-  /** The job whose modal is open, if any. */
-  readonly openJobId: string | null;
+  /** The stage whose "Try it" modal is open, if any. */
+  readonly openStageId: string | null;
+  /** Ids of the jobs whose interview prompt runs as the short grill; the rest run the full one. */
+  readonly shortJobIds: readonly string[];
   /** Ids of the tickets ticked off in the ticket graph. */
   readonly ticked: readonly string[];
   /** A Workflow the viewer uploaded and that is shown instead of an authored one. */
@@ -28,23 +27,22 @@ export interface WorkflowState {
 /** What a Slide's Preset decides at the start. */
 export interface Start {
   readonly workflowId: string;
-  readonly mode: Mode;
   readonly level: Level;
 }
 
 /** What a part can ask the parent for. */
 export type WorkflowEvent =
-  | { readonly type: 'mode'; readonly mode: Mode }
   | { readonly type: 'level'; readonly level: Level }
   | { readonly type: 'workflow'; readonly workflowId: string }
-  | { readonly type: 'open'; readonly jobId: string }
+  | { readonly type: 'open'; readonly stageId: string }
   | { readonly type: 'close' }
+  | { readonly type: 'short'; readonly jobId: string }
   | { readonly type: 'tick'; readonly ticketId: string }
   | { readonly type: 'upload'; readonly workflow: Workflow }
   | { readonly type: 'upload-failed'; readonly problems: readonly string[] };
 
 export function createState(start: Start): WorkflowState {
-  return { ...start, openJobId: null, ticked: [], uploaded: null, uploadProblems: [] };
+  return { ...start, openStageId: null, shortJobIds: [], ticked: [], uploaded: null, uploadProblems: [] };
 }
 
 type Handlers = {
@@ -54,21 +52,19 @@ type Handlers = {
   ) => WorkflowState;
 };
 
-/** What changing the shown Workflow starts over: the open job, the ticks, any upload and its problems. */
-const FRESH = { openJobId: null, ticked: [], uploaded: null, uploadProblems: [] } as const;
+/** What changing the shown Workflow starts over: the open stage, the short grills, the ticks, any upload and its problems. */
+const FRESH = { openStageId: null, shortJobIds: [], ticked: [], uploaded: null, uploadProblems: [] } as const;
+
+const toggled = (ids: readonly string[], id: string): readonly string[] =>
+  ids.includes(id) ? ids.filter((each) => each !== id) : [...ids, id];
 
 const HANDLERS: Handlers = {
-  mode: (state, { mode }) => ({ ...state, mode }),
   level: (state, { level }) => ({ ...state, level }),
   workflow: (state, { workflowId }) => ({ ...state, ...FRESH, workflowId }),
-  open: (state, { jobId }) => ({ ...state, openJobId: jobId }),
-  close: (state) => (state.openJobId === null ? state : { ...state, openJobId: null }),
-  tick: (state, { ticketId }) => ({
-    ...state,
-    ticked: state.ticked.includes(ticketId)
-      ? state.ticked.filter((id) => id !== ticketId)
-      : [...state.ticked, ticketId],
-  }),
+  open: (state, { stageId }) => ({ ...state, openStageId: stageId }),
+  close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null }),
+  short: (state, { jobId }) => ({ ...state, shortJobIds: toggled(state.shortJobIds, jobId) }),
+  tick: (state, { ticketId }) => ({ ...state, ticked: toggled(state.ticked, ticketId) }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
   'upload-failed': (state, { problems }) => ({ ...state, uploadProblems: problems }),
 };

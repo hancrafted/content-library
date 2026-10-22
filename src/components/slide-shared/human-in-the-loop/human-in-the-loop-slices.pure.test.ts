@@ -15,34 +15,15 @@ const job = {
   inputs: [],
   outputs: [],
   skills: [],
-  prompt: 'P',
+  run: { todo: 'Do.', prompt: 'P' },
 } as const;
 const flow = (id: string): Workflow => ({
   id,
   title: id,
   scenario: 'S',
-  stages: [{ id: 's', name: 'S', jobs: [job] }],
+  stages: [{ id: 's', name: 'S', moves: [], jobs: [job] }],
 });
-const labels = {
-  modeWatch: 'a',
-  modeTry: 'b',
-  levelSimple: 'c',
-  levelTechnical: 'd',
-  workflow: 'e',
-  close: 'f',
-  copied: 'g',
-  signedOff: 'h',
-  download: 'i',
-  upload: 'j',
-};
-const words = {
-  ...labels,
-  ...Object.fromEntries(
-    'copyPrompt copyCommand openChatgpt openClaude copyExample copyCheck copyPage sectionDoes sectionIn sectionOut sectionCriteria sectionSkills sectionFullPrompt sectionExample setup newTab'
-      .split(' ')
-      .map((key) => [key, key]),
-  ),
-} as UiWords;
+const words = {} as UiWords;
 const outputWords = {} as OutputWords;
 const data: HumanInTheLoopData = {
   workflows: [flow('one'), flow('two')],
@@ -51,8 +32,8 @@ const data: HumanInTheLoopData = {
   words,
   outputWords,
   controls: {},
-  mode: 'watch',
   level: 'simple',
+  readonly: false,
 };
 const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   data,
@@ -60,7 +41,7 @@ const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   workflow,
   view: workflowView(workflow, state),
 });
-const start = { workflowId: data.workflowId, mode: data.mode, level: data.level };
+const start = { workflowId: data.workflowId, level: data.level };
 
 describe('success cases', () => {
   it('shows the chosen Workflow, and an uploaded one over it', () => {
@@ -75,33 +56,35 @@ describe('success cases', () => {
     expect(uploaded).toBe(mine);
   });
 
-  it('gives the modal the open job and each callback sends its own event', () => {
+  it('gives the modal the open stage and each callback sends its own event', () => {
     // ARRANGE
     const sent: WorkflowEvent[] = [];
     const on = callbacksFor((event) => sent.push(event));
-    const state = { ...createState(start), openJobId: job.id };
+    const state = { ...createState(start), openStageId: 's', shortJobIds: [job.id] };
     // ACT
     const slices = slicesOf(shown(flow('two'), state), on);
-    slices.diagram.onOpenJob(job.id);
+    slices.diagram.onOpenStage('s');
+    slices.modal.onShort(job.id);
     slices.modal.onClose();
     // ASSERT
-    expect(slices.modal.card?.id).toBe(job.id);
+    expect(slices.modal.stage?.id).toBe('s');
+    expect(slices.modal.shortJobIds).toEqual([job.id]);
     expect(slices.modal.outputWords).toBe(outputWords);
-    expect(sent).toEqual([{ type: 'open', jobId: job.id }, { type: 'close' }]);
+    expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'short', jobId: job.id }, { type: 'close' }]);
   });
 });
 
 describe('failure cases', () => {
-  it('gives no modal card for a job id the Workflow does not have', () => {
+  it('gives no modal for a stage id the Workflow does not have', () => {
     // ARRANGE
-    const state = { ...createState(start), openJobId: 'ghost' };
+    const state = { ...createState(start), openStageId: 'ghost' };
     // ACT
     const slices = slicesOf(
       shown(flow('two'), state),
       callbacksFor(() => undefined),
     );
     // ASSERT
-    expect(slices.modal.card).toBeNull();
+    expect(slices.modal.stage).toBeNull();
   });
 
   it('turns a file that is not a Workflow into an upload-failed event with its problems', () => {
@@ -115,22 +98,20 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('hands each part its slice of one view: the diagram the view, the toolbar its setup', () => {
+  it('hands the parts the readonly flag of the Preset, so none shows a Try it button or the Technical toggle', () => {
     // ARRANGE
-    const state = { ...createState(start), mode: 'try', level: 'technical' } as const;
-    const workflow = { ...flow('two'), setup: 'install it' };
-    const view = workflowView(workflow, state);
+    const state = createState(start);
+    const workflow = flow('two');
     // ACT
     const slices = slicesOf(
-      { data, state, workflow, view },
+      { data: { ...data, readonly: true }, state, workflow, view: workflowView(workflow, state) },
       callbacksFor(() => undefined),
     );
     // ASSERT
-    expect(slices.diagram.view).toBe(view);
-    expect(slices.toolbar.setup).toBe('install it');
+    expect([slices.diagram.readonly, slices.toolbar.readonly]).toEqual([true, true]);
   });
 
-  it('opens no modal while no job is open, and hands no part the state or dispatch', () => {
+  it('opens no modal while no stage is open, and hands no part the state or dispatch', () => {
     // ARRANGE
     const state = createState(start);
     // ACT
@@ -139,7 +120,7 @@ describe('edge cases', () => {
       callbacksFor(() => undefined),
     );
     // ASSERT
-    expect(slices.modal.card).toBeNull();
+    expect(slices.modal.stage).toBeNull();
     for (const part of Object.values(slices)) expect(Object.keys(part)).not.toContain('dispatch');
     for (const part of Object.values(slices)) expect(Object.keys(part)).not.toContain('state');
   });

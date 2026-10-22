@@ -26,13 +26,27 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('drops the Slide initials for German, here and nowhere else', () => {
+  it('keeps the Slide initials for German too: the letters stay English, only the tooltips are German', () => {
     // ARRANGE
     const props = { ...BASE, locale: 'de' };
     // ACT
     const data = humanInTheLoopData(props);
     // ASSERT
-    expect(data.diagram?.initials).toBe(false);
+    expect(data.diagram?.initials).toBe(true);
+    expect(data.workflows[0]?.stages[0]?.moves[0]).toMatchObject({
+      letter: 'B',
+      why: expect.stringContaining('Zerlege'),
+    });
+  });
+
+  it('is not readonly unless the Preset says so', () => {
+    // ARRANGE
+    const props = { workflow: 'summer-party', locale: 'en' } as const;
+    // ACT
+    const open = humanInTheLoopData(props).readonly;
+    const locked = humanInTheLoopData({ ...props, readonly: true }).readonly;
+    // ASSERT
+    expect([open, locked]).toEqual([false, true]);
   });
 });
 

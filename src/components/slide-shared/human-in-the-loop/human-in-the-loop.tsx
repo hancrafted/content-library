@@ -2,7 +2,7 @@ import { HumanInTheLoopClient } from './human-in-the-loop.client';
 import type { DiagramSlots, HumanInTheLoopData, WorkflowSlideWords } from './human-in-the-loop.types';
 import type { ControlMap } from './toolbar-controls.pure';
 import { WORKFLOW_IDS, outputWords, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
-import type { Level, Mode } from './workflow-state.pure';
+import type { Level } from './workflow-state.pure';
 
 /*
  * The human-in-the-loop workflow, a Shared visual. A Slide names a Workflow by id and its own words; the Workflow, the
@@ -17,11 +17,12 @@ export interface HumanInTheLoopProps {
   readonly locale: string;
   /** Words a Slide says differently from the visual's own. */
   readonly words?: WorkflowSlideWords;
-  readonly mode?: Mode;
   readonly level?: Level;
+  /** Hides every "Try it" button and the Technical toggle, so the Slide shows the diagram alone. */
+  readonly readonly?: boolean;
   /** The Preset's overrides of the toolbar's control registry, e.g. `{ picker: { show: false } }`. */
   readonly controls?: ControlMap;
-  /** The Slide's own markers, notes, popovers and words on the diagram; this entry alone drops its initials for German. */
+  /** The Slide's own markers, notes, popovers and words on the diagram */
   readonly diagram?: DiagramSlots;
 }
 
@@ -32,8 +33,8 @@ export function humanInTheLoopData({
   workflow: id,
   locale,
   words,
-  mode = 'watch',
   level = 'simple',
+  readonly = false,
   controls,
   diagram,
 }: HumanInTheLoopProps): HumanInTheLoopData {
@@ -45,9 +46,9 @@ export function humanInTheLoopData({
     words: { ...uiWords(lang), ...words?.ui },
     outputWords: outputWords(lang),
     controls: controls ?? {},
-    mode,
     level,
-    diagram: diagram && { ...diagram, initials: diagram.initials === true && lang === 'en' },
+    readonly,
+    diagram,
   };
 }
 
