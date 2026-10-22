@@ -1,4 +1,4 @@
-import { PURPOSES, RUNTIMES } from './workflow-schema.types';
+import { PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
 
 /*
  * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type
@@ -22,7 +22,13 @@ const enumOf = (of: readonly string[]): Spec => ({ t: 'enum', of });
 const list = (of: Spec, min = 0): Spec => ({ t: 'list', of, min });
 const obj = (fields: Record<string, Spec>, optional: readonly string[] = []): Spec => ({ t: 'obj', fields, optional });
 
-const section = obj({ heading: str, purpose: enumOf(PURPOSES), explain: str, text: str }, ['purpose', 'explain']);
+const ids = list(str, 1);
+const section = obj({ heading: str, purpose: enumOf(PURPOSES), explain: str, techniques: ids, text: str }, [
+  'purpose',
+  'explain',
+  'techniques',
+]);
+const technique = obj({ id: str, tier: enumOf(TIERS), title: str, explain: str });
 const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool }, [
   'sample',
   'free',
@@ -38,7 +44,7 @@ const task = obj(
     instructions: str,
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
-    details: obj({ why: str, example: strs, goodLooksLike: list(str, 1) }),
+    details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
   },
   ['fanOut', 'review', 'instructions'],
 );
@@ -61,6 +67,7 @@ export const FILE_SPEC: Spec = obj({
   title: str,
   scenario: obj({ summary: str, facts: list(str, 1) }),
   purposes: { t: 'rec', of: str, keys: PURPOSES },
+  techniques: list(technique, 1),
   reviewer: obj({ sections: list(section, 1) }),
   templates: { t: 'rec', of: str },
   stages: list(stage, 1),

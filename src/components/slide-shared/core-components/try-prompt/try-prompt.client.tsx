@@ -9,7 +9,7 @@ import { PromptBody } from './prompt-body.client';
 import { joinPrompt, type PromptSection, type SlotValues } from './prompt-sections.pure';
 import type { PromptKit, PromptView } from './try-prompt.types';
 
-export type { PromptSection, PromptSlot } from './prompt-sections.pure';
+export type { PromptSection, PromptSlot, PromptTechnique } from './prompt-sections.pure';
 export type { PromptKit, TryPromptWords } from './try-prompt.types';
 
 /*
@@ -122,6 +122,7 @@ export function TryPrompt(props: TryPromptProps) {
         instructions={prompt.instructions}
         parts={parts}
         purposes={prompt.purposes ?? {}}
+        techniques={prompt.techniques ?? []}
         values={current}
         words={kit.words}
         onValue={onValue}

@@ -47,6 +47,7 @@ function viewOf(
     instructions,
     slots: parts.slots,
     purposes: file.purposes,
+    techniques: file.techniques,
   };
 }
 

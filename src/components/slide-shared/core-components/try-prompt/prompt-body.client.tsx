@@ -4,7 +4,15 @@ import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 import { useId, useState, type ReactNode } from 'react';
 import { Tip } from '../tip/tip.client';
-import { explanation, joinPrompt, sectionText, type PromptParts, type SlotValues } from './prompt-sections.pure';
+import {
+  explanation,
+  joinPrompt,
+  sectionText,
+  techniquesOf,
+  type PromptParts,
+  type PromptTechnique,
+  type SlotValues,
+} from './prompt-sections.pure';
 import { SlotInput } from './slot-input.client';
 import type { TryPromptWords } from './try-prompt.types';
 
@@ -14,15 +22,41 @@ import type { TryPromptWords } from './try-prompt.types';
  * purpose marker). Nothing in it sets a width: text wraps, so the box never outgrows the modal.
  */
 
-/** The marker beside a section's H2: its purpose, with the explanation as the tooltip. */
-function PurposeMarker({ purpose, text }: { purpose: string; text: string }) {
+/** The tier's word: the caller's, or the tier's own key. */
+function tierWord(tier: string, words: TryPromptWords): string {
+  return (tier === 'basic' ? words.tierBasic : tier === 'advanced' ? words.tierAdvanced : undefined) ?? tier;
+}
+
+/** The techniques of a section, one line each: title, tier, and what it is. */
+function TechniqueLines({ techniques, words }: Pick<MarkerProps, 'techniques' | 'words'>) {
   return (
-    <Tip text={text} place="below" align="start">
+    <ul className="mt-1 list-none space-y-1 p-0">
+      {techniques.map((each) => (
+        <li key={each.id}>
+          <strong>{each.title}</strong> ({tierWord(each.tier, words)}): {each.explain}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** The marker beside a section's H2: its purpose, with the explanation and the section's techniques as the tooltip. */
+function PurposeMarker({ purpose, text, techniques, words }: MarkerProps) {
+  const spoken = [text, ...techniques.map((each) => `${tierWord(each.tier, words)}: ${each.title}. ${each.explain}`)];
+  const tip = (
+    <>
+      {text}
+      {techniques.length > 0 && <TechniqueLines techniques={techniques} words={words} />}
+    </>
+  );
+  return (
+    <Tip text={tip} place="below" align="start">
       <span
         tabIndex={0}
         role="note"
-        aria-label={`${purpose}: ${text}`}
+        aria-label={`${purpose}: ${spoken.join(' ')}`}
         data-purpose={purpose}
+        data-techniques={techniques.length > 0 ? techniques.map((each) => each.id).join(' ') : undefined}
         className="inline-flex min-h-6 cursor-help items-center rounded-full border border-border px-2 text-caption text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {purpose}
@@ -31,26 +65,44 @@ function PurposeMarker({ purpose, text }: { purpose: string; text: string }) {
   );
 }
 
+interface MarkerProps {
+  readonly purpose: string;
+  readonly text: string;
+  readonly techniques: readonly PromptTechnique[];
+  readonly words: TryPromptWords;
+}
+
 interface BodyProps {
   readonly id: string;
   readonly open: boolean;
   readonly parts: PromptParts;
   readonly purposes: Readonly<Record<string, string>>;
+  readonly techniques: readonly PromptTechnique[];
   readonly instructions?: string;
   readonly values: SlotValues;
   readonly words: TryPromptWords;
   readonly onValue: (key: string, value: string) => void;
 }
 
-function Sections({ parts, purposes, values }: Pick<BodyProps, 'parts' | 'purposes' | 'values'>) {
+type SectionsProps = Pick<BodyProps, 'parts' | 'purposes' | 'techniques' | 'values' | 'words'>;
+
+function Sections({ parts, purposes, techniques, values, words }: SectionsProps) {
   return parts.sections.map((section, at) => {
     const why = explanation(section, purposes);
+    const marker = why !== undefined && (
+      <PurposeMarker
+        purpose={section.purpose!}
+        text={why}
+        techniques={techniquesOf(section, techniques)}
+        words={words}
+      />
+    );
     return (
       <section key={at} data-section={at} className="flex min-w-0 flex-col gap-1">
         {section.heading !== undefined && (
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-body font-semibold">{section.heading}</h2>
-            {why !== undefined && <PurposeMarker purpose={section.purpose!} text={why} />}
+            {marker}
           </div>
         )}
         <p className="text-caption wrap-anywhere whitespace-pre-wrap">
@@ -93,7 +145,13 @@ function Panel({ name, title, initiallyOpen, children }: PanelProps) {
 }
 
 /** The panel of what the visitor does: the step's instructions, then its slot fields. */
-function Todo({ instructions, parts, values, words, onValue }: Omit<BodyProps, 'id' | 'open' | 'purposes'>) {
+function Todo({
+  instructions,
+  parts,
+  values,
+  words,
+  onValue,
+}: Omit<BodyProps, 'id' | 'open' | 'purposes' | 'techniques'>) {
   return (
     <Panel name="todo" title={words.whatToDo} initiallyOpen>
       {instructions !== undefined && <p className="text-caption wrap-anywhere">{instructions}</p>}
@@ -111,7 +169,7 @@ function Todo({ instructions, parts, values, words, onValue }: Omit<BodyProps, '
   );
 }
 
-export function PromptBody({ id, open, purposes, ...rest }: BodyProps) {
+export function PromptBody({ id, open, purposes, techniques, ...rest }: BodyProps) {
   const { parts, values, words, instructions } = rest;
   const [only] = parts.sections;
   const plain = parts.sections.length === 1 && only?.heading === undefined;
@@ -129,7 +187,7 @@ export function PromptBody({ id, open, purposes, ...rest }: BodyProps) {
         {plain ? (
           <p className="text-caption wrap-anywhere whitespace-pre-wrap">{joinPrompt(parts, values)}</p>
         ) : (
-          <Sections parts={parts} purposes={purposes} values={values} />
+          <Sections parts={parts} purposes={purposes} techniques={techniques} values={values} words={words} />
         )}
       </Panel>
     </div>

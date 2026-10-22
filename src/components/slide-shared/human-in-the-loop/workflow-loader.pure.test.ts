@@ -16,6 +16,7 @@ function base() {
     title: 'Demo',
     scenario: { summary: 'A demo.', facts: ['A fact'] },
     purposes,
+    techniques: [{ id: 'delimiters', tier: 'basic', title: 'Delimiters', explain: 'Fence pasted text.' }],
     reviewer: { sections: [{ heading: 'Inputs', purpose: 'context', text: '{{inputs}} {{checks}} {{template}}' }] },
     templates: {
       plan: '---\nkind: plan\n---\n# <Title>\n## Pieces\n',
@@ -274,6 +275,54 @@ describe('failure cases', () => {
     const problems = problemsOf(load(change));
     // ASSERT
     expect(problems).toMatch(/purpose is "vibes"/);
+  });
+
+  it('rejects a catalogue entry without a tier or with an unknown one', () => {
+    // ARRANGE
+    const none = (file: File) => void delete (file.techniques[0] as { tier?: string }).tier;
+    const odd = (file: File) => void (file.techniques[0]!.tier = 'expert');
+    // ACT
+    const r0 = problemsOf(load(none));
+    const r1 = problemsOf(load(odd));
+    // ASSERT
+    expect(r0).toMatch(/techniques\[0\]\.tier is missing/);
+    expect(r1).toMatch(/tier is "expert"/);
+  });
+
+  it('rejects a reference to an unknown technique id, in a section, the reviewer and the details', () => {
+    // ARRANGE
+    const inSection = (file: File) => void Object.assign(research(file).do.simple[0]!, { techniques: ['nope'] });
+    const inReviewer = (file: File) => void Object.assign(file.reviewer.sections[0]!, { techniques: ['nope'] });
+    const inDetails = (file: File) => void Object.assign(research(file).details, { techniques: ['nope'] });
+    // ACT
+    const [inSections, inReviewers, inDetailsOf] = [inSection, inReviewer, inDetails].map((change) =>
+      problemsOf(load(change)),
+    );
+    // ASSERT
+    expect(inSections).toMatch(/unknown technique "nope"/);
+    expect(inReviewers).toMatch(/reviewer.*unknown technique "nope"/);
+    expect(inDetailsOf).toMatch(/task "research".*unknown technique "nope"/);
+  });
+
+  it('rejects a technique id used twice', () => {
+    // ARRANGE
+    const twice = (file: File) => void file.techniques.push({ ...file.techniques[0]! });
+    // ACT
+    const problems = problemsOf(load(twice));
+    // ASSERT
+    expect(problems).toMatch(/technique id "delimiters" is used twice/);
+  });
+
+  it('accepts a section and details that name a catalogue technique', () => {
+    // ARRANGE
+    const ok = (file: File) => {
+      Object.assign(research(file).do.simple[0]!, { techniques: ['delimiters'] });
+      Object.assign(research(file).details, { techniques: ['delimiters'] });
+    };
+    // ACT
+    const problems = problemsOf(load(ok));
+    // ASSERT
+    expect(problems).toBe('');
   });
 
   it('rejects an unknown marker, and {{n}} outside a fan-out', () => {

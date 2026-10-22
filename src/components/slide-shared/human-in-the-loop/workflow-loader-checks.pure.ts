@@ -3,7 +3,7 @@ import { handoffProblems, readTemplate } from './markdown-handoff.pure';
 import { unknownMarkers } from './workflow-markers.pure';
 import { namesBefore, namesOf, tasksOf, type Producer } from './workflow-outputs.pure';
 import { slotSample } from './workflow-sample.pure';
-import type { SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
+import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * The meaning checks of a Workflow file whose shape already holds: templates, ids, slots naming earlier outputs,
@@ -33,6 +33,24 @@ export function idProblems(file: WorkflowFile): string[] {
     ...tasks
       .filter((task) => task.fanOut !== undefined && task.fanOut < 2)
       .map((task) => `Task "${task.id}" has fanOut ${task.fanOut}; it must be at least 2.`),
+  ];
+}
+
+/** Technique ids used twice in the catalogue, and every reference to an id the catalogue lacks. */
+export function techniqueProblems(file: WorkflowFile): string[] {
+  const known = new Set(file.techniques.map((entry) => entry.id));
+  const unknown = (where: string, ids: readonly string[] | undefined): string[] =>
+    (ids ?? []).filter((id) => !known.has(id)).map((id) => `${where} names the unknown technique "${id}".`);
+  const sections = (where: string, list: readonly SectionDef[]): string[] =>
+    list.flatMap((section) => unknown(`Section "${section.heading}" of ${where}`, section.techniques));
+  return [
+    ...dupes(file.techniques.map((entry) => entry.id)).map((id) => `The technique id "${id}" is used twice.`),
+    ...sections('the reviewer', file.reviewer.sections),
+    ...tasksOf(file).flatMap((task) => [
+      ...sections(`the simple prompt of task "${task.id}"`, task.do.simple),
+      ...sections(`the technical prompt of task "${task.id}"`, task.do.technical),
+      ...unknown(`The details of task "${task.id}"`, task.details.techniques),
+    ]),
   ];
 }
 

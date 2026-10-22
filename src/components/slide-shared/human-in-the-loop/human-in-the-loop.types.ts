@@ -50,6 +50,10 @@ export interface UiWords {
   /** The tooltip of a prompt's show/hide toggle. */
   readonly toggleTip: string;
   readonly sectionWhy: string;
+  /** The heading of a task's techniques under why it matters, and the names of the two tiers. */
+  readonly sectionTechniques: string;
+  readonly tierBasic: string;
+  readonly tierAdvanced: string;
   /** The two panels of an opened prompt, a slot field's eye toggle tooltips, and the empty field's hint (`{title}`, `{lines}`). */
   readonly whatToDo: string;
   readonly preview: string;

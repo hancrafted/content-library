@@ -37,6 +37,17 @@ describe('success cases', () => {
     expect(technical.map((step) => step.id)).toEqual(['do', 'review']);
   });
 
+  it('hands the details the techniques of a task, resolved from the catalogue with their tier', () => {
+    // ARRANGE
+    const view = workflowView(WORKFLOW, SIMPLE);
+    // ACT
+    const venue = jobOf(view, 'venue').task.techniques;
+    // ASSERT
+    expect(venue.map((each) => each.id)).toContain('fresh-context');
+    expect(venue.find((each) => each.id === 'fresh-context')).toMatchObject({ tier: 'advanced' });
+    expect(venue.every((each) => each.title && each.explain)).toBe(true);
+  });
+
   it('hands the details one example per chat for a fan-out and one otherwise', () => {
     // ARRANGE
     const chats = 3;

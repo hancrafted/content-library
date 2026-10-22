@@ -424,6 +424,30 @@ describe('success cases', () => {
     TIMEOUT,
   );
 
+  it(
+    'lists the techniques of a task under why it matters, and those of a section with their tier in its purpose tooltip',
+    async () => {
+      // ARRANGE
+      await open('light');
+      // ACT
+      await openStage(/Research/);
+      const listed = await js<string[]>(
+        `[...document.querySelectorAll('${MODAL} [data-column="details"] [data-technique]')].map((el) => el.dataset.technique + ':' + el.dataset.tier)`,
+      );
+      const tip = await js<string>(
+        `document.querySelector('${MODAL} [data-purpose][data-techniques~="cite-sources"]').closest('[data-tip-host]').querySelector('[data-tip-text]').textContent`,
+      );
+      const plain = await count(`${MODAL} [data-purpose]:not([data-techniques])`);
+      // ASSERT
+      expect(listed).toEqual(
+        expect.arrayContaining(['fresh-context:advanced', 'cite-sources:basic', 'separate-verification:advanced']),
+      );
+      expect(tip).toMatch(/Cite sources \(Basic\)/);
+      expect(plain).toBeGreaterThan(0);
+    },
+    TIMEOUT,
+  );
+
   it.each([
     ['English', { url: URL_UNDER_TEST, title: /Try it$/, pills: ['Summer party', 'Vacation'] }],
     ['German', { url: GERMAN_URL, title: /Ausprobieren$/, pills: ['Sommerfest', 'Urlaub'] }],

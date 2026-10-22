@@ -1,4 +1,4 @@
-import type { PromptSection, PromptSlot } from './prompt-sections.pure';
+import type { PromptSection, PromptSlot, PromptTechnique } from './prompt-sections.pure';
 
 /** The prompt a TryPrompt shows and copies: a prompt, or a one-line command, with an optional short variant. */
 export interface PromptView {
@@ -14,6 +14,8 @@ export interface PromptView {
   readonly slots?: readonly PromptSlot[];
   /** One explanation per purpose; a section's marker shows its purpose's, or its own `explain`. */
   readonly purposes?: Readonly<Record<string, string>>;
+  /** The technique catalogue the sections' `techniques` name. */
+  readonly techniques?: readonly PromptTechnique[];
 }
 
 /** The words a TryPrompt shows; it owns none (the caller passes them in, in the visitor's language). */
@@ -36,6 +38,9 @@ export interface TryPromptWords {
   readonly preview: string;
   readonly showFull: string;
   readonly collapse: string;
+  /** The names of the two technique tiers; a tier without a word shows its own key. */
+  readonly tierBasic?: string;
+  readonly tierAdvanced?: string;
   /** The hint of an empty field, with `{title}` and `{lines}` of its sample filled in; `sampleHintOne` for one line. */
   readonly sampleHint: string;
   readonly sampleHintOne: string;

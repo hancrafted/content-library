@@ -26,6 +26,16 @@ describe('success cases', () => {
     expect(prompt.slots?.map((slot) => slot.id)).toEqual(['tickets']);
   });
 
+  it('hands the prompt the technique catalogue and keeps the technique ids of its sections', () => {
+    // ARRANGE
+    const research = task('venue');
+    // ACT
+    const prompt = doPrompt(file, research, { runtime: 'simple', chat: 1 });
+    // ASSERT
+    expect(prompt.techniques).toEqual(file.techniques);
+    expect(prompt.sections?.some((section) => (section.techniques ?? []).length > 0)).toBe(true);
+  });
+
   it('shows the sample of an empty slot in the joined prompt', () => {
     // ARRANGE
     const research = task('venue');

@@ -28,6 +28,9 @@ ui:
   chatTip: 'Der Prompt für Chat {n}: in einen eigenen, frischen Chat einfügen'
   toggleTip: Den Text ein- oder ausblenden
   sectionWhy: Warum es zählt
+  sectionTechniques: Diese Techniken übt es
+  tierBasic: Basis
+  tierAdvanced: Fortgeschritten
   whatToDo: Was zu tun ist
   preview: Prompt-Vorschau
   showFull: Ganzen Text anzeigen

@@ -6,6 +6,7 @@ import {
   type PromptKit,
   type PromptSection,
   type PromptSlot,
+  type PromptTechnique,
   type TryPromptWords,
 } from './try-prompt.client';
 
@@ -23,6 +24,8 @@ const WORDS: TryPromptWords = {
   preview: 'Prompt preview',
   showFull: 'Show full text',
   collapse: 'Collapse',
+  tierBasic: 'Basic',
+  tierAdvanced: 'Advanced',
   sampleHint: 'Sample: {title} · {lines} lines',
   sampleHintOne: 'Sample: {title} · 1 line',
 };
@@ -41,6 +44,7 @@ function render(props: {
   slots?: PromptSlot[];
   values?: Record<string, string>;
   instructions?: string;
+  techniques?: PromptTechnique[];
 }): string {
   const { values, ...rest } = props;
   const prompt = { kind: 'prompt' as const, text: '', purposes: PURPOSES, ...rest };
@@ -98,6 +102,32 @@ describe('success cases', () => {
     // ASSERT
     expect(html).toContain('data-purpose="role"');
     expect(html).toContain('A role steers behaviour.');
+  });
+
+  it('lists the techniques of a section in its purpose marker, each with its tier', () => {
+    // ARRANGE
+    const techniques: PromptTechnique[] = [
+      { id: 'fence', tier: 'basic', title: 'Fence it', explain: 'Wrap pasted text.' },
+      { id: 'shots', tier: 'advanced', title: 'Show one', explain: 'Give an example.' },
+    ];
+    const sections = [{ ...SECTIONS[0]!, techniques: ['fence', 'shots'] }];
+    // ACT
+    const html = render({ sections, techniques });
+    // ASSERT
+    expect(html).toContain('data-techniques="fence shots"');
+    expect(html).toMatch(/Basic[^<]*<\/[a-z]+>[^]*Fence it[^]*Wrap pasted text\./);
+    expect(html).toMatch(/Advanced[^]*Show one[^]*Give an example\./);
+    expect(html).toContain('A role steers behaviour.');
+  });
+
+  it('leaves a section without techniques unchanged', () => {
+    // ARRANGE
+    const techniques: PromptTechnique[] = [{ id: 'fence', tier: 'basic', title: 'Fence it', explain: 'Wrap.' }];
+    // ACT
+    const html = render({ sections: SECTIONS, techniques });
+    // ASSERT
+    expect(html).not.toContain('data-techniques');
+    expect(html).not.toContain('Fence it');
   });
 
   it('prefers a per-section explanation over the purpose one', () => {

@@ -28,6 +28,9 @@ ui:
   chatTip: 'The prompt for chat {n}: paste it into its own fresh chat'
   toggleTip: Show or hide the text
   sectionWhy: Why it matters
+  sectionTechniques: Techniques it teaches
+  tierBasic: Basic
+  tierAdvanced: Advanced
   whatToDo: What to do
   preview: Prompt preview
   showFull: Show full text

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { WORKFLOW_IDS, workflowFor } from './workflow-data';
 import { slotSample } from './workflow-sample.pure';
-import type { SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
+import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * FE-012-shared-visual-content §1.3: both files of a pair hold the same structure and only the words differ. The
@@ -18,6 +18,7 @@ const fileOf = (id: (typeof WORKFLOW_IDS)[number], locale: 'en' | 'de'): Workflo
 const count = (value: string | readonly string[] | undefined): number | undefined =>
   value === undefined ? undefined : typeof value === 'string' ? 1 : value.length;
 
+const sectionShape = (section: SectionDef) => [section.purpose, section.techniques ?? []];
 const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, count(slot.sample)];
 const taskShape = (task: TaskDef) => ({
   id: task.id,
@@ -25,8 +26,8 @@ const taskShape = (task: TaskDef) => ({
   template: task.template,
   fanOut: task.fanOut,
   slots: task.slots.map(slotShape),
-  simple: task.do.simple.map((section) => section.purpose),
-  technical: task.do.technical.map((section) => section.purpose),
+  simple: task.do.simple.map(sectionShape),
+  technical: task.do.technical.map(sectionShape),
   instructions: Boolean(task.instructions),
   review: task.review && {
     instructions: Boolean(task.review.instructions),
@@ -35,6 +36,7 @@ const taskShape = (task: TaskDef) => ({
   },
   examples: count(task.details.example),
   good: task.details.goodLooksLike.length,
+  techniques: task.details.techniques ?? [],
 });
 
 /** What must match across the pair. */
@@ -42,7 +44,8 @@ const structureOf = (file: WorkflowFile) => ({
   id: file.id,
   facts: file.scenario.facts.length,
   purposes: Object.keys(file.purposes),
-  reviewer: file.reviewer.sections.map((section) => section.purpose),
+  techniques: file.techniques.map((entry) => [entry.id, entry.tier]),
+  reviewer: file.reviewer.sections.map(sectionShape),
   templates: Object.keys(file.templates),
   stages: file.stages.map((stage) => ({
     id: stage.id,
@@ -90,6 +93,25 @@ describe('success cases', () => {
     expect(texts.every((text) => text === undefined || (text.match(/[.!?](\s|$)/g) ?? []).length <= longest)).toBe(
       true,
     );
+  });
+
+  it.each(EACH)('tags sections and tasks only with techniques of the catalogue, in %s %s', (id, locale) => {
+    // ARRANGE
+    const file = fileOf(id, locale);
+    const known = file.techniques.map((entry) => entry.id);
+    // ACT
+    const used = [
+      ...file.reviewer.sections.flatMap((section) => section.techniques ?? []),
+      ...file.stages.flatMap((stage) =>
+        stage.tasks.flatMap((task) => [
+          ...[...task.do.simple, ...task.do.technical].flatMap((section) => section.techniques ?? []),
+          ...(task.details.techniques ?? []),
+        ]),
+      ),
+    ];
+    // ASSERT
+    expect(used.length).toBeGreaterThan(0);
+    expect(used.filter((id) => !known.includes(id))).toEqual([]);
   });
 
   it.each(WORKFLOW_IDS)('holds the same structure in English and German for %s', (id) => {
