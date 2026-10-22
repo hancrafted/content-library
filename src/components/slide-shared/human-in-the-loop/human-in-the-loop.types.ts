@@ -37,7 +37,6 @@ export interface UiWords {
   readonly copyPrompt: string;
   readonly copyCommand: string;
   readonly openChatgpt: string;
-  readonly openClaude: string;
   readonly short: string;
   readonly shortTip: string;
   readonly sectionAbout: string;
@@ -51,6 +50,13 @@ export interface UiWords {
   /** The tooltip of a prompt's show/hide toggle. */
   readonly toggleTip: string;
   readonly sectionWhy: string;
+  /** The two panels of an opened prompt, a slot field's eye toggle tooltips, and the empty field's hint (`{title}`, `{lines}`). */
+  readonly whatToDo: string;
+  readonly preview: string;
+  readonly showFull: string;
+  readonly collapse: string;
+  readonly sampleHint: string;
+  readonly sampleHintOne: string;
   /** A paste-in slot's upload button and its add-entry button; `tooLong` is the "open in" tooltip for a long prompt. */
   readonly slotUpload: string;
   readonly slotAdd: string;

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { stringify } from 'yaml';
 import { isNewSchema, loadWorkflow } from './workflow-loader.pure';
+import { slotSample } from './workflow-sample.pure';
 
 const PLAN = '---\nkind: plan\n---\n# Plan\n## Pieces\nOne, two.\n';
 const RESEARCH = '---\nkind: research\n---\n# Mill\n## Cost\n140\n';
@@ -93,9 +94,41 @@ const load = (change: (file: File) => void = () => undefined) => {
 };
 const problemsOf = (result: ReturnType<typeof loadWorkflow>) =>
   'problems' in result ? result.problems.join('\n') : '';
-const research = (file: File) => file.stages[1]!.tasks[0]!;
+type Research = File['stages'][1]['tasks'][0] & {
+  instructions?: string;
+  review: { instructions?: string };
+};
+const research = (file: File): Research => file.stages[1]!.tasks[0]! as Research;
 
 describe('success cases', () => {
+  it('lets a free slot without a sample take the scenario text as its sample', () => {
+    // ARRANGE
+    const free = (file: File) =>
+      void (research(file).slots[0] = { id: 'plan', mode: 'single', label: 'Plan', free: true } as never);
+    // ACT
+    const result = load(free);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && slotSample(result.file, result.file.stages[1]!.tasks[0]!.slots[0]!)).toBe(
+      'A demo.\n\n- A fact',
+    );
+  });
+
+  it('loads the instructions of a do step and of a review step', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      research(file).instructions = 'Open a fresh chat.';
+      research(file).review.instructions = 'Paste the fix handoff back.';
+    };
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect('file' in result && result.file.stages[1]!.tasks[0]!.instructions).toBe('Open a fresh chat.');
+    expect('file' in result && result.file.stages[1]!.tasks[0]!.review?.instructions).toBe(
+      'Paste the fix handoff back.',
+    );
+  });
+
   it('loads a file with a fan-out, a slot on an earlier output and a review', () => {
     // ARRANGE
     const expected = 'demo';
@@ -155,6 +188,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('rejects instructions that are not text', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      (research(file) as { instructions?: unknown }).instructions = 3;
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[1].tasks[0].instructions must be text.');
+  });
+
   const many = (sample: unknown) => ({ id: 'research', mode: 'multiple', label: 'All', sample });
   const add =
     (slot: object, text = '{{research_1}} {{research_2}}') =>
@@ -203,14 +247,24 @@ describe('failure cases', () => {
     expect(r1).toMatch(/example of task "plan" is a list but the task has no fan-out/);
   });
 
-  it('still rejects a slot naming no output unless it is a free input', () => {
+  it('rejects a slot that is not free and has no sample', () => {
     // ARRANGE
-    const free = (file: File) =>
-      void (research(file).slots[0] = { id: 'x', mode: 'single', label: 'X', free: true } as never);
+    const bare = (file: File) =>
+      void (research(file).slots[0] = { id: 'plan', mode: 'single', label: 'Plan' } as never);
     // ACT
-    const problems = problemsOf(load(free));
+    const problems = problemsOf(load(bare));
     // ASSERT
-    expect(problems).toMatch(/Slot "x" of task "research" needs a sample/);
+    expect(problems).toMatch(/Slot "plan" of task "research" needs a sample/);
+  });
+
+  it('rejects a slot naming no output unless it is a free input', () => {
+    // ARRANGE
+    const named = (file: File) =>
+      void (research(file).slots[0] = { id: 'x', mode: 'single', label: 'X', sample: 'Text.' } as never);
+    // ACT
+    const problems = problemsOf(load(named));
+    // ASSERT
+    expect(problems).toMatch(/Slot "x" of task "research" names no output of an earlier stage/);
   });
 
   it('rejects an unknown purpose', () => {

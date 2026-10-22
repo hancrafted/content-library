@@ -4,13 +4,13 @@ import { externalHref } from '@/lib/external-link.pure';
 import { cn } from '@/lib/utils';
 import { Copy } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { ChatGptMark, ClaudeMark } from '../chat-icons/chat-icons';
+import { ChatGptMark } from '../chat-icons/chat-icons';
 import { IconButton, OUTLINED_ICON } from '../icon-button/icon-button.client';
 import { Tip } from '../tip/tip.client';
 import { openInLinks } from './chat-links.pure';
 import type { PromptKit } from './try-prompt.types';
 
-/* The icon buttons of a prompt row: the Short toggle, copy, and the two "open in" links. */
+/* The icon buttons of a prompt row: the Short toggle, copy, and the "open in ChatGPT" link. */
 
 /** The chat link: the icon alone on a phone, the icon and its name from `md` up. */
 const WRITTEN_OUT = cn(OUTLINED_ICON, 'text-caption font-medium', 'md:w-auto md:gap-1.5 md:px-3');
@@ -63,7 +63,7 @@ function ChatLink({ url, label, tip, newTab, onOpen, children }: ChatLinkProps) 
   );
 }
 
-/** The three icon buttons of a prompt: copy it, open it in ChatGPT, open it in Claude. */
+/** The icon buttons of a prompt: copy it, open it in ChatGPT. */
 export function PromptActions({ text, copyLabel, kit }: { text: string; copyLabel: string; kit: PromptKit }) {
   const links = openInLinks(text);
   const { words } = kit;
@@ -78,9 +78,6 @@ export function PromptActions({ text, copyLabel, kit }: { text: string; copyLabe
       </IconButton>
       <ChatLink url={links.chatgpt} label={words.openChatgpt} tip={tip(words.openChatgpt)} {...common}>
         <ChatGptMark className="size-4" />
-      </ChatLink>
-      <ChatLink url={links.claude} label={words.openClaude} tip={tip(words.openClaude)} {...common}>
-        <ClaudeMark className="size-4" />
       </ChatLink>
     </>
   );

@@ -17,7 +17,6 @@ ui:
   copyPrompt: Prompt kopieren
   copyCommand: Befehl kopieren
   openChatgpt: In ChatGPT öffnen
-  openClaude: In Claude öffnen
   short: Kurz
   shortTip: Kurze Fassung, nur die 3 wichtigsten Fragen pro Runde
   sectionAbout: Über diesen Schritt
@@ -29,6 +28,12 @@ ui:
   chatTip: 'Der Prompt für Chat {n}: in einen eigenen, frischen Chat einfügen'
   toggleTip: Den Text ein- oder ausblenden
   sectionWhy: Warum es zählt
+  whatToDo: Was zu tun ist
+  preview: Prompt-Vorschau
+  showFull: Ganzen Text anzeigen
+  collapse: Einklappen
+  sampleHint: 'Beispiel: {title} · {lines} Zeilen'
+  sampleHintOne: 'Beispiel: {title} · 1 Zeile'
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
   tooLong: zu lang für einen Link, daher wird er kopiert und ein leerer Chat geöffnet

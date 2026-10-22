@@ -14,7 +14,7 @@ export type { PromptKit, TryPromptWords } from './try-prompt.types';
 
 /*
  * One prompt as a disclosure, collapsed by default: a row with the label, the Short toggle where there is one and
- * three icon buttons (copy, ChatGPT, Claude), and the prompt text below when opened. Whether it is open is local to
+ * two icon buttons (copy, ChatGPT), and the prompt text below when opened. Whether it is open is local to
  * this leaf (it passes the reload test, FE-001); the Short choice is the parent's.
  *
  * A prompt may come as sections: opened, each shows its H2 and, when it has a purpose with an explanation, a marker
@@ -112,15 +112,14 @@ export function TryPrompt(props: TryPromptProps) {
   const panel = useId();
   const { current, onValue } = useSlotValues(props);
   const parts = { sections: sectionsOf(prompt, kit.short), slots: prompt.slots ?? [] };
-  const label = prompt.kind === 'command' ? kit.words.commandLabel : kit.words.promptLabel;
   const text = joinPrompt(parts, current);
   return (
-    <div className="rounded-xl border border-border bg-background" data-prompt={prompt.kind}>
+    <div className="min-w-0 rounded-xl border border-border bg-background" data-prompt={prompt.kind}>
       <Row {...{ prompt, kit, open, panel, text }} onToggle={() => setOpen((now) => !now)} />
       <PromptBody
         id={panel}
         open={open}
-        label={label}
+        instructions={prompt.instructions}
         parts={parts}
         purposes={prompt.purposes ?? {}}
         values={current}

@@ -2,6 +2,7 @@ import { markerCount } from '../core-components/try-prompt/prompt-sections.pure'
 import { handoffProblems, readTemplate } from './markdown-handoff.pure';
 import { unknownMarkers } from './workflow-markers.pure';
 import { namesBefore, namesOf, tasksOf, type Producer } from './workflow-outputs.pure';
+import { slotSample } from './workflow-sample.pure';
 import type { SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
@@ -91,8 +92,8 @@ function entryProblems(slot: SlotDef, list: readonly string[], basis: SampleBasi
 
 /** The sample of one slot: a lone text for a single slot, a list of one per marker for a multiple slot. */
 function sampleProblems(slot: SlotDef, basis: SampleBasis): string[] {
-  const { sample } = slot;
   const { file, task, template } = basis;
+  const sample = slotSample(file, slot);
   const where = `Slot "${slot.id}" of task "${task.id}"`;
   const lone = typeof sample === 'string';
   if (sample === undefined) return [];
@@ -119,7 +120,8 @@ function doSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<st
     ...task.slots.flatMap((slot) => {
       const producer = names.get(slot.id);
       const named = slotNameProblems(slot, task, producer);
-      if (slot.sample === undefined) return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
+      if (slotSample(file, slot) === undefined)
+        return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
       const template = slot.free ? undefined : producer?.task.template;
       return [...named, ...sampleProblems(slot, { file, task, template, markers: markersOf(slot, task) })];
     }),

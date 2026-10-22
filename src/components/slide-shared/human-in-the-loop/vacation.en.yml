@@ -116,7 +116,6 @@ stages:
             mode: single
             free: true
             label: Your task
-            sample: Plan a vacation for two. One week in the first week of September, about 1,500 euros for the stay, and a recommendation for my partner.
         details:
           why: A big task fits no single chat. Cut into pieces, each one can be planned in a fresh chat from a short handoff, and a short grill first stops the AI from guessing what the task is.
           example: &plan_example |
@@ -136,6 +135,7 @@ stages:
           goodLooksLike:
             - Each piece is small enough to plan in its own chat from a short handoff.
             - Exactly one piece goes first, with a one-sentence reason.
+        instructions: 'Open a fresh chat and paste the prompt. Answer its few questions, then keep the plan it writes.'
         do:
           simple:
             - heading: Your role
@@ -175,6 +175,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Open a fresh chat so the reviewer has not seen how the work was made, and paste the prompt with the result filled in. Then paste the fix handoff it writes back into the first chat.'
           slots:
             - id: plan_result
               mode: single
@@ -215,6 +216,7 @@ stages:
           goodLooksLike:
             - Every question came with two options and a recommendation.
             - One answer is something you had not thought of before the interview.
+        instructions: "Open a fresh chat and paste the prompt with your plan filled in. Answer each round of questions, and say 'done' when nothing is left to ask."
         do:
           simple:
             - heading: Your role
@@ -312,6 +314,7 @@ stages:
           goodLooksLike:
             - Every requirement is short and can be checked with yes or no.
             - Nothing is in the spec that your answers did not say.
+        instructions: 'Open a fresh chat and paste the prompt with your interview filled in. Check that every requirement is something you could tick off.'
         do:
           simple:
             - heading: Your role
@@ -357,6 +360,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Open a fresh chat so the reviewer has not seen how the work was made, and paste the prompt with the result filled in. Then paste the fix handoff it writes back into the first chat.'
           slots:
             - id: interview
               mode: single
@@ -408,6 +412,7 @@ stages:
           goodLooksLike:
             - Each ticket covers a different option, so no two overlap.
             - Each ticket carries every requirement of the spec.
+        instructions: 'Open a fresh chat and paste the prompt with your spec filled in. Keep the tickets it writes: each one goes to its own research chat.'
         do:
           simple:
             - heading: Your role
@@ -452,6 +457,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Open a fresh chat so the reviewer has not seen how the work was made, and paste the prompt with the result filled in. Then paste the fix handoff it writes back into the first chat.'
           slots:
             - id: spec
               mode: single
@@ -530,6 +536,7 @@ stages:
           goodLooksLike:
             - Each must-have has its own verdict and a named source.
             - What could not be found is written down as an open doubt.
+        instructions: "Open a fresh chat for each ticket and paste that chat's prompt with its ticket filled in. Keep every result."
         do:
           simple:
             - heading: Your role
@@ -574,6 +581,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Open a fresh chat so the reviewer has not seen how the work was made, and paste the prompt with the result filled in. Then paste the fix handoff it writes back into the first chat.'
           slots:
             - id: tickets
               mode: single
@@ -634,6 +642,7 @@ stages:
           goodLooksLike:
             - The criteria are the ones in the spec, no more and no fewer.
             - Every place in the ranking has a reason taken from a result.
+        instructions: 'Open a fresh chat and paste the prompt with your research results filled in. Read the ranking and the doubts it writes.'
         do:
           simple:
             - heading: Your role
@@ -707,6 +716,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Open a fresh chat so the reviewer has not seen how the work was made, and paste the prompt with the result filled in. Then paste the fix handoff it writes back into the first chat.'
           slots:
             - id: spec
               mode: single
@@ -759,6 +769,7 @@ stages:
           goodLooksLike:
             - One clear choice, with every reason traceable to the comparison.
             - Next steps are concrete enough to start on today.
+        instructions: 'Open a fresh chat and paste the prompt with your comparison filled in. Decide with the recommendation it writes.'
         do:
           simple:
             - heading: Your role
@@ -803,6 +814,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Open a fresh chat so the reviewer has not seen how the work was made, and paste the prompt with the result filled in. Then paste the fix handoff it writes back into the first chat.'
           slots:
             - id: comparison
               mode: single

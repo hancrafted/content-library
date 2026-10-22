@@ -15,11 +15,16 @@ const WORDS: TryPromptWords = {
   copyPrompt: 'Copy prompt',
   copyCommand: 'Copy command',
   openChatgpt: 'Open in ChatGPT',
-  openClaude: 'Open in Claude',
   short: 'Short',
   shortTip: 'Shorter',
   newTab: 'new tab',
   tooLong: 'Too long for a link: copies the prompt and opens an empty chat',
+  whatToDo: 'What to do',
+  preview: 'Prompt preview',
+  showFull: 'Show full text',
+  collapse: 'Collapse',
+  sampleHint: 'Sample: {title} · {lines} lines',
+  sampleHintOne: 'Sample: {title} · 1 line',
 };
 const NOOP = vi.fn();
 const KIT: PromptKit = { short: false, words: WORDS, onShort: NOOP, onCopy: NOOP };
@@ -31,16 +36,21 @@ const SECTIONS: PromptSection[] = [
 ];
 const SPEC: PromptSlot = { id: 'spec', mode: 'single', label: 'Spec', sample: 'SAMPLE SPEC' };
 
-function render(props: { sections: PromptSection[]; slots?: PromptSlot[]; values?: Record<string, string> }): string {
+function render(props: {
+  sections: PromptSection[];
+  slots?: PromptSlot[];
+  values?: Record<string, string>;
+  instructions?: string;
+}): string {
   const { values, ...rest } = props;
   const prompt = { kind: 'prompt' as const, text: '', purposes: PURPOSES, ...rest };
   return renderToStaticMarkup(createElement(TryPrompt, { prompt, kit: KIT, values }));
 }
 
-/** The text of the prompt as shown, which is the text that is copied. */
+/** The prompt as it is copied, carried on the body. */
 function shown(html: string): string {
-  const match = /data-prompt-text=""[^>]*>([\s\S]*?)<\/pre>/.exec(html);
-  return (match?.[1] ?? '').replaceAll('&quot;', '"').replaceAll('&#x27;', "'");
+  const match = /data-prompt-text="([^"]*)"/.exec(html);
+  return (match?.[1] ?? '').replaceAll('&quot;', '"').replaceAll('&#x27;', "'").replaceAll('&amp;', '&');
 }
 
 const SOURCES: PromptSlot = { id: 'research', mode: 'multiple', label: 'Research', sample: 'SAMPLE R' };
@@ -119,16 +129,16 @@ describe('success cases', () => {
     expect(text).toContain('S1|B|S3');
   });
 
-  it('shows the entry its own sample as the placeholder', () => {
+  it('hints each empty entry with its own sample title and line count', () => {
     // ARRANGE
     const slot: PromptSlot = { ...SOURCES, sample: ['S1', 'S2', 'S3'] };
     const props = { sections: MULTI, slots: [slot], values: { research_1: 'A', research_2: 'B', research_3: 'C' } };
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain('placeholder="S1"');
-    expect(html).toContain('placeholder="S2"');
-    expect(html).toContain('placeholder="S3"');
+    expect(html).toContain('placeholder="Sample: S1 · 1 line"');
+    expect(html).toContain('placeholder="Sample: S2 · 1 line"');
+    expect(html).toContain('placeholder="Sample: S3 · 1 line"');
   });
 
   it('starts a multiple slot with one entry and a plus button', () => {
@@ -141,13 +151,82 @@ describe('success cases', () => {
     expect(html).toContain('data-slot-add');
   });
 
-  it('prefills the chat link with the prompt', () => {
+  it('prefills the ChatGPT link with the prompt and offers no Claude link', () => {
     // ARRANGE
     const props = { sections: SECTIONS, slots: [SPEC] };
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain('href="https://claude.ai/new?q=');
+    expect(html).toContain('href="https://chatgpt.com/?q=');
+    expect(html).not.toContain('claude.ai');
+    expect(html).not.toContain('Claude');
+  });
+
+  it('opens the What to do panel and closes the Prompt preview by default', () => {
+    // ARRANGE
+    const props = { sections: SECTIONS, slots: [SPEC], instructions: 'Open a fresh chat.' };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).toMatch(
+      /aria-expanded="true"[^>]*data-panel-toggle="todo"|data-panel-toggle="todo"[^>]*aria-expanded="true"/,
+    );
+    expect(html).toMatch(
+      /aria-expanded="false"[^>]*data-panel-toggle="preview"|data-panel-toggle="preview"[^>]*aria-expanded="false"/,
+    );
+    expect(html).toMatch(/<div[^>]*data-panel="preview"[^>]*hidden=""|<div[^>]*hidden=""[^>]*data-panel="preview"/);
+    expect(html).not.toMatch(/<div[^>]*data-panel="todo"[^>]*hidden=""/);
+  });
+
+  it('renders the instructions in the What to do panel', () => {
+    // ARRANGE
+    const props = { sections: SECTIONS, instructions: 'Open a fresh chat.' };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).toContain('Open a fresh chat.');
+    expect(html).toContain('What to do');
+  });
+
+  it('shows the What to do panel for slots alone', () => {
+    // ARRANGE
+    const props = { sections: SECTIONS, slots: [SPEC] };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).toContain('data-panel="todo"');
+  });
+
+  it('shows a slot as a label, an upload button, an eye toggle and a one-row textarea', () => {
+    // ARRANGE
+    const props = { sections: SECTIONS, slots: [SPEC] };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).toContain('>Spec</label>');
+    expect(html).toContain('rows="1"');
+    expect(html).toContain('aria-pressed="false"');
+    expect(html).toContain('aria-label="Show full text"');
+    expect(html).toContain('type="file"');
+  });
+
+  it('hints an empty field with the title and line count of its sample', () => {
+    // ARRANGE
+    const sample = '---\nkind: spec\n---\n# Old Mill\n## Goal\nx';
+    const props = { sections: SECTIONS, slots: [{ ...SPEC, sample }] };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).toContain('placeholder="Sample: Old Mill · 6 lines"');
+  });
+
+  it('keeps every line break of a pasted text in the collapsed field', () => {
+    // ARRANGE
+    const props = { sections: SECTIONS, slots: [SPEC], values: { spec: 'first\nsecond' } };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).toMatch(/<textarea[^>]*rows="1"[^>]*>first\nsecond<\/textarea>/);
   });
 
   it('shows a plain text prompt as one section without heading or marker', () => {
@@ -162,6 +241,16 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('shows no What to do panel when the step has neither instructions nor slots', () => {
+    // ARRANGE
+    const props = { sections: SECTIONS };
+    // ACT
+    const html = render(props);
+    // ASSERT
+    expect(html).not.toContain('data-panel="todo"');
+    expect(html).toContain('data-panel="preview"');
+  });
+
   it('shows no marker on a section without a purpose', () => {
     // ARRANGE
     const props = { sections: [SECTIONS[2]!] };
@@ -208,7 +297,6 @@ describe('failure cases', () => {
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain('href="https://claude.ai/new"');
     expect(html).toContain('href="https://chatgpt.com/"');
     expect(html).toContain(WORDS.tooLong);
   });

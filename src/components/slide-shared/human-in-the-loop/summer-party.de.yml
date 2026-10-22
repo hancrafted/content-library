@@ -117,7 +117,6 @@ stages:
             mode: single
             free: true
             label: Deine Aufgabe
-            sample: Plane das nächste Sommerfest der Firma. 200 Mitarbeitende aus fünf Standorten in Europa kommen für einen Abend Ende Juni in Frankfurt zusammen.
         details:
           why: Eine große Aufgabe passt in keinen einzelnen Chat. In Teile geschnitten, kann jedes in einem frischen Chat aus einem kurzen Handoff geplant werden, und eine kurze Rückfragerunde vorab verhindert, dass die KI rät, worum es geht.
           example: &plan_example |
@@ -138,6 +137,7 @@ stages:
           goodLooksLike:
             - Jedes Teil ist klein genug, um es in einem eigenen Chat aus einem kurzen Handoff zu planen.
             - Genau ein Teil kommt zuerst, mit einem Satz als Begründung.
+        instructions: 'Öffne einen frischen Chat und füge den Prompt ein. Beantworte die wenigen Fragen und behalte den Plan, den er schreibt.'
         do:
           simple:
             - heading: Deine Rolle
@@ -177,6 +177,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Öffne einen frischen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand, und füge den Prompt mit dem Ergebnis ein. Füge dann die Korrektur-Übergabe, die er schreibt, in den ersten Chat zurück.'
           slots:
             - id: plan_result
               mode: single
@@ -219,6 +220,7 @@ stages:
           goodLooksLike:
             - Jede Frage kam mit zwei Optionen und einer Empfehlung.
             - Eine Antwort ist etwas, woran Du vor dem Interview nicht gedacht hattest.
+        instructions: "Öffne einen frischen Chat und füge den Prompt mit deinem Plan ein. Beantworte jede Fragerunde und sage 'fertig', wenn nichts mehr zu fragen bleibt."
         do:
           simple:
             - heading: Deine Rolle
@@ -316,6 +318,7 @@ stages:
           goodLooksLike:
             - Jede Anforderung ist kurz und lässt sich mit Ja oder Nein prüfen.
             - In der Spezifikation steht nichts, was Deine Antworten nicht gesagt haben.
+        instructions: 'Öffne einen frischen Chat und füge den Prompt mit deinem Interview ein. Prüfe, ob sich jede Anforderung abhaken lässt.'
         do:
           simple:
             - heading: Deine Rolle
@@ -361,6 +364,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Öffne einen frischen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand, und füge den Prompt mit dem Ergebnis ein. Füge dann die Korrektur-Übergabe, die er schreibt, in den ersten Chat zurück.'
           slots:
             - id: interview
               mode: single
@@ -412,6 +416,7 @@ stages:
           goodLooksLike:
             - Jedes Ticket deckt eine andere Option ab, sodass sich keine zwei überschneiden.
             - Jedes Ticket trägt jede Anforderung der Spezifikation.
+        instructions: 'Öffne einen frischen Chat und füge den Prompt mit deiner Spezifikation ein. Behalte die Tickets: Jedes geht in einen eigenen Recherche-Chat.'
         do:
           simple:
             - heading: Deine Rolle
@@ -456,6 +461,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Öffne einen frischen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand, und füge den Prompt mit dem Ergebnis ein. Füge dann die Korrektur-Übergabe, die er schreibt, in den ersten Chat zurück.'
           slots:
             - id: spec
               mode: single
@@ -531,6 +537,7 @@ stages:
           goodLooksLike:
             - Jede Anforderung hat ein eigenes Urteil und eine genannte Quelle.
             - Was nicht zu finden war, steht als offener Zweifel da.
+        instructions: 'Öffne für jedes Ticket einen frischen Chat und füge den Prompt dieses Chats mit seinem Ticket ein. Behalte jedes Ergebnis.'
         do:
           simple:
             - heading: Deine Rolle
@@ -575,6 +582,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Öffne einen frischen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand, und füge den Prompt mit dem Ergebnis ein. Füge dann die Korrektur-Übergabe, die er schreibt, in den ersten Chat zurück.'
           slots:
             - id: tickets
               mode: single
@@ -635,6 +643,7 @@ stages:
           goodLooksLike:
             - Die Kriterien sind die der Spezifikation, nicht mehr und nicht weniger.
             - Jeder Platz in der Rangfolge hat eine Begründung aus einem Ergebnis.
+        instructions: 'Öffne einen frischen Chat und füge den Prompt mit deinen Recherche-Ergebnissen ein. Lies das Ranking und die Zweifel, die er schreibt.'
         do:
           simple:
             - heading: Deine Rolle
@@ -708,6 +717,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Öffne einen frischen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand, und füge den Prompt mit dem Ergebnis ein. Füge dann die Korrektur-Übergabe, die er schreibt, in den ersten Chat zurück.'
           slots:
             - id: spec
               mode: single
@@ -760,6 +770,7 @@ stages:
           goodLooksLike:
             - Eine klare Wahl, jeder Grund ist im Vergleich nachvollziehbar.
             - Die nächsten Schritte sind konkret genug, um heute damit zu beginnen.
+        instructions: 'Öffne einen frischen Chat und füge den Prompt mit deinem Vergleich ein. Entscheide mit der Empfehlung, die er schreibt.'
         do:
           simple:
             - heading: Deine Rolle
@@ -804,6 +815,7 @@ stages:
 
                 {{template}}
         review:
+          instructions: 'Öffne einen frischen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand, und füge den Prompt mit dem Ergebnis ein. Füge dann die Korrektur-Übergabe, die er schreibt, in den ersten Chat zurück.'
           slots:
             - id: comparison
               mode: single

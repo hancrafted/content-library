@@ -94,3 +94,11 @@ export function explanation(section: PromptSection, purposes: Readonly<Record<st
   if (section.purpose === undefined) return undefined;
   return section.explain ?? purposes[section.purpose];
 }
+
+/** The title and line count of a sample: its first H1 (else its first line), and how many lines it has. */
+export function sampleSummary(sample: string): { title: string; lines: number } {
+  const lines = sample.trimEnd().split('\n');
+  const h1 = lines.find((line) => /^#\s+\S/.test(line));
+  const first = lines.find((line) => line.trim() !== '') ?? '';
+  return { title: (h1 ?? first).replace(/^#\s+/, '').trim(), lines: lines.length };
+}

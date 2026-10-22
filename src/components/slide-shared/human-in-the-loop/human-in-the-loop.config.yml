@@ -17,7 +17,6 @@ ui:
   copyPrompt: Copy prompt
   copyCommand: Copy command
   openChatgpt: Open in ChatGPT
-  openClaude: Open in Claude
   short: Short
   shortTip: Short version, only the 3 most load-bearing questions per round
   sectionAbout: About this step
@@ -29,6 +28,12 @@ ui:
   chatTip: 'The prompt for chat {n}: paste it into its own fresh chat'
   toggleTip: Show or hide the text
   sectionWhy: Why it matters
+  whatToDo: What to do
+  preview: Prompt preview
+  showFull: Show full text
+  collapse: Collapse
+  sampleHint: 'Sample: {title} · {lines} lines'
+  sampleHintOne: 'Sample: {title} · 1 line'
   slotUpload: Upload a markdown file
   slotAdd: Add another entry
   tooLong: too long for a link, so it is copied and an empty chat opens
