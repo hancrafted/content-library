@@ -1,0 +1,91 @@
+import { externalHref } from '@/lib/external-link.pure';
+import type { ReactNode } from 'react';
+import type { Handoff } from './handoff.pure';
+import type { UiWords } from './human-in-the-loop.types';
+import { OutputView } from './outputs/output-dispatch';
+import type { OutputWords } from './outputs/output-words';
+import type { ModalSection } from './workflow-view.pure';
+
+const SECTION_LABEL: Record<ModalSection['kind'], keyof UiWords> = {
+  does: 'sectionAbout',
+  in: 'sectionIn',
+  out: 'sectionOut',
+  criteria: 'sectionCriteria',
+  skills: 'sectionSkills',
+  example: 'sectionExample',
+};
+
+type Of<K extends ModalSection['kind']> = Extract<ModalSection, { kind: K }>;
+
+function List({ items }: { items: readonly string[] }) {
+  return (
+    <ul className="mt-1 list-disc pl-5">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
+function Links({ section }: { section: Of<'skills'> }) {
+  return (
+    <ul className="mt-1 flex flex-wrap gap-2">
+      {section.links.map((link) => (
+        <li key={link.href}>
+          <a className="underline" href={externalHref(link.href)} target="_blank" rel="noopener noreferrer">
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** The labels and ticks of the modal, as the modal part holds them. */
+export interface BodyChrome {
+  readonly words: UiWords;
+  readonly ticked: readonly string[];
+  readonly onTick: (ticketId: string) => void;
+  readonly outputWords: OutputWords;
+}
+
+function Example({ examples, chrome }: { examples: readonly Handoff[]; chrome: BodyChrome }) {
+  return (
+    <div className="mt-1 flex flex-col gap-2">
+      {examples.map((handoff, at) => (
+        <div key={at}>
+          <OutputView handoff={handoff} ticked={chrome.ticked} onTick={chrome.onTick} words={chrome.outputWords} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function bodyOf(section: ModalSection, examples: readonly Handoff[], chrome: BodyChrome): ReactNode {
+  if (section.kind === 'does') return <p className="mt-1">{section.text}</p>;
+  if (section.kind === 'skills') return <Links section={section} />;
+  if (section.kind === 'example') return <Example examples={examples} chrome={chrome} />;
+  return <List items={section.items} />;
+}
+
+interface ModalBodyProps {
+  readonly sections: readonly ModalSection[];
+  readonly examples: readonly Handoff[];
+  readonly chrome: BodyChrome;
+}
+
+/** The explanation under the steps, in the order the view gives: what it does, in, out, criteria, skills, example. */
+export function ModalBody({ sections, examples, chrome }: ModalBodyProps) {
+  return (
+    <div className="flex flex-col gap-4">
+      {sections.map((section) => (
+        <section key={section.kind}>
+          <h3 className="text-caption font-medium text-muted-foreground">
+            {chrome.words[SECTION_LABEL[section.kind]]}
+          </h3>
+          {bodyOf(section, examples, chrome)}
+        </section>
+      ))}
+    </div>
+  );
+}

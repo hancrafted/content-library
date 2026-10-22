@@ -1,0 +1,1067 @@
+# The vacation Workflow: data (stages, jobs, edges, outputs) and the English words. The German twin holds `words:`
+# only, under the same keys. A prompt is complete as pasted: an earlier result is inlined as its example handoff.
+id: vacation
+focalJob: spec
+stages:
+  - id: trip
+    moves:
+      - B
+    jobs:
+      - id: pieces
+        chat: new
+        dependsOn: []
+        inputs: []
+        outputs: [{ id: piece, kind: text }]
+        skills: []
+  - id: interview
+    moves:
+      - I
+    jobs:
+      - id: interview
+        chat: new
+        dependsOn: [pieces]
+        inputs: [piece]
+        outputs: [{ id: answers, kind: text }]
+        skills: [productivity/grilling]
+  - id: requirements
+    moves:
+      - R
+    gate: 1
+    jobs:
+      - id: spec
+        chat: new
+        dependsOn: [interview]
+        inputs: [answers]
+        outputs: [{ id: spec, kind: spec }, { id: tickets, kind: tickets }]
+        skills: [engineering/to-spec, engineering/to-tickets]
+  - id: research
+    moves:
+      - F
+    jobs:
+      - id: stay
+        chat: new
+        dependsOn: [spec]
+        inputs: [spec]
+        outputs: [{ id: research, kind: research }]
+        fanOut: 3
+        skills: [engineering/research]
+  - id: compare
+    moves:
+      - E
+    gate: 2
+    jobs:
+      - id: compare
+        chat: new
+        dependsOn: [spec, stay]
+        inputs: [spec, research]
+        outputs: [{ id: comparison, kind: comparison }]
+        skills: []
+  - id: recommendation
+    jobs:
+      - id: plan
+        chat: new
+        dependsOn: [compare]
+        inputs: [comparison]
+        outputs: [{ id: plan, kind: text }]
+        skills: []
+
+words:
+  title: Vacation
+  scenario: 'Plan a vacation for two: one week away, and a recommendation for your partner.'
+  setup: |-
+    claude plugin install mattpocock-skills@claude-plugins-official
+    Then open a folder for this task and start Claude Code in it.
+  stages:
+    trip:
+      name: Plan
+      moves:
+        B: 'Break it down: split the big task into pieces and take only one forward.'
+    interview:
+      name: Interview
+      moves:
+        I: 'Interview yourself with AI: the AI asks before it guesses, one question at a time.'
+    requirements:
+      name: Requirements
+      moves:
+        R: 'Requirements first: the answers become a short list you sign off before any work starts.'
+      card:
+        label: Requirements card
+        lines:
+          - Sleeps 2
+          - At most €1,500 for the week
+          - At most 10 minutes on foot to the sea
+          - Private bathroom
+          - Airport transfer of at most 60 minutes
+        status: Signed off
+    research:
+      name: Research
+      moves:
+        F: 'Fresh start for each piece: one new chat per stay keeps every window small.'
+    compare:
+      name: Compare
+      moves:
+        E: 'Evaluate each step: check each result against the card before you move on.'
+    recommendation:
+      name: Review
+  jobs:
+    pieces:
+      title: Stay
+      description: Split the trip into its four pieces and take only one forward, the stay. The other three wait for their turn.
+      parked:
+        - Flights
+        - Activities
+        - Dining
+      run:
+        todo: Open a new chat, paste the prompt and read the answer. Keep the handoff block at the end.
+        prompt: |-
+          ## Your role
+          You are a planning coach. You help me cut a big task into pieces that can be planned one after the other, and you pick the piece to start with.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+
+          ## How to work
+          1. Break the task into exactly four pieces. A piece is something I can plan in its own chat from a short handoff. The order may matter, but each piece must be small enough to plan on its own.
+          2. Name each piece in one or two words and add half a sentence on what it decides.
+          3. Recommend the single piece to take first: the one that fixes the most for the others. Give the reason in one sentence.
+          4. Do not plan any piece yet and do not ask me questions.
+
+          ## Output
+          First the numbered list of the four pieces, then the recommendation. End your answer with exactly one fenced block in this shape:
+          ```handoff
+          kind: text
+          text: "<the chosen piece, then its one-sentence reason>"
+          ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it.
+        ```
+      check:
+        todo: Open a fresh chat, paste the check prompt and fix the one thing it names.
+        criteria:
+          - There are four pieces and each can be planned in its own chat from a short handoff (order may matter).
+          - Exactly one piece is chosen, with a one-sentence reason.
+        prompt: |-
+          ## Your role
+          You are a strict reviewer in a fresh chat. You did not write the work below, you owe it nothing, and you do not rewrite it. You only check it.
+
+          ## Criteria
+          1. There are four pieces and each can be planned in its own chat from a short handoff (order may matter).
+          2. Exactly one piece is chosen, with a one-sentence reason.
+
+          ## How to work
+          1. Grade every criterion above, one by one, as PASS or FAIL.
+          2. Back every grade with evidence: quote or point to the exact part of the work. If you cannot find evidence, the grade is FAIL.
+          3. Do not be generous. Unclear, missing or only half true counts as FAIL.
+          4. After the grades, name the ONE fix that matters most, in one or two sentences, and say exactly what to change.
+          5. Add nothing else: no praise, no summary, no rewritten version.
+
+          ## Output
+          A list "Criterion: PASS or FAIL, evidence", then "Most important fix: ...".
+
+          ## The answer to check
+          This is the whole answer of the first chat, the list and the block. Replace it with your own whole answer if you have one.
+
+          Here are the four pieces:
+          1. Stay
+          2. Flights
+          3. Activities
+          4. Dining
+
+          Take first: Stay.
+
+          ```handoff
+          kind: text
+          text: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it.
+          ```
+    interview:
+      title: AI asks you
+      detail: 3 questions, 1 you forgot
+      description: The AI interviews you before it guesses, one question at a time, and brings up what you had not thought of.
+      run:
+        todo: Open a new chat, paste the prompt and answer each round ("yes" accepts the recommendation). When it says the interview is complete, type "done".
+        prompt: |-
+          ## Your role
+          You are a relentless but friendly interviewer, in the style of the "grilling" method. You interview me about the plan below until we share the same understanding, before anybody guesses or writes a plan. You ask. You do not plan yet.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          We take one piece forward. This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: text
+          text: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it.
+          ```
+
+          ## How to work
+          Think of my plan as a tree of decisions: every decision opens the decisions that hang off it. Work the tree in rounds.
+          1. The frontier is every decision whose prerequisites are already settled: the questions you can ask now without guessing at answers you have not heard yet. Ask the whole frontier in one round.
+          2. Number the questions Q1, Q2, Q3 and keep counting across rounds. Format every question exactly like this:
+
+          ❓ **Q1** - **<short title>**: <the question, one or two sentences>
+             A) <option>
+             B) <option>
+
+          ➡️ Recommended: <A or B>, because <one sentence>. Reply "yes" to accept.
+
+          3. Word each question so that me saying "yes" accepts your recommended answer. Always give two options and a recommendation.
+          4. After the questions, stop and wait for my answers. Never answer for me and never start the next round before I reply.
+          5. After each reply, recompute the tree: settled decisions push the frontier outward and unlock questions that depended on them. A question that depends on another one still open belongs to a later round.
+          6. Facts are your job, decisions are mine. Never ask me for something you could know yourself; state it as an assumption instead. Round 1 may collect the starting facts you cannot know (budget, dates, special needs) as one question with a sensible default.
+          7. Include at least one question about something I probably have not thought about, for example what my partner would hate.
+          8. If I say I do not understand, explain it with an everyday analogy and ask again.
+          9. The interview is finished when the frontier is empty: every branch visited, nothing silently assumed. Then say so in two lines and ask me to say "done".
+
+          ## Output
+          Start now with round 1. When I say "done", reply with one short line and then exactly one fenced block in this shape, with every question you asked and my final answer:
+          ```handoff
+          kind: text
+          text: |-
+            Start: <the basic facts I gave you>
+            Q1 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
+            Q2 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
+          ```
+        short: |-
+          ## Your role
+          You are a relentless but friendly interviewer, in the style of the "grilling" method. You interview me about the plan below until we share the same understanding, before anybody guesses or writes a plan. You ask. You do not plan yet.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          We take one piece forward. This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: text
+          text: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it.
+          ```
+
+          ## How to work
+          Think of my plan as a tree of decisions: every decision opens the decisions that hang off it. Work the tree in rounds.
+          1. The frontier is every decision whose prerequisites are already settled: the questions you can ask now without guessing at answers you have not heard yet. This is the SHORT version for a 10-minute slot: ask only the at most 3 most load-bearing questions of the frontier in each round, the ones that most other decisions hang off, and run at most 2 rounds.
+          2. Number the questions Q1, Q2, Q3 and keep counting across rounds. Format every question exactly like this:
+
+          ❓ **Q1** - **<short title>**: <the question, one or two sentences>
+             A) <option>
+             B) <option>
+
+          ➡️ Recommended: <A or B>, because <one sentence>. Reply "yes" to accept.
+
+          3. Word each question so that me saying "yes" accepts your recommended answer. Always give two options and a recommendation.
+          4. After the questions, stop and wait for my answers. Never answer for me and never start the next round before I reply.
+          5. After each reply, recompute the tree: settled decisions push the frontier outward and unlock questions that depended on them. A question that depends on another one still open belongs to a later round.
+          6. Facts are your job, decisions are mine. Never ask me for something you could know yourself; state it as an assumption instead. Round 1 may collect the starting facts you cannot know (budget, dates, special needs) as one question with a sensible default.
+          7. Include at least one question about something I probably have not thought about, for example what my partner would hate. It counts toward the 3.
+          8. If I say I do not understand, explain it with an everyday analogy and ask again.
+          9. After round 2, or earlier if nothing load-bearing is left, say so in two lines and ask me to say "done".
+
+          ## Output
+          Start now with round 1. When I say "done", reply with one short line and then exactly one fenced block in this shape, with every question you asked and my final answer:
+          ```handoff
+          kind: text
+          text: |-
+            Start: <the basic facts I gave you>
+            Q1 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
+            Q2 <title>: <options A and B>. Recommended <A or B>, <reason>. My answer: <my answer>.
+          ```
+        shortCommand: '/grilling Interview me about this piece of my plan. I want to plan a vacation for two people: one week away. The piece we take forward: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it. Work in rounds with numbered questions, two options each and a recommended answer, include one question about what my partner would hate, and when I say "done" end with one handoff block of kind text holding every question and my answer. Short version: at most 3 load-bearing questions per round, at most 2 rounds.'
+      command: '/grilling Interview me about this piece of my plan. I want to plan a vacation for two people: one week away. The piece we take forward: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it. Work in rounds with numbered questions, two options each and a recommended answer, include one question about what my partner would hate, and when I say "done" end with one handoff block of kind text holding every question and my answer.'
+      exampleInput: |-
+        ```handoff
+        kind: text
+        text: Stay. It fixes the place and the dates, and flights, activities and dining all follow from it.
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Start: two people, one week in September, about 1500 euros for the stay.
+          Q1 Style: one base for the week (A) or a new place every two days (B). Recommended A, a week is short for packing. My answer: A.
+          Q2 Where and when: by the sea on the Algarve (A) or in the mountains (B). Recommended A, it is still warm in September. My answer: A, the Algarve, first week of September.
+          Q3 The one I forgot, my partner's dealbreaker: ask before searching (A) or find out later (B). Recommended A, it removes options early. My answer: A. No shared bathroom, at most an hour from the airport, and the sea at most 10 minutes on foot.
+        ```
+      check:
+        todo: Open a fresh chat, paste the check prompt and fix the one thing it names.
+        criteria:
+          - Every question came with two options and a recommendation.
+          - At least one question surfaced something you had not thought of.
+          - The answers are written down, not only remembered.
+        prompt: |-
+          ## Your role
+          You are a strict reviewer in a fresh chat. You did not write the work below, you owe it nothing, and you do not rewrite it. You only check it.
+
+          ## Criteria
+          1. Every question came with two options and a recommendation.
+          2. At least one question surfaced something you had not thought of.
+          3. The answers are written down, not only remembered.
+
+          ## How to work
+          1. Grade every criterion above, one by one, as PASS or FAIL.
+          2. Back every grade with evidence: quote or point to the exact part of the work. If you cannot find evidence, the grade is FAIL.
+          3. Do not be generous. Unclear, missing or only half true counts as FAIL.
+          4. After the grades, name the ONE fix that matters most, in one or two sentences, and say exactly what to change.
+          5. Add nothing else: no praise, no summary, no rewritten version.
+
+          ## Output
+          A list "Criterion: PASS or FAIL, evidence", then "Most important fix: ...".
+
+          ## The interview result to check
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: text
+          text: |-
+            Start: two people, one week in September, about 1500 euros for the stay.
+            Q1 Style: one base for the week (A) or a new place every two days (B). Recommended A, a week is short for packing. My answer: A.
+            Q2 Where and when: by the sea on the Algarve (A) or in the mountains (B). Recommended A, it is still warm in September. My answer: A, the Algarve, first week of September.
+            Q3 The one I forgot, my partner's dealbreaker: ask before searching (A) or find out later (B). Recommended A, it removes options early. My answer: A. No shared bathroom, at most an hour from the airport, and the sea at most 10 minutes on foot.
+          ```
+    spec:
+      title: Requirements card
+      description: The answers become a spec with a short list of requirements you both sign off, and the work is cut into slices that can be done on their own.
+      run:
+        todo: Open a new chat, paste the prompt and read the spec and tickets. Ask for changes until you can sign off the requirements.
+        prompt: |-
+          ## Your role
+          You are a spec writer. You turn my interview answers into a clear specification and then cut the work into tickets. You do not interview me again: you synthesise what is written below.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: text
+          text: |-
+            Start: two people, one week in September, about 1500 euros for the stay.
+            Q1 Style: one base for the week (A) or a new place every two days (B). Recommended A, a week is short for packing. My answer: A.
+            Q2 Where and when: by the sea on the Algarve (A) or in the mountains (B). Recommended A, it is still warm in September. My answer: A, the Algarve, first week of September.
+            Q3 The one I forgot, my partner's dealbreaker: ask before searching (A) or find out later (B). Recommended A, it removes options early. My answer: A. No shared bathroom, at most an hour from the airport, and the sea at most 10 minutes on foot.
+          ```
+
+          ## How to work
+          Part 1, the spec. Write it in the chat with exactly these seven headings, in this order:
+          1. **Problem Statement**: the problem, from the point of view of the people who have it.
+          2. **Solution**: the solution, from the same point of view, in a few sentences.
+          3. **User Stories**: a numbered list of at least 8, each "As a <who>, I want <what>, so that <benefit>", covering all the aspects my answers touched.
+          4. **Decisions**: the decisions we made, one line each, without brand names or dates I did not give you.
+          5. **How we will know it worked**: the checks that prove the goal is met, one line each, about what we can observe and not about how we did it.
+          6. **Out of Scope**: what we will not do now.
+          7. **Further Notes**: open points, assumptions and risks.
+
+          Part 2, the tickets. Cut the work into tracer-bullet tickets: thin vertical slices. Rules:
+          - Each slice cuts a narrow but COMPLETE path from start to finish. It is not one layer of the work.
+          - A finished slice can be shown or checked on its own.
+          - Each slice is small enough to do in one sitting.
+          - Each ticket names its blocking edges: the other tickets that must be done before it can start. A ticket with no blockers can start right away. Only list a blocker that really gates it.
+          Show the breakdown as a numbered list: title, blocked by, what it delivers. Do not wait for my approval; I can ask for changes afterwards and you then repeat the two blocks.
+
+          ## Output
+          Spec and tickets in the chat first. Then end your answer with exactly two fenced blocks, in this order and shape. In the spec block, the goal is one sentence, the requirements are the short checkable essentials from the Decisions, and the slices are the tickets' titles in short form. Ticket ids are short lower-case words, and every blockedBy entry is an id from the same block.
+          ```handoff
+          kind: spec
+          goal: "<one sentence>"
+          requirements: ["<short checkable essential>", "<another one>"]
+          outOfScope: ["<what we will not do>"]
+          slices: ["<one thin vertical slice>", "<another slice>"]
+          ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: t1, title: "<title>", acceptance: ["<criterion>"], blockedBy: [] }
+            - { id: t2, title: "<title>", acceptance: ["<criterion>"], blockedBy: [t1] }
+          ```
+      command: |-
+        /to-spec Turn these interview answers into a spec, do not interview me again. Start: two people, one week in September, about 1500 euros for the stay. Q1 Style: one base for the week (A) or a new place every two days (B). Recommended A, a week is short for packing. My answer: A. Q2 Where and when: by the sea on the Algarve (A) or in the mountains (B). Recommended A, it is still warm in September. My answer: A, the Algarve, first week of September. Q3 The one I forgot, my partner's dealbreaker: ask before searching (A) or find out later (B). Recommended A, it removes options early. My answer: A. No shared bathroom, at most an hour from the airport, and the sea at most 10 minutes on foot. Then run /to-tickets on the spec.
+      exampleInput: |-
+        ```handoff
+        kind: text
+        text: |-
+          Start: two people, one week in September, about 1500 euros for the stay.
+          Q1 Style: one base for the week (A) or a new place every two days (B). Recommended A, a week is short for packing. My answer: A.
+          Q2 Where and when: by the sea on the Algarve (A) or in the mountains (B). Recommended A, it is still warm in September. My answer: A, the Algarve, first week of September.
+          Q3 The one I forgot, my partner's dealbreaker: ask before searching (A) or find out later (B). Recommended A, it removes options early. My answer: A. No shared bathroom, at most an hour from the airport, and the sea at most 10 minutes on foot.
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: spec
+        goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+        requirements:
+          - Sleeps 2
+          - At most 1500 euros for the week
+          - At most 10 minutes on foot to the sea
+          - Private bathroom
+          - Airport transfer of at most 60 minutes
+        outOfScope:
+          - Flights
+          - Activities
+        slices:
+          - Shortlist three stays
+          - Check each against the requirements
+          - Rank them
+        ```
+        ```handoff
+        kind: tickets
+        tickets:
+          - { id: shortlist, title: Shortlist three stays, acceptance: [Each stay sleeps 2], blockedBy: [] }
+          - { id: sea, title: Check the walk to the sea, acceptance: [Walking time per stay], blockedBy: [shortlist] }
+          - { id: price, title: Check the price for the week, acceptance: [At most 1500 euros], blockedBy: [shortlist] }
+          - { id: bath, title: Check the private bathroom, acceptance: [Confirmed per stay], blockedBy: [shortlist] }
+          - { id: transfer, title: Check the airport transfer, acceptance: [Travel time per stay], blockedBy: [shortlist] }
+          - { id: rank, title: Rank the three stays, acceptance: [A ranking with reasons], blockedBy: [sea, price, bath, transfer] }
+        ```
+      check:
+        todo: Open a fresh chat, paste the check prompt and fix the one thing it names before you sign off.
+        criteria:
+          - The goal is one sentence.
+          - Every requirement is short and checkable.
+          - Every slice can be done and checked on its own.
+        prompt: |-
+          ## Your role
+          You are a strict reviewer in a fresh chat. You did not write the work below, you owe it nothing, and you do not rewrite it. You only check it.
+
+          ## Criteria
+          1. The goal is one sentence.
+          2. Every requirement is short and checkable.
+          3. Every slice can be done and checked on its own.
+
+          ## How to work
+          1. Grade every criterion above, one by one, as PASS or FAIL.
+          2. Back every grade with evidence: quote or point to the exact part of the work. If you cannot find evidence, the grade is FAIL.
+          3. Do not be generous. Unclear, missing or only half true counts as FAIL.
+          4. After the grades, name the ONE fix that matters most, in one or two sentences, and say exactly what to change.
+          5. Add nothing else: no praise, no summary, no rewritten version.
+
+          ## Output
+          A list "Criterion: PASS or FAIL, evidence", then "Most important fix: ...".
+
+          ## The spec and tickets to check
+          These are the results of the previous steps. If you have your own, replace the blocks below with them.
+
+          ```handoff
+          kind: spec
+          goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+          requirements:
+            - Sleeps 2
+            - At most 1500 euros for the week
+            - At most 10 minutes on foot to the sea
+            - Private bathroom
+            - Airport transfer of at most 60 minutes
+          outOfScope:
+            - Flights
+            - Activities
+          slices:
+            - Shortlist three stays
+            - Check each against the requirements
+            - Rank them
+          ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: shortlist, title: Shortlist three stays, acceptance: [Each stay sleeps 2], blockedBy: [] }
+            - { id: sea, title: Check the walk to the sea, acceptance: [Walking time per stay], blockedBy: [shortlist] }
+            - { id: price, title: Check the price for the week, acceptance: [At most 1500 euros], blockedBy: [shortlist] }
+            - { id: bath, title: Check the private bathroom, acceptance: [Confirmed per stay], blockedBy: [shortlist] }
+            - { id: transfer, title: Check the airport transfer, acceptance: [Travel time per stay], blockedBy: [shortlist] }
+            - { id: rank, title: Rank the three stays, acceptance: [A ranking with reasons], blockedBy: [sea, price, bath, transfer] }
+          ```
+      page:
+        todo: Make a page from the spec
+        simple: |-
+          ## Your role
+          You are a front-end designer who makes small, clean pages for people with no technical background.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          These are the results of the previous steps. If you have your own, replace the blocks below with them.
+
+          ```handoff
+          kind: spec
+          goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+          requirements:
+            - Sleeps 2
+            - At most 1500 euros for the week
+            - At most 10 minutes on foot to the sea
+            - Private bathroom
+            - Airport transfer of at most 60 minutes
+          outOfScope:
+            - Flights
+            - Activities
+          slices:
+            - Shortlist three stays
+            - Check each against the requirements
+            - Rank them
+          ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: shortlist, title: Shortlist three stays, acceptance: [Each stay sleeps 2], blockedBy: [] }
+            - { id: sea, title: Check the walk to the sea, acceptance: [Walking time per stay], blockedBy: [shortlist] }
+            - { id: price, title: Check the price for the week, acceptance: [At most 1500 euros], blockedBy: [shortlist] }
+            - { id: bath, title: Check the private bathroom, acceptance: [Confirmed per stay], blockedBy: [shortlist] }
+            - { id: transfer, title: Check the airport transfer, acceptance: [Travel time per stay], blockedBy: [shortlist] }
+            - { id: rank, title: Rank the three stays, acceptance: [A ranking with reasons], blockedBy: [sea, price, bath, transfer] }
+          ```
+
+          ## How to work
+          Turn this spec into one good-looking page: the goal first, then the requirements, what is out of scope, the slices, and the tickets with what blocks what.
+          - Use only what is in the handoff above. Do not invent facts, names or numbers.
+          - Plain, readable design: a clear title, short sections, generous spacing, readable on a phone, light and dark mode.
+          - No external files, fonts or libraries: all CSS inline in the one file.
+
+          ## Output
+          Give me one complete, self-contained HTML file in a single code block, with nothing before or after it. Then tell me in one line to save it as page.html and open it in my browser.
+        technical: |-
+          ## Your role
+          You are a front-end designer who makes small, clean pages for people with no technical background.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          These are the results of the previous steps. If you have your own, replace the blocks below with them.
+
+          ```handoff
+          kind: spec
+          goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+          requirements:
+            - Sleeps 2
+            - At most 1500 euros for the week
+            - At most 10 minutes on foot to the sea
+            - Private bathroom
+            - Airport transfer of at most 60 minutes
+          outOfScope:
+            - Flights
+            - Activities
+          slices:
+            - Shortlist three stays
+            - Check each against the requirements
+            - Rank them
+          ```
+          ```handoff
+          kind: tickets
+          tickets:
+            - { id: shortlist, title: Shortlist three stays, acceptance: [Each stay sleeps 2], blockedBy: [] }
+            - { id: sea, title: Check the walk to the sea, acceptance: [Walking time per stay], blockedBy: [shortlist] }
+            - { id: price, title: Check the price for the week, acceptance: [At most 1500 euros], blockedBy: [shortlist] }
+            - { id: bath, title: Check the private bathroom, acceptance: [Confirmed per stay], blockedBy: [shortlist] }
+            - { id: transfer, title: Check the airport transfer, acceptance: [Travel time per stay], blockedBy: [shortlist] }
+            - { id: rank, title: Rank the three stays, acceptance: [A ranking with reasons], blockedBy: [sea, price, bath, transfer] }
+          ```
+
+          ## How to work
+          Turn this spec into one good-looking page: the goal first, then the requirements, what is out of scope, the slices, and the tickets with what blocks what.
+          - Use only what is in the handoff above. Do not invent facts, names or numbers.
+          - Plain, readable design: a clear title, short sections, generous spacing, readable on a phone, light and dark mode.
+          - No external files, fonts or libraries: all CSS inline in the one file.
+
+          ## Output
+          Write the page to a temporary .html file, start a local web server for that folder on a free port (for example with python3 -m http.server), and open the address in my default browser. Tell me the address and the file path when you are done.
+    stay:
+      title: Stay
+      description: One fresh chat per stay. Each chat gets only the requirements, and checks one stay against every criterion.
+      run:
+        todo: 'Open a fresh chat for each stay (three in all), paste the prompt and pick one of the three real places to stay it names.'
+        prompt: |-
+          ## Your role
+          You are a careful researcher. You check exactly ONE stay against my requirements and report only what you can back up. You do not compare it with any other stay and you do not recommend.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          This is one chat out of three: I open a fresh chat for each stay, so that no result colours another.
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: spec
+          goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+          requirements:
+            - Sleeps 2
+            - At most 1500 euros for the week
+            - At most 10 minutes on foot to the sea
+            - Private bathroom
+            - Airport transfer of at most 60 minutes
+          outOfScope:
+            - Flights
+            - Activities
+          slices:
+            - Shortlist three stays
+            - Check each against the requirements
+            - Rank them
+          ```
+
+          ## How to work
+          1. Start by naming three real places to stay in the region named in the spec (in the example: the Algarve coast) that fit the requirements, each with one line on why it fits. Let me pick one and wait for my answer. Check only the one I pick.
+          2. Go through the requirements one by one. For each one find the fact that settles it.
+          3. Use primary sources first: the stay's own website, its official documents and prices, an official booking or authority page. Use reviews and aggregator sites only to fill a gap, and say so.
+          4. For every fact name where you found it (page or document) and how sure you are: sure, unsure, or not found. Never guess to fill a gap: write "not found" and say what would settle it.
+          5. If you cannot browse the web in this chat, say so at the top and mark every fact as unverified, from memory.
+          6. Show me the evidence first as a short table: requirement, fact, source, how sure.
+          7. Flag the most important uncertainty in the summary.
+
+          ## Output
+          The evidence table first, then end your answer with exactly one fenced block in this shape, one fact per requirement:
+          ```handoff
+          kind: research
+          subject: "<the option>"
+          summary: "<two sentences>"
+          facts:
+            - "<requirement: checked fact (source: where; sure | unsure | not found)>"
+          ```
+      command: |-
+        /research Name three real places to stay in the Algarve coast that fit these requirements: Sleeps 2; At most 1500 euros for the week; At most 10 minutes on foot to the sea; Private bathroom; Airport transfer of at most 60 minutes. Let me pick one, then check it against every requirement. Use primary sources, name the source of every fact, and say where you are unsure. Do not compare it with other stays.
+      exampleInput: |-
+        ```handoff
+        kind: spec
+        goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+        requirements:
+          - Sleeps 2
+          - At most 1500 euros for the week
+          - At most 10 minutes on foot to the sea
+          - Private bathroom
+          - Airport transfer of at most 60 minutes
+        outOfScope:
+          - Flights
+          - Activities
+        slices:
+          - Shortlist three stays
+          - Check each against the requirements
+          - Rank them
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: research
+        subject: Casa Blu
+        summary: A small apartment above the bay with a private bathroom, five minutes from the beach on foot. The airport transfer is not confirmed.
+        facts:
+          - "Sleeps 2: sleeps two in one bedroom (source: listing page; sure)"
+          - "At most 1500 euros for the week: about 1400 euros for 7 nights in early September (source: booking page; sure)"
+          - "At most 10 minutes on foot to the sea: 5 minutes to the beach (source: owner map; sure)"
+          - "Private bathroom: en-suite bathroom (source: listing photos; sure)"
+          - "Airport transfer of at most 60 minutes: about 50 minutes by car, no shuttle listed (source: owner FAQ; unsure)"
+        ```
+      check:
+        todo: Open a fresh chat, paste the check prompt and fix the one thing it names.
+        criteria:
+          - Every requirement has a checked fact.
+          - Where the AI is unsure, it says so.
+        prompt: |-
+          ## Your role
+          You are a strict reviewer in a fresh chat. You did not write the work below, you owe it nothing, and you do not rewrite it. You only check it.
+
+          ## Criteria
+          1. Every requirement has a checked fact.
+          2. Where the AI is unsure, it says so.
+
+          ## How to work
+          1. Grade every criterion above, one by one, as PASS or FAIL.
+          2. Back every grade with evidence: quote or point to the exact part of the work. If you cannot find evidence, the grade is FAIL.
+          3. Do not be generous. Unclear, missing or only half true counts as FAIL.
+          4. After the grades, name the ONE fix that matters most, in one or two sentences, and say exactly what to change.
+          5. Add nothing else: no praise, no summary, no rewritten version.
+
+          ## Output
+          A list "Criterion: PASS or FAIL, evidence", then "Most important fix: ...".
+
+          ## The requirements and the research to check
+          These are the results of the previous steps. If you have your own, replace the blocks below with them.
+
+          ```handoff
+          kind: spec
+          goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+          requirements:
+            - Sleeps 2
+            - At most 1500 euros for the week
+            - At most 10 minutes on foot to the sea
+            - Private bathroom
+            - Airport transfer of at most 60 minutes
+          outOfScope:
+            - Flights
+            - Activities
+          slices:
+            - Shortlist three stays
+            - Check each against the requirements
+            - Rank them
+          ```
+          ```handoff
+          kind: research
+          subject: Casa Blu
+          summary: A small apartment above the bay with a private bathroom, five minutes from the beach on foot. The airport transfer is not confirmed.
+          facts:
+            - "Sleeps 2: sleeps two in one bedroom (source: listing page; sure)"
+            - "At most 1500 euros for the week: about 1400 euros for 7 nights in early September (source: booking page; sure)"
+            - "At most 10 minutes on foot to the sea: 5 minutes to the beach (source: owner map; sure)"
+            - "Private bathroom: en-suite bathroom (source: listing photos; sure)"
+            - "Airport transfer of at most 60 minutes: about 50 minutes by car, no shuttle listed (source: owner FAQ; unsure)"
+          ```
+      page:
+        todo: Make a page from the research
+        simple: |-
+          ## Your role
+          You are a front-end designer who makes small, clean pages for people with no technical background.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: research
+          subject: Casa Blu
+          summary: A small apartment above the bay with a private bathroom, five minutes from the beach on foot. The airport transfer is not confirmed.
+          facts:
+            - "Sleeps 2: sleeps two in one bedroom (source: listing page; sure)"
+            - "At most 1500 euros for the week: about 1400 euros for 7 nights in early September (source: booking page; sure)"
+            - "At most 10 minutes on foot to the sea: 5 minutes to the beach (source: owner map; sure)"
+            - "Private bathroom: en-suite bathroom (source: listing photos; sure)"
+            - "Airport transfer of at most 60 minutes: about 50 minutes by car, no shuttle listed (source: owner FAQ; unsure)"
+          ```
+
+          ## How to work
+          Turn this research into one good-looking page: the stay, the summary and one card per fact with its source and how sure it is.
+          - Use only what is in the handoff above. Do not invent facts, names or numbers.
+          - Plain, readable design: a clear title, short sections, generous spacing, readable on a phone, light and dark mode.
+          - No external files, fonts or libraries: all CSS inline in the one file.
+
+          ## Output
+          Give me one complete, self-contained HTML file in a single code block, with nothing before or after it. Then tell me in one line to save it as page.html and open it in my browser.
+        technical: |-
+          ## Your role
+          You are a front-end designer who makes small, clean pages for people with no technical background.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: research
+          subject: Casa Blu
+          summary: A small apartment above the bay with a private bathroom, five minutes from the beach on foot. The airport transfer is not confirmed.
+          facts:
+            - "Sleeps 2: sleeps two in one bedroom (source: listing page; sure)"
+            - "At most 1500 euros for the week: about 1400 euros for 7 nights in early September (source: booking page; sure)"
+            - "At most 10 minutes on foot to the sea: 5 minutes to the beach (source: owner map; sure)"
+            - "Private bathroom: en-suite bathroom (source: listing photos; sure)"
+            - "Airport transfer of at most 60 minutes: about 50 minutes by car, no shuttle listed (source: owner FAQ; unsure)"
+          ```
+
+          ## How to work
+          Turn this research into one good-looking page: the stay, the summary and one card per fact with its source and how sure it is.
+          - Use only what is in the handoff above. Do not invent facts, names or numbers.
+          - Plain, readable design: a clear title, short sections, generous spacing, readable on a phone, light and dark mode.
+          - No external files, fonts or libraries: all CSS inline in the one file.
+
+          ## Output
+          Write the page to a temporary .html file, start a local web server for that folder on a free port (for example with python3 -m http.server), and open the address in my default browser. Tell me the address and the file path when you are done.
+    compare:
+      title: Rank 3 stays
+      detail: against the card
+      description: One chat gets the requirements and all three research results, and ranks the stays against your criteria.
+      run:
+        todo: Open a new chat, paste the prompt (swap in your three research results if you have them) and read the score table and the gate.
+        prompt: |-
+          ## Your role
+          You are an evaluator. You score every option against the requirements that were signed off, and you apply a gate before anything is recommended.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          These are the results of the previous steps. If you have your own, replace the blocks below with them.
+
+          ```handoff
+          kind: spec
+          goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+          requirements: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+          outOfScope: [Flights]
+          slices: [Rank the stays]
+          ```
+          ```handoff
+          kind: research
+          subject: Casa Blu
+          summary: Apartment above the bay, five minutes to the beach. The airport transfer is not confirmed.
+          facts:
+            - "Sleeps 2: sleeps two in one bedroom (source: listing page; sure)"
+            - "At most 1500 euros for the week: about 1400 euros for 7 nights in early September (source: booking page; sure)"
+            - "At most 10 minutes on foot to the sea: 5 minutes to the beach (source: owner map; sure)"
+            - "Private bathroom: en-suite bathroom (source: listing photos; sure)"
+            - "Airport transfer of at most 60 minutes: about 50 minutes by car, no shuttle listed (source: owner FAQ; unsure)"
+          ```
+          ```handoff
+          kind: research
+          subject: Villa Mare
+          summary: Roomy and right on the beach, but over budget.
+          facts:
+            - "Sleeps 2: sleeps four, so two fit easily (source: listing page; sure)"
+            - "At most 1500 euros for the week: about 1900 euros for 7 nights in early September (source: booking page; sure)"
+            - "At most 10 minutes on foot to the sea: right on the beach (source: owner map; sure)"
+            - "Private bathroom: two en-suite bathrooms (source: listing photos; sure)"
+            - "Airport transfer of at most 60 minutes: about 40 minutes by car (source: owner FAQ; sure)"
+          ```
+          ```handoff
+          kind: research
+          subject: Hotel Collina
+          summary: Quiet hillside hotel, a 25 minute walk to the sea.
+          facts:
+            - "Sleeps 2: double room (source: hotel website; sure)"
+            - "At most 1500 euros for the week: about 1300 euros for 7 nights in early September (source: booking page; sure)"
+            - "At most 10 minutes on foot to the sea: 25 minutes on foot (source: hotel map; sure)"
+            - "Private bathroom: en-suite bathroom (source: hotel website; sure)"
+            - "Airport transfer of at most 60 minutes: about 45 minutes by car (source: hotel FAQ; sure)"
+          ```
+
+          ## How to work
+          1. Take the requirements of the spec as the only criteria. Do not add criteria of your own.
+          2. For every option and every criterion give a score: 2 = met, 1 = partly met or unknown, 0 = missed. Add a few words of evidence from the research. If the research marks a fact unsure or not found, the score is at most 1.
+          3. Show the scores as a table: criteria as rows, options as columns, with the total at the bottom.
+          4. Apply the gate. The gate is the second sign-off: an option passes only if it scores 2 on every criterion that is a hard limit (price, capacity, access, safety) and 1 or more on the others. Name each option that fails and why.
+          5. If no option passes, say "Gate: no option passes" and list what to research next. Still fill the ranking.
+          6. Rank the options best to worst. Each "why" is one sentence and starts with the total score, like "9 of 10." If the option fails the gate, "Fails the gate:" and the reason follow right after the score.
+          7. Do not recommend the final choice yet and do not change the requirements.
+
+          ## Output
+          The score table, the gate result in one line, then exactly one fenced block in this shape:
+          ```handoff
+          kind: comparison
+          criteria: ["<requirement>", "<requirement>"]
+          ranking:
+            - { name: "<option>", why: "<score and one sentence>" }
+          ```
+      exampleInput: |-
+        ```handoff
+        kind: spec
+        goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+        requirements: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+        outOfScope: [Flights]
+        slices: [Rank the stays]
+        ```
+        ```handoff
+        kind: research
+        subject: Casa Blu
+        summary: Apartment above the bay, five minutes to the beach. The airport transfer is not confirmed.
+        facts:
+          - "Sleeps 2: sleeps two in one bedroom (source: listing page; sure)"
+          - "At most 1500 euros for the week: about 1400 euros for 7 nights in early September (source: booking page; sure)"
+          - "At most 10 minutes on foot to the sea: 5 minutes to the beach (source: owner map; sure)"
+          - "Private bathroom: en-suite bathroom (source: listing photos; sure)"
+          - "Airport transfer of at most 60 minutes: about 50 minutes by car, no shuttle listed (source: owner FAQ; unsure)"
+        ```
+        ```handoff
+        kind: research
+        subject: Villa Mare
+        summary: Roomy and right on the beach, but over budget.
+        facts:
+          - "Sleeps 2: sleeps four, so two fit easily (source: listing page; sure)"
+          - "At most 1500 euros for the week: about 1900 euros for 7 nights in early September (source: booking page; sure)"
+          - "At most 10 minutes on foot to the sea: right on the beach (source: owner map; sure)"
+          - "Private bathroom: two en-suite bathrooms (source: listing photos; sure)"
+          - "Airport transfer of at most 60 minutes: about 40 minutes by car (source: owner FAQ; sure)"
+        ```
+        ```handoff
+        kind: research
+        subject: Hotel Collina
+        summary: Quiet hillside hotel, a 25 minute walk to the sea.
+        facts:
+          - "Sleeps 2: double room (source: hotel website; sure)"
+          - "At most 1500 euros for the week: about 1300 euros for 7 nights in early September (source: booking page; sure)"
+          - "At most 10 minutes on foot to the sea: 25 minutes on foot (source: hotel map; sure)"
+          - "Private bathroom: en-suite bathroom (source: hotel website; sure)"
+          - "Airport transfer of at most 60 minutes: about 45 minutes by car (source: hotel FAQ; sure)"
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: comparison
+        criteria: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+        ranking:
+          - { name: Casa Blu, why: "9 of 10. Passes the gate; the airport transfer is still unsure." }
+          - { name: Villa Mare, why: "8 of 10. Fails the gate: 1900 euros for the week is over the 1500 limit." }
+          - { name: Hotel Collina, why: "8 of 10. Fails the gate: 25 minutes on foot is over the 10 minute limit." }
+        ```
+      check:
+        todo: Open a fresh chat, paste the check prompt and fix the one thing it names.
+        criteria:
+          - Every stay is ranked with a reason.
+          - Every missed requirement is flagged.
+        prompt: |-
+          ## Your role
+          You are a strict reviewer in a fresh chat. You did not write the work below, you owe it nothing, and you do not rewrite it. You only check it.
+
+          ## Criteria
+          1. Every stay is ranked with a reason.
+          2. Every missed requirement is flagged.
+
+          ## How to work
+          1. Grade every criterion above, one by one, as PASS or FAIL.
+          2. Back every grade with evidence: quote or point to the exact part of the work. If you cannot find evidence, the grade is FAIL.
+          3. Do not be generous. Unclear, missing or only half true counts as FAIL.
+          4. After the grades, name the ONE fix that matters most, in one or two sentences, and say exactly what to change.
+          5. Add nothing else: no praise, no summary, no rewritten version.
+
+          ## Output
+          A list "Criterion: PASS or FAIL, evidence", then "Most important fix: ...".
+
+          ## The requirements and the ranking to check
+          These are the results of the previous steps. If you have your own, replace the blocks below with them.
+
+          ```handoff
+          kind: spec
+          goal: Choose one place on the Algarve coast where two people can stay for a week in the first week of September.
+          requirements: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+          outOfScope: [Flights]
+          slices: [Rank the stays]
+          ```
+          ```handoff
+          kind: comparison
+          criteria: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+          ranking:
+            - { name: Casa Blu, why: "9 of 10. Passes the gate; the airport transfer is still unsure." }
+            - { name: Villa Mare, why: "8 of 10. Fails the gate: 1900 euros for the week is over the 1500 limit." }
+            - { name: Hotel Collina, why: "8 of 10. Fails the gate: 25 minutes on foot is over the 10 minute limit." }
+          ```
+      page:
+        todo: Make a ranked-table page
+        simple: |-
+          ## Your role
+          You are a front-end designer who makes small, clean pages for people with no technical background.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: comparison
+          criteria: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+          ranking:
+            - { name: Casa Blu, why: "9 of 10. Passes the gate; the airport transfer is still unsure." }
+            - { name: Villa Mare, why: "8 of 10. Fails the gate: 1900 euros for the week is over the 1500 limit." }
+            - { name: Hotel Collina, why: "8 of 10. Fails the gate: 25 minutes on foot is over the 10 minute limit." }
+          ```
+
+          ## How to work
+          Turn this comparison into one good-looking page with a ranked table I can show my partner.
+          - Use only what is in the handoff above. Do not invent facts, names or numbers.
+          - Plain, readable design: a clear title, short sections, generous spacing, readable on a phone, light and dark mode.
+          - No external files, fonts or libraries: all CSS inline in the one file.
+
+          ## Output
+          Give me one complete, self-contained HTML file in a single code block, with nothing before or after it. Then tell me in one line to save it as page.html and open it in my browser.
+        technical: |-
+          ## Your role
+          You are a front-end designer who makes small, clean pages for people with no technical background.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: comparison
+          criteria: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+          ranking:
+            - { name: Casa Blu, why: "9 of 10. Passes the gate; the airport transfer is still unsure." }
+            - { name: Villa Mare, why: "8 of 10. Fails the gate: 1900 euros for the week is over the 1500 limit." }
+            - { name: Hotel Collina, why: "8 of 10. Fails the gate: 25 minutes on foot is over the 10 minute limit." }
+          ```
+
+          ## How to work
+          Turn this comparison into one good-looking page with a ranked table I can show my partner.
+          - Use only what is in the handoff above. Do not invent facts, names or numbers.
+          - Plain, readable design: a clear title, short sections, generous spacing, readable on a phone, light and dark mode.
+          - No external files, fonts or libraries: all CSS inline in the one file.
+
+          ## Output
+          Write the page to a temporary .html file, start a local web server for that folder on a free port (for example with python3 -m http.server), and open the address in my default browser. Tell me the address and the file path when you are done.
+    plan:
+      title: Trip plan
+      detail: by Sunday
+      description: The comparison becomes a one-page recommendation for your partner.
+      run:
+        todo: Open a new chat, paste the prompt and read the one page. Send it to my partner once the check passes.
+        prompt: |-
+          ## Your role
+          You are a chief of staff. You write a one-page recommendation for my partner, who has little time and has not followed the work.
+
+          ## Context
+          I want to plan a vacation for two people: one week away.
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: comparison
+          criteria: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+          ranking:
+            - { name: Casa Blu, why: "9 of 10. Passes the gate; the airport transfer is still unsure." }
+            - { name: Villa Mare, why: "8 of 10. Fails the gate: 1900 euros for the week is over the 1500 limit." }
+          ```
+
+          ## How to work
+          1. Write for my partner: plain words, no jargon, at most 250 words.
+          2. Use exactly these headings: **Recommendation** (one stay, in one sentence), **Three reasons** (the three that matter most, one line each, taken from the comparison), **The risk to settle first** (one risk and the one action that settles it), **What I need from you** (the decision, and by when it is useful).
+          3. Only use facts from the comparison. If something is missing, say so under the risk instead of inventing it.
+
+          ## Output
+          The page in the chat, then end your answer with exactly one fenced block in this shape, holding the page as plain text:
+          ```handoff
+          kind: text
+          text: |-
+            <the one-page recommendation>
+          ```
+      exampleInput: |-
+        ```handoff
+        kind: comparison
+        criteria: [Sleeps 2, At most 1500 euros for the week, At most 10 minutes on foot to the sea, Private bathroom, Airport transfer of at most 60 minutes]
+        ranking:
+          - { name: Casa Blu, why: "9 of 10. Passes the gate; the airport transfer is still unsure." }
+          - { name: Villa Mare, why: "8 of 10. Fails the gate: 1900 euros for the week is over the 1500 limit." }
+        ```
+      exampleOutput: |-
+        ```handoff
+        kind: text
+        text: |-
+          **Recommendation**
+          Book Casa Blu for the first week of September.
+
+          **Three reasons**
+          - It sleeps two and has a private bathroom.
+          - It costs about 1400 euros, under the 1500 limit.
+          - The sea is 5 minutes on foot.
+
+          **The risk to settle first**
+          The airport transfer is not confirmed. Ask the owner how to get there from the airport.
+
+          **What I need from you**
+          A yes to Casa Blu by Friday, so we can hold the dates.
+        ```
+      check:
+        todo: Open a fresh chat, paste the check prompt and fix the one thing it names before you send the page.
+        criteria:
+          - One stay is recommended.
+          - There are three reasons and one risk to settle first.
+        prompt: |-
+          ## Your role
+          You are a strict reviewer in a fresh chat. You did not write the work below, you owe it nothing, and you do not rewrite it. You only check it.
+
+          ## Criteria
+          1. One stay is recommended.
+          2. There are three reasons and one risk to settle first.
+
+          ## How to work
+          1. Grade every criterion above, one by one, as PASS or FAIL.
+          2. Back every grade with evidence: quote or point to the exact part of the work. If you cannot find evidence, the grade is FAIL.
+          3. Do not be generous. Unclear, missing or only half true counts as FAIL.
+          4. After the grades, name the ONE fix that matters most, in one or two sentences, and say exactly what to change.
+          5. Add nothing else: no praise, no summary, no rewritten version.
+
+          ## Output
+          A list "Criterion: PASS or FAIL, evidence", then "Most important fix: ...".
+
+          ## The recommendation to check
+          This is the result of the previous step. If you have your own result from that step, replace the block below with it.
+
+          ```handoff
+          kind: text
+          text: |-
+            **Recommendation**
+            Book Casa Blu for the first week of September.
+
+            **Three reasons**
+            - It sleeps two and has a private bathroom.
+            - It costs about 1400 euros, under the 1500 limit.
+            - The sea is 5 minutes on foot.
+
+            **The risk to settle first**
+            The airport transfer is not confirmed. Ask the owner how to get there from the airport.
+
+            **What I need from you**
+            A yes to Casa Blu by Friday, so we can hold the dates.
+          ```

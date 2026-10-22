@@ -1,0 +1,51 @@
+# Die Wörter der Oberfläche des Visuals, mit denselben Schlüsseln wie die englische Datei.
+ui:
+  workflow: Ablauf
+  toolbar: Ablauf-Steuerung
+  technical: Technisch
+  technicalTip: 'Technisch: zeigt die einmalige Einrichtung und die /Skill-Befehle'
+  download: Diesen Ablauf herunterladen
+  upload: Eigenen Ablauf hochladen
+  close: Schließen
+  copied: Kopiert
+  tryIt: Ausprobieren
+  tryTitle: '{stage}: Ausprobieren'
+  tryFor: 'für {stage}'
+  moveLabel: 'BRIEF {letter}: {why}'
+  promptLabel: Prompt
+  commandLabel: Befehl
+  copyPrompt: Prompt kopieren
+  copyCommand: Befehl kopieren
+  openChatgpt: In ChatGPT öffnen
+  openClaude: In Claude öffnen
+  short: Kurz
+  shortTip: Kurze Fassung, nur die 3 wichtigsten Fragen pro Runde
+  sectionAbout: Über diesen Schritt
+  sectionIn: Was du einfügst
+  sectionOut: Was du zurückbekommst
+  sectionCriteria: So sieht gut aus
+  sectionSkills: Skills
+  sectionExample: Beispielergebnis
+  setup: Einmalige Einrichtung
+  newTab: öffnet in neuem Tab
+
+# Die Wörter der Ausgabe-Ansichten (Spezifikation, Tickets, Recherche, Vergleich, Anforderungen), mit denselben Schlüsseln.
+output:
+  goal: Ziel
+  requirements: Anforderungen
+  outOfScope: Nicht dabei
+  slices: Scheiben
+  tickets: Tickets
+  acceptance: Fertig, wenn
+  blockedBy: Nach
+  ready: Bereit
+  done: Erledigt
+  blocked: Wartet
+  progress: '{done} von {total} erledigt'
+  graphHint: Klicke ein bereites Ticket an, um es abzuhaken und freizugeben, was daran hängt.
+  facts: Fakten
+  criteria: Kriterien
+  ranking: Rangfolge
+  rank: '#'
+  option: Option
+  why: Warum

@@ -1,33 +1,7 @@
 {
   "title": "Human-in-the-Loop-Workflow",
   "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen.",
-  "pipelineLabel": "Die Schritte eines Briefings, Stufe für Stufe",
-  "stages": {
-    "party": {
-      "name": "Sommerfest",
-      "move": "Zerlege es"
-    },
-    "interview": {
-      "name": "Interview",
-      "move": "Interviewe Dich mit KI"
-    },
-    "requirements": {
-      "name": "Anforderungen",
-      "move": "Erst die Anforderungen"
-    },
-    "research": {
-      "name": "Recherche",
-      "move": "Frischer Start für jedes Teil"
-    },
-    "compare": {
-      "name": "Vergleich",
-      "move": "Prüfe jeden Schritt"
-    },
-    "recommendation": {
-      "name": "Empfehlung",
-      "move": "für Deine Chefin"
-    }
-  },
+  "workflowLabel": "Die Schritte eines Briefings, Stufe für Stufe",
   "loop": {
     "note": "<marker>Ein frischer Chat pro Aufgabe</marker> hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
   },
@@ -82,44 +56,18 @@
   },
   "jobsLabel": "{stage}: Aufgaben",
   "jobs": {
-    "party": {
-      "venue": "Location",
-      "travel": "Anreise",
-      "catering": "Catering",
-      "invitations": "Einladungen",
-      "budget": "Budget"
-    },
     "interview": {
-      "label": "KI fragt Dich",
       "detail": "3 Fragen,",
       "forgot": "<marker>1 vergessen</marker>"
     },
     "research": {
-      "venue1": "Location 1",
-      "venue2": "Location 2",
-      "venue3": "Location 3",
       "checked": "Gegen die Karte geprüft"
     },
     "compare": {
-      "label": "3 Locations ranken",
-      "detail": "gemessen an der Karte",
       "gate": "Prüfpunkt 2"
-    },
-    "recommendation": {
-      "label": "Location-Plan",
-      "detail": "bis Freitag"
     }
   },
   "card": {
-    "gate": "Prüfpunkt 1",
-    "title": "Anforderungskarte",
-    "criteria": {
-      "guests": "200 Gäste",
-      "budget": "150 € pro Person",
-      "stepFree": "Stufenlos",
-      "vegetarian": "Vegetarisches Menü",
-      "quiet": "Ruhig genug zum Reden"
-    },
-    "signOff": "Freigegeben"
+    "gate": "Prüfpunkt 1"
   }
 }

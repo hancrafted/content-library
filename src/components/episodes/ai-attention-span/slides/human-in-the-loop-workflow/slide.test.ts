@@ -129,7 +129,7 @@ describe('success cases', () => {
         .get(),
       card: pipeline.text().includes('Requirements card'),
       connectors: pipeline.find('> li > [aria-hidden="true"]').length,
-      fans: pipeline.find('svg.h-40').length,
+      fans: pipeline.find('svg[data-fan]').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);
@@ -159,7 +159,7 @@ describe('edge cases', () => {
 
   it('names the first stage as the task, in both locales', () => {
     // ARRANGE
-    const expected = ['Summer party', 'Sommerfest'];
+    const expected = ['Plan', 'Plan'];
     // ACT
     const names = (['en', 'de'] as const).map((locale) =>
       scene(locale)('ol[aria-label] > li').first().find('p.font-semibold').first().text().trim(),

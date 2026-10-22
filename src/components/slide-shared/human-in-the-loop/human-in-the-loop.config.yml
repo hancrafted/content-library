@@ -1,0 +1,51 @@
+# The words of the visual's own chrome (not of any Workflow). The German twin holds the same keys.
+ui:
+  workflow: Workflow
+  toolbar: Workflow controls
+  technical: Technical
+  technicalTip: 'Technical: show the one-time setup and the /skill commands'
+  download: Download this Workflow
+  upload: Upload your own Workflow
+  close: Close
+  copied: Copied
+  tryIt: Try it
+  tryTitle: '{stage}: Try it'
+  tryFor: 'for {stage}'
+  moveLabel: 'BRIEF {letter}: {why}'
+  promptLabel: Prompt
+  commandLabel: Command
+  copyPrompt: Copy prompt
+  copyCommand: Copy command
+  openChatgpt: Open in ChatGPT
+  openClaude: Open in Claude
+  short: Short
+  shortTip: Short version, only the 3 most load-bearing questions per round
+  sectionAbout: About this step
+  sectionIn: What you paste in
+  sectionOut: What you get back
+  sectionCriteria: What good looks like
+  sectionSkills: Skills
+  sectionExample: Example result
+  setup: One-time setup
+  newTab: opens in a new tab
+
+# The words of the output renderers (spec, tickets, research, comparison, requirements). The German twin holds the same keys.
+output:
+  goal: Goal
+  requirements: Requirements
+  outOfScope: Out of scope
+  slices: Slices
+  tickets: Tickets
+  acceptance: Done when
+  blockedBy: After
+  ready: Ready
+  done: Done
+  blocked: Waiting
+  progress: '{done} of {total} done'
+  graphHint: Click a ready ticket to tick it off and unlock what it blocks.
+  facts: Facts
+  criteria: Criteria
+  ranking: Ranking
+  rank: '#'
+  option: Option
+  why: Why
