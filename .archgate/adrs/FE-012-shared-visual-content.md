@@ -13,6 +13,8 @@ description: 'A Shared visual may own one locale pair of data and default words 
 
 ## Context
 
+> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): a Shared visual is renamed Explorable explanation and moves to its own folder apart from plain shared parts; the rules below are unchanged.
+
 A **Shared visual** is one interactive visual several Slides show, each by its own **Preset** — the context window cornerstone shows on about ten Slides of one Episode. It is drawn from data: a chat log of dozens of steps, category labels, token budgets, the Presets themselves, in English and German.
 
 Without this record a `slide-shared` part owns no words, so that data has no home:
@@ -42,7 +44,6 @@ For this project the chat and its labels are one artifact, authored together fro
 
 1. This admits a text home for a Shared visual only: a part with Presets, used by two or more Slides. Any other `slide-shared` part owns no words and takes them as props.
 2. A Shared visual's data is content: it owns no route, no anchor and no Episode metadata.
-3. Amended: now Explorable explanation, own folder; rules unchanged.
 
 ### 4. Parts of an interactive Shared visual
 
