@@ -196,7 +196,29 @@ _Pending: ticket *Pipeline and evidence: how /new-episode draws on and grows res
 
 ## Event page behaviour
 
-_Pending: ticket *Prototype: an Event page and an unlisted one-off Episode*._
+Settled in ticket _Prototype: an Event page and an unlisted one-off Episode_ from a throwaway static prototype (kept outside the repo, never merged). Han could not react in this run, so his reaction is played from the vision and the Delivery contract and is `decided-for-Han (test run)`, contestable.
+
+- **Event page.** Breadcrumb (Events / Event), title, one facts line (kind, date, place, Audience), description, then, for a past Event, the notice, then the Playlist as a numbered list of Episode cards. The event-frame Episode is item 1, shaded as a band and chipped "Event page" (DE "Veranstaltungsseite"); an unlisted one-off carries the chip "Unlisted" (DE "Nicht gelistet"). The existing Episode card is reused; there is no new card type.
+- **Event-scoped Episode page.** Breadcrumb ends in the Episode title; the past notice sits above the title; the title is followed by "Episode 2 of 4" (position in the Playlist) and previous/next links inside the Playlist, with a link back to the Event. Unlisted and public Episodes look the same here; only the chip on the Event page differs.
+- **Past notice.** One fixed line, same copy on the Event page and every Event-scoped Episode page, shown as a bordered, warning-tinted callout with a role of `note`. It is not dismissible and carries no date. It is Translation keys, not a stored field:
+  - EN: "This Event has already taken place. The content below is kept up to date and may differ from the recording."
+  - DE: "Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen."
+- **Upcoming Event** shows the same page without the notice. Nothing marks an unlisted Episode as unlisted beyond the chip and `noindex`.
+- Prototype verdict: the Delivery contract's placement (above the Playlist, above the title) reads right; no change to it.
+
+### Proposed failing browser tests (in Han's words)
+
+Each runs on the built export (`*.browser.test.ts`), one test per line.
+
+- "An Event page lists its Episodes in the Playlist's order, event-frame first": the Playlist items' order equals the record's order and item 1 carries the event-frame chip.
+- "A past Event says its content may differ from the recording; an upcoming Event does not": the notice element is present on a past Event page and absent on an upcoming one.
+- "I open an unlisted Episode from its Event and the notice is above the title": on a past Event's Episode page the notice precedes the `h1` in DOM order.
+- "The notice is not on a public Episode's own page": `/episodes/<slug>/` has no notice even when the Episode also belongs to a past Event.
+- "I can walk the Playlist from an Episode": an Event-scoped Episode page shows its position ("2 of 4"), and next and previous land on the neighbouring Episodes' Event-scoped URLs.
+- "The German Event page warns in German": `/de/events/<event>/` shows the DE notice and no English one.
+- "An unlisted Episode reached from its Event tells search engines not to index it": the page carries `meta robots noindex` (the sitemap side stays in the fast suite).
+
+Per the Testing rule, the first three are the corrected behaviour Han would react to; the rest pin the contract.
 
 ## Considered options
 
@@ -212,6 +234,9 @@ _Pending: ticket *Prototype: an Event page and an unlisted one-off Episode*._
 - Delivery contract: **Unlisted Episodes also served at `/episodes/<slug>/`.** Rejected: two URLs for one page, and the bare Episode route would then need to know which Events present it.
 - Delivery contract: **A stored Event status (upcoming or past).** Rejected: it goes stale by hand; the date derives it.
 
+- Event page behaviour: **A dismissible or dated past notice.** Rejected: a recording viewer must always see it, and a date goes stale.
+- Event page behaviour: **A separate card type for the event-frame Episode.** Rejected: the existing Episode card with a chip and a band suffices.
+
 ## Consequences
 
 - `GLOSSARY.md` changes ship with each implementation ticket, never ahead of the code.
@@ -221,3 +246,4 @@ _Pending: ticket *Prototype: an Event page and an unlisted one-off Episode*._
 - Slide reuse: a retired instance slug stays reserved for as long as an Episode pins it as its anchor.
 - Slide reuse: adding a pool Slide to an Episode can fail the build on its sibling links, by design.
 - Evidence vocabulary: a new top Concept is a new theme (icon and accent), so it is a design decision; the Tag record and its filter chips are replaced by the Concept store.
+- Event page behaviour: the past notice is two Translation keys (`eventsPage` namespace), and the Event-scoped Episode page gains a Playlist position and previous/next links.
