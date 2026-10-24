@@ -14,6 +14,23 @@ frontmatter:
           presence: required
           intent: "The file name for a reader, equal to the file's h1 so retrieval can list the file by it; the title-matches-h1 check compares them."
         stale_after: { presence: required, format: datetime }
+    - ruleId: product-vision
+      folders: [docs/steering/]
+      intent: 'docs/steering/ holds the product strategy every agent reads before a decision, so each file declares itself a steering document and its status says whether Han has reviewed it'
+      fields:
+        type:
+          presence: required
+          allowed:
+            - {
+                value: product-vision,
+                intent: 'North star, horizons, ranked trade-off rules, escalation and non-goals: steers decisions without carrying the model.',
+              }
+        title: *title
+        status:
+          presence: required
+          allowed:
+            - { value: draft, intent: 'Written by an agent; Han has not reviewed the text yet.' }
+            - { value: accepted, intent: 'Han reviewed the text and accepts it as the steering document.' }
     - ruleId: agent-guide
       folders: [docs/agents/]
       intent: 'docs/agents/ holds method and procedure only, so every file declares itself an agent guide and product reference is caught here'
