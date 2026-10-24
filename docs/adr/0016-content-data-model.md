@@ -92,7 +92,67 @@ Decided-for-Han (test run): all of the above, contestable.
 
 ## Citations
 
-_Pending: ticket *Citations: how does a claim cite a Research question?*._
+Settled in ticket _Citations: how does a claim cite a Research question?_ (answers `decided-for-Han (test run)`). It rests on _Evidence vocabulary_ (categories dissolve, ids stable) and on the markdown-harness facts of ticket _What can markdown-harness check for source trust and citations?_ (a `pattern` on a source URL is configuration; "this id exists elsewhere", domain trust levels and JSON Schema need a change to markdown-harness).
+
+### Research question
+
+1. **Id and URL.** A Research question's id is the `<category>-<####>` part of its folder name, for example `AIE-0001`, kept as written. Its page is `/research/<id>`, English only (decision 3). The `__<question-slug>` part of the folder is for people and is not part of the id. No existing file is renamed (_Research categories_), and a retired id is never reused.
+2. **The id is derived, not stored.** There is no `id` field: the store takes it from the folder name, so folder and field cannot disagree. The build fails on a malformed or duplicate id across the wiki and staging together.
+3. **`informs` is a required field:** a non-empty list of Concept ids, the first being the main one (as in _Top Concepts_). markdown-harness checks that it is present and non-empty; the Zod store checks that each id is a Concept. This is what lets a Concept page list its Research questions.
+4. **`confidence` is a required field:** `settled`, `contested` or `open`. It describes the evidence for the Answer, never the writer's certainty:
+   - `settled`: the Answer rests on at least two independent primary Sources that agree, and no Source or Caveat contradicts it.
+   - `contested`: credible primary Sources disagree, or the effect is real but depends on context the Answer names.
+   - `open`: anything less: one Source, only weak Sources, or a mechanism still debated.
+5. **Who sets `confidence`.** The agent that writes the research proposes it, with the Answer, by the three definitions above. Han confirms or changes it at the Promotion Gate. After that only Han changes it, and a re-run for staleness (`stale_after`) resets it to a proposal he confirms again. markdown-harness enforces presence and the three values (`allowed`); whether a value is _earned_ is judgement, so `intent` states the definition and review enforces it.
+6. **The page shows it.** `/research/<id>` shows the Answer, the `confidence` as a badge with its definition, the Concepts it informs, its Sources, and the Speaker notes that cite it.
+
+### The citation contract
+
+7. **Default: cite a Research question.** A Speaker note's source entry names a Research question by id; its title, link and `confidence` come from the question, so the entry carries no title of its own.
+8. **Exception: cite a Source directly, only when it is high trust.** A direct entry keeps today's `url` and its title in the Slide's `i18n`. A Source that is not high trust is never cited directly: the claim needs a Research question, which is where weak Sources are weighed, caveated and given a `confidence`.
+
+   ```ts
+   sources: [
+     { slug: 'onboarding', research: 'AIE-0001' }, // default: the note cites a Research question
+     { slug: 'claude-docs', url: 'https://docs.anthropic.com/…' }, // direct: host is on the allowlist
+   ];
+   ```
+
+   The citation attaches where the claim is made; today that is the note's `sources`, and attaching to a single note item is the implementer's refinement.
+
+9. **What decides high trust: the Source's host, from one allowlist.** A Source is high trust when its host is an accountable primary publisher of the claim it supports. Three kinds qualify: a vendor's own documentation for what that vendor's product does (`anthropic.com` and `claude.com` hosts for Anthropic's products), a standard or law's own text (`eur-lex.europa.eu`), and the scholarly record (`arxiv.org`, `doi.org`, `nber.org`, `aeaweb.org`). The list lives in code in one place, one entry per host with a reason line. There is exactly one level: on the list is high trust, off it is not; markdown-harness cannot hold levels either. Matching is anchored on `https://` and the host, so `docs.anthropic.com.evil.example` is not `docs.anthropic.com`. Adding a host is a trust decision, not a content edit: Han accepts it. Blogs, analytics vendors, media and aggregators (`hbr.org`, `paulgraham.com`, `steveblank.com`, `benchmarks.ebsta.com`, `github.com`) are not on it. A host says who publishes, not that a given page is right, so a cited Source still needs a Research question when the claim is contested.
+10. **The allowlist is not a gate on Research questions.** A research file's `sources[].resource` stays governed by the existing primary-source `intent`, not a host pattern: research legitimately weighs a practitioner essay or a dataset, and those belong there precisely because the question carries the caveats.
+11. **Where each check lives.** markdown-harness (configuration): `confidence` values and presence, `informs` presence. The vitest suite (`npm run verify`, hermetic): everything markdown-harness cannot do, namely that a cited Research question id exists, that `informs` ids are Concepts, that a direct `url` is on the allowlist (Speaker note sources are TypeScript in `slide.tsx`, which markdown-harness does not read), and the migration baseline below. `check:sources` stays the network liveness check.
+12. **Staged research can be cited before Promotion, but not past publication.** A Run's Speaker notes cite research that is still in `docs/episodes/<slug>/research/` (its id resolves from staging), because Promotion comes after the Episode is final. The check refuses a `published` Episode that cites an id that exists only in staging, so Promotion happens before publishing. Staged ids have no page until promoted.
+
+### Migration of the 138 existing URL sources
+
+13. **Grandfather behind a shrinking baseline; migrate on touch; no big-bang migration.** There are 138 sources on 113 Speaker notes and 24 Research questions (13 more staged), so a Research question does not exist for most claims yet, and writing them all would block this model on research work. Instead:
+    - A source that is already high trust is valid under the contract and needs nothing. By the count of literal URLs, 57 of 92 are on the allowlist's hosts; 35 are not. The other 46 sources use non-literal forms, which the implementation's check classifies.
+    - Every existing source that is not high trust is listed once in a checked-in baseline file generated by the check. A source in the baseline passes.
+    - **The baseline only shrinks.** A new off-list URL source that is not in the baseline is refused; a baseline entry whose source no longer exists is refused too, so removing a migrated source forces the baseline update and the list cannot grow stale.
+    - **Migrate on touch:** a note edited in a Run, or an instance made from it, moves its baseline sources to Research questions in that change. The pipeline's review step asks for it (the _Pipeline and evidence_ seam); the check enforces the ratchet, not the touch.
+    - The baseline is reviewed when horizon 2 starts (2027); an empty baseline is deleted and the exception ends.
+14. **A check refuses, from the day the implementation ticket merges:** a Research question without a valid `confidence` or `informs`; a Concept id in `informs` that does not exist; a `research:` citation to an id that does not exist; a direct `url` that is neither on the allowlist nor in the baseline; a baseline entry that is gone; a published Episode citing a staged id. There is no warning period: the baseline is the transition.
+
+### The 13 staged research files
+
+15. **They join the same contract in the same implementation change.** The research rule governs `research.md` in staging and in the wiki alike, so requiring `confidence` and `informs` fails the 13 staged files (`COG-0001`, `LLM-0006` to `LLM-0010`, `AIE-0012` to `AIE-0015`, `WORK-0001` to `WORK-0003`) unless they are backfilled. The implementation backfills all 37 files at once: the agent proposes `confidence` and `informs`, Han confirms. Their ids already continue the per-category counts, so nothing renumbers.
+16. **One overlap is handed on.** `AIE-0014` (`llm-non-deterministic-output`) answers nearly the question `LLM-0001` already answers. Staged ids are not public, so Promotion may merge it into `LLM-0001` and retire `AIE-0014`; the _Pipeline and evidence_ seam decides how the retrieval job catches such duplicates.
+
+Failing tests, in Han's words:
+
+- "A Speaker note that cites a Research question shows its title, links to its page and shows how settled it is."
+- "A Speaker note that cites a Research question that does not exist fails."
+- "A new Speaker note source from a blog fails; one from Anthropic's documentation passes."
+- "A look-alike host such as `docs.anthropic.com.evil.example` is not trusted."
+- "A Research question with no `confidence`, or one that is not settled, contested or open, fails."
+- "A Research question that informs no Concept, or a Concept that does not exist, fails."
+- "A Concept page lists every Research question that informs it, and a Research page lists the Speaker notes that cite it."
+- "Fixing a grandfathered source removes it from the baseline, and a baseline entry for a source that is gone fails."
+- "A published Episode that cites research still in staging fails."
+
+Decided-for-Han (test run): all of the above, contestable.
 
 ## Slide reuse
 
@@ -139,6 +199,12 @@ _Pending: ticket *Prototype: an Event page and an unlisted one-off Episode*._
 - **Evidence vocabulary: one-to-one Tag rename.** Rejected: `workflow` grouped no subject and two research areas (model behaviour, adoption) had no home.
 - **Evidence vocabulary: keep research categories as a Concept field.** Rejected: a second axis beside `broader` that two Concepts can disagree on.
 - **Evidence vocabulary: store `narrower`.** Rejected: it is the inverse of `broader`; two copies drift.
+- **Citations: cite a Source directly whenever the URL resolves.** Rejected: a Speaker note would carry no weighing of the Source; Research questions exist to hold caveats and `confidence`.
+- **Citations: trust levels per host (high, medium, low).** Rejected: markdown-harness cannot select on a field value, and one level keeps "on the list or not" testable.
+- **Citations: migrate all 138 sources now.** Rejected: most claims have no Research question yet; it would block the model on research work.
+- **Citations: grandfather with no baseline.** Rejected: nothing would stop the off-list count growing.
+- **Citations: `confidence` derived from Source count.** Rejected: contested and open need judgement the count cannot make; the agent proposes, Han confirms.
+- **Citations: an `id` field in the research frontmatter.** Rejected: it can disagree with the folder name.
 
 ## Consequences
 
@@ -147,3 +213,7 @@ _Pending: ticket *Prototype: an Event page and an unlisted one-off Episode*._
 - Slide reuse: a retired instance slug stays reserved for as long as an Episode pins it as its anchor.
 - Slide reuse: adding a pool Slide to an Episode can fail the build on its sibling links, by design.
 - Evidence vocabulary: a new top Concept is a new theme (icon and accent), so it is a design decision; the Tag record and its filter chips are replaced by the Concept store.
+- Citations: a baseline file of off-list URL sources exists until it is empty; reviewed at the start of horizon 2.
+- Citations: all 37 research files (24 wiki, 13 staged) gain `confidence` and `informs` in one change; the research writer's template gains them in the _Pipeline and evidence_ seam.
+- Citations: adding a host to the allowlist is a trust decision Han accepts, like a new top Concept.
+- Citations: Promotion must precede publishing an Episode that cites its own staged research.
