@@ -5,6 +5,8 @@ status: proposed
 
 # The Slide is a self-contained folder
 
+> Amended by _Content data model_ (0016): Slide folders may live in the shared pool and be referenced by several Episodes; `slideHref` resolves per Episode.
+
 An Episode composes Slides, and a Slide is one folder, `slides/<slide>/`, named after its slug. It holds its server entry (`slide.tsx`), its `*.client.tsx` widgets, their `*.pure.ts` logic and tests, an optional CSS module, and its own Translation files, `i18n/en.json` and `i18n/de.json`. The entry hands the Episode chrome its slug, notes, Voice script segments, Scene **and its text**; the kit builds the Slide's translator from that text, so a Slide is typed from its own files and knows no Episode. A Section is a list of Slides whose first names it; anchors and heading level derive from position. Copying a Slide into another Episode is `cp -r` of its folder plus one import and one list entry in the Episode file. The rules live in `FE-002`, `FE-006` and `FE-007`; this record keeps the reasons and what was traded away.
 
 ## Why
