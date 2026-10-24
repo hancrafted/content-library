@@ -5,6 +5,8 @@ status: proposed
 
 # Episode content is staged in docs and harvested at Promotion
 
+> Amended by _Content data model_ (0016): Promotion also resolves each Slide instance at a Gate: update the shared Slide or become its own Slide.
+
 A new Episode's text starts as markdown in a staging folder, `docs/episodes/<slug>/`: a Brief, research files, a Dossier and then the Spec. The implementation is built and iterated from those files, and they stay the source of truth through the feedback loop and practice. When the Episode is final it is promoted: Staging is harvested into lessons, cleanups and tickets, the Spec's design Options are filed into the Design archive, the Brief moves beside the Episode, and the staging folder is deleted. From then on the Slide folders, code and `i18n/`, are the only source of the Episode's words.
 
 ## Why the Slide's `i18n/` and not a `slide.md`

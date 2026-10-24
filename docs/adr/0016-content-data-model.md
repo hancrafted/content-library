@@ -38,7 +38,27 @@ _Pending: ticket *Citations: how does a claim cite a Research question?*._
 
 ## Slide reuse
 
-_Pending: ticket *Slide reuse: shared pool, instances and Promotion*._
+Settled in ticket _Slide reuse: shared pool, instances and Promotion_ (answers `decided-for-Han (test run)`). It amends _The Slide is a self-contained folder_ and _Episode content is staged then promoted_.
+
+1. **The shared pool is one flat folder of Slide folders,** `src/components/slide-pool/<slug>/`, with the same shape as any Slide folder. A Slide lives in its Episode's `slides/` until first reuse. First reuse is one command that moves the folder into the pool (`git mv`), re-points the owning Episode's import, and adds the reference to the reusing Episode. Slug, text and anchors do not change, so no published URL moves. Pool Slides obey the same import boundary as any Slide.
+2. **An Episode lists a pool Slide by reference.** An unchanged reuse is a reference: the Episode's Section list names the pool Slide; nothing is copied.
+3. **An instance is a Slide folder in the Episode's own `slides/`,** copied from the pool Slide the moment a Run edits it. It gets its own globally unique slug at the copy, never the origin's, and carries a marker `copiedFrom: { slug, commit }`. A copy that no edit has touched is deleted and replaced by a reference, so no unchanged instance outlives its Run.
+4. **The Promotion Gate resolves every instance,** one decision per instance, Han deciding:
+   - **Update the shared Slide:** the instance's content replaces the pool Slide, the Gate lists every Episode that references the origin, and the instance folder is deleted. The Episode's entry becomes a reference to the pool Slide and **pins the retired instance slug as its anchor**, so that Episode's published anchor does not move. If the pool Slide changed since `commit`, the Gate says so and Han reconciles by hand; there is no automatic merge.
+   - **Become its own Slide:** the `copiedFrom` marker is removed; slug, folder and anchors stay. The Slide is a new Slide in the Episode's folder, and reuses by the same rule 1.
+     Neither outcome renames a slug, so a promotion collision cannot occur: the instance's slug was unique from birth.
+5. **`slideHref` resolves per Episode, by the slug the Slide author wrote.** A Slide in the pool links to a sibling by that sibling's pool slug. The walk resolves it to this Episode's placement of that Slide or, if the Episode holds an instance copied from it, to the instance; it emits the Episode's own anchor, including a pinned one. A sibling the Episode does not hold fails the build (as before), unless the call site opts into a fallback (`slideHref(slug, { fallback: 'text' })`), which renders plain text. Adding a pool Slide to an Episode therefore fails the build until its linked siblings are there too, or the author has made the link optional.
+6. **An unlisted Episode's `slides/` changes nothing:** it owns Slides, references pool Slides, makes instances and promotes exactly as a public Episode. Its Slides sit in the same global slug namespace and its anchors are snapshotted by the same published-anchors test.
+7. **Global slug uniqueness refuses, at build and in the command that creates a Slide or instance:** a slug used by two Slides anywhere (Episode folders and pool together); a retired instance slug reused, since the Episode's pin keeps it reserved; an instance given its origin's slug. Title slides are exempt; their anchor stays per Episode.
+
+Failing tests, in Han's words:
+
+- "Reusing a Slide in a second Episode moves it into the pool and the first Episode's page looks the same."
+- "Editing a reused Slide in one Episode does not change it in the others."
+- "Promoting an edit as an update changes the shared Slide, lists the Episodes it affects, and no published anchor moves."
+- "Promoting an edit as its own Slide keeps its slug and anchors."
+- "A link between sibling Slides still works in an Episode whose siblings differ, and a missing sibling fails the build."
+- "Two Slides with the same slug anywhere are refused."
 
 ## Delivery contract
 
@@ -56,8 +76,12 @@ _Pending: ticket *Prototype: an Event page and an unlisted one-off Episode*._
 
 - **Always copy, then merge at Promotion.** Rejected in the initial grill: Promotion becomes a three-way merge, drift needs a recorded base, and an unpromoted copy becomes a permanent fork.
 - **A separate Astro/Starlight evidence site.** Rejected: evidence renders on this site, one build and one link graph.
+- **Slide reuse: promotion renames the instance's slug.** Rejected: it moves a published anchor. Instances get a unique slug from birth, so nothing is renamed at the Gate.
+- **Slide reuse: `slideHref` typed to the pool Slide's siblings, or links declared per Episode.** Rejected: a pool Slide cannot know the Episodes that hold it; per-Episode resolution by slug keeps the Slide self-contained.
 
 ## Consequences
 
 - `GLOSSARY.md` changes ship with each implementation ticket, never ahead of the code.
 - Ids stay stable: horizon 3 progress tracking will key on them.
+- Slide reuse: a retired instance slug stays reserved for as long as an Episode pins it as its anchor.
+- Slide reuse: adding a pool Slide to an Episode can fail the build on its sibling links, by design.
