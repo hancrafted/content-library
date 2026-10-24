@@ -5,6 +5,8 @@ status: accepted
 
 # Tags replace Topics
 
+_Amended by *Content data model*: Tags become Concepts._
+
 The Episode overview grouped Episodes by Topic, a curated playlist with an icon and an accent, and also by Tag, a flat keyword. A card then drew three sources that disagreed: an Episode's own look picked the icon and colour, its Topic picked the label, and its Tags said something else again. Topic also carried the idea of a YouTube playlist the channel never used, and "AI enablement" matched nearly every Episode, so it grouped nothing.
 
 Topic is dropped. Tags are the only organising idea.
