@@ -252,7 +252,64 @@ One predicate decides each page's treatment and both `pageMetadata` and the site
 
 ## Pipeline and evidence
 
-_Pending: ticket *Pipeline and evidence: how /new-episode draws on and grows research*._
+Settled in ticket _Pipeline and evidence: how /new-episode draws on and grows research_ (answers `decided-for-Han (test run)`). It amends _Episode content is staged then promoted_ and uses _Citations_ and _Slide reuse_ as given. Facts: `skills/new-episode/assets/pipeline.yml` (Setup jobs `categorize-research`, `retrieval`, `convert-references`, `customize-pipeline`; Research job `write-research`), `references/retrieval.md`, `references/write-research.md`, `skills/episode-promote/SKILL.md` step 7 and `promote-research.ts`.
+
+### Reuse before commission
+
+1. **A Run draws on the evidence layer first and commissions only what is missing.** For each Research question in the Brief, `retrieval` searches the Research questions of the wiki and of every other open Staging, narrowed first by the Concepts the question belongs to, and decides one outcome:
+   - `reuse <id>`: a question fits (its h1 and `Context` support the claim this Episode makes, not just the topic) and is fresh (`stale_after` is later than today). No job; Slides cite it by id.
+   - `refresh <id>`: fits but stale. A job rewrites it.
+   - `new`: nothing fits, or a question answers only part. A job writes one; the partial match is cited as a Source.
+     `confidence` does not decide reuse: an `open` or `contested` question is reused as it stands, and the plan names its `confidence` so the Dossier carries the caveat and never states the claim as settled.
+2. **`categorize-research` stops adding categories.** The categories dissolve (_Research categories_). The job now names each new folder with the nearest existing prefix and the next free number across the wiki and all Staging, and returns beside each question the Concept ids the question informs (the first the main one). It no longer edits `GLOSSARY.md`. A question that fits no Concept returns a `concept-gap` note instead of inventing one; a new narrower Concept is a markdown file the Run stages with its research and Han confirms at Promotion, and a new top Concept stays a design decision (_Top Concepts_).
+3. **A near duplicate is caught at retrieval, not at Promotion.** The `AIE-0014` and `LLM-0001` overlap came from a Run that could not see another Run's Staging. Retrieval now reads staged questions of other open Runs, so a question that another Staging already answers is `reuse` of that staged id (citable, _Citations_ rule 12), never a second `new`. Already staged overlaps are resolved at the Promotion Gate (below).
+4. **A refresh keeps the id.** An id is cited by notes and never reused (_Citations_ rule 1), so a refresh that took the next number would orphan every citation. The refresh job writes the same folder name in the Run's Staging; the duplicate-id check allows a staged id that shadows a wiki id only when the plan lists it as `refresh`; Promotion replaces the wiki file. Its `confidence` resets to a proposal Han confirms again (_Citations_ rule 5). This closes the question design-ADR _Episode content is staged then promoted_ left open.
+
+### The research Stage is optional, the proof is not
+
+5. **The Research Stage may hold no Job.** The Glossary already lets a Stage hold none; this makes it a normal outcome rather than the `- none: every question reused.` special case. An Episode whose every claim is reused, whose Slides are all references, or an event-frame Episode with no new claim, runs with an empty Research Stage. What is not optional is the proof: a Slide whose claim has no Research question or high-trust Source fails the citation checks (_Citations_), so an empty Stage is allowed only because retrieval found the evidence already there.
+6. **The Research plan changes shape.** `research-plan.md` keeps `## Research jobs` and `## Reuse`, and each item gains what the contract needs:
+   - Under `## Reuse`: `Question <n>: reuse <id>, confidence <value>, fresh until <date>`.
+   - Under `## Research jobs`: `new: <folder>, question <n>, informs <concept-id…>` and `refresh: <folder>, question <n>, <the stale id>`. A third kind, `migrate: <folder>, <slide-slug>`, is the touch rule below.
+   - The rule `research-plan-body` fails an item with no `informs`, a reuse of an id that does not exist, and a refresh that names a folder other than the stale id's.
+7. **Migrate on touch is a research job.** When the Slide plan (below) adapts a Slide, or the Run edits a note whose sources are in the grandfather baseline, retrieval lists one `migrate` job for those sources: a Research question that weighs them, so the baseline entries leave in the same Run (_Citations_ rule 13). The `implement-section` reviewer's rubric gains one line: no note the Section touched or copied keeps a baseline source. The ratchet itself stays the check's.
+8. **The research writer's template changes** (handed on by _Citations_): `write-research.md` and its sample `AIE-0000` gain `informs` and `confidence`. The writer proposes `confidence` by the three definitions of _Citations_ rule 4 and says in one line which Sources earn it; it never sets a value for a question it did not weigh. Its rubric gains two lines: `confidence` follows the definitions, `informs` names Concepts that exist. `write-dossier` cites by id (`[AIE-0001]`), never by URL, except a high-trust Source.
+
+### Promotion
+
+9. **Research still moves in full, now through a Gate.** Cited or not, every staged question moves to `docs/llm-wiki/research/` (design-ADR _Episode content is staged then promoted_ keeps this). The Promotion Gate's harvest gains a card per staged question: `confidence` and `informs` for Han to confirm (_Citations_ rule 5), with the writer's one-line reason. `episode:promote-research` refuses, before moving, a question with no confirmed `confidence`, an `informs` that is not a Concept, an id the wiki holds that the plan did not list as `refresh`, or a staged Concept that is not accepted. Instance Slides are resolved at the same Gate by _Slide reuse_ rule 4.
+10. **Duplicates are merged at the Gate, by decision.** Where two staged or wiki questions answer one question, Han chooses: merge into the older (its Answer gains the findings, the retired id is listed in a `supersedes` line and never reused, and every citation to it is re-pointed in the same commit) or keep both because the claims differ. For the standing overlap, the recommendation is to merge `AIE-0014` into `LLM-0001`: the claim is the same and neither id is public yet. No agent merges alone.
+11. **Promotion still precedes publishing** an Episode that cites its own staged research (_Citations_ rule 12). The Promotion skill's step 1 says so.
+
+### Reuse of Slides from the author's side
+
+12. **A Slide plan joins the Run.** A new Setup job `slide-retrieval` writes `slide-plan.md` from the Brief's `## Slides` and the pool. For each Slide the Brief names it decides one outcome: `reuse <pool-slug>` (a reference), `adapt <pool-slug>, <what changes>` (an instance) or `new`. It matches a Slide that teaches a Concept first by Definition Slide (`defines: <concept-id>`), then by title and purpose. It lists every Episode that holds each candidate and the Research questions the candidate cites. A pool listing is generated on demand (`npm run slides:pool`, slug, title, `defines`, Episodes holding it) so the job reads one page and never the folders.
+13. **Research follows the Slides.** `retrieval` reads `slide-plan.md`: the Research questions that reused Slides already cite need no job and appear under `## Reuse`; a Slide marked `adapt` whose notes carry baseline sources yields a `migrate` job. `retrieval` needs `slide-retrieval`.
+14. **What the author sees.** The Brief's Slide entries are unchanged; the plan is the agent's proposal and Han changes it at the Spec Gate, where it is shown. In the Spec a `reuse` Slide appears once, as it is, with no Options, labelled _reused from `<pool-slug>`, held by these Episodes_. An `adapt` Slide shows the pool Slide beside Options that only modify it. A `new` Slide behaves as today. Han can flip any Slide among the three at the Spec Gate; a flip is a feedback item keyed to its Slide.
+15. **Build follows the plan.** `reuse` is one reference in the Episode's Section list, no folder. `adapt` runs _Slide reuse_ rule 3's copy command first (own slug, `copiedFrom`), then edits; if no edit lands, the copy is deleted and replaced by a reference. If the origin still lives in another Episode's folder, the reuse command moves it to the pool first (_Slide reuse_ rule 1), and the plan lists that move so the other Episode's owner sees it. `new` is built as today. The Dossier and the voice script are written only for `new` and `adapt` Slides; a reused Slide keeps its words.
+16. **Reuse never touches the pool Slide's words from inside a Run.** Only the Promotion Gate changes a pool Slide, and only by _Slide reuse_ rule 4.
+
+### A fix by hand feeds back
+
+17. **A fix by hand is a commit that corrects content a Run or a person made, outside a Run's job.** Content means an Episode, a Slide (its own or a pool Slide), a Research question or a Concept: paths `src/components/episodes/**`, `src/components/slide-pool/**`, `docs/llm-wiki/**`. Product vision rule 5 makes it feed back; this makes it checkable (rule 1 prefers a check to goodwill).
+18. **The commit says where the lesson goes.** A `fix(...)` commit that touches those paths carries a `Feeds:` trailer with one of: a path of the skill, template, reference or guide that should have got it right (`skills/new-episode/references/write-research.md`); an issue URL, which is enough under a deadline (rule 5) and which names the fix to make; or `none: <reason>` where the fix is a one-off typo or a fact that no process could have caught. The commit-time gate (the `commit` skill's husky check) refuses such a commit without one. A path must exist. An issue is filed with the `needs-triage` label and a title naming the skill.
+19. **Promotion reads them.** The lessons harvester gains the `fix(...)` commits of the Episode's branch since its last Gate: a card per commit with a `Feeds:` path proposes the change to that skill, template or guide (landed by `pipeline-feedback`), one with an issue shows it, one with `none` is listed so Han can contest the reason, and a fix with no trailer cannot exist, because the gate refused it. A fix after Promotion has no harvest, so its trailer is the only route; `pipeline-feedback` reads open `Feeds:` issues when it runs.
+20. **A fix to evidence feeds the writer.** A change of `confidence` or an Answer by Han feeds `write-research.md` or its rubric by the same trailer, so the next question is proposed better. Han's own confirmation at the Gate is not a fix and needs no trailer.
+
+Failing tests, in Han's words:
+
+- "A Run whose every Research question already has a fresh answer writes no research and still cites each one."
+- "A Brief question that another Run's Staging already answers is reused, not written again."
+- "A refreshed question keeps its id, and the notes that cited it still resolve."
+- "A research plan item with no Concepts it informs fails."
+- "A new Research question is proposed with a confidence and the Concepts it informs; one without either fails."
+- "Promotion refuses a research question whose confidence Han has not confirmed."
+- "A Slide that is reused in a new Episode costs one reference, no Options and no Voice script."
+- "Adapting a Slide leaves the other Episodes unchanged, and an adapted note with a grandfathered source gets a Research question."
+- "A fix to an Episode or a Slide without a `Feeds:` line is refused at commit; one that names a skill file that does not exist is refused."
+- "Promotion lists every hand fix of the Run with where it feeds back."
+
+Decided-for-Han (test run): all of the above, contestable.
 
 ## Event page behaviour
 
@@ -301,6 +358,12 @@ Per the Testing rule, the first three are the corrected behaviour Han would reac
 - Delivery contract: **A stored Event status (upcoming or past).** Rejected: it goes stale by hand; the date derives it.
 - Event page behaviour: **A dismissible or dated past notice.** Rejected: a recording viewer must always see it, and a date goes stale.
 - Event page behaviour: **A separate card type for the event-frame Episode.** Rejected: the existing Episode card with a chip and a band suffices.
+- Pipeline and evidence: **Commission research for every Brief question, as today.** Rejected: it writes duplicates (`AIE-0014` beside `LLM-0001`) and spends a Run on proof that exists.
+- Pipeline and evidence: **A refresh takes the next free id.** Rejected: it orphans every note citing the stale id; a refresh keeps its id.
+- Pipeline and evidence: **Reuse only `settled` questions.** Rejected: most questions are `open` today; reusing with the caveat is honest and cheaper than rewriting.
+- Pipeline and evidence: **Make research an optional proof (a claim may stand uncited).** Rejected: vision rule 3; only the Stage is optional.
+- Pipeline and evidence: **Reuse planning inside `retrieval`, one job.** Rejected: evidence and Slides are different pools with different outcomes; two jobs keep each file one decision.
+- Pipeline and evidence: **Trust agents to feed hand fixes back unprompted.** Rejected: it did not happen reliably (`LEARNINGS.md` lessons arrive from harvests); a trailer the commit gate checks does.
 
 ## Consequences
 
@@ -316,3 +379,6 @@ Per the Testing rule, the first three are the corrected behaviour Han would reac
 - Citations: all 37 research files (24 wiki, 13 staged) gain `confidence` and `informs` in one change; the research writer's template gains them in the _Pipeline and evidence_ seam.
 - Citations: adding a host to the allowlist is a trust decision Han accepts, like a new top Concept.
 - Citations: Promotion must precede publishing an Episode that cites its own staged research.
+- Pipeline and evidence: `categorize-research`, `retrieval`, `write-research`, the `research-plan-body` rule, the research sample, `write-dossier`, the `implement-section` rubric and `episode-promote` (step 1, harvest, `promote-research`) change; a new `slide-retrieval` job and `slides:pool` listing are added. `GLOSSARY.md` gains Slide plan and the Research plan's wording when they ship.
+- Pipeline and evidence: the duplicate-id check permits one shadow, a staged `refresh` of a wiki id, until Promotion replaces the file.
+- Pipeline and evidence: `fix(...)` commits on content paths need a `Feeds:` trailer; the `commit` skill and its husky gate gain the check.
