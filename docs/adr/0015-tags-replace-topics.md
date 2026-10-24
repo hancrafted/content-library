@@ -5,7 +5,7 @@ status: accepted
 
 # Tags replace Topics
 
-_Amended by *Content data model*: Tags become Concepts._
+> Amended by _Content data model_ (docs/adr/0016-content-data-model.md): Tags become Concepts.
 
 The Episode overview grouped Episodes by Topic, a curated playlist with an icon and an accent, and also by Tag, a flat keyword. A card then drew three sources that disagreed: an Episode's own look picked the icon and colour, its Topic picked the label, and its Tags said something else again. Topic also carried the idea of a YouTube playlist the channel never used, and "AI enablement" matched nearly every Episode, so it grouped nothing.
 
@@ -17,7 +17,9 @@ Topic is dropped. Tags are the only organising idea.
 2. **The lead Tag owns the look.** An Episode's first Tag is its lead Tag and fixes its card's icon and accent. `topic`, `extraTopics`, the highlighted-Topic label and the per-Episode `look` are removed, so colour, icon and label can no longer disagree.
 3. **Filters.** Five of the six Tags are offered as filter chips; search matches every Tag name. A Topic filter no longer exists.
 4. **Format stays as data.** Every Episode is a Foundations Episode, so the Format control and label stay hidden until two Formats are in use.
-5. **Workshop is the one aggregation.** An ordered set of Episodes for an event is a Workshop, not a playlist; no Playlist concept exists. _Amended by *Content data model*: Event and Playlist replace Workshop._
+5. **Workshop is the one aggregation.** An ordered set of Episodes for an event is a Workshop, not a playlist; no Playlist concept exists.
+
+   > Amended by _Content data model_ (docs/adr/0016-content-data-model.md): Event and Playlist replace Workshop.
 
 ## Considered options
 

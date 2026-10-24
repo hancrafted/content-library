@@ -42,6 +42,7 @@ For this project the chat and its labels are one artifact, authored together fro
 
 1. This admits a text home for a Shared visual only: a part with Presets, used by two or more Slides. Any other `slide-shared` part owns no words and takes them as props.
 2. A Shared visual's data is content: it owns no route, no anchor and no Episode metadata.
+3. Amended: now Explorable explanation, own folder; rules unchanged.
 
 ### 4. Parts of an interactive Shared visual
 

@@ -5,8 +5,8 @@ status: proposed
 
 # Episode content is staged in docs and harvested at Promotion
 
-> Amended by _Content data model_ (0016): Promotion also resolves each Slide instance at a Gate: update the shared Slide or become its own Slide.
-> Amended by _Content data model_ (0016, _Pipeline and evidence_): research may be reused, so the Research stage can be empty; a refresh keeps its id; Promotion confirms `confidence` and `informs` and merges duplicates.
+> Amended by _Content data model_ (docs/adr/0016-content-data-model.md): Promotion also resolves each Slide instance at a Gate: update the shared Slide or become its own Slide.
+> Amended by _Content data model_ (docs/adr/0016-content-data-model.md): (_Pipeline and evidence_) research may be reused, so the Research stage can be empty; a refresh keeps its id; Promotion confirms `confidence` and `informs` and merges duplicates.
 
 A new Episode's text starts as markdown in a staging folder, `docs/episodes/<slug>/`: a Brief, research files, a Dossier and then the Spec. The implementation is built and iterated from those files, and they stay the source of truth through the feedback loop and practice. When the Episode is final it is promoted: Staging is harvested into lessons, cleanups and tickets, the Spec's design Options are filed into the Design archive, the Brief moves beside the Episode, and the staging folder is deleted. From then on the Slide folders, code and `i18n/`, are the only source of the Episode's words.
 
