@@ -24,6 +24,7 @@ export type FindingKind =
   | 'pipeline'
   | 'research-folder'
   | 'research-plan'
+  | 'slide-plan'
   | 'spec';
 
 export interface Finding {

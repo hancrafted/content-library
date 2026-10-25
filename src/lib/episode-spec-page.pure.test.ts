@@ -37,9 +37,9 @@ describe('success cases', () => {
   it('reads each Slide with its Section and its Option ids, in page order', () => {
     // ARRANGE
     const expected = [
-      { section: 'why', slug: 'spent', options: ['1a', '1b'] },
-      { section: 'why', slug: 'middle', options: ['2a', '2b', '2c'] },
-      { section: 'fix', slug: 'trim', options: ['3a'] },
+      { section: 'why', slug: 'spent', options: ['1a', '1b'], number: 1 },
+      { section: 'why', slug: 'middle', options: ['2a', '2b', '2c'], number: 2 },
+      { section: 'fix', slug: 'trim', options: ['3a'], number: 3 },
     ];
     // ACT
     const slides = specSlides(PAGE);

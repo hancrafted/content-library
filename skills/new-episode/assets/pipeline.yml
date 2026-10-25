@@ -102,22 +102,42 @@ jobs:
         references: [GLOSSARY.md, docs/episodes/<slug>/brief.md]
         model: opus
 
+  # Decides per Slide the Brief names, against the pool listing: reuse,
+  # adapt or new. Runs before retrieval, which brings in the research the
+  # kept Slides cite and migrates an adapted Slide's grandfathered Sources.
+  - id: slide-retrieval
+    stage: setup
+    needs: [brief-grill]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/<slug>/slide-plan.md]
+    checks: [mh, vitest]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: []
+        references: [references/slide-retrieval.md, docs/episodes/<slug>/brief.md]
+        model: inherit
+
   # Decides per research question, across the wiki and every open Staging:
   # reuse, refresh or new. Lists the questions needing a job under
   # `## Research jobs` in its research plan, which the write-research foreach
   # reads; with every question reused, the Research Stage holds no job.
   - id: retrieval
     stage: setup
-    needs: [categorize-research]
+    needs: [categorize-research, slide-retrieval]
     isolation: worktree
     before: [mh-query]
     outputs: [docs/episodes/<slug>/research-plan.md]
-    checks: [mh]
+    checks: [mh, vitest]
     retries: 0
     agents:
       - type: implementor
         skills: []
-        references: [references/retrieval.md, docs/episodes/<slug>/brief.md]
+        references:
+          - references/retrieval.md
+          - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/slide-plan.md
         model: inherit
 
   # Runs `npm run convert-reference` once per file the Brief lists under
@@ -194,6 +214,7 @@ jobs:
         references:
           - references/write-dossier.md
           - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/slide-plan.md
           - docs/episodes/<slug>/research-plan.md
           - docs/episodes/<slug>/research/*/research.md
           - docs/episodes/<slug>/reference/*/design-reference.md
@@ -224,6 +245,7 @@ jobs:
         references:
           - references/write-voice-script.md
           - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/slide-plan.md
           - docs/episodes/<slug>/dossier.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
@@ -262,6 +284,7 @@ jobs:
           - assets/sample-episode/spec/spec.html
           - GLOSSARY.md
           - docs/episodes/<slug>/brief.md
+          - docs/episodes/<slug>/slide-plan.md
           - docs/episodes/<slug>/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md

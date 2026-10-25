@@ -544,10 +544,11 @@ body-structure:
               level: 3
               minCount: 1
               pattern: '^.{1,60} \{#[a-z0-9]+(?:-[a-z0-9]+)*\}$'
-              intent: 'A page slide: one point the speaker makes, under a catchy, short title that previews it. Fail if it makes more than one point, or its title does not preview that point.'
+              intent: 'A page slide: one point the speaker makes, under a catchy, short title that previews it. It holds its Visual, Speaker notes and Voice script, unless the Slide plan reuses it: a reused Slide keeps its words and holds none (the staging test checks both). Fail if it makes more than one point, or its title does not preview that point.'
               headings:
                 - purpose: heading
                   level: 4
+                  presence: optional
                   allowed:
                     [
                       {
@@ -558,6 +559,7 @@ body-structure:
                   mayHold: [prose]
                 - purpose: heading
                   level: 4
+                  presence: optional
                   allowed:
                     [
                       {
@@ -568,6 +570,7 @@ body-structure:
                   mayHold: [ordered-list]
                 - purpose: heading
                   level: 4
+                  presence: optional
                   allowed:
                     [
                       {
@@ -701,7 +704,30 @@ body-structure:
               [
                 {
                   title: Reuse,
-                  intent: 'One item per question an existing Research question of the wiki or another Staging already answers, fresh, `Question <n>: reuse <id>, confidence <value>, fresh until <date>`, the confidence and date copied from its frontmatter so the Dossier carries an open or contested caveat. Fail if an item names a question that does not fit the claim, or one past its stale_after.',
+                  intent: 'One item per question an existing Research question of the wiki or another Staging already answers, fresh, `Question <n>: reuse <id>, confidence <value>, fresh until <date>`, the confidence and date copied from its frontmatter so the Dossier carries an open or contested caveat; and one per Research question a Slide the Slide plan reuses or adapts already cites, `Slide <n>: reuse <id>, confidence <value>, fresh until <date>`, which needs no job. Fail if an item names a question that does not fit the claim, or one past its stale_after.',
+                },
+              ],
+            mayHold: [unordered-list],
+          }
+    - ruleId: slide-plan-body
+      fileNames: [slide-plan.md]
+      intent: "slide-retrieval's decision per Slide the Brief names, made against `npm run slides:pool` (every page Slide of every Episode and the Slide pool), so a Run reuses Slides before it builds them. A reused Slide costs one reference and no Options, Dossier words or Voice script; an adapted one becomes an instance; Han flips any item at the Spec Gate. Fail if a candidate is matched by topic alone, when its Definition Slide (`defines`) or its title and purpose do not make the point the Brief's Slide makes. The staging test checks one item per Brief Slide, the Dossier and Spec against the plan, and each candidate's `held by`, `cites` and `moves from` against the listing."
+      undefinedHeadings: forbid
+      headings:
+        - {
+            purpose: heading,
+            level: 1,
+            allowed:
+              [{ title: Slide plan, intent: "One Episode's Slide plan. Fail if it plans Slides for another Episode." }],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Slides,
+                  intent: "One item per Slide of the Brief, in its numbering: `Slide <n>: reuse <slug>; held by <episode>, …; cites <id>, … | none` (the Slide fits as it is: a reference), `Slide <n>: adapt <slug>; held by …; cites …; changes <what>` (it fits once changed: an instance), or `Slide <n>: new` (nothing fits), optionally `; closest <slug>; held by …; cites …` so Han can flip it. A candidate still in another Episode's own slides/ adds `; moves from <episode>` before `changes`. Fail if a Slide is reused whose words do not say what the Brief's Slide says, or adapted when the change would rewrite most of it.",
                 },
               ],
             mayHold: [unordered-list],

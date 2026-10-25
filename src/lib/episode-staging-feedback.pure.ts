@@ -22,6 +22,8 @@ const FEEDBACK_ITEM = /^- `([a-z0-9-]+(?:--[a-z0-9-]+)?)` · (content|implementa
 const SPEC_SLIDE_ITEM = new RegExp(
   `^- \`(${TITLE_ANCHOR}|[a-z0-9-]+--[a-z0-9-]+)\` · design — picked: (?:none — \\S.*|\\d+[a-z](?:, \\d+[a-z])*(?: — \\S.*)?)$`,
 );
+/** Han's flip of a page Slide's Slide plan item; a reused Slide's flip carries his note, a flip to adapt always. */
+const SPEC_PLAN_ITEM = /^- `([a-z0-9-]+--[a-z0-9-]+)` · design — plan: (?:reuse|new|adapt)(?: — \S.*)?$/;
 const SPEC_BRIEF_ITEM = new RegExp(`^- \`(${BRIEF_KEYS.join('|')})\` · design — \\S.*$`);
 const SPEC_VISUAL_LANGUAGE_ITEM = /^- `visual-language` · design — (?!picked:)\S.*$/;
 
@@ -45,10 +47,10 @@ function unknownAnchor(anchor: string, { anchors, sections, source }: FeedbackAn
 
 function checkSpecFeedbackLine(line: string, anchors: FeedbackAnchors): string[] {
   if (SPEC_VISUAL_LANGUAGE_ITEM.test(line) || SPEC_BRIEF_ITEM.test(line)) return [];
-  const item = SPEC_SLIDE_ITEM.exec(line);
+  const item = SPEC_SLIDE_ITEM.exec(line) ?? SPEC_PLAN_ITEM.exec(line);
   if (item === null)
     return [
-      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none, \`top\` for the Title slide) or "- \`visual-language\` · design — note" or "- \`brief--<heading-slug>\` · design — note": "${line}".`,
+      `Spec review line not of the form "- \`<section>--<slide>\` · design — picked: <option ids>|none — note" (the note required with none, \`top\` for the Title slide) or "- \`<section>--<slide>\` · design — plan: reuse|adapt|new — note" or "- \`visual-language\` · design — note" or "- \`brief--<heading-slug>\` · design — note": "${line}".`,
     ];
   return unknownAnchor(item[1], anchors);
 }

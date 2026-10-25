@@ -10,6 +10,10 @@ import { unless, type Finding } from './finding.pure';
  *   - refresh: <folder>, question <n>, refreshes <id>
  *   - migrate: <folder>, <slide-slug>, informs <concept-id>, …
  *   - Question <n>: reuse <id>, confidence <value>, fresh until <date>
+ *   - Slide <n>: reuse <id>, confidence <value>, fresh until <date>
+ *
+ * A `Slide <n>` reuse is a question a Slide the Slide plan reuses or adapts already cites (rule 13): it needs no job
+ * and no Dossier citation, since the Slide keeps citing it.
  *
  * markdown-harness governs the headings; this checks what it cannot: the references the items make.
  */
@@ -22,7 +26,10 @@ export type ResearchPlanItem =
   | {
       readonly kind: 'reuse';
       readonly id: string;
-      readonly question: number;
+      /** The Brief's research question it answers, or undefined for one a reused or adapted Slide cites. */
+      readonly question: number | undefined;
+      /** The Brief's Slide whose kept Slide cites it, for a `Slide <n>` reuse. */
+      readonly slide: number | undefined;
       readonly confidence: string | undefined;
       readonly freshUntil: string | undefined;
     };
@@ -95,9 +102,9 @@ function readJob(text: string): ResearchPlanItem | undefined {
 }
 
 function readReuse(text: string): ResearchPlanItem | undefined {
-  const match = /^Question (\d+): reuse (.*)$/.exec(text);
+  const match = /^(Question|Slide) (\d+): reuse (.*)$/.exec(text);
   if (!match) return undefined;
-  const [id, ...others] = partsOf(match[2]);
+  const [id, ...others] = partsOf(match[3]);
   if (!ID.test(id ?? '')) return undefined;
   const after = (word: string) =>
     others
@@ -107,14 +114,15 @@ function readReuse(text: string): ResearchPlanItem | undefined {
   return {
     kind: 'reuse',
     id,
-    question: Number(match[1]),
+    question: match[1] === 'Question' ? Number(match[2]) : undefined,
+    slide: match[1] === 'Slide' ? Number(match[2]) : undefined,
     confidence: after('confidence'),
     freshUntil: after('fresh until'),
   };
 }
 
 const UNREAD =
-  'none of `new: <folder>, question <n>, informs <concept-id>, …`, `refresh: <folder>, question <n>, refreshes <id>`, `migrate: <folder>, <slide-slug>, informs <concept-id>, …` under Research jobs, or `Question <n>: reuse <id>, confidence <value>, fresh until <date>` under Reuse';
+  'none of `new: <folder>, question <n>, informs <concept-id>, …`, `refresh: <folder>, question <n>, refreshes <id>`, `migrate: <folder>, <slide-slug>, informs <concept-id>, …` under Research jobs, or `Question <n>: reuse <id>, confidence <value>, fresh until <date>` or `Slide <n>: reuse …` under Reuse';
 
 /** Each list item of the plan, as written, with what it reads as: nothing for a line of no known form. */
 function readItems(markdown: string): { text: string; item: ResearchPlanItem | undefined }[] {

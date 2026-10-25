@@ -48,6 +48,7 @@
     "design-archive": "node skills/episode-promote/scripts/serve.ts",
     "dashboard:demo": "node scripts/dashboard-demo.ts",
     "slides:adapt": "node scripts/slide-adapt.ts",
+    "slides:pool": "node scripts/slide-pool.ts",
     "slides:reuse": "node scripts/slide-reuse.ts",
     "slides:settle": "node scripts/slide-settle.ts",
     "episode:backfill-identity": "node skills/new-episode/scripts/backfill-identity.ts",
