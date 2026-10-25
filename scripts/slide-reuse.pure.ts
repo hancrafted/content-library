@@ -38,6 +38,7 @@ export type ReuseResult =
   { readonly ok: true; readonly plan: ReusePlan } | { readonly ok: false; readonly reasons: readonly string[] };
 
 const SPECIFIER = /(\bfrom\s*|\bimport\s*\(?\s*)(['"])([^'"\n]+)\2/g;
+const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const IMPORT_LINE = /^import [^;]*;$/gm;
 
 /** The repository path an import specifier names, or `undefined` for a package. */
@@ -195,6 +196,10 @@ function referenceEdit(request: ReuseRequest, origin: Origin, repo: RepoView): R
  * first reuse only; a Slide already there gains one more reference and nothing else changes.
  */
 export function planReuse(request: ReuseRequest, repo: RepoView): ReuseResult {
+  const odd = [request.slug, request.into, request.section].find((name) => !KEBAB.test(name));
+  if (odd !== undefined) {
+    return { ok: false, reasons: [`"${odd}" is no slug: slide, Episode and Section are named in kebab-case.`] };
+  }
   const origin = findOrigin(request.slug, repo);
   if (typeof origin === 'string') return { ok: false, reasons: [origin] };
   const refusals = targetRefusals(request, origin, repo);

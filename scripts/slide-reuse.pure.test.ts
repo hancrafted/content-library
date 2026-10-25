@@ -63,6 +63,18 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('refuses a name that is no kebab-case slug, such as a Section test file', () => {
+    // ARRANGE
+    const expected = {
+      ok: false,
+      reasons: ['"pipeline.test" is no slug: slide, Episode and Section are named in kebab-case.'],
+    };
+    // ACT
+    const result = planReuse({ ...REQUEST, section: 'pipeline.test' }, repoOf(BASE));
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
   it('refuses a slug no Slide folder carries', () => {
     // ARRANGE
     const expected = {
