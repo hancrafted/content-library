@@ -1,13 +1,13 @@
 import { findEpisode } from '@/components/episodes/registry';
-import type { Slide } from '@/components/slide-master/slide';
+import type { EpisodeRecord, Slide } from '@/components/slide-master/slide';
 import { loadContentStore, type ContentStore, type RawContent, type Refusal } from '@/lib/content-store.pure';
 import type { EpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { CONCEPT_THEMES, type ListedEpisodeSlug } from '@/lib/episode-overview';
 import { EVENTS } from '@/lib/events.pure';
 import { readConceptFiles, readResearchFiles, readResearchPlans } from '@/lib/evidence-files';
 import { PLAYLISTS } from '@/lib/playlists.pure';
-import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS, type UnlistedEpisodeSlug } from '@/lib/routes';
-import { EPISODES_DIR, readSlideFolders } from '@/lib/slide-folders';
+import { ANY_EPISODE_SLUGS, type UnlistedEpisodeSlug } from '@/lib/routes';
+import { EPISODES_DIR, readSlideFolders, type SlideFolderPath } from '@/lib/slide-folders';
 import SOURCE_BASELINE from '@/lib/source-baseline.json';
 import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
@@ -45,10 +45,19 @@ export const UNLISTED = {
 /** Upcoming Episodes in the order the overview lists them. */
 export const UPCOMING: readonly UpcomingEpisodeMetadata[] = [];
 
+/**
+ * Every Slide record the store reads: each Episode's, listed or unlisted, and each tooling page's. An unlisted Episode
+ * has every ability a listed one has (product vision, rule 4), so every gatherer below reads this one list.
+ */
+const RECORD_SLUGS = [...ANY_EPISODE_SLUGS, ...TOOLING_SLUGS] as const;
+
+/** Looks up one Slide record by slug: the registry's, or a test's stand-in. */
+type FindRecord = (slug: string) => EpisodeRecord;
+
 /** Every source every Speaker note in every Episode and tooling page cites, flattened to one record each. */
-function slideSources(): RawContent['slideSources'] {
-  return [...EPISODE_SLUGS, ...TOOLING_SLUGS, ...UNLISTED_EPISODE_SLUGS].flatMap((slug) => {
-    const episode = findEpisode(slug);
+function slideSources(find: FindRecord): RawContent['slideSources'] {
+  return RECORD_SLUGS.flatMap((slug) => {
+    const episode = find(slug);
     const slides: readonly { slide: string; notes: Slide['notes'] }[] = [
       { slide: 'title', notes: episode.notes ?? [] },
       ...episode.sections.flatMap((section) => section.map((each) => ({ slide: each.slug, notes: each.notes }))),
@@ -67,9 +76,9 @@ function slideSources(): RawContent['slideSources'] {
 }
 
 /** Every Definition Slide in every Episode and tooling page: a Slide that declares the Concept it defines. */
-function definitionSlides(): RawContent['definitionSlides'] {
-  return [...EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((episode) =>
-    findEpisode(episode).sections.flatMap((section) =>
+function definitionSlides(find: FindRecord): RawContent['definitionSlides'] {
+  return RECORD_SLUGS.flatMap((episode) =>
+    find(episode).sections.flatMap((section) =>
       section.flatMap(({ slug, defines }) => (defines === undefined ? [] : [{ episode, slide: slug, defines }])),
     ),
   );
@@ -79,60 +88,66 @@ function definitionSlides(): RawContent['definitionSlides'] {
  * Every Slide folder, each marked when it holds its Episode's Title slide, whose slug is exempt from uniqueness, and,
  * for an instance, with the slug it was copied from. An instance lives in its own Episode's `slides/`.
  */
-function slides(): RawContent['slides'] {
+function slides(find: FindRecord, folders: readonly SlideFolderPath[]): RawContent['slides'] {
   const titles = new Set(
-    [...EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((slug) => {
-      const title = findEpisode(slug).title;
+    RECORD_SLUGS.flatMap((slug) => {
+      const title = find(slug).title;
       return title === undefined ? [] : [`${EPISODES_DIR}/${slug}/slides/${title.slug}`];
     }),
   );
   const origins = new Map<string, string>(
-    EPISODE_SLUGS.flatMap((slug) =>
-      findEpisode(slug).sections.flatMap((section) =>
+    RECORD_SLUGS.flatMap((slug) =>
+      find(slug).sections.flatMap((section) =>
         section.flatMap(({ slug: own, copiedFrom }) =>
           copiedFrom === undefined ? [] : [[`${EPISODES_DIR}/${slug}/slides/${own}`, copiedFrom.slug] as const],
         ),
       ),
     ),
   );
-  return readSlideFolders(process.cwd()).map((folder) => {
+  return folders.map((folder) => {
     const copiedFrom = origins.get(folder.path);
     return { ...folder, title: titles.has(folder.path), ...(copiedFrom !== undefined && { copiedFrom }) };
   });
 }
 
 /** Every Pinned anchor: each Episode's reference to a pool Slide placed under a retired instance slug. */
-function pins(): RawContent['pins'] {
-  return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((episode) =>
-    findEpisode(episode).sections.flatMap((section) =>
+function pins(find: FindRecord): RawContent['pins'] {
+  return RECORD_SLUGS.flatMap((episode) =>
+    find(episode).sections.flatMap((section) =>
       section.flatMap(({ pinnedSlug }) => (pinnedSlug === undefined ? [] : [{ episode, slug: pinnedSlug }])),
     ),
   );
 }
 
 /** Each Episode's Slide list, the Slides its Sections place, so the store can tell an Episode derived from another. */
-function episodeSlides(): RawContent['episodeSlides'] {
-  return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS].map((episode) => ({
+function episodeSlides(find: FindRecord): RawContent['episodeSlides'] {
+  return ANY_EPISODE_SLUGS.map((episode) => ({
     episode,
-    slides: findEpisode(episode).sections.flatMap((section) => section.map(({ slug }) => slug)),
+    slides: find(episode).sections.flatMap((section) => section.map(({ slug }) => slug)),
   }));
 }
 
-/** The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy. */
-export function rawContent(): RawContent {
+/**
+ * The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy, or gather from a
+ * stand-in Slide record and Slide folders.
+ */
+export function rawContent(
+  find: FindRecord = findEpisode,
+  folders: readonly SlideFolderPath[] = readSlideFolders(process.cwd()),
+): RawContent {
   return {
     themes: CONCEPT_THEMES,
     concepts: readConceptFiles(process.cwd()),
-    definitionSlides: definitionSlides(),
+    definitionSlides: definitionSlides(find),
     episodes: [...Object.values(REGISTERED), ...Object.values(UNLISTED), ...UPCOMING],
-    episodeSlides: episodeSlides(),
+    episodeSlides: episodeSlides(find),
     events: EVENTS,
     playlists: PLAYLISTS,
     research: readResearchFiles(process.cwd()),
-    slideSources: slideSources(),
+    slideSources: slideSources(find),
     sourceBaseline: SOURCE_BASELINE,
-    slides: slides(),
-    pins: pins(),
+    slides: slides(find, folders),
+    pins: pins(find),
     researchPlans: readResearchPlans(process.cwd()),
   };
 }
