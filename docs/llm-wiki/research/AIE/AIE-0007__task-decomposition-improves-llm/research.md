@@ -6,6 +6,7 @@ description: 'Models often solve each sub-problem yet fail to compose them, and
   decomposing into simpler, separately prompted subtasks closes much of that
   gap.'
 confidence: contested
+confidence_reason: 'The gain holds on tasks with a known decomposition, and a Source shows its limit.'
 informs: [agentic-ai]
 generated:
   by: claude-code/sonnet-5.5

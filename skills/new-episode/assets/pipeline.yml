@@ -79,16 +79,18 @@ jobs:
   - id: categorize-research
     stage: setup
     intent: >-
-      Name one research folder per research question of the Brief, in its
-      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
-      categories: pick the category each question belongs to, or, when none
-      fits, add a new category there with its meaning. Number each folder with
-      the next free number of its category, counting every research folder in
-      docs/episodes/*/research/ and docs/llm-wiki/research/*/. When an existing
-      research folder answers the question, reuse its category and number. Write the
-      question's subject, not the Episode, in 20-40 characters of kebab case.
-      Return the names, each beside its question, and any category you added
-      with why no existing one fits.
+      For each research question of the Brief, in its order, return its
+      research folder and the Concepts it informs. When `npm run
+      episode:research -- list` shows a Research question of the wiki or a
+      Staging that answers it, name that question's folder. Otherwise name
+      `<prefix>-<####>__<question-slug>`: the nearest existing prefix of
+      GLOSSARY.md's Research categories, numbered by `npm run
+      episode:research -- next <prefix>`, and the question's subject, not the
+      Episode, in 20-40 characters of kebab case. The Concepts are ids from
+      docs/llm-wiki/concepts/, the main one first. A question that fits no
+      Concept gets a `concept-gap` note, `question <n> — <the subject no
+      Concept covers>`, in place of a Concept you invent. Return the names,
+      each beside its question and its Concepts.
     needs: [brief-grill]
     isolation: worktree
     outputs: []
@@ -97,12 +99,13 @@ jobs:
     agents:
       - type: implementor
         skills: [domain-modeling]
-        references: [GLOSSARY.md, docs/episodes/<slug>/brief.md, docs/llm-wiki/index.md]
+        references: [GLOSSARY.md, docs/episodes/<slug>/brief.md]
         model: opus
 
-  # Decides per research question: reuse, refresh or new. Lists the questions
-  # needing a job under `## Research jobs` in its research plan, which the
-  # write-research foreach reads.
+  # Decides per research question, across the wiki and every open Staging:
+  # reuse, refresh or new. Lists the questions needing a job under
+  # `## Research jobs` in its research plan, which the write-research foreach
+  # reads; with every question reused, the Research Stage holds no job.
   - id: retrieval
     stage: setup
     needs: [categorize-research]
@@ -114,7 +117,7 @@ jobs:
     agents:
       - type: implementor
         skills: []
-        references: [references/retrieval.md, docs/episodes/<slug>/brief.md, docs/llm-wiki/index.md]
+        references: [references/retrieval.md, docs/episodes/<slug>/brief.md]
         model: inherit
 
   # Runs `npm run convert-reference` once per file the Brief lists under
@@ -153,8 +156,8 @@ jobs:
         model: inherit
         session: orchestrator
 
-  # One job per question retrieval lists under Research jobs, new or refresh;
-  # a reused question has none.
+  # One job per item retrieval lists under Research jobs, new, refresh or
+  # migrate; a reused question has none.
   - id: write-research
     stage: research
     needs: [customize-pipeline]

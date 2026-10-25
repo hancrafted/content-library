@@ -26,6 +26,7 @@ import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata
 import type { ThemeLook } from './episode-overview';
 import type { EventRecord } from './events.pure';
 import type { PlaylistRecord } from './playlists.pure';
+import { refreshShadows } from './research-plan.pure';
 import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
 import { slideFolderProblems } from './slide-slugs.pure';
@@ -82,6 +83,8 @@ export interface RawContent {
   readonly slideSources: readonly unknown[];
   /** Every Slide folder in every Episode's `slides/` and in the Slide pool. */
   readonly slides: readonly unknown[];
+  /** Every Staging's `research-plan.md`: a refresh it lists lets its staged question shadow the wiki id. */
+  readonly researchPlans: readonly EvidenceFile[];
 }
 
 interface Parsed<T> {
@@ -128,8 +131,9 @@ function duplicates(items: readonly string[]): string[] {
   return [...new Set(items.filter((item, at) => items.indexOf(item) !== at))];
 }
 
-function researchIdRefusals(research: readonly ResearchRecord[]): Refusal[] {
-  return duplicates(research.map(({ id }) => id)).map((id) => ({
+function researchIdRefusals(research: readonly ResearchRecord[], plans: RawContent['researchPlans']): Refusal[] {
+  const shadows = refreshShadows(research, plans);
+  return duplicates(research.filter((record) => !shadows.has(record)).map(({ id }) => id)).map((id) => ({
     kind: 'research' as const,
     record: id,
     message: 'the id is used by more than one research file',
@@ -224,7 +228,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
   const sound = soundOf(read, raw);
   const refusals = [
     ...Object.values(read).flatMap((part) => part.refusals),
-    ...researchIdRefusals(read.research.value),
+    ...researchIdRefusals(read.research.value, raw.researchPlans),
     ...slideFolderProblems(read.slides.value).map((problem) => ({ kind: 'slide' as const, ...problem })),
     ...crossChecks(sound),
   ];

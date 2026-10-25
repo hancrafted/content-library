@@ -46,6 +46,18 @@ export function readResearchFiles(root: string): EvidenceText[] {
   return filesIn(root, dirs, 'research.md');
 }
 
+/** Each Episode's research plan, `docs/episodes/<slug>/research-plan.md`, where its Staging has one. */
+export function readResearchPlans(root: string): EvidenceText[] {
+  return folders(path.join(root, 'docs/episodes')).flatMap((slug) => {
+    const relative = `docs/episodes/${slug}/research-plan.md`;
+    try {
+      return [{ path: relative, markdown: readFileSync(path.join(root, relative), 'utf8') }];
+    } catch {
+      return [];
+    }
+  });
+}
+
 /** The wiki's Concept files, one flat folder per Concept, in folder order. */
 export function readConceptFiles(root: string): EvidenceText[] {
   return filesIn(root, ['docs/llm-wiki/concepts'], 'concept.md');

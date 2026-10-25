@@ -6,6 +6,7 @@ description: "Clarifying questions improve results because they replace the
   model's guesses about missing requirements with the user's answers, but only
   for underspecified tasks."
 confidence: contested
+confidence_reason: 'The gain is shown only on simulated users and benchmarks.'
 informs: [agentic-ai, llm-behaviour]
 generated:
   by: claude-code/sonnet-5.5

@@ -6,6 +6,7 @@ description: 'A search tool returns retrieved page content to the model, which
   composes the answer itself, so the pages sit in the context window as input
   tokens unless the tool filters them first.'
 confidence: open
+confidence_reason: 'Developer-API documentation only; the step to the apps is inferred.'
 informs: [context-engineering, ai-cost]
 generated:
   by: claude-code/sonnet-5.5

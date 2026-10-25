@@ -6,6 +6,7 @@ description: 'A correct-looking final answer can rest on flawed reasoning, so
   step-level checks find errors that final-result checks pass, though models
   cannot reliably find those errors in themselves.'
 confidence: open
+confidence_reason: 'The human-review claim is inferred from training studies.'
 informs: [agentic-ai]
 generated:
   by: claude-code/sonnet-5.5

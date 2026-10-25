@@ -5,6 +5,7 @@
  * is the caller's job, so every rule tests against an in-memory folder.
  */
 
+import { checkSpeakerNotes } from './dossier-speaker-notes.pure';
 import { SPEC_FILE, specSectionSlugs, specSlideAnchors } from './episode-spec-page.pure';
 import { checkSpec, specStage } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
@@ -19,12 +20,10 @@ import {
   blocksOf,
   bodyLines,
   h4s,
-  orderedList,
   sectionSlugs,
   slideAnchors,
   type Block,
   type Heading,
-  type ListItem,
 } from './staging-markdown.pure';
 
 /** The names a Dossier `Visual` may use: frame components and slide-master Slides, and motion effects. */
@@ -106,43 +105,6 @@ function checkVisuals(blocks: readonly Block[], known: KnownVisuals): Finding[] 
   });
 }
 
-const SPEAKER_NOTE_ITEM = /^\*\*[^*]+\*\* — \S.*$/;
-const SOURCE = /^sources: \[(\d+)\] \S.* — \S+$/;
-const TARGET = /^target: \S.*$/;
-const CITATION = /\[(\d+)\]/g;
-
-function checkSpeakerNote(where: string, { text, nested }: ListItem): string[] {
-  if (!SPEAKER_NOTE_ITEM.test(text))
-    return [`${where} has an item not of the form "**header** — description [n]": "${text}".`];
-  const sources = nested.flatMap((line) => SOURCE.exec(line)?.[1] ?? []);
-  const unknown = nested.filter((line) => !SOURCE.test(line) && !TARGET.test(line));
-  const targets = nested.filter((line) => TARGET.test(line));
-  const unresolved = [...text.matchAll(CITATION)]
-    .map(([citation, n]) => ({ citation, n }))
-    .filter(({ n }) => !sources.includes(n));
-  return [
-    ...unless(sources.length > 0, `${where}: "${text}" has no nested "sources: [n] title — URL" line.`),
-    ...unknown.map(
-      (line) =>
-        `${where}: "${text}" has a nested line that is neither "sources: [n] title — URL" nor "target:": "${line}".`,
-    ),
-    ...unless(targets.length <= 1, `${where}: "${text}" has more than one "target:" line.`),
-    ...unresolved.map(({ citation }) => `${where}: "${text}" cites ${citation}, which resolves to no nested source.`),
-  ];
-}
-
-function checkSpeakerNotes(blocks: readonly Block[]): Finding[] {
-  return h4s(blocks, 'Speaker notes').flatMap(({ owner, body }) => {
-    const where = `The Speaker notes of {#${owner}}`;
-    const { items, strays } = orderedList(body);
-    const messages = [
-      ...strays.map((line) => `${where} hold a line outside the ordered list: "${line}".`),
-      ...items.flatMap((item) => checkSpeakerNote(where, item)),
-    ];
-    return messages.map((message): Finding => ({ kind: 'speaker-note', file: 'dossier.md', message }));
-  });
-}
-
 /**
  * Checks one staging folder's files against each other. `files` maps a path
  * relative to the folder (`dossier.md`, `feedback/01/feedback.md`) to its text;
@@ -188,7 +150,7 @@ function checkDossier(files: Readonly<Record<string, string>>, known: KnownVisua
     ...checkSlugs(dossierBlocks.map(({ heading }) => heading)),
     ...checkTitleSlide(dossierBlocks),
     ...checkVisuals(dossierBlocks, known),
-    ...checkSpeakerNotes(dossierBlocks),
+    ...checkSpeakerNotes(dossierBlocks, files['research-plan.md']),
   ];
 }
 

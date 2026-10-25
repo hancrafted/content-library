@@ -194,6 +194,12 @@ export const researchSchema = z
       .describe(
         "How settled the evidence for the Answer is, never the writer's certainty: settled, contested or open, by the definitions in CONFIDENCE_DEFINITIONS",
       ),
+    confidence_reason: z
+      .string()
+      .min(1)
+      .describe(
+        "The writer's one line on which Sources earn the confidence, the reason Han reads when he confirms it at the Promotion Gate",
+      ),
     informs: conceptIds('The Concepts the question informs, the first the main one').min(
       1,
       'names no Concept: a Research question informs at least one, the first its main one',

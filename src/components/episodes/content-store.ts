@@ -4,7 +4,7 @@ import { loadContentStore, type ContentStore, type RawContent, type Refusal } fr
 import type { EpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { CONCEPT_THEMES, type ListedEpisodeSlug } from '@/lib/episode-overview';
 import { EVENTS } from '@/lib/events.pure';
-import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
+import { readConceptFiles, readResearchFiles, readResearchPlans } from '@/lib/evidence-files';
 import { PLAYLISTS } from '@/lib/playlists.pure';
 import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS, type UnlistedEpisodeSlug } from '@/lib/routes';
 import { EPISODES_DIR, readSlideFolders } from '@/lib/slide-folders';
@@ -112,6 +112,7 @@ export function rawContent(): RawContent {
     research: readResearchFiles(process.cwd()),
     slideSources: slideSources(),
     slides: slides(),
+    researchPlans: readResearchPlans(process.cwd()),
   };
 }
 

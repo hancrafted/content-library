@@ -6,6 +6,7 @@ description: 'Pocock names a communication barrier between a person and an AI
   agent, caused by differing vocabulary, and answers it with shared-language and
   questioning skills.'
 confidence: open
+confidence_reason: 'One person''s words carry it, and the phrase itself was not found.'
 informs: [agentic-ai]
 generated:
   by: claude-code/sonnet-4.6

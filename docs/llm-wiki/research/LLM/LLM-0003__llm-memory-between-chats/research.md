@@ -5,6 +5,7 @@ description: 'A model keeps nothing between requests, so it only knows what the
   current context holds; any memory across chats is text an application stores
   and sends again.'
 confidence: settled
+confidence_reason: "Anthropic's documentation and the GPT-3 paper agree."
 informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5

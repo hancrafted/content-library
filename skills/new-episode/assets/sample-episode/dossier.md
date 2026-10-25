@@ -46,8 +46,8 @@ master: three-column · motion: none
 
 #### Speaker notes
 
-1. **A longer window does not help** — extended-context models show the same drop in the middle; size alone does not make it reliable [1].
-   - sources: [1] Lost in the Middle — https://arxiv.org/abs/2307.03172
+1. **A longer window does not help** — extended-context models show the same drop in the middle; size alone does not make it reliable [AIE-0000].
+   - research: AIE-0000
 
 #### Voice script
 
@@ -67,8 +67,8 @@ master: basic-page · motion: none
 
 #### Speaker notes
 
-1. **The start is weighted most** — attention carries a built-in bias toward the start of the input, so a fresh session puts the new task where it counts most [1].
-   - sources: [1] Found in the Middle — https://arxiv.org/abs/2406.16008
+1. **The start is weighted most** — a fresh, focused context outperforms a long chat, so a fresh session puts the new task where it counts most [AIE-0011].
+   - research: AIE-0011
 
 #### Voice script
 

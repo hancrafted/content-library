@@ -5,6 +5,7 @@ description: 'Training and evaluation reward a committed answer over an
   abstention or a clarifying question, so language models guess one reading of a
   vague prompt.'
 confidence: open
+confidence_reason: "The explanation is the authors' hypothesis, applied here by inference."
 informs: [llm-behaviour]
 generated:
   by: claude-code/sonnet-5.5

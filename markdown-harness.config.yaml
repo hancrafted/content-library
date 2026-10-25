@@ -185,6 +185,9 @@ frontmatter:
                 intent: 'When confidence is open: anything less, one Source, only weak Sources, or a mechanism still debated.',
               }
           intent: "How settled the evidence for the Answer is, never the writer's certainty. The writer proposes it by the three definitions; Han confirms it. Fail if the value is not earned by its definition."
+        confidence_reason:
+          presence: required
+          intent: "The writer's one line on which Sources earn the confidence, by their numbers or kind, which Han reads when he confirms it at the Promotion Gate. Fail if it states the writer's certainty instead of what the Sources show, or names no Source or kind of Source."
         informs:
           presence: required
           intent: 'The Concept ids the question informs, the first its main one, so each Concept page lists its Research questions. Fail if the main Concept is not the subject the h1 asks about.'
@@ -664,7 +667,7 @@ body-structure:
           }
     - ruleId: research-plan-body
       fileNames: [research-plan.md]
-      intent: "Retrieval's decision per research question, so the pipeline's write-research jobs and the Dossier read one file instead of prose in a log. Fail if a question the Brief lists is missing from both sections, or a question appears in both."
+      intent: "Retrieval's decision per research question, across the Research questions of the wiki and of every Staging, so the pipeline's write-research jobs and the Dossier read one file instead of prose in a log. Fail if a question the Brief lists is missing from both sections, appears in both, or is planned new while a fresh question that fits is listed by `npm run episode:research -- list`. The staging test checks each item's references: an informs id that is no Concept, a reused id that does not exist, a refresh under another id."
       undefinedHeadings: forbid
       headings:
         - {
@@ -685,7 +688,7 @@ body-structure:
               [
                 {
                   title: Research jobs,
-                  intent: 'One item per research question that needs a job, `new: <research folder>, question <n>` or `refresh: <research folder>, question <n>, <the stale file>`; customize-pipeline writes one write-research job per item and the foreach reads this heading. Fail if a question decided reuse is listed, or an item names no research folder.',
+                  intent: "One item per job, in the Brief's order: `new: <research folder>, question <n>, informs <concept-id>, …` (the main Concept first), `refresh: <research folder>, question <n>, refreshes <the stale id>` (the folder keeps the stale id) or `migrate: <research folder>, <slide-slug>, informs <concept-id>, …` (a question that weighs a touched note's baseline sources). No item when every question is reused: the Research Stage then holds no job. customize-pipeline writes one write-research job per item and the foreach reads this heading. Fail if a question decided reuse is listed, or a new or migrate item names no Concept it informs.",
                 },
               ],
             mayHold: [unordered-list],
@@ -698,7 +701,7 @@ body-structure:
               [
                 {
                   title: Reuse,
-                  intent: 'One item per question the llm-wiki already answers, `Question <n>: reuse <path to research.md>`. Fail if an item names no existing research file.',
+                  intent: 'One item per question an existing Research question of the wiki or another Staging already answers, fresh, `Question <n>: reuse <id>, confidence <value>, fresh until <date>`, the confidence and date copied from its frontmatter so the Dossier carries an open or contested caveat. Fail if an item names a question that does not fit the claim, or one past its stale_after.',
                 },
               ],
             mayHold: [unordered-list],

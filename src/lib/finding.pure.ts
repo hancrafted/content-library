@@ -23,6 +23,7 @@ export type FindingKind =
   | 'runs-header'
   | 'pipeline'
   | 'research-folder'
+  | 'research-plan'
   | 'spec';
 
 export interface Finding {

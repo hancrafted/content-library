@@ -6,6 +6,7 @@ description: 'No study measures executing versus managing; usage data show many
   users skip briefing and checking, and users six months in iterate more and
   delegate less, so "most" is unsupported, "many" is.'
 confidence: open
+confidence_reason: 'The mapping to management is inference over model-classified data.'
 informs: [agentic-ai, ai-adoption]
 generated:
   by: claude-code/sonnet-4.6
