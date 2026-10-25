@@ -25,7 +25,7 @@ Altitude test: if the next feature could make the record wrong, it's too low. Fe
 
 1. Decision MUST state the rule and its reason, not the mechanism. Signatures, timings, selectors live in code, tests, rules.
 2. Prose MUST be terse; grammar MAY be dropped. Examples beat paragraphs — `#drawer=open` opens a stranger's drawer.
-3. An ADR MUST stand alone: no links or ID references to other ADRs, no issue links. External docs and repo research files allowed.
+3. An ADR MUST stand alone: no links or ID references to other Archgate ADRs, no issue links. Design-ADRs (`docs/adr/`), external docs and repo research files MAY be cited.
 4. Name a file or symbol only where a rule or reviewer checks it.
 
 ### 2. Layout (📜 Rule: `adr-governed-files`)
@@ -69,7 +69,7 @@ Altitude test: if the next feature could make the record wrong, it's too low. Fe
 ### Don'ts
 
 1. **DON'T** spell out mechanism — no `createUrlState(window)`, `150 ms`, `NewExpression[...]`. (Decision 1)
-2. **DON'T** link another ADR or an issue — `[FE-004](./FE-004-…)`, `#13`. (Decision 1)
+2. **DON'T** link another Archgate ADR or an issue — `[FE-004](./FE-004-…)`, `#13`; cite a design-ADR by path instead — `docs/adr/0016-content-data-model.md`. (Decision 1)
 3. **DON'T** split one Discipline's prose to dodge the budget; cut words first. (Decision 4, 📜 Rule: `adr-size-budget`)
 4. **DON'T** mark a rule twice on one side, or name one that doesn't exist. (Decision 4, 📜 Rule: `adr-rule-mentions`)
 5. **DON'T** ship a rule at `warning` or `info`. (Decision 5, 📜 Rule: `adr-error-tier`)

@@ -1,0 +1,1 @@
+../../.archgate/adrs/FE-013-content-store.md

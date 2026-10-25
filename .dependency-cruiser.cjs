@@ -17,6 +17,9 @@ const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
 const SLIDE_SHARED_REACH = ['^src/components/(slide-master|slide-shared|ui)/', '^src/(hooks|lib)/'];
 
 // The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2.1).
+// An Episode's metadata file: a record the content store loads (FE-013).
+const EPISODE_METADATA = '^src/components/episodes/[^/]+/episode-metadata\\.ts$';
+
 const CORE_COMPONENTS = '^src/components/slide-shared/core-components/';
 
 // A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
@@ -162,7 +165,7 @@ module.exports = {
       to: { path: '^src/components/episode-page/(title-slide|episode-page-container)\\.tsx$' },
     },
 
-    // FE-007: layering. Tiers run app → components → hooks → lib; an edge may
+    // FE-007: layering. Tiers run app → components → content-store → hooks → lib; an edge may
     // skip a tier downward, never point upward. Boundary rules above (FE-006)
     // and the layering rules below can both fire on one edge.
     {
@@ -190,16 +193,62 @@ module.exports = {
     {
       name: 'lib-imports-no-upper-tier',
       severity: 'error',
-      comment: 'src/lib/** is the bottom tier: it MUST NOT import src/app, src/components or src/hooks (FE-007).',
+      comment:
+        'src/lib/** is the bottom tier: it MUST NOT import src/app, src/components, src/content-store or src/hooks (FE-007).',
       from: { path: '^src/lib/' },
-      to: { path: '^src/(app|components|hooks)/' },
+      to: { path: '^src/(app|components|content-store|hooks)/' },
     },
     {
       name: 'hooks-import-no-upper-tier',
       severity: 'error',
-      comment: 'src/hooks/** sits above lib only: it MUST NOT import src/app or src/components (FE-007).',
+      comment:
+        'src/hooks/** sits above lib only: it MUST NOT import src/app, src/components or src/content-store (FE-007).',
       from: { path: '^src/hooks/' },
-      to: { path: '^src/(app|components)/' },
+      to: { path: '^src/(app|components|content-store)/' },
+    },
+    // FE-013 and FE-007 §2.5: the content store is the one reader of records, and its own tier.
+    {
+      name: 'records-read-only-through-store',
+      severity: 'error',
+      comment:
+        "Records are read only through src/content-store/store.ts: nothing else imports an Episode's episode-metadata.ts or src/content-store/{events,playlists,schemas}/**. An Episode's metadata file may import its schema for editor feedback (FE-013).",
+      from: {
+        pathNot: [
+          '^src/content-store/',
+          '\\.test\\.tsx?$',
+          EPISODE_METADATA,
+          // Dormant until the store exists (FE-013 Compliance, Known gap): the old reader. The store's first change removes this line.
+          '^src/components/episodes/episode-repository\\.ts$',
+        ],
+      },
+      to: { path: [EPISODE_METADATA, '^src/content-store/(events|playlists|schemas)/'] },
+    },
+    {
+      name: 'store-entry-only',
+      severity: 'error',
+      comment:
+        'Outside the content store, imports reach only its entry, src/content-store/store.ts; schemas, refusals and records stay free to change behind it (FE-013).',
+      from: { pathNot: ['^src/content-store/', '\\.test\\.tsx?$', EPISODE_METADATA] },
+      to: { path: '^src/content-store/', pathNot: '^src/content-store/store\\.ts$' },
+    },
+    {
+      name: 'episode-metadata-reaches-only-schemas-and-lib',
+      severity: 'error',
+      comment:
+        "An Episode's episode-metadata.ts is a record: it imports only src/content-store/schemas/**, src/lib/** and zod, so the store reading it closes no cycle (FE-007, FE-013).",
+      from: { path: EPISODE_METADATA },
+      to: { pathNot: ['^src/content-store/schemas/', '^src/lib/', '(^|/)node_modules/zod/'] },
+    },
+    {
+      name: 'content-store-tier',
+      severity: 'error',
+      comment:
+        "src/content-store/** sits between components and hooks: it imports no React and nothing from src/app or src/components except an Episode's episode-metadata.ts (FE-007).",
+      from: { path: '^src/content-store/' },
+      to: {
+        path: ['^src/(app|components)/', '(^|/)node_modules/(@types/)?(react|react-dom)/'],
+        pathNot: EPISODE_METADATA,
+      },
     },
     // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.
     {
