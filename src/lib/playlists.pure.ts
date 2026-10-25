@@ -29,3 +29,37 @@ export const PLAYLISTS = [
     episodes: ['axel-agentic-workflow-agenda', 'onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'],
   },
 ] as const satisfies readonly PlaylistRecord[];
+
+/** Where one Episode sits in a Playlist: its 1-based position, the count, and its neighbours' slugs, when it has them. */
+export interface PlaylistPosition {
+  readonly position: number;
+  readonly count: number;
+  readonly previous?: string;
+  readonly next?: string;
+}
+
+/** The Episode's place in the Playlist's order, for an Event-scoped Episode page; throws on a slug the Playlist does not hold. */
+export function playlistPosition(episodes: readonly string[], slug: string): PlaylistPosition {
+  const index = episodes.indexOf(slug);
+  if (index === -1) throw new Error(`The Playlist holds no Episode "${slug}"`);
+  const previous = episodes[index - 1];
+  const next = episodes[index + 1];
+  return {
+    position: index + 1,
+    count: episodes.length,
+    ...(previous === undefined ? {} : { previous }),
+    ...(next === undefined ? {} : { next }),
+  };
+}
+
+/** The chip an Event page's Playlist card carries (design-ADR 0016, Event page behaviour). */
+export type PlaylistChip = 'event-frame' | 'unlisted';
+
+/** The event-frame Episode is chipped as the Event page, any other unlisted Episode as unlisted; a public one has none. */
+export function playlistChip(episode: {
+  readonly type: 'standard' | 'event-frame';
+  readonly visibility: Visibility;
+}): PlaylistChip | undefined {
+  if (episode.type === 'event-frame') return 'event-frame';
+  return episode.visibility === 'unlisted' ? 'unlisted' : undefined;
+}

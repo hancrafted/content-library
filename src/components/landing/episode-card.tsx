@@ -57,7 +57,7 @@ function CardConcepts({ card, locale, inEnglish }: ConceptsProps) {
             href={localizePath(conceptRoute(concept.id), 'en')}
             hrefLang="en"
             title={concept.tooltip}
-            className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-caption text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
+            className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-caption text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
           >
             {concept.label}
             {foreign && (
@@ -107,6 +107,21 @@ export interface EpisodeCardProps {
   showFormat: boolean;
   /** Where the card sits in its grid. */
   className?: string;
+  /** A short label under the title, what an Event's Playlist says of an Episode: "Event page", "Unlisted". */
+  chip?: string;
+}
+
+/** The short label under the title, when the card carries one. */
+function CardChip({ chip }: { chip: string | undefined }) {
+  if (chip === undefined) return null;
+  return (
+    <span
+      data-episode-chip
+      className="w-fit rounded-full border border-border px-2 py-0.5 text-caption font-medium text-muted-foreground"
+    >
+      {chip}
+    </span>
+  );
 }
 
 /** The card's own data attributes, the hooks tests and probes read. */
@@ -133,6 +148,7 @@ export function EpisodeCardView({
   labels,
   showFormat,
   className,
+  chip,
 }: EpisodeCardProps) {
   return (
     <CardShell
@@ -144,6 +160,7 @@ export function EpisodeCardView({
       data={dataOf(card)}
     >
       <CardTitle variant={variant} title={card.title} route={card.route} locale={locale} level={headingLevel} />
+      <CardChip chip={chip} />
       <CardCaption variant={variant}>{card.caption}</CardCaption>
       <CardConcepts card={card} locale={locale} inEnglish={labels.conceptInEnglish} />
       <CardFooter card={card} variant={variant} labels={labels} showFormat={showFormat} />

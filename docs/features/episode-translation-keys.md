@@ -112,7 +112,12 @@ An Event is a record in `src/lib/events.pure.ts` that holds no string ([Events](
 - `eventsPage.playlist`: the heading of the numbered Episode list on an Event page.
 - `eventsPage.start`: the primary button, with a `{step}` placeholder for the first Episode that has a page ("Start with Episode 1").
 - `eventsPage.readingTime`: the total reading time of the Episodes, with a `{minutes}` placeholder.
-- `eventsPage.back`: the link up to `/events`; the page draws its arrow icon, so the string holds none.
+- `eventsPage.breadcrumb`: the accessible name of the trail above an Event page and its Episode pages (Events / Event / Episode); the trail's first step reads `eventsPage.title`.
+- `eventsPage.kinds.<kind>` and `eventsPage.audiences.<audience>`: the Event's kind and Audience on its facts line, one key per value of `kind` and `audience` in `src/lib/events.pure.ts`.
+- `eventsPage.pastNotice`: the one fixed line a past Event shows above its Playlist and above the title of each of its Episode pages (design-ADR 0016, Event page behaviour). It carries no date.
+- `eventsPage.chips.event-frame` and `.unlisted`: the chip on an Event page's card of the event-frame Episode and of any other unlisted Episode.
+- `eventsPage.position`: "Episode {position} of {count}", under the title of an Event-scoped Episode page.
+- `eventsPage.previous`, `.next`, `.backToEvent` and `.playlistNav`: the walk at the end of an Event-scoped Episode page and its accessible name.
 - `nav.events`: the header entry. `meta.events.title` and `.description`: the `/events` page metadata, read by `pageMetadata('events', locale)` (FE-008). An Event page takes its metadata from its `items` pair.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.

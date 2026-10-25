@@ -494,7 +494,6 @@
   },
   "eventsPage": {
     "title": "Veranstaltungen",
-    "back": "Alle Veranstaltungen",
     "intro": "Workshops und andere Sessions, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
     "empty": "Derzeit keine öffentlichen Veranstaltungen.",
     "playlist": "Episoden",
@@ -504,6 +503,25 @@
       "one": "1 Episode",
       "other": "{count} Episoden"
     },
+    "breadcrumb": "Brotkrumen",
+    "pastNotice": "Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen.",
+    "kinds": {
+      "workshop": "Workshop",
+      "webinar": "Webinar"
+    },
+    "audiences": {
+      "german-business": "Für Unternehmen in Deutschland",
+      "international": "Für ein internationales Publikum"
+    },
+    "chips": {
+      "event-frame": "Veranstaltungsseite",
+      "unlisted": "Nicht gelistet"
+    },
+    "position": "Episode {position} von {count}",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "backToEvent": "Zur Veranstaltung",
+    "playlistNav": "Playlist",
     "items": {
       "2026-10-23-axel-agentic-workflow": {
         "title": "AXEL Seminar: Agentic Workflows",

@@ -32,12 +32,31 @@ export interface TitleSlideProps {
   hero?: ReactNode;
   youtubeId?: string;
   talkLabels?: TalkPlayerLabels;
+  /** On an Event-scoped Episode page, its place in the Event's Playlist, "Episode 2 of 4"; it follows the title. */
+  position?: string;
   /** On an Episode with authored headers, the short names the Title slide's notes target; only these carry a `data-target`. The Slide header marks both. */
   targets?: readonly TitleTarget[];
 }
 
+/** The Episode's place in its Event's Playlist, under the title and caption. */
+function PlaylistPosition({ position }: { position: string | undefined }) {
+  if (position === undefined) return null;
+  return (
+    <p data-playlist-position className="text-caption font-medium text-muted-foreground">
+      {position}
+    </p>
+  );
+}
+
 /** The Title slide as an Episode with authored Scene headers renders it: the `h1` and caption over the hero Scene or the glow. */
-function AuthoredTitleSlide({ title, caption, hero, launcher, targets }: TitleSlideProps & { launcher: ReactNode }) {
+function AuthoredTitleSlide({
+  title,
+  caption,
+  hero,
+  launcher,
+  targets,
+  position,
+}: TitleSlideProps & { launcher: ReactNode }) {
   const targetOf = (name: TitleTarget) => (targets?.includes(name) ? { 'data-target': name } : {});
   return (
     <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide">
@@ -45,6 +64,7 @@ function AuthoredTitleSlide({ title, caption, hero, launcher, targets }: TitleSl
       <SlideFrame className="justify-center">
         <HeroTitle {...targetOf('title')}>{title}</HeroTitle>
         {caption && <SlideCaption {...targetOf('caption')}>{caption}</SlideCaption>}
+        <PlaylistPosition position={position} />
         {launcher}
       </SlideFrame>
     </SlideWrapper>
@@ -72,7 +92,12 @@ export function TitleSlide(props: TitleSlideProps) {
     entrance,
     // Without a hero Scene the header sits centred over the glow; with one, header and hero sit together, centred.
     className: hero === undefined ? 'my-auto pb-16 md:pb-24' : 'mt-auto',
-    children: launcher,
+    children: (
+      <>
+        <PlaylistPosition position={props.position} />
+        {launcher}
+      </>
+    ),
   };
   return (
     <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide" mode="shared" header={header} scene="hug">
