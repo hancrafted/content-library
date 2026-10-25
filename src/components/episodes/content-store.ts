@@ -8,6 +8,7 @@ import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
 import { PLAYLISTS } from '@/lib/playlists.pure';
 import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS, type UnlistedEpisodeSlug } from '@/lib/routes';
 import { EPISODES_DIR, readSlideFolders } from '@/lib/slide-folders';
+import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
 import { episodeMetadata as aiGivesYouMoreWork } from './ai-gives-you-more-work/episode-metadata';
 import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
@@ -43,9 +44,9 @@ export const UNLISTED = {
 /** Upcoming Episodes in the order the overview lists them. */
 export const UPCOMING: readonly UpcomingEpisodeMetadata[] = [];
 
-/** Every source every Speaker note in every Episode cites, flattened to one record each. */
+/** Every source every Speaker note in every Episode and tooling page cites, flattened to one record each. */
 function slideSources(): RawContent['slideSources'] {
-  return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS].flatMap((slug) => {
+  return [...EPISODE_SLUGS, ...TOOLING_SLUGS, ...UNLISTED_EPISODE_SLUGS].flatMap((slug) => {
     const episode = findEpisode(slug);
     const slides: readonly { slide: string; notes: Slide['notes'] }[] = [
       { slide: 'title', notes: episode.notes ?? [] },
@@ -65,9 +66,9 @@ function slideSources(): RawContent['slideSources'] {
   });
 }
 
-/** Every Definition Slide in every Episode: a Slide that declares the Concept it defines. */
+/** Every Definition Slide in every Episode and tooling page: a Slide that declares the Concept it defines. */
 function definitionSlides(): RawContent['definitionSlides'] {
-  return EPISODE_SLUGS.flatMap((episode) =>
+  return [...EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((episode) =>
     findEpisode(episode).sections.flatMap((section) =>
       section.flatMap(({ slug, defines }) => (defines === undefined ? [] : [{ episode, slide: slug, defines }])),
     ),
@@ -80,7 +81,7 @@ function definitionSlides(): RawContent['definitionSlides'] {
  */
 function slides(): RawContent['slides'] {
   const titles = new Set(
-    EPISODE_SLUGS.flatMap((slug) => {
+    [...EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((slug) => {
       const title = findEpisode(slug).title;
       return title === undefined ? [] : [`${EPISODES_DIR}/${slug}/slides/${title.slug}`];
     }),
@@ -100,6 +101,14 @@ function slides(): RawContent['slides'] {
   });
 }
 
+/** Each Episode's Slide list, the Slides its Sections place, so the store can tell an Episode derived from another. */
+function episodeSlides(): RawContent['episodeSlides'] {
+  return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS].map((episode) => ({
+    episode,
+    slides: findEpisode(episode).sections.flatMap((section) => section.map(({ slug }) => slug)),
+  }));
+}
+
 /** The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy. */
 export function rawContent(): RawContent {
   return {
@@ -107,6 +116,7 @@ export function rawContent(): RawContent {
     concepts: readConceptFiles(process.cwd()),
     definitionSlides: definitionSlides(),
     episodes: [...Object.values(REGISTERED), ...Object.values(UNLISTED), ...UPCOMING],
+    episodeSlides: episodeSlides(),
     events: EVENTS,
     playlists: PLAYLISTS,
     research: readResearchFiles(process.cwd()),

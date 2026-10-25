@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { episodeSlidesSchema } from './canonical-episode.pure';
 import { CONFIDENCES } from './confidence.pure';
 import { ACCENTS, ICONS } from './episode-overview';
 import { AUDIENCES, EVENT_KINDS } from './events.pure';
@@ -117,6 +118,9 @@ export const episodeSchema = z
       ),
       status: z.literal('published').describe('The Episode has a page and is announced'),
       publishedOn: isoDay('The release date'),
+      canonicalEpisode: slugOf(
+        'Unlisted only: the public Episode it derives from, which takes its search credit',
+      ).optional(),
     }),
     z.object({
       ...sharedEpisode,
@@ -229,6 +233,7 @@ export const CONTENT_SCHEMAS = {
   concept: conceptSchema,
   definitionSlide: definitionSlideSchema,
   episode: episodeSchema,
+  episodeSlides: episodeSlidesSchema,
   event: eventSchema,
   playlist: playlistSchema,
   slideSource: slideSourceSchema,
