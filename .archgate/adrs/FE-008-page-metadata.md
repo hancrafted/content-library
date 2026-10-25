@@ -24,8 +24,6 @@ Rejected:
 
 Notes: `x-default` is the default-locale URL. The deploy sets `SITE_URL` to the production origin (https://hancrafted.net), so a domain change needs no code change. `not-found.tsx` is a separate UI decision. An unknown locale prefix is no file in `out/`, so Pages serves its 404; `resolveLocale()`'s `notFound()` only narrows the type and nothing relies on it. Cards and structured data exist so a shared link previews and search understands Episodes.
 
-Why the sitemap asks `pageTreatment`: `pageMetadata` asks the same predicate, so a page's robots and canonical and its sitemap membership cannot disagree.
-
 Why layouts stay site-wide: Next.js inherits a layout's field into every page that omits it, so a layout canonical declares every child a copy of one URL.
 
 ## Decision
@@ -54,7 +52,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 5. Scope
 
-1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list the `PAGES` the visibility predicate `pageTreatment` puts in the sitemap.
+1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list the `PAGES` the visibility predicate `pageTreatment` puts in the sitemap, the predicate `pageMetadata` also asks.
 
 ### 6. Indexable pages carry cards and structured data
 
