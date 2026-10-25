@@ -7,8 +7,8 @@ export const ROUTES = {
   dashboard: '/dashboard',
   /** Prefix every Episode route sits under; there is an index page at this path. */
   episodes: '/episodes',
-  /** The Workshops list; each Workshop's page sits under this path. */
-  workshops: '/workshops',
+  /** The Events list; each Event's page sits under this path. */
+  events: '/events',
 } as const;
 
 export const LEGACY_EPISODE_PREFIX = '/episode';
@@ -63,7 +63,7 @@ export function episodeParams(): { episode: EpisodesPathSlug }[] {
 
 /**
  * Every Event, by slug: a hand-kept page list, checked against the content store's Event records by the store's
- * tests (lib cannot read the store, FE-007). Until the Events pages land, each Event is served as a Workshop page.
+ * tests (lib cannot read the store, FE-007).
  */
 export const EVENT_SLUGS = ['2026-10-23-axel-agentic-workflow'] as const;
 
@@ -73,14 +73,19 @@ export function isEventSlug(slug: string): slug is EventSlug {
   return (EVENT_SLUGS as readonly string[]).includes(slug);
 }
 
-/** The logical path of one Workshop. */
-export function workshopRoute(slug: string): string {
-  return `${ROUTES.workshops}/${slug}`;
+/** The logical path of one Event's page. */
+export function eventRoute(slug: string): string {
+  return `${ROUTES.events}/${slug}`;
 }
 
-/** One static param per Event, served as a Workshop page; both Workshop routes export exactly these (FE-005). */
-export function workshopParams(): { workshop: EventSlug }[] {
-  return EVENT_SLUGS.map((workshop) => ({ workshop }));
+/** The logical path of one Episode of an Event's Playlist, shown under the Event. */
+export function eventEpisodeRoute(event: string, episode: string): string {
+  return `${eventRoute(event)}${ROUTES.episodes}/${episode}`;
+}
+
+/** One static param per Event; both Event routes export exactly these (FE-005). */
+export function eventParams(): { event: EventSlug }[] {
+  return EVENT_SLUGS.map((event) => ({ event }));
 }
 
 /** A page with its own metadata and a closed set of exported locales. */
@@ -88,20 +93,20 @@ export type PageRef =
   | 'home'
   | 'dashboard'
   | 'episodes'
-  | 'workshops'
+  | 'events'
   | { readonly episode: EpisodeSlug }
   | { readonly tooling: ToolingSlug }
-  | { readonly workshop: EventSlug };
+  | { readonly event: EventSlug };
 
 /** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
 export const PAGES: readonly PageRef[] = [
   'home',
   'dashboard',
   'episodes',
-  'workshops',
+  'events',
   ...EPISODE_SLUGS.map((episode) => ({ episode })),
   ...TOOLING_SLUGS.map((tooling) => ({ tooling })),
-  ...EVENT_SLUGS.map((workshop) => ({ workshop })),
+  ...EVENT_SLUGS.map((event) => ({ event })),
 ];
 
 /** English-only operations pages have no German counterpart. */
@@ -113,7 +118,7 @@ export function pageLocales(page: PageRef): readonly Locale[] {
 export function routeOf(page: PageRef): string {
   if (isEpisodePage(page)) return episodeRoute(page.episode);
   if (isToolingPage(page)) return episodeRoute(page.tooling);
-  return isWorkshopPage(page) ? workshopRoute(page.workshop) : ROUTES[page];
+  return isEventPage(page) ? eventRoute(page.event) : ROUTES[page];
 }
 
 /** Whether a page is an Episode's, narrowing to the `{ episode }` form. */
@@ -126,9 +131,9 @@ export function isToolingPage(page: PageRef): page is { readonly tooling: Toolin
   return typeof page !== 'string' && 'tooling' in page;
 }
 
-/** Whether a page is a Workshop's, narrowing to the `{ workshop }` form. */
-export function isWorkshopPage(page: PageRef): page is { readonly workshop: EventSlug } {
-  return typeof page !== 'string' && 'workshop' in page;
+/** Whether a page is an Event's, narrowing to the `{ event }` form. */
+export function isEventPage(page: PageRef): page is { readonly event: EventSlug } {
+  return typeof page !== 'string' && 'event' in page;
 }
 
 /** The URL a logical path is served at under `siteUrl`: `trailingSlash` makes it the canonical, the origin alone for the home page. */

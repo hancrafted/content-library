@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { workshopCard, type WorkshopReads } from './workshop-card.pure';
+import { eventCard, type EventReads } from './event-card.pure';
 
 /** A hand-written stand-in for the Translation file: the keys the card reads, answered with their own words. */
-const READS: WorkshopReads = {
+const READS: EventReads = {
   read: (key) => `«${key}»`,
   episodeCount: { one: '1 Episode', other: '{count} Episodes' },
 };
@@ -19,12 +19,12 @@ describe('success cases', () => {
   it('reads the title and description by the Event slug and routes the card to its page', () => {
     // ARRANGE
     const expected = {
-      title: '«workshopsPage.items.2026-10-23-intro.title»',
-      description: '«workshopsPage.items.2026-10-23-intro.description»',
-      route: '/workshops/2026-10-23-intro',
+      title: '«eventsPage.items.2026-10-23-intro.title»',
+      description: '«eventsPage.items.2026-10-23-intro.description»',
+      route: '/events/2026-10-23-intro',
     };
     // ACT
-    const card = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const card = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
     // ASSERT
     expect({ title: card.title, description: card.description, route: card.route }).toEqual(expected);
   });
@@ -33,8 +33,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { english: 'Oct 23, 2026', german: '23. Okt. 2026', date: '2026-10-23' };
     // ACT
-    const english = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
-    const german = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'de', READS);
+    const english = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const german = eventCard({ event: RECORD, playlist: PLAYLIST }, 'de', READS);
     // ASSERT
     expect({ english: english.dateLabel, german: german.dateLabel, date: english.date }).toEqual(expected);
   });
@@ -43,7 +43,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { count: 3, label: '3 Episodes' };
     // ACT
-    const card = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const card = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
     // ASSERT
     expect({ count: card.episodeCount, label: card.episodeCountLabel }).toEqual(expected);
   });
@@ -52,26 +52,26 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('fails the build when a Translation key is missing, rather than drawing a blank', () => {
     // ARRANGE
-    const reads: WorkshopReads = {
+    const reads: EventReads = {
       ...READS,
       read: (key) => {
         throw new Error(`Missing ${key}`);
       },
     };
     // ACT
-    const build = () => workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', reads);
+    const build = () => eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', reads);
     // ASSERT
-    expect(build).toThrow('Missing workshopsPage.items.2026-10-23-intro.title');
+    expect(build).toThrow('Missing eventsPage.items.2026-10-23-intro.title');
   });
 });
 
 describe('edge cases', () => {
-  it('uses the singular for a Workshop of one Episode', () => {
+  it('uses the singular for an Event of one Episode', () => {
     // ARRANGE
     const playlist = { episodes: ['alpha'] };
     const expected = '1 Episode';
     // ACT
-    const card = workshopCard({ event: RECORD, playlist: playlist }, 'en', READS);
+    const card = eventCard({ event: RECORD, playlist: playlist }, 'en', READS);
     // ASSERT
     expect(card.episodeCountLabel).toBe(expected);
   });
@@ -81,8 +81,8 @@ describe('edge cases', () => {
     const timed = { ...RECORD, time: '09:30', location: 'Berlin' };
     const expected = { time: '09:30', location: 'Berlin' };
     // ACT
-    const withDetails = workshopCard({ event: timed, playlist: PLAYLIST }, 'en', READS);
-    const without = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const withDetails = eventCard({ event: timed, playlist: PLAYLIST }, 'en', READS);
+    const without = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
     // ASSERT
     expect({ time: withDetails.time, location: withDetails.location }).toEqual(expected);
     expect('time' in without || 'location' in without).toBe(false);

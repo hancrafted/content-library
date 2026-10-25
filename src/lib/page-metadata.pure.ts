@@ -78,7 +78,7 @@ function socialCards(
 /** The copy of a page that has no record of its own: `meta.<page>` of the Translation file. */
 function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | 'description'> {
   const { meta } = TRANSLATIONS[locale];
-  if (page === 'dashboard' || page === 'episodes' || page === 'workshops') return meta[page];
+  if (page === 'dashboard' || page === 'episodes' || page === 'events') return meta[page];
   return meta.home;
 }
 
@@ -89,7 +89,7 @@ function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | '
  * reach, so the route hands it in, with its status: an upcoming Episode's page
  * is `noindex`, so the publish flip removes it from search.
  */
-export function pageMetadata(page: 'home' | 'episodes' | 'workshops', locale: Locale): Metadata;
+export function pageMetadata(page: 'home' | 'episodes' | 'events', locale: Locale): Metadata;
 export function pageMetadata(page: 'dashboard', locale: 'en'): Metadata;
 export function pageMetadata(page: Exclude<PageRef, string>, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {

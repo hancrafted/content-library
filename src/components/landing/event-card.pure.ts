@@ -2,24 +2,23 @@ import type { Event } from '@/content-store/schemas/event.schema';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { Playlist } from '@/content-store/schemas/playlist.schema';
 import type { Locale } from '@/lib/locale.pure';
-import { workshopRoute } from '@/lib/routes';
+import { eventRoute } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
 import { releaseDateOf, type ReadKey } from './episode-card.pure';
 
-/** What a Workshop card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
-export interface WorkshopReads {
+/** What an Event card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
+export interface EventReads {
   readonly read: ReadKey;
   readonly episodeCount: { readonly one: string; readonly other: string };
 }
 
 /**
- * One Event as its Workshop card draws it, until the Events pages replace it: the Event and the Playlist it
- * presents, with their strings read in one locale. Plain values
- * only, so a Server Component can hand it on (FE-006 §4).
+ * One Event as its card draws it: the Event and the Playlist it presents, with their strings read in one locale.
+ * Plain values only, so a Server Component can hand it on (FE-006 §4).
  */
-export interface WorkshopCard {
+export interface EventCard {
   readonly slug: string;
-  /** The Workshop's locale-neutral logical path; a JSX `href` must be `localizePath(route, locale)` (FE-003). */
+  /** The Event's locale-neutral logical path; a JSX `href` must be `localizePath(route, locale)` (FE-003). */
   readonly route: string;
   readonly title: string;
   readonly description: string;
@@ -33,18 +32,18 @@ export interface WorkshopCard {
   readonly episodeCountLabel: string;
 }
 
-const ITEMS = 'workshopsPage.items';
+const ITEMS = 'eventsPage.items';
 
 /** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
-export function workshopCard(
+export function eventCard(
   { event: record, playlist }: { event: Event; playlist: Pick<Playlist, 'episodes'> },
   locale: Locale,
-  { read, episodeCount }: WorkshopReads,
-): WorkshopCard {
+  { read, episodeCount }: EventReads,
+): EventCard {
   const count = playlist.episodes.length;
   return {
     slug: record.slug,
-    route: workshopRoute(record.slug),
+    route: eventRoute(record.slug),
     title: read(`${ITEMS}.${record.slug}.title`),
     description: read(`${ITEMS}.${record.slug}.description`),
     date: record.date,
