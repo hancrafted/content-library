@@ -133,6 +133,17 @@ function slideSlugRefusals(slides: readonly SlideFolder[]): Refusal[] {
   }));
 }
 
+/** An instance takes a slug of its own at the copy, never its origin's (design-ADR 0016, Slide reuse rule 7). */
+function instanceSlugRefusals(slides: readonly SlideFolder[]): Refusal[] {
+  return slides
+    .filter(({ slug, copiedFrom }) => copiedFrom === slug)
+    .map(({ path, slug }) => ({
+      kind: 'slide' as const,
+      record: slug,
+      message: `${path} is an instance of "${slug}" under its origin's slug: an instance takes a slug of its own`,
+    }));
+}
+
 function researchIdRefusals(research: readonly ResearchRecord[]): Refusal[] {
   return duplicates(research.map(({ id }) => id)).map((id) => ({
     kind: 'research' as const,
@@ -179,6 +190,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
     ...[tags, episodes, workshops, slideSources, slides, research].flatMap((part) => part.refusals),
     ...researchIdRefusals(research.value),
     ...slideSlugRefusals(slides.value),
+    ...instanceSlugRefusals(slides.value),
     ...crossChecks(soundEpisodes, soundWorkshops),
   ];
   if (refusals.length > 0) return { ok: false, refusals };

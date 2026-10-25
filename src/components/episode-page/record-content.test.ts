@@ -204,6 +204,29 @@ describe('success cases', () => {
     expect(result).toEqual(expected);
     await expect(build).rejects.toThrow(/the-lost-middle.*slides.*foundations--why-context-rots/);
   });
+  it('resolves a sibling link to the instance an Episode holds of that sibling, even beside its origin', async () => {
+    // ARRANGE
+    const instance = slide({
+      slug: 'the-lost-middle-for-founders',
+      copiedFrom: { slug: 'the-lost-middle', commit: '0123abc' },
+      messages: WHY,
+      content: () => null,
+    });
+    const adapted = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, instance, linking]] });
+    const both = episode({
+      slug: 'slides',
+      messages: EPISODE,
+      sections: [[foundations, lostMiddle, instance, linking]],
+    });
+    const expected = {
+      adapted: '<a href="/episodes/slides#foundations--the-lost-middle-for-founders">the lost middle</a>',
+      both: '<a href="/episodes/slides#foundations--the-lost-middle-for-founders">the lost middle</a>',
+    };
+    // ACT
+    const result = { adapted: await linkOf(adapted, 'why-context-rots'), both: await linkOf(both, 'why-context-rots') };
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {

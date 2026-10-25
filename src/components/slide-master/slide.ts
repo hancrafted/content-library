@@ -87,7 +87,19 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly segments: readonly SegmentSpec[];
   /** The slug of the note whose Context marker follows the caption, when a term in it needs a source. */
   readonly captionNote?: string;
+  /** Set on an instance only: the pool Slide it was copied from (design-ADR 0016, _Slide reuse_ rule 3). */
+  readonly copiedFrom?: CopiedFrom;
   readonly content: (kit: RuntimeKit) => ReactNode;
+}
+
+/**
+ * An instance's marker: the pool Slide it was copied from, by slug, and the commit it was copied at. An instance is a
+ * Slide folder in its Episode's own `slides/`, adapted from a reused Slide under a slug of its own; Promotion resolves
+ * it (design-ADR 0016, _Slide reuse_ rules 3 and 4).
+ */
+export interface CopiedFrom {
+  readonly slug: string;
+  readonly commit: string;
 }
 
 /** A Slide whose own file holds a `title`: the only kind that may open a Section. */
@@ -105,6 +117,8 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
   /** One of the Slide's notes: its Context marker follows the caption (a term in the caption that needs a source). */
   readonly captionNote?: N['slug'];
+  /** Set by `npm run slides:adapt` on an instance only; never written by hand. */
+  readonly copiedFrom?: CopiedFrom;
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
@@ -120,6 +134,7 @@ export function slide<
     notes: spec.notes ?? [],
     segments: spec.segments ?? [],
     ...(spec.captionNote !== undefined && { captionNote: spec.captionNote }),
+    ...(spec.copiedFrom !== undefined && { copiedFrom: spec.copiedFrom }),
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
     content: spec.content as unknown as Slide['content'],
   };

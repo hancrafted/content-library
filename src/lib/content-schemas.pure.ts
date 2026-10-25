@@ -91,6 +91,7 @@ export const slideFolderSchema = z
     title: z
       .boolean()
       .describe("Whether the folder holds an Episode's Title slide, whose slug is exempt from uniqueness"),
+    copiedFrom: slugOf('Set on an instance only: the slug of the pool Slide it was copied from').optional(),
   })
   .describe('One Slide folder, wherever it lives');
 
