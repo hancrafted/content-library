@@ -2,6 +2,8 @@
 type: research
 title: 'Why do typical B2B sales cycles take as long as they do?'
 description: 'B2B sales cycles are long because the buyer is a group whose members each hold veto power, so cycle length is significantly affected by group size and purchase type.'
+confidence: contested
+informs: [sales]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-13T23:21:30Z

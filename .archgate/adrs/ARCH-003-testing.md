@@ -15,49 +15,49 @@ description: "What a test file may do and how it is shaped: six behavioural Don'
 
 Test-driven development (TDD) and the red-green-refactor cycle are the primary agentic coding practices. Because agents optimizing for a green signal routinely introduce mocks, skips, and ambient shortcuts that destroy test validity, this ADR establishes behavioral boundaries and uniform suite structures to keep passing tests trustworthy proof and missing cases visible.
 
+Rationale for the rules below: the three suite blocks have no fourth name. a `// ARRANGE / ACT` comment is two markers short. A named expected value in `// ARRANGE` lets a reviewer disagree with it. `expect(seen).toContain(key)` names the missing key, while `expect(isSeen).toBe(true)` discards why it failed. The fast suite and pull-request CI open no browser, so neither needs a build. A sleep passes by being long enough: slow on a fast machine, red on a slow one. A retrying assertion matters because `expect(await drawer.isVisible()).toBe(true)` reads once. A pristine or empty baseline fails on the very commit that changes the tree it guards.
+
 ## Decision
 
 ### 1. Determinism and Real Execution
 
-1. **Tests MUST be fully deterministic**: all time, randomness, and inputs MUST be supplied explicitly with zero dependence on ambient state or network.
-2. **Tests MUST provide real assertion value**: tests MUST execute real code against explicit expected values—mock frameworks (`vi.mock`/`vi.spyOn`), snapshot matchers, skipped tests (`.skip`), and assertion-free bodies are forbidden. A reviewed contract file — `published-anchors.json` — is an expected value.
+1. **Tests MUST be fully deterministic**: all time, randomness and inputs MUST be supplied explicitly, with no ambient state or network.
+2. **Tests MUST provide real assertion value**: they MUST execute real code against explicit expected values—mocks, snapshot matchers, skipped tests and assertion-free bodies are forbidden. A reviewed contract file, `published-anchors.json`, is an expected value.
 
 ### 2. Suite structure
 
-1. In every test under `src/` and every browser test, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. There is no fourth name. (📜 Rule: `suite-three-blocks`)
+1. In every test under `src/` and every browser test, a top-level suite MUST split into exactly three `describe` blocks — `success cases`, `failure cases`, `edge cases` — each holding at least one test. (📜 Rule: `suite-three-blocks`)
 2. `describe` MUST NOT nest past two levels; a test MUST NOT sit at file top level.
 
 ### 3. Test-body structure
 
-1. Every test body MUST carry `// ARRANGE`, `// ACT` and `// ASSERT`, uppercase, exactly once each, in that order; one marker per comment, so `// ARRANGE / ACT` is two markers short. (📜 Rule: `test-body-aaa`)
-2. The `// ASSERT` block MUST NOT hold a magic string or number; name it in `// ARRANGE`, so a reviewer can disagree with it. Exempt: `0`, `1`, `-1`, `true`, `false`, `null`, `undefined`, `''`, `[]`, `{}`. (📜 Rule: `assert-no-magic`)
-3. An assertion MUST NOT collapse into a boolean inside `// ACT`. Put the observation in `// ACT` and keep the rich matcher in `// ASSERT` — `expect(seen).toContain(key)` names the missing key, while `expect(isSeen).toBe(true)` discards why it failed.
+1. Every test body MUST carry `// ARRANGE`, `// ACT` and `// ASSERT`, exactly once each, in order; one marker per comment. (📜 Rule: `test-body-aaa`)
+2. The `// ASSERT` block MUST NOT hold a magic string or number; name it in `// ARRANGE`. Exempt: `0`, `1`, `-1`, `true`, `false`, `null`, `undefined`, `''`, `[]`, `{}`. (📜 Rule: `assert-no-magic`)
+3. An assertion MUST NOT collapse into a boolean inside `// ACT`: observe in `// ACT`, keep the rich matcher in `// ASSERT`.
 
 ### 4. Where a test lives
 
-1. A unit test sits beside its subject under `src/` — `slide-zone.pure.test.ts` beside `slide-zone.pure.ts` — and runs in the fast suite.
-2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. `*.browser.test.ts` drives the built export, locally via `npm run test:browser` and nightly on `main` in CI; the fast suite and pull-request CI open no browser, so neither needs a build.
+1. A unit test sits beside its subject under `src/` and runs in the fast suite.
+2. `*.build.test.ts` (in `tests/post-build/`) runs after `npm run build`. `*.browser.test.ts` drives the built export, via `npm run test:browser` and nightly on `main` in CI.
 3. An Episode test reaches only what an Episode file may, plus Node builtins for in-test fixtures.
 
 ### 5. Browser tests wait on the page
 
-1. A browser test MUST NOT wait on time — no `waitForTimeout`, `setTimeout` or `delay`. A sleep passes by being long enough: slow on a fast machine, red on a slow one.
+1. A browser test MUST NOT wait on time — no `waitForTimeout`, `setTimeout` or `delay`.
 2. It waits on what the page shows: a retrying assertion, or an animating element reaching `data-motion="settled"`.
-3. An assertion MUST retry: `await expect(drawer).toBeVisible()`, never `expect(await drawer.isVisible()).toBe(true)`, which reads once.
+3. An assertion MUST retry (`await expect(drawer).toBeVisible()`), not read once.
 
 ## Do's and Don'ts
 
 ### Do's
 
-1. **DO** pass every instant, seed and input a test depends on into the test explicitly. (Decision 1.1)
-2. **DO** write the expected value out by hand, so a reviewer can disagree with it. (Decision 1.2)
-3. **DO** hand-write a stand-in when a collaborator must be substituted, and keep it in the test file where a reader can see what it does. (Decision 1.2)
-4. **DO** split every suite under `src/`, and every browser test, into `success cases`, `failure cases` and `edge cases`, with at least one test in each. (Decision 2, 📜 Rule: `suite-three-blocks`)
-5. **DO** treat a block you cannot fill as a question about the subject, not a rule to route around. (Decision 2.1)
-6. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
-7. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
-8. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
-9. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
+1. **DO** write the expected value out by hand, so a reviewer can disagree with it. (Decision 1.2)
+2. **DO** hand-write a stand-in for a substituted collaborator, in the test file. (Decision 1.2)
+3. **DO** split every suite under `src/`, and every browser test, into `success cases`, `failure cases` and `edge cases`, with at least one test in each. (Decision 2, 📜 Rule: `suite-three-blocks`)
+4. **DO** treat a block you cannot fill as a question about the subject, not a rule to route around. (Decision 2.1)
+5. **DO** mark every body `// ARRANGE`, `// ACT`, `// ASSERT`, naming expected values before asserting them. (Decision 3, 📜 Rule: `test-body-aaa`)
+6. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
+7. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
 
 ### Don'ts
 
@@ -68,9 +68,9 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 5. **DON'T** call `vi.mock`, `vi.doMock`, `vi.spyOn`, `vi.mocked`, `vi.stubGlobal`, or a `jest` equivalent. (Decision 1.2)
 6. **DON'T** assert an expected value the code under test computed. (Decision 1.2)
 7. **DON'T** inline a magic string or number in the `// ASSERT` block. Strings: by review. (Decision 3, 📜 Rule: `assert-no-magic`)
-8. **DON'T** assert a side effect's absence against a pristine or empty baseline — that measures ambient repository state, and it fails on the very commit that changes the tree it guards. (Decision 1.2)
-9. **DON'T** sleep in a browser test — `page.waitForTimeout(500)`, `await delay(2000)`. (Decision 5)
-10. **DON'T** assert a browser read taken once — `expect(await el.isVisible())`, `expect(await el.textContent())`. (Decision 5)
+8. **DON'T** assert a side effect's absence against a pristine or empty baseline (it measures ambient repository state). (Decision 1.2)
+9. **DON'T** sleep in a browser test — `page.waitForTimeout(500)`. (Decision 5)
+10. **DON'T** assert a browser read taken once (`expect(await el.isVisible())`). (Decision 5)
 
 ## Consequences
 

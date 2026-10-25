@@ -1,6 +1,7 @@
 import { EVENTS, type EventSlug } from './events.pure';
 import { LOCALES, localizePath, type Locale } from './locale.pure';
 import { PLAYLISTS } from './playlists.pure';
+import { RESEARCH_IDS, type ResearchId } from './research-ids';
 import { isToolingSlug, TOOLING_SLUGS, type ToolingSlug } from './tooling-pages';
 
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */
@@ -13,6 +14,8 @@ export const ROUTES = {
   events: '/events',
   /** Prefix every Concept page sits under, English only; there is no index page yet. */
   concepts: '/concepts',
+  /** Prefix every Research question page sits under, English only; there is no index page yet. */
+  research: '/research',
 } as const;
 
 export const LEGACY_EPISODE_PREFIX = '/episode';
@@ -32,17 +35,12 @@ export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
 /** A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. */
 export type EpisodesPathSlug = EpisodeSlug | ToolingSlug;
 
-/** Every page under `/episodes/`: each Episode's own, then each tooling page. */
-export const EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = [...EPISODE_SLUGS, ...TOOLING_SLUGS];
-
 export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
   return isEpisodeSlug(slug) || isToolingSlug(slug);
 }
 
 /** The page a slug under `/episodes/` names: a tooling page's, else the Episode's own. */
-export function episodesPathPage(
-  slug: EpisodesPathSlug,
-): { readonly episode: EpisodeSlug } | { readonly tooling: ToolingSlug } {
+export function episodesPathPage(slug: EpisodesPathSlug) {
   return isToolingSlug(slug) ? { tooling: slug } : { episode: slug };
 }
 
@@ -61,10 +59,6 @@ export type AnyEpisodeSlug = EpisodeSlug | UnlistedEpisodeSlug;
 /** Every Slide record the registry holds: each Episode's, and each tooling page's. */
 export type RecordSlug = AnyEpisodeSlug | ToolingSlug;
 
-export function isRecordSlug(slug: string): slug is RecordSlug {
-  return isAnyEpisodeSlug(slug) || isToolingSlug(slug);
-}
-
 export function isAnyEpisodeSlug(slug: string): slug is AnyEpisodeSlug {
   return isEpisodeSlug(slug) || (UNLISTED_EPISODE_SLUGS as readonly string[]).includes(slug);
 }
@@ -78,10 +72,7 @@ export function episodeRoute(slug: EpisodesPathSlug): string {
   return `${ROUTES.episodes}/${slug}`;
 }
 
-/**
- * The logical path an Episode's page is served at: the one handed in (an Event-scoped page passes its own), else the
- * Episode's own `/episodes/<slug>`. An unlisted Episode has no page of its own, so it must be handed one.
- */
+/** The path a record's page is served at: the one handed in (an Event-scoped page's), else `/episodes/<slug>`. */
 export function episodePageRoute(slug: RecordSlug, route?: string): string {
   if (route !== undefined) return route;
   if (!isEpisodesPathSlug(slug)) throw new Error(`"${slug}" is unlisted: it has no /episodes/ page, only its Event's.`);
@@ -93,12 +84,9 @@ export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
   return `${LEGACY_EPISODE_PREFIX}/${slug}`;
 }
 
-/**
- * One static param per page under `/episodes/`, each Episode's and each tooling page's; both Episode routes and both
- * legacy stub routes export exactly these (FE-002, FE-005).
- */
+/** One static param per page under `/episodes/`, Episode or tooling page; its routes and legacy stubs export these. */
 export function episodeParams(): { episode: EpisodesPathSlug }[] {
-  return EPISODES_PATH_SLUGS.map((episode) => ({ episode }));
+  return [...EPISODE_SLUGS, ...TOOLING_SLUGS].map((episode) => ({ episode }));
 }
 
 export const EVENT_SLUGS: readonly EventSlug[] = EVENTS.map((event) => event.slug);
@@ -169,6 +157,16 @@ export function conceptParams(): { concept: ConceptId }[] {
   return CONCEPT_IDS.map((concept) => ({ concept }));
 }
 
+/** The logical path of one Research question page; it has no German counterpart, so link it with the `en` locale. */
+export function researchRoute(id: string): string {
+  return `${ROUTES.research}/${id}`;
+}
+
+/** One static param per promoted Research question; the Research route exports exactly these (FE-005). */
+export function researchParams(): { research: ResearchId }[] {
+  return RESEARCH_IDS.map((research) => ({ research }));
+}
+
 /** A page with its own metadata and a closed set of exported locales. */
 export type PageRef =
   | 'home'
@@ -179,7 +177,8 @@ export type PageRef =
   | { readonly tooling: ToolingSlug }
   | { readonly event: EventSlug }
   | { readonly event: EventSlug; readonly episode: AnyEpisodeSlug }
-  | { readonly concept: ConceptId };
+  | { readonly concept: ConceptId }
+  | { readonly research: ResearchId };
 
 /** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
 export const PAGES: readonly PageRef[] = [
@@ -192,11 +191,12 @@ export const PAGES: readonly PageRef[] = [
   ...EVENT_SLUGS.map((event) => ({ event })),
   ...eventEpisodeParams(),
   ...CONCEPT_IDS.map((concept) => ({ concept })),
+  ...RESEARCH_IDS.map((research) => ({ research })),
 ];
 
 /** English-only pages have no German counterpart: the operations dashboard, and every evidence page. */
 export function pageLocales(page: PageRef): readonly Locale[] {
-  return page === 'dashboard' || isConceptPage(page) ? ['en'] : LOCALES;
+  return page === 'dashboard' || isConceptPage(page) || isResearchPage(page) ? ['en'] : LOCALES;
 }
 
 /** The logical path a page is exported at. */
@@ -205,6 +205,7 @@ export function routeOf(page: PageRef): string {
   if (isToolingPage(page)) return episodeRoute(page.tooling);
   if (isEventEpisodePage(page)) return eventEpisodeRoute(page.event, page.episode);
   if (isConceptPage(page)) return conceptRoute(page.concept);
+  if (isResearchPage(page)) return researchRoute(page.research);
   return isEventPage(page) ? eventRoute(page.event) : ROUTES[page];
 }
 
@@ -233,6 +234,11 @@ export function isEventEpisodePage(
 /** Whether a page is a Concept's, narrowing to the `{ concept }` form. */
 export function isConceptPage(page: PageRef): page is { readonly concept: ConceptId } {
   return typeof page !== 'string' && 'concept' in page;
+}
+
+/** Whether a page is a Research question's, narrowing to the `{ research }` form. */
+export function isResearchPage(page: PageRef): page is { readonly research: ResearchId } {
+  return typeof page !== 'string' && 'research' in page;
 }
 
 /** The URL a logical path is served at under `siteUrl`: `trailingSlash` makes it the canonical, the origin alone for the home page. */

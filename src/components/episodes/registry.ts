@@ -1,6 +1,7 @@
 import type { EpisodeMessages, EpisodeRecord } from '@/components/slide-master/slide';
 import type { Locale } from '@/lib/locale.pure';
-import { isRecordSlug, type RecordSlug } from '@/lib/routes';
+import { isAnyEpisodeSlug, type RecordSlug } from '@/lib/routes';
+import { isToolingSlug } from '@/lib/tooling-pages';
 import { notFound } from 'next/navigation';
 import { aiAttentionSpan } from './ai-attention-span/ai-attention-span';
 import { aiGivesYouMoreWork } from './ai-gives-you-more-work/ai-gives-you-more-work';
@@ -35,7 +36,7 @@ const EPISODES: { readonly [S in RecordSlug]: EpisodeRecord & { readonly slug: S
 };
 
 export function findEpisode(slug: string): EpisodeRecord {
-  if (!isRecordSlug(slug)) notFound();
+  if (!isAnyEpisodeSlug(slug) && !isToolingSlug(slug)) notFound();
   return EPISODES[slug];
 }
 

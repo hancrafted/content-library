@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { episodeSlidesSchema } from './canonical-episode.pure';
+import { CONFIDENCES } from './confidence.pure';
 import { ACCENTS, ICONS } from './episode-overview';
 import { AUDIENCES, EVENT_KINDS } from './events.pure';
 import { PLAYLIST_TYPES, VISIBILITIES } from './playlists.pure';
@@ -117,7 +119,7 @@ export const episodeSchema = z
       status: z.literal('published').describe('The Episode has a page and is announced'),
       publishedOn: isoDay('The release date'),
       canonicalEpisode: slugOf(
-        'An unlisted Episode only: the public Episode it was derived from, whose page takes its search credit',
+        'Unlisted only: the public Episode it derives from, which takes its search credit',
       ).optional(),
     }),
     z.object({
@@ -130,10 +132,6 @@ export const episodeSchema = z
   .refine((episode) => episode.type !== 'event-frame' || episode.visibility === 'unlisted', {
     message: 'an event-frame Episode is always unlisted',
     path: ['visibility'],
-  })
-  .refine((episode) => !('canonicalEpisode' in episode) || episode.visibility === 'unlisted', {
-    message: 'only an unlisted Episode names a canonicalEpisode; a public one is its own canonical',
-    path: ['canonicalEpisode'],
   })
   .describe('What an Episode declares about itself: its overview entry, its type and its visibility');
 
@@ -173,15 +171,6 @@ export const slideSourceSchema = z
   })
   .describe('One source a Speaker note cites');
 
-export const episodeSlidesSchema = z
-  .object({
-    episode: slugOf('The Episode slug'),
-    slides: z
-      .array(slugOf('A Slide slug, unique across every Episode and the Slide pool'))
-      .describe("The Slides the Episode's Sections place, in page order; the Title slide is not one"),
-  })
-  .describe("One Episode's Slide list, which tells an Episode derived from another");
-
 /** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
 export const SLIDE_FOLDER = /^src\/components\/(episodes\/[a-z0-9-]+\/slides|slide-pool)\/[a-z0-9-]+$/;
 
@@ -195,6 +184,7 @@ export const slideFolderSchema = z
     title: z
       .boolean()
       .describe("Whether the folder holds an Episode's Title slide, whose slug is exempt from uniqueness"),
+    copiedFrom: slugOf('Set on an instance only: the slug of the pool Slide it was copied from').optional(),
   })
   .describe('One Slide folder, wherever it lives');
 
@@ -203,6 +193,15 @@ export const researchSchema = z
     type: z.literal('research').describe('The kind of Staging file this is'),
     title: z.string().min(1).describe('The question, written as one'),
     description: z.string().min(1).max(200).describe('The answer in one sentence, at most 200 characters'),
+    confidence: z
+      .enum(CONFIDENCES)
+      .describe(
+        "How settled the evidence for the Answer is, never the writer's certainty: settled, contested or open, by the definitions in CONFIDENCE_DEFINITIONS",
+      ),
+    informs: conceptIds('The Concepts the question informs, the first the main one').min(
+      1,
+      'names no Concept: a Research question informs at least one, the first its main one',
+    ),
     generated: z
       .object({
         by: z.string().min(1).describe('Who or what wrote the file'),
@@ -210,6 +209,12 @@ export const researchSchema = z
       })
       .describe('The provenance of the file'),
     stale_after: z.string().min(1).optional().describe('The instant after which the answer needs a re-run'),
+    verified: z
+      .union([verification, z.array(verification)])
+      .optional()
+      .describe(
+        'OKF trust: who confirmed the file and when; an entry by human:han at or after generated.at confirms confidence and informs',
+      ),
     sources: z
       .array(
         z.object({
@@ -240,5 +245,4 @@ export type SlideSource = z.infer<typeof slideSourceSchema>;
 export type ConceptFrontmatter = z.infer<typeof conceptSchema>;
 export type DefinitionSlide = z.infer<typeof definitionSlideSchema>;
 export type SlideFolder = z.infer<typeof slideFolderSchema>;
-export type EpisodeSlides = z.infer<typeof episodeSlidesSchema>;
 export type ResearchFrontmatter = z.infer<typeof researchSchema>;

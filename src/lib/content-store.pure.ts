@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import { canonicalEpisodeProblems } from './canonical-episode.pure';
+import { canonicalEpisodeProblems, episodeSlidesSchema, type SlideList } from './canonical-episode.pure';
 import type { ConceptFile } from './concept-record.pure';
 import {
   conceptProblems,
@@ -13,13 +13,11 @@ import {
 import {
   definitionSlideSchema,
   episodeSchema,
-  episodeSlidesSchema,
   eventSchema,
   playlistSchema,
   slideFolderSchema,
   slideSourceSchema,
   type DefinitionSlide,
-  type EpisodeSlides,
   type RecordKind,
   type SlideFolder,
   type SlideSource,
@@ -29,8 +27,10 @@ import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata
 import type { ThemeLook } from './episode-overview';
 import type { EventRecord } from './events.pure';
 import type { PlaylistRecord } from './playlists.pure';
+import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
-import { duplicates, researchIdRefusals, slideSlugRefusals } from './unique-ids.pure';
+import { slideFolderProblems } from './slide-slugs.pure';
+import { duplicates, researchIdRefusals } from './unique-ids.pure';
 
 /*
  * The content store: one loader reads every record the site is built from through its Zod schema and answers with
@@ -135,11 +135,12 @@ interface Sound {
   readonly episodes: readonly EpisodeMetadata[];
   readonly delivery: DeliveryRecords | undefined; // absent while an Episode, Event or Playlist fails its schema
   readonly definitionSlides: readonly DefinitionSlide[];
-  readonly episodeSlides: readonly EpisodeSlides[];
+  readonly episodeSlides: readonly SlideList[];
+  readonly research: readonly ResearchRecord[];
 }
 
-/** What the evidence says about itself and what Slides say about it: the hierarchy sound, every `defines` a Concept. */
-function evidenceChecks({ concepts, themed, definitionSlides }: Sound): Refusal[] {
+/** What evidence and Slides say about it: the hierarchy sound, every `defines` and `informs` a Concept. */
+function evidenceChecks({ concepts, themed, definitionSlides, research }: Sound): Refusal[] {
   const known = concepts.map(({ id }) => id);
   return [
     ...duplicates(known).map((id) => ({ kind: 'concept' as const, record: id, message: 'the id is used twice' })),
@@ -151,6 +152,7 @@ function evidenceChecks({ concepts, themed, definitionSlides }: Sound): Refusal[
         record: `${episode}/${slide}`,
         message: `defines names ${defines}, which is no Concept`,
       })),
+    ...informsProblems(research, known).map((problem) => ({ kind: 'research' as const, ...problem })),
   ];
 }
 
@@ -204,6 +206,7 @@ function soundOf(read: ReturnType<typeof readEach>, raw: RawContent): Sound {
     delivery,
     definitionSlides: read.definitionSlides.value,
     episodeSlides: read.episodeSlides.value,
+    research: read.research.value,
   };
 }
 
@@ -218,7 +221,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
   const refusals = [
     ...Object.values(read).flatMap((part) => part.refusals),
     ...researchIdRefusals(read.research.value),
-    ...slideSlugRefusals(read.slides.value),
+    ...slideFolderProblems(read.slides.value).map((problem) => ({ kind: 'slide' as const, ...problem })),
     ...crossChecks(sound),
   ];
   if (refusals.length > 0) return { ok: false, refusals };

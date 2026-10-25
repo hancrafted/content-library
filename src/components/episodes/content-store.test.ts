@@ -1,5 +1,6 @@
 import { loadContentStore } from '@/lib/content-store.pure';
 import { CONCEPT_THEMES } from '@/lib/episode-overview';
+import { evidenceTree } from '@/lib/evidence-markdown.pure';
 import { pageLocales, PAGES, routeOf } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { contentStore, rawContent } from './content-store';
@@ -8,6 +9,9 @@ import { contentStore, rawContent } from './content-store';
  * The content store against the records the site renders today: it returns them all, and a broken copy is refused
  * by name instead of throwing.
  */
+
+/** The research files the wiki holds today: 24 promoted, 13 more in Staging. */
+const WIKI_RESEARCH_COUNT = 24;
 
 describe('success cases', () => {
   it('returns the same Episodes, Events, Playlists and research records the site renders, and the seven top Concepts', () => {
@@ -83,6 +87,21 @@ describe('success cases', () => {
     expect(pages).toEqual(expected);
   });
 
+  it('gives every promoted Research question an English page at /research/<id>, and no staged one', () => {
+    // ARRANGE
+    const research = contentStore().research;
+    const expected = research.filter(({ staged }) => !staged).map(({ id }) => `/research/${id} en`);
+    const paged = new Map(PAGES.map((page) => [routeOf(page), pageLocales(page).join(' ')]));
+    // ACT
+    const pages = research.flatMap(({ id }) => {
+      const locales = paged.get(`/research/${id}`);
+      return locales === undefined ? [] : [`/research/${id} ${locales}`];
+    });
+    // ASSERT
+    expect(pages).toEqual(expected);
+    expect(pages).toHaveLength(WIKI_RESEARCH_COUNT);
+  });
+
   it('themes the cards by exactly the top Concepts the wiki holds', () => {
     // ARRANGE
     const expected = Object.keys(CONCEPT_THEMES).sort();
@@ -126,6 +145,20 @@ describe('failure cases', () => {
     expect(pages).toEqual(expected);
   });
 
+  it('keeps no Research page whose wiki file is gone', () => {
+    // ARRANGE
+    const expected = contentStore()
+      .research.filter(({ staged }) => !staged)
+      .map(({ id }) => `/research/${id}`)
+      .sort();
+    // ACT
+    const pages = PAGES.map(routeOf)
+      .filter((route) => route.startsWith('/research/'))
+      .sort();
+    // ASSERT
+    expect(pages).toEqual(expected);
+  });
+
   it('names the research file whose frontmatter is broken, without throwing', () => {
     // ARRANGE
     const raw = rawContent();
@@ -144,6 +177,22 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('renders every Research question, staged or promoted, with each citation marker matched to a Source', () => {
+    // ARRANGE
+    const research = contentStore().research;
+    // ACT
+    const broken = research.flatMap(({ id, body, sources }) => {
+      try {
+        evidenceTree(body, { sources: sources.map((source) => source.id) });
+        return [];
+      } catch (error) {
+        return [`${id}: ${error instanceof Error ? error.message : String(error)}`];
+      }
+    });
+    // ASSERT
+    expect(broken).toEqual([]);
+  });
+
   it('loads the store once, so every caller reads the same records', () => {
     // ARRANGE
     const first = contentStore();

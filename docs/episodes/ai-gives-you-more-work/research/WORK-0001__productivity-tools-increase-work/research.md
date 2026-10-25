@@ -5,6 +5,8 @@ title: 'Why do productivity tools like the plough, the steam engine and the
 description: 'Cheaper output raises demand faster than labour per unit falls,
   and tools lift the value of the tasks left to people, but only while demand
   stays elastic.'
+confidence: contested
+informs: [ai-adoption]
 generated:
   by: claude-code/sonnet-4.6
   at: 2026-10-19T18:30:07Z

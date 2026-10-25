@@ -7,7 +7,7 @@ export function EvidenceBody({ tree }: { tree: EvidenceTree }) {
   return (
     <div
       data-evidence-body
-      className="max-w-3xl space-y-4 text-body text-foreground text-pretty [&_a]:underline [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6"
+      className="max-w-3xl space-y-4 text-body text-foreground text-pretty [&_a]:underline [&_h2]:pt-4 [&_h2]:font-semibold [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6"
     >
       {toJsxRuntime(tree, { Fragment, jsx, jsxs })}
     </div>

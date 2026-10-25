@@ -65,6 +65,8 @@ const RESEARCH = {
     'type: research',
     "title: 'Why?'",
     "description: 'Because.'",
+    'confidence: open',
+    'informs: [sales]',
     'generated:',
     '  by: someone',
     '  at: 2026-10-13T00:00:00Z',
@@ -394,6 +396,29 @@ describe('failure cases', () => {
         record: 'pipeline',
         message:
           'the slug is used by more than one Slide: src/components/episodes/never-too-early-sales/slides/pipeline, src/components/slide-pool/pipeline',
+      },
+    ];
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual(expected);
+  });
+
+  it("An instance given its origin's slug is refused", () => {
+    // ARRANGE
+    const instance = {
+      path: 'src/components/episodes/onboard-ai-every-time/slides/pipeline',
+      slug: 'pipeline',
+      title: false,
+      copiedFrom: 'pipeline',
+    };
+    const raw = { ...VALID, slides: [instance] };
+    const expected = [
+      {
+        kind: 'slide',
+        record: 'pipeline',
+        message:
+          'src/components/episodes/onboard-ai-every-time/slides/pipeline is an instance of "pipeline" under its origin\'s slug: an instance takes a slug of its own',
       },
     ];
     // ACT

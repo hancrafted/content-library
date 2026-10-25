@@ -4,6 +4,8 @@ title: 'Why do language models attend most to the start and end of a long contex
 description: 'Models attend most to the start and end because causal masking
   favours early tokens and distance decay favours recent ones, leaving the
   middle weakest.'
+confidence: contested
+informs: [llm-behaviour, context-engineering]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-20T19:17:16Z

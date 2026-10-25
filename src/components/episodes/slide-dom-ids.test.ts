@@ -1,7 +1,8 @@
 import { localizeSlide } from '@/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/components/slide-master/slide';
 import { placeSections } from '@/lib/episode.pure';
-import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
+import { EPISODE_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
+import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -21,7 +22,7 @@ interface PlacedSlide {
 
 /** Every Slide of every registered Episode and tooling page. */
 function allSlides(): PlacedSlide[] {
-  return EPISODES_PATH_SLUGS.flatMap((episode) =>
+  return [...EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((episode) =>
     findEpisode(episode)
       .sections.flat()
       .map((slide) => ({ episode, slide })),

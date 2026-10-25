@@ -110,7 +110,8 @@ describe('page metadata', () => {
 
   it('lists only exported locales and x-default as alternates on each page, and none on a page canonical elsewhere', () => {
     // ARRANGE
-    const isEnglishOnly = (url: string) => url === '/dashboard' || url.startsWith('/concepts/');
+    const isEnglishOnly = (url: string) =>
+      url === '/dashboard' || url.startsWith('/concepts/') || url.startsWith('/research/');
     const englishOnlyLanguages = ['en', 'x-default'];
     const bilingualLanguages = ['de', 'en', 'x-default'];
     const langsOf = (url: string) => {

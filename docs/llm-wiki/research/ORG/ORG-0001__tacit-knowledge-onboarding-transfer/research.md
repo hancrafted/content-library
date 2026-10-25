@@ -5,6 +5,8 @@ title: 'Why does tacit organisational knowledge fail to transfer during employee
 description: 'Tacit knowledge resists being written down, and the receiver needs
   prior knowledge and close contact to absorb it, so what is not shown in
   practice is lost on a newcomer.'
+confidence: contested
+informs: [ai-adoption]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-19T14:06:40Z

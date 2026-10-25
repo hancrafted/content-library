@@ -25,6 +25,15 @@ _Avoid_: Tag, Topic, category, keyword
 **Top Concept**: a Concept with no parent (`broader: []`). The seven top Concepts are the closed set of themes: each has an icon and an accent, and a new one is a design decision, not a content edit. An Episode lists the top Concepts it teaches, and its card shows them, linked to their pages.
 _Avoid_: Root concept, theme tag, lead Tag
 
+**Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source.
+_Avoid_: Research file, research note, finding
+
+**Confidence**: how settled the evidence for a Research question's Answer is, never the writer's certainty: `settled` (at least two independent primary Sources agree, nothing contradicts them), `contested` (credible Sources disagree, or the effect depends on context the Answer names) or `open` (anything less). The writer proposes it; it stays a proposal until Han confirms it with a `verified` entry at or after `generated.at`.
+_Avoid_: Certainty, evidence level, trust level
+
+**informs**: the field of a Research question that lists the Concepts it supports, the first its main one; each Concept's page lists the Research questions that inform it.
+_Avoid_: Tags, categories, concepts (as a field name)
+
 **applyThemeFromConcept**: the field of an Episode's metadata that names one of its top Concepts, whose icon and accent its card draws.
 _Avoid_: Lead Tag, look
 
@@ -66,7 +75,7 @@ _Avoid_: Sitenav, sidebar
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and another Episode reuses a Slide by **Reference**, never by a copy. Its slug is unique across every Episode and the Slide pool; only a Title slide's may repeat. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and another Episode reuses a Slide by **Reference**, never by a hand copy; adapting it makes an **Instance**. Its slug is unique across every Episode and the Slide pool; only a Title slide's may repeat. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
 **Slide pool**: one flat folder of Slide folders, `src/components/slide-pool/`, holding every Slide a second Episode reuses. A Slide lives in its Episode's `slides/` until its first reuse, when `npm run slides:reuse` moves its folder there unchanged: slug, text and anchors stay, so no published URL moves.
@@ -74,6 +83,12 @@ _Avoid_: Shared slides, library (the Slide library is the Master slides), common
 
 **Reference (Slide)**: an Episode's listing of a pool Slide in one of its Sections: an import and a list entry, nothing copied. The Slide renders the same in every Episode that holds it; its anchor comes from its place in each, and so does the target of its `slideHref` link to a sibling: a sibling the Episode lacks fails the build unless the link falls back to plain text.
 _Avoid_: Link, alias, copy, symlink
+
+**Instance (Slide)**: a pool Slide adapted for one Episode: a copy in that Episode's own `slides/`, made by `npm run slides:adapt`, under a slug of its own (never its origin's) and marked with **copiedFrom**. It takes the place of the Episode's Reference, so the other Episodes keep the pool Slide; a sibling link to the origin's slug resolves to the Instance in its Episode. `npm run slides:settle` replaces an Instance no edit touched with the Reference again, and Promotion resolves an edited one.
+_Avoid_: Fork, variant, override, copy (unqualified)
+
+**copiedFrom**: an Instance's marker in its `slide.tsx`, `copiedFrom: { slug, commit }`: the pool Slide it was copied from and the commit it was copied at. Written by `npm run slides:adapt`, never by hand.
+_Avoid_: origin, parent, source (a Source is evidence)
 
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
