@@ -1,4 +1,5 @@
-import { FILTER_TAGS, type TagId } from '@/lib/episode-overview';
+import type { TagId } from '@/content-store/schemas/fields';
+import { FILTER_TAGS } from '@/lib/episode-overview';
 import { fillTemplate } from '@/lib/template.pure';
 import type { EpisodeCard, Labelled } from './episode-card.pure';
 

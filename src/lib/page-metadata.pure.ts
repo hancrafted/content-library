@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
+import type { EpisodeStatus } from '../content-store/schemas/episode.schema';
+import type { IsoDate } from '../content-store/schemas/fields';
 import { TRANSLATIONS } from '../i18n/translations';
-import type { EpisodeStatus, IsoDate } from './episode-metadata.pure';
 import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
 import { isEpisodePage, isToolingPage, pageLocales, routeOf, type PageRef } from './routes';
 

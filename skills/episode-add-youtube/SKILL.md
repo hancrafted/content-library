@@ -5,7 +5,7 @@ description: Add YouTube recording links to an Episode across its title slide pl
 
 # Episode add YouTube
 
-Adding a YouTube recording to an Episode wires it across three defined surfaces from one declaration on its `EpisodeRecord`:
+Adding a YouTube recording to an Episode wires it across three defined surfaces from one declaration on its metadata record, `episode-metadata.ts`, which the content store loads:
 
 1. **Title slide launcher**: On `/episodes/<slug>`, the `TitleSlide` renders a `TalkLauncher` button ("Watch the talk") that opens the dockable companion `TalkPlayer` iframe (`https://www.youtube-nocookie.com/embed/<id>`).
 2. **Cards on `/episodes` page**: On the browse grid, the Episode's card renders a direct YouTube link button (`[data-episode-video]`, `text-youtube`) opening `https://www.youtube.com/watch?v=<id>` in a new tab.
@@ -20,28 +20,29 @@ The exemplar implementation is `maintaining-markdown-for-ai`.
 Obtain the 11-character YouTube video ID for English (`en`) and German (`de`):
 
 - If provided as a URL (`https://www.youtube.com/watch?v=...` or `https://youtu.be/...`), extract the 11-character video ID parameter.
-- `EpisodeRecord.youtube` is a `PerLocale<string>` requiring both `en` and `de`. When only one recording exists, assign that same video ID to both locales.
+- A public Episode's `youtube` holds one video ID per locale, by locale (`en`, `de`); the content store refuses a key that is not a site locale. When only one recording exists, assign that same video ID to both locales.
 
 _Done when_ both `en` and `de` have an 11-character video ID string.
 
-### 2. Declare `youtube` on the Episode record
+### 2. Declare `youtube` on the Episode's metadata record
 
-In `src/components/episodes/<slug>/episode.ts`, add the `youtube` property to the `episode({ ... })` declaration:
+In `src/components/episodes/<slug>/episode-metadata.ts`, add the `youtube` property:
 
 ```ts
-export const myEpisode = episode({
+export const episodeMetadata = {
   slug: 'my-episode',
-  youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
-  messages: { en, de },
+  status: 'published',
+  visibility: 'public',
   // ...
-});
+  youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
+} as const satisfies EpisodeInput;
 ```
 
-_Done when_ `src/components/episodes/<slug>/episode.ts` exports `youtube` on the record and `npm run typecheck` passes.
+_Done when_ `episode-metadata.ts` carries `youtube` and `npm run typecheck` passes.
 
 ### 3. Update tests and registry assertions
 
-1. In `src/components/episodes/registry.test.ts`, add the recording entry to the `RECORDINGS` table:
+1. In `src/content-store/store.test.ts`, add the recording entry to the `RECORDINGS` table:
    ```ts
    const RECORDINGS = [
      { slug: 'ai-token-economy', en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
@@ -54,7 +55,7 @@ _Done when_ `src/components/episodes/<slug>/episode.ts` exports `youtube` on the
    const withVideo = ['maintaining-markdown-for-ai', 'ai-token-economy', '<slug>'];
    ```
 
-_Done when_ `npx vitest run src/components/episodes/registry.test.ts` passes.
+_Done when_ `npx vitest run src/content-store/store.test.ts` passes.
 
 ### 4. Verify all defined places
 
@@ -73,9 +74,10 @@ _Done when_ `npm run verify` passes and the DOM probe confirms the presence of `
 
 ```mermaid
 flowchart TD
-  R["Episode Record<br/>src/components/episodes/&lt;slug&gt;/&lt;slug&gt;.ts<br/>youtube: { en, de }"]
-  R --> C["EpisodePageContainer<br/>reads episode.youtube?.[locale]"]
-  R --> EC["episodeCards(locale)<br/>youtubeOf(entry, locale)"]
+  R["Episode metadata record<br/>src/components/episodes/&lt;slug&gt;/episode-metadata.ts<br/>youtube: { en, de }"]
+  R --> S["Content store<br/>episodeVideo(slug, locale)"]
+  S --> C["EpisodePageContainer<br/>youtubeId prop from EpisodePage"]
+  S --> EC["episodeCards(locale)<br/>youtubeOf(entry, locale)"]
   C --> TS["TitleSlide<br/>TalkLauncher (data-video-id)"]
   C --> TP["TalkPlayer<br/>youtube-nocookie.com embed"]
   EC --> EP["/episodes Browse Card<br/>YoutubeLink (data-episode-video)"]
@@ -84,8 +86,8 @@ flowchart TD
 
 ### Exemplar: `maintaining-markdown-for-ai`
 
-- **Record**: `src/components/episodes/maintaining-markdown-for-ai/episode.ts` defines `youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' }`.
-- **Registry test**: `src/components/episodes/registry.test.ts` asserts `maintaining-markdown-for-ai` in `RECORDINGS`.
+- **Record**: `src/components/episodes/maintaining-markdown-for-ai/episode-metadata.ts` defines `youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' }`.
+- **Store test**: `src/content-store/store.test.ts` asserts `maintaining-markdown-for-ai` in `RECORDINGS`.
 - **Index test**: `tests/post-build/episodes-index.build.test.ts` includes `maintaining-markdown-for-ai` in `withVideo`.
 
 ### Privacy and embed rules

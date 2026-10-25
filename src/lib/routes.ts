@@ -1,6 +1,5 @@
 import { LOCALES, localizePath, type Locale } from './locale.pure';
 import { isToolingSlug, TOOLING_SLUGS, type ToolingSlug } from './tooling-pages';
-import { WORKSHOPS, type WorkshopSlug } from './workshops.pure';
 
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */
 export const ROUTES = {
@@ -62,10 +61,16 @@ export function episodeParams(): { episode: EpisodesPathSlug }[] {
   return EPISODES_PATH_SLUGS.map((episode) => ({ episode }));
 }
 
-export const WORKSHOP_SLUGS: readonly WorkshopSlug[] = WORKSHOPS.map((workshop) => workshop.slug);
+/**
+ * Every Event, by slug: a hand-kept page list, checked against the content store's Event records by the store's
+ * tests (lib cannot read the store, FE-007). Until the Events pages land, each Event is served as a Workshop page.
+ */
+export const EVENT_SLUGS = ['2026-10-23-axel-agentic-workflow'] as const;
 
-export function isWorkshopSlug(slug: string): slug is WorkshopSlug {
-  return (WORKSHOP_SLUGS as readonly string[]).includes(slug);
+export type EventSlug = (typeof EVENT_SLUGS)[number];
+
+export function isEventSlug(slug: string): slug is EventSlug {
+  return (EVENT_SLUGS as readonly string[]).includes(slug);
 }
 
 /** The logical path of one Workshop. */
@@ -73,9 +78,9 @@ export function workshopRoute(slug: string): string {
   return `${ROUTES.workshops}/${slug}`;
 }
 
-/** One static param per Workshop; both Workshop routes export exactly these (FE-005). */
-export function workshopParams(): { workshop: WorkshopSlug }[] {
-  return WORKSHOP_SLUGS.map((workshop) => ({ workshop }));
+/** One static param per Event, served as a Workshop page; both Workshop routes export exactly these (FE-005). */
+export function workshopParams(): { workshop: EventSlug }[] {
+  return EVENT_SLUGS.map((workshop) => ({ workshop }));
 }
 
 /** A page with its own metadata and a closed set of exported locales. */
@@ -86,7 +91,7 @@ export type PageRef =
   | 'workshops'
   | { readonly episode: EpisodeSlug }
   | { readonly tooling: ToolingSlug }
-  | { readonly workshop: WorkshopSlug };
+  | { readonly workshop: EventSlug };
 
 /** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
 export const PAGES: readonly PageRef[] = [
@@ -96,7 +101,7 @@ export const PAGES: readonly PageRef[] = [
   'workshops',
   ...EPISODE_SLUGS.map((episode) => ({ episode })),
   ...TOOLING_SLUGS.map((tooling) => ({ tooling })),
-  ...WORKSHOP_SLUGS.map((workshop) => ({ workshop })),
+  ...EVENT_SLUGS.map((workshop) => ({ workshop })),
 ];
 
 /** English-only operations pages have no German counterpart. */
@@ -122,7 +127,7 @@ export function isToolingPage(page: PageRef): page is { readonly tooling: Toolin
 }
 
 /** Whether a page is a Workshop's, narrowing to the `{ workshop }` form. */
-export function isWorkshopPage(page: PageRef): page is { readonly workshop: WorkshopSlug } {
+export function isWorkshopPage(page: PageRef): page is { readonly workshop: EventSlug } {
   return typeof page !== 'string' && 'workshop' in page;
 }
 

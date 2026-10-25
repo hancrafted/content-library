@@ -1,4 +1,4 @@
-import type { PublishedEpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
+import type { PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/episode.schema';
 import { describe, expect, it } from 'vitest';
 import { episodeCard } from './episode-card.pure';
 
@@ -8,9 +8,10 @@ const read = (key: string) => `[${key}]`;
 /** A published Episode's copy, as the registry reads it from the Episode's record. */
 const COPY = { title: 'Your AI token economy', caption: 'Hidden managing responsibilities.' };
 
-const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
+const PUBLISHED_METADATA: PublishedEpisode = {
   slug: 'ai-token-economy',
   status: 'published',
+  visibility: 'public',
   format: 'foundations',
   tags: ['cost'],
   publishedOn: '2026-10-09',
@@ -19,9 +20,10 @@ const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
 /** The published Episode as the card reads it: its metadata with its copy from the registry. */
 const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
 
-const UPCOMING: UpcomingEpisodeMetadata = {
+const UPCOMING: UpcomingEpisode = {
   slug: 'choosing-the-right-model',
   status: 'upcoming',
+  visibility: 'public',
   format: 'short',
   tags: ['cost', 'sales'],
 };

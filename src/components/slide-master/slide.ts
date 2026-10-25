@@ -140,14 +140,14 @@ export type SlideEntrance = 'typewriter' | 'fade' | 'none';
 export type HeaderMode = 'shared' | 'authored';
 
 /**
- * An Episode record of Slides: static data. It carries its own
- * text, so the site-wide Translation files hold nothing of it. A tooling page
+ * An Episode's composition of Slides: static data. It carries its own
+ * text, so the site-wide Translation files hold nothing of it. What the Episode
+ * declares about itself (status, visibility, Video) is its metadata record,
+ * loaded by the content store (FE-013). A tooling page
  * composes its Slides the same way, but is no Episode (`tooling-pages.ts`).
  */
-export interface EpisodeRecord<Ep extends EpisodesPathSlug = EpisodesPathSlug> {
+export interface EpisodeComposition<Ep extends EpisodesPathSlug = EpisodesPathSlug> {
   readonly slug: Ep;
-  /** One recording per locale, shown on the Title slide; optional until recorded. */
-  readonly youtube?: PerLocale<string>;
   readonly messages: PerLocale<EpisodeMessages>;
   /** The Title slide's Speaker notes and Voice script segments, when its text holds them. */
   readonly notes?: readonly NoteSpec[];
@@ -171,11 +171,11 @@ export interface EpisodeRecord<Ep extends EpisodesPathSlug = EpisodesPathSlug> {
 }
 
 /** An Episode's header mode, read once from its record: the shared header unless the record sets `header: 'authored'`. */
-export function headerModeOf(record: Pick<EpisodeRecord, 'header'>): HeaderMode {
+export function headerModeOf(record: Pick<EpisodeComposition, 'header'>): HeaderMode {
   return record.header ?? 'shared';
 }
 
 /** An Episode record from its own text and its Sections; each Section's first Slide names it. */
-export function episode<Ep extends EpisodesPathSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
+export function episode<Ep extends EpisodesPathSlug>(record: EpisodeComposition<Ep>): EpisodeComposition<Ep> {
   return record;
 }

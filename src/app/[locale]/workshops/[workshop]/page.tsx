@@ -1,6 +1,6 @@
 import { WorkshopPage, workshopPageCopy } from '@/components/pages/workshop-page';
 import { pageMetadata } from '@/lib/page-metadata.pure';
-import { isWorkshopSlug, workshopParams } from '@/lib/routes';
+import { isEventSlug, workshopParams } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { resolveLocale } from '../../params';
 
@@ -13,7 +13,7 @@ export const generateStaticParams = workshopParams;
 
 export async function generateMetadata({ params }: WorkshopParams) {
   const { workshop } = await params;
-  if (!isWorkshopSlug(workshop)) notFound();
+  if (!isEventSlug(workshop)) notFound();
   const locale = await resolveLocale(params);
   return pageMetadata({ workshop }, locale, workshopPageCopy(workshop, locale));
 }

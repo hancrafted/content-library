@@ -78,12 +78,6 @@ const HEADER_MODES = [
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */
-const RECORDINGS = [
-  { slug: 'ai-token-economy', en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
-  { slug: 'maintaining-markdown-for-ai', en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
-  { slug: 'never-too-early-sales', en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
-] as const;
-
 describe('success cases', () => {
   it.each(EPISODE_SLUGS)('registers %s as a valid slug whose record carries that slug', (slug) => {
     // ARRANGE
@@ -162,15 +156,6 @@ describe('success cases', () => {
     const mode = headerModeOf(findEpisode(slug));
     // ASSERT
     expect(mode).toBe(expected);
-  });
-
-  it.each(RECORDINGS)('keeps the recorded YouTube video of $slug', ({ slug, en, de }) => {
-    // ARRANGE
-    const expected = { en, de };
-    // ACT
-    const youtube = findEpisode(slug).youtube;
-    // ASSERT
-    expect(youtube).toEqual(expected);
   });
 });
 

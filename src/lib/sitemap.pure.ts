@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
-import type { EpisodeStatus, IsoDate } from './episode-metadata.pure';
+import type { EpisodeStatus } from '../content-store/schemas/episode.schema';
+import type { IsoDate } from '../content-store/schemas/fields';
 import { DEFAULT_LOCALE } from './locale.pure';
 import { isNoindex } from './page-metadata.pure';
-import { isEpisodePage, pageLocales, PAGES, routeOf, servedUrl } from './routes';
+import { isEpisodePage, pageLocales, PAGES, routeOf, servedUrl, type EpisodeSlug } from './routes';
 
 /**
  * The sitemap: one entry per indexable page and locale, each carrying the full hreflang set, English canonical at
@@ -11,8 +12,8 @@ import { isEpisodePage, pageLocales, PAGES, routeOf, servedUrl } from './routes'
  */
 export function sitemapEntries(
   siteUrl: string,
-  statusOf: (slug: string) => EpisodeStatus,
-  publishedOnOf: (slug: string) => IsoDate | undefined,
+  statusOf: (slug: EpisodeSlug) => EpisodeStatus,
+  publishedOnOf: (slug: EpisodeSlug) => IsoDate | undefined,
 ): MetadataRoute.Sitemap {
   const indexable = PAGES.filter((page) => !isNoindex(page, isEpisodePage(page) ? statusOf(page.episode) : undefined));
   return indexable.flatMap((page) => {

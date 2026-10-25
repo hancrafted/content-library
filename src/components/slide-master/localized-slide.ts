@@ -5,7 +5,7 @@ import type { EpisodesPathSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
 import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
-import type { EpisodeRecord, HeaderMode, Slide, SlideMessages } from './slide';
+import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { captionTextOf, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit, type ReferenceLabels } from './slide-kit';
@@ -158,7 +158,7 @@ function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
  * an Episode that declares none, and then the drawer shows its explainer.
  */
 export function titleContext(
-  record: EpisodeRecord,
+  record: EpisodeComposition,
   locale: Locale,
 ): Pick<SlideText, 'notes' | 'voiceScript' | 'minutes'> {
   const specs = { notes: record.notes ?? [], segments: record.segments ?? [] };
@@ -170,7 +170,7 @@ export function titleContext(
  * table of contents or not (docs/adr/0002). The landing card and the table of
  * contents both quote this one sum. Renders no Scene.
  */
-export function episodeMinutes(record: EpisodeRecord, locale: Locale): number {
+export function episodeMinutes(record: EpisodeComposition, locale: Locale): number {
   return record.sections
     .flat()
     .reduce(

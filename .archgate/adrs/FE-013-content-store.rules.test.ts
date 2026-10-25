@@ -1,8 +1,7 @@
 /// <reference path="../rules.d.ts" />
 
 // Sibling test for FE-013-content-store.rules.ts — the executable spec the store
-// ticket turns green: pass and fail for each rule, the dormant state before the
-// store's entry exists, and the edges: a moved diagram, a `%% store:` line outside
+// ticket turned green: pass and fail for each rule, a missing store entry, and the edges: a moved diagram, a `%% store:` line outside
 // the diagram, nested and extended shapes, prose naming a type, and helper types.
 
 import ts from 'typescript';
@@ -193,13 +192,15 @@ describe('model-matches-store', () => {
     expect(violations[0]?.message).toContain(MODEL);
   });
 
-  it('stays dormant on the schemas while the store entry does not exist', async () => {
+  it('fails a moved or deleted store entry, never passing the schemas silently', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({ [MODEL]: diagram(STORE_LINE) });
+    const expected = 'src/content-store/store.ts is missing';
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations).toEqual([]);
+    expect(violations).toHaveLength(1);
+    expect(violations[0]?.message).toContain(expected);
   });
 });
 
@@ -265,7 +266,7 @@ describe('type-from-schema', () => {
     expect(violations).toEqual([]);
   });
 
-  it('stays dormant while the store entry does not exist', async () => {
+  it('checks every source file even while the store entry is missing', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({
       [MODEL]: diagram(STORE_LINE),
@@ -274,7 +275,7 @@ describe('type-from-schema', () => {
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations).toEqual([]);
+    expect(violations.map((v) => v.file)).toEqual(['src/lib/episode-metadata.pure.ts']);
   });
 });
 
@@ -344,12 +345,12 @@ describe('field-described', () => {
     expect(violations[0]?.message).toContain(PROVENANCE);
   });
 
-  it('stays dormant while the store entry does not exist', async () => {
+  it('checks every schema even while the store entry is missing', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({ [schema('event')]: 'export const s = z.object({ slug: z.string() });\n' });
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations).toEqual([]);
+    expect(violations.map((v) => v.file)).toEqual([schema('event')]);
   });
 });

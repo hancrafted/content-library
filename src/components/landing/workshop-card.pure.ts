@@ -1,8 +1,9 @@
-import type { IsoDate } from '@/lib/episode-metadata.pure';
+import type { Event } from '@/content-store/schemas/event.schema';
+import type { IsoDate } from '@/content-store/schemas/fields';
+import type { Playlist } from '@/content-store/schemas/playlist.schema';
 import type { Locale } from '@/lib/locale.pure';
 import { workshopRoute } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
-import type { WorkshopRecord } from '@/lib/workshops.pure';
 import { releaseDateOf, type ReadKey } from './episode-card.pure';
 
 /** What a Workshop card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
@@ -12,7 +13,8 @@ export interface WorkshopReads {
 }
 
 /**
- * One Workshop as its card draws it: the record with its strings read in one locale. Plain values
+ * One Event as its Workshop card draws it, until the Events pages replace it: the Event and the Playlist it
+ * presents, with their strings read in one locale. Plain values
  * only, so a Server Component can hand it on (FE-006 §4).
  */
 export interface WorkshopCard {
@@ -35,11 +37,11 @@ const ITEMS = 'workshopsPage.items';
 
 /** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
 export function workshopCard(
-  record: WorkshopRecord,
+  { event: record, playlist }: { event: Event; playlist: Pick<Playlist, 'episodes'> },
   locale: Locale,
   { read, episodeCount }: WorkshopReads,
 ): WorkshopCard {
-  const count = record.episodes.length;
+  const count = playlist.episodes.length;
   return {
     slug: record.slug,
     route: workshopRoute(record.slug),

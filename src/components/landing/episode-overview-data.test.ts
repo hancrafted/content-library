@@ -1,7 +1,8 @@
-import { hasPage, listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
-import { leadTagOf, lookOf, tagProblems } from '@/lib/episode-metadata.pure';
-import { FEATURED, FILTER_TAGS, FORMATS, TAG_IDS, TAGS } from '@/lib/episode-overview';
+import { FORMATS, TAG_IDS } from '@/content-store/schemas/fields';
+import { hasPage, listEpisodes } from '@/content-store/store';
+import { leadTagOf, lookOf } from '@/lib/episode-metadata.pure';
+import { FEATURED, FILTER_TAGS, TAGS } from '@/lib/episode-overview';
 import de from '@/messages/de.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
@@ -9,8 +10,8 @@ import { TAG_ACCENTS, TAG_ICONS } from './episode-visuals';
 
 /*
  * The Episode overview's central lists against the Episodes that exist (#40):
- * Featured names published Episodes, every Episode's Tags sit in the closed
- * vocabulary, each Tag has a look the landing can draw, and every string a card
+ * Featured names published Episodes, each Tag in the closed vocabulary (whose
+ * use the content store refuses outside it) has a look the landing can draw, and every string a card
  * reads is translated, each Tag's name and tooltip included.
  */
 
@@ -105,15 +106,6 @@ describe('success cases', () => {
     const stray = FILTER_TAGS.filter((id) => !TAG_IDS.includes(id));
     // ASSERT
     expect(stray).toEqual(expected);
-  });
-
-  it('leaves no Episode with a Tag outside the vocabulary or without a Tag', () => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const problems = tagProblems(listEpisodes());
-    // ASSERT
-    expect(problems).toEqual(expected);
   });
 });
 

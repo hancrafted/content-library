@@ -21,7 +21,6 @@ export const aiTokenEconomy = episode({
   slug: 'ai-token-economy',
   messages: { en, de },
   header: 'authored',
-  youtube: { en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
   sections: [
     [motivation, leadOneUpskillMany, theFourErasOfAi, theInvisibleInvoice, outcomePerEuro],
     [whatIsAToken, liveContextBreakdown, cliVsWebToolObscurity],
