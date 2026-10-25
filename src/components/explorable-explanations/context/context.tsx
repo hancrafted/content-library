@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { SpeechBubble } from '../speech-bubble/speech-bubble';
+import { SpeechBubble } from '../../slide-shared/speech-bubble/speech-bubble';
 import { ContextBars } from './context-bars-view';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
 import type { ContextViewData } from './context-view';
@@ -8,7 +8,7 @@ import { ContextClient } from './context.client';
 import { SessionBarView } from './session-bar-view';
 
 /*
- * The context window cornerstone, a Shared visual. A Slide places it by Preset id and locale; the Preset, the chat and
+ * The context window cornerstone, an Explorable explanation. A Slide places it by Preset id and locale; the Preset, the chat and
  * the words come from context-preset.config.yml (or its German twin, picked by the locale) at build time, and a Slide
  * may override any word. The interactive part is the one client leaf; the bars are static.
  */

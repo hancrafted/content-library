@@ -1,8 +1,8 @@
+import { HumanInTheLoop } from '@/components/explorable-explanations/human-in-the-loop/human-in-the-loop';
+import type { PopoverCopy } from '@/components/explorable-explanations/human-in-the-loop/human-in-the-loop.types';
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
 import { Sparkle } from '@/components/slide-shared/glyphs/glyphs';
-import { HumanInTheLoop } from '@/components/slide-shared/human-in-the-loop/human-in-the-loop';
-import type { PopoverCopy } from '@/components/slide-shared/human-in-the-loop/human-in-the-loop.types';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { InterviewChat, type ChatTurnCopy } from './interview-chat.client';

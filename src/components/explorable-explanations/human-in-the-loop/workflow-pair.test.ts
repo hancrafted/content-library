@@ -4,7 +4,7 @@ import { slotSample } from './workflow-sample.pure';
 import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
- * FE-012-shared-visual-content §1.3: both files of a pair hold the same structure and only the words differ. The
+ * FE-012-explorable-explanation-content §1.3: both files of a pair hold the same structure and only the words differ. The
  * structure is the stage, task and slot ids, the slot modes and sample counts, the section count and purposes, the
  * fan-out and the example counts; strings are ignored.
  */
