@@ -152,3 +152,51 @@ rules_comment_string_eats_headings() {
     *) return 1 ;;
   esac
 }
+
+# rules_is_fix <header> — a `fix` commit, with or without scope and `!`.
+rules_is_fix() {
+  printf '%s\n' "$1" | grep -Eq '^fix(\([^)]+\))?!?: '
+}
+
+# rules_touches_content <paths> <globs> — whether any of the newline-separated
+# <paths> matches any of the newline-separated shell <globs>. `*` crosses `/`, so
+# `src/components/episodes/*` covers the whole tree beneath it. Blank and `#`
+# lines in <globs> are ignored.
+rules_touches_content() {
+  while IFS= read -r _rules_path; do
+    [ -n "$_rules_path" ] || continue
+    while IFS= read -r _rules_glob; do
+      case "$_rules_glob" in '' | '#'*) continue ;; esac
+      # shellcheck disable=SC2254
+      case "$_rules_path" in $_rules_glob) return 0 ;; esac
+    done <<GLOBS
+$2
+GLOBS
+  done <<PATHS
+$1
+PATHS
+  return 1
+}
+
+# rules_feeds_kind <value> — the form of one `Feeds:` value: `url` (an http(s)
+# issue URL), `none` (`none: <reason>` with a reason), `path` (a single token, to
+# be checked against the repository) or `bad` (empty, `none:` without a reason,
+# a bare issue number, or anything with spaces).
+rules_feeds_kind() {
+  _rules_feed=$(printf '%s' "$1" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+  case "$_rules_feed" in
+    '') printf 'bad' ;;
+    http://?* | https://?*) printf 'url' ;;
+    none: | none:[[:space:]]*)
+      if [ -n "$(printf '%s' "${_rules_feed#none:}" | tr -d '[:space:]')" ]; then
+        printf 'none'
+      else
+        printf 'bad'
+      fi
+      ;;
+    *[[:space:]]*) printf 'bad' ;;
+    *)
+      if printf '%s' "$_rules_feed" | grep -Eq '^#?[0-9]+$'; then printf 'bad'; else printf 'path'; fi
+      ;;
+  esac
+}

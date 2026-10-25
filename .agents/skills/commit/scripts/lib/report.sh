@@ -75,3 +75,10 @@ report_source_failure() {
 value: <canonical ref> | <prompt summary>   (either part alone is fine, not neither)
 the trailer block must be the last paragraph, preceded by a blank line"
 }
+
+# report_feeds_failure <problem> — a fix to content must say where the lesson goes.
+report_feeds_failure() {
+  gate_reject 'Feeds trailer' 'a `fix(...)` commit on content paths needs a `Feeds:` trailer' "$1
+value: an existing skill, template or guide path | an issue URL | none: <reason>
+put it in the last paragraph, beside \`Source:\`"
+}

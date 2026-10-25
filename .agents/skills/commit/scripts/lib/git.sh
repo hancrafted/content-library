@@ -50,3 +50,31 @@ git_merge_in_progress() {
   _git_merge_head=$(git rev-parse --git-path MERGE_HEAD 2>/dev/null) || return 1
   [ -n "$_git_merge_head" ] && [ -e "$_git_merge_head" ]
 }
+
+# git_feeds_values <message-file> — the `Feeds:` values git's trailer parser sees,
+# one per line. Same parser as `Source:`, for the same reason.
+git_feeds_values() {
+  git interpret-trailers --parse <"$1" 2>/dev/null |
+    grep -i '^feeds:' |
+    sed 's/^[^:]*:[[:space:]]*//'
+}
+
+# git_staged_paths — the paths this commit changes, one per line.
+git_staged_paths() {
+  git diff --cached --name-only --diff-filter=ACMRD 2>/dev/null
+}
+
+# git_feeds_globs — the repository's content paths, from `.husky/feeds-paths`
+# (one shell glob per line; `*` crosses `/`). No file means the repository has no
+# content paths and the `Feeds:` check does not apply.
+git_feeds_globs() {
+  _git_top=$(git rev-parse --show-toplevel 2>/dev/null) || return 0
+  [ -f "$_git_top/.husky/feeds-paths" ] && cat "$_git_top/.husky/feeds-paths"
+  return 0
+}
+
+# git_path_exists <path> — whether <path> exists in the repository's working tree.
+git_path_exists() {
+  _git_top=$(git rev-parse --show-toplevel 2>/dev/null) || return 1
+  [ -e "$_git_top/$1" ]
+}
