@@ -65,7 +65,7 @@ flowchart LR
 
 ### 2. The Slide is the unit
 
-1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/`. The Episode file only composes.
+1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/`. `episode.ts` only composes.
 2. A Section MUST be a list of Slides, the first, titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
 3. Reading time MUST be counted from Voice script words per locale.
 

@@ -92,7 +92,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 3. Each module owns one thing
 
-1. `episodes/<ep>/` owns one Episode: its record, its own text, published anchors, one folder per Slide, and one `sections/<section-slug>.ts` per Section, exporting its ordered Slides to the record's `sections`.
+1. `episodes/<ep>/` owns one Episode: `episode.ts`, its own text, published anchors, one folder per Slide, and one `sections/<section-slug>.ts` per Section, exporting its ordered Slides to the record's `sections`.
 2. A Slide folder owns all it needs: Scene, widgets, logic, CSS, text, notes, Voice script.
 3. `slide-master/` owns the frame, Slide layouts, record and kit types; `slide-shared/` owns parts two Slides share, client leaves in their part.
 4. `episode-page/` owns the one container and Slide mechanics; `table-of-contents/` and `context-drawer/` own the chrome, reached only from the container.

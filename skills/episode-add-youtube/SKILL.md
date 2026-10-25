@@ -26,7 +26,7 @@ _Done when_ both `en` and `de` have an 11-character video ID string.
 
 ### 2. Declare `youtube` on the Episode record
 
-In `src/components/episodes/<slug>/<slug>.ts`, add the `youtube` property to the `episode({ ... })` declaration:
+In `src/components/episodes/<slug>/episode.ts`, add the `youtube` property to the `episode({ ... })` declaration:
 
 ```ts
 export const myEpisode = episode({
@@ -37,7 +37,7 @@ export const myEpisode = episode({
 });
 ```
 
-_Done when_ `src/components/episodes/<slug>/<slug>.ts` exports `youtube` on the record and `npm run typecheck` passes.
+_Done when_ `src/components/episodes/<slug>/episode.ts` exports `youtube` on the record and `npm run typecheck` passes.
 
 ### 3. Update tests and registry assertions
 
@@ -84,7 +84,7 @@ flowchart TD
 
 ### Exemplar: `maintaining-markdown-for-ai`
 
-- **Record**: `src/components/episodes/maintaining-markdown-for-ai/maintaining-markdown-for-ai.ts` defines `youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' }`.
+- **Record**: `src/components/episodes/maintaining-markdown-for-ai/episode.ts` defines `youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' }`.
 - **Registry test**: `src/components/episodes/registry.test.ts` asserts `maintaining-markdown-for-ai` in `RECORDINGS`.
 - **Index test**: `tests/post-build/episodes-index.build.test.ts` includes `maintaining-markdown-for-ai` in `withVideo`.
 

@@ -1,5 +1,5 @@
 // An Episode's Slides in order, read from its code folder: the Title slide and each Section's Slide folders, from
-// `<slug>.ts` and its Section placement markers (`sections/*.ts`) or its inline Section arrays. It reads the source
+// `episode.ts` and its Section placement markers (`sections/*.ts`) or its inline Section arrays. It reads the source
 // text, not the modules, so it runs under plain node without the app's `@/` aliases.
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -58,8 +58,8 @@ function sectionMarker(folder: string, from: string, name: string): string[] {
 }
 
 export function episodeOutline(folder: string): EpisodeOutline {
-  const file = path.join(folder, `${path.basename(folder)}.ts`);
-  if (!existsSync(file)) throw new Error(`${file} is missing: an Episode folder holds a file named after it`);
+  const file = path.join(folder, 'episode.ts');
+  if (!existsSync(file)) throw new Error(`${file} is missing: an Episode folder holds its record in episode.ts`);
   const source = readFileSync(file, 'utf8');
   const named = imports(source);
   const title = /\btitle:\s*(\w+)/.exec(source)?.[1];
