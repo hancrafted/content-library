@@ -310,6 +310,16 @@ describe('slide-token-dark-counterpart (A4)', () => {
     expect(violations.map((v) => v.line)).toEqual([3]);
   });
 
+  it('holds a pool Slide token file to the dark-counterpart rule, as any Slide token file', async () => {
+    // ARRANGE
+    const poolCss = 'src/components/slide-pool/loop/loop.module.css';
+    const css = '.a {\n  --edge: #d0342c;\n}\n';
+    // ACT
+    const violations = await run('slide-token-dark-counterpart', { [poolCss]: css });
+    // ASSERT
+    expect(violations.map((v) => v.line)).toEqual([2]);
+  });
+
   it('fails a named colour with no dark value in a Slide token file', async () => {
     // ARRANGE
     const css = '.a {\n  --edge: chocolate;\n}\n';

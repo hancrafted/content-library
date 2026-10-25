@@ -2,10 +2,12 @@ import type { z } from 'zod';
 import {
   episodeSchema,
   KEBAB,
+  slideFolderSchema,
   slideSourceSchema,
   tagSchema,
   workshopSchema,
   type RecordKind,
+  type SlideFolder,
   type SlideSource,
 } from './content-schemas.pure';
 import { tagProblems, type EpisodeMetadata } from './episode-metadata.pure';
@@ -33,6 +35,7 @@ export interface ContentStore {
   readonly workshops: readonly WorkshopRecord[];
   readonly research: readonly ResearchRecord[];
   readonly slideSources: readonly SlideSource[];
+  readonly slides: readonly SlideFolder[];
 }
 
 /** One refusal: the kind of record, which one, and one sentence on what is wrong with it. */
@@ -53,6 +56,8 @@ export interface RawContent {
   readonly workshops: readonly unknown[];
   readonly research: readonly { readonly path: string; readonly markdown: string }[];
   readonly slideSources: readonly unknown[];
+  /** Every Slide folder in every Episode's `slides/` and in the Slide pool. */
+  readonly slides: readonly unknown[];
 }
 
 interface Parsed<T> {
@@ -112,6 +117,30 @@ function duplicates(items: readonly string[]): string[] {
   return [...new Set(items.filter((item, at) => items.indexOf(item) !== at))];
 }
 
+/**
+ * Slide slugs are unique across every Episode folder and the Slide pool together (design-ADR 0016, Slide reuse rule
+ * 7), so a reused Slide keeps its slug and anchor wherever it is placed. A Title slide is exempt: its anchor is `top`.
+ */
+function slideSlugRefusals(slides: readonly SlideFolder[]): Refusal[] {
+  const placed = slides.filter(({ title }) => !title);
+  return duplicates(placed.map(({ slug }) => slug)).map((slug) => ({
+    kind: 'slide' as const,
+    record: slug,
+    message: `the slug is used by more than one Slide: ${placed
+      .filter((each) => each.slug === slug)
+      .map(({ path }) => path)
+      .join(', ')}`,
+  }));
+}
+
+function researchIdRefusals(research: readonly ResearchRecord[]): Refusal[] {
+  return duplicates(research.map(({ id }) => id)).map((id) => ({
+    kind: 'research' as const,
+    record: id,
+    message: 'the id is used by more than one research file',
+  }));
+}
+
 const LISTED_SLUGS: readonly string[] = EPISODE_SLUGS.filter(
   (slug) => !(LAYOUT_REFERENCES as readonly string[]).includes(slug),
 );
@@ -141,17 +170,15 @@ export function loadContentStore(raw: RawContent): LoadResult {
   const episodes = readAll('episode', episodeSchema, raw.episodes);
   const workshops = readAll('workshop', workshopSchema, raw.workshops);
   const slideSources = readAll('slide-source', slideSourceSchema, raw.slideSources);
+  const slides = readAll('slide', slideFolderSchema, raw.slides);
   const research = readResearch(raw.research);
   // The schemas checked each record's shape; the cross-checks need only the records that passed them.
   const soundEpisodes = episodes.value as unknown as EpisodeMetadata[];
   const soundWorkshops = workshops.value as WorkshopRecord[];
   const refusals = [
-    ...[tags, episodes, workshops, slideSources, research].flatMap((part) => part.refusals),
-    ...duplicates(research.value.map(({ id }) => id)).map((id) => ({
-      kind: 'research' as const,
-      record: id,
-      message: 'the id is used by more than one research file',
-    })),
+    ...[tags, episodes, workshops, slideSources, slides, research].flatMap((part) => part.refusals),
+    ...researchIdRefusals(research.value),
+    ...slideSlugRefusals(slides.value),
     ...crossChecks(soundEpisodes, soundWorkshops),
   ];
   if (refusals.length > 0) return { ok: false, refusals };
@@ -161,6 +188,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
     workshops: soundWorkshops,
     research: research.value,
     slideSources: slideSources.value,
+    slides: slides.value,
   };
   return { ok: true, store };
 }

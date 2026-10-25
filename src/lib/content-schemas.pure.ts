@@ -27,7 +27,7 @@ const isoDay = (what: string) =>
 const slugOf = (what: string) => z.string().regex(KEBAB, 'must be kebab-case').describe(what);
 
 /** What each record kind is: the name every refusal carries. */
-export type RecordKind = 'tag' | 'episode' | 'workshop' | 'research' | 'slide-source';
+export type RecordKind = 'tag' | 'episode' | 'workshop' | 'research' | 'slide-source' | 'slide';
 
 export const tagSchema = z
   .object({
@@ -78,6 +78,22 @@ export const slideSourceSchema = z
   })
   .describe('One source a Speaker note cites');
 
+/** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
+export const SLIDE_FOLDER = /^src\/components\/(episodes\/[a-z0-9-]+\/slides|slide-pool)\/[a-z0-9-]+$/;
+
+export const slideFolderSchema = z
+  .object({
+    path: z
+      .string()
+      .regex(SLIDE_FOLDER)
+      .describe("The Slide folder, from the repository root: in an Episode's slides/ or in the Slide pool"),
+    slug: slugOf('The Slide slug: the folder name, unique across every Episode and the Slide pool'),
+    title: z
+      .boolean()
+      .describe("Whether the folder holds an Episode's Title slide, whose slug is exempt from uniqueness"),
+  })
+  .describe('One Slide folder, wherever it lives');
+
 export const researchSchema = z
   .object({
     type: z.literal('research').describe('The kind of Staging file this is'),
@@ -108,8 +124,10 @@ export const CONTENT_SCHEMAS = {
   episode: episodeSchema,
   workshop: workshopSchema,
   slideSource: slideSourceSchema,
+  slideFolder: slideFolderSchema,
   research: researchSchema,
 } as const;
 
 export type SlideSource = z.infer<typeof slideSourceSchema>;
+export type SlideFolder = z.infer<typeof slideFolderSchema>;
 export type ResearchFrontmatter = z.infer<typeof researchSchema>;
