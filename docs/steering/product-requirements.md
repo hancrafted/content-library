@@ -1,7 +1,10 @@
 ---
-type: product-requirements
+type: product-steering
 title: Product requirements
-status: draft
+generated:
+  by: claude-code/opus-5.5
+  at: 2026-10-25T22:00:00+01:00
+stale_after: 2026-11-08T22:00:00+01:00
 ---
 
 # Product requirements
