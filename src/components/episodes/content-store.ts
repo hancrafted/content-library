@@ -74,7 +74,10 @@ function definitionSlides(): RawContent['definitionSlides'] {
   );
 }
 
-/** Every Slide folder, each marked when it holds its Episode's Title slide, whose slug is exempt from uniqueness. */
+/**
+ * Every Slide folder, each marked when it holds its Episode's Title slide, whose slug is exempt from uniqueness, and,
+ * for an instance, with the slug it was copied from. An instance lives in its own Episode's `slides/`.
+ */
 function slides(): RawContent['slides'] {
   const titles = new Set(
     EPISODE_SLUGS.flatMap((slug) => {
@@ -82,7 +85,19 @@ function slides(): RawContent['slides'] {
       return title === undefined ? [] : [`${EPISODES_DIR}/${slug}/slides/${title.slug}`];
     }),
   );
-  return readSlideFolders(process.cwd()).map((folder) => ({ ...folder, title: titles.has(folder.path) }));
+  const origins = new Map<string, string>(
+    EPISODE_SLUGS.flatMap((slug) =>
+      findEpisode(slug).sections.flatMap((section) =>
+        section.flatMap(({ slug: own, copiedFrom }) =>
+          copiedFrom === undefined ? [] : [[`${EPISODES_DIR}/${slug}/slides/${own}`, copiedFrom.slug] as const],
+        ),
+      ),
+    ),
+  );
+  return readSlideFolders(process.cwd()).map((folder) => {
+    const copiedFrom = origins.get(folder.path);
+    return { ...folder, title: titles.has(folder.path), ...(copiedFrom !== undefined && { copiedFrom }) };
+  });
 }
 
 /** The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy. */

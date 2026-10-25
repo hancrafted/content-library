@@ -338,6 +338,29 @@ describe('failure cases', () => {
     expect(refusals).toEqual(expected);
   });
 
+  it("An instance given its origin's slug is refused", () => {
+    // ARRANGE
+    const instance = {
+      path: 'src/components/episodes/onboard-ai-every-time/slides/pipeline',
+      slug: 'pipeline',
+      title: false,
+      copiedFrom: 'pipeline',
+    };
+    const raw = { ...VALID, slides: [instance] };
+    const expected = [
+      {
+        kind: 'slide',
+        record: 'pipeline',
+        message:
+          'src/components/episodes/onboard-ai-every-time/slides/pipeline is an instance of "pipeline" under its origin\'s slug: an instance takes a slug of its own',
+      },
+    ];
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual(expected);
+  });
+
   it('refuses two Slides with the same slug in two Episode folders', () => {
     // ARRANGE
     const twin = { ...SLIDE, path: 'src/components/episodes/onboard-ai-every-time/slides/pipeline' };

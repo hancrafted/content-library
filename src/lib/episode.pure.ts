@@ -74,23 +74,25 @@ function assertUniqueSlideSlugs(slugs: readonly string[]): void {
   }
 }
 
+/** The least a Slide record carries to answer a sibling link: its slug and, on an instance, its origin's slug. */
+export interface LinkedSlideOutline extends SlideOutline {
+  readonly copiedFrom?: { readonly slug: string };
+}
+
 /**
  * One Episode's answer to a sibling link (design-ADR 0016, _Slide reuse_
  * rule 5): each slug a Slide's author may write, mapped to the anchor this
  * Episode emits for it. A pool Slide links a sibling by that sibling's own
  * slug, so the same Slide resolves to a different anchor in each Episode that
- * holds it. A slug missing from the map is a sibling the Episode does not hold.
+ * holds it. An instance answers to its own slug and to its origin's, and wins
+ * over the origin when the Episode holds both: the Episode adapted that
+ * Slide, so its links go to the adaptation. A slug missing from the map is a
+ * sibling the Episode does not hold.
  */
-export function siblingAnchors(placed: readonly PlacedListSlide<SlideOutline>[]): ReadonlyMap<string, string> {
-  return new Map(placed.flatMap((placement) => answeredSlugs(placement).map((slug) => [slug, placement.id] as const)));
-}
-
-/**
- * The authored slugs one placement answers to. Today a Slide answers to its
- * own slug only. This is where an instance would also answer to the slug it
- * was copied from; a pinned anchor needs no change here, since it arrives as
- * the placement's `id`.
- */
-function answeredSlugs(placement: PlacedListSlide<SlideOutline>): readonly string[] {
-  return [placement.slide.slug];
+export function siblingAnchors(placed: readonly PlacedListSlide<LinkedSlideOutline>[]): ReadonlyMap<string, string> {
+  const own = placed.map(({ slide, id }) => [slide.slug, id] as const);
+  const origins = placed.flatMap(({ slide, id }) =>
+    slide.copiedFrom === undefined ? [] : [[slide.copiedFrom.slug, id] as const],
+  );
+  return new Map([...own, ...origins]);
 }

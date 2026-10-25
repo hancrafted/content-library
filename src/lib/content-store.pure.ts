@@ -27,6 +27,7 @@ import type { ThemeLook } from './episode-overview';
 import type { EventRecord } from './events.pure';
 import type { PlaylistRecord } from './playlists.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
+import { slideFolderProblems } from './slide-slugs.pure';
 
 /*
  * The content store: one loader reads every record the site is built from through its Zod schema and answers with
@@ -126,22 +127,6 @@ function duplicates(items: readonly string[]): string[] {
   return [...new Set(items.filter((item, at) => items.indexOf(item) !== at))];
 }
 
-/**
- * Slide slugs are unique across every Episode folder and the Slide pool together (design-ADR 0016, Slide reuse rule
- * 7), so a reused Slide keeps its slug and anchor wherever it is placed. A Title slide is exempt: its anchor is `top`.
- */
-function slideSlugRefusals(slides: readonly SlideFolder[]): Refusal[] {
-  const placed = slides.filter(({ title }) => !title);
-  return duplicates(placed.map(({ slug }) => slug)).map((slug) => ({
-    kind: 'slide' as const,
-    record: slug,
-    message: `the slug is used by more than one Slide: ${placed
-      .filter((each) => each.slug === slug)
-      .map(({ path }) => path)
-      .join(', ')}`,
-  }));
-}
-
 function researchIdRefusals(research: readonly ResearchRecord[]): Refusal[] {
   return duplicates(research.map(({ id }) => id)).map((id) => ({
     kind: 'research' as const,
@@ -230,7 +215,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
   const refusals = [
     ...Object.values(read).flatMap((part) => part.refusals),
     ...researchIdRefusals(read.research.value),
-    ...slideSlugRefusals(read.slides.value),
+    ...slideFolderProblems(read.slides.value).map((problem) => ({ kind: 'slide' as const, ...problem })),
     ...crossChecks(sound),
   ];
   if (refusals.length > 0) return { ok: false, refusals };
