@@ -61,6 +61,12 @@ const TABLE: [string, PageRef, PageFacts, PageTreatment][] = [
     indexed({ episode: 'ai-token-economy' }),
   ],
   [
+    'an upcoming public Episode viewed at an Event-scoped URL',
+    { event: EVENT, episode: 'ai-token-economy' },
+    { visibility: 'public', status: 'upcoming' },
+    hidden,
+  ],
+  [
     'an upcoming Episode (public only)',
     { episode: 'ai-attention-span' },
     { visibility: 'public', status: 'upcoming' },

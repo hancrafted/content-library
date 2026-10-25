@@ -1,9 +1,12 @@
+import type { EpisodeRecord } from '@/components/slide-master/slide';
 import { loadContentStore } from '@/lib/content-store.pure';
 import { CONCEPT_THEMES } from '@/lib/episode-overview';
 import { evidenceTree } from '@/lib/evidence-markdown.pure';
 import { pageLocales, PAGES, routeOf } from '@/lib/routes';
+import { readSlideFolders } from '@/lib/slide-folders';
 import { describe, expect, it } from 'vitest';
 import { contentStore, rawContent } from './content-store';
+import { findEpisode } from './registry';
 
 /*
  * The content store against the records the site renders today: it returns them all, and a broken copy is refused
@@ -177,6 +180,39 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("reads an unlisted Episode's Title slide, Definition Slide and instance as it reads a listed one's", () => {
+    // ARRANGE
+    const unlisted = 'axel-agentic-workflow-agenda';
+    const own = findEpisode(unlisted);
+    const [[agenda]] = own.sections;
+    const instance = { ...agenda, slug: 'agenda-for-axel', copiedFrom: { slug: 'agenda', commit: 'abc1234' } };
+    const definition = { ...agenda, slug: 'what-agentic-means', defines: 'agentic-ai' };
+    const record: EpisodeRecord = {
+      ...own,
+      title: { ...agenda, slug: 'hero' },
+      sections: [[agenda, instance, definition] as const],
+    };
+    const find = (slug: string) => (slug === unlisted ? record : findEpisode(slug));
+    const dir = `src/components/episodes/${unlisted}/slides`;
+    const folders = [
+      ...readSlideFolders(process.cwd()),
+      { path: `${dir}/hero`, slug: 'hero' },
+      { path: `${dir}/agenda-for-axel`, slug: 'agenda-for-axel' },
+      { path: `${dir}/what-agentic-means`, slug: 'what-agentic-means' },
+    ];
+    const expected = {
+      title: { path: `${dir}/hero`, slug: 'hero', title: true },
+      instance: { path: `${dir}/agenda-for-axel`, slug: 'agenda-for-axel', title: false, copiedFrom: 'agenda' },
+      definition: { episode: unlisted, slide: 'what-agentic-means', defines: 'agentic-ai' },
+    };
+    // ACT
+    const raw = rawContent(find, folders);
+    // ASSERT
+    expect(raw.slides).toContainEqual(expected.title);
+    expect(raw.slides).toContainEqual(expected.instance);
+    expect(raw.definitionSlides).toContainEqual(expected.definition);
+  });
+
   it('renders every Research question, staged or promoted, with each citation marker matched to a Source', () => {
     // ARRANGE
     const research = contentStore().research;

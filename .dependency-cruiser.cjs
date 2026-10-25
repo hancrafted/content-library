@@ -58,6 +58,17 @@ module.exports = {
       to: { path: '^src/lib/prefs-storage\\.ts$' },
     },
     {
+      name: 'client-never-reaches-node-fs',
+      severity: 'error',
+      comment:
+        'The content store and the files it reads (content-store.ts, evidence-files.ts, slide-folders.ts) use node:fs and run only at build time, on the server. No *.client.tsx leaf may reach them, directly or through any chain of imports: node:fs would ride into the client bundle (FE-006). Named by path, as prefs-storage is: a new node:fs reader needs this rule widened by hand.',
+      from: { path: '\\.client\\.tsx$' },
+      to: {
+        path: '^src/(components/episodes/content-store|lib/(evidence-files|slide-folders))\\.ts$',
+        reachable: true,
+      },
+    },
+    {
       name: 'client-never-imports-app',
       severity: 'error',
       comment:

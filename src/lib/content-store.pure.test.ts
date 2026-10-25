@@ -248,34 +248,36 @@ describe('failure cases', () => {
     expect(refusals[0]).toMatchObject(expected);
   });
 
-  it.each([
-    {
-      name: 'a public event-frame Episode',
-      raw: { ...VALID, episodes: [EPISODE, { ...FRAME, visibility: 'public' }] },
-      expected: { kind: 'episode', record: 'axel-agentic-workflow-agenda' },
-    },
-    {
-      name: 'visibility: attendees',
-      raw: { ...VALID, playlists: [{ ...PLAYLIST, visibility: 'attendees' }] },
-      expected: { kind: 'playlist', record: 'axel-agentic-workflow' },
-    },
-    {
-      name: 'an Event whose Playlist is missing',
-      raw: { ...VALID, events: [{ ...EVENT, playlist: 'no-such-playlist' }] },
-      expected: { kind: 'event', record: '2026-10-23-axel-agentic-workflow' },
-    },
-    {
-      name: 'an Event whose Playlist is not type: event',
-      raw: { ...VALID, playlists: [{ ...PLAYLIST, type: 'standard' }] },
-      expected: { kind: 'event', record: '2026-10-23-axel-agentic-workflow' },
-    },
-  ])('The schema refuses $name', ({ raw, expected }) => {
-    // ARRANGE
-    const records = raw;
-    // ACT
-    const refusals = refusalsOf(records);
-    // ASSERT
-    expect(refusals).toContainEqual(expect.objectContaining(expected));
+  describe('The schema refuses a public event-frame Episode, visibility: attendees, and an Event whose Playlist is missing or not type: event', () => {
+    it.each([
+      {
+        name: 'a public event-frame Episode',
+        raw: { ...VALID, episodes: [EPISODE, { ...FRAME, visibility: 'public' }] },
+        expected: { kind: 'episode', record: 'axel-agentic-workflow-agenda' },
+      },
+      {
+        name: 'visibility: attendees',
+        raw: { ...VALID, playlists: [{ ...PLAYLIST, visibility: 'attendees' }] },
+        expected: { kind: 'playlist', record: 'axel-agentic-workflow' },
+      },
+      {
+        name: 'an Event whose Playlist is missing',
+        raw: { ...VALID, events: [{ ...EVENT, playlist: 'no-such-playlist' }] },
+        expected: { kind: 'event', record: '2026-10-23-axel-agentic-workflow' },
+      },
+      {
+        name: 'an Event whose Playlist is not type: event',
+        raw: { ...VALID, playlists: [{ ...PLAYLIST, type: 'standard' }] },
+        expected: { kind: 'event', record: '2026-10-23-axel-agentic-workflow' },
+      },
+    ])('refuses $name', ({ raw, expected }) => {
+      // ARRANGE
+      const records = raw;
+      // ACT
+      const refusals = refusalsOf(records);
+      // ASSERT
+      expect(refusals).toContainEqual(expect.objectContaining(expected));
+    });
   });
 
   it('An orphan unlisted Episode is refused', () => {

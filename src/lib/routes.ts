@@ -54,7 +54,8 @@ export const UNLISTED_EPISODE_SLUGS = ['axel-agentic-workflow-agenda'] as const;
 export type UnlistedEpisodeSlug = (typeof UNLISTED_EPISODE_SLUGS)[number];
 
 /** Every Episode: the ones with an `/episodes/` page and the unlisted ones. */
-export type AnyEpisodeSlug = EpisodeSlug | UnlistedEpisodeSlug;
+export const ANY_EPISODE_SLUGS = [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS] as const;
+export type AnyEpisodeSlug = (typeof ANY_EPISODE_SLUGS)[number];
 
 /** Every Slide record the registry holds: each Episode's, and each tooling page's. */
 export type RecordSlug = AnyEpisodeSlug | ToolingSlug;
