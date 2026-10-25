@@ -1,6 +1,7 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
 import { contentStore } from '@/components/episodes/content-store';
+import { EventEpisodeHeader, PlaylistNav, type EventEpisodeChrome } from '@/components/events/event-episode-chrome';
 import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
 import type { EpisodeRecord, HeaderMode, SlideEntrance } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
@@ -68,7 +69,16 @@ function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; pa
   );
 }
 
-function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly LocalizedSlide[]; page: PageHeader }) {
+/** The insets every Slide wrapper takes, for the Event's chrome around the Content area (FE-009 §2). */
+const INSET = 'pl-(--inset-l) pr-(--inset-r)';
+
+interface SlideColumnProps {
+  titleSlide: TitleSlideProps;
+  slides: readonly LocalizedSlide[];
+  page: PageHeader;
+}
+
+function SlideColumn(props: SlideColumnProps) {
   const ids = [TITLE_ANCHOR, ...props.slides.map(({ id }) => id)];
   return (
     <SlideZones>
@@ -84,11 +94,14 @@ function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly Loca
   );
 }
 
-/** The Title slide's props: the Episode's text, its hero Scene and entrance, its recording, and what its notes target. */
+/**
+ * The Title slide's props: the Episode's text, its hero Scene and entrance, its recording, what its notes target, and
+ * on an Event's page its place in the Playlist.
+ */
 function titleSlideOf(
   content: EpisodeContent,
   page: PageHeader,
-  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels'>,
+  extras: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'position'>,
 ): TitleSlideProps {
   return {
     title: content.title,
@@ -96,7 +109,7 @@ function titleSlideOf(
     mode: page.mode,
     entrance: page.entrance,
     hero: content.hero,
-    ...talk,
+    ...extras,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
   };
 }
@@ -151,12 +164,33 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
   return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
 }
 
+/** The Episode's recording in this locale and the player's labels; neither when it has no video. */
+async function talkOf(episode: EpisodeRecord, locale: Locale) {
+  const youtubeId = episode.youtube?.[locale];
+  return { youtubeId, talkLabels: youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined };
+}
+
+/** How the page's Slide headers render: the Episode's header mode and entrance, and each page Slide's Eyebrow. */
+async function pageHeaderOf(
+  content: EpisodeContent,
+  locale: Locale,
+  sections: readonly TocSection[],
+): Promise<PageHeader> {
+  return {
+    mode: content.header,
+    entrance: content.entrance,
+    eyebrows: await eyebrowsFor(locale, content.header, sections),
+  };
+}
+
 /** What the shell renders: one Episode in one locale, at the route the page is served at. */
 interface ContainerProps {
   locale: Locale;
   episode: EpisodeRecord;
   /** The logical path the page is served at: the Episode's own `/episodes/<slug>`, or an Event's page of it. */
   route: string;
+  /** Present on an Event's page of the Episode: what the Event adds around it. */
+  event?: EventEpisodeChrome;
 }
 
 /**
@@ -167,17 +201,13 @@ interface ContainerProps {
  * reads that list, so no id is derived twice and none can drift. It also
  * provides the page's one URL-state service (FE-001 §2).
  */
-export async function EpisodePageContainer({ locale, episode, route }: ContainerProps) {
+export async function EpisodePageContainer({ locale, episode, route, event }: ContainerProps) {
   const content = await recordContent(episode, locale, siteContext(locale));
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
-  const page: PageHeader = {
-    mode: content.header,
-    entrance: content.entrance,
-    eyebrows: await eyebrowsFor(locale, content.header, sections),
-  };
-  const youtubeId = episode.youtube?.[locale];
-  const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
+  const page = await pageHeaderOf(content, locale, sections);
+  const { youtubeId, talkLabels } = await talkOf(episode, locale);
+  const titleSlide = titleSlideOf(content, page, { youtubeId, talkLabels, position: event?.position });
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (
@@ -188,7 +218,9 @@ export async function EpisodePageContainer({ locale, episode, route }: Container
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
         <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
-        <SlideColumn titleSlide={titleSlideOf(content, page, { youtubeId, talkLabels })} slides={slides} page={page} />
+        {event && <EventEpisodeHeader chrome={event} className={INSET} />}
+        <SlideColumn titleSlide={titleSlide} slides={slides} page={page} />
+        {event && <PlaylistNav chrome={event} className={INSET} />}
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>

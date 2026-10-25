@@ -52,6 +52,9 @@ _Avoid_: Agenda, course, series, collection
 **Event-frame Episode**: the Episode that holds one Event's agenda, scope and organisation, first in that Event's Playlist. It has no video, is always unlisted and always published, and is never in the Episode overview.
 _Avoid_: Event page (the Event's own page), agenda episode, intro
 
+**Past Event notice**: the one fixed line a past Event shows, saying the Event has taken place and its content is kept up to date and may differ from the recording. It sits above the Playlist on the Event page and above the title on each of the Event's Episode pages, never on an Episode's own page. An Event is past when its date lies before the build day; an upcoming Event shows no notice.
+_Avoid_: Archive banner, outdated warning, recording disclaimer
+
 **Visibility**: whether an Episode or a Playlist is listed and indexed: public, or unlisted. An unlisted Episode lives only under the Event whose Playlist presents it; unlisted is not private, since anyone with the URL can open it.
 _Avoid_: Private, hidden, draft, attendees-only
 
