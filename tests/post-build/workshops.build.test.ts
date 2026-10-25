@@ -1,17 +1,23 @@
-// The Workshops: /workshops lists one card per Workshop in both locales, each Workshop has a page,
+// The Workshops, each an Event read through the content store: /workshops lists one card per Event in both locales, each Workshop has a page,
 // the header carries one Workshops entry, and the sitemap names the pages with their hreflang set.
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { listEvents, playlistOf } from '../../src/content-store/store';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
-import { episodeRoute, ROUTES, workshopRoute } from '../../src/lib/routes';
-import { WORKSHOPS } from '../../src/lib/workshops.pure';
+import { episodeRoute, isEpisodeSlug, ROUTES, workshopRoute, type EpisodeSlug } from '../../src/lib/routes';
 import { exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
-const FIRST = WORKSHOPS[0];
+const EVENTS = listEvents();
+/** A Playlist entry as the Episode it names; the store refused any entry that names no registered Episode. */
+function registered(slug: string): EpisodeSlug {
+  if (!isEpisodeSlug(slug)) throw new Error(`"${slug}" is no registered Episode`);
+  return slug;
+}
+const FIRST = { ...EVENTS[0], episodes: playlistOf(EVENTS[0]).episodes.map(registered) };
 const WORDS: Record<
   Locale,
   { title: string; date: string; count: string; nav: string; start: string; reading: RegExp }
@@ -43,7 +49,7 @@ describe('/workshops page', () => {
     const cards = $('[data-workshop-list] [data-workshop-card]');
     const card = cards.filter(`[data-workshop-slug="${FIRST.slug}"]`);
     // ASSERT
-    expect(cards.length).toBe(WORKSHOPS.length);
+    expect(cards.length).toBe(EVENTS.length);
     expect(card.find('h2').text()).toBe(expected.title);
     expect(card.find('time[data-workshop-date]').attr('datetime')).toBe(FIRST.date);
     expect(card.find('time[data-workshop-date]').text()).toBe(expected.date);

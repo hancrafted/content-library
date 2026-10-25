@@ -1,8 +1,8 @@
 import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
-import { episodeSlugPublishedOn, episodeSlugStatus } from '@/components/episodes/episode-status';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { findPageRecord } from '@/components/episodes/tooling-pages';
 import { JsonLdScript } from '@/components/json-ld';
+import { episodePublishedOn, episodeStatus, episodeVideo } from '@/content-store/store';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
 import { SITE_URL } from '@/lib/site-url';
@@ -17,27 +17,28 @@ export function EpisodePage({ slug, locale }: { slug: string; locale: Locale }) 
   if (isToolingSlug(slug)) return <EpisodePageContainer locale={locale} episode={findPageRecord(slug)} />;
   const episode = findEpisode(slug);
   const { title, description } = episodeCopy(slug, locale);
+  const youtube = episodeVideo(episode.slug, locale);
   const data =
-    episodeSlugStatus(slug) === 'published'
+    episodeStatus(episode.slug) === 'published'
       ? episodeJsonLd(SITE_URL, locale, {
           slug: episode.slug,
           title,
           description,
-          publishedOn: episodeSlugPublishedOn(slug),
-          youtube: episode.youtube?.[locale],
+          publishedOn: episodePublishedOn(episode.slug),
+          youtube,
         })
       : undefined;
   return (
     <>
       {data && <JsonLdScript data={data} />}
-      <EpisodePageContainer locale={locale} episode={episode} />
+      <EpisodePageContainer locale={locale} episode={episode} youtubeId={youtube} />
     </>
   );
 }
 
 /**
  * A page's title, description, status and release date under `/episodes/`, for `pageMetadata` (FE-008): an
- * Episode's read through the registry, whose status makes an upcoming page `noindex`; a tooling page's from its own
+ * Episode's read through the registry and the content store, whose status makes an upcoming page `noindex`; a tooling page's from its own
  * record, with no status, since it is `noindex` as a tooling page.
  */
 export function episodePageCopy(slug: string, locale: Locale): PageCopy {
@@ -45,7 +46,8 @@ export function episodePageCopy(slug: string, locale: Locale): PageCopy {
     const { title, description } = findPageRecord(slug).messages[locale];
     return { title, description };
   }
-  const { title, description } = episodeCopy(slug, locale);
-  const publishedOn = episodeSlugPublishedOn(slug);
-  return { title, description, status: episodeSlugStatus(slug), ...(publishedOn ? { publishedOn } : {}) };
+  const { slug: episodeSlug } = findEpisode(slug);
+  const { title, description } = episodeCopy(episodeSlug, locale);
+  const publishedOn = episodePublishedOn(episodeSlug);
+  return { title, description, status: episodeStatus(episodeSlug), ...(publishedOn ? { publishedOn } : {}) };
 }

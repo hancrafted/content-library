@@ -16,7 +16,7 @@ import { EpisodeCardView, type CardLabels } from '@/components/landing/episode-c
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { SearchBox, TagChips, type FilterLabels } from '@/components/landing/episode-filters';
 import { Button } from '@/components/ui/button';
-import type { TagId } from '@/lib/episode-overview';
+import type { TagId } from '@/content-store/schemas/fields';
 import type { Locale } from '@/lib/locale.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { cn } from '@/lib/utils';

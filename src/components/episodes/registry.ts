@@ -1,4 +1,4 @@
-import type { EpisodeMessages, EpisodeRecord } from '@/components/slide-master/slide';
+import type { EpisodeComposition, EpisodeMessages } from '@/components/slide-master/slide';
 import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
@@ -15,7 +15,7 @@ import { onboardAiEveryTime } from './onboard-ai-every-time/episode';
  * without a record or a record without a slug fails `tsc`, and so does a key
  * that differs from its record's own slug.
  */
-const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: S } } = {
+const EPISODES: { readonly [S in EpisodeSlug]: EpisodeComposition & { readonly slug: S } } = {
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
   'never-too-early-sales': neverTooEarlySales,
@@ -24,7 +24,7 @@ const EPISODES: { readonly [S in EpisodeSlug]: EpisodeRecord & { readonly slug: 
   'ai-gives-you-more-work': aiGivesYouMoreWork,
 };
 
-export function findEpisode(slug: string): EpisodeRecord<EpisodeSlug> {
+export function findEpisode(slug: string): EpisodeComposition<EpisodeSlug> {
   if (!isEpisodeSlug(slug)) notFound();
   return EPISODES[slug];
 }

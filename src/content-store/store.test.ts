@@ -1,0 +1,353 @@
+import { EVENT_SLUGS } from '@/lib/routes';
+import { describe, expect, it } from 'vitest';
+import { episodeVideo, findEvent, listEpisodes, listEvents, loadContent, playlistOf } from './store';
+
+/*
+ * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
+ * throws a sentence naming its kind, slug and field. Fixtures are raw records, as a record file would hold them.
+ */
+
+const EPISODE = {
+  slug: 'alpha',
+  status: 'published',
+  visibility: 'public',
+  format: 'foundations',
+  tags: ['workflow'],
+  publishedOn: '2026-10-20',
+} as const;
+const UNLISTED = { ...EPISODE, slug: 'alpha-at-axel', visibility: 'unlisted' } as const;
+const PLAYLIST = { id: 'axel', visibility: 'public', episodes: ['alpha'] } as const;
+const EVENT = {
+  slug: '2026-10-23-axel',
+  date: '2026-10-23',
+  kind: 'workshop',
+  audience: 'organization',
+  playlist: 'axel',
+} as const;
+/** The Episodes recorded so far, each with its video per locale. */
+const RECORDINGS = [
+  { slug: 'ai-token-economy', en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
+  { slug: 'maintaining-markdown-for-ai', en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' },
+  { slug: 'never-too-early-sales', en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
+] as const;
+/** The record with one field left out, as a file that forgot it would hold it. */
+function without<T extends object>(record: T, key: keyof T): Partial<T> {
+  const copy: Partial<T> = { ...record };
+  delete copy[key];
+  return copy;
+}
+const SOUND = { episodes: [EPISODE], events: [EVENT], playlists: [PLAYLIST] };
+
+describe('success cases', () => {
+  it('loads a sound set of records whole', () => {
+    // ARRANGE
+    const expected = { episodes: [EPISODE], events: [EVENT], playlists: [PLAYLIST] };
+    // ACT
+    const content = loadContent(SOUND);
+    // ASSERT
+    expect(content).toEqual(expected);
+  });
+
+  it('loads the AXEL Workshop as the first Event, presenting a public Playlist of the three Episodes it taught', () => {
+    // ARRANGE
+    const expected = {
+      event: {
+        slug: '2026-10-23-axel-agentic-workflow',
+        date: '2026-10-23',
+        kind: 'workshop',
+        audience: 'organization',
+        playlist: 'axel-agentic-workflow',
+      },
+      playlist: {
+        id: 'axel-agentic-workflow',
+        visibility: 'public',
+        episodes: ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'],
+      },
+    };
+    // ACT
+    const event = findEvent(expected.event.slug);
+    const playlist = event && playlistOf(event);
+    // ASSERT
+    expect({ event, playlist }).toEqual(expected);
+  });
+
+  it('keeps the hand-kept Event slugs of the routes in step with the Event records', () => {
+    // ARRANGE
+    const expected = [...EVENT_SLUGS];
+    // ACT
+    const slugs = listEvents().map((event) => event.slug);
+    // ASSERT
+    expect(slugs).toEqual(expected);
+  });
+
+  it('declares every Episode public today', () => {
+    // ARRANGE
+    const expected: string[] = [];
+    // ACT
+    const notPublic = listEpisodes().filter((episode) => episode.visibility !== 'public');
+    // ASSERT
+    expect(notPublic.map((episode) => episode.slug)).toEqual(expected);
+  });
+
+  it.each(RECORDINGS)(
+    'plays the recorded YouTube video of $slug per locale, from its metadata record',
+    ({ slug, en, de }) => {
+      // ARRANGE
+      const expected = { en, de };
+      // ACT
+      const video = { en: episodeVideo(slug, 'en'), de: episodeVideo(slug, 'de') };
+      // ASSERT
+      expect(video).toEqual(expected);
+    },
+  );
+});
+
+describe('failure cases', () => {
+  it('An unlisted Episode in no Event is refused.', () => {
+    // ARRANGE
+    const input = { ...SOUND, episodes: [EPISODE, UNLISTED] };
+    const expected = 'Episode alpha-at-axel: visibility is unlisted, but no Event presents a Playlist listing it';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('A record without a visibility is refused.', () => {
+    // ARRANGE
+    const withoutVisibility = without(EPISODE, 'visibility');
+    const input = { ...SOUND, episodes: [withoutVisibility] };
+    const expected = 'Episode alpha: visibility is required, public or unlisted';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a Playlist without a visibility', () => {
+    // ARRANGE
+    const withoutVisibility = without(PLAYLIST, 'visibility');
+    const input = { ...SOUND, playlists: [withoutVisibility] };
+    const expected = 'Playlist axel: visibility is required, public or unlisted';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it.each([
+    ['Episode', { ...SOUND, episodes: [{ ...EPISODE, visibility: 'attendees' }] }, 'Episode alpha'],
+    ['Playlist', { ...SOUND, playlists: [{ ...PLAYLIST, visibility: 'attendees' }] }, 'Playlist axel'],
+  ])('refuses the visibility attendees on an %s until horizon 3', (_, input, record) => {
+    // ARRANGE
+    const expected = `${record}: visibility is "attendees", which is refused until horizon 3 gives it an enforcer`;
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Event whose slug does not start with its date', () => {
+    // ARRANGE
+    const input = { ...SOUND, events: [{ ...EVENT, slug: '2026-10-24-axel' }] };
+    const expected = 'Event 2026-10-24-axel: slug must be <date>-<name>, starting with its date 2026-10-23';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Event slug that is only its date, with no name after it', () => {
+    // ARRANGE
+    const input = { ...SOUND, events: [{ ...EVENT, slug: '2026-10-23' }] };
+    const expected = 'Event 2026-10-23: slug must be <date>-<name>, starting with its date 2026-10-23';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it.each([
+    ['Episode', { ...SOUND, episodes: [EPISODE, EPISODE] }, 'Episode alpha: slug is used by more than one Episode'],
+    ['Event', { ...SOUND, events: [EVENT, EVENT] }, 'Event 2026-10-23-axel: slug is used by more than one Event'],
+    ['Playlist', { ...SOUND, playlists: [PLAYLIST, PLAYLIST] }, 'Playlist axel: id is used by more than one Playlist'],
+  ])('refuses two %s records sharing a slug', (_, input, expected) => {
+    // ARRANGE
+    const records = input;
+    // ACT
+    const load = () => loadContent(records);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Event naming a Playlist that does not exist', () => {
+    // ARRANGE
+    const input = { ...SOUND, events: [{ ...EVENT, playlist: 'missing' }] };
+    const expected = 'Event 2026-10-23-axel: playlist "missing" does not exist';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a Playlist that lists no Episode', () => {
+    // ARRANGE
+    const input = { ...SOUND, playlists: [{ ...PLAYLIST, episodes: [] }] };
+    const expected = 'Playlist axel: episodes lists none, but a Playlist lists at least one Episode';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a Playlist naming an Episode that is not registered', () => {
+    // ARRANGE
+    const input = { ...SOUND, playlists: [{ ...PLAYLIST, episodes: ['alpha', 'ghost'] }] };
+    const expected = 'Playlist axel: episodes names "ghost", which is no registered Episode';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a Playlist listing one Episode twice', () => {
+    // ARRANGE
+    const input = { ...SOUND, playlists: [{ ...PLAYLIST, episodes: ['alpha', 'alpha'] }] };
+    const expected = 'Playlist axel: episodes lists "alpha" twice';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a public Playlist no Event presents when it lists an unlisted Episode', () => {
+    // ARRANGE
+    const curated = { id: 'curated', visibility: 'public', episodes: ['alpha', 'alpha-at-axel'] } as const;
+    const atAxel = { ...PLAYLIST, episodes: ['alpha-at-axel'] };
+    const input = { episodes: [EPISODE, UNLISTED], events: [EVENT], playlists: [atAxel, curated] };
+    const expected =
+      'Playlist curated: episodes lists the unlisted Episode "alpha-at-axel", but no Event presents this public Playlist';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it("refuses a recording whose language is not one of the site's locales", () => {
+    // ARRANGE
+    const recorded = { ...UNLISTED, youtube: { id: 'S0Nx4faEebY', language: 'fr' } };
+    const input = {
+      ...SOUND,
+      episodes: [EPISODE, recorded],
+      playlists: [{ ...PLAYLIST, episodes: ['alpha-at-axel'] }],
+    };
+    const expected = `Episode alpha-at-axel: youtube.language "fr" is not one of the site's locales (en, de)`;
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it("refuses a public Episode's video under a key that is not one of the site's locales", () => {
+    // ARRANGE
+    const input = { ...SOUND, episodes: [{ ...EPISODE, youtube: { fr: 'S0Nx4faEebY' } }] };
+    const expected = `Episode alpha: youtube names "fr", which is not one of the site's locales (en, de)`;
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a public Episode carrying one recording, and an unlisted one carrying a video per locale', () => {
+    // ARRANGE
+    const recordedPublic = { ...EPISODE, youtube: { id: 'S0Nx4faEebY', language: 'de' } };
+    const perLocaleUnlisted = { ...UNLISTED, youtube: { en: 'S0Nx4faEebY' } };
+    const input = {
+      ...SOUND,
+      episodes: [recordedPublic, perLocaleUnlisted],
+      playlists: [{ ...PLAYLIST, episodes: ['alpha-at-axel'] }],
+    };
+    const expected = [
+      'Episode alpha: youtube is one recording with its language, but a public Episode keeps one video per locale',
+      'Episode alpha-at-axel: youtube is one video per locale, but an unlisted Episode carries one recording with its language',
+    ];
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expected.forEach((sentence) => expect(load).toThrow(sentence));
+  });
+
+  it('refuses an Episode listing one Tag twice, and a Tag outside the vocabulary', () => {
+    // ARRANGE
+    const twice = { ...EPISODE, tags: ['workflow', 'workflow'] };
+    const unknown = { ...EPISODE, slug: 'beta', tags: ['astrology'] };
+    const expected = { twice: 'Episode alpha: tags lists workflow twice', unknown: 'Episode beta: tags.0 ' };
+    // ACT
+    const loadTwice = () => loadContent({ ...SOUND, episodes: [twice] });
+    const loadUnknown = () => loadContent({ ...SOUND, episodes: [EPISODE, unknown] });
+    // ASSERT
+    expect(loadTwice).toThrow(expected.twice);
+    expect(loadUnknown).toThrow(expected.unknown);
+  });
+
+  it('refuses a published Episode without a release date, naming the field', () => {
+    // ARRANGE
+    const undated = without(EPISODE, 'publishedOn');
+    const expected = 'Episode alpha: publishedOn ';
+    // ACT
+    const load = () => loadContent({ ...SOUND, episodes: [undated] });
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+});
+
+describe('edge cases', () => {
+  it('lets an event Playlist, public or not, list unlisted Episodes made for its Event', () => {
+    // ARRANGE
+    const atAxel = { ...PLAYLIST, episodes: ['alpha-at-axel', 'alpha'] };
+    const input = { episodes: [EPISODE, UNLISTED], events: [EVENT], playlists: [atAxel] };
+    const expected = ['alpha', 'alpha-at-axel'];
+    // ACT
+    const content = loadContent(input);
+    // ASSERT
+    expect(content.episodes.map((episode) => episode.slug)).toEqual(expected);
+  });
+
+  it('names a record whose slug is missing instead of dropping it', () => {
+    // ARRANGE
+    const nameless = without(EPISODE, 'slug');
+    const expected = 'Episode (no slug): slug ';
+    // ACT
+    const load = () => loadContent({ ...SOUND, episodes: [EPISODE, nameless] });
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('reports every refusal at once, one sentence per broken record', () => {
+    // ARRANGE
+    const input = {
+      ...SOUND,
+      events: [{ ...EVENT, playlist: 'missing' }],
+      playlists: [PLAYLIST, { ...PLAYLIST, id: 'empty', episodes: [] }],
+    };
+    const expected = [
+      'The content store refused a record:',
+      '- Event 2026-10-23-axel: playlist "missing" does not exist',
+      '- Playlist empty: episodes lists none, but a Playlist lists at least one Episode',
+    ].join('\n');
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('flags a missing status in its own words', () => {
+    // ARRANGE
+    const statusless = without(EPISODE, 'status');
+    const expected = 'Episode alpha: status is missing, but must be published or upcoming';
+    // ACT
+    const load = () => loadContent({ ...SOUND, episodes: [statusless] });
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+});

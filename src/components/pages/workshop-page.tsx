@@ -5,11 +5,11 @@ import { agendaOf, startOf, totalMinutes } from '@/components/landing/workshop-a
 import type { WorkshopCard } from '@/components/landing/workshop-card.pure';
 import { workshopCards } from '@/components/landing/workshop-cards';
 import { Button } from '@/components/ui/button';
+import { findEvent, playlistOf } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { ROUTES } from '@/lib/routes';
+import { ROUTES, type EventSlug } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
-import { WORKSHOPS, type WorkshopSlug } from '@/lib/workshops.pure';
 import { ArrowLeft, ArrowRight, CalendarDays, Clock, Layers, MapPin, type LucideIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 /** A Workshop page's title and description in one locale, for its metadata. */
-export function workshopPageCopy(slug: WorkshopSlug, locale: Locale) {
+export function workshopPageCopy(slug: EventSlug, locale: Locale) {
   return TRANSLATIONS[locale].workshopsPage.items[slug];
 }
 
@@ -122,13 +122,13 @@ function Agenda({ cards, locale, labels, title }: AgendaProps) {
  * description and a start button, then the Workshop's Episodes as a numbered list of compact cards.
  */
 export async function WorkshopPage({ slug, locale }: { slug: string; locale: Locale }) {
-  const record = WORKSHOPS.find((workshop) => workshop.slug === slug);
+  const record = findEvent(slug);
   if (record === undefined) notFound();
   const t = await getTranslations({ locale, namespace: 'workshopsPage' });
   const landing = await getTranslations({ locale, namespace: 'landing' });
   const card = (await workshopCards(locale)).find((each) => each.slug === slug);
   if (card === undefined) notFound();
-  const episodes = agendaOf(record.episodes, await episodeCards(locale));
+  const episodes = agendaOf(playlistOf(record).episodes, await episodeCards(locale));
   return (
     <main data-testid="workshop-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
       <Link

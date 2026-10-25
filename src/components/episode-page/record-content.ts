@@ -10,7 +10,7 @@ import {
 } from '@/components/slide-master/localized-slide';
 import {
   headerModeOf,
-  type EpisodeRecord,
+  type EpisodeComposition,
   type HeaderMode,
   type Slide,
   type SlideEntrance,
@@ -53,7 +53,7 @@ export interface EpisodeContent {
  * the anchor it points at.
  */
 export async function recordContent(
-  record: EpisodeRecord,
+  record: EpisodeComposition,
   locale: Locale,
   translatorOf: TranslatorOf,
 ): Promise<EpisodeContent> {

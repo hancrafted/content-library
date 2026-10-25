@@ -71,7 +71,7 @@ describe('success cases', () => {
 
   it("points a Workshop page's canonical at its own slug and locale, with the copy its route hands in", () => {
     // ARRANGE
-    const slug = 'axel-agentic-workflow-2026-10-23';
+    const slug = '2026-10-23-axel-agentic-workflow';
     const expected = { canonical: `/de/workshops/${slug}`, type: 'website', title: COPY.title };
     // ACT
     const metadata = pageMetadata({ workshop: slug }, 'de', COPY);

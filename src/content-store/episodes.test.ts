@@ -4,11 +4,11 @@ import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeStatus, hasPage, listEpisodes } from './episode-repository';
+import { episodeStatus, hasPage, listEpisodes } from './store';
 
 /*
- * The read API the Episode overview depends on (#40): one metadata entry per
- * Episode folder, so no Episode silently drops out of the overview.
+ * The store's Episode read API the Episode overview depends on (#40): one metadata
+ * entry per Episode folder, so no Episode silently drops out of the overview.
  */
 
 const EPISODES_DIR = path.join(process.cwd(), 'src/components/episodes');
@@ -69,9 +69,11 @@ describe('success cases', () => {
     const expected = {
       slug,
       status: 'published',
+      visibility: 'public',
       format: 'foundations',
       tags: ['sales'],
       publishedOn: '2026-10-19',
+      youtube: { en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
     };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
@@ -87,6 +89,7 @@ describe('success cases', () => {
     const expected = {
       slug,
       status: 'published',
+      visibility: 'public',
       format: 'foundations',
       tags: ['context-engineering', 'agentic-ai', 'workflow'],
       publishedOn: '2026-10-20',
@@ -105,6 +108,7 @@ describe('success cases', () => {
     const expected = {
       slug,
       status: 'published',
+      visibility: 'public',
       format: 'foundations',
       tags: ['context-engineering', 'workflow'],
       publishedOn: '2026-10-21',
@@ -123,6 +127,7 @@ describe('success cases', () => {
     const expected = {
       slug,
       status: 'published',
+      visibility: 'public',
       format: 'foundations',
       tags: ['agentic-ai', 'workflow'],
       publishedOn: '2026-10-21',

@@ -7,21 +7,24 @@ const READS: WorkshopReads = {
   episodeCount: { one: '1 Episode', other: '{count} Episodes' },
 };
 const RECORD = {
-  slug: 'intro-2026-10-23',
+  slug: '2026-10-23-intro',
   date: '2026-10-23',
-  episodes: ['alpha', 'beta', 'gamma'],
+  kind: 'workshop',
+  audience: 'organization',
+  playlist: 'intro',
 } as const;
+const PLAYLIST = { episodes: ['alpha', 'beta', 'gamma'] };
 
 describe('success cases', () => {
-  it('reads the title and description by the Workshop slug and routes the card to its page', () => {
+  it('reads the title and description by the Event slug and routes the card to its page', () => {
     // ARRANGE
     const expected = {
-      title: '«workshopsPage.items.intro-2026-10-23.title»',
-      description: '«workshopsPage.items.intro-2026-10-23.description»',
-      route: '/workshops/intro-2026-10-23',
+      title: '«workshopsPage.items.2026-10-23-intro.title»',
+      description: '«workshopsPage.items.2026-10-23-intro.description»',
+      route: '/workshops/2026-10-23-intro',
     };
     // ACT
-    const card = workshopCard(RECORD, 'en', READS);
+    const card = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
     // ASSERT
     expect({ title: card.title, description: card.description, route: card.route }).toEqual(expected);
   });
@@ -30,8 +33,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { english: 'Oct 23, 2026', german: '23. Okt. 2026', date: '2026-10-23' };
     // ACT
-    const english = workshopCard(RECORD, 'en', READS);
-    const german = workshopCard(RECORD, 'de', READS);
+    const english = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const german = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'de', READS);
     // ASSERT
     expect({ english: english.dateLabel, german: german.dateLabel, date: english.date }).toEqual(expected);
   });
@@ -40,7 +43,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { count: 3, label: '3 Episodes' };
     // ACT
-    const card = workshopCard(RECORD, 'en', READS);
+    const card = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
     // ASSERT
     expect({ count: card.episodeCount, label: card.episodeCountLabel }).toEqual(expected);
   });
@@ -56,19 +59,19 @@ describe('failure cases', () => {
       },
     };
     // ACT
-    const build = () => workshopCard(RECORD, 'en', reads);
+    const build = () => workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', reads);
     // ASSERT
-    expect(build).toThrow('Missing workshopsPage.items.intro-2026-10-23.title');
+    expect(build).toThrow('Missing workshopsPage.items.2026-10-23-intro.title');
   });
 });
 
 describe('edge cases', () => {
   it('uses the singular for a Workshop of one Episode', () => {
     // ARRANGE
-    const record = { ...RECORD, episodes: ['alpha'] };
+    const playlist = { episodes: ['alpha'] };
     const expected = '1 Episode';
     // ACT
-    const card = workshopCard(record, 'en', READS);
+    const card = workshopCard({ event: RECORD, playlist: playlist }, 'en', READS);
     // ASSERT
     expect(card.episodeCountLabel).toBe(expected);
   });
@@ -78,8 +81,8 @@ describe('edge cases', () => {
     const timed = { ...RECORD, time: '09:30', location: 'Berlin' };
     const expected = { time: '09:30', location: 'Berlin' };
     // ACT
-    const withDetails = workshopCard(timed, 'en', READS);
-    const without = workshopCard(RECORD, 'en', READS);
+    const withDetails = workshopCard({ event: timed, playlist: PLAYLIST }, 'en', READS);
+    const without = workshopCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
     // ASSERT
     expect({ time: withDetails.time, location: withDetails.location }).toEqual(expected);
     expect('time' in without || 'location' in without).toBe(false);

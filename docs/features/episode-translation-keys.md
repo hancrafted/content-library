@@ -86,10 +86,9 @@ page-template/i18n/en.json              title, caption, description
 
 ## Episode overview entries
 
-Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, Format, Tags (lead Tag first) and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
+Each Episode declares its own metadata record in `episodes/<slug>/episode-metadata.ts`: status, visibility, Format, Tags (lead Tag first), its Video and, once published, its publish date. It holds ids only, no strings. The content store (`src/content-store/store.ts`) loads every record through its schema, and the landing page reads only `listEpisodes()` from it. The closed vocabularies live in `src/content-store/schemas/fields.ts` (`TAG_IDS`, `FORMATS`); the overview's lists in `src/lib/episode-overview.ts`:
 
-- `TAGS`: the closed Tag vocabulary, each Tag with an icon and an accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
-- `FORMATS`: the closed list of Formats.
+- `TAGS`: each Tag's icon and accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
 - `FEATURED`: exactly three published slugs, lead first.
 
 An entry reads its text from:
@@ -97,15 +96,15 @@ An entry reads its text from:
 - An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry (`findEpisode(slug).messages[locale]`).
 - An Upcoming Episode with no page: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when its page is written.
 - Every Episode: `landing.episodeOverview.formats.<format>`, one per id in `FORMATS`. The Format control and label stay hidden until two Formats are in use.
-- Every Tag in the vocabulary: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; a test fails when an Episode lists an id outside `TAGS`, lists none, or when a Tag lacks either key in en or de.
+- Every Tag in the vocabulary: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; the store refuses an Episode that lists an id outside `TAG_IDS`, lists none or lists one twice, and a test fails when a Tag lacks either key in en or de.
 - Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the overview's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
 - The `/episodes` heading and its one-line intro: `episodesPage.title` and `episodesPage.intro`.
 
 ## Workshop keys
 
-A Workshop is a record in `src/lib/workshops.pure.ts` that holds no string ([Workshops](workshops.md)). Its text sits in the site-wide files:
+An Event, shown as a Workshop page, is a record in the content store that holds no string ([Workshops](workshops.md)). Its text sits in the site-wide files:
 
-- `workshopsPage.items.<slug>.title` and `.description`, one pair per Workshop slug. The title is the card's heading, the Workshop page's `h1` and `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
+- `workshopsPage.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Workshop page's `h1` and `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
 - `workshopsPage.title` and `workshopsPage.intro`: the `/workshops` heading and its one-line intro.
 - `workshopsPage.episodeCount.one` and `.other`: the Episode count on a card and on the Workshop page; `other` keeps a plain `{count}` placeholder.
 - `workshopsPage.agenda`: the heading of the numbered Episode list on a Workshop page.

@@ -1,9 +1,11 @@
+import type { TagId } from '../content-store/schemas/fields';
 import type { EpisodeSlug } from './routes';
 
 /*
- * The Episode overview's central lists: the vocabularies an Episode's metadata
- * picks from, the look each Tag gives its Episodes, and the Featured slots.
- * Everything else about an Episode lives in its own folder
+ * The Episode overview's central lists: the look each Tag gives its Episodes,
+ * and the Featured slots. The vocabularies an Episode's metadata picks from
+ * (Tag ids, formats) live in the content store's `schemas/fields.ts`; everything
+ * else about an Episode lives in its own folder
  * (`episodes/<slug>/episode-metadata.ts`). Ids only; every string a visitor
  * reads is a Translation key (FE-003).
  */
@@ -22,7 +24,7 @@ export interface TagLook {
 }
 
 /**
- * The closed Tag vocabulary: the only Tags an Episode may carry. An Episode's
+ * The look of each Tag in the closed vocabulary (`TAG_IDS`). An Episode's
  * first Tag is its lead Tag, and that Tag's look is its card's icon and accent.
  * Each Tag's name and tooltip are Translation keys by id.
  */
@@ -33,9 +35,7 @@ export const TAGS = {
   cost: { icon: 'coins', accent: 'amber' },
   sales: { icon: 'handshake', accent: 'emerald' },
   workflow: { icon: 'list-plus', accent: 'primary' },
-} as const satisfies Record<string, TagLook>;
-export type TagId = keyof typeof TAGS;
-export const TAG_IDS = Object.keys(TAGS) as readonly TagId[];
+} as const satisfies Readonly<Record<TagId, TagLook>>;
 
 /** The Tags the overview offers as filter chips, in order; search still matches every Tag name. */
 export const FILTER_TAGS = [
@@ -45,9 +45,6 @@ export const FILTER_TAGS = [
   'cost',
   'sales',
 ] as const satisfies readonly TagId[];
-
-export const FORMATS = ['foundations', 'teardown', 'short'] as const;
-export type FormatId = (typeof FORMATS)[number];
 
 /** The Featured slots: published Episodes, lead first. Re-ranking is this one edit. */
 export const FEATURED = [

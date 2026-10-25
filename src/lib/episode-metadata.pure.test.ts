@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { leadTagOf, overviewOrder, tagProblems, type EpisodeMetadata } from './episode-metadata.pure';
+import type { Episode } from '../content-store/schemas/episode.schema';
+import { leadTagOf, overviewOrder } from './episode-metadata.pure';
 
 /** Five hand-placed Episodes: three published, two upcoming. */
-const EPISODES: readonly EpisodeMetadata[] = [
+const EPISODES: readonly Episode[] = [
   {
     slug: 'never-too-early-sales',
     status: 'published',
+    visibility: 'public',
     format: 'foundations',
     tags: ['sales'],
     publishedOn: '2026-10-08',
@@ -13,6 +15,7 @@ const EPISODES: readonly EpisodeMetadata[] = [
   {
     slug: 'maintaining-markdown-for-ai',
     status: 'published',
+    visibility: 'public',
     format: 'teardown',
     tags: ['markdown', 'sales'],
     publishedOn: '2026-10-09',
@@ -20,15 +23,16 @@ const EPISODES: readonly EpisodeMetadata[] = [
   {
     slug: 'ai-token-economy',
     status: 'published',
+    visibility: 'public',
     format: 'foundations',
     tags: ['cost'],
     publishedOn: '2026-10-09',
   },
-  { slug: 'rolling-out-ai', status: 'upcoming', format: 'foundations', tags: ['agentic-ai'] },
-  { slug: 'ai-in-code-review', status: 'upcoming', format: 'short', tags: ['workflow'] },
+  { slug: 'rolling-out-ai', status: 'upcoming', visibility: 'public', format: 'foundations', tags: ['agentic-ai'] },
+  { slug: 'ai-in-code-review', status: 'upcoming', visibility: 'public', format: 'short', tags: ['workflow'] },
 ];
 
-const slugs = (entries: readonly EpisodeMetadata[]) => entries.map(({ slug }) => slug);
+const slugs = (entries: readonly Episode[]) => entries.map(({ slug }) => slug);
 
 describe('success cases', () => {
   it('orders the Featured Episodes first, as listed, then other published ones newest first, then upcoming as given', () => {
@@ -55,15 +59,6 @@ describe('success cases', () => {
     // ASSERT
     expect(lead).toBe(expected);
   });
-
-  it('finds no problem in Episodes whose Tags are all in the vocabulary', () => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const problems = tagProblems(EPISODES);
-    // ASSERT
-    expect(problems).toEqual(expected);
-  });
 });
 
 describe('failure cases', () => {
@@ -83,26 +78,6 @@ describe('failure cases', () => {
     expect(slugs(ordered)).toEqual(expected);
   });
 
-  it('rejects an Episode with a Tag outside the vocabulary', () => {
-    // ARRANGE
-    const episodes = [{ slug: 'ai-token-economy', tags: ['cost', 'tokens'] }];
-    const expected = ['ai-token-economy: unknown Tag tokens'];
-    // ACT
-    const problems = tagProblems(episodes);
-    // ASSERT
-    expect(problems).toEqual(expected);
-  });
-
-  it('rejects an Episode with no Tag, since its lead Tag gives its card its look', () => {
-    // ARRANGE
-    const episodes = [{ slug: 'ai-token-economy', tags: [] }];
-    const expected = ['ai-token-economy: has no Tag'];
-    // ACT
-    const problems = tagProblems(episodes);
-    // ASSERT
-    expect(problems).toEqual(expected);
-  });
-
   it('ignores a Featured slug no Episode holds', () => {
     // ARRANGE
     const featured = ['no-such-episode', 'never-too-early-sales'];
@@ -117,16 +92,6 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('names a Tag once the Episode lists it twice', () => {
-    // ARRANGE
-    const episodes = [{ slug: 'ai-token-economy', tags: ['cost', 'cost'] }];
-    const expected = ['ai-token-economy: lists the Tag cost twice'];
-    // ACT
-    const problems = tagProblems(episodes);
-    // ASSERT
-    expect(problems).toEqual(expected);
-  });
-
   it('breaks a tie between published Episodes of one date by slug, and leaves the given list in its order', () => {
     // ARRANGE
     const before = slugs(EPISODES);

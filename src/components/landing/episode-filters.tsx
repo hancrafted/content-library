@@ -1,6 +1,6 @@
 import type { TagOption } from '@/components/landing/episode-browse.pure';
 import { Button } from '@/components/ui/button';
-import type { TagId } from '@/lib/episode-overview';
+import type { TagId } from '@/content-store/schemas/fields';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import type { Ref } from 'react';

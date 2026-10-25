@@ -151,10 +151,10 @@ module.exports = {
       name: 'episode-tests-reach-only-slide-parts',
       severity: 'error',
       comment:
-        'An Episode test reaches what an Episode file does, plus Node builtins for reading in-test file fixtures such as published-anchors.json (ARCH-003 §4.2).',
+        "An Episode test reaches what an Episode file does, plus Node builtins for reading in-test file fixtures such as published-anchors.json (ARCH-003 §4.2), and the content store's entry and schemas, the one reader of an Episode's status and its type (FE-013).",
       from: { path: '^src/components/episodes/.+\\.test\\.ts$' },
       to: {
-        pathNot: [...EPISODE_REACH, 'node_modules'],
+        pathNot: [...EPISODE_REACH, '^src/content-store/store\\.ts$', STORE_SCHEMAS, 'node_modules'],
         dependencyTypesNot: ['core'],
       },
     },
@@ -215,13 +215,7 @@ module.exports = {
       comment:
         "Records are read only through src/content-store/store.ts: nothing else imports an Episode's episode-metadata.ts or src/content-store/{events,playlists}/** (FE-013).",
       from: {
-        pathNot: [
-          '^src/content-store/',
-          '\\.test\\.tsx?$',
-          EPISODE_METADATA,
-          // tech-debt: the old reader stays until the store replaces it (FE-013 Known gap), https://github.com/hancrafted/content-library/issues/331
-          '^src/components/episodes/episode-repository\\.ts$',
-        ],
+        pathNot: ['^src/content-store/', '\\.test\\.tsx?$', EPISODE_METADATA],
       },
       to: { path: [EPISODE_METADATA, '^src/content-store/(events|playlists)/'] },
     },

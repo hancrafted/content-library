@@ -1,4 +1,4 @@
-import type { EpisodeRecord } from '@/components/slide-master/slide';
+import type { EpisodeComposition } from '@/components/slide-master/slide';
 import { isToolingSlug, type ToolingSlug } from '@/lib/tooling-pages';
 import { notFound } from 'next/navigation';
 import { pageTemplate } from './page-template/episode';
@@ -11,18 +11,18 @@ import { slides } from './slides/episode';
  * Episode and rendered by the same container, but no Episode, so they stay out of the Episode registry. Typed against
  * `TOOLING_SLUGS`, so a slug without a record, or a key that differs from its record's slug, fails `tsc`.
  */
-const TOOLING_PAGES: { readonly [S in ToolingSlug]: EpisodeRecord & { readonly slug: S } } = {
+const TOOLING_PAGES: { readonly [S in ToolingSlug]: EpisodeComposition & { readonly slug: S } } = {
   'page-template': pageTemplate,
   'slide-master': slideMaster,
   slides,
 };
 
-export function findToolingPage(slug: string): EpisodeRecord<ToolingSlug> {
+export function findToolingPage(slug: string): EpisodeComposition<ToolingSlug> {
   if (!isToolingSlug(slug)) notFound();
   return TOOLING_PAGES[slug];
 }
 
 /** The Slides a page under `/episodes/<slug>/` renders: a tooling page's, else the Episode's from the registry. */
-export function findPageRecord(slug: string): EpisodeRecord {
+export function findPageRecord(slug: string): EpisodeComposition {
   return isToolingSlug(slug) ? TOOLING_PAGES[slug] : findEpisode(slug);
 }

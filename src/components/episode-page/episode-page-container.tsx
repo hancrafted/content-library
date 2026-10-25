@@ -1,7 +1,7 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
 import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
-import type { EpisodeRecord, HeaderMode, SlideEntrance } from '@/components/slide-master/slide';
+import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import type { EyebrowText } from '@/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/components/slide-master/slide-header';
@@ -146,6 +146,13 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
   return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
 }
 
+interface EpisodePageContainerProps {
+  locale: Locale;
+  episode: EpisodeComposition;
+  /** The Episode's video in this locale, from its metadata record; none for a tooling page or before upload. */
+  youtubeId?: string;
+}
+
 /**
  * The shell every Episode page renders through (FE-002). It alone turns the
  * Episode record into the page: the named slots, the Title slide with the
@@ -154,7 +161,7 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
  * reads that list, so no id is derived twice and none can drift. It also
  * provides the page's one URL-state service (FE-001 §2).
  */
-export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
+export async function EpisodePageContainer({ locale, episode, youtubeId }: EpisodePageContainerProps) {
   const content = await recordContent(episode, locale, translatorOf(locale));
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
@@ -163,7 +170,6 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
     entrance: content.entrance,
     eyebrows: await eyebrowsFor(locale, content.header, sections),
   };
-  const youtubeId = episode.youtube?.[locale];
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);

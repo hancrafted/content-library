@@ -1,12 +1,7 @@
-import {
-  leadTagOf,
-  lookOf,
-  type EpisodeStatus,
-  type IsoDate,
-  type PublishedEpisodeMetadata,
-  type UpcomingEpisodeMetadata,
-} from '@/lib/episode-metadata.pure';
-import type { Accent, FormatId, TagIcon, TagId } from '@/lib/episode-overview';
+import type { EpisodeStatus, PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/episode.schema';
+import type { FormatId, IsoDate, TagId } from '@/content-store/schemas/fields';
+import { leadTagOf, lookOf } from '@/lib/episode-metadata.pure';
+import type { Accent, TagIcon } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
 
@@ -71,8 +66,7 @@ export type EpisodeCopy = Pick<EpisodeCard, 'title' | 'caption'>;
  * and so its own `i18n/` (`copy`), which it then carries as a published one does.
  */
 export type CardEntry =
-  | (PublishedEpisodeMetadata & { readonly copy: EpisodeCopy })
-  | (UpcomingEpisodeMetadata & { readonly copy?: EpisodeCopy });
+  (PublishedEpisode & { readonly copy: EpisodeCopy }) | (UpcomingEpisode & { readonly copy?: EpisodeCopy });
 
 export interface CardContext {
   readonly locale: Locale;

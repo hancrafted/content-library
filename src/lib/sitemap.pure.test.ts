@@ -26,7 +26,7 @@ describe('success cases', () => {
 
   it('lists the Workshops page and each Workshop page in both locales with reciprocal alternates', () => {
     // ARRANGE
-    const slug = 'axel-agentic-workflow-2026-10-23';
+    const slug = '2026-10-23-axel-agentic-workflow';
     const route = `/workshops/${slug}/`;
     const expected = {
       url: `${SITE}/de${route}`,

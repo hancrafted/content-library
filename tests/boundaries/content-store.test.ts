@@ -1,8 +1,7 @@
 // Probe tests for the content store's import boundaries (FE-013 Decision 1, FE-007 §2):
 // the dependency-cruiser rules run, as `npm run lint:boundaries` runs them, over a
 // throwaway tree of probe files written to a temporary directory. Every forbidden rule
-// runs, so a probe meets the real gate. The store does not exist on main yet, so these
-// probes are the executable spec its ticket builds against.
+// runs, so a probe meets the real gate.
 
 import { cruise, type IForbiddenRuleType, type IReporterOutput } from 'dependency-cruiser';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -128,7 +127,7 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('rejects every reader that bypasses the entry, a store that reaches components or React, a lower tier reaching the store, a client leaf importing it at runtime, a schema leaving its leaf, and Episode metadata reaching above lib', () => {
+  it('rejects every reader that bypasses the entry, the old Episode repository included, a store that reaches components or React, a lower tier reaching the store, a client leaf importing it at runtime, a schema leaving its leaf, and Episode metadata reaching above lib', () => {
     // ARRANGE
     const expected = [
       'client-never-imports-content-store: src/components/landing/reaches-store.client.tsx -> src/content-store/store.ts',
@@ -137,6 +136,7 @@ describe('failure cases', () => {
       'episode-metadata-reaches-only-schemas-and-lib: src/components/episodes/stray/episode-metadata.ts -> src/components/slide-master/slide.ts',
       'hooks-import-no-upper-tier: src/hooks/use-store.ts -> src/content-store/store.ts',
       'lib-imports-no-upper-tier: src/lib/reaches-store.pure.ts -> src/content-store/store.ts',
+      'records-read-only-through-store: src/components/episodes/episode-repository.ts -> src/components/episodes/probe/episode-metadata.ts',
       'records-read-only-through-store: src/components/landing/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
       'records-read-only-through-store: src/components/landing/reaches-metadata.tsx -> src/components/episodes/probe/episode-metadata.ts',
       'schemas-are-a-leaf: src/content-store/schemas/reaches-lib.schema.ts -> src/lib/probe.pure.ts',
@@ -154,15 +154,6 @@ describe('edge cases', () => {
   it("lets a test reach the store's internals", () => {
     // ARRANGE
     const file = `${STORE}/store.test.ts`;
-    // ACT
-    const found = from(file);
-    // ASSERT
-    expect(found).toEqual([]);
-  });
-
-  it('keeps the old Episode repository as the one dormant exception until the store replaces it', () => {
-    // ARRANGE
-    const file = 'src/components/episodes/episode-repository.ts';
     // ACT
     const found = from(file);
     // ASSERT

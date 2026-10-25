@@ -1,7 +1,7 @@
-import { listEpisodes } from '@/components/episodes/episode-repository';
 import { findPageRecord } from '@/components/episodes/tooling-pages';
 
-import type { EpisodeStatus } from '@/lib/episode-metadata.pure';
+import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
+import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/lib/episode.pure';
 import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';

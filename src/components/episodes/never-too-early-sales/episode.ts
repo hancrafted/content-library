@@ -17,7 +17,6 @@ import { hero } from './slides/hero/slide';
  */
 export const neverTooEarlySales = episode({
   slug: 'never-too-early-sales',
-  youtube: { en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
   messages: { en, de },
   title: hero,
   sections: [

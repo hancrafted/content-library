@@ -1,4 +1,4 @@
-import type { TagId } from '@/lib/episode-overview';
+import type { TagId } from '@/content-store/schemas/fields';
 import { describe, expect, it } from 'vitest';
 import {
   browseView,
