@@ -14,6 +14,10 @@ Read before changing the look, layout or interaction of what surrounds an Episod
 - Insets: `1rem` each side below `md`; from `md`, `21rem` left (the table of contents plus its gap) and `3rem` right, or the drawer width plus `4rem` while the drawer sits beside.
 - Full-bleed decoration goes in `SlideBackdrop`, content in `SlideFrame` (the Foreground). Z-index values come from the ladder in FE-009 §8; popovers render through the Episode portal root, placed by the shared `usePopoverPlacement` hook (`src/hooks/use-popover-placement.ts`, maths in `src/lib/popover-placement.pure.ts`); modals as a native `<dialog>`.
 
+## Under an Event
+
+On an Event-scoped Episode page the Event's breadcrumb and past notice sit above the Title slide, inside the insets, "Episode n of m" sits under the title, and the Playlist walk follows the last Slide. They scroll with the page; none floats. Detail: [Events](events.md#routes).
+
 ## Corners
 
 - Top-right: the Context drawer card, never the video.

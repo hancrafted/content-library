@@ -18,6 +18,7 @@ import {
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
+import { episodeRoute } from '@/lib/routes';
 import type { ReactNode } from 'react';
 
 /*
@@ -29,6 +30,13 @@ import type { ReactNode } from 'react';
 
 /** One locale's site-wide translator for a namespace, read by runtime key: next-intl in the page, a stand-in in tests. */
 export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
+
+/** What the page lends the Episode: the site-wide translator, and the route it is served at when not its own. */
+export interface PageContext {
+  readonly translatorOf: TranslatorOf;
+  /** The logical path the page is served at, which `slideHref` links on: the Episode's own unless an Event presents it. */
+  readonly route?: string;
+}
 
 /** What one locale of an Episode renders: the Title slide's text and its Slides in page order. */
 export interface EpisodeContent {
@@ -55,11 +63,12 @@ export interface EpisodeContent {
 export async function recordContent(
   record: EpisodeComposition,
   locale: Locale,
-  translatorOf: TranslatorOf,
+  { translatorOf, route = episodeRoute(record.slug) }: PageContext,
 ): Promise<EpisodeContent> {
   const drawer = await translatorOf('contextDrawer');
   const episode: EpisodeContext = {
     episode: record.slug,
+    route,
     locale,
     placed: placeSections<Slide>(record.sections).flat(),
     referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },

@@ -9,10 +9,11 @@ import { TableOfContents, type TocLabels } from '@/components/table-of-contents/
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
+import { episodeRoute } from '@/lib/routes';
 import type { TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
+import type { ReactNode } from 'react';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { eyebrowsOf, INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
@@ -88,7 +89,7 @@ function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly Loca
 function titleSlideOf(
   content: EpisodeContent,
   page: PageHeader,
-  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels'>,
+  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'position'>,
 ): TitleSlideProps {
   return {
     title: content.title,
@@ -103,7 +104,7 @@ function titleSlideOf(
 
 function EpisodeToc(props: {
   locale: Locale;
-  slug: EpisodesPathSlug;
+  route: string;
   sections: readonly TocSection[];
   minutes: number;
   labels: TocLabels;
@@ -112,7 +113,7 @@ function EpisodeToc(props: {
     <aside data-slot="toc" className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem]">
       <TableOfContents
         locale={props.locale}
-        route={episodeRoute(props.slug)}
+        route={props.route}
         sections={props.sections}
         total={props.minutes}
         targetAttribute="data-slide"
@@ -146,11 +147,39 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
   return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
 }
 
+/** What an Event adds around an Episode it presents: its header above the Title slide, its Playlist walk after the last Slide. */
+export interface EpisodeFrame {
+  /** The logical path the page is served at under the Event; the contents and Slide links point there. */
+  readonly route: string;
+  readonly header: ReactNode;
+  readonly footer: ReactNode;
+  /** The Episode's place in the Playlist, "Episode 2 of 3", under the title. */
+  readonly position: string;
+}
+
+/** How the page's Slide headers render: the Episode's header mode and entrance, and each page Slide's Eyebrow. */
+async function pageHeaderOf(
+  content: EpisodeContent,
+  locale: Locale,
+  sections: readonly TocSection[],
+): Promise<PageHeader> {
+  return {
+    mode: content.header,
+    entrance: content.entrance,
+    eyebrows: await eyebrowsFor(locale, content.header, sections),
+  };
+}
+
+/** The Episode at its own URL: no Event frame around it. */
+const OWN_PAGE: Partial<EpisodeFrame> = {};
+
 interface EpisodePageContainerProps {
   locale: Locale;
   episode: EpisodeComposition;
   /** The Episode's video in this locale, from its metadata record; none for a tooling page or before upload. */
   youtubeId?: string;
+  /** Present when an Event presents the Episode at its own URL; absent on `/episodes/<slug>/`. */
+  frame?: Partial<EpisodeFrame>;
 }
 
 /**
@@ -159,18 +188,19 @@ interface EpisodePageContainerProps {
  * `h1`, each Section's wrapper and anchors, the table of contents and the
  * Context drawer. It walks the Episode once (`placeSections`) and every one of them
  * reads that list, so no id is derived twice and none can drift. It also
- * provides the page's one URL-state service (FE-001 §2).
+ * provides the page's one URL-state service (FE-001 §2). Under an Event, the
+ * frame's header and Playlist walk sit around the Content area, and the
+ * contents and Slide links point at the Event's URL for the Episode.
  */
-export async function EpisodePageContainer({ locale, episode, youtubeId }: EpisodePageContainerProps) {
-  const content = await recordContent(episode, locale, translatorOf(locale));
+export async function EpisodePageContainer(props: EpisodePageContainerProps) {
+  const { locale, episode, youtubeId, frame = OWN_PAGE } = props;
+  const route = frame.route ?? episodeRoute(episode.slug);
+  const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), route });
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
-  const page: PageHeader = {
-    mode: content.header,
-    entrance: content.entrance,
-    eyebrows: await eyebrowsFor(locale, content.header, sections),
-  };
+  const page = await pageHeaderOf(content, locale, sections);
   const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
+  const titleSlide = titleSlideOf(content, page, { youtubeId, talkLabels, position: frame.position });
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (
@@ -180,8 +210,10 @@ export async function EpisodePageContainer({ locale, episode, youtubeId }: Episo
         data-episode={episode.slug}
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
-        <EpisodeToc locale={locale} slug={episode.slug} sections={sections} minutes={minutes} labels={tocLabels} />
-        <SlideColumn titleSlide={titleSlideOf(content, page, { youtubeId, talkLabels })} slides={slides} page={page} />
+        <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
+        {frame.header}
+        <SlideColumn titleSlide={titleSlide} slides={slides} page={page} />
+        {frame.footer}
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>

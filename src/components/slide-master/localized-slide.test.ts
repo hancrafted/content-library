@@ -193,6 +193,18 @@ describe('success cases', () => {
     expect(hrefs).toEqual(expected);
   });
 
+  it('links each Slide slug on the page an Event presents the Episode at, so the attendee stays under the Event', () => {
+    // ARRANGE
+    const route = '/events/2026-10-23-axel-agentic-workflow/episodes/page-template';
+    const expected = `/de${route}#foundations--why-a-template`;
+    const episode = { ...episodeOf('de', [[foundations, whyATemplate, visual]]), route };
+    // ACT
+    const kit = kitOf(localizeSlide(episode.placed[2] as never, episode));
+    const href = kit.slideHref('why-a-template');
+    // ASSERT
+    expect(href).toBe(expected);
+  });
+
   it("returns a key's raw string, placeholders unfilled, for a client component to fill", () => {
     // ARRANGE
     const expected = 'Show all {count}';

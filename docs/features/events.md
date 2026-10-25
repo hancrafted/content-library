@@ -21,9 +21,14 @@ The records hold no text. The store refuses a bad record when it loads, so the b
 
 - `/events` and `/de/events`: the list, one card per Event whose Playlist is public (name, date, Episode count).
 - `/events/<event-slug>` and `/de/events/<event-slug>`: the Event's page (`src/components/pages/event-page.tsx`): breadcrumb, title, the facts line (kind, date and time, location, Audience, Episode count, total reading time), the description, the past notice, the Start button, then its Playlist's Episodes as a numbered list of compact Episode cards, the first emphasised. Each card opens the Episode under the Event, `/events/<event-slug>/episodes/<episode-slug>/`.
-- The path set is closed at build time from `EVENT_SLUGS` (`src/lib/routes.ts`, FE-005), a hand-kept list the store's tests check against the Event records.
+- `/events/<event-slug>/episodes/<episode-slug>/` and its `/de` twin: an Episode as the Event presents it (`src/components/pages/event-episode-page.tsx`), described below.
+- The Event path set is closed at build time from `EVENT_SLUGS` (`src/lib/routes.ts`, FE-005), a hand-kept list the store's tests check against the Event records. The Event-scoped Episode path set comes from the Playlists themselves (`eventEpisodeParams`): every listed Episode that has a page, nothing else.
 
-Both are in the sitemap with canonical and hreflang, and the header has one Events entry.
+The list and the Event pages are in the sitemap with canonical and hreflang, and the header has one Events entry.
+
+**Event-scoped Episode page.** The Episode's own page through the one container (FE-002), with the Event around it: the breadcrumb (Events / the Event / the Episode) and, for a past Event, the past notice above the Title slide; "Episode n of m" under the title; after the last Slide, the previous and next Episode of the Playlist, and on the last Episode a way back to the Event instead of a next one (`src/components/events/event-episode-chrome.tsx`). The count is the whole Playlist; the walk steps over an Episode with no page yet (`playlistPlace`, `src/lib/events.pure.ts`). The table of contents and the Slides' `slideHref` links stay on the Event's URL.
+
+Search: a public, published Episode under an Event points its canonical at its own `/episodes/<slug>/` page, carries no hreflang and no structured data, and is indexable; any other Episode under an Event (upcoming, or unlisted) is `noindex` with itself as canonical (`pageMetadata`, `src/lib/page-metadata.pure.ts`). No Event-scoped Episode page is in the sitemap. These pages are not in `PAGES`; `tests/post-build/events.build.test.ts` walks them from the Playlists.
 
 **Past Event.** An Event whose date lies before the build day (`BUILD_DAY`, `src/lib/build-day.ts`) shows one fixed notice above its Playlist: the content is kept up to date and may differ from the recording. Past is derived, never stored, so a page is as fresh as the last deploy. An upcoming Event shows none.
 

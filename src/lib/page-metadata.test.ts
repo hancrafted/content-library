@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { isNoindex, pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
 
+const UNDER_EVENT = { event: '2026-10-23-axel-agentic-workflow', episode: 'ai-attention-span' } as const;
+
 /** An Episode's copy as its record hands it to the route. */
 const COPY = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
 
@@ -188,9 +190,39 @@ describe('success cases', () => {
     // ASSERT
     expect(card.alternateLocale).toBe(expected);
   });
+  it('A public Episode under an Event points its canonical at its own /episodes/ page', () => {
+    // ARRANGE
+    const expected = {
+      canonical: '/de/episodes/ai-attention-span',
+      languages: undefined,
+      robots: undefined,
+      card: '/de/episodes/ai-attention-span',
+    };
+    // ACT
+    const metadata = pageMetadata(UNDER_EVENT, 'de', { ...COPY, status: 'published', visibility: 'public' });
+    // ASSERT
+    expect({
+      canonical: metadata.alternates?.canonical,
+      languages: metadata.alternates?.languages,
+      robots: metadata.robots,
+      card: metadata.openGraph?.url,
+    }).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('keeps an Event-scoped Episode page out of search, canonical to itself, when its facts are missing', () => {
+    // ARRANGE
+    const expected = {
+      canonical: '/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
+      robots: { index: false },
+    };
+    // ACT
+    const metadata = pageMetadata(UNDER_EVENT, 'en', COPY);
+    // ASSERT
+    expect({ canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
+  });
+
   it('rejects a SITE_URL that is not an absolute URL', () => {
     // ARRANGE
     const env = { SITE_URL: 'hancrafted.github.io/content-library' };
@@ -245,5 +277,20 @@ describe('edge cases', () => {
     ];
     // ASSERT
     expect(results).toEqual([true, true, false, false, false]);
+  });
+  it('keeps an upcoming or unlisted Episode under an Event out of search, canonical to itself', () => {
+    // ARRANGE
+    const self = '/de/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span';
+    const expected = [
+      { canonical: self, robots: { index: false } },
+      { canonical: self, robots: { index: false } },
+    ];
+    // ACT
+    const seen = [
+      pageMetadata(UNDER_EVENT, 'de', { ...COPY, status: 'upcoming', visibility: 'public' }),
+      pageMetadata(UNDER_EVENT, 'de', { ...COPY, status: 'published', visibility: 'unlisted' }),
+    ].map((metadata) => ({ canonical: metadata.alternates?.canonical, robots: metadata.robots }));
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 });
