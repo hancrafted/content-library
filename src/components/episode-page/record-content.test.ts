@@ -63,6 +63,27 @@ const RECORD = episode({
   sections: [[foundations, whyATemplate, visual], [nextSteps]],
 });
 
+// One pool Slide, held by reference: its author names the sibling by the slug they wrote.
+const lostMiddle = slide({ slug: 'the-lost-middle', messages: WHY, content: () => null });
+const linking = slide({
+  slug: 'why-context-rots',
+  messages: VISUAL,
+  content: ({ slideHref }) => createElement('a', { href: slideHref('the-lost-middle') }, 'the lost middle'),
+});
+const optional = slide({
+  slug: 'see-also',
+  messages: VISUAL,
+  content: ({ slideHref }) => {
+    const href = slideHref('the-lost-middle', { fallback: 'text' });
+    return href === undefined ? 'the lost middle' : createElement('a', { href }, 'the lost middle');
+  },
+});
+const linkOf = async (record: ReturnType<typeof episode>, slug: string) => {
+  const { slides } = await recordContent(record, 'en', translatorOf('en'));
+  const placed = slides.find((localized) => localized.id.endsWith(slug));
+  return renderToStaticMarkup(placed?.content);
+};
+
 describe('success cases', () => {
   it("reads the Episode's own title and caption in the page's locale", async () => {
     // ARRANGE
@@ -155,6 +176,33 @@ describe('success cases', () => {
     const { slides } = await recordContent(record, 'en', translatorOf('en'));
     // ASSERT
     expect(slides[0].header).toEqual(expected);
+  });
+  it('A link between sibling Slides still works in an Episode whose siblings differ, and a missing sibling fails the build', async () => {
+    // ARRANGE
+    const nested = episode({
+      slug: 'page-template',
+      messages: EPISODE,
+      sections: [[foundations, linking, lostMiddle]],
+    });
+    const leading = episode({
+      slug: 'slide-master',
+      messages: EPISODE,
+      sections: [[lostMiddle], [nextSteps, linking]],
+    });
+    const missing = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, linking]] });
+    const expected = {
+      nested: '<a href="/episodes/page-template#foundations--the-lost-middle">the lost middle</a>',
+      leading: '<a href="/episodes/slide-master#the-lost-middle">the lost middle</a>',
+    };
+    // ACT
+    const result = {
+      nested: await linkOf(nested, 'why-context-rots'),
+      leading: await linkOf(leading, 'why-context-rots'),
+    };
+    const build = recordContent(missing, 'en', translatorOf('en'));
+    // ASSERT
+    expect(result).toEqual(expected);
+    await expect(build).rejects.toThrow(/the-lost-middle.*slides.*foundations--why-context-rots/);
   });
 });
 
@@ -257,5 +305,19 @@ describe('edge cases', () => {
     const named = (await recordContent(record, 'en', translatorOf('en'))).entrance;
     // ASSERT
     expect({ byDefault, named }).toEqual(expected);
+  });
+
+  it('renders a text-fallback link as plain text when the sibling is absent, and as a link when it is there', async () => {
+    // ARRANGE
+    const absent = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, optional]] });
+    const present = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, optional, lostMiddle]] });
+    const expected = {
+      absent: 'the lost middle',
+      present: '<a href="/episodes/slides#foundations--the-lost-middle">the lost middle</a>',
+    };
+    // ACT
+    const result = { absent: await linkOf(absent, 'see-also'), present: await linkOf(present, 'see-also') };
+    // ASSERT
+    expect(result).toEqual(expected);
   });
 });

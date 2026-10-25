@@ -1,5 +1,5 @@
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
-import type { PlacedListSlide, SlideLevel } from '@/lib/episode.pure';
+import { siblingAnchors, type PlacedListSlide, type SlideLevel } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { EpisodeSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
@@ -196,7 +196,7 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
   }
   const t = ownTranslator(slide.messages[episode.locale], episode.locale);
   const kit = slideKit(
-    { ...episode, anchors: new Map(episode.placed.map((placed) => [placed.slide.slug, placed.id])) },
+    { ...episode, anchors: siblingAnchors(episode.placed) },
     {
       t,
       level: 'h2',
@@ -224,7 +224,7 @@ export function localizeSlide(
   const shared = episode.header === 'shared';
   const notes = slide.notes.map((note) => note.slug);
   const kit = slideKit(
-    { ...episode, anchors: new Map(episode.placed.map((placed) => [placed.slide.slug, placed.id])) },
+    { ...episode, anchors: siblingAnchors(episode.placed) },
     {
       t,
       level,
