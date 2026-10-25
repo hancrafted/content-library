@@ -136,6 +136,12 @@ _Avoid_: Publish, migration, release
 **Design archive**: every promoted Episode's design Options, one page per Slide with the picked one marked and the feedback that chose it, kept to browse and reuse in later Episodes.
 _Avoid_: Spec archive, gallery
 
+**Hand fix**: a `fix(...)` commit that corrects content a Run or a person made (an Episode, a Slide, a wiki note), outside a Run's job. It always says where its lesson goes, in a Feeds trailer.
+_Avoid_: Patch, hotfix, manual edit
+
+**Feeds trailer**: the `Feeds:` line of a Hand fix's commit message: the path of the skill, template or guide that should have got it right, an issue URL, or `none: <reason>`. The commit-time gate refuses a Hand fix without one, and a path must exist.
+_Avoid_: Fix note, lesson line
+
 **Run**: one execution of an Episode's per-run pipeline, from its start to the moment it is finished or abandoned. An Episode can have many Runs, each one comparable with the others.
 _Avoid_: Session, execution, pipeline run
 
