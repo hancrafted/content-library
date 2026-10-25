@@ -1,9 +1,9 @@
 import { listEpisodes } from '@/components/episodes/episode-repository';
-import { findEpisode } from '@/components/episodes/registry';
+import { findPageRecord } from '@/components/episodes/tooling-pages';
 
 import type { EpisodeStatus } from '@/lib/episode-metadata.pure';
 import { placeSections, type SlideOutline } from '@/lib/episode.pure';
-import { EPISODE_SLUGS } from '@/lib/routes';
+import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
@@ -51,27 +51,27 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
 }
 
 /**
- * The registered Episodes whose anchors are bound: every one but an upcoming
+ * The pages under `/episodes/` whose anchors are bound: every one but an upcoming
  * Episode, whose anchors bind when it is published (docs/features/episode-publishing.md).
- * A layout reference has no metadata and is always bound.
+ * A tooling page has no status and is always bound.
  */
 function boundSlugs(
-  registered: readonly (typeof EPISODE_SLUGS)[number][],
+  registered: readonly EpisodesPathSlug[],
   episodes: readonly { slug: string; status: EpisodeStatus }[],
-): (typeof EPISODE_SLUGS)[number][] {
+): EpisodesPathSlug[] {
   const upcoming = episodes.filter(({ status }) => status === 'upcoming').map(({ slug }) => slug);
   return registered.filter((slug) => !upcoming.includes(slug));
 }
 
 /** The anchors the walk produces for one Episode, as the Episode page does: its record's Section lists. */
-function producedAnchors(slug: (typeof EPISODE_SLUGS)[number]): string[] {
-  return placeSections<SlideOutline>(findEpisode(slug).sections).flatMap((section) => section.map(({ id }) => id));
+function producedAnchors(slug: EpisodesPathSlug): string[] {
+  return placeSections<SlideOutline>(findPageRecord(slug).sections).flatMap((section) => section.map(({ id }) => id));
 }
 
 describe('success cases', () => {
   it('still produces every published anchor of every registered Episode', async () => {
     // ARRANGE
-    const cases = boundSlugs(EPISODE_SLUGS, listEpisodes());
+    const cases = boundSlugs(EPISODES_PATH_SLUGS, listEpisodes());
     // ACT
     const lostPerEpisode = await Promise.all(
       cases.map(async (slug) => {
@@ -87,7 +87,7 @@ describe('success cases', () => {
   it('keeps each published-anchors.json a sorted array of unique strings', async () => {
     // ARRANGE
     const snapshots = await Promise.all(
-      boundSlugs(EPISODE_SLUGS, listEpisodes()).map((slug) => publishedAnchorsOf(slug, producedAnchors(slug))),
+      boundSlugs(EPISODES_PATH_SLUGS, listEpisodes()).map((slug) => publishedAnchorsOf(slug, producedAnchors(slug))),
     );
     // ACT
     const unsorted = snapshots.filter((anchors) => anchors.join() !== [...new Set(anchors)].sort().join());

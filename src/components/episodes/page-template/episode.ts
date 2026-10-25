@@ -12,8 +12,9 @@ import { whyATemplate } from './slides/why-a-template/slide';
  * Slide is one folder under `slides/`, named after its slug, holding its server
  * entry, client widgets, CSS and its own Translation files. The Episode's own
  * title, caption and description sit in `i18n/`. Copying a Slide in from
- * another Episode is one import and one list entry. Every Slide layout is
- * shown in the `slide-layouts` Episode.
+ * another Episode is one import and one list entry. A tooling page, not an
+ * Episode: the Slide layouts are the frame components in `slide-master/` and
+ * the Slide library.
  *
  * The Slide wrapper renders every Slide's header (Eyebrow, title, caption)
  * from the Slide's own `title` and `caption`, and types it in once, so a Scene

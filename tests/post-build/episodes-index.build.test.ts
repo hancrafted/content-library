@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
-import { EPISODE_SLUGS, episodeRoute, legacyEpisodeRoute, ROUTES } from '../../src/lib/routes';
+import { episodeRoute, EPISODES_PATH_SLUGS, legacyEpisodeRoute, ROUTES } from '../../src/lib/routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
@@ -186,7 +186,7 @@ describe('/episodes index page', () => {
 });
 
 describe('legacy /episode/<slug> stubs', () => {
-  const STUB_PAGES = EPISODE_SLUGS.flatMap((slug) =>
+  const STUB_PAGES = EPISODES_PATH_SLUGS.flatMap((slug) =>
     LOCALES.map((locale) => ({ slug, locale, legacyUrl: localizePath(legacyEpisodeRoute(slug), locale) })),
   );
 

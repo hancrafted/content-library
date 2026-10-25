@@ -1,11 +1,11 @@
 import { localizeSlide } from '@/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/components/slide-master/slide';
 import { placeSections } from '@/lib/episode.pure';
-import { EPISODE_SLUGS, type EpisodeSlug } from '@/lib/routes';
+import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { findEpisode } from './registry';
+import { findPageRecord } from './tooling-pages';
 
 /*
  * A copied Slide must never break `aria-labelledby` (#51): the same layout
@@ -15,14 +15,14 @@ import { findEpisode } from './registry';
  */
 
 interface PlacedSlide {
-  readonly episode: EpisodeSlug;
+  readonly episode: EpisodesPathSlug;
   readonly slide: Slide;
 }
 
-/** Every Slide of every registered Episode. */
+/** Every Slide of every registered Episode and tooling page. */
 function allSlides(): PlacedSlide[] {
-  return EPISODE_SLUGS.flatMap((episode) =>
-    findEpisode(episode)
+  return EPISODES_PATH_SLUGS.flatMap((episode) =>
+    findPageRecord(episode)
       .sections.flat()
       .map((slide) => ({ episode, slide })),
   );
@@ -30,10 +30,10 @@ function allSlides(): PlacedSlide[] {
 
 /** The Slide's Scene as the page renders it in English, localized into its own Episode. */
 function scene({ episode, slide }: PlacedSlide) {
-  const placed = placeSections<Slide>(findEpisode(episode).sections).flat();
+  const placed = placeSections<Slide>(findPageRecord(episode).sections).flat();
   const own = placed.find((entry) => entry.slide === slide);
   if (own === undefined) throw new Error(`No Slide "${slide.slug}" in "${episode}".`);
-  const header = headerModeOf(findEpisode(episode));
+  const header = headerModeOf(findPageRecord(episode));
   return localizeSlide(own, {
     episode,
     locale: 'en',
@@ -85,13 +85,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('walks every slide-master and slide-layouts Slide, so an empty walk cannot pass', () => {
+  it('walks every slide-master Slide, so an empty walk cannot pass', () => {
     // ARRANGE
-    const expected = { 'slide-layouts': 3, 'slide-master': 20 };
+    const expected = 20;
     // ACT
-    const slides = allSlides();
-    const count = (episode: EpisodeSlug) => slides.filter((placed) => placed.episode === episode).length;
+    const count = allSlides().filter((placed) => placed.episode === 'slide-master').length;
     // ASSERT
-    expect({ 'slide-layouts': count('slide-layouts'), 'slide-master': count('slide-master') }).toEqual(expected);
+    expect(count).toBe(expected);
   });
 });

@@ -34,7 +34,7 @@ type PageT = Awaited<ReturnType<typeof getTranslations<'episodesPage'>>>;
 const REFERENCE_LINK =
   'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
 
-/** The layout references are not content, so they sit under the browse grid: the page template, the Slide master, the Slides gallery. */
+/** The tooling pages are no Episodes, so they sit under the browse grid: the page template, the Slide master, the Slides gallery. */
 function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
   const links = [
     { route: episodeRoute('page-template'), icon: Layers, label: t('references.pageTemplate') },
@@ -59,7 +59,7 @@ function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
 
 /**
  * The /episodes index page (FE-007 §1): lists every published Episode, and in dev mode
- * also lists in-progress staging Episodes as a GUI entry point (#85). The layout references close the page.
+ * also lists in-progress staging Episodes as a GUI entry point (#85). The tooling pages close the page.
  */
 export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
   const isDev = process.env.NODE_ENV === 'development';

@@ -7,11 +7,11 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
+import { episodeRoute, EPISODES_PATH_SLUGS } from '../../src/lib/routes';
 import { exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
 
-const PAGES = EPISODE_SLUGS.flatMap((slug) =>
+const PAGES = EPISODES_PATH_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 

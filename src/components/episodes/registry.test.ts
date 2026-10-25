@@ -71,7 +71,6 @@ const COMPOSITION = [
 /** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
 const HEADER_MODES = [
   { slug: 'ai-token-economy', header: 'authored' },
-  { slug: 'page-template', header: 'shared' },
   { slug: 'never-too-early-sales', header: 'shared' },
   { slug: 'onboard-ai-every-time', header: 'shared' },
   { slug: 'ai-attention-span', header: 'shared' },
@@ -126,19 +125,19 @@ describe('success cases', () => {
 
   it("reads an Episode's German text from its own folder", () => {
     // ARRANGE
-    const expected = 'Seitenvorlage';
+    const expected = 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst';
     // ACT
-    const { title } = findEpisode('page-template').messages.de;
+    const { title } = findEpisode('ai-attention-span').messages.de;
     // ASSERT
     expect(title).toBe(expected);
   });
 
   it('hands the page metadata and the landing card one Episode text in the locale asked for', () => {
     // ARRANGE
-    const expectedTitle = 'Seitenvorlage';
+    const expectedTitle = 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst';
     const expectedKeys = ['caption', 'description', 'title'];
     // ACT
-    const copy = episodeCopy('page-template', 'de');
+    const copy = episodeCopy('ai-attention-span', 'de');
     // ASSERT
     expect(copy.title).toBe(expectedTitle);
     expect(Object.keys(copy).sort()).toEqual(expectedKeys);
@@ -198,6 +197,20 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it.each(['page-template', 'slide-master', 'slides'])(
+    'keeps the tooling page %s out of the Episode registry, so it is no Episode',
+    (slug) => {
+      // ARRANGE
+      const expected = false;
+      // ACT
+      const valid = isEpisodeSlug(slug);
+      const lookup = () => findEpisode(slug);
+      // ASSERT
+      expect(valid).toBe(expected);
+      expect(lookup).toThrow();
+    },
+  );
+
   it.each(EPISODE_SLUGS)('gives %s at least one Section, each holding at least its opener', (slug) => {
     // ARRANGE
     const { sections } = findEpisode(slug);

@@ -9,7 +9,7 @@ import { TableOfContents, type TocLabels } from '@/components/table-of-contents/
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
 import type { TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
@@ -103,7 +103,7 @@ function titleSlideOf(
 
 function EpisodeToc(props: {
   locale: Locale;
-  slug: EpisodeSlug;
+  slug: EpisodesPathSlug;
   sections: readonly TocSection[];
   minutes: number;
   labels: TocLabels;

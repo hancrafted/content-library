@@ -30,7 +30,7 @@ function PartHeading({ children }: { children: string }) {
 
 /**
  * The landing's Episodes section: a Spotlight of the hottest
- * published Episodes to click straight into, plus a link to browse all Episodes; the layout references sit on /episodes.
+ * published Episodes to click straight into, plus a link to browse all Episodes; the tooling pages sit on /episodes.
  */
 export async function EpisodesSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing' });
