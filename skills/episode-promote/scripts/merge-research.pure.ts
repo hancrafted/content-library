@@ -64,7 +64,7 @@ export function mergeResearch({ retired, into, files }: MergeInput): Merge {
   const writes: Record<string, string> = {};
   for (const [path, text] of Object.entries(files)) {
     if (path === to || path.startsWith(`${folder}/`)) continue;
-    const repointed = text.replaceAll(from, to).replace(citation, into);
+    const repointed = text.replaceAll(folder, to.slice(0, -'/research.md'.length)).replace(citation, into);
     if (repointed !== text) writes[path] = repointed;
   }
   writes[to] = withSupersedes(files[to], [...supersededBy(files[from]), retired]);

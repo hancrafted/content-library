@@ -47,7 +47,7 @@ if (command === 'list') {
     // A merge retires an id into its kept question's `supersedes` line; that id is never handed out again.
     const retired = files.flatMap(({ markdown }) => {
       const front = readFrontmatter(markdown);
-      const supersedes = 'reason' in front ? undefined : (front.data as { supersedes?: unknown }).supersedes;
+      const supersedes = 'reason' in front ? undefined : (front.data as { supersedes?: unknown } | null)?.supersedes;
       return Array.isArray(supersedes) ? supersedes.map(String) : [];
     });
     const ids = [...held, ...retired];
