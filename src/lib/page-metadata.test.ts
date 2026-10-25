@@ -22,9 +22,9 @@ describe('success cases', () => {
 
   it('points the canonical at the page in its own locale', () => {
     // ARRANGE
-    const expected = '/de/episodes/page-template';
+    const expected = '/de/episodes/ai-token-economy';
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, 'de', COPY);
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, 'de', COPY);
     // ASSERT
     expect(metadata.alternates?.canonical).toBe(expected);
   });
@@ -32,13 +32,13 @@ describe('success cases', () => {
   it('lists every locale and x-default as alternates, identical from either locale', () => {
     // ARRANGE
     const expected = {
-      en: '/episodes/page-template',
-      de: '/de/episodes/page-template',
-      'x-default': '/episodes/page-template',
+      en: '/episodes/ai-token-economy',
+      de: '/de/episodes/ai-token-economy',
+      'x-default': '/episodes/ai-token-economy',
     };
     // ACT
-    const fromEnglish = pageMetadata({ episode: 'page-template' }, 'en', COPY).alternates?.languages;
-    const fromGerman = pageMetadata({ episode: 'page-template' }, 'de', COPY).alternates?.languages;
+    const fromEnglish = pageMetadata({ episode: 'ai-token-economy' }, 'en', COPY).alternates?.languages;
+    const fromGerman = pageMetadata({ episode: 'ai-token-economy' }, 'de', COPY).alternates?.languages;
     // ASSERT
     expect(fromEnglish).toEqual(expected);
     expect(fromGerman).toEqual(expected);
@@ -48,7 +48,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, 'de', COPY);
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, 'de', COPY);
     // ASSERT
     expect({ title: metadata.title, description: metadata.description }).toEqual(expected);
   });
@@ -121,7 +121,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { index: false };
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, locale, { ...COPY, status: 'upcoming' });
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, locale, { ...COPY, status: 'upcoming' });
     // ASSERT
     expect(metadata.robots).toEqual(expected);
   });
@@ -130,7 +130,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = undefined;
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, 'en', { ...COPY, status });
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, 'en', { ...COPY, status });
     // ASSERT
     expect(metadata.robots).toBe(expected);
   });
@@ -154,21 +154,30 @@ describe('success cases', () => {
     // ARRANGE
     const copy = { ...COPY, publishedOn: '2026-10-20' as const };
     // ACT
-    const card = pageMetadata({ episode: 'page-template' }, 'en', copy).openGraph as Record<string, unknown>;
+    const card = pageMetadata({ episode: 'ai-token-economy' }, 'en', copy).openGraph as Record<string, unknown>;
     // ASSERT
-    expect(card).toMatchObject({ type: 'article', url: '/episodes/page-template', publishedTime: '2026-10-20' });
+    expect(card).toMatchObject({ type: 'article', url: '/episodes/ai-token-economy', publishedTime: '2026-10-20' });
   });
 
   it('repeats title and description on the card and falls back to the site-wide 1200x630 image', () => {
     // ARRANGE
     const expectedImage = { url: '/og-image.png', width: 1200, height: 630 };
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, 'de', COPY);
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, 'de', COPY);
     // ASSERT
     expect(metadata.openGraph).toMatchObject({ title: 'Seitenvorlage', description: 'Diese Episode kopieren.' });
     expect(metadata.openGraph?.images).toEqual([expect.objectContaining(expectedImage)]);
     expect(metadata.twitter).toMatchObject({ card: 'summary_large_image', title: 'Seitenvorlage' });
     expect(metadata.twitter?.images).toEqual(['/og-image.png']);
+  });
+
+  it('keeps a tooling page out of search, canonical at its own URL under /episodes/', () => {
+    // ARRANGE
+    const expected = { canonical: '/de/episodes/slide-master', robots: { index: false } };
+    // ACT
+    const metadata = pageMetadata({ tooling: 'slide-master' }, 'de', COPY);
+    // ASSERT
+    expect({ canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
   });
 
   it('names no alternate locale on an English-only page', () => {
@@ -225,7 +234,7 @@ describe('edge cases', () => {
 
   it('keeps the dashboard and an upcoming Episode out of search, and every other page in', () => {
     // ARRANGE
-    const episode = { episode: 'page-template' } as const;
+    const episode = { episode: 'ai-token-economy' } as const;
     // ACT
     const results = [
       isNoindex('dashboard'),

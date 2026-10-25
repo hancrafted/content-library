@@ -1,5 +1,5 @@
-// Post-build check of the Slides reference Episode (/episodes/slides): one Section per cornerstone, each Slide with its
-// own anchor and the Episode chrome, and the layout references moved from the landing page to the bottom of /episodes.
+// Post-build check of the Slides tooling page (/episodes/slides): one Section per cornerstone, each Slide with its
+// own anchor and the Episode chrome, and the tooling pages moved from the landing page to the bottom of /episodes.
 
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
@@ -39,7 +39,7 @@ describe('/episodes/slides', () => {
   );
 });
 
-describe('the layout references', () => {
+describe('the tooling pages', () => {
   it.each(LOCALES)('sit at the bottom of /episodes, the Slides Episode among them, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.episodes, locale));

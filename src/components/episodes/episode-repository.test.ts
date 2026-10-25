@@ -1,5 +1,6 @@
-import { FEATURED, LAYOUT_REFERENCES } from '@/lib/episode-overview';
+import { FEATURED } from '@/lib/episode-overview';
 import { EPISODE_SLUGS } from '@/lib/routes';
+import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -14,9 +15,9 @@ const EPISODES_DIR = path.join(process.cwd(), 'src/components/episodes');
 const METADATA_FILE = 'episode-metadata.ts';
 const KEBAB_CASE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** Every Episode folder on disk, layout references left out: what the overview must list. */
+/** Every Episode folder on disk, tooling pages left out: what the overview must list. */
 function episodeFolders(): string[] {
-  const layout: readonly string[] = LAYOUT_REFERENCES;
+  const layout: readonly string[] = TOOLING_SLUGS;
   return readdirSync(EPISODES_DIR, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && !layout.includes(entry.name))
     .map((entry) => entry.name)
@@ -41,9 +42,9 @@ describe('success cases', () => {
     expect(listed).toEqual(expected);
   });
 
-  it('lists every registered Episode but the layout references, whatever its status', () => {
+  it('lists every registered Episode, whatever its status', () => {
     // ARRANGE
-    const expected = EPISODE_SLUGS.filter((slug) => !(LAYOUT_REFERENCES as readonly string[]).includes(slug)).sort();
+    const expected = [...EPISODE_SLUGS].sort();
     // ACT
     const withPage = listEpisodes()
       .filter(({ slug }) => hasPage(slug))
@@ -134,14 +135,18 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it.each(LAYOUT_REFERENCES)('counts the layout reference %s as published, so it stays indexable', (slug) => {
-    // ARRANGE
-    const expected = 'published';
-    // ACT
-    const status = episodeStatus(slug);
-    // ASSERT
-    expect(status).toBe(expected);
-  });
+  it.each(['page-template', 'slide-master', 'slides'])(
+    'lists no tooling page in the overview or Upcoming Episodes: %s is no Episode',
+    (slug) => {
+      // ARRANGE
+      const expected = { listed: false, page: false };
+      // ACT
+      const listed = listEpisodes().some((episode) => episode.slug === slug);
+      const page = hasPage(slug);
+      // ASSERT
+      expect({ listed, page }).toEqual(expected);
+    },
+  );
 
   it.each(listEpisodes().filter(({ slug }) => hasPage(slug)))(
     'reads the status of $slug from its metadata',

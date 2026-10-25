@@ -1,6 +1,6 @@
 import type { Locale } from '@/lib/locale.pure';
 import { localizePath } from '@/lib/locale.pure';
-import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
+import { episodeRoute, isEpisodesPathSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 /**
@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
  * Forwards with <meta http-equiv="refresh"> to /episodes/<slug> and declares the new URL canonical.
  */
 export function EpisodeStubPage({ slug, locale }: { slug: string; locale: Locale }) {
-  if (!isEpisodeSlug(slug)) notFound();
+  if (!isEpisodesPathSlug(slug)) notFound();
   const target = localizePath(episodeRoute(slug), locale);
 
   return (

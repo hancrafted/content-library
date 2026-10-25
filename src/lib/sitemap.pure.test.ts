@@ -75,6 +75,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it.each(['page-template', 'slide-master', 'slides'])('never lists the tooling page %s in either locale', (slug) => {
+    // ARRANGE
+    const tooling = [`${SITE}/episodes/${slug}/`, `${SITE}/de/episodes/${slug}/`];
+    // ACT
+    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
+    // ASSERT
+    expect(urls.filter((url) => tooling.includes(url))).toEqual([]);
+  });
+
   it('leaves out an upcoming Episode in both locales and keeps the published ones', () => {
     // ARRANGE
     const upcoming = EPISODE_SLUGS[0];

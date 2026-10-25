@@ -82,7 +82,7 @@ page-template/i18n/en.json              title, caption, description
 - Template: a string a client widget completes after the reader acts keeps a plain `{name}` placeholder (`"showAll": "Show all {count}"`, no ICU plural; keys are camelCase, never `show-all`). The Slide reads it with `template('showAll')` and passes it as a prop; the widget renders `fillTemplate(label, { count })`. `template` accepts only a string leaf of the Slide's own file (or subtree).
 - A Section of one Slide needs no extra key: its section slide holds `title` and `caption` like any other Slide.
 - A `tsc` error from `t`, `ref` or `target` means the Translation file or the declaration is wrong; fix it, never cast ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
-- `src/components/episodes/page-template/` is the copy source for a new Episode; `src/components/episodes/slide-layouts/` shows each Slide layout.
+- `src/components/episodes/page-template/` is the copy source for a new Episode; the frame components in `src/components/slide-master/` and the Slide library, `src/components/episodes/slide-master/`, hold the Slide layouts.
 
 ## Episode overview entries
 
@@ -116,4 +116,4 @@ A Workshop is a record in `src/lib/workshops.pure.ts` that holds no string ([Wor
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-`page-template`, `slide-layouts` and `slide-master` are layout references (`LAYOUT_REFERENCES`), not content: they are not in the Episode overview and need no metadata.
+`page-template`, `slide-master` and `slides` are tooling pages (`TOOLING_SLUGS` in `src/lib/tooling-pages.ts`, records in `src/components/episodes/tooling-pages.ts`), not Episodes: they are not in the Episode registry or overview, are `noindex`, stay out of the sitemap and need no metadata.

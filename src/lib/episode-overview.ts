@@ -49,20 +49,9 @@ export const FILTER_TAGS = [
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];
 
-/** Registered Episodes that are layout references, not content: never in the overview. */
-export const LAYOUT_REFERENCES = [
-  'page-template',
-  'slide-layouts',
-  'slide-master',
-  'slides',
-] as const satisfies readonly EpisodeSlug[];
-
-/** A registered Episode the overview lists: every one but the layout references. */
-export type ListedEpisodeSlug = Exclude<EpisodeSlug, (typeof LAYOUT_REFERENCES)[number]>;
-
 /** The Featured slots: published Episodes, lead first. Re-ranking is this one edit. */
 export const FEATURED = [
   'onboard-ai-every-time',
   'ai-attention-span',
   'ai-gives-you-more-work',
-] as const satisfies readonly [ListedEpisodeSlug, ListedEpisodeSlug, ListedEpisodeSlug];
+] as const satisfies readonly [EpisodeSlug, EpisodeSlug, EpisodeSlug];

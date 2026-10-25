@@ -10,7 +10,7 @@ export function episodeSlugStatus(slug: string): EpisodeStatus {
   return episodeStatus(findEpisode(slug).slug);
 }
 
-/** An Episode's release date, for the sitemap and the page metadata; undefined while upcoming or for a layout reference. */
+/** An Episode's release date, for the sitemap and the page metadata; undefined while upcoming. */
 export function episodeSlugPublishedOn(slug: string): IsoDate | undefined {
   return episodePublishedOn(findEpisode(slug).slug);
 }

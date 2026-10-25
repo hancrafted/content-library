@@ -1,4 +1,5 @@
-import { TAG_IDS, TAGS, type FormatId, type ListedEpisodeSlug, type TagId, type TagLook } from './episode-overview';
+import { TAG_IDS, TAGS, type FormatId, type TagId, type TagLook } from './episode-overview';
+import type { EpisodeSlug } from './routes';
 
 /*
  * What an Episode declares about itself for the Episode overview, in its own
@@ -18,7 +19,7 @@ interface SharedMetadata {
 
 /** An Episode that has a page: its slug is registered. */
 export interface PublishedEpisodeMetadata extends SharedMetadata {
-  readonly slug: ListedEpisodeSlug;
+  readonly slug: EpisodeSlug;
   readonly status: 'published';
   readonly publishedOn: IsoDate;
 }

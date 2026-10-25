@@ -8,7 +8,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import legacy from '../../src/design-system/legacy.json';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
+import { episodeRoute, EPISODES_PATH_SLUGS } from '../../src/lib/routes';
 import { exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles } from './stylesheets';
 
@@ -20,7 +20,7 @@ function episodeSelectors(css: string): string[] {
   return [...css.replace(/["']/g, '').matchAll(/\[data-episode=([^\]]+)\]/g)].map((match) => match[1]);
 }
 
-const EPISODE_PAGES = EPISODE_SLUGS.flatMap((slug) =>
+const EPISODE_PAGES = EPISODES_PATH_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ url: localizePath(episodeRoute(slug), locale) })),
 );
 

@@ -1,7 +1,7 @@
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import type { PlacedListSlide, SlideLevel } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import type { EpisodeSlug } from '@/lib/routes';
+import type { EpisodesPathSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
 import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
@@ -59,7 +59,7 @@ export type LocalizedSlide = Placement &
 
 /** What a Slide needs to know of the Episode page it is localized into: the same for every Slide. */
 export interface EpisodeContext {
-  readonly episode: EpisodeSlug;
+  readonly episode: EpisodesPathSlug;
   readonly locale: Locale;
   /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];

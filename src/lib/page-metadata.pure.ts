@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { TRANSLATIONS } from '../i18n/translations';
 import type { EpisodeStatus, IsoDate } from './episode-metadata.pure';
 import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
-import { isEpisodePage, pageLocales, routeOf, type PageRef } from './routes';
+import { isEpisodePage, isToolingPage, pageLocales, routeOf, type PageRef } from './routes';
 
 /** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
 const LOCAL_ORIGIN = 'http://localhost:3000';
@@ -43,9 +43,9 @@ export const OG_IMAGE = { url: '/og-image.png', width: 1200, height: 630 } as co
 
 const OG_LOCALES: Record<Locale, string> = { en: 'en_US', de: 'de_DE' };
 
-/** Whether a page is kept out of search: the dashboard, and an Episode still upcoming. Metadata and sitemap both ask. */
+/** Whether a page is kept out of search: the dashboard, a tooling page, and an Episode still upcoming. Metadata and sitemap both ask. */
 export function isNoindex(page: PageRef, status?: EpisodeStatus): boolean {
-  return page === 'dashboard' || status === 'upcoming';
+  return page === 'dashboard' || isToolingPage(page) || status === 'upcoming';
 }
 
 /** Open Graph and Twitter cards: the page's own title and description, the fallback image, its locale and the others. */

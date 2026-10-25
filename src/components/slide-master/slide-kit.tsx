@@ -1,6 +1,6 @@
 import type { SlideLevel } from '@/lib/episode.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
 import { ContextMarker } from './context-marker';
 import { ContextRef } from './context-ref';
@@ -21,7 +21,7 @@ export interface ReferenceLabels {
 
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
 export interface EpisodeKitInput {
-  readonly episode: EpisodeSlug;
+  readonly episode: EpisodesPathSlug;
   readonly locale: Locale;
   /** Each Slide slug's placed id, from the walk (`placeSections`): what `slideHref` links to. */
   readonly anchors: ReadonlyMap<string, string>;

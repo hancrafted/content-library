@@ -5,7 +5,7 @@ import { agenticWorkflowsSection } from './sections/agentic-workflows';
 import { contextWindowSection } from './sections/context-window';
 
 /*
- * The cornerstone Slides one by one (FE-002), a layout reference beside the page template and the Slide master: one
+ * The cornerstone Slides one by one (FE-002), a tooling page beside the page template and the Slide master: one
  * Section per cornerstone, each listing the ways it is shown. A change to a Shared visual is previewed here before it
  * reaches an Episode, the browser lane runs against it, and one Slide's anchor is a link to send on its own.
  */
