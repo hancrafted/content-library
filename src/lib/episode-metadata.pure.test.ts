@@ -5,6 +5,8 @@ import { episodeConceptProblems, lookOf, overviewOrder, type EpisodeMetadata } f
 const EPISODES: readonly EpisodeMetadata[] = [
   {
     slug: 'never-too-early-sales',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'foundations',
     concepts: ['sales'],
@@ -13,6 +15,8 @@ const EPISODES: readonly EpisodeMetadata[] = [
   },
   {
     slug: 'maintaining-markdown-for-ai',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'teardown',
     concepts: ['markdown-documentation', 'sales'],
@@ -21,6 +25,8 @@ const EPISODES: readonly EpisodeMetadata[] = [
   },
   {
     slug: 'ai-token-economy',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'foundations',
     concepts: ['ai-cost'],
@@ -29,6 +35,8 @@ const EPISODES: readonly EpisodeMetadata[] = [
   },
   {
     slug: 'rolling-out-ai',
+    type: 'standard',
+    visibility: 'public',
     status: 'upcoming',
     format: 'foundations',
     concepts: ['agentic-ai'],
@@ -36,6 +44,8 @@ const EPISODES: readonly EpisodeMetadata[] = [
   },
   {
     slug: 'ai-in-code-review',
+    type: 'standard',
+    visibility: 'public',
     status: 'upcoming',
     format: 'short',
     concepts: ['ai-adoption'],

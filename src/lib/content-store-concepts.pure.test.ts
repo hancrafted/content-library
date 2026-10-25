@@ -38,6 +38,8 @@ function concept(id: string, fields: ConceptFields = {}) {
 
 const EPISODE = {
   slug: 'never-too-early-sales',
+  type: 'standard',
+  visibility: 'public',
   status: 'published',
   format: 'foundations',
   concepts: ['sales'],
@@ -52,7 +54,8 @@ const VALID: RawContent = {
   },
   concepts: [concept('sales'), concept('ai-cost'), concept('startup-cash-flow', { broader: ['sales'] })],
   episodes: [EPISODE],
-  workshops: [],
+  events: [],
+  playlists: [],
   research: [],
   slideSources: [],
   slides: [],

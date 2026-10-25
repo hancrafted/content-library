@@ -5,3 +5,9 @@
 # Home for slug-rename redirects, so an old Episode URL keeps working. One rule per line, source then target, then 301:
 #   /episodes/old-slug/    /episodes/new-slug/    301
 #   /de/episodes/old-slug/ /de/episodes/new-slug/ 301
+
+# Workshops became Events (design-ADR 0016, Delivery contract): every old Workshop URL lands on its Event.
+/workshops/                                     /events/                                     301
+/de/workshops/                                  /de/events/                                  301
+/workshops/axel-agentic-workflow-2026-10-23/    /events/2026-10-23-axel-agentic-workflow/    301
+/de/workshops/axel-agentic-workflow-2026-10-23/ /de/events/2026-10-23-axel-agentic-workflow/ 301

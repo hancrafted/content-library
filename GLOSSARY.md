@@ -37,8 +37,17 @@ _Avoid_: Tags, categories, concepts (as a field name)
 **applyThemeFromConcept**: the field of an Episode's metadata that names one of its top Concepts, whose icon and accent its card draws.
 _Avoid_: Lead Tag, look
 
-**Workshop**: a dated, ordered set of Episodes, run as one event. It lists Episode slugs in the order to follow them and may list an upcoming Episode. It is not a playlist and has no status.
-_Avoid_: Playlist, course, series
+**Event**: a dated occasion of one kind (a workshop, a webinar) that presents one Playlist to an Audience. It owns no Slides, holds no text and has no visibility or status of its own: its Playlist's visibility is its own, and its date decides whether it is past.
+_Avoid_: Workshop (a kind of Event, not the record), session, booking
+
+**Playlist**: an ordered list of Episodes with a type and a Visibility, and nothing else. A Playlist of type event is made for exactly one Event and opens with its event-frame Episode; a standard Playlist is a curated list with no Event.
+_Avoid_: Agenda, course, series, collection
+
+**Event-frame Episode**: the Episode that holds one Event's agenda, scope and organisation, first in that Event's Playlist. It has no video, is always unlisted and always published, and is never in the Episode overview.
+_Avoid_: Event page (the Event's own page), agenda episode, intro
+
+**Visibility**: whether an Episode or a Playlist is listed and indexed: public, or unlisted. An unlisted Episode lives only under the Event whose Playlist presents it; unlisted is not private, since anyone with the URL can open it.
+_Avoid_: Private, hidden, draft, attendees-only
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
@@ -60,7 +69,7 @@ _Avoid_: Sitenav, sidebar
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and another Episode reuses a Slide by **Reference**, never by a copy. Its slug is unique across every Episode and the Slide pool; only a Title slide's may repeat. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and another Episode reuses a Slide by **Reference**, never by a hand copy; adapting it makes an **Instance**. Its slug is unique across every Episode and the Slide pool; only a Title slide's may repeat. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
 
 **Slide pool**: one flat folder of Slide folders, `src/components/slide-pool/`, holding every Slide a second Episode reuses. A Slide lives in its Episode's `slides/` until its first reuse, when `npm run slides:reuse` moves its folder there unchanged: slug, text and anchors stay, so no published URL moves.
@@ -68,6 +77,12 @@ _Avoid_: Shared slides, library (the Slide library is the Master slides), common
 
 **Reference (Slide)**: an Episode's listing of a pool Slide in one of its Sections: an import and a list entry, nothing copied. The Slide renders the same in every Episode that holds it; its anchor comes from its place in each, and so does the target of its `slideHref` link to a sibling: a sibling the Episode lacks fails the build unless the link falls back to plain text.
 _Avoid_: Link, alias, copy, symlink
+
+**Instance (Slide)**: a pool Slide adapted for one Episode: a copy in that Episode's own `slides/`, made by `npm run slides:adapt`, under a slug of its own (never its origin's) and marked with **copiedFrom**. It takes the place of the Episode's Reference, so the other Episodes keep the pool Slide; a sibling link to the origin's slug resolves to the Instance in its Episode. `npm run slides:settle` replaces an Instance no edit touched with the Reference again, and Promotion resolves an edited one.
+_Avoid_: Fork, variant, override, copy (unqualified)
+
+**copiedFrom**: an Instance's marker in its `slide.tsx`, `copiedFrom: { slug, commit }`: the pool Slide it was copied from and the commit it was copied at. Written by `npm run slides:adapt`, never by hand.
+_Avoid_: origin, parent, source (a Source is evidence)
 
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide

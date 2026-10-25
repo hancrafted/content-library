@@ -1,6 +1,7 @@
 import { ResearchPage, researchPageCopy } from '@/components/pages/research-page';
 import { pageMetadata } from '@/lib/page-metadata.pure';
-import { isResearchId, researchParams } from '@/lib/routes';
+import { isResearchId } from '@/lib/research-ids';
+import { researchParams } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 interface ResearchParams {

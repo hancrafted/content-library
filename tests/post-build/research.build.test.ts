@@ -6,9 +6,10 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CONFIDENCE_DEFINITIONS } from '../../src/lib/content-schemas.pure';
+import { CONFIDENCE_DEFINITIONS } from '../../src/lib/confidence.pure';
 import { localizePath } from '../../src/lib/locale.pure';
-import { conceptRoute, RESEARCH_IDS, researchRoute } from '../../src/lib/routes';
+import { RESEARCH_IDS } from '../../src/lib/research-ids';
+import { conceptRoute, researchRoute } from '../../src/lib/routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const page = (id: string) => exportedPage(localizePath(researchRoute(id), 'en'));

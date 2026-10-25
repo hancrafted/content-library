@@ -3,13 +3,15 @@ import type { Slide } from '@/components/slide-master/slide';
 import { loadContentStore, type ContentStore, type RawContent, type Refusal } from '@/lib/content-store.pure';
 import type { EpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
 import { CONCEPT_THEMES, type ListedEpisodeSlug } from '@/lib/episode-overview';
+import { EVENTS } from '@/lib/events.pure';
 import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
-import { EPISODE_SLUGS } from '@/lib/routes';
+import { PLAYLISTS } from '@/lib/playlists.pure';
+import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS, type UnlistedEpisodeSlug } from '@/lib/routes';
 import { EPISODES_DIR, readSlideFolders } from '@/lib/slide-folders';
-import { WORKSHOPS } from '@/lib/workshops.pure';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
 import { episodeMetadata as aiGivesYouMoreWork } from './ai-gives-you-more-work/episode-metadata';
 import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
+import { episodeMetadata as axelAgenticWorkflowAgenda } from './axel-agentic-workflow-agenda/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from './never-too-early-sales/episode-metadata';
 import { episodeMetadata as onboardAiEveryTime } from './onboard-ai-every-time/episode-metadata';
@@ -33,12 +35,17 @@ export const REGISTERED = {
   'ai-gives-you-more-work': aiGivesYouMoreWork,
 } as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
+/** Unlisted Episodes, by slug: each lives only under the Event whose Playlist presents it. */
+export const UNLISTED = {
+  'axel-agentic-workflow-agenda': axelAgenticWorkflowAgenda,
+} as const satisfies { readonly [S in UnlistedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
+
 /** Upcoming Episodes in the order the overview lists them. */
 export const UPCOMING: readonly UpcomingEpisodeMetadata[] = [];
 
 /** Every source every Speaker note in every Episode cites, flattened to one record each. */
 function slideSources(): RawContent['slideSources'] {
-  return EPISODE_SLUGS.flatMap((slug) => {
+  return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS].flatMap((slug) => {
     const episode = findEpisode(slug);
     const slides: readonly { slide: string; notes: Slide['notes'] }[] = [
       { slide: 'title', notes: episode.notes ?? [] },
@@ -67,7 +74,10 @@ function definitionSlides(): RawContent['definitionSlides'] {
   );
 }
 
-/** Every Slide folder, each marked when it holds its Episode's Title slide, whose slug is exempt from uniqueness. */
+/**
+ * Every Slide folder, each marked when it holds its Episode's Title slide, whose slug is exempt from uniqueness, and,
+ * for an instance, with the slug it was copied from. An instance lives in its own Episode's `slides/`.
+ */
 function slides(): RawContent['slides'] {
   const titles = new Set(
     EPISODE_SLUGS.flatMap((slug) => {
@@ -75,7 +85,19 @@ function slides(): RawContent['slides'] {
       return title === undefined ? [] : [`${EPISODES_DIR}/${slug}/slides/${title.slug}`];
     }),
   );
-  return readSlideFolders(process.cwd()).map((folder) => ({ ...folder, title: titles.has(folder.path) }));
+  const origins = new Map<string, string>(
+    EPISODE_SLUGS.flatMap((slug) =>
+      findEpisode(slug).sections.flatMap((section) =>
+        section.flatMap(({ slug: own, copiedFrom }) =>
+          copiedFrom === undefined ? [] : [[`${EPISODES_DIR}/${slug}/slides/${own}`, copiedFrom.slug] as const],
+        ),
+      ),
+    ),
+  );
+  return readSlideFolders(process.cwd()).map((folder) => {
+    const copiedFrom = origins.get(folder.path);
+    return { ...folder, title: titles.has(folder.path), ...(copiedFrom !== undefined && { copiedFrom }) };
+  });
 }
 
 /** The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy. */
@@ -84,8 +106,9 @@ export function rawContent(): RawContent {
     themes: CONCEPT_THEMES,
     concepts: readConceptFiles(process.cwd()),
     definitionSlides: definitionSlides(),
-    episodes: [...Object.values(REGISTERED), ...UPCOMING],
-    workshops: WORKSHOPS,
+    episodes: [...Object.values(REGISTERED), ...Object.values(UNLISTED), ...UPCOMING],
+    events: EVENTS,
+    playlists: PLAYLISTS,
     research: readResearchFiles(process.cwd()),
     slideSources: slideSources(),
     slides: slides(),

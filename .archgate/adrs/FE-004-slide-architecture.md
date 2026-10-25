@@ -126,7 +126,7 @@ For this project the map matters because handoffs run on agents with no session 
 2. **DO** add an Episode by copying `page-template/` and registering it. (Decision 3, Decision 4)
 3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, design-ADR-0008)
 4. **DO** promote a part a second Slide needs into `slide-shared/`. (Decision 3, Decision 6)
-5. **DO** reuse a Slide in another Episode with `npm run slides:reuse`, never by copying its folder. (Decision 3)
+5. **DO** reuse a Slide in another Episode with `npm run slides:reuse`, and adapt one with `npm run slides:adapt`, never by copying its folder. (Decision 3)
 6. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)
 7. **DO** keep interactivity in the smallest `*.client.tsx` leaf. (Decision 5)
 

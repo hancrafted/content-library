@@ -81,6 +81,8 @@ export interface CardContext {
   readonly youtubeId?: string;
   /** The Episode's Featured slot, 1 first; left off when it is not Featured. */
   readonly featuredRank?: number;
+  /** The logical path the card links to in place of the Episode's own page: an Event presents its Episodes at its own URLs. */
+  readonly route?: string;
   /** When true, upcoming Episodes with a page get a link (e.g. in dev mode GUI). */
   readonly linkDrafts?: boolean;
 }
@@ -114,10 +116,16 @@ function releaseFields(entry: CardEntry, locale: Locale): Pick<EpisodeCard, 'pub
   return { publishedOn: entry.publishedOn, releaseDate: releaseDateOf(entry.publishedOn, locale) };
 }
 
+/** Where the card links: the route handed in (an Event's own Episode page), else the Episode's own page when it has one. */
+function routeOf(entry: CardEntry, ctx: CardContext): string | undefined {
+  if (ctx.route !== undefined) return ctx.route;
+  return isEpisodeSlug(entry.slug) ? episodeRoute(entry.slug) : undefined;
+}
+
 function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {
   const isLinked = entry.status === 'published' || isDraftLinked(entry, ctx.linkDrafts);
-  if (!isLinked || !isEpisodeSlug(entry.slug)) return {};
-  const route = episodeRoute(entry.slug);
+  const route = routeOf(entry, ctx);
+  if (!isLinked || route === undefined) return {};
   return {
     route,
     href: localizePath(route, ctx.locale),

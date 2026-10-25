@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { EpisodeCard } from './episode-card.pure';
-import { agendaOf, startOf, totalMinutes } from './workshop-agenda.pure';
+import { startOf, totalMinutes } from './event-playlist.pure';
 
-/** A hand-written stand-in for the card fields the agenda reads. */
+/** A hand-written stand-in for the card fields the Playlist reads. */
 type Stub = Pick<EpisodeCard, 'slug' | 'route' | 'minutes'>;
 const linked = (slug: string, minutes?: number): Stub => ({
   slug,
@@ -31,26 +31,16 @@ describe('success cases', () => {
     // ASSERT
     expect({ step: start?.step, slug: start?.card.slug }).toEqual(expected);
   });
-
-  it('lists the cards in the order the Workshop teaches its Episodes', () => {
-    // ARRANGE
-    const cards = [linked('alpha'), linked('beta'), linked('gamma')];
-    const expected = ['gamma', 'alpha'];
-    // ACT
-    const agenda = agendaOf(['gamma', 'alpha'], cards);
-    // ASSERT
-    expect(agenda.map((card) => card.slug)).toEqual(expected);
-  });
 });
 
 describe('failure cases', () => {
-  it('names the Episode a Workshop lists that has no card', () => {
+  it('offers no start and no total for an empty Playlist', () => {
     // ARRANGE
-    const cards = [linked('alpha')];
+    const cards: Stub[] = [];
     // ACT
-    const build = () => agendaOf(['alpha', 'missing'], cards);
+    const seen = { start: startOf(cards), total: totalMinutes(cards) };
     // ASSERT
-    expect(build).toThrow('"missing"');
+    expect(seen).toEqual({ start: undefined, total: undefined });
   });
 });
 

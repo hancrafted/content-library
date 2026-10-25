@@ -37,22 +37,22 @@ export interface ReusePlan {
 export type ReuseResult =
   { readonly ok: true; readonly plan: ReusePlan } | { readonly ok: false; readonly reasons: readonly string[] };
 
-const SPECIFIER = /(\bfrom\s*|\bimport\s*\(?\s*)(['"])([^'"\n]+)\2/g;
-const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+export const SPECIFIER = /(\bfrom\s*|\bimport\s*\(?\s*)(['"])([^'"\n]+)\2/g;
+export const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const IMPORT_LINE = /^import [^;]*;$/gm;
 
 /** The repository path an import specifier names, or `undefined` for a package. */
-function resolveSpecifier(file: string, spec: string): string | undefined {
+export function resolveSpecifier(file: string, spec: string): string | undefined {
   if (spec.startsWith('@/')) return `src/${spec.slice(2)}`;
   if (spec.startsWith('.')) return posix.normalize(posix.join(posix.dirname(file), spec));
   return undefined;
 }
 
-function inside(path: string, folder: string): boolean {
+export function inside(path: string, folder: string): boolean {
   return path === folder || path.startsWith(`${folder}/`);
 }
 
-function aliasOf(path: string): string {
+export function aliasOf(path: string): string {
   return path.startsWith('src/') ? `@/${path.slice('src/'.length)}` : path;
 }
 
@@ -106,7 +106,7 @@ function repointedFiles(move: Move, files: readonly string[], repo: RepoView): R
 }
 
 /** The name a Slide's `slide.tsx` exports its Slide under: `export const <name> = slide(`. */
-function exportedName(entry: string): string | undefined {
+export function exportedName(entry: string): string | undefined {
   return /export const (\w+) = slide\(/.exec(entry)?.[1];
 }
 
@@ -121,7 +121,7 @@ function isTitleSlide(episode: string, slug: string, repo: RepoView): boolean {
 }
 
 /** The Section file with `name` imported from `spec` and appended to its list. */
-function withReference(section: string, name: string, spec: string): string | undefined {
+export function withReference(section: string, name: string, spec: string): string | undefined {
   const list = /(:\s*Section\s*=\s*\[)([\s\S]*?)(\]\s*;)/.exec(section);
   if (list === null) return undefined;
   const items = list[2].trimEnd().replace(/,$/, '');

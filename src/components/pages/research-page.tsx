@@ -2,14 +2,15 @@ import { contentStore } from '@/components/episodes/content-store';
 import { EvidenceBody } from '@/components/evidence/evidence-body';
 import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
 import { TRANSLATIONS } from '@/i18n/translations';
-import { CONFIDENCE_DEFINITIONS } from '@/lib/content-schemas.pure';
+import { CONFIDENCE_DEFINITIONS } from '@/lib/confidence.pure';
 import { evidenceTree } from '@/lib/evidence-markdown.pure';
 import { externalHref } from '@/lib/external-link.pure';
 import { localizePath } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
 import { sourceAnchor } from '@/lib/remark-citations.pure';
+import { isResearchId, type ResearchId } from '@/lib/research-ids';
 import type { ResearchRecord } from '@/lib/research-record.pure';
-import { conceptRoute, isResearchId, researchRoute, type ResearchId } from '@/lib/routes';
+import { conceptRoute, researchRoute } from '@/lib/routes';
 import Link from 'next/link';
 
 /*

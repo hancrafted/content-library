@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 export const PAGE_CONTAINER = 'mx-auto w-full max-w-6xl px-6 py-12 sm:py-16';
 
 /**
- * The title and one-line intro of a header-nav page: Episodes, Workshops, Content pipeline. The title is the page's
+ * The title and one-line intro of a header-nav page: Episodes, Events, Content pipeline. The title is the page's
  * one h1, set in the subheading role so the three read as one family; `children` sit under the intro.
  */
 export function PageHeader({ title, intro, children }: { title: string; intro: ReactNode; children?: ReactNode }) {

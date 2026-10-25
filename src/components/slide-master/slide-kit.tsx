@@ -1,6 +1,6 @@
 import type { SlideLevel } from '@/lib/episode.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
+import { episodePageRoute, type AnyEpisodeSlug } from '@/lib/routes';
 import type { ReactNode } from 'react';
 import { ContextMarker } from './context-marker';
 import { ContextRef } from './context-ref';
@@ -21,7 +21,7 @@ export interface ReferenceLabels {
 
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
 export interface EpisodeKitInput {
-  readonly episode: EpisodeSlug;
+  readonly episode: AnyEpisodeSlug;
   readonly locale: Locale;
   /** Each authored sibling slug's anchor in this Episode (`siblingAnchors`): what `slideHref` links to. */
   readonly anchors: ReadonlyMap<string, string>;
@@ -60,7 +60,9 @@ function slideHrefOf(episode: EpisodeKitInput, slideId: string): SlideHref {
   function slideHref(slug: string, options: SlideHrefOptions): string | undefined;
   function slideHref(slug: string, options?: SlideHrefOptions): string | undefined {
     const anchor = episode.anchors.get(slug);
-    if (anchor !== undefined) return localizePath(episodeRoute(episode.episode), episode.locale, anchor);
+    // The Episode's own page: an unlisted Episode has none, so a sibling link there throws until the kit knows the
+    // route the page is served at.
+    if (anchor !== undefined) return localizePath(episodePageRoute(episode.episode), episode.locale, anchor);
     if (options?.fallback === 'text') return undefined;
     throw new Error(`No Slide "${slug}" in "${episode.episode}" to link from "${slideId}".`);
   }

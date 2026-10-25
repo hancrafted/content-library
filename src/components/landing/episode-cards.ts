@@ -1,8 +1,9 @@
-import { featuredSlugs, hasPage, listEpisodes } from '@/components/episodes/episode-repository';
+import { allEpisodes, featuredSlugs, hasPage, listEpisodes } from '@/components/episodes/episode-repository';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { episodeMinutes } from '@/components/slide-master/localized-slide';
 import { overviewOrder, type EpisodeMetadata } from '@/lib/episode-metadata.pure';
 import type { Locale } from '@/lib/locale.pure';
+import { isAnyEpisodeSlug } from '@/lib/routes';
 import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
@@ -16,7 +17,7 @@ function minutesOf(entry: EpisodeMetadata, locale: Locale): number | undefined {
 
 /** The Episode's video id in this locale; none without a page or a video. */
 function youtubeOf(entry: EpisodeMetadata, locale: Locale): { youtubeId?: string } {
-  if (!hasPage(entry.slug)) return {};
+  if (!isAnyEpisodeSlug(entry.slug)) return {};
   const id = findEpisode(entry.slug).youtube?.[locale];
   return id === undefined ? {} : { youtubeId: id };
 }
@@ -57,4 +58,29 @@ export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions
       linkDrafts: options?.linkDrafts,
     }),
   );
+}
+
+/**
+ * The Episodes a Playlist presents, as localized cards in its order, each linking to the URL `routeOf` gives it (an
+ * Event's own Episode pages). Unlisted Episodes included; throws on a slug with no Episode, so the build fails rather
+ * than ships a gap.
+ */
+export async function playlistCards(
+  locale: Locale,
+  slugs: readonly string[],
+  routeOf: (slug: string) => string,
+): Promise<EpisodeCard[]> {
+  const t = await getTranslations({ locale });
+  const read = t as unknown as ReadKey;
+  return slugs.map((slug) => {
+    const entry = allEpisodes().find((each) => each.slug === slug);
+    if (entry === undefined) throw new Error(`No Episode "${slug}" in the Playlist`);
+    return episodeCard(withCopy(entry, locale), {
+      locale,
+      read,
+      minutes: minutesOf(entry, locale),
+      ...youtubeOf(entry, locale),
+      route: routeOf(slug),
+    });
+  });
 }
