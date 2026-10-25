@@ -4,6 +4,8 @@ title: 'Why does a fresh, focused context outperform a long, accumulated chat?'
 description: 'A fresh, focused context outperforms a long chat because accuracy
   falls as input grows and a model that took a wrong turn leans on its own
   earlier attempts and does not recover.'
+confidence: contested
+informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-19T14:09:38Z

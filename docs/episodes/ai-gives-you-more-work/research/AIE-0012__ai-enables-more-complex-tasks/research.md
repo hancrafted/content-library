@@ -4,6 +4,8 @@ title: 'Why does AI let individuals take on more complex tasks than before?'
 description: 'AI completes longer tasks on its own and speeds up professional
   work inside its capability frontier, but only where the task fits the model
   and the person splits and checks the work.'
+confidence: contested
+informs: [ai-adoption, agentic-ai]
 generated:
   by: claude-code/sonnet-4.6
   at: 2026-10-19T18:26:40Z

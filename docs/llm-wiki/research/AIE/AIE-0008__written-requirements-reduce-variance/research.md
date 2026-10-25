@@ -4,6 +4,8 @@ title: 'Why do explicit written requirements reduce the variation in LLM output?
 description: 'A stated requirement is met more steadily across prompts and model
   updates than a guessed one, but stating all at once can lower compliance and
   run noise remains.'
+confidence: open
+informs: [agentic-ai, llm-behaviour]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-19T14:05:29Z

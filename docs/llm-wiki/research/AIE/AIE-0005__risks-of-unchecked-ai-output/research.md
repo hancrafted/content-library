@@ -2,6 +2,8 @@
 type: research
 title: 'Why does unchecked AI work carry real risk?'
 description: 'Unchecked AI output has caused documented harm, from sanctioned fake citations to less secure code written with more confidence, so someone must verify it.'
+confidence: contested
+informs: [agentic-ai]
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-13T00:00:00Z

@@ -26,6 +26,7 @@ import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata
 import type { ThemeLook } from './episode-overview';
 import type { EventRecord } from './events.pure';
 import type { PlaylistRecord } from './playlists.pure';
+import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
 import { slideFolderProblems } from './slide-slugs.pure';
 
@@ -142,10 +143,11 @@ interface Sound {
   readonly episodes: readonly EpisodeMetadata[];
   readonly delivery: DeliveryRecords | undefined; // absent while an Episode, Event or Playlist fails its schema
   readonly definitionSlides: readonly DefinitionSlide[];
+  readonly research: readonly ResearchRecord[];
 }
 
-/** What the evidence says about itself and what Slides say about it: the hierarchy sound, every `defines` a Concept. */
-function evidenceChecks({ concepts, themed, definitionSlides }: Sound): Refusal[] {
+/** What evidence and Slides say about it: the hierarchy sound, every `defines` and `informs` a Concept. */
+function evidenceChecks({ concepts, themed, definitionSlides, research }: Sound): Refusal[] {
   const known = concepts.map(({ id }) => id);
   return [
     ...duplicates(known).map((id) => ({ kind: 'concept' as const, record: id, message: 'the id is used twice' })),
@@ -157,6 +159,7 @@ function evidenceChecks({ concepts, themed, definitionSlides }: Sound): Refusal[
         record: `${episode}/${slide}`,
         message: `defines names ${defines}, which is no Concept`,
       })),
+    ...informsProblems(research, known).map((problem) => ({ kind: 'research' as const, ...problem })),
   ];
 }
 
@@ -201,7 +204,14 @@ function soundOf(read: ReturnType<typeof readEach>, raw: RawContent): Sound {
   const deliverySound = [read.episodes, read.events, read.playlists].every((part) => part.refusals.length === 0);
   const delivery = deliverySound ? { episodes, events, playlists: read.playlists.value } : undefined;
   const themed = isRecord(raw.themes) ? Object.keys(raw.themes) : [];
-  return { concepts: read.concepts.value, themed, episodes, delivery, definitionSlides: read.definitionSlides.value };
+  return {
+    concepts: read.concepts.value,
+    themed,
+    episodes,
+    delivery,
+    definitionSlides: read.definitionSlides.value,
+    research: read.research.value,
+  };
 }
 
 /**

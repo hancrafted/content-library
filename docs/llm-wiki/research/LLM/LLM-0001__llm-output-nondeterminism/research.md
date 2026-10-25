@@ -4,6 +4,8 @@ title: 'Why do large language models give different answers to the same prompt?'
 description: 'Models sample each next token from a probability distribution, and
   even with sampling switched off, server-side numerical effects still change
   the output between runs.'
+confidence: settled
+informs: [llm-behaviour]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-19T14:02:52Z

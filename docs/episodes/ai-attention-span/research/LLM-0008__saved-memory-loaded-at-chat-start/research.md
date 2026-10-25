@@ -4,6 +4,8 @@ title: 'Why do chat assistants load saved memory at the start of a chat?'
 description: 'A model keeps nothing between chats, so an app stores notes about
   you and puts them into the new, empty context window so the assistant seems to
   know you.'
+confidence: open
+informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-20T19:15:08Z

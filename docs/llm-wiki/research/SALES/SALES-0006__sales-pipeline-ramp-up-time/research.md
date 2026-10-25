@@ -2,6 +2,8 @@
 type: research
 title: 'Why does building an effective sales pipeline take months to ramp up?'
 description: 'A pipeline takes months because the market, the buyer and the metrics are unknown at the start, and each must be learned through real conversations before a repeatable process exists.'
+confidence: open
+informs: [sales]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-13T23:23:42Z

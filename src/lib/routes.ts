@@ -1,6 +1,7 @@
 import { EVENTS, type EventSlug } from './events.pure';
 import { LOCALES, localizePath, type Locale } from './locale.pure';
 import { PLAYLISTS } from './playlists.pure';
+import { RESEARCH_IDS, type ResearchId } from './research-ids';
 
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */
 export const ROUTES = {
@@ -12,6 +13,8 @@ export const ROUTES = {
   events: '/events',
   /** Prefix every Concept page sits under, English only; there is no index page yet. */
   concepts: '/concepts',
+  /** Prefix every Research question page sits under, English only; there is no index page yet. */
+  research: '/research',
 } as const;
 
 export const LEGACY_EPISODE_PREFIX = '/episode';
@@ -147,6 +150,16 @@ export function conceptParams(): { concept: ConceptId }[] {
   return CONCEPT_IDS.map((concept) => ({ concept }));
 }
 
+/** The logical path of one Research question page; it has no German counterpart, so link it with the `en` locale. */
+export function researchRoute(id: string): string {
+  return `${ROUTES.research}/${id}`;
+}
+
+/** One static param per promoted Research question; the Research route exports exactly these (FE-005). */
+export function researchParams(): { research: ResearchId }[] {
+  return RESEARCH_IDS.map((research) => ({ research }));
+}
+
 /** A page with its own metadata and a closed set of exported locales. */
 export type PageRef =
   | 'home'
@@ -156,7 +169,8 @@ export type PageRef =
   | { readonly episode: EpisodeSlug }
   | { readonly event: EventSlug }
   | { readonly event: EventSlug; readonly episode: AnyEpisodeSlug }
-  | { readonly concept: ConceptId };
+  | { readonly concept: ConceptId }
+  | { readonly research: ResearchId };
 
 /** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
 export const PAGES: readonly PageRef[] = [
@@ -168,11 +182,12 @@ export const PAGES: readonly PageRef[] = [
   ...EVENT_SLUGS.map((event) => ({ event })),
   ...eventEpisodeParams(),
   ...CONCEPT_IDS.map((concept) => ({ concept })),
+  ...RESEARCH_IDS.map((research) => ({ research })),
 ];
 
 /** English-only pages have no German counterpart: the operations dashboard, and every evidence page. */
 export function pageLocales(page: PageRef): readonly Locale[] {
-  return page === 'dashboard' || isConceptPage(page) ? ['en'] : LOCALES;
+  return page === 'dashboard' || isConceptPage(page) || isResearchPage(page) ? ['en'] : LOCALES;
 }
 
 /** The logical path a page is exported at. */
@@ -180,6 +195,7 @@ export function routeOf(page: PageRef): string {
   if (isEpisodePage(page)) return episodeRoute(page.episode);
   if (isEventEpisodePage(page)) return eventEpisodeRoute(page.event, page.episode);
   if (isConceptPage(page)) return conceptRoute(page.concept);
+  if (isResearchPage(page)) return researchRoute(page.research);
   return isEventPage(page) ? eventRoute(page.event) : ROUTES[page];
 }
 
@@ -203,6 +219,11 @@ export function isEventEpisodePage(
 /** Whether a page is a Concept's, narrowing to the `{ concept }` form. */
 export function isConceptPage(page: PageRef): page is { readonly concept: ConceptId } {
   return typeof page !== 'string' && 'concept' in page;
+}
+
+/** Whether a page is a Research question's, narrowing to the `{ research }` form. */
+export function isResearchPage(page: PageRef): page is { readonly research: ResearchId } {
+  return typeof page !== 'string' && 'research' in page;
 }
 
 /** The URL a logical path is served at under `siteUrl`: `trailingSlash` makes it the canonical, the origin alone for the home page. */

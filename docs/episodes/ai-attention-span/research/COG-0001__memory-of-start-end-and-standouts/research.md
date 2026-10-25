@@ -5,6 +5,8 @@ title: 'Why do people remember the start, the end and the standout moments of a
 description: 'Recall of a sequence is U-shaped (primacy and recency effects) and
   a distinctive item is remembered better than its neighbours (isolation
   effect), though the mechanisms behind each are still debated.'
+confidence: contested
+informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-20T19:20:42Z
