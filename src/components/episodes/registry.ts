@@ -1,6 +1,6 @@
 import type { EpisodeMessages, EpisodeRecord } from '@/components/slide-master/slide';
 import type { Locale } from '@/lib/locale.pure';
-import { isAnyEpisodeSlug, type AnyEpisodeSlug } from '@/lib/routes';
+import { isRecordSlug, type RecordSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { aiAttentionSpan } from './ai-attention-span/ai-attention-span';
 import { aiGivesYouMoreWork } from './ai-gives-you-more-work/ai-gives-you-more-work';
@@ -15,12 +15,12 @@ import { slideMaster } from './slide-master/slide-master';
 import { slides } from './slides/slides';
 
 /**
- * Every Episode, by slug (FE-002), the unlisted ones included. Typed against `EPISODE_SLUGS` and
- * `UNLISTED_EPISODE_SLUGS`, so a slug
+ * Every Slide record, by slug (FE-002): each Episode's, the unlisted ones included, and each tooling page's. Typed
+ * against `EPISODE_SLUGS`, `UNLISTED_EPISODE_SLUGS` and `TOOLING_SLUGS`, so a slug
  * without a record or a record without a slug fails `tsc`, and so does a key
  * that differs from its record's own slug.
  */
-const EPISODES: { readonly [S in AnyEpisodeSlug]: EpisodeRecord & { readonly slug: S } } = {
+const EPISODES: { readonly [S in RecordSlug]: EpisodeRecord & { readonly slug: S } } = {
   'page-template': pageTemplate,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'ai-token-economy': aiTokenEconomy,
@@ -35,7 +35,7 @@ const EPISODES: { readonly [S in AnyEpisodeSlug]: EpisodeRecord & { readonly slu
 };
 
 export function findEpisode(slug: string): EpisodeRecord {
-  if (!isAnyEpisodeSlug(slug)) notFound();
+  if (!isRecordSlug(slug)) notFound();
   return EPISODES[slug];
 }
 

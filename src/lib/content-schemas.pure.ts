@@ -116,6 +116,9 @@ export const episodeSchema = z
       ),
       status: z.literal('published').describe('The Episode has a page and is announced'),
       publishedOn: isoDay('The release date'),
+      canonicalEpisode: slugOf(
+        'An unlisted Episode only: the public Episode it was derived from, whose page takes its search credit',
+      ).optional(),
     }),
     z.object({
       ...sharedEpisode,
@@ -127,6 +130,10 @@ export const episodeSchema = z
   .refine((episode) => episode.type !== 'event-frame' || episode.visibility === 'unlisted', {
     message: 'an event-frame Episode is always unlisted',
     path: ['visibility'],
+  })
+  .refine((episode) => !('canonicalEpisode' in episode) || episode.visibility === 'unlisted', {
+    message: 'only an unlisted Episode names a canonicalEpisode; a public one is its own canonical',
+    path: ['canonicalEpisode'],
   })
   .describe('What an Episode declares about itself: its overview entry, its type and its visibility');
 
@@ -165,6 +172,15 @@ export const slideSourceSchema = z
     url: z.url().describe('The address the source links to'),
   })
   .describe('One source a Speaker note cites');
+
+export const episodeSlidesSchema = z
+  .object({
+    episode: slugOf('The Episode slug'),
+    slides: z
+      .array(slugOf('A Slide slug, unique across every Episode and the Slide pool'))
+      .describe("The Slides the Episode's Sections place, in page order; the Title slide is not one"),
+  })
+  .describe("One Episode's Slide list, which tells an Episode derived from another");
 
 /** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
 export const SLIDE_FOLDER = /^src\/components\/(episodes\/[a-z0-9-]+\/slides|slide-pool)\/[a-z0-9-]+$/;
@@ -212,6 +228,7 @@ export const CONTENT_SCHEMAS = {
   concept: conceptSchema,
   definitionSlide: definitionSlideSchema,
   episode: episodeSchema,
+  episodeSlides: episodeSlidesSchema,
   event: eventSchema,
   playlist: playlistSchema,
   slideSource: slideSourceSchema,
@@ -223,4 +240,5 @@ export type SlideSource = z.infer<typeof slideSourceSchema>;
 export type ConceptFrontmatter = z.infer<typeof conceptSchema>;
 export type DefinitionSlide = z.infer<typeof definitionSlideSchema>;
 export type SlideFolder = z.infer<typeof slideFolderSchema>;
+export type EpisodeSlides = z.infer<typeof episodeSlidesSchema>;
 export type ResearchFrontmatter = z.infer<typeof researchSchema>;

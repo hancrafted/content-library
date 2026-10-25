@@ -5,7 +5,7 @@ title: 'Page Metadata'
 domain: frontend
 rules: true
 files: ['src/app/**/*.tsx', 'src/lib/structured-data*.ts']
-paths: ['src/app/**/*.{ts,tsx}', 'src/lib/{page-metadata,site-url,sitemap,structured-data}*.ts']
+paths: ['src/app/**/*.{ts,tsx}', 'src/lib/{page-metadata,site-url,sitemap,structured-data,visibility}*.ts']
 description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl Translation files, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only. Indexable pages also carry social cards and structured data.'
 ---
 
@@ -50,7 +50,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 5. Scope
 
-1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list `PAGES` minus `isNoindex`, which `pageMetadata` also applies. `not-found.tsx` is a separate UI decision.
+1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list the `PAGES` the visibility predicate `pageTreatment` puts in the sitemap, the predicate `pageMetadata` also asks (design-ADR 0016). `not-found.tsx` is a separate UI decision.
 2. An unknown locale prefix is no file in `out/`, so Pages serves its 404. `resolveLocale()`'s `notFound()` only narrows the type; nothing relies on it.
 
 ### 6. Indexable pages carry cards and structured data

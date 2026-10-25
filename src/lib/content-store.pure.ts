@@ -1,4 +1,5 @@
 import type { z } from 'zod';
+import { canonicalEpisodeProblems } from './canonical-episode.pure';
 import type { ConceptFile } from './concept-record.pure';
 import {
   conceptProblems,
@@ -12,11 +13,13 @@ import {
 import {
   definitionSlideSchema,
   episodeSchema,
+  episodeSlidesSchema,
   eventSchema,
   playlistSchema,
   slideFolderSchema,
   slideSourceSchema,
   type DefinitionSlide,
+  type EpisodeSlides,
   type RecordKind,
   type SlideFolder,
   type SlideSource,
@@ -27,6 +30,7 @@ import type { ThemeLook } from './episode-overview';
 import type { EventRecord } from './events.pure';
 import type { PlaylistRecord } from './playlists.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
+import { duplicates, researchIdRefusals, slideSlugRefusals } from './unique-ids.pure';
 
 /*
  * The content store: one loader reads every record the site is built from through its Zod schema and answers with
@@ -74,6 +78,8 @@ export interface RawContent {
   readonly concepts: readonly EvidenceFile[];
   readonly definitionSlides: readonly unknown[];
   readonly episodes: readonly unknown[];
+  /** Each Episode's Slide list, which tells an Episode derived from another. */
+  readonly episodeSlides: readonly unknown[];
   readonly events: readonly unknown[];
   readonly playlists: readonly unknown[];
   readonly research: readonly EvidenceFile[];
@@ -94,10 +100,10 @@ function refuse(kind: RecordKind, record: string, issues: readonly z.core.$ZodIs
   });
 }
 
-/** The name a raw record goes by: its slug, or its id for a Playlist. */
+/** The name a raw record goes by: its slug, its id for a Playlist, or its Episode for a Slide list. */
 function slugOfRaw(raw: unknown): string {
   const fields = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
-  const value = fields.slug ?? fields.id;
+  const value = fields.slug ?? fields.id ?? fields.episode;
   return typeof value === 'string' ? value : '(unnamed)';
 }
 
@@ -122,34 +128,6 @@ function readResearch(files: RawContent['research']): Parsed<ResearchRecord[]> {
   };
 }
 
-function duplicates(items: readonly string[]): string[] {
-  return [...new Set(items.filter((item, at) => items.indexOf(item) !== at))];
-}
-
-/**
- * Slide slugs are unique across every Episode folder and the Slide pool together (design-ADR 0016, Slide reuse rule
- * 7), so a reused Slide keeps its slug and anchor wherever it is placed. A Title slide is exempt: its anchor is `top`.
- */
-function slideSlugRefusals(slides: readonly SlideFolder[]): Refusal[] {
-  const placed = slides.filter(({ title }) => !title);
-  return duplicates(placed.map(({ slug }) => slug)).map((slug) => ({
-    kind: 'slide' as const,
-    record: slug,
-    message: `the slug is used by more than one Slide: ${placed
-      .filter((each) => each.slug === slug)
-      .map(({ path }) => path)
-      .join(', ')}`,
-  }));
-}
-
-function researchIdRefusals(research: readonly ResearchRecord[]): Refusal[] {
-  return duplicates(research.map(({ id }) => id)).map((id) => ({
-    kind: 'research' as const,
-    record: id,
-    message: 'the id is used by more than one research file',
-  }));
-}
-
 interface Sound {
   readonly concepts: readonly ConceptFile[];
   /** Every id the theme record keys, a malformed look included, so one bad look is refused once. */
@@ -157,6 +135,7 @@ interface Sound {
   readonly episodes: readonly EpisodeMetadata[];
   readonly delivery: DeliveryRecords | undefined; // absent while an Episode, Event or Playlist fails its schema
   readonly definitionSlides: readonly DefinitionSlide[];
+  readonly episodeSlides: readonly EpisodeSlides[];
 }
 
 /** What the evidence says about itself and what Slides say about it: the hierarchy sound, every `defines` a Concept. */
@@ -189,6 +168,7 @@ function crossChecks(sound: Sound): Refusal[] {
     ...episodeConceptProblems(episodes, topConcepts).map(own('episode')),
     ...duplicates(slugs).map((slug) => own('episode')(`${slug}: the slug is used twice`)),
     ...episodePageProblems(episodes).map(own('episode')),
+    ...canonicalEpisodeProblems(episodes, sound.episodeSlides).map(own('episode')),
     ...(delivery === undefined ? [] : deliveryProblems(delivery).map(({ kind, message }) => own(kind)(message))),
   ];
 }
@@ -200,6 +180,7 @@ function readEach(raw: RawContent) {
     concepts: readConcepts(raw.concepts),
     definitionSlides: readAll('definition-slide', definitionSlideSchema, raw.definitionSlides),
     episodes: readAll('episode', episodeSchema, raw.episodes),
+    episodeSlides: readAll('episode', episodeSlidesSchema, raw.episodeSlides),
     events: readAll('event', eventSchema, raw.events),
     playlists: readAll('playlist', playlistSchema, raw.playlists),
     slideSources: readAll('slide-source', slideSourceSchema, raw.slideSources),
@@ -216,7 +197,14 @@ function soundOf(read: ReturnType<typeof readEach>, raw: RawContent): Sound {
   const deliverySound = [read.episodes, read.events, read.playlists].every((part) => part.refusals.length === 0);
   const delivery = deliverySound ? { episodes, events, playlists: read.playlists.value } : undefined;
   const themed = isRecord(raw.themes) ? Object.keys(raw.themes) : [];
-  return { concepts: read.concepts.value, themed, episodes, delivery, definitionSlides: read.definitionSlides.value };
+  return {
+    concepts: read.concepts.value,
+    themed,
+    episodes,
+    delivery,
+    definitionSlides: read.definitionSlides.value,
+    episodeSlides: read.episodeSlides.value,
+  };
 }
 
 /**

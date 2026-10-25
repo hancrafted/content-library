@@ -1,7 +1,7 @@
 import { episodePageCopy } from '@/components/pages/episode-page';
 import { EpisodeStubPage } from '@/components/pages/episode-stub-page';
 import { pageMetadata } from '@/lib/page-metadata.pure';
-import { episodeParams, isEpisodeSlug } from '@/lib/routes';
+import { episodeParams, episodesPathPage, isEpisodesPathSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 import { resolveLocale } from '../../params';
 
@@ -14,9 +14,9 @@ export const generateStaticParams = episodeParams;
 
 export async function generateMetadata({ params }: EpisodeParams) {
   const { episode } = await params;
-  if (!isEpisodeSlug(episode)) notFound();
+  if (!isEpisodesPathSlug(episode)) notFound();
   const locale = await resolveLocale(params);
-  return pageMetadata({ episode }, locale, episodePageCopy(episode, locale));
+  return pageMetadata(episodesPathPage(episode), locale, episodePageCopy(episode, locale));
 }
 
 export default async function Page({ params }: EpisodeParams) {

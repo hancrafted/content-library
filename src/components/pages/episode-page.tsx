@@ -1,10 +1,11 @@
 import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
 import { episodeSlugPublishedOn, episodeSlugStatus } from '@/components/episodes/episode-status';
+import { episodeFacts } from '@/components/episodes/page-facts';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { JsonLdScript } from '@/components/json-ld';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { episodePageRoute, isEpisodeSlug } from '@/lib/routes';
+import { episodePageRoute, isAnyEpisodeSlug, isEpisodeSlug } from '@/lib/routes';
 import { SITE_URL } from '@/lib/site-url';
 import { episodeJsonLd } from '@/lib/structured-data.pure';
 
@@ -35,9 +36,17 @@ export function EpisodePage({ slug, locale, route }: { slug: string; locale: Loc
   );
 }
 
-/** An Episode page's title, description, status and release date, read through the registry, for `pageMetadata` (FE-008); the status makes an upcoming page `noindex`. */
+/**
+ * An Episode page's title, description and release date, read through the registry, and the facts its treatment
+ * turns on, for `pageMetadata` (FE-008). A tooling page has no facts: it is never indexed.
+ */
 export function episodePageCopy(slug: string, locale: Locale): PageCopy {
   const { title, description } = episodeCopy(slug, locale);
   const publishedOn = episodeSlugPublishedOn(slug);
-  return { title, description, status: episodeSlugStatus(slug), ...(publishedOn ? { publishedOn } : {}) };
+  return {
+    title,
+    description,
+    ...(isAnyEpisodeSlug(slug) ? { facts: episodeFacts(slug) } : {}),
+    ...(publishedOn ? { publishedOn } : {}),
+  };
 }

@@ -1,7 +1,7 @@
 import { localizeSlide } from '@/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/components/slide-master/slide';
 import { placeSections } from '@/lib/episode.pure';
-import { EPISODE_SLUGS, type EpisodeSlug } from '@/lib/routes';
+import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -15,13 +15,13 @@ import { findEpisode } from './registry';
  */
 
 interface PlacedSlide {
-  readonly episode: EpisodeSlug;
+  readonly episode: EpisodesPathSlug;
   readonly slide: Slide;
 }
 
-/** Every Slide of every registered Episode. */
+/** Every Slide of every registered Episode and tooling page. */
 function allSlides(): PlacedSlide[] {
-  return EPISODE_SLUGS.flatMap((episode) =>
+  return EPISODES_PATH_SLUGS.flatMap((episode) =>
     findEpisode(episode)
       .sections.flat()
       .map((slide) => ({ episode, slide })),
@@ -90,7 +90,7 @@ describe('edge cases', () => {
     const expected = { 'slide-layouts': 3, 'slide-master': 20 };
     // ACT
     const slides = allSlides();
-    const count = (episode: EpisodeSlug) => slides.filter((placed) => placed.episode === episode).length;
+    const count = (episode: EpisodesPathSlug) => slides.filter((placed) => placed.episode === episode).length;
     // ASSERT
     expect({ 'slide-layouts': count('slide-layouts'), 'slide-master': count('slide-master') }).toEqual(expected);
   });

@@ -1,6 +1,7 @@
 import { EVENTS, type EventSlug } from './events.pure';
 import { LOCALES, localizePath, type Locale } from './locale.pure';
 import { PLAYLISTS } from './playlists.pure';
+import { isToolingSlug, TOOLING_SLUGS, type ToolingSlug } from './tooling-pages';
 
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */
 export const ROUTES = {
@@ -24,15 +25,26 @@ export const EPISODE_SLUGS = [
   'onboard-ai-every-time',
   'ai-attention-span',
   'ai-gives-you-more-work',
-  // Unlisted: built and exported, linked from neither the landing page nor the header.
-  'slide-layouts',
-  // A catalog of reusable Slide layouts, linked from the bottom of /episodes beside the page template.
-  'slide-master',
-  // The cornerstone Slides one by one, outside their Episodes: a preview bench and a link to send one Slide.
-  'slides',
 ] as const;
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
+
+/** A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. */
+export type EpisodesPathSlug = EpisodeSlug | ToolingSlug;
+
+/** Every page under `/episodes/`: each Episode's own, then each tooling page. */
+export const EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = [...EPISODE_SLUGS, ...TOOLING_SLUGS];
+
+export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
+  return isEpisodeSlug(slug) || isToolingSlug(slug);
+}
+
+/** The page a slug under `/episodes/` names: a tooling page's, else the Episode's own. */
+export function episodesPathPage(
+  slug: EpisodesPathSlug,
+): { readonly episode: EpisodeSlug } | { readonly tooling: ToolingSlug } {
+  return isToolingSlug(slug) ? { tooling: slug } : { episode: slug };
+}
 
 /**
  * Unlisted Episodes: built and exported only under the Event whose Playlist presents them
@@ -43,8 +55,15 @@ export const UNLISTED_EPISODE_SLUGS = ['axel-agentic-workflow-agenda'] as const;
 
 export type UnlistedEpisodeSlug = (typeof UNLISTED_EPISODE_SLUGS)[number];
 
-/** Every Episode the registry holds: the ones with an `/episodes/` page and the unlisted ones. */
+/** Every Episode: the ones with an `/episodes/` page and the unlisted ones. */
 export type AnyEpisodeSlug = EpisodeSlug | UnlistedEpisodeSlug;
+
+/** Every Slide record the registry holds: each Episode's, and each tooling page's. */
+export type RecordSlug = AnyEpisodeSlug | ToolingSlug;
+
+export function isRecordSlug(slug: string): slug is RecordSlug {
+  return isAnyEpisodeSlug(slug) || isToolingSlug(slug);
+}
 
 export function isAnyEpisodeSlug(slug: string): slug is AnyEpisodeSlug {
   return isEpisodeSlug(slug) || (UNLISTED_EPISODE_SLUGS as readonly string[]).includes(slug);
@@ -54,8 +73,8 @@ export function isEpisodeSlug(slug: string): slug is EpisodeSlug {
   return (EPISODE_SLUGS as readonly string[]).includes(slug);
 }
 
-/** The logical path of one Episode. */
-export function episodeRoute(slug: EpisodeSlug): string {
+/** The logical path of one Episode, or of a tooling page, which sits beside them. */
+export function episodeRoute(slug: EpisodesPathSlug): string {
   return `${ROUTES.episodes}/${slug}`;
 }
 
@@ -63,20 +82,23 @@ export function episodeRoute(slug: EpisodeSlug): string {
  * The logical path an Episode's page is served at: the one handed in (an Event-scoped page passes its own), else the
  * Episode's own `/episodes/<slug>`. An unlisted Episode has no page of its own, so it must be handed one.
  */
-export function episodePageRoute(slug: AnyEpisodeSlug, route?: string): string {
+export function episodePageRoute(slug: RecordSlug, route?: string): string {
   if (route !== undefined) return route;
-  if (!isEpisodeSlug(slug)) throw new Error(`"${slug}" is unlisted: it has no /episodes/ page, only its Event's.`);
+  if (!isEpisodesPathSlug(slug)) throw new Error(`"${slug}" is unlisted: it has no /episodes/ page, only its Event's.`);
   return episodeRoute(slug);
 }
 
 /** The logical path of a legacy Episode stub. */
-export function legacyEpisodeRoute(slug: EpisodeSlug): string {
+export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
   return `${LEGACY_EPISODE_PREFIX}/${slug}`;
 }
 
-/** One static param per Episode; both Episode routes export exactly these (FE-002, FE-005). */
-export function episodeParams(): { episode: EpisodeSlug }[] {
-  return EPISODE_SLUGS.map((episode) => ({ episode }));
+/**
+ * One static param per page under `/episodes/`, each Episode's and each tooling page's; both Episode routes and both
+ * legacy stub routes export exactly these (FE-002, FE-005).
+ */
+export function episodeParams(): { episode: EpisodesPathSlug }[] {
+  return EPISODES_PATH_SLUGS.map((episode) => ({ episode }));
 }
 
 export const EVENT_SLUGS: readonly EventSlug[] = EVENTS.map((event) => event.slug);
@@ -154,6 +176,7 @@ export type PageRef =
   | 'episodes'
   | 'events'
   | { readonly episode: EpisodeSlug }
+  | { readonly tooling: ToolingSlug }
   | { readonly event: EventSlug }
   | { readonly event: EventSlug; readonly episode: AnyEpisodeSlug }
   | { readonly concept: ConceptId };
@@ -165,6 +188,7 @@ export const PAGES: readonly PageRef[] = [
   'episodes',
   'events',
   ...EPISODE_SLUGS.map((episode) => ({ episode })),
+  ...TOOLING_SLUGS.map((tooling) => ({ tooling })),
   ...EVENT_SLUGS.map((event) => ({ event })),
   ...eventEpisodeParams(),
   ...CONCEPT_IDS.map((concept) => ({ concept })),
@@ -178,6 +202,7 @@ export function pageLocales(page: PageRef): readonly Locale[] {
 /** The logical path a page is exported at. */
 export function routeOf(page: PageRef): string {
   if (isEpisodePage(page)) return episodeRoute(page.episode);
+  if (isToolingPage(page)) return episodeRoute(page.tooling);
   if (isEventEpisodePage(page)) return eventEpisodeRoute(page.event, page.episode);
   if (isConceptPage(page)) return conceptRoute(page.concept);
   return isEventPage(page) ? eventRoute(page.event) : ROUTES[page];
@@ -186,6 +211,11 @@ export function routeOf(page: PageRef): string {
 /** Whether a page is an Episode's own, narrowing to the `{ episode }` form. */
 export function isEpisodePage(page: PageRef): page is { readonly episode: EpisodeSlug } {
   return typeof page !== 'string' && 'episode' in page && !('event' in page);
+}
+
+/** Whether a page is a tooling page, narrowing to the `{ tooling }` form. */
+export function isToolingPage(page: PageRef): page is { readonly tooling: ToolingSlug } {
+  return typeof page !== 'string' && 'tooling' in page;
 }
 
 /** Whether a page is an Event's, narrowing to the `{ event }` form. */
