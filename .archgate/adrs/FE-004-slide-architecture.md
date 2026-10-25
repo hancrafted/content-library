@@ -5,9 +5,9 @@ title: 'Slide Architecture'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
+files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
+paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
 description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, and what an agent may change freely versus only by a new ADR.'
 ---
 
@@ -34,6 +34,9 @@ flowchart TD
 flowchart LR
   ep["episodes/ep — record, sections/ + Slide folders"] --> master["slide-master — frame, layouts, record and kit types"]
   ep --> shared["slide-shared — parts two Slides share"]
+  ep --> explain["explorable-explanations — Slides show by Preset"]
+  explain --> shared
+  explain --> ui
   ep --> ui["ui — primitives"]
   shared --> ui
   container["episode-page — the one container"] --> master
@@ -103,7 +106,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 5. Text, styling and client code each have fixed homes
 
-1. Text: Translation files for site chrome, landing, Upcoming cards; an Episode's for title, caption, description; a Slide's for its strings; a Shared visual's: its locale pair.
+1. Text: Translation files for site chrome, landing, Upcoming cards; an Episode's for title, caption, description; a Slide's for its strings; an Explorable explanation's: its pair.
 2. Styling: site tokens in `globals.css`; an Episode token remap under its own scope; a Slide's look in its own CSS module.
 3. Client code: `*.client.tsx` leaves only (in a Slide folder, the container's mechanics or the chrome); hooks hold browser state.
 
@@ -154,7 +157,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ## Compliance and Enforcement
 
-1. **Dependency rules** (`npm run lint:boundaries`, pre-commit and CI) hold tier direction, Slide-folder and `slide-shared` reach, and chrome reached only from the container.
+1. **Dependency rules** (`npm run lint:boundaries`, pre-commit and CI) hold tier direction, Slide-folder and shared reach, and chrome reached only from the container.
 2. **Lint** holds the `'use client'` classifier; **types** hold the record, registry and per-Slide text; **unit and post-build tests** hold anchors, folder names and slot order.
 
 **Manual review duties:** a new module, tier or text/style home arrives with an ADR and an updated map; diagrams match the tree.

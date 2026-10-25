@@ -10,8 +10,8 @@ import { describe, expect, it } from 'vitest';
 
 const ROOT = path.join(__dirname, '../..');
 const eslint = new ESLint({ cwd: ROOT });
-const VIEW = 'src/components/slide-shared/context/probe-view.tsx';
-const OTHER = 'src/components/slide-shared/context/probe.tsx';
+const VIEW = 'src/components/explorable-explanations/context/probe-view.tsx';
+const OTHER = 'src/components/explorable-explanations/context/probe.tsx';
 const TIMEOUT = 30_000;
 
 /** The messages the no-restricted-syntax rule raises for a snippet linted as `file`. */

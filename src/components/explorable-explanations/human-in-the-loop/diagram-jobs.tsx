@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
-import { Check, FlowStub, ParkedStub, Sparkle } from '../glyphs/glyphs';
+import { Check, FlowStub, ParkedStub, Sparkle } from '../../slide-shared/glyphs/glyphs';
 import { chatNames, splitParked } from './diagram-model.pure';
 import type { JobSlot, PopoverCopy } from './human-in-the-loop.types';
 import { NodePopover, type NodeCopy } from './node-popover.client';

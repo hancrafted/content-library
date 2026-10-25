@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import { joinPrompt } from '../core-components/try-prompt/prompt-sections.pure';
+import { joinPrompt } from '../../slide-shared/core-components/try-prompt/prompt-sections.pure';
 import summerPartyEn from './summer-party.en.yml';
 import { doPrompt, reviewPrompt, stepsOf } from './workflow-prompts.pure';
 import type { TaskDef, WorkflowFile } from './workflow-schema.types';
