@@ -61,7 +61,7 @@ An Upcoming Episode has no record: only `episode-metadata.ts` and two landing st
 5. **Two lines of wiring per Slide**, written by hand in the Episode file.
 6. **German is checked by shape, not by value.** An empty or English-copied German string still compiles; review and the built-page text snapshot catch it.
 7. **A cross-Slide link is checked at build, not in the editor.**
-8. **Authoring needs a copy source.** `page-template` is the minimal one; `slide-layouts` shows each layout rendered; `docs/features/episode-migration.md` is the recipe for converting a prototype.
+8. **Authoring needs a copy source.** The Episode template is the minimal one; the Slide library shows each Master slide rendered; `docs/features/episode-migration.md` is the recipe for converting a prototype.
 
 ## Related
 

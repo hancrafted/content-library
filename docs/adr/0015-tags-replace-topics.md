@@ -15,8 +15,6 @@ Topic is dropped. Tags are the only organising idea.
 2. **The lead Tag owns the look.** An Episode's first Tag is its lead Tag and fixes its card's icon and accent. `topic`, `extraTopics`, the highlighted-Topic label and the per-Episode `look` are removed, so colour, icon and label can no longer disagree.
 3. **Filters.** Five of the six Tags are offered as filter chips; search matches every Tag name. A Topic filter no longer exists.
 4. **Format stays as data.** Every Episode is a Foundations Episode, so the Format control and label stay hidden until two Formats are in use.
-5. **Workshop is the one aggregation.** An ordered set of Episodes for an event is a Workshop, not a playlist; no Playlist concept exists.
-   _Superseded 2026-10-25 by [Content data model](0016-content-data-model.md): an Event presents a Playlist, and Workshop is retired._
 
 ## Considered options
 
