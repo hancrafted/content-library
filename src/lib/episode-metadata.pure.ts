@@ -1,4 +1,11 @@
-import { TAG_IDS, TAGS, type FormatId, type ListedEpisodeSlug, type TagId, type TagLook } from './episode-overview';
+import {
+  CONCEPT_THEMES,
+  type FormatId,
+  type ListedEpisodeSlug,
+  type ThemeLook,
+  type TopConceptId,
+} from './episode-overview';
+import type { UnlistedEpisodeSlug } from './routes';
 
 /*
  * What an Episode declares about itself for the Episode overview, in its own
@@ -12,46 +19,69 @@ export type IsoDate = `${number}-${number}-${number}`;
 
 interface SharedMetadata {
   readonly format: FormatId;
-  /** Tag ids from the closed vocabulary, lead Tag first: it gives the Episode's card its icon and accent. */
-  readonly tags: readonly [TagId, ...TagId[]];
+  /** The top Concepts the Episode teaches, in the order its card names them. */
+  readonly concepts: readonly [TopConceptId, ...TopConceptId[]];
+  /** One of `concepts`: the top Concept whose icon and accent the Episode's card draws. */
+  readonly applyThemeFromConcept: TopConceptId;
 }
 
-/** An Episode that has a page: its slug is registered. */
+/** An Episode that has a page: its slug is registered, at `/episodes/` when public, only under its Event when unlisted. */
 export interface PublishedEpisodeMetadata extends SharedMetadata {
-  readonly slug: ListedEpisodeSlug;
+  readonly slug: ListedEpisodeSlug | UnlistedEpisodeSlug;
+  /** `event-frame` holds one Event's agenda, scope and organisation; it is always unlisted. */
+  readonly type: 'standard' | 'event-frame';
+  /** `public` is listed and indexed; `unlisted` lives only under its Event and is never listed. */
+  readonly visibility: 'public' | 'unlisted';
   readonly status: 'published';
   readonly publishedOn: IsoDate;
+  /** An unlisted Episode only: the public Episode it was derived from, whose page takes its search credit. */
+  readonly canonicalEpisode?: ListedEpisodeSlug;
 }
 
 /** An Episode announced but not written: a folder holding only its metadata, no page, so no link. */
 export interface UpcomingEpisodeMetadata extends SharedMetadata {
   readonly slug: string;
+  /** Upcoming applies to public, standard Episodes only. */
+  readonly type: 'standard';
+  readonly visibility: 'public';
   readonly status: 'upcoming';
 }
 
 export type EpisodeMetadata = PublishedEpisodeMetadata | UpcomingEpisodeMetadata;
 export type EpisodeStatus = EpisodeMetadata['status'];
 
-/** The Episode's lead Tag: its first, which fixes the look of its card. */
-export function leadTagOf(episode: Pick<SharedMetadata, 'tags'>): TagId {
-  return episode.tags[0];
+/** The icon and accent an Episode's card draws, from the top Concept it names in `applyThemeFromConcept`. */
+export function lookOf(episode: Pick<SharedMetadata, 'applyThemeFromConcept'>): ThemeLook {
+  return CONCEPT_THEMES[episode.applyThemeFromConcept];
 }
 
-/** The icon and accent an Episode's card draws, from its lead Tag. */
-export function lookOf(episode: Pick<SharedMetadata, 'tags'>): TagLook {
-  return TAGS[leadTagOf(episode)];
-}
-
-/** What is wrong with the Tags the given Episodes declare: one sentence per problem, none when they are sound. */
-export function tagProblems(episodes: readonly { slug: string; tags: readonly string[] }[]): string[] {
-  const known: readonly string[] = TAG_IDS;
-  return episodes.flatMap(({ slug, tags }) => [
-    ...(tags.length === 0 ? [`${slug}: has no Tag`] : []),
-    ...tags.filter((tag) => !known.includes(tag)).map((tag) => `${slug}: unknown Tag ${tag}`),
-    ...[...new Set(tags.filter((tag, at) => tags.indexOf(tag) !== at))].map(
-      (tag) => `${slug}: lists the Tag ${tag} twice`,
+/**
+ * What is wrong with the Concepts the given Episodes declare, against the top Concepts the store holds: one
+ * sentence per problem, none when they are sound.
+ */
+export function episodeConceptProblems(
+  episodes: readonly { slug: string; concepts: readonly string[]; applyThemeFromConcept: string }[],
+  topConcepts: readonly string[],
+): string[] {
+  return episodes.flatMap(({ slug, concepts, applyThemeFromConcept: theme }) => [
+    ...(topConcepts.includes(theme)
+      ? []
+      : [`${slug}: applyThemeFromConcept names ${theme}, which is not one of the top Concepts`]),
+    ...(concepts.includes(theme)
+      ? []
+      : [`${slug}: applyThemeFromConcept names ${theme}, which concepts does not list`]),
+    ...concepts
+      .filter((id) => !topConcepts.includes(id))
+      .map((id) => `${slug}: concepts names ${id}, which is not one of the top Concepts`),
+    ...[...new Set(concepts.filter((id, at) => concepts.indexOf(id) !== at))].map(
+      (id) => `${slug}: lists the Concept ${id} twice`,
     ),
   ]);
+}
+
+/** Whether the Episode overview and Upcoming list it: public, standard Episodes only; an unlisted or event-frame one lives under its Event. */
+export function isListed(episode: Pick<EpisodeMetadata, 'type' | 'visibility'>): boolean {
+  return episode.visibility === 'public' && episode.type === 'standard';
 }
 
 function isPublished(episode: EpisodeMetadata): episode is PublishedEpisodeMetadata {

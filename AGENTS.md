@@ -9,6 +9,7 @@ This project is a localized Next.js application which serves to visualize theory
 - `/code-review` is the reviewer. `archgate check` is the ADR gate; `archgate:reviewer` findings are advisory: confirm each against the ADR text before acting.
 - Save a pasted handoff verbatim to `.scratch/<feature>/handoff.md` before starting; review agents read that file as the spec.
 - Use `npm run verify` frequently to verify that the changes are correct.
+- Read `docs/steering/product-vision.md` before any decision. Its ranked trade-off rules decide conflicts, and its escalation steps apply whenever a change would trade architecture or agent legibility for delivery.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
 - Start with `.archgate/adrs/FE-004-slide-architecture.md` for the architecture map.
 - `docs/agents/` holds method and procedure, product-agnostic. Feature reference (Episodes, Context drawer, Translation keys) lives in `docs/features/`.
@@ -24,7 +25,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Browser checks of GSAP motion (the landing hero): a background or occluded tab never fires `requestAnimationFrame`, so the animation stays paused and any window resize finishes it by design. Bring the tab to the front before judging motion; DOM counts (`[data-task-paper]` opacity, `[data-completed-papers]`, `[data-overflow-papers]`) verify the mechanics without it.
 
 - `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`; `*.browser.test.ts` runs on Playwright against the built export via `npm run test:browser`: pre-push when a push touches its paths, and nightly on `main` in CI; pull-request CI opens no browser. Keep the vitest configs split — `verify` must stay fast and must not require a build.
-- When the user corrects a Shared visual's behaviour (animation, Preset, state, layout) for the first time after looking at it, propose a browser test that pins the corrected behaviour, titled in the user's words, and write it once they confirm. Episode Slides and copy changes never trigger one.
+- When the user corrects an Explorable explanation's behaviour (animation, Preset, state, layout) for the first time after looking at it, propose a browser test that pins the corrected behaviour, titled in the user's words, and write it once they confirm. Episode Slides and copy changes never trigger one.
 
 ## Audiences
 

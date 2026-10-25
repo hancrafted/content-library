@@ -10,9 +10,12 @@ const COPY = { title: 'Your AI token economy', caption: 'Hidden managing respons
 
 const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
   slug: 'ai-token-economy',
+  type: 'standard',
+  visibility: 'public',
   status: 'published',
   format: 'foundations',
-  tags: ['cost'],
+  concepts: ['ai-cost'],
+  applyThemeFromConcept: 'ai-cost',
   publishedOn: '2026-10-09',
 };
 
@@ -21,13 +24,16 @@ const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
 
 const UPCOMING: UpcomingEpisodeMetadata = {
   slug: 'choosing-the-right-model',
+  type: 'standard',
+  visibility: 'public',
   status: 'upcoming',
   format: 'short',
-  tags: ['cost', 'sales'],
+  concepts: ['ai-cost', 'sales'],
+  applyThemeFromConcept: 'ai-cost',
 };
 
 describe('success cases', () => {
-  it('builds a published card that links to its Episode, takes its copy from its record and its look from its lead Tag', () => {
+  it('builds a published card that links to its Episode, takes its copy from its record and its look from the Concept named in applyThemeFromConcept', () => {
     // ARRANGE
     const expected = {
       slug: 'ai-token-economy',
@@ -36,13 +42,13 @@ describe('success cases', () => {
       status: 'published',
       title: 'Your AI token economy',
       caption: 'Hidden managing responsibilities.',
-      leadTag: { id: 'cost', label: '[landing.episodeOverview.tags.cost.name]' },
+      themeConcept: { id: 'ai-cost', label: '[landing.episodeOverview.concepts.ai-cost.name]' },
       format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
-      tags: [
+      concepts: [
         {
-          id: 'cost',
-          label: '[landing.episodeOverview.tags.cost.name]',
-          tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
+          id: 'ai-cost',
+          label: '[landing.episodeOverview.concepts.ai-cost.name]',
+          tooltip: '[landing.episodeOverview.concepts.ai-cost.tooltip]',
         },
       ],
       minutes: 42,
@@ -58,14 +64,18 @@ describe('success cases', () => {
     expect(card).toEqual(expected);
   });
 
-  it('draws the icon and accent of the lead Tag, whatever Tags follow it', () => {
+  it('An Episode card takes its icon and accent from the Concept named in applyThemeFromConcept', () => {
     // ARRANGE
-    const entry = { ...PUBLISHED, tags: ['markdown', 'cost'] } as const;
-    const expected = { accent: 'rose', icon: 'file-text', leadTag: 'markdown' };
+    const entry = {
+      ...PUBLISHED,
+      concepts: ['ai-cost', 'markdown-documentation'],
+      applyThemeFromConcept: 'markdown-documentation',
+    } as const;
+    const expected = { accent: 'rose', icon: 'file-text', themeConcept: 'markdown-documentation' };
     // ACT
-    const { accent, icon, leadTag } = episodeCard(entry, { locale: 'en', read });
+    const { accent, icon, themeConcept } = episodeCard(entry, { locale: 'en', read });
     // ASSERT
-    expect({ accent, icon, leadTag: leadTag.id }).toEqual(expected);
+    expect({ accent, icon, themeConcept: themeConcept.id }).toEqual(expected);
   });
 
   it('prefixes the link with the locale but leaves the route neutral, so a German card opens the German Episode', () => {
@@ -86,18 +96,18 @@ describe('success cases', () => {
       status: 'upcoming',
       title: '[landing.episodeOverview.upcoming.choosing-the-right-model.title]',
       caption: '[landing.episodeOverview.upcoming.choosing-the-right-model.caption]',
-      leadTag: { id: 'cost', label: '[landing.episodeOverview.tags.cost.name]' },
+      themeConcept: { id: 'ai-cost', label: '[landing.episodeOverview.concepts.ai-cost.name]' },
       format: { id: 'short', label: '[landing.episodeOverview.formats.short]' },
-      tags: [
+      concepts: [
         {
-          id: 'cost',
-          label: '[landing.episodeOverview.tags.cost.name]',
-          tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
+          id: 'ai-cost',
+          label: '[landing.episodeOverview.concepts.ai-cost.name]',
+          tooltip: '[landing.episodeOverview.concepts.ai-cost.tooltip]',
         },
         {
           id: 'sales',
-          label: '[landing.episodeOverview.tags.sales.name]',
-          tooltip: '[landing.episodeOverview.tags.sales.tooltip]',
+          label: '[landing.episodeOverview.concepts.sales.name]',
+          tooltip: '[landing.episodeOverview.concepts.sales.tooltip]',
         },
       ],
       featuredRank: null,
@@ -110,25 +120,25 @@ describe('success cases', () => {
     expect(card).toEqual(expected);
   });
 
-  it("labels each Tag with its name and tooltip in the reader's locale, in the order the Episode lists them", () => {
+  it("labels each top Concept with its name and tooltip in the reader's locale, in the order the Episode lists them", () => {
     // ARRANGE
-    const entry = { ...PUBLISHED, tags: ['cost', 'workflow'] } as const;
+    const entry = { ...PUBLISHED, concepts: ['ai-cost', 'ai-adoption'] } as const;
     const expected = [
       {
-        id: 'cost',
-        label: '[landing.episodeOverview.tags.cost.name]',
-        tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
+        id: 'ai-cost',
+        label: '[landing.episodeOverview.concepts.ai-cost.name]',
+        tooltip: '[landing.episodeOverview.concepts.ai-cost.tooltip]',
       },
       {
-        id: 'workflow',
-        label: '[landing.episodeOverview.tags.workflow.name]',
-        tooltip: '[landing.episodeOverview.tags.workflow.tooltip]',
+        id: 'ai-adoption',
+        label: '[landing.episodeOverview.concepts.ai-adoption.name]',
+        tooltip: '[landing.episodeOverview.concepts.ai-adoption.tooltip]',
       },
     ];
     // ACT
-    const { tags } = episodeCard(entry, { locale: 'en', read });
+    const { concepts } = episodeCard(entry, { locale: 'en', read });
     // ASSERT
-    expect(tags).toEqual(expected);
+    expect(concepts).toEqual(expected);
   });
 
   it("names a published card's release date in the reader's locale", () => {

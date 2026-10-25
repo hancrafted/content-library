@@ -6,8 +6,8 @@ import { TitleSlide } from './title-slide';
 const TEXT = { title: 'Page template', caption: 'The smallest Episode.' };
 
 /** The Title slide's static HTML on the shared header, with or without an authored hero Scene. */
-function render(hero?: string) {
-  const props = { ...TEXT, mode: 'shared' as const, entrance: 'none' as const };
+function render(hero?: string, position?: string) {
+  const props = { ...TEXT, mode: 'shared' as const, entrance: 'none' as const, ...(position && { position }) };
   return renderToStaticMarkup(
     createElement(TitleSlide, hero === undefined ? props : { ...props, hero: createElement('figure', null, hero) }),
   );
@@ -27,6 +27,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it("names nothing of a Playlist on an Episode's own page", () => {
+    // ARRANGE
+    const marker = 'data-playlist-position';
+    // ACT
+    const html = render();
+    // ASSERT
+    expect(html).not.toContain(marker);
+  });
+
   it('never lets an authored hero fill the slide, which would push it to the bottom', () => {
     // ARRANGE
     const fill = 'data-headed="fill"';
@@ -38,6 +47,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("follows the title with the Episode's place in its Event's Playlist", () => {
+    // ARRANGE
+    const position = 'Episode 2 of 4';
+    const afterTitle = new RegExp(`</h1>.*data-playlist-position[^>]*>${position}<`);
+    // ACT
+    const html = render(undefined, position);
+    // ASSERT
+    expect(html).toMatch(afterTitle);
+  });
+
   it('centres the h1 and caption over the shared glow when there is no hero', () => {
     // ARRANGE
     const glow = 'hero-glow';

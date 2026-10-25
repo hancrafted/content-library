@@ -1,7 +1,7 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import type { EpisodeSlug } from '@/lib/routes';
+import type { RecordSlug } from '@/lib/routes';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
 import type {
@@ -11,6 +11,7 @@ import type {
   RichTag,
   RuntimeKit,
   SegmentSpec,
+  SlideHref,
   TitleComponent,
 } from './slide-base';
 
@@ -46,14 +47,18 @@ export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTra
  * only its own file; `ref`, `marker`, `Marker` and `target` take only the
  * notes it declares.
  * `slideHref` takes any slug: the container fails the build for one that is not
- * a Slide of the same Episode, since the Slide cannot know which Episode it is in.
+ * a Slide of the same Episode, since the Slide cannot know which Episode it is in,
+ * unless the call site opts into the text fallback.
  */
 export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
   readonly t: OwnTranslator<M>;
   /** The page's locale, for formatting a number or date the Translation file does not hold. */
   readonly locale: Locale;
-  /** The localized `href` of another Slide of this Episode: its page path and the anchor its position gives it. */
-  readonly slideHref: (slug: string) => string;
+  /**
+   * The localized `href` of a sibling Slide in this Episode: its page path and the anchor its position gives it.
+   * With `{ fallback: 'text' }`, a sibling the Episode does not hold gives `undefined`: render the text unlinked.
+   */
+  readonly slideHref: SlideHref;
   /** A string leaf as written, `{name}` placeholders unfilled, for a client component to fill with `fillTemplate`. */
   readonly template: (key: OwnTemplateKey<M>) => string;
   /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
@@ -82,7 +87,23 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly segments: readonly SegmentSpec[];
   /** The slug of the note whose Context marker follows the caption, when a term in it needs a source. */
   readonly captionNote?: string;
+  /** Set on an instance only: the pool Slide it was copied from (design-ADR 0016, _Slide reuse_ rule 3). */
+  readonly copiedFrom?: CopiedFrom;
+  /** Set by `pinAnchor` on one Episode's reference only: the retired instance slug its anchor keeps. */
+  readonly pinnedSlug?: string;
+  /** A Definition Slide's Concept: the id of the Concept it teaches. The content store fails one that names no Concept. */
+  readonly defines?: string;
   readonly content: (kit: RuntimeKit) => ReactNode;
+}
+
+/**
+ * An instance's marker: the pool Slide it was copied from, by slug, and the commit it was copied at. An instance is a
+ * Slide folder in its Episode's own `slides/`, adapted from a reused Slide under a slug of its own; Promotion resolves
+ * it (design-ADR 0016, _Slide reuse_ rules 3 and 4).
+ */
+export interface CopiedFrom {
+  readonly slug: string;
+  readonly commit: string;
 }
 
 /** A Slide whose own file holds a `title`: the only kind that may open a Section. */
@@ -100,6 +121,13 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
   /** One of the Slide's notes: its Context marker follows the caption (a term in the caption that needs a source). */
   readonly captionNote?: N['slug'];
+  /** Set by `npm run slides:adapt` on an instance only; never written by hand. */
+  readonly copiedFrom?: CopiedFrom;
+  /**
+   * Makes this page Slide a Definition Slide: the id of the Concept it teaches
+   * (`docs/llm-wiki/concepts/<id>/concept.md`). The content store fails one that names no Concept.
+   */
+  readonly defines?: string;
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
@@ -115,9 +143,21 @@ export function slide<
     notes: spec.notes ?? [],
     segments: spec.segments ?? [],
     ...(spec.captionNote !== undefined && { captionNote: spec.captionNote }),
+    ...(spec.copiedFrom !== undefined && { copiedFrom: spec.copiedFrom }),
+    ...(spec.defines !== undefined && { defines: spec.defines }),
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
     content: spec.content as unknown as Slide['content'],
   };
+}
+
+/**
+ * One Episode's reference to a pool Slide, placed under a Pinned anchor: the slug of the instance it took over at
+ * Promotion (design-ADR 0016, _Slide reuse_ rule 4). The Episode's anchor stays `<section>--<retired slug>`, so no
+ * published link moves; the Slide itself, its slug and its text are the pool Slide's. Written by
+ * `npm run slides:promote`, never by hand; the retired slug stays reserved.
+ */
+export function pinAnchor<T extends Slide>(slide: T, retiredSlug: string): T {
+  return { ...slide, pinnedSlug: retiredSlug };
 }
 
 /** A Section of Slides: its section slide, which names it, then its page Slides. */
@@ -143,7 +183,7 @@ export type HeaderMode = 'shared' | 'authored';
  * An Episode record of Slides: static data. It carries its own
  * text, so the site-wide Translation files hold nothing of it.
  */
-export interface EpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
+export interface EpisodeRecord<Ep extends RecordSlug = RecordSlug> {
   readonly slug: Ep;
   /** One recording per locale, shown on the Title slide; optional until recorded. */
   readonly youtube?: PerLocale<string>;
@@ -175,6 +215,6 @@ export function headerModeOf(record: Pick<EpisodeRecord, 'header'>): HeaderMode 
 }
 
 /** An Episode record from its own text and its Sections; each Section's first Slide names it. */
-export function episode<Ep extends EpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
+export function episode<Ep extends RecordSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
   return record;
 }

@@ -1,4 +1,4 @@
-import { episode, slide } from '@/components/slide-master/slide';
+import { episode, pinAnchor, slide } from '@/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TRANSLATIONS } from '@/i18n/translations';
 import type { Locale } from '@/lib/locale.pure';
@@ -63,12 +63,33 @@ const RECORD = episode({
   sections: [[foundations, whyATemplate, visual], [nextSteps]],
 });
 
+// One pool Slide, held by reference: its author names the sibling by the slug they wrote.
+const lostMiddle = slide({ slug: 'the-lost-middle', messages: WHY, content: () => null });
+const linking = slide({
+  slug: 'why-context-rots',
+  messages: VISUAL,
+  content: ({ slideHref }) => createElement('a', { href: slideHref('the-lost-middle') }, 'the lost middle'),
+});
+const optional = slide({
+  slug: 'see-also',
+  messages: VISUAL,
+  content: ({ slideHref }) => {
+    const href = slideHref('the-lost-middle', { fallback: 'text' });
+    return href === undefined ? 'the lost middle' : createElement('a', { href }, 'the lost middle');
+  },
+});
+const linkOf = async (record: ReturnType<typeof episode>, slug: string) => {
+  const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] });
+  const placed = slides.find((localized) => localized.id.endsWith(slug));
+  return renderToStaticMarkup(placed?.content);
+};
+
 describe('success cases', () => {
   it("reads the Episode's own title and caption in the page's locale", async () => {
     // ARRANGE
     const expected = { title: 'Seitenvorlage', caption: 'Die kleinste Episode.' };
     // ACT
-    const { title, caption } = await recordContent(RECORD, 'de', translatorOf('de'));
+    const { title, caption } = await recordContent(RECORD, 'de', { translatorOf: translatorOf('de'), research: [] });
     // ASSERT
     expect({ title, caption }).toEqual(expected);
   });
@@ -82,7 +103,7 @@ describe('success cases', () => {
       { id: 'next-steps', section: 'next-steps', level: 'h2', title: 'Nächste Schritte' },
     ];
     // ACT
-    const { slides } = await recordContent(RECORD, 'de', translatorOf('de'));
+    const { slides } = await recordContent(RECORD, 'de', { translatorOf: translatorOf('de'), research: [] });
     // ASSERT
     expect(slides.map(({ id, section, level, title }) => ({ id, section, level, title }))).toEqual(expected);
   });
@@ -103,7 +124,7 @@ describe('success cases', () => {
       undefined,
     ];
     // ACT
-    const { slides, header } = await recordContent(record, 'en', translatorOf('en'));
+    const { slides, header } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] });
     // ASSERT
     expect(header).toBe('shared');
     expect(slides.map((placed) => placed.header)).toEqual(expected);
@@ -119,7 +140,7 @@ describe('success cases', () => {
     const record = episode({ slug: 'page-template', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = '<p>Rakete</p>';
     // ACT
-    const { hero: scene } = await recordContent(record, 'de', translatorOf('de'));
+    const { hero: scene } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), research: [] });
     // ASSERT
     expect(renderToStaticMarkup(scene)).toBe(expected);
   });
@@ -134,7 +155,7 @@ describe('success cases', () => {
     const record = episode({ slug: 'page-template', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = 'Eine leere Pipeline.';
     // ACT
-    const { caption } = await recordContent(record, 'de', translatorOf('de'));
+    const { caption } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), research: [] });
     // ASSERT
     expect(caption).toBe(expected);
   });
@@ -152,9 +173,77 @@ describe('success cases', () => {
     const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[bold]] });
     const expected = { title: 'Foundations', caption: 'Revenue lands here.', captionEmphasis: [{ start: 8, end: 13 }] };
     // ACT
-    const { slides } = await recordContent(record, 'en', translatorOf('en'));
+    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] });
     // ASSERT
     expect(slides[0].header).toEqual(expected);
+  });
+  it('A link between sibling Slides still works in an Episode whose siblings differ, and a missing sibling fails the build', async () => {
+    // ARRANGE
+    const nested = episode({
+      slug: 'page-template',
+      messages: EPISODE,
+      sections: [[foundations, linking, lostMiddle]],
+    });
+    const leading = episode({
+      slug: 'slide-master',
+      messages: EPISODE,
+      sections: [[lostMiddle], [nextSteps, linking]],
+    });
+    const missing = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, linking]] });
+    const expected = {
+      nested: '<a href="/episodes/page-template#foundations--the-lost-middle">the lost middle</a>',
+      leading: '<a href="/episodes/slide-master#the-lost-middle">the lost middle</a>',
+    };
+    // ACT
+    const result = {
+      nested: await linkOf(nested, 'why-context-rots'),
+      leading: await linkOf(leading, 'why-context-rots'),
+    };
+    const build = recordContent(missing, 'en', { translatorOf: translatorOf('en'), research: [] });
+    // ASSERT
+    expect(result).toEqual(expected);
+    await expect(build).rejects.toThrow(/the-lost-middle.*slides.*foundations--why-context-rots/);
+  });
+  it('resolves a sibling link to the instance an Episode holds of that sibling, even beside its origin', async () => {
+    // ARRANGE
+    const instance = slide({
+      slug: 'the-lost-middle-for-founders',
+      copiedFrom: { slug: 'the-lost-middle', commit: '0123abc' },
+      messages: WHY,
+      content: () => null,
+    });
+    const adapted = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, instance, linking]] });
+    const both = episode({
+      slug: 'slides',
+      messages: EPISODE,
+      sections: [[foundations, lostMiddle, instance, linking]],
+    });
+    const expected = {
+      adapted: '<a href="/episodes/slides#foundations--the-lost-middle-for-founders">the lost middle</a>',
+      both: '<a href="/episodes/slides#foundations--the-lost-middle-for-founders">the lost middle</a>',
+    };
+    // ACT
+    const result = { adapted: await linkOf(adapted, 'why-context-rots'), both: await linkOf(both, 'why-context-rots') };
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
+  it('places a pool Slide at the anchor its Episode pinned, and a sibling link follows it there', async () => {
+    // ARRANGE
+    const pinnedRecord = episode({
+      slug: 'slides',
+      messages: EPISODE,
+      sections: [[foundations, pinAnchor(lostMiddle, 'the-lost-middle-for-founders'), linking]],
+    });
+    const expected = {
+      ids: ['foundations', 'foundations--the-lost-middle-for-founders', 'foundations--why-context-rots'],
+      link: '<a href="/episodes/slides#foundations--the-lost-middle-for-founders">the lost middle</a>',
+    };
+    // ACT
+    const { slides } = await recordContent(pinnedRecord, 'en', { translatorOf: translatorOf('en'), research: [] });
+    const result = { ids: slides.map(({ id }) => id), link: await linkOf(pinnedRecord, 'why-context-rots') };
+    // ASSERT
+    expect(result).toEqual(expected);
   });
 });
 
@@ -168,7 +257,7 @@ describe('failure cases', () => {
     });
     const expected = 'foundations';
     // ACT
-    const build = recordContent(record, 'en', translatorOf('en'));
+    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] });
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -182,7 +271,7 @@ describe('failure cases', () => {
     const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[foundations, titled]] });
     const expected = /header: 'authored'/;
     // ACT
-    const { slides } = await recordContent(record, 'en', translatorOf('en'));
+    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] });
     const render = () => renderToStaticMarkup(slides[1].content);
     // ASSERT
     expect(render).toThrow(expected);
@@ -200,7 +289,7 @@ describe('failure cases', () => {
     const record = episode({ slug: 'page-template', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = 'hero';
     // ACT
-    const build = recordContent(record, 'en', translatorOf('en'));
+    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] });
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -219,7 +308,7 @@ describe('edge cases', () => {
     const record = episode({ slug: 'page-template', messages: EPISODE, sections: [[referring]] });
     const expected = 'öffnet Sprechernotiz';
     // ACT
-    const { slides } = await recordContent(record, 'de', translatorOf('de'));
+    const { slides } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), research: [] });
     const [{ content }] = slides;
     const label = isValidElement<{ label: string }>(content) ? content.props.label : undefined;
     // ASSERT
@@ -241,7 +330,7 @@ describe('edge cases', () => {
     const expected =
       '<h3 data-target="title" class="font-semibold text-balance hyphens-auto text-subheading">Why a template</h3>';
     // ACT
-    const { slides, header } = await recordContent(record, 'en', translatorOf('en'));
+    const { slides, header } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] });
     // ASSERT
     expect(header).toBe('authored');
     expect(slides.map((placed) => placed.header)).toEqual([undefined, undefined]);
@@ -253,9 +342,23 @@ describe('edge cases', () => {
     const record = episode({ slug: 'page-template', messages: EPISODE, entrance: 'fade', sections: [[foundations]] });
     const expected = { byDefault: 'typewriter', named: 'fade' };
     // ACT
-    const byDefault = (await recordContent(RECORD, 'en', translatorOf('en'))).entrance;
-    const named = (await recordContent(record, 'en', translatorOf('en'))).entrance;
+    const byDefault = (await recordContent(RECORD, 'en', { translatorOf: translatorOf('en'), research: [] })).entrance;
+    const named = (await recordContent(record, 'en', { translatorOf: translatorOf('en'), research: [] })).entrance;
     // ASSERT
     expect({ byDefault, named }).toEqual(expected);
+  });
+
+  it('renders a text-fallback link as plain text when the sibling is absent, and as a link when it is there', async () => {
+    // ARRANGE
+    const absent = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, optional]] });
+    const present = episode({ slug: 'slides', messages: EPISODE, sections: [[foundations, optional, lostMiddle]] });
+    const expected = {
+      absent: 'the lost middle',
+      present: '<a href="/episodes/slides#foundations--the-lost-middle">the lost middle</a>',
+    };
+    // ACT
+    const result = { absent: await linkOf(absent, 'see-also'), present: await linkOf(present, 'see-also') };
+    // ASSERT
+    expect(result).toEqual(expected);
   });
 });

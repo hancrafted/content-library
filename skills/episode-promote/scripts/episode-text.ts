@@ -23,8 +23,8 @@ function messages(file: string): SlideMessages {
 const episode = messages(path.join(folder, 'i18n', `${locale}.json`));
 const sections = episodeOutline(folder).sections.map((slides) =>
   slides.map((slide) => ({
-    slug: slide,
-    messages: messages(path.join(folder, 'slides', slide, 'i18n', `${locale}.json`)),
+    slug: slide.slug,
+    messages: messages(path.join(slide.folder, 'i18n', `${locale}.json`)),
   })),
 );
 process.stdout.write(episodeText({ episode: { title: episode.title ?? slug, caption: episode.caption }, sections }));

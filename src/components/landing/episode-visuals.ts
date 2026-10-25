@@ -1,14 +1,15 @@
-import type { Accent, TagIcon } from '@/lib/episode-overview';
-import { Coins, FileText, Handshake, Hourglass, ListPlus, Sparkles, type LucideIcon } from 'lucide-react';
+import type { Accent, ThemeIcon } from '@/lib/episode-overview';
+import { Brain, Coins, FileText, Handshake, Hourglass, ListPlus, Sparkles, type LucideIcon } from 'lucide-react';
 
-/** A Tag names its icon as data; this is the one place the landing turns the name into a drawing. */
-export const TAG_ICONS: Record<TagIcon, LucideIcon> = {
+/** A top Concept's theme names its icon as data; this is the one place the landing turns the name into a drawing. */
+export const THEME_ICONS: Record<ThemeIcon, LucideIcon> = {
   sparkles: Sparkles,
   hourglass: Hourglass,
   'list-plus': ListPlus,
   handshake: Handshake,
   'file-text': FileText,
   coins: Coins,
+  brain: Brain,
 };
 
 /** One colour family drawn as the classes a card needs; whole strings, so Tailwind can see each one. */
@@ -21,7 +22,7 @@ export interface AccentClasses {
   readonly edge: string;
 }
 
-export const TAG_ACCENTS: Record<Accent, AccentClasses> = {
+export const THEME_ACCENTS: Record<Accent, AccentClasses> = {
   primary: {
     ink: 'text-primary',
     wash: 'from-primary/10',
@@ -51,5 +52,10 @@ export const TAG_ACCENTS: Record<Accent, AccentClasses> = {
     ink: 'text-violet-700 dark:text-violet-400',
     wash: 'from-violet-500/15',
     edge: 'hover:border-violet-500/50 has-[a:focus-visible]:border-violet-500/50',
+  },
+  teal: {
+    ink: 'text-teal-700 dark:text-teal-400',
+    wash: 'from-teal-500/15',
+    edge: 'hover:border-teal-500/50 has-[a:focus-visible]:border-teal-500/50',
   },
 };

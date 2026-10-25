@@ -20,22 +20,24 @@ Under the App Router the directory **is** the URL: `src/app/[locale]/episode/pag
 
 One rule spans both: import direction. Lib stays React-free so a lib module is a plain module a test imports without a DOM.
 
+Slide internals stay ungoverned in shape (the Slide wrapper rules add only Backdrop, looping and stacking): a prototype's per-slide type interface degraded every visualisation, and silence gets filled with structure, so governance binds boundaries, never a Slide's inside. A Slide folder is `episodes/<ep>/slides/<slide>/` or `slide-pool/<slide>/`; an Explorable explanation is `explorable-explanations/<name>/`; `slide-shared/core-components/` holds primitives, one subfolder each. A Slide folder imports only global shared code so a Slide copied with `cp -r`, one import and one list entry needs nothing else.
+
 Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). The router forbids it in the framework zone; in the authored zone three tier folders already carry the direction, and a Package tree would add a second positional law. A record wanting Packages must reverse this one.
 
 ## Decision
 
 ### 1. Thin routes
 
-1. A `page.tsx` MUST render one page component from `src/components/pages/**`, plus its segment exports.
-2. A root layout MUST render `SiteShell`, plus `metadata` and segment exports; a nested layout MUST NOT (`<html>`), it MAY wrap children.
-3. Route files MUST hold no layout markup, data shaping or business logic.
-4. A route MUST reach `src/components/**` only through the two composition roots: `src/components/pages/**` and `SiteShell`.
+1. A `page.tsx` MUST render one page component from `src/components/pages/**`, plus segment exports.
+2. A root layout MUST render `SiteShell`, plus `metadata` and segment exports; a nested layout MUST NOT render `<html>` and MAY wrap children.
+3. Routes MUST hold no layout markup, data shaping or business logic.
+4. A route MUST reach `src/components/**` only through `src/components/pages/**` and `SiteShell`.
 
 ### 2. Import direction
 
 1. Tiers run `app → components → hooks → lib`. An edge MAY skip a tier downward; it MUST NOT point upward.
 2. No import cycle MAY exist under `src/`.
-3. `src/components/pages/**` is the top sub-tier of components: only a route or a test imports it.
+3. `src/components/pages/**` is components' top sub-tier; only a route or test imports it.
 4. A stylesheet import is not a tier edge.
 
 ### 3. `src/lib/**` imports no React
@@ -44,16 +46,15 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 4. The ungoverned zone: Slide internals
 
-1. What renders inside one Slide — markup, props, layout — is explicitly **not** governed: no mandated component shape, prop interface or layout rule. Values, not shape: tokens govern colour, size and weight inside a Scene; the Slide wrapper rules add only Backdrop, looping and stacking.
-2. Why: a prototype's per-slide type interface degraded every visualisation. Governance binds boundaries, never a Slide's inside; silence gets filled with structure.
+1. What renders inside one Slide (markup, props, layout) is **not** governed: no mandated shape, prop interface or layout rule. Values, not shape: tokens govern colour, size and weight inside a Scene.
 
 ### 5. A Slide folder imports only global shared code
 
-1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `slide-shared/core-components/` only from its server files, never from a `*.client.tsx` widget.
-2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `slide-shared/core-components/`, hooks, lib.
-   1. (§5.2.1) `src/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
-   2. (§5.2.2) Every `slide-shared` part, its `*.client.tsx` files included, MAY import `core-components/`.
-3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing else. §4 holds inside.
+1. A Slide folder MUST import only its own files and `slide-master/`, `slide-shared/`, `explorable-explanations/`, `ui/`, `src/hooks/`, `src/lib/`, never another Slide or its Episode. Its `*.client.tsx` MUST import only own files, hooks, lib; `slide-shared/core-components/` is reached from server files only.
+2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/`; its `*.client.tsx` only own folder, `core-components/`, hooks, lib.
+   1. (§5.2.1) `slide-shared/core-components/` holds the primitives parts share. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
+   2. (§5.2.2) Every `slide-shared` part, its `*.client.tsx` included, MAY import `core-components/`.
+3. An Explorable explanation follows rule 2, its `*.client.tsx` too.
 
 ## Do's and Don'ts
 
@@ -109,7 +110,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 **Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/lib/` carry no classifier; left for a future lib-tree record.
 
-**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); core components own no words (§5.2.1); `slide-shared` parts take serializable props and own no words, except a Shared visual's locale pair of data and default words, which a Slide overrides (§5).
+**Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); core components own no words (§5.2.1); `slide-shared` parts take serializable props and own no words, except an Explorable explanation's locale pair of data and default words, which a Slide overrides (§5).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

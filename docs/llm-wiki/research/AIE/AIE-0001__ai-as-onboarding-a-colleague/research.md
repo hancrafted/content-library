@@ -2,6 +2,9 @@
 type: research
 title: 'Why do others frame working with AI as onboarding a colleague?'
 description: 'Vendors and practitioners call AI a new colleague because it has broad ability but no knowledge of your work, so you must supply context, a brief and checks.'
+confidence: contested
+confidence_reason: 'Practitioner and vendor sources agree on the onboarding lens, but Mollick rejects its intern form, so the Sources disagree.'
+informs: [agentic-ai, context-engineering]
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-13T00:00:00Z

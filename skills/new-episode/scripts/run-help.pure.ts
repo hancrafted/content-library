@@ -20,7 +20,7 @@ export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
   score <target> <name> <value> --source s [--rubric r] [--body b] [--via chat|commit] [--comment c] [--ticket n]
                                                    target: <job> (Job), <job>#<n> (Attempt) or gate:<name>
   note <job> <type> "<text>"                       record a typed note on the open Job; type is needs-human, blocked,
-                                                   research-gap, spine-change or no-library-match
+                                                   research-gap, spine-change, no-library-match or concept-gap
   resume                                           re-open the marker for the current Run in a new session
   archive                                          copy events.jsonl, pipeline.yml, brief.md, spec/spec.html to .logs/new-episode/<slug>/
 status is ok (default), error, refused, crashed or reused.`;

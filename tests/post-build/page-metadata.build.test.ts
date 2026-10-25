@@ -1,12 +1,15 @@
-// FE-008 post-build check: every exported page carries one canonical pointing at
-// itself, and hreflang alternates that resolve to exported files and link back.
+// FE-008 post-build check: every exported page carries one canonical — itself, or
+// for a public Episode under an Event its own /episodes/ page (design-ADR 0016) — and,
+// when self-canonical, hreflang alternates that resolve to exported files and link back.
 // Reads the built HTML, so it judges what crawlers see, not what the code meant.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { localizePath } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
-import { EXPORTED_PAGES, exportedFile, OUT_DIR } from './exported-pages';
+import { episodeRoute, isEpisodeSlug, ROUTES } from '../../src/lib/routes';
+import { EXPORTED_PAGES, exportedFile, OUT_DIR, type ExportedPage } from './exported-pages';
 
 // The deploy passes its SITE_URL here too, so a build that lost its
 // SITE_URL — and emitted localhost canonicals — fails against the workflow's value.
@@ -64,6 +67,22 @@ function servedUrl(url: string): string {
   return url === '/' ? `${SITE_URL}/` : `${SITE_URL}${url}/`;
 }
 
+const EVENT_EPISODE_RE = new RegExp(`${ROUTES.events}/[^/]+/episodes/([^/]+)$`);
+
+/** The public Episode an Event-scoped page shows, whose own page takes the canonical; none for any other page. */
+function creditedEpisode(url: string): string | undefined {
+  const episode = EVENT_EPISODE_RE.exec(url)?.[1];
+  return episode !== undefined && isEpisodeSlug(episode) ? episode : undefined;
+}
+
+/** The canonical a page should carry: its own URL, or a credited Episode's own page in the same locale. */
+function expectedCanonical({ url, locale }: ExportedPage): string {
+  const episode = creditedEpisode(url);
+  return servedUrl(
+    episode === undefined || !isEpisodeSlug(episode) ? url : localizePath(episodeRoute(episode), locale),
+  );
+}
+
 describe('page metadata', () => {
   let pages: PageLinks[] = [];
 
@@ -77,11 +96,11 @@ describe('page metadata', () => {
     console.info(`page metadata: walked ${pages.length} pages, ${alternateCount} alternates, site ${SITE_URL}`);
   });
 
-  it('gives every page exactly one canonical, pointing at the page itself', () => {
+  it('gives every page exactly one canonical: itself, or the own page of a public Episode seen under an Event', () => {
     // ARRANGE
     const expected = EXPORTED_PAGES.map((page) => ({
       file: exportedFile(page.url),
-      canonicals: [servedUrl(page.url)],
+      canonicals: [expectedCanonical(page)],
     }));
     // ACT
     const actual = pages.map(({ file, canonicals }) => ({ file, canonicals }));
@@ -89,15 +108,17 @@ describe('page metadata', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('lists only exported locales and x-default as alternates on each page', () => {
+  it('lists only exported locales and x-default as alternates on each page, and none on a page canonical elsewhere', () => {
     // ARRANGE
-    const englishOnlyRoute = '/dashboard';
+    const isEnglishOnly = (url: string) =>
+      url === '/dashboard' || url.startsWith('/concepts/') || url.startsWith('/research/');
     const englishOnlyLanguages = ['en', 'x-default'];
     const bilingualLanguages = ['de', 'en', 'x-default'];
-    const expected = EXPORTED_PAGES.map(({ url }) => ({
-      file: exportedFile(url),
-      langs: url === englishOnlyRoute ? englishOnlyLanguages : bilingualLanguages,
-    }));
+    const langsOf = (url: string) => {
+      if (creditedEpisode(url) !== undefined) return [];
+      return isEnglishOnly(url) ? englishOnlyLanguages : bilingualLanguages;
+    };
+    const expected = EXPORTED_PAGES.map(({ url }) => ({ file: exportedFile(url), langs: langsOf(url) }));
     // ACT
     const actual = pages.map(({ file, alternates }) => ({ file, langs: Object.keys(alternates).sort() }));
     // ASSERT

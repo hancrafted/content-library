@@ -1,4 +1,4 @@
-import { FILTER_TAGS, type TagId } from '@/lib/episode-overview';
+import { TOP_CONCEPT_IDS, type TopConceptId } from '@/lib/episode-overview';
 import { fillTemplate } from '@/lib/template.pure';
 import type { EpisodeCard, Labelled } from './episode-card.pure';
 
@@ -17,25 +17,26 @@ export const SPOTLIGHT_SIZE = 3;
 
 /** The visitor's choices in the Browse grid; transient, held in memory only (FE-001). */
 export interface BrowseSelection {
-  /** The Tags the visitor pressed; a card needs any one of them, and none pressed lifts the filter. */
-  readonly tags: readonly TagId[];
+  /** The top Concepts the visitor pressed; a card needs any one of them, and none pressed lifts the filter. */
+  readonly concepts: readonly TopConceptId[];
   /** The text the visitor typed into search; blank lifts the search. */
   readonly query: string;
   /** True once the visitor asked for every match instead of the first {@link BROWSE_CAP}. */
   readonly expanded: boolean;
 }
 
-export const INITIAL_SELECTION: BrowseSelection = { tags: [], query: '', expanded: false };
+export const INITIAL_SELECTION: BrowseSelection = { concepts: [], query: '', expanded: false };
 
-/** The selection with the Tag pressed, or released if it was already pressed. */
-export function toggleTag(selection: BrowseSelection, tag: TagId): BrowseSelection {
-  const tags = selection.tags.includes(tag) ? selection.tags.filter((id) => id !== tag) : [...selection.tags, tag];
-  return { ...selection, tags };
+/** The selection with the top Concept pressed, or released if it was already pressed. */
+export function toggleConcept(selection: BrowseSelection, concept: TopConceptId): BrowseSelection {
+  const pressed = selection.concepts;
+  const concepts = pressed.includes(concept) ? pressed.filter((id) => id !== concept) : [...pressed, concept];
+  return { ...selection, concepts };
 }
 
-/** Whether a Tag is pressed or a query typed, i.e. whether "Reset filters" has anything to lift. */
+/** Whether a top Concept is pressed or a query typed, i.e. whether "Reset filters" has anything to lift. */
 export function hasActiveFilters(selection: BrowseSelection): boolean {
-  return selection.tags.length > 0 || fold(selection.query) !== '';
+  return selection.concepts.length > 0 || fold(selection.query) !== '';
 }
 
 /** The cards newest first, ties by slug, then the upcoming ones in the order given. */
@@ -65,9 +66,9 @@ function fold(text: string): string {
   return text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
 }
 
-/** The text a query searches: the title, caption and every Tag name in the reader's locale, so a Tag's tooltip is left out. */
+/** The text a query searches: the title, caption and every Concept name in the reader's locale, so a Concept's tooltip is left out. */
 function searchText(card: EpisodeCard): string {
-  return fold([card.title, card.caption, ...card.tags.map((tag) => tag.label)].join('\n'));
+  return fold([card.title, card.caption, ...card.concepts.map((concept) => concept.label)].join('\n'));
 }
 
 function matchesQuery(card: EpisodeCard, query: string): boolean {
@@ -76,8 +77,8 @@ function matchesQuery(card: EpisodeCard, query: string): boolean {
 }
 
 function matches(card: EpisodeCard, selection: BrowseSelection): boolean {
-  const tagged = selection.tags.length === 0 || card.tags.some((tag) => selection.tags.includes(tag.id));
-  return tagged && matchesQuery(card, selection.query);
+  const named = selection.concepts.length === 0 || card.concepts.some(({ id }) => selection.concepts.includes(id));
+  return named && matchesQuery(card, selection.query);
 }
 
 export interface BrowseView {
@@ -107,25 +108,25 @@ export function browseView(
   };
 }
 
-export interface TagOption extends Labelled<TagId> {
+export interface ConceptOption extends Labelled<TopConceptId> {
   readonly count: number;
 }
 
 /**
- * One chip per filter Tag any card carries, in vocabulary order, counting what
- * pressing it alone would show under the typed query; an Episode with two Tags
- * counts in both. The pressed Tags do not change a count, so the row neither
+ * One chip per top Concept any card names, in theme order, counting what
+ * pressing it alone would show under the typed query; an Episode with two
+ * Concepts counts in both. The pressed Concepts do not change a count, so the row neither
  * jumps nor shrinks as the visitor widens the OR, and a chip the query
  * empties stays, at zero.
  */
-export function tagChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): TagOption[] {
-  const labels = new Map<TagId, string>();
-  for (const { id, label } of cards.flatMap((card) => card.tags)) labels.set(id, label);
+export function conceptChoices(cards: readonly EpisodeCard[], selection: BrowseSelection): ConceptOption[] {
+  const labels = new Map<TopConceptId, string>();
+  for (const { id, label } of cards.flatMap((card) => card.concepts)) labels.set(id, label);
   const searched = cards.filter((card) => matchesQuery(card, selection.query));
-  return FILTER_TAGS.flatMap((id) => {
+  return TOP_CONCEPT_IDS.flatMap((id) => {
     const label = labels.get(id);
     if (label === undefined) return [];
-    return [{ id, label, count: searched.filter((card) => card.tags.some((tag) => tag.id === id)).length }];
+    return [{ id, label, count: searched.filter((card) => card.concepts.some((concept) => concept.id === id)).length }];
   });
 }
 

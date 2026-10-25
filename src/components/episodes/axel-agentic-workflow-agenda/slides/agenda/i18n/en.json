@@ -1,0 +1,9 @@
+{
+  "title": "Agenda",
+  "caption": "Three Episodes, one after the other. Each opens from the Event page.",
+  "steps": {
+    "onboard": "Onboard AI every time: treat it like a brilliant freelancer with amnesia.",
+    "attention": "Manage its attention span: a long chat is a limited window.",
+    "management": "Take on the management work: AI executes, you manage."
+  }
+}

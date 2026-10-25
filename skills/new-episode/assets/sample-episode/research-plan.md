@@ -2,8 +2,8 @@
 
 ## Research jobs
 
-- new: AIE-0000__why-recall-degrades-with-position, question 1.
+- new: AIE-0000__why-recall-degrades-with-position, question 1, informs llm-behaviour, context-engineering.
 
 ## Reuse
 
-- Question 2: reuse `docs/llm-wiki/research/AIE/AIE-0004__context-and-brief-improve-ai-output/research.md`.
+- Question 2: reuse AIE-0011, confidence contested, fresh until 2027-04-19.

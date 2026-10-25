@@ -23,20 +23,20 @@ A Section's own slide is a Slide like any other: its `title` names the Section a
 
 ## Role vocabulary
 
-| Role                                  | Meaning                                                                                  | Used on                          |
-| ------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| `title`                               | the Slide's heading and table-of-contents label; absent on an untitled Slide             | Slide                            |
-| `caption`                             | one-line framing under the title                                                         | Slide                            |
-| `prose`                               | body paragraph                                                                           | Slide                            |
-| `columns.<column>.{title,prose}`      | one column of a three-column Slide, keyed by its slug                                    | Slide                            |
-| `notes.<note>.header`                 | Speaker note item heading                                                                | Speaker note                     |
-| `notes.<note>.description`            | Speaker note item text; cites sources as `[1]`, `[2]`                                    | Speaker note                     |
-| `notes.<note>.sources.<source>.title` | a cited source's title                                                                   | Speaker note, if it has sources  |
-| `notes.<note>.image.alt`              | alt text of the note's image                                                             | Speaker note, if it has an image |
-| `voiceScript.segments.<seg>.title`    | Voice script segment heading                                                             | Voice script segment             |
-| `voiceScript.segments.<seg>.keywords` | one leaf, comma-separated                                                                | Voice script segment             |
-| `voiceScript.segments.<seg>.script`   | the spoken text                                                                          | Voice script segment             |
-| `voiceScript.segments.<seg>.bridge`   | closing line handing over to the next Section; only if the Slide declares `bridge: true` | Voice script segment             |
+| Role                                  | Meaning                                                                                  | Used on                           |
+| ------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------- |
+| `title`                               | the Slide's heading and table-of-contents label; absent on an untitled Slide             | Slide                             |
+| `caption`                             | one-line framing under the title                                                         | Slide                             |
+| `prose`                               | body paragraph                                                                           | Slide                             |
+| `columns.<column>.{title,prose}`      | one column of a three-column Slide, keyed by its slug                                    | Slide                             |
+| `notes.<note>.header`                 | Speaker note item heading                                                                | Speaker note                      |
+| `notes.<note>.description`            | Speaker note item text; cites sources as `[1]`, `[2]`                                    | Speaker note                      |
+| `notes.<note>.sources.<source>.title` | the title of a source cited by `url`; a `research` source takes its question's title     | Speaker note, if it cites a `url` |
+| `notes.<note>.image.alt`              | alt text of the note's image                                                             | Speaker note, if it has an image  |
+| `voiceScript.segments.<seg>.title`    | Voice script segment heading                                                             | Voice script segment              |
+| `voiceScript.segments.<seg>.keywords` | one leaf, comma-separated                                                                | Voice script segment              |
+| `voiceScript.segments.<seg>.script`   | the spoken text                                                                          | Voice script segment              |
+| `voiceScript.segments.<seg>.bridge`   | closing line handing over to the next Section; only if the Slide declares `bridge: true` | Voice script segment              |
 
 `<note>`, `<seg>`, `<column>` and `<source>` are kebab-case slugs. A Slide may add a leaf no role describes (the untitled Slide in page-template keeps its sentence under `statement`); add a role to the table in the same change when a new Slide layout needs one.
 
@@ -86,9 +86,9 @@ page-template/i18n/en.json              title, caption, description
 
 ## Episode overview entries
 
-Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, Format, Tags (lead Tag first) and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
+Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, Format, the top Concepts it teaches (`concepts`), the one whose look its card takes (`applyThemeFromConcept`) and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
 
-- `TAGS`: the closed Tag vocabulary, each Tag with an icon and an accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
+- `CONCEPT_THEMES`: one icon and accent per top Concept, the closed set `applyThemeFromConcept` may name; an Episode declares no look of its own. Its order is the order of the filter chips. The Concepts themselves are files in `docs/llm-wiki/concepts/`; the content store checks the two hold the same top Concepts.
 - `FORMATS`: the closed list of Formats.
 - `FEATURED`: exactly three published slugs, lead first.
 
@@ -97,23 +97,29 @@ An entry reads its text from:
 - An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry (`findEpisode(slug).messages[locale]`).
 - An Upcoming Episode with no page: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when its page is written.
 - Every Episode: `landing.episodeOverview.formats.<format>`, one per id in `FORMATS`. The Format control and label stay hidden until two Formats are in use.
-- Every Tag in the vocabulary: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; a test fails when an Episode lists an id outside `TAGS`, lists none, or when a Tag lacks either key in en or de.
+- Every top Concept: `landing.episodeOverview.concepts.<id>.name` and `.tooltip`, one per id in `CONCEPT_THEMES`: the card's chip, a link to the English Concept page. On a German page the chip carries `landing.episodeOverview.conceptInEnglish` (`.mark` shown, `.label` for screen readers). The content store fails an Episode that names a Concept outside the top Concepts; a test fails when a top Concept lacks either key in en or de.
+- The Concept page (`/concepts/<id>`, English only): its name, definition and body come from the Concept file; its labels from `conceptPage`.
 - Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the overview's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
 - The `/episodes` heading and its one-line intro: `episodesPage.title` and `episodesPage.intro`.
 
-## Workshop keys
+## Event keys
 
-A Workshop is a record in `src/lib/workshops.pure.ts` that holds no string ([Workshops](workshops.md)). Its text sits in the site-wide files:
+An Event is a record in `src/lib/events.pure.ts` that holds no string ([Events](events.md)). Its text sits in the site-wide files:
 
-- `workshopsPage.items.<slug>.title` and `.description`, one pair per Workshop slug. The title is the card's heading, the Workshop page's `h1` and `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
-- `workshopsPage.title` and `workshopsPage.intro`: the `/workshops` heading and its one-line intro.
-- `workshopsPage.episodeCount.one` and `.other`: the Episode count on a card and on the Workshop page; `other` keeps a plain `{count}` placeholder.
-- `workshopsPage.agenda`: the heading of the numbered Episode list on a Workshop page.
-- `workshopsPage.start`: the primary button, with a `{step}` placeholder for the first Episode that has a page ("Start with Episode 1").
-- `workshopsPage.readingTime`: the total reading time of the Episodes, with a `{minutes}` placeholder.
-- `workshopsPage.back`: the link up to `/workshops`; the page draws its arrow icon, so the string holds none.
-- `meta.workshops.title` and `.description`: the `/workshops` page metadata, read by `pageMetadata('workshops', locale)` (FE-008). A Workshop page takes its metadata from its `items` pair.
+- `eventsPage.items.<slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Event page's `h1` and `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
+- `eventsPage.title` and `eventsPage.intro`: the `/events` heading and its one-line intro; `eventsPage.empty`: the line `/events` shows when no Event's Playlist is public.
+- `eventsPage.episodeCount.one` and `.other`: the Episode count on a card and on the Event page; `other` keeps a plain `{count}` placeholder.
+- `eventsPage.playlist`: the heading of the numbered Episode list on an Event page.
+- `eventsPage.start`: the primary button, with a `{step}` placeholder for the first Episode that has a page ("Start with Episode 1").
+- `eventsPage.readingTime`: the total reading time of the Episodes, with a `{minutes}` placeholder.
+- `eventsPage.breadcrumb`: the accessible name of the trail above an Event page and its Episode pages (Events / Event / Episode); the trail's first step reads `eventsPage.title`.
+- `eventsPage.kinds.<kind>` and `eventsPage.audiences.<audience>`: the Event's kind and Audience on its facts line, one key per value of `kind` and `audience` in `src/lib/events.pure.ts`.
+- `eventsPage.pastNotice`: the one fixed line a past Event shows above its Playlist and above the title of each of its Episode pages (design-ADR 0016, Event page behaviour). It carries no date.
+- `eventsPage.chips.event-frame` and `.unlisted`: the chip on an Event page's card of the event-frame Episode and of any other unlisted Episode.
+- `eventsPage.position`: "Episode {position} of {count}", under the title of an Event-scoped Episode page.
+- `eventsPage.previous`, `.next`, `.backToEvent` and `.playlistNav`: the walk at the end of an Event-scoped Episode page and its accessible name.
+- `nav.events`: the header entry. `meta.events.title` and `.description`: the `/events` page metadata, read by `pageMetadata('events', locale)` (FE-008). An Event page takes its metadata from its `items` pair.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-`page-template`, `slide-layouts` and `slide-master` are layout references (`LAYOUT_REFERENCES`), not content: they are not in the Episode overview and need no metadata.
+`page-template` is a layout reference (`LAYOUT_REFERENCES`), and `slide-layouts`, `slide-master` and `slides` are tooling pages (`TOOLING_SLUGS`, `src/lib/tooling-pages.ts`), not content: none is in the Episode overview and none needs metadata.

@@ -19,11 +19,56 @@ _Avoid_: Episode index, catalog, episode list, manifest
 **Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
-**Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
-_Avoid_: Topic, category, theme, label, keyword
+**Concept**: one subject the evidence and the Episodes are grouped under: one markdown file at `docs/llm-wiki/concepts/<id>/concept.md` whose id is its kebab-case English name, never renamed (a better name becomes an alias). It sits in a hierarchy by `broader` (its parents); `narrower` is derived, never written. It renders in English only at `/concepts/<id>`.
+_Avoid_: Tag, Topic, category, keyword
 
-**Workshop**: a dated, ordered set of Episodes, run as one event. It lists Episode slugs in the order to follow them and may list an upcoming Episode. It is not a playlist and has no status.
-_Avoid_: Playlist, course, series
+**Top Concept**: a Concept with no parent (`broader: []`). The seven top Concepts are the closed set of themes: each has an icon and an accent, and a new one is a design decision, not a content edit. An Episode lists the top Concepts it teaches, and its card shows them, linked to their pages.
+_Avoid_: Root concept, theme tag, lead Tag
+
+**Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging except while a Run refreshes it: the refresh keeps the id in Staging, listed as `refresh` in its Research plan, until Promotion replaces the wiki file. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source. A duplicate merged at the Promotion Gate retires: its id goes into the kept question's `supersedes` line, every citation of it points to the kept question, and no file takes the id again.
+_Avoid_: Research file, research note, finding
+
+**Source**: one piece of evidence a claim rests on: a paper, a vendor's documentation, a law's text, an essay. A Research question weighs its Sources and lists them; a Speaker note item cites a Source directly only when it is a High-trust Source, and otherwise cites the Research question that weighs it.
+_Avoid_: Reference, link (for the evidence itself)
+
+**High-trust Source**: a Source whose `https://` host, or a subdomain of it, is on the allowlist in `src/lib/high-trust-hosts.pure.ts`: an accountable primary publisher of the claim, such as a vendor's own documentation, a law's own text or the scholarly record. It is the only Source a Speaker note item may cite directly. There is one level, on the list or off it, and adding a host is Han's trust decision. The allowlist does not govern the Sources a Research question weighs.
+_Avoid_: Trusted domain, primary source (as a check), whitelist
+
+**Source baseline**: `src/lib/source-baseline.json`, the Speaker note sources that cited a Source off the allowlist when the citation contract began, each named `<episode>/<slide>/<note>/<slug>` with its url. A listed source passes until a Run touching its note moves it to a Research question. It only shrinks: a direct url neither high trust nor listed fails, and so does an entry whose source is gone. It is reviewed when horizon 2 starts and deleted once empty.
+_Avoid_: Allowlist exceptions, grandfather list, ignore file
+
+**Confidence**: how settled the evidence for a Research question's Answer is, never the writer's certainty: `settled` (at least two independent primary Sources agree, nothing contradicts them), `contested` (credible Sources disagree, or the effect depends on context the Answer names) or `open` (anything less). The writer proposes it, with one line on which Sources earn it (`confidence_reason`); it stays a proposal until Han confirms it with a `verified` entry at or after `generated.at`.
+_Avoid_: Certainty, evidence level, trust level
+
+**informs**: the field of a Research question that lists the Concepts it supports, the first its main one; each Concept's page lists the Research questions that inform it.
+_Avoid_: Tags, categories, concepts (as a field name)
+
+**concept-gap**: the note `categorize-research` returns for a research question no Concept covers, naming the uncovered subject instead of inventing a Concept. A narrower Concept it leads to is staged with the research for Han to accept at Promotion; a new top Concept stays a design decision.
+_Avoid_: Missing concept, new tag
+
+**applyThemeFromConcept**: the field of an Episode's metadata that names one of its top Concepts, whose icon and accent its card draws.
+_Avoid_: Lead Tag, look
+
+**Event**: a dated occasion of one kind (a workshop, a webinar) that presents one Playlist to an Audience. It owns no Slides, holds no text and has no visibility or status of its own: its Playlist's visibility is its own, and its date decides whether it is past.
+_Avoid_: Workshop (a kind of Event, not the record), session, booking
+
+**Playlist**: an ordered list of Episodes with a type and a Visibility, and nothing else. A Playlist of type event is made for exactly one Event and opens with its event-frame Episode; a standard Playlist is a curated list with no Event.
+_Avoid_: Agenda, course, series, collection
+
+**Event-frame Episode**: the Episode that holds one Event's agenda, scope and organisation, first in that Event's Playlist. It has no video, is always unlisted and always published, and is never in the Episode overview.
+_Avoid_: Event page (the Event's own page), agenda episode, intro
+
+**Past Event notice**: the one fixed line a past Event shows, saying the Event has taken place and its content is kept up to date and may differ from the recording. It sits above the Playlist on the Event page and above the title on each of the Event's Episode pages, never on an Episode's own page. An Event is past when its date lies before the build day; an upcoming Event shows no notice.
+_Avoid_: Archive banner, outdated warning, recording disclaimer
+
+**Visibility**: whether an Episode or a Playlist is listed and indexed: public, or unlisted. An unlisted Episode lives only under the Event whose Playlist presents it; unlisted is not private, since anyone with the URL can open it.
+_Avoid_: Private, hidden, draft, attendees-only
+
+**canonicalEpisode**: the field of an unlisted Episode's metadata that names the public Episode it was derived from; its pages then point search engines at that Episode's own page instead of carrying `noindex`. An unlisted Episode that holds every Slide of a public Episode must name it.
+_Avoid_: Original, source Episode, parent Episode
+
+**Tooling page**: a catalogue of Slides served at `/episodes/<slug>/` beside the Episodes but no Episode itself: `slide-layouts`, `slide-master`, `slides`. It has no Visibility and no status, is never indexed and never in the sitemap.
+_Avoid_: Layout reference (the page template), unlisted Episode, catalog Episode
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
@@ -45,19 +90,34 @@ _Avoid_: Sitenav, sidebar
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and another Episode reuses a Slide by **Reference**, never by a hand copy; adapting it makes an **Instance**. Its slug is unique across every Episode and the Slide pool; only a Title slide's may repeat. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
+
+**Slide pool**: one flat folder of Slide folders, `src/components/slide-pool/`, holding every Slide a second Episode reuses. A Slide lives in its Episode's `slides/` until its first reuse, when `npm run slides:reuse` moves its folder there unchanged: slug, text and anchors stay, so no published URL moves.
+_Avoid_: Shared slides, library (the Slide library is the Master slides), common folder
+
+**Reference (Slide)**: an Episode's listing of a pool Slide in one of its Sections: an import and a list entry, nothing copied. The Slide renders the same in every Episode that holds it; its anchor comes from its place in each, and so does the target of its `slideHref` link to a sibling: a sibling the Episode lacks fails the build unless the link falls back to plain text.
+_Avoid_: Link, alias, copy, symlink
+
+**Instance (Slide)**: a pool Slide adapted for one Episode: a copy in that Episode's own `slides/`, made by `npm run slides:adapt`, under a slug of its own (never its origin's) and marked with **copiedFrom**. It takes the place of the Episode's Reference, so the other Episodes keep the pool Slide; a sibling link to the origin's slug resolves to the Instance in its Episode. `npm run slides:settle` replaces an Instance no edit touched with the Reference again, and Promotion resolves an edited one with `npm run slides:promote`: it updates the pool Slide, leaving a **Pinned anchor**, or becomes a Slide of its own under the same slug.
+_Avoid_: Fork, variant, override, copy (unqualified)
+
+**copiedFrom**: an Instance's marker in its `slide.tsx`, `copiedFrom: { slug, commit }`: the pool Slide it was copied from and the commit it was copied at. Written by `npm run slides:adapt`, never by hand.
+_Avoid_: origin, parent, source (a Source is evidence)
+
+**Pinned anchor**: an Episode's Reference placed under a retired Instance slug, `pinAnchor(<pool Slide>, '<instance slug>')` in its Section list, so that Episode's anchor (`<section>--<instance slug>`) does not move when Promotion makes the Instance's content the pool Slide's. Written by `npm run slides:promote`, never by hand. The retired slug stays reserved: no Slide takes it again, and the build and `npm run slides:adapt` refuse one that does.
+_Avoid_: alias, redirect, anchor override
 
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
 
-**Preset**: one Slide's settings of a Shared visual: the view it opens in and what it lights, so the Slide tells its own story at rest.
+**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing.
+_Avoid_: Shared visual, cornerstone component, shared component, widget
+
+**Preset**: one Slide's settings of an Explorable explanation: the view it opens in and what it lights, so the Slide tells its own story at rest.
 _Avoid_: State, configuration, variant
 
-**Shared visual**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing.
-_Avoid_: Cornerstone component, shared component, widget
-
-**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Shared visual, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
+**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Explorable explanation, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
 _Avoid_: Pipeline, flow, process
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
@@ -68,6 +128,9 @@ _Avoid_: Theme, key visual
 
 **Slide header**: the Eyebrow, title and caption above a titled Slide's Scene. The Slide wrapper renders it for every Episode whose record does not set `header: 'authored'`, and types it in the first time the Slide is active, once.
 _Avoid_: Title block, heading area
+
+**Definition Slide**: a page slide that teaches one Concept and declares it with `defines: <concept-id>`; one that names no Concept fails the build.
+_Avoid_: Glossary slide, term slide
 
 **Eyebrow**: the small uppercase line above a page slide's title in its Slide header: its Section's title on the left, its place among the Section's page slides (`n / N`) on the right. Computed from the table of contents, never authored; section slides and the Title slide have none.
 _Avoid_: Kicker, overline, label
@@ -87,7 +150,7 @@ _Avoid_: Furniture, overlay
 **Speaker notes**: a Slide's short list of talking points, each a Speaker note item.
 _Avoid_: Notes, comments
 
-**Speaker note item**: one talking point: a header, a description, optional titled sources and image, and the element of its Slide it explains.
+**Speaker note item**: one talking point: a header, a description, optional sources and image, and the element of its Slide it explains. Each of its sources is one citation holding exactly one of `research` (a Research question by id, by default) or `url` (a Source cited directly, by exception: a High-trust Source, or one in the Source baseline); a `research` citation takes its title, link and Confidence from the question, and a published Episode cites no question that is still in Staging.
 _Avoid_: Note, bullet, comment
 
 **Context reference**: an underlined phrase or a Context marker on a Slide that opens one Speaker note item in the Context drawer.
@@ -115,7 +178,10 @@ _Avoid_: Transition, segue
 **Spine**: the Brief's ordered Sections, each listing its **Brief Slides**: a planned page Slide's title, purpose and visual idea. The Red thread made concrete. It is kept in step with the Dossier until the Spec Gate and with the Spec after it: write-dossier keeps it title for title, and records every change as a `spine-change` note on its Job.
 _Avoid_: Outline, pitch, plan
 
-**Research plan**: retrieval's decision per research question, `research-plan.md` in the Episode folder: the questions that need a research job (new or refresh) and the ones whose llm-wiki research is reused. `customize-pipeline` writes one `write-research` job per listed item.
+**Research plan**: retrieval's decision per research question, `research-plan.md` in the Episode folder, made across the Research questions of the wiki and every open Staging: each question an existing one already answers, fresh, is reused by id with its Confidence and the date it stays fresh; each that needs a research job is listed as `new` (with the Concepts it informs), `refresh` (keeping the stale id) or `migrate` (weighing a touched note's grandfathered sources). `customize-pipeline` writes one `write-research` job per listed job. It also reuses, by Slide, each Research question a Slide the Slide plan keeps already cites, and adds a `migrate` job for an adapted Slide whose notes carry grandfathered sources.
+
+**Slide plan**: slide-retrieval's decision per Brief Slide, `slide-plan.md` in the Episode folder, made against `npm run slides:pool`, the listing of every page Slide of every Episode and the Slide pool: `reuse` a Slide as it stands (one Reference, no Options, Dossier words or Voice script), `adapt` it (an Instance, saying what changes) or build it `new`. Each candidate names the Episodes holding it and the Research questions it cites. The Spec shows each outcome, and Han flips any Slide among the three at the Spec Gate, which rewrites the plan.
+_Avoid_: Slide list, reuse plan
 _Avoid_: Run log, retrieval log
 
 **Dossier**: the draft the Spec is written from: its h1 is the Title slide, its h2s the Sections and its h3s the Slides, and each Slide carries its Visual idea, Speaker notes with citations and Voice script. Everything in it moves into the Spec, and it is deleted when Han approves the Spec.
@@ -130,11 +196,19 @@ _Avoid_: Plot, subplot, storyline
 **Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research, Dossier and Spec, outside the code.
 _Avoid_: Drafts, workspace
 
-**Promotion**: the step that closes a final Episode's making: it harvests Staging into lessons, cleanups and tickets, files the Spec's Options into the Design archive, keeps the Brief beside the Episode, and deletes Staging. No words move; the Slides already own them.
+**Promotion**: the step that closes a final Episode's making, before it is published when it cites its own staged research: it harvests Staging into lessons, cleanups and tickets at the Promotion Gate, files the Spec's Options into the Design archive, keeps the Brief beside the Episode, moves the staged Research questions and accepted Concepts into the llm-wiki, and deletes Staging. No Slide words move; the Slides already own them.
 _Avoid_: Publish, migration, release
+
+**Promotion Gate**: Han's decision on the Harvest report, one card per proposal. Besides the lessons, style, Slide library, cleanup and ticket cards, it holds a card per staged Research question, showing its proposed Confidence, the Concepts it informs and the writer's reason for him to confirm or change, and a card per duplicate pair, proposing to merge the newer question into the older. Only a confirmed question moves to the llm-wiki, and only Han's kept card merges a duplicate.
 
 **Design archive**: every promoted Episode's design Options, one page per Slide with the picked one marked and the feedback that chose it, kept to browse and reuse in later Episodes.
 _Avoid_: Spec archive, gallery
+
+**Hand fix**: a `fix(...)` commit that corrects content a Run or a person made (an Episode, a Slide, a wiki note), outside a Run's job. It always says where its lesson goes, in a Feeds trailer.
+_Avoid_: Patch, hotfix, manual edit
+
+**Feeds trailer**: the `Feeds:` line of a Hand fix's commit message: the path of the skill, template or guide that should have got it right, an issue URL, or `none: <reason>`. The commit-time gate refuses a Hand fix without one, and a path must exist.
+_Avoid_: Fix note, lesson line
 
 **Run**: one execution of an Episode's per-run pipeline, from its start to the moment it is finished or abandoned. An Episode can have many Runs, each one comparable with the others.
 _Avoid_: Session, execution, pipeline run
@@ -144,6 +218,9 @@ _Avoid_: Task, step
 
 **Stage**: one of the ordered phases a Run moves through (Brief, Setup, Research, Dossier, Specification, Build, PR), grouping the Jobs that serve it. A Job waits only for Jobs of its own or an earlier Stage, and a Stage may hold no Job.
 _Avoid_: Phase, step
+
+**Research Stage**: the Stage whose Jobs write the Research questions the Research plan lists, one per job. It holds no Job when every question is reused, which is normal: a Run commissions only the evidence the wiki and the other Stagings lack, and its Slides still cite each reused question.
+_Avoid_: Research phase, research step
 
 **Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its options and what Build needs to build the chosen one. Han picks an option per Slide at its Gate, and Build builds from the Spec alone.
 _Avoid_: Ticket, spec issue, build spec, design spec
@@ -162,7 +239,7 @@ _Avoid_: Grade, rating, result
 
 ## Research categories
 
-A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. In the llm-wiki it sits in its category's folder, `docs/llm-wiki/research/<category>/`. The `categorize-research` job of `/new-episode` picks the category, or adds a new one here.
+A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. In the llm-wiki it sits in its category's folder, `docs/llm-wiki/research/<category>/`. The categories are closed id namespaces: the `categorize-research` job of `/new-episode` takes the nearest one and the next free number across the wiki and every Staging (`npm run episode:research -- next <prefix>`), and adds none.
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
 

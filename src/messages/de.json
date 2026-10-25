@@ -6,7 +6,7 @@
   "nav": {
     "label": "Hauptnavigation",
     "episodes": "Episoden",
-    "workshops": "Workshops",
+    "events": "Veranstaltungen",
     "dashboard": "Content-Pipeline",
     "contact": "Mit mir arbeiten",
     "newTab": "öffnet in einem neuen Tab",
@@ -68,7 +68,7 @@
       "browseTitle": "Alle Episoden durchstöbern",
       "search": "Episoden durchsuchen",
       "searchPlaceholder": "Nach Titel oder Tag suchen",
-      "tagFilter": "Nach Tag filtern",
+      "conceptFilter": "Nach Konzept filtern",
       "showAll": "Alle {count} Episoden anzeigen",
       "showFewer": "Weniger anzeigen",
       "results": {
@@ -78,31 +78,39 @@
       },
       "empty": "Zu diesen Filtern gibt es noch keine Episode.",
       "reset": "Filter zurücksetzen",
-      "tags": {
+      "concepts": {
         "context-engineering": {
           "name": "Context Engineering",
           "tooltip": "Der KI zur richtigen Zeit den richtigen Kontext geben"
         },
         "agentic-ai": {
           "name": "Agentische KI",
-          "tooltip": "KI, die in Schritten plant und handelt, statt nur zu antworten"
+          "tooltip": "Arbeit an eine KI abgeben und dafür verantwortlich bleiben"
         },
-        "markdown": {
-          "name": "Markdown",
+        "llm-behaviour": {
+          "name": "LLM-Verhalten",
+          "tooltip": "Wie sich ein Sprachmodell verhält, egal womit man es füttert"
+        },
+        "ai-adoption": {
+          "name": "KI-Einführung",
+          "tooltip": "KI-Nutzung in messbare Produktivität verwandeln"
+        },
+        "markdown-documentation": {
+          "name": "Markdown-Dokumentation",
           "tooltip": "Textdokumente, die Menschen und KI gleich gut lesen"
         },
-        "cost": {
-          "name": "Kosten",
+        "ai-cost": {
+          "name": "KI-Kosten",
           "tooltip": "Was KI wirklich kostet und wohin das Geld fließt"
         },
         "sales": {
           "name": "Vertrieb",
           "tooltip": "Kunden finden, gewinnen und halten"
-        },
-        "workflow": {
-          "name": "Workflow",
-          "tooltip": "Wie Arbeit in Schritte geteilt und zwischen Chats übergeben wird"
         }
+      },
+      "conceptInEnglish": {
+        "mark": "EN",
+        "label": "(Seite auf Englisch)"
       },
       "formats": {
         "foundations": "Grundlagen",
@@ -412,9 +420,9 @@
       "title": "Visualisierte Theorie · hancrafted",
       "description": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert."
     },
-    "workshops": {
-      "title": "Workshops",
-      "description": "Begleitete Workshops, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
+    "events": {
+      "title": "Veranstaltungen",
+      "description": "Workshops und andere Sessions, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
     }
   },
   "episodesPage": {
@@ -461,6 +469,12 @@
     "shortcut": "Tastenkürzel",
     "sourcesCount": "Quellen ({count})",
     "opensInNewTab": "öffnet in neuem Tab",
+    "researchQuestion": "Forschungsfrage",
+    "confidence": {
+      "settled": "Gesichert",
+      "contested": "Umstritten",
+      "open": "Offen"
+    },
     "menu": {
       "label": "Weitere Optionen",
       "layout": "Darstellung",
@@ -478,22 +492,61 @@
     "backToVideo": "Zurück zum Video",
     "close": "Videoplayer schließen"
   },
-  "workshopsPage": {
-    "title": "Workshops",
-    "back": "Alle Workshops",
-    "intro": "Begleitete Sessions, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
-    "agenda": "Ablauf",
+  "eventsPage": {
+    "title": "Veranstaltungen",
+    "intro": "Workshops und andere Sessions, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
+    "empty": "Derzeit keine öffentlichen Veranstaltungen.",
+    "playlist": "Episoden",
     "start": "Mit Episode {step} starten",
     "readingTime": "{minutes} Min. Lesezeit insgesamt",
     "episodeCount": {
       "one": "1 Episode",
       "other": "{count} Episoden"
     },
+    "breadcrumb": "Brotkrumen",
+    "pastNotice": "Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen.",
+    "kinds": {
+      "workshop": "Workshop",
+      "webinar": "Webinar"
+    },
+    "audiences": {
+      "german-business": "Für Unternehmen in Deutschland",
+      "international": "Für ein internationales Publikum"
+    },
+    "chips": {
+      "event-frame": "Veranstaltungsseite",
+      "unlisted": "Nicht gelistet"
+    },
+    "position": "Episode {position} von {count}",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "backToEvent": "Zur Veranstaltung",
+    "playlistNav": "Playlist",
     "items": {
-      "axel-agentic-workflow-2026-10-23": {
+      "2026-10-23-axel-agentic-workflow": {
         "title": "AXEL Seminar: Agentic Workflows",
         "description": "Mit KI-Agenten arbeiten in drei Episoden: jedes Mal neu einarbeiten, ihre Aufmerksamkeitsspanne managen und verstehen, warum sie Management-Arbeit bringen."
       }
     }
+  },
+  "conceptPage": {
+    "eyebrow": "Konzept",
+    "aliases": "Auch genannt",
+    "broader": "Übergeordnet",
+    "narrower": "Untergeordnet",
+    "related": "Verwandt",
+    "research": "Forschungsfragen"
+  },
+  "researchPage": {
+    "eyebrow": "Forschungsfrage",
+    "confidence": "Belastbarkeit",
+    "proposed": "Vom Verfasser vorgeschlagen, noch nicht geprüft",
+    "settled": "Gesichert",
+    "contested": "Umstritten",
+    "open": "Offen",
+    "informs": "Stützt",
+    "sources": "Quellen",
+    "newTab": "öffnet in neuem Tab",
+    "citedBy": "Sprechernotizen, die sie zitieren"
   }
 }

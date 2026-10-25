@@ -40,7 +40,7 @@ Copy `page-template/` to `episodes/<ep>/`, then:
 
 - Delete its Slide folders and its `published-anchors.json`; the anchors bind at publication ([Episode publishing](episode-publishing.md)), not here.
 - Rename `page-template.ts` to `<ep>.ts` and its export to the camelCase slug. Set `slug: '<ep>'` and `sections: []` until step 7; add `youtube: { en, de }` once the video ids exist.
-- Register it now, all three together, since `tsc` refuses any one alone: the slug in `EPISODE_SLUGS` (`src/lib/routes.ts`), the record in `EPISODES` (`src/components/episodes/registry.ts`), and `episodes/<ep>/episode-metadata.ts` in `REGISTERED` (`src/components/episodes/episode-repository.ts`; its `status` decides published or upcoming). The metadata holds `status: 'upcoming'`, its primary Topic, any extra Topics, its Format and its Tags, as in `specs-an-agent-can-follow/episode-metadata.ts`, and no `publishedOn`: publishing adds `status: 'published'` and `publishedOn` later. The page is built and served at `/episode/<ep>`, `noindex`, its overview card Upcoming and unlinked.
+- Register it now, all three together, since `tsc` refuses any one alone: the slug in `EPISODE_SLUGS` (`src/lib/routes.ts`), the record in `EPISODES` (`src/components/episodes/registry.ts`), and `episodes/<ep>/episode-metadata.ts` in `REGISTERED` (`src/components/episodes/episode-repository.ts`; its `status` decides published or upcoming). The metadata holds `type: 'standard'`, `visibility: 'public'`, `status: 'upcoming'`, its primary Topic, any extra Topics, its Format and its Tags, as in `specs-an-agent-can-follow/episode-metadata.ts`, and no `publishedOn`: publishing adds `status: 'published'` and `publishedOn` later. The page is built and served at `/episode/<ep>`, `noindex`, its overview card Upcoming and unlinked.
 - If `episodes/<ep>/` already exists as an Upcoming Episode, copy into it, keep `status: 'upcoming'`, move it out of `UPCOMING` into `REGISTERED`, and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)).
 - Write the Episode's own text in `i18n/en.json` and `de.json`: `title`, `caption`, `description`. English goes in verbatim from the source; German is written fresh from the same facts, not translated.
 
@@ -81,7 +81,7 @@ export const theLostMiddle = slide({
 - The kit is everything a Scene needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
   - `template('showAll')`: the raw string, `{count}` unfilled, for a client widget to fill with `fillTemplate` from `@/lib/template.pure`.
-  - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build.
+  - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build. `slideHref(slug, { fallback: 'text' })` returns `undefined` instead, and the Slide renders its text unlinked: use it in a pool Slide whose sibling some Episode may not hold.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`: notes, below; `Title` only on an Episode with `header: 'authored'`.
 - A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/hooks/` and `src/lib/` (step 6). A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit.
@@ -95,7 +95,7 @@ Done when: every Slide of step 1 has a folder and `npm run typecheck` passes.
 
 - A note's `target` is a short name: `title`, `caption`, `prose`, a column slug, or `{...target('chart')}` on a one-off element.
 - A Context reference is `<ref>phrase</ref>` in the string and `ref('<note>')` in `t.rich`, or a Context marker: `<marker>phrase</marker>` with `marker('<note>')`, or `<Marker note="<note>" />` on an element.
-- `sources: [{ slug, url }]` on the note that cites them; titles under `notes.<note>.sources.<source>.title`.
+- `sources` on the note that cites them, each `{ slug, research: '<id>' }` for a Research question (the default; no title of its own) or `{ slug, url }` for a Source cited directly, whose title sits under `notes.<note>.sources.<source>.title`. A `url` must be a High-trust Source (its host on `src/lib/high-trust-hosts.pure.ts`) or already in the Source baseline; a migrated note that drops a baseline source deletes its entry from `src/lib/source-baseline.json` in the same change.
 - Voice script: `segments` by slug, strings under `voiceScript.segments.<segment>`. A segment's `bridge: true` needs a `bridge` string.
 - Reading time is counted from the script and bridge words (en 140, de 120 per minute), so write no minutes and no segment times ([FE-002 §2](../../.archgate/adrs/FE-002-episode-page.md#2-the-slide-is-the-unit)).
 

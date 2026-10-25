@@ -2,6 +2,9 @@
 type: research
 title: 'Why does engaging in sales and obtaining early sales results, like LOI, filled sales pipeline, generate trust?'
 description: "Early sales results are costly, observable signals of quality that cut a buyer's or investor's uncertainty about a young firm, but no study measures letters of intent or pipelines directly."
+confidence: open
+confidence_reason: 'Only practitioner accounts support it.'
+informs: [sales]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-13T23:21:01Z

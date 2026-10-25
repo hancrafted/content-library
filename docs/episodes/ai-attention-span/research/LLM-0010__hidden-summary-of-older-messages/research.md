@@ -4,6 +4,9 @@ title: 'Why do consumer chat apps summarise older messages without showing it?'
 description: 'Only Claude documents it: its app summarises earlier messages near
   the window limit so a chat can go on, with only an occasional status hint;
   ChatGPT, Gemini and Copilot document no such step.'
+confidence: open
+confidence_reason: 'That the apps summarise without showing it is inference.'
+informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-20T19:18:00Z

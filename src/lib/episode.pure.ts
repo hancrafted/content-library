@@ -1,6 +1,16 @@
-/** The least a Slide record carries to be placed: its stable slug. */
+/**
+ * The least a Slide record carries to be placed: its stable slug and, on an Episode's reference to a pool Slide that
+ * took over an instance, the Pinned anchor slug: the retired instance slug its placement keeps (design-ADR 0016,
+ * _Slide reuse_ rule 4).
+ */
 export interface SlideOutline {
   readonly slug: string;
+  readonly pinnedSlug?: string;
+}
+
+/** The slug a Slide's anchor is built from: its Pinned anchor slug when its Episode pinned one, else its own. */
+function anchorSlug(slide: SlideOutline): string {
+  return checkedSlug(slide.pinnedSlug ?? slide.slug);
 }
 
 /**
@@ -40,7 +50,8 @@ export function checkedSlug(slug: string): string {
  * The one walk over an Episode record (FE-002): each Section list, in page
  * order, with the anchor and heading level each Slide gets from its position.
  * The first Slide names its Section (`<section>`); every other one is joined
- * under it (`<section>--<slide>`), so a Slide only knows its own slug. Slide
+ * under it (`<section>--<slide>`), so a Slide only knows its own slug; a
+ * reference with a Pinned anchor slug is placed by that slug instead. Slide
  * slugs are unique across the whole Episode, because Translation keys are flat
  * by Slide slug. Throws on a bad or duplicate slug, so a broken Episode fails
  * `next dev` and the static build alike.
@@ -49,27 +60,60 @@ export function placeSections<S extends SlideOutline>(
   sections: readonly SectionList<S>[],
 ): (readonly PlacedListSlide<S>[])[] {
   const placed = sections.map(([head, ...pages]) => {
-    const section = checkedSlug(head.slug);
+    const section = anchorSlug(head);
     return [
       { id: section, slide: head, section, level: 'h2' as const },
       ...pages.map((slide) => ({
-        id: `${section}--${checkedSlug(slide.slug)}`,
+        id: `${section}--${anchorSlug(slide)}`,
         slide,
         section,
         level: 'h3' as const,
       })),
     ];
   });
-  assertUniqueSlideSlugs(placed.flat().map(({ slide }) => slide.slug));
+  const slides = placed.flat().map(({ slide }) => slide);
+  assertUnique(
+    slides.map(({ slug }) => slug),
+    (slug) => `Duplicate Slide slug "${slug}": Slide slugs must be unique across an Episode.`,
+  );
+  assertUnique(
+    slides.map(anchorSlug),
+    (slug) => `Pinned anchor "${slug}" is also a Slide's slug in this Episode: two Slides would share an anchor.`,
+  );
   return placed;
 }
 
-function assertUniqueSlideSlugs(slugs: readonly string[]): void {
+function assertUnique(slugs: readonly string[], message: (slug: string) => string): void {
   const seen = new Set<string>();
   for (const slug of slugs) {
-    if (seen.has(slug)) {
-      throw new Error(`Duplicate Slide slug "${slug}": Slide slugs must be unique across an Episode.`);
-    }
+    if (seen.has(slug)) throw new Error(message(slug));
     seen.add(slug);
   }
+}
+
+/** The least a Slide record carries to answer a sibling link: its slug and, on an instance, its origin's slug. */
+export interface LinkedSlideOutline extends SlideOutline {
+  readonly copiedFrom?: { readonly slug: string };
+}
+
+/**
+ * One Episode's answer to a sibling link (design-ADR 0016, _Slide reuse_
+ * rule 5): each slug a Slide's author may write, mapped to the anchor this
+ * Episode emits for it. A pool Slide links a sibling by that sibling's own
+ * slug, so the same Slide resolves to a different anchor in each Episode that
+ * holds it. An instance answers to its own slug and to its origin's, and wins
+ * over the origin when the Episode holds both: the Episode adapted that
+ * Slide, so its links go to the adaptation. A reference with a Pinned anchor
+ * answers to its own slug and to the pinned one, at the pinned anchor. A slug
+ * missing from the map is a sibling the Episode does not hold.
+ */
+export function siblingAnchors(placed: readonly PlacedListSlide<LinkedSlideOutline>[]): ReadonlyMap<string, string> {
+  const own = placed.map(({ slide, id }) => [slide.slug, id] as const);
+  const origins = placed.flatMap(({ slide, id }) =>
+    slide.copiedFrom === undefined ? [] : [[slide.copiedFrom.slug, id] as const],
+  );
+  const pins = placed.flatMap(({ slide, id }) =>
+    slide.pinnedSlug === undefined ? [] : [[slide.pinnedSlug, id] as const],
+  );
+  return new Map([...own, ...pins, ...origins]);
 }

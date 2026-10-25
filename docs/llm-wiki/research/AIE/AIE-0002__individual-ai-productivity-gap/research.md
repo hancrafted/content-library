@@ -2,6 +2,9 @@
 type: research
 title: 'Why do individuals fail to reach the promised AI productivity boost?'
 description: 'Individuals miss the promised AI boost because gains depend on task fit, context and checking: measured effects are mixed and smaller than the hype, and self-reports overstate them.'
+confidence: contested
+confidence_reason: 'The METR RCT finds a slowdown where field studies find gains, and the mechanism is inferred.'
+informs: [ai-adoption]
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-13T00:00:00Z

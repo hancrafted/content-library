@@ -42,7 +42,10 @@ async function translatorOf(): Promise<RuntimeTranslator> {
 /** The drawer's items for an Episode of these Sections, as the adapter builds them. */
 async function itemsOf(sections: readonly Section[]) {
   const record = episode({ slug: 'page-template', messages: EPISODE, sections });
-  return contextItemsOf((await recordContent(record, 'en', translatorOf)).slides, EXPLAINER);
+  return contextItemsOf(
+    (await recordContent(record, 'en', { translatorOf: translatorOf, research: [] })).slides,
+    EXPLAINER,
+  );
 }
 
 function noteOf(
@@ -75,7 +78,7 @@ async function titleOf(withText: boolean) {
     ...(withText && { notes: [{ slug: 'n', target: 'title' }], segments: [{ slug: 's' }] }),
     sections: [[foundations]],
   });
-  const content = await recordContent(record, 'en', translatorOf);
+  const content = await recordContent(record, 'en', { translatorOf: translatorOf, research: [] });
   return contextItemsOf(content.slides, EXPLAINER, content.titleContext)[0];
 }
 
@@ -104,7 +107,7 @@ describe('success cases', () => {
     });
     const expected = 1 / 140;
     // ACT
-    const { minutes } = await recordContent(record, 'en', translatorOf);
+    const { minutes } = await recordContent(record, 'en', { translatorOf: translatorOf, research: [] });
     // ASSERT
     expect(minutes).toBeCloseTo(expected);
   });

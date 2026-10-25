@@ -1,5 +1,7 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
+import { contentStore } from '@/components/episodes/content-store';
+import { EventEpisodeHeader, PlaylistNav, type EventEpisodeChrome } from '@/components/events/event-episode-chrome';
 import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
 import type { EpisodeRecord, HeaderMode, SlideEntrance } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
@@ -9,14 +11,13 @@ import { TableOfContents, type TocLabels } from '@/components/table-of-contents/
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import type { TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { eyebrowsOf, INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
-import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
+import { recordContent, type EpisodeContent, type SiteContext, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
@@ -68,7 +69,16 @@ function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; pa
   );
 }
 
-function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly LocalizedSlide[]; page: PageHeader }) {
+/** The insets every Slide wrapper takes, for the Event's chrome around the Content area (FE-009 §2). */
+const INSET = 'pl-(--inset-l) pr-(--inset-r)';
+
+interface SlideColumnProps {
+  titleSlide: TitleSlideProps;
+  slides: readonly LocalizedSlide[];
+  page: PageHeader;
+}
+
+function SlideColumn(props: SlideColumnProps) {
   const ids = [TITLE_ANCHOR, ...props.slides.map(({ id }) => id)];
   return (
     <SlideZones>
@@ -84,11 +94,14 @@ function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly Loca
   );
 }
 
-/** The Title slide's props: the Episode's text, its hero Scene and entrance, its recording, and what its notes target. */
+/**
+ * The Title slide's props: the Episode's text, its hero Scene and entrance, its recording, what its notes target, and
+ * on an Event's page its place in the Playlist.
+ */
 function titleSlideOf(
   content: EpisodeContent,
   page: PageHeader,
-  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels'>,
+  extras: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'position'>,
 ): TitleSlideProps {
   return {
     title: content.title,
@@ -96,14 +109,14 @@ function titleSlideOf(
     mode: page.mode,
     entrance: page.entrance,
     hero: content.hero,
-    ...talk,
+    ...extras,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
   };
 }
 
 function EpisodeToc(props: {
   locale: Locale;
-  slug: EpisodeSlug;
+  route: string;
   sections: readonly TocSection[];
   minutes: number;
   labels: TocLabels;
@@ -112,7 +125,7 @@ function EpisodeToc(props: {
     <aside data-slot="toc" className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem]">
       <TableOfContents
         locale={props.locale}
-        route={episodeRoute(props.slug)}
+        route={props.route}
         sections={props.sections}
         total={props.minutes}
         targetAttribute="data-slide"
@@ -139,11 +152,45 @@ function translatorOf(locale: Locale): TranslatorOf {
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
 }
 
+/** What the site lends one locale of an Episode page: its translator and every Research question a note may cite. */
+function siteContext(locale: Locale): SiteContext {
+  return { translatorOf: translatorOf(locale), research: contentStore().research };
+}
+
 /** Each page Slide's Eyebrow on the shared header, its counter read "Page n of N" in the page's language. */
 async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly TocSection[]) {
   if (mode !== 'shared') return new Map<string, EyebrowText>();
   const t = await getTranslations({ locale, namespace: 'slideHeader' });
   return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
+}
+
+/** The Episode's recording in this locale and the player's labels; neither when it has no video. */
+async function talkOf(episode: EpisodeRecord, locale: Locale) {
+  const youtubeId = episode.youtube?.[locale];
+  return { youtubeId, talkLabels: youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined };
+}
+
+/** How the page's Slide headers render: the Episode's header mode and entrance, and each page Slide's Eyebrow. */
+async function pageHeaderOf(
+  content: EpisodeContent,
+  locale: Locale,
+  sections: readonly TocSection[],
+): Promise<PageHeader> {
+  return {
+    mode: content.header,
+    entrance: content.entrance,
+    eyebrows: await eyebrowsFor(locale, content.header, sections),
+  };
+}
+
+/** What the shell renders: one Episode in one locale, at the route the page is served at. */
+interface ContainerProps {
+  locale: Locale;
+  episode: EpisodeRecord;
+  /** The logical path the page is served at: the Episode's own `/episodes/<slug>`, or an Event's page of it. */
+  route: string;
+  /** Present on an Event's page of the Episode: what the Event adds around it. */
+  event?: EventEpisodeChrome;
 }
 
 /**
@@ -154,17 +201,13 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
  * reads that list, so no id is derived twice and none can drift. It also
  * provides the page's one URL-state service (FE-001 §2).
  */
-export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
-  const content = await recordContent(episode, locale, translatorOf(locale));
+export async function EpisodePageContainer({ locale, episode, route, event }: ContainerProps) {
+  const content = await recordContent(episode, locale, siteContext(locale));
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
-  const page: PageHeader = {
-    mode: content.header,
-    entrance: content.entrance,
-    eyebrows: await eyebrowsFor(locale, content.header, sections),
-  };
-  const youtubeId = episode.youtube?.[locale];
-  const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
+  const page = await pageHeaderOf(content, locale, sections);
+  const { youtubeId, talkLabels } = await talkOf(episode, locale);
+  const titleSlide = titleSlideOf(content, page, { youtubeId, talkLabels, position: event?.position });
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (
@@ -174,8 +217,10 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
         data-episode={episode.slug}
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
-        <EpisodeToc locale={locale} slug={episode.slug} sections={sections} minutes={minutes} labels={tocLabels} />
-        <SlideColumn titleSlide={titleSlideOf(content, page, { youtubeId, talkLabels })} slides={slides} page={page} />
+        <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
+        {event && <EventEpisodeHeader chrome={event} className={INSET} />}
+        <SlideColumn titleSlide={titleSlide} slides={slides} page={page} />
+        {event && <PlaylistNav chrome={event} className={INSET} />}
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>

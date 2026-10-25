@@ -22,6 +22,7 @@ function localized(locale: Locale): LocalizedSlide {
     placed,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
     header: 'shared',
+    research: [],
   });
 }
 

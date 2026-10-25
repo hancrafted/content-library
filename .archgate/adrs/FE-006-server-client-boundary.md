@@ -50,9 +50,9 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 ### 5. Episode and `slide-shared` client files
 
-1. An Episode's `*.client.tsx` files MUST live in a Slide folder `episodes/<ep>/slides/<slide>/`, nowhere else; the Slide's entry stays server.
+1. An Episode's `*.client.tsx` files MUST live only in a Slide folder, `episodes/<ep>/slides/<slide>/` or `slide-pool/<slide>/`; its entry stays server.
 2. A Slide's client widget MUST reach only its own folder, hooks and lib.
-3. A `slide-shared` part's client leaf MUST sit in that part's folder and reach only it, hooks and lib; the part's entry stays server.
+3. A `slide-shared` part's or Explorable explanation's client leaf MUST sit in its own folder and reach only it, hooks and lib; the entry stays server.
 
 ## Do's and Don'ts
 
@@ -66,7 +66,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 6. **DO** reach `readPrefs` / `writePrefs` through a hook or a `*.client.tsx` leaf, as `use-theme.ts` and `locale-toggle.client.tsx` do. (Decision 3)
 7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
 8. **DO** put an Episode's interactive visualisation in its Slide folder as `<name>.client.tsx`, its logic in a `.pure.ts` beside it. (Decision 5)
-9. **DO** put a Shared visual's client leaf in its `slide-shared/<part>/` folder; its server entry takes the Slide's Preset and words, over its defaults. (Decision 5)
+9. **DO** put an Explorable explanation's client leaf in its own folder; its server entry takes the Slide's Preset and words. (Decision 5)
 
 ### Don'ts
 

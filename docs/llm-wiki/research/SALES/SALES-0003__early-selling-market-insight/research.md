@@ -2,6 +2,9 @@
 type: research
 title: 'Why does selling early yield market insight?'
 description: 'Selling early yields market insight because founders start with an inaccurate model of their customers, and only direct contact with real buyers replaces that guess with facts.'
+confidence: open
+confidence_reason: 'Only practitioner accounts support it.'
+informs: [sales]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-13T23:20:03+00:00

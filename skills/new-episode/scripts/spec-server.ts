@@ -1,6 +1,6 @@
 // The Spec review server (design-ADR 0011): serves an Episode's `spec/spec.html` and its `design.css`, and saves the
-// review form's POST as the next `feedback/<NN>/feedback.md` round. It lives with the skill's scripts, outside `src/`
-// and the static export; `spec.ts` is its command line.
+// review form's POST as the next `feedback/<NN>/feedback.md` round, with Han's flips applied to `slide-plan.md`. It
+// lives with the skill's scripts, outside `src/` and the static export; `spec.ts` is its command line.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
@@ -11,6 +11,7 @@ import {
   specSlides,
   specTitleSlideOptions,
 } from '../../../src/lib/episode-spec-page.pure.ts';
+import { flipSlidePlan, SLIDE_PLAN_FILE } from '../../../src/lib/slide-plan.pure.ts';
 import { nextRound, reviewToFeedback, type Fault } from './spec-feedback.pure.ts';
 
 export interface SpecServer {
@@ -97,6 +98,9 @@ async function save(response: ServerResponse, request: IncomingMessage, options:
   const file = path.join(options.folder, result.file);
   mkdirSync(path.dirname(file), { recursive: true });
   writeFileSync(file, result.text, { flag: 'wx' });
+  const plan = path.join(options.folder, SLIDE_PLAN_FILE);
+  if (result.flips.length > 0 && existsSync(plan))
+    writeFileSync(plan, flipSlidePlan(readFileSync(plan, 'utf8'), result.flips));
   response.writeHead(303, { location: `/?saved=${path.basename(path.dirname(file))}` });
   response.end();
 }

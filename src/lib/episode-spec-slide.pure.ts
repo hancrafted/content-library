@@ -162,20 +162,62 @@ function checkMarkers(figure: Selection, slug: string, notes: readonly string[])
     );
 }
 
+/** A reused Slide (`data-reused`): its label, no Option and no words of its own, since it keeps the pool Slide's. */
+function checkReusedSlide(slide: Selection, where: string): string[] {
+  const pool = slide.attr('data-reused') ?? '';
+  return [
+    ...unless(
+      slide.find('[data-spec="reused"]').text().startsWith(`Reused from ${pool}, held by `),
+      `${where} is reused but has no <p data-spec="reused"> label "Reused from ${pool}, held by <Episodes>."`,
+    ),
+    ...unless(
+      slide.find(`${OPTION}, input[name^="pick:"]`).length === 0,
+      `${where} is reused from ${pool}, so it has no Options: a reused Slide costs one reference and keeps how it looks.`,
+    ),
+    ...unless(
+      slide.find('[data-spec="voice-script"], [data-spec="speaker-notes"]').length === 0,
+      `${where} is reused from ${pool}, so it shows no Voice script or Speaker notes of its own: it keeps the pool Slide's words.`,
+    ),
+  ];
+}
+
+/** An adapted Slide (`data-adapted`) shows its origin, the pool Slide as it is, beside the Options that modify it. */
+function checkAdaptedSlide(slide: Selection, where: string): string[] {
+  const pool = slide.attr('data-adapted') ?? '';
+  return [
+    ...unless(
+      slide.find(`figure[data-spec="origin"][data-pool="${pool}"]`).length === 1,
+      `${where} adapts ${pool} but shows no <figure data-spec="origin" data-pool="${pool}">: draw the pool Slide as it is beside the Options.`,
+    ),
+    ...unless(
+      slide.attr('id') !== pool,
+      `${where} adapts ${pool} under its origin's slug: an instance takes a slug of its own.`,
+    ),
+  ];
+}
+
 /** The rules of one Slide, the `at`-th in page order. */
-export function checkSlide({ $, approved }: SpecPage, element: Element, at: number): string[] {
+export function checkSlide(page: SpecPage, element: Element, at: number): string[] {
+  const { $ } = page;
   const slide = $(element);
+  const where = `The Slide {#${slide.attr('id') ?? ''}}`;
+  const numbered = unless(
+    slide.attr('data-number') === String(at + 1),
+    `${where} is numbered ${slide.attr('data-number')}, but it is Slide ${at + 1} in page order.`,
+  );
+  if (slide.is('[data-reused]')) return [...numbered, ...checkReusedSlide(slide, where)];
+  const adapted = slide.is('[data-adapted]') ? checkAdaptedSlide(slide, where) : [];
+  return [...numbered, ...adapted, ...checkPageSlide(page, slide, where)];
+}
+
+/** The Options and the note of a Slide that is not reused. */
+function checkPageSlide({ $, approved }: SpecPage, slide: Selection, where: string): string[] {
   const slug = slide.attr('id') ?? '';
-  const where = `The Slide {#${slug}}`;
   const figures = slide
     .find(OPTION)
     .toArray()
     .map((figure) => $(figure));
   return [
-    ...unless(
-      slide.attr('data-number') === String(at + 1),
-      `${where} is numbered ${slide.attr('data-number')}, but it is Slide ${at + 1} in page order.`,
-    ),
     ...checkOptionMarks(figures, where, {
       number: Number(slide.attr('data-number')),
       approved,

@@ -5,6 +5,9 @@ title: 'Why do people working with AI keep executing the work themselves instead
 description: 'No study measures executing versus managing; usage data show many
   users skip briefing and checking, and users six months in iterate more and
   delegate less, so "most" is unsupported, "many" is.'
+confidence: open
+confidence_reason: 'The mapping to management is inference over model-classified data.'
+informs: [agentic-ai, ai-adoption]
 generated:
   by: claude-code/sonnet-4.6
   at: 2026-10-19T18:27:08Z

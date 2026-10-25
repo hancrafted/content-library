@@ -1,3 +1,4 @@
+import type { Confidence } from '@/lib/confidence.pure';
 import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 
 /*
@@ -34,6 +35,10 @@ export interface DrawerStrings {
   readonly empty: { readonly notes: string; readonly script: string };
   /** Said to assistive tech after a source link, e.g. `opens in a new tab`. */
   readonly opensInNewTab: string;
+  /** Names a source that cites a Research question, before its id. */
+  readonly researchQuestion: string;
+  /** How settled a cited Research question's Answer is, one word per value. */
+  readonly confidence: Readonly<Record<Confidence, string>>;
   readonly keywords: string;
   readonly bridge: string;
 }

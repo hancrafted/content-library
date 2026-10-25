@@ -14,7 +14,7 @@ import { queryRuns } from './run-query.pure.ts';
 
 const SLUG = 'demo';
 const SESSION = 'sess-1';
-const JOBS = ['brief-grill', 'write-dossier', 'open-pr', 'write-spec', 'a'];
+const JOBS = ['brief-grill', 'categorize-research', 'write-dossier', 'open-pr', 'write-spec', 'a'];
 const pipeline = (jobs: readonly string[]): string =>
   `status: approved\njobs:\n${jobs.map((id) => `  - id: ${id}\n`).join('')}`;
 const roots: string[] = [];
@@ -76,6 +76,21 @@ describe('success cases', () => {
     });
     const summaries = queryRuns([{ episode: SLUG, folded }], "SELECT summary FROM spans WHERE type = 'job'");
     expect(summaries).toEqual(expect.objectContaining({ rows: [{ summary: 'dossier written, one gap' }] }));
+  });
+
+  it('records a concept-gap note from categorize-research for a question that fits no Concept', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'categorize-research');
+    const text = 'question 3 — human serial-position memory fits no Concept';
+    const expected = [{ type: 'concept-gap', text }];
+    // ACT
+    const noted = run(ctx, 'note', 'categorize-research', 'concept-gap', text);
+    const { folded } = readEpisodeLog(SLUG, ctx.root);
+    const result = queryRuns([{ episode: SLUG, folded }], 'SELECT type, text FROM notes');
+    // ASSERT
+    expect(noted).toEqual({ ok: true, output: expect.stringContaining('concept-gap') });
+    expect(result).toEqual(expect.objectContaining({ rows: expected }));
   });
 
   it('refuses a note of an unknown type, and a note on a Job that is not open', () => {

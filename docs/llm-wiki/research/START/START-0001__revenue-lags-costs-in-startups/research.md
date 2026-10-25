@@ -2,6 +2,9 @@
 type: research
 title: 'Why does revenue typically lag the costs that generate it in an early-stage startup?'
 description: 'Revenue lags costs because a startup pays for building, hiring and selling before customers exist, then waits through deal closing, invoicing and payment terms before cash arrives.'
+confidence: open
+confidence_reason: 'Essays and one statute; the lag the Answer sums up is inference.'
+informs: [sales]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-13T23:16:40Z

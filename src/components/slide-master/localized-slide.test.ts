@@ -92,6 +92,27 @@ const retitled = slide({
   content: (kit) => seen(kit as never),
 });
 const visual = slide({ slug: 'visual', messages: VISUAL, content: (kit) => seen(kit as never) });
+const CITING_NOTE = { notes: { claim: { header: 'A claim', description: 'It holds [1], mostly [2].' } } };
+const citing = slide({
+  slug: 'citing',
+  messages: { en: CITING_NOTE, de: CITING_NOTE },
+  notes: [
+    {
+      slug: 'claim',
+      target: 'prose',
+      sources: [
+        { slug: 'onboarding', research: 'AIE-0001' },
+        { slug: 'staged', research: 'COG-0001' },
+      ],
+    },
+  ],
+  content: (kit) => seen(kit as never),
+});
+/** The Research questions an Episode's notes may cite, as the content store holds them. */
+const RESEARCH = [
+  { id: 'AIE-0001', title: 'Why is AI like onboarding a colleague?', confidence: 'contested', staged: false },
+  { id: 'COG-0001', title: 'Why do we remember the ends of a list?', confidence: 'open', staged: true },
+] as const;
 
 /** The Episode a test localizes into: the walk's real placement of these Sections. */
 function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide[]])[]): EpisodeContext {
@@ -104,6 +125,7 @@ function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide
       marker: (title) => (locale === 'de' ? `Sprechernotiz: ${title}` : `Speaker note: ${title}`),
     },
     header: 'authored',
+    research: RESEARCH,
   };
 }
 
@@ -274,6 +296,21 @@ describe('success cases', () => {
     expect(voiceScript).toEqual([expectedSegment]);
   });
 
+  it('A Speaker note that cites a Research question shows its title, links to its page and shows how settled it is', () => {
+    // ARRANGE
+    const expected = {
+      slug: 'onboarding',
+      research: 'AIE-0001',
+      title: 'Why is AI like onboarding a colleague?',
+      confidence: 'contested',
+      page: { path: '/research/AIE-0001', locale: 'en' },
+    };
+    // ACT
+    const [source] = localized('en', [[foundations, citing]])[1].notes[0].sources ?? [];
+    // ASSERT
+    expect(source).toEqual(expected);
+  });
+
   it("times a Slide from its own Voice script's words, script and bridge, in the page's locale", () => {
     // ARRANGE
     const expected = { en: 13 / 140, de: 11 / 120 };
@@ -376,6 +413,29 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('cites staged research by its title and confidence, without a link, since it has no page until Promotion', () => {
+    // ARRANGE
+    const expected = {
+      slug: 'staged',
+      research: 'COG-0001',
+      title: 'Why do we remember the ends of a list?',
+      confidence: 'open',
+    };
+    // ACT
+    const source = localized('en', [[foundations, citing]])[1].notes[0].sources?.[1];
+    // ASSERT
+    expect(source).toEqual(expected);
+  });
+
+  it('links a German note to the English Research page, the only one there is', () => {
+    // ARRANGE
+    const expected = { path: '/research/AIE-0001', locale: 'en' };
+    // ACT
+    const source = localized('de', [[foundations, citing]])[1].notes[0].sources?.[0];
+    // ASSERT
+    expect(source).toMatchObject({ page: expected });
+  });
+
   it('gives a Slide without notes or a Voice script empty lists and 0 minutes', () => {
     // ARRANGE
     const expected = { notes: [], voiceScript: [], minutes: 0 };

@@ -5,6 +5,9 @@ title: 'Why does Matt Pocock describe the skills for working with AI as a
 description: 'Pocock names a communication barrier between a person and an AI
   agent, caused by differing vocabulary, and answers it with shared-language and
   questioning skills.'
+confidence: open
+confidence_reason: 'One person''s words carry it, and the phrase itself was not found.'
+informs: [agentic-ai]
 generated:
   by: claude-code/sonnet-4.6
   at: 2026-10-19T18:27:29Z

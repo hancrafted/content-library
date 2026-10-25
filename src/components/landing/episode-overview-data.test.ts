@@ -1,17 +1,17 @@
 import { hasPage, listEpisodes } from '@/components/episodes/episode-repository';
 import { findEpisode } from '@/components/episodes/registry';
-import { leadTagOf, lookOf, tagProblems } from '@/lib/episode-metadata.pure';
-import { FEATURED, FILTER_TAGS, FORMATS, TAG_IDS, TAGS } from '@/lib/episode-overview';
+import { lookOf } from '@/lib/episode-metadata.pure';
+import { CONCEPT_THEMES, FEATURED, FORMATS, TOP_CONCEPT_IDS } from '@/lib/episode-overview';
 import de from '@/messages/de.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
-import { TAG_ACCENTS, TAG_ICONS } from './episode-visuals';
+import { THEME_ACCENTS, THEME_ICONS } from './episode-visuals';
 
 /*
  * The Episode overview's central lists against the Episodes that exist (#40):
- * Featured names published Episodes, every Episode's Tags sit in the closed
- * vocabulary, each Tag has a look the landing can draw, and every string a card
- * reads is translated, each Tag's name and tooltip included.
+ * Featured names published Episodes, each top Concept's theme is a look the
+ * landing can draw, and every string a card reads is translated, each top
+ * Concept's name and tooltip included.
  */
 
 const TRANSLATIONS = { en, de } as const;
@@ -39,7 +39,7 @@ describe('success cases', () => {
     expect(featured).toEqual(expected);
   });
 
-  it('gives each Featured Episode the look of its lead Tag, with no Episode declaring one', () => {
+  it('gives each Featured Episode the look of the Concept it names in applyThemeFromConcept, with no Episode declaring one', () => {
     // ARRANGE
     const expected = [
       'onboard-ai-every-time: context-engineering sky/hourglass',
@@ -50,7 +50,7 @@ describe('success cases', () => {
     const looks = FEATURED.map((slug) => {
       const episode = listEpisodes().find((e) => e.slug === slug);
       const { accent, icon } = lookOf(episode!);
-      return `${slug}: ${leadTagOf(episode!)} ${accent}/${icon}`;
+      return `${slug}: ${episode!.applyThemeFromConcept} ${accent}/${icon}`;
     });
     // ASSERT
     expect(looks).toEqual(expected);
@@ -68,52 +68,36 @@ describe('success cases', () => {
     expect(declared).toEqual(expected);
   });
 
-  it('gives every Tag in the vocabulary a name and tooltip in both locales', () => {
+  it('gives every top Concept a name and tooltip in both locales', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
     const missing = (['en', 'de'] as const).flatMap((locale) => {
-      const tags = TRANSLATIONS[locale].landing.episodeOverview.tags as Record<
+      const concepts = TRANSLATIONS[locale].landing.episodeOverview.concepts as Record<
         string,
         { name?: string; tooltip?: string } | undefined
       >;
-      return TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `${locale}: ${id}`);
+      return TOP_CONCEPT_IDS.filter((id) => !(concepts[id]?.name && concepts[id]?.tooltip)).map(
+        (id) => `${locale}: ${id}`,
+      );
     });
     // ASSERT
     expect(missing).toEqual(expected);
   });
 
-  it('gives every Tag an icon and an accent the landing can draw', () => {
+  it('gives every top Concept an icon and an accent the landing can draw', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
-    const undrawable = TAG_IDS.flatMap((tag) => {
-      const { icon, accent } = TAGS[tag];
+    const undrawable = TOP_CONCEPT_IDS.flatMap((id) => {
+      const { icon, accent } = CONCEPT_THEMES[id];
       return [
-        ...(TAG_ICONS[icon] === undefined ? [`${tag}: icon ${icon}`] : []),
-        ...(TAG_ACCENTS[accent] === undefined ? [`${tag}: accent ${accent}`] : []),
+        ...(THEME_ICONS[icon] === undefined ? [`${id}: icon ${icon}`] : []),
+        ...(THEME_ACCENTS[accent] === undefined ? [`${id}: accent ${accent}`] : []),
       ];
     });
     // ASSERT
     expect(undrawable).toEqual(expected);
-  });
-
-  it('offers only vocabulary Tags as filter chips', () => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const stray = FILTER_TAGS.filter((id) => !TAG_IDS.includes(id));
-    // ASSERT
-    expect(stray).toEqual(expected);
-  });
-
-  it('leaves no Episode with a Tag outside the vocabulary or without a Tag', () => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const problems = tagProblems(listEpisodes());
-    // ASSERT
-    expect(problems).toEqual(expected);
   });
 });
 
@@ -121,13 +105,13 @@ describe('failure cases', () => {
   it.each(['en', 'de'] as const)('leaves no string a card reads untranslated in %s', (locale) => {
     // ARRANGE
     const { episodeOverview } = TRANSLATIONS[locale].landing;
-    const tags = episodeOverview.tags as Record<string, { name?: string; tooltip?: string } | undefined>;
+    const concepts = episodeOverview.concepts as Record<string, { name?: string; tooltip?: string } | undefined>;
     const upcomingCopy = episodeOverview.upcoming as Record<string, { title?: string; caption?: string } | undefined>;
     const expected: string[] = [];
     // ACT
     const missing = [
       ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
-      ...TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `tags.${id}`),
+      ...TOP_CONCEPT_IDS.filter((id) => !(concepts[id]?.name && concepts[id]?.tooltip)).map((id) => `concepts.${id}`),
       ...listEpisodes().flatMap(({ slug, status }) => {
         const copy = hasPage(slug) ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
@@ -139,13 +123,13 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps no Translation key for a Tag outside the vocabulary', () => {
+  it('keeps no Translation key for a Concept that is not a top Concept', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
     const stray = (['en', 'de'] as const).flatMap((locale) =>
-      Object.keys(TRANSLATIONS[locale].landing.episodeOverview.tags)
-        .filter((id) => !(TAG_IDS as readonly string[]).includes(id))
+      Object.keys(TRANSLATIONS[locale].landing.episodeOverview.concepts)
+        .filter((id) => !(TOP_CONCEPT_IDS as readonly string[]).includes(id))
         .map((id) => `${locale}: ${id}`),
     );
     // ASSERT

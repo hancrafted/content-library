@@ -52,9 +52,7 @@ export interface Envelope {
   payload_truncated?: true;
 }
 
-/** What a note on a Job says: where a human is needed, what blocked, what research went without, a spine change, a Slide with no library match. */
-export const NOTE_TYPES = ['needs-human', 'blocked', 'research-gap', 'spine-change', 'no-library-match'] as const;
-export type NoteType = (typeof NOTE_TYPES)[number];
+export { NOTE_TYPES, type NoteType } from './run-note-types.pure.ts';
 
 /** The point facts an `event` line may record. */
 export const EVENT_NAMES = ['skill.invoke', 'file.read', 'instructions.load', 'note'] as const;

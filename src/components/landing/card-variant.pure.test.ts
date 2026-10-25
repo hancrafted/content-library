@@ -23,18 +23,18 @@ describe('success cases', () => {
     expect(cue).toBe(expected);
   });
 
-  it('shows a workshop card as the quiet arrow', () => {
+  it('shows an Event card as the quiet arrow', () => {
     // ARRANGE
     const expected = 'arrow';
     // ACT
-    const cue = cueOf(LINKED, 'workshop');
+    const cue = cueOf(LINKED, 'event');
     // ASSERT
     expect(cue).toBe(expected);
   });
 });
 
 describe('failure cases', () => {
-  it.each(['lead', 'compact', 'workshop'] as const)(
+  it.each(['lead', 'compact', 'event'] as const)(
     'shows an announced-only Episode as coming soon on a %s card',
     (variant) => {
       // ARRANGE

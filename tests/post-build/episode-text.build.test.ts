@@ -12,10 +12,11 @@ import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
+import { isToolingSlug, TOOLING_SLUGS } from '../../src/lib/tooling-pages';
 import { episodeText, type EpisodeText } from './episode-text';
 import { exportedPage } from './exported-pages';
 
-const PAGES = EPISODE_SLUGS.flatMap((slug) =>
+const PAGES = [...EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 
@@ -68,7 +69,8 @@ describe.each(PAGES)('$url', ({ slug, locale, url }) => {
     // ARRANGE
     const file = join(EPISODES_DIR, slug, 'published-anchors.json');
     // An upcoming Episode's page is built `noindex` and its anchors bind at publication (docs/features/episode-publishing.md).
-    if (isNoindex(url)) {
+    // A tooling page is `noindex` too, but its anchors are bound: it is no Episode and never upcoming.
+    if (!isToolingSlug(slug) && isNoindex(url)) {
       expect(existsSync(file)).toBe(false);
       return;
     }

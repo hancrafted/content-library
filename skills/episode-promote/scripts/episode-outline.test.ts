@@ -4,9 +4,13 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { episodeOutline } from './episode-outline.ts';
 
-/** Writes an Episode folder from `files` (path → source) into a fresh temp folder and returns its path. */
+/**
+ * Writes an Episode folder from `files` (path → source, relative to the Episode folder) at
+ * `src/components/episodes/<slug>` in a fresh temp repository, and returns its path.
+ */
 function episodeFolder(slug: string, files: Record<string, string>): string {
-  const folder = path.join(mkdtempSync(path.join(tmpdir(), 'episode-outline-')), slug);
+  const root = mkdtempSync(path.join(tmpdir(), 'episode-outline-'));
+  const folder = path.join(root, 'src/components/episodes', slug);
   for (const [file, source] of Object.entries(files)) {
     mkdirSync(path.dirname(path.join(folder, file)), { recursive: true });
     writeFileSync(path.join(folder, file), source);
@@ -63,16 +67,37 @@ export const tokenTalk = episode({
 `,
 };
 
+// A Section reusing a pool Slide by reference, one under a Pinned anchor (what `slides:promote` writes).
+const WITH_POOL = {
+  ...WITH_MARKERS,
+  'sections/why-cash.ts': `import { pinAnchor, type Section } from '@/components/slide-master/slide';
+import { defaultAlive } from '@/components/slide-pool/default-alive/slide';
+import { burnRate } from '@/components/slide-pool/burn-rate/slide';
+import { whyCash } from '../slides/why-cash/slide';
+
+export const whyCashSection: Section = [whyCash, burnRate, pinAnchor(defaultAlive, 'default-alive-for-founders')];
+`,
+};
+
+/** An outline entry: the Slide's anchor slug in this Episode and the folder holding its files. */
+function own(folder: string, slug: string) {
+  return { slug, folder: path.join(folder, 'slides', slug) };
+}
+
+function pooled(folder: string, slug: string, anchor = slug) {
+  return { slug: anchor, folder: path.join(folder, '..', '..', 'slide-pool', slug) };
+}
+
 describe('episodeOutline', () => {
   describe('success cases', () => {
     it('reads the Title slide and each Section placement marker, Slides in marker order, not import order', () => {
       // ARRANGE
       const folder = episodeFolder('cash-first', WITH_MARKERS);
       const expected = {
-        title: 'hero',
+        title: own(folder, 'hero'),
         sections: [
-          ['why-cash', 'watch-cash'],
-          ['how-to-start', 'lead-list', 'first-call'],
+          [own(folder, 'why-cash'), own(folder, 'watch-cash')],
+          [own(folder, 'how-to-start'), own(folder, 'lead-list'), own(folder, 'first-call')],
         ],
       };
 
@@ -86,13 +111,31 @@ describe('episodeOutline', () => {
     it('reads Sections written inline as arrays, in an Episode with no Title slide', () => {
       // ARRANGE
       const folder = episodeFolder('token-talk', INLINE);
-      const expected = { sections: [['motivation', 'what-is-a-token'], ['tools-and-tips']] };
+      const expected = {
+        sections: [[own(folder, 'motivation'), own(folder, 'what-is-a-token')], [own(folder, 'tools-and-tips')]],
+      };
 
       // ACT
       const outline = episodeOutline(folder);
 
       // ASSERT
       expect(outline).toEqual(expected);
+    });
+
+    it("reads a pool Slide from the Slide pool's folder, and a Pinned anchor under its retired slug", () => {
+      // ARRANGE
+      const folder = episodeFolder('cash-first', WITH_POOL);
+      const expected = [
+        own(folder, 'why-cash'),
+        pooled(folder, 'burn-rate'),
+        pooled(folder, 'default-alive', 'default-alive-for-founders'),
+      ];
+
+      // ACT
+      const outline = episodeOutline(folder);
+
+      // ASSERT
+      expect(outline.sections[0]).toEqual(expected);
     });
   });
 
@@ -118,7 +161,7 @@ describe('episodeOutline', () => {
 export const whyCashSection: Section = [whyCash];
 `,
       });
-      const message = /whyCash is not imported from a slides\/<folder>\/slide module/;
+      const message = /whyCash is not imported from a slides\/<folder>\/slide or slide-pool\/<folder>\/slide module/;
 
       // ACT
       const outline = () => episodeOutline(folder);
@@ -132,7 +175,7 @@ export const whyCashSection: Section = [whyCash];
     it('reads a Section marker written on one line', () => {
       // ARRANGE
       const folder = episodeFolder('cash-first', WITH_MARKERS);
-      const firstSection = ['why-cash', 'watch-cash'];
+      const firstSection = [own(folder, 'why-cash'), own(folder, 'watch-cash')];
 
       // ACT
       const outline = episodeOutline(folder);

@@ -1,6 +1,6 @@
+import { SessionBarPreset } from '@/components/explorable-explanations/context/context';
 import { localizeSlide, localizeTitleScene } from '@/components/slide-master/localized-slide';
 import type { Slide } from '@/components/slide-master/slide';
-import { SessionBarPreset } from '@/components/slide-shared/context/context';
 import { placeSections } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { load } from 'cheerio';
@@ -33,6 +33,7 @@ const context = (locale: Locale) => ({
   placed: PLACED,
   referenceLabels: { ref: 'opens speaker note', marker: (title: string) => `Speaker note: ${title}` },
   header: 'shared' as const,
+  research: [],
 });
 
 function localized(slug: string, locale: Locale) {
@@ -328,7 +329,7 @@ describe('success cases', () => {
 
   it('pulses only the in-progress segment, and only when motion is welcome', () => {
     // ARRANGE
-    const css = readFileSync('src/components/slide-shared/context/context.module.css', 'utf8');
+    const css = readFileSync('src/components/explorable-explanations/context/context.module.css', 'utf8');
     // ACT
     const block = css.match(
       /@media \(prefers-reduced-motion: no-preference\) \{\s*\.sessionPart\[data-state='current'\][^}]*animation:[^}]*\}/,

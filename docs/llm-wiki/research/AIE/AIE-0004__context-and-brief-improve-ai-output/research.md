@@ -2,6 +2,9 @@
 type: research
 title: 'Why does richer context and a clearer brief measurably improve AI output?'
 description: 'Relevant, specific context and a fully specified brief measurably lift LLM output, but padding, noise and boilerplate overviews do not help and can hurt.'
+confidence: contested
+confidence_reason: 'Coding-agent studies disagree on whether context files help.'
+informs: [context-engineering]
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-13T00:00:00Z

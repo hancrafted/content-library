@@ -5,13 +5,21 @@ import { checkResearchJobs } from '@/lib/episode-research-jobs.pure';
 import { unsettledBriefSections } from '@/lib/episode-staging-brief.pure';
 import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type KnownVisuals } from '@/lib/episode-staging.pure';
 import { checkVoiceScriptDiff } from '@/lib/episode-voice-script.pure';
+import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
 import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
+import { checkResearchPlan } from '@/lib/research-plan.pure';
+import { checkSlidePlan } from '@/lib/slide-plan-check.pure';
+import { SLIDE_PLAN_FILE } from '@/lib/slide-plan.pure';
+import SOURCE_BASELINE from '@/lib/source-baseline.json';
+import { grandfatheredSlides } from '@/lib/source-baseline.pure';
 import { gateTier } from '@/lib/staging-file.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
+import { listSlides } from '../../scripts/slide-pool.pure';
+import { repo } from '../../scripts/slide-repo';
 
 /*
  * The cross-file checks (design-ADR 0004) applied to the real corpus: every
@@ -358,6 +366,54 @@ describe('success cases', () => {
     // ACT
     const findings = pairs.flatMap(([file, yaml, plan]) => checkResearchJobs(file, yaml, plan));
     // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('finds every research plan, the sample one included, naming Concepts that exist and Research questions of the wiki or a Staging', () => {
+    // ARRANGE
+    const sampleResearch = Object.keys(readFolder(path.join(SAMPLE, 'research'))).map((file) => ({
+      id: file.split('__')[0],
+      path: `${path.relative(ROOT, SAMPLE)}/research/${file}`,
+    }));
+    const research = [
+      ...readResearchFiles(ROOT).map(({ path: file }) => ({
+        id: file.split('/').at(-2)?.split('__')[0] ?? '',
+        path: file,
+      })),
+      ...sampleResearch,
+    ];
+    const concepts = readConceptFiles(ROOT).map(({ path: file }) => file.split('/').at(-2) ?? '');
+    const plans = Object.entries(stagingFolders())
+      .map(([staging, folder]) => [staging, path.join(folder, 'research-plan.md')] as const)
+      .filter(([, file]) => existsSync(file));
+    // ACT
+    const findings = plans.flatMap(([staging, file]) =>
+      checkResearchPlan(`${staging}/research-plan.md`, readFileSync(file, 'utf8'), { staging, research, concepts }),
+    );
+    // ASSERT
+    expect(plans.length).toBeGreaterThan(1);
+    expect(findings).toEqual([]);
+  });
+
+  it('finds every Slide plan, the sample one included, naming Slides the repository holds as the pool listing does', () => {
+    // ARRANGE
+    const slides = listSlides(repo);
+    const grandfathered = grandfatheredSlides(SOURCE_BASELINE);
+    const plans = Object.entries(stagingFolders())
+      .map(([staging, folder]) => [staging, folder, path.join(folder, SLIDE_PLAN_FILE)] as const)
+      .filter(([, , file]) => existsSync(file));
+    // ACT
+    const findings = plans.flatMap(([staging, folder, file]) => {
+      const researchPlan = path.join(folder, 'research-plan.md');
+      return checkSlidePlan(`${staging}/${SLIDE_PLAN_FILE}`, readFileSync(file, 'utf8'), {
+        episode: path.basename(folder),
+        slides,
+        grandfathered,
+        researchPlan: existsSync(researchPlan) ? readFileSync(researchPlan, 'utf8') : undefined,
+      });
+    });
+    // ASSERT
+    expect(plans.length).toBeGreaterThan(0);
     expect(findings).toEqual([]);
   });
 

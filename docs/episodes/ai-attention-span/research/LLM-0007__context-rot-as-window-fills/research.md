@@ -4,6 +4,9 @@ title: 'Why does a language model''s output quality drop as its context window f
 description: 'Output quality drops as the window fills because length itself
   degrades results, even with perfect retrieval, and each token must share a
   finite attention budget with more tokens.'
+confidence: settled
+confidence_reason: 'Several independent studies agree that output degrades as the window fills.'
+informs: [llm-behaviour, context-engineering]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-20T19:22:02Z

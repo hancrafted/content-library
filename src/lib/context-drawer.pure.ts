@@ -3,14 +3,34 @@
  * content, never design: no field carries layout, style, placement or markup.
  */
 
+import type { Confidence } from './confidence.pure';
+import type { Locale } from './locale.pure';
 import type { DrawerMode } from './prefs.pure';
 
-/** One source of a note: a stable slug, an `https` URL and its localized, human title. */
-export interface NoteSource {
+/** A source that cites a Source directly: a stable slug, an `https` URL and its localized, human title. */
+export interface UrlSource {
   readonly slug: string;
   readonly url: string;
   readonly title: string;
+  readonly research?: undefined;
 }
+
+/**
+ * A source that cites a Research question: its id, the question as its title, how settled its Answer is, and the
+ * page to read it on. A staged question has no page until Promotion, so it carries no `page`.
+ */
+export interface ResearchSource {
+  readonly slug: string;
+  readonly research: string;
+  readonly title: string;
+  readonly confidence: Confidence;
+  /** The question's page as a logical path and the locale it is in: Research pages are English only. */
+  readonly page?: { readonly path: string; readonly locale: Locale };
+  readonly url?: undefined;
+}
+
+/** One source of a note: a Research question by default, a Source directly by exception (design-ADR 0016). */
+export type NoteSource = UrlSource | ResearchSource;
 
 /** One talking point (a Speaker note item), pointing at the Slide element it explains. */
 export interface SpeakerNoteItem {
