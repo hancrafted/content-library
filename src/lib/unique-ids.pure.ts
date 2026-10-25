@@ -2,7 +2,7 @@ import { refreshShadows } from './research-plan.pure';
 import type { ResearchRecord } from './research-record.pure';
 
 /*
- * Ids that must be unique across records: research ids across the wiki and Staging. The content store reports
+ * Ids that must be unique across records: research ids across the wiki and Staging, retired ids included. The content store reports
  * these refusals with the rest; Slide slugs have their own module (`slide-slugs.pure.ts`).
  */
 
@@ -27,9 +27,30 @@ export function researchIdRefusals(
   plans: readonly { readonly path: string; readonly markdown: string }[],
 ): UniquenessRefusal[] {
   const shadows = refreshShadows(research, plans);
-  return duplicates(research.filter((record) => !shadows.has(record)).map(({ id }) => id)).map((id) => ({
+  const doubled = duplicates(research.filter((record) => !shadows.has(record)).map(({ id }) => id)).map((id) => ({
     kind: 'research' as const,
     record: id,
     message: 'the id is used by more than one research file',
   }));
+  return [...doubled, ...retiredIdRefusals(research)];
+}
+
+/**
+ * One refusal per research file whose id a merge retired: a `supersedes` line names it, so the id is never reused
+ * (design-ADR 0016, Pipeline and evidence rule 10).
+ */
+function retiredIdRefusals(research: readonly ResearchRecord[]): UniquenessRefusal[] {
+  const retiredInto = new Map(research.flatMap(({ id, supersedes }) => (supersedes ?? []).map((old) => [old, id])));
+  return research.flatMap(({ id }) => {
+    const into = retiredInto.get(id);
+    return into === undefined
+      ? []
+      : [
+          {
+            kind: 'research' as const,
+            record: id,
+            message: `the id was retired into ${into} by a merge and is never reused; take the next free number`,
+          },
+        ];
+  });
 }

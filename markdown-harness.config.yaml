@@ -191,6 +191,10 @@ frontmatter:
         informs:
           presence: required
           intent: 'The Concept ids the question informs, the first its main one, so each Concept page lists its Research questions. Fail if the main Concept is not the subject the h1 asks about.'
+        # design-ADR 0016, Pipeline and evidence rule 10. Written only by `npm run episode:merge-research`; the content
+        # store refuses a research file under an id any supersedes line names.
+        supersedes:
+          intent: 'The Research question ids Han merged into this one at the Promotion Gate, each retired for good: never reused, every citation re-pointed here. Fail if the Answer does not carry the findings of a question it supersedes.'
         verified: *verified
         generated.by:
           presence: required

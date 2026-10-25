@@ -5,6 +5,7 @@ import { ACCENTS, ICONS } from './episode-overview';
 import { AUDIENCES, EVENT_KINDS } from './events.pure';
 import { slugOf } from './kebab.pure';
 import { PLAYLIST_TYPES, VISIBILITIES } from './playlists.pure';
+import { slideFolderSchema } from './slide-folder-schema.pure';
 import { slideSourceSchema } from './slide-source.pure';
 
 /*
@@ -162,23 +163,6 @@ export const playlistSchema = z
   })
   .describe('An ordered list of Episodes with a type and a visibility, and nothing else');
 
-/** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
-export const SLIDE_FOLDER = /^src\/components\/(episodes\/[a-z0-9-]+\/slides|slide-pool)\/[a-z0-9-]+$/;
-
-export const slideFolderSchema = z
-  .object({
-    path: z
-      .string()
-      .regex(SLIDE_FOLDER)
-      .describe("The Slide folder, from the repository root: in an Episode's slides/ or in the Slide pool"),
-    slug: slugOf('The Slide slug: the folder name, unique across every Episode and the Slide pool'),
-    title: z
-      .boolean()
-      .describe("Whether the folder holds an Episode's Title slide, whose slug is exempt from uniqueness"),
-    copiedFrom: slugOf('Set on an instance only: the slug of the pool Slide it was copied from').optional(),
-  })
-  .describe('One Slide folder, wherever it lives');
-
 export const researchSchema = z
   .object({
     type: z.literal('research').describe('The kind of Staging file this is'),
@@ -199,6 +183,17 @@ export const researchSchema = z
       1,
       'names no Concept: a Research question informs at least one, the first its main one',
     ),
+    supersedes: z
+      .array(
+        z
+          .string()
+          .regex(/^[A-Z]+-\d{4}$/)
+          .describe('A Research question id'),
+      )
+      .optional()
+      .describe(
+        'The ids merged into this question at the Promotion Gate, each retired: never reused, every citation re-pointed here',
+      ),
     generated: z
       .object({
         by: z.string().min(1).describe('Who or what wrote the file'),
@@ -240,5 +235,4 @@ export const CONTENT_SCHEMAS = {
 
 export type ConceptFrontmatter = z.infer<typeof conceptSchema>;
 export type DefinitionSlide = z.infer<typeof definitionSlideSchema>;
-export type SlideFolder = z.infer<typeof slideFolderSchema>;
 export type ResearchFrontmatter = z.infer<typeof researchSchema>;

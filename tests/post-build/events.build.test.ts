@@ -25,14 +25,23 @@ const FIRST = EVENTS[0];
 /** Every Workshop URL that was ever published, and the Event it became. Written out: the Workshop record is gone. */
 const LEGACY_WORKSHOPS = [{ workshop: 'axel-agentic-workflow-2026-10-23', event: '2026-10-23-axel-agentic-workflow' }];
 
-const WORDS: Record<Locale, { title: string; nav: string; empty: string; frame: string }> = {
+const WORDS: Record<
+  Locale,
+  { title: string; nav: string; empty: string; frame: string; chip: string; kind: string; audience: string }
+> = {
   en: {
+    chip: 'Event page',
+    kind: 'Workshop',
+    audience: 'For German businesses',
     title: 'AXEL Seminar: Agentic Workflows',
     nav: 'Events',
     empty: 'No public Events right now.',
     frame: 'AXEL Seminar: the agenda',
   },
   de: {
+    chip: 'Veranstaltungsseite',
+    kind: 'Workshop',
+    audience: 'Für Unternehmen in Deutschland',
     title: 'AXEL Seminar: Agentic Workflows',
     nav: 'Veranstaltungen',
     empty: 'Derzeit keine öffentlichen Veranstaltungen.',
@@ -116,6 +125,36 @@ describe('Event page', () => {
     const $ = exportedPage(localizePath(eventRoute(FIRST.slug), locale));
     // ACT
     const seen = { title: $('h1').text(), date: $('time[data-event-date]').attr('datetime') };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it.each(LOCALES)('shades the event-frame Episode as a band chipped as the Event page, alone, for %s', (locale) => {
+    // ARRANGE
+    const expected = { band: [0], chips: [WORDS[locale].chip] };
+    const $ = exportedPage(localizePath(eventRoute(FIRST.slug), locale));
+    // ACT
+    const steps = $('ol[data-event-playlist] > li[data-agenda-step]');
+    const seen = {
+      band: steps
+        .map((index, step) => ($(step).is('[data-event-frame]') ? index : null))
+        .get()
+        .filter((index) => index !== null),
+      chips: steps
+        .find('[data-episode-chip]')
+        .map((_, chip) => $(chip).text())
+        .get(),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it.each(LOCALES)("names the Event's kind and Audience on its facts line for %s", (locale) => {
+    // ARRANGE
+    const expected = { kind: WORDS[locale].kind, audience: WORDS[locale].audience };
+    const $ = exportedPage(localizePath(eventRoute(FIRST.slug), locale));
+    // ACT
+    const seen = { kind: $('[data-event-kind]').text(), audience: $('[data-event-audience]').text() };
     // ASSERT
     expect(seen).toEqual(expected);
   });

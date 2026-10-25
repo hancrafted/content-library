@@ -1,6 +1,6 @@
 # Harvest
 
-Promotion's harvest: the last moment Staging and the built Episode sit side by side. Five harvesters read both and propose; none applies a change. Dispatch them as parallel subagents, each with the slug, the Staging path, its section below, and [the card shape](#the-card) to return its proposals in. Assemble the five returns into `docs/episodes/<staging>/harvest.json`, one section per harvester, then render the gate page with `npm run episode:harvest -- docs/episodes/<staging>`.
+Promotion's harvest: the last moment Staging and the built Episode sit side by side. Six harvesters read both and propose; none applies a change. Dispatch them as parallel subagents, each with the slug, the Staging path, its section below, and [the card shape](#the-card) to return its proposals in. Assemble the six returns into `docs/episodes/<staging>/harvest.json`, one section per harvester, then render the gate page with `npm run episode:harvest -- docs/episodes/<staging>`.
 
 Shared inputs: `brief.md`, `spec/spec.html`, `feedback/*/feedback.md`, `pipeline.yml`, `events.jsonl` (query it with `npm run episode:query`), the gate commits on the Episode's branch, and the code under `src/components/episodes/<slug>/`.
 
@@ -23,6 +23,14 @@ Small fixes to apply in this PR: dead code, unused i18n keys, leftover TODOs, a 
 ## Refactor tickets
 
 Changes too large for this PR: a shared abstraction several Episodes need, a test the Run kept missing, a contract that drifted. Each proposal is a ticket: a title, the problem with its evidence, and the outcome, ready for `gh issue create --label needs-triage`.
+
+## Duplicates
+
+Research questions that answer one question twice (design-ADR `docs/adr/0016-content-data-model.md`, _Pipeline and evidence_ rule 10). Compare each staged question with the wiki's and every other Staging's: `npm run episode:research -- list <concept-id>` for each Concept it informs. Two questions are duplicates when their h1s ask the same thing and their Answers state the same claim; a narrower or differently scoped claim is not one. Each proposal is one card to merge the newer question into the older: `title` says which question survives, `changes` is the older question's `research.md`, `evidence` names both ids and every file citing the newer one. A promoted question never retires, since its page is public, so the newer one is always staged. The user keeps the card to merge, or strikes it to keep both.
+
+## Research questions
+
+`npm run episode:harvest` writes this section itself, one card per staged question (`scripts/research-cards.pure.ts`): the `confidence` and `informs` its writer proposed, with the writer's one-line reason. No harvester writes it.
 
 ## The card
 
@@ -50,7 +58,7 @@ The user decides each proposal on one card of the Harvest report, so a proposal 
 }
 ```
 
-- **id**: the section's letter and a number: `L` Lessons, `S` Style, `B` Slide library, `C` Cleanups, `T` Refactor tickets.
+- **id**: the section's letter and a number: `L` Lessons, `S` Style, `B` Slide library, `C` Cleanups, `T` Refactor tickets, `D` Duplicates; `Q` is the research section's.
 - **title**: the decision, as one plain sentence the user can say yes or no to.
 - **happened**, **change**, **gain**: one or two short sentences each, in [plain language](#plain-language).
 - **evidence**: the only field for ids, rule numbers, job names, line numbers and commit hashes. It stays folded on the card.

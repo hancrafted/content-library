@@ -1,7 +1,7 @@
 import { EpisodePage, episodePageCopy } from '@/components/pages/episode-page';
 import { DEFAULT_LOCALE } from '@/lib/locale.pure';
 import { pageMetadata } from '@/lib/page-metadata.pure';
-import { eventEpisodeParams, eventEpisodeRoute, isAnyEpisodeSlug, isEventEpisode, isEventSlug } from '@/lib/routes';
+import { eventEpisodeParams, isAnyEpisodeSlug, isEventEpisode, isEventSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 interface EventEpisodeParams {
@@ -19,5 +19,5 @@ export async function generateMetadata({ params }: EventEpisodeParams) {
 
 export default async function Page({ params }: EventEpisodeParams) {
   const { event, episode } = await params;
-  return <EpisodePage slug={episode} locale={DEFAULT_LOCALE} route={eventEpisodeRoute(event, episode)} />;
+  return <EpisodePage slug={episode} locale={DEFAULT_LOCALE} event={event} />;
 }
