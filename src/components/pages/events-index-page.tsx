@@ -1,0 +1,29 @@
+import { EventCardView } from '@/components/landing/event-card';
+import { eventCards } from '@/components/landing/event-cards';
+import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
+import type { Locale } from '@/lib/locale.pure';
+import { getTranslations } from 'next-intl/server';
+
+/** The /events page: a title with a one-line intro, then one card per Event whose Playlist is public, or a line saying there is none. */
+export async function EventsIndexPage({ locale }: { locale: Locale }) {
+  const t = await getTranslations({ locale, namespace: 'eventsPage' });
+  const cards = await eventCards(locale, { listedOnly: true });
+  return (
+    <main data-testid="events-index-page" className={PAGE_CONTAINER}>
+      <PageHeader title={t('title')} intro={<p>{t('intro')}</p>} />
+      {cards.length === 0 ? (
+        <p data-events-empty className="text-body text-muted-foreground">
+          {t('empty')}
+        </p>
+      ) : (
+        <ul data-event-list className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((card) => (
+            <li key={card.slug} className="flex">
+              <EventCardView card={card} locale={locale} headingLevel={2} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
+  );
+}

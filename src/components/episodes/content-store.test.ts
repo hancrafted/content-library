@@ -1,4 +1,6 @@
 import { loadContentStore } from '@/lib/content-store.pure';
+import { CONCEPT_THEMES } from '@/lib/episode-overview';
+import { pageLocales, PAGES, routeOf } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { contentStore, rawContent } from './content-store';
 
@@ -8,7 +10,7 @@ import { contentStore, rawContent } from './content-store';
  */
 
 describe('success cases', () => {
-  it('returns the same Episodes, Tags, Workshop and research records the site renders today', () => {
+  it('returns the same Episodes, Events, Playlists and research records the site renders, and the seven top Concepts', () => {
     // ARRANGE
     const expected = {
       episodes: [
@@ -18,9 +20,19 @@ describe('success cases', () => {
         'onboard-ai-every-time',
         'ai-attention-span',
         'ai-gives-you-more-work',
+        'axel-agentic-workflow-agenda',
       ],
-      tags: ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'],
-      workshops: ['axel-agentic-workflow-2026-10-23'],
+      concepts: [
+        'agentic-ai',
+        'ai-adoption',
+        'ai-cost',
+        'context-engineering',
+        'llm-behaviour',
+        'markdown-documentation',
+        'sales',
+      ],
+      events: ['2026-10-23-axel-agentic-workflow'],
+      playlists: ['axel-agentic-workflow'],
       researchCount: 37,
     };
     // ACT
@@ -28,8 +40,9 @@ describe('success cases', () => {
     // ASSERT
     expect({
       episodes: store.episodes.map(({ slug }) => slug),
-      tags: Object.keys(store.tags),
-      workshops: store.workshops.map(({ slug }) => slug),
+      concepts: store.concepts.map(({ id }) => id),
+      events: store.events.map(({ slug }) => slug),
+      playlists: store.playlists.map(({ id }) => id),
       researchCount: store.research.length,
     }).toEqual(expected);
   });
@@ -50,6 +63,35 @@ describe('success cases', () => {
     const count = contentStore().slideSources.length;
     // ASSERT
     expect(count).toBeGreaterThan(expectedAtLeast);
+  });
+
+  it('A Concept page exists at /concepts/<id> for each of the seven', () => {
+    // ARRANGE
+    const expected = [
+      '/concepts/agentic-ai en',
+      '/concepts/ai-adoption en',
+      '/concepts/ai-cost en',
+      '/concepts/context-engineering en',
+      '/concepts/llm-behaviour en',
+      '/concepts/markdown-documentation en',
+      '/concepts/sales en',
+    ];
+    const paged = new Map(PAGES.map((page) => [routeOf(page), pageLocales(page).join(' ')]));
+    // ACT
+    const pages = contentStore().concepts.map(({ id }) => `/concepts/${id} ${paged.get(`/concepts/${id}`)}`);
+    // ASSERT
+    expect(pages).toEqual(expected);
+  });
+
+  it('themes the cards by exactly the top Concepts the wiki holds', () => {
+    // ARRANGE
+    const expected = Object.keys(CONCEPT_THEMES).sort();
+    // ACT
+    const top = contentStore()
+      .concepts.filter(({ broader }) => broader.length === 0)
+      .map(({ id }) => id);
+    // ASSERT
+    expect(top).toEqual(expected);
   });
 
   it("gathers every Slide folder of every Episode, marking each Episode's Title slide", () => {
@@ -75,6 +117,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('keeps no Concept page whose Concept file is gone', () => {
+    // ARRANGE
+    const expected = contentStore().concepts.map(({ id }) => `/concepts/${id}`);
+    // ACT
+    const pages = PAGES.map(routeOf).filter((route) => route.startsWith('/concepts/'));
+    // ASSERT
+    expect(pages).toEqual(expected);
+  });
+
   it('names the research file whose frontmatter is broken, without throwing', () => {
     // ARRANGE
     const raw = rawContent();

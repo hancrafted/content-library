@@ -1,31 +1,56 @@
 import { describe, expect, it } from 'vitest';
-import { leadTagOf, overviewOrder, tagProblems, type EpisodeMetadata } from './episode-metadata.pure';
+import { episodeConceptProblems, lookOf, overviewOrder, type EpisodeMetadata } from './episode-metadata.pure';
 
 /** Five hand-placed Episodes: three published, two upcoming. */
 const EPISODES: readonly EpisodeMetadata[] = [
   {
     slug: 'never-too-early-sales',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'foundations',
-    tags: ['sales'],
+    concepts: ['sales'],
+    applyThemeFromConcept: 'sales',
     publishedOn: '2026-10-08',
   },
   {
     slug: 'maintaining-markdown-for-ai',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'teardown',
-    tags: ['markdown', 'sales'],
+    concepts: ['markdown-documentation', 'sales'],
+    applyThemeFromConcept: 'markdown-documentation',
     publishedOn: '2026-10-09',
   },
   {
     slug: 'ai-token-economy',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'foundations',
-    tags: ['cost'],
+    concepts: ['ai-cost'],
+    applyThemeFromConcept: 'ai-cost',
     publishedOn: '2026-10-09',
   },
-  { slug: 'rolling-out-ai', status: 'upcoming', format: 'foundations', tags: ['agentic-ai'] },
-  { slug: 'ai-in-code-review', status: 'upcoming', format: 'short', tags: ['workflow'] },
+  {
+    slug: 'rolling-out-ai',
+    type: 'standard',
+    visibility: 'public',
+    status: 'upcoming',
+    format: 'foundations',
+    concepts: ['agentic-ai'],
+    applyThemeFromConcept: 'agentic-ai',
+  },
+  {
+    slug: 'ai-in-code-review',
+    type: 'standard',
+    visibility: 'public',
+    status: 'upcoming',
+    format: 'short',
+    concepts: ['ai-adoption'],
+    applyThemeFromConcept: 'ai-adoption',
+  },
 ];
 
 const slugs = (entries: readonly EpisodeMetadata[]) => entries.map(({ slug }) => slug);
@@ -47,20 +72,21 @@ describe('success cases', () => {
     expect(slugs(ordered)).toEqual(expected);
   });
 
-  it("takes an Episode's first Tag as its lead Tag", () => {
+  it('draws the look of the Concept named in applyThemeFromConcept, not of the first Concept listed', () => {
     // ARRANGE
-    const expected = 'markdown';
+    const expected = { icon: 'file-text', accent: 'rose' };
     // ACT
-    const lead = leadTagOf(EPISODES[1]);
+    const look = lookOf(EPISODES[1]);
     // ASSERT
-    expect(lead).toBe(expected);
+    expect(look).toEqual(expected);
   });
 
-  it('finds no problem in Episodes whose Tags are all in the vocabulary', () => {
+  it('finds no problem in Episodes themed by top Concepts they list', () => {
     // ARRANGE
     const expected: string[] = [];
+    const top = ['sales', 'markdown-documentation', 'ai-cost', 'agentic-ai', 'ai-adoption'];
     // ACT
-    const problems = tagProblems(EPISODES);
+    const problems = episodeConceptProblems(EPISODES, top);
     // ASSERT
     expect(problems).toEqual(expected);
   });
@@ -83,22 +109,12 @@ describe('failure cases', () => {
     expect(slugs(ordered)).toEqual(expected);
   });
 
-  it('rejects an Episode with a Tag outside the vocabulary', () => {
+  it('rejects an Episode that lists a Concept that is not a top Concept', () => {
     // ARRANGE
-    const episodes = [{ slug: 'ai-token-economy', tags: ['cost', 'tokens'] }];
-    const expected = ['ai-token-economy: unknown Tag tokens'];
+    const episodes = [{ slug: 'ai-token-economy', concepts: ['ai-cost', 'tokens'], applyThemeFromConcept: 'ai-cost' }];
+    const expected = ['ai-token-economy: concepts names tokens, which is not one of the top Concepts'];
     // ACT
-    const problems = tagProblems(episodes);
-    // ASSERT
-    expect(problems).toEqual(expected);
-  });
-
-  it('rejects an Episode with no Tag, since its lead Tag gives its card its look', () => {
-    // ARRANGE
-    const episodes = [{ slug: 'ai-token-economy', tags: [] }];
-    const expected = ['ai-token-economy: has no Tag'];
-    // ACT
-    const problems = tagProblems(episodes);
+    const problems = episodeConceptProblems(episodes, ['ai-cost']);
     // ASSERT
     expect(problems).toEqual(expected);
   });
@@ -117,12 +133,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('names a Tag once the Episode lists it twice', () => {
+  it('names a Concept once the Episode lists it twice', () => {
     // ARRANGE
-    const episodes = [{ slug: 'ai-token-economy', tags: ['cost', 'cost'] }];
-    const expected = ['ai-token-economy: lists the Tag cost twice'];
+    const episodes = [{ slug: 'ai-token-economy', concepts: ['ai-cost', 'ai-cost'], applyThemeFromConcept: 'ai-cost' }];
+    const expected = ['ai-token-economy: lists the Concept ai-cost twice'];
     // ACT
-    const problems = tagProblems(episodes);
+    const problems = episodeConceptProblems(episodes, ['ai-cost']);
     // ASSERT
     expect(problems).toEqual(expected);
   });

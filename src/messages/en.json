@@ -6,7 +6,7 @@
   "nav": {
     "label": "Main",
     "episodes": "Episodes",
-    "workshops": "Workshops",
+    "events": "Events",
     "dashboard": "Content pipeline",
     "contact": "Work with me",
     "newTab": "opens in a new tab",
@@ -68,7 +68,7 @@
       "browseTitle": "Browse all Episodes",
       "search": "Search Episodes",
       "searchPlaceholder": "Search by title or tag",
-      "tagFilter": "Filter by tag",
+      "conceptFilter": "Filter by Concept",
       "showAll": "Show all {count} Episodes",
       "showFewer": "Show fewer",
       "results": {
@@ -78,31 +78,39 @@
       },
       "empty": "No Episodes match these filters yet.",
       "reset": "Reset filters",
-      "tags": {
+      "concepts": {
         "context-engineering": {
           "name": "Context engineering",
           "tooltip": "Giving the AI the right context at the right time"
         },
         "agentic-ai": {
           "name": "Agentic AI",
-          "tooltip": "AI that plans and acts in steps, not just answers"
+          "tooltip": "Handing work to an AI and staying responsible for it"
         },
-        "markdown": {
-          "name": "Markdown",
+        "llm-behaviour": {
+          "name": "LLM behaviour",
+          "tooltip": "How a language model behaves, whatever you feed it"
+        },
+        "ai-adoption": {
+          "name": "AI adoption",
+          "tooltip": "Turning AI use into productivity you can measure"
+        },
+        "markdown-documentation": {
+          "name": "Markdown documentation",
           "tooltip": "Plain-text documents that people and AI both read well"
         },
-        "cost": {
-          "name": "Cost",
+        "ai-cost": {
+          "name": "AI cost",
           "tooltip": "What AI really costs, and where the spend goes"
         },
         "sales": {
           "name": "Sales",
           "tooltip": "Finding, winning and keeping customers"
-        },
-        "workflow": {
-          "name": "Workflow",
-          "tooltip": "How work is split into steps and handed between chats"
         }
+      },
+      "conceptInEnglish": {
+        "mark": "EN",
+        "label": "(page in English)"
       },
       "formats": {
         "foundations": "Foundations",
@@ -412,9 +420,9 @@
       "title": "Visualised theory · hancrafted",
       "description": "Theory from the hancrafted training videos, visualised page by page."
     },
-    "workshops": {
-      "title": "Workshops",
-      "description": "Guided workshops that walk through a planned set of visualised theory episodes, in order."
+    "events": {
+      "title": "Events",
+      "description": "Workshops and other sessions that walk through a planned set of visualised theory episodes, in order."
     }
   },
   "episodesPage": {
@@ -478,11 +486,12 @@
     "backToVideo": "Back to video",
     "close": "Close video player"
   },
-  "workshopsPage": {
-    "title": "Workshops",
-    "back": "All workshops",
-    "intro": "Guided sessions that walk through a planned set of Episodes, in order.",
-    "agenda": "Agenda",
+  "eventsPage": {
+    "title": "Events",
+    "back": "All Events",
+    "intro": "Workshops and other sessions that walk through a planned set of Episodes, in order.",
+    "empty": "No public Events right now.",
+    "playlist": "Episodes",
     "start": "Start with Episode {step}",
     "readingTime": "{minutes} min total reading time",
     "episodeCount": {
@@ -490,10 +499,17 @@
       "other": "{count} Episodes"
     },
     "items": {
-      "axel-agentic-workflow-2026-10-23": {
+      "2026-10-23-axel-agentic-workflow": {
         "title": "AXEL Seminar: Agentic Workflows",
         "description": "Working with AI agents in three Episodes: onboard them every time, manage their attention span, and see why they add management work."
       }
     }
+  },
+  "conceptPage": {
+    "eyebrow": "Concept",
+    "aliases": "Also called",
+    "broader": "Broader",
+    "narrower": "Narrower",
+    "related": "Related"
   }
 }

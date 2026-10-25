@@ -190,6 +190,42 @@ frontmatter:
           presence: required
           format: datetime
           intent: 'When the Findings stop being trustworthy: a year after generated.at, or six months when they concern a named product or version, or a price. Fail if it is later than that.'
+    # A Concept is one flat folder per Concept, `docs/llm-wiki/concepts/<id>/concept.md`, its id the folder name
+    # (design-ADR 0016, The Concept record). The Zod Concept schema in the content store checks what this cannot:
+    # that every id in broader and related is a Concept, that broader has no cycle, and that only a top Concept
+    # carries a theme. narrower is derived by the store, so it is not a field here and unknownKeys refuses it.
+    - ruleId: concept
+      fileNames: [concept.md]
+      intent: 'A Concept is one subject, scoped by one sentence against its neighbours, so a Research question can name the Concepts it informs and an Episode card its theme. Fail if the definition overlaps a neighbouring Concept without saying where the line runs.'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: concept, intent: 'Evidence vocabulary: one subject the site groups proof and Episodes under.' }
+        title: *title
+        description:
+          presence: required
+          maxLength: 200
+          intent: 'The one-sentence scoping definition against the neighbouring Concepts, ending with what it is not. Fail if it names the subject without saying where it stops.'
+        aliases:
+          presence: optional
+          intent: 'Other names for the Concept. A Concept is never renamed: a better name becomes an alias and the id stays.'
+        # markdown-harness reads an empty list as an absent field, so `broader: []` cannot be `required` here; the Zod
+        # Concept schema in the content store requires the key.
+        broader:
+          presence: optional
+          intent: 'Required by the content store. SKOS broader: the parent Concept ids, `[]` for a top Concept. Only a top Concept carries a theme, and a new top Concept is a design decision, not a content edit.'
+        related:
+          presence: optional
+          intent: 'SKOS related: associative Concept ids, written on one side only; the content store mirrors them onto the other.'
+        generated.by: *generated-by
+        generated.at: *generated-at
+        stale_after:
+          presence: optional
+          format: datetime
+          intent: 'When the definition needs a re-check against the Research questions that inform it.'
+        verified: *verified
     - ruleId: feedback
       fileNames: [feedback.md]
       intent: "One round of Han's feedback, kept so every item reaches the file it changes and the style harvest can learn from every round."
@@ -570,6 +606,15 @@ body-structure:
                 },
               ],
           }
+    - ruleId: concept-body
+      fileNames: [concept.md]
+      intent: 'The definition first, then the longer explanation, so the Concept page and a reader skimming the file meet the definition before anything else.'
+      undefinedHeadings: forbid
+      headings:
+        - purpose: heading
+          level: 1
+          intent: 'The Concept name, equal to the title.'
+          mayHold: [prose]
     - ruleId: feedback-body
       fileNames: [feedback.md]
       headings:

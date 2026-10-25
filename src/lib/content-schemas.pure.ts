@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { ACCENTS, ICONS } from './episode-overview';
+import { AUDIENCES, EVENT_KINDS } from './events.pure';
+import { PLAYLIST_TYPES, VISIBILITIES } from './playlists.pure';
 
 /*
  * The schemas the content store loads each record kind through. They are its contract, so each field says what it
@@ -27,46 +29,132 @@ const isoDay = (what: string) =>
 const slugOf = (what: string) => z.string().regex(KEBAB, 'must be kebab-case').describe(what);
 
 /** What each record kind is: the name every refusal carries. */
-export type RecordKind = 'tag' | 'episode' | 'workshop' | 'research' | 'slide-source' | 'slide';
+export type RecordKind =
+  'theme' | 'concept' | 'episode' | 'event' | 'playlist' | 'research' | 'slide-source' | 'slide' | 'definition-slide';
 
-export const tagSchema = z
+export const themeSchema = z
   .object({
-    icon: z.enum(ICONS).describe('The icon the landing draws on a card led by this Tag, by name'),
-    accent: z.enum(ACCENTS).describe('The colour family a card led by this Tag draws; the design owns the shade'),
+    icon: z.enum(ICONS).describe('The icon the landing draws on a card themed by this top Concept, by name'),
+    accent: z
+      .enum(ACCENTS)
+      .describe('The colour family a card themed by this top Concept draws; the design owns the shade'),
   })
-  .describe('The look one Tag gives its Episodes');
+  .describe('The look one top Concept gives the Episode cards that name it in applyThemeFromConcept');
+
+const conceptIds = (what: string) => z.array(slugOf('A Concept id: the folder name of its concept.md')).describe(what);
+
+const verification = z
+  .object({
+    by: z.string().min(1).describe('Who confirmed the file, as an OKF actor'),
+    at: z.string().min(1).describe('When they confirmed it, a UTC datetime'),
+  })
+  .describe('One confirmation of the file');
+
+export const conceptSchema = z
+  .strictObject({
+    type: z.literal('concept').describe('The kind of evidence file this is'),
+    title: z.string().min(1).describe('The Concept name, in English'),
+    description: z
+      .string()
+      .min(1)
+      .max(200)
+      .describe('The one-sentence scoping definition against its neighbours, at most 200 characters'),
+    aliases: z
+      .array(z.string().min(1))
+      .optional()
+      .describe('Other names for the Concept; a better name becomes an alias, the id never changes'),
+    broader: conceptIds('SKOS broader: the parent Concept ids; [] makes a top Concept, the only kind with a theme'),
+    related: conceptIds(
+      'SKOS related: associative Concept ids, stored on one side only; the store mirrors them',
+    ).optional(),
+    generated: z
+      .object({
+        by: z.string().min(1).describe('Who or what wrote the file, as an OKF actor'),
+        at: z.string().min(1).describe('When the file was written, a UTC datetime'),
+      })
+      .describe('The provenance of the file'),
+    stale_after: z.string().min(1).optional().describe('The instant after which the definition needs a re-check'),
+    verified: z
+      .union([verification, z.array(verification)])
+      .optional()
+      .describe('OKF trust: who confirmed the file and when, one { by, at } or a list of them'),
+  })
+  .describe('The frontmatter of one Concept file; narrower is derived by the store, never written');
+
+export const definitionSlideSchema = z
+  .object({
+    episode: slugOf('The Episode whose Slide it is'),
+    slide: slugOf('The Slide slug'),
+    defines: slugOf('The id of the Concept the Slide defines'),
+  })
+  .describe('A page Slide that teaches one Concept and declares it in defines');
+
+const visibility = (what: string) =>
+  z.enum(VISIBILITIES).describe(`${what}; unlisted is not private, and attendees waits for horizon 3`);
 
 const sharedEpisode = {
-  slug: slugOf('The Episode slug: its folder name and the last part of its URL'),
+  slug: slugOf('The Episode slug: its folder name and the last part of its URL, unique across all Episodes'),
   format: z.enum(['foundations', 'teardown', 'short']).describe('The Episode format the overview filters by'),
-  tags: z
+  concepts: z
     .array(z.string())
-    .describe('Tag ids from the closed vocabulary, lead Tag first: it gives the Episode card its icon and accent'),
+    .min(1)
+    .describe('The top Concepts the Episode teaches, in the order its card names them'),
+  applyThemeFromConcept: z
+    .string()
+    .describe('The top Concept, one of concepts, whose icon and accent the Episode card draws'),
 };
 
 export const episodeSchema = z
   .discriminatedUnion('status', [
     z.object({
       ...sharedEpisode,
+      type: z
+        .enum(['standard', 'event-frame'])
+        .describe("standard teaches; event-frame holds one Event's agenda, scope and organisation, and has no video"),
+      visibility: visibility(
+        'public is listed and indexed at /episodes/<slug>/; unlisted lives only under its Event and is never listed',
+      ),
       status: z.literal('published').describe('The Episode has a page and is announced'),
       publishedOn: isoDay('The release date'),
     }),
     z.object({
       ...sharedEpisode,
+      type: z.literal('standard').describe('An upcoming Episode teaches: an event-frame Episode is always published'),
+      visibility: z.literal('public').describe('Upcoming applies to public Episodes only'),
       status: z.literal('upcoming').describe('The Episode is announced but not written: no page, no link'),
     }),
   ])
-  .describe('What an Episode declares about itself for the overview');
+  .refine((episode) => episode.type !== 'event-frame' || episode.visibility === 'unlisted', {
+    message: 'an event-frame Episode is always unlisted',
+    path: ['visibility'],
+  })
+  .describe('What an Episode declares about itself: its overview entry, its type and its visibility');
 
-export const workshopSchema = z
+export const eventSchema = z
   .object({
-    slug: slugOf('A readable name and the date, so a shared link says what and when'),
-    date: isoDay('The day the Workshop takes place'),
+    slug: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}-[a-z0-9]+(-[a-z0-9]+)*$/, 'must be <date>-<name> in kebab-case')
+      .describe('The date, then a readable name, so a shared link says when and what'),
+    date: isoDay('The day the Event takes place; before the build date, the Event is past'),
+    kind: z.enum(EVENT_KINDS).describe('What kind of occasion it is; data, so the URL survives a change of kind'),
     time: z.string().regex(CLOCK, 'must be HH:MM').optional().describe('The start as the venue writes it, HH:MM'),
     location: z.string().min(1).optional().describe('A place name, the same in every locale'),
-    episodes: z.array(z.string()).describe('Episode slugs in the order the Workshop teaches them'),
+    audience: z.enum(AUDIENCES).describe('The Audience the Event targets'),
+    playlist: slugOf("The id of the one Playlist of type event the Event presents; its visibility is the Event's"),
   })
-  .describe('A dated, ordered set of Episodes');
+  .describe('A dated occasion that presents one Playlist and owns no Slides and no text');
+
+export const playlistSchema = z
+  .object({
+    id: slugOf('The Playlist id an Event names'),
+    type: z
+      .enum(PLAYLIST_TYPES)
+      .describe('event: made for one Event, opening with its event-frame Episode; standard: curated, no Event'),
+    visibility: visibility("Whether the Playlist's own surfaces, an Event's pages included, are listed and indexed"),
+    episodes: z.array(z.string()).min(1).describe('Episode slugs in the order the Playlist presents them'),
+  })
+  .describe('An ordered list of Episodes with a type and a visibility, and nothing else');
 
 export const slideSourceSchema = z
   .object({
@@ -121,14 +209,19 @@ export const researchSchema = z
 
 /** The schemas the store loads each kind through, for a caller that needs the contract itself. */
 export const CONTENT_SCHEMAS = {
-  tag: tagSchema,
+  theme: themeSchema,
+  concept: conceptSchema,
+  definitionSlide: definitionSlideSchema,
   episode: episodeSchema,
-  workshop: workshopSchema,
+  event: eventSchema,
+  playlist: playlistSchema,
   slideSource: slideSourceSchema,
   slideFolder: slideFolderSchema,
   research: researchSchema,
 } as const;
 
 export type SlideSource = z.infer<typeof slideSourceSchema>;
+export type ConceptFrontmatter = z.infer<typeof conceptSchema>;
+export type DefinitionSlide = z.infer<typeof definitionSlideSchema>;
 export type SlideFolder = z.infer<typeof slideFolderSchema>;
 export type ResearchFrontmatter = z.infer<typeof researchSchema>;

@@ -53,34 +53,43 @@ describe('success cases', () => {
     expect({ title: metadata.title, description: metadata.description }).toEqual(expected);
   });
 
-  it('builds the Workshops list metadata from the Translation file with reciprocal alternates', () => {
+  it('builds the Events list metadata from the Translation file with reciprocal alternates', () => {
     // ARRANGE
     const expected = {
-      title: 'Workshops',
-      canonical: '/de/workshops',
-      languages: { en: '/workshops', de: '/de/workshops', 'x-default': '/workshops' },
+      title: 'Events',
+      canonical: '/de/events',
+      languages: { en: '/events', de: '/de/events', 'x-default': '/events' },
     };
     // ACT
-    const english = pageMetadata('workshops', 'en');
-    const german = pageMetadata('workshops', 'de');
+    const english = pageMetadata('events', 'en');
+    const german = pageMetadata('events', 'de');
     // ASSERT
     expect(english.title).toBe(expected.title);
     expect(german.alternates?.canonical).toBe(expected.canonical);
     expect(german.alternates?.languages).toEqual(expected.languages);
   });
 
-  it("points a Workshop page's canonical at its own slug and locale, with the copy its route hands in", () => {
+  it("points an Event page's canonical at its own slug and locale, with the copy its route hands in", () => {
     // ARRANGE
-    const slug = 'axel-agentic-workflow-2026-10-23';
-    const expected = { canonical: `/de/workshops/${slug}`, type: 'website', title: COPY.title };
+    const slug = '2026-10-23-axel-agentic-workflow';
+    const expected = { canonical: `/de/events/${slug}`, type: 'website', title: COPY.title };
     // ACT
-    const metadata = pageMetadata({ workshop: slug }, 'de', COPY);
+    const metadata = pageMetadata({ event: slug }, 'de', COPY);
     // ASSERT
     expect({
       canonical: metadata.alternates?.canonical,
       type: (metadata.openGraph as { type?: string } | null | undefined)?.type,
       title: metadata.title,
     }).toEqual(expected);
+  });
+
+  it('keeps the page of an Event whose Playlist is unlisted out of search', () => {
+    // ARRANGE
+    const expected = { index: false };
+    // ACT
+    const metadata = pageMetadata({ event: '2026-10-23-axel-agentic-workflow' }, 'en', COPY);
+    // ASSERT
+    expect(metadata.robots).toEqual(expected);
   });
 
   it("takes the landing page's title and description from the locale Translation file", () => {

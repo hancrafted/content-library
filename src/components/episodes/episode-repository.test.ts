@@ -3,7 +3,7 @@ import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeStatus, hasPage, listEpisodes } from './episode-repository';
+import { allEpisodes, episodeStatus, hasPage, listEpisodes } from './episode-repository';
 
 /*
  * The read API the Episode overview depends on (#40): one metadata entry per
@@ -34,7 +34,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = episodeFolders();
     // ACT
-    const listed = listEpisodes()
+    const listed = allEpisodes()
       .map(({ slug }) => slug)
       .sort();
     // ASSERT
@@ -53,7 +53,7 @@ describe('success cases', () => {
     expect(withPage).toEqual(expected);
   });
 
-  it.each(listEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {
+  it.each(allEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {
     // ARRANGE
     const folder = path.join(EPISODES_DIR, slug);
     // ACT
@@ -62,14 +62,17 @@ describe('success cases', () => {
     expect(files).toContain(METADATA_FILE);
   });
 
-  it('registers never-too-early-sales as a published Episode led by the sales Tag, with its page', () => {
+  it('registers never-too-early-sales as a published Episode themed by the sales Concept, with its page', () => {
     // ARRANGE
     const slug = 'never-too-early-sales';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
-      tags: ['sales'],
+      concepts: ['sales'],
+      applyThemeFromConcept: 'sales',
       publishedOn: '2026-10-19',
     };
     // ACT
@@ -80,14 +83,17 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it('registers onboard-ai-every-time as a published Episode led by context-engineering, with its page', () => {
+  it('registers onboard-ai-every-time as a published Episode themed by context-engineering, with its page', () => {
     // ARRANGE
     const slug = 'onboard-ai-every-time';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
-      tags: ['context-engineering', 'agentic-ai', 'workflow'],
+      concepts: ['context-engineering', 'agentic-ai'],
+      applyThemeFromConcept: 'context-engineering',
       publishedOn: '2026-10-20',
     };
     // ACT
@@ -98,14 +104,17 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it('registers ai-attention-span as a published Episode led by context-engineering, with its page', () => {
+  it('registers ai-attention-span as a published Episode themed by context-engineering, with its page', () => {
     // ARRANGE
     const slug = 'ai-attention-span';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
-      tags: ['context-engineering', 'workflow'],
+      concepts: ['context-engineering'],
+      applyThemeFromConcept: 'context-engineering',
       publishedOn: '2026-10-21',
     };
     // ACT
@@ -116,14 +125,17 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it('registers ai-gives-you-more-work as a published Episode led by agentic-ai, with its page', () => {
+  it('registers ai-gives-you-more-work as a published Episode themed by agentic-ai, with its page', () => {
     // ARRANGE
     const slug = 'ai-gives-you-more-work';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
-      tags: ['agentic-ai', 'workflow'],
+      concepts: ['agentic-ai', 'ai-adoption'],
+      applyThemeFromConcept: 'agentic-ai',
       publishedOn: '2026-10-21',
     };
     // ACT
@@ -132,6 +144,18 @@ describe('success cases', () => {
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
+  });
+
+  it('never lists the event-frame Episode in the overview, which still holds its metadata', () => {
+    // ARRANGE
+    const frame = 'axel-agentic-workflow-agenda';
+    // ACT
+    const seen = {
+      overview: listEpisodes().some(({ slug }) => slug === frame),
+      all: allEpisodes().some(({ slug }) => slug === frame),
+    };
+    // ASSERT
+    expect(seen).toEqual({ overview: false, all: true });
   });
 
   it.each(LAYOUT_REFERENCES)('counts the layout reference %s as published, so it stays indexable', (slug) => {
@@ -220,12 +244,14 @@ describe('edge cases', () => {
     expect(featured).toEqual(expected);
   });
 
-  it('keeps every Tag atomic: kebab-case and once per Episode', () => {
+  it('keeps every Concept an Episode lists atomic: kebab-case and once per Episode', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
-    const faulty = listEpisodes().flatMap(({ slug, tags }) =>
-      tags.filter((tag, index) => !KEBAB_CASE.test(tag) || tags.indexOf(tag) !== index).map((tag) => `${slug}: ${tag}`),
+    const faulty = listEpisodes().flatMap(({ slug, concepts }) =>
+      concepts
+        .filter((id, index) => !KEBAB_CASE.test(id) || concepts.indexOf(id) !== index)
+        .map((id) => `${slug}: ${id}`),
     );
     // ASSERT
     expect(faulty).toEqual(expected);

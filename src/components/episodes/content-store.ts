@@ -2,14 +2,16 @@ import { findEpisode } from '@/components/episodes/registry';
 import type { Slide } from '@/components/slide-master/slide';
 import { loadContentStore, type ContentStore, type RawContent, type Refusal } from '@/lib/content-store.pure';
 import type { EpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
-import { TAGS, type ListedEpisodeSlug } from '@/lib/episode-overview';
-import { readResearchFiles } from '@/lib/research-files';
-import { EPISODE_SLUGS } from '@/lib/routes';
+import { CONCEPT_THEMES, type ListedEpisodeSlug } from '@/lib/episode-overview';
+import { EVENTS } from '@/lib/events.pure';
+import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
+import { PLAYLISTS } from '@/lib/playlists.pure';
+import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS, type UnlistedEpisodeSlug } from '@/lib/routes';
 import { EPISODES_DIR, readSlideFolders } from '@/lib/slide-folders';
-import { WORKSHOPS } from '@/lib/workshops.pure';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
 import { episodeMetadata as aiGivesYouMoreWork } from './ai-gives-you-more-work/episode-metadata';
 import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
+import { episodeMetadata as axelAgenticWorkflowAgenda } from './axel-agentic-workflow-agenda/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from './never-too-early-sales/episode-metadata';
 import { episodeMetadata as onboardAiEveryTime } from './onboard-ai-every-time/episode-metadata';
@@ -33,12 +35,17 @@ export const REGISTERED = {
   'ai-gives-you-more-work': aiGivesYouMoreWork,
 } as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
+/** Unlisted Episodes, by slug: each lives only under the Event whose Playlist presents it. */
+export const UNLISTED = {
+  'axel-agentic-workflow-agenda': axelAgenticWorkflowAgenda,
+} as const satisfies { readonly [S in UnlistedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
+
 /** Upcoming Episodes in the order the overview lists them. */
 export const UPCOMING: readonly UpcomingEpisodeMetadata[] = [];
 
 /** Every source every Speaker note in every Episode cites, flattened to one record each. */
 function slideSources(): RawContent['slideSources'] {
-  return EPISODE_SLUGS.flatMap((slug) => {
+  return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS].flatMap((slug) => {
     const episode = findEpisode(slug);
     const slides: readonly { slide: string; notes: Slide['notes'] }[] = [
       { slide: 'title', notes: episode.notes ?? [] },
@@ -56,6 +63,15 @@ function slideSources(): RawContent['slideSources'] {
       ),
     );
   });
+}
+
+/** Every Definition Slide in every Episode: a Slide that declares the Concept it defines. */
+function definitionSlides(): RawContent['definitionSlides'] {
+  return EPISODE_SLUGS.flatMap((episode) =>
+    findEpisode(episode).sections.flatMap((section) =>
+      section.flatMap(({ slug, defines }) => (defines === undefined ? [] : [{ episode, slide: slug, defines }])),
+    ),
+  );
 }
 
 /**
@@ -87,9 +103,12 @@ function slides(): RawContent['slides'] {
 /** The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy. */
 export function rawContent(): RawContent {
   return {
-    tags: TAGS,
-    episodes: [...Object.values(REGISTERED), ...UPCOMING],
-    workshops: WORKSHOPS,
+    themes: CONCEPT_THEMES,
+    concepts: readConceptFiles(process.cwd()),
+    definitionSlides: definitionSlides(),
+    episodes: [...Object.values(REGISTERED), ...Object.values(UNLISTED), ...UPCOMING],
+    events: EVENTS,
+    playlists: PLAYLISTS,
     research: readResearchFiles(process.cwd()),
     slideSources: slideSources(),
     slides: slides(),

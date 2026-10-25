@@ -1,7 +1,7 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import type { EpisodeSlug } from '@/lib/routes';
+import type { AnyEpisodeSlug } from '@/lib/routes';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
 import type {
@@ -89,6 +89,8 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly captionNote?: string;
   /** Set on an instance only: the pool Slide it was copied from (design-ADR 0016, _Slide reuse_ rule 3). */
   readonly copiedFrom?: CopiedFrom;
+  /** A Definition Slide's Concept: the id of the Concept it teaches. The content store fails one that names no Concept. */
+  readonly defines?: string;
   readonly content: (kit: RuntimeKit) => ReactNode;
 }
 
@@ -119,6 +121,11 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly captionNote?: N['slug'];
   /** Set by `npm run slides:adapt` on an instance only; never written by hand. */
   readonly copiedFrom?: CopiedFrom;
+  /**
+   * Makes this page Slide a Definition Slide: the id of the Concept it teaches
+   * (`docs/llm-wiki/concepts/<id>/concept.md`). The content store fails one that names no Concept.
+   */
+  readonly defines?: string;
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
@@ -135,6 +142,7 @@ export function slide<
     segments: spec.segments ?? [],
     ...(spec.captionNote !== undefined && { captionNote: spec.captionNote }),
     ...(spec.copiedFrom !== undefined && { copiedFrom: spec.copiedFrom }),
+    ...(spec.defines !== undefined && { defines: spec.defines }),
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
     content: spec.content as unknown as Slide['content'],
   };
@@ -163,7 +171,7 @@ export type HeaderMode = 'shared' | 'authored';
  * An Episode record of Slides: static data. It carries its own
  * text, so the site-wide Translation files hold nothing of it.
  */
-export interface EpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
+export interface EpisodeRecord<Ep extends AnyEpisodeSlug = AnyEpisodeSlug> {
   readonly slug: Ep;
   /** One recording per locale, shown on the Title slide; optional until recorded. */
   readonly youtube?: PerLocale<string>;
@@ -195,6 +203,6 @@ export function headerModeOf(record: Pick<EpisodeRecord, 'header'>): HeaderMode 
 }
 
 /** An Episode record from its own text and its Sections; each Section's first Slide names it. */
-export function episode<Ep extends EpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
+export function episode<Ep extends AnyEpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
   return record;
 }

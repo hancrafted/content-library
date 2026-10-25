@@ -1,4 +1,4 @@
-import { TAG_ACCENTS } from '@/components/landing/episode-visuals';
+import { THEME_ACCENTS } from '@/components/landing/episode-visuals';
 import type { Accent } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
@@ -40,7 +40,7 @@ export const VARIANTS: Record<CardVariant, VariantClasses> = {
     caption: 'line-clamp-3 text-caption',
     cue: '',
   },
-  workshop: {
+  event: {
     frame: 'rounded-2xl p-6',
     art: '-bottom-6 -right-6 size-36',
     title: 'text-body font-semibold',
@@ -67,7 +67,7 @@ interface ShellProps {
 }
 
 export function CardShell({ variant, linked, accent, icon, data, className = '', children }: ShellProps) {
-  const look = TAG_ACCENTS[accent];
+  const look = THEME_ACCENTS[accent];
   const tone = linked ? `${LINKED_FRAME} ${look.edge}` : UPCOMING_FRAME;
   return (
     <article
@@ -83,7 +83,7 @@ export function CardShell({ variant, linked, accent, icon, data, className = '',
 
 /** The corner wash and the large faded icon behind the text; decorative, so they take no clicks and sit under the content. */
 function CardArt({ accent, icon: Icon, classes }: { accent: Accent; icon: LucideIcon; classes: string }) {
-  const look = TAG_ACCENTS[accent];
+  const look = THEME_ACCENTS[accent];
   return (
     <>
       <span
