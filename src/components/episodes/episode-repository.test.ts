@@ -1,5 +1,6 @@
 import { FEATURED, LAYOUT_REFERENCES } from '@/lib/episode-overview';
 import { EPISODE_SLUGS } from '@/lib/routes';
+import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -14,9 +15,9 @@ const EPISODES_DIR = path.join(process.cwd(), 'src/components/episodes');
 const METADATA_FILE = 'episode-metadata.ts';
 const KEBAB_CASE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** Every Episode folder on disk, layout references left out: what the overview must list. */
+/** Every Episode folder on disk, layout references and tooling pages left out: what the overview must list. */
 function episodeFolders(): string[] {
-  const layout: readonly string[] = LAYOUT_REFERENCES;
+  const layout: readonly string[] = [...LAYOUT_REFERENCES, ...TOOLING_SLUGS];
   return readdirSync(EPISODES_DIR, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && !layout.includes(entry.name))
     .map((entry) => entry.name)

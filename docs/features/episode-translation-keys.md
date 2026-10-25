@@ -117,4 +117,4 @@ An Event is a record in `src/lib/events.pure.ts` that holds no string ([Events](
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-`page-template`, `slide-layouts` and `slide-master` are layout references (`LAYOUT_REFERENCES`), not content: they are not in the Episode overview and need no metadata.
+`page-template` is a layout reference (`LAYOUT_REFERENCES`), and `slide-layouts`, `slide-master` and `slides` are tooling pages (`TOOLING_SLUGS`, `src/lib/tooling-pages.ts`), not content: none is in the Episode overview and none needs metadata.

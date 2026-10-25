@@ -59,6 +59,7 @@ const VALID: RawContent = {
   research: [],
   slideSources: [],
   slides: [],
+  episodeSlides: [],
   definitionSlides: [],
 };
 

@@ -52,6 +52,12 @@ _Avoid_: Event page (the Event's own page), agenda episode, intro
 **Visibility**: whether an Episode or a Playlist is listed and indexed: public, or unlisted. An unlisted Episode lives only under the Event whose Playlist presents it; unlisted is not private, since anyone with the URL can open it.
 _Avoid_: Private, hidden, draft, attendees-only
 
+**canonicalEpisode**: the field of an unlisted Episode's metadata that names the public Episode it was derived from; its pages then point search engines at that Episode's own page instead of carrying `noindex`. An unlisted Episode that holds every Slide of a public Episode must name it.
+_Avoid_: Original, source Episode, parent Episode
+
+**Tooling page**: a catalogue of Slides served at `/episodes/<slug>/` beside the Episodes but no Episode itself: `slide-layouts`, `slide-master`, `slides`. It has no Visibility and no status, is never indexed and never in the sitemap.
+_Avoid_: Layout reference (the page template), unlisted Episode, catalog Episode
+
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
 

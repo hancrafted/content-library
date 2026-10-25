@@ -1,9 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { EPISODE_SLUGS } from './routes';
+import { EPISODE_SLUGS, isEventEpisodePage, isEventPage, type PageRef } from './routes';
 import { robotsFor, sitemapEntries } from './sitemap.pure';
+import type { PageFacts } from './visibility.pure';
 
 const SITE = 'https://hancrafted.net';
-const allPublished = () => 'published' as const;
+const EVENT = '2026-10-23-axel-agentic-workflow';
+const FRAME = 'axel-agentic-workflow-agenda';
+
+/** Every Episode public and published, every Event's Playlist public, the agenda Episode unlisted. */
+const allPublished = (page: PageRef): PageFacts => {
+  if (isEventPage(page)) return { visibility: 'public' };
+  const unlisted = isEventEpisodePage(page) && page.episode === FRAME;
+  return { visibility: unlisted ? 'unlisted' : 'public', status: 'published' };
+};
 
 const undated = () => undefined;
 
@@ -27,11 +36,22 @@ describe('success cases', () => {
   it('lists the Events page in both locales, and no page of an Event whose Playlist is unlisted', () => {
     // ARRANGE
     const expected = { listed: [`${SITE}/events/`, `${SITE}/de/events/`], absent: [] };
+    const unlistedEvent = (page: PageRef): PageFacts =>
+      isEventPage(page) ? { visibility: 'unlisted' } : allPublished(page);
+    // ACT
+    const urls = sitemapEntries(SITE, unlistedEvent, undated).map((entry) => entry.url);
+    // ASSERT
+    expect(urls).toEqual(expect.arrayContaining(expected.listed));
+    expect(urls.filter((url) => url.includes(`/events/${EVENT}/`))).toEqual(expected.absent);
+  });
+
+  it('lists the page of an Event whose Playlist is public, and none of its Episode pages', () => {
+    // ARRANGE
+    const expected = { listed: [`${SITE}/events/${EVENT}/`, `${SITE}/de/events/${EVENT}/`] };
     // ACT
     const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
     // ASSERT
-    expect(urls).toEqual(expect.arrayContaining(expected.listed));
-    expect(urls.filter((url) => url.includes('/events/2026-10-23-axel-agentic-workflow/'))).toEqual(expected.absent);
+    expect(urls.filter((url) => url.includes(`/events/${EVENT}/`))).toEqual(expected.listed);
   });
 
   it('writes the home page as the origin with a trailing slash', () => {
@@ -55,6 +75,37 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('An unlisted Episode never shows in the sitemap', () => {
+    // ARRANGE
+    const absent: string[] = [];
+    // ACT
+    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
+    // ASSERT
+    expect(urls.filter((url) => url.includes(FRAME))).toEqual(absent);
+  });
+
+  it('leaves out an Episode that credits its canonical to a public one', () => {
+    // ARRANGE
+    const absent: string[] = [];
+    const derived = (page: PageRef): PageFacts =>
+      isEventEpisodePage(page)
+        ? { visibility: 'unlisted', status: 'published', canonicalEpisode: 'onboard-ai-every-time' }
+        : allPublished(page);
+    // ACT
+    const urls = sitemapEntries(SITE, derived, undated).map((entry) => entry.url);
+    // ASSERT
+    expect(urls.filter((url) => url.includes('/episodes/') && url.includes('/events/'))).toEqual(absent);
+  });
+
+  it.each(['slide-layouts', 'slide-master', 'slides'])('A tooling page is never in the sitemap: %s', (slug) => {
+    // ARRANGE
+    const absent: string[] = [];
+    // ACT
+    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
+    // ASSERT
+    expect(urls.filter((url) => url.endsWith(`/episodes/${slug}/`))).toEqual(absent);
+  });
+
   it('leaves out the dashboard, which is noindex and English-only', () => {
     // ARRANGE
     const dashboard = `${SITE}/dashboard/`;
@@ -70,7 +121,10 @@ describe('edge cases', () => {
     // ARRANGE
     const upcoming = EPISODE_SLUGS[0];
     const published = EPISODE_SLUGS[1];
-    const statusOf = (slug: string) => (slug === upcoming ? ('upcoming' as const) : ('published' as const));
+    const statusOf = (page: PageRef): PageFacts =>
+      typeof page !== 'string' && 'episode' in page && page.episode === upcoming
+        ? { visibility: 'public', status: 'upcoming' }
+        : allPublished(page);
     // ACT
     const urls = sitemapEntries(SITE, statusOf, undated).map((entry) => entry.url);
     // ASSERT

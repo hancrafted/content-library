@@ -1,15 +1,17 @@
 import { z } from 'zod';
+import { episodeSlidesSchema } from './canonical-episode.pure';
 import { CONFIDENCES } from './confidence.pure';
 import { ACCENTS, ICONS } from './episode-overview';
 import { AUDIENCES, EVENT_KINDS } from './events.pure';
+import { slugOf } from './kebab.pure';
 import { PLAYLIST_TYPES, VISIBILITIES } from './playlists.pure';
+import { slideSourceSchema } from './slide-source.pure';
 
 /*
  * The schemas the content store loads each record kind through. They are its contract, so each field says what it
  * is for. Nothing here reads a file.
  */
 
-export const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
 const CLOCK = /^\d{2}:\d{2}$/;
 export const RESEARCH_ID = /^([A-Z]+-\d{4})__[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -26,8 +28,6 @@ const isoDay = (what: string) =>
     .regex(ISO_DAY)
     .refine(isCalendarDay, 'is not a real calendar day')
     .describe(`${what}, a real calendar day written YYYY-MM-DD`);
-
-const slugOf = (what: string) => z.string().regex(KEBAB, 'must be kebab-case').describe(what);
 
 /** What each record kind is: the name every refusal carries. */
 export type RecordKind =
@@ -117,6 +117,9 @@ export const episodeSchema = z
       ),
       status: z.literal('published').describe('The Episode has a page and is announced'),
       publishedOn: isoDay('The release date'),
+      canonicalEpisode: slugOf(
+        'Unlisted only: the public Episode it derives from, which takes its search credit',
+      ).optional(),
     }),
     z.object({
       ...sharedEpisode,
@@ -156,24 +159,6 @@ export const playlistSchema = z
     episodes: z.array(z.string()).min(1).describe('Episode slugs in the order the Playlist presents them'),
   })
   .describe('An ordered list of Episodes with a type and a visibility, and nothing else');
-
-export const slideSourceSchema = z
-  .strictObject({
-    episode: slugOf('The Episode whose Slide cites the source'),
-    slide: slugOf('The Slide whose Speaker note cites the source'),
-    note: slugOf('The Speaker note item that carries the source'),
-    slug: slugOf('The source slug; a url item keeps its title under this key in the Slide translation files'),
-    research: z
-      .string()
-      .regex(/^[A-Z]+-\d{4}$/, 'must be a Research question id such as AIE-0001')
-      .optional()
-      .describe('The Research question the note cites, by id; its title, link and confidence come from the question'),
-    url: z.url().optional().describe('The address of a Source the note cites directly, the exception to research'),
-  })
-  .refine(({ research, url }) => (research === undefined) !== (url === undefined), {
-    message: 'a source item holds exactly one of research or url',
-  })
-  .describe('One source a Speaker note cites: a Research question by default, a Source directly by exception');
 
 /** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
 export const SLIDE_FOLDER = /^src\/components\/(episodes\/[a-z0-9-]+\/slides|slide-pool)\/[a-z0-9-]+$/;
@@ -237,6 +222,7 @@ export const CONTENT_SCHEMAS = {
   concept: conceptSchema,
   definitionSlide: definitionSlideSchema,
   episode: episodeSchema,
+  episodeSlides: episodeSlidesSchema,
   event: eventSchema,
   playlist: playlistSchema,
   slideSource: slideSourceSchema,

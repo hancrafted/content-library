@@ -81,11 +81,22 @@ const RESEARCH = {
 };
 const SLIDE = { path: 'src/components/episodes/never-too-early-sales/slides/pipeline', slug: 'pipeline', title: false };
 const POOL_SLIDE = { path: 'src/components/slide-pool/default-alive', slug: 'default-alive', title: false };
+/** Each Episode's Slide list: the agenda holds a Slide of its own and one of the public Episode's two. */
+const SLIDE_LISTS = [
+  { episode: 'never-too-early-sales', slides: ['pipeline', 'close'] },
+  { episode: 'axel-agentic-workflow-agenda', slides: ['agenda', 'pipeline'] },
+];
+/** The agenda holding every Slide of the public Episode: derived from it. */
+const DERIVED_LISTS = [
+  SLIDE_LISTS[0],
+  { episode: 'axel-agentic-workflow-agenda', slides: ['agenda', 'pipeline', 'close'] },
+];
 const VALID: RawContent = {
   themes: THEMES,
   concepts: [SALES],
   definitionSlides: [],
   episodes: [EPISODE, FRAME],
+  episodeSlides: SLIDE_LISTS,
   events: [EVENT],
   playlists: [PLAYLIST],
   research: [RESEARCH],
@@ -113,6 +124,20 @@ function undescribed(node: unknown, at: string): string[] {
 }
 
 describe('success cases', () => {
+  it('loads an Episode derived from a public one when it names that Episode as its canonical', () => {
+    // ARRANGE
+    const derived = { ...FRAME, canonicalEpisode: 'never-too-early-sales' };
+    const raw = { ...VALID, episodes: [EPISODE, derived], episodeSlides: DERIVED_LISTS };
+    const expected = 'never-too-early-sales';
+    // ACT
+    const result = loadContentStore(raw);
+    // ASSERT
+    expect(result.ok ? [] : result.refusals).toEqual([]);
+    expect(result.ok && result.store.episodes.find((e) => e.slug === derived.slug)).toMatchObject({
+      canonicalEpisode: expected,
+    });
+  });
+
   it('returns the typed store when every record is sound', () => {
     // ARRANGE
     const expected = {
@@ -149,6 +174,45 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('An Episode derived from a public one that does not name its canonical Episode fails', () => {
+    // ARRANGE
+    const raw = { ...VALID, episodeSlides: DERIVED_LISTS };
+    const expected = { kind: 'episode', record: 'axel-agentic-workflow-agenda' };
+    const named = 'canonicalEpisode: never-too-early-sales';
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+    expect(refusals.map(({ message }) => message).join('\n')).toContain(named);
+  });
+
+  it.each([
+    ['an Episode that does not exist', 'no-such-episode'],
+    ['an unlisted Episode', 'axel-agentic-workflow-agenda'],
+  ])('refuses a canonicalEpisode that names %s', (_case, target) => {
+    // ARRANGE
+    const pointing = { ...FRAME, canonicalEpisode: target };
+    const raw = { ...VALID, episodes: [EPISODE, pointing] };
+    const expected = { kind: 'episode', record: 'axel-agentic-workflow-agenda' };
+    const reason = 'must name a public Episode';
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+    expect(refusals.map(({ message }) => message).join('\n')).toContain(reason);
+  });
+
+  it('refuses a canonicalEpisode on a public Episode, which is its own canonical', () => {
+    // ARRANGE
+    const pointing = { ...EPISODE, canonicalEpisode: 'never-too-early-sales' };
+    const raw = { ...VALID, episodes: [pointing, FRAME] };
+    const expected = { kind: 'episode', record: 'never-too-early-sales' };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+  });
+
   it('names the Episode whose metadata is malformed instead of throwing', () => {
     // ARRANGE
     const raw = { ...VALID, episodes: [{ ...EPISODE, publishedOn: '2026-02-30' }, FRAME] };
@@ -401,6 +465,17 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('counts no unlisted Episode as derived from a public one that holds no Slide', () => {
+    // ARRANGE
+    const lists = [{ episode: 'never-too-early-sales', slides: [] }, SLIDE_LISTS[1]];
+    const raw = { ...VALID, episodeSlides: lists };
+    const expected: unknown[] = [];
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual(expected);
+  });
+
   it('reports every refusal at once, one per malformed record', () => {
     // ARRANGE
     const raw = {

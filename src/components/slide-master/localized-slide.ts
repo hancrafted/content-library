@@ -2,7 +2,7 @@ import type { CitedResearch } from '@/lib/citations.pure';
 import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import { siblingAnchors, type PlacedListSlide, type SlideLevel } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import type { AnyEpisodeSlug } from '@/lib/routes';
+import type { RecordSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
 import type { ReactNode } from 'react';
 import { noteSourcesOf } from './note-sources';
@@ -61,7 +61,7 @@ export type LocalizedSlide = Placement &
 
 /** What a Slide needs to know of the Episode page it is localized into: the same for every Slide. */
 export interface EpisodeContext {
-  readonly episode: AnyEpisodeSlug;
+  readonly episode: RecordSlug;
   readonly locale: Locale;
   /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];

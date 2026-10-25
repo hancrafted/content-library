@@ -1,20 +1,20 @@
 import type { MetadataRoute } from 'next';
-import type { EpisodeStatus, IsoDate } from './episode-metadata.pure';
+import type { IsoDate } from './episode-metadata.pure';
 import { DEFAULT_LOCALE } from './locale.pure';
-import { isNoindex } from './page-metadata.pure';
-import { isEpisodePage, pageLocales, PAGES, routeOf, servedUrl } from './routes';
+import { isEpisodePage, pageLocales, PAGES, routeOf, servedUrl, type PageRef } from './routes';
+import { pageTreatment, type PageFacts } from './visibility.pure';
 
 /**
  * The sitemap: one entry per indexable page and locale, each carrying the full hreflang set, English canonical at
- * the bare root and German at `/de`. Episode entries carry `lastModified` from their publish date. Pages are `PAGES`, minus whatever `pageMetadata` marks `noindex` (the dashboard,
- * an upcoming Episode), so the two cannot disagree.
+ * the bare root and German at `/de`. Episode entries carry `lastModified` from their publish date. Pages are the `PAGES` the visibility predicate puts in the
+ * sitemap, the one `pageMetadata` asks too, so the two cannot disagree.
  */
 export function sitemapEntries(
   siteUrl: string,
-  statusOf: (slug: string) => EpisodeStatus,
+  factsOf: (page: PageRef) => PageFacts,
   publishedOnOf: (slug: string) => IsoDate | undefined,
 ): MetadataRoute.Sitemap {
-  const indexable = PAGES.filter((page) => !isNoindex(page, isEpisodePage(page) ? statusOf(page.episode) : undefined));
+  const indexable = PAGES.filter((page) => pageTreatment(page, factsOf(page)).inSitemap);
   return indexable.flatMap((page) => {
     const route = routeOf(page);
     const locales = pageLocales(page);

@@ -1,4 +1,5 @@
 import { contentStore } from '@/components/episodes/content-store';
+import { eventFacts } from '@/components/episodes/page-facts';
 import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { playlistCards } from '@/components/landing/episode-cards';
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { TRANSLATIONS } from '@/i18n/translations';
 import type { EventSlug } from '@/lib/events.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
+import type { PageCopy } from '@/lib/page-metadata.pure';
 import { eventEpisodeRoute, ROUTES } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
 import { ArrowLeft, ArrowRight, CalendarDays, Clock, Layers, MapPin, type LucideIcon } from 'lucide-react';
@@ -17,9 +19,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-/** An Event page's title and description in one locale, for its metadata. */
-export function eventPageCopy(slug: EventSlug, locale: Locale) {
-  return TRANSLATIONS[locale].eventsPage.items[slug];
+/** An Event page's title and description in one locale, and its Playlist's visibility, for its metadata. */
+export function eventPageCopy(slug: EventSlug, locale: Locale): PageCopy {
+  const { title, description } = TRANSLATIONS[locale].eventsPage.items[slug];
+  return { title, description, facts: eventFacts(slug) };
 }
 
 type EventT = Awaited<ReturnType<typeof getTranslations<'eventsPage'>>>;

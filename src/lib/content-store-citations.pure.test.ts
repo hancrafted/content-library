@@ -68,6 +68,7 @@ const VALID: RawContent = {
   themes: { sales: { icon: 'handshake', accent: 'emerald' } },
   concepts: [SALES],
   definitionSlides: [],
+  episodeSlides: [],
   episodes: [PUBLISHED],
   events: [],
   playlists: [],

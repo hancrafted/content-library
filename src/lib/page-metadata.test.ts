@@ -1,8 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { isNoindex, pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
+import { pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
 
 /** An Episode's copy as its record hands it to the route. */
-const COPY = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
+const COPY = {
+  title: 'Seitenvorlage',
+  description: 'Diese Episode kopieren.',
+  facts: { visibility: 'public', status: 'published' },
+} as const;
+
+const EVENT = '2026-10-23-axel-agentic-workflow';
+const UNLISTED = { ...COPY, facts: { visibility: 'unlisted', status: 'published' } } as const;
 
 describe('success cases', () => {
   it('exports English-only dashboard metadata without a nonexistent German alternate', () => {
@@ -74,7 +81,7 @@ describe('success cases', () => {
     const slug = '2026-10-23-axel-agentic-workflow';
     const expected = { canonical: `/de/events/${slug}`, type: 'website', title: COPY.title };
     // ACT
-    const metadata = pageMetadata({ event: slug }, 'de', COPY);
+    const metadata = pageMetadata({ event: slug }, 'de', { ...COPY, facts: { visibility: 'public' } });
     // ASSERT
     expect({
       canonical: metadata.alternates?.canonical,
@@ -87,9 +94,54 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { index: false };
     // ACT
-    const metadata = pageMetadata({ event: '2026-10-23-axel-agentic-workflow' }, 'en', COPY);
+    const metadata = pageMetadata({ event: EVENT }, 'en', { ...COPY, facts: { visibility: 'unlisted' } });
     // ASSERT
     expect(metadata.robots).toEqual(expected);
+  });
+
+  it('An unlisted Episode page tells search engines not to index it', () => {
+    // ARRANGE
+    const expected = { robots: { index: false }, canonical: `/events/${EVENT}/episodes/axel-agentic-workflow-agenda` };
+    // ACT
+    const metadata = pageMetadata({ event: EVENT, episode: 'axel-agentic-workflow-agenda' }, 'en', UNLISTED);
+    // ASSERT
+    expect({ robots: metadata.robots, canonical: metadata.alternates?.canonical }).toEqual(expected);
+  });
+
+  it('An Episode I derived from a public one points its canonical at the public page', () => {
+    // ARRANGE
+    const copy = { ...COPY, facts: { ...UNLISTED.facts, canonicalEpisode: 'onboard-ai-every-time' } } as const;
+    const expected = { canonical: '/de/episodes/onboard-ai-every-time', robots: undefined, languages: undefined };
+    // ACT
+    const metadata = pageMetadata({ event: EVENT, episode: 'axel-agentic-workflow-agenda' }, 'de', copy);
+    // ASSERT
+    expect({
+      canonical: metadata.alternates?.canonical,
+      robots: metadata.robots,
+      languages: metadata.alternates?.languages,
+    }).toEqual(expected);
+    expect(metadata.openGraph?.url).toBe(expected.canonical);
+  });
+
+  it("credits a public Episode seen at its Event's URL to the Episode's own page", () => {
+    // ARRANGE
+    const expected = { canonical: '/episodes/ai-token-economy', robots: undefined };
+    // ACT
+    const metadata = pageMetadata({ event: EVENT, episode: 'ai-token-economy' }, 'en', COPY);
+    // ASSERT
+    expect({ canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
+  });
+
+  it('keeps a tooling page out of search at its own URL', () => {
+    // ARRANGE
+    const expected = { robots: { index: false }, canonical: '/de/episodes/slide-master' };
+    // ACT
+    const metadata = pageMetadata({ tooling: 'slide-master' }, 'de', {
+      title: COPY.title,
+      description: COPY.description,
+    });
+    // ASSERT
+    expect({ robots: metadata.robots, canonical: metadata.alternates?.canonical }).toEqual(expected);
   });
 
   it("takes the landing page's title and description from the locale Translation file", () => {
@@ -130,16 +182,19 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { index: false };
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, locale, { ...COPY, status: 'upcoming' });
+    const metadata = pageMetadata({ episode: 'page-template' }, locale, {
+      ...COPY,
+      facts: { visibility: 'public', status: 'upcoming' },
+    });
     // ASSERT
     expect(metadata.robots).toEqual(expected);
   });
 
-  it.each(['published', undefined] as const)('leaves a page with status %s indexable', (status) => {
+  it('leaves a public, published Episode page indexable', () => {
     // ARRANGE
     const expected = undefined;
     // ACT
-    const metadata = pageMetadata({ episode: 'page-template' }, 'en', { ...COPY, status });
+    const metadata = pageMetadata({ episode: 'page-template' }, 'en', COPY);
     // ASSERT
     expect(metadata.robots).toBe(expected);
   });
@@ -232,18 +287,15 @@ describe('edge cases', () => {
     expect(metadata.alternates?.canonical).toBe(expected);
   });
 
-  it('keeps the dashboard and an upcoming Episode out of search, and every other page in', () => {
+  it('keeps an Episode page whose facts are missing out of search', () => {
     // ARRANGE
-    const episode = { episode: 'page-template' } as const;
+    const expected = { index: false };
     // ACT
-    const results = [
-      isNoindex('dashboard'),
-      isNoindex(episode, 'upcoming'),
-      isNoindex(episode, 'published'),
-      isNoindex('home'),
-      isNoindex('episodes'),
-    ];
+    const metadata = pageMetadata({ episode: 'page-template' }, 'en', {
+      title: COPY.title,
+      description: COPY.description,
+    });
     // ASSERT
-    expect(results).toEqual([true, true, false, false, false]);
+    expect(metadata.robots).toEqual(expected);
   });
 });
