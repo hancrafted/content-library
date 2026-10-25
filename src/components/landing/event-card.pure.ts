@@ -1,23 +1,23 @@
 import type { IsoDate } from '@/lib/episode-metadata.pure';
+import type { EventRecord } from '@/lib/events.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { workshopRoute } from '@/lib/routes';
+import { eventRoute } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
-import type { WorkshopRecord } from '@/lib/workshops.pure';
 import { releaseDateOf, type ReadKey } from './episode-card.pure';
 
-/** What a Workshop card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
-export interface WorkshopReads {
+/** What an Event card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
+export interface EventReads {
   readonly read: ReadKey;
   readonly episodeCount: { readonly one: string; readonly other: string };
 }
 
 /**
- * One Workshop as its card draws it: the record with its strings read in one locale. Plain values
+ * One Event as its card draws it: the record with its strings read in one locale. Plain values
  * only, so a Server Component can hand it on (FE-006 §4).
  */
-export interface WorkshopCard {
+export interface EventCard {
   readonly slug: string;
-  /** The Workshop's locale-neutral logical path; a JSX `href` must be `localizePath(route, locale)` (FE-003). */
+  /** The Event's locale-neutral logical path; a JSX `href` must be `localizePath(route, locale)` (FE-003). */
   readonly route: string;
   readonly title: string;
   readonly description: string;
@@ -31,18 +31,18 @@ export interface WorkshopCard {
   readonly episodeCountLabel: string;
 }
 
-const ITEMS = 'workshopsPage.items';
+const ITEMS = 'eventsPage.items';
 
-/** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
-export function workshopCard(
-  record: WorkshopRecord,
+/** Assembles one card from the Event and the Episodes its Playlist presents; throws when a string it needs is missing, so the build fails rather than ships a blank. */
+export function eventCard(
+  { record, episodes }: { record: EventRecord; episodes: readonly string[] },
   locale: Locale,
-  { read, episodeCount }: WorkshopReads,
-): WorkshopCard {
-  const count = record.episodes.length;
+  { read, episodeCount }: EventReads,
+): EventCard {
+  const count = episodes.length;
   return {
     slug: record.slug,
-    route: workshopRoute(record.slug),
+    route: eventRoute(record.slug),
     title: read(`${ITEMS}.${record.slug}.title`),
     description: read(`${ITEMS}.${record.slug}.description`),
     date: record.date,

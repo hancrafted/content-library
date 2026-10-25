@@ -3,6 +3,8 @@ import type { PublishedEpisodeMetadata } from '@/lib/episode-metadata.pure';
 /** What the Episode overview shows about this Episode; its title and caption are Translation keys (#40). */
 export const episodeMetadata = {
   slug: 'ai-token-economy',
+  type: 'standard',
+  visibility: 'public',
   status: 'published',
   format: 'foundations',
   concepts: ['ai-cost', 'agentic-ai'],

@@ -9,7 +9,6 @@ import { TableOfContents, type TocLabels } from '@/components/table-of-contents/
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodeSlug } from '@/lib/routes';
 import type { TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
@@ -103,7 +102,7 @@ function titleSlideOf(
 
 function EpisodeToc(props: {
   locale: Locale;
-  slug: EpisodeSlug;
+  route: string;
   sections: readonly TocSection[];
   minutes: number;
   labels: TocLabels;
@@ -112,7 +111,7 @@ function EpisodeToc(props: {
     <aside data-slot="toc" className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem]">
       <TableOfContents
         locale={props.locale}
-        route={episodeRoute(props.slug)}
+        route={props.route}
         sections={props.sections}
         total={props.minutes}
         targetAttribute="data-slide"
@@ -146,6 +145,14 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
   return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
 }
 
+/** What the shell renders: one Episode in one locale, at the route the page is served at. */
+interface ContainerProps {
+  locale: Locale;
+  episode: EpisodeRecord;
+  /** The logical path the page is served at: the Episode's own `/episodes/<slug>`, or an Event's page of it. */
+  route: string;
+}
+
 /**
  * The shell every Episode page renders through (FE-002). It alone turns the
  * Episode record into the page: the named slots, the Title slide with the
@@ -154,7 +161,7 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
  * reads that list, so no id is derived twice and none can drift. It also
  * provides the page's one URL-state service (FE-001 §2).
  */
-export async function EpisodePageContainer({ locale, episode }: { locale: Locale; episode: EpisodeRecord }) {
+export async function EpisodePageContainer({ locale, episode, route }: ContainerProps) {
   const content = await recordContent(episode, locale, translatorOf(locale));
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
@@ -174,7 +181,7 @@ export async function EpisodePageContainer({ locale, episode }: { locale: Locale
         data-episode={episode.slug}
         className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
       >
-        <EpisodeToc locale={locale} slug={episode.slug} sections={sections} minutes={minutes} labels={tocLabels} />
+        <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
         <SlideColumn titleSlide={titleSlideOf(content, page, { youtubeId, talkLabels })} slides={slides} page={page} />
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}

@@ -1,14 +1,14 @@
 import { CardArrow, CardShell, CardTitle } from '@/components/landing/card-shell';
 import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
 import { THEME_ACCENTS } from '@/components/landing/episode-visuals';
-import type { WorkshopCard } from '@/components/landing/workshop-card.pure';
+import type { EventCard } from '@/components/landing/event-card.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { CalendarDays } from 'lucide-react';
 
 const WHEN = THEME_ACCENTS.primary.ink;
 
-export interface WorkshopCardProps {
-  card: WorkshopCard;
+export interface EventCardProps {
+  card: EventCard;
   locale: Locale;
   /** The title's heading level, one below the heading the list sits under. */
   headingLevel: CardHeadingLevel;
@@ -16,15 +16,15 @@ export interface WorkshopCardProps {
   className?: string;
 }
 
-/** The date is the card's loudest line, with the time beside it when the Workshop has one. */
-function WorkshopDate({ card }: { card: WorkshopCard }) {
+/** The date is the card's loudest line, with the time beside it when the Event has one. */
+function EventDate({ card }: { card: EventCard }) {
   return (
     <p className={`flex flex-wrap items-baseline gap-x-3 text-subheading font-semibold ${WHEN}`}>
-      <time data-workshop-date dateTime={card.date}>
+      <time data-event-date dateTime={card.date}>
         {card.dateLabel}
       </time>
       {card.time !== undefined && (
-        <span data-workshop-time className="text-caption font-medium">
+        <span data-event-time className="text-caption font-medium">
           {card.time}
         </span>
       )}
@@ -33,27 +33,27 @@ function WorkshopDate({ card }: { card: WorkshopCard }) {
 }
 
 /**
- * One Workshop as a card, in the Episode card's style: the calendar icon in the primary accent,
+ * One Event as a card, in the Episode card's style: the calendar icon in the primary accent,
  * the date first, the title as the card's one link, the Episode count where an Episode shows its Concepts;
- * no description, which the Workshop's own page carries.
+ * no description, which the Event's own page carries.
  */
-export function WorkshopCardView({ card, locale, headingLevel, className }: WorkshopCardProps) {
+export function EventCardView({ card, locale, headingLevel, className }: EventCardProps) {
   return (
     <CardShell
-      variant="workshop"
+      variant="event"
       linked
       accent="primary"
       icon={CalendarDays}
       className={className}
-      data={{ 'data-workshop-card': '', 'data-workshop-slug': card.slug }}
+      data={{ 'data-event-card': '', 'data-event-slug': card.slug }}
     >
-      <WorkshopDate card={card} />
-      <CardTitle variant="workshop" title={card.title} route={card.route} locale={locale} level={headingLevel} />
+      <EventDate card={card} />
+      <CardTitle variant="event" title={card.title} route={card.route} locale={locale} level={headingLevel} />
       <div className="mt-auto flex min-h-11 items-center justify-between gap-4 pt-2">
-        <span data-workshop-episode-count className="text-caption text-muted-foreground">
+        <span data-event-episode-count className="text-caption text-muted-foreground">
           {card.episodeCountLabel}
         </span>
-        <CardArrow variant="workshop" />
+        <CardArrow variant="event" />
       </div>
     </CardShell>
   );

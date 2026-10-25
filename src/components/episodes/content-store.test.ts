@@ -10,7 +10,7 @@ import { contentStore, rawContent } from './content-store';
  */
 
 describe('success cases', () => {
-  it('returns the same Episodes, Workshop and research records the site renders today, and the seven top Concepts', () => {
+  it('returns the same Episodes, Events, Playlists and research records the site renders, and the seven top Concepts', () => {
     // ARRANGE
     const expected = {
       episodes: [
@@ -20,6 +20,7 @@ describe('success cases', () => {
         'onboard-ai-every-time',
         'ai-attention-span',
         'ai-gives-you-more-work',
+        'axel-agentic-workflow-agenda',
       ],
       concepts: [
         'agentic-ai',
@@ -30,7 +31,8 @@ describe('success cases', () => {
         'markdown-documentation',
         'sales',
       ],
-      workshops: ['axel-agentic-workflow-2026-10-23'],
+      events: ['2026-10-23-axel-agentic-workflow'],
+      playlists: ['axel-agentic-workflow'],
       researchCount: 37,
     };
     // ACT
@@ -39,7 +41,8 @@ describe('success cases', () => {
     expect({
       episodes: store.episodes.map(({ slug }) => slug),
       concepts: store.concepts.map(({ id }) => id),
-      workshops: store.workshops.map(({ slug }) => slug),
+      events: store.events.map(({ slug }) => slug),
+      playlists: store.playlists.map(({ id }) => id),
       researchCount: store.research.length,
     }).toEqual(expected);
   });

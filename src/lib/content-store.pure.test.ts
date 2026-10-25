@@ -22,13 +22,35 @@ const SALES = {
 };
 const EPISODE = {
   slug: 'never-too-early-sales',
+  type: 'standard',
+  visibility: 'public',
   status: 'published',
   format: 'foundations',
   concepts: ['sales'],
   applyThemeFromConcept: 'sales',
   publishedOn: '2026-10-19',
 };
-const WORKSHOP = { slug: 'intro-2026-10-23', date: '2026-10-23', episodes: ['never-too-early-sales'] };
+/** An event-frame Episode: the agenda page of one Event, always unlisted. Its slug has a registered page. */
+const FRAME = {
+  ...EPISODE,
+  slug: 'axel-agentic-workflow-agenda',
+  type: 'event-frame',
+  visibility: 'unlisted',
+  publishedOn: '2026-10-23',
+};
+const PLAYLIST = {
+  id: 'axel-agentic-workflow',
+  type: 'event',
+  visibility: 'unlisted',
+  episodes: ['axel-agentic-workflow-agenda', 'never-too-early-sales'],
+};
+const EVENT = {
+  slug: '2026-10-23-axel-agentic-workflow',
+  date: '2026-10-23',
+  kind: 'workshop',
+  audience: 'german-business',
+  playlist: 'axel-agentic-workflow',
+};
 const SOURCE = {
   episode: 'never-too-early-sales',
   slide: 'pipeline',
@@ -61,8 +83,9 @@ const VALID: RawContent = {
   themes: THEMES,
   concepts: [SALES],
   definitionSlides: [],
-  episodes: [EPISODE],
-  workshops: [WORKSHOP],
+  episodes: [EPISODE, FRAME],
+  events: [EVENT],
+  playlists: [PLAYLIST],
   research: [RESEARCH],
   slideSources: [SOURCE],
   slides: [SLIDE, POOL_SLIDE],
@@ -91,8 +114,9 @@ describe('success cases', () => {
   it('returns the typed store when every record is sound', () => {
     // ARRANGE
     const expected = {
-      episodes: ['never-too-early-sales'],
-      workshops: ['intro-2026-10-23'],
+      episodes: ['never-too-early-sales', 'axel-agentic-workflow-agenda'],
+      events: ['2026-10-23-axel-agentic-workflow'],
+      playlists: ['axel-agentic-workflow'],
       research: ['AIE-0001'],
       themes: ['sales'],
       concepts: ['sales'],
@@ -104,7 +128,8 @@ describe('success cases', () => {
     if (!result.ok) return;
     expect({
       episodes: result.store.episodes.map((e) => e.slug),
-      workshops: result.store.workshops.map((w) => w.slug),
+      events: result.store.events.map((e) => e.slug),
+      playlists: result.store.playlists.map((p) => p.id),
       research: result.store.research.map((r) => r.id),
       themes: Object.keys(result.store.themes),
       concepts: result.store.concepts.map((c) => c.id),
@@ -124,7 +149,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('names the Episode whose metadata is malformed instead of throwing', () => {
     // ARRANGE
-    const raw = { ...VALID, episodes: [{ ...EPISODE, publishedOn: '2026-02-30' }] };
+    const raw = { ...VALID, episodes: [{ ...EPISODE, publishedOn: '2026-02-30' }, FRAME] };
     const expected = { kind: 'episode', record: 'never-too-early-sales' };
     // ACT
     const refusals = refusalsOf(raw);
@@ -143,14 +168,124 @@ describe('failure cases', () => {
     expect(refusals[0]).toMatchObject(expected);
   });
 
-  it('names the Workshop whose slug does not end in its date', () => {
+  it('names the Event whose slug does not start with its date', () => {
     // ARRANGE
-    const raw = { ...VALID, workshops: [{ ...WORKSHOP, slug: 'intro-2026-10-24' }] };
-    const expected = { kind: 'workshop', record: 'intro-2026-10-24' };
+    const raw = { ...VALID, events: [{ ...EVENT, slug: '2026-10-24-axel-agentic-workflow' }] };
+    const expected = { kind: 'event', record: '2026-10-24-axel-agentic-workflow' };
     // ACT
     const refusals = refusalsOf(raw);
     // ASSERT
     expect(refusals[0]).toMatchObject(expected);
+  });
+
+  it.each([
+    {
+      name: 'a public event-frame Episode',
+      raw: { ...VALID, episodes: [EPISODE, { ...FRAME, visibility: 'public' }] },
+      expected: { kind: 'episode', record: 'axel-agentic-workflow-agenda' },
+    },
+    {
+      name: 'visibility: attendees',
+      raw: { ...VALID, playlists: [{ ...PLAYLIST, visibility: 'attendees' }] },
+      expected: { kind: 'playlist', record: 'axel-agentic-workflow' },
+    },
+    {
+      name: 'an Event whose Playlist is missing',
+      raw: { ...VALID, events: [{ ...EVENT, playlist: 'no-such-playlist' }] },
+      expected: { kind: 'event', record: '2026-10-23-axel-agentic-workflow' },
+    },
+    {
+      name: 'an Event whose Playlist is not type: event',
+      raw: { ...VALID, playlists: [{ ...PLAYLIST, type: 'standard' }] },
+      expected: { kind: 'event', record: '2026-10-23-axel-agentic-workflow' },
+    },
+  ])('The schema refuses $name', ({ raw, expected }) => {
+    // ARRANGE
+    const records = raw;
+    // ACT
+    const refusals = refusalsOf(records);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+  });
+
+  it('An orphan unlisted Episode is refused', () => {
+    // ARRANGE
+    const orphan = { ...EPISODE, slug: 'axel-agentic-workflow-agenda', visibility: 'unlisted' };
+    const raw = { ...VALID, episodes: [orphan], events: [], playlists: [] };
+    const expected = { kind: 'episode', record: 'axel-agentic-workflow-agenda' };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+    expect(refusals.map(({ message }) => message).join('\n')).toContain('no Event');
+  });
+
+  it('A public Playlist of type standard with an unlisted Episode is refused; a public Event may present unlisted Episodes', () => {
+    // ARRANGE
+    const curated = {
+      id: 'starter',
+      type: 'standard',
+      visibility: 'public',
+      episodes: ['axel-agentic-workflow-agenda'],
+    };
+    const leaking = { ...VALID, playlists: [PLAYLIST, curated] };
+    const publicEvent = { ...VALID, playlists: [{ ...PLAYLIST, visibility: 'public' }] };
+    const expected = { kind: 'playlist', record: 'starter' };
+    // ACT
+    const leakingRefusals = refusalsOf(leaking);
+    const publicEventResult = loadContentStore(publicEvent);
+    // ASSERT
+    expect(leakingRefusals).toContainEqual(expect.objectContaining(expected));
+    expect(publicEventResult.ok).toBe(true);
+  });
+
+  it("An Event's Playlist that does not open with its event-frame Episode is refused", () => {
+    // ARRANGE
+    const raw = { ...VALID, playlists: [{ ...PLAYLIST, episodes: [...PLAYLIST.episodes].reverse() }] };
+    const expected = { kind: 'playlist', record: 'axel-agentic-workflow' };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+  });
+
+  it('An upcoming Episode that is unlisted is refused', () => {
+    // ARRANGE
+    const upcoming = {
+      slug: 'next-one',
+      type: 'standard',
+      visibility: 'unlisted',
+      status: 'upcoming',
+      format: 'short',
+      concepts: ['sales'],
+      applyThemeFromConcept: 'sales',
+    };
+    const raw = { ...VALID, episodes: [EPISODE, FRAME, upcoming] };
+    const expected = { kind: 'episode', record: 'next-one' };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+  });
+
+  it('Two Episodes with the same slug are refused', () => {
+    // ARRANGE
+    const raw = { ...VALID, episodes: [EPISODE, FRAME, { ...EPISODE, publishedOn: '2026-10-20' }] };
+    const expected = { kind: 'episode', record: 'never-too-early-sales' };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
+  });
+
+  it('A Playlist naming an Episode that does not exist is refused', () => {
+    // ARRANGE
+    const raw = { ...VALID, playlists: [{ ...PLAYLIST, episodes: [...PLAYLIST.episodes, 'no-such-episode'] }] };
+    const expected = { kind: 'playlist', record: 'axel-agentic-workflow' };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toContainEqual(expect.objectContaining(expected));
   });
 
   it('names the research file whose frontmatter lacks a description', () => {
@@ -216,7 +351,7 @@ describe('failure cases', () => {
 
   it('names an Episode that lists a Concept outside the top Concepts', () => {
     // ARRANGE
-    const raw = { ...VALID, episodes: [{ ...EPISODE, concepts: ['sales', 'tokens'] }] };
+    const raw = { ...VALID, episodes: [{ ...EPISODE, concepts: ['sales', 'tokens'] }, FRAME] };
     const expected = [
       {
         kind: 'episode',
@@ -246,9 +381,9 @@ describe('edge cases', () => {
     const raw = {
       ...VALID,
       themes: { sales: { icon: 'nope', accent: 'emerald' } },
-      workshops: [{ ...WORKSHOP, date: 'soon' }],
+      events: [{ ...EVENT, date: 'soon' }],
     };
-    const expected = ['theme', 'workshop'];
+    const expected = ['theme', 'event'];
     // ACT
     const kinds = [...new Set(refusalsOf(raw).map((r) => r.kind))];
     // ASSERT
