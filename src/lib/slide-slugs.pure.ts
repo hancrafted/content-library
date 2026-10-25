@@ -1,4 +1,4 @@
-import type { SlideFolder } from './content-schemas.pure';
+import type { SlideFolder } from './slide-folder-schema.pure';
 
 /*
  * What global Slide slug uniqueness refuses at build (design-ADR 0016, Slide reuse rule 7), over every Slide folder in

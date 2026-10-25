@@ -45,6 +45,7 @@
     "episode:harvest": "node skills/episode-promote/scripts/harvest-report.ts",
     "episode:research": "node skills/new-episode/scripts/research.ts",
     "episode:promote-research": "node skills/episode-promote/scripts/promote-research.ts",
+    "episode:merge-research": "node skills/episode-promote/scripts/merge-research.ts",
     "design-archive": "node skills/episode-promote/scripts/serve.ts",
     "dashboard:demo": "node scripts/dashboard-demo.ts",
     "slides:adapt": "node scripts/slide-adapt.ts",

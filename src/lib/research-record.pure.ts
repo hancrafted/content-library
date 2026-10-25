@@ -1,5 +1,6 @@
 import { RESEARCH_ID, researchSchema, type ResearchFrontmatter } from './content-schemas.pure';
 import { readFrontmatter, reasonsOf } from './frontmatter.pure';
+import { confirmedByHan } from './han-confirmation.pure';
 
 /*
  * One research file read into a Research question: its id from the folder name, its frontmatter through the
@@ -30,14 +31,6 @@ export interface ResearchRecord extends ResearchFrontmatter {
 export type ResearchRead =
   | { readonly record: ResearchRecord; readonly reasons?: undefined }
   | { readonly record?: undefined; readonly reasons: readonly string[] };
-
-const HAN = 'human:han';
-
-function confirmedByHan({ verified, generated }: ResearchFrontmatter): boolean {
-  const entries = verified === undefined ? [] : Array.isArray(verified) ? verified : [verified];
-  const since = Date.parse(generated.at);
-  return entries.some(({ by, at }) => by === HAN && Date.parse(at) >= since);
-}
 
 /** The Research question a file holds, or why it holds none. */
 export function readResearchFile(path: string, markdown: string): ResearchRead {

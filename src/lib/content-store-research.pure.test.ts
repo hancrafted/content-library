@@ -267,6 +267,28 @@ describe('edge cases', () => {
     expect(refusals).toEqual(expected);
   });
 
+  it('A merge re-points every citation and the retired id can never be reused: a file under a retired id fails', () => {
+    // ARRANGE
+    const raw = {
+      ...VALID,
+      research: [
+        research(SALES_0001, { extra: ['supersedes: [SALES-0002]'] }),
+        research(`${STAGED}/SALES-0002__sales-cycle-drivers`),
+      ],
+    };
+    const expected = [
+      {
+        kind: 'research',
+        record: 'SALES-0002',
+        message: 'the id was retired into SALES-0001 by a merge and is never reused; take the next free number',
+      },
+    ];
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual(expected);
+  });
+
   it('takes a staged Research question id from its folder and tells it apart from a wiki one', () => {
     // ARRANGE
     const raw = { ...VALID, research: [research(SALES_0001), research(`${STAGED}/SALES-0007__staged-question`)] };
