@@ -6,7 +6,7 @@ domain: frontend
 rules: false
 files: ['src/**/*.{ts,tsx}']
 paths: ['src/**/*.{ts,tsx}']
-description: 'Two zones under different laws — src/app governed by content, the authored zone by position — one import direction app → components → hooks → lib with no cycles and no React in lib, a Slide folder importing only global shared code, and Slide internals ungoverned in shape — values, not shape: only colour, size and weight follow tokens.'
+description: 'Two zones under different laws — src/app governed by content, the authored zone by position — one import direction app → components → content-store → hooks → lib with no cycles and no React in lib, a Slide folder importing only global shared code, and Slide internals ungoverned in shape — values, not shape: only colour, size and weight follow tokens.'
 ---
 
 # Module Layering
@@ -16,7 +16,7 @@ description: 'Two zones under different laws — src/app governed by content, th
 Under the App Router the directory **is** the URL: `src/app/[locale]/episode/page-template/page.tsx` sits where it sits because `/de/episode/page-template` exists. So the tree splits into two zones:
 
 - **Framework zone** — `src/app/**`. The router owns position; this record governs what a file there may _contain_.
-- **Authored zone** — `src/components/**`, `src/hooks/**`, `src/lib/**`. Position is chosen, so the folder is the tier.
+- **Authored zone** — `src/components/**`, `src/content-store/**`, `src/hooks/**`, `src/lib/**`. Position is chosen, so the folder is the tier.
 
 One rule spans both: import direction. Lib stays React-free so a lib module is a plain module a test imports without a DOM.
 
@@ -33,10 +33,11 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 2. Import direction
 
-1. Tiers run `app → components → hooks → lib`. An edge MAY skip a tier downward; it MUST NOT point upward.
+1. Tiers run `app → components → content-store → hooks → lib`. An edge MAY skip a tier downward; it MUST NOT point upward.
 2. No import cycle MAY exist under `src/`.
 3. `src/components/pages/**` is the top sub-tier of components: only a route or a test imports it.
 4. A stylesheet import is not a tier edge.
+5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only schemas and lib. The store's `schemas/` is a leaf every tier may import, so a lib module takes a record type without an upward edge.
 
 ### 3. `src/lib/**` imports no React
 
@@ -62,7 +63,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 1. **DO** write a page as a single `<XxxPage locale={…} />` from `@/components/pages/*`. (Decision 1)
 2. **DO** add a new page component under `src/components/pages/` and import it only from routes. (Decisions 1 and 2)
 3. **DO** move logic a route needs into `src/lib/**` and call it from the page component. (Decision 1)
-4. **DO** import downward or skip tiers downward: components → lib, hooks → lib, app → lib. (Decision 2)
+4. **DO** import downward or skip tiers downward: components → content-store, components → lib, hooks → lib, app → lib. (Decision 2)
 5. **DO** keep `src/lib/**` to `.ts` files that test without a DOM. (Decision 3)
 6. **DO** leave a Slide's internal markup to the visualization it serves; take its colour, size and weight from tokens. (Decision 4)
 7. **DO** move a part two Slides need into `src/components/slide-shared/` and import it from there. (Decision 5)
@@ -72,7 +73,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 1. **DON'T** import `src/components/ui/**` or any non-root component from a route. (Decision 1)
 2. **DON'T** shape data, branch on content or lay out markup under `src/app/**`. (Decision 1)
-3. **DON'T** import upward: lib → hooks/components/app, hooks → components/app, components → app. (Decision 2)
+3. **DON'T** import upward: lib → hooks/content-store/components/app, hooks → content-store/components/app, content-store → app or any component but an Episode's metadata file. (Decision 2)
 4. **DON'T** import a page component from another component, or create an import cycle. (Decision 2)
 5. **DON'T** write `import type { ReactNode } from 'react'` or a `.tsx` file under `src/lib/**`. (Decision 3)
 6. **DON'T** invent a shared Slide type, prop interface or layout contract and route Slides through it. (Decision 4)
@@ -104,7 +105,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ## Compliance and Enforcement
 
-1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries`, pre-commit and CI): §1.1, §1.2, §1.4, §2.1–§2.3, §3, §5 including `core-components-are-a-leaf` and the core exception on the client-leaf rule (§5.2.2) (its message names the allowed locations; probe tests over a throwaway tree).
+1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries`, pre-commit and CI): §1.1, §1.2, §1.4, §2.1–§2.3, §2.5, §3, §5 including `core-components-are-a-leaf` and the core exception on the client-leaf rule (§5.2.2) (its message names the allowed locations; probe tests over a throwaway tree).
 2. **Unused-file check** (knip, pre-push and CI): an unimported `.tsx` under `src/lib/` (§3).
 
 **Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/lib/` carry no classifier; left for a future lib-tree record.
