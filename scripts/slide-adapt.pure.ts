@@ -16,6 +16,7 @@ import {
   type FileText,
   type InstanceRepoView,
 } from './slide-instance.pure.ts';
+import { sectionsPinning } from './slide-pin.pure.ts';
 import { EPISODES_DIR, exportedName, KEBAB, withReference, type RepoView } from './slide-reuse.pure.ts';
 
 export interface AdaptRequest {
@@ -61,12 +62,18 @@ function adaptRefusals(request: AdaptRequest, repo: RepoView): string[] {
   const named = nameRefusals(request);
   if (named.length > 0) return named;
   const taken = foldersNamed(request.as, repo);
+  const pinning = sectionsPinning(request.as, repo);
   const episode = `${EPISODES_DIR}/${request.into}`;
   return [
     ...originRefusals(request, repo),
     ...(taken.length === 0
       ? []
       : [`"${request.as}" is already the slug of ${taken.join(', ')}: Slide slugs are unique.`]),
+    ...(pinning.length === 0
+      ? []
+      : [
+          `"${request.as}" is a retired instance slug, pinned as an anchor in ${pinning.join(', ')}: it stays reserved.`,
+        ]),
     ...(repo.exists(episode) ? [] : [`No Episode folder ${episode}.`]),
   ];
 }

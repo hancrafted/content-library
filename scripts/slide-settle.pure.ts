@@ -5,6 +5,7 @@ import {
   copiedFiles,
   folderFiles,
   instanceFolderOf,
+  MARKER,
   poolFolderOf,
   repointedSection,
   sectionsImporting,
@@ -23,8 +24,6 @@ export interface SettlePlan {
   /** Instances kept, each with why: edited, or its origin is gone. */
   readonly kept: readonly string[];
 }
-
-const MARKER = /copiedFrom:\s*\{\s*slug:\s*(['"])([a-z0-9-]+)\1,\s*commit:\s*(['"])([0-9a-f]+)\3,?\s*\}/;
 
 /** An instance found in an Episode: its names and the commit its copy was made at. */
 interface Found {

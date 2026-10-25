@@ -104,6 +104,7 @@ const VALID: RawContent = {
   slideSources: [SOURCE],
   sourceBaseline: [],
   researchPlans: [],
+  pins: [],
   slides: [SLIDE, POOL_SLIDE],
 };
 
@@ -422,6 +423,29 @@ describe('failure cases', () => {
         record: 'pipeline',
         message:
           'src/components/episodes/onboard-ai-every-time/slides/pipeline is an instance of "pipeline" under its origin\'s slug: an instance takes a slug of its own',
+      },
+    ];
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual(expected);
+  });
+
+  it('A retired instance slug reused is refused', () => {
+    // ARRANGE
+    const pin = { episode: 'never-too-early-sales', slug: 'pipeline-for-founders' };
+    const reused = {
+      path: 'src/components/episodes/onboard-ai-every-time/slides/pipeline-for-founders',
+      slug: 'pipeline-for-founders',
+      title: false,
+    };
+    const raw = { ...VALID, slides: [SLIDE, POOL_SLIDE, reused], pins: [pin] };
+    const expected = [
+      {
+        kind: 'slide',
+        record: 'pipeline-for-founders',
+        message:
+          'src/components/episodes/onboard-ai-every-time/slides/pipeline-for-founders takes a retired instance slug: never-too-early-sales pins it as an anchor, so it stays reserved',
       },
     ];
     // ACT

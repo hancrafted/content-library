@@ -26,7 +26,7 @@ import type { PlaylistRecord } from './playlists.pure';
 import { readAll, type Parsed, type Refusal } from './record-reads.pure';
 import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
-import { slideFolderSchema, type SlideFolder } from './slide-folder-schema.pure';
+import { pinnedAnchorSchema, slideFolderSchema, type SlideFolder } from './slide-folder-schema.pure';
 import { slideFolderProblems } from './slide-slugs.pure';
 import { slideSourceSchema, type SlideSource } from './slide-source.pure';
 import { sourceBaselineEntrySchema, sourceTrustProblems, type SourceBaselineEntry } from './source-baseline.pure';
@@ -81,6 +81,8 @@ export interface RawContent {
   readonly sourceBaseline: readonly unknown[];
   /** Every Slide folder in every Episode's `slides/` and in the Slide pool. */
   readonly slides: readonly unknown[];
+  /** Every Pinned anchor every Episode's Section lists hold. */
+  readonly pins: readonly unknown[];
   /** Every Staging's `research-plan.md`: a refresh it lists lets its staged question shadow the wiki id. */
   readonly researchPlans: readonly EvidenceFile[];
 }
@@ -159,6 +161,7 @@ function readEach(raw: RawContent) {
     slideSources: readAll('slide-source', slideSourceSchema, raw.slideSources),
     sourceBaseline: readAll('source-baseline', sourceBaselineEntrySchema, raw.sourceBaseline),
     slides: readAll('slide', slideFolderSchema, raw.slides),
+    pins: readAll('slide', pinnedAnchorSchema, raw.pins),
     research: readResearch(raw.research),
   };
 }
@@ -195,7 +198,10 @@ export function loadContentStore(raw: RawContent): LoadResult {
   const refusals = [
     ...Object.values(read).flatMap((part) => part.refusals),
     ...researchIdRefusals(read.research.value, raw.researchPlans),
-    ...slideFolderProblems(read.slides.value).map((problem) => ({ kind: 'slide' as const, ...problem })),
+    ...slideFolderProblems(read.slides.value, read.pins.value).map((problem) => ({
+      kind: 'slide' as const,
+      ...problem,
+    })),
     ...crossChecks(sound),
   ];
   if (refusals.length > 0) return { ok: false, refusals };

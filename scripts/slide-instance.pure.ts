@@ -35,6 +35,9 @@ export interface InstanceNames {
   readonly to: string;
 }
 
+/** An instance's `copiedFrom: { slug, commit }` marker in its `slide.tsx`: group 2 is the origin, group 4 the commit. */
+export const MARKER = /copiedFrom:\s*\{\s*slug:\s*(['"])([a-z0-9-]+)\1,\s*commit:\s*(['"])([0-9a-f]+)\3,?\s*\}/;
+
 /** How the adapter formats a file the plan rewrote; settling formats the copy it compares against the same way. */
 export type Format = (path: string, text: string) => Promise<string>;
 

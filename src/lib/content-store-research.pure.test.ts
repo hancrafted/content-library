@@ -88,6 +88,7 @@ const VALID: RawContent = {
   episodeSlides: [],
   definitionSlides: [],
   researchPlans: [],
+  pins: [],
 };
 
 /** A research plan in the Staging that holds `folder`, listing a refresh of the wiki question it shadows. */

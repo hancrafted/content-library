@@ -39,9 +39,9 @@ _Done when_ every Slide of the Spec is on the Episode's page, the user has seen 
 
 ### 5. Harvest
 
-Read [`references/harvest.md`](references/harvest.md) and run its six harvesters as parallel subagents. Assemble their cards into `docs/episodes/<staging>/harvest.json` and render the Harvest report with `npm run episode:harvest -- docs/episodes/<staging>`: one card per proposal, before and after drawn side by side. The command adds the research section itself, a card per staged Research question. Nothing is applied yet.
+Read [`references/harvest.md`](references/harvest.md) and run its six harvesters as parallel subagents. Assemble their cards into `docs/episodes/<staging>/harvest.json` and render the Harvest report with `npm run episode:harvest -- docs/episodes/<staging>`: one card per proposal, before and after drawn side by side. The command adds two sections itself: research, a card per staged Research question, and adapted Slides, a card per Instance the Episode holds. Nothing is applied yet.
 
-_Done when_ `harvest.html` renders all six harvested sections and a research card per staged question, every card with its before, after and evidence.
+_Done when_ `harvest.html` renders all six harvested sections, a research card per staged question and a card per Instance, every card with its before, after and evidence.
 
 ### 6. Gate the harvest
 
@@ -51,8 +51,9 @@ Research and duplicate cards are the user's evidence decisions:
 
 - A kept research card (`Q`) is the user's confirmation. Write the `confidence` or `informs` the note names, if any, then add `verified: { by: human:han, at: <now, UTC> }` to that `research.md`. A struck card leaves the question unconfirmed, and step 7 refuses to move it until the user confirms it.
 - A kept duplicate card (`D`) is applied in step 7; a struck one keeps both questions.
+- An Instance card (`I`) is one decision per Instance: kept, the Instance updates the shared Slide; struck, it becomes a Slide of its own. Both are applied in step 7. A card that warns the shared Slide changed since the copy needs those changes carried into the Instance by hand before an update.
 
-_Done when_ every kept card is applied, filed or queued for step 7, every staged question has a kept research card or the user has decided its fate, and `npm run verify` is green.
+_Done when_ every kept card is applied, filed or queued for step 7, every staged question has a kept research card or the user has decided its fate, every Instance card is decided, and `npm run verify` is green.
 
 ### 7. Keep what outlives Staging, and delete Staging
 
@@ -61,6 +62,7 @@ One commit, because `tests/docs/episode-staging.test.ts` fails on a half-moved S
 - `brief.md` moves to `src/components/episodes/<slug>/brief.md`, its `status: draft` line removed.
 - For each kept duplicate card, write the retired question's findings into the kept question's Answer, then `npm run episode:merge-research -- <retired-id> <kept-id>`: it re-points every citation, lists the retired id in the kept question's `supersedes` line (never reused), and deletes the retired folder. It refuses to retire a promoted id.
 - `npm run episode:promote-research -- docs/episodes/<staging>` moves every research folder into `docs/llm-wiki/research/<category>/` and lists it in `docs/llm-wiki/index.md`, cited by a Slide or not; replaces the wiki question a `refresh` in `research-plan.md` rewrote; and moves each staged Concept (`<staging>/concepts/<id>/concept.md`) into `docs/llm-wiki/concepts/`. It refuses, before moving anything, a folder with no `research.md`, a question the user has not confirmed, an `informs` that is no Concept, an id the wiki holds that the plan does not list as `refresh`, a staged Concept the user has not accepted (its `verified` entry), or a category `GLOSSARY.md` does not name; fix that and rerun. Add the ids it prints to `RESEARCH_IDS` and `CONCEPT_IDS`.
+- For each Instance card, `npm run slides:promote -- <instance-slug> --update` (kept) or `--own` (struck). An update writes the Instance's content into the pool Slide, deletes the Instance, and lists the pool Slide in its Episode under a Pinned anchor, so no published anchor moves; it prints every Episode the shared Slide changes in, for the PR. It refuses while the shared Slide changed since the copy: carry those changes into the Instance, then add `--reconciled`. `--own` drops the `copiedFrom` marker; slug and anchors stay.
 - `git rm -r docs/episodes/<staging>`; git history keeps it.
 - Every comment or doc still naming `docs/episodes/<staging>/` (the Episode file's header comment among them) is rewritten to name the commit before this one.
 

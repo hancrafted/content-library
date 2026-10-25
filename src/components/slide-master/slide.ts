@@ -89,6 +89,8 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly captionNote?: string;
   /** Set on an instance only: the pool Slide it was copied from (design-ADR 0016, _Slide reuse_ rule 3). */
   readonly copiedFrom?: CopiedFrom;
+  /** Set by `pinAnchor` on one Episode's reference only: the retired instance slug its anchor keeps. */
+  readonly pinnedSlug?: string;
   /** A Definition Slide's Concept: the id of the Concept it teaches. The content store fails one that names no Concept. */
   readonly defines?: string;
   readonly content: (kit: RuntimeKit) => ReactNode;
@@ -146,6 +148,16 @@ export function slide<
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
     content: spec.content as unknown as Slide['content'],
   };
+}
+
+/**
+ * One Episode's reference to a pool Slide, placed under a Pinned anchor: the slug of the instance it took over at
+ * Promotion (design-ADR 0016, _Slide reuse_ rule 4). The Episode's anchor stays `<section>--<retired slug>`, so no
+ * published link moves; the Slide itself, its slug and its text are the pool Slide's. Written by
+ * `npm run slides:promote`, never by hand; the retired slug stays reserved.
+ */
+export function pinAnchor<T extends Slide>(slide: T, retiredSlug: string): T {
+  return { ...slide, pinnedSlug: retiredSlug };
 }
 
 /** A Section of Slides: its section slide, which names it, then its page Slides. */
