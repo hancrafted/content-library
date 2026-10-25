@@ -1,12 +1,11 @@
 import {
-  leadTagOf,
   lookOf,
   type EpisodeStatus,
   type IsoDate,
   type PublishedEpisodeMetadata,
   type UpcomingEpisodeMetadata,
 } from '@/lib/episode-metadata.pure';
-import type { Accent, FormatId, TagIcon, TagId } from '@/lib/episode-overview';
+import type { Accent, FormatId, ThemeIcon, TopConceptId } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
 
@@ -16,14 +15,14 @@ export interface Labelled<Id extends string> {
   readonly label: string;
 }
 
-/** One Tag as a card draws it: its name and the tooltip that explains it, both in the reader's locale. */
-export interface TagLabel extends Labelled<TagId> {
+/** One top Concept as a card draws it: its name and the tooltip that explains it, both in the reader's locale. */
+export interface ConceptLabel extends Labelled<TopConceptId> {
   readonly tooltip: string;
 }
 
 /**
  * One Episode as a landing design draws it: the Episode's metadata with its
- * strings read in one locale and its look taken from its lead Tag. Plain
+ * strings read in one locale and its look taken from the top Concept it names in `applyThemeFromConcept`. Plain
  * values only, so a Server Component can hand it to a `*.client.tsx` leaf
  * (FE-006 §4).
  */
@@ -40,11 +39,11 @@ export interface EpisodeCard {
   readonly status: EpisodeStatus;
   readonly title: string;
   readonly caption: string;
-  /** The Episode's first Tag, which the card names and draws its icon and accent from. */
-  readonly leadTag: Labelled<TagId>;
+  /** The top Concept the Episode names in `applyThemeFromConcept`: the card draws its icon and accent from it. */
+  readonly themeConcept: Labelled<TopConceptId>;
   readonly format: Labelled<FormatId>;
-  /** The Episode's Tags in its own order, lead Tag first. */
-  readonly tags: readonly TagLabel[];
+  /** The top Concepts the Episode teaches, in its own order. */
+  readonly concepts: readonly ConceptLabel[];
   /** The Episode's video in this locale; left off when it has none or is not published. */
   readonly youtubeUrl?: string;
   /** Reading time in this locale; left off when the Episode's record was not read. */
@@ -55,7 +54,7 @@ export interface EpisodeCard {
   /** Position in the Featured slots, 1 first; `null` for every other card. */
   readonly featuredRank: number | null;
   readonly accent: Accent;
-  readonly icon: TagIcon;
+  readonly icon: ThemeIcon;
 }
 
 /** Reads one Translation key by its full dotted path. */
@@ -141,20 +140,21 @@ function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCar
 export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
   const { read } = ctx;
   const copy = copyOf(entry, ctx);
-  const tags = entry.tags.map((id) => ({
+  const concepts = entry.concepts.map((id) => ({
     id,
-    label: read(`${OVERVIEW_KEYS}.tags.${id}.name`),
-    tooltip: read(`${OVERVIEW_KEYS}.tags.${id}.tooltip`),
+    label: read(`${OVERVIEW_KEYS}.concepts.${id}.name`),
+    tooltip: read(`${OVERVIEW_KEYS}.concepts.${id}.tooltip`),
   }));
+  const theme = entry.applyThemeFromConcept;
   return {
     slug: entry.slug,
     route: null,
     href: null,
     status: entry.status,
     ...copy,
-    leadTag: { id: leadTagOf(entry), label: tags[0].label },
+    themeConcept: { id: theme, label: read(`${OVERVIEW_KEYS}.concepts.${theme}.name`) },
     format: { id: entry.format, label: read(`${OVERVIEW_KEYS}.formats.${entry.format}`) },
-    tags,
+    concepts,
     featuredRank: null,
     ...lookOf(entry),
     ...publishedFields(entry, ctx),

@@ -1,5 +1,7 @@
+import { LAYOUT_REFERENCES } from './episode-overview';
 import type { EventRecord } from './events.pure';
 import type { PlaylistRecord } from './playlists.pure';
+import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS } from './routes';
 
 /*
  * What the delivery records say about each other (design-ADR 0016, Delivery contract): an Event presents one
@@ -129,4 +131,25 @@ function orphanProblems({ episodes, events, playlists }: DeliveryRecords): Deliv
 /** Every delivery problem, one sentence each; empty when the records are consistent. */
 export function deliveryProblems(records: DeliveryRecords): DeliveryProblem[] {
   return [...eventProblems(records), ...playlistProblems(records), ...orphanProblems(records)];
+}
+
+const LISTED_SLUGS: readonly string[] = EPISODE_SLUGS.filter(
+  (slug) => !(LAYOUT_REFERENCES as readonly string[]).includes(slug),
+);
+const UNLISTED_SLUGS: readonly string[] = UNLISTED_EPISODE_SLUGS;
+
+/**
+ * Where each published Episode's page is registered, one sentence per Episode that has none: a public one at
+ * `/episodes/<slug>/`, an unlisted one only under its Event.
+ */
+export function episodePageProblems(
+  episodes: readonly (DeliveryEpisode & { readonly status: 'published' | 'upcoming' })[],
+): string[] {
+  return episodes
+    .filter(({ status }) => status === 'published')
+    .filter(({ slug, visibility }) => !(visibility === 'public' ? LISTED_SLUGS : UNLISTED_SLUGS).includes(slug))
+    .map(
+      ({ slug, visibility }) =>
+        `${slug}: a published ${visibility} Episode needs a registered page, and this slug names none`,
+    );
 }

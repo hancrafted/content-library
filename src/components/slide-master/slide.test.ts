@@ -124,7 +124,9 @@ describe('failure cases', () => {
         slug: 'why-a-template',
         messages: { en: EN, de: DE },
         notes: [{ slug: 'reference-episode', target: 'prose' }],
-        content: ({ t, ref, marker, Marker, target, template }) => {
+        content: ({ t, ref, marker, Marker, target, template, slideHref }) => {
+          // @ts-expect-error -- a text-fallback link may be absent: the call site must handle `undefined`
+          const href: string = slideHref('optional-sibling', { fallback: 'text' });
           // @ts-expect-error -- a key outside this Slide's own file
           t('statement');
           // @ts-expect-error -- a subtree, not a string leaf
@@ -137,7 +139,7 @@ describe('failure cases', () => {
           Marker({ note: 'no-such-note' });
           // @ts-expect-error -- a target no note of this Slide names
           target('caption');
-          return null;
+          return href;
         },
       }),
       slide({

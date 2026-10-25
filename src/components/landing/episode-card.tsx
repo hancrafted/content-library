@@ -3,15 +3,19 @@ import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/comp
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { EpisodeLinks } from '@/components/landing/episode-links';
 import { ReleaseDate } from '@/components/landing/episode-release-date';
-import { TAG_ICONS } from '@/components/landing/episode-visuals';
+import { THEME_ICONS } from '@/components/landing/episode-visuals';
 import type { VideoLabels } from '@/components/landing/episode-youtube-link';
-import type { Locale } from '@/lib/locale.pure';
+import { localizePath, type Locale } from '@/lib/locale.pure';
+import { conceptRoute } from '@/lib/routes';
 import type { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 
 /** The strings a card draws that are not on the card itself. */
 export interface CardLabels extends VideoLabels {
   readonly open: string;
   readonly comingSoon: string;
+  /** What marks a Concept link as leading to an English page, on a page in another locale. */
+  readonly conceptInEnglish: { readonly mark: string; readonly label: string };
 }
 
 type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
@@ -23,24 +27,48 @@ export function cardLabels(t: LandingT): CardLabels {
     comingSoon: t('episodeOverview.comingSoon'),
     watchVideo: t('episodeOverview.watchVideo'),
     newTab: t('episodeOverview.newTab'),
+    conceptInEnglish: {
+      mark: t('episodeOverview.conceptInEnglish.mark'),
+      label: t('episodeOverview.conceptInEnglish.label'),
+    },
   };
 }
 
 const META = 'text-caption text-muted-foreground';
 
-/** The Episode's Tags as plain labels: no filter acts on them, and each explains itself on hover. */
-function CardTags({ card }: { card: EpisodeCard }) {
-  if (card.tags.length === 0) return null;
+interface ConceptsProps {
+  card: EpisodeCard;
+  locale: Locale;
+  inEnglish: CardLabels['conceptInEnglish'];
+}
+
+/**
+ * The Episode's top Concepts, each a link to its Concept page above the card's own link, explaining itself on hover.
+ * A Concept page is English only (design-ADR 0016), so on a page in another locale the link says so.
+ */
+function CardConcepts({ card, locale, inEnglish }: ConceptsProps) {
+  if (card.concepts.length === 0) return null;
+  const foreign = locale !== 'en';
   return (
-    <ul data-episode-tags className="relative z-20 flex flex-wrap gap-1.5">
-      {card.tags.map((tag) => (
-        <li
-          key={tag.id}
-          data-tag={tag.id}
-          title={tag.tooltip}
-          className="rounded-full bg-muted px-2 py-0.5 text-caption text-muted-foreground"
-        >
-          {tag.label}
+    <ul data-episode-concepts className="relative z-20 flex flex-wrap gap-1.5">
+      {card.concepts.map((concept) => (
+        <li key={concept.id} data-concept={concept.id}>
+          <Link
+            href={localizePath(conceptRoute(concept.id), 'en')}
+            hrefLang="en"
+            title={concept.tooltip}
+            className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-caption text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/50"
+          >
+            {concept.label}
+            {foreign && (
+              <>
+                <span aria-hidden data-concept-in-english className="font-semibold tracking-wider">
+                  {inEnglish.mark}
+                </span>
+                <span className="sr-only">{inEnglish.label}</span>
+              </>
+            )}
+          </Link>
         </li>
       ))}
     </ul>
@@ -87,14 +115,14 @@ function dataOf(card: EpisodeCard) {
     'data-episode-card': '',
     'data-episode-slug': card.slug,
     'data-episode-status': card.status,
-    'data-lead-tag': card.leadTag.id,
+    'data-theme-concept': card.themeConcept.id,
     'data-format': card.format.id,
   };
 }
 
 /**
- * One Episode as a card, in the landing page's style: the lead Tag's accent and
- * icon, title, caption, Tags, release date and video. A published card is a link
+ * One Episode as a card, in the landing page's style: the theme Concept's accent and
+ * icon, title, caption, Concepts, release date and video. A published card is a link
  * as a whole; an announced-only one is muted and goes nowhere.
  */
 export function EpisodeCardView({
@@ -111,13 +139,13 @@ export function EpisodeCardView({
       variant={variant}
       linked={isLinked(card)}
       accent={card.accent}
-      icon={TAG_ICONS[card.icon]}
+      icon={THEME_ICONS[card.icon]}
       className={className}
       data={dataOf(card)}
     >
       <CardTitle variant={variant} title={card.title} route={card.route} locale={locale} level={headingLevel} />
       <CardCaption variant={variant}>{card.caption}</CardCaption>
-      <CardTags card={card} />
+      <CardConcepts card={card} locale={locale} inEnglish={labels.conceptInEnglish} />
       <CardFooter card={card} variant={variant} labels={labels} showFormat={showFormat} />
     </CardShell>
   );

@@ -7,6 +7,7 @@ export const episodeMetadata = {
   visibility: 'unlisted',
   status: 'published',
   format: 'short',
-  tags: ['agentic-ai'],
+  concepts: ['agentic-ai'],
+  applyThemeFromConcept: 'agentic-ai',
   publishedOn: '2026-10-23',
 } as const satisfies PublishedEpisodeMetadata;

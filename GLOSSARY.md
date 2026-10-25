@@ -19,8 +19,14 @@ _Avoid_: Episode index, catalog, episode list, manifest
 **Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
-**Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
-_Avoid_: Topic, category, theme, label, keyword
+**Concept**: one subject the evidence and the Episodes are grouped under: one markdown file at `docs/llm-wiki/concepts/<id>/concept.md` whose id is its kebab-case English name, never renamed (a better name becomes an alias). It sits in a hierarchy by `broader` (its parents); `narrower` is derived, never written. It renders in English only at `/concepts/<id>`.
+_Avoid_: Tag, Topic, category, keyword
+
+**Top Concept**: a Concept with no parent (`broader: []`). The seven top Concepts are the closed set of themes: each has an icon and an accent, and a new one is a design decision, not a content edit. An Episode lists the top Concepts it teaches, and its card shows them, linked to their pages.
+_Avoid_: Root concept, theme tag, lead Tag
+
+**applyThemeFromConcept**: the field of an Episode's metadata that names one of its top Concepts, whose icon and accent its card draws.
+_Avoid_: Lead Tag, look
 
 **Event**: a dated occasion of one kind (a workshop, a webinar) that presents one Playlist to an Audience. It owns no Slides, holds no text and has no visibility or status of its own: its Playlist's visibility is its own, and its date decides whether it is past.
 _Avoid_: Workshop (a kind of Event, not the record), session, booking
@@ -54,8 +60,14 @@ _Avoid_: Sitenav, sidebar
 **Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
-**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
+**Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and another Episode reuses a Slide by **Reference**, never by a copy. Its slug is unique across every Episode and the Slide pool; only a Title slide's may repeat. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
+
+**Slide pool**: one flat folder of Slide folders, `src/components/slide-pool/`, holding every Slide a second Episode reuses. A Slide lives in its Episode's `slides/` until its first reuse, when `npm run slides:reuse` moves its folder there unchanged: slug, text and anchors stay, so no published URL moves.
+_Avoid_: Shared slides, library (the Slide library is the Master slides), common folder
+
+**Reference (Slide)**: an Episode's listing of a pool Slide in one of its Sections: an import and a list entry, nothing copied. The Slide renders the same in every Episode that holds it; its anchor comes from its place in each, and so does the target of its `slideHref` link to a sibling: a sibling the Episode lacks fails the build unless the link falls back to plain text.
+_Avoid_: Link, alias, copy, symlink
 
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
@@ -77,6 +89,9 @@ _Avoid_: Theme, key visual
 
 **Slide header**: the Eyebrow, title and caption above a titled Slide's Scene. The Slide wrapper renders it for every Episode whose record does not set `header: 'authored'`, and types it in the first time the Slide is active, once.
 _Avoid_: Title block, heading area
+
+**Definition Slide**: a page slide that teaches one Concept and declares it with `defines: <concept-id>`; one that names no Concept fails the build.
+_Avoid_: Glossary slide, term slide
 
 **Eyebrow**: the small uppercase line above a page slide's title in its Slide header: its Section's title on the left, its place among the Section's page slides (`n / N`) on the right. Computed from the table of contents, never authored; section slides and the Title slide have none.
 _Avoid_: Kicker, overline, label

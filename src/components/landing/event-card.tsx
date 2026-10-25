@@ -1,11 +1,11 @@
 import { CardArrow, CardShell, CardTitle } from '@/components/landing/card-shell';
 import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
-import { TAG_ACCENTS } from '@/components/landing/episode-visuals';
+import { THEME_ACCENTS } from '@/components/landing/episode-visuals';
 import type { EventCard } from '@/components/landing/event-card.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { CalendarDays } from 'lucide-react';
 
-const WHEN = TAG_ACCENTS.primary.ink;
+const WHEN = THEME_ACCENTS.primary.ink;
 
 export interface EventCardProps {
   card: EventCard;
@@ -34,7 +34,7 @@ function EventDate({ card }: { card: EventCard }) {
 
 /**
  * One Event as a card, in the Episode card's style: the calendar icon in the primary accent,
- * the date first, the title as the card's one link, the Episode count where an Episode shows its Tags;
+ * the date first, the title as the card's one link, the Episode count where an Episode shows its Concepts;
  * no description, which the Event's own page carries.
  */
 export function EventCardView({ card, locale, headingLevel, className }: EventCardProps) {

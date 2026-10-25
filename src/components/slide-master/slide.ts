@@ -11,6 +11,7 @@ import type {
   RichTag,
   RuntimeKit,
   SegmentSpec,
+  SlideHref,
   TitleComponent,
 } from './slide-base';
 
@@ -46,14 +47,18 @@ export type OwnTranslator<M extends SlideMessages> = ReturnType<typeof createTra
  * only its own file; `ref`, `marker`, `Marker` and `target` take only the
  * notes it declares.
  * `slideHref` takes any slug: the container fails the build for one that is not
- * a Slide of the same Episode, since the Slide cannot know which Episode it is in.
+ * a Slide of the same Episode, since the Slide cannot know which Episode it is in,
+ * unless the call site opts into the text fallback.
  */
 export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
   readonly t: OwnTranslator<M>;
   /** The page's locale, for formatting a number or date the Translation file does not hold. */
   readonly locale: Locale;
-  /** The localized `href` of another Slide of this Episode: its page path and the anchor its position gives it. */
-  readonly slideHref: (slug: string) => string;
+  /**
+   * The localized `href` of a sibling Slide in this Episode: its page path and the anchor its position gives it.
+   * With `{ fallback: 'text' }`, a sibling the Episode does not hold gives `undefined`: render the text unlinked.
+   */
+  readonly slideHref: SlideHref;
   /** A string leaf as written, `{name}` placeholders unfilled, for a client component to fill with `fillTemplate`. */
   readonly template: (key: OwnTemplateKey<M>) => string;
   /** The `t.rich` tag for a Context reference to one of this Slide's notes. */
@@ -82,6 +87,8 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly segments: readonly SegmentSpec[];
   /** The slug of the note whose Context marker follows the caption, when a term in it needs a source. */
   readonly captionNote?: string;
+  /** A Definition Slide's Concept: the id of the Concept it teaches. The content store fails one that names no Concept. */
+  readonly defines?: string;
   readonly content: (kit: RuntimeKit) => ReactNode;
 }
 
@@ -100,6 +107,11 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
   /** One of the Slide's notes: its Context marker follows the caption (a term in the caption that needs a source). */
   readonly captionNote?: N['slug'];
+  /**
+   * Makes this page Slide a Definition Slide: the id of the Concept it teaches
+   * (`docs/llm-wiki/concepts/<id>/concept.md`). The content store fails one that names no Concept.
+   */
+  readonly defines?: string;
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
@@ -115,6 +127,7 @@ export function slide<
     notes: spec.notes ?? [],
     segments: spec.segments ?? [],
     ...(spec.captionNote !== undefined && { captionNote: spec.captionNote }),
+    ...(spec.defines !== undefined && { defines: spec.defines }),
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
     content: spec.content as unknown as Slide['content'],
   };

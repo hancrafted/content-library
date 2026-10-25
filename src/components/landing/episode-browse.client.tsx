@@ -3,20 +3,20 @@
 import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
 import {
   browseView,
+  conceptChoices,
   hasActiveFilters,
   INITIAL_SELECTION,
   resultsText,
   showsFormat,
-  tagChoices,
-  toggleTag,
+  toggleConcept,
   type BrowseSelection,
   type ResultsLabels,
 } from '@/components/landing/episode-browse.pure';
 import { EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { SearchBox, TagChips, type FilterLabels } from '@/components/landing/episode-filters';
+import { ConceptChips, SearchBox, type FilterLabels } from '@/components/landing/episode-filters';
 import { Button } from '@/components/ui/button';
-import type { TagId } from '@/lib/episode-overview';
+import type { TopConceptId } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import { cn } from '@/lib/utils';
@@ -85,8 +85,8 @@ function useBrowse(cards: readonly EpisodeCard[]) {
     search,
     active: hasActiveFilters(selection),
     view: browseView(cards, selection),
-    tags: tagChoices(cards, selection),
-    toggleTag: (tag: TagId) => setSelection((prev) => toggleTag(prev, tag)),
+    concepts: conceptChoices(cards, selection),
+    toggleConcept: (concept: TopConceptId) => setSelection((prev) => toggleConcept(prev, concept)),
     setQuery: (query: string) => setSelection((prev) => ({ ...prev, query })),
     toggleExpanded: () => setSelection((prev) => ({ ...prev, expanded: !prev.expanded })),
     reset: () => {
@@ -99,11 +99,11 @@ function useBrowse(cards: readonly EpisodeCard[]) {
 type Browse = ReturnType<typeof useBrowse>;
 
 function BrowseControls({ browse, labels }: { browse: Browse; labels: BrowseLabels }) {
-  const { selection, tags } = browse;
+  const { selection, concepts } = browse;
   return (
     <div data-browse-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
       <SearchBox query={selection.query} labels={labels} onChange={browse.setQuery} inputRef={browse.search} />
-      <TagChips options={tags} selected={selection.tags} labels={labels} onToggle={browse.toggleTag} />
+      <ConceptChips options={concepts} selected={selection.concepts} labels={labels} onToggle={browse.toggleConcept} />
     </div>
   );
 }
@@ -169,7 +169,7 @@ interface BrowseProps {
 }
 
 /**
- * The Browse block: a search box, Tag chips, a Format control when there is more than one
+ * The Browse block: a search box, Concept chips, a Format control when there is more than one
  * Format, and a grid of every Episode card. The grid is in the server HTML in
  * full; filtering and the cap only toggle `hidden`, so find-in-page and a
  * script-less visit still see all of it. Leaving the page and coming back

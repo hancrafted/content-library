@@ -5,9 +5,9 @@ title: 'Episode Page'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,slide-pool,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,slide-pool,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
 description: 'How an Episode page is built: the Slide is the unit, one folder carrying its own text, composed into Sections by a typed record and rendered by one container; Scene is free JSX, position sets headings, strings and anchors keyed by Slide slug, reading time counted from the Voice script, Episode CSS scoped to its page.'
 ---
 
@@ -82,7 +82,7 @@ flowchart LR
 ### 5. Strings and anchors keyed by Slide slug
 
 1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches the English shape. Episode text: `<episode>/i18n/`.
-2. Published anchors MUST stay (`published-anchors.json`, at publication); `slideHref` MUST name a Slide of it.
+2. Published anchors MUST stay (`published-anchors.json`, at publication); `slideHref` MUST name a Slide of it unless it falls back to text.
 
 ### 6. Table of contents and Context drawer read the record
 
@@ -145,7 +145,7 @@ flowchart LR
 ## Compliance and Enforcement
 
 1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, unregistered slug, foreign key, undeclared note or untitled Section opener fails `tsc`.
-2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
+2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected unless it falls back to text, and one pool Slide's link resolved per Episode; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.
 

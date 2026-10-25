@@ -7,6 +7,7 @@ export const episodeMetadata = {
   visibility: 'public',
   status: 'published',
   format: 'foundations',
-  tags: ['markdown', 'context-engineering'],
+  concepts: ['markdown-documentation', 'context-engineering'],
+  applyThemeFromConcept: 'markdown-documentation',
   publishedOn: '2026-10-09',
 } as const satisfies PublishedEpisodeMetadata;

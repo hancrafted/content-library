@@ -86,9 +86,9 @@ page-template/i18n/en.json              title, caption, description
 
 ## Episode overview entries
 
-Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, Format, Tags (lead Tag first) and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
+Each Episode declares its own overview metadata in `episodes/<slug>/episode-metadata.ts`: status, Format, the top Concepts it teaches (`concepts`), the one whose look its card takes (`applyThemeFromConcept`) and, once published, its publish date. It holds ids only, no strings. `listEpisodes()` in `src/components/episodes/episode-repository.ts` collects every Episode's metadata, and the landing page reads only that. The central lists live in `src/lib/episode-overview.ts`:
 
-- `TAGS`: the closed Tag vocabulary, each Tag with an icon and an accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
+- `CONCEPT_THEMES`: one icon and accent per top Concept, the closed set `applyThemeFromConcept` may name; an Episode declares no look of its own. Its order is the order of the filter chips. The Concepts themselves are files in `docs/llm-wiki/concepts/`; the content store checks the two hold the same top Concepts.
 - `FORMATS`: the closed list of Formats.
 - `FEATURED`: exactly three published slugs, lead first.
 
@@ -97,7 +97,8 @@ An entry reads its text from:
 - An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry (`findEpisode(slug).messages[locale]`).
 - An Upcoming Episode with no page: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when its page is written.
 - Every Episode: `landing.episodeOverview.formats.<format>`, one per id in `FORMATS`. The Format control and label stay hidden until two Formats are in use.
-- Every Tag in the vocabulary: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; a test fails when an Episode lists an id outside `TAGS`, lists none, or when a Tag lacks either key in en or de.
+- Every top Concept: `landing.episodeOverview.concepts.<id>.name` and `.tooltip`, one per id in `CONCEPT_THEMES`: the card's chip, a link to the English Concept page. On a German page the chip carries `landing.episodeOverview.conceptInEnglish` (`.mark` shown, `.label` for screen readers). The content store fails an Episode that names a Concept outside the top Concepts; a test fails when a top Concept lacks either key in en or de.
+- The Concept page (`/concepts/<id>`, English only): its name, definition and body come from the Concept file; its labels from `conceptPage`.
 - Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the overview's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
 - The `/episodes` heading and its one-line intro: `episodesPage.title` and `episodesPage.intro`.
 

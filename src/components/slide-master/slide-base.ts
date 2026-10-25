@@ -65,11 +65,28 @@ export interface RuntimeTranslator {
   has(key: string): boolean;
 }
 
+/** How a link to a sibling the Episode does not hold behaves: `text` renders the call site's text without a link. */
+export interface SlideHrefOptions {
+  readonly fallback: 'text';
+}
+
+/**
+ * The localized `href` of a sibling Slide, named by the slug its author wrote
+ * and resolved to this Episode's placement of it (design-ADR 0016, _Slide
+ * reuse_ rule 5). A sibling the Episode does not hold throws, failing the
+ * build, unless the call site opts into `{ fallback: 'text' }`: it then gets
+ * `undefined` and renders its text without a link.
+ */
+export interface SlideHref {
+  (slug: string): string;
+  (slug: string, options: SlideHrefOptions): string | undefined;
+}
+
 /** The kit as the container builds it, by runtime key. Every `SlideKit` accepts it (see the type tests). */
 export interface RuntimeKit {
   readonly t: RuntimeTranslator;
   readonly locale: Locale;
-  readonly slideHref: (slug: string) => string;
+  readonly slideHref: SlideHref;
   readonly template: (key: string) => string;
   readonly ref: (note: string) => RichTag;
   readonly marker: (note: string, className?: string) => RichTag;

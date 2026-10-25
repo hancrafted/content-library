@@ -29,14 +29,65 @@ const isoDay = (what: string) =>
 const slugOf = (what: string) => z.string().regex(KEBAB, 'must be kebab-case').describe(what);
 
 /** What each record kind is: the name every refusal carries. */
-export type RecordKind = 'tag' | 'episode' | 'event' | 'playlist' | 'research' | 'slide-source';
+export type RecordKind =
+  'theme' | 'concept' | 'episode' | 'event' | 'playlist' | 'research' | 'slide-source' | 'slide' | 'definition-slide';
 
-export const tagSchema = z
+export const themeSchema = z
   .object({
-    icon: z.enum(ICONS).describe('The icon the landing draws on a card led by this Tag, by name'),
-    accent: z.enum(ACCENTS).describe('The colour family a card led by this Tag draws; the design owns the shade'),
+    icon: z.enum(ICONS).describe('The icon the landing draws on a card themed by this top Concept, by name'),
+    accent: z
+      .enum(ACCENTS)
+      .describe('The colour family a card themed by this top Concept draws; the design owns the shade'),
   })
-  .describe('The look one Tag gives its Episodes');
+  .describe('The look one top Concept gives the Episode cards that name it in applyThemeFromConcept');
+
+const conceptIds = (what: string) => z.array(slugOf('A Concept id: the folder name of its concept.md')).describe(what);
+
+const verification = z
+  .object({
+    by: z.string().min(1).describe('Who confirmed the file, as an OKF actor'),
+    at: z.string().min(1).describe('When they confirmed it, a UTC datetime'),
+  })
+  .describe('One confirmation of the file');
+
+export const conceptSchema = z
+  .strictObject({
+    type: z.literal('concept').describe('The kind of evidence file this is'),
+    title: z.string().min(1).describe('The Concept name, in English'),
+    description: z
+      .string()
+      .min(1)
+      .max(200)
+      .describe('The one-sentence scoping definition against its neighbours, at most 200 characters'),
+    aliases: z
+      .array(z.string().min(1))
+      .optional()
+      .describe('Other names for the Concept; a better name becomes an alias, the id never changes'),
+    broader: conceptIds('SKOS broader: the parent Concept ids; [] makes a top Concept, the only kind with a theme'),
+    related: conceptIds(
+      'SKOS related: associative Concept ids, stored on one side only; the store mirrors them',
+    ).optional(),
+    generated: z
+      .object({
+        by: z.string().min(1).describe('Who or what wrote the file, as an OKF actor'),
+        at: z.string().min(1).describe('When the file was written, a UTC datetime'),
+      })
+      .describe('The provenance of the file'),
+    stale_after: z.string().min(1).optional().describe('The instant after which the definition needs a re-check'),
+    verified: z
+      .union([verification, z.array(verification)])
+      .optional()
+      .describe('OKF trust: who confirmed the file and when, one { by, at } or a list of them'),
+  })
+  .describe('The frontmatter of one Concept file; narrower is derived by the store, never written');
+
+export const definitionSlideSchema = z
+  .object({
+    episode: slugOf('The Episode whose Slide it is'),
+    slide: slugOf('The Slide slug'),
+    defines: slugOf('The id of the Concept the Slide defines'),
+  })
+  .describe('A page Slide that teaches one Concept and declares it in defines');
 
 const visibility = (what: string) =>
   z.enum(VISIBILITIES).describe(`${what}; unlisted is not private, and attendees waits for horizon 3`);
@@ -44,9 +95,13 @@ const visibility = (what: string) =>
 const sharedEpisode = {
   slug: slugOf('The Episode slug: its folder name and the last part of its URL, unique across all Episodes'),
   format: z.enum(['foundations', 'teardown', 'short']).describe('The Episode format the overview filters by'),
-  tags: z
+  concepts: z
     .array(z.string())
-    .describe('Tag ids from the closed vocabulary, lead Tag first: it gives the Episode card its icon and accent'),
+    .min(1)
+    .describe('The top Concepts the Episode teaches, in the order its card names them'),
+  applyThemeFromConcept: z
+    .string()
+    .describe('The top Concept, one of concepts, whose icon and accent the Episode card draws'),
 };
 
 export const episodeSchema = z
@@ -111,6 +166,22 @@ export const slideSourceSchema = z
   })
   .describe('One source a Speaker note cites');
 
+/** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
+export const SLIDE_FOLDER = /^src\/components\/(episodes\/[a-z0-9-]+\/slides|slide-pool)\/[a-z0-9-]+$/;
+
+export const slideFolderSchema = z
+  .object({
+    path: z
+      .string()
+      .regex(SLIDE_FOLDER)
+      .describe("The Slide folder, from the repository root: in an Episode's slides/ or in the Slide pool"),
+    slug: slugOf('The Slide slug: the folder name, unique across every Episode and the Slide pool'),
+    title: z
+      .boolean()
+      .describe("Whether the folder holds an Episode's Title slide, whose slug is exempt from uniqueness"),
+  })
+  .describe('One Slide folder, wherever it lives');
+
 export const researchSchema = z
   .object({
     type: z.literal('research').describe('The kind of Staging file this is'),
@@ -137,13 +208,19 @@ export const researchSchema = z
 
 /** The schemas the store loads each kind through, for a caller that needs the contract itself. */
 export const CONTENT_SCHEMAS = {
-  tag: tagSchema,
+  theme: themeSchema,
+  concept: conceptSchema,
+  definitionSlide: definitionSlideSchema,
   episode: episodeSchema,
   event: eventSchema,
   playlist: playlistSchema,
   slideSource: slideSourceSchema,
+  slideFolder: slideFolderSchema,
   research: researchSchema,
 } as const;
 
 export type SlideSource = z.infer<typeof slideSourceSchema>;
+export type ConceptFrontmatter = z.infer<typeof conceptSchema>;
+export type DefinitionSlide = z.infer<typeof definitionSlideSchema>;
+export type SlideFolder = z.infer<typeof slideFolderSchema>;
 export type ResearchFrontmatter = z.infer<typeof researchSchema>;

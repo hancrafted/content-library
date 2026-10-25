@@ -20,7 +20,7 @@ const PUBLISHED_SLUGS = [
   'ai-gives-you-more-work',
 ];
 const DRAFT_SLUGS: readonly string[] = [];
-const TAGGED = { slug: 'ai-token-economy', tags: ['cost', 'agentic-ai'] };
+const TAGGED = { slug: 'ai-token-economy', concepts: ['ai-cost', 'agentic-ai'] };
 
 describe('/episodes index page', () => {
   it.each(LOCALES)('renders the browse grid on the /episodes page for %s', (locale) => {
@@ -57,11 +57,12 @@ describe('/episodes index page', () => {
     expect({ slug: expected.slug, dateTime: date.attr('datetime'), text: date.text() }).toEqual(expected);
   });
 
-  it.each(LOCALES)('offers unpressed multi-select tag chips with counts on the /episodes page for %s', (locale) => {
+  it.each(LOCALES)('offers unpressed multi-select Concept chips with counts on the /episodes page for %s', (locale) => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);
     const $ = exportedPage(url);
-    const expected = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales'].length;
+    const expected = ['context-engineering', 'agentic-ai', 'ai-adoption', 'markdown-documentation', 'ai-cost', 'sales']
+      .length;
 
     // ACT
     const chips = $('[data-browse-controls] [role="group"] button[aria-pressed]');
@@ -169,18 +170,18 @@ describe('/episodes index page', () => {
     expect(arrows.length).toBe(expected);
   });
 
-  it.each(LOCALES)('shows each Tag on its card with a tooltip on the /episodes page for %s', (locale) => {
+  it.each(LOCALES)('shows each top Concept on its card with a tooltip on the /episodes page for %s', (locale) => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);
     const $ = exportedPage(url);
 
     // ACT
-    const tags = $(`[data-episode-card][data-episode-slug="${TAGGED.slug}"] [data-tag]`);
-    const ids = tags.toArray().map((tag) => $(tag).attr('data-tag'));
-    const untitled = tags.toArray().filter((tag) => !$(tag).attr('title'));
+    const chips = $(`[data-episode-card][data-episode-slug="${TAGGED.slug}"] [data-concept]`);
+    const ids = chips.toArray().map((chip) => $(chip).attr('data-concept'));
+    const untitled = chips.toArray().filter((chip) => !$(chip).find('a').attr('title'));
 
     // ASSERT
-    expect(ids).toEqual(TAGGED.tags);
+    expect(ids).toEqual(TAGGED.concepts);
     expect(untitled).toEqual([]);
   });
 });
