@@ -469,6 +469,12 @@
     "shortcut": "Shortcut",
     "sourcesCount": "Sources ({count})",
     "opensInNewTab": "opens in a new tab",
+    "researchQuestion": "Research question",
+    "confidence": {
+      "settled": "Settled",
+      "contested": "Contested",
+      "open": "Open"
+    },
     "menu": {
       "label": "More options",
       "layout": "Layout",
@@ -522,6 +528,7 @@
     "open": "Open",
     "informs": "Informs",
     "sources": "Sources",
-    "newTab": "opens in a new tab"
+    "newTab": "opens in a new tab",
+    "citedBy": "Speaker notes that cite it"
   }
 }

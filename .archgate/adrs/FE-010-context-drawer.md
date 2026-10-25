@@ -41,36 +41,36 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 
 ### 2. In the DOM, printed (📜 Rule: `print-reveals-context`)
 
-1. The server MUST render all notes, scripts and sources into one context slot, entries tagged by Slide.
+1. The server MUST render all notes, scripts and sources into one context slot, tagged by Slide.
 2. A closed drawer MUST hide with `invisible` plus a transform, never `hidden`, `display: none` or `inert`.
 3. `globals.css` MUST reveal the context slot in an `@media print` block.
 
 ### 3. Typed content
 
-1. A note: `header`, `description`, optional `sources` and `image`, required `target`. A segment: `title`, `keywords`, `script`, optional `bridge`. Neither MAY carry design.
+1. A note: `header`, `description`, optional `sources` and `image`, required `target`. A segment: `title`, `keywords`, `script`, optional `bridge`. No design.
 2. A description cites by `[n]` markers naming its note's sources.
 3. Notes, segments and sources key on a kebab-case `slug`, never a position.
-4. A segment's time span MUST be counted from its words; it declares no time.
+4. A segment's time span MUST be counted from its words, never declared.
 
 ### 4. Targets
 
-1. A note's `target` MUST be a short name (`prose`, `chart`), marked on one element inside its Slide's wrapper and found there only.
+1. A note's `target` MUST be a short name (`prose`, `chart`), marked on one element in its Slide's wrapper, found only there.
 2. A `ContextRef` wraps a phrase, shows no number, names its note by slug, is a `<button type="button">`, carries no id or target.
 
 ### 5. Interaction
 
 1. `Alt+N` toggles, Escape closes; focus enters on open, returns on close.
-2. The drawer MUST be a client leaf reached only from the Episode page container and its adapter.
+2. The drawer MUST be a client leaf reached only from the Episode page container and adapter.
 
 ### 6. Strings and links
 
 1. Translation keys follow `docs/features/episode-translation-keys.md`; chrome under `contextDrawer.*`.
-2. A source MUST be an `https` link named as opening a new tab.
+2. A `url` source MUST be an `https` link named as opening a new tab; a `research` one links its promoted question's page.
 
 ### 7. Card and modes
 
-1. Fixed card; only `transform` animates. Beside (`xl`+) widens the right inset at once; over covers it.
-2. Layout MUST be the `drawerMode` preference; open state and tab stay in memory.
+1. Fixed card; only `transform` animates. Beside (`xl`+) widens the right inset at once; over covers.
+2. Layout MUST be the `drawerMode` preference; open state and tab live in memory.
 
 ### 8. Input only
 
@@ -95,7 +95,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 2. **DON'T** put the `hidden` attribute, `display: none` or `inert` on the context slot. (Decision 2)
 3. **DON'T** add a layout, style, placement or time field to a note or segment. (Decision 3)
 4. **DON'T** render the drawer from an Episode file. (Decision 5)
-5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 6)
+5. **DON'T** show a `url` source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 6)
 6. **DON'T** transition width, padding or margins for the card, or give it a layout spacer or grid column. (Decision 7)
 7. **DON'T** read Episode, table-of-contents or Translation code from the drawer, or number a `ContextRef`. (Decisions 4 and 8)
 

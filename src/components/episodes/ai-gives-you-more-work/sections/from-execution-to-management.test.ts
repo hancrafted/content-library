@@ -27,6 +27,7 @@ function sceneOf(slug: string, locale: Locale = 'en'): string {
     placed: PLACED,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
     header: 'shared',
+    research: [],
   });
   return renderToStaticMarkup(localized.content);
 }

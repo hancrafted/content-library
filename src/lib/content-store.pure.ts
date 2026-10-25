@@ -1,5 +1,6 @@
 import type { z } from 'zod';
 import { canonicalEpisodeProblems, episodeSlidesSchema, type SlideList } from './canonical-episode.pure';
+import { citationProblems } from './citations.pure';
 import type { ConceptFile } from './concept-record.pure';
 import {
   conceptProblems,
@@ -16,11 +17,9 @@ import {
   eventSchema,
   playlistSchema,
   slideFolderSchema,
-  slideSourceSchema,
   type DefinitionSlide,
   type RecordKind,
   type SlideFolder,
-  type SlideSource,
 } from './content-schemas.pure';
 import { deliveryProblems, episodePageProblems, type DeliveryRecords } from './delivery.pure';
 import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata.pure';
@@ -30,6 +29,7 @@ import type { PlaylistRecord } from './playlists.pure';
 import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
 import { slideFolderProblems } from './slide-slugs.pure';
+import { slideSourceSchema, type SlideSource } from './slide-source.pure';
 import { duplicates, researchIdRefusals } from './unique-ids.pure';
 
 /*
@@ -137,6 +137,7 @@ interface Sound {
   readonly definitionSlides: readonly DefinitionSlide[];
   readonly episodeSlides: readonly SlideList[];
   readonly research: readonly ResearchRecord[];
+  readonly slideSources: readonly SlideSource[];
 }
 
 /** What evidence and Slides say about it: the hierarchy sound, every `defines` and `informs` a Concept. */
@@ -167,6 +168,7 @@ function crossChecks(sound: Sound): Refusal[] {
   const topConcepts = sound.concepts.filter(isTopConcept).map(({ id }) => id);
   return [
     ...evidenceChecks(sound),
+    ...citationProblems(sound.slideSources, sound.research, episodes),
     ...episodeConceptProblems(episodes, topConcepts).map(own('episode')),
     ...duplicates(slugs).map((slug) => own('episode')(`${slug}: the slug is used twice`)),
     ...episodePageProblems(episodes).map(own('episode')),
@@ -207,6 +209,7 @@ function soundOf(read: ReturnType<typeof readEach>, raw: RawContent): Sound {
     definitionSlides: read.definitionSlides.value,
     episodeSlides: read.episodeSlides.value,
     research: read.research.value,
+    slideSources: read.slideSources.value as SlideSource[],
   };
 }
 
@@ -233,7 +236,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
     events: read.events.value as EventRecord[],
     playlists: read.playlists.value,
     research: read.research.value,
-    slideSources: read.slideSources.value,
+    slideSources: sound.slideSources,
     slides: read.slides.value,
   };
   return { ok: true, store };

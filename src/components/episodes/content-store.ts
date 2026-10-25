@@ -58,8 +58,7 @@ function slideSources(): RawContent['slideSources'] {
           episode: slug,
           slide,
           note: note.slug,
-          slug: source.slug,
-          url: source.url,
+          ...source,
         })),
       ),
     );

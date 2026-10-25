@@ -50,8 +50,12 @@ async function translatorOf(): Promise<RuntimeTranslator> {
 
 /** The Slides of an Episode of these Sections, as the container hands them to the table of contents. */
 async function slidesOf(sections: readonly Section[]) {
-  return (await recordContent(episode({ slug: 'page-template', messages: EPISODE, sections }), 'en', translatorOf))
-    .slides;
+  return (
+    await recordContent(episode({ slug: 'page-template', messages: EPISODE, sections }), 'en', {
+      translatorOf: translatorOf,
+      research: [],
+    })
+  ).slides;
 }
 
 describe('success cases', () => {
