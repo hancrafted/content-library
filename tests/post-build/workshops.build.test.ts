@@ -50,7 +50,7 @@ describe('/workshops page', () => {
     expect(card.find('[data-workshop-episode-count]').text()).toBe(expected.count);
   });
 
-  it.each(LOCALES)('draws the Workshop card with the quiet arrow and no Tags for %s', (locale) => {
+  it.each(LOCALES)('draws the Workshop card with the quiet arrow and no Concepts for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.workshops, locale));
     // ACT
@@ -58,7 +58,7 @@ describe('/workshops page', () => {
     // ASSERT
     expect(card.attr('data-card-variant')).toBe('workshop');
     expect(card.find('[data-open-cue="arrow"]').length).toBe(1);
-    expect(card.find('[data-tag], [data-episode-tags]').length).toBe(0);
+    expect(card.find('[data-concept], [data-episode-concepts]').length).toBe(0);
   });
 
   it.each(LOCALES)('links each card to its Workshop page in the locale for %s', (locale) => {

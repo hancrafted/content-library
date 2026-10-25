@@ -5,6 +5,7 @@ export const episodeMetadata = {
   slug: 'ai-attention-span',
   status: 'published',
   format: 'foundations',
-  tags: ['context-engineering', 'workflow'],
+  concepts: ['context-engineering'],
+  applyThemeFromConcept: 'context-engineering',
   publishedOn: '2026-10-21',
 } as const satisfies PublishedEpisodeMetadata;

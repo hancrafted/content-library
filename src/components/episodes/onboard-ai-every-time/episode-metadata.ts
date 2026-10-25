@@ -5,6 +5,7 @@ export const episodeMetadata = {
   slug: 'onboard-ai-every-time',
   status: 'published',
   format: 'foundations',
-  tags: ['context-engineering', 'agentic-ai', 'workflow'],
+  concepts: ['context-engineering', 'agentic-ai'],
+  applyThemeFromConcept: 'context-engineering',
   publishedOn: '2026-10-20',
 } as const satisfies PublishedEpisodeMetadata;

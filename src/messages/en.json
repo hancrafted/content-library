@@ -68,7 +68,7 @@
       "browseTitle": "Browse all Episodes",
       "search": "Search Episodes",
       "searchPlaceholder": "Search by title or tag",
-      "tagFilter": "Filter by tag",
+      "conceptFilter": "Filter by Concept",
       "showAll": "Show all {count} Episodes",
       "showFewer": "Show fewer",
       "results": {
@@ -78,31 +78,39 @@
       },
       "empty": "No Episodes match these filters yet.",
       "reset": "Reset filters",
-      "tags": {
+      "concepts": {
         "context-engineering": {
           "name": "Context engineering",
           "tooltip": "Giving the AI the right context at the right time"
         },
         "agentic-ai": {
           "name": "Agentic AI",
-          "tooltip": "AI that plans and acts in steps, not just answers"
+          "tooltip": "Handing work to an AI and staying responsible for it"
         },
-        "markdown": {
-          "name": "Markdown",
+        "llm-behaviour": {
+          "name": "LLM behaviour",
+          "tooltip": "How a language model behaves, whatever you feed it"
+        },
+        "ai-adoption": {
+          "name": "AI adoption",
+          "tooltip": "Turning AI use into productivity you can measure"
+        },
+        "markdown-documentation": {
+          "name": "Markdown documentation",
           "tooltip": "Plain-text documents that people and AI both read well"
         },
-        "cost": {
-          "name": "Cost",
+        "ai-cost": {
+          "name": "AI cost",
           "tooltip": "What AI really costs, and where the spend goes"
         },
         "sales": {
           "name": "Sales",
           "tooltip": "Finding, winning and keeping customers"
-        },
-        "workflow": {
-          "name": "Workflow",
-          "tooltip": "How work is split into steps and handed between chats"
         }
+      },
+      "conceptInEnglish": {
+        "mark": "EN",
+        "label": "(page in English)"
       },
       "formats": {
         "foundations": "Foundations",
@@ -495,5 +503,12 @@
         "description": "Working with AI agents in three Episodes: onboard them every time, manage their attention span, and see why they add management work."
       }
     }
+  },
+  "conceptPage": {
+    "eyebrow": "Concept",
+    "aliases": "Also called",
+    "broader": "Broader",
+    "narrower": "Narrower",
+    "related": "Related"
   }
 }

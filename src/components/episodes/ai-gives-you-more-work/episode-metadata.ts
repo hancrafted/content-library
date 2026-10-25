@@ -5,6 +5,7 @@ export const episodeMetadata = {
   slug: 'ai-gives-you-more-work',
   status: 'published',
   format: 'foundations',
-  tags: ['agentic-ai', 'workflow'],
+  concepts: ['agentic-ai', 'ai-adoption'],
+  applyThemeFromConcept: 'agentic-ai',
   publishedOn: '2026-10-21',
 } as const satisfies PublishedEpisodeMetadata;

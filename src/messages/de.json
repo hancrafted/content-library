@@ -68,7 +68,7 @@
       "browseTitle": "Alle Episoden durchstöbern",
       "search": "Episoden durchsuchen",
       "searchPlaceholder": "Nach Titel oder Tag suchen",
-      "tagFilter": "Nach Tag filtern",
+      "conceptFilter": "Nach Konzept filtern",
       "showAll": "Alle {count} Episoden anzeigen",
       "showFewer": "Weniger anzeigen",
       "results": {
@@ -78,31 +78,39 @@
       },
       "empty": "Zu diesen Filtern gibt es noch keine Episode.",
       "reset": "Filter zurücksetzen",
-      "tags": {
+      "concepts": {
         "context-engineering": {
           "name": "Context Engineering",
           "tooltip": "Der KI zur richtigen Zeit den richtigen Kontext geben"
         },
         "agentic-ai": {
           "name": "Agentische KI",
-          "tooltip": "KI, die in Schritten plant und handelt, statt nur zu antworten"
+          "tooltip": "Arbeit an eine KI abgeben und dafür verantwortlich bleiben"
         },
-        "markdown": {
-          "name": "Markdown",
+        "llm-behaviour": {
+          "name": "LLM-Verhalten",
+          "tooltip": "Wie sich ein Sprachmodell verhält, egal womit man es füttert"
+        },
+        "ai-adoption": {
+          "name": "KI-Einführung",
+          "tooltip": "KI-Nutzung in messbare Produktivität verwandeln"
+        },
+        "markdown-documentation": {
+          "name": "Markdown-Dokumentation",
           "tooltip": "Textdokumente, die Menschen und KI gleich gut lesen"
         },
-        "cost": {
-          "name": "Kosten",
+        "ai-cost": {
+          "name": "KI-Kosten",
           "tooltip": "Was KI wirklich kostet und wohin das Geld fließt"
         },
         "sales": {
           "name": "Vertrieb",
           "tooltip": "Kunden finden, gewinnen und halten"
-        },
-        "workflow": {
-          "name": "Workflow",
-          "tooltip": "Wie Arbeit in Schritte geteilt und zwischen Chats übergeben wird"
         }
+      },
+      "conceptInEnglish": {
+        "mark": "EN",
+        "label": "(Seite auf Englisch)"
       },
       "formats": {
         "foundations": "Grundlagen",
@@ -495,5 +503,12 @@
         "description": "Mit KI-Agenten arbeiten in drei Episoden: jedes Mal neu einarbeiten, ihre Aufmerksamkeitsspanne managen und verstehen, warum sie Management-Arbeit bringen."
       }
     }
+  },
+  "conceptPage": {
+    "eyebrow": "Konzept",
+    "aliases": "Auch genannt",
+    "broader": "Übergeordnet",
+    "narrower": "Untergeordnet",
+    "related": "Verwandt"
   }
 }

@@ -5,6 +5,7 @@ export const episodeMetadata = {
   slug: 'never-too-early-sales',
   status: 'published',
   format: 'foundations',
-  tags: ['sales'],
+  concepts: ['sales'],
+  applyThemeFromConcept: 'sales',
   publishedOn: '2026-10-19',
 } as const satisfies PublishedEpisodeMetadata;
