@@ -9,8 +9,8 @@ import { nextRound, reviewToFeedback } from './spec-feedback.pure.ts';
  */
 
 const SLIDES: readonly SpecSlide[] = [
-  { section: 'why', slug: 'spent', options: ['1a', '1b'] },
-  { section: 'why', slug: 'quiet', options: ['2a', '2b', '2c'] },
+  { section: 'why', slug: 'spent', options: ['1a', '1b'], number: 1 },
+  { section: 'why', slug: 'quiet', options: ['2a', '2b', '2c'], number: 2 },
 ];
 const TITLE = ['0a', '0b', '0c'];
 const NOW = new Date('2026-10-15T10:40:05.123Z');
@@ -91,6 +91,7 @@ describe('success cases', () => {
       text: [...header(1), '- `why--spent` · design — picked: 1a', '- `why--quiet` · design — picked: 2b', ''].join(
         '\n',
       ),
+      flips: [],
     };
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
@@ -117,7 +118,7 @@ describe('success cases', () => {
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 2, now: NOW });
     // ASSERT
-    expect(result).toEqual({ kind: 'saved', file: 'feedback/02/feedback.md', text: expected });
+    expect(result).toEqual({ kind: 'saved', file: 'feedback/02/feedback.md', text: expected, flips: [] });
   });
 
   it('numbers the next round one past the highest round folder', () => {
@@ -148,7 +149,7 @@ describe('success cases', () => {
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, titleSlide: TITLE, round: 1, now: NOW });
     // ASSERT
-    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected });
+    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected, flips: [] });
   });
 });
 
@@ -261,6 +262,6 @@ describe('edge cases', () => {
     // ACT
     const result = reviewToFeedback({ fields, slides: SLIDES, round: 1, now: NOW });
     // ASSERT
-    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected });
+    expect(result).toEqual({ kind: 'saved', file: 'feedback/01/feedback.md', text: expected, flips: [] });
   });
 });

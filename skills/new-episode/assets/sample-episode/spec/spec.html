@@ -1184,29 +1184,38 @@
   The Spec review form, inlined verbatim into every spec/spec.html by write-spec
   (design-ADR 0011). Its fields sit beside what they review and join it by form="spec-review":
   per Option a checkbox name="pick:<slide-slug>" value="<option-id>", per Slide a textarea
-  name="note:<slide-slug>", and one textarea name="note:visual-language".
+  name="note:<slide-slug>", one textarea name="note:visual-language", and per Slide the Slide plan
+  names a candidate for a select name="plan:<slide-slug>" holding reuse, adapt or new.
   npm run episode:spec serves the page and saves the review as the next feedback round.
 -->
 <form id="spec-review" class="spec-review" method="post">
-  <p>Tick the Options you want under each Slide and dictate a note per Slide. A Slide with no tick needs a note.</p>
+  <p>
+    Tick the Options you want under each Slide and dictate a note per Slide. A Slide with no tick needs a note, unless
+    it is reused; a Slide you flip to adapt needs a note on what changes.
+  </p>
   <output name="status" aria-live="polite"></output>
   <button type="submit">Save review</button>
 </form>
 <script>
   (() => {
-    // A Slide with no tick needs a note; ticks and notes survive a reload until a save succeeds.
+    // A Slide with no tick needs a note unless it is reused, a flip to adapt needs one; fields survive a reload until a save succeeds.
     const form = document.getElementById('spec-review');
     const meta = JSON.parse(document.getElementById('spec-meta')?.textContent || '{}');
     const key = 'spec-review:' + (meta.title || location.pathname);
-    const fields = [...form.elements].filter((field) => /^(pick|note):/.test(field.name));
+    const fields = [...form.elements].filter((field) => /^(pick|note|plan):/.test(field.name));
     const isBox = (field) => field.type === 'checkbox';
     const id = (field) => (isBox(field) ? field.name + '=' + field.value : field.name);
     const ticked = (slug) => fields.some((field) => field.name === 'pick:' + slug && field.checked);
+    const plan = (slug) => fields.find((field) => field.name === 'plan:' + slug);
+    const needsNote = (slug) => {
+      const field = plan(slug);
+      if (field && field.value !== field.dataset.current && field.value === 'adapt') return true;
+      if (field && field.dataset.current === 'reuse') return false;
+      return slug !== 'visual-language' && !ticked(slug);
+    };
     const sync = () => {
-      for (const note of fields.filter((field) => !isBox(field))) {
-        const slug = note.name.slice('note:'.length);
-        note.required = slug !== 'visual-language' && !ticked(slug);
-      }
+      for (const note of fields.filter((field) => field.name.startsWith('note:')))
+        note.required = needsNote(note.name.slice('note:'.length));
     };
     const store = () => {
       const draft = fields.map((field) => [id(field), isBox(field) ? field.checked : field.value]);

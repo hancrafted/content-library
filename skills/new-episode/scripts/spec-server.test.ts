@@ -193,6 +193,35 @@ describe('success cases', () => {
     expect(response.headers.get('location')).toBe(expectedLocation);
     expect(saved).toBe(expectedText);
   });
+  it('writes a flip of a Slide at the Spec Gate into the Slide plan beside the round', async () => {
+    // ARRANGE
+    const { folder, base } = await serve();
+    const plan =
+      '# Slide plan\n\n## Slides\n\n- Slide 1: new.\n- Slide 2: adapt lost-in-the-middle; held by ai-attention-span; cites none; changes A sales call.\n';
+    writeFileSync(path.join(folder, 'slide-plan.md'), plan);
+    const spec = SPEC.replace(
+      '<figure data-spec="option" data-option="2b"></figure>',
+      '<figure data-spec="option" data-option="2b"></figure><select name="plan:quiet" data-current="adapt"></select>',
+    );
+    writeFileSync(path.join(folder, 'spec/spec.html'), spec);
+    const fields: [string, string][] = [
+      ['pick:top', '0a'],
+      ['pick:spent', '1a'],
+      ['pick:quiet', '2a'],
+      ['plan:quiet', 'reuse'],
+    ];
+    // ACT
+    const response = await post(base, fields);
+    const saved = readFileSync(path.join(folder, 'slide-plan.md'), 'utf8');
+    // ASSERT
+    expect(response.status).toBe(303);
+    expect(saved).toBe(
+      plan.replace(
+        'adapt lost-in-the-middle; held by ai-attention-span; cites none; changes A sales call.',
+        'reuse lost-in-the-middle; held by ai-attention-span; cites none.',
+      ),
+    );
+  });
 });
 
 describe('failure cases', () => {

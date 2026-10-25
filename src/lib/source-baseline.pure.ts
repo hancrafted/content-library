@@ -71,3 +71,11 @@ export function sourceTrustProblems(
       })),
   ];
 }
+
+/**
+ * The slugs of the Slides whose Speaker notes cite a grandfathered Source, each once: a Run that adapts one moves its
+ * entries to a Research question (Pipeline and evidence rule 7).
+ */
+export function grandfatheredSlides(baseline: readonly SourceBaselineEntry[]): string[] {
+  return [...new Set(baseline.map(({ source }) => source.split('/')[1] ?? ''))].sort();
+}

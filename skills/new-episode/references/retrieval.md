@@ -1,6 +1,6 @@
 # retrieval
 
-Output: `docs/episodes/<slug>/research-plan.md`, which decides per research question whether an existing Research question is reused, refreshed or a new one written, and lists under `## Research jobs` each question that needs a job. No reviewer. It runs in Setup, before `customize-pipeline`, which writes one `write-research` job per listed item and none for a reused question.
+Output: `docs/episodes/<slug>/research-plan.md`, which decides per research question whether an existing Research question is reused, refreshed or a new one written, and lists under `## Research jobs` each question that needs a job. No reviewer. It runs in Setup, after `slide-retrieval` and before `customize-pipeline`, which writes one `write-research` job per listed item and none for a reused question.
 
 ## Prompt
 
@@ -14,6 +14,11 @@ The evidence layer comes first: commission only what is missing (design-ADR 0016
    - `reuse <id>`: fits and fresh. No research job; the Dossier cites the id.
    - `refresh <id>`: fits but stale. A refresh job checks it against current sources and rewrites it under **the same id**, so every note citing it still resolves.
    - `new`: nothing fits, or a question answers only part of it. A new research job; a partial match is cited as a Source.
+
+Then read `slide-plan.md`, which `slide-retrieval` wrote: research follows the Slides.
+
+- Each Research question a `reuse` or `adapt` Slide `cites` needs no job: list it under `## Reuse` as `Slide <n>: reuse <id>, confidence <value>, fresh until <date>`, copied from the listing, so the Dossier carries its caveat.
+- An `adapt` Slide whose Speaker notes cite a Source of the Source baseline (`src/lib/source-baseline.json`, entries `<episode>/<slide>/<note>/<source>`) gets one `migrate` job named by the pool Slide's slug, so its baseline entries leave in this Run. A `reuse` Slide keeps its notes as they are and needs none.
 
 `confidence` never decides reuse: an `open` or `contested` question is reused as it stands, and the plan names its `confidence` so the Dossier carries the caveat.
 
@@ -29,11 +34,12 @@ Write the plan by its rule (`npx mh query docs/episodes/<slug>/research-plan.md`
 ## Reuse
 
 - Question 3: reuse LLM-0002, confidence open, fresh until 2027-04-19.
+- Slide 4: reuse AIE-0011, confidence contested, fresh until 2027-04-19.
 ```
 
 - A `new` item takes the folder `categorize-research` named and the Concepts it returned, the main one first.
 - A `refresh` item's folder is the stale question's own folder name, written into this Run's Staging; the stale file stays untouched until Promotion replaces it.
-- A `migrate` item is a research job for the grandfathered sources on a note the Run touches (an adapted Slide, an edited note): one question that weighs them, named by the Slide slug, so the baseline entries leave in this Run.
+- A `migrate` item is a research job for the grandfathered sources on a note the Run touches (an adapted Slide, an edited note): one question that weighs them, named by the Slide slug, so the baseline entries leave in this Run. The staging test fails an adapted Slide with baseline Sources and no `migrate` item naming its slug.
 - A `reuse` item copies `confidence` and the `stale_after` date from the listing.
 
 With every question reused, `## Research jobs` holds no item and the Research Stage holds no job: a normal outcome.
