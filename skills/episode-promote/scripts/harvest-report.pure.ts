@@ -62,7 +62,7 @@ const KINDS = new Set(['flow', 'stack', 'quote', 'count']);
 /** The fields the user decides on, which must read without the repo open. */
 const PLAIN = ['title', 'happened', 'change', 'gain'] as const;
 /** A rule id (`FE-010`, `ARCH-003`) or a section sign (`§3.2`): jargon the user cannot decide on days later. */
-const JARGON = /\b[A-Z]{2,5}-\d{3}\b|§\d+(?:\.\d+)*/g;
+export const JARGON = /\b[A-Z]{2,5}-\d{3}\b|§\d+(?:\.\d+)*/g;
 const DATA_BLOCK = /(<script type="application\/json" id="harvest">)[\s\S]*?(<\/script>)/;
 
 function duplicateIds(cards: readonly Card[]): string[] {
