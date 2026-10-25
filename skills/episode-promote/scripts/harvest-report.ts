@@ -1,6 +1,7 @@
 // `npm run episode:harvest -- docs/episodes/<staging>`: renders `<staging>/harvest.json` into `<staging>/harvest.html`
-// through the template in `assets/harvest-report.html`, and opens it. It writes the research section itself, a card
-// per question in `<staging>/research/`, over any section of that key. Exits 1 listing every problem the page would
+// through the template in `assets/harvest-report.html`, and opens it. It writes two sections itself, over any section
+// of the same key: research, a card per question in `<staging>/research/`, and hand fixes, a card per `fix(...)`
+// commit on content paths since the Run's last Gate. Exits 1 listing every problem the page would
 // draw wrong. The page is Promotion's gate: the user keeps or strikes each card and pastes the decisions back.
 
 import { execFile } from 'node:child_process';
@@ -8,6 +9,8 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
+import { handFixSection } from './hand-fixes.pure.ts';
+import { handFixesOfRun } from './hand-fixes.ts';
 import { harvestReport, type Harvest } from './harvest-report.pure.ts';
 import { researchSection } from './research-cards.pure.ts';
 
@@ -33,9 +36,13 @@ function stagedResearch(): { path: string; markdown: string }[] {
 const out = path.join(staging, 'harvest.html');
 try {
   const read = JSON.parse(readFileSync(source, 'utf8')) as Harvest;
-  const research = researchSection(stagedResearch());
-  const others = read.sections.filter(({ key }) => key !== research.key);
-  const harvest: Harvest = { ...read, sections: research.cards.length > 0 ? [...others, research] : others };
+  const written = [
+    researchSection(stagedResearch()),
+    handFixSection(handFixesOfRun(process.cwd(), path.relative(process.cwd(), path.resolve(staging)), read.episode)),
+  ];
+  const keys = new Set(written.map(({ key }) => key));
+  const others = read.sections.filter(({ key }) => !keys.has(key));
+  const harvest: Harvest = { ...read, sections: [...others, ...written.filter(({ cards }) => cards.length > 0)] };
   const page = harvestReport(readFileSync(TEMPLATE, 'utf8'), harvest);
   // Formatted like every committed file, so the Staging commit that carries the page passes the format gate.
   const config = (await resolveConfig(out)) ?? {};
