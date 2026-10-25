@@ -1,6 +1,6 @@
-import type { PromptSlot } from '../core-components/try-prompt/prompt-sections.pure';
-import { joinPrompt } from '../core-components/try-prompt/prompt-sections.pure';
-import type { PromptView } from '../core-components/try-prompt/try-prompt.types';
+import type { PromptSlot } from '../../slide-shared/core-components/try-prompt/prompt-sections.pure';
+import { joinPrompt } from '../../slide-shared/core-components/try-prompt/prompt-sections.pure';
+import type { PromptView } from '../../slide-shared/core-components/try-prompt/try-prompt.types';
 import { tasksOf } from './workflow-outputs.pure';
 import { slotSample } from './workflow-sample.pure';
 import type { Runtime, SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';

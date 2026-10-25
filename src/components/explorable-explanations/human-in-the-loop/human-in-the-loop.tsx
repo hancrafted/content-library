@@ -5,7 +5,7 @@ import { WORKFLOW_IDS, uiWords, workflowFor, type WorkflowId, type WorkflowLocal
 import type { Level } from './workflow-state.pure';
 
 /*
- * The human-in-the-loop workflow, a Shared visual. A Slide names a Workflow by id and its own words; the Workflow, the
+ * The human-in-the-loop workflow, an Explorable explanation. A Slide names a Workflow by id and its own words; the Workflow, the
  * prompts and the labels come from the YAML pairs of this folder at build time (FE-012), and a Slide may override any
  * word key by key. The interactive parent is the one client leaf.
  */

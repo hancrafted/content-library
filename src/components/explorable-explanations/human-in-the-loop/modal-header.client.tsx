@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { Code, X } from 'lucide-react';
-import { IconButton, OUTLINED_ICON } from '../core-components/icon-button/icon-button.client';
+import { IconButton, OUTLINED_ICON } from '../../slide-shared/core-components/icon-button/icon-button.client';
 import type { UiWords } from './human-in-the-loop.types';
 import { tryTitle } from './words.pure';
 import type { Level } from './workflow-state.pure';

@@ -1,5 +1,5 @@
 /*
- * The one pill toolbar, mirrored from the context window's (slide-shared/context/context.module.css, `.top`): a
+ * The one pill toolbar, mirrored from the context window's (explorable-explanations/context/context.module.css, `.top`): a
  * client leaf may import only its own folder (FE-007 §5), so the tokens are mirrored, not imported. Every colour
  * derives from a global token (FE-011 §2).
  */

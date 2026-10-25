@@ -1,6 +1,6 @@
+import { AttentionBubblePreset } from '@/components/explorable-explanations/context/context';
 import { slide } from '@/components/slide-master/slide';
 import { SlideBackdrop, SlideFrame } from '@/components/slide-master/slide-master';
-import { AttentionBubblePreset } from '@/components/slide-shared/context/context';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

@@ -1,4 +1,4 @@
-import type { TryPromptWords } from '../core-components/try-prompt/try-prompt.types';
+import type { TryPromptWords } from '../../slide-shared/core-components/try-prompt/try-prompt.types';
 import type { UiWords } from './human-in-the-loop.types';
 
 /** The title of a stage's modal, and the accessible name of its Try it button: the word's `{stage}` filled in. */
