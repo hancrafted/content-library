@@ -37,7 +37,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 2. No import cycle MAY exist under `src/`.
 3. `src/components/pages/**` is the top sub-tier of components: only a route or a test imports it.
 4. A stylesheet import is not a tier edge.
-5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only its schema and lib, so the edge closes no cycle.
+5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only schemas and lib. The store's `schemas/` is a leaf every tier may import, so a lib module takes a record type without an upward edge.
 
 ### 3. `src/lib/**` imports no React
 

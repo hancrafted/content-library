@@ -1,10 +1,11 @@
 // Probe tests for the content store's import boundaries (FE-013 Decision 1, FE-007 §2):
 // the dependency-cruiser rules run, as `npm run lint:boundaries` runs them, over a
-// throwaway tree of probe files written to a temporary directory. The store does not
-// exist on main yet, so these probes are the executable spec its ticket builds against.
+// throwaway tree of probe files written to a temporary directory. Every forbidden rule
+// runs, so a probe meets the real gate. The store does not exist on main yet, so these
+// probes are the executable spec its ticket builds against.
 
 import { cruise, type IForbiddenRuleType, type IReporterOutput } from 'dependency-cruiser';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -13,19 +14,11 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 const config = createRequire(import.meta.url)('../../.dependency-cruiser.cjs') as {
   forbidden: (IForbiddenRuleType & { name: string; comment: string })[];
 };
-const RULES = [
-  'records-read-only-through-store',
-  'store-entry-only',
-  'episode-metadata-reaches-only-schemas-and-lib',
-  'content-store-tier',
-  'lib-imports-no-upper-tier',
-  'hooks-import-no-upper-tier',
-];
-const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
+const RULE_SET = { forbidden: config.forbidden };
 
 const STORE = 'src/content-store';
 const EPISODE = 'src/components/episodes/probe';
-const PAGES = 'src/components/pages';
+const PAGES = 'src/components/landing';
 
 /** Each probe file and what it imports, relative to the probe tree's root. */
 const PROBES: Readonly<Record<string, string>> = {
@@ -62,6 +55,12 @@ const PROBES: Readonly<Record<string, string>> = {
     "import { episodeMetadata } from '../episodes/probe/episode-metadata';\nexport const x = episodeMetadata;",
   [`${PAGES}/reaches-refusals.tsx`]:
     "import { refusals } from '../../content-store/refusals';\nexport const x = refusals;",
+  [`${PAGES}/types-from-schema.client.tsx`]:
+    "import type { episodeSchema } from '../../content-store/schemas/episode.schema';\nexport type X = typeof episodeSchema;",
+  [`${PAGES}/reaches-store.client.tsx`]: "import { store } from '../../content-store/store';\nexport const x = store;",
+  'src/lib/types-from-schema.pure.ts':
+    "import { episodeSchema } from '../content-store/schemas/episode.schema';\nexport const x = episodeSchema;",
+  [`${STORE}/schemas/reaches-lib.schema.ts`]: "import { probe } from '../../lib/probe.pure';\nexport const x = probe;",
   [`${PAGES}/reaches-event.tsx`]:
     "import { event } from '../../content-store/events/2026-10-23-axel';\nexport const x = event;",
   'src/lib/reaches-store.pure.ts': "import { store } from '../content-store/store';\nexport const x = store;",
@@ -118,21 +117,31 @@ describe('success cases', () => {
     // ASSERT
     expect(found).toEqual([]);
   });
+  it('lets lib read record types from a schema, and a client leaf import one as a type only', () => {
+    // ARRANGE
+    const files = ['src/lib/types-from-schema.pure.ts', `${PAGES}/types-from-schema.client.tsx`];
+    // ACT
+    const found = files.flatMap(from);
+    // ASSERT
+    expect(found).toEqual([]);
+  });
 });
 
 describe('failure cases', () => {
-  it('rejects every reader that bypasses the entry, a store that reaches components or React, a lower tier reaching the store, and Episode metadata reaching above lib', () => {
+  it('rejects every reader that bypasses the entry, a store that reaches components or React, a lower tier reaching the store, a client leaf importing it at runtime, a schema leaving its leaf, and Episode metadata reaching above lib', () => {
     // ARRANGE
     const expected = [
+      'client-never-imports-content-store: src/components/landing/reaches-store.client.tsx -> src/content-store/store.ts',
       'content-store-tier: src/content-store/reaches-react.ts -> node_modules/react/index.js',
       'content-store-tier: src/content-store/reaches-slide-master.ts -> src/components/slide-master/slide.ts',
       'episode-metadata-reaches-only-schemas-and-lib: src/components/episodes/stray/episode-metadata.ts -> src/components/slide-master/slide.ts',
       'hooks-import-no-upper-tier: src/hooks/use-store.ts -> src/content-store/store.ts',
       'lib-imports-no-upper-tier: src/lib/reaches-store.pure.ts -> src/content-store/store.ts',
-      'records-read-only-through-store: src/components/pages/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
-      'records-read-only-through-store: src/components/pages/reaches-metadata.tsx -> src/components/episodes/probe/episode-metadata.ts',
-      'store-entry-only: src/components/pages/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
-      'store-entry-only: src/components/pages/reaches-refusals.tsx -> src/content-store/refusals.ts',
+      'records-read-only-through-store: src/components/landing/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
+      'records-read-only-through-store: src/components/landing/reaches-metadata.tsx -> src/components/episodes/probe/episode-metadata.ts',
+      'schemas-are-a-leaf: src/content-store/schemas/reaches-lib.schema.ts -> src/lib/probe.pure.ts',
+      'store-entry-only: src/components/landing/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
+      'store-entry-only: src/components/landing/reaches-refusals.tsx -> src/content-store/refusals.ts',
     ];
     // ACT
     const found = violations();
@@ -158,5 +167,18 @@ describe('edge cases', () => {
     const found = from(file);
     // ASSERT
     expect(found).toEqual([]);
+  });
+
+  it('expires the old-repository exception once the store entry exists in this repository', () => {
+    // ARRANGE
+    const exception = 'episode-repository';
+    const storeExists = existsSync('src/content-store/store.ts');
+    // ACT
+    const stillExempt = storeExists && readFileSync('.dependency-cruiser.cjs', 'utf8').includes(exception);
+    // ASSERT
+    expect(
+      stillExempt,
+      'src/content-store/store.ts exists: delete the episode-repository exception from records-read-only-through-store (FE-013 Known gap).',
+    ).toBe(false);
   });
 });

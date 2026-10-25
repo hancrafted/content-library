@@ -19,6 +19,8 @@ const SLIDE_SHARED_REACH = ['^src/components/(slide-master|slide-shared|ui)/', '
 // The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2.1).
 // An Episode's metadata file: a record the content store loads (FE-013).
 const EPISODE_METADATA = '^src/components/episodes/[^/]+/episode-metadata\\.ts$';
+// The store's schemas: a leaf every tier may import record types from (FE-007 §2.5).
+const STORE_SCHEMAS = '^src/content-store/schemas/';
 
 const CORE_COMPONENTS = '^src/components/slide-shared/core-components/';
 
@@ -101,7 +103,7 @@ module.exports = {
         'An Episode page file composes the Slide master, Slide layouts and the Episode record, plus src/lib helpers — never the table of contents, page shells or routes (FE-002).',
       from: {
         path: '^src/components/episodes/',
-        pathNot: ['\\.test\\.ts$', SLIDE_FOLDER],
+        pathNot: ['\\.test\\.ts$', SLIDE_FOLDER, EPISODE_METADATA],
       },
       to: { pathNot: [...EPISODE_REACH, 'node_modules'] },
     },
@@ -194,42 +196,42 @@ module.exports = {
       name: 'lib-imports-no-upper-tier',
       severity: 'error',
       comment:
-        'src/lib/** is the bottom tier: it MUST NOT import src/app, src/components, src/content-store or src/hooks (FE-007).',
+        "src/lib/** is the bottom tier: it MUST NOT import src/app, src/components, src/content-store or src/hooks — except the store's schemas, a leaf every tier reads record types from (FE-007).",
       from: { path: '^src/lib/' },
-      to: { path: '^src/(app|components|content-store|hooks)/' },
+      to: { path: '^src/(app|components|content-store|hooks)/', pathNot: STORE_SCHEMAS },
     },
     {
       name: 'hooks-import-no-upper-tier',
       severity: 'error',
       comment:
-        'src/hooks/** sits above lib only: it MUST NOT import src/app, src/components or src/content-store (FE-007).',
+        "src/hooks/** sits above lib only: it MUST NOT import src/app, src/components or src/content-store — except the store's schemas (FE-007).",
       from: { path: '^src/hooks/' },
-      to: { path: '^src/(app|components|content-store)/' },
+      to: { path: '^src/(app|components|content-store)/', pathNot: STORE_SCHEMAS },
     },
     // FE-013 and FE-007 §2.5: the content store is the one reader of records, and its own tier.
     {
       name: 'records-read-only-through-store',
       severity: 'error',
       comment:
-        "Records are read only through src/content-store/store.ts: nothing else imports an Episode's episode-metadata.ts or src/content-store/{events,playlists,schemas}/**. An Episode's metadata file may import its schema for editor feedback (FE-013).",
+        "Records are read only through src/content-store/store.ts: nothing else imports an Episode's episode-metadata.ts or src/content-store/{events,playlists}/** (FE-013).",
       from: {
         pathNot: [
           '^src/content-store/',
           '\\.test\\.tsx?$',
           EPISODE_METADATA,
-          // Dormant until the store exists (FE-013 Compliance, Known gap): the old reader. The store's first change removes this line.
+          // tech-debt: the old reader stays until the store replaces it (FE-013 Known gap), https://github.com/hancrafted/content-library/issues/331
           '^src/components/episodes/episode-repository\\.ts$',
         ],
       },
-      to: { path: [EPISODE_METADATA, '^src/content-store/(events|playlists|schemas)/'] },
+      to: { path: [EPISODE_METADATA, '^src/content-store/(events|playlists)/'] },
     },
     {
       name: 'store-entry-only',
       severity: 'error',
       comment:
-        'Outside the content store, imports reach only its entry, src/content-store/store.ts; schemas, refusals and records stay free to change behind it (FE-013).',
-      from: { pathNot: ['^src/content-store/', '\\.test\\.tsx?$', EPISODE_METADATA] },
-      to: { path: '^src/content-store/', pathNot: '^src/content-store/store\\.ts$' },
+        'Outside the content store, imports reach only its entry, src/content-store/store.ts, and its schemas for record types; refusals and records stay free to change behind it (FE-013).',
+      from: { pathNot: ['^src/content-store/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/content-store/', pathNot: ['^src/content-store/store\\.ts$', STORE_SCHEMAS] },
     },
     {
       name: 'episode-metadata-reaches-only-schemas-and-lib',
@@ -238,6 +240,22 @@ module.exports = {
         "An Episode's episode-metadata.ts is a record: it imports only src/content-store/schemas/**, src/lib/** and zod, so the store reading it closes no cycle (FE-007, FE-013).",
       from: { path: EPISODE_METADATA },
       to: { pathNot: ['^src/content-store/schemas/', '^src/lib/', '(^|/)node_modules/zod/'] },
+    },
+    {
+      name: 'schemas-are-a-leaf',
+      severity: 'error',
+      comment:
+        'src/content-store/schemas/** is a leaf every tier may import record types from: it imports only other schemas and zod, so lib reading it closes no upward edge (FE-007, FE-013).',
+      from: { path: STORE_SCHEMAS },
+      to: { pathNot: [STORE_SCHEMAS, '(^|/)node_modules/zod/'] },
+    },
+    {
+      name: 'client-never-imports-content-store',
+      severity: 'error',
+      comment:
+        'A *.client.tsx leaf MUST NOT import the content store at runtime — Zod and every record would ride into the client bundle. A type-only import is fine; a client leaf gets record values as props (FE-013).',
+      from: { path: '\\.client\\.tsx$' },
+      to: { path: '^src/content-store/', dependencyTypesNot: ['type-only'] },
     },
     {
       name: 'content-store-tier',

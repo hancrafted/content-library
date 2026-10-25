@@ -4,8 +4,8 @@ id: FE-013
 title: 'Content Store'
 domain: frontend
 rules: true
-files: ['src/components/episodes/*/episode-metadata.ts', 'src/lib/workshops.pure.ts']
-paths: ['src/components/episodes/*/episode-metadata.ts', 'src/lib/workshops.pure.ts']
+files: ['src/{content-store/**/*,lib/workshops.pure}.ts', 'src/components/episodes/*/episode-metadata.ts']
+paths: ['src/{content-store/**/*,lib/workshops.pure}.ts', 'src/components/episodes/*/episode-metadata.ts']
 description: 'Every record — Episode metadata, Event, Playlist — enters the site through one content store that parses it with a Zod schema whose inferred type is its only type, every field described, and refuses a bad record at build time, naming it.'
 ---
 
@@ -34,14 +34,16 @@ For this project the reasons and the model — which entities are records, how t
 
 ### 1. One entry
 
-1. Pages, routes, the sitemap and metadata MUST read records only through the store's one entry module; record files, schemas and refusals are reached by nothing else.
+1. Pages, routes, the sitemap and metadata MUST read records only through the store's one entry module; record files and refusals are reached by nothing else.
 2. The store is its own tier between components and hooks: no React, and it reaches into components only for an Episode's metadata file, so an Episode stays one folder.
+3. The schemas are a leaf below every tier, importing only zod: any module, lib included, takes a record's type from them, so no tier needs a type of its own. A lib module gets record values as arguments.
+4. A client leaf MUST NOT import the store at runtime; it gets record values as props, so Zod and the records stay out of the browser bundle.
 
 ### 2. The schema is the type
 
 1. Each record kind MUST have exactly one schema file in the store, and the record kinds are exactly the entities the content-model diagram's `%% store:` line names (📜 Rule: `model-matches-store`).
-2. A record's type MUST be inferred from its schema; no hand-written interface or object type describes a record (📜 Rule: `type-from-schema`).
-3. Every schema field MUST carry a `.describe()`: the schema is the field reference an agent reads (📜 Rule: `field-described`).
+2. A record's type MUST be inferred from its schema; nowhere in `src/` does a hand-written interface or object type describe a record — one named after a stored kind or ending in `Metadata` or `Record` (📜 Rule: `type-from-schema`).
+3. Every schema field MUST carry a `.describe()` on its own chain, in a shape written inline: the schema is the field reference an agent reads (📜 Rule: `field-described`).
 
 ### 3. Fail closed
 
@@ -61,10 +63,11 @@ For this project the reasons and the model — which entities are records, how t
 
 ### Don'ts
 
-1. **DON'T** import an `episode-metadata.ts`, an Event, a Playlist or a schema from outside the store. (Decision 1)
+1. **DON'T** import an `episode-metadata.ts`, an Event, a Playlist or the refusals from outside the store, or re-export them from its entry. (Decision 1)
 2. **DON'T** import React, a Slide or the Slide master into the store. (Decision 1)
-3. **DON'T** write `interface EventRecord { … }` beside its schema. (Decision 2)
-4. **DON'T** drop a bad record and build the rest — `records.filter(isValid)`. (Decision 3)
+3. **DON'T** import the store's values into a `*.client.tsx` — `import type` only. (Decision 1)
+4. **DON'T** write `interface EpisodeMetadata { … }` in lib, or `satisfies { slug: string }` on a record. (Decision 2)
+5. **DON'T** drop a bad record and build the rest — `records.filter(isValid)`. (Decision 3)
 
 ## Consequences
 
@@ -73,15 +76,16 @@ For this project the reasons and the model — which entities are records, how t
 1. **Fails closed:** a forgotten `visibility` stops the build instead of publishing a page.
 2. **One type:** schema and type cannot drift; renaming a field is one edit.
 3. **One reader:** every page sees records after the same parse and refusals.
-4. **Model in step:** the diagram an agent reads names exactly the kinds the code loads.
+4. **Model in step:** the diagram an agent reads names exactly the kinds the store's entry loads.
 5. **Self-describing:** each field's meaning sits on the field.
-6. **One seam:** the platform horizon swaps the store's source, not its readers.
+6. **One seam:** the platform horizon swaps the store's source behind its entry; readers change only if the entry turns async.
 
 **Negative:**
 
 1. **A dependency:** Zod becomes a direct dependency the whole build rests on.
 2. **Indirection:** a page reads a record through a function, not a plain import.
-3. **Text-matched rules:** the type and description rules read source text, so an unusual formatting can slip past them.
+3. **Text-matched types:** archgate erases types before parsing, so the type rule reads source text and knows a record type by its name; a record type named otherwise slips past it.
+4. **Names reserved:** `Record` and `Metadata` as type-name endings, and the stored kinds' names, belong to records anywhere in `src/`.
 
 **Risks:**
 
@@ -91,12 +95,12 @@ For this project the reasons and the model — which entities are records, how t
 ## Compliance and Enforcement
 
 1. **Rules** (`FE-013-content-store.rules.ts`, error): Decision 2.
-2. **Lint** (dependency-cruiser, error; probe tests over a throwaway tree): Decision 1.
+2. **Lint** (dependency-cruiser, error; probe tests run the whole rule set over a throwaway tree): Decision 1.
 3. **Tests** (fast suite): Decision 3 — each refusal throws its sentence for a bad record.
 
-**Known gap:** the rules stay dormant, and the lint keeps one exception for the old Episode repository, until the store's entry module exists; their tests pin every case meanwhile. The store's first change removes both.
+**Known gap:** the rules stay dormant, and the lint keeps one exception for the old Episode repository, until the store's entry module exists; their tests pin every case meanwhile. A probe test fails once the entry exists while the exception stays, so the store's first change removes both.
 
-**Manual review duties:** descriptions say what a field means; refusals name kind, slug and field; no reader bypasses the entry through a re-export.
+**Manual review duties:** descriptions say what a field means; refusals name kind, slug and field and never filter silently (Decision 3); no reader bypasses the entry through a re-export; scripts and tests outside `src/` read records through the entry too.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
