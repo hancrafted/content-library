@@ -24,10 +24,10 @@ describe('success cases', () => {
     expect(entries).toContainEqual(german);
   });
 
-  it('lists the Workshops page and each Workshop page in both locales with reciprocal alternates', () => {
+  it('lists the Events page and each Event page in both locales with reciprocal alternates', () => {
     // ARRANGE
     const slug = '2026-10-23-axel-agentic-workflow';
-    const route = `/workshops/${slug}/`;
+    const route = `/events/${slug}/`;
     const expected = {
       url: `${SITE}/de${route}`,
       alternates: {
@@ -39,7 +39,7 @@ describe('success cases', () => {
     // ASSERT
     expect(entries).toContainEqual(expected);
     expect(entries.map((entry) => entry.url)).toEqual(
-      expect.arrayContaining([`${SITE}/workshops/`, `${SITE}/de/workshops/`, `${SITE}${route}`]),
+      expect.arrayContaining([`${SITE}/events/`, `${SITE}/de/events/`, `${SITE}${route}`]),
     );
   });
 

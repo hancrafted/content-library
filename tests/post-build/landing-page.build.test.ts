@@ -155,7 +155,7 @@ describe('landing page post-build structure', () => {
 
   it.each(LANDING_PAGES)('keeps every header link once, behind a menu button below lg, for $locale', ({ url }) => {
     // ARRANGE
-    const singleCopies = ['nav-episodes', 'nav-workshops', 'header-contact', 'theme-toggle', 'locale-toggle'];
+    const singleCopies = ['nav-episodes', 'nav-events', 'header-contact', 'theme-toggle', 'locale-toggle'];
     const collapsed = 'false';
     // ACT
     const $ = getPage(url);

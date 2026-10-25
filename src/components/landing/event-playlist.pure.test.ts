@@ -1,15 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import type { EpisodeCard } from './episode-card.pure';
-import { agendaOf, startOf, totalMinutes } from './workshop-agenda.pure';
+import { eventPlaylistCards, startOf, totalMinutes } from './event-playlist.pure';
 
-/** A hand-written stand-in for the card fields the agenda reads. */
-type Stub = Pick<EpisodeCard, 'slug' | 'route' | 'minutes'>;
+/** A hand-written stand-in for the card fields an Event's Playlist reads. */
+type Stub = Pick<EpisodeCard, 'slug' | 'route' | 'href' | 'minutes'>;
 const linked = (slug: string, minutes?: number): Stub => ({
   slug,
   route: `/episodes/${slug}`,
+  href: `/episodes/${slug}`,
   ...(minutes === undefined ? {} : { minutes }),
 });
-const upcoming = (slug: string): Stub => ({ slug, route: null });
+const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
+const EVENT = '2026-10-23-intro';
 
 describe('success cases', () => {
   it('adds the counted minutes of every Episode that has them', () => {
@@ -32,29 +34,52 @@ describe('success cases', () => {
     expect({ step: start?.step, slug: start?.card.slug }).toEqual(expected);
   });
 
-  it('lists the cards in the order the Workshop teaches its Episodes', () => {
+  it("lists the cards in the Playlist's order", () => {
     // ARRANGE
     const cards = [linked('alpha'), linked('beta'), linked('gamma')];
     const expected = ['gamma', 'alpha'];
     // ACT
-    const agenda = agendaOf(['gamma', 'alpha'], cards);
+    const playlist = eventPlaylistCards({ event: EVENT, episodes: ['gamma', 'alpha'] }, cards, 'en');
     // ASSERT
-    expect(agenda.map((card) => card.slug)).toEqual(expected);
+    expect(playlist.map((card) => card.slug)).toEqual(expected);
+  });
+
+  it('opens each Episode under its Event, in the locale', () => {
+    // ARRANGE
+    const cards = [linked('alpha')];
+    const expected = {
+      route: '/events/2026-10-23-intro/episodes/alpha',
+      href: '/de/events/2026-10-23-intro/episodes/alpha',
+    };
+    // ACT
+    const [card] = eventPlaylistCards({ event: EVENT, episodes: ['alpha'] }, cards, 'de');
+    // ASSERT
+    expect({ route: card.route, href: card.href }).toEqual(expected);
   });
 });
 
 describe('failure cases', () => {
-  it('names the Episode a Workshop lists that has no card', () => {
+  it('names the Episode a Playlist lists that has no card', () => {
     // ARRANGE
     const cards = [linked('alpha')];
     // ACT
-    const build = () => agendaOf(['alpha', 'missing'], cards);
+    const build = () => eventPlaylistCards({ event: EVENT, episodes: ['alpha', 'missing'] }, cards, 'en');
     // ASSERT
     expect(build).toThrow('"missing"');
   });
 });
 
 describe('edge cases', () => {
+  it('leaves an Episode with no page unlinked under its Event', () => {
+    // ARRANGE
+    const cards = [upcoming('alpha')];
+    const expected = { route: null, href: null };
+    // ACT
+    const [card] = eventPlaylistCards({ event: EVENT, episodes: ['alpha'] }, cards, 'en');
+    // ASSERT
+    expect({ route: card.route, href: card.href }).toEqual(expected);
+  });
+
   it('shows no total when no Episode has a counted time', () => {
     // ARRANGE
     const cards = [linked('alpha'), upcoming('beta')];

@@ -6,7 +6,7 @@
   "nav": {
     "label": "Hauptnavigation",
     "episodes": "Episoden",
-    "workshops": "Workshops",
+    "events": "Veranstaltungen",
     "dashboard": "Content-Pipeline",
     "contact": "Mit mir arbeiten",
     "newTab": "öffnet in einem neuen Tab",
@@ -412,9 +412,9 @@
       "title": "Visualisierte Theorie · hancrafted",
       "description": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert."
     },
-    "workshops": {
-      "title": "Workshops",
-      "description": "Begleitete Workshops, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
+    "events": {
+      "title": "Veranstaltungen",
+      "description": "Workshops und Webinare, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
     }
   },
   "episodesPage": {
@@ -478,16 +478,25 @@
     "backToVideo": "Zurück zum Video",
     "close": "Videoplayer schließen"
   },
-  "workshopsPage": {
-    "title": "Workshops",
-    "back": "Alle Workshops",
-    "intro": "Begleitete Sessions, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
-    "agenda": "Ablauf",
+  "eventsPage": {
+    "title": "Veranstaltungen",
+    "intro": "Workshops und Webinare, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
+    "breadcrumb": "Brotkrumen",
+    "playlist": "Playlist",
     "start": "Mit Episode {step} starten",
     "readingTime": "{minutes} Min. Lesezeit insgesamt",
     "episodeCount": {
       "one": "1 Episode",
       "other": "{count} Episoden"
+    },
+    "pastNotice": "Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen.",
+    "kinds": {
+      "workshop": "Workshop",
+      "webinar": "Webinar"
+    },
+    "audiences": {
+      "individual": "Für Einzelpersonen",
+      "organization": "Für Unternehmen"
     },
     "items": {
       "2026-10-23-axel-agentic-workflow": {

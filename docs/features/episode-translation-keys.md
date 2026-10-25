@@ -100,18 +100,20 @@ An entry reads its text from:
 - Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the overview's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
 - The `/episodes` heading and its one-line intro: `episodesPage.title` and `episodesPage.intro`.
 
-## Workshop keys
+## Event keys
 
-An Event, shown as a Workshop page, is a record in the content store that holds no string ([Workshops](workshops.md)). Its text sits in the site-wide files:
+An Event is a record in the content store that holds no string ([Events](events.md)). Its text sits in the site-wide files:
 
-- `workshopsPage.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Workshop page's `h1` and `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
-- `workshopsPage.title` and `workshopsPage.intro`: the `/workshops` heading and its one-line intro.
-- `workshopsPage.episodeCount.one` and `.other`: the Episode count on a card and on the Workshop page; `other` keeps a plain `{count}` placeholder.
-- `workshopsPage.agenda`: the heading of the numbered Episode list on a Workshop page.
-- `workshopsPage.start`: the primary button, with a `{step}` placeholder for the first Episode that has a page ("Start with Episode 1").
-- `workshopsPage.readingTime`: the total reading time of the Episodes, with a `{minutes}` placeholder.
-- `workshopsPage.back`: the link up to `/workshops`; the page draws its arrow icon, so the string holds none.
-- `meta.workshops.title` and `.description`: the `/workshops` page metadata, read by `pageMetadata('workshops', locale)` (FE-008). A Workshop page takes its metadata from its `items` pair.
+- `eventsPage.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Event page's `h1`, its breadcrumb's last step and its `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
+- `eventsPage.title` and `eventsPage.intro`: the `/events` heading and its one-line intro; the title is also the breadcrumb's first step.
+- `eventsPage.breadcrumb`: the breadcrumb's accessible name.
+- `eventsPage.episodeCount.one` and `.other`: the Episode count on a card and on the Event page; `other` keeps a plain `{count}` placeholder.
+- `eventsPage.kinds.<kind>` and `eventsPage.audiences.<audience>`: the kind and the Audience on the facts line, one per id in `EVENT_KINDS` and `AUDIENCES`.
+- `eventsPage.playlist`: the heading of the numbered Episode list on an Event page.
+- `eventsPage.start`: the primary button, with a `{step}` placeholder for the first Episode that has a page ("Start with Episode 1").
+- `eventsPage.readingTime`: the total reading time of the Episodes, with a `{minutes}` placeholder.
+- `eventsPage.pastNotice`: the one fixed notice a past Event shows.
+- `meta.events.title` and `.description`: the `/events` page metadata, read by `pageMetadata('events', locale)` (FE-008). An Event page takes its metadata from its `items` pair.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 

@@ -53,28 +53,28 @@ describe('success cases', () => {
     expect({ title: metadata.title, description: metadata.description }).toEqual(expected);
   });
 
-  it('builds the Workshops list metadata from the Translation file with reciprocal alternates', () => {
+  it('builds the Events list metadata from the Translation file with reciprocal alternates', () => {
     // ARRANGE
     const expected = {
-      title: 'Workshops',
-      canonical: '/de/workshops',
-      languages: { en: '/workshops', de: '/de/workshops', 'x-default': '/workshops' },
+      title: 'Events',
+      canonical: '/de/events',
+      languages: { en: '/events', de: '/de/events', 'x-default': '/events' },
     };
     // ACT
-    const english = pageMetadata('workshops', 'en');
-    const german = pageMetadata('workshops', 'de');
+    const english = pageMetadata('events', 'en');
+    const german = pageMetadata('events', 'de');
     // ASSERT
     expect(english.title).toBe(expected.title);
     expect(german.alternates?.canonical).toBe(expected.canonical);
     expect(german.alternates?.languages).toEqual(expected.languages);
   });
 
-  it("points a Workshop page's canonical at its own slug and locale, with the copy its route hands in", () => {
+  it("points an Event page's canonical at its own slug and locale, with the copy its route hands in", () => {
     // ARRANGE
     const slug = '2026-10-23-axel-agentic-workflow';
-    const expected = { canonical: `/de/workshops/${slug}`, type: 'website', title: COPY.title };
+    const expected = { canonical: `/de/events/${slug}`, type: 'website', title: COPY.title };
     // ACT
-    const metadata = pageMetadata({ workshop: slug }, 'de', COPY);
+    const metadata = pageMetadata({ event: slug }, 'de', COPY);
     // ASSERT
     expect({
       canonical: metadata.alternates?.canonical,
