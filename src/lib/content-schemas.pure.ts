@@ -29,9 +29,11 @@ const isoDay = (what: string) =>
     .refine(isCalendarDay, 'is not a real calendar day')
     .describe(`${what}, a real calendar day written YYYY-MM-DD`);
 
+/** The records a Speaker note's citations rest on: its source items and the Source baseline. */
+type CitationKind = 'slide-source' | 'source-baseline';
 /** What each record kind is: the name every refusal carries. */
 export type RecordKind =
-  'theme' | 'concept' | 'episode' | 'event' | 'playlist' | 'research' | 'slide-source' | 'slide' | 'definition-slide';
+  'theme' | 'concept' | 'episode' | 'event' | 'playlist' | 'research' | 'slide' | 'definition-slide' | CitationKind;
 
 export const themeSchema = z
   .object({

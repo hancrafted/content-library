@@ -58,6 +58,7 @@ const VALID: RawContent = {
   playlists: [],
   research: [],
   slideSources: [],
+  sourceBaseline: [],
   researchPlans: [],
   slides: [],
   episodeSlides: [],

@@ -8,6 +8,7 @@ import { readConceptFiles, readResearchFiles, readResearchPlans } from '@/lib/ev
 import { PLAYLISTS } from '@/lib/playlists.pure';
 import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS, type UnlistedEpisodeSlug } from '@/lib/routes';
 import { EPISODES_DIR, readSlideFolders } from '@/lib/slide-folders';
+import SOURCE_BASELINE from '@/lib/source-baseline.json';
 import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
 import { episodeMetadata as aiGivesYouMoreWork } from './ai-gives-you-more-work/episode-metadata';
@@ -120,6 +121,7 @@ export function rawContent(): RawContent {
     playlists: PLAYLISTS,
     research: readResearchFiles(process.cwd()),
     slideSources: slideSources(),
+    sourceBaseline: SOURCE_BASELINE,
     slides: slides(),
     researchPlans: readResearchPlans(process.cwd()),
   };

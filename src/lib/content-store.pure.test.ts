@@ -56,7 +56,7 @@ const SOURCE = {
   slide: 'pipeline',
   note: 'intro',
   slug: 'docs',
-  url: 'https://a.example/x',
+  url: 'https://docs.anthropic.com/x',
 };
 const RESEARCH = {
   path: 'docs/llm-wiki/research/AIE/AIE-0001__ai-as-onboarding-a-colleague/research.md',
@@ -102,6 +102,7 @@ const VALID: RawContent = {
   playlists: [PLAYLIST],
   research: [RESEARCH],
   slideSources: [SOURCE],
+  sourceBaseline: [],
   researchPlans: [],
   slides: [SLIDE, POOL_SLIDE],
 };
