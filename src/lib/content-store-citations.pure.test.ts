@@ -78,6 +78,7 @@ const VALID: RawContent = {
     { ...AT, slug: 'cycle', research: 'SALES-0001' },
     { ...AT, slug: 'docs', url: 'https://docs.anthropic.com/x' },
   ],
+  sourceBaseline: [],
   slides: [],
   researchPlans: [],
 };

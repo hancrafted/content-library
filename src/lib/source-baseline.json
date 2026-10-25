@@ -1,0 +1,174 @@
+[
+  {
+    "source": "ai-attention-span/everyday-habits/one-job-per-chat/hong-context-rot",
+    "url": "https://www.trychroma.com/research/context-rot"
+  },
+  {
+    "source": "ai-attention-span/one-innocent-question/the-remedy/openai-web-search",
+    "url": "https://developers.openai.com/api/docs/guides/tools-web-search"
+  },
+  {
+    "source": "ai-attention-span/what-happens-when-the-bar-fills-up/extra-material-makes-it-worse/hong-context-rot",
+    "url": "https://www.trychroma.com/research/context-rot"
+  },
+  {
+    "source": "ai-attention-span/what-happens-when-the-bar-fills-up/what-is-context-rot/hong-context-rot",
+    "url": "https://www.trychroma.com/research/context-rot"
+  },
+  {
+    "source": "ai-attention-span/what-happens-when-the-bar-fills-up/what-the-studies-measure/hong-context-rot",
+    "url": "https://www.trychroma.com/research/context-rot"
+  },
+  {
+    "source": "ai-attention-span/whats-really-in-the-window/chat-apps-document-the-effect/google-gemini-memory",
+    "url": "https://support.google.com/gemini/answer/16598625"
+  },
+  {
+    "source": "ai-attention-span/whats-really-in-the-window/not-every-feature-preloads/openai-chatgpt-memory",
+    "url": "https://help.openai.com/en/articles/8590148-memory-faq"
+  },
+  {
+    "source": "ai-attention-span/whats-really-in-the-window/nothing-carries-over-by-itself/han-llm-memory-between-chats",
+    "url": "https://github.com/hancrafted/content-library/blob/main/docs/llm-wiki/research/LLM/LLM-0003__llm-memory-between-chats/research.md"
+  },
+  {
+    "source": "ai-attention-span/you-cant-watch-the-meter/other-apps-are-unknown/openai-compaction",
+    "url": "https://developers.openai.com/api/docs/guides/compaction"
+  },
+  {
+    "source": "ai-gives-you-more-work/every-revolution-one-card/cheaper-unit-more-work/jevons-coal-question",
+    "url": "https://www.econlib.org/library/YPDBooks/Jevons/jvnCQ.html"
+  },
+  {
+    "source": "ai-gives-you-more-work/every-revolution-one-card/gain-is-conditional/dellacqua-jagged-frontier",
+    "url": "https://mitsloan.mit.edu/sites/default/files/2023-10/SSRN-id4573321.pdf"
+  },
+  {
+    "source": "ai-gives-you-more-work/every-revolution-one-card/plough-is-the-weaker-card/boserup-agricultural-growth",
+    "url": "https://www.biw.kuleuven.be/aee/clo/idessa_files/boserup1965.pdf"
+  },
+  {
+    "source": "ai-gives-you-more-work/every-revolution-one-card/some-workers-did-rise/ure-philosophy-of-manufactures",
+    "url": "https://archive.org/details/philosophyofmanu00urea"
+  },
+  {
+    "source": "ai-gives-you-more-work/practise-it-today-at-work/briefing-context-checking/dellacqua-jagged-frontier",
+    "url": "https://mitsloan.mit.edu/sites/default/files/2023-10/SSRN-id4573321.pdf"
+  },
+  {
+    "source": "ai-gives-you-more-work/you-were-promoted/communication-barrier/pocock-software-fundamentals",
+    "url": "https://ai.engineer/talks/v4F1gFy-hqg-software-fundamentals-for-ai-coding"
+  },
+  {
+    "source": "ai-gives-you-more-work/you-were-promoted/workers-describe-the-shift/lee-critical-thinking",
+    "url": "https://www.microsoft.com/en-us/research/uploads/prod/2025/01/lee_2025_ai_critical_thinking_survey.pdf"
+  },
+  {
+    "source": "never-too-early-sales/how-marketing-feeds-the-pipeline/customers-do-not-arrive-alone/graham-do-things-that-dont-scale",
+    "url": "https://paulgraham.com/ds.html"
+  },
+  {
+    "source": "never-too-early-sales/how-marketing-feeds-the-pipeline/the-marketing-hand-off-has-its-own-rate/ebsta-gtm-benchmarks",
+    "url": "https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+  },
+  {
+    "source": "never-too-early-sales/pipeline-by-the-numbers/a-reference-win-rate/ebsta-pavilion",
+    "url": "https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+  },
+  {
+    "source": "never-too-early-sales/pipeline-by-the-numbers/buying-groups-disagree/gartner-buyer-teams",
+    "url": "https://www.gartner.com/en/newsroom/press-releases/2025-05-07-gartner-sales-survey-finds-74-percent-of-b2b-buyer-teams-demonstrate-unhealthy-conflict-during-the-decision-process"
+  },
+  {
+    "source": "never-too-early-sales/pipeline-by-the-numbers/everyone-holds-a-veto/hbr-consensus-sale",
+    "url": "https://hbr.org/2015/03/making-the-consensus-sale"
+  },
+  {
+    "source": "never-too-early-sales/pipeline-by-the-numbers/the-biggest-loss-is-no-decision/hbr-indecision",
+    "url": "https://hbr.org/2022/06/stop-losing-sales-to-customer-indecision"
+  },
+  {
+    "source": "never-too-early-sales/pipeline-tools-in-practice/late-deals-convert-worse/ebsta-gtm-benchmarks",
+    "url": "https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+  },
+  {
+    "source": "never-too-early-sales/sales-is-more-than-selling/ask-about-the-last-time/yc-how-to-talk-to-users",
+    "url": "https://www.ycombinator.com/blog/startup-school-week-1-recap-kevin-hale-and-eric-migicovsky/"
+  },
+  {
+    "source": "never-too-early-sales/sales-is-more-than-selling/friends-orders-can-mislead/blank-it-must-be-a-marketing-problem",
+    "url": "https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
+  },
+  {
+    "source": "never-too-early-sales/sales-is-more-than-selling/premature-scaling-burns-cash/blank-it-must-be-a-marketing-problem",
+    "url": "https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
+  },
+  {
+    "source": "never-too-early-sales/sales-is-more-than-selling/your-starting-model-is-wrong/graham-do-things-that-dont-scale",
+    "url": "https://paulgraham.com/ds.html"
+  },
+  {
+    "source": "never-too-early-sales/watch-your-cashflow-revenue-pulled-in/predicted-revenue-is-discounted/default-alive",
+    "url": "https://paulgraham.com/aord.html"
+  },
+  {
+    "source": "never-too-early-sales/watch-your-cashflow-start-when/even-a-yes-arrives-late/startup-funding",
+    "url": "https://www.paulgraham.com/startupfunding.html"
+  },
+  {
+    "source": "never-too-early-sales/watch-your-cashflow/costs-begin-before-customers/startup-funding",
+    "url": "https://www.paulgraham.com/startupfunding.html"
+  },
+  {
+    "source": "never-too-early-sales/watch-your-cashflow/default-alive-test/default-alive",
+    "url": "https://paulgraham.com/aord.html"
+  },
+  {
+    "source": "never-too-early-sales/watch-your-cashflow/high-burn-rate-is-a-clock/startup-funding",
+    "url": "https://www.paulgraham.com/startupfunding.html"
+  },
+  {
+    "source": "never-too-early-sales/what-is-a-sales-pipeline/cycle-length-hits-cash/roberge-science-of-scaling",
+    "url": "https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
+  },
+  {
+    "source": "never-too-early-sales/what-is-a-sales-pipeline/stage-rates-are-not-portable/ebsta-pavilion",
+    "url": "https://benchmarks.ebsta.com/hubfs/V3%202025%20Benchmark%20Report/gtm_benchmarks_digital_report.pdf"
+  },
+  {
+    "source": "never-too-early-sales/why-it-takes-time-to-ramp-up/learn-first-codify-later/roberge-science-of-scaling",
+    "url": "https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
+  },
+  {
+    "source": "never-too-early-sales/why-it-takes-time-to-ramp-up/metrics-lag-by-one-cycle/roberge-science-of-scaling",
+    "url": "https://f.hubspotusercontent10.net/hubfs/6575667/Stage%202s%20Science%20of%20Scaling.pdf"
+  },
+  {
+    "source": "never-too-early-sales/why-it-takes-time-to-ramp-up/selling-blind/blank-marketing-problem",
+    "url": "https://steveblank.com/2010/02/11/it-must-be-a-marketing-problem/"
+  },
+  {
+    "source": "never-too-early-sales/why-it-takes-time-to-ramp-up/startups-search-they-do-not-execute/blank-manifesto",
+    "url": "https://steveblank.com/category/customer-development-manifesto/"
+  },
+  {
+    "source": "onboard-ai-every-time/brief-the-venue/focus-beats-volume/hong-context-rot",
+    "url": "https://www.trychroma.com/research/context-rot"
+  },
+  {
+    "source": "onboard-ai-every-time/manage-the-price/fresh-start-for-each-piece/hong-context-rot",
+    "url": "https://www.trychroma.com/research/context-rot"
+  },
+  {
+    "source": "onboard-ai-every-time/pay-the-price/how-much-varies/he-defeating-nondeterminism",
+    "url": "https://thinkingmachines.ai/blog/defeating-nondeterminism-in-llm-inference/"
+  },
+  {
+    "source": "onboard-ai-every-time/you-are-the-new-hire/even-the-experts-cannot-always-say-it/nonaka-knowledge-creating-company",
+    "url": "https://hbr.org/2007/07/the-knowledge-creating-company"
+  },
+  {
+    "source": "onboard-ai-every-time/you-are-the-new-hire/why-the-middle-zone-stays-unwritten/nonaka-knowledge-creating-company",
+    "url": "https://hbr.org/2007/07/the-knowledge-creating-company"
+  }
+]
