@@ -6,14 +6,27 @@ import { describe, expect, it } from 'vitest';
  * A Slide is one folder `slides/<slide>/` named after its slug
  * (#51, FE-002), so the folder, the anchor half and the Slide's own Translation
  * files share one name. Each folder's server entry is `slide.tsx`; this reads
- * every one and compares the slug it declares with the folder it sits in.
+ * every one, the Slide pool's included, and compares the slug it declares with the folder it sits in.
  */
 
 const EPISODES_DIR = __dirname;
+const SLIDE_POOL_DIR = path.join(__dirname, '..', 'slide-pool');
 const ENTRY = 'slide.tsx';
 
-/** Every Slide folder of every Episode: a directory under `<episode>/slides/`. */
+/** Every Slide folder of the Slide pool, under the name `slide-pool`; none while the pool is empty. */
+function poolFolders(): { episode: string; folder: string; entry: string }[] {
+  if (!existsSync(SLIDE_POOL_DIR)) return [];
+  return readdirSync(SLIDE_POOL_DIR, { withFileTypes: true })
+    .filter((each) => each.isDirectory())
+    .map(({ name: folder }) => ({ episode: 'slide-pool', folder, entry: path.join(SLIDE_POOL_DIR, folder, ENTRY) }));
+}
+
+/** Every Slide folder of every Episode, a directory under `<episode>/slides/`, then the Slide pool's. */
 function slideFolders(): { episode: string; folder: string; entry: string }[] {
+  return [...episodeFolders(), ...poolFolders()];
+}
+
+function episodeFolders(): { episode: string; folder: string; entry: string }[] {
   return readdirSync(EPISODES_DIR, { withFileTypes: true })
     .filter((each) => each.isDirectory())
     .flatMap(({ name: episode }) => {
