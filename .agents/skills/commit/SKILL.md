@@ -42,8 +42,8 @@ change with no ticket at all is a normal case rather than an error to escalate �
 a prose summary of the prompt is a valid value.
 _Done when_ you hold a canonical reference, a prose summary, or both.
 
-**4. Author the message, and write it to the draft.** Satisfy the three
-conditions below. The draft is `"$(git rev-parse --absolute-git-dir)/COMMIT_DRAFT"`
+**4. Author the message, and write it to the draft.** Satisfy the
+conditions below (three always, a fourth on a fix to content paths). The draft is `"$(git rev-parse --absolute-git-dir)/COMMIT_DRAFT"`
 — inside git's own directory, so it needs no `.gitignore` entry, never reaches
 `git status`, and resolves the same from any subdirectory or worktree. Author and
 write together, so step 5 never reads a stale draft. A message carrying both
@@ -80,7 +80,7 @@ There is no approval stop anywhere in this run. The commit is local and
 reversible, so `git reset` and `git commit --amend` are the review mechanism,
 and the human reviews a real commit with `git show` rather than a proposal.
 
-## The contract — three blocking conditions
+## The contract — three blocking conditions, and a fourth for fixes to content
 
 The gate is `scripts/commit-msg`. It reads the proposed message and exits 0 or 1.
 One message that satisfies all three, end to end:
@@ -145,6 +145,36 @@ git log --format='%(trailers:key=Source,valueonly)'
   trailer, and neither is one followed by another prose paragraph — both look
   fine to a human and return nothing to `git log`.
 - Repeats are allowed when a change has more than one cause.
+
+**4. `Feeds:` trailer, on a fix to content only.** A `fix(...)` commit that
+touches a content path carries a `Feeds:` trailer in the same last paragraph as
+`Source:`, saying where the lesson of the fix goes (a fix by hand feeds back; see
+design-ADR 0016, rules 17 and 18). Any other commit needs none.
+
+- A content path is any path matching a line of `.husky/feeds-paths` in the
+  repository, one shell glob per line, `*` crossing `/`. This repository lists
+  `src/components/episodes/*`, `src/components/slide-pool/*` and
+  `docs/llm-wiki/*`; a pattern whose folder does not exist yet still counts. With
+  no `.husky/feeds-paths` the condition does not apply.
+- The value is one of: the repository path of the skill, template, reference or
+  guide that should have got it right, which must exist
+  (`Feeds: skills/new-episode/references/write-research.md`); a full issue URL,
+  enough under a deadline, filed with the `needs-triage` label and a title naming
+  the skill; or `none: <reason>` for a one-off typo or a fact no process could
+  have caught. A bare issue number, `none:` without a reason, or a path that does
+  not exist is refused.
+- Judged against the staged paths, so stage first, then write the message.
+
+```text
+fix(episode): correct the attention-span figure
+
+### Fixed
+
+1. The cited figure matches its research note.
+
+Source: https://github.com/hancrafted/content-library/issues/321 | wrong figure
+Feeds: skills/new-episode/references/write-research.md
+```
 
 **Provenance is `Source:` alone. Never name yourself as a co-author.** Agent
 harnesses append a `Co-Authored-By` for the model by default, and the harness

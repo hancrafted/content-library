@@ -5,8 +5,8 @@
 # allow the commit or 1 to reject it. Depends on nothing beyond POSIX shell and
 # git, so it behaves identically on a laptop and in a container.
 #
-# Three blocking conditions — header, body shape, `Source:` trailer — and two
-# exemptions. The contract is documented in ../SKILL.md; where the prose and this
+# Four blocking conditions — header, body shape, `Source:` trailer, and a `Feeds:`
+# trailer on a fix to content paths — and two exemptions. The contract is documented in ../SKILL.md; where the prose and this
 # script differ, this script is the contract.
 #
 # This file is orchestration only. The predicates live in lib/rules.sh, the git
@@ -86,6 +86,46 @@ $source_values
 SOURCES
   if [ "$source_ok" -eq 0 ]; then
     report_source_failure "$source_problem"
+  fi
+fi
+
+# Condition 4 — a fix by hand feeds back. A `fix(...)` commit that touches the
+# repository's content paths (`.husky/feeds-paths`) carries a `Feeds:` trailer:
+# an existing path, an issue URL, or `none: <reason>`. Skipped where the
+# repository lists no content paths.
+if rules_is_fix "$header"; then
+  feeds_globs=$(git_feeds_globs)
+  if [ -n "$feeds_globs" ] && rules_touches_content "$(git_staged_paths)" "$feeds_globs"; then
+    feeds_values=$(git_feeds_values "$message_file")
+    if [ -z "$feeds_values" ]; then
+      report_feeds_failure 'this fix touches content paths and git found no Feeds: trailer'
+    else
+      feeds_ok=0
+      feeds_problem=''
+      while IFS= read -r feeds_value; do
+        feeds_kind=$(rules_feeds_kind "$feeds_value")
+        value_problem=''
+        case "$feeds_kind" in
+          url | none) feeds_ok=1 ;;
+          path)
+            if git_path_exists "$feeds_value"; then
+              feeds_ok=1
+            else
+              value_problem="the path \`$feeds_value\` does not exist"
+            fi
+            ;;
+          *) value_problem="\`Feeds: $feeds_value\` is not a path, an issue URL or \`none: <reason>\`" ;;
+        esac
+        if [ -n "$value_problem" ] && [ -z "$feeds_problem" ]; then
+          feeds_problem=$value_problem
+        fi
+      done <<FEEDS
+$feeds_values
+FEEDS
+      if [ "$feeds_ok" -eq 0 ]; then
+        report_feeds_failure "$feeds_problem"
+      fi
+    fi
   fi
 fi
 
