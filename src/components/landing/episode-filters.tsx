@@ -1,15 +1,15 @@
-import type { TagOption } from '@/components/landing/episode-browse.pure';
+import type { ConceptOption } from '@/components/landing/episode-browse.pure';
 import { Button } from '@/components/ui/button';
-import type { TagId } from '@/lib/episode-overview';
+import type { TopConceptId } from '@/lib/episode-overview';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import type { Ref } from 'react';
 
-/** The strings the search box and the Tag filter draw. */
+/** The strings the search box and the Concept filter draw. */
 export interface FilterLabels {
   readonly search: string;
   readonly searchPlaceholder: string;
-  readonly tagFilter: string;
+  readonly conceptFilter: string;
 }
 
 /** The search box: a labelled field whose every keystroke narrows the grid below it. */
@@ -55,8 +55,8 @@ const PRESSED_CHIP =
   'border-selected bg-selected text-selected-foreground hover:bg-selected hover:text-selected-foreground dark:border-selected dark:bg-selected dark:hover:bg-selected';
 const IDLE_CHIP = 'text-muted-foreground hover:border-foreground/40 hover:bg-background hover:text-foreground';
 
-/** A Tag chip: a toggle button, so its name stays put and `aria-pressed` carries the state. */
-function TagChip({ label, count, pressed, onPress }: ChipProps) {
+/** A Concept chip: a toggle button, so its name stays put and `aria-pressed` carries the state. */
+function ConceptChip({ label, count, pressed, onPress }: ChipProps) {
   return (
     <Button
       type="button"
@@ -75,19 +75,19 @@ function TagChip({ label, count, pressed, onPress }: ChipProps) {
   );
 }
 
-interface TagChipsProps {
-  options: readonly TagOption[];
-  selected: readonly TagId[];
+interface ConceptChipsProps {
+  options: readonly ConceptOption[];
+  selected: readonly TopConceptId[];
   labels: FilterLabels;
-  onToggle: (id: TagId) => void;
+  onToggle: (id: TopConceptId) => void;
 }
 
-/** The Tag filter: one multi-select chip per filter Tag with its count, wrapping on a narrow screen; none pressed shows everything. */
-export function TagChips({ options, selected, labels, onToggle }: TagChipsProps) {
+/** The Concept filter: one multi-select chip per top Concept with its count, wrapping on a narrow screen; none pressed shows everything. */
+export function ConceptChips({ options, selected, labels, onToggle }: ConceptChipsProps) {
   return (
-    <div role="group" aria-label={labels.tagFilter} className="flex flex-wrap gap-2">
+    <div role="group" aria-label={labels.conceptFilter} className="flex flex-wrap gap-2">
       {options.map((option) => (
-        <TagChip
+        <ConceptChip
           key={option.id}
           label={option.label}
           count={option.count}

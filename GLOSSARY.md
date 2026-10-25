@@ -19,8 +19,14 @@ _Avoid_: Episode index, catalog, episode list, manifest
 **Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
-**Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
-_Avoid_: Topic, category, theme, label, keyword
+**Concept**: one subject the evidence and the Episodes are grouped under: one markdown file at `docs/llm-wiki/concepts/<id>/concept.md` whose id is its kebab-case English name, never renamed (a better name becomes an alias). It sits in a hierarchy by `broader` (its parents); `narrower` is derived, never written. It renders in English only at `/concepts/<id>`.
+_Avoid_: Tag, Topic, category, keyword
+
+**Top Concept**: a Concept with no parent (`broader: []`). The seven top Concepts are the closed set of themes: each has an icon and an accent, and a new one is a design decision, not a content edit. An Episode lists the top Concepts it teaches, and its card shows them, linked to their pages.
+_Avoid_: Root concept, theme tag, lead Tag
+
+**applyThemeFromConcept**: the field of an Episode's metadata that names one of its top Concepts, whose icon and accent its card draws.
+_Avoid_: Lead Tag, look
 
 **Workshop**: a dated, ordered set of Episodes, run as one event. It lists Episode slugs in the order to follow them and may list an upcoming Episode. It is not a playlist and has no status.
 _Avoid_: Playlist, course, series
@@ -68,6 +74,9 @@ _Avoid_: Theme, key visual
 
 **Slide header**: the Eyebrow, title and caption above a titled Slide's Scene. The Slide wrapper renders it for every Episode whose record does not set `header: 'authored'`, and types it in the first time the Slide is active, once.
 _Avoid_: Title block, heading area
+
+**Definition Slide**: a page slide that teaches one Concept and declares it with `defines: <concept-id>`; one that names no Concept fails the build.
+_Avoid_: Glossary slide, term slide
 
 **Eyebrow**: the small uppercase line above a page slide's title in its Slide header: its Section's title on the left, its place among the Section's page slides (`n / N`) on the right. Computed from the table of contents, never authored; section slides and the Title slide have none.
 _Avoid_: Kicker, overline, label

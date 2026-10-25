@@ -1,4 +1,6 @@
 import { loadContentStore } from '@/lib/content-store.pure';
+import { CONCEPT_THEMES } from '@/lib/episode-overview';
+import { pageLocales, PAGES, routeOf } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { contentStore, rawContent } from './content-store';
 
@@ -8,7 +10,7 @@ import { contentStore, rawContent } from './content-store';
  */
 
 describe('success cases', () => {
-  it('returns the same Episodes, Tags, Workshop and research records the site renders today', () => {
+  it('returns the same Episodes, Workshop and research records the site renders today, and the seven top Concepts', () => {
     // ARRANGE
     const expected = {
       episodes: [
@@ -19,7 +21,15 @@ describe('success cases', () => {
         'ai-attention-span',
         'ai-gives-you-more-work',
       ],
-      tags: ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'],
+      concepts: [
+        'agentic-ai',
+        'ai-adoption',
+        'ai-cost',
+        'context-engineering',
+        'llm-behaviour',
+        'markdown-documentation',
+        'sales',
+      ],
       workshops: ['axel-agentic-workflow-2026-10-23'],
       researchCount: 37,
     };
@@ -28,7 +38,7 @@ describe('success cases', () => {
     // ASSERT
     expect({
       episodes: store.episodes.map(({ slug }) => slug),
-      tags: Object.keys(store.tags),
+      concepts: store.concepts.map(({ id }) => id),
       workshops: store.workshops.map(({ slug }) => slug),
       researchCount: store.research.length,
     }).toEqual(expected);
@@ -51,9 +61,47 @@ describe('success cases', () => {
     // ASSERT
     expect(count).toBeGreaterThan(expectedAtLeast);
   });
+
+  it('A Concept page exists at /concepts/<id> for each of the seven', () => {
+    // ARRANGE
+    const expected = [
+      '/concepts/agentic-ai en',
+      '/concepts/ai-adoption en',
+      '/concepts/ai-cost en',
+      '/concepts/context-engineering en',
+      '/concepts/llm-behaviour en',
+      '/concepts/markdown-documentation en',
+      '/concepts/sales en',
+    ];
+    const paged = new Map(PAGES.map((page) => [routeOf(page), pageLocales(page).join(' ')]));
+    // ACT
+    const pages = contentStore().concepts.map(({ id }) => `/concepts/${id} ${paged.get(`/concepts/${id}`)}`);
+    // ASSERT
+    expect(pages).toEqual(expected);
+  });
+
+  it('themes the cards by exactly the top Concepts the wiki holds', () => {
+    // ARRANGE
+    const expected = Object.keys(CONCEPT_THEMES).sort();
+    // ACT
+    const top = contentStore()
+      .concepts.filter(({ broader }) => broader.length === 0)
+      .map(({ id }) => id);
+    // ASSERT
+    expect(top).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('keeps no Concept page whose Concept file is gone', () => {
+    // ARRANGE
+    const expected = contentStore().concepts.map(({ id }) => `/concepts/${id}`);
+    // ACT
+    const pages = PAGES.map(routeOf).filter((route) => route.startsWith('/concepts/'));
+    // ASSERT
+    expect(pages).toEqual(expected);
+  });
+
   it('names the research file whose frontmatter is broken, without throwing', () => {
     // ARRANGE
     const raw = rawContent();

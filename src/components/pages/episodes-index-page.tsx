@@ -16,7 +16,7 @@ function browseLabels(t: LandingT): BrowseLabels {
     ...cardLabels(t),
     search: t('episodeOverview.search'),
     searchPlaceholder: t('episodeOverview.searchPlaceholder'),
-    tagFilter: t('episodeOverview.tagFilter'),
+    conceptFilter: t('episodeOverview.conceptFilter'),
     showAll: t.raw('episodeOverview.showAll') as string,
     showFewer: t('episodeOverview.showFewer'),
     results: {

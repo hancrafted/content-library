@@ -5,6 +5,7 @@ export const episodeMetadata = {
   slug: 'ai-token-economy',
   status: 'published',
   format: 'foundations',
-  tags: ['cost', 'agentic-ai'],
+  concepts: ['ai-cost', 'agentic-ai'],
+  applyThemeFromConcept: 'ai-cost',
   publishedOn: '2026-10-09',
 } as const satisfies PublishedEpisodeMetadata;

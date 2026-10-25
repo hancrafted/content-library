@@ -3,12 +3,29 @@ import { z } from 'zod';
 import { CONTENT_SCHEMAS } from './content-schemas.pure';
 import { loadContentStore, type RawContent } from './content-store.pure';
 
-const TAGS = { sales: { icon: 'handshake', accent: 'emerald' } };
+const THEMES = { sales: { icon: 'handshake', accent: 'emerald' } };
+const SALES = {
+  path: 'docs/llm-wiki/concepts/sales/concept.md',
+  markdown: [
+    '---',
+    'type: concept',
+    "title: 'Sales'",
+    "description: 'Winning paying customers.'",
+    'broader: []',
+    'generated:',
+    '  by: someone',
+    '  at: 2026-10-25T00:00:00Z',
+    '---',
+    '',
+    'Sales is winning paying customers.',
+  ].join('\n'),
+};
 const EPISODE = {
   slug: 'never-too-early-sales',
   status: 'published',
   format: 'foundations',
-  tags: ['sales'],
+  concepts: ['sales'],
+  applyThemeFromConcept: 'sales',
   publishedOn: '2026-10-19',
 };
 const WORKSHOP = { slug: 'intro-2026-10-23', date: '2026-10-23', episodes: ['never-too-early-sales'] };
@@ -39,7 +56,9 @@ const RESEARCH = {
   ].join('\n'),
 };
 const VALID: RawContent = {
-  tags: TAGS,
+  themes: THEMES,
+  concepts: [SALES],
+  definitionSlides: [],
   episodes: [EPISODE],
   workshops: [WORKSHOP],
   research: [RESEARCH],
@@ -72,7 +91,8 @@ describe('success cases', () => {
       episodes: ['never-too-early-sales'],
       workshops: ['intro-2026-10-23'],
       research: ['AIE-0001'],
-      tags: ['sales'],
+      themes: ['sales'],
+      concepts: ['sales'],
     };
     // ACT
     const result = loadContentStore(VALID);
@@ -83,7 +103,8 @@ describe('success cases', () => {
       episodes: result.store.episodes.map((e) => e.slug),
       workshops: result.store.workshops.map((w) => w.slug),
       research: result.store.research.map((r) => r.id),
-      tags: Object.keys(result.store.tags),
+      themes: Object.keys(result.store.themes),
+      concepts: result.store.concepts.map((c) => c.id),
     }).toEqual(expected);
   });
 
@@ -109,10 +130,10 @@ describe('failure cases', () => {
     expect(refusals[0].message).toContain('publishedOn');
   });
 
-  it('names the Tag whose look is malformed', () => {
+  it('names the theme whose look is malformed', () => {
     // ARRANGE
-    const raw = { ...VALID, tags: { sales: { icon: 'handshake', accent: 'mauve' } } };
-    const expected = { kind: 'tag', record: 'sales' };
+    const raw = { ...VALID, themes: { sales: { icon: 'handshake', accent: 'mauve' } } };
+    const expected = { kind: 'theme', record: 'sales' };
     // ACT
     const refusals = refusalsOf(raw);
     // ASSERT
@@ -161,11 +182,15 @@ describe('failure cases', () => {
     expect(refusals[0]).toMatchObject(expected);
   });
 
-  it('names an Episode that carries a Tag outside the vocabulary', () => {
+  it('names an Episode that lists a Concept outside the top Concepts', () => {
     // ARRANGE
-    const raw = { ...VALID, episodes: [{ ...EPISODE, tags: ['sales', 'tokens'] }] };
+    const raw = { ...VALID, episodes: [{ ...EPISODE, concepts: ['sales', 'tokens'] }] };
     const expected = [
-      { kind: 'episode', record: 'never-too-early-sales', message: 'never-too-early-sales: unknown Tag tokens' },
+      {
+        kind: 'episode',
+        record: 'never-too-early-sales',
+        message: 'never-too-early-sales: concepts names tokens, which is not one of the top Concepts',
+      },
     ];
     // ACT
     const refusals = refusalsOf(raw);
@@ -188,10 +213,10 @@ describe('edge cases', () => {
     // ARRANGE
     const raw = {
       ...VALID,
-      tags: { sales: { icon: 'nope', accent: 'emerald' } },
+      themes: { sales: { icon: 'nope', accent: 'emerald' } },
       workshops: [{ ...WORKSHOP, date: 'soon' }],
     };
-    const expected = ['tag', 'workshop'];
+    const expected = ['theme', 'workshop'];
     // ACT
     const kinds = [...new Set(refusalsOf(raw).map((r) => r.kind))];
     // ASSERT

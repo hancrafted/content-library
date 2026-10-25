@@ -2,8 +2,8 @@ import { findEpisode } from '@/components/episodes/registry';
 import type { Slide } from '@/components/slide-master/slide';
 import { loadContentStore, type ContentStore, type RawContent, type Refusal } from '@/lib/content-store.pure';
 import type { EpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
-import { TAGS, type ListedEpisodeSlug } from '@/lib/episode-overview';
-import { readResearchFiles } from '@/lib/research-files';
+import { CONCEPT_THEMES, type ListedEpisodeSlug } from '@/lib/episode-overview';
+import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
 import { EPISODE_SLUGS } from '@/lib/routes';
 import { WORKSHOPS } from '@/lib/workshops.pure';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
@@ -57,10 +57,21 @@ function slideSources(): RawContent['slideSources'] {
   });
 }
 
+/** Every Definition Slide in every Episode: a Slide that declares the Concept it defines. */
+function definitionSlides(): RawContent['definitionSlides'] {
+  return EPISODE_SLUGS.flatMap((episode) =>
+    findEpisode(episode).sections.flatMap((section) =>
+      section.flatMap(({ slug, defines }) => (defines === undefined ? [] : [{ episode, slide: slug, defines }])),
+    ),
+  );
+}
+
 /** The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy. */
 export function rawContent(): RawContent {
   return {
-    tags: TAGS,
+    themes: CONCEPT_THEMES,
+    concepts: readConceptFiles(process.cwd()),
+    definitionSlides: definitionSlides(),
     episodes: [...Object.values(REGISTERED), ...UPCOMING],
     workshops: WORKSHOPS,
     research: readResearchFiles(process.cwd()),
