@@ -9,6 +9,7 @@ This project is a localized Next.js application which serves to visualize theory
 - `/code-review` is the reviewer. `archgate check` is the ADR gate; `archgate:reviewer` findings are advisory: confirm each against the ADR text before acting.
 - Save a pasted handoff verbatim to `.scratch/<feature>/handoff.md` before starting; review agents read that file as the spec.
 - Use `npm run verify` frequently to verify that the changes are correct.
+- Read `docs/steering/product-vision.md` before any decision. Its ranked trade-off rules decide conflicts, and its escalation steps apply whenever a change would trade architecture or agent legibility for delivery.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
 - Start with `.archgate/adrs/FE-004-slide-architecture.md` for the architecture map.
 - `docs/agents/` holds method and procedure, product-agnostic. Feature reference (Episodes, Context drawer, Translation keys) lives in `docs/features/`.
