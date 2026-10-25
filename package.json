@@ -49,6 +49,7 @@
     "design-archive": "node skills/episode-promote/scripts/serve.ts",
     "dashboard:demo": "node scripts/dashboard-demo.ts",
     "slides:adapt": "node scripts/slide-adapt.ts",
+    "slides:pool": "node scripts/slide-pool.ts",
     "slides:reuse": "node scripts/slide-reuse.ts",
     "slides:promote": "node scripts/slide-promote.ts",
     "slides:settle": "node scripts/slide-settle.ts",

@@ -39,9 +39,9 @@ _Done when_ every Slide of the Spec is on the Episode's page, the user has seen 
 
 ### 5. Harvest
 
-Read [`references/harvest.md`](references/harvest.md) and run its six harvesters as parallel subagents. Assemble their cards into `docs/episodes/<staging>/harvest.json` and render the Harvest report with `npm run episode:harvest -- docs/episodes/<staging>`: one card per proposal, before and after drawn side by side. The command adds two sections itself: research, a card per staged Research question, and adapted Slides, a card per Instance the Episode holds. Nothing is applied yet.
+Read [`references/harvest.md`](references/harvest.md) and run its six harvesters as parallel subagents. Assemble their cards into `docs/episodes/<staging>/harvest.json` and render the Harvest report with `npm run episode:harvest -- docs/episodes/<staging>`: one card per proposal, before and after drawn side by side. The command adds three sections itself: a card per staged Research question, a card per hand fix of the Run with where its `Feeds:` trailer says the lesson goes, and a card per Instance the Episode holds. Nothing is applied yet.
 
-_Done when_ `harvest.html` renders all six harvested sections, a research card per staged question and a card per Instance, every card with its before, after and evidence.
+_Done when_ `harvest.html` renders all six harvested sections, a research card per staged question, a hand-fix card per `fix(...)` commit on content since the Run's last Gate and a card per Instance, every card with its before, after and evidence.
 
 ### 6. Gate the harvest
 
@@ -52,6 +52,8 @@ Research and duplicate cards are the user's evidence decisions:
 - A kept research card (`Q`) is the user's confirmation. Write the `confidence` or `informs` the note names, if any, then add `verified: { by: human:han, at: <now, UTC> }` to that `research.md`. A struck card leaves the question unconfirmed, and step 7 refuses to move it until the user confirms it.
 - A kept duplicate card (`D`) is applied in step 7; a struck one keeps both questions.
 - An Instance card (`I`) is one decision per Instance: kept, the Instance updates the shared Slide; struck, it becomes a Slide of its own. Both are applied in step 7. A card that warns the shared Slide changed since the copy needs those changes carried into the Instance by hand before an update.
+
+Hand-fix cards (`F`) are lessons, landed with the `pipeline-feedback` skill: a kept card naming a file gets its lesson in that file; a kept card naming an issue leaves the issue to carry it. A kept `none` card agrees nothing is to learn; a struck one means the user contests the reason, and its note names the file that gets the lesson.
 
 _Done when_ every kept card is applied, filed or queued for step 7, every staged question has a kept research card or the user has decided its fate, every Instance card is decided, and `npm run verify` is green.
 

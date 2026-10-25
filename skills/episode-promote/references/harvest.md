@@ -6,7 +6,7 @@ Shared inputs: `brief.md`, `spec/spec.html`, `feedback/*/feedback.md`, `pipeline
 
 ## Lessons
 
-What the Run teaches the pipeline. Pair the gate commits with `git log --grep='Gate:'` and diff each draft against the user's approval; a status-only diff is acceptance, not a correction. An unmarked commit is the user's (`agentOf` in `skills/new-episode/scripts/marks.pure.ts`). Then: a correction made twice is a proposed rubric line. Count failing rubric Scores across Runs (`npm run episode:query -- "SELECT rubric, count(*) AS n FROM scores WHERE name = 'rubric' AND value = 'fail' GROUP BY rubric ORDER BY n DESC"`). Read the run log's prefixed findings (`No library match:` and the like), grouped by job. Each proposal is a `LEARNINGS.md` lesson in that file's shape: what happened, its evidence, the proposed fix and the file it changes. Skip a lesson `LEARNINGS.md` already holds; cite it instead.
+What the Run teaches the pipeline. Pair the gate commits with `git log --grep='Gate:'` and diff each draft against the user's approval; a status-only diff is acceptance, not a correction. An unmarked commit is the user's (`agentOf` in `skills/new-episode/scripts/marks.pure.ts`). Then: a correction made twice is a proposed rubric line. Count failing rubric Scores across Runs (`npm run episode:query -- "SELECT rubric, count(*) AS n FROM scores WHERE name = 'rubric' AND value = 'fail' GROUP BY rubric ORDER BY n DESC"`). Read the run log's prefixed findings (`No library match:` and the like), grouped by job. Each proposal is a `LEARNINGS.md` lesson in that file's shape: what happened, its evidence, the proposed fix and the file it changes. Skip a lesson `LEARNINGS.md` already holds; cite it instead. The user's hand fixes have their own section, which the command writes ([Hand fixes](#hand-fixes)): read them for patterns, and propose a lesson only when several fixes point at one cause.
 
 ## Style
 
@@ -31,6 +31,17 @@ Research questions that answer one question twice (design-ADR `docs/adr/0016-con
 ## Research questions
 
 `npm run episode:harvest` writes this section itself, one card per staged question (`scripts/research-cards.pure.ts`): the `confidence` and `informs` its writer proposed, with the writer's one-line reason. No harvester writes it.
+
+## Hand fixes
+
+`npm run episode:harvest` writes this section itself, one card per hand fix of the Run (`scripts/hand-fixes.ts`, design-ADR `docs/adr/0016-content-data-model.md`, _A fix by hand feeds back_): every `fix(...)` commit that touched a content path (`.husky/feeds-paths`, the commit gate's list) since the Run's last `Gate:` commit, except one that touched only another Episode's folder. Each card shows where the commit's `Feeds:` trailer sends the lesson:
+
+- a file: the card proposes the lesson for that skill, template or guide;
+- an issue URL: the card shows the issue that holds the lesson;
+- `none: <reason>`: the card lists the fix and its reason, so the user can contest it;
+- no trailer, which only a skipped commit gate lets through: the card asks where the lesson goes.
+
+The command refuses a Staging folder that no `Gate:` commit's `Source:` names, since it cannot tell where the Run's fixes start. No harvester writes this section.
 
 ## Adapted Slides
 
@@ -62,7 +73,7 @@ The user decides each proposal on one card of the Harvest report, so a proposal 
 }
 ```
 
-- **id**: the section's letter and a number: `L` Lessons, `S` Style, `B` Slide library, `C` Cleanups, `T` Refactor tickets, `D` Duplicates; `Q` is the research section's.
+- **id**: the section's letter and a number: `L` Lessons, `S` Style, `B` Slide library, `C` Cleanups, `T` Refactor tickets, `D` Duplicates; `Q` is the research section's and `F` the hand-fix section's.
 - **title**: the decision, as one plain sentence the user can say yes or no to.
 - **happened**, **change**, **gain**: one or two short sentences each, in [plain language](#plain-language).
 - **evidence**: the only field for ids, rule numbers, job names, line numbers and commit hashes. It stays folded on the card.

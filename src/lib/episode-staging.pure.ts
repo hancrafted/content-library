@@ -11,6 +11,7 @@ import { checkSpec, specStage } from './episode-spec.pure';
 import { checkBrief } from './episode-staging-brief.pure';
 import { checkFeedback } from './episode-staging-feedback.pure';
 import { checkStagingOrder } from './episode-staging-order.pure';
+import { checkSlidePlanAgreement } from './episode-staging-slide-plan.pure';
 import { checkTexts } from './episode-staging-texts.pure';
 import { checkTitleSlide } from './episode-staging-title.pure';
 import { unless, type Finding } from './finding.pure';
@@ -122,6 +123,7 @@ export function checkStagingFolder(
     ...checkDossier(files, known),
     ...checkSpec(files, reviewAsset, specStage(files[SPEC_FILE] ?? '')),
     ...checkFeedbackRounds(files),
+    ...checkSlidePlanAgreement(files),
   ];
 }
 

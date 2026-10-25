@@ -38,8 +38,8 @@ _Done when_ `node skills/new-episode/scripts/approve.ts docs/episodes/<slug>/bri
 
 Setup turns the approved Brief into the approved pipeline. Every job of `pipeline.yml` names its `stage`, one of the ordered `stages` ([design-ADR-0008](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md)); Setup's jobs run by [the job loop](#the-job-loop), each when `npm run episode:status -- <slug>` prints it `ready`:
 
-1. `categorize-research`, whose `intent` is the implementor's prompt: one research folder name and its Concepts per research question, and a `concept-gap` note for a question no Concept covers. Keep the names and Concepts for retrieval; save them to `.scratch/<slug>/research-folders.md` when the session may end before it.
-2. `retrieval` by [`references/retrieval.md`](references/retrieval.md), beside `convert-references` by [`references/convert-references.md`](references/convert-references.md): retrieval decides reuse, refresh or new per question and writes `research-plan.md` listing the questions needing a job under `## Research jobs`.
+1. `categorize-research`, whose `intent` is the implementor's prompt: one research folder name and its Concepts per research question, and a `concept-gap` note for a question no Concept covers. Keep the names and Concepts for retrieval; save them to `.scratch/<slug>/research-folders.md` when the session may end before it. Beside it, `slide-retrieval` by [`references/slide-retrieval.md`](references/slide-retrieval.md) decides reuse, adapt or new per Slide of the Brief and writes `slide-plan.md`.
+2. `retrieval` by [`references/retrieval.md`](references/retrieval.md), beside `convert-references` by [`references/convert-references.md`](references/convert-references.md): retrieval decides reuse, refresh or new per question, brings in what the kept Slides cite, and writes `research-plan.md` listing the questions needing a job under `## Research jobs`.
 3. `customize-pipeline` by [`references/customize-pipeline.md`](references/customize-pipeline.md): expands `write-research` into one job per listed question and `implement-section` into one job per Section of the Brief's `## Slides`, and gives each `implement-section` job its own free dev-server `port`, then sets `status: approved`. No gate: the run continues straight into Research.
 
 _Done when_ `docs/episodes/<slug>/pipeline.yml` has `status: approved`, committed by `customize-pipeline`.
@@ -67,7 +67,7 @@ _Done when_ every todo is done or blocked, and each one has a closed Job span wi
 
 ### 6. Serve and open the PR
 
-Run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where the user learns about it.
+First run `npm run slides:settle` on the Episode branch and commit what it changes: every Instance no Section job edited goes back to a Reference to its pool Slide, so no unchanged copy outlives the Run. Then run the `open-pr` job by [`references/open-pr.md`](references/open-pr.md), even when a branch blocked: the PR checklist is where the user learns about it.
 
 Then end the Run: `npm run episode:run -- <slug> end-run ok --summary "<one line>"`. The user's feedback and Promotion follow; [Promotion archives the log](#promotion).
 
