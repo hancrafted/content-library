@@ -158,14 +158,22 @@ export const playlistSchema = z
   .describe('An ordered list of Episodes with a type and a visibility, and nothing else');
 
 export const slideSourceSchema = z
-  .object({
+  .strictObject({
     episode: slugOf('The Episode whose Slide cites the source'),
     slide: slugOf('The Slide whose Speaker note cites the source'),
     note: slugOf('The Speaker note item that carries the source'),
-    slug: slugOf('The source slug, the key of its title in the Slide translation files'),
-    url: z.url().describe('The address the source links to'),
+    slug: slugOf('The source slug; a url item keeps its title under this key in the Slide translation files'),
+    research: z
+      .string()
+      .regex(/^[A-Z]+-\d{4}$/, 'must be a Research question id such as AIE-0001')
+      .optional()
+      .describe('The Research question the note cites, by id; its title, link and confidence come from the question'),
+    url: z.url().optional().describe('The address of a Source the note cites directly, the exception to research'),
   })
-  .describe('One source a Speaker note cites');
+  .refine(({ research, url }) => (research === undefined) !== (url === undefined), {
+    message: 'a source item holds exactly one of research or url',
+  })
+  .describe('One source a Speaker note cites: a Research question by default, a Source directly by exception');
 
 /** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
 export const SLIDE_FOLDER = /^src\/components\/(episodes\/[a-z0-9-]+\/slides|slide-pool)\/[a-z0-9-]+$/;
@@ -236,7 +244,6 @@ export const CONTENT_SCHEMAS = {
   research: researchSchema,
 } as const;
 
-export type SlideSource = z.infer<typeof slideSourceSchema>;
 export type ConceptFrontmatter = z.infer<typeof conceptSchema>;
 export type DefinitionSlide = z.infer<typeof definitionSlideSchema>;
 export type SlideFolder = z.infer<typeof slideFolderSchema>;

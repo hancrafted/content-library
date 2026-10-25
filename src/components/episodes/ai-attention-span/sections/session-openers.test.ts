@@ -33,6 +33,7 @@ const context = (locale: Locale) => ({
   placed: PLACED,
   referenceLabels: { ref: 'opens speaker note', marker: (title: string) => `Speaker note: ${title}` },
   header: 'shared' as const,
+  research: [],
 });
 
 function localized(slug: string, locale: Locale) {

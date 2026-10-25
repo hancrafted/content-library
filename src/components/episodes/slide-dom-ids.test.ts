@@ -40,6 +40,7 @@ function scene({ episode, slide }: PlacedSlide) {
     placed,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
     header,
+    research: [],
   }).content;
 }
 

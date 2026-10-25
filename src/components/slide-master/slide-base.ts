@@ -11,11 +11,14 @@ import type { ReactElement, ReactNode } from 'react';
 /** One value per locale, so a missing German value fails `tsc`. */
 export type PerLocale<T> = Readonly<Record<Locale, T>>;
 
-/** A source's non-localized facts; its title is a Translation file leaf. */
-export interface SourceSpec {
-  readonly slug: string;
-  readonly url: string;
-}
+/**
+ * One citation of a Speaker note, holding exactly one of `research` or `url` (design-ADR 0016, Citations rules 7 and
+ * 8). By default it cites a Research question by id, whose title, link and confidence come from the question; a `url`
+ * cites a Source directly and keeps its title as a Translation file leaf.
+ */
+export type SourceSpec =
+  | { readonly slug: string; readonly research: string; readonly url?: never }
+  | { readonly slug: string; readonly url: string; readonly research?: never };
 
 /**
  * A Speaker note item as a Slide declares it. `target` is the short name of
