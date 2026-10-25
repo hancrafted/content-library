@@ -14,23 +14,35 @@ frontmatter:
           presence: required
           intent: "The file name for a reader, equal to the file's h1 so retrieval can list the file by it; the title-matches-h1 check compares them."
         stale_after: { presence: required, format: datetime }
-    - ruleId: product-vision
+    - ruleId: steering
       folders: [docs/steering/]
-      intent: 'docs/steering/ holds the product strategy every agent reads before a decision, so each file declares itself a steering document and its status says whether Han has reviewed it'
+      intent: 'docs/steering/ holds the product strategy every agent reads before a decision, so each file says who wrote it, whether Han has verified that version, and when he must re-read it'
+      unknownKeys: forbidden
+      assess:
+        stale: 'Steering older than two weeks: ask Han to re-read it against the decisions made since, then add his verified entry and move stale_after.'
       fields:
         type:
           presence: required
           allowed:
             - {
-                value: product-vision,
-                intent: 'North star, horizons, ranked trade-off rules, escalation and non-goals: steers decisions without carrying the model.',
+                value: product-steering,
+                intent: 'Product strategy that decides conflicts: the vision (north star, horizons, trade-off rules) or the requirements (capabilities per Audience and horizon).',
               }
         title: *title
-        status:
+        generated.by: &generated-by
           presence: required
-          allowed:
-            - { value: draft, intent: 'Written by an agent; Han has not reviewed the text yet.' }
-            - { value: accepted, intent: 'Han reviewed the text and accepts it as the steering document.' }
+          format: actor
+          intent: 'Who wrote or last rewrote the file, as an OKF actor: `<producer>/<version>` for an agent (`claude-code/opus-5.5`), `human:<id>` for a person (`human:han`). Fail if an agent-written file names a person, or a file Han edited names an agent.'
+        generated.at: &generated-at
+          presence: required
+          format: datetime
+          intent: 'When the file last changed in substance, with an explicit UTC offset. A `verified` entry counts only while its `at` is at or after this, so an edit re-opens the gate.'
+        verified:
+          intent: 'OKF §5.2 trust: `{ by: human:han, at }` entries, added only when Han has read the file. An entry counts only while its `at` is at or after generated.at, so an agent edit re-opens the review. Absent until his first review.'
+        stale_after:
+          presence: required
+          format: datetime
+          intent: 'When Han must re-read the file: two weeks after his last verified entry, or after generated.at while he has none. Only his review moves it, together with a new verified entry. Two weeks while the strategy is young; lengthen later.'
     - ruleId: agent-guide
       folders: [docs/agents/]
       intent: 'docs/agents/ holds method and procedure only, so every file declares itself an agent guide and product reference is caught here'
@@ -97,14 +109,8 @@ frontmatter:
                 value: draft,
                 intent: 'A Brief in Staging is draft; Promotion removes the line when it moves the Brief to src/components/episodes/<slug>/.',
               }
-        generated.by: &generated-by
-          presence: required
-          format: actor
-          intent: 'Who wrote or last rewrote the file, as an OKF actor: `<producer>/<version>` for an agent (`claude-code/opus-5.5`), `human:<id>` for a person (`human:han`). Fail if an agent-written file names a person, or a file Han edited names an agent.'
-        generated.at: &generated-at
-          presence: required
-          format: datetime
-          intent: 'When the file last changed in substance, with an explicit UTC offset. A `verified` entry counts only while its `at` is at or after this, so an edit re-opens the gate.'
+        generated.by: *generated-by
+        generated.at: *generated-at
         verified: &verified
           intent: 'OKF §5.2 trust: who confirmed the file and when, as a list of `{ by, at }` or one bare mapping (OKF reads a bare mapping as a one-element list). `process:markdown-harness` once the checks pass, `human:han` once Han approves at the gate; an entry counts only while its `at` is at or after generated.at. The shape, actor and datetime are checked in tests/docs/episode-staging.test.ts, because one address cannot govern both the list and the bare mapping.'
 

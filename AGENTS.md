@@ -27,13 +27,13 @@ This project is a localized Next.js application which serves to visualize theory
 - `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`; `*.browser.test.ts` runs on Playwright against the built export via `npm run test:browser`: pre-push when a push touches its paths, and nightly on `main` in CI; pull-request CI opens no browser. Keep the vitest configs split — `verify` must stay fast and must not require a build.
 - When the user corrects a Shared visual's behaviour (animation, Preset, state, layout) for the first time after looking at it, propose a browser test that pins the corrected behaviour, titled in the user's words, and write it once they confirm. Episode Slides and copy changes never trigger one.
 
-## Audiences
+## Audiences and locales
 
-International English via YouTube — reach. German businesses for coaching and
-consulting — conversion. They want different things from the same site, and the
-locale split serves both: English canonical at the bare root so shared links
-just work, German canonical at `/de` because search indexes locales separately
-and German buyers arrive from German queries.
+The Audiences (Individual, Organization) and what each is for:
+`docs/steering/product-vision.md`; what each can do, per horizon:
+`docs/steering/product-requirements.md`. English is canonical at the bare root
+so shared links just work; German is canonical at `/de`, because search indexes
+locales separately and German buyers arrive from German queries.
 
 ## How work arrives
 
