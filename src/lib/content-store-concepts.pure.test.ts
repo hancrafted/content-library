@@ -60,6 +60,7 @@ const VALID: RawContent = {
   slideSources: [],
   sourceBaseline: [],
   researchPlans: [],
+  pins: [],
   slides: [],
   episodeSlides: [],
   definitionSlides: [],

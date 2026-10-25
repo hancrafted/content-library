@@ -1,4 +1,4 @@
-import { episode, slide } from '@/components/slide-master/slide';
+import { episode, pinAnchor, slide } from '@/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/components/slide-master/slide-base';
 import { TRANSLATIONS } from '@/i18n/translations';
 import type { Locale } from '@/lib/locale.pure';
@@ -224,6 +224,24 @@ describe('success cases', () => {
     };
     // ACT
     const result = { adapted: await linkOf(adapted, 'why-context-rots'), both: await linkOf(both, 'why-context-rots') };
+    // ASSERT
+    expect(result).toEqual(expected);
+  });
+
+  it('places a pool Slide at the anchor its Episode pinned, and a sibling link follows it there', async () => {
+    // ARRANGE
+    const pinnedRecord = episode({
+      slug: 'slides',
+      messages: EPISODE,
+      sections: [[foundations, pinAnchor(lostMiddle, 'the-lost-middle-for-founders'), linking]],
+    });
+    const expected = {
+      ids: ['foundations', 'foundations--the-lost-middle-for-founders', 'foundations--why-context-rots'],
+      link: '<a href="/episodes/slides#foundations--the-lost-middle-for-founders">the lost middle</a>',
+    };
+    // ACT
+    const { slides } = await recordContent(pinnedRecord, 'en', { translatorOf: translatorOf('en'), research: [] });
+    const result = { ids: slides.map(({ id }) => id), link: await linkOf(pinnedRecord, 'why-context-rots') };
     // ASSERT
     expect(result).toEqual(expected);
   });

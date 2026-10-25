@@ -1,9 +1,10 @@
-import type { SlideFolder } from './slide-folder-schema.pure';
+import type { PinnedAnchor, SlideFolder } from './slide-folder-schema.pure';
 
 /*
  * What global Slide slug uniqueness refuses at build (design-ADR 0016, Slide reuse rule 7), over every Slide folder in
- * every Episode's `slides/` and the Slide pool: a slug two Slides share, and an instance under its origin's slug. A
- * Title slide is exempt: its anchor is `top`. The content store names each problem as a refusal.
+ * every Episode's `slides/` and the Slide pool: a slug two Slides share, an instance under its origin's slug, and a
+ * retired instance slug a Pinned anchor reserves. A Title slide is exempt: its anchor is `top`. The content store names
+ * each problem as a refusal.
  */
 
 /** One problem: the Slide slug it concerns and one sentence on what is wrong. */
@@ -38,7 +39,24 @@ function originSlugs(slides: readonly SlideFolder[]): SlideFolderProblem[] {
     }));
 }
 
-/** Every slug problem among the Slide folders, shared slugs first. */
-export function slideFolderProblems(slides: readonly SlideFolder[]): SlideFolderProblem[] {
-  return [...sharedSlugs(slides), ...originSlugs(slides)];
+/** A retired instance slug stays its Episode's anchor, so no Slide takes it again. */
+function retiredSlugs(slides: readonly SlideFolder[], pins: readonly PinnedAnchor[]): SlideFolderProblem[] {
+  return slides
+    .filter(({ title }) => !title)
+    .flatMap(({ path, slug }) =>
+      pins
+        .filter((pin) => pin.slug === slug)
+        .map(({ episode }) => ({
+          record: slug,
+          message: `${path} takes a retired instance slug: ${episode} pins it as an anchor, so it stays reserved`,
+        })),
+    );
+}
+
+/** Every slug problem among the Slide folders and the Pinned anchors, shared slugs first. */
+export function slideFolderProblems(
+  slides: readonly SlideFolder[],
+  pins: readonly PinnedAnchor[],
+): SlideFolderProblem[] {
+  return [...sharedSlugs(slides), ...originSlugs(slides), ...retiredSlugs(slides, pins)];
 }

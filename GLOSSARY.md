@@ -99,11 +99,14 @@ _Avoid_: Shared slides, library (the Slide library is the Master slides), common
 **Reference (Slide)**: an Episode's listing of a pool Slide in one of its Sections: an import and a list entry, nothing copied. The Slide renders the same in every Episode that holds it; its anchor comes from its place in each, and so does the target of its `slideHref` link to a sibling: a sibling the Episode lacks fails the build unless the link falls back to plain text.
 _Avoid_: Link, alias, copy, symlink
 
-**Instance (Slide)**: a pool Slide adapted for one Episode: a copy in that Episode's own `slides/`, made by `npm run slides:adapt`, under a slug of its own (never its origin's) and marked with **copiedFrom**. It takes the place of the Episode's Reference, so the other Episodes keep the pool Slide; a sibling link to the origin's slug resolves to the Instance in its Episode. `npm run slides:settle` replaces an Instance no edit touched with the Reference again, and Promotion resolves an edited one.
+**Instance (Slide)**: a pool Slide adapted for one Episode: a copy in that Episode's own `slides/`, made by `npm run slides:adapt`, under a slug of its own (never its origin's) and marked with **copiedFrom**. It takes the place of the Episode's Reference, so the other Episodes keep the pool Slide; a sibling link to the origin's slug resolves to the Instance in its Episode. `npm run slides:settle` replaces an Instance no edit touched with the Reference again, and Promotion resolves an edited one with `npm run slides:promote`: it updates the pool Slide, leaving a **Pinned anchor**, or becomes a Slide of its own under the same slug.
 _Avoid_: Fork, variant, override, copy (unqualified)
 
 **copiedFrom**: an Instance's marker in its `slide.tsx`, `copiedFrom: { slug, commit }`: the pool Slide it was copied from and the commit it was copied at. Written by `npm run slides:adapt`, never by hand.
 _Avoid_: origin, parent, source (a Source is evidence)
+
+**Pinned anchor**: an Episode's Reference placed under a retired Instance slug, `pinAnchor(<pool Slide>, '<instance slug>')` in its Section list, so that Episode's anchor (`<section>--<instance slug>`) does not move when Promotion makes the Instance's content the pool Slide's. Written by `npm run slides:promote`, never by hand. The retired slug stays reserved: no Slide takes it again, and the build and `npm run slides:adapt` refuse one that does.
+_Avoid_: alias, redirect, anchor override
 
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide

@@ -101,6 +101,15 @@ function slides(): RawContent['slides'] {
   });
 }
 
+/** Every Pinned anchor: each Episode's reference to a pool Slide placed under a retired instance slug. */
+function pins(): RawContent['pins'] {
+  return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((episode) =>
+    findEpisode(episode).sections.flatMap((section) =>
+      section.flatMap(({ pinnedSlug }) => (pinnedSlug === undefined ? [] : [{ episode, slug: pinnedSlug }])),
+    ),
+  );
+}
+
 /** Each Episode's Slide list, the Slides its Sections place, so the store can tell an Episode derived from another. */
 function episodeSlides(): RawContent['episodeSlides'] {
   return [...EPISODE_SLUGS, ...UNLISTED_EPISODE_SLUGS].map((episode) => ({
@@ -123,6 +132,7 @@ export function rawContent(): RawContent {
     slideSources: slideSources(),
     sourceBaseline: SOURCE_BASELINE,
     slides: slides(),
+    pins: pins(),
     researchPlans: readResearchPlans(process.cwd()),
   };
 }

@@ -43,6 +43,10 @@ Research questions that answer one question twice (design-ADR `docs/adr/0016-con
 
 The command refuses a Staging folder that no `Gate:` commit's `Source:` names, since it cannot tell where the Run's fixes start. No harvester writes this section.
 
+## Adapted Slides
+
+`npm run episode:harvest` writes this section itself, one card per Instance the Episode holds (`scripts/instance-cards.pure.ts`): the shared Slide it was copied from, every Episode an update would change, and a warning naming each commit that changed the shared Slide since the copy. No harvester writes it.
+
 ## The card
 
 The user decides each proposal on one card of the Harvest report, so a proposal is a card, as JSON. The shapes are typed in [`scripts/harvest-report.pure.ts`](../scripts/harvest-report.pure.ts); `episode:harvest` refuses a duplicate id, an overlap naming no card, and a visual kind the page cannot draw.

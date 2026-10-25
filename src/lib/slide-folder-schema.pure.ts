@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { slugOf } from './kebab.pure';
 
 /*
- * The schema the content store loads each Slide folder through: where it lives, its slug, and whether it is an
- * instance of a pool Slide. Nothing here reads a file.
+ * The schemas the content store loads each Slide folder through (where it lives, its slug, and whether it is an
+ * instance of a pool Slide) and each Pinned anchor an Episode holds. Nothing here reads a file.
  */
 
 /** Where Slide folders live: an Episode's own `slides/`, or the Slide pool once a second Episode reuses one. */
@@ -24,3 +24,12 @@ export const slideFolderSchema = z
   .describe('One Slide folder, wherever it lives');
 
 export type SlideFolder = z.infer<typeof slideFolderSchema>;
+
+export const pinnedAnchorSchema = z
+  .object({
+    episode: slugOf('The Episode whose Section list holds the pinned reference'),
+    slug: slugOf('The retired instance slug the reference keeps as its anchor: reserved, never a Slide slug again'),
+  })
+  .describe("A Pinned anchor: one Episode's reference to a pool Slide placed under a retired instance slug");
+
+export type PinnedAnchor = z.infer<typeof pinnedAnchorSchema>;

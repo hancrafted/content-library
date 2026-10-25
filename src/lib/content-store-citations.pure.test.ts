@@ -81,6 +81,7 @@ const VALID: RawContent = {
   sourceBaseline: [],
   slides: [],
   researchPlans: [],
+  pins: [],
 };
 
 function refusalsOf(raw: RawContent) {
