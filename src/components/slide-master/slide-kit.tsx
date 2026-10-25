@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { ContextMarker } from './context-marker';
 import { ContextRef } from './context-ref';
 import { DEFAULT_RICH_TAGS } from './rich-tags';
-import type { RuntimeKit, RuntimeTranslator } from './slide-base';
+import type { RuntimeKit, RuntimeTranslator, SlideHref, SlideHrefOptions } from './slide-base';
 import { SlideTitle } from './slide-master';
 
 /** The optional message key a Slide sets when its on-screen title differs from its table-of-contents `title`. */
@@ -23,7 +23,7 @@ export interface ReferenceLabels {
 export interface EpisodeKitInput {
   readonly episode: EpisodeSlug;
   readonly locale: Locale;
-  /** Each Slide slug's placed id, from the walk (`placeSections`): what `slideHref` links to. */
+  /** Each authored sibling slug's anchor in this Episode (`siblingAnchors`): what `slideHref` links to. */
   readonly anchors: ReadonlyMap<string, string>;
   readonly referenceLabels: ReferenceLabels;
 }
@@ -51,13 +51,20 @@ function withDefaultTags(t: RuntimeTranslator): RuntimeTranslator {
   return Object.assign((key: string, ...args: unknown[]) => t(key, ...args), t, { rich });
 }
 
-/** `slideHref`: the localized link to a Slide of this Episode, by the anchor the walk placed it at. */
-function slideHrefOf(episode: EpisodeKitInput, slideId: string): RuntimeKit['slideHref'] {
-  return (slug) => {
+/**
+ * `slideHref`: the localized link to a sibling Slide, by the anchor this Episode's walk placed it at
+ * (`siblingAnchors`). A sibling the Episode does not hold throws, unless the call site opts into the text fallback.
+ */
+function slideHrefOf(episode: EpisodeKitInput, slideId: string): SlideHref {
+  function slideHref(slug: string): string;
+  function slideHref(slug: string, options: SlideHrefOptions): string | undefined;
+  function slideHref(slug: string, options?: SlideHrefOptions): string | undefined {
     const anchor = episode.anchors.get(slug);
-    if (anchor === undefined) throw new Error(`No Slide "${slug}" in "${episode.episode}" to link from "${slideId}".`);
-    return localizePath(episodeRoute(episode.episode), episode.locale, anchor);
-  };
+    if (anchor !== undefined) return localizePath(episodeRoute(episode.episode), episode.locale, anchor);
+    if (options?.fallback === 'text') return undefined;
+    throw new Error(`No Slide "${slug}" in "${episode.episode}" to link from "${slideId}".`);
+  }
+  return slideHref;
 }
 
 /** `template`: a string leaf of the Slide's keys as written, for a client component to fill. */
