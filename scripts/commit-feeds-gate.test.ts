@@ -94,24 +94,26 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('refuses a fix to an Episode or a Slide without a Feeds: line', () => {
-    // ARRANGE
-    const root = repoWith([EPISODE_FILE]);
-    // ACT
-    const result = gate(root, 'fix(episode): typo', []);
-    // ASSERT
-    expect(result.code).toBe(1);
-    expect(result.stderr).toContain('Feeds');
-  });
+  describe('A fix to an Episode or a Slide without a Feeds: line is refused at commit; one that names a skill file that does not exist is refused', () => {
+    it('refuses a fix to an Episode without a Feeds: line', () => {
+      // ARRANGE
+      const root = repoWith([EPISODE_FILE]);
+      // ACT
+      const result = gate(root, 'fix(episode): typo', []);
+      // ASSERT
+      expect(result.code).toBe(1);
+      expect(result.stderr).toContain('Feeds');
+    });
 
-  it('refuses a Feeds: path to a skill file that does not exist', () => {
-    // ARRANGE
-    const root = repoWith([EPISODE_FILE]);
-    // ACT
-    const result = gate(root, 'fix(episode): typo', ['Feeds: skills/new-episode/references/nope.md']);
-    // ASSERT
-    expect(result.code).toBe(1);
-    expect(result.stderr).toContain('does not exist');
+    it('refuses a Feeds: line naming a skill file that does not exist', () => {
+      // ARRANGE
+      const root = repoWith([EPISODE_FILE]);
+      // ACT
+      const result = gate(root, 'fix(episode): typo', ['Feeds: skills/new-episode/references/nope.md']);
+      // ASSERT
+      expect(result.code).toBe(1);
+      expect(result.stderr).toContain('does not exist');
+    });
   });
 
   it('refuses none: with no reason', () => {
