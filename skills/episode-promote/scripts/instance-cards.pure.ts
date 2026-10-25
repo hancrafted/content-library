@@ -24,12 +24,16 @@ function listed(items: readonly string[]): string {
   return items.length < 2 ? (items[0] ?? '') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
 }
 
+function changesSince(poolChanges: readonly string[]): string[] {
+  return poolChanges.length === 0 ? [] : [`Changed since the copy: ${poolChanges.join('; ')}.`];
+}
+
 function card({ slug, folder, origin, affected, poolChanges }: InstanceFacts, at: number): Card {
   const adapted = `The Run adapted the shared Slide "${origin}" for this Episode and edited the copy.`;
   const warning =
     poolChanges.length === 0
       ? ''
-      : ` The shared Slide changed since the copy (${poolChanges.join('; ')}): carry that into the copy by hand before an update, then add --reconciled.`;
+      : ` The shared Slide changed since the copy (${poolChanges.length} change(s), named under evidence): carry them into the copy by hand before an update, then add --reconciled.`;
   return {
     id: `I${at + 1}`,
     title: `Make "${slug}" the shared Slide "${origin}", or keep it as a Slide of its own.`,
@@ -40,7 +44,10 @@ function card({ slug, folder, origin, affected, poolChanges }: InstanceFacts, at
     gain: "Every Slide has one home, and this Episode's links keep working either way.",
     before: { kind: 'stack', items: [{ label: origin }, { label: slug }] },
     after: { kind: 'stack', items: [{ label: `${origin}, changed in ${listed(affected)}` }] },
-    evidence: `An update changes the shared Slide in: ${affected.join(', ')}.`,
+    // Commit subjects stay out of the fields the report checks for plain words: a subject may name a rule id.
+    evidence: [`An update changes the shared Slide in: ${affected.join(', ')}.`, ...changesSince(poolChanges)].join(
+      ' ',
+    ),
   };
 }
 

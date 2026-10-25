@@ -43,13 +43,17 @@ describe('instanceSection', () => {
   describe('failure cases', () => {
     it('warns on the card when the shared Slide changed since the copy, naming each change', () => {
       // ARRANGE
-      const changed = { ...INSTANCE, poolChanges: ['3f2a1bc fix the German pool title'] };
+      const changed = { ...INSTANCE, poolChanges: ['3f2a1bc fix(FE-011): the German pool title'] };
       const expectedWarning =
-        'The shared Slide changed since the copy (3f2a1bc fix the German pool title): carry that into the copy by hand before an update, then add --reconciled.';
+        'The shared Slide changed since the copy (1 change(s), named under evidence): carry them into the copy by hand before an update, then add --reconciled.';
+      const expectedEvidence = 'Changed since the copy: 3f2a1bc fix(FE-011): the German pool title.';
+      const ruleId = 'FE-011';
       // ACT
       const [card] = instanceSection([changed]).cards;
       // ASSERT
       expect(card.happened).toContain(expectedWarning);
+      expect(card.happened).not.toContain(ruleId);
+      expect(card.evidence).toContain(expectedEvidence);
       expect(card.weight).toBe('weak');
     });
   });
