@@ -90,17 +90,17 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 1. This record is the map
 
-1. Read this before touching an Episode: modules and flows, not mechanism; rules live with each area's owner (Context).
+1. Read this before touching an Episode: modules and flows, not mechanism; each area's owner holds its rules (Context).
 
 ### 2. Four tiers, one direction
 
-1. `app → components → hooks → lib`, skips downward only. Routes stay thin, reaching components via the page composition roots.
+1. `app → components → hooks → lib`, skips downward only. Routes stay thin (FE-007).
 
 ### 3. Each module owns one thing
 
-1. `episodes/<ep>/` owns one Episode: its record, its own text, published anchors, one folder per Slide, and one `sections/<section-slug>.ts` per Section, exporting its ordered Slides to the record's `sections`.
+1. `episodes/<ep>/` owns one Episode: its record, text, published anchors, a folder per Slide, and one `sections/<section-slug>.ts` per Section exporting its ordered Slides to the record's `sections`.
 2. A Slide folder owns all it needs: Scene, widgets, logic, CSS, text, notes, Voice script. Once reused it moves to `slide-pool/`, listed by reference.
-3. `slide-master/` owns the frame, Slide layouts, record and kit types; `slide-shared/` owns parts two Slides share, client leaves in their part.
+3. `slide-master/` owns the frame, Slide layouts, record and kit types; `slide-shared/` owns parts two Slides share, client leaves inside each part.
 4. `episode-page/` owns the one container and Slide mechanics; `table-of-contents/` and `context-drawer/` own the chrome, reached only from the container.
 
 ### 4. An Episode becomes a page in one pass
@@ -109,14 +109,14 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 5. Text, styling and client code each have fixed homes
 
-1. Text: Translation files for site chrome, landing, Upcoming cards; an Episode's for title, caption, description; a Slide's for its strings; an Explorable explanation's: its pair.
-2. Styling: site tokens in `globals.css`; an Episode token remap under its own scope; a Slide's look in its own CSS module.
-3. Client code: `*.client.tsx` leaves only (in a Slide folder, the container's mechanics or the chrome); hooks hold browser state.
+1. Text: Translation files for site chrome, landing, Upcoming cards; an Episode's for title, caption, description; a Slide's for its strings; an Explorable explanation's for its pair.
+2. Styling: site tokens in `globals.css`; an Episode token remap under its own scope; a Slide's look in its CSS module.
+3. Client code: `*.client.tsx` leaves only (in a Slide folder, container mechanics or chrome); hooks hold browser state.
 
 ### 6. What an agent may change
 
 1. Free: the Title slide's optional notes and Voice script, anything inside a Scene, a new Slide folder, a new Episode from the template, a part promoted to `slide-shared`.
-2. Only a new ADR: a tier, a module, a second container or route, a shared Slide shape, a cross-Slide import, a new text or style home.
+2. Only a new ADR: a tier, module, second container or route, shared Slide shape, cross-Slide import, or new text or style home.
 
 ## Do's and Don'ts
 

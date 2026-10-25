@@ -66,18 +66,18 @@ flowchart LR
 ### 2. The Slide is the unit
 
 1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/`. The Episode file only composes.
-2. A Section MUST be a list of Slides, the first, titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
+2. A Section MUST be a list of Slides, the first titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides stay unlisted.
 3. Reading time MUST be counted from Voice script words per locale.
 
 ### 3. Scene is free
 
 1. A Scene MUST be free JSX, no slide-type union, reaching the record only via its typed kit.
 2. Browser code MUST live in its Slide's folder as `*.client.tsx`.
-3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib; its `*.client.tsx` only own files, hooks, lib. Shared parts live in `slide-shared`: plain props.
+3. A Slide folder MUST import only global shared code (FE-007 §5); its `*.client.tsx` only own files, hooks, lib. Shared parts live in `slide-shared`, plain props.
 
 ### 4. Headings mirror the Dossier
 
-1. One `h1`: the Episode title. Position sets `h2`/`h3` via the header or `Title`; no Episode file MAY write `h1`–`h3`.
+1. One `h1`, the Episode title. Position sets `h2`/`h3` via the header or `Title`; an Episode file MUST NOT write `h1`–`h3`.
 
 ### 5. Strings and anchors keyed by Slide slug
 
@@ -86,13 +86,13 @@ flowchart LR
 
 ### 6. Table of contents and Context drawer read the record
 
-1. Both MUST read Slide data from the record and the active Slide from `useActiveSlide()`, never the DOM.
+1. Both MUST read Slide data from the record and the active Slide from `useActiveSlide()`, not the DOM.
 
 ### 7. Episode styling stays in the Episode
 
 1. `globals.css` MUST hold only tokens Episodes share.
 2. A Slide's CSS MUST be a CSS module in its folder (its token file).
-3. An Episode MAY keep one stylesheet beside its record, under `[data-episode='<slug>']`, only to remap tokens its chrome reads — `palette.css`.
+3. An Episode MAY keep one stylesheet, `palette.css`, beside its record under `[data-episode='<slug>']`, only to remap tokens its chrome reads.
 4. Colour, size and weight MUST use design tokens.
 
 ## Do's and Don'ts
