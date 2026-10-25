@@ -25,7 +25,7 @@ _Avoid_: Tag, Topic, category, keyword
 **Top Concept**: a Concept with no parent (`broader: []`). The seven top Concepts are the closed set of themes: each has an icon and an accent, and a new one is a design decision, not a content edit. An Episode lists the top Concepts it teaches, and its card shows them, linked to their pages.
 _Avoid_: Root concept, theme tag, lead Tag
 
-**Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging except while a Run refreshes it: the refresh keeps the id in Staging, listed as `refresh` in its Research plan, until Promotion replaces the wiki file. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source.
+**Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging except while a Run refreshes it: the refresh keeps the id in Staging, listed as `refresh` in its Research plan, until Promotion replaces the wiki file. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source. A duplicate merged at the Promotion Gate retires: its id goes into the kept question's `supersedes` line, every citation of it points to the kept question, and no file takes the id again.
 _Avoid_: Research file, research note, finding
 
 **Source**: one piece of evidence a claim rests on: a paper, a vendor's documentation, a law's text, an essay. A Research question weighs its Sources and lists them; a Speaker note item cites a Source directly only when it is a High-trust Source, and otherwise cites the Research question that weighs it.
@@ -190,8 +190,10 @@ _Avoid_: Plot, subplot, storyline
 **Staging**: where an Episode's text lives while it is being made, before it is final: its Brief, research, Dossier and Spec, outside the code.
 _Avoid_: Drafts, workspace
 
-**Promotion**: the step that closes a final Episode's making: it harvests Staging into lessons, cleanups and tickets, files the Spec's Options into the Design archive, keeps the Brief beside the Episode, and deletes Staging. No words move; the Slides already own them.
+**Promotion**: the step that closes a final Episode's making, before it is published when it cites its own staged research: it harvests Staging into lessons, cleanups and tickets at the Promotion Gate, files the Spec's Options into the Design archive, keeps the Brief beside the Episode, moves the staged Research questions and accepted Concepts into the llm-wiki, and deletes Staging. No Slide words move; the Slides already own them.
 _Avoid_: Publish, migration, release
+
+**Promotion Gate**: Han's decision on the Harvest report, one card per proposal. Besides the lessons, style, Slide library, cleanup and ticket cards, it holds a card per staged Research question, showing its proposed Confidence, the Concepts it informs and the writer's reason for him to confirm or change, and a card per duplicate pair, proposing to merge the newer question into the older. Only a confirmed question moves to the llm-wiki, and only Han's kept card merges a duplicate.
 
 **Design archive**: every promoted Episode's design Options, one page per Slide with the picked one marked and the feedback that chose it, kept to browse and reuse in later Episodes.
 _Avoid_: Spec archive, gallery

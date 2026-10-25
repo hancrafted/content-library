@@ -1,13 +1,15 @@
 // `npm run episode:harvest -- docs/episodes/<staging>`: renders `<staging>/harvest.json` into `<staging>/harvest.html`
-// through the template in `assets/harvest-report.html`, and opens it. Exits 1 listing every problem the page would
+// through the template in `assets/harvest-report.html`, and opens it. It writes the research section itself, a card
+// per question in `<staging>/research/`, over any section of that key. Exits 1 listing every problem the page would
 // draw wrong. The page is Promotion's gate: the user keeps or strikes each card and pastes the decisions back.
 
 import { execFile } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
 import { harvestReport, type Harvest } from './harvest-report.pure.ts';
+import { researchSection } from './research-cards.pure.ts';
 
 const TEMPLATE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../assets/harvest-report.html');
 const staging = process.argv[2]?.replace(/\/$/, '');
@@ -17,9 +19,23 @@ if (!source || !existsSync(source)) {
   process.exit(1);
 }
 
+/** Each research file the Run staged, by repo path, in folder order. */
+function stagedResearch(): { path: string; markdown: string }[] {
+  const root = path.join(staging, 'research');
+  if (!existsSync(root)) return [];
+  return readdirSync(root, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && existsSync(path.join(root, entry.name, 'research.md')))
+    .map((entry) => path.join(root, entry.name, 'research.md'))
+    .sort()
+    .map((file) => ({ path: file, markdown: readFileSync(file, 'utf8') }));
+}
+
 const out = path.join(staging, 'harvest.html');
 try {
-  const harvest = JSON.parse(readFileSync(source, 'utf8')) as Harvest;
+  const read = JSON.parse(readFileSync(source, 'utf8')) as Harvest;
+  const research = researchSection(stagedResearch());
+  const others = read.sections.filter(({ key }) => key !== research.key);
+  const harvest: Harvest = { ...read, sections: research.cards.length > 0 ? [...others, research] : others };
   const page = harvestReport(readFileSync(TEMPLATE, 'utf8'), harvest);
   // Formatted like every committed file, so the Staging commit that carries the page passes the format gate.
   const config = (await resolveConfig(out)) ?? {};

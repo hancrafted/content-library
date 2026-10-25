@@ -1,4 +1,4 @@
-import { unless, type Finding } from './finding.pure';
+import { unless, type Finding } from './finding.pure.ts';
 
 /*
  * The research plan retrieval writes, `docs/episodes/<slug>/research-plan.md`, read item by item and checked against

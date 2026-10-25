@@ -15,10 +15,8 @@ import {
   episodeSchema,
   eventSchema,
   playlistSchema,
-  slideFolderSchema,
   type DefinitionSlide,
   type RecordKind,
-  type SlideFolder,
 } from './content-schemas.pure';
 import { deliveryProblems, episodePageProblems, type DeliveryRecords } from './delivery.pure';
 import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata.pure';
@@ -28,6 +26,7 @@ import type { PlaylistRecord } from './playlists.pure';
 import { readAll, type Parsed, type Refusal } from './record-reads.pure';
 import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
+import { slideFolderSchema, type SlideFolder } from './slide-folder-schema.pure';
 import { slideFolderProblems } from './slide-slugs.pure';
 import { slideSourceSchema, type SlideSource } from './slide-source.pure';
 import { sourceBaselineEntrySchema, sourceTrustProblems, type SourceBaselineEntry } from './source-baseline.pure';
