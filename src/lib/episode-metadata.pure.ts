@@ -34,6 +34,8 @@ export interface PublishedEpisodeMetadata extends SharedMetadata {
   readonly visibility: 'public' | 'unlisted';
   readonly status: 'published';
   readonly publishedOn: IsoDate;
+  /** An unlisted Episode only: the public Episode it was derived from, whose page takes its search credit. */
+  readonly canonicalEpisode?: ListedEpisodeSlug;
 }
 
 /** An Episode announced but not written: a folder holding only its metadata, no page, so no link. */

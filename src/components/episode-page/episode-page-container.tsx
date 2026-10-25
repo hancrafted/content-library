@@ -1,5 +1,6 @@
 import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
 import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
+import { contentStore } from '@/components/episodes/content-store';
 import type { LocalizedSlide } from '@/components/slide-master/localized-slide';
 import type { EpisodeRecord, HeaderMode, SlideEntrance } from '@/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
@@ -15,7 +16,7 @@ import { getTranslations } from 'next-intl/server';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { eyebrowsOf, INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
-import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
+import { recordContent, type EpisodeContent, type SiteContext, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
@@ -138,6 +139,11 @@ function translatorOf(locale: Locale): TranslatorOf {
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
 }
 
+/** What the site lends one locale of an Episode page: its translator and every Research question a note may cite. */
+function siteContext(locale: Locale): SiteContext {
+  return { translatorOf: translatorOf(locale), research: contentStore().research };
+}
+
 /** Each page Slide's Eyebrow on the shared header, its counter read "Page n of N" in the page's language. */
 async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly TocSection[]) {
   if (mode !== 'shared') return new Map<string, EyebrowText>();
@@ -162,7 +168,7 @@ interface ContainerProps {
  * provides the page's one URL-state service (FE-001 §2).
  */
 export async function EpisodePageContainer({ locale, episode, route }: ContainerProps) {
-  const content = await recordContent(episode, locale, translatorOf(locale));
+  const content = await recordContent(episode, locale, siteContext(locale));
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
   const page: PageHeader = {

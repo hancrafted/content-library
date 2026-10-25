@@ -20,7 +20,7 @@ All three load through the content store (`src/lib/content-store.pure.ts`), whos
 
 The store refuses: an Event whose Playlist is missing or not `type: event`; an event Playlist presented by no Event or by two, or not opening with its one event-frame Episode; a public event-frame Episode; a public standard Playlist listing an unlisted Episode (an event Playlist may); an unlisted Episode in no Event's Playlist (an orphan); a Playlist entry that names no Episode; two Episodes with one slug.
 
-An unlisted Episode is registered in `UNLISTED_EPISODE_SLUGS` (`src/lib/routes.ts`), in the registry and in `UNLISTED` (`src/components/episodes/content-store.ts`), never in `EPISODE_SLUGS`, so it has no `/episodes/<slug>/` page.
+An unlisted Episode is registered in `UNLISTED_EPISODE_SLUGS` (`src/lib/routes.ts`), in the registry and in `UNLISTED` (`src/components/episodes/content-store.ts`), never in `EPISODE_SLUGS`, so it has no `/episodes/<slug>/` page. An unlisted Episode derived from a public one, holding every Slide of it, names that Episode in `canonicalEpisode` in its metadata; the content store refuses one that does not, and a `canonicalEpisode` that names anything but a public, published Episode.
 
 ## Routes
 
@@ -28,7 +28,7 @@ An unlisted Episode is registered in `UNLISTED_EPISODE_SLUGS` (`src/lib/routes.t
 - `/events/<event>/` and `/de/events/<event>/`: the Event's page: date, time, location, Episode count, reading time, description, the Start button, then the Playlist as a numbered list of compact Episode cards, the event-frame Episode first, each linking to its page under the Event.
 - `/events/<event>/episodes/<episode>/` and the `/de` mirror: one Episode of the Playlist, rendered as its Episode page.
 
-Static params are closed at build time: one per Event and one per Playlist entry (FE-005). An Event whose Playlist is unlisted is `noindex` and out of the sitemap; every Event-scoped Episode page is `noindex` and out of the sitemap for now. Old `/workshops/` URLs 301 to their Event in `public/_redirects`, both locales; `tests/post-build/events.build.test.ts` fails when a legacy Workshop slug has no line.
+Static params are closed at build time: one per Event and one per Playlist entry (FE-005). Sitemap, robots and canonical come from one predicate, `pageTreatment` (`src/lib/visibility.pure.ts`), that `pageMetadata` and the sitemap both ask, per the visibility table in design-ADR 0016. An Event whose Playlist is unlisted is `noindex` and out of the sitemap. No Event-scoped Episode page is in the sitemap: a public Episode there points its canonical at its own `/episodes/<slug>/` page, an unlisted one with `canonicalEpisode` at that public Episode's, and any other unlisted one is `noindex`. Old `/workshops/` URLs 301 to their Event in `public/_redirects`, both locales; `tests/post-build/events.build.test.ts` fails when a legacy Workshop slug has no line.
 
 ## Add an Event
 

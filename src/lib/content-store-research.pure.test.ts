@@ -84,6 +84,7 @@ const VALID: RawContent = {
   research: [research(SALES_0001)],
   slideSources: [],
   slides: [],
+  episodeSlides: [],
   definitionSlides: [],
   researchPlans: [],
 };

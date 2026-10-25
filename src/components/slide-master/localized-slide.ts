@@ -1,12 +1,14 @@
-import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
+import type { CitedResearch } from '@/lib/citations.pure';
+import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
 import { siblingAnchors, type PlacedListSlide, type SlideLevel } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import type { AnyEpisodeSlug } from '@/lib/routes';
+import type { RecordSlug } from '@/lib/routes';
 import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
-import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
+import { noteSourcesOf } from './note-sources';
+import { ownTranslator } from './own-translator';
 import type { EpisodeRecord, HeaderMode, Slide, SlideMessages } from './slide';
-import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
+import type { NoteSpec, RuntimeTranslator, SegmentSpec } from './slide-base';
 import { captionTextOf, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit, type ReferenceLabels } from './slide-kit';
 
@@ -59,7 +61,7 @@ export type LocalizedSlide = Placement &
 
 /** What a Slide needs to know of the Episode page it is localized into: the same for every Slide. */
 export interface EpisodeContext {
-  readonly episode: AnyEpisodeSlug;
+  readonly episode: RecordSlug;
   readonly locale: Locale;
   /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];
@@ -67,42 +69,22 @@ export interface EpisodeContext {
   readonly referenceLabels: ReferenceLabels;
   /** Whether the Slide wrapper renders each Slide's header or its Scene does (the record's `header`). */
   readonly header: HeaderMode;
-}
-
-/**
- * next-intl's `createTranslator` over the Slide's own messages. Like the
- * site-wide config (`src/i18n/request.ts`), any missing message or formatting
- * error throws, so untranslated text fails the build instead of shipping.
- */
-function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
-  const t = createTranslator({
-    locale,
-    messages,
-    onError(error) {
-      throw error;
-    },
-  });
-  // `messages` is a runtime record, so next-intl types `t` over unknown keys and
-  // its overloads don't line up with RuntimeTranslator's open signature. The
-  // members are the same at runtime; each Slide's typed translator is checked
-  // against its own JSON at the Slide (the type tests in slide.test.ts).
-  return t as unknown as RuntimeTranslator;
+  /** Every Research question a note may cite, from the content store, which has refused any id that names none. */
+  readonly research: readonly CitedResearch[];
 }
 
 type Read = (key: string) => string;
 
-function sourceOf(read: Read, key: string, spec: SourceSpec): NoteSource {
-  return { slug: spec.slug, url: spec.url, title: read(`${key}.sources.${spec.slug}.title`) };
-}
-
-function noteOf(read: Read, spec: NoteSpec): SpeakerNoteItem {
+function noteOf(read: Read, spec: NoteSpec, research: readonly CitedResearch[]): SpeakerNoteItem {
   const key = `notes.${spec.slug}`;
   return {
     slug: spec.slug,
     header: read(`${key}.header`),
     description: read(`${key}.description`),
     target: spec.target,
-    ...(spec.sources && { sources: spec.sources.map((source) => sourceOf(read, key, source)) }),
+    ...(spec.sources && {
+      sources: noteSourcesOf(spec.sources, (slug) => read(`${key}.sources.${slug}.title`), research),
+    }),
     ...(spec.image && { image: { src: spec.image.src, alt: read(`${key}.image.alt`) } }),
   };
 }
@@ -130,25 +112,37 @@ function voiceScriptOf(read: Read, specs: readonly SegmentSpec[], locale: Locale
   return segments.map((segment, index) => ({ ...segment, ...spans[index] }));
 }
 
+/** What reading a Slide's text needs: its translator, the page's locale and every Research question it may cite. */
+interface Reading {
+  readonly t: RuntimeTranslator;
+  readonly locale: Locale;
+  readonly research: readonly CitedResearch[];
+}
+
+/** Where a Voice script's last segment ends, in minutes: 0 without one. */
+function minutesOf(voiceScript: readonly VoiceScriptSegment[]): number {
+  return voiceScript.at(-1)?.to ?? 0;
+}
+
 /** The Speaker notes, Voice script and reading time a Slide, or the Title slide, declares over its own messages. */
 function contextOf(
   specs: { readonly notes: readonly NoteSpec[]; readonly segments: readonly SegmentSpec[] },
-  t: RuntimeTranslator,
-  locale: Locale,
+  { t, locale, research }: Reading,
 ): Pick<SlideText, 'notes' | 'voiceScript' | 'minutes'> {
   const voiceScript = voiceScriptOf(t, specs.segments, locale);
   return {
-    minutes: voiceScript.at(-1)?.to ?? 0,
-    notes: specs.notes.map((note) => noteOf(t, note)),
+    minutes: minutesOf(voiceScript),
+    notes: specs.notes.map((note) => noteOf(t, note, research)),
     voiceScript,
   };
 }
 
-function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
+function textOf(slide: Slide, reading: Reading): SlideText {
+  const { t } = reading;
   return {
     slug: slide.slug,
     ...(t.has('title') && { title: t('title') }),
-    ...contextOf(slide, t, locale),
+    ...contextOf(slide, reading),
   };
 }
 
@@ -160,9 +154,15 @@ function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
 export function titleContext(
   record: EpisodeRecord,
   locale: Locale,
+  research: readonly CitedResearch[],
 ): Pick<SlideText, 'notes' | 'voiceScript' | 'minutes'> {
   const specs = { notes: record.notes ?? [], segments: record.segments ?? [] };
-  return contextOf(specs, ownTranslator({ ...record.messages[locale] }, locale), locale);
+  return contextOf(specs, { t: ownTranslator({ ...record.messages[locale] }, locale), locale, research });
+}
+
+/** The reading time a Slide, or the Title slide, declares over its own messages: no notes are read. */
+function declaredMinutes(segments: readonly SegmentSpec[], messages: SlideMessages, locale: Locale): number {
+  return minutesOf(voiceScriptOf(ownTranslator(messages, locale), segments, locale));
 }
 
 /**
@@ -174,8 +174,8 @@ export function episodeMinutes(record: EpisodeRecord, locale: Locale): number {
   return record.sections
     .flat()
     .reduce(
-      (sum, slide) => sum + textOf(slide, ownTranslator(slide.messages[locale], locale), locale).minutes,
-      titleContext(record, locale).minutes,
+      (sum, slide) => sum + declaredMinutes(slide.segments, slide.messages[locale], locale),
+      declaredMinutes(record.segments ?? [], { ...record.messages[locale] }, locale),
     );
 }
 
@@ -220,7 +220,7 @@ export function localizeSlide(
 ): LocalizedSlide {
   const { locale } = episode;
   const t = ownTranslator(slide.messages[locale], locale);
-  const text = textOf(slide, t, locale);
+  const text = textOf(slide, { t, locale, research: episode.research });
   const shared = episode.header === 'shared';
   const notes = slide.notes.map((note) => note.slug);
   const kit = slideKit(

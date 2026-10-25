@@ -1,5 +1,6 @@
-import { conceptSchema, KEBAB, type ConceptFrontmatter } from './content-schemas.pure';
+import { conceptSchema, type ConceptFrontmatter } from './content-schemas.pure';
 import { readFrontmatter, reasonsOf } from './frontmatter.pure';
+import { KEBAB } from './kebab.pure';
 
 /*
  * One Concept file read into a Concept: its id from the folder name (`docs/llm-wiki/concepts/<id>/concept.md`), its

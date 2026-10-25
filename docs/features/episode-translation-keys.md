@@ -23,20 +23,20 @@ A Section's own slide is a Slide like any other: its `title` names the Section a
 
 ## Role vocabulary
 
-| Role                                  | Meaning                                                                                  | Used on                          |
-| ------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------------- |
-| `title`                               | the Slide's heading and table-of-contents label; absent on an untitled Slide             | Slide                            |
-| `caption`                             | one-line framing under the title                                                         | Slide                            |
-| `prose`                               | body paragraph                                                                           | Slide                            |
-| `columns.<column>.{title,prose}`      | one column of a three-column Slide, keyed by its slug                                    | Slide                            |
-| `notes.<note>.header`                 | Speaker note item heading                                                                | Speaker note                     |
-| `notes.<note>.description`            | Speaker note item text; cites sources as `[1]`, `[2]`                                    | Speaker note                     |
-| `notes.<note>.sources.<source>.title` | a cited source's title                                                                   | Speaker note, if it has sources  |
-| `notes.<note>.image.alt`              | alt text of the note's image                                                             | Speaker note, if it has an image |
-| `voiceScript.segments.<seg>.title`    | Voice script segment heading                                                             | Voice script segment             |
-| `voiceScript.segments.<seg>.keywords` | one leaf, comma-separated                                                                | Voice script segment             |
-| `voiceScript.segments.<seg>.script`   | the spoken text                                                                          | Voice script segment             |
-| `voiceScript.segments.<seg>.bridge`   | closing line handing over to the next Section; only if the Slide declares `bridge: true` | Voice script segment             |
+| Role                                  | Meaning                                                                                  | Used on                           |
+| ------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------- |
+| `title`                               | the Slide's heading and table-of-contents label; absent on an untitled Slide             | Slide                             |
+| `caption`                             | one-line framing under the title                                                         | Slide                             |
+| `prose`                               | body paragraph                                                                           | Slide                             |
+| `columns.<column>.{title,prose}`      | one column of a three-column Slide, keyed by its slug                                    | Slide                             |
+| `notes.<note>.header`                 | Speaker note item heading                                                                | Speaker note                      |
+| `notes.<note>.description`            | Speaker note item text; cites sources as `[1]`, `[2]`                                    | Speaker note                      |
+| `notes.<note>.sources.<source>.title` | the title of a source cited by `url`; a `research` source takes its question's title     | Speaker note, if it cites a `url` |
+| `notes.<note>.image.alt`              | alt text of the note's image                                                             | Speaker note, if it has an image  |
+| `voiceScript.segments.<seg>.title`    | Voice script segment heading                                                             | Voice script segment              |
+| `voiceScript.segments.<seg>.keywords` | one leaf, comma-separated                                                                | Voice script segment              |
+| `voiceScript.segments.<seg>.script`   | the spoken text                                                                          | Voice script segment              |
+| `voiceScript.segments.<seg>.bridge`   | closing line handing over to the next Section; only if the Slide declares `bridge: true` | Voice script segment              |
 
 `<note>`, `<seg>`, `<column>` and `<source>` are kebab-case slugs. A Slide may add a leaf no role describes (the untitled Slide in page-template keeps its sentence under `statement`); add a role to the table in the same change when a new Slide layout needs one.
 
@@ -117,4 +117,4 @@ An Event is a record in `src/lib/events.pure.ts` that holds no string ([Events](
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-`page-template`, `slide-layouts` and `slide-master` are layout references (`LAYOUT_REFERENCES`), not content: they are not in the Episode overview and need no metadata.
+`page-template` is a layout reference (`LAYOUT_REFERENCES`), and `slide-layouts`, `slide-master` and `slides` are tooling pages (`TOOLING_SLUGS`, `src/lib/tooling-pages.ts`), not content: none is in the Episode overview and none needs metadata.

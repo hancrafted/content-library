@@ -1,7 +1,8 @@
 import { readConceptFile, type ConceptFile } from './concept-record.pure';
-import { KEBAB, themeSchema } from './content-schemas.pure';
+import { themeSchema } from './content-schemas.pure';
 import type { ThemeLook } from './episode-overview';
 import { reasonsOf } from './frontmatter.pure';
+import { KEBAB } from './kebab.pure';
 
 /*
  * The Concept hierarchy (SKOS): what the Concepts say about each other. Every id they name resolves, `broader` has

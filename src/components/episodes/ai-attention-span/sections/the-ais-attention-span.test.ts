@@ -131,6 +131,7 @@ function localized(slide: Slide, locale: 'en' | 'de' = 'en') {
     placed,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
     header: 'shared',
+    research: [],
   });
 }
 

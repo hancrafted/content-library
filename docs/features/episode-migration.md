@@ -95,7 +95,7 @@ Done when: every Slide of step 1 has a folder and `npm run typecheck` passes.
 
 - A note's `target` is a short name: `title`, `caption`, `prose`, a column slug, or `{...target('chart')}` on a one-off element.
 - A Context reference is `<ref>phrase</ref>` in the string and `ref('<note>')` in `t.rich`, or a Context marker: `<marker>phrase</marker>` with `marker('<note>')`, or `<Marker note="<note>" />` on an element.
-- `sources: [{ slug, url }]` on the note that cites them; titles under `notes.<note>.sources.<source>.title`.
+- `sources` on the note that cites them, each `{ slug, research: '<id>' }` for a Research question (the default; no title of its own) or `{ slug, url }` for a Source cited directly, whose title sits under `notes.<note>.sources.<source>.title`.
 - Voice script: `segments` by slug, strings under `voiceScript.segments.<segment>`. A segment's `bridge: true` needs a `bridge` string.
 - Reading time is counted from the script and bridge words (en 140, de 120 per minute), so write no minutes and no segment times ([FE-002 §2](../../.archgate/adrs/FE-002-episode-page.md#2-the-slide-is-the-unit)).
 

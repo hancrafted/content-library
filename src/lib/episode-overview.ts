@@ -47,13 +47,11 @@ export const TOP_CONCEPT_IDS = Object.keys(CONCEPT_THEMES) as readonly TopConcep
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];
 
-/** Registered Episodes that are layout references, not content: never in the overview. */
-export const LAYOUT_REFERENCES = [
-  'page-template',
-  'slide-layouts',
-  'slide-master',
-  'slides',
-] as const satisfies readonly EpisodeSlug[];
+/**
+ * Registered Episodes that are layout references, not content: never in the overview. The Slide catalogues are
+ * tooling pages, no Episodes (`TOOLING_SLUGS`).
+ */
+export const LAYOUT_REFERENCES = ['page-template'] as const satisfies readonly EpisodeSlug[];
 
 /** A registered Episode the overview lists: every one but the layout references. */
 export type ListedEpisodeSlug = Exclude<EpisodeSlug, (typeof LAYOUT_REFERENCES)[number]>;

@@ -28,6 +28,9 @@ _Avoid_: Root concept, theme tag, lead Tag
 **Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging except while a Run refreshes it: the refresh keeps the id in Staging, listed as `refresh` in its Research plan, until Promotion replaces the wiki file. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source.
 _Avoid_: Research file, research note, finding
 
+**Source**: one piece of evidence a claim rests on: a paper, a vendor's documentation, a law's text, an essay. A Research question weighs its Sources and lists them; a Speaker note item cites a Source directly only by exception, and otherwise cites the Research question that weighs it.
+_Avoid_: Reference, link (for the evidence itself)
+
 **Confidence**: how settled the evidence for a Research question's Answer is, never the writer's certainty: `settled` (at least two independent primary Sources agree, nothing contradicts them), `contested` (credible Sources disagree, or the effect depends on context the Answer names) or `open` (anything less). The writer proposes it, with one line on which Sources earn it (`confidence_reason`); it stays a proposal until Han confirms it with a `verified` entry at or after `generated.at`.
 _Avoid_: Certainty, evidence level, trust level
 
@@ -51,6 +54,12 @@ _Avoid_: Event page (the Event's own page), agenda episode, intro
 
 **Visibility**: whether an Episode or a Playlist is listed and indexed: public, or unlisted. An unlisted Episode lives only under the Event whose Playlist presents it; unlisted is not private, since anyone with the URL can open it.
 _Avoid_: Private, hidden, draft, attendees-only
+
+**canonicalEpisode**: the field of an unlisted Episode's metadata that names the public Episode it was derived from; its pages then point search engines at that Episode's own page instead of carrying `noindex`. An unlisted Episode that holds every Slide of a public Episode must name it.
+_Avoid_: Original, source Episode, parent Episode
+
+**Tooling page**: a catalogue of Slides served at `/episodes/<slug>/` beside the Episodes but no Episode itself: `slide-layouts`, `slide-master`, `slides`. It has no Visibility and no status, is never indexed and never in the sitemap.
+_Avoid_: Layout reference (the page template), unlisted Episode, catalog Episode
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
@@ -129,7 +138,7 @@ _Avoid_: Furniture, overlay
 **Speaker notes**: a Slide's short list of talking points, each a Speaker note item.
 _Avoid_: Notes, comments
 
-**Speaker note item**: one talking point: a header, a description, optional titled sources and image, and the element of its Slide it explains.
+**Speaker note item**: one talking point: a header, a description, optional sources and image, and the element of its Slide it explains. Each of its sources is one citation holding exactly one of `research` (a Research question by id, by default) or `url` (a Source cited directly, by exception); a `research` citation takes its title, link and Confidence from the question, and a published Episode cites no question that is still in Staging.
 _Avoid_: Note, bullet, comment
 
 **Context reference**: an underlined phrase or a Context marker on a Slide that opens one Speaker note item in the Context drawer.

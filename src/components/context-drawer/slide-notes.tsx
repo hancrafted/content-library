@@ -1,6 +1,14 @@
-import { sourceDomain, splitCitations, type NoteSource, type SpeakerNoteItem } from '@/lib/context-drawer.pure';
+import {
+  sourceDomain,
+  splitCitations,
+  type NoteSource,
+  type ResearchSource,
+  type SpeakerNoteItem,
+  type UrlSource,
+} from '@/lib/context-drawer.pure';
 import { CITATION_ATTR, NOTE_TARGET_ATTR, SOURCE_ATTR } from '@/lib/context-link.pure';
 import { externalHref } from '@/lib/external-link.pure';
+import { localizePath } from '@/lib/locale.pure';
 import { ChevronRight, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import type { ContextDrawerLabels } from './context-drawer-input';
@@ -38,20 +46,56 @@ function Description({ text, labels }: { text: string; labels: ContextDrawerLabe
   );
 }
 
-function Source({ source, number, labels }: { source: NoteSource; number: number; labels: ContextDrawerLabels }) {
+const SOURCE_LINK =
+  'inline-flex items-start gap-1 underline underline-offset-2 hover:text-foreground focus-visible:outline-2';
+
+/** A Source cited directly: a link out, in a new tab, with its host below. */
+function UrlSourceBody({ source, labels }: { source: UrlSource; labels: ContextDrawerLabels }) {
   return (
-    <li {...{ [SOURCE_ATTR]: number }} className="pl-1">
-      <a
-        href={externalHref(source.url)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-start gap-1 underline underline-offset-2 hover:text-foreground focus-visible:outline-2"
-      >
-        <span>{source.title}</span>
+    <>
+      <a href={externalHref(source.url)} target="_blank" rel="noopener noreferrer" className={SOURCE_LINK}>
+        <span data-source-title>{source.title}</span>
         <ExternalLink aria-hidden className="mt-0.5 size-3 shrink-0" />
         <span className="sr-only">({labels.strings.opensInNewTab})</span>
       </a>
       <span className="block text-body opacity-80">{sourceDomain(source.url)}</span>
+    </>
+  );
+}
+
+/**
+ * A cited Research question: the question as a link to its page on this site, then its id and how settled its
+ * Answer is. A staged question has no page until Promotion, so its title stands without a link.
+ */
+function ResearchSourceBody({ source, labels }: { source: ResearchSource; labels: ContextDrawerLabels }) {
+  const title = <span data-source-title>{source.title}</span>;
+  return (
+    <>
+      {source.page ? (
+        <a href={localizePath(source.page.path, source.page.locale)} className={SOURCE_LINK}>
+          {title}
+        </a>
+      ) : (
+        title
+      )}
+      <span className="block text-body opacity-80">
+        {labels.strings.researchQuestion} {source.research} ·{' '}
+        <span data-confidence={source.confidence} className="font-medium">
+          {labels.strings.confidence[source.confidence]}
+        </span>
+      </span>
+    </>
+  );
+}
+
+function Source({ source, number, labels }: { source: NoteSource; number: number; labels: ContextDrawerLabels }) {
+  return (
+    <li {...{ [SOURCE_ATTR]: number }} className="pl-1">
+      {source.research === undefined ? (
+        <UrlSourceBody source={source} labels={labels} />
+      ) : (
+        <ResearchSourceBody source={source} labels={labels} />
+      )}
     </li>
   );
 }

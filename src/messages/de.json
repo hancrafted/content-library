@@ -469,6 +469,12 @@
     "shortcut": "Tastenkürzel",
     "sourcesCount": "Quellen ({count})",
     "opensInNewTab": "öffnet in neuem Tab",
+    "researchQuestion": "Forschungsfrage",
+    "confidence": {
+      "settled": "Gesichert",
+      "contested": "Umstritten",
+      "open": "Offen"
+    },
     "menu": {
       "label": "Weitere Optionen",
       "layout": "Darstellung",
@@ -522,6 +528,7 @@
     "open": "Offen",
     "informs": "Stützt",
     "sources": "Quellen",
-    "newTab": "öffnet in neuem Tab"
+    "newTab": "öffnet in neuem Tab",
+    "citedBy": "Sprechernotizen, die sie zitieren"
   }
 }

@@ -8,7 +8,15 @@ import { describe, expect, it } from 'vitest';
 import { EVENTS } from '../../src/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
-import { eventEpisodeRoute, eventEpisodes, eventRoute, ROUTES } from '../../src/lib/routes';
+import {
+  episodeRoute,
+  eventEpisodeRoute,
+  eventEpisodes,
+  eventRoute,
+  isEpisodeSlug,
+  ROUTES,
+} from '../../src/lib/routes';
+import { TOOLING_SLUGS } from '../../src/lib/tooling-pages';
 import { exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
@@ -134,6 +142,41 @@ describe('Episode pages under an Event', () => {
     expect(seen).toEqual({ episode, headings: 1 });
   });
 
+  it.each(LOCALES)('An unlisted Episode page tells search engines not to index it, in %s', (locale) => {
+    // ARRANGE
+    const frame = eventEpisodes(FIRST.slug)[0];
+    const url = localizePath(eventEpisodeRoute(FIRST.slug, frame), locale);
+    const expected = { noindex: true, canonical: `${SITE_URL}${url}/` };
+    const $ = exportedPage(url);
+    // ACT
+    const seen = {
+      noindex: ($('meta[name="robots"]').attr('content') ?? '').includes('noindex'),
+      canonical: $('link[rel="canonical"]').attr('href'),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  const PUBLIC_PAIRS = PAIRS.filter(({ episode }) => isEpisodeSlug(episode));
+
+  it.each(PUBLIC_PAIRS)(
+    'credits $episode under its Event to its own /episodes/ page for $locale, with no noindex and no hreflang',
+    ({ episode, locale }) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(eventEpisodeRoute(FIRST.slug, episode), locale));
+      const own = isEpisodeSlug(episode) ? episodeRoute(episode) : '';
+      const expected = { robots: undefined, canonical: `${SITE_URL}${localizePath(own, locale)}/`, hreflang: 0 };
+      // ACT
+      const seen = {
+        robots: $('meta[name="robots"]').attr('content'),
+        canonical: $('link[rel="canonical"]').attr('href'),
+        hreflang: $('link[rel="alternate"][hreflang]').length,
+      };
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
+
   it.each(LOCALES)('gives the unlisted event-frame Episode no page of its own at /episodes/ for %s', (locale) => {
     // ARRANGE
     const frame = eventEpisodes(FIRST.slug)[0];
@@ -179,6 +222,34 @@ describe('/events page and header', () => {
     };
     // ASSERT
     expect(seen).toEqual({ list: true, unlisted: false });
+  });
+});
+
+describe('tooling pages', () => {
+  const PAGES = TOOLING_SLUGS.flatMap((slug) => LOCALES.map((locale) => ({ slug, locale })));
+
+  it.each(PAGES)('keeps the tooling page $slug at its URL but out of search for $locale', ({ slug, locale }) => {
+    // ARRANGE
+    const url = localizePath(episodeRoute(slug), locale);
+    const expected = { noindex: true, canonical: `${SITE_URL}${url}/` };
+    const $ = exportedPage(url);
+    // ACT
+    const seen = {
+      noindex: ($('meta[name="robots"]').attr('content') ?? '').includes('noindex'),
+      canonical: $('link[rel="canonical"]').attr('href'),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('A tooling page is never in the sitemap', () => {
+    // ARRANGE
+    const sitemap = readFileSync(join(OUT_DIR, 'sitemap.xml'), 'utf8');
+    const expected: string[] = [];
+    // ACT
+    const listed = TOOLING_SLUGS.filter((slug) => sitemap.includes(`${episodeRoute(slug)}/</loc>`));
+    // ASSERT
+    expect(listed).toEqual(expected);
   });
 });
 

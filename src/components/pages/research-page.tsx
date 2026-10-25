@@ -1,3 +1,4 @@
+import { citingNotes } from '@/components/episodes/citing-notes';
 import { contentStore } from '@/components/episodes/content-store';
 import { EvidenceBody } from '@/components/evidence/evidence-body';
 import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
@@ -16,7 +17,8 @@ import Link from 'next/link';
 /*
  * The page of one promoted Research question at /research/<id>, in English only (design-ADR 0016, Citations rule 6):
  * the question, how settled its Answer is as a badge with that value's definition, the Concepts it informs, its body
- * rendered through unified with every [n] marker linked to the nth Source, and the Sources list those markers point at.
+ * rendered through unified with every [n] marker linked to the nth Source, the Sources list those markers point at,
+ * and the Speaker notes that cite it.
  */
 
 type Labels = (typeof TRANSLATIONS)['en']['researchPage'];
@@ -106,6 +108,27 @@ function SourceItem({ source, labels }: { source: Source; labels: Labels }) {
   );
 }
 
+/** Every Speaker note of a listed Episode that cites the question, linked to its Slide; left out when none does. */
+function CitingNotes({ id, label }: { id: ResearchId; label: string }) {
+  const notes = citingNotes(contentStore().slideSources, id);
+  if (notes.length === 0) return null;
+  return (
+    <section data-research-cited-by className="mt-10 max-w-3xl border-t border-border pt-6">
+      <h2 className="mb-4 text-body font-semibold text-foreground">{label}</h2>
+      <ul className="space-y-2 text-body">
+        {notes.map((note) => (
+          <li key={`${note.anchor}/${note.header}`} data-citing-note={note.episode}>
+            <Link href={localizePath(note.path, 'en', note.anchor)} className="underline">
+              {note.header}
+            </Link>
+            <span className="text-muted-foreground"> · {note.episodeTitle}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export function ResearchPage({ id }: { id: ResearchId }) {
   const labels = TRANSLATIONS.en.researchPage;
   const research = researchOf(id);
@@ -128,6 +151,7 @@ export function ResearchPage({ id }: { id: ResearchId }) {
           ))}
         </ol>
       </section>
+      <CitingNotes id={id} label={labels.citedBy} />
     </main>
   );
 }
