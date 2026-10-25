@@ -93,6 +93,11 @@ export function episodeStatus(slug: EpisodeSlug): EpisodeStatus {
   return episodeOf(slug).status;
 }
 
+/** The Episode's visibility: a public one has its own page; an unlisted one lives only under its Event. */
+export function episodeVisibility(slug: EpisodeSlug): Episode['visibility'] {
+  return episodeOf(slug).visibility;
+}
+
 /** The release date of a published Episode; undefined for an upcoming one or an unknown slug. */
 export function episodePublishedOn(slug: string): IsoDate | undefined {
   const episode = CONTENT.episodes.find((entry) => entry.slug === slug);

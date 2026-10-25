@@ -60,6 +60,8 @@ export type LocalizedSlide = Placement &
 /** What a Slide needs to know of the Episode page it is localized into: the same for every Slide. */
 export interface EpisodeContext {
   readonly episode: EpisodesPathSlug;
+  /** The logical path the page is served at, when an Event presents the Episode: what `slideHref` links on. */
+  readonly route?: string;
   readonly locale: Locale;
   /** Every Slide of the Episode as the walk (`placeSections`) placed it: what `slideHref` links to. */
   readonly placed: readonly PlacedListSlide<Slide>[];

@@ -1,16 +1,18 @@
 // The Events, each read through the content store (design-ADR 0016, Delivery): every old Workshop link lands on its
 // Event, /events lists every Event whose Playlist is public, an Event's page shows its facts line, the past notice
 // above its Playlist, and the Playlist as numbered cards in order, each opening the Episode under the Event. The
-// header carries one Events entry, and the sitemap names the pages with their hreflang set.
+// header carries one Events entry, and the sitemap names the pages with their hreflang set. Each Episode an Event
+// presents has a page under the Event: its place in the Playlist, the walk to its neighbours and back to the Event,
+// the past notice above the title, and a canonical to its own /episodes/ page when it is public; none is in the sitemap.
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { listEvents, playlistOf } from '../../src/content-store/store';
+import { episodeStatus, episodeVisibility, hasPage, listEvents, playlistOf } from '../../src/content-store/store';
 import { isPastEvent } from '../../src/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
-import { eventEpisodeRoute, eventRoute, ROUTES } from '../../src/lib/routes';
+import { episodeRoute, eventEpisodeRoute, eventRoute, ROUTES } from '../../src/lib/routes';
 import { exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
@@ -39,6 +41,10 @@ const WORDS: Record<
     kind: string;
     audience: string;
     notice: string;
+    position: (position: number, count: number) => string;
+    previous: string;
+    next: string;
+    back: string;
   }
 > = {
   en: {
@@ -52,6 +58,10 @@ const WORDS: Record<
     audience: 'For organizations',
     notice:
       'This Event has already taken place. The content below is kept up to date and may differ from the recording.',
+    position: (position, count) => `Episode ${position} of ${count}`,
+    previous: 'Previous Episode',
+    next: 'Next Episode',
+    back: 'Back to the Event',
   },
   de: {
     title: 'AXEL Seminar: Agentic Workflows',
@@ -64,6 +74,10 @@ const WORDS: Record<
     audience: 'Für Unternehmen',
     notice:
       'Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen.',
+    position: (position, count) => `Episode ${position} von ${count}`,
+    previous: 'Vorherige Episode',
+    next: 'Nächste Episode',
+    back: 'Zurück zur Veranstaltung',
   },
 };
 
@@ -251,11 +265,203 @@ describe('Event page', () => {
   });
 });
 
+describe('Episode pages under an Event', () => {
+  /** Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports. */
+  const PAGES_UNDER_EVENTS = EVENTS.flatMap((event) =>
+    playlistOf(event)
+      .episodes.filter((episode) => hasPage(episode))
+      .flatMap((episode) => LOCALES.map((locale) => ({ event: event.slug, episode, locale }))),
+  );
+  const AXEL_PAGES = AXEL_EPISODES.filter((episode) => hasPage(episode));
+  const urlOf = (event: string, episode: string, locale: Locale) =>
+    localizePath(eventEpisodeRoute(event, episode), locale);
+
+  it.each(PAGES_UNDER_EVENTS)(
+    'exports $episode under $event for $locale as the Episode page',
+    ({ event, episode, locale }) => {
+      // ARRANGE
+      const expected = { episode, headings: 1 };
+      const $ = exportedPage(urlOf(event, episode, locale));
+      // ACT
+      const seen = { episode: $('[data-slot="episode-page"]').attr('data-episode'), headings: $('h1').length };
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
+
+  it.each(LOCALES)(
+    'An Event-scoped page shows "Episode n of m", previous and next in Playlist order, and a link back to the Event on the last one (%s)',
+    (locale) => {
+      // ARRANGE
+      const count = AXEL_EPISODES.length;
+      const hrefOf = (episode: string | undefined) =>
+        episode === undefined ? undefined : `${urlOf(AXEL.slug, episode, locale)}/`;
+      const expected = AXEL_PAGES.map((episode, index) => ({
+        position: WORDS[locale].position(AXEL_EPISODES.indexOf(episode) + 1, count),
+        previous: hrefOf(AXEL_PAGES[index - 1]),
+        next: hrefOf(AXEL_PAGES[index + 1]),
+        back: index === AXEL_PAGES.length - 1 ? `${localizePath(eventRoute(AXEL.slug), locale)}/` : undefined,
+      }));
+      // ACT
+      const seen = AXEL_PAGES.map((episode) => {
+        const $ = exportedPage(urlOf(AXEL.slug, episode, locale));
+        const nav = $('nav[data-playlist-nav]');
+        return {
+          position: $('[data-slot="title-slide"] [data-playlist-position]').text(),
+          previous: nav.find('a[data-playlist-previous]').attr('href'),
+          next: nav.find('a[data-playlist-next]').attr('href'),
+          back: nav.find('a[data-playlist-back]').attr('href'),
+        };
+      });
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
+
+  it.each(LOCALES)('names each step of the walk in the locale for %s', (locale) => {
+    // ARRANGE
+    const [first] = AXEL_PAGES;
+    const last = AXEL_PAGES.at(-1) ?? first;
+    const expected = { next: WORDS[locale].next, previous: WORDS[locale].previous, back: WORDS[locale].back };
+    // ACT
+    const seen = {
+      next: exportedPage(urlOf(AXEL.slug, first, locale))('a[data-playlist-next] [data-playlist-cue]').text(),
+      previous: exportedPage(urlOf(AXEL.slug, last, locale))('a[data-playlist-previous] [data-playlist-cue]').text(),
+      back: exportedPage(urlOf(AXEL.slug, last, locale))('a[data-playlist-back] [data-playlist-cue]').text(),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it.each(PAGES_UNDER_EVENTS)(
+    'leads from $episode back up to its Event and to all Events through the breadcrumb for $locale',
+    ({ event, episode, locale }) => {
+      // ARRANGE
+      const $ = exportedPage(urlOf(event, episode, locale));
+      const expected = {
+        hrefs: [`${localizePath(ROUTES.events, locale)}/`, `${localizePath(eventRoute(event), locale)}/`],
+        current: $('h1 .sr-only').first().text() || $('h1').text(),
+      };
+      // ACT
+      const trail = $('nav[data-event-breadcrumb]');
+      const seen = {
+        hrefs: trail
+          .find('a')
+          .map((_, link) => $(link).attr('href'))
+          .get(),
+        current: trail.find('[aria-current="page"]').text(),
+      };
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
+
+  it.each(PAGES_UNDER_EVENTS)(
+    'A public Episode under an Event carries a canonical to its own /episodes/ page ($episode, $locale)',
+    ({ event, episode, locale }) => {
+      // ARRANGE
+      const own = `${SITE_URL}${localizePath(episodeRoute(episode as Parameters<typeof episodeRoute>[0]), locale)}/`;
+      const self = `${SITE_URL}${urlOf(event, episode, locale)}/`;
+      const indexable =
+        hasPage(episode) && episodeVisibility(episode) === 'public' && episodeStatus(episode) === 'published';
+      const expected = indexable
+        ? { canonical: own, noindex: false, hreflang: 0, card: own }
+        : { canonical: self, noindex: true, hreflang: 3, card: self };
+      const $ = exportedPage(urlOf(event, episode, locale));
+      // ACT
+      const seen = {
+        canonical: $('link[rel="canonical"]').attr('href'),
+        noindex: ($('meta[name="robots"]').attr('content') ?? '').includes('noindex'),
+        hreflang: $('link[rel="alternate"][hreflang]').length,
+        card: $('meta[property="og:url"]').attr('content'),
+      };
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
+
+  it.each(PAGES_UNDER_EVENTS)(
+    'leaves the structured data on the Episode’s own page, not on $episode under its Event, for $locale',
+    ({ event, episode, locale }) => {
+      // ARRANGE
+      const $ = exportedPage(urlOf(event, episode, locale));
+      // ACT
+      const scripts = $('script[type="application/ld+json"]').length;
+      // ASSERT
+      expect(scripts).toBe(0);
+    },
+  );
+
+  it.each(PAGES_UNDER_EVENTS)(
+    'links the table of contents of $episode to the page under its Event for $locale',
+    ({ event, episode, locale }) => {
+      // ARRANGE
+      const $ = exportedPage(urlOf(event, episode, locale));
+      const prefix = `${urlOf(event, episode, locale)}/#`;
+      // ACT
+      const elsewhere = $('[data-slot="toc"] a[href*="#"]')
+        .map((_, link) => $(link).attr('href'))
+        .get()
+        .filter((href) => !href.startsWith(prefix));
+      // ASSERT
+      expect(elsewhere).toEqual([]);
+    },
+  );
+
+  it.each(LOCALES)('The past notice shows on a past Event’s Episode pages, above the title (%s)', (locale) => {
+    // ARRANGE
+    const expected = AXEL_PAGES.map(() => ({ past: true, notice: WORDS[locale].notice, beforeTitle: true }));
+    // ACT
+    const seen = AXEL_PAGES.map((episode) => {
+      const $ = exportedPage(urlOf(AXEL.slug, episode, locale));
+      const order = $('[data-past-notice], h1')
+        .map((_, element) => (element.tagName === 'h1' ? 'title' : 'notice'))
+        .get();
+      return {
+        past: isPastEvent(AXEL.date, TODAY),
+        notice: $('[data-past-notice]').text(),
+        beforeTitle: order.join() === 'notice,title',
+      };
+    });
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it.each(LOCALES)('opens every linked card of the Event page on an exported page (%s)', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(eventRoute(AXEL.slug), locale));
+    // ACT
+    const missing = $('ol[data-event-playlist] a[data-card-link]')
+      .map((_, link) => $(link).attr('href') ?? '')
+      .get()
+      .filter((href) => {
+        try {
+          exportedPage(href.replace(/\/$/, ''));
+          return false;
+        } catch {
+          return true;
+        }
+      });
+    // ASSERT
+    expect(missing).toEqual([]);
+  });
+
+  it('lists no Episode page under an Event in the sitemap', () => {
+    // ARRANGE
+    const sitemap = readFileSync(join(OUT_DIR, 'sitemap.xml'), 'utf8');
+    // ACT
+    const underEvents = sitemap.match(/<loc>[^<]*\/events\/[^<]*\/episodes\/[^<]*<\/loc>/g) ?? [];
+    // ASSERT
+    expect(underEvents).toEqual([]);
+  });
+});
+
 describe('heading levels', () => {
   const PAGES = [
     { name: '/episodes', route: ROUTES.episodes },
     { name: '/events', route: ROUTES.events },
     { name: 'an Event page', route: eventRoute(AXEL.slug) },
+    { name: 'an Episode page under an Event', route: eventEpisodeRoute(AXEL.slug, AXEL_EPISODES[0]) },
   ];
 
   it.each(PAGES.flatMap((page) => LOCALES.map((locale) => ({ ...page, locale }))))(

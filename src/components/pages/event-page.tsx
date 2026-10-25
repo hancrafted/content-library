@@ -193,7 +193,7 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
       <EventBreadcrumb
         locale={locale}
         labels={{ breadcrumb: t('breadcrumb'), events: t('title') }}
-        event={card.title}
+        event={{ slug, title: card.title }}
       />
       <h1 className="mt-6 text-heading font-semibold text-balance text-foreground">{card.title}</h1>
       <Facts card={card} record={record} minutes={totalMinutes(episodes)} t={t} />

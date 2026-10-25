@@ -88,7 +88,16 @@ export function eventParams(): { event: EventSlug }[] {
   return EVENT_SLUGS.map((event) => ({ event }));
 }
 
-/** A page with its own metadata and a closed set of exported locales. */
+/** An Episode as an Event presents it, at `/events/<event>/episodes/<episode>/`. */
+export interface EventEpisodePage {
+  readonly event: EventSlug;
+  readonly episode: EpisodeSlug;
+}
+
+/**
+ * A page with its own metadata and a closed set of exported locales. An Event-scoped Episode page is one too, but not
+ * in `PAGES`: which Episodes an Event presents is its Playlist's, read through the content store (lib cannot).
+ */
 export type PageRef =
   | 'home'
   | 'dashboard'
@@ -96,7 +105,8 @@ export type PageRef =
   | 'events'
   | { readonly episode: EpisodeSlug }
   | { readonly tooling: ToolingSlug }
-  | { readonly event: EventSlug };
+  | { readonly event: EventSlug }
+  | EventEpisodePage;
 
 /** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
 export const PAGES: readonly PageRef[] = [
@@ -116,14 +126,15 @@ export function pageLocales(page: PageRef): readonly Locale[] {
 
 /** The logical path a page is exported at. */
 export function routeOf(page: PageRef): string {
+  if (isEventEpisodePage(page)) return eventEpisodeRoute(page.event, page.episode);
   if (isEpisodePage(page)) return episodeRoute(page.episode);
   if (isToolingPage(page)) return episodeRoute(page.tooling);
   return isEventPage(page) ? eventRoute(page.event) : ROUTES[page];
 }
 
-/** Whether a page is an Episode's, narrowing to the `{ episode }` form. */
+/** Whether a page is an Episode's own, at `/episodes/<slug>/`, narrowing to the `{ episode }` form. */
 export function isEpisodePage(page: PageRef): page is { readonly episode: EpisodeSlug } {
-  return typeof page !== 'string' && 'episode' in page;
+  return typeof page !== 'string' && 'episode' in page && !('event' in page);
 }
 
 /** Whether a page is a tooling page, narrowing to the `{ tooling }` form. */
@@ -131,9 +142,14 @@ export function isToolingPage(page: PageRef): page is { readonly tooling: Toolin
   return typeof page !== 'string' && 'tooling' in page;
 }
 
-/** Whether a page is an Event's, narrowing to the `{ event }` form. */
+/** Whether a page is an Event's own, narrowing to the `{ event }` form. */
 export function isEventPage(page: PageRef): page is { readonly event: EventSlug } {
-  return typeof page !== 'string' && 'event' in page;
+  return typeof page !== 'string' && 'event' in page && !('episode' in page);
+}
+
+/** Whether a page is an Episode shown under an Event, narrowing to the `{ event, episode }` form. */
+export function isEventEpisodePage(page: PageRef): page is EventEpisodePage {
+  return typeof page !== 'string' && 'event' in page && 'episode' in page;
 }
 
 /** The URL a logical path is served at under `siteUrl`: `trailingSlash` makes it the canonical, the origin alone for the home page. */
