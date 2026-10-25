@@ -1,33 +1,12 @@
-import type { EpisodeMetadata, EpisodeStatus, IsoDate, UpcomingEpisodeMetadata } from '@/lib/episode-metadata.pure';
-import { FEATURED, LAYOUT_REFERENCES, type ListedEpisodeSlug } from '@/lib/episode-overview';
+import type { EpisodeMetadata, EpisodeStatus, IsoDate } from '@/lib/episode-metadata.pure';
+import { FEATURED, LAYOUT_REFERENCES } from '@/lib/episode-overview';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
-import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
-import { episodeMetadata as aiGivesYouMoreWork } from './ai-gives-you-more-work/episode-metadata';
-import { episodeMetadata as aiTokenEconomy } from './ai-token-economy/episode-metadata';
-import { episodeMetadata as maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode-metadata';
-import { episodeMetadata as neverTooEarlySales } from './never-too-early-sales/episode-metadata';
-import { episodeMetadata as onboardAiEveryTime } from './onboard-ai-every-time/episode-metadata';
-
+import { contentStore, type REGISTERED } from './content-store';
 /*
  * The Episode overview's read API (#40): every Episode's own metadata,
  * collected by explicit imports as the registry collects records. No glob, no
- * codegen, no React (FE-007 §3). The one seam a database would replace.
+ * codegen, no React (FE-007 §3). Reads the content store, the one seam a database would replace.
  */
-
-/**
- * Episodes that have a page, by slug: every registered listed one. Its
- * `status` says published or upcoming; an upcoming one with a page sits among them. Typed against the registered slugs, so a
- * registered Episode without metadata, or a key naming another Episode's
- * metadata, fails `tsc`.
- */
-const REGISTERED = {
-  'maintaining-markdown-for-ai': maintainingMarkdownForAi,
-  'ai-token-economy': aiTokenEconomy,
-  'never-too-early-sales': neverTooEarlySales,
-  'onboard-ai-every-time': onboardAiEveryTime,
-  'ai-attention-span': aiAttentionSpan,
-  'ai-gives-you-more-work': aiGivesYouMoreWork,
-} as const satisfies { readonly [S in ListedEpisodeSlug]: EpisodeMetadata & { readonly slug: S } };
 
 /** The slugs whose metadata says `published`. */
 type PublishedSlug = {
@@ -39,12 +18,9 @@ export function featuredSlugs(): readonly PublishedSlug[] {
   return FEATURED;
 }
 
-/** Upcoming Episodes in the order the overview lists them. */
-const UPCOMING: readonly UpcomingEpisodeMetadata[] = [];
-
 /** Every Episode's metadata: the published ones, then the upcoming ones in overview order. */
 export function listEpisodes(options?: { includeDrafts?: boolean }): readonly EpisodeMetadata[] {
-  const all = [...Object.values(REGISTERED), ...UPCOMING];
+  const all = contentStore().episodes;
   if (options?.includeDrafts ?? true) return all;
   return all.filter((entry) => entry.status === 'published');
 }

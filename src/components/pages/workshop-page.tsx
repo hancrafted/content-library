@@ -1,3 +1,4 @@
+import { contentStore } from '@/components/episodes/content-store';
 import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { episodeCards } from '@/components/landing/episode-cards';
@@ -9,7 +10,7 @@ import { TRANSLATIONS } from '@/i18n/translations';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ROUTES } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
-import { WORKSHOPS, type WorkshopSlug } from '@/lib/workshops.pure';
+import { type WorkshopSlug } from '@/lib/workshops.pure';
 import { ArrowLeft, ArrowRight, CalendarDays, Clock, Layers, MapPin, type LucideIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
@@ -122,7 +123,7 @@ function Agenda({ cards, locale, labels, title }: AgendaProps) {
  * description and a start button, then the Workshop's Episodes as a numbered list of compact cards.
  */
 export async function WorkshopPage({ slug, locale }: { slug: string; locale: Locale }) {
-  const record = WORKSHOPS.find((workshop) => workshop.slug === slug);
+  const record = contentStore().workshops.find((workshop) => workshop.slug === slug);
   if (record === undefined) notFound();
   const t = await getTranslations({ locale, namespace: 'workshopsPage' });
   const landing = await getTranslations({ locale, namespace: 'landing' });
