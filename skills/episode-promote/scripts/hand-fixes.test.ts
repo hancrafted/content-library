@@ -57,80 +57,82 @@ afterAll(() => {
   for (const root of roots) rmSync(root, { recursive: true, force: true });
 });
 
-describe('success cases', () => {
-  it('Promotion lists every hand fix of the Run with where it feeds back', () => {
-    // ARRANGE
-    const root = runRepo();
-    commit(root, 'src/components/episodes/demo/b.tsx', `fix(demo): the cashflow label\n\nFeeds: ${SKILL_FILE}`);
-    commit(root, 'src/components/slide-pool/x/c.tsx', `fix(pool): the axis title\n\nFeeds: ${ISSUE}`);
-    commit(root, 'docs/llm-wiki/research/r.md', 'fix(wiki): a date\n\nFeeds: none: a one-off typo');
-    const expected = [
-      { subject: 'fix(demo): the cashflow label', feeds: SKILL_FILE },
-      { subject: 'fix(pool): the axis title', feeds: ISSUE },
-      { subject: 'fix(wiki): a date', feeds: 'none: a one-off typo' },
-    ];
-    // ACT
-    const fixes = handFixesOfRun(root, STAGING, EPISODE).map(({ subject, feeds }) => ({ subject, feeds }));
-    // ASSERT
-    expect(fixes).toEqual(expected);
+describe('handFixesOfRun', () => {
+  describe('success cases', () => {
+    it('Promotion lists every hand fix of the Run with where it feeds back', () => {
+      // ARRANGE
+      const root = runRepo();
+      commit(root, 'src/components/episodes/demo/b.tsx', `fix(demo): the cashflow label\n\nFeeds: ${SKILL_FILE}`);
+      commit(root, 'src/components/slide-pool/x/c.tsx', `fix(pool): the axis title\n\nFeeds: ${ISSUE}`);
+      commit(root, 'docs/llm-wiki/research/r.md', 'fix(wiki): a date\n\nFeeds: none: a one-off typo');
+      const expected = [
+        { subject: 'fix(demo): the cashflow label', feeds: SKILL_FILE },
+        { subject: 'fix(pool): the axis title', feeds: ISSUE },
+        { subject: 'fix(wiki): a date', feeds: 'none: a one-off typo' },
+      ];
+      // ACT
+      const fixes = handFixesOfRun(root, STAGING, EPISODE).map(({ subject, feeds }) => ({ subject, feeds }));
+      // ASSERT
+      expect(fixes).toEqual(expected);
+    });
+
+    it('names the content files each hand fix touched', () => {
+      // ARRANGE
+      const root = runRepo();
+      commit(root, 'src/components/episodes/demo/b.tsx', `fix(demo): the label\n\nFeeds: ${SKILL_FILE}`);
+      const expected = [['src/components/episodes/demo/b.tsx']];
+      // ACT
+      const files = handFixesOfRun(root, STAGING, EPISODE).map((fix) => fix.files);
+      // ASSERT
+      expect(files).toEqual(expected);
+    });
   });
 
-  it('names the content files each hand fix touched', () => {
-    // ARRANGE
-    const root = runRepo();
-    commit(root, 'src/components/episodes/demo/b.tsx', `fix(demo): the label\n\nFeeds: ${SKILL_FILE}`);
-    const expected = [['src/components/episodes/demo/b.tsx']];
-    // ACT
-    const files = handFixesOfRun(root, STAGING, EPISODE).map((fix) => fix.files);
-    // ASSERT
-    expect(files).toEqual(expected);
-  });
-});
-
-describe('failure cases', () => {
-  it('refuses a Staging folder with no Gate commit, so no hand fix goes unlisted', () => {
-    // ARRANGE
-    const root = runRepo();
-    const expected = /no Gate commit names docs\/episodes\/other\//;
-    // ACT
-    const list = (): unknown => handFixesOfRun(root, 'docs/episodes/other', EPISODE);
-    // ASSERT
-    expect(list).toThrow(expected);
-  });
-});
-
-describe('edge cases', () => {
-  it('leaves out a fix outside content, a change that is no fix, and a fix before the last Gate', () => {
-    // ARRANGE
-    const root = runRepo();
-    commit(root, 'scripts/tool.ts', 'fix(scripts): a tool bug');
-    commit(root, 'src/components/episodes/demo/b.tsx', 'feat(demo): a new Slide');
-    // ACT
-    const fixes = handFixesOfRun(root, STAGING, EPISODE);
-    // ASSERT
-    expect(fixes).toEqual([]);
+  describe('failure cases', () => {
+    it('refuses a Staging folder with no Gate commit, so no hand fix goes unlisted', () => {
+      // ARRANGE
+      const root = runRepo();
+      const expected = /no Gate commit names docs\/episodes\/other\//;
+      // ACT
+      const list = (): unknown => handFixesOfRun(root, 'docs/episodes/other', EPISODE);
+      // ASSERT
+      expect(list).toThrow(expected);
+    });
   });
 
-  it('leaves out a fix that touched only another Episode, and keeps a shared Slide fixed beside it', () => {
-    // ARRANGE
-    const root = runRepo();
-    commit(root, 'src/components/episodes/other/a.tsx', 'fix(other): their label\n\nFeeds: none: theirs');
-    commit(root, 'src/components/slide-pool/x/c.tsx', 'fix(pool): a shared label\n\nFeeds: none: shared');
-    const expected = ['fix(pool): a shared label'];
-    // ACT
-    const subjects = handFixesOfRun(root, STAGING, EPISODE).map(({ subject }) => subject);
-    // ASSERT
-    expect(subjects).toEqual(expected);
-  });
+  describe('edge cases', () => {
+    it('leaves out a fix outside content, a change that is no fix, and a fix before the last Gate', () => {
+      // ARRANGE
+      const root = runRepo();
+      commit(root, 'scripts/tool.ts', 'fix(scripts): a tool bug');
+      commit(root, 'src/components/episodes/demo/b.tsx', 'feat(demo): a new Slide');
+      // ACT
+      const fixes = handFixesOfRun(root, STAGING, EPISODE);
+      // ASSERT
+      expect(fixes).toEqual([]);
+    });
 
-  it('lists a fix whose commit names no Feeds line, which only a skipped gate lets through', () => {
-    // ARRANGE
-    const root = runRepo();
-    commit(root, 'src/components/episodes/demo/b.tsx', 'fix(demo)!: the label');
-    const expected = [{ subject: 'fix(demo)!: the label', feeds: null }];
-    // ACT
-    const fixes = handFixesOfRun(root, STAGING, EPISODE).map(({ subject, feeds }) => ({ subject, feeds }));
-    // ASSERT
-    expect(fixes).toEqual(expected);
+    it('leaves out a fix that touched only another Episode, and keeps a shared Slide fixed beside it', () => {
+      // ARRANGE
+      const root = runRepo();
+      commit(root, 'src/components/episodes/other/a.tsx', 'fix(other): their label\n\nFeeds: none: theirs');
+      commit(root, 'src/components/slide-pool/x/c.tsx', 'fix(pool): a shared label\n\nFeeds: none: shared');
+      const expected = ['fix(pool): a shared label'];
+      // ACT
+      const subjects = handFixesOfRun(root, STAGING, EPISODE).map(({ subject }) => subject);
+      // ASSERT
+      expect(subjects).toEqual(expected);
+    });
+
+    it('lists a fix whose commit names no Feeds line, which only a skipped gate lets through', () => {
+      // ARRANGE
+      const root = runRepo();
+      commit(root, 'src/components/episodes/demo/b.tsx', 'fix(demo)!: the label');
+      const expected = [{ subject: 'fix(demo)!: the label', feeds: null }];
+      // ACT
+      const fixes = handFixesOfRun(root, STAGING, EPISODE).map(({ subject, feeds }) => ({ subject, feeds }));
+      // ASSERT
+      expect(fixes).toEqual(expected);
+    });
   });
 });
