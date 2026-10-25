@@ -90,6 +90,27 @@ describe('success cases', () => {
     // ASSERT
     expect(top).toEqual(expected);
   });
+
+  it("gathers every Slide folder of every Episode, marking each Episode's Title slide", () => {
+    // ARRANGE
+    const expectedTitles = [
+      'src/components/episodes/ai-attention-span/slides/hero',
+      'src/components/episodes/ai-gives-you-more-work/slides/hero',
+      'src/components/episodes/never-too-early-sales/slides/hero',
+      'src/components/episodes/onboard-ai-every-time/slides/hero',
+      'src/components/episodes/page-template/slides/hero',
+    ];
+    const expectedSlide = {
+      path: 'src/components/episodes/onboard-ai-every-time/slides/one-prompt',
+      slug: 'one-prompt',
+      title: false,
+    };
+    // ACT
+    const slides = contentStore().slides;
+    // ASSERT
+    expect(slides.filter(({ title }) => title).map(({ path }) => path)).toEqual(expectedTitles);
+    expect(slides).toContainEqual(expectedSlide);
+  });
 });
 
 describe('failure cases', () => {

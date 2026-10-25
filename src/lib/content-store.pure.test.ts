@@ -55,6 +55,8 @@ const RESEARCH = {
     'Body [1].',
   ].join('\n'),
 };
+const SLIDE = { path: 'src/components/episodes/never-too-early-sales/slides/pipeline', slug: 'pipeline', title: false };
+const POOL_SLIDE = { path: 'src/components/slide-pool/default-alive', slug: 'default-alive', title: false };
 const VALID: RawContent = {
   themes: THEMES,
   concepts: [SALES],
@@ -63,6 +65,7 @@ const VALID: RawContent = {
   workshops: [WORKSHOP],
   research: [RESEARCH],
   slideSources: [SOURCE],
+  slides: [SLIDE, POOL_SLIDE],
 };
 
 function refusalsOf(raw: RawContent) {
@@ -182,6 +185,35 @@ describe('failure cases', () => {
     expect(refusals[0]).toMatchObject(expected);
   });
 
+  it('Two Slides with the same slug anywhere are refused', () => {
+    // ARRANGE
+    const twin = { ...SLIDE, path: 'src/components/slide-pool/pipeline' };
+    const raw = { ...VALID, slides: [SLIDE, POOL_SLIDE, twin] };
+    const expected = [
+      {
+        kind: 'slide',
+        record: 'pipeline',
+        message:
+          'the slug is used by more than one Slide: src/components/episodes/never-too-early-sales/slides/pipeline, src/components/slide-pool/pipeline',
+      },
+    ];
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual(expected);
+  });
+
+  it('refuses two Slides with the same slug in two Episode folders', () => {
+    // ARRANGE
+    const twin = { ...SLIDE, path: 'src/components/episodes/onboard-ai-every-time/slides/pipeline' };
+    const raw = { ...VALID, slides: [SLIDE, twin] };
+    const expected = { kind: 'slide', record: 'pipeline' };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toMatchObject([expected]);
+  });
+
   it('names an Episode that lists a Concept outside the top Concepts', () => {
     // ARRANGE
     const raw = { ...VALID, episodes: [{ ...EPISODE, concepts: ['sales', 'tokens'] }] };
@@ -245,6 +277,17 @@ describe('edge cases', () => {
     const refusals = refusalsOf(raw);
     // ASSERT
     expect(refusals[0]).toMatchObject(expected);
+  });
+
+  it('lets every Episode keep a Title slide of the same slug, since its anchor stays per Episode', () => {
+    // ARRANGE
+    const hero = { path: 'src/components/episodes/never-too-early-sales/slides/hero', slug: 'hero', title: true };
+    const otherHero = { ...hero, path: 'src/components/episodes/onboard-ai-every-time/slides/hero' };
+    const raw = { ...VALID, slides: [SLIDE, hero, otherHero] };
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual([]);
   });
 
   it('refuses a value that is not an object at all', () => {

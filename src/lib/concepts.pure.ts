@@ -1,4 +1,7 @@
-import type { ConceptFile } from './concept-record.pure';
+import { readConceptFile, type ConceptFile } from './concept-record.pure';
+import { KEBAB, themeSchema } from './content-schemas.pure';
+import type { ThemeLook } from './episode-overview';
+import { reasonsOf } from './frontmatter.pure';
 
 /*
  * The Concept hierarchy (SKOS): what the Concepts say about each other. Every id they name resolves, `broader` has
@@ -19,6 +22,47 @@ export interface ConceptProblem {
   readonly kind: 'concept' | 'theme';
   readonly record: string;
   readonly message: string;
+}
+
+/** Records read from their raw form, with a problem for each one that could not be read. */
+export interface ConceptReads<T> {
+  readonly value: T;
+  readonly refusals: readonly ConceptProblem[];
+}
+
+export function isRecord(raw: unknown): raw is Record<string, unknown> {
+  return typeof raw === 'object' && raw !== null && !Array.isArray(raw);
+}
+
+/** The theme record read through the theme schema: one look per top Concept id. */
+export function readThemes(raw: unknown): ConceptReads<Record<string, ThemeLook>> {
+  const value: Record<string, ThemeLook> = {};
+  if (!isRecord(raw)) {
+    const message = 'the themes are one record keyed by top Concept id';
+    return { value, refusals: [{ kind: 'theme', record: '(themes)', message }] };
+  }
+  const refusals: ConceptProblem[] = [];
+  for (const [id, look] of Object.entries(raw)) {
+    const result = themeSchema.safeParse(look);
+    if (!KEBAB.test(id)) refusals.push({ kind: 'theme', record: id, message: 'the Concept id must be kebab-case' });
+    if (result.success) value[id] = result.data;
+    else
+      refusals.push(
+        ...reasonsOf(result.error.issues).map((message) => ({ kind: 'theme' as const, record: id, message })),
+      );
+  }
+  return { value, refusals };
+}
+
+/** Every Concept file read into a Concept, each one that cannot be read named by its path. */
+export function readConcepts(files: readonly { path: string; markdown: string }[]): ConceptReads<ConceptFile[]> {
+  const reads = files.map((file) => ({ file, read: readConceptFile(file.path, file.markdown) }));
+  return {
+    value: reads.flatMap(({ read }) => (read.concept ? [read.concept] : [])),
+    refusals: reads.flatMap(({ file, read }) =>
+      (read.reasons ?? []).map((message) => ({ kind: 'concept' as const, record: file.path, message })),
+    ),
+  };
 }
 
 /** Whether a Concept has no parent: a top Concept, the only kind that carries a theme. */

@@ -5,9 +5,9 @@ title: 'Slide Architecture'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
+files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,slide-pool}/**', 'src/components/pages/**', 'src/app/**/episode/**']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
+paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,slide-pool}/**', 'src/components/pages/**', 'src/app/**/episode/**']
 description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, and what an agent may change freely versus only by a new ADR.'
 ---
 
@@ -38,6 +38,9 @@ flowchart LR
   explain --> shared
   explain --> ui
   ep --> ui["ui — primitives"]
+  ep --> pool["slide-pool — Slide folders Episodes reuse"]
+  pool --> master
+  pool --> shared
   shared --> ui
   container["episode-page — the one container"] --> master
   container --> toc["table-of-contents"]
@@ -96,7 +99,7 @@ For this project the map matters because handoffs run on agents with no session 
 ### 3. Each module owns one thing
 
 1. `episodes/<ep>/` owns one Episode: its record, its own text, published anchors, one folder per Slide, and one `sections/<section-slug>.ts` per Section, exporting its ordered Slides to the record's `sections`.
-2. A Slide folder owns all it needs: Scene, widgets, logic, CSS, text, notes, Voice script.
+2. A Slide folder owns all it needs: Scene, widgets, logic, CSS, text, notes, Voice script. Once reused it moves to `slide-pool/`, listed by reference.
 3. `slide-master/` owns the frame, Slide layouts, record and kit types; `slide-shared/` owns parts two Slides share, client leaves in their part.
 4. `episode-page/` owns the one container and Slide mechanics; `table-of-contents/` and `context-drawer/` own the chrome, reached only from the container.
 
@@ -123,8 +126,9 @@ For this project the map matters because handoffs run on agents with no session 
 2. **DO** add an Episode by copying `page-template/` and registering it. (Decision 3, Decision 4)
 3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, design-ADR-0008)
 4. **DO** promote a part a second Slide needs into `slide-shared/`. (Decision 3, Decision 6)
-5. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)
-6. **DO** keep interactivity in the smallest `*.client.tsx` leaf. (Decision 5)
+5. **DO** reuse a Slide in another Episode with `npm run slides:reuse`, never by copying its folder. (Decision 3)
+6. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)
+7. **DO** keep interactivity in the smallest `*.client.tsx` leaf. (Decision 5)
 
 ### Don'ts
 
@@ -168,6 +172,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Slide, Scene, chrome.
 - [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
+- [`docs/adr/0016-content-data-model.md`](../../docs/adr/0016-content-data-model.md) — Slide reuse: the pool, references, global slugs.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.
 - [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
 - [Mermaid flowcharts](https://mermaid.js.org/syntax/flowchart.html)

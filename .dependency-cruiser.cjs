@@ -6,13 +6,21 @@
 
 // What an Episode file may reach: the Slide master (which holds the Episode
 // record, `slide-master/slide.ts`), slide-shared (parts several Slides
-// of any Episode share), explorable-explanations (the Explorable explanations Slides show), the Episode folders and src/lib.
-const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|explorable-explanations|episodes)/', '^src/lib/'];
+// of any Episode share), explorable-explanations (the Explorable explanations Slides show), the Episode folders,
+// the Slide pool (a Slide two Episodes reuse, listed by reference: design-ADR 0016) and src/lib.
+const EPISODE_REACH = [
+  '^src/components/(slide-master|slide-shared|explorable-explanations|episodes|slide-pool)/',
+  '^src/lib/',
+];
 
 // A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/` (FE-002, FE-007 §5). The two capture
 // groups name the Episode and the Slide, so a rule's `to` can say "this same folder" as `$1`/`$2`.
 const SLIDE_FOLDER = '^src/components/episodes/([^/]+)/slides/([^/]+)/';
 const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
+// A pool Slide is the same folder moved into the flat Slide pool on first reuse (design-ADR 0016, Slide reuse rule 1);
+// it obeys the same boundary. The capture group names the Slide.
+const POOL_SLIDE = '^src/components/slide-pool/([^/]+)/';
+const OWN_POOL_SLIDE = '^src/components/slide-pool/$1/';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the UI kit, hooks and lib.
 const SLIDE_SHARED_REACH = [
   '^src/components/(slide-master|slide-shared|explorable-explanations|ui)/',
@@ -125,6 +133,30 @@ module.exports = {
         "A Slide's *.client.tsx widget runs in the browser. It reaches its own Slide folder, src/hooks/ and src/lib/ only — never the Slide master, slide-shared, the UI kit or other components (FE-002, FE-006).",
       from: { path: `${SLIDE_FOLDER}.+\\.client\\.tsx$` },
       to: { pathNot: [OWN_SLIDE_FOLDER, '^src/(hooks|lib)/', 'node_modules'] },
+    },
+    {
+      name: 'pool-slide-reaches-only-own-and-shared',
+      severity: 'error',
+      comment:
+        'A pool Slide (slide-pool/<slide>/) is a Slide folder two Episodes reuse, and obeys the same boundary: it imports only its own files and src/components/slide-master/, slide-shared/, explorable-explanations/, ui/, src/hooks/ and src/lib/. Never another Slide, an Episode, or the pool itself (FE-007 §5, design-ADR 0016).',
+      from: { path: POOL_SLIDE },
+      to: { pathNot: [OWN_POOL_SLIDE, ...SLIDE_SHARED_REACH, 'node_modules'], dependencyTypesNot: ['core'] },
+    },
+    {
+      name: 'pool-slide-client-reaches-only-hooks-and-lib',
+      severity: 'error',
+      comment:
+        "A pool Slide's *.client.tsx widget runs in the browser. It reaches its own Slide folder, src/hooks/ and src/lib/ only, as any Slide's widget (FE-006 §5, design-ADR 0016).",
+      from: { path: `${POOL_SLIDE}.+\\.client\\.tsx$` },
+      to: { pathNot: [OWN_POOL_SLIDE, '^src/(hooks|lib)/', 'node_modules'] },
+    },
+    {
+      name: 'slide-pool-reached-only-from-episodes',
+      severity: 'error',
+      comment:
+        'A pool Slide is listed by reference from an Episode file (its record or a sections/<section>.ts), as an Episode lists its own Slides. Nothing else imports it (FE-004, design-ADR 0016).',
+      from: { pathNot: ['^src/components/(episodes|slide-pool)/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/components/slide-pool/' },
     },
     {
       name: 'slide-shared-reaches-only-ui-and-lib',

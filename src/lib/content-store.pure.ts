@@ -1,15 +1,23 @@
 import type { z } from 'zod';
-import { readConceptFile, type ConceptFile } from './concept-record.pure';
-import { conceptProblems, isTopConcept, linkConcepts, type Concept } from './concepts.pure';
+import type { ConceptFile } from './concept-record.pure';
+import {
+  conceptProblems,
+  isRecord,
+  isTopConcept,
+  linkConcepts,
+  readConcepts,
+  readThemes,
+  type Concept,
+} from './concepts.pure';
 import {
   definitionSlideSchema,
   episodeSchema,
-  KEBAB,
+  slideFolderSchema,
   slideSourceSchema,
-  themeSchema,
   workshopSchema,
   type DefinitionSlide,
   type RecordKind,
+  type SlideFolder,
   type SlideSource,
 } from './content-schemas.pure';
 import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata.pure';
@@ -37,6 +45,7 @@ export interface ContentStore {
   readonly workshops: readonly WorkshopRecord[];
   readonly research: readonly ResearchRecord[];
   readonly slideSources: readonly SlideSource[];
+  readonly slides: readonly SlideFolder[];
 }
 
 /** One refusal: the kind of record, which one, and one sentence on what is wrong with it. */
@@ -65,6 +74,8 @@ export interface RawContent {
   readonly workshops: readonly unknown[];
   readonly research: readonly EvidenceFile[];
   readonly slideSources: readonly unknown[];
+  /** Every Slide folder in every Episode's `slides/` and in the Slide pool. */
+  readonly slides: readonly unknown[];
 }
 
 interface Parsed<T> {
@@ -95,36 +106,6 @@ function readAll<S extends z.ZodType>(kind: RecordKind, schema: S, raws: readonl
   return { value, refusals };
 }
 
-function isRecord(raw: unknown): raw is Record<string, unknown> {
-  return typeof raw === 'object' && raw !== null && !Array.isArray(raw);
-}
-
-function readThemes(raw: unknown): Parsed<Record<string, ThemeLook>> {
-  const value: Record<string, ThemeLook> = {};
-  if (!isRecord(raw)) {
-    const message = 'the themes are one record keyed by top Concept id';
-    return { value, refusals: [{ kind: 'theme', record: '(themes)', message }] };
-  }
-  const refusals: Refusal[] = [];
-  for (const [id, look] of Object.entries(raw)) {
-    const result = themeSchema.safeParse(look);
-    if (!KEBAB.test(id)) refusals.push({ kind: 'theme', record: id, message: 'the Concept id must be kebab-case' });
-    if (result.success) value[id] = result.data;
-    else refusals.push(...refuse('theme', id, result.error.issues));
-  }
-  return { value, refusals };
-}
-
-function readConcepts(files: readonly EvidenceFile[]): Parsed<ConceptFile[]> {
-  const reads = files.map((file) => ({ file, read: readConceptFile(file.path, file.markdown) }));
-  return {
-    value: reads.flatMap(({ read }) => (read.concept ? [read.concept] : [])),
-    refusals: reads.flatMap(({ file, read }) =>
-      (read.reasons ?? []).map((message) => ({ kind: 'concept' as const, record: file.path, message })),
-    ),
-  };
-}
-
 function readResearch(files: RawContent['research']): Parsed<ResearchRecord[]> {
   const reads = files.map((file) => ({ file, read: readResearchFile(file.path, file.markdown) }));
   return {
@@ -137,6 +118,30 @@ function readResearch(files: RawContent['research']): Parsed<ResearchRecord[]> {
 
 function duplicates(items: readonly string[]): string[] {
   return [...new Set(items.filter((item, at) => items.indexOf(item) !== at))];
+}
+
+/**
+ * Slide slugs are unique across every Episode folder and the Slide pool together (design-ADR 0016, Slide reuse rule
+ * 7), so a reused Slide keeps its slug and anchor wherever it is placed. A Title slide is exempt: its anchor is `top`.
+ */
+function slideSlugRefusals(slides: readonly SlideFolder[]): Refusal[] {
+  const placed = slides.filter(({ title }) => !title);
+  return duplicates(placed.map(({ slug }) => slug)).map((slug) => ({
+    kind: 'slide' as const,
+    record: slug,
+    message: `the slug is used by more than one Slide: ${placed
+      .filter((each) => each.slug === slug)
+      .map(({ path }) => path)
+      .join(', ')}`,
+  }));
+}
+
+function researchIdRefusals(research: readonly ResearchRecord[]): Refusal[] {
+  return duplicates(research.map(({ id }) => id)).map((id) => ({
+    kind: 'research' as const,
+    record: id,
+    message: 'the id is used by more than one research file',
+  }));
 }
 
 const LISTED_SLUGS: readonly string[] = EPISODE_SLUGS.filter(
@@ -190,11 +195,6 @@ function crossChecks(sound: Sound): Refusal[] {
   ];
 }
 
-function duplicateResearch(research: readonly ResearchRecord[]): Refusal[] {
-  const message = 'the id is used by more than one research file';
-  return duplicates(research.map(({ id }) => id)).map((id) => ({ kind: 'research', record: id, message }));
-}
-
 /** Every record read through its schema, each with the refusals of the ones that failed it. */
 function readEach(raw: RawContent) {
   return {
@@ -204,6 +204,7 @@ function readEach(raw: RawContent) {
     episodes: readAll('episode', episodeSchema, raw.episodes),
     workshops: readAll('workshop', workshopSchema, raw.workshops),
     slideSources: readAll('slide-source', slideSourceSchema, raw.slideSources),
+    slides: readAll('slide', slideFolderSchema, raw.slides),
     research: readResearch(raw.research),
   };
 }
@@ -224,7 +225,8 @@ export function loadContentStore(raw: RawContent): LoadResult {
   };
   const refusals = [
     ...Object.values(read).flatMap((part) => part.refusals),
-    ...duplicateResearch(read.research.value),
+    ...researchIdRefusals(read.research.value),
+    ...slideSlugRefusals(read.slides.value),
     ...crossChecks(sound),
   ];
   if (refusals.length > 0) return { ok: false, refusals };
@@ -236,6 +238,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
     workshops: sound.workshops,
     research: read.research.value,
     slideSources: read.slideSources.value,
+    slides: read.slides.value,
   };
   return { ok: true, store };
 }

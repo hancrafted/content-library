@@ -5,6 +5,7 @@ import type { EpisodeMetadata, UpcomingEpisodeMetadata } from '@/lib/episode-met
 import { CONCEPT_THEMES, type ListedEpisodeSlug } from '@/lib/episode-overview';
 import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
 import { EPISODE_SLUGS } from '@/lib/routes';
+import { EPISODES_DIR, readSlideFolders } from '@/lib/slide-folders';
 import { WORKSHOPS } from '@/lib/workshops.pure';
 import { episodeMetadata as aiAttentionSpan } from './ai-attention-span/episode-metadata';
 import { episodeMetadata as aiGivesYouMoreWork } from './ai-gives-you-more-work/episode-metadata';
@@ -66,6 +67,17 @@ function definitionSlides(): RawContent['definitionSlides'] {
   );
 }
 
+/** Every Slide folder, each marked when it holds its Episode's Title slide, whose slug is exempt from uniqueness. */
+function slides(): RawContent['slides'] {
+  const titles = new Set(
+    EPISODE_SLUGS.flatMap((slug) => {
+      const title = findEpisode(slug).title;
+      return title === undefined ? [] : [`${EPISODES_DIR}/${slug}/slides/${title.slug}`];
+    }),
+  );
+  return readSlideFolders(process.cwd()).map((folder) => ({ ...folder, title: titles.has(folder.path) }));
+}
+
 /** The raw records, gathered and untrusted. Exported so a test can feed the loader a broken copy. */
 export function rawContent(): RawContent {
   return {
@@ -76,6 +88,7 @@ export function rawContent(): RawContent {
     workshops: WORKSHOPS,
     research: readResearchFiles(process.cwd()),
     slideSources: slideSources(),
+    slides: slides(),
   };
 }
 

@@ -5,7 +5,8 @@ title: 'Design Tokens'
 domain: frontend
 rules: true
 files: ['src/**/*.{ts,tsx,css,json}']
-paths: ['src/components/{episodes,slide-master,slide-shared,explorable-explanations,landing}/**', 'src/app/globals.css']
+# prettier-ignore
+paths: ['src/components/{episodes,slide-pool,slide-master,slide-shared,explorable-explanations,landing}/**', 'src/app/globals.css']
 description: 'Values, not shape: every colour, font size and font weight in the site and inside a Scene is a token reference — raw colours only in the global palette and a Slide token file, four type roles plus one hero exception, weights normal to semibold — while Scene markup, props and layout stay free; legacy files sit on a list that only shrinks.'
 ---
 
