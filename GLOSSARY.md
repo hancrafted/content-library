@@ -25,6 +25,15 @@ _Avoid_: Tag, Topic, category, keyword
 **Top Concept**: a Concept with no parent (`broader: []`). The seven top Concepts are the closed set of themes: each has an icon and an accent, and a new one is a design decision, not a content edit. An Episode lists the top Concepts it teaches, and its card shows them, linked to their pages.
 _Avoid_: Root concept, theme tag, lead Tag
 
+**Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source.
+_Avoid_: Research file, research note, finding
+
+**Confidence**: how settled the evidence for a Research question's Answer is, never the writer's certainty: `settled` (at least two independent primary Sources agree, nothing contradicts them), `contested` (credible Sources disagree, or the effect depends on context the Answer names) or `open` (anything less). The writer proposes it; it stays a proposal until Han confirms it with a `verified` entry at or after `generated.at`.
+_Avoid_: Certainty, evidence level, trust level
+
+**informs**: the field of a Research question that lists the Concepts it supports, the first its main one; each Concept's page lists the Research questions that inform it.
+_Avoid_: Tags, categories, concepts (as a field name)
+
 **applyThemeFromConcept**: the field of an Episode's metadata that names one of its top Concepts, whose icon and accent its card draws.
 _Avoid_: Lead Tag, look
 

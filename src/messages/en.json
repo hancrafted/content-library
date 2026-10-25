@@ -509,6 +509,18 @@
     "aliases": "Also called",
     "broader": "Broader",
     "narrower": "Narrower",
-    "related": "Related"
+    "related": "Related",
+    "research": "Research questions"
+  },
+  "researchPage": {
+    "eyebrow": "Research question",
+    "confidence": "Confidence",
+    "proposed": "Proposed by the writer, not yet reviewed",
+    "settled": "Settled",
+    "contested": "Contested",
+    "open": "Open",
+    "informs": "Informs",
+    "sources": "Sources",
+    "newTab": "opens in a new tab"
   }
 }

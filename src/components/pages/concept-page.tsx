@@ -6,12 +6,14 @@ import type { Concept } from '@/lib/concepts.pure';
 import { evidenceTree } from '@/lib/evidence-markdown.pure';
 import { localizePath } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { conceptRoute, type ConceptId } from '@/lib/routes';
+import { researchInforming } from '@/lib/research-questions.pure';
+import { conceptRoute, researchRoute, type ConceptId } from '@/lib/routes';
 import Link from 'next/link';
 
 /*
  * The page of one Concept at /concepts/<id>, in English only (design-ADR 0016, decision 3): its name, its scoping
- * definition, its body rendered through unified, and the Concepts it sits under, above and beside.
+ * definition, its body rendered through unified, the Research questions that inform it, and the Concepts it sits
+ * under, above and beside.
  */
 
 function conceptOf(id: ConceptId): Concept {
@@ -66,6 +68,26 @@ function Hierarchy({ concept, labels }: { concept: Concept; labels: Labels }) {
   );
 }
 
+/** Every promoted Research question that informs the Concept, linked to its page; left out when there is none. */
+function ResearchQuestions({ concept, label }: { concept: Concept; label: string }) {
+  const research = researchInforming(contentStore().research, concept.id);
+  if (research.length === 0) return null;
+  return (
+    <section data-concept-research className="mt-10 max-w-3xl border-t border-border pt-6">
+      <h2 className="mb-4 text-body font-semibold text-foreground">{label}</h2>
+      <ul className="space-y-2">
+        {research.map(({ id, title }) => (
+          <li key={id} data-research-question={id}>
+            <Link href={localizePath(researchRoute(id), 'en')} className="text-body underline">
+              {title}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
 export function ConceptPage({ id }: { id: ConceptId }) {
   const labels = TRANSLATIONS.en.conceptPage;
   const concept = conceptOf(id);
@@ -81,6 +103,7 @@ export function ConceptPage({ id }: { id: ConceptId }) {
         )}
       </PageHeader>
       <EvidenceBody tree={evidenceTree(concept.body, { withoutTitle: true })} />
+      <ResearchQuestions concept={concept} label={labels.research} />
       <Hierarchy concept={concept} labels={labels} />
     </main>
   );

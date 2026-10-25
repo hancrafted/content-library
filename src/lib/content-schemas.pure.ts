@@ -9,6 +9,21 @@ import { ACCENTS, ICONS } from './episode-overview';
 export const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
 const CLOCK = /^\d{2}:\d{2}$/;
+/**
+ * How settled the evidence for a Research question's Answer is (design-ADR 0016, Citations rule 4). The agent that
+ * writes the research proposes one; Han confirms it at the Promotion Gate.
+ */
+export const CONFIDENCE_DEFINITIONS = {
+  settled:
+    'The Answer rests on at least two independent primary Sources that agree, and no Source or Caveat contradicts it.',
+  contested: 'Credible primary Sources disagree, or the effect is real but depends on context the Answer names.',
+  open: 'Anything less: one Source, only weak Sources, or a mechanism still debated.',
+} as const;
+
+export type Confidence = keyof typeof CONFIDENCE_DEFINITIONS;
+
+export const CONFIDENCES = Object.keys(CONFIDENCE_DEFINITIONS) as [Confidence, ...Confidence[]];
+
 export const RESEARCH_ID = /^([A-Z]+-\d{4})__[a-z0-9]+(-[a-z0-9]+)*$/;
 
 /** Only a date that survives a round trip is a day: `2026-02-30` has the shape but is not one. */
@@ -154,6 +169,15 @@ export const researchSchema = z
     type: z.literal('research').describe('The kind of Staging file this is'),
     title: z.string().min(1).describe('The question, written as one'),
     description: z.string().min(1).max(200).describe('The answer in one sentence, at most 200 characters'),
+    confidence: z
+      .enum(CONFIDENCES)
+      .describe(
+        "How settled the evidence for the Answer is, never the writer's certainty: settled, contested or open, by the definitions in CONFIDENCE_DEFINITIONS",
+      ),
+    informs: conceptIds('The Concepts the question informs, the first the main one').min(
+      1,
+      'names no Concept: a Research question informs at least one, the first its main one',
+    ),
     generated: z
       .object({
         by: z.string().min(1).describe('Who or what wrote the file'),
@@ -161,6 +185,12 @@ export const researchSchema = z
       })
       .describe('The provenance of the file'),
     stale_after: z.string().min(1).optional().describe('The instant after which the answer needs a re-run'),
+    verified: z
+      .union([verification, z.array(verification)])
+      .optional()
+      .describe(
+        'OKF trust: who confirmed the file and when; an entry by human:han at or after generated.at confirms confidence and informs',
+      ),
     sources: z
       .array(
         z.object({

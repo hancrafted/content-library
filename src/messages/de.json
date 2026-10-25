@@ -509,6 +509,18 @@
     "aliases": "Auch genannt",
     "broader": "Übergeordnet",
     "narrower": "Untergeordnet",
-    "related": "Verwandt"
+    "related": "Verwandt",
+    "research": "Forschungsfragen"
+  },
+  "researchPage": {
+    "eyebrow": "Forschungsfrage",
+    "confidence": "Belastbarkeit",
+    "proposed": "Vom Verfasser vorgeschlagen, noch nicht geprüft",
+    "settled": "Gesichert",
+    "contested": "Umstritten",
+    "open": "Offen",
+    "informs": "Stützt",
+    "sources": "Quellen",
+    "newTab": "öffnet in neuem Tab"
   }
 }

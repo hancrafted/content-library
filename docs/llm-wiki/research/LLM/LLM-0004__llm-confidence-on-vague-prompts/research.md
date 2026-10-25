@@ -4,6 +4,8 @@ title: 'Why do LLMs answer confidently instead of asking when a prompt is vague?
 description: 'Training and evaluation reward a committed answer over an
   abstention or a clarifying question, so language models guess one reading of a
   vague prompt.'
+confidence: open
+informs: [llm-behaviour]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-19T13:57:45Z

@@ -22,6 +22,7 @@ import {
 } from './content-schemas.pure';
 import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata.pure';
 import { LAYOUT_REFERENCES, type ThemeLook } from './episode-overview';
+import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
 import { EPISODE_SLUGS } from './routes';
 import { workshopProblems, type WorkshopRecord } from './workshops.pure';
@@ -155,10 +156,11 @@ interface Sound {
   readonly episodes: readonly EpisodeMetadata[];
   readonly workshops: readonly WorkshopRecord[];
   readonly definitionSlides: readonly DefinitionSlide[];
+  readonly research: readonly ResearchRecord[];
 }
 
-/** What the evidence says about itself and what Slides say about it: the hierarchy sound, every `defines` a Concept. */
-function evidenceChecks({ concepts, themed, definitionSlides }: Sound): Refusal[] {
+/** What evidence and Slides say about it: the hierarchy sound, every `defines` and `informs` a Concept. */
+function evidenceChecks({ concepts, themed, definitionSlides, research }: Sound): Refusal[] {
   const known = concepts.map(({ id }) => id);
   return [
     ...duplicates(known).map((id) => ({ kind: 'concept' as const, record: id, message: 'the id is used twice' })),
@@ -170,6 +172,7 @@ function evidenceChecks({ concepts, themed, definitionSlides }: Sound): Refusal[
         record: `${episode}/${slide}`,
         message: `defines names ${defines}, which is no Concept`,
       })),
+    ...informsProblems(research, known).map((problem) => ({ kind: 'research' as const, ...problem })),
   ];
 }
 
@@ -222,6 +225,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
     episodes: read.episodes.value as unknown as EpisodeMetadata[],
     workshops: read.workshops.value as WorkshopRecord[],
     definitionSlides: read.definitionSlides.value,
+    research: read.research.value,
   };
   const refusals = [
     ...Object.values(read).flatMap((part) => part.refusals),

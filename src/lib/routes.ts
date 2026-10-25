@@ -11,6 +11,8 @@ export const ROUTES = {
   workshops: '/workshops',
   /** Prefix every Concept page sits under, English only; there is no index page yet. */
   concepts: '/concepts',
+  /** Prefix every Research question page sits under, English only; there is no index page yet. */
+  research: '/research',
 } as const;
 
 export const LEGACY_EPISODE_PREFIX = '/episode';
@@ -98,6 +100,54 @@ export function conceptParams(): { concept: ConceptId }[] {
   return CONCEPT_IDS.map((concept) => ({ concept }));
 }
 
+/**
+ * Every promoted Research question id, one page each at `/research/<id>`, in English only (design-ADR 0016, Citations
+ * rule 1). The ids come from the folder names under `docs/llm-wiki/research/<category>/`; staged research has no page
+ * until Promotion moves it there and adds its id here. The content store test fails when the two differ.
+ */
+export const RESEARCH_IDS = [
+  'AIE-0001',
+  'AIE-0002',
+  'AIE-0003',
+  'AIE-0004',
+  'AIE-0005',
+  'AIE-0006',
+  'AIE-0007',
+  'AIE-0008',
+  'AIE-0009',
+  'AIE-0010',
+  'AIE-0011',
+  'LLM-0001',
+  'LLM-0002',
+  'LLM-0003',
+  'LLM-0004',
+  'LLM-0005',
+  'ORG-0001',
+  'SALES-0001',
+  'SALES-0002',
+  'SALES-0003',
+  'SALES-0004',
+  'SALES-0005',
+  'SALES-0006',
+  'START-0001',
+] as const;
+
+export type ResearchId = (typeof RESEARCH_IDS)[number];
+
+export function isResearchId(id: string): id is ResearchId {
+  return (RESEARCH_IDS as readonly string[]).includes(id);
+}
+
+/** The logical path of one Research question page; it has no German counterpart, so link it with the `en` locale. */
+export function researchRoute(id: string): string {
+  return `${ROUTES.research}/${id}`;
+}
+
+/** One static param per promoted Research question; the Research route exports exactly these (FE-005). */
+export function researchParams(): { research: ResearchId }[] {
+  return RESEARCH_IDS.map((research) => ({ research }));
+}
+
 /** A page with its own metadata and a closed set of exported locales. */
 export type PageRef =
   | 'home'
@@ -106,7 +156,8 @@ export type PageRef =
   | 'workshops'
   | { readonly episode: EpisodeSlug }
   | { readonly workshop: WorkshopSlug }
-  | { readonly concept: ConceptId };
+  | { readonly concept: ConceptId }
+  | { readonly research: ResearchId };
 
 /** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
 export const PAGES: readonly PageRef[] = [
@@ -117,17 +168,19 @@ export const PAGES: readonly PageRef[] = [
   ...EPISODE_SLUGS.map((episode) => ({ episode })),
   ...WORKSHOP_SLUGS.map((workshop) => ({ workshop })),
   ...CONCEPT_IDS.map((concept) => ({ concept })),
+  ...RESEARCH_IDS.map((research) => ({ research })),
 ];
 
 /** English-only pages have no German counterpart: the operations dashboard, and every evidence page. */
 export function pageLocales(page: PageRef): readonly Locale[] {
-  return page === 'dashboard' || isConceptPage(page) ? ['en'] : LOCALES;
+  return page === 'dashboard' || isConceptPage(page) || isResearchPage(page) ? ['en'] : LOCALES;
 }
 
 /** The logical path a page is exported at. */
 export function routeOf(page: PageRef): string {
   if (isEpisodePage(page)) return episodeRoute(page.episode);
   if (isConceptPage(page)) return conceptRoute(page.concept);
+  if (isResearchPage(page)) return researchRoute(page.research);
   return isWorkshopPage(page) ? workshopRoute(page.workshop) : ROUTES[page];
 }
 
@@ -144,6 +197,11 @@ export function isWorkshopPage(page: PageRef): page is { readonly workshop: Work
 /** Whether a page is a Concept's, narrowing to the `{ concept }` form. */
 export function isConceptPage(page: PageRef): page is { readonly concept: ConceptId } {
   return typeof page !== 'string' && 'concept' in page;
+}
+
+/** Whether a page is a Research question's, narrowing to the `{ research }` form. */
+export function isResearchPage(page: PageRef): page is { readonly research: ResearchId } {
+  return typeof page !== 'string' && 'research' in page;
 }
 
 /** The URL a logical path is served at under `siteUrl`: `trailingSlash` makes it the canonical, the origin alone for the home page. */

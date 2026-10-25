@@ -2,6 +2,8 @@
 type: research
 title: 'Why does a language model''s recall of information degrade with its position in a long context?'
 description: 'Language models recall information at the start and end of a long context better than in the middle, because attention is biased by position.'
+confidence: contested
+informs: [llm-behaviour, context-engineering]
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-12T00:00:00Z

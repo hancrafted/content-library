@@ -5,6 +5,8 @@ title: 'Why does letting an LLM ask clarifying questions before a task improve
 description: "Clarifying questions improve results because they replace the
   model's guesses about missing requirements with the user's answers, but only
   for underspecified tasks."
+confidence: contested
+informs: [agentic-ai, llm-behaviour]
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-19T14:08:32Z

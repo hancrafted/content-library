@@ -43,6 +43,8 @@ const RESEARCH = {
     'type: research',
     "title: 'Why?'",
     "description: 'Because.'",
+    'confidence: open',
+    'informs: [sales]',
     'generated:',
     '  by: someone',
     '  at: 2026-10-13T00:00:00Z',

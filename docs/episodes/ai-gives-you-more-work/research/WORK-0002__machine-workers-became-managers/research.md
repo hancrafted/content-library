@@ -5,6 +5,8 @@ title: 'Why did workers who took up managing new machines, like the steam
 description: 'Early industrial managers came from several routes, and the
   evidence found does not show machine-operating workers as the main one, so the
   premise is overstated.'
+confidence: open
+informs: [ai-adoption]
 generated:
   by: claude-code/sonnet-4.6
   at: 2026-10-19T18:32:24Z
