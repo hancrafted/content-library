@@ -36,11 +36,17 @@ function checkSpeakerNote(where: string, { text, nested }: ListItem): string[] {
   ];
 }
 
-/** The Research question ids the plan names: each one it reuses, by its question, and each one a job writes. */
-function plannedIds(plan: string): { reused: Map<string, number>; written: Set<string> } {
+/**
+ * The Research question ids the plan names: each one it reuses, by its question (none for one a kept Slide cites,
+ * which the Slide goes on citing), and each one a job writes.
+ */
+function plannedIds(plan: string): { reused: Map<string, number | undefined>; written: Set<string> } {
   const items = readResearchPlan(plan);
+  const reused = new Map<string, number | undefined>();
+  for (const item of items)
+    if (item.kind === 'reuse' && reused.get(item.id) === undefined) reused.set(item.id, item.question);
   return {
-    reused: new Map(items.flatMap((item) => (item.kind === 'reuse' ? [[item.id, item.question] as const] : []))),
+    reused,
     written: new Set(items.flatMap((item) => (item.kind === 'reuse' ? [] : [item.folder.split('__')[0]]))),
   };
 }
@@ -70,7 +76,7 @@ function checkAgainstPlan(blocks: readonly Block[], plan: string | undefined): s
       ),
   );
   const uncited = [...reused]
-    .filter(([id]) => !all.has(id))
+    .filter(([id, question]) => question !== undefined && !all.has(id))
     .map(
       ([id, question]) =>
         `The research plan reuses ${id} for question ${question}, which no Speaker note cites by \`research: ${id}\`; cite it where the Slide makes its claim, or retrieval should not have reused it.`,

@@ -1,6 +1,6 @@
 // `npm run episode:spec-assemble -- <slug | Episode folder>`: builds `spec/spec.html` from what exists (design-ADR 0011).
 // `--forbid <word,word…>` first fails, naming file and line, when a term survives in the staging folder (after a rename).
-// Agents supply content only: the Brief, the Dossier, the designers' fragments `.scratch/<slug>/spec/*.html` and the
+// Agents supply content only: the Brief, the Dossier, the Slide plan, the designers' fragments `.scratch/<slug>/spec/*.html` and the
 // Visual language and Episode page markup `visual-language.html` and `episode-page.html` beside them. The user's feedback
 // rounds lock the user's picks. Compiles `spec/design.css` beside the page. Refuses an approved Spec; runs the Spec contract that applies to the stage (all of it once Options are present) and exits 1 on findings.
 
@@ -80,6 +80,7 @@ try {
     generated: { by: 'process:spec-assemble', at: utcSeconds(new Date()) },
     brief,
     dossier,
+    slidePlan: read(path.join(folder, 'slide-plan.md')),
     fragments,
     visualLanguage: read(path.join(scratch, 'visual-language.html')),
     episodePage: read(path.join(scratch, 'episode-page.html')),

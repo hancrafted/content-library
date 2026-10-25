@@ -21,6 +21,10 @@ export interface SpecSlide {
   section: string;
   slug: string;
   options: readonly string[];
+  /** Its number, `data-number`. */
+  number: number;
+  /** The Slide plan's outcome its plan field holds (reuse, adapt or new), when the plan names a candidate for it. */
+  plan?: string;
 }
 
 /** The Spec's Slides inside a Section, in page order; a Slide in no Section has no anchor, so it is no Slide here. */
@@ -35,8 +39,16 @@ export function specSlides(html: string): SpecSlide[] {
         .find(OPTION)
         .toArray()
         .map((option) => $(option).attr('data-option') ?? ''),
+      number: Number($(slide).attr('data-number')),
+      ...planOf(
+        $(slide)
+          .find(`select[name="plan:${$(slide).attr('id') ?? ''}"]`)
+          .attr('data-current'),
+      ),
     }));
 }
+
+const planOf = (current: string | undefined) => (current === undefined ? {} : { plan: current });
 
 /** The page Slide anchors of a Spec, `<section id>--<slide id>` in page order, as feedback items key them. */
 export function specSlideAnchors(html: string): string[] {

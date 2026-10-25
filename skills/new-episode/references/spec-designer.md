@@ -9,6 +9,7 @@ Point, never paste: read each file yourself.
 - The Brief, `docs/episodes/<slug>/brief.md`, including its `## Style`.
 - Each design reference the Brief lists, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md` and its page images in `pages/`: the model the user brought.
 - The Dossier, `docs/episodes/<slug>/dossier.md`: each of your Slides' Visual, title, Voice script and Speaker notes.
+- The Slide plan, `docs/episodes/<slug>/slide-plan.md`: a Slide it reuses is not yours to design; a Slide it adapts is ([Adapted Slides](#adapted-slides)).
 - The Visual language the orchestrator gives you. Every Option follows it.
 - `GLOSSARY.md`, and `docs/design/`: `slide-library.md`, `design-guide.md` (the user's taste, its named styles, and run 1 as "not this"), `design-system.md` (tokens and motion rules).
 - The ADRs `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md`, `FE-011-design-tokens.md`.
@@ -71,3 +72,7 @@ Write one file, the fragment file the orchestrator names, holding per Slide, in 
 ```
 
 `<N>` is the Slide's number, letters from `a`. Leave out the pick checkbox and the note field: the orchestrator adds them. Write no other file and commit nothing. Return per Slide the Options' ids, one line each, the recommended one marked, and the path of each screenshot you checked, after the last `episode:spec-preview` run exited 0.
+
+## Adapted Slides
+
+A Slide the Slide plan marks `adapt <slug>` is an instance of a pool Slide: its Options only modify that Slide, by what the plan's `changes` says, and keep the rest. Open the pool Slide on the dev server and read its folder (`npm run slides:pool` names where it lives). In the fragment, before the Options, draw it as it is today in one `<figure data-spec="origin" data-pool="<slug>">` with a mock and a figcaption, so the user sees the original beside each change. Each Option's build notes say what it changes on the origin, nothing more.

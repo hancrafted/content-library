@@ -91,6 +91,20 @@ describe('failure cases', () => {
     expect(findings).toEqual(expected);
   });
 
+  it('still names a question reused for the Brief that no Speaker note cites when a kept Slide cites it too', () => {
+    // ARRANGE
+    const notes = `1. **Not the tool** — individuals miss the promised gain [AIE-0002].
+   - research: AIE-0002`;
+    const plan = `${ALL_REUSED}- Slide 3: reuse LLM-0001, confidence settled, fresh until 2027-04-19.\n`;
+    const files = { 'research-plan.md': plan, 'dossier.md': dossier(notes) };
+    // ACT
+    const findings = findingsOf(files);
+    // ASSERT
+    expect(findings.map(({ message }) => message)).toEqual([
+      'The research plan reuses LLM-0001 for question 2, which no Speaker note cites by `research: LLM-0001`; cite it where the Slide makes its claim, or retrieval should not have reused it.',
+    ]);
+  });
+
   it('names a cited id the research plan does not name, and a marker with no research line', () => {
     // ARRANGE
     const notes = `${CITES_BOTH}
@@ -119,6 +133,16 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('lets a question that only a kept Slide cites go uncited in the Dossier', () => {
+    // ARRANGE
+    const plan = `${ALL_REUSED}- Slide 3: reuse ORG-0001, confidence open, fresh until 2027-04-19.\n`;
+    const files = { 'research-plan.md': plan, 'dossier.md': dossier(CITES_BOTH) };
+    // ACT
+    const findings = findingsOf(files);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('lets a note cite a question a research job of this Run writes, before it is promoted', () => {
     // ARRANGE
     const plan = `# Research plan\n\n## Research jobs\n\n- new: AIE-0016__why-recall-degrades, question 1, informs llm-behaviour.\n`;

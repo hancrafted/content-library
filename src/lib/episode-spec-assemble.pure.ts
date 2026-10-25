@@ -8,8 +8,10 @@
 
 import { load } from 'cheerio';
 import { briefCardMarkup } from './episode-spec-assemble-brief.pure.ts';
+import { partsOf, type Parts } from './episode-spec-assemble-parts.pure.ts';
+import { planAttribute, planField, planLabel } from './episode-spec-assemble-plan.pure.ts';
 import { escape, inline, notesList, visualPanel, voiceList, wordTabs } from './episode-spec-assemble-words.pure.ts';
-import { fragmentSlides, pickBox } from './episode-spec-fragment.pure.ts';
+import { pickBox } from './episode-spec-fragment.pure.ts';
 import { FORM } from './episode-spec-slide.pure.ts';
 import { briefSource, dossierSource, mergedSource, type Source } from './episode-spec-source.pure.ts';
 import { TITLE_ANCHOR } from './episode.pure.ts';
@@ -29,34 +31,13 @@ export interface SpecInputs {
   /** Markup inside the Visual language and Episode page cards. */
   visualLanguage?: string;
   episodePage?: string;
+  /** The Slide plan, `slide-plan.md`, when the Run has one: it marks each reused and adapted Slide. */
+  slidePlan?: string;
   /** Every feedback round's `feedback.md`, oldest first. */
   feedback?: readonly string[];
   /** The current `spec.html`, if any; assembly refuses when it is approved. */
   existing?: string;
   locale?: string;
-}
-
-/** The picks that lock a Slide: its latest feedback item with exactly one pick, by Slide slug. */
-const PICK_LINE = /^- `([a-z0-9-]+(?:--[a-z0-9-]+)?)` · design — picked: (none|\d+[a-z](?:, \d+[a-z])*)/;
-
-/** A feedback line's Slide slug and the Options it picked, none for a line of another form. */
-function pickOf(line: string): { slug: string; picks: string[] } | undefined {
-  const item = PICK_LINE.exec(line);
-  if (item === null) return undefined;
-  return {
-    slug: (item[1] ?? '').split('--').at(-1) ?? '',
-    picks: (item[2] ?? '').split(', ').filter((pick) => pick !== 'none'),
-  };
-}
-
-function locksOf(rounds: readonly string[]): Map<string, string> {
-  const locks = new Map<string, string>();
-  const picked = rounds.flatMap((round) => round.split('\n').flatMap((line) => pickOf(line) ?? []));
-  for (const { slug, picks } of picked) {
-    if (picks.length === 1) locks.set(slug, picks[0] ?? '');
-    else locks.delete(slug);
-  }
-  return locks;
 }
 
 /** One Slide's Options: build notes wrapped, pick boxes added, the locked Option marked picked and ticked. */
@@ -75,12 +56,6 @@ function optionsMarkup(slug: string, html: string, locked: string | undefined): 
   return $.html();
 }
 
-/** What the Options of a page come from: the designers' fragments by Slide slug, and Han's locked picks. */
-interface Parts {
-  fragments: Map<string, string>;
-  locks: Map<string, string>;
-}
-
 type SourceSlide = Source['sections'][number]['slides'][number];
 
 function slideWords(slide: SourceSlide): string {
@@ -92,22 +67,33 @@ function slideWords(slide: SourceSlide): string {
 }
 
 /** The Options stage and the note field, once the Slide has Options. */
-function slideStage(slide: SourceSlide, number: number, { fragments, locks }: Parts): string {
+const noteField = (slug: string, number: number) =>
+  `<textarea class="spec-note" form="${FORM}" name="note:${slug}" placeholder="Note on Slide ${number}"></textarea>`;
+
+/** The Options stage and the note field, once the Slide has Options; a reused Slide has none, only its note. */
+function slideStage(slide: SourceSlide, number: number, { fragments, locks, plan }: Parts): string {
+  const item = plan.get(number);
+  const field = planField(slide.slug, item);
+  if (item?.outcome === 'reuse') return `${field}\n${noteField(slide.slug, number)}`;
   const options = fragments.get(slide.slug);
-  if (options === undefined) return '';
-  const note = `<textarea class="spec-note" form="${FORM}" name="note:${slide.slug}" placeholder="Note on Slide ${number}"></textarea>`;
-  return `<div class="spec-options">\n${optionsMarkup(slide.slug, options, locks.get(slide.slug))}\n</div>\n${note}`;
+  if (options === undefined) return field;
+  const stage = optionsMarkup(slide.slug, options, locks.get(slide.slug));
+  return `<div class="spec-options">\n${stage}\n</div>\n${field}\n${noteField(slide.slug, number)}`;
 }
 
+/** A reused Slide keeps its words, so it shows none; every other Slide shows its words as tabs. */
 function slideMarkup(slide: SourceSlide, number: number, parts: Parts): string {
   const purpose = slide.purpose === undefined ? '' : `<p class="spec-purpose">${inline(slide.purpose)}</p>`;
-  return `<article data-spec="slide" id="${slide.slug}" data-number="${number}">
+  const item = parts.plan.get(number);
+  const words = item?.outcome === 'reuse' ? '' : slideWords(slide);
+  return `<article data-spec="slide" id="${slide.slug}" data-number="${number}"${planAttribute(item)}>
 <header class="spec-slide-head">
 <span class="spec-number">${number}</span>
 <h3>${inline(slide.title)}</h3>
 </header>
 ${purpose}
-${slideWords(slide)}
+${planLabel(item)}
+${words}
 ${slideStage(slide, number, parts)}
 </article>`;
 }
@@ -211,13 +197,8 @@ export function assembleSpec(inputs: SpecInputs): string {
     throw new Error('the Spec is approved: an approved Spec cannot be assembled again');
   const brief = briefSource(inputs.brief);
   const source = inputs.dossier === undefined ? brief : mergedSource(brief, dossierSource(inputs.dossier));
-  const fragments = new Map(
-    (inputs.fragments ?? []).flatMap((file) =>
-      fragmentSlides(file).map(({ slug, html }) => [slug, html.trim()] as const),
-    ),
-  );
-  const parts = { fragments, locks: locksOf(inputs.feedback ?? []) };
-  const titleOptions = fragments.get(TITLE_ANCHOR);
+  const parts = partsOf(inputs);
+  const titleOptions = parts.fragments.get(TITLE_ANCHOR);
   const title = titleOptions === undefined ? '' : titleArticle(titleOptions, parts.locks.get(TITLE_ANCHOR));
   return `${head(inputs.frame, source.title)}${metaBlock(inputs, source.title)}
 </head>

@@ -57,7 +57,7 @@ export function aliasOf(path: string): string {
 }
 
 /** The files that import anything inside `folder`, apart from the folder's own files. */
-function importersOf(folder: string, files: readonly string[], repo: RepoView): string[] {
+export function importersOf(folder: string, files: readonly string[], repo: RepoView): string[] {
   return files.filter(
     (file) =>
       !inside(file, folder) &&
@@ -111,7 +111,7 @@ export function exportedName(entry: string): string | undefined {
 }
 
 /** Whether an Episode's record holds this Slide folder as its Title slide (`title: <name>`, imported from it). */
-function isTitleSlide(episode: string, slug: string, repo: RepoView): boolean {
+export function isTitleSlide(episode: string, slug: string, repo: RepoView): boolean {
   const record = `${EPISODES_DIR}/${episode}/${episode}.ts`;
   if (!repo.exists(record)) return false;
   const text = repo.read(record);
