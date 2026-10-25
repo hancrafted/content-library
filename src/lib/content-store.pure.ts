@@ -86,6 +86,8 @@ export interface RawContent {
   readonly slideSources: readonly unknown[];
   /** Every Slide folder in every Episode's `slides/` and in the Slide pool. */
   readonly slides: readonly unknown[];
+  /** Every Staging's `research-plan.md`: a refresh it lists lets its staged question shadow the wiki id. */
+  readonly researchPlans: readonly EvidenceFile[];
 }
 
 interface Parsed<T> {
@@ -223,7 +225,7 @@ export function loadContentStore(raw: RawContent): LoadResult {
   const sound = soundOf(read, raw);
   const refusals = [
     ...Object.values(read).flatMap((part) => part.refusals),
-    ...researchIdRefusals(read.research.value),
+    ...researchIdRefusals(read.research.value, raw.researchPlans),
     ...slideFolderProblems(read.slides.value).map((problem) => ({ kind: 'slide' as const, ...problem })),
     ...crossChecks(sound),
   ];

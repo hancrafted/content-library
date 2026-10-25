@@ -5,7 +5,9 @@ import { checkResearchJobs } from '@/lib/episode-research-jobs.pure';
 import { unsettledBriefSections } from '@/lib/episode-staging-brief.pure';
 import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type KnownVisuals } from '@/lib/episode-staging.pure';
 import { checkVoiceScriptDiff } from '@/lib/episode-voice-script.pure';
+import { readConceptFiles, readResearchFiles } from '@/lib/evidence-files';
 import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
+import { checkResearchPlan } from '@/lib/research-plan.pure';
 import { gateTier } from '@/lib/staging-file.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
@@ -358,6 +360,32 @@ describe('success cases', () => {
     // ACT
     const findings = pairs.flatMap(([file, yaml, plan]) => checkResearchJobs(file, yaml, plan));
     // ASSERT
+    expect(findings).toEqual([]);
+  });
+
+  it('finds every research plan, the sample one included, naming Concepts that exist and Research questions of the wiki or a Staging', () => {
+    // ARRANGE
+    const sampleResearch = Object.keys(readFolder(path.join(SAMPLE, 'research'))).map((file) => ({
+      id: file.split('__')[0],
+      path: `${path.relative(ROOT, SAMPLE)}/research/${file}`,
+    }));
+    const research = [
+      ...readResearchFiles(ROOT).map(({ path: file }) => ({
+        id: file.split('/').at(-2)?.split('__')[0] ?? '',
+        path: file,
+      })),
+      ...sampleResearch,
+    ];
+    const concepts = readConceptFiles(ROOT).map(({ path: file }) => file.split('/').at(-2) ?? '');
+    const plans = Object.entries(stagingFolders())
+      .map(([staging, folder]) => [staging, path.join(folder, 'research-plan.md')] as const)
+      .filter(([, file]) => existsSync(file));
+    // ACT
+    const findings = plans.flatMap(([staging, file]) =>
+      checkResearchPlan(`${staging}/research-plan.md`, readFileSync(file, 'utf8'), { staging, research, concepts }),
+    );
+    // ASSERT
+    expect(plans.length).toBeGreaterThan(1);
     expect(findings).toEqual([]);
   });
 

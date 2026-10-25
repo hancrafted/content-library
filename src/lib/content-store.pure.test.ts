@@ -66,6 +66,7 @@ const RESEARCH = {
     "title: 'Why?'",
     "description: 'Because.'",
     'confidence: open',
+    "confidence_reason: 'One Source, so open.'",
     'informs: [sales]',
     'generated:',
     '  by: someone',
@@ -101,6 +102,7 @@ const VALID: RawContent = {
   playlists: [PLAYLIST],
   research: [RESEARCH],
   slideSources: [SOURCE],
+  researchPlans: [],
   slides: [SLIDE, POOL_SLIDE],
 };
 

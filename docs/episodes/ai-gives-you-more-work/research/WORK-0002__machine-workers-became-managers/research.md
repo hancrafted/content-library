@@ -6,6 +6,7 @@ description: 'Early industrial managers came from several routes, and the
   evidence found does not show machine-operating workers as the main one, so the
   premise is overstated.'
 confidence: open
+confidence_reason: 'The verdict rests on an absence of evidence.'
 informs: [ai-adoption]
 generated:
   by: claude-code/sonnet-4.6

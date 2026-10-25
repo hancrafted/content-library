@@ -3,6 +3,7 @@ type: research
 title: 'Why are stage conversion rates in a B2B sales pipeline as low as they are?'
 description: 'Each stage filters out most entries, buying groups of many people must agree, and the biggest loss is buyers who decide nothing, so only a minority of opportunities close.'
 confidence: open
+confidence_reason: 'Vendor data and Gartner figures known only from search excerpts are weak Sources.'
 informs: [sales]
 generated:
   by: claude-code/sonnet-5.5

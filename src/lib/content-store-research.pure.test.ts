@@ -13,12 +13,17 @@ const STAGED = 'docs/episodes/never-too-early-sales/research';
 interface ResearchFields {
   readonly confidence?: string | null;
   readonly informs?: readonly string[] | null;
+  readonly reason?: string | null;
   readonly extra?: readonly string[];
 }
 
+/** One frontmatter line, or none when the field is left out (`null`). */
+function line(value: string | null, write: (value: string) => string): string[] {
+  return value === null ? [] : [write(value)];
+}
+
 function research(folder: string, fields: ResearchFields = {}) {
-  const confidence = fields.confidence === undefined ? 'open' : fields.confidence;
-  const informs = fields.informs === undefined ? ['sales'] : fields.informs;
+  const { confidence = 'open', informs = ['sales'], reason = 'Source [1] alone, so open.' } = fields;
   return {
     path: `${folder}/research.md`,
     markdown: [
@@ -26,8 +31,9 @@ function research(folder: string, fields: ResearchFields = {}) {
       'type: research',
       "title: 'Why does it happen?'",
       "description: 'Because it does.'",
-      ...(confidence === null ? [] : [`confidence: ${confidence}`]),
-      ...(informs === null ? [] : [`informs: [${informs.join(', ')}]`]),
+      ...line(confidence, (value) => `confidence: ${value}`),
+      ...line(informs === null ? null : informs.join(', '), (value) => `informs: [${value}]`),
+      ...line(reason, (value) => `confidence_reason: '${value}'`),
       ...(fields.extra ?? []),
       'generated:',
       '  by: claude-code/opus-5.5',
@@ -80,7 +86,16 @@ const VALID: RawContent = {
   slides: [],
   episodeSlides: [],
   definitionSlides: [],
+  researchPlans: [],
 };
+
+/** A research plan in the Staging that holds `folder`, listing a refresh of the wiki question it shadows. */
+function refreshPlan(staging: string, folder: string, stale: string) {
+  return {
+    path: `${staging}/research-plan.md`,
+    markdown: `# Research plan\n\n## Research jobs\n\n- refresh: ${folder}, question 1, refreshes ${stale}.\n`,
+  };
+}
 
 function refusalsOf(raw: RawContent) {
   const result = loadContentStore(raw);
@@ -88,6 +103,27 @@ function refusalsOf(raw: RawContent) {
 }
 
 describe('success cases', () => {
+  it('A new Research question is proposed with a confidence and the Concepts it informs: it loads as a proposal with its reason', () => {
+    // ARRANGE
+    const staged = `${STAGED}/SALES-0007__staged-question`;
+    const raw = {
+      ...VALID,
+      research: [research(staged, { confidence: 'open', reason: 'One vendor survey [1], so open.' })],
+    };
+    const expected = {
+      id: 'SALES-0007',
+      staged: true,
+      confirmed: false,
+      confidence: 'open',
+      confidence_reason: 'One vendor survey [1], so open.',
+      informs: ['sales'],
+    };
+    // ACT
+    const result = loadContentStore(raw);
+    // ASSERT
+    expect(result.ok ? result.store.research[0] : result.refusals).toMatchObject(expected);
+  });
+
   it('loads a Research question with its confidence and the Concepts it informs, the main one first', () => {
     // ARRANGE
     const raw = {
@@ -103,6 +139,26 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it.each([
+    ['no confidence', { confidence: null }, /^confidence: /],
+    ['no Concepts it informs', { informs: null }, /^informs: /],
+    ['no line on which Sources earn the confidence', { reason: null }, /^confidence_reason: /],
+  ])(
+    'A new Research question is proposed with a confidence and the Concepts it informs; one without either fails: %s',
+    (_, fields, message) => {
+      // ARRANGE
+      const staged = `${STAGED}/SALES-0007__staged-question`;
+      const raw = { ...VALID, research: [research(SALES_0001), research(staged, fields)] };
+      const expected = { kind: 'research', record: `${staged}/research.md` };
+      // ACT
+      const refusals = refusalsOf(raw);
+      // ASSERT
+      expect(refusals).toHaveLength(1);
+      expect(refusals[0]).toMatchObject(expected);
+      expect(refusals[0].message).toMatch(message);
+    },
+  );
+
   it.each([
     ['no confidence', null],
     ['confidence probable', 'probable'],
@@ -171,6 +227,45 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('A refreshed question keeps its id, and the notes that cited it still resolve', () => {
+    // ARRANGE
+    const refreshed = `${STAGED}/SALES-0001__b2b-sales-cycle-length`;
+    const raw = {
+      ...VALID,
+      research: [research(SALES_0001), research(refreshed, { confidence: 'open' })],
+      researchPlans: [
+        refreshPlan('docs/episodes/never-too-early-sales', 'SALES-0001__b2b-sales-cycle-length', 'SALES-0001'),
+      ],
+    };
+    const expected = [
+      { id: 'SALES-0001', staged: false },
+      { id: 'SALES-0001', staged: true },
+    ];
+    // ACT
+    const result = loadContentStore(raw);
+    // ASSERT
+    expect(result.ok ? result.store.research.map(({ id, staged }) => ({ id, staged })) : result.refusals).toEqual(
+      expected,
+    );
+  });
+
+  it('refuses a staged question that shadows a wiki id when its plan lists no refresh of that id', () => {
+    // ARRANGE
+    const shadow = `${STAGED}/SALES-0001__b2b-sales-cycle-length`;
+    const raw = {
+      ...VALID,
+      research: [research(SALES_0001), research(shadow)],
+      researchPlans: [refreshPlan('docs/episodes/never-too-early-sales', 'SALES-0002__another-question', 'SALES-0002')],
+    };
+    const expected = [
+      { kind: 'research', record: 'SALES-0001', message: 'the id is used by more than one research file' },
+    ];
+    // ACT
+    const refusals = refusalsOf(raw);
+    // ASSERT
+    expect(refusals).toEqual(expected);
+  });
+
   it('takes a staged Research question id from its folder and tells it apart from a wiki one', () => {
     // ARRANGE
     const raw = { ...VALID, research: [research(SALES_0001), research(`${STAGED}/SALES-0007__staged-question`)] };

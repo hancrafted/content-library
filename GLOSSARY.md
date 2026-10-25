@@ -25,17 +25,20 @@ _Avoid_: Tag, Topic, category, keyword
 **Top Concept**: a Concept with no parent (`broader: []`). The seven top Concepts are the closed set of themes: each has an icon and an accent, and a new one is a design decision, not a content edit. An Episode lists the top Concepts it teaches, and its card shows them, linked to their pages.
 _Avoid_: Root concept, theme tag, lead Tag
 
-**Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source.
+**Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging except while a Run refreshes it: the refresh keeps the id in Staging, listed as `refresh` in its Research plan, until Promotion replaces the wiki file. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source.
 _Avoid_: Research file, research note, finding
 
 **Source**: one piece of evidence a claim rests on: a paper, a vendor's documentation, a law's text, an essay. A Research question weighs its Sources and lists them; a Speaker note item cites a Source directly only by exception, and otherwise cites the Research question that weighs it.
 _Avoid_: Reference, link (for the evidence itself)
 
-**Confidence**: how settled the evidence for a Research question's Answer is, never the writer's certainty: `settled` (at least two independent primary Sources agree, nothing contradicts them), `contested` (credible Sources disagree, or the effect depends on context the Answer names) or `open` (anything less). The writer proposes it; it stays a proposal until Han confirms it with a `verified` entry at or after `generated.at`.
+**Confidence**: how settled the evidence for a Research question's Answer is, never the writer's certainty: `settled` (at least two independent primary Sources agree, nothing contradicts them), `contested` (credible Sources disagree, or the effect depends on context the Answer names) or `open` (anything less). The writer proposes it, with one line on which Sources earn it (`confidence_reason`); it stays a proposal until Han confirms it with a `verified` entry at or after `generated.at`.
 _Avoid_: Certainty, evidence level, trust level
 
 **informs**: the field of a Research question that lists the Concepts it supports, the first its main one; each Concept's page lists the Research questions that inform it.
 _Avoid_: Tags, categories, concepts (as a field name)
+
+**concept-gap**: the note `categorize-research` returns for a research question no Concept covers, naming the uncovered subject instead of inventing a Concept. A narrower Concept it leads to is staged with the research for Han to accept at Promotion; a new top Concept stays a design decision.
+_Avoid_: Missing concept, new tag
 
 **applyThemeFromConcept**: the field of an Episode's metadata that names one of its top Concepts, whose icon and accent its card draws.
 _Avoid_: Lead Tag, look
@@ -163,7 +166,7 @@ _Avoid_: Transition, segue
 **Spine**: the Brief's ordered Sections, each listing its **Brief Slides**: a planned page Slide's title, purpose and visual idea. The Red thread made concrete. It is kept in step with the Dossier until the Spec Gate and with the Spec after it: write-dossier keeps it title for title, and records every change as a `spine-change` note on its Job.
 _Avoid_: Outline, pitch, plan
 
-**Research plan**: retrieval's decision per research question, `research-plan.md` in the Episode folder: the questions that need a research job (new or refresh) and the ones whose llm-wiki research is reused. `customize-pipeline` writes one `write-research` job per listed item.
+**Research plan**: retrieval's decision per research question, `research-plan.md` in the Episode folder, made across the Research questions of the wiki and every open Staging: each question an existing one already answers, fresh, is reused by id with its Confidence and the date it stays fresh; each that needs a research job is listed as `new` (with the Concepts it informs), `refresh` (keeping the stale id) or `migrate` (weighing a touched note's grandfathered sources). `customize-pipeline` writes one `write-research` job per listed job.
 _Avoid_: Run log, retrieval log
 
 **Dossier**: the draft the Spec is written from: its h1 is the Title slide, its h2s the Sections and its h3s the Slides, and each Slide carries its Visual idea, Speaker notes with citations and Voice script. Everything in it moves into the Spec, and it is deleted when Han approves the Spec.
@@ -199,6 +202,9 @@ _Avoid_: Task, step
 **Stage**: one of the ordered phases a Run moves through (Brief, Setup, Research, Dossier, Specification, Build, PR), grouping the Jobs that serve it. A Job waits only for Jobs of its own or an earlier Stage, and a Stage may hold no Job.
 _Avoid_: Phase, step
 
+**Research Stage**: the Stage whose Jobs write the Research questions the Research plan lists, one per job. It holds no Job when every question is reused, which is normal: a Run commissions only the evidence the wiki and the other Stagings lack, and its Slides still cite each reused question.
+_Avoid_: Research phase, research step
+
 **Spec**: the one page the Specification Stage writes in Staging, read in a browser: per Slide its options and what Build needs to build the chosen one. Han picks an option per Slide at its Gate, and Build builds from the Spec alone.
 _Avoid_: Ticket, spec issue, build spec, design spec
 
@@ -216,7 +222,7 @@ _Avoid_: Grade, rating, result
 
 ## Research categories
 
-A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. In the llm-wiki it sits in its category's folder, `docs/llm-wiki/research/<category>/`. The `categorize-research` job of `/new-episode` picks the category, or adds a new one here.
+A research folder is named `<category>-<####>__<question-slug>`: the category below, a number counted per category across the repo, and the question's subject in 20-40 characters of kebab case. In the llm-wiki it sits in its category's folder, `docs/llm-wiki/research/<category>/`. The categories are closed id namespaces: the `categorize-research` job of `/new-episode` takes the nearest one and the next free number across the wiki and every Staging (`npm run episode:research -- next <prefix>`), and adds none.
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
 

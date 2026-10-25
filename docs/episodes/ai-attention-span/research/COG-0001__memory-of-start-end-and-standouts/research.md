@@ -6,6 +6,7 @@ description: 'Recall of a sequence is U-shaped (primacy and recency effects) and
   a distinctive item is remembered better than its neighbours (isolation
   effect), though the mechanisms behind each are still debated.'
 confidence: contested
+confidence_reason: 'The serial-position effects are textbook, but the origin of recency is disputed.'
 informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5

@@ -6,6 +6,7 @@ description: 'Tacit knowledge resists being written down, and the receiver needs
   prior knowledge and close contact to absorb it, so what is not shown in
   practice is lost on a newcomer.'
 confidence: contested
+confidence_reason: 'Whether writing captures tacit knowledge is disputed among the Sources.'
 informs: [ai-adoption]
 generated:
   by: claude-code/sonnet-5.5

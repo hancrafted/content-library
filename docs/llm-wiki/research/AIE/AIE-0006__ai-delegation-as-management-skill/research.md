@@ -3,6 +3,7 @@ type: research
 title: 'Why is effective AI delegation a management discipline rather than a skill of seniority, given that AI boosts novices more on simple tasks?'
 description: 'Delegating real work to AI takes management disciplines (briefing, context, verification) that experience merely correlates with, and novice-boost studies measure bounded tasks, not that discipline.'
 confidence: open
+confidence_reason: 'The central claim is inference; no Source tests it causally.'
 informs: [agentic-ai, ai-adoption]
 generated:
   by: claude-code/opus-5.5

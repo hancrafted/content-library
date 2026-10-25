@@ -6,6 +6,7 @@ description: 'Cheaper output raises demand faster than labour per unit falls,
   and tools lift the value of the tasks left to people, but only while demand
   stays elastic.'
 confidence: contested
+confidence_reason: 'The Sources disagree on the housework case.'
 informs: [ai-adoption]
 generated:
   by: claude-code/sonnet-4.6

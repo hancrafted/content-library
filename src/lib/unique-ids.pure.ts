@@ -1,3 +1,4 @@
+import { refreshShadows } from './research-plan.pure';
 import type { ResearchRecord } from './research-record.pure';
 
 /*
@@ -17,8 +18,16 @@ export function duplicates(items: readonly string[]): string[] {
   return [...new Set(items.filter((item, at) => items.indexOf(item) !== at))];
 }
 
-export function researchIdRefusals(research: readonly ResearchRecord[]): UniquenessRefusal[] {
-  return duplicates(research.map(({ id }) => id)).map((id) => ({
+/**
+ * One refusal per research id held by more than one file. A staged refresh that its own plan lists shadows its wiki id
+ * with leave (design-ADR 0016, Pipeline and evidence rule 4), so it is not counted.
+ */
+export function researchIdRefusals(
+  research: readonly ResearchRecord[],
+  plans: readonly { readonly path: string; readonly markdown: string }[],
+): UniquenessRefusal[] {
+  const shadows = refreshShadows(research, plans);
+  return duplicates(research.filter((record) => !shadows.has(record)).map(({ id }) => id)).map((id) => ({
     kind: 'research' as const,
     record: id,
     message: 'the id is used by more than one research file',

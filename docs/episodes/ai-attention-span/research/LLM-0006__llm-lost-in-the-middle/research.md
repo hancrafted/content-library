@@ -5,6 +5,7 @@ description: 'Models attend most to the start and end because causal masking
   favours early tokens and distance decay favours recent ones, leaving the
   middle weakest.'
 confidence: contested
+confidence_reason: 'The Answer itself says the strength of the effect is disputed among the Sources.'
 informs: [llm-behaviour, context-engineering]
 generated:
   by: claude-code/sonnet-5.5

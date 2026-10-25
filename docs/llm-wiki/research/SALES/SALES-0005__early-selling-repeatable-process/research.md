@@ -3,6 +3,7 @@ type: research
 title: 'Why does engaging in sales early lead to a repeatable sales process?'
 description: 'Early selling by the founders is how a startup learns who buys, why and how, and a repeatable sales process is that learning written down; scaling before it exists burns cash.'
 confidence: open
+confidence_reason: 'Only practitioner accounts support it.'
 informs: [sales]
 generated:
   by: claude-code/sonnet-5.5

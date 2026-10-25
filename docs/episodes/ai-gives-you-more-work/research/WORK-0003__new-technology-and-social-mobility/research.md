@@ -6,6 +6,7 @@ description: 'Studies show steam-using English counties had more skilled
   workers, but no study found shows adopting workers rising, and mobility, wage
   and schooling evidence for industrialisation is mixed.'
 confidence: open
+confidence_reason: 'No Source follows the adopters over time.'
 informs: [ai-adoption]
 generated:
   by: claude-code/sonnet-4.6

@@ -43,6 +43,7 @@
     "episode:archive": "node skills/episode-promote/scripts/archive.ts",
     "episode:text": "node skills/episode-promote/scripts/episode-text.ts",
     "episode:harvest": "node skills/episode-promote/scripts/harvest-report.ts",
+    "episode:research": "node skills/new-episode/scripts/research.ts",
     "episode:promote-research": "node skills/episode-promote/scripts/promote-research.ts",
     "design-archive": "node skills/episode-promote/scripts/serve.ts",
     "dashboard:demo": "node scripts/dashboard-demo.ts",

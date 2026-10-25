@@ -19,6 +19,7 @@ function research(folder: string) {
       "title: 'Why does it happen?'",
       "description: 'Because it does.'",
       'confidence: contested',
+      "confidence_reason: 'The Sources disagree.'",
       'informs: [sales]',
       'generated:',
       '  by: claude-code/opus-5.5',
@@ -78,6 +79,7 @@ const VALID: RawContent = {
     { ...AT, slug: 'docs', url: 'https://docs.anthropic.com/x' },
   ],
   slides: [],
+  researchPlans: [],
 };
 
 function refusalsOf(raw: RawContent) {

@@ -5,6 +5,7 @@ description: 'A fresh, focused context outperforms a long chat because accuracy
   falls as input grows and a model that took a wrong turn leans on its own
   earlier attempts and does not recover.'
 confidence: contested
+confidence_reason: 'It depends on context: the vendor guidance sometimes keeps the history.'
 informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5

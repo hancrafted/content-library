@@ -6,6 +6,7 @@ description: "An LLM lacks organisational knowledge because a company's
   internal facts are absent from public training text, and rare facts are
   learned poorly even when present."
 confidence: settled
+confidence_reason: 'Four studies and a vendor policy agree; the step to organisation facts is flagged as inference.'
 informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5

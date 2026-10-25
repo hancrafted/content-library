@@ -5,6 +5,7 @@ description: 'The model keeps no state between requests, so each message must
   carry the full conversation as input, and that whole input is processed and
   billed again unless a cache covers it.'
 confidence: open
+confidence_reason: 'All four Sources come from one publisher, Anthropic, so none is independent.'
 informs: [context-engineering, ai-cost]
 generated:
   by: claude-code/sonnet-5.5

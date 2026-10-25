@@ -5,6 +5,7 @@ description: 'A model keeps nothing between chats, so an app stores notes about
   you and puts them into the new, empty context window so the assistant seems to
   know you.'
 confidence: open
+confidence_reason: 'The app behaviour is inferred from documentation.'
 informs: [context-engineering]
 generated:
   by: claude-code/sonnet-5.5

@@ -6,6 +6,7 @@ description: 'Language models sample each next word from a probability
   distribution, and even with sampling off, serving infrastructure varies the
   arithmetic, so the same prompt can give different results.'
 confidence: open
+confidence_reason: 'That this is unlike earlier machines is an untested inference.'
 informs: [llm-behaviour]
 generated:
   by: claude-code/sonnet-4.6
