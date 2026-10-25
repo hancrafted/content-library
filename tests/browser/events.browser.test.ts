@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 /*
- * The browser seam of an Event (`npm run test:browser`, against the built export): the past notice on the Event page
- * and on its Event-scoped Episode pages, the walk through the Playlist, and the robots tag an unlisted Episode carries
- * there. Each test is titled in Han's words (design-ADR 0016, Event page behaviour). The AXEL Event took place on
- * 2026-10-23, so every build after it renders it past. That an upcoming Event shows no notice is pinned in the fast
- * suite (`src/components/events/past-notice.test.ts`): no upcoming Event exists to open here.
+ * The browser seam of an Event (`npm run test:browser`, against the built export): the Playlist's order on the Event
+ * page, the past notice on the Event page and on its Event-scoped Episode pages, the walk through the Playlist, and the
+ * robots tag an unlisted Episode carries there. Each test is titled in Han's words (design-ADR 0016, Event page
+ * behaviour). The AXEL Event took place on 2026-10-23, so every build after it renders it past. That an upcoming Event
+ * shows no notice is pinned in the fast suite (`src/components/events/past-notice.test.ts`): no upcoming Event exists
+ * to open here.
  */
 
 const EVENT = '/events/2026-10-23-axel-agentic-workflow/';
@@ -20,6 +21,23 @@ const DE_NOTICE =
   'Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen.';
 
 test.describe('success cases', () => {
+  test("An Event's page lists its Episodes in the Playlist's order, event-frame first", async ({ page }) => {
+    // ARRANGE
+    const expected = [
+      'AXEL Seminar: the agenda',
+      'Treat AI like a brilliant freelancer with amnesia',
+      'Why AI has a weird attention span you must learn to manage',
+      'Will AI reduce your work? It adds work: managing it.',
+    ];
+    const steps = page.locator('ol[data-event-playlist] > li[data-agenda-step]');
+    // ACT
+    await page.goto(EVENT);
+    // ASSERT
+    await expect(steps.locator('a[data-card-link]')).toHaveText(expected);
+    await expect(steps.first()).toHaveAttribute('data-event-frame', '');
+    await expect(page.locator('ol[data-event-playlist] > li[data-event-frame]')).toHaveCount(1);
+  });
+
   test('A past Event says its content may differ from the recording; an upcoming Event does not', async ({ page }) => {
     // ARRANGE
     const role = 'note';
