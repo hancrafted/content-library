@@ -2,8 +2,9 @@ import { expect, test, type Page } from '@playwright/test';
 import axe from 'axe-core';
 
 /*
- * The browser lane (`npm run test:browser`, local only, never CI): axe-core over the landing page and the three
- * workshop Episodes and the Slides Episode (every Context Preset), light and dark, against the built export served by Playwright's `webServer`. Serious and critical
+ * The browser lane (`npm run test:browser`, local only, never CI): axe-core over the landing page, the three
+ * workshop Episodes, the Slides Episode (every Context Preset), and a past Event's page and one of its Episode pages
+ * (breadcrumb, past notice, Playlist walk), light and dark, against the built export served by Playwright's `webServer`. Serious and critical
  * violations fail; moderate and minor ones are only printed.
  */
 
@@ -13,6 +14,8 @@ const PAGES = [
   '/episodes/ai-attention-span/',
   '/episodes/ai-gives-you-more-work/',
   '/episodes/slides/',
+  '/events/2026-10-23-axel-agentic-workflow/',
+  '/events/2026-10-23-axel-agentic-workflow/episodes/axel-agentic-workflow-agenda/',
 ];
 const THEMES = ['light', 'dark'] as const;
 const SETTLE = 15_000;
