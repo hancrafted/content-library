@@ -1,4 +1,3 @@
-import type { z } from 'zod';
 import { canonicalEpisodeProblems, episodeSlidesSchema, type SlideList } from './canonical-episode.pure';
 import { citationProblems } from './citations.pure';
 import type { ConceptFile } from './concept-record.pure';
@@ -26,10 +25,12 @@ import { episodeConceptProblems, type EpisodeMetadata } from './episode-metadata
 import type { ThemeLook } from './episode-overview';
 import type { EventRecord } from './events.pure';
 import type { PlaylistRecord } from './playlists.pure';
+import { readAll, type Parsed, type Refusal } from './record-reads.pure';
 import { informsProblems } from './research-questions.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
 import { slideFolderProblems } from './slide-slugs.pure';
 import { slideSourceSchema, type SlideSource } from './slide-source.pure';
+import { sourceBaselineEntrySchema, sourceTrustProblems, type SourceBaselineEntry } from './source-baseline.pure';
 import { duplicates, researchIdRefusals } from './unique-ids.pure';
 
 /*
@@ -55,13 +56,7 @@ export interface ContentStore {
   readonly slides: readonly SlideFolder[];
 }
 
-/** One refusal: the kind of record, which one, and one sentence on what is wrong with it. */
-export interface Refusal {
-  readonly kind: RecordKind;
-  /** The record's slug, id or path, whichever names it. */
-  readonly record: string;
-  readonly message: string;
-}
+export type { Refusal };
 
 export type LoadResult =
   { readonly ok: true; readonly store: ContentStore } | { readonly ok: false; readonly refusals: readonly Refusal[] };
@@ -84,40 +79,11 @@ export interface RawContent {
   readonly playlists: readonly unknown[];
   readonly research: readonly EvidenceFile[];
   readonly slideSources: readonly unknown[];
+  readonly sourceBaseline: readonly unknown[];
   /** Every Slide folder in every Episode's `slides/` and in the Slide pool. */
   readonly slides: readonly unknown[];
   /** Every Staging's `research-plan.md`: a refresh it lists lets its staged question shadow the wiki id. */
   readonly researchPlans: readonly EvidenceFile[];
-}
-
-interface Parsed<T> {
-  readonly value: T;
-  readonly refusals: readonly Refusal[];
-}
-
-function refuse(kind: RecordKind, record: string, issues: readonly z.core.$ZodIssue[]): Refusal[] {
-  return issues.map((issue) => {
-    const where = issue.path.length > 0 ? `${issue.path.join('.')}: ` : '';
-    return { kind, record, message: `${where}${issue.message}` };
-  });
-}
-
-/** The name a raw record goes by: its slug, its id for a Playlist, or its Episode for a Slide list. */
-function slugOfRaw(raw: unknown): string {
-  const fields = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
-  const value = fields.slug ?? fields.id ?? fields.episode;
-  return typeof value === 'string' ? value : '(unnamed)';
-}
-
-function readAll<S extends z.ZodType>(kind: RecordKind, schema: S, raws: readonly unknown[]): Parsed<z.infer<S>[]> {
-  const value: z.infer<S>[] = [];
-  const refusals: Refusal[] = [];
-  for (const raw of raws) {
-    const result = schema.safeParse(raw);
-    if (result.success) value.push(result.data);
-    else refusals.push(...refuse(kind, slugOfRaw(raw), result.error.issues));
-  }
-  return { value, refusals };
 }
 
 function readResearch(files: RawContent['research']): Parsed<ResearchRecord[]> {
@@ -140,6 +106,7 @@ interface Sound {
   readonly episodeSlides: readonly SlideList[];
   readonly research: readonly ResearchRecord[];
   readonly slideSources: readonly SlideSource[];
+  readonly sourceBaseline: readonly SourceBaselineEntry[];
 }
 
 /** What evidence and Slides say about it: the hierarchy sound, every `defines` and `informs` a Concept. */
@@ -171,6 +138,7 @@ function crossChecks(sound: Sound): Refusal[] {
   return [
     ...evidenceChecks(sound),
     ...citationProblems(sound.slideSources, sound.research, episodes),
+    ...sourceTrustProblems(sound.slideSources, sound.sourceBaseline),
     ...episodeConceptProblems(episodes, topConcepts).map(own('episode')),
     ...duplicates(slugs).map((slug) => own('episode')(`${slug}: the slug is used twice`)),
     ...episodePageProblems(episodes).map(own('episode')),
@@ -190,6 +158,7 @@ function readEach(raw: RawContent) {
     events: readAll('event', eventSchema, raw.events),
     playlists: readAll('playlist', playlistSchema, raw.playlists),
     slideSources: readAll('slide-source', slideSourceSchema, raw.slideSources),
+    sourceBaseline: readAll('source-baseline', sourceBaselineEntrySchema, raw.sourceBaseline),
     slides: readAll('slide', slideFolderSchema, raw.slides),
     research: readResearch(raw.research),
   };
@@ -212,6 +181,7 @@ function soundOf(read: ReturnType<typeof readEach>, raw: RawContent): Sound {
     episodeSlides: read.episodeSlides.value,
     research: read.research.value,
     slideSources: read.slideSources.value as SlideSource[],
+    sourceBaseline: read.sourceBaseline.value,
   };
 }
 

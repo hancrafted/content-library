@@ -28,8 +28,14 @@ _Avoid_: Root concept, theme tag, lead Tag
 **Research question**: one question answered from primary Sources in one `research.md`, in an Episode's Staging until Promotion moves it to `docs/llm-wiki/research/<category>/`. Its id is the `<category>-<####>` part of its folder name, never stored and never reused, unique across the wiki and Staging except while a Run refreshes it: the refresh keeps the id in Staging, listed as `refresh` in its Research plan, until Promotion replaces the wiki file. It carries a Confidence and the Concepts it informs, and once promoted it renders in English only at `/research/<id>`, each `[n]` in its body linked to its nth Source.
 _Avoid_: Research file, research note, finding
 
-**Source**: one piece of evidence a claim rests on: a paper, a vendor's documentation, a law's text, an essay. A Research question weighs its Sources and lists them; a Speaker note item cites a Source directly only by exception, and otherwise cites the Research question that weighs it.
+**Source**: one piece of evidence a claim rests on: a paper, a vendor's documentation, a law's text, an essay. A Research question weighs its Sources and lists them; a Speaker note item cites a Source directly only when it is a High-trust Source, and otherwise cites the Research question that weighs it.
 _Avoid_: Reference, link (for the evidence itself)
+
+**High-trust Source**: a Source whose `https://` host, or a subdomain of it, is on the allowlist in `src/lib/high-trust-hosts.pure.ts`: an accountable primary publisher of the claim, such as a vendor's own documentation, a law's own text or the scholarly record. It is the only Source a Speaker note item may cite directly. There is one level, on the list or off it, and adding a host is Han's trust decision. The allowlist does not govern the Sources a Research question weighs.
+_Avoid_: Trusted domain, primary source (as a check), whitelist
+
+**Source baseline**: `src/lib/source-baseline.json`, the Speaker note sources that cited a Source off the allowlist when the citation contract began, each named `<episode>/<slide>/<note>/<slug>` with its url. A listed source passes until a Run touching its note moves it to a Research question. It only shrinks: a direct url neither high trust nor listed fails, and so does an entry whose source is gone. It is reviewed when horizon 2 starts and deleted once empty.
+_Avoid_: Allowlist exceptions, grandfather list, ignore file
 
 **Confidence**: how settled the evidence for a Research question's Answer is, never the writer's certainty: `settled` (at least two independent primary Sources agree, nothing contradicts them), `contested` (credible Sources disagree, or the effect depends on context the Answer names) or `open` (anything less). The writer proposes it, with one line on which Sources earn it (`confidence_reason`); it stays a proposal until Han confirms it with a `verified` entry at or after `generated.at`.
 _Avoid_: Certainty, evidence level, trust level
@@ -141,7 +147,7 @@ _Avoid_: Furniture, overlay
 **Speaker notes**: a Slide's short list of talking points, each a Speaker note item.
 _Avoid_: Notes, comments
 
-**Speaker note item**: one talking point: a header, a description, optional sources and image, and the element of its Slide it explains. Each of its sources is one citation holding exactly one of `research` (a Research question by id, by default) or `url` (a Source cited directly, by exception); a `research` citation takes its title, link and Confidence from the question, and a published Episode cites no question that is still in Staging.
+**Speaker note item**: one talking point: a header, a description, optional sources and image, and the element of its Slide it explains. Each of its sources is one citation holding exactly one of `research` (a Research question by id, by default) or `url` (a Source cited directly, by exception: a High-trust Source, or one in the Source baseline); a `research` citation takes its title, link and Confidence from the question, and a published Episode cites no question that is still in Staging.
 _Avoid_: Note, bullet, comment
 
 **Context reference**: an underlined phrase or a Context marker on a Slide that opens one Speaker note item in the Context drawer.
