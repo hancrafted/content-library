@@ -81,7 +81,7 @@ export const theLostMiddle = slide({
 - The kit is everything a Scene needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
   - `template('showAll')`: the raw string, `{count}` unfilled, for a client widget to fill with `fillTemplate` from `@/lib/template.pure`.
-  - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build.
+  - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build. `slideHref(slug, { fallback: 'text' })` returns `undefined` instead, and the Slide renders its text unlinked: use it in a pool Slide whose sibling some Episode may not hold.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`: notes, below; `Title` only on an Episode with `header: 'authored'`.
 - A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/hooks/` and `src/lib/` (step 6). A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit.

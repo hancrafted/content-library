@@ -51,7 +51,7 @@ _Avoid_: Card, panel; page, which means the Next.js route the whole Episode rend
 **Slide pool**: one flat folder of Slide folders, `src/components/slide-pool/`, holding every Slide a second Episode reuses. A Slide lives in its Episode's `slides/` until its first reuse, when `npm run slides:reuse` moves its folder there unchanged: slug, text and anchors stay, so no published URL moves.
 _Avoid_: Shared slides, library (the Slide library is the Master slides), common folder
 
-**Reference (Slide)**: an Episode's listing of a pool Slide in one of its Sections: an import and a list entry, nothing copied. The Slide renders the same in every Episode that holds it; its anchor comes from its place in each.
+**Reference (Slide)**: an Episode's listing of a pool Slide in one of its Sections: an import and a list entry, nothing copied. The Slide renders the same in every Episode that holds it; its anchor comes from its place in each, and so does the target of its `slideHref` link to a sibling: a sibling the Episode lacks fails the build unless the link falls back to plain text.
 _Avoid_: Link, alias, copy, symlink
 
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.

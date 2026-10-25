@@ -42,7 +42,7 @@ Some text is completed only in the browser — "Show all 12", once a filter has 
 1. **DO** link with `localizePath(ROUTES.<route>, locale)`; keep route constants locale-neutral. (Decision 2)
 2. **DO** switch locale with `localizePath(stripLocale(pathname), target)`. (Decision 2)
 3. **DO** open an external link in a new tab and say so to screen readers — `<span className="sr-only">(opens in a new tab)</span>`. (Decision 2)
-4. **DO** link another Slide of the same Episode with the kit's `slideHref(slug)`. (Decision 2)
+4. **DO** link another Slide of the same Episode with the kit's `slideHref(slug)`; `slideHref(slug, { fallback: 'text' })` for a sibling some Episode may lack. (Decision 2)
 5. **DO** pass `template('showAll')` to the widget and render `fillTemplate(label, { count })`. (Decision 3)
 
 ### Don'ts
