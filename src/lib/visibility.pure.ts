@@ -44,16 +44,21 @@ function creditTo(episode: EpisodeSlug): PageTreatment {
   return { inSitemap: false, index: true, canonical: { episode } };
 }
 
-/** An Episode as its Event presents it: a public one credits its own page, an unlisted one its declared original. */
-function eventEpisodeTreatment(episode: string, facts: PageFacts): PageTreatment {
-  if (facts.visibility === 'public' && isEpisodeSlug(episode)) return creditTo(episode);
-  if (facts.visibility === 'unlisted' && facts.canonicalEpisode !== undefined) return creditTo(facts.canonicalEpisode);
-  return HIDDEN;
-}
-
 /** An Episode's own page: listed when public and published; an upcoming one, or one with no facts, stays hidden. */
 function episodeTreatment(facts: PageFacts): PageTreatment {
   return facts.visibility === 'public' && facts.status === 'published' ? LISTED : HIDDEN;
+}
+
+/**
+ * An Episode as its Event presents it: a public one credits its own page once that page is indexable, an unlisted
+ * one its declared original. No indexable page canonicalises to a `noindex` one, so an upcoming public Episode stays
+ * hidden here as on its own page.
+ */
+function eventEpisodeTreatment(episode: string, facts: PageFacts): PageTreatment {
+  if (facts.visibility === 'public' && isEpisodeSlug(episode))
+    return episodeTreatment(facts).index ? creditTo(episode) : HIDDEN;
+  if (facts.visibility === 'unlisted' && facts.canonicalEpisode !== undefined) return creditTo(facts.canonicalEpisode);
+  return HIDDEN;
 }
 
 /** A page's treatment, row by row of the visibility table. Missing facts never index a page that needs them. */
