@@ -24,23 +24,14 @@ describe('success cases', () => {
     expect(entries).toContainEqual(german);
   });
 
-  it('lists the Workshops page and each Workshop page in both locales with reciprocal alternates', () => {
+  it('lists the Events page in both locales, and no page of an Event whose Playlist is unlisted', () => {
     // ARRANGE
-    const slug = 'axel-agentic-workflow-2026-10-23';
-    const route = `/workshops/${slug}/`;
-    const expected = {
-      url: `${SITE}/de${route}`,
-      alternates: {
-        languages: { en: `${SITE}${route}`, de: `${SITE}/de${route}`, 'x-default': `${SITE}${route}` },
-      },
-    };
+    const expected = { listed: [`${SITE}/events/`, `${SITE}/de/events/`], absent: [] };
     // ACT
-    const entries = sitemapEntries(SITE, allPublished, undated);
+    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
     // ASSERT
-    expect(entries).toContainEqual(expected);
-    expect(entries.map((entry) => entry.url)).toEqual(
-      expect.arrayContaining([`${SITE}/workshops/`, `${SITE}/de/workshops/`, `${SITE}${route}`]),
-    );
+    expect(urls).toEqual(expect.arrayContaining(expected.listed));
+    expect(urls.filter((url) => url.includes('/events/2026-10-23-axel-agentic-workflow/'))).toEqual(expected.absent);
   });
 
   it('writes the home page as the origin with a trailing slash', () => {

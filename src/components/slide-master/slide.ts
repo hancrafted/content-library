@@ -1,7 +1,7 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import type { EpisodeSlug } from '@/lib/routes';
+import type { AnyEpisodeSlug } from '@/lib/routes';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
 import type {
@@ -143,7 +143,7 @@ export type HeaderMode = 'shared' | 'authored';
  * An Episode record of Slides: static data. It carries its own
  * text, so the site-wide Translation files hold nothing of it.
  */
-export interface EpisodeRecord<Ep extends EpisodeSlug = EpisodeSlug> {
+export interface EpisodeRecord<Ep extends AnyEpisodeSlug = AnyEpisodeSlug> {
   readonly slug: Ep;
   /** One recording per locale, shown on the Title slide; optional until recorded. */
   readonly youtube?: PerLocale<string>;
@@ -175,6 +175,6 @@ export function headerModeOf(record: Pick<EpisodeRecord, 'header'>): HeaderMode 
 }
 
 /** An Episode record from its own text and its Sections; each Section's first Slide names it. */
-export function episode<Ep extends EpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
+export function episode<Ep extends AnyEpisodeSlug>(record: EpisodeRecord<Ep>): EpisodeRecord<Ep> {
   return record;
 }

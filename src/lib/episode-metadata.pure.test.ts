@@ -5,6 +5,8 @@ import { leadTagOf, overviewOrder, tagProblems, type EpisodeMetadata } from './e
 const EPISODES: readonly EpisodeMetadata[] = [
   {
     slug: 'never-too-early-sales',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'foundations',
     tags: ['sales'],
@@ -12,6 +14,8 @@ const EPISODES: readonly EpisodeMetadata[] = [
   },
   {
     slug: 'maintaining-markdown-for-ai',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'teardown',
     tags: ['markdown', 'sales'],
@@ -19,13 +23,29 @@ const EPISODES: readonly EpisodeMetadata[] = [
   },
   {
     slug: 'ai-token-economy',
+    type: 'standard',
+    visibility: 'public',
     status: 'published',
     format: 'foundations',
     tags: ['cost'],
     publishedOn: '2026-10-09',
   },
-  { slug: 'rolling-out-ai', status: 'upcoming', format: 'foundations', tags: ['agentic-ai'] },
-  { slug: 'ai-in-code-review', status: 'upcoming', format: 'short', tags: ['workflow'] },
+  {
+    slug: 'rolling-out-ai',
+    type: 'standard',
+    visibility: 'public',
+    status: 'upcoming',
+    format: 'foundations',
+    tags: ['agentic-ai'],
+  },
+  {
+    slug: 'ai-in-code-review',
+    type: 'standard',
+    visibility: 'public',
+    status: 'upcoming',
+    format: 'short',
+    tags: ['workflow'],
+  },
 ];
 
 const slugs = (entries: readonly EpisodeMetadata[]) => entries.map(({ slug }) => slug);

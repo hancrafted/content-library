@@ -3,7 +3,7 @@ import { EPISODE_SLUGS } from '@/lib/routes';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeStatus, hasPage, listEpisodes } from './episode-repository';
+import { allEpisodes, episodeStatus, hasPage, listEpisodes } from './episode-repository';
 
 /*
  * The read API the Episode overview depends on (#40): one metadata entry per
@@ -34,7 +34,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = episodeFolders();
     // ACT
-    const listed = listEpisodes()
+    const listed = allEpisodes()
       .map(({ slug }) => slug)
       .sort();
     // ASSERT
@@ -53,7 +53,7 @@ describe('success cases', () => {
     expect(withPage).toEqual(expected);
   });
 
-  it.each(listEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {
+  it.each(allEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {
     // ARRANGE
     const folder = path.join(EPISODES_DIR, slug);
     // ACT
@@ -67,6 +67,8 @@ describe('success cases', () => {
     const slug = 'never-too-early-sales';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
       tags: ['sales'],
@@ -85,6 +87,8 @@ describe('success cases', () => {
     const slug = 'onboard-ai-every-time';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
       tags: ['context-engineering', 'agentic-ai', 'workflow'],
@@ -103,6 +107,8 @@ describe('success cases', () => {
     const slug = 'ai-attention-span';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
       tags: ['context-engineering', 'workflow'],
@@ -121,6 +127,8 @@ describe('success cases', () => {
     const slug = 'ai-gives-you-more-work';
     const expected = {
       slug,
+      type: 'standard',
+      visibility: 'public',
       status: 'published',
       format: 'foundations',
       tags: ['agentic-ai', 'workflow'],
@@ -132,6 +140,18 @@ describe('success cases', () => {
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
+  });
+
+  it('never lists the event-frame Episode in the overview, which still holds its metadata', () => {
+    // ARRANGE
+    const frame = 'axel-agentic-workflow-agenda';
+    // ACT
+    const seen = {
+      overview: listEpisodes().some(({ slug }) => slug === frame),
+      all: allEpisodes().some(({ slug }) => slug === frame),
+    };
+    // ASSERT
+    expect(seen).toEqual({ overview: false, all: true });
   });
 
   it.each(LAYOUT_REFERENCES)('counts the layout reference %s as published, so it stays indexable', (slug) => {

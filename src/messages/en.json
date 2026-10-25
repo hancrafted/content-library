@@ -6,7 +6,7 @@
   "nav": {
     "label": "Main",
     "episodes": "Episodes",
-    "workshops": "Workshops",
+    "events": "Events",
     "dashboard": "Content pipeline",
     "contact": "Work with me",
     "newTab": "opens in a new tab",
@@ -412,9 +412,9 @@
       "title": "Visualised theory · hancrafted",
       "description": "Theory from the hancrafted training videos, visualised page by page."
     },
-    "workshops": {
-      "title": "Workshops",
-      "description": "Guided workshops that walk through a planned set of visualised theory episodes, in order."
+    "events": {
+      "title": "Events",
+      "description": "Workshops and other sessions that walk through a planned set of visualised theory episodes, in order."
     }
   },
   "episodesPage": {
@@ -478,11 +478,12 @@
     "backToVideo": "Back to video",
     "close": "Close video player"
   },
-  "workshopsPage": {
-    "title": "Workshops",
-    "back": "All workshops",
-    "intro": "Guided sessions that walk through a planned set of Episodes, in order.",
-    "agenda": "Agenda",
+  "eventsPage": {
+    "title": "Events",
+    "back": "All Events",
+    "intro": "Workshops and other sessions that walk through a planned set of Episodes, in order.",
+    "empty": "No public Events right now.",
+    "playlist": "Episodes",
     "start": "Start with Episode {step}",
     "readingTime": "{minutes} min total reading time",
     "episodeCount": {
@@ -490,7 +491,7 @@
       "other": "{count} Episodes"
     },
     "items": {
-      "axel-agentic-workflow-2026-10-23": {
+      "2026-10-23-axel-agentic-workflow": {
         "title": "AXEL Seminar: Agentic Workflows",
         "description": "Working with AI agents in three Episodes: onboard them every time, manage their attention span, and see why they add management work."
       }

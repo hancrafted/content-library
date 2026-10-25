@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { TRANSLATIONS } from '../i18n/translations';
 import type { EpisodeStatus, IsoDate } from './episode-metadata.pure';
+import { EVENTS } from './events.pure';
 import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
-import { isEpisodePage, pageLocales, routeOf, type PageRef } from './routes';
+import { PLAYLISTS, type PlaylistRecord } from './playlists.pure';
+import { isEpisodePage, isEventEpisodePage, isEventPage, pageLocales, routeOf, type PageRef } from './routes';
 
 /** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
 const LOCAL_ORIGIN = 'http://localhost:3000';
@@ -43,9 +45,21 @@ export const OG_IMAGE = { url: '/og-image.png', width: 1200, height: 630 } as co
 
 const OG_LOCALES: Record<Locale, string> = { en: 'en_US', de: 'de_DE' };
 
-/** Whether a page is kept out of search: the dashboard, and an Episode still upcoming. Metadata and sitemap both ask. */
+/** Whether an Event's Playlist is unlisted, which keeps the Event's page out of search. */
+function isUnlistedEvent(event: string): boolean {
+  const playlist = EVENTS.find((each) => each.slug === event)?.playlist;
+  const playlists: readonly PlaylistRecord[] = PLAYLISTS;
+  return playlists.find((each) => each.id === playlist)?.visibility !== 'public';
+}
+
+/**
+ * Whether a page is kept out of search: the dashboard, an Episode still upcoming, an Event whose Playlist is unlisted,
+ * and, for now, every Episode as an Event presents it (its own page, when public, is the one to index). Metadata and
+ * sitemap both ask.
+ */
 export function isNoindex(page: PageRef, status?: EpisodeStatus): boolean {
-  return page === 'dashboard' || status === 'upcoming';
+  if (isEventPage(page)) return isUnlistedEvent(page.event);
+  return page === 'dashboard' || status === 'upcoming' || isEventEpisodePage(page);
 }
 
 /** Open Graph and Twitter cards: the page's own title and description, the fallback image, its locale and the others. */
@@ -77,7 +91,7 @@ function socialCards(
 /** The copy of a page that has no record of its own: `meta.<page>` of the Translation file. */
 function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | 'description'> {
   const { meta } = TRANSLATIONS[locale];
-  if (page === 'dashboard' || page === 'episodes' || page === 'workshops') return meta[page];
+  if (page === 'dashboard' || page === 'episodes' || page === 'events') return meta[page];
   return meta.home;
 }
 
@@ -88,7 +102,7 @@ function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | '
  * reach, so the route hands it in, with its status: an upcoming Episode's page
  * is `noindex`, so the publish flip removes it from search.
  */
-export function pageMetadata(page: 'home' | 'episodes' | 'workshops', locale: Locale): Metadata;
+export function pageMetadata(page: 'home' | 'episodes' | 'events', locale: Locale): Metadata;
 export function pageMetadata(page: 'dashboard', locale: 'en'): Metadata;
 export function pageMetadata(page: Exclude<PageRef, string>, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {

@@ -1,18 +1,21 @@
 import type { z } from 'zod';
 import {
   episodeSchema,
+  eventSchema,
   KEBAB,
+  playlistSchema,
   slideSourceSchema,
   tagSchema,
-  workshopSchema,
   type RecordKind,
   type SlideSource,
 } from './content-schemas.pure';
+import { deliveryProblems, type DeliveryRecords } from './delivery.pure';
 import { tagProblems, type EpisodeMetadata } from './episode-metadata.pure';
 import { LAYOUT_REFERENCES, type ACCENTS, type ICONS } from './episode-overview';
+import type { EventRecord } from './events.pure';
+import type { PlaylistRecord } from './playlists.pure';
 import { readResearchFile, type ResearchRecord } from './research-record.pure';
-import { EPISODE_SLUGS } from './routes';
-import { workshopProblems, type WorkshopRecord } from './workshops.pure';
+import { EPISODE_SLUGS, UNLISTED_EPISODE_SLUGS } from './routes';
 
 /*
  * The content store: one loader reads every record the site is built from through its Zod schema and answers with
@@ -30,7 +33,8 @@ export interface TagLookRecord {
 export interface ContentStore {
   readonly tags: Readonly<Record<string, TagLookRecord>>;
   readonly episodes: readonly EpisodeMetadata[];
-  readonly workshops: readonly WorkshopRecord[];
+  readonly events: readonly EventRecord[];
+  readonly playlists: readonly PlaylistRecord[];
   readonly research: readonly ResearchRecord[];
   readonly slideSources: readonly SlideSource[];
 }
@@ -50,7 +54,8 @@ export type LoadResult =
 export interface RawContent {
   readonly tags: unknown;
   readonly episodes: readonly unknown[];
-  readonly workshops: readonly unknown[];
+  readonly events: readonly unknown[];
+  readonly playlists: readonly unknown[];
   readonly research: readonly { readonly path: string; readonly markdown: string }[];
   readonly slideSources: readonly unknown[];
 }
@@ -67,8 +72,10 @@ function refuse(kind: RecordKind, record: string, issues: readonly z.core.$ZodIs
   });
 }
 
+/** The name a raw record goes by: its slug, or its id for a Playlist. */
 function slugOfRaw(raw: unknown): string {
-  const value = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>).slug : undefined;
+  const fields = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {};
+  const value = fields.slug ?? fields.id;
   return typeof value === 'string' ? value : '(unnamed)';
 }
 
@@ -116,20 +123,48 @@ const LISTED_SLUGS: readonly string[] = EPISODE_SLUGS.filter(
   (slug) => !(LAYOUT_REFERENCES as readonly string[]).includes(slug),
 );
 
-/** What the records say about each other: Tags in the vocabulary, a published Episode with a page, a Workshop's Episodes known. */
-function crossChecks(episodes: readonly EpisodeMetadata[], workshops: readonly WorkshopRecord[]): Refusal[] {
+const UNLISTED_SLUGS: readonly string[] = UNLISTED_EPISODE_SLUGS;
+
+/** Where a published Episode's page is registered: a public one at /episodes/, an unlisted one only under its Event. */
+function pageProblem({ slug, status, visibility }: EpisodeMetadata): string[] {
+  if (status !== 'published') return [];
+  const pages = visibility === 'public' ? LISTED_SLUGS : UNLISTED_SLUGS;
+  return pages.includes(slug)
+    ? []
+    : [`${slug}: a published ${visibility} Episode needs a registered page, and this slug names none`];
+}
+
+/** What the records say about each other: Tags in the vocabulary, a published Episode with a page, the delivery records consistent. */
+function crossChecks(episodes: readonly EpisodeMetadata[], delivery: DeliveryRecords | undefined): Refusal[] {
   const slugs = episodes.map(({ slug }) => slug);
   const own = (kind: RecordKind) => (message: string) => ({ kind, record: message.split(':')[0], message });
   return [
     ...tagProblems(episodes).map(own('episode')),
     ...duplicates(slugs).map((slug) => own('episode')(`${slug}: the slug is used twice`)),
-    ...episodes
-      .filter(({ slug, status }) => status === 'published' && !LISTED_SLUGS.includes(slug))
-      .map(({ slug }) =>
-        own('episode')(`${slug}: a published Episode needs a registered page, and this slug names none`),
-      ),
-    ...workshopProblems(workshops, [...EPISODE_SLUGS, ...slugs]).map(own('workshop')),
+    ...episodes.flatMap(pageProblem).map(own('episode')),
+    ...(delivery === undefined ? [] : deliveryProblems(delivery).map(({ kind, message }) => own(kind)(message))),
   ];
+}
+
+/** A research id used by more than one file. */
+function researchDuplicates(research: readonly ResearchRecord[]): Refusal[] {
+  return duplicates(research.map(({ id }) => id)).map((id) => ({
+    kind: 'research' as const,
+    record: id,
+    message: 'the id is used by more than one research file',
+  }));
+}
+
+/** Every record kind read through its schema, each with the records that passed and the refusals of those that did not. */
+function readRecords(raw: RawContent) {
+  return {
+    tags: readTags(raw.tags),
+    episodes: readAll('episode', episodeSchema, raw.episodes),
+    events: readAll('event', eventSchema, raw.events),
+    playlists: readAll('playlist', playlistSchema, raw.playlists),
+    slideSources: readAll('slide-source', slideSourceSchema, raw.slideSources),
+    research: readResearch(raw.research),
+  };
 }
 
 /**
@@ -137,28 +172,27 @@ function crossChecks(episodes: readonly EpisodeMetadata[], workshops: readonly W
  * refusals at once, each naming the kind of record and which one. It never throws on a malformed record.
  */
 export function loadContentStore(raw: RawContent): LoadResult {
-  const tags = readTags(raw.tags);
-  const episodes = readAll('episode', episodeSchema, raw.episodes);
-  const workshops = readAll('workshop', workshopSchema, raw.workshops);
-  const slideSources = readAll('slide-source', slideSourceSchema, raw.slideSources);
-  const research = readResearch(raw.research);
+  const parts = readRecords(raw);
+  const { tags, episodes, events, playlists, slideSources, research } = parts;
   // The schemas checked each record's shape; the cross-checks need only the records that passed them.
   const soundEpisodes = episodes.value as unknown as EpisodeMetadata[];
-  const soundWorkshops = workshops.value as WorkshopRecord[];
+  const soundEvents = events.value as EventRecord[];
+  // A record the schema refused is missing from the rest; checking how the others point at it would only echo
+  // that refusal, so the delivery records are checked together once all of them are sound.
+  const delivery = [episodes, events, playlists].every((part) => part.refusals.length === 0)
+    ? { episodes: soundEpisodes, events: soundEvents, playlists: playlists.value }
+    : undefined;
   const refusals = [
-    ...[tags, episodes, workshops, slideSources, research].flatMap((part) => part.refusals),
-    ...duplicates(research.value.map(({ id }) => id)).map((id) => ({
-      kind: 'research' as const,
-      record: id,
-      message: 'the id is used by more than one research file',
-    })),
-    ...crossChecks(soundEpisodes, soundWorkshops),
+    ...Object.values(parts).flatMap((part) => part.refusals),
+    ...researchDuplicates(research.value),
+    ...crossChecks(soundEpisodes, delivery),
   ];
   if (refusals.length > 0) return { ok: false, refusals };
   const store = {
     tags: tags.value,
     episodes: soundEpisodes,
-    workshops: soundWorkshops,
+    events: soundEvents,
+    playlists: playlists.value,
     research: research.value,
     slideSources: slideSources.value,
   };

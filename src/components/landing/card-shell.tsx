@@ -40,7 +40,7 @@ export const VARIANTS: Record<CardVariant, VariantClasses> = {
     caption: 'line-clamp-3 text-caption',
     cue: '',
   },
-  workshop: {
+  event: {
     frame: 'rounded-2xl p-6',
     art: '-bottom-6 -right-6 size-36',
     title: 'text-body font-semibold',

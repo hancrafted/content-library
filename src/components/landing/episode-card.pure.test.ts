@@ -10,6 +10,8 @@ const COPY = { title: 'Your AI token economy', caption: 'Hidden managing respons
 
 const PUBLISHED_METADATA: PublishedEpisodeMetadata = {
   slug: 'ai-token-economy',
+  type: 'standard',
+  visibility: 'public',
   status: 'published',
   format: 'foundations',
   tags: ['cost'],
@@ -21,6 +23,8 @@ const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
 
 const UPCOMING: UpcomingEpisodeMetadata = {
   slug: 'choosing-the-right-model',
+  type: 'standard',
+  visibility: 'public',
   status: 'upcoming',
   format: 'short',
   tags: ['cost', 'sales'],

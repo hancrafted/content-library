@@ -1,4 +1,5 @@
 import { TAG_IDS, TAGS, type FormatId, type ListedEpisodeSlug, type TagId, type TagLook } from './episode-overview';
+import type { UnlistedEpisodeSlug } from './routes';
 
 /*
  * What an Episode declares about itself for the Episode overview, in its own
@@ -16,9 +17,13 @@ interface SharedMetadata {
   readonly tags: readonly [TagId, ...TagId[]];
 }
 
-/** An Episode that has a page: its slug is registered. */
+/** An Episode that has a page: its slug is registered, at `/episodes/` when public, only under its Event when unlisted. */
 export interface PublishedEpisodeMetadata extends SharedMetadata {
-  readonly slug: ListedEpisodeSlug;
+  readonly slug: ListedEpisodeSlug | UnlistedEpisodeSlug;
+  /** `event-frame` holds one Event's agenda, scope and organisation; it is always unlisted. */
+  readonly type: 'standard' | 'event-frame';
+  /** `public` is listed and indexed; `unlisted` lives only under its Event and is never listed. */
+  readonly visibility: 'public' | 'unlisted';
   readonly status: 'published';
   readonly publishedOn: IsoDate;
 }
@@ -26,6 +31,9 @@ export interface PublishedEpisodeMetadata extends SharedMetadata {
 /** An Episode announced but not written: a folder holding only its metadata, no page, so no link. */
 export interface UpcomingEpisodeMetadata extends SharedMetadata {
   readonly slug: string;
+  /** Upcoming applies to public, standard Episodes only. */
+  readonly type: 'standard';
+  readonly visibility: 'public';
   readonly status: 'upcoming';
 }
 
@@ -52,6 +60,11 @@ export function tagProblems(episodes: readonly { slug: string; tags: readonly st
       (tag) => `${slug}: lists the Tag ${tag} twice`,
     ),
   ]);
+}
+
+/** Whether the Episode overview and Upcoming list it: public, standard Episodes only; an unlisted or event-frame one lives under its Event. */
+export function isListed(episode: Pick<EpisodeMetadata, 'type' | 'visibility'>): boolean {
+  return episode.visibility === 'public' && episode.type === 'standard';
 }
 
 function isPublished(episode: EpisodeMetadata): episode is PublishedEpisodeMetadata {

@@ -8,7 +8,7 @@ import { contentStore, rawContent } from './content-store';
  */
 
 describe('success cases', () => {
-  it('returns the same Episodes, Tags, Workshop and research records the site renders today', () => {
+  it('returns the same Episodes, Tags, Events, Playlists and research records the site renders', () => {
     // ARRANGE
     const expected = {
       episodes: [
@@ -18,9 +18,11 @@ describe('success cases', () => {
         'onboard-ai-every-time',
         'ai-attention-span',
         'ai-gives-you-more-work',
+        'axel-agentic-workflow-agenda',
       ],
       tags: ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'],
-      workshops: ['axel-agentic-workflow-2026-10-23'],
+      events: ['2026-10-23-axel-agentic-workflow'],
+      playlists: ['axel-agentic-workflow'],
       researchCount: 37,
     };
     // ACT
@@ -29,7 +31,8 @@ describe('success cases', () => {
     expect({
       episodes: store.episodes.map(({ slug }) => slug),
       tags: Object.keys(store.tags),
-      workshops: store.workshops.map(({ slug }) => slug),
+      events: store.events.map(({ slug }) => slug),
+      playlists: store.playlists.map(({ id }) => id),
       researchCount: store.research.length,
     }).toEqual(expected);
   });

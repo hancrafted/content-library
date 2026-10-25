@@ -22,8 +22,17 @@ _Avoid_: Draft, coming-soon episode, stub
 **Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
 _Avoid_: Topic, category, theme, label, keyword
 
-**Workshop**: a dated, ordered set of Episodes, run as one event. It lists Episode slugs in the order to follow them and may list an upcoming Episode. It is not a playlist and has no status.
-_Avoid_: Playlist, course, series
+**Event**: a dated occasion of one kind (a workshop, a webinar) that presents one Playlist to an Audience. It owns no Slides, holds no text and has no visibility or status of its own: its Playlist's visibility is its own, and its date decides whether it is past.
+_Avoid_: Workshop (a kind of Event, not the record), session, booking
+
+**Playlist**: an ordered list of Episodes with a type and a Visibility, and nothing else. A Playlist of type event is made for exactly one Event and opens with its event-frame Episode; a standard Playlist is a curated list with no Event.
+_Avoid_: Agenda, course, series, collection
+
+**Event-frame Episode**: the Episode that holds one Event's agenda, scope and organisation, first in that Event's Playlist. It has no video, is always unlisted and always published, and is never in the Episode overview.
+_Avoid_: Event page (the Event's own page), agenda episode, intro
+
+**Visibility**: whether an Episode or a Playlist is listed and indexed: public, or unlisted. An unlisted Episode lives only under the Event whose Playlist presents it; unlisted is not private, since anyone with the URL can open it.
+_Avoid_: Private, hidden, draft, attendees-only
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length

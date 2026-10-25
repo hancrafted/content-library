@@ -50,8 +50,8 @@ function HeaderNav({ locale, t }: { locale: Locale; t: HeaderT }) {
       <NavLink section={ROUTES.episodes} href={localizePath(ROUTES.episodes, locale)} data-testid="nav-episodes">
         {t('nav.episodes')}
       </NavLink>
-      <NavLink section={ROUTES.workshops} href={localizePath(ROUTES.workshops, locale)} data-testid="nav-workshops">
-        {t('nav.workshops')}
+      <NavLink section={ROUTES.events} href={localizePath(ROUTES.events, locale)} data-testid="nav-events">
+        {t('nav.events')}
       </NavLink>
       <DashboardNav locale={locale} label={t('nav.dashboard')} />
     </nav>
