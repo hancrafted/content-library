@@ -10,10 +10,11 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { TITLE_ANCHOR } from '../../src/lib/episode.pure';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
+import { TOOLING_SLUGS } from '../../src/lib/tooling-pages';
 import { exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
 
-const PAGES = EPISODE_SLUGS.flatMap((slug) =>
+const PAGES = [...EPISODE_SLUGS, ...TOOLING_SLUGS].flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 
