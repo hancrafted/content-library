@@ -16,7 +16,7 @@ function episodeFolder(slug: string, files: Record<string, string>): string {
 
 // The marker shape `implement-section` writes (never-too-early-sales, onboard-ai-every-time).
 const WITH_MARKERS = {
-  'cash-first.ts': `import { episode } from '@/components/slide-master/slide';
+  'episode.ts': `import { episode } from '@/components/slide-master/slide';
 import { howToStartSection } from './sections/how-to-start';
 import { whyCashSection } from './sections/why-cash';
 import { hero } from './slides/hero/slide';
@@ -48,7 +48,7 @@ export const howToStartSection: Section = [
 
 // The inline shape of the hand-built Episodes (ai-token-economy, maintaining-markdown-for-ai).
 const INLINE = {
-  'token-talk.ts': `import { episode } from '@/components/slide-master/slide';
+  'episode.ts': `import { episode } from '@/components/slide-master/slide';
 import { motivation } from './slides/motivation/slide';
 import { toolsAndTips } from './slides/tools-and-tips/slide';
 import { whatIsAToken } from './slides/what-is-a-token/slide';
@@ -97,10 +97,10 @@ describe('episodeOutline', () => {
   });
 
   describe('failure cases', () => {
-    it('refuses a folder with no Episode file named after it', () => {
+    it('refuses an Episode folder with no episode.ts', () => {
       // ARRANGE
       const folder = episodeFolder('no-such-episode', {});
-      const message = /no-such-episode\.ts/;
+      const message = /no-such-episode\/episode\.ts is missing/;
 
       // ACT
       const outline = () => episodeOutline(folder);

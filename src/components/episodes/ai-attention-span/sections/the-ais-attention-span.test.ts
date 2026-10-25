@@ -7,7 +7,7 @@ import path from 'node:path';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { aiAttentionSpan } from '../ai-attention-span';
+import { aiAttentionSpan } from '../episode';
 import { theAisAttentionSpanSection } from './the-ais-attention-span';
 
 /*

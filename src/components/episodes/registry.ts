@@ -2,16 +2,16 @@ import type { EpisodeMessages, EpisodeRecord } from '@/components/slide-master/s
 import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
-import { aiAttentionSpan } from './ai-attention-span/ai-attention-span';
-import { aiGivesYouMoreWork } from './ai-gives-you-more-work/ai-gives-you-more-work';
-import { aiTokenEconomy } from './ai-token-economy/ai-token-economy';
-import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/maintaining-markdown-for-ai';
-import { neverTooEarlySales } from './never-too-early-sales/never-too-early-sales';
-import { onboardAiEveryTime } from './onboard-ai-every-time/onboard-ai-every-time';
-import { pageTemplate } from './page-template/page-template';
-import { slideLayouts } from './slide-layouts/slide-layouts';
-import { slideMaster } from './slide-master/slide-master';
-import { slides } from './slides/slides';
+import { aiAttentionSpan } from './ai-attention-span/episode';
+import { aiGivesYouMoreWork } from './ai-gives-you-more-work/episode';
+import { aiTokenEconomy } from './ai-token-economy/episode';
+import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode';
+import { neverTooEarlySales } from './never-too-early-sales/episode';
+import { onboardAiEveryTime } from './onboard-ai-every-time/episode';
+import { pageTemplate } from './page-template/episode';
+import { slideLayouts } from './slide-layouts/episode';
+import { slideMaster } from './slide-master/episode';
+import { slides } from './slides/episode';
 
 /**
  * Every Episode, by slug (FE-002). Typed against `EPISODE_SLUGS`, so a slug

@@ -39,7 +39,7 @@ Done when: no two slugs match and each Section's first slug names the Section.
 Copy `page-template/` to `episodes/<ep>/`, then:
 
 - Delete its Slide folders and its `published-anchors.json`; the anchors bind at publication ([Episode publishing](episode-publishing.md)), not here.
-- Rename `page-template.ts` to `<ep>.ts` and its export to the camelCase slug. Set `slug: '<ep>'` and `sections: []` until step 7; add `youtube: { en, de }` once the video ids exist.
+- Keep `episode.ts` and rename its export to the camelCase slug. Set `slug: '<ep>'` and `sections: []` until step 7; add `youtube: { en, de }` once the video ids exist.
 - Register it now, all three together, since `tsc` refuses any one alone: the slug in `EPISODE_SLUGS` (`src/lib/routes.ts`), the record in `EPISODES` (`src/components/episodes/registry.ts`), and `episodes/<ep>/episode-metadata.ts` in `REGISTERED` (`src/components/episodes/episode-repository.ts`; its `status` decides published or upcoming). The metadata holds `status: 'upcoming'`, its primary Topic, any extra Topics, its Format and its Tags, as in `specs-an-agent-can-follow/episode-metadata.ts`, and no `publishedOn`: publishing adds `status: 'published'` and `publishedOn` later. The page is built and served at `/episode/<ep>`, `noindex`, its overview card Upcoming and unlinked.
 - If `episodes/<ep>/` already exists as an Upcoming Episode, copy into it, keep `status: 'upcoming'`, move it out of `UPCOMING` into `REGISTERED`, and move its copy from `landing.episodeOverview.upcoming.<ep>` into `episodes/<ep>/i18n/` ([Episode overview entries](episode-translation-keys.md#episode-overview-entries)).
 - Write the Episode's own text in `i18n/en.json` and `de.json`: `title`, `caption`, `description`. English goes in verbatim from the source; German is written fresh from the same facts, not translated.
@@ -113,7 +113,7 @@ Done when: each widget's pure logic has a passing test.
 ## 7. Compose and snapshot
 
 - `episodes/<ep>/sections/<section-slug>.ts`, one per Section, `<section-slug>` the slug of its section slide: export that Section's Slide list, `[sectionSlide, ...pages]`, in order ([FE-004 §3](../../.archgate/adrs/FE-004-slide-architecture.md#3-each-module-owns-one-thing), [design-ADR-0008](../adr/0008-pipeline-jobs-belong-to-stages.md)). A page Slide is listed there, never in the Episode file. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry in its Section's module.
-- `episodes/<ep>/<ep>.ts`: import each Section's list and fill `sections: [...]` with them, in Section order, in `episode({ slug, youtube, messages: { en, de }, sections })`.
+- `episodes/<ep>/episode.ts`: import each Section's list and fill `sections: [...]` with them, in Section order, in `episode({ slug, youtube, messages: { en, de }, sections })`.
 - To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
 - Do not write `published-anchors.json`: `published-anchors.test.ts` skips an upcoming Episode, and the publish step writes the file ([Episode publishing](episode-publishing.md)).
 
