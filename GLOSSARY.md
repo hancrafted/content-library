@@ -10,6 +10,9 @@ Localized visualisations of theory content, captured from YouTube training video
 
 ## Product & Features
 
+**Audience**: a level of AI enablement the library serves, independent of locale: **Individual**, a person learning for themselves, or **Organization**, a company enabling its people.
+_Avoid_: International viewers, German businesses, segment, persona
+
 **Episode**: one page of visualised theory content, localized into en and de: its Slides stacked vertically, navigated by its table of contents. Its title is the page's h1; it holds Sections and has one YouTube recording per locale.
 _Avoid_: Post, article, video, tower
 

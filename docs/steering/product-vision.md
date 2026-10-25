@@ -8,12 +8,23 @@ status: draft
 
 ## North star
 
-A visual knowledge library of reusable teaching units, backed by public research and produced by an agentic pipeline, that wins clients through workshops now and an audience through YouTube later.
+A visual knowledge library of reusable teaching units, backed by public research and produced by an agentic pipeline, that enables people and organizations to work with AI: it wins clients through workshops now and an audience through YouTube later.
+
+The repo practises what it teaches: what agents build here is proof, and source material, for Episodes on AI enablement.
+
+## Audiences
+
+An Audience is a level of AI enablement, independent of locale.
+
+- **Individual:** a person learning for themselves, reached through YouTube. Paid end: webinars and cohorts.
+- **Organization:** a company enabling its people, reached through workshops, German businesses first. Paid end: consulting and engineering projects.
+
+What each Audience can do, per horizon: `docs/steering/product-requirements.md`.
 
 ## Horizons
 
 1. **Now to Jan 2027: workshops.** Events are Han's main client exposure. The site is a presenting surface with a booking call to action.
-2. **2027: library, evidence and pipeline.** Polished YouTube Episodes and public playlists build an audience. Explorable explanations on their own URLs bring visitors back. Concepts and Research questions are rendered publicly, so a viewer can see that what an Episode teaches rests on research. The content pipeline becomes a product, first local, then in the cloud.
+2. **2027: library, evidence and pipeline.** Polished YouTube Episodes and public playlists build an audience. Explorable explanations on their own URLs bring visitors back. A first paid webinar or cohort runs without a platform of our own. Concepts and Research questions are rendered publicly, so a viewer can see that what an Episode teaches rests on research. The content pipeline becomes a product, first local, then in the cloud.
 3. **End of 2027: platform.** Login, booking, billing, webinars and progress tracking. The site moves from static pages to an application with a backend.
 
 ## Trade-off rules
