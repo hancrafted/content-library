@@ -10,11 +10,16 @@
 // src/lib.
 const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|explorable-explanations|episodes)/', '^src/lib/'];
 
-// A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/`, or `episodes/by-event/<event>/<ep>/slides/<slide>/`
-// in an Event's copy (FE-002, FE-007 §5). The two capture groups name the Episode's folder and the Slide, so a rule's
-// `to` can say "this same folder" as `$1`/`$2`.
-const SLIDE_FOLDER = '^src/components/episodes/(by-event/[^/]+/[^/]+|[^/]+)/slides/([^/]+)/';
-const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
+// A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/`, `episodes/by-event/<event>/<ep>/slides/<slide>/`
+// in an Event's copy, or `episodes/slide-pool/<slide>/` in the Slide pool (FE-002, FE-004 §3, FE-007 §5). The two
+// capture groups name the folder that holds the Slide and the Slide, so a rule's `to` can say "this same folder" as
+// `$1/$2`.
+const SLIDE_FOLDER = '^src/components/episodes/(by-event/[^/]+/[^/]+/slides|[^/]+/slides|slide-pool)/([^/]+)/';
+const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/$2/';
+// The Slide pool: content Slides several Episodes compose (FE-004 §3).
+const SLIDE_POOL = '^src/components/episodes/slide-pool/';
+// A Section file, `<ep>/sections/<section-slug>.ts`, named after its section slide; the second capture group names it.
+const SECTION_FILE = '^src/components/episodes/(by-event/[^/]+/[^/]+|[^/]+)/sections/([^/]+)\\.ts$';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the Explorable explanations, the UI
 // kit, hooks and lib.
 const SLIDE_SHARED_REACH = [
@@ -122,9 +127,33 @@ module.exports = {
       name: 'slide-folder-reaches-only-own-and-shared',
       severity: 'error',
       comment:
-        'A Slide folder (episodes/<ep>/slides/<slide>/) imports only its own files and the global shared locations: src/components/slide-master/, src/components/slide-shared/, src/components/explorable-explanations/, src/components/ui/, src/hooks/ and src/lib/. Never another Slide, the Episode file, or anything else Episode-local; a part two Slides share moves to src/components/slide-shared/ (FE-007).',
+        'A Slide folder (episodes/<ep>/slides/<slide>/, or a pool Slide, episodes/slide-pool/<slide>/) imports only its own files and the global shared locations: src/components/slide-master/, src/components/slide-shared/, src/components/explorable-explanations/, src/components/ui/, src/hooks/ and src/lib/. Never another Slide, a pool Slide included, the Episode file, or anything else Episode-local; a part two Slides share moves to src/components/slide-shared/ (FE-007).',
       from: { path: SLIDE_FOLDER },
       to: { pathNot: [OWN_SLIDE_FOLDER, ...SLIDE_SHARED_REACH, 'node_modules'], dependencyTypesNot: ['core'] },
+    },
+    {
+      name: 'slide-pool-reached-only-from-sections',
+      severity: 'error',
+      comment:
+        'A pool Slide (src/components/episodes/slide-pool/<slide>/) is a content Slide several Episodes compose: only a Section file, <ep>/sections/<section-slug>.ts, imports it. Never the Episode file, so a pool Slide is never a Title slide, and never another Slide (FE-004).',
+      from: { pathNot: [SECTION_FILE, SLIDE_POOL] },
+      to: { path: SLIDE_POOL },
+    },
+    {
+      name: 'section-slide-never-from-pool',
+      severity: 'error',
+      comment:
+        "A Section file is named after its section slide (sections/<section-slug>.ts). That Slide stays the Episode's own, in its slides/ folder: only content Slides enter the Slide pool, so a Section never imports src/components/episodes/slide-pool/<section-slug>/ (FE-004).",
+      from: { path: SECTION_FILE },
+      to: { path: '^src/components/episodes/slide-pool/$2/' },
+    },
+    {
+      name: 'section-reaches-pool-by-alias',
+      severity: 'error',
+      comment:
+        'A Section imports a pool Slide through the alias path, @/components/episodes/slide-pool/<slide>/slide, never a relative path, so an Event copy under by-event/ imports it the same way at any depth (FE-004).',
+      from: { path: SECTION_FILE },
+      to: { path: SLIDE_POOL, dependencyTypesNot: ['aliased-tsconfig'] },
     },
     {
       name: 'slide-client-reaches-only-hooks-and-lib',

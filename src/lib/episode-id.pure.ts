@@ -8,8 +8,11 @@
 /** The folder an Event's copies sit in, one folder per Event: `by-event/<event-slug>/<slug>/`. */
 export const EVENT_COPIES_FOLDER = 'by-event';
 
+/** The Slide pool: one folder of content Slides several Episodes compose, `slide-pool/<slide>/` (FE-004). */
+export const SLIDE_POOL_FOLDER = 'slide-pool';
+
 /** Folder names under the Episodes folder that hold no Episode, so no Episode may take one as its slug. */
-export const RESERVED_FOLDER_NAMES: readonly string[] = [EVENT_COPIES_FOLDER];
+export const RESERVED_FOLDER_NAMES: readonly string[] = [EVENT_COPIES_FOLDER, SLIDE_POOL_FOLDER];
 
 const SEPARATOR = '__';
 

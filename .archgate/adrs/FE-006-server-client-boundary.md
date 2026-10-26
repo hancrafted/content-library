@@ -46,11 +46,11 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 ### 4. Props crossing the boundary
 
-1. Every prop a Server Component passes to a `*.client.tsx` component MUST be serializable by React: primitives, plain objects and arrays of them, `Date`, `Map`, `Set`, promises, JSX — never a function, class instance or unregistered symbol. Pass a Translation file slice (as `ThemeToggle` takes `labels`), not a callback.
+1. Every prop a Server Component passes to a `*.client.tsx` component MUST be serializable by React: primitives, plain objects and arrays of them, `Date`, `Map`, `Set`, promises, JSX — never a function, class instance or unregistered symbol. Pass a Translation file slice, not a callback.
 
 ### 5. Episode and `slide-shared` client files
 
-1. An Episode's `*.client.tsx` files MUST live in a Slide folder `episodes/[by-event/<e>/]<ep>/slides/<slide>/`, nowhere else; the Slide's entry stays server.
+1. An Episode's `*.client.tsx` files MUST live in a Slide folder, `[by-event/<e>/]<ep>/slides/<slide>/` or `slide-pool/<slide>/` under `episodes/`, nowhere else; the Slide's entry stays server.
 2. A Slide's client widget MUST reach only its own folder, hooks and lib.
 3. A `slide-shared` part's or Explorable explanation's client leaf MUST sit in its own folder and reach only it, hooks and lib; the entry stays server.
 

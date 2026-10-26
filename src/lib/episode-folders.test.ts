@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeFolders, pageFolders } from './episode-folders';
+import { episodeFolders, pageFolders, slideFolders } from './episode-folders';
 
 /*
  * The one folder walker (design-ADR 0016 decision 3): every Episode, standalone and Event copy alike, and every tooling
@@ -59,9 +59,29 @@ describe('success cases', () => {
     // ASSERT
     expect(copies).toEqual(expected);
   });
+  it('walks the 5 Slides of the Slide pool beside every page Slide, each owned by the pool', () => {
+    // ARRANGE
+    const expected = ['brief-the-venue', 'manage-the-price', 'one-prompt', 'pay-the-price', 'you-are-the-new-hire'];
+    // ACT
+    const pool = slideFolders(ROOT)
+      .filter(({ owner }) => owner === 'slide-pool')
+      .map(({ slug }) => slug);
+    // ASSERT
+    expect(pool).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('never takes the reserved slide-pool folder for an Episode or a tooling page', () => {
+    // ARRANGE
+    const root = tree(['alpha/episode-metadata.ts', 'slide-pool/pooled/slide.tsx']);
+    const expected = ['alpha'];
+    // ACT
+    const ids = pageFolders(root).map(({ id }) => id);
+    // ASSERT
+    expect(ids).toEqual(expected);
+  });
+
   it('never takes the reserved by-event folder for an Episode or a tooling page', () => {
     // ARRANGE
     const root = tree(['alpha/episode-metadata.ts', 'by-event/2026-01-01-x/beta/episode-metadata.ts']);
