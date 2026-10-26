@@ -25,7 +25,7 @@ export function templateProblems(file: WorkflowFile): string[] {
 
 export function idProblems(file: WorkflowFile): string[] {
   const tasks = tasksOf(file);
-  const outputs = file.stages.flatMap((stage) => stage.tasks.flatMap((t) => [...producersOf(t, stage).keys()]));
+  const outputs = file.stages.flatMap((stage) => stage.jobs.flatMap((t) => [...producersOf(t, stage).keys()]));
   return [
     ...dupes(file.stages.map((stage) => stage.id)).map((id) => `The stage id "${id}" is used twice.`),
     ...dupes(tasks.map((task) => task.id)).map((id) => `The task id "${id}" is used twice.`),
@@ -217,4 +217,4 @@ export function reviewerProblems(file: WorkflowFile): string[] {
 }
 
 export const contentProblems = (file: WorkflowFile): string[] =>
-  file.stages.flatMap((stage, index) => stage.tasks.flatMap((task) => taskProblems(file, task, index)));
+  file.stages.flatMap((stage, index) => stage.jobs.flatMap((task) => taskProblems(file, task, index)));

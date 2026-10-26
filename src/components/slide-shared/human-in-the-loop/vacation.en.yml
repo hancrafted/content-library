@@ -125,7 +125,7 @@ stages:
     title: Plan
     learningGoal: 'Break it down: split the big task into pieces and take only one forward.'
     move: B
-    tasks:
+    jobs:
       - id: pieces
         title: Break it up
         summary: Into smaller pieces, in order, with what depends on what
@@ -215,7 +215,7 @@ stages:
     title: Interview
     learningGoal: 'Interview yourself with AI: the AI asks before it guesses, a few questions at a time.'
     move: I
-    tasks:
+    jobs:
       - id: interview
         title: AI grills you
         summary: In an interactive interview, a few questions at a time
@@ -309,7 +309,7 @@ stages:
         - Private bathroom
         - Airport transfer of at most 60 minutes
       status: Signed off
-    tasks:
+    jobs:
       - id: spec
         title: You sign off
         summary: The requirements card, line by line
@@ -412,7 +412,7 @@ stages:
     title: Tickets
     learningGoal: 'Break it down again: cut the spec into tickets that do not overlap, so each can get its own chat.'
     move: B
-    tasks:
+    jobs:
       - id: tickets
         title: Write tickets
         summary: One self-contained ticket per option to research
@@ -514,7 +514,7 @@ stages:
     title: Research
     learningGoal: Give each ticket its own fresh chat so every window stays small and no two chats do the same work.
     move: F
-    tasks:
+    jobs:
       - id: venue
         title: Chat
         summary: One fresh chat per ticket, with web search
@@ -655,7 +655,7 @@ stages:
     learningGoal: 'Evaluate each step: check each result against the card before you move on.'
     move: E
     gate: 2
-    tasks:
+    jobs:
       - id: compare
         title: Rank the results
         summary: Against your requirements, and you pick at Gate 2
@@ -802,7 +802,7 @@ stages:
   - id: recommendation
     title: Review
     learningGoal: Close the loop yourself. Read the comparison and decide what goes to the people who sign it off.
-    tasks:
+    jobs:
       - id: recommend
         title: Recommend one
         summary: A one-minute read with next steps

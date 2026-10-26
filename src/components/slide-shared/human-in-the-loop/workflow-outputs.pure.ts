@@ -25,13 +25,13 @@ export function producersOf(task: TaskDef, stage: StageDef): ReadonlyMap<string,
 export function producersBefore(file: WorkflowFile, index: number): ReadonlyMap<string, Producer> {
   const names = new Map<string, Producer>();
   for (const stage of file.stages.slice(0, index)) {
-    for (const task of stage.tasks) for (const [name, producer] of producersOf(task, stage)) names.set(name, producer);
+    for (const task of stage.jobs) for (const [name, producer] of producersOf(task, stage)) names.set(name, producer);
   }
   return names;
 }
 
 /** Every task of the file, in drawing order. */
-export const tasksOf = (file: WorkflowFile): TaskDef[] => file.stages.flatMap((stage) => stage.tasks);
+export const tasksOf = (file: WorkflowFile): TaskDef[] => file.stages.flatMap((stage) => stage.jobs);
 
 /** The ids of the tasks a task takes from: the producers of its slots, once each. */
 export function producerIdsOf(file: WorkflowFile, stageIndex: number, task: TaskDef): string[] {

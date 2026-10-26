@@ -52,7 +52,7 @@ const structureOf = (file: WorkflowFile) => ({
     move: stage.move,
     gate: stage.gate,
     card: stage.card?.lines.length,
-    tasks: stage.tasks.map(taskShape),
+    jobs: stage.jobs.map(taskShape),
   })),
 });
 
@@ -83,7 +83,7 @@ describe('success cases', () => {
   });
   it.each(EACH)('gives every do and review step instructions of one or two sentences, in %s %s', (id, locale) => {
     // ARRANGE
-    const tasks = fileOf(id, locale).stages.flatMap((stage) => stage.tasks);
+    const tasks = fileOf(id, locale).stages.flatMap((stage) => stage.jobs);
     // ACT
     const texts = tasks.flatMap((task) => [task.instructions, task.review?.instructions]);
     const longest = 2;
@@ -103,7 +103,7 @@ describe('success cases', () => {
     const used = [
       ...file.reviewer.sections.flatMap((section) => section.techniques ?? []),
       ...file.stages.flatMap((stage) =>
-        stage.tasks.flatMap((task) => [
+        stage.jobs.flatMap((task) => [
           ...[...task.do.simple, ...task.do.technical].flatMap((section) => section.techniques ?? []),
           ...(task.details.techniques ?? []),
         ]),
@@ -126,7 +126,7 @@ describe('success cases', () => {
 
 const EACH = WORKFLOW_IDS.flatMap((id) => (['en', 'de'] as const).map((locale) => [id, locale] as const));
 const taskOf = (file: WorkflowFile, id: string): TaskDef => {
-  const found = file.stages.flatMap((stage) => stage.tasks).find((each) => each.id === id);
+  const found = file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id);
   if (!found) throw new Error(`no task ${id}`);
   return found;
 };
@@ -135,7 +135,7 @@ describe('failure cases', () => {
   it('reads a difference of structure: a stage with one task fewer is not the same pair', () => {
     // ARRANGE
     const en = fileOf('summer-party', 'en');
-    const fewer = { ...en, stages: en.stages.map((stage, at) => (at === 0 ? { ...stage, tasks: [] } : stage)) };
+    const fewer = { ...en, stages: en.stages.map((stage, at) => (at === 0 ? { ...stage, jobs: [] } : stage)) };
     // ACT
     const same = JSON.stringify(structureOf(fewer)) === JSON.stringify(structureOf(en));
     // ASSERT

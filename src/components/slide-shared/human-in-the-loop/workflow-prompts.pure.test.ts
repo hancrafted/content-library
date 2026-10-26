@@ -7,7 +7,7 @@ import type { TaskDef, WorkflowFile } from './workflow-schema.types';
 
 const file = parse(summerPartyEn) as WorkflowFile;
 const task = (id: string): TaskDef =>
-  file.stages.flatMap((stage) => stage.tasks).find((each) => each.id === id) as TaskDef;
+  file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id) as TaskDef;
 const joined = (prompt: ReturnType<typeof doPrompt>) =>
   joinPrompt({ sections: prompt.sections ?? [], slots: prompt.slots ?? [] }, {});
 
@@ -104,7 +104,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the whole technical prompt, including its template, free of unresolved built-in markers', () => {
     // ARRANGE
-    const all = file.stages.flatMap((stage) => stage.tasks);
+    const all = file.stages.flatMap((stage) => stage.jobs);
     // ACT
     const left = all.flatMap((each) => [
       joined(doPrompt(file, each, { runtime: 'technical', chat: 1 })),
