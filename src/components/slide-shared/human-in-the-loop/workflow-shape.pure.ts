@@ -38,6 +38,8 @@ const task = obj(
     id: str,
     title: str,
     summary: str,
+    goal: obj({ do: str, review: str }, ['review']),
+    needs: ids,
     output: str,
     template: str,
     slots: list(slot),
@@ -47,19 +49,20 @@ const task = obj(
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
   },
-  ['summary', 'fanOut', 'review', 'instructions'],
+  ['summary', 'needs', 'output', 'fanOut', 'review', 'instructions'],
 );
 const stage = obj(
   {
     id: str,
     title: str,
     learningGoal: str,
+    summary: str,
     move: enumOf(['B', 'R', 'I', 'E', 'F']),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),
     jobs: list(task, 1),
   },
-  ['move', 'gate', 'card'],
+  ['summary', 'move', 'gate', 'card'],
 );
 
 /** The Spec of a whole Workflow file. */

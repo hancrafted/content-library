@@ -6,6 +6,7 @@ import {
   techniqueProblems,
   templateProblems,
 } from './workflow-loader-checks.pure';
+import { jobOrderProblems } from './workflow-loader-jobs.pure';
 import type { WorkflowFile } from './workflow-schema.types';
 import { shapeProblems } from './workflow-shape.pure';
 
@@ -42,6 +43,7 @@ export function loadWorkflow(source: string): FileResult {
     ...idProblems(file),
     ...techniqueProblems(file),
     ...reviewerProblems(file),
+    ...jobOrderProblems(file),
     ...contentProblems(file),
   ];
   return problems.length > 0 ? { problems } : { file };

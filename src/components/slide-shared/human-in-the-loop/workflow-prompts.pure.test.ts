@@ -93,7 +93,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('has no review step for a task without a review', () => {
     // ARRANGE
-    const interview = task('interview');
+    const interview: TaskDef = { ...task('interview'), review: undefined };
     // ACT
     const ids = stepsOf(file, interview, 'simple').map((step) => step.id);
     // ASSERT

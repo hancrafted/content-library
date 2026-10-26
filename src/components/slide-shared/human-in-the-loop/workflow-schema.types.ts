@@ -100,8 +100,15 @@ export interface TaskDef {
   readonly title: string;
   /** One short line under the title on the diagram: what the job does, so the diagram reads at rest. */
   readonly summary?: string;
-  /** The id this task hands on; a later slot with this id takes it. A fan-out `x` hands on `x_1` … `x_N`. */
-  readonly output: string;
+  /** The one-sentence goal of each step, shown as the stepper's title. `review` is required exactly when the job has a review. */
+  readonly goal: { readonly do: string; readonly review?: string };
+  /** Ids of jobs of the same stage that run first; a slot may take their outputs. Without it, slots take earlier stages' outputs only. */
+  readonly needs?: readonly string[];
+  /**
+   * The id this task hands on; a later slot with this id takes it. A fan-out `x` hands on `x_1` … `x_N`. Absent only on
+   * the final job of the last stage, which the viewer marks done with a checkbox.
+   */
+  readonly output?: string;
   /** Key into `templates`; shared by the do prompt, the reviewer and the loader. */
   readonly template: string;
   /** Each `id` names the `output` of a task in an earlier stage (or `x_K` of a fan-out). */
@@ -127,6 +134,8 @@ export interface StageDef {
   readonly title: string;
   /** One line under the popover title. */
   readonly learningGoal: string;
+  /** The Presentation card's text, at most eight words. */
+  readonly summary?: string;
   readonly move?: MoveLetter;
   readonly gate?: number;
   readonly card?: CardDef;

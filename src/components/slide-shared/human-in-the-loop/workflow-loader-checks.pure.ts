@@ -1,9 +1,10 @@
 import { markerCount } from '../core-components/try-prompt/prompt-sections.pure';
 import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure';
+import { unneededOutputs } from './workflow-loader-jobs.pure';
 import { unknownMarkers } from './workflow-markers.pure';
-import { producersBefore, producersOf, tasksOf, type Producer } from './workflow-outputs.pure';
+import { producersFor, producersOf, tasksOf, type Producer } from './workflow-outputs.pure';
 import { slotSample } from './workflow-sample.pure';
-import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
+import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * The meaning checks of a Workflow file whose shape already holds: templates, ids, slots naming earlier outputs,
@@ -132,12 +133,17 @@ function markersOf(slot: SlotDef, task: TaskDef): number {
   return Math.max(...Object.values(task.do).map((sections) => markerCount(asSlot, sections)));
 }
 
-function doSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<string, Producer>): string[] {
+function doSlotProblems(
+  file: WorkflowFile,
+  task: TaskDef,
+  scope: { names: ReadonlyMap<string, Producer>; own: ReadonlySet<string> },
+): string[] {
+  const { names, own } = scope;
   return [
     ...dupes(task.slots.map((slot) => slot.id)).map((id) => `Task "${task.id}" has the slot "${id}" twice.`),
     ...task.slots.flatMap((slot) => {
       const producer = names.get(slot.id);
-      const named = slotNameProblems(slot, task, producer);
+      const named = own.has(slot.id) ? [] : slotNameProblems(slot, task, producer);
       if (slotSample(file, slot) === undefined)
         return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
       const template = slot.free ? undefined : producer?.task.template;
@@ -154,7 +160,7 @@ function clashProblems(slot: SlotDef, task: TaskDef, used: ReadonlySet<string>):
 
 /** One review slot: a fresh id may not clash, a named output is taken in the right mode, a sample fits a template. */
 function reviewSlotOf(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<string, Producer>) {
-  const used = new Set(tasksOf(file).flatMap((t) => [t.output, ...t.slots.map((slot) => slot.id)]));
+  const used = new Set(tasksOf(file).flatMap((t) => [t.output ?? '', ...t.slots.map((slot) => slot.id)]));
   return (slot: SlotDef): string[] => {
     const producer = names.get(slot.id);
     const basis = {
@@ -199,12 +205,13 @@ function markerProblems(task: TaskDef, names: ReadonlyMap<string, Producer>): st
 }
 
 function taskProblems(file: WorkflowFile, task: TaskDef, index: number): string[] {
-  const names = producersBefore(file, index);
+  const names = producersFor(file, index, task);
+  const own = unneededOutputs(file.stages[index] as StageDef, task);
   const known =
     task.template in file.templates ? [] : [`Task "${task.id}" names the unknown template "${task.template}".`];
   return [
     ...known,
-    ...doSlotProblems(file, task, names),
+    ...doSlotProblems(file, task, { names, own }),
     ...reviewSlotProblems(file, task, names),
     ...markerProblems(task, names),
     ...exampleProblems(file, task),

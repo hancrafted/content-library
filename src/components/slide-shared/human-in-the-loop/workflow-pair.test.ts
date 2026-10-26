@@ -5,7 +5,7 @@ import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-sche
 
 /*
  * FE-012-shared-visual-content §1.3: both files of a pair hold the same structure and only the words differ. The
- * structure is the stage, task and slot ids, the slot modes and sample counts, the section count and purposes, the
+ * structure is the stage, task and slot ids, each job's `needs` and goals, a stage's summary, the slot modes and sample counts, the section count and purposes, the
  * fan-out and the example counts; strings are ignored.
  */
 
@@ -23,6 +23,8 @@ const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, co
 const taskShape = (task: TaskDef) => ({
   id: task.id,
   output: task.output,
+  needs: task.needs ?? [],
+  goal: [Boolean(task.goal.do), Boolean(task.goal.review)],
   template: task.template,
   fanOut: task.fanOut,
   slots: task.slots.map(slotShape),
@@ -51,6 +53,7 @@ const structureOf = (file: WorkflowFile) => ({
     id: stage.id,
     move: stage.move,
     gate: stage.gate,
+    summary: Boolean(stage.summary),
     card: stage.card?.lines.length,
     jobs: stage.jobs.map(taskShape),
   })),

@@ -50,6 +50,8 @@ export interface Stage {
   readonly name: string;
   /** The one-line learning goal under the title of the stage's popover. */
   readonly goal: string;
+  /** The Presentation card's text, at most eight words. */
+  readonly summary?: string;
   /** The BRIEF letters this stage applies, in BRIEF order. */
   readonly moves: readonly StageMove[];
   /** The sign-off card, on the stage that holds the focal job. */

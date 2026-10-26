@@ -1,6 +1,6 @@
-import { producersBefore } from './workflow-outputs.pure';
+import { producersFor } from './workflow-outputs.pure';
 import { stepsOf, type TaskStep } from './workflow-prompts.pure';
-import type { Runtime, TechniqueDef } from './workflow-schema.types';
+import type { Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
 import type { Job, Workflow } from './workflow.types';
 
@@ -16,9 +16,11 @@ export interface ViewOptions {
 
 /** What a task shows: its steps (do, then review), and why, examples and what good looks like. */
 export interface TaskModalView {
+  /** The job's id: a job without an output is marked done under it. */
+  readonly id: string;
   readonly steps: readonly TaskStep[];
-  /** The name this task hands on: its result is saved under it (`name_K` for chat K of a fan-out). */
-  readonly output: string;
+  /** The name this task hands on: its result is saved under it (`name_K` for chat K of a fan-out). Absent: a checkbox marks it done. */
+  readonly output?: string;
   /** The names earlier stages hand on: a slot with one of these ids takes a previous result. */
   readonly previous: readonly string[];
   readonly why: string;
@@ -33,6 +35,8 @@ export interface TaskModalView {
 export interface JobModalView {
   readonly id: string;
   readonly title: string;
+  /** The one-sentence goal of the do step (the stepper's title) and, when the job has a review, of the review. */
+  readonly goal: TaskDef['goal'];
   readonly task: TaskModalView;
 }
 
@@ -55,9 +59,10 @@ function taskView({ task }: Job, workflow: Workflow, at: { level: Level; stage: 
   const runtime: Runtime = level === 'technical' ? 'technical' : 'simple';
   const { example } = task.details;
   return {
+    id: task.id,
     steps: stepsOf(workflow.file, task, runtime),
     output: task.output,
-    previous: [...producersBefore(workflow.file, stageAt).keys()],
+    previous: [...producersFor(workflow.file, stageAt, task).keys()],
     why: task.details.why,
     examples: typeof example === 'string' ? [example] : example,
     goodLooksLike: task.details.goodLooksLike,
@@ -78,6 +83,7 @@ export function workflowView(workflow: Workflow, { level }: ViewOptions): Workfl
       jobs: stage.jobs.map((job) => ({
         id: job.id,
         title: job.title,
+        goal: job.task.goal,
         task: taskView(job, workflow, { level, stage: stageAt }),
       })),
     })),

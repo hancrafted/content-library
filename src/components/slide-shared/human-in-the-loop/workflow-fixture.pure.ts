@@ -12,6 +12,7 @@ const SECTION = { heading: 'Task', purpose: 'task', text: 'Do it.' } as const;
 export const TASK: TaskDef = {
   id: 'j',
   title: 'J',
+  goal: { do: 'Do J.', review: 'Check J.' },
   output: 'o',
   template: 't',
   slots: [],
