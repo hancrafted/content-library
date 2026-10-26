@@ -14,7 +14,7 @@ export const generateStaticParams = eventParams;
 export async function generateMetadata({ params }: EventParams) {
   const { event } = await params;
   if (!isEventSlug(event)) notFound();
-  return pageMetadata({ event }, DEFAULT_LOCALE, eventPageCopy(event, DEFAULT_LOCALE));
+  return pageMetadata({ kind: 'event', event }, DEFAULT_LOCALE, eventPageCopy(event, DEFAULT_LOCALE));
 }
 
 export default async function Page({ params }: EventParams) {

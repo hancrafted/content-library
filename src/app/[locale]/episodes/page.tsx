@@ -10,7 +10,7 @@ export const dynamicParams = false;
 export const generateStaticParams = prefixedLocaleParams;
 
 export async function generateMetadata({ params }: EpisodesParams) {
-  return pageMetadata('episodes', await resolveLocale(params));
+  return pageMetadata({ kind: 'episodes' }, await resolveLocale(params));
 }
 
 export default async function Page({ params }: EpisodesParams) {

@@ -119,7 +119,7 @@ describe('success cases', () => {
     const expectedCanonical = { en: `/episodes/${slug}`, de: `/de/episodes/${slug}` };
     // ACT
     const meta = (['en', 'de'] as const).map((locale) =>
-      pageMetadata({ episode: slug }, locale, findEpisode(slug).messages[locale]),
+      pageMetadata({ kind: 'episode', episode: slug }, locale, findEpisode(slug).messages[locale]),
     );
     // ASSERT
     expect({ en: meta[0].alternates?.canonical, de: meta[1].alternates?.canonical }).toEqual(expectedCanonical);

@@ -256,8 +256,8 @@ agents directly under a Job. A spawn description labels an agent when present.
 ## English-only route and metadata
 
 Han's approved FE-008 exception permits English-only operational pages:
-`PageRef` includes `dashboard`, and `pageLocales('dashboard')` contains only `en`.
-`pageMetadata('dashboard', 'en')` supplies `noindex`, an English canonical, and
+`PageRef` includes the `dashboard` kind, and `pageLocales({ kind: 'dashboard' })` contains only `en`.
+`pageMetadata({ kind: 'dashboard' }, 'en')` supplies `noindex`, an English canonical, and
 only `en` and `x-default` alternates. There is no `/de/dashboard` export.
 
 Dashboard navigation appears in the English header only. The dashboard's locale

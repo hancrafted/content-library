@@ -1,14 +1,6 @@
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
-import {
-  isEpisodePage,
-  isEventEpisodePage,
-  isEventPage,
-  isEventSlug,
-  type EpisodeSlug,
-  type EventSlug,
-  type PageRef,
-} from '@/lib/routes';
+import { isEventSlug, matchPage, type EpisodeSlug, type EventSlug, type PageRef } from '@/lib/routes';
 import { pageTreatment, type PageFacts } from '@/lib/visibility.pure';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { event as axelAgenticWorkflowEvent } from './events/2026-10-23-axel-agentic-workflow';
@@ -146,16 +138,25 @@ export function playlistOf(event: Event): Playlist {
  * that presents no record. An Episode or Event the records do not hold hands in nothing, so the page fails closed.
  */
 export function pageFactsIn(content: Content, page: PageRef): PageFacts {
-  if (isEpisodePage(page) || isEventEpisodePage(page)) {
-    const episode = content.episodes.find((entry) => entry.slug === page.episode);
+  const none = (): PageFacts => ({});
+  const episodeFacts = ({ episode: slug }: { readonly episode: EpisodeSlug }): PageFacts => {
+    const episode = content.episodes.find((entry) => entry.slug === slug);
     return episode === undefined ? {} : { visibility: episode.visibility, status: episode.status };
-  }
-  if (isEventPage(page)) {
-    const event = content.events.find((entry) => entry.slug === page.event);
-    const playlist = content.playlists.find((entry) => entry.id === event?.playlist);
-    return playlist === undefined ? {} : { visibility: playlist.visibility };
-  }
-  return {};
+  };
+  return matchPage(page, {
+    home: none,
+    dashboard: none,
+    episodes: none,
+    events: none,
+    episode: episodeFacts,
+    tooling: none,
+    event: ({ event: slug }) => {
+      const event = content.events.find((entry) => entry.slug === slug);
+      const playlist = content.playlists.find((entry) => entry.id === event?.playlist);
+      return playlist === undefined ? {} : { visibility: playlist.visibility };
+    },
+    'event-episode': episodeFacts,
+  });
 }
 
 /** What a page presents, for the visibility predicate: the sitemap, page metadata and static params all ask this. */
@@ -169,7 +170,7 @@ export function pageFacts(page: PageRef): PageFacts {
  */
 export function listedEventsIn(content: Content): readonly ServedEvent[] {
   return content.events.filter(isServed).filter((event) => {
-    const page = { event: event.slug };
+    const page = { kind: 'event', event: event.slug } as const;
     return pageTreatment(page, pageFactsIn(content, page)).listed;
   });
 }

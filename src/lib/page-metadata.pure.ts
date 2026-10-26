@@ -2,7 +2,16 @@ import type { Metadata } from 'next';
 import type { IsoDate } from '../content-store/schemas/fields';
 import { TRANSLATIONS } from '../i18n/translations';
 import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
-import { episodeRoute, isEpisodePage, isEventEpisodePage, pageLocales, routeOf, type PageRef } from './routes';
+import {
+  episodeRoute,
+  matchPage,
+  pageLocales,
+  routeOf,
+  type ListPage,
+  type PageKind,
+  type PageRef,
+  type RecordPage,
+} from './routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
 /** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
@@ -49,6 +58,18 @@ function canonicalRoute(page: PageRef, treatment: PageTreatment): string {
   return treatment.canonical === 'self' ? routeOf(page) : episodeRoute(treatment.canonical.episode);
 }
 
+/** Each kind of page's Open Graph type: an Episode's page, its own or under an Event, is an article. */
+const OPEN_GRAPH_TYPE: Readonly<Record<PageKind, 'article' | 'website'>> = {
+  home: 'website',
+  dashboard: 'website',
+  episodes: 'website',
+  events: 'website',
+  episode: 'article',
+  tooling: 'website',
+  event: 'website',
+  'event-episode': 'article',
+};
+
 /** Open Graph and Twitter cards: the page's own title and description, the fallback image, its locale and the others. */
 function socialCards(
   page: PageRef,
@@ -62,7 +83,7 @@ function socialCards(
     .map((each) => OG_LOCALES[each]);
   return {
     openGraph: {
-      type: isEpisodePage(page) || isEventEpisodePage(page) ? 'article' : 'website',
+      type: OPEN_GRAPH_TYPE[page.kind],
       ...words,
       url: canonical,
       siteName,
@@ -75,11 +96,23 @@ function socialCards(
   };
 }
 
-/** The copy of a page that has no record of its own: `meta.<page>` of the Translation file. */
-function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | 'description'> {
+/** The copy of a page: the copy its route hands in, else `meta.<kind>` of the Translation file for a page that presents no record. */
+function copyOf(page: PageRef, locale: Locale, copy: PageCopy | undefined): Pick<PageCopy, 'title' | 'description'> {
+  if (copy !== undefined) return copy;
   const { meta } = TRANSLATIONS[locale];
-  if (page === 'dashboard' || page === 'episodes' || page === 'events') return meta[page];
-  return meta.home;
+  const handedIn = ({ kind }: RecordPage) => {
+    throw new Error(`A ${kind} page presents a record: its route hands in its copy`);
+  };
+  return matchPage(page, {
+    home: () => meta.home,
+    dashboard: () => meta.dashboard,
+    episodes: () => meta.episodes,
+    events: () => meta.events,
+    episode: handedIn,
+    tooling: handedIn,
+    event: handedIn,
+    'event-episode': handedIn,
+  });
 }
 
 /**
@@ -91,13 +124,13 @@ function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | '
  * those into robots and canonical: a page whose canonical is elsewhere carries
  * no hreflang alternates of its own.
  */
-export function pageMetadata(page: 'home' | 'episodes' | 'events', locale: Locale): Metadata;
-export function pageMetadata(page: 'dashboard', locale: 'en'): Metadata;
-export function pageMetadata(page: Exclude<PageRef, string>, locale: Locale, copy: PageCopy): Metadata;
+export function pageMetadata(page: Exclude<ListPage, { kind: 'dashboard' }>, locale: Locale): Metadata;
+export function pageMetadata(page: { readonly kind: 'dashboard' }, locale: 'en'): Metadata;
+export function pageMetadata(page: RecordPage, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {
   const treatment = pageTreatment(page, copy?.facts ?? {});
   const canonical = localizePath(canonicalRoute(page, treatment), locale);
-  const { title, description } = copy ?? listPageCopy(page, locale);
+  const { title, description } = copyOf(page, locale, copy);
   return {
     title,
     description,

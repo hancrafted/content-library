@@ -1,12 +1,5 @@
 import type { Episode, EpisodeStatus } from '../content-store/schemas/episode.schema';
-import {
-  isEpisodePage,
-  isEventEpisodePage,
-  isEventPage,
-  isToolingPage,
-  type EpisodeSlug,
-  type PageRef,
-} from './routes';
+import { matchPage, type EpisodeSlug, type PageRef } from './routes';
 
 /*
  * The one visibility predicate (design-ADR 0016, Routes and visibility; FE-008): a page and the facts of what it
@@ -57,10 +50,23 @@ function eventEpisodeTreatment(episode: EpisodeSlug, facts: PageFacts): PageTrea
   return { exported: true, inSitemap: false, index: true, listed: false, canonical: { episode } };
 }
 
-/** A page's treatment, row by row of the visibility table. Missing facts never index a page that needs them. */
+/**
+ * A page's treatment, row by row of the visibility table, one case per page kind. Fails closed: missing facts never
+ * index a page that needs them, and a page of a kind no case names is never built, listed or indexed.
+ */
 export function pageTreatment(page: PageRef, facts: PageFacts): PageTreatment {
-  if (page === 'dashboard' || isToolingPage(page)) return HIDDEN;
-  if (isEventEpisodePage(page)) return eventEpisodeTreatment(page.episode, facts);
-  if (isEventPage(page)) return facts.visibility === 'public' ? LISTED : HIDDEN;
-  return isEpisodePage(page) ? episodeTreatment(facts) : LISTED;
+  return matchPage(
+    page,
+    {
+      home: () => LISTED,
+      dashboard: () => HIDDEN,
+      episodes: () => LISTED,
+      events: () => LISTED,
+      episode: () => episodeTreatment(facts),
+      tooling: () => HIDDEN,
+      event: () => (facts.visibility === 'public' ? LISTED : HIDDEN),
+      'event-episode': ({ episode }) => eventEpisodeTreatment(episode, facts),
+    },
+    () => ABSENT,
+  );
 }
