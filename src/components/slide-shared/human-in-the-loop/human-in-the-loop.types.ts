@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
 import type { ProgressActions, ProgressNote, TeachingProps } from './progress-controls.types';
 import type { ControlMap } from './toolbar-controls.pure';
-import type { StageRun } from './workflow-run.pure';
+import type { Run, StageRun } from './workflow-run.pure';
 import type { Level, View } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
@@ -20,13 +20,12 @@ export interface UiWords {
   readonly workflow: string;
   /** The Chat · CLI control: its group name, each segment's label and its tooltip. */
   readonly level: string;
-  /** The view control: its group name and tooltip, each view's label, and the tooltip of a view not built yet. */
+  /** The view control: its group name and tooltip, and each view's label. */
   readonly view: string;
   readonly viewTip: string;
   readonly viewPresentation: string;
   readonly viewDetailed: string;
   readonly viewHandson: string;
-  readonly viewSoon: string;
   /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
   readonly sendBack: string;
@@ -58,6 +57,7 @@ export interface UiWords {
   readonly resultPlaceholder: string;
   /** The checkbox label of a final job that hands nothing on. */
   readonly markDone: string;
+  readonly markChecked: string;
   readonly download: string;
   /** The note over the toolbar when saved progress is stale or could not be written, and its buttons. */
   readonly noteStale: string;
@@ -124,6 +124,9 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly newTab: string;
+  /** Hands-on marks: job not started, job with its result in. */
+  readonly stateOpen: string;
+  readonly stateDone: string;
 }
 
 /** A Slide's words, laid over the visual's labels key by key. A Workflow has no words to override: it is written in one language. */
@@ -186,6 +189,8 @@ export interface DiagramProps {
   readonly view: View;
   /** Rounds drawn per repeated stage, by stage id: the run model's count, else the teaching cap. */
   readonly rounds: Readonly<Record<string, number>>;
+  /** What the viewer has done, from the run model: the Hands-on view draws it, the other views ignore it. */
+  readonly run?: Run;
 }
 
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */

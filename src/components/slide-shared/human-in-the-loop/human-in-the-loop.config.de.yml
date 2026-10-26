@@ -7,8 +7,9 @@ ui:
   viewPresentation: Präsentation
   viewDetailed: Detailliert
   viewHandson: Praxis
-  viewSoon: 'Kommt bald'
   checked: geprüft
+  stateOpen: offen
+  stateDone: erledigt
   sendBack: zurückgeben
   repeats: '× jede Runde ({n})'
   tryJob: '{job} in {stage} öffnen'
@@ -33,6 +34,7 @@ ui:
   insertedAt: 'Wird im Prompt unter "{section}" eingefügt'
   resultHeading: Ergebnis
   markDone: Diesen Schritt als erledigt markieren
+  markChecked: Ich habe dieses Ergebnis geprüft
   resultPlaceholder: Ergebnis hier einfügen, um es für den nächsten Schritt zu speichern
   contextTip: 'Hilfe: zeigt, was in jedem Schritt zu tun ist'
   download: Diesen Ablauf herunterladen

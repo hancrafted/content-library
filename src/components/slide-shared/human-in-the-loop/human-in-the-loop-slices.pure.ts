@@ -99,23 +99,14 @@ export interface Slices {
 
 /** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
-  const { data, state, workflow } = shown;
-  const { words, readonly } = data;
+  const { state, workflow } = shown;
   const { file } = workflow;
   const run = runOf(file, { results: state.slotValues, teaching: state.teaching });
   const teachingProps = teachingPropsOf(shown, run.canChangeTeaching, on);
   const toolbar = toolbarOf(shown, on, teachingProps);
   return {
     toolbar,
-    diagram: {
-      workflow,
-      readonly,
-      onOpenStage: on.onOpenStage,
-      view: state.view,
-      rounds: roundsOf(workflow, run),
-      slots: data.diagram,
-      words,
-    },
+    diagram: diagramOf(shown, on, run),
     modal: modalOf(shown, on, { run, teaching: teachingProps }),
   };
 }
@@ -132,6 +123,19 @@ function teachingPropsOf({ data, state, progress }: Shown, canChange: boolean, o
   };
   const onDownloadRun = progress?.onDownload ?? (() => undefined);
   return { teaching, onTeaching: on.onTeaching, onReset: on.onReset, onDownloadRun };
+}
+
+function diagramOf({ data, state, workflow }: Shown, on: Callbacks, run: Run): DiagramProps {
+  return {
+    workflow,
+    readonly: data.readonly,
+    onOpenStage: on.onOpenStage,
+    view: state.view,
+    rounds: roundsOf(workflow, run),
+    run,
+    slots: data.diagram,
+    words: data.words,
+  };
 }
 
 function toolbarOf(

@@ -6,7 +6,6 @@ const words = {
   viewPresentation: 'Presentation',
   viewDetailed: 'Detailed',
   viewHandson: 'Hands-on',
-  viewSoon: 'Coming soon',
 } as UiWords;
 
 describe('success cases', () => {
@@ -22,22 +21,22 @@ describe('success cases', () => {
     ]);
   });
 
-  it('enables Presentation and Detailed, the views built so far', () => {
+  it('offers Hands-on as a view the viewer can pick, like the other two', () => {
     // ARRANGE
     // ACT
-    const enabled = viewOptions(words).filter((option) => option.enabled);
+    const handson = viewOptions(words).find(({ view }) => view === 'handson');
     // ASSERT
-    expect(enabled.map(({ view }) => view)).toEqual(['presentation', 'detailed']);
+    expect(handson).toEqual({ view: 'handson', label: 'Hands-on' });
   });
 });
 
 describe('failure cases', () => {
-  it('says "Coming soon" on the view that is not built yet, and nothing on the ones that are', () => {
+  it('labels every view with its own word, so no segment is left blank', () => {
     // ARRANGE
     // ACT
-    const tips = viewOptions(words).map(({ tip }) => tip);
+    const labels = viewOptions(words).map(({ label }) => label);
     // ASSERT
-    expect(tips).toEqual([undefined, undefined, 'Coming soon']);
+    expect(labels.every((label) => label.length > 0)).toBe(true);
   });
 });
 

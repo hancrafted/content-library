@@ -161,13 +161,4 @@ describe('edge cases', () => {
     // ASSERT
     expect(label).toBe('W');
   });
-
-  it('draws the Presentation cards for a view that is not built yet, so the diagram never goes blank', () => {
-    // ARRANGE
-    const $ = render({ view: 'handson' });
-    // ACT
-    const cards = $('[data-stage-card]').length;
-    // ASSERT
-    expect(cards).toBeGreaterThan(0);
-  });
 });

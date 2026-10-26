@@ -3,6 +3,7 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { CopyButton, PromptActions } from '../core-components/try-prompt/prompt-actions.client';
 import { joinPrompt, type PromptParts } from '../core-components/try-prompt/prompt-sections.pure';
+import { CheckedBox } from './checked-box.client';
 import { contextEntries } from './context-entries.pure';
 import { ContextField } from './context-field.client';
 import { Context } from './step-context.client';
@@ -28,6 +29,8 @@ export interface PanelProps {
   readonly slots: SlotState;
   /** The number of this panel's first step: a review continues after the do steps. */
   readonly first: number;
+  /** The key a review's "I checked this result" is written to; only a review step shows the box. */
+  readonly checkedAs?: string;
 }
 
 /** Where a do step saves its result: the task's output, or `output_K` for chat K of a fan-out. */
@@ -66,24 +69,9 @@ function Actions({ step, kit, slots }: { step: Step; kit: StepKit; slots: SlotSt
   );
 }
 
-/** A job that hands nothing on is done when the viewer ticks it, not when a result is pasted. */
-function DoneBox({ name, kit, slots }: { name: string; kit: StepKit; slots: SlotState }) {
-  return (
-    <label className="flex cursor-pointer items-center gap-2 text-body">
-      <input
-        type="checkbox"
-        className="size-4 accent-primary"
-        checked={Boolean(slots.values[name])}
-        onChange={(event) => slots.onChange({ ...slots.values, [name]: event.target.checked ? 'done' : '' })}
-      />
-      {kit.words.markDone}
-    </label>
-  );
-}
-
 function Result({ name, kit, slots, final }: { name: string; kit: StepKit; slots: SlotState; final: boolean }) {
   const { words } = kit;
-  if (final) return <DoneBox {...{ name, kit, slots }} />;
+  if (final) return <CheckedBox name={name} label={words.markDone} slots={slots} mark="done" />;
   return (
     <ContextField
       field={name}
@@ -123,7 +111,7 @@ function DoSteps({ step, task, kit, slots, first }: PanelProps) {
 }
 
 export function StepPanel(props: PanelProps) {
-  const { step, kind, kit, slots, first } = props;
+  const { step, kind, kit, slots, first, checkedAs } = props;
   return (
     <div className="flex flex-col gap-4" data-step-panel={kind}>
       {kind === 'do' ? (
@@ -131,6 +119,7 @@ export function StepPanel(props: PanelProps) {
       ) : (
         <StepSection n={first} title={kit.words.stepCheck} info={kit.words.stepCheckInfo} kit={kit}>
           <Actions step={step} kit={kit} slots={slots} />
+          {checkedAs && <CheckedBox name={checkedAs} label={kit.words.markChecked} slots={slots} />}
         </StepSection>
       )}
     </div>

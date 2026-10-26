@@ -201,7 +201,7 @@ test.describe('success cases', () => {
     await expect(root).not.toContainText(/Watch|Try it yourself/);
   });
 
-  test('opens in the Presentation view: a card per stage, Hands-on disabled, and nothing sideways on a phone', async ({
+  test('opens in the Presentation view: a card per stage, all three views offered, and nothing sideways on a phone', async ({
     page,
   }) => {
     // ARRANGE
@@ -216,7 +216,7 @@ test.describe('success cases', () => {
     await expect(root).toHaveAttribute('data-view', 'presentation');
     await expect(root.locator('[data-stage-card]')).toHaveCount(stages - repeated);
     await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
-    await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Hands-on']);
+    await expect(view.locator('[data-view-option]')).toHaveText(['Presentation', 'Detailed', 'Hands-on']);
     expect(await sideways()).toBeLessThanOrEqual(0);
   });
 
@@ -240,6 +240,31 @@ test.describe('success cases', () => {
     await expect(modal).toHaveAttribute('data-stage', 'execute');
     await page.keyboard.press('Escape');
     await expect(card).toBeFocused();
+  });
+
+  test('pasting a result in the popover updates the Hands-on view: the job is done, then checked, and the rounds take the pasted titles, capped by teaching', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# Plan\n## Epics\n### Payments\nA.\n### Search\nB.\n### Reports\nC.';
+    const taught = ['Payments', 'Search'];
+    const { root, modal } = await open(page, 'light');
+    await root.locator('[data-view-option="handson"]').click();
+    const epics = root.locator('[data-job-card="epics"] [data-state]');
+    const titles = root.locator('[data-bracket]').first().locator('[data-round-title]');
+    // ACT
+    await expect(root).toHaveAttribute('data-view', 'handson');
+    await expect(epics).toHaveAttribute('data-state', 'open');
+    await root.locator('button[data-try-job="epics"]').click();
+    await field(modal, 'plan').fill(pasted);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    // ASSERT
+    await expect(epics).toHaveAttribute('data-state', 'done');
+    await expect(titles).toHaveText(taught);
+    await root.locator('button[data-try-job="epics"]').click();
+    await modal.getByLabel('I checked this result').check();
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await expect(epics).toHaveAttribute('data-state', 'checked');
   });
 
   test('opens a stage as a stepper: the stage title, the first job open, its prompt copied with no marker left', async ({

@@ -3,7 +3,7 @@ import { itemsOf, openItemOf } from './stepper-items.pure';
 import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
-import { resultKey, runOf } from './workflow-run.pure';
+import { checkedKey, resultKey, runOf } from './workflow-run.pure';
 import { workflowView } from './workflow-view.pure';
 
 const loaded = loadWorkflow(vacationEn);
@@ -44,6 +44,16 @@ describe('success cases', () => {
     expect(text).toContain('### 2. Small hotel');
   });
 
+  it('names, for each round, the key its checked mark is written to, so the run model reads it back', () => {
+    // ARRANGE
+    const items = itemsFor('simple', {});
+    const rounds = [1, 2, 3];
+    // ACT
+    const marks = items.map((item) => item.checkedAs);
+    // ASSERT
+    expect(marks).toEqual(rounds.map((round) => checkedKey(RESEARCH, 'venue', round)));
+  });
+
   it('opens the item of the job whose card was pressed, the first round of a repeated one', () => {
     // ARRANGE
     const items = itemsFor('simple', {});
@@ -55,6 +65,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('keeps no round on the mark of a job whose stage does not repeat, and takes it from the stage and job', () => {
+    // ARRANGE
+    const items = itemsFor('technical', {});
+    // ACT
+    const marks = items.map((item) => item.checkedAs);
+    // ASSERT
+    expect(marks).toEqual([checkedKey(RESEARCH, 'venue')]);
+  });
+
   it('opens the first item for no job and for a job the stage does not hold', () => {
     // ARRANGE
     const items = itemsFor('simple', {});
