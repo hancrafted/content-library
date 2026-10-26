@@ -7,8 +7,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { SPEC_FILE } from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
-import { buildDesignCss } from './spec-css.ts';
-import { startSpecServer, type SpecServer } from './spec-server.ts';
+import { buildDesignCss } from '../../../src/pipeline/lib/spec-css.ts';
+import { startSpecServer, type SpecServer } from '../../../src/pipeline/lib/spec-server.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const FIRST_PORT = 4000;

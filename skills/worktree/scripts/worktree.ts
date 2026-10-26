@@ -4,7 +4,7 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
-import { stopServers } from '../../new-episode/scripts/servers.ts';
+import { stopServers } from '../../../src/pipeline/lib/servers.ts';
 import { parseArgs } from './worktree-args.pure.ts';
 import { mergeIntoBase } from './worktree-merge.ts';
 import { describeProc, killable, lineage, parseLsof, planSync, type Proc } from './worktree-process.pure.ts';

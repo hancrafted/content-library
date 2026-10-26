@@ -1,12 +1,12 @@
 // What every run command shares: the context it reads from outside, the current Run's view read fresh from the log,
 // the one place a line is written and the marker pointed, and resuming a Run in a new session. Real disk;
 // run-commands.ts is the caller.
-import { episodeLogPath, readEpisodeLog, readMarker } from '../../../src/pipeline/lib/episode-run-log.ts';
-import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
-import { type LogEvent, type RunLogLine, type Span } from '../../../src/pipeline/lib/run-log.pure.ts';
-import { hasEnded, openSpan } from '../../../src/pipeline/lib/run-spans.pure.ts';
+import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { refuse, type Opts, type Params } from './run-args.pure.ts';
+import { appendEvent } from './run-log-writer.ts';
+import { type LogEvent, type RunLogLine, type Span } from './run-log.pure.ts';
 import { pointMarker, type MarkerHome } from './run-marker.ts';
+import { hasEnded, openSpan } from './run-spans.pure.ts';
 import type { ServerHost } from './servers.ts';
 
 /** What a command reads from outside; each defaults to the real thing. */

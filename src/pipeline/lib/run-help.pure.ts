@@ -1,4 +1,4 @@
-// The help text of `npm run episode:run`: printed by run.ts and on any command run-commands.ts cannot read.
+// The help text of `npm run episode:run`: printed by the skill's run.ts and on any command run-commands.ts cannot read.
 export const USAGE = `usage: npm run episode:run -- <slug> <command> ...
   begin-run --model <model> [--harness <h>]        open the Run and the marker (refused while a Run is open);
                                                    writes the draft pipeline.yml and starts the dashboard and Spec servers

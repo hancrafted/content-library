@@ -82,11 +82,12 @@ describe('success cases', () => {
     // ARRANGE
     const { base } = await serve();
     const expectedType = 'text/html; charset=utf-8';
+    const ok = 200;
     // ACT
     const response = await fetch(`${base}/`);
     const body = await response.text();
     // ASSERT
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(ok);
     expect(response.headers.get('content-type')).toBe(expectedType);
     expect(body).toContain('<title>Spec · Budget</title>');
   });
@@ -185,11 +186,12 @@ describe('success cases', () => {
       '- `why--quiet` · design — picked: none — None fit: try a heat strip.',
       '',
     ].join('\n');
+    const seeOther = 303;
     // ACT
     const response = await post(base, fields);
     const saved = readFileSync(path.join(folder, 'feedback/02/feedback.md'), 'utf8');
     // ASSERT
-    expect(response.status).toBe(303);
+    expect(response.status).toBe(seeOther);
     expect(response.headers.get('location')).toBe(expectedLocation);
     expect(saved).toBe(expectedText);
   });
