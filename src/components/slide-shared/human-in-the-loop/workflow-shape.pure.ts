@@ -57,7 +57,7 @@ const stage = obj(
     move: enumOf(['B', 'R', 'I', 'E', 'F']),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),
-    tasks: list(task, 1),
+    jobs: list(task, 1),
   },
   ['move', 'gate', 'card'],
 );

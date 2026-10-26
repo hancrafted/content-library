@@ -38,7 +38,7 @@ Every handoff is markdown: one H1, then H2 sections, and no front matter. A chat
 
 ## Stage and task fields
 
-Stage: `id`, `title`, `learningGoal` (one line under the popover title), `tasks` (at least one), and optional `move` (`B`, `R`, `I`, `E` or `F`, the BRIEF letter; a stage teaches one move or none), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
+Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `move` (`B`, `R`, `I`, `E` or `F`, the BRIEF letter; a stage teaches one move or none), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
 
 Task: `id`, `title`, `output`, `template`, `slots` (may be empty), `do`, `details`, and optional `fanOut`, `instructions`, `review`.
 
@@ -162,7 +162,7 @@ stages:
     title: Write
     learningGoal: 'Break it down: one small piece, written in a fresh chat.'
     move: B
-    tasks:
+    jobs:
       - id: greet
         title: Greeting
         output: greeting
@@ -225,7 +225,7 @@ stages:
 `loadWorkflow` returns every problem at once, one sentence each; the shape problems come first and stop the meaning checks.
 
 - The text is not YAML: "The file is not valid YAML."
-- Shape, with a path such as `stages[0].tasks[1].do.simple`: `<path> is missing.`; `<path> is not a field of the schema.`; `<path> must be a mapping.` / `a list.`; `<path> needs at least N entries.`; `<path> must be text` (non-empty), `a whole number of at least 1`, `true or false`, or `text or a list of texts`; `<path> is "x", which is not one of ...` (a `purpose`, `tier`, `mode`, `move`); `purposes` lacking one of its six keys or holding another.
+- Shape, with a path such as `stages[0].jobs[1].do.simple`: `<path> is missing.`; `<path> is not a field of the schema.`; `<path> must be a mapping.` / `a list.`; `<path> needs at least N entries.`; `<path> must be text` (non-empty), `a whole number of at least 1`, `true or false`, or `text or a list of texts`; `<path> is "x", which is not one of ...` (a `purpose`, `tier`, `mode`, `move`); `purposes` lacking one of its six keys or holding another.
 - Templates: front matter; no H1; a `{{marker}}` inside.
 - Ids: a stage, task or technique id used twice; an output handed on by two tasks; a slot id twice in one task; a `fanOut` below 2.
 - Slots: names no output of an earlier stage (and is not `free`); takes all chats of a fan-out but is `single`; is `multiple` but its output is no fan-out; a non-free do slot with no sample; a `multiple` slot with a lone sample or a `single` slot with a list; a list whose length differs from the markers; a review slot id that clashes with another id.
