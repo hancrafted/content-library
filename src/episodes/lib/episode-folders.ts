@@ -1,14 +1,15 @@
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import {
-  episodeFolderOf,
-  episodeIdOf,
-  episodeRefOf,
+  episodeRef,
   EVENT_COPIES_FOLDER,
+  folderOf,
   RESERVED_FOLDER_NAMES,
   SLIDE_POOL_FOLDER,
   TOOLING_FOLDER,
+  toolingRef,
   type EpisodeRef,
+  type ToolingRef,
 } from '../../content-store/catalogue/episode-id.pure.ts';
 
 /*
@@ -25,15 +26,12 @@ export const EPISODES_DIR = 'src/episodes';
 /** The file that makes a page folder an Episode: its metadata record. */
 export const METADATA_FILE = 'episode-metadata.ts';
 
-/** The folder the tooling pages sit in, `tooling/<slug>/`, passed on for tools, which reach `src/` only through an area's `lib/`. */
-export { TOOLING_FOLDER };
-
-/** A tooling page, which is no Episode: named by its slug, which is also its id. */
-interface ToolingRef {
-  readonly kind: 'tooling';
-  readonly id: string;
-  readonly slug: string;
-}
+/**
+ * Passed on for tools and Episode tests, which reach the content store's catalogue only through an area's `lib/`: the
+ * folder the tooling pages sit in, `tooling/<slug>/`, and `episodeRef`, which names the Episode in a folder, `<slug>/` or
+ * `by-event/<event>/<slug>/`, so a test never writes an Episode id out by hand.
+ */
+export { episodeRef, TOOLING_FOLDER };
 
 /** One page folder: the Episode it holds, as code passes an Episode, or a tooling page; where it sits; what it holds. */
 export type PageFolder = (EpisodeRef | ToolingRef) & {
@@ -53,12 +51,9 @@ function subfolders(dir: string): string[] {
     .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 }
 
-function pageFolder(episodesDir: string, slug: string, event?: string): PageFolder {
-  const episode = episodeRefOf(episodeIdOf(slug, event));
-  return atFolder(episodesDir, episodeFolderOf(episode), episode);
-}
-
-function atFolder(episodesDir: string, folder: string, page: EpisodeRef | ToolingRef): PageFolder {
+/** The page folder of an Episode, a tooling page's, at the folder its ref names (`folderOf`). */
+function atFolder(episodesDir: string, page: EpisodeRef | ToolingRef): PageFolder {
+  const folder = folderOf(page);
   const dir = path.join(episodesDir, folder);
   return { ...page, folder, dir, files: readdirSync(dir) };
 }
@@ -66,9 +61,7 @@ function atFolder(episodesDir: string, folder: string, page: EpisodeRef | Toolin
 /** Every tooling page folder, `tooling/<slug>/`, in slug order: its id is its slug, and it holds no Episode metadata. */
 export function toolingFolders(root: string): PageFolder[] {
   const episodesDir = path.join(root, EPISODES_DIR);
-  return subfolders(path.join(episodesDir, TOOLING_FOLDER)).map((slug) =>
-    atFolder(episodesDir, `${TOOLING_FOLDER}/${slug}`, { kind: 'tooling', id: slug, slug }),
-  );
+  return subfolders(path.join(episodesDir, TOOLING_FOLDER)).map((slug) => atFolder(episodesDir, toolingRef(slug)));
 }
 
 /**
@@ -79,9 +72,11 @@ export function pageFolders(root: string): PageFolder[] {
   const episodesDir = path.join(root, EPISODES_DIR);
   const own = subfolders(episodesDir)
     .filter((name) => !RESERVED_FOLDER_NAMES.includes(name))
-    .map((slug) => pageFolder(episodesDir, slug));
+    .map((slug) => atFolder(episodesDir, episodeRef(slug)));
   const copies = subfolders(path.join(episodesDir, EVENT_COPIES_FOLDER)).flatMap((event) =>
-    subfolders(path.join(episodesDir, EVENT_COPIES_FOLDER, event)).map((slug) => pageFolder(episodesDir, slug, event)),
+    subfolders(path.join(episodesDir, EVENT_COPIES_FOLDER, event)).map((slug) =>
+      atFolder(episodesDir, episodeRef(slug, event)),
+    ),
   );
   return [...own, ...copies, ...toolingFolders(root)];
 }

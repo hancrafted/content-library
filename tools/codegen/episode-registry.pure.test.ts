@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { episodeRef } from '../../src/episodes/lib/episode-folders.ts';
 import { episodeRegistryFiles, REGISTRY_PATHS, type EpisodeFolder } from './episode-registry.pure.ts';
 
 const WITH_PAGE: EpisodeFolder = {
@@ -8,8 +9,10 @@ const WITH_PAGE: EpisodeFolder = {
   episodeSource:
     "import { episode } from '@/episodes/components/slide-master/slide';\n\nexport const aiTokenEconomy = episode({\n",
 };
+/** The id the registry keys an Event's copy by, as its folder `by-event/2026-10-23-axel/ai-token-economy/` gives it. */
+const COPY_ID = episodeRef('ai-token-economy', '2026-10-23-axel').id;
 const COPY: EpisodeFolder = {
-  id: '2026-10-23-axel__ai-token-economy',
+  id: COPY_ID,
   folder: 'by-event/2026-10-23-axel/ai-token-economy',
   files: ['episode-metadata.ts', 'episode.ts', 'i18n', 'slides'],
   // An Event's `cp -r` copy, under its Event, whose export kept its source's name.
@@ -44,7 +47,7 @@ describe('success cases', () => {
 
   it('lists every Episode folder holding a record and metadata by its Episode id, in id order', () => {
     // ARRANGE
-    const expected = "export const EPISODE_IDS = ['2026-10-23-axel__ai-token-economy', 'ai-token-economy'] as const;";
+    const expected = `export const EPISODE_IDS = ['${COPY_ID}', 'ai-token-economy'] as const;`;
     // ACT
     const slugs = fileAt([COPY, WITH_PAGE], REGISTRY_PATHS.ids);
     // ASSERT
@@ -57,7 +60,7 @@ describe('success cases', () => {
       "import { episodeMetadata as aiTokenEconomy } from '@/episodes/ai-token-economy/episode-metadata';",
       "import { episodeMetadata as _20261023Axel__aiTokenEconomy } from '@/episodes/by-event/2026-10-23-axel/ai-token-economy/episode-metadata';",
       "  'ai-token-economy': aiTokenEconomy,",
-      "  '2026-10-23-axel__ai-token-economy': _20261023Axel__aiTokenEconomy,",
+      `  '${COPY_ID}': _20261023Axel__aiTokenEconomy,`,
     ];
     // ACT
     const metadata = fileAt([WITH_PAGE, COPY], REGISTRY_PATHS.metadata);
@@ -70,7 +73,7 @@ describe('success cases', () => {
     const expected = [
       "import { aiTokenEconomy } from '@/episodes/ai-token-economy/episode';",
       "import { aiTokenEconomy as _20261023Axel__aiTokenEconomy } from '@/episodes/by-event/2026-10-23-axel/ai-token-economy/episode';",
-      "  '2026-10-23-axel__ai-token-economy': _20261023Axel__aiTokenEconomy,",
+      `  '${COPY_ID}': _20261023Axel__aiTokenEconomy,`,
     ];
     // ACT
     const compositions = fileAt([WITH_PAGE, COPY], REGISTRY_PATHS.compositions);

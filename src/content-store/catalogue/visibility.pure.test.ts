@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { episodeRef } from './episode-id.pure';
 import type { PageRef } from './record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
@@ -19,12 +20,13 @@ const ANNOUNCED: PageTreatment = { exported: true, inSitemap: false, index: fals
 const PUBLISHED_PUBLIC: PageFacts = { visibility: 'public', status: 'published' };
 const PUBLISHED_UNLISTED: PageFacts = { visibility: 'unlisted', status: 'published' };
 
-const EPISODE_PAGE: PageRef = { kind: 'episode', episode: 'ai-attention-span' };
+const EPISODE_PAGE: PageRef = { kind: 'episode', episode: episodeRef('ai-attention-span') };
 const EVENT_PAGE: PageRef = { kind: 'event', event: EVENT };
-const EVENT_EPISODE_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: 'ai-attention-span' };
+const EVENT_EPISODE_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: episodeRef('ai-attention-span') };
 /** The AXEL seminar's own copy, in its folder `by-event/<event>/ai-attention-span/`. */
-const COPY_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: `${EVENT}__ai-attention-span` };
-const COPY_OWN_PAGE: PageRef = { kind: 'episode', episode: `${EVENT}__ai-attention-span` };
+const COPY = episodeRef('ai-attention-span', EVENT);
+const COPY_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: COPY };
+const COPY_OWN_PAGE: PageRef = { kind: 'episode', episode: COPY };
 /** Indexed and in the sitemap at its Event-scoped URL, canonical to itself, never on the site's own lists. */
 const SELF_INDEXED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: false, canonical: 'self' };
 

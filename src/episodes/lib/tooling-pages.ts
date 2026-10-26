@@ -1,11 +1,4 @@
-import {
-  episodesPathPage,
-  isEpisodesPathSlug,
-  isToolingSlug,
-  matchPage,
-  type EpisodesPathPage,
-  type ToolingSlug,
-} from '@/content-store/catalogue/record-routes';
+import { isToolingSlug, type ToolingSlug } from '@/content-store/catalogue/record-routes';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { notFound } from 'next/navigation';
 import { TOOLING_PAGES } from './episode-registry.generated';
@@ -22,16 +15,7 @@ export function findToolingPage(slug: string): EpisodeComposition<ToolingSlug> {
   return TOOLING_PAGES[slug];
 }
 
-/** The page a slug under `/episodes/<slug>/` names: a tooling page, or an Episode's own; any other slug is no page. */
-export function findEpisodesPathPage(slug: string): EpisodesPathPage {
-  if (!isEpisodesPathSlug(slug)) notFound();
-  return episodesPathPage(slug);
-}
-
-/** The Slides a page under `/episodes/<slug>/` renders: a tooling page's, else the Episode's from the registry. */
+/** The Slides a page renders, by its Episode id or tooling page's slug: a tooling page's, else the Episode's. */
 export function findPageRecord(slug: string): EpisodeComposition {
-  return matchPage<EpisodesPathPage, EpisodeComposition>(findEpisodesPathPage(slug), {
-    tooling: ({ tooling }) => TOOLING_PAGES[tooling],
-    episode: ({ episode }) => findEpisode(episode),
-  });
+  return isToolingSlug(slug) ? TOOLING_PAGES[slug] : findEpisode(slug);
 }

@@ -1,6 +1,6 @@
-import { episodeRefOf, matchEpisode } from '@/content-store/catalogue/episode-id.pure';
+import { matchEpisode } from '@/content-store/catalogue/episode-id.pure';
 import {
-  isEpisodeId,
+  hasPage,
   matchPage,
   TOOLING_SLUGS,
   type EpisodeId,
@@ -53,16 +53,16 @@ export interface PageCatalogue {
 const NO_FACTS: PageFacts = {};
 
 /** What an Episode presents, as the predicate reads it: its visibility, its status, and whether it is an Event's copy. */
-function episodeFactsOf({ id, visibility, status }: LoadedEpisode): PageFacts {
-  const copy = matchEpisode(episodeRefOf(id), { standalone: () => false, 'event-copy': () => true });
+function episodeFactsOf({ ref, visibility, status }: LoadedEpisode): PageFacts {
+  const copy = matchEpisode(ref, { standalone: () => false, 'event-copy': () => true });
   return { visibility, status, ...(copy && { copy }) };
 }
 
 /** What a page presents, as the predicate reads it; an Episode or Event the records do not hold hands in nothing. */
 function factsIn(content: Content, page: PageRef): PageFacts {
   const none = () => NO_FACTS;
-  const episodeFacts = ({ episode: id }: { readonly episode: EpisodeId }): PageFacts => {
-    const episode = content.episodes.find((entry) => entry.id === id);
+  const episodeFacts = ({ episode: { id } }: { readonly episode: { readonly id: EpisodeId } }): PageFacts => {
+    const episode = content.episodes.find(({ ref }) => ref.id === id);
     return episode === undefined ? NO_FACTS : episodeFactsOf(episode);
   };
   return matchPage(page, {
@@ -81,10 +81,10 @@ function factsIn(content: Content, page: PageRef): PageFacts {
 }
 
 /** The page an Episode has at `/episodes/<slug>/`: one no Event owns, with a page; an Event's copy has none there. */
-function ownPageOf({ id }: LoadedEpisode): PageRef[] {
-  if (!isEpisodeId(id)) return [];
-  return matchEpisode(episodeRefOf(id), {
-    standalone: () => [{ kind: 'episode', episode: id }],
+function ownPageOf({ ref }: LoadedEpisode): PageRef[] {
+  if (!hasPage(ref)) return [];
+  return matchEpisode(ref, {
+    standalone: () => [{ kind: 'episode', episode: ref }],
     'event-copy': () => [],
   });
 }
@@ -117,13 +117,13 @@ export function catalogueOf(content: Content): PageCatalogue {
     treatmentOf,
     episodesPathParams: () =>
       built.flatMap((page): { episode: EpisodesPathSlug }[] => {
-        if (page.kind === 'episode') return [{ episode: page.episode }];
+        if (page.kind === 'episode') return [{ episode: page.episode.id }];
         return page.kind === 'tooling' ? [{ episode: page.tooling }] : [];
       }),
     eventParams: () => built.flatMap((page) => (page.kind === 'event' ? [{ event: page.event }] : [])),
     eventEpisodeParams: () =>
       built.flatMap((page) =>
-        page.kind === 'event-episode' ? [{ event: page.event, episode: episodeRefOf(page.episode).slug }] : [],
+        page.kind === 'event-episode' ? [{ event: page.event, episode: page.episode.slug }] : [],
       ),
     listedEpisodes: () => content.episodes.filter((episode) => episodePageTreatment(episodeFactsOf(episode)).listed),
     listedEvents: () => content.events.filter(({ slug }) => treatmentOf({ kind: 'event', event: slug }).listed),

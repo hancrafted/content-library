@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeFolders, pageFolders, slideFolders, toolingFolders } from './episode-folders';
+import { episodeFolders, episodeRef, pageFolders, slideFolders, toolingFolders } from './episode-folders';
 
 /*
  * The one folder walker (design-ADR 0016 decision 3): every Episode, standalone and Event copy alike, and every tooling
@@ -98,7 +98,7 @@ describe('failure cases', () => {
   it('never takes the reserved by-event folder for an Episode or a tooling page', () => {
     // ARRANGE
     const root = tree(['alpha/episode-metadata.ts', 'by-event/2026-01-01-x/beta/episode-metadata.ts']);
-    const expected = ['alpha', '2026-01-01-x__beta'];
+    const expected = ['alpha', episodeRef('beta', '2026-01-01-x').id];
     // ACT
     const ids = pageFolders(root).map(({ id }) => id);
     // ASSERT

@@ -1,5 +1,6 @@
-import { episodeRefOf, matchEpisode } from '@/content-store/catalogue/episode-id.pure';
-import { EPISODE_IDS, type EpisodeId } from '@/content-store/catalogue/record-routes';
+import { matchEpisode, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, type EpisodeId } from '@/content-store/catalogue/record-routes';
+import { listEpisodes } from '@/content-store/store';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { describe, expect, it } from 'vitest';
 import { episodePageCopy, episodesPathPageOf, eventEpisodePageOf, type EpisodePageRef } from './episode-page';
@@ -10,27 +11,42 @@ import { episodePageCopy, episodesPathPageOf, eventEpisodePageOf, type EpisodePa
  * `pageMetadata` each page's own words in both locales.
  */
 
+/** Every Episode with a page, by the EpisodeRef the store serves it with. */
+const EPISODES: readonly EpisodeRef<EpisodeId>[] = listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : []));
+
 /** The page an Episode is served at, resolved as its route binds it: from the URL's params. */
-function servedPageOf(id: EpisodeId): EpisodePageRef {
-  return matchEpisode<EpisodeId, EpisodePageRef>(episodeRefOf(id), {
+function servedPageOf(episode: EpisodeRef<EpisodeId>): EpisodePageRef {
+  return matchEpisode<EpisodeId, EpisodePageRef>(episode, {
     standalone: ({ slug }) => episodesPathPageOf(slug),
     'event-copy': ({ event, slug }) => eventEpisodePageOf(event, slug),
   });
 }
 
-describe('success cases', () => {
-  it.each(EPISODE_IDS)('produces page metadata for %s in en and de where it is served, canonical per locale', (id) => {
-    // ARRANGE
-    const [event, slug] = id.includes('__') ? id.split('__') : [undefined, id];
-    const path = event === undefined ? `/episodes/${slug}` : `/events/${event}/episodes/${slug}`;
-    const expectedCanonical = { en: path, de: `/de${path}` };
-    // ACT
-    const page = servedPageOf(id);
-    const [en, de] = (['en', 'de'] as const).map((locale) => pageMetadata(page, locale, episodePageCopy(page, locale)));
-    // ASSERT
-    expect({ en: en.alternates?.canonical, de: de.alternates?.canonical }).toEqual(expectedCanonical);
-    expect([en.title, de.title]).not.toContain('');
+/** The logical path an Episode is served at: under `/episodes/`, or an Event's copy under its Event. */
+function servedPathOf(episode: EpisodeRef<EpisodeId>): string {
+  return matchEpisode(episode, {
+    standalone: ({ slug }) => `/episodes/${slug}`,
+    'event-copy': ({ event, slug }) => `/events/${event}/episodes/${slug}`,
   });
+}
+
+describe('success cases', () => {
+  it.each(EPISODES)(
+    'produces page metadata for $id in en and de where it is served, canonical per locale',
+    (episode) => {
+      // ARRANGE
+      const path = servedPathOf(episode);
+      const expectedCanonical = { en: path, de: `/de${path}` };
+      // ACT
+      const page = servedPageOf(episode);
+      const [en, de] = (['en', 'de'] as const).map((locale) =>
+        pageMetadata(page, locale, episodePageCopy(page, locale)),
+      );
+      // ASSERT
+      expect({ en: en.alternates?.canonical, de: de.alternates?.canonical }).toEqual(expectedCanonical);
+      expect([en.title, de.title]).not.toContain('');
+    },
+  );
 
   it("titles an Event's copy with its own words, under its Event", () => {
     // ARRANGE
@@ -80,7 +96,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it("finds no page under /episodes/ for an Event's copy", () => {
     // ARRANGE
-    const copy = EPISODE_IDS.find((id) => id.includes('__'));
+    const copy = EPISODES.find(({ kind }) => kind === 'event-copy')?.id;
     // ACT
     const resolve = () => episodesPathPageOf(copy ?? '');
     // ASSERT

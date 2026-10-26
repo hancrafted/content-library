@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import { episodeRef } from './catalogue/episode-id.pure';
 import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
  * throws a sentence naming its kind, slug and field. Fixtures are raw records, as a record file would hold them; an
- * Episode enters with the id its folder gives it, as the generated Episode registry hands it in.
+ * Episode enters with the id its folder gives it, as the generated Episode registry hands it in, and is served with its
+ * EpisodeRef, the id parsed once.
  */
 
 const AXEL = '2026-10-23-axel-agentic-workflow';
@@ -18,7 +20,7 @@ const EPISODE = {
 } as const;
 /** The AXEL seminar's unlisted copy of alpha, in its Event's folder `by-event/<event>/alpha/`. */
 const UNLISTED = { ...EPISODE, visibility: 'unlisted' } as const;
-const COPY_ID = `${AXEL}__alpha`;
+const COPY_ID = episodeRef('alpha', AXEL).id;
 const PLAYLIST = { id: 'axel', visibility: 'public', episodes: ['alpha'] } as const;
 const EVENT = {
   slug: AXEL,
@@ -44,16 +46,16 @@ function without<T extends object>(record: T, key: keyof T): Partial<T> {
 function own(record: Readonly<Record<string, unknown>>, id = String(record.slug)): { id: string; record: unknown } {
   return { id, record };
 }
-/** An Event's copy, entered under its id `<event-slug>__<slug>` from its folder `by-event/<event-slug>/<slug>/`. */
+/** An Event's copy, entered under the id its folder `by-event/<event-slug>/<slug>/` gives it. */
 function copy(record: Readonly<Record<string, unknown>>, event: string = AXEL): { id: string; record: unknown } {
-  return { id: `${event}__${String(record.slug)}`, record };
+  return { id: episodeRef(String(record.slug), event).id, record };
 }
 const SOUND = { episodes: [own(EPISODE)], events: [EVENT], playlists: [PLAYLIST] };
 
 describe('success cases', () => {
   it('loads a sound set of records whole, each Event holding the Playlist it presents with its Episodes', () => {
     // ARRANGE
-    const loaded = { ...EPISODE, id: 'alpha' };
+    const loaded = { ...EPISODE, ref: episodeRef('alpha') };
     const presented = { ...PLAYLIST, episodes: [{ episode: loaded, place: { position: 1, count: 1 } }] };
     const expected = { episodes: [loaded], events: [{ ...EVENT, playlist: presented }], playlists: [PLAYLIST] };
     // ACT
@@ -76,23 +78,23 @@ describe('success cases', () => {
         episodes: [
           {
             slug: 'onboard-ai-every-time',
-            page: `${AXEL}__onboard-ai-every-time`,
-            place: { position: 1, count: 3, next: `${AXEL}__ai-attention-span` },
+            page: episodeRef('onboard-ai-every-time', AXEL),
+            place: { position: 1, count: 3, next: episodeRef('ai-attention-span', AXEL) },
           },
           {
             slug: 'ai-attention-span',
-            page: `${AXEL}__ai-attention-span`,
+            page: episodeRef('ai-attention-span', AXEL),
             place: {
               position: 2,
               count: 3,
-              previous: `${AXEL}__onboard-ai-every-time`,
-              next: `${AXEL}__ai-gives-you-more-work`,
+              previous: episodeRef('onboard-ai-every-time', AXEL),
+              next: episodeRef('ai-gives-you-more-work', AXEL),
             },
           },
           {
             slug: 'ai-gives-you-more-work',
-            page: `${AXEL}__ai-gives-you-more-work`,
-            place: { position: 3, count: 3, previous: `${AXEL}__ai-attention-span` },
+            page: episodeRef('ai-gives-you-more-work', AXEL),
+            place: { position: 3, count: 3, previous: episodeRef('ai-attention-span', AXEL) },
           },
         ],
       },
@@ -116,19 +118,23 @@ describe('success cases', () => {
   it('declares every Episode public but the ones the AXEL seminar and the CyberForum Akademie webinar present', () => {
     // ARRANGE
     // Written out, in id order: the one list that says which Episodes are unlisted; the store is not the oracle.
+    const cyberforum = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
     const expected = [
-      '2026-10-23-axel-agentic-workflow__ai-attention-span',
-      '2026-10-23-axel-agentic-workflow__ai-gives-you-more-work',
-      '2026-10-23-axel-agentic-workflow__onboard-ai-every-time',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-gives-you-more-work',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
+      episodeRef('ai-attention-span', AXEL),
+      episodeRef('ai-gives-you-more-work', AXEL),
+      episodeRef('onboard-ai-every-time', AXEL),
+      episodeRef('ai-attention-span', cyberforum),
+      episodeRef('ai-gives-you-more-work', cyberforum),
+      episodeRef('intro', cyberforum),
+      episodeRef('onboard-ai-every-time', cyberforum),
     ];
     // ACT
-    const notPublic = listEpisodes().filter((episode) => episode.visibility !== 'public');
+    const notPublic = listEpisodes()
+      .filter((episode) => episode.visibility !== 'public')
+      .map(({ ref }) => ref)
+      .sort((a, b) => (a.id < b.id ? -1 : 1));
     // ASSERT
-    expect(notPublic.map((episode) => episode.id).sort()).toEqual(expected);
+    expect(notPublic).toEqual(expected);
   });
 
   it.each(RECORDINGS)(
@@ -377,7 +383,7 @@ describe('failure cases', () => {
       episodes: [own(EPISODE), stray],
       playlists: [{ ...PLAYLIST, episodes: ['alpha', stray.id] }],
     };
-    const expected = `Episode 2026-10-24-nowhere__alpha: its folder by-event/2026-10-24-nowhere/ names no Event`;
+    const expected = `Episode ${stray.id}: its folder by-event/2026-10-24-nowhere/ names no Event`;
     // ACT
     const load = () => loadContent(input);
     // ASSERT
@@ -522,15 +528,28 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it("lets an event Playlist, public or not, list its own Event's unlisted copies", () => {
+  it("lets an event Playlist, public or not, list its own Event's unlisted copies, each served with its ref", () => {
     // ARRANGE
-    const atAxel = { ...PLAYLIST, episodes: [COPY_ID] };
-    const input = { episodes: [own(EPISODE), copy(UNLISTED)], events: [EVENT], playlists: [atAxel] };
-    const expected = ['alpha', COPY_ID];
+    // A registered copy, so its entry has a page: its ref is the page's.
+    const attention = { ...UNLISTED, slug: 'ai-attention-span' };
+    const copyId = episodeRef('ai-attention-span', AXEL).id;
+    const atAxel = { ...PLAYLIST, episodes: [copyId] };
+    const input = { episodes: [own(EPISODE), copy(attention)], events: [EVENT], playlists: [atAxel] };
+    const expected = {
+      episodes: [
+        { kind: 'standalone', id: 'alpha', slug: 'alpha' },
+        { kind: 'event-copy', id: copyId, event: AXEL, slug: 'ai-attention-span' },
+      ],
+      page: { kind: 'event-copy', id: copyId, event: AXEL, slug: 'ai-attention-span' },
+    };
     // ACT
     const content = loadContent(input);
+    const seen = {
+      episodes: content.episodes.map(({ ref }) => ref),
+      page: content.events[0].playlist.episodes[0].page,
+    };
     // ASSERT
-    expect(content.episodes.map((episode) => episode.id)).toEqual(expected);
+    expect(seen).toEqual(expected);
   });
 
   it('counts an Episode with no page yet in its Playlist, while the walk steps over it', () => {
@@ -542,14 +561,22 @@ describe('edge cases', () => {
     const expected = [
       {
         slug: 'ai-token-economy',
-        page: 'ai-token-economy',
-        place: { position: 1, count: 3, next: 'ai-attention-span' },
+        page: episodeRef('ai-token-economy'),
+        place: { position: 1, count: 3, next: episodeRef('ai-attention-span') },
       },
-      { slug: 'alpha', place: { position: 2, count: 3, previous: 'ai-token-economy', next: 'ai-attention-span' } },
+      {
+        slug: 'alpha',
+        place: {
+          position: 2,
+          count: 3,
+          previous: episodeRef('ai-token-economy'),
+          next: episodeRef('ai-attention-span'),
+        },
+      },
       {
         slug: 'ai-attention-span',
-        page: 'ai-attention-span',
-        place: { position: 3, count: 3, previous: 'ai-token-economy' },
+        page: episodeRef('ai-attention-span'),
+        place: { position: 3, count: 3, previous: episodeRef('ai-token-economy') },
       },
     ];
     // ACT

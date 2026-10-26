@@ -1,5 +1,6 @@
-import { isEpisodeId, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
-import type { Episode } from './schemas/episode.schema';
+import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
+import type { LoadedEpisode } from './episode-refusals';
 import type { Event } from './schemas/event.schema';
 import type { Playlist } from './schemas/playlist.schema';
 
@@ -11,19 +12,22 @@ import type { Playlist } from './schemas/playlist.schema';
 
 /**
  * Where one Episode sits in its Event's Playlist: its 1-based position, the count every listed Episode makes, and the
- * nearest Episode before and after it that has a page to walk to, by Episode id.
+ * nearest Episode before and after it that has a page to walk to, by EpisodeRef.
  */
 export interface PlaylistPlace {
   readonly position: number;
   readonly count: number;
-  readonly previous?: EpisodeId;
-  readonly next?: EpisodeId;
+  readonly previous?: EpisodeRef<EpisodeId>;
+  readonly next?: EpisodeRef<EpisodeId>;
 }
 
-/** One Episode an Event's Playlist lists: its record with its id, its id again when it has a page, and its place. */
+/**
+ * One Episode an Event's Playlist lists: its record with its ref, its ref again as `page` when it has a page (its URL
+ * slug and owning Event are fields of it), and its place.
+ */
 export interface PlaylistEntry {
-  readonly episode: Episode & { readonly id: string };
-  readonly page?: EpisodeId;
+  readonly episode: LoadedEpisode;
+  readonly page?: EpisodeRef<EpisodeId>;
   readonly place: PlaylistPlace;
 }
 
@@ -37,13 +41,13 @@ export type ServedEvent = Omit<Event, 'slug' | 'playlist'> & {
 };
 
 /** Each Episode of a Playlist, in its order, with its place: the count is every one; the walk steps over the pageless. */
-export function playlistEntries(episodes: readonly (Episode & { readonly id: string })[]): PlaylistEntry[] {
-  const pages = episodes.map(({ id }) => (isEpisodeId(id) ? id : undefined));
-  const hasPage = (page: EpisodeId | undefined): page is EpisodeId => page !== undefined;
+export function playlistEntries(episodes: readonly LoadedEpisode[]): PlaylistEntry[] {
+  const pages = episodes.map(({ ref }) => (hasPage(ref) ? ref : undefined));
+  const isPage = (page: EpisodeRef<EpisodeId> | undefined): page is EpisodeRef<EpisodeId> => page !== undefined;
   return episodes.map((episode, index) => {
     const page = pages[index];
-    const previous = pages.slice(0, index).reverse().find(hasPage);
-    const next = pages.slice(index + 1).find(hasPage);
+    const previous = pages.slice(0, index).reverse().find(isPage);
+    const next = pages.slice(index + 1).find(isPage);
     return {
       episode,
       ...(page === undefined ? {} : { page }),

@@ -1,4 +1,4 @@
-import { episodeRefOf, matchEpisode } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRefOf, matchEpisode, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { EventSlug } from '@/content-store/catalogue/record-routes';
 import type { z } from 'zod';
 import { duplicates } from './duplicates';
@@ -13,7 +13,8 @@ import { playlistEntries, type ServedEvent } from './served-event';
  * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 3, 4, 8 and 9): each record is parsed by its
  * schema, then the cross-record rules run over the sound ones and resolve each Event into the Playlist it presents.
  * Every refusal is one sentence naming the kind, the record and the field; a refused record is never dropped, the
- * whole load throws. An Episode is named by its Episode id, which its folder gives it.
+ * whole load throws. An Episode is named by its Episode id, which its folder gives it; it is parsed into the Episode's
+ * EpisodeRef here, once, and every rule after reads the ref.
  */
 
 /** One Episode as the generated registry hands it in: the id its folder gives it, and its record as its file writes it. */
@@ -106,10 +107,10 @@ function eventRefusals(event: Event): string[] {
 }
 
 /** Why a Playlist may not list an Event's copy: an Event other than its owner presents the Playlist, or none does. */
-function foreignCopy(id: string, presenters: readonly string[]): string | undefined {
-  return matchEpisode(episodeRefOf(id), {
+function foreignCopy(episode: EpisodeRef, presenters: readonly string[]): string | undefined {
+  return matchEpisode(episode, {
     standalone: () => undefined,
-    'event-copy': ({ event: owner }) => {
+    'event-copy': ({ id, event: owner }) => {
       const others = presenters.filter((event) => event !== owner);
       if (presenters.length > 0 && others.length === 0) return undefined;
       const by = others.length === 0 ? 'no Event presents' : `Event ${others.join(', ')} presents`;
@@ -118,9 +119,9 @@ function foreignCopy(id: string, presenters: readonly string[]): string | undefi
   });
 }
 
-/** Whether no Event owns the Episode an id names. */
-function isStandalone(id: string): boolean {
-  return matchEpisode(episodeRefOf(id), { standalone: () => true, 'event-copy': () => false });
+/** Whether no Event owns the Episode. */
+function isStandalone(episode: EpisodeRef): boolean {
+  return matchEpisode(episode, { standalone: () => true, 'event-copy': () => false });
 }
 
 function playlistRefusals(
@@ -130,7 +131,8 @@ function playlistRefusals(
 ): string[] {
   const own = (sentence: string) => `Playlist ${playlist.id}: ${sentence}`;
   const unknown = playlist.episodes.filter((id) => !episodes.has(id));
-  const unlisted = playlist.episodes.filter((id) => episodes.get(id)?.visibility === 'unlisted');
+  const listed = playlist.episodes.flatMap((id) => episodes.get(id) ?? []);
+  const unlisted = listed.filter(({ visibility }) => visibility === 'unlisted').map(({ ref }) => ref);
   const slugs = [...new Set(playlist.episodes)].flatMap((id) => episodes.get(id)?.slug ?? []);
   return [
     ...(playlist.episodes.length === 0 ? [own('episodes lists none, but a Playlist lists at least one Episode')] : []),
@@ -139,11 +141,13 @@ function playlistRefusals(
     ...duplicates(slugs).map((slug) =>
       own(`episodes lists two Episodes with the slug "${slug}", which would share one URL under its Event`),
     ),
-    ...playlist.episodes.flatMap((id) => foreignCopy(id, presenters) ?? []).map(own),
+    ...listed.flatMap(({ ref }) => foreignCopy(ref, presenters) ?? []).map(own),
     ...(playlist.visibility === 'public' && presenters.length === 0
       ? unlisted
           .filter(isStandalone)
-          .map((id) => own(`episodes lists the unlisted Episode "${id}", but no Event presents this public Playlist`))
+          .map(({ id }) =>
+            own(`episodes lists the unlisted Episode "${id}", but no Event presents this public Playlist`),
+          )
       : []),
   ];
 }
@@ -158,10 +162,10 @@ function crossRecordRefusals(
     playlists.filter((playlist) => presented.has(playlist.id)).flatMap((playlist) => playlist.episodes),
   );
   const eventSlugs = events.map((event) => event.slug);
-  const byId = new Map(episodes.map((episode) => [episode.id, episode]));
+  const byId = new Map(episodes.map((episode) => [episode.ref.id, episode]));
   const presenters = (playlist: Playlist) =>
     events.filter((event) => event.playlist === playlist.id).map((event) => event.slug);
-  const episodeIds = episodes.map((episode) => episode.id);
+  const episodeIds = episodes.map(({ ref }) => ref.id);
   const playlistIds = playlists.map((playlist) => playlist.id);
   return [
     ...uniqueness('Episode', episodeIds, 'id'),
@@ -201,7 +205,7 @@ function serve(
  */
 export function checkRecords(content: ParsedContent): { content: Content; refused: string[] } {
   const playlists = new Map(content.playlists.map((playlist) => [playlist.id, playlist]));
-  const episodes = new Map(content.episodes.map((episode) => [episode.id, episode]));
+  const episodes = new Map(content.episodes.map((episode) => [episode.ref.id, episode]));
   const events = content.events.map((event) => serve(event, playlists, episodes));
   return {
     content: { ...content, events: events.flatMap(({ served }) => served) },
@@ -212,11 +216,11 @@ export function checkRecords(content: ParsedContent): { content: Content; refuse
   };
 }
 
-/** Each Episode's record parsed by its schema and given its entry's id, named by that id when refused. */
+/** Each Episode's record parsed by its schema and given the EpisodeRef its entry's id names, named by that id when refused. */
 function parseEpisodes(entries: readonly EpisodeEntry[]): { parsed: LoadedEpisode[]; refused: string[] } {
   const each = entries.map(({ id, record }) => ({ id, ...parseAll(EPISODE_READER, [record], () => id) }));
   return {
-    parsed: each.flatMap(({ id, parsed }) => parsed.map((episode) => ({ ...episode, id }))),
+    parsed: each.flatMap(({ id, parsed }) => parsed.map((episode) => ({ ...episode, ref: episodeRefOf(id) }))),
     refused: each.flatMap(({ refused }) => refused),
   };
 }

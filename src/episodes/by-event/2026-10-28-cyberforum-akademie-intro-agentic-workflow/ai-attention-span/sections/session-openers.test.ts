@@ -1,5 +1,6 @@
 import { localizeSlide, localizeTitleScene } from '@/episodes/components/slide-master/localized-slide';
 import type { Slide } from '@/episodes/components/slide-master/slide';
+import { episodeRef } from '@/episodes/lib/episode-folders';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import { SessionBarPreset } from '@/explorable-explanations/context/context';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -28,7 +29,7 @@ const PLACED = placeSections<Slide>([
 ]).flat();
 
 const context = (locale: Locale) => ({
-  episode: '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span' as const,
+  episode: episodeRef('ai-attention-span', '2026-10-28-cyberforum-akademie-intro-agentic-workflow').id,
   locale,
   placed: PLACED,
   referenceLabels: { ref: 'opens speaker note', marker: (title: string) => `Speaker note: ${title}` },

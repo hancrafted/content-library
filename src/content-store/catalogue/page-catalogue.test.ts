@@ -1,6 +1,7 @@
 import { TOOLING_SLUGS, type PageRef } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../store';
+import { episodeRef } from './episode-id.pure';
 import { catalogueOf } from './page-catalogue';
 
 /*
@@ -29,8 +30,10 @@ const UPCOMING = {
 } as const;
 const AXEL = '2026-10-23-axel-agentic-workflow';
 const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
-const COPY_ID = `${AXEL}__ai-attention-span` as const;
-const PLAYLIST = { id: 'axel', visibility: 'public', episodes: [PUBLIC.slug, COPY_ID] } as const;
+/** The pages' EpisodeRefs: the public Episode no Event owns, and the AXEL seminar's copy. */
+const PUBLIC_REF = episodeRef(PUBLIC.slug);
+const COPY = episodeRef(UNLISTED.slug, AXEL);
+const PLAYLIST = { id: 'axel', visibility: 'public', episodes: [PUBLIC.slug, COPY.id] } as const;
 const EVENT = {
   slug: AXEL,
   date: '2026-10-23',
@@ -41,7 +44,7 @@ const EVENT = {
 } as const;
 /** The records as the generated registry hands them in, each Episode under the id its folder gives it. */
 const own = (record: { readonly slug: string }) => ({ id: record.slug, record });
-const copy = (record: object) => ({ id: COPY_ID, record });
+const copy = (record: object) => ({ id: COPY.id, record });
 const RECORDS = { episodes: [own(PUBLIC), copy(UNLISTED)], events: [EVENT], playlists: [PLAYLIST] };
 
 const HIDDEN = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' } as const;
@@ -52,14 +55,14 @@ describe('success cases', () => {
   it("I flip an Event's copy from unlisted to public by changing one field: it is published at its Event URL only.", () => {
     // ARRANGE
     const flipped = { ...RECORDS, episodes: [own(PUBLIC), copy({ ...UNLISTED, visibility: 'public' })] };
-    const ownPage: PageRef = { kind: 'episode', episode: COPY_ID };
-    const underEvent: PageRef = { kind: 'event-episode', event: AXEL, episode: COPY_ID };
+    const ownPage: PageRef = { kind: 'episode', episode: COPY };
+    const underEvent: PageRef = { kind: 'event-episode', event: AXEL, episode: COPY };
     const seenIn = (input: Parameters<typeof loadContent>[0]) => {
       const catalogue = catalogueOf(loadContent(input));
       return {
         own: catalogue.treatmentOf(ownPage),
         underEvent: catalogue.treatmentOf(underEvent),
-        overview: catalogue.listedEpisodes().map((episode) => episode.id),
+        overview: catalogue.listedEpisodes().map(({ ref }) => ref.id),
         episodesPages: catalogue.episodesPathParams().map(({ episode }) => episode),
       };
     };
@@ -117,9 +120,9 @@ describe('failure cases', () => {
   it('never builds, lists or indexes a page whose record the store does not hold', () => {
     // ARRANGE
     const pages: PageRef[] = [
-      { kind: 'episode', episode: 'ai-token-economy' },
+      { kind: 'episode', episode: episodeRef('ai-token-economy') },
       { kind: 'event', event: CYBERFORUM },
-      { kind: 'event-episode', event: AXEL, episode: 'ai-token-economy' },
+      { kind: 'event-episode', event: AXEL, episode: episodeRef('ai-token-economy') },
     ];
     const expected = [
       { index: false, listed: false, inSitemap: false },
@@ -145,11 +148,11 @@ describe('edge cases', () => {
       { kind: 'dashboard' },
       { kind: 'episodes' },
       { kind: 'events' },
-      { kind: 'episode', episode: PUBLIC.slug },
+      { kind: 'episode', episode: PUBLIC_REF },
       ...TOOLING_SLUGS.map((tooling) => ({ kind: 'tooling', tooling }) as const),
       { kind: 'event', event: AXEL },
-      { kind: 'event-episode', event: AXEL, episode: PUBLIC.slug },
-      { kind: 'event-episode', event: AXEL, episode: COPY_ID },
+      { kind: 'event-episode', event: AXEL, episode: PUBLIC_REF },
+      { kind: 'event-episode', event: AXEL, episode: COPY },
     ];
     // ACT
     const pages = catalogueOf(loadContent(RECORDS)).pages.map(({ page }) => page);
@@ -160,11 +163,11 @@ describe('edge cases', () => {
   it('announces a public upcoming Episode on the overview before its folder holds a page', () => {
     // ARRANGE
     const records = { ...RECORDS, episodes: [own(PUBLIC), copy(UNLISTED), own(UPCOMING)] };
-    const expected = { overview: [PUBLIC.slug, UPCOMING.slug], pages: [PUBLIC.slug] };
+    const expected = { overview: [PUBLIC.slug, UPCOMING.slug], pages: [PUBLIC_REF] };
     // ACT
     const catalogue = catalogueOf(loadContent(records));
     const seen = {
-      overview: catalogue.listedEpisodes().map((episode) => episode.id),
+      overview: catalogue.listedEpisodes().map(({ ref }) => ref.id),
       pages: catalogue.pages.flatMap(({ page }) => (page.kind === 'episode' ? [page.episode] : [])),
     };
     // ASSERT

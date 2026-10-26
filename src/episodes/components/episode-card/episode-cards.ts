@@ -1,4 +1,4 @@
-import { isEpisodeId } from '@/content-store/catalogue/record-routes';
+import { hasPage } from '@/content-store/catalogue/record-routes';
 import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { episodeMinutes } from '@/episodes/components/slide-master/localized-slide';
 import { overviewOrder } from '@/episodes/lib/episode-metadata.pure';
@@ -11,21 +11,21 @@ import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './e
 /** A published Episode's whole reading time; none without a Voice script. */
 function minutesOf(entry: LoadedEpisode, locale: Locale): number | undefined {
   if (entry.status !== 'published') return undefined;
-  const total = episodeMinutes(findEpisode(entry.id), locale);
+  const total = episodeMinutes(findEpisode(entry.ref.id), locale);
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
 /** The Episode's video id in this locale; none without a page or a video. */
 function youtubeOf(entry: LoadedEpisode, locale: Locale): { youtubeId?: string } {
-  if (!isEpisodeId(entry.id)) return {};
-  const id = episodeVideo(entry.id, locale)?.id;
+  if (!hasPage(entry.ref)) return {};
+  const id = episodeVideo(entry.ref.id, locale)?.id;
   return id === undefined ? {} : { youtubeId: id };
 }
 
 /** An Episode with a page (published, or upcoming with its id registered) with its title and caption from the registry, by id; a page-less upcoming one has no record. */
 function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
-  if (entry.status !== 'published' && !isEpisodeId(entry.id)) return entry;
-  const { title, caption } = episodeCopy(entry.id, locale);
+  if (entry.status !== 'published' && !hasPage(entry.ref)) return entry;
+  const { title, caption } = episodeCopy(entry.ref.id, locale);
   return { ...entry, copy: { title, caption } };
 }
 
@@ -69,7 +69,7 @@ export async function episodeCardMaker(
       read,
       minutes: minutesOf(entry, locale),
       ...youtubeOf(entry, locale),
-      ...featuredRankOf(entry.id),
+      ...featuredRankOf(entry.ref.id),
       linkDrafts: options?.linkDrafts,
     });
 }

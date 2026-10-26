@@ -1,4 +1,5 @@
-import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
+import type { EpisodeRef, ToolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRoute, type EpisodeId, type ToolingSlug } from '@/content-store/catalogue/record-routes';
 import type { Video } from '@/content-store/store';
 import type { LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';
@@ -194,8 +195,11 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 
 interface EpisodePageContainerProps {
   locale: Locale;
-  /** The page's Episode id, or the tooling page's slug: what `data-episode` names, and the source folder the token editor names. */
-  id: EpisodesPathSlug;
+  /**
+   * The Episode the page presents, as the store served its ref, or the tooling page it is: its id is what
+   * `data-episode` names, and its folder the source folder the token editor names.
+   */
+  presents: EpisodeRef<EpisodeId> | ToolingRef<ToolingSlug>;
   episode: EpisodeComposition;
   /** The Episode's Video in this locale, from the content store; none for a tooling page or before upload. */
   video?: Video;
@@ -214,7 +218,8 @@ interface EpisodePageContainerProps {
  * contents and Slide links point at the Event's URL for the Episode.
  */
 export async function EpisodePageContainer(props: EpisodePageContainerProps) {
-  const { locale, id, episode, video, frame = OWN_PAGE } = props;
+  const { locale, presents, episode, video, frame = OWN_PAGE } = props;
+  const { id } = presents;
   const youtubeId = video?.id;
   const route = frame.route ?? episodeRoute(id);
   const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), id, route });
@@ -235,7 +240,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>
-      <DevSlideReporter folder={sourceFolderOf(id)} />
+      <DevSlideReporter folder={sourceFolderOf(presents)} />
     </UrlStateProvider>
   );
 }

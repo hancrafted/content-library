@@ -1,3 +1,4 @@
+import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
@@ -32,10 +33,10 @@ export interface EventEpisodeChrome {
   readonly next?: Step;
 }
 
-/** One Episode an Event presents: the served Event, the Episode's page, and its place in the Event's Playlist. */
+/** One Episode an Event presents: the served Event, the Episode's page as its EpisodeRef, and its place in the Playlist. */
 export interface PresentedEpisode {
   readonly event: ServedEvent;
-  readonly episode: EpisodeId;
+  readonly episode: EpisodeRef<EpisodeId>;
   readonly place: PlaylistPlace;
 }
 
@@ -44,13 +45,13 @@ export interface PresentedEpisode {
  * title in that locale, so the Events area never reads an Episode itself.
  */
 export async function eventEpisodeChrome(
-  { event, episode: slug, place }: PresentedEpisode,
+  { event, episode: presented, place }: PresentedEpisode,
   locale: Locale,
-  titleOf: (episode: EpisodeId) => string,
+  titleOf: (episode: EpisodeRef<EpisodeId>) => string,
 ): Promise<EventEpisodeChrome> {
   const labels = EVENT_WORDS[locale];
   const t = await getTranslations({ locale, namespace: 'events' });
-  const stepOf = (episode: EpisodeId | undefined): Step | undefined =>
+  const stepOf = (episode: EpisodeRef<EpisodeId> | undefined): Step | undefined =>
     episode === undefined ? undefined : { title: titleOf(episode), route: eventEpisodeRoute(event.slug, episode) };
   const previous = stepOf(place.previous);
   const next = stepOf(place.next);
@@ -58,7 +59,7 @@ export async function eventEpisodeChrome(
     locale,
     labels,
     event: { slug: event.slug, title: labels.items[event.slug].title, date: event.date },
-    episode: titleOf(slug),
+    episode: titleOf(presented),
     position: t('position', { position: place.position, count: place.count }),
     ...(previous && { previous }),
     ...(next && { next }),

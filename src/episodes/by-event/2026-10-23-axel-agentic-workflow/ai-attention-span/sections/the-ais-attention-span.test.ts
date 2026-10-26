@@ -1,5 +1,6 @@
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { Slide } from '@/episodes/components/slide-master/slide';
+import { episodeRef } from '@/episodes/lib/episode-folders';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import { load, type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
@@ -126,7 +127,7 @@ function localized(slide: Slide, locale: 'en' | 'de' = 'en') {
   const own = placed.find((entry) => entry.slide === slide);
   if (own === undefined) throw new Error(`No Slide "${slide.slug}" placed.`);
   return localizeSlide(own, {
-    episode: '2026-10-23-axel-agentic-workflow__ai-attention-span',
+    episode: episodeRef('ai-attention-span', '2026-10-23-axel-agentic-workflow').id,
     locale,
     placed,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
