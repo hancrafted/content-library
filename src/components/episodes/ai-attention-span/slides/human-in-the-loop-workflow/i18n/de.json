@@ -56,18 +56,10 @@
   },
   "jobsLabel": "{stage}: Aufgaben",
   "jobs": {
-    "interview": {
+    "scope": {
       "detail": "3 Fragen,",
       "forgot": "<marker>1 vergessen</marker>"
     },
-    "research": {
-      "checked": "Gegen die Karte geprüft"
-    },
-    "compare": {
-      "gate": "Prüfpunkt 2"
-    }
-  },
-  "card": {
-    "gate": "Prüfpunkt 1"
+    "checked": "Von einem zweiten Chat geprüft"
   }
 }

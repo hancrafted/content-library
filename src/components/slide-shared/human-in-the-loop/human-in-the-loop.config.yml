@@ -49,6 +49,15 @@ ui:
   downloadProgress: Download progress
   downloadOldProgress: Download old progress
   discardProgress: Discard
+  teaching: Teaching mode
+  teachingTip: 'Teaching mode keeps the run short: the first epics and tickets only, shorter grills.'
+  teachingLocked: Reset to change
+  reset: Reset
+  resetTip: 'Previous work was found here or in another Episode. Reset starts over.'
+  resetConfirm: 'Reset clears the results you pasted for this Workflow, here and in every Episode. Download them first to keep them.'
+  resetDownload: Download progress
+  resetNow: Reset now
+  resetCancel: Cancel
   close: Close
   copied: Copied
   gate: 'Gate {n}'

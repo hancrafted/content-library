@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { joinPrompt } from '../core-components/try-prompt/prompt-sections.pure';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import { doPrompt, reviewPrompt, roundStep, stepsOf } from './workflow-prompts.pure';
 import type { TaskDef, WorkflowFile } from './workflow-schema.types';
 
-const file = parse(summerPartyEn) as WorkflowFile;
+const file = parse(vacationEn) as WorkflowFile;
 const task = (id: string): TaskDef =>
   file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id) as TaskDef;
 const joined = (prompt: ReturnType<typeof doPrompt>) =>
@@ -40,7 +40,7 @@ describe('success cases', () => {
     // ACT
     const text = joined(doPrompt(file, research, 'technical'));
     // ASSERT
-    expect(text).toContain('### 3. Outdoor or garden venue');
+    expect(text).toContain('### 3. Villa or guesthouse');
     expect(text).not.toContain('{{');
   });
 
@@ -66,8 +66,8 @@ describe('success cases', () => {
     // ASSERT
     expect(text).toContain('### Research result of chat 1');
     expect(text).toContain('### Research result of chat 3');
-    expect(text).toContain('# Old Mill');
-    expect(text).toContain('# Riverside Garden Pavilion');
+    expect(text).toContain('# Casa Blu');
+    expect(text).toContain('# Villa Mare');
     expect(text).not.toContain('{{');
   });
 

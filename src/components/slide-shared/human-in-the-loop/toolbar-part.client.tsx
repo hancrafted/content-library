@@ -11,8 +11,9 @@ import type { ToolbarProps } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
 import { ProgressNote } from './progress-note.client';
 import { saveFile } from './save-file';
+import { ResetConfirm, TeachingControls, useTeachingProps } from './teaching-controls.client';
 import { ToolButton } from './tool-button.client';
-import { offers } from './toolbar-controls.pure';
+import { offers, type ControlId } from './toolbar-controls.pure';
 import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
@@ -142,14 +143,11 @@ function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; reado
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: view, Chat · CLI, progress save and load, download, upload. */
-function Icons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
-  const { controls, readonly, words, level } = bar;
+/** The Workflow file's own download and upload, after the progress file's. */
+function WorkflowFileIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
+  const { controls, words } = bar;
   return (
     <>
-      {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
-      {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
-      <ProgressIcons bar={bar} describedBy={describedBy} />
       {offers(controls, 'download') && (
         <ToolButton
           label={words.download}
@@ -169,13 +167,34 @@ function Icons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly desc
   );
 }
 
+/** The icon buttons the registry and the Preset allow, in order: view, Chat · CLI, progress save and load, download, upload. */
+function Icons({
+  bar,
+  describedBy,
+  teaching,
+}: {
+  readonly bar: ToolbarProps;
+  readonly describedBy?: string;
+  readonly teaching: ReactNode;
+}) {
+  const { controls, readonly, words, level } = bar;
+  return (
+    <>
+      {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
+      {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
+      {teaching}
+      <ProgressIcons bar={bar} describedBy={describedBy} />
+      <WorkflowFileIcons bar={bar} describedBy={describedBy} />
+    </>
+  );
+}
+
 const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
+const ICON_CONTROLS: readonly ControlId[] = ['view', 'level', 'teaching', 'reset', 'download', 'upload'];
+const PROGRESS_CONTROLS: readonly ControlId[] = ['progressDownload', 'progressUpload'];
 const hasIcons = (bar: ToolbarProps) =>
-  offers(bar.controls, 'view') ||
-  offers(bar.controls, 'level', bar.readonly) ||
-  offers(bar.controls, 'download') ||
-  offers(bar.controls, 'upload') ||
-  (bar.progress !== null && (offers(bar.controls, 'progressDownload') || offers(bar.controls, 'progressUpload')));
+  ICON_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)) ||
+  (bar.progress !== null && PROGRESS_CONTROLS.some((id) => offers(bar.controls, id)));
 
 /** What sits under the pill when there is something to say: the progress note, then an upload's problems. */
 function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
@@ -189,6 +208,7 @@ function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string })
 
 export function ToolbarPart(bar: ToolbarProps) {
   const problemsId = useId();
+  const teachingProps = useTeachingProps(bar.words, bar);
   const pills = hasPills(bar);
   const icons = hasIcons(bar);
   if (!pills && !icons) return <Notes bar={bar} id={problemsId} />;
@@ -204,8 +224,9 @@ export function ToolbarPart(bar: ToolbarProps) {
       >
         <Picker bar={bar} />
         {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
-        <Icons bar={bar} describedBy={describedBy} />
+        <Icons bar={bar} describedBy={describedBy} teaching={<TeachingControls {...teachingProps} />} />
       </div>
+      <ResetConfirm {...teachingProps} />
       <Notes bar={bar} id={problemsId} />
     </>
   );

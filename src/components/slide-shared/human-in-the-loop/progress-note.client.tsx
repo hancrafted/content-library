@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import type { UiWords } from './human-in-the-loop.types';
-import type { ProgressNote as Note } from './progress.types';
+import type { ProgressNote as Note } from './progress-controls.types';
 
 /*
  * The note over the toolbar about saved progress. Stale: the saved run belongs to an older Workflow; the viewer keeps it

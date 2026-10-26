@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 
-const start = { workflowId: 'summer-party', level: 'simple', view: 'presentation' } as const;
+const start = { workflowId: 'project-plan', level: 'simple', view: 'presentation' } as const;
 const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {
@@ -25,6 +25,32 @@ describe('success cases', () => {
     // ASSERT
     expect(state.slotValues).toEqual(saved.results);
     expect(state.teaching).toBe(saved.teaching);
+  });
+
+  it('switches teaching mode off and on', () => {
+    // ARRANGE
+    const initial = createState(start);
+    // ACT
+    const off = reduce(initial, { type: 'teaching', teaching: false });
+    const on = reduce(off, { type: 'teaching', teaching: true });
+    // ASSERT
+    expect(off.teaching).toBe(false);
+    expect(on.teaching).toBe(true);
+  });
+
+  it('a reset empties the pasted values, turns teaching back on and keeps the rest', () => {
+    // ARRANGE
+    const events: WorkflowEvent[] = [
+      { type: 'level', level: 'technical' },
+      { type: 'open', stageId: 'x' },
+      { type: 'teaching', teaching: false },
+      { type: 'slots', values: { 'a.b': 'text' } },
+    ];
+    const busy = events.reduce(reduce, createState(start));
+    // ACT
+    const state = reduce(busy, { type: 'reset' });
+    // ASSERT
+    expect(state).toEqual({ ...createState({ ...start, level: 'technical' }), openStageId: 'x' });
   });
 
   it('takes back an uploaded progress file over the problems of an earlier refusal', () => {

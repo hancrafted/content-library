@@ -33,6 +33,7 @@ const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sa
   'sample',
   'free',
 ]);
+const limit = obj({ full: int, teaching: int });
 const task = obj(
   {
     id: str,
@@ -46,9 +47,10 @@ const task = obj(
     instructions: str,
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
+    limits: { t: 'rec', of: limit },
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
   },
-  ['summary', 'needs', 'output', 'review', 'instructions'],
+  ['summary', 'needs', 'output', 'review', 'instructions', 'limits'],
 );
 const stage = obj(
   {

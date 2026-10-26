@@ -1,7 +1,7 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
-import type { ProgressActions, ProgressNote } from './progress.types';
+import type { ProgressActions, ProgressNote, TeachingProps } from './progress-controls.types';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { Run, StageRun } from './workflow-run.pure';
 import type { Level, View } from './workflow-state.pure';
@@ -57,7 +57,6 @@ export interface UiWords {
   readonly resultPlaceholder: string;
   /** The checkbox label of a final job that hands nothing on. */
   readonly markDone: string;
-  /** The checkbox label under a review: the viewer says they ran it and the result holds. */
   readonly markChecked: string;
   readonly download: string;
   /** The note over the toolbar when saved progress is stale or could not be written, and its buttons. */
@@ -65,6 +64,17 @@ export interface UiWords {
   readonly noteUnsaved: string;
   readonly downloadProgress: string;
   readonly downloadOldProgress: string;
+  /** The teaching switch: its name, tooltip, and the tooltip while it is locked. */
+  readonly teaching: string;
+  readonly teachingTip: string;
+  readonly teachingLocked: string;
+  /** Reset: its name, its tooltip when saved work was found, and its confirmation. */
+  readonly reset: string;
+  readonly resetTip: string;
+  readonly resetConfirm: string;
+  readonly resetDownload: string;
+  readonly resetNow: string;
+  readonly resetCancel: string;
   readonly discardProgress: string;
   readonly upload: string;
   /** The toolbar's save and load of the progress file; the refusals of a file that does not fit (`{workflow}` is its title). */
@@ -114,7 +124,7 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly newTab: string;
-  /** The Hands-on view's marks: a job not started and a job whose result is in (a reviewed one reads `checked`). */
+  /** Hands-on marks: job not started, job with its result in. */
   readonly stateOpen: string;
   readonly stateDone: string;
 }
@@ -184,7 +194,7 @@ export interface DiagramProps {
 }
 
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
-export interface ToolbarProps {
+export interface ToolbarProps extends TeachingProps {
   readonly workflow: Workflow;
   /** Every authored Workflow, for the pills. */
   readonly choices: readonly { readonly id: string; readonly title: string }[];
@@ -206,7 +216,7 @@ export interface ToolbarProps {
 }
 
 /** What the modal part draws: the open stage's view (null: closed). */
-export interface ModalProps {
+export interface ModalProps extends TeachingProps {
   readonly stage: StageView | null;
   /** The run of the open stage: job states and rounds. */
   readonly run: StageRun | null;

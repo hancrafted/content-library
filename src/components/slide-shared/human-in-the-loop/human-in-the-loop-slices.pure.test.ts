@@ -9,7 +9,7 @@ import {
   uploadEvent,
 } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
 import { loadWorkflow } from './workflow-loader.pure';
@@ -17,6 +17,7 @@ import { createState, type WorkflowEvent } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
+const noop = () => undefined;
 const job = baseJob({ id: 'ask', title: 'Ask' });
 const flow = (id: string): Workflow => ({ ...baseFlow([stage('s', [job])]), id, title: id });
 const words = {
@@ -48,6 +49,12 @@ const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   view: workflowView(workflow, state),
 });
 const start = { workflowId: data.workflowId, level: data.level, view: data.view };
+
+const slicesFor = (state: ReturnType<typeof createState>, controls = {}, sent: WorkflowEvent[] = []) =>
+  slicesOf(
+    { ...shown(flow('two'), state), data: { ...data, controls } },
+    callbacksFor((event) => sent.push(event)),
+  );
 
 describe('success cases', () => {
   it('shows the chosen Workflow, and an uploaded one over it', () => {
@@ -117,7 +124,7 @@ describe('success cases', () => {
 
   it('shows the modal the results by marker name and sends a change up keyed by result', () => {
     // ARRANGE
-    const loaded = loadWorkflow(summerPartyEn);
+    const loaded = loadWorkflow(vacationEn);
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const sent: WorkflowEvent[] = [];
@@ -135,7 +142,7 @@ describe('success cases', () => {
 
   it('hands the diagram the run of the pasted results, round states included, for the Hands-on view', () => {
     // ARRANGE
-    const loaded = loadWorkflow(summerPartyEn);
+    const loaded = loadWorkflow(vacationEn);
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const on = callbacksFor(() => undefined);
@@ -177,6 +184,59 @@ describe('success cases', () => {
     );
     // ASSERT
     expect(slices.toolbar.note).toBe(note);
+  });
+
+  it('hands the toolbar and the modal the same teaching state: on, free to change, no saved work', () => {
+    // ARRANGE
+    const state = createState(start);
+    // ACT
+    const { toolbar, modal } = slicesFor(state);
+    // ASSERT
+    const expected = { show: true, resetShow: true, on: true, locked: false, hasWork: false };
+    expect(toolbar.teaching).toEqual(expected);
+    expect(modal.teaching).toEqual(expected);
+  });
+
+  it('locks teaching and marks saved work once a result is pasted', () => {
+    // ARRANGE
+    const state = { ...createState(start), teaching: false, slotValues: { 's.ask': 'answer' } };
+    // ACT
+    const { toolbar } = slicesFor(state);
+    // ASSERT
+    expect(toolbar.teaching).toMatchObject({ on: false, locked: true, hasWork: true });
+  });
+
+  it('sends the switch and Reset up as events, from the toolbar and from the modal', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const { toolbar, modal } = slicesFor(createState(start), {}, sent);
+    // ACT
+    toolbar.onTeaching(false);
+    modal.onReset();
+    // ASSERT
+    expect(sent).toEqual([{ type: 'teaching', teaching: false }, { type: 'reset' }]);
+  });
+
+  it('lets a Preset hide the switch and Reset, in both places', () => {
+    // ARRANGE
+    const controls = { teaching: { show: false }, reset: { show: false } };
+    // ACT
+    const { toolbar, modal } = slicesFor(createState(start), controls);
+    // ASSERT
+    expect([toolbar.teaching, modal.teaching]).toEqual([
+      expect.objectContaining({ show: false, resetShow: false }),
+      expect.objectContaining({ show: false, resetShow: false }),
+    ]);
+  });
+
+  it('hides them for a readonly Preset', () => {
+    // ARRANGE
+    const state = createState(start);
+    const workflow = flow('two');
+    // ACT
+    const { toolbar } = slicesOf({ ...shown(workflow, state), data: { ...data, readonly: true } }, callbacksFor(noop));
+    // ASSERT
+    expect(toolbar.teaching).toMatchObject({ show: false, resetShow: false });
   });
 });
 

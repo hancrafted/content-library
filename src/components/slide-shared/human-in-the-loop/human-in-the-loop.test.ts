@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { humanInTheLoopData } from './human-in-the-loop';
 
-const BASE = { workflow: 'summer-party', diagram: { initials: true } } as const;
+const BASE = { workflow: 'project-plan', diagram: { initials: true } } as const;
 
 describe('success cases', () => {
   it('keeps the Slide initials for English', () => {
@@ -19,8 +19,8 @@ describe('success cases', () => {
     // ACT
     const data = humanInTheLoopData(props);
     // ASSERT
-    expect(data.workflows.map((w) => w.id)).toEqual(['summer-party', 'vacation']);
-    expect(data.workflowId).toBe('summer-party');
+    expect(data.workflows.map((w) => w.id)).toEqual(['project-plan', 'vacation']);
+    expect(data.workflowId).toBe('project-plan');
     expect(data.controls).toEqual({});
   });
 });
@@ -28,7 +28,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('starts in the Presentation view unless the Preset names another', () => {
     // ARRANGE
-    const props = { workflow: 'summer-party', locale: 'en' } as const;
+    const props = { workflow: 'project-plan', locale: 'en' } as const;
     // ACT
     const plain = humanInTheLoopData(props).view;
     const preset = humanInTheLoopData({ ...props, view: 'detailed' }).view;
@@ -45,13 +45,13 @@ describe('failure cases', () => {
     expect(data.diagram?.initials).toBe(true);
     expect(data.workflows[0]?.stages[0]?.moves[0]).toMatchObject({
       letter: 'B',
-      why: expect.stringContaining('Zerlege'),
+      why: expect.stringContaining('Projektplanung'),
     });
   });
 
   it('is not readonly unless the Preset says so', () => {
     // ARRANGE
-    const props = { workflow: 'summer-party', locale: 'en' } as const;
+    const props = { workflow: 'project-plan', locale: 'en' } as const;
     // ACT
     const open = humanInTheLoopData(props).readonly;
     const locked = humanInTheLoopData({ ...props, readonly: true }).readonly;

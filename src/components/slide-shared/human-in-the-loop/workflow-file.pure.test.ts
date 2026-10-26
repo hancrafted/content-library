@@ -8,7 +8,7 @@ import { loadWorkflow } from './workflow-loader.pure';
 describe('success cases', () => {
   it('uploading a downloaded Workflow yields the same Workflow, in each language of each shipped file', () => {
     // ARRANGE
-    const shipped = [workflowFor('summer-party', 'en'), workflowFor('vacation', 'de')];
+    const shipped = [workflowFor('project-plan', 'en'), workflowFor('vacation', 'de')];
     // ACT
     const events = shipped.map((workflow) => uploadEvent(workflowFile(workflow).text));
     // ASSERT
@@ -17,11 +17,11 @@ describe('success cases', () => {
 
   it('writes the file as written: the same text again, under the Workflow id', () => {
     // ARRANGE
-    const shipped = workflowFor('summer-party', 'en');
+    const shipped = workflowFor('project-plan', 'en');
     // ACT
     const { name, text } = workflowFile(shipped);
     // ASSERT
-    expect(name).toBe('summer-party.yml');
+    expect(name).toBe('project-plan.yml');
     expect(text).toContain('templates:');
   });
 });
