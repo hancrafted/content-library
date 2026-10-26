@@ -2,7 +2,7 @@ import { hasPage } from '@/content-store/catalogue/record-routes';
 import { FORMATS, TAG_IDS } from '@/content-store/schemas/fields';
 import { featuredIds, listEpisodes } from '@/content-store/store';
 import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';
-import { findEpisode } from '@/episodes/lib/registry';
+import { compositionOf } from '@/episodes/lib/registry';
 import { FILTER_TAGS, TAGS } from '@/episodes/lib/tag-looks';
 import { describe, expect, it } from 'vitest';
 import de from '../episode-browser/i18n/de.json';
@@ -123,7 +123,7 @@ describe('failure cases', () => {
       ...FORMATS.filter((id) => !episodeBrowser.formats[id]).map((id) => `formats.${id}`),
       ...TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `tags.${id}`),
       ...listEpisodes().flatMap(({ ref, slug, status }) => {
-        const copy = hasPage(ref) ? findEpisode(ref.id).messages[locale] : upcomingCopy[slug];
+        const copy = hasPage(ref) ? compositionOf(ref).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
       }),
     ];

@@ -4,7 +4,7 @@ import { episodeFolders, METADATA_FILE } from '@/episodes/lib/episode-folders';
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { FEATURED } from './featured';
-import { episodeStatus, listEpisodes } from './store';
+import { episodePublishedOn, episodeStatus, listEpisodes } from './store';
 
 /*
  * The store's Episode read API the Episode browser depends on (#40): one metadata
@@ -151,6 +151,18 @@ describe('success cases', () => {
       expect(status).toBe(expected);
     },
   );
+
+  it.each(listEpisodes().filter(({ ref }) => isEpisodeId(ref.id)))(
+    'reads the release date of $ref.id from its metadata, none while it is upcoming',
+    (episode) => {
+      // ARRANGE
+      const expected = episode.status === 'published' ? episode.publishedOn : undefined;
+      // ACT
+      const publishedOn = episodePublishedOn(episode.ref.id as Parameters<typeof episodePublishedOn>[0]);
+      // ASSERT
+      expect(publishedOn).toBe(expected);
+    },
+  );
 });
 
 describe('failure cases', () => {
@@ -193,6 +205,15 @@ describe('failure cases', () => {
     const unlisted = 'not-an-episode' as Parameters<typeof episodeStatus>[0];
     // ACT
     const read = () => episodeStatus(unlisted);
+    // ASSERT
+    expect(read).toThrow(/not-an-episode/);
+  });
+
+  it('fails loudly for a release date of a registered slug no metadata lists, as the status read does', () => {
+    // ARRANGE
+    const unlisted = 'not-an-episode' as Parameters<typeof episodePublishedOn>[0];
+    // ACT
+    const read = () => episodePublishedOn(unlisted);
     // ASSERT
     expect(read).toThrow(/not-an-episode/);
   });

@@ -13,7 +13,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
-import { findPageRecord } from './tooling-pages';
+import { compositionAt } from './compositions.fixture';
 
 /*
  * Published anchors (FE-002): every Slide anchor an Episode has ever put in a
@@ -74,9 +74,7 @@ function boundPages(
 
 /** The anchors the walk produces for one page, as the Episode page does: its record's Section lists. */
 function producedAnchors(page: Page): string[] {
-  return placeSections<SlideOutline>(findPageRecord(page.id).sections).flatMap((section) =>
-    section.map(({ id }) => id),
-  );
+  return placeSections<SlideOutline>(compositionAt(page.id).sections).flatMap((section) => section.map(({ id }) => id));
 }
 
 describe('success cases', () => {

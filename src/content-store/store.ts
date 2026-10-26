@@ -8,7 +8,7 @@ import { FEATURED } from './featured';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
-import type { Episode, EpisodeStatus } from './schemas/episode.schema';
+import type { EpisodeStatus } from './schemas/episode.schema';
 import type { EventInput } from './schemas/event.schema';
 import type { IsoDate } from './schemas/fields';
 import type { PlaylistInput } from './schemas/playlist.schema';
@@ -84,15 +84,10 @@ export function episodeStatus(id: EpisodeId): EpisodeStatus {
   return episodeOf(id).status;
 }
 
-/** The Episode's visibility: a public one has its own page; an unlisted one lives only under its Event. */
-export function episodeVisibility(id: EpisodeId): Episode['visibility'] {
-  return episodeOf(id).visibility;
-}
-
-/** The release date of a published Episode; undefined for an upcoming one or an unknown id. */
-export function episodePublishedOn(id: string): IsoDate | undefined {
-  const episode = CONTENT.episodes.find(({ ref }) => ref.id === id);
-  return episode?.status === 'published' ? episode.publishedOn : undefined;
+/** The Episode's release date once published; none while it is upcoming. */
+export function episodePublishedOn(id: EpisodeId): IsoDate | undefined {
+  const episode = episodeOf(id);
+  return episode.status === 'published' ? episode.publishedOn : undefined;
 }
 
 /** The Video an Episode's page plays: its YouTube id and, for an Event recording, the language spoken in it. */

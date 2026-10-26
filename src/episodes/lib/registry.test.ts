@@ -1,11 +1,13 @@
-import { EPISODE_IDS, hasPage, isEpisodeId } from '@/content-store/catalogue/record-routes';
+import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, isEpisodeId, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { headerModeOf } from '@/episodes/components/slide-master/slide';
 import { describe, expect, it } from 'vitest';
-import { episodeCopy, findEpisode } from './registry';
+import { compositionOf } from './registry';
 
 /*
- * What every registered Episode shares (FE-002): a record under its Episode id carrying its folder's slug,
+ * The one composition lookup (FE-002): the Slides and own text a page renders, by the EpisodeRef of an Episode with a
+ * page or the ref of a tooling page. What every registered Episode shares: a record under its Episode id carrying its folder's slug,
  * its own text from its folder's `i18n/` (what the Title slide, the page
  * metadata and the landing card read) and the Section list its Dossier fixes.
  * Every Episode comes from the Episode registry. The per-Episode facts in the tables below are written out by hand from
@@ -19,6 +21,9 @@ const PUBLISHED_PUBLIC = listEpisodes()
   .filter(({ ref, status, visibility }) => status === 'published' && visibility === 'public' && hasPage(ref))
   .map(({ ref }) => ref.id)
   .sort();
+
+/** Every Episode with a page, by its EpisodeRef, as the store serves it. */
+const WITH_PAGE = listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : []));
 
 /** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
 const COMPOSITION = [
@@ -88,19 +93,16 @@ const HEADER_MODES = [
 ] as const;
 
 describe('success cases', () => {
-  it.each(listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])))(
-    "registers $id with a record carrying its folder's slug",
-    (ref) => {
-      // ARRANGE
-      const expectedSlug = ref.slug;
-      // ACT
-      const episode = findEpisode(ref.id);
-      // ASSERT
-      expect(episode.slug).toBe(expectedSlug);
-    },
-  );
+  it.each(WITH_PAGE)("registers $id with a record carrying its folder's slug", (ref) => {
+    // ARRANGE
+    const expectedSlug = ref.slug;
+    // ACT
+    const episode = compositionOf(ref);
+    // ASSERT
+    expect(episode.slug).toBe(expectedSlug);
+  });
 
-  it.each(EPISODE_IDS)('gives %s its own title, caption and description in en and de', (slug) => {
+  it.each(WITH_PAGE)('gives $id its own title, caption and description in en and de', (ref) => {
     // ARRANGE
     // A Title slide's optional Speaker notes and Voice script may sit beside them.
     const expected = expect.objectContaining({
@@ -109,7 +111,7 @@ describe('success cases', () => {
       description: expect.any(String),
     });
     // ACT
-    const texts = (['en', 'de'] as const).map((locale) => findEpisode(slug).messages[locale]);
+    const texts = (['en', 'de'] as const).map((locale) => compositionOf(ref).messages[locale]);
     // ASSERT
     expect(texts).toEqual([expected, expected]);
     expect(texts.flatMap(({ title, caption, description }) => [title, caption, description])).not.toContain('');
@@ -119,27 +121,16 @@ describe('success cases', () => {
     // ARRANGE
     const expected = 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst';
     // ACT
-    const { title } = findEpisode('ai-attention-span').messages.de;
+    const { title } = compositionOf(episodeRef('ai-attention-span')).messages.de;
     // ASSERT
     expect(title).toBe(expected);
-  });
-
-  it('hands the page metadata and the landing card one Episode text in the locale asked for', () => {
-    // ARRANGE
-    const expectedTitle = 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst';
-    const expectedKeys = ['caption', 'description', 'title'];
-    // ACT
-    const copy = episodeCopy('ai-attention-span', 'de');
-    // ASSERT
-    expect(copy.title).toBe(expectedTitle);
-    expect(Object.keys(copy).sort()).toEqual(expectedKeys);
   });
 
   it.each(COMPOSITION)('composes $slug in Dossier order, each Section opened by the Slide that names it', (c) => {
     // ARRANGE
     const expectedSections = c.sections;
     // ACT
-    const composed = findEpisode(c.slug).sections.map(([opener, ...pages]) => ({
+    const composed = compositionOf(episodeRef(c.slug)).sections.map(([opener, ...pages]) => ({
       opener: opener.slug,
       pageSlides: pages.length,
     }));
@@ -151,31 +142,51 @@ describe('success cases', () => {
     // ARRANGE
     const expected = header;
     // ACT
-    const mode = headerModeOf(findEpisode(slug));
+    const mode = headerModeOf(compositionOf(episodeRef(slug)));
     // ASSERT
     expect(mode).toBe(expected);
+  });
+
+  it.each(TOOLING_SLUGS)('finds the tooling page %s under its own slug', (slug) => {
+    // ARRANGE
+    const expected = slug;
+    // ACT
+    const page = compositionOf(toolingRef(slug));
+    // ASSERT
+    expect(page.slug).toBe(expected);
+  });
+
+  it('composes the Workshop template as agenda, in scope, out of scope and orga Slides after its Title slide', () => {
+    // ARRANGE
+    const expected = [['agenda'], ['in-scope', 'out-of-scope'], ['orga']];
+    // ACT
+    const composition = compositionOf(toolingRef('workshop-template'));
+    // ASSERT
+    expect(composition.sections.map((section) => section.map(({ slug }) => slug))).toEqual(expected);
   });
 });
 
 describe('failure cases', () => {
-  it('rejects an unregistered slug in the route check and in the registry lookup', () => {
+  it('rejects an unregistered slug in the route check, in the types and in the lookup', () => {
     // ARRANGE
     const unregistered = 'non-existent-episode';
     // ACT
     const valid = isEpisodeId(unregistered);
-    const lookup = () => findEpisode(unregistered);
+    // @ts-expect-error -- an Episode the registry does not hold has no composition
+    const lookup = () => compositionOf(episodeRef(unregistered));
     // ASSERT
     expect(valid).toBe(false);
-    expect(lookup).toThrow();
+    expect(lookup).toThrow(unregistered);
   });
 
-  it('finds no Episode text for an unregistered slug', () => {
+  it('finds no tooling page for an Episode slug', () => {
     // ARRANGE
-    const unregistered = 'non-existent-episode';
+    const episode = 'ai-attention-span';
     // ACT
-    const read = () => episodeCopy(unregistered, 'en');
+    // @ts-expect-error -- an Episode's slug names no tooling page
+    const lookup = () => compositionOf(toolingRef(episode));
     // ASSERT
-    expect(read).toThrow();
+    expect(lookup).toThrow(episode);
   });
 });
 
@@ -192,23 +203,31 @@ describe('edge cases', () => {
     expect(covered).toEqual(expected);
   });
 
-  it.each(['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'])(
-    'keeps the tooling page %s out of the Episode registry, so it is no Episode',
-    (slug) => {
-      // ARRANGE
-      const expected = false;
-      // ACT
-      const valid = isEpisodeId(slug);
-      const lookup = () => findEpisode(slug);
-      // ASSERT
-      expect(valid).toBe(expected);
-      expect(lookup).toThrow();
-    },
-  );
-
-  it.each(EPISODE_IDS)('gives %s at least one Section, each holding at least its opener', (slug) => {
+  it.each(TOOLING_SLUGS)('keeps the tooling page %s out of the Episode registry, so it is no Episode', (slug) => {
     // ARRANGE
-    const { sections } = findEpisode(slug);
+    const expected = false;
+    // ACT
+    const valid = isEpisodeId(slug);
+    // @ts-expect-error -- a tooling page's slug names no Episode
+    const lookup = () => compositionOf(episodeRef(slug));
+    // ASSERT
+    expect(valid).toBe(expected);
+    expect(lookup).toThrow(slug);
+  });
+
+  it('finds no tooling page for the deleted slide-layouts', () => {
+    // ARRANGE
+    const deleted = 'slide-layouts';
+    // ACT
+    // @ts-expect-error -- a deleted tooling page has no composition
+    const lookup = () => compositionOf(toolingRef(deleted));
+    // ASSERT
+    expect(lookup).toThrow(deleted);
+  });
+
+  it.each(WITH_PAGE)('gives $id at least one Section, each holding at least its opener', (ref) => {
+    // ARRANGE
+    const { sections } = compositionOf(ref);
     // ACT
     const emptySections = sections.filter((section) => section.length === 0);
     // ASSERT

@@ -12,11 +12,11 @@ const EPISODE_CONTENT = '^src/episodes/(?!(components|lib|hooks)/)';
 const EPISODE_HOOKS = '^src/episodes/hooks/';
 // The composition registries in the area's lib/: they import every Episode's and tooling page's record, so they sit
 // above the Episodes they list and the lib rules below leave them out.
-const COMPOSITION_REGISTRY_NAMES = '(registry|tooling-pages|episode-registry\\.generated)';
+const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
 // The tests that run over every composed Episode and tooling page through those registries, rendering Slides.
 const REGISTRY_TESTS =
-  '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders|tooling-pages)\\.test\\.ts$';
+  '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders)\\.test\\.ts$';
 // The product areas (spec #348): each a top-level folder of src/, between page assembly above and the content store
 // below. AREA captures the area's name, so a rule's `to` can say "this same area" as `^src/$1/`.
 const AREA_NAMES = '(episodes|events|explorable-explanations|pipeline)';

@@ -2,7 +2,7 @@ import { pageFolders, type PageFolder } from '@/episodes/lib/episode-folders';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { findPageRecord } from './tooling-pages';
+import { compositionAt } from './compositions.fixture';
 
 /*
  * Placement markers (FE-004 Decision 3, design-ADR-0008 Decision 7):
@@ -58,7 +58,7 @@ const MARKED = markedEpisodes();
 describe('success cases', () => {
   it.each(MARKED)('keeps one marker per Section of %s, named after its section slide', (slug) => {
     // ARRANGE
-    const expected = findPageRecord(slug)
+    const expected = compositionAt(slug)
       .sections.map(([opener]) => opener.slug)
       .sort();
     // ACT
@@ -69,7 +69,7 @@ describe('success cases', () => {
 
   it.each(MARKED)('composes %s from its markers: each Section is the list its marker exports', async (slug) => {
     // ARRANGE
-    const record = findPageRecord(slug).sections;
+    const record = compositionAt(slug).sections;
     const expected = record.map(() => true);
     // ACT
     const fromMarker = await Promise.all(
@@ -86,7 +86,7 @@ describe('failure cases', () => {
     const expected: string[] = [];
     // ACT
     const strays = markedEpisodes().flatMap((episode) => {
-      const openers = findPageRecord(episode).sections.map(([opener]) => opener.slug);
+      const openers = compositionAt(episode).sections.map(([opener]) => opener.slug);
       return markerNames(episode)
         .filter((name) => !openers.includes(name))
         .map((name) => `${episode}/${MARKERS_DIR}/${name}.ts`);

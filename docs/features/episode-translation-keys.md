@@ -92,7 +92,7 @@ Each Episode declares its own metadata record in `episodes/<slug>/episode-metada
 
 An entry reads its text from:
 
-- An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry (`findEpisode(slug).messages[locale]`).
+- An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry by its EpisodeRef (`compositionOf(ref).messages[locale]`).
 - An Upcoming Episode with no page: `episodeBrowser.upcoming.<slug>.title` and `.caption`. It has no record, so this is Episode browser text and stays in the browser's files; move it into the Episode folder's `i18n/` when its page is written.
 - Every Episode: `episodeBrowser.formats.<format>`, one per id in `FORMATS`. The Format control and label stay hidden until two Formats are in use.
 - Every Tag in the vocabulary: `episodeBrowser.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; the store refuses an Episode that lists an id outside `TAG_IDS`, lists none or lists one twice, and a test fails when a Tag lacks either key in en or de.

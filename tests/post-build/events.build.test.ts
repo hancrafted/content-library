@@ -17,7 +17,7 @@ import {
   type EpisodeId,
   type EventSlug,
 } from '../../src/content-store/catalogue/record-routes';
-import { episodeStatus, episodeVisibility, listEvents } from '../../src/content-store/store';
+import { listEvents } from '../../src/content-store/store';
 import { isPastEvent } from '../../src/events/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
@@ -325,11 +325,14 @@ describe('the 2026-10-28 Event', () => {
 });
 
 describe('Episode pages under an Event', () => {
-  /** Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports. */
+  /**
+   * Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports, each with
+   * the record the served Event lists it by.
+   */
   const PAGES_UNDER_EVENTS = EVENTS.flatMap((event) =>
     event.playlist.episodes
-      .flatMap(({ page }) => (page === undefined ? [] : [page]))
-      .flatMap((episode) => LOCALES.map((locale) => ({ event: event.slug, episode, locale }))),
+      .flatMap(({ episode: record, page }) => (page === undefined ? [] : [{ record, episode: page }]))
+      .flatMap(({ record, episode }) => LOCALES.map((locale) => ({ event: event.slug, episode, record, locale }))),
   );
   const urlOf = (event: EventSlug, episode: EpisodeRef<EpisodeId>, locale: Locale) =>
     localizePath(eventEpisodeRoute(event, episode), locale);
@@ -416,11 +419,11 @@ describe('Episode pages under an Event', () => {
 
   it.each(PAGES_UNDER_EVENTS)(
     'A public Episode under an Event carries a canonical to its own /episodes/ page, a public Event copy to itself ($episode.id, $locale)',
-    ({ event, episode, locale }) => {
+    ({ event, episode, record, locale }) => {
       // ARRANGE
       const own = `${SITE_URL}${localizePath(episodeRoute(episode.id), locale)}/`;
       const self = `${SITE_URL}${urlOf(event, episode, locale)}/`;
-      const indexable = episodeVisibility(episode.id) === 'public' && episodeStatus(episode.id) === 'published';
+      const indexable = record.visibility === 'public' && record.status === 'published';
       const copy = matchEpisode(episode, { standalone: () => false, 'event-copy': () => true });
       const expected = !indexable
         ? { canonical: self, noindex: true, hreflang: 3, card: self }
