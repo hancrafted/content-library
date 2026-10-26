@@ -124,11 +124,15 @@ stages:
   - id: party
     title: Plan
     learningGoal: 'Zerlege es: Teile die große Aufgabe in Teile und nimm nur eines mit.'
+    summary: 'Teile die Aufgabe in Teile'
     move: B
     jobs:
       - id: pieces
         title: Zerlegen
         summary: In kleinere Teile, mit Reihenfolge und Abhängigkeiten
+        goal:
+          do: 'Erstelle mit KI einen groben Plan und teile ihn in kleinere Teile.'
+          review: 'Lass einen zweiten KI-Chat den Plan prüfen, bevor Du weitermachst.'
         output: plan
         template: plan
         slots:
@@ -215,11 +219,15 @@ stages:
   - id: interview
     title: Interview
     learningGoal: 'Interviewe Dich mit KI: Die KI fragt, bevor sie rät, ein paar Fragen auf einmal.'
+    summary: 'Die KI fragt, bevor sie rät'
     move: I
     jobs:
       - id: interview
         title: KI löchert Dich
         summary: In einem Interview, ein paar Fragen auf einmal
+        goal:
+          do: 'Lass Dich von der KI zum ersten Teil interviewen, ein paar Fragen auf einmal.'
+          review: 'Lass einen zweiten KI-Chat das Interview prüfen.'
         output: interview
         template: interview
         slots:
@@ -296,10 +304,23 @@ stages:
                 Schreibe das Ergebnis als Markdown-Datei, oder als rohes Markdown, wenn Du keine Dateien erstellen kannst, in dieser Vorlage.
 
                 {{template}}
+        review:
+          instructions: 'Füge Dein Ergebnis in den Kasten unten ein und kopiere den Prompt in einen weiteren neuen Chat, damit der Prüfer nicht weiß, wie die Arbeit entstand. Sagt er Fertig, mach weiter; sagt er Korrektur nötig, füge sein Korrektur-Handoff in Deinen ersten Chat zurück und behalte das korrigierte Ergebnis.'
+          slots:
+            - id: interview_result
+              mode: single
+              label: Das Interviewergebnis zur Prüfung
+              sample: *interview_example
+          checks:
+            - Jede Wahl kam mit zwei Optionen und einer Empfehlung, und es gab nie mehr als drei Fragen auf einmal.
+            - Mindestens eine Frage betrifft etwas, das der Plan nicht gesagt hat.
+            - Keine Antwort fehlt, und keine zwei Antworten widersprechen sich.
+            - Nichts im Interview plant oder löst die Aufgabe selbst.
 
   - id: requirements
     title: Anforderungen
     learningGoal: 'Erst die Anforderungen: Aus den Antworten wird eine kurze Liste, die Du freigibst, bevor die Arbeit beginnt.'
+    summary: 'Aus Antworten wird eine freigegebene Liste'
     move: R
     gate: 1
     card:
@@ -315,6 +336,9 @@ stages:
       - id: spec
         title: Du gibst frei
         summary: Die Anforderungen, Zeile für Zeile
+        goal:
+          do: 'Mach aus Deinen Antworten eine Anforderungskarte und gib sie frei.'
+          review: 'Lass einen zweiten KI-Chat die Anforderungskarte prüfen.'
         output: spec
         template: spec
         slots:
@@ -413,11 +437,15 @@ stages:
   - id: tickets
     title: Tickets
     learningGoal: 'Zerlege es noch einmal: Schneide die Spezifikation in Tickets, die sich nicht überschneiden, damit jedes einen eigenen Chat bekommt.'
+    summary: 'Schneide die Spezifikation in Tickets'
     move: B
     jobs:
       - id: tickets
         title: Tickets schreiben
         summary: Ein eigenständiges Ticket pro Option
+        goal:
+          do: 'Schreibe pro zu recherchierender Option ein eigenständiges Ticket.'
+          review: 'Lass einen zweiten KI-Chat die Tickets prüfen.'
         output: tickets
         template: tickets
         slots:
@@ -515,11 +543,15 @@ stages:
   - id: research
     title: Recherche
     learningGoal: Gib jedem Ticket einen eigenen frischen Chat, damit jedes Fenster klein bleibt und keine zwei Chats dieselbe Arbeit machen.
+    summary: 'Pro Ticket ein frischer Chat'
     move: F
     jobs:
       - id: venue
         title: Chat
         summary: Ein frischer Chat pro Ticket, mit Websuche
+        goal:
+          do: 'Recherchiere jedes Ticket in einem eigenen frischen Chat, mit Websuche.'
+          review: 'Lass einen zweiten KI-Chat die Recherche prüfen.'
         output: research
         template: research
         fanOut: 3
@@ -652,12 +684,16 @@ stages:
   - id: compare
     title: Vergleich
     learningGoal: 'Prüfe jeden Schritt: Vergleiche jedes Ergebnis mit der Karte, bevor Du weitermachst.'
+    summary: 'Ranke die Ergebnisse nach Deinen Anforderungen'
     move: E
     gate: 2
     jobs:
       - id: compare
         title: Ergebnisse ranken
         summary: Gegen Deine Anforderungen; Du wählst an Freigabe 2
+        goal:
+          do: 'Ranke die Recherche-Ergebnisse nach Deinen Anforderungen.'
+          review: 'Lass einen zweiten KI-Chat das Ranking prüfen.'
         output: comparison
         template: comparison
         slots:
@@ -801,10 +837,14 @@ stages:
   - id: recommendation
     title: Prüfen
     learningGoal: Schließe den Kreis selbst. Lies den Vergleich und entscheide, was an die Menschen geht, die es freigeben.
+    summary: 'Eine klare Empfehlung, von Dir geprüft'
     jobs:
       - id: recommend
         title: Eine empfehlen
         summary: In einer Minute gelesen, mit nächsten Schritten
+        goal:
+          do: 'Lass Dir eine klare Empfehlung mit nächsten Schritten geben.'
+          review: 'Lass einen zweiten KI-Chat die Empfehlung prüfen.'
         output: recommendation
         template: recommendation
         slots:

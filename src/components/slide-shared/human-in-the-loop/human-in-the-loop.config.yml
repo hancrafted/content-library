@@ -19,6 +19,7 @@ ui:
   previousResults: Previous results
   insertedAt: 'Added to the prompt under "{section}"'
   resultHeading: Result
+  markDone: Mark this step as done
   resultPlaceholder: Paste the result here to save it for the next step
   contextTip: 'Help: show what to do in each step'
   download: Download this Workflow

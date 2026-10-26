@@ -6,7 +6,6 @@ import { ChatTabs } from './chat-tabs.client';
 import type { SlotState, StepKit } from './step-kit.types';
 import { contextCount, resultKey } from './step-panel.client';
 import { itemsOf, type Item } from './stepper-items.pure';
-import { goalOf } from './task-goals.pure';
 import type { JobModalView } from './workflow-view.pure';
 
 /*
@@ -46,10 +45,15 @@ function StepItem({ item, at, kit, slots }: StepItemProps) {
     <AccordionItem value={String(at)} data-job={job.id} className="last:border-b-0">
       <AccordionTrigger>
         <Marker done={isDone(item, slots)} at={at} />
-        {goalOf(job.id, 'do', job.title)}
+        {job.goal.do}
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-4 sm:pl-10">
         {doSteps.length > 0 && <ChatTabs steps={doSteps} task={job.task} kind="do" kit={kit} slots={slots} first={1} />}
+        {reviewSteps.length > 0 && job.goal.review && (
+          <p data-review-goal="" className="text-caption text-muted-foreground">
+            {job.goal.review}
+          </p>
+        )}
         {reviewSteps.length > 0 && (
           <ChatTabs steps={reviewSteps} task={job.task} kind="review" kit={kit} slots={slots} first={reviewAt} />
         )}

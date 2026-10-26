@@ -15,17 +15,30 @@ export interface Producer {
 /** The names a task hands on, with what each one is. */
 export function producersOf(task: TaskDef, stage: StageDef): ReadonlyMap<string, Producer> {
   const names = new Map<string, Producer>();
-  if (task.fanOut === undefined) return names.set(task.output, { task, stage, all: false });
-  names.set(task.output, { task, stage, all: true });
-  for (let at = 1; at <= task.fanOut; at += 1) names.set(`${task.output}_${at}`, { task, stage, all: false });
+  const { output } = task;
+  if (output === undefined) return names;
+  if (task.fanOut === undefined) return names.set(output, { task, stage, all: false });
+  names.set(output, { task, stage, all: true });
+  for (let at = 1; at <= task.fanOut; at += 1) names.set(`${output}_${at}`, { task, stage, all: false });
   return names;
 }
 
-/** The names handed on by the stages before the `index`th, in order; a later task of the same stage is not earlier. */
+/** The names handed on by the stages before the `index`th, in order. */
 export function producersBefore(file: WorkflowFile, index: number): ReadonlyMap<string, Producer> {
   const names = new Map<string, Producer>();
   for (const stage of file.stages.slice(0, index)) {
     for (const task of stage.jobs) for (const [name, producer] of producersOf(task, stage)) names.set(name, producer);
+  }
+  return names;
+}
+
+/** What a task's slots may take: the earlier stages' outputs, and those of the jobs of its own stage it `needs`. */
+export function producersFor(file: WorkflowFile, index: number, task: TaskDef): ReadonlyMap<string, Producer> {
+  const names = new Map(producersBefore(file, index));
+  const stage = file.stages[index];
+  for (const job of stage?.jobs ?? []) {
+    if (!task.needs?.includes(job.id)) continue;
+    for (const [name, producer] of producersOf(job, stage as StageDef)) names.set(name, producer);
   }
   return names;
 }
@@ -35,7 +48,7 @@ export const tasksOf = (file: WorkflowFile): TaskDef[] => file.stages.flatMap((s
 
 /** The ids of the tasks a task takes from: the producers of its slots, once each. */
 export function producerIdsOf(file: WorkflowFile, stageIndex: number, task: TaskDef): string[] {
-  const names = producersBefore(file, stageIndex);
-  const ids = task.slots.flatMap((slot) => names.get(slot.id)?.task.id ?? []);
+  const names = producersFor(file, stageIndex, task);
+  const ids = [...(task.needs ?? []), ...task.slots.flatMap((slot) => names.get(slot.id)?.task.id ?? [])];
   return [...new Set(ids)];
 }

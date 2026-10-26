@@ -68,14 +68,14 @@ describe('success cases', () => {
     expect(moves).toEqual(expected);
   });
 
-  it('gives Interview no review, Research three chats, and every other task a review', () => {
+  it('gives Research three chats, and every task a review', () => {
     // ARRANGE
     const chats = 3;
-    const others = tasksOf(file).filter((each) => each.id !== 'interview');
     // ACT
-    const unreviewed = others.filter((each) => !each.review).map((each) => each.id);
+    const unreviewed = tasksOf(file)
+      .filter((each) => !each.review)
+      .map((each) => each.id);
     // ASSERT
-    expect(task('interview').review).toBeUndefined();
     expect(task('venue').fanOut).toBe(chats);
     expect(unreviewed).toEqual([]);
   });

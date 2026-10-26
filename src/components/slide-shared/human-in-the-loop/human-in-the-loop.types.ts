@@ -39,6 +39,8 @@ export interface UiWords {
   readonly insertedAt: string;
   readonly resultHeading: string;
   readonly resultPlaceholder: string;
+  /** The checkbox label of a final job that hands nothing on. */
+  readonly markDone: string;
   readonly download: string;
   readonly upload: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */

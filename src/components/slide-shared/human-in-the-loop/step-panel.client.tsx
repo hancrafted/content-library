@@ -31,8 +31,10 @@ export interface PanelProps {
 }
 
 /** Where a do step saves its result: the task's output, or `output_K` for chat K of a fan-out. */
-export const resultKey = (step: Step, task: TaskModalView): string =>
-  step.chat === undefined ? task.output : `${task.output}_${step.chat}`;
+export const resultKey = (step: Step, task: TaskModalView): string => {
+  if (task.output === undefined) return `${task.id}.done`;
+  return step.chat === undefined ? task.output : `${task.output}_${step.chat}`;
+};
 
 const partsOf = ({ prompt }: Step): PromptParts => ({
   sections: prompt.sections ?? [{ text: prompt.text }],
@@ -64,8 +66,24 @@ function Actions({ step, kit, slots }: { step: Step; kit: StepKit; slots: SlotSt
   );
 }
 
-function Result({ name, kit, slots }: { name: string; kit: StepKit; slots: SlotState }) {
+/** A job that hands nothing on is done when the viewer ticks it, not when a result is pasted. */
+function DoneBox({ name, kit, slots }: { name: string; kit: StepKit; slots: SlotState }) {
+  return (
+    <label className="flex cursor-pointer items-center gap-2 text-body">
+      <input
+        type="checkbox"
+        className="size-4 accent-primary"
+        checked={Boolean(slots.values[name])}
+        onChange={(event) => slots.onChange({ ...slots.values, [name]: event.target.checked ? 'done' : '' })}
+      />
+      {kit.words.markDone}
+    </label>
+  );
+}
+
+function Result({ name, kit, slots, final }: { name: string; kit: StepKit; slots: SlotState; final: boolean }) {
   const { words } = kit;
+  if (final) return <DoneBox {...{ name, kit, slots }} />;
   return (
     <ContextField
       field={name}
@@ -98,7 +116,7 @@ function DoSteps({ step, task, kit, slots, first }: PanelProps) {
       )}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
         <Actions step={step} kit={kit} slots={slots} />
-        <Result name={resultKey(step, task)} kit={kit} slots={slots} />
+        <Result name={resultKey(step, task)} kit={kit} slots={slots} final={task.output === undefined} />
       </StepSection>
     </>
   );

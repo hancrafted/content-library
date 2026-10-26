@@ -57,12 +57,26 @@ describe('success cases', () => {
     expect(jobOf(view, 'venue').task.examples).toHaveLength(chats);
     expect(jobOf(view, 'pieces').task.examples).toHaveLength(1);
   });
+
+  it("gives each job the goals of the Workflow file for the stepper's titles", () => {
+    // ARRANGE
+    const pieces = loaded.file.stages[0]?.jobs[0];
+    const expected = { do: pieces?.goal.do, review: pieces?.goal.review };
+    // ACT
+    const goal = jobOf(workflowView(WORKFLOW, SIMPLE), 'pieces').goal;
+    // ASSERT
+    expect(goal).toEqual(expected);
+    expect(goal.do).toContain('high-level plan');
+  });
 });
 
 describe('failure cases', () => {
   it('gives a task without a review no review step', () => {
     // ARRANGE
-    const view = workflowView(WORKFLOW, SIMPLE);
+    const bare = (job: (typeof WORKFLOW.stages)[0]['jobs'][0]) =>
+      job.id === 'interview' ? { ...job, task: { ...job.task, review: undefined } } : job;
+    const stages = WORKFLOW.stages.map((stage) => ({ ...stage, jobs: stage.jobs.map(bare) }));
+    const view = workflowView({ ...WORKFLOW, stages }, SIMPLE);
     // ACT
     const ids = jobOf(view, 'interview').task.steps.map((step) => step.id);
     // ASSERT

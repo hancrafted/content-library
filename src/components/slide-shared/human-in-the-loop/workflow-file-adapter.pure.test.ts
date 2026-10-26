@@ -81,7 +81,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps the file on the Workflow and the task on each job, with the review and the stage goal', () => {
+  it('keeps the file on the Workflow and the task on each job, with the review and the stage goal and summary', () => {
     // ARRANGE
     const chats = 3;
     const venue = jobs.find((job) => job.id === 'venue');
@@ -91,7 +91,7 @@ describe('edge cases', () => {
     // ASSERT
     expect(workflow.file.id).toBe('summer-party');
     expect(venue?.task.fanOut).toBe(chats);
-    expect([venue?.reviewed, interview?.reviewed]).toEqual([true, false]);
+    expect([venue?.reviewed, interview?.reviewed]).toEqual([true, true]);
     expect(goal).toContain('Break it down');
   });
 
