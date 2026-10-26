@@ -10,7 +10,7 @@ export const dynamicParams = false;
 export const generateStaticParams = prefixedLocaleParams;
 
 export async function generateMetadata({ params }: EventsParams) {
-  return pageMetadata('events', await resolveLocale(params));
+  return pageMetadata({ kind: 'events' }, await resolveLocale(params));
 }
 
 export default async function Page({ params }: EventsParams) {

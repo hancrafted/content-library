@@ -29,7 +29,7 @@ function isPublished(episode: Episode): episode is PublishedEpisode {
  * facts, so an upcoming Episode with no page yet (a slug outside `EPISODE_SLUGS`) takes the row its page will have.
  */
 function isListed(episode: Episode): boolean {
-  return pageTreatment({ episode: episode.slug as EpisodeSlug }, episode).listed;
+  return pageTreatment({ kind: 'episode', episode: episode.slug as EpisodeSlug }, episode).listed;
 }
 
 /**

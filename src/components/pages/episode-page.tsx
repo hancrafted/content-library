@@ -1,21 +1,34 @@
 import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
-import { findPageRecord } from '@/components/episodes/tooling-pages';
+import { findEpisodesPathPage, findToolingPage } from '@/components/episodes/tooling-pages';
 import { JsonLdScript } from '@/components/json-ld';
 import { episodePublishedOn, episodeStatus, episodeVideo, pageFacts } from '@/content-store/store';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { EPISODES_PATH_SLUGS, episodesPathPage, isEpisodesPathSlug, type EpisodesPathSlug } from '@/lib/routes';
+import {
+  EPISODES_PATH_SLUGS,
+  episodesPathPage,
+  matchPage,
+  type EpisodeSlug,
+  type EpisodesPathPage,
+  type EpisodesPathSlug,
+} from '@/lib/routes';
 import { SITE_URL } from '@/lib/site-url';
 import { episodeJsonLd } from '@/lib/structured-data.pure';
-import { isToolingSlug } from '@/lib/tooling-pages';
 import { pageTreatment } from '@/lib/visibility.pure';
 import { notFound } from 'next/navigation';
+import type { ReactNode } from 'react';
 
 /** Whether the visibility predicate exports a page at `/episodes/<slug>/`: every tooling page and public Episode, no unlisted one. */
-function isExported(slug: EpisodesPathSlug): boolean {
-  const page = episodesPathPage(slug);
+function isExported(page: EpisodesPathPage): boolean {
   return pageTreatment(page, pageFacts(page)).exported;
+}
+
+/** The page a slug under `/episodes/` names, when the visibility predicate exports one there; else no page. */
+function exportedPage(slug: string): EpisodesPathPage {
+  const page = findEpisodesPathPage(slug);
+  if (!isExported(page)) notFound();
+  return page;
 }
 
 /**
@@ -24,7 +37,7 @@ function isExported(slug: EpisodesPathSlug): boolean {
  * and the legacy `/episode/` stubs export exactly these.
  */
 export function episodePageParams(): { episode: EpisodesPathSlug }[] {
-  return EPISODES_PATH_SLUGS.filter(isExported).map((episode) => ({ episode }));
+  return EPISODES_PATH_SLUGS.filter((slug) => isExported(episodesPathPage(slug))).map((episode) => ({ episode }));
 }
 
 /**
@@ -32,18 +45,25 @@ export function episodePageParams(): { episode: EpisodesPathSlug }[] {
  * (FE-002), with its structured data when published. A tooling page renders through the same container, with none.
  */
 export function EpisodePage({ slug, locale }: { slug: string; locale: Locale }) {
-  if (isToolingSlug(slug)) return <EpisodePageContainer locale={locale} episode={findPageRecord(slug)} />;
-  if (!isEpisodesPathSlug(slug) || !isExported(slug)) notFound();
+  const page = exportedPage(slug);
+  return matchPage<EpisodesPathPage, ReactNode>(page, {
+    tooling: ({ tooling }) => <EpisodePageContainer locale={locale} episode={findToolingPage(tooling)} />,
+    episode: ({ episode }) => <OwnEpisodePage slug={episode} locale={locale} />,
+  });
+}
+
+/** An Episode's own page: the container, with its recording, and its structured data once published. */
+function OwnEpisodePage({ slug, locale }: { slug: EpisodeSlug; locale: Locale }) {
   const episode = findEpisode(slug);
   const { title, description } = episodeCopy(slug, locale);
-  const video = episodeVideo(episode.slug, locale);
+  const video = episodeVideo(slug, locale);
   const data =
-    episodeStatus(episode.slug) === 'published'
+    episodeStatus(slug) === 'published'
       ? episodeJsonLd(SITE_URL, locale, {
-          slug: episode.slug,
+          slug,
           title,
           description,
-          publishedOn: episodePublishedOn(episode.slug),
+          publishedOn: episodePublishedOn(slug),
           youtube: video?.id,
         })
       : undefined;
@@ -61,12 +81,15 @@ export function EpisodePage({ slug, locale }: { slug: string; locale: Locale }) 
  * robots and canonical; a tooling page's from its own record, with no facts, since it is `noindex` as a tooling page.
  */
 export function episodePageCopy(slug: string, locale: Locale): PageCopy {
-  if (isToolingSlug(slug)) {
-    const { title, description } = findPageRecord(slug).messages[locale];
-    return { title, description };
-  }
-  const { slug: episodeSlug } = findEpisode(slug);
-  const { title, description } = episodeCopy(episodeSlug, locale);
-  const publishedOn = episodePublishedOn(episodeSlug);
-  return { title, description, facts: pageFacts({ episode: episodeSlug }), ...(publishedOn ? { publishedOn } : {}) };
+  return matchPage<EpisodesPathPage, PageCopy>(findEpisodesPathPage(slug), {
+    tooling: ({ tooling }) => {
+      const { title, description } = findToolingPage(tooling).messages[locale];
+      return { title, description };
+    },
+    episode: (own) => {
+      const { title, description } = episodeCopy(own.episode, locale);
+      const publishedOn = episodePublishedOn(own.episode);
+      return { title, description, facts: pageFacts(own), ...(publishedOn ? { publishedOn } : {}) };
+    },
+  });
 }

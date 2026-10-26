@@ -28,7 +28,7 @@ import type { ReactNode } from 'react';
  */
 export function eventPageCopy(slug: EventSlug, locale: Locale): PageCopy {
   const { title, description } = TRANSLATIONS[locale].eventsPage.items[slug];
-  return { title, description, facts: pageFacts({ event: slug }) };
+  return { title, description, facts: pageFacts({ kind: 'event', event: slug }) };
 }
 
 type EventT = Awaited<ReturnType<typeof getTranslations<'eventsPage'>>>;

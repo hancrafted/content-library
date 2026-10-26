@@ -1,8 +1,23 @@
 import type { MetadataRoute } from 'next';
 import type { IsoDate } from '../content-store/schemas/fields';
 import { DEFAULT_LOCALE } from './locale.pure';
-import { isEpisodePage, pageLocales, PAGES, routeOf, servedUrl, type EpisodeSlug, type PageRef } from './routes';
+import { matchPage, pageLocales, PAGES, routeOf, servedUrl, type EpisodeSlug, type PageRef } from './routes';
 import { pageTreatment, type PageFacts } from './visibility.pure';
+
+/** A sitemap entry's `lastModified`: an Episode's own page carries its publish date, no other page one. */
+function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeSlug) => IsoDate | undefined): IsoDate | undefined {
+  const none = () => undefined;
+  return matchPage<PageRef, IsoDate | undefined>(page, {
+    home: none,
+    dashboard: none,
+    episodes: none,
+    events: none,
+    episode: ({ episode }) => publishedOnOf(episode),
+    tooling: none,
+    event: none,
+    'event-episode': none,
+  });
+}
 
 /**
  * The sitemap: one entry per indexable page and locale, each carrying the full hreflang set, English canonical at
@@ -23,7 +38,7 @@ export function sitemapEntries(
       ...Object.fromEntries(locales.map((locale) => [locale, servedUrl(siteUrl, route, locale)])),
       'x-default': servedUrl(siteUrl, route, DEFAULT_LOCALE),
     };
-    const lastModified = isEpisodePage(page) ? publishedOnOf(page.episode) : undefined;
+    const lastModified = lastModifiedOf(page, publishedOnOf);
     return locales.map((locale) => ({
       url: servedUrl(siteUrl, route, locale),
       ...(lastModified ? { lastModified } : {}),

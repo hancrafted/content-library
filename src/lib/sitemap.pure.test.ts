@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { EPISODE_SLUGS, isEpisodePage, isEventPage, type PageRef } from './routes';
+import { EPISODE_SLUGS, type PageRef } from './routes';
 import { robotsFor, sitemapEntries } from './sitemap.pure';
 import type { PageFacts } from './visibility.pure';
 
@@ -70,7 +70,7 @@ describe('failure cases', () => {
     const episode = EPISODE_SLUGS[1];
     const event = '2026-10-23-axel-agentic-workflow';
     const factsOf = (page: PageRef): PageFacts => {
-      const unlisted = (isEpisodePage(page) && page.episode === episode) || isEventPage(page);
+      const unlisted = (page.kind === 'episode' && page.episode === episode) || page.kind === 'event';
       return { visibility: unlisted ? 'unlisted' : 'public', status: 'published' };
     };
     const hidden = [
@@ -114,7 +114,7 @@ describe('edge cases', () => {
     const published = EPISODE_SLUGS[1];
     const factsOf = (page: PageRef): PageFacts => ({
       visibility: 'public',
-      status: isEpisodePage(page) && page.episode === upcoming ? 'upcoming' : 'published',
+      status: page.kind === 'episode' && page.episode === upcoming ? 'upcoming' : 'published',
     });
     // ACT
     const urls = sitemapEntries(SITE, factsOf, undated).map((entry) => entry.url);
