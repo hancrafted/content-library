@@ -6,6 +6,7 @@ import type { RuntimeTranslator } from '@/components/slide-master/slide-base';
 import type { EyebrowText } from '@/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/components/slide-master/slide-header';
 import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
+import type { Video } from '@/content-store/store';
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
@@ -22,7 +23,7 @@ import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
-import { TalkPlayer } from './talk-player.client';
+import { TalkPlayer, type RecordingLanguage, type TalkPlayerLabels } from './talk-player.client';
 import { isTitleTarget, TitleSlide, type TitleSlideProps } from './title-slide';
 import { UrlStateProvider } from './url-state-provider.client';
 
@@ -89,7 +90,7 @@ function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly Loca
 function titleSlideOf(
   content: EpisodeContent,
   page: PageHeader,
-  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'position'>,
+  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'recording' | 'position'>,
 ): TitleSlideProps {
   return {
     title: content.title,
@@ -170,14 +171,26 @@ async function pageHeaderOf(
   };
 }
 
+/** The talk player's labels and, for an Event recording, its language named in the page's language; none without a Video. */
+async function talkOf(
+  locale: Locale,
+  video: Video | undefined,
+): Promise<{ talkLabels?: TalkPlayerLabels; recording?: RecordingLanguage }> {
+  if (video === undefined) return {};
+  const talkLabels = await readTranslationStrings(locale, 'talkPlayer', ['recordedIn']);
+  if (video.recordedIn === undefined) return { talkLabels };
+  const t = await getTranslations({ locale, namespace: 'talkPlayer' });
+  return { talkLabels, recording: { language: video.recordedIn, label: t(`recordedIn.${video.recordedIn}`) } };
+}
+
 /** The Episode at its own URL: no Event frame around it. */
 const OWN_PAGE: Partial<EpisodeFrame> = {};
 
 interface EpisodePageContainerProps {
   locale: Locale;
   episode: EpisodeComposition;
-  /** The Episode's video in this locale, from its metadata record; none for a tooling page or before upload. */
-  youtubeId?: string;
+  /** The Episode's Video in this locale, from the content store; none for a tooling page or before upload. */
+  video?: Video;
   /** Present when an Event presents the Episode at its own URL; absent on `/episodes/<slug>/`. */
   frame?: Partial<EpisodeFrame>;
 }
@@ -193,14 +206,15 @@ interface EpisodePageContainerProps {
  * contents and Slide links point at the Event's URL for the Episode.
  */
 export async function EpisodePageContainer(props: EpisodePageContainerProps) {
-  const { locale, episode, youtubeId, frame = OWN_PAGE } = props;
+  const { locale, episode, video, frame = OWN_PAGE } = props;
+  const youtubeId = video?.id;
   const route = frame.route ?? episodeRoute(episode.slug);
   const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), route });
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
   const page = await pageHeaderOf(content, locale, sections);
-  const talkLabels = youtubeId ? await readTranslationStrings(locale, 'talkPlayer') : undefined;
-  const titleSlide = titleSlideOf(content, page, { youtubeId, talkLabels, position: frame.position });
+  const { talkLabels, recording } = await talkOf(locale, video);
+  const titleSlide = titleSlideOf(content, page, { youtubeId, talkLabels, recording, position: frame.position });
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (

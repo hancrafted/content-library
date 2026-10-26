@@ -5,6 +5,7 @@ import { useDockedPageMark, useTalkHostPlacement } from '@/hooks/use-talk-host-p
 import { closeTalkPlayer, openTalkPlayer, registerSlot, useTalkPlayer } from '@/hooks/use-talk-player';
 import { useActiveSlide, useUrlState } from '@/hooks/use-url-state';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
+import type { Locale } from '@/lib/locale.pure';
 import { shouldDock } from '@/lib/talk-dock.pure';
 import { cn } from '@/lib/utils';
 import { useState, useSyncExternalStore } from 'react';
@@ -15,6 +16,12 @@ export interface TalkPlayerLabels {
   readonly heading: string;
   readonly backToVideo: string;
   readonly close: string;
+}
+
+/** An Event recording's language, named in the page's language before play: "Recorded in German". */
+export interface RecordingLanguage {
+  readonly language: Locale;
+  readonly label: string;
 }
 
 const WIDE_QUERY = '(min-width: 64rem)';
@@ -47,13 +54,24 @@ function TalkLauncherBadge() {
 const LAUNCHER =
   'group mt-8 flex w-full max-w-md items-center gap-3 rounded-2xl border border-border bg-background/95 px-4 py-3 text-left shadow-xs transition-all hover:border-secondary hover:bg-secondary/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary cursor-pointer';
 
+/** The language an Event recording was made in, named before play; nothing for a per-locale video. */
+function RecordedIn({ recording }: { recording: RecordingLanguage | undefined }) {
+  if (recording === undefined) return null;
+  return (
+    <span data-recording-language={recording.language} className="mt-0.5 block text-caption text-muted-foreground">
+      {recording.label}
+    </span>
+  );
+}
+
 interface LauncherProps {
   youtubeId: string;
   labels: TalkPlayerLabels;
+  recording?: RecordingLanguage;
   hidden: boolean;
 }
 
-function LauncherButton({ youtubeId, labels, hidden }: LauncherProps) {
+function LauncherButton({ youtubeId, labels, recording, hidden }: LauncherProps) {
   return (
     <button
       type="button"
@@ -72,6 +90,7 @@ function LauncherButton({ youtubeId, labels, hidden }: LauncherProps) {
           {labels.watch}
         </span>
         <span className="mt-0.5 block text-body leading-snug text-foreground/80">{labels.subtitle}</span>
+        <RecordedIn recording={recording} />
       </span>
     </button>
   );
@@ -81,11 +100,20 @@ function LauncherButton({ youtubeId, labels, hidden }: LauncherProps) {
  * The Title slide's launcher while the talk is closed; while it plays, the 16:9 talk slot takes its place.
  * Both stay in the static HTML (one hidden), so the slot is there for the player to follow once it opens.
  */
-export function TalkLauncher({ youtubeId, labels }: { youtubeId: string; labels: TalkPlayerLabels }) {
+export function TalkLauncher({
+  youtubeId,
+  labels,
+  recording,
+}: {
+  youtubeId: string;
+  labels: TalkPlayerLabels;
+  /** An Event recording's language, labelled on the launcher; none for a public Episode's per-locale video. */
+  recording?: RecordingLanguage;
+}) {
   const { isOpen } = useTalkPlayer();
   return (
     <>
-      <LauncherButton youtubeId={youtubeId} labels={labels} hidden={isOpen} />
+      <LauncherButton youtubeId={youtubeId} labels={labels} recording={recording} hidden={isOpen} />
       {/* mt-16: the strip above the frame where the player's 2rem header sits, plus a gap. */}
       <div
         ref={registerSlot}

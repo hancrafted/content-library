@@ -147,7 +147,7 @@ describe('success cases', () => {
       // ARRANGE
       const expected = { en, de };
       // ACT
-      const video = { en: episodeVideo(slug, 'en'), de: episodeVideo(slug, 'de') };
+      const video = { en: episodeVideo(slug, 'en')?.id, de: episodeVideo(slug, 'de')?.id };
       // ASSERT
       expect(video).toEqual(expected);
     },
@@ -304,6 +304,22 @@ describe('failure cases', () => {
       playlists: [{ ...PLAYLIST, episodes: ['alpha-at-axel'] }],
     };
     const expected = `Episode alpha-at-axel: youtube.language "fr" is not one of the site's locales (en, de)`;
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an unlisted Episode with more than one Video', () => {
+    // ARRANGE
+    const twoVideos = { ...UNLISTED, youtube: { en: 'S0Nx4faEebY', de: 'YxCVw4bUbW0' } };
+    const input = {
+      ...SOUND,
+      episodes: [EPISODE, twoVideos],
+      playlists: [{ ...PLAYLIST, episodes: ['alpha-at-axel'] }],
+    };
+    const expected =
+      'Episode alpha-at-axel: youtube holds 2 videos (en, de), but an unlisted Episode carries at most one Video, its Event recording with its language';
     // ACT
     const load = () => loadContent(input);
     // ASSERT

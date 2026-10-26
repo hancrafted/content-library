@@ -36,7 +36,7 @@ export function EpisodePage({ slug, locale }: { slug: string; locale: Locale }) 
   if (!isEpisodesPathSlug(slug) || !isExported(slug)) notFound();
   const episode = findEpisode(slug);
   const { title, description } = episodeCopy(slug, locale);
-  const youtube = episodeVideo(episode.slug, locale);
+  const video = episodeVideo(episode.slug, locale);
   const data =
     episodeStatus(episode.slug) === 'published'
       ? episodeJsonLd(SITE_URL, locale, {
@@ -44,13 +44,13 @@ export function EpisodePage({ slug, locale }: { slug: string; locale: Locale }) 
           title,
           description,
           publishedOn: episodePublishedOn(episode.slug),
-          youtube,
+          youtube: video?.id,
         })
       : undefined;
   return (
     <>
       {data && <JsonLdScript data={data} />}
-      <EpisodePageContainer locale={locale} episode={episode} youtubeId={youtube} />
+      <EpisodePageContainer locale={locale} episode={episode} video={video} />
     </>
   );
 }

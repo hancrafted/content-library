@@ -59,7 +59,7 @@ export async function EventEpisodePage({ event, episode, locale }: { event: stri
     <EpisodePageContainer
       locale={locale}
       episode={composition}
-      youtubeId={episodeVideo(composition.slug, locale)}
+      video={episodeVideo(composition.slug, locale)}
       frame={frame}
     />
   );

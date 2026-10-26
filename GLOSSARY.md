@@ -13,7 +13,7 @@ Localized visualisations of theory content, captured from YouTube training video
 **Audience**: a level of AI enablement the library serves, independent of locale: **Individual**, a person learning for themselves, or **Organization**, a company enabling its people.
 _Avoid_: International viewers, German businesses, segment, persona
 
-**Episode**: one page of visualised theory content, localized into en and de: its Slides stacked vertically, navigated by its table of contents. Its title is the page's h1; it holds Sections and has one YouTube recording per locale.
+**Episode**: one page of visualised theory content, localized into en and de: its Slides stacked vertically, navigated by its table of contents. Its title is the page's h1; it holds Sections and plays its Video once uploaded.
 _Avoid_: Post, article, video, tower
 
 **Episode overview**: the landing page's list of every Episode, published or upcoming, that a visitor browses and filters.
@@ -36,6 +36,9 @@ _Avoid_: Status, private, hidden, draft
 
 **unlisted Episode**: an Episode whose visibility is `unlisted`: a composition made for one Event, usually its Slides copied (`cp -r`) from a public Episode and left to drift. It is registered once like any Episode, lives only at its Event-scoped Episode page, has no `/episodes/` page, is `noindex`, never in the sitemap, the Episode overview or Upcoming Episodes, and is refused when no Event's Playlist lists it. Flipping its `visibility` to `public` is the one edit that gives it its own page. One visibility predicate decides all of this (`pageTreatment`, `src/lib/visibility.pure.ts`).
 _Avoid_: Private Episode, hidden Episode, event copy, attendee page
+
+**Video**: a YouTube video an Episode's page plays from its Title slide, declared as `youtube` in the Episode's metadata and optional until uploaded; visibility decides how many. A public Episode has at most one per locale: none, English, German or both. An unlisted Episode has at most one, its **Event recording**: one YouTube id with the language spoken at its Event, played on both locale pages and labelled with that language before play. The content store refuses a second Video on an unlisted Episode and a language that is not a site locale.
+_Avoid_: Clip, recording link
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
