@@ -15,8 +15,8 @@ import type { Playlist } from './schemas/playlist.schema';
 
 /*
  * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here, parsed
- * by its schema and checked against the others when this module loads. An Episode's metadata arrives through the
- * generated Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder); Events and Playlists by explicit
+ * by its schema and checked against the others when this module loads. Episode metadata arrives through the generated
+ * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder), Events and Playlists by explicit
  * import. A bad record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read
  * records only through the functions below. The one seam a database would replace.
  */
@@ -53,7 +53,7 @@ export function featuredSlugs(): readonly PublishedSlug[] {
   return FEATURED;
 }
 
-/** Every Episode's metadata: the registered ones, then the upcoming ones in overview order. */
+/** Every Episode's metadata: those with a page, then the upcoming ones without, each in folder-name order. */
 export function listEpisodes(options?: { includeDrafts?: boolean }): readonly Episode[] {
   if (options?.includeDrafts ?? true) return CONTENT.episodes;
   return CONTENT.episodes.filter((entry) => entry.status === 'published');

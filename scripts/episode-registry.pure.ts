@@ -1,7 +1,8 @@
-// The Episode registry (GLOSSARY): what `npm run episodes:registry` writes from the Episode folders. An Episode is its
-// folder, `src/components/episodes/<slug>/`, so the slug list, the store's metadata records and the compositions are
-// derived from the folders, one generated file per tier (FE-007: lib may not import the store or a component). Each file is checked in, so `tsc` reads the records where they are written, and a fast test fails
-// when one is stale. The disk side lives in episode-registry.ts.
+// The Episode registry (GLOSSARY): what `npm run episodes:registry` writes from the Episode folders. An Episode is
+// its folder, `src/components/episodes/<slug>/`, so the slug list, the store's metadata records and the compositions
+// are derived from the folders, one generated file per tier (FE-007: lib may not import the store or a component).
+// Each file is checked in, so `tsc` reads the records where they are written, and a fast test fails when one is
+// stale. The disk side lives in episode-registry.ts.
 
 /** One folder under `src/components/episodes/`: its name, its entries, and its `episode.ts` text when it has one. */
 export interface EpisodeFolder {
@@ -56,6 +57,17 @@ function exportedRecord(folder: EpisodeFolder): string {
   return names[0];
 }
 
+/** Code-point order, so the registry is the same on every machine whatever its locale. */
+function bySlug(a: { readonly slug: string }, b: { readonly slug: string }): number {
+  if (a.slug === b.slug) return 0;
+  return a.slug < b.slug ? -1 : 1;
+}
+
+/** One map entry per Episode, keyed by its folder name. */
+function entries(episodes: readonly RegisteredEpisode[]): string {
+  return episodes.map(({ slug, local }) => `  '${slug}': ${local},`).join('\n');
+}
+
 function importOf({ local, exported }: RegisteredEpisode, from: string): string {
   return `import { ${exported === local ? local : `${exported} as ${local}`} } from '${from}';`;
 }
@@ -72,7 +84,7 @@ export const EPISODE_SLUGS = [${slugs}] as const;
 function metadataFile(episodes: readonly RegisteredEpisode[], upcoming: readonly string[]): string {
   const asMetadata = (slug: string) => ({ slug, local: identifierOf(slug), exported: 'episodeMetadata' });
   const imports = [...episodes.map(({ slug }) => asMetadata(slug)), ...upcoming.map(asMetadata)]
-    .sort((a, b) => a.slug.localeCompare(b.slug))
+    .sort(bySlug)
     .map((each) => importOf(each, `@/components/episodes/${each.slug}/episode-metadata`));
   return `${HEADER}
 ${SLUG_TYPE}
@@ -81,7 +93,7 @@ ${imports.join('\n')}
 
 /** Every Episode with a page, public or unlisted: its metadata by slug, so a key and its record's slug must match. */
 export const EPISODE_METADATA = {
-${episodes.map(({ slug, local }) => `  '${slug}': ${local},`).join('\n')}
+${entries(episodes)}
 } as const satisfies { readonly [S in EpisodeSlug]: EpisodeInput & { readonly slug: S } };
 
 /** Upcoming Episodes without a page, by folder name: each folder holding only its metadata. */
@@ -97,7 +109,7 @@ ${episodes.map((each) => importOf(each, `./${each.slug}/episode`)).join('\n')}
 
 /** Every Episode's composition by slug, so a key and its record's slug must match. */
 export const EPISODES: { readonly [S in EpisodeSlug]: EpisodeComposition & { readonly slug: S } } = {
-${episodes.map(({ slug, local }) => `  '${slug}': ${local},`).join('\n')}
+${entries(episodes)}
 };
 `;
 }
@@ -107,9 +119,7 @@ ${episodes.map(({ slug, local }) => `  '${slug}': ${local},`).join('\n')}
  * and is left out; one with metadata but no `episode.ts` is an upcoming Episode without a page. Order is folder name.
  */
 export function episodeRegistryFiles(folders: readonly EpisodeFolder[]): readonly RegistryFile[] {
-  const sorted = folders
-    .filter(({ files }) => files.includes(METADATA_FILE))
-    .sort((a, b) => a.slug.localeCompare(b.slug));
+  const sorted = folders.filter(({ files }) => files.includes(METADATA_FILE)).sort(bySlug);
   const episodes = sorted
     .filter(({ files }) => files.includes(RECORD_FILE))
     .map((folder) => ({ slug: folder.slug, local: identifierOf(folder.slug), exported: exportedRecord(folder) }));

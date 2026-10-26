@@ -1,6 +1,6 @@
-// `npm run episodes:registry` writes the Episode registry from the Episode folders, formatted as Prettier would. The fast
-// suite fails while a checked-in registry file is stale (episode-registry.test.ts). What the registry holds:
-// episode-registry.pure.ts.
+// `npm run episodes:registry` writes the Episode registry from the Episode folders, formatted as Prettier would.
+// The fast suite fails while a checked-in registry file is stale (episode-registry.test.ts). What the registry
+// holds: episode-registry.pure.ts.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';

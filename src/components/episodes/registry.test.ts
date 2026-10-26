@@ -10,13 +10,14 @@ import { episodeCopy, findEpisode } from './registry';
  * its own text from its folder's `i18n/` (what the Title slide, the page
  * metadata and the landing card read) and the Section list its Dossier fixes.
  * Every Episode comes from the Episode registry. The per-Episode facts in the tables below are written out by hand from
- * each public Episode's Dossier, and every public Episode has its rows; an unlisted Episode is a copy made for one
- * Event and left to drift (product vision, rule 4), with no Dossier to pin it, so it has none.
+ * each published public Episode's Dossier, and every one has its rows, written at publication; an Episode still in the
+ * pipeline gains Slides Section by Section, and an unlisted Episode is a copy made for one Event and left to drift
+ * (product vision, rule 4), so neither has a fixed composition to pin.
  */
 
-/** The public Episodes with a page, by slug: the ones the tables below must cover, no more, no less. */
-const PUBLIC_EPISODES = listEpisodes()
-  .filter(({ slug, visibility }) => visibility === 'public' && isEpisodeSlug(slug))
+/** The published public Episodes, by slug: the ones the tables below must cover, no more, no less. */
+const PUBLISHED_PUBLIC = listEpisodes()
+  .filter(({ slug, status, visibility }) => status === 'published' && visibility === 'public' && isEpisodeSlug(slug))
   .map(({ slug }) => slug)
   .sort();
 
@@ -191,9 +192,9 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('writes the composition and the header mode of every public Episode by hand, and of no unlisted one', () => {
+  it('writes the composition and the header mode of every published public Episode by hand, and of no other', () => {
     // ARRANGE
-    const expected = { composition: PUBLIC_EPISODES, header: PUBLIC_EPISODES };
+    const expected = { composition: PUBLISHED_PUBLIC, header: PUBLISHED_PUBLIC };
     // ACT
     const covered = {
       composition: COMPOSITION.map(({ slug }) => slug).sort(),
