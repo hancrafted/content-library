@@ -4,6 +4,23 @@ ui:
   toolbar: Ablauf-Steuerung
   technical: Technisch
   technicalTip: 'Technisch: zeigt die einmalige Einrichtung und die /Skill-Befehle'
+  context: Hilfe
+  intro: 'Gehe die Schritte der Reihe nach durch: Kopiere jeden Prompt in einen neuen KI-Chat und füge das Ergebnis hier wieder ein.'
+  stepContext: 'Kontext angeben'
+  stepContextInfo: 'Der Prompt unten braucht Ergebnisse früherer Aufgaben oder zusätzliche Eingaben. Sie werden hier eingetragen, wenn du das Ergebnis in einem früheren Schritt eingefügt hast. Lass ein Feld leer, um das Beispiel zu verwenden.'
+  stepDo: 'Prompt ausführen und Ergebnis einfügen'
+  stepDoInfo: 'Führe den Prompt in einer neuen Unterhaltung aus und füge das Ergebnis hier ein. Schließe die Unterhaltung nicht.'
+  stepCheck: 'Ergebnis prüfen'
+  stepCheckInfo: 'Prüfe das Ergebnis in einer neuen Unterhaltung. Fällt es durch, füge das Feedback in die Unterhaltung des vorherigen Schritts ein und aktualisiere das Ergebnis. Wiederhole das, bis alle Prüfungen bestehen.'
+  copyExplanation: 'Erklär-Prompt kopieren'
+  copyExplanationTip: 'Füge diesen Prompt in einen Chat ein, damit die KI den Prompt, seine Struktur, das Gute und das Verbesserbare erklärt.'
+  explainWrapper: "Du bist mein Coach für Prompt Engineering. Unten steht ein Prompt, den ich gleich mit einem KI-Assistenten verwenden will. Erkläre ihn mir, damit ich Meta-Prompting lerne:\n1. Wofür jeder Teil des Prompts da ist.\n2. Warum er gut funktioniert: welche Techniken er nutzt (Rolle, Kontext, Vorgaben, Ausgabeformat, Beispiele) und warum sie helfen.\n3. Wo er schwach ist und wie ich ihn verbessern oder an meine Situation anpassen kann.\nHalte dich kurz und konkret und zitiere die Zeilen, auf die du dich beziehst.\n\nPrompt:\n\"\"\"\n{prompt}\n\"\"\""
+  stepN: 'Schritt {n}: {title}'
+  previousResults: Frühere Ergebnisse
+  insertedAt: 'Wird im Prompt unter "{section}" eingefügt'
+  resultHeading: Ergebnis
+  resultPlaceholder: Ergebnis hier einfügen, um es für den nächsten Schritt zu speichern
+  contextTip: 'Hilfe: zeigt, was in jedem Schritt zu tun ist'
   download: Diesen Ablauf herunterladen
   upload: Eigenen Ablauf hochladen
   close: Schließen

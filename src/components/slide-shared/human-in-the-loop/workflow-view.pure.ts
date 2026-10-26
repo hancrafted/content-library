@@ -1,3 +1,4 @@
+import { producersBefore } from './workflow-outputs.pure';
 import { stepsOf, type TaskStep } from './workflow-prompts.pure';
 import type { Runtime, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
@@ -16,6 +17,10 @@ export interface ViewOptions {
 /** What a task shows: its steps (do, then review), and why, examples and what good looks like. */
 export interface TaskModalView {
   readonly steps: readonly TaskStep[];
+  /** The name this task hands on: its result is saved under it (`name_K` for chat K of a fan-out). */
+  readonly output: string;
+  /** The names earlier stages hand on: a slot with one of these ids takes a previous result. */
+  readonly previous: readonly string[];
   readonly why: string;
   /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a fan-out one per chat. */
   readonly examples: readonly string[];
@@ -45,11 +50,14 @@ export interface WorkflowView {
   readonly stages: readonly StageView[];
 }
 
-function taskView({ task }: Job, workflow: Workflow, level: Level): TaskModalView {
+function taskView({ task }: Job, workflow: Workflow, at: { level: Level; stage: number }): TaskModalView {
+  const { level, stage: stageAt } = at;
   const runtime: Runtime = level === 'technical' ? 'technical' : 'simple';
   const { example } = task.details;
   return {
     steps: stepsOf(workflow.file, task, runtime),
+    output: task.output,
+    previous: [...producersBefore(workflow.file, stageAt).keys()],
     why: task.details.why,
     examples: typeof example === 'string' ? [example] : example,
     goodLooksLike: task.details.goodLooksLike,
@@ -63,11 +71,15 @@ function taskView({ task }: Job, workflow: Workflow, level: Level): TaskModalVie
 export function workflowView(workflow: Workflow, { level }: ViewOptions): WorkflowView {
   return {
     title: workflow.title,
-    stages: workflow.stages.map((stage) => ({
+    stages: workflow.stages.map((stage, stageAt) => ({
       id: stage.id,
       name: stage.name,
       goal: stage.goal,
-      jobs: stage.jobs.map((job) => ({ id: job.id, title: job.title, task: taskView(job, workflow, level) })),
+      jobs: stage.jobs.map((job) => ({
+        id: job.id,
+        title: job.title,
+        task: taskView(job, workflow, { level, stage: stageAt }),
+      })),
     })),
   };
 }

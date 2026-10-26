@@ -67,7 +67,7 @@ interface CopyButtonProps {
 }
 
 /** "Copy prompt": a press copies, and on success the icon turns into a tick and the label into "Copied", then back. */
-function CopyButton({ label, done, onCopy }: CopyButtonProps) {
+export function CopyButton({ label, done, onCopy }: CopyButtonProps) {
   const motion = useMotion();
   const [confirmed, confirm] = useConfirmed();
   const Icon = confirmed ? Check : Copy;

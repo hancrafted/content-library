@@ -1,12 +1,14 @@
 'use client';
 
-import { useMotion } from '@/hooks/use-motion';
-import { ChevronDown, Code, Download, Upload } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Code, Download, Upload } from 'lucide-react';
 import { useId, type ChangeEvent } from 'react';
-import { IconButton } from '../core-components/icon-button/icon-button.client';
-import { Tip } from '../core-components/tip/tip.client';
-import styles from './human-in-the-loop.module.css';
 import type { ToolbarProps } from './human-in-the-loop.types';
+import { ToolButton } from './tool-button.client';
 import { offers } from './toolbar-controls.pure';
 import { workflowFile } from './workflow-file.pure';
 
@@ -30,64 +32,68 @@ function Options({ bar, known }: { readonly bar: ToolbarProps; readonly known: b
   return (
     <>
       {known ? null : (
-        <option value={bar.workflow.id} disabled>
+        <SelectItem value={bar.workflow.id} disabled>
           {bar.workflow.title}
-        </option>
+        </SelectItem>
       )}
       {bar.choices.map((c) => (
-        <option key={c.id} value={c.id} data-workflow={c.id}>
+        <SelectItem key={c.id} value={c.id} data-workflow={c.id}>
           {c.title}
-        </option>
+        </SelectItem>
       ))}
     </>
   );
 }
 
-/** The use case picker: a visible label and a native select of the Workflows; an uploaded one joins as its own option. */
+/** The use case picker: a visible label and a shadcn Select of the Workflows; an uploaded one joins as its own option. */
 function Picker({ bar }: { readonly bar: ToolbarProps }) {
   const id = useId();
   if (!offers(bar.controls, 'picker') || bar.choices.length < 2) return null;
   const known = bar.choices.some((c) => c.id === bar.workflow.id);
   return (
-    <div className={styles.picker} data-control="picker">
-      <label htmlFor={id} className="text-caption font-medium">
+    <div className="flex min-w-0 items-center gap-2 pl-3" data-control="picker">
+      <Label htmlFor={id} className="text-caption text-muted-foreground">
         {bar.words.workflow}:
-      </label>
-      <span className={styles.select}>
-        <select
-          id={id}
-          value={bar.workflow.id}
-          onChange={(event) => bar.onWorkflow(event.target.value)}
-          className="text-caption font-semibold"
-        >
+      </Label>
+      <Select value={bar.workflow.id} onValueChange={bar.onWorkflow}>
+        <SelectTrigger id={id}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
           <Options bar={bar} known={known} />
-        </select>
-        <ChevronDown aria-hidden="true" />
-      </span>
+        </SelectContent>
+      </Select>
     </div>
   );
 }
 
+const UPLOAD_BUTTON = 'relative size-9 rounded-full focus-within:ring-[3px] focus-within:ring-ring/50';
+
 function UploadButton({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
-  const motion = useMotion();
   const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) bar.onUpload(await file.text());
     event.target.value = '';
   };
   return (
-    <Tip text={bar.words.upload} align="end">
-      <label className={`${styles.icon} ${styles.upload}`} data-control="upload" {...motion}>
-        <Upload aria-hidden="true" />
-        <input
-          type="file"
-          accept=".yml,.yaml,application/x-yaml,text/yaml"
-          aria-label={bar.words.upload}
-          aria-describedby={describedBy}
-          onChange={readChosenFile}
-        />
-      </label>
-    </Tip>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button asChild variant="ghost" size="icon" className={UPLOAD_BUTTON}>
+          <label data-control="upload">
+            <Upload aria-hidden="true" />
+            <input
+              type="file"
+              accept=".yml,.yaml,application/x-yaml,text/yaml"
+              aria-label={bar.words.upload}
+              aria-describedby={describedBy}
+              onChange={readChosenFile}
+              className="absolute inset-0 size-full cursor-pointer opacity-0"
+            />
+          </label>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{bar.words.upload}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -107,27 +113,26 @@ function Icons({ bar }: { readonly bar: ToolbarProps }) {
   return (
     <>
       {offers(controls, 'level', readonly) && (
-        <IconButton
-          className={styles.icon}
+        <ToolButton
           label={words.technical}
           tip={words.technicalTip}
           data-control="level"
-          aria-pressed={level === 'technical'}
+          pressed={level === 'technical'}
+          variant="ghost"
           onClick={() => bar.onLevel(level === 'technical' ? 'simple' : 'technical')}
         >
           <Code aria-hidden="true" />
-        </IconButton>
+        </ToolButton>
       )}
       {offers(controls, 'download') && (
-        <IconButton
-          className={styles.icon}
+        <ToolButton
           label={words.download}
-          align="end"
           data-control="download"
+          variant="ghost"
           onClick={() => download(bar.workflow)}
         >
           <Download aria-hidden="true" />
-        </IconButton>
+        </ToolButton>
       )}
     </>
   );
@@ -150,14 +155,14 @@ export function ToolbarPart(bar: ToolbarProps) {
   return (
     <>
       <div
-        className={styles.toolbar}
+        className="mb-4 flex w-fit max-w-full flex-wrap items-center gap-0.5 rounded-full border bg-muted p-[3px]"
         role="toolbar"
         aria-label={bar.words.toolbar}
         data-part="toolbar"
         data-level={bar.level}
       >
         <Picker bar={bar} />
-        {pills && icons ? <span className={styles.sep} aria-hidden="true" /> : null}
+        {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
         <Icons bar={bar} />
         {offers(bar.controls, 'upload') && <UploadButton bar={bar} describedBy={describedBy} />}
       </div>

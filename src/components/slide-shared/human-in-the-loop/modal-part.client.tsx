@@ -1,13 +1,13 @@
 'use client';
 
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { useEffect, useRef, useState } from 'react';
-import type { PromptKit } from '../core-components/try-prompt/try-prompt.client';
-import type { ModalProps, UiWords } from './human-in-the-loop.types';
+import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog';
+import { useState } from 'react';
+import type { ModalProps } from './human-in-the-loop.types';
 import { ModalHeader } from './modal-header.client';
-import { TaskDetails, TaskSteps, type SlotState } from './task-steps.client';
+import type { SlotState, StepKit } from './step-kit.types';
+import { Stepper } from './stepper.client';
 import { tryTitle } from './words.pure';
-import type { JobModalView, StageView } from './workflow-view.pure';
+import type { StageView } from './workflow-view.pure';
 
 /** Copies text; `true` when the clipboard took it. */
 async function copyText(text: string): Promise<boolean> {
@@ -30,119 +30,63 @@ function useCopy(done: string) {
   return [announced, copy] as const;
 }
 
-function useModalDialog(isOpen: boolean) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    const element = dialog.current;
-    if (!isOpen || !element || element.open) return;
-    element.showModal();
-    // The title takes the first focus, so no control (and no tooltip) greets the viewer; closing returns focus to the opener.
-    element.querySelector<HTMLElement>('[data-autofocus]')?.focus();
-  }, [isOpen]);
-  return dialog;
-}
-
-interface TasksProps {
-  readonly slots: SlotState;
-  readonly jobs: readonly JobModalView[];
-  readonly kit: PromptKit & { readonly words: UiWords };
-  readonly words: UiWords;
-}
-
-/** The tasks of a stage: steps on the left and the details of the task in focus on the right; on a phone one column, details folded under each task. */
-interface ColumnProps extends TasksProps {
-  readonly wide: boolean;
-  readonly onActive: (jobId: string) => void;
-}
-
-function TaskColumn({ jobs, kit, words, wide, slots, onActive }: ColumnProps) {
-  const several = jobs.length > 1;
-  return (
-    <div data-column={wide ? 'tasks' : undefined} className="flex min-w-0 flex-col gap-8">
-      {jobs.map((job, at) => (
-        <section
-          key={job.id}
-          data-job={job.id}
-          aria-label={several ? job.title : undefined}
-          className="flex flex-col gap-4"
-        >
-          {several && <h3 className="text-body font-semibold">{job.title}</h3>}
-          <TaskSteps task={job.task} kit={kit} slots={slots} openFirst={at === 0} onActive={() => onActive(job.id)} />
-          {!wide && <TaskDetails jobId={job.id} task={job.task} words={words} folded />}
-        </section>
-      ))}
-    </div>
-  );
-}
-
-function Tasks({ jobs, kit, words, slots }: TasksProps) {
-  const wide = useMediaQuery('(min-width: 768px)');
-  const [active, setActive] = useState(jobs[0]?.id);
-  const shown = jobs.find((job) => job.id === active) ?? jobs[0];
-  return (
-    <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,20rem)]">
-      <TaskColumn {...{ jobs, kit, words, wide, slots }} onActive={setActive} />
-      {wide && shown && (
-        <aside data-column="details" className="min-w-0 md:sticky md:top-0 md:self-start">
-          <TaskDetails jobId={shown.id} task={shown.task} words={words} folded={false} />
-        </aside>
-      )}
-    </div>
-  );
-}
-
-type PanelProps = Omit<ModalProps, 'stage' | 'slotValues' | 'onSlots'> & {
+type PanelProps = Omit<ModalProps, 'stage' | 'slotValues' | 'onSlots' | 'onClose'> & {
   readonly stage: StageView;
   readonly slots: SlotState;
 };
 
-/** The card inside the dialog: the header, then the stage's jobs, then the live region a copy announces in. Full screen on a phone. */
-function Panel({ stage, slots, level, onLevel, onClose, ...chrome }: PanelProps) {
+function Panel({ stage, slots, level, onLevel, ...chrome }: PanelProps) {
   const [announced, copy] = useCopy(chrome.words.copied);
+  const [showContext, setShowContext] = useState(false);
   const { words } = chrome;
   const first = stage.jobs[0];
-  const kit = {
-    words,
-    onCopy: copy,
-  };
+  const kit: StepKit = { words, onCopy: copy, info: showContext };
   return (
-    <div className="flex h-full w-full flex-col gap-4 bg-card p-4 text-foreground md:h-auto md:max-h-full md:max-w-5xl md:rounded-2xl md:border md:border-border md:p-5 md:shadow-lg">
-      <ModalHeader stage={stage} words={words} level={level} onLevel={onLevel} onClose={onClose} />
+    <>
+      <ModalHeader {...{ stage, words, level, onLevel, showContext }} onContext={setShowContext} />
+      {showContext && (
+        <DialogDescription data-intro="" className="shrink-0">
+          {[stage.goal, words.intro].filter(Boolean).join(' ')}
+        </DialogDescription>
+      )}
       <div
         data-scroll=""
         className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto overscroll-contain md:flex-initial md:pr-2"
       >
-        {first && <Tasks jobs={stage.jobs} kit={kit} words={words} slots={slots} />}
+        {first && <Stepper jobs={stage.jobs} kit={kit} slots={slots} />}
       </div>
       <p role="status" aria-live="polite" className="h-5 shrink-0 text-caption text-muted-foreground">
         {announced}
       </p>
-    </div>
+    </>
   );
 }
 
+/** The title takes the first focus, so no control (and no tooltip) greets the viewer. */
+function focusTitle(event: Event) {
+  event.preventDefault();
+  document.querySelector<HTMLElement>('[data-part="modal"] [data-autofocus]')?.focus();
+}
+
 /**
- * The stage modal part: a native `<dialog>` opened with `showModal()` while a stage is open, so the browser gives the
- * top layer, Escape and the focus trap, and a press on the backdrop closes it (same pattern as the interview chat).
- * Every stage's modal has one information architecture: the title and an X at the top right, the numbered steps
- * (collapsed prompts behind copy and chat buttons), then the explanation. A copy announces `words.copied` in a polite
- * live region.
+ * The stage modal part: a shadcn Dialog (Radix) open while a stage is open, so it gives the top layer, Escape, the
+ * focus trap and a close on the overlay. The title takes the first focus, so no control greets the viewer; closing
+ * returns focus to the opener. A copy announces `words.copied` in a polite live region.
  */
 export function ModalPart({ stage, slotValues, onSlots, onClose, ...rest }: ModalProps) {
-  const dialog = useModalDialog(stage !== null);
-  if (!stage) return null;
-  const close = () => dialog.current?.close();
   return (
-    <dialog
-      ref={dialog}
-      data-part="modal"
-      data-stage={stage.id}
-      aria-label={tryTitle(rest.words, stage.name)}
-      onClose={onClose}
-      onClick={(event) => event.target === event.currentTarget && close()}
-      className="m-0 h-dvh max-h-none w-full max-w-none items-center justify-center overscroll-contain bg-transparent p-0 text-inherit backdrop:bg-overlay/70 open:flex md:p-6"
-    >
-      <Panel {...{ stage, ...rest }} slots={{ values: slotValues, onChange: onSlots }} onClose={close} />
-    </dialog>
+    <Dialog open={stage !== null} onOpenChange={(open) => !open && onClose()}>
+      {stage && (
+        <DialogContent
+          data-part="modal"
+          data-stage={stage.id}
+          aria-label={tryTitle(rest.words, stage.name)}
+          onOpenAutoFocus={focusTitle}
+          className="h-dvh md:h-auto md:max-h-[calc(100dvh-3rem)] md:max-w-5xl md:p-5"
+        >
+          <Panel {...{ stage, ...rest }} slots={{ values: slotValues, onChange: onSlots }} />
+        </DialogContent>
+      )}
+    </Dialog>
   );
 }

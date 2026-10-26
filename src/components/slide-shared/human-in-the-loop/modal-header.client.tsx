@@ -1,9 +1,9 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import { Code, X } from 'lucide-react';
-import { IconButton, OUTLINED_ICON } from '../core-components/icon-button/icon-button.client';
+import { DialogClose, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { CircleHelp, Code, X } from 'lucide-react';
 import type { UiWords } from './human-in-the-loop.types';
+import { ToolButton } from './tool-button.client';
 import { tryTitle } from './words.pure';
 import type { Level } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
@@ -13,45 +13,50 @@ interface HeaderProps {
   readonly words: UiWords;
   readonly level: Level;
   readonly onLevel: (level: Level) => void;
-  readonly onClose: () => void;
+  readonly showContext: boolean;
+  readonly onContext: (show: boolean) => void;
 }
 
-/** The title, the learning goal under it, and at the right the simple/technical toggle beside Close. */
-function LevelToggle({ words, level, onLevel }: Pick<HeaderProps, 'words' | 'level' | 'onLevel'>) {
+function Actions({ words, level, onLevel, showContext, onContext }: Omit<HeaderProps, 'stage'>) {
   const technical = level === 'technical';
   return (
-    <IconButton
-      label={words.technical}
-      tip={words.technicalTip}
-      align="end"
-      aria-pressed={technical}
-      className={cn(OUTLINED_ICON, technical && 'bg-primary text-primary-foreground hover:bg-primary')}
-      onClick={() => onLevel(technical ? 'simple' : 'technical')}
-    >
-      <Code aria-hidden="true" className="size-4" />
-    </IconButton>
+    <div className="flex shrink-0 items-center gap-2">
+      <ToolButton
+        label={words.context}
+        tip={words.contextTip}
+        pressed={showContext}
+        text
+        onClick={() => onContext(!showContext)}
+      >
+        <CircleHelp aria-hidden="true" />
+      </ToolButton>
+      <ToolButton
+        label={words.technical}
+        tip={words.technicalTip}
+        pressed={technical}
+        onClick={() => onLevel(technical ? 'simple' : 'technical')}
+      >
+        <Code aria-hidden="true" />
+      </ToolButton>
+      <DialogClose asChild>
+        <ToolButton label={words.close}>
+          <X aria-hidden="true" />
+        </ToolButton>
+      </DialogClose>
+    </div>
   );
 }
 
-export function ModalHeader({ stage, words, level, onLevel, onClose }: HeaderProps) {
+/** The title at the left; at the right the info and simple/technical toggles beside Close. */
+export function ModalHeader({ stage, ...actions }: HeaderProps) {
   return (
-    <header className="flex shrink-0 items-start justify-between gap-3">
-      <div className="min-w-0">
-        <h2 tabIndex={-1} data-autofocus="" className="text-body font-semibold outline-none">
-          {tryTitle(words, stage.name)}
-        </h2>
-        {stage.goal && (
-          <p data-goal="" className="mt-1 text-muted-foreground">
-            {stage.goal}
-          </p>
-        )}
-      </div>
-      <div className="flex shrink-0 items-center gap-2">
-        <LevelToggle words={words} level={level} onLevel={onLevel} />
-        <IconButton label={words.close} align="end" onClick={onClose}>
-          <X aria-hidden="true" className="size-4" />
-        </IconButton>
-      </div>
-    </header>
+    <DialogHeader>
+      <DialogTitle asChild>
+        <h3 data-autofocus="" tabIndex={-1} className="text-subheading font-semibold outline-none">
+          {tryTitle(actions.words, stage.name)}
+        </h3>
+      </DialogTitle>
+      <Actions {...actions} />
+    </DialogHeader>
   );
 }

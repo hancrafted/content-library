@@ -19,6 +19,26 @@ export interface UiWords {
   /** The Technical toggle's name, and its tooltip. */
   readonly technical: string;
   readonly technicalTip: string;
+  /** The context toggle's name and tooltip: it shows or hides why a task matters, its techniques and an example result. */
+  readonly context: string;
+  readonly contextTip: string;
+  /** The line under the title of a stage's modal. */
+  readonly intro: string;
+  /** The stepper's sections, and the stepper's buttons. */
+  readonly stepN: string;
+  readonly stepContext: string;
+  readonly stepContextInfo: string;
+  readonly stepDo: string;
+  readonly stepDoInfo: string;
+  readonly stepCheck: string;
+  readonly stepCheckInfo: string;
+  readonly copyExplanation: string;
+  readonly copyExplanationTip: string;
+  readonly explainWrapper: string;
+  readonly previousResults: string;
+  readonly insertedAt: string;
+  readonly resultHeading: string;
+  readonly resultPlaceholder: string;
   readonly download: string;
   readonly upload: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
