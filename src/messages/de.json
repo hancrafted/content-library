@@ -476,7 +476,11 @@
     "subtitle": "Ihre KI liest jedes Mal veraltete Dokumente · 22 Min.",
     "heading": "DER VORTRAG",
     "backToVideo": "Zurück zum Video",
-    "close": "Videoplayer schließen"
+    "close": "Videoplayer schließen",
+    "recordedIn": {
+      "en": "Aufgezeichnet auf Englisch",
+      "de": "Aufgezeichnet auf Deutsch"
+    }
   },
   "eventsPage": {
     "title": "Veranstaltungen",

@@ -118,14 +118,23 @@ export function episodePublishedOn(slug: string): IsoDate | undefined {
   return episode?.status === 'published' ? episode.publishedOn : undefined;
 }
 
+/** The Video an Episode's page plays: its YouTube id and, for an Event recording, the language spoken in it. */
+export interface Video {
+  readonly id: string;
+  /** Set only on an unlisted Episode's Event recording, which plays on every locale page labelled with it. */
+  readonly recordedIn?: Locale;
+}
+
 /**
- * The YouTube video id an Episode's page plays in this locale; none until uploaded. An unlisted Episode's one
- * recording plays on every locale page.
+ * The Video an Episode's page plays in this locale; none until uploaded. An unlisted Episode's one recording plays on
+ * every locale page, with the language it was recorded in (a site locale: the store refuses any other).
  */
-export function episodeVideo(slug: EpisodeSlug, locale: Locale): string | undefined {
+export function episodeVideo(slug: EpisodeSlug, locale: Locale): Video | undefined {
   const video = episodeOf(slug).youtube;
   if (video === undefined) return undefined;
-  return 'language' in video ? video.id : video[locale];
+  if ('language' in video) return { id: video.id, recordedIn: video.language as Locale };
+  const id = video[locale];
+  return id === undefined ? undefined : { id };
 }
 
 /** Every Event, in record order. */
