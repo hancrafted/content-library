@@ -34,8 +34,8 @@ Search: one visibility predicate, `pageTreatment` (`src/lib/visibility.pure.ts`)
 
 1. `cp -r src/components/episodes/<slug> src/components/episodes/<event-name>-<slug>`, delete the copy's `brief.md`, and give the copy its new slug in `episode.ts`, `episode-metadata.ts` and its tests, keeping every Slide slug.
 2. In `episode-metadata.ts`, set `visibility: 'unlisted'` and `publishedOn` to the Event's date.
-3. Register it like any Episode: `EPISODE_SLUGS` (`src/lib/routes.ts`), the registry (`src/components/episodes/registry.ts`) and `REGISTERED` in `src/content-store/store.ts`; add its Section openers to `registry.test.ts` and, when it keeps `sections/`, to `placement-markers.test.ts`.
-4. List it in the Event's Playlist. The store refuses an unlisted Episode no Event's Playlist lists.
+3. List it in the Event's Playlist. The store refuses an unlisted Episode no Event's Playlist lists.
+4. Run `npm run episodes:registry`: the folder is the registration, and the Episode registry (GLOSSARY) adds the slug, the metadata and the composition from it. Add the slug to the unlisted list `src/content-store/store.test.ts` writes out in "declares every Episode public but…", the one place that says which Episodes are unlisted.
 
 Flipping `visibility` back to `public` is the one edit that gives it its own page, sitemap entry and overview card.
 
@@ -49,8 +49,8 @@ Flipping `visibility` back to `public` is the one edit that gives it its own pag
 
 A new Event starts from the **Workshop template** (GLOSSARY), a tooling page at `/episodes/workshop-template/` (`src/components/episodes/workshop-template/`): a Title slide, then agenda, in-scope, out-of-scope and orga Slides, every word a placeholder. Pick the Event's prefix, its name's first word (`cyberforum-`), and work through the steps in order:
 
-1. **Copy the template into a new unlisted Episode.** `cp -r src/components/episodes/workshop-template src/components/episodes/<prefix>-intro`. In the copy's `episode.ts`, set `slug` and rename the export; in its `i18n/`, give it its own title, caption and description. The template has no metadata, so add `episode-metadata.ts`, copied from another unlisted Episode with its slug, `visibility: 'unlisted'` and `publishedOn` the Event's date. Copy each further Episode the Event presents the same way, as in "Unlisted Episodes" steps 1 and 2, under the same prefix.
-2. **Register it.** Each new Episode as in "Unlisted Episodes" step 3: `EPISODE_SLUGS`, the registry, `REGISTERED`, and `registry.test.ts`'s `COMPOSITION` and `HEADER_MODES` (the template's copy: Sections `agenda` with no page Slide, `in-scope` with one, `orga` with none; header `shared`); `placement-markers.test.ts` for each copy that keeps `sections/` (the template's copy has none). Add the new unlisted slugs to the list `store.test.ts` expects in "declares every Episode public but…".
+1. **Copy the template into a new unlisted Episode.** `cp -r src/components/episodes/workshop-template src/components/episodes/<prefix>-intro`. In the copy's `episode.ts`, set `slug`; in its `i18n/`, give it its own title, caption and description. The template has no metadata, so add `episode-metadata.ts`, copied from another unlisted Episode with its slug, `visibility: 'unlisted'` and `publishedOn` the Event's date. Copy each further Episode the Event presents the same way, as in "Unlisted Episodes" steps 1 and 2, under the same prefix.
+2. **Register them.** As in "Unlisted Episodes" step 4: `npm run episodes:registry`, and the new slugs in `store.test.ts`'s unlisted list.
 3. **Append the Playlist.** Add `src/content-store/playlists/<id>.ts`: its id, visibility, and the Episode slugs in teaching order, the template's copy first. Import it into `PLAYLISTS` in `src/content-store/store.ts`.
 4. **Append the Event.** Add `src/content-store/events/<date>-<name>.ts`: slug, date, kind, Audience, optional time (`17:00`, `17:00–19:00` or `17:00–19:00 CET`) and location, and the Playlist's id. Import it into `EVENTS` in `src/content-store/store.ts`, and add the slug to `EVENT_SLUGS` in `src/lib/routes.ts`.
 5. **Write the Translation keys.** `eventsPage.items.<event-slug>.title` and `.description` in `src/messages/en.json` and `de.json`. The other keys an Event page reads are in [Episode translation keys](episode-translation-keys.md#event-keys).

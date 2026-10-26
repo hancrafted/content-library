@@ -22,7 +22,7 @@ The Episode is a draft: it has no video and no Promotion. This overrides the met
 
 - Write `episode-metadata.ts` with `status: 'upcoming'`, `visibility: 'public'` and no `publishedOn`; the schema (`src/content-store/schemas/episode.schema.ts`) refuses one, and refuses a record without a visibility. Publishing flips both and is the user's separate step ([episode-publishing](../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
 - Format and Tags come from the Brief. `format` and at least one Tag are required by the Episode schema (`src/content-store/schemas/episode.schema.ts`), so a required field the Brief does not name gets a `needs-human` note plus the closest honest value (the nearest existing Format or Tag), never an invented one.
-- Register the metadata in the `REGISTERED` map in `src/content-store/store.ts`: it holds every registered slug whatever its `status`, so an upcoming Episode with a page type-checks. The page is built `noindex` and its card stays unlinked until publishing; write no `published-anchors.json` here.
+- Register the Episode by running `npm run episodes:registry`: the Episode registry derives the slug, the metadata and the record from the folder, whatever its `status`, so an upcoming Episode with a page type-checks; the fast suite fails while the registry is stale. The page is built `noindex` and its card stays unlinked until publishing; write no `published-anchors.json` here.
 
 ## Review
 

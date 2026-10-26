@@ -8,26 +8,12 @@ import { findPageRecord } from './tooling-pages';
  * an Episode built Section by Section in parallel keeps one module per Section,
  * `<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide
  * list, section slide first. The record imports them into `sections` in order,
- * so each Section job edits its own module and no two jobs edit one line.
+ * so each Section job edits its own module and no two jobs edit one line. Which pages keep such a folder is read
+ * from the folders: an Episode or tooling page with `sections/`, its order fixed by `registry.test.ts`'s `COMPOSITION`.
  */
 
 const EPISODES_DIR = __dirname;
 const MARKERS_DIR = 'sections';
-
-/** The Episodes built at placement markers. Their Section order is `registry.test.ts`'s `COMPOSITION`. */
-const MARKED = [
-  'ai-gives-you-more-work',
-  'never-too-early-sales',
-  'onboard-ai-every-time',
-  'ai-attention-span',
-  'axel-onboard-ai-every-time',
-  'axel-ai-attention-span',
-  'axel-ai-gives-you-more-work',
-  'cyberforum-onboard-ai-every-time',
-  'cyberforum-ai-attention-span',
-  'cyberforum-ai-gives-you-more-work',
-  'explorable-explanations',
-] as const;
 
 /** The marker module names of an Episode, without the extension; none when it keeps no `sections/` folder. */
 function markerNames(episode: string): string[] {
@@ -45,7 +31,7 @@ async function markerExports(episode: string, name: string): Promise<unknown[]> 
   return Object.values(exported);
 }
 
-/** Every Episode folder that keeps a `sections/` folder. */
+/** Every Episode folder that keeps a `sections/` folder: the pages built at placement markers. */
 function markedEpisodes(): string[] {
   return readdirSync(EPISODES_DIR, { withFileTypes: true })
     .filter((each) => each.isDirectory() && existsSync(path.join(EPISODES_DIR, each.name, MARKERS_DIR)))
@@ -53,16 +39,10 @@ function markedEpisodes(): string[] {
     .sort();
 }
 
-describe('success cases', () => {
-  it('keeps a sections/ folder in exactly the Episodes built at placement markers', () => {
-    // ARRANGE
-    const expected = [...MARKED].sort();
-    // ACT
-    const marked = markedEpisodes();
-    // ASSERT
-    expect(marked).toEqual(expected);
-  });
+/** Read from the folders, so a copied Episode that keeps its `sections/` is checked with no list to extend. */
+const MARKED = markedEpisodes();
 
+describe('success cases', () => {
   it.each(MARKED)('keeps one marker per Section of %s, named after its section slide', (slug) => {
     // ARRANGE
     const expected = findPageRecord(slug)

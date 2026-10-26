@@ -102,19 +102,20 @@ describe('success cases', () => {
 
   it('declares every Episode public but the ones the AXEL seminar and the CyberForum Akademie webinar present', () => {
     // ARRANGE
+    // Written out, in slug order: the one list that says which Episodes are unlisted; the store is not the oracle.
     const expected = [
-      'axel-onboard-ai-every-time',
       'axel-ai-attention-span',
       'axel-ai-gives-you-more-work',
-      'cyberforum-intro',
-      'cyberforum-onboard-ai-every-time',
+      'axel-onboard-ai-every-time',
       'cyberforum-ai-attention-span',
       'cyberforum-ai-gives-you-more-work',
+      'cyberforum-intro',
+      'cyberforum-onboard-ai-every-time',
     ];
     // ACT
     const notPublic = listEpisodes().filter((episode) => episode.visibility !== 'public');
     // ASSERT
-    expect(notPublic.map((episode) => episode.slug)).toEqual(expected);
+    expect(notPublic.map((episode) => episode.slug).sort()).toEqual(expected);
   });
 
   it('I flip an Episode from unlisted to public by changing one field.', () => {

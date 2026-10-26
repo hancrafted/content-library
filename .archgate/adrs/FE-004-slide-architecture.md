@@ -121,7 +121,7 @@ For this project the map matters because handoffs run on agents with no session 
 ### Do's
 
 1. **DO** start from this map, then open the record that owns the concern. (Decision 1)
-2. **DO** add an Episode by copying `episode-template/` and registering it. (Decision 3, Decision 4)
+2. **DO** add an Episode by copying `episode-template/`, adding its metadata and running `npm run episodes:registry`. (Decision 3, Decision 4)
 3. **DO** add a Slide as one folder, one import and one list entry in its Section's `sections/<section-slug>.ts`. (Decision 3, design-ADR-0008)
 4. **DO** promote a part a second Slide needs into `slide-shared/`. (Decision 3, Decision 6)
 5. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)

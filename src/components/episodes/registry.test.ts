@@ -1,4 +1,5 @@
 import { headerModeOf } from '@/components/slide-master/slide';
+import { listEpisodes } from '@/content-store/store';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
@@ -8,8 +9,17 @@ import { episodeCopy, findEpisode } from './registry';
  * What every registered Episode shares (FE-002): a record under its own slug,
  * its own text from its folder's `i18n/` (what the Title slide, the page
  * metadata and the landing card read) and the Section list its Dossier fixes.
- * Per-Episode facts sit in the tables below, written out by hand.
+ * Every Episode comes from the Episode registry. The per-Episode facts in the tables below are written out by hand from
+ * each published public Episode's Dossier, and every one has its rows, written at publication; an Episode still in the
+ * pipeline gains Slides Section by Section, and an unlisted Episode is a copy made for one Event and left to drift
+ * (product vision, rule 4), so neither has a fixed composition to pin.
  */
+
+/** The published public Episodes, by slug: the ones the tables below must cover, no more, no less. */
+const PUBLISHED_PUBLIC = listEpisodes()
+  .filter(({ slug, status, visibility }) => status === 'published' && visibility === 'public' && isEpisodeSlug(slug))
+  .map(({ slug }) => slug)
+  .sort();
 
 /** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
 const COMPOSITION = [
@@ -66,75 +76,18 @@ const COMPOSITION = [
       { opener: 'managing-the-attention-span', pageSlides: 4 },
     ],
   },
-  // The unlisted copies the AXEL seminar presented: `cp -r` of the three above, unedited so far.
-  {
-    slug: 'axel-onboard-ai-every-time',
-    sections: [
-      { opener: 'the-thought-experiment', pageSlides: 3 },
-      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 2 },
-    ],
-  },
-  {
-    slug: 'axel-ai-attention-span',
-    sections: [
-      { opener: 'thought-experiment', pageSlides: 2 },
-      { opener: 'the-ais-attention-span', pageSlides: 4 },
-      { opener: 'what-fills-the-window', pageSlides: 3 },
-      { opener: 'managing-the-attention-span', pageSlides: 4 },
-    ],
-  },
-  {
-    slug: 'axel-ai-gives-you-more-work',
-    sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
-  },
-  // The CyberForum Akademie webinar's: the Workshop template's copy, then `cp -r` of the same three, unedited so far.
-  {
-    slug: 'cyberforum-intro',
-    sections: [
-      { opener: 'agenda', pageSlides: 0 },
-      { opener: 'in-scope', pageSlides: 1 },
-      { opener: 'orga', pageSlides: 0 },
-    ],
-  },
-  {
-    slug: 'cyberforum-onboard-ai-every-time',
-    sections: [
-      { opener: 'the-thought-experiment', pageSlides: 3 },
-      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 2 },
-    ],
-  },
-  {
-    slug: 'cyberforum-ai-attention-span',
-    sections: [
-      { opener: 'thought-experiment', pageSlides: 2 },
-      { opener: 'the-ais-attention-span', pageSlides: 4 },
-      { opener: 'what-fills-the-window', pageSlides: 3 },
-      { opener: 'managing-the-attention-span', pageSlides: 4 },
-    ],
-  },
-  {
-    slug: 'cyberforum-ai-gives-you-more-work',
-    sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
-  },
 ] as const;
 
 /** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
 const HEADER_MODES = [
   { slug: 'ai-token-economy', header: 'authored' },
+  { slug: 'maintaining-markdown-for-ai', header: 'authored' },
   { slug: 'never-too-early-sales', header: 'shared' },
   { slug: 'onboard-ai-every-time', header: 'shared' },
   { slug: 'ai-attention-span', header: 'shared' },
   { slug: 'ai-gives-you-more-work', header: 'shared' },
-  { slug: 'axel-onboard-ai-every-time', header: 'shared' },
-  { slug: 'axel-ai-attention-span', header: 'shared' },
-  { slug: 'axel-ai-gives-you-more-work', header: 'shared' },
-  { slug: 'cyberforum-intro', header: 'shared' },
-  { slug: 'cyberforum-onboard-ai-every-time', header: 'shared' },
-  { slug: 'cyberforum-ai-attention-span', header: 'shared' },
-  { slug: 'cyberforum-ai-gives-you-more-work', header: 'shared' },
 ] as const;
 
-/** The recorded YouTube video of the Episodes that have one asserted here. */
 describe('success cases', () => {
   it.each(EPISODE_SLUGS)('registers %s as a valid slug whose record carries that slug', (slug) => {
     // ARRANGE
@@ -239,6 +192,18 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('writes the composition and the header mode of every published public Episode by hand, and of no other', () => {
+    // ARRANGE
+    const expected = { composition: PUBLISHED_PUBLIC, header: PUBLISHED_PUBLIC };
+    // ACT
+    const covered = {
+      composition: COMPOSITION.map(({ slug }) => slug).sort(),
+      header: HEADER_MODES.map(({ slug }) => slug).sort(),
+    };
+    // ASSERT
+    expect(covered).toEqual(expected);
+  });
+
   it.each(['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'])(
     'keeps the tooling page %s out of the Episode registry, so it is no Episode',
     (slug) => {

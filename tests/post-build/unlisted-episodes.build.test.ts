@@ -1,18 +1,18 @@
 // Unlisted Episodes (design-ADR 0016, Routes and visibility): an Episode made for one Event lives only under that
 // Event. It is never in the sitemap, the Episode overview or an Upcoming list, has no /episodes/ page, and its page
-// under the Event tells search engines not to index it. The AXEL seminar's and the CyberForum Akademie webinar's
-// Playlists list such copies. Once its recording is uploaded, an unlisted Episode plays it on both locale pages,
-// labelled with the language spoken.
+// under the Event tells search engines not to index it. Once its recording is uploaded, an unlisted Episode plays it
+// on both locale pages, labelled with the language spoken. Every unlisted Episode an Event's Playlist lists is checked.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { listEpisodes } from '../../src/content-store/store';
+import { listEpisodes, listEvents, playlistOf } from '../../src/content-store/store';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import {
   episodeRoute,
   eventEpisodeRoute,
   eventRoute,
+  isEpisodeSlug,
   legacyEpisodeRoute,
   ROUTES,
   type EventSlug,
@@ -22,19 +22,18 @@ import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 const AXEL: EventSlug = '2026-10-23-axel-agentic-workflow';
 /** The AXEL seminar's unlisted copies, in the order it taught them. Written out: the store is not the oracle. */
 const AXEL_UNLISTED = ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'] as const;
-const CYBERFORUM: EventSlug = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
-/** The CyberForum Akademie webinar's: the Workshop template's copy, then copies of the same three. */
-const CYBERFORUM_UNLISTED = [
-  'cyberforum-intro',
-  'cyberforum-onboard-ai-every-time',
-  'cyberforum-ai-attention-span',
-  'cyberforum-ai-gives-you-more-work',
-] as const;
-/** Every unlisted Episode with the Event that presents it. */
-const PRESENTED = [
-  ...AXEL_UNLISTED.map((episode) => ({ event: AXEL, episode })),
-  ...CYBERFORUM_UNLISTED.map((episode) => ({ event: CYBERFORUM, episode })),
-];
+/**
+ * Every unlisted Episode with each Event that presents it, read from the store so a new one is never skipped. Which
+ * Episodes are unlisted is written out once, in `src/content-store/store.test.ts`; this file checks their pages.
+ */
+const PRESENTED = listEvents().flatMap((event) =>
+  playlistOf(event)
+    .episodes.filter((episode) =>
+      listEpisodes().some(({ slug, visibility }) => slug === episode && visibility === 'unlisted'),
+    )
+    .filter(isEpisodeSlug)
+    .map((episode) => ({ event: event.slug, episode })),
+);
 const UNLISTED: readonly string[] = PRESENTED.map(({ episode }) => episode);
 const PER_LOCALE = PRESENTED.flatMap((presented) => LOCALES.map((locale) => ({ ...presented, locale })));
 

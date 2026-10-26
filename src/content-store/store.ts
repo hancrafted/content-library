@@ -1,67 +1,33 @@
-import { episodeMetadata as aiAttentionSpan } from '@/components/episodes/ai-attention-span/episode-metadata';
-import { episodeMetadata as aiGivesYouMoreWork } from '@/components/episodes/ai-gives-you-more-work/episode-metadata';
-import { episodeMetadata as aiTokenEconomy } from '@/components/episodes/ai-token-economy/episode-metadata';
-import { episodeMetadata as axelAiAttentionSpan } from '@/components/episodes/axel-ai-attention-span/episode-metadata';
-import { episodeMetadata as axelAiGivesYouMoreWork } from '@/components/episodes/axel-ai-gives-you-more-work/episode-metadata';
-import { episodeMetadata as axelOnboardAiEveryTime } from '@/components/episodes/axel-onboard-ai-every-time/episode-metadata';
-import { episodeMetadata as cyberforumAiAttentionSpan } from '@/components/episodes/cyberforum-ai-attention-span/episode-metadata';
-import { episodeMetadata as cyberforumAiGivesYouMoreWork } from '@/components/episodes/cyberforum-ai-gives-you-more-work/episode-metadata';
-import { episodeMetadata as cyberforumIntro } from '@/components/episodes/cyberforum-intro/episode-metadata';
-import { episodeMetadata as cyberforumOnboardAiEveryTime } from '@/components/episodes/cyberforum-onboard-ai-every-time/episode-metadata';
-import { episodeMetadata as maintainingMarkdownForAi } from '@/components/episodes/maintaining-markdown-for-ai/episode-metadata';
-import { episodeMetadata as neverTooEarlySales } from '@/components/episodes/never-too-early-sales/episode-metadata';
-import { episodeMetadata as onboardAiEveryTime } from '@/components/episodes/onboard-ai-every-time/episode-metadata';
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
 import { isEventSlug, matchPage, type EpisodeSlug, type EventSlug, type PageRef } from '@/lib/routes';
 import { pageTreatment, type PageFacts } from '@/lib/visibility.pure';
+import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { event as axelAgenticWorkflowEvent } from './events/2026-10-23-axel-agentic-workflow';
 import { event as cyberforumAkademieIntroAgenticWorkflowEvent } from './events/2026-10-28-cyberforum-akademie-intro-agentic-workflow';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { crossRecordRefusals, parseRecords, type Content, type ContentInput } from './refusals';
-import type { Episode, EpisodeInput, EpisodeStatus } from './schemas/episode.schema';
+import type { Episode, EpisodeStatus } from './schemas/episode.schema';
 import type { Event } from './schemas/event.schema';
 import type { IsoDate } from './schemas/fields';
 import type { Playlist } from './schemas/playlist.schema';
 
 /*
- * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here by
- * explicit import (no glob, no codegen), parsed by its schema and checked against the others when this module loads.
- * A bad record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read records
- * only through the functions below. The one seam a database would replace.
+ * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here, parsed
+ * by its schema and checked against the others when this module loads. Episode metadata arrives through the generated
+ * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder), Events and Playlists by explicit
+ * import. A bad record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read
+ * records only through the functions below. The one seam a database would replace.
  */
-
-/**
- * Every Episode's metadata, by slug: every registered one, public or unlisted. Typed against the registered slugs, so a registered
- * Episode without metadata, or a key naming another Episode's metadata, fails `tsc`.
- */
-const REGISTERED = {
-  'maintaining-markdown-for-ai': maintainingMarkdownForAi,
-  'ai-token-economy': aiTokenEconomy,
-  'never-too-early-sales': neverTooEarlySales,
-  'onboard-ai-every-time': onboardAiEveryTime,
-  'ai-attention-span': aiAttentionSpan,
-  'ai-gives-you-more-work': aiGivesYouMoreWork,
-  'axel-onboard-ai-every-time': axelOnboardAiEveryTime,
-  'axel-ai-attention-span': axelAiAttentionSpan,
-  'axel-ai-gives-you-more-work': axelAiGivesYouMoreWork,
-  'cyberforum-intro': cyberforumIntro,
-  'cyberforum-onboard-ai-every-time': cyberforumOnboardAiEveryTime,
-  'cyberforum-ai-attention-span': cyberforumAiAttentionSpan,
-  'cyberforum-ai-gives-you-more-work': cyberforumAiGivesYouMoreWork,
-} as const satisfies { readonly [S in EpisodeSlug]: EpisodeInput & { readonly slug: S } };
-
-/** Upcoming Episodes without a page, in the order the overview lists them: a folder holding only its metadata. */
-const UPCOMING: readonly EpisodeInput[] = [];
 
 const EVENTS = [axelAgenticWorkflowEvent, cyberforumAkademieIntroAgenticWorkflowEvent];
 const PLAYLISTS = [axelAgenticWorkflowPlaylist, cyberforumAkademieIntroAgenticWorkflowPlaylist];
 
 /** The slugs whose metadata says `published`. */
 type PublishedSlug = {
-  [S in keyof typeof REGISTERED]: (typeof REGISTERED)[S]['status'] extends 'published' ? S : never;
-}[keyof typeof REGISTERED];
+  [S in keyof typeof EPISODE_METADATA]: (typeof EPISODE_METADATA)[S]['status'] extends 'published' ? S : never;
+}[keyof typeof EPISODE_METADATA];
 
 /**
  * Every record parsed and checked, or a thrown error listing every refusal, one sentence each naming its kind, its
@@ -77,7 +43,7 @@ export function loadContent(input: ContentInput): Content {
 }
 
 const CONTENT = loadContent({
-  episodes: [...Object.values(REGISTERED), ...UPCOMING],
+  episodes: [...Object.values(EPISODE_METADATA), ...UPCOMING_METADATA],
   events: EVENTS,
   playlists: PLAYLISTS,
 });
@@ -87,7 +53,7 @@ export function featuredSlugs(): readonly PublishedSlug[] {
   return FEATURED;
 }
 
-/** Every Episode's metadata: the registered ones, then the upcoming ones in overview order. */
+/** Every Episode's metadata: those with a page, then the upcoming ones without, each in folder-name order. */
 export function listEpisodes(options?: { includeDrafts?: boolean }): readonly Episode[] {
   if (options?.includeDrafts ?? true) return CONTENT.episodes;
   return CONTENT.episodes.filter((entry) => entry.status === 'published');

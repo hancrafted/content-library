@@ -99,7 +99,7 @@ flowchart LR
 
 ### Do's
 
-1. **DO** start an Episode by copying `episode-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `episode-template/`: rename the slug; add `episode-metadata.ts` and run `npm run episodes:registry`; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Scene from `SlideFrame`; heading per design-ADR-0012. (Decisions 3 and 4)

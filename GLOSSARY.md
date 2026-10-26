@@ -19,6 +19,9 @@ _Avoid_: Post, article, video, tower
 **Episode overview**: the landing page's list of every Episode, published or upcoming, that a visitor browses and filters.
 _Avoid_: Episode index, catalog, episode list, manifest
 
+**Episode registry**: every Episode the code knows, generated from the Episode folders, so adding an Episode is adding its folder: a folder `src/components/episodes/<slug>/` holding `episode-metadata.ts` is an Episode, and with `episode.ts` beside it, one with a page. `npm run episodes:registry` writes it as one checked-in `episode-registry.generated.ts` per tier (the slugs in lib, the metadata the content store loads, the compositions); the fast suite fails while it is stale.
+_Avoid_: Episode index, slug list, hand-kept registration
+
 **Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
