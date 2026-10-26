@@ -1,6 +1,6 @@
-import { eventRoute } from '@/content-store/catalogue/routes';
+import { eventRoute, type EventSlug } from '@/content-store/catalogue/routes';
+import type { Event } from '@/content-store/schemas/event.schema';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import type { ServedEvent } from '@/content-store/store';
 import { dateLabelOf } from '@/shared/lib/date-label.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
@@ -35,7 +35,8 @@ export interface EventCard {
 const ITEMS = 'events.items';
 
 /** What a card reads of an Event the store serves: its slug, its day and time, its place, and its Playlist's length. */
-type CardEvent = Pick<ServedEvent, 'slug' | 'date' | 'time' | 'location'> & {
+type CardEvent = Pick<Event, 'date' | 'time' | 'location'> & {
+  readonly slug: EventSlug;
   readonly playlist: { readonly episodes: readonly unknown[] };
 };
 

@@ -1,4 +1,4 @@
-// Pins the pipeline product area's boundary (#354, FE-007 §2.7): the content pipeline, its Run log and the dashboard
+// Pins the pipeline product area's boundary (#354, FE-007 §2.6 and §2.7): the content pipeline, its Run log and the dashboard
 // live in `src/pipeline/`, page assembly reaches them through `components/` and `lib/`, and nothing under `src/`
 // imports `skills/` or `tools/`. The dependency-cruiser rules run over a throwaway probe tree, as in
 // slide-folder.test.ts.
@@ -15,11 +15,14 @@ const config = createRequire(import.meta.url)('../../.dependency-cruiser.cjs') a
 };
 const RULES = [
   'src-never-imports-skills-or-tools',
-  'pipeline-reached-only-from-page-assembly',
-  'page-assembly-reaches-pipeline-through-tier-folders',
-  'pipeline-imports-no-other-area',
-  'pipeline-lib-imports-no-react-or-upper-tier',
-  'pipeline-hooks-reached-only-from-client',
+  'layers-never-import-app',
+  'page-assembly-reached-only-from-app',
+  'areas-never-import-each-other',
+  'page-assembly-reaches-areas-through-tier-folders',
+  'shared-knows-no-domain',
+  'lib-imports-no-react',
+  'lib-imports-no-upper-tier',
+  'hooks-reached-only-from-client',
 ];
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
@@ -28,6 +31,7 @@ const TEMPLATE = 'src/page-assembly/dashboard';
 
 /** Each probe file and what it imports, relative to the probe tree's root. */
 const PROBES: Readonly<Record<string, string>> = {
+  'node_modules/react/index.js': 'export const React = 1;',
   'skills/probe/scripts/helper.ts': 'export const helper = 1;',
   'tools/probe/helper.ts': 'export const tool = 1;',
   'src/shared/components/ui/button.tsx': 'export const Button = 1;',
@@ -53,6 +57,7 @@ const PROBES: Readonly<Record<string, string>> = {
   'src/shared/lib/reaches-skill.ts':
     "import { helper } from '../../../skills/probe/scripts/helper';\nexport const x = helper;",
   'src/shared/lib/reaches-tool.ts': "import { tool } from '../../../tools/probe/helper';\nexport const x = tool;",
+  [`${AREA}/lib/reaches-react.ts`]: "import { React } from 'react';\nexport const x = React;",
   [`${AREA}/lib/reaches-hook.ts`]: "import { useRun } from '../hooks/use-run';\nexport const x = useRun;",
   [`${AREA}/components/reaches-landing.tsx`]:
     "import { Card } from '../../page-assembly/landing/card';\nexport const x = Card;",
@@ -111,14 +116,15 @@ describe('failure cases', () => {
   it('rejects src/ importing a skill or a tool, a lower tier reaching the area, assembly reaching its hooks, and the area leaving its tiers', () => {
     // ARRANGE
     const expected = [
-      `page-assembly-reaches-pipeline-through-tier-folders: ${TEMPLATE}/reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
-      `pipeline-hooks-reached-only-from-client: ${TEMPLATE}/reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
-      `pipeline-hooks-reached-only-from-client: ${AREA}/components/server-reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
-      `pipeline-hooks-reached-only-from-client: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
-      `pipeline-imports-no-other-area: ${AREA}/components/reaches-landing.tsx -> src/page-assembly/landing/card.tsx`,
-      `pipeline-imports-no-other-area: ${AREA}/lib/reaches-episodes.ts -> src/episodes/lib/episode.pure.ts`,
-      `pipeline-lib-imports-no-react-or-upper-tier: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
-      `pipeline-reached-only-from-page-assembly: src/shared/lib/reaches-pipeline.pure.ts -> ${AREA}/lib/run-log.pure.ts`,
+      `areas-never-import-each-other: ${AREA}/lib/reaches-episodes.ts -> src/episodes/lib/episode.pure.ts`,
+      `hooks-reached-only-from-client: ${TEMPLATE}/reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
+      `hooks-reached-only-from-client: ${AREA}/components/server-reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
+      `hooks-reached-only-from-client: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
+      `lib-imports-no-react: ${AREA}/lib/reaches-react.ts -> node_modules/react/index.js`,
+      `lib-imports-no-upper-tier: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
+      `page-assembly-reached-only-from-app: ${AREA}/components/reaches-landing.tsx -> src/page-assembly/landing/card.tsx`,
+      `page-assembly-reaches-areas-through-tier-folders: ${TEMPLATE}/reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
+      `shared-knows-no-domain: src/shared/lib/reaches-pipeline.pure.ts -> ${AREA}/lib/run-log.pure.ts`,
       'src-never-imports-skills-or-tools: src/shared/lib/reaches-skill.ts -> skills/probe/scripts/helper.ts',
       'src-never-imports-skills-or-tools: src/shared/lib/reaches-tool.ts -> tools/probe/helper.ts',
     ];

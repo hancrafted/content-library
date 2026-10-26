@@ -18,7 +18,9 @@ const RULES = [
   'slide-shared-reaches-only-ui-and-lib',
   'explorable-explanation-reaches-shared-ui-and-lib',
   'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib',
-  'explorable-explanation-reached-only-from-slides-and-page-assembly',
+  'areas-never-import-each-other',
+  'page-assembly-reaches-areas-through-tier-folders',
+  'shared-knows-no-domain',
 ];
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
@@ -114,11 +116,13 @@ describe('Explorable explanation folder', () => {
   it('rejects an explanation reaching a slide-shared part (another product area), a client leaf leaving its explanation for another or a plain shared part, and a shared part or lib module importing an explanation', () => {
     // ARRANGE
     const expected = [
+      'areas-never-import-each-other: reaches-statement.client.tsx -> src/episodes/components/slide-shared/statement.tsx',
+      'areas-never-import-each-other: reaches-statement.tsx -> src/episodes/components/slide-shared/statement.tsx',
+      'areas-never-import-each-other: src/episodes/components/slide-shared/reaches-explanation.tsx -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
       'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib: reaches-other.client.tsx -> src/explorable-explanations/other-explanation/other.tsx',
       'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib: reaches-statement.client.tsx -> src/episodes/components/slide-shared/statement.tsx',
-      'explorable-explanation-reached-only-from-slides-and-page-assembly: src/episodes/components/slide-shared/reaches-explanation.tsx -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
-      'explorable-explanation-reached-only-from-slides-and-page-assembly: src/shared/lib/reaches-explanation.pure.ts -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
       'explorable-explanation-reaches-shared-ui-and-lib: reaches-statement.tsx -> src/episodes/components/slide-shared/statement.tsx',
+      'shared-knows-no-domain: src/shared/lib/reaches-explanation.pure.ts -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
       'slide-shared-reaches-only-ui-and-lib: src/episodes/components/slide-shared/reaches-explanation.tsx -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
     ];
     // ACT
