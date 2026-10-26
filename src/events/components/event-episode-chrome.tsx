@@ -1,7 +1,7 @@
 import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
+import type { PresentedEpisode } from '@/content-store/store';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
@@ -31,13 +31,6 @@ export interface EventEpisodeChrome {
   readonly position: string;
   readonly previous?: Step;
   readonly next?: Step;
-}
-
-/** One Episode an Event presents: the served Event, the Episode's page as its EpisodeRef, and its place in the Playlist. */
-export interface PresentedEpisode {
-  readonly event: ServedEvent;
-  readonly episode: EpisodeRef<EpisodeId>;
-  readonly place: PlaylistPlace;
 }
 
 /**
