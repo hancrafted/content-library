@@ -1,7 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [".archgate/adrs/*.rules.ts", "skills/*/scripts/*.pure.ts"],
-  "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts", "scripts/**/*.ts"],
+  "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts", "tools/**/*.ts"],
   "ignoreExportsUsedInFile": true,
   "ignoreBinaries": ["magick", "marker_single", "pdfinfo", "pdftoppm"]
 }

@@ -18,7 +18,7 @@ Read before touching a deploy workflow, `public/_headers`, `public/_redirects`, 
 
 ## Temporary: the old github.io URLs
 
-`.github/workflows/deploy.yml` still deploys to GitHub Pages, but only redirect stubs (`scripts/redirect-stubs.ts`): one HTML per exported page with a meta refresh and a canonical to the same path on https://hancrafted.net. GitHub Pages cannot send a 301. `redirectStubPlan` alone decides which files of `out/` are pages; it keeps `404.html` and points it at the home page, so every unknown old URL lands there. Remove the workflow and switch Pages off (Settings, Pages) after a few months.
+`.github/workflows/deploy.yml` still deploys to GitHub Pages, but only redirect stubs (`tools/deploy/redirect-stubs.ts`): one HTML per exported page with a meta refresh and a canonical to the same path on https://hancrafted.net. GitHub Pages cannot send a 301. `redirectStubPlan` alone decides which files of `out/` are pages; it keeps `404.html` and points it at the home page, so every unknown old URL lands there. Remove the workflow and switch Pages off (Settings, Pages) after a few months.
 
 ## Moving the domain
 

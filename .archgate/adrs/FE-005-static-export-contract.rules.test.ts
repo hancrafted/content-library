@@ -261,7 +261,7 @@ describe('no-request-time-features', () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({
       'docs/proxy.ts': `export function proxy() {}\n`,
-      'scripts/actions.ts': `'use server';\n`,
+      'tools/actions.ts': `'use server';\n`,
     });
     // ACT
     await rule.check(ctx);
