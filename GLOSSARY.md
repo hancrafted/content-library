@@ -70,6 +70,9 @@ _Avoid_: Event template, intro template, workshop Episode
 **Slide library**: every Master slide a Slide copies from the Slide master tooling page (`src/components/episodes/slide-master/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/components/slide-master/`, `src/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
 _Avoid_: Catalog
 
+**Slide pool**: the content Slides several Episodes compose as they are, one folder each under `src/components/episodes/slide-pool/`, beside the Episode folders. Each Episode keeps its own Title slide, section slides and Section files, which import a pool Slide through the `@/` alias; a Title slide or section slide never enters it. A Slide is promoted to the pool deliberately; copying stays the default. A fix to a pool Slide changes every Episode that composes it, past Events' copies included. Where else a reused thing goes: FE-004-slide-architecture.
+_Avoid_: shared Slides, Slide library (the Master slides a Slide is copied from), common Slides
+
 **Master slide**: one entry of the Slide library. The Dossier's `master:` key stays.
 _Avoid_: Catalog entry, template
 
@@ -90,7 +93,7 @@ _Avoid_: Card, panel; page, which means the Next.js route the whole Episode rend
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
 
-**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Each lives in its own folder under `src/components/explorable-explanations/`, apart from the plain shared parts in `slide-shared/`.
+**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Each lives in its own folder under `src/explorable-explanations/`, the Explorable explanations product area, apart from the plain shared parts in `slide-shared/`.
 _Avoid_: Shared visual, cornerstone component, shared component, widget
 
 **Preset**: one Slide's settings of an Explorable explanation: the view it opens in and what it lights, so the Slide tells its own story at rest.
