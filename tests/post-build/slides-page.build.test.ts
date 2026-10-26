@@ -45,6 +45,7 @@ describe('the tooling pages', () => {
     const $ = exportedPage(localizePath(ROUTES.episodes, locale));
     const expected = [
       href(episodeRoute('page-template'), locale),
+      href(episodeRoute('workshop-template'), locale),
       href(episodeRoute('slide-master'), locale),
       href(episodeRoute('slides'), locale),
     ];

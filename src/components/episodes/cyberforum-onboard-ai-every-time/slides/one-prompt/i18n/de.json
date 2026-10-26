@@ -1,0 +1,81 @@
+{
+  "title": "Was ein einziger Prompt bewirkt",
+  "heading": "Ein Prompt, ein polierter Plan",
+  "caption": "Er sieht fertig aus. Schau genauer hin.",
+  "promptLabel": "Der eine Prompt",
+  "prompt": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa.",
+  "stackLabel": "12 Dokumente zurück, poliert",
+  "traitsLabel": "Was jede Eigenschaft im Plan hinterlassen hat",
+  "cracks": {
+    "probabilistic": {
+      "trait": "Probabilistisch",
+      "why": "Frag noch einmal, und Du bekommst einen ganz neuen Plan.",
+      "produced": "Plan v1: Lissabon, 14. Juni. Plan v2: Berlin, 5. Juli."
+    },
+    "relentless": {
+      "trait": "Unermüdlich",
+      "why": "Nie gefragt, woher Deine Leute anreisen, und Dich unter Dokumenten begraben.",
+      "produced": "Die Top 10 Hotels auf Tripadvisor gewählt, egal wo sie liegen"
+    },
+    "informed": {
+      "trait": "Informiert",
+      "why": "Kennt tausend Aktivitäten, aber nicht Deine Kultur.",
+      "produced": "Teamaktivität: Paintball, 3 Stunden, alle 200"
+    },
+    "confident": {
+      "trait": "Selbstsicher",
+      "why": "Preise, die wie Fakten aussehen und erfunden sind.",
+      "produced": "Location: 48 € pro Kopf, Catering inklusive, Verfügbarkeit bestätigt"
+    },
+    "every-word-billed": {
+      "trait": "Jedes Wort berechnet",
+      "why": "Du hast jede Seite davon bezahlt.",
+      "produced": "Rechnung: 6.400 Wörter gelesen und geschrieben × 0,08 €"
+    }
+  },
+  "callout": "<strong>Schwer zu prüfen.</strong> Wahrscheinlich wirfst Du es weg und machst es selbst.",
+  "voiceScript": {
+    "segments": {
+      "one-prompt-in": {
+        "title": "Ein Prompt rein",
+        "keywords": "",
+        "script": "Was passiert also, wenn Du ihnen nur einen Prompt gibst: Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa? Du bekommst einen Plan. Einen polierten. Schau genauer hin."
+      },
+      "probabilistic": {
+        "title": "Probabilistisch",
+        "keywords": "",
+        "script": "Sie sind probabilistisch: Frag noch einmal, und Du bekommst einen ganz neuen Plan, in Lissabon statt Berlin."
+      },
+      "relentless": {
+        "title": "Unermüdlich",
+        "keywords": "",
+        "script": "Sie sind unermüdlich: Sie haben Hotels in zwölf Städten nach Bewertung verglichen, nie gefragt, woher Deine Leute anreisen, und Dich unter Dokumenten begraben."
+      },
+      "informed": {
+        "title": "Informiert",
+        "keywords": "",
+        "script": "Sie sind informiert: Sie kennen tausend Teambuilding-Aktivitäten, und sie haben Paintball gewählt, weil sie Deine Kultur nicht kennen."
+      },
+      "confident": {
+        "title": "Selbstsicher",
+        "keywords": "",
+        "script": "Sie sind selbstsicher: Die Preise der Locations sehen aus wie Fakten, und sie sind erfunden."
+      },
+      "every-word-billed": {
+        "title": "Jedes Wort berechnet",
+        "keywords": "",
+        "script": "Und sie rechnen pro Wort ab: Du hast jede Seite davon bezahlt."
+      },
+      "you-saw-the-ai": {
+        "title": "Du hast die KI gesehen",
+        "keywords": "",
+        "script": "Du hast es wahrscheinlich gemerkt: Hinter jeder Eigenschaft hast Du schon die KI gesehen. Aber bleiben wir im Gedankenexperiment. Wenn das ein menschlicher Freelancer mit diesen fünf Eigenschaften wäre, wie würdest Du ihn für eine komplexe Aufgabe wie diese einarbeiten?"
+      },
+      "the-mental-model": {
+        "title": "Das mentale Modell",
+        "keywords": "",
+        "script": "Das ist das mentale Modell, das ich Dir mitgeben will. Im weiteren Verlauf wirst Du sehen, dass sich ein KI-Agent seltsamerweise in vielem wie dieser brillante Freelancer mit Amnesie verhält. Und Deine Aufgabe ist, ihn einzuarbeiten und zu führen, damit er ein Ergebnis liefert, mit dem Du arbeiten kannst."
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+/*
+ * How to manage the PRICE: the board is a size container, so the move and trait names wrap with its width. The one
+ * emphasis motion, CSS only: the highlight moves to the move being spoken, as the presenter points at its row (or a
+ * keyboard reader focuses its Context marker); that row stays at full
+ * strength while the shared `focus-group` dims the others, and its ticks take a `primary` outline. Nothing enters,
+ * nothing loops; the base rule is the at-rest frame with every tick shown, and reduced motion swaps the outline at once.
+ */
+
+.board {
+  container-type: inline-size;
+}
+
+.tick {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.row:is(:hover, :focus-within) .tick {
+  outline-color: var(--primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tick {
+    transition: outline-color 200ms ease-out;
+  }
+}

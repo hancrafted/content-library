@@ -1,0 +1,85 @@
+{
+  "title": "Eine harmlose Frage",
+  "caption": "Eine Zeile im Chat. Zwanzig Seiten im Fenster.",
+  "illustrative": "<marker>Token-Zahlen nur zur Veranschaulichung</marker>",
+  "card": {
+    "title": "Eine Zeile im Chat, die ganze Datei dahinter",
+    "lead": "Für die Antwort hat die KI alle 20 Seiten des Catering-PDFs gelesen, <marker>im Chat nicht zu sehen</marker>.",
+    "more": "<loaded>Die zwei Websuchen davor brachten Auszüge, ein bescheidener Happen</loaded>. <stays>Beide bleiben für jede spätere Frage im Fenster</stays>."
+  },
+  "sizes": {
+    "heading": "Gleicher Maßstab, Tokens",
+    "label": "Größen in Tokens",
+    "question": "Deine Frage",
+    "searches": "Zwei Websuchen",
+    "pdf": "Das Catering-PDF",
+    "answer": "Die Antwort"
+  },
+  "notes": {
+    "everything-is-loaded": {
+      "header": "Alles wird geladen",
+      "description": "Bei der einfachen Websuche landet jedes Ergebnis im Kontextfenster, vieles davon ohne Bezug zur Anfrage [1].",
+      "sources": {
+        "anthropic-web-search-tool": { "title": "Anthropic, Web search tool (Claude API documentation)" }
+      }
+    },
+    "it-stays": {
+      "header": "Es bleibt",
+      "description": "Suchergebnisse zählen als Eingabe-Tokens, im selben Zug und in späteren, und werden in spätere Anfragen wieder mitgeschickt, bleiben also Teil des Fensters [1].",
+      "sources": {
+        "anthropic-web-search-tool": { "title": "Anthropic, Web search tool (Claude API documentation)" }
+      }
+    },
+    "a-pdf-is-the-big-bite": {
+      "header": "Ein PDF ist der große Happen",
+      "description": "Anthropic schätzt eine durchschnittliche Webseite auf etwa 2.500 Tokens und ein PDF eines Forschungsartikels auf etwa 125.000 [1].",
+      "sources": {
+        "anthropic-web-fetch-tool": { "title": "Anthropic, Web fetch tool (Claude API documentation)" }
+      }
+    },
+    "the-remedy": {
+      "header": "Das Gegenmittel",
+      "description": "Anbieter filtern vor dem Fenster oder begrenzen die zurückgegebenen Tokens [1]; OpenAI beschreibt dieselbe Form, wobei Deep Research Hunderte Quellen anzapft [2].",
+      "sources": {
+        "anthropic-web-fetch-tool": { "title": "Anthropic, Web fetch tool (Claude API documentation)" },
+        "openai-web-search": { "title": "OpenAI, Web search (API documentation)" }
+      }
+    },
+    "api-figures-not-app-figures": {
+      "header": "API-Zahlen, keine App-Zahlen",
+      "description": "Diese Quellen beschreiben Entwicklerwerkzeuge; wie viele Seiten eine bestimmte Chat-App pro Frage lädt, ist nicht veröffentlicht [1].",
+      "sources": {
+        "anthropic-web-search-tool": { "title": "Anthropic, Web search tool (Claude API documentation)" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-venues": {
+        "title": "Drei Locations",
+        "keywords": "",
+        "script": "Angenommen, Du fragst: Finde drei Locations in Lissabon. Das ist eine kleine Frage. Die Antwort sind drei Optionen in ein paar Zeilen, und dahinter hat die KI zwei Suchen ausgeführt."
+      },
+      "what-you-dont-see": {
+        "title": "Was Du nicht siehst",
+        "keywords": "",
+        "script": "Diese Suchen bringen Auszüge von Webseiten zurück, die Du nie zu sehen bekommst. Jeder ist ein bescheidener Happen, und das Fenster nimmt ihn auf und macht weiter."
+      },
+      "the-catering-pdf": {
+        "title": "Das Catering-PDF",
+        "keywords": "",
+        "script": "Dann zeigst Du auf die Catering-Angebote im Projektordner und fragst, welches passt. Die Antwort ist eine Zeile, Sabor Verde. Um sie zu geben, hat die KI das ganze Catering-PDF gelesen, alle zwanzig Seiten, und diese eine Frage hat das Fenster weit mehr gefüllt als alles davor."
+      },
+      "the-intern": {
+        "title": "Die Praktikantin",
+        "keywords": "",
+        "script": "Gib einer Praktikantin dieselbe Aufgabe, und sie würde auch erst die ganze Datei lesen, bevor sie Dir eine Zeile sagt. Die KI macht genau das, nur schnell, und zeigt Dir nur das Ergebnis. Daran ist nichts falsch, Du musst nur wissen, dass es passiert ist."
+      },
+      "a-big-bite": {
+        "title": "Ein großer Happen",
+        "keywords": "",
+        "script": "Eine kurze Frage kann also einen großen Happen aus dem Fenster nehmen, während der Chat so klein aussieht wie vorher. Denk daran, wenn sich ein Chat früher voll anfühlt, als Du erwartet hast."
+      }
+    }
+  }
+}

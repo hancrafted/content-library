@@ -73,6 +73,15 @@ describe('success cases', () => {
     expect({ event, playlist }).toEqual(expected);
   });
 
+  it.each(['17:00', '17:00–19:00', '17:00–19:00 CET'])('loads an Event time as the venue writes it: %s', (time) => {
+    // ARRANGE
+    const expected = time;
+    // ACT
+    const [event] = loadContent({ ...SOUND, events: [{ ...EVENT, time }] }).events;
+    // ASSERT
+    expect(event.time).toBe(expected);
+  });
+
   it('keeps the hand-kept Event slugs of the routes in step with the Event records', () => {
     // ARRANGE
     const expected = [...EVENT_SLUGS];
@@ -82,9 +91,17 @@ describe('success cases', () => {
     expect(slugs).toEqual(expected);
   });
 
-  it('declares every Episode public but the three the AXEL seminar presented', () => {
+  it('declares every Episode public but the ones the AXEL seminar and the CyberForum Akademie webinar present', () => {
     // ARRANGE
-    const expected = ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'];
+    const expected = [
+      'axel-onboard-ai-every-time',
+      'axel-ai-attention-span',
+      'axel-ai-gives-you-more-work',
+      'cyberforum-intro',
+      'cyberforum-onboard-ai-every-time',
+      'cyberforum-ai-attention-span',
+      'cyberforum-ai-gives-you-more-work',
+    ];
     // ACT
     const notPublic = listEpisodes().filter((episode) => episode.visibility !== 'public');
     // ASSERT
@@ -176,6 +193,16 @@ describe('failure cases', () => {
   ])('refuses the visibility attendees on an %s until horizon 3', (_, input, record) => {
     // ARRANGE
     const expected = `${record}: visibility is "attendees", which is refused until horizon 3 gives it an enforcer`;
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Event time that is no clock time', () => {
+    // ARRANGE
+    const input = { ...SOUND, events: [{ ...EVENT, time: 'evening' }] };
+    const expected = 'Event 2026-10-23-axel: time must be written HH:MM, or HH:MM–HH:MM, with an optional zone';
     // ACT
     const load = () => loadContent(input);
     // ASSERT

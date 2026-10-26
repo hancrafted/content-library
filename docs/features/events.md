@@ -45,7 +45,13 @@ Flipping `visibility` back to `public` is the one edit that gives it its own pag
 
 ## Add an Event
 
-1. Add `src/content-store/playlists/<id>.ts` with the Episode slugs, and `src/content-store/events/<date>-<name>.ts` naming it.
-2. Import both in `src/content-store/store.ts` (`EVENTS`, `PLAYLISTS`), and add the Event slug to `EVENT_SLUGS` in `src/lib/routes.ts`.
-3. Write `eventsPage.items.<event-slug>.title` and `.description` in `src/messages/en.json` and `de.json`.
-4. Run `npm run verify`; the route files, sitemap and static params follow from the records. The other keys an Event page reads are in [Episode translation keys](episode-translation-keys.md#event-keys).
+A new Event starts from the **Workshop template** (GLOSSARY), a tooling page at `/episodes/workshop-template/` (`src/components/episodes/workshop-template/`): a Title slide, then agenda, in-scope, out-of-scope and orga Slides, every word a placeholder. Pick the Event's prefix, its name's first word (`cyberforum-`), and work through the steps in order:
+
+1. **Copy the template into a new unlisted Episode.** `cp -r src/components/episodes/workshop-template src/components/episodes/<prefix>-intro`. In the copy's `episode.ts`, set `slug` and rename the export; in its `i18n/`, give it its own title, caption and description. The template has no metadata, so add `episode-metadata.ts`, copied from another unlisted Episode with its slug, `visibility: 'unlisted'` and `publishedOn` the Event's date. Copy each further Episode the Event presents the same way, as in "Unlisted Episodes" steps 1 and 2, under the same prefix.
+2. **Register it.** Each new Episode as in "Unlisted Episodes" step 3: `EPISODE_SLUGS`, the registry, `REGISTERED`, and `registry.test.ts`'s `COMPOSITION` and `HEADER_MODES` (the template's copy: Sections `agenda` with no page Slide, `in-scope` with one, `orga` with none; header `shared`); `placement-markers.test.ts` for each copy that keeps `sections/` (the template's copy has none). Add the new unlisted slugs to the list `store.test.ts` expects in "declares every Episode public but…".
+3. **Append the Playlist.** Add `src/content-store/playlists/<id>.ts`: its id, visibility, and the Episode slugs in teaching order, the template's copy first. Import it into `PLAYLISTS` in `src/content-store/store.ts`.
+4. **Append the Event.** Add `src/content-store/events/<date>-<name>.ts`: slug, date, kind, Audience, optional time (`17:00`, `17:00–19:00` or `17:00–19:00 CET`) and location, and the Playlist's id. Import it into `EVENTS` in `src/content-store/store.ts`, and add the slug to `EVENT_SLUGS` in `src/lib/routes.ts`.
+5. **Write the Translation keys.** `eventsPage.items.<event-slug>.title` and `.description` in `src/messages/en.json` and `de.json`. The other keys an Event page reads are in [Episode translation keys](episode-translation-keys.md#event-keys).
+6. **Run `npm run verify`.** The route files, sitemap and static params follow from the records.
+
+The template's own words stay placeholders: write the Event's agenda, scope and orga in the copy, never in the template.

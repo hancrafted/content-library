@@ -9,7 +9,7 @@ import { LOCALES, localizePath } from '../../src/lib/locale.pure';
 import { ROUTES } from '../../src/lib/routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
-const TOOLING = ['page-template', 'slide-master', 'slides'] as const;
+const TOOLING = ['page-template', 'workshop-template', 'slide-master', 'slides'] as const;
 
 const PAGES = TOOLING.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(`/episodes/${slug}`, locale) })),

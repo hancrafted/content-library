@@ -1,6 +1,6 @@
 // Unlisted Episodes (design-ADR 0016, Routes and visibility): an Episode made for one Event lives only under that
 // Event. It is never in the sitemap, the Episode overview or an Upcoming list, has no /episodes/ page, and its page
-// under the Event tells search engines not to index it. The AXEL seminar's Playlist lists three such copies.
+// under the Event tells search engines not to index it. The AXEL seminar's and the CyberForum Akademie webinar's Playlists list such copies.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -11,8 +11,22 @@ import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const AXEL = '2026-10-23-axel-agentic-workflow';
 /** The AXEL seminar's unlisted copies, in the order it taught them. Written out: the store is not the oracle. */
-const UNLISTED = ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'] as const;
-const PER_LOCALE = UNLISTED.flatMap((episode) => LOCALES.map((locale) => ({ episode, locale })));
+const AXEL_UNLISTED = ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'] as const;
+const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
+/** The CyberForum Akademie webinar's: the Workshop template's copy, then copies of the same three. */
+const CYBERFORUM_UNLISTED = [
+  'cyberforum-intro',
+  'cyberforum-onboard-ai-every-time',
+  'cyberforum-ai-attention-span',
+  'cyberforum-ai-gives-you-more-work',
+] as const;
+/** Every unlisted Episode with the Event that presents it. */
+const PRESENTED = [
+  ...AXEL_UNLISTED.map((episode) => ({ event: AXEL, episode })),
+  ...CYBERFORUM_UNLISTED.map((episode) => ({ event: CYBERFORUM, episode })),
+];
+const UNLISTED: readonly string[] = PRESENTED.map(({ episode }) => episode);
+const PER_LOCALE = PRESENTED.flatMap((presented) => LOCALES.map((locale) => ({ ...presented, locale })));
 
 /** The Episode slugs a page shows as cards, wherever it shows them. */
 function cardSlugs(url: string): string[] {
@@ -33,7 +47,7 @@ describe('unlisted Episodes stay out of every list', () => {
       sitemap: UNLISTED.filter((episode) => sitemap.includes(`/${episode}/`)),
       lists: lists.flatMap((url) =>
         cardSlugs(url)
-          .filter((slug) => (UNLISTED as readonly string[]).includes(slug))
+          .filter((slug) => UNLISTED.includes(slug))
           .map((slug) => `${url}: ${slug}`),
       ),
     };
@@ -54,9 +68,9 @@ describe('unlisted Episodes stay out of every list', () => {
 describe('unlisted Episode pages under their Event', () => {
   it.each(PER_LOCALE)(
     'An unlisted Episode page tells search engines not to index it. ($episode, $locale)',
-    ({ episode, locale }) => {
+    ({ event, episode, locale }) => {
       // ARRANGE
-      const url = localizePath(eventEpisodeRoute(AXEL, episode), locale);
+      const url = localizePath(eventEpisodeRoute(event, episode), locale);
       const expected = { robots: 'noindex', canonical: true };
       const $ = exportedPage(url);
       // ACT
@@ -72,7 +86,7 @@ describe('unlisted Episode pages under their Event', () => {
   it.each(LOCALES)('The AXEL Event page lists its three unlisted Episodes in order, under the Event (%s)', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(eventRoute(AXEL), locale));
-    const expected = UNLISTED.map((episode) => ({
+    const expected = AXEL_UNLISTED.map((episode) => ({
       slug: episode,
       href: `${localizePath(eventEpisodeRoute(AXEL, episode), locale)}/`,
     }));

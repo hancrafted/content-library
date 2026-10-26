@@ -1,0 +1,88 @@
+{
+  "title": "Du wurdest befördert",
+  "caption": "KI bringt Dich vom Erledigen der Arbeit zum Verantworten der Arbeit. Hinüber führen <b>Managementfähigkeiten</b>, die Du mit Menschen schon nutzt.",
+  "rooms": {
+    "execution": {
+      "title": "Ausführung",
+      "era": "Raum 1 · alles selbst machen",
+      "line": "Wo viele noch sitzen",
+      "claim": "Du machst die Arbeit selbst"
+    },
+    "management": {
+      "title": "Management",
+      "era": "Raum 2 · mit KI",
+      "line": "Wohin KI Dich befördert hat",
+      "claim": "Du managst die Arbeit"
+    }
+  },
+  "gap": {
+    "label": "die Fehlanpassung",
+    "many": "Viele tun noch so, als machten sie die Arbeit selbst"
+  },
+  "stones": {
+    "breakDown": { "title": "Zerlegen", "detail": "kleine Schritte, die sie korrigieren kann" },
+    "goals": { "title": "Klare Ziele", "detail": "wie gut aussieht" },
+    "review": { "title": "Prüfen", "detail": "am Ziel messen" },
+    "delegate": { "title": "Delegieren", "detail": "die Aufgabe übergeben" }
+  },
+  "notes": {
+    "many-skip-the-management-steps": {
+      "header": "Viele überspringen die Managementschritte",
+      "description": "In 9.830 Gesprächen auf Claude.ai nannten 51,1 Prozent ein Ziel, 15,8 Prozent hinterfragten die Begründung und 8,7 Prozent prüften Fakten; keine Studie misst Ausführen gegenüber Managen, deshalb tragen die Daten „viele“, nicht „die meisten“ [1].",
+      "sources": {
+        "anthropic-ai-fluency-index": { "title": "Anthropic, The AI Fluency Index (February 2026)" }
+      }
+    },
+    "workers-describe-the-shift": {
+      "header": "Beschäftigte beschreiben den Wandel selbst",
+      "description": "In einer Umfrage unter 319 Menschen, die wöchentlich generative KI nutzen, verlagerte sich der Aufwand vom Ausführen zum Verantworten von Aufgaben und vom Sammeln von Informationen zum Prüfen; mehr Vertrauen in die KI ging mit weniger Prüfen einher [1].",
+      "sources": {
+        "lee-critical-thinking": {
+          "title": "Lee et al., The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers (CHI 2025)"
+        }
+      }
+    },
+    "stepping-stone-break-it-down": {
+      "header": "Trittstein: zerlegen",
+      "description": "Nutzerinnen und Nutzer zerlegen komplexe Aufgaben in kleinere Schritte; so entsteht eine Feedbackschleife, in der das Modell seinen Kurs korrigiert [1].",
+      "sources": {
+        "anthropic-economic-index-primitives": {
+          "title": "Anthropic, Economic Index: New building blocks for AI use (January 2026)"
+        }
+      }
+    },
+    "communication-barrier": {
+      "header": "Pocock spricht von einer „Kommunikationsbarriere“",
+      "description": "Er sagt, zwischen einem Menschen und einem KI-Agenten gebe es eine Kommunikationsbarriere, und sie liege im Vokabular: Beide sprechen nicht dieselbe Sprache, also braucht es eine gemeinsame; der Ausdruck „Sprachbarriere“ stammt nicht von ihm, und die Deutung als Managementaufgabe ist eine Schlussfolgerung dieses Projekts [1].",
+      "sources": {
+        "pocock-software-fundamentals": {
+          "title": "Matt Pocock, Software Fundamentals Matter More Than Ever (AI Engineer Europe 2026)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "you-were-promoted": {
+        "title": "Du wurdest befördert",
+        "keywords": "",
+        "script": "So lässt sich das lesen: KI befördert Dich. Du wechselst vom Erledigen der Arbeit zum Managen der Arbeit, und die Arbeit schrumpft nicht, sie verändert sich, sodass Du Dinge schaffst, die vorher außer Reichweite waren."
+      },
+      "the-misalignment": {
+        "title": "Die Fehlanpassung",
+        "keywords": "",
+        "script": "Dieser Wechsel hat eine Lücke, und sie ist die größte Fehlanpassung, vor der Menschen heute stehen. Viele von uns sitzen noch im Raum der Ausführung und tun so, als machten wir die Arbeit selbst, obwohl die neue Aufgabe ist, sie zu managen."
+      },
+      "four-stepping-stones": {
+        "title": "Vier Trittsteine",
+        "keywords": "",
+        "script": "Hinüber führen vier Trittsteine: zerlegen, klare Ziele schreiben, prüfen und delegieren. Keiner davon ist eine technische Fähigkeit. Du kennst sie alle aus der Arbeit mit Menschen, und jeder macht Dich sicherer mit dem, was zurückkommt."
+      },
+      "the-barrier": {
+        "title": "Die Barriere",
+        "keywords": "",
+        "script": "Und es gibt einen Grund, warum die Lücke echt ist. Stell Dir vor, Du bittest die KI um „den üblichen Bericht“ und bekommst etwas Poliertes zurück, das eine Frage beantwortet, die Du nie gestellt hast. Nichts ist kaputtgegangen, ihr fehlten nur die Begriffe in Deinem Kopf. Nimm Dir also vor Deiner nächsten Übergabe eine Minute und schreib die Begriffe auf, die für Dich selbstverständlich sind, und verwende sie jedes Mal."
+      }
+    }
+  }
+}

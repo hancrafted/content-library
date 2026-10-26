@@ -1,0 +1,15 @@
+{
+  "title": "Nicht im Fokus",
+  "caption": "Ersetze dies durch das, was diese Session auslässt, damit niemand darauf wartet.",
+  "items": {
+    "first": "Ein Thema, das die Session auslässt",
+    "second": "Ein zweites Thema, das die Session auslässt",
+    "third": "Ein drittes Thema, das die Session auslässt"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Was Du zu den ausgelassenen Themen sagst",
+      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    }
+  }
+}

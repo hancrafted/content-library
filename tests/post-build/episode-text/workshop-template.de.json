@@ -1,0 +1,59 @@
+{
+  "title": "Workshop-Vorlage · hancrafted",
+  "description": "Kopiere diese Werkzeugseite als erste Episode einer neuen Veranstaltung: Titel, Agenda, Fokus und Organisation.",
+  "toc": "Inhalt Wird geladen 1 Agenda 2 Im Fokus Nicht im Fokus 3 Organisation Inhalt öffnen : Inhalt Inhalt 1 Agenda 2 Im Fokus Nicht im Fokus 3 Organisation",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Workshop-Vorlage Ersetze dies durch den Namen des Workshops, sein Datum und für wen er ist."
+    },
+    {
+      "id": "agenda",
+      "text": "Agenda Ersetze dies durch den Ablauf der Session: jeder Block mit seinem Zeitfenster. Zeitfenster: erster Block Zeitfenster: zweiter Block Zeitfenster: dritter Block Zeitfenster: Fragen und Abschluss"
+    },
+    {
+      "id": "in-scope",
+      "text": "Im Fokus Ersetze dies durch das, was diese Session behandelt. Ein Thema, das die Session behandelt Ein zweites Thema, das die Session behandelt Ein drittes Thema, das die Session behandelt"
+    },
+    {
+      "id": "in-scope--out-of-scope",
+      "text": "Im Fokus (1/1) Seite 1 von 1 Nicht im Fokus Ersetze dies durch das, was diese Session auslässt, damit niemand darauf wartet. Ein Thema, das die Session auslässt Ein zweites Thema, das die Session auslässt Ein drittes Thema, das die Session auslässt"
+    },
+    {
+      "id": "orga",
+      "text": "Organisation Ersetze dies durch den organisatorischen Rahmen der Session. Pausen: wann sie stattfinden Fragen: wann und wie man sie stellt Unterlagen: wo Teilnehmende sie danach finden Kontakt: wie man den Host erreicht"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "agenda",
+      "text": "Agenda Was Du zur Agenda sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    {
+      "id": "in-scope",
+      "text": "Im Fokus Was Du zum Fokus sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    {
+      "id": "in-scope--out-of-scope",
+      "text": "Nicht im Fokus Was Du zu den ausgelassenen Themen sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    {
+      "id": "orga",
+      "text": "Organisation Was Du zur Organisation sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "agenda", "text": "Agenda Kein Sprechtext für diese Folie." },
+    { "id": "in-scope", "text": "Im Fokus Kein Sprechtext für diese Folie." },
+    { "id": "in-scope--out-of-scope", "text": "Nicht im Fokus Kein Sprechtext für diese Folie." },
+    { "id": "orga", "text": "Organisation Kein Sprechtext für diese Folie." }
+  ]
+}
