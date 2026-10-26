@@ -19,15 +19,15 @@ const SLIDE_ANCHOR = 'agentic-workflows--human-in-the-loop';
 const ROOT = '[data-human-in-the-loop]';
 const MODAL = '[role="dialog"][data-part="modal"]';
 const COPY_PROMPT = 'Copy prompt';
-/** Two Workflows by seven stages, in one language: more than the default 30s. */
+/** Two Workflows by six or seven stages, in one language: more than the default 30s. */
 const LONG_TEST = 120_000;
 /** A point on the overlay, outside the centred dialog. */
 const OVERLAY = { x: 4, y: 4 };
 
-/** A valid Workflow of the viewer's own: the shipped summer party under another id and title. */
-const OWN = readFileSync(path.join(__dirname, 'summer-party.en.yml'), 'utf8')
-  .replace('id: summer-party', 'id: mine')
-  .replace('title: Plan company summer party', 'title: Mine');
+/** A valid Workflow of the viewer's own: the shipped project plan under another id and title. */
+const OWN = readFileSync(path.join(__dirname, 'project-plan.en.yml'), 'utf8')
+  .replace('id: project-plan', 'id: mine')
+  .replace('title: Plan a project', 'title: Mine');
 
 /** Opens the Episode at the Slide with the clipboard recorded (a headless page's is not ours to read). */
 async function open(page: Page, theme: 'light' | 'dark', where: { width?: number; url?: string } = {}) {
@@ -118,9 +118,12 @@ async function popoverProblems(page: Page, where: string, language: Language): P
   return checks.filter(([wrong]) => wrong).map(([, what]) => `${where}: ${what}`);
 }
 
+/** How many stages each shipped Workflow draws. */
+const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 7 };
+
 /** Opens one Workflow, then every stage of it in turn, and reports what is wrong. */
 async function stageProblems(page: Page, id: string, language: Language): Promise<string[]> {
-  const stages = 7;
+  const stages = STAGES[id] ?? 0;
   const root = page.locator(ROOT);
   await pickWorkflow(root, id);
   const buttons = root.locator('[data-part="diagram"] button[data-try]');
@@ -143,7 +146,7 @@ test.describe('success cases', () => {
     // ARRANGE
     const expectedControls = ['picker', 'level', 'download', 'upload'];
     const expectedLabel = 'Use case:';
-    const expectedChosen = 'Plan company summer party';
+    const expectedChosen = 'Plan a project';
     const { root, toolbar } = await open(page, 'light');
     // ACT
     const controls = () =>
@@ -160,14 +163,14 @@ test.describe('success cases', () => {
     page,
   }) => {
     // ARRANGE
-    const expectedTitle = 'Requirements: Practice it';
+    const expectedTitle = 'High-level plan: Practice it';
     const expectedOpen = 1;
-    const interview = '## Questions and answers';
+    const interview = '## Done looks like';
     const placeholder = '{{';
     const copiedStatus = 'Copied';
     const { modal } = await open(page, 'light');
     // ACT
-    await openStage(page, 'Requirements');
+    await openStage(page, 'High-level plan');
     await copyPrompt(modal).click();
     // ASSERT
     await expect(modal.locator('[data-slot="dialog-title"]')).toHaveText(expectedTitle);
@@ -262,6 +265,24 @@ test.describe('success cases', () => {
     }
   });
 
+  test('runs the Epics stage as two rounds in teaching mode, each titled by an example epic, with the grill capped at five questions', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const exampleTitles = ['Date and venue:', 'Travel and accommodation:'];
+    const questions = 'at most 5 questions';
+    const { modal } = await open(page, 'light');
+    const rounds = () => modal.locator('[data-job="grill"] [data-slot="accordion-trigger"]');
+    // ACT
+    await openStage(page, 'Epics');
+    await copyPrompt(modal).click();
+    await expect.poll(() => copies(page)).toBe(1);
+    // ASSERT
+    await expect(rounds()).toContainText(exampleTitles);
+    await expect(rounds()).toHaveCount(exampleTitles.length);
+    await expect.poll(async () => (await copied(page))[0]).toContain(questions);
+  });
+
   test("runs vacation's Research stage as rounds titled by the example tickets, then by the pasted tickets, capped at three", async ({
     page,
   }) => {
@@ -301,37 +322,35 @@ test.describe('success cases', () => {
         await open(page, 'light', { url: language.url });
         const problems: string[] = [];
         // ACT
-        for (const id of ['summer-party', 'vacation']) problems.push(...(await stageProblems(page, id, language)));
+        for (const id of ['project-plan', 'vacation']) problems.push(...(await stageProblems(page, id, language)));
         // ASSERT
         expect(problems).toEqual(expected);
       });
     }
   });
 
-  test('carries a result pasted in one stage into the copied prompt of a later stage, keeps it across close and reopen, and stores nothing', async ({
+  test('carries a result pasted in one job into the copied prompt of the next job, keeps it across close and reopen, and stores nothing', async ({
     page,
   }) => {
     // ARRANGE
-    const pasted = '# PASTED SPEC MARKER';
+    const pasted = '# PASTED TASK MARKER';
     const { modal } = await open(page, 'light');
     await page.evaluate(() => {
       localStorage.clear();
       sessionStorage.clear();
     });
     // ACT
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill(pasted);
-    await modal.getByRole('button', { name: 'Close' }).click();
-    await expect(modal).toHaveCount(0);
-    await openStage(page, 'Tickets');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(pasted);
+    await modal.locator('[data-job="scope"] [data-slot="accordion-trigger"]').click();
     await copyPrompt(modal).click();
     await expect.poll(() => copies(page)).toBe(1);
     const written = await copied(page);
     await modal.getByRole('button', { name: 'Close' }).click();
-    await openStage(page, 'Requirements');
+    await openStage(page, 'High-level plan');
     // ASSERT
     expect(written.at(-1)).toContain(pasted);
-    await expect(field(modal, 'spec')).toHaveValue(pasted);
+    await expect(field(modal, 'task')).toHaveValue(pasted);
     expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
   });
 
@@ -341,8 +360,8 @@ test.describe('success cases', () => {
     // ARRANGE
     const pasted = '# Pasted\n\nfirst line\nsecond line';
     const { modal } = await open(page, 'light');
-    await openStage(page, 'Plan');
-    const input = field(modal, 'task');
+    await openStage(page, 'High-level plan');
+    const input = field(modal, 'idea');
     // ACT
     await input.fill(pasted);
     await copyPrompt(modal).click();
@@ -356,9 +375,9 @@ test.describe('success cases', () => {
   test('expands a field with the eye toggle and collapses it again', async ({ page }) => {
     // ARRANGE
     const { modal } = await open(page, 'light');
-    await openStage(page, 'Plan');
-    const input = field(modal, 'task');
-    const eye = modal.locator('[data-field="task"] button[aria-pressed]');
+    await openStage(page, 'High-level plan');
+    const input = field(modal, 'idea');
+    const eye = modal.locator('[data-field="idea"] button[aria-pressed]');
     const rows = async () => Number(await input.getAttribute('rows'));
     // ACT
     await expect(input).toHaveAttribute('rows', '1');
@@ -404,7 +423,7 @@ test.describe('success cases', () => {
 test.describe('failure cases', () => {
   test('reports the problems of a broken uploaded Workflow and keeps the authored one', async ({ page }) => {
     // ARRANGE
-    const authored = 'summer-party';
+    const authored = 'project-plan';
     const { root } = await open(page, 'light');
     // ACT
     await root

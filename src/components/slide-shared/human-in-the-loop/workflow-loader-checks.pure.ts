@@ -1,7 +1,8 @@
 import { markerCount } from '../core-components/try-prompt/prompt-sections.pure';
 import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure';
 import { unneededOutputs } from './workflow-loader-jobs.pure';
-import { unknownMarkers } from './workflow-markers.pure';
+import { limitProblems, slotNameProblems } from './workflow-loader-slots.pure';
+import { expandSections, unknownMarkers } from './workflow-markers.pure';
 import { producersFor, producersOf, tasksOf, type Producer } from './workflow-outputs.pure';
 import { slotSample } from './workflow-sample.pure';
 import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
@@ -65,18 +66,6 @@ function againstTemplate(
   return handoffProblems(source, readTemplate(template)).map((problem) => `${what} ${problem}.`);
 }
 
-/** The slot's id against what earlier stages hand on: unknown, or taken in the wrong mode. */
-function slotNameProblems(slot: SlotDef, task: TaskDef, producer: Producer | undefined): string[] {
-  const where = `Slot "${slot.id}" of task "${task.id}"`;
-  if (slot.free) return [];
-  if (!producer) return [`${where} names no output of an earlier stage.`];
-  if (producer.all && slot.mode === 'single')
-    return [`${where} takes all rounds of a repeated stage; its mode must be multiple.`];
-  if (!producer.all && slot.mode === 'multiple')
-    return [`${where} is multiple but its output is not from a repeated stage.`];
-  return [];
-}
-
 /** What a slot's samples are held to: the file and task, its template (none for a free input), its marker count. */
 interface SampleBasis {
   readonly file: WorkflowFile;
@@ -126,9 +115,36 @@ function sampleProblems(slot: SlotDef, basis: SampleBasis): string[] {
 }
 
 /** The markers a multiple slot has in a task's prompts: the most any runtime's sections number. */
-function markersOf(slot: SlotDef, task: TaskDef): number {
+function markersOf(slot: SlotDef, task: TaskDef, width: number): number {
   const asSlot = { id: slot.id, mode: slot.mode, label: slot.label };
-  return Math.max(...Object.values(task.do).map((sections) => markerCount(asSlot, sections)));
+  const widths = new Map([[slot.id, width]]);
+  return Math.max(
+    ...Object.values(task.do).map((sections) => markerCount(asSlot, expandSections(sections, [slot], widths))),
+  );
+}
+
+function slotNamed(
+  slot: SlotDef,
+  task: TaskDef,
+  scope: { names: ReadonlyMap<string, Producer>; own: ReadonlySet<string> },
+): string[] {
+  return scope.own.has(slot.id) ? [] : slotNameProblems(slot, task, scope.names.get(slot.id));
+}
+
+function doSlotOf(
+  file: WorkflowFile,
+  task: TaskDef,
+  scope: { names: ReadonlyMap<string, Producer>; own: ReadonlySet<string> },
+) {
+  return (slot: SlotDef): string[] => {
+    const producer = scope.names.get(slot.id);
+    const named = slotNamed(slot, task, scope);
+    if (slotSample(file, slot) === undefined)
+      return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
+    const template = slot.free ? undefined : producer?.task.template;
+    const markers = markersOf(slot, task, producer?.stage.foreach?.teaching ?? 0);
+    return [...named, ...sampleProblems(slot, { file, task, template, markers })];
+  };
 }
 
 function doSlotProblems(
@@ -136,17 +152,9 @@ function doSlotProblems(
   task: TaskDef,
   scope: { names: ReadonlyMap<string, Producer>; own: ReadonlySet<string> },
 ): string[] {
-  const { names, own } = scope;
   return [
     ...dupes(task.slots.map((slot) => slot.id)).map((id) => `Task "${task.id}" has the slot "${id}" twice.`),
-    ...task.slots.flatMap((slot) => {
-      const producer = names.get(slot.id);
-      const named = own.has(slot.id) ? [] : slotNameProblems(slot, task, producer);
-      if (slotSample(file, slot) === undefined)
-        return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
-      const template = slot.free ? undefined : producer?.task.template;
-      return [...named, ...sampleProblems(slot, { file, task, template, markers: markersOf(slot, task) })];
-    }),
+    ...task.slots.flatMap(doSlotOf(file, task, scope)),
   ];
 }
 
@@ -198,8 +206,9 @@ function markerProblems(task: TaskDef, stage: StageDef, names: ReadonlyMap<strin
   const { slots } = task;
   const repeated = stage.foreach !== undefined;
   const widths = new Map(slots.map((slot) => [slot.id, names.get(slot.id)?.stage.foreach?.teaching ?? 0]));
+  const limits = Object.keys(task.limits ?? {});
   return Object.entries(task.do).flatMap(([runtime, sections]) =>
-    unknownMarkers(sections, { reviewer: false, slots, repeated, widths }).map(
+    unknownMarkers(sections, { reviewer: false, slots, repeated, widths, limits }).map(
       (marker) => `The ${runtime} prompt of task "${task.id}" has the unknown marker {{${marker}}}.`,
     ),
   );
@@ -216,6 +225,7 @@ function taskProblems(file: WorkflowFile, task: TaskDef, index: number): string[
     ...doSlotProblems(file, task, { names, own }),
     ...reviewSlotProblems(file, task, names),
     ...markerProblems(task, stage, names),
+    ...limitProblems(task, stage),
     ...exampleProblems(file, task, stage),
   ];
 }

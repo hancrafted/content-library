@@ -1,6 +1,7 @@
 import type { PromptSlot } from '../core-components/try-prompt/prompt-sections.pure';
 import { joinPrompt } from '../core-components/try-prompt/prompt-sections.pure';
 import type { PromptView } from '../core-components/try-prompt/try-prompt.types';
+import { expandSections, limitMarker, limitValue } from './workflow-markers.pure';
 import { slotSample } from './workflow-sample.pure';
 import type { Runtime, SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
@@ -24,6 +25,33 @@ const widthOf = (file: WorkflowFile, output: string): number => {
   const stage = file.stages.find((each) => each.jobs.some((task) => task.output === output));
   return stage?.foreach?.teaching ?? 0;
 };
+
+/** How a prompt is made: whether teaching mode is on (the limits it names), and the rounds each multiple slot takes. */
+export interface PromptOptions {
+  /** Teaching mode picks each limit's teaching value; default on. */
+  readonly teaching?: boolean;
+  /** Per multiple slot id, how many entries `{{id_*}}` expands into; default the teaching cap of its repeated stage. */
+  readonly widths?: ReadonlyMap<string, number>;
+}
+
+/** The runtime alone, or the runtime with how the prompt is made. */
+export type PromptMode = Runtime | (PromptOptions & { readonly runtime: Runtime });
+
+const modeOf = (mode: PromptMode): { runtime: Runtime; options: PromptOptions } =>
+  typeof mode === 'string' ? { runtime: mode, options: {} } : { runtime: mode.runtime, options: mode };
+
+/** The `{{limit.name}}` fills of a task. */
+const limitsOf = (task: TaskDef, options: PromptOptions): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(task.limits ?? {}).map(([name, limit]) => [
+      limitMarker(name),
+      String(limitValue(limit, options.teaching ?? true)),
+    ]),
+  );
+
+/** The rounds each multiple slot of `slots` takes: given, else the teaching cap of the stage that hands its output on. */
+const widthsOf = (file: WorkflowFile, slots: readonly SlotDef[], options: PromptOptions): Map<string, number> =>
+  new Map(slots.map((slot) => [slot.id, options.widths?.get(slot.id) ?? widthOf(file, slot.id)]));
 
 const numbered = (items: readonly string[]): string => items.map((item, at) => `${at + 1}. ${item}`).join('\n');
 
@@ -57,19 +85,30 @@ function viewOf(
 }
 
 /** The prompt of the do step for one runtime; a round's `{{item}}` stays in the text, for `roundStep` to fill. */
-export function doPrompt(file: WorkflowFile, task: TaskDef, runtime: Runtime): PromptView {
-  const fills = { template: fenced(file.templates[task.template] ?? '') };
-  const sections = task.do[runtime].map((section) => ({ ...section, text: resolve(section.text, fills) }));
+export function doPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode): PromptView {
+  const { runtime, options } = modeOf(mode);
+  const fills = { template: fenced(file.templates[task.template] ?? ''), ...limitsOf(task, options) };
+  const expanded = expandSections(task.do[runtime], task.slots, widthsOf(file, task.slots, options));
+  const sections = expanded.map((section) => ({ ...section, text: resolve(section.text, fills) }));
   return viewOf({ sections, slots: task.slots, instructions: task.instructions }, file);
 }
 
-/** The prompt of the review step: the general reviewer joined with the task's checks, inputs and template. */
-export function reviewPrompt(file: WorkflowFile, task: TaskDef): PromptView {
+/**
+ * The prompt of the review step: the general reviewer joined with the task's checks, inputs and template. A check that
+ * names `{{item}}` is about one round; the CLI prompt reviews every round at once, so it leaves those checks out.
+ */
+export function reviewPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode = 'simple'): PromptView {
+  const { runtime, options } = modeOf(mode);
   const review = task.review ?? { slots: [], checks: [] };
+  const limits = limitsOf(task, options);
+  const checks = review.checks
+    .filter((check) => runtime === 'simple' || !check.includes('{{item}}'))
+    .map((check) => resolve(check, limits));
+  const widths = widthsOf(file, review.slots, options);
   const fills = {
     template: fenced(file.templates[task.template] ?? ''),
-    checks: numbered(review.checks),
-    inputs: inputsOf(review.slots, (slot) => widthOf(file, slot.id)),
+    checks: numbered(checks),
+    inputs: inputsOf(review.slots, (slot) => widths.get(slot.id) ?? 0),
   };
   const sections = file.reviewer.sections.map((section) => ({ ...section, text: resolve(section.text, fills) }));
   return viewOf({ sections, slots: review.slots, instructions: review.instructions }, file);
@@ -83,9 +122,10 @@ export interface TaskStep {
 }
 
 /** The steps of a task at a runtime: its do prompt, then its review. A repeated stage's rounds are made from them. */
-export function stepsOf(file: WorkflowFile, task: TaskDef, runtime: Runtime): TaskStep[] {
-  const doStep: TaskStep = { id: 'do', prompt: doPrompt(file, task, runtime) };
-  return task.review ? [doStep, { id: 'review', prompt: reviewPrompt(file, task) }] : [doStep];
+export function stepsOf(file: WorkflowFile, task: TaskDef, mode: PromptMode): TaskStep[] {
+  const doStep: TaskStep = { id: 'do', prompt: doPrompt(file, task, mode) };
+  const review: TaskStep = { id: 'review', prompt: reviewPrompt(file, task, mode) };
+  return task.review ? [doStep, review] : [doStep];
 }
 
 /** What a round shares with the other rounds of its job: the results it takes in and the one it hands on. */
@@ -93,6 +133,16 @@ export interface RoundShare {
   /** The names earlier stages hand on: a slot with one of these ids takes a shared result. */
   readonly previous: readonly string[];
   readonly output?: string;
+  /** The outputs of the jobs of the same stage this job needs: a slot with one of these ids takes the round's own result. */
+  readonly sameStage?: readonly string[];
+}
+
+/** What a field is called in round `round`: its own round's result (`id_K`), its own field (`id#K`), or shared (none). */
+function roundName(id: string, at: { step: TaskStep['id']; round: number; share: RoundShare }): string | undefined {
+  const { step, round, share } = at;
+  if (share.sameStage?.includes(id)) return `${id}_${round}`;
+  const shared = step === 'do' || share.previous.includes(id) || id === share.output;
+  return shared ? undefined : `${id}#${round}`;
 }
 
 /**
@@ -102,9 +152,11 @@ export interface RoundShare {
  */
 export function roundStep(step: TaskStep, round: { number: number; item: string }, share: RoundShare): TaskStep {
   const { prompt } = step;
-  const shared = (id: string): boolean => step.id === 'do' || share.previous.includes(id) || id === share.output;
   const renamed = new Map(
-    (prompt.slots ?? []).filter((slot) => !shared(slot.id)).map((slot) => [slot.id, `${slot.id}#${round.number}`]),
+    (prompt.slots ?? []).flatMap((slot): [string, string][] => {
+      const to = roundName(slot.id, { step: step.id, round: round.number, share });
+      return to === undefined ? [] : [[slot.id, to]];
+    }),
   );
   const fill = (text: string): string =>
     text.replace(/\{\{([^{}]+)\}\}/g, (marker, name: string) => {

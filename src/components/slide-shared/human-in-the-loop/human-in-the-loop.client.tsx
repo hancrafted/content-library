@@ -6,6 +6,7 @@ import { callbacksFor, shownWorkflow, slicesOf } from './human-in-the-loop-slice
 import type { HumanInTheLoopData } from './human-in-the-loop.types';
 import { ModalPart } from './modal-part.client';
 import { ToolbarPart } from './toolbar-part.client';
+import { roundsOf, runOf } from './workflow-run.pure';
 import { createState, reduce } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 
@@ -19,8 +20,15 @@ export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   const [state, dispatch] = useReducer(reduce, start, createState);
   const on = useMemo(() => callbacksFor(dispatch), []);
   const workflow = shownWorkflow(data, state);
-  const { level } = state;
-  const view = useMemo(() => workflow && workflowView(workflow, { level }), [workflow, level]);
+  const { level, teaching, slotValues } = state;
+  const rounds = useMemo(
+    () => (workflow ? JSON.stringify(roundsOf(runOf(workflow.file, { results: slotValues, teaching }))) : '{}'),
+    [workflow, slotValues, teaching],
+  );
+  const view = useMemo(
+    () => workflow && workflowView(workflow, { level, teaching, rounds: JSON.parse(rounds) as Record<string, number> }),
+    [workflow, level, teaching, rounds],
+  );
   if (!workflow || !view) return null;
   const slices = slicesOf({ data, state, workflow, view }, on);
   return (

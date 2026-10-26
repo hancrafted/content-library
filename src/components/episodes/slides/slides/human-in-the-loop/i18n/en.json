@@ -1,10 +1,10 @@
 {
   "title": "Human in the loop workflow",
-  "caption": "The brief workflow for the summer party: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between.",
+  "caption": "The project-plan workflow: six stages from a vague task to a reviewed report, a fresh chat for each job, and you check every artifact in between.",
   "notes": {
     "workflow": {
       "header": "The Shared visual in its own words",
-      "description": "The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the summer party Workflow, Vacation one pill away, every \"Try it\" open."
+      "description": "The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the project-plan Workflow, Vacation one pill away, every \"Try it\" open."
     }
   }
 }

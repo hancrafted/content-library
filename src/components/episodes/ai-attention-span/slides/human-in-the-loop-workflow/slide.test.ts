@@ -99,9 +99,9 @@ describe('success cases', () => {
     expect(markers).toEqual(expected);
   });
 
-  it('shows the seven stages of the brief with no bold first letter and no acronym named', () => {
+  it('shows the six stages of the project plan with no bold first letter and no acronym named', () => {
     // ARRANGE
-    const expected = { stages: 7, bold: 0, acronym: false };
+    const expected = { stages: 6, bold: 0, acronym: false };
     // ACT
     const $ = scene('en');
     const actual = {
@@ -113,9 +113,15 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws every stage with its jobs and the fan-out and fan-in of brief the venue', () => {
+  it('draws every stage with its jobs and the fan-out and fan-in of the project plan', () => {
     // ARRANGE
-    const expected = { jobLists: 7, workers: ['Chat 1', 'Chat 2', 'Chat 3'], card: true, connectors: 6, fans: 2 };
+    const expected = {
+      jobLists: 6,
+      workers: ['Run the ticket 1', 'Run the ticket 2', 'Run the ticket 3', 'Run the ticket 4'],
+      card: true,
+      connectors: 5,
+      fans: 4,
+    };
     // ACT
     const $ = scene('en');
     const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');
@@ -123,9 +129,9 @@ describe('success cases', () => {
       jobLists: pipeline.find('> li > div > ol').length,
       workers: pipeline
         .find('> li > div > ol')
-        .eq(4)
+        .eq(3)
         .find('li')
-        .map((_, el) => $(el).children().first().text().replace('Checked against the card', '').trim())
+        .map((_, el) => $(el).children().first().text().replace('Checked by a second chat', '').trim())
         .get(),
       card: pipeline.text().includes('You sign off'),
       connectors: pipeline.find('> li > [aria-hidden="true"]').length,
@@ -159,7 +165,7 @@ describe('edge cases', () => {
 
   it('names the first stage as the task, in both locales', () => {
     // ARRANGE
-    const expected = ['Plan', 'Plan'];
+    const expected = ['High-level plan', 'Grobplan'];
     // ACT
     const names = (['en', 'de'] as const).map((locale) =>
       scene(locale)('ol[aria-label] > li').first().find('p.font-semibold').first().text().trim(),

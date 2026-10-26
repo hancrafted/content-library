@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import {
   BUILT_IN_MARKERS,
   PURPOSES,
@@ -10,7 +10,7 @@ import {
   type WorkflowFile,
 } from './workflow-schema.types';
 
-const proposal = parse(summerPartyEn) as WorkflowFile;
+const proposal = parse(vacationEn) as WorkflowFile;
 const RESEARCH = 4;
 
 const markersOf = (sections: readonly SectionDef[]) =>

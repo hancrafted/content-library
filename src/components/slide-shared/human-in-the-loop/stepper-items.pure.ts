@@ -22,7 +22,7 @@ const split = (job: JobModalView) => ({
 });
 
 function roundItems(job: JobModalView, round: RoundRun, state: JobState): Item {
-  const share = { previous: job.task.previous, output: job.task.output };
+  const share = { previous: job.task.previous, output: job.task.output, sameStage: job.task.sameStage };
   const { doSteps, reviewSteps } = split(job);
   const make = (step: Steps[number]) => roundStep(step, round, share);
   return {

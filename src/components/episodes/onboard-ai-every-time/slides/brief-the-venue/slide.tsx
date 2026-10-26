@@ -139,43 +139,42 @@ export const briefTheVenue = slide({
     return (
       <SlideFrame className="mt-10 gap-10">
         <HumanInTheLoop
-          workflow="summer-party"
+          workflow="project-plan"
           locale={locale}
           diagram={{
             label: t('workflowLabel'),
             jobsLabel: template('jobsLabel'),
-            checked: t('jobs.research.checked'),
+            checked: t('jobs.checked'),
             initials: true,
             stages: {
-              party: stageSlot('party'),
-              interview: { ...stageSlot('interview'), target: target(INTERVIEW) },
-              requirements: { ...stageSlot('requirements'), target: target(REQUIREMENTS), gateLabel: t('card.gate') },
-              tickets: stageSlot('tickets'),
-              research: {
-                ...stageSlot('research'),
+              plan: { ...stageSlot('plan'), target: target(INTERVIEW) },
+              epics: stageSlot('epics'),
+              requirements: { ...stageSlot('requirements'), target: target(REQUIREMENTS) },
+              execute: {
+                ...stageSlot('execute'),
                 target: target(RESEARCH),
                 aside: <Marker note="focus-beats-volume" placement="beside" />,
               },
-              compare: { ...stageSlot('compare'), target: target(COMPARE), gateLabel: t('jobs.compare.gate') },
-              recommendation: stageSlot('recommendation'),
+              aggregate: stageSlot('aggregate'),
+              review: { ...stageSlot('review'), target: target(COMPARE) },
             },
             jobs: {
-              pieces: { popover: popover('party') },
-              interview: {
+              task: { popover: popover('plan') },
+              scope: {
                 detail: (
                   <>
-                    {t('jobs.interview.detail')}
+                    {t('jobs.scope.detail')}
                     <br />
-                    {t.rich('jobs.interview.forgot', { marker: marker('a-wrong-early-guess-sticks') })}
+                    {t.rich('jobs.scope.forgot', { marker: marker('a-wrong-early-guess-sticks') })}
                   </>
                 ),
                 after: chat,
               },
-              spec: {
+              tickets: {
                 marker: <Marker note="why-the-sign-off-is-a-gate" placement="beside" />,
               },
-              venue: { popover: popover(RESEARCH) },
-              compare: {
+              ticket: { popover: popover('execute') },
+              html: {
                 marker: <Marker note="the-answer-can-be-right-and-the-work-wrong" placement="beside" />,
               },
             },

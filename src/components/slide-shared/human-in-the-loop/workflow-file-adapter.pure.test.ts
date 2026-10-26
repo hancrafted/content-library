@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { connectorInto } from './diagram-layout.pure';
 import { jobRole } from './diagram-model.pure';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import type { WorkflowFile } from './workflow-schema.types';
 import { workflowView } from './workflow-view.pure';
 
-const workflow = workflowOf(parse(summerPartyEn) as WorkflowFile);
+const workflow = workflowOf(parse(vacationEn) as WorkflowFile);
 const jobs = workflow.stages.flatMap((stage) => stage.jobs);
 
 describe('success cases', () => {
@@ -89,7 +89,7 @@ describe('edge cases', () => {
     // ACT
     const goal = workflow.stages[0]?.goal;
     // ASSERT
-    expect(workflow.file.id).toBe('summer-party');
+    expect(workflow.file.id).toBe('vacation');
     expect(venue?.fanOut).toBe(chats);
     expect([venue?.reviewed, interview?.reviewed]).toEqual([true, true]);
     expect(goal).toContain('Break it down');

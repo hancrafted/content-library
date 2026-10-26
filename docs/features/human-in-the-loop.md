@@ -10,7 +10,7 @@ Read before placing, changing or testing the human-in-the-loop Shared visual (`s
 
 ## Placing it
 
-A Slide renders `<HumanInTheLoop workflow="summer-party" locale={locale} diagram={…} />` from `human-in-the-loop.tsx`, the server entry. It reads the Workflows and the words of the locale at build time and hands them, serializable, to the one client parent `human-in-the-loop.client.tsx`.
+A Slide renders `<HumanInTheLoop workflow="project-plan" locale={locale} diagram={…} />` from `human-in-the-loop.tsx`, the server entry. It reads the Workflows and the words of the locale at build time and hands them, serializable, to the one client parent `human-in-the-loop.client.tsx`.
 
 - `words={{ ui }}` overrides the chrome words key by key. A Workflow has no words to override: its file is written in one language and renders as written.
 - `diagram` carries the Slide's own markers, popovers, notes (`target`), gate words and the worked-chat button, keyed by stage and job id. Its `initials` draws each stage's BRIEF letters as circled capitals (English letters in German too, with German tooltips); a Slide that leaves the acronym unnamed says `initials: false`. The ai-attention-span Slide sets `initials: false` on purpose: the BRIEF acronym is shown only in the freelancer Episode (onboard-ai-every-time). `jobsLabel` is a template (`{stage}: jobs`) for every stage's list of jobs, `gateLabel` on a stage slot is the word for its gate, and a stage's or job's `popover` carries no title: the diagram titles it with the stage name. The sign-off card is the Workflow's (`card` on the stage), never a Slide's.
@@ -24,7 +24,7 @@ The parent owns all state (`workflow-state.pure.ts`), computes `workflowView` on
 
 ## Adding a Workflow
 
-A Workflow is one YAML file per language; what is written renders as written. The authoring guide is [agentic-workflow.md](agentic-workflow.md): the schema, markers, slots, repeated stages, handoff templates and every loader problem. Start from `summer-party.en.yml` and `summer-party.de.yml`.
+A Workflow is one YAML file per language; what is written renders as written. The authoring guide is [agentic-workflow.md](agentic-workflow.md): the schema, markers, slots, repeated stages, handoff templates and every loader problem. Start from `project-plan.en.yml` and `project-plan.de.yml`.
 
 1. Register the pair in `workflow-data.ts` (`FILES`, `WORKFLOW_IDS`). `workflow-pair.test.ts` holds both files to one structure (FE-012 §1.3), and the loader checks every sample and example against its template. The build throws each problem of a shipped file.
 2. Viewers may also upload a Workflow file (the same shape, in any language); problems are listed under the toolbar and the authored Workflow stays. A download writes the current file as it is; pasted values are not exported.
