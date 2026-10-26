@@ -1,30 +1,23 @@
+import { episodeFolders } from '@/lib/episode-folders';
 import { FEATURED } from '@/lib/episode-overview';
-import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
-import { TOOLING_SLUGS } from '@/lib/tooling-pages';
-import { existsSync, readdirSync } from 'node:fs';
-import path from 'node:path';
+import { EPISODE_IDS, isEpisodeId } from '@/lib/routes';
+import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { episodeStatus, listEpisodes } from './store';
 
 /*
  * The store's Episode read API the Episode overview depends on (#40): one metadata
- * entry per Episode folder, so no Episode silently drops out of the overview. The
- * Episode registry derives the entries from the folders; the first test checks that
- * every folder but a tooling page's is an Episode.
+ * entry per Episode folder, an Event's copies included, so no Episode silently drops out. The
+ * Episode registry derives the entries from the folders the one folder walker finds; the first test checks that
+ * every Episode it finds, and only those, is in the store, by its Episode id.
  */
 
-const EPISODES_DIR = path.join(process.cwd(), 'src/components/episodes');
+const ROOT = process.cwd();
 const METADATA_FILE = 'episode-metadata.ts';
 const KEBAB_CASE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** Every Episode folder on disk, tooling pages left out: what the overview must list. */
-function episodeFolders(): string[] {
-  const layout: readonly string[] = TOOLING_SLUGS;
-  return readdirSync(EPISODES_DIR, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && !layout.includes(entry.name))
-    .map((entry) => entry.name)
-    .sort();
-}
+/** Every Episode folder the walker finds, by Episode id. */
+const FOLDERS = new Map(episodeFolders(ROOT).map((folder) => [folder.id, folder]));
 
 /** Only a date that survives a round trip is one: `2026-02-30` has the shape but is not a day. */
 function isCalendarDate(value: string): boolean {
@@ -35,20 +28,20 @@ function isCalendarDate(value: string): boolean {
 describe('success cases', () => {
   it('returns one entry per Episode folder, and no entry without a folder', () => {
     // ARRANGE
-    const expected = episodeFolders();
+    const expected = [...FOLDERS.keys()].sort();
     // ACT
     const listed = listEpisodes()
-      .map(({ slug }) => slug)
+      .map(({ id }) => id)
       .sort();
     // ASSERT
     expect(listed).toEqual(expected);
   });
 
-  it.each(listEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {
+  it.each(listEpisodes().map(({ id }) => id))('keeps the metadata of %s in its own folder', (id) => {
     // ARRANGE
-    const folder = path.join(EPISODES_DIR, slug);
+    const folder = FOLDERS.get(id);
     // ACT
-    const files = existsSync(folder) ? readdirSync(folder) : [];
+    const files = folder?.files ?? [];
     // ASSERT
     expect(files).toContain(METADATA_FILE);
   });
@@ -57,6 +50,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'never-too-early-sales';
     const expected = {
+      id: slug,
       slug,
       status: 'published',
       visibility: 'public',
@@ -66,8 +60,8 @@ describe('success cases', () => {
       youtube: { en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = isEpisodeSlug(slug);
+    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -77,6 +71,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'onboard-ai-every-time';
     const expected = {
+      id: slug,
       slug,
       status: 'published',
       visibility: 'public',
@@ -85,8 +80,8 @@ describe('success cases', () => {
       publishedOn: '2026-10-20',
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = isEpisodeSlug(slug);
+    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -96,6 +91,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'ai-attention-span';
     const expected = {
+      id: slug,
       slug,
       status: 'published',
       visibility: 'public',
@@ -104,8 +100,8 @@ describe('success cases', () => {
       publishedOn: '2026-10-21',
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = isEpisodeSlug(slug);
+    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -115,6 +111,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'ai-gives-you-more-work';
     const expected = {
+      id: slug,
       slug,
       status: 'published',
       visibility: 'public',
@@ -123,8 +120,8 @@ describe('success cases', () => {
       publishedOn: '2026-10-21',
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = isEpisodeSlug(slug);
+    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -136,20 +133,20 @@ describe('success cases', () => {
       // ARRANGE
       const expected = { listed: false, page: false };
       // ACT
-      const listed = listEpisodes().some((episode) => episode.slug === slug);
-      const page = isEpisodeSlug(slug);
+      const listed = listEpisodes().some((episode) => episode.id === slug);
+      const page = isEpisodeId(slug);
       // ASSERT
       expect({ listed, page }).toEqual(expected);
     },
   );
 
-  it.each(listEpisodes().filter(({ slug }) => isEpisodeSlug(slug)))(
-    'reads the status of $slug from its metadata',
+  it.each(listEpisodes().filter(({ id }) => isEpisodeId(id)))(
+    'reads the status of $id from its metadata',
     (episode) => {
       // ARRANGE
       const expected = episode.status;
       // ACT
-      const status = episodeStatus(episode.slug as Parameters<typeof episodeStatus>[0]);
+      const status = episodeStatus(episode.id as Parameters<typeof episodeStatus>[0]);
       // ASSERT
       expect(status).toBe(expected);
     },
@@ -173,7 +170,7 @@ describe('failure cases', () => {
     const expected: string[] = [];
     // ACT
     const undated = listEpisodes().flatMap((episode) =>
-      episode.status === 'published' && !isCalendarDate(episode.publishedOn) ? [episode.slug] : [],
+      episode.status === 'published' && !isCalendarDate(episode.publishedOn) ? [episode.id] : [],
     );
     // ASSERT
     expect(undated).toEqual(expected);
@@ -181,12 +178,12 @@ describe('failure cases', () => {
 
   it('gives an upcoming Episode with no page a folder holding only its metadata', () => {
     // ARRANGE
-    const registered: readonly string[] = EPISODE_SLUGS;
+    const registered: readonly string[] = EPISODE_IDS;
     const expected = listEpisodes()
-      .filter(({ status, slug }) => status === 'upcoming' && !registered.includes(slug))
-      .map(({ slug }) => [slug, [METADATA_FILE]]);
+      .filter(({ status, id }) => status === 'upcoming' && !registered.includes(id))
+      .map(({ id }) => [id, [METADATA_FILE]]);
     // ACT
-    const contents = expected.map(([slug]) => [slug, readdirSync(path.join(EPISODES_DIR, slug as string))]);
+    const contents = expected.map(([id]) => [id, readdirSync(FOLDERS.get(id as string)?.dir ?? '')]);
     // ASSERT
     expect(contents).toEqual(expected);
   });
@@ -215,7 +212,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = FEATURED.map((slug) => [slug, 'published']);
     // ACT
-    const featured = FEATURED.map((slug) => [slug, listEpisodes().find((episode) => episode.slug === slug)?.status]);
+    const featured = FEATURED.map((slug) => [slug, listEpisodes().find((episode) => episode.id === slug)?.status]);
     // ASSERT
     expect(featured).toEqual(expected);
   });

@@ -22,6 +22,11 @@ const PUBLISHED_UNLISTED: PageFacts = { visibility: 'unlisted', status: 'publish
 const EPISODE_PAGE: PageRef = { kind: 'episode', episode: 'ai-attention-span' };
 const EVENT_PAGE: PageRef = { kind: 'event', event: EVENT };
 const EVENT_EPISODE_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: 'ai-attention-span' };
+/** The AXEL seminar's own copy, in its folder `by-event/<event>/ai-attention-span/`. */
+const COPY_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: `${EVENT}__ai-attention-span` };
+const COPY_OWN_PAGE: PageRef = { kind: 'episode', episode: `${EVENT}__ai-attention-span` };
+/** Indexed and in the sitemap at its Event-scoped URL, canonical to itself, never on the site's own lists. */
+const SELF_INDEXED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: false, canonical: 'self' };
 
 /** Pages whose treatment rests on what they present. */
 const NEEDS_FACTS: [string, PageRef][] = [
@@ -50,6 +55,14 @@ const TABLE: [string, PageRef, PageFacts, PageTreatment][] = [
   ['an upcoming Episode under an Event', EVENT_EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, HIDDEN],
   ['an upcoming Episode', EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, ANNOUNCED],
   ['a tooling page', { kind: 'tooling', tooling: 'slide-master' }, {}, HIDDEN],
+  ["a public, published Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_PUBLIC, copy: true }, SELF_INDEXED],
+  ["an unlisted Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_UNLISTED, copy: true }, HIDDEN],
+  [
+    "a public Event's copy at /episodes/, where it has no page",
+    COPY_OWN_PAGE,
+    { ...PUBLISHED_PUBLIC, copy: true },
+    ABSENT,
+  ],
 ];
 
 const NO_RECORD: [string, PageRef, PageTreatment][] = [

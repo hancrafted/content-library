@@ -1,5 +1,5 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventEpisodeRoute, type EpisodeSlug, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, type EpisodeId, type EventSlug } from '@/lib/routes';
 import type { EpisodeCard } from './episode-card.pure';
 
 /** The card fields an Event's Playlist reads. */
@@ -8,7 +8,7 @@ type PlaylistCard = Pick<EpisodeCard, 'slug' | 'route' | 'minutes'>;
 /** What the cards read of an Event the store serves (`ServedEvent`): its slug, and each listed Episode with its page. */
 interface EventWithPlaylist<Listed> {
   readonly slug: EventSlug;
-  readonly playlist: { readonly episodes: readonly { readonly episode: Listed; readonly page?: EpisodeSlug }[] };
+  readonly playlist: { readonly episodes: readonly { readonly episode: Listed; readonly page?: EpisodeId }[] };
 }
 
 /**

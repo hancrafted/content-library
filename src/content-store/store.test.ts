@@ -3,9 +3,11 @@ import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
- * throws a sentence naming its kind, slug and field. Fixtures are raw records, as a record file would hold them.
+ * throws a sentence naming its kind, slug and field. Fixtures are raw records, as a record file would hold them; an
+ * Episode enters with the id its folder gives it, as the generated Episode registry hands it in.
  */
 
+const AXEL = '2026-10-23-axel-agentic-workflow';
 const EPISODE = {
   slug: 'alpha',
   status: 'published',
@@ -14,12 +16,15 @@ const EPISODE = {
   tags: ['workflow'],
   publishedOn: '2026-10-20',
 } as const;
-const UNLISTED = { ...EPISODE, slug: 'alpha-at-axel', visibility: 'unlisted' } as const;
+/** The AXEL seminar's unlisted copy of alpha, in its Event's folder `by-event/<event>/alpha/`. */
+const UNLISTED = { ...EPISODE, visibility: 'unlisted' } as const;
+const COPY_ID = `${AXEL}__alpha`;
 const PLAYLIST = { id: 'axel', visibility: 'public', episodes: ['alpha'] } as const;
 const EVENT = {
-  slug: '2026-10-23-axel-agentic-workflow',
+  slug: AXEL,
   date: '2026-10-23',
   kind: 'workshop',
+  organizer: 'axel',
   audience: 'organization',
   playlist: 'axel',
 } as const;
@@ -35,13 +40,22 @@ function without<T extends object>(record: T, key: keyof T): Partial<T> {
   delete copy[key];
   return copy;
 }
-const SOUND = { episodes: [EPISODE], events: [EVENT], playlists: [PLAYLIST] };
+/** An Episode no Event owns, entered under its folder's id, its slug. */
+function own(record: Readonly<Record<string, unknown>>, id = String(record.slug)): { id: string; record: unknown } {
+  return { id, record };
+}
+/** An Event's copy, entered under its id `<event-slug>__<slug>` from its folder `by-event/<event-slug>/<slug>/`. */
+function copy(record: Readonly<Record<string, unknown>>, event: string = AXEL): { id: string; record: unknown } {
+  return { id: `${event}__${String(record.slug)}`, record };
+}
+const SOUND = { episodes: [own(EPISODE)], events: [EVENT], playlists: [PLAYLIST] };
 
 describe('success cases', () => {
   it('loads a sound set of records whole, each Event holding the Playlist it presents with its Episodes', () => {
     // ARRANGE
-    const presented = { ...PLAYLIST, episodes: [{ episode: EPISODE, place: { position: 1, count: 1 } }] };
-    const expected = { episodes: [EPISODE], events: [{ ...EVENT, playlist: presented }], playlists: [PLAYLIST] };
+    const loaded = { ...EPISODE, id: 'alpha' };
+    const presented = { ...PLAYLIST, episodes: [{ episode: loaded, place: { position: 1, count: 1 } }] };
+    const expected = { episodes: [loaded], events: [{ ...EVENT, playlist: presented }], playlists: [PLAYLIST] };
     // ACT
     const content = loadContent(SOUND);
     // ASSERT
@@ -54,30 +68,31 @@ describe('success cases', () => {
       slug: '2026-10-23-axel-agentic-workflow',
       date: '2026-10-23',
       kind: 'workshop',
+      organizer: 'axel',
       audience: 'organization',
       playlist: {
         id: 'axel-agentic-workflow',
         visibility: 'public',
         episodes: [
           {
-            slug: 'axel-onboard-ai-every-time',
-            page: 'axel-onboard-ai-every-time',
-            place: { position: 1, count: 3, next: 'axel-ai-attention-span' },
+            slug: 'onboard-ai-every-time',
+            page: `${AXEL}__onboard-ai-every-time`,
+            place: { position: 1, count: 3, next: `${AXEL}__ai-attention-span` },
           },
           {
-            slug: 'axel-ai-attention-span',
-            page: 'axel-ai-attention-span',
+            slug: 'ai-attention-span',
+            page: `${AXEL}__ai-attention-span`,
             place: {
               position: 2,
               count: 3,
-              previous: 'axel-onboard-ai-every-time',
-              next: 'axel-ai-gives-you-more-work',
+              previous: `${AXEL}__onboard-ai-every-time`,
+              next: `${AXEL}__ai-gives-you-more-work`,
             },
           },
           {
-            slug: 'axel-ai-gives-you-more-work',
-            page: 'axel-ai-gives-you-more-work',
-            place: { position: 3, count: 3, previous: 'axel-ai-attention-span' },
+            slug: 'ai-gives-you-more-work',
+            page: `${AXEL}__ai-gives-you-more-work`,
+            place: { position: 3, count: 3, previous: `${AXEL}__ai-attention-span` },
           },
         ],
       },
@@ -100,20 +115,20 @@ describe('success cases', () => {
 
   it('declares every Episode public but the ones the AXEL seminar and the CyberForum Akademie webinar present', () => {
     // ARRANGE
-    // Written out, in slug order: the one list that says which Episodes are unlisted; the store is not the oracle.
+    // Written out, in id order: the one list that says which Episodes are unlisted; the store is not the oracle.
     const expected = [
-      'axel-ai-attention-span',
-      'axel-ai-gives-you-more-work',
-      'axel-onboard-ai-every-time',
-      'cyberforum-ai-attention-span',
-      'cyberforum-ai-gives-you-more-work',
-      'cyberforum-intro',
-      'cyberforum-onboard-ai-every-time',
+      '2026-10-23-axel-agentic-workflow__ai-attention-span',
+      '2026-10-23-axel-agentic-workflow__ai-gives-you-more-work',
+      '2026-10-23-axel-agentic-workflow__onboard-ai-every-time',
+      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
+      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-gives-you-more-work',
+      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro',
+      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
     ];
     // ACT
     const notPublic = listEpisodes().filter((episode) => episode.visibility !== 'public');
     // ASSERT
-    expect(notPublic.map((episode) => episode.slug).sort()).toEqual(expected);
+    expect(notPublic.map((episode) => episode.id).sort()).toEqual(expected);
   });
 
   it.each(RECORDINGS)(
@@ -132,8 +147,8 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('An unlisted Episode in no Event is refused.', () => {
     // ARRANGE
-    const input = { ...SOUND, episodes: [EPISODE, UNLISTED] };
-    const expected = 'Episode alpha-at-axel: visibility is unlisted, but no Event presents a Playlist listing it';
+    const input = { ...SOUND, episodes: [own(EPISODE), copy(UNLISTED)] };
+    const expected = `Episode ${COPY_ID}: visibility is unlisted, but no Event presents a Playlist listing it`;
     // ACT
     const load = () => loadContent(input);
     // ASSERT
@@ -143,7 +158,7 @@ describe('failure cases', () => {
   it('A record without a visibility is refused.', () => {
     // ARRANGE
     const withoutVisibility = without(EPISODE, 'visibility');
-    const input = { ...SOUND, episodes: [withoutVisibility] };
+    const input = { ...SOUND, episodes: [own(withoutVisibility)] };
     const expected = 'Episode alpha: visibility is required, public or unlisted';
     // ACT
     const load = () => loadContent(input);
@@ -163,7 +178,7 @@ describe('failure cases', () => {
   });
 
   it.each([
-    ['Episode', { ...SOUND, episodes: [{ ...EPISODE, visibility: 'attendees' }] }, 'Episode alpha'],
+    ['Episode', { ...SOUND, episodes: [own({ ...EPISODE, visibility: 'attendees' })] }, 'Episode alpha'],
     ['Playlist', { ...SOUND, playlists: [{ ...PLAYLIST, visibility: 'attendees' }] }, 'Playlist axel'],
   ])('refuses the visibility attendees on an %s until horizon 3', (_, input, record) => {
     // ARRANGE
@@ -206,7 +221,11 @@ describe('failure cases', () => {
   });
 
   it.each([
-    ['Episode', { ...SOUND, episodes: [EPISODE, EPISODE] }, 'Episode alpha: slug is used by more than one Episode'],
+    [
+      'Episode',
+      { ...SOUND, episodes: [own(EPISODE), own(EPISODE)] },
+      'Episode alpha: id is used by more than one Episode',
+    ],
     [
       'Event',
       { ...SOUND, events: [EVENT, EVENT] },
@@ -264,11 +283,11 @@ describe('failure cases', () => {
 
   it('refuses a public Playlist no Event presents when it lists an unlisted Episode', () => {
     // ARRANGE
-    const curated = { id: 'curated', visibility: 'public', episodes: ['alpha', 'alpha-at-axel'] } as const;
-    const atAxel = { ...PLAYLIST, episodes: ['alpha-at-axel'] };
-    const input = { episodes: [EPISODE, UNLISTED], events: [EVENT], playlists: [atAxel, curated] };
+    const unlistedOwn = { ...EPISODE, slug: 'beta', visibility: 'unlisted' } as const;
+    const curated = { id: 'curated', visibility: 'public', episodes: ['alpha', 'beta'] } as const;
+    const input = { episodes: [own(EPISODE), own(unlistedOwn)], events: [EVENT], playlists: [PLAYLIST, curated] };
     const expected =
-      'Playlist curated: episodes lists the unlisted Episode "alpha-at-axel", but no Event presents this public Playlist';
+      'Playlist curated: episodes lists the unlisted Episode "beta", but no Event presents this public Playlist';
     // ACT
     const load = () => loadContent(input);
     // ASSERT
@@ -280,10 +299,10 @@ describe('failure cases', () => {
     const recorded = { ...UNLISTED, youtube: { id: 'S0Nx4faEebY', language: 'fr' } };
     const input = {
       ...SOUND,
-      episodes: [EPISODE, recorded],
-      playlists: [{ ...PLAYLIST, episodes: ['alpha-at-axel'] }],
+      episodes: [own(EPISODE), copy(recorded)],
+      playlists: [{ ...PLAYLIST, episodes: [COPY_ID] }],
     };
-    const expected = `Episode alpha-at-axel: youtube.language "fr" is not one of the site's locales (en, de)`;
+    const expected = `Episode ${COPY_ID}: youtube.language "fr" is not one of the site's locales (en, de)`;
     // ACT
     const load = () => loadContent(input);
     // ASSERT
@@ -295,11 +314,10 @@ describe('failure cases', () => {
     const twoVideos = { ...UNLISTED, youtube: { en: 'S0Nx4faEebY', de: 'YxCVw4bUbW0' } };
     const input = {
       ...SOUND,
-      episodes: [EPISODE, twoVideos],
-      playlists: [{ ...PLAYLIST, episodes: ['alpha-at-axel'] }],
+      episodes: [own(EPISODE), copy(twoVideos)],
+      playlists: [{ ...PLAYLIST, episodes: [COPY_ID] }],
     };
-    const expected =
-      'Episode alpha-at-axel: youtube holds 2 videos (en, de), but an unlisted Episode carries at most one Video, its Event recording with its language';
+    const expected = `Episode ${COPY_ID}: youtube holds 2 videos (en, de), but an unlisted Episode carries at most one Video, its Event recording with its language`;
     // ACT
     const load = () => loadContent(input);
     // ASSERT
@@ -308,7 +326,7 @@ describe('failure cases', () => {
 
   it("refuses a public Episode's video under a key that is not one of the site's locales", () => {
     // ARRANGE
-    const input = { ...SOUND, episodes: [{ ...EPISODE, youtube: { fr: 'S0Nx4faEebY' } }] };
+    const input = { ...SOUND, episodes: [own({ ...EPISODE, youtube: { fr: 'S0Nx4faEebY' } })] };
     const expected = `Episode alpha: youtube names "fr", which is not one of the site's locales (en, de)`;
     // ACT
     const load = () => loadContent(input);
@@ -322,17 +340,114 @@ describe('failure cases', () => {
     const perLocaleUnlisted = { ...UNLISTED, youtube: { en: 'S0Nx4faEebY' } };
     const input = {
       ...SOUND,
-      episodes: [recordedPublic, perLocaleUnlisted],
-      playlists: [{ ...PLAYLIST, episodes: ['alpha-at-axel'] }],
+      episodes: [own(recordedPublic), copy(perLocaleUnlisted)],
+      playlists: [{ ...PLAYLIST, episodes: [COPY_ID] }],
     };
     const expected = [
       'Episode alpha: youtube is one recording with its language, but a public Episode keeps one video per locale',
-      'Episode alpha-at-axel: youtube is one video per locale, but an unlisted Episode carries one recording with its language',
+      `Episode ${COPY_ID}: youtube is one video per locale, but an unlisted Episode carries one recording with its language`,
     ];
     // ACT
     const load = () => loadContent(input);
     // ASSERT
     expected.forEach((sentence) => expect(load).toThrow(sentence));
+  });
+
+  it.each([
+    ['without one', without(EVENT, 'organizer'), 'organizer is required, one of hancrafted, axel, cyberforum'],
+    [
+      'outside the list',
+      { ...EVENT, organizer: 'acme' },
+      'organizer is "acme", but must be one of hancrafted, axel, cyberforum',
+    ],
+  ])('refuses an Event organizer %s, naming the Event', (_, event, field) => {
+    // ARRANGE
+    const expected = `Event ${AXEL}: ${field}`;
+    // ACT
+    const load = () => loadContent({ ...SOUND, events: [event] });
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Episode in a by-event folder naming no Event, naming the Episode', () => {
+    // ARRANGE
+    const stray = copy(UNLISTED, '2026-10-24-nowhere');
+    const input = {
+      ...SOUND,
+      episodes: [own(EPISODE), stray],
+      playlists: [{ ...PLAYLIST, episodes: ['alpha', stray.id] }],
+    };
+    const expected = `Episode 2026-10-24-nowhere__alpha: its folder by-event/2026-10-24-nowhere/ names no Event`;
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it("refuses a Playlist listing another Event's copy, naming the Playlist", () => {
+    // ARRANGE
+    const other = {
+      ...EVENT,
+      slug: '2026-10-28-cyberforum',
+      date: '2026-10-28',
+      organizer: 'cyberforum',
+      playlist: 'cyberforum',
+    };
+    const theirs = { id: 'cyberforum', visibility: 'public', episodes: [COPY_ID] } as const;
+    const ours = { ...PLAYLIST, episodes: [COPY_ID] };
+    const input = { episodes: [own(EPISODE), copy(UNLISTED)], events: [EVENT, other], playlists: [ours, theirs] };
+    const expected = `Playlist cyberforum: episodes lists "${COPY_ID}", a copy Event ${AXEL} owns, but Event 2026-10-28-cyberforum presents this Playlist`;
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an unlisted Episode outside by-event/, naming the Episode', () => {
+    // ARRANGE
+    const input = { ...SOUND, episodes: [own(UNLISTED)] };
+    const expected =
+      "Episode alpha: visibility is unlisted, but it lives outside by-event/: an unlisted Episode lives in its Event's folder";
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Episode whose slug is the reserved folder name by-event, naming the Episode', () => {
+    // ARRANGE
+    const reserved = { ...EPISODE, slug: 'by-event' };
+    const input = { ...SOUND, episodes: [own(EPISODE), own(reserved)] };
+    const expected = 'Episode by-event: slug "by-event" is a reserved folder name of the Episodes folder';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Episode whose slug is not its folder name, naming the Episode', () => {
+    // ARRANGE
+    const input = { ...SOUND, episodes: [own(EPISODE, 'beta')], playlists: [{ ...PLAYLIST, episodes: ['beta'] }] };
+    const expected = 'Episode beta: slug "alpha" is not its folder\'s name "beta"';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses a Playlist listing two Episodes with one slug, which would share one URL under its Event', () => {
+    // ARRANGE
+    const input = {
+      ...SOUND,
+      episodes: [own(EPISODE), copy(EPISODE)],
+      playlists: [{ ...PLAYLIST, episodes: ['alpha', COPY_ID] }],
+    };
+    const expected =
+      'Playlist axel: episodes lists two Episodes with the slug "alpha", which would share one URL under its Event';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
   });
 
   it('refuses an Episode listing one Tag twice, and a Tag outside the vocabulary', () => {
@@ -341,8 +456,8 @@ describe('failure cases', () => {
     const unknown = { ...EPISODE, slug: 'beta', tags: ['astrology'] };
     const expected = { twice: 'Episode alpha: tags lists workflow twice', unknown: 'Episode beta: tags.0 ' };
     // ACT
-    const loadTwice = () => loadContent({ ...SOUND, episodes: [twice] });
-    const loadUnknown = () => loadContent({ ...SOUND, episodes: [EPISODE, unknown] });
+    const loadTwice = () => loadContent({ ...SOUND, episodes: [own(twice)] });
+    const loadUnknown = () => loadContent({ ...SOUND, episodes: [own(EPISODE), own(unknown)] });
     // ASSERT
     expect(loadTwice).toThrow(expected.twice);
     expect(loadUnknown).toThrow(expected.unknown);
@@ -353,22 +468,22 @@ describe('failure cases', () => {
     const undated = without(EPISODE, 'publishedOn');
     const expected = 'Episode alpha: publishedOn ';
     // ACT
-    const load = () => loadContent({ ...SOUND, episodes: [undated] });
+    const load = () => loadContent({ ...SOUND, episodes: [own(undated)] });
     // ASSERT
     expect(load).toThrow(expected);
   });
 });
 
 describe('edge cases', () => {
-  it('lets an event Playlist, public or not, list unlisted Episodes made for its Event', () => {
+  it("lets an event Playlist, public or not, list its own Event's unlisted copies", () => {
     // ARRANGE
-    const atAxel = { ...PLAYLIST, episodes: ['alpha-at-axel', 'alpha'] };
-    const input = { episodes: [EPISODE, UNLISTED], events: [EVENT], playlists: [atAxel] };
-    const expected = ['alpha', 'alpha-at-axel'];
+    const atAxel = { ...PLAYLIST, episodes: [COPY_ID] };
+    const input = { episodes: [own(EPISODE), copy(UNLISTED)], events: [EVENT], playlists: [atAxel] };
+    const expected = ['alpha', COPY_ID];
     // ACT
     const content = loadContent(input);
     // ASSERT
-    expect(content.episodes.map((episode) => episode.slug)).toEqual(expected);
+    expect(content.episodes.map((episode) => episode.id)).toEqual(expected);
   });
 
   it('counts an Episode with no page yet in its Playlist, while the walk steps over it', () => {
@@ -376,7 +491,7 @@ describe('edge cases', () => {
     const tokens = { ...EPISODE, slug: 'ai-token-economy' };
     const attention = { ...EPISODE, slug: 'ai-attention-span' };
     const playlist = { ...PLAYLIST, episodes: ['ai-token-economy', 'alpha', 'ai-attention-span'] };
-    const input = { episodes: [tokens, EPISODE, attention], events: [EVENT], playlists: [playlist] };
+    const input = { episodes: [own(tokens), own(EPISODE), own(attention)], events: [EVENT], playlists: [playlist] };
     const expected = [
       {
         slug: 'ai-token-economy',
@@ -398,12 +513,12 @@ describe('edge cases', () => {
     );
   });
 
-  it('names a record whose slug is missing instead of dropping it', () => {
+  it('names a record whose slug is missing by its folder instead of dropping it', () => {
     // ARRANGE
     const nameless = without(EPISODE, 'slug');
-    const expected = 'Episode (no slug): slug ';
+    const expected = 'Episode beta: slug ';
     // ACT
-    const load = () => loadContent({ ...SOUND, episodes: [EPISODE, nameless] });
+    const load = () => loadContent({ ...SOUND, episodes: [own(EPISODE), own(nameless, 'beta')] });
     // ASSERT
     expect(load).toThrow(expected);
   });
@@ -431,7 +546,7 @@ describe('edge cases', () => {
     const statusless = without(EPISODE, 'status');
     const expected = 'Episode alpha: status is missing, but must be published or upcoming';
     // ACT
-    const load = () => loadContent({ ...SOUND, episodes: [statusless] });
+    const load = () => loadContent({ ...SOUND, episodes: [own(statusless)] });
     // ASSERT
     expect(load).toThrow(expected);
   });

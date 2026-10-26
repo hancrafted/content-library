@@ -1,4 +1,4 @@
-import { isEpisodeSlug, type EpisodeSlug, type EventSlug } from '@/lib/routes';
+import { isEpisodeId, type EpisodeId, type EventSlug } from '@/lib/routes';
 import type { Episode } from './schemas/episode.schema';
 import type { Event } from './schemas/event.schema';
 import type { Playlist } from './schemas/playlist.schema';
@@ -11,19 +11,19 @@ import type { Playlist } from './schemas/playlist.schema';
 
 /**
  * Where one Episode sits in its Event's Playlist: its 1-based position, the count every listed Episode makes, and the
- * nearest Episode before and after it that has a page to walk to.
+ * nearest Episode before and after it that has a page to walk to, by Episode id.
  */
 export interface PlaylistPlace {
   readonly position: number;
   readonly count: number;
-  readonly previous?: EpisodeSlug;
-  readonly next?: EpisodeSlug;
+  readonly previous?: EpisodeId;
+  readonly next?: EpisodeId;
 }
 
-/** One Episode an Event's Playlist lists: its record, its page's slug when it has a page, and its place. */
+/** One Episode an Event's Playlist lists: its record with its id, its id again when it has a page, and its place. */
 export interface PlaylistEntry {
-  readonly episode: Episode;
-  readonly page?: EpisodeSlug;
+  readonly episode: Episode & { readonly id: string };
+  readonly page?: EpisodeId;
   readonly place: PlaylistPlace;
 }
 
@@ -37,9 +37,9 @@ export type ServedEvent = Omit<Event, 'slug' | 'playlist'> & {
 };
 
 /** Each Episode of a Playlist, in its order, with its place: the count is every one; the walk steps over the pageless. */
-export function playlistEntries(episodes: readonly Episode[]): PlaylistEntry[] {
-  const pages = episodes.map(({ slug }) => (isEpisodeSlug(slug) ? slug : undefined));
-  const hasPage = (page: EpisodeSlug | undefined): page is EpisodeSlug => page !== undefined;
+export function playlistEntries(episodes: readonly (Episode & { readonly id: string })[]): PlaylistEntry[] {
+  const pages = episodes.map(({ id }) => (isEpisodeId(id) ? id : undefined));
+  const hasPage = (page: EpisodeId | undefined): page is EpisodeId => page !== undefined;
   return episodes.map((episode, index) => {
     const page = pages[index];
     const previous = pages.slice(0, index).reverse().find(hasPage);

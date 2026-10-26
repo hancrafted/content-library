@@ -1,5 +1,5 @@
 import type { TagId } from '../content-store/schemas/fields';
-import type { EpisodeSlug } from './routes';
+import type { EpisodeId } from './routes';
 
 /*
  * The Episode overview's central lists: the look each Tag gives its Episodes,
@@ -51,4 +51,4 @@ export const FEATURED = [
   'onboard-ai-every-time',
   'ai-attention-span',
   'ai-gives-you-more-work',
-] as const satisfies readonly [EpisodeSlug, EpisodeSlug, EpisodeSlug];
+] as const satisfies readonly [EpisodeId, EpisodeId, EpisodeId];

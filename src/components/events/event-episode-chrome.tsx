@@ -3,7 +3,7 @@ import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventEpisodeRoute, eventRoute, type EpisodeSlug, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
@@ -36,7 +36,7 @@ export interface EventEpisodeChrome {
 /** One Episode an Event presents: the served Event, the Episode's page, and its place in the Event's Playlist. */
 export interface PresentedEpisode {
   readonly event: ServedEvent;
-  readonly episode: EpisodeSlug;
+  readonly episode: EpisodeId;
   readonly place: PlaylistPlace;
 }
 
@@ -47,7 +47,7 @@ export async function eventEpisodeChrome(
 ): Promise<EventEpisodeChrome> {
   const labels = TRANSLATIONS[locale].eventsPage;
   const t = await getTranslations({ locale, namespace: 'eventsPage' });
-  const stepOf = (episode: EpisodeSlug | undefined): Step | undefined =>
+  const stepOf = (episode: EpisodeId | undefined): Step | undefined =>
     episode === undefined
       ? undefined
       : { title: episodeCopy(episode, locale).title, route: eventEpisodeRoute(event.slug, episode) };

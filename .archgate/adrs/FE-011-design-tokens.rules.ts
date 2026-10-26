@@ -7,7 +7,8 @@
 
 const LEGACY_FILE = 'src/design-system/legacy.json';
 const GLOBALS = 'src/app/globals.css';
-const SLIDE_MODULE_GLOB = 'src/components/episodes/*/slides/**/*.module.css';
+// Every Slide token file, an Event's copy's under `episodes/by-event/<event>/<ep>/` too.
+const SLIDE_MODULE_GLOB = 'src/components/episodes/**/slides/**/*.module.css';
 // The one token file outside a Slide folder: the token editor's panel keeps a fixed palette so it survives edits to the
 // site tokens it edits. It may hold raw colours (A1) and must pair them with :global(.dark) values (A4); unlike a Slide
 // token file it redeclares global names on purpose (so A3 does not apply). Adding a file here needs an ADR amendment.

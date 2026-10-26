@@ -4,22 +4,19 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
+import { pageFolders } from '../src/lib/episode-folders.ts';
 import { episodeRegistryFiles, type EpisodeFolder, type RegistryFile } from './episode-registry.pure.ts';
 import { eventRegistryFiles } from './event-registry.pure.ts';
 
-const EPISODES_DIR = 'src/components/episodes';
 const EVENTS_DIR = 'src/content-store/events';
 
-/** Every folder under `src/components/episodes/`, with its entries and its `episode.ts` text. */
+/** Every page folder the one folder walker finds, an Event's copies included, with its entries and `episode.ts` text. */
 function readEpisodeFolders(root: string): EpisodeFolder[] {
-  const dir = path.join(root, EPISODES_DIR);
-  return readdirSync(dir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map(({ name }) => {
-      const record = path.join(dir, name, 'episode.ts');
-      const episodeSource = existsSync(record) ? readFileSync(record, 'utf8') : undefined;
-      return { slug: name, files: readdirSync(path.join(dir, name)), episodeSource };
-    });
+  return pageFolders(root).map(({ id, folder, dir, files }) => {
+    const record = path.join(dir, 'episode.ts');
+    const episodeSource = existsSync(record) ? readFileSync(record, 'utf8') : undefined;
+    return { id, folder, files, episodeSource };
+  });
 }
 
 /** Every file directly under `src/content-store/events/`. */

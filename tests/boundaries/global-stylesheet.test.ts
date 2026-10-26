@@ -1,6 +1,7 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { pageFolders } from '../../src/lib/episode-folders';
 
 /*
  * The site-wide stylesheet holds only tokens Episodes share (FE-002 §7): an
@@ -15,7 +16,7 @@ const GLOBALS = readFileSync(path.join(__dirname, '../../src/app/globals.css'), 
   /\/\*[\s\S]*?\*\//g,
   '',
 );
-const EPISODES_DIR = path.join(__dirname, '../../src/components/episodes');
+const ROOT = path.join(__dirname, '../..');
 
 describe('success cases', () => {
   it('declares the shared colour tokens on the root', () => {
@@ -43,9 +44,7 @@ describe('edge cases', () => {
   it('mentions no Episode by its folder name, even outside a data-episode selector', () => {
     // ARRANGE
     const expected: string[] = [];
-    const episodes = readdirSync(EPISODES_DIR, { withFileTypes: true })
-      .filter((each) => each.isDirectory())
-      .map(({ name }) => name);
+    const episodes = [...new Set(pageFolders(ROOT).map(({ slug }) => slug))];
     // ACT
     const named = episodes.filter((episode) => GLOBALS.includes(episode));
     // ASSERT

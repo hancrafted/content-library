@@ -1,38 +1,37 @@
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { episodeMinutes } from '@/components/slide-master/localized-slide';
-import type { Episode } from '@/content-store/schemas/episode.schema';
-import { episodeVideo, featuredSlugs, listedEpisodes } from '@/content-store/store';
+import { episodeVideo, featuredSlugs, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { overviewOrder } from '@/lib/episode-metadata.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { isEpisodeSlug } from '@/lib/routes';
+import { isEpisodeId } from '@/lib/routes';
 import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
 
 /** A published Episode's whole reading time; none without a Voice script. */
-function minutesOf(entry: Episode, locale: Locale): number | undefined {
+function minutesOf(entry: LoadedEpisode, locale: Locale): number | undefined {
   if (entry.status !== 'published') return undefined;
-  const total = episodeMinutes(findEpisode(entry.slug), locale);
+  const total = episodeMinutes(findEpisode(entry.id), locale);
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
 /** The Episode's video id in this locale; none without a page or a video. */
-function youtubeOf(entry: Episode, locale: Locale): { youtubeId?: string } {
-  if (!isEpisodeSlug(entry.slug)) return {};
-  const id = episodeVideo(entry.slug, locale)?.id;
+function youtubeOf(entry: LoadedEpisode, locale: Locale): { youtubeId?: string } {
+  if (!isEpisodeId(entry.id)) return {};
+  const id = episodeVideo(entry.id, locale)?.id;
   return id === undefined ? {} : { youtubeId: id };
 }
 
-/** An Episode with a page (published, or upcoming with its slug registered) with its title and caption from the registry; a page-less upcoming one has no record. */
-function withCopy(entry: Episode, locale: Locale): CardEntry {
-  if (entry.status !== 'published' && !isEpisodeSlug(entry.slug)) return entry;
-  const { title, caption } = episodeCopy(entry.slug, locale);
+/** An Episode with a page (published, or upcoming with its id registered) with its title and caption from the registry, by id; a page-less upcoming one has no record. */
+function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
+  if (entry.status !== 'published' && !isEpisodeId(entry.id)) return entry;
+  const { title, caption } = episodeCopy(entry.id, locale);
   return { ...entry, copy: { title, caption } };
 }
 
 /** The Episode's Featured slot, 1 first; none when it holds no slot. */
-function featuredRankOf(slug: string): { featuredRank?: number } {
-  const slot = (featuredSlugs() as readonly string[]).indexOf(slug);
+function featuredRankOf(id: string): { featuredRank?: number } {
+  const slot = (featuredSlugs() as readonly string[]).indexOf(id);
   return slot === -1 ? {} : { featuredRank: slot + 1 };
 }
 
@@ -61,7 +60,7 @@ export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions
 export async function episodeCardMaker(
   locale: Locale,
   options?: EpisodeCardsOptions,
-): Promise<(entry: Episode) => EpisodeCard> {
+): Promise<(entry: LoadedEpisode) => EpisodeCard> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
   return (entry) =>
@@ -70,7 +69,7 @@ export async function episodeCardMaker(
       read,
       minutes: minutesOf(entry, locale),
       ...youtubeOf(entry, locale),
-      ...featuredRankOf(entry.slug),
+      ...featuredRankOf(entry.id),
       linkDrafts: options?.linkDrafts,
     });
 }

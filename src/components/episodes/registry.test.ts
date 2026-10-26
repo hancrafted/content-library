@@ -1,12 +1,13 @@
 import { headerModeOf } from '@/components/slide-master/slide';
 import { listEpisodes, treatmentOf } from '@/content-store/store';
+import { episodeRefOf, matchEpisode } from '@/lib/episode-id.pure';
 import { pageMetadata } from '@/lib/page-metadata.pure';
-import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
+import { EPISODE_IDS, isEpisodeId, isEventSlug, type RecordPage } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { episodeCopy, findEpisode } from './registry';
 
 /*
- * What every registered Episode shares (FE-002): a record under its own slug,
+ * What every registered Episode shares (FE-002): a record under its Episode id carrying its folder's slug,
  * its own text from its folder's `i18n/` (what the Title slide, the page
  * metadata and the landing card read) and the Section list its Dossier fixes.
  * Every Episode comes from the Episode registry. The per-Episode facts in the tables below are written out by hand from
@@ -15,11 +16,22 @@ import { episodeCopy, findEpisode } from './registry';
  * (product vision, rule 4), so neither has a fixed composition to pin.
  */
 
-/** The published public Episodes, by slug: the ones the tables below must cover, no more, no less. */
+/** The published public Episodes, by id: the ones the tables below must cover, no more, no less. */
 const PUBLISHED_PUBLIC = listEpisodes()
-  .filter(({ slug, status, visibility }) => status === 'published' && visibility === 'public' && isEpisodeSlug(slug))
-  .map(({ slug }) => slug)
+  .filter(({ id, status, visibility }) => status === 'published' && visibility === 'public' && isEpisodeId(id))
+  .map(({ id }) => id)
   .sort();
+
+/** The page an Episode is served at: its own under `/episodes/`, or, for an Event's copy, under its Event. */
+function servedPageOf(id: (typeof EPISODE_IDS)[number]): RecordPage {
+  return matchEpisode(episodeRefOf(id), {
+    standalone: (): RecordPage => ({ kind: 'episode', episode: id }),
+    'event-copy': ({ event }): RecordPage => {
+      if (!isEventSlug(event)) throw new Error(`"${id}" names no Event`);
+      return { kind: 'event-episode', event, episode: id };
+    },
+  });
+}
 
 /** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
 const COMPOSITION = [
@@ -89,18 +101,18 @@ const HEADER_MODES = [
 ] as const;
 
 describe('success cases', () => {
-  it.each(EPISODE_SLUGS)('registers %s as a valid slug whose record carries that slug', (slug) => {
+  it.each(EPISODE_IDS)("registers %s as a valid id whose record carries its folder's slug", (id) => {
     // ARRANGE
-    const expectedSlug = slug;
+    const expectedSlug = id.split('__').at(-1);
     // ACT
-    const valid = isEpisodeSlug(slug);
-    const episode = findEpisode(slug);
+    const valid = isEpisodeId(id);
+    const episode = findEpisode(id);
     // ASSERT
     expect(valid).toBe(true);
     expect(episode.slug).toBe(expectedSlug);
   });
 
-  it.each(EPISODE_SLUGS)('gives %s its own title, caption and description in en and de', (slug) => {
+  it.each(EPISODE_IDS)('gives %s its own title, caption and description in en and de', (slug) => {
     // ARRANGE
     // A Title slide's optional Speaker notes and Voice script may sit beside them.
     const expected = expect.objectContaining({
@@ -115,13 +127,15 @@ describe('success cases', () => {
     expect(texts.flatMap(({ title, caption, description }) => [title, caption, description])).not.toContain('');
   });
 
-  it.each(EPISODE_SLUGS)('produces page metadata for %s in en and de, canonical per locale', (slug) => {
+  it.each(EPISODE_IDS)('produces page metadata for %s in en and de where it is served, canonical per locale', (id) => {
     // ARRANGE
-    const expectedCanonical = { en: `/episodes/${slug}`, de: `/de/episodes/${slug}` };
+    const [event, slug] = id.includes('__') ? id.split('__') : [undefined, id];
+    const path = event === undefined ? `/episodes/${slug}` : `/events/${event}/episodes/${slug}`;
+    const expectedCanonical = { en: path, de: `/de${path}` };
     // ACT
-    const page = { kind: 'episode', episode: slug } as const;
+    const page = servedPageOf(id);
     const meta = (['en', 'de'] as const).map((locale) =>
-      pageMetadata(page, locale, { ...findEpisode(slug).messages[locale], treatment: treatmentOf(page) }),
+      pageMetadata(page, locale, { ...findEpisode(id).messages[locale], treatment: treatmentOf(page) }),
     );
     // ASSERT
     expect({ en: meta[0].alternates?.canonical, de: meta[1].alternates?.canonical }).toEqual(expectedCanonical);
@@ -175,7 +189,7 @@ describe('failure cases', () => {
     // ARRANGE
     const unregistered = 'non-existent-episode';
     // ACT
-    const valid = isEpisodeSlug(unregistered);
+    const valid = isEpisodeId(unregistered);
     const lookup = () => findEpisode(unregistered);
     // ASSERT
     expect(valid).toBe(false);
@@ -211,7 +225,7 @@ describe('edge cases', () => {
       // ARRANGE
       const expected = false;
       // ACT
-      const valid = isEpisodeSlug(slug);
+      const valid = isEpisodeId(slug);
       const lookup = () => findEpisode(slug);
       // ASSERT
       expect(valid).toBe(expected);
@@ -219,7 +233,7 @@ describe('edge cases', () => {
     },
   );
 
-  it.each(EPISODE_SLUGS)('gives %s at least one Section, each holding at least its opener', (slug) => {
+  it.each(EPISODE_IDS)('gives %s at least one Section, each holding at least its opener', (slug) => {
     // ARRANGE
     const { sections } = findEpisode(slug);
     // ACT

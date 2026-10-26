@@ -2,6 +2,7 @@ import { findPageRecord } from '@/components/episodes/tooling-pages';
 
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
+import { episodeFolderOf, episodeRefOf } from '@/lib/episode-id.pure';
 import { placeSections, type SlideOutline } from '@/lib/episode.pure';
 import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
@@ -17,8 +18,9 @@ import { describe, expect, it } from 'vitest';
  * Section lists alone, so they cannot differ by locale.
  */
 
-function snapshotPath(slug: string): string {
-  return path.join(__dirname, slug, 'published-anchors.json');
+/** The snapshot in the page's folder, an Event's copy's under its Event, by Episode id (or tooling slug). */
+function snapshotPath(id: string): string {
+  return path.join(__dirname, episodeFolderOf(episodeRefOf(id)), 'published-anchors.json');
 }
 
 /** The file to paste for a new Episode: its anchors sorted, formatted with the repo's prettier config so `prettier --check` accepts it. */
@@ -57,9 +59,9 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
  */
 function boundSlugs(
   registered: readonly EpisodesPathSlug[],
-  episodes: readonly { slug: string; status: EpisodeStatus }[],
+  episodes: readonly { id: string; status: EpisodeStatus }[],
 ): EpisodesPathSlug[] {
-  const upcoming = episodes.filter(({ status }) => status === 'upcoming').map(({ slug }) => slug);
+  const upcoming = episodes.filter(({ status }) => status === 'upcoming').map(({ id }) => id);
   return registered.filter((slug) => !upcoming.includes(slug));
 }
 
@@ -130,9 +132,9 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('skips an upcoming Episode with a page and binds a published one', () => {
     // ARRANGE
-    const episodes: { slug: string; status: EpisodeStatus }[] = [
-      { slug: 'maintaining-markdown-for-ai', status: 'published' },
-      { slug: 'ai-token-economy', status: 'upcoming' },
+    const episodes: { id: string; status: EpisodeStatus }[] = [
+      { id: 'maintaining-markdown-for-ai', status: 'published' },
+      { id: 'ai-token-economy', status: 'upcoming' },
     ];
     const expected = ['episode-template', 'maintaining-markdown-for-ai'];
     // ACT

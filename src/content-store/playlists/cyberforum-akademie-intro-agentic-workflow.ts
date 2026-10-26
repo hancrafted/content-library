@@ -8,9 +8,9 @@ export const playlist = {
   id: 'cyberforum-akademie-intro-agentic-workflow',
   visibility: 'public',
   episodes: [
-    'cyberforum-intro',
-    'cyberforum-onboard-ai-every-time',
-    'cyberforum-ai-attention-span',
-    'cyberforum-ai-gives-you-more-work',
+    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro',
+    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
+    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
+    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-gives-you-more-work',
   ],
 } satisfies PlaylistInput;

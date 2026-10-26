@@ -53,6 +53,7 @@ async function slidesOf(sections: readonly Section[]) {
   return (
     await recordContent(episode({ slug: 'episode-template', messages: EPISODE, sections }), 'en', {
       translatorOf: translatorOf,
+      id: 'episode-template',
     })
   ).slides;
 }

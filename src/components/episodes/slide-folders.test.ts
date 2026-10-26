@@ -1,3 +1,4 @@
+import { pageFolders } from '@/lib/episode-folders';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -6,23 +7,22 @@ import { describe, expect, it } from 'vitest';
  * A Slide is one folder `slides/<slide>/` named after its slug
  * (#51, FE-002), so the folder, the anchor half and the Slide's own Translation
  * files share one name. Each folder's server entry is `slide.tsx`; this reads
- * every one and compares the slug it declares with the folder it sits in.
+ * every one and compares the slug it declares with the folder it sits in. The pages come from the one folder
+ * walker, so an Event's copies under `by-event/` are read too.
  */
 
-const EPISODES_DIR = __dirname;
+const ROOT = process.cwd();
 const ENTRY = 'slide.tsx';
 
-/** Every Slide folder of every Episode: a directory under `<episode>/slides/`. */
+/** Every Slide folder of every Episode and tooling page: a directory under `<page>/slides/`, named by the page's id. */
 function slideFolders(): { episode: string; folder: string; entry: string }[] {
-  return readdirSync(EPISODES_DIR, { withFileTypes: true })
-    .filter((each) => each.isDirectory())
-    .flatMap(({ name: episode }) => {
-      const slides = path.join(EPISODES_DIR, episode, 'slides');
-      if (!existsSync(slides)) return [];
-      return readdirSync(slides, { withFileTypes: true })
-        .filter((each) => each.isDirectory())
-        .map(({ name: folder }) => ({ episode, folder, entry: path.join(slides, folder, ENTRY) }));
-    });
+  return pageFolders(ROOT).flatMap(({ id: episode, dir }) => {
+    const slides = path.join(dir, 'slides');
+    if (!existsSync(slides)) return [];
+    return readdirSync(slides, { withFileTypes: true })
+      .filter((each) => each.isDirectory())
+      .map(({ name: folder }) => ({ episode, folder, entry: path.join(slides, folder, ENTRY) }));
+  });
 }
 
 /** The slugs the Slides an entry module exports declare: each carries its own messages. */
@@ -97,10 +97,12 @@ describe('failure cases', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
-    const leftovers = readdirSync(EPISODES_DIR, { withFileTypes: true })
-      .filter((each) => each.isDirectory())
-      .flatMap(({ name: episode }) => ['parts', 'client'].map((kind) => path.join(episode, kind)))
-      .filter((folder) => existsSync(path.join(EPISODES_DIR, folder)));
+    const leftovers = pageFolders(ROOT)
+      .flatMap(({ folder, dir }) =>
+        ['parts', 'client'].map((kind) => ({ shown: path.join(folder, kind), at: path.join(dir, kind) })),
+      )
+      .filter(({ at }) => existsSync(at))
+      .map(({ shown }) => shown);
     // ASSERT
     expect(leftovers).toEqual(expected);
   });

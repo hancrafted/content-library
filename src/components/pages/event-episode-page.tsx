@@ -8,20 +8,30 @@ import {
 } from '@/components/events/event-episode-chrome';
 import { episodePublishedOn, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
 import { BUILD_DAY } from '@/lib/build-day';
+import { episodeRefOf } from '@/lib/episode-id.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { eventEpisodeRoute, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, isEventSlug, type PageOf } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 /** The insets every Slide wrapper takes, so the Event's chrome lines up with the Slides (FE-009 §2). */
 const INSET = 'pl-(--inset-l) pr-(--inset-r)';
 
-/** The Event and the Episode a page under it shows, with its place; a pair its Playlist does not hold is no page. */
-function presented(eventSlug: string, episode: string): PresentedEpisode {
+/**
+ * The Event and the Episode a page under it shows at that slug, with its place: an Event's copy, or a public Episode
+ * its Playlist lists. A pair its Playlist does not hold is no page.
+ */
+function presented(eventSlug: string, slug: string): PresentedEpisode {
   const event = findEvent(eventSlug);
-  const entry = event?.playlist.episodes.find(({ page }) => page === episode);
+  const entry = event?.playlist.episodes.find(({ page }) => page !== undefined && episodeRefOf(page).slug === slug);
   if (event === undefined || entry?.page === undefined) notFound();
   return { event, episode: entry.page, place: entry.place };
+}
+
+/** The page at `/events/<event>/episodes/<slug>/`, naming its Episode by id; a pair no Playlist holds is no page. */
+export function eventEpisodePage(event: string, slug: string): PageOf<'event-episode'> {
+  if (!isEventSlug(event)) notFound();
+  return { kind: 'event-episode', event, episode: presented(event, slug).episode };
 }
 
 /**
@@ -43,8 +53,9 @@ export async function EventEpisodePage({ event, episode, locale }: { event: stri
   return (
     <EpisodePageContainer
       locale={locale}
+      id={shown.episode}
       episode={composition}
-      video={episodeVideo(composition.slug, locale)}
+      video={episodeVideo(shown.episode, locale)}
       frame={frame}
     />
   );
@@ -54,15 +65,13 @@ export async function EventEpisodePage({ event, episode, locale }: { event: stri
  * An Event-scoped Episode page's title, description and treatment, for `pageMetadata` (FE-008): the Episode's own
  * copy, and the page catalogue's treatment, which decides whether it is `noindex` or its own page takes the credit.
  */
-export function eventEpisodePageCopy(event: EventSlug, episode: string, locale: Locale): PageCopy {
-  const shown = presented(event, episode);
-  const { slug } = findEpisode(shown.episode);
-  const { title, description } = episodeCopy(slug, locale);
-  const publishedOn = episodePublishedOn(slug);
+export function eventEpisodePageCopy(page: PageOf<'event-episode'>, locale: Locale): PageCopy {
+  const { title, description } = episodeCopy(page.episode, locale);
+  const publishedOn = episodePublishedOn(page.episode);
   return {
     title,
     description,
-    treatment: treatmentOf({ kind: 'event-episode', event, episode: slug }),
+    treatment: treatmentOf(page),
     ...(publishedOn ? { publishedOn } : {}),
   };
 }

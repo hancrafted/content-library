@@ -1,11 +1,11 @@
 import type { MetadataRoute } from 'next';
 import type { IsoDate } from '../content-store/schemas/fields';
 import { DEFAULT_LOCALE } from './locale.pure';
-import { matchPage, pageLocales, routeOf, servedUrl, type EpisodeSlug, type PageRef } from './routes';
+import { matchPage, pageLocales, routeOf, servedUrl, type EpisodeId, type PageRef } from './routes';
 import type { TreatedPage } from './visibility.pure';
 
 /** A sitemap entry's `lastModified`: an Episode's own page carries its publish date, no other page one. */
-function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeSlug) => IsoDate | undefined): IsoDate | undefined {
+function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeId) => IsoDate | undefined): IsoDate | undefined {
   const none = () => undefined;
   return matchPage<PageRef, IsoDate | undefined>(page, {
     home: none,
@@ -29,7 +29,7 @@ function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeSlug) => Iso
 export function sitemapEntries(
   siteUrl: string,
   pages: readonly TreatedPage[],
-  publishedOnOf: (slug: EpisodeSlug) => IsoDate | undefined,
+  publishedOnOf: (slug: EpisodeId) => IsoDate | undefined,
 ): MetadataRoute.Sitemap {
   const indexable = pages.filter(({ treatment }) => treatment.inSitemap).map(({ page }) => page);
   return indexable.flatMap((page) => {

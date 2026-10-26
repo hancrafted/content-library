@@ -57,4 +57,22 @@ describe('edge cases', () => {
     // ASSERT
     expect(prompt).toContain(expectedPart);
   });
+
+  it("points an Event's copy at its folder under its Event, from the Episode id the page names", () => {
+    // ARRANGE
+    const changes = [
+      {
+        scope: { kind: 'slide' as const, id: 'x', episode: '2026-10-23-axel-agentic-workflow__intro' },
+        theme: 'light' as const,
+        name: '--a',
+        from: '1',
+        to: '2',
+      },
+    ];
+    const expectedPart = 'src/components/episodes/by-event/2026-10-23-axel-agentic-workflow/intro/';
+    // ACT
+    const prompt = formatChangePrompt(changes);
+    // ASSERT
+    expect(prompt).toContain(expectedPart);
+  });
 });

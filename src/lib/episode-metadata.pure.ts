@@ -18,7 +18,7 @@ export function lookOf(episode: Pick<Episode, 'tags'>): TagLook {
   return TAGS[leadTagOf(episode)];
 }
 
-function isPublished(episode: Episode): episode is PublishedEpisode {
+function isPublished<E extends Episode>(episode: E): episode is E & PublishedEpisode {
   return episode.status === 'published';
 }
 
@@ -27,7 +27,7 @@ function isPublished(episode: Episode): episode is PublishedEpisode {
  * unlisted one, design-ADR 0016): the Featured Episodes as listed, then every other published one newest first (ties
  * by slug), then the upcoming ones in the order given. A Featured slug that names no published Episode is skipped.
  */
-export function overviewOrder(episodes: readonly Episode[], featured: readonly string[]): Episode[] {
+export function overviewOrder<E extends Episode>(episodes: readonly E[], featured: readonly string[]): E[] {
   const published = episodes.filter(isPublished);
   const lead = featured.flatMap((slug) => published.filter((episode) => episode.slug === slug));
   const rest = published

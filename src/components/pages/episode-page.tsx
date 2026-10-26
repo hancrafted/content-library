@@ -5,7 +5,7 @@ import { JsonLdScript } from '@/components/json-ld';
 import { episodePublishedOn, episodeStatus, episodeVideo, treatmentOf } from '@/content-store/store';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { matchPage, type EpisodeSlug, type EpisodesPathPage } from '@/lib/routes';
+import { matchPage, type EpisodeId, type EpisodesPathPage } from '@/lib/routes';
 import { SITE_URL } from '@/lib/site-url';
 import { episodeJsonLd } from '@/lib/structured-data.pure';
 import { notFound } from 'next/navigation';
@@ -25,13 +25,13 @@ function exportedPage(slug: string): EpisodesPathPage {
 export function EpisodePage({ slug, locale }: { slug: string; locale: Locale }) {
   const page = exportedPage(slug);
   return matchPage<EpisodesPathPage, ReactNode>(page, {
-    tooling: ({ tooling }) => <EpisodePageContainer locale={locale} episode={findToolingPage(tooling)} />,
+    tooling: ({ tooling }) => <EpisodePageContainer locale={locale} id={tooling} episode={findToolingPage(tooling)} />,
     episode: ({ episode }) => <OwnEpisodePage slug={episode} locale={locale} />,
   });
 }
 
 /** An Episode's own page: the container, with its recording, and its structured data once published. */
-function OwnEpisodePage({ slug, locale }: { slug: EpisodeSlug; locale: Locale }) {
+function OwnEpisodePage({ slug, locale }: { slug: EpisodeId; locale: Locale }) {
   const episode = findEpisode(slug);
   const { title, description } = episodeCopy(slug, locale);
   const video = episodeVideo(slug, locale);
@@ -48,7 +48,7 @@ function OwnEpisodePage({ slug, locale }: { slug: EpisodeSlug; locale: Locale })
   return (
     <>
       {data && <JsonLdScript data={data} />}
-      <EpisodePageContainer locale={locale} episode={episode} video={video} />
+      <EpisodePageContainer locale={locale} id={slug} episode={episode} video={video} />
     </>
   );
 }
