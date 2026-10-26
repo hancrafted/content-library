@@ -215,7 +215,7 @@ without it; an unknown `skills_invoked` keeps it pending. On the Job span only
 only while the Run has one Attempt. The Job box shows each skill once: green
 when every agent listing it ran it, red when any skipped it. A check reads its
 latest `check:<name>` Score: `pass` or `fail`. `jobChips()` in
-`src/lib/dashboard-chips.pure.ts` computes both for the projection; the
+`src/pipeline/lib/dashboard-chips.pure.ts` computes both for the projection; the
 pipeline's `checks` reach it through `jobOf()`.
 
 ## Reading and interpretation
@@ -233,7 +233,7 @@ replaced by an equal-sized or larger unrelated file cannot be detected by size;
 choose the folder again in that case. The footer reports bytes read and complete
 lines, including malformed lines.
 
-The shared `createLogFold()` in `skills/new-episode/scripts/run-log-fold.pure.ts`
+The shared `createLogFold()` in `src/pipeline/lib/run-log-fold.pure.ts`
 owns both batch and incremental span semantics. `live: 'unfinished'` treats open
 spans as running only while their own trace's Run has no end. Chronological order
 is timestamp then sequence; the latest end supplies the terminal state. The
@@ -256,8 +256,8 @@ agents directly under a Job. A spawn description labels an agent when present.
 ## English-only route and metadata
 
 Han's approved FE-008 exception permits English-only operational pages:
-`PageRef` includes `dashboard`, and `pageLocales('dashboard')` contains only `en`.
-`pageMetadata('dashboard', 'en')` supplies `noindex`, an English canonical, and
+`PageRef` includes the `dashboard` kind, and `pageLocales({ kind: 'dashboard' })` contains only `en`.
+`pageMetadata({ kind: 'dashboard' }, 'en')` supplies `noindex`, an English canonical, and
 only `en` and `x-default` alternates. There is no `/de/dashboard` export.
 
 Dashboard navigation appears in the English header only. The dashboard's locale

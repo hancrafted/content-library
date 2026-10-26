@@ -63,7 +63,7 @@ The long phone call: primacy, recency, a blurry middle and standout highlights, 
 - The bridge to the short `ai-gives-you-more-work` Episode (standing in for the promotion Episode for now) is spoken in the workshop only, never on a Slide.
 - Attention values (for example 20 units to the start, 30 to the end, 50 spread across the middle) and token counts are illustrative, and every Slide showing them says so.
 - A grounding comes before every mechanism: the viewer feels the problem before a term names it, so the smart and dumb zone appear only after the viewer has seen the middle fade.
-- Slides 3, 4, 5, 7, 8, 9, 10 and 11 are states of one shared visual, the context window cornerstone; each still tells its own story and reads top to bottom without touching a toggle.
+- Slides 3, 4, 5, 7, 8, 9, 10 and 11 are states of one Explorable explanation, the context window cornerstone; each still tells its own story and reads top to bottom without touching a toggle.
 - Questions to the room (who plans their own attention, their calendar) are spoken in the workshop only, so the YouTube cut works without an audience.
 
 ## Slides

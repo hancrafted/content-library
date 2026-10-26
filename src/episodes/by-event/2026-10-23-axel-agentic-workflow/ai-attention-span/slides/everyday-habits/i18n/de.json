@@ -1,0 +1,103 @@
+{
+  "title": "Gewohnheiten für jeden Tag",
+  "caption": "Teile das Projekt in Jobs, halte jeden Chat bei einem Job und nimm nur eine kurze Übergabe in den nächsten mit, damit der neue Chat klein und klar startet.",
+  "barsLabel": "Der alte Chat gibt eine kurze Übergabekarte an einen neuen Chat weiter",
+  "oldChat": "Alter Chat: Sommerfest",
+  "freshChat": "Neuer Chat: Einladungen",
+  "handoff": {
+    "title": "Übergabekarte",
+    "text": "Feier für 200, 27. Juni, <budget>Budget 30.000 €</budget>. Ort: Estrela-Pavillon. Caterer: Sabor Verde (60 vegetarisch). Weiter: Einladungen.",
+    "arrow": "erste Nachricht des neuen Chats"
+  },
+  "habitsLabel": "Sechs Gewohnheiten für jeden Tag",
+  "habits": {
+    "1": {
+      "title": "Zerleg es",
+      "body": "Teile das Projekt in Jobs, bevor der erste Chat beginnt."
+    },
+    "2": {
+      "title": "Neuer Job, neuer Chat",
+      "body": "Wechselt das Thema, öffne einen neuen Chat."
+    },
+    "3": {
+      "title": "Bitte um eine Übergabe",
+      "body": "Nach echtem Fortschritt oder vor einer Pause: das Ziel, die Entscheidungen, der nächste Schritt."
+    },
+    "4": {
+      "title": "Lies sie, korrigiere sie",
+      "body": "Korrigiere, was falsch ist, bevor Du sie weitergibst."
+    },
+    "5": {
+      "title": "Beginne den nächsten Chat damit",
+      "body": "Füge sie als erste Nachricht ein."
+    },
+    "6": {
+      "title": "Prüfe den Kontext, wenn Du kannst",
+      "body": "In agentischen Tools führst Du regelmäßig <code>/context</code> aus."
+    }
+  },
+  "illustrative": "Token-Zahlen zur Veranschaulichung · 200K-Fenster",
+  "notes": {
+    "length-itself-hurts": {
+      "header": "Die Länge allein schadet",
+      "description": "Selbst bei perfektem Abruf sank die Leistung, je länger die Eingabe wurde, und der Abfall blieb, als irrelevante Tokens durch Leerzeichen ersetzt oder für die Attention ausgeblendet wurden [1]. Dass ein frischer, kürzerer Chat den Abfall vermeidet, ist eine Schlussfolgerung daraus; einen Neustart testen die Studien nicht.",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "one-job-per-chat": {
+      "header": "Ein Job pro Chat",
+      "description": "Schon ein einziger Ablenker senkt die Leistung gegenüber der Nadel allein; fremdes Material in einem Chat hat also seinen Preis [1].",
+      "sources": {
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "a-short-recap-helped": {
+      "header": "Eine kurze Zusammenfassung half",
+      "description": "Ließ man das Modell die gefundenen Belege vor dem Lösen wiederholen, wurde aus einer langen Aufgabe eine kurze, und die Ergebnisse wurden besser [1]. Dass eine Übergabe genauso wirkt, ist eine Schlussfolgerung.",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "break-it-down": {
+        "title": "Zerleg es",
+        "keywords": "",
+        "script": "Stell Dir vor, Du planst das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. Zerleg es. Teile das Projekt in Jobs, bevor der erste Chat beginnt: Du teilst eine große Aufgabe in kleine Schritte, und jeder Schritt ist klein genug, um ihn im Blick zu behalten."
+      },
+      "one-chat-one-job": {
+        "title": "Neuer Job, neuer Chat",
+        "keywords": "",
+        "script": "Neuer Job, neuer Chat. Wenn das Thema wechselt, öffne einen neuen Chat, damit die Hotelfrage nicht das Catering-PDF mitschleppen muss. Ein Neustart gibt das ganze Fenster der Arbeit vor Dir und nichts davon dem, was vor einer Stunde passiert ist."
+      },
+      "ask-for-a-handoff": {
+        "title": "Bitte um eine Übergabe",
+        "keywords": "",
+        "script": "Bitte um eine Übergabe. Nach echtem Fortschritt oder vor einer Kaffeepause hältst Du an und bittest die KI um eine Übergabe: eine kurze Karte mit dem Ziel, mit dem, was entschieden ist, und mit dem, was als Nächstes kommt."
+      },
+      "read-and-correct-it": {
+        "title": "Lies und korrigiere sie",
+        "keywords": "",
+        "script": "Dann lies sie und korrigiere, was falsch ist. Eine Zusammenfassung kann Dinge weglassen oder etwas falsch wiedergeben, und Du bist verantwortlich dafür, was der nächste Chat glaubt."
+      },
+      "start-the-next-chat-with-it": {
+        "title": "Beginne den nächsten Chat damit",
+        "keywords": "",
+        "script": "Und beginne den nächsten Chat damit. Füge die Übergabe als erste Nachricht ein, und der neue Chat startet klein und klar, mit dem Ort, dem Caterer, dem Budget und dem nächsten Schritt, und sonst nichts."
+      },
+      "check-the-context": {
+        "title": "Prüfe den Kontext",
+        "keywords": "",
+        "script": "Und prüfe den Kontext, wenn Du kannst. In agentischen Tools führst Du regelmäßig den Befehl Slash Context aus, und Du siehst, wie voll das Fenster ist, bevor es zum Problem wird."
+      }
+    }
+  }
+}

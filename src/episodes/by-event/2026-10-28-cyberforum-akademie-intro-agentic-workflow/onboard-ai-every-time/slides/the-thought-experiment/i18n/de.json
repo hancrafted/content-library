@@ -1,0 +1,32 @@
+{
+  "title": "Das Gedankenexperiment",
+  "newHire": {
+    "job": "Neu im Job · Du",
+    "day": "Tag 1"
+  },
+  "questionsLabel": "Die Fragen, die jemand Neues beantwortet braucht",
+  "questions": {
+    "budget": "Budget?",
+    "signOff": "Wer gibt frei?",
+    "lastTime": "Was lief letztes Mal schief?"
+  },
+  "voiceScript": {
+    "segments": {
+      "hook-new-job": {
+        "title": "Hook, neuer Job",
+        "keywords": "",
+        "script": "Stell Dir vor, Du fängst einen neuen Job an. Neue Umgebung, neue Kultur, neue Tools, und in Deiner ersten Woche bekommst Du eine Aufgabe: Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. (Pause) Bevor Du irgendetwas buchst, stell Dir jede Frage vor, die Du beantwortet haben müsstest, um das gut zu machen, denn gleich hörst Du, wie viele es sind."
+      },
+      "what-this-is-and-is-not": {
+        "title": "Was das hier ist, und was nicht",
+        "keywords": "",
+        "script": "Das ist die erste von drei Folgen darüber, wie Du agentisch mit KI arbeitest, und sie ist als Referenz gebaut, auf die die späteren Videos zurückverweisen. Ich bleibe bei einfachen Worten, ohne Fachjargon, denn Du musst nicht wissen, wie KI innen funktioniert, um verlässliche Ergebnisse von ihr zu bekommen. Eines lasse ich bewusst weg: die Kontext- und Gedächtnisfunktionen von ChatGPT und ähnlichen Tools. Die verdienen eine eigene Folge, die über die Aufmerksamkeitsspanne, deshalb halten wir sie hier heraus."
+      },
+      "where-it-goes": {
+        "title": "Wohin es geht",
+        "keywords": "",
+        "script": "Darum geht es in den nächsten zehn Minuten: Alles, was Du Dir gerade vorgestellt hast, die Fragen, die Vorgeschichte, die ungeschriebenen Regeln, braucht auch die KI von Dir, denn was für einen Menschen gut ist, ist auch für KI gut. Deshalb gehen wir in zwei Schritten vor, entlang zwei Grundpfeilern. Erst: wem Du die Arbeit wirklich übergibst. Dann: was Du ihm mitgibst, damit die Arbeit richtig zurückkommt."
+      }
+    }
+  }
+}

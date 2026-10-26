@@ -1,7 +1,7 @@
 // `npm run check:events`: refuses a staged change that removes lines from an Episode's `events.jsonl` that remains; deleting the whole file (Promotion, after `archive`) is allowed.
 // Wired into `verify:commit`; exits 1 and names each file.
 import { execFileSync } from 'node:child_process';
-import { eventLogDeletions } from './events-append-only.pure.ts';
+import { eventLogDeletions } from '../../../src/pipeline/lib/events-append-only.pure.ts';
 
 const staged = execFileSync('git', ['diff', '--cached', '-U0', '--no-color', '--no-ext-diff'], {
   encoding: 'utf8',

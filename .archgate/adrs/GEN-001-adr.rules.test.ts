@@ -579,14 +579,14 @@ describe('adr-paths-resolve', () => {
     const files = passingFiles();
     files[ADR_PATH] = VALID_ADR.replace(
       'paths: [".archgate/adrs/**/*.md"]',
-      'paths: [".archgate/adrs/**/*.md", "src/hooks/use-deleted.ts"]',
+      'paths: [".archgate/adrs/**/*.md", "src/shared/hooks/use-deleted.ts"]',
     );
     const { ctx, violations } = makeCtx(files);
     // ACT
     await rules['adr-paths-resolve'].check(ctx);
     // ASSERT
     expect(violations).toHaveLength(1);
-    expect(violations[0].message).toMatch(/'paths:' entry 'src\/hooks\/use-deleted.ts' matches no file/);
+    expect(violations[0].message).toMatch(/'paths:' entry 'src\/shared\/hooks\/use-deleted.ts' matches no file/);
     expect(violations[0].file).toBe(ADR_PATH);
   });
 
@@ -595,14 +595,14 @@ describe('adr-paths-resolve', () => {
     const files = passingFiles();
     files[ADR_PATH] = VALID_ADR.replace(
       'files: [".archgate/adrs/**/*.{md,ts}"]',
-      "files: ['.archgate/adrs/**/*.{md,ts}', 'src/lib/gone.pure*']",
+      "files: ['.archgate/adrs/**/*.{md,ts}', 'src/shared/lib/gone.pure*']",
     );
     const { ctx, violations } = makeCtx(files);
     // ACT
     await rules['adr-paths-resolve'].check(ctx);
     // ASSERT
     expect(violations.map((v) => v.message)).toEqual([
-      expect.stringMatching(/'files:' entry 'src\/lib\/gone.pure\*' matches no file/),
+      expect.stringMatching(/'files:' entry 'src\/shared\/lib\/gone.pure\*' matches no file/),
     ]);
   });
 

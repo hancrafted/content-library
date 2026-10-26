@@ -82,7 +82,7 @@ Opening: _Where Episode files live_. This issue settles which directory owns the
 
 1. Next to the English text, in the same Episode folder, because one folder then holds everything about one Episode.
 2. In a separate `de/` tree that mirrors the English one, because translators can work without touching English files.
-3. In `src/lib/messages.ts`, because the site already keeps UI strings there.
+3. In `src/shared/lib/messages.ts`, because the site already keeps UI strings there.
 
 ➡️ **Recommendation: Option 1.** One folder per Episode keeps both languages in step: a change to one is visible next to the other.
 
@@ -111,7 +111,7 @@ docs/episodes-de/
 **Option 3: In `messages.ts`**
 
 ```text
-src/lib/
+src/shared/lib/
 └── messages.ts          # Single table: every string for both languages, grows with each Episode
 ```
 
@@ -119,7 +119,7 @@ src/lib/
 
 The round above shows the question shape; this one shows classification, in this repo's buckets. The issue _Decide what an unknown locale prefix returns_ listed four decisions, one of them compound. Classified, they become two asked questions and two decided lines. The example is illustrative, not a decision.
 
-Opening: _Decide what an unknown locale prefix returns_. This issue settles what a visitor gets at a path like `/fr/episode/page-template`. You leave with a design-ADR on disk.
+Opening: _Decide what an unknown locale prefix returns_. This issue settles what a visitor gets at a path like `/fr/episode/episode-template`. You leave with a design-ADR on disk.
 
 ---
 
@@ -134,21 +134,21 @@ Opening: _Decide what an unknown locale prefix returns_. This issue settles what
 **Option 1: 404**
 
 ```text
-/fr/episode/page-template
+/fr/episode/episode-template
 result: 404 page                       # fail closed: an unstated Locale gets no content
 ```
 
 **Option 2: redirect**
 
 ```text
-/fr/episode/page-template
-result: client redirect to /episode/page-template   # trust the visitor's intent, needs a script
+/fr/episode/episode-template
+result: client redirect to /episode/episode-template   # trust the visitor's intent, needs a script
 ```
 
 **Option 3: serve English**
 
 ```text
-/fr/episode/page-template
+/fr/episode/episode-template
 result: English page at the /fr URL    # forgiving, but a duplicate URL for one Episode
 ```
 

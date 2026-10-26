@@ -1,0 +1,28 @@
+{
+  "events": {
+    "breadcrumb": {
+      "label": "Brotkrumen",
+      "events": "Veranstaltungen"
+    },
+    "episodeCount": {
+      "one": "1 Episode",
+      "other": "{count} Episoden"
+    },
+    "pastNotice": "Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen.",
+    "position": "Episode {position} von {count}",
+    "playlistNav": "Playlist",
+    "previous": "Vorherige Episode",
+    "next": "Nächste Episode",
+    "backToEvent": "Zurück zur Veranstaltung",
+    "items": {
+      "2026-10-23-axel-agentic-workflow": {
+        "title": "AXEL Seminar: Agentic Workflows",
+        "description": "Mit KI-Agenten arbeiten in drei Episoden: jedes Mal neu einarbeiten, ihre Aufmerksamkeitsspanne managen und verstehen, warum sie Management-Arbeit bringen."
+      },
+      "2026-10-28-cyberforum-akademie-intro-agentic-workflow": {
+        "title": "CyberForum Akademie: Einführung in agentische Workflows",
+        "description": "Eine Einführung in die Arbeit mit KI-Agenten: zuerst die Agenda, dann jedes Mal neu einarbeiten, ihre Aufmerksamkeitsspanne managen und verstehen, warum sie Management-Arbeit bringen."
+      }
+    }
+  }
+}

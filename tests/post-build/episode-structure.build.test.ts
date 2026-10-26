@@ -7,19 +7,19 @@ import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { TITLE_ANCHOR } from '../../src/lib/episode.pure';
-import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
-import { exportedPage, OUT_DIR } from './exported-pages';
+import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/record-routes';
+import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
+import { TITLE_ANCHOR } from '../../src/shared/lib/title-anchor.pure';
+import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
 
-const PAGES = EPISODE_SLUGS.flatMap((slug) =>
+const PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 
 /** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
 const UNTITLED: Readonly<Record<string, readonly string[]>> = {
-  'page-template': ['next-steps--what-comes-next'],
+  'episode-template': ['next-steps--what-comes-next'],
 };
 
 /** Episodes whose Title slide carries its own Voice script: the drawer shows that script there, not its explainer. */
@@ -27,7 +27,17 @@ const TITLE_SCRIPTED: readonly string[] = ['onboard-ai-every-time'];
 
 /** The scripts of an Episode's Title slide Voice script segments in `locale`, from its own Translation file. */
 function titleScripts(slug: string, locale: string): string[] {
-  const file = join(import.meta.dirname, '..', '..', 'src', 'components', 'episodes', slug, 'i18n', `${locale}.json`);
+  const file = join(
+    import.meta.dirname,
+    '..',
+    '..',
+    'src',
+    'episodes',
+    isToolingSlug(slug) ? 'tooling' : '',
+    slug,
+    'i18n',
+    `${locale}.json`,
+  );
   const messages = JSON.parse(readFileSync(file, 'utf8'));
   const segments: Record<string, { script: string }> = messages.voiceScript?.segments ?? {};
   return Object.values(segments).map(({ script }) => script);
@@ -126,7 +136,10 @@ describe('episode structure', () => {
       // ARRANGE
       const $ = exportedPage(url);
       const translation = JSON.parse(
-        readFileSync(join(import.meta.dirname, '..', '..', 'src', 'messages', `${locale}.json`), 'utf8'),
+        readFileSync(
+          join(import.meta.dirname, '..', '..', 'src', 'shared', 'page-chrome', 'i18n', `${locale}.json`),
+          'utf8',
+        ),
       );
       const explainer = String(translation.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
       // A Title slide with its own Voice script shows it instead, so neither tab explains the drawer.

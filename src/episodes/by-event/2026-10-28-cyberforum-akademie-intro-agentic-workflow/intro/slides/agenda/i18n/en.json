@@ -1,0 +1,16 @@
+{
+  "title": "Agenda",
+  "caption": "Replace with the plan of the session: each block with its time slot.",
+  "items": {
+    "first": "Time slot: first block",
+    "second": "Time slot: second block",
+    "third": "Time slot: third block",
+    "fourth": "Time slot: questions and wrap-up"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "What to say about the agenda",
+      "description": "Replace with what you say while this Slide is up."
+    }
+  }
+}

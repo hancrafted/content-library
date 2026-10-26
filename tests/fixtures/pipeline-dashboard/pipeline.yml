@@ -2,7 +2,7 @@
 # orchestrator copies this file to docs/episodes/never-too-early-sales-run-2/pipeline.yml, tailors
 # it for that Episode, and Han approves it by setting `status: approved`.
 #
-# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+# Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
 #   template  per-run only: the main commit the pipeline was tailored
 #             from; the template is not merged into the Episode branch again until

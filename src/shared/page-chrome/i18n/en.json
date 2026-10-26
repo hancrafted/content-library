@@ -1,0 +1,71 @@
+{
+  "brand": {
+    "name": "hancrafted",
+    "home": "hancrafted, go to the landing page"
+  },
+  "nav": {
+    "label": "Main",
+    "episodes": "Episodes",
+    "events": "Events",
+    "dashboard": "Content pipeline",
+    "contact": "Work with me",
+    "newTab": "opens in a new tab",
+    "menu": "Menu"
+  },
+  "social": {
+    "label": "Social profiles",
+    "youtube": "YouTube",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Language"
+  },
+  "tableOfContents": {
+    "title": "Contents",
+    "progress": "Reading time",
+    "remaining": {
+      "one": "{count} min left",
+      "other": "{count} min left"
+    },
+    "toggle": "Show or hide slides",
+    "loading": "Loading",
+    "open": "Open contents",
+    "close": "Close contents"
+  },
+  "contextDrawer": {
+    "title": "Context",
+    "open": "Open context",
+    "close": "Close context",
+    "tabs": {
+      "notes": "Speaker notes",
+      "script": "Voice script"
+    },
+    "explainer": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press {shortcut} to open or close it.",
+    "empty": {
+      "notes": "No speaker notes for this Slide.",
+      "script": "No voice script for this Slide."
+    },
+    "keywords": "Keywords",
+    "bridge": "Bridge",
+    "slide": "Slide",
+    "shortcut": "Shortcut",
+    "sourcesCount": "Sources ({count})",
+    "opensInNewTab": "opens in a new tab",
+    "menu": {
+      "label": "More options",
+      "layout": "Layout",
+      "beside": "Side by side",
+      "over": "Overlay"
+    },
+    "refNote": "opens speaker note",
+    "markerNote": "Speaker note: {title}",
+    "citation": "Source {number}"
+  }
+}

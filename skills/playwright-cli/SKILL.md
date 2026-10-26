@@ -1,6 +1,6 @@
 ---
 name: playwright-cli
-description: Explore a page of the built export interactively with Playwright's own CLI — find controls by role, click them, read attributes such as data-motion and data-state — before writing a *.browser.test.ts spec. Use before writing or fixing a browser spec, or whenever a Shared visual's controls, roles or state must be discovered by clicking, not measured; layout numbers and screenshots belong to visual-check.
+description: Explore a page of the built export interactively with Playwright's own CLI — find controls by role, click them, read attributes such as data-motion and data-state — before writing a *.browser.test.ts spec. Use before writing or fixing a browser spec, or whenever an Explorable explanation's controls, roles or state must be discovered by clicking, not measured; layout numbers and screenshots belong to visual-check.
 ---
 
 # Playwright CLI
@@ -25,10 +25,10 @@ Serve the export first (`npm run build`, then `npm run preview` in the backgroun
 
 `--raw` prints only the value. Refs go stale after the page re-renders: take a new `snapshot` before reusing one.
 
-## Example: the Context controls on `/episodes/slides/`
+## Example: the Context controls on `/episodes/explorable-explanations/`
 
 ```bash
-npx playwright cli -s=probe open http://localhost:4300/episodes/slides/
+npx playwright cli -s=probe open http://localhost:4300/episodes/explorable-explanations/
 npx playwright cli -s=probe find "Context window"       # button "Context window" [pressed] [ref=e195]
 npx playwright cli -s=probe --raw eval "el => el.getAttribute('aria-pressed')" e195   # "true"
 npx playwright cli -s=probe --raw eval "() => [...document.querySelectorAll('[data-motion]')].map(e => e.getAttribute('data-motion')).join()"   # "rise"

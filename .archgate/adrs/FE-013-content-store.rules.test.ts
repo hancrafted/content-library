@@ -1,8 +1,7 @@
 /// <reference path="../rules.d.ts" />
 
 // Sibling test for FE-013-content-store.rules.ts — the executable spec the store
-// ticket turns green: pass and fail for each rule, the dormant state before the
-// store's entry exists, and the edges: a moved diagram, a `%% store:` line outside
+// ticket turned green: pass and fail for each rule, a missing store entry, and the edges: a moved diagram, a `%% store:` line outside
 // the diagram, nested and extended shapes, prose naming a type, and helper types.
 
 import ts from 'typescript';
@@ -193,20 +192,22 @@ describe('model-matches-store', () => {
     expect(violations[0]?.message).toContain(MODEL);
   });
 
-  it('stays dormant on the schemas while the store entry does not exist', async () => {
+  it('fails a moved or deleted store entry, never passing the schemas silently', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({ [MODEL]: diagram(STORE_LINE) });
+    const expected = 'src/content-store/store.ts is missing';
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations).toEqual([]);
+    expect(violations).toHaveLength(1);
+    expect(violations[0]?.message).toContain(expected);
   });
 });
 
 describe('type-from-schema', () => {
   const rule = ruleSet.rules['type-from-schema'];
   const PROVENANCE = '(FE-013 [type-from-schema])';
-  const METADATA = 'src/components/episodes/probe/episode-metadata.ts';
+  const METADATA = 'src/episodes/probe/episode-metadata.ts';
 
   it('passes inferred types, helper types, other components and prose that names a type', async () => {
     // ARRANGE
@@ -217,7 +218,7 @@ describe('type-from-schema', () => {
       [schema('event')]: `${DESCRIBED}export type Event = z.infer<typeof s>;\n`,
       [METADATA]:
         "import { episodeSchema } from '@/content-store/schemas/episode.schema';\nexport const episodeMetadata = episodeSchema.parse({ slug: 'probe' });\n",
-      'src/components/landing/episode-card.tsx': 'interface EpisodeCardProps { slug: string }\n',
+      'src/episodes/components/episode-card/episode-card.tsx': 'interface EpisodeCardProps { slug: string }\n',
       'src/content-store/schemas/fields.ts':
         "export const language = z.enum(['en']).describe('The interface Episode = { spoken }.');\n",
     });
@@ -230,19 +231,19 @@ describe('type-from-schema', () => {
   it('fails hand-written record types anywhere under src/, and satisfies {…} in Episode metadata', async () => {
     // ARRANGE
     const expected = [
-      ['src/components/episodes/probe/episode-metadata.ts', 1],
       ['src/content-store/refusals.ts', 1],
-      ['src/lib/episode-metadata.pure.ts', 1],
-      ['src/lib/episode-metadata.pure.ts', 2],
-      ['src/lib/sitemap.pure.ts', 1],
+      ['src/episodes/lib/episode-metadata.pure.ts', 1],
+      ['src/episodes/lib/episode-metadata.pure.ts', 2],
+      ['src/episodes/probe/episode-metadata.ts', 1],
+      ['src/page-assembly/sitemap/sitemap.pure.ts', 1],
     ];
     const { ctx, violations } = makeCtx({
       [MODEL]: diagram(STORE_LINE),
       [STORE]: '',
       'src/content-store/refusals.ts': 'export type Playlist = Readonly<{ episodes: string[] }>;\n',
-      'src/lib/episode-metadata.pure.ts':
+      'src/episodes/lib/episode-metadata.pure.ts':
         'export interface PublishedEpisodeMetadata { slug: string }\nexport type WorkshopRecord = { slug: string };\n',
-      'src/lib/sitemap.pure.ts': 'interface Episode { slug: string }\n',
+      'src/page-assembly/sitemap/sitemap.pure.ts': 'interface Episode { slug: string }\n',
       [METADATA]: "export const episodeMetadata = { slug: 'probe' } as const satisfies { slug: string };\n",
     });
     // ACT
@@ -265,16 +266,16 @@ describe('type-from-schema', () => {
     expect(violations).toEqual([]);
   });
 
-  it('stays dormant while the store entry does not exist', async () => {
+  it('checks every source file even while the store entry is missing', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({
       [MODEL]: diagram(STORE_LINE),
-      'src/lib/episode-metadata.pure.ts': 'export interface EpisodeMetadata { slug: string }\n',
+      'src/episodes/lib/episode-metadata.pure.ts': 'export interface EpisodeMetadata { slug: string }\n',
     });
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations).toEqual([]);
+    expect(violations.map((v) => v.file)).toEqual(['src/episodes/lib/episode-metadata.pure.ts']);
   });
 });
 
@@ -344,12 +345,12 @@ describe('field-described', () => {
     expect(violations[0]?.message).toContain(PROVENANCE);
   });
 
-  it('stays dormant while the store entry does not exist', async () => {
+  it('checks every schema even while the store entry is missing', async () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({ [schema('event')]: 'export const s = z.object({ slug: z.string() });\n' });
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations).toEqual([]);
+    expect(violations.map((v) => v.file)).toEqual([schema('event')]);
   });
 });

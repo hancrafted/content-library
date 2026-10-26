@@ -1,0 +1,71 @@
+{
+  "brand": {
+    "name": "hancrafted",
+    "home": "hancrafted, zur Startseite"
+  },
+  "nav": {
+    "label": "Hauptnavigation",
+    "episodes": "Episoden",
+    "events": "Veranstaltungen",
+    "dashboard": "Content-Pipeline",
+    "contact": "Mit mir arbeiten",
+    "newTab": "öffnet in einem neuen Tab",
+    "menu": "Menü"
+  },
+  "social": {
+    "label": "Profile in sozialen Netzwerken",
+    "youtube": "YouTube",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
+  },
+  "theme": {
+    "label": "Farbschema",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Sprache"
+  },
+  "tableOfContents": {
+    "title": "Inhalt",
+    "progress": "Lesezeit",
+    "remaining": {
+      "one": "noch {count} Min.",
+      "other": "noch {count} Min."
+    },
+    "toggle": "Folien ein- oder ausblenden",
+    "loading": "Wird geladen",
+    "open": "Inhalt öffnen",
+    "close": "Inhalt schließen"
+  },
+  "contextDrawer": {
+    "title": "Kontext",
+    "open": "Kontext öffnen",
+    "close": "Kontext schließen",
+    "tabs": {
+      "notes": "Sprechernotizen",
+      "script": "Sprechtext"
+    },
+    "explainer": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit {shortcut} öffnen und schließen Sie es.",
+    "empty": {
+      "notes": "Keine Sprechernotizen für diese Folie.",
+      "script": "Kein Sprechtext für diese Folie."
+    },
+    "keywords": "Stichworte",
+    "bridge": "Überleitung",
+    "slide": "Folie",
+    "shortcut": "Tastenkürzel",
+    "sourcesCount": "Quellen ({count})",
+    "opensInNewTab": "öffnet in neuem Tab",
+    "menu": {
+      "label": "Weitere Optionen",
+      "layout": "Darstellung",
+      "beside": "Nebeneinander",
+      "over": "Überlagert"
+    },
+    "refNote": "öffnet Sprechernotiz",
+    "markerNote": "Sprechernotiz: {title}",
+    "citation": "Quelle {number}"
+  }
+}

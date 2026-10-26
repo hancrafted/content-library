@@ -1,0 +1,15 @@
+{
+  "eventPage": {
+    "playlist": "Playlist",
+    "start": "Mit Episode {step} starten",
+    "readingTime": "{minutes} Min. Lesezeit insgesamt",
+    "kinds": {
+      "workshop": "Workshop",
+      "webinar": "Webinar"
+    },
+    "audiences": {
+      "individual": "Für Einzelpersonen",
+      "organization": "Für Unternehmen"
+    }
+  }
+}

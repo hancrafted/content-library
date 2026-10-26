@@ -5,8 +5,8 @@ title: 'Localization'
 domain: frontend
 rules: true
 files: ['src/**/*.tsx']
-paths: ['src/**/*.{ts,tsx}']
-description: 'How a locale shows up in a URL: the default locale is served unprefixed, every other locale under a /<locale> path segment; every href is built one way; text a client completes is filled from one template.'
+paths: ['src/**/*.{ts,tsx}', 'src/**/i18n/*.json']
+description: "How a locale shows up in a URL: the default locale is served unprefixed, every other locale under a /<locale> path segment; every href is built one way; text a client completes is filled from one template; every text sits in its owner's Translation files, one owner per namespace, merged into one message set."
 ---
 
 # Localization
@@ -17,12 +17,14 @@ Static export: no middleware detects a locale or rewrites a prefix at request ti
 
 Some text is completed only in the browser — "Show all 12", once a filter has counted. Reading the raw string with `t.raw` needs a cast and escapes the typed keys, and each widget grew its own replace call.
 
+Site text lived in two site-wide files that every change touched, far from the code rendering it. next-intl serves one message set, so owners' files must merge into it, and a namespace two of them define would silently let one file win.
+
 ## Decision
 
 ### 1. Default locale unprefixed, every other locale a path segment
 
 1. The default locale (`en`) MUST be served at the bare path, its canonical URL; no `/en` route may exist.
-2. Every other locale MUST be served under a leading `/<locale>` segment — `/de`, `/de/episode/page-template`.
+2. Every other locale MUST be served under a leading `/<locale>` segment — `/de`, `/de/episode/episode-template`.
 
 ### 2. Every href is built one way (📜 Rule: `href-via-localize-path`)
 
@@ -35,6 +37,12 @@ Some text is completed only in the browser — "Show all 12", once a filter has 
 1. A Translation string a client component completes at runtime MUST keep its `{name}` placeholders and be filled by `fillTemplate` — no other replace.
 2. An Episode MUST hand it over from its kit's `template(key)`, never `t.raw`.
 
+### 4. Text sits with its owner
+
+1. A text MUST sit in the `i18n/en.json` and `de.json` of the folder that renders it: a page template, a product area or its component, page chrome, page assembly's `lib/`; an Episode's and a Slide's ride on their record. No site-wide file.
+2. Each top-level namespace MUST have one owner. `src/page-assembly/translations.ts` lists every owner's pair and merges them into next-intl's one set; a namespace two owners define fails loading it, naming both files.
+3. A German file MUST hold exactly its English file's keys.
+
 ## Do's and Don'ts
 
 ### Do's
@@ -44,12 +52,14 @@ Some text is completed only in the browser — "Show all 12", once a filter has 
 3. **DO** open an external link in a new tab and say so to screen readers — `<span className="sr-only">(opens in a new tab)</span>`. (Decision 2)
 4. **DO** link another Slide of the same Episode with the kit's `slideHref(slug)`. (Decision 2)
 5. **DO** pass `template('showAll')` to the widget and render `fillTemplate(label, { count })`. (Decision 3)
+6. **DO** add a new owner's pair to `TRANSLATION_OWNERS`; read another owner's words through next-intl, or import its files where the import rules allow. (Decision 4)
 
 ### Don'ts
 
 1. **DON'T** add an `/en` route or redirect, or emit `/en` in any URL. (Decision 1)
 2. **DON'T** build an `href` any other way — `'/de' + path`, `http://…`, `{url}`, `{...{ href }}`. (Decision 2, 📜 Rule: `href-via-localize-path`)
 3. **DON'T** read an Episode string with `t.raw`, or fill a placeholder by hand — `label.replace('{count}', …)`. (Decision 3)
+4. **DON'T** define a namespace in a second owner's file: move the keys to the owner that renders them, or give them a namespace of their own. (Decision 4)
 
 ## Consequences
 
@@ -58,6 +68,7 @@ Some text is completed only in the browser — "Show all 12", once a filter has 
 1. **One canonical URL per page per locale:** bare path is English; prefixed paths map one-to-one onto exported files.
 2. **No stray links:** every `href` in the tree has one of three known shapes.
 3. **Typed runtime text:** an Episode's template key is checked like any other; one fill function site-wide.
+4. **Words beside their renderer:** an agent changing a text finds it in the folder it works in; no shared file to collide on.
 
 **Negative:**
 
@@ -65,6 +76,8 @@ Some text is completed only in the browser — "Show all 12", once a filter has 
 2. **Internal links need the locale:** a Slide gets it, and its Slide links, from the kit; other code without it can't link internally.
 3. **Wrappers repeat:** each external link restates `target`, `rel` and the new-tab label.
 4. **A missing value shows:** an unfilled `{count}` stays on the page as written, by design.
+5. **One list kept by hand:** a new owner's pair is merged only once added to `TRANSLATION_OWNERS`; until then its keys fail `tsc` and the build.
+6. **Reading across owners:** where import direction forbids an owner's file, its words arrive only through next-intl or as props.
 
 **Risks:**
 
@@ -74,14 +87,16 @@ Some text is completed only in the browser — "Show all 12", once a filter has 
 ## Compliance and Enforcement
 
 1. **Rule** `href-via-localize-path` (archgate, error): every JSX `href` under `src/` is `localizePath(…)`, an `https://` literal or `externalHref(…)`; external ones carry `target` and `rel`; spread `href`s refused.
-2. **Unit tests:** `localizePath` and `switchLocale` — bare default, `/de` prefix, round-trip switch; `fillTemplate`.
-3. **Types:** the kit's `template` takes only a string leaf of the Slide's own keys (§3.2).
+2. **Unit tests:** `localizePath` and `switchLocale` — bare default, `/de` prefix, round-trip switch; `fillTemplate`; the merge refuses a namespace two owners define, and every owner's German file holds its English keys (§4).
+3. **Types:** the kit's `template` takes only a string leaf of the Slide's own keys (§3.2); each owner's German file is typed against its English one (§4.3).
 4. **Lint:** `.raw(` refused in Episode files (§3.2).
+5. **Build:** the merge runs when next-intl loads its config, so a namespace two owners define fails `next build` too (§4.2).
 
-**Manual review duties:** no hand-written placeholder replace (§3.1); no `/en` route; logical path locale-neutral; every external link tells the reader it opens a new tab.
+**Manual review duties:** a text sits with the folder that renders it (§4.1); no hand-written placeholder replace (§3.1); no `/en` route; logical path locale-neutral; every external link tells the reader it opens a new tab.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
 - [Next.js — static exports](https://nextjs.org/docs/app/guides/static-exports) — why no middleware runs.
+- [next-intl — request configuration](https://next-intl.dev/docs/usage/configuration) — the one message set per locale the owners merge into.

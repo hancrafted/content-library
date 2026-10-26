@@ -10,17 +10,17 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { EPISODE_SLUGS, episodeRoute } from '../../src/lib/routes';
+import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/record-routes';
+import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { episodeText, type EpisodeText } from './episode-text';
-import { exportedPage } from './exported-pages';
+import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage } from './exported-pages';
 
-const PAGES = EPISODE_SLUGS.flatMap((slug) =>
+const PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 
 const FIXTURE_DIR = join(import.meta.dirname, 'episode-text');
-const EPISODES_DIR = join(import.meta.dirname, '..', '..', 'src', 'components', 'episodes');
+const EPISODES_DIR = join(import.meta.dirname, '..', '..', 'src', 'episodes');
 
 /** A dotted Translation key path as next-intl prints a message it cannot find. */
 const RAW_KEY = /\b(?:episodes|landing|contextDrawer|tableOfContents|talkPlayer)\.[a-z0-9-]+\.[A-Za-z0-9.-]+/;
@@ -29,7 +29,7 @@ function builtText(url: string): EpisodeText {
   return episodeText(exportedPage(url));
 }
 
-/** Whether the exported page asks search engines not to index it: an upcoming Episode's page does. */
+/** Whether the exported page asks search engines not to index it: an upcoming Episode's page and a tooling page do. */
 function isNoindex(url: string): boolean {
   const page = exportedPage(url);
   return (page('meta[name="robots"]').attr('content') ?? '').includes('noindex');
@@ -66,9 +66,10 @@ describe.each(PAGES)('$url', ({ slug, locale, url }) => {
 
   it('renders its Slides under exactly the published anchors, or binds none while upcoming', () => {
     // ARRANGE
-    const file = join(EPISODES_DIR, slug, 'published-anchors.json');
+    const file = join(EPISODES_DIR, isToolingSlug(slug) ? 'tooling' : '', slug, 'published-anchors.json');
     // An upcoming Episode's page is built `noindex` and its anchors bind at publication (docs/features/episode-publishing.md).
-    if (isNoindex(url)) {
+    // A tooling page is `noindex` too, but has no status: its anchors are bound.
+    if (isNoindex(url) && !isToolingSlug(slug)) {
       expect(existsSync(file)).toBe(false);
       return;
     }

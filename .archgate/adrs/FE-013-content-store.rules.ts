@@ -9,25 +9,17 @@
 // `field-described` walks the AST. `type-from-schema` matches text: archgate
 // transpiles TypeScript before parsing, so interfaces and type aliases never reach
 // the tree; strings and comments are blanked first, so prose never matches.
-//
-// Dormant until the store's entry exists: the checks that read the store return
-// early without it, while their tests pin every case. The store's first change
-// deletes the guard (FE-013 Compliance, Known gap).
 
 const STORE_ENTRY = 'src/content-store/store.ts';
 const MODEL_FILE = 'docs/adr/0016-content-data-model.md';
 const SCHEMA_GLOB = 'src/content-store/schemas/*.schema.ts';
 const SOURCE_GLOB = 'src/**/*.{ts,tsx}';
-const EPISODE_METADATA_RE = /^src\/components\/episodes\/[^/]+\/episode-metadata\.ts$/;
+const EPISODE_METADATA_RE = /^src\/episodes\/(?:by-event\/[^/]+\/)?[^/]+\/episode-metadata\.ts$/;
 
 const MERMAID_RE = /```mermaid\n([\s\S]*?)```/g;
 const STORE_LINE_RE = /^[ \t]*%%[ \t]*store:[ \t]*([^\n%]*)/m;
 const OBJECT_FACTORIES = new Set(['object', 'strictObject', 'looseObject']);
 const SHAPE_METHODS = new Set(['extend', 'safeExtend']);
-
-async function storeExists(ctx: RuleContext): Promise<boolean> {
-  return (await ctx.glob(STORE_ENTRY)).length > 0;
-}
 
 function lineAt(source: string, index: number): number {
   return source.slice(0, index).split('\n').length;
@@ -201,7 +193,12 @@ export default {
           });
           return;
         }
-        if (!(await storeExists(ctx))) return;
+        if ((await ctx.glob(STORE_ENTRY)).length === 0) {
+          ctx.report.violation({
+            message: `${STORE_ENTRY} is missing — every record enters the site through the store's one entry; repoint this rule if it moved (FE-013 [model-matches-store]).`,
+          });
+          return;
+        }
         const modelled = line.kinds.map(kindFile);
         const modelLine = lineAt(model, line.at);
         const entry = await ctx.readFile(STORE_ENTRY);
@@ -236,7 +233,6 @@ export default {
         'No hand-written interface or object type for a record anywhere under src/ — named after a stored kind or ending in Metadata or Record — and no `satisfies {…}` in an Episode metadata file: a record type is z.infer of its schema.',
       severity: 'error',
       async check(ctx) {
-        if (!(await storeExists(ctx))) return;
         const model = (await ctx.glob(MODEL_FILE)).length > 0 ? await ctx.readFile(MODEL_FILE) : '';
         const kinds = (storeLine(model)?.kinds ?? []).map(kindType);
         const names = new RegExp(`^(?:${[...kinds, '\\w*Metadata', '\\w*Record'].join('|')})$`);
@@ -257,7 +253,6 @@ export default {
         'Every field of every object shape in a store schema — z.object, z.strictObject, z.looseObject, .extend, .safeExtend — is written inline and carries .describe( on its own chain.',
       severity: 'error',
       async check(ctx) {
-        if (!(await storeExists(ctx))) return;
         for (const file of (await ctx.glob(SCHEMA_GLOB)).sort()) {
           const tree = await ctx.ast(file, 'typescript');
           const source = await ctx.readFile(file);

@@ -1,0 +1,53 @@
+{
+  "episodeBrowser": {
+    "open": "Episode öffnen",
+    "comingSoon": "Demnächst",
+    "minutesUnit": "Min. Lesezeit",
+    "watchVideo": "Auf YouTube ansehen",
+    "newTab": "öffnet in neuem Tab",
+    "search": "Episoden durchsuchen",
+    "searchPlaceholder": "Nach Titel oder Tag suchen",
+    "tagFilter": "Nach Tag filtern",
+    "showAll": "Alle {count} Episoden anzeigen",
+    "showFewer": "Weniger anzeigen",
+    "results": {
+      "none": "Keine passende Episode",
+      "one": "1 Episode",
+      "other": "{count} Episoden"
+    },
+    "empty": "Zu diesen Filtern gibt es noch keine Episode.",
+    "reset": "Filter zurücksetzen",
+    "tags": {
+      "context-engineering": {
+        "name": "Context Engineering",
+        "tooltip": "Der KI zur richtigen Zeit den richtigen Kontext geben"
+      },
+      "agentic-ai": {
+        "name": "Agentische KI",
+        "tooltip": "KI, die in Schritten plant und handelt, statt nur zu antworten"
+      },
+      "markdown": {
+        "name": "Markdown",
+        "tooltip": "Textdokumente, die Menschen und KI gleich gut lesen"
+      },
+      "cost": {
+        "name": "Kosten",
+        "tooltip": "Was KI wirklich kostet und wohin das Geld fließt"
+      },
+      "sales": {
+        "name": "Vertrieb",
+        "tooltip": "Kunden finden, gewinnen und halten"
+      },
+      "workflow": {
+        "name": "Workflow",
+        "tooltip": "Wie Arbeit in Schritte geteilt und zwischen Chats übergeben wird"
+      }
+    },
+    "formats": {
+      "foundations": "Grundlagen",
+      "teardown": "Teardown",
+      "short": "Kurz"
+    },
+    "upcoming": {}
+  }
+}

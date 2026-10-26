@@ -5,7 +5,7 @@ status: accepted
 
 # Reading time is counted from the Voice script
 
-A Slide's minutes, and each Voice script segment's `from`/`to`, are computed from the words the speaker reads: script plus bridge, at 140 words per minute in English and 120 in German. No Slide or segment declares a time. An Episode whose total is 0 shows no time: the table of contents hides its time-left label and the landing card shows no minutes. The rules live in `FE-002` §2 and `FE-010` §3; the count lives in `src/lib/speaking-time.pure.ts`.
+A Slide's minutes, and each Voice script segment's `from`/`to`, are computed from the words the speaker reads: script plus bridge, at 140 words per minute in English and 120 in German. No Slide or segment declares a time. An Episode whose total is 0 shows no time: the table of contents hides its time-left label and the landing card shows no minutes. The rules live in `FE-002` §2 and `FE-010` §3; the count lives in `src/shared/lib/speaking-time.pure.ts`.
 
 ## Why
 
