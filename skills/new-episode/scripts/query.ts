@@ -3,8 +3,8 @@
 // `run_id` on the Run's own row, so join on `trace_id` to tag any span with its Run. Nothing is printed beyond the
 // selected columns. Columns: see the Run query section of the new-episode SKILL.md. The logic lives in
 // run-query.pure.ts; this file only reads the disk.
-import { readRuns } from './episode-run-log.ts';
-import { queryRuns } from './run-query.pure.ts';
+import { readRuns } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { queryRuns } from '../../../src/pipeline/lib/run-query.pure.ts';
 
 const [sql, ...patterns] = process.argv.slice(2);
 if (!sql) {

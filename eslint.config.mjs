@@ -239,6 +239,7 @@ export default tseslint.config(
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
           'src/{page-assembly,components,hooks}/**/*.tsx': OPTIONAL_CLIENT,
+          'src/pipeline/**/*.tsx': OPTIONAL_CLIENT,
           'src/**/*.ts': '!(*.client)',
         },
         {

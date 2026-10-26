@@ -1,9 +1,9 @@
 // The agent-span commands: begin-agent and end-agent record an agent on any harness, by its spawn description. The
 // Claude Code adapter enriches the same span by name (claude-adapter.pure.ts). Real disk; run-commands.ts registers them.
-import { parseDescription } from '../../../src/lib/episode-spawn-description.pure.ts';
+import { parseDescription } from '../../../src/pipeline/lib/episode-spawn-description.pure.ts';
+import type { LogEvent } from '../../../src/pipeline/lib/run-log.pure.ts';
+import { isOpen, latest, openSpan } from '../../../src/pipeline/lib/run-spans.pure.ts';
 import { endEvent, need, refuse, type Opts, type Params } from './run-args.pure.ts';
-import type { LogEvent } from './run-log.pure.ts';
-import { isOpen, latest, openSpan } from './run-spans.pure.ts';
 import { openView, viewOf, write, type RunContext } from './run-view.ts';
 
 /** Opens a typed agent span named by its spawn description under the Job's open Attempt; a repeat changes nothing. */

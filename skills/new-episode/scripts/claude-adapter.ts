@@ -9,7 +9,6 @@
 // records already happened.
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
-import { agentModel } from './agent-definition.ts';
 import {
   adaptInstructions,
   adaptRead,
@@ -17,10 +16,11 @@ import {
   type InstructionsHookInput,
   type InstructionsHookPayload,
   type ToolHookPayload,
-} from './claude-adapter-event.pure.ts';
-import { adaptSubagent, subagentFiles, type HookPayload } from './claude-adapter.pure.ts';
-import { readOrNull as read, readLog } from './episode-run-log.ts';
-import { LockTimeoutError, appendEvent } from './run-log-writer.ts';
+} from '../../../src/pipeline/lib/claude-adapter-event.pure.ts';
+import { adaptSubagent, subagentFiles, type HookPayload } from '../../../src/pipeline/lib/claude-adapter.pure.ts';
+import { readOrNull as read, readLog } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { LockTimeoutError, appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
+import { agentModel } from './agent-definition.ts';
 import { findRun } from './run-root.ts';
 
 /** A point-fact hook waits at most this long for the lock, so a contended log never stalls the call it follows. */

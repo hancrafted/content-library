@@ -4,7 +4,7 @@
 # have collected what it needs, and the user approves it by setting
 # `status: approved` (design-ADR-0008).
 #
-# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+# Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
 #   dev_port  per-run only, written by begin-run: the dashboard dev server's port, the
 #             first free one from 4000; implement-episode-init serves the Episode there

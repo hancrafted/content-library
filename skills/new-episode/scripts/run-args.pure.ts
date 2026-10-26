@@ -1,8 +1,8 @@
 // The run commands' argument vocabulary: the options they read, the refusal they raise, and the checks that turn a
 // positional status or an option into a field of the log line. Pure; run-commands.ts is the only caller.
 import { parseArgs } from 'node:util';
+import { STATUSES, VIAS, type LogEvent, type Status, type Via } from '../../../src/pipeline/lib/run-log.pure.ts';
 import { USAGE } from './run-help.pure.ts';
-import { STATUSES, VIAS, type LogEvent, type Status, type Via } from './run-log.pure.ts';
 
 export const OPTIONS = {
   model: { type: 'string' },

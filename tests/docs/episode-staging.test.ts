@@ -1,12 +1,17 @@
-import { readPipeline } from '@/lib/episode-pipeline-definition.pure';
-import { checkPipeline, type PipelineContext } from '@/lib/episode-pipeline.pure';
-import { checkReferenceJobs } from '@/lib/episode-reference-jobs.pure';
-import { checkResearchJobs } from '@/lib/episode-research-jobs.pure';
-import { unsettledBriefSections } from '@/lib/episode-staging-brief.pure';
-import { checkResearchIndex, checkRunsCsv, checkStagingFolder, type KnownVisuals } from '@/lib/episode-staging.pure';
-import { checkVoiceScriptDiff } from '@/lib/episode-voice-script.pure';
-import { checkResearchFolders, researchCategories } from '@/lib/research-folder.pure';
-import { gateTier } from '@/lib/staging-file.pure';
+import { readPipeline } from '@/pipeline/lib/episode-pipeline-definition.pure';
+import { checkPipeline, type PipelineContext } from '@/pipeline/lib/episode-pipeline.pure';
+import { checkReferenceJobs } from '@/pipeline/lib/episode-reference-jobs.pure';
+import { checkResearchJobs } from '@/pipeline/lib/episode-research-jobs.pure';
+import { unsettledBriefSections } from '@/pipeline/lib/episode-staging-brief.pure';
+import {
+  checkResearchIndex,
+  checkRunsCsv,
+  checkStagingFolder,
+  type KnownVisuals,
+} from '@/pipeline/lib/episode-staging.pure';
+import { checkVoiceScriptDiff } from '@/pipeline/lib/episode-voice-script.pure';
+import { checkResearchFolders, researchCategories } from '@/pipeline/lib/research-folder.pure';
+import { gateTier } from '@/pipeline/lib/staging-file.pure';
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';

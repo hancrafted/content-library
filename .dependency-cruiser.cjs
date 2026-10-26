@@ -332,6 +332,55 @@ module.exports = {
       from: { path: '^src/app/' },
       to: { path: '^src/components/', pathNot: '^src/components/site-shell\\.tsx$' },
     },
+    // The pipeline product area (FE-007 §2.6): the content pipeline, its Run log and the dashboard.
+    {
+      name: 'src-never-imports-skills-or-tools',
+      severity: 'error',
+      comment:
+        'Nothing under src/ imports skills/ or tools/: a skill or a tool runs the product, it never houses what the product imports. Move the module into its area under src/ (FE-007).',
+      from: { path: '^src/' },
+      to: { path: '^(skills|tools)/' },
+    },
+    {
+      name: 'pipeline-reached-only-from-page-assembly',
+      severity: 'error',
+      comment:
+        'src/pipeline/** is a product area: from the rest of src/, only page assembly (or a test) imports it, and only through its components/ and lib/ folders (FE-007).',
+      from: { path: '^src/', pathNot: ['^src/(pipeline|page-assembly)/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/pipeline/' },
+    },
+    {
+      name: 'page-assembly-reaches-pipeline-through-tier-folders',
+      severity: 'error',
+      comment:
+        "Page assembly reaches src/pipeline/** only through its components/ and lib/ folders, never its hooks/ or a file at the area's root (FE-007).",
+      from: { path: '^src/page-assembly/' },
+      to: { path: '^src/pipeline/', pathNot: '^src/pipeline/(components|lib)/' },
+    },
+    {
+      name: 'pipeline-imports-no-other-area',
+      severity: 'error',
+      comment:
+        'src/pipeline/** imports no route, page template or other component; of src/components/ it reaches only the UI kit, ui/ (FE-007).',
+      from: { path: '^src/pipeline/' },
+      to: { path: '^src/(app|page-assembly|components)/', pathNot: '^src/components/ui/' },
+    },
+    {
+      name: 'pipeline-lib-imports-no-react-or-upper-tier',
+      severity: 'error',
+      comment:
+        "src/pipeline/lib/** is the area's bottom tier: no React, not even types, and no import of the area's components/ or hooks/, so a skill script runs it under plain node and a test imports it without a DOM (FE-007).",
+      from: { path: '^src/pipeline/lib/' },
+      to: { path: ['^src/pipeline/(components|hooks)/', '(^|/)node_modules/(@types/)?(react|react-dom)/'] },
+    },
+    {
+      name: 'pipeline-hooks-reached-only-from-client',
+      severity: 'error',
+      comment:
+        "A hook runs only in the browser. Reach src/pipeline/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component; a hook imports none of the area's components (FE-006).",
+      from: { pathNot: ['\\.client\\.tsx$', '^src/(pipeline/)?hooks/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/pipeline/hooks/' },
+    },
   ],
   required: [
     {

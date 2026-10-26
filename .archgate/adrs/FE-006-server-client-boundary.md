@@ -35,18 +35,18 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 1. A file carrying a top-level `'use client'` directive MUST be named `*.client.tsx`.
 2. A file named `*.client.tsx` MUST carry the directive as its first statement.
-3. `.client` MUST be a `.tsx` suffix only, under `src/{page-assembly,components,hooks}/**`, and MUST NOT stack with another classifier.
+3. `.client` MUST be a `.tsx` suffix only, under `src/{page-assembly,pipeline,components,hooks}/**`, and MUST NOT stack with another classifier.
 4. No file under `src/app/**` MAY carry a classifier, so no `.client` file sits there.
 
 ### 3. Edges across the boundary
 
-1. `src/hooks/**` MUST be reached only from a `*.client.tsx` file, another hook, or a test; a hook does not carry the directive.
+1. A hook (`src/**/hooks/**`) MUST be reached only from a `*.client.tsx` file, another hook, or a test; a hook does not carry the directive.
 2. A `*.client.tsx` file MUST NOT import from `src/app/**`.
 3. `src/lib/prefs-storage.ts` (`window.localStorage`) MUST be reached only from a hook, a `*.client.tsx` file, or a test: read at build time it returns `{}` and renders silently wrong.
 
 ### 4. Props crossing the boundary
 
-1. Every prop a Server Component passes to a `*.client.tsx` component MUST be serializable by React: primitives, plain objects and arrays of them, `Date`, `Map`, `Set`, promises, JSX — never a function, class instance or unregistered symbol. Pass a Translation file slice (as `ThemeToggle` takes `labels`), not a callback.
+1. Every prop a Server Component passes to a `*.client.tsx` component MUST be serializable by React: primitives, plain objects and arrays of them, `Date`, `Map`, `Set`, promises, JSX — never a function, class instance or unregistered symbol. Pass a Translation file slice, not a callback.
 
 ### 5. Episode and `slide-shared` client files
 
@@ -104,9 +104,9 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
-- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
+- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,components,hooks}/**/*.tsx` and `src/pipeline/**/*.tsx` are `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
 - §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; dependency rules limit a Slide widget's and a `slide-shared` client leaf's reach.
-- §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
+- §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `pipeline-hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 
 **Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.
 

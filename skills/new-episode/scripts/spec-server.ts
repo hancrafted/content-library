@@ -10,8 +10,8 @@ import {
   specBriefKeys,
   specSlides,
   specTitleSlideOptions,
-} from '../../../src/lib/episode-spec-page.pure.ts';
-import { nextRound, reviewToFeedback, type Fault } from './spec-feedback.pure.ts';
+} from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
+import { nextRound, reviewToFeedback, type Fault } from '../../../src/pipeline/lib/spec-feedback.pure.ts';
 
 export interface SpecServer {
   port: number;

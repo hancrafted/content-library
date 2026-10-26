@@ -6,7 +6,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
+import { SPEC_FILE } from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
 import { buildDesignCss } from './spec-css.ts';
 import { startSpecServer, type SpecServer } from './spec-server.ts';
 

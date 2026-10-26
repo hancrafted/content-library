@@ -5,8 +5,8 @@
 // locking live in run-log-writer.ts; this file only parses argv.
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { episodeLogPath } from './episode-run-log.ts';
-import { appendEvent } from './run-log-writer.ts';
+import { episodeLogPath } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
 
 function main(): void {
   const slug = process.argv[2];

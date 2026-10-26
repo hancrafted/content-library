@@ -7,11 +7,11 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { findForbidden, parseSpecAssembleArgs } from '../../../src/lib/episode-forbid.pure.ts';
-import { assembleSpec } from '../../../src/lib/episode-spec-assemble.pure.ts';
-import { SPEC_FILE } from '../../../src/lib/episode-spec-page.pure.ts';
-import { checkSpec } from '../../../src/lib/episode-spec.pure.ts';
-import { utcSeconds } from '../../../src/lib/staging-file.pure.ts';
+import { findForbidden, parseSpecAssembleArgs } from '../../../src/pipeline/lib/episode-forbid.pure.ts';
+import { assembleSpec } from '../../../src/pipeline/lib/episode-spec-assemble.pure.ts';
+import { SPEC_FILE } from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
+import { checkSpec } from '../../../src/pipeline/lib/episode-spec.pure.ts';
+import { utcSeconds } from '../../../src/pipeline/lib/staging-file.pure.ts';
 import { buildDesignCss } from './spec-css.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');

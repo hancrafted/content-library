@@ -6,16 +6,29 @@
 // clock, ids, git and the transcript lookup are injectable.
 import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
-import { declaredJobs } from './episode-status.ts';
+import {
+  archiveEpisodeLog,
+  episodeLogPath,
+  readEpisodeLog,
+  readMarker,
+} from '../../../src/pipeline/lib/episode-run-log.ts';
+import { declaredJobs } from '../../../src/pipeline/lib/episode-status.ts';
+import { type LogEvent, type Status } from '../../../src/pipeline/lib/run-log.pure.ts';
+import {
+  hasEnded,
+  isOpen,
+  latest,
+  openAgentsOf,
+  openSpan,
+  openUnderRun,
+  scoreTarget,
+} from '../../../src/pipeline/lib/run-spans.pure.ts';
 import { beginAgent, endAgent } from './run-agent-commands.ts';
 import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
 import { USAGE } from './run-help.pure.ts';
-import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
 import { note } from './run-note-command.ts';
-import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
-import { openView, pointAt, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
+import { openView, pointAt, resume, resuming, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
 import { serversNote } from './servers.ts';
 
 export type { RunContext } from './run-view.ts';
@@ -177,27 +190,6 @@ function score(ctx: RunContext, p: Params<'target' | 'name' | 'value'>, opts: Op
   } as LogEvent);
   return `Score ${name}=${raw} on ${target}`;
 }
-
-function resume(ctx: RunContext): string {
-  const { run, spans } = openView(ctx);
-  const job = openSpan(spans, 'job');
-  pointAt(ctx, run, { jobSpanId: job?.span_id ?? run.span_id, sessionId: sessionOf(ctx) });
-  return `Run ${run.run_id} resumed${job === undefined ? '' : ` in Job ${job.job}`}`;
-}
-
-/** Runs `step` for a session the live marker does not list yet: resumes first, and prints that it did. */
-const resuming =
-  <K extends string>(step: (ctx: RunContext, p: Params<K>, opts: Opts) => string) =>
-  (ctx: RunContext, p: Params<K>, opts: Opts): string => {
-    const marker = readMarker(ctx.root);
-    const current = readEpisodeLog(ctx.slug, ctx.root).current;
-    const unlisted =
-      marker !== null &&
-      current !== null &&
-      marker.trace_id === current.trace_id &&
-      !(marker.session_ids ?? [marker.session_id]).includes(sessionOf(ctx));
-    return unlisted ? `${resume(ctx)} (this session was not on the Run)\n${step(ctx, p, opts)}` : step(ctx, p, opts);
-  };
 
 /** A command: the names of its positional parameters, and what it does with them. */
 interface Command {

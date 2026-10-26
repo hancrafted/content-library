@@ -17,7 +17,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { cropName, keepsCrop, pageImage, renderReference } from './convert-reference.pure.ts';
+import { cropName, keepsCrop, pageImage, renderReference } from '../../../src/pipeline/lib/convert-reference.pure.ts';
 
 const MAX_EDGE = 1568;
 const JPEG_QUALITY = '80';

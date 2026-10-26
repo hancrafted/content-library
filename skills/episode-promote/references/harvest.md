@@ -6,7 +6,7 @@ Shared inputs: `brief.md`, `spec/spec.html`, `feedback/*/feedback.md`, `pipeline
 
 ## Lessons
 
-What the Run teaches the pipeline. Pair the gate commits with `git log --grep='Gate:'` and diff each draft against the user's approval; a status-only diff is acceptance, not a correction. An unmarked commit is the user's (`agentOf` in `skills/new-episode/scripts/marks.pure.ts`). Then: a correction made twice is a proposed rubric line. Count failing rubric Scores across Runs (`npm run episode:query -- "SELECT rubric, count(*) AS n FROM scores WHERE name = 'rubric' AND value = 'fail' GROUP BY rubric ORDER BY n DESC"`). Read the run log's prefixed findings (`No library match:` and the like), grouped by job. Each proposal is a `LEARNINGS.md` lesson in that file's shape: what happened, its evidence, the proposed fix and the file it changes. Skip a lesson `LEARNINGS.md` already holds; cite it instead.
+What the Run teaches the pipeline. Pair the gate commits with `git log --grep='Gate:'` and diff each draft against the user's approval; a status-only diff is acceptance, not a correction. An unmarked commit is the user's (`agentOf` in `src/pipeline/lib/marks.pure.ts`). Then: a correction made twice is a proposed rubric line. Count failing rubric Scores across Runs (`npm run episode:query -- "SELECT rubric, count(*) AS n FROM scores WHERE name = 'rubric' AND value = 'fail' GROUP BY rubric ORDER BY n DESC"`). Read the run log's prefixed findings (`No library match:` and the like), grouped by job. Each proposal is a `LEARNINGS.md` lesson in that file's shape: what happened, its evidence, the proposed fix and the file it changes. Skip a lesson `LEARNINGS.md` already holds; cite it instead.
 
 ## Style
 
@@ -26,7 +26,7 @@ Changes too large for this PR: a shared abstraction several Episodes need, a tes
 
 ## The card
 
-The user decides each proposal on one card of the Harvest report, so a proposal is a card, as JSON. The shapes are typed in [`scripts/harvest-report.pure.ts`](../scripts/harvest-report.pure.ts); `episode:harvest` refuses a duplicate id, an overlap naming no card, and a visual kind the page cannot draw.
+The user decides each proposal on one card of the Harvest report, so a proposal is a card, as JSON. The shapes are typed in [`src/pipeline/lib/harvest-report.pure.ts`](../../../src/pipeline/lib/harvest-report.pure.ts); `episode:harvest` refuses a duplicate id, an overlap naming no card, and a visual kind the page cannot draw.
 
 ```json
 {
