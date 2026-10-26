@@ -249,6 +249,57 @@ describe('success cases', () => {
     expect(problemsOf(result)).toBe('');
   });
 
+  it('fills {{limit.name}} from the limits of a job, with a full and a teaching value', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      Object.assign(research(file), { limits: { questions: { full: 8, teaching: 5 } } });
+      research(file).do.simple = [{ ...section, text: 'Ask at most {{limit.questions}}. {{item}} {{plan}}' }];
+    };
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+  });
+
+  it('allows {{item}} in the checks of a job of a repeated stage', () => {
+    // ARRANGE
+    const change = (file: File) => void (research(file).review as { checks: string[] }).checks.push('Covers {{item}}.');
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+  });
+
+  it('expands {{research_*}} of a multiple slot into one marker per teaching round', () => {
+    // ARRANGE
+    const many = { id: 'research', mode: 'multiple', label: 'All', sample: [RESEARCH, RESEARCH] };
+    // ACT
+    const result = load((file) => later(file, many, 'All: {{research_*}}'));
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+  });
+
+  it('lets a job of a repeated stage take the output of a needed job of the same stage as its own round', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      const [first] = file.stages[1]!.jobs;
+      file.stages[1]!.jobs.push({
+        ...first!,
+        id: 'second',
+        output: 'second',
+        needs: ['research'],
+        goal: { do: 'Second.', review: 'Check second.' },
+        slots: [{ id: 'research', mode: 'single', label: 'Its research', sample: RESEARCH }],
+        details: details([RESEARCH, RESEARCH]),
+        do: { simple: [{ ...section, text: 'Round {{item}}: {{research}}' }], technical: [section] },
+      } as never);
+    };
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+  });
+
   it('tells a new-schema file from an old one by its templates', () => {
     // ARRANGE
     const old = 'id: x\nstages: []\n';
@@ -610,6 +661,41 @@ describe('failure cases', () => {
     const problems = problemsOf(load(change));
     // ASSERT
     expect(problems).toContain('Stage "plan" repeats over "plan#pieces", but no earlier stage hands on "plan".');
+  });
+
+  it('rejects a {{limit.name}} the job does not declare, and a teaching value above the full one', () => {
+    // ARRANGE
+    const undeclared = (file: File) =>
+      void (research(file).do.simple = [{ ...section, text: '{{limit.questions}} {{item}} {{plan}}' }]);
+    const inverted = (file: File) =>
+      void Object.assign(research(file), { limits: { questions: { full: 3, teaching: 5 } } });
+    // ACT
+    const r0 = problemsOf(load(undeclared));
+    const r1 = problemsOf(load(inverted));
+    // ASSERT
+    expect(r0).toMatch(/unknown marker \{\{limit\.questions\}\}/);
+    expect(r1).toContain('The limit "questions" of task "research" has a teaching value above its full value.');
+  });
+
+  it('rejects {{item}} in the checks of a job whose stage does not repeat, and an unknown marker in checks', () => {
+    // ARRANGE
+    const plain = (file: File) => void file.stages[0]!.jobs[0]!.review!.checks.push('Covers {{item}}.');
+    const unknown = (file: File) => void research(file).review.checks.push('Covers {{nothing}}.');
+    // ACT
+    const r0 = problemsOf(load(plain));
+    const r1 = problemsOf(load(unknown));
+    // ASSERT
+    expect(r0).toContain('The checks of task "plan" have the unknown marker {{item}}.');
+    expect(r1).toContain('The checks of task "research" have the unknown marker {{nothing}}.');
+  });
+
+  it('rejects {{x_*}} on a single slot', () => {
+    // ARRANGE
+    const single = { id: 'research_2', mode: 'single', label: 'R2', sample: RESEARCH };
+    // ACT
+    const result = problemsOf(load((file) => later(file, single, '{{research_2_*}}')));
+    // ASSERT
+    expect(result).toMatch(/unknown marker/);
   });
 });
 

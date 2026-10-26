@@ -115,6 +115,12 @@ function stageRun(file: WorkflowFile, stage: StageDef, input: RunInput): StageRu
   return { id: stage.id, jobs, rounds, done: all.filter((each) => each.state !== 'open').length, total: all.length };
 }
 
+/** The rounds each repeated stage plays now, by stage id, as `workflowView` takes them. */
+export const roundsOf = (run: Run): Record<string, number> =>
+  Object.fromEntries(
+    run.stages.filter((stage) => stage.rounds.length > 0).map((stage) => [stage.id, stage.rounds.length]),
+  );
+
 /** The run of a Workflow file: every stage's jobs, rounds and count, and whether teaching mode may still change. */
 export function runOf(file: WorkflowFile, input: RunInput): Run {
   return {

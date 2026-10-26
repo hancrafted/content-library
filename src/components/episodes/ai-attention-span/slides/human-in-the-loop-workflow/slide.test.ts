@@ -99,9 +99,9 @@ describe('success cases', () => {
     expect(markers).toEqual(expected);
   });
 
-  it('shows the seven stages of the brief with no bold first letter and no acronym named', () => {
+  it('shows the six stages of the project plan with no bold first letter and no acronym named', () => {
     // ARRANGE
-    const expected = { stages: 7, bold: 0, acronym: false };
+    const expected = { stages: 6, bold: 0, acronym: false };
     // ACT
     const $ = scene('en');
     const actual = {
@@ -113,13 +113,13 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws every stage as a card holding its job cards, the repeated stage once in a bracket, and the interview keeps its "forgot" detail', () => {
+  it('draws every stage as a card holding its job cards, each repeated stage once in a bracket, and the scope job keeps its "forgot" detail', () => {
     // ARRANGE
-    const expected = { cards: 7, brackets: 1, branches: 0, fans: 0, gated: 2, forgotLines: 1 };
+    const expected = { cards: 6, brackets: 2, branches: 0, fans: 0, gated: 3, forgotLines: 1 };
     // ACT
     const $ = scene('en');
     const pipeline = $('ol[data-part="diagram"]');
-    const interview = pipeline.find('[data-job-card="interview"]');
+    const interview = pipeline.find('[data-job-card="scope"]');
     const actual = {
       cards: pipeline.find('[data-stage-card]').length,
       brackets: pipeline.find('[data-bracket]').length,
@@ -156,7 +156,7 @@ describe('edge cases', () => {
 
   it('names the first stage as the task, in both locales', () => {
     // ARRANGE
-    const expected = ['Plan', 'Plan'];
+    const expected = ['High-level plan', 'Grobplan'];
     // ACT
     const names = (['en', 'de'] as const).map((locale) =>
       scene(locale)('ol[aria-label] > li').first().find('p.font-semibold').first().text().trim(),

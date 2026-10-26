@@ -36,7 +36,9 @@ export type SlotMode = 'single' | 'multiple';
 /**
  * Markers a section's `text` may hold:
  * - `{{<slot id>}}` and `{{<slot id>_K}}`: a slot's value, or the Kth entry of a `multiple` slot;
- * - `{{item}}`: in a repeated stage, the H3 section the round works on;
+ * - `{{item}}`: in a repeated stage, the H3 section the round works on (also in the job's review `checks`);
+ * - `{{limit.<name>}}`: a number the job declares under `limits`, its full value or, in teaching mode, its teaching one;
+ * - `{{<slot id>_*}}`: every marker of a `multiple` slot, one per round, joined by a rule (the whole run, however many rounds);
  * - `{{template}}`: the task's handoff template;
  * and in `reviewer` sections only:
  * - `{{checks}}`: the task's tailored checks; `{{inputs}}`: the task's review slots, each under its label.
@@ -93,6 +95,12 @@ export interface DetailsDef {
   readonly techniques?: readonly string[];
 }
 
+/** A number a prompt names, such as how many questions a grill may ask: one value for a full run, one for teaching mode. */
+export interface LimitDef {
+  readonly full: number;
+  readonly teaching: number;
+}
+
 export interface TaskDef {
   readonly id: string;
   /** The job's bold name on the diagram, and its heading in a stage's modal. */
@@ -116,6 +124,8 @@ export interface TaskDef {
   readonly instructions?: string;
   readonly do: Readonly<Record<Runtime, readonly SectionDef[]>>;
   readonly review?: ReviewDef;
+  /** Named numbers the prompts and checks of this job take as `{{limit.<name>}}`: every teaching cap sits here, next to its full value. */
+  readonly limits?: Readonly<Record<string, LimitDef>>;
   readonly details: DetailsDef;
 }
 

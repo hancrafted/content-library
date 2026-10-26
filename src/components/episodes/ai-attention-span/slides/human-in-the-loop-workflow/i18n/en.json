@@ -56,18 +56,10 @@
   },
   "jobsLabel": "{stage}: jobs",
   "jobs": {
-    "interview": {
+    "scope": {
       "detail": "3 questions,",
       "forgot": "<marker>1 you forgot</marker>"
     },
-    "research": {
-      "checked": "Checked against the card"
-    },
-    "compare": {
-      "gate": "Gate 2"
-    }
-  },
-  "card": {
-    "gate": "Gate 1"
+    "checked": "Checked by a second chat"
   }
 }

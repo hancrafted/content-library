@@ -9,7 +9,7 @@ import {
   uploadEvent,
 } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
 import { loadWorkflow } from './workflow-loader.pure';
@@ -124,7 +124,7 @@ describe('success cases', () => {
 
   it('shows the modal the results by marker name and sends a change up keyed by result', () => {
     // ARRANGE
-    const loaded = loadWorkflow(summerPartyEn);
+    const loaded = loadWorkflow(vacationEn);
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const sent: WorkflowEvent[] = [];

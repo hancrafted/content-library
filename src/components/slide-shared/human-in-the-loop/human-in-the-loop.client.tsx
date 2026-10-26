@@ -16,6 +16,7 @@ import { ModalPart } from './modal-part.client';
 import type { ProgressActions, ProgressNote } from './progress-controls.types';
 import { saveFile } from './save-file';
 import { ToolbarPart } from './toolbar-part.client';
+import { roundsOf, runOf } from './workflow-run.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 
@@ -61,6 +62,18 @@ function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispat
   return { note: noteFor(status, { onDownload, onDiscard: discard }), actions, resetSaved: reset };
 }
 
+function useViewOf(workflow: ReturnType<typeof shownWorkflow>, state: WorkflowState) {
+  const { level, teaching, slotValues } = state;
+  const rounds = useMemo(
+    () => (workflow ? JSON.stringify(roundsOf(runOf(workflow.file, { results: slotValues, teaching }))) : '{}'),
+    [workflow, slotValues, teaching],
+  );
+  return useMemo(
+    () => workflow && workflowView(workflow, { level, teaching, rounds: JSON.parse(rounds) as Record<string, number> }),
+    [workflow, level, teaching, rounds],
+  );
+}
+
 export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   const start = { workflowId: data.workflowId, level: data.level, view: data.view };
   const [state, dispatch] = useReducer(reduce, start, createState);
@@ -76,8 +89,7 @@ export function HumanInTheLoopClient(data: HumanInTheLoopData) {
     };
   }, [resetSaved]);
   const workflow = shownWorkflow(data, state);
-  const { level } = state;
-  const view = useMemo(() => workflow && workflowView(workflow, { level }), [workflow, level]);
+  const view = useViewOf(workflow, state);
   if (!workflow || !view) return null;
   const slices = slicesOf({ data, state, workflow, note, progress: actions, view }, on);
   return (

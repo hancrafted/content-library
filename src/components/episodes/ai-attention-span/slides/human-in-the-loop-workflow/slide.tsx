@@ -36,29 +36,27 @@ export const humanInTheLoopWorkflow = slide({
     return (
       <SlideFrame className="mt-10 gap-10">
         <HumanInTheLoop
-          workflow="summer-party"
+          workflow="project-plan"
           locale={locale}
           view="detailed"
           diagram={{
             label: t('workflowLabel'),
             jobsLabel: template('jobsLabel'),
-            checked: t('jobs.research.checked'),
+            checked: t('jobs.checked'),
             initials: false,
             stages: {
-              requirements: { gateLabel: t('card.gate') },
-              research: {
+              execute: {
                 target: target(WORKERS),
                 aside: <Marker note="clean-windows-for-each-part" placement="beside" />,
               },
-              compare: { gateLabel: t('jobs.compare.gate') },
             },
             jobs: {
-              interview: {
+              scope: {
                 detail: (
                   <>
-                    {t('jobs.interview.detail')}
+                    {t('jobs.scope.detail')}
                     <br />
-                    {t.rich('jobs.interview.forgot', { marker: (chunks) => chunks })}
+                    {t.rich('jobs.scope.forgot', { marker: (chunks) => chunks })}
                   </>
                 ),
               },

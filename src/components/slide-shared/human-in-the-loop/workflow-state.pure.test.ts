@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 
-const start = { workflowId: 'summer-party', level: 'simple', view: 'presentation' } as const;
+const start = { workflowId: 'project-plan', level: 'simple', view: 'presentation' } as const;
 const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {

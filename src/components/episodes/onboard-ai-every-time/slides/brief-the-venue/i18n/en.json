@@ -8,63 +8,49 @@
     "out": "Out:"
   },
   "stages": {
-    "party": {
+    "plan": {
       "popover": {
-        "in": "the whole party.",
-        "out": "five pieces, only the venue taken forward."
+        "in": "the whole task.",
+        "out": "a short plan, split into epics."
       }
     },
-    "interview": {
+    "epics": {
       "popover": {
-        "in": "your rough idea.",
-        "out": "the questions you had not thought of, answered."
+        "in": "one epic.",
+        "out": "its questions answered and a spec written."
       }
     },
     "requirements": {
       "popover": {
-        "in": "your answers.",
-        "out": "a requirements card you sign off."
+        "in": "all epic specs.",
+        "out": "one requirements document and the tickets you sign off."
       }
     },
-    "tickets": {
-      "popover": {
-        "in": "your signed-off requirements card.",
-        "out": "one ticket per venue type, each with its must-haves."
-      }
-    },
-    "research": {
+    "execute": {
       "popover": {
         "in": "one ticket.",
-        "out": "one venue checked against every criterion."
+        "out": "its result, with a table of numbers."
       }
     },
-    "compare": {
+    "aggregate": {
       "popover": {
-        "in": "three checked venues.",
-        "out": "a ranking against the card."
+        "in": "all ticket results.",
+        "out": "one report with risks and open decisions."
       }
     },
-    "recommendation": {
+    "review": {
       "popover": {
-        "in": "the comparison.",
-        "out": "the venue plan for your boss."
+        "in": "the report.",
+        "out": "a page you sign off or send back."
       }
     }
   },
   "jobs": {
-    "interview": {
+    "scope": {
       "detail": "3 questions,",
       "forgot": "<marker>1 you forgot</marker>"
     },
-    "research": {
-      "checked": "Checked against the card"
-    },
-    "compare": {
-      "gate": "Gate 2"
-    }
-  },
-  "card": {
-    "gate": "Gate 1"
+    "checked": "Checked by a second chat"
   },
   "legend": {
     "label": "Legend",

@@ -21,7 +21,7 @@
     },
     {
       "id": "agentic-workflows--human-in-the-loop",
-      "text": "Agentische Workflows (1/1) Seite 1 von 1 Human-in-the-Loop-Workflow Der Brief-Workflow für das Sommerfest: Ein Planer-Chat bereitet jede Übergabe vor, Worker-Chats erledigen die Aufgaben, und Sie prüfen jedes Ergebnis dazwischen. Anwendungsfall : Firmen-Sommerfest planen Präsentation Detailliert Praxis Chat CLI Lernmodus Zurücksetzen Jetzt üben für Plan Plan Teile die Aufgabe in Teile geprüft Jetzt üben für Interview Interview Die KI fragt, bevor sie rät geprüft Jetzt üben für Anforderungen Anforderungen Aus Antworten wird eine freigegebene Liste geprüft Freigabe 1 zurückgeben zurückgeben Jetzt üben für Tickets Tickets Schneide die Spezifikation in Tickets geprüft Jetzt üben für Recherche Recherche 1 geprüft Recherche 2 geprüft Recherche 3 geprüft Pro Ticket ein frischer Chat Jetzt üben für Vergleich Vergleich Ranke die Ergebnisse nach Deinen Anforderungen geprüft Freigabe 2 zurückgeben zurückgeben Jetzt üben für Prüfen Prüfen Eine klare Empfehlung, von Dir geprüft geprüft"
+      "text": "Agentische Workflows (1/1) Seite 1 von 1 Human-in-the-Loop-Workflow Der Projektplan-Workflow: sechs Stufen von einer vagen Aufgabe zu einem geprüften Bericht, ein frischer Chat pro Aufgabe, und Sie prüfen jedes Ergebnis dazwischen. Anwendungsfall : Ein Projekt planen Präsentation Detailliert Praxis Chat CLI Lernmodus Zurücksetzen Jetzt üben für Grobplan Grobplan Von der vagen Aufgabe zu Epics geprüft Freigabe 1 zurückgeben zurückgeben Jetzt üben für Epics Epics 1 geprüft Epics 2 geprüft Befragen, dann spezifizieren, je Epic Jetzt üben für Anforderungen Anforderungen Zusammenführen, Konflikte lösen, Tickets schneiden geprüft Freigabe 2 zurückgeben zurückgeben Jetzt üben für Ausführen Ausführen 1 geprüft Ausführen 2 geprüft Ausführen 3 geprüft Ausführen 4 geprüft Ein frischer Chat pro Ticket Jetzt üben für Zusammenführen Zusammenführen Ergebnisse zu einem Bericht verbunden geprüft Jetzt üben für Prüfen Prüfen Der Bericht als Seite, dann deine Freigabe Freigabe 3 zurückgeben zurückgeben"
     }
   ],
   "notes": [
@@ -37,7 +37,7 @@
     { "id": "agentic-workflows", "text": "Agentische Workflows Keine Sprechernotizen für diese Folie." },
     {
       "id": "agentic-workflows--human-in-the-loop",
-      "text": "Human-in-the-Loop-Workflow Die Visualisierung mit eigenen Worten Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Sommerfest-Workflow, Urlaub eine Pille weiter, jedes „Ausprobieren“ offen."
+      "text": "Human-in-the-Loop-Workflow Die Visualisierung mit eigenen Worten Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Projektplan-Workflow, Urlaub eine Pille weiter, jedes „Ausprobieren“ offen."
     }
   ],
   "script": [

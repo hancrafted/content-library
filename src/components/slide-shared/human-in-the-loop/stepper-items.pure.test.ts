@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { itemsOf, openItemOf } from './stepper-items.pure';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { resultKey, runOf } from './workflow-run.pure';
 import { workflowView } from './workflow-view.pure';
 
-const loaded = loadWorkflow(summerPartyEn);
+const loaded = loadWorkflow(vacationEn);
 if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
 const WORKFLOW = workflowOf(loaded.file);
 const RESEARCH = 'research';
@@ -26,9 +26,9 @@ describe('success cases', () => {
     // ASSERT
     expect(items.map((item) => item.key)).toEqual(['venue#1', 'venue#2', 'venue#3']);
     expect(items.map((item) => item.round?.title)).toEqual([
-      '1. Event hall',
-      '2. Hotel with a conference floor',
-      '3. Outdoor or garden venue',
+      '1. Apartment',
+      '2. Small hotel',
+      '3. Villa or guesthouse',
     ]);
     expect(items.every((item) => item.doSteps.length === 1 && item.reviewSteps.length === 1)).toBe(true);
   });
@@ -41,7 +41,7 @@ describe('success cases', () => {
     const text = items[1]?.doSteps[0]?.prompt.sections?.map((section) => section.text).join('\n');
     // ASSERT
     expect(items.map((item) => item.state)).toEqual(['open', 'done', 'open']);
-    expect(text).toContain('### 2. Hotel with a conference floor');
+    expect(text).toContain('### 2. Small hotel');
   });
 
   it('opens the item of the job whose card was pressed, the first round of a repeated one', () => {

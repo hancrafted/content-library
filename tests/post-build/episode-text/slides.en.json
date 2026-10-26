@@ -21,7 +21,7 @@
     },
     {
       "id": "agentic-workflows--human-in-the-loop",
-      "text": "Agentic workflows (1/1) Page 1 of 1 Human in the loop workflow The brief workflow for the summer party: a planner chat prepares each handoff, worker chats do the jobs, and you check every artifact in between. Use case : Plan company summer party Presentation Detailed Hands-on Chat CLI Teaching mode Reset Practice it for Plan Plan Split the task into pieces checked Practice it for Interview Interview The AI asks before it guesses checked Practice it for Requirements Requirements Turn answers into a signed-off list checked Gate 1 send back send back Practice it for Tickets Tickets Cut the spec into ticket-sized pieces checked Practice it for Research Research 1 checked Research 2 checked Research 3 checked One fresh chat per ticket Practice it for Compare Compare Rank the results against your requirements checked Gate 2 send back send back Practice it for Review Review One clear recommendation, checked by you checked"
+      "text": "Agentic workflows (1/1) Page 1 of 1 Human in the loop workflow The project-plan workflow: six stages from a vague task to a reviewed report, a fresh chat for each job, and you check every artifact in between. Use case : Plan a project Presentation Detailed Hands-on Chat CLI Teaching mode Reset Practice it for High-level plan High-level plan From a vague task to epics checked Gate 1 send back send back Practice it for Epics Epics 1 checked Epics 2 checked Grill, then spec, once per epic Practice it for Requirements Requirements Merge specs, resolve conflicts, cut tickets checked Gate 2 send back send back Practice it for Execute Execute 1 checked Execute 2 checked Execute 3 checked Execute 4 checked One fresh chat per ticket Practice it for Aggregate Aggregate Results combined into one report checked Practice it for Review Review The report as a page, then your sign-off Gate 3 send back send back"
     }
   ],
   "notes": [
@@ -37,7 +37,7 @@
     { "id": "agentic-workflows", "text": "Agentic workflows No speaker notes for this Slide." },
     {
       "id": "agentic-workflows--human-in-the-loop",
-      "text": "Human in the loop workflow The Shared visual in its own words The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the summer party Workflow, Vacation one pill away, every \"Try it\" open."
+      "text": "Human in the loop workflow The Shared visual in its own words The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the project-plan Workflow, Vacation one pill away, every \"Try it\" open."
     }
   ],
   "script": [

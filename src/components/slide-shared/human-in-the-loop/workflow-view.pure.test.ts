@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { workflowView } from './workflow-view.pure';
 
-const loaded = loadWorkflow(summerPartyEn);
+const loaded = loadWorkflow(vacationEn);
 if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
 const WORKFLOW = workflowOf(loaded.file);
 

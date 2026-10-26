@@ -21,15 +21,15 @@ const MODAL = '[role="dialog"][data-part="modal"]';
 /** The one progress key, as `src/config.yaml` names it (FE-001 §3). */
 const PROGRESS_KEY = 'hancrafted:progress';
 const COPY_PROMPT = 'Copy prompt';
-/** Two Workflows by seven stages, in one language: more than the default 30s. */
+/** Two Workflows by six or seven stages, in one language: more than the default 30s. */
 const LONG_TEST = 120_000;
 /** A point on the overlay, outside the centred dialog. */
 const OVERLAY = { x: 4, y: 4 };
 
-/** A valid Workflow of the viewer's own: the shipped summer party under another id and title. */
-const OWN = readFileSync(path.join(__dirname, 'summer-party.en.yml'), 'utf8')
-  .replace('id: summer-party', 'id: mine')
-  .replace('title: Plan company summer party', 'title: Mine');
+/** A valid Workflow of the viewer's own: the shipped project plan under another id and title. */
+const OWN = readFileSync(path.join(__dirname, 'project-plan.en.yml'), 'utf8')
+  .replace('id: project-plan', 'id: mine')
+  .replace('title: Plan a project', 'title: Mine');
 
 /** Opens the Episode at the Slide with the clipboard recorded (a headless page's is not ours to read). */
 async function open(page: Page, theme: 'light' | 'dark', where: { width?: number; url?: string } = {}) {
@@ -150,9 +150,12 @@ async function popoverProblems(page: Page, where: string, language: Language): P
   return checks.filter(([wrong]) => wrong).map(([, what]) => `${where}: ${what}`);
 }
 
+/** How many stages each shipped Workflow draws. */
+const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 7 };
+
 /** Opens one Workflow, then every stage of it in turn, and reports what is wrong. */
 async function stageProblems(page: Page, id: string, language: Language): Promise<string[]> {
-  const stages = 7;
+  const stages = STAGES[id] ?? 0;
   const root = page.locator(ROOT);
   await pickWorkflow(root, id);
   const buttons = root.locator('[data-part="diagram"] button[data-try]');
@@ -185,7 +188,7 @@ test.describe('success cases', () => {
       'upload',
     ];
     const expectedLabel = 'Use case:';
-    const expectedChosen = 'Plan company summer party';
+    const expectedChosen = 'Plan a project';
     const { root, toolbar } = await open(page, 'light');
     // ACT
     const controls = () =>
@@ -202,7 +205,8 @@ test.describe('success cases', () => {
     page,
   }) => {
     // ARRANGE
-    const stages = 7;
+    const stages = 6;
+    const repeated = 2;
     const phone = 390;
     const { root } = await open(page, 'light', { width: phone });
     // ACT
@@ -210,7 +214,7 @@ test.describe('success cases', () => {
     const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     // ASSERT
     await expect(root).toHaveAttribute('data-view', 'presentation');
-    await expect(root.locator('[data-stage-card]')).toHaveCount(stages - 1);
+    await expect(root.locator('[data-stage-card]')).toHaveCount(stages - repeated);
     await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
     await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Hands-on']);
     expect(await sideways()).toBeLessThanOrEqual(0);
@@ -220,19 +224,20 @@ test.describe('success cases', () => {
     page,
   }) => {
     // ARRANGE
-    const rounds = 3;
+    const rounds = 4;
+    const brackets = 2;
     const { root, modal } = await open(page, 'light');
     // ACT
     await root.locator('[data-view-option="detailed"]').click();
-    const bracket = root.locator('[data-bracket]');
+    const bracket = root.locator('[data-bracket]').last();
     const card = bracket.locator('[data-job-card] button[data-try-job]');
     // ASSERT
     await expect(root).toHaveAttribute('data-view', 'detailed');
-    await expect(bracket).toHaveCount(1);
+    await expect(root.locator('[data-bracket]')).toHaveCount(brackets);
     await expect(bracket.locator('[data-bracket-label]')).toHaveText(`× each round (${rounds})`);
     await expect(bracket.locator('[data-job-card]')).toHaveCount(1);
     await card.click();
-    await expect(modal).toHaveAttribute('data-stage', 'research');
+    await expect(modal).toHaveAttribute('data-stage', 'execute');
     await page.keyboard.press('Escape');
     await expect(card).toBeFocused();
   });
@@ -241,14 +246,14 @@ test.describe('success cases', () => {
     page,
   }) => {
     // ARRANGE
-    const expectedTitle = 'Requirements: Practice it';
+    const expectedTitle = 'High-level plan: Practice it';
     const expectedOpen = 1;
-    const interview = '## Questions and answers';
+    const interview = '## Done looks like';
     const placeholder = '{{';
     const copiedStatus = 'Copied';
     const { modal } = await open(page, 'light');
     // ACT
-    await openStage(page, 'Requirements');
+    await openStage(page, 'High-level plan');
     await copyPrompt(modal).click();
     // ASSERT
     await expect(modal.locator('[data-slot="dialog-title"]')).toHaveText(expectedTitle);
@@ -343,6 +348,24 @@ test.describe('success cases', () => {
     }
   });
 
+  test('runs the Epics stage as two rounds in teaching mode, each titled by an example epic, with the grill capped at five questions', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const exampleTitles = ['Date and venue:', 'Travel and accommodation:'];
+    const questions = 'at most 5 questions';
+    const { modal } = await open(page, 'light');
+    const rounds = () => modal.locator('[data-job="grill"] [data-slot="accordion-trigger"]');
+    // ACT
+    await openStage(page, 'Epics');
+    await copyPrompt(modal).click();
+    await expect.poll(() => copies(page)).toBe(1);
+    // ASSERT
+    await expect(rounds()).toContainText(exampleTitles);
+    await expect(rounds()).toHaveCount(exampleTitles.length);
+    await expect.poll(async () => (await copied(page))[0]).toContain(questions);
+  });
+
   test("runs vacation's Research stage as rounds titled by the example tickets, then by the pasted tickets, capped at three", async ({
     page,
   }) => {
@@ -382,7 +405,7 @@ test.describe('success cases', () => {
         await open(page, 'light', { url: language.url });
         const problems: string[] = [];
         // ACT
-        for (const id of ['summer-party', 'vacation']) problems.push(...(await stageProblems(page, id, language)));
+        for (const id of ['project-plan', 'vacation']) problems.push(...(await stageProblems(page, id, language)));
         // ASSERT
         expect(problems).toEqual(expected);
       });
@@ -393,22 +416,20 @@ test.describe('success cases', () => {
     page,
   }) => {
     // ARRANGE
-    const pasted = '# PASTED SPEC MARKER';
+    const pasted = '# PASTED TASK MARKER';
     const { modal } = await open(page, 'light');
     // ACT
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill(pasted);
-    await modal.getByRole('button', { name: 'Close' }).click();
-    await expect(modal).toHaveCount(0);
-    await openStage(page, 'Tickets');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(pasted);
+    await modal.locator('[data-job="scope"] [data-slot="accordion-trigger"]').click();
     await copyPrompt(modal).click();
     await expect.poll(() => copies(page)).toBe(1);
     const written = await copied(page);
     await modal.getByRole('button', { name: 'Close' }).click();
-    await openStage(page, 'Requirements');
+    await openStage(page, 'High-level plan');
     // ASSERT
     expect(written.at(-1)).toContain(pasted);
-    await expect(field(modal, 'spec')).toHaveValue(pasted);
+    await expect(field(modal, 'task')).toHaveValue(pasted);
   });
 
   test('turns teaching off before the first paste so the rounds follow the pasted tickets, then locks the switch until Reset', async ({
@@ -452,8 +473,8 @@ test.describe('success cases', () => {
     const reset = toolbar.locator('[data-control="reset"]');
     // ACT
     await expect(reset).toHaveAttribute('data-has-work', 'false');
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill(pasted);
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(pasted);
     const popoverReset = modal.locator('[data-control="reset"]');
     await expect(popoverReset).toHaveAttribute('data-has-work', 'true');
     await popoverReset.click();
@@ -463,7 +484,7 @@ test.describe('success cases', () => {
     await expect(confirm.getByRole('button', { name: 'Download progress' })).toBeVisible();
     await confirm.locator('[data-reset-now]').click();
     await expect(confirm).toHaveCount(0);
-    await expect(field(modal, 'spec')).toHaveValue('');
+    await expect(field(modal, 'task')).toHaveValue('');
     await expect(popoverReset).toHaveAttribute('data-has-work', 'false');
     await expect.poll(() => storedProgress(page)).not.toContain('RESET MARKER');
     expect(await storedProgress(page)).toContain('keep');
@@ -474,21 +495,21 @@ test.describe('success cases', () => {
   }) => {
     // ARRANGE
     const pasted = '# SAVED SPEC MARKER';
-    const requirements = 2;
+    const first = 0;
     const { modal } = await open(page, 'light');
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill(pasted);
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(pasted);
     await expect.poll(() => storedKeys(page)).toEqual([PROGRESS_KEY]);
     await modal.getByRole('button', { name: 'Close' }).click();
     // ACT
     await open(page, 'light');
-    await openStage(page, 'Requirements');
-    await expect(field(modal, 'spec')).toHaveValue(pasted);
+    await openStage(page, 'High-level plan');
+    await expect(field(modal, 'task')).toHaveValue(pasted);
     await page.keyboard.press('Escape');
     const german = await open(page, 'light', { url: GERMAN_EPISODE });
-    await german.root.locator('[data-part="diagram"] button[data-try]').nth(requirements).click();
+    await german.root.locator('[data-part="diagram"] button[data-try]').nth(first).click();
     // ASSERT
-    await expect(field(german.modal, 'spec')).toHaveValue(pasted);
+    await expect(field(german.modal, 'task')).toHaveValue(pasted);
   });
 
   test('keeps every line break of a multi-line paste in a collapsed field when the prompt is copied', async ({
@@ -497,8 +518,8 @@ test.describe('success cases', () => {
     // ARRANGE
     const pasted = '# Pasted\n\nfirst line\nsecond line';
     const { modal } = await open(page, 'light');
-    await openStage(page, 'Plan');
-    const input = field(modal, 'task');
+    await openStage(page, 'High-level plan');
+    const input = field(modal, 'idea');
     // ACT
     await input.fill(pasted);
     await copyPrompt(modal).click();
@@ -512,9 +533,9 @@ test.describe('success cases', () => {
   test('expands a field with the eye toggle and collapses it again', async ({ page }) => {
     // ARRANGE
     const { modal } = await open(page, 'light');
-    await openStage(page, 'Plan');
-    const input = field(modal, 'task');
-    const eye = modal.locator('[data-field="task"] button[aria-pressed]');
+    await openStage(page, 'High-level plan');
+    const input = field(modal, 'idea');
+    const eye = modal.locator('[data-field="idea"] button[aria-pressed]');
     const rows = async () => Number(await input.getAttribute('rows'));
     // ACT
     await expect(input).toHaveAttribute('rows', '1');
@@ -550,20 +571,20 @@ test.describe('success cases', () => {
     const first = '# First spec\n\nline two';
     const second = '# Second spec';
     const { root, modal } = await open(page, 'light');
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill(first);
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(first);
     await page.keyboard.press('Escape');
     // ACT
     const file = await savedProgressFile(root);
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill(second);
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(second);
     await page.keyboard.press('Escape');
     await loadProgress(root, file);
-    await openStage(page, 'Requirements');
+    await openStage(page, 'High-level plan');
     // ASSERT
-    expect(file).toMatch(/^workflow: summer-party\nhash: [0-9a-f]{64}\nteaching: true\nresults:\n/);
-    expect(file).toContain('requirements.spec: |-\n    # First spec\n\n    line two');
-    await expect(field(modal, 'spec')).toHaveValue(first);
+    expect(file).toMatch(/^workflow: project-plan\nhash: [0-9a-f]{64}\nteaching: true\nresults:\n/);
+    expect(file).toContain('plan.task: |-\n    # First spec\n\n    line two');
+    await expect(field(modal, 'task')).toHaveValue(first);
   });
 
   test('shows a valid uploaded Workflow in place of the authored one', async ({ page }) => {
@@ -585,15 +606,15 @@ test.describe('failure cases', () => {
     page,
   }) => {
     // ARRANGE
-    const stale = { hash: 'an-older-edit', teaching: true, results: { 'requirements.spec': '# OLD' } };
+    const stale = { hash: 'an-older-edit', teaching: true, results: { 'plan.task': '# OLD' } };
     const { modal } = await open(page, 'light');
-    await storeProgress(page, { 'human-in-the-loop/summer-party': stale });
+    await storeProgress(page, { 'human-in-the-loop/project-plan': stale });
     // ACT
     const { root } = await open(page, 'light');
     const note = root.locator('[data-progress-note="stale"]');
     await expect(note).toBeVisible();
-    await openStage(page, 'Requirements');
-    await expect(field(modal, 'spec')).toHaveValue('');
+    await openStage(page, 'High-level plan');
+    await expect(field(modal, 'task')).toHaveValue('');
     await page.keyboard.press('Escape');
     const kept = await storedProgress(page);
     await note.getByRole('button', { name: 'Discard' }).click();
@@ -612,8 +633,8 @@ test.describe('failure cases', () => {
     });
     const { root, modal } = await open(page, 'light');
     // ACT
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill('# NOT SAVED');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill('# NOT SAVED');
     await page.keyboard.press('Escape');
     // ASSERT
     await expect(root.locator('[data-progress-note="unsaved"]')).toBeVisible();
@@ -624,27 +645,27 @@ test.describe('failure cases', () => {
     // ARRANGE
     const kept = '# Kept';
     const { root, modal } = await open(page, 'light');
-    await openStage(page, 'Requirements');
-    await field(modal, 'spec').fill(kept);
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(kept);
     await page.keyboard.press('Escape');
     const file = (await savedProgressFile(root)).replace(/hash: [0-9a-f]{64}/, 'hash: edited');
     // ACT
     await loadProgress(root, file);
-    await openStage(page, 'Requirements');
+    await openStage(page, 'High-level plan');
     // ASSERT
-    await expect(root.locator('[data-upload-problems] li')).toContainText('Plan company summer party changed');
-    await expect(field(modal, 'spec')).toHaveValue(kept);
+    await expect(root.locator('[data-upload-problems] li')).toContainText('Plan a project changed');
+    await expect(field(modal, 'task')).toHaveValue(kept);
   });
 
   test('refuses a progress file of another Workflow', async ({ page }) => {
     // ARRANGE
     const { root } = await open(page, 'light');
-    const file = (await savedProgressFile(root)).replace('workflow: summer-party', 'workflow: vacation');
+    const file = (await savedProgressFile(root)).replace('workflow: project-plan', 'workflow: vacation');
     // ACT
     await loadProgress(root, file);
     // ASSERT
     await expect(root.locator('[data-upload-problems] li')).toContainText('another Workflow');
-    await expect(root).toHaveAttribute('data-human-in-the-loop', 'summer-party');
+    await expect(root).toHaveAttribute('data-human-in-the-loop', 'project-plan');
   });
 
   test('has no progress save or load while an uploaded Workflow is shown, which is not kept', async ({ page }) => {
@@ -661,7 +682,7 @@ test.describe('failure cases', () => {
 
   test('reports the problems of a broken uploaded Workflow and keeps the authored one', async ({ page }) => {
     // ARRANGE
-    const authored = 'summer-party';
+    const authored = 'project-plan';
     const { root } = await open(page, 'light');
     // ACT
     await root
