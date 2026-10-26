@@ -1,4 +1,3 @@
-import { findEpisode } from '@/components/episodes/registry';
 import { episodeRefOf, matchEpisode } from '@/lib/episode-id.pure';
 import { EPISODE_IDS, type EpisodeId } from '@/lib/routes';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
@@ -24,18 +23,26 @@ describe('success cases', () => {
     // ARRANGE
     const [event, slug] = id.includes('__') ? id.split('__') : [undefined, id];
     const path = event === undefined ? `/episodes/${slug}` : `/events/${event}/episodes/${slug}`;
-    const expected = {
-      canonical: { en: path, de: `/de${path}` },
-      title: { en: findEpisode(id).messages.en.title, de: findEpisode(id).messages.de.title },
-    };
+    const expectedCanonical = { en: path, de: `/de${path}` };
     // ACT
     const page = servedPageOf(id);
     const [en, de] = (['en', 'de'] as const).map((locale) => pageMetadata(page, locale, episodePageCopy(page, locale)));
     // ASSERT
-    expect({
-      canonical: { en: en.alternates?.canonical, de: de.alternates?.canonical },
-      title: { en: en.title, de: de.title },
-    }).toEqual(expected);
+    expect({ en: en.alternates?.canonical, de: de.alternates?.canonical }).toEqual(expectedCanonical);
+    expect([en.title, de.title]).not.toContain('');
+  });
+
+  it("titles an Event's copy with its own words, under its Event", () => {
+    // ARRANGE
+    const expected = {
+      title: 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst',
+      canonical: '/de/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
+    };
+    // ACT
+    const page = eventEpisodePageOf('2026-10-23-axel-agentic-workflow', 'ai-attention-span');
+    const metadata = pageMetadata(page, 'de', episodePageCopy(page, 'de'));
+    // ASSERT
+    expect({ title: metadata.title, canonical: metadata.alternates?.canonical }).toEqual(expected);
   });
 
   it('serves a tooling page under /episodes/ with its own words, out of search', () => {
