@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import { hydrated } from '../../../../tests/browser/hydrated';
-import { settled } from '../../../../tests/browser/settled';
+import { hydrated } from '../../../tests/browser/hydrated';
+import { settled } from '../../../tests/browser/settled';
 
 /*
  * The browser seam of Context (`npm run test:browser`, local only until the nightly lands): the Explorable explanations page's

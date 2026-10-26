@@ -1,4 +1,4 @@
-import { markerCount } from '../../slide-shared/core-components/try-prompt/prompt-sections.pure';
+import { markerCount } from '@/components/slide-shared/core-components/try-prompt/prompt-sections.pure';
 import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure';
 import { unknownMarkers } from './workflow-markers.pure';
 import { producersBefore, producersOf, tasksOf, type Producer } from './workflow-outputs.pure';

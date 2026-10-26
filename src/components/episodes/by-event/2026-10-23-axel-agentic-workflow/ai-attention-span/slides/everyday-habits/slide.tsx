@@ -1,6 +1,6 @@
-import { ContextBarsPreset } from '@/components/explorable-explanations/context/context';
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
+import { ContextBarsPreset } from '@/explorable-explanations/context/context';
 import type { ReactNode } from 'react';
 import styles from './everyday-habits.module.css';
 import { HabitList } from './habit-list';

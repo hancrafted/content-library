@@ -7,7 +7,7 @@ import { loadWorkflow } from './workflow-loader.pure';
  * loads that block, so the guide cannot drift from the loader.
  */
 
-const GUIDE = new URL('../../../../docs/features/agentic-workflow.md', import.meta.url);
+const GUIDE = new URL('../../../docs/features/agentic-workflow.md', import.meta.url);
 
 const fixture = (): string => {
   const block = /```yaml\n(# guide-fixture\n[\s\S]*?)```/.exec(readFileSync(GUIDE, 'utf8'));

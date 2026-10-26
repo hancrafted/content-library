@@ -2,8 +2,8 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import axe from 'axe-core';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { hydrated } from '../../../../tests/browser/hydrated';
-import { settled } from '../../../../tests/browser/settled';
+import { hydrated } from '../../../tests/browser/hydrated';
+import { settled } from '../../../tests/browser/settled';
 
 /*
  * The browser seam (`npm run test:browser`, local only until the nightly lands): the Slide "Human in the loop" of the
