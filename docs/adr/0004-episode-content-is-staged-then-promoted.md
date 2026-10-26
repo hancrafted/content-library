@@ -26,10 +26,10 @@ The Spec holds every Option the designers drew, most of them rejected, and Han's
    - The run log and its `pipeline.yml` are archived to `.logs/new-episode/<slug>/`, a folder the dashboard opens, with the Brief and the Spec as the Run left them: a record of the Run, never a source.
    - The Spec's Options, with each Slide's Visual idea, feedback, designer prompts and cited design references, are filed into `design-archive/<slug>/`.
    - Staging is harvested: lessons, style, Slide library candidates and cleanups are proposed, Han approves them at one gate, and larger refactors are filed as tickets.
-   - `brief.md` moves to `src/components/episodes/<ep>/`, its `status: draft` removed.
+   - `brief.md` moves to `src/episodes/<ep>/`, its `status: draft` removed.
    - Every research file moves to `docs/llm-wiki/research/<category>/` and is listed in `docs/llm-wiki/index.md` under its category's h3, by `npm run episode:promote-research` (amended: it first moved only research a Slide still cites. A Slide cites a source URL, not a research file, and no one judges whether a citation earns its place, so keeping research no longer waits on that judgment. The wiki grows with every Run instead; organizing it is its own problem).
    - The staging folder, the Spec with it, is deleted after the harvest has read it. git history keeps it.
-3. **After Promotion, each Slide has one owner of its words:** its `i18n/<locale>.json`. `<ep>.ts` and its Section markers own Slide order.
+3. **After Promotion, each Slide has one owner of its words:** its `i18n/<locale>.json`. `episode.ts` and its Section markers own Slide order.
 4. **German is a translation of `i18n/en.json` into `de.json`**, before or after Promotion.
 5. **Headings carry explicit slugs**, `### <title> {#slug}`, because the slug becomes a folder name, a Translation key and a published anchor, and must survive a retitle.
 
@@ -38,7 +38,7 @@ The Spec holds every Option the designers drew, most of them rejected, and Han's
 - **Move each Slide's words into `slide.md`, with a parity test against `en.json`.** The first version of this record. Rejected for the duplication above.
 - **A guide file (`AGENTS.md`) per Slide or per Episode**, recording its purpose and design decisions. Rejected for now: the Design archive and the Brief carry the decisions, and its map of the code would drift unchecked. Added when agents are seen to misread a Slide.
 - **Keep the Spec whole** beside the code, or in `docs/`. Rejected: a 500K page of mostly rejected mocks in the code folder, where the Design archive keeps what is reused from it. A copy stays in `.logs/` as the Run's record, beside its log, which nothing builds from.
-- **Generate `i18n/*.json` or `<ep>.ts` from markdown.** Rejected: it ties the app to a document format that is not stable, and design-ADR _The Slide is a self-contained folder_ already rejected a generator.
+- **Generate `i18n/*.json` or `episode.ts` from markdown.** Rejected: it ties the app to a document format that is not stable, and design-ADR _The Slide is a self-contained folder_ already rejected a generator.
 
 ## Consequences
 

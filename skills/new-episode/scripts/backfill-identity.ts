@@ -3,9 +3,9 @@
 // meta.json (beside its transcript) and appends an `attrs` line that gives the fold that identity. Dry-run by
 // default: it lists what it would append and writes nothing; `--write` appends, through the writer, to the one log
 // named. Append-only and idempotent: a second run appends nothing. Run it only after the Run has ended.
-import { identityBackfill } from './backfill-identity.pure.ts';
-import { readLog, readOrNull } from './episode-run-log.ts';
-import { appendEvent } from './run-log-writer.ts';
+import { identityBackfill } from '../../../src/pipeline/lib/backfill-identity.pure.ts';
+import { readLog, readOrNull } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
 
 /** One line saying what was (or would be) appended, with the roles it gives and any span left alone. */
 function summary(events: readonly { role?: string }[], elsewhere: number, write: boolean): string {

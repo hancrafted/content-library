@@ -4,7 +4,7 @@
 # have collected what it needs, and finalizes it by setting
 # `status: approved` (design-ADR-0008).
 #
-# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+# Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
 #   dev_port  per-run only, written by begin-run: the dashboard dev server's port, the
 #             first free one from 4000; implement-episode-init serves the Episode there
@@ -460,12 +460,12 @@ jobs:
         model: opus
         session: orchestrator
 
-  # The Shared visuals several Sections place, built once after the Episode's
+  # The Explorable explanations several Sections place, built once after the Episode's
   # wiring and before the Sections, so the parallel Section jobs only place them.
   - id: implement-shared-visuals
     stage: build
     intent: >-
-      Build the Shared visuals the Spec's Slides share, before any Section job:
+      Build the Explorable explanations the Spec's Slides share, before any Section job:
       src/components/slide-shared/context-window/ (the context window cornerstone)
       and src/components/slide-shared/call-transcript/ (Slides 1, 2 and 6), by
       the Spec's Visual language and Episode page cards and the build notes of

@@ -1,0 +1,105 @@
+/*
+ * The Episode id (GLOSSARY): every Episode's one name across all Episodes, derived from its folder and never written
+ * in its record (design-ADR 0016 decision 3). An Episode no Event owns sits in `src/episodes/<slug>/` and its id is its
+ * slug; an Event's copy sits in `episodes/by-event/<event-slug>/<slug>/` and its id is `<event-slug>__<slug>`. One path
+ * segment, so it works as a folder, a DOM id or a key. Imports nothing, so the registry generator can load it too.
+ *
+ * This module alone knows that format; code passes an EpisodeRef (GLOSSARY). `episodeRef` builds one from its parts,
+ * `episodeRefOf` parses an id, and `folderOf` gives any page's folder.
+ */
+
+/** The folder an Event's copies sit in, one folder per Event: `by-event/<event-slug>/<slug>/`. */
+export const EVENT_COPIES_FOLDER = 'by-event';
+
+/** The Slide pool: one folder of content Slides several Episodes compose, `slide-pool/<slide>/` (FE-004). */
+export const SLIDE_POOL_FOLDER = 'slide-pool';
+
+/** The tooling pages: authoring benches served under `/episodes/<slug>/` but no Episode, `tooling/<slug>/`. */
+export const TOOLING_FOLDER = 'tooling';
+
+/**
+ * Folder names under the Episodes folder that hold no Episode, so no Episode may take one as its slug: the Event copies,
+ * the Slide pool, the tooling pages, and the area's code (`components/`, `lib/`, `hooks/`).
+ */
+export const RESERVED_FOLDER_NAMES: readonly string[] = [
+  EVENT_COPIES_FOLDER,
+  SLIDE_POOL_FOLDER,
+  TOOLING_FOLDER,
+  'components',
+  'lib',
+  'hooks',
+];
+
+const SEPARATOR = '__';
+
+/** An Episode as code passes it: no Event owns it, so its slug is its id, or one Event owns it as its copy. */
+export type EpisodeRef<Id extends string = string> =
+  | { readonly kind: 'standalone'; readonly id: Id; readonly slug: Id }
+  | { readonly kind: 'event-copy'; readonly id: Id; readonly event: string; readonly slug: string };
+
+/** An Episode no Event owns: the only kind with a page of its own under `/episodes/`. */
+export type StandaloneRef<Id extends string = string> = Extract<EpisodeRef<Id>, { readonly kind: 'standalone' }>;
+
+/** The slug an Episode id names: the id itself, or what follows its Event slug. Types a record against its key. */
+export type EpisodeSlugOf<Id extends string> = Id extends `${string}${typeof SEPARATOR}${infer Slug}` ? Slug : Id;
+
+/** The id `episodeRef` gives a slug, alone or under the Event that owns it. */
+export type EpisodeIdOf<Slug extends string, Event extends string | undefined> = Event extends string
+  ? `${Event}${typeof SEPARATOR}${Slug}`
+  : Slug;
+
+/**
+ * The Episode in folder `<slug>/`, or, when an Event owns it, in `by-event/<event>/<slug>/`: built from its parts, never
+ * parsed. The folder walker names each Episode it finds this way, and a test names an Episode this way, so no caller
+ * writes an id out by hand.
+ */
+export function episodeRef<Slug extends string>(slug: Slug): StandaloneRef<Slug>;
+export function episodeRef<Slug extends string, Event extends string>(
+  slug: Slug,
+  event: Event,
+): Extract<EpisodeRef<EpisodeIdOf<Slug, Event>>, { readonly kind: 'event-copy' }>;
+export function episodeRef(slug: string, event?: string): EpisodeRef {
+  if (event === undefined) return { kind: 'standalone', id: slug, slug };
+  return { kind: 'event-copy', id: `${event}${SEPARATOR}${slug}`, event, slug };
+}
+
+/** The Episode an id names: a copy when it holds its Event's slug, else one no Event owns. Only the store calls it. */
+export function episodeRefOf<Id extends string>(id: Id): EpisodeRef<Id> {
+  const at = id.indexOf(SEPARATOR);
+  if (at < 0) return { kind: 'standalone', id, slug: id };
+  return { kind: 'event-copy', id, event: id.slice(0, at), slug: id.slice(at + SEPARATOR.length) };
+}
+
+/** One case per kind of Episode, each handed the Episode narrowed to that kind. */
+export type EpisodeCases<Id extends string, R> = {
+  readonly [K in EpisodeRef<Id>['kind']]: (episode: Extract<EpisodeRef<Id>, { readonly kind: K }>) => R;
+};
+
+/** The one way to branch on an Episode's kind, as `matchPage` is for a page's: a new kind fails `tsc` at each site. */
+export function matchEpisode<Id extends string, R>(episode: EpisodeRef<Id>, cases: EpisodeCases<Id, R>): R {
+  return episode.kind === 'standalone' ? cases.standalone(episode) : cases['event-copy'](episode);
+}
+
+/** A tooling page (design-ADR 0016 decision 12): an authoring bench, no Episode, named by its slug, which is its id. */
+export interface ToolingRef<Slug extends string = string> {
+  readonly kind: 'tooling';
+  readonly id: Slug;
+  readonly slug: Slug;
+}
+
+/** The tooling page in folder `tooling/<slug>/`. */
+export function toolingRef<Slug extends string>(slug: Slug): ToolingRef<Slug> {
+  return { kind: 'tooling', id: slug, slug };
+}
+
+/**
+ * A page's folder under the Episodes folder, the one place the folder layout is written: `<slug>` for an Episode no
+ * Event owns, `by-event/<event>/<slug>` for an Event's copy, `tooling/<slug>` for a tooling page.
+ */
+export function folderOf(page: EpisodeRef | ToolingRef): string {
+  if (page.kind === 'tooling') return `${TOOLING_FOLDER}/${page.slug}`;
+  return matchEpisode(page, {
+    standalone: ({ slug }) => slug,
+    'event-copy': ({ event, slug }) => `${EVENT_COPIES_FOLDER}/${event}/${slug}`,
+  });
+}

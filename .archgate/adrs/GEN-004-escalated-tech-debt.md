@@ -4,7 +4,7 @@ id: GEN-004
 title: 'Escalated Tech Debt'
 domain: general
 rules: true
-files: ['src/**/*', 'scripts/**/*', 'skills/**/*', '.github/**/*']
+files: ['src/**/*', 'tools/**/*', 'skills/**/*', '.github/**/*']
 paths: ['**/*']
 description: 'Escalation is the compliant path for a shortcut: name the trade-off, state the cost, get it accepted, then fence it and mark it with a tech-debt comment that links its issue.'
 ---
@@ -61,7 +61,7 @@ Prohibition fails the other way: an agent forbidden to cut corners cuts them out
 
 ## Compliance and Enforcement
 
-1. **Rule** `tech-debt-links-issue` (archgate, error): every source file under src/, scripts/, skills/ and .github/; a `tech-debt` comment without an issue URL fails.
+1. **Rule** `tech-debt-links-issue` (archgate, error): every source file under src/, tools/, skills/ and .github/; a `tech-debt` comment without an issue URL fails.
 2. **Review:** a shortcut with no marker is caught by `/code-review`.
 
 **Exceptions:** raise a separate ADR; human approval required.

@@ -40,10 +40,10 @@ function makeCtx(files: Record<string, string>) {
 }
 
 const EN_PAGE = 'src/app/(en)/page.tsx';
-const DE_PAGE = 'src/app/[locale]/episode/page-template/page.tsx';
+const DE_PAGE = 'src/app/[locale]/episode/episode-template/page.tsx';
 const EN_LAYOUT = 'src/app/(en)/layout.tsx';
-const STATIC_FORM = `export const metadata = pageMetadata('home', DEFAULT_LOCALE);\nexport default function Page() {}\n`;
-const FUNCTION_FORM = `export async function generateMetadata({ params }) {\n  return pageMetadata('episodeTemplate', await resolveLocale(params));\n}\n`;
+const STATIC_FORM = `export const metadata = pageMetadata({ kind: 'home' }, DEFAULT_LOCALE);\nexport default function Page() {}\n`;
+const FUNCTION_FORM = `export async function generateMetadata({ params }) {\n  return pageMetadata({ kind: 'episodes' }, await resolveLocale(params));\n}\n`;
 
 describe('page-exports-metadata', () => {
   const rule = ruleSet.rules['page-exports-metadata'];
@@ -122,7 +122,9 @@ describe('layout-holds-site-metadata-only', () => {
 
   it('fails a layout that calls pageMetadata', async () => {
     // ARRANGE
-    const { ctx, violations } = makeCtx({ [EN_LAYOUT]: `export const metadata = pageMetadata('home', 'en');\n` });
+    const { ctx, violations } = makeCtx({
+      [EN_LAYOUT]: `export const metadata = pageMetadata({ kind: 'home' }, 'en');\n`,
+    });
     const expectedFiles = [EN_LAYOUT];
     // ACT
     await rule.check(ctx);

@@ -2,7 +2,13 @@
 // with a browser user agent, following redirects, and prints one line per URL: ok, dead or unverifiable.
 // Exits 1 only when a link is dead; a 403 or a timeout may be a bot wall, so it is left to a human.
 import { readFileSync } from 'node:fs';
-import { classify, resourcesOf, summarize, type Outcome, type Verdict } from './check-sources.pure.ts';
+import {
+  classify,
+  resourcesOf,
+  summarize,
+  type Outcome,
+  type Verdict,
+} from '../../../src/pipeline/lib/check-sources.pure.ts';
 
 const TIMEOUT_MS = 20_000;
 const CONCURRENCY = 8;

@@ -6,7 +6,7 @@
 // test. Matched textually. Self-contained by design:
 // archgate forbids imports between rules files.
 const CSS_FILE = 'src/app/globals.css';
-const DRAWER_GLOB = 'src/components/context-drawer/**/*';
+const DRAWER_GLOB = 'src/shared/page-chrome/context-drawer/**/*';
 
 const COMMENT_RE = /\/\*[\s\S]*?\*\//g;
 const PRINT_START_RE = /@media\s+print\s*\{/g;
@@ -60,7 +60,7 @@ export default {
     },
     'drawer-is-non-modal': {
       description:
-        'Nothing under src/components/context-drawer/ calls showModal( or sets aria-modal: the drawer is a complementary region that leaves the page interactive.',
+        'Nothing under src/shared/page-chrome/context-drawer/ calls showModal( or sets aria-modal: the drawer is a complementary region that leaves the page interactive.',
       severity: 'error',
       async check(ctx) {
         for (const file of await ctx.glob(DRAWER_GLOB)) {

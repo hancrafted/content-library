@@ -53,7 +53,7 @@ describe('dynamic-segment-static-params', () => {
     const { ctx, violations } = makeCtx({
       [LOCALE_PAGE]: FULL_SEGMENT,
       'src/app/[locale]/layout.tsx': asyncForm,
-      'src/app/[locale]/episode/page-template/page.tsx': FULL_SEGMENT,
+      'src/app/[locale]/episode/episode-template/page.tsx': FULL_SEGMENT,
     });
     // ACT
     await rule.check(ctx);
@@ -63,7 +63,7 @@ describe('dynamic-segment-static-params', () => {
 
   it('fails once per missing export', async () => {
     // ARRANGE
-    const nestedPage = 'src/app/[locale]/episode/page-template/page.tsx';
+    const nestedPage = 'src/app/[locale]/episode/episode-template/page.tsx';
     const { ctx, violations } = makeCtx({
       [LOCALE_PAGE]: `export const generateStaticParams = prefixedLocaleParams;\n`,
       [nestedPage]: `export default function Page() {}\n`,
@@ -213,8 +213,8 @@ describe('no-request-time-features', () => {
     ['a root proxy file', { 'proxy.ts': `export function proxy() {}\n` }],
     ['a src middleware file', { 'src/middleware.ts': `export function middleware() {}\n` }],
     ['an intercepting route folder', { 'src/app/(.)photo/page.tsx': `export default function P() {}\n` }],
-    ['a file-level use server', { 'src/lib/actions.ts': `'use server';\nexport async function save() {}\n` }],
-    ['an inline use server', { 'src/lib/form.tsx': `async function save() {\n  "use server";\n}\n` }],
+    ['a file-level use server', { 'src/shared/lib/actions.ts': `'use server';\nexport async function save() {}\n` }],
+    ['an inline use server', { 'src/shared/lib/form.tsx': `async function save() {\n  "use server";\n}\n` }],
     ['a revalidate export', { 'src/app/(en)/page.tsx': `export const revalidate = 60;\n` }],
     ['a POST route handler', { 'src/app/api/route.ts': `export async function POST() {}\n` }],
     ['a GET that reads the request', { 'src/app/api/route.ts': `export async function GET(request: Request) {}\n` }],
@@ -246,7 +246,7 @@ describe('no-request-time-features', () => {
 
   it('reports the line a directive sits on', async () => {
     // ARRANGE
-    const file = 'src/lib/form.tsx';
+    const file = 'src/shared/lib/form.tsx';
     const expectedLine = 3;
     const { ctx, violations } = makeCtx({
       [file]: `import x from 'y';\nasync function save() {\n  'use server';\n}\n`,
@@ -261,7 +261,7 @@ describe('no-request-time-features', () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({
       'docs/proxy.ts': `export function proxy() {}\n`,
-      'scripts/actions.ts': `'use server';\n`,
+      'tools/actions.ts': `'use server';\n`,
     });
     // ACT
     await rule.check(ctx);

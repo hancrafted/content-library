@@ -94,7 +94,7 @@ Every agent runs where its `session` says. `subagent`, the default, is spawned w
 
    A subagent whose description does not parse is still logged, as role `skill-spawned`: under the Job when exactly one is open, else under the Run, never a guessed Job. When the job's `before` lists `mh-query`, tell it: before writing each markdown path in `outputs`, run `npx mh query <path>` on it as written, a `*` included, and follow every intent it prints as an instruction. The query's answer is read, never saved.
 
-2. **Checks.** Run the job's `checks` in order, cheapest first. This table is the one list of check names and their commands; `src/lib/episode-pipeline.pure.ts` refuses any other name:
+2. **Checks.** Run the job's `checks` in order, cheapest first. This table is the one list of check names and their commands; `src/pipeline/lib/episode-pipeline.pure.ts` refuses any other name:
 
    | check          | command                                                                                                                                                                                                                                                         |
    | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -124,7 +124,7 @@ _Done when_ the job passed or is blocked, its outputs are committed, its Job spa
 
 ## Agent marks
 
-Every agent write is marked, so gate diffs teach the user's style and nothing else. An unmarked commit is the user's; `agentOf` in `scripts/marks.pure.ts` reads the marks.
+Every agent write is marked, so gate diffs teach the user's style and nothing else. An unmarked commit is the user's; `agentOf` in `src/pipeline/lib/marks.pure.ts` reads the marks.
 
 - **Commits:** an `Agent: <job id>` trailer on every commit an agent makes in the run, beside `Source:` (and `Gate:` on a gate commit). The user's own commits carry none.
 - **Issue edits:** a job that edits a GitHub issue (none in the template) ends the body with one `Edited-by: <job id>` line, replaced when another job edits, and names it in the Job's `end-job --summary` as `Edited #<issue>`.

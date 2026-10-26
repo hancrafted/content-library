@@ -14,11 +14,11 @@ Read before touching a deploy workflow, `public/_headers`, `public/_redirects`, 
 - Secrets `CLOUDFLARE_API_TOKEN` (Pages: Edit) and `CLOUDFLARE_ACCOUNT_ID` live in the repository settings.
 - `public/_headers` sets long immutable caching on `/_next/static/*`, basic security headers, and `X-Robots-Tag: noindex` on every `*.pages.dev` host. It sets no Content-Security-Policy: the export has inline scripts, so a policy needs verifying first.
 - `public/_redirects` is the home for slug-rename redirects (same host only). Pages cannot redirect one hostname to another there.
-- `src/app/sitemap.ts` and `src/app/robots.ts` write `sitemap.xml` (hreflang alternates; pages come from `PAGES` in `src/lib/routes.ts`, minus the ones `isNoindex` marks, the same rule `pageMetadata` applies) and `robots.txt` at build time, from `SITE_URL`.
+- `src/app/sitemap.ts` and `src/app/robots.ts` write `sitemap.xml` (hreflang alternates; pages come from the page catalogue, `PAGES` in `src/content-store/store.ts`, the ones whose treatment puts them in the sitemap, the same treatment `pageMetadata` reads) and `robots.txt` at build time, from `SITE_URL`.
 
 ## Temporary: the old github.io URLs
 
-`.github/workflows/deploy.yml` still deploys to GitHub Pages, but only redirect stubs (`scripts/redirect-stubs.ts`): one HTML per exported page with a meta refresh and a canonical to the same path on https://hancrafted.net. GitHub Pages cannot send a 301. `redirectStubPlan` alone decides which files of `out/` are pages; it keeps `404.html` and points it at the home page, so every unknown old URL lands there. Remove the workflow and switch Pages off (Settings, Pages) after a few months.
+`.github/workflows/deploy.yml` still deploys to GitHub Pages, but only redirect stubs (`tools/deploy/redirect-stubs.ts`): one HTML per exported page with a meta refresh and a canonical to the same path on https://hancrafted.net. GitHub Pages cannot send a 301. `redirectStubPlan` alone decides which files of `out/` are pages; it keeps `404.html` and points it at the home page, so every unknown old URL lands there. Remove the workflow and switch Pages off (Settings, Pages) after a few months.
 
 ## Moving the domain
 

@@ -1,0 +1,85 @@
+{
+  "title": "One innocent question",
+  "caption": "One line in the chat. Twenty pages in the window.",
+  "illustrative": "<marker>Token counts illustrative</marker>",
+  "card": {
+    "title": "One line in the chat, the whole file behind it",
+    "lead": "To answer, the AI read all 20 pages of the catering PDF, <marker>not shown in the chat</marker>.",
+    "more": "<loaded>The two web searches before it brought back extracts, a modest bite</loaded>. <stays>Both stay in the window for every later question</stays>."
+  },
+  "sizes": {
+    "heading": "Same scale, tokens",
+    "label": "Sizes in tokens",
+    "question": "Your question",
+    "searches": "Two web searches",
+    "pdf": "The catering PDF",
+    "answer": "The answer"
+  },
+  "notes": {
+    "everything-is-loaded": {
+      "header": "Everything is loaded",
+      "description": "with basic web search every result is loaded into the context window, much of it irrelevant to the request [1].",
+      "sources": {
+        "anthropic-web-search-tool": { "title": "Anthropic, Web search tool (Claude API documentation)" }
+      }
+    },
+    "it-stays": {
+      "header": "It stays",
+      "description": "search results count as input tokens, in the turn itself and in later turns, and are passed back into later requests, so they remain part of the window [1].",
+      "sources": {
+        "anthropic-web-search-tool": { "title": "Anthropic, Web search tool (Claude API documentation)" }
+      }
+    },
+    "a-pdf-is-the-big-bite": {
+      "header": "A PDF is the big bite",
+      "description": "Anthropic estimates an average web page at about 2,500 tokens and a research-paper PDF at about 125,000 [1].",
+      "sources": {
+        "anthropic-web-fetch-tool": { "title": "Anthropic, Web fetch tool (Claude API documentation)" }
+      }
+    },
+    "the-remedy": {
+      "header": "The remedy",
+      "description": "vendors filter before the window or cap the returned tokens [1]; OpenAI describes the same shape, with deep research tapping hundreds of sources [2].",
+      "sources": {
+        "anthropic-web-fetch-tool": { "title": "Anthropic, Web fetch tool (Claude API documentation)" },
+        "openai-web-search": { "title": "OpenAI, Web search (API documentation)" }
+      }
+    },
+    "api-figures-not-app-figures": {
+      "header": "API figures, not app figures",
+      "description": "these sources describe developer tools; how many pages a given chat app loads per question is not published [1].",
+      "sources": {
+        "anthropic-web-search-tool": { "title": "Anthropic, Web search tool (Claude API documentation)" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "three-venues": {
+        "title": "Three venues",
+        "keywords": "",
+        "script": "Say you ask: find three venues in Lisbon. It is a small question. The answer is three options in a few lines, and behind it the AI ran two searches."
+      },
+      "what-you-dont-see": {
+        "title": "What you don't see",
+        "keywords": "",
+        "script": "Those searches bring back extracts of web pages that you never see. Each one is a modest bite, and the window takes it and moves on."
+      },
+      "the-catering-pdf": {
+        "title": "The catering PDF",
+        "keywords": "",
+        "script": "Then you point at the catering offers in the project folder and ask which one fits. The answer is one line, Sabor Verde. To give it, the AI read the whole catering PDF, all twenty pages, and that one question filled the window far more than anything before it."
+      },
+      "the-intern": {
+        "title": "The intern",
+        "keywords": "",
+        "script": "Give an intern the same task and they would read the whole file first too, before telling you one line. The AI does exactly that, only fast, and it shows you just the result. There is nothing wrong with it, you only need to know it happened."
+      },
+      "a-big-bite": {
+        "title": "A big bite",
+        "keywords": "",
+        "script": "So one short question can take a big bite out of the window while the chat looks as small as before. Keep that in mind when a chat feels full sooner than you expected."
+      }
+    }
+  }
+}

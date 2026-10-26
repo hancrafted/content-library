@@ -1,0 +1,24 @@
+{
+  "title": "Wie arbeiten wir mit diesem Freelancer?",
+  "aiBadge": {
+    "job": "KI",
+    "day": "Tag 1"
+  },
+  "movesLabel": "Das Briefing, an den Ausweis geklemmt",
+  "moves": {
+    "break": "Zerlege es",
+    "requirements": "Erst die Anforderungen",
+    "interview": "Interviewe Dich mit KI",
+    "evaluate": "Prüfe jeden Schritt",
+    "fresh": "Frischer Start"
+  },
+  "voiceScript": {
+    "segments": {
+      "answer-to-the-traits": {
+        "title": "Die Antwort auf die Eigenschaften",
+        "keywords": "",
+        "script": "Fünf Eigenschaften kosten Dich etwas. Die gute Nachricht: Du kannst jeder von ihnen etwas entgegensetzen, mit fünf Schritten. Das ist der zweite Grundpfeiler."
+      }
+    }
+  }
+}

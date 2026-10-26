@@ -1,23 +1,37 @@
 // Shared by the post-build tests: the page URLs the app derives and the file
-// `next build` writes for each. Derived from the modules the site renders from,
-// so no page list is hand-kept.
+// `next build` writes for each. Derived from the page catalogue the site renders
+// from, so no page list is hand-kept.
 
 import { load, type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import nextConfig from '../../next.config';
-import { localizePath, type Locale } from '../../src/lib/locale.pure';
-import { PAGES, pageLocales, routeOf } from '../../src/lib/routes';
+import { pageLocales, routeOf, type EpisodesPathSlug } from '../../src/content-store/catalogue/record-routes';
+import { episodesPathParams, PAGES } from '../../src/content-store/store';
+import { localizePath, type Locale } from '../../src/shared/lib/locale.pure';
 
 export const OUT_DIR = join(import.meta.dirname, '..', '..', 'out');
 
 export interface ExportedPage {
   locale: Locale;
   url: string;
+  /** Whether the page is its own canonical: a public Episode under an Event credits its own `/episodes/` page. */
+  selfCanonical: boolean;
 }
 
-export const EXPORTED_PAGES: readonly ExportedPage[] = PAGES.flatMap((page) =>
-  pageLocales(page).map((locale) => ({ locale, url: localizePath(routeOf(page), locale) })),
+/** Every slug with a page exported at `/episodes/<slug>/`: each tooling page and each public Episode. */
+export const EXPORTED_EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = episodesPathParams().map(
+  ({ episode }) => episode,
+);
+
+/** Every page the catalogue builds, in each locale it is built in: an unlisted Episode has no `/episodes/` page. */
+export const EXPORTED_PAGES: readonly ExportedPage[] = PAGES.filter(({ treatment }) => treatment.exported).flatMap(
+  ({ page, treatment }) =>
+    pageLocales(page).map((locale) => ({
+      locale,
+      url: localizePath(routeOf(page), locale),
+      selfCanonical: treatment.canonical === 'self',
+    })),
 );
 
 /** The file `next build` writes for a URL: `trailingSlash` puts `/de` at `de/index.html`, else `de.html`. */
@@ -55,4 +69,15 @@ export function resolveBasePath(): string {
     }
   }
   return nextConfig.basePath ?? '';
+}
+
+/** The `_redirects` rules as source, target and status, comments and blank lines dropped. */
+export function redirectRules(): { from: string; to: string; status: string }[] {
+  return readFileSync(join(OUT_DIR, '_redirects'), 'utf8')
+    .split('\n')
+    .filter((line) => line.trim() !== '' && !line.startsWith('#'))
+    .map((line) => {
+      const [from, to, status] = line.trim().split(/\s+/);
+      return { from, to, status };
+    });
 }

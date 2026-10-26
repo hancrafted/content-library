@@ -1,0 +1,154 @@
+import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, isEpisodeId, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
+import { listEpisodes } from '@/content-store/store';
+import { headerModeOf } from '@/episodes/components/slide-master/slide';
+import { describe, expect, it } from 'vitest';
+import { compositionOf } from './registry';
+
+/*
+ * The one composition lookup (FE-002): the Slides and own text a page renders, by the EpisodeRef of an Episode with a
+ * page or the ref of a tooling page. What every registered Episode shares: a record under its Episode id carrying its
+ * folder's slug, its own text from its folder's `i18n/` (what the Title slide, the page metadata and the landing card
+ * read), and Sections each opened by the Slide that names it. Each holds for every Episode the registry holds, so
+ * adding or publishing one adds no row here. The one per-Episode fact is the header mode, a deliberate content
+ * decision: only the Episodes built before the shared Slide header (design-ADR-0012) author their own.
+ */
+
+/** Every Episode with a page, by its EpisodeRef, as the store serves it. */
+const WITH_PAGE = listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : []));
+
+/** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included. */
+const AUTHORED_HEADERS = ['ai-token-economy', 'maintaining-markdown-for-ai'];
+
+describe('success cases', () => {
+  it.each(WITH_PAGE)("registers $id with a record carrying its folder's slug", (ref) => {
+    // ARRANGE
+    const expectedSlug = ref.slug;
+    // ACT
+    const episode = compositionOf(ref);
+    // ASSERT
+    expect(episode.slug).toBe(expectedSlug);
+  });
+
+  it.each(WITH_PAGE)('gives $id its own title, caption and description in en and de', (ref) => {
+    // ARRANGE
+    // A Title slide's optional Speaker notes and Voice script may sit beside them.
+    const expected = expect.objectContaining({
+      title: expect.any(String),
+      caption: expect.any(String),
+      description: expect.any(String),
+    });
+    // ACT
+    const texts = (['en', 'de'] as const).map((locale) => compositionOf(ref).messages[locale]);
+    // ASSERT
+    expect(texts).toEqual([expected, expected]);
+    expect(texts.flatMap(({ title, caption, description }) => [title, caption, description])).not.toContain('');
+  });
+
+  it("reads an Episode's German text from its own folder", () => {
+    // ARRANGE
+    const expected = 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst';
+    // ACT
+    const { title } = compositionOf(episodeRef('ai-attention-span')).messages.de;
+    // ASSERT
+    expect(title).toBe(expected);
+  });
+
+  it('renders the shared Slide header on every Episode but the ones built before it, which author their own', () => {
+    // ARRANGE
+    const expected = AUTHORED_HEADERS;
+    // ACT
+    const authored = [
+      ...new Set(WITH_PAGE.filter((ref) => headerModeOf(compositionOf(ref)) === 'authored').map(({ slug }) => slug)),
+    ].sort();
+    // ASSERT
+    expect(authored).toEqual(expected);
+  });
+
+  it.each(TOOLING_SLUGS)('finds the tooling page %s under its own slug', (slug) => {
+    // ARRANGE
+    const expected = slug;
+    // ACT
+    const page = compositionOf(toolingRef(slug));
+    // ASSERT
+    expect(page.slug).toBe(expected);
+  });
+
+  it('composes the Workshop template as agenda, in scope, out of scope and orga Slides after its Title slide', () => {
+    // ARRANGE
+    const expected = [['agenda'], ['in-scope', 'out-of-scope'], ['orga']];
+    // ACT
+    const sections = compositionOf(toolingRef('workshop-template')).sections.map((section) =>
+      section.map(({ slug }) => slug),
+    );
+    // ASSERT
+    expect(sections).toEqual(expected);
+  });
+});
+
+describe('failure cases', () => {
+  it('rejects an unregistered slug in the route check, in the types and in the lookup', () => {
+    // ARRANGE
+    const unregistered = 'non-existent-episode';
+    // ACT
+    const valid = isEpisodeId(unregistered);
+    // @ts-expect-error -- an Episode the registry does not hold has no composition
+    const lookup = () => compositionOf(episodeRef(unregistered));
+    // ASSERT
+    expect(valid).toBe(false);
+    expect(lookup).toThrow(unregistered);
+  });
+
+  it('finds no tooling page for an Episode slug', () => {
+    // ARRANGE
+    const episode = 'ai-attention-span';
+    // ACT
+    // @ts-expect-error -- an Episode's slug names no tooling page
+    const lookup = () => compositionOf(toolingRef(episode));
+    // ASSERT
+    expect(lookup).toThrow(episode);
+  });
+});
+
+describe('edge cases', () => {
+  it.each(TOOLING_SLUGS)('keeps the tooling page %s out of the Episode registry, so it is no Episode', (slug) => {
+    // ARRANGE
+    const expected = false;
+    // ACT
+    const valid = isEpisodeId(slug);
+    // @ts-expect-error -- a tooling page's slug names no Episode
+    const lookup = () => compositionOf(episodeRef(slug));
+    // ASSERT
+    expect(valid).toBe(expected);
+    expect(lookup).toThrow(slug);
+  });
+
+  it('finds no tooling page for the deleted slide-layouts', () => {
+    // ARRANGE
+    const deleted = 'slide-layouts';
+    // ACT
+    // @ts-expect-error -- a deleted tooling page has no composition
+    const lookup = () => compositionOf(toolingRef(deleted));
+    // ASSERT
+    expect(lookup).toThrow(deleted);
+  });
+
+  it.each(WITH_PAGE)('opens each Section of $id with a Slide of its own, never one another Section opens', (ref) => {
+    // ARRANGE
+    const openers = compositionOf(ref).sections.map(([opener]) => opener.slug);
+    // ACT
+    const repeated = openers.filter((slug, index) => openers.indexOf(slug) !== index);
+    // ASSERT
+    expect(repeated).toEqual([]);
+  });
+
+  it.each(WITH_PAGE)('gives $id at least one Section, each holding at least its opener', (ref) => {
+    // ARRANGE
+    const { sections } = compositionOf(ref);
+    // ACT
+    const emptySections = sections.filter((section) => section.length === 0);
+    // ASSERT
+    expect(sections.length).toBeGreaterThan(0);
+    expect(emptySections).toEqual([]);
+  });
+});

@@ -1,0 +1,15 @@
+{
+  "title": "The AI's attention span",
+  "caption": "Now the cause: how the AI holds a chat.",
+  "punchline": "Dialling it up. I hope you are ready?",
+  "poll": "Still with me? How's your attention?",
+  "voiceScript": {
+    "segments": {
+      "why-it-happens": {
+        "title": "Why it happens",
+        "keywords": "",
+        "script": "Dialling it up. I hope you are ready? So far you have seen what happens. Now the cause, because once you know how the AI holds a chat, the pattern stops being a surprise, and only after that do we look at what it does to your answers."
+      }
+    }
+  }
+}

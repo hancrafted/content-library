@@ -10,9 +10,13 @@ Read before changing the look, layout or interaction of what surrounds an Episod
 
 ## Layers
 
-- The Chrome (table of contents, Context drawer, talk player) floats over the Slides and takes no layout space; each Slide gets the full viewport width. The Content area pads every wrapper with `--inset-l` and `--inset-r` ([FE-009 §2](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md)), so the Foreground clears the Chrome while the Backdrop stays full-bleed.
+- The page chrome (table of contents, Context drawer) and the talk player float over the Slides and take no layout space; each Slide gets the full viewport width. The Content area pads every wrapper with `--inset-l` and `--inset-r` ([FE-009 §2](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md)), so the Foreground clears the Chrome while the Backdrop stays full-bleed.
 - Insets: `1rem` each side below `md`; from `md`, `21rem` left (the table of contents plus its gap) and `3rem` right, or the drawer width plus `4rem` while the drawer sits beside.
-- Full-bleed decoration goes in `SlideBackdrop`, content in `SlideFrame` (the Foreground). Z-index values come from the ladder in FE-009 §8; popovers render through the Episode portal root, placed by the shared `usePopoverPlacement` hook (`src/hooks/use-popover-placement.ts`, maths in `src/lib/popover-placement.pure.ts`); modals as a native `<dialog>`.
+- Full-bleed decoration goes in `SlideBackdrop`, content in `SlideFrame` (the Foreground). Z-index values come from the ladder in FE-009 §8; popovers render through the Episode portal root, placed by the shared `usePopoverPlacement` hook (`src/shared/hooks/use-popover-placement.ts`, maths in `src/shared/lib/popover-placement.pure.ts`); modals as a native `<dialog>`.
+
+## Under an Event
+
+On an Event-scoped Episode page the Event's breadcrumb and past notice sit above the Title slide, inside the insets, "Episode n of m" sits under the title, and the Playlist walk follows the last Slide. They scroll with the page; none floats. Detail: [Events](events.md#routes).
 
 ## Corners
 
@@ -31,7 +35,7 @@ Read before changing the look, layout or interaction of what surrounds an Episod
 
 ## Reserved places
 
-- YouTube: one player per Episode and locale, loaded on play, never with the page. It plays in a 16:9 talk slot in the Title slide's Foreground through one host that is never re-parented (re-parenting reloads the video). Undocked it is `absolute` at the slot's page coordinates, re-measured on resize, not on scroll, so it scrolls natively and cannot lag. From `lg` it docks, becoming `fixed`, when the active Slide leaves `top`; the glide between the two animates `transform` only, and is instant under `prefers-reduced-motion`. Docked it offers "Back to video" and Close; undocked, Close only. Below `lg` it never docks.
+- YouTube: one player per Episode and locale, loaded on play, never with the page. An unlisted Episode's Event recording (GLOSSARY: Video) plays on both locale pages; its launcher names the language spoken in it before play (`talkPlayer.recordedIn.<locale>`, `[data-recording-language]`). It plays in a 16:9 talk slot in the Title slide's Foreground through one host that is never re-parented (re-parenting reloads the video). Undocked it is `absolute` at the slot's page coordinates, re-measured on resize, not on scroll, so it scrolls natively and cannot lag. From `lg` it docks, becoming `fixed`, when the active Slide leaves `top`; the glide between the two animates `transform` only, and is instant under `prefers-reduced-motion`. Docked it offers "Back to video" and Close; undocked, Close only. Below `lg` it never docks.
 - Arrow-key Slide navigation: ←/→ step to the previous or next Slide, without wrapping; ignored with a modifier and inside editable fields, tab/menu/listbox/slider/radio widgets, the drawer, open dialogs and iframes. ↑/↓ and PageUp/PageDown scroll natively. The URL follows through the observer, not the keys.
 
 ## Card
@@ -65,7 +69,7 @@ The targeting rules are in [FE-010 §4](../../.archgate/adrs/FE-010-context-draw
 
 - **Which targets exist.** The kit's `<Title>` marks `title`. The section slide, basic page and three-column layouts mark `caption`; basic page marks `prose`; three-column marks each column by its slug. A free layout (`SlideFrame`) marks only `title`, so a note aiming at `caption` or `prose` there resolves to nothing, silently: mark the element yourself with `{...target('caption')}`.
 - **Two forms of Context reference.** `ContextRef` underlines a phrase (`<ref>` in the string, `ref('<note>')` in `t.rich`). `ContextMarker` is the Context button's speech-bubble icon beside a fact: inline, `<marker>phrase</marker>` with `marker('<note>')` renders the phrase, a no-break space and `(icon)` on its baseline; on an element, the kit's `<Marker note="…" />` sits in the top-right corner of a `relative` element, or where its `className` puts it; `placement="beside"` keeps it in the flow of a label. A marker owns its hit area, so a `static` class on one fails lint. Both use the same `data-context-ref` attribute and listener. A marker is named `Speaker note: <note header>` (`contextDrawer.markerNote`), muted at rest, foreground on an accent tint on hover, a ring on keyboard focus, and absent from print.
-- **Which form** ([design-ADR-0013](../adr/0013-context-markers.md)). A new Episode gives every fact whose note carries a source a Context reference: a marker, or an underline where a phrase fits. `page-template`'s `why-a-template` shows one of each marker.
+- **Which form** ([design-ADR-0013](../adr/0013-context-markers.md)). A new Episode gives every fact whose note carries a source a Context reference: a marker, or an underline where a phrase fits. `episode-template`'s `why-a-template` shows one of each marker.
 - **A Context reference names a note, not an element.** A note's `target` is the element holding the fact, not the reference.
 - **Highlight.** Hovering or focusing a note, or a Context reference, sets `data-context-active` on the other side; a note pinned open by a Context reference sets `data-context-pinned` on its item. Both tint the whole item with `--highlight-target` at 14% opacity, with no border or outline. The Slide's element, which has no padding of its own, gets the same tint spread 0.25rem past its box by a `box-shadow` ring, which takes no space, so nothing shifts. Screen only; print shows none.
 - **Click.** Clicking a Context reference opens the drawer on Notes at that note and scrolls the drawer's body so the note sits as near the top as the content allows (`revealScrollTop`); a note near the end stops where the content ends.
@@ -76,4 +80,4 @@ One `--selected` / `--selected-foreground` pair in `globals.css` marks the selec
 
 ## Sources of truth in code
 
-The Slide observer in `src/components/episode-page/` owns the one `IntersectionObserver`, at the shared reading line in `src/lib/reading-line.pure.ts`. `src/components/episode-page/context-drawer-input.ts` is the only adapter from an Episode record to the drawer's `ContextDrawerInput` (`src/components/context-drawer/context-drawer-input.ts`; rule: FE-010 §8).
+The Slide observer in `src/episodes/components/episode-page/` owns the one `IntersectionObserver`, at the shared reading line in `src/shared/lib/reading-line.pure.ts`. `src/episodes/components/episode-page/context-drawer-input.ts` is the only adapter from an Episode record to the drawer's `ContextDrawerInput` (`src/shared/page-chrome/context-drawer/context-drawer-input.ts`; rule: FE-010 §8).

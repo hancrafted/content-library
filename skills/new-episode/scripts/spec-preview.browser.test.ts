@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // The browser lane (`npm run test:browser`, local only): a real subprocess and a real headless browser, against
-// ARCH-003 §1.1. What the command reports is unit-tested in `spec-preview.pure.test.ts`; these cases prove the
+// ARCH-003 §1.1. What the command reports is unit-tested in `src/pipeline/lib/spec-preview.pure.test.ts`; these cases prove the
 // real render: every Option gets a screenshot, and text running past its Option is measured at 1440px.
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');

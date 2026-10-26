@@ -13,26 +13,68 @@ Localized visualisations of theory content, captured from YouTube training video
 **Audience**: a level of AI enablement the library serves, independent of locale: **Individual**, a person learning for themselves, or **Organization**, a company enabling its people.
 _Avoid_: International viewers, German businesses, segment, persona
 
-**Episode**: one page of visualised theory content, localized into en and de: its Slides stacked vertically, navigated by its table of contents. Its title is the page's h1; it holds Sections and has one YouTube recording per locale.
+**Episode**: one page of visualised theory content, localized into en and de: its Slides stacked vertically, navigated by its table of contents. Its title is the page's h1; it holds Sections and plays its Video once uploaded.
 _Avoid_: Post, article, video, tower
 
-**Episode overview**: the landing page's list of every Episode, published or upcoming, that a visitor browses and filters.
+**Episode browser**: the list of Episode cards, published or upcoming, that a visitor browses and filters, shared by the landing page and the `/episodes/` Overview (`src/episodes/components/episode-browser/`). It replaces the old meaning of "Episode overview", which now names only the `/episodes/` page (Overview).
 _Avoid_: Episode index, catalog, episode list, manifest
 
-**Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
+**Overview**: a page listing every item of one resource: the page at `/episodes/` and the one at `/events/`, whose templates are `src/page-assembly/episode-overview/` and `src/page-assembly/events-overview/`. A code name only, in files and variables, never in a URL or on screen.
+_Avoid_: Index page, list page
+
+**Episode registry**: every Episode the code knows, generated from the Episode folders, so adding an Episode is adding its folder: a folder `src/episodes/<slug>/`, or an Event's `src/episodes/by-event/<event-slug>/<slug>/`, holding `episode-metadata.ts` is an Episode, and with `episode.ts` beside it, one with a page. One folder walker (`src/episodes/lib/episode-folders.ts`) finds them for the generator and every test that reads the folders. `npm run registry` writes it as checked-in `*.generated.ts` files (the Episode ids in the content store's catalogue, the metadata the content store loads, the compositions in the Episodes area's lib), each keyed by Episode id, the tooling pages listed and composed beside them by slug; the fast suite fails while it is stale. Code reads a page's composition through one lookup, by its EpisodeRef or a tooling page's ref (`compositionOf`, `src/episodes/lib/registry.ts`).
+_Avoid_: Episode index, slug list, hand-kept registration
+
+**Episode id**: every Episode's one name across all Episodes, derived from its folder and never written in its record: its slug for an Episode no Event owns, `<event-slug>__<slug>` for an **Event copy**, an Episode an Event owns in its folder `by-event/<event-slug>/<slug>/`. A slug is unique among its siblings, so a copy usually keeps its original's slug; registries, the page catalogue and Playlists key on the id. Code passes an **EpisodeRef** and branches on its kind with `matchEpisode` (`src/content-store/catalogue/episode-id.pure.ts`). `by-event` is reserved, never a slug.
+_Avoid_: Episode key, full slug, prefixed slug
+
+**EpisodeRef**: an Episode as code passes it: its kind (no Event owns it, or it is an Event copy), its Episode id, its slug and, for a copy, its owning Event, each a field. The content store reads an Episode id into its EpisodeRef once, when the records load, and hands out the EpisodeRef with every Episode, Playlist entry and Episode page; nothing downstream reads the id's format.
+_Avoid_: Episode id string, parsed id
+
+**Upcoming Episode**: an Episode announced in the Episode browser but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
 **Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
 _Avoid_: Topic, category, theme, label, keyword
 
-**Workshop**: a dated, ordered set of Episodes, run as one event. It lists Episode slugs in the order to follow them and may list an upcoming Episode. It is not a playlist and has no status.
-_Avoid_: Playlist, course, series
+**Event**: a dated workshop or webinar that presents one Playlist. Its slug is its date then its name (`2026-10-23-axel-agentic-workflow`); it records its kind, the Audience it targets, its Organizer and an optional time and location. It owns its Event copies, in `src/episodes/by-event/<event-slug>/`, and no Slides directly, holds no text (its title and description are Translation keys) and has no visibility of its own. One record each in the content store (`src/content-store/events/`); its page is `/events/<event-slug>/`, and each Episode its Playlist lists has an **Event-scoped Episode page** at `/events/<event-slug>/episodes/<episode-slug>/`: the Episode's page with the Event's breadcrumb, past notice, place in the Playlist and walk to the previous and next Episode.
+_Avoid_: Workshop (the old name; its `/workshops/` URLs 301 to the Event), session, occasion, course
+
+**Organizer**: who runs an Event, named on its record from a closed list, `ORGANIZERS` in the content store's `schemas/fields.ts` (`hancrafted`, `axel`, `cyberforum`). Required: the store refuses an Event without one or with one outside the list.
+_Avoid_: Host, client, partner, venue
+
+**Event registry**: every Event the code knows, generated from the Event files, so adding an Event is adding its file `src/content-store/events/<slug>.ts`. `npm run registry` writes it beside the Episode registry: the Event slugs in lib, the records the content store loads; the fast suite fails while it is stale.
+_Avoid_: Event slug list, hand-kept Event pages
+
+**Playlist**: an ordered list of Episodes and its visibility, nothing else. An **event Playlist** is one an Event presents, read from the Event side, never stored; it may list unlisted Episodes, while a public Playlist no Event presents lists only public ones. One record each in the content store (`src/content-store/playlists/`).
+_Avoid_: Agenda, series, collection
+
+**visibility**: whether a record is listed and indexed: `public` or `unlisted`, required on every Episode and Playlist, so a forgotten one is refused and fails closed. Unlisted is not private: anyone holding the URL can open the page. `attendees` is refused until the platform horizon gives it an enforcer.
+_Avoid_: Status, private, hidden, draft
+
+**unlisted Episode**: an Episode whose visibility is `unlisted`: a composition made for one Event, usually its Slides copied (`cp -r`) from a public Episode and left to drift. It is an Event copy: registered once like any Episode by its Episode id, its folder in its Event's `by-event/<event-slug>/`, it lives only at its Event-scoped Episode page, has no `/episodes/` page, is `noindex`, never in the sitemap, the Episode browser or Upcoming Episodes, and is refused when it lives outside `by-event/` or no Event's Playlist lists it. Flipping its `visibility` to `public` is the one edit that indexes its Event-scoped page and adds it to the sitemap; it gets no `/episodes/` page. The page catalogue decides all of this.
+_Avoid_: Private Episode, hidden Episode, attendee page
+
+**page catalogue**: every page the site has, read from the records, each with its treatment: built or not, in the sitemap, indexed, on the site's own lists, and where its canonical points (`src/content-store/catalogue/page-catalogue.ts`, served by the content store as `PAGES` and `treatmentOf`). One visibility predicate (`pageTreatment`) gives each treatment; the routes' static params, page metadata, the sitemap, the Episode browser and the `/events/` list all ask the catalogue, so they cannot disagree. It also maps both ways between a built page and its route's params: the static params, and the page a route's params name, or none (`episodesPathPageAt`, `eventEpisodePageAt`, an Event-scoped page with the Episode it presents), which the page template turns into the 404.
+_Avoid_: route list, page list, hand-kept page list
+
+**Video**: a YouTube video an Episode's page plays from its Title slide, declared as `youtube` in the Episode's metadata and optional until uploaded; visibility decides how many. A public Episode has at most one per locale: none, English, German or both. An unlisted Episode has at most one, its **Event recording**: one YouTube id with the language spoken at its Event, played on both locale pages and labelled with that language before play. The content store refuses a second Video on an unlisted Episode and a language that is not a site locale.
+_Avoid_: Clip, recording link
 
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
 
-**Slide library**: every Master slide a Slide copies from the Slide master Episode (`src/components/episodes/slide-master/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/components/slide-master/`, `src/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
+**Tooling page**: an authoring bench with a previewable page at `/episodes/<slug>/`, composed of Slides like an Episode but no Episode: the Episode template (`episode-template`), the Workshop template (`workshop-template`), the Slide library (`slide-master`) and the Explorable explanations page (`explorable-explanations`). It has no visibility and no status, is `noindex`, never in the sitemap, and in no Episode list: not the Episode ids, the Episode browser or Upcoming Episodes. One folder each, `src/episodes/tooling/<slug>/`; `npm run registry` generates `TOOLING_SLUGS` and their compositions from those folders.
+_Avoid_: Layout reference, reference Episode
+
+**Workshop template**: the tooling page a new Event's opening Episode is copied from (`src/episodes/tooling/workshop-template/`): a Title slide, then agenda, in-scope, out-of-scope and orga Slides, every word a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
+_Avoid_: Event template, intro template, workshop Episode
+
+**Slide library**: every Master slide a Slide copies from the Slide master tooling page (`src/episodes/tooling/slide-master/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/episodes/components/slide-master/`, `src/episodes/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
 _Avoid_: Catalog
+
+**Slide pool**: the content Slides several Episodes compose as they are, one folder each under `src/episodes/slide-pool/`, beside the Episode folders. Each Episode keeps its own Title slide, section slides and Section files, which import a pool Slide through the `@/` alias; a Title slide or section slide never enters it. A Slide is promoted to the pool deliberately; copying stays the default. A fix to a pool Slide changes every Episode that composes it, past Events' copies included. Where else a reused thing goes: FE-004-slide-architecture.
+_Avoid_: shared Slides, Slide library (the Master slides a Slide is copied from), common Slides
 
 **Master slide**: one entry of the Slide library. The Dossier's `master:` key stays.
 _Avoid_: Catalog entry, template
@@ -54,13 +96,13 @@ _Avoid_: Card, panel; page, which means the Next.js route the whole Episode rend
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
 
-**Preset**: one Slide's settings of a Shared visual: the view it opens in and what it lights, so the Slide tells its own story at rest.
+**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Each lives in its own folder under `src/explorable-explanations/`, the Explorable explanations product area, apart from the plain shared parts in `slide-shared/`.
+_Avoid_: Shared visual, cornerstone component, shared component, widget
+
+**Preset**: one Slide's settings of an Explorable explanation: the view it opens in and what it lights, so the Slide tells its own story at rest.
 _Avoid_: State, configuration, variant
 
-**Shared visual**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing.
-_Avoid_: Cornerstone component, shared component, widget
-
-**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Shared visual, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
+**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Explorable explanation, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
 _Avoid_: Pipeline, flow, process
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
@@ -84,8 +126,8 @@ _Avoid_: Background
 **Foreground**: the primary layer of a Scene, inset so it never sits under the table of contents or the Context drawer. A Slide with no Backdrop is just a Foreground.
 _Avoid_: Content, front layer
 
-**Chrome**: what floats over the Slides and takes no layout space: the table of contents, the Context drawer and the talk player.
-_Avoid_: Furniture, overlay
+**Page chrome**: the parts around a page's content that any page may carry: the site header with its language and theme toggles, the footer bar, the table of contents and the Context drawer, in `src/shared/page-chrome/`. It knows nothing of the domain and takes what it needs as props; page assembly and the Episode page container place it. On an Episode page the table of contents and the Context drawer float over the Slides with the talk player, which stays in Episodes with the video it plays, and take no layout space.
+_Avoid_: Chrome, furniture, overlay
 
 **Speaker notes**: a Slide's short list of talking points, each a Speaker note item.
 _Avoid_: Notes, comments
@@ -183,8 +225,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 ## Localization
 
-**Translation file**: one locale's strings for one owner: the site's chrome and landing (`src/messages/`), one Episode, or one Slide (its folder's `i18n/`); English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
+**Translation file**: one locale's strings for one owner, in its folder's `i18n/`: a page template, a product area or its component, page chrome, one Episode, or one Slide. The owners' files outside Episodes and Slides merge into one message set (`src/page-assembly/translations.ts`), each top-level namespace defined by one owner; English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
 _Avoid_: Catalog, messages file, dictionary
 
-**Translation key**: the dotted path naming one string in a Translation file, e.g. `tableOfContents.title` site-wide, or `notes.attention-valley.header` in a Slide's own file.
+**Translation key**: the dotted path naming one string in a Translation file, e.g. `tableOfContents.title` in page chrome's file, or `notes.attention-valley.header` in a Slide's own file.
 _Avoid_: Catalog key, catalog path, message id

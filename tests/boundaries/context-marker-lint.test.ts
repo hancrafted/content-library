@@ -10,7 +10,7 @@ import { describe, expect, it } from 'vitest';
 
 const ROOT = path.join(__dirname, '../..');
 const eslint = new ESLint({ cwd: ROOT });
-const SLIDE = 'src/components/episodes/onboard-ai-every-time/slides/probe/slide.tsx';
+const SLIDE = 'src/episodes/onboard-ai-every-time/slides/probe/slide.tsx';
 const TIMEOUT = 30_000;
 
 /** The messages a marker call site draws from the guard when linted as a Slide. */

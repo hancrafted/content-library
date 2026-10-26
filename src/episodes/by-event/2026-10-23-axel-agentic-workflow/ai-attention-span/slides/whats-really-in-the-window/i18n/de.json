@@ -1,0 +1,104 @@
+{
+  "title": "Was wirklich im Kontextfenster steckt",
+  "caption": "Der Chat ist nur der Teil, den Du siehst. Noch vor Deinem ersten Wort hält das Kontextfenster schon Anweisungen und Notizen über Dich.",
+  "illustrative": "Token-Zahlen nur zur Veranschaulichung",
+  "cards": {
+    "start": {
+      "title": "Startanweisungen",
+      "lead": "<marker>Text, der vor Deine erste Nachricht gestellt wird, bevor Du irgendetwas tippst.</marker>",
+      "cost": "<marker>Je länger sie werden, desto mehr Platz nehmen sie ein und desto weniger genau werden sie befolgt.</marker>"
+    },
+    "memory": {
+      "title": "Gedächtnis",
+      "lead": "<marker>Kurze Notizen über Dich, früher gespeichert und der KI wieder vorgelegt, damit ein neuer Chat Dich schon kennt.</marker>",
+      "apps": "<marker>Auch Claude und Gemini behalten ein Gedächtnis über Chats hinweg.</marker>"
+    }
+  },
+  "named": {
+    "heading": "Heute nur genannt, nicht erklärt",
+    "items": {
+      "files": "Dateien, die die KI gelesen hat",
+      "web": "Webseiten",
+      "tools": "Ergebnisse von Tools und Konnektoren",
+      "reminders": "Systemhinweise"
+    },
+    "pastChats": "<marker>Frühere Chats werden nur auf Anfrage geholt, nicht vorab geladen</marker>."
+  },
+  "notes": {
+    "nothing-carries-over-by-itself": {
+      "header": "Nichts trägt sich von selbst weiter",
+      "description": "Ein Modell behält zwischen zwei Anfragen nichts; ein Gedächtnis über Chats hinweg gibt es nur, wenn eine Anwendung Notizen außerhalb des Modells speichert und sie wieder in den Kontext legt [1].",
+      "sources": {
+        "han-llm-memory-between-chats": {
+          "title": "Han, Why does an LLM forget everything between chats? (frühere Recherche, ohne Chat-Apps für Endnutzer)"
+        }
+      }
+    },
+    "documented-for-claude-code": {
+      "header": "Für Claude Code dokumentiert",
+      "description": "Seine Anweisungen und gespeicherten Notizen werden zu Beginn jedes Gesprächs geladen, und Claude behandelt sie als Kontext, nicht als verbindliche Konfiguration [1].",
+      "sources": {
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
+      }
+    },
+    "loading-has-a-cost": {
+      "header": "Laden hat seinen Preis",
+      "description": "Längere Anweisungsdateien verbrauchen mehr Kontext und werden weniger genau befolgt, und vom Index der Notizen laden zu Beginn nur die ersten 200 Zeilen oder 25 KB [1].",
+      "sources": {
+        "anthropic-claude-code-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        }
+      }
+    },
+    "chat-apps-document-the-effect": {
+      "header": "Chat-Apps dokumentieren die Wirkung",
+      "description": "Die Claude-App speichert ihr Gedächtnis als Themen, damit das nächste Gespräch schon weiß, was sich geändert hat [1], und Gemini merkt sich, was Du teilst, auch in neuen Chats [2]; dass die Apps es zu Beginn laden, ist eine Schlussfolgerung.",
+      "sources": {
+        "anthropic-chat-search-and-memory": {
+          "title": "Anthropic, Use Claude's chat search and memory to build on previous conversations"
+        },
+        "google-gemini-memory": {
+          "title": "Google, Manage what Gemini remembers about you and customize responses"
+        }
+      }
+    },
+    "not-every-feature-preloads": {
+      "header": "Nicht alles wird vorab geladen",
+      "description": "Claudes Suche in früheren Chats wird erst auf Anfrage ausgeführt [1], und ChatGPT sucht nur dann nach passendem Kontext, wenn er eine Antwort wahrscheinlich verbessert [2].",
+      "sources": {
+        "anthropic-chat-search-and-memory": {
+          "title": "Anthropic, Use Claude's chat search and memory to build on previous conversations"
+        },
+        "openai-chatgpt-memory": {
+          "title": "OpenAI, Memory in ChatGPT"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "more-than-the-chat": {
+        "title": "Mehr als der Chat",
+        "keywords": "",
+        "script": "Was Du im Chat siehst, ist nur ein Teil von dem, was die KI liest. Hier ist das Kontextfenster selbst, ohne den Chat: Der Balken ist das Fenster, die Liste nennt, was es füllt, und die Karte erklärt den Teil, auf den Du zeigst. Mit den Schaltern stellst Du das Fenster und die Liste zwischen einfach und technisch um."
+      },
+      "starting-instructions": {
+        "title": "Startanweisungen",
+        "keywords": "",
+        "script": "Zuerst die Startanweisungen: Text, der vor Deine erste Nachricht gestellt wird, bevor Du ein einziges Wort tippst. So ist die KI schon eingewiesen, bevor Du etwas sagst."
+      },
+      "memory": {
+        "title": "Gedächtnis",
+        "keywords": "",
+        "script": "Zweitens das Gedächtnis: kurze Notizen über Dich, früher gespeichert und der KI wieder vorgelegt. Darum weiß ein neuer Chat schon ein paar Dinge über Dich. Das ist nützlich, und es ist noch etwas mehr im Fenster."
+      },
+      "the-rest": {
+        "title": "Der Rest",
+        "keywords": "",
+        "script": "Der Rest sind angehängte Dateien, Webseiten, die die KI gelesen hat, und Ergebnisse von Tools und Konnektoren. Ich nenne sie heute nur. Wichtig ist, dass sie sich alle dasselbe Fenster mit Deinem Chat teilen."
+      }
+    }
+  }
+}

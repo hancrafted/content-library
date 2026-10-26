@@ -1,0 +1,16 @@
+{
+  "title": "Organisation",
+  "caption": "Replace with how the session runs.",
+  "items": {
+    "breaks": "Breaks: when they are",
+    "questions": "Questions: when and how to ask them",
+    "materials": "Materials: where attendees find them afterwards",
+    "contact": "Contact: how to reach the host"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "What to say about the organisation",
+      "description": "Replace with what you say while this Slide is up."
+    }
+  }
+}

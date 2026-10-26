@@ -2,9 +2,9 @@ import { load, type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { FEATURED } from '../../src/lib/episode-overview';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { ROUTES } from '../../src/lib/routes';
+import { FEATURED } from '../../src/content-store/featured';
+import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
+import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, OUT_DIR, resolveBasePath } from './exported-pages';
 
 const basePath = resolveBasePath();
@@ -155,7 +155,7 @@ describe('landing page post-build structure', () => {
 
   it.each(LANDING_PAGES)('keeps every header link once, behind a menu button below lg, for $locale', ({ url }) => {
     // ARRANGE
-    const singleCopies = ['nav-episodes', 'nav-workshops', 'header-contact', 'theme-toggle', 'locale-toggle'];
+    const singleCopies = ['nav-episodes', 'nav-events', 'header-contact', 'theme-toggle', 'locale-toggle'];
     const collapsed = 'false';
     // ACT
     const $ = getPage(url);

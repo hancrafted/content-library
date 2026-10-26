@@ -14,15 +14,15 @@ The implementor (`archgate:developer`) builds the Spec's `Episode page` section,
 
 ### Placement markers
 
-One module per Section ([design-ADR-0008](../../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) Decision 7, FE-004 Decision 3), `src/components/episodes/<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide list, which the Episode record imports into `sections` in order. `<section-slug>` is the Section's h3 title under the Brief's `## Slides` in kebab case, the one slug [`customize-pipeline`](customize-pipeline.md) gives the Section's job when it expands the `implement-section` foreach; never the Spec Section's `id`, which may differ. Its Section job adds its page Slides to that list alone, so parallel Section branches never edit one line, and its job id `implement-section-<section-slug>` names the module it owns.
+One module per Section ([design-ADR-0008](../../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) Decision 7, FE-004 Decision 3), `src/episodes/<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide list, which the Episode record imports into `sections` in order. `<section-slug>` is the Section's h3 title under the Brief's `## Slides` in kebab case, the one slug [`customize-pipeline`](customize-pipeline.md) gives the Section's job when it expands the `implement-section` foreach; never the Spec Section's `id`, which may differ. Its Section job adds its page Slides to that list alone, so parallel Section branches never edit one line, and its job id `implement-section-<section-slug>` names the module it owns.
 
 ### Metadata
 
 The Episode is a draft: it has no video and no Promotion. This overrides the metadata line in step 3 of [episode-migration](../../../docs/features/episode-migration.md).
 
-- Write `episode-metadata.ts` with `status: 'upcoming'` (the existing non-published value, `UpcomingEpisodeMetadata`) and no `publishedOn`; the type refuses one. Publishing flips both and is the user's separate step ([episode-publishing](../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
-- Topic, extra Topics and Tags come from the Brief. `topic`, `format` and `tags` are required in `SharedMetadata` (`src/lib/episode-metadata.pure.ts`), so a required field the Brief does not name gets a `needs-human` note plus the closest honest value (the nearest existing Topic or Format, an empty `tags` list), never an invented one. `extraTopics` is optional: when the Brief names none, leave it out.
-- Register the metadata in the `REGISTERED` map in `episode-repository.ts`: it holds every registered slug whatever its `status`, so an upcoming Episode with a page type-checks. The page is built `noindex` and its card stays unlinked until publishing; write no `published-anchors.json` here.
+- Write `episode-metadata.ts` with `status: 'upcoming'`, `visibility: 'public'` and no `publishedOn`; the schema (`src/content-store/schemas/episode.schema.ts`) refuses one, and refuses a record without a visibility. Publishing flips both and is the user's separate step ([episode-publishing](../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
+- Format and Tags come from the Brief. `format` and at least one Tag are required by the Episode schema (`src/content-store/schemas/episode.schema.ts`), so a required field the Brief does not name gets a `needs-human` note plus the closest honest value (the nearest existing Format or Tag), never an invented one.
+- Register the Episode by running `npm run registry`: the Episode registry derives the slug, the metadata and the record from the folder, whatever its `status`, so an upcoming Episode with a page type-checks; the fast suite fails while the registry is stale. The page is built `noindex` and its card stays unlinked until publishing; write no `published-anchors.json` here.
 
 ## Review
 

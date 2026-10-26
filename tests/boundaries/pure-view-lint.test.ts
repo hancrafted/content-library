@@ -10,8 +10,8 @@ import { describe, expect, it } from 'vitest';
 
 const ROOT = path.join(__dirname, '../..');
 const eslint = new ESLint({ cwd: ROOT });
-const VIEW = 'src/components/slide-shared/context/probe-view.tsx';
-const OTHER = 'src/components/slide-shared/context/probe.tsx';
+const VIEW = 'src/explorable-explanations/context/probe-view.tsx';
+const OTHER = 'src/explorable-explanations/context/probe.tsx';
 const TIMEOUT = 30_000;
 
 /** The messages the no-restricted-syntax rule raises for a snippet linted as `file`. */
@@ -22,7 +22,7 @@ async function restricted(code: string, file: string): Promise<string[]> {
 
 const HOOK = "import { useState } from 'react';\nexport const Probe = () => { useState(0); return <div />; };\n";
 const HANDLER = 'export const Probe = () => <button onClick={() => undefined} />;\n';
-const HOOK_IMPORT = "import { useThing } from '@/hooks/use-thing';\nexport const Probe = () => <div />;\n";
+const HOOK_IMPORT = "import { useThing } from '@/shared/hooks/use-thing';\nexport const Probe = () => <div />;\n";
 const CLIENT_IMPORT = "import { Leaf } from './leaf.client';\nexport const Probe = () => <Leaf />;\n";
 const DIRECTIVE = "'use client';\nexport const Probe = () => <div />;\n";
 const PURE = 'export const Probe = ({ a }: { a: number }) => <div style={{ width: a }} />;\n';

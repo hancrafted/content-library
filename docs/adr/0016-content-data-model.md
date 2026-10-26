@@ -20,6 +20,7 @@ erDiagram
 
     AUDIENCE ||--o{ EVENT : "is targeted by"
     EVENT ||--|| PLAYLIST : presents
+    EVENT ||--o{ EPISODE : owns
     PLAYLIST }o--|{ EPISODE : "orders"
     EPISODE }o--|{ TAG : "carries (first = lead Tag)"
     EPISODE ||--o{ VIDEO : "public: 0-2, one per locale | unlisted: 0-1, recorded at its Event"
@@ -39,15 +40,15 @@ Out of the model: Concept, Research question and Source (the evidence layer, its
 
 1. **An Episode is standalone.** A container of Slides with its own title, Slides and Videos, whether public or unlisted.
 2. **Every Episode declares `visibility`: `public` or `unlisted`.** A record without it is refused, so a forgotten field fails closed. Flipping it is the one edit that moves an Episode between the two; pages, sitemap and overview follow.
-3. **Every Episode is registered once**, whatever its visibility. Episode slugs are unique across all Episodes.
-4. **An unlisted Episode lives only under an Event.** One that no Event's Playlist lists is refused. It has no overview card and is never an Upcoming Episode. Unlisted is not private: anyone holding the URL can open it.
+3. **Every Episode is registered once**, whatever its visibility, by its **Episode id**: derived from its folder, never written in its record. An Episode no Event owns sits in `episodes/<slug>/` and its id is its slug; an Event's copy sits in `episodes/by-event/<event-slug>/<slug>/` and its id is `<event-slug>__<slug>`. A slug is unique among its siblings, so a copy usually keeps its original's; the id is unique across all Episodes. `by-event` is a reserved folder name, never a slug. Code passes an `EpisodeRef` (standalone or Event copy) and branches on it with `matchEpisode`: the store reads each id into its EpisodeRef once, when the records load, and serves it with every Episode, Playlist entry and Episode page.
+4. **An unlisted Episode lives only under an Event**, in that Event's folder: one outside `by-event/`, or one that no Event's Playlist lists, is refused. It has no overview card and is never an Upcoming Episode. Unlisted is not private: anyone holding the URL can open it. A public copy in an Event's folder lives at its Event-scoped URL only, with no `/episodes/` page.
 5. **A Video is a YouTube video; visibility decides how many.** A public Episode has at most one per locale: none, English, German or both. An unlisted Episode has at most one, recorded at its Event in the language spoken there, played on both locale pages and labelled with that language: the recording belongs to the composition that was presented.
 6. **Slides are copied, then promoted deliberately** (vision rule 4). Reusing a Slide copies its folder into the Episode, slug kept (_The Slide is a self-contained folder_). Copies drift until Han promotes one to a **Shared Slide**. How promotion works is open in ticket _Slide reuse_.
 7. **Tags group Episodes** as _Tags replace Topics_ decides, until the evidence layer replaces them.
 
 ### Delivery
 
-8. **An Event** is a dated workshop or webinar: slug `<date>-<name>`, date, kind, the Audience it targets, optional time and location, and the one Playlist it presents. It owns no Slides, holds no text (title and description are Translation keys, FE-003) and has no visibility of its own.
+8. **An Event** is a dated workshop or webinar: slug `<date>-<name>`, date, kind, the Audience it targets, its **Organizer** (one of a closed list), optional time and location, and the one Playlist it presents. It owns its copies of Episodes, each in its folder `by-event/<event-slug>/`, and its Playlist lists Episodes no Event owns and its own copies, never another Event's. It owns no Slides directly, holds no text (title and description are Translation keys, FE-003) and has no visibility of its own. A copy that moves under its Event keeps its old Event-scoped URL as a 301 in `public/_redirects`.
 9. **A Playlist** is an ordered list of Episodes and its `visibility`, nothing else. Whether it is an event Playlist is read from the Event side. A public Playlist lists only public Episodes; an event Playlist may list unlisted ones. `attendees` is refused until horizon 3 gives it an enforcer.
 10. **The Workshop template** replaces the event-frame Episode: a copy source holding title, agenda, in-scope, out-of-scope and orga Slides, copied into an ordinary unlisted Episode placed first in an Event's Playlist. A `/new-event` skill waits until two real Events exist.
 
@@ -64,21 +65,22 @@ Out of the model: Concept, Research question and Source (the evidence layer, its
 | `/events/`                                      | Events whose Playlist is public. Replaces `/workshops/`.           |
 | `/events/<event-slug>/`                         | The Event: facts, past notice, its Playlist as numbered cards.     |
 | `/events/<event-slug>/episodes/<episode-slug>/` | One Episode of that Playlist: "Episode n of m", previous and next. |
-| `/episodes/<episode-slug>/`                     | A public Episode, unchanged. An unlisted Episode has none.         |
+| `/episodes/<episode-slug>/`                     | A public Episode no Event owns. An Event's copy has none.          |
 
 Old `/workshops/` URLs 301 to their Event in `public/_redirects`, both locales (FE-005 forbids `next.config.ts` redirects).
 
 One predicate decides each page's sitemap entry, robots tag and canonical, and both the page metadata and the sitemap ask it (FE-008):
 
-| Page                             | Sitemap | Robots    | Canonical                    |
-| -------------------------------- | ------- | --------- | ---------------------------- |
-| Public, published Episode        | yes     | index     | itself, with hreflang        |
-| Event page, public Playlist      | yes     | index     | itself, with hreflang        |
-| Event page, unlisted Playlist    | no      | `noindex` | itself                       |
-| Unlisted Episode under its Event | no      | `noindex` | itself                       |
-| Public Episode under an Event    | no      | index     | its `/episodes/<slug>/` page |
-| Upcoming Episode, anywhere       | no      | `noindex` | itself                       |
-| Tooling page                     | no      | `noindex` | itself                       |
+| Page                              | Sitemap | Robots    | Canonical                    |
+| --------------------------------- | ------- | --------- | ---------------------------- |
+| Public, published Episode         | yes     | index     | itself, with hreflang        |
+| Event page, public Playlist       | yes     | index     | itself, with hreflang        |
+| Event page, unlisted Playlist     | no      | `noindex` | itself                       |
+| Unlisted Episode under its Event  | no      | `noindex` | itself                       |
+| Public Episode under an Event     | no      | index     | its `/episodes/<slug>/` page |
+| Public Event copy under its Event | yes     | index     | itself, with hreflang        |
+| Upcoming Episode, anywhere        | no      | `noindex` | itself                       |
+| Tooling page                      | no      | `noindex` | itself                       |
 
 `noindex` is a meta tag only; `robots.txt` keeps `allow: /` so a crawler can read it.
 

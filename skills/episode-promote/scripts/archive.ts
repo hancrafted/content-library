@@ -6,11 +6,13 @@
 
 import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { buildDesignCss } from '../../new-episode/scripts/spec-css.ts';
-import { archivedEpisode, archiveIndex } from './archive-dashboard.pure.ts';
-import { designArchive } from './archive.pure.ts';
+import { archivedEpisode, archiveIndex } from '../../../src/pipeline/lib/archive-dashboard.pure.ts';
+import { designArchive } from '../../../src/pipeline/lib/archive.pure.ts';
+import { buildDesignCss } from '../../../src/pipeline/lib/spec-css.ts';
 
 const ARCHIVE = 'design-archive';
+/** The archive pages' own styles, kept beside the skill's other page assets. */
+const asset = (name: string): string => readFileSync(path.join(import.meta.dirname, '../assets', name), 'utf8');
 const staging = process.argv[2]?.replace(/\/$/, '');
 if (!staging || !existsSync(path.join(staging, 'spec/spec.html'))) {
   console.error('usage: npm run episode:archive -- docs/episodes/<staging-folder>  (it must hold spec/spec.html)');
@@ -32,6 +34,7 @@ const { slug, pages, references } = designArchive({
   spec: readFileSync(path.join(staging, 'spec/spec.html'), 'utf8'),
   feedback,
   events: existsSync(eventsFile) ? readFileSync(eventsFile, 'utf8') : '',
+  style: asset('archive-episode.css'),
 });
 
 rmSync(path.join(ARCHIVE, slug), { recursive: true, force: true });
@@ -56,7 +59,7 @@ copyFileSync(await buildDesignCss(path.join(staging, 'spec')), path.join(ARCHIVE
 const episodes = readdirSync(ARCHIVE, { withFileTypes: true })
   .filter((entry) => entry.isDirectory() && existsSync(path.join(ARCHIVE, entry.name, 'index.html')))
   .map(({ name }) => archivedEpisode(name, readFileSync(path.join(ARCHIVE, name, 'index.html'), 'utf8')));
-writeFileSync(path.join(ARCHIVE, 'index.html'), archiveIndex(episodes));
+writeFileSync(path.join(ARCHIVE, 'index.html'), archiveIndex(episodes, asset('archive-dashboard.css')));
 const archived = episodes.find((episode) => episode.slug === slug);
 console.log(
   `archived ${archived?.slides ?? 0} Slide(s) and ${references.length} reference(s) to ${ARCHIVE}/${slug}/index.html`,

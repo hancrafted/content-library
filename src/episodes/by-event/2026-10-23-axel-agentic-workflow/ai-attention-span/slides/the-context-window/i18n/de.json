@@ -1,0 +1,73 @@
+{
+  "title": "Das Kontextfenster",
+  "caption": "Mit jeder Nachricht geht der ganze Chat mit, und der Platz ist begrenzt: das Kontextfenster.",
+  "cards": {
+    "resend": {
+      "kicker": "Mit jeder Nachricht",
+      "body": "<keeps>Die KI bekommt den ganzen Chat noch einmal</keeps>, <replies>ihre eigenen Antworten eingeschlossen</replies>."
+    },
+    "limit": {
+      "kicker": "Die Grenze",
+      "body": "Der Platz dafür ist begrenzt. Diese Grenze ist das <b>Kontextfenster</b>."
+    },
+    "apps": {
+      "kicker": "In Chat-Apps",
+      "body": "<marker>Apps können das Fenster auf ihre eigene Art verwalten.</marker>"
+    }
+  },
+  "illustrative": "Zahlen zur Veranschaulichung",
+  "notes": {
+    "the-model-keeps-nothing": {
+      "header": "Das Modell behält nichts",
+      "description": "die Messages-API ist zustandslos: Zwischen zwei Anfragen hält sie kein Gespräch fest, und wer sie aufruft, schickt die früheren Nachrichten von Nutzer und Assistent mit der neuen mit [1].",
+      "sources": {
+        "anthropic-messages-api": { "title": "Anthropic, Messages API reference" }
+      }
+    },
+    "replies-feed-back-in": {
+      "header": "Antworten fließen zurück",
+      "description": "die Antwort des Modells wird Teil der Eingabe für die nächste Runde [1].",
+      "sources": {
+        "anthropic-context-windows": { "title": "Anthropic, Context windows" }
+      }
+    },
+    "both-directions-count": {
+      "header": "Beide Richtungen zählen",
+      "description": "das Kontextfenster hält den bisherigen Gesprächsverlauf und dazu die neu erzeugte Ausgabe [1].",
+      "sources": {
+        "anthropic-context-windows": { "title": "Anthropic, Context windows" }
+      }
+    },
+    "apps-may-differ": {
+      "header": "Apps können abweichen",
+      "description": "die Quellen beschreiben die Entwickler-API; dass eine Chat-App den Verlauf erneut schickt, ist ein Schluss daraus, und Chat-Oberflächen wie claude.ai können das Fenster stattdessen verwalten, indem sie die ältesten Inhalte zuerst entfernen [1].",
+      "sources": {
+        "anthropic-context-windows": { "title": "Anthropic, Context windows" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "you-type-one-line": {
+        "title": "Du tippst eine Zeile",
+        "keywords": "",
+        "script": "Du tippst eine kurze Zeile, sagen wir: Finde drei Locations in Lissabon. Aber was die KI bekommt, ist das ganze bisherige Gespräch, von Deiner ersten Nachricht bis zur letzten, und sie bekommt all das mit jeder einzelnen Nachricht, die Du schickst."
+      },
+      "there-is-a-size-limit": {
+        "title": "Es gibt eine Größengrenze",
+        "keywords": "",
+        "script": "Dieses Paket hat eine Höchstgröße. Stell es Dir als Balken vor, der sich Block für Block füllt, ein Block für jede Frage und jede Antwort, bis kein Platz mehr ist. Dieser Balken ist das Kontextfenster. Diese Grenze ist die Aufmerksamkeitsspanne der KI: wie viel sie auf einmal im Blick behalten kann."
+      },
+      "the-term-to-keep": {
+        "title": "Der Begriff zum Merken",
+        "keywords": "",
+        "script": "Der Begriff zum Merken ist Kontextfenster. Wenn Du Dir heute nur ein Wort merkst, dann dieses: Kontextfenster."
+      },
+      "context-engineering": {
+        "title": "Context Engineering",
+        "keywords": "",
+        "script": "Für den Umgang damit gibt es einen Namen: Context Engineering. Es heißt, der KI den richtigen Kontext zur richtigen Zeit zu geben, nicht den meisten Kontext, sondern den richtigen. Genau den verwalten wir heute."
+      }
+    }
+  }
+}

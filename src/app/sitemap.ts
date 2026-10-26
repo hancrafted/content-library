@@ -1,5 +1,5 @@
-import { sitemapPage } from '@/components/pages/sitemap-page';
-import { SITE_URL } from '@/lib/site-url';
+import { sitemapPage } from '@/page-assembly/sitemap/sitemap-page';
+import { SITE_URL } from '@/shared/lib/site-url';
 import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';

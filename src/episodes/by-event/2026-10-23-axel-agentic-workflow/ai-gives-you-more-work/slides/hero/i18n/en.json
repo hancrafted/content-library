@@ -1,0 +1,15 @@
+{
+  "caption": "AI takes over the execution and hands you the management, and that is what lets one person take on far more complex work.",
+  "label": "A staircase of four steps, the AI step the tallest",
+  "axis": "How complex a task one person takes on",
+  "steps": {
+    "farming": "Farming",
+    "steam": "Steam engine",
+    "computer": "Computer",
+    "ai": "AI",
+    "aiNote": "drafts and reasons"
+  },
+  "goal": "Managing it",
+  "legend": "Each step: the machine takes the lower work, you climb a level.",
+  "legendAi": "The AI step is the tallest yet."
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Out of scope",
+  "caption": "Replace with what this session leaves out, so no one waits for it.",
+  "items": {
+    "first": "A topic the session leaves out",
+    "second": "A second topic the session leaves out",
+    "third": "A third topic the session leaves out"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "What to say about what is left out",
+      "description": "Replace with what you say while this Slide is up."
+    }
+  }
+}

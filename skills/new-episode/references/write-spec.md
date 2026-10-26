@@ -1,6 +1,6 @@
 # write-spec
 
-Output: `docs/episodes/<slug>/spec/spec.html`, the **Spec**: one static HTML page showing the Title slide with three **Options**, each a set with every section slide, then every page Slide with two or three Options under its title, Visual idea, Voice script and Speaker notes ([design-ADR-0011](../../../docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md)). [The sample](../assets/sample-episode/spec/spec.html) shows its shape; `src/lib/episode-spec.pure.ts` holds its contract and the staging test enforces it. The job runs in the orchestrator session, because it spawns the designers, and ends at the Spec Gate: The user reviews the page, Slides without one pick are redesigned, and they approve once every Slide has one.
+Output: `docs/episodes/<slug>/spec/spec.html`, the **Spec**: one static HTML page showing the Title slide with three **Options**, each a set with every section slide, then every page Slide with two or three Options under its title, Visual idea, Voice script and Speaker notes ([design-ADR-0011](../../../docs/adr/0011-episode-design-is-reviewed-as-a-static-html-spec.md)). [The sample](../assets/sample-episode/spec/spec.html) shows its shape; `src/pipeline/lib/episode-spec.pure.ts` holds its contract and the staging test enforces it. The job runs in the orchestrator session, because it spawns the designers, and ends at the Spec Gate: The user reviews the page, Slides without one pick are redesigned, and they approve once every Slide has one.
 
 ## Prompt
 

@@ -1,0 +1,47 @@
+import { SectionSlide } from '@/episodes/components/slide-master/section-slide';
+import { slide } from '@/episodes/components/slide-master/slide';
+import { SlideProse } from '@/episodes/components/slide-master/slide-master';
+import type { ReactElement } from 'react';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+import { TokenizerPlaygroundClient } from './tokenizer-playground.client';
+
+const DIMENSIONS = [
+  { label: 'input', desc: 'every word you send — and re-send on every turn', color: 'text-primary' },
+  { label: 'output', desc: 'every word generated in return and reasoning traces', color: 'text-human' },
+  { label: 'cache write', desc: 'storing recurring context blocks for reuse', color: 'text-(--info)' },
+  { label: 'cache read', desc: 'reusing cached blocks — ~10% of base input rate', color: 'text-(--success)' },
+] as const;
+
+function BillingDimensions(): ReactElement {
+  return (
+    <div className="rounded-xl border border-border bg-muted/50 p-5">
+      <p className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-muted-foreground">
+        Every token is billed 4 ways
+      </p>
+      <ul className="mt-3 grid gap-2 text-sm text-muted-foreground">
+        {DIMENSIONS.map((d) => (
+          <li key={d.label} className="flex items-baseline gap-2">
+            <span className={`font-mono text-xs font-semibold ${d.color}`}>{d.label}</span>
+            <span>{d.desc}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export const whatIsAToken = slide({
+  slug: 'what-is-a-token',
+  messages: { en, de },
+  notes: [{ slug: 'probabilistic-units', target: 'title' }],
+  content: ({ t, Title }) => (
+    <SectionSlide title={<Title>{t('title')}</Title>} caption={t('caption')}>
+      <SlideProse>{t('prose')}</SlideProse>
+      <div className="mt-8 grid gap-6 lg:grid-cols-[3fr_2fr]">
+        <TokenizerPlaygroundClient />
+        <BillingDimensions />
+      </div>
+    </SectionSlide>
+  ),
+});

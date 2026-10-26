@@ -40,7 +40,7 @@ function makeCtx(files: Record<string, string>) {
 }
 
 const CSS = 'src/app/globals.css';
-const DRAWER = 'src/components/context-drawer/context-drawer.client.tsx';
+const DRAWER = 'src/shared/page-chrome/context-drawer/context-drawer.client.tsx';
 const PROVENANCE = '(FE-010 [print-reveals-context])';
 
 describe('print-reveals-context', () => {
@@ -148,7 +148,7 @@ describe('drawer-is-non-modal', () => {
 
   it('ignores files outside the drawer folder', async () => {
     // ARRANGE
-    const { ctx, violations } = makeCtx({ 'src/components/other.tsx': `x.showModal();\n` });
+    const { ctx, violations } = makeCtx({ 'src/shared/components/other.tsx': `x.showModal();\n` });
     // ACT
     await rule.check(ctx);
     // ASSERT

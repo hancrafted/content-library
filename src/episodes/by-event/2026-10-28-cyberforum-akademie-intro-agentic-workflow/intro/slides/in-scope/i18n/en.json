@@ -1,0 +1,15 @@
+{
+  "title": "In scope",
+  "caption": "Replace with what this session covers.",
+  "items": {
+    "first": "A topic the session covers",
+    "second": "A second topic the session covers",
+    "third": "A third topic the session covers"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "What to say about the scope",
+      "description": "Replace with what you say while this Slide is up."
+    }
+  }
+}

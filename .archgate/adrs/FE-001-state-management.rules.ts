@@ -3,14 +3,14 @@
 // FE-001 — State Management. Storage Discipline (§3).
 //
 // `single-storage-key` — one localStorage key per kind: preferences and
-// hands-on progress, each named once in src/config.yaml (FE-001 §3). Every
+// hands-on progress, each named once in src/shared/config.yaml (FE-001 §3). Every
 // getItem/setItem call under src/ must pass one of them, either as its constant
 // (`PREFS_KEY`, `PROGRESS_KEY`) or as the literal itself, and every constant
 // declaration must equal its configured key, so the config and the code cannot
 // drift. Accepted trade-off: a third legitimate key breaks this rule, and the
 // ADR is amended first. Self-contained by design: archgate forbids imports
 // between rules files.
-const CONFIG_PATH = 'src/config.yaml';
+const CONFIG_PATH = 'src/shared/config.yaml';
 const SOURCE_GLOBS = ['src/**/*.ts', 'src/**/*.tsx'];
 
 /** Each kind's config field and the constant that names it in code. */
@@ -67,7 +67,7 @@ function checkCalls(ctx: RuleContext, file: string, source: string, keys: readon
   for (const call of source.matchAll(CALL_RE)) {
     if (usesKey(call[1], keys)) continue;
     ctx.report.violation({
-      message: `localStorage call passes '${call[1].trim()}', not ${allowed} from ${CONFIG_PATH} — pass PREFS_KEY or PROGRESS_KEY, or read and write through src/lib/prefs-storage.ts ${PROVENANCE}.`,
+      message: `localStorage call passes '${call[1].trim()}', not ${allowed} from ${CONFIG_PATH} — pass PREFS_KEY or PROGRESS_KEY, or read and write through src/shared/lib/prefs-storage.ts ${PROVENANCE}.`,
       file,
       line: lineAt(source, call.index),
     });
@@ -91,7 +91,7 @@ export default {
   rules: {
     'single-storage-key': {
       description:
-        'Every localStorage getItem/setItem call under src/ uses one of the two keys set as localStorageKey and progressStorageKey in src/config.yaml, and every PREFS_KEY and PROGRESS_KEY declaration equals its key.',
+        'Every localStorage getItem/setItem call under src/ uses one of the two keys set as localStorageKey and progressStorageKey in src/shared/config.yaml, and every PREFS_KEY and PROGRESS_KEY declaration equals its key.',
       severity: 'error',
       async check(ctx) {
         const { keys, missing } = await readConfiguredKeys(ctx);

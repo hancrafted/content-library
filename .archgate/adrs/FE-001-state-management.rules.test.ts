@@ -13,7 +13,7 @@ interface Reported {
   line?: number;
 }
 
-const CONFIG = 'src/config.yaml';
+const CONFIG = 'src/shared/config.yaml';
 const KEY = 'hancrafted:prefs';
 const PROGRESS = 'hancrafted:progress';
 
@@ -53,8 +53,8 @@ function makeCtx(
   return { ctx, violations };
 }
 
-const STORAGE = 'src/lib/prefs-storage.ts';
-const PURE = 'src/lib/prefs.pure.ts';
+const STORAGE = 'src/shared/lib/prefs-storage.ts';
+const PURE = 'src/shared/lib/prefs.pure.ts';
 const rule = ruleSet.rules['single-storage-key'];
 
 describe('single-storage-key', () => {
@@ -63,7 +63,7 @@ describe('single-storage-key', () => {
     const { ctx, violations } = makeCtx({
       [PURE]: `export const PREFS_KEY = '${KEY}';\n`,
       [STORAGE]: `window.localStorage.getItem(PREFS_KEY);\nwindow.localStorage.setItem(PREFS_KEY, raw);\nlocalStorage.getItem("${KEY}");\n`,
-      'src/lib/theme.pure.ts': 'const s = `localStorage.getItem(${JSON.stringify(PREFS_KEY)})`;\n',
+      'src/shared/lib/theme.pure.ts': 'const s = `localStorage.getItem(${JSON.stringify(PREFS_KEY)})`;\n',
     });
     // ACT
     await rule.check(ctx);
@@ -96,12 +96,12 @@ describe('single-storage-key', () => {
     // ARRANGE
     const expectedLine = 2;
     const { ctx, violations } = makeCtx({
-      'src/hooks/x.tsx': `const a = 1;\nlocalStorage.setItem('theme', 'dark');\n`,
+      'src/shared/hooks/x.tsx': `const a = 1;\nlocalStorage.setItem('theme', 'dark');\n`,
     });
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations.map((v) => [v.file, v.line])).toEqual([['src/hooks/x.tsx', expectedLine]]);
+    expect(violations.map((v) => [v.file, v.line])).toEqual([['src/shared/hooks/x.tsx', expectedLine]]);
   });
 
   it('fails on a call passing an unrelated variable', async () => {
@@ -144,7 +144,7 @@ describe('single-storage-key', () => {
 
   it('leaves files outside src/ alone', async () => {
     // ARRANGE
-    const { ctx, violations } = makeCtx({ 'scripts/x.ts': `localStorage.setItem('other', '1');\n` });
+    const { ctx, violations } = makeCtx({ 'tools/x.ts': `localStorage.setItem('other', '1');\n` });
     // ACT
     await rule.check(ctx);
     // ASSERT
