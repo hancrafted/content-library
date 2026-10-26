@@ -29,9 +29,8 @@ export interface UiWords {
   /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
   readonly sendBack: string;
-  /** The Detailed view's bracket round a repeated stage (`{n}` rounds) and a job card's hidden name (`{job}`, `{stage}`). */
-  readonly repeats: string;
-  readonly tryJob: string;
+  readonly repeats: string; // Detailed view: a repeated stage's bracket (`{n}` rounds)
+  readonly tryJob: string; // Detailed view: a job card's hidden name (`{job}`, `{stage}`)
   readonly chat: string;
   readonly chatTip: string;
   readonly cli: string;
