@@ -30,16 +30,16 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 1. Every `page.tsx` MUST export `metadata` or `generateMetadata` returning `pageMetadata(<PageRef>, locale)`.
 2. `pageMetadata` derives the canonical and one alternate per locale plus `x-default` (the default-locale URL). No route writes a URL.
-3. `PageRef` is `'home'` or `{ episode: <EpisodeSlug> }`; every page has one.
+3. Every page has a `PageRef`: `home`, `dashboard`, `episodes`, `events`, an Episode, a tooling page, an Event, or an Episode under an Event.
 
 ### 2. Title and description are translated strings
 
-1. They MUST live in Translation files typed so a missing German key fails `tsc` — the landing page's in `meta.home`; an Episode's in its own folder's `i18n/`, read through its record and handed to `pageMetadata` by the route; the site-wide files hold no Episode text.
+1. They MUST live in Translation files typed so a missing German key fails `tsc` — the landing page's in `meta.home`; an Episode's in its folder's `i18n/`, read through its record; the site-wide files hold no Episode text.
 2. A page at a root layout's own segment MUST name the brand in its title; `title.template` skips that segment.
 
 ### 3. `SITE_URL` is the absolute base
 
-1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/lib/site-url.ts`. The deploy sets it to the production origin (https://hancrafted.net), so a domain change needs no code change.
+1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/lib/site-url.ts`. The deploy sets it (https://hancrafted.net), so a domain change needs no code change.
 2. Unset, it falls back to localhost plus the base path; malformed, the build throws.
 3. It MUST NOT carry the `NEXT_PUBLIC_` prefix; only build-time metadata reads it.
 
@@ -50,12 +50,12 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 5. Scope
 
-1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list `PAGES` minus `isNoindex`, which `pageMetadata` also applies. `not-found.tsx` is a separate UI decision.
+1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list the `PAGES` that the visibility predicate `pageTreatment` admits, which `pageMetadata` also asks. `not-found.tsx` is a separate UI decision.
 2. An unknown locale prefix is no file in `out/`, so Pages serves its 404. `resolveLocale()`'s `notFound()` only narrows the type; nothing relies on it.
 
 ### 6. Indexable pages carry cards and structured data
 
-1. Every indexable page MUST carry social cards and structured data, so a shared link previews and search understands Episodes: the landing page as a person and website, a published Episode as an article, with its recording where one exists.
+1. Every indexable page MUST carry social cards and structured data: the landing page as a person and website, a published Episode as an article, with its recording where one exists.
 2. An upcoming or `noindex` page MUST carry neither.
 3. Each page's card URL and structured-data URL MUST equal its canonical.
 
@@ -114,4 +114,5 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 - [Next.js — Metadata and `generateMetadata`](https://nextjs.org/docs/app/api-reference/functions/generate-metadata) — `metadataBase`, `alternates`, `title.template`, inheritance.
 - [Google Search — Localized versions of your pages](https://developers.google.com/search/docs/specialty/international/localized-versions) — reciprocal `hreflang` and `x-default`.
+- [`docs/adr/0016-content-data-model.md`](../../docs/adr/0016-content-data-model.md) — the visibility table `pageTreatment` implements (§5.1).
 - [actions/configure-pages](https://github.com/actions/configure-pages) — the `base_url` output.

@@ -2,7 +2,16 @@ import { overviewOrder } from '@/lib/episode-metadata.pure';
 import { EVENT_SLUGS, type PageRef } from '@/lib/routes';
 import { pageTreatment } from '@/lib/visibility.pure';
 import { describe, expect, it } from 'vitest';
-import { episodeVideo, findEvent, listEpisodes, listEvents, loadContent, pageFactsIn, playlistOf } from './store';
+import {
+  episodeVideo,
+  findEvent,
+  listedEventsIn,
+  listEpisodes,
+  listEvents,
+  loadContent,
+  pageFactsIn,
+  playlistOf,
+} from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
@@ -125,13 +134,19 @@ describe('success cases', () => {
     };
     const expected = {
       unlisted: {
-        own: { exported: false, inSitemap: false, index: false, canonical: 'self' },
-        underEvent: { exported: true, inSitemap: false, index: false, canonical: 'self' },
+        own: { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' },
+        underEvent: { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' },
         overview: ['alpha'],
       },
       public: {
-        own: { exported: true, inSitemap: true, index: true, canonical: 'self' },
-        underEvent: { exported: true, inSitemap: false, index: true, canonical: { episode: 'alpha-at-axel' } },
+        own: { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' },
+        underEvent: {
+          exported: true,
+          inSitemap: false,
+          index: true,
+          listed: false,
+          canonical: { episode: 'alpha-at-axel' },
+        },
         overview: ['alpha', 'alpha-at-axel'],
       },
     };
@@ -139,6 +154,20 @@ describe('success cases', () => {
     const seen = { unlisted: seenIn(unlisted), public: seenIn(flipped) };
     // ASSERT
     expect(seen).toEqual(expected);
+  });
+
+  it('lists on /events/ only the Events whose Playlist is public, leaving out one whose Playlist is unlisted', () => {
+    // ARRANGE
+    const [publicSlug, unlistedSlug] = EVENT_SLUGS;
+    const shown = { ...EVENT, slug: publicSlug, date: '2026-10-23' };
+    const private_ = { ...EVENT, slug: unlistedSlug, date: '2026-10-28', playlist: 'private' };
+    const unlistedPlaylist = { ...PLAYLIST, id: 'private', visibility: 'unlisted' };
+    const content = loadContent({ ...SOUND, events: [shown, private_], playlists: [PLAYLIST, unlistedPlaylist] });
+    const expected = [publicSlug];
+    // ACT
+    const listed = listedEventsIn(content).map((event) => event.slug);
+    // ASSERT
+    expect(listed).toEqual(expected);
   });
 
   it.each(RECORDINGS)(

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { isPastEvent, playlistPlace } from './events.pure';
 
 const PLAYLIST = ['agenda', 'onboard', 'attention', 'more-work'];
-const everyHasAPage = () => true;
+/** Every Playlist entry has a page: a stand-in for `isEpisodeSlug` over registered slugs. */
+const everyHasAPage = (slug: string): slug is string => slug.length > 0;
 
 describe('success cases', () => {
   it('says where an Episode sits in the Playlist and which Episodes come before and after it', () => {
@@ -61,7 +62,7 @@ describe('edge cases', () => {
 
   it('steps over an Episode with no page yet, but still counts it', () => {
     // ARRANGE
-    const hasPage = (slug: string) => slug !== 'attention';
+    const hasPage = (slug: string): slug is string => slug !== 'attention';
     const expected = { position: 2, count: 4, previous: 'agenda', next: 'more-work' };
     // ACT
     const place = playlistPlace(PLAYLIST, 'onboard', hasPage);

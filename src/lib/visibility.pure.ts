@@ -10,9 +10,10 @@ import {
 
 /*
  * The one visibility predicate (design-ADR 0016, Routes and visibility; FE-008): a page and the facts of what it
- * presents in, whether it is exported, listed in the sitemap, indexed, and where its canonical points out. The
- * sitemap, page metadata and the `/episodes/` static params all ask it, so they cannot disagree. Pure: the facts come
- * from the content store through the composition roots (`src/components/pages/page-facts.ts`).
+ * presents in, whether it is exported, listed in the sitemap, indexed, shown on the site's own lists, and where its
+ * canonical points out. The sitemap, page metadata, the `/episodes/` static params, the Episode overview and the
+ * `/events/` list all ask it, so they cannot disagree. Pure: the facts come from the content store (`pageFacts` in
+ * `src/content-store/store.ts`).
  */
 
 /** What a page presents, as far as its treatment depends on it. A page that presents no record passes `{}`. */
@@ -30,24 +31,30 @@ export interface PageTreatment {
   readonly inSitemap: boolean;
   /** `false` emits `robots: noindex`. */
   readonly index: boolean;
+  /** Shown on the site's own lists: the Episode overview, Spotlight, Upcoming and `/events/`. */
+  readonly listed: boolean;
   /** `self`, with hreflang alternates, or the public Episode whose `/episodes/<slug>/` page takes the credit. */
   readonly canonical: 'self' | { readonly episode: EpisodeSlug };
 }
 
-const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, canonical: 'self' };
-const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, canonical: 'self' };
-const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, canonical: 'self' };
+const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };
+const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' };
+const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' };
+/** A public upcoming Episode: announced on the site's own lists, kept out of search. */
+const ANNOUNCED: PageTreatment = { ...HIDDEN, listed: true };
 
-/** An Episode's own page: listed when public and published, absent when unlisted, else hidden (fails closed). */
+/** An Episode's own page: listed when public and published, announced when public and upcoming, absent when unlisted, else hidden (fails closed). */
 function episodeTreatment({ visibility, status }: PageFacts): PageTreatment {
   if (visibility === 'unlisted') return ABSENT;
-  return visibility === 'public' && status === 'published' ? LISTED : HIDDEN;
+  if (visibility !== 'public') return HIDDEN;
+  if (status === 'published') return LISTED;
+  return status === 'upcoming' ? ANNOUNCED : HIDDEN;
 }
 
 /** An Episode under its Event: a public one credits its own page once that page is indexable; any other is hidden. */
 function eventEpisodeTreatment(episode: EpisodeSlug, facts: PageFacts): PageTreatment {
   if (!episodeTreatment(facts).inSitemap) return HIDDEN;
-  return { exported: true, inSitemap: false, index: true, canonical: { episode } };
+  return { exported: true, inSitemap: false, index: true, listed: false, canonical: { episode } };
 }
 
 /** A page's treatment, row by row of the visibility table. Missing facts never index a page that needs them. */

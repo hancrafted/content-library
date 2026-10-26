@@ -10,9 +10,11 @@ import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.
 
 const EVENT = '2026-10-23-axel-agentic-workflow';
 
-const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, canonical: 'self' };
-const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, canonical: 'self' };
-const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, canonical: 'self' };
+const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };
+const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' };
+const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' };
+/** A public upcoming Episode: on the site's own lists (overview, Upcoming), out of search. */
+const ANNOUNCED: PageTreatment = { exported: true, inSitemap: false, index: false, listed: true, canonical: 'self' };
 
 const PUBLISHED_PUBLIC: PageFacts = { visibility: 'public', status: 'published' };
 const PUBLISHED_UNLISTED: PageFacts = { visibility: 'unlisted', status: 'published' };
@@ -34,7 +36,7 @@ describe('success cases', () => {
       'a public Episode under an Event',
       { event: EVENT, episode: 'ai-attention-span' },
       PUBLISHED_PUBLIC,
-      { exported: true, inSitemap: false, index: true, canonical: { episode: 'ai-attention-span' } },
+      { exported: true, inSitemap: false, index: true, listed: false, canonical: { episode: 'ai-attention-span' } },
     ],
     [
       'an upcoming Episode under an Event',
@@ -42,7 +44,7 @@ describe('success cases', () => {
       { visibility: 'public', status: 'upcoming' },
       HIDDEN,
     ],
-    ['an upcoming Episode', { episode: 'ai-attention-span' }, { visibility: 'public', status: 'upcoming' }, HIDDEN],
+    ['an upcoming Episode', { episode: 'ai-attention-span' }, { visibility: 'public', status: 'upcoming' }, ANNOUNCED],
     ['a tooling page', { tooling: 'slide-master' }, {}, HIDDEN],
   ])('treats %s as the visibility table says', (...row) => {
     // ARRANGE
@@ -64,14 +66,17 @@ describe('failure cases', () => {
     expect(treatment).toEqual(expected);
   });
 
-  it.each(NEEDS_FACTS)('keeps %s out of search when no visibility is handed in', (_name, page) => {
-    // ARRANGE
-    const expected = { inSitemap: false, index: false, canonical: 'self' };
-    // ACT
-    const { inSitemap, index, canonical } = pageTreatment(page, { status: 'published' });
-    // ASSERT
-    expect({ inSitemap, index, canonical }).toEqual(expected);
-  });
+  it.each(NEEDS_FACTS)(
+    'keeps %s out of search and off the site lists when no visibility is handed in',
+    (_name, page) => {
+      // ARRANGE
+      const expected = { inSitemap: false, index: false, listed: false, canonical: 'self' };
+      // ACT
+      const { inSitemap, index, listed, canonical } = pageTreatment(page, { status: 'published' });
+      // ASSERT
+      expect({ inSitemap, index, listed, canonical }).toEqual(expected);
+    },
+  );
 });
 
 describe('edge cases', () => {

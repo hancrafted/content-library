@@ -15,13 +15,14 @@ import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
 import {
   isEpisodePage,
-  isEpisodeSlug,
   isEventEpisodePage,
   isEventPage,
+  isEventSlug,
   type EpisodeSlug,
+  type EventSlug,
   type PageRef,
 } from '@/lib/routes';
-import type { PageFacts } from '@/lib/visibility.pure';
+import { pageTreatment, type PageFacts } from '@/lib/visibility.pure';
 import { event as axelAgenticWorkflowEvent } from './events/2026-10-23-axel-agentic-workflow';
 import { event as cyberforumAkademieIntroAgenticWorkflowEvent } from './events/2026-10-28-cyberforum-akademie-intro-agentic-workflow';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
@@ -100,11 +101,6 @@ export function listEpisodes(options?: { includeDrafts?: boolean }): readonly Ep
   return CONTENT.episodes.filter((entry) => entry.status === 'published');
 }
 
-/** Whether the slug has an Episode page: every registered slug, whatever the status. A tooling page is no Episode. */
-export function hasPage(slug: string): slug is EpisodeSlug {
-  return isEpisodeSlug(slug);
-}
-
 /** One registered Episode's metadata. A registered slug the store does not hold is a bug, so it throws. */
 function episodeOf(slug: string): Episode {
   const episode = CONTENT.episodes.find((entry) => entry.slug === slug);
@@ -147,14 +143,28 @@ export function episodeVideo(slug: EpisodeSlug, locale: Locale): Video | undefin
   return id === undefined ? undefined : { id };
 }
 
+/** An Event as the store serves it: its slug names a page of the hand-kept `EVENT_SLUGS`. */
+export type ServedEvent = Event & { readonly slug: EventSlug };
+
+/** Whether the Event has a page: its slug is one of `EVENT_SLUGS`. */
+function isServed(event: Event): event is ServedEvent {
+  return isEventSlug(event.slug);
+}
+
+/** Every Event, each with a page; one missing from `EVENT_SLUGS` throws, so the build and the fast suite stop. */
+const SERVED_EVENTS: readonly ServedEvent[] = CONTENT.events.map((event) => {
+  if (!isServed(event)) throw new Error(`Event ${event.slug} is missing from EVENT_SLUGS (src/lib/routes.ts)`);
+  return event;
+});
+
 /** Every Event, in record order. */
-export function listEvents(): readonly Event[] {
-  return CONTENT.events;
+export function listEvents(): readonly ServedEvent[] {
+  return SERVED_EVENTS;
 }
 
 /** One Event by slug; undefined when no Event carries it. */
-export function findEvent(slug: string): Event | undefined {
-  return CONTENT.events.find((event) => event.slug === slug);
+export function findEvent(slug: string): ServedEvent | undefined {
+  return SERVED_EVENTS.find((event) => event.slug === slug);
 }
 
 /** The one Playlist an Event presents; the load refused any Event naming a missing one. */
@@ -185,4 +195,20 @@ export function pageFactsIn(content: Content, page: PageRef): PageFacts {
 /** What a page presents, for the visibility predicate: the sitemap, page metadata and static params all ask this. */
 export function pageFacts(page: PageRef): PageFacts {
   return pageFactsIn(CONTENT, page);
+}
+
+/**
+ * The Events `/events/` lists, in record order, read from the given records: those whose page the visibility
+ * predicate puts on the site's lists (a public Playlist). An Event with no page in `EVENT_SLUGS` is listed nowhere.
+ */
+export function listedEventsIn(content: Content): readonly ServedEvent[] {
+  return content.events.filter(isServed).filter((event) => {
+    const page = { event: event.slug };
+    return pageTreatment(page, pageFactsIn(content, page)).listed;
+  });
+}
+
+/** The Events `/events/` lists. */
+export function listedEvents(): readonly ServedEvent[] {
+  return listedEventsIn(CONTENT);
 }

@@ -1,9 +1,10 @@
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { episodeMinutes } from '@/components/slide-master/localized-slide';
 import type { Episode } from '@/content-store/schemas/episode.schema';
-import { episodeVideo, featuredSlugs, hasPage, listEpisodes } from '@/content-store/store';
+import { episodeVideo, featuredSlugs, listEpisodes } from '@/content-store/store';
 import { overviewOrder } from '@/lib/episode-metadata.pure';
 import type { Locale } from '@/lib/locale.pure';
+import { isEpisodeSlug } from '@/lib/routes';
 import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
@@ -17,14 +18,14 @@ function minutesOf(entry: Episode, locale: Locale): number | undefined {
 
 /** The Episode's video id in this locale; none without a page or a video. */
 function youtubeOf(entry: Episode, locale: Locale): { youtubeId?: string } {
-  if (!hasPage(entry.slug)) return {};
+  if (!isEpisodeSlug(entry.slug)) return {};
   const id = episodeVideo(entry.slug, locale)?.id;
   return id === undefined ? {} : { youtubeId: id };
 }
 
 /** An Episode with a page (published, or upcoming with its slug registered) with its title and caption from the registry; a page-less upcoming one has no record. */
 function withCopy(entry: Episode, locale: Locale): CardEntry {
-  if (entry.status !== 'published' && !hasPage(entry.slug)) return entry;
+  if (entry.status !== 'published' && !isEpisodeSlug(entry.slug)) return entry;
   const { title, caption } = episodeCopy(entry.slug, locale);
   return { ...entry, copy: { title, caption } };
 }

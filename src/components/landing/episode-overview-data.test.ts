@@ -1,8 +1,9 @@
 import { findEpisode } from '@/components/episodes/registry';
 import { FORMATS, TAG_IDS } from '@/content-store/schemas/fields';
-import { hasPage, listEpisodes } from '@/content-store/store';
+import { listEpisodes } from '@/content-store/store';
 import { leadTagOf, lookOf } from '@/lib/episode-metadata.pure';
 import { FEATURED, FILTER_TAGS, TAGS } from '@/lib/episode-overview';
+import { isEpisodeSlug } from '@/lib/routes';
 import de from '@/messages/de.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
@@ -121,7 +122,7 @@ describe('failure cases', () => {
       ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
       ...TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `tags.${id}`),
       ...listEpisodes().flatMap(({ slug, status }) => {
-        const copy = hasPage(slug) ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
+        const copy = isEpisodeSlug(slug) ? findEpisode(slug).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
       }),
     ];
@@ -147,7 +148,7 @@ describe('edge cases', () => {
   it('keeps site-wide upcoming copy only for Episodes with no page, so one with a page reads its own i18n', () => {
     // ARRANGE
     const expected = listEpisodes()
-      .filter(({ slug, status }) => status === 'upcoming' && !hasPage(slug))
+      .filter(({ slug, status }) => status === 'upcoming' && !isEpisodeSlug(slug))
       .map(({ slug }) => slug)
       .sort();
     // ACT

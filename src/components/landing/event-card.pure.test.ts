@@ -7,7 +7,7 @@ const READS: EventReads = {
   episodeCount: { one: '1 Episode', other: '{count} Episodes' },
 };
 const RECORD = {
-  slug: '2026-10-23-intro',
+  slug: '2026-10-23-axel-agentic-workflow',
   date: '2026-10-23',
   kind: 'workshop',
   audience: 'organization',
@@ -19,9 +19,9 @@ describe('success cases', () => {
   it('reads the title and description by the Event slug and routes the card to its page', () => {
     // ARRANGE
     const expected = {
-      title: '«eventsPage.items.2026-10-23-intro.title»',
-      description: '«eventsPage.items.2026-10-23-intro.description»',
-      route: '/events/2026-10-23-intro',
+      title: '«eventsPage.items.2026-10-23-axel-agentic-workflow.title»',
+      description: '«eventsPage.items.2026-10-23-axel-agentic-workflow.description»',
+      route: '/events/2026-10-23-axel-agentic-workflow',
     };
     // ACT
     const card = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
@@ -61,7 +61,7 @@ describe('failure cases', () => {
     // ACT
     const build = () => eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', reads);
     // ASSERT
-    expect(build).toThrow('Missing eventsPage.items.2026-10-23-intro.title');
+    expect(build).toThrow('Missing eventsPage.items.2026-10-23-axel-agentic-workflow.title');
   });
 });
 

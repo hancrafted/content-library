@@ -8,11 +8,19 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeStatus, episodeVisibility, hasPage, listEvents, playlistOf } from '../../src/content-store/store';
+import { episodeStatus, episodeVisibility, listEvents, playlistOf } from '../../src/content-store/store';
 import { isPastEvent } from '../../src/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
-import { episodeRoute, eventEpisodeRoute, eventRoute, ROUTES } from '../../src/lib/routes';
+import {
+  episodeRoute,
+  eventEpisodeRoute,
+  eventRoute,
+  isEpisodeSlug,
+  ROUTES,
+  type EpisodeSlug,
+  type EventSlug,
+} from '../../src/lib/routes';
 import { exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
@@ -20,11 +28,16 @@ const EVENTS = listEvents();
 const LISTED = EVENTS.filter((event) => playlistOf(event).visibility === 'public');
 const AXEL = EVENTS.find((event) => event.slug === '2026-10-23-axel-agentic-workflow');
 if (AXEL === undefined) throw new Error('The AXEL Event is missing from the content store');
-const AXEL_EPISODES = playlistOf(AXEL).episodes;
+/** A Playlist entry the test expects a page for: a registered Episode, or the test file is wrong. */
+const registered = (slug: string): EpisodeSlug => {
+  if (!isEpisodeSlug(slug)) throw new Error(`"${slug}" is no registered Episode`);
+  return slug;
+};
+const AXEL_EPISODES = playlistOf(AXEL).episodes.map(registered);
 const TODAY = new Date().toISOString().slice(0, 10) as `${number}-${number}-${number}`;
 
 /** Every Workshop URL that was ever published, and the Event it became. Written out: the Workshop pages are gone. */
-const LEGACY_WORKSHOPS = [
+const LEGACY_WORKSHOPS: readonly { workshop: string; event: EventSlug }[] = [
   { workshop: 'axel-agentic-workflow-2026-10-23', event: '2026-10-23-axel-agentic-workflow' },
   { workshop: '2026-10-23-axel-agentic-workflow', event: '2026-10-23-axel-agentic-workflow' },
 ];
@@ -255,14 +268,14 @@ describe('Event page', () => {
 });
 
 describe('the 2026-10-28 Event', () => {
-  const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
+  const CYBERFORUM: EventSlug = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
   /** The Workshop template's copy, then the three Episodes AXEL taught, copied unedited. Written out: the store is not the oracle. */
   const EPISODES = [
     'cyberforum-intro',
     'cyberforum-onboard-ai-every-time',
     'cyberforum-ai-attention-span',
     'cyberforum-ai-gives-you-more-work',
-  ];
+  ] as const satisfies readonly EpisodeSlug[];
   const FACTS = {
     en: { kind: 'Webinar', audience: 'For individuals', time: ' · 17:00–19:00 CET', location: 'remote' },
     de: { kind: 'Webinar', audience: 'Für Einzelpersonen', time: ' · 17:00–19:00 CET', location: 'remote' },
@@ -315,11 +328,11 @@ describe('Episode pages under an Event', () => {
   /** Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports. */
   const PAGES_UNDER_EVENTS = EVENTS.flatMap((event) =>
     playlistOf(event)
-      .episodes.filter((episode) => hasPage(episode))
+      .episodes.filter((episode) => isEpisodeSlug(episode))
       .flatMap((episode) => LOCALES.map((locale) => ({ event: event.slug, episode, locale }))),
   );
-  const AXEL_PAGES = AXEL_EPISODES.filter((episode) => hasPage(episode));
-  const urlOf = (event: string, episode: string, locale: Locale) =>
+  const AXEL_PAGES = AXEL_EPISODES.filter((episode) => isEpisodeSlug(episode));
+  const urlOf = (event: EventSlug, episode: EpisodeSlug, locale: Locale) =>
     localizePath(eventEpisodeRoute(event, episode), locale);
 
   it.each(PAGES_UNDER_EVENTS)(
@@ -340,7 +353,7 @@ describe('Episode pages under an Event', () => {
     (locale) => {
       // ARRANGE
       const count = AXEL_EPISODES.length;
-      const hrefOf = (episode: string | undefined) =>
+      const hrefOf = (episode: EpisodeSlug | undefined) =>
         episode === undefined ? undefined : `${urlOf(AXEL.slug, episode, locale)}/`;
       const expected = AXEL_PAGES.map((episode, index) => ({
         position: WORDS[locale].position(AXEL_EPISODES.indexOf(episode) + 1, count),
@@ -409,7 +422,7 @@ describe('Episode pages under an Event', () => {
       const own = `${SITE_URL}${localizePath(episodeRoute(episode as Parameters<typeof episodeRoute>[0]), locale)}/`;
       const self = `${SITE_URL}${urlOf(event, episode, locale)}/`;
       const indexable =
-        hasPage(episode) && episodeVisibility(episode) === 'public' && episodeStatus(episode) === 'published';
+        isEpisodeSlug(episode) && episodeVisibility(episode) === 'public' && episodeStatus(episode) === 'published';
       const expected = indexable
         ? { canonical: own, noindex: false, hreflang: 0, card: own }
         : { canonical: self, noindex: true, hreflang: 3, card: self };

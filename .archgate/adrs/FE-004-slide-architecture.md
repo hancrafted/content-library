@@ -5,9 +5,9 @@ title: 'Slide Architecture'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
+files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/episode/**']
+paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/{episode,episodes,events}/**']
 description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, and what an agent may change freely versus only by a new ADR.'
 ---
 
@@ -87,33 +87,34 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 1. This record is the map
 
-1. Read this before touching an Episode: modules and flows, not mechanism; rules live with each area's owner (Context).
+1. Read before touching an Episode: modules and flows; rules live with each area's owner (Context).
 
 ### 2. Four tiers, one direction
 
-1. `app → components → hooks → lib`, skips downward only. Routes stay thin, reaching components via the page composition roots.
+1. `app → components → hooks → lib`, skips downward only. Thin routes reach components via page roots.
 
 ### 3. Each module owns one thing
 
-1. `episodes/<ep>/` owns one Episode: `episode.ts`, its own text, published anchors, one folder per Slide, and one `sections/<section-slug>.ts` per Section, exporting its ordered Slides to the record's `sections`.
+1. `episodes/<ep>/` owns one Episode: `episode.ts`, its text, published anchors, a folder per Slide, a `sections/<slug>.ts` per Section, its Slides in order.
 2. A Slide folder owns all it needs: Scene, widgets, logic, CSS, text, notes, Voice script.
-3. `slide-master/` owns the frame, Slide layouts, record and kit types; `slide-shared/` owns parts two Slides share, client leaves in their part.
+3. `slide-master/` owns the frame, layouts, record and kit types; `slide-shared/` owns parts two Slides share, client leaves in their part.
 4. `episode-page/` owns the one container and Slide mechanics; `table-of-contents/` and `context-drawer/` own the chrome, reached only from the container.
 
 ### 4. An Episode becomes a page in one pass
 
-1. Route → page component → registry → record → container → static HTML. One container renders every Episode; anchors and heading levels come from position.
+1. Route → page component → registry → record → container → static HTML. One container renders every Episode; anchors and headings come from position.
+2. Routes (design-ADR 0016): `/episodes/<ep>/`; `/events/`, `/events/<e>/` and `/events/<e>/episodes/<ep>/`, an Episode its Event frames, same container.
 
 ### 5. Text, styling and client code each have fixed homes
 
-1. Text: Translation files for site chrome, landing, Upcoming cards; an Episode's for title, caption, description; a Slide's for its strings; an Explorable explanation's: its pair.
-2. Styling: site tokens in `globals.css`; an Episode token remap under its own scope; a Slide's look in its own CSS module.
-3. Client code: `*.client.tsx` leaves only (in a Slide folder, the container's mechanics or the chrome); hooks hold browser state.
+1. Text: Translation files for chrome, landing, Upcoming cards; an Episode's for title, caption, description; a Slide's for its strings; an Explorable explanation's pair.
+2. Styling: site tokens in `globals.css`; an Episode's token remap under its scope; a Slide's look in its CSS module.
+3. Client code: `*.client.tsx` leaves only (Slide folder, container mechanics, chrome); hooks hold browser state.
 
 ### 6. What an agent may change
 
-1. Free: the Title slide's optional notes and Voice script, anything inside a Scene, a new Slide folder, a new Episode from the template, a part promoted to `slide-shared`.
-2. Only a new ADR: a tier, a module, a second container or route, a shared Slide shape, a cross-Slide import, a new text or style home.
+1. Free: the Title slide's notes and Voice script, anything in a Scene, a new Slide folder, a new Episode from the template, a part promoted to `slide-shared`.
+2. Only a new ADR: a tier, module, second container, route beyond §4.2, shared Slide shape, cross-Slide import, new text or style home.
 
 ## Do's and Don'ts
 
@@ -170,4 +171,5 @@ For this project the map matters because handoffs run on agents with no session 
 - [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.
 - [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
+- [`docs/adr/0016-content-data-model.md`](../../docs/adr/0016-content-data-model.md) — the Event routes and the Event-scoped Episode page (§4.2).
 - [Mermaid flowcharts](https://mermaid.js.org/syntax/flowchart.html)

@@ -11,7 +11,7 @@ const linked = (slug: string, minutes?: number): Stub => ({
   ...(minutes === undefined ? {} : { minutes }),
 });
 const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
-const EVENT = '2026-10-23-intro';
+const EVENT = '2026-10-23-axel-agentic-workflow';
 
 describe('success cases', () => {
   it('adds the counted minutes of every Episode that has them', () => {
@@ -36,23 +36,23 @@ describe('success cases', () => {
 
   it("lists the cards in the Playlist's order", () => {
     // ARRANGE
-    const cards = [linked('alpha'), linked('beta'), linked('gamma')];
-    const expected = ['gamma', 'alpha'];
+    const cards = [linked('ai-token-economy'), linked('ai-attention-span'), linked('never-too-early-sales')];
+    const expected = ['never-too-early-sales', 'ai-token-economy'];
     // ACT
-    const playlist = eventPlaylistCards({ event: EVENT, episodes: ['gamma', 'alpha'] }, cards, 'en');
+    const playlist = eventPlaylistCards({ event: EVENT, episodes: expected }, cards, 'en');
     // ASSERT
     expect(playlist.map((card) => card.slug)).toEqual(expected);
   });
 
   it('opens each Episode under its Event, in the locale', () => {
     // ARRANGE
-    const cards = [linked('alpha')];
+    const cards = [linked('axel-ai-attention-span')];
     const expected = {
-      route: '/events/2026-10-23-intro/episodes/alpha',
-      href: '/de/events/2026-10-23-intro/episodes/alpha',
+      route: '/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span',
+      href: '/de/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span',
     };
     // ACT
-    const [card] = eventPlaylistCards({ event: EVENT, episodes: ['alpha'] }, cards, 'de');
+    const [card] = eventPlaylistCards({ event: EVENT, episodes: ['axel-ai-attention-span'] }, cards, 'de');
     // ASSERT
     expect({ route: card.route, href: card.href }).toEqual(expected);
   });
@@ -61,11 +61,22 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('names the Episode a Playlist lists that has no card', () => {
     // ARRANGE
-    const cards = [linked('alpha')];
+    const cards = [linked('ai-token-economy')];
     // ACT
-    const build = () => eventPlaylistCards({ event: EVENT, episodes: ['alpha', 'missing'] }, cards, 'en');
+    const build = () => eventPlaylistCards({ event: EVENT, episodes: ['ai-token-economy', 'missing'] }, cards, 'en');
     // ASSERT
     expect(build).toThrow('"missing"');
+  });
+
+  it('refuses a linked card whose Episode is not registered, so the build fails rather than links a missing page', () => {
+    // ARRANGE
+    const cards = [linked('ghost')];
+    const expected =
+      'The linked card "ghost" in the Playlist of Event 2026-10-23-axel-agentic-workflow is no registered Episode';
+    // ACT
+    const build = () => eventPlaylistCards({ event: EVENT, episodes: ['ghost'] }, cards, 'en');
+    // ASSERT
+    expect(build).toThrow(expected);
   });
 });
 

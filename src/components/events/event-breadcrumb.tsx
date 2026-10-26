@@ -1,5 +1,5 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventRoute, ROUTES } from '@/lib/routes';
+import { eventRoute, ROUTES, type EventSlug } from '@/lib/routes';
 import Link from 'next/link';
 
 interface EventBreadcrumbProps {
@@ -7,7 +7,7 @@ interface EventBreadcrumbProps {
   /** The trail's accessible name and the Events list's own label, in the page's locale. */
   labels: { readonly breadcrumb: string; readonly events: string };
   /** The Event: its slug and title, a link on an Event-scoped Episode page and the current page on the Event's own. */
-  event: { readonly slug: string; readonly title: string };
+  event: { readonly slug: EventSlug; readonly title: string };
   /** The title of the Episode an Event-scoped Episode page shows; it ends the trail. */
   episode?: string;
 }
