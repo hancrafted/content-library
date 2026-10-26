@@ -1,11 +1,11 @@
-import type { EpisodeRef, ToolingRef } from '@/content-store/catalogue/episode-id.pure';
-import { episodeRoute, type EpisodeId, type ToolingSlug } from '@/content-store/catalogue/record-routes';
+import { episodeRoute } from '@/content-store/catalogue/record-routes';
 import type { Video } from '@/content-store/store';
 import type { LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import type { EyebrowText } from '@/episodes/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
+import type { ComposedPage } from '@/episodes/lib/registry';
 import { DevSlideReporter } from '@/shared/components/design-system-token-editor/dev-slide-reporter';
 import { readTranslationStrings } from '@/shared/i18n/translation-strings';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -199,7 +199,7 @@ interface EpisodePageContainerProps {
    * The Episode the page presents, as the store served its ref, or the tooling page it is: its id is what
    * `data-episode` names, and its folder the source folder the token editor names.
    */
-  presents: EpisodeRef<EpisodeId> | ToolingRef<ToolingSlug>;
+  page: ComposedPage;
   episode: EpisodeComposition;
   /** The Episode's Video in this locale, from the content store; none for a tooling page or before upload. */
   video?: Video;
@@ -218,16 +218,16 @@ interface EpisodePageContainerProps {
  * contents and Slide links point at the Event's URL for the Episode.
  */
 export async function EpisodePageContainer(props: EpisodePageContainerProps) {
-  const { locale, presents, episode, video, frame = OWN_PAGE } = props;
-  const { id } = presents;
+  const { locale, page, episode, video, frame = OWN_PAGE } = props;
+  const { id } = page;
   const youtubeId = video?.id;
   const route = frame.route ?? episodeRoute(id);
   const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), id, route });
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
-  const page = await pageHeaderOf(content, locale, sections);
+  const header = await pageHeaderOf(content, locale, sections);
   const { talkLabels, recording } = await talkOf(locale, video);
-  const titleSlide = titleSlideOf(content, page, { youtubeId, talkLabels, recording, position: frame.position });
+  const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, position: frame.position });
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (
@@ -235,12 +235,12 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
       <div data-slot="episode-page" data-episode={id} className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}>
         <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
         {frame.header}
-        <SlideColumn titleSlide={titleSlide} slides={slides} page={page} />
+        <SlideColumn titleSlide={titleSlide} slides={slides} page={header} />
         {frame.footer}
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>
-      <DevSlideReporter folder={sourceFolderOf(presents)} />
+      <DevSlideReporter folder={sourceFolderOf(page)} />
     </UrlStateProvider>
   );
 }

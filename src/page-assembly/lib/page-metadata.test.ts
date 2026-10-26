@@ -1,4 +1,4 @@
-import { episodeRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { pageMetadata, siteMetadata } from './page-metadata.pure';
@@ -182,7 +182,10 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { canonical: '/de/episodes/slide-master', robots: { index: false } };
     // ACT
-    const metadata = pageMetadata({ kind: 'tooling', tooling: 'slide-master' }, 'de', { ...COPY, treatment: HIDDEN });
+    const metadata = pageMetadata({ kind: 'tooling', tooling: toolingRef('slide-master') }, 'de', {
+      ...COPY,
+      treatment: HIDDEN,
+    });
     // ASSERT
     expect({ canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
   });

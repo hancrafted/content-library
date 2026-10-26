@@ -1,5 +1,5 @@
 import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
-import { eventEpisodeRoute, eventRoute, type EpisodeId } from '@/content-store/catalogue/record-routes';
+import { eventEpisodeRoute, eventRoute } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PresentedEpisode } from '@/content-store/store';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
@@ -26,15 +26,23 @@ export interface EventEpisodeFrame {
   readonly position: string;
 }
 
-/** What the frame reads of the Episode the page catalogue presents: the Event's slug and day, the Episode, its place. */
-type FramedEpisode = Pick<PresentedEpisode, 'episode' | 'place'> & {
+/**
+ * What the frame reads of the Episode the page catalogue presents: the Event's slug and day, the Episode, its place.
+ * Any Episode will do: the frame reads only its slug and hands it to `titleOf`, so `Id` is whatever page assembly holds.
+ */
+interface FramedEpisode<Id extends string> {
   readonly event: Pick<PresentedEpisode['event'], 'slug' | 'date'>;
-};
+  readonly episode: EpisodeRef<Id>;
+  readonly place: Pick<PresentedEpisode['place'], 'position' | 'count'> & {
+    readonly previous?: EpisodeRef<Id>;
+    readonly next?: EpisodeRef<Id>;
+  };
+}
 
-interface FrameOptions {
+interface FrameOptions<Id extends string> {
   readonly locale: Locale;
   /** An Episode's title in `locale`, handed in by page assembly, so the Events area never reads an Episode itself. */
-  readonly titleOf: (episode: EpisodeRef<EpisodeId>) => string;
+  readonly titleOf: (episode: EpisodeRef<Id>) => string;
   /** The day the page is built; an Event dated before it is past. */
   readonly buildDay: IsoDate;
 }
@@ -52,7 +60,7 @@ interface Step {
 interface FrameParts {
   readonly locale: Locale;
   readonly labels: (typeof EVENT_WORDS)[Locale];
-  readonly event: { readonly slug: FramedEpisode['event']['slug']; readonly title: string; readonly date: IsoDate };
+  readonly event: { readonly slug: PresentedEpisode['event']['slug']; readonly title: string; readonly date: IsoDate };
   readonly episode: string;
   readonly previous?: Step;
   readonly next?: Step;
@@ -62,12 +70,12 @@ interface FrameParts {
  * The whole frame of one Episode's page under one Event, read in one locale: the one call page assembly makes for an
  * Event-scoped Episode page.
  */
-export function eventEpisodeFrame(
-  { event, episode, place }: FramedEpisode,
-  { locale, titleOf, buildDay }: FrameOptions,
+export function eventEpisodeFrame<Id extends string>(
+  { event, episode, place }: FramedEpisode<Id>,
+  { locale, titleOf, buildDay }: FrameOptions<Id>,
 ): EventEpisodeFrame {
   const labels = EVENT_WORDS[locale];
-  const stepOf = (to: EpisodeRef<EpisodeId> | undefined): Step | undefined =>
+  const stepOf = (to: EpisodeRef<Id> | undefined): Step | undefined =>
     to === undefined ? undefined : { title: titleOf(to), route: eventEpisodeRoute(event.slug, to) };
   const previous = stepOf(place.previous);
   const next = stepOf(place.next);

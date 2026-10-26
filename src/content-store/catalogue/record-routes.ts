@@ -1,6 +1,6 @@
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { ROUTES } from '@/shared/lib/static-routes';
-import type { EpisodeRef } from './episode-id.pure';
+import type { EpisodeRef, StandaloneRef, ToolingRef } from './episode-id.pure';
 import { EPISODE_IDS, TOOLING_SLUGS } from './episode-ids.generated';
 import { EVENT_SLUGS } from './event-slugs.generated';
 
@@ -46,12 +46,9 @@ export function isToolingSlug(slug: string): slug is ToolingSlug {
 }
 
 /**
- * Every name that may name a page at `/episodes/<slug>/`: each Episode's id, then each tooling page's slug. An Event's
- * copy, whose id holds its Event's slug, is never exported there; nor is an unlisted Episode.
+ * A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. An Event's copy, whose id holds its
+ * Event's slug, is never exported there; nor is an unlisted Episode.
  */
-export const EPISODES_PATH_SLUGS = [...EPISODE_IDS, ...TOOLING_SLUGS] as const;
-
-/** A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. */
 export type EpisodesPathSlug = EpisodeId | ToolingSlug;
 
 export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
@@ -86,14 +83,15 @@ export function eventRoute(slug: EventSlug): string {
 }
 
 /** The logical path of one Episode of an Event's Playlist, shown under the Event at its slug, an Event's copy's too. */
-export function eventEpisodeRoute(event: EventSlug, episode: EpisodeRef<EpisodeId>): string {
+export function eventEpisodeRoute(event: EventSlug, episode: Pick<EpisodeRef, 'slug'>): string {
   return `${eventRoute(event)}${ROUTES.episodes}/${episode.slug}`;
 }
 
 /**
  * A page with its own metadata and a closed set of exported locales, told apart by its `kind`. Every site that
  * branches on the kind does so through `matchPage` or a table keyed by `PageKind`, so a new kind fails `tsc` at each.
- * An Episode's page carries the EpisodeRef the store served, so its slug and owning Event are fields, never a parse.
+ * An Episode's page carries the EpisodeRef the store served, so its slug and owning Event are fields, never a parse;
+ * its own page under `/episodes/` only one no Event owns. A tooling page carries its ToolingRef.
  * Which pages exist, and how each is treated, is the page catalogue's (`PAGES` in the content store): it reads them
  * from the records, which lib cannot.
  */
@@ -102,8 +100,8 @@ export type PageRef =
   | { readonly kind: 'dashboard' }
   | { readonly kind: 'episodes' }
   | { readonly kind: 'events' }
-  | { readonly kind: 'episode'; readonly episode: EpisodeRef<EpisodeId> }
-  | { readonly kind: 'tooling'; readonly tooling: ToolingSlug }
+  | { readonly kind: 'episode'; readonly episode: StandaloneRef<EpisodeId> }
+  | { readonly kind: 'tooling'; readonly tooling: ToolingRef<ToolingSlug> }
   | { readonly kind: 'event'; readonly event: EventSlug }
   | { readonly kind: 'event-episode'; readonly event: EventSlug; readonly episode: EpisodeRef<EpisodeId> };
 
@@ -163,8 +161,8 @@ export function routeOf(page: PageRef): string {
     dashboard: () => ROUTES.dashboard,
     episodes: () => ROUTES.episodes,
     events: () => ROUTES.events,
-    episode: ({ episode }) => episodeRoute(episode.id),
-    tooling: ({ tooling }) => episodeRoute(tooling),
+    episode: ({ episode }) => episodeRoute(episode.slug),
+    tooling: ({ tooling }) => episodeRoute(tooling.slug),
     event: ({ event }) => eventRoute(event),
     'event-episode': ({ event, episode }) => eventEpisodeRoute(event, episode),
   });

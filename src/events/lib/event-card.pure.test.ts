@@ -1,11 +1,13 @@
-import { EVENT_SLUGS } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { eventCard } from './event-card.pure';
-import de from './i18n/de.json';
-import en from './i18n/en.json';
 
-/** Any registered Event, as the store serves it, presenting three Episodes: the words come from its Translation keys. */
-const SLUG = EVENT_SLUGS[0];
+/*
+ * One Event's card (design-ADR 0016, Delivery): its words from the Events area's Translation files, its date and
+ * Episode count in the reader's locale. The words are the AXEL seminar's, written out by hand; an Event's words are
+ * keyed by the Event registry's slugs, so the card is built for that registered Event.
+ */
+
+const SLUG = '2026-10-23-axel-agentic-workflow';
 const RECORD = {
   slug: SLUG,
   date: '2026-10-23',
@@ -16,9 +18,17 @@ describe('success cases', () => {
   it("reads the title and description from the Events area's Translation files, in the locale, and routes the card to its page", () => {
     // ARRANGE
     const expected = {
-      english: { title: en.events.items[SLUG].title, description: en.events.items[SLUG].description },
-      german: { title: de.events.items[SLUG].title, description: de.events.items[SLUG].description },
-      route: `/events/${SLUG}`,
+      english: {
+        title: 'AXEL Seminar: Agentic Workflows',
+        description:
+          'Working with AI agents in three Episodes: onboard them every time, manage their attention span, and see why they add management work.',
+      },
+      german: {
+        title: 'AXEL Seminar: Agentic Workflows',
+        description:
+          'Mit KI-Agenten arbeiten in drei Episoden: jedes Mal neu einarbeiten, ihre Aufmerksamkeitsspanne managen und verstehen, warum sie Management-Arbeit bringen.',
+      },
+      route: '/events/2026-10-23-axel-agentic-workflow',
     };
     // ACT
     const english = eventCard(RECORD, 'en');
@@ -52,14 +62,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('refuses an Event the registry does not hold, at type check and at build, rather than drawing a blank', () => {
+  it('refuses an Event the registry does not hold, at type check and at build, naming it rather than drawing a blank', () => {
     // ARRANGE
     const unknown = { ...RECORD, slug: 'no-such-event' };
+    const expected = 'No words name the Event "no-such-event" in en';
     // ACT
     // @ts-expect-error -- an Event's words are keyed by the registered slugs only
     const build = () => eventCard(unknown, 'en');
     // ASSERT
-    expect(build).toThrow(TypeError);
+    expect(build).toThrow(expected);
   });
 });
 

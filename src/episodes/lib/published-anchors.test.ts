@@ -5,7 +5,7 @@ import {
   type EpisodeRef,
   type ToolingRef,
 } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
+import { hasPage, TOOLING_SLUGS, type ToolingSlug } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
@@ -13,7 +13,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
-import { compositionAt } from './compositions.fixture';
+import { compositionOf, type ComposedPage } from './registry';
 
 /*
  * Published anchors (FE-002): every Slide anchor an Episode has ever put in a
@@ -23,7 +23,7 @@ import { compositionAt } from './compositions.fixture';
  * Section lists alone, so they cannot differ by locale.
  */
 
-/** A page whose anchors may be bound: an Episode with a page, or a tooling page. */
+/** A page whose anchors may be bound: an Episode, or a tooling page. */
 type Page = EpisodeRef | ToolingRef;
 
 /** The snapshot in the page's folder: an Event's copy's under its Event, a tooling page's under `tooling/`. */
@@ -66,15 +66,15 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
  */
 function boundPages(
   episodes: readonly { ref: EpisodeRef; status: EpisodeStatus }[],
-  tooling: readonly string[],
-): Page[] {
-  const bound = episodes.filter(({ ref, status }) => status !== 'upcoming' && hasPage(ref)).map(({ ref }) => ref);
+  tooling: readonly ToolingSlug[],
+): ComposedPage[] {
+  const bound = episodes.flatMap(({ ref, status }) => (status !== 'upcoming' && hasPage(ref) ? [ref] : []));
   return [...tooling.map(toolingRef), ...bound];
 }
 
 /** The anchors the walk produces for one page, as the Episode page does: its record's Section lists. */
-function producedAnchors(page: Page): string[] {
-  return placeSections<SlideOutline>(compositionAt(page.id).sections).flatMap((section) => section.map(({ id }) => id));
+function producedAnchors(page: ComposedPage): string[] {
+  return placeSections<SlideOutline>(compositionOf(page).sections).flatMap((section) => section.map(({ id }) => id));
 }
 
 describe('success cases', () => {

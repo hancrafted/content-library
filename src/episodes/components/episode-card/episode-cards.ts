@@ -18,7 +18,7 @@ function minutesOf(entry: LoadedEpisode, locale: Locale): number | undefined {
 /** The Episode's video id in this locale; none without a page or a video. */
 function youtubeOf(entry: LoadedEpisode, locale: Locale): { youtubeId?: string } {
   if (!hasPage(entry.ref)) return {};
-  const id = episodeVideo(entry.ref.id, locale)?.id;
+  const id = episodeVideo(entry.ref, locale)?.id;
   return id === undefined ? {} : { youtubeId: id };
 }
 

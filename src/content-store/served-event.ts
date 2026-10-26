@@ -53,11 +53,11 @@ export interface PresentedEpisode {
 /** Each Episode of a Playlist, in its order, with its place: the count is every one; the walk steps over the pageless. */
 export function playlistEntries(episodes: readonly LoadedEpisode[]): PlaylistEntry[] {
   const pages = episodes.map(({ ref }) => (hasPage(ref) ? ref : undefined));
-  const isPage = (page: EpisodeRef<EpisodeId> | undefined): page is EpisodeRef<EpisodeId> => page !== undefined;
+  const isDefined = (page: EpisodeRef<EpisodeId> | undefined): page is EpisodeRef<EpisodeId> => page !== undefined;
   return episodes.map((episode, index) => {
     const page = pages[index];
-    const previous = pages.slice(0, index).reverse().find(isPage);
-    const next = pages.slice(index + 1).find(isPage);
+    const previous = pages.slice(0, index).reverse().find(isDefined);
+    const next = pages.slice(index + 1).find(isDefined);
     return {
       episode,
       ...(page === undefined ? {} : { page }),

@@ -4,9 +4,8 @@
  * slug; an Event's copy sits in `episodes/by-event/<event-slug>/<slug>/` and its id is `<event-slug>__<slug>`. One path
  * segment, so it works as a folder, a DOM id or a key. Imports nothing, so the registry generator can load it too.
  *
- * This module alone knows that format. Code passes an EpisodeRef (GLOSSARY): the content store parses each id once,
- * as its records load (`episodeRefOf`), and serves the ref on every Episode, Playlist entry and Episode page; the
- * folder walker and tests build one from its parts (`episodeRef`); `folderOf` gives any page's folder.
+ * This module alone knows that format; code passes an EpisodeRef (GLOSSARY). `episodeRef` builds one from its parts,
+ * `episodeRefOf` parses an id, and `folderOf` gives any page's folder.
  */
 
 /** The folder an Event's copies sit in, one folder per Event: `by-event/<event-slug>/<slug>/`. */
@@ -33,10 +32,13 @@ export const RESERVED_FOLDER_NAMES: readonly string[] = [
 
 const SEPARATOR = '__';
 
-/** An Episode as code passes it: no Event owns it, or one Event owns it as its copy. */
+/** An Episode as code passes it: no Event owns it, so its slug is its id, or one Event owns it as its copy. */
 export type EpisodeRef<Id extends string = string> =
-  | { readonly kind: 'standalone'; readonly id: Id; readonly slug: string }
+  | { readonly kind: 'standalone'; readonly id: Id; readonly slug: Id }
   | { readonly kind: 'event-copy'; readonly id: Id; readonly event: string; readonly slug: string };
+
+/** An Episode no Event owns: the only kind with a page of its own under `/episodes/`. */
+export type StandaloneRef<Id extends string = string> = Extract<EpisodeRef<Id>, { readonly kind: 'standalone' }>;
 
 /** The slug an Episode id names: the id itself, or what follows its Event slug. Types a record against its key. */
 export type EpisodeSlugOf<Id extends string> = Id extends `${string}${typeof SEPARATOR}${infer Slug}` ? Slug : Id;
@@ -51,20 +53,17 @@ export type EpisodeIdOf<Slug extends string, Event extends string | undefined> =
  * parsed. The folder walker names each Episode it finds this way, and a test names an Episode this way, so no caller
  * writes an id out by hand.
  */
-export function episodeRef<Slug extends string>(slug: Slug): EpisodeRef<Slug>;
+export function episodeRef<Slug extends string>(slug: Slug): StandaloneRef<Slug>;
 export function episodeRef<Slug extends string, Event extends string>(
   slug: Slug,
   event: Event,
-): EpisodeRef<EpisodeIdOf<Slug, Event>>;
+): Extract<EpisodeRef<EpisodeIdOf<Slug, Event>>, { readonly kind: 'event-copy' }>;
 export function episodeRef(slug: string, event?: string): EpisodeRef {
   if (event === undefined) return { kind: 'standalone', id: slug, slug };
   return { kind: 'event-copy', id: `${event}${SEPARATOR}${slug}`, event, slug };
 }
 
-/**
- * The Episode an id names: a copy when it holds its Event's slug, else one no Event owns. The one parse of an id, run
- * by the content store as its records load; everything downstream is handed the ref.
- */
+/** The Episode an id names: a copy when it holds its Event's slug, else one no Event owns. Only the store calls it. */
 export function episodeRefOf<Id extends string>(id: Id): EpisodeRef<Id> {
   const at = id.indexOf(SEPARATOR);
   if (at < 0) return { kind: 'standalone', id, slug: id };

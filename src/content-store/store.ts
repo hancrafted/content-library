@@ -1,4 +1,5 @@
 import type { Locale } from '@/shared/lib/locale.pure';
+import type { EpisodeRef } from './catalogue/episode-id.pure';
 import { catalogueOf } from './catalogue/page-catalogue';
 import type { EpisodeId } from './catalogue/record-routes';
 import type { LoadedEpisode } from './episode-refusals';
@@ -72,22 +73,22 @@ export function listEpisodes(): readonly LoadedEpisode[] {
   return CONTENT.episodes;
 }
 
-/** One registered Episode's metadata. A registered id the store does not hold is a bug, so it throws. */
-function episodeOf(id: string): LoadedEpisode {
+/** A registered Episode's metadata. A registered Episode the store does not hold is a bug, so it throws. */
+function episodeOf({ id }: EpisodeRef<EpisodeId>): LoadedEpisode {
   const episode = CONTENT.episodes.find(({ ref }) => ref.id === id);
   if (!episode) throw new Error(`No Episode metadata lists the registered id "${id}"`);
   return episode;
 }
 
 /** The Episode's status. */
-export function episodeStatus(id: EpisodeId): EpisodeStatus {
-  return episodeOf(id).status;
+export function episodeStatus(episode: EpisodeRef<EpisodeId>): EpisodeStatus {
+  return episodeOf(episode).status;
 }
 
 /** The Episode's release date once published; none while it is upcoming. */
-export function episodePublishedOn(id: EpisodeId): IsoDate | undefined {
-  const episode = episodeOf(id);
-  return episode.status === 'published' ? episode.publishedOn : undefined;
+export function episodePublishedOn(episode: EpisodeRef<EpisodeId>): IsoDate | undefined {
+  const loaded = episodeOf(episode);
+  return loaded.status === 'published' ? loaded.publishedOn : undefined;
 }
 
 /** The Video an Episode's page plays: its YouTube id and, for an Event recording, the language spoken in it. */
@@ -101,15 +102,15 @@ export interface Video {
  * The Video an Episode's page plays in this locale; none until uploaded. An unlisted Episode's one recording plays on
  * every locale page, with the language it was recorded in (a site locale: the store refuses any other).
  */
-export function episodeVideo(id: EpisodeId, locale: Locale): Video | undefined {
-  const video = episodeOf(id).youtube;
+export function episodeVideo(episode: EpisodeRef<EpisodeId>, locale: Locale): Video | undefined {
+  const video = episodeOf(episode).youtube;
   if (video === undefined) return undefined;
   if ('language' in video) return { id: video.id, recordedIn: video.language as Locale };
   const local = video[locale];
   return local === undefined ? undefined : { id: local };
 }
 
-export type { EventEpisodePage } from './catalogue/page-catalogue';
+export type { EpisodesPathParams, EventEpisodePage, EventEpisodeParams, RouteParams } from './catalogue/page-catalogue';
 export type { PresentedEpisode, ServedEvent } from './served-event';
 
 /**

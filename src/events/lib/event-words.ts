@@ -10,11 +10,20 @@ import en from './i18n/en.json';
  */
 export const EVENT_WORDS: Record<Locale, (typeof en)['events']> = { en: en.events, de: de.events };
 
+/** An Event's title and description in one locale. */
+export interface EventCopy {
+  readonly title: string;
+  readonly description: string;
+}
+
 /**
  * An Event's title and description in one locale, the one read of them: its card's heading and text, its page's
  * metadata copy, and its step in the breadcrumb and the Playlist walk. Keyed by the Event registry's slugs, so a
- * registered Event with no words fails `tsc`.
+ * registered Event with no words fails `tsc`; a slug the registry does not hold, which only a cast lets through, throws
+ * naming the Event rather than drawing a blank.
  */
-export function eventCopy(slug: EventSlug, locale: Locale): { readonly title: string; readonly description: string } {
-  return EVENT_WORDS[locale].items[slug];
+export function eventCopy(slug: EventSlug, locale: Locale): EventCopy {
+  const copy: EventCopy | undefined = EVENT_WORDS[locale].items[slug];
+  if (copy === undefined) throw new Error(`No words name the Event "${slug}" in ${locale}`);
+  return copy;
 }

@@ -1,3 +1,4 @@
+import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { matchPage, pageLocales, routeOf, type EpisodeId, type PageRef } from '@/content-store/catalogue/record-routes';
 import type { TreatedPage } from '@/content-store/catalogue/visibility.pure';
 import type { IsoDate } from '@/content-store/schemas/fields';
@@ -6,14 +7,17 @@ import { servedUrl } from '@/shared/lib/static-routes';
 import type { MetadataRoute } from 'next';
 
 /** A sitemap entry's `lastModified`: an Episode's own page carries its publish date, no other page one. */
-function lastModifiedOf(page: PageRef, publishedOnOf: (id: EpisodeId) => IsoDate | undefined): IsoDate | undefined {
+function lastModifiedOf(
+  page: PageRef,
+  publishedOnOf: (episode: EpisodeRef<EpisodeId>) => IsoDate | undefined,
+): IsoDate | undefined {
   const none = () => undefined;
   return matchPage<PageRef, IsoDate | undefined>(page, {
     home: none,
     dashboard: none,
     episodes: none,
     events: none,
-    episode: ({ episode }) => publishedOnOf(episode.id),
+    episode: ({ episode }) => publishedOnOf(episode),
     tooling: none,
     event: none,
     'event-episode': none,
@@ -30,7 +34,7 @@ function lastModifiedOf(page: PageRef, publishedOnOf: (id: EpisodeId) => IsoDate
 export function sitemapEntries(
   siteUrl: string,
   pages: readonly TreatedPage[],
-  publishedOnOf: (id: EpisodeId) => IsoDate | undefined,
+  publishedOnOf: (episode: EpisodeRef<EpisodeId>) => IsoDate | undefined,
 ): MetadataRoute.Sitemap {
   const indexable = pages.filter(({ treatment }) => treatment.inSitemap).map(({ page }) => page);
   return indexable.flatMap((page) => {

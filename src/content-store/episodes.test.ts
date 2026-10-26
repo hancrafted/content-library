@@ -1,5 +1,5 @@
 import { episodeRef } from '@/content-store/catalogue/episode-id.pure';
-import { EPISODE_IDS, isEpisodeId } from '@/content-store/catalogue/record-routes';
+import { EPISODE_IDS, hasPage, isEpisodeId } from '@/content-store/catalogue/record-routes';
 import { episodeFolders, METADATA_FILE } from '@/episodes/lib/episode-folders';
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -18,6 +18,9 @@ const KEBAB_CASE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 /** Every Episode folder the walker finds, by Episode id. */
 const FOLDERS = new Map(episodeFolders(ROOT).map((folder) => [folder.id, folder]));
+
+/** Every Episode with a page, its ref narrowed to a registered Episode's, as the getters take it. */
+const WITH_PAGE = listEpisodes().flatMap((episode) => (hasPage(episode.ref) ? [{ ...episode, ref: episode.ref }] : []));
 
 /** Only a date that survives a round trip is one: `2026-02-30` has the shape but is not a day. */
 function isCalendarDate(value: string): boolean {
@@ -140,29 +143,23 @@ describe('success cases', () => {
     },
   );
 
-  it.each(listEpisodes().filter(({ ref }) => isEpisodeId(ref.id)))(
-    'reads the status of $ref.id from its metadata',
-    (episode) => {
-      // ARRANGE
-      const expected = episode.status;
-      // ACT
-      const status = episodeStatus(episode.ref.id as Parameters<typeof episodeStatus>[0]);
-      // ASSERT
-      expect(status).toBe(expected);
-    },
-  );
+  it.each(WITH_PAGE)('reads the status of $ref.id from its metadata', (episode) => {
+    // ARRANGE
+    const expected = episode.status;
+    // ACT
+    const status = episodeStatus(episode.ref);
+    // ASSERT
+    expect(status).toBe(expected);
+  });
 
-  it.each(listEpisodes().filter(({ ref }) => isEpisodeId(ref.id)))(
-    'reads the release date of $ref.id from its metadata, none while it is upcoming',
-    (episode) => {
-      // ARRANGE
-      const expected = episode.status === 'published' ? episode.publishedOn : undefined;
-      // ACT
-      const publishedOn = episodePublishedOn(episode.ref.id as Parameters<typeof episodePublishedOn>[0]);
-      // ASSERT
-      expect(publishedOn).toBe(expected);
-    },
-  );
+  it.each(WITH_PAGE)('reads the release date of $ref.id from its metadata, none while it is upcoming', (episode) => {
+    // ARRANGE
+    const expected = episode.status === 'published' ? episode.publishedOn : undefined;
+    // ACT
+    const publishedOn = episodePublishedOn(episode.ref);
+    // ASSERT
+    expect(publishedOn).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -202,8 +199,9 @@ describe('failure cases', () => {
 
   it('fails loudly for a registered slug no metadata lists, never defaulting to published', () => {
     // ARRANGE
-    const unlisted = 'not-an-episode' as Parameters<typeof episodeStatus>[0];
+    const unlisted = episodeRef('not-an-episode');
     // ACT
+    // @ts-expect-error -- an Episode the registry does not hold has no status to read
     const read = () => episodeStatus(unlisted);
     // ASSERT
     expect(read).toThrow(/not-an-episode/);
@@ -211,8 +209,9 @@ describe('failure cases', () => {
 
   it('fails loudly for a release date of a registered slug no metadata lists, as the status read does', () => {
     // ARRANGE
-    const unlisted = 'not-an-episode' as Parameters<typeof episodePublishedOn>[0];
+    const unlisted = episodeRef('not-an-episode');
     // ACT
+    // @ts-expect-error -- an Episode the registry does not hold has no release date to read
     const read = () => episodePublishedOn(unlisted);
     // ASSERT
     expect(read).toThrow(/not-an-episode/);

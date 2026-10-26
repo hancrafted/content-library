@@ -3,9 +3,8 @@ import { episodeRef, episodeRefOf, folderOf, matchEpisode, toolingRef } from './
 
 /*
  * The Episode id module (GLOSSARY, Episode id): the one place that knows an Event's copy is named
- * `<event-slug>__<slug>`. The store parses each id once, at load; every other caller is handed an EpisodeRef, or builds
- * one with `episodeRef`, and reads its kind, slug and owning Event as fields. These are the only tests that write an id
- * out by hand.
+ * `<event-slug>__<slug>`. Code passes an EpisodeRef (GLOSSARY). These tests, and the folder walker's, which checks the
+ * id it names a copy's folder by, are the only ones that write an id out by hand.
  */
 
 const EVENT = '2026-10-23-axel-agentic-workflow';

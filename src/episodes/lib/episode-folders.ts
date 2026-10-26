@@ -27,9 +27,10 @@ export const EPISODES_DIR = 'src/episodes';
 export const METADATA_FILE = 'episode-metadata.ts';
 
 /**
- * Passed on for tools and Episode tests, which reach the content store's catalogue only through an area's `lib/`: the
- * folder the tooling pages sit in, `tooling/<slug>/`, and `episodeRef`, which names the Episode in a folder, `<slug>/` or
- * `by-event/<event>/<slug>/`, so a test never writes an Episode id out by hand.
+ * Passed on for `tools/` and the tests inside an Episode's folder, which FE-007 lets reach `src/` only through an
+ * area's `lib/` or the store's entry, never the store's catalogue (§2.8, §5.1): the folder the tooling pages sit in,
+ * `tooling/<slug>/`, and `episodeRef`, which names the Episode in a folder, `<slug>/` or `by-event/<event>/<slug>/`, so
+ * a test never writes an Episode id out by hand. Every other test imports them from the catalogue itself.
  */
 export { episodeRef, TOOLING_FOLDER };
 

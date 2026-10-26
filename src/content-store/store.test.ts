@@ -6,7 +6,7 @@ import { episodeVideo, findEvent, loadContent } from './store';
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
  * throws a sentence naming its kind, slug and field. Fixtures are raw records, as a record file would hold them; an
  * Episode enters with the id its folder gives it, as the generated Episode registry hands it in, and is served with its
- * EpisodeRef, the id parsed once.
+ * EpisodeRef.
  */
 
 const AXEL = '2026-10-23-axel-agentic-workflow';
@@ -138,7 +138,8 @@ describe('success cases', () => {
       // ARRANGE
       const expected = { en, de };
       // ACT
-      const video = { en: episodeVideo(slug, 'en')?.id, de: episodeVideo(slug, 'de')?.id };
+      const episode = episodeRef(slug);
+      const video = { en: episodeVideo(episode, 'en')?.id, de: episodeVideo(episode, 'de')?.id };
       // ASSERT
       expect(video).toEqual(expected);
     },
