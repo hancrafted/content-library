@@ -29,13 +29,13 @@ function stageOf(file: WorkflowFile, stage: StageDef, index: number): Stage {
     moves: stage.move ? [{ letter: stage.move, why: stage.learningGoal }] : [],
     card: stage.card,
     gate: stage.gate,
-    jobs: stage.tasks.map((task) => jobOf(file, task, index)),
+    jobs: stage.jobs.map((task) => jobOf(file, task, index)),
   };
 }
 
 /** The Workflow of a loaded file; the stage with a sign-off card holds the focal job. */
 export function workflowOf(file: WorkflowFile): Workflow {
-  const focal = file.stages.find((stage) => stage.card)?.tasks[0];
+  const focal = file.stages.find((stage) => stage.card)?.jobs[0];
   return {
     id: file.id,
     title: file.title,

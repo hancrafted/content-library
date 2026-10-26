@@ -130,7 +130,7 @@ export interface StageDef {
   readonly move?: MoveLetter;
   readonly gate?: number;
   readonly card?: CardDef;
-  readonly tasks: readonly TaskDef[];
+  readonly jobs: readonly TaskDef[];
 }
 
 export interface ScenarioDef {

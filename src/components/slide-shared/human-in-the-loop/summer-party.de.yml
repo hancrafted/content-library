@@ -125,7 +125,7 @@ stages:
     title: Plan
     learningGoal: 'Zerlege es: Teile die große Aufgabe in Teile und nimm nur eines mit.'
     move: B
-    tasks:
+    jobs:
       - id: pieces
         title: Zerlegen
         summary: In kleinere Teile, mit Reihenfolge und Abhängigkeiten
@@ -216,7 +216,7 @@ stages:
     title: Interview
     learningGoal: 'Interviewe Dich mit KI: Die KI fragt, bevor sie rät, ein paar Fragen auf einmal.'
     move: I
-    tasks:
+    jobs:
       - id: interview
         title: KI löchert Dich
         summary: In einem Interview, ein paar Fragen auf einmal
@@ -311,7 +311,7 @@ stages:
         - Vegetarisches Menü
         - Separater ruhiger Raum
       status: Freigegeben
-    tasks:
+    jobs:
       - id: spec
         title: Du gibst frei
         summary: Die Anforderungen, Zeile für Zeile
@@ -414,7 +414,7 @@ stages:
     title: Tickets
     learningGoal: 'Zerlege es noch einmal: Schneide die Spezifikation in Tickets, die sich nicht überschneiden, damit jedes einen eigenen Chat bekommt.'
     move: B
-    tasks:
+    jobs:
       - id: tickets
         title: Tickets schreiben
         summary: Ein eigenständiges Ticket pro Option
@@ -516,7 +516,7 @@ stages:
     title: Recherche
     learningGoal: Gib jedem Ticket einen eigenen frischen Chat, damit jedes Fenster klein bleibt und keine zwei Chats dieselbe Arbeit machen.
     move: F
-    tasks:
+    jobs:
       - id: venue
         title: Chat
         summary: Ein frischer Chat pro Ticket, mit Websuche
@@ -654,7 +654,7 @@ stages:
     learningGoal: 'Prüfe jeden Schritt: Vergleiche jedes Ergebnis mit der Karte, bevor Du weitermachst.'
     move: E
     gate: 2
-    tasks:
+    jobs:
       - id: compare
         title: Ergebnisse ranken
         summary: Gegen Deine Anforderungen; Du wählst an Freigabe 2
@@ -801,7 +801,7 @@ stages:
   - id: recommendation
     title: Prüfen
     learningGoal: Schließe den Kreis selbst. Lies den Vergleich und entscheide, was an die Menschen geht, die es freigeben.
-    tasks:
+    jobs:
       - id: recommend
         title: Eine empfehlen
         summary: In einer Minute gelesen, mit nächsten Schritten

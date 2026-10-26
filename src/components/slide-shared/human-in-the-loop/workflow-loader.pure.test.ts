@@ -27,7 +27,7 @@ function base() {
         id: 'plan',
         title: 'Plan',
         learningGoal: 'Split it.',
-        tasks: [
+        jobs: [
           {
             id: 'plan',
             title: 'Plan',
@@ -43,7 +43,7 @@ function base() {
         id: 'research',
         title: 'Research',
         learningGoal: 'Fresh chats.',
-        tasks: [
+        jobs: [
           {
             id: 'research',
             title: 'Research',
@@ -72,7 +72,7 @@ type File = ReturnType<typeof base>;
 /** Adds a Compare stage after Research that takes `slot` and prompts with `text`. */
 function later(file: File, slot: object, text: string): void {
   const task = {
-    ...file.stages[1]!.tasks[0]!,
+    ...file.stages[1]!.jobs[0]!,
     id: 'compare',
     output: 'compare',
     fanOut: undefined,
@@ -83,7 +83,7 @@ function later(file: File, slot: object, text: string): void {
     id: 'compare',
     title: 'Compare',
     learningGoal: 'Rank.',
-    tasks: [
+    jobs: [
       { ...task, template: 'research', slots: [slot], do: { simple: [{ ...section, text }], technical: [section] } },
     ] as never,
   });
@@ -95,11 +95,11 @@ const load = (change: (file: File) => void = () => undefined) => {
 };
 const problemsOf = (result: ReturnType<typeof loadWorkflow>) =>
   'problems' in result ? result.problems.join('\n') : '';
-type Research = File['stages'][1]['tasks'][0] & {
+type Research = File['stages'][1]['jobs'][0] & {
   instructions?: string;
   review: { instructions?: string };
 };
-const research = (file: File): Research => file.stages[1]!.tasks[0]! as Research;
+const research = (file: File): Research => file.stages[1]!.jobs[0]! as Research;
 
 describe('success cases', () => {
   it('lets a free slot without a sample take the scenario text as its sample', () => {
@@ -110,7 +110,7 @@ describe('success cases', () => {
     const result = load(free);
     // ASSERT
     expect(problemsOf(result)).toBe('');
-    expect('file' in result && slotSample(result.file, result.file.stages[1]!.tasks[0]!.slots[0]!)).toBe(
+    expect('file' in result && slotSample(result.file, result.file.stages[1]!.jobs[0]!.slots[0]!)).toBe(
       'A demo.\n\n- A fact',
     );
   });
@@ -124,8 +124,8 @@ describe('success cases', () => {
     // ACT
     const result = load(change);
     // ASSERT
-    expect('file' in result && result.file.stages[1]!.tasks[0]!.instructions).toBe('Open a fresh chat.');
-    expect('file' in result && result.file.stages[1]!.tasks[0]!.review?.instructions).toBe(
+    expect('file' in result && result.file.stages[1]!.jobs[0]!.instructions).toBe('Open a fresh chat.');
+    expect('file' in result && result.file.stages[1]!.jobs[0]!.review?.instructions).toBe(
       'Paste the fix handoff back.',
     );
   });
@@ -158,8 +158,8 @@ describe('success cases', () => {
     const free = { id: 'task', mode: 'single', label: 'Your task', sample: 'Plan a party.', free: true };
     const change = (file: File) => {
       later(file, many, '{{research_1}} {{research_2}}');
-      file.stages[0]!.tasks[0]!.slots = [free] as never;
-      file.stages[0]!.tasks[0]!.do.simple = [{ ...section, text: 'Task: {{task}}' }];
+      file.stages[0]!.jobs[0]!.slots = [free] as never;
+      file.stages[0]!.jobs[0]!.do.simple = [{ ...section, text: 'Task: {{task}}' }];
     };
     // ACT
     const result = load(change);
@@ -197,7 +197,20 @@ describe('failure cases', () => {
     // ACT
     const problems = problemsOf(load(change));
     // ASSERT
-    expect(problems).toContain('stages[1].tasks[0].instructions must be text.');
+    expect(problems).toContain('stages[1].jobs[0].instructions must be text.');
+  });
+
+  it('reports a stage that still uses the old tasks: key as an unknown field', () => {
+    // ARRANGE
+    const change = (file: File) => {
+      const stage = file.stages[0] as unknown as Record<string, unknown>;
+      stage.tasks = stage.jobs;
+      delete stage.jobs;
+    };
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[0].tasks is not a field of the schema.');
   });
 
   const many = (sample: unknown) => ({ id: 'research', mode: 'multiple', label: 'All', sample });
@@ -239,7 +252,7 @@ describe('failure cases', () => {
   it('rejects an example list that is not one per chat, and a list on a task without a fan-out', () => {
     // ARRANGE
     const short = (file: File) => void (research(file).details.example = [RESEARCH] as never);
-    const list = (file: File) => void (file.stages[0]!.tasks[0]!.details.example = [PLAN] as never);
+    const list = (file: File) => void (file.stages[0]!.jobs[0]!.details.example = [PLAN] as never);
     // ACT
     const r0 = problemsOf(load(short));
     const r1 = problemsOf(load(list));
@@ -328,7 +341,7 @@ describe('failure cases', () => {
   it('rejects an unknown marker, and {{n}} outside a fan-out', () => {
     // ARRANGE
     const unknown = (file: File) => void (research(file).do.simple[0]!.text = '{{nothing}}');
-    const noFan = (file: File) => void (file.stages[0]!.tasks[0]!.do.simple[0]!.text = 'Chat {{n}}');
+    const noFan = (file: File) => void (file.stages[0]!.jobs[0]!.do.simple[0]!.text = 'Chat {{n}}');
     // ACT
     const r0 = problemsOf(load(unknown));
     const r1 = problemsOf(load(noFan));
@@ -383,12 +396,12 @@ describe('failure cases', () => {
   it('reports a shape problem with its path, and text that is not YAML', () => {
     // ARRANGE
     const change = (file: File) =>
-      void delete (research(file).details as Partial<File['stages'][0]['tasks'][0]['details']>).why;
+      void delete (research(file).details as Partial<File['stages'][0]['jobs'][0]['details']>).why;
     // ACT
     const r0 = problemsOf(load(change));
     const r1 = problemsOf(loadWorkflow('a: [b'));
     // ASSERT
-    expect(r0).toMatch(/stages\[1\]\.tasks\[0\]\.details\.why is missing/);
+    expect(r0).toMatch(/stages\[1\]\.jobs\[0\]\.details\.why is missing/);
     expect(r1).toMatch(/not valid YAML/);
   });
 });
