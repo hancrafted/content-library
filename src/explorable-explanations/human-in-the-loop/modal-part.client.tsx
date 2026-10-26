@@ -1,8 +1,8 @@
 'use client';
 
+import type { PromptKit } from '@/components/slide-shared/core-components/try-prompt/try-prompt.client';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { useEffect, useRef, useState } from 'react';
-import type { PromptKit } from '../../slide-shared/core-components/try-prompt/try-prompt.client';
 import type { ModalProps, UiWords } from './human-in-the-loop.types';
 import { ModalHeader } from './modal-header.client';
 import { TaskDetails, TaskSteps, type SlotState } from './task-steps.client';

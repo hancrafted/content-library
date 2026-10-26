@@ -5,9 +5,9 @@ title: 'Slide Architecture'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
+files: ['src/components/{episode-page,slide-master,slide-shared,episodes}/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
+paths: ['src/components/{episode-page,slide-master,slide-shared,episodes}/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR.'
 ---
 
@@ -37,7 +37,7 @@ flowchart LR
   ep -- "sections/ only" --> pool["episodes/slide-pool — content Slides Episodes share"]
   pool --> master
   pool --> shared
-  ep --> explain["explorable-explanations — Slides show by Preset"]
+  ep --> explain["src/explorable-explanations — product area, Slides show by Preset"]
   explain --> shared
   explain --> ui
   ep --> ui["ui — primitives"]

@@ -1,5 +1,5 @@
+import { SpeechBubble } from '@/components/slide-shared/speech-bubble/speech-bubble';
 import type { ReactNode } from 'react';
-import { SpeechBubble } from '../../slide-shared/speech-bubble/speech-bubble';
 import { ContextBars } from './context-bars-view';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
 import type { ContextViewData } from './context-view';

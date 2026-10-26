@@ -93,7 +93,7 @@ _Avoid_: Card, panel; page, which means the Next.js route the whole Episode rend
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
 
-**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Each lives in its own folder under `src/components/explorable-explanations/`, apart from the plain shared parts in `slide-shared/`.
+**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Each lives in its own folder under `src/explorable-explanations/`, the Explorable explanations product area, apart from the plain shared parts in `slide-shared/`.
 _Avoid_: Shared visual, cornerstone component, shared component, widget
 
 **Preset**: one Slide's settings of an Explorable explanation: the view it opens in and what it lights, so the Slide tells its own story at rest.

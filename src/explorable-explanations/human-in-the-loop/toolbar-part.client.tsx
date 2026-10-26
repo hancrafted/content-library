@@ -1,10 +1,10 @@
 'use client';
 
+import { IconButton } from '@/components/slide-shared/core-components/icon-button/icon-button.client';
+import { Tip } from '@/components/slide-shared/core-components/tip/tip.client';
 import { useMotion } from '@/hooks/use-motion';
 import { ChevronDown, Code, Download, Upload } from 'lucide-react';
 import { useId, type ChangeEvent } from 'react';
-import { IconButton } from '../../slide-shared/core-components/icon-button/icon-button.client';
-import { Tip } from '../../slide-shared/core-components/tip/tip.client';
 import styles from './human-in-the-loop.module.css';
 import type { ToolbarProps } from './human-in-the-loop.types';
 import { offers } from './toolbar-controls.pure';

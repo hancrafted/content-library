@@ -4,8 +4,8 @@ id: FE-012
 title: 'Explorable Explanation Content'
 domain: frontend
 rules: false
-files: ['src/components/{explorable-explanations,slide-shared}/**']
-paths: ['src/components/{explorable-explanations,slide-shared}/**']
+files: ['src/explorable-explanations/**', 'src/components/slide-shared/**']
+paths: ['src/explorable-explanations/**', 'src/components/slide-shared/**']
 description: 'An Explorable explanation may own one locale pair of data and default words in its own folder, picked by the path locale at build time; every Slide that shows it overrides any default word by props, and a plain slide-shared part still owns no words.'
 ---
 
@@ -13,7 +13,7 @@ description: 'An Explorable explanation may own one locale pair of data and defa
 
 ## Context
 
-> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): an Explorable explanation lives in its own folder, `src/components/explorable-explanations/`, apart from plain shared parts; the rules below are unchanged.
+> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): an Explorable explanation lives in its own folder, `src/explorable-explanations/<name>/` in the Explorable explanations product area, apart from plain shared parts; the rules below are unchanged.
 
 An **Explorable explanation** is one interactive visual several Slides show, each by its own **Preset** — the context window cornerstone shows on about ten Slides of one Episode. It is drawn from data: a chat log of dozens of steps, category labels, token budgets, the Presets themselves, in English and German.
 
