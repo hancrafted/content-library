@@ -1,0 +1,25 @@
+/* The Design archive Episode page's own additions to the Spec's styles and `design.css` (episode:archive). */
+.spec-kicker a {
+  color: inherit;
+}
+.spec-words > [data-panel='visual-idea'] {
+  display: block;
+}
+[data-archive-slide] {
+  margin-bottom: 4rem;
+}
+[data-archive] {
+  margin-top: 1.5rem;
+}
+[data-archive='references'] img {
+  max-width: 480px;
+  border: 1px solid var(--border, #ddd);
+}
+[data-archive='prompt'] pre {
+  white-space: pre-wrap;
+}
+.archive-section-title {
+  margin: 4rem 0 2rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+}

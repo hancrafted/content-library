@@ -4,8 +4,8 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
 import path from 'node:path';
-import { frontmatterModel } from './agent-definition.pure.ts';
-import { readOrNull } from './episode-run-log.ts';
+import { frontmatterModel } from '../../../src/pipeline/lib/agent-definition.pure.ts';
+import { readOrNull } from '../../../src/pipeline/lib/episode-run-log.ts';
 
 const MAX_DEPTH = 6;
 const SKIPPED = new Set(['node_modules', '.git']);

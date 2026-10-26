@@ -1,7 +1,7 @@
 'use client';
 
-import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
 import { Button } from '@/components/ui/button';
+import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
 import type { TagId } from '@/content-store/schemas/fields';
 import {
   browseView,

@@ -1,11 +1,12 @@
 // What every run command shares: the context it reads from outside, the current Run's view read fresh from the log,
-// and the one place a line is written and the marker pointed. Real disk; run-commands.ts is the caller.
-import { episodeLogPath, readEpisodeLog } from './episode-run-log.ts';
-import { refuse } from './run-args.pure.ts';
-import { appendEvent } from './run-log-writer.ts';
-import { type LogEvent, type RunLogLine, type Span } from './run-log.pure.ts';
+// the one place a line is written and the marker pointed, and resuming a Run in a new session. Real disk;
+// run-commands.ts is the caller.
+import { episodeLogPath, readEpisodeLog, readMarker } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
+import { type LogEvent, type RunLogLine, type Span } from '../../../src/pipeline/lib/run-log.pure.ts';
+import { hasEnded, openSpan } from '../../../src/pipeline/lib/run-spans.pure.ts';
+import { refuse, type Opts, type Params } from './run-args.pure.ts';
 import { pointMarker, type MarkerHome } from './run-marker.ts';
-import { hasEnded } from './run-spans.pure.ts';
 import type { ServerHost } from './servers.ts';
 
 /** What a command reads from outside; each defaults to the real thing. */
@@ -61,3 +62,24 @@ export const pointAt = (ctx: RunContext, run: RunLogLine, to: { jobSpanId: strin
 export function sessionOf(ctx: RunContext): string {
   return ctx.sessionId ?? refuse('no session id: set SESSION_ID, or run inside Claude Code (CLAUDE_CODE_SESSION_ID)');
 }
+
+export function resume(ctx: RunContext): string {
+  const { run, spans } = openView(ctx);
+  const job = openSpan(spans, 'job');
+  pointAt(ctx, run, { jobSpanId: job?.span_id ?? run.span_id, sessionId: sessionOf(ctx) });
+  return `Run ${run.run_id} resumed${job === undefined ? '' : ` in Job ${job.job}`}`;
+}
+
+/** Runs `step` for a session the live marker does not list yet: resumes first, and prints that it did. */
+export const resuming =
+  <K extends string>(step: (ctx: RunContext, p: Params<K>, opts: Opts) => string) =>
+  (ctx: RunContext, p: Params<K>, opts: Opts): string => {
+    const marker = readMarker(ctx.root);
+    const current = readEpisodeLog(ctx.slug, ctx.root).current;
+    const unlisted =
+      marker !== null &&
+      current !== null &&
+      marker.trace_id === current.trace_id &&
+      !(marker.session_ids ?? [marker.session_id]).includes(sessionOf(ctx));
+    return unlisted ? `${resume(ctx)} (this session was not on the Run)\n${step(ctx, p, opts)}` : step(ctx, p, opts);
+  };

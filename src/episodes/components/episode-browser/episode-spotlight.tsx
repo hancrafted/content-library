@@ -1,4 +1,4 @@
-import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
+import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
 import { showsFormat, spotlightOf } from '@/episodes/components/episode-browser/episode-browser.pure';
 import { EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';

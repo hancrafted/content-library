@@ -409,6 +409,79 @@ module.exports = {
       from: { path: '^src/app/' },
       to: { path: ['^src/components/', '^src/episodes/'], pathNot: '^src/components/site-shell\\.tsx$' },
     },
+    // The Events product area (spec #348): Events and their Playlists. It reaches only itself, the shared tiers and the
+    // content store; only page assembly reaches into it, passing it another area's parts as props (FE-007).
+    {
+      name: 'events-area-reaches-only-shared-and-store',
+      severity: 'error',
+      comment:
+        'src/events/** is a product area: it imports only its own files, the shared tiers (src/components/ui/, src/hooks/, src/i18n/, src/lib/) and the content store, never another product area (an Episode, its cards, a Slide) or a layer above it. What it needs from another area, page assembly passes in as props (FE-007).',
+      from: { path: '^src/events/' },
+      to: {
+        pathNot: ['^src/events/', '^src/components/ui/', '^src/(hooks|i18n|lib|content-store)/', 'node_modules'],
+        dependencyTypesNot: ['core'],
+      },
+    },
+    {
+      name: 'events-area-reached-only-from-page-assembly',
+      severity: 'error',
+      comment:
+        'Only page assembly (src/page-assembly/**) composes the Events area: no route, component, hook, lib module, store module or other product area imports src/events/** (FE-007).',
+      from: { pathNot: ['^src/events/', '^src/page-assembly/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/events/' },
+    },
+    // The pipeline product area (FE-007 §2.7): the content pipeline, its Run log and the dashboard.
+    {
+      name: 'src-never-imports-skills-or-tools',
+      severity: 'error',
+      comment:
+        'Nothing under src/ imports skills/ or tools/: a skill or a tool runs the product, it never houses what the product imports. Move the module into its area under src/ (FE-007).',
+      from: { path: '^src/' },
+      to: { path: '^(skills|tools)/' },
+    },
+    {
+      name: 'pipeline-reached-only-from-page-assembly',
+      severity: 'error',
+      comment:
+        'src/pipeline/** is a product area: from the rest of src/, only page assembly (or a test) imports it, and only through its components/ and lib/ folders (FE-007).',
+      from: { path: '^src/', pathNot: ['^src/(pipeline|page-assembly)/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/pipeline/' },
+    },
+    {
+      name: 'page-assembly-reaches-pipeline-through-tier-folders',
+      severity: 'error',
+      comment:
+        "Page assembly reaches src/pipeline/** only through its components/ and lib/ folders, never its hooks/ or a file at the area's root (FE-007).",
+      from: { path: '^src/page-assembly/' },
+      to: { path: '^src/pipeline/', pathNot: '^src/pipeline/(components|lib)/' },
+    },
+    {
+      name: 'pipeline-imports-no-other-area',
+      severity: 'error',
+      comment:
+        'src/pipeline/** imports no route, page template, other product area or other component; of src/components/ it reaches only the UI kit, ui/ (FE-007).',
+      from: { path: '^src/pipeline/' },
+      to: {
+        path: '^src/(app|page-assembly|components|episodes|events|explorable-explanations)/',
+        pathNot: '^src/components/ui/',
+      },
+    },
+    {
+      name: 'pipeline-lib-imports-no-react-or-upper-tier',
+      severity: 'error',
+      comment:
+        "src/pipeline/lib/** is the area's bottom tier: no React, not even types, and no import of the area's components/ or hooks/, so a skill script runs it under plain node and a test imports it without a DOM (FE-007).",
+      from: { path: '^src/pipeline/lib/' },
+      to: { path: ['^src/pipeline/(components|hooks)/', '(^|/)node_modules/(@types/)?(react|react-dom)/'] },
+    },
+    {
+      name: 'pipeline-hooks-reached-only-from-client',
+      severity: 'error',
+      comment:
+        'A hook runs only in the browser. Reach src/pipeline/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).',
+      from: { pathNot: ['\\.client\\.tsx$', '^src/(pipeline/)?hooks/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/pipeline/hooks/' },
+    },
   ],
   required: [
     {

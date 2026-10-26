@@ -1,9 +1,9 @@
-import { CardCaption, CardCue, CardShell, CardTitle } from '@/components/landing/card-shell';
-import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/components/landing/card-variant.pure';
+import { CardCaption, CardCue, CardShell, CardTitle } from '@/components/ui/card-shell';
+import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/components/ui/card-variant.pure';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { EpisodeLinks } from '@/episodes/components/episode-card/episode-links';
 import { ReleaseDate } from '@/episodes/components/episode-card/episode-release-date';
-import { TAG_ICONS } from '@/episodes/components/episode-card/episode-visuals';
+import { TAG_ACCENTS, TAG_ICONS } from '@/episodes/components/episode-card/episode-visuals';
 import type { VideoLabels } from '@/episodes/components/episode-card/episode-youtube-link';
 import type { Locale } from '@/lib/locale.pure';
 import type { getTranslations } from 'next-intl/server';
@@ -110,7 +110,7 @@ export function EpisodeCardView({
     <CardShell
       variant={variant}
       linked={isLinked(card)}
-      accent={card.accent}
+      look={TAG_ACCENTS[card.accent]}
       icon={TAG_ICONS[card.icon]}
       className={className}
       data={dataOf(card)}

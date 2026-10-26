@@ -1,3 +1,4 @@
+import { PRIMARY_LOOK, type AccentClasses } from '@/components/ui/card-shell';
 import type { Accent, TagIcon } from '@/lib/episode-overview';
 import { Coins, FileText, Handshake, Hourglass, ListPlus, Sparkles, type LucideIcon } from 'lucide-react';
 
@@ -11,22 +12,9 @@ export const TAG_ICONS: Record<TagIcon, LucideIcon> = {
   coins: Coins,
 };
 
-/** One colour family drawn as the classes a card needs; whole strings, so Tailwind can see each one. */
-export interface AccentClasses {
-  /** The accent as plain text or an icon, 4.5:1 on the page in both themes. */
-  readonly ink: string;
-  /** The corner wash that tints a large card. */
-  readonly wash: string;
-  /** The card's border once hovered or focused. */
-  readonly edge: string;
-}
-
+/** Each Tag accent drawn as the classes a card needs; whole strings, so Tailwind can see each one. */
 export const TAG_ACCENTS: Record<Accent, AccentClasses> = {
-  primary: {
-    ink: 'text-primary',
-    wash: 'from-primary/10',
-    edge: 'hover:border-primary/40 has-[a:focus-visible]:border-primary/40',
-  },
+  primary: PRIMARY_LOOK,
   amber: {
     ink: 'text-amber-700 dark:text-amber-400',
     wash: 'from-amber-500/15',

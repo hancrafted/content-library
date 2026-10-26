@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, describe, expect, it } from 'vitest';
-import { specStage } from '../../../src/lib/episode-spec.pure.ts';
+import { specStage } from '../../../src/pipeline/lib/episode-spec.pure.ts';
 
 // A real subprocess (ARCH-003 §1.1): the ticket (#228) asks for the command's page, exit code and refusal end to end.
 /* `npm run episode:spec-assemble` on a temp Episode folder: reads what exists and writes `spec/spec.html`. */

@@ -6,7 +6,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { promoteResearch } from './promote-research.pure.ts';
+import { promoteResearch } from '../../../src/pipeline/lib/promote-research.pure.ts';
 
 const WIKI = 'docs/llm-wiki';
 const staging = process.argv[2]?.replace(/\/$/, '');

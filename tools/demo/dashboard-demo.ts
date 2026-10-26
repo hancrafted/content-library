@@ -2,7 +2,7 @@
 // pipeline.yml and events.jsonl, to public/dashboard-demo/, which the dashboard's demo replays (dashboard-demo.pure.ts).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { demoClock, publicDemoEvents, publicDemoPipeline } from '../../src/lib/dashboard-demo.pure.ts';
+import { demoClock, publicDemoEvents, publicDemoPipeline } from '../../src/pipeline/lib/dashboard-demo.pure.ts';
 
 const [folder, repo] = process.argv.slice(2);
 if (!folder || !repo) {

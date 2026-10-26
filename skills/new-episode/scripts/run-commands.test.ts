@@ -2,10 +2,10 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, 
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
+import { episodeLogPath, readEpisodeLog, readMarker } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
+import { queryRuns } from '../../../src/pipeline/lib/run-query.pure.ts';
 import { runCommand, type RunContext } from './run-commands.ts';
-import { appendEvent } from './run-log-writer.ts';
-import { queryRuns } from './run-query.pure.ts';
 
 /*
  * The run-scoped commands against a real temp worktree: names in, lines and marker out. Clock, ids, git,

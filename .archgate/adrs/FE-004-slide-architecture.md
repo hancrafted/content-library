@@ -24,6 +24,10 @@ flowchart TD
   app["src/app — routes"] --> pages["src/page-assembly — page templates, one folder each"]
   pages --> comp["src/components — feature modules"]
   pages --> area["src/episodes — Episodes area: content folders, then components/ hooks/ lib/ tiers"]
+  pages --> events["src/events — Events and their Playlists"]
+  events --> lib
+  pages --> pipeline["src/pipeline — content pipeline, Run log, dashboard"]
+  pipeline --> lib
   comp --> hooks["src/hooks — browser state"]
   comp --> lib["src/lib — pure logic, no React"]
   hooks --> lib

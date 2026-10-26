@@ -4,7 +4,7 @@
 import { execFileSync, spawn } from 'node:child_process';
 import { closeSync, existsSync, mkdirSync, openSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { draftPipeline, pickPorts, portsOf, type RunWhere } from './servers.pure.ts';
+import { draftPipeline, pickPorts, portsOf, type RunWhere } from '../../../src/pipeline/lib/servers.pure.ts';
 
 /** What begin-run and end-run need from the machine; each defaults to the real thing, a test passes its own. */
 export interface ServerHost {
