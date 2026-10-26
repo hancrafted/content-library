@@ -2,8 +2,11 @@
 ui:
   workflow: Use case
   toolbar: Workflow controls
-  technical: Technical
-  technicalTip: 'Technical: show the one-time setup and the /skill commands'
+  level: Prompt style
+  chat: Chat
+  chatTip: 'Chat: prompts to paste into an AI chat'
+  cli: CLI
+  cliTip: 'CLI: show the one-time setup and the /skill commands'
   context: Help
   intro: 'Work through the steps in order: copy each prompt into a new AI chat, then paste the result back here.'
   stepContext: 'Provide context'

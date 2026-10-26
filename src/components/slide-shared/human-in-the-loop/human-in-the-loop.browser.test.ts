@@ -137,7 +137,7 @@ async function stageProblems(page: Page, id: string, language: Language): Promis
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Technical, download and upload', async ({
+  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Chat · CLI, download and upload', async ({
     page,
   }) => {
     // ARRANGE
@@ -232,17 +232,34 @@ test.describe('success cases', () => {
     }
   });
 
-  test('switches to Vacation, then copies the /grilling prompt in Technical', async ({ page }) => {
+  test('switches to Vacation, then copies the /grilling prompt in CLI', async ({ page }) => {
     // ARRANGE
     const command = '/grilling';
     const { root, modal } = await open(page, 'light');
     // ACT
     await pickWorkflow(root, 'vacation');
-    await root.locator('[data-control="level"]').click();
+    await root.locator('[data-control="level"]').getByRole('button', { name: 'CLI' }).click();
     await openStage(page, 'Interview');
     await copyPrompt(modal).click();
     // ASSERT
     await expect.poll(async () => (await copied(page)).at(-1)).toContain(command);
+  });
+
+  test.describe('Chat and CLI labels', () => {
+    for (const [name, url] of [
+      ['English', EPISODE],
+      ['German', GERMAN_EPISODE],
+    ] as const) {
+      test(`labels the two-way control Chat and CLI in ${name}`, async ({ page }) => {
+        // ARRANGE
+        const expected = ['Chat', 'CLI'];
+        const { toolbar } = await open(page, 'light', { url });
+        // ACT
+        const segments = toolbar.locator('[data-control="level"] button');
+        // ASSERT
+        await expect(segments).toHaveText(expected);
+      });
+    }
   });
 
   test('fans the Research task out as Chat 1..3 tabs', async ({ page }) => {

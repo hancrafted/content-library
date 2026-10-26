@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CONTROLS, controlOf, defOf, offers, type ControlId } from './toolbar-controls.pure';
 
 describe('success cases', () => {
-  it('shows the picker, the Technical toggle, download and upload by default, in that order', () => {
+  it('shows the picker, the Chat · CLI control, download and upload by default, in that order', () => {
     // ARRANGE
     const none = {};
     // ACT
@@ -21,7 +21,7 @@ describe('success cases', () => {
     expect(offers(preset, 'download')).toBe(true);
   });
 
-  it('hides the Technical toggle, and only it, for a readonly Preset', () => {
+  it('hides the Chat · CLI control, and only it, for a readonly Preset', () => {
     // ARRANGE
     const none = {};
     // ACT
@@ -52,7 +52,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps a hidden Technical toggle hidden even in readonly', () => {
+  it('keeps a hidden Chat · CLI control hidden even in readonly', () => {
     // ARRANGE
     const preset = { level: { show: false } };
     // ACT
