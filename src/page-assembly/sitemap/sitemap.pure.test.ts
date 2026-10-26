@@ -1,4 +1,4 @@
-import type { PageRef } from '@/content-store/catalogue/routes';
+import type { PageRef } from '@/content-store/catalogue/record-routes';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { robotsFor, sitemapEntries } from './sitemap.pure';

@@ -1,4 +1,4 @@
-import { episodeRoute, isEpisodesPathSlug } from '@/content-store/catalogue/routes';
+import { episodeRoute, isEpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { localizePath } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';

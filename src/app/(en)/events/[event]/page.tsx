@@ -1,4 +1,4 @@
-import { isEventSlug } from '@/content-store/catalogue/routes';
+import { isEventSlug } from '@/content-store/catalogue/record-routes';
 import { eventParams } from '@/content-store/store';
 import { EventPage, eventPageCopy } from '@/page-assembly/event/event-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';

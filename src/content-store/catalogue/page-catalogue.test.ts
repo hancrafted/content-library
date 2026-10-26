@@ -1,4 +1,4 @@
-import { TOOLING_SLUGS, type PageRef } from '@/content-store/catalogue/routes';
+import { TOOLING_SLUGS, type PageRef } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../store';
 import { catalogueOf } from './page-catalogue';

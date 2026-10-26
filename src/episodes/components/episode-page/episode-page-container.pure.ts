@@ -1,5 +1,5 @@
 import { episodeFolderOf, episodeRefOf, TOOLING_FOLDER } from '@/content-store/catalogue/episode-id.pure';
-import { isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import { isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import type { TocItem, TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';

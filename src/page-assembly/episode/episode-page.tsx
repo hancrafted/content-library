@@ -6,7 +6,7 @@ import {
   type EpisodeId,
   type EpisodesPathPage,
   type PageOf,
-} from '@/content-store/catalogue/routes';
+} from '@/content-store/catalogue/record-routes';
 import { episodePublishedOn, episodeStatus, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
 import { episodeCopy, findEpisode } from '@/episodes/lib/registry';

@@ -1,4 +1,4 @@
-import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/routes';
+import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';

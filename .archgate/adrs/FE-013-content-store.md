@@ -98,6 +98,7 @@ For this project the reasons and the model — which entities are records, how t
 
 1. **Rules** (`FE-013-content-store.rules.ts`, error): Decision 2.
 2. **Lint** (dependency-cruiser, error; probe tests run the whole rule set over a throwaway tree): Decision 1.
+   Tests are exempt from Decision 1.2's one upward edge: the store's folder-to-record test reads the Episodes area's folder walker.
 3. **Tests** (fast suite): Decision 3 — each refusal throws its sentence for a bad record.
 
 **Manual review duties:** descriptions say what a field means; refusals name kind, record and field and never filter silently (Decision 3); no reader bypasses the entry through a re-export; scripts and tests outside `src/` read records through the entry too.

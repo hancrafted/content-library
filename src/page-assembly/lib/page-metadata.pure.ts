@@ -7,7 +7,7 @@ import {
   type PageKind,
   type PageRef,
   type RecordPage,
-} from '@/content-store/catalogue/routes';
+} from '@/content-store/catalogue/record-routes';
 import { pageTreatment, type PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import { DEFAULT_LOCALE, localizePath, type Locale } from '@/shared/lib/locale.pure';

@@ -1,4 +1,4 @@
-import type { EventSlug } from '@/content-store/catalogue/routes';
+import type { EventSlug } from '@/content-store/catalogue/record-routes';
 import type { Locale } from '@/shared/lib/locale.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';

@@ -5,7 +5,7 @@ import {
   matchPage,
   type EpisodesPathPage,
   type ToolingSlug,
-} from '@/content-store/catalogue/routes';
+} from '@/content-store/catalogue/record-routes';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { notFound } from 'next/navigation';
 import { TOOLING_PAGES } from './episode-registry.generated';

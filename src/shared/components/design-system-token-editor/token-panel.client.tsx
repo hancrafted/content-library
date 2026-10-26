@@ -110,7 +110,7 @@ function Scope({ slideId, children }: { slideId?: string; children: React.ReactN
 
 export interface PanelProps {
   theme: Theme;
-  /** The page's tokens; `currentSlide` is `null` off an Episode page, where the Slide tab is off. */
+  /** The page's tokens; `currentSlide` is `null` on a page that reports no Slide, where the Slide tab is off. */
   tokens: PageTokens;
   edits: Edits;
   changes: Change[];
@@ -140,7 +140,7 @@ function ScopeContents({ tokens, ...list }: ListScope & { tokens: PageTokens }) 
   );
 }
 
-/** The scope tabs and what each shows. The Slide tab exists only while an Episode page reports a Slide. */
+/** The scope tabs and what each shows. The Slide tab exists only while the page reports a Slide. */
 function ScopeTabs({
   tab,
   onTab,
@@ -176,7 +176,7 @@ interface TabState {
 }
 
 /**
- * The popover body: scope tabs (Slide only on an Episode page), the theme row, the
+ * The popover body: scope tabs (Slide only while the page reports one), the theme row, the
  * grouped token list for the active theme, and the copy and reset actions. It
  * follows the site's light or dark theme with a palette of its own (see the CSS
  * module), so it keeps its look while the site's tokens are edited.

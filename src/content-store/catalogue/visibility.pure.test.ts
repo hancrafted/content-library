@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PageRef } from './routes';
+import type { PageRef } from './record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
 /*

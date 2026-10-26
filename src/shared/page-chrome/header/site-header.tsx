@@ -3,7 +3,7 @@ import { Button } from '@/shared/components/ui/button';
 import { BOOKING_URL } from '@/shared/lib/contact';
 import { externalHref } from '@/shared/lib/external-link.pure';
 import { localizePath, type Locale, type LocalesByRoute } from '@/shared/lib/locale.pure';
-import { ROUTES } from '@/shared/lib/routes';
+import { ROUTES } from '@/shared/lib/static-routes';
 import { HeaderMenu } from '@/shared/page-chrome/header/header-menu.client';
 import { NavLink } from '@/shared/page-chrome/header/nav-link.client';
 import { SiteBrand } from '@/shared/page-chrome/header/site-brand';

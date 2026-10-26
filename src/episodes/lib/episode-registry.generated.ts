@@ -2,7 +2,7 @@
 // folder `src/episodes/<slug>/` or `…/by-event/<event>/<slug>/` holding `episode-metadata.ts` is an
 // Episode, keyed by its id; with `episode.ts`, a page. A folder `src/episodes/tooling/<slug>/` is a tooling page.
 import type { EpisodeSlugOf } from '@/content-store/catalogue/episode-id.pure';
-import type { EpisodeId, ToolingSlug } from '@/content-store/catalogue/routes';
+import type { EpisodeId, ToolingSlug } from '@/content-store/catalogue/record-routes';
 import { aiAttentionSpan } from '@/episodes/ai-attention-span/episode';
 import { aiGivesYouMoreWork } from '@/episodes/ai-gives-you-more-work/episode';
 import { aiTokenEconomy } from '@/episodes/ai-token-economy/episode';

@@ -1,4 +1,4 @@
-import { isEpisodeId } from '@/content-store/catalogue/routes';
+import { isEpisodeId } from '@/content-store/catalogue/record-routes';
 import { FORMATS, TAG_IDS } from '@/content-store/schemas/fields';
 import { featuredIds, listEpisodes } from '@/content-store/store';
 import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';

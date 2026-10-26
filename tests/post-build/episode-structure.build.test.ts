@@ -7,7 +7,7 @@ import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/routes';
+import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/record-routes';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '../../src/shared/lib/title-anchor.pure';
 import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-pages';

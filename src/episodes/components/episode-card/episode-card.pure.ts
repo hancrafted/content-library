@@ -1,4 +1,4 @@
-import { episodeRoute, isEpisodeId } from '@/content-store/catalogue/routes';
+import { episodeRoute, isEpisodeId } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus, PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/episode.schema';
 import type { FormatId, TagId } from '@/content-store/schemas/fields';
 import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';

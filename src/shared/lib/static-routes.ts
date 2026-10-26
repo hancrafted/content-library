@@ -2,7 +2,7 @@ import { localizePath, type Locale } from './locale.pure';
 
 /*
  * The static routes: the logical paths of the site's own pages, which know nothing of a record. A record's path
- * (an Episode's, an Event's) is the content store's, `src/content-store/catalogue/routes.ts`.
+ * (an Episode's, an Event's) is the content store's, `src/content-store/catalogue/record-routes.ts`.
  */
 
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */

@@ -129,7 +129,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 2. **Unit test:** every top-level `src/` folder but the routes, and `tools/`, has a pointer-only `AGENTS.md` whose paths, ADR ids, sections and rule names exist.
 3. **Unused-file check** (knip, pre-push and CI): an unimported `.tsx` in a `lib/` folder (§3).
 
-**Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/shared/lib/` carry no classifier; left for a future lib-tree record.
+**Known gap:** `static-routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/shared/lib/` carry no classifier; left for a future lib-tree record.
 
 **Manual review duties:** routes hold no markup, data shaping or logic (§1.2); no shared Slide shape (§4); core components own no words (§5.2); two areas meet by props passed in page assembly, never by moving one area's module into another (§2.4).
 

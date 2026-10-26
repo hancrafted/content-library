@@ -9,7 +9,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeRefOf } from '../../src/content-store/catalogue/episode-id.pure';
+import { episodeRefOf, matchEpisode } from '../../src/content-store/catalogue/episode-id.pure';
 import {
   episodeRoute,
   eventEpisodeRoute,
@@ -17,12 +17,12 @@ import {
   isEpisodeId,
   type EpisodeId,
   type EventSlug,
-} from '../../src/content-store/catalogue/routes';
+} from '../../src/content-store/catalogue/record-routes';
 import { episodeStatus, episodeVisibility, listEvents } from '../../src/content-store/store';
 import { isPastEvent } from '../../src/events/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.pure';
-import { ROUTES } from '../../src/shared/lib/routes';
 import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
+import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
@@ -430,7 +430,7 @@ describe('Episode pages under an Event', () => {
       const self = `${SITE_URL}${urlOf(event, episode, locale)}/`;
       const indexable =
         isEpisodeId(episode) && episodeVisibility(episode) === 'public' && episodeStatus(episode) === 'published';
-      const copy = episodeRefOf(episode).kind === 'event-copy';
+      const copy = matchEpisode(episodeRefOf(episode), { standalone: () => false, 'event-copy': () => true });
       const expected = !indexable
         ? { canonical: self, noindex: true, hreflang: 3, card: self }
         : copy

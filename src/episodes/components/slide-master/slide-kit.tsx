@@ -1,4 +1,4 @@
-import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import type { SlideLevel } from '@/episodes/lib/episode.pure';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
