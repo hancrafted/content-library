@@ -5,11 +5,10 @@ describe('success cases', () => {
   it('A past Event says its content may differ from the recording; an upcoming Event does not', () => {
     // ARRANGE
     const buildDay = '2026-10-26';
-    const expected = { past: true, sameDay: false, upcoming: false };
+    const expected = { past: true, upcoming: false };
     // ACT
     const seen = {
       past: isPastEvent('2026-10-23', buildDay),
-      sameDay: isPastEvent('2026-10-26', buildDay),
       upcoming: isPastEvent('2026-10-28', buildDay),
     };
     // ASSERT

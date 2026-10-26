@@ -6,7 +6,7 @@ import type { EpisodeCard } from './episode-card.pure';
 type PlaylistCard = Pick<EpisodeCard, 'slug' | 'route' | 'minutes'>;
 
 /** What the cards read of an Event the store serves (`ServedEvent`): its slug, and each listed Episode with its page. */
-interface PlaylistOf<Listed> {
+interface EventWithPlaylist<Listed> {
   readonly slug: EventSlug;
   readonly playlist: { readonly episodes: readonly { readonly episode: Listed; readonly page?: EpisodeSlug }[] };
 }
@@ -16,7 +16,7 @@ interface PlaylistOf<Listed> {
  * the attendee stays in the Event's context; a card with no page stays unlinked.
  */
 export function eventPlaylistCards<Listed, Card extends Pick<EpisodeCard, 'route' | 'href'>>(
-  event: PlaylistOf<Listed>,
+  event: EventWithPlaylist<Listed>,
   cardOf: (episode: Listed) => Card,
   locale: Locale,
 ): Card[] {
