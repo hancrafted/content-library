@@ -37,6 +37,8 @@ export type WorkflowEvent =
   | { readonly type: 'workflow'; readonly workflowId: string }
   | { readonly type: 'open'; readonly stageId: string }
   | { readonly type: 'close' }
+  | { readonly type: 'teaching'; readonly teaching: boolean }
+  | { readonly type: 'reset' }
   | { readonly type: 'slots'; readonly values: Readonly<Record<string, string>> }
   | { readonly type: 'upload'; readonly workflow: Workflow }
   | { readonly type: 'restore'; readonly results: Readonly<Record<string, string>>; readonly teaching: boolean }
@@ -60,9 +62,10 @@ type Handlers = {
   ) => WorkflowState;
 };
 
-/** What changing the shown Workflow starts over: the open stage, the pasted values, any upload and its problems. */
+/** What changing the shown Workflow starts over: the open stage, the pasted values, teaching mode, any upload and its problems. */
 const FRESH = {
   openStageId: null,
+  teaching: true,
   slotValues: {},
   uploaded: null,
   uploadProblems: [],
@@ -73,6 +76,8 @@ const HANDLERS: Handlers = {
   workflow: (state, { workflowId }) => ({ ...state, ...FRESH, workflowId }),
   open: (state, { stageId }) => ({ ...state, openStageId: stageId }),
   close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null }),
+  teaching: (state, { teaching }) => ({ ...state, teaching }),
+  reset: (state) => ({ ...state, slotValues: {}, teaching: true }),
   slots: (state, { values }) => ({ ...state, slotValues: values }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
   restore: (state, { results, teaching }) => ({ ...state, slotValues: results, teaching }),

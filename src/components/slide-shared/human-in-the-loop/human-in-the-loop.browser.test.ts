@@ -153,11 +153,11 @@ async function stageProblems(page: Page, id: string, language: Language): Promis
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Chat · CLI, download and upload', async ({
+  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Chat · CLI, teaching, reset, download and upload', async ({
     page,
   }) => {
     // ARRANGE
-    const expectedControls = ['picker', 'level', 'download', 'upload'];
+    const expectedControls = ['picker', 'level', 'teaching', 'reset', 'download', 'upload'];
     const expectedLabel = 'Use case:';
     const expectedChosen = 'Plan company summer party';
     const { root, toolbar } = await open(page, 'light');
@@ -344,6 +344,64 @@ test.describe('success cases', () => {
     // ASSERT
     expect(written.at(-1)).toContain(pasted);
     await expect(field(modal, 'spec')).toHaveValue(pasted);
+  });
+
+  test('turns teaching off before the first paste so the rounds follow the pasted tickets, then locks the switch until Reset', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# Tickets\n## Tickets\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
+    const fullRounds = 4;
+    const { modal, root, toolbar } = await open(page, 'light');
+    await pickWorkflow(root, 'vacation');
+    const teaching = toolbar.locator('[data-control="teaching"]');
+    const rounds = () => modal.locator('[data-job="venue"] [data-slot="accordion-trigger"]');
+    // ACT
+    await expect(teaching).toBeEnabled();
+    await expect(teaching).toHaveAttribute('aria-checked', 'true');
+    await teaching.click();
+    await openStage(page, 'Tickets');
+    await field(modal, 'tickets').fill(pasted);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await openStage(page, 'Research');
+    // ASSERT
+    await expect(rounds()).toHaveCount(fullRounds);
+    await expect(modal.locator('[data-control="teaching"]')).toBeDisabled();
+    await modal.locator('[data-control="teaching"]').locator('xpath=..').hover();
+    await expect(page.getByRole('tooltip')).toContainText('Reset to change');
+    await modal.locator('[data-control="reset"]').click();
+    await modal.locator('[data-reset-now]').click();
+    await expect(modal.locator('[data-control="teaching"]')).toBeEnabled();
+    await expect(modal.locator('[data-control="teaching"]')).toHaveAttribute('aria-checked', 'true');
+  });
+
+  test('turns Reset to the warning colour once work is saved, confirms inside the popover and clears only this Workflow', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# RESET MARKER';
+    const other = { 'human-in-the-loop/vacation': { hash: 'h', teaching: true, results: { 'a.b': 'keep' } } };
+    await open(page, 'light');
+    await storeProgress(page, other);
+    const { modal, toolbar } = await open(page, 'light');
+    const reset = toolbar.locator('[data-control="reset"]');
+    // ACT
+    await expect(reset).toHaveAttribute('data-has-work', 'false');
+    await openStage(page, 'Requirements');
+    await field(modal, 'spec').fill(pasted);
+    const popoverReset = modal.locator('[data-control="reset"]');
+    await expect(popoverReset).toHaveAttribute('data-has-work', 'true');
+    await popoverReset.click();
+    // ASSERT
+    const confirm = modal.locator('[data-reset-confirm]');
+    await expect(confirm).toBeVisible();
+    await expect(confirm.getByRole('button', { name: 'Download progress' })).toBeVisible();
+    await confirm.locator('[data-reset-now]').click();
+    await expect(confirm).toHaveCount(0);
+    await expect(field(modal, 'spec')).toHaveValue('');
+    await expect(popoverReset).toHaveAttribute('data-has-work', 'false');
+    await expect.poll(() => storedProgress(page)).not.toContain('RESET MARKER');
+    expect(await storedProgress(page)).toContain('keep');
   });
 
   test('keeps a pasted result across a reload and a switch of language, under the one progress key', async ({

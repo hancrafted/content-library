@@ -6,11 +6,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Download, Upload } from 'lucide-react';
-import { useId, type ChangeEvent } from 'react';
+import { useId, type ChangeEvent, type ReactNode } from 'react';
 import type { ToolbarProps } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
 import { ProgressNote } from './progress-note.client';
 import { saveFile } from './save-file';
+import { ResetConfirm, TeachingControls, useTeachingProps } from './teaching-controls.client';
 import { ToolButton } from './tool-button.client';
 import { offers } from './toolbar-controls.pure';
 import { workflowFile } from './workflow-file.pure';
@@ -103,11 +104,12 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
 }
 
 /** The icon buttons the registry and the Preset allow, in order: Chat · CLI, download, upload. */
-function Icons({ bar }: { readonly bar: ToolbarProps }) {
+function Icons({ bar, teaching }: { readonly bar: ToolbarProps; readonly teaching: ReactNode }) {
   const { controls, readonly, words, level } = bar;
   return (
     <>
       {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
+      {teaching}
       {offers(controls, 'download') && (
         <ToolButton
           label={words.download}
@@ -124,7 +126,11 @@ function Icons({ bar }: { readonly bar: ToolbarProps }) {
 
 const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
 const hasIcons = (bar: ToolbarProps) =>
-  offers(bar.controls, 'level', bar.readonly) || offers(bar.controls, 'download') || offers(bar.controls, 'upload');
+  offers(bar.controls, 'level', bar.readonly) ||
+  offers(bar.controls, 'teaching', bar.readonly) ||
+  offers(bar.controls, 'reset', bar.readonly) ||
+  offers(bar.controls, 'download') ||
+  offers(bar.controls, 'upload');
 
 /** What sits under the pill when there is something to say: the progress note, then an upload's problems. */
 function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
@@ -138,6 +144,7 @@ function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string })
 
 export function ToolbarPart(bar: ToolbarProps) {
   const problemsId = useId();
+  const teachingProps = useTeachingProps(bar.words, bar);
   const pills = hasPills(bar);
   const icons = hasIcons(bar);
   if (!pills && !icons) return <Notes bar={bar} id={problemsId} />;
@@ -153,9 +160,10 @@ export function ToolbarPart(bar: ToolbarProps) {
       >
         <Picker bar={bar} />
         {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
-        <Icons bar={bar} />
+        <Icons bar={bar} teaching={<TeachingControls {...teachingProps} />} />
         {offers(bar.controls, 'upload') && <UploadButton bar={bar} describedBy={describedBy} />}
       </div>
+      <ResetConfirm {...teachingProps} />
       <Notes bar={bar} id={problemsId} />
     </>
   );

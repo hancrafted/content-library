@@ -51,6 +51,17 @@ export interface UiWords {
   readonly noteUnsaved: string;
   readonly downloadProgress: string;
   readonly downloadOldProgress: string;
+  /** The teaching switch: its name, tooltip, and the tooltip while it is locked. */
+  readonly teaching: string;
+  readonly teachingTip: string;
+  readonly teachingLocked: string;
+  /** Reset: its name, its tooltip when saved work was found, and its confirmation. */
+  readonly reset: string;
+  readonly resetTip: string;
+  readonly resetConfirm: string;
+  readonly resetDownload: string;
+  readonly resetNow: string;
+  readonly resetCancel: string;
   readonly discardProgress: string;
   readonly upload: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
@@ -163,8 +174,31 @@ export interface ProgressNote {
   readonly onDiscard: () => void;
 }
 
+/** What the teaching switch and Reset need to draw, the same in the toolbar and at the popover's top right. */
+export interface TeachingState {
+  /** The switch and Reset each show unless the Preset hides them (or the Preset is readonly). */
+  readonly show: boolean;
+  readonly resetShow: boolean;
+  /** Teaching mode is on. */
+  readonly on: boolean;
+  /** A result is pasted: the switch is disabled until Reset. */
+  readonly locked: boolean;
+  /** Saved work was found for this Workflow, here or in another Episode: Reset turns the warning colour. */
+  readonly hasWork: boolean;
+}
+
+/** The teaching switch and Reset, as props of the parts that hold them. */
+export interface TeachingProps {
+  readonly teaching: TeachingState;
+  readonly onTeaching: (teaching: boolean) => void;
+  /** Clears this Workflow's run and its saved entry; the parts confirm first. */
+  readonly onReset: () => void;
+  /** Saves the current run as a file: the download Reset offers first. */
+  readonly onDownloadRun: () => void;
+}
+
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
-export interface ToolbarProps {
+export interface ToolbarProps extends TeachingProps {
   readonly workflow: Workflow;
   /** Every authored Workflow, for the pills. */
   readonly choices: readonly { readonly id: string; readonly title: string }[];
@@ -183,7 +217,7 @@ export interface ToolbarProps {
 }
 
 /** What the modal part draws: the open stage's view (null: closed). */
-export interface ModalProps {
+export interface ModalProps extends TeachingProps {
   readonly stage: StageView | null;
   /** The run of the open stage: job states and rounds. */
   readonly run: StageRun | null;

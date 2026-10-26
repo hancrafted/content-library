@@ -4,8 +4,11 @@ import type {
   HumanInTheLoopData,
   ModalProps,
   ProgressNote,
+  TeachingProps,
+  TeachingState,
   ToolbarProps,
 } from './human-in-the-loop.types';
+import { offers } from './toolbar-controls.pure';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { markerValuesOf, resultsOf, runOf } from './workflow-run.pure';
@@ -39,7 +42,7 @@ export function uploadEvent(yaml: string): WorkflowEvent {
 }
 
 /** The callbacks the parts send events up by. */
-export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload'> &
+export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload' | 'onTeaching' | 'onReset'> &
   Pick<DiagramProps, 'onOpenStage'> &
   Pick<ModalProps, 'onClose' | 'onSlots'>;
 
@@ -48,6 +51,8 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
   return {
     onLevel: (level) => dispatch({ type: 'level', level }),
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
+    onTeaching: (teaching) => dispatch({ type: 'teaching', teaching }),
+    onReset: () => dispatch({ type: 'reset' }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
     onOpenStage: (stageId) => dispatch({ type: 'open', stageId }),
     onClose: () => dispatch({ type: 'close' }),
@@ -62,6 +67,8 @@ export interface Shown {
   readonly workflow: Workflow;
   /** What to tell the viewer about their saved progress, if anything. */
   readonly note: ProgressNote | null;
+  /** Saves the current run as a file. */
+  readonly onDownloadRun: () => void;
   /** `workflowView` of the Workflow for the state's level, computed once per change by the parent. */
   readonly view: WorkflowView;
 }
@@ -76,9 +83,10 @@ export interface Slices {
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
   const { data, state, workflow, view } = shown;
   const { words, readonly } = data;
-  const toolbar = toolbarOf(shown, on);
   const { file } = workflow;
   const run = runOf(file, { results: state.slotValues, teaching: state.teaching });
+  const teachingProps = teachingPropsOf(shown, run.canChangeTeaching, on);
+  const toolbar = toolbarOf(shown, on, teachingProps);
   return {
     toolbar,
     diagram: {
@@ -97,14 +105,32 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       onLevel: on.onLevel,
       onClose: on.onClose,
       onSlots: (values) => on.onSlots(resultsOf(file, values)),
+      ...teachingProps,
     },
   };
 }
 
-function toolbarOf({ data, state, workflow, note }: Shown, on: Callbacks): ToolbarProps {
+/** The teaching switch and Reset for both places that hold them: the toolbar and the popover. */
+function teachingPropsOf({ data, state, onDownloadRun }: Shown, canChange: boolean, on: Callbacks): TeachingProps {
+  const { controls, readonly } = data;
+  const teaching: TeachingState = {
+    show: offers(controls, 'teaching', readonly),
+    resetShow: offers(controls, 'reset', readonly),
+    on: state.teaching,
+    locked: !canChange,
+    hasWork: !canChange,
+  };
+  return { teaching, onTeaching: on.onTeaching, onReset: on.onReset, onDownloadRun };
+}
+
+function toolbarOf({ data, state, workflow, note }: Shown, on: Callbacks, teaching: TeachingProps): ToolbarProps {
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
   const { level, uploadProblems } = state;
   const { onLevel, onWorkflow, onUpload } = on;
-  return { workflow, choices, level, controls, readonly, words, uploadProblems, note, onLevel, onWorkflow, onUpload };
+  return {
+    ...teaching,
+    ...{ workflow, choices, level, controls, readonly, words, uploadProblems, note },
+    ...{ onLevel, onWorkflow, onUpload },
+  };
 }

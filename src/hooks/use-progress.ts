@@ -40,6 +40,9 @@ interface Loaded {
 /** The last run known to be in storage, as text; null forces the next write. */
 type Saved = MutableRefObject<string | null>;
 
+/** The run of a viewer who has pasted nothing and not touched teaching mode. */
+const EMPTY: Progress = { results: {}, teaching: true };
+
 const signature = (progress: Progress): string => JSON.stringify(progress);
 
 /** Reads the entry of `key` when it or its hash changes, resumes a matching one, and says what was found. */
@@ -84,10 +87,36 @@ function statusOf(loaded: boolean, stale: boolean, refused: boolean): ProgressSt
   return refused ? 'unsaved' : 'saved';
 }
 
+interface ClearOptions {
+  readonly key: string | null;
+  readonly hash: string;
+  readonly saved: Saved;
+  readonly setLoaded: (loaded: Loaded) => void;
+  readonly setRefused: (refused: boolean) => void;
+}
+
+/** `discard` forgets an old entry; `reset` clears the viewer's own run. Both remove the entry and let the page carry on. */
+function useClear({ key, hash, saved, setLoaded, setRefused }: ClearOptions) {
+  /** `next` is what the page then holds, so it is not written straight back. */
+  const clear = useCallback(
+    (next: Progress | null) => {
+      if (key === null) return;
+      removeProgress(key);
+      saved.current = next && signature(next);
+      setRefused(false);
+      setLoaded({ key, hash, stale: undefined });
+    },
+    [key, hash, saved, setLoaded, setRefused],
+  );
+  const discard = useCallback(() => clear(null), [clear]);
+  const reset = useCallback(() => clear(EMPTY), [clear]);
+  return { discard, reset };
+}
+
 /**
  * Saves one hands-on's run under the progress key and resumes it after a reload, another Episode or the other language
  * (FE-001 §3). An entry whose hash differs never loads: a fresh run starts and the old entry waits for `discard` or a
- * download. Returns the entry a download should hold, and `discard`.
+ * download. Returns the entry a download should hold, `discard` for an old entry and `reset` for the viewer's own run.
  */
 export function useProgress(options: Options) {
   const { key, hash, progress } = options;
@@ -98,12 +127,12 @@ export function useProgress(options: Options) {
   const stale = ready ? loaded.stale : undefined;
   useSave({ ...options, active: ready && !stale }, saved, setRefused);
 
-  const discard = useCallback(() => {
-    if (key === null) return;
-    removeProgress(key);
-    saved.current = null;
-    setLoaded({ key, hash, stale: undefined });
-  }, [key, hash, setLoaded]);
+  const { discard, reset } = useClear({ key, hash, saved, setLoaded, setRefused });
 
-  return { status: statusOf(ready, stale !== undefined, refused), kept: stale ?? { hash, ...progress }, discard };
+  return {
+    status: statusOf(ready, stale !== undefined, refused),
+    kept: stale ?? { hash, ...progress },
+    discard,
+    reset,
+  };
 }

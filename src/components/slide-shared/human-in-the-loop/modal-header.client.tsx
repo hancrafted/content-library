@@ -2,25 +2,30 @@
 
 import { DialogClose, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { CircleHelp, X } from 'lucide-react';
-import type { UiWords } from './human-in-the-loop.types';
+import type { TeachingProps, UiWords } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
+import { TeachingControls } from './teaching-controls.client';
 import { ToolButton } from './tool-button.client';
 import { tryTitle } from './words.pure';
 import type { Level } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
 
-interface HeaderProps {
+interface HeaderProps extends TeachingProps {
   readonly stage: StageView;
   readonly words: UiWords;
   readonly level: Level;
   readonly onLevel: (level: Level) => void;
   readonly showContext: boolean;
   readonly onContext: (show: boolean) => void;
+  readonly confirming: boolean;
+  readonly onConfirming: (open: boolean) => void;
 }
 
-function Actions({ words, level, onLevel, showContext, onContext }: Omit<HeaderProps, 'stage'>) {
+function Actions(props: Omit<HeaderProps, 'stage'>) {
+  const { words, level, onLevel, showContext, onContext } = props;
   return (
-    <div className="flex shrink-0 items-center gap-2">
+    <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
+      <TeachingControls {...props} />
       <ToolButton
         label={words.context}
         tip={words.contextTip}
@@ -40,7 +45,7 @@ function Actions({ words, level, onLevel, showContext, onContext }: Omit<HeaderP
   );
 }
 
-/** The title at the left; at the right the info and Chat · CLI control beside Close. */
+/** The title at the left; at the right the teaching switch and Reset, the info and Chat · CLI control beside Close. */
 export function ModalHeader({ stage, ...actions }: HeaderProps) {
   return (
     <DialogHeader>

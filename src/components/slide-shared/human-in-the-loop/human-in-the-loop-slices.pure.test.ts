@@ -9,6 +9,7 @@ import { createState, type WorkflowEvent } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
+const noop = () => undefined;
 const job = baseJob({ id: 'ask', title: 'Ask' });
 const flow = (id: string): Workflow => ({ ...baseFlow([stage('s', [job])]), id, title: id });
 const words = {} as UiWords;
@@ -27,9 +28,16 @@ const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   state,
   workflow,
   note: null,
+  onDownloadRun: noop,
   view: workflowView(workflow, state),
 });
 const start = { workflowId: data.workflowId, level: data.level };
+
+const slicesFor = (state: ReturnType<typeof createState>, controls = {}, sent: WorkflowEvent[] = []) =>
+  slicesOf(
+    { ...shown(flow('two'), state), data: { ...data, controls } },
+    callbacksFor((event) => sent.push(event)),
+  );
 
 describe('success cases', () => {
   it('shows the chosen Workflow, and an uploaded one over it', () => {
@@ -105,11 +113,64 @@ describe('success cases', () => {
     const note = { kind: 'stale', onDownload: () => undefined, onDiscard: () => undefined } as const;
     // ACT
     const slices = slicesOf(
-      { data, state, workflow, note, view: workflowView(workflow, state) },
+      { data, state, workflow, note, onDownloadRun: noop, view: workflowView(workflow, state) },
       callbacksFor(() => undefined),
     );
     // ASSERT
     expect(slices.toolbar.note).toBe(note);
+  });
+
+  it('hands the toolbar and the modal the same teaching state: on, free to change, no saved work', () => {
+    // ARRANGE
+    const state = createState(start);
+    // ACT
+    const { toolbar, modal } = slicesFor(state);
+    // ASSERT
+    const expected = { show: true, resetShow: true, on: true, locked: false, hasWork: false };
+    expect(toolbar.teaching).toEqual(expected);
+    expect(modal.teaching).toEqual(expected);
+  });
+
+  it('locks teaching and marks saved work once a result is pasted', () => {
+    // ARRANGE
+    const state = { ...createState(start), teaching: false, slotValues: { 's.ask': 'answer' } };
+    // ACT
+    const { toolbar } = slicesFor(state);
+    // ASSERT
+    expect(toolbar.teaching).toMatchObject({ on: false, locked: true, hasWork: true });
+  });
+
+  it('sends the switch and Reset up as events, from the toolbar and from the modal', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const { toolbar, modal } = slicesFor(createState(start), {}, sent);
+    // ACT
+    toolbar.onTeaching(false);
+    modal.onReset();
+    // ASSERT
+    expect(sent).toEqual([{ type: 'teaching', teaching: false }, { type: 'reset' }]);
+  });
+
+  it('lets a Preset hide the switch and Reset, in both places', () => {
+    // ARRANGE
+    const controls = { teaching: { show: false }, reset: { show: false } };
+    // ACT
+    const { toolbar, modal } = slicesFor(createState(start), controls);
+    // ASSERT
+    expect([toolbar.teaching, modal.teaching]).toEqual([
+      expect.objectContaining({ show: false, resetShow: false }),
+      expect.objectContaining({ show: false, resetShow: false }),
+    ]);
+  });
+
+  it('hides them for a readonly Preset', () => {
+    // ARRANGE
+    const state = createState(start);
+    const workflow = flow('two');
+    // ACT
+    const { toolbar } = slicesOf({ ...shown(workflow, state), data: { ...data, readonly: true } }, callbacksFor(noop));
+    // ASSERT
+    expect(toolbar.teaching).toMatchObject({ show: false, resetShow: false });
   });
 });
 
@@ -152,7 +213,14 @@ describe('edge cases', () => {
     const workflow = flow('two');
     // ACT
     const slices = slicesOf(
-      { data: { ...data, readonly: true }, state, workflow, note: null, view: workflowView(workflow, state) },
+      {
+        data: { ...data, readonly: true },
+        state,
+        workflow,
+        note: null,
+        onDownloadRun: noop,
+        view: workflowView(workflow, state),
+      },
       callbacksFor(() => undefined),
     );
     // ASSERT

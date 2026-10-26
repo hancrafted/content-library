@@ -27,6 +27,32 @@ describe('success cases', () => {
     expect(state.teaching).toBe(saved.teaching);
   });
 
+  it('switches teaching mode off and on', () => {
+    // ARRANGE
+    const initial = createState(start);
+    // ACT
+    const off = reduce(initial, { type: 'teaching', teaching: false });
+    const on = reduce(off, { type: 'teaching', teaching: true });
+    // ASSERT
+    expect(off.teaching).toBe(false);
+    expect(on.teaching).toBe(true);
+  });
+
+  it('a reset empties the pasted values, turns teaching back on and keeps the rest', () => {
+    // ARRANGE
+    const events: WorkflowEvent[] = [
+      { type: 'level', level: 'technical' },
+      { type: 'open', stageId: 'x' },
+      { type: 'teaching', teaching: false },
+      { type: 'slots', values: { 'a.b': 'text' } },
+    ];
+    const busy = events.reduce(reduce, createState(start));
+    // ACT
+    const state = reduce(busy, { type: 'reset' });
+    // ASSERT
+    expect(state).toEqual({ ...createState({ ...start, level: 'technical' }), openStageId: 'x' });
+  });
+
   it('forgets the pasted values when another Workflow is shown', () => {
     // ARRANGE
     const filled = reduce(createState(start), { type: 'slots', values: { spec: 'S' } });
