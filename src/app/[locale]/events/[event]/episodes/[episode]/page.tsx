@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: EventEpisodeParams) {
   const { event, episode } = await params;
   if (!isEventSlug(event) || !isEpisodeSlug(episode)) notFound();
   const locale = await resolveLocale(params);
-  return pageMetadata({ event, episode }, locale, eventEpisodePageCopy(event, episode, locale));
+  return pageMetadata({ kind: 'event-episode', event, episode }, locale, eventEpisodePageCopy(event, episode, locale));
 }
 
 export default async function Page({ params }: EventEpisodeParams) {

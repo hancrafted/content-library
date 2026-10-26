@@ -6,7 +6,7 @@ export const dynamicParams = false;
 export const generateStaticParams = prefixedLocaleParams;
 
 export async function generateMetadata({ params }: LocaleParams) {
-  return pageMetadata('home', await resolveLocale(params));
+  return pageMetadata({ kind: 'home' }, await resolveLocale(params));
 }
 
 export default async function Page({ params }: LocaleParams) {

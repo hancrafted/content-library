@@ -76,7 +76,7 @@ export function eventEpisodePageCopy(event: EventSlug, episode: string, locale: 
   return {
     title,
     description,
-    facts: pageFacts({ event, episode: slug }),
+    facts: pageFacts({ kind: 'event-episode', event, episode: slug }),
     ...(publishedOn ? { publishedOn } : {}),
   };
 }

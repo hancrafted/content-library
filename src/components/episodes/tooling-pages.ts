@@ -1,4 +1,5 @@
 import type { EpisodeComposition } from '@/components/slide-master/slide';
+import { episodesPathPage, isEpisodesPathSlug, matchPage, type EpisodesPathPage } from '@/lib/routes';
 import { isToolingSlug, type ToolingSlug } from '@/lib/tooling-pages';
 import { notFound } from 'next/navigation';
 import { episodeTemplate } from './episode-template/episode';
@@ -26,5 +27,10 @@ export function findToolingPage(slug: string): EpisodeComposition<ToolingSlug> {
 
 /** The Slides a page under `/episodes/<slug>/` renders: a tooling page's, else the Episode's from the registry. */
 export function findPageRecord(slug: string): EpisodeComposition {
-  return isToolingSlug(slug) ? TOOLING_PAGES[slug] : findEpisode(slug);
+  if (!isEpisodesPathSlug(slug)) notFound();
+  const page = episodesPathPage(slug);
+  return matchPage<EpisodesPathPage, EpisodeComposition>(page, {
+    tooling: ({ tooling }) => TOOLING_PAGES[tooling],
+    episode: ({ episode }) => findEpisode(episode),
+  });
 }

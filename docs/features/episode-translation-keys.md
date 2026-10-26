@@ -116,7 +116,7 @@ An Event is a record in the content store that holds no string ([Events](events.
 - `eventsPage.position`: "Episode n of m" under the title of an Event-scoped Episode page, with `{position}` and `{count}` placeholders.
 - `eventsPage.playlistNav`: the accessible name of the Playlist walk after the last Slide.
 - `eventsPage.previous`, `eventsPage.next` and `eventsPage.backToEvent`: the cues of the walk's steps; `backToEvent` replaces `next` on the last Episode and sits over the Event's title.
-- `meta.events.title` and `.description`: the `/events` page metadata, read by `pageMetadata('events', locale)` (FE-008). An Event page takes its metadata from its `items` pair.
+- `meta.events.title` and `.description`: the `/events` page metadata, read by `pageMetadata({ kind: 'events' }, locale)` (FE-008). An Event page takes its metadata from its `items` pair.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 

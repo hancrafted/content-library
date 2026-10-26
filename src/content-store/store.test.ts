@@ -122,8 +122,8 @@ describe('success cases', () => {
     const presented = { ...PLAYLIST, episodes: ['alpha', 'alpha-at-axel'] };
     const unlisted = { episodes: [EPISODE, UNLISTED], events: [EVENT], playlists: [presented] };
     const flipped = { ...unlisted, episodes: [EPISODE, { ...UNLISTED, visibility: 'public' }] };
-    const own = { episode: 'alpha-at-axel' } as unknown as PageRef;
-    const underEvent = { event: EVENT.slug, episode: 'alpha-at-axel' } as unknown as PageRef;
+    const own = { kind: 'episode', episode: 'alpha-at-axel' } as unknown as PageRef;
+    const underEvent = { kind: 'event-episode', event: EVENT.slug, episode: 'alpha-at-axel' } as unknown as PageRef;
     const seenIn = (input: Parameters<typeof loadContent>[0]) => {
       const content = loadContent(input);
       return {

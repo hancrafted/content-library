@@ -55,7 +55,7 @@ function LocaleOption({ option, locale, pathname }: { option: Locale; locale: Lo
  */
 export function LocaleToggle({ locale, label }: { locale: Locale; label: string }) {
   const pathname = usePathname();
-  const locales = stripLocale(pathname) === ROUTES.dashboard ? pageLocales('dashboard') : LOCALES;
+  const locales = stripLocale(pathname) === ROUTES.dashboard ? pageLocales({ kind: 'dashboard' }) : LOCALES;
   return (
     <div role="group" aria-label={label} data-testid="locale-toggle" className={SEGMENTED_GROUP}>
       {locales.map((option) => (

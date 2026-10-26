@@ -14,7 +14,11 @@ export const generateStaticParams = eventEpisodeParams;
 export async function generateMetadata({ params }: EventEpisodeParams) {
   const { event, episode } = await params;
   if (!isEventSlug(event) || !isEpisodeSlug(episode)) notFound();
-  return pageMetadata({ event, episode }, DEFAULT_LOCALE, eventEpisodePageCopy(event, episode, DEFAULT_LOCALE));
+  return pageMetadata(
+    { kind: 'event-episode', event, episode },
+    DEFAULT_LOCALE,
+    eventEpisodePageCopy(event, episode, DEFAULT_LOCALE),
+  );
 }
 
 export default async function Page({ params }: EventEpisodeParams) {

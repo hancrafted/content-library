@@ -32,7 +32,7 @@ export default {
           if (!METADATA_EXPORT_RE.test(source)) {
             ctx.report.violation({
               message:
-                "Page exports no metadata — add export const metadata = pageMetadata('<page>', DEFAULT_LOCALE), or a generateMetadata that returns pageMetadata(...) (FE-008 [page-exports-metadata]).",
+                "Page exports no metadata — add export const metadata = pageMetadata({ kind: '<page>' }, DEFAULT_LOCALE), or a generateMetadata that returns pageMetadata(...) (FE-008 [page-exports-metadata]).",
               file,
             });
           } else if (!PAGE_HELPER_RE.test(source)) {

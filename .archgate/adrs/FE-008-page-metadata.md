@@ -30,7 +30,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 1. Every `page.tsx` MUST export `metadata` or `generateMetadata` returning `pageMetadata(<PageRef>, locale)`.
 2. `pageMetadata` derives the canonical and one alternate per locale plus `x-default` (the default-locale URL). No route writes a URL.
-3. Every page has a `PageRef`: `home`, `dashboard`, `episodes`, `events`, an Episode, a tooling page, an Event, or an Episode under an Event.
+3. Every page has a `PageRef` `kind`: `home`, `dashboard`, `episodes`, `events`, `episode`, `tooling`, `event` or `event-episode`. Code branching on it names every kind, so a new one fails `tsc`.
 
 ### 2. Title and description are translated strings
 
@@ -63,7 +63,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### Do's
 
-1. **DO** write `export const metadata = pageMetadata('home', DEFAULT_LOCALE)` in the unprefixed tree and `generateMetadata` returning `pageMetadata('home', await resolveLocale(params))` under `[locale]`. (Decision 1, 📜 Rule: `page-exports-metadata`)
+1. **DO** write `export const metadata = pageMetadata({ kind: 'home' }, DEFAULT_LOCALE)` in the unprefixed tree and `generateMetadata` returning `pageMetadata({ kind: 'home' }, await resolveLocale(params))` under `[locale]`. (Decision 1, 📜 Rule: `page-exports-metadata`)
 2. **DO** add a new page's `PageRef`, title and description in both locales before its route. (Decisions 1 and 2)
 3. **DO** write each locale's title and description for a searcher in that language, not as translations of each other. (Decision 2)
 4. **DO** keep root layouts to `siteMetadata(locale, SITE_URL)`. (Decision 4, 📜 Rule: `layout-holds-site-metadata-only`)
@@ -102,7 +102,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 ## Compliance and Enforcement
 
 1. **Rules** (archgate, error): `page-exports-metadata` (§1.1), `layout-holds-site-metadata-only` (§4). A comment naming `description` in a layout is a known false positive.
-2. **Types:** a missing Translation key or unknown `PageRef` fails `tsc` (§1.3, §2.1).
+2. **Types:** a missing Translation key, an unknown `PageRef`, or a page kind with no case at a site that branches on kind fails `tsc` (§1.3, §2.1).
 3. **Unit tests:** `pageMetadata` canonical, alternates, `x-default`, cards; `SITE_URL` fallback and throw; structured data present for a published Episode and absent for an unpublished one (§1.2, §3.2, §6.1, §6.2).
 4. **Post-build test** (CI and deploy, before upload): one canonical per page equal to its served URL under `SITE_URL`; every alternate resolves to a file in `out/` and links back; card and structured-data URLs equal the canonical (§6.3).
 
