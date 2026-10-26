@@ -1,5 +1,5 @@
 import { SITE_URL } from '@/lib/site-url';
-import { robotsFor } from '@/lib/sitemap.pure';
+import { robotsFor } from '@/page-assembly/sitemap/sitemap.pure';
 import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-static';

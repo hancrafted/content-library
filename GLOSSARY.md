@@ -19,6 +19,9 @@ _Avoid_: Post, article, video, tower
 **Episode overview**: the landing page's list of every Episode, published or upcoming, that a visitor browses and filters.
 _Avoid_: Episode index, catalog, episode list, manifest
 
+**Overview**: a page listing every item of one resource: the page at `/episodes/` and the one at `/events/`, whose templates are `src/page-assembly/episode-overview/` and `src/page-assembly/events-overview/`. A code name only, in files and variables, never in a URL or on screen.
+_Avoid_: Index page, list page
+
 **Episode registry**: every Episode the code knows, generated from the Episode folders, so adding an Episode is adding its folder: a folder `src/components/episodes/<slug>/`, or an Event's `src/components/episodes/by-event/<event-slug>/<slug>/`, holding `episode-metadata.ts` is an Episode, and with `episode.ts` beside it, one with a page. One folder walker (`src/lib/episode-folders.ts`) finds them for the generator and every test that reads the folders. `npm run registry` writes it as one checked-in `episode-registry.generated.ts` per tier (the Episode ids in lib, the metadata the content store loads, the compositions), each keyed by Episode id; the fast suite fails while it is stale.
 _Avoid_: Episode index, slug list, hand-kept registration
 

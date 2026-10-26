@@ -1,12 +1,12 @@
 import { JsonLdScript } from '@/components/json-ld';
-import { AboutSection } from '@/components/landing/about-section';
-import { ContactFooter } from '@/components/landing/contact-footer';
-import { EpisodesSection } from '@/components/landing/episodes-section';
-import { HeroSection } from '@/components/landing/hero-section';
-import { MethodSection } from '@/components/landing/method-section';
 import type { Locale } from '@/lib/locale.pure';
 import { SITE_URL } from '@/lib/site-url';
-import { landingJsonLd } from '@/lib/structured-data.pure';
+import { AboutSection } from '@/page-assembly/landing/about-section';
+import { ContactFooter } from '@/page-assembly/landing/contact-footer';
+import { EpisodesSection } from '@/page-assembly/landing/episodes-section';
+import { HeroSection } from '@/page-assembly/landing/hero-section';
+import { MethodSection } from '@/page-assembly/landing/method-section';
+import { landingJsonLd } from '@/page-assembly/lib/structured-data.pure';
 
 export function LandingPage({ locale }: { locale: Locale }) {
   return (

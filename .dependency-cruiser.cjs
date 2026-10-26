@@ -324,17 +324,26 @@ module.exports = {
     {
       name: 'components-never-import-app',
       severity: 'error',
-      comment: 'src/components/** sits below the routes: it MUST NOT import src/app/** (FE-007).',
-      from: { path: '^src/components/' },
+      comment:
+        'src/page-assembly/** and src/components/** sit below the routes: they MUST NOT import src/app/** (FE-007).',
+      from: { path: '^src/(page-assembly|components)/' },
       to: { path: '^src/app/' },
     },
     {
-      name: 'pages-reached-only-from-app',
+      name: 'page-assembly-reached-only-from-app',
       severity: 'error',
       comment:
-        'src/components/pages/** is the top sub-tier of components: only a route under src/app/** (or a test) imports it, never another component or a page (FE-007).',
-      from: { pathNot: ['^src/app/', '\\.test\\.tsx?$'] },
-      to: { path: '^src/components/pages/' },
+        'src/page-assembly/** is the layer between the routes and everything below them: only a route under src/app/** (or a test) imports it from outside, never a component, hook, lib module or the content store (FE-007).',
+      from: { pathNot: ['^src/app/', '^src/page-assembly/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/page-assembly/' },
+    },
+    {
+      name: 'template-reaches-only-own-folder-and-lib',
+      severity: 'error',
+      comment:
+        'Page assembly is flat: a template folder (src/page-assembly/<template>/) holds its single-use parts and imports only its own files and src/page-assembly/lib/, never another template; lib/ imports no template (FE-007).',
+      from: { path: '^src/page-assembly/([^/]+)/' },
+      to: { path: '^src/page-assembly/', pathNot: '^src/page-assembly/($1|lib)/' },
     },
     {
       name: 'site-shell-reached-only-from-root-layouts',
@@ -348,18 +357,19 @@ module.exports = {
       name: 'route-reaches-components-only-via-roots',
       severity: 'error',
       comment:
-        'A route composes; it does not lay out. src/app/** reaches src/components/** only through a page component under src/components/pages/ or SiteShell (FE-007).',
+        'A route composes; it does not lay out. src/app/** renders a page template from src/page-assembly/ and reaches src/components/** only through SiteShell (FE-007).',
       from: { path: '^src/app/' },
-      to: { path: '^src/components/', pathNot: '^src/components/(pages/|site-shell\\.tsx$)' },
+      to: { path: '^src/components/', pathNot: '^src/components/site-shell\\.tsx$' },
     },
   ],
   required: [
     {
-      name: 'page-composes-a-page-component',
+      name: 'page-composes-a-template',
       severity: 'error',
-      comment: 'Every src/app/**/page.tsx renders a component from src/components/pages/ (FE-007).',
+      comment:
+        'Every src/app/**/page.tsx renders a page template from a template folder of src/page-assembly/, never lib/ alone (FE-007).',
       module: { path: '^src/app/(.+/)?page\\.tsx$' },
-      to: { path: '^src/components/pages/' },
+      to: { path: '^src/page-assembly/(?!lib/)[^/]+/' },
     },
     {
       name: 'root-layout-composes-site-shell',

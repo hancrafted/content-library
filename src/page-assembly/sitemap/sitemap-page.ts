@@ -1,5 +1,5 @@
 import { episodePublishedOn, PAGES } from '@/content-store/store';
-import { sitemapEntries } from '@/lib/sitemap.pure';
+import { sitemapEntries } from '@/page-assembly/sitemap/sitemap.pure';
 import type { MetadataRoute } from 'next';
 
 /**

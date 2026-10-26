@@ -20,8 +20,8 @@ The store serves each Event resolved (`ServedEvent`, `src/content-store/served-e
 ## Routes
 
 - `/events` and `/de/events`: the list, one card per Event whose Playlist is public (name, date, Episode count).
-- `/events/<event-slug>` and `/de/events/<event-slug>`: the Event's page (`src/components/pages/event-page.tsx`): breadcrumb, title, the facts line (kind, date and time, location, Audience, Episode count, total reading time), the description, the past notice, the Start button, then its Playlist's Episodes as a numbered list of compact Episode cards, the first emphasised. Each card opens the Episode under the Event, `/events/<event-slug>/episodes/<episode-slug>/`.
-- `/events/<event-slug>/episodes/<episode-slug>/` and its `/de` twin: an Episode as the Event presents it (`src/components/pages/event-episode-page.tsx`), described below.
+- `/events/<event-slug>` and `/de/events/<event-slug>`: the Event's page (`src/page-assembly/event/event-page.tsx`, its Playlist list `src/components/events/playlist-list.tsx`): breadcrumb, title, the facts line (kind, date and time, location, Audience, Episode count, total reading time), the description, the past notice, the Start button, then its Playlist's Episodes as a numbered list of compact Episode cards, the first emphasised. Each card opens the Episode under the Event, `/events/<event-slug>/episodes/<episode-slug>/`.
+- `/events/<event-slug>/episodes/<episode-slug>/` and its `/de` twin: an Episode as the Event presents it (the Episode page template, `src/page-assembly/episode/episode-page.tsx`, for a page of kind `event-episode`), described below.
 - Every path set is closed at build time by the page catalogue (GLOSSARY, `src/content-store/page-catalogue.ts`, FE-005): one Event page per Event file, which the Event registry (GLOSSARY) lists, and one Event-scoped Episode page per Episode a Playlist lists that has a page (`eventParams`, `eventEpisodeParams`).
 
 The list, and each Event page whose Playlist is public, are in the sitemap with canonical and hreflang; an Event page whose Playlist is unlisted is `noindex` and out of it. The header has one Events entry.

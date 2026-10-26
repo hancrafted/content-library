@@ -5,9 +5,9 @@ title: 'Slide Architecture'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/{episode,episodes,events}/**']
+files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/{episode,episodes,events}/**']
+paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR.'
 ---
 
@@ -21,7 +21,7 @@ An agent opening this repo meets five Episode-shaped records, each deep on one c
 
 ```mermaid
 flowchart TD
-  app["src/app — routes"] --> pages["components/pages — composition roots"]
+  app["src/app — routes"] --> pages["src/page-assembly — page templates, one folder each"]
   pages --> comp["src/components — feature modules"]
   comp --> hooks["src/hooks — browser state"]
   comp --> lib["src/lib — pure logic, no React"]
@@ -51,7 +51,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-  R["route"] --> P["Episode page component"]
+  R["route"] --> P["Episode page template"]
   P --> REG["registry: slug to record"]
   REG --> REC["Episode record: Sections of Slides"]
   P --> C["container"]
@@ -92,9 +92,9 @@ For this project the map matters because handoffs run on agents with no session 
 
 1. Read first; each area's owner holds its rules.
 
-### 2. Four tiers, one direction
+### 2. Five tiers, one direction
 
-1. `app → components → hooks → lib`, downward only; routes reach components via page roots.
+1. `app → page-assembly → components → hooks → lib`, downward only.
 
 ### 3. Each module owns one thing
 
@@ -106,7 +106,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 4. One pass from Episode to page
 
-1. Route → page → registry → record → container → static HTML; anchors from position.
+1. Route → Episode page template (by page kind) → registry → record → container → static HTML; anchors from position.
 2. Routes (design-ADR 0016): `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`.
 
 ### 5. Text, styling and client code have fixed homes

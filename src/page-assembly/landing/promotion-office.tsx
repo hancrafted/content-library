@@ -1,4 +1,4 @@
-import { OfficeWindow } from '@/components/landing/promotion-window';
+import { OfficeWindow } from '@/page-assembly/landing/promotion-window';
 
 function ShadowMaterials() {
   return (
