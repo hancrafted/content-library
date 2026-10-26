@@ -1,11 +1,10 @@
 import { episodeCopy } from '@/components/episodes/registry';
-import type { Event } from '@/content-store/schemas/event.schema';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import { hasPage, playlistOf } from '@/content-store/store';
+import { playlistOf, type ServedEvent } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { playlistPlace } from '@/lib/events.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventEpisodeRoute, eventRoute, isEventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, eventRoute, isEpisodeSlug, type EpisodeSlug, type EventSlug } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
@@ -27,7 +26,7 @@ interface Step {
 export interface EventEpisodeChrome {
   readonly locale: Locale;
   readonly labels: (typeof TRANSLATIONS)[Locale]['eventsPage'];
-  readonly event: { readonly slug: string; readonly title: string; readonly date: IsoDate };
+  readonly event: { readonly slug: EventSlug; readonly title: string; readonly date: IsoDate };
   readonly episode: string;
   /** "Episode 2 of 3". */
   readonly position: string;
@@ -36,12 +35,15 @@ export interface EventEpisodeChrome {
 }
 
 /** The chrome of one Episode's page under one Event; throws for an Event or Episode its Playlist does not hold. */
-export async function eventEpisodeChrome(event: Event, slug: string, locale: Locale): Promise<EventEpisodeChrome> {
-  if (!isEventSlug(event.slug)) throw new Error(`Event ${event.slug} is missing from EVENT_SLUGS`);
+export async function eventEpisodeChrome(
+  event: ServedEvent,
+  slug: EpisodeSlug,
+  locale: Locale,
+): Promise<EventEpisodeChrome> {
   const labels = TRANSLATIONS[locale].eventsPage;
   const t = await getTranslations({ locale, namespace: 'eventsPage' });
-  const place = playlistPlace(playlistOf(event).episodes, slug, hasPage);
-  const stepOf = (episode: string | undefined): Step | undefined =>
+  const place = playlistPlace(playlistOf(event).episodes, slug, isEpisodeSlug);
+  const stepOf = (episode: EpisodeSlug | undefined): Step | undefined =>
     episode === undefined
       ? undefined
       : { title: episodeCopy(episode, locale).title, route: eventEpisodeRoute(event.slug, episode) };

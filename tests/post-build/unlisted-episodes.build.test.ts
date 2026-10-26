@@ -9,13 +9,20 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { listEpisodes } from '../../src/content-store/store';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
-import { episodeRoute, eventEpisodeRoute, eventRoute, legacyEpisodeRoute, ROUTES } from '../../src/lib/routes';
+import {
+  episodeRoute,
+  eventEpisodeRoute,
+  eventRoute,
+  legacyEpisodeRoute,
+  ROUTES,
+  type EventSlug,
+} from '../../src/lib/routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
-const AXEL = '2026-10-23-axel-agentic-workflow';
+const AXEL: EventSlug = '2026-10-23-axel-agentic-workflow';
 /** The AXEL seminar's unlisted copies, in the order it taught them. Written out: the store is not the oracle. */
 const AXEL_UNLISTED = ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'] as const;
-const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
+const CYBERFORUM: EventSlug = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
 /** The CyberForum Akademie webinar's: the Workshop template's copy, then copies of the same three. */
 const CYBERFORUM_UNLISTED = [
   'cyberforum-intro',

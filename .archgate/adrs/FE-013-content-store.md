@@ -4,8 +4,10 @@ id: FE-013
 title: 'Content Store'
 domain: frontend
 rules: true
-files: ['src/content-store/**/*.ts', 'src/components/episodes/*/episode-metadata.ts']
-paths: ['src/content-store/**/*.ts', 'src/components/episodes/*/episode-metadata.ts']
+# prettier-ignore
+files: ['src/content-store/**/*.ts', 'src/components/episodes/*/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
+# prettier-ignore
+paths: ['src/content-store/**/*.ts', 'src/components/episodes/*/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
 description: 'Every record — Episode metadata, Event, Playlist — enters the site through one content store that parses it with a Zod schema whose inferred type is its only type, every field described, and refuses a bad record at build time, naming it.'
 ---
 

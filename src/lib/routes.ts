@@ -83,12 +83,12 @@ export function isEventSlug(slug: string): slug is EventSlug {
 }
 
 /** The logical path of one Event's page. */
-export function eventRoute(slug: string): string {
+export function eventRoute(slug: EventSlug): string {
   return `${ROUTES.events}/${slug}`;
 }
 
 /** The logical path of one Episode of an Event's Playlist, shown under the Event. */
-export function eventEpisodeRoute(event: string, episode: string): string {
+export function eventEpisodeRoute(event: EventSlug, episode: EpisodeSlug): string {
   return `${eventRoute(event)}${ROUTES.episodes}/${episode}`;
 }
 

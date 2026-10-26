@@ -2,7 +2,7 @@ import type { Event } from '@/content-store/schemas/event.schema';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { Playlist } from '@/content-store/schemas/playlist.schema';
 import type { Locale } from '@/lib/locale.pure';
-import { eventRoute } from '@/lib/routes';
+import { eventRoute, type EventSlug } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
 import { releaseDateOf, type ReadKey } from './episode-card.pure';
 
@@ -36,7 +36,7 @@ const ITEMS = 'eventsPage.items';
 
 /** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
 export function eventCard(
-  { event: record, playlist }: { event: Event; playlist: Pick<Playlist, 'episodes'> },
+  { event: record, playlist }: { event: Event & { readonly slug: EventSlug }; playlist: Pick<Playlist, 'episodes'> },
   locale: Locale,
   { read, episodeCount }: EventReads,
 ): EventCard {

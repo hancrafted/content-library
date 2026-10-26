@@ -191,14 +191,14 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
   const landing = await getTranslations({ locale, namespace: 'landing' });
   const card = (await eventCards(locale)).find((each) => each.slug === slug);
   if (card === undefined) notFound();
-  const playlist = { event: slug, episodes: playlistOf(record).episodes };
+  const playlist = { event: record.slug, episodes: playlistOf(record).episodes };
   const episodes = eventPlaylistCards(playlist, await playlistEpisodeCards(playlist.episodes, locale), locale);
   return (
     <main data-testid="event-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
       <EventBreadcrumb
         locale={locale}
         labels={{ breadcrumb: t('breadcrumb'), events: t('title') }}
-        event={{ slug, title: card.title }}
+        event={{ slug: record.slug, title: card.title }}
       />
       <h1 className="mt-6 text-heading font-semibold text-balance text-foreground">{card.title}</h1>
       <Facts card={card} record={record} minutes={totalMinutes(episodes)} t={t} />

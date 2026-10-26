@@ -1,10 +1,10 @@
 import { FEATURED } from '@/lib/episode-overview';
-import { EPISODE_SLUGS } from '@/lib/routes';
+import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeStatus, hasPage, listEpisodes } from './store';
+import { episodeStatus, listEpisodes } from './store';
 
 /*
  * The store's Episode read API the Episode overview depends on (#40): one metadata
@@ -47,7 +47,7 @@ describe('success cases', () => {
     const expected = [...EPISODE_SLUGS].sort();
     // ACT
     const withPage = listEpisodes()
-      .filter(({ slug }) => hasPage(slug))
+      .filter(({ slug }) => isEpisodeSlug(slug))
       .map(({ slug }) => slug)
       .sort();
     // ASSERT
@@ -77,7 +77,7 @@ describe('success cases', () => {
     };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = hasPage(slug);
+    const page = isEpisodeSlug(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -96,7 +96,7 @@ describe('success cases', () => {
     };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = hasPage(slug);
+    const page = isEpisodeSlug(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -115,7 +115,7 @@ describe('success cases', () => {
     };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = hasPage(slug);
+    const page = isEpisodeSlug(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -134,7 +134,7 @@ describe('success cases', () => {
     };
     // ACT
     const metadata = listEpisodes().find((episode) => episode.slug === slug);
-    const page = hasPage(slug);
+    const page = isEpisodeSlug(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
     expect(page).toBe(true);
@@ -147,13 +147,13 @@ describe('success cases', () => {
       const expected = { listed: false, page: false };
       // ACT
       const listed = listEpisodes().some((episode) => episode.slug === slug);
-      const page = hasPage(slug);
+      const page = isEpisodeSlug(slug);
       // ASSERT
       expect({ listed, page }).toEqual(expected);
     },
   );
 
-  it.each(listEpisodes().filter(({ slug }) => hasPage(slug)))(
+  it.each(listEpisodes().filter(({ slug }) => isEpisodeSlug(slug)))(
     'reads the status of $slug from its metadata',
     (episode) => {
       // ARRANGE
