@@ -1,7 +1,7 @@
 import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps } from './human-in-the-loop.types';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
-import { markerValuesOf, resultsOf, runOf } from './workflow-run.pure';
+import { markerValuesOf, resultsOf, runOf, type Run } from './workflow-run.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
 import type { WorkflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
@@ -25,7 +25,7 @@ export function uploadEvent(yaml: string): WorkflowEvent {
 }
 
 /** The callbacks the parts send events up by. */
-export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload'> &
+export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onView' | 'onWorkflow' | 'onUpload'> &
   Pick<DiagramProps, 'onOpenStage'> &
   Pick<ModalProps, 'onClose' | 'onSlots'>;
 
@@ -33,6 +33,7 @@ export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload'
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
   return {
     onLevel: (level) => dispatch({ type: 'level', level }),
+    onView: (view) => dispatch({ type: 'view', view }),
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
     onOpenStage: (stageId) => dispatch({ type: 'open', stageId }),
@@ -69,6 +70,8 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       workflow,
       readonly,
       onOpenStage: on.onOpenStage,
+      view: state.view,
+      rounds: roundsOf(workflow, run),
       slots: data.diagram,
       words,
     },
@@ -88,7 +91,29 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
 function toolbarOf({ data, state, workflow }: Shown, on: Callbacks): ToolbarProps {
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
-  const { level, uploadProblems } = state;
-  const { onLevel, onWorkflow, onUpload } = on;
-  return { workflow, choices, level, controls, readonly, words, uploadProblems, onLevel, onWorkflow, onUpload };
+  const { level, view, uploadProblems } = state;
+  const { onLevel, onView, onWorkflow, onUpload } = on;
+  return {
+    workflow,
+    choices,
+    level,
+    view,
+    controls,
+    readonly,
+    words,
+    uploadProblems,
+    onLevel,
+    onView,
+    onWorkflow,
+    onUpload,
+  };
+}
+
+/** How many rounds each repeated stage draws: the rounds the run holds, else the stage's teaching cap. */
+function roundsOf(workflow: Workflow, run: Run): Record<string, number> {
+  const counts = workflow.stages.flatMap((stage) => {
+    const held = run.stages.find((each) => each.id === stage.id)?.rounds.length ?? 0;
+    return stage.foreach ? [[stage.id, held || stage.foreach.teaching] as const] : [];
+  });
+  return Object.fromEntries(counts);
 }

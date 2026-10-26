@@ -137,11 +137,11 @@ async function stageProblems(page: Page, id: string, language: Language): Promis
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Chat · CLI, download and upload', async ({
+  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then the view, Chat · CLI, download and upload', async ({
     page,
   }) => {
     // ARRANGE
-    const expectedControls = ['picker', 'level', 'download', 'upload'];
+    const expectedControls = ['picker', 'view', 'level', 'download', 'upload'];
     const expectedLabel = 'Use case:';
     const expectedChosen = 'Plan company summer party';
     const { root, toolbar } = await open(page, 'light');
@@ -154,6 +154,24 @@ test.describe('success cases', () => {
     await expect(picker.locator('label')).toHaveText(expectedLabel);
     await expect(picker.getByRole('combobox')).toHaveText(expectedChosen);
     await expect(root).not.toContainText(/Watch|Try it yourself/);
+  });
+
+  test('opens in the Presentation view: a card per stage, the other views disabled, and nothing sideways on a phone', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const stages = 7;
+    const phone = 390;
+    const { root } = await open(page, 'light', { width: phone });
+    // ACT
+    const view = root.locator('[data-control="view"]');
+    const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    // ASSERT
+    await expect(root).toHaveAttribute('data-view', 'presentation');
+    await expect(root.locator('[data-stage-card]')).toHaveCount(stages - 1);
+    await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
+    await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Detailed', 'Hands-on']);
+    expect(await sideways()).toBeLessThanOrEqual(0);
   });
 
   test('opens a stage as a stepper: the stage title, the first job open, its prompt copied with no marker left', async ({

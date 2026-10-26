@@ -11,6 +11,7 @@ import type { ToolbarProps } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
 import { ToolButton } from './tool-button.client';
 import { offers } from './toolbar-controls.pure';
+import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
@@ -109,11 +110,12 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: Chat · CLI, download, upload. */
+/** The icon buttons the registry and the Preset allow, in order: view, Chat · CLI, download, upload. */
 function Icons({ bar }: { readonly bar: ToolbarProps }) {
   const { controls, readonly, words, level } = bar;
   return (
     <>
+      {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
       {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
       {offers(controls, 'download') && (
         <ToolButton
@@ -131,7 +133,10 @@ function Icons({ bar }: { readonly bar: ToolbarProps }) {
 
 const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
 const hasIcons = (bar: ToolbarProps) =>
-  offers(bar.controls, 'level', bar.readonly) || offers(bar.controls, 'download') || offers(bar.controls, 'upload');
+  offers(bar.controls, 'view') ||
+  offers(bar.controls, 'level', bar.readonly) ||
+  offers(bar.controls, 'download') ||
+  offers(bar.controls, 'upload');
 
 function UploadProblems({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
   return bar.uploadProblems.length > 0 ? <Problems id={id} problems={bar.uploadProblems} /> : null;
