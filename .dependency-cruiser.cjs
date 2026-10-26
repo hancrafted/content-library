@@ -17,9 +17,16 @@ const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.
 // The tests that run over every composed Episode and tooling page through those registries, rendering Slides.
 const REGISTRY_TESTS =
   '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders|tooling-pages)\\.test\\.ts$';
-// Plain logic, no React: src/shared/lib/ and the Episodes area's lib/.
+// The product areas (spec #348): each a top-level folder of src/, between page assembly above and the content store
+// below. AREA captures the area's name, so a rule's `to` can say "this same area" as `^src/$1/`.
+const AREA_NAMES = '(episodes|events|explorable-explanations|pipeline)';
+const AREA = `^src/${AREA_NAMES}/`;
+// The tier folders every area and shared may hold, named the same everywhere (FE-007): plain logic and browser hooks.
+const TIER_LIB = '^src/(shared|episodes|events|pipeline)/lib/';
+const TIER_HOOKS = '^src/(shared|episodes|events|pipeline)/hooks/';
+// What a Slide, a slide-shared part or an Episode may reach of plain logic: src/shared/lib/ and the Episodes area's lib/.
 const LIB = '^src/(shared|episodes)/lib/';
-// Browser hooks: src/shared/hooks/ and the Episodes area's hooks/.
+// Browser hooks a Slide's client widget may reach: src/shared/hooks/ and the Episodes area's hooks/.
 const HOOKS = '^src/(shared|episodes)/hooks/';
 // Shared (spec #348): what every layer uses and knows nothing of the domain — UI primitives, design system, i18n,
 // generic hooks and lib, and page chrome. The UI kit, the primitives Slide parts share, and page chrome by name.
@@ -91,16 +98,16 @@ module.exports = {
       name: 'hooks-reached-only-from-client',
       severity: 'error',
       comment:
-        'A hook runs only in the browser. Reach src/shared/hooks/** or src/episodes/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).',
-      from: { pathNot: ['\\.client\\.tsx$', HOOKS, '\\.test\\.tsx?$'] },
-      to: { path: HOOKS },
+        "A hook runs only in the browser. Reach a hooks/ tier folder (src/shared/hooks/ or an area's) from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).",
+      from: { pathNot: ['\\.client\\.tsx$', TIER_HOOKS, '\\.test\\.tsx?$'] },
+      to: { path: TIER_HOOKS },
     },
     {
       name: 'prefs-storage-reached-only-from-client',
       severity: 'error',
       comment:
         'src/shared/lib/prefs-storage.ts touches window.localStorage. Reach it from a hook, a *.client.tsx leaf or a test — a Server Component would read empty prefs at build time and render silently wrong (FE-006). Named by path: no classifier marks a browser-API module, so a second one needs this rule widened by hand.',
-      from: { pathNot: ['\\.client\\.tsx$', HOOKS, '\\.test\\.tsx?$'] },
+      from: { pathNot: ['\\.client\\.tsx$', TIER_HOOKS, '\\.test\\.tsx?$'] },
       to: { path: '^src/shared/lib/prefs-storage\\.ts$' },
     },
     {
@@ -259,14 +266,6 @@ module.exports = {
       },
     },
     {
-      name: 'explorable-explanation-reached-only-from-slides-and-page-assembly',
-      severity: 'error',
-      comment:
-        'src/explorable-explanations/ is a product area. A Slide folder showing an explanation is the one edge another product area may draw into it; otherwise only page assembly, another explanation or a test imports it, never a shared part, a hook, shared lib or the content store (FE-007, FE-012).',
-      from: { pathNot: [SLIDE_FOLDER, EXPLANATIONS, '^src/page-assembly/', '\\.test\\.tsx?$'] },
-      to: { path: EXPLANATIONS },
-    },
-    {
       name: 'core-components-are-a-leaf',
       severity: 'error',
       comment:
@@ -308,28 +307,28 @@ module.exports = {
       name: 'lib-imports-no-react',
       severity: 'error',
       comment:
-        'src/shared/lib/** and src/episodes/lib/** import no React — not runtime, not types — so every lib module stays a plain module a vitest test imports without a DOM (FE-007).',
-      from: { path: LIB, pathNot: REGISTRY_TESTS },
+        "A lib/ tier folder (src/shared/lib/ or an area's) imports no React — not runtime, not types — so every lib module stays a plain module a vitest test imports, and a skill script runs under plain node, without a DOM (FE-007).",
+      from: { path: TIER_LIB, pathNot: REGISTRY_TESTS },
       to: { path: '(^|/)node_modules/(@types/)?(react|react-dom)/' },
     },
     {
       name: 'lib-tsx-never-imported',
       severity: 'error',
       comment:
-        'JSX needs a .tsx file; src/shared/lib/** and src/episodes/lib/** hold none, so nothing may import a .tsx module from them (FE-007).',
+        "JSX needs a .tsx file; a lib/ tier folder (src/shared/lib/ or an area's) holds none, so nothing may import a .tsx module from one (FE-007).",
       from: {},
-      to: { path: `${LIB}.+\\.tsx$` },
+      to: { path: `${TIER_LIB}.+\\.tsx$` },
     },
     {
       name: 'lib-imports-no-upper-tier',
       severity: 'error',
       comment:
-        "src/shared/lib/** and src/episodes/lib/** are the bottom tier of their folder: they MUST NOT import src/app, page assembly, a component, page chrome, a hook, an Episode's folder or the content store — except the store's schemas and catalogue, the leaves that name records and their ids. Shared lib reaches neither (shared-knows-no-domain). The composition registries in src/episodes/lib/ import every Episode's record and sit above it (FE-007).",
-      from: { path: LIB, pathNot: [COMPOSITION_REGISTRY, REGISTRY_TESTS] },
+        "A lib/ tier folder (src/shared/lib/ or an area's) is the bottom tier of its folder: it MUST NOT import src/app, page assembly, a component, page chrome, a hook, an Episode's folder or the content store — except the store's schemas and catalogue, the leaves that name records and their ids. Shared lib reaches neither (shared-knows-no-domain). The composition registries in src/episodes/lib/ import every Episode's record and sit above it (FE-007).",
+      from: { path: TIER_LIB, pathNot: [COMPOSITION_REGISTRY, REGISTRY_TESTS] },
       to: {
         path: [
           '^src/(app|page-assembly)/',
-          '^src/(shared|episodes)/(components|page-chrome|hooks)/',
+          '^src/(shared|episodes|events|pipeline)/(components|page-chrome|hooks)/',
           '^src/episodes/(?!lib/)',
           '^src/content-store/(?!(schemas|catalogue)/)',
         ],
@@ -339,12 +338,12 @@ module.exports = {
       name: 'hooks-import-no-upper-tier',
       severity: 'error',
       comment:
-        "src/shared/hooks/** and src/episodes/hooks/** sit above lib only: they MUST NOT import src/app, page assembly, a component, page chrome, the content store or an Episode's folder — except the store's schemas (FE-007).",
-      from: { path: HOOKS },
+        "A hooks/ tier folder (src/shared/hooks/ or an area's) sits above lib only: it MUST NOT import src/app, page assembly, a component, page chrome, the content store or an Episode's folder — except the store's schemas (FE-007).",
+      from: { path: TIER_HOOKS },
       to: {
         path: [
           '^src/(app|page-assembly|content-store)/',
-          '^src/(shared|episodes)/(components|page-chrome)/',
+          '^src/(shared|episodes|events|pipeline)/(components|page-chrome)/',
           '^src/episodes/(?!(lib|hooks)/)',
         ],
         pathNot: STORE_SCHEMAS,
@@ -418,7 +417,7 @@ module.exports = {
     },
     // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.
     {
-      name: 'components-never-import-app',
+      name: 'layers-never-import-app',
       severity: 'error',
       comment:
         'Everything outside src/app/ sits below the routes: page assembly, the product areas, the content store and shared MUST NOT import src/app/** (FE-007).',
@@ -460,28 +459,28 @@ module.exports = {
         pathNot: '^src/shared/page-chrome/site-shell\\.tsx$',
       },
     },
-    // The Events product area (spec #348): Events and their Playlists. It reaches only itself, the shared tiers and the
-    // content store; only page assembly reaches into it, passing it another area's parts as props (FE-007).
+    // The area rules (spec #348, FE-007 §2.6 and §2.7). With the layer rules above (layers-never-import-app,
+    // page-assembly-reached-only-from-app, content-store-tier, shared-knows-no-domain) they hold every product area:
+    // an area is reached only from page assembly, and two areas meet only there.
     {
-      name: 'events-area-reaches-only-shared-and-store',
+      name: 'areas-never-import-each-other',
       severity: 'error',
       comment:
-        'src/events/** is a product area: it imports only its own files, the shared tiers (src/shared/components/ui/, src/shared/hooks/, src/shared/i18n/, src/shared/lib/) and the content store, never another product area (an Episode, its cards, a Slide) or a layer above it. What it needs from another area, page assembly passes in as props (FE-007).',
-      from: { path: '^src/events/' },
+        "A product area (src/episodes/, src/events/, src/explorable-explanations/, src/pipeline/) imports no other area. Two areas meet only in page assembly, which builds one area's parts and passes them to the other as props, as the Event page passes ready-made Episode cards to the Playlist list. The one exception is a Slide folder showing an Explorable explanation; slide-folder-reaches-only-own-and-shared holds a Slide, and episode-tests-reach-only-slide-parts the Episode tests that render one (FE-007).",
+      from: { path: AREA, pathNot: [SLIDE_FOLDER, `${EPISODE_CONTENT}.+\\.test\\.tsx?$`] },
+      to: { path: AREA, pathNot: '^src/$1/' },
+    },
+    {
+      name: 'page-assembly-reaches-areas-through-tier-folders',
+      severity: 'error',
+      comment:
+        "Page assembly reaches a product area only through its components/ and lib/ folders — never its hooks/, an Episode's own folder or a file at the area's root, and there are no per-area index.ts barrels. The Explorable explanations area holds one self-contained folder per explanation (FE-012), so page assembly reaches an explanation's folder (FE-007).",
+      from: { path: '^src/page-assembly/' },
       to: {
-        pathNot: ['^src/events/', SHARED_UI, '^src/shared/(hooks|i18n|lib)/', '^src/content-store/', 'node_modules'],
-        dependencyTypesNot: ['core'],
+        path: AREA,
+        pathNot: ['^src/(episodes|events|pipeline)/(components|lib)/', '^src/explorable-explanations/[^/]+/'],
       },
     },
-    {
-      name: 'events-area-reached-only-from-page-assembly',
-      severity: 'error',
-      comment:
-        'Only page assembly (src/page-assembly/**) composes the Events area: no route, component, hook, lib module, store module or other product area imports src/events/** (FE-007).',
-      from: { pathNot: ['^src/events/', '^src/page-assembly/', '\\.test\\.tsx?$'] },
-      to: { path: '^src/events/' },
-    },
-    // The pipeline product area (FE-007 §2.7): the content pipeline, its Run log and the dashboard.
     {
       name: 'src-never-imports-skills-or-tools',
       severity: 'error',
@@ -491,50 +490,15 @@ module.exports = {
       to: { path: '^(skills|tools)/' },
     },
     {
-      name: 'pipeline-reached-only-from-page-assembly',
+      name: 'skills-and-tools-reach-src-through-area-lib-or-store-entry',
       severity: 'error',
       comment:
-        'src/pipeline/** is a product area: from the rest of src/, only page assembly (or a test) imports it, and only through its components/ and lib/ folders (FE-007).',
-      from: { path: '^src/', pathNot: ['^src/(pipeline|page-assembly)/', '\\.test\\.tsx?$'] },
-      to: { path: '^src/pipeline/' },
-    },
-    {
-      name: 'page-assembly-reaches-pipeline-through-tier-folders',
-      severity: 'error',
-      comment:
-        "Page assembly reaches src/pipeline/** only through its components/ and lib/ folders, never its hooks/ or a file at the area's root (FE-007).",
-      from: { path: '^src/page-assembly/' },
-      to: { path: '^src/pipeline/', pathNot: '^src/pipeline/(components|lib)/' },
-    },
-    {
-      name: 'pipeline-imports-no-other-area',
-      severity: 'error',
-      comment:
-        'src/pipeline/** imports no route, page template, other product area, page chrome or other shared component; of src/shared/components/ it reaches only the UI kit, ui/ (FE-007).',
-      from: { path: '^src/pipeline/' },
+        "skills/ and tools/ reach src/ only through a product area's lib/ folder (src/pipeline/lib/, src/episodes/lib/, …) or the content store's entry, src/content-store/store.ts: plain modules that run under node. Logic a skill or a tool needs moves into its area's lib/ (FE-007).",
+      from: { path: '^(skills|tools)/' },
       to: {
-        path: [
-          '^src/(app|page-assembly|episodes|events|explorable-explanations)/',
-          '^src/shared/(components|page-chrome)/',
-        ],
-        pathNot: SHARED_UI,
+        path: '^src/',
+        pathNot: ['^src/(episodes|events|pipeline)/lib/', '^src/content-store/store\\.ts$'],
       },
-    },
-    {
-      name: 'pipeline-lib-imports-no-react-or-upper-tier',
-      severity: 'error',
-      comment:
-        "src/pipeline/lib/** is the area's bottom tier: no React, not even types, and no import of the area's components/ or hooks/, so a skill script runs it under plain node and a test imports it without a DOM (FE-007).",
-      from: { path: '^src/pipeline/lib/' },
-      to: { path: ['^src/pipeline/(components|hooks)/', '(^|/)node_modules/(@types/)?(react|react-dom)/'] },
-    },
-    {
-      name: 'pipeline-hooks-reached-only-from-client',
-      severity: 'error',
-      comment:
-        'A hook runs only in the browser. Reach src/pipeline/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).',
-      from: { pathNot: ['\\.client\\.tsx$', HOOKS, '^src/pipeline/hooks/', '\\.test\\.tsx?$'] },
-      to: { path: '^src/pipeline/hooks/' },
     },
   ],
   required: [

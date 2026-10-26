@@ -1,5 +1,5 @@
-// Pins the Events product area's boundary (spec #348, FE-007): `src/events/` reaches only itself, the shared tiers and
-// the content store, and only page assembly reaches into it. The dependency-cruiser rules run over a throwaway probe
+// Pins the Events product area's boundary (spec #348, FE-007 §2): `src/events/` imports no other product area and no
+// layer above it, and only page assembly reaches into it, through its tier folders. The dependency-cruiser rules run over a throwaway probe
 // tree, as in slide-folder.test.ts.
 
 import { cruise, type IForbiddenRuleType, type IReporterOutput } from 'dependency-cruiser';
@@ -12,7 +12,13 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 const config = createRequire(import.meta.url)('../../.dependency-cruiser.cjs') as {
   forbidden: (IForbiddenRuleType & { name: string })[];
 };
-const RULES = ['events-area-reaches-only-shared-and-store', 'events-area-reached-only-from-page-assembly'];
+const RULES = [
+  'layers-never-import-app',
+  'page-assembly-reached-only-from-app',
+  'areas-never-import-each-other',
+  'page-assembly-reaches-areas-through-tier-folders',
+  'shared-knows-no-domain',
+];
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
 const AREA = 'src/events';
@@ -122,13 +128,13 @@ describe('Events product area', () => {
   it('rejects the area importing another product area or a layer above it, and anything but page assembly importing the area', () => {
     // ARRANGE
     const expected = [
-      'events-area-reached-only-from-page-assembly: src/shared/components/reaches-events.tsx -> src/events/components/probe-card.tsx',
-      'events-area-reached-only-from-page-assembly: src/shared/lib/reaches-events.pure.ts -> src/events/lib/probe-event.pure.ts',
-      'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.pure.ts',
-      'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/lib/probe.pure.ts',
-      'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/lib/registry.ts',
-      'events-area-reaches-only-shared-and-store: src/events/components/reaches-up.tsx -> src/app/page.tsx',
-      'events-area-reaches-only-shared-and-store: src/events/components/reaches-up.tsx -> src/page-assembly/event/event-page.tsx',
+      'areas-never-import-each-other: src/events/components/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.pure.ts',
+      'areas-never-import-each-other: src/events/components/reaches-episodes.tsx -> src/episodes/lib/probe.pure.ts',
+      'areas-never-import-each-other: src/events/components/reaches-episodes.tsx -> src/episodes/lib/registry.ts',
+      'layers-never-import-app: src/events/components/reaches-up.tsx -> src/app/page.tsx',
+      'page-assembly-reached-only-from-app: src/events/components/reaches-up.tsx -> src/page-assembly/event/event-page.tsx',
+      'shared-knows-no-domain: src/shared/components/reaches-events.tsx -> src/events/components/probe-card.tsx',
+      'shared-knows-no-domain: src/shared/lib/reaches-events.pure.ts -> src/events/lib/probe-event.pure.ts',
     ];
     // ACT
     const found = violations();
