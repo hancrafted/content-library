@@ -4,18 +4,17 @@ import { eventEpisodeChrome, EventEpisodeHeader, PlaylistNav } from '@/component
 import type { Event } from '@/content-store/schemas/event.schema';
 import {
   episodePublishedOn,
-  episodeStatus,
   episodeVideo,
-  episodeVisibility,
   findEvent,
   hasPage,
   listEvents,
+  pageFacts,
   playlistOf,
 } from '@/content-store/store';
 import { BUILD_DAY } from '@/lib/build-day';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { eventEpisodeRoute } from '@/lib/routes';
+import { eventEpisodeRoute, type EventSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 /** The insets every Slide wrapper takes, so the Event's chrome lines up with the Slides (FE-009 §2). */
@@ -67,10 +66,10 @@ export async function EventEpisodePage({ event, episode, locale }: { event: stri
 }
 
 /**
- * An Event-scoped Episode page's title, description, status and visibility, for `pageMetadata` (FE-008): the
- * Episode's own copy, and the facts that decide whether its own page takes the search credit.
+ * An Event-scoped Episode page's title, description and facts, for `pageMetadata` (FE-008): the Episode's own copy,
+ * and its visibility and status, which decide whether it is `noindex` or its own page takes the search credit.
  */
-export function eventEpisodePageCopy(event: string, episode: string, locale: Locale): PageCopy {
+export function eventEpisodePageCopy(event: EventSlug, episode: string, locale: Locale): PageCopy {
   const shown = presented(event, episode);
   const { slug } = findEpisode(shown.episode);
   const { title, description } = episodeCopy(slug, locale);
@@ -78,8 +77,7 @@ export function eventEpisodePageCopy(event: string, episode: string, locale: Loc
   return {
     title,
     description,
-    status: episodeStatus(slug),
-    visibility: episodeVisibility(slug),
+    facts: pageFacts({ event, episode: slug }),
     ...(publishedOn ? { publishedOn } : {}),
   };
 }

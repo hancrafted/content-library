@@ -1,0 +1,73 @@
+{
+  "title": "Human-in-the-Loop-Workflow",
+  "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. Du bist der Kapitän: Ein Planer-Chat bereitet jede Übergabe vor, Helfer-Chats erledigen die Aufgaben, und Du prüfst jedes Artefakt dazwischen.",
+  "workflowLabel": "Die Schritte eines Briefings, Stufe für Stufe",
+  "loop": {
+    "note": "<marker>Ein frischer Chat pro Aufgabe</marker> hält jedes Fenster klein; Du koordinierst wie ein Projektmanager."
+  },
+  "notes": {
+    "clean-windows-for-each-part": {
+      "header": "Saubere Fenster für jeden Teil",
+      "description": "Anthropics Mittel für lange Aufgaben umfasst Sub-Agents, die mit sauberen Fenstern arbeiten [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "short-tasks-beat-long-ones": {
+      "header": "Kurze Aufgaben schlagen lange",
+      "description": "Aus einer langen Aufgabe eine kurze zu machen, verbesserte die Ergebnisse, bei GPT-4o auf RULER um bis zu 4 % [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "recall": {
+        "title": "Das Briefing in Erinnerung",
+        "keywords": "",
+        "script": "Erinnere Dich an das Briefing für die Location: zerlege die Feier, interviewe Dich mit der KI, schreibe zuerst die Anforderungen, gib jedem Teil einen frischen Chat und prüfe jeden Schritt. Das war eine Aufgabe, gut gemacht. Ein größeres Projekt braucht dieselben Schritte und dazu eine Arbeitsweise, die sie zusammenhält."
+      },
+      "human-in-the-loop": {
+        "title": "Human in the Loop",
+        "keywords": "",
+        "script": "Diese Arbeitsweise nennen wir einen Human-in-the-Loop-Workflow. Du bist der Orchestrator, der Kapitän am Steuer, und Du setzt die KI ein, wie ein Kapitän seine Crew einsetzt."
+      },
+      "planner-and-handoff": {
+        "title": "Planer und Übergabe",
+        "keywords": "",
+        "script": "Ein Chat bleibt der Planer. Er hilft Dir, die Aufgabe vorzubereiten, und schreibt eine Übergabe. Er behält nur den Plan und die Ergebnisse, also bleibt er klein und hat Platz übrig."
+      },
+      "worker-chats": {
+        "title": "Helfer-Chats",
+        "keywords": "",
+        "script": "Die Übergabe geht an Helfer-Chats, je ein frischer pro Aufgabe: Locations, Catering, Einladungen. Jeder Helfer liest seine Dateien, füllt sich so weit, wie er muss, speichert sein Ergebnis, und dann lässt Du ihn gehen."
+      },
+      "you-check": {
+        "title": "Du prüfst",
+        "keywords": "",
+        "script": "Du bringst die Ergebnisse zurück zum Planer, und jedes Artefakt dazwischen, die Übergabe und jedes Ergebnis, prüfst Du. Jeder Chat hat einen Job, also läuft keiner lange genug, um seine Mitte zu verwischen. Das ist die ganze Idee: Das Fenster ist die Aufmerksamkeitsspanne der KI, und sie zu managen ist Dein Job. Ein ehrlicher Hinweis: Die Zonen und Zahlen, die ich Dir genannt habe, sind Faustregeln und Veranschaulichungen, und ich habe nicht jede Chat-App getestet, also beobachte Deine eigenen Chats und pass an. Wenn Du entspannt anfangen willst, nimm den nächsten Chat, der abdriftet, bitte ihn um eine Übergabe und öffne damit einen neuen. Danke."
+      }
+    }
+  },
+  "jobsLabel": "{stage}: Aufgaben",
+  "jobs": {
+    "interview": {
+      "detail": "3 Fragen,",
+      "forgot": "<marker>1 vergessen</marker>"
+    },
+    "research": {
+      "checked": "Gegen die Karte geprüft"
+    },
+    "compare": {
+      "gate": "Prüfpunkt 2"
+    }
+  },
+  "card": {
+    "gate": "Prüfpunkt 1"
+  }
+}

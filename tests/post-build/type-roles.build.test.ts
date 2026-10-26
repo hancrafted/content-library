@@ -8,8 +8,8 @@ import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
 import legacy from '../../src/design-system/legacy.json';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { episodeRoute, EPISODES_PATH_SLUGS } from '../../src/lib/routes';
-import { exportedPage, OUT_DIR } from './exported-pages';
+import { episodeRoute } from '../../src/lib/routes';
+import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles } from './stylesheets';
 
 /** Episodes whose files predate the token rules (FE-011 §6): their own `[data-episode=…]` palette is exempt until migrated. */
@@ -20,7 +20,7 @@ function episodeSelectors(css: string): string[] {
   return [...css.replace(/["']/g, '').matchAll(/\[data-episode=([^\]]+)\]/g)].map((match) => match[1]);
 }
 
-const EPISODE_PAGES = EPISODES_PATH_SLUGS.flatMap((slug) =>
+const EPISODE_PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ url: localizePath(episodeRoute(slug), locale) })),
 );
 

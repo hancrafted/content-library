@@ -41,14 +41,38 @@ export interface EpisodeCardsOptions {
 }
 
 /**
- * Every Episode the read API lists, as a localized card (FE-006 §4: plain
+ * Every public Episode the read API lists, as a localized card (FE-006 §4: plain
  * data, safe to hand to a client leaf), in overview order: Featured first,
- * then the other published ones newest first, then the upcoming ones.
+ * then the other published ones newest first, then the upcoming ones. An
+ * unlisted Episode is never among them; it lives only under its Event.
  */
 export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions): Promise<EpisodeCard[]> {
+  const entries = overviewOrder(listEpisodes({ includeDrafts: options?.includeDrafts }), featuredSlugs());
+  return cardsOf(entries, locale, options);
+}
+
+/**
+ * The cards of the Episodes a Playlist lists, in its order, public or unlisted: what an Event page shows. Throws on
+ * a slug no Episode carries, so the build fails rather than ships a gap.
+ */
+export async function playlistEpisodeCards(episodes: readonly string[], locale: Locale): Promise<EpisodeCard[]> {
+  const all = listEpisodes();
+  const entries = episodes.map((slug) => {
+    const entry = all.find((each) => each.slug === slug);
+    if (entry === undefined) throw new Error(`No Episode carries the slug "${slug}" a Playlist lists`);
+    return entry;
+  });
+  return cardsOf(entries, locale);
+}
+
+async function cardsOf(
+  entries: readonly Episode[],
+  locale: Locale,
+  options?: EpisodeCardsOptions,
+): Promise<EpisodeCard[]> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
-  return overviewOrder(listEpisodes({ includeDrafts: options?.includeDrafts }), featuredSlugs()).map((entry) =>
+  return entries.map((entry) =>
     episodeCard(withCopy(entry, locale), {
       locale,
       read,

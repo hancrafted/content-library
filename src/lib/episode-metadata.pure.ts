@@ -23,11 +23,12 @@ function isPublished(episode: Episode): episode is PublishedEpisode {
 }
 
 /**
- * The overview's order: the Featured Episodes as listed, then every other
- * published one newest first (ties by slug), then the upcoming ones in the
- * order given. A Featured slug that names no published Episode is skipped.
+ * The overview's order, public Episodes only (an unlisted one lives only under its Event, design-ADR 0016): the
+ * Featured Episodes as listed, then every other published one newest first (ties by slug), then the upcoming ones
+ * in the order given. A Featured slug that names no published public Episode is skipped.
  */
-export function overviewOrder(episodes: readonly Episode[], featured: readonly string[]): Episode[] {
+export function overviewOrder(all: readonly Episode[], featured: readonly string[]): Episode[] {
+  const episodes = all.filter((episode) => episode.visibility === 'public');
   const published = episodes.filter(isPublished);
   const lead = featured.flatMap((slug) => published.filter((episode) => episode.slug === slug));
   const rest = published

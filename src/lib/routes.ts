@@ -13,7 +13,11 @@ export const ROUTES = {
 
 export const LEGACY_EPISODE_PREFIX = '/episode';
 
-/** Every Episode. The tooling pages served beside them are no Episodes: `TOOLING_SLUGS`. */
+/**
+ * Every Episode, public or unlisted: each registered once. Which of them has an `/episodes/` page is the visibility
+ * predicate's (`pageTreatment`): an unlisted one lives only under its Event. The tooling pages served beside them are
+ * no Episodes: `TOOLING_SLUGS`.
+ */
 export const EPISODE_SLUGS = [
   'maintaining-markdown-for-ai',
   'ai-token-economy',
@@ -21,6 +25,9 @@ export const EPISODE_SLUGS = [
   'onboard-ai-every-time',
   'ai-attention-span',
   'ai-gives-you-more-work',
+  'axel-onboard-ai-every-time',
+  'axel-ai-attention-span',
+  'axel-ai-gives-you-more-work',
 ] as const;
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
@@ -29,7 +36,7 @@ export function isEpisodeSlug(slug: string): slug is EpisodeSlug {
   return (EPISODE_SLUGS as readonly string[]).includes(slug);
 }
 
-/** Every page served at `/episodes/<slug>/`: each Episode's, then each tooling page's. */
+/** Every slug that may name a page at `/episodes/<slug>/`: each Episode's, then each tooling page's; an unlisted Episode's is not exported. */
 export const EPISODES_PATH_SLUGS = [...EPISODE_SLUGS, ...TOOLING_SLUGS] as const;
 
 /** A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. */
@@ -54,11 +61,6 @@ export function episodeRoute(slug: EpisodesPathSlug): string {
 /** The logical path of a legacy Episode stub. */
 export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
   return `${LEGACY_EPISODE_PREFIX}/${slug}`;
-}
-
-/** One static param per page under `/episodes/`, Episode or tooling page; both routes and the legacy stubs export these (FE-002, FE-005). */
-export function episodeParams(): { episode: EpisodesPathSlug }[] {
-  return EPISODES_PATH_SLUGS.map((episode) => ({ episode }));
 }
 
 /**
@@ -108,7 +110,10 @@ export type PageRef =
   | { readonly event: EventSlug }
   | EventEpisodePage;
 
-/** Every exported page: the one list the sitemap, the post-build tests and the redirect stubs derive from (FE-005, FE-008). */
+/**
+ * Every page that may be exported: the one list the sitemap and the post-build tests derive from (FE-005, FE-008),
+ * each filtered by the visibility predicate, which drops an unlisted Episode's `/episodes/` page.
+ */
 export const PAGES: readonly PageRef[] = [
   'home',
   'dashboard',

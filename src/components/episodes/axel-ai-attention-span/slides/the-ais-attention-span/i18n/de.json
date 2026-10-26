@@ -1,0 +1,15 @@
+{
+  "title": "Die Aufmerksamkeitsspanne der KI",
+  "caption": "Jetzt die Ursache: wie die KI einen Chat im Blick behält.",
+  "punchline": "Jetzt drehe ich auf. Hoffentlich bist Du bereit?",
+  "poll": "Noch dabei? Wie steht's um Deine Aufmerksamkeit?",
+  "voiceScript": {
+    "segments": {
+      "why-it-happens": {
+        "title": "Warum das passiert",
+        "keywords": "",
+        "script": "Jetzt drehe ich auf. Hoffentlich bist Du bereit? Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
+      }
+    }
+  }
+}

@@ -20,6 +20,9 @@ const MARKED = [
   'never-too-early-sales',
   'onboard-ai-every-time',
   'ai-attention-span',
+  'axel-onboard-ai-every-time',
+  'axel-ai-attention-span',
+  'axel-ai-gives-you-more-work',
   'slides',
 ] as const;
 

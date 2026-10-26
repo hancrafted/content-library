@@ -1,12 +1,23 @@
 import { episodeMetadata as aiAttentionSpan } from '@/components/episodes/ai-attention-span/episode-metadata';
 import { episodeMetadata as aiGivesYouMoreWork } from '@/components/episodes/ai-gives-you-more-work/episode-metadata';
 import { episodeMetadata as aiTokenEconomy } from '@/components/episodes/ai-token-economy/episode-metadata';
+import { episodeMetadata as axelAiAttentionSpan } from '@/components/episodes/axel-ai-attention-span/episode-metadata';
+import { episodeMetadata as axelAiGivesYouMoreWork } from '@/components/episodes/axel-ai-gives-you-more-work/episode-metadata';
+import { episodeMetadata as axelOnboardAiEveryTime } from '@/components/episodes/axel-onboard-ai-every-time/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from '@/components/episodes/maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from '@/components/episodes/never-too-early-sales/episode-metadata';
 import { episodeMetadata as onboardAiEveryTime } from '@/components/episodes/onboard-ai-every-time/episode-metadata';
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
-import { isEpisodeSlug, type EpisodeSlug } from '@/lib/routes';
+import {
+  isEpisodePage,
+  isEpisodeSlug,
+  isEventEpisodePage,
+  isEventPage,
+  type EpisodeSlug,
+  type PageRef,
+} from '@/lib/routes';
+import type { PageFacts } from '@/lib/visibility.pure';
 import { event as axelAgenticWorkflowEvent } from './events/2026-10-23-axel-agentic-workflow';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { crossRecordRefusals, parseRecords, type Content, type ContentInput } from './refusals';
@@ -23,7 +34,7 @@ import type { Playlist } from './schemas/playlist.schema';
  */
 
 /**
- * Every Episode's metadata, by slug: every registered one. Typed against the registered slugs, so a registered
+ * Every Episode's metadata, by slug: every registered one, public or unlisted. Typed against the registered slugs, so a registered
  * Episode without metadata, or a key naming another Episode's metadata, fails `tsc`.
  */
 const REGISTERED = {
@@ -33,6 +44,9 @@ const REGISTERED = {
   'onboard-ai-every-time': onboardAiEveryTime,
   'ai-attention-span': aiAttentionSpan,
   'ai-gives-you-more-work': aiGivesYouMoreWork,
+  'axel-onboard-ai-every-time': axelOnboardAiEveryTime,
+  'axel-ai-attention-span': axelAiAttentionSpan,
+  'axel-ai-gives-you-more-work': axelAiGivesYouMoreWork,
 } as const satisfies { readonly [S in EpisodeSlug]: EpisodeInput & { readonly slug: S } };
 
 /** Upcoming Episodes without a page, in the order the overview lists them: a folder holding only its metadata. */
@@ -129,4 +143,27 @@ export function playlistOf(event: Event): Playlist {
   const playlist = CONTENT.playlists.find((entry) => entry.id === event.playlist);
   if (!playlist) throw new Error(`Event ${event.slug}: playlist "${event.playlist}" does not exist`);
   return playlist;
+}
+
+/**
+ * What a page presents, for the visibility predicate (`pageTreatment`), read from the given records: an Episode's
+ * visibility and status, on its own page or under an Event; an Event page's Playlist visibility; nothing for a page
+ * that presents no record. An Episode or Event the records do not hold hands in nothing, so the page fails closed.
+ */
+export function pageFactsIn(content: Content, page: PageRef): PageFacts {
+  if (isEpisodePage(page) || isEventEpisodePage(page)) {
+    const episode = content.episodes.find((entry) => entry.slug === page.episode);
+    return episode === undefined ? {} : { visibility: episode.visibility, status: episode.status };
+  }
+  if (isEventPage(page)) {
+    const event = content.events.find((entry) => entry.slug === page.event);
+    const playlist = content.playlists.find((entry) => entry.id === event?.playlist);
+    return playlist === undefined ? {} : { visibility: playlist.visibility };
+  }
+  return {};
+}
+
+/** What a page presents, for the visibility predicate: the sitemap, page metadata and static params all ask this. */
+export function pageFacts(page: PageRef): PageFacts {
+  return pageFactsIn(CONTENT, page);
 }

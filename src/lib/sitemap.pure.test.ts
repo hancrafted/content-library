@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { EPISODE_SLUGS } from './routes';
+import { EPISODE_SLUGS, isEpisodePage, isEventPage, type PageRef } from './routes';
 import { robotsFor, sitemapEntries } from './sitemap.pure';
+import type { PageFacts } from './visibility.pure';
 
 const SITE = 'https://hancrafted.net';
-const allPublished = () => 'published' as const;
+const allPublished = (): PageFacts => ({ visibility: 'public', status: 'published' });
 
 const undated = () => undefined;
 
@@ -64,6 +65,26 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('leaves out an unlisted Episode and an Event whose Playlist is unlisted, in both locales', () => {
+    // ARRANGE
+    const episode = EPISODE_SLUGS[1];
+    const event = '2026-10-23-axel-agentic-workflow';
+    const factsOf = (page: PageRef): PageFacts => {
+      const unlisted = (isEpisodePage(page) && page.episode === episode) || isEventPage(page);
+      return { visibility: unlisted ? 'unlisted' : 'public', status: 'published' };
+    };
+    const hidden = [
+      `${SITE}/episodes/${episode}/`,
+      `${SITE}/de/episodes/${episode}/`,
+      `${SITE}/events/${event}/`,
+      `${SITE}/de/events/${event}/`,
+    ];
+    // ACT
+    const urls = sitemapEntries(SITE, factsOf, undated).map((entry) => entry.url);
+    // ASSERT
+    expect(urls.filter((url) => hidden.includes(url))).toEqual([]);
+  });
+
   it('leaves out the dashboard, which is noindex and English-only', () => {
     // ARRANGE
     const dashboard = `${SITE}/dashboard/`;
@@ -88,9 +109,12 @@ describe('edge cases', () => {
     // ARRANGE
     const upcoming = EPISODE_SLUGS[0];
     const published = EPISODE_SLUGS[1];
-    const statusOf = (slug: string) => (slug === upcoming ? ('upcoming' as const) : ('published' as const));
+    const factsOf = (page: PageRef): PageFacts => ({
+      visibility: 'public',
+      status: isEpisodePage(page) && page.episode === upcoming ? 'upcoming' : 'published',
+    });
     // ACT
-    const urls = sitemapEntries(SITE, statusOf, undated).map((entry) => entry.url);
+    const urls = sitemapEntries(SITE, factsOf, undated).map((entry) => entry.url);
     // ASSERT
     expect(urls).not.toContain(`${SITE}/episodes/${upcoming}/`);
     expect(urls).not.toContain(`${SITE}/de/episodes/${upcoming}/`);

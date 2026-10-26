@@ -1,0 +1,103 @@
+{
+  "title": "Everyday habits",
+  "caption": "Split the project into jobs, keep each chat to one job, and carry only a short handoff into the next one, so the new chat starts small and sharp.",
+  "barsLabel": "The old chat hands one short handoff card to a fresh chat",
+  "oldChat": "Old chat: summer party",
+  "freshChat": "Fresh chat: invitations",
+  "handoff": {
+    "title": "Handoff card",
+    "text": "Party for 200, 27 June, <budget>budget 30,000 €</budget>. Venue: Estrela pavilion. Caterer: Sabor Verde (60 vegetarian). Next: invitations.",
+    "arrow": "first message of the new chat"
+  },
+  "habitsLabel": "Six everyday habits",
+  "habits": {
+    "1": {
+      "title": "Break it down",
+      "body": "Split the project into jobs before the first chat."
+    },
+    "2": {
+      "title": "New job, fresh chat",
+      "body": "When the topic changes, open a new chat."
+    },
+    "3": {
+      "title": "Ask for a handoff",
+      "body": "After real progress or before a break: the goal, the decisions, the next step."
+    },
+    "4": {
+      "title": "Read it, correct it",
+      "body": "Fix what is wrong before you carry it on."
+    },
+    "5": {
+      "title": "Start the next chat with it",
+      "body": "Paste it in as the first message."
+    },
+    "6": {
+      "title": "Check the context if you can",
+      "body": "In agentic tools, run <code>/context</code> regularly."
+    }
+  },
+  "illustrative": "Token counts are illustrative · 200K window",
+  "notes": {
+    "length-itself-hurts": {
+      "header": "Length itself hurts",
+      "description": "With perfect retrieval, performance still dropped as input grew, and the drop persisted when irrelevant tokens were replaced by whitespace or masked from attention [1]; that a fresh, shorter chat avoids the drop is an inference from this, the studies do not test a restart.",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "one-job-per-chat": {
+      "header": "One job per chat",
+      "description": "Even a single distractor lowers performance relative to the needle alone, so unrelated material in a chat has a cost [1].",
+      "sources": {
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "a-short-recap-helped": {
+      "header": "A short recap helped",
+      "description": "Having the model recite the retrieved evidence before solving, which turns a long task into a short one, improved results [1]; that a handoff works the same way is an inference.",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "break-it-down": {
+        "title": "Break it down",
+        "keywords": "",
+        "script": "Say you are planning your company's next summer party: 200 employees across five offices in Europe. Break it down. Split the project into jobs before the first chat: you split a big task into small steps, and each step is small enough to hold in view."
+      },
+      "one-chat-one-job": {
+        "title": "New job, fresh chat",
+        "keywords": "",
+        "script": "New job, fresh chat. When the topic changes, open a new chat, so that the hotel question doesn't have to carry the catering PDF along. A fresh start spends the whole window on the work in front of you, and none of it on what happened an hour ago."
+      },
+      "ask-for-a-handoff": {
+        "title": "Ask for a handoff",
+        "keywords": "",
+        "script": "Ask for a handoff. After real progress, or before a coffee break, stop and ask the AI for a handoff: a short card with the goal, what is decided and what comes next."
+      },
+      "read-and-correct-it": {
+        "title": "Read and correct it",
+        "keywords": "",
+        "script": "Then read it and correct what is wrong. A summary can leave things out or get one wrong, and you are the one accountable for what the next chat believes."
+      },
+      "start-the-next-chat-with-it": {
+        "title": "Start the next chat with it",
+        "keywords": "",
+        "script": "And start the next chat with it. Paste the handoff in as the first message, and the new chat starts small and sharp, with the venue, the caterer, the budget and the next step, and nothing else."
+      },
+      "check-the-context": {
+        "title": "Check the context",
+        "keywords": "",
+        "script": "And check the context if you can. In agentic tools, run the slash context command regularly, and you see how full the window is before it becomes a problem."
+      }
+    }
+  }
+}
