@@ -37,6 +37,11 @@ ui:
   contextTip: 'Help: show what to do in each step'
   download: Download this Workflow
   upload: Upload your own Workflow
+  progressSave: 'Save progress to a file'
+  progressLoad: 'Load progress from a file'
+  refuseUnreadable: 'This file is not a progress file.'
+  refuseOtherWorkflow: 'This file is progress of another Workflow, not {workflow}.'
+  refuseChanged: '{workflow} changed since this file was made, so its progress does not fit.'
   noteStale: 'This Workflow changed since your progress was saved, so you start fresh. Your old progress is kept until you choose.'
   noteUnsaved: 'Your progress could not be saved in this browser. Download it to keep it.'
   downloadProgress: Download progress

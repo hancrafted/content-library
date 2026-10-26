@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { CONTROLS, controlOf, defOf, offers, type ControlId } from './toolbar-controls.pure';
 
 describe('success cases', () => {
-  it('shows the picker, the view control, the Chat · CLI control, download and upload by default, in that order', () => {
+  it('shows the picker, the view control, the Chat · CLI control, saving and loading progress, then the Workflow download and upload by default, in that order', () => {
     // ARRANGE
     const none = {};
     // ACT
     const shown = CONTROLS.filter(({ id }) => offers(none, id)).map(({ id }) => id);
     // ASSERT
-    expect(shown).toEqual(['picker', 'view', 'level', 'download', 'upload']);
+    expect(shown).toEqual(['picker', 'view', 'level', 'progressDownload', 'progressUpload', 'download', 'upload']);
   });
 
   it("lays a Preset's setting over the definition key by key and leaves the rest", () => {
@@ -27,7 +27,7 @@ describe('success cases', () => {
     // ACT
     const shown = CONTROLS.filter(({ id }) => offers(none, id, true)).map(({ id }) => id);
     // ASSERT
-    expect(shown).toEqual(['picker', 'view', 'download', 'upload']);
+    expect(shown).toEqual(['picker', 'view', 'progressDownload', 'progressUpload', 'download', 'upload']);
   });
 });
 
@@ -58,7 +58,7 @@ describe('edge cases', () => {
     // ACT
     const shown = CONTROLS.filter(({ id }) => offers(preset, id)).map(({ id }) => id);
     // ASSERT
-    expect(shown).toEqual(['picker', 'level', 'download', 'upload']);
+    expect(shown).toEqual(['picker', 'level', 'progressDownload', 'progressUpload', 'download', 'upload']);
   });
 
   it('keeps a hidden Chat · CLI control hidden even in readonly', () => {
