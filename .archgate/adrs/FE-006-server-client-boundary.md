@@ -35,7 +35,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 1. A file carrying a top-level `'use client'` directive MUST be named `*.client.tsx`.
 2. A file named `*.client.tsx` MUST carry the directive as its first statement.
-3. `.client` MUST be a `.tsx` suffix only, under `src/{page-assembly,components,hooks}/**`, and MUST NOT stack with another classifier.
+3. `.client` MUST be a `.tsx`-only suffix under `src/{page-assembly,components,events,hooks}/**`, never stacked with another classifier.
 4. No file under `src/app/**` MAY carry a classifier, so no `.client` file sits there.
 
 ### 3. Edges across the boundary
@@ -104,7 +104,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
-- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,components,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
+- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,components,hooks}/**/*.tsx` and `src/events/**/*.tsx` are `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
 - §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; dependency rules limit a Slide widget's and a `slide-shared` client leaf's reach.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 

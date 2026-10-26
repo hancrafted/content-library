@@ -1,7 +1,7 @@
-import { CardArrow, CardShell, CardTitle } from '@/components/landing/card-shell';
-import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
-import { TAG_ACCENTS } from '@/components/landing/episode-visuals';
-import type { EventCard } from '@/components/landing/event-card.pure';
+import { TAG_ACCENTS } from '@/components/ui/accent-classes';
+import { CardArrow, CardShell, CardTitle } from '@/components/ui/card-shell';
+import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
+import type { EventCard } from '@/events/lib/event-card.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { CalendarDays } from 'lucide-react';
 

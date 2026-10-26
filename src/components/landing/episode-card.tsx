@@ -1,10 +1,10 @@
-import { CardCaption, CardCue, CardShell, CardTitle } from '@/components/landing/card-shell';
-import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/components/landing/card-variant.pure';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { EpisodeLinks } from '@/components/landing/episode-links';
 import { ReleaseDate } from '@/components/landing/episode-release-date';
 import { TAG_ICONS } from '@/components/landing/episode-visuals';
 import type { VideoLabels } from '@/components/landing/episode-youtube-link';
+import { CardCaption, CardCue, CardShell, CardTitle } from '@/components/ui/card-shell';
+import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/components/ui/card-variant.pure';
 import type { Locale } from '@/lib/locale.pure';
 import type { getTranslations } from 'next-intl/server';
 

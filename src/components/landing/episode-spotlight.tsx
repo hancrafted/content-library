@@ -1,7 +1,7 @@
-import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
 import { showsFormat, spotlightOf } from '@/components/landing/episode-browse.pure';
 import { EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
+import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
 import type { Locale } from '@/lib/locale.pure';
 
 /** Where each card sits: the lead spans two thirds and the full height of the stack beside it, and fills the row when nothing sits beside it. */

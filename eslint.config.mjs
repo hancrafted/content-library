@@ -239,11 +239,12 @@ export default tseslint.config(
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
           'src/{page-assembly,components,hooks}/**/*.tsx': OPTIONAL_CLIENT,
+          'src/events/**/*.tsx': OPTIONAL_CLIENT,
           'src/**/*.ts': '!(*.client)',
         },
         {
           errorMessage:
-            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/components or src/hooks, never under src/app (FE-006).',
+            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/components, src/events or src/hooks, never under src/app (FE-006).',
         },
       ],
     },

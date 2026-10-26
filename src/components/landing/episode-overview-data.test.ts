@@ -1,4 +1,5 @@
 import { findEpisode } from '@/components/episodes/registry';
+import { TAG_ACCENTS } from '@/components/ui/accent-classes';
 import { FORMATS, TAG_IDS } from '@/content-store/schemas/fields';
 import { listEpisodes } from '@/content-store/store';
 import { leadTagOf, lookOf } from '@/lib/episode-metadata.pure';
@@ -7,7 +8,7 @@ import { isEpisodeId } from '@/lib/routes';
 import de from '@/messages/de.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
-import { TAG_ACCENTS, TAG_ICONS } from './episode-visuals';
+import { TAG_ICONS } from './episode-visuals';
 
 /*
  * The Episode overview's central lists against the Episodes that exist (#40):

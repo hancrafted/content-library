@@ -1,4 +1,3 @@
-import { episodeCopy } from '@/components/episodes/registry';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
@@ -40,24 +39,26 @@ export interface PresentedEpisode {
   readonly place: PlaylistPlace;
 }
 
-/** The chrome of one Episode's page under one Event, read in one locale. */
+/**
+ * The chrome of one Episode's page under one Event, read in one locale. Page assembly hands in `titleOf`, an Episode's
+ * title in that locale, so the Events area never reads an Episode itself.
+ */
 export async function eventEpisodeChrome(
   { event, episode: slug, place }: PresentedEpisode,
   locale: Locale,
+  titleOf: (episode: EpisodeId) => string,
 ): Promise<EventEpisodeChrome> {
   const labels = TRANSLATIONS[locale].eventsPage;
   const t = await getTranslations({ locale, namespace: 'eventsPage' });
   const stepOf = (episode: EpisodeId | undefined): Step | undefined =>
-    episode === undefined
-      ? undefined
-      : { title: episodeCopy(episode, locale).title, route: eventEpisodeRoute(event.slug, episode) };
+    episode === undefined ? undefined : { title: titleOf(episode), route: eventEpisodeRoute(event.slug, episode) };
   const previous = stepOf(place.previous);
   const next = stepOf(place.next);
   return {
     locale,
     labels,
     event: { slug: event.slug, title: labels.items[event.slug].title, date: event.date },
-    episode: episodeCopy(slug, locale).title,
+    episode: titleOf(slug),
     position: t('position', { position: place.position, count: place.count }),
     ...(previous && { previous }),
     ...(next && { next }),

@@ -1,10 +1,9 @@
 import type { EpisodeId } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
-import type { EpisodeCard } from './episode-card.pure';
-import { eventPlaylistCards, startOf, totalMinutes } from './event-playlist.pure';
+import { eventPlaylistCards, startOf, totalMinutes, type PlaylistCard } from './event-playlist.pure';
 
 /** A hand-written stand-in for the card fields an Event's Playlist reads. */
-type Stub = Pick<EpisodeCard, 'slug' | 'route' | 'href' | 'minutes'>;
+type Stub = PlaylistCard & { readonly slug: string };
 const linked = (slug: string, minutes?: number): Stub => ({
   slug,
   route: `/episodes/${slug}`,

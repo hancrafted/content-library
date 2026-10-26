@@ -1,6 +1,6 @@
-import { EventCardView } from '@/components/landing/event-card';
-import { eventCards } from '@/components/landing/event-cards';
 import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
+import { EventCardView } from '@/events/components/event-card';
+import { eventCards } from '@/events/components/event-cards';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
