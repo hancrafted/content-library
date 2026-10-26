@@ -1,6 +1,6 @@
 ---
 name: episode-add-youtube
-description: Add YouTube recording links to an Episode across its title slide player launcher, /episodes browse cards, and landing spotlight. Use when adding YouTube video IDs, linking video recordings, or wiring the talk player for an episode.
+description: Add YouTube recording links to an Episode across its title slide player launcher, /episodes browse cards, and landing spotlight, or an Event recording to an unlisted Episode. Use when adding YouTube video IDs, linking video recordings, uploading a workshop or Event recording, or wiring the talk player for an episode.
 ---
 
 # Episode add YouTube
@@ -12,6 +12,8 @@ Adding a YouTube recording to an Episode wires it across three defined surfaces 
 3. **Landing page spotlight (optional)**: When the Episode is published and featured in the spotlight on `/`, its card displays the same direct YouTube link.
 
 The exemplar implementation is `maintaining-markdown-for-ai`.
+
+**An unlisted Episode** (`visibility: 'unlisted'`, a composition made for one Event) carries at most one Video instead: the Event recording, one YouTube id with the language spoken at the Event. It plays on both locale pages under the Event, whose launcher labels that language before play ("Recorded in German"); it has no `/episodes/` page and no card link. Follow [The unlisted case](#the-unlisted-case) instead of steps 1 to 3.
 
 ## Steps
 
@@ -68,17 +70,36 @@ Run verification and probe the DOM for the video elements:
 
 _Done when_ `npm run verify` passes and the DOM probe confirms the presence of `[data-video-id]` on the title slide and `[data-episode-video]` on the browse card.
 
+## The unlisted case
+
+1. Extract the one 11-character video ID, as in step 1, and ask which language was spoken at the Event if the user has not said: `en` or `de`, nothing else.
+2. In `src/components/episodes/<slug>/episode-metadata.ts`, add one recording, never a per-locale pair:
+   ```ts
+   export const episodeMetadata = {
+     slug: 'axel-onboard-ai-every-time',
+     status: 'published',
+     visibility: 'unlisted',
+     // ...
+     youtube: { id: '<video-id>', language: 'de' },
+   } as const satisfies EpisodeInput;
+   ```
+   The content store refuses a second Video on an unlisted Episode, a per-locale `youtube` on it, and a `language` that is not a site locale.
+3. Run `npm run verify`, then `npm run build && npm run test:build`. `tests/post-build/unlisted-episodes.build.test.ts` reads the recording from the store and checks both locale pages of every Episode in its `UNLISTED` table; an unlisted Episode of another Event joins that table first.
+4. Probe `/events/<event-slug>/episodes/<slug>/` and its `/de` twin: `[data-slot="title-slide"] [data-video-id="<id>"]` and, inside the launcher, `[data-recording-language="<language>"]` with the label in the page's language.
+
+_Done when_ the post-build test passes and both locale pages show the same video id and the language label.
+
 ## Reference
 
 ### Architecture and data flow
 
 ```mermaid
 flowchart TD
-  R["Episode metadata record<br/>src/components/episodes/&lt;slug&gt;/episode-metadata.ts<br/>youtube: { en, de }"]
-  R --> S["Content store<br/>episodeVideo(slug, locale)"]
-  S --> C["EpisodePageContainer<br/>youtubeId prop from EpisodePage"]
+  R["Episode metadata record<br/>src/components/episodes/&lt;slug&gt;/episode-metadata.ts<br/>youtube: { en, de } or { id, language }"]
+  R --> S["Content store<br/>episodeVideo(slug, locale): { id, recordedIn? }"]
+  S --> C["EpisodePageContainer<br/>video prop from EpisodePage or EventEpisodePage"]
   S --> EC["episodeCards(locale)<br/>youtubeOf(entry, locale)"]
-  C --> TS["TitleSlide<br/>TalkLauncher (data-video-id)"]
+  C --> TS["TitleSlide<br/>TalkLauncher (data-video-id, data-recording-language)"]
   C --> TP["TalkPlayer<br/>youtube-nocookie.com embed"]
   EC --> EP["/episodes Browse Card<br/>YoutubeLink (data-episode-video)"]
   EC --> LP["Landing Spotlight Card<br/>YoutubeLink (data-episode-video)"]

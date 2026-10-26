@@ -476,7 +476,11 @@
     "subtitle": "Your AI reads stale docs every time · 22 min",
     "heading": "THE TALK",
     "backToVideo": "Back to video",
-    "close": "Close video player"
+    "close": "Close video player",
+    "recordedIn": {
+      "en": "Recorded in English",
+      "de": "Recorded in German"
+    }
   },
   "eventsPage": {
     "title": "Events",

@@ -39,6 +39,8 @@ Search: one visibility predicate, `pageTreatment` (`src/lib/visibility.pure.ts`)
 
 Flipping `visibility` back to `public` is the one edit that gives it its own page, sitemap entry and overview card.
 
+**Event recording.** An unlisted Episode plays the one Video recorded at its Event: `youtube: { id, language }` in its `episode-metadata.ts`, `language` the locale spoken there. Both locale pages play it, labelled with that language before play (`tests/post-build/unlisted-episodes.build.test.ts`). It is optional until uploaded; the `episode-add-youtube` skill adds it. Flipping a recorded Episode to `public` also rewrites its `youtube` as one video per locale: the store refuses the one-recording shape on a public Episode.
+
 **Past Event.** An Event whose date lies before the build day (`BUILD_DAY`, `src/lib/build-day.ts`) shows one fixed notice above its Playlist: the content is kept up to date and may differ from the recording. Past is derived, never stored, so a page is as fresh as the last deploy. An upcoming Event shows none.
 
 **Old Workshop links.** `/workshops/` and every published Workshop URL 301 to their Event in `public/_redirects`, both locales. A renamed Event slug gets its own pair of lines there.

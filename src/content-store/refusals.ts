@@ -77,6 +77,13 @@ function uniqueness(kind: Kind, names: readonly string[], field: 'slug' | 'id'):
 const LOCALE_LIST: readonly string[] = LOCALES;
 const NOT_A_LOCALE = `is not one of the site's locales (${LOCALE_LIST.join(', ')})`;
 
+/** Why an unlisted Episode's per-locale `youtube` is refused: it holds more than one Video, or the wrong shape. */
+function unlistedPerLocale(keys: readonly string[]): string {
+  if (keys.length > 1)
+    return `youtube holds ${keys.length} videos (${keys.join(', ')}), but an unlisted Episode carries at most one Video, its Event recording with its language`;
+  return 'youtube is one video per locale, but an unlisted Episode carries one recording with its language';
+}
+
 /** What is wrong with an Episode's Video for its visibility: one recording if unlisted, one per locale if public. */
 function videoRefusals({ visibility, youtube }: Episode): string[] {
   if (youtube === undefined) return [];
@@ -87,13 +94,10 @@ function videoRefusals({ visibility, youtube }: Episode): string[] {
         : []),
       ...(LOCALE_LIST.includes(youtube.language) ? [] : [`youtube.language "${youtube.language}" ${NOT_A_LOCALE}`]),
     ];
+  const keys = Object.keys(youtube);
   return [
-    ...(visibility === 'unlisted'
-      ? ['youtube is one video per locale, but an unlisted Episode carries one recording with its language']
-      : []),
-    ...Object.keys(youtube)
-      .filter((key) => !LOCALE_LIST.includes(key))
-      .map((key) => `youtube names "${key}", which ${NOT_A_LOCALE}`),
+    ...(visibility === 'unlisted' ? [unlistedPerLocale(keys)] : []),
+    ...keys.filter((key) => !LOCALE_LIST.includes(key)).map((key) => `youtube names "${key}", which ${NOT_A_LOCALE}`),
   ];
 }
 

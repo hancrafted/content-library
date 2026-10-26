@@ -1,11 +1,13 @@
 // Unlisted Episodes (design-ADR 0016, Routes and visibility): an Episode made for one Event lives only under that
 // Event. It is never in the sitemap, the Episode overview or an Upcoming list, has no /episodes/ page, and its page
-// under the Event tells search engines not to index it. The AXEL seminar's Playlist lists three such copies.
+// under the Event tells search engines not to index it. The AXEL seminar's Playlist lists three such copies. Once its
+// recording is uploaded, an unlisted Episode plays it on both locale pages, labelled with the language spoken.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
+import { listEpisodes } from '../../src/content-store/store';
+import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { episodeRoute, eventEpisodeRoute, eventRoute, legacyEpisodeRoute, ROUTES } from '../../src/lib/routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
@@ -86,4 +88,41 @@ describe('unlisted Episode pages under their Event', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+});
+
+/** How each locale page names the language a recording was made in. Written out: the Translation files are not the oracle. */
+const RECORDED_IN: Record<Locale, Record<Locale, string>> = {
+  en: { en: 'Recorded in English', de: 'Recorded in German' },
+  de: { en: 'Aufgezeichnet auf Englisch', de: 'Aufgezeichnet auf Deutsch' },
+};
+
+/** The one recording an unlisted Episode carries once Han uploads it (`episode-add-youtube`); none before. */
+function recordingOf(episode: string): { id: string; language: Locale } | undefined {
+  const video = listEpisodes().find((entry) => entry.slug === episode)?.youtube;
+  return video !== undefined && 'language' in video ? { id: video.id, language: video.language as Locale } : undefined;
+}
+
+describe('an unlisted Episode plays its Event recording', () => {
+  it.each(PER_LOCALE)(
+    'An unlisted Episode plays its event recording, labelled with the language it was recorded in. ($episode, $locale)',
+    ({ episode, locale }) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(eventEpisodeRoute(AXEL, episode), locale));
+      const recording = recordingOf(episode);
+      const expected =
+        recording === undefined
+          ? { video: undefined, language: undefined, label: '' }
+          : { video: recording.id, language: recording.language, label: RECORDED_IN[locale][recording.language] };
+      // ACT
+      const launcher = $('[data-slot="title-slide"] #talk-launcher');
+      const label = launcher.find('[data-recording-language]');
+      const seen = {
+        video: launcher.attr('data-video-id'),
+        language: label.attr('data-recording-language'),
+        label: label.text(),
+      };
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
 });
