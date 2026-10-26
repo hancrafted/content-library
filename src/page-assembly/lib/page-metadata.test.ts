@@ -1,4 +1,4 @@
-import type { PageTreatment } from '@/lib/visibility.pure';
+import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { pageMetadata, siteMetadata } from './page-metadata.pure';
 

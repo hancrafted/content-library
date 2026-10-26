@@ -4,8 +4,8 @@ id: FE-009
 title: 'Slide Wrapper and Scene'
 domain: frontend
 rules: false
-files: ['src/episodes/**', 'src/hooks/**', 'src/lib/reading-line.pure*.ts']
-paths: ['src/episodes/**', 'src/hooks/**', 'src/lib/reading-line.pure*.ts']
+files: ['src/episodes/**', 'src/shared/hooks/**', 'src/shared/lib/reading-line.pure*.ts']
+paths: ['src/episodes/**', 'src/shared/hooks/**', 'src/shared/lib/reading-line.pure*.ts']
 description: 'Wrapper owns mechanics, Scene owns creativity in two layers (Backdrop and Foreground): a full-width single-column Content area that owns the insets, an isolating server Slide wrapper that never clips, a client SlideMount that drops far content, one observer with two thresholds, a stacking ladder, and a pause duty for looping animation.'
 ---
 
@@ -17,7 +17,7 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **The split:** the Slide wrapper owns mechanics — anchor, height, width, mount boundary, stacking context — and renders the Slide header and the entrance, which design-ADR-0012 governs. The Scene inside is ungoverned, in two layers: a full-bleed **Backdrop** and an inset **Foreground**. A heading may sit centred, top or lower right, so it is never an anchor: placement would move the observer's target.
 
-**Why two layers:** the chrome (table of contents, Context drawer, talk player) floats over the Slides and takes no columns, so every Slide gets the full viewport width. The Foreground, inset by the Content area, never sits under the chrome; the Backdrop keeps the whole width, so a glow or image never ends at a column edge. Widening the right inset when the drawer sits beside the Slides moves only the Foreground.
+**Why two layers:** the page chrome (table of contents, Context drawer) and the talk player float over the Slides and take no columns, so every Slide gets the full viewport width. The Foreground, inset by the Content area, never sits under them; the Backdrop keeps the whole width, so a glow or image never ends at a column edge. Widening the right inset when the drawer sits beside the Slides moves only the Foreground.
 
 **Why a grid:** reading mode looks like flow layout, but a future overview mode re-tiles the same cells into columns without new markup.
 
@@ -33,18 +33,18 @@ An Episode stacks many Slides, some heavy (charts, looping demos). Navigation ne
 
 **Ladder, lowest to highest:**
 
-| Layer                                                                                     | z    |
-| ----------------------------------------------------------------------------------------- | ---- |
-| Backdrop (inside the `isolate` wrapper)                                                   | -10  |
-| Foreground                                                                                | auto |
-| Chrome from `md`: table of contents, drawer card (non-modal), talk player, drawer trigger | 40   |
-| Episode portal root (popovers), site header                                               | 50   |
-| Scrim (below `md`)                                                                        | 60   |
-| Drawer card below `md`, sheets                                                            | 70   |
+| Layer                                                                              | z    |
+| ---------------------------------------------------------------------------------- | ---- |
+| Backdrop (inside the `isolate` wrapper)                                            | -10  |
+| Foreground                                                                         | auto |
+| From `md`: table of contents, drawer card (non-modal), talk player, drawer trigger | 40   |
+| Episode portal root (popovers), site header                                        | 50   |
+| Scrim (below `md`)                                                                 | 60   |
+| Drawer card below `md`, sheets                                                     | 70   |
 
 The card stays at 40 from `md` so a popover on the portal root (50) still shows above it. Modals are native `<dialog>`s in the top layer and take no z-index.
 
-A new layer picks a rung here. The `isolate` wrapper would trap a popover under the chrome, hence the portal root.
+A new layer picks a rung here. The `isolate` wrapper would trap a popover under the table of contents or drawer, hence the portal root.
 
 **Reserved, not built:** overview mode; guided-tour popovers (only the portal root exists); keyboard landing on a scroll target distinct from the wrapper's top.
 
@@ -138,7 +138,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 1. **A non-grid element between Content area and wrapper breaks the cells.** **Mitigation:** §2.3; the post-build test checks wrappers are grid children.
 2. **Unclipped content bleeds into the next Slide.** **Mitigation:** the Scene manages its own bounds; browser check at 375px and 1440px.
-3. **A wrapper's stacking context traps a popover under the chrome.** **Mitigation:** §8.1 requires the portal root; the ladder is written down once.
+3. **A wrapper's stacking context traps a popover under the table of contents or drawer.** **Mitigation:** §8.1 requires the portal root; the ladder is written down once.
 4. **A `far` Slide's kept height goes stale after a resize.** **Mitigation:** the mount re-measures while mounted; a jump is a browser-check step.
 
 ## Compliance and Enforcement
@@ -146,7 +146,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 1. **Unit tests:** zone derivation; wrapper and mount contracts.
 2. **Lint:** `new IntersectionObserver` refused outside the Slide observer and the reveal hook (§5.1).
 3. **Post-build test:** Content area grid, portal root, wrappers as grid children carrying `isolate`, Backdrops `aria-hidden` inside their wrapper and hidden in print, the old three-column grid class absent, anchors in static HTML (§2, §3, §7).
-4. **Browser check:** `visual-check` DOM numbers at 375, 1100 and 1440px with the drawer beside, over and closed: the Backdrop is as wide as the viewport; the Foreground is clear of the chrome (§2, §7).
+4. **Browser check:** `visual-check` DOM numbers at 375, 1100 and 1440px with the drawer beside, over and closed: the Backdrop is as wide as the viewport; the Foreground is clear of the table of contents, drawer and talk player (§2, §7).
 
 **Exception (§5.1):** the reveal hook observes once to stagger in the landing page's About cards, then disconnects. It reports to no page service and writes no zone, so it can't compete for `active`.
 
@@ -156,7 +156,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 ## References
 
-- [`GLOSSARY.md`](../../GLOSSARY.md) — Scene, Backdrop, Foreground, Chrome.
+- [`GLOSSARY.md`](../../GLOSSARY.md) — Scene, Backdrop, Foreground, Page chrome.
 - [design-ADR-0012](../../docs/adr/0012-slide-header-and-play-once-motion.md) — the Slide header, the play-once entrance, the hover vocabulary.
 - [MDN IntersectionObserver `rootMargin`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin), [MDN `display: contents`](https://developer.mozilla.org/en-US/docs/Web/CSS/display#contents).
 

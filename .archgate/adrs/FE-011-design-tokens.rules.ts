@@ -5,7 +5,7 @@
 // global stylesheet, and a dead entry on the legacy list. Each check is one rule, A1..A6 in the ticket.
 // Self-contained by design: archgate forbids imports between rules files.
 
-const LEGACY_FILE = 'src/design-system/legacy.json';
+const LEGACY_FILE = 'src/shared/design-system/legacy.json';
 const GLOBALS = 'src/app/globals.css';
 // Every Slide token file, an Event's copy's under `episodes/by-event/<event>/<ep>/` and a pool Slide's under
 // `episodes/slide-pool/<slide>/` too.
@@ -13,7 +13,7 @@ const SLIDE_MODULE_GLOBS = ['src/episodes/**/slides/**/*.module.css', 'src/episo
 // The one token file outside a Slide folder: the token editor's panel keeps a fixed palette so it survives edits to the
 // site tokens it edits. It may hold raw colours (A1) and must pair them with :global(.dark) values (A4); unlike a Slide
 // token file it redeclares global names on purpose (so A3 does not apply). Adding a file here needs an ADR amendment.
-const EDITOR_PANEL_MODULE = 'src/components/design-system-token-editor/token-panel.module.css';
+const EDITOR_PANEL_MODULE = 'src/shared/components/design-system-token-editor/token-panel.module.css';
 const CODE_GLOBS = ['src/**/*.ts', 'src/**/*.tsx'];
 const CSS_GLOB = 'src/**/*.css';
 
@@ -22,7 +22,7 @@ const TEST_FILE_RE = /\.(?:test|spec)\.tsx?$/;
 
 // FE-011 §3.5: two relative sizes stay allowed, one file each.
 const RELATIVE_SIZE_ALLOWED: Record<string, string> = {
-  'src/components/context-drawer/slide-notes.tsx': '0.7em',
+  'src/shared/page-chrome/context-drawer/slide-notes.tsx': '0.7em',
   'src/episodes/components/slide-master/rich-tags.tsx': '0.9em',
 };
 
@@ -411,7 +411,7 @@ export default {
     // A6 — §6.2. The legacy list only shrinks; an entry that matches no file is dead.
     'no-dead-legacy-entry': {
       description:
-        'Every glob in src/design-system/legacy.json MUST match at least one file. A migrated or deleted file takes its entry with it.',
+        'Every glob in src/shared/design-system/legacy.json MUST match at least one file. A migrated or deleted file takes its entry with it.',
       severity: 'error',
       async check(ctx) {
         const entry = (await ctx.readJSON(LEGACY_FILE)) as { globs: string[] };

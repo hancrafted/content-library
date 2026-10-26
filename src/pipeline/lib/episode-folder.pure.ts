@@ -2,7 +2,7 @@
  * The Episode folder the dashboard reads: `docs/episodes/<slug>`, addressed by paths inside it ('/'-separated).
  * Read-only and small on purpose — the poll step and the output probe need text, bytes from an offset, size and
  * modification time, and whether a file is there. Two adapters: the browser's File System Access handle (under
- * src/hooks/, it touches the DOM) and the in-memory folder below, which tests and stand-ins drive.
+ * src/shared/hooks/, it touches the DOM) and the in-memory folder below, which tests and stand-ins drive.
  */
 
 export interface FileStat {

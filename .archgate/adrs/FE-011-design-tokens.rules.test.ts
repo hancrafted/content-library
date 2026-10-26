@@ -33,11 +33,11 @@ function globToRegExp(pattern: string): RegExp {
   return new RegExp(`^${body}$`);
 }
 
-const LEGACY_PATH = 'src/design-system/legacy.json';
+const LEGACY_PATH = 'src/shared/design-system/legacy.json';
 const GLOBALS_PATH = 'src/app/globals.css';
 const GLOBALS =
   ':root {\n  --primary: oklch(0.2 0 0);\n  --machine: oklch(0.6 0.1 240);\n}\n.dark {\n  --primary: #eee;\n}\n';
-const PANEL_CSS = 'src/components/design-system-token-editor/token-panel.module.css';
+const PANEL_CSS = 'src/shared/components/design-system-token-editor/token-panel.module.css';
 const SLIDE_CSS = 'src/episodes/demo/slides/loop/loop.module.css';
 /** A pool Slide's token file, `slide-pool/<slide>/`: a Slide token file like any other. */
 const POOL_SLIDE_CSS = 'src/episodes/slide-pool/loop/loop.module.css';
@@ -160,10 +160,10 @@ describe('no-raw-colour-in-css (A1)', () => {
     // ARRANGE
     const files = {
       [SLIDE_CSS]: '.loop {\n  --edge: #d0342c;\n}\n',
-      'src/components/landing/hero.module.css': '.hero {\n  color: #fff;\n}\n',
+      'src/page-assembly/landing/hero.module.css': '.hero {\n  color: #fff;\n}\n',
     };
     // ACT
-    const violations = await run('no-raw-colour-in-css', files, ['src/components/landing/**']);
+    const violations = await run('no-raw-colour-in-css', files, ['src/page-assembly/landing/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });
@@ -237,11 +237,11 @@ describe('no-raw-value-in-code (A2)', () => {
       'src/episodes/components/slide-master/ok.tsx':
         "// fill=\"#fff\" was here\nconst s = { color: 'var(--foreground)', fill: 'currentColor' };\n",
       [SLIDE_CSS]: '.loop {\n  /* font-size: 13px */\n  --font-note: var(--font-mono);\n}\n',
-      'src/lib/contrast.test.ts': "const bg = '#fafafa';\n",
-      'src/components/landing/hero.tsx': "const c = '#fff';\n",
+      'src/shared/lib/contrast.test.ts': "const bg = '#fafafa';\n",
+      'src/page-assembly/landing/hero.tsx': "const c = '#fff';\n",
     };
     // ACT
-    const violations = await run('no-raw-value-in-code', files, ['src/components/landing/**']);
+    const violations = await run('no-raw-value-in-code', files, ['src/page-assembly/landing/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });
@@ -249,7 +249,7 @@ describe('no-raw-value-in-code (A2)', () => {
   it('allows the citation marker 0.7em and inline code 0.9em in their own file only', async () => {
     // ARRANGE
     const files = {
-      'src/components/context-drawer/slide-notes.tsx': "const s = { fontSize: '0.7em' };\n",
+      'src/shared/page-chrome/context-drawer/slide-notes.tsx': "const s = { fontSize: '0.7em' };\n",
       'src/episodes/components/slide-master/rich-tags.tsx': "const s = { fontSize: '0.9em' };\n",
       'src/episodes/components/slide-master/other.tsx': "const s = { fontSize: '0.7em' };\n",
     };
@@ -367,24 +367,24 @@ describe('no-episode-selector-in-globals (A5)', () => {
 describe('no-dead-legacy-entry (A6)', () => {
   it('fails a legacy glob that matches no file', async () => {
     // ARRANGE
-    const files = { 'src/components/landing/hero.tsx': '' };
+    const files = { 'src/page-assembly/landing/hero.tsx': '' };
     // ACT
     const violations = await run('no-dead-legacy-entry', files, [
-      'src/components/landing/**',
-      'src/components/gone/**',
+      'src/page-assembly/landing/**',
+      'src/page-assembly/gone/**',
     ]);
     // ASSERT
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({ file: LEGACY_PATH });
-    expect(violations[0].message).toContain('src/components/gone/**');
+    expect(violations[0].message).toContain('src/page-assembly/gone/**');
     expect(violations[0].message).toContain('(FE-011 [no-dead-legacy-entry])');
   });
 
   it('passes when every entry matches a file', async () => {
     // ARRANGE
-    const files = { 'src/components/landing/hero.tsx': '' };
+    const files = { 'src/page-assembly/landing/hero.tsx': '' };
     // ACT
-    const violations = await run('no-dead-legacy-entry', files, ['src/components/landing/**']);
+    const violations = await run('no-dead-legacy-entry', files, ['src/page-assembly/landing/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });

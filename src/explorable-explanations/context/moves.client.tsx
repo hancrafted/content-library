@@ -1,6 +1,6 @@
 'use client';
 
-import { useMotion } from '@/hooks/use-motion';
+import { useMotion } from '@/shared/hooks/use-motion';
 import type { ComponentPropsWithoutRef, ElementType } from 'react';
 
 type MovesProps<T extends ElementType> = { readonly as?: T; readonly trigger?: unknown } & Omit<

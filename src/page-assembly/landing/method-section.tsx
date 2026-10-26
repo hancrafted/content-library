@@ -1,8 +1,8 @@
-import { externalHref } from '@/lib/external-link.pure';
-import { FRAMEWORK_SLIDES, type FrameworkSlideData } from '@/lib/framework-slides.pure';
-import type { Locale } from '@/lib/locale.pure';
+import { FRAMEWORK_SLIDES, type FrameworkSlideData } from '@/page-assembly/landing/framework-slides.pure';
 import { MethodRailSection } from '@/page-assembly/landing/method-rail-section.client';
 import type { MethodCard } from '@/page-assembly/landing/method-slide-item';
+import { externalHref } from '@/shared/lib/external-link.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 

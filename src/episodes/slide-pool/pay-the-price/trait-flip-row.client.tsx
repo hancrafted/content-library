@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useId, type Dispatch, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
 import { Card, type BackLabels, type FlipRow } from './trait-flip-card.client';
 import styles from './trait-flip.module.css';

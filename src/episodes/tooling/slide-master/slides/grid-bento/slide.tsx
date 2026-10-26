@@ -1,6 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useId } from 'react';
 import { GridBentoLoop } from './grid-bento-loop.client';
 import styles from './grid-bento.module.css';

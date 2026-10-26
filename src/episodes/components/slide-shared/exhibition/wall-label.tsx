@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 /**
  * The museum label under an exhibit: flat on the wall, narrower than its frame and centred under it, no box border.

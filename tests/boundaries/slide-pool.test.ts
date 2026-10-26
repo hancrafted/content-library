@@ -33,7 +33,7 @@ const POOLED = '@/episodes/slide-pool/pooled/slide';
 const PROBES: Readonly<Record<string, string>> = {
   'tsconfig.json': JSON.stringify({ compilerOptions: { baseUrl: '.', paths: { '@/*': ['./src/*'] } } }),
   'src/episodes/components/slide-master/slide.ts': 'export const slide = 1;',
-  'src/hooks/use-probe.ts': 'export const useProbe = 1;',
+  'src/shared/hooks/use-probe.ts': 'export const useProbe = 1;',
   [`${POOL}/pooled/part.tsx`]: 'export const part = 1;',
   [`${POOL}/pooled/slide.tsx`]: [
     "import { part } from './part';",
@@ -41,7 +41,7 @@ const PROBES: Readonly<Record<string, string>> = {
     'export const pooled = [part, slide];',
   ].join('\n'),
   [`${POOL}/pooled/widget.client.tsx`]:
-    "import { useProbe } from '../../../hooks/use-probe';\nexport const w = useProbe;",
+    "import { useProbe } from '../../../shared/hooks/use-probe';\nexport const w = useProbe;",
   [`${POOL}/other/slide.tsx`]: 'export const other = 1;',
   [`${POOL}/pooled/reaches-other-pool-slide.tsx`]: "import { other } from '../other/slide';\nexport const x = other;",
   [`${POOL}/pooled/reaches-episode-slide.tsx`]:

@@ -1,7 +1,7 @@
 // A run's state, read from disk alone: each job of a per-run pipeline.yml
 // as done, running, gate, blocked, ready or waiting, from the latest job span
 // per job id in the Episode's events.jsonl, folded by `fold`. The orchestrator builds its todo list from this, never from memory.
-// It reads the pipeline and the gates through the same src/lib modules the
+// It reads the pipeline and the gates through the same src/pipeline/lib modules the
 // pipeline check uses; they import nothing but `yaml`, so bare node runs them.
 
 import { readPipeline, type Job } from './episode-pipeline-definition.pure.ts';

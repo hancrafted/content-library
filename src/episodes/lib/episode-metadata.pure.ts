@@ -1,6 +1,6 @@
 import type { Episode, PublishedEpisode } from '@/content-store/schemas/episode.schema';
 import type { TagId } from '@/content-store/schemas/fields';
-import { TAGS, type TagLook } from '@/lib/episode-overview';
+import { TAGS, type TagLook } from '@/episodes/lib/tag-looks';
 
 /*
  * How the Episode browser reads what an Episode declares about itself: its lead Tag, its card's look and the

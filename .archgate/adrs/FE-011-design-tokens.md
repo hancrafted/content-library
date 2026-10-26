@@ -59,7 +59,7 @@ Reasons, values and the token reference: [`docs/design/design-system.md`](../../
 
 ### 6. Legacy list
 
-1. Files predating these rules sit in `src/design-system/legacy.json`, exempt from §2–§4 except §3.2 and §4.4.
+1. Files predating these rules sit in `src/shared/design-system/legacy.json`, exempt from §2–§4 except §3.2 and §4.4.
 2. Entries are only removed, never added; a dead entry MUST go. (📜 Rule: `no-dead-legacy-entry`)
 
 ## Do's and Don'ts

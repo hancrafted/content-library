@@ -1,8 +1,8 @@
-import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
 import { showsFormat, spotlightOf } from '@/episodes/components/episode-browser/episode-browser.pure';
 import { EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
-import type { Locale } from '@/lib/locale.pure';
+import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 
 /** Where each card sits: the lead spans two thirds and the full height of the stack beside it, and fills the row when nothing sits beside it. */
 function placement(isLead: boolean, sideCount: number): string {

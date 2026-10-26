@@ -1,6 +1,6 @@
-import { fillTemplate } from '@/lib/template.pure';
 import type { CheckChip, SkillChip } from '@/pipeline/lib/dashboard-chips.pure';
 import type { DashboardJob } from '@/pipeline/lib/dashboard-projection.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { Check, CircleDashed, X, type LucideIcon } from 'lucide-react';
 import type { DashboardCopy } from './dashboard-evidence';
 

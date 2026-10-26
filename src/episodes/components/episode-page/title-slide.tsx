@@ -1,6 +1,6 @@
 import type { HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';
 import { HeroTitle, SlideBackdrop, SlideCaption, SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
+import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type RecordingLanguage, type TalkPlayerLabels } from './talk-player.client';

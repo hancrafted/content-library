@@ -1,4 +1,4 @@
-import type { FrameworkSlideData } from '@/lib/framework-slides.pure';
+import type { FrameworkSlideData } from '@/page-assembly/landing/framework-slides.pure';
 import { Car, HandHelping, RefreshCw, Undo2, Users, type LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 

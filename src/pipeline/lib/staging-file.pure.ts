@@ -1,5 +1,5 @@
 /*
- * A Staging file's frontmatter, read once for every caller: the cross-file checks in src/lib, the docs tests and
+ * A Staging file's frontmatter, read once for every caller: the cross-file checks in src/pipeline/lib, the docs tests and
  * the new-episode skill scripts. It imports nothing but `yaml`, so the scripts run it under bare node.
  *
  * Its trust tiers follow design-ADR 0005: `verified` is a list of `{ by, at }` entries (or one bare mapping, which

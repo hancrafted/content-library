@@ -80,14 +80,14 @@ export const theLostMiddle = slide({
 - A type error from a kit field or from `messages` means the Slide's own files or its declaration are wrong: German must have every English key. Fix them; never cast.
 - The kit is everything a Scene needs:
   - `t('caption')`, `t('count', { n })`; `t.rich('prose', { ref: ref('<note>') })` already knows `<em>`, `<b>`, `<code>` — pass a tag only to restyle it.
-  - `template('showAll')`: the raw string, `{count}` unfilled, for a client widget to fill with `fillTemplate` from `@/lib/template.pure`.
+  - `template('showAll')`: the raw string, `{count}` unfilled, for a client widget to fill with `fillTemplate` from `@/shared/lib/template.pure`.
   - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`: notes, below; `Title` only on an Episode with `header: 'authored'`.
-- A Slide folder imports only its own files and the global shared locations: `src/episodes/components/slide-master/`, `src/episodes/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/hooks/` and `src/lib/` (step 6). A server part only this Slide uses sits in its folder (see `episode-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/episodes/components/slide-shared/`, plain props, no kit.
+- A Slide folder imports only its own files and the global shared locations: `src/episodes/components/slide-master/`, `src/episodes/components/slide-shared/`, `src/shared/components/ui/`, `src/shared/hooks/`, `src/shared/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/shared/hooks/` and `src/shared/lib/` (step 6). A server part only this Slide uses sits in its folder (see `episode-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/episodes/components/slide-shared/`, plain props, no kit.
 - Colour, size and weight come from tokens only ([FE-011](../../.archgate/adrs/FE-011-design-tokens.md#dos-and-donts), reference in [the design system](../design/design-system.md)): `text-foreground`, `text-machine`, `var(--…)`; text sizes `text-body`, `text-caption`, `text-subheading`, `text-heading`. Never `bg-amber-500`, `text-xs`, `text-[13px]`, `font-bold` or a hex value; a Slide's own colour is a token in its CSS module with a `:global(.dark)` value. Lint and `archgate check` refuse the rest.
 - A Slide's own CSS is a CSS module in its folder, combined with Tailwind via `cn()` (see `ai-token-economy/slides/motivation/freelancer-cards.module.css`). Only a token remap that the chrome reads too (the Title slide glow, `<em>`, the talk player) goes in one Episode stylesheet beside the Episode file, every selector under `[data-episode='<ep>']` (see `maintaining-markdown-for-ai/palette.css`). Never style one Slide from it.
-- A `slide-shared` part reaches only other slide-shared parts, the UI kit and `src/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`, [FE-007 §5](../../.archgate/adrs/FE-007-module-layering.md#5-a-slide-folder-imports-only-global-shared-code)). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).
+- A `slide-shared` part reaches only other slide-shared parts, the UI kit, the core components and `src/shared/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`, [FE-007 §5](../../.archgate/adrs/FE-007-module-layering.md#5-a-slide-folder-imports-only-global-shared-code)). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).
 
 Done when: every Slide of step 1 has a folder and `npm run typecheck` passes.
 
@@ -103,7 +103,7 @@ Done when: every note target resolves to one element of its Slide, and every sou
 
 ## 6. Client widgets
 
-- Interactive or animated parts go in the Slide's folder as `<name>.client.tsx` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)); they reach only their own folder, `src/hooks/` and `src/lib/`.
+- Interactive or animated parts go in the Slide's folder as `<name>.client.tsx` ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)); they reach only their own folder, `src/shared/hooks/` and `src/shared/lib/`.
 - Logic goes in `<name>.pure.ts` beside it with a `.pure.test.ts`; test the logic, not the markup.
 - Respect `prefers-reduced-motion`; pause looping animation outside the active Slide.
 - Slide files render the widget like any component and stay server components.
@@ -114,7 +114,7 @@ Done when: each widget's pure logic has a passing test.
 
 - `episodes/<ep>/sections/<section-slug>.ts`, one per Section, `<section-slug>` the slug of its section slide: export that Section's Slide list, `[sectionSlide, ...pages]`, in order ([FE-004 §3](../../.archgate/adrs/FE-004-slide-architecture.md#3-each-module-owns-one-thing), [design-ADR-0008](../adr/0008-pipeline-jobs-belong-to-stages.md)). A page Slide is listed there, never in the Episode file. Copying a Slide in from another Episode is `cp -r` of its folder plus one import and one entry in its Section's module.
 - `episodes/<ep>/episode.ts`: import each Section's list and fill `sections: [...]` with them, in Section order, in `episode({ slug, youtube, messages: { en, de }, sections })`.
-- To feature it, edit the three slugs in `FEATURED` in `src/lib/episode-overview.ts`.
+- To feature it, edit the three Episode ids in `FEATURED` in `src/content-store/featured.ts`.
 - Do not write `published-anchors.json`: `published-anchors.test.ts` skips an upcoming Episode, and the publish step writes the file ([Episode publishing](episode-publishing.md)).
 
 Done when: `npx vitest run src/episodes/lib/published-anchors.test.ts` is green.

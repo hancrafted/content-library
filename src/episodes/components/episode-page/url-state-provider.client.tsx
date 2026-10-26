@@ -1,7 +1,7 @@
 'use client';
 
-import { UrlStateContext } from '@/hooks/use-url-state';
-import { createUrlState } from '@/lib/url-state';
+import { UrlStateContext } from '@/shared/hooks/use-url-state';
+import { createUrlState } from '@/shared/lib/url-state';
 import { useEffect, useState, type ReactNode } from 'react';
 
 /**

@@ -1,6 +1,6 @@
 'use client';
 
-import { externalHref } from '@/lib/external-link.pure';
+import { externalHref } from '@/shared/lib/external-link.pure';
 import { useEffect, useRef } from 'react';
 import { MODALS_DATA, type ModalContent, type ModalKey } from './markdown-roles-data.pure';
 

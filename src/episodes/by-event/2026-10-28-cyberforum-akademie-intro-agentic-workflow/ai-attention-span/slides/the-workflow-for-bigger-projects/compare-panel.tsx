@@ -1,4 +1,4 @@
-import type { TargetProps } from '@/lib/context-link.pure';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import styles from './the-workflow-for-bigger-projects.module.css';
 

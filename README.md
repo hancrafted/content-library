@@ -87,13 +87,13 @@ Static export runs no middleware, so locales are an explicit route tree; next-in
 - `src/app/(en)/` — default-locale routes, rendered with `locale="en"`.
 - `src/app/[locale]/` — prefixed routes; `generateStaticParams` returns only `de`.
 
-Both are root layouts that render the same `SiteShell` and header from `src/components/`; each route renders one page template from `src/page-assembly/`. Build URLs with `localizePath` from `src/lib/locale.pure.ts`; never hand-write a `/de` prefix.
+Both are root layouts that render the same `SiteShell` and header from the page chrome, `src/shared/page-chrome/`; each route renders one page template from `src/page-assembly/`. Build URLs with `localizePath` from `src/shared/lib/locale.pure.ts`; never hand-write a `/de` prefix.
 
 Strings live in `src/messages/<locale>.json`. Read them with `getTranslations({ locale, namespace })` from `next-intl/server`, passing the locale explicitly. Episode keys follow `docs/features/episode-translation-keys.md`. `de.json` is typed against `en.json`, so a missing German key fails `npm run typecheck`, and a missing key at render time fails the build.
 
 ## Preferences
 
-Every client-side preference (`theme`, `locale`) lives in **one** localStorage key, `hancrafted:prefs`, as a JSON object. Read and write it only through `src/lib/prefs-storage.ts`.
+Every client-side preference (`theme`, `locale`) lives in **one** localStorage key, `hancrafted:prefs`, as a JSON object. Read and write it only through `src/shared/lib/prefs-storage.ts`.
 
 ## Test hooks
 

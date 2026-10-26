@@ -1,4 +1,4 @@
-import { CONTEXT_REF_ATTR } from '@/lib/context-link.pure';
+import { CONTEXT_REF_ATTR } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 
 /*

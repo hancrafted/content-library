@@ -1,8 +1,8 @@
 'use client';
 
 import type { SlideZone } from '@/episodes/lib/slide-zone.pure';
-import { prefersReducedMotion } from '@/hooks/prefers-reduced-motion';
-import { cn } from '@/lib/utils';
+import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
+import { cn } from '@/shared/lib/utils';
 import { useEffect, useRef, type KeyboardEvent } from 'react';
 import {
   CYCLE_ITEMS,

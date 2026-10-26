@@ -3,13 +3,13 @@
 // FE-001 — State Management. Preferences Discipline (§3).
 //
 // `single-storage-key` — the site touches exactly one localStorage key, named
-// once in src/config.yaml (FE-001 §3). Every getItem/setItem call under src/
+// once in src/shared/config.yaml (FE-001 §3). Every getItem/setItem call under src/
 // must pass that key, either as `PREFS_KEY` or as the literal itself, and every
 // `PREFS_KEY` declaration must equal it, so the config and the code cannot
 // drift. Accepted trade-off: the next legitimate second key breaks this rule,
 // and the ADR is amended first. Self-contained by
 // design: archgate forbids imports between rules files.
-const CONFIG_PATH = 'src/config.yaml';
+const CONFIG_PATH = 'src/shared/config.yaml';
 const CONFIG_FIELD = 'localStorageKey';
 const SOURCE_GLOBS = ['src/**/*.ts', 'src/**/*.tsx'];
 const KEY_CONSTANT = 'PREFS_KEY';
@@ -45,7 +45,7 @@ function checkSource(ctx: RuleContext, file: string, source: string, key: string
   for (const call of source.matchAll(CALL_RE)) {
     if (usesKey(call[1], key)) continue;
     ctx.report.violation({
-      message: `localStorage call passes '${call[1].trim()}', not the one key '${key}' from ${CONFIG_PATH} — pass ${KEY_CONSTANT}, or read and write through src/lib/prefs-storage.ts ${PROVENANCE}.`,
+      message: `localStorage call passes '${call[1].trim()}', not the one key '${key}' from ${CONFIG_PATH} — pass ${KEY_CONSTANT}, or read and write through src/shared/lib/prefs-storage.ts ${PROVENANCE}.`,
       file,
       line: lineAt(source, call.index),
     });
@@ -64,7 +64,7 @@ export default {
   rules: {
     'single-storage-key': {
       description:
-        'Every localStorage getItem/setItem call under src/ uses the one key set as localStorageKey in src/config.yaml, and every PREFS_KEY declaration equals that key.',
+        'Every localStorage getItem/setItem call under src/ uses the one key set as localStorageKey in src/shared/config.yaml, and every PREFS_KEY declaration equals that key.',
       severity: 'error',
       async check(ctx) {
         const key = await readConfiguredKey(ctx);

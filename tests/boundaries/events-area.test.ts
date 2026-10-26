@@ -25,10 +25,10 @@ const reach = (from: string, names: readonly string[]) =>
     .replaceAll("'@/", `'${'../'.repeat(from.split('/').length - 2)}`);
 
 const PROBES: Readonly<Record<string, string>> = {
-  'src/components/ui/button.tsx': 'export const Button = 1;',
-  'src/hooks/use-probe.ts': 'export const useProbe = 1;',
-  'src/i18n/translations.ts': 'export const TRANSLATIONS = 1;',
-  'src/lib/probe.pure.ts': 'export const probe = 1;',
+  'src/shared/components/ui/button.tsx': 'export const Button = 1;',
+  'src/shared/hooks/use-probe.ts': 'export const useProbe = 1;',
+  'src/shared/i18n/translations.ts': 'export const TRANSLATIONS = 1;',
+  'src/shared/lib/probe.pure.ts': 'export const probe = 1;',
   'src/content-store/store.ts': 'export const store = 1;',
   'src/content-store/schemas/fields.ts': 'export const fields = 1;',
   'src/episodes/lib/registry.ts': 'export const registry = 1;',
@@ -36,14 +36,14 @@ const PROBES: Readonly<Record<string, string>> = {
   'src/episodes/lib/probe.pure.ts': 'export const episode = 1;',
   'src/app/page.tsx': 'export const page = 1;',
   [`${AREA}/lib/probe-event.pure.ts`]: reach(`${AREA}/lib/probe-event.pure.ts`, [
-    '@/lib/probe.pure',
+    '@/shared/lib/probe.pure',
     '@/content-store/schemas/fields',
   ]),
   [`${AREA}/components/probe-card.tsx`]: reach(`${AREA}/components/probe-card.tsx`, [
     '@/events/lib/probe-event.pure',
-    '@/components/ui/button',
-    '@/hooks/use-probe',
-    '@/i18n/translations',
+    '@/shared/components/ui/button',
+    '@/shared/hooks/use-probe',
+    '@/shared/i18n/translations',
     '@/content-store/store',
   ]),
   [`${AREA}/components/reaches-episodes.tsx`]: reach(`${AREA}/components/reaches-episodes.tsx`, [
@@ -59,8 +59,10 @@ const PROBES: Readonly<Record<string, string>> = {
     '@/events/components/probe-card',
     '@/events/lib/probe-event.pure',
   ]),
-  'src/lib/reaches-events.pure.ts': reach('src/lib/reaches-events.pure.ts', ['@/events/lib/probe-event.pure']),
-  'src/components/landing/reaches-events.tsx': reach('src/components/landing/reaches-events.tsx', [
+  'src/shared/lib/reaches-events.pure.ts': reach('src/shared/lib/reaches-events.pure.ts', [
+    '@/events/lib/probe-event.pure',
+  ]),
+  'src/shared/components/reaches-events.tsx': reach('src/shared/components/reaches-events.tsx', [
     '@/events/components/probe-card',
   ]),
 };
@@ -93,19 +95,19 @@ afterAll(() => {
 });
 
 describe('Events product area', () => {
-  it('holds the Event cards, the Playlist list and the Event-scoped Episode framing, none left in the old roots', () => {
+  it('holds the Event cards, the Playlist list and the Event-scoped Episode framing', () => {
     // ARRANGE
-    const moved = [
-      ['src/components/events/playlist-list.tsx', `${AREA}/components/playlist-list.tsx`],
-      ['src/components/events/event-episode-chrome.tsx', `${AREA}/components/event-episode-chrome.tsx`],
-      ['src/components/landing/event-card.tsx', `${AREA}/components/event-card.tsx`],
-      ['src/components/landing/event-playlist.pure.ts', `${AREA}/lib/event-playlist.pure.ts`],
-      ['src/lib/events.pure.ts', `${AREA}/lib/events.pure.ts`],
+    const homes = [
+      `${AREA}/components/playlist-list.tsx`,
+      `${AREA}/components/event-episode-chrome.tsx`,
+      `${AREA}/components/event-card.tsx`,
+      `${AREA}/lib/event-playlist.pure.ts`,
+      `${AREA}/lib/events.pure.ts`,
     ];
     // ACT
-    const found = moved.map(([before, after]) => [existsSync(before), existsSync(after)]);
+    const found = homes.filter((file) => !existsSync(file));
     // ASSERT
-    expect(found).toEqual(moved.map(() => [false, true]));
+    expect(found).toEqual([]);
   });
 
   it('lets the area reach itself, the shared tiers and the content store, and page assembly reach the area', () => {
@@ -120,8 +122,8 @@ describe('Events product area', () => {
   it('rejects the area importing another product area or a layer above it, and anything but page assembly importing the area', () => {
     // ARRANGE
     const expected = [
-      'events-area-reached-only-from-page-assembly: src/components/landing/reaches-events.tsx -> src/events/components/probe-card.tsx',
-      'events-area-reached-only-from-page-assembly: src/lib/reaches-events.pure.ts -> src/events/lib/probe-event.pure.ts',
+      'events-area-reached-only-from-page-assembly: src/shared/components/reaches-events.tsx -> src/events/components/probe-card.tsx',
+      'events-area-reached-only-from-page-assembly: src/shared/lib/reaches-events.pure.ts -> src/events/lib/probe-event.pure.ts',
       'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.pure.ts',
       'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/lib/probe.pure.ts',
       'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/lib/registry.ts',

@@ -1,6 +1,6 @@
-import { PAPER_CAPACITY, PAPER_PILE_ORIGIN } from '@/lib/paper-pile.pure';
 import { PaperTray, PaperTrayFront, PromotionOffice } from '@/page-assembly/landing/promotion-office';
 import { PileShadow } from '@/page-assembly/landing/promotion-shadow';
+import { PAPER_CAPACITY, PAPER_PILE_ORIGIN } from '@/shared/lib/paper-pile.pure';
 
 interface PromotionDeskProps {
   promotion: string;

@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
 import type { TagId } from '@/content-store/schemas/fields';
 import type { TagOption } from '@/episodes/components/episode-browser/episode-browser.pure';
-import { cn } from '@/lib/utils';
+import { Button } from '@/shared/components/ui/button';
+import { cn } from '@/shared/lib/utils';
 import { Search } from 'lucide-react';
 import type { Ref } from 'react';
 

@@ -1,7 +1,7 @@
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { Slide } from '@/episodes/components/slide-master/slide';
 import { placeSections } from '@/episodes/lib/episode.pure';
-import type { Locale } from '@/lib/locale.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';

@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useCallback, useId, useState, type MouseEvent } from 'react';
 import { laneClass, MetroLines } from './metro-map-lines.client';
 import { MetroPopover } from './metro-map-popover.client';

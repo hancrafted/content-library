@@ -1,6 +1,6 @@
+import { EPISODE_IDS, isEpisodeId } from '@/content-store/catalogue/routes';
 import { listEpisodes } from '@/content-store/store';
 import { headerModeOf } from '@/episodes/components/slide-master/slide';
-import { EPISODE_IDS, isEpisodeId } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { episodeCopy, findEpisode } from './registry';
 

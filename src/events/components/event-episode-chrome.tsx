@@ -1,9 +1,9 @@
+import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
-import { TRANSLATIONS } from '@/i18n/translations';
-import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/lib/routes';
-import { cn } from '@/lib/utils';
+import { TRANSLATIONS } from '@/shared/i18n/translations';
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import { cn } from '@/shared/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

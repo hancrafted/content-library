@@ -1,8 +1,8 @@
+import { EPISODE_IDS, isEpisodeId } from '@/content-store/catalogue/routes';
 import { episodeFolders } from '@/episodes/lib/episode-folders';
-import { FEATURED } from '@/lib/episode-overview';
-import { EPISODE_IDS, isEpisodeId } from '@/lib/routes';
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { FEATURED } from './featured';
 import { episodeStatus, listEpisodes } from './store';
 
 /*

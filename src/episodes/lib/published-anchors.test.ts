@@ -1,8 +1,8 @@
+import { episodeFolderOf, episodeRefOf, TOOLING_FOLDER } from '@/content-store/catalogue/episode-id.pure';
+import { EPISODES_PATH_SLUGS, isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
-import { episodeFolderOf, episodeRefOf, TOOLING_FOLDER } from '@/episodes/lib/episode-id.pure';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
-import { EPISODES_PATH_SLUGS, isToolingSlug, type EpisodesPathSlug } from '@/lib/routes';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';

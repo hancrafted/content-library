@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { AiJob, ChatJobs, DeliverableJob, FocalJob, PieceJobs, popoverOf, type JobViewProps } from './diagram-jobs';
 import { connectorInto, fanGeometry, type Connector as ConnectorKind } from './diagram-layout.pure';
 import { jobRole } from './diagram-model.pure';

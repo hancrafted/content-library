@@ -1,4 +1,4 @@
-import type { TargetProps } from '@/lib/context-link.pure';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
 
 function ShippedCol(target: TargetProps) {
   return (

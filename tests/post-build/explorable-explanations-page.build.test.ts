@@ -3,8 +3,9 @@
 // page to the bottom of /episodes.
 
 import { describe, expect, it } from 'vitest';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { episodeRoute, ROUTES } from '../../src/lib/routes';
+import { episodeRoute } from '../../src/content-store/catalogue/routes';
+import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
+import { ROUTES } from '../../src/shared/lib/routes';
 import { exportedPage, resolveBasePath } from './exported-pages';
 
 const basePath = resolveBasePath();

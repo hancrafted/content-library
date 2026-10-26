@@ -1,4 +1,4 @@
-import { placePopover, type Box, type Viewport } from '@/lib/popover-placement.pure';
+import { placePopover, type Box, type Viewport } from '@/shared/lib/popover-placement.pure';
 import { describe, expect, it } from 'vitest';
 import { barBox, elapsedShare, GANTT_BARS, GANTT_LANES, laneClashes, TOOLTIP_RULES } from './horizontal-gantt.pure';
 

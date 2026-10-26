@@ -1,5 +1,5 @@
-import { Check, FlowStub, ParkedStub, Sparkle } from '@/episodes/components/slide-shared/glyphs/glyphs';
-import { cn } from '@/lib/utils';
+import { Check, FlowStub, ParkedStub, Sparkle } from '@/shared/components/core-components/glyphs/glyphs';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { chatNames, splitParked } from './diagram-model.pure';
 import type { JobSlot, PopoverCopy } from './human-in-the-loop.types';

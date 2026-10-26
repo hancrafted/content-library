@@ -1,8 +1,8 @@
 'use client';
 
-import { usePopoverPlacement } from '@/hooks/use-popover-placement';
-import { popoverBox } from '@/lib/popover-placement.pure';
-import { cn } from '@/lib/utils';
+import { usePopoverPlacement } from '@/shared/hooks/use-popover-placement';
+import { popoverBox } from '@/shared/lib/popover-placement.pure';
+import { cn } from '@/shared/lib/utils';
 import { createPortal } from 'react-dom';
 import { TOGGLETIP_RULES, type RailSide } from './horizontal-rail.pure';
 

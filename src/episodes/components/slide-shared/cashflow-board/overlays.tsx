@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import styles from './cashflow-board.module.css';
 import { lanePlacement } from './cashflow-board.pure';

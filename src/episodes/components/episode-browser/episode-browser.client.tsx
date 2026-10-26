@@ -1,7 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
 import type { TagId } from '@/content-store/schemas/fields';
 import {
   browseView,
@@ -17,9 +15,11 @@ import {
 import { SearchBox, TagChips, type FilterLabels } from '@/episodes/components/episode-browser/episode-filters';
 import { EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
-import type { Locale } from '@/lib/locale.pure';
-import { fillTemplate } from '@/lib/template.pure';
-import { cn } from '@/lib/utils';
+import { Button } from '@/shared/components/ui/button';
+import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
+import { cn } from '@/shared/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { useRef, useState } from 'react';
 

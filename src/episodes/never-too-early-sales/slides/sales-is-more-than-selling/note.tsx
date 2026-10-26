@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
 const TILT = { left: '-rotate-2', right: 'rotate-1', none: '' } as const;

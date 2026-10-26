@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, FocusEvent, MouseEvent } from 'react';
 import { laneClass } from './metro-map-lines.client';
 import { canvasShare, isInterchange, LABEL_SIDE, STATION_AT, stationLanes, type Station } from './metro-map.pure';

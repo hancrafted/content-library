@@ -5,9 +5,10 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { episodeRoute, legacyEpisodeRoute, ROUTES } from '../../src/lib/routes';
-import { resolveSiteUrl } from '../../src/lib/site-url.pure';
+import { episodeRoute, legacyEpisodeRoute } from '../../src/content-store/catalogue/routes';
+import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
+import { ROUTES } from '../../src/shared/lib/routes';
+import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
 import { EXPORTED_EPISODES_PATH_SLUGS, exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);

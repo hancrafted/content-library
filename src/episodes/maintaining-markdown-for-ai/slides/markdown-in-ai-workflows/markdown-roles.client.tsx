@@ -1,8 +1,8 @@
 'use client';
 
-import type { TargetProps } from '@/lib/context-link.pure';
-import { externalHref } from '@/lib/external-link.pure';
-import { cn } from '@/lib/utils';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import { externalHref } from '@/shared/lib/external-link.pure';
+import { cn } from '@/shared/lib/utils';
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import { ROLES_DATA, type ModalKey, type RoleDetail, type RoleKey } from './markdown-roles-data.pure';
 import { MarkdownRolesModal } from './markdown-roles-modal.client';

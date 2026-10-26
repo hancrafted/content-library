@@ -30,15 +30,15 @@ const TEMPLATE = 'src/page-assembly/dashboard';
 const PROBES: Readonly<Record<string, string>> = {
   'skills/probe/scripts/helper.ts': 'export const helper = 1;',
   'tools/probe/helper.ts': 'export const tool = 1;',
-  'src/components/ui/button.tsx': 'export const Button = 1;',
-  'src/components/landing/card.tsx': 'export const Card = 1;',
-  'src/lib/probe.pure.ts': 'export const probe = 1;',
+  'src/shared/components/ui/button.tsx': 'export const Button = 1;',
+  'src/page-assembly/landing/card.tsx': 'export const Card = 1;',
+  'src/shared/lib/probe.pure.ts': 'export const probe = 1;',
   'src/episodes/lib/episode.pure.ts': 'export const placeSections = 1;',
-  [`${AREA}/lib/run-log.pure.ts`]: "import { probe } from '../../lib/probe.pure';\nexport const log = probe;",
+  [`${AREA}/lib/run-log.pure.ts`]: "import { probe } from '../../shared/lib/probe.pure';\nexport const log = probe;",
   [`${AREA}/hooks/use-run.ts`]: "import { log } from '../lib/run-log.pure';\nexport const useRun = log;",
   [`${AREA}/components/panel.client.tsx`]: [
     "import { useRun } from '../hooks/use-run';",
-    "import { Button } from '../../components/ui/button';",
+    "import { Button } from '../../shared/components/ui/button';",
     'export const Panel = [useRun, Button];',
   ].join('\n'),
   [`${AREA}/components/dashboard.tsx`]: "import { Panel } from './panel.client';\nexport const Dashboard = Panel;",
@@ -48,12 +48,14 @@ const PROBES: Readonly<Record<string, string>> = {
     'export const Page = [Dashboard, log];',
   ].join('\n'),
   [`${TEMPLATE}/reaches-hook.tsx`]: "import { useRun } from '../../pipeline/hooks/use-run';\nexport const x = useRun;",
-  'src/lib/reaches-pipeline.pure.ts': "import { log } from '../pipeline/lib/run-log.pure';\nexport const x = log;",
-  'src/lib/reaches-skill.ts': "import { helper } from '../../skills/probe/scripts/helper';\nexport const x = helper;",
-  'src/lib/reaches-tool.ts': "import { tool } from '../../tools/probe/helper';\nexport const x = tool;",
+  'src/shared/lib/reaches-pipeline.pure.ts':
+    "import { log } from '../../pipeline/lib/run-log.pure';\nexport const x = log;",
+  'src/shared/lib/reaches-skill.ts':
+    "import { helper } from '../../../skills/probe/scripts/helper';\nexport const x = helper;",
+  'src/shared/lib/reaches-tool.ts': "import { tool } from '../../../tools/probe/helper';\nexport const x = tool;",
   [`${AREA}/lib/reaches-hook.ts`]: "import { useRun } from '../hooks/use-run';\nexport const x = useRun;",
   [`${AREA}/components/reaches-landing.tsx`]:
-    "import { Card } from '../../components/landing/card';\nexport const x = Card;",
+    "import { Card } from '../../page-assembly/landing/card';\nexport const x = Card;",
   [`${AREA}/lib/reaches-episodes.ts`]:
     "import { placeSections } from '../../episodes/lib/episode.pure';\nexport const x = placeSections;",
   [`${AREA}/components/server-reaches-hook.tsx`]:
@@ -113,12 +115,12 @@ describe('failure cases', () => {
       `pipeline-hooks-reached-only-from-client: ${TEMPLATE}/reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
       `pipeline-hooks-reached-only-from-client: ${AREA}/components/server-reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
       `pipeline-hooks-reached-only-from-client: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
-      `pipeline-imports-no-other-area: ${AREA}/components/reaches-landing.tsx -> src/components/landing/card.tsx`,
+      `pipeline-imports-no-other-area: ${AREA}/components/reaches-landing.tsx -> src/page-assembly/landing/card.tsx`,
       `pipeline-imports-no-other-area: ${AREA}/lib/reaches-episodes.ts -> src/episodes/lib/episode.pure.ts`,
       `pipeline-lib-imports-no-react-or-upper-tier: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
-      `pipeline-reached-only-from-page-assembly: src/lib/reaches-pipeline.pure.ts -> ${AREA}/lib/run-log.pure.ts`,
-      'src-never-imports-skills-or-tools: src/lib/reaches-skill.ts -> skills/probe/scripts/helper.ts',
-      'src-never-imports-skills-or-tools: src/lib/reaches-tool.ts -> tools/probe/helper.ts',
+      `pipeline-reached-only-from-page-assembly: src/shared/lib/reaches-pipeline.pure.ts -> ${AREA}/lib/run-log.pure.ts`,
+      'src-never-imports-skills-or-tools: src/shared/lib/reaches-skill.ts -> skills/probe/scripts/helper.ts',
+      'src-never-imports-skills-or-tools: src/shared/lib/reaches-tool.ts -> tools/probe/helper.ts',
     ];
     // ACT
     const found = violations();

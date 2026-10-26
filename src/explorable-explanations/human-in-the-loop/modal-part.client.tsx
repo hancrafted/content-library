@@ -1,7 +1,7 @@
 'use client';
 
-import type { PromptKit } from '@/episodes/components/slide-shared/core-components/try-prompt/try-prompt.client';
-import { useMediaQuery } from '@/hooks/use-media-query';
+import type { PromptKit } from '@/shared/components/core-components/try-prompt/try-prompt.client';
+import { useMediaQuery } from '@/shared/hooks/use-media-query';
 import { useEffect, useRef, useState } from 'react';
 import type { ModalProps, UiWords } from './human-in-the-loop.types';
 import { ModalHeader } from './modal-header.client';

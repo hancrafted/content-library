@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './trait-flip.module.css';
 

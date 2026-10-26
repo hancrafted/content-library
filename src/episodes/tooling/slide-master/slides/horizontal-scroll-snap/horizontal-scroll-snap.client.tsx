@@ -1,7 +1,7 @@
 'use client';
 
-import { prefersReducedMotion } from '@/hooks/prefers-reduced-motion';
-import { cn } from '@/lib/utils';
+import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
+import { cn } from '@/shared/lib/utils';
 import { type RefObject, useEffect, useId, useRef, useState } from 'react';
 import { readTrack, stepDelta, type TrackGeometry, type TrackReading } from './horizontal-scroll-snap.pure';
 

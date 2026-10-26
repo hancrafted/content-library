@@ -1,6 +1,6 @@
-import { ContextIcon } from '@/components/ui/context-icon';
-import { CONTEXT_REF_ATTR } from '@/lib/context-link.pure';
-import { cn } from '@/lib/utils';
+import { ContextIcon } from '@/shared/components/ui/context-icon';
+import { CONTEXT_REF_ATTR } from '@/shared/lib/context-link.pure';
+import { cn } from '@/shared/lib/utils';
 
 /*
  * Every form shares the drawer's attribute and the button's states: muted at

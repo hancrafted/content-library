@@ -1,7 +1,7 @@
 'use client';
 
-import { isStepReached, stepPosition } from '@/lib/theme-transition.pure';
 import type { MethodCard } from '@/page-assembly/landing/method-slide-item';
+import { isStepReached, stepPosition } from '@/shared/lib/theme-transition.pure';
 
 interface NodeSymbolProps {
   isPassed: boolean;

@@ -1,4 +1,4 @@
-import { joinPrompt } from '@/episodes/components/slide-shared/core-components/try-prompt/prompt-sections.pure';
+import { joinPrompt } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import summerPartyEn from './summer-party.en.yml';

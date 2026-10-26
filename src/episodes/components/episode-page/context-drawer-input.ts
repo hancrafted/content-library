@@ -1,9 +1,9 @@
-import type { ContextDrawerInput } from '@/components/context-drawer/context-drawer-input';
 import type { LocalizedSlide, SlideContext } from '@/episodes/components/slide-master/localized-slide';
-import { readTranslationStrings } from '@/i18n/translation-strings';
-import { TRANSLATIONS } from '@/i18n/translations';
-import { SHORTCUT_LABEL } from '@/lib/context-drawer.pure';
-import type { Locale } from '@/lib/locale.pure';
+import { readTranslationStrings } from '@/shared/i18n/translation-strings';
+import { TRANSLATIONS } from '@/shared/i18n/translations';
+import { SHORTCUT_LABEL } from '@/shared/lib/context-drawer.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import type { ContextDrawerInput } from '@/shared/page-chrome/context-drawer/context-drawer-input';
 import { getTranslations } from 'next-intl/server';
 import { checkDrawerStrings, contextItemsOf, NOT_DRAWER_STRINGS } from './context-drawer-input.pure';
 

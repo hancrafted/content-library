@@ -9,20 +9,20 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeStatus, episodeVisibility, listEvents } from '../../src/content-store/store';
-import { episodeRefOf } from '../../src/episodes/lib/episode-id.pure';
-import { isPastEvent } from '../../src/events/lib/events.pure';
-import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
+import { episodeRefOf } from '../../src/content-store/catalogue/episode-id.pure';
 import {
   episodeRoute,
   eventEpisodeRoute,
   eventRoute,
   isEpisodeId,
-  ROUTES,
   type EpisodeId,
   type EventSlug,
-} from '../../src/lib/routes';
-import { resolveSiteUrl } from '../../src/lib/site-url.pure';
+} from '../../src/content-store/catalogue/routes';
+import { episodeStatus, episodeVisibility, listEvents } from '../../src/content-store/store';
+import { isPastEvent } from '../../src/events/lib/events.pure';
+import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.pure';
+import { ROUTES } from '../../src/shared/lib/routes';
+import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
 import { exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);

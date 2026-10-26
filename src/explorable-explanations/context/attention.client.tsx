@@ -1,6 +1,6 @@
 'use client';
 
-import { useMotion } from '@/hooks/use-motion';
+import { useMotion } from '@/shared/hooks/use-motion';
 import { memo, useMemo, useRef, type FocusEvent, type PointerEvent } from 'react';
 import { axisMaxOf, bucketOf, EDGE } from './attention-curve.pure';
 import { useDock } from './attention-dock';

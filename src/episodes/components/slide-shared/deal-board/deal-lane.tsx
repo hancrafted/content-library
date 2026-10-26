@@ -1,5 +1,5 @@
 import { formatEuro } from '@/episodes/components/slide-shared/cashflow-board/cashflow-board.pure';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './deal-board.module.css';
 import { laneTotal, type Deal, type DealLane, type DealSlot } from './deal-board.pure';

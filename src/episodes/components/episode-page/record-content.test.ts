@@ -1,7 +1,7 @@
 import { episode, slide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
-import { TRANSLATIONS } from '@/i18n/translations';
-import type { Locale } from '@/lib/locale.pure';
+import { TRANSLATIONS } from '@/shared/i18n/translations';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { createElement, isValidElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';

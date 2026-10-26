@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { BackSvg, beat, Label, type BackProps } from './back-parts';
 import styles from './trait-flip.module.css';
 

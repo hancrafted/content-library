@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { Dispatch, ReactNode } from 'react';
 import { ConfidentBack } from './back-confident';
 import { EveryWordBilledBack } from './back-every-word-billed';

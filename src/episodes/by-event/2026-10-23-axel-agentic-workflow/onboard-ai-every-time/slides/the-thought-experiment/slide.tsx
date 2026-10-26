@@ -1,7 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { VisitorBadge } from '@/episodes/components/slide-shared/visitor-badge/visitor-badge';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

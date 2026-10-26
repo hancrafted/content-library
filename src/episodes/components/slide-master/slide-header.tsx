@@ -1,6 +1,6 @@
 import type { TextRange } from '@/episodes/lib/caption-emphasis.pure';
 import { ENTRANCE_MS, typewriterSchedule } from '@/episodes/lib/typewriter.pure';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { ContextMarker } from './context-marker';
 import type { SlideEntrance } from './slide';

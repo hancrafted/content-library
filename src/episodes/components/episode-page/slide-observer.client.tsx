@@ -2,9 +2,9 @@
 
 import { ZoneStoreContext } from '@/episodes/hooks/use-slide-zone';
 import { APPROACH_ROOT_MARGIN, type ZoneStore } from '@/episodes/lib/slide-zone.pure';
-import { useUrlState } from '@/hooks/use-url-state';
-import { activeId, readingLineMargin } from '@/lib/reading-line.pure';
-import type { UrlState } from '@/lib/url-state';
+import { useUrlState } from '@/shared/hooks/use-url-state';
+import { activeId, readingLineMargin } from '@/shared/lib/reading-line.pure';
+import type { UrlState } from '@/shared/lib/url-state';
 import { useContext, useEffect } from 'react';
 
 /** One observer over every Slide wrapper, narrowed by `rootMargin`. */

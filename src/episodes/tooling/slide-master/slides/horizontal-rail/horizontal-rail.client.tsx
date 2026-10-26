@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useCallback, useId, useState, type FocusEvent, type MouseEvent } from 'react';
 import { RailToggletip, type ToggletipCopy } from './horizontal-rail-toggletip.client';
 import { RAIL_ITEMS, railSide, type RailItem, type RailSide } from './horizontal-rail.pure';

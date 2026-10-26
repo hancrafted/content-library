@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import styles from './cashflow-board.module.css';
 import type { BoardLabels, CashflowColumn } from './cashflow-board.types';
 import { placeOn } from './place-on';

@@ -1,5 +1,5 @@
-import type { TargetProps } from '@/lib/context-link.pure';
-import { cn } from '@/lib/utils';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import { cn } from '@/shared/lib/utils';
 
 interface SchemaRow {
   line: number;

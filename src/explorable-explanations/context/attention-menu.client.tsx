@@ -1,7 +1,7 @@
 'use client';
 
-import { usePopoverPlacement } from '@/hooks/use-popover-placement';
-import { popoverBox, type PopoverRules } from '@/lib/popover-placement.pure';
+import { usePopoverPlacement } from '@/shared/hooks/use-popover-placement';
+import { popoverBox, type PopoverRules } from '@/shared/lib/popover-placement.pure';
 import { useCallback, useId, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { Distribution } from './attention-distribution.client';

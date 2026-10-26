@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 /** One step of the climb: its rank is a relative height, not data, and the axis says so. */
 export interface StaircaseStep {

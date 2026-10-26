@@ -14,15 +14,23 @@ const EPISODE_HOOKS = '^src/episodes/hooks/';
 // above the Episodes they list and the lib rules below leave them out.
 const COMPOSITION_REGISTRY_NAMES = '(registry|tooling-pages|episode-registry\\.generated)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
-// The area's plain lib modules, every one but the composition registries: the content store may read them.
-const EPISODE_PLAIN_LIB = `^src/episodes/lib/(?!${COMPOSITION_REGISTRY_NAMES}\\.ts$)[^/]+\\.ts$`;
 // The tests that run over every composed Episode and tooling page through those registries, rendering Slides.
 const REGISTRY_TESTS =
   '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders|tooling-pages)\\.test\\.ts$';
-// Plain logic, no React: src/lib/ and the Episodes area's lib/.
-const LIB = '^src/(lib|episodes/lib)/';
-// Browser hooks: src/hooks/ and the Episodes area's hooks/.
-const HOOKS = '^src/(hooks|episodes/hooks)/';
+// Plain logic, no React: src/shared/lib/ and the Episodes area's lib/.
+const LIB = '^src/(shared|episodes)/lib/';
+// Browser hooks: src/shared/hooks/ and the Episodes area's hooks/.
+const HOOKS = '^src/(shared|episodes)/hooks/';
+// Shared (spec #348): what every layer uses and knows nothing of the domain — UI primitives, design system, i18n,
+// generic hooks and lib, and page chrome. The UI kit, the primitives Slide parts share, and page chrome by name.
+const SHARED_UI = '^src/shared/components/ui/';
+const SHARED_LIB = '^src/shared/lib/';
+const SHARED_HOOKS = '^src/shared/hooks/';
+const PAGE_CHROME = '^src/shared/page-chrome/';
+// The Episode page container and the adapter that builds the Context drawer's input: the Episodes area's one way into
+// page chrome's table of contents and Context drawer.
+const EPISODE_CONTAINER =
+  '^src/episodes/components/episode-page/(episode-page-container\\.(tsx|pure\\.ts)|context-drawer-input(\\.pure)?\\.ts)$';
 
 // What an Episode file may reach: the Slide master (which holds the Episode
 // record, `slide-master/slide.ts`), slide-shared (parts several Slides
@@ -47,10 +55,10 @@ const SLIDE_POOL = '^src/episodes/slide-pool/';
 // A Section file, `<ep>/sections/<section-slug>.ts`, named after its section slide; the second capture group names it.
 const SECTION_FILE = '^src/episodes/((?:by-event/[^/]+|tooling)/[^/]+|[^/]+)/sections/([^/]+)\\.ts$';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the Explorable explanations, the UI
-// kit, hooks and lib.
+// kit, the core components (server files only, see the client rule), hooks and lib.
 const SLIDE_SHARED_REACH = [
   '^src/episodes/components/(slide-master|slide-shared)/',
-  '^src/components/ui/',
+  '^src/shared/components/(ui|core-components)/',
   '^src/explorable-explanations/',
   HOOKS,
   LIB,
@@ -62,8 +70,11 @@ const EPISODE_METADATA =
   '^src/episodes/(by-event/[^/]+/[^/]+|(?!components/|lib/|hooks/|tooling/)[^/]+)/episode-metadata\\.ts$';
 // The store's schemas: a leaf every tier may import record types from (FE-007 §2.5).
 const STORE_SCHEMAS = '^src/content-store/schemas/';
+// The store's catalogue, the delivery policy readers import beside the entry: every module but the page catalogue,
+// which the entry serves over its records.
+const STORE_CATALOGUE = '^src/content-store/catalogue/(?!page-catalogue\\.)';
 
-const CORE_COMPONENTS = '^src/episodes/components/slide-shared/core-components/';
+const CORE_COMPONENTS = '^src/shared/components/core-components/';
 
 // A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
 const SLIDE_SHARED_CLIENT = '^src/episodes/components/slide-shared/([^/]+)/.+\\.client\\.tsx$';
@@ -80,7 +91,7 @@ module.exports = {
       name: 'hooks-reached-only-from-client',
       severity: 'error',
       comment:
-        'A hook runs only in the browser. Reach src/hooks/** or src/episodes/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).',
+        'A hook runs only in the browser. Reach src/shared/hooks/** or src/episodes/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).',
       from: { pathNot: ['\\.client\\.tsx$', HOOKS, '\\.test\\.tsx?$'] },
       to: { path: HOOKS },
     },
@@ -88,9 +99,9 @@ module.exports = {
       name: 'prefs-storage-reached-only-from-client',
       severity: 'error',
       comment:
-        'src/lib/prefs-storage.ts touches window.localStorage. Reach it from a hook, a *.client.tsx leaf or a test — a Server Component would read empty prefs at build time and render silently wrong (FE-006). Named by path: no classifier marks a browser-API module, so a second one needs this rule widened by hand.',
+        'src/shared/lib/prefs-storage.ts touches window.localStorage. Reach it from a hook, a *.client.tsx leaf or a test — a Server Component would read empty prefs at build time and render silently wrong (FE-006). Named by path: no classifier marks a browser-API module, so a second one needs this rule widened by hand.',
       from: { pathNot: ['\\.client\\.tsx$', HOOKS, '\\.test\\.tsx?$'] },
-      to: { path: '^src/lib/prefs-storage\\.ts$' },
+      to: { path: '^src/shared/lib/prefs-storage\\.ts$' },
     },
     {
       name: 'client-never-imports-app',
@@ -109,7 +120,23 @@ module.exports = {
         path: '^src/episodes/',
         pathNot: '^src/episodes/components/episode-page/episode-page-container\\.(tsx|pure\\.ts)$',
       },
-      to: { path: '^src/components/table-of-contents/' },
+      to: { path: '^src/shared/page-chrome/table-of-contents/' },
+    },
+    {
+      name: 'page-chrome-reached-only-from-page-assembly-or-container',
+      severity: 'error',
+      comment:
+        'Page chrome (src/shared/page-chrome/: header, footer bar, toggles, table of contents, Context drawer) is reached from page assembly or the Episode page container, plus SiteShell from the root layouts. No product area part, store module or other shared module imports it; what it needs from the domain arrives as props (FE-004, FE-007).',
+      from: {
+        pathNot: [
+          PAGE_CHROME,
+          '^src/page-assembly/',
+          EPISODE_CONTAINER,
+          '^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$',
+          '\\.test\\.tsx?$',
+        ],
+      },
+      to: { path: PAGE_CHROME },
     },
     {
       name: 'context-drawer-reached-only-from-container',
@@ -119,10 +146,10 @@ module.exports = {
       from: {
         pathNot: [
           '^src/episodes/components/episode-page/(episode-page-container\\.tsx|context-drawer-input(\\.pure)?\\.ts)$',
-          '^src/components/context-drawer/',
+          '^src/shared/page-chrome/context-drawer/',
         ],
       },
-      to: { path: '^src/components/context-drawer/' },
+      to: { path: '^src/shared/page-chrome/context-drawer/' },
     },
     {
       name: 'context-drawer-takes-input-only',
@@ -130,15 +157,16 @@ module.exports = {
       comment:
         'The Context drawer knows nothing of Episodes: it renders from one ContextDrawerInput and observes the ids it is given. Its components, hooks and lib files MUST NOT import Episode, table-of-contents, route or next-intl code (FE-010 §8). The one adapter that builds the input lives under src/episodes/components/episode-page/.',
       from: {
-        path: '^src/(components/context-drawer/|hooks/use-(context-|reading-line)|lib/(context-drawer|context-link|roving-focus|reading-line)\\.pure\\.ts$)',
+        path: '^src/shared/(page-chrome/context-drawer/|hooks/use-(context-|reading-line)|lib/(context-drawer|context-link|roving-focus|reading-line)\\.pure\\.ts$)',
         pathNot: '\\.test\\.tsx?$',
       },
       to: {
         path: [
           '^src/episodes/',
-          '^src/components/table-of-contents/',
-          '^src/hooks/use-table-of-contents',
-          '^src/lib/(routes|table-of-contents)',
+          '^src/shared/page-chrome/table-of-contents/',
+          '^src/shared/hooks/use-table-of-contents',
+          '^src/shared/lib/(routes|table-of-contents)',
+          '^src/content-store/',
           '(^|/)node_modules/next-intl/',
         ],
       },
@@ -158,7 +186,7 @@ module.exports = {
       name: 'slide-folder-reaches-only-own-and-shared',
       severity: 'error',
       comment:
-        'A Slide folder (episodes/<ep>/slides/<slide>/, or a pool Slide, episodes/slide-pool/<slide>/) imports only its own files and the global shared locations: src/episodes/components/slide-master/, src/episodes/components/slide-shared/, src/explorable-explanations/, src/components/ui/, src/hooks/, src/lib/, src/episodes/hooks/ and src/episodes/lib/. Never another Slide, a pool Slide included, the Episode file, or anything else Episode-local; a part two Slides share moves to src/episodes/components/slide-shared/ (FE-007).',
+        'A Slide folder (episodes/<ep>/slides/<slide>/, or a pool Slide, episodes/slide-pool/<slide>/) imports only its own files and the global shared locations: src/episodes/components/slide-master/, src/episodes/components/slide-shared/, src/explorable-explanations/, src/shared/components/ui/, src/shared/hooks/, src/shared/lib/, src/episodes/hooks/ and src/episodes/lib/. Never another Slide, a pool Slide included, the Episode file, or anything else Episode-local; a part two Slides share moves to src/episodes/components/slide-shared/ (FE-007).',
       from: { path: SLIDE_FOLDER },
       to: { pathNot: [OWN_SLIDE_FOLDER, ...SLIDE_SHARED_REACH, 'node_modules'], dependencyTypesNot: ['core'] },
     },
@@ -198,15 +226,15 @@ module.exports = {
       name: 'slide-shared-reaches-only-ui-and-lib',
       severity: 'error',
       comment:
-        'src/episodes/components/slide-shared/ holds parts several Slides of any Episode share. A part takes serializable props: its server files reach only other slide-shared parts, the UI kit (src/components/ui/) and lib — never a Slide, an Episode, the Slide master or its kit, so a Slide copied into another Episode finds it unchanged (FE-002, FE-007 §5, epic #51).',
+        'src/episodes/components/slide-shared/ holds parts several Slides of any Episode share. A part takes serializable props: its server files reach only other slide-shared parts, the UI kit (src/shared/components/ui/), the core components (src/shared/components/core-components/) and lib — never a Slide, an Episode, the Slide master or its kit, so a Slide copied into another Episode finds it unchanged (FE-002, FE-007 §5, epic #51).',
       from: { path: '^src/episodes/components/slide-shared/', pathNot: ['\\.test\\.ts$', SLIDE_SHARED_CLIENT] },
-      to: { pathNot: ['^src/episodes/components/slide-shared/', '^src/components/ui/', LIB, 'node_modules'] },
+      to: { pathNot: ['^src/episodes/components/slide-shared/', SHARED_UI, CORE_COMPONENTS, LIB, 'node_modules'] },
     },
     {
       name: 'slide-shared-client-reaches-only-own-part-hooks-and-lib',
       severity: 'error',
       comment:
-        "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/episodes/components/slide-shared/<part>/) and reaches only that folder, src/hooks/ and src/lib/ — never another part, the UI kit, a Slide or the Slide master. The one exception is core-components/, which any slide-shared part, client leaf included, may import (FE-006 §5, FE-007 §5.2).",
+        "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/episodes/components/slide-shared/<part>/) and reaches only that folder, src/shared/hooks/ and src/shared/lib/ — never another part, the UI kit, a Slide or the Slide master. The one exception is src/shared/components/core-components/, which any slide-shared part, client leaf included, may import (FE-006 §5, FE-007 §5.2).",
       from: { path: SLIDE_SHARED_CLIENT },
       to: { pathNot: ['^src/episodes/components/slide-shared/$1/', CORE_COMPONENTS, HOOKS, LIB, 'node_modules'] },
     },
@@ -214,27 +242,27 @@ module.exports = {
       name: 'explorable-explanation-reaches-shared-ui-and-lib',
       severity: 'error',
       comment:
-        'src/explorable-explanations/ holds the Explorable explanations several Slides show. An explanation takes serializable props: its server files reach only other explanations, slide-shared parts, the UI kit (src/components/ui/) and src/lib — never a Slide, an Episode, the Slide master or its kit (FE-012, FE-007 §5, design-ADR 0016 decision 6).',
+        'src/explorable-explanations/ holds the Explorable explanations several Slides show. An explanation takes serializable props: its server files reach only other explanations, the core components (src/shared/components/core-components/), the UI kit (src/shared/components/ui/) and lib — never another product area (a Slide, an Episode, slide-shared, the Slide master) (FE-012, FE-007 §5, design-ADR 0016 decision 6).',
       from: { path: EXPLANATIONS, pathNot: ['\\.test\\.ts$', EXPLANATION_CLIENT] },
       to: {
-        pathNot: [EXPLANATIONS, '^src/episodes/components/slide-shared/', '^src/components/ui/', LIB, 'node_modules'],
+        pathNot: [EXPLANATIONS, CORE_COMPONENTS, SHARED_UI, SHARED_LIB, 'node_modules'],
       },
     },
     {
       name: 'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib',
       severity: 'error',
       comment:
-        "An Explorable explanation's *.client.tsx leaf runs in the browser. It sits in its explanation's folder (src/explorable-explanations/<name>/) and reaches only that folder, slide-shared/core-components/, src/hooks/ and src/lib/ — never another explanation, a plain slide-shared part, the UI kit, a Slide or the Slide master (FE-006 §5, FE-007 §5.2).",
+        "An Explorable explanation's *.client.tsx leaf runs in the browser. It sits in its explanation's folder (src/explorable-explanations/<name>/) and reaches only that folder, src/shared/components/core-components/, src/shared/hooks/ and src/shared/lib/ — never another explanation, a slide-shared part, the UI kit, a Slide or the Slide master (FE-006 §5, FE-007 §5.2).",
       from: { path: EXPLANATION_CLIENT },
       to: {
-        pathNot: ['^src/explorable-explanations/$1/', CORE_COMPONENTS, HOOKS, LIB, 'node_modules'],
+        pathNot: ['^src/explorable-explanations/$1/', CORE_COMPONENTS, SHARED_HOOKS, SHARED_LIB, 'node_modules'],
       },
     },
     {
       name: 'explorable-explanation-reached-only-from-slides-and-page-assembly',
       severity: 'error',
       comment:
-        'src/explorable-explanations/ is a product area. A Slide folder showing an explanation is the one edge another product area may draw into it; otherwise only page assembly, another explanation or a test imports it, never a shared part, a hook, src/lib or the content store (FE-007, FE-012).',
+        'src/explorable-explanations/ is a product area. A Slide folder showing an explanation is the one edge another product area may draw into it; otherwise only page assembly, another explanation or a test imports it, never a shared part, a hook, shared lib or the content store (FE-007, FE-012).',
       from: { pathNot: [SLIDE_FOLDER, EXPLANATIONS, '^src/page-assembly/', '\\.test\\.tsx?$'] },
       to: { path: EXPLANATIONS },
     },
@@ -242,9 +270,9 @@ module.exports = {
       name: 'core-components-are-a-leaf',
       severity: 'error',
       comment:
-        'src/episodes/components/slide-shared/core-components/ holds the primitives every slide-shared part shares. It is a leaf: its files import only core-components/, src/hooks/ and src/lib/ — never another slide-shared part, the UI kit, a Slide or the Slide master (FE-007 §5.2).',
+        'src/shared/components/core-components/ holds the primitives every slide-shared part shares. It is a leaf: its files import only core-components/, src/shared/hooks/ and src/shared/lib/ — never another slide-shared part, the UI kit, a Slide or the Slide master (FE-007 §5.2).',
       from: { path: CORE_COMPONENTS, pathNot: '\\.test\\.tsx?$' },
-      to: { pathNot: [CORE_COMPONENTS, HOOKS, LIB, 'node_modules'] },
+      to: { pathNot: [CORE_COMPONENTS, SHARED_HOOKS, SHARED_LIB, 'node_modules'] },
     },
     {
       name: 'episode-tests-reach-only-slide-parts',
@@ -280,7 +308,7 @@ module.exports = {
       name: 'lib-imports-no-react',
       severity: 'error',
       comment:
-        'src/lib/** and src/episodes/lib/** import no React — not runtime, not types — so every lib module stays a plain module a vitest test imports without a DOM (FE-007).',
+        'src/shared/lib/** and src/episodes/lib/** import no React — not runtime, not types — so every lib module stays a plain module a vitest test imports without a DOM (FE-007).',
       from: { path: LIB, pathNot: REGISTRY_TESTS },
       to: { path: '(^|/)node_modules/(@types/)?(react|react-dom)/' },
     },
@@ -288,7 +316,7 @@ module.exports = {
       name: 'lib-tsx-never-imported',
       severity: 'error',
       comment:
-        'JSX needs a .tsx file; src/lib/** and src/episodes/lib/** hold none, so nothing may import a .tsx module from them (FE-007).',
+        'JSX needs a .tsx file; src/shared/lib/** and src/episodes/lib/** hold none, so nothing may import a .tsx module from them (FE-007).',
       from: {},
       to: { path: `${LIB}.+\\.tsx$` },
     },
@@ -296,21 +324,29 @@ module.exports = {
       name: 'lib-imports-no-upper-tier',
       severity: 'error',
       comment:
-        "src/lib/** and src/episodes/lib/** are the bottom tier: they MUST NOT import src/app, page assembly, a component, the content store, a hook or an Episode's folder — except the store's schemas, a leaf every tier reads record types from. The composition registries in src/episodes/lib/ import every Episode's record and sit above it (FE-007).",
+        "src/shared/lib/** and src/episodes/lib/** are the bottom tier of their folder: they MUST NOT import src/app, page assembly, a component, page chrome, a hook, an Episode's folder or the content store — except the store's schemas and catalogue, the leaves that name records and their ids. Shared lib reaches neither (shared-knows-no-domain). The composition registries in src/episodes/lib/ import every Episode's record and sit above it (FE-007).",
       from: { path: LIB, pathNot: [COMPOSITION_REGISTRY, REGISTRY_TESTS] },
       to: {
-        path: ['^src/(app|page-assembly|components|content-store|hooks)/', '^src/episodes/(?!lib/)'],
-        pathNot: STORE_SCHEMAS,
+        path: [
+          '^src/(app|page-assembly)/',
+          '^src/(shared|episodes)/(components|page-chrome|hooks)/',
+          '^src/episodes/(?!lib/)',
+          '^src/content-store/(?!(schemas|catalogue)/)',
+        ],
       },
     },
     {
       name: 'hooks-import-no-upper-tier',
       severity: 'error',
       comment:
-        "src/hooks/** and src/episodes/hooks/** sit above lib only: they MUST NOT import src/app, page assembly, a component, the content store or an Episode's folder — except the store's schemas (FE-007).",
+        "src/shared/hooks/** and src/episodes/hooks/** sit above lib only: they MUST NOT import src/app, page assembly, a component, page chrome, the content store or an Episode's folder — except the store's schemas (FE-007).",
       from: { path: HOOKS },
       to: {
-        path: ['^src/(app|page-assembly|components|content-store)/', '^src/episodes/(?!(lib|hooks)/)'],
+        path: [
+          '^src/(app|page-assembly|content-store)/',
+          '^src/(shared|episodes)/(components|page-chrome)/',
+          '^src/episodes/(?!(lib|hooks)/)',
+        ],
         pathNot: STORE_SCHEMAS,
       },
     },
@@ -329,17 +365,17 @@ module.exports = {
       name: 'store-entry-only',
       severity: 'error',
       comment:
-        'Outside the content store, imports reach only its entry, src/content-store/store.ts, and its schemas for record types; refusals and records stay free to change behind it (FE-013).',
+        'Outside the content store, imports reach only its entry, src/content-store/store.ts, its schemas for record types, and its catalogue (catalogue/: slug lists, Episode id, record routes, visibility predicate) but not the page catalogue the entry serves; refusals, records and Featured stay free to change behind it (FE-013).',
       from: { pathNot: ['^src/content-store/', '\\.test\\.tsx?$'] },
-      to: { path: '^src/content-store/', pathNot: ['^src/content-store/store\\.ts$', STORE_SCHEMAS] },
+      to: { path: '^src/content-store/', pathNot: ['^src/content-store/store\\.ts$', STORE_SCHEMAS, STORE_CATALOGUE] },
     },
     {
       name: 'episode-metadata-reaches-only-schemas-and-lib',
       severity: 'error',
       comment:
-        "An Episode's episode-metadata.ts is a record: it imports only src/content-store/schemas/**, src/lib/** and zod, so the store reading it closes no cycle (FE-007, FE-013).",
+        "An Episode's episode-metadata.ts is a record: it imports only src/content-store/schemas/**, src/shared/lib/** and zod, so the store reading it closes no cycle (FE-007, FE-013).",
       from: { path: EPISODE_METADATA },
-      to: { pathNot: ['^src/content-store/schemas/', '^src/lib/', '(^|/)node_modules/zod/'] },
+      to: { pathNot: ['^src/content-store/schemas/', '^src/shared/lib/', '(^|/)node_modules/zod/'] },
     },
     {
       name: 'schemas-are-a-leaf',
@@ -361,20 +397,32 @@ module.exports = {
       name: 'content-store-tier',
       severity: 'error',
       comment:
-        "src/content-store/** sits between components and hooks: it imports no React and nothing from src/app, page assembly, a component or the Episodes area except an Episode's episode-metadata.ts and the area's plain lib modules (the Episode id) (FE-007).",
-      from: { path: '^src/content-store/' },
+        "src/content-store/** sits below the product areas and above shared: it imports no React and nothing outside itself and src/shared/ — no route, page assembly, product area or page chrome — except an Episode's episode-metadata.ts, its one upward edge. Its tests may also read the Episode folders through the walker (FE-007).",
+      from: { path: '^src/content-store/', pathNot: '\\.test\\.ts$' },
       to: {
-        path: ['^src/(app|page-assembly|components|episodes)/', '(^|/)node_modules/(@types/)?(react|react-dom)/'],
-        pathNot: [EPISODE_METADATA, EPISODE_PLAIN_LIB],
+        path: [
+          '^src/(?!content-store/|shared/)',
+          '^src/shared/(components|page-chrome|hooks)/',
+          '(^|/)node_modules/(@types/)?(react|react-dom)/',
+        ],
+        pathNot: EPISODE_METADATA,
       },
+    },
+    {
+      name: 'shared-knows-no-domain',
+      severity: 'error',
+      comment:
+        'src/shared/** knows nothing of the domain: it imports only other shared modules (and, until they move to their owners, the site-wide Translation files in src/messages/), never the content store, its schemas included, a product area, page assembly or a route. What page chrome needs from the domain arrives as props (FE-007).',
+      from: { path: '^src/shared/' },
+      to: { path: '^src/', pathNot: ['^src/shared/', '^src/messages/'] },
     },
     // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.
     {
       name: 'components-never-import-app',
       severity: 'error',
       comment:
-        'src/page-assembly/**, src/components/** and src/episodes/** sit below the routes: they MUST NOT import src/app/** (FE-007).',
-      from: { path: '^src/(page-assembly|components|episodes)/' },
+        'Everything outside src/app/ sits below the routes: page assembly, the product areas, the content store and shared MUST NOT import src/app/** (FE-007).',
+      from: { path: '^src/(?!app/)' },
       to: { path: '^src/app/' },
     },
     {
@@ -399,15 +447,18 @@ module.exports = {
       comment:
         'SiteShell renders <html>; only the two root layouts (or a test) import it. A nested layout or page doing so would nest a second <html> (FE-007).',
       from: { pathNot: ['^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$', '\\.test\\.tsx?$'] },
-      to: { path: '^src/components/site-shell\\.tsx$' },
+      to: { path: '^src/shared/page-chrome/site-shell\\.tsx$' },
     },
     {
       name: 'route-reaches-components-only-via-roots',
       severity: 'error',
       comment:
-        'A route composes; it does not lay out. src/app/** renders a page template from src/page-assembly/ and reaches src/components/** only through SiteShell, and the Episodes area not at all (FE-007).',
+        'A route composes; it does not lay out. src/app/** renders a page template from src/page-assembly/ and reaches shared components and page chrome only through SiteShell, and no product area at all (FE-007).',
       from: { path: '^src/app/' },
-      to: { path: ['^src/components/', '^src/episodes/'], pathNot: '^src/components/site-shell\\.tsx$' },
+      to: {
+        path: ['^src/shared/(components|page-chrome)/', '^src/(episodes|events|explorable-explanations|pipeline)/'],
+        pathNot: '^src/shared/page-chrome/site-shell\\.tsx$',
+      },
     },
     // The Events product area (spec #348): Events and their Playlists. It reaches only itself, the shared tiers and the
     // content store; only page assembly reaches into it, passing it another area's parts as props (FE-007).
@@ -415,10 +466,10 @@ module.exports = {
       name: 'events-area-reaches-only-shared-and-store',
       severity: 'error',
       comment:
-        'src/events/** is a product area: it imports only its own files, the shared tiers (src/components/ui/, src/hooks/, src/i18n/, src/lib/) and the content store, never another product area (an Episode, its cards, a Slide) or a layer above it. What it needs from another area, page assembly passes in as props (FE-007).',
+        'src/events/** is a product area: it imports only its own files, the shared tiers (src/shared/components/ui/, src/shared/hooks/, src/shared/i18n/, src/shared/lib/) and the content store, never another product area (an Episode, its cards, a Slide) or a layer above it. What it needs from another area, page assembly passes in as props (FE-007).',
       from: { path: '^src/events/' },
       to: {
-        pathNot: ['^src/events/', '^src/components/ui/', '^src/(hooks|i18n|lib|content-store)/', 'node_modules'],
+        pathNot: ['^src/events/', SHARED_UI, '^src/shared/(hooks|i18n|lib)/', '^src/content-store/', 'node_modules'],
         dependencyTypesNot: ['core'],
       },
     },
@@ -459,11 +510,14 @@ module.exports = {
       name: 'pipeline-imports-no-other-area',
       severity: 'error',
       comment:
-        'src/pipeline/** imports no route, page template, other product area or other component; of src/components/ it reaches only the UI kit, ui/ (FE-007).',
+        'src/pipeline/** imports no route, page template, other product area, page chrome or other shared component; of src/shared/components/ it reaches only the UI kit, ui/ (FE-007).',
       from: { path: '^src/pipeline/' },
       to: {
-        path: '^src/(app|page-assembly|components|episodes|events|explorable-explanations)/',
-        pathNot: '^src/components/ui/',
+        path: [
+          '^src/(app|page-assembly|episodes|events|explorable-explanations)/',
+          '^src/shared/(components|page-chrome)/',
+        ],
+        pathNot: SHARED_UI,
       },
     },
     {
@@ -479,7 +533,7 @@ module.exports = {
       severity: 'error',
       comment:
         'A hook runs only in the browser. Reach src/pipeline/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).',
-      from: { pathNot: ['\\.client\\.tsx$', '^src/(pipeline/)?hooks/', '\\.test\\.tsx?$'] },
+      from: { pathNot: ['\\.client\\.tsx$', HOOKS, '^src/pipeline/hooks/', '\\.test\\.tsx?$'] },
       to: { path: '^src/pipeline/hooks/' },
     },
   ],
@@ -497,7 +551,7 @@ module.exports = {
       severity: 'error',
       comment: 'Each root layout — the one rendering <html> — renders SiteShell (FE-007).',
       module: { path: '^src/app/(\\(en\\)|\\[locale\\])/layout\\.tsx$' },
-      to: { path: '^src/components/site-shell\\.tsx$' },
+      to: { path: '^src/shared/page-chrome/site-shell\\.tsx$' },
     },
   ],
   options: {

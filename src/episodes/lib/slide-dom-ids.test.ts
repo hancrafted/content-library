@@ -1,7 +1,7 @@
+import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/episodes/components/slide-master/slide';
 import { placeSections } from '@/episodes/lib/episode.pure';
-import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/lib/routes';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';

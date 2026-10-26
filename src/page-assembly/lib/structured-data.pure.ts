@@ -1,8 +1,9 @@
+import { episodeRoute, type EpisodeId } from '@/content-store/catalogue/routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import { TRANSLATIONS } from '@/i18n/translations';
-import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute, ROUTES, servedUrl, type EpisodeId } from '@/lib/routes';
-import { SOCIAL_LINKS } from '@/lib/social-links';
+import { TRANSLATIONS } from '@/shared/i18n/translations';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { ROUTES, servedUrl } from '@/shared/lib/routes';
+import { SOCIAL_LINKS } from '@/shared/lib/social-links';
 import { OG_IMAGE } from './page-metadata.pure';
 
 /*

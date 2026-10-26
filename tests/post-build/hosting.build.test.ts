@@ -4,7 +4,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { resolveSiteUrl } from '../../src/lib/site-url.pure';
+import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
 import { OUT_DIR } from './exported-pages';
 
 const read = (file: string) => readFileSync(join(OUT_DIR, file), 'utf8');

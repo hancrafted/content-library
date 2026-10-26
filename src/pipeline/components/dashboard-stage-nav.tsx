@@ -1,7 +1,7 @@
-import { fillTemplate } from '@/lib/template.pure';
 import { spanElapsed } from '@/pipeline/lib/dashboard-elapsed.pure';
 import type { GraphGeometry, StageGeometry } from '@/pipeline/lib/dashboard-graph-geometry.pure';
 import type { StageNode } from '@/pipeline/lib/dashboard-graph-view.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { CircleAlert } from 'lucide-react';
 import { useContext } from 'react';
 import { JobChipList } from './dashboard-chips';

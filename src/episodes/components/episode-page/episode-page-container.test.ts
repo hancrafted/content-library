@@ -1,6 +1,6 @@
 import { episode, slide, type Section, type Slide, type TitledSlide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
-import { DRAWER_BESIDE_ATTR } from '@/lib/context-drawer.pure';
+import { DRAWER_BESIDE_ATTR } from '@/shared/lib/context-drawer.pure';
 import { describe, expect, it } from 'vitest';
 import { TALK_DOCKED_ATTR, tocReserveRem } from '../../lib/talk-dock.pure';
 import { INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';

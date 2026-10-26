@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useCallback, useId, useState, type ReactNode } from 'react';
 import { GanttBar, LANE_CLASS, type BarHandlers } from './horizontal-gantt-bar.client';
 import { GanttTooltip, type BarCopy } from './horizontal-gantt-tooltip.client';

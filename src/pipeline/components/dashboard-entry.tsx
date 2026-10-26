@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components/ui/button';
 import { FolderOpen, LockKeyhole, Play } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { DashboardCopy } from './dashboard-evidence';

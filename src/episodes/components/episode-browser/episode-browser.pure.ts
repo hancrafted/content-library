@@ -1,7 +1,7 @@
 import type { TagId } from '@/content-store/schemas/fields';
 import type { EpisodeCard, Labelled } from '@/episodes/components/episode-card/episode-card.pure';
-import { FILTER_TAGS } from '@/lib/episode-overview';
-import { fillTemplate } from '@/lib/template.pure';
+import { FILTER_TAGS } from '@/episodes/lib/tag-looks';
+import { fillTemplate } from '@/shared/lib/template.pure';
 
 /*
  * What the Episodes section decides before it draws anything: which published

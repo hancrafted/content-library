@@ -1,7 +1,7 @@
 'use client';
 
-import { usePopoverPlacement } from '@/hooks/use-popover-placement';
-import { popoverBox } from '@/lib/popover-placement.pure';
+import { usePopoverPlacement } from '@/shared/hooks/use-popover-placement';
+import { popoverBox } from '@/shared/lib/popover-placement.pure';
 import { createPortal } from 'react-dom';
 import { laneClass } from './metro-map-lines.client';
 import type { StationCopy } from './metro-map-station.client';

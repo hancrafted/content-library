@@ -1,8 +1,8 @@
 'use client';
 
-import { fillTemplate } from '@/lib/template.pure';
 import type { ReplayControls } from '@/pipeline/hooks/use-dashboard-replay';
 import type { GraphGeometry } from '@/pipeline/lib/dashboard-graph-geometry.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { formatDuration } from '../lib/run-log-tree.pure';
 import type { DashboardCopy } from './dashboard-evidence';

@@ -1,4 +1,4 @@
-import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
+import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { describe, expect, it } from 'vitest';
 import { placeSections, type SectionList, type SlideOutline } from './episode.pure';
 

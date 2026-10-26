@@ -1,5 +1,5 @@
-import type { TargetProps } from '@/lib/context-link.pure';
-import type { Locale } from '@/lib/locale.pure';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import type { ReactElement, ReactNode } from 'react';
 
 /*

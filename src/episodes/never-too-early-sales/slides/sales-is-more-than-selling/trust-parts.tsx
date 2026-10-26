@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useId, type CSSProperties, type ReactNode } from 'react';
 import styles from './slide.module.css';
 

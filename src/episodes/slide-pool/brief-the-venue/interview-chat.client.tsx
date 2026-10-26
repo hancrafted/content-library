@@ -1,7 +1,7 @@
 'use client';
 
-import { externalHref } from '@/lib/external-link.pure';
-import { cn } from '@/lib/utils';
+import { externalHref } from '@/shared/lib/external-link.pure';
+import { cn } from '@/shared/lib/utils';
 import { useRef, type ReactNode } from 'react';
 
 /** A skill the turn invokes: its slash command, linked to where the skill is published. */

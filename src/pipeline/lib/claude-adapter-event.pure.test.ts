@@ -147,10 +147,10 @@ describe('success cases', () => {
       span_id: AGENT_SPAN,
       name: 'file.read',
       source: 'measured',
-      attributes: { 'file.path': 'src/lib/a.ts' },
+      attributes: { 'file.path': 'src/shared/lib/a.ts' },
     };
     // ACT
-    const event = adaptRead(readInput(`${ROOT}/src/lib/a.ts`));
+    const event = adaptRead(readInput(`${ROOT}/src/shared/lib/a.ts`));
     // ASSERT
     expect(event).toEqual(expected);
   });
@@ -166,7 +166,7 @@ describe('success cases', () => {
       attributes: {
         'file.path': '.claude/rules/fe-001-state-management.md',
         load_reason: 'path_glob_match',
-        'trigger_file.path': 'src/lib/a.ts',
+        'trigger_file.path': 'src/shared/lib/a.ts',
         adr: 'FE-001-state-management',
       },
       payload: { claude_code: { memory_type: 'Project', globs } },
@@ -174,7 +174,7 @@ describe('success cases', () => {
     // ACT
     const event = adaptInstructions(
       loadInput(
-        { memory_type: 'Project', globs, trigger_file_path: `${ROOT}/src/lib/a.ts` },
+        { memory_type: 'Project', globs, trigger_file_path: `${ROOT}/src/shared/lib/a.ts` },
         `${ROOT}/.archgate/adrs/FE-001-state-management.md`,
       ),
     );

@@ -1,6 +1,6 @@
 import { Frame } from '@/episodes/components/slide-shared/exhibition/frame';
 import { WallLabel } from '@/episodes/components/slide-shared/exhibition/wall-label';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { RoomArt, type RoomSlug } from './room-art';
 
 /**

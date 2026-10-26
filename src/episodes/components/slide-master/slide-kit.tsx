@@ -1,6 +1,6 @@
+import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
 import type { SlideLevel } from '@/episodes/lib/episode.pure';
-import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
 import { ContextMarker } from './context-marker';
 import { ContextRef } from './context-ref';

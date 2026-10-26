@@ -1,7 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { fillTemplate } from '@/lib/template.pure';
 import { useDashboardDetail } from '@/pipeline/hooks/use-dashboard-detail';
 import type { ReplayControls } from '@/pipeline/hooks/use-dashboard-replay';
 import type { DashboardEvent, EventScope } from '@/pipeline/lib/dashboard-events.pure';
@@ -9,6 +7,8 @@ import { graphView, type GraphView } from '@/pipeline/lib/dashboard-graph-view.p
 import type { EpisodeOutputs } from '@/pipeline/lib/dashboard-outputs.pure';
 import type { DashboardJob, DashboardView } from '@/pipeline/lib/dashboard-projection.pure';
 import { jobTimings } from '@/pipeline/lib/dashboard-scrub.pure';
+import { Button } from '@/shared/components/ui/button';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { useId, useState, type CSSProperties } from 'react';
 import { DashboardDrawer } from './dashboard-drawer.client';
 import type { DashboardCopy } from './dashboard-evidence';

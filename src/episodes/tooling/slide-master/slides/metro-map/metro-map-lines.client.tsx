@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import styles from './metro-map.module.css';
 import { CANVAS, LANE_ROUTES, LANES, metroPath, type Lane } from './metro-map.pure';
 

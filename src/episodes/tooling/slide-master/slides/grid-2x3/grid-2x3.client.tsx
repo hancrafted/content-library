@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { Blocks, Compass, Layers, Orbit, Sparkles, Waypoints, type LucideIcon } from 'lucide-react';
 import { useId } from 'react';
 import { GRID_2X3_CELLS, GRID_2X3_TONES, type Grid2x3Cell, type Grid2x3Tone } from './grid-2x3.pure';

@@ -1,5 +1,5 @@
 import { placeSections } from '@/episodes/lib/episode.pure';
-import type { Locale } from '@/lib/locale.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
 import { createElement, Fragment, isValidElement, type ReactElement, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';

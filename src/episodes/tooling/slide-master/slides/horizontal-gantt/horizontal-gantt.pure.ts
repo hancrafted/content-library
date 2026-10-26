@@ -4,7 +4,7 @@
  * and how wide its tooltip grows. No DOM, no React.
  */
 
-import type { PopoverRules } from '@/lib/popover-placement.pure';
+import type { PopoverRules } from '@/shared/lib/popover-placement.pure';
 
 /** The axis runs one year, in months; a quarter is three of them. */
 export const AXIS_MONTHS = 12;
@@ -73,7 +73,7 @@ export function laneClashes<K extends string>(bars: Readonly<Record<K, Bar>>): [
   );
 }
 
-/** The tooltip's widths and gaps for the shared popover placement (`@/lib/popover-placement.pure`); it prefers to open above its bar. */
+/** The tooltip's widths and gaps for the shared popover placement (`@/shared/lib/popover-placement.pure`); it prefers to open above its bar. */
 export const TOOLTIP_RULES: PopoverRules = {
   /** The widest a tooltip grows; a phone narrows it to the viewport minus its margins. */
   maxWidth: 272,

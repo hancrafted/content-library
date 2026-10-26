@@ -486,6 +486,39 @@ describe('failure cases', () => {
     // ASSERT
     expect(load).toThrow(expected);
   });
+
+  it('refuses Featured slots that are not three published public Episodes, naming each slot', () => {
+    // ARRANGE
+    const upcoming = {
+      slug: 'beta',
+      status: 'upcoming',
+      visibility: 'public',
+      format: 'foundations',
+      tags: ['workflow'],
+    };
+    const episodes = [own(EPISODE), own(upcoming), copy(UNLISTED)];
+    const input = {
+      ...SOUND,
+      episodes,
+      playlists: [{ ...PLAYLIST, episodes: [COPY_ID] }],
+      featured: ['alpha', 'beta'],
+    };
+    const unlisted = { ...input, featured: ['alpha', COPY_ID, 'missing'] };
+    const expected = [
+      'Featured: names 2 slots, but Featured fills 3',
+      'Featured: slot "beta" is upcoming, but a Featured Episode is published',
+    ];
+    const expectedUnlisted = [
+      `Featured: slot "${COPY_ID}" is unlisted, but a Featured Episode is public`,
+      'Featured: slot "missing" names no Episode',
+    ];
+    // ACT
+    const load = () => loadContent(input);
+    const loadUnlisted = () => loadContent(unlisted);
+    // ASSERT
+    for (const sentence of expected) expect(load).toThrow(sentence);
+    for (const sentence of expectedUnlisted) expect(loadUnlisted).toThrow(sentence);
+  });
 });
 
 describe('edge cases', () => {

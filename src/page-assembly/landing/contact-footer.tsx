@@ -1,9 +1,9 @@
-import { SocialLinks } from '@/components/social-links';
-import { Button } from '@/components/ui/button';
-import { BOOKING_URL, CONTACT_EMAIL } from '@/lib/contact';
-import { externalHref } from '@/lib/external-link.pure';
-import type { Locale } from '@/lib/locale.pure';
 import { CopyEmail } from '@/page-assembly/landing/copy-email.client';
+import { Button } from '@/shared/components/ui/button';
+import { BOOKING_URL, CONTACT_EMAIL } from '@/shared/lib/contact';
+import { externalHref } from '@/shared/lib/external-link.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { FooterBar } from '@/shared/page-chrome/footer/footer-bar';
 import { ArrowUpRight, CalendarDays } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -25,11 +25,10 @@ function ContactActions({ t, newTab }: { t: ContactT; newTab: string }) {
   );
 }
 
-/** The landing page's close: book a get-to-know call or write an email, with the social profiles below. */
+/** The landing page's close: book a get-to-know call or write an email, above the site's footer bar. */
 export async function ContactFooter({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.contact' });
   const newTab = (await getTranslations({ locale, namespace: 'nav' }))('newTab');
-  const brand = (await getTranslations({ locale, namespace: 'brand' }))('name');
   return (
     <footer
       id="contact"
@@ -46,10 +45,7 @@ export async function ContactFooter({ locale }: { locale: Locale }) {
         </div>
         <ContactActions t={t} newTab={newTab} />
       </div>
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 border-t border-border px-6 py-4 text-caption text-muted-foreground">
-        <span>© {brand}</span>
-        <SocialLinks locale={locale} />
-      </div>
+      <FooterBar locale={locale} />
     </footer>
   );
 }

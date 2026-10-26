@@ -8,7 +8,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { resolveSiteUrl } from '../../src/lib/site-url.pure';
+import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
 import { EXPORTED_PAGES, exportedFile, OUT_DIR } from './exported-pages';
 
 /** The pages that are their own canonical, each carrying its hreflang set. */

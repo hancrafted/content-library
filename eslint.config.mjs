@@ -10,7 +10,7 @@ import tseslint from 'typescript-eslint';
 // Design tokens (FE-011): the legacy list is one file that ESLint and Archgate both read.
 // Legacy files are exempt from E2 only; E1 (no phantom class) holds everywhere.
 const LEGACY_FILES = JSON.parse(
-  readFileSync(new URL('./src/design-system/legacy.json', import.meta.url), 'utf8'),
+  readFileSync(new URL('./src/shared/design-system/legacy.json', import.meta.url), 'utf8'),
 ).globs;
 const CSS_HOOK_CLASSES = [
   '^hero-glow(--accent)?$',
@@ -78,14 +78,14 @@ const NO_RAW_READ = {
 // alone creates an IntersectionObserver. `no-restricted-properties` catches a bare
 // `history.replaceState(...)`; the selector catches `window.history.*` and
 // `globalThis.history.*`, which `object: 'history'` does not match.
-const URL_STATE_FILE = 'src/lib/url-state.ts';
+const URL_STATE_FILE = 'src/shared/lib/url-state.ts';
 const SLIDE_OBSERVER_FILE = 'src/episodes/components/episode-page/slide-observer.client.tsx';
 /** FE-009 §5.1: the one-shot reveal hook, the only other file allowed an IntersectionObserver. */
-const REVEAL_OBSERVER_FILE = 'src/hooks/use-revealed-on-view.ts';
+const REVEAL_OBSERVER_FILE = 'src/shared/hooks/use-revealed-on-view.ts';
 const HISTORY_WRITE = {
   selector:
     "CallExpression > MemberExpression[object.property.name='history'][property.name=/^(pushState|replaceState)$/]",
-  message: 'Only src/lib/url-state.ts writes browser history; call urlState.navigateTo(id) instead (FE-001).',
+  message: 'Only src/shared/lib/url-state.ts writes browser history; call urlState.navigateTo(id) instead (FE-001).',
 };
 const NEW_OBSERVER = {
   selector: "NewExpression[callee.name='IntersectionObserver']",
@@ -121,7 +121,7 @@ const PURE_VIEW = [
     message: 'A *-view.tsx file is a pure view: no event handlers. Attach them in the interactive part (FE-006).',
   },
   {
-    selector: 'ImportDeclaration[source.value=/(^@\\/hooks\\/|\\.client$)/]',
+    selector: 'ImportDeclaration[source.value=/(^@\\/[a-z-]+\\/hooks\\/|\\.client$)/]',
     message: 'A *-view.tsx file imports no hook and no client leaf: it must render on the server (FE-006).',
   },
 ];
@@ -175,7 +175,7 @@ const allowSize = (size) => ({
     { restrict: [...tokenRestrictions(`(?!${size.replace('.', '\\.')}em\\])`), E3] },
   ],
 });
-const CITATION_FILE = 'src/components/context-drawer/slide-notes.tsx';
+const CITATION_FILE = 'src/shared/page-chrome/context-drawer/slide-notes.tsx';
 const INLINE_CODE_FILE = 'src/episodes/components/slide-master/rich-tags.tsx';
 
 export default tseslint.config(
@@ -243,13 +243,12 @@ export default tseslint.config(
         'error',
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
-          'src/{page-assembly,components,episodes,events,explorable-explanations,pipeline,hooks}/**/*.tsx':
-            OPTIONAL_CLIENT,
+          'src/{page-assembly,episodes,events,explorable-explanations,pipeline,shared}/**/*.tsx': OPTIONAL_CLIENT,
           'src/**/*.ts': '!(*.client)',
         },
         {
           errorMessage:
-            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/components, src/episodes, src/events, src/explorable-explanations, src/pipeline or src/hooks, never under src/app (FE-006).',
+            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/episodes, src/events, src/explorable-explanations, src/pipeline or src/shared, never under src/app (FE-006).',
         },
       ],
     },
@@ -347,7 +346,7 @@ export default tseslint.config(
   {
     // The rule guards the Pages Router; an App Router root layout renders its own <head>,
     // which carries the pre-paint `js` class script (design-ADR-0012 §5).
-    files: ['src/components/site-shell.tsx'],
+    files: ['src/shared/page-chrome/site-shell.tsx'],
     rules: { '@next/next/no-head-element': 'off' },
   },
   {

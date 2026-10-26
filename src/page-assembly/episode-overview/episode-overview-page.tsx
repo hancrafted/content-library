@@ -1,10 +1,10 @@
-import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
+import { episodeRoute } from '@/content-store/catalogue/routes';
 import { EpisodeBrowser, type BrowseLabels } from '@/episodes/components/episode-browser/episode-browser.client';
 import { newestFirst } from '@/episodes/components/episode-browser/episode-browser.pure';
 import { cardLabels } from '@/episodes/components/episode-card/episode-card';
 import { episodeCards } from '@/episodes/components/episode-card/episode-cards';
-import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute } from '@/lib/routes';
+import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { GalleryHorizontalEnd, Layers, LayoutTemplate, Presentation } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

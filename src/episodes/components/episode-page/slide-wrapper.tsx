@@ -1,6 +1,6 @@
 import type { HeaderMode } from '@/episodes/components/slide-master/slide';
 import { SlideHeader, type SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { ComponentPropsWithoutRef } from 'react';
 import { SlideMount } from './slide-mount.client';
 

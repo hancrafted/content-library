@@ -1,9 +1,9 @@
+import { isEpisodeId } from '@/content-store/catalogue/routes';
 import { FORMATS, TAG_IDS } from '@/content-store/schemas/fields';
-import { listEpisodes } from '@/content-store/store';
+import { featuredIds, listEpisodes } from '@/content-store/store';
 import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';
 import { findEpisode } from '@/episodes/lib/registry';
-import { FEATURED, FILTER_TAGS, TAGS } from '@/lib/episode-overview';
-import { isEpisodeId } from '@/lib/routes';
+import { FILTER_TAGS, TAGS } from '@/episodes/lib/tag-looks';
 import de from '@/messages/de.json';
 import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
@@ -17,6 +17,7 @@ import { TAG_ACCENTS, TAG_ICONS } from './episode-visuals';
  */
 
 const TRANSLATIONS = { en, de } as const;
+const FEATURED = featuredIds();
 
 describe('success cases', () => {
   it('fills every Featured slot with a distinct published Episode', () => {

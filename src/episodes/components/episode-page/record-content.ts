@@ -1,3 +1,4 @@
+import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
 import {
   episodeMinutes,
   localizeSlide,
@@ -17,8 +18,7 @@ import {
 } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import { placeSections } from '@/episodes/lib/episode.pure';
-import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
+import type { Locale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
 
 /*

@@ -2,7 +2,7 @@
 
 import { useRevealSteps } from '@/episodes/hooks/use-reveal-steps';
 import { revealedSteps } from '@/episodes/lib/reveal-steps.pure';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { MouseEvent, ReactNode } from 'react';
 import styles from './reveal-steps.module.css';
 
