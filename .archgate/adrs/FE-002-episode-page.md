@@ -5,9 +5,9 @@ title: 'Episode Page'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
 description: 'How an Episode page is built: the Slide is the unit, one folder carrying its own text, composed into Sections by a typed record and rendered by one container; Scene is free JSX, position sets headings, strings and anchors keyed by Slide slug, reading time counted from the Voice script, Episode CSS scoped to its page.'
 ---
 
@@ -55,7 +55,7 @@ flowchart LR
 
 **The kit** gives a Slide `t` (built from the Slide's own messages; its `t.rich` knows `em`, `b`, `code`), `template`, `ref`, `target`, `slideHref`, `locale` and `Title`.
 
-**Reference implementation: `src/components/episodes/page-template/`** is the copy source; the frame layouts are in `src/components/slide-master/`, and the Slide library (`slide-master/`) shows the rest. Both are tooling pages, not Episodes (design-ADR 0016). How to write a Slide lives there and in the feature guides.
+**Reference implementation: `src/components/episodes/episode-template/`** is the copy source; the frame layouts are in `src/components/slide-master/`, and the Slide library (`slide-master/`) shows the rest. Both are tooling pages, not Episodes (design-ADR 0016). How to write a Slide lives there and in the feature guides.
 
 ## Decision
 
@@ -99,7 +99,7 @@ flowchart LR
 
 ### Do's
 
-1. **DO** start an Episode by copying `page-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `episode-template/`: rename the slug; register slug, record and metadata together; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Scene from `SlideFrame`; heading per design-ADR-0012. (Decisions 3 and 4)

@@ -6,7 +6,7 @@ stale_after: 2027-01-11T00:00:00Z
 
 # Episode migration
 
-Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); colour and type: [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/components/episodes/page-template/`. Layouts: the frame components in `src/components/slide-master/` and the Slide library, `src/components/episodes/slide-master/`.
+Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); colour and type: [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/components/episodes/episode-template/`. Layouts: the frame components in `src/components/slide-master/` and the Slide library, `src/components/episodes/slide-master/`.
 
 Each step ends on a completion criterion. Stop at a step only when its criterion holds. Work in a worktree; commit through `/commit`.
 
@@ -36,7 +36,7 @@ Done when: no two slugs match and each Section's first slug names the Section.
 
 ## 3. Copy the template, register the Episode, write its text
 
-Copy `page-template/` to `episodes/<ep>/`, then:
+Copy `episode-template/` to `episodes/<ep>/`, then:
 
 - Delete its Slide folders and its `published-anchors.json`; the anchors bind at publication ([Episode publishing](episode-publishing.md)), not here.
 - Keep `episode.ts` and rename its export to the camelCase slug. Set `slug: '<ep>'` and `sections: []` until step 7; add `youtube: { en, de }` to `episode-metadata.ts` once the video ids exist.
@@ -75,7 +75,7 @@ export const theLostMiddle = slide({
 ```
 
 - The Slide wrapper renders the Slide header from the Slide's own text: the Eyebrow (computed), the `title` (or `heading`) and the `caption`, typed in once ([design-ADR-0012](../adr/0012-slide-header-and-play-once-motion.md)). The Scene is free JSX in a `SlideFrame` holding the visual only; a `<Title>` in it fails the build. The frame layouts (`SectionSlide`, `BasicPageSlide`, `ThreeColumnSlide` in `src/components/slide-master/`) author their own header, for an Episode whose record sets `header: 'authored'`.
-- A section slide's Scene echoes the Hero motif; the Title slide's hero visual is a Slide folder set as the record's `title` (see `page-template/slides/hero/` and `foundations/`).
+- A section slide's Scene echoes the Hero motif; the Title slide's hero visual is a Slide folder set as the record's `title` (see `episode-template/slides/hero/` and `foundations/`).
 - No entrance motion in a Scene: the wrapper fades it up once. Hover emphasis reuses the shared classes in [the design system](../design/design-system.md#hover-vocabulary).
 - A type error from a kit field or from `messages` means the Slide's own files or its declaration are wrong: German must have every English key. Fix them; never cast.
 - The kit is everything a Scene needs:
@@ -84,7 +84,7 @@ export const theLostMiddle = slide({
   - `slideHref('the-lost-middle')`: the localized link to another Slide of this Episode; a slug not in the Episode fails the build.
   - `locale`: for `Intl` number or date formatting.
   - `ref`, `target`: notes, below; `Title` only on an Episode with `header: 'authored'`.
-- A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/hooks/` and `src/lib/` (step 6). A server part only this Slide uses sits in its folder (see `page-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit.
+- A Slide folder imports only its own files and the global shared locations: `src/components/slide-master/`, `src/components/slide-shared/`, `src/components/ui/`, `src/hooks/`, `src/lib/`; its `*.client.tsx` widgets reach only their own folder, `src/hooks/` and `src/lib/` (step 6). A server part only this Slide uses sits in its folder (see `episode-template/slides/what-comes-next/statement.tsx`); a part two Slides share goes in `src/components/slide-shared/`, plain props, no kit.
 - Colour, size and weight come from tokens only ([FE-011](../../.archgate/adrs/FE-011-design-tokens.md#dos-and-donts), reference in [the design system](../design/design-system.md)): `text-foreground`, `text-machine`, `var(--…)`; text sizes `text-body`, `text-caption`, `text-subheading`, `text-heading`. Never `bg-amber-500`, `text-xs`, `text-[13px]`, `font-bold` or a hex value; a Slide's own colour is a token in its CSS module with a `:global(.dark)` value. Lint and `archgate check` refuse the rest.
 - A Slide's own CSS is a CSS module in its folder, combined with Tailwind via `cn()` (see `ai-token-economy/slides/motivation/freelancer-cards.module.css`). Only a token remap that the chrome reads too (the Title slide glow, `<em>`, the talk player) goes in one Episode stylesheet beside the Episode file, every selector under `[data-episode='<ep>']` (see `maintaining-markdown-for-ai/palette.css`). Never style one Slide from it.
 - A `slide-shared` part reaches only other slide-shared parts, the UI kit and `src/lib` (dependency-cruiser rule `slide-shared-reaches-only-ui-and-lib`, [FE-007 §5](../../.archgate/adrs/FE-007-module-layering.md#5-a-slide-folder-imports-only-global-shared-code)). A popover uses the shared `usePopoverPlacement` hook; see [Episode chrome](episode-chrome.md).

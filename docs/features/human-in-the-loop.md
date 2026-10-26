@@ -1,12 +1,12 @@
 ---
 type: feature-guide
-title: Human-in-the-loop Shared visual
+title: Human-in-the-loop Explorable explanation
 stale_after: 2027-04-22T00:00:00Z
 ---
 
-# Human-in-the-loop Shared visual
+# Human-in-the-loop Explorable explanation
 
-Read before placing, changing or testing the human-in-the-loop Shared visual (`src/components/slide-shared/human-in-the-loop/`). To write a Workflow file, read [agentic-workflow.md](agentic-workflow.md). Binding rules: [FE-012 Shared Visual Content](../../.archgate/adrs/FE-012-shared-visual-content.md), [FE-006](../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind. A **Workflow** is defined in the [glossary](../../GLOSSARY.md).
+Read before placing, changing or testing the human-in-the-loop Explorable explanation (`src/components/explorable-explanations/human-in-the-loop/`). To write a Workflow file, read [agentic-workflow.md](agentic-workflow.md). Binding rules: [FE-012 Explorable Explanation Content](../../.archgate/adrs/FE-012-explorable-explanation-content.md), [FE-006](../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind. A **Workflow** is defined in the [glossary](../../GLOSSARY.md).
 
 ## Placing it
 
@@ -32,5 +32,5 @@ A Workflow is one YAML file per language; what is written renders as written. Th
 ## Testing
 
 - Fast suite: `*.pure.test.ts` and `*.test.ts` beside the files (Workflow loading, the pair structure, view model, state, markdown handoffs).
-- Browser seam: `human-in-the-loop.browser.test.ts`, local only (`npm run test:browser`), drives the Slides Episode's "Human in the loop" Slide in the shared headless Chrome: the pill toolbar, a stage's Try it modal (title with learning goal, the simple/technical toggle and X, two columns on desktop with the details following the focused task, full screen on a phone with the details folded under each task, Chat 1..N tabs and the Technical orchestrator, "Open in" written out or icon only, collapsed prompts, copy, chat links, "Copied", backdrop, X and Escape close), Compare's one multiple research slot with its three samples, one example per Research chat, every stage of both Workflows in English and in German (`/de/episodes/slides/`) with no unfilled marker, Vacation with its own card lines, a broken and a valid upload, axe in light and dark, and phone width. `HITL_URL` names the page (default `http://localhost:3000/episodes/slides/`), served by `next dev` or `npm run preview`.
+- Browser seam: `human-in-the-loop.browser.test.ts`, local only (`npm run test:browser`), drives the Explorable explanations page's "Human in the loop" Slide in the shared headless Chrome: the pill toolbar, a stage's Try it modal (title with learning goal, the simple/technical toggle and X, two columns on desktop with the details following the focused task, full screen on a phone with the details folded under each task, Chat 1..N tabs and the Technical orchestrator, "Open in" written out or icon only, collapsed prompts, copy, chat links, "Copied", backdrop, X and Escape close), Compare's one multiple research slot with its three samples, one example per Research chat, every stage of both Workflows in English and in German (`/de/episodes/explorable-explanations/`) with no unfilled marker, Vacation with its own card lines, a broken and a valid upload, axe in light and dark, and phone width. `HITL_URL` names the page (default `http://localhost:3000/episodes/explorable-explanations/`), served by `next dev` or `npm run preview`.
 - Episode text captures (`tests/…/episode-text`) include the toolbar words; recapture them when a word changes.

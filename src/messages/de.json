@@ -29,7 +29,7 @@
   },
   "landing": {
     "title": "Start",
-    "link": "Seitenvorlage",
+    "link": "Episoden-Vorlage",
     "hero": {
       "eyebrow": "hancrafted / Menschlich geführt. KI-beschleunigt.",
       "offers": {
@@ -422,10 +422,10 @@
     "intro": "Interaktive Visualisierungen, die ich gebaut habe, weil ich nie wieder eine PowerPoint-Präsentation basteln wollte.",
     "references": {
       "label": "Referenzen",
-      "pageTemplate": "Episoden-Seitenvorlage",
+      "episodeTemplate": "Episoden-Vorlage",
       "workshopTemplate": "Workshop-Vorlage",
       "slideMaster": "Slide-Master",
-      "slides": "Folien"
+      "explorableExplanations": "Interaktive Erklärungen"
     }
   },
   "slideHeader": {

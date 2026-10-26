@@ -1,15 +1,24 @@
 // Post-build check of the tooling pages (design-ADR 0016 decisions 12 and 13): the authoring benches keep a
 // previewable page in both locales, ask search engines not to index it, stay out of the sitemap and out of every
-// Episode list; `slide-layouts` is gone, with nothing linking to it.
+// Episode list; `slide-layouts` is gone, with nothing linking to it; the renamed pages keep their old links alive.
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { ROUTES } from '../../src/lib/routes';
-import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
+import { episodeRoute, ROUTES } from '../../src/lib/routes';
+import { exportedFile, exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
-const TOOLING = ['page-template', 'workshop-template', 'slide-master', 'slides'] as const;
+const TOOLING = ['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'] as const;
+
+/**
+ * Every tooling page renamed with the Explorable explanation vocabulary, and its new slug. Written out: the old pages
+ * are gone.
+ */
+const RENAMED = [
+  { old: 'page-template', slug: 'episode-template' },
+  { old: 'slides', slug: 'explorable-explanations' },
+] as const;
 
 const PAGES = TOOLING.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(`/episodes/${slug}`, locale) })),
@@ -86,5 +95,29 @@ describe('slide-layouts', () => {
     const linking = htmlFiles().filter((file) => readFileSync(join(OUT_DIR, file), 'utf8').includes('slide-layouts'));
     // ASSERT
     expect(linking).toEqual(expected);
+  });
+});
+
+describe('old tooling page links', () => {
+  it.each(LOCALES)('I open the old page-template or slides link and land on the renamed page (%s)', (locale) => {
+    // ARRANGE
+    const expected = RENAMED.map(({ old, slug }) => ({
+      from: `${localizePath(`/episodes/${old}`, locale)}/`,
+      to: `${localizePath(episodeRoute(slug), locale)}/`,
+      status: '301',
+    }));
+    // ACT
+    const rules = redirectRules();
+    // ASSERT
+    expect(rules).toEqual(expect.arrayContaining(expected));
+  });
+
+  it.each(LOCALES)('exports no page under an old slug for %s', (locale) => {
+    // ARRANGE
+    const files = RENAMED.map(({ old }) => join(OUT_DIR, exportedFile(localizePath(`/episodes/${old}`, locale))));
+    // ACT
+    const exported = files.filter((file) => existsSync(file));
+    // ASSERT
+    expect(exported).toEqual([]);
   });
 });

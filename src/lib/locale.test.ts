@@ -6,28 +6,28 @@ const switchLocale = (pathname: string, target: Locale) => localizePath(stripLoc
 describe('success cases', () => {
   it('keeps the default locale unprefixed', () => {
     // ARRANGE
-    const logicalPath = '/episode/page-template';
+    const logicalPath = '/episode/episode-template';
     // ACT
     const url = localizePath(logicalPath, 'en');
     // ASSERT
-    expect(url).toBe('/episode/page-template');
+    expect(url).toBe('/episode/episode-template');
   });
 
   it('prefixes a non-default locale', () => {
     // ARRANGE
-    const logicalPath = '/episode/page-template';
+    const logicalPath = '/episode/episode-template';
     // ACT
     const url = localizePath(logicalPath, 'de');
     // ASSERT
-    expect(url).toBe('/de/episode/page-template');
+    expect(url).toBe('/de/episode/episode-template');
   });
 
   it('appends a fragment after the localized path', () => {
     // ARRANGE
-    const logicalPath = '/episode/page-template';
+    const logicalPath = '/episode/episode-template';
     const fragment = 'foundations--why-a-template';
-    const expectedEnglish = '/episode/page-template#foundations--why-a-template';
-    const expectedGerman = '/de/episode/page-template#foundations--why-a-template';
+    const expectedEnglish = '/episode/episode-template#foundations--why-a-template';
+    const expectedGerman = '/de/episode/episode-template#foundations--why-a-template';
     // ACT
     const english = localizePath(logicalPath, 'en', fragment);
     const german = localizePath(logicalPath, 'de', fragment);
@@ -38,20 +38,20 @@ describe('success cases', () => {
 
   it('switches to the same logical page in the other locale', () => {
     // ARRANGE
-    const english = '/episode/page-template';
-    const german = '/de/episode/page-template';
+    const english = '/episode/episode-template';
+    const german = '/de/episode/episode-template';
     // ACT
     const toGerman = switchLocale(english, 'de');
     const toEnglish = switchLocale(german, 'en');
     // ASSERT
-    expect(toGerman).toBe('/de/episode/page-template');
-    expect(toEnglish).toBe('/episode/page-template');
+    expect(toGerman).toBe('/de/episode/episode-template');
+    expect(toEnglish).toBe('/episode/episode-template');
   });
 
   it('reads the locale from a pathname', () => {
     // ARRANGE
-    const german = '/de/episode/page-template';
-    const english = '/episode/page-template';
+    const german = '/de/episode/episode-template';
+    const english = '/episode/episode-template';
     // ACT
     const fromGerman = localeFromPathname(german);
     const fromEnglish = localeFromPathname(english);
@@ -63,8 +63,8 @@ describe('success cases', () => {
   it('marks a section active on its pages in either locale', () => {
     // ARRANGE
     const section = '/episode';
-    const english = '/episode/page-template';
-    const german = '/de/episode/page-template';
+    const english = '/episode/episode-template';
+    const german = '/de/episode/episode-template';
     // ACT
     const activeInEnglish = isSectionActive(english, section);
     const activeInGerman = isSectionActive(german, section);
@@ -142,19 +142,19 @@ describe('edge cases', () => {
 
   it('ignores trailing slashes from a trailingSlash export', () => {
     // ARRANGE
-    const pathname = '/de/episode/page-template/';
+    const pathname = '/de/episode/episode-template/';
     // ACT
     const logical = stripLocale(pathname);
     // ASSERT
-    expect(logical).toBe('/episode/page-template');
+    expect(logical).toBe('/episode/episode-template');
   });
 
   it('switching to the current locale is a no-op', () => {
     // ARRANGE
-    const pathname = '/de/episode/page-template';
+    const pathname = '/de/episode/episode-template';
     // ACT
     const url = switchLocale(pathname, 'de');
     // ASSERT
-    expect(url).toBe('/de/episode/page-template');
+    expect(url).toBe('/de/episode/episode-template');
   });
 });

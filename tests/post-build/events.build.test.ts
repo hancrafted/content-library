@@ -13,7 +13,7 @@ import { isPastEvent } from '../../src/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
 import { episodeRoute, eventEpisodeRoute, eventRoute, ROUTES } from '../../src/lib/routes';
-import { exportedPage, OUT_DIR } from './exported-pages';
+import { exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
 const EVENTS = listEvents();
@@ -80,17 +80,6 @@ const WORDS: Record<
     back: 'Zurück zur Veranstaltung',
   },
 };
-
-/** The `_redirects` rules as source, target and status, comments and blank lines dropped. */
-function redirectRules(): { from: string; to: string; status: string }[] {
-  return readFileSync(join(OUT_DIR, '_redirects'), 'utf8')
-    .split('\n')
-    .filter((line) => line.trim() !== '' && !line.startsWith('#'))
-    .map((line) => {
-      const [from, to, status] = line.trim().split(/\s+/);
-      return { from, to, status };
-    });
-}
 
 describe('old Workshop links', () => {
   it.each(LOCALES)('I open the old workshop link and land on the Event page (%s)', (locale) => {

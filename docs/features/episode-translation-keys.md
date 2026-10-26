@@ -38,13 +38,13 @@ A Section's own slide is a Slide like any other: its `title` names the Section a
 | `voiceScript.segments.<seg>.script`   | the spoken text                                                                          | Voice script segment             |
 | `voiceScript.segments.<seg>.bridge`   | closing line handing over to the next Section; only if the Slide declares `bridge: true` | Voice script segment             |
 
-`<note>`, `<seg>`, `<column>` and `<source>` are kebab-case slugs. A Slide may add a leaf no role describes (the untitled Slide in page-template keeps its sentence under `statement`); add a role to the table in the same change when a new Slide layout needs one.
+`<note>`, `<seg>`, `<column>` and `<source>` are kebab-case slugs. A Slide may add a leaf no role describes (the untitled Slide in episode-template keeps its sentence under `statement`); add a role to the table in the same change when a new Slide layout needs one.
 
 The record, not the Translation file, holds what is not a string: a note's `slug` and `target`, a source's `slug` and `url`, an image's `src`, a segment's `slug` and `bridge` flag. Neither holds a time: a Slide's minutes and each segment's span are counted from the `script` and `bridge` words. Slide text wraps a phrase in `<marker>…</marker>`, read with `t.rich('prose', { marker: marker('<note>') })`, to follow it with a Context marker to a note of the same Slide, or in `<ref>…</ref>`, read with `ref('<note>')`, to underline it. A marker's accessible name is the note's `header` in the site-wide `contextDrawer.markerNote`. Chrome shared by every Episode (for example `tableOfContents.title`) sits in the site-wide files and is not bound by this table.
 
-## Worked example: page-template
+## Worked example: episode-template
 
-`src/components/episodes/page-template/slides/why-a-template/slide.tsx` declares slug `why-a-template`, its messages `{ en, de }` imported from `./i18n/`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in its own `i18n/en.json`:
+`src/components/episodes/episode-template/slides/why-a-template/slide.tsx` declares slug `why-a-template`, its messages `{ en, de }` imported from `./i18n/`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in its own `i18n/en.json`:
 
 ```text
 title
@@ -72,7 +72,7 @@ Two more Slides of the same Episode, as excerpts, and the Episode's own file:
 ```text
 slides/foundations/i18n/en.json         title: section slide, names the first Section
 slides/what-comes-next/i18n/en.json     statement: untitled Slide, no `title`, so no table-of-contents entry
-page-template/i18n/en.json              title, caption, description
+episode-template/i18n/en.json              title, caption, description
 ```
 
 ## Worked notes
@@ -82,7 +82,7 @@ page-template/i18n/en.json              title, caption, description
 - Template: a string a client widget completes after the reader acts keeps a plain `{name}` placeholder (`"showAll": "Show all {count}"`, no ICU plural; keys are camelCase, never `show-all`). The Slide reads it with `template('showAll')` and passes it as a prop; the widget renders `fillTemplate(label, { count })`. `template` accepts only a string leaf of the Slide's own file (or subtree).
 - A Section of one Slide needs no extra key: its section slide holds `title` and `caption` like any other Slide.
 - A `tsc` error from `t`, `ref` or `target` means the Translation file or the declaration is wrong; fix it, never cast ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
-- `src/components/episodes/page-template/` is the copy source for a new Episode; the frame components in `src/components/slide-master/` and the Slide library, `src/components/episodes/slide-master/`, hold the Slide layouts.
+- `src/components/episodes/episode-template/` is the copy source for a new Episode; the frame components in `src/components/slide-master/` and the Slide library, `src/components/episodes/slide-master/`, hold the Slide layouts.
 
 ## Episode overview entries
 
@@ -120,4 +120,4 @@ An Event is a record in the content store that holds no string ([Events](events.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-`page-template`, `slide-master` and `slides` are tooling pages (`TOOLING_SLUGS` in `src/lib/tooling-pages.ts`, records in `src/components/episodes/tooling-pages.ts`), not Episodes: they are not in the Episode registry or overview, are `noindex`, stay out of the sitemap and need no metadata.
+`episode-template`, `workshop-template`, `slide-master` and `explorable-explanations` are tooling pages (`TOOLING_SLUGS` in `src/lib/tooling-pages.ts`, records in `src/components/episodes/tooling-pages.ts`), not Episodes: they are not in the Episode registry or overview, are `noindex`, stay out of the sitemap and need no metadata.

@@ -1,10 +1,10 @@
 import type { EpisodeComposition } from '@/components/slide-master/slide';
 import { isToolingSlug, type ToolingSlug } from '@/lib/tooling-pages';
 import { notFound } from 'next/navigation';
-import { pageTemplate } from './page-template/episode';
+import { episodeTemplate } from './episode-template/episode';
+import { explorableExplanations } from './explorable-explanations/episode';
 import { findEpisode } from './registry';
 import { slideMaster } from './slide-master/episode';
-import { slides } from './slides/episode';
 import { workshopTemplate } from './workshop-template/episode';
 
 /**
@@ -13,10 +13,10 @@ import { workshopTemplate } from './workshop-template/episode';
  * `TOOLING_SLUGS`, so a slug without a record, or a key that differs from its record's slug, fails `tsc`.
  */
 const TOOLING_PAGES: { readonly [S in ToolingSlug]: EpisodeComposition & { readonly slug: S } } = {
-  'page-template': pageTemplate,
+  'episode-template': episodeTemplate,
   'workshop-template': workshopTemplate,
   'slide-master': slideMaster,
-  slides,
+  'explorable-explanations': explorableExplanations,
 };
 
 export function findToolingPage(slug: string): EpisodeComposition<ToolingSlug> {

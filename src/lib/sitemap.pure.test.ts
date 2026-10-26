@@ -96,7 +96,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it.each(['page-template', 'workshop-template', 'slide-master', 'slides'])(
+  it.each(['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'])(
     'never lists the tooling page %s in either locale',
     (slug) => {
       // ARRANGE

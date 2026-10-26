@@ -231,10 +231,10 @@ describe('never-too-early-sales', () => {
   });
 });
 
-describe('page-template', () => {
+describe('episode-template', () => {
   it.each(LOCALES)('has notes on why-a-template alone and the empty state elsewhere in %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath(episodeRoute('page-template'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('episode-template'), locale));
     // ACT
     const withNotes = $('#context-panel-notes [data-context-for]')
       .toArray()
@@ -246,7 +246,7 @@ describe('page-template', () => {
 
   it.each(LOCALES)('wraps phrases in context references that resolve to their own note, in %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath(episodeRoute('page-template'), locale));
+    const $ = exportedPage(localizePath(episodeRoute('episode-template'), locale));
     const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
     // ACT
     const resolved = refs.map((ref) => {

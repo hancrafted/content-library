@@ -77,10 +77,10 @@ off-screen pausing, and resize during flight.
 
 English is the default locale and is served **unprefixed**; German lives under `/de`.
 
-| English                  | German                      |
-| ------------------------ | --------------------------- |
-| `/`                      | `/de`                       |
-| `/episode/page-template` | `/de/episode/page-template` |
+| English                     | German                         |
+| --------------------------- | ------------------------------ |
+| `/`                         | `/de`                          |
+| `/episode/episode-template` | `/de/episode/episode-template` |
 
 Static export runs no middleware, so locales are an explicit route tree; next-intl only supplies the strings:
 

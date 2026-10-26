@@ -134,9 +134,9 @@ describe('edge cases', () => {
       { slug: 'maintaining-markdown-for-ai', status: 'published' },
       { slug: 'ai-token-economy', status: 'upcoming' },
     ];
-    const expected = ['page-template', 'maintaining-markdown-for-ai'];
+    const expected = ['episode-template', 'maintaining-markdown-for-ai'];
     // ACT
-    const bound = boundSlugs(['page-template', 'maintaining-markdown-for-ai', 'ai-token-economy'], episodes);
+    const bound = boundSlugs(['episode-template', 'maintaining-markdown-for-ai', 'ai-token-economy'], episodes);
     // ASSERT
     expect(bound).toEqual(expected);
   });

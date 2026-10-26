@@ -96,7 +96,7 @@ const visual = slide({ slug: 'visual', messages: VISUAL, content: (kit) => seen(
 /** The Episode a test localizes into: the walk's real placement of these Sections. */
 function episodeOf(locale: Locale, sections: readonly (readonly [Slide, ...Slide[]])[]): EpisodeContext {
   return {
-    episode: 'page-template',
+    episode: 'episode-template',
     locale,
     placed: placeSections<Slide>(sections).flat(),
     referenceLabels: {
@@ -183,8 +183,8 @@ describe('success cases', () => {
   it('links each Slide slug to the localized anchor the walk placed it at', () => {
     // ARRANGE
     const expected = [
-      '/de/episodes/page-template#foundations--why-a-template',
-      '/de/episodes/page-template#foundations',
+      '/de/episodes/episode-template#foundations--why-a-template',
+      '/de/episodes/episode-template#foundations',
     ];
     // ACT
     const kit = kitOf(localized('de')[2]);
@@ -195,7 +195,7 @@ describe('success cases', () => {
 
   it('links each Slide slug on the page an Event presents the Episode at, so the attendee stays under the Event', () => {
     // ARRANGE
-    const route = '/events/2026-10-23-axel-agentic-workflow/episodes/page-template';
+    const route = '/events/2026-10-23-axel-agentic-workflow/episodes/episode-template';
     const expected = `/de${route}#foundations--why-a-template`;
     const episode = { ...episodeOf('de', [[foundations, whyATemplate, visual]]), route };
     // ACT
@@ -305,7 +305,7 @@ describe('success cases', () => {
     });
     const messages = { title: 'Page template', caption: 'The smallest Episode.', description: 'A test.' };
     const record = episode({
-      slug: 'page-template',
+      slug: 'episode-template',
       messages: { en: messages, de: messages },
       sections: [
         [foundations, whyATemplate],

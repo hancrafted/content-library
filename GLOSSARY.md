@@ -43,7 +43,7 @@ _Avoid_: Clip, recording link
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
 
-**Tooling page**: an authoring bench with a previewable page at `/episodes/<slug>/`, composed of Slides like an Episode but no Episode: the Episode template (`page-template`), the Workshop template (`workshop-template`), the Slide library (`slide-master`) and the Explorable explanations page (`slides`). It has no visibility and no status, is `noindex`, never in the sitemap, and in no Episode list: not the registry, the overview or Upcoming Episodes. Listed in `TOOLING_SLUGS` (`src/lib/tooling-pages.ts`).
+**Tooling page**: an authoring bench with a previewable page at `/episodes/<slug>/`, composed of Slides like an Episode but no Episode: the Episode template (`episode-template`), the Workshop template (`workshop-template`), the Slide library (`slide-master`) and the Explorable explanations page (`explorable-explanations`). It has no visibility and no status, is `noindex`, never in the sitemap, and in no Episode list: not the registry, the overview or Upcoming Episodes. Listed in `TOOLING_SLUGS` (`src/lib/tooling-pages.ts`).
 _Avoid_: Layout reference, reference Episode
 
 **Workshop template**: the tooling page a new Event's opening Episode is copied from (`src/components/episodes/workshop-template/`): a Title slide, then agenda, in-scope, out-of-scope and orga Slides, every word a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
@@ -72,13 +72,13 @@ _Avoid_: Card, panel; page, which means the Next.js route the whole Episode rend
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
 
-**Preset**: one Slide's settings of a Shared visual: the view it opens in and what it lights, so the Slide tells its own story at rest.
+**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Each lives in its own folder under `src/components/explorable-explanations/`, apart from the plain shared parts in `slide-shared/`.
+_Avoid_: Shared visual, cornerstone component, shared component, widget
+
+**Preset**: one Slide's settings of an Explorable explanation: the view it opens in and what it lights, so the Slide tells its own story at rest.
 _Avoid_: State, configuration, variant
 
-**Shared visual**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing.
-_Avoid_: Cornerstone component, shared component, widget
-
-**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Shared visual, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
+**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Explorable explanation, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
 _Avoid_: Pipeline, flow, process
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.
