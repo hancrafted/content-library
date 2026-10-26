@@ -1,14 +1,7 @@
 import { progressKeyOf, readProgressFile, type Refusal } from '@/lib/progress.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import type {
-  DiagramProps,
-  HumanInTheLoopData,
-  ModalProps,
-  ProgressActions,
-  ProgressNote,
-  ToolbarProps,
-  UiWords,
-} from './human-in-the-loop.types';
+import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps, UiWords } from './human-in-the-loop.types';
+import type { ProgressActions, ProgressNote } from './progress.types';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { markerValuesOf, resultsOf, runOf, type Run } from './workflow-run.pure';
@@ -101,21 +94,13 @@ export interface Slices {
 /** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
   const { data, state, workflow, view } = shown;
-  const { words, readonly } = data;
+  const { words } = data;
   const toolbar = toolbarOf(shown, on);
   const { file } = workflow;
   const run = runOf(file, { results: state.slotValues, teaching: state.teaching });
   return {
     toolbar,
-    diagram: {
-      workflow,
-      readonly,
-      onOpenStage: on.onOpenStage,
-      view: state.view,
-      rounds: roundsOf(workflow, run),
-      slots: data.diagram,
-      words,
-    },
+    diagram: diagramOf(shown, on, run),
     modal: {
       stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
       run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
@@ -127,6 +112,19 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       onClose: on.onClose,
       onSlots: (values) => on.onSlots(resultsOf(file, values)),
     },
+  };
+}
+
+function diagramOf({ data, state, workflow }: Shown, on: Callbacks, run: Run): DiagramProps {
+  return {
+    workflow,
+    readonly: data.readonly,
+    onOpenStage: on.onOpenStage,
+    view: state.view,
+    rounds: roundsOf(workflow, run),
+    run,
+    slots: data.diagram,
+    words: data.words,
   };
 }
 

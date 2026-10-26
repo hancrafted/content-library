@@ -11,8 +11,9 @@ import {
   shownWorkflow,
   slicesOf,
 } from './human-in-the-loop-slices.pure';
-import type { HumanInTheLoopData, ProgressActions, ProgressNote } from './human-in-the-loop.types';
+import type { HumanInTheLoopData } from './human-in-the-loop.types';
 import { ModalPart } from './modal-part.client';
+import type { ProgressActions, ProgressNote } from './progress.types';
 import { saveFile } from './save-file';
 import { ToolbarPart } from './toolbar-part.client';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';

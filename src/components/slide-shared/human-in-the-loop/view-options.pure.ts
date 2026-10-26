@@ -4,19 +4,15 @@ import type { View } from './workflow-state.pure';
 export interface ViewOption {
   readonly view: View;
   readonly label: string;
-  /** Built yet? A view that is not stays in the control, disabled, so the three-way shape is already visible. */
-  readonly enabled: boolean;
-  /** The tooltip of a disabled view. */
-  readonly tip?: string;
 }
 
-/** The views the diagram can show: Presentation and Detailed; Hands-on (#385) is drawn disabled until it exists. */
+/** The views the diagram can show, in the order of the control: Presentation, Detailed, Hands-on. */
 export function viewOptions(
-  words: Pick<UiWords, 'viewPresentation' | 'viewDetailed' | 'viewHandson' | 'viewSoon'>,
+  words: Pick<UiWords, 'viewPresentation' | 'viewDetailed' | 'viewHandson'>,
 ): readonly ViewOption[] {
   return [
-    { view: 'presentation', label: words.viewPresentation, enabled: true },
-    { view: 'detailed', label: words.viewDetailed, enabled: true },
-    { view: 'handson', label: words.viewHandson, enabled: false, tip: words.viewSoon },
+    { view: 'presentation', label: words.viewPresentation },
+    { view: 'detailed', label: words.viewDetailed },
+    { view: 'handson', label: words.viewHandson },
   ];
 }

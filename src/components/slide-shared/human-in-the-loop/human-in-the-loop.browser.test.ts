@@ -188,7 +188,7 @@ test.describe('success cases', () => {
     await expect(root).not.toContainText(/Watch|Try it yourself/);
   });
 
-  test('opens in the Presentation view: a card per stage, Hands-on disabled, and nothing sideways on a phone', async ({
+  test('opens in the Presentation view: a card per stage, all three views offered, and nothing sideways on a phone', async ({
     page,
   }) => {
     // ARRANGE
@@ -202,7 +202,7 @@ test.describe('success cases', () => {
     await expect(root).toHaveAttribute('data-view', 'presentation');
     await expect(root.locator('[data-stage-card]')).toHaveCount(stages - 1);
     await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
-    await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Hands-on']);
+    await expect(view.locator('[data-view-option]')).toHaveText(['Presentation', 'Detailed', 'Hands-on']);
     expect(await sideways()).toBeLessThanOrEqual(0);
   });
 
@@ -225,6 +225,30 @@ test.describe('success cases', () => {
     await expect(modal).toHaveAttribute('data-stage', 'research');
     await page.keyboard.press('Escape');
     await expect(card).toBeFocused();
+  });
+
+  test('pasting a result in the popover updates the Hands-on view: the job is done, then checked, and the rounds take the pasted titles', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# Tickets\n## Tickets\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
+    const { root, modal } = await open(page, 'light');
+    await root.locator('[data-view-option="handson"]').click();
+    const tickets = root.locator('[data-job-card="tickets"] [data-state]');
+    const titles = root.locator('[data-bracket] [data-round-title]');
+    // ACT
+    await expect(root).toHaveAttribute('data-view', 'handson');
+    await expect(tickets).toHaveAttribute('data-state', 'open');
+    await root.locator('button[data-try-job="tickets"]').click();
+    await field(modal, 'tickets').fill(pasted);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    // ASSERT
+    await expect(tickets).toHaveAttribute('data-state', 'done');
+    await expect(titles).toHaveText(['Camper van', 'Cabin', 'Hostel']);
+    await root.locator('button[data-try-job="tickets"]').click();
+    await modal.getByLabel('I checked this result').check();
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await expect(tickets).toHaveAttribute('data-state', 'checked');
   });
 
   test('opens a stage as a stepper: the stage title, the first job open, its prompt copied with no marker left', async ({

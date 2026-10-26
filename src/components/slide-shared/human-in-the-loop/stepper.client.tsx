@@ -33,8 +33,31 @@ interface StepItemProps {
   readonly slots: SlotState;
 }
 
+function Review({ item, kit, slots, first }: Omit<StepItemProps, 'at'> & { first: number }) {
+  const { job, reviewSteps } = item;
+  if (reviewSteps.length === 0) return null;
+  return (
+    <>
+      {job.goal.review && (
+        <p data-review-goal="" className="text-caption text-muted-foreground">
+          {job.goal.review}
+        </p>
+      )}
+      <ChatTabs
+        steps={reviewSteps}
+        task={job.task}
+        kind="review"
+        kit={kit}
+        slots={slots}
+        first={first}
+        checkedAs={item.checkedAs}
+      />
+    </>
+  );
+}
+
 function StepItem({ item, at, kit, slots }: StepItemProps) {
-  const { job, doSteps, reviewSteps } = item;
+  const { job, doSteps } = item;
   const [lead] = doSteps;
   const reviewAt = (lead ? contextCount(lead, job.task, kit) + 1 : 0) + 1;
   return (
@@ -45,14 +68,7 @@ function StepItem({ item, at, kit, slots }: StepItemProps) {
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-4 sm:pl-10">
         {doSteps.length > 0 && <ChatTabs steps={doSteps} task={job.task} kind="do" kit={kit} slots={slots} first={1} />}
-        {reviewSteps.length > 0 && job.goal.review && (
-          <p data-review-goal="" className="text-caption text-muted-foreground">
-            {job.goal.review}
-          </p>
-        )}
-        {reviewSteps.length > 0 && (
-          <ChatTabs steps={reviewSteps} task={job.task} kind="review" kit={kit} slots={slots} first={reviewAt} />
-        )}
+        <Review item={item} kit={kit} slots={slots} first={reviewAt} />
       </AccordionContent>
     </AccordionItem>
   );

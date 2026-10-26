@@ -1,8 +1,9 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
+import type { ProgressActions, ProgressNote } from './progress.types';
 import type { ControlMap } from './toolbar-controls.pure';
-import type { StageRun } from './workflow-run.pure';
+import type { Run, StageRun } from './workflow-run.pure';
 import type { Level, View } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
@@ -19,13 +20,12 @@ export interface UiWords {
   readonly workflow: string;
   /** The Chat · CLI control: its group name, each segment's label and its tooltip. */
   readonly level: string;
-  /** The view control: its group name and tooltip, each view's label, and the tooltip of a view not built yet. */
+  /** The view control: its group name and tooltip, and each view's label. */
   readonly view: string;
   readonly viewTip: string;
   readonly viewPresentation: string;
   readonly viewDetailed: string;
   readonly viewHandson: string;
-  readonly viewSoon: string;
   /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
   readonly sendBack: string;
@@ -57,6 +57,8 @@ export interface UiWords {
   readonly resultPlaceholder: string;
   /** The checkbox label of a final job that hands nothing on. */
   readonly markDone: string;
+  /** The checkbox label under a review: the viewer says they ran it and the result holds. */
+  readonly markChecked: string;
   readonly download: string;
   /** The note over the toolbar when saved progress is stale or could not be written, and its buttons. */
   readonly noteStale: string;
@@ -112,6 +114,9 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly newTab: string;
+  /** The Hands-on view's marks: a job not started and a job whose result is in (a reviewed one reads `checked`). */
+  readonly stateOpen: string;
+  readonly stateDone: string;
 }
 
 /** A Slide's words, laid over the visual's labels key by key. A Workflow has no words to override: it is written in one language. */
@@ -174,23 +179,8 @@ export interface DiagramProps {
   readonly view: View;
   /** Rounds drawn per repeated stage, by stage id: the run model's count, else the teaching cap. */
   readonly rounds: Readonly<Record<string, number>>;
-}
-
-/** The note about saved progress: an entry of an edited Workflow waits for a choice, or storage refused a write. */
-export interface ProgressNote {
-  readonly kind: 'stale' | 'unsaved';
-  /** Saves the old entry (stale) or the current run (unsaved) as a file. */
-  readonly onDownload: () => void;
-  /** Forgets the old entry; stale only. */
-  readonly onDiscard: () => void;
-}
-
-/** What the toolbar does with the run of the shown Workflow; none for an uploaded one, whose run is not kept. */
-export interface ProgressActions {
-  /** Saves the current run as a YAML file. */
-  readonly onDownload: () => void;
-  /** The text of a progress file the viewer chose; the parent checks it against the shown Workflow. */
-  readonly onUpload: (yaml: string) => void;
+  /** What the viewer has done, from the run model: the Hands-on view draws it, the other views ignore it. */
+  readonly run?: Run;
 }
 
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */

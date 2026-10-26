@@ -1,5 +1,6 @@
 import { roundStep } from './workflow-prompts.pure';
 import type { JobState, RoundRun, StageRun } from './workflow-run.pure';
+import { checkedKey } from './workflow-run.pure';
 import type { JobModalView, StageView } from './workflow-view.pure';
 
 type Steps = JobModalView['task']['steps'];
@@ -14,6 +15,8 @@ export interface Item {
   readonly round?: Pick<RoundRun, 'number' | 'title'>;
   /** Where the run says the job stands. */
   readonly state: JobState;
+  /** The result key the viewer's "I checked it" is written to: the run model reads the job as checked from it. */
+  readonly checkedAs: string;
 }
 
 const split = (job: JobModalView) => ({
@@ -21,7 +24,7 @@ const split = (job: JobModalView) => ({
   reviewSteps: job.task.steps.filter((s) => s.id === 'review'),
 });
 
-function roundItems(job: JobModalView, round: RoundRun, state: JobState): Item {
+function roundItems(job: JobModalView, round: RoundRun, at: { stage: string; state: JobState }): Item {
   const share = { previous: job.task.previous, output: job.task.output };
   const { doSteps, reviewSteps } = split(job);
   const make = (step: Steps[number]) => roundStep(step, round, share);
@@ -31,7 +34,8 @@ function roundItems(job: JobModalView, round: RoundRun, state: JobState): Item {
     doSteps: doSteps.map(make),
     reviewSteps: reviewSteps.map(make),
     round: { number: round.number, title: round.title },
-    state,
+    state: at.state,
+    checkedAs: checkedKey(at.stage, job.id, round.number),
   };
 }
 
@@ -40,8 +44,16 @@ export function itemsOf(stage: StageView, run: StageRun): Item[] {
   const stateOf = (id: string, jobs: StageRun['jobs']): JobState =>
     jobs.find((each) => each.id === id)?.state ?? 'open';
   const items = stage.repeats
-    ? run.rounds.flatMap((round) => stage.jobs.map((job) => roundItems(job, round, stateOf(job.id, round.jobs))))
-    : stage.jobs.map((job) => ({ key: job.id, job, ...split(job), state: stateOf(job.id, run.jobs) }));
+    ? run.rounds.flatMap((round) =>
+        stage.jobs.map((job) => roundItems(job, round, { stage: stage.id, state: stateOf(job.id, round.jobs) })),
+      )
+    : stage.jobs.map((job) => ({
+        key: job.id,
+        job,
+        ...split(job),
+        state: stateOf(job.id, run.jobs),
+        checkedAs: checkedKey(stage.id, job.id),
+      }));
   return items.filter((item) => item.doSteps.length + item.reviewSteps.length > 0);
 }
 

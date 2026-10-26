@@ -7,8 +7,9 @@ ui:
   viewPresentation: Presentation
   viewDetailed: Detailed
   viewHandson: Hands-on
-  viewSoon: 'Coming soon'
   checked: checked
+  stateOpen: open
+  stateDone: done
   sendBack: send back
   repeats: '× each round ({n})'
   tryJob: 'Open {job} in {stage}'
@@ -33,6 +34,7 @@ ui:
   insertedAt: 'Added to the prompt under "{section}"'
   resultHeading: Result
   markDone: Mark this step as done
+  markChecked: I checked this result
   resultPlaceholder: Paste the result here to save it for the next step
   contextTip: 'Help: show what to do in each step'
   download: Download this Workflow

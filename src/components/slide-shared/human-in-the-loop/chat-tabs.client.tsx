@@ -15,6 +15,7 @@ interface TabsProps {
   readonly kit: StepKit;
   readonly slots: SlotState;
   readonly first: number;
+  readonly checkedAs?: string;
 }
 
 function TabButton({
@@ -75,7 +76,7 @@ function TabList({
 }
 
 /** One panel for a single chat; for a fan-out a tab per chat, every panel mounted so what is pasted survives a switch. */
-export function ChatTabs({ steps, task, kind, kit, slots, first }: TabsProps) {
+export function ChatTabs({ steps, task, kind, kit, slots, first, checkedAs }: TabsProps) {
   const [selected, setSelected] = useState(0);
   const id = useId();
   const several = steps.length > 1;
@@ -89,7 +90,7 @@ export function ChatTabs({ steps, task, kind, kit, slots, first }: TabsProps) {
           id={`${id}-${at}-panel`}
           hidden={at !== selected}
         >
-          <StepPanel {...{ step, task, kind, kit, slots, first }} />
+          <StepPanel {...{ step, task, kind, kit, slots, first, checkedAs }} />
         </div>
       ))}
     </div>

@@ -1,6 +1,5 @@
 'use client';
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import type { UiWords } from './human-in-the-loop.types';
 import { viewOptions, type ViewOption } from './view-options.pure';
@@ -13,32 +12,24 @@ interface ViewControlProps {
 }
 
 function Segment({ option, on, onPick }: { option: ViewOption; on: boolean; onPick: () => void }) {
-  const button = (
+  return (
     <button
       type="button"
       aria-pressed={on}
-      aria-disabled={!option.enabled || undefined}
       data-view-option={option.view}
-      onClick={option.enabled ? onPick : undefined}
+      onClick={onPick}
       className={cn(
         'h-full rounded-full px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50',
-        option.enabled ? 'cursor-pointer' : 'cursor-not-allowed opacity-50',
+        'cursor-pointer',
         on ? 'bg-primary text-primary-foreground' : 'text-foreground/70 hover:text-foreground',
       )}
     >
       {option.label}
     </button>
   );
-  if (!option.tip) return button;
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>{button}</TooltipTrigger>
-      <TooltipContent>{option.tip}</TooltipContent>
-    </Tooltip>
-  );
 }
 
-/** The three-way view control: one pressed segment at a time, named by `words.view`; views not built yet are disabled. */
+/** The three-way view control: one pressed segment at a time, named by `words.view`. */
 export function ViewControl({ words, view, onView }: ViewControlProps) {
   return (
     <div

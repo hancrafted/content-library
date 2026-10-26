@@ -133,6 +133,20 @@ describe('success cases', () => {
     expect(sent).toEqual([{ type: 'slots', values: { 'research.venue#3': 'R3' } }]);
   });
 
+  it('hands the diagram the run of the pasted results, round states included, for the Hands-on view', () => {
+    // ARRANGE
+    const loaded = loadWorkflow(summerPartyEn);
+    if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
+    const real = workflowOf(loaded.file);
+    const on = callbacksFor(() => undefined);
+    const state = { ...createState(start), slotValues: { 'research.venue#2': 'R2', 'research.venue.checked#2': 'ok' } };
+    // ACT
+    const { diagram } = slicesOf(shown(real, state), on);
+    const research = diagram.run?.stages.find((each) => each.id === 'research');
+    // ASSERT
+    expect(research?.rounds.map((round) => round.state)).toEqual(['open', 'checked', 'open']);
+  });
+
   it('names the run of the shown authored Workflow by its key and the hash of its files', () => {
     // ARRANGE
     const withHashes = { ...data, hashes: { one: 'h1', two: 'h2' } };
