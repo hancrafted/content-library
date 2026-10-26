@@ -79,12 +79,7 @@ export function EventEpisodeHeader({
   const { locale, labels, event, episode } = chrome;
   return (
     <div data-event-episode-header className={cn('flex flex-col gap-4 pt-2 pb-6', className)}>
-      <EventBreadcrumb
-        locale={locale}
-        labels={{ breadcrumb: labels.breadcrumb.label, events: labels.breadcrumb.events }}
-        event={event}
-        episode={episode}
-      />
+      <EventBreadcrumb locale={locale} labels={labels.breadcrumb} event={event} episode={episode} />
       <PastNotice date={event.date} buildDay={buildDay} text={labels.pastNotice} />
     </div>
   );

@@ -138,11 +138,7 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
   const episodes = eventPlaylistCards(record, await episodeCardMaker(locale), locale);
   return (
     <main data-testid="event-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
-      <EventBreadcrumb
-        locale={locale}
-        labels={{ breadcrumb: words.breadcrumb.label, events: words.breadcrumb.events }}
-        event={{ slug: record.slug, title: card.title }}
-      />
+      <EventBreadcrumb locale={locale} labels={words.breadcrumb} event={{ slug: record.slug, title: card.title }} />
       <h1 className="mt-6 text-heading font-semibold text-balance text-foreground">{card.title}</h1>
       <Facts card={card} record={record} minutes={totalMinutes(episodes)} t={t} />
       <p className="mt-6 max-w-2xl text-body text-pretty text-foreground">{card.description}</p>
