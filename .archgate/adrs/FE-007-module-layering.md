@@ -16,7 +16,7 @@ description: 'Two zones under different laws — src/app governed by content, th
 Under the App Router the directory **is** the URL: `src/app/[locale]/episode/episode-template/page.tsx` sits where it sits because `/de/episode/episode-template` exists. So the tree splits into two zones:
 
 - **Framework zone** — `src/app/**`. The router owns position; this record governs what a file there may _contain_.
-- **Authored zone** — `src/page-assembly/**`, `src/components/**`, `src/explorable-explanations/**`, `src/content-store/**`, `src/hooks/**`, `src/lib/**`. Position is chosen, so the folder is the tier.
+- **Authored zone** — `src/page-assembly/**`, `src/events/**`, `src/components/**`, `src/explorable-explanations/**`, `src/content-store/**`, `src/hooks/**`, `src/lib/**`. Position is chosen, so the folder is the tier.
 
 One rule spans both: import direction. Lib stays React-free so a lib module is a plain module a test imports without a DOM.
 
@@ -38,6 +38,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 3. `src/page-assembly/**` is flat, a folder per template plus `lib/`: only routes and tests import it; a template imports only its folder and `lib/`.
 4. A stylesheet import is not a tier edge.
 5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/[by-event/<e>/]<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only schemas and lib. The store's `schemas/` is a leaf every tier may import, so a lib module takes a record type without an upward edge.
+6. `src/events/**`, the Events area: only page assembly imports it; it imports only itself, `ui/`, hooks, i18n, lib and the store. Page assembly passes it another area's parts as props.
 
 ### 3. `src/lib/**` imports no React
 
@@ -106,7 +107,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ## Compliance and Enforcement
 
-1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries`, pre-commit and CI): §1.1, §1.2, §1.4, §2.1–§2.3, §2.5, §3, §5 including `core-components-are-a-leaf` and the core exception on the client-leaf rule (§5.2.2) (its message names the allowed locations; probe tests over a throwaway tree).
+1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries`, pre-commit and CI): §1.1, §1.2, §1.4, §2.1–§2.3, §2.5, §2.6, §3, §5 including `core-components-are-a-leaf` and the core exception on the client-leaf rule (§5.2.2) (its message names the allowed locations; probe tests over a throwaway tree).
 2. **Unused-file check** (knip, pre-push and CI): an unimported `.tsx` under `src/lib/` (§3).
 
 **Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/lib/` carry no classifier; left for a future lib-tree record.

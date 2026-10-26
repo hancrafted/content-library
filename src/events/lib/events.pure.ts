@@ -1,4 +1,4 @@
-import type { IsoDate } from '../content-store/schemas/fields';
+import type { IsoDate } from '@/content-store/schemas/fields';
 
 /**
  * Whether an Event is past: its date lies before the build day (design-ADR 0016, Past Event). Derived, never stored;

@@ -1,13 +1,14 @@
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { ServedEvent } from '@/content-store/store';
+import { dateLabelOf } from '@/lib/date-label.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { eventRoute } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
-import { releaseDateOf, type ReadKey } from './episode-card.pure';
 
 /** What an Event card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
 export interface EventReads {
-  readonly read: ReadKey;
+  /** Reads one Translation key by its full dotted path. */
+  readonly read: (key: string) => string;
   readonly episodeCount: { readonly one: string; readonly other: string };
 }
 
@@ -47,7 +48,7 @@ export function eventCard(record: CardEvent, locale: Locale, { read, episodeCoun
     title: read(`${ITEMS}.${record.slug}.title`),
     description: read(`${ITEMS}.${record.slug}.description`),
     date: record.date,
-    dateLabel: releaseDateOf(record.date, locale),
+    dateLabel: dateLabelOf(record.date, locale),
     ...(record.time === undefined ? {} : { time: record.time }),
     ...(record.location === undefined ? {} : { location: record.location }),
     episodeCount: count,

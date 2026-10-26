@@ -1,14 +1,14 @@
 import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { findEpisodesPathPage, findToolingPage } from '@/components/episodes/tooling-pages';
+import { JsonLdScript } from '@/components/json-ld';
+import { episodePublishedOn, episodeStatus, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
 import {
   eventEpisodeChrome,
   EventEpisodeHeader,
   PlaylistNav,
   type PresentedEpisode,
-} from '@/components/events/event-episode-chrome';
-import { JsonLdScript } from '@/components/json-ld';
-import { episodePublishedOn, episodeStatus, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
+} from '@/events/components/event-episode-chrome';
 import { BUILD_DAY } from '@/lib/build-day';
 import { episodeRefOf } from '@/lib/episode-id.pure';
 import type { Locale } from '@/lib/locale.pure';
@@ -101,7 +101,7 @@ function OwnEpisodePage({ id, locale }: { id: EpisodeId; locale: Locale }) {
  */
 async function EpisodeUnderEvent({ page, locale }: { page: PageOf<'event-episode'>; locale: Locale }) {
   const shown = presented(page.event, (episode) => episode === page.episode);
-  const chrome = await eventEpisodeChrome(shown, locale);
+  const chrome = await eventEpisodeChrome(shown, locale, (episode) => episodeCopy(episode, locale).title);
   const frame = {
     route: eventEpisodeRoute(shown.event.slug, shown.episode),
     header: <EventEpisodeHeader chrome={chrome} buildDay={BUILD_DAY} className={INSET} />,

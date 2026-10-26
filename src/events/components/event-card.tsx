@@ -1,11 +1,8 @@
-import { CardArrow, CardShell, CardTitle } from '@/components/landing/card-shell';
-import type { CardHeadingLevel } from '@/components/landing/card-variant.pure';
-import { TAG_ACCENTS } from '@/components/landing/episode-visuals';
-import type { EventCard } from '@/components/landing/event-card.pure';
+import { CardArrow, CardShell, CardTitle, PRIMARY_LOOK } from '@/components/ui/card-shell';
+import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
+import type { EventCard } from '@/events/lib/event-card.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { CalendarDays } from 'lucide-react';
-
-const WHEN = TAG_ACCENTS.primary.ink;
 
 export interface EventCardProps {
   card: EventCard;
@@ -19,7 +16,7 @@ export interface EventCardProps {
 /** The date is the card's loudest line, with the time beside it when the Event has one. */
 function EventDate({ card }: { card: EventCard }) {
   return (
-    <p className={`flex flex-wrap items-baseline gap-x-3 text-subheading font-semibold ${WHEN}`}>
+    <p className={`flex flex-wrap items-baseline gap-x-3 text-subheading font-semibold ${PRIMARY_LOOK.ink}`}>
       <time data-event-date dateTime={card.date}>
         {card.dateLabel}
       </time>
@@ -42,7 +39,7 @@ export function EventCardView({ card, locale, headingLevel, className }: EventCa
     <CardShell
       variant="event"
       linked
-      accent="primary"
+      look={PRIMARY_LOOK}
       icon={CalendarDays}
       className={className}
       data={{ 'data-event-card': '', 'data-event-slug': card.slug }}

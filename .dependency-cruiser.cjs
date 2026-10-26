@@ -373,6 +373,27 @@ module.exports = {
       from: { path: '^src/app/' },
       to: { path: '^src/components/', pathNot: '^src/components/site-shell\\.tsx$' },
     },
+    // The Events product area (spec #348): Events and their Playlists. It reaches only itself, the shared tiers and the
+    // content store; only page assembly reaches into it, passing it another area's parts as props (FE-007).
+    {
+      name: 'events-area-reaches-only-shared-and-store',
+      severity: 'error',
+      comment:
+        'src/events/** is a product area: it imports only its own files, the shared tiers (src/components/ui/, src/hooks/, src/i18n/, src/lib/) and the content store, never another product area (an Episode, its cards, a Slide) or a layer above it. What it needs from another area, page assembly passes in as props (FE-007).',
+      from: { path: '^src/events/' },
+      to: {
+        pathNot: ['^src/events/', '^src/components/ui/', '^src/(hooks|i18n|lib|content-store)/', 'node_modules'],
+        dependencyTypesNot: ['core'],
+      },
+    },
+    {
+      name: 'events-area-reached-only-from-page-assembly',
+      severity: 'error',
+      comment:
+        'Only page assembly (src/page-assembly/**) composes the Events area: no route, component, hook, lib module, store module or other product area imports src/events/** (FE-007).',
+      from: { pathNot: ['^src/events/', '^src/page-assembly/', '\\.test\\.tsx?$'] },
+      to: { path: '^src/events/' },
+    },
   ],
   required: [
     {

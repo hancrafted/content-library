@@ -1,6 +1,5 @@
-import type { ReadKey } from '@/components/landing/episode-card.pure';
-import { eventCard, type EventCard, type EventReads } from '@/components/landing/event-card.pure';
 import { listedEvents, listEvents, type ServedEvent } from '@/content-store/store';
+import { eventCard, type EventCard, type EventReads } from '@/events/lib/event-card.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
@@ -9,7 +8,7 @@ async function readsOf(locale: Locale): Promise<EventReads> {
   const t = await getTranslations({ locale });
   const page = await getTranslations({ locale, namespace: 'eventsPage' });
   const episodeCount = { one: page('episodeCount.one'), other: page.raw('episodeCount.other') as string };
-  return { read: t as unknown as ReadKey, episodeCount };
+  return { read: t as unknown as EventReads['read'], episodeCount };
 }
 
 /**

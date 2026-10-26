@@ -1,5 +1,3 @@
-import { TAG_ACCENTS } from '@/components/landing/episode-visuals';
-import type { Accent } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -12,6 +10,23 @@ import type { CardHeadingLevel, CardVariant, OpenCue } from './card-variant.pure
  * the cue that says it opens. What differs per variant is one table row, so a
  * new variant adds a row here and its own body, never a second frame.
  */
+
+/** One colour family drawn as the classes a card needs; the card kind that places the shell picks it. */
+export interface AccentClasses {
+  /** The accent as plain text or an icon, 4.5:1 on the page in both themes. */
+  readonly ink: string;
+  /** The corner wash that tints a large card. */
+  readonly wash: string;
+  /** The card's border once hovered or focused. */
+  readonly edge: string;
+}
+
+/** The site's primary as a card's colour family, in tokens: an Event card's look, and the primary Tag accent. */
+export const PRIMARY_LOOK: AccentClasses = {
+  ink: 'text-primary',
+  wash: 'from-primary/10',
+  edge: 'hover:border-primary/40 has-[a:focus-visible]:border-primary/40',
+};
 
 interface VariantClasses {
   /** The frame's corner radius, padding and height. */
@@ -58,7 +73,8 @@ interface ShellProps {
   variant: CardVariant;
   /** False for an announced-only card: muted, no wash, no icon, no hover. */
   linked: boolean;
-  accent: Accent;
+  /** The card's colour family, as whole class strings so Tailwind can see each one. */
+  look: AccentClasses;
   icon: LucideIcon;
   /** The card's own data attributes, so each card kind keeps its own hooks for tests and probes. */
   data: Record<`data-${string}`, string | undefined>;
@@ -66,8 +82,7 @@ interface ShellProps {
   children: ReactNode;
 }
 
-export function CardShell({ variant, linked, accent, icon, data, className = '', children }: ShellProps) {
-  const look = TAG_ACCENTS[accent];
+export function CardShell({ variant, linked, look, icon, data, className = '', children }: ShellProps) {
   const tone = linked ? `${LINKED_FRAME} ${look.edge}` : UPCOMING_FRAME;
   return (
     <article
@@ -75,15 +90,14 @@ export function CardShell({ variant, linked, accent, icon, data, className = '',
       data-card-variant={variant}
       className={`${FRAME} ${VARIANTS[variant].frame} ${tone} ${className}`}
     >
-      {linked && <CardArt accent={accent} icon={icon} classes={VARIANTS[variant].art} />}
+      {linked && <CardArt look={look} icon={icon} classes={VARIANTS[variant].art} />}
       {children}
     </article>
   );
 }
 
 /** The corner wash and the large faded icon behind the text; decorative, so they take no clicks and sit under the content. */
-function CardArt({ accent, icon: Icon, classes }: { accent: Accent; icon: LucideIcon; classes: string }) {
-  const look = TAG_ACCENTS[accent];
+function CardArt({ look, icon: Icon, classes }: { look: AccentClasses; icon: LucideIcon; classes: string }) {
   return (
     <>
       <span

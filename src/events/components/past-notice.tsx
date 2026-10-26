@@ -1,5 +1,5 @@
 import type { IsoDate } from '@/content-store/schemas/fields';
-import { isPastEvent } from '@/lib/events.pure';
+import { isPastEvent } from '@/events/lib/events.pure';
 import { cn } from '@/lib/utils';
 import { History } from 'lucide-react';
 
