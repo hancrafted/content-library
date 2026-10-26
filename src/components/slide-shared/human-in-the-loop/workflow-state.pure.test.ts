@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 
-const start = { workflowId: 'project-plan', level: 'simple' } as const;
+const start = { workflowId: 'project-plan', level: 'simple', view: 'presentation' } as const;
 const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {
@@ -15,6 +15,51 @@ describe('success cases', () => {
     const later = reduce(reduce(filled, { type: 'close' }), { type: 'open', stageId: 'compare' });
     // ASSERT
     expect(later.slotValues).toEqual(pasted);
+  });
+
+  it('takes back a saved run: its results and its teaching flag', () => {
+    // ARRANGE
+    const saved = { results: { 'a.b': 'text' }, teaching: false };
+    // ACT
+    const state = reduce(createState(start), { type: 'restore', ...saved });
+    // ASSERT
+    expect(state.slotValues).toEqual(saved.results);
+    expect(state.teaching).toBe(saved.teaching);
+  });
+
+  it('switches teaching mode off and on', () => {
+    // ARRANGE
+    const initial = createState(start);
+    // ACT
+    const off = reduce(initial, { type: 'teaching', teaching: false });
+    const on = reduce(off, { type: 'teaching', teaching: true });
+    // ASSERT
+    expect(off.teaching).toBe(false);
+    expect(on.teaching).toBe(true);
+  });
+
+  it('a reset empties the pasted values, turns teaching back on and keeps the rest', () => {
+    // ARRANGE
+    const events: WorkflowEvent[] = [
+      { type: 'level', level: 'technical' },
+      { type: 'open', stageId: 'x' },
+      { type: 'teaching', teaching: false },
+      { type: 'slots', values: { 'a.b': 'text' } },
+    ];
+    const busy = events.reduce(reduce, createState(start));
+    // ACT
+    const state = reduce(busy, { type: 'reset' });
+    // ASSERT
+    expect(state).toEqual({ ...createState({ ...start, level: 'technical' }), openStageId: 'x' });
+  });
+
+  it('takes back an uploaded progress file over the problems of an earlier refusal', () => {
+    // ARRANGE
+    const refused = reduce(createState(start), { type: 'upload-failed', problems: ['no'] });
+    // ACT
+    const state = reduce(refused, { type: 'restore', results: { 'a.b': 'x' }, teaching: true });
+    // ASSERT
+    expect(state.uploadProblems).toEqual([]);
   });
 
   it('forgets the pasted values when another Workflow is shown', () => {
@@ -32,6 +77,7 @@ describe('success cases', () => {
       ...start,
       teaching: true,
       openStageId: null,
+      openJobId: null,
       slotValues: {},
       uploaded: null,
       uploadProblems: [],
@@ -40,6 +86,17 @@ describe('success cases', () => {
     const state = createState(start);
     // ASSERT
     expect(state).toEqual(expected);
+  });
+
+  it('switches the view without touching the pasted values, and keeps it when the Workflow changes', () => {
+    // ARRANGE
+    const filled = reduce(createState(start), { type: 'slots', values: { a: 'b' } });
+    // ACT
+    const viewed = reduce(filled, { type: 'view', view: 'handson' });
+    const other = reduce(viewed, { type: 'workflow', workflowId: 'vacation' });
+    // ASSERT
+    expect(viewed).toEqual({ ...filled, view: 'handson' });
+    expect(other.view).toBe('handson');
   });
 
   it('switches the level', () => {
@@ -61,6 +118,19 @@ describe('success cases', () => {
     // ASSERT
     expect(open.openStageId).toBe(stage);
     expect(closed.openStageId).toBeNull();
+  });
+
+  it('opens the modal at the job whose card was pressed, and forgets the job when it closes or opens by stage', () => {
+    // ARRANGE
+    const initial = createState(start);
+    // ACT
+    const atJob = reduce(initial, { type: 'open', stageId: 'tickets', jobId: 'epics' });
+    const byStage = reduce(atJob, { type: 'open', stageId: 'tickets' });
+    const closed = reduce(atJob, { type: 'close' });
+    // ASSERT
+    expect([atJob.openStageId, atJob.openJobId]).toEqual(['tickets', 'epics']);
+    expect(byStage.openJobId).toBeNull();
+    expect(closed.openJobId).toBeNull();
   });
 
   it('switching Workflow resets the open stage, the pasted values and any upload', () => {

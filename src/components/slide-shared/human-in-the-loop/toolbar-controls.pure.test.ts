@@ -2,13 +2,23 @@ import { describe, expect, it } from 'vitest';
 import { CONTROLS, controlOf, defOf, offers, type ControlId } from './toolbar-controls.pure';
 
 describe('success cases', () => {
-  it('shows the picker, the Chat · CLI control, download and upload by default, in that order', () => {
+  it('shows the picker, the view control, the Chat · CLI control, teaching, reset, saving and loading progress, then the Workflow download and upload by default, in that order', () => {
     // ARRANGE
     const none = {};
     // ACT
     const shown = CONTROLS.filter(({ id }) => offers(none, id)).map(({ id }) => id);
     // ASSERT
-    expect(shown).toEqual(['picker', 'level', 'download', 'upload']);
+    expect(shown).toEqual([
+      'picker',
+      'view',
+      'level',
+      'teaching',
+      'reset',
+      'progressDownload',
+      'progressUpload',
+      'download',
+      'upload',
+    ]);
   });
 
   it("lays a Preset's setting over the definition key by key and leaves the rest", () => {
@@ -21,17 +31,26 @@ describe('success cases', () => {
     expect(offers(preset, 'download')).toBe(true);
   });
 
-  it('hides the Chat · CLI control, and only it, for a readonly Preset', () => {
+  it('hides the Chat · CLI control, teaching and reset for a readonly Preset, where nothing is tried', () => {
     // ARRANGE
     const none = {};
     // ACT
     const shown = CONTROLS.filter(({ id }) => offers(none, id, true)).map(({ id }) => id);
     // ASSERT
-    expect(shown).toEqual(['picker', 'download', 'upload']);
+    expect(shown).toEqual(['picker', 'view', 'progressDownload', 'progressUpload', 'download', 'upload']);
   });
 });
 
 describe('failure cases', () => {
+  it('lets a Preset hide teaching and reset one by one', () => {
+    // ARRANGE
+    const preset = { teaching: { show: false } };
+    // ACT
+    const shown = [offers(preset, 'teaching'), offers(preset, 'reset')];
+    // ASSERT
+    expect(shown).toEqual([false, true]);
+  });
+
   it('never shows a control the Preset hides', () => {
     // ARRANGE
     const preset = { upload: { show: false }, level: { show: false } };
@@ -52,6 +71,24 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('lets a Preset hide the view control so a talk always opens the same way', () => {
+    // ARRANGE
+    const preset = { view: { show: false } };
+    // ACT
+    const shown = CONTROLS.filter(({ id }) => offers(preset, id)).map(({ id }) => id);
+    // ASSERT
+    expect(shown).toEqual([
+      'picker',
+      'level',
+      'teaching',
+      'reset',
+      'progressDownload',
+      'progressUpload',
+      'download',
+      'upload',
+    ]);
+  });
+
   it('keeps a hidden Chat · CLI control hidden even in readonly', () => {
     // ARRANGE
     const preset = { level: { show: false } };

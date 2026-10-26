@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { connectorInto, fanGeometry } from './diagram-layout.pure';
+import { BRANCH_PITCH, connectorInto, fanGeometry } from './diagram-layout.pure';
 import { stage as baseStage, job } from './workflow-fixture.pure';
 import type { Stage } from './workflow.types';
 
-const stage = (id: string, fanOut?: number): Stage => ({ ...baseStage(id, [job({ id, fanOut })]) });
+const stage = (id: string): Stage => baseStage(id, [job({ id })]);
 
 describe('success cases', () => {
   it('draws the fan of three exactly as the venue pipeline drew it', () => {
@@ -56,9 +56,10 @@ describe('success cases', () => {
   it('fans out into a stage of N chats and back in after it', () => {
     // ARRANGE
     const wide = 4;
-    const stages = [stage('a'), stage('b', wide), stage('c')];
+    const stages = [stage('a'), stage('b'), stage('c')];
+    const rounds = { b: wide };
     // ACT
-    const kinds = stages.map((each, i) => connectorInto(stages[i - 1], each));
+    const kinds = stages.map((each, i) => connectorInto(stages[i - 1], each, rounds));
     // ASSERT
     expect(kinds).toEqual([{ kind: 'straight' }, { kind: 'out', branches: wide }, { kind: 'in', branches: wide }]);
   });
@@ -67,20 +68,39 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('draws no fan for a single chat: the connector stays straight', () => {
     // ARRANGE
-    const stages = [stage('a'), stage('b', 1)];
+    const stages = [stage('a'), stage('b')];
     // ACT
-    const kind = connectorInto(stages[0], stages[1] as Stage);
+    const kind = connectorInto(stages[0], stages[1] as Stage, { b: 1 });
     // ASSERT
     expect(kind).toEqual({ kind: 'straight' });
   });
 });
 
 describe('edge cases', () => {
+  it('stands each branch card one fan pitch apart, so every card meets its branch', () => {
+    // ARRANGE
+    const cards = 4;
+    // ACT
+    const fan = fanGeometry('out', cards);
+    const gaps = fan.ys.slice(1).map((y, i) => y - (fan.ys[i] ?? 0));
+    // ASSERT
+    expect(gaps).toEqual([BRANCH_PITCH, BRANCH_PITCH, BRANCH_PITCH]);
+  });
+
+  it('keeps a stage a single card when the run holds no rounds for it', () => {
+    // ARRANGE
+    const stages = [stage('a'), stage('b')];
+    // ACT
+    const kind = connectorInto(stages[0], stages[1] as Stage, {});
+    // ASSERT
+    expect(kind).toEqual({ kind: 'straight' });
+  });
+
   it('opens the first stage with a straight connector when it has no predecessor', () => {
     // ARRANGE
     const first = stage('a');
     // ACT
-    const kind = connectorInto(undefined, first);
+    const kind = connectorInto(undefined, first, {});
     // ASSERT
     expect(kind).toEqual({ kind: 'straight' });
   });

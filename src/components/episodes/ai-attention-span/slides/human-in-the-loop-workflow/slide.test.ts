@@ -113,29 +113,20 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws every stage with its jobs and the fan-out and fan-in of the project plan', () => {
+  it('draws every stage as a card holding its job cards, each repeated stage once in a bracket, and the scope job keeps its "forgot" detail', () => {
     // ARRANGE
-    const expected = {
-      jobLists: 6,
-      workers: ['Run the ticket 1', 'Run the ticket 2', 'Run the ticket 3', 'Run the ticket 4'],
-      card: true,
-      connectors: 5,
-      fans: 4,
-    };
+    const expected = { cards: 6, brackets: 2, branches: 0, fans: 0, gated: 3, forgotLines: 1 };
     // ACT
     const $ = scene('en');
-    const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');
+    const pipeline = $('ol[data-part="diagram"]');
+    const interview = pipeline.find('[data-job-card="scope"]');
     const actual = {
-      jobLists: pipeline.find('> li > div > ol').length,
-      workers: pipeline
-        .find('> li > div > ol')
-        .eq(3)
-        .find('li')
-        .map((_, el) => $(el).children().first().text().replace('Checked by a second chat', '').trim())
-        .get(),
-      card: pipeline.text().includes('You sign off'),
-      connectors: pipeline.find('> li > [aria-hidden="true"]').length,
+      cards: pipeline.find('[data-stage-card]').length,
+      brackets: pipeline.find('[data-bracket]').length,
+      branches: pipeline.find('[data-branch]').length,
       fans: pipeline.find('svg[data-fan]').length,
+      gated: pipeline.find('[data-gate]').length,
+      forgotLines: interview.find('[data-summary] br').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);

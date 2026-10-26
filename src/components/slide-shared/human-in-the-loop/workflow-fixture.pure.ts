@@ -25,6 +25,7 @@ export const JOB: Job = {
   id: 'j',
   title: 'J',
   dependsOn: [],
+  needs: [],
   inputs: [],
   outputs: [],
   reviewed: false,

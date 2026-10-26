@@ -18,12 +18,12 @@ export interface Job {
   readonly detail?: string;
   /** Jobs of an earlier stage that must be done first: the producers of this job's slots. */
   readonly dependsOn: readonly string[];
+  /** Jobs of the same stage that run first, as the file's `needs` names them; the Detailed view draws them in this order. */
+  readonly needs: readonly string[];
   /** The slot ids this job takes in, each an output id of a job it depends on. */
   readonly inputs: readonly string[];
   /** What the job hands on: its output id. */
   readonly outputs: readonly { readonly id: string }[];
-  /** The rounds the diagram draws as parallel chats: the teaching cap of its repeated stage; absent for a single chat. */
-  readonly fanOut?: number;
   /** Whether the job has a review in a fresh chat; the diagram ticks each chat then. */
   readonly reviewed: boolean;
   /** Labels of the other parts of the task, drawn dimmed beside this job (the party's parked pieces). */

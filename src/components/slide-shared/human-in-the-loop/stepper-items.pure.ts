@@ -44,3 +44,9 @@ export function itemsOf(stage: StageView, run: StageRun): Item[] {
     : stage.jobs.map((job) => ({ key: job.id, job, ...split(job), state: stateOf(job.id, run.jobs) }));
   return items.filter((item) => item.doSteps.length + item.reviewSteps.length > 0);
 }
+
+/** The accordion value of the item to open: the first item of the job whose card was pressed, else the first item. */
+export function openItemOf(items: readonly Item[], jobId: string | null): string {
+  const at = items.findIndex((item) => item.job.id === jobId);
+  return String(Math.max(at, 0));
+}

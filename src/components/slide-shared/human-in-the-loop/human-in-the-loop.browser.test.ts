@@ -18,6 +18,8 @@ const GERMAN_EPISODE = '/de/episodes/slides/';
 const SLIDE_ANCHOR = 'agentic-workflows--human-in-the-loop';
 const ROOT = '[data-human-in-the-loop]';
 const MODAL = '[role="dialog"][data-part="modal"]';
+/** The one progress key, as `src/config.yaml` names it (FE-001 §3). */
+const PROGRESS_KEY = 'hancrafted:progress';
 const COPY_PROMPT = 'Copy prompt';
 /** Two Workflows by six or seven stages, in one language: more than the default 30s. */
 const LONG_TEST = 120_000;
@@ -55,6 +57,36 @@ async function open(page: Page, theme: 'light' | 'dark', where: { width?: number
   await hydrated(root.locator('button').first());
   return { root, toolbar: root.locator('[data-part="toolbar"]'), modal: page.locator(MODAL) };
 }
+
+/** The localStorage keys in use: the single progress key, never a third. */
+const storedKeys = (page: Page) => page.evaluate(() => Object.keys(localStorage));
+
+/** The text under the progress key, as the page keeps it. */
+const storedProgress = (page: Page) =>
+  page.evaluate((PROGRESS_KEY) => localStorage.getItem(PROGRESS_KEY), PROGRESS_KEY);
+
+/** Puts `store` under the progress key, as an earlier visit would have left it. */
+const storeProgress = (page: Page, store: object) =>
+  page.evaluate(
+    ([PROGRESS_KEY, text]) => localStorage.setItem(PROGRESS_KEY, text),
+    [PROGRESS_KEY, JSON.stringify(store)],
+  );
+
+/** Presses Save progress and reads the YAML file the browser is handed. */
+async function savedProgressFile(root: Locator): Promise<string> {
+  const download = root.page().waitForEvent('download');
+  await root.locator('[data-control="progressDownload"]').click();
+  const stream = await (await download).createReadStream();
+  const chunks: Buffer[] = [];
+  for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+/** Hands the progress load a file with `text`. */
+const loadProgress = (root: Locator, text: string) =>
+  root
+    .locator('[data-control="progressUpload"] input[type=file]')
+    .setInputFiles({ name: 'progress.yml', mimeType: 'text/yaml', buffer: Buffer.from(text) });
 
 const copied = (page: Page) => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied);
 const copies = (page: Page) => copied(page).then((all) => all.length);
@@ -140,11 +172,21 @@ async function stageProblems(page: Page, id: string, language: Language): Promis
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Chat · CLI, download and upload', async ({
+  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then the view, Chat · CLI, teaching, reset, saving and loading progress, download and upload', async ({
     page,
   }) => {
     // ARRANGE
-    const expectedControls = ['picker', 'level', 'download', 'upload'];
+    const expectedControls = [
+      'picker',
+      'view',
+      'level',
+      'teaching',
+      'reset',
+      'progressDownload',
+      'progressUpload',
+      'download',
+      'upload',
+    ];
     const expectedLabel = 'Use case:';
     const expectedChosen = 'Plan a project';
     const { root, toolbar } = await open(page, 'light');
@@ -157,6 +199,47 @@ test.describe('success cases', () => {
     await expect(picker.locator('label')).toHaveText(expectedLabel);
     await expect(picker.getByRole('combobox')).toHaveText(expectedChosen);
     await expect(root).not.toContainText(/Watch|Try it yourself/);
+  });
+
+  test('opens in the Presentation view: a card per stage, Hands-on disabled, and nothing sideways on a phone', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const stages = 6;
+    const repeated = 2;
+    const phone = 390;
+    const { root } = await open(page, 'light', { width: phone });
+    // ACT
+    const view = root.locator('[data-control="view"]');
+    const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    // ASSERT
+    await expect(root).toHaveAttribute('data-view', 'presentation');
+    await expect(root.locator('[data-stage-card]')).toHaveCount(stages - repeated);
+    await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
+    await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Hands-on']);
+    expect(await sideways()).toBeLessThanOrEqual(0);
+  });
+
+  test('draws the Detailed view of a repeated stage once, in a bracket of its rounds, and a job card opens its modal', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const rounds = 4;
+    const brackets = 2;
+    const { root, modal } = await open(page, 'light');
+    // ACT
+    await root.locator('[data-view-option="detailed"]').click();
+    const bracket = root.locator('[data-bracket]').last();
+    const card = bracket.locator('[data-job-card] button[data-try-job]');
+    // ASSERT
+    await expect(root).toHaveAttribute('data-view', 'detailed');
+    await expect(root.locator('[data-bracket]')).toHaveCount(brackets);
+    await expect(bracket.locator('[data-bracket-label]')).toHaveText(`× each round (${rounds})`);
+    await expect(bracket.locator('[data-job-card]')).toHaveCount(1);
+    await card.click();
+    await expect(modal).toHaveAttribute('data-stage', 'execute');
+    await page.keyboard.press('Escape');
+    await expect(card).toBeFocused();
   });
 
   test('opens a stage as a stepper: the stage title, the first job open, its prompt copied with no marker left', async ({
@@ -329,16 +412,12 @@ test.describe('success cases', () => {
     }
   });
 
-  test('carries a result pasted in one job into the copied prompt of the next job, keeps it across close and reopen, and stores nothing', async ({
+  test('carries a result pasted in one stage into the copied prompt of a later stage, keeps it across close and reopen', async ({
     page,
   }) => {
     // ARRANGE
     const pasted = '# PASTED TASK MARKER';
     const { modal } = await open(page, 'light');
-    await page.evaluate(() => {
-      localStorage.clear();
-      sessionStorage.clear();
-    });
     // ACT
     await openStage(page, 'High-level plan');
     await field(modal, 'task').fill(pasted);
@@ -351,7 +430,86 @@ test.describe('success cases', () => {
     // ASSERT
     expect(written.at(-1)).toContain(pasted);
     await expect(field(modal, 'task')).toHaveValue(pasted);
-    expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
+  });
+
+  test('turns teaching off before the first paste so the rounds follow the pasted tickets, then locks the switch until Reset', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# Tickets\n## Tickets\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
+    const fullRounds = 4;
+    const { modal, root, toolbar } = await open(page, 'light');
+    await pickWorkflow(root, 'vacation');
+    const teaching = toolbar.locator('[data-control="teaching"]');
+    const rounds = () => modal.locator('[data-job="venue"] [data-slot="accordion-trigger"]');
+    // ACT
+    await expect(teaching).toBeEnabled();
+    await expect(teaching).toHaveAttribute('aria-checked', 'true');
+    await teaching.click();
+    await openStage(page, 'Tickets');
+    await field(modal, 'tickets').fill(pasted);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await openStage(page, 'Research');
+    // ASSERT
+    await expect(rounds()).toHaveCount(fullRounds);
+    await expect(modal.locator('[data-control="teaching"]')).toBeDisabled();
+    await modal.locator('[data-control="teaching"]').locator('xpath=..').hover();
+    await expect(page.getByRole('tooltip')).toContainText('Reset to change');
+    await modal.locator('[data-control="reset"]').click();
+    await modal.locator('[data-reset-now]').click();
+    await expect(modal.locator('[data-control="teaching"]')).toBeEnabled();
+    await expect(modal.locator('[data-control="teaching"]')).toHaveAttribute('aria-checked', 'true');
+  });
+
+  test('turns Reset to the warning colour once work is saved, confirms inside the popover and clears only this Workflow', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# RESET MARKER';
+    const other = { 'human-in-the-loop/vacation': { hash: 'h', teaching: true, results: { 'a.b': 'keep' } } };
+    await open(page, 'light');
+    await storeProgress(page, other);
+    const { modal, toolbar } = await open(page, 'light');
+    const reset = toolbar.locator('[data-control="reset"]');
+    // ACT
+    await expect(reset).toHaveAttribute('data-has-work', 'false');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(pasted);
+    const popoverReset = modal.locator('[data-control="reset"]');
+    await expect(popoverReset).toHaveAttribute('data-has-work', 'true');
+    await popoverReset.click();
+    // ASSERT
+    const confirm = modal.locator('[data-reset-confirm]');
+    await expect(confirm).toBeVisible();
+    await expect(confirm.getByRole('button', { name: 'Download progress' })).toBeVisible();
+    await confirm.locator('[data-reset-now]').click();
+    await expect(confirm).toHaveCount(0);
+    await expect(field(modal, 'task')).toHaveValue('');
+    await expect(popoverReset).toHaveAttribute('data-has-work', 'false');
+    await expect.poll(() => storedProgress(page)).not.toContain('RESET MARKER');
+    expect(await storedProgress(page)).toContain('keep');
+  });
+
+  test('keeps a pasted result across a reload and a switch of language, under the one progress key', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# SAVED SPEC MARKER';
+    const first = 0;
+    const { modal } = await open(page, 'light');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(pasted);
+    await expect.poll(() => storedKeys(page)).toEqual([PROGRESS_KEY]);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    // ACT
+    await open(page, 'light');
+    await openStage(page, 'High-level plan');
+    await expect(field(modal, 'task')).toHaveValue(pasted);
+    await page.keyboard.press('Escape');
+    const german = await open(page, 'light', { url: GERMAN_EPISODE });
+    await german.root.locator('[data-part="diagram"] button[data-try]').nth(first).click();
+    // ASSERT
+    await expect(field(german.modal, 'task')).toHaveValue(pasted);
   });
 
   test('keeps every line break of a multi-line paste in a collapsed field when the prompt is copied', async ({
@@ -406,6 +564,29 @@ test.describe('success cases', () => {
     });
   }
 
+  test('restores the run from the progress file it downloaded, with every result as a block scalar', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const first = '# First spec\n\nline two';
+    const second = '# Second spec';
+    const { root, modal } = await open(page, 'light');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(first);
+    await page.keyboard.press('Escape');
+    // ACT
+    const file = await savedProgressFile(root);
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(second);
+    await page.keyboard.press('Escape');
+    await loadProgress(root, file);
+    await openStage(page, 'High-level plan');
+    // ASSERT
+    expect(file).toMatch(/^workflow: project-plan\nhash: [0-9a-f]{64}\nteaching: true\nresults:\n/);
+    expect(file).toContain('plan.task: |-\n    # First spec\n\n    line two');
+    await expect(field(modal, 'task')).toHaveValue(first);
+  });
+
   test('shows a valid uploaded Workflow in place of the authored one', async ({ page }) => {
     // ARRANGE
     const mine = 'mine';
@@ -421,6 +602,84 @@ test.describe('success cases', () => {
 });
 
 test.describe('failure cases', () => {
+  test('starts fresh when the saved run belongs to an edited Workflow, keeps the old entry, and Discard clears it', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const stale = { hash: 'an-older-edit', teaching: true, results: { 'plan.task': '# OLD' } };
+    const { modal } = await open(page, 'light');
+    await storeProgress(page, { 'human-in-the-loop/project-plan': stale });
+    // ACT
+    const { root } = await open(page, 'light');
+    const note = root.locator('[data-progress-note="stale"]');
+    await expect(note).toBeVisible();
+    await openStage(page, 'High-level plan');
+    await expect(field(modal, 'task')).toHaveValue('');
+    await page.keyboard.press('Escape');
+    const kept = await storedProgress(page);
+    await note.getByRole('button', { name: 'Discard' }).click();
+    // ASSERT
+    expect(kept).toContain('an-older-edit');
+    await expect(note).toHaveCount(0);
+    expect(await storedProgress(page)).not.toContain('an-older-edit');
+  });
+
+  test('tells the viewer to download their progress when the browser refuses to save it', async ({ page }) => {
+    // ARRANGE
+    await page.addInitScript(() => {
+      Storage.prototype.setItem = () => {
+        throw new Error('QuotaExceededError');
+      };
+    });
+    const { root, modal } = await open(page, 'light');
+    // ACT
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill('# NOT SAVED');
+    await page.keyboard.press('Escape');
+    // ASSERT
+    await expect(root.locator('[data-progress-note="unsaved"]')).toBeVisible();
+    await expect(root.getByRole('button', { name: 'Download progress' })).toBeVisible();
+  });
+
+  test('refuses a progress file of an edited Workflow, naming it, and keeps the run', async ({ page }) => {
+    // ARRANGE
+    const kept = '# Kept';
+    const { root, modal } = await open(page, 'light');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill(kept);
+    await page.keyboard.press('Escape');
+    const file = (await savedProgressFile(root)).replace(/hash: [0-9a-f]{64}/, 'hash: edited');
+    // ACT
+    await loadProgress(root, file);
+    await openStage(page, 'High-level plan');
+    // ASSERT
+    await expect(root.locator('[data-upload-problems] li')).toContainText('Plan a project changed');
+    await expect(field(modal, 'task')).toHaveValue(kept);
+  });
+
+  test('refuses a progress file of another Workflow', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page, 'light');
+    const file = (await savedProgressFile(root)).replace('workflow: project-plan', 'workflow: vacation');
+    // ACT
+    await loadProgress(root, file);
+    // ASSERT
+    await expect(root.locator('[data-upload-problems] li')).toContainText('another Workflow');
+    await expect(root).toHaveAttribute('data-human-in-the-loop', 'project-plan');
+  });
+
+  test('has no progress save or load while an uploaded Workflow is shown, which is not kept', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page, 'light');
+    // ACT
+    await root
+      .locator('[data-control="upload"] input[type=file]')
+      .setInputFiles({ name: 'mine.yml', mimeType: 'text/yaml', buffer: Buffer.from(OWN) });
+    // ASSERT
+    await expect(root).toHaveAttribute('data-human-in-the-loop', 'mine');
+    await expect(root.locator('[data-control="progressDownload"], [data-control="progressUpload"]')).toHaveCount(0);
+  });
+
   test('reports the problems of a broken uploaded Workflow and keeps the authored one', async ({ page }) => {
     // ARRANGE
     const authored = 'project-plan';

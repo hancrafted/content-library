@@ -2,6 +2,16 @@
 ui:
   workflow: Use case
   toolbar: Workflow controls
+  view: Diagram view
+  viewTip: 'Choose how the diagram shows the workflow'
+  viewPresentation: Presentation
+  viewDetailed: Detailed
+  viewHandson: Hands-on
+  viewSoon: 'Coming soon'
+  checked: checked
+  sendBack: send back
+  repeats: '× each round ({n})'
+  tryJob: 'Open {job} in {stage}'
   level: Prompt style
   chat: Chat
   chatTip: 'Chat: prompts to paste into an AI chat'
@@ -27,6 +37,25 @@ ui:
   contextTip: 'Help: show what to do in each step'
   download: Download this Workflow
   upload: Upload your own Workflow
+  progressSave: 'Save progress to a file'
+  progressLoad: 'Load progress from a file'
+  refuseUnreadable: 'This file is not a progress file.'
+  refuseOtherWorkflow: 'This file is progress of another Workflow, not {workflow}.'
+  refuseChanged: '{workflow} changed since this file was made, so its progress does not fit.'
+  noteStale: 'This Workflow changed since your progress was saved, so you start fresh. Your old progress is kept until you choose.'
+  noteUnsaved: 'Your progress could not be saved in this browser. Download it to keep it.'
+  downloadProgress: Download progress
+  downloadOldProgress: Download old progress
+  discardProgress: Discard
+  teaching: Teaching mode
+  teachingTip: 'Teaching mode keeps the run short: the first epics and tickets only, shorter grills.'
+  teachingLocked: Reset to change
+  reset: Reset
+  resetTip: 'Previous work was found here or in another Episode. Reset starts over.'
+  resetConfirm: 'Reset clears the results you pasted for this Workflow, here and in every Episode. Download them first to keep them.'
+  resetDownload: Download progress
+  resetNow: Reset now
+  resetCancel: Cancel
   close: Close
   copied: Copied
   gate: 'Gate {n}'

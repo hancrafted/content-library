@@ -5,7 +5,7 @@ import { Check } from 'lucide-react';
 import { ChatTabs } from './chat-tabs.client';
 import type { SlotState, StepKit } from './step-kit.types';
 import { contextCount } from './step-panel.client';
-import { itemsOf, type Item } from './stepper-items.pure';
+import { itemsOf, openItemOf, type Item } from './stepper-items.pure';
 import type { StageRun } from './workflow-run.pure';
 import type { StageView } from './workflow-view.pure';
 
@@ -64,12 +64,15 @@ interface StepperProps {
   readonly run: StageRun;
   readonly kit: StepKit;
   readonly slots: SlotState;
+  /** The job whose card opened the modal: its first item starts open. */
+  readonly jobId?: string | null;
 }
 
-export function Stepper({ stage, run, kit, slots }: StepperProps) {
+export function Stepper({ stage, run, kit, slots, jobId = null }: StepperProps) {
+  const items = itemsOf(stage, run);
   return (
-    <Accordion type="single" collapsible data-stepper="" defaultValue="0">
-      {itemsOf(stage, run).map((item, at) => (
+    <Accordion type="single" collapsible data-stepper="" defaultValue={openItemOf(items, jobId)}>
+      {items.map((item, at) => (
         <StepItem key={item.key} {...{ item, at, kit, slots }} />
       ))}
     </Accordion>

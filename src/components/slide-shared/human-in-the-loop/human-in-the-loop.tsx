@@ -1,8 +1,8 @@
 import { HumanInTheLoopClient } from './human-in-the-loop.client';
 import type { DiagramSlots, HumanInTheLoopData, WorkflowSlideWords } from './human-in-the-loop.types';
 import type { ControlMap } from './toolbar-controls.pure';
-import { WORKFLOW_IDS, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
-import type { Level } from './workflow-state.pure';
+import { WORKFLOW_IDS, hashFor, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
+import type { Level, View } from './workflow-state.pure';
 
 /*
  * The human-in-the-loop workflow, a Shared visual. A Slide names a Workflow by id and its own words; the Workflow, the
@@ -18,6 +18,8 @@ export interface HumanInTheLoopProps {
   /** Words a Slide says differently from the visual's own. */
   readonly words?: WorkflowSlideWords;
   readonly level?: Level;
+  /** The view the diagram opens in; hide the view control through `controls` to keep it. */
+  readonly view?: View;
   /** Hides every "Try it" button and the Technical toggle, so the Slide shows the diagram alone. */
   readonly readonly?: boolean;
   /** The Preset's overrides of the toolbar's control registry, e.g. `{ picker: { show: false } }`. */
@@ -34,6 +36,7 @@ export function humanInTheLoopData({
   locale,
   words,
   level = 'simple',
+  view = 'presentation',
   readonly = false,
   controls,
   diagram,
@@ -42,10 +45,12 @@ export function humanInTheLoopData({
   return {
     workflows: WORKFLOW_IDS.map((each) => workflowFor(each, lang)),
     workflowId: id,
+    hashes: Object.fromEntries(WORKFLOW_IDS.map((each) => [each, hashFor(each)])),
     locale: lang,
     words: { ...uiWords(lang), ...words?.ui },
     controls: controls ?? {},
     level,
+    view,
     readonly,
     diagram,
   };
