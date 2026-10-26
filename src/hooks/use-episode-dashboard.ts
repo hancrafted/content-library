@@ -8,7 +8,7 @@ import { useEpisodeOutputs } from './use-episode-outputs';
 type PickerWindow = Window & { showDirectoryPicker?: (options: { mode: 'read' }) => Promise<DirectoryHandle> };
 type Selection = { folder: EpisodeFolder; demo: boolean } & Awaited<ReturnType<typeof openEpisode>>;
 
-/** The recorded Run under public/dashboard-demo/, made by scripts/dashboard-demo.ts. */
+/** The recorded Run under public/dashboard-demo/, made by tools/demo/dashboard-demo.ts. */
 const DEMO_FILES = ['pipeline.yml', 'events.jsonl'] as const;
 const DEMO_NAME = 'Demo · onboard-ai-every-time';
 

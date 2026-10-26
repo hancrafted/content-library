@@ -1,4 +1,4 @@
-// `node scripts/redirect-stubs.ts <out dir> <stub dir> <origin>`: writes a redirect stub for every page in the
+// `node tools/deploy/redirect-stubs.ts <out dir> <stub dir> <origin>`: writes a redirect stub for every page in the
 // export, for the temporary GitHub Pages deploy of the old github.io URLs. Build with the old base path first so
 // the page list matches the paths that were public.
 import { mkdirSync, readdirSync, writeFileSync } from 'node:fs';
@@ -7,7 +7,7 @@ import { redirectStubHtml, redirectStubPlan } from './redirect-stubs.pure.ts';
 
 const [outDir, stubDir, origin] = process.argv.slice(2);
 if (!outDir || !stubDir || !origin) {
-  console.error('usage: node scripts/redirect-stubs.ts <out dir> <stub dir> <origin>');
+  console.error('usage: node tools/deploy/redirect-stubs.ts <out dir> <stub dir> <origin>');
   process.exit(1);
 }
 
