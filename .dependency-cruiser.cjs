@@ -74,11 +74,11 @@ const SLIDE_SHARED_REACH = [
   LIB,
 ];
 
-// The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2.1).
+// The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2).
 // An Episode's metadata file, an Event's copy's under `by-event/<event>/`: a record the content store loads (FE-013).
 const EPISODE_METADATA =
   '^src/episodes/(by-event/[^/]+/[^/]+|(?!components/|lib/|hooks/|tooling/)[^/]+)/episode-metadata\\.ts$';
-// The store's schemas: a leaf every tier may import record types from (FE-007 §2.5).
+// The store's schemas: a leaf every tier may import record types from (FE-007 §2.7).
 const STORE_SCHEMAS = '^src/content-store/schemas/';
 // The store's catalogue, the delivery policy readers import beside the entry: every module but the page catalogue,
 // which the entry serves over its records.
@@ -352,7 +352,7 @@ module.exports = {
         pathNot: STORE_SCHEMAS,
       },
     },
-    // FE-013 and FE-007 §2.5: the content store is the one reader of records, and its own tier.
+    // FE-013 and FE-007 §2.7: the content store is the one reader of records, and its own tier.
     {
       name: 'records-read-only-through-store',
       severity: 'error',
@@ -462,7 +462,7 @@ module.exports = {
         pathNot: '^src/shared/page-chrome/site-shell\\.tsx$',
       },
     },
-    // The area rules (spec #348, FE-007 §2.6 and §2.7). With the layer rules above (layers-never-import-app,
+    // The area rules (spec #348, FE-007 §2.3–§2.5 and §2.8). With the layer rules above (layers-never-import-app,
     // page-assembly-reached-only-from-app, content-store-tier, shared-knows-no-domain) they hold every product area:
     // an area is reached only from page assembly, and two areas meet only there.
     {
