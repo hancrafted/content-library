@@ -2,8 +2,11 @@
 ui:
   workflow: Anwendungsfall
   toolbar: Ablauf-Steuerung
-  technical: Technisch
-  technicalTip: 'Technisch: zeigt die einmalige Einrichtung und die /Skill-Befehle'
+  level: Prompt-Stil
+  chat: Chat
+  chatTip: 'Chat: Prompts zum Einfügen in einen KI-Chat'
+  cli: CLI
+  cliTip: 'CLI: zeigt die einmalige Einrichtung und die /Skill-Befehle'
   context: Hilfe
   intro: 'Gehe die Schritte der Reihe nach durch: Kopiere jeden Prompt in einen neuen KI-Chat und füge das Ergebnis hier wieder ein.'
   stepContext: 'Kontext angeben'

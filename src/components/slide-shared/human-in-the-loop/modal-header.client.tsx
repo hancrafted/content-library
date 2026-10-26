@@ -1,8 +1,9 @@
 'use client';
 
 import { DialogClose, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { CircleHelp, Code, X } from 'lucide-react';
+import { CircleHelp, X } from 'lucide-react';
 import type { UiWords } from './human-in-the-loop.types';
+import { LevelControl } from './level-control.client';
 import { ToolButton } from './tool-button.client';
 import { tryTitle } from './words.pure';
 import type { Level } from './workflow-state.pure';
@@ -18,7 +19,6 @@ interface HeaderProps {
 }
 
 function Actions({ words, level, onLevel, showContext, onContext }: Omit<HeaderProps, 'stage'>) {
-  const technical = level === 'technical';
   return (
     <div className="flex shrink-0 items-center gap-2">
       <ToolButton
@@ -30,14 +30,7 @@ function Actions({ words, level, onLevel, showContext, onContext }: Omit<HeaderP
       >
         <CircleHelp aria-hidden="true" />
       </ToolButton>
-      <ToolButton
-        label={words.technical}
-        tip={words.technicalTip}
-        pressed={technical}
-        onClick={() => onLevel(technical ? 'simple' : 'technical')}
-      >
-        <Code aria-hidden="true" />
-      </ToolButton>
+      <LevelControl words={words} level={level} onLevel={onLevel} />
       <DialogClose asChild>
         <ToolButton label={words.close}>
           <X aria-hidden="true" />
@@ -47,7 +40,7 @@ function Actions({ words, level, onLevel, showContext, onContext }: Omit<HeaderP
   );
 }
 
-/** The title at the left; at the right the info and simple/technical toggles beside Close. */
+/** The title at the left; at the right the info and Chat · CLI control beside Close. */
 export function ModalHeader({ stage, ...actions }: HeaderProps) {
   return (
     <DialogHeader>

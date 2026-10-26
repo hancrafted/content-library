@@ -5,17 +5,18 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Code, Download, Upload } from 'lucide-react';
+import { Download, Upload } from 'lucide-react';
 import { useId, type ChangeEvent } from 'react';
 import type { ToolbarProps } from './human-in-the-loop.types';
+import { LevelControl } from './level-control.client';
 import { ToolButton } from './tool-button.client';
 import { offers } from './toolbar-controls.pure';
 import { workflowFile } from './workflow-file.pure';
 
 /*
  * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a native select), a
- * separator, then icon buttons (Technical `</>`, download, upload), each with a tooltip. The control registry says what shows; a readonly Preset also drops
- * the Technical toggle. The parent validates an upload; this part only reads the chosen file.
+ * separator, then icon buttons (download, upload) after the Chat · CLI control, each with a tooltip. The control registry says what shows; a readonly Preset also drops
+ * the Chat · CLI control. The parent validates an upload; this part only reads the chosen file.
  */
 
 function download(workflow: ToolbarProps['workflow']) {
@@ -108,23 +109,12 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: Technical, download, upload. */
+/** The icon buttons the registry and the Preset allow, in order: Chat · CLI, download, upload. */
 function Icons({ bar }: { readonly bar: ToolbarProps }) {
   const { controls, readonly, words, level } = bar;
   return (
     <>
-      {offers(controls, 'level', readonly) && (
-        <ToolButton
-          label={words.technical}
-          tip={words.technicalTip}
-          data-control="level"
-          pressed={level === 'technical'}
-          variant="ghost"
-          onClick={() => bar.onLevel(level === 'technical' ? 'simple' : 'technical')}
-        >
-          <Code aria-hidden="true" />
-        </ToolButton>
-      )}
+      {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
       {offers(controls, 'download') && (
         <ToolButton
           label={words.download}

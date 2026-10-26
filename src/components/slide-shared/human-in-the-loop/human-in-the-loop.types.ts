@@ -16,9 +16,12 @@ import type { Workflow } from './workflow.types';
 export interface UiWords {
   /** The visible label and accessible name of the Workflow picker: the use case. */
   readonly workflow: string;
-  /** The Technical toggle's name, and its tooltip. */
-  readonly technical: string;
-  readonly technicalTip: string;
+  /** The Chat · CLI control: its group name, each segment's label and its tooltip. */
+  readonly level: string;
+  readonly chat: string;
+  readonly chatTip: string;
+  readonly cli: string;
+  readonly cliTip: string;
   /** The context toggle's name and tooltip: it shows or hides why a task matters, its techniques and an example result. */
   readonly context: string;
   readonly contextTip: string;
@@ -144,7 +147,7 @@ export interface DiagramProps {
   readonly onOpenStage: (stageId: string) => void;
 }
 
-/** What the toolbar part draws: the Workflow pills, the Technical toggle, download and upload in one pill. */
+/** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
 export interface ToolbarProps {
   readonly workflow: Workflow;
   /** Every authored Workflow, for the pills. */
@@ -152,7 +155,7 @@ export interface ToolbarProps {
   readonly level: Level;
   /** The Preset's overrides of the control registry. */
   readonly controls: ControlMap;
-  /** A readonly Preset: no Technical toggle, since nothing is tried. */
+  /** A readonly Preset: no Chat · CLI control, since nothing is tried. */
   readonly readonly: boolean;
   readonly uploadProblems: readonly string[];
   readonly words: UiWords;
@@ -183,7 +186,7 @@ export interface HumanInTheLoopData {
   readonly words: UiWords;
   readonly controls: ControlMap;
   readonly level: Level;
-  /** A readonly Preset hides every "Try it" button and the Technical toggle; the diagram stays. */
+  /** A readonly Preset hides every "Try it" button and the Chat · CLI control; the diagram stays. */
   readonly readonly: boolean;
   /** The Slide's additions to the diagram. */
   readonly diagram?: DiagramSlots;
