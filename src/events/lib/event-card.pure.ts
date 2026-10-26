@@ -4,13 +4,7 @@ import type { IsoDate } from '@/content-store/schemas/fields';
 import { dateLabelOf } from '@/shared/lib/date-label.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-
-/** What an Event card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
-export interface EventReads {
-  /** Reads one Translation key by its full dotted path. */
-  readonly read: (key: string) => string;
-  readonly episodeCount: { readonly one: string; readonly other: string };
-}
+import { EVENT_WORDS, eventCopy } from './event-words';
 
 /**
  * One Event as its card draws it: the Event and the Playlist it presents, with their strings read in one locale.
@@ -32,22 +26,25 @@ export interface EventCard {
   readonly episodeCountLabel: string;
 }
 
-const ITEMS = 'events.items';
-
 /** What a card reads of an Event the store serves: its slug, its day and time, its place, and its Playlist's length. */
 type CardEvent = Pick<Event, 'date' | 'time' | 'location'> & {
   readonly slug: EventSlug;
   readonly playlist: { readonly episodes: readonly unknown[] };
 };
 
-/** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
-export function eventCard(record: CardEvent, locale: Locale, { read, episodeCount }: EventReads): EventCard {
+/**
+ * Assembles one card, its words read through the Events area's word map: an Event's title and description by its
+ * slug, which `tsc` holds to the Event registry, so a missing key fails the type check rather than ships a blank.
+ */
+export function eventCard(record: CardEvent, locale: Locale): EventCard {
   const count = record.playlist.episodes.length;
+  const { title, description } = eventCopy(record.slug, locale);
+  const { episodeCount } = EVENT_WORDS[locale];
   return {
     slug: record.slug,
     route: eventRoute(record.slug),
-    title: read(`${ITEMS}.${record.slug}.title`),
-    description: read(`${ITEMS}.${record.slug}.description`),
+    title,
+    description,
     date: record.date,
     dateLabel: dateLabelOf(record.date, locale),
     ...(record.time === undefined ? {} : { time: record.time }),
