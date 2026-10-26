@@ -90,12 +90,12 @@ describe('edge cases', () => {
     const goal = workflow.stages[0]?.goal;
     // ASSERT
     expect(workflow.file.id).toBe('summer-party');
-    expect(venue?.task.fanOut).toBe(chats);
+    expect(venue?.fanOut).toBe(chats);
     expect([venue?.reviewed, interview?.reviewed]).toEqual([true, true]);
     expect(goal).toContain('Break it down');
   });
 
-  it('gives the popover of a task its do and review steps, per chat in Simple and one orchestrator in Technical', () => {
+  it('gives the popover of a task its do and review steps, one template in each level, repeated per round in Simple only', () => {
     // ARRANGE
     const find = (level: 'simple' | 'technical') =>
       workflowView(workflow, { level }).stages.find((stage) => stage.id === 'research')?.jobs[0]?.task;
@@ -103,7 +103,7 @@ describe('edge cases', () => {
     const simple = find('simple');
     const technical = find('technical');
     // ASSERT
-    expect(simple?.steps.map((step) => step.id)).toEqual(['do', 'do', 'do', 'review']);
+    expect(simple?.steps.map((step) => step.id)).toEqual(['do', 'review']);
     expect(technical?.steps.map((step) => step.id)).toEqual(['do', 'review']);
     expect(simple?.goodLooksLike.length).toBeGreaterThan(0);
   });

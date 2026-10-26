@@ -1,4 +1,4 @@
-import type { MoveLetter, TaskDef, WorkflowFile } from './workflow-schema.types';
+import type { ForeachDef, MoveLetter, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * The Workflow model the diagram draws, made from a loaded Workflow file by `workflowOf`. Every word is already
@@ -10,7 +10,7 @@ import type { MoveLetter, TaskDef, WorkflowFile } from './workflow-schema.types'
 /** The BRIEF move a Workflow stage makes, by its first letter; the initials are highlighted from it. */
 export type Move = MoveLetter;
 
-/** One Workflow job: one chat, or `fanOut` parallel chats from one template. */
+/** One Workflow job: one chat, or, in a repeated stage, one chat per round. */
 export interface Job {
   readonly id: string;
   readonly title: string;
@@ -22,7 +22,7 @@ export interface Job {
   readonly inputs: readonly string[];
   /** What the job hands on: its output id. */
   readonly outputs: readonly { readonly id: string }[];
-  /** N parallel chats from this one template; absent for a single chat. */
+  /** The rounds the diagram draws as parallel chats: the teaching cap of its repeated stage; absent for a single chat. */
   readonly fanOut?: number;
   /** Whether the job has a review in a fresh chat; the diagram ticks each chat then. */
   readonly reviewed: boolean;
@@ -58,6 +58,8 @@ export interface Stage {
   readonly card?: GateCard;
   /** Gate number when a human signs off this stage before the next starts. */
   readonly gate?: number;
+  /** The stage repeats once per H3 of an earlier output; its jobs run once per round. */
+  readonly foreach?: ForeachDef;
   readonly jobs: readonly Job[];
 }
 

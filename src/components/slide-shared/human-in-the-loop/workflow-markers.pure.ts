@@ -8,7 +8,7 @@ export const markersIn = (sections: readonly SectionDef[]): string[] =>
     [...section.text.matchAll(/\{\{([^{}]+)\}\}/g)].map((found) => (found[1] ?? '').trim()),
   );
 
-/** The marker names a slot fills: `id`, or `id_1` … `id_N` of a multiple slot over a fan-out of `width` chats. */
+/** The marker names a slot fills: `id`, or `id_1` … `id_N` of a multiple slot over a repeated stage of `width` rounds. */
 export function slotMarkers(slot: SlotDef, width: number): string[] {
   if (slot.mode === 'single') return [slot.id];
   return Array.from({ length: width }, (_, at) => `${slot.id}_${at + 1}`);
@@ -18,15 +18,15 @@ export interface MarkerScope {
   /** The sections of a task's prompt, or the general reviewer. */
   readonly reviewer: boolean;
   readonly slots: readonly SlotDef[];
-  /** The chats of the task itself (for `{{n}}`). */
-  readonly fanOut: number | undefined;
-  /** The chats of the fan-out each multiple slot takes, by slot id. */
+  /** Whether the task's stage repeats (for `{{item}}`). */
+  readonly repeated: boolean;
+  /** The rounds of the repeated stage each multiple slot takes, by slot id. */
   readonly widths?: ReadonlyMap<string, number>;
 }
 
-/** The markers a scope may use: built-ins (`n` only in a fan-out), reviewer markers in the reviewer, its slots. */
-export function allowedMarkers({ reviewer, slots, fanOut, widths }: MarkerScope): ReadonlySet<string> {
-  const builtIn = BUILT_IN_MARKERS.filter((name) => name !== 'n' || (!reviewer && fanOut !== undefined));
+/** The markers a scope may use: built-ins (`item` only in a repeated stage), reviewer markers in the reviewer, its slots. */
+export function allowedMarkers({ reviewer, slots, repeated, widths }: MarkerScope): ReadonlySet<string> {
+  const builtIn = BUILT_IN_MARKERS.filter((name) => name !== 'item' || (!reviewer && repeated));
   const own = reviewer ? REVIEWER_MARKERS : slots.flatMap((slot) => slotMarkers(slot, widths?.get(slot.id) ?? 0));
   return new Set<string>([...builtIn, ...own]);
 }

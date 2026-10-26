@@ -26,15 +26,17 @@ describe('success cases', () => {
     expect(view.stages[0]?.goal).toBe(loaded.file.stages[0]?.learningGoal);
   });
 
-  it('Simple makes one do step per chat of a fan-out and Technical one orchestrator step, each with its review', () => {
+  it('Both levels make one do step and one review, and only Simple plays a repeated stage once per round', () => {
     // ARRANGE
-    const chats = 3;
+    const research = (level: typeof SIMPLE | typeof TECHNICAL) =>
+      workflowView(WORKFLOW, level).stages.find((stage) => stage.id === 'research');
     // ACT
-    const simple = jobOf(workflowView(WORKFLOW, SIMPLE), 'venue').task.steps;
-    const technical = jobOf(workflowView(WORKFLOW, TECHNICAL), 'venue').task.steps;
+    const simple = research(SIMPLE);
+    const technical = research(TECHNICAL);
     // ASSERT
-    expect(simple.map((step) => step.id)).toEqual([...Array<string>(chats).fill('do'), 'review']);
-    expect(technical.map((step) => step.id)).toEqual(['do', 'review']);
+    expect(simple?.jobs[0]?.task.steps.map((step) => step.id)).toEqual(['do', 'review']);
+    expect(technical?.jobs[0]?.task.steps.map((step) => step.id)).toEqual(['do', 'review']);
+    expect([simple?.repeats, technical?.repeats]).toEqual([true, false]);
   });
 
   it('hands the details the techniques of a task, resolved from the catalogue with their tier', () => {

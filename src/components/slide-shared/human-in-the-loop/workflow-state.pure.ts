@@ -16,7 +16,9 @@ export interface WorkflowState {
   readonly openStageId: string | null;
   /** A Workflow the viewer uploaded and that is shown instead of an authored one. */
   readonly uploaded: Workflow | null;
-  /** What the viewer pasted into the prompt slots, by marker name (a slot's id, or `id_K`), shared by every stage. Memory only. */
+  /** Teaching mode caps a repeated stage's rounds. On at the start; the run model says when it may still change. */
+  readonly teaching: boolean;
+  /** What the viewer pasted, keyed as the run model keys results (`stage.job`, `stage.job#k`), plus free inputs by their own name. Memory only. */
   readonly slotValues: Readonly<Record<string, string>>;
   /** What was wrong with the last upload; empty when it loaded or none was tried. */
   readonly uploadProblems: readonly string[];
@@ -41,6 +43,7 @@ export type WorkflowEvent =
 export function createState(start: Start): WorkflowState {
   return {
     ...start,
+    teaching: true,
     openStageId: null,
     slotValues: {},
     uploaded: null,

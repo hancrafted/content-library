@@ -31,9 +31,6 @@ export function idProblems(file: WorkflowFile): string[] {
     ...dupes(file.stages.map((stage) => stage.id)).map((id) => `The stage id "${id}" is used twice.`),
     ...dupes(tasks.map((task) => task.id)).map((id) => `The task id "${id}" is used twice.`),
     ...dupes(outputs).map((name) => `The output "${name}" is handed on by two tasks.`),
-    ...tasks
-      .filter((task) => task.fanOut !== undefined && task.fanOut < 2)
-      .map((task) => `Task "${task.id}" has fanOut ${task.fanOut}; it must be at least 2.`),
   ];
 }
 
@@ -74,8 +71,9 @@ function slotNameProblems(slot: SlotDef, task: TaskDef, producer: Producer | und
   if (slot.free) return [];
   if (!producer) return [`${where} names no output of an earlier stage.`];
   if (producer.all && slot.mode === 'single')
-    return [`${where} takes all chats of a fan-out; its mode must be multiple.`];
-  if (!producer.all && slot.mode === 'multiple') return [`${where} is multiple but its output is not a fan-out.`];
+    return [`${where} takes all rounds of a repeated stage; its mode must be multiple.`];
+  if (!producer.all && slot.mode === 'multiple')
+    return [`${where} is multiple but its output is not from a repeated stage.`];
   return [];
 }
 
@@ -167,7 +165,7 @@ function reviewSlotOf(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<stri
       file,
       task,
       template: producer?.task.template ?? task.template,
-      markers: producer?.task.fanOut ?? 0,
+      markers: producer?.stage.foreach?.teaching ?? 0,
       noun: 'review slot',
     };
     const named = producer ? slotNameProblems(slot, task, producer) : clashProblems(slot, task, used);
@@ -179,26 +177,29 @@ function reviewSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMa
   return (task.review?.slots ?? []).flatMap(reviewSlotOf(file, task, names));
 }
 
-/** The example of a task: one text, or for a fan-out a list with one per chat; each against the task's template. */
-function exampleProblems(file: WorkflowFile, task: TaskDef): string[] {
+/** The example of a task: one text, or in a repeated stage a list with one per teaching round; each against its template. */
+function exampleProblems(file: WorkflowFile, task: TaskDef, stage: StageDef): string[] {
   const { example } = task.details;
   const where = `The example of task "${task.id}"`;
-  const chats = task.fanOut;
+  const rounds = stage.foreach?.teaching;
   if (typeof example === 'string') {
     return againstTemplate(file, task.template, { source: example, what: where });
   }
-  if (chats === undefined) return [`${where} is a list but the task has no fan-out.`];
-  if (example.length !== chats) return [`${where} needs ${chats} examples, one per chat, and has ${example.length}.`];
+  if (rounds === undefined) return [`${where} is a list but its stage does not repeat.`];
+  if (example.length !== rounds) {
+    return [`${where} needs ${rounds} examples, one per teaching round, and has ${example.length}.`];
+  }
   return example.flatMap((source, at) =>
-    againstTemplate(file, task.template, { source, what: `The example of chat ${at + 1} of task "${task.id}"` }),
+    againstTemplate(file, task.template, { source, what: `The example of round ${at + 1} of task "${task.id}"` }),
   );
 }
 
-function markerProblems(task: TaskDef, names: ReadonlyMap<string, Producer>): string[] {
-  const { slots, fanOut } = task;
-  const widths = new Map(slots.map((slot) => [slot.id, names.get(slot.id)?.task.fanOut ?? 0]));
+function markerProblems(task: TaskDef, stage: StageDef, names: ReadonlyMap<string, Producer>): string[] {
+  const { slots } = task;
+  const repeated = stage.foreach !== undefined;
+  const widths = new Map(slots.map((slot) => [slot.id, names.get(slot.id)?.stage.foreach?.teaching ?? 0]));
   return Object.entries(task.do).flatMap(([runtime, sections]) =>
-    unknownMarkers(sections, { reviewer: false, slots, fanOut, widths }).map(
+    unknownMarkers(sections, { reviewer: false, slots, repeated, widths }).map(
       (marker) => `The ${runtime} prompt of task "${task.id}" has the unknown marker {{${marker}}}.`,
     ),
   );
@@ -206,20 +207,21 @@ function markerProblems(task: TaskDef, names: ReadonlyMap<string, Producer>): st
 
 function taskProblems(file: WorkflowFile, task: TaskDef, index: number): string[] {
   const names = producersFor(file, index, task);
-  const own = unneededOutputs(file.stages[index] as StageDef, task);
+  const stage = file.stages[index] as StageDef;
+  const own = unneededOutputs(stage, task);
   const known =
     task.template in file.templates ? [] : [`Task "${task.id}" names the unknown template "${task.template}".`];
   return [
     ...known,
     ...doSlotProblems(file, task, { names, own }),
     ...reviewSlotProblems(file, task, names),
-    ...markerProblems(task, names),
-    ...exampleProblems(file, task),
+    ...markerProblems(task, stage, names),
+    ...exampleProblems(file, task, stage),
   ];
 }
 
 export function reviewerProblems(file: WorkflowFile): string[] {
-  const scope = { reviewer: true, slots: [], fanOut: undefined } as const;
+  const scope = { reviewer: true, slots: [], repeated: false } as const;
   return unknownMarkers(file.reviewer.sections, scope).map((m) => `The reviewer has the unknown marker {{${m}}}.`);
 }
 

@@ -30,6 +30,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected: WorkflowState = {
       ...start,
+      teaching: true,
       openStageId: null,
       slotValues: {},
       uploaded: null,
