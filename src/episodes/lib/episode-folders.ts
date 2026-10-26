@@ -65,9 +65,8 @@ export function toolingFolders(root: string): PageFolder[] {
 }
 
 /**
- * Every page folder under `<root>/src/episodes/`, in folder-name order: the standalone Episodes and
- * tooling pages, then each Event's copies, Event by Event. The reserved folders hold no page and are walked into, never
- * listed.
+ * Every page folder under `<root>/src/episodes/`, in folder-name order: the standalone Episodes, then each Event's
+ * copies, Event by Event, then the tooling pages. The reserved folders hold no page and are walked into, never listed.
  */
 export function pageFolders(root: string): PageFolder[] {
   const episodesDir = path.join(root, EPISODES_DIR);

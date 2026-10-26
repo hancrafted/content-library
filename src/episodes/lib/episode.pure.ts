@@ -1,3 +1,5 @@
+import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
+
 /** The least a Slide record carries to be placed: its stable slug. */
 export interface SlideOutline {
   readonly slug: string;
@@ -20,12 +22,6 @@ export interface PlacedListSlide<S> {
   readonly section: string;
   readonly level: SlideLevel;
 }
-
-/**
- * The DOM id of the Title slide, and the active-Slide value for "no hash": the
- * top of the page. Reserved, so no Section or Slide slug may be `top`.
- */
-export const TITLE_ANCHOR = 'top';
 
 /** Lowercase kebab-case; a single hyphen only, since `--` joins section and slide. */
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;

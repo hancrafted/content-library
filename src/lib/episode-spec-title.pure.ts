@@ -8,7 +8,6 @@
  */
 
 import { type CheerioAPI } from 'cheerio';
-import { TITLE_ANCHOR } from '../episodes/lib/episode.pure.ts';
 import { OPTION, SECTION, TITLE_SLIDE } from './episode-spec-page.pure.ts';
 import {
   checkOption,
@@ -19,6 +18,7 @@ import {
   type SpecPage,
 } from './episode-spec-slide.pure.ts';
 import { unless } from './finding.pure.ts';
+import { TITLE_ANCHOR } from './title-anchor.pure.ts';
 
 const TITLE_SLIDE_OPTIONS: OptionCount = { min: 3, max: 3, words: 'three' };
 const WHERE = `The Title slide {#${TITLE_ANCHOR}}`;

@@ -12,7 +12,10 @@ const EPISODE_CONTENT = '^src/episodes/(?!(components|lib|hooks)/)';
 const EPISODE_HOOKS = '^src/episodes/hooks/';
 // The composition registries in the area's lib/: they import every Episode's and tooling page's record, so they sit
 // above the Episodes they list and the lib rules below leave them out.
-const COMPOSITION_REGISTRY = '^src/episodes/lib/(registry|tooling-pages|episode-registry\\.generated)\\.ts$';
+const COMPOSITION_REGISTRY_NAMES = '(registry|tooling-pages|episode-registry\\.generated)';
+const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
+// The area's plain lib modules, every one but the composition registries: the content store may read them.
+const EPISODE_PLAIN_LIB = `^src/episodes/lib/(?!${COMPOSITION_REGISTRY_NAMES}\\.ts$)[^/]+\\.ts$`;
 // The tests that run over every composed Episode and tooling page through those registries, rendering Slides.
 const REGISTRY_TESTS =
   '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders|tooling-pages)\\.test\\.ts$';
@@ -362,7 +365,7 @@ module.exports = {
       from: { path: '^src/content-store/' },
       to: {
         path: ['^src/(app|page-assembly|components|episodes)/', '(^|/)node_modules/(@types/)?(react|react-dom)/'],
-        pathNot: [EPISODE_METADATA, '^src/episodes/lib/(?!registry|tooling-pages|episode-registry)[^/]+\\.ts$'],
+        pathNot: [EPISODE_METADATA, EPISODE_PLAIN_LIB],
       },
     },
     // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.

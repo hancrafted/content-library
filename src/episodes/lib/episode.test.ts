@@ -1,5 +1,6 @@
+import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
 import { describe, expect, it } from 'vitest';
-import { placeSections, TITLE_ANCHOR, type SectionList, type SlideOutline } from './episode.pure';
+import { placeSections, type SectionList, type SlideOutline } from './episode.pure';
 
 /** A Section as a Slide record lists it: its section slide's slug first, then its page Slides'. */
 function list(...slugs: [string, ...string[]]): readonly [SlideOutline, ...SlideOutline[]] {

@@ -7,11 +7,11 @@ import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/c
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import type { EyebrowText } from '@/episodes/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
-import { TITLE_ANCHOR } from '@/episodes/lib/episode.pure';
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import type { Locale } from '@/lib/locale.pure';
 import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
 import type { TocSection } from '@/lib/table-of-contents.pure';
+import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';

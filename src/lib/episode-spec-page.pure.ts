@@ -2,12 +2,12 @@
  * Where the Spec page sits in a staging folder and how its Slides are read
  * (design-ADR 0011): the role selectors every Spec reader shares and the one
  * Slide reader the Spec check, the feedback check and the review server use.
- * It imports nothing but `cheerio` and `episode.pure.ts`, by its `.ts` path, so
+ * It imports nothing but `cheerio` and `title-anchor.pure.ts`, by its `.ts` path, so
  * the new-episode scripts run it under bare node.
  */
 
 import { load } from 'cheerio';
-import { TITLE_ANCHOR } from '../episodes/lib/episode.pure.ts';
+import { TITLE_ANCHOR } from './title-anchor.pure.ts';
 
 /** The Spec page, relative to the Episode's staging folder. */
 export const SPEC_FILE = 'spec/spec.html';

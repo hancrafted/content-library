@@ -1,7 +1,8 @@
 import type { ContextItem } from '@/components/context-drawer/context-drawer-input';
 import type { LocalizedSlide, SlideContext } from '@/episodes/components/slide-master/localized-slide';
-import { checkedSlug, TITLE_ANCHOR } from '@/episodes/lib/episode.pure';
+import { checkedSlug } from '@/episodes/lib/episode.pure';
 import { splitCitations, type SpeakerNoteItem, type VoiceScriptSegment } from '@/lib/context-drawer.pure';
+import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
 
 /*
  * THE SEAM. This file and `context-drawer-input.ts` are the only place the

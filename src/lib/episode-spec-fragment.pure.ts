@@ -5,9 +5,9 @@
  * run on a fragment with the checkbox added the way assembly adds it. The Slide's number is its Options' leading digit.
  */
 import { load } from 'cheerio';
-import { TITLE_ANCHOR } from '../episodes/lib/episode.pure.ts';
 import { OPTION } from './episode-spec-page.pure.ts';
 import { checkOption, checkOptionMarks, FORM, type OptionCount } from './episode-spec-slide.pure.ts';
+import { TITLE_ANCHOR } from './title-anchor.pure.ts';
 
 const SLIDE_MARKER = /<!-- slide: ([a-z0-9-]+) -->/g;
 const OPTIONS: OptionCount = { min: 2, max: 3, words: 'two or three' };
