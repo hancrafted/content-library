@@ -1,12 +1,12 @@
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
-import type { EpisodeSlug } from '@/lib/routes';
+import type { EpisodeId } from '@/lib/routes';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { EVENT_RECORDS } from './event-registry.generated';
 import { catalogueOf } from './page-catalogue';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
-import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
+import { checkRecords, parseRecords, type Content, type ContentInput, type LoadedEpisode } from './refusals';
 import type { Episode, EpisodeStatus } from './schemas/episode.schema';
 import type { EventInput } from './schemas/event.schema';
 import type { IsoDate } from './schemas/fields';
@@ -16,7 +16,8 @@ import type { ServedEvent } from './served-event';
 /*
  * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here, parsed
  * by its schema and checked against the others when this module loads. Episode metadata arrives through the generated
- * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder), Events through the generated
+ * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder, keyed by the Episode id its
+ * folder gives it), Events through the generated
  * Event registry (`./event-registry.generated.ts`, one entry per Event file), Playlists by explicit import. A bad
  * record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read records only
  * through the functions below, and every page through the page catalogue served here. The one seam a database would
@@ -29,8 +30,8 @@ const PLAYLISTS: readonly PlaylistInput[] = [
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
 ];
 
-/** The slugs whose metadata says `published`. */
-type PublishedSlug = {
+/** The Episode ids whose metadata says `published`. */
+type PublishedId = {
   [S in keyof typeof EPISODE_METADATA]: (typeof EPISODE_METADATA)[S]['status'] extends 'published' ? S : never;
 }[keyof typeof EPISODE_METADATA];
 
@@ -52,41 +53,43 @@ function refusal(sentences: readonly string[]): Error {
 }
 
 const CONTENT = loadContent({
-  episodes: [...Object.values(EPISODE_METADATA), ...UPCOMING_METADATA],
+  episodes: Object.entries({ ...EPISODE_METADATA, ...UPCOMING_METADATA }).map(([id, record]) => ({ id, record })),
   events: EVENTS,
   playlists: PLAYLISTS,
 });
 
-/** The Featured slugs, typed so `tsc` refuses one that names an upcoming Episode. */
-export function featuredSlugs(): readonly PublishedSlug[] {
+/** The Featured Episode ids, typed so `tsc` refuses one that names an upcoming Episode. */
+export function featuredIds(): readonly PublishedId[] {
   return FEATURED;
 }
 
-/** Every Episode's metadata: those with a page, then the upcoming ones without, each in folder-name order. */
-export function listEpisodes(): readonly Episode[] {
+export type { LoadedEpisode } from './refusals';
+
+/** Every Episode's metadata with its id: those with a page, then the upcoming ones without, each in id order. */
+export function listEpisodes(): readonly LoadedEpisode[] {
   return CONTENT.episodes;
 }
 
-/** One registered Episode's metadata. A registered slug the store does not hold is a bug, so it throws. */
-function episodeOf(slug: string): Episode {
-  const episode = CONTENT.episodes.find((entry) => entry.slug === slug);
-  if (!episode) throw new Error(`No Episode metadata lists the registered slug "${slug}"`);
+/** One registered Episode's metadata. A registered id the store does not hold is a bug, so it throws. */
+function episodeOf(id: string): LoadedEpisode {
+  const episode = CONTENT.episodes.find((entry) => entry.id === id);
+  if (!episode) throw new Error(`No Episode metadata lists the registered id "${id}"`);
   return episode;
 }
 
 /** The Episode's status. */
-export function episodeStatus(slug: EpisodeSlug): EpisodeStatus {
-  return episodeOf(slug).status;
+export function episodeStatus(id: EpisodeId): EpisodeStatus {
+  return episodeOf(id).status;
 }
 
 /** The Episode's visibility: a public one has its own page; an unlisted one lives only under its Event. */
-export function episodeVisibility(slug: EpisodeSlug): Episode['visibility'] {
-  return episodeOf(slug).visibility;
+export function episodeVisibility(id: EpisodeId): Episode['visibility'] {
+  return episodeOf(id).visibility;
 }
 
-/** The release date of a published Episode; undefined for an upcoming one or an unknown slug. */
-export function episodePublishedOn(slug: string): IsoDate | undefined {
-  const episode = CONTENT.episodes.find((entry) => entry.slug === slug);
+/** The release date of a published Episode; undefined for an upcoming one or an unknown id. */
+export function episodePublishedOn(id: string): IsoDate | undefined {
+  const episode = CONTENT.episodes.find((entry) => entry.id === id);
   return episode?.status === 'published' ? episode.publishedOn : undefined;
 }
 
@@ -101,12 +104,12 @@ export interface Video {
  * The Video an Episode's page plays in this locale; none until uploaded. An unlisted Episode's one recording plays on
  * every locale page, with the language it was recorded in (a site locale: the store refuses any other).
  */
-export function episodeVideo(slug: EpisodeSlug, locale: Locale): Video | undefined {
-  const video = episodeOf(slug).youtube;
+export function episodeVideo(id: EpisodeId, locale: Locale): Video | undefined {
+  const video = episodeOf(id).youtube;
   if (video === undefined) return undefined;
   if ('language' in video) return { id: video.id, recordedIn: video.language as Locale };
-  const id = video[locale];
-  return id === undefined ? undefined : { id };
+  const local = video[locale];
+  return local === undefined ? undefined : { id: local };
 }
 
 export type { PlaylistPlace, ServedEvent } from './served-event';

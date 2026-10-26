@@ -1,4 +1,5 @@
-import { EPISODE_SLUGS } from './episode-registry.generated';
+import { episodeRefOf } from './episode-id.pure';
+import { EPISODE_IDS } from './episode-registry.generated';
 import { EVENT_SLUGS } from './event-registry.generated';
 import { LOCALES, localizePath, type Locale } from './locale.pure';
 import { isToolingSlug, TOOLING_SLUGS, type ToolingSlug } from './tooling-pages';
@@ -16,26 +17,31 @@ export const ROUTES = {
 export const LEGACY_EPISODE_PREFIX = '/episode';
 
 /**
- * Every Episode, public or unlisted: each one folder, `src/components/episodes/<slug>/`, listed by the generated
- * Episode registry. Which of them has an `/episodes/` page is the page catalogue's (`treatmentOf` in the content
- * store): an unlisted one lives only under its Event. The tooling pages served beside them are no Episodes: `TOOLING_SLUGS`.
+ * Every Episode with a page, public or unlisted, by its Episode id (GLOSSARY): one folder each,
+ * `src/components/episodes/<slug>/`, or `…/by-event/<event-slug>/<slug>/` for an Event's copy, whose id is
+ * `<event-slug>__<slug>`. Listed by the generated Episode registry. Which of them has an `/episodes/` page is the page
+ * catalogue's (`treatmentOf` in the content store): an Event's copy lives only under its Event. The tooling pages
+ * served beside them are no Episodes: `TOOLING_SLUGS`.
  */
-export { EPISODE_SLUGS };
+export { EPISODE_IDS };
 
-export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
+export type EpisodeId = (typeof EPISODE_IDS)[number];
 
-export function isEpisodeSlug(slug: string): slug is EpisodeSlug {
-  return (EPISODE_SLUGS as readonly string[]).includes(slug);
+export function isEpisodeId(id: string): id is EpisodeId {
+  return (EPISODE_IDS as readonly string[]).includes(id);
 }
 
-/** Every slug that may name a page at `/episodes/<slug>/`: each Episode's, then each tooling page's; an unlisted Episode's is not exported. */
-export const EPISODES_PATH_SLUGS = [...EPISODE_SLUGS, ...TOOLING_SLUGS] as const;
+/**
+ * Every name that may name a page at `/episodes/<slug>/`: each Episode's id, then each tooling page's slug. An Event's
+ * copy, whose id holds its Event's slug, is never exported there; nor is an unlisted Episode.
+ */
+export const EPISODES_PATH_SLUGS = [...EPISODE_IDS, ...TOOLING_SLUGS] as const;
 
 /** A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. */
-export type EpisodesPathSlug = EpisodeSlug | ToolingSlug;
+export type EpisodesPathSlug = EpisodeId | ToolingSlug;
 
 export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
-  return isEpisodeSlug(slug) || isToolingSlug(slug);
+  return isEpisodeId(slug) || isToolingSlug(slug);
 }
 
 /** The page a slug under `/episodes/` names: a tooling page's, else the Episode's own. */
@@ -70,9 +76,9 @@ export function eventRoute(slug: EventSlug): string {
   return `${ROUTES.events}/${slug}`;
 }
 
-/** The logical path of one Episode of an Event's Playlist, shown under the Event. */
-export function eventEpisodeRoute(event: EventSlug, episode: EpisodeSlug): string {
-  return `${eventRoute(event)}${ROUTES.episodes}/${episode}`;
+/** The logical path of one Episode of an Event's Playlist, shown under the Event at its slug, an Event's copy's too. */
+export function eventEpisodeRoute(event: EventSlug, episode: EpisodeId): string {
+  return `${eventRoute(event)}${ROUTES.episodes}/${episodeRefOf(episode).slug}`;
 }
 
 /**
@@ -86,10 +92,10 @@ export type PageRef =
   | { readonly kind: 'dashboard' }
   | { readonly kind: 'episodes' }
   | { readonly kind: 'events' }
-  | { readonly kind: 'episode'; readonly episode: EpisodeSlug }
+  | { readonly kind: 'episode'; readonly episode: EpisodeId }
   | { readonly kind: 'tooling'; readonly tooling: ToolingSlug }
   | { readonly kind: 'event'; readonly event: EventSlug }
-  | { readonly kind: 'event-episode'; readonly event: EventSlug; readonly episode: EpisodeSlug };
+  | { readonly kind: 'event-episode'; readonly event: EventSlug; readonly episode: EpisodeId };
 
 /** A page's kind: what every site that treats pages differently branches on. */
 export type PageKind = PageRef['kind'];

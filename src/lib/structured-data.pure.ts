@@ -2,7 +2,7 @@ import type { IsoDate } from '../content-store/schemas/fields';
 import { TRANSLATIONS } from '../i18n/translations';
 import type { Locale } from './locale.pure';
 import { OG_IMAGE } from './page-metadata.pure';
-import { episodeRoute, ROUTES, servedUrl, type EpisodeSlug } from './routes';
+import { episodeRoute, ROUTES, servedUrl, type EpisodeId } from './routes';
 import { SOCIAL_LINKS } from './social-links';
 
 /*
@@ -18,7 +18,7 @@ export interface JsonLd {
 
 /** What an Episode page hands in: its copy, its release date and its recording in this locale. */
 export interface EpisodeLdInput {
-  readonly slug: EpisodeSlug;
+  readonly slug: EpisodeId;
   readonly title: string;
   readonly description: string;
   readonly publishedOn?: IsoDate;

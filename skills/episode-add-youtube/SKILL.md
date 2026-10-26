@@ -73,10 +73,10 @@ _Done when_ `npm run verify` passes and the DOM probe confirms the presence of `
 ## The unlisted case
 
 1. Extract the one 11-character video ID, as in step 1, and ask which language was spoken at the Event if the user has not said: `en` or `de`, nothing else.
-2. In `src/components/episodes/<slug>/episode-metadata.ts`, add one recording, never a per-locale pair:
+2. In the copy's record, `src/components/episodes/by-event/<event-slug>/<slug>/episode-metadata.ts`, add one recording, never a per-locale pair:
    ```ts
    export const episodeMetadata = {
-     slug: 'axel-onboard-ai-every-time',
+     slug: 'onboard-ai-every-time',
      status: 'published',
      visibility: 'unlisted',
      // ...
@@ -96,7 +96,7 @@ _Done when_ the post-build test passes and both locale pages show the same video
 ```mermaid
 flowchart TD
   R["Episode metadata record<br/>src/components/episodes/&lt;slug&gt;/episode-metadata.ts<br/>youtube: { en, de } or { id, language }"]
-  R --> S["Content store<br/>episodeVideo(slug, locale): { id, recordedIn? }"]
+  R --> S["Content store<br/>episodeVideo(id, locale): { id, recordedIn? }"]
   S --> C["EpisodePageContainer<br/>video prop from EpisodePage or EventEpisodePage"]
   S --> EC["episodeCards(locale)<br/>youtubeOf(entry, locale)"]
   C --> TS["TitleSlide<br/>TalkLauncher (data-video-id, data-recording-language)"]

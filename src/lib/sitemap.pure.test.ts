@@ -87,9 +87,9 @@ describe('failure cases', () => {
     // ARRANGE
     const pages = [
       ...SITE_PAGES,
-      ...treated(ABSENT, { kind: 'episode', episode: 'axel-ai-attention-span' }),
+      ...treated(ABSENT, { kind: 'episode', episode: `${EVENT}__ai-attention-span` }),
       ...treated(HIDDEN, { kind: 'dashboard' }, { kind: 'tooling', tooling: 'slide-master' }),
-      ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: 'axel-ai-attention-span' }),
+      ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: `${EVENT}__ai-attention-span` }),
     ];
     const expected = [
       `${SITE}/`,

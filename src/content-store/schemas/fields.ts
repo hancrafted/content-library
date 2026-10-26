@@ -22,6 +22,9 @@ export const EVENT_KINDS = ['workshop', 'webinar'] as const;
 /** The Audience an Event targets (`docs/steering/product-vision.md`). */
 export const AUDIENCES = ['individual', 'organization'] as const;
 
+/** Who runs an Event: Han's own Events are `hancrafted`, a partner's carry its name, so a partner's Events group. */
+export const ORGANIZERS = ['hancrafted', 'axel', 'cyberforum'] as const;
+
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
 

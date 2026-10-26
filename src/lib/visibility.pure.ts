@@ -1,5 +1,5 @@
 import type { Episode, EpisodeStatus } from '../content-store/schemas/episode.schema';
-import { matchPage, type EpisodeSlug, type PageRef } from './routes';
+import { matchPage, type EpisodeId, type PageRef } from './routes';
 
 /*
  * The one visibility predicate (design-ADR 0016, Routes and visibility; FE-008): a page and the facts of what it
@@ -15,6 +15,8 @@ export interface PageFacts {
   readonly visibility?: Episode['visibility'];
   /** An Episode's status: an upcoming one is kept out of search. */
   readonly status?: EpisodeStatus;
+  /** The Episode is an Event's copy (design-ADR 0016 decision 8): it lives under its Event only, never at `/episodes/`. */
+  readonly copy?: boolean;
 }
 
 export interface PageTreatment {
@@ -27,7 +29,7 @@ export interface PageTreatment {
   /** Shown on the site's own lists: the Episode overview, Spotlight, Upcoming and `/events/`. */
   readonly listed: boolean;
   /** `self`, with hreflang alternates, or the public Episode whose `/episodes/<slug>/` page takes the credit. */
-  readonly canonical: 'self' | { readonly episode: EpisodeSlug };
+  readonly canonical: 'self' | { readonly episode: EpisodeId };
 }
 
 /** One page and how the site treats it: what the page catalogue lists and the sitemap reads. */
@@ -41,20 +43,27 @@ const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, 
 const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' };
 /** A public upcoming Episode: announced on the site's own lists, kept out of search. */
 const ANNOUNCED: PageTreatment = { ...HIDDEN, listed: true };
+/** A public Event's copy under its Event: indexed and in the sitemap at that URL, its own canonical, never listed. */
+const SELF_INDEXED: PageTreatment = { ...LISTED, listed: false };
 
 /**
  * An Episode's own page, or the one it will have: listed when public and published, announced when public and
- * upcoming, absent when unlisted, else hidden (fails closed). An upcoming Episode without a page yet takes this row.
+ * upcoming, absent when unlisted or an Event's copy, else hidden (fails closed). An upcoming Episode without a page yet
+ * takes this row.
  */
-export function episodePageTreatment({ visibility, status }: PageFacts): PageTreatment {
-  if (visibility === 'unlisted') return ABSENT;
+export function episodePageTreatment({ visibility, status, copy }: PageFacts): PageTreatment {
+  if (visibility === 'unlisted' || copy) return ABSENT;
   if (visibility !== 'public') return HIDDEN;
   if (status === 'published') return LISTED;
   return status === 'upcoming' ? ANNOUNCED : HIDDEN;
 }
 
-/** An Episode under its Event: a public one credits its own page once that page is indexable; any other is hidden. */
-function eventEpisodeTreatment(episode: EpisodeSlug, facts: PageFacts): PageTreatment {
+/**
+ * An Episode under its Event: a public, published copy of that Event is its own indexed page there; any other public
+ * Episode credits its own page once that page is indexable; any other is hidden.
+ */
+function eventEpisodeTreatment(episode: EpisodeId, facts: PageFacts): PageTreatment {
+  if (facts.copy) return facts.visibility === 'public' && facts.status === 'published' ? SELF_INDEXED : HIDDEN;
   if (!episodePageTreatment(facts).inSitemap) return HIDDEN;
   return { exported: true, inSitemap: false, index: true, listed: false, canonical: { episode } };
 }

@@ -2,20 +2,27 @@ import { describe, expect, it } from 'vitest';
 import { episodeRegistryFiles, REGISTRY_PATHS, type EpisodeFolder } from './episode-registry.pure.ts';
 
 const WITH_PAGE: EpisodeFolder = {
-  slug: 'ai-token-economy',
+  id: 'ai-token-economy',
+  folder: 'ai-token-economy',
   files: ['episode-metadata.ts', 'episode.ts', 'i18n', 'slides'],
   episodeSource:
     "import { episode } from '@/components/slide-master/slide';\n\nexport const aiTokenEconomy = episode({\n",
 };
 const COPY: EpisodeFolder = {
-  slug: 'axel-ai-token-economy',
+  id: '2026-10-23-axel__ai-token-economy',
+  folder: 'by-event/2026-10-23-axel/ai-token-economy',
   files: ['episode-metadata.ts', 'episode.ts', 'i18n', 'slides'],
-  // A `cp -r` copy whose export kept its source's name.
+  // An Event's `cp -r` copy, under its Event, whose export kept its source's name.
   episodeSource: 'export const aiTokenEconomy = episode({\n',
 };
-const UPCOMING: EpisodeFolder = { slug: 'specs-an-agent-can-follow', files: ['episode-metadata.ts'] };
+const UPCOMING: EpisodeFolder = {
+  id: 'specs-an-agent-can-follow',
+  folder: 'specs-an-agent-can-follow',
+  files: ['episode-metadata.ts'],
+};
 const TOOLING: EpisodeFolder = {
-  slug: 'workshop-template',
+  id: 'workshop-template',
+  folder: 'workshop-template',
   files: ['episode.ts', 'i18n', 'slides'],
   episodeSource: 'export const workshopTemplate = episode({\n',
 };
@@ -26,32 +33,34 @@ function fileAt(folders: readonly EpisodeFolder[], path: string): string {
 }
 
 describe('success cases', () => {
-  it('writes one registry file per tier: the slugs for lib, the metadata for the store, the compositions for the registry', () => {
+  it('writes one registry file per tier: the ids for lib, the metadata for the store, the compositions for the registry', () => {
     // ARRANGE
-    const expected = [REGISTRY_PATHS.slugs, REGISTRY_PATHS.metadata, REGISTRY_PATHS.compositions];
+    const expected = [REGISTRY_PATHS.ids, REGISTRY_PATHS.metadata, REGISTRY_PATHS.compositions];
     // ACT
     const paths = episodeRegistryFiles([WITH_PAGE]).map((file) => file.path);
     // ASSERT
     expect(paths).toEqual(expected);
   });
 
-  it('lists every Episode folder holding a record and metadata as an Episode slug, in folder-name order', () => {
+  it('lists every Episode folder holding a record and metadata by its Episode id, in id order', () => {
     // ARRANGE
-    const expected = "export const EPISODE_SLUGS = ['ai-token-economy', 'axel-ai-token-economy'] as const;";
+    const expected = "export const EPISODE_IDS = ['2026-10-23-axel__ai-token-economy', 'ai-token-economy'] as const;";
     // ACT
-    const slugs = fileAt([COPY, WITH_PAGE], REGISTRY_PATHS.slugs);
+    const slugs = fileAt([COPY, WITH_PAGE], REGISTRY_PATHS.ids);
     // ASSERT
     expect(slugs).toContain(expected);
   });
 
-  it("imports each Episode's metadata into the store's registry, keyed by its folder", () => {
+  it("imports each Episode's metadata into the store's registry from its folder, keyed by its id", () => {
     // ARRANGE
     const expected = [
       "import { episodeMetadata as aiTokenEconomy } from '@/components/episodes/ai-token-economy/episode-metadata';",
+      "import { episodeMetadata as _20261023Axel__aiTokenEconomy } from '@/components/episodes/by-event/2026-10-23-axel/ai-token-economy/episode-metadata';",
       "  'ai-token-economy': aiTokenEconomy,",
+      "  '2026-10-23-axel__ai-token-economy': _20261023Axel__aiTokenEconomy,",
     ];
     // ACT
-    const metadata = fileAt([WITH_PAGE], REGISTRY_PATHS.metadata);
+    const metadata = fileAt([WITH_PAGE, COPY], REGISTRY_PATHS.metadata);
     // ASSERT
     expected.forEach((line) => expect(metadata).toContain(line));
   });
@@ -60,8 +69,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       "import { aiTokenEconomy } from './ai-token-economy/episode';",
-      "import { aiTokenEconomy as axelAiTokenEconomy } from './axel-ai-token-economy/episode';",
-      "  'axel-ai-token-economy': axelAiTokenEconomy,",
+      "import { aiTokenEconomy as _20261023Axel__aiTokenEconomy } from './by-event/2026-10-23-axel/ai-token-economy/episode';",
+      "  '2026-10-23-axel__ai-token-economy': _20261023Axel__aiTokenEconomy,",
     ];
     // ACT
     const compositions = fileAt([WITH_PAGE, COPY], REGISTRY_PATHS.compositions);
@@ -69,12 +78,13 @@ describe('success cases', () => {
     expected.forEach((line) => expect(compositions).toContain(line));
   });
 
-  it('types each map against the Episode slugs, so a record whose slug is not its folder fails tsc', () => {
+  it("types each map against the Episode ids, so a record whose slug is not its folder's name fails tsc", () => {
     // ARRANGE
     const expected = {
-      metadata: '} as const satisfies { readonly [S in EpisodeSlug]: EpisodeInput & { readonly slug: S } };',
+      metadata:
+        '} as const satisfies { readonly [I in EpisodeId]: EpisodeInput & { readonly slug: EpisodeSlugOf<I> } };',
       compositions:
-        'export const EPISODES: { readonly [S in EpisodeSlug]: EpisodeComposition & { readonly slug: S } } = {',
+        'export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { readonly slug: EpisodeSlugOf<I> } } = {',
     };
     // ACT
     const seen = {
@@ -97,6 +107,15 @@ describe('failure cases', () => {
     expect(generate).toThrow(/ai-token-economy\/episode\.ts/);
   });
 
+  it("refuses an Event copy's broken episode.ts naming its folder under its Event", () => {
+    // ARRANGE
+    const broken: EpisodeFolder = { ...COPY, episodeSource: 'export const notes = [];\n' };
+    // ACT
+    const generate = () => episodeRegistryFiles([broken]);
+    // ASSERT
+    expect(generate).toThrow(/by-event\/2026-10-23-axel\/ai-token-economy\/episode\.ts/);
+  });
+
   it('refuses an Episode folder whose episode.ts exports two records', () => {
     // ARRANGE
     const twice: EpisodeFolder = {
@@ -113,7 +132,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('leaves a folder without metadata out of every registry file: a tooling page is no Episode', () => {
     // ARRANGE
-    const expected = TOOLING.slug;
+    const expected = TOOLING.id;
     // ACT
     const texts = episodeRegistryFiles([TOOLING, WITH_PAGE]).map((file) => file.text);
     // ASSERT
@@ -123,19 +142,20 @@ describe('edge cases', () => {
   it("lists a folder holding only its metadata as an upcoming Episode: in the store's registry, with no page", () => {
     // ARRANGE
     const expected = {
-      upcoming: 'export const UPCOMING_METADATA: readonly EpisodeInput[] = [specsAnAgentCanFollow];',
-      slugs: 'export const EPISODE_SLUGS = [] as const;',
+      upcoming:
+        "export const UPCOMING_METADATA: Readonly<Record<string, EpisodeInput>> = { 'specs-an-agent-can-follow': specsAnAgentCanFollow };",
+      slugs: 'export const EPISODE_IDS = [] as const;',
     };
     // ACT
     const seen = {
       metadata: fileAt([UPCOMING], REGISTRY_PATHS.metadata),
-      slugs: fileAt([UPCOMING], REGISTRY_PATHS.slugs),
+      slugs: fileAt([UPCOMING], REGISTRY_PATHS.ids),
       compositions: fileAt([UPCOMING], REGISTRY_PATHS.compositions),
     };
     // ASSERT
     expect(seen.metadata).toContain(expected.upcoming);
     expect(seen.slugs).toContain(expected.slugs);
-    expect(seen.compositions).not.toContain(UPCOMING.slug);
+    expect(seen.compositions).not.toContain(UPCOMING.id);
   });
 
   it('marks every registry file as generated, naming the command that rewrites it', () => {

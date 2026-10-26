@@ -68,7 +68,10 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { title: 'Seitenvorlage', caption: 'Die kleinste Episode.' };
     // ACT
-    const { title, caption } = await recordContent(RECORD, 'de', { translatorOf: translatorOf('de') });
+    const { title, caption } = await recordContent(RECORD, 'de', {
+      translatorOf: translatorOf('de'),
+      id: 'episode-template',
+    });
     // ASSERT
     expect({ title, caption }).toEqual(expected);
   });
@@ -82,7 +85,7 @@ describe('success cases', () => {
       { id: 'next-steps', section: 'next-steps', level: 'h2', title: 'Nächste Schritte' },
     ];
     // ACT
-    const { slides } = await recordContent(RECORD, 'de', { translatorOf: translatorOf('de') });
+    const { slides } = await recordContent(RECORD, 'de', { translatorOf: translatorOf('de'), id: 'episode-template' });
     // ASSERT
     expect(slides.map(({ id, section, level, title }) => ({ id, section, level, title }))).toEqual(expected);
   });
@@ -107,7 +110,10 @@ describe('success cases', () => {
       undefined,
     ];
     // ACT
-    const { slides, header } = await recordContent(record, 'en', { translatorOf: translatorOf('en') });
+    const { slides, header } = await recordContent(record, 'en', {
+      translatorOf: translatorOf('en'),
+      id: 'episode-template',
+    });
     // ASSERT
     expect(header).toBe('shared');
     expect(slides.map((placed) => placed.header)).toEqual(expected);
@@ -123,7 +129,10 @@ describe('success cases', () => {
     const record = episode({ slug: 'episode-template', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = '<p>Rakete</p>';
     // ACT
-    const { hero: scene } = await recordContent(record, 'de', { translatorOf: translatorOf('de') });
+    const { hero: scene } = await recordContent(record, 'de', {
+      translatorOf: translatorOf('de'),
+      id: 'episode-template',
+    });
     // ASSERT
     expect(renderToStaticMarkup(scene)).toBe(expected);
   });
@@ -138,7 +147,7 @@ describe('success cases', () => {
     const record = episode({ slug: 'episode-template', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = 'Eine leere Pipeline.';
     // ACT
-    const { caption } = await recordContent(record, 'de', { translatorOf: translatorOf('de') });
+    const { caption } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), id: 'episode-template' });
     // ASSERT
     expect(caption).toBe(expected);
   });
@@ -156,7 +165,7 @@ describe('success cases', () => {
     const record = episode({ slug: 'episode-template', messages: EPISODE, sections: [[bold]] });
     const expected = { title: 'Foundations', caption: 'Revenue lands here.', captionEmphasis: [{ start: 8, end: 13 }] };
     // ACT
-    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en') });
+    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
     // ASSERT
     expect(slides[0].header).toEqual(expected);
   });
@@ -172,7 +181,7 @@ describe('failure cases', () => {
     });
     const expected = 'foundations';
     // ACT
-    const build = recordContent(record, 'en', { translatorOf: translatorOf('en') });
+    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -186,7 +195,7 @@ describe('failure cases', () => {
     const record = episode({ slug: 'episode-template', messages: EPISODE, sections: [[foundations, titled]] });
     const expected = /header: 'authored'/;
     // ACT
-    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en') });
+    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
     const render = () => renderToStaticMarkup(slides[1].content);
     // ASSERT
     expect(render).toThrow(expected);
@@ -204,7 +213,7 @@ describe('failure cases', () => {
     const record = episode({ slug: 'episode-template', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = 'hero';
     // ACT
-    const build = recordContent(record, 'en', { translatorOf: translatorOf('en') });
+    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -223,7 +232,7 @@ describe('edge cases', () => {
     const record = episode({ slug: 'episode-template', messages: EPISODE, sections: [[referring]] });
     const expected = 'öffnet Sprechernotiz';
     // ACT
-    const { slides } = await recordContent(record, 'de', { translatorOf: translatorOf('de') });
+    const { slides } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), id: 'episode-template' });
     const [{ content }] = slides;
     const label = isValidElement<{ label: string }>(content) ? content.props.label : undefined;
     // ASSERT
@@ -245,7 +254,10 @@ describe('edge cases', () => {
     const expected =
       '<h3 data-target="title" class="font-semibold text-balance hyphens-auto text-subheading">Why a template</h3>';
     // ACT
-    const { slides, header } = await recordContent(record, 'en', { translatorOf: translatorOf('en') });
+    const { slides, header } = await recordContent(record, 'en', {
+      translatorOf: translatorOf('en'),
+      id: 'episode-template',
+    });
     // ASSERT
     expect(header).toBe('authored');
     expect(slides.map((placed) => placed.header)).toEqual([undefined, undefined]);
@@ -262,8 +274,10 @@ describe('edge cases', () => {
     });
     const expected = { byDefault: 'typewriter', named: 'fade' };
     // ACT
-    const byDefault = (await recordContent(RECORD, 'en', { translatorOf: translatorOf('en') })).entrance;
-    const named = (await recordContent(record, 'en', { translatorOf: translatorOf('en') })).entrance;
+    const byDefault = (await recordContent(RECORD, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' }))
+      .entrance;
+    const named = (await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' }))
+      .entrance;
     // ASSERT
     expect({ byDefault, named }).toEqual(expected);
   });

@@ -37,7 +37,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 2. No import cycle MAY exist under `src/`.
 3. `src/components/pages/**` is the top sub-tier of components: only a route or a test imports it.
 4. A stylesheet import is not a tier edge.
-5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only schemas and lib. The store's `schemas/` is a leaf every tier may import, so a lib module takes a record type without an upward edge.
+5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/[by-event/<e>/]<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only schemas and lib. The store's `schemas/` is a leaf every tier may import, so a lib module takes a record type without an upward edge.
 
 ### 3. `src/lib/**` imports no React
 
@@ -50,7 +50,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 5. A Slide folder imports only global shared code
 
-1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `explorable-explanations/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `slide-shared/core-components/` only from its server files, never from a `*.client.tsx` widget.
+1. A Slide folder, `episodes/[by-event/<e>/]<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `explorable-explanations/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `slide-shared/core-components/` only from its server files, never from a `*.client.tsx` widget.
 2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `slide-shared/core-components/`, hooks, lib.
    1. (§5.2.1) `src/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
    2. (§5.2.2) Every `slide-shared` part, its `*.client.tsx` files included, MAY import `core-components/`.

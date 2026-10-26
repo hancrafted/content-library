@@ -10,9 +10,10 @@
 // src/lib.
 const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|explorable-explanations|episodes)/', '^src/lib/'];
 
-// A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/` (FE-002, FE-007 §5). The two capture
-// groups name the Episode and the Slide, so a rule's `to` can say "this same folder" as `$1`/`$2`.
-const SLIDE_FOLDER = '^src/components/episodes/([^/]+)/slides/([^/]+)/';
+// A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/`, or `episodes/by-event/<event>/<ep>/slides/<slide>/`
+// in an Event's copy (FE-002, FE-007 §5). The two capture groups name the Episode's folder and the Slide, so a rule's
+// `to` can say "this same folder" as `$1`/`$2`.
+const SLIDE_FOLDER = '^src/components/episodes/(by-event/[^/]+/[^/]+|[^/]+)/slides/([^/]+)/';
 const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the Explorable explanations, the UI
 // kit, hooks and lib.
@@ -22,8 +23,8 @@ const SLIDE_SHARED_REACH = [
 ];
 
 // The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2.1).
-// An Episode's metadata file: a record the content store loads (FE-013).
-const EPISODE_METADATA = '^src/components/episodes/[^/]+/episode-metadata\\.ts$';
+// An Episode's metadata file, an Event's copy's under `by-event/<event>/`: a record the content store loads (FE-013).
+const EPISODE_METADATA = '^src/components/episodes/(by-event/[^/]+/[^/]+|[^/]+)/episode-metadata\\.ts$';
 // The store's schemas: a leaf every tier may import record types from (FE-007 §2.5).
 const STORE_SCHEMAS = '^src/content-store/schemas/';
 

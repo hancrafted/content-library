@@ -1,4 +1,4 @@
-import type { EpisodeSlug } from '@/lib/routes';
+import type { EpisodeId } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import type { EpisodeCard } from './episode-card.pure';
 import { eventPlaylistCards, startOf, totalMinutes } from './event-playlist.pure';
@@ -12,8 +12,8 @@ const linked = (slug: string, minutes?: number): Stub => ({
   ...(minutes === undefined ? {} : { minutes }),
 });
 const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
-/** An Episode as its Playlist lists it: its record (only the slug read here), and its page's slug when it has one. */
-const entry = (slug: string, page?: EpisodeSlug) => ({ episode: { slug }, ...(page === undefined ? {} : { page }) });
+/** An Episode as its Playlist lists it: its record (only the slug read here), and its page's Episode id when it has one. */
+const entry = (slug: string, page?: EpisodeId) => ({ episode: { slug }, ...(page === undefined ? {} : { page }) });
 /** The AXEL seminar presenting the given Episodes, in this order. */
 const axel = (...episodes: ReturnType<typeof entry>[]) =>
   ({ slug: '2026-10-23-axel-agentic-workflow', playlist: { episodes } }) as const;
@@ -54,12 +54,12 @@ describe('success cases', () => {
     expect(playlist.map((card) => card.slug)).toEqual(expected);
   });
 
-  it('opens each Episode under its Event, in the locale', () => {
+  it("opens each Episode under its Event at its slug, an Event's copy too, in the locale", () => {
     // ARRANGE
-    const event = axel(entry('axel-ai-attention-span', 'axel-ai-attention-span'));
+    const event = axel(entry('ai-attention-span', '2026-10-23-axel-agentic-workflow__ai-attention-span'));
     const expected = {
-      route: '/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span',
-      href: '/de/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span',
+      route: '/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
+      href: '/de/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
     };
     // ACT
     const [card] = eventPlaylistCards(event, linkedCard, 'de');

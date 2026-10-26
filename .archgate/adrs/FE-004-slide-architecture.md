@@ -87,7 +87,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 1. This record is the map
 
-1. Read before touching an Episode: modules and flows; rules live with each area's owner (Context).
+1. Read before touching an Episode: modules and flows; rules live with each area's owner.
 
 ### 2. Four tiers, one direction
 
@@ -95,7 +95,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 3. Each module owns one thing
 
-1. `episodes/<ep>/` owns one Episode: `episode.ts`, its text, published anchors, a folder per Slide, a `sections/<slug>.ts` per Section, its Slides in order.
+1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, its text, published anchors, a folder per Slide, a `sections/<slug>.ts` per Section, Slides in order.
 2. A Slide folder owns all it needs: Scene, widgets, logic, CSS, text, notes, Voice script.
 3. `slide-master/` owns the frame, layouts, record and kit types; `slide-shared/` owns parts two Slides share, client leaves in their part.
 4. `episode-page/` owns the one container and Slide mechanics; `table-of-contents/` and `context-drawer/` own the chrome, reached only from the container.

@@ -3,7 +3,7 @@ import type { FormatId, IsoDate, TagId } from '@/content-store/schemas/fields';
 import { leadTagOf, lookOf } from '@/lib/episode-metadata.pure';
 import type { Accent, TagIcon } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute, isEpisodeSlug } from '@/lib/routes';
+import { episodeRoute, isEpisodeId } from '@/lib/routes';
 
 /** One id with its label in the reader's locale. */
 export interface Labelled<Id extends string> {
@@ -59,14 +59,19 @@ export type ReadKey = (key: string) => string;
 /** A published Episode's own title and caption, read through the registry from its record. */
 export type EpisodeCopy = Pick<EpisodeCard, 'title' | 'caption'>;
 
+/** An Episode's record with the Episode id its folder gives it, as the content store serves it. */
+type Identified<E> = E & { readonly id: string };
+
 /**
  * The Episode a card draws, keyed on its status: a published one carries its
  * copy from the registry, so `tsc` refuses one without it; an upcoming one
  * reads its own from the landing Translation keys, unless it already has a page
  * and so its own `i18n/` (`copy`), which it then carries as a published one does.
+ * Its page is looked up by its Episode id, so an Event's copy never opens its original.
  */
 export type CardEntry =
-  (PublishedEpisode & { readonly copy: EpisodeCopy }) | (UpcomingEpisode & { readonly copy?: EpisodeCopy });
+  | Identified<PublishedEpisode & { readonly copy: EpisodeCopy }>
+  | Identified<UpcomingEpisode & { readonly copy?: EpisodeCopy }>;
 
 export interface CardContext {
   readonly locale: Locale;
@@ -111,8 +116,8 @@ function releaseFields(entry: CardEntry, locale: Locale): Pick<EpisodeCard, 'pub
 
 function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {
   const isLinked = entry.status === 'published' || isDraftLinked(entry, ctx.linkDrafts);
-  if (!isLinked || !isEpisodeSlug(entry.slug)) return {};
-  const route = episodeRoute(entry.slug);
+  if (!isLinked || !isEpisodeId(entry.id)) return {};
+  const route = episodeRoute(entry.id);
   return {
     route,
     href: localizePath(route, ctx.locale),

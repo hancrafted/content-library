@@ -1,7 +1,8 @@
 // FE-008 post-build check: every exported page that is its own canonical carries
 // one canonical pointing at itself, and hreflang alternates that resolve to
 // exported files and link back. A public Episode under an Event credits its own
-// page instead, with no alternates: events.build.test.ts checks those.
+// page instead, with no alternates: events.build.test.ts checks those. A public
+// Event copy has no page of its own, so its page under its Event is its canonical.
 // Reads the built HTML, so it judges what crawlers see, not what the code meant.
 
 import { existsSync, readFileSync } from 'node:fs';

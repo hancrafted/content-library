@@ -10,7 +10,7 @@ import type { Video } from '@/content-store/store';
 import { readTranslationStrings } from '@/i18n/translation-strings';
 import { TITLE_ANCHOR } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute } from '@/lib/routes';
+import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
 import type { TocSection } from '@/lib/table-of-contents.pure';
 import { cn } from '@/lib/utils';
 import { getTranslations } from 'next-intl/server';
@@ -188,6 +188,8 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 
 interface EpisodePageContainerProps {
   locale: Locale;
+  /** The page's Episode id, or the tooling page's slug: what `data-episode` names and the token editor resolves to a folder. */
+  id: EpisodesPathSlug;
   episode: EpisodeComposition;
   /** The Episode's Video in this locale, from the content store; none for a tooling page or before upload. */
   video?: Video;
@@ -206,10 +208,10 @@ interface EpisodePageContainerProps {
  * contents and Slide links point at the Event's URL for the Episode.
  */
 export async function EpisodePageContainer(props: EpisodePageContainerProps) {
-  const { locale, episode, video, frame = OWN_PAGE } = props;
+  const { locale, id, episode, video, frame = OWN_PAGE } = props;
   const youtubeId = video?.id;
-  const route = frame.route ?? episodeRoute(episode.slug);
-  const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), route });
+  const route = frame.route ?? episodeRoute(id);
+  const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), id, route });
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
   const page = await pageHeaderOf(content, locale, sections);
@@ -218,12 +220,8 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (
-    <UrlStateProvider key={`${locale}/${episode.slug}`}>
-      <div
-        data-slot="episode-page"
-        data-episode={episode.slug}
-        className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}
-      >
+    <UrlStateProvider key={`${locale}/${id}`}>
+      <div data-slot="episode-page" data-episode={id} className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}>
         <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
         {frame.header}
         <SlideColumn titleSlide={titleSlide} slides={slides} page={page} />

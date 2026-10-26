@@ -23,6 +23,8 @@ const RULES = [
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
 const SLIDE = 'src/components/episodes/probe/slides/probe-slide';
+/** A Slide of an Event's copy, under `by-event/<event>/<slug>/`: the same fence holds there. */
+const COPY = 'src/components/episodes/by-event/2026-01-01-probe/probe';
 const PART = 'src/components/slide-shared/probe-visual';
 const CORE = 'src/components/slide-shared/core-components';
 
@@ -55,6 +57,11 @@ const PROBES: Readonly<Record<string, string>> = {
   [`${SLIDE}/reaches-toc.tsx`]: "import { Toc } from '../../../../table-of-contents/toc';\nexport const x = Toc;",
   [`${SLIDE}/reaches-master.client.tsx`]:
     "import { slide } from '../../../../slide-master/slide';\nexport const x = slide;",
+  [`${COPY}/slides/other-slide/slide.tsx`]: 'export const copied = 1;',
+  [`${COPY}/slides/probe-slide/own.tsx`]: 'export const own = 1;',
+  [`${COPY}/slides/probe-slide/slide.tsx`]: "import { own } from './own';\nexport const legalCopy = own;",
+  [`${COPY}/slides/probe-slide/copy-reaches-other-slide.tsx`]:
+    "import { copied } from '../other-slide/slide';\nexport const x = copied;",
   [`${PART}/probe-visual.pure.ts`]: 'export const view = 1;',
   [`${PART}/probe-visual.client.tsx`]:
     "import { view } from './probe-visual.pure';\nimport { useProbe } from '../../../hooks/use-probe';\nimport { probe } from '../../../lib/probe.pure';\nexport const v = [view, useProbe, probe];",
@@ -95,7 +102,7 @@ function violations(): string[] {
   return output.output.summary.violations
     .map(
       ({ rule, from, to }) =>
-        `${rule.name}: ${from.replace(`${SLIDE}/`, '').replace(`${PART}/`, '').replace(`${CORE}/probe-core/`, '')} -> ${to}`,
+        `${rule.name}: ${from.replace(`${SLIDE}/`, '').replace(`${COPY}/slides/probe-slide/`, '').replace(`${PART}/`, '').replace(`${CORE}/probe-core/`, '')} -> ${to}`,
     )
     .sort();
 }
@@ -160,13 +167,14 @@ describe('core-components', () => {
 });
 
 describe('failure cases', () => {
-  it('rejects a Slide importing another Slide, the Episode file or a non-shared component, a client widget reaching the Slide master, a slide-shared client leaf leaving its part, and a slide-shared server part reaching a hook', () => {
+  it("rejects a Slide importing another Slide (an Event copy's too), the Episode file or a non-shared component, a client widget reaching the Slide master, a slide-shared client leaf leaving its part, and a slide-shared server part reaching a hook", () => {
     // ARRANGE
     const expected = [
       'core-components-are-a-leaf: reaches-part.tsx -> src/components/slide-shared/statement.tsx',
       'core-components-are-a-leaf: reaches-ui.tsx -> src/components/ui/button.tsx',
       'slide-client-reaches-only-hooks-and-lib: reaches-core.client.tsx -> src/components/slide-shared/core-components/probe-core/probe-core.tsx',
       'slide-client-reaches-only-hooks-and-lib: reaches-master.client.tsx -> src/components/slide-master/slide.ts',
+      'slide-folder-reaches-only-own-and-shared: copy-reaches-other-slide.tsx -> src/components/episodes/by-event/2026-01-01-probe/probe/slides/other-slide/slide.tsx',
       'slide-folder-reaches-only-own-and-shared: reaches-episode.tsx -> src/components/episodes/probe/probe.ts',
       'slide-folder-reaches-only-own-and-shared: reaches-other-slide.tsx -> src/components/episodes/probe/slides/other-slide/slide.tsx',
       'slide-folder-reaches-only-own-and-shared: reaches-toc.tsx -> src/components/table-of-contents/toc.tsx',

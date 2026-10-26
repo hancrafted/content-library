@@ -8,7 +8,8 @@ const read = (key: string) => `[${key}]`;
 /** A published Episode's copy, as the registry reads it from the Episode's record. */
 const COPY = { title: 'Your AI token economy', caption: 'Hidden managing responsibilities.' };
 
-const PUBLISHED_METADATA: PublishedEpisode = {
+const PUBLISHED_METADATA: PublishedEpisode & { readonly id: string } = {
+  id: 'ai-token-economy',
   slug: 'ai-token-economy',
   status: 'published',
   visibility: 'public',
@@ -20,7 +21,8 @@ const PUBLISHED_METADATA: PublishedEpisode = {
 /** The published Episode as the card reads it: its metadata with its copy from the registry. */
 const PUBLISHED = { ...PUBLISHED_METADATA, copy: COPY };
 
-const UPCOMING: UpcomingEpisode = {
+const UPCOMING: UpcomingEpisode & { readonly id: string } = {
+  id: 'choosing-the-right-model',
   slug: 'choosing-the-right-model',
   status: 'upcoming',
   visibility: 'public',

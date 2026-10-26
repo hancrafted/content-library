@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import type { Episode } from '../content-store/schemas/episode.schema';
 import { leadTagOf, overviewOrder } from './episode-metadata.pure';
 
-/** Five hand-placed Episodes: three published, two upcoming. */
-const EPISODES: readonly Episode[] = [
+type Identified = Episode & { readonly id: string };
+
+/** Five hand-placed Episodes: three published, two upcoming, each no Event owns, so its id is its slug. */
+const RECORDS: readonly Episode[] = [
   {
     slug: 'never-too-early-sales',
     status: 'published',
@@ -31,6 +33,7 @@ const EPISODES: readonly Episode[] = [
   { slug: 'rolling-out-ai', status: 'upcoming', visibility: 'public', format: 'foundations', tags: ['agentic-ai'] },
   { slug: 'ai-in-code-review', status: 'upcoming', visibility: 'public', format: 'short', tags: ['workflow'] },
 ];
+const EPISODES: readonly Identified[] = RECORDS.map((episode) => ({ ...episode, id: episode.slug }));
 
 const slugs = (entries: readonly Episode[]) => entries.map(({ slug }) => slug);
 
@@ -92,7 +95,18 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('breaks a tie between published Episodes of one date by slug, and leaves the given list in its order', () => {
+  it("features an Event's copy by its Episode id, not the slug it shares with its original", () => {
+    // ARRANGE
+    const COPY = '2026-10-23-axel-agentic-workflow__ai-token-economy';
+    const copy = { ...EPISODES[2], id: COPY, publishedOn: '2026-10-01' } as const;
+    const expected = [COPY, 'ai-token-economy'];
+    // ACT
+    const ordered = overviewOrder([EPISODES[2], copy], [COPY]);
+    // ASSERT
+    expect(ordered.map(({ id }) => id)).toEqual(expected);
+  });
+
+  it('breaks a tie between published Episodes of one date by Episode id, and leaves the given list in its order', () => {
     // ARRANGE
     const before = slugs(EPISODES);
     const expected = ['ai-token-economy', 'maintaining-markdown-for-ai', 'never-too-early-sales'];

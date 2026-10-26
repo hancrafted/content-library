@@ -1,7 +1,6 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { SectionList } from '@/lib/episode.pure';
 import type { Locale } from '@/lib/locale.pure';
-import type { EpisodesPathSlug } from '@/lib/routes';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
 import type {
@@ -146,7 +145,8 @@ export type HeaderMode = 'shared' | 'authored';
  * loaded by the content store (FE-013). A tooling page
  * composes its Slides the same way, but is no Episode (`tooling-pages.ts`).
  */
-export interface EpisodeComposition<Ep extends EpisodesPathSlug = EpisodesPathSlug> {
+export interface EpisodeComposition<Ep extends string = string> {
+  /** Its folder's name: unique among its siblings, so an Event's copy usually keeps its original's (its id holds the Event). */
   readonly slug: Ep;
   readonly messages: PerLocale<EpisodeMessages>;
   /** The Title slide's Speaker notes and Voice script segments, when its text holds them. */
@@ -176,6 +176,6 @@ export function headerModeOf(record: Pick<EpisodeComposition, 'header'>): Header
 }
 
 /** An Episode record from its own text and its Sections; each Section's first Slide names it. */
-export function episode<Ep extends EpisodesPathSlug>(record: EpisodeComposition<Ep>): EpisodeComposition<Ep> {
+export function episode<Ep extends string>(record: EpisodeComposition<Ep>): EpisodeComposition<Ep> {
   return record;
 }
