@@ -1,4 +1,4 @@
-import { episodeRefOf } from '@/content-store/catalogue/episode-id.pure';
+import { toolingRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import {
   eventEpisodeRoute,
   isEventSlug,
@@ -7,10 +7,10 @@ import {
   type EpisodesPathPage,
   type PageOf,
 } from '@/content-store/catalogue/record-routes';
-import { episodePublishedOn, episodeStatus, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
+import { episodePublishedOn, episodeStatus, episodeVideo, findEvent, PAGES, treatmentOf } from '@/content-store/store';
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
 import { episodeCopy, findEpisode } from '@/episodes/lib/registry';
-import { findEpisodesPathPage, findToolingPage } from '@/episodes/lib/tooling-pages';
+import { findToolingPage } from '@/episodes/lib/tooling-pages';
 import {
   eventEpisodeChrome,
   EventEpisodeHeader,
@@ -32,18 +32,24 @@ import type { ReactNode } from 'react';
  */
 export type EpisodePageRef = PageOf<'episode' | 'tooling' | 'event-episode'>;
 
-/** The page a slug under `/episodes/` names, when the page catalogue builds one there; else no page. */
+/**
+ * The page a slug under `/episodes/` names, when the page catalogue builds one there: an Episode's own page, read as
+ * the slug of its EpisodeRef, or a tooling page; else no page.
+ */
 export function episodesPathPageOf(slug: string): EpisodesPathPage {
-  const page = findEpisodesPathPage(slug);
-  if (!treatmentOf(page).exported) notFound();
-  return page;
+  const atSlug = (page: EpisodesPathPage) => (page.kind === 'tooling' ? page.tooling : page.episode.slug) === slug;
+  const found = PAGES.flatMap(({ page, treatment }) =>
+    treatment.exported && (page.kind === 'episode' || page.kind === 'tooling') && atSlug(page) ? [page] : [],
+  );
+  if (found.length === 0) notFound();
+  return found[0];
 }
 
 /**
  * The Event and the Episode a page under it shows, with its place: an Event's copy, or a public Episode its Playlist
  * lists. A pair its Playlist does not hold is no page.
  */
-function presented(eventSlug: string, matches: (episode: string) => boolean): PresentedEpisode {
+function presented(eventSlug: string, matches: (episode: EpisodeRef<EpisodeId>) => boolean): PresentedEpisode {
   const event = findEvent(eventSlug);
   const entry = event?.playlist.episodes.find(({ page }) => page !== undefined && matches(page));
   if (event === undefined || entry?.page === undefined) notFound();
@@ -53,7 +59,7 @@ function presented(eventSlug: string, matches: (episode: string) => boolean): Pr
 /** The page at `/events/<event>/episodes/<slug>/`, naming its Episode by id; a pair no Playlist holds is no page. */
 export function eventEpisodePageOf(event: string, slug: string): PageOf<'event-episode'> {
   if (!isEventSlug(event)) notFound();
-  const { episode } = presented(event, (page) => episodeRefOf(page).slug === slug);
+  const { episode } = presented(event, (page) => page.slug === slug);
   return { kind: 'event-episode', event, episode };
 }
 
@@ -66,14 +72,17 @@ const INSET = 'pl-(--inset-l) pr-(--inset-r)';
  */
 export function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
   return matchPage<EpisodePageRef, ReactNode>(page, {
-    tooling: ({ tooling }) => <EpisodePageContainer locale={locale} id={tooling} episode={findToolingPage(tooling)} />,
-    episode: ({ episode }) => <OwnEpisodePage id={episode} locale={locale} />,
+    tooling: ({ tooling }) => (
+      <EpisodePageContainer locale={locale} presents={toolingRef(tooling)} episode={findToolingPage(tooling)} />
+    ),
+    episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} />,
     'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} />,
   });
 }
 
 /** An Episode's own page: the container, with its recording, and its structured data once published. */
-function OwnEpisodePage({ id, locale }: { id: EpisodeId; locale: Locale }) {
+function OwnEpisodePage({ episode, locale }: { episode: EpisodeRef<EpisodeId>; locale: Locale }) {
+  const { id } = episode;
   const { title, description } = episodeCopy(id, locale);
   const video = episodeVideo(id, locale);
   const data =
@@ -89,7 +98,7 @@ function OwnEpisodePage({ id, locale }: { id: EpisodeId; locale: Locale }) {
   return (
     <>
       {data && <JsonLdScript data={data} />}
-      <EpisodePageContainer locale={locale} id={id} episode={findEpisode(id)} video={video} />
+      <EpisodePageContainer locale={locale} presents={episode} episode={findEpisode(id)} video={video} />
     </>
   );
 }
@@ -100,8 +109,8 @@ function OwnEpisodePage({ id, locale }: { id: EpisodeId; locale: Locale }) {
  * and the Playlist walk after the last Slide. Its structured data stays on the Episode's own page.
  */
 async function EpisodeUnderEvent({ page, locale }: { page: PageOf<'event-episode'>; locale: Locale }) {
-  const shown = presented(page.event, (episode) => episode === page.episode);
-  const chrome = await eventEpisodeChrome(shown, locale, (episode) => episodeCopy(episode, locale).title);
+  const shown = presented(page.event, (episode) => episode.id === page.episode.id);
+  const chrome = await eventEpisodeChrome(shown, locale, (episode) => episodeCopy(episode.id, locale).title);
   const frame = {
     route: eventEpisodeRoute(shown.event.slug, shown.episode),
     header: <EventEpisodeHeader chrome={chrome} buildDay={BUILD_DAY} className={INSET} />,
@@ -111,9 +120,9 @@ async function EpisodeUnderEvent({ page, locale }: { page: PageOf<'event-episode
   return (
     <EpisodePageContainer
       locale={locale}
-      id={shown.episode}
-      episode={findEpisode(shown.episode)}
-      video={episodeVideo(shown.episode, locale)}
+      presents={shown.episode}
+      episode={findEpisode(shown.episode.id)}
+      video={episodeVideo(shown.episode.id, locale)}
       frame={frame}
     />
   );
@@ -126,9 +135,9 @@ async function EpisodeUnderEvent({ page, locale }: { page: PageOf<'event-episode
  */
 export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy {
   const treatment = treatmentOf(page);
-  const episodeOf = ({ episode }: { episode: EpisodeId }): PageCopy => {
-    const { title, description } = episodeCopy(episode, locale);
-    const publishedOn = episodePublishedOn(episode);
+  const episodeOf = ({ episode: { id } }: { episode: EpisodeRef<EpisodeId> }): PageCopy => {
+    const { title, description } = episodeCopy(id, locale);
+    const publishedOn = episodePublishedOn(id);
     return { title, description, treatment, ...(publishedOn ? { publishedOn } : {}) };
   };
   return matchPage<EpisodePageRef, PageCopy>(page, {

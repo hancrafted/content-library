@@ -1,8 +1,9 @@
+import { episodeRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { Episode } from '@/content-store/schemas/episode.schema';
 import { describe, expect, it } from 'vitest';
 import { leadTagOf, overviewOrder } from './episode-metadata.pure';
 
-type Identified = Episode & { readonly id: string };
+type Identified = Episode & { readonly ref: EpisodeRef };
 
 /** Five hand-placed Episodes: three published, two upcoming, each no Event owns, so its id is its slug. */
 const RECORDS: readonly Episode[] = [
@@ -33,7 +34,7 @@ const RECORDS: readonly Episode[] = [
   { slug: 'rolling-out-ai', status: 'upcoming', visibility: 'public', format: 'foundations', tags: ['agentic-ai'] },
   { slug: 'ai-in-code-review', status: 'upcoming', visibility: 'public', format: 'short', tags: ['workflow'] },
 ];
-const EPISODES: readonly Identified[] = RECORDS.map((episode) => ({ ...episode, id: episode.slug }));
+const EPISODES: readonly Identified[] = RECORDS.map((episode) => ({ ...episode, ref: episodeRef(episode.slug) }));
 
 const slugs = (entries: readonly Episode[]) => entries.map(({ slug }) => slug);
 
@@ -97,13 +98,13 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it("features an Event's copy by its Episode id, not the slug it shares with its original", () => {
     // ARRANGE
-    const COPY = '2026-10-23-axel-agentic-workflow__ai-token-economy';
-    const copy = { ...EPISODES[2], id: COPY, publishedOn: '2026-10-01' } as const;
-    const expected = [COPY, 'ai-token-economy'];
+    const COPY = episodeRef('ai-token-economy', '2026-10-23-axel-agentic-workflow');
+    const copy = { ...EPISODES[2], ref: COPY, publishedOn: '2026-10-01' } as const;
+    const expected = [COPY.id, 'ai-token-economy'];
     // ACT
-    const ordered = overviewOrder([EPISODES[2], copy], [COPY]);
+    const ordered = overviewOrder([EPISODES[2], copy], [COPY.id]);
     // ASSERT
-    expect(ordered.map(({ id }) => id)).toEqual(expected);
+    expect(ordered.map(({ ref }) => ref.id)).toEqual(expected);
   });
 
   it('breaks a tie between published Episodes of one date by Episode id, and leaves the given list in its order', () => {

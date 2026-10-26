@@ -1,5 +1,4 @@
 import {
-  episodeRefOf,
   EVENT_COPIES_FOLDER,
   matchEpisode,
   RESERVED_FOLDER_NAMES,
@@ -15,8 +14,11 @@ import type { Episode } from './schemas/episode.schema';
  * cross-record rules that call them sit in `refusals.ts`.
  */
 
-/** An Episode's record as the store serves it: with its Episode id, derived from its folder, never written in it. */
-export type LoadedEpisode = Episode & { readonly id: string };
+/**
+ * An Episode's record as the store serves it: with its EpisodeRef, parsed once from the Episode id its folder gives it
+ * (never written in the record), so a caller reads its kind, slug and owning Event as fields and its id as `ref.id`.
+ */
+export type LoadedEpisode = Episode & { readonly ref: EpisodeRef };
 
 const LOCALE_LIST: readonly string[] = LOCALES;
 const NOT_A_LOCALE = `is not one of the site's locales (${LOCALE_LIST.join(', ')})`;
@@ -46,7 +48,7 @@ function videoRefusals({ visibility, youtube }: Episode): string[] {
 }
 
 /** What is wrong with where an Episode lives: a reserved slug, a slug its folder does not carry, an Event that is not. */
-function folderRefusals({ slug, visibility }: LoadedEpisode, ref: EpisodeRef, events: ReadonlySet<string>): string[] {
+function folderRefusals({ slug, visibility, ref }: LoadedEpisode, events: ReadonlySet<string>): string[] {
   const owner = matchEpisode(ref, { standalone: () => undefined, 'event-copy': ({ event }) => event });
   const checks: readonly (readonly [boolean, string])[] = [
     [RESERVED_FOLDER_NAMES.includes(slug), `slug "${slug}" is a reserved folder name of the Episodes folder`],
@@ -67,11 +69,11 @@ export function episodeRefusals(
   events: ReadonlySet<string>,
 ): string[] {
   const tags: readonly string[] = episode.tags;
-  const orphan = episode.visibility === 'unlisted' && !listedByEvents.has(episode.id);
+  const orphan = episode.visibility === 'unlisted' && !listedByEvents.has(episode.ref.id);
   return [
-    ...folderRefusals(episode, episodeRefOf(episode.id), events),
+    ...folderRefusals(episode, events),
     ...duplicates(tags).map((tag) => `tags lists ${tag} twice`),
     ...(orphan ? ['visibility is unlisted, but no Event presents a Playlist listing it, so it has no address'] : []),
     ...videoRefusals(episode),
-  ].map((sentence) => `Episode ${episode.id}: ${sentence}`);
+  ].map((sentence) => `Episode ${episode.ref.id}: ${sentence}`);
 }

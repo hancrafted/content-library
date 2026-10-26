@@ -1,3 +1,4 @@
+import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { eventEpisodeRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 
@@ -14,7 +15,9 @@ export interface PlaylistCard {
 /** What the cards read of an Event the store serves (`ServedEvent`): its slug, and each listed Episode with its page. */
 interface EventWithPlaylist<Listed> {
   readonly slug: EventSlug;
-  readonly playlist: { readonly episodes: readonly { readonly episode: Listed; readonly page?: EpisodeId }[] };
+  readonly playlist: {
+    readonly episodes: readonly { readonly episode: Listed; readonly page?: EpisodeRef<EpisodeId> }[];
+  };
 }
 
 /**

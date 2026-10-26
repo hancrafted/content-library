@@ -1,3 +1,4 @@
+import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
 import type { TocSection } from '@/shared/lib/table-of-contents.pure';
 import { describe, expect, it } from 'vitest';
 import { eyebrowsOf, sourceFolderOf } from './episode-page-container.pure';
@@ -42,7 +43,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = 'src/episodes/ai-token-economy';
     // ACT
-    const folder = sourceFolderOf('ai-token-economy');
+    const folder = sourceFolderOf(episodeRef('ai-token-economy'));
     // ASSERT
     expect(folder).toBe(expected);
   });
@@ -82,8 +83,8 @@ describe('edge cases', () => {
     ];
     // ACT
     const folders = [
-      sourceFolderOf('2026-10-23-axel-agentic-workflow__onboard-ai-every-time'),
-      sourceFolderOf('slide-master'),
+      sourceFolderOf(episodeRef('onboard-ai-every-time', '2026-10-23-axel-agentic-workflow')),
+      sourceFolderOf(toolingRef('slide-master')),
     ];
     // ASSERT
     expect(folders).toEqual(expected);

@@ -1,4 +1,4 @@
-import { EPISODE_IDS, isEpisodeId } from '@/content-store/catalogue/record-routes';
+import { EPISODE_IDS, hasPage, isEpisodeId } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { headerModeOf } from '@/episodes/components/slide-master/slide';
 import { describe, expect, it } from 'vitest';
@@ -16,8 +16,8 @@ import { episodeCopy, findEpisode } from './registry';
 
 /** The published public Episodes, by id: the ones the tables below must cover, no more, no less. */
 const PUBLISHED_PUBLIC = listEpisodes()
-  .filter(({ id, status, visibility }) => status === 'published' && visibility === 'public' && isEpisodeId(id))
-  .map(({ id }) => id)
+  .filter(({ ref, status, visibility }) => status === 'published' && visibility === 'public' && hasPage(ref))
+  .map(({ ref }) => ref.id)
   .sort();
 
 /** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
@@ -88,16 +88,17 @@ const HEADER_MODES = [
 ] as const;
 
 describe('success cases', () => {
-  it.each(EPISODE_IDS)("registers %s as a valid id whose record carries its folder's slug", (id) => {
-    // ARRANGE
-    const expectedSlug = id.split('__').at(-1);
-    // ACT
-    const valid = isEpisodeId(id);
-    const episode = findEpisode(id);
-    // ASSERT
-    expect(valid).toBe(true);
-    expect(episode.slug).toBe(expectedSlug);
-  });
+  it.each(listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])))(
+    "registers $id with a record carrying its folder's slug",
+    (ref) => {
+      // ARRANGE
+      const expectedSlug = ref.slug;
+      // ACT
+      const episode = findEpisode(ref.id);
+      // ASSERT
+      expect(episode.slug).toBe(expectedSlug);
+    },
+  );
 
   it.each(EPISODE_IDS)('gives %s its own title, caption and description in en and de', (slug) => {
     // ARRANGE

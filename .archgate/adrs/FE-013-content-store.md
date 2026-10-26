@@ -62,6 +62,7 @@ For this project the reasons and the model — which entities are records, how t
 3. **DO** export the type from the schema — `export type Event = z.infer<typeof eventSchema>`. (Decision 2, 📜 Rule: `type-from-schema`)
 4. **DO** describe each field — `date: isoDate.describe('The day the Event takes place.')`. (Decision 2, 📜 Rule: `field-described`)
 5. **DO** throw a sentence that names the record — `Event 2026-10-28-axel: Playlist "x" does not exist`. (Decision 3)
+6. **DO** read an Episode's kind, slug and Event from the EpisodeRef the store serves — `matchEpisode(episode.ref, …)`, `page.episode.slug` — never by parsing its Episode id. (Decision 1)
 
 ### Don'ts
 

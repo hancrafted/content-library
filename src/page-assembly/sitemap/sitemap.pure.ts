@@ -13,7 +13,7 @@ function lastModifiedOf(page: PageRef, publishedOnOf: (id: EpisodeId) => IsoDate
     dashboard: none,
     episodes: none,
     events: none,
-    episode: ({ episode }) => publishedOnOf(episode),
+    episode: ({ episode }) => publishedOnOf(episode.id),
     tooling: none,
     event: none,
     'event-episode': none,

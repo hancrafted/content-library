@@ -1,3 +1,4 @@
+import { episodeRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { EpisodeId } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { eventPlaylistCards, startOf, totalMinutes, type PlaylistCard } from './event-playlist.pure';
@@ -11,8 +12,11 @@ const linked = (slug: string, minutes?: number): Stub => ({
   ...(minutes === undefined ? {} : { minutes }),
 });
 const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
-/** An Episode as its Playlist lists it: its record (only the slug read here), and its page's Episode id when it has one. */
-const entry = (slug: string, page?: EpisodeId) => ({ episode: { slug }, ...(page === undefined ? {} : { page }) });
+/** An Episode as its Playlist lists it: its record (only the slug read here), and its page's EpisodeRef when it has one. */
+const entry = (slug: string, page?: EpisodeRef<EpisodeId>) => ({
+  episode: { slug },
+  ...(page === undefined ? {} : { page }),
+});
 /** The AXEL seminar presenting the given Episodes, in this order. */
 const axel = (...episodes: ReturnType<typeof entry>[]) =>
   ({ slug: '2026-10-23-axel-agentic-workflow', playlist: { episodes } }) as const;
@@ -43,8 +47,8 @@ describe('success cases', () => {
   it("lists the cards in the Playlist's order", () => {
     // ARRANGE
     const event = axel(
-      entry('never-too-early-sales', 'never-too-early-sales'),
-      entry('ai-token-economy', 'ai-token-economy'),
+      entry('never-too-early-sales', episodeRef('never-too-early-sales')),
+      entry('ai-token-economy', episodeRef('ai-token-economy')),
     );
     const expected = ['never-too-early-sales', 'ai-token-economy'];
     // ACT
@@ -55,7 +59,7 @@ describe('success cases', () => {
 
   it("opens each Episode under its Event at its slug, an Event's copy too, in the locale", () => {
     // ARRANGE
-    const event = axel(entry('ai-attention-span', '2026-10-23-axel-agentic-workflow__ai-attention-span'));
+    const event = axel(entry('ai-attention-span', episodeRef('ai-attention-span', '2026-10-23-axel-agentic-workflow')));
     const expected = {
       route: '/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
       href: '/de/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
@@ -70,7 +74,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('keeps an upcoming Episode unlinked under its Event, even when its page is already built', () => {
     // ARRANGE
-    const event = axel(entry('ai-token-economy', 'ai-token-economy'));
+    const event = axel(entry('ai-token-economy', episodeRef('ai-token-economy')));
     const expected = { route: null, href: null };
     // ACT
     const [card] = eventPlaylistCards(event, (episode) => upcoming(episode.slug), 'en');

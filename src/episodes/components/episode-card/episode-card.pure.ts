@@ -1,4 +1,5 @@
-import { episodeRoute, isEpisodeId } from '@/content-store/catalogue/record-routes';
+import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRoute, hasPage } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus, PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/episode.schema';
 import type { FormatId, TagId } from '@/content-store/schemas/fields';
 import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';
@@ -60,8 +61,8 @@ export type ReadKey = (key: string) => string;
 /** A published Episode's own title and caption, read through the registry from its record. */
 export type EpisodeCopy = Pick<EpisodeCard, 'title' | 'caption'>;
 
-/** An Episode's record with the Episode id its folder gives it, as the content store serves it. */
-type Identified<E> = E & { readonly id: string };
+/** An Episode's record with the EpisodeRef its folder gives it, as the content store serves it. */
+type Identified<E> = E & { readonly ref: EpisodeRef };
 
 /**
  * The Episode a card draws, keyed on its status: a published one carries its
@@ -112,8 +113,8 @@ function releaseFields(entry: CardEntry, locale: Locale): Pick<EpisodeCard, 'pub
 
 function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {
   const isLinked = entry.status === 'published' || isDraftLinked(entry, ctx.linkDrafts);
-  if (!isLinked || !isEpisodeId(entry.id)) return {};
-  const route = episodeRoute(entry.id);
+  if (!isLinked || !hasPage(entry.ref)) return {};
+  const route = episodeRoute(entry.ref.id);
   return {
     route,
     href: localizePath(route, ctx.locale),

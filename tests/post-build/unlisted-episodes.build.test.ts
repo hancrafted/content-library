@@ -6,11 +6,11 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { episodeRef, type EpisodeRef } from '../../src/content-store/catalogue/episode-id.pure';
 import {
   episodeRoute,
   eventEpisodeRoute,
   eventRoute,
-  isEpisodeId,
   legacyEpisodeRoute,
   type EventSlug,
 } from '../../src/content-store/catalogue/record-routes';
@@ -19,24 +19,18 @@ import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.
 import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
-const AXEL: EventSlug = '2026-10-23-axel-agentic-workflow';
-/** The AXEL seminar's unlisted copies, in the order it taught them. Written out: the store is not the oracle. */
-const AXEL_UNLISTED = [
-  '2026-10-23-axel-agentic-workflow__onboard-ai-every-time',
-  '2026-10-23-axel-agentic-workflow__ai-attention-span',
-  '2026-10-23-axel-agentic-workflow__ai-gives-you-more-work',
-] as const;
-/** The slug each copy's card carries: its folder name. */
+const AXEL = '2026-10-23-axel-agentic-workflow' satisfies EventSlug;
+/** The slug each of the AXEL seminar's unlisted copies carries, its folder name, in the order it taught them. Written out: the store is not the oracle. */
 const AXEL_UNLISTED_SLUGS = ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'] as const;
+/** The AXEL seminar's unlisted copies, each the Event's own. */
+const AXEL_UNLISTED = AXEL_UNLISTED_SLUGS.map((slug) => episodeRef(slug, AXEL));
 /**
  * Every unlisted Episode with each Event that presents it, read from the store so a new one is never skipped. Which
  * Episodes are unlisted is written out once, in `src/content-store/store.test.ts`; this file checks their pages.
  */
 const PRESENTED = listEvents().flatMap((event) =>
   event.playlist.episodes
-    .filter(({ episode }) => episode.visibility === 'unlisted')
-    .map(({ episode }) => episode.id)
-    .filter(isEpisodeId)
+    .flatMap(({ episode, page }) => (episode.visibility === 'unlisted' && page !== undefined ? [page] : []))
     .map((episode) => ({ event: event.slug, episode })),
 );
 /** Each unlisted Episode's page under its Event, in each locale: the URLs no list may name. */
@@ -72,9 +66,11 @@ describe('unlisted Episodes stay out of every list', () => {
     expect(seen).toEqual(expected);
   });
 
-  it.each(PER_LOCALE)('exports no /episodes/ page for $episode in $locale', ({ episode, locale }) => {
+  it.each(PER_LOCALE)('exports no /episodes/ page for $episode.id in $locale', ({ episode, locale }) => {
     // ARRANGE
-    const pages = [episodeRoute(episode), legacyEpisodeRoute(episode)].map((route) => localizePath(route, locale));
+    const pages = [episodeRoute(episode.id), legacyEpisodeRoute(episode.id)].map((route) =>
+      localizePath(route, locale),
+    );
     // ACT
     const exported = pages.filter((url) => existsSync(join(OUT_DIR, exportedFile(url))));
     // ASSERT
@@ -84,7 +80,7 @@ describe('unlisted Episodes stay out of every list', () => {
 
 describe('unlisted Episode pages under their Event', () => {
   it.each(PER_LOCALE)(
-    'An unlisted Episode page tells search engines not to index it. ($episode, $locale)',
+    'An unlisted Episode page tells search engines not to index it. ($episode.id, $locale)',
     ({ event, episode, locale }) => {
       // ARRANGE
       const url = localizePath(eventEpisodeRoute(event, episode), locale);
@@ -126,14 +122,14 @@ const RECORDED_IN: Record<Locale, Record<Locale, string>> = {
 };
 
 /** The one recording an unlisted Episode carries once Han uploads it (`episode-add-youtube`); none before. */
-function recordingOf(episode: string): { id: string; language: Locale } | undefined {
-  const video = listEpisodes().find((entry) => entry.id === episode)?.youtube;
+function recordingOf(episode: EpisodeRef): { id: string; language: Locale } | undefined {
+  const video = listEpisodes().find(({ ref }) => ref.id === episode.id)?.youtube;
   return video !== undefined && 'language' in video ? { id: video.id, language: video.language as Locale } : undefined;
 }
 
 describe('an unlisted Episode plays its Event recording', () => {
   it.each(PER_LOCALE)(
-    'An unlisted Episode plays its event recording, labelled with the language it was recorded in. ($episode, $locale)',
+    'An unlisted Episode plays its event recording, labelled with the language it was recorded in. ($episode.id, $locale)',
     ({ event, episode, locale }) => {
       // ARRANGE
       const $ = exportedPage(localizePath(eventEpisodeRoute(event, episode), locale));

@@ -67,14 +67,14 @@ export function featuredIds(): readonly PublishedId[] {
 
 export type { LoadedEpisode } from './episode-refusals';
 
-/** Every Episode's metadata with its id: those with a page, then the upcoming ones without, each in id order. */
+/** Every Episode's metadata with its EpisodeRef: those with a page, then the upcoming ones without, each in id order. */
 export function listEpisodes(): readonly LoadedEpisode[] {
   return CONTENT.episodes;
 }
 
 /** One registered Episode's metadata. A registered id the store does not hold is a bug, so it throws. */
 function episodeOf(id: string): LoadedEpisode {
-  const episode = CONTENT.episodes.find((entry) => entry.id === id);
+  const episode = CONTENT.episodes.find(({ ref }) => ref.id === id);
   if (!episode) throw new Error(`No Episode metadata lists the registered id "${id}"`);
   return episode;
 }
@@ -91,7 +91,7 @@ export function episodeVisibility(id: EpisodeId): Episode['visibility'] {
 
 /** The release date of a published Episode; undefined for an upcoming one or an unknown id. */
 export function episodePublishedOn(id: string): IsoDate | undefined {
-  const episode = CONTENT.episodes.find((entry) => entry.id === id);
+  const episode = CONTENT.episodes.find(({ ref }) => ref.id === id);
   return episode?.status === 'published' ? episode.publishedOn : undefined;
 }
 

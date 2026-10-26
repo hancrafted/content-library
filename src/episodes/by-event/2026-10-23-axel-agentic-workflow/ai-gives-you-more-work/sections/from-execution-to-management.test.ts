@@ -1,5 +1,6 @@
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { Slide } from '@/episodes/components/slide-master/slide';
+import { episodeRef } from '@/episodes/lib/episode-folders';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
@@ -22,7 +23,7 @@ function sceneOf(slug: string, locale: Locale = 'en'): string {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);
   const localized = localizeSlide(own, {
-    episode: '2026-10-23-axel-agentic-workflow__ai-gives-you-more-work',
+    episode: episodeRef('ai-gives-you-more-work', '2026-10-23-axel-agentic-workflow').id,
     locale,
     placed: PLACED,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },

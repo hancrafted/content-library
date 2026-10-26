@@ -1,5 +1,4 @@
-import { episodeFolderOf, episodeRefOf, TOOLING_FOLDER } from '@/content-store/catalogue/episode-id.pure';
-import { isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
+import { folderOf, type EpisodeRef, type ToolingRef } from '@/content-store/catalogue/episode-id.pure';
 import type { TocItem, TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
@@ -77,7 +76,6 @@ export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5
  * The source folder a page's Slides sit in, as the dev token editor names it in its prompt: an Episode's own folder,
  * an Event's copy's under its Event, or a tooling page's under `tooling/`.
  */
-export function sourceFolderOf(id: EpisodesPathSlug): string {
-  const folder = isToolingSlug(id) ? `${TOOLING_FOLDER}/${id}` : episodeFolderOf(episodeRefOf(id));
-  return `src/episodes/${folder}`;
+export function sourceFolderOf(page: EpisodeRef | ToolingRef): string {
+  return `src/episodes/${folderOf(page)}`;
 }

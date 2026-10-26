@@ -83,7 +83,7 @@ export function pageTreatment(page: PageRef, facts: PageFacts): PageTreatment {
       episode: () => episodePageTreatment(facts),
       tooling: () => HIDDEN,
       event: () => (facts.visibility === 'public' ? LISTED : HIDDEN),
-      'event-episode': ({ episode }) => eventEpisodeTreatment(episode, facts),
+      'event-episode': ({ episode }) => eventEpisodeTreatment(episode.id, facts),
     },
     () => ABSENT,
   );

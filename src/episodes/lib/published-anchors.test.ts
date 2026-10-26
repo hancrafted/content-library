@@ -1,5 +1,11 @@
-import { episodeFolderOf, episodeRefOf, TOOLING_FOLDER } from '@/content-store/catalogue/episode-id.pure';
-import { EPISODES_PATH_SLUGS, isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
+import {
+  episodeRef,
+  folderOf,
+  toolingRef,
+  type EpisodeRef,
+  type ToolingRef,
+} from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
@@ -17,10 +23,12 @@ import { findPageRecord } from './tooling-pages';
  * Section lists alone, so they cannot differ by locale.
  */
 
-/** The snapshot in the page's folder, an Event's copy's under its Event, by Episode id; a tooling page's under `tooling/`. */
-function snapshotPath(id: string): string {
-  const folder = isToolingSlug(id) ? path.join(TOOLING_FOLDER, id) : episodeFolderOf(episodeRefOf(id));
-  return path.join(__dirname, '..', folder, 'published-anchors.json');
+/** A page whose anchors may be bound: an Episode with a page, or a tooling page. */
+type Page = EpisodeRef | ToolingRef;
+
+/** The snapshot in the page's folder: an Event's copy's under its Event, a tooling page's under `tooling/`. */
+function snapshotPath(page: Page): string {
+  return path.join(__dirname, '..', folderOf(page), 'published-anchors.json');
 }
 
 /** The file to paste for a new Episode: its anchors sorted, formatted with the repo's prettier config so `prettier --check` accepts it. */
@@ -30,12 +38,12 @@ async function snapshotFile(file: string, produced: readonly string[]): Promise<
 }
 
 /** The snapshot's anchors, or a thrown file to paste when the Episode has none. */
-async function publishedAnchorsOf(slug: string, produced: readonly string[]): Promise<string[]> {
-  const file = snapshotPath(slug);
+async function publishedAnchorsOf(page: Page, produced: readonly string[]): Promise<string[]> {
+  const file = snapshotPath(page);
   if (!existsSync(file)) {
     const contents = await snapshotFile(file, produced);
     throw new Error(
-      `Episode "${slug}" has no published-anchors.json. Create ${file} with this content:\n${contents}\n`,
+      `Episode "${page.id}" has no published-anchors.json. Create ${file} with this content:\n${contents}\n`,
     );
   }
   return JSON.parse(readFileSync(file, 'utf8')) as string[];
@@ -53,32 +61,33 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
 }
 
 /**
- * The pages under `/episodes/` whose anchors are bound: every one but an upcoming
- * Episode, whose anchors bind when it is published (docs/features/episode-publishing.md).
- * A tooling page has no status and is always bound.
+ * The pages whose anchors are bound: every Episode with a page but an upcoming one, whose anchors bind when it is
+ * published (docs/features/episode-publishing.md), and every tooling page, which has no status and is always bound.
  */
-function boundSlugs(
-  registered: readonly EpisodesPathSlug[],
-  episodes: readonly { id: string; status: EpisodeStatus }[],
-): EpisodesPathSlug[] {
-  const upcoming = episodes.filter(({ status }) => status === 'upcoming').map(({ id }) => id);
-  return registered.filter((slug) => !upcoming.includes(slug));
+function boundPages(
+  episodes: readonly { ref: EpisodeRef; status: EpisodeStatus }[],
+  tooling: readonly string[],
+): Page[] {
+  const bound = episodes.filter(({ ref, status }) => status !== 'upcoming' && hasPage(ref)).map(({ ref }) => ref);
+  return [...tooling.map(toolingRef), ...bound];
 }
 
-/** The anchors the walk produces for one Episode, as the Episode page does: its record's Section lists. */
-function producedAnchors(slug: EpisodesPathSlug): string[] {
-  return placeSections<SlideOutline>(findPageRecord(slug).sections).flatMap((section) => section.map(({ id }) => id));
+/** The anchors the walk produces for one page, as the Episode page does: its record's Section lists. */
+function producedAnchors(page: Page): string[] {
+  return placeSections<SlideOutline>(findPageRecord(page.id).sections).flatMap((section) =>
+    section.map(({ id }) => id),
+  );
 }
 
 describe('success cases', () => {
   it('still produces every published anchor of every registered Episode', async () => {
     // ARRANGE
-    const cases = boundSlugs(EPISODES_PATH_SLUGS, listEpisodes());
+    const cases = boundPages(listEpisodes(), TOOLING_SLUGS);
     // ACT
     const lostPerEpisode = await Promise.all(
-      cases.map(async (slug) => {
-        const produced = producedAnchors(slug);
-        return lostAnchors({ slug, published: await publishedAnchorsOf(slug, produced), produced });
+      cases.map(async (page) => {
+        const produced = producedAnchors(page);
+        return lostAnchors({ slug: page.id, published: await publishedAnchorsOf(page, produced), produced });
       }),
     );
     const lost = lostPerEpisode.flat();
@@ -89,7 +98,7 @@ describe('success cases', () => {
   it('keeps each published-anchors.json a sorted array of unique strings', async () => {
     // ARRANGE
     const snapshots = await Promise.all(
-      boundSlugs(EPISODES_PATH_SLUGS, listEpisodes()).map((slug) => publishedAnchorsOf(slug, producedAnchors(slug))),
+      boundPages(listEpisodes(), TOOLING_SLUGS).map((page) => publishedAnchorsOf(page, producedAnchors(page))),
     );
     // ACT
     const unsorted = snapshots.filter((anchors) => anchors.join() !== [...new Set(anchors)].sort().join());
@@ -117,7 +126,7 @@ describe('failure cases', () => {
 
   it('fails an Episode that has no published-anchors.json and prints the sorted file as prettier writes it', async () => {
     // ARRANGE
-    const unregistered = 'no-such-episode';
+    const unregistered = episodeRef('no-such-episode');
     const produced = ['demo--why', 'demo', 'demo--how'];
     const expectedFile = path.join('no-such-episode', 'published-anchors.json');
     const expectedJson = '\n["demo", "demo--how", "demo--why"]\n\n';
@@ -132,13 +141,13 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('skips an upcoming Episode with a page and binds a published one', () => {
     // ARRANGE
-    const episodes: { id: string; status: EpisodeStatus }[] = [
-      { id: 'maintaining-markdown-for-ai', status: 'published' },
-      { id: 'ai-token-economy', status: 'upcoming' },
+    const episodes: { ref: EpisodeRef; status: EpisodeStatus }[] = [
+      { ref: episodeRef('maintaining-markdown-for-ai'), status: 'published' },
+      { ref: episodeRef('ai-token-economy'), status: 'upcoming' },
     ];
     const expected = ['episode-template', 'maintaining-markdown-for-ai'];
     // ACT
-    const bound = boundSlugs(['episode-template', 'maintaining-markdown-for-ai', 'ai-token-economy'], episodes);
+    const bound = boundPages(episodes, ['episode-template']).map(({ id }) => id);
     // ASSERT
     expect(bound).toEqual(expected);
   });
@@ -171,7 +180,7 @@ describe('edge cases', () => {
       '',
     ].join('\n');
     // ACT
-    const read = publishedAnchorsOf('no-such-episode', produced);
+    const read = publishedAnchorsOf(episodeRef('no-such-episode'), produced);
     // ASSERT
     await expect(read).rejects.toThrow(expectedJson);
   });

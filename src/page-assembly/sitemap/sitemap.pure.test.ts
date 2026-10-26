@@ -1,3 +1,4 @@
+import { episodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { PageRef } from '@/content-store/catalogue/record-routes';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
@@ -20,7 +21,7 @@ const SITE_PAGES = treated(
   { kind: 'home' },
   { kind: 'episodes' },
   { kind: 'events' },
-  { kind: 'episode', episode: 'ai-attention-span' },
+  { kind: 'episode', episode: episodeRef('ai-attention-span') },
   { kind: 'event', event: EVENT },
 );
 
@@ -87,9 +88,9 @@ describe('failure cases', () => {
     // ARRANGE
     const pages = [
       ...SITE_PAGES,
-      ...treated(ABSENT, { kind: 'episode', episode: `${EVENT}__ai-attention-span` }),
+      ...treated(ABSENT, { kind: 'episode', episode: episodeRef('ai-attention-span', EVENT) }),
       ...treated(HIDDEN, { kind: 'dashboard' }, { kind: 'tooling', tooling: 'slide-master' }),
-      ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: `${EVENT}__ai-attention-span` }),
+      ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: episodeRef('ai-attention-span', EVENT) }),
     ];
     const expected = [
       `${SITE}/`,

@@ -1,11 +1,15 @@
+import { episodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { pageMetadata, siteMetadata } from './page-metadata.pure';
 
+/** An Episode's own page, as the page catalogue hands it: carrying the Episode's EpisodeRef. */
+const OWN_PAGE = { kind: 'episode', episode: episodeRef('ai-token-economy') } as const;
+
 const UNDER_EVENT = {
   kind: 'event-episode',
   event: '2026-10-23-axel-agentic-workflow',
-  episode: 'ai-attention-span',
+  episode: episodeRef('ai-attention-span'),
 } as const;
 
 const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };
@@ -34,7 +38,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = '/de/episodes/ai-token-economy';
     // ACT
-    const metadata = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, 'de', COPY);
+    const metadata = pageMetadata(OWN_PAGE, 'de', COPY);
     // ASSERT
     expect(metadata.alternates?.canonical).toBe(expected);
   });
@@ -47,9 +51,8 @@ describe('success cases', () => {
       'x-default': '/episodes/ai-token-economy',
     };
     // ACT
-    const fromEnglish = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, 'en', COPY).alternates
-      ?.languages;
-    const fromGerman = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, 'de', COPY).alternates?.languages;
+    const fromEnglish = pageMetadata(OWN_PAGE, 'en', COPY).alternates?.languages;
+    const fromGerman = pageMetadata(OWN_PAGE, 'de', COPY).alternates?.languages;
     // ASSERT
     expect(fromEnglish).toEqual(expected);
     expect(fromGerman).toEqual(expected);
@@ -59,7 +62,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { title: 'Seitenvorlage', description: 'Diese Episode kopieren.' };
     // ACT
-    const metadata = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, 'de', COPY);
+    const metadata = pageMetadata(OWN_PAGE, 'de', COPY);
     // ASSERT
     expect({ title: metadata.title, description: metadata.description }).toEqual(expected);
   });
@@ -122,7 +125,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { index: false };
     // ACT
-    const metadata = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, locale, {
+    const metadata = pageMetadata(OWN_PAGE, locale, {
       ...COPY,
       treatment: { ...HIDDEN, listed: true },
     });
@@ -134,7 +137,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = undefined;
     // ACT
-    const metadata = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, 'en', COPY);
+    const metadata = pageMetadata(OWN_PAGE, 'en', COPY);
     // ASSERT
     expect(metadata.robots).toBe(expected);
   });
@@ -158,10 +161,7 @@ describe('success cases', () => {
     // ARRANGE
     const copy = { ...COPY, publishedOn: '2026-10-20' as const };
     // ACT
-    const card = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, 'en', copy).openGraph as Record<
-      string,
-      unknown
-    >;
+    const card = pageMetadata(OWN_PAGE, 'en', copy).openGraph as Record<string, unknown>;
     // ASSERT
     expect(card).toMatchObject({ type: 'article', url: '/episodes/ai-token-economy', publishedTime: '2026-10-20' });
   });
@@ -170,7 +170,7 @@ describe('success cases', () => {
     // ARRANGE
     const expectedImage = { url: '/og-image.png', width: 1200, height: 630 };
     // ACT
-    const metadata = pageMetadata({ kind: 'episode', episode: 'ai-token-economy' }, 'de', COPY);
+    const metadata = pageMetadata(OWN_PAGE, 'de', COPY);
     // ASSERT
     expect(metadata.openGraph).toMatchObject({ title: 'Seitenvorlage', description: 'Diese Episode kopieren.' });
     expect(metadata.openGraph?.images).toEqual([expect.objectContaining(expectedImage)]);

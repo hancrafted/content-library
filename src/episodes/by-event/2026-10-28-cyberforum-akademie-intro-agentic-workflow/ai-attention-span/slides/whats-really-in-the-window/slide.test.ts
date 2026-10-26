@@ -1,5 +1,6 @@
 import { localizeSlide, type LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import { slide, type Slide } from '@/episodes/components/slide-master/slide';
+import { episodeRef } from '@/episodes/lib/episode-folders';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
@@ -17,7 +18,7 @@ const SECTION = slide({
 function localized(locale: Locale): LocalizedSlide {
   const placed = placeSections<Slide>([[SECTION, whatsReallyInTheWindow]]).flat();
   return localizeSlide(placed[1] as never, {
-    episode: '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
+    episode: episodeRef('ai-attention-span', '2026-10-28-cyberforum-akademie-intro-agentic-workflow').id,
     locale,
     placed,
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },

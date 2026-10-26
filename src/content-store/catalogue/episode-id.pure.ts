@@ -3,6 +3,10 @@
  * in its record (design-ADR 0016 decision 3). An Episode no Event owns sits in `src/episodes/<slug>/` and its id is its
  * slug; an Event's copy sits in `episodes/by-event/<event-slug>/<slug>/` and its id is `<event-slug>__<slug>`. One path
  * segment, so it works as a folder, a DOM id or a key. Imports nothing, so the registry generator can load it too.
+ *
+ * This module alone knows that format. Code passes an EpisodeRef (GLOSSARY): the content store parses each id once,
+ * as its records load (`episodeRefOf`), and serves the ref on every Episode, Playlist entry and Episode page; the
+ * folder walker and tests build one from its parts (`episodeRef`); `folderOf` gives any page's folder.
  */
 
 /** The folder an Event's copies sit in, one folder per Event: `by-event/<event-slug>/<slug>/`. */
@@ -37,12 +41,30 @@ export type EpisodeRef<Id extends string = string> =
 /** The slug an Episode id names: the id itself, or what follows its Event slug. Types a record against its key. */
 export type EpisodeSlugOf<Id extends string> = Id extends `${string}${typeof SEPARATOR}${infer Slug}` ? Slug : Id;
 
-/** The id of the Episode in folder `<slug>/`, or, when an Event owns it, in `by-event/<event>/<slug>/`. */
-export function episodeIdOf(slug: string, event?: string): string {
-  return event === undefined ? slug : `${event}${SEPARATOR}${slug}`;
+/** The id `episodeRef` gives a slug, alone or under the Event that owns it. */
+export type EpisodeIdOf<Slug extends string, Event extends string | undefined> = Event extends string
+  ? `${Event}${typeof SEPARATOR}${Slug}`
+  : Slug;
+
+/**
+ * The Episode in folder `<slug>/`, or, when an Event owns it, in `by-event/<event>/<slug>/`: built from its parts, never
+ * parsed. The folder walker names each Episode it finds this way, and a test names an Episode this way, so no caller
+ * writes an id out by hand.
+ */
+export function episodeRef<Slug extends string>(slug: Slug): EpisodeRef<Slug>;
+export function episodeRef<Slug extends string, Event extends string>(
+  slug: Slug,
+  event: Event,
+): EpisodeRef<EpisodeIdOf<Slug, Event>>;
+export function episodeRef(slug: string, event?: string): EpisodeRef {
+  if (event === undefined) return { kind: 'standalone', id: slug, slug };
+  return { kind: 'event-copy', id: `${event}${SEPARATOR}${slug}`, event, slug };
 }
 
-/** The Episode an id names: a copy when it holds its Event's slug, else one no Event owns. */
+/**
+ * The Episode an id names: a copy when it holds its Event's slug, else one no Event owns. The one parse of an id, run
+ * by the content store as its records load; everything downstream is handed the ref.
+ */
 export function episodeRefOf<Id extends string>(id: Id): EpisodeRef<Id> {
   const at = id.indexOf(SEPARATOR);
   if (at < 0) return { kind: 'standalone', id, slug: id };
@@ -59,9 +81,25 @@ export function matchEpisode<Id extends string, R>(episode: EpisodeRef<Id>, case
   return episode.kind === 'standalone' ? cases.standalone(episode) : cases['event-copy'](episode);
 }
 
-/** The Episode's folder under the Episodes folder: `<slug>`, or `by-event/<event>/<slug>` for a copy. */
-export function episodeFolderOf(episode: EpisodeRef): string {
-  return matchEpisode(episode, {
+/** A tooling page (design-ADR 0016 decision 12): an authoring bench, no Episode, named by its slug, which is its id. */
+export interface ToolingRef<Slug extends string = string> {
+  readonly kind: 'tooling';
+  readonly id: Slug;
+  readonly slug: Slug;
+}
+
+/** The tooling page in folder `tooling/<slug>/`. */
+export function toolingRef<Slug extends string>(slug: Slug): ToolingRef<Slug> {
+  return { kind: 'tooling', id: slug, slug };
+}
+
+/**
+ * A page's folder under the Episodes folder, the one place the folder layout is written: `<slug>` for an Episode no
+ * Event owns, `by-event/<event>/<slug>` for an Event's copy, `tooling/<slug>` for a tooling page.
+ */
+export function folderOf(page: EpisodeRef | ToolingRef): string {
+  if (page.kind === 'tooling') return `${TOOLING_FOLDER}/${page.slug}`;
+  return matchEpisode(page, {
     standalone: ({ slug }) => slug,
     'event-copy': ({ event, slug }) => `${EVENT_COPIES_FOLDER}/${event}/${slug}`,
   });

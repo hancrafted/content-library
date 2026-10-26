@@ -9,12 +9,11 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeRefOf, matchEpisode } from '../../src/content-store/catalogue/episode-id.pure';
+import { episodeRef, matchEpisode, type EpisodeRef } from '../../src/content-store/catalogue/episode-id.pure';
 import {
   episodeRoute,
   eventEpisodeRoute,
   eventRoute,
-  isEpisodeId,
   type EpisodeId,
   type EventSlug,
 } from '../../src/content-store/catalogue/record-routes';
@@ -30,12 +29,12 @@ const EVENTS = listEvents();
 const LISTED = EVENTS.filter((event) => event.playlist.visibility === 'public');
 const AXEL = EVENTS.find((event) => event.slug === '2026-10-23-axel-agentic-workflow');
 if (AXEL === undefined) throw new Error('The AXEL Event is missing from the content store');
-/** A Playlist entry the test expects a page for: a registered Episode, or the test file is wrong. */
-const registered = (id: string): EpisodeId => {
-  if (!isEpisodeId(id)) throw new Error(`"${id}" is no registered Episode`);
-  return id;
+/** A Playlist entry the test expects a page for: a registered Episode's ref, or the test file is wrong. */
+const registered = ({ episode, page }: (typeof AXEL.playlist.episodes)[number]): EpisodeRef<EpisodeId> => {
+  if (page === undefined) throw new Error(`"${episode.ref.id}" is no registered Episode`);
+  return page;
 };
-const AXEL_EPISODES = AXEL.playlist.episodes.map(({ episode }) => registered(episode.id));
+const AXEL_EPISODES = AXEL.playlist.episodes.map(registered);
 /** The slugs AXEL's cards carry, in the order it taught them: its copies' folder names. Written out: the store is not the oracle. */
 const AXEL_SLUGS = ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'];
 const TODAY = new Date().toISOString().slice(0, 10) as `${number}-${number}-${number}`;
@@ -272,16 +271,11 @@ describe('Event page', () => {
 });
 
 describe('the 2026-10-28 Event', () => {
-  const CYBERFORUM: EventSlug = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
+  const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow' satisfies EventSlug;
   /** The Workshop template's copy, then the three Episodes AXEL taught, copied unedited. Written out: the store is not the oracle. */
-  const SLUGS = ['intro', 'onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'];
-  /** Each copy's Episode id: its Event's slug, then its folder name. */
-  const EPISODES = [
-    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro',
-    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
-    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
-    '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-gives-you-more-work',
-  ] as const satisfies readonly EpisodeId[];
+  const SLUGS = ['intro', 'onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'] as const;
+  /** Each copy, the Event's own: its folder name under the Event's folder. */
+  const EPISODES = SLUGS.map((slug) => episodeRef(slug, CYBERFORUM)) satisfies readonly EpisodeRef<EpisodeId>[];
   const FACTS = {
     en: { kind: 'Webinar', audience: 'For individuals', time: ' · 17:00–19:00 CET', location: 'remote' },
     de: { kind: 'Webinar', audience: 'Für Einzelpersonen', time: ' · 17:00–19:00 CET', location: 'remote' },
@@ -334,19 +328,17 @@ describe('Episode pages under an Event', () => {
   /** Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports. */
   const PAGES_UNDER_EVENTS = EVENTS.flatMap((event) =>
     event.playlist.episodes
-      .map(({ episode }) => episode.id)
-      .filter((episode) => isEpisodeId(episode))
+      .flatMap(({ page }) => (page === undefined ? [] : [page]))
       .flatMap((episode) => LOCALES.map((locale) => ({ event: event.slug, episode, locale }))),
   );
-  const AXEL_PAGES = AXEL_EPISODES.filter((episode) => isEpisodeId(episode));
-  const urlOf = (event: EventSlug, episode: EpisodeId, locale: Locale) =>
+  const urlOf = (event: EventSlug, episode: EpisodeRef<EpisodeId>, locale: Locale) =>
     localizePath(eventEpisodeRoute(event, episode), locale);
 
   it.each(PAGES_UNDER_EVENTS)(
-    'exports $episode under $event for $locale as the Episode page',
+    'exports $episode.id under $event for $locale as the Episode page',
     ({ event, episode, locale }) => {
       // ARRANGE
-      const expected = { episode, headings: 1 };
+      const expected = { episode: episode.id, headings: 1 };
       const $ = exportedPage(urlOf(event, episode, locale));
       // ACT
       const seen = { episode: $('[data-slot="episode-page"]').attr('data-episode'), headings: $('h1').length };
@@ -360,16 +352,16 @@ describe('Episode pages under an Event', () => {
     (locale) => {
       // ARRANGE
       const count = AXEL_EPISODES.length;
-      const hrefOf = (episode: EpisodeId | undefined) =>
+      const hrefOf = (episode: EpisodeRef<EpisodeId> | undefined) =>
         episode === undefined ? undefined : `${urlOf(AXEL.slug, episode, locale)}/`;
-      const expected = AXEL_PAGES.map((episode, index) => ({
+      const expected = AXEL_EPISODES.map((episode, index) => ({
         position: WORDS[locale].position(AXEL_EPISODES.indexOf(episode) + 1, count),
-        previous: hrefOf(AXEL_PAGES[index - 1]),
-        next: hrefOf(AXEL_PAGES[index + 1]),
-        back: index === AXEL_PAGES.length - 1 ? `${localizePath(eventRoute(AXEL.slug), locale)}/` : undefined,
+        previous: hrefOf(AXEL_EPISODES[index - 1]),
+        next: hrefOf(AXEL_EPISODES[index + 1]),
+        back: index === AXEL_EPISODES.length - 1 ? `${localizePath(eventRoute(AXEL.slug), locale)}/` : undefined,
       }));
       // ACT
-      const seen = AXEL_PAGES.map((episode) => {
+      const seen = AXEL_EPISODES.map((episode) => {
         const $ = exportedPage(urlOf(AXEL.slug, episode, locale));
         const nav = $('nav[data-playlist-nav]');
         return {
@@ -386,8 +378,8 @@ describe('Episode pages under an Event', () => {
 
   it.each(LOCALES)('names each step of the walk in the locale for %s', (locale) => {
     // ARRANGE
-    const [first] = AXEL_PAGES;
-    const last = AXEL_PAGES.at(-1) ?? first;
+    const [first] = AXEL_EPISODES;
+    const last = AXEL_EPISODES.at(-1) ?? first;
     const expected = { next: WORDS[locale].next, previous: WORDS[locale].previous, back: WORDS[locale].back };
     // ACT
     const seen = {
@@ -400,7 +392,7 @@ describe('Episode pages under an Event', () => {
   });
 
   it.each(PAGES_UNDER_EVENTS)(
-    'leads from $episode back up to its Event and to all Events through the breadcrumb for $locale',
+    'leads from $episode.id back up to its Event and to all Events through the breadcrumb for $locale',
     ({ event, episode, locale }) => {
       // ARRANGE
       const $ = exportedPage(urlOf(event, episode, locale));
@@ -423,14 +415,13 @@ describe('Episode pages under an Event', () => {
   );
 
   it.each(PAGES_UNDER_EVENTS)(
-    'A public Episode under an Event carries a canonical to its own /episodes/ page, a public Event copy to itself ($episode, $locale)',
+    'A public Episode under an Event carries a canonical to its own /episodes/ page, a public Event copy to itself ($episode.id, $locale)',
     ({ event, episode, locale }) => {
       // ARRANGE
-      const own = `${SITE_URL}${localizePath(episodeRoute(episode as Parameters<typeof episodeRoute>[0]), locale)}/`;
+      const own = `${SITE_URL}${localizePath(episodeRoute(episode.id), locale)}/`;
       const self = `${SITE_URL}${urlOf(event, episode, locale)}/`;
-      const indexable =
-        isEpisodeId(episode) && episodeVisibility(episode) === 'public' && episodeStatus(episode) === 'published';
-      const copy = matchEpisode(episodeRefOf(episode), { standalone: () => false, 'event-copy': () => true });
+      const indexable = episodeVisibility(episode.id) === 'public' && episodeStatus(episode.id) === 'published';
+      const copy = matchEpisode(episode, { standalone: () => false, 'event-copy': () => true });
       const expected = !indexable
         ? { canonical: self, noindex: true, hreflang: 3, card: self }
         : copy
@@ -450,7 +441,7 @@ describe('Episode pages under an Event', () => {
   );
 
   it.each(PAGES_UNDER_EVENTS)(
-    'leaves the structured data on the Episode’s own page, not on $episode under its Event, for $locale',
+    'leaves the structured data on the Episode’s own page, not on $episode.id under its Event, for $locale',
     ({ event, episode, locale }) => {
       // ARRANGE
       const $ = exportedPage(urlOf(event, episode, locale));
@@ -462,7 +453,7 @@ describe('Episode pages under an Event', () => {
   );
 
   it.each(PAGES_UNDER_EVENTS)(
-    'links the table of contents of $episode to the page under its Event for $locale',
+    'links the table of contents of $episode.id to the page under its Event for $locale',
     ({ event, episode, locale }) => {
       // ARRANGE
       const $ = exportedPage(urlOf(event, episode, locale));
@@ -479,9 +470,9 @@ describe('Episode pages under an Event', () => {
 
   it.each(LOCALES)('The past notice shows on a past Event’s Episode pages, above the title (%s)', (locale) => {
     // ARRANGE
-    const expected = AXEL_PAGES.map(() => ({ past: true, notice: WORDS[locale].notice, beforeTitle: true }));
+    const expected = AXEL_EPISODES.map(() => ({ past: true, notice: WORDS[locale].notice, beforeTitle: true }));
     // ACT
-    const seen = AXEL_PAGES.map((episode) => {
+    const seen = AXEL_EPISODES.map((episode) => {
       const $ = exportedPage(urlOf(AXEL.slug, episode, locale));
       const order = $('[data-past-notice], h1')
         .map((_, element) => (element.tagName === 'h1' ? 'title' : 'notice'))

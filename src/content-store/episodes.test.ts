@@ -1,3 +1,4 @@
+import { episodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { EPISODE_IDS, isEpisodeId } from '@/content-store/catalogue/record-routes';
 import { episodeFolders, METADATA_FILE } from '@/episodes/lib/episode-folders';
 import { readdirSync } from 'node:fs';
@@ -30,13 +31,13 @@ describe('success cases', () => {
     const expected = [...FOLDERS.keys()].sort();
     // ACT
     const listed = listEpisodes()
-      .map(({ id }) => id)
+      .map(({ ref }) => ref.id)
       .sort();
     // ASSERT
     expect(listed).toEqual(expected);
   });
 
-  it.each(listEpisodes().map(({ id }) => id))('keeps the metadata of %s in its own folder', (id) => {
+  it.each(listEpisodes().map(({ ref }) => ref.id))('keeps the metadata of %s in its own folder', (id) => {
     // ARRANGE
     const folder = FOLDERS.get(id);
     // ACT
@@ -49,7 +50,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'never-too-early-sales';
     const expected = {
-      id: slug,
+      ref: episodeRef(slug),
       slug,
       status: 'published',
       visibility: 'public',
@@ -59,7 +60,7 @@ describe('success cases', () => {
       youtube: { en: 'lnr7T-IBHTw', de: 'lnr7T-IBHTw' },
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const metadata = listEpisodes().find(({ ref }) => ref.id === slug);
     const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
@@ -70,7 +71,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'onboard-ai-every-time';
     const expected = {
-      id: slug,
+      ref: episodeRef(slug),
       slug,
       status: 'published',
       visibility: 'public',
@@ -79,7 +80,7 @@ describe('success cases', () => {
       publishedOn: '2026-10-20',
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const metadata = listEpisodes().find(({ ref }) => ref.id === slug);
     const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
@@ -90,7 +91,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'ai-attention-span';
     const expected = {
-      id: slug,
+      ref: episodeRef(slug),
       slug,
       status: 'published',
       visibility: 'public',
@@ -99,7 +100,7 @@ describe('success cases', () => {
       publishedOn: '2026-10-21',
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const metadata = listEpisodes().find(({ ref }) => ref.id === slug);
     const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
@@ -110,7 +111,7 @@ describe('success cases', () => {
     // ARRANGE
     const slug = 'ai-gives-you-more-work';
     const expected = {
-      id: slug,
+      ref: episodeRef(slug),
       slug,
       status: 'published',
       visibility: 'public',
@@ -119,7 +120,7 @@ describe('success cases', () => {
       publishedOn: '2026-10-21',
     };
     // ACT
-    const metadata = listEpisodes().find((episode) => episode.id === slug);
+    const metadata = listEpisodes().find(({ ref }) => ref.id === slug);
     const page = isEpisodeId(slug);
     // ASSERT
     expect(metadata).toEqual(expected);
@@ -132,20 +133,20 @@ describe('success cases', () => {
       // ARRANGE
       const expected = { listed: false, page: false };
       // ACT
-      const listed = listEpisodes().some((episode) => episode.id === slug);
+      const listed = listEpisodes().some(({ ref }) => ref.id === slug);
       const page = isEpisodeId(slug);
       // ASSERT
       expect({ listed, page }).toEqual(expected);
     },
   );
 
-  it.each(listEpisodes().filter(({ id }) => isEpisodeId(id)))(
-    'reads the status of $id from its metadata',
+  it.each(listEpisodes().filter(({ ref }) => isEpisodeId(ref.id)))(
+    'reads the status of $ref.id from its metadata',
     (episode) => {
       // ARRANGE
       const expected = episode.status;
       // ACT
-      const status = episodeStatus(episode.id as Parameters<typeof episodeStatus>[0]);
+      const status = episodeStatus(episode.ref.id as Parameters<typeof episodeStatus>[0]);
       // ASSERT
       expect(status).toBe(expected);
     },
@@ -169,7 +170,7 @@ describe('failure cases', () => {
     const expected: string[] = [];
     // ACT
     const undated = listEpisodes().flatMap((episode) =>
-      episode.status === 'published' && !isCalendarDate(episode.publishedOn) ? [episode.id] : [],
+      episode.status === 'published' && !isCalendarDate(episode.publishedOn) ? [episode.ref.id] : [],
     );
     // ASSERT
     expect(undated).toEqual(expected);
@@ -179,8 +180,8 @@ describe('failure cases', () => {
     // ARRANGE
     const registered: readonly string[] = EPISODE_IDS;
     const expected = listEpisodes()
-      .filter(({ status, id }) => status === 'upcoming' && !registered.includes(id))
-      .map(({ id }) => [id, [METADATA_FILE]]);
+      .filter(({ status, ref }) => status === 'upcoming' && !registered.includes(ref.id))
+      .map(({ ref }) => [ref.id, [METADATA_FILE]]);
     // ACT
     const contents = expected.map(([id]) => [id, readdirSync(FOLDERS.get(id as string)?.dir ?? '')]);
     // ASSERT
@@ -211,7 +212,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = FEATURED.map((slug) => [slug, 'published']);
     // ACT
-    const featured = FEATURED.map((slug) => [slug, listEpisodes().find((episode) => episode.id === slug)?.status]);
+    const featured = FEATURED.map((slug) => [slug, listEpisodes().find(({ ref }) => ref.id === slug)?.status]);
     // ASSERT
     expect(featured).toEqual(expected);
   });
