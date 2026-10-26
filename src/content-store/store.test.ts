@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episodeRef } from './catalogue/episode-id.pure';
+import { episodeRef, matchEpisode } from './catalogue/episode-id.pure';
 import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
 
 /*
@@ -115,26 +115,32 @@ describe('success cases', () => {
     expect(event.time).toBe(expected);
   });
 
-  it('declares every Episode public but the ones the AXEL seminar and the CyberForum Akademie webinar present', () => {
+  it("serves each Episode with the visibility its record declares: an Event's copy unlisted, one no Event owns public", () => {
     // ARRANGE
-    // Written out, in id order: the one list that says which Episodes are unlisted; the store is not the oracle.
-    const cyberforum = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
+    const input = {
+      ...SOUND,
+      episodes: [own(EPISODE), copy(UNLISTED)],
+      playlists: [{ ...PLAYLIST, episodes: [COPY_ID] }],
+    };
     const expected = [
-      episodeRef('ai-attention-span', AXEL),
-      episodeRef('ai-gives-you-more-work', AXEL),
-      episodeRef('onboard-ai-every-time', AXEL),
-      episodeRef('ai-attention-span', cyberforum),
-      episodeRef('ai-gives-you-more-work', cyberforum),
-      episodeRef('intro', cyberforum),
-      episodeRef('onboard-ai-every-time', cyberforum),
+      { ref: episodeRef('alpha'), visibility: 'public' },
+      { ref: episodeRef('alpha', AXEL), visibility: 'unlisted' },
     ];
     // ACT
-    const notPublic = listEpisodes()
-      .filter((episode) => episode.visibility !== 'public')
-      .map(({ ref }) => ref)
-      .sort((a, b) => (a.id < b.id ? -1 : 1));
+    const served = loadContent(input).episodes.map(({ ref, visibility }) => ({ ref, visibility }));
     // ASSERT
-    expect(notPublic).toEqual(expected);
+    expect(served).toEqual(expected);
+  });
+
+  it("holds every Episode the repo does not declare public in an Event's folder", () => {
+    // ARRANGE
+    const ownedByNoEvent = { standalone: () => true, 'event-copy': () => false };
+    // ACT
+    const strays = listEpisodes()
+      .filter(({ ref, visibility }) => visibility !== 'public' && matchEpisode(ref, ownedByNoEvent))
+      .map(({ ref }) => ref.id);
+    // ASSERT
+    expect(strays).toEqual([]);
   });
 
   it.each(RECORDINGS)(
