@@ -39,6 +39,8 @@ const GLOBALS =
   ':root {\n  --primary: oklch(0.2 0 0);\n  --machine: oklch(0.6 0.1 240);\n}\n.dark {\n  --primary: #eee;\n}\n';
 const PANEL_CSS = 'src/components/design-system-token-editor/token-panel.module.css';
 const SLIDE_CSS = 'src/components/episodes/demo/slides/loop/loop.module.css';
+/** A pool Slide's token file, `slide-pool/<slide>/`: a Slide token file like any other. */
+const POOL_SLIDE_CSS = 'src/components/episodes/slide-pool/loop/loop.module.css';
 
 function makeCtx(files: Record<string, string>, legacyGlobs: string[] = []) {
   const violations: Reported[] = [];
@@ -266,6 +268,15 @@ describe('slide-token-no-global-name (A3)', () => {
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({ file: SLIDE_CSS, line: 2 });
     expect(violations[0].message).toContain('(FE-011 [slide-token-no-global-name])');
+  });
+
+  it("fails a pool Slide's token file that redeclares a global token name, as any Slide's", async () => {
+    // ARRANGE
+    const files = { [POOL_SLIDE_CSS]: '.loop {\n  --primary: red;\n}\n' };
+    // ACT
+    const violations = await run('slide-token-no-global-name', files);
+    // ASSERT
+    expect(violations.map((v) => v.file)).toEqual([POOL_SLIDE_CSS]);
   });
 
   it('passes Slide-local names and legacy Slide files', async () => {

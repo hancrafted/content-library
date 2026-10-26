@@ -1,6 +1,6 @@
-import { HumanInTheLoop } from '@/components/explorable-explanations/human-in-the-loop/human-in-the-loop';
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
+import { HumanInTheLoop } from '@/explorable-explanations/human-in-the-loop/human-in-the-loop';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

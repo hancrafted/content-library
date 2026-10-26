@@ -42,11 +42,12 @@ const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
 // write `<SlideTitle as="h3">`; h4 and below are free.
 const EPISODE_FILES = 'src/components/episodes/**/*.{ts,tsx}';
 // A `*.client.tsx` inside a Slide folder `episodes/<ep>/slides/<slide>/`, an Event's
-// copy's under `episodes/by-event/<event>/`, is the only place an Episode may carry
-// 'use client'; it keeps the spine rule but not the directive ban.
+// copy's under `episodes/by-event/<event>/` or a pool Slide's `episodes/slide-pool/<slide>/`,
+// is the only place an Episode may carry 'use client'; it keeps the spine rule but not the directive ban.
 const EPISODE_CLIENT_FILES = [
   'src/components/episodes/*/slides/*/**/*.client.tsx',
   'src/components/episodes/by-event/*/*/slides/*/**/*.client.tsx',
+  'src/components/episodes/slide-pool/*/**/*.client.tsx',
 ];
 const SPINE_HEADINGS = [
   {
@@ -238,13 +239,12 @@ export default tseslint.config(
         'error',
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
-          'src/{page-assembly,components,hooks}/**/*.tsx': OPTIONAL_CLIENT,
-          'src/pipeline/**/*.tsx': OPTIONAL_CLIENT,
+          'src/{page-assembly,components,events,explorable-explanations,pipeline,hooks}/**/*.tsx': OPTIONAL_CLIENT,
           'src/**/*.ts': '!(*.client)',
         },
         {
           errorMessage:
-            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/components or src/hooks, never under src/app (FE-006).',
+            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/components, src/events, src/explorable-explanations or src/hooks, never under src/app (FE-006).',
         },
       ],
     },
@@ -349,7 +349,11 @@ export default tseslint.config(
     // FE-002: a Slide's Scene is free-form markup, so its server entry `slide.tsx`
     // drops the per-function line cap; complexity and the file cap still hold.
     // Caps follow file kind: every other file in a Slide folder keeps every cap.
-    files: ['src/components/episodes/*/slides/*/slide.tsx', 'src/components/episodes/by-event/*/*/slides/*/slide.tsx'],
+    files: [
+      'src/components/episodes/*/slides/*/slide.tsx',
+      'src/components/episodes/by-event/*/*/slides/*/slide.tsx',
+      'src/components/episodes/slide-pool/*/slide.tsx',
+    ],
     rules: { 'max-lines-per-function': 'off' },
   },
   {

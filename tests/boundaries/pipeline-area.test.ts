@@ -1,4 +1,4 @@
-// Pins the pipeline product area's boundary (#354, FE-007 §2.6): the content pipeline, its Run log and the dashboard
+// Pins the pipeline product area's boundary (#354, FE-007 §2.7): the content pipeline, its Run log and the dashboard
 // live in `src/pipeline/`, page assembly reaches them through `components/` and `lib/`, and nothing under `src/`
 // imports `skills/` or `tools/`. The dependency-cruiser rules run over a throwaway probe tree, as in
 // slide-folder.test.ts.

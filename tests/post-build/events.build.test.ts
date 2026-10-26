@@ -10,8 +10,8 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { episodeStatus, episodeVisibility, listEvents } from '../../src/content-store/store';
+import { isPastEvent } from '../../src/events/lib/events.pure';
 import { episodeRefOf } from '../../src/lib/episode-id.pure';
-import { isPastEvent } from '../../src/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import {
   episodeRoute,

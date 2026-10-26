@@ -1,5 +1,5 @@
-import { pageFolders } from '@/lib/episode-folders';
-import { existsSync, readdirSync } from 'node:fs';
+import { pageFolders, slideFolders as walkSlideFolders } from '@/lib/episode-folders';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -7,22 +7,16 @@ import { describe, expect, it } from 'vitest';
  * A Slide is one folder `slides/<slide>/` named after its slug
  * (#51, FE-002), so the folder, the anchor half and the Slide's own Translation
  * files share one name. Each folder's server entry is `slide.tsx`; this reads
- * every one and compares the slug it declares with the folder it sits in. The pages come from the one folder
- * walker, so an Event's copies under `by-event/` are read too.
+ * every one and compares the slug it declares with the folder it sits in. The Slide folders come from the one folder
+ * walker, so an Event's copies under `by-event/` and the Slide pool's Slides under `slide-pool/` are read too.
  */
 
 const ROOT = process.cwd();
 const ENTRY = 'slide.tsx';
 
-/** Every Slide folder of every Episode and tooling page: a directory under `<page>/slides/`, named by the page's id. */
-function slideFolders(): { episode: string; folder: string; entry: string }[] {
-  return pageFolders(ROOT).flatMap(({ id: episode, dir }) => {
-    const slides = path.join(dir, 'slides');
-    if (!existsSync(slides)) return [];
-    return readdirSync(slides, { withFileTypes: true })
-      .filter((each) => each.isDirectory())
-      .map(({ name: folder }) => ({ episode, folder, entry: path.join(slides, folder, ENTRY) }));
-  });
+/** Every Slide folder, its owner (a page's id, or `slide-pool`) and its server entry. */
+function slideFolders(): { owner: string; slug: string; entry: string }[] {
+  return walkSlideFolders(ROOT).map(({ owner, slug, dir }) => ({ owner, slug, entry: path.join(dir, ENTRY) }));
 }
 
 /** The slugs the Slides an entry module exports declare: each carries its own messages. */
@@ -51,12 +45,10 @@ describe('success cases', () => {
   it('names every Slide folder after the one Slide slug its server entry declares', async () => {
     // ARRANGE
     const folders = slideFolders();
-    const expected = folders.map(({ episode, folder }) => `${episode}/${folder}: ${folder}`);
+    const expected = folders.map(({ owner, slug }) => `${owner}/${slug}: ${slug}`);
     // ACT
     const actual = await Promise.all(
-      folders.map(
-        async ({ episode, folder, entry }) => `${episode}/${folder}: ${(await declaredSlugs(entry)).join(', ')}`,
-      ),
+      folders.map(async ({ owner, slug, entry }) => `${owner}/${slug}: ${(await declaredSlugs(entry)).join(', ')}`),
     );
     // ASSERT
     expect(actual).toEqual(expected);
@@ -70,7 +62,7 @@ describe('failure cases', () => {
     // ACT
     const missing = slideFolders()
       .filter(({ entry }) => !existsSync(entry))
-      .map(({ episode, folder }) => `${episode}/slides/${folder} has no ${ENTRY}`);
+      .map(({ owner, slug }) => `${owner}/${slug} has no ${ENTRY}`);
     // ASSERT
     expect(missing).toEqual(expected);
   });
@@ -114,10 +106,22 @@ describe('edge cases', () => {
     const expected = ['foundations', 'hero', 'next-steps', 'what-comes-next', 'why-a-template'];
     // ACT
     const folders = slideFolders()
-      .filter(({ episode }) => episode === 'episode-template')
-      .map(({ folder }) => folder)
+      .filter(({ owner }) => owner === 'episode-template')
+      .map(({ slug }) => slug)
       .sort();
     // ASSERT
     expect(folders).toEqual(expected);
+  });
+
+  it('checks the 5 Slide pool folders too, so a walk that skips the pool fails', () => {
+    // ARRANGE
+    const expected = ['brief-the-venue', 'manage-the-price', 'one-prompt', 'pay-the-price', 'you-are-the-new-hire'];
+    // ACT
+    const pool = slideFolders()
+      .filter(({ owner }) => owner === 'slide-pool')
+      .map(({ slug }) => slug)
+      .sort();
+    // ASSERT
+    expect(pool).toEqual(expected);
   });
 });

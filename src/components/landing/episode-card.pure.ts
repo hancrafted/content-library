@@ -1,5 +1,6 @@
 import type { EpisodeStatus, PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/episode.schema';
-import type { FormatId, IsoDate, TagId } from '@/content-store/schemas/fields';
+import type { FormatId, TagId } from '@/content-store/schemas/fields';
+import { dateLabelOf } from '@/lib/date-label.pure';
 import { leadTagOf, lookOf } from '@/lib/episode-metadata.pure';
 import type { Accent, TagIcon } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
@@ -103,15 +104,10 @@ function videoOf(entry: CardEntry, youtubeId?: string): Pick<EpisodeCard, 'youtu
   return { youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}` };
 }
 
-/** The release day as the locale writes it, read in UTC so the calendar day never shifts with the build machine's time zone. */
-export function releaseDateOf(publishedOn: IsoDate, locale: Locale): string {
-  const format = new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
-  return format.format(new Date(`${publishedOn}T00:00:00Z`));
-}
-
+/** The release day as the reader's locale writes it; an upcoming Episode has none yet. */
 function releaseFields(entry: CardEntry, locale: Locale): Pick<EpisodeCard, 'publishedOn' | 'releaseDate'> {
   if (entry.status !== 'published') return {};
-  return { publishedOn: entry.publishedOn, releaseDate: releaseDateOf(entry.publishedOn, locale) };
+  return { publishedOn: entry.publishedOn, releaseDate: dateLabelOf(entry.publishedOn, locale) };
 }
 
 function publishedFields(entry: CardEntry, ctx: CardContext): Partial<EpisodeCard> {

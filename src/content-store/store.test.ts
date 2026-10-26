@@ -425,6 +425,17 @@ describe('failure cases', () => {
     expect(load).toThrow(expected);
   });
 
+  it('refuses an Episode whose slug is the reserved folder name slide-pool, naming the Episode', () => {
+    // ARRANGE
+    const reserved = { ...EPISODE, slug: 'slide-pool' };
+    const input = { ...SOUND, episodes: [own(EPISODE), own(reserved)] };
+    const expected = 'Episode slide-pool: slug "slide-pool" is a reserved folder name of the Episodes folder';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
   it('refuses an Episode whose slug is not its folder name, naming the Episode', () => {
     // ARRANGE
     const input = { ...SOUND, episodes: [own(EPISODE, 'beta')], playlists: [{ ...PLAYLIST, episodes: ['beta'] }] };
