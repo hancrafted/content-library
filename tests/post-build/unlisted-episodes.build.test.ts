@@ -25,8 +25,8 @@ const AXEL_UNLISTED_SLUGS = ['onboard-ai-every-time', 'ai-attention-span', 'ai-g
 /** The AXEL seminar's unlisted copies, each the Event's own. */
 const AXEL_UNLISTED = AXEL_UNLISTED_SLUGS.map((slug) => episodeRef(slug, AXEL));
 /**
- * Every unlisted Episode with each Event that presents it, read from the store so a new one is never skipped. Which
- * Episodes are unlisted is written out once, in `src/content-store/store.test.ts`; this file checks their pages.
+ * Every unlisted Episode with each Event that presents it, read from the store so a new one is never skipped; the
+ * store's refusals decide which Episodes may be unlisted, and this file checks their pages.
  */
 const PRESENTED = listEvents().flatMap((event) =>
   event.playlist.episodes

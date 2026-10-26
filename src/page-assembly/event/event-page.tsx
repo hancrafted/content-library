@@ -4,10 +4,9 @@ import { cardLabels, EpisodeCardView, type CardLabels } from '@/episodes/compone
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { episodeCardMaker } from '@/episodes/components/episode-card/episode-cards';
 import { EventBreadcrumb } from '@/events/components/event-breadcrumb';
-import { eventCardOf } from '@/events/components/event-cards';
 import { PastNotice } from '@/events/components/past-notice';
 import { PlaylistList, type PlaylistEntry } from '@/events/components/playlist-list';
-import type { EventCard } from '@/events/lib/event-card.pure';
+import { eventCard, type EventCard } from '@/events/lib/event-card.pure';
 import { eventPlaylistCards, startOf, totalMinutes } from '@/events/lib/event-playlist.pure';
 import { EVENT_WORDS, eventCopy } from '@/events/lib/event-words';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
@@ -134,7 +133,7 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
   const t = await getTranslations({ locale, namespace: 'eventPage' });
   const browser = await getTranslations({ locale, namespace: 'episodeBrowser' });
   const words = EVENT_WORDS[locale];
-  const card = await eventCardOf(record, locale);
+  const card = eventCard(record, locale);
   const episodes = eventPlaylistCards(record, await episodeCardMaker(locale), locale);
   return (
     <main data-testid="event-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">

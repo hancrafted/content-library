@@ -103,7 +103,7 @@ An entry reads its text from:
 
 An Event is a record in the content store that holds no string ([Events](events.md)). Its text sits with what renders it: `events.*` in the Events area's `src/events/lib/i18n/`, `eventsOverview.*` in the `/events` template's `src/page-assembly/events-overview/i18n/`, `eventPage.*` in the Event page template's `src/page-assembly/event/i18n/`:
 
-- `events.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Event page's `h1`, its breadcrumb's last step and its `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
+- `events.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Event page's `h1`, its breadcrumb's last step and its `<title>`; the description is the page's intro paragraph and its meta description. Each is read one way, through the Events area's word map (`eventCopy`, `src/events/lib/event-words.ts`), keyed by the Event registry's slugs, so a missing pair fails `tsc`.
 - `eventsOverview.title` and `eventsOverview.intro`: the `/events` heading and its one-line intro.
 - `events.breadcrumb.label` and `events.breadcrumb.events`: the breadcrumb's accessible name and its first step.
 - `events.episodeCount.one` and `.other`: the Episode count on a card and on the Event page; `other` keeps a plain `{count}` placeholder.
@@ -112,7 +112,7 @@ An Event is a record in the content store that holds no string ([Events](events.
 - `eventPage.start`: the primary button, with a `{step}` placeholder for the first Episode that has a page ("Start with Episode 1").
 - `eventPage.readingTime`: the total reading time of the Episodes, with a `{minutes}` placeholder.
 - `events.pastNotice`: the one fixed notice a past Event shows, on its page and on each of its Episode pages.
-- `events.position`: "Episode n of m" under the title of an Event-scoped Episode page, with `{position}` and `{count}` placeholders.
+- `events.position`: "Episode n of m" under the title of an Event-scoped Episode page, with `{position}` and `{count}` placeholders, filled by `fillTemplate`.
 - `events.playlistNav`: the accessible name of the Playlist walk after the last Slide.
 - `events.previous`, `events.next` and `events.backToEvent`: the cues of the walk's steps; `backToEvent` replaces `next` on the last Episode and sits over the Event's title.
 - `meta.events.title` and `.description` (page assembly's `src/page-assembly/lib/i18n/`): the `/events` page metadata, read by `pageMetadata({ kind: 'events' }, locale)` (FE-008). An Event page takes its metadata from its `items` pair.

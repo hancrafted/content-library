@@ -1,15 +1,46 @@
 import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
-import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
+import { eventEpisodeRoute, eventRoute, type EpisodeId } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PresentedEpisode } from '@/content-store/store';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { cn } from '@/shared/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { EVENT_WORDS } from '../lib/event-words';
+import type { ReactNode } from 'react';
+import { EVENT_WORDS, eventCopy } from '../lib/event-words';
 import { EventBreadcrumb } from './event-breadcrumb';
 import { PastNotice } from './past-notice';
+
+/**
+ * What an Event adds around an Episode it presents at its own URL (design-ADR 0016, Routes and visibility), ready for
+ * the Episode page container: the route the page is served at, the header above the Title slide (the breadcrumb, then
+ * for a past Event the notice), "Episode n of m" under the title, and the Playlist walk after the last Slide.
+ */
+export interface EventEpisodeFrame {
+  /** The logical path of the Episode under its Event; the contents and Slide links point there. */
+  readonly route: string;
+  readonly header: ReactNode;
+  readonly footer: ReactNode;
+  /** "Episode 2 of 3". */
+  readonly position: string;
+}
+
+/** What the frame reads of the Episode the page catalogue presents: the Event's slug and day, the Episode, its place. */
+type FramedEpisode = Pick<PresentedEpisode, 'episode' | 'place'> & {
+  readonly event: Pick<PresentedEpisode['event'], 'slug' | 'date'>;
+};
+
+interface FrameOptions {
+  readonly locale: Locale;
+  /** An Episode's title in `locale`, handed in by page assembly, so the Events area never reads an Episode itself. */
+  readonly titleOf: (episode: EpisodeRef<EpisodeId>) => string;
+  /** The day the page is built; an Event dated before it is past. */
+  readonly buildDay: IsoDate;
+}
+
+/** The insets every Slide wrapper takes, so the frame lines up with the Slides (FE-009 §2). */
+const INSET = 'pl-(--inset-l) pr-(--inset-r)';
 
 /** One step of the walk through the Playlist: the Episode's title and the logical path of its page under the Event. */
 interface Step {
@@ -17,62 +48,50 @@ interface Step {
   readonly route: string;
 }
 
-/**
- * What an Event-scoped Episode page adds around the Episode (design-ADR 0016, Routes and visibility), read in one
- * locale: the breadcrumb and, for a past Event, the notice above the title; "Episode n of m" under the title; the
- * previous and next Episodes after the last Slide, and the way back to the Event once the Playlist ends.
- */
-export interface EventEpisodeChrome {
+/** The words and places the header and the walk share, read once in the page's locale. */
+interface FrameParts {
   readonly locale: Locale;
   readonly labels: (typeof EVENT_WORDS)[Locale];
-  readonly event: { readonly slug: EventSlug; readonly title: string; readonly date: IsoDate };
+  readonly event: { readonly slug: FramedEpisode['event']['slug']; readonly title: string; readonly date: IsoDate };
   readonly episode: string;
-  /** "Episode 2 of 3". */
-  readonly position: string;
   readonly previous?: Step;
   readonly next?: Step;
 }
 
 /**
- * The chrome of one Episode's page under one Event, read in one locale. Page assembly hands in `titleOf`, an Episode's
- * title in that locale, so the Events area never reads an Episode itself.
+ * The whole frame of one Episode's page under one Event, read in one locale: the one call page assembly makes for an
+ * Event-scoped Episode page.
  */
-export async function eventEpisodeChrome(
-  { event, episode: presented, place }: PresentedEpisode,
-  locale: Locale,
-  titleOf: (episode: EpisodeRef<EpisodeId>) => string,
-): Promise<EventEpisodeChrome> {
+export function eventEpisodeFrame(
+  { event, episode, place }: FramedEpisode,
+  { locale, titleOf, buildDay }: FrameOptions,
+): EventEpisodeFrame {
   const labels = EVENT_WORDS[locale];
-  const t = await getTranslations({ locale, namespace: 'events' });
-  const stepOf = (episode: EpisodeRef<EpisodeId> | undefined): Step | undefined =>
-    episode === undefined ? undefined : { title: titleOf(episode), route: eventEpisodeRoute(event.slug, episode) };
+  const stepOf = (to: EpisodeRef<EpisodeId> | undefined): Step | undefined =>
+    to === undefined ? undefined : { title: titleOf(to), route: eventEpisodeRoute(event.slug, to) };
   const previous = stepOf(place.previous);
   const next = stepOf(place.next);
-  return {
+  const parts: FrameParts = {
     locale,
     labels,
-    event: { slug: event.slug, title: labels.items[event.slug].title, date: event.date },
-    episode: titleOf(presented),
-    position: t('position', { position: place.position, count: place.count }),
+    event: { slug: event.slug, title: eventCopy(event.slug, locale).title, date: event.date },
+    episode: titleOf(episode),
     ...(previous && { previous }),
     ...(next && { next }),
+  };
+  return {
+    route: eventEpisodeRoute(event.slug, episode),
+    header: <EventEpisodeHeader parts={parts} buildDay={buildDay} />,
+    footer: <PlaylistNav parts={parts} />,
+    position: fillTemplate(labels.position, { position: place.position, count: place.count }),
   };
 }
 
 /** Above the Title slide: the breadcrumb ending in the Episode, then, for a past Event, the notice. */
-export function EventEpisodeHeader({
-  chrome,
-  buildDay,
-  className,
-}: {
-  chrome: EventEpisodeChrome;
-  /** The day the page is built; an Event dated before it is past. */
-  buildDay: IsoDate;
-  className?: string;
-}) {
-  const { locale, labels, event, episode } = chrome;
+function EventEpisodeHeader({ parts, buildDay }: { parts: FrameParts; buildDay: IsoDate }) {
+  const { locale, labels, event, episode } = parts;
   return (
-    <div data-event-episode-header className={cn('flex flex-col gap-4 pt-2 pb-6', className)}>
+    <div data-event-episode-header className={cn('flex flex-col gap-4 pt-2 pb-6', INSET)}>
       <EventBreadcrumb locale={locale} labels={labels.breadcrumb} event={event} episode={episode} />
       <PastNotice date={event.date} buildDay={buildDay} text={labels.pastNotice} />
     </div>
@@ -114,8 +133,8 @@ function WalkStep(props: {
  * After the last Slide: the previous Episode of the Playlist and the next one, each when there is one; on the last
  * Episode the next step leads back to the Event, so the attendee is never stranded.
  */
-export function PlaylistNav({ chrome, className }: { chrome: EventEpisodeChrome; className?: string }) {
-  const { locale, labels, previous, next, event } = chrome;
+function PlaylistNav({ parts }: { parts: FrameParts }) {
+  const { locale, labels, previous, next, event } = parts;
   const ahead = next
     ? { walk: 'next' as const, cue: labels.next, ...next }
     : { walk: 'back' as const, cue: labels.backToEvent, title: event.title, route: eventRoute(event.slug) };
@@ -123,7 +142,7 @@ export function PlaylistNav({ chrome, className }: { chrome: EventEpisodeChrome;
     <nav
       aria-label={labels.playlistNav}
       data-playlist-nav
-      className={cn('grid grid-cols-2 items-start gap-6 py-12', className)}
+      className={cn('grid grid-cols-2 items-start gap-6 py-12', INSET)}
     >
       <div>{previous && <WalkStep walk="previous" cue={labels.previous} {...previous} locale={locale} />}</div>
       <div className="flex justify-end">
