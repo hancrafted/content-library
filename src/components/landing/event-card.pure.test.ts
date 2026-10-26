@@ -6,14 +6,12 @@ const READS: EventReads = {
   read: (key) => `«${key}»`,
   episodeCount: { one: '1 Episode', other: '{count} Episodes' },
 };
+/** An Event as the store serves it, presenting three Episodes. */
 const RECORD = {
   slug: '2026-10-23-axel-agentic-workflow',
   date: '2026-10-23',
-  kind: 'workshop',
-  audience: 'organization',
-  playlist: 'intro',
+  playlist: { episodes: ['alpha', 'beta', 'gamma'] },
 } as const;
-const PLAYLIST = { episodes: ['alpha', 'beta', 'gamma'] };
 
 describe('success cases', () => {
   it('reads the title and description by the Event slug and routes the card to its page', () => {
@@ -24,7 +22,7 @@ describe('success cases', () => {
       route: '/events/2026-10-23-axel-agentic-workflow',
     };
     // ACT
-    const card = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const card = eventCard(RECORD, 'en', READS);
     // ASSERT
     expect({ title: card.title, description: card.description, route: card.route }).toEqual(expected);
   });
@@ -33,8 +31,8 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { english: 'Oct 23, 2026', german: '23. Okt. 2026', date: '2026-10-23' };
     // ACT
-    const english = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
-    const german = eventCard({ event: RECORD, playlist: PLAYLIST }, 'de', READS);
+    const english = eventCard(RECORD, 'en', READS);
+    const german = eventCard(RECORD, 'de', READS);
     // ASSERT
     expect({ english: english.dateLabel, german: german.dateLabel, date: english.date }).toEqual(expected);
   });
@@ -43,7 +41,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { count: 3, label: '3 Episodes' };
     // ACT
-    const card = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const card = eventCard(RECORD, 'en', READS);
     // ASSERT
     expect({ count: card.episodeCount, label: card.episodeCountLabel }).toEqual(expected);
   });
@@ -59,7 +57,7 @@ describe('failure cases', () => {
       },
     };
     // ACT
-    const build = () => eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', reads);
+    const build = () => eventCard(RECORD, 'en', reads);
     // ASSERT
     expect(build).toThrow('Missing eventsPage.items.2026-10-23-axel-agentic-workflow.title');
   });
@@ -68,10 +66,10 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('uses the singular for an Event of one Episode', () => {
     // ARRANGE
-    const playlist = { episodes: ['alpha'] };
+    const single = { ...RECORD, playlist: { episodes: ['alpha'] } };
     const expected = '1 Episode';
     // ACT
-    const card = eventCard({ event: RECORD, playlist: playlist }, 'en', READS);
+    const card = eventCard(single, 'en', READS);
     // ASSERT
     expect(card.episodeCountLabel).toBe(expected);
   });
@@ -81,8 +79,8 @@ describe('edge cases', () => {
     const timed = { ...RECORD, time: '09:30', location: 'Berlin' };
     const expected = { time: '09:30', location: 'Berlin' };
     // ACT
-    const withDetails = eventCard({ event: timed, playlist: PLAYLIST }, 'en', READS);
-    const without = eventCard({ event: RECORD, playlist: PLAYLIST }, 'en', READS);
+    const withDetails = eventCard(timed, 'en', READS);
+    const without = eventCard(RECORD, 'en', READS);
     // ASSERT
     expect({ time: withDetails.time, location: withDetails.location }).toEqual(expected);
     expect('time' in without || 'location' in without).toBe(false);

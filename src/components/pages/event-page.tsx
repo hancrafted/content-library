@@ -2,13 +2,12 @@ import { EventBreadcrumb } from '@/components/events/event-breadcrumb';
 import { PastNotice } from '@/components/events/past-notice';
 import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { playlistEpisodeCards } from '@/components/landing/episode-cards';
+import { episodeCardMaker } from '@/components/landing/episode-cards';
 import type { EventCard } from '@/components/landing/event-card.pure';
-import { eventCards } from '@/components/landing/event-cards';
+import { eventCardOf } from '@/components/landing/event-cards';
 import { eventPlaylistCards, startOf, totalMinutes } from '@/components/landing/event-playlist.pure';
 import { Button } from '@/components/ui/button';
-import type { Event } from '@/content-store/schemas/event.schema';
-import { findEvent, pageFacts, playlistOf } from '@/content-store/store';
+import { findEvent, pageFacts, type ServedEvent } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { BUILD_DAY } from '@/lib/build-day';
 import { localizePath, type Locale } from '@/lib/locale.pure';
@@ -56,7 +55,7 @@ function DateFact({ card }: { card: EventCard }) {
 
 interface FactsProps {
   card: EventCard;
-  record: Event;
+  record: ServedEvent;
   minutes: number | undefined;
   t: EventT;
 }
@@ -189,10 +188,8 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
   if (record === undefined) notFound();
   const t = await getTranslations({ locale, namespace: 'eventsPage' });
   const landing = await getTranslations({ locale, namespace: 'landing' });
-  const card = (await eventCards(locale)).find((each) => each.slug === slug);
-  if (card === undefined) notFound();
-  const playlist = { event: record.slug, episodes: playlistOf(record).episodes };
-  const episodes = eventPlaylistCards(playlist, await playlistEpisodeCards(playlist.episodes, locale), locale);
+  const card = await eventCardOf(record, locale);
+  const episodes = eventPlaylistCards(record, await episodeCardMaker(locale), locale);
   return (
     <main data-testid="event-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
       <EventBreadcrumb

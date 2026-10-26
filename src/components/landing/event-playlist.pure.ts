@@ -1,27 +1,29 @@
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventEpisodeRoute, isEpisodeSlug, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, type EpisodeSlug, type EventSlug } from '@/lib/routes';
 import type { EpisodeCard } from './episode-card.pure';
 
 /** The card fields an Event's Playlist reads. */
 type PlaylistCard = Pick<EpisodeCard, 'slug' | 'route' | 'minutes'>;
 
+/** What the cards read of an Event the store serves (`ServedEvent`): its slug, and each listed Episode with its page. */
+interface PlaylistOf<Listed> {
+  readonly slug: EventSlug;
+  readonly playlist: { readonly episodes: readonly { readonly episode: Listed; readonly page?: EpisodeSlug }[] };
+}
+
 /**
  * The Playlist's Episodes as cards, in the Playlist's order, each linked card opening the Episode under its Event so
- * the attendee stays in the Event's context; a card with no page stays unlinked. Throws on an Episode with no card,
- * so the build fails rather than ships a gap.
+ * the attendee stays in the Event's context; a card with no page stays unlinked.
  */
-export function eventPlaylistCards<Card extends Pick<EpisodeCard, 'slug' | 'route' | 'href'>>(
-  { event, episodes }: { event: EventSlug; episodes: readonly string[] },
-  cards: readonly Card[],
+export function eventPlaylistCards<Listed, Card extends Pick<EpisodeCard, 'route' | 'href'>>(
+  event: PlaylistOf<Listed>,
+  cardOf: (episode: Listed) => Card,
   locale: Locale,
 ): Card[] {
-  return episodes.map((slug) => {
-    const card = cards.find((each) => each.slug === slug);
-    if (card === undefined) throw new Error(`No Episode card for "${slug}" in the Playlist of Event ${event}`);
-    if (card.route === null) return card;
-    if (!isEpisodeSlug(slug))
-      throw new Error(`The linked card "${slug}" in the Playlist of Event ${event} is no registered Episode`);
-    const route = eventEpisodeRoute(event, slug);
+  return event.playlist.episodes.map(({ episode, page }) => {
+    const card = cardOf(episode);
+    if (card.route === null || page === undefined) return card;
+    const route = eventEpisodeRoute(event.slug, page);
     return { ...card, route, href: localizePath(route, locale) };
   });
 }

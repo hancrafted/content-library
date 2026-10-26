@@ -6,7 +6,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { listEpisodes, listEvents, playlistOf } from '../../src/content-store/store';
+import { listEpisodes, listEvents } from '../../src/content-store/store';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import {
   episodeRoute,
@@ -27,10 +27,9 @@ const AXEL_UNLISTED = ['axel-onboard-ai-every-time', 'axel-ai-attention-span', '
  * Episodes are unlisted is written out once, in `src/content-store/store.test.ts`; this file checks their pages.
  */
 const PRESENTED = listEvents().flatMap((event) =>
-  playlistOf(event)
-    .episodes.filter((episode) =>
-      listEpisodes().some(({ slug, visibility }) => slug === episode && visibility === 'unlisted'),
-    )
+  event.playlist.episodes
+    .filter(({ episode }) => episode.visibility === 'unlisted')
+    .map(({ episode }) => episode.slug)
     .filter(isEpisodeSlug)
     .map((episode) => ({ event: event.slug, episode })),
 );

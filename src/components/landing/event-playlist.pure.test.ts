@@ -1,3 +1,4 @@
+import type { EpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import type { EpisodeCard } from './episode-card.pure';
 import { eventPlaylistCards, startOf, totalMinutes } from './event-playlist.pure';
@@ -11,7 +12,13 @@ const linked = (slug: string, minutes?: number): Stub => ({
   ...(minutes === undefined ? {} : { minutes }),
 });
 const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
-const EVENT = '2026-10-23-axel-agentic-workflow';
+/** An Episode as its Playlist lists it: its record (only the slug read here), and its page's slug when it has one. */
+const entry = (slug: string, page?: EpisodeSlug) => ({ episode: { slug }, ...(page === undefined ? {} : { page }) });
+/** The AXEL seminar presenting the given Episodes, in this order. */
+const axel = (...episodes: ReturnType<typeof entry>[]) =>
+  ({ slug: '2026-10-23-axel-agentic-workflow', playlist: { episodes } }) as const;
+/** A card for each Episode, linked to its own page. */
+const linkedCard = (episode: { slug: string }): Stub => linked(episode.slug);
 
 describe('success cases', () => {
   it('adds the counted minutes of every Episode that has them', () => {
@@ -36,57 +43,50 @@ describe('success cases', () => {
 
   it("lists the cards in the Playlist's order", () => {
     // ARRANGE
-    const cards = [linked('ai-token-economy'), linked('ai-attention-span'), linked('never-too-early-sales')];
+    const event = axel(
+      entry('never-too-early-sales', 'never-too-early-sales'),
+      entry('ai-token-economy', 'ai-token-economy'),
+    );
     const expected = ['never-too-early-sales', 'ai-token-economy'];
     // ACT
-    const playlist = eventPlaylistCards({ event: EVENT, episodes: expected }, cards, 'en');
+    const playlist = eventPlaylistCards(event, linkedCard, 'en');
     // ASSERT
     expect(playlist.map((card) => card.slug)).toEqual(expected);
   });
 
   it('opens each Episode under its Event, in the locale', () => {
     // ARRANGE
-    const cards = [linked('axel-ai-attention-span')];
+    const event = axel(entry('axel-ai-attention-span', 'axel-ai-attention-span'));
     const expected = {
       route: '/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span',
       href: '/de/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span',
     };
     // ACT
-    const [card] = eventPlaylistCards({ event: EVENT, episodes: ['axel-ai-attention-span'] }, cards, 'de');
+    const [card] = eventPlaylistCards(event, linkedCard, 'de');
     // ASSERT
     expect({ route: card.route, href: card.href }).toEqual(expected);
   });
 });
 
 describe('failure cases', () => {
-  it('names the Episode a Playlist lists that has no card', () => {
+  it('keeps an upcoming Episode unlinked under its Event, even when its page is already built', () => {
     // ARRANGE
-    const cards = [linked('ai-token-economy')];
+    const event = axel(entry('ai-token-economy', 'ai-token-economy'));
+    const expected = { route: null, href: null };
     // ACT
-    const build = () => eventPlaylistCards({ event: EVENT, episodes: ['ai-token-economy', 'missing'] }, cards, 'en');
+    const [card] = eventPlaylistCards(event, (episode) => upcoming(episode.slug), 'en');
     // ASSERT
-    expect(build).toThrow('"missing"');
-  });
-
-  it('refuses a linked card whose Episode is not registered, so the build fails rather than links a missing page', () => {
-    // ARRANGE
-    const cards = [linked('ghost')];
-    const expected =
-      'The linked card "ghost" in the Playlist of Event 2026-10-23-axel-agentic-workflow is no registered Episode';
-    // ACT
-    const build = () => eventPlaylistCards({ event: EVENT, episodes: ['ghost'] }, cards, 'en');
-    // ASSERT
-    expect(build).toThrow(expected);
+    expect({ route: card.route, href: card.href }).toEqual(expected);
   });
 });
 
 describe('edge cases', () => {
   it('leaves an Episode with no page unlinked under its Event', () => {
     // ARRANGE
-    const cards = [upcoming('alpha')];
+    const event = axel(entry('alpha'));
     const expected = { route: null, href: null };
     // ACT
-    const [card] = eventPlaylistCards({ event: EVENT, episodes: ['alpha'] }, cards, 'en');
+    const [card] = eventPlaylistCards(event, (episode) => upcoming(episode.slug), 'en');
     // ASSERT
     expect({ route: card.route, href: card.href }).toEqual(expected);
   });

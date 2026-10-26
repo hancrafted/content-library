@@ -2,16 +2,7 @@ import { overviewOrder } from '@/lib/episode-metadata.pure';
 import { EVENT_SLUGS, type PageRef } from '@/lib/routes';
 import { pageTreatment } from '@/lib/visibility.pure';
 import { describe, expect, it } from 'vitest';
-import {
-  episodeVideo,
-  findEvent,
-  listedEventsIn,
-  listEpisodes,
-  listEvents,
-  loadContent,
-  pageFactsIn,
-  playlistOf,
-} from './store';
+import { episodeVideo, findEvent, listedEventsIn, listEpisodes, listEvents, loadContent, pageFactsIn } from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
@@ -29,7 +20,7 @@ const EPISODE = {
 const UNLISTED = { ...EPISODE, slug: 'alpha-at-axel', visibility: 'unlisted' } as const;
 const PLAYLIST = { id: 'axel', visibility: 'public', episodes: ['alpha'] } as const;
 const EVENT = {
-  slug: '2026-10-23-axel',
+  slug: '2026-10-23-axel-agentic-workflow',
   date: '2026-10-23',
   kind: 'workshop',
   audience: 'organization',
@@ -50,36 +41,55 @@ function without<T extends object>(record: T, key: keyof T): Partial<T> {
 const SOUND = { episodes: [EPISODE], events: [EVENT], playlists: [PLAYLIST] };
 
 describe('success cases', () => {
-  it('loads a sound set of records whole', () => {
+  it('loads a sound set of records whole, each Event holding the Playlist it presents with its Episodes', () => {
     // ARRANGE
-    const expected = { episodes: [EPISODE], events: [EVENT], playlists: [PLAYLIST] };
+    const presented = { ...PLAYLIST, episodes: [{ episode: EPISODE, place: { position: 1, count: 1 } }] };
+    const expected = { episodes: [EPISODE], events: [{ ...EVENT, playlist: presented }], playlists: [PLAYLIST] };
     // ACT
     const content = loadContent(SOUND);
     // ASSERT
     expect(content).toEqual(expected);
   });
 
-  it('loads the AXEL seminar as the first Event, presenting a public Playlist of the three unlisted Episodes it taught', () => {
+  it("serves the AXEL seminar with its public Playlist's three unlisted Episodes in order, each with its place", () => {
     // ARRANGE
     const expected = {
-      event: {
-        slug: '2026-10-23-axel-agentic-workflow',
-        date: '2026-10-23',
-        kind: 'workshop',
-        audience: 'organization',
-        playlist: 'axel-agentic-workflow',
-      },
+      slug: '2026-10-23-axel-agentic-workflow',
+      date: '2026-10-23',
+      kind: 'workshop',
+      audience: 'organization',
       playlist: {
         id: 'axel-agentic-workflow',
         visibility: 'public',
-        episodes: ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'],
+        episodes: [
+          {
+            slug: 'axel-onboard-ai-every-time',
+            page: 'axel-onboard-ai-every-time',
+            place: { position: 1, count: 3, next: 'axel-ai-attention-span' },
+          },
+          {
+            slug: 'axel-ai-attention-span',
+            page: 'axel-ai-attention-span',
+            place: {
+              position: 2,
+              count: 3,
+              previous: 'axel-onboard-ai-every-time',
+              next: 'axel-ai-gives-you-more-work',
+            },
+          },
+          {
+            slug: 'axel-ai-gives-you-more-work',
+            page: 'axel-ai-gives-you-more-work',
+            place: { position: 3, count: 3, previous: 'axel-ai-attention-span' },
+          },
+        ],
       },
     };
     // ACT
-    const event = findEvent(expected.event.slug);
-    const playlist = event && playlistOf(event);
+    const event = findEvent(expected.slug);
+    const episodes = event?.playlist.episodes.map(({ episode, ...entry }) => ({ slug: episode.slug, ...entry }));
     // ASSERT
-    expect({ event, playlist }).toEqual(expected);
+    expect(event && { ...event, playlist: { ...event.playlist, episodes } }).toEqual(expected);
   });
 
   it.each(['17:00', '17:00–19:00', '17:00–19:00 CET'])('loads an Event time as the venue writes it: %s', (time) => {
@@ -232,7 +242,8 @@ describe('failure cases', () => {
   it('refuses an Event time that is no clock time', () => {
     // ARRANGE
     const input = { ...SOUND, events: [{ ...EVENT, time: 'evening' }] };
-    const expected = 'Event 2026-10-23-axel: time must be written HH:MM, or HH:MM–HH:MM, with an optional zone';
+    const expected =
+      'Event 2026-10-23-axel-agentic-workflow: time must be written HH:MM, or HH:MM–HH:MM, with an optional zone';
     // ACT
     const load = () => loadContent(input);
     // ASSERT
@@ -261,7 +272,11 @@ describe('failure cases', () => {
 
   it.each([
     ['Episode', { ...SOUND, episodes: [EPISODE, EPISODE] }, 'Episode alpha: slug is used by more than one Episode'],
-    ['Event', { ...SOUND, events: [EVENT, EVENT] }, 'Event 2026-10-23-axel: slug is used by more than one Event'],
+    [
+      'Event',
+      { ...SOUND, events: [EVENT, EVENT] },
+      'Event 2026-10-23-axel-agentic-workflow: slug is used by more than one Event',
+    ],
     ['Playlist', { ...SOUND, playlists: [PLAYLIST, PLAYLIST] }, 'Playlist axel: id is used by more than one Playlist'],
   ])('refuses two %s records sharing a slug', (_, input, expected) => {
     // ARRANGE
@@ -275,7 +290,18 @@ describe('failure cases', () => {
   it('refuses an Event naming a Playlist that does not exist', () => {
     // ARRANGE
     const input = { ...SOUND, events: [{ ...EVENT, playlist: 'missing' }] };
-    const expected = 'Event 2026-10-23-axel: playlist "missing" does not exist';
+    const expected = 'Event 2026-10-23-axel-agentic-workflow: playlist "missing" does not exist';
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('refuses an Event whose slug is missing from the hand-kept Event pages, so it would have no page', () => {
+    // ARRANGE
+    const input = { ...SOUND, events: [{ ...EVENT, slug: '2026-10-23-elsewhere' }] };
+    const expected =
+      'Event 2026-10-23-elsewhere: slug is missing from EVENT_SLUGS (src/lib/routes.ts), so it has no page';
     // ACT
     const load = () => loadContent(input);
     // ASSERT
@@ -421,6 +447,33 @@ describe('edge cases', () => {
     expect(content.episodes.map((episode) => episode.slug)).toEqual(expected);
   });
 
+  it('counts an Episode with no page yet in its Playlist, while the walk steps over it', () => {
+    // ARRANGE
+    const tokens = { ...EPISODE, slug: 'ai-token-economy' };
+    const attention = { ...EPISODE, slug: 'ai-attention-span' };
+    const playlist = { ...PLAYLIST, episodes: ['ai-token-economy', 'alpha', 'ai-attention-span'] };
+    const input = { episodes: [tokens, EPISODE, attention], events: [EVENT], playlists: [playlist] };
+    const expected = [
+      {
+        slug: 'ai-token-economy',
+        page: 'ai-token-economy',
+        place: { position: 1, count: 3, next: 'ai-attention-span' },
+      },
+      { slug: 'alpha', place: { position: 2, count: 3, previous: 'ai-token-economy', next: 'ai-attention-span' } },
+      {
+        slug: 'ai-attention-span',
+        page: 'ai-attention-span',
+        place: { position: 3, count: 3, previous: 'ai-token-economy' },
+      },
+    ];
+    // ACT
+    const [event] = loadContent(input).events;
+    // ASSERT
+    expect(event.playlist.episodes.map(({ episode, ...entry }) => ({ slug: episode.slug, ...entry }))).toEqual(
+      expected,
+    );
+  });
+
   it('names a record whose slug is missing instead of dropping it', () => {
     // ARRANGE
     const nameless = without(EPISODE, 'slug');
@@ -440,7 +493,7 @@ describe('edge cases', () => {
     };
     const expected = [
       'The content store refused a record:',
-      '- Event 2026-10-23-axel: playlist "missing" does not exist',
+      '- Event 2026-10-23-axel-agentic-workflow: playlist "missing" does not exist',
       '- Playlist empty: episodes lists none, but a Playlist lists at least one Episode',
     ].join('\n');
     // ACT
