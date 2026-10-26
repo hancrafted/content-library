@@ -1,5 +1,5 @@
-import { EventsIndexPage } from '@/components/pages/events-index-page';
-import { pageMetadata } from '@/lib/page-metadata.pure';
+import { EventsOverviewPage } from '@/page-assembly/events-overview/events-overview-page';
+import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { prefixedLocaleParams, resolveLocale } from '../params';
 
 interface EventsParams {
@@ -14,5 +14,5 @@ export async function generateMetadata({ params }: EventsParams) {
 }
 
 export default async function Page({ params }: EventsParams) {
-  return <EventsIndexPage locale={await resolveLocale(params)} />;
+  return <EventsOverviewPage locale={await resolveLocale(params)} />;
 }

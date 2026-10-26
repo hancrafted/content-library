@@ -4,7 +4,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
+import { resolveSiteUrl } from '../../src/shared/lib/site-url.pure';
 import { OUT_DIR } from './exported-pages';
 
 const read = (file: string) => readFileSync(join(OUT_DIR, file), 'utf8');
@@ -43,6 +43,28 @@ describe('hosting files in the export', () => {
     const domainLevel = rules.filter((line) => /^\s*https?:\/\//.test(line));
     // ASSERT
     expect(domainLevel).toEqual([]);
+  });
+
+  it("moves each Event copy's old URL to its URL under its Event, 301, in both locales", () => {
+    // ARRANGE
+    const AXEL = '/events/2026-10-23-axel-agentic-workflow/episodes';
+    const CYBERFORUM = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes';
+    const moved = [
+      [`${AXEL}/axel-ai-attention-span/`, `${AXEL}/ai-attention-span/`],
+      [`${AXEL}/axel-ai-gives-you-more-work/`, `${AXEL}/ai-gives-you-more-work/`],
+      [`${AXEL}/axel-onboard-ai-every-time/`, `${AXEL}/onboard-ai-every-time/`],
+      [`${CYBERFORUM}/cyberforum-ai-attention-span/`, `${CYBERFORUM}/ai-attention-span/`],
+      [`${CYBERFORUM}/cyberforum-ai-gives-you-more-work/`, `${CYBERFORUM}/ai-gives-you-more-work/`],
+      [`${CYBERFORUM}/cyberforum-intro/`, `${CYBERFORUM}/intro/`],
+      [`${CYBERFORUM}/cyberforum-onboard-ai-every-time/`, `${CYBERFORUM}/onboard-ai-every-time/`],
+    ];
+    const expected = moved.flatMap(([from, to]) => [`${from} ${to} 301`, `/de${from} /de${to} 301`]);
+    // ACT
+    const rules = read('_redirects')
+      .split('\n')
+      .map((line) => line.trim().split(/\s+/).join(' '));
+    // ASSERT
+    expect(rules).toEqual(expect.arrayContaining(expected));
   });
 
   it('serves a sitemap of the site origin and a robots.txt that points at it', () => {

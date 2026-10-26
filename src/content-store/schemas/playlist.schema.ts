@@ -13,8 +13,8 @@ export const playlistSchema = z
       "Whether the Playlist's own surfaces, an Event's pages included, are listed and indexed; a public Playlist no Event presents lists only public Episodes",
     ),
     episodes: z
-      .array(z.string().describe('An Episode slug'))
-      .describe('Episode slugs in the order the Playlist presents them; at least one, none twice'),
+      .array(z.string().describe("An Episode id: its slug, or `<event-slug>__<slug>` for an Event's copy"))
+      .describe("Episode ids in the order the Playlist presents them; at least one, none twice, no other Event's copy"),
   })
   .describe('An ordered list of Episodes with a visibility; it never owns Slides');
 

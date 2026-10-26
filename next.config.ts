@@ -5,7 +5,7 @@ import path from 'node:path';
 
 function getTransitionStyle(): string {
   try {
-    const configPath = path.join(process.cwd(), 'src/config.yaml');
+    const configPath = path.join(process.cwd(), 'src/shared/config.yaml');
     if (fs.existsSync(configPath)) {
       const raw = fs.readFileSync(configPath, 'utf8');
       const match = raw.match(/^\s*transition_style\s*:\s*([a-zA-Z0-9_-]+)/m);
@@ -48,6 +48,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+const withNextIntl = createNextIntlPlugin('./src/page-assembly/i18n-request.ts');
 
 export default withNextIntl(nextConfig);

@@ -2,8 +2,8 @@
 // with statuses, durations, models and tokens, or the subtree under a span id. A span with no end line reads
 // as running only while the active-run marker names its Run, and crashed otherwise.
 import { existsSync } from 'node:fs';
-import { episodeLogPath, readLog } from './episode-run-log.ts';
-import { renderTree } from './run-log.pure.ts';
+import { episodeLogPath, readLog } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { renderTree } from '../../../src/pipeline/lib/run-log.pure.ts';
 
 const target = process.argv[2];
 const spanId = process.argv[3];

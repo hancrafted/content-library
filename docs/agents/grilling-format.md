@@ -82,7 +82,7 @@ Opening: _Where Episode files live_. This issue settles which directory owns the
 
 1. Next to the English text, in the same Episode folder, because one folder then holds everything about one Episode.
 2. In a separate `de/` tree that mirrors the English one, because translators can work without touching English files.
-3. In `src/lib/messages.ts`, because the site already keeps UI strings there.
+3. In `src/shared/lib/messages.ts`, because the site already keeps UI strings there.
 
 ➡️ **Recommendation: Option 1.** One folder per Episode keeps both languages in step: a change to one is visible next to the other.
 
@@ -111,7 +111,7 @@ docs/episodes-de/
 **Option 3: In `messages.ts`**
 
 ```text
-src/lib/
+src/shared/lib/
 └── messages.ts          # Single table: every string for both languages, grows with each Episode
 ```
 

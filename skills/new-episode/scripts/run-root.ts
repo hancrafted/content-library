@@ -2,8 +2,14 @@
 // project dir is not that worktree when the run lives in a worktree and the session started elsewhere.
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { readOrNull } from './episode-run-log.ts';
-import { MARKER_PATH, parseMarker, sessionsOf, worktreePaths, type Marker } from './marker.pure.ts';
+import { readOrNull } from '../../../src/pipeline/lib/episode-run-log.ts';
+import {
+  MARKER_PATH,
+  parseMarker,
+  sessionsOf,
+  worktreePaths,
+  type Marker,
+} from '../../../src/pipeline/lib/marker.pure.ts';
 
 export interface FoundRun {
   root: string;

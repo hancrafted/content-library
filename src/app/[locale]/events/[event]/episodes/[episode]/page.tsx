@@ -1,8 +1,6 @@
-import { EventEpisodePage, eventEpisodePageCopy } from '@/components/pages/event-episode-page';
 import { eventEpisodeParams } from '@/content-store/store';
-import { pageMetadata } from '@/lib/page-metadata.pure';
-import { isEpisodeSlug, isEventSlug } from '@/lib/routes';
-import { notFound } from 'next/navigation';
+import { EpisodePage, episodePageCopy, eventEpisodePageOf } from '@/page-assembly/episode/episode-page';
+import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { resolveLocale } from '../../../../params';
 
 interface EventEpisodeParams {
@@ -14,12 +12,12 @@ export const generateStaticParams = eventEpisodeParams;
 
 export async function generateMetadata({ params }: EventEpisodeParams) {
   const { event, episode } = await params;
-  if (!isEventSlug(event) || !isEpisodeSlug(episode)) notFound();
+  const page = eventEpisodePageOf(event, episode);
   const locale = await resolveLocale(params);
-  return pageMetadata({ kind: 'event-episode', event, episode }, locale, eventEpisodePageCopy(event, episode, locale));
+  return pageMetadata(page, locale, episodePageCopy(page, locale));
 }
 
 export default async function Page({ params }: EventEpisodeParams) {
   const { event, episode } = await params;
-  return <EventEpisodePage event={event} episode={episode} locale={await resolveLocale(params)} />;
+  return <EpisodePage page={eventEpisodePageOf(event, episode)} locale={await resolveLocale(params)} />;
 }

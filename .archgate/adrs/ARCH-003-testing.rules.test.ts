@@ -44,7 +44,7 @@ function makeCtx(files: Record<string, string>) {
   return { ctx, violations };
 }
 
-const FILE = 'src/lib/thing.test.ts';
+const FILE = 'src/shared/lib/thing.test.ts';
 const BODY = `    // ARRANGE\n    const a = 1;\n    // ACT\n    const b = a;\n    // ASSERT\n    expect(b).toBe(a);\n`;
 const test = (title: string, body = BODY) => `  it('${title}', () => {\n${body}  });\n`;
 const block = (name: string, inner = test('works')) => `describe('${name}', () => {\n${inner}});\n`;
@@ -147,7 +147,7 @@ describe('suite-three-blocks', () => {
     const { ctx, violations } = makeCtx({
       'tests/post-build/x.build.test.ts': source,
       '.archgate/adrs/X.rules.test.ts': source,
-      'src/lib/thing.ts': source,
+      'src/shared/lib/thing.ts': source,
     });
     // ACT
     await rule.check(ctx);

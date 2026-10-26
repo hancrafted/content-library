@@ -5,9 +5,9 @@ title: 'Episode Page'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+files: ['src/episodes/**', 'src/shared/page-chrome/table-of-contents/**', 'src/explorable-explanations/**', 'src/app/**/episode/**', 'src/shared/lib/speaking-time.pure*']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes,table-of-contents}/**', 'src/app/**/episode/**', 'src/lib/speaking-time.pure*']
+paths: ['src/episodes/**', 'src/shared/page-chrome/table-of-contents/**', 'src/explorable-explanations/**', 'src/app/**/episode/**', 'src/shared/lib/speaking-time.pure*']
 description: 'How an Episode page is built: the Slide is the unit, one folder carrying its own text, composed into Sections by a typed record and rendered by one container; Scene is free JSX, position sets headings, strings and anchors keyed by Slide slug, reading time counted from the Voice script, Episode CSS scoped to its page.'
 ---
 
@@ -55,7 +55,7 @@ flowchart LR
 
 **The kit** gives a Slide `t` (built from the Slide's own messages; its `t.rich` knows `em`, `b`, `code`), `template`, `ref`, `target`, `slideHref`, `locale` and `Title`.
 
-**Reference implementation: `src/components/episodes/episode-template/`** is the copy source; the frame layouts are in `src/components/slide-master/`, and the Slide library (`slide-master/`) shows the rest. Both are tooling pages, not Episodes (design-ADR 0016). How to write a Slide lives there and in the feature guides.
+**Reference implementation: `src/episodes/tooling/episode-template/`** is the copy source; the frame layouts are in `src/episodes/components/slide-master/`, and the Slide library (`slide-master/`) shows the rest. Both are tooling pages, not Episodes (design-ADR 0016). How to write a Slide lives there and in the feature guides.
 
 ## Decision
 
@@ -65,7 +65,7 @@ flowchart LR
 
 ### 2. The Slide is the unit
 
-1. Each Slide MUST be one flat folder `slides/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/`. `episode.ts` only composes.
+1. Each Slide MUST be one flat folder `slides/<slide>/` or `slide-pool/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/`. `episode.ts` only composes.
 2. A Section MUST be a list of Slides, the first, titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
 3. Reading time MUST be counted from Voice script words per locale.
 
@@ -73,7 +73,7 @@ flowchart LR
 
 1. A Scene MUST be free JSX, no slide-type union, reaching the record only via its typed kit.
 2. Browser code MUST live in its Slide's folder as `*.client.tsx`.
-3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib; its `*.client.tsx` only own files, hooks, lib. Shared parts live in `slide-shared`: plain props.
+3. A Slide folder MUST import only its own files, Slide master, `slide-shared`, UI kit, hooks, lib; its `*.client.tsx` only own files, hooks, lib. Shared parts: `slide-shared`, plain props.
 
 ### 4. Headings mirror the Dossier
 
@@ -81,7 +81,7 @@ flowchart LR
 
 ### 5. Strings and anchors keyed by Slide slug
 
-1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches the English shape. Episode text: `<episode>/i18n/`.
+1. A Slide's text MUST live in its own `i18n/<locale>.json`, by role — `title`, not `sections.0.title`; German matches English. Episode text: `<episode>/i18n/`.
 2. Published anchors MUST stay (`published-anchors.json`, at publication); `slideHref` MUST name a Slide of it.
 
 ### 6. Table of contents and Context drawer read the record
@@ -92,7 +92,7 @@ flowchart LR
 
 1. `globals.css` MUST hold only tokens Episodes share.
 2. A Slide's CSS MUST be a CSS module in its folder (its token file).
-3. An Episode MAY keep one stylesheet beside its record, under `[data-episode='<slug>']`, only to remap tokens its chrome reads — `palette.css`.
+3. An Episode MAY keep one stylesheet beside its record, under `[data-episode='<slug>']`, only to remap tokens its chrome reads.
 4. Colour, size and weight MUST use design tokens.
 
 ## Do's and Don'ts

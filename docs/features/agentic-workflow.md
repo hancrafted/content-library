@@ -6,7 +6,7 @@ stale_after: 2027-04-22T00:00:00Z
 
 # Agentic workflow Authoring guide
 
-Read before writing or changing a Workflow file (`src/components/explorable-explanations/human-in-the-loop/<id>.<locale>.yml`). It is the whole contract of the file: what each field means, which problem the loader reports for which mistake, and a one-stage file that loads. The types are `workflow-schema.types.ts`; the shape check is `workflow-shape.pure.ts`; the meaning checks are `workflow-loader-checks.pure.ts`; both run in `loadWorkflow` (`workflow-loader.pure.ts`). Where the visual is placed and tested: [human-in-the-loop.md](human-in-the-loop.md). A **Workflow** is defined in the [glossary](../../GLOSSARY.md).
+Read before writing or changing a Workflow file (`src/explorable-explanations/human-in-the-loop/<id>.<locale>.yml`). It is the whole contract of the file: what each field means, which problem the loader reports for which mistake, and a one-stage file that loads. The types are `workflow-schema.types.ts`; the shape check is `workflow-shape.pure.ts`; the meaning checks are `workflow-loader-checks.pure.ts`; both run in `loadWorkflow` (`workflow-loader.pure.ts`). Where the visual is placed and tested: [human-in-the-loop.md](human-in-the-loop.md). A **Workflow** is defined in the [glossary](../../GLOSSARY.md).
 
 ## One language per file
 

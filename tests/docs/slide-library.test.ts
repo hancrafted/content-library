@@ -8,9 +8,9 @@ import { describe, expect, it } from 'vitest';
  */
 
 const ROOT = path.resolve(__dirname, '../..');
-const MASTER_SLIDES = path.join(ROOT, 'src/components/episodes/slide-master/slides');
+const MASTER_SLIDES = path.join(ROOT, 'src/episodes/tooling/slide-master/slides');
 const LIBRARY_DOC = path.join(ROOT, 'docs/design/slide-library.md');
-const MOTIONS_DIR = path.join(ROOT, 'src/components/slide-shared/motions');
+const MOTIONS_DIR = path.join(ROOT, 'src/episodes/components/slide-shared/motions');
 const NOT_A_MASTER_SLIDE = ['Library motions'];
 
 function masterSlideFolders(): string[] {

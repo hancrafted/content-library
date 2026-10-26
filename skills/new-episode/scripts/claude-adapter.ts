@@ -2,14 +2,13 @@
 // PostToolUse on the Skill tool (`skill`) and the Read tool (`read`), and InstructionsLoaded (`instructions`). A plugin
 // over the core writer. It acts only
 // when some worktree's `.scratch/active-run` lists the hook's session; otherwise it prints nothing and exits 0, so
-// a retro or review session never touches a run's log. The mapping lives in claude-adapter.pure.ts; the line is
-// written by run-log-writer.ts, which owns the shape, the clock, the lock and the sequence.
+// a retro or review session never touches a run's log. The mapping lives in src/pipeline/lib/claude-adapter.pure.ts; the line is
+// written by src/pipeline/lib/run-log-writer.ts, which owns the shape, the clock, the lock and the sequence.
 // A lock timeout is the one failure it reports: a line on stderr and exit 1, which Claude Code does not treat as
 // blocking (exit 2 would block SubagentStop). A point-fact hook waits only 2 s, reports it too, and exits 0: what it
 // records already happened.
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
-import { agentModel } from './agent-definition.ts';
 import {
   adaptInstructions,
   adaptRead,
@@ -17,10 +16,11 @@ import {
   type InstructionsHookInput,
   type InstructionsHookPayload,
   type ToolHookPayload,
-} from './claude-adapter-event.pure.ts';
-import { adaptSubagent, subagentFiles, type HookPayload } from './claude-adapter.pure.ts';
-import { readOrNull as read, readLog } from './episode-run-log.ts';
-import { LockTimeoutError, appendEvent } from './run-log-writer.ts';
+} from '../../../src/pipeline/lib/claude-adapter-event.pure.ts';
+import { adaptSubagent, subagentFiles, type HookPayload } from '../../../src/pipeline/lib/claude-adapter.pure.ts';
+import { readOrNull as read, readLog } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { LockTimeoutError, appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
+import { agentModel } from './agent-definition.ts';
 import { findRun } from './run-root.ts';
 
 /** A point-fact hook waits at most this long for the lock, so a contended log never stalls the call it follows. */

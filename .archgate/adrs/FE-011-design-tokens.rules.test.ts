@@ -33,12 +33,14 @@ function globToRegExp(pattern: string): RegExp {
   return new RegExp(`^${body}$`);
 }
 
-const LEGACY_PATH = 'src/design-system/legacy.json';
+const LEGACY_PATH = 'src/shared/design-system/legacy.json';
 const GLOBALS_PATH = 'src/app/globals.css';
 const GLOBALS =
   ':root {\n  --primary: oklch(0.2 0 0);\n  --machine: oklch(0.6 0.1 240);\n}\n.dark {\n  --primary: #eee;\n}\n';
-const PANEL_CSS = 'src/components/design-system-token-editor/token-panel.module.css';
-const SLIDE_CSS = 'src/components/episodes/demo/slides/loop/loop.module.css';
+const PANEL_CSS = 'src/shared/components/design-system-token-editor/token-panel.module.css';
+const SLIDE_CSS = 'src/episodes/demo/slides/loop/loop.module.css';
+/** A pool Slide's token file, `slide-pool/<slide>/`: a Slide token file like any other. */
+const POOL_SLIDE_CSS = 'src/episodes/slide-pool/loop/loop.module.css';
 
 function makeCtx(files: Record<string, string>, legacyGlobs: string[] = []) {
   const violations: Reported[] = [];
@@ -80,12 +82,12 @@ async function run(ruleId: keyof typeof ruleSet.rules, files: Record<string, str
 describe('no-raw-colour-in-css (A1)', () => {
   it('fails a raw colour in a stylesheet that is neither globals nor a Slide token file', async () => {
     // ARRANGE
-    const files = { 'src/components/slide-master/panel.module.css': '.panel {\n  color: #ff0000;\n}\n' };
+    const files = { 'src/episodes/components/slide-master/panel.module.css': '.panel {\n  color: #ff0000;\n}\n' };
     // ACT
     const violations = await run('no-raw-colour-in-css', files);
     // ASSERT
     expect(violations).toHaveLength(1);
-    expect(violations[0]).toMatchObject({ file: 'src/components/slide-master/panel.module.css', line: 2 });
+    expect(violations[0]).toMatchObject({ file: 'src/episodes/components/slide-master/panel.module.css', line: 2 });
     expect(violations[0].message).toContain('(FE-011 [no-raw-colour-in-css])');
   });
 
@@ -109,7 +111,7 @@ describe('no-raw-colour-in-css (A1)', () => {
     ['a named colour in a shadow', '.panel {\n  box-shadow: 0 1px 2px black;\n}\n'],
   ])('fails %s in a stylesheet that is neither globals nor a Slide token file', async (_name, css) => {
     // ARRANGE
-    const files = { 'src/components/slide-master/panel.module.css': css };
+    const files = { 'src/episodes/components/slide-master/panel.module.css': css };
     // ACT
     const violations = await run('no-raw-colour-in-css', files);
     // ASSERT
@@ -138,7 +140,9 @@ describe('no-raw-colour-in-css (A1)', () => {
       '',
     ].join('\n');
     // ACT
-    const violations = await run('no-raw-colour-in-css', { 'src/components/slide-master/panel.module.css': css });
+    const violations = await run('no-raw-colour-in-css', {
+      'src/episodes/components/slide-master/panel.module.css': css,
+    });
     // ASSERT
     expect(violations).toEqual([]);
   });
@@ -156,10 +160,10 @@ describe('no-raw-colour-in-css (A1)', () => {
     // ARRANGE
     const files = {
       [SLIDE_CSS]: '.loop {\n  --edge: #d0342c;\n}\n',
-      'src/components/landing/hero.module.css': '.hero {\n  color: #fff;\n}\n',
+      'src/page-assembly/landing/hero.module.css': '.hero {\n  color: #fff;\n}\n',
     };
     // ACT
-    const violations = await run('no-raw-colour-in-css', files, ['src/components/landing/**']);
+    const violations = await run('no-raw-colour-in-css', files, ['src/page-assembly/landing/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });
@@ -180,7 +184,7 @@ describe('no-raw-value-in-code (A2)', () => {
     ['a font family', 'const s = { fontFamily: "Inter" };'],
   ])('fails %s', async (_name, line) => {
     // ARRANGE
-    const files = { 'src/components/slide-master/chart.tsx': `export const x = 1;\n${line}\n` };
+    const files = { 'src/episodes/components/slide-master/chart.tsx': `export const x = 1;\n${line}\n` };
     // ACT
     const violations = await run('no-raw-value-in-code', files);
     // ASSERT
@@ -201,7 +205,7 @@ describe('no-raw-value-in-code (A2)', () => {
   it('passes "Invoice #0042", whose four hex digits are not a colour', async () => {
     // ARRANGE
     const files = {
-      'src/components/slide-master/invoice.tsx': 'const label = "Invoice #0042";\nconst id = `Order #abcd`;\n',
+      'src/episodes/components/slide-master/invoice.tsx': 'const label = "Invoice #0042";\nconst id = `Order #abcd`;\n',
     };
     // ACT
     const violations = await run('no-raw-value-in-code', files);
@@ -212,7 +216,7 @@ describe('no-raw-value-in-code (A2)', () => {
   it('passes transparent, currentColor, inherit and identifiers that spell a colour', async () => {
     // ARRANGE
     const files = {
-      'src/components/slide-master/ok.tsx': [
+      'src/episodes/components/slide-master/ok.tsx': [
         "const s = { color: 'currentColor', background: 'transparent', fill: 'inherit' };",
         'const black = 1;',
         'const next = white + red;',
@@ -230,14 +234,14 @@ describe('no-raw-value-in-code (A2)', () => {
   it('passes token references, custom-property font names, comments, tests and legacy files', async () => {
     // ARRANGE
     const files = {
-      'src/components/slide-master/ok.tsx':
+      'src/episodes/components/slide-master/ok.tsx':
         "// fill=\"#fff\" was here\nconst s = { color: 'var(--foreground)', fill: 'currentColor' };\n",
       [SLIDE_CSS]: '.loop {\n  /* font-size: 13px */\n  --font-note: var(--font-mono);\n}\n',
-      'src/lib/contrast.test.ts': "const bg = '#fafafa';\n",
-      'src/components/landing/hero.tsx': "const c = '#fff';\n",
+      'src/shared/lib/contrast.test.ts': "const bg = '#fafafa';\n",
+      'src/page-assembly/landing/hero.tsx': "const c = '#fff';\n",
     };
     // ACT
-    const violations = await run('no-raw-value-in-code', files, ['src/components/landing/**']);
+    const violations = await run('no-raw-value-in-code', files, ['src/page-assembly/landing/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });
@@ -245,14 +249,14 @@ describe('no-raw-value-in-code (A2)', () => {
   it('allows the citation marker 0.7em and inline code 0.9em in their own file only', async () => {
     // ARRANGE
     const files = {
-      'src/components/context-drawer/slide-notes.tsx': "const s = { fontSize: '0.7em' };\n",
-      'src/components/slide-master/rich-tags.tsx': "const s = { fontSize: '0.9em' };\n",
-      'src/components/slide-master/other.tsx': "const s = { fontSize: '0.7em' };\n",
+      'src/shared/page-chrome/context-drawer/slide-notes.tsx': "const s = { fontSize: '0.7em' };\n",
+      'src/episodes/components/slide-master/rich-tags.tsx': "const s = { fontSize: '0.9em' };\n",
+      'src/episodes/components/slide-master/other.tsx': "const s = { fontSize: '0.7em' };\n",
     };
     // ACT
     const violations = await run('no-raw-value-in-code', files);
     // ASSERT
-    expect(violations.map((v) => v.file)).toEqual(['src/components/slide-master/other.tsx']);
+    expect(violations.map((v) => v.file)).toEqual(['src/episodes/components/slide-master/other.tsx']);
   });
 });
 
@@ -268,14 +272,23 @@ describe('slide-token-no-global-name (A3)', () => {
     expect(violations[0].message).toContain('(FE-011 [slide-token-no-global-name])');
   });
 
+  it("fails a pool Slide's token file that redeclares a global token name, as any Slide's", async () => {
+    // ARRANGE
+    const files = { [POOL_SLIDE_CSS]: '.loop {\n  --primary: red;\n}\n' };
+    // ACT
+    const violations = await run('slide-token-no-global-name', files);
+    // ASSERT
+    expect(violations.map((v) => v.file)).toEqual([POOL_SLIDE_CSS]);
+  });
+
   it('passes Slide-local names and legacy Slide files', async () => {
     // ARRANGE
     const files = {
       [SLIDE_CSS]: '.loop {\n  --edge: blue;\n}\n',
-      'src/components/episodes/old/slides/x/x.module.css': '.x {\n  --primary: red;\n}\n',
+      'src/episodes/old/slides/x/x.module.css': '.x {\n  --primary: red;\n}\n',
     };
     // ACT
-    const violations = await run('slide-token-no-global-name', files, ['src/components/episodes/old/**']);
+    const violations = await run('slide-token-no-global-name', files, ['src/episodes/old/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });
@@ -321,9 +334,9 @@ describe('slide-token-dark-counterpart (A4)', () => {
 
   it('exempts a legacy Slide file', async () => {
     // ARRANGE
-    const files = { 'src/components/episodes/old/slides/x/x.module.css': '.x {\n  --edge: #fff;\n}\n' };
+    const files = { 'src/episodes/old/slides/x/x.module.css': '.x {\n  --edge: #fff;\n}\n' };
     // ACT
-    const violations = await run('slide-token-dark-counterpart', files, ['src/components/episodes/old/**']);
+    const violations = await run('slide-token-dark-counterpart', files, ['src/episodes/old/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });
@@ -354,24 +367,24 @@ describe('no-episode-selector-in-globals (A5)', () => {
 describe('no-dead-legacy-entry (A6)', () => {
   it('fails a legacy glob that matches no file', async () => {
     // ARRANGE
-    const files = { 'src/components/landing/hero.tsx': '' };
+    const files = { 'src/page-assembly/landing/hero.tsx': '' };
     // ACT
     const violations = await run('no-dead-legacy-entry', files, [
-      'src/components/landing/**',
-      'src/components/gone/**',
+      'src/page-assembly/landing/**',
+      'src/page-assembly/gone/**',
     ]);
     // ASSERT
     expect(violations).toHaveLength(1);
     expect(violations[0]).toMatchObject({ file: LEGACY_PATH });
-    expect(violations[0].message).toContain('src/components/gone/**');
+    expect(violations[0].message).toContain('src/page-assembly/gone/**');
     expect(violations[0].message).toContain('(FE-011 [no-dead-legacy-entry])');
   });
 
   it('passes when every entry matches a file', async () => {
     // ARRANGE
-    const files = { 'src/components/landing/hero.tsx': '' };
+    const files = { 'src/page-assembly/landing/hero.tsx': '' };
     // ACT
-    const violations = await run('no-dead-legacy-entry', files, ['src/components/landing/**']);
+    const violations = await run('no-dead-legacy-entry', files, ['src/page-assembly/landing/**']);
     // ASSERT
     expect(violations).toEqual([]);
   });

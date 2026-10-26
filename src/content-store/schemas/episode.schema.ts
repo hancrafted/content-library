@@ -2,17 +2,20 @@ import { z } from 'zod';
 import { FORMATS, isoDate, slug, TAG_IDS, visibility } from './fields';
 
 /*
- * What an Episode declares about itself, in its own folder (`episodes/<slug>/episode-metadata.ts`): its overview
- * entry, its visibility and its Video. Ids and dates only; titles and captions stay Translation keys (FE-003).
+ * What an Episode declares about itself, in its own folder (`episodes/<slug>/episode-metadata.ts`, or
+ * `episodes/by-event/<event-slug>/<slug>/` for an Event's copy): its overview entry, its visibility and its Video. Its
+ * Episode id is its folder's, never written here. Ids and dates only; titles and captions stay Translation keys (FE-003).
  */
 
 const YOUTUBE_ID = /^[\w-]{11}$/;
 const tag = z.enum(TAG_IDS);
 
 const shared = z.object({
-  slug: slug.describe('The Episode slug: its folder name and the last part of its URL, unique across all Episodes'),
+  slug: slug.describe(
+    "The Episode slug: its folder's name and the last part of its URL, unique among its siblings; an Event's copy usually keeps its original's",
+  ),
   visibility: visibility.describe(
-    'public is listed and indexed at /episodes/<slug>/; unlisted lives only under the Event whose Playlist lists it, never listed. A missing one is refused, so a forgotten field fails closed',
+    "public is listed and indexed at /episodes/<slug>/, or, for an Event's copy, at its Event-scoped URL only; unlisted lives only in its Event's folder and under that Event, never listed. A missing one is refused, so a forgotten field fails closed",
   ),
   format: z.enum(FORMATS).describe('The Episode format the overview filters by'),
   tags: z

@@ -12,7 +12,7 @@ import { describe, expect, it } from 'vitest';
 const read = (file: string) =>
   readFileSync(path.join(__dirname, '../..', file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 const GLOBALS = read('src/app/globals.css');
-const PALETTE = read('src/components/episodes/maintaining-markdown-for-ai/palette.css');
+const PALETTE = read('src/episodes/maintaining-markdown-for-ai/palette.css');
 
 const block = (css: string, opener: string): string => {
   const start = css.indexOf(opener);

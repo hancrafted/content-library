@@ -5,9 +5,9 @@ title: 'Content Store'
 domain: frontend
 rules: true
 # prettier-ignore
-files: ['src/content-store/**/*.ts', 'src/components/episodes/*/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
+files: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
 # prettier-ignore
-paths: ['src/content-store/**/*.ts', 'src/components/episodes/*/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
+paths: ['src/content-store/**/*.ts', 'src/episodes/**/episode-metadata.ts', 'docs/adr/0016-content-data-model.md']
 description: 'Every record — Episode metadata, Event, Playlist — enters the site through one content store that parses it with a Zod schema whose inferred type is its only type, every field described, and refuses a bad record at build time, naming it.'
 ---
 
@@ -36,9 +36,9 @@ For this project the reasons and the model — which entities are records, how t
 
 ### 1. One entry
 
-1. Pages, routes, the sitemap and metadata MUST read records only through the store's one entry module; record files and refusals are reached by nothing else.
-2. The store is its own tier between components and hooks: no React, and it reaches into components only for an Episode's metadata file, imported by the generated Episode registry, so an Episode stays one folder.
-3. The schemas are a leaf below every tier, importing only zod: any module, lib included, takes a record's type from them, so no tier needs a type of its own. A lib module gets record values as arguments.
+1. Pages, routes, the sitemap and metadata MUST read records only through the store's one entry module; record files, refusals and Featured are reached by nothing else. Its `catalogue/` (slug lists, Episode id, record routes, visibility, the page catalogue behind the entry) names records without reading them.
+2. The store is its own layer between the product areas and `shared/`: no React, and it reaches outside itself and `shared/` only for an Episode's metadata file, imported by the generated Episode registry, so an Episode stays one folder.
+3. The schemas are a leaf importing only zod: any module above `shared/`, lib included, takes a record's type from them, so no tier needs a type of its own. A lib module gets record values as arguments.
 4. A client leaf MUST NOT import the store at runtime; it gets record values as props, so Zod and the records stay out of the browser bundle.
 
 ### 2. The schema is the type
@@ -49,7 +49,7 @@ For this project the reasons and the model — which entities are records, how t
 
 ### 3. Fail closed
 
-1. The store MUST parse every record and apply the cross-record refusals when it loads; a bad record throws, naming its kind, slug and field, so the build and the fast suite both fail.
+1. The store MUST parse every record and apply the cross-record refusals when it loads; a bad record throws, naming its kind, record and field, so the build and the fast suite both fail.
 2. A refusal MUST NOT become a silent filter: a record is loaded whole or the build stops.
 3. Which refusals exist is the model's business, held in the store's tests; this record fixes only that they fail closed.
 
@@ -98,9 +98,10 @@ For this project the reasons and the model — which entities are records, how t
 
 1. **Rules** (`FE-013-content-store.rules.ts`, error): Decision 2.
 2. **Lint** (dependency-cruiser, error; probe tests run the whole rule set over a throwaway tree): Decision 1.
+   Tests are exempt from Decision 1.2's one upward edge: the store's folder-to-record test reads the Episodes area's folder walker.
 3. **Tests** (fast suite): Decision 3 — each refusal throws its sentence for a bad record.
 
-**Manual review duties:** descriptions say what a field means; refusals name kind, slug and field and never filter silently (Decision 3); no reader bypasses the entry through a re-export; scripts and tests outside `src/` read records through the entry too.
+**Manual review duties:** descriptions say what a field means; refusals name kind, record and field and never filter silently (Decision 3); no reader bypasses the entry through a re-export; scripts and tests outside `src/` read records through the entry too.
 
 **Exceptions:** raise a separate ADR; human approval required.
 

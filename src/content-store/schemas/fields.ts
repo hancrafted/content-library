@@ -12,7 +12,7 @@ export const VISIBILITIES = ['public', 'unlisted'] as const;
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];
 
-/** The closed Tag vocabulary: the only Tags an Episode may carry. Each Tag's look lives in `lib/episode-overview`. */
+/** The closed Tag vocabulary: the only Tags an Episode may carry. Each Tag's look lives in the Episodes area, `src/episodes/lib/tag-looks.ts`. */
 export const TAG_IDS = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'] as const;
 export type TagId = (typeof TAG_IDS)[number];
 
@@ -21,6 +21,9 @@ export const EVENT_KINDS = ['workshop', 'webinar'] as const;
 
 /** The Audience an Event targets (`docs/steering/product-vision.md`). */
 export const AUDIENCES = ['individual', 'organization'] as const;
+
+/** Who runs an Event: Han's own Events are `hancrafted`, a partner's carry its name, so a partner's Events group. */
+export const ORGANIZERS = ['hancrafted', 'axel', 'cyberforum'] as const;
 
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;

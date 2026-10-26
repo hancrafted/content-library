@@ -4,8 +4,9 @@ id: FE-010
 title: 'Context Drawer'
 domain: frontend
 rules: true
-files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
-paths: ['src/components/{context-drawer,episodes}/**', 'src/lib/context-{drawer,link}.pure*.ts', 'src/app/globals.css']
+files: ['src/shared/page-chrome/context-drawer/**/*', 'src/app/globals.css']
+# prettier-ignore
+paths: ['src/shared/page-chrome/context-drawer/**', 'src/episodes/**', 'src/shared/lib/context-{drawer,link}.pure*.ts', 'src/app/globals.css']
 description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, linked to the Slide by targets and context references, with the note and segment shapes typed as content and kept apart from design.'
 ---
 
@@ -60,11 +61,11 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 ### 5. Interaction
 
 1. `Alt+N` toggles, Escape closes; focus enters on open, returns on close.
-2. The drawer MUST be a client leaf reached only from the Episode page container and its adapter.
+2. It is page chrome: a client leaf placed only by page assembly or the container.
 
 ### 6. Strings and links
 
-1. Translation keys follow `docs/features/episode-translation-keys.md`; chrome under `contextDrawer.*`.
+1. Translation keys follow `docs/features/episode-translation-keys.md`; the drawer's own words under `contextDrawer.*`.
 2. A source MUST be an `https` link named as opening a new tab.
 
 ### 7. Card and modes
@@ -74,7 +75,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 
 ### 8. Input only
 
-1. The drawer MUST render from one `ContextDrawerInput` and import no Episode, route, table-of-contents or `next-intl` code.
+1. The drawer MUST render from one `ContextDrawerInput` and import no Episode, content store, route, table-of-contents or `next-intl` code.
 2. It MUST take the active Slide from `useActiveSlide()`, never observe the viewport.
 
 ## Do's and Don'ts
@@ -94,7 +95,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 1. **DON'T** call `showModal(` or set `aria-modal` in the drawer. (Decision 1)
 2. **DON'T** put the `hidden` attribute, `display: none` or `inert` on the context slot. (Decision 2)
 3. **DON'T** add a layout, style, placement or time field to a note or segment. (Decision 3)
-4. **DON'T** render the drawer from an Episode file. (Decision 5)
+4. **DON'T** render the drawer from an Episode file or anywhere but page assembly or the container. (Decision 5)
 5. **DON'T** show a source as plain text, or open it without `rel="noopener noreferrer"`. (Decision 6)
 6. **DON'T** transition width, padding or margins for the card, or give it a layout spacer or grid column. (Decision 7)
 7. **DON'T** read Episode, table-of-contents or Translation code from the drawer, or number a `ContextRef`. (Decisions 4 and 8)
@@ -126,7 +127,7 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 1. **Rules** (archgate, error): `drawer-is-non-modal` (§1), `print-reveals-context` (§2.3).
 2. **Types:** note and segment shapes; German Translation file typed against English; every note and segment slug has a Translation subtree (§3, §6).
 3. **Unit tests:** citation parsing, context links, roving focus, the input adapter, Translation key shape, counted spans.
-4. **Dependency rules:** drawer reached only from the container; drawer code imports no Episode, table-of-contents, route or `next-intl` code (§5.2, §8).
+4. **Dependency rules:** page chrome, the drawer included, reached only from page assembly or the container; drawer code imports no Episode, content store, table-of-contents, route or `next-intl` code (§5.2, §8).
 5. **Post-build test:** slot and notes in static HTML, no `hidden` attribute, each target resolving to one element in its Slide, each `ContextRef` to one note, locale parity, sources as links, citation markers, print block (§2, §4, §6).
 
 **Manual review duties:** card placement, motion and one-step layout at 1440px, 1100px and 375px; `ContextRef` hover, focus and click; the mode menu by keyboard; German copy; `Alt+N` on real screen readers; a real print preview; focus return; no design field in the note shape.
@@ -135,5 +136,5 @@ Card, head, menu and selected-state detail: [`docs/features/episode-chrome.md`](
 
 ## References
 
-- [`GLOSSARY.md`](../../GLOSSARY.md) — Speaker note item, Voice script segment, Bridge, Context drawer, Context reference, Citation marker.
+- [`GLOSSARY.md`](../../GLOSSARY.md) — Page chrome, Speaker note item, Voice script segment, Bridge, Context drawer, Context reference, Citation marker.
 - [APG tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/), [WCAG 2.1.4](https://www.w3.org/WAI/WCAG21/Understanding/character-key-shortcuts.html).

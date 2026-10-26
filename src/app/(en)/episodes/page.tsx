@@ -1,9 +1,9 @@
-import { EpisodesIndexPage } from '@/components/pages/episodes-index-page';
-import { DEFAULT_LOCALE } from '@/lib/locale.pure';
-import { pageMetadata } from '@/lib/page-metadata.pure';
+import { EpisodeOverviewPage } from '@/page-assembly/episode-overview/episode-overview-page';
+import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
+import { DEFAULT_LOCALE } from '@/shared/lib/locale.pure';
 
 export const metadata = pageMetadata({ kind: 'episodes' }, DEFAULT_LOCALE);
 
 export default async function Page() {
-  return <EpisodesIndexPage locale={DEFAULT_LOCALE} />;
+  return <EpisodeOverviewPage locale={DEFAULT_LOCALE} />;
 }

@@ -2,8 +2,8 @@
 // archived by default), one row per agent span: rows of Runs the logs hold are regenerated, rows of Runs no log
 // holds stay. The CSV is a report over the logs; never edit it by hand.
 import { writeFileSync } from 'node:fs';
-import { readOrNull, readRuns } from './episode-run-log.ts';
-import { runsCsv } from './run-query.pure.ts';
+import { readOrNull, readRuns } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { runsCsv } from '../../../src/pipeline/lib/run-query.pure.ts';
 
 const OUT = 'docs/episodes/runs.csv';
 const { sources, files, errors } = readRuns(process.argv.slice(2));

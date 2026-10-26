@@ -15,6 +15,23 @@
 /workshops/2026-10-23-axel-agentic-workflow/    /events/2026-10-23-axel-agentic-workflow/    301
 /de/workshops/2026-10-23-axel-agentic-workflow/ /de/events/2026-10-23-axel-agentic-workflow/ 301
 
+# Event copies live under their Event (design-ADR 0016 decision 8): each copy dropped its organizer prefix, so its old
+# Event-scoped URL lands on its new one.
+/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span/                                    /events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span/                              301
+/de/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-attention-span/                                 /de/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span/                           301
+/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-gives-you-more-work/                               /events/2026-10-23-axel-agentic-workflow/episodes/ai-gives-you-more-work/                         301
+/de/events/2026-10-23-axel-agentic-workflow/episodes/axel-ai-gives-you-more-work/                            /de/events/2026-10-23-axel-agentic-workflow/episodes/ai-gives-you-more-work/                      301
+/events/2026-10-23-axel-agentic-workflow/episodes/axel-onboard-ai-every-time/                                /events/2026-10-23-axel-agentic-workflow/episodes/onboard-ai-every-time/                          301
+/de/events/2026-10-23-axel-agentic-workflow/episodes/axel-onboard-ai-every-time/                             /de/events/2026-10-23-axel-agentic-workflow/episodes/onboard-ai-every-time/                       301
+/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-ai-attention-span/         /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/ai-attention-span/         301
+/de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-ai-attention-span/      /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/ai-attention-span/      301
+/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-ai-gives-you-more-work/    /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/ai-gives-you-more-work/    301
+/de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-ai-gives-you-more-work/ /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/ai-gives-you-more-work/ 301
+/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-intro/                     /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/intro/                     301
+/de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-intro/                  /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/intro/                  301
+/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-onboard-ai-every-time/     /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/onboard-ai-every-time/     301
+/de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-onboard-ai-every-time/  /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/onboard-ai-every-time/  301
+
 # Two tooling pages were renamed with the Explorable explanation vocabulary (design-ADR 0016): the page template became
 # the Episode template, the Slides page the Explorable explanations page.
 /episodes/page-template/    /episodes/episode-template/           301

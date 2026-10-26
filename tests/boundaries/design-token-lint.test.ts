@@ -10,13 +10,15 @@ import { describe, expect, it } from 'vitest';
  */
 
 const ROOT = path.join(__dirname, '../..');
-const LEGACY: string[] = JSON.parse(readFileSync(path.join(ROOT, 'src/design-system/legacy.json'), 'utf8')).globs;
+const LEGACY: string[] = JSON.parse(
+  readFileSync(path.join(ROOT, 'src/shared/design-system/legacy.json'), 'utf8'),
+).globs;
 const eslint = new ESLint({ cwd: ROOT });
 
-const SLIDE = 'src/components/episodes/slide-master/slides/probe/slide.tsx';
-const HERO_TITLE = 'src/components/slide-master/slide-master.tsx';
-const CITATION = 'src/components/context-drawer/slide-notes.tsx';
-const INLINE_CODE = 'src/components/slide-master/rich-tags.tsx';
+const SLIDE = 'src/episodes/tooling/slide-master/slides/probe/slide.tsx';
+const HERO_TITLE = 'src/episodes/components/slide-master/slide-master.tsx';
+const CITATION = 'src/shared/page-chrome/context-drawer/slide-notes.tsx';
+const INLINE_CODE = 'src/episodes/components/slide-master/rich-tags.tsx';
 const TIMEOUT = 30_000;
 
 const markup = (classes: string) => `export const Probe = () => <div className="${classes}" />;\n`;

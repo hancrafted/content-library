@@ -1,4 +1,4 @@
-import { checkTitleMatchesH1 } from '@/lib/title-h1.pure';
+import { checkTitleMatchesH1 } from '@/pipeline/lib/title-h1.pure';
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';

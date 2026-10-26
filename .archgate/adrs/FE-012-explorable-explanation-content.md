@@ -4,8 +4,8 @@ id: FE-012
 title: 'Explorable Explanation Content'
 domain: frontend
 rules: false
-files: ['src/components/{explorable-explanations,slide-shared}/**']
-paths: ['src/components/{explorable-explanations,slide-shared}/**']
+files: ['src/explorable-explanations/**', 'src/episodes/components/slide-shared/**']
+paths: ['src/explorable-explanations/**', 'src/episodes/components/slide-shared/**']
 description: 'An Explorable explanation may own one locale pair of data and default words in its own folder, picked by the path locale at build time; every Slide that shows it overrides any default word by props, and a plain slide-shared part still owns no words.'
 ---
 
@@ -13,7 +13,7 @@ description: 'An Explorable explanation may own one locale pair of data and defa
 
 ## Context
 
-> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): an Explorable explanation lives in its own folder, `src/components/explorable-explanations/`, apart from plain shared parts; the rules below are unchanged.
+> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): an Explorable explanation lives in its own folder, `src/explorable-explanations/<name>/` in the Explorable explanations product area, apart from plain shared parts; the rules below are unchanged.
 
 An **Explorable explanation** is one interactive visual several Slides show, each by its own **Preset** — the context window cornerstone shows on about ten Slides of one Episode. It is drawn from data: a chat log of dozens of steps, category labels, token budgets, the Presets themselves, in English and German.
 
@@ -21,7 +21,7 @@ Without this record a plain `slide-shared` part owns no words, so that data has 
 
 1. **In every Slide's `i18n/`:** ten Slides repeat the same labels and the same chat; a fix lands in one and drifts in nine. A Slide cannot import another Slide's words, so there is no single copy to point at.
 2. **In the Episode folder:** a `slide-shared` part may not import an Episode, so the part cannot read it; each Slide would pass the whole chat down as props.
-3. **In the site-wide Translation files:** that home is for site chrome and cards, and a long chat log there swamps them.
+3. **In page chrome's or a template's Translation files:** those homes are for site chrome and cards, and a long chat log there swamps them.
 
 Chosen: the visual's folder holds the data and default words once per locale, and a Slide still has the last word.
 

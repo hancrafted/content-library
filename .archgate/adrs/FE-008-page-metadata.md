@@ -4,8 +4,8 @@ id: FE-008
 title: 'Page Metadata'
 domain: frontend
 rules: true
-files: ['src/app/**/*.tsx', 'src/lib/structured-data*.ts']
-paths: ['src/app/**/*.{ts,tsx}', 'src/lib/{page-metadata,site-url,sitemap,structured-data}*.ts']
+files: ['src/app/**/*.tsx', 'src/page-assembly/{lib,sitemap}/*.ts']
+paths: ['src/app/**/*.{ts,tsx}', 'src/page-assembly/{lib,sitemap}/*.ts', 'src/shared/lib/site-url*.ts']
 description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl Translation files, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only. Indexable pages also carry social cards and structured data.'
 ---
 
@@ -34,12 +34,12 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 2. Title and description are translated strings
 
-1. They MUST live in Translation files typed so a missing German key fails `tsc` — the landing page's in `meta.home`; an Episode's in its folder's `i18n/`, read through its record; the site-wide files hold no Episode text.
+1. They MUST live in Translation files typed so a missing German key fails `tsc` — the landing page's in `meta.home`; an Episode's in its folder's `i18n/`, read through its record; no other file holds Episode text.
 2. A page at a root layout's own segment MUST name the brand in its title; `title.template` skips that segment.
 
 ### 3. `SITE_URL` is the absolute base
 
-1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/lib/site-url.ts`. The deploy sets it (https://hancrafted.net), so a domain change needs no code change.
+1. `metadataBase` MUST come from `SITE_URL` (origin plus base path), read only in `src/shared/lib/site-url.ts`. The deploy sets it (https://hancrafted.net), so a domain change needs no code change.
 2. Unset, it falls back to localhost plus the base path; malformed, the build throws.
 3. It MUST NOT carry the `NEXT_PUBLIC_` prefix; only build-time metadata reads it.
 
@@ -74,7 +74,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 1. **DON'T** write a title, description or URL literal into a route's metadata. (Decisions 1 and 2)
 2. **DON'T** set `alternates`, `canonical` or `description` on a layout. (Decision 4)
-3. **DON'T** hard-code the site origin, or read `SITE_URL` outside `src/lib/site-url.ts`. (Decision 3)
+3. **DON'T** hard-code the site origin, or read `SITE_URL` outside `src/shared/lib/site-url.ts`. (Decision 3)
 4. **DON'T** rename `SITE_URL` to `NEXT_PUBLIC_SITE_URL`. (Decision 3)
 5. **DON'T** add `not-found.tsx` under this record, nor a hand-kept page list or `noindex` exclusion to the sitemap. (Decision 5)
 6. **DON'T** spell a card or structured-data URL apart from the canonical, nor emit either on a `noindex` page. (Decision 6)

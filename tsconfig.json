@@ -25,9 +25,10 @@
     "*.ts",
     "*.mts",
     "skills/new-episode/scripts",
+    "skills/episode-promote/scripts",
     "skills/worktree",
     "skills/visual-check",
-    "scripts",
+    "tools",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

@@ -10,9 +10,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { episodeRoute } from '../../src/lib/routes';
-import { isToolingSlug } from '../../src/lib/tooling-pages';
+import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/record-routes';
+import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { episodeText, type EpisodeText } from './episode-text';
 import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage } from './exported-pages';
 
@@ -21,7 +20,7 @@ const PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
 );
 
 const FIXTURE_DIR = join(import.meta.dirname, 'episode-text');
-const EPISODES_DIR = join(import.meta.dirname, '..', '..', 'src', 'components', 'episodes');
+const EPISODES_DIR = join(import.meta.dirname, '..', '..', 'src', 'episodes');
 
 /** A dotted Translation key path as next-intl prints a message it cannot find. */
 const RAW_KEY = /\b(?:episodes|landing|contextDrawer|tableOfContents|talkPlayer)\.[a-z0-9-]+\.[A-Za-z0-9.-]+/;
@@ -67,7 +66,7 @@ describe.each(PAGES)('$url', ({ slug, locale, url }) => {
 
   it('renders its Slides under exactly the published anchors, or binds none while upcoming', () => {
     // ARRANGE
-    const file = join(EPISODES_DIR, slug, 'published-anchors.json');
+    const file = join(EPISODES_DIR, isToolingSlug(slug) ? 'tooling' : '', slug, 'published-anchors.json');
     // An upcoming Episode's page is built `noindex` and its anchors bind at publication (docs/features/episode-publishing.md).
     // A tooling page is `noindex` too, but has no status: its anchors are bound.
     if (isNoindex(url) && !isToolingSlug(slug)) {

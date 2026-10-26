@@ -6,9 +6,9 @@ import { load, type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import nextConfig from '../../next.config';
+import { pageLocales, routeOf, type EpisodesPathSlug } from '../../src/content-store/catalogue/record-routes';
 import { episodesPathParams, PAGES } from '../../src/content-store/store';
-import { localizePath, type Locale } from '../../src/lib/locale.pure';
-import { pageLocales, routeOf, type EpisodesPathSlug } from '../../src/lib/routes';
+import { localizePath, type Locale } from '../../src/shared/lib/locale.pure';
 
 export const OUT_DIR = join(import.meta.dirname, '..', '..', 'out');
 

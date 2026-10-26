@@ -207,7 +207,7 @@ describe('model-matches-store', () => {
 describe('type-from-schema', () => {
   const rule = ruleSet.rules['type-from-schema'];
   const PROVENANCE = '(FE-013 [type-from-schema])';
-  const METADATA = 'src/components/episodes/probe/episode-metadata.ts';
+  const METADATA = 'src/episodes/probe/episode-metadata.ts';
 
   it('passes inferred types, helper types, other components and prose that names a type', async () => {
     // ARRANGE
@@ -218,7 +218,7 @@ describe('type-from-schema', () => {
       [schema('event')]: `${DESCRIBED}export type Event = z.infer<typeof s>;\n`,
       [METADATA]:
         "import { episodeSchema } from '@/content-store/schemas/episode.schema';\nexport const episodeMetadata = episodeSchema.parse({ slug: 'probe' });\n",
-      'src/components/landing/episode-card.tsx': 'interface EpisodeCardProps { slug: string }\n',
+      'src/episodes/components/episode-card/episode-card.tsx': 'interface EpisodeCardProps { slug: string }\n',
       'src/content-store/schemas/fields.ts':
         "export const language = z.enum(['en']).describe('The interface Episode = { spoken }.');\n",
     });
@@ -231,19 +231,19 @@ describe('type-from-schema', () => {
   it('fails hand-written record types anywhere under src/, and satisfies {…} in Episode metadata', async () => {
     // ARRANGE
     const expected = [
-      ['src/components/episodes/probe/episode-metadata.ts', 1],
       ['src/content-store/refusals.ts', 1],
-      ['src/lib/episode-metadata.pure.ts', 1],
-      ['src/lib/episode-metadata.pure.ts', 2],
-      ['src/lib/sitemap.pure.ts', 1],
+      ['src/episodes/lib/episode-metadata.pure.ts', 1],
+      ['src/episodes/lib/episode-metadata.pure.ts', 2],
+      ['src/episodes/probe/episode-metadata.ts', 1],
+      ['src/page-assembly/sitemap/sitemap.pure.ts', 1],
     ];
     const { ctx, violations } = makeCtx({
       [MODEL]: diagram(STORE_LINE),
       [STORE]: '',
       'src/content-store/refusals.ts': 'export type Playlist = Readonly<{ episodes: string[] }>;\n',
-      'src/lib/episode-metadata.pure.ts':
+      'src/episodes/lib/episode-metadata.pure.ts':
         'export interface PublishedEpisodeMetadata { slug: string }\nexport type WorkshopRecord = { slug: string };\n',
-      'src/lib/sitemap.pure.ts': 'interface Episode { slug: string }\n',
+      'src/page-assembly/sitemap/sitemap.pure.ts': 'interface Episode { slug: string }\n',
       [METADATA]: "export const episodeMetadata = { slug: 'probe' } as const satisfies { slug: string };\n",
     });
     // ACT
@@ -270,12 +270,12 @@ describe('type-from-schema', () => {
     // ARRANGE
     const { ctx, violations } = makeCtx({
       [MODEL]: diagram(STORE_LINE),
-      'src/lib/episode-metadata.pure.ts': 'export interface EpisodeMetadata { slug: string }\n',
+      'src/episodes/lib/episode-metadata.pure.ts': 'export interface EpisodeMetadata { slug: string }\n',
     });
     // ACT
     await rule.check(ctx);
     // ASSERT
-    expect(violations.map((v) => v.file)).toEqual(['src/lib/episode-metadata.pure.ts']);
+    expect(violations.map((v) => v.file)).toEqual(['src/episodes/lib/episode-metadata.pure.ts']);
   });
 });
 
