@@ -49,14 +49,14 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 ### 1. Thin routes
 
 1. A `page.tsx` MUST render one page-assembly template, a root layout `SiteShell`; a nested layout never `<html>`.
-2. A route holds no markup, data shaping or logic; shared code only via `SiteShell`, no area.
+2. A route holds no markup, data shaping or logic; shared components only via `SiteShell`, no area.
 
 ### 2. Import direction
 
 1. Layers import downward only: `app → page-assembly → product areas → content-store → shared`; tiers `components → hooks → lib`. No cycles; a stylesheet is no edge.
 2. Page assembly is flat: a folder per template plus `lib/`; a template imports only its folder and `lib/`.
 3. Product areas MUST NOT import each other. A Slide folder MAY show an Explorable explanation.
-4. Two areas meet only in page assembly, passing one's ready-made parts to the other as props: the Playlist list takes Episode cards.
+4. Two areas meet only in page assembly, passing one's ready-made parts as props: the Playlist list takes Episode cards.
 5. Page assembly reaches an area only via `components/` and `lib/`, no barrels; a tierless explanation via its folder. An explanation is a component, never a page.
 6. `shared/` knows no domain, never reads the store or its schemas, and is open to every area alike.
 7. Areas and page assembly read the store. Its one upward edge is an Episode's metadata file; `schemas/` is a leaf any tier imports.
@@ -72,9 +72,9 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 5. A Slide folder imports only global shared code
 
-1. A Slide folder imports only own files, the Slide master, `slide-shared/`, an explanation and `shared/`, never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib.
+1. A Slide folder imports only own files, the Slide master, `slide-shared/`, an explanation, `ui/`, shared hooks and lib, never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib.
 2. A `slide-shared` part or an explanation imports only its kind, `core-components/`, `ui/` and shared lib; `core-components/` is a leaf owning no words.
-3. Why: a Slide copied with `cp -r` needs only one import and one list entry.
+3. Why: a Slide copied with `cp -r` needs one import and one list entry.
 
 ## Do's and Don'ts
 
