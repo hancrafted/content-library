@@ -63,6 +63,20 @@ describe('success cases', () => {
     },
   );
 
+  it.each([
+    ['en', { epics: 'epic', execute: 'ticket' }],
+    ['de', { epics: 'Epic', execute: 'Ticket' }],
+  ] as const)('names what each repeated stage repeats over, in %s', (locale, expected) => {
+    // ARRANGE
+    const { file: loaded } = workflowFor('project-plan', locale);
+    // ACT
+    const items = Object.fromEntries(
+      loaded.stages.filter((each) => each.foreach).map((each) => [each.id, each.foreach?.item]),
+    );
+    // ASSERT
+    expect(items).toEqual(expected);
+  });
+
   it('keeps every cap of teaching mode next to its full value', () => {
     // ARRANGE
     const rounds = { epics: 2, execute: 4 };

@@ -644,6 +644,20 @@ describe('failure cases', () => {
     expect(problems).toContain('Stage "research" repeats over "plan"; write it as <output>#<h2 slug>.');
   });
 
+  it('accepts the word a round is called, and reports one that is not text', () => {
+    // ARRANGE
+    const named = (item: unknown) => (file: File) =>
+      void Object.assign(file.stages[1]!, { foreach: { over: 'plan#pieces', teaching: 2, item } });
+    // ACT
+    const accepted = problemsOf(load(named('piece')));
+    const number = problemsOf(load(named(3)));
+    const blank = problemsOf(load(named(' ')));
+    // ASSERT
+    expect(accepted).not.toContain('foreach.item');
+    expect(number).toContain('stages[1].foreach.item must be text.');
+    expect(blank).toContain('stages[1].foreach.item must be text.');
+  });
+
   it('reports a teaching cap below 1', () => {
     // ARRANGE
     const change = foreach('plan#pieces', 0);

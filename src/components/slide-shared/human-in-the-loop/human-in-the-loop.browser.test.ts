@@ -220,6 +220,29 @@ test.describe('success cases', () => {
     expect(await sideways()).toBeLessThanOrEqual(0);
   });
 
+  test('crossfades when the view changes, and not at all under reduced motion', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page, 'light');
+    const fade = () =>
+      root.locator('[data-view-fade]').evaluate((el) => ({
+        state: el.getAttribute('data-view-fade'),
+        animation: getComputedStyle(el).animationName,
+      }));
+    // ACT
+    const first = await fade();
+    await root.locator('[data-view-option="detailed"]').click();
+    await expect(root).toHaveAttribute('data-view', 'detailed');
+    const moving = await fade();
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await root.locator('[data-view-option="handson"]').click();
+    await expect(root).toHaveAttribute('data-view', 'handson');
+    const still = await fade();
+    // ASSERT
+    expect(first).toEqual({ state: 'off', animation: 'none' });
+    expect(moving).toEqual({ state: 'on', animation: 'slide-fade' });
+    expect(still).toEqual({ state: 'on', animation: 'none' });
+  });
+
   test('draws the Detailed view of a repeated stage once, in a bracket of its rounds, and a job card opens its modal', async ({
     page,
   }) => {
@@ -234,7 +257,7 @@ test.describe('success cases', () => {
     // ASSERT
     await expect(root).toHaveAttribute('data-view', 'detailed');
     await expect(root.locator('[data-bracket]')).toHaveCount(brackets);
-    await expect(bracket.locator('[data-bracket-label]')).toHaveText(`× each round (${rounds})`);
+    await expect(bracket.locator('[data-bracket-label]')).toHaveText(`× each ticket (${rounds})`);
     await expect(bracket.locator('[data-job-card]')).toHaveCount(1);
     await card.click();
     await expect(modal).toHaveAttribute('data-stage', 'execute');

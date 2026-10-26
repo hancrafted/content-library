@@ -9,7 +9,8 @@ import type { ForeachDef, StageDef, TaskDef, WorkflowFile } from './workflow-sch
  *
  * Results are one flat map keyed `stage.job`, or `stage.job#k` for round k of a repeated stage. A job that hands on
  * nothing is done when its key holds any text (the checkbox writes `done`). A job's review is checked when the key
- * `stage.job.checked` (`stage.job.checked#k`) holds any text.
+ * `stage.job.checked` (`stage.job.checked#k`) holds any text. At CLI level a repeated stage's one orchestrator keeps its
+ * result and check under the bare `stage.job` keys, which count for every round.
  */
 
 export type Results = Readonly<Record<string, string>>;
@@ -67,12 +68,22 @@ export const resultKey = (stageId: string, jobId: string, round?: number): strin
 export const checkedKey = (stageId: string, jobId: string, round?: number): string =>
   `${stageId}.${jobId}.checked${round === undefined ? '' : `#${round}`}`;
 
-const filled = (results: Results, key: string): boolean => (results[key] ?? '').trim() !== '';
+/** Whether the viewer put any text under `key`: the one test of "this is set" for results and checked marks alike. */
+export const filled = (results: Results, key: string): boolean => (results[key] ?? '').trim() !== '';
+
+/**
+ * A round of a repeated stage reads its own key, then the stage's single key: at CLI level one orchestrator runs every
+ * round, so its one result and its one check stand for all of them.
+ */
+const keysFor = (own: string, shared: string, round: number | undefined): string[] =>
+  round === undefined ? [own] : [own, shared];
 
 function jobRun(task: TaskDef, at: { stage: string; round?: number }, results: Results): JobRun {
   const key = resultKey(at.stage, task.id, at.round);
-  const done = filled(results, key);
-  const checked = done && filled(results, checkedKey(at.stage, task.id, at.round));
+  const result = keysFor(key, resultKey(at.stage, task.id), at.round);
+  const check = keysFor(checkedKey(at.stage, task.id, at.round), checkedKey(at.stage, task.id), at.round);
+  const done = result.some((each) => filled(results, each));
+  const checked = done && check.some((each) => filled(results, each));
   if (checked) return { id: task.id, key, state: 'checked' };
   return { id: task.id, key, state: done ? 'done' : 'open' };
 }
@@ -125,7 +136,7 @@ export const roundsOf = (run: Run): Record<string, number> =>
 export function runOf(file: WorkflowFile, input: RunInput): Run {
   return {
     stages: file.stages.map((stage) => stageRun(file, stage, input)),
-    canChangeTeaching: !Object.values(input.results).some((value) => value.trim() !== ''),
+    canChangeTeaching: !Object.keys(input.results).some((key) => filled(input.results, key)),
   };
 }
 
@@ -154,12 +165,13 @@ function markerOf(bindings: readonly Binding[], key: string): string {
   const round = /^(.*)#(\d+)$/.exec(key);
   const found = bindings.find((each) => each.base === (round?.[1] ?? key));
   if (!found) return key;
-  if (found.repeated) return round ? `${found.marker}_${round[2]}` : key;
+  if (found.repeated) return round ? `${found.marker}_${round[2]}` : found.marker;
   return round ? key : found.marker;
 }
 
+/** The bare marker is the job's one result: of a plain job, or of a repeated job's single CLI orchestrator. */
 function keyOf(bindings: readonly Binding[], marker: string): string {
-  const plain = bindings.find((each) => !each.repeated && each.marker === marker);
+  const plain = bindings.find((each) => each.marker === marker);
   if (plain) return plain.base;
   const round = /^(.*)_(\d+)$/.exec(marker);
   const repeated = bindings.find((each) => each.repeated && each.marker === round?.[1]);

@@ -39,10 +39,18 @@ function roundItems(job: JobModalView, round: RoundRun, at: { stage: string; sta
   };
 }
 
+const RANK: Record<JobState, number> = { open: 0, done: 1, checked: 2 };
+
+/** The state a job shows when one item stands for every round: the least advanced of its rounds, open when none. */
+function sharedState(id: string, run: StageRun): JobState {
+  const states = run.rounds.map((round) => round.jobs.find((each) => each.id === id)?.state ?? 'open');
+  return states.reduce<JobState>((least, each) => (RANK[each] < RANK[least] ? each : least), states[0] ?? 'open');
+}
+
 /** The items of a stage's stepper, in order, each with the state the run gives its job. */
 export function itemsOf(stage: StageView, run: StageRun): Item[] {
   const stateOf = (id: string, jobs: StageRun['jobs']): JobState =>
-    jobs.find((each) => each.id === id)?.state ?? 'open';
+    jobs.find((each) => each.id === id)?.state ?? sharedState(id, run);
   const items = stage.repeats
     ? run.rounds.flatMap((round) =>
         stage.jobs.map((job) => roundItems(job, round, { stage: stage.id, state: stateOf(job.id, round.jobs) })),
@@ -57,8 +65,9 @@ export function itemsOf(stage: StageView, run: StageRun): Item[] {
   return items.filter((item) => item.doSteps.length + item.reviewSteps.length > 0);
 }
 
-/** The accordion value of the item to open: the first item of the job whose card was pressed, else the first item. */
-export function openItemOf(items: readonly Item[], jobId: string | null): string {
-  const at = items.findIndex((item) => item.job.id === jobId);
+/** The accordion value of the item to open: the job card's own round, else the first item of its job, else the first item. */
+export function openItemOf(items: readonly Item[], jobId: string | null, round: number | null = null): string {
+  const own = items.findIndex((item) => item.job.id === jobId && item.round?.number === round);
+  const at = own >= 0 ? own : items.findIndex((item) => item.job.id === jobId);
   return String(Math.max(at, 0));
 }

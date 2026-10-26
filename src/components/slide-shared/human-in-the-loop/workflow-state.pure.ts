@@ -21,6 +21,8 @@ export interface WorkflowState {
   readonly openStageId: string | null;
   /** The job whose card opened the modal: the stepper opens at it. Null where the modal opened by its stage. */
   readonly openJobId: string | null;
+  /** The round of a repeated stage the job card sat in: the stepper opens at that round. Null where the modal opened by its stage or job. */
+  readonly openRound: number | null;
   /** A Workflow the viewer uploaded and that is shown instead of an authored one. */
   readonly uploaded: Workflow | null;
   /** Teaching mode caps a repeated stage's rounds. On at the start; the run model says when it may still change. */
@@ -44,7 +46,7 @@ export type WorkflowEvent =
   | { readonly type: 'level'; readonly level: Level }
   | { readonly type: 'view'; readonly view: View }
   | { readonly type: 'workflow'; readonly workflowId: string }
-  | { readonly type: 'open'; readonly stageId: string; readonly jobId?: string }
+  | { readonly type: 'open'; readonly stageId: string; readonly jobId?: string; readonly round?: number }
   | { readonly type: 'close' }
   | { readonly type: 'teaching'; readonly teaching: boolean }
   | { readonly type: 'reset' }
@@ -59,6 +61,7 @@ export function createState(start: Start): WorkflowState {
     teaching: true,
     openStageId: null,
     openJobId: null,
+    openRound: null,
     slotValues: {},
     uploaded: null,
     uploadProblems: [],
@@ -76,6 +79,7 @@ type Handlers = {
 const FRESH = {
   openStageId: null,
   openJobId: null,
+  openRound: null,
   teaching: true,
   slotValues: {},
   uploaded: null,
@@ -86,8 +90,14 @@ const HANDLERS: Handlers = {
   level: (state, { level }) => ({ ...state, level }),
   view: (state, { view }) => ({ ...state, view }),
   workflow: (state, { workflowId }) => ({ ...state, ...FRESH, workflowId }),
-  open: (state, { stageId, jobId }) => ({ ...state, openStageId: stageId, openJobId: jobId ?? null }),
-  close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null, openJobId: null }),
+  open: (state, { stageId, jobId, round }) => ({
+    ...state,
+    openStageId: stageId,
+    openJobId: jobId ?? null,
+    openRound: round ?? null,
+  }),
+  close: (state) =>
+    state.openStageId === null ? state : { ...state, openStageId: null, openJobId: null, openRound: null },
   teaching: (state, { teaching }) => ({ ...state, teaching }),
   reset: (state) => ({ ...state, slotValues: {}, teaching: true }),
   slots: (state, { values }) => ({ ...state, slotValues: values }),

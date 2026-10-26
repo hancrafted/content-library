@@ -24,6 +24,8 @@ interface JobCardProps {
   readonly joined: boolean;
   /** Where the run says the job stands, drawn as a mark in Hands-on; none in the other views. */
   readonly state?: JobState;
+  /** The round of a repeated stage this card sits in: the modal opens at it. */
+  readonly round?: number;
   /** Opens the modal at this job; none where a readonly Preset tries nothing. */
   readonly onOpen: (() => void) | undefined;
 }
@@ -82,7 +84,7 @@ function Mark({ state, reviewed, words }: { state?: JobState; reviewed: boolean;
   return reviewed ? <CheckedMark word={words.checked} /> : null;
 }
 
-export function JobCard({ stage, job, slot, words, joined, state, onOpen }: JobCardProps) {
+export function JobCard({ stage, job, slot, words, joined, state, round, onOpen }: JobCardProps) {
   const label = words.tryJob.replace('{job}', job.title).replace('{stage}', stage.name);
   return (
     <li
@@ -93,7 +95,7 @@ export function JobCard({ stage, job, slot, words, joined, state, onOpen }: JobC
       )}
     >
       {joined && <JobArrow />}
-      {onOpen && <JobButton stage={stage.name} jobId={job.id} label={label} onOpen={onOpen} />}
+      {onOpen && <JobButton stage={stage.name} jobId={job.id} round={round} label={label} onOpen={onOpen} />}
       <Heading stage={stage} job={job} slot={slot} />
       <Detail detail={slot.detail ?? job.detail} />
       <Mark state={state} reviewed={job.reviewed} words={words} />

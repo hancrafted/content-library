@@ -1,6 +1,7 @@
 'use client';
 
 import type { SlotState } from './step-kit.types';
+import { filled } from './workflow-run.pure';
 
 interface CheckedBoxProps {
   /** The result key the box writes to: set to `mark` when ticked, emptied when not. */
@@ -18,7 +19,7 @@ export function CheckedBox({ name, label, slots, mark = 'checked' }: CheckedBoxP
       <input
         type="checkbox"
         className="size-4 accent-primary"
-        checked={(slots.values[name] ?? '').trim() !== ''}
+        checked={filled(slots.values, name)}
         onChange={(event) => slots.onChange({ ...slots.values, [name]: event.target.checked ? mark : '' })}
       />
       {label}

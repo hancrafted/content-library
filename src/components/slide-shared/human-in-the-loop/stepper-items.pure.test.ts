@@ -62,6 +62,24 @@ describe('success cases', () => {
     // ASSERT
     expect(at).toBe('0');
   });
+
+  it('opens the item of the round of the job whose card was pressed', () => {
+    // ARRANGE
+    const items = itemsFor('simple', {});
+    // ACT
+    const at = openItemOf(items, 'venue', 3);
+    // ASSERT
+    expect(at).toBe('2');
+  });
+
+  it('gives the one CLI item of a repeated stage the state its rounds share', () => {
+    // ARRANGE
+    const results = { [resultKey(RESEARCH, 'venue')]: 'orchestrated', [checkedKey(RESEARCH, 'venue')]: 'yes' };
+    // ACT
+    const items = itemsFor('technical', results);
+    // ASSERT
+    expect(items.map((item) => item.state)).toEqual(['checked']);
+  });
 });
 
 describe('failure cases', () => {
@@ -82,6 +100,15 @@ describe('failure cases', () => {
     const unknown = openItemOf(items, 'ghost');
     // ASSERT
     expect([none, unknown]).toEqual(['0', '0']);
+  });
+
+  it('opens the first item of the job for a round it does not play', () => {
+    // ARRANGE
+    const items = itemsFor('simple', {});
+    // ACT
+    const at = openItemOf(items, 'venue', 9);
+    // ASSERT
+    expect(at).toBe('0');
   });
 
   it('shows a single item without rounds in Technical, where one orchestrator runs them all', () => {

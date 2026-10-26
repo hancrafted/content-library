@@ -93,7 +93,7 @@ A job that reads all rounds of a repeated stage (the merge of the epic specs, th
 
 ## Repeated stage
 
-A stage repeats with `foreach: { over: <output>#<h2 slug>, teaching: N }`; it replaces the old `fanOut`. `over` names an output an earlier stage hands on and the slug of an H2 of that job's template (lowercase words joined by dashes). Each H3 under that H2 in the pasted result is one round, and the whole stage's jobs run once per round. A round reaches its item through `{{item}}`, which is filled with the H3 and the text under it; the round's title is the H3 text.
+A stage repeats with `foreach: { over: <output>#<h2 slug>, teaching: N, item: <word> }`; it replaces the old `fanOut`. `item` is optional: what one round is called in the file's language (`epic`, German `Epic`), so the Detailed bracket reads "× each epic (2)"; without it the bracket says "round". `over` names an output an earlier stage hands on and the slug of an H2 of that job's template (lowercase words joined by dashes). Each H3 under that H2 in the pasted result is one round, and the whole stage's jobs run once per round. A round reaches its item through `{{item}}`, which is filled with the H3 and the text under it; the round's title is the H3 text.
 
 - Teaching mode takes the first `teaching` H3s, in document order; full mode takes every H3 pasted. Before anything is pasted, the rounds come from the producing job's `details.example`.
 - Each job's output becomes `x_1` ... `x_N` (N is `teaching`); a later slot over it is `multiple` with N markers. `details.example` of a job in the stage is a list of N, one example per teaching round, so the example and the downstream sample stay one coherent set.
@@ -108,6 +108,7 @@ A stage repeats with `foreach: { over: <output>#<h2 slug>, teaching: N }`; it re
   foreach:
     over: tickets#tickets
     teaching: 3
+    item: ticket
   jobs:
     - id: venue
       title: Chat

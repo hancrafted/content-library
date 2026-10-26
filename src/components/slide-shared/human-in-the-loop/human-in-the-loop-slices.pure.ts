@@ -1,4 +1,5 @@
-import { progressKeyOf, readProgressFile, type Refusal } from '@/lib/progress.pure';
+import { readProgressFile, type Refusal } from '@/lib/progress-file.pure';
+import { progressKeyOf } from '@/lib/progress.pure';
 import { fillTemplate } from '@/lib/template.pure';
 import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps, UiWords } from './human-in-the-loop.types';
 import type { ProgressActions, ProgressNote, TeachingProps, TeachingState } from './progress-controls.types';
@@ -72,7 +73,8 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
     onTeaching: (teaching) => dispatch({ type: 'teaching', teaching }),
     onReset: () => dispatch({ type: 'reset' }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
-    onOpenStage: (stageId, jobId) => dispatch({ type: 'open', stageId, ...(jobId !== undefined && { jobId }) }),
+    onOpenStage: (stageId, jobId, round) =>
+      dispatch({ type: 'open', stageId, ...(jobId !== undefined && { jobId }), ...(round !== undefined && { round }) }),
     onClose: () => dispatch({ type: 'close' }),
     onSlots: (values) => dispatch({ type: 'slots', values }),
   };
@@ -121,8 +123,7 @@ function teachingPropsOf({ data, state, progress }: Shown, canChange: boolean, o
     locked: !canChange,
     hasWork: !canChange,
   };
-  const onDownloadRun = progress?.onDownload ?? (() => undefined);
-  return { teaching, onTeaching: on.onTeaching, onReset: on.onReset, onDownloadRun };
+  return { teaching, onTeaching: on.onTeaching, onReset: on.onReset, onDownloadRun: progress?.onDownload };
 }
 
 function diagramOf({ data, state, workflow }: Shown, on: Callbacks, run: Run): DiagramProps {
@@ -185,6 +186,7 @@ function modalOf(
     stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
     run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
     jobId: state.openJobId,
+    round: state.openRound,
     slotValues: markerValuesOf(file, state.slotValues),
     words: data.words,
     level: state.level,

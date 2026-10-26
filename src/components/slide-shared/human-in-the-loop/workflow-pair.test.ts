@@ -54,7 +54,7 @@ const structureOf = (file: WorkflowFile) => ({
     move: stage.move,
     gate: stage.gate,
     summary: Boolean(stage.summary),
-    foreach: stage.foreach,
+    foreach: stage.foreach && { ...stage.foreach, item: Boolean(stage.foreach.item) },
     card: stage.card?.lines.length,
     jobs: stage.jobs.map(taskShape),
   })),
