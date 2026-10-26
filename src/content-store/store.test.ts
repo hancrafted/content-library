@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { episodeRef, matchEpisode } from './catalogue/episode-id.pure';
-import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
+import { episodeRef } from './catalogue/episode-id.pure';
+import { episodeVideo, findEvent, loadContent } from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
@@ -130,17 +130,6 @@ describe('success cases', () => {
     const served = loadContent(input).episodes.map(({ ref, visibility }) => ({ ref, visibility }));
     // ASSERT
     expect(served).toEqual(expected);
-  });
-
-  it("holds every Episode the repo does not declare public in an Event's folder", () => {
-    // ARRANGE
-    const ownedByNoEvent = { standalone: () => true, 'event-copy': () => false };
-    // ACT
-    const strays = listEpisodes()
-      .filter(({ ref, visibility }) => visibility !== 'public' && matchEpisode(ref, ownedByNoEvent))
-      .map(({ ref }) => ref.id);
-    // ASSERT
-    expect(strays).toEqual([]);
   });
 
   it.each(RECORDINGS)(

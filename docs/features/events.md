@@ -35,7 +35,7 @@ Search: the page catalogue gives every page its treatment from one visibility pr
 1. `mkdir -p src/episodes/by-event/<event-slug> && cp -r src/episodes/<slug> src/episodes/by-event/<event-slug>/<slug>`, and delete the copy's `brief.md`. The slug stays; in its tests, a context names the copy by `episodeRef('<slug>', '<event-slug>').id` (from `@/episodes/lib/episode-folders`), never by an id written out. Keep every Slide slug.
 2. In `episode-metadata.ts`, set `visibility: 'unlisted'` and `publishedOn` to the Event's date.
 3. List it in the Event's Playlist. The store refuses an unlisted Episode no Event's Playlist lists.
-4. Run `npm run registry`: the folder is the registration, and the Episode registry (GLOSSARY) adds the id, the metadata and the composition from it. No test lists the copies: the store's refusals and the post-build suite check every one it loads.
+4. Run `npm run registry`: the folder is the registration, and the Episode registry (GLOSSARY) adds the id, the metadata and the composition from it. No test lists the copies: the store's refusals check each one as it loads, and the post-build suite checks each one's pages.
 
 A copy of an Episode whose Sections compose pool Slides keeps composing them: its Section files import them through the `@/` alias, so the copy carries no pool Slide of its own.
 
