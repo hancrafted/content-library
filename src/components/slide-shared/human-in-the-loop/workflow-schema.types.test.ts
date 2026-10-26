@@ -17,14 +17,14 @@ const markersOf = (sections: readonly SectionDef[]) =>
   sections.flatMap((section) => [...section.text.matchAll(/\{\{([^}]+)\}\}/g)].map((match) => match[1]));
 
 describe('success cases', () => {
-  it('reads as a WorkflowFile with a fan-out task, slots, a template and a review', () => {
+  it('reads as a WorkflowFile with a repeated stage, slots, a template and a review', () => {
     // ARRANGE
     const chats = 3;
     const stage: StageDef = proposal.stages[RESEARCH] as StageDef;
     // ACT
     const task = stage.jobs[0];
     // ASSERT
-    expect(task.fanOut).toBe(chats);
+    expect(stage.foreach?.teaching).toBe(chats);
     expect(task.slots.map((slot) => slot.id)).toEqual(['tickets']);
     expect(proposal.templates[task.template]).toContain('## Fit against the requirements');
     expect(task.review?.checks.length).toBeGreaterThan(0);

@@ -7,6 +7,7 @@ import { ModalHeader } from './modal-header.client';
 import type { SlotState, StepKit } from './step-kit.types';
 import { Stepper } from './stepper.client';
 import { tryTitle } from './words.pure';
+import type { StageRun } from './workflow-run.pure';
 import type { StageView } from './workflow-view.pure';
 
 /** Copies text; `true` when the clipboard took it. */
@@ -30,12 +31,13 @@ function useCopy(done: string) {
   return [announced, copy] as const;
 }
 
-type PanelProps = Omit<ModalProps, 'stage' | 'slotValues' | 'onSlots' | 'onClose'> & {
+type PanelProps = Omit<ModalProps, 'stage' | 'run' | 'slotValues' | 'onSlots' | 'onClose'> & {
   readonly stage: StageView;
+  readonly run: StageRun;
   readonly slots: SlotState;
 };
 
-function Panel({ stage, slots, level, onLevel, ...chrome }: PanelProps) {
+function Panel({ stage, run, slots, level, onLevel, ...chrome }: PanelProps) {
   const [announced, copy] = useCopy(chrome.words.copied);
   const [showContext, setShowContext] = useState(false);
   const { words } = chrome;
@@ -53,7 +55,7 @@ function Panel({ stage, slots, level, onLevel, ...chrome }: PanelProps) {
         data-scroll=""
         className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto overscroll-contain md:flex-initial md:pr-2"
       >
-        {first && <Stepper jobs={stage.jobs} kit={kit} slots={slots} />}
+        {first && <Stepper stage={stage} run={run} kit={kit} slots={slots} />}
       </div>
       <p role="status" aria-live="polite" className="h-5 shrink-0 text-caption text-muted-foreground">
         {announced}
@@ -81,14 +83,14 @@ function focusOpener(event: Event, stageName: string | null) {
  * focus trap and a close on the overlay. The title takes the first focus, so no control greets the viewer; closing
  * returns focus to the opener. A copy announces `words.copied` in a polite live region.
  */
-export function ModalPart({ stage, slotValues, onSlots, onClose, ...rest }: ModalProps) {
+export function ModalPart({ stage, run, slotValues, onSlots, onClose, ...rest }: ModalProps) {
   const opener = useRef<string | null>(null);
   useEffect(() => {
     if (stage) opener.current = stage.name;
   }, [stage]);
   return (
     <Dialog open={stage !== null} onOpenChange={(open) => !open && onClose()}>
-      {stage && (
+      {stage && run && (
         <DialogContent
           data-part="modal"
           data-stage={stage.id}
@@ -97,7 +99,7 @@ export function ModalPart({ stage, slotValues, onSlots, onClose, ...rest }: Moda
           onCloseAutoFocus={(event) => focusOpener(event, opener.current)}
           className="h-dvh md:h-auto md:max-h-[calc(100dvh-3rem)] md:max-w-5xl md:p-5"
         >
-          <Panel {...{ stage, ...rest }} slots={{ values: slotValues, onChange: onSlots }} />
+          <Panel {...{ stage, run, ...rest }} slots={{ values: slotValues, onChange: onSlots }} />
         </DialogContent>
       )}
     </Dialog>

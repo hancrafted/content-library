@@ -262,15 +262,27 @@ test.describe('success cases', () => {
     }
   });
 
-  test('fans the Research task out as Chat 1..3 tabs', async ({ page }) => {
+  test("runs vacation's Research stage as rounds titled by the example tickets, then by the pasted tickets, capped at three", async ({
+    page,
+  }) => {
     // ARRANGE
-    const expectedTabs = ['Chat 1', 'Chat 2', 'Chat 3'];
-    const { modal } = await open(page, 'light');
+    const exampleTitles = ['1. Apartment:', '2. Small hotel:', '3. Villa or guesthouse:'];
+    const pastedTitles = ['Camper van:', 'Cabin:', 'Hostel:'];
+    const pasted = '# Tickets\n## Tickets\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
+    const { modal, root } = await open(page, 'light');
+    await pickWorkflow(root, 'vacation');
+    const rounds = () => modal.locator('[data-job="venue"] [data-slot="accordion-trigger"]');
     // ACT
     await openStage(page, 'Research');
-    const tabs = modal.locator('[data-job][data-state="open"] [role="tablist"]').first().getByRole('tab');
+    await expect(rounds()).toContainText(exampleTitles);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await openStage(page, 'Tickets');
+    await field(modal, 'tickets').fill(pasted);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await openStage(page, 'Research');
     // ASSERT
-    await expect(tabs).toHaveText(expectedTabs);
+    await expect(rounds()).toContainText(pastedTitles);
+    await expect(rounds()).toHaveCount(pastedTitles.length);
   });
 
   test.describe('every stage in both languages', () => {

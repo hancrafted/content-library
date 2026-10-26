@@ -1,6 +1,7 @@
 import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps } from './human-in-the-loop.types';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
+import { markerValuesOf, resultsOf, runOf } from './workflow-run.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
 import type { WorkflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
@@ -60,6 +61,8 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
   const { data, state, workflow, view } = shown;
   const { words, readonly } = data;
   const toolbar = toolbarOf(shown, on);
+  const { file } = workflow;
+  const run = runOf(file, { results: state.slotValues, teaching: state.teaching });
   return {
     toolbar,
     diagram: {
@@ -71,12 +74,13 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
     },
     modal: {
       stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
-      slotValues: state.slotValues,
+      run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
+      slotValues: markerValuesOf(file, state.slotValues),
       words,
       level: state.level,
       onLevel: on.onLevel,
       onClose: on.onClose,
-      onSlots: on.onSlots,
+      onSlots: (values) => on.onSlots(resultsOf(file, values)),
     },
   };
 }

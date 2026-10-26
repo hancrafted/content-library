@@ -10,7 +10,7 @@ Read before writing or changing a Workflow file (`src/components/slide-shared/hu
 
 ## One language per file
 
-A file is written in one language and renders as written; it has no locale field. A Workflow ships as a pair, `<id>.en.yml` and `<id>.de.yml`, registered in `workflow-data.ts` (`FILES`, `WORKFLOW_IDS`). `workflow-pair.test.ts` holds both files of a pair to one structure: Workflow, stage, task and slot ids, slot modes, `free`, sample and example counts, section purposes and technique ids, fan-out, the number of facts, checks and card lines, the template keys. Strings are free. Change one file's structure and change its twin in the same commit. The build throws every problem of a shipped file; a viewer's upload lists them under the toolbar.
+A file is written in one language and renders as written; it has no locale field. A Workflow ships as a pair, `<id>.en.yml` and `<id>.de.yml`, registered in `workflow-data.ts` (`FILES`, `WORKFLOW_IDS`). `workflow-pair.test.ts` holds both files of a pair to one structure: Workflow, stage, task and slot ids, slot modes, `free`, sample and example counts, section purposes and technique ids, `foreach`, the number of facts, checks and card lines, the template keys. Strings are free. Change one file's structure and change its twin in the same commit. The build throws every problem of a shipped file; a viewer's upload lists them under the toolbar.
 
 ## Top level
 
@@ -38,9 +38,9 @@ Every handoff is markdown: one H1, then H2 sections, and no front matter. A chat
 
 ## Stage and task fields
 
-Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Presentation card's text, at most eight words), `move` (`B`, `R`, `I`, `E` or `F`, the BRIEF letter; a stage teaches one move or none), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
+Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Presentation card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `move` (`B`, `R`, `I`, `E` or `F`, the BRIEF letter; a stage teaches one move or none), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
 
-Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` and `review` (both required except on the final job of the last stage), and optional `needs`, `fanOut`, `instructions`.
+Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` and `review` (both required except on the final job of the last stage), and optional `needs`, `instructions`.
 
 - `goal`: `do` is the one-sentence goal of the do step, the stepper's title; `review` is the goal of the review step and is required when the job has a review.
 - `needs`: ids of jobs of the same stage that run first. A slot may take the output of a job it needs; a slot that takes a same-stage output without `needs`, an unknown id and a cycle are load problems.
@@ -59,8 +59,8 @@ Section: `heading` (rendered as H2), `text` (markdown with markers), and optiona
 A slot is a paste-in input of a prompt. The diagram draws its edges from the slots, so a slot's `id` names the `output` of a task in an **earlier stage** (not the same stage). Fields: `id`, `mode`, `label`, `sample`, optional `free`.
 
 - `single` takes one value, marker `{{id}}`. The value is a handoff of the producing task's template; the sample is one string.
-- `multiple` takes the chats of a fan-out. Its `id` is the fan-out's `output`; markers are `{{id_1}}` ... `{{id_N}}`, one input per marker, plus button capped at the highest marker the do prompts use. The sample is a list with one entry per marker, in marker order. A `single` slot may also take one chat's result as `{{output_K}}`.
-- A fan-out `x` of N chats hands on `x_1` ... `x_N` and `x` (all of them). A `multiple` slot must take `x`; a `single` slot must take one `x_K`.
+- `multiple` takes the rounds of a repeated stage. Its `id` is the repeated job's `output`; markers are `{{id_1}}` ... `{{id_N}}`, one input per marker, plus button capped at the highest marker the do prompts use. The sample is a list with one entry per marker, in marker order. A `single` slot may also take one chat's result as `{{output_K}}`.
+- A job of a repeated stage with `teaching: N` hands on `x_1` ... `x_N` and `x` (all of them). A `multiple` slot must take `x`; a `single` slot must take one `x_K`.
 - `free: true` marks the user's own text (the task to plan), not an earlier output. It names no output and its sample is plain text, not a handoff. With no `sample`, it takes the scenario: the summary, a blank line, then the facts as a list. Use `single`.
 - A do slot needs a sample (a free slot gets the scenario one); the sample stays in the prompt while the slot is empty, so a jump-in user sees a working prompt. Make a sample the same shape and content the producing task's example has, or a user jumping in sees inputs that do not match the stage before.
 
@@ -68,41 +68,52 @@ A slot is a paste-in input of a prompt. The diagram draws its edges from the slo
 
 Written `{{name}}` in a section's `text` (spaces inside are trimmed). Anything else is an unknown marker.
 
-| Marker          | Where                          | Filled with                                                                                          |
-| --------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| `{{slot_id}}`   | do sections                    | The pasted value, or the slot's sample while empty.                                                  |
-| `{{slot_id_K}}` | do sections                    | The Kth entry of a `multiple` slot, K from 1 to the fan-out's N.                                     |
-| `{{n}}`         | do sections of a `fanOut` task | The chat number, 1 to N.                                                                             |
-| `{{template}}`  | do and reviewer sections       | The task's template, in a fenced markdown block.                                                     |
-| `{{inputs}}`    | reviewer sections              | Each review slot under its label, its marker in a fenced block; a `multiple` slot gets one per chat. |
-| `{{checks}}`    | reviewer sections              | The task's `checks`, numbered.                                                                       |
+| Marker          | Where                           | Filled with                                                                                          |
+| --------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `{{slot_id}}`   | do sections                     | The pasted value, or the slot's sample while empty.                                                  |
+| `{{slot_id_K}}` | do sections                     | The Kth entry of a `multiple` slot, K from 1 to the stage's teaching cap N.                          |
+| `{{item}}`      | do sections of a repeated stage | The H3 section the round works on: its heading and the text under it.                                |
+| `{{template}}`  | do and reviewer sections        | The task's template, in a fenced markdown block.                                                     |
+| `{{inputs}}`    | reviewer sections               | Each review slot under its label, its marker in a fenced block; a `multiple` slot gets one per chat. |
+| `{{checks}}`    | reviewer sections               | The task's `checks`, numbered.                                                                       |
 
-`{{inputs}}` and `{{checks}}` are for the `reviewer` only, and the reviewer may use no slot marker. Place the template with an explicit `{{template}}`; it is never appended. Simple shows Chat 1..N tabs with `{{n}}` filled in; technical shows one prompt and fills `{{n}}` with 1, so write the technical fan-out prompt for one orchestrator that launches N subagents and leave `{{n}}` out of it.
+`{{inputs}}` and `{{checks}}` are for the `reviewer` only, and the reviewer may use no slot marker. Place the template with an explicit `{{template}}`; it is never appended. Simple plays a repeated stage once per round, each with `{{item}}` filled in; technical shows one prompt per job, so write the technical prompt of a repeated stage for one orchestrator that launches one subagent per round and leave `{{item}}` out of it.
 
-## Fan-out
+## Repeated stage
 
-`fanOut: N` (a whole number of at least 2) makes N parallel chats from one template. The task's `output` becomes `x_1` ... `x_N`. `details.example` is a list of N, one example per chat in chat order; the popover shows chat n's example with chat n. The Compare slot over it is `multiple` and its sample list is the same N entries, so the example and the downstream sample stay one coherent set. Each chat should take its own unit of work (chat n takes ticket n), or N chats may do the same work.
+A stage repeats with `foreach: { over: <output>#<h2 slug>, teaching: N }`; it replaces the old `fanOut`. `over` names an output an earlier stage hands on and the slug of an H2 of that job's template (lowercase words joined by dashes). Each H3 under that H2 in the pasted result is one round, and the whole stage's jobs run once per round. A round reaches its item through `{{item}}`, which is filled with the H3 and the text under it; the round's title is the H3 text.
+
+- Teaching mode takes the first `teaching` H3s, in document order; full mode takes every H3 pasted. Before anything is pasted, the rounds come from the producing job's `details.example`.
+- Each job's output becomes `x_1` ... `x_N` (N is `teaching`); a later slot over it is `multiple` with N markers. `details.example` of a job in the stage is a list of N, one example per teaching round, so the example and the downstream sample stay one coherent set.
+- The loader reports an `over` that is not `output#slug`, an unknown output or heading, a `teaching` below 1, `fanOut` as an unknown field and `{{item}}` outside a repeated stage.
+- Results are kept as `stage.job`, or `stage.job#k` for round k; `workflow-run.pure.ts` is the one seam that turns a Workflow and its results into job states, rounds and counts.
 
 ```yaml
-# Research task: three chats, one per ticket (fragment)
-- id: venue
-  title: Chat
-  output: research # hands on research_1, research_2, research_3
-  template: research
-  fanOut: 3
-  slots:
-    - { id: tickets, mode: single, label: Your tickets, sample: '...' }
-  do:
-    simple:
-      - heading: Your ticket
-        purpose: context
-        text: 'This is chat {{n}}. Take ticket number {{n}} from: {{tickets}}'
-    technical:
-      - heading: Task
-        purpose: task
-        text: '/research the tickets below, one subagent per ticket. {{tickets}}'
-  details:
-    example: ['<chat 1 handoff>', '<chat 2 handoff>', '<chat 3 handoff>']
+# Tickets (earlier stage) hand on a template with ## Tickets / ### <Ticket title>
+- id: research
+  title: Research
+  learningGoal: Give each ticket its own fresh chat.
+  foreach:
+    over: tickets#tickets
+    teaching: 3
+  jobs:
+    - id: venue
+      title: Chat
+      output: research # hands on research_1, research_2, research_3
+      template: research
+      slots:
+        - { id: tickets, mode: single, label: Your tickets, sample: '...' }
+      do:
+        simple:
+          - heading: Your ticket
+            purpose: context
+            text: 'Work only on this ticket: {{item}}'
+        technical:
+          - heading: Task
+            purpose: task
+            text: '/research the tickets below, one subagent per ticket. {{tickets}}'
+      details:
+        example: ['<round 1 handoff>', '<round 2 handoff>', '<round 3 handoff>']
 # the Compare task, a later stage:
 #   slots: [{ id: research, mode: multiple, label: ..., sample: [ "<1>", "<2>", "<3>" ] }]
 #   a do section uses {{research_1}} {{research_2}} {{research_3}}
@@ -234,11 +245,11 @@ stages:
 - The text is not YAML: "The file is not valid YAML."
 - Shape, with a path such as `stages[0].jobs[1].do.simple`: `<path> is missing.`; `<path> is not a field of the schema.`; `<path> must be a mapping.` / `a list.`; `<path> needs at least N entries.`; `<path> must be text` (non-empty), `a whole number of at least 1`, `true or false`, or `text or a list of texts`; `<path> is "x", which is not one of ...` (a `purpose`, `tier`, `mode`, `move`); `purposes` lacking one of its six keys or holding another.
 - Templates: front matter; no H1; a `{{marker}}` inside.
-- Ids: a stage, task or technique id used twice; an output handed on by two tasks; a slot id twice in one task; a `fanOut` below 2.
-- Slots: names no output of an earlier stage (and is not `free`); takes all chats of a fan-out but is `single`; is `multiple` but its output is no fan-out; a non-free do slot with no sample; a `multiple` slot with a lone sample or a `single` slot with a list; a list whose length differs from the markers; a review slot id that clashes with another id.
+- Ids: a stage, task or technique id used twice; an output handed on by two tasks; a slot id twice in one task; a `teaching` cap below 1.
+- Slots: names no output of an earlier stage (and is not `free`); takes all rounds of a repeated stage but is `single`; is `multiple` but its output is not from a repeated stage; a non-free do slot with no sample; a `multiple` slot with a lone sample or a `single` slot with a list; a list whose length differs from the markers; a review slot id that clashes with another id.
 - Jobs: a `needs` id that is no job of the stage; a `needs` cycle; a slot taking a same-stage output without `needs`; a job with no review, or with a review and no `goal.review`; a job with no output that is not the final job of the last stage; a stage `summary` over eight words.
 - Techniques: a section or details naming an unknown technique id.
 - Markers: an unknown marker in a task prompt (either runtime) or in the reviewer, naming the marker.
-- Handoffs: a sample or example with front matter, with no H1, or whose H2 sections differ from the template's; a task naming an unknown template; a list example on a task without fan-out; a fan-out example list whose length is not N.
+- Handoffs: a sample or example with front matter, with no H1, or whose H2 sections differ from the template's; a task naming an unknown template; a list example on a job whose stage does not repeat; an example list whose length is not the stage's teaching cap.
 
 Verify a new file by running `npm test` (`workflow-pair.test.ts`, the loader and the guide test), or load it through the toolbar upload.

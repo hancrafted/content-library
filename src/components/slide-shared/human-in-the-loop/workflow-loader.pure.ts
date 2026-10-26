@@ -1,4 +1,5 @@
 import { parse } from 'yaml';
+import { foreachProblems } from './workflow-foreach.pure';
 import {
   contentProblems,
   idProblems,
@@ -43,6 +44,7 @@ export function loadWorkflow(source: string): FileResult {
     ...idProblems(file),
     ...techniqueProblems(file),
     ...reviewerProblems(file),
+    ...foreachProblems(file),
     ...jobOrderProblems(file),
     ...contentProblems(file),
   ];

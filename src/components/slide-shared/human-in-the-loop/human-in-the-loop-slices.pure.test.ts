@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { callbacksFor, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
+import summerPartyEn from './summer-party.en.yml';
+import { workflowOf } from './workflow-file-adapter.pure';
 import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
+import { loadWorkflow } from './workflow-loader.pure';
 import { createState, type WorkflowEvent } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
@@ -64,6 +67,24 @@ describe('success cases', () => {
     // ASSERT
     expect(modal.slotValues).toEqual({ spec: 'S' });
     expect(sent).toEqual([{ type: 'slots', values: { spec: 'S2' } }]);
+  });
+
+  it('shows the modal the results by marker name and sends a change up keyed by result', () => {
+    // ARRANGE
+    const loaded = loadWorkflow(summerPartyEn);
+    if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
+    const real = workflowOf(loaded.file);
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const state = { ...createState(start), openStageId: 'research', slotValues: { 'research.venue#2': 'R2' } };
+    const rounds = [1, 2, 3];
+    // ACT
+    const { modal } = slicesOf(shown(real, state), on);
+    modal.onSlots({ research_3: 'R3' });
+    // ASSERT
+    expect(modal.slotValues).toEqual({ research_2: 'R2' });
+    expect(modal.run?.rounds.map((round) => round.number)).toEqual(rounds);
+    expect(sent).toEqual([{ type: 'slots', values: { 'research.venue#3': 'R3' } }]);
   });
 });
 

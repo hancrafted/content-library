@@ -68,7 +68,7 @@ describe('success cases', () => {
     expect(moves).toEqual(expected);
   });
 
-  it('gives Research three chats, and every task a review', () => {
+  it('repeats Research per ticket with a teaching cap of three, and gives every task a review', () => {
     // ARRANGE
     const chats = 3;
     // ACT
@@ -76,7 +76,10 @@ describe('success cases', () => {
       .filter((each) => !each.review)
       .map((each) => each.id);
     // ASSERT
-    expect(task('venue').fanOut).toBe(chats);
+    expect(file.stages.find((each) => each.id === 'research')?.foreach).toEqual({
+      over: 'tickets#tickets',
+      teaching: chats,
+    });
     expect(unreviewed).toEqual([]);
   });
 
@@ -99,7 +102,7 @@ describe('success cases', () => {
           ?.match(/^- .+$/gm) ?? []
       ).map((line) => line.slice(2));
     const spec = exampleOf('spec');
-    const tickets = exampleOf('tickets').split(/^## /m).slice(1);
+    const tickets = exampleOf('tickets').split(/^### /m).slice(1);
     // ACT
     const titles = tickets.map((section) => section.split('\n')[0]);
     const lacking = tickets.filter((section) =>
@@ -175,7 +178,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('lets Research chat n take ticket n and the Compare results come from chats 1 to 3', () => {
+  it('lets each Research round take its own ticket as {{item}} and the Compare results come from rounds 1 to 3', () => {
     // ARRANGE
     const simple = task('venue')
       .do.simple.map((section) => section.text)
@@ -183,7 +186,7 @@ describe('edge cases', () => {
     // ACT
     const slots = task('compare').slots.map((slot) => slot.id);
     // ASSERT
-    expect(simple).toMatch(/ticket number \{\{n\}\}/);
+    expect(simple).toContain('{{item}}');
     expect(slots).toEqual(['spec', 'research']);
   });
 

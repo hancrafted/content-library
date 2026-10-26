@@ -2,6 +2,7 @@ import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
 import type { ControlMap } from './toolbar-controls.pure';
+import type { StageRun } from './workflow-run.pure';
 import type { Level } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
@@ -168,6 +169,8 @@ export interface ToolbarProps {
 /** What the modal part draws: the open stage's view (null: closed). */
 export interface ModalProps {
   readonly stage: StageView | null;
+  /** The run of the open stage: job states and rounds. */
+  readonly run: StageRun | null;
   /** The pasted slot values by marker name, shared by every stage of the Workflow. */
   readonly slotValues: Readonly<Record<string, string>>;
   readonly words: UiWords;

@@ -4,20 +4,16 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Check } from 'lucide-react';
 import { ChatTabs } from './chat-tabs.client';
 import type { SlotState, StepKit } from './step-kit.types';
-import { contextCount, resultKey } from './step-panel.client';
+import { contextCount } from './step-panel.client';
 import { itemsOf, type Item } from './stepper-items.pure';
-import type { JobModalView } from './workflow-view.pure';
+import type { StageRun } from './workflow-run.pure';
+import type { StageView } from './workflow-view.pure';
 
 /*
- * The vertical stepper of a stage's modal: one numbered item per job, titled by its goal in one sentence. An open item
+ * The vertical stepper of a stage's modal: one numbered item per job (per round of a repeated stage, titled by its H3), titled by its goal in one sentence. An open item
  * lists its steps (context, prompt and result, check) with minimal chrome. The first is open at first. Built on the
  * shadcn Accordion: one item open at a time, closable.
  */
-
-/** An item is done once every chat's result was pasted: its number turns into a tick. */
-function isDone({ job, doSteps }: Item, slots: SlotState): boolean {
-  return doSteps.length > 0 && doSteps.every((step) => Boolean(slots.values[resultKey(step, job.task)]?.trim()));
-}
 
 function Marker({ done, at }: { done: boolean; at: number }) {
   return (
@@ -44,8 +40,8 @@ function StepItem({ item, at, kit, slots }: StepItemProps) {
   return (
     <AccordionItem value={String(at)} data-job={job.id} className="last:border-b-0">
       <AccordionTrigger>
-        <Marker done={isDone(item, slots)} at={at} />
-        {job.goal.do}
+        <Marker done={item.state !== 'open'} at={at} />
+        {item.round ? `${item.round.title}: ${job.goal.do}` : job.goal.do}
       </AccordionTrigger>
       <AccordionContent className="flex flex-col gap-4 sm:pl-10">
         {doSteps.length > 0 && <ChatTabs steps={doSteps} task={job.task} kind="do" kit={kit} slots={slots} first={1} />}
@@ -63,15 +59,17 @@ function StepItem({ item, at, kit, slots }: StepItemProps) {
 }
 
 interface StepperProps {
-  readonly jobs: readonly JobModalView[];
+  readonly stage: StageView;
+  /** What the run says of this stage: each job's state and, in a repeated stage, its rounds. */
+  readonly run: StageRun;
   readonly kit: StepKit;
   readonly slots: SlotState;
 }
 
-export function Stepper({ jobs, kit, slots }: StepperProps) {
+export function Stepper({ stage, run, kit, slots }: StepperProps) {
   return (
     <Accordion type="single" collapsible data-stepper="" defaultValue="0">
-      {itemsOf(jobs).map((item, at) => (
+      {itemsOf(stage, run).map((item, at) => (
         <StepItem key={item.key} {...{ item, at, kit, slots }} />
       ))}
     </Accordion>

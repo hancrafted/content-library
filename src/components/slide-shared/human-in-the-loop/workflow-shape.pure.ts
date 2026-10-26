@@ -43,13 +43,12 @@ const task = obj(
     output: str,
     template: str,
     slots: list(slot),
-    fanOut: int,
     instructions: str,
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
   },
-  ['summary', 'needs', 'output', 'fanOut', 'review', 'instructions'],
+  ['summary', 'needs', 'output', 'review', 'instructions'],
 );
 const stage = obj(
   {
@@ -57,12 +56,13 @@ const stage = obj(
     title: str,
     learningGoal: str,
     summary: str,
+    foreach: obj({ over: str, teaching: int }),
     move: enumOf(['B', 'R', 'I', 'E', 'F']),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),
     jobs: list(task, 1),
   },
-  ['summary', 'move', 'gate', 'card'],
+  ['summary', 'foreach', 'move', 'gate', 'card'],
 );
 
 /** The Spec of a whole Workflow file. */

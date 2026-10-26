@@ -19,12 +19,12 @@ export interface TaskModalView {
   /** The job's id: a job without an output is marked done under it. */
   readonly id: string;
   readonly steps: readonly TaskStep[];
-  /** The name this task hands on: its result is saved under it (`name_K` for chat K of a fan-out). Absent: a checkbox marks it done. */
+  /** The name this task hands on: its result is saved under it (`name_K` for round K of a repeated stage). Absent: a checkbox marks it done. */
   readonly output?: string;
   /** The names earlier stages hand on: a slot with one of these ids takes a previous result. */
   readonly previous: readonly string[];
   readonly why: string;
-  /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a fan-out one per chat. */
+  /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a repeated stage one per teaching round. */
   readonly examples: readonly string[];
   readonly goodLooksLike: readonly string[];
   /** The techniques the task's structure teaches, from the file's catalogue, shown under "why it matters". */
@@ -46,6 +46,8 @@ export interface StageView {
   readonly name: string;
   /** The one-line learning goal under the title. */
   readonly goal?: string;
+  /** Whether the stepper plays the jobs once per round: the stage repeats and the level is Simple. */
+  readonly repeats: boolean;
   readonly jobs: readonly JobModalView[];
 }
 
@@ -80,6 +82,7 @@ export function workflowView(workflow: Workflow, { level }: ViewOptions): Workfl
       id: stage.id,
       name: stage.name,
       goal: stage.goal,
+      repeats: stage.foreach !== undefined && level === 'simple',
       jobs: stage.jobs.map((job) => ({
         id: job.id,
         title: job.title,

@@ -9,7 +9,7 @@ const section = { heading: 'Task', purpose: 'task', text: 'Do it.' };
 const details = (example: string | string[]) => ({ why: 'Because.', example, goodLooksLike: ['Clear.'] });
 const purposes = Object.fromEntries(['role', 'context', 'task', 'steps', 'template', 'scope'].map((p) => [p, `${p}.`]));
 
-/** A valid two-stage file: Plan hands on `plan`, Research fans out over it into research_1 and research_2. */
+/** A valid two-stage file: Plan hands on `plan`, Research repeats per piece of it, handing on research_1 and research_2. */
 function base() {
   return {
     id: 'demo',
@@ -48,6 +48,7 @@ function base() {
         id: 'research',
         title: 'Research',
         learningGoal: 'Fresh chats.',
+        foreach: { over: 'plan#pieces', teaching: 2 },
         jobs: [
           {
             id: 'research',
@@ -55,10 +56,9 @@ function base() {
             goal: { do: 'Research each piece.', review: 'Check the research.' },
             output: 'research',
             template: 'research',
-            fanOut: 2,
             slots: [{ id: 'plan', mode: 'single', label: 'Plan', sample: PLAN }],
             do: {
-              simple: [{ ...section, text: 'Chat {{n}} takes {{plan}} in {{template}}.' }],
+              simple: [{ ...section, text: 'Round {{item}} takes {{plan}} in {{template}}.' }],
               technical: [{ ...section, text: '{{plan}}' }],
             },
             review: {
@@ -81,7 +81,6 @@ function later(file: File, slot: object, text: string): void {
     ...file.stages[1]!.jobs[0]!,
     id: 'compare',
     output: 'compare',
-    fanOut: undefined,
     goal: { do: 'Rank.', review: 'Check the ranking.' },
     details: details(RESEARCH),
   };
@@ -204,7 +203,7 @@ describe('success cases', () => {
     });
   });
 
-  it('loads a file with a fan-out, a slot on an earlier output and a review', () => {
+  it('loads a file with a repeated stage, a slot on an earlier output and a review', () => {
     // ARRANGE
     const expected = 'demo';
     // ACT
@@ -213,7 +212,7 @@ describe('success cases', () => {
     expect('file' in result && result.file.id).toBe(expected);
   });
 
-  it('resolves the numbered outputs x_1 … x_N of a fan-out for a later single slot and a multiple slot', () => {
+  it('resolves the numbered outputs x_1 … x_N of a repeated stage for a later single slot and a multiple slot', () => {
     // ARRANGE
     const single = { id: 'research_2', mode: 'single', label: 'R2', sample: RESEARCH };
     const multiple = { id: 'research', mode: 'multiple', label: 'All', sample: [RESEARCH, RESEARCH] };
@@ -241,7 +240,7 @@ describe('success cases', () => {
     expect(problemsOf(result)).toBe('');
   });
 
-  it('takes one example per chat of a fan-out', () => {
+  it('takes one example per teaching round of a repeated stage', () => {
     // ARRANGE
     const change = (file: File) => void (research(file).details.example = [RESEARCH, RESEARCH] as never);
     // ACT
@@ -403,8 +402,8 @@ describe('failure cases', () => {
     const r0 = problemsOf(load(short));
     const r1 = problemsOf(load(list));
     // ASSERT
-    expect(r0).toMatch(/example of task "research" needs 2 examples, one per chat, and has 1/);
-    expect(r1).toMatch(/example of task "plan" is a list but the task has no fan-out/);
+    expect(r0).toMatch(/example of task "research" needs 2 examples, one per teaching round, and has 1/);
+    expect(r1).toMatch(/example of task "plan" is a list but its stage does not repeat/);
   });
 
   it('rejects a slot that is not free and has no sample', () => {
@@ -484,16 +483,16 @@ describe('failure cases', () => {
     expect(problems).toBe('');
   });
 
-  it('rejects an unknown marker, and {{n}} outside a fan-out', () => {
+  it('rejects an unknown marker, ', () => {
     // ARRANGE
     const unknown = (file: File) => void (research(file).do.simple[0]!.text = '{{nothing}}');
-    const noFan = (file: File) => void (file.stages[0]!.jobs[0]!.do.simple[0]!.text = 'Chat {{n}}');
+    const noFan = (file: File) => void (file.stages[0]!.jobs[0]!.do.simple[0]!.text = 'Round {{item}}');
     // ACT
     const r0 = problemsOf(load(unknown));
     const r1 = problemsOf(load(noFan));
     // ASSERT
     expect(r0).toMatch(/unknown marker \{\{nothing\}\}/);
-    expect(r1).toMatch(/unknown marker \{\{n\}\}/);
+    expect(r1).toMatch(/unknown marker \{\{item\}\}/);
   });
 
   it('rejects a slot naming no earlier output', () => {
@@ -549,6 +548,68 @@ describe('failure cases', () => {
     // ASSERT
     expect(r0).toMatch(/stages\[1\]\.jobs\[0\]\.details\.why is missing/);
     expect(r1).toMatch(/not valid YAML/);
+  });
+
+  it('reports fanOut as an unknown field of a job', () => {
+    // ARRANGE
+    const change = (file: File) => void Object.assign(research(file), { fanOut: 2 });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[1].jobs[0].fanOut is not a field of the schema.');
+  });
+
+  const foreach =
+    (over: string, teaching: unknown = 2) =>
+    (file: File) =>
+      void Object.assign(file.stages[1]!, { foreach: { over, teaching } });
+
+  it('reports a foreach over an output no earlier stage hands on', () => {
+    // ARRANGE
+    const change = foreach('ghost#pieces');
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Stage "research" repeats over "ghost#pieces", but no earlier stage hands on "ghost".');
+  });
+
+  it("reports a foreach over a heading the output's template does not have", () => {
+    // ARRANGE
+    const change = foreach('plan#ghost');
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain(
+      'Stage "research" repeats over "plan#ghost", but the template of "plan" has no H2 "ghost".',
+    );
+  });
+
+  it('reports a foreach over that is not written output#heading', () => {
+    // ARRANGE
+    const change = foreach('plan');
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Stage "research" repeats over "plan"; write it as <output>#<h2 slug>.');
+  });
+
+  it('reports a teaching cap below 1', () => {
+    // ARRANGE
+    const change = foreach('plan#pieces', 0);
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[1].foreach.teaching must be a whole number of at least 1.');
+  });
+
+  it('reports a foreach in the first stage, which has no earlier output to repeat over', () => {
+    // ARRANGE
+    const change = (file: File) =>
+      void Object.assign(file.stages[0]!, { foreach: { over: 'plan#pieces', teaching: 2 } });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('Stage "plan" repeats over "plan#pieces", but no earlier stage hands on "plan".');
   });
 });
 

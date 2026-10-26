@@ -1,14 +1,14 @@
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
- * What a task hands on, by name. A task's `output` is a name a later slot takes; a fan-out `x` of N chats hands on
- * `x_1` … `x_N`, and `x` itself names them all (a `multiple` slot). Every name points at the producing task.
+ * What a task hands on, by name. A task's `output` is a name a later slot takes; in a repeated stage `x` hands on
+ * `x_1` … `x_N` (N the teaching rounds), and `x` itself names them all (a `multiple` slot). Every name points at the producing task.
  */
 
 export interface Producer {
   readonly task: TaskDef;
   readonly stage: StageDef;
-  /** The `x` of a fan-out: it may be taken only by a `multiple` slot. */
+  /** The `x` of a repeated stage: it may be taken only by a `multiple` slot. */
   readonly all: boolean;
 }
 
@@ -17,9 +17,9 @@ export function producersOf(task: TaskDef, stage: StageDef): ReadonlyMap<string,
   const names = new Map<string, Producer>();
   const { output } = task;
   if (output === undefined) return names;
-  if (task.fanOut === undefined) return names.set(output, { task, stage, all: false });
+  if (stage.foreach === undefined) return names.set(output, { task, stage, all: false });
   names.set(output, { task, stage, all: true });
-  for (let at = 1; at <= task.fanOut; at += 1) names.set(`${output}_${at}`, { task, stage, all: false });
+  for (let at = 1; at <= stage.foreach.teaching; at += 1) names.set(`${output}_${at}`, { task, stage, all: false });
   return names;
 }
 
