@@ -114,7 +114,7 @@ describe('tech-debt-links-issue', () => {
   const unlinked: [label: string, file: string, source: string][] = [
     ['line comment', FILE, `// ${MARK}: fenced parser\n`],
     ['block comment', FILE, `/* ${MARK}: fenced parser */\n`],
-    ['hash comment', 'scripts/sync.sh', `# ${MARK}: fenced script\n`],
+    ['hash comment', 'tools/sync.sh', `# ${MARK}: fenced script\n`],
     ['marker beside code', FILE, `const a = 1; // ${MARK}: fenced\n`],
     ['bare issue number, no link', FILE, `// ${MARK}: see #317\n`],
   ];

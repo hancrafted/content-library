@@ -1,6 +1,6 @@
 /*
  * The dashboard's demo Run: a recorded pipeline.yml and events.jsonl, published under public/dashboard-demo/.
- * `scripts/dashboard-demo.ts` makes the public copy from a local Run folder with the two functions below; the
+ * `tools/demo/dashboard-demo.ts` makes the public copy from a local Run folder with the two functions below; the
  * dashboard replays it with its clock stopped at the Run's last event, so nothing in it reads as still running.
  */
 

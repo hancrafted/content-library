@@ -118,7 +118,7 @@ describe('single-storage-key', () => {
 
   it('leaves files outside src/ alone', async () => {
     // ARRANGE
-    const { ctx, violations } = makeCtx({ 'scripts/x.ts': `localStorage.setItem('other', '1');\n` });
+    const { ctx, violations } = makeCtx({ 'tools/x.ts': `localStorage.setItem('other', '1');\n` });
     // ACT
     await rule.check(ctx);
     // ASSERT
