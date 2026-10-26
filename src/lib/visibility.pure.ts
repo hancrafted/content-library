@@ -30,6 +30,12 @@ export interface PageTreatment {
   readonly canonical: 'self' | { readonly episode: EpisodeSlug };
 }
 
+/** One page and how the site treats it: what the page catalogue lists and the sitemap reads. */
+export interface TreatedPage {
+  readonly page: PageRef;
+  readonly treatment: PageTreatment;
+}
+
 const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };
 const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' };
 const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' };

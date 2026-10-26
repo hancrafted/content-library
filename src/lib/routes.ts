@@ -17,8 +17,8 @@ export const LEGACY_EPISODE_PREFIX = '/episode';
 
 /**
  * Every Episode, public or unlisted: each one folder, `src/components/episodes/<slug>/`, listed by the generated
- * Episode registry. Which of them has an `/episodes/` page is the page catalogue's (`treatmentOf` in the content store): an unlisted
- * one lives only under its Event. The tooling pages served beside them are no Episodes: `TOOLING_SLUGS`.
+ * Episode registry. Which of them has an `/episodes/` page is the page catalogue's (`treatmentOf` in the content
+ * store): an unlisted one lives only under its Event. The tooling pages served beside them are no Episodes: `TOOLING_SLUGS`.
  */
 export { EPISODE_SLUGS };
 

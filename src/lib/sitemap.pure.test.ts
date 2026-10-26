@@ -91,11 +91,22 @@ describe('failure cases', () => {
       ...treated(HIDDEN, { kind: 'dashboard' }, { kind: 'tooling', tooling: 'slide-master' }),
       ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: 'axel-ai-attention-span' }),
     ];
-    const expected = sitemapEntries(SITE, SITE_PAGES, undated);
+    const expected = [
+      `${SITE}/`,
+      `${SITE}/de/`,
+      `${SITE}/episodes/`,
+      `${SITE}/de/episodes/`,
+      `${SITE}/events/`,
+      `${SITE}/de/events/`,
+      `${SITE}/episodes/ai-attention-span/`,
+      `${SITE}/de/episodes/ai-attention-span/`,
+      `${SITE}/events/${EVENT}/`,
+      `${SITE}/de/events/${EVENT}/`,
+    ];
     // ACT
-    const entries = sitemapEntries(SITE, pages, undated);
+    const urls = sitemapEntries(SITE, pages, undated).map((entry) => entry.url);
     // ASSERT
-    expect(entries).toEqual(expected);
+    expect(urls).toEqual(expected);
   });
 });
 

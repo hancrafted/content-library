@@ -28,8 +28,8 @@ export interface PlaylistEntry {
 }
 
 /**
- * An Event as the store serves it: its slug names a page (the generated Event registry), and its Playlist is resolved, the Episodes
- * it lists in its order, each with its place.
+ * An Event as the store serves it: its slug names a page (the generated Event registry), and its Playlist is
+ * resolved, the Episodes it lists in its order, each with its place.
  */
 export type ServedEvent = Omit<Event, 'slug' | 'playlist'> & {
   readonly slug: EventSlug;

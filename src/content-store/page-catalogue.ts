@@ -7,7 +7,13 @@ import {
   type PageRef,
 } from '@/lib/routes';
 import { TOOLING_SLUGS } from '@/lib/tooling-pages';
-import { episodePageTreatment, pageTreatment, type PageFacts, type PageTreatment } from '@/lib/visibility.pure';
+import {
+  episodePageTreatment,
+  pageTreatment,
+  type PageFacts,
+  type PageTreatment,
+  type TreatedPage,
+} from '@/lib/visibility.pure';
 import type { Content } from './refusals';
 import type { Episode } from './schemas/episode.schema';
 import type { ServedEvent } from './served-event';
@@ -19,19 +25,13 @@ import type { ServedEvent } from './served-event';
  * presents and pairs them with the predicate itself. The store serves one catalogue over its records (`store.ts`).
  */
 
-/** One page and how the site treats it: built, in the sitemap, indexed, listed, and where its canonical points. */
-export interface CataloguedPage {
-  readonly page: PageRef;
-  readonly treatment: PageTreatment;
-}
-
 export interface PageCatalogue {
   /**
    * Every page, each once, with its treatment: the site's own lists, each Episode's own page (public or not), each
    * tooling page, each Event, then each Episode under its Event. Only a page whose treatment says `exported` is built;
    * the sitemap keeps this order.
    */
-  readonly pages: readonly CataloguedPage[];
+  readonly pages: readonly TreatedPage[];
   /** A page's treatment; a page whose record the records do not hold is never listed or indexed (fails closed). */
   readonly treatmentOf: (page: PageRef) => PageTreatment;
   /** One static param per page built under `/episodes/`: each exported Episode's own page and each tooling page. */

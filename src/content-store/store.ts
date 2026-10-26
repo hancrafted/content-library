@@ -17,8 +17,10 @@ import type { ServedEvent } from './served-event';
  * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here, parsed
  * by its schema and checked against the others when this module loads. Episode metadata arrives through the generated
  * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder), Events through the generated
- * Event registry (`./event-registry.generated.ts`, one entry per Event file), Playlists by explicit import. A bad record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read
- * records only through the functions below. The one seam a database would replace.
+ * Event registry (`./event-registry.generated.ts`, one entry per Event file), Playlists by explicit import. A bad
+ * record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read records only
+ * through the functions below, and every page through the page catalogue served here. The one seam a database would
+ * replace.
  */
 
 const EVENTS: readonly EventInput[] = Object.values(EVENT_RECORDS);
