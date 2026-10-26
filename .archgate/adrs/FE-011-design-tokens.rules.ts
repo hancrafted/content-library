@@ -7,8 +7,12 @@
 
 const LEGACY_FILE = 'src/design-system/legacy.json';
 const GLOBALS = 'src/app/globals.css';
-// Every Slide token file, an Event's copy's under `episodes/by-event/<event>/<ep>/` too.
-const SLIDE_MODULE_GLOB = 'src/components/episodes/**/slides/**/*.module.css';
+// Every Slide token file, an Event's copy's under `episodes/by-event/<event>/<ep>/` and a pool Slide's under
+// `episodes/slide-pool/<slide>/` too.
+const SLIDE_MODULE_GLOBS = [
+  'src/components/episodes/**/slides/**/*.module.css',
+  'src/components/episodes/slide-pool/**/*.module.css',
+];
 // The one token file outside a Slide folder: the token editor's panel keeps a fixed palette so it survives edits to the
 // site tokens it edits. It may hold raw colours (A1) and must pair them with :global(.dark) values (A4); unlike a Slide
 // token file it redeclares global names on purpose (so A3 does not apply). Adding a file here needs an ADR amendment.
@@ -265,7 +269,8 @@ async function governed(ctx: RuleContext, globs: string[]): Promise<string[]> {
 async function slideModules(ctx: RuleContext, extra: string[] = []): Promise<string[]> {
   const legacy = await legacyFiles(ctx);
   const present = new Set(await ctx.glob('src/**/*.module.css'));
-  const files = [...(await ctx.glob(SLIDE_MODULE_GLOB)), ...extra.filter((file) => present.has(file))];
+  const globbed = (await Promise.all(SLIDE_MODULE_GLOBS.map((glob) => ctx.glob(glob)))).flat();
+  const files = [...new Set(globbed), ...extra.filter((file) => present.has(file))];
   return files.filter((file) => !legacy.has(file));
 }
 
@@ -292,7 +297,8 @@ export default {
         'A raw colour (hex, rgb(), hsl(), oklch()) in CSS appears only under :root / .dark in globals.css and in a Slide token file (a CSS module in an Episode Slide folder), plus the token editor panel module. Named colours (black, chocolate, …) count; transparent, currentColor and inherit do not. Legacy files are exempt.',
       severity: 'error',
       async check(ctx) {
-        const slides = new Set([...(await ctx.glob(SLIDE_MODULE_GLOB)), EDITOR_PANEL_MODULE]);
+        const globbed = (await Promise.all(SLIDE_MODULE_GLOBS.map((glob) => ctx.glob(glob)))).flat();
+        const slides = new Set([...globbed, EDITOR_PANEL_MODULE]);
         for (const file of await governed(ctx, [CSS_GLOB])) {
           if (slides.has(file)) continue;
           const css = stripComments(await ctx.readFile(file), 'css');

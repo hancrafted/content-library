@@ -37,6 +37,15 @@ Search: the page catalogue gives every page its treatment from one visibility pr
 3. List it in the Event's Playlist. The store refuses an unlisted Episode no Event's Playlist lists.
 4. Run `npm run registry`: the folder is the registration, and the Episode registry (GLOSSARY) adds the id, the metadata and the composition from it. Add the id to the unlisted list `src/content-store/store.test.ts` writes out in "declares every Episode public but…", the one place that says which Episodes are unlisted.
 
+A copy of an Episode whose Sections compose pool Slides keeps composing them: its Section files import them through the `@/` alias, so the copy carries no pool Slide of its own.
+
+**Promote Slides to the pool.** Copying is the default; promotion is a deliberate choice, made when an Episode and its copies should show the same content Slides as they are. The Slide pool (GLOSSARY) holds only content Slides: each Episode keeps its own Title slide, section slides and Section files. `onboard-ai-every-time` and its two Event copies are the worked example. Where else a reused thing goes is FE-004-slide-architecture's reuse table. To promote:
+
+1. Confirm the Slide folder is byte-identical in every Episode that will compose it (`diff -r`). If any copy differs, keep the copies, or settle the one version first.
+2. `git mv src/components/episodes/<slug>/slides/<slide> src/components/episodes/slide-pool/<slide>`, then `git rm -r` the same folder in each copy.
+3. In every Section file that lists it, import it through the alias, `@/components/episodes/slide-pool/<slide>/slide`, never a relative path. A section slide stays in its Episode: the dependency rules refuse a Section importing a pool Slide of its own name.
+4. Run `npm run verify` and `npm run build && npm run test:build`: the Slides, text and anchors of each Episode stay as they were. A later fix to a pool Slide reaches every Episode that composes it, past Events' copies too; the past-Event notice covers that.
+
 Flipping a copy's `visibility` to `public` is the one edit that indexes its Event-scoped page and puts it in the sitemap; it stays under its Event, with no `/episodes/` page and no overview card.
 
 **Event recording.** An unlisted Episode plays the one Video recorded at its Event: `youtube: { id, language }` in its `episode-metadata.ts`, `language` the locale spoken there. Both locale pages play it, labelled with that language before play (`tests/post-build/unlisted-episodes.build.test.ts`). It is optional until uploaded; the `episode-add-youtube` skill adds it. Flipping a recorded Episode to `public` also rewrites its `youtube` as one video per locale: the store refuses the one-recording shape on a public Episode.
