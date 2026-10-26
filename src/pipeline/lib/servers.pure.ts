@@ -1,5 +1,5 @@
 // The Run's two servers, decided without touching the disk: which pair of ports a Run takes and what its draft
-// pipeline.yml says. The disk and processes are `skills/new-episode/scripts/servers.ts`; begin-run is the caller (`skills/new-episode/scripts/run-commands.ts`).
+// pipeline.yml says. The disk and processes are `servers.ts`; begin-run is the caller (`run-commands.ts`).
 
 /** The first port a Run's dashboard dev server may take; the Spec server takes the next one. */
 export const FIRST_PORT = 4000;

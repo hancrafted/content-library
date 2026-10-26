@@ -1,17 +1,12 @@
 // The Spec review server (design-ADR 0011): serves an Episode's `spec/spec.html` and its `design.css`, and saves the
-// review form's POST as the next `feedback/<NN>/feedback.md` round. It lives with the skill's scripts, outside `src/`
-// and the static export; `spec.ts` is its command line.
+// review form's POST as the next `feedback/<NN>/feedback.md` round. Nothing in the static export imports it;
+// `npm run episode:spec` (the new-episode skill's `spec.ts`) is its command line.
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import path from 'node:path';
-import {
-  SPEC_FILE,
-  specBriefKeys,
-  specSlides,
-  specTitleSlideOptions,
-} from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
-import { nextRound, reviewToFeedback, type Fault } from '../../../src/pipeline/lib/spec-feedback.pure.ts';
+import { SPEC_FILE, specBriefKeys, specSlides, specTitleSlideOptions } from './episode-spec-page.pure.ts';
+import { nextRound, reviewToFeedback, type Fault } from './spec-feedback.pure.ts';
 
 export interface SpecServer {
   port: number;

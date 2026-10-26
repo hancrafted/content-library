@@ -8,7 +8,7 @@ import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync,
 import path from 'node:path';
 import { archivedEpisode, archiveIndex } from '../../../src/pipeline/lib/archive-dashboard.pure.ts';
 import { designArchive } from '../../../src/pipeline/lib/archive.pure.ts';
-import { buildDesignCss } from '../../new-episode/scripts/spec-css.ts';
+import { buildDesignCss } from '../../../src/pipeline/lib/spec-css.ts';
 
 const ARCHIVE = 'design-archive';
 /** The archive pages' own styles, kept beside the skill's other page assets. */

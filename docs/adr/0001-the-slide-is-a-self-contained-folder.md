@@ -30,7 +30,7 @@ Q1–Q12 were settled in the grilling session after PR #50.
 11. **Q11 — Shared helpers.** Popover placement is one hook in `src/shared/hooks/` with its maths in `src/shared/lib/`, rendering into the Episode portal root. Reveal-once logic stays inside each Scene (`FE-007` §4).
 12. **Q12 — Styling and rollout.** A Slide's CSS module sits in its folder and is scoped by the module, so the `[data-episode]` wrapper is no longer required for Slide CSS; colour rules stay. The switch lands expand–contract on an epic branch: the new factory beside `slidesFor`, Episodes moved one per sub-issue, then the old shape deleted, so `main` sees one merge and never carries rules for two shapes.
 
-Position stays the one source for structure: first in its Section is `h2`, the rest `h3`, set by the kit's `Title`. Anchors stay position-based (`<section>--<slide>`), and a `published-anchors.json` snapshot per Episode makes losing one a failing test. The record and kit types live in `slide-master/`, the vocabulary Episodes import; only the walk is pure, in `src/lib`.
+Position stays the one source for structure: first in its Section is `h2`, the rest `h3`, set by the kit's `Title`. Anchors stay position-based (`<section>--<slide>`), and a `published-anchors.json` snapshot per Episode makes losing one a failing test. The record and kit types live in `slide-master/`, the vocabulary Episodes import; only the walk is pure, in `src/episodes/lib/episode.pure.ts`.
 
 ## Upcoming Episodes
 

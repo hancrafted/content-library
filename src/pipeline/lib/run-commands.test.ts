@@ -2,10 +2,10 @@ import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, 
 import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { episodeLogPath, readEpisodeLog, readMarker } from '../../../src/pipeline/lib/episode-run-log.ts';
-import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
-import { queryRuns } from '../../../src/pipeline/lib/run-query.pure.ts';
+import { episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
 import { runCommand, type RunContext } from './run-commands.ts';
+import { appendEvent } from './run-log-writer.ts';
+import { queryRuns } from './run-query.pure.ts';
 
 /*
  * The run-scoped commands against a real temp worktree: names in, lines and marker out. Clock, ids, git,
@@ -52,6 +52,64 @@ const begun = (): RunContext => {
 afterEach(() => {
   for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
 });
+
+/** An agent span the hook adapter would have started under the open Attempt of a Job. */
+const startAgent = (ctx: RunContext, job: string, role: string): void => {
+  const attempt = spans(ctx).find((s) => s.type === 'attempt' && s.job === job && s.end_t === null);
+  appendEvent(
+    { root: ctx.root, file: episodeLogPath(SLUG) },
+    { kind: 'start', type: 'agent', name: `${job}#1/${role}`, job, role, attempt: 1, parent_span_id: attempt?.span_id },
+    ctx.writer,
+  );
+};
+
+const finishedRun = (): RunContext => {
+  const ctx = begun();
+  run(ctx, 'begin-job', 'write-dossier');
+  run(ctx, 'end-job', 'write-dossier');
+  run(ctx, 'end-run');
+  run(ctx, 'begin-run', '--model', 'opus');
+  return ctx;
+};
+
+const said = (t: string, id: string, output: number) =>
+  JSON.stringify({
+    type: 'assistant',
+    timestamp: t,
+    message: { id, model: 'opus', usage: { input_tokens: 1, output_tokens: output } },
+  });
+
+const attempted = (): RunContext => {
+  const ctx = begun();
+  run(ctx, 'begin-job', 'a');
+  run(ctx, 'begin-attempt', 'a');
+  return ctx;
+};
+const agents = (ctx: RunContext) => spans(ctx).filter((s) => s.type === 'agent');
+
+const TEMPLATE =
+  'status: draft\nstages: [brief]\njobs:\n  - id: brief-grill\n    stage: brief\n    outputs: [docs/episodes/<slug>/brief.md]\n';
+
+/** A worktree with the template and no pipeline yet; ports 4000 and 4001 are taken. */
+function served(taken: readonly number[] = [4000, 4001]) {
+  const ctx = context();
+  rmSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'));
+  mkdirSync(path.join(ctx.root, 'skills/new-episode/assets'), { recursive: true });
+  writeFileSync(path.join(ctx.root, 'skills/new-episode/assets/pipeline.yml'), TEMPLATE);
+  const started: { dev: number; spec: number }[] = [];
+  const stopped: string[] = [];
+  const withHost: RunContext = {
+    ...ctx,
+    servers: {
+      isFree: (port) => !taken.includes(port),
+      start: (_root, _slug, ports) => void started.push(ports),
+      stop: (root) => void stopped.push(root),
+    },
+  };
+  return { ctx: withHost, started, stopped };
+}
+const pipelineOf = (ctx: RunContext) =>
+  readFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'), 'utf8');
 
 describe('success cases', () => {
   it('records typed notes on the open Job and a Job summary, and the query returns both', () => {
@@ -150,6 +208,7 @@ describe('success cases', () => {
     run(ctx, 'begin-job', 'write-dossier');
     const first = run(ctx, 'begin-attempt', 'write-dossier');
     run(ctx, 'end-attempt', 'write-dossier', 'error');
+    const retry = 2;
     // ACT
     const second = run(ctx, 'begin-attempt', 'write-dossier');
     // ASSERT
@@ -158,7 +217,7 @@ describe('success cases', () => {
     expect(second).toEqual({ ok: true, output: expect.stringContaining('write-dossier#2/<role>') });
     expect(attempts.map((s) => [s.attempt, s.parent_span_id])).toEqual([
       [1, spans(ctx).find((s) => s.type === 'job')?.span_id],
-      [2, spans(ctx).find((s) => s.type === 'job')?.span_id],
+      [retry, spans(ctx).find((s) => s.type === 'job')?.span_id],
     ]);
     expect(attempts[1]?.retry_of).toBe(attempts[0]?.span_id);
     expect(attempts[0]?.status).toBe('error');
@@ -261,28 +320,31 @@ describe('success cases', () => {
 
   it('ends the Run, records orchestrator usage and clears the marker in one step', () => {
     // ARRANGE
+    const INPUT = 100;
+    const OUTPUT = 20;
     const transcript = [
       {
         type: 'assistant',
         timestamp: '2026-10-14T09:00:30Z',
-        message: { model: 'opus', usage: { input_tokens: 100, output_tokens: 20 } },
+        message: { model: 'opus', usage: { input_tokens: INPUT, output_tokens: OUTPUT } },
       },
     ]
       .map((e) => JSON.stringify(e))
       .join('\n');
     const ctx = context(transcript);
+    const endRunLines = 2;
     run(ctx, 'begin-run', '--model', 'opus');
     // ACT
     const result = run(ctx, 'end-run', 'ok', '--summary', 'shipped');
     // ASSERT
     const ends = lines(ctx).filter((l) => l.kind === 'end-run');
     expect(result.ok).toBe(true);
-    expect(ends).toHaveLength(2);
+    expect(ends).toHaveLength(endRunLines);
     expect(ends[1]).toEqual(
       expect.objectContaining({
         summary: 'shipped',
-        'gen_ai.usage.input_tokens': 100,
-        'gen_ai.usage.output_tokens': 20,
+        'gen_ai.usage.input_tokens': INPUT,
+        'gen_ai.usage.output_tokens': OUTPUT,
       }),
     );
     expect(existsSync(path.join(ctx.root, '.scratch/active-run'))).toBe(false);
@@ -301,6 +363,7 @@ describe('success cases', () => {
       'sess-2': [said('2026-10-14T09:00:45Z', 'm2', 5)].join('\n'),
     });
     run(ctx, 'begin-run', '--model', 'opus');
+    const inside = { 'gen_ai.usage.input_tokens': 2, 'gen_ai.usage.output_tokens': 25 };
     // ACT
     run({ ...ctx, sessionId: 'sess-2' }, 'resume');
     run({ ...ctx, sessionId: 'sess-2' }, 'end-run');
@@ -309,7 +372,7 @@ describe('success cases', () => {
       lines(ctx)
         .filter((l) => l.kind === 'end-run')
         .at(-1),
-    ).toEqual(expect.objectContaining({ 'gen_ai.usage.input_tokens': 2, 'gen_ai.usage.output_tokens': 25 }));
+    ).toEqual(expect.objectContaining(inside));
   });
 
   it('resumes the current Run in the newest open Job after a crash', () => {
@@ -341,6 +404,184 @@ describe('success cases', () => {
     // ASSERT
     expect(result).toEqual({ ok: true, output: archive });
     expect(copied).toEqual(files.map((file) => readFileSync(path.join(staging, file), 'utf8')));
+  });
+
+  it('keeps an open agent open when an Attempt ends ok', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'a');
+    run(ctx, 'begin-attempt', 'a');
+    startAgent(ctx, 'a', 'implementor');
+    // ACT
+    run(ctx, 'end-attempt', 'a', 'ok');
+    // ASSERT
+    expect(spans(ctx).find((s) => s.type === 'agent')?.status).toBe('running');
+  });
+
+  it('writes a reused Job span in the current Run linked to the earlier Run ok span, once', () => {
+    // ARRANGE
+    const ctx = finishedRun();
+    const earlier = spans(ctx).find((s) => s.type === 'job');
+    // ACT
+    const first = run(ctx, 'reuse', 'write-dossier');
+    const second = run(ctx, 'reuse', 'write-dossier');
+    // ASSERT
+    const reused = spans(ctx).filter((s) => s.type === 'job' && s.status === 'reused');
+    expect(first).toEqual({ ok: true, output: expect.stringContaining('reused') });
+    expect(second).toEqual({ ok: true, output: expect.stringContaining('already') });
+    expect(reused).toHaveLength(1);
+    expect(reused[0]).toEqual(
+      expect.objectContaining({
+        job: 'write-dossier',
+        link_span_id: earlier?.span_id,
+        link_trace_id: earlier?.trace_id,
+      }),
+    );
+    expect(reused[0]?.trace_id).not.toBe(earlier?.trace_id);
+  });
+
+  it('puts --ticket on the Score line', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    const ticket = 176;
+    // ACT
+    run(ctx, 'score', 'write-spec', 'check', 'pass', '--source', 'check:mh', '--ticket', String(ticket));
+    // ASSERT
+    expect(readEpisodeLog(SLUG, ctx.root).folded.scores[0]).toEqual(expect.objectContaining({ ticket }));
+  });
+
+  it('measures the orchestrator usage between the Job start and end, laid over the Job by one attrs line', () => {
+    // ARRANGE
+    const IN_JOB = 7;
+    const ctx = context(
+      [
+        said('2026-10-14T09:00:30Z', 'before-job', 1000),
+        said('2026-10-14T09:01:30Z', 'in-job', IN_JOB),
+        said('2026-10-14T09:05:30Z', 'after-job', 1000),
+      ].join('\n'),
+    );
+    writeFileSync(
+      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
+      'status: approved\njobs:\n  - id: write-dossier\n    session: orchestrator\n  - id: a\n',
+    );
+    run(ctx, 'begin-run', '--model', 'opus');
+    run(ctx, 'begin-job', 'write-dossier');
+    // ACT
+    run(ctx, 'end-job', 'write-dossier', 'ok', '--summary', 'done');
+    // ASSERT
+    const job = spans(ctx).find((s) => s.type === 'job');
+    expect(job).toEqual(
+      expect.objectContaining({
+        status: 'ok',
+        summary: 'done',
+        source: 'measured',
+        'gen_ai.usage.input_tokens': 1,
+        'gen_ai.usage.output_tokens': IN_JOB,
+      }),
+    );
+  });
+
+  it('appends an attrs line, never a second end, and records the skills the orchestrator invoked in the window', () => {
+    // ARRANGE
+    const skill = (t: string, name: string) =>
+      JSON.stringify({
+        type: 'assistant',
+        timestamp: t,
+        message: { id: `sk-${name}`, content: [{ type: 'tool_use', name: 'Skill', input: { skill: name } }] },
+      });
+    const ctx = context(
+      [
+        skill('2026-10-14T09:00:30Z', 'before-job'),
+        skill('2026-10-14T09:01:30Z', 'grilling'),
+        said('2026-10-14T09:01:40Z', 'in-job', 7),
+      ].join('\n'),
+    );
+    writeFileSync(
+      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
+      'status: approved\njobs:\n  - id: write-dossier\n    session: orchestrator\n  - id: a\n',
+    );
+    run(ctx, 'begin-run', '--model', 'opus');
+    run(ctx, 'begin-job', 'write-dossier');
+    // ACT
+    run(ctx, 'end-job', 'write-dossier', 'ok', '--summary', 'done');
+    // ASSERT
+    const lines = readFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'events.jsonl'), 'utf8')
+      .trim()
+      .split('\n')
+      .map((l) => JSON.parse(l));
+    const ofJob = lines.filter((l) => l.span_id === spans(ctx).find((s) => s.type === 'job')?.span_id);
+    expect(ofJob.map((l) => l.kind)).toEqual(['start', 'end', 'attrs']);
+    expect(spans(ctx).find((s) => s.type === 'job')).toMatchObject({ status: 'ok', skills_invoked: ['grilling'] });
+  });
+
+  it('begins a typed agent span under the open Attempt, named by its description', () => {
+    // ARRANGE
+    const ctx = attempted();
+    const ticket = 7;
+    // ACT
+    const result = run(ctx, 'begin-agent', `a#1/implementor/#${ticket}`, '--harness', 'copilot');
+    // ASSERT
+    expect(result).toEqual({ ok: true, output: expect.any(String) });
+    const attempt = spans(ctx).find((s) => s.type === 'attempt');
+    expect(agents(ctx)).toEqual([
+      expect.objectContaining({
+        name: `a#1/implementor/#${ticket}`,
+        job: 'a',
+        attempt: 1,
+        role: 'implementor',
+        ticket,
+        status: 'running',
+        parent_span_id: attempt?.span_id,
+        source: 'typed',
+      }),
+    ]);
+  });
+
+  it('ends the agent span with the status given', () => {
+    // ARRANGE
+    const ctx = attempted();
+    run(ctx, 'begin-agent', 'a#1/implementor');
+    // ACT
+    const result = run(ctx, 'end-agent', 'a#1/implementor');
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(agents(ctx).map((s) => s.status)).toEqual(['ok']);
+  });
+
+  it('records a refused spawn as end-agent refused', () => {
+    // ARRANGE
+    const ctx = attempted();
+    run(ctx, 'begin-agent', 'a#1/reviewer');
+    // ACT
+    run(ctx, 'end-agent', 'a#1/reviewer', 'refused');
+    // ASSERT
+    expect(agents(ctx).map((s) => s.status)).toEqual(['refused']);
+  });
+
+  it('writes the draft pipeline with the template sha, the slug and both ports, then starts both servers', () => {
+    // ARRANGE
+    const { ctx, started } = served();
+    const firstFree = { dev: 4002, spec: 4003 };
+    // ACT
+    const result = run(ctx, 'begin-run', '--model', 'opus');
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(pipelineOf(ctx)).toContain(
+      `status: draft\ntemplate: abc1234\ndev_port: ${firstFree.dev}\nspec_port: ${firstFree.spec}\n`,
+    );
+    expect(pipelineOf(ctx)).toContain('docs/episodes/demo/brief.md');
+    expect(started).toEqual([firstFree]);
+  });
+
+  it('stops both servers when the Run ends', () => {
+    // ARRANGE
+    const { ctx, stopped } = served();
+    run(ctx, 'begin-run', '--model', 'opus');
+    // ACT
+    run(ctx, 'end-run');
+    // ASSERT
+    expect(stopped).toEqual([ctx.root]);
   });
 });
 
@@ -470,49 +711,6 @@ describe('failure cases', () => {
     expect(lines(ctx).filter((l) => l.kind === 'end-run')).toEqual([]);
     expect(readMarker(ctx.root)).not.toBeNull();
   });
-});
-
-/** An agent span the hook adapter would have started under the open Attempt of a Job. */
-const startAgent = (ctx: RunContext, job: string, role: string): void => {
-  const attempt = spans(ctx).find((s) => s.type === 'attempt' && s.job === job && s.end_t === null);
-  appendEvent(
-    { root: ctx.root, file: episodeLogPath(SLUG) },
-    { kind: 'start', type: 'agent', name: `${job}#1/${role}`, job, role, attempt: 1, parent_span_id: attempt?.span_id },
-    ctx.writer,
-  );
-};
-
-describe('lifecycle cases', () => {
-  it.each(['error', 'crashed'])('ends the open agents crashed when an Attempt ends %s', (status) => {
-    // ARRANGE
-    const ctx = begun();
-    run(ctx, 'begin-job', 'a');
-    run(ctx, 'begin-attempt', 'a');
-    startAgent(ctx, 'a', 'implementor');
-    // ACT
-    const result = run(ctx, 'end-attempt', 'a', status);
-    // ASSERT
-    expect(result.ok).toBe(true);
-    expect(spans(ctx).map((s) => [s.type, s.status])).toEqual([
-      ['run', 'running'],
-      ['job', 'running'],
-      ['attempt', status],
-      ['agent', 'crashed'],
-    ]);
-    expect(run(ctx, 'begin-attempt', 'a').ok).toBe(true);
-  });
-
-  it('keeps an open agent open when an Attempt ends ok', () => {
-    // ARRANGE
-    const ctx = begun();
-    run(ctx, 'begin-job', 'a');
-    run(ctx, 'begin-attempt', 'a');
-    startAgent(ctx, 'a', 'implementor');
-    // ACT
-    run(ctx, 'end-attempt', 'a', 'ok');
-    // ASSERT
-    expect(spans(ctx).find((s) => s.type === 'agent')?.status).toBe('running');
-  });
 
   it('refuses new spans and resume on an ended Run, naming begin-run, but still takes Scores', () => {
     // ARRANGE
@@ -537,9 +735,62 @@ describe('lifecycle cases', () => {
     });
     expect(run(ctx, 'begin-run', '--model', 'opus').ok).toBe(true);
   });
+
+  it('refuses when no earlier Run has an ok span of that Job', () => {
+    // ARRANGE
+    const ctx = begun();
+    const before = lines(ctx).length;
+    // ACT
+    const result = run(ctx, 'reuse', 'write-dossier');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('no earlier') });
+    expect(lines(ctx)).toHaveLength(before);
+  });
+
+  it('refuses a ticket that is not a number', () => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'write-spec');
+    // ACT
+    const result = run(ctx, 'score', 'write-spec', 'check', 'pass', '--source', 'check:mh', '--ticket', 'x');
+    // ASSERT
+    expect(result).toEqual({ ok: false, error: expect.stringContaining('ticket') });
+  });
+
+  it('refuses a description that does not parse, and an Attempt that is not open', () => {
+    // ARRANGE
+    const ctx = attempted();
+    // ACT
+    const bad = run(ctx, 'begin-agent', 'implementor');
+    const none = run(ctx, 'begin-agent', 'a#2/implementor');
+    const unknown = run(ctx, 'end-agent', 'a#1/ghost');
+    // ASSERT
+    expect(bad).toEqual({ ok: false, error: expect.stringContaining('<job>#<n>/<role>') });
+    expect(none).toEqual({ ok: false, error: expect.stringContaining('no open Attempt a#2') });
+    expect(unknown).toEqual({ ok: false, error: expect.stringContaining('no agent span "a#1/ghost"') });
+  });
 });
 
 describe('edge cases', () => {
+  it.each(['error', 'crashed'])('ends the open agents crashed when an Attempt ends %s', (status) => {
+    // ARRANGE
+    const ctx = begun();
+    run(ctx, 'begin-job', 'a');
+    run(ctx, 'begin-attempt', 'a');
+    startAgent(ctx, 'a', 'implementor');
+    // ACT
+    const result = run(ctx, 'end-attempt', 'a', status);
+    // ASSERT
+    expect(result.ok).toBe(true);
+    expect(spans(ctx).map((s) => [s.type, s.status])).toEqual([
+      ['run', 'running'],
+      ['job', 'running'],
+      ['attempt', status],
+      ['agent', 'crashed'],
+    ]);
+    expect(run(ctx, 'begin-attempt', 'a').ok).toBe(true);
+  });
+
   it('archives a Run with no Brief or Spec yet, copying only what exists', () => {
     // ARRANGE
     const ctx = begun();
@@ -613,144 +864,6 @@ describe('edge cases', () => {
     expect(lines(ctx).filter((l) => l.kind === 'end-run')).toHaveLength(1);
     expect(readMarker(ctx.root)).toBeNull();
   });
-});
-
-describe('reuse', () => {
-  const finishedRun = (): RunContext => {
-    const ctx = begun();
-    run(ctx, 'begin-job', 'write-dossier');
-    run(ctx, 'end-job', 'write-dossier');
-    run(ctx, 'end-run');
-    run(ctx, 'begin-run', '--model', 'opus');
-    return ctx;
-  };
-
-  it('writes a reused Job span in the current Run linked to the earlier Run ok span, once', () => {
-    // ARRANGE
-    const ctx = finishedRun();
-    const earlier = spans(ctx).find((s) => s.type === 'job');
-    // ACT
-    const first = run(ctx, 'reuse', 'write-dossier');
-    const second = run(ctx, 'reuse', 'write-dossier');
-    // ASSERT
-    const reused = spans(ctx).filter((s) => s.type === 'job' && s.status === 'reused');
-    expect(first).toEqual({ ok: true, output: expect.stringContaining('reused') });
-    expect(second).toEqual({ ok: true, output: expect.stringContaining('already') });
-    expect(reused).toHaveLength(1);
-    expect(reused[0]).toEqual(
-      expect.objectContaining({
-        job: 'write-dossier',
-        link_span_id: earlier?.span_id,
-        link_trace_id: earlier?.trace_id,
-      }),
-    );
-    expect(reused[0]?.trace_id).not.toBe(earlier?.trace_id);
-  });
-
-  it('refuses when no earlier Run has an ok span of that Job', () => {
-    // ARRANGE
-    const ctx = begun();
-    const before = lines(ctx).length;
-    // ACT
-    const result = run(ctx, 'reuse', 'write-dossier');
-    // ASSERT
-    expect(result).toEqual({ ok: false, error: expect.stringContaining('no earlier') });
-    expect(lines(ctx)).toHaveLength(before);
-  });
-});
-
-describe('score ticket', () => {
-  it('puts --ticket on the Score line', () => {
-    // ARRANGE
-    const ctx = begun();
-    run(ctx, 'begin-job', 'write-spec');
-    // ACT
-    run(ctx, 'score', 'write-spec', 'check', 'pass', '--source', 'check:mh', '--ticket', '176');
-    // ASSERT
-    expect(readEpisodeLog(SLUG, ctx.root).folded.scores[0]).toEqual(expect.objectContaining({ ticket: 176 }));
-  });
-
-  it('refuses a ticket that is not a number', () => {
-    // ARRANGE
-    const ctx = begun();
-    run(ctx, 'begin-job', 'write-spec');
-    // ACT
-    const result = run(ctx, 'score', 'write-spec', 'check', 'pass', '--source', 'check:mh', '--ticket', 'x');
-    // ASSERT
-    expect(result).toEqual({ ok: false, error: expect.stringContaining('ticket') });
-  });
-});
-
-describe('orchestrator Job usage', () => {
-  const said = (t: string, id: string, output: number) =>
-    JSON.stringify({
-      type: 'assistant',
-      timestamp: t,
-      message: { id, model: 'opus', usage: { input_tokens: 1, output_tokens: output } },
-    });
-
-  it('measures the orchestrator usage between the Job start and end, laid over the Job by one attrs line', () => {
-    // ARRANGE
-    const ctx = context(
-      [
-        said('2026-10-14T09:00:30Z', 'before-job', 1000),
-        said('2026-10-14T09:01:30Z', 'in-job', 7),
-        said('2026-10-14T09:05:30Z', 'after-job', 1000),
-      ].join('\n'),
-    );
-    writeFileSync(
-      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
-      'status: approved\njobs:\n  - id: write-dossier\n    session: orchestrator\n  - id: a\n',
-    );
-    run(ctx, 'begin-run', '--model', 'opus');
-    run(ctx, 'begin-job', 'write-dossier');
-    // ACT
-    run(ctx, 'end-job', 'write-dossier', 'ok', '--summary', 'done');
-    // ASSERT
-    const job = spans(ctx).find((s) => s.type === 'job');
-    expect(job).toEqual(
-      expect.objectContaining({
-        status: 'ok',
-        summary: 'done',
-        source: 'measured',
-        'gen_ai.usage.input_tokens': 1,
-        'gen_ai.usage.output_tokens': 7,
-      }),
-    );
-  });
-
-  it('appends an attrs line, never a second end, and records the skills the orchestrator invoked in the window', () => {
-    // ARRANGE
-    const skill = (t: string, name: string) =>
-      JSON.stringify({
-        type: 'assistant',
-        timestamp: t,
-        message: { id: `sk-${name}`, content: [{ type: 'tool_use', name: 'Skill', input: { skill: name } }] },
-      });
-    const ctx = context(
-      [
-        skill('2026-10-14T09:00:30Z', 'before-job'),
-        skill('2026-10-14T09:01:30Z', 'grilling'),
-        said('2026-10-14T09:01:40Z', 'in-job', 7),
-      ].join('\n'),
-    );
-    writeFileSync(
-      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
-      'status: approved\njobs:\n  - id: write-dossier\n    session: orchestrator\n  - id: a\n',
-    );
-    run(ctx, 'begin-run', '--model', 'opus');
-    run(ctx, 'begin-job', 'write-dossier');
-    // ACT
-    run(ctx, 'end-job', 'write-dossier', 'ok', '--summary', 'done');
-    // ASSERT
-    const lines = readFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'events.jsonl'), 'utf8')
-      .trim()
-      .split('\n')
-      .map((l) => JSON.parse(l));
-    const ofJob = lines.filter((l) => l.span_id === spans(ctx).find((s) => s.type === 'job')?.span_id);
-    expect(ofJob.map((l) => l.kind)).toEqual(['start', 'end', 'attrs']);
-    expect(spans(ctx).find((s) => s.type === 'job')).toMatchObject({ status: 'ok', skills_invoked: ['grilling'] });
-  });
 
   it('leaves a subagent Job without usage', () => {
     // ARRANGE
@@ -762,59 +875,6 @@ describe('orchestrator Job usage', () => {
     // ASSERT
     expect(spans(ctx).find((s) => s.type === 'job')?.['gen_ai.usage.output_tokens']).toBeUndefined();
   });
-});
-
-describe('agent spans', () => {
-  const attempted = (): RunContext => {
-    const ctx = begun();
-    run(ctx, 'begin-job', 'a');
-    run(ctx, 'begin-attempt', 'a');
-    return ctx;
-  };
-  const agents = (ctx: RunContext) => spans(ctx).filter((s) => s.type === 'agent');
-
-  it('begins a typed agent span under the open Attempt, named by its description', () => {
-    // ARRANGE
-    const ctx = attempted();
-    // ACT
-    const result = run(ctx, 'begin-agent', 'a#1/implementor/#7', '--harness', 'copilot');
-    // ASSERT
-    expect(result).toEqual({ ok: true, output: expect.any(String) });
-    const attempt = spans(ctx).find((s) => s.type === 'attempt');
-    expect(agents(ctx)).toEqual([
-      expect.objectContaining({
-        name: 'a#1/implementor/#7',
-        job: 'a',
-        attempt: 1,
-        role: 'implementor',
-        ticket: 7,
-        status: 'running',
-        parent_span_id: attempt?.span_id,
-        source: 'typed',
-      }),
-    ]);
-  });
-
-  it('ends the agent span with the status given', () => {
-    // ARRANGE
-    const ctx = attempted();
-    run(ctx, 'begin-agent', 'a#1/implementor');
-    // ACT
-    const result = run(ctx, 'end-agent', 'a#1/implementor');
-    // ASSERT
-    expect(result.ok).toBe(true);
-    expect(agents(ctx).map((s) => s.status)).toEqual(['ok']);
-  });
-
-  it('records a refused spawn as end-agent refused', () => {
-    // ARRANGE
-    const ctx = attempted();
-    run(ctx, 'begin-agent', 'a#1/reviewer');
-    // ACT
-    run(ctx, 'end-agent', 'a#1/reviewer', 'refused');
-    // ASSERT
-    expect(agents(ctx).map((s) => s.status)).toEqual(['refused']);
-  });
 
   it('does not open a second span for a description already open', () => {
     // ARRANGE
@@ -824,57 +884,6 @@ describe('agent spans', () => {
     run(ctx, 'begin-agent', 'a#1/implementor');
     // ASSERT
     expect(agents(ctx)).toHaveLength(1);
-  });
-
-  it('refuses a description that does not parse, and an Attempt that is not open', () => {
-    // ARRANGE
-    const ctx = attempted();
-    // ACT
-    const bad = run(ctx, 'begin-agent', 'implementor');
-    const none = run(ctx, 'begin-agent', 'a#2/implementor');
-    const unknown = run(ctx, 'end-agent', 'a#1/ghost');
-    // ASSERT
-    expect(bad).toEqual({ ok: false, error: expect.stringContaining('<job>#<n>/<role>') });
-    expect(none).toEqual({ ok: false, error: expect.stringContaining('no open Attempt a#2') });
-    expect(unknown).toEqual({ ok: false, error: expect.stringContaining('no agent span "a#1/ghost"') });
-  });
-});
-
-describe('run servers', () => {
-  const TEMPLATE =
-    'status: draft\nstages: [brief]\njobs:\n  - id: brief-grill\n    stage: brief\n    outputs: [docs/episodes/<slug>/brief.md]\n';
-
-  /** A worktree with the template and no pipeline yet; ports 4000 and 4001 are taken. */
-  function served(taken: readonly number[] = [4000, 4001]) {
-    const ctx = context();
-    rmSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'));
-    mkdirSync(path.join(ctx.root, 'skills/new-episode/assets'), { recursive: true });
-    writeFileSync(path.join(ctx.root, 'skills/new-episode/assets/pipeline.yml'), TEMPLATE);
-    const started: { dev: number; spec: number }[] = [];
-    const stopped: string[] = [];
-    const withHost: RunContext = {
-      ...ctx,
-      servers: {
-        isFree: (port) => !taken.includes(port),
-        start: (_root, _slug, ports) => void started.push(ports),
-        stop: (root) => void stopped.push(root),
-      },
-    };
-    return { ctx: withHost, started, stopped };
-  }
-  const pipelineOf = (ctx: RunContext) =>
-    readFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'), 'utf8');
-
-  it('writes the draft pipeline with the template sha, the slug and both ports, then starts both servers', () => {
-    // ARRANGE
-    const { ctx, started } = served();
-    // ACT
-    const result = run(ctx, 'begin-run', '--model', 'opus');
-    // ASSERT
-    expect(result.ok).toBe(true);
-    expect(pipelineOf(ctx)).toContain('status: draft\ntemplate: abc1234\ndev_port: 4002\nspec_port: 4003\n');
-    expect(pipelineOf(ctx)).toContain('docs/episodes/demo/brief.md');
-    expect(started).toEqual([{ dev: 4002, spec: 4003 }]);
   });
 
   it('skips the dashboard port when it picks the pair', () => {
@@ -890,24 +899,13 @@ describe('run servers', () => {
   it('keeps a pipeline that exists and starts the servers on its ports', () => {
     // ARRANGE
     const { ctx, started } = served();
-    writeFileSync(
-      path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'),
-      'status: draft\ndev_port: 4010\nspec_port: 4011\njobs: []\n',
-    );
+    const declared = { dev: 4010, spec: 4011 };
+    const existing = `status: draft\ndev_port: ${declared.dev}\nspec_port: ${declared.spec}\njobs: []\n`;
+    writeFileSync(path.join(ctx.root, 'docs/episodes', SLUG, 'pipeline.yml'), existing);
     // ACT
     run(ctx, 'begin-run', '--model', 'opus');
     // ASSERT
-    expect(pipelineOf(ctx)).toBe('status: draft\ndev_port: 4010\nspec_port: 4011\njobs: []\n');
-    expect(started).toEqual([{ dev: 4010, spec: 4011 }]);
-  });
-
-  it('stops both servers when the Run ends', () => {
-    // ARRANGE
-    const { ctx, stopped } = served();
-    run(ctx, 'begin-run', '--model', 'opus');
-    // ACT
-    run(ctx, 'end-run');
-    // ASSERT
-    expect(stopped).toEqual([ctx.root]);
+    expect(pipelineOf(ctx)).toBe(existing);
+    expect(started).toEqual([declared]);
   });
 });

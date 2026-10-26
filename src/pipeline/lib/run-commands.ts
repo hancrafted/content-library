@@ -6,28 +6,15 @@
 // clock, ids, git and the transcript lookup are injectable.
 import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import {
-  archiveEpisodeLog,
-  episodeLogPath,
-  readEpisodeLog,
-  readMarker,
-} from '../../../src/pipeline/lib/episode-run-log.ts';
-import { declaredJobs } from '../../../src/pipeline/lib/episode-status.ts';
-import { type LogEvent, type Status } from '../../../src/pipeline/lib/run-log.pure.ts';
-import {
-  hasEnded,
-  isOpen,
-  latest,
-  openAgentsOf,
-  openSpan,
-  openUnderRun,
-  scoreTarget,
-} from '../../../src/pipeline/lib/run-spans.pure.ts';
+import { archiveEpisodeLog, episodeLogPath, readEpisodeLog, readMarker } from './episode-run-log.ts';
+import { declaredJobs } from './episode-status.ts';
 import { beginAgent, endAgent } from './run-agent-commands.ts';
 import { endEvent, need, parseRunArgs, refuse, viaOf, type Opts, type Params } from './run-args.pure.ts';
 import { USAGE } from './run-help.pure.ts';
+import { type LogEvent, type Status } from './run-log.pure.ts';
 import { endMarker, liveMarker, recordJobUsage } from './run-marker.ts';
 import { note } from './run-note-command.ts';
+import { hasEnded, isOpen, latest, openAgentsOf, openSpan, openUnderRun, scoreTarget } from './run-spans.pure.ts';
 import { openView, pointAt, resume, resuming, sessionOf, viewOf, write, type RunContext } from './run-view.ts';
 import { serversNote } from './servers.ts';
 

@@ -1,5 +1,5 @@
 // The active-run marker: `.scratch/active-run`, JSON written at run start and removed at run end. It says which Run
-// is live and which session orchestrates it. Pure: `skills/new-episode/scripts/run-marker.ts` writes it, and the run-log module (episode-run-log.ts) reads it
+// is live and which session orchestrates it. Pure: `run-marker.ts` writes it, and the run-log module (episode-run-log.ts) reads it
 // from disk and derives liveness from it.
 
 /** Where the marker sits, relative to the worktree root. */

@@ -17,23 +17,35 @@ description: "The architecture map read first: tiers and import direction, the m
 
 An agent opening this repo meets five Episode-shaped records, each deep on one concern. None says which module is which or how the parts meet, so an agent guesses, and guesses grow a shared Slide type, a second container or an Episode-local `parts/` folder. This record is the map: shape and ownership only. Each detailed rule lives with the record that owns its area — the Episode page rules (`episodes/`, `slide-master/`, `slide-shared/`), the import boundary (all of `src/`), the server/client boundary (`*.client.tsx`, hooks), the Slide wrapper rules (`episode-page/`, `slide-master/`) and the Context drawer rules (`context-drawer/`); on conflict, that owner wins.
 
-**Tiers.** Folders are tiers; imports only point down.
+**Layers and tiers.** Imports only point down; inside a layer, `components/ → hooks/ → lib/`.
 
 ```mermaid
 flowchart TD
-  app["src/app — routes"] --> pages["src/page-assembly — page templates, one folder each"]
-  pages --> area["src/episodes — Episodes area: content folders, then components/ hooks/ lib/ tiers"]
-  pages --> events["src/events — Events and their Playlists"]
-  pages --> explain["src/explorable-explanations"]
-  pages --> pipeline["src/pipeline — content pipeline, Run log, dashboard"]
-  pages --> chrome["src/shared/page-chrome — header, footer bar, toggles, contents, drawer"]
-  area --> store["src/content-store — records, refusals, catalogue"]
+  app["src/app — routes, one template each"] --> tpl
+  subgraph pa["src/page-assembly — flat"]
+    tpl["a folder per template — landing, events-overview, event, episode-overview, episode, dashboard, sitemap"] --> palib["lib/ — page metadata, JSON-LD"]
+    merge["translations.ts — merges every owner's i18n/"]
+  end
+  tpl --> episodes["src/episodes — content: ep/ by-event/ slide-pool/ tooling/; code: components/ hooks/ lib/"]
+  tpl --> events["src/events — Events, Playlists: components/ lib/"]
+  tpl --> explain["src/explorable-explanations — one folder each"]
+  tpl --> pipeline["src/pipeline — pipeline, Run log, dashboard"]
+  tpl --> chrome["src/shared/page-chrome — header, footer bar, toggles, contents, drawer"]
+  episodes -- "a Slide shows one" --> explain
+  episodes -- "the container" --> chrome
+  tpl --> store["src/content-store — records, refusals, catalogue/"]
+  app -. "static params" .-> store
+  episodes --> store
   events --> store
-  store --> shared["src/shared — domain-free: components/ hooks/ lib/ tiers"]
+  store -- "Episode metadata only" --> episodes
+  store --> shared["src/shared — domain-free: components/ hooks/ lib/ i18n/ design-system/"]
   explain --> shared
   pipeline --> shared
   chrome --> shared
+  tools["skills/, tools/ — entry points"] -. "an area's lib/, the store's entry" .-> pipeline
 ```
+
+Two areas meet only in a template, which hands one's parts to the other as props: the Event template passes Episode cards to the Playlist list.
 
 **The Episodes area.** `src/episodes/` keeps content (`<ep>/`, `by-event/`, `slide-pool/`, `tooling/`) apart from code (`components/`, `lib/`, `hooks/`); no Episode slug takes one of these names.
 
@@ -194,6 +206,7 @@ For this project the map matters because handoffs run on agents with no session 
 ## References
 
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Slide, Scene, Page chrome.
+- [`docs/adr/0017-source-tree-follows-the-product.md`](../../docs/adr/0017-source-tree-follows-the-product.md) — why the tree follows the product.
 - [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.
 - [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.

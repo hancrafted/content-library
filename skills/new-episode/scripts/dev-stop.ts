@@ -1,6 +1,6 @@
 // `npm run dev-stop -- <port>`: stops the server this worktree's Run started on <port> (its pid file under
 // `.scratch/<slug>/servers/`), and nothing else.
-import { stopServers } from './servers.ts';
+import { stopServers } from '../../../src/pipeline/lib/servers.ts';
 
 const port = Number(process.argv[2]);
 if (!Number.isInteger(port)) {

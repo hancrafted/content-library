@@ -4,12 +4,12 @@
 import { globSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { runUsageEvent } from '../../../src/pipeline/lib/claude-adapter.pure.ts';
-import { episodeLogPath, readMarker } from '../../../src/pipeline/lib/episode-run-log.ts';
-import { MARKER_PATH, sessionsOf, type Marker } from '../../../src/pipeline/lib/marker.pure.ts';
-import { appendEvent, type WriterDeps } from '../../../src/pipeline/lib/run-log-writer.ts';
-import type { RunLogLine } from '../../../src/pipeline/lib/run-log.pure.ts';
-import { jobFactsEvent } from '../../../src/pipeline/lib/usage-window.pure.ts';
+import { runUsageEvent } from './claude-adapter.pure.ts';
+import { episodeLogPath, readMarker } from './episode-run-log.ts';
+import { MARKER_PATH, sessionsOf, type Marker } from './marker.pure.ts';
+import { appendEvent, type WriterDeps } from './run-log-writer.ts';
+import type { RunLogLine } from './run-log.pure.ts';
+import { jobFactsEvent } from './usage-window.pure.ts';
 
 /** Where the marker lives and what its end-of-Run step reads from outside. */
 export interface MarkerHome {
