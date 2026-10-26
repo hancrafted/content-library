@@ -75,7 +75,7 @@ const HANDLERS: Handlers = {
   close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null }),
   slots: (state, { values }) => ({ ...state, slotValues: values }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
-  restore: (state, { results, teaching }) => ({ ...state, slotValues: results, teaching }),
+  restore: (state, { results, teaching }) => ({ ...state, slotValues: results, teaching, uploadProblems: [] }),
   'upload-failed': (state, { problems }) => ({ ...state, uploadProblems: problems }),
 };
 

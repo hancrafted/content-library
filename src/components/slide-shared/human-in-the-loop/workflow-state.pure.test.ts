@@ -27,6 +27,15 @@ describe('success cases', () => {
     expect(state.teaching).toBe(saved.teaching);
   });
 
+  it('takes back an uploaded progress file over the problems of an earlier refusal', () => {
+    // ARRANGE
+    const refused = reduce(createState(start), { type: 'upload-failed', problems: ['no'] });
+    // ACT
+    const state = reduce(refused, { type: 'restore', results: { 'a.b': 'x' }, teaching: true });
+    // ASSERT
+    expect(state.uploadProblems).toEqual([]);
+  });
+
   it('forgets the pasted values when another Workflow is shown', () => {
     // ARRANGE
     const filled = reduce(createState(start), { type: 'slots', values: { spec: 'S' } });

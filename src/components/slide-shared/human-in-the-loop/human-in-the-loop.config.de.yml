@@ -27,6 +27,11 @@ ui:
   contextTip: 'Hilfe: zeigt, was in jedem Schritt zu tun ist'
   download: Diesen Ablauf herunterladen
   upload: Eigenen Ablauf hochladen
+  progressSave: 'Fortschritt in eine Datei sichern'
+  progressLoad: 'Fortschritt aus einer Datei laden'
+  refuseUnreadable: 'Diese Datei ist keine Fortschrittsdatei.'
+  refuseOtherWorkflow: 'Diese Datei enthält den Fortschritt eines anderen Ablaufs, nicht von {workflow}.'
+  refuseChanged: '{workflow} hat sich geändert, seit diese Datei erstellt wurde, daher passt ihr Fortschritt nicht.'
   noteStale: 'Dieser Ablauf hat sich geändert, seit dein Fortschritt gespeichert wurde, daher beginnst du neu. Dein alter Fortschritt bleibt erhalten, bis du entscheidest.'
   noteUnsaved: 'Dein Fortschritt konnte in diesem Browser nicht gespeichert werden. Lade ihn herunter, um ihn zu behalten.'
   downloadProgress: Fortschritt herunterladen
