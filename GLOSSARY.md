@@ -123,7 +123,7 @@ _Avoid_: Background
 **Foreground**: the primary layer of a Scene, inset so it never sits under the table of contents or the Context drawer. A Slide with no Backdrop is just a Foreground.
 _Avoid_: Content, front layer
 
-**Page chrome**: the parts around a page's content that any page may carry: the site header with its language and theme toggles, the table of contents and the Context drawer, in `src/shared/page-chrome/`. It knows nothing of the domain and takes what it needs as props; page assembly and the Episode page container place it. On an Episode page the table of contents and the Context drawer float over the Slides with the talk player, which stays in Episodes with the video it plays, and take no layout space.
+**Page chrome**: the parts around a page's content that any page may carry: the site header with its language and theme toggles, the footer bar, the table of contents and the Context drawer, in `src/shared/page-chrome/`. It knows nothing of the domain and takes what it needs as props; page assembly and the Episode page container place it. On an Episode page the table of contents and the Context drawer float over the Slides with the talk player, which stays in Episodes with the video it plays, and take no layout space.
 _Avoid_: Chrome, furniture, overlay
 
 **Speaker notes**: a Slide's short list of talking points, each a Speaker note item.

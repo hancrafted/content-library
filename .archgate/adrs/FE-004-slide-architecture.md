@@ -26,7 +26,7 @@ flowchart TD
   pages --> events["src/events — Events and their Playlists"]
   pages --> explain["src/explorable-explanations"]
   pages --> pipeline["src/pipeline — content pipeline, Run log, dashboard"]
-  pages --> chrome["src/shared/page-chrome — header, toggles, contents, drawer"]
+  pages --> chrome["src/shared/page-chrome — header, footer bar, toggles, contents, drawer"]
   area --> store["src/content-store — records, refusals, catalogue"]
   events --> store
   store --> shared["src/shared — domain-free: components/ hooks/ lib/ tiers"]

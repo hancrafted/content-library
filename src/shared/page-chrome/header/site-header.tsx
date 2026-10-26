@@ -7,7 +7,7 @@ import { ROUTES } from '@/shared/lib/routes';
 import { HeaderMenu } from '@/shared/page-chrome/header/header-menu.client';
 import { NavLink } from '@/shared/page-chrome/header/nav-link.client';
 import { SiteBrand } from '@/shared/page-chrome/header/site-brand';
-import { SocialLinks } from '@/shared/page-chrome/header/social-links';
+import { SocialLinks } from '@/shared/page-chrome/social-links';
 import { LocaleToggle } from '@/shared/page-chrome/toggles/locale-toggle.client';
 import { ThemeToggle } from '@/shared/page-chrome/toggles/theme-toggle.client';
 import { ArrowUpRight } from 'lucide-react';

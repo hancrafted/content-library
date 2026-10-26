@@ -3,7 +3,7 @@ import caseStyles from '@/page-assembly/landing/fieldnote-case.module.css';
 import { FieldnoteSketch } from '@/page-assembly/landing/fieldnote-sketch';
 import styles from '@/page-assembly/landing/fieldnotes.module.css';
 import type { Locale } from '@/shared/lib/locale.pure';
-import { SocialLinks } from '@/shared/page-chrome/header/social-links';
+import { SocialLinks } from '@/shared/page-chrome/social-links';
 import { ArrowDown, Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 

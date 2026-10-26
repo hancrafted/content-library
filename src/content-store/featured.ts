@@ -14,8 +14,8 @@ export const FEATURED = [
   'ai-gives-you-more-work',
 ] as const satisfies readonly [EpisodeId, EpisodeId, EpisodeId];
 
-/** How many slots Featured fills. */
-const SLOTS = 3;
+/** How many slots Featured fills: the tuple's length, which the type above fixes. */
+const SLOTS = FEATURED.length;
 
 /** Why one slot cannot be Featured, or nothing: it names a published public Episode. */
 function slotRefusal(id: string, episodes: ReadonlyMap<string, LoadedEpisode>): string | undefined {

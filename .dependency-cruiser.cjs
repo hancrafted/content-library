@@ -126,7 +126,7 @@ module.exports = {
       name: 'page-chrome-reached-only-from-page-assembly-or-container',
       severity: 'error',
       comment:
-        'Page chrome (src/shared/page-chrome/: header, toggles, table of contents, Context drawer) is reached from page assembly or the Episode page container, plus SiteShell from the root layouts. No product area part, store module or other shared module imports it; what it needs from the domain arrives as props (FE-004, FE-007).',
+        'Page chrome (src/shared/page-chrome/: header, footer bar, toggles, table of contents, Context drawer) is reached from page assembly or the Episode page container, plus SiteShell from the root layouts. No product area part, store module or other shared module imports it; what it needs from the domain arrives as props (FE-004, FE-007).',
       from: {
         pathNot: [
           PAGE_CHROME,
