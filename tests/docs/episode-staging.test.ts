@@ -75,14 +75,14 @@ function namesEndingIn(folder: string, suffix: string): string[] {
  * `.module.css`. The folder is empty today, so `motions` is too.
  */
 function knownVisuals(): KnownVisuals {
-  const masterSlides = readdirSync(path.join(ROOT, 'src/components/episodes/slide-master/slides'), {
+  const masterSlides = readdirSync(path.join(ROOT, 'src/episodes/tooling/slide-master/slides'), {
     withFileTypes: true,
   })
     .filter((entry) => entry.isDirectory())
     .map(({ name }) => name);
   return {
-    masters: [...namesEndingIn(path.join(ROOT, 'src/components/slide-master'), '-slide.tsx'), ...masterSlides],
-    motions: namesEndingIn(path.join(ROOT, 'src/components/slide-shared/motions'), '.module.css'),
+    masters: [...namesEndingIn(path.join(ROOT, 'src/episodes/components/slide-master'), '-slide.tsx'), ...masterSlides],
+    motions: namesEndingIn(path.join(ROOT, 'src/episodes/components/slide-shared/motions'), '.module.css'),
   };
 }
 

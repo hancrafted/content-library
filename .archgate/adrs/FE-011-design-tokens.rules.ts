@@ -9,10 +9,7 @@ const LEGACY_FILE = 'src/design-system/legacy.json';
 const GLOBALS = 'src/app/globals.css';
 // Every Slide token file, an Event's copy's under `episodes/by-event/<event>/<ep>/` and a pool Slide's under
 // `episodes/slide-pool/<slide>/` too.
-const SLIDE_MODULE_GLOBS = [
-  'src/components/episodes/**/slides/**/*.module.css',
-  'src/components/episodes/slide-pool/**/*.module.css',
-];
+const SLIDE_MODULE_GLOBS = ['src/episodes/**/slides/**/*.module.css', 'src/episodes/slide-pool/**/*.module.css'];
 // The one token file outside a Slide folder: the token editor's panel keeps a fixed palette so it survives edits to the
 // site tokens it edits. It may hold raw colours (A1) and must pair them with :global(.dark) values (A4); unlike a Slide
 // token file it redeclares global names on purpose (so A3 does not apply). Adding a file here needs an ADR amendment.
@@ -26,7 +23,7 @@ const TEST_FILE_RE = /\.(?:test|spec)\.tsx?$/;
 // FE-011 §3.5: two relative sizes stay allowed, one file each.
 const RELATIVE_SIZE_ALLOWED: Record<string, string> = {
   'src/components/context-drawer/slide-notes.tsx': '0.7em',
-  'src/components/slide-master/rich-tags.tsx': '0.9em',
+  'src/episodes/components/slide-master/rich-tags.tsx': '0.9em',
 };
 
 // A hex colour has 3, 4, 6 or 8 digits. "Invoice #0042" has four, so a bare hex is never enough: it must sit where a

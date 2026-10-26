@@ -4,8 +4,8 @@ id: FE-009
 title: 'Slide Wrapper and Scene'
 domain: frontend
 rules: false
-files: ['src/components/{episode*,slide-master}/**', 'src/hooks/**', 'src/lib/{slide-zone,reading-line}.pure*.ts']
-paths: ['src/components/{episode*,slide-master}/**', 'src/hooks/**', 'src/lib/{slide-zone,reading-line}.pure*.ts']
+files: ['src/episodes/**', 'src/hooks/**', 'src/lib/reading-line.pure*.ts']
+paths: ['src/episodes/**', 'src/hooks/**', 'src/lib/reading-line.pure*.ts']
 description: 'Wrapper owns mechanics, Scene owns creativity in two layers (Backdrop and Foreground): a full-width single-column Content area that owns the insets, an isolating server Slide wrapper that never clips, a client SlideMount that drops far content, one observer with two thresholds, a stacking ladder, and a pause duty for looping animation.'
 ---
 

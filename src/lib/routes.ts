@@ -1,8 +1,7 @@
-import { episodeRefOf } from './episode-id.pure';
-import { EPISODE_IDS } from './episode-registry.generated';
+import { episodeRefOf } from '@/episodes/lib/episode-id.pure';
+import { EPISODE_IDS, TOOLING_SLUGS } from './episode-registry.generated';
 import { EVENT_SLUGS } from './event-registry.generated';
 import { LOCALES, localizePath, type Locale } from './locale.pure';
-import { isToolingSlug, TOOLING_SLUGS, type ToolingSlug } from './tooling-pages';
 
 /** Locale-neutral logical paths. Turn one into a URL with `localizePath`. */
 export const ROUTES = {
@@ -18,7 +17,7 @@ export const LEGACY_EPISODE_PREFIX = '/episode';
 
 /**
  * Every Episode with a page, public or unlisted, by its Episode id (GLOSSARY): one folder each,
- * `src/components/episodes/<slug>/`, or `…/by-event/<event-slug>/<slug>/` for an Event's copy, whose id is
+ * `src/episodes/<slug>/`, or `…/by-event/<event-slug>/<slug>/` for an Event's copy, whose id is
  * `<event-slug>__<slug>`. Listed by the generated Episode registry. Which of them has an `/episodes/` page is the page
  * catalogue's (`treatmentOf` in the content store): an Event's copy lives only under its Event. The tooling pages
  * served beside them are no Episodes: `TOOLING_SLUGS`.
@@ -29,6 +28,19 @@ export type EpisodeId = (typeof EPISODE_IDS)[number];
 
 export function isEpisodeId(id: string): id is EpisodeId {
   return (EPISODE_IDS as readonly string[]).includes(id);
+}
+
+/**
+ * Tooling pages: authoring benches served at `/episodes/<slug>/` beside the Episodes, but no Episode (design-ADR
+ * 0016 decision 12), one folder each, `src/episodes/tooling/<slug>/`, listed by the generated registry. They have no
+ * visibility and no status, are `noindex`, self-canonical and never in the sitemap, and no Episode list shows them.
+ */
+export { TOOLING_SLUGS };
+
+export type ToolingSlug = (typeof TOOLING_SLUGS)[number];
+
+export function isToolingSlug(slug: string): slug is ToolingSlug {
+  return (TOOLING_SLUGS as readonly string[]).includes(slug);
 }
 
 /**

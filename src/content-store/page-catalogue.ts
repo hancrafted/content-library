@@ -1,13 +1,13 @@
-import { episodeRefOf, matchEpisode } from '@/lib/episode-id.pure';
+import { episodeRefOf, matchEpisode } from '@/episodes/lib/episode-id.pure';
 import {
   isEpisodeId,
   matchPage,
+  TOOLING_SLUGS,
   type EpisodeId,
   type EpisodesPathSlug,
   type EventSlug,
   type PageRef,
 } from '@/lib/routes';
-import { TOOLING_SLUGS } from '@/lib/tooling-pages';
 import {
   episodePageTreatment,
   pageTreatment,

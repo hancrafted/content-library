@@ -1,5 +1,5 @@
 // Unlisted Episodes (design-ADR 0016, Routes and visibility): an Episode made for one Event lives only under that
-// Event. It is never in the sitemap, the Episode overview or an Upcoming list, has no /episodes/ page, and its page
+// Event. It is never in the sitemap, the Episode browser or an Upcoming list, has no /episodes/ page, and its page
 // under the Event tells search engines not to index it. Once its recording is uploaded, an unlisted Episode plays it
 // on both locale pages, labelled with the language spoken. Every unlisted Episode an Event's Playlist lists is checked.
 
@@ -54,7 +54,7 @@ function cardLinks(url: string): string[] {
 }
 
 describe('unlisted Episodes stay out of every list', () => {
-  it('An unlisted Episode never shows in the sitemap, the Episode overview or an Upcoming list.', () => {
+  it('An unlisted Episode never shows in the sitemap, the Episode browser or an Upcoming list.', () => {
     // ARRANGE
     const sitemap = readFileSync(join(OUT_DIR, 'sitemap.xml'), 'utf8');
     const lists = LOCALES.flatMap((locale) => [localizePath(ROUTES.episodes, locale), localizePath('/', locale)]);

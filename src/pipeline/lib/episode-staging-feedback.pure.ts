@@ -5,7 +5,7 @@
  * the file's frontmatter and h1; the items sit inside a list, where it cannot see.
  */
 
-import { TITLE_ANCHOR } from '../../lib/episode.pure';
+import { TITLE_ANCHOR } from '../../lib/title-anchor.pure';
 import { BRIEF_KEYS } from './episode-spec-brief.pure';
 import { unless, type Finding } from './finding.pure';
 import { frontmatterField } from './staging-file.pure';

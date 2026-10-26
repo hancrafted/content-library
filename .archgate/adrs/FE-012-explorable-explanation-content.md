@@ -4,8 +4,8 @@ id: FE-012
 title: 'Explorable Explanation Content'
 domain: frontend
 rules: false
-files: ['src/explorable-explanations/**', 'src/components/slide-shared/**']
-paths: ['src/explorable-explanations/**', 'src/components/slide-shared/**']
+files: ['src/explorable-explanations/**', 'src/episodes/components/slide-shared/**']
+paths: ['src/explorable-explanations/**', 'src/episodes/components/slide-shared/**']
 description: 'An Explorable explanation may own one locale pair of data and default words in its own folder, picked by the path locale at build time; every Slide that shows it overrides any default word by props, and a plain slide-shared part still owns no words.'
 ---
 

@@ -2,7 +2,7 @@ import type { TagId } from '../content-store/schemas/fields';
 import type { EpisodeId } from './routes';
 
 /*
- * The Episode overview's central lists: the look each Tag gives its Episodes,
+ * The Episode browser's central lists: the look each Tag gives its Episodes,
  * and the Featured slots. The vocabularies an Episode's metadata picks from
  * (Tag ids, formats) live in the content store's `schemas/fields.ts`; everything
  * else about an Episode lives in its own folder

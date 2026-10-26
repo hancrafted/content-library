@@ -23,31 +23,31 @@ const RULES = [
 ];
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
-const POOL = 'src/components/episodes/slide-pool';
-const EPISODE = 'src/components/episodes/probe';
+const POOL = 'src/episodes/slide-pool';
+const EPISODE = 'src/episodes/probe';
 /** An Event's copy, one folder deeper: the alias reaches the pool from any depth. */
-const COPY = 'src/components/episodes/by-event/2026-01-01-probe/probe';
-const POOLED = '@/components/episodes/slide-pool/pooled/slide';
+const COPY = 'src/episodes/by-event/2026-01-01-probe/probe';
+const POOLED = '@/episodes/slide-pool/pooled/slide';
 
 /** Each probe file and what it imports, relative to the probe tree's root. */
 const PROBES: Readonly<Record<string, string>> = {
   'tsconfig.json': JSON.stringify({ compilerOptions: { baseUrl: '.', paths: { '@/*': ['./src/*'] } } }),
-  'src/components/slide-master/slide.ts': 'export const slide = 1;',
+  'src/episodes/components/slide-master/slide.ts': 'export const slide = 1;',
   'src/hooks/use-probe.ts': 'export const useProbe = 1;',
   [`${POOL}/pooled/part.tsx`]: 'export const part = 1;',
   [`${POOL}/pooled/slide.tsx`]: [
     "import { part } from './part';",
-    "import { slide } from '../../../slide-master/slide';",
+    "import { slide } from '../../components/slide-master/slide';",
     'export const pooled = [part, slide];',
   ].join('\n'),
   [`${POOL}/pooled/widget.client.tsx`]:
-    "import { useProbe } from '../../../../hooks/use-probe';\nexport const w = useProbe;",
+    "import { useProbe } from '../../../hooks/use-probe';\nexport const w = useProbe;",
   [`${POOL}/other/slide.tsx`]: 'export const other = 1;',
   [`${POOL}/pooled/reaches-other-pool-slide.tsx`]: "import { other } from '../other/slide';\nexport const x = other;",
   [`${POOL}/pooled/reaches-episode-slide.tsx`]:
     "import { own } from '../../probe/slides/own/slide';\nexport const x = own;",
   [`${POOL}/pooled/reaches-master.client.tsx`]:
-    "import { slide } from '../../../slide-master/slide';\nexport const x = slide;",
+    "import { slide } from '../../components/slide-master/slide';\nexport const x = slide;",
   [`${EPISODE}/slides/opener/slide.tsx`]: 'export const opener = 1;',
   [`${EPISODE}/slides/own/slide.tsx`]: 'export const own = 1;',
   [`${EPISODE}/slides/own/reaches-pool.tsx`]: `import { pooled } from '${POOLED}';\nexport const x = pooled;`,
@@ -70,7 +70,7 @@ let output: IReporterOutput;
 function violations(): string[] {
   if (typeof output.output === 'string') throw new Error('dependency-cruiser returned a report, not a result.');
   return output.output.summary.violations
-    .map(({ rule, from, to }) => `${rule.name}: ${from.replace('src/components/episodes/', '')} -> ${to}`)
+    .map(({ rule, from, to }) => `${rule.name}: ${from.replace('src/episodes/', '')} -> ${to}`)
     .sort();
 }
 
@@ -122,14 +122,14 @@ describe('failure cases', () => {
   it('refuses a pool Slide as a Title slide or a section slide, reached by a relative path, or from another Slide', () => {
     // ARRANGE
     const expected = [
-      'section-reaches-pool-by-alias: probe/sections/relative.ts -> src/components/episodes/slide-pool/pooled/slide.tsx',
-      'section-slide-never-from-pool: probe/sections/pooled.ts -> src/components/episodes/slide-pool/pooled/slide.tsx',
-      'slide-client-reaches-only-hooks-and-lib: slide-pool/pooled/reaches-master.client.tsx -> src/components/slide-master/slide.ts',
-      'slide-folder-reaches-only-own-and-shared: probe/slides/own/reaches-pool.tsx -> src/components/episodes/slide-pool/pooled/slide.tsx',
-      'slide-folder-reaches-only-own-and-shared: slide-pool/pooled/reaches-episode-slide.tsx -> src/components/episodes/probe/slides/own/slide.tsx',
-      'slide-folder-reaches-only-own-and-shared: slide-pool/pooled/reaches-other-pool-slide.tsx -> src/components/episodes/slide-pool/other/slide.tsx',
-      'slide-pool-reached-only-from-sections: probe/episode.ts -> src/components/episodes/slide-pool/pooled/slide.tsx',
-      'slide-pool-reached-only-from-sections: probe/slides/own/reaches-pool.tsx -> src/components/episodes/slide-pool/pooled/slide.tsx',
+      'section-reaches-pool-by-alias: probe/sections/relative.ts -> src/episodes/slide-pool/pooled/slide.tsx',
+      'section-slide-never-from-pool: probe/sections/pooled.ts -> src/episodes/slide-pool/pooled/slide.tsx',
+      'slide-client-reaches-only-hooks-and-lib: slide-pool/pooled/reaches-master.client.tsx -> src/episodes/components/slide-master/slide.ts',
+      'slide-folder-reaches-only-own-and-shared: probe/slides/own/reaches-pool.tsx -> src/episodes/slide-pool/pooled/slide.tsx',
+      'slide-folder-reaches-only-own-and-shared: slide-pool/pooled/reaches-episode-slide.tsx -> src/episodes/probe/slides/own/slide.tsx',
+      'slide-folder-reaches-only-own-and-shared: slide-pool/pooled/reaches-other-pool-slide.tsx -> src/episodes/slide-pool/other/slide.tsx',
+      'slide-pool-reached-only-from-sections: probe/episode.ts -> src/episodes/slide-pool/pooled/slide.tsx',
+      'slide-pool-reached-only-from-sections: probe/slides/own/reaches-pool.tsx -> src/episodes/slide-pool/pooled/slide.tsx',
     ];
     // ACT
     const found = violations();
@@ -141,7 +141,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('resolves the alias in the probe tree, so the by-alias rule is not passing over unresolved imports', () => {
     // ARRANGE
-    const resolved = 'src/components/episodes/slide-pool/pooled/slide.tsx';
+    const resolved = 'src/episodes/slide-pool/pooled/slide.tsx';
     // ACT
     const targets =
       typeof output.output === 'string'

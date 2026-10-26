@@ -26,7 +26,7 @@ The Spec holds every Option the designers drew, most of them rejected, and Han's
    - The run log and its `pipeline.yml` are archived to `.logs/new-episode/<slug>/`, a folder the dashboard opens, with the Brief and the Spec as the Run left them: a record of the Run, never a source.
    - The Spec's Options, with each Slide's Visual idea, feedback, designer prompts and cited design references, are filed into `design-archive/<slug>/`.
    - Staging is harvested: lessons, style, Slide library candidates and cleanups are proposed, Han approves them at one gate, and larger refactors are filed as tickets.
-   - `brief.md` moves to `src/components/episodes/<ep>/`, its `status: draft` removed.
+   - `brief.md` moves to `src/episodes/<ep>/`, its `status: draft` removed.
    - Every research file moves to `docs/llm-wiki/research/<category>/` and is listed in `docs/llm-wiki/index.md` under its category's h3, by `npm run episode:promote-research` (amended: it first moved only research a Slide still cites. A Slide cites a source URL, not a research file, and no one judges whether a citation earns its place, so keeping research no longer waits on that judgment. The wiki grows with every Run instead; organizing it is its own problem).
    - The staging folder, the Spec with it, is deleted after the harvest has read it. git history keeps it.
 3. **After Promotion, each Slide has one owner of its words:** its `i18n/<locale>.json`. `episode.ts` and its Section markers own Slide order.

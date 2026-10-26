@@ -31,8 +31,8 @@ const PROBES: Readonly<Record<string, string>> = {
   'src/lib/probe.pure.ts': 'export const probe = 1;',
   'src/content-store/store.ts': 'export const store = 1;',
   'src/content-store/schemas/fields.ts': 'export const fields = 1;',
-  'src/components/episodes/probe/registry.ts': 'export const registry = 1;',
-  'src/components/landing/episode-card.pure.ts': 'export const card = 1;',
+  'src/episodes/lib/registry.ts': 'export const registry = 1;',
+  'src/episodes/components/episode-card/episode-card.pure.ts': 'export const card = 1;',
   'src/episodes/lib/probe.pure.ts': 'export const episode = 1;',
   'src/app/page.tsx': 'export const page = 1;',
   [`${AREA}/lib/probe-event.pure.ts`]: reach(`${AREA}/lib/probe-event.pure.ts`, [
@@ -47,8 +47,8 @@ const PROBES: Readonly<Record<string, string>> = {
     '@/content-store/store',
   ]),
   [`${AREA}/components/reaches-episodes.tsx`]: reach(`${AREA}/components/reaches-episodes.tsx`, [
-    '@/components/episodes/probe/registry',
-    '@/components/landing/episode-card.pure',
+    '@/episodes/lib/registry',
+    '@/episodes/components/episode-card/episode-card.pure',
     '@/episodes/lib/probe.pure',
   ]),
   [`${AREA}/components/reaches-up.tsx`]: reach(`${AREA}/components/reaches-up.tsx`, [
@@ -122,9 +122,9 @@ describe('Events product area', () => {
     const expected = [
       'events-area-reached-only-from-page-assembly: src/components/landing/reaches-events.tsx -> src/events/components/probe-card.tsx',
       'events-area-reached-only-from-page-assembly: src/lib/reaches-events.pure.ts -> src/events/lib/probe-event.pure.ts',
-      'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/components/episodes/probe/registry.ts',
-      'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/components/landing/episode-card.pure.ts',
+      'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.pure.ts',
       'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/lib/probe.pure.ts',
+      'events-area-reaches-only-shared-and-store: src/events/components/reaches-episodes.tsx -> src/episodes/lib/registry.ts',
       'events-area-reaches-only-shared-and-store: src/events/components/reaches-up.tsx -> src/app/page.tsx',
       'events-area-reaches-only-shared-and-store: src/events/components/reaches-up.tsx -> src/page-assembly/event/event-page.tsx',
     ];

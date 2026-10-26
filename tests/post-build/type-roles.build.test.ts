@@ -13,7 +13,9 @@ import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-
 import { cssFiles } from './stylesheets';
 
 /** Episodes whose files predate the token rules (FE-011 §6): their own `[data-episode=…]` palette is exempt until migrated. */
-const LEGACY_EPISODES = legacy.globs.flatMap((glob) => /^src\/components\/episodes\/([^/*]+)\//.exec(glob)?.[1] ?? []);
+const LEGACY_EPISODES = legacy.globs.flatMap(
+  (glob) => /^src\/episodes\/(?!components\/)([^/*]+)\//.exec(glob)?.[1] ?? [],
+);
 
 /** Every `[data-episode=…]` selector a stylesheet holds, as its Episode slug. */
 function episodeSelectors(css: string): string[] {

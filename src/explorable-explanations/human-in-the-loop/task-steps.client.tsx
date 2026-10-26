@@ -1,6 +1,9 @@
 'use client';
 
-import { TryPrompt, type PromptKit } from '@/components/slide-shared/core-components/try-prompt/try-prompt.client';
+import {
+  TryPrompt,
+  type PromptKit,
+} from '@/episodes/components/slide-shared/core-components/try-prompt/try-prompt.client';
 import { cn } from '@/lib/utils';
 import { useId, useState } from 'react';
 import type { UiWords } from './human-in-the-loop.types';

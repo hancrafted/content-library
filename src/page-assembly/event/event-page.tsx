@@ -1,8 +1,8 @@
-import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
-import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { episodeCardMaker } from '@/components/landing/episode-cards';
 import { Button } from '@/components/ui/button';
 import { findEvent, treatmentOf, type ServedEvent } from '@/content-store/store';
+import { cardLabels, EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
+import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
+import { episodeCardMaker } from '@/episodes/components/episode-card/episode-cards';
 import { EventBreadcrumb } from '@/events/components/event-breadcrumb';
 import { eventCardOf } from '@/events/components/event-cards';
 import { PastNotice } from '@/events/components/past-notice';

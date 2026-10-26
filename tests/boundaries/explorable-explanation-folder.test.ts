@@ -22,22 +22,22 @@ const RULES = [
 ];
 const RULE_SET = { forbidden: config.forbidden.filter(({ name }) => RULES.includes(name)) };
 
-const SLIDE = 'src/components/episodes/probe/slides/probe-slide';
+const SLIDE = 'src/episodes/probe/slides/probe-slide';
 const EXPLANATION = 'src/explorable-explanations/probe-explanation';
-const CORE = 'src/components/slide-shared/core-components';
+const CORE = 'src/episodes/components/slide-shared/core-components';
 
 const PROBES: Readonly<Record<string, string>> = {
-  'src/components/slide-shared/statement.tsx': 'export const Statement = 1;',
+  'src/episodes/components/slide-shared/statement.tsx': 'export const Statement = 1;',
   'src/components/ui/button.tsx': 'export const Button = 1;',
   'src/hooks/use-probe.ts': 'export const useProbe = 1;',
   'src/lib/probe.pure.ts': 'export const probe = 1;',
   [`${CORE}/probe-core/probe-core.tsx`]: 'export const core = 1;',
   'src/explorable-explanations/other-explanation/other.tsx': 'export const other = 1;',
   [`${EXPLANATION}/probe-explanation.client.tsx`]:
-    "import { core } from '../../components/slide-shared/core-components/probe-core/probe-core';\nimport { useProbe } from '../../hooks/use-probe';\nexport const c = [core, useProbe];",
+    "import { core } from '../../episodes/components/slide-shared/core-components/probe-core/probe-core';\nimport { useProbe } from '../../hooks/use-probe';\nexport const c = [core, useProbe];",
   [`${EXPLANATION}/probe-explanation.tsx`]: [
     "import { c } from './probe-explanation.client';",
-    "import { Statement } from '../../components/slide-shared/statement';",
+    "import { Statement } from '../../episodes/components/slide-shared/statement';",
     "import { Button } from '../../components/ui/button';",
     "import { probe } from '../../lib/probe.pure';",
     'export const explanation = [c, Statement, Button, probe];',
@@ -45,15 +45,15 @@ const PROBES: Readonly<Record<string, string>> = {
   [`${EXPLANATION}/reaches-other.client.tsx`]:
     "import { other } from '../other-explanation/other';\nexport const x = other;",
   [`${EXPLANATION}/reaches-statement.client.tsx`]:
-    "import { Statement } from '../../components/slide-shared/statement';\nexport const x = Statement;",
+    "import { Statement } from '../../episodes/components/slide-shared/statement';\nexport const x = Statement;",
   [`${SLIDE}/slide.tsx`]:
-    "import { explanation } from '../../../../../explorable-explanations/probe-explanation/probe-explanation';\nexport const slide = explanation;",
+    "import { explanation } from '../../../../explorable-explanations/probe-explanation/probe-explanation';\nexport const slide = explanation;",
   'src/page-assembly/probe-template/probe-template.tsx':
     "import { explanation } from '../../explorable-explanations/probe-explanation/probe-explanation';\nexport const page = explanation;",
   'src/lib/reaches-explanation.pure.ts':
     "import { explanation } from '../explorable-explanations/probe-explanation/probe-explanation';\nexport const x = explanation;",
-  'src/components/slide-shared/reaches-explanation.tsx':
-    "import { explanation } from '../../explorable-explanations/probe-explanation/probe-explanation';\nexport const x = explanation;",
+  'src/episodes/components/slide-shared/reaches-explanation.tsx':
+    "import { explanation } from '../../../explorable-explanations/probe-explanation/probe-explanation';\nexport const x = explanation;",
 };
 
 let root = '';
@@ -94,7 +94,7 @@ describe('Explorable explanation folder', () => {
     const moved = names.map((name) => ({
       name,
       inHome: existsSync(join(process.cwd(), home, name)),
-      inShared: existsSync(join(process.cwd(), 'src/components/slide-shared', name)),
+      inShared: existsSync(join(process.cwd(), 'src/episodes/components/slide-shared', name)),
     }));
     // ASSERT
     expect(moved).toEqual(names.map((name) => ({ name, inHome: true, inShared: false })));
@@ -113,10 +113,10 @@ describe('Explorable explanation folder', () => {
     // ARRANGE
     const expected = [
       'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib: reaches-other.client.tsx -> src/explorable-explanations/other-explanation/other.tsx',
-      'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib: reaches-statement.client.tsx -> src/components/slide-shared/statement.tsx',
-      'explorable-explanation-reached-only-from-slides-and-page-assembly: src/components/slide-shared/reaches-explanation.tsx -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
+      'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib: reaches-statement.client.tsx -> src/episodes/components/slide-shared/statement.tsx',
+      'explorable-explanation-reached-only-from-slides-and-page-assembly: src/episodes/components/slide-shared/reaches-explanation.tsx -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
       'explorable-explanation-reached-only-from-slides-and-page-assembly: src/lib/reaches-explanation.pure.ts -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
-      'slide-shared-reaches-only-ui-and-lib: src/components/slide-shared/reaches-explanation.tsx -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
+      'slide-shared-reaches-only-ui-and-lib: src/episodes/components/slide-shared/reaches-explanation.tsx -> src/explorable-explanations/probe-explanation/probe-explanation.tsx',
     ];
     // ACT
     const found = violations();

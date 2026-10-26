@@ -1,4 +1,4 @@
-import { episodeFolderOf, episodeRefOf } from './episode-id.pure';
+import { episodeFolderOf, episodeRefOf } from '@/episodes/lib/episode-id.pure';
 import type { Change } from './token-changes.pure';
 
 function scopeLine(change: Change): string {
@@ -7,7 +7,7 @@ function scopeLine(change: Change): string {
     return 'Global tokens (the `:root` and `.dark` declarations in `src/app/globals.css`)';
   }
   const where = scope.episode
-    ? `the Slide's token file, a CSS module under \`src/components/episodes/${episodeFolderOf(episodeRefOf(scope.episode))}/\``
+    ? `the Slide's token file, a CSS module under \`src/episodes/${episodeFolderOf(episodeRefOf(scope.episode))}/\``
     : "the Slide's token file, a CSS module in the Slide's folder";
   return `Slide \`${scope.id}\` (${where})`;
 }

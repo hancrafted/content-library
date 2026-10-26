@@ -10,7 +10,7 @@ changed=$(printf '%s\n' "$refs" | while read -r _ local _ remote; do
   [ -z "$local" ] || [ "$local" = "$zero" ] && continue
   if [ "$remote" = "$zero" ]; then git diff --name-only "origin/main...$local"; else git diff --name-only "$remote" "$local"; fi
 done)
-if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|playwright\.config\.ts|src/components/|src/explorable-explanations/|src/pipeline/|src/app/|tests/browser/)'; then
+if printf '%s\n' "$changed" | grep -qE '^(skills/visual-check/|skills/new-episode/scripts/spec-preview|playwright\.config\.ts|src/components/|src/episodes/|src/explorable-explanations/|src/pipeline/|src/app/|tests/browser/)'; then
   # Playwright's webServer serves `out/` on the preview port, so the hook only builds.
   # The Chromium browser Playwright drives comes from `npx playwright install chromium` (once per machine and per version).
   # The post-build tests read the same `out/`, so they run too: a change to what a page shows

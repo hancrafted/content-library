@@ -10,7 +10,7 @@ const args = process.argv.slice(2);
 const localeAt = args.indexOf('--locale');
 const locale = localeAt === -1 ? 'en' : args[localeAt + 1];
 const slug = args.find((arg, index) => !arg.startsWith('--') && (localeAt === -1 || index !== localeAt + 1));
-const folder = path.join('src/components/episodes', slug ?? '');
+const folder = path.join('src/episodes', slug ?? '');
 if (!slug || !locale || !existsSync(folder)) {
   console.error('usage: npm run episode:text -- <slug> [--locale de]  (run from the repo root)');
   process.exit(1);

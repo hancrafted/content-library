@@ -1,8 +1,8 @@
 import { LiquidInkTransition } from '@/components/animations/liquid-ink-transition.client';
-import { cardLabels } from '@/components/landing/episode-card';
-import { episodeCards } from '@/components/landing/episode-cards';
-import { EpisodeSpotlight } from '@/components/landing/episode-spotlight';
 import { Button } from '@/components/ui/button';
+import { EpisodeSpotlight } from '@/episodes/components/episode-browser/episode-spotlight';
+import { cardLabels } from '@/episodes/components/episode-card/episode-card';
+import { episodeCards } from '@/episodes/components/episode-card/episode-cards';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ROUTES } from '@/lib/routes';
 import { ArrowRight } from 'lucide-react';

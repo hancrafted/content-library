@@ -33,6 +33,7 @@ const PROBES: Readonly<Record<string, string>> = {
   'src/components/ui/button.tsx': 'export const Button = 1;',
   'src/components/landing/card.tsx': 'export const Card = 1;',
   'src/lib/probe.pure.ts': 'export const probe = 1;',
+  'src/episodes/lib/episode.pure.ts': 'export const placeSections = 1;',
   [`${AREA}/lib/run-log.pure.ts`]: "import { probe } from '../../lib/probe.pure';\nexport const log = probe;",
   [`${AREA}/hooks/use-run.ts`]: "import { log } from '../lib/run-log.pure';\nexport const useRun = log;",
   [`${AREA}/components/panel.client.tsx`]: [
@@ -53,6 +54,8 @@ const PROBES: Readonly<Record<string, string>> = {
   [`${AREA}/lib/reaches-hook.ts`]: "import { useRun } from '../hooks/use-run';\nexport const x = useRun;",
   [`${AREA}/components/reaches-landing.tsx`]:
     "import { Card } from '../../components/landing/card';\nexport const x = Card;",
+  [`${AREA}/lib/reaches-episodes.ts`]:
+    "import { placeSections } from '../../episodes/lib/episode.pure';\nexport const x = placeSections;",
   [`${AREA}/components/server-reaches-hook.tsx`]:
     "import { useRun } from '../hooks/use-run';\nexport const x = useRun;",
 };
@@ -111,6 +114,7 @@ describe('failure cases', () => {
       `pipeline-hooks-reached-only-from-client: ${AREA}/components/server-reaches-hook.tsx -> ${AREA}/hooks/use-run.ts`,
       `pipeline-hooks-reached-only-from-client: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
       `pipeline-imports-no-other-area: ${AREA}/components/reaches-landing.tsx -> src/components/landing/card.tsx`,
+      `pipeline-imports-no-other-area: ${AREA}/lib/reaches-episodes.ts -> src/episodes/lib/episode.pure.ts`,
       `pipeline-lib-imports-no-react-or-upper-tier: ${AREA}/lib/reaches-hook.ts -> ${AREA}/hooks/use-run.ts`,
       `pipeline-reached-only-from-page-assembly: src/lib/reaches-pipeline.pure.ts -> ${AREA}/lib/run-log.pure.ts`,
       'src-never-imports-skills-or-tools: src/lib/reaches-skill.ts -> skills/probe/scripts/helper.ts',

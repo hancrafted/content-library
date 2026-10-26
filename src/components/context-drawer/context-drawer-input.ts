@@ -5,7 +5,7 @@ import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.p
  * nothing about Episodes, Sections, anchors, the table of contents or the
  * Translation file: everything it renders, and every item id it matches against the active Slide, arrives here.
  * Whoever owns the content builds one of these (today the adapter in
- * `src/components/episode-page/context-drawer-input.ts`); the drawer never asks where
+ * `src/episodes/components/episode-page/context-drawer-input.ts`); the drawer never asks where
  * it came from.
  */
 

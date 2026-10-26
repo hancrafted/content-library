@@ -6,7 +6,7 @@ const WITH_PAGE: EpisodeFolder = {
   folder: 'ai-token-economy',
   files: ['episode-metadata.ts', 'episode.ts', 'i18n', 'slides'],
   episodeSource:
-    "import { episode } from '@/components/slide-master/slide';\n\nexport const aiTokenEconomy = episode({\n",
+    "import { episode } from '@/episodes/components/slide-master/slide';\n\nexport const aiTokenEconomy = episode({\n",
 };
 const COPY: EpisodeFolder = {
   id: '2026-10-23-axel__ai-token-economy',
@@ -22,7 +22,7 @@ const UPCOMING: EpisodeFolder = {
 };
 const TOOLING: EpisodeFolder = {
   id: 'workshop-template',
-  folder: 'workshop-template',
+  folder: 'tooling/workshop-template',
   files: ['episode.ts', 'i18n', 'slides'],
   episodeSource: 'export const workshopTemplate = episode({\n',
 };
@@ -54,8 +54,8 @@ describe('success cases', () => {
   it("imports each Episode's metadata into the store's registry from its folder, keyed by its id", () => {
     // ARRANGE
     const expected = [
-      "import { episodeMetadata as aiTokenEconomy } from '@/components/episodes/ai-token-economy/episode-metadata';",
-      "import { episodeMetadata as _20261023Axel__aiTokenEconomy } from '@/components/episodes/by-event/2026-10-23-axel/ai-token-economy/episode-metadata';",
+      "import { episodeMetadata as aiTokenEconomy } from '@/episodes/ai-token-economy/episode-metadata';",
+      "import { episodeMetadata as _20261023Axel__aiTokenEconomy } from '@/episodes/by-event/2026-10-23-axel/ai-token-economy/episode-metadata';",
       "  'ai-token-economy': aiTokenEconomy,",
       "  '2026-10-23-axel__ai-token-economy': _20261023Axel__aiTokenEconomy,",
     ];
@@ -68,8 +68,8 @@ describe('success cases', () => {
   it("imports each Episode's record under the name its episode.ts exports, renamed after its folder when they differ", () => {
     // ARRANGE
     const expected = [
-      "import { aiTokenEconomy } from './ai-token-economy/episode';",
-      "import { aiTokenEconomy as _20261023Axel__aiTokenEconomy } from './by-event/2026-10-23-axel/ai-token-economy/episode';",
+      "import { aiTokenEconomy } from '@/episodes/ai-token-economy/episode';",
+      "import { aiTokenEconomy as _20261023Axel__aiTokenEconomy } from '@/episodes/by-event/2026-10-23-axel/ai-token-economy/episode';",
       "  '2026-10-23-axel__ai-token-economy': _20261023Axel__aiTokenEconomy,",
     ];
     // ACT
@@ -94,6 +94,28 @@ describe('success cases', () => {
     // ASSERT
     expect(seen.metadata).toContain(expected.metadata);
     expect(seen.compositions).toContain(expected.compositions);
+  });
+
+  it('lists each tooling page by its slug beside the Episode ids, so routes need no hand-written list', () => {
+    // ARRANGE
+    const expected = "export const TOOLING_SLUGS = ['workshop-template'] as const;";
+    // ACT
+    const ids = fileAt([TOOLING, WITH_PAGE], REGISTRY_PATHS.ids);
+    // ASSERT
+    expect(ids).toContain(expected);
+  });
+
+  it('composes each tooling page from its folder under tooling/, keyed by its slug and typed against it', () => {
+    // ARRANGE
+    const expected = [
+      "import { workshopTemplate } from '@/episodes/tooling/workshop-template/episode';",
+      'export const TOOLING_PAGES: { readonly [S in ToolingSlug]: EpisodeComposition & { readonly slug: S } } = {',
+      "  'workshop-template': workshopTemplate,",
+    ];
+    // ACT
+    const compositions = fileAt([TOOLING, WITH_PAGE], REGISTRY_PATHS.compositions);
+    // ASSERT
+    expected.forEach((line) => expect(compositions).toContain(line));
   });
 });
 
@@ -130,13 +152,24 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('leaves a folder without metadata out of every registry file: a tooling page is no Episode', () => {
+  it("leaves a tooling page out of the Episode ids and the store's metadata: a tooling page is no Episode", () => {
     // ARRANGE
-    const expected = TOOLING.id;
+    const expected = "export const EPISODE_IDS = ['ai-token-economy'] as const;";
     // ACT
-    const texts = episodeRegistryFiles([TOOLING, WITH_PAGE]).map((file) => file.text);
+    const ids = fileAt([TOOLING, WITH_PAGE], REGISTRY_PATHS.ids);
+    const metadata = fileAt([TOOLING, WITH_PAGE], REGISTRY_PATHS.metadata);
     // ASSERT
-    texts.forEach((text) => expect(text).not.toContain(expected));
+    expect(ids).toContain(expected);
+    expect(metadata).not.toContain(TOOLING.id);
+  });
+
+  it('refuses a tooling page whose episode.ts exports no record, naming its folder under tooling/', () => {
+    // ARRANGE
+    const broken: EpisodeFolder = { ...TOOLING, episodeSource: 'export const notes = [];\n' };
+    // ACT
+    const generate = () => episodeRegistryFiles([broken]);
+    // ASSERT
+    expect(generate).toThrow(/tooling\/workshop-template\/episode\.ts/);
   });
 
   it("lists a folder holding only its metadata as an upcoming Episode: in the store's registry, with no page", () => {

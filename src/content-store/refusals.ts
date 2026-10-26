@@ -1,4 +1,4 @@
-import { episodeRefOf } from '@/lib/episode-id.pure';
+import { episodeRefOf } from '@/episodes/lib/episode-id.pure';
 import type { EventSlug } from '@/lib/routes';
 import type { z } from 'zod';
 import { duplicates, episodeRefusals, type LoadedEpisode } from './episode-refusals';

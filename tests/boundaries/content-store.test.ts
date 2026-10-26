@@ -16,7 +16,7 @@ const config = createRequire(import.meta.url)('../../.dependency-cruiser.cjs') a
 const RULE_SET = { forbidden: config.forbidden };
 
 const STORE = 'src/content-store';
-const EPISODE = 'src/components/episodes/probe';
+const EPISODE = 'src/episodes/probe';
 const PAGES = 'src/components/landing';
 
 /** Each probe file and what it imports, relative to the probe tree's root. */
@@ -24,7 +24,7 @@ const PROBES: Readonly<Record<string, string>> = {
   'node_modules/zod/index.js': 'export const z = 1;',
   'node_modules/react/index.js': 'export const React = 1;',
   'src/lib/probe.pure.ts': 'export const probe = 1;',
-  'src/components/slide-master/slide.ts': 'export const slide = 1;',
+  'src/episodes/components/slide-master/slide.ts': 'export const slide = 1;',
   [`${STORE}/schemas/episode.schema.ts`]: "import { z } from 'zod';\nexport const episodeSchema = z;",
   [`${STORE}/events/2026-10-23-axel.ts`]: 'export const event = 1;',
   [`${STORE}/refusals.ts`]: "import { probe } from '../lib/probe.pure';\nexport const refusals = probe;",
@@ -32,26 +32,26 @@ const PROBES: Readonly<Record<string, string>> = {
     "import { episodeSchema } from './schemas/episode.schema';",
     "import { event } from './events/2026-10-23-axel';",
     "import { refusals } from './refusals';",
-    "import { episodeMetadata } from '../components/episodes/probe/episode-metadata';",
+    "import { episodeMetadata } from '../episodes/probe/episode-metadata';",
     "import { probe } from '../lib/probe.pure';",
     'export const store = [episodeSchema, event, refusals, episodeMetadata, probe];',
   ].join('\n'),
   [`${STORE}/store.test.ts`]: "import { refusals } from './refusals';\nexport const t = refusals;",
   [`${STORE}/reaches-slide-master.ts`]:
-    "import { slide } from '../components/slide-master/slide';\nexport const x = slide;",
+    "import { slide } from '../episodes/components/slide-master/slide';\nexport const x = slide;",
   [`${STORE}/reaches-react.ts`]: "import { React } from 'react';\nexport const x = React;",
   [`${EPISODE}/episode-metadata.ts`]: [
-    "import { episodeSchema } from '../../../content-store/schemas/episode.schema';",
-    "import { probe } from '../../../lib/probe.pure';",
+    "import { episodeSchema } from '../../content-store/schemas/episode.schema';",
+    "import { probe } from '../../lib/probe.pure';",
     'export const episodeMetadata = [episodeSchema, probe];',
   ].join('\n'),
-  'src/components/episodes/stray/episode-metadata.ts':
-    "import { slide } from '../../slide-master/slide';\nexport const episodeMetadata = slide;",
-  'src/components/episodes/episode-repository.ts':
+  'src/episodes/stray/episode-metadata.ts':
+    "import { slide } from '../components/slide-master/slide';\nexport const episodeMetadata = slide;",
+  'src/episodes/episode-repository.ts':
     "import { episodeMetadata } from './probe/episode-metadata';\nexport const old = episodeMetadata;",
   [`${PAGES}/reads-store.tsx`]: "import { store } from '../../content-store/store';\nexport const x = store;",
   [`${PAGES}/reaches-metadata.tsx`]:
-    "import { episodeMetadata } from '../episodes/probe/episode-metadata';\nexport const x = episodeMetadata;",
+    "import { episodeMetadata } from '../../episodes/probe/episode-metadata';\nexport const x = episodeMetadata;",
   [`${PAGES}/reaches-refusals.tsx`]:
     "import { refusals } from '../../content-store/refusals';\nexport const x = refusals;",
   [`${PAGES}/types-from-schema.client.tsx`]:
@@ -132,13 +132,13 @@ describe('failure cases', () => {
     const expected = [
       'client-never-imports-content-store: src/components/landing/reaches-store.client.tsx -> src/content-store/store.ts',
       'content-store-tier: src/content-store/reaches-react.ts -> node_modules/react/index.js',
-      'content-store-tier: src/content-store/reaches-slide-master.ts -> src/components/slide-master/slide.ts',
-      'episode-metadata-reaches-only-schemas-and-lib: src/components/episodes/stray/episode-metadata.ts -> src/components/slide-master/slide.ts',
+      'content-store-tier: src/content-store/reaches-slide-master.ts -> src/episodes/components/slide-master/slide.ts',
+      'episode-metadata-reaches-only-schemas-and-lib: src/episodes/stray/episode-metadata.ts -> src/episodes/components/slide-master/slide.ts',
       'hooks-import-no-upper-tier: src/hooks/use-store.ts -> src/content-store/store.ts',
       'lib-imports-no-upper-tier: src/lib/reaches-store.pure.ts -> src/content-store/store.ts',
-      'records-read-only-through-store: src/components/episodes/episode-repository.ts -> src/components/episodes/probe/episode-metadata.ts',
       'records-read-only-through-store: src/components/landing/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
-      'records-read-only-through-store: src/components/landing/reaches-metadata.tsx -> src/components/episodes/probe/episode-metadata.ts',
+      'records-read-only-through-store: src/components/landing/reaches-metadata.tsx -> src/episodes/probe/episode-metadata.ts',
+      'records-read-only-through-store: src/episodes/episode-repository.ts -> src/episodes/probe/episode-metadata.ts',
       'schemas-are-a-leaf: src/content-store/schemas/reaches-lib.schema.ts -> src/lib/probe.pure.ts',
       'store-entry-only: src/components/landing/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
       'store-entry-only: src/components/landing/reaches-refusals.tsx -> src/content-store/refusals.ts',

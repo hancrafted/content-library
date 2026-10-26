@@ -61,8 +61,8 @@ describe('success cases', () => {
 
   it("labels an output by its path inside its Episode's staging folder", () => {
     // ARRANGE
-    const outputs = ['docs/episodes/never-too-early/spec/spec.md', 'src/components/episodes/x/page.tsx'];
-    const expected = ['spec/spec.md', 'src/components/episodes/x/page.tsx'];
+    const outputs = ['docs/episodes/never-too-early/spec/spec.md', 'src/episodes/x/page.tsx'];
+    const expected = ['spec/spec.md', 'src/episodes/x/page.tsx'];
     // ACT
     const labels = outputs.map(outputLabel);
     // ASSERT
@@ -128,7 +128,7 @@ describe('failure cases', () => {
 
   it("answers null for an output outside the chosen folder or another Episode's", () => {
     // ARRANGE
-    const outputs = ['src/components/episodes/x/page.tsx', 'docs/episodes/other/brief.md', 'docs/episodes/brief.md'];
+    const outputs = ['src/episodes/x/page.tsx', 'docs/episodes/other/brief.md', 'docs/episodes/brief.md'];
     const expected = [null, null, null];
     // ACT
     const segments = outputs.map((output) => outputSegments(output, FOLDER));

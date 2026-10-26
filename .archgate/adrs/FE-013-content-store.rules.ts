@@ -14,7 +14,7 @@ const STORE_ENTRY = 'src/content-store/store.ts';
 const MODEL_FILE = 'docs/adr/0016-content-data-model.md';
 const SCHEMA_GLOB = 'src/content-store/schemas/*.schema.ts';
 const SOURCE_GLOB = 'src/**/*.{ts,tsx}';
-const EPISODE_METADATA_RE = /^src\/components\/episodes\/(?:by-event\/[^/]+\/)?[^/]+\/episode-metadata\.ts$/;
+const EPISODE_METADATA_RE = /^src\/episodes\/(?:by-event\/[^/]+\/)?[^/]+\/episode-metadata\.ts$/;
 
 const MERMAID_RE = /```mermaid\n([\s\S]*?)```/g;
 const STORE_LINE_RE = /^[ \t]*%%[ \t]*store:[ \t]*([^\n%]*)/m;

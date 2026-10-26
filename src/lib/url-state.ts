@@ -1,4 +1,4 @@
-import { TITLE_ANCHOR } from './episode.pure';
+import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
 
 /*
  * The URL-state service (FE-001): the only module that writes browser history,

@@ -8,7 +8,7 @@
  */
 
 import { type CheerioAPI } from 'cheerio';
-import { TITLE_ANCHOR } from '../../lib/episode.pure.ts';
+import { TITLE_ANCHOR } from '../../lib/title-anchor.pure.ts';
 import { OPTION, SECTION, TITLE_SLIDE } from './episode-spec-page.pure.ts';
 import {
   checkOption,

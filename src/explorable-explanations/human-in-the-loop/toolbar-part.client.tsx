@@ -1,7 +1,7 @@
 'use client';
 
-import { IconButton } from '@/components/slide-shared/core-components/icon-button/icon-button.client';
-import { Tip } from '@/components/slide-shared/core-components/tip/tip.client';
+import { IconButton } from '@/episodes/components/slide-shared/core-components/icon-button/icon-button.client';
+import { Tip } from '@/episodes/components/slide-shared/core-components/tip/tip.client';
 import { useMotion } from '@/hooks/use-motion';
 import { ChevronDown, Code, Download, Upload } from 'lucide-react';
 import { useId, type ChangeEvent } from 'react';

@@ -6,7 +6,7 @@ stale_after: 2027-01-13T00:00:00Z
 
 # Slide library
 
-Every Master slide a Slide can copy from the Slide master Episode (`src/components/episodes/slide-master/slides/`, `cp -r`), and the motions the library holds. The `write-spec` designers pick from it, and a vitest keeps the headings below equal to the folders.
+Every Master slide a Slide can copy from the Slide master Episode (`src/episodes/tooling/slide-master/slides/`, `cp -r`), and the motions the library holds. The `write-spec` designers pick from it, and a vitest keeps the headings below equal to the folders.
 
 Each entry has three lines.
 
@@ -142,4 +142,4 @@ Motion rules and the reasons behind them live in [the design system](design-syst
 
 ## Library motions
 
-A library motion is a CSS module under `src/components/slide-shared/motions/`. The folder `src/components/slide-shared/motions/` is empty today, so no Slide carries a library motion and every motion above is Slide-local. A motion moves into the folder when a second Slide needs it.
+A library motion is a CSS module under `src/episodes/components/slide-shared/motions/`. The folder `src/episodes/components/slide-shared/motions/` is empty today, so no Slide carries a library motion and every motion above is Slide-local. A motion moves into the folder when a second Slide needs it.

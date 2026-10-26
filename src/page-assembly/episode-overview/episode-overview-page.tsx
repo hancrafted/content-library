@@ -1,8 +1,8 @@
-import { EpisodeBrowse, type BrowseLabels } from '@/components/landing/episode-browse.client';
-import { newestFirst } from '@/components/landing/episode-browse.pure';
-import { cardLabels } from '@/components/landing/episode-card';
-import { episodeCards } from '@/components/landing/episode-cards';
 import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
+import { EpisodeBrowser, type BrowseLabels } from '@/episodes/components/episode-browser/episode-browser.client';
+import { newestFirst } from '@/episodes/components/episode-browser/episode-browser.pure';
+import { cardLabels } from '@/episodes/components/episode-card/episode-card';
+import { episodeCards } from '@/episodes/components/episode-card/episode-cards';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
 import { GalleryHorizontalEnd, Layers, LayoutTemplate, Presentation } from 'lucide-react';
@@ -81,7 +81,7 @@ export async function EpisodeOverviewPage({ locale }: { locale: Locale }) {
   return (
     <main data-testid="episodes-index-page" className={PAGE_CONTAINER}>
       <PageHeader title={tPage('title')} intro={<p data-episodes-intro>{tPage('intro')}</p>} />
-      <EpisodeBrowse cards={newestFirst(cards)} locale={locale} labels={browseLabels(tLanding)} headingLevel={2} />
+      <EpisodeBrowser cards={newestFirst(cards)} locale={locale} labels={browseLabels(tLanding)} headingLevel={2} />
       <ReferenceLinks locale={locale} t={tPage} />
     </main>
   );

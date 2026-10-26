@@ -107,7 +107,7 @@ frontmatter:
           allowed:
             - {
                 value: draft,
-                intent: 'A Brief in Staging is draft; Promotion removes the line when it moves the Brief to src/components/episodes/<slug>/.',
+                intent: 'A Brief in Staging is draft; Promotion removes the line when it moves the Brief to src/episodes/<slug>/.',
               }
         generated.by: *generated-by
         generated.at: *generated-at

@@ -1,8 +1,9 @@
-import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
-import { episodeCopy, findEpisode } from '@/components/episodes/registry';
-import { findEpisodesPathPage, findToolingPage } from '@/components/episodes/tooling-pages';
 import { JsonLdScript } from '@/components/json-ld';
 import { episodePublishedOn, episodeStatus, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
+import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
+import { episodeRefOf } from '@/episodes/lib/episode-id.pure';
+import { episodeCopy, findEpisode } from '@/episodes/lib/registry';
+import { findEpisodesPathPage, findToolingPage } from '@/episodes/lib/tooling-pages';
 import {
   eventEpisodeChrome,
   EventEpisodeHeader,
@@ -10,7 +11,6 @@ import {
   type PresentedEpisode,
 } from '@/events/components/event-episode-chrome';
 import { BUILD_DAY } from '@/lib/build-day';
-import { episodeRefOf } from '@/lib/episode-id.pure';
 import type { Locale } from '@/lib/locale.pure';
 import {
   eventEpisodeRoute,

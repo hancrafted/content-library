@@ -2,7 +2,7 @@
 // designer prompts in the run log and the design reference images the Spec cites. Pure text in, records out.
 
 import type { CheerioAPI } from 'cheerio';
-import { TITLE_ANCHOR } from '../../lib/episode.pure.ts';
+import { TITLE_ANCHOR } from '../../lib/title-anchor.pure.ts';
 import { OPTION, SLIDE, TITLE_SLIDE } from './episode-spec-page.pure.ts';
 
 export interface SlidePage {
