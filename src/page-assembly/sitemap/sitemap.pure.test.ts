@@ -1,7 +1,7 @@
+import type { PageRef } from '@/lib/routes';
+import type { PageTreatment } from '@/lib/visibility.pure';
 import { describe, expect, it } from 'vitest';
-import type { PageRef } from './routes';
 import { robotsFor, sitemapEntries } from './sitemap.pure';
-import type { PageTreatment } from './visibility.pure';
 
 const SITE = 'https://hancrafted.net';
 const EVENT = '2026-10-23-axel-agentic-workflow';

@@ -1,9 +1,9 @@
 'use client';
 
-import { MethodProgressStepper } from '@/components/landing/method-progress-stepper.client';
-import { MethodSlideItem, type MethodCard } from '@/components/landing/method-slide-item';
 import { useResolvedTheme } from '@/hooks/use-resolved-theme';
 import { computeActiveStep, computeThemeColors } from '@/lib/theme-transition.pure';
+import { MethodProgressStepper } from '@/page-assembly/landing/method-progress-stepper.client';
+import { MethodSlideItem, type MethodCard } from '@/page-assembly/landing/method-slide-item';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';

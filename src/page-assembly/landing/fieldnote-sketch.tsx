@@ -1,5 +1,5 @@
-import { FieldnoteReveal } from '@/components/landing/fieldnote-reveal.client';
-import styles from '@/components/landing/fieldnote-sketch.module.css';
+import { FieldnoteReveal } from '@/page-assembly/landing/fieldnote-reveal.client';
+import styles from '@/page-assembly/landing/fieldnote-sketch.module.css';
 import type { CSSProperties, ReactNode } from 'react';
 
 /** Motion vocabulary: `draw` traces a stroke, `pop` scales a mark in, `jitter` shakes friction, `fade` brings in context, `sweep` turns a hand. */

@@ -1,9 +1,9 @@
-import type { IsoDate } from '../content-store/schemas/fields';
-import { TRANSLATIONS } from '../i18n/translations';
-import type { Locale } from './locale.pure';
+import type { IsoDate } from '@/content-store/schemas/fields';
+import { TRANSLATIONS } from '@/i18n/translations';
+import type { Locale } from '@/lib/locale.pure';
+import { episodeRoute, ROUTES, servedUrl, type EpisodeId } from '@/lib/routes';
+import { SOCIAL_LINKS } from '@/lib/social-links';
 import { OG_IMAGE } from './page-metadata.pure';
-import { episodeRoute, ROUTES, servedUrl, type EpisodeId } from './routes';
-import { SOCIAL_LINKS } from './social-links';
 
 /*
  * schema.org JSON-LD as plain data (FE-008 §6): the landing page's Person and WebSite, an Episode's Article and,

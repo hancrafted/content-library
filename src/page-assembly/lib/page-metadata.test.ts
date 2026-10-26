@@ -1,6 +1,6 @@
+import type { PageTreatment } from '@/lib/visibility.pure';
 import { describe, expect, it } from 'vitest';
-import { pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
-import type { PageTreatment } from './visibility.pure';
+import { pageMetadata, siteMetadata } from './page-metadata.pure';
 
 const UNDER_EVENT = {
   kind: 'event-episode',
@@ -118,16 +118,6 @@ describe('success cases', () => {
     expect(metadata).not.toHaveProperty('description');
   });
 
-  it('uses SITE_URL when the deploy sets it', () => {
-    // ARRANGE
-    const env = { SITE_URL: 'https://example.com/content-library/' };
-    const expected = 'https://example.com/content-library';
-    // ACT
-    const url = resolveSiteUrl(env);
-    // ASSERT
-    expect(url).toBe(expected);
-  });
-
   it.each(['en', 'de'] as const)('keeps an Episode page its treatment hides out of search in %s', (locale) => {
     // ARRANGE
     const expected = { index: false };
@@ -238,39 +228,9 @@ describe('failure cases', () => {
     // ASSERT
     expect({ canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
   });
-
-  it('rejects a SITE_URL that is not an absolute URL', () => {
-    // ARRANGE
-    const env = { SITE_URL: 'hancrafted.github.io/content-library' };
-    const expected = /SITE_URL/;
-    // ACT
-    const resolve = () => resolveSiteUrl(env);
-    // ASSERT
-    expect(resolve).toThrow(expected);
-  });
 });
 
 describe('edge cases', () => {
-  it('falls back to localhost under the base path when SITE_URL is unset', () => {
-    // ARRANGE
-    const env = { NEXT_PUBLIC_BASE_PATH: '/content-library' };
-    const expected = 'http://localhost:3000/content-library';
-    // ACT
-    const url = resolveSiteUrl(env);
-    // ASSERT
-    expect(url).toBe(expected);
-  });
-
-  it('treats an empty SITE_URL as unset', () => {
-    // ARRANGE
-    const env = { SITE_URL: '' };
-    const expected = 'http://localhost:3000';
-    // ACT
-    const url = resolveSiteUrl(env);
-    // ASSERT
-    expect(url).toBe(expected);
-  });
-
   it('keeps the bare root as the home canonical of the default locale', () => {
     // ARRANGE
     const expected = '/';

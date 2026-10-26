@@ -1,5 +1,5 @@
-import { LandingPage } from '@/components/pages/landing-page';
-import { pageMetadata } from '@/lib/page-metadata.pure';
+import { LandingPage } from '@/page-assembly/landing/landing-page';
+import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { prefixedLocaleParams, resolveLocale, type LocaleParams } from './params';
 
 export const dynamicParams = false;

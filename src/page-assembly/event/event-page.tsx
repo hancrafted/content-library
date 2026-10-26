@@ -1,5 +1,6 @@
 import { EventBreadcrumb } from '@/components/events/event-breadcrumb';
 import { PastNotice } from '@/components/events/past-notice';
+import { PlaylistList, type PlaylistEntry } from '@/components/events/playlist-list';
 import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
 import { episodeCardMaker } from '@/components/landing/episode-cards';
@@ -11,10 +12,9 @@ import { findEvent, treatmentOf, type ServedEvent } from '@/content-store/store'
 import { TRANSLATIONS } from '@/i18n/translations';
 import { BUILD_DAY } from '@/lib/build-day';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import type { PageCopy } from '@/lib/page-metadata.pure';
 import type { EventSlug } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
-import { cn } from '@/lib/utils';
+import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import { ArrowRight, CalendarDays, Clock, Layers, MapPin, Presentation, Users, type LucideIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
@@ -104,41 +104,12 @@ function StartButton({ start, locale, t }: { start: ReturnType<typeof startOf>; 
   );
 }
 
-/** The step number beside a card: filled for the emphasised first step, muted for an Episode with no page yet. */
-function StepNumber({ step, first, muted }: { step: number; first: boolean; muted: boolean }) {
-  return (
-    <span
-      aria-hidden
-      data-step-number
-      className={cn(
-        'mt-4 flex size-10 shrink-0 items-center justify-center rounded-full text-body font-semibold tabular-nums',
-        first ? 'bg-primary text-primary-foreground' : 'border border-border',
-        !first && (muted ? 'text-muted-foreground' : 'text-foreground'),
-      )}
-    >
-      {step}
-    </span>
-  );
-}
-
-interface PlaylistStepProps {
-  card: EpisodeCard;
-  /** The 1-based place in the Playlist; step 1 is emphasised as where to start. */
-  step: number;
-  locale: Locale;
-  labels: CardLabels;
-}
-
-/** One Playlist entry: its step number and its compact card, the first one raised and ringed. */
-function PlaylistStep({ card, step, locale, labels }: PlaylistStepProps) {
-  const first = step === 1;
-  return (
-    <li
-      data-playlist-step
-      {...(first ? { 'data-playlist-first': '' } : {})}
-      className="flex items-start gap-4 sm:gap-6"
-    >
-      <StepNumber step={step} first={first} muted={card.route === null} />
+/** The Playlist's Episodes as entries of the Playlist list, each card a compact Episode card built here. */
+function playlistEntries(cards: readonly EpisodeCard[], locale: Locale, labels: CardLabels): PlaylistEntry[] {
+  return cards.map((card) => ({
+    key: card.slug,
+    linked: card.route !== null,
+    card: (className: string) => (
       <EpisodeCardView
         card={card}
         variant="compact"
@@ -146,36 +117,10 @@ function PlaylistStep({ card, step, locale, labels }: PlaylistStepProps) {
         locale={locale}
         labels={labels}
         showFormat={false}
-        className={cn('min-w-0 flex-1', first && 'shadow-md ring-2 ring-primary/25')}
+        className={className}
       />
-    </li>
-  );
-}
-
-interface PlaylistProps {
-  cards: readonly EpisodeCard[];
-  locale: Locale;
-  labels: CardLabels;
-  title: string;
-}
-
-/**
- * The Episodes in the Playlist's order, the first emphasised as where to start; the step number is text beside the
- * card, the list itself says the order.
- */
-function Playlist({ cards, locale, labels, title }: PlaylistProps) {
-  return (
-    <section aria-labelledby="event-playlist" className="mt-14">
-      <h2 id="event-playlist" className="text-subheading font-semibold text-foreground">
-        {title}
-      </h2>
-      <ol data-event-playlist role="list" className="mt-6 space-y-4">
-        {cards.map((card, index) => (
-          <PlaylistStep key={card.slug} card={card} step={index + 1} locale={locale} labels={labels} />
-        ))}
-      </ol>
-    </section>
-  );
+    ),
+  }));
 }
 
 /**
@@ -202,7 +147,7 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
       <p className="mt-6 max-w-2xl text-body text-pretty text-foreground">{card.description}</p>
       <PastNotice date={record.date} buildDay={BUILD_DAY} text={t('pastNotice')} className="mt-8" />
       <StartButton start={startOf(episodes)} locale={locale} t={t} />
-      <Playlist cards={episodes} locale={locale} labels={cardLabels(landing)} title={t('playlist')} />
+      <PlaylistList entries={playlistEntries(episodes, locale, cardLabels(landing))} title={t('playlist')} />
     </main>
   );
 }
