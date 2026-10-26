@@ -35,6 +35,11 @@ ui:
   contextTip: 'Hilfe: zeigt, was in jedem Schritt zu tun ist'
   download: Diesen Ablauf herunterladen
   upload: Eigenen Ablauf hochladen
+  noteStale: 'Dieser Ablauf hat sich geändert, seit dein Fortschritt gespeichert wurde, daher beginnst du neu. Dein alter Fortschritt bleibt erhalten, bis du entscheidest.'
+  noteUnsaved: 'Dein Fortschritt konnte in diesem Browser nicht gespeichert werden. Lade ihn herunter, um ihn zu behalten.'
+  downloadProgress: Fortschritt herunterladen
+  downloadOldProgress: Alten Fortschritt herunterladen
+  discardProgress: Verwerfen
   close: Schließen
   copied: Kopiert
   gate: 'Freigabe {n}'

@@ -56,6 +56,12 @@ export interface UiWords {
   /** The checkbox label of a final job that hands nothing on. */
   readonly markDone: string;
   readonly download: string;
+  /** The note over the toolbar when saved progress is stale or could not be written, and its buttons. */
+  readonly noteStale: string;
+  readonly noteUnsaved: string;
+  readonly downloadProgress: string;
+  readonly downloadOldProgress: string;
+  readonly discardProgress: string;
   readonly upload: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
   readonly gate: string;
@@ -161,6 +167,15 @@ export interface DiagramProps {
   readonly rounds: Readonly<Record<string, number>>;
 }
 
+/** The note about saved progress: an entry of an edited Workflow waits for a choice, or storage refused a write. */
+export interface ProgressNote {
+  readonly kind: 'stale' | 'unsaved';
+  /** Saves the old entry (stale) or the current run (unsaved) as a file. */
+  readonly onDownload: () => void;
+  /** Forgets the old entry; stale only. */
+  readonly onDiscard: () => void;
+}
+
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
 export interface ToolbarProps {
   readonly workflow: Workflow;
@@ -173,6 +188,7 @@ export interface ToolbarProps {
   /** A readonly Preset: no Chat · CLI control, since nothing is tried. */
   readonly readonly: boolean;
   readonly uploadProblems: readonly string[];
+  readonly note: ProgressNote | null;
   readonly words: UiWords;
   readonly onLevel: (level: Level) => void;
   readonly onView: (view: View) => void;
@@ -200,6 +216,8 @@ export interface HumanInTheLoopData {
   /** Every authored Workflow of the locale, with the Slide's words laid over the one `workflowId` names. */
   readonly workflows: readonly Workflow[];
   readonly workflowId: string;
+  /** The hash of each authored Workflow's English and German files together, by id: what a saved run is checked against. */
+  readonly hashes: Readonly<Record<string, string>>;
   readonly locale: 'en' | 'de';
   readonly words: UiWords;
   readonly controls: ControlMap;

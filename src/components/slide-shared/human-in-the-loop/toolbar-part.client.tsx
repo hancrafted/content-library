@@ -9,6 +9,8 @@ import { Download, Upload } from 'lucide-react';
 import { useId, type ChangeEvent } from 'react';
 import type { ToolbarProps } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
+import { ProgressNote } from './progress-note.client';
+import { saveFile } from './save-file';
 import { ToolButton } from './tool-button.client';
 import { offers } from './toolbar-controls.pure';
 import { ViewControl } from './view-control.client';
@@ -19,15 +21,6 @@ import { workflowFile } from './workflow-file.pure';
  * separator, then icon buttons (download, upload) after the Chat · CLI control, each with a tooltip. The control registry says what shows; a readonly Preset also drops
  * the Chat · CLI control. The parent validates an upload; this part only reads the chosen file.
  */
-
-function download(workflow: ToolbarProps['workflow']) {
-  const { name, text, type } = workflowFile(workflow);
-  const url = URL.createObjectURL(new Blob([text], { type }));
-  const link = Object.assign(document.createElement('a'), { download: name });
-  link.setAttribute('href', url);
-  link.click();
-  URL.revokeObjectURL(url);
-}
 
 /** The picker's options: the Workflows, after an uploaded one that is none of them. */
 function Options({ bar, known }: { readonly bar: ToolbarProps; readonly known: boolean }) {
@@ -122,7 +115,7 @@ function Icons({ bar }: { readonly bar: ToolbarProps }) {
           label={words.download}
           data-control="download"
           variant="ghost"
-          onClick={() => download(bar.workflow)}
+          onClick={() => saveFile(workflowFile(bar.workflow))}
         >
           <Download aria-hidden="true" />
         </ToolButton>
@@ -138,15 +131,21 @@ const hasIcons = (bar: ToolbarProps) =>
   offers(bar.controls, 'download') ||
   offers(bar.controls, 'upload');
 
-function UploadProblems({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
-  return bar.uploadProblems.length > 0 ? <Problems id={id} problems={bar.uploadProblems} /> : null;
+/** What sits under the pill when there is something to say: the progress note, then an upload's problems. */
+function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
+  return (
+    <>
+      {bar.note && <ProgressNote note={bar.note} words={bar.words} />}
+      {bar.uploadProblems.length > 0 && <Problems id={id} problems={bar.uploadProblems} />}
+    </>
+  );
 }
 
 export function ToolbarPart(bar: ToolbarProps) {
   const problemsId = useId();
   const pills = hasPills(bar);
   const icons = hasIcons(bar);
-  if (!pills && !icons) return null;
+  if (!pills && !icons) return <Notes bar={bar} id={problemsId} />;
   const describedBy = bar.uploadProblems.length > 0 ? problemsId : undefined;
   return (
     <>
@@ -162,7 +161,7 @@ export function ToolbarPart(bar: ToolbarProps) {
         <Icons bar={bar} />
         {offers(bar.controls, 'upload') && <UploadButton bar={bar} describedBy={describedBy} />}
       </div>
-      <UploadProblems bar={bar} id={problemsId} />
+      <Notes bar={bar} id={problemsId} />
     </>
   );
 }

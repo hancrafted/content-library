@@ -2,7 +2,8 @@ import type { Workflow } from './workflow.types';
 
 /*
  * The parent's state and reducer. The state is plain and serializable (arrays, not sets) and lives only in the
- * component: nothing goes to the URL (FE-001) or to storage.
+ * component: nothing goes to the URL (FE-001). Progress (the results and the teaching flag) is saved by a hook around
+ * this state under the progress key (FE-001 §3); the `restore` event is how a saved run comes back in.
  */
 
 /** Simple copies long prompts; Technical copies the matching `/skill` command. */
@@ -22,7 +23,7 @@ export interface WorkflowState {
   readonly uploaded: Workflow | null;
   /** Teaching mode caps a repeated stage's rounds. On at the start; the run model says when it may still change. */
   readonly teaching: boolean;
-  /** What the viewer pasted, keyed as the run model keys results (`stage.job`, `stage.job#k`), plus free inputs by their own name. Memory only. */
+  /** What the viewer pasted, keyed as the run model keys results (`stage.job`, `stage.job#k`), plus free inputs by their own name. The hook saves these. */
   readonly slotValues: Readonly<Record<string, string>>;
   /** What was wrong with the last upload; empty when it loaded or none was tried. */
   readonly uploadProblems: readonly string[];
@@ -45,6 +46,7 @@ export type WorkflowEvent =
   | { readonly type: 'close' }
   | { readonly type: 'slots'; readonly values: Readonly<Record<string, string>> }
   | { readonly type: 'upload'; readonly workflow: Workflow }
+  | { readonly type: 'restore'; readonly results: Readonly<Record<string, string>>; readonly teaching: boolean }
   | { readonly type: 'upload-failed'; readonly problems: readonly string[] };
 
 export function createState(start: Start): WorkflowState {
@@ -81,6 +83,7 @@ const HANDLERS: Handlers = {
   close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null }),
   slots: (state, { values }) => ({ ...state, slotValues: values }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),
+  restore: (state, { results, teaching }) => ({ ...state, slotValues: results, teaching }),
   'upload-failed': (state, { problems }) => ({ ...state, uploadProblems: problems }),
 };
 

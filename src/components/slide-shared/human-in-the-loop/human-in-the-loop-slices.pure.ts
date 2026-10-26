@@ -1,4 +1,11 @@
-import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps } from './human-in-the-loop.types';
+import { progressKeyOf } from '@/lib/progress.pure';
+import type {
+  DiagramProps,
+  HumanInTheLoopData,
+  ModalProps,
+  ProgressNote,
+  ToolbarProps,
+} from './human-in-the-loop.types';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { markerValuesOf, resultsOf, runOf, type Run } from './workflow-run.pure';
@@ -14,6 +21,13 @@ import type { Workflow } from './workflow.types';
 /** The shown Workflow: an uploaded one wins, then the chosen authored one, then the first. */
 export function shownWorkflow(data: HumanInTheLoopData, state: WorkflowState): Workflow | undefined {
   return state.uploaded ?? data.workflows.find((w) => w.id === state.workflowId) ?? data.workflows[0];
+}
+
+/** The saved run the shown Workflow belongs to: its key and source hash; none for an uploaded one, which is not kept. */
+export function progressTarget(data: HumanInTheLoopData, state: WorkflowState): { key: string; hash: string } | null {
+  const id = shownWorkflow(data, state)?.id;
+  const hash = id === undefined || state.uploaded ? undefined : data.hashes[id];
+  return id !== undefined && hash !== undefined ? { key: progressKeyOf(id), hash } : null;
 }
 
 /** What an uploaded file's text becomes: the event that loads it, or the one that reports its problems. */
@@ -47,6 +61,8 @@ export interface Shown {
   readonly data: HumanInTheLoopData;
   readonly state: WorkflowState;
   readonly workflow: Workflow;
+  /** What to tell the viewer about their saved progress, if anything. */
+  readonly note: ProgressNote | null;
   /** `workflowView` of the Workflow for the state's level, computed once per change by the parent. */
   readonly view: WorkflowView;
 }
@@ -88,7 +104,7 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
   };
 }
 
-function toolbarOf({ data, state, workflow }: Shown, on: Callbacks): ToolbarProps {
+function toolbarOf({ data, state, workflow, note }: Shown, on: Callbacks): ToolbarProps {
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
   const { level, view, uploadProblems } = state;
@@ -102,6 +118,7 @@ function toolbarOf({ data, state, workflow }: Shown, on: Callbacks): ToolbarProp
     readonly,
     words,
     uploadProblems,
+    note,
     onLevel,
     onView,
     onWorkflow,

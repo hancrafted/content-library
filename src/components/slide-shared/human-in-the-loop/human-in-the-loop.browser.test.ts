@@ -18,6 +18,8 @@ const GERMAN_EPISODE = '/de/episodes/slides/';
 const SLIDE_ANCHOR = 'agentic-workflows--human-in-the-loop';
 const ROOT = '[data-human-in-the-loop]';
 const MODAL = '[role="dialog"][data-part="modal"]';
+/** The one progress key, as `src/config.yaml` names it (FE-001 §3). */
+const PROGRESS_KEY = 'hancrafted:progress';
 const COPY_PROMPT = 'Copy prompt';
 /** Two Workflows by seven stages, in one language: more than the default 30s. */
 const LONG_TEST = 120_000;
@@ -55,6 +57,20 @@ async function open(page: Page, theme: 'light' | 'dark', where: { width?: number
   await hydrated(root.locator('button').first());
   return { root, toolbar: root.locator('[data-part="toolbar"]'), modal: page.locator(MODAL) };
 }
+
+/** The localStorage keys in use: the single progress key, never a third. */
+const storedKeys = (page: Page) => page.evaluate(() => Object.keys(localStorage));
+
+/** The text under the progress key, as the page keeps it. */
+const storedProgress = (page: Page) =>
+  page.evaluate((PROGRESS_KEY) => localStorage.getItem(PROGRESS_KEY), PROGRESS_KEY);
+
+/** Puts `store` under the progress key, as an earlier visit would have left it. */
+const storeProgress = (page: Page, store: object) =>
+  page.evaluate(
+    ([PROGRESS_KEY, text]) => localStorage.setItem(PROGRESS_KEY, text),
+    [PROGRESS_KEY, JSON.stringify(store)],
+  );
 
 const copied = (page: Page) => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied);
 const copies = (page: Page) => copied(page).then((all) => all.length);
@@ -326,16 +342,12 @@ test.describe('success cases', () => {
     }
   });
 
-  test('carries a result pasted in one stage into the copied prompt of a later stage, keeps it across close and reopen, and stores nothing', async ({
+  test('carries a result pasted in one stage into the copied prompt of a later stage, keeps it across close and reopen', async ({
     page,
   }) => {
     // ARRANGE
     const pasted = '# PASTED SPEC MARKER';
     const { modal } = await open(page, 'light');
-    await page.evaluate(() => {
-      localStorage.clear();
-      sessionStorage.clear();
-    });
     // ACT
     await openStage(page, 'Requirements');
     await field(modal, 'spec').fill(pasted);
@@ -350,7 +362,28 @@ test.describe('success cases', () => {
     // ASSERT
     expect(written.at(-1)).toContain(pasted);
     await expect(field(modal, 'spec')).toHaveValue(pasted);
-    expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
+  });
+
+  test('keeps a pasted result across a reload and a switch of language, under the one progress key', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# SAVED SPEC MARKER';
+    const requirements = 2;
+    const { modal } = await open(page, 'light');
+    await openStage(page, 'Requirements');
+    await field(modal, 'spec').fill(pasted);
+    await expect.poll(() => storedKeys(page)).toEqual([PROGRESS_KEY]);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    // ACT
+    await open(page, 'light');
+    await openStage(page, 'Requirements');
+    await expect(field(modal, 'spec')).toHaveValue(pasted);
+    await page.keyboard.press('Escape');
+    const german = await open(page, 'light', { url: GERMAN_EPISODE });
+    await german.root.locator('[data-part="diagram"] button[data-try]').nth(requirements).click();
+    // ASSERT
+    await expect(field(german.modal, 'spec')).toHaveValue(pasted);
   });
 
   test('keeps every line break of a multi-line paste in a collapsed field when the prompt is copied', async ({
@@ -420,6 +453,45 @@ test.describe('success cases', () => {
 });
 
 test.describe('failure cases', () => {
+  test('starts fresh when the saved run belongs to an edited Workflow, keeps the old entry, and Discard clears it', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const stale = { hash: 'an-older-edit', teaching: true, results: { 'requirements.spec': '# OLD' } };
+    const { modal } = await open(page, 'light');
+    await storeProgress(page, { 'human-in-the-loop/summer-party': stale });
+    // ACT
+    const { root } = await open(page, 'light');
+    const note = root.locator('[data-progress-note="stale"]');
+    await expect(note).toBeVisible();
+    await openStage(page, 'Requirements');
+    await expect(field(modal, 'spec')).toHaveValue('');
+    await page.keyboard.press('Escape');
+    const kept = await storedProgress(page);
+    await note.getByRole('button', { name: 'Discard' }).click();
+    // ASSERT
+    expect(kept).toContain('an-older-edit');
+    await expect(note).toHaveCount(0);
+    expect(await storedProgress(page)).not.toContain('an-older-edit');
+  });
+
+  test('tells the viewer to download their progress when the browser refuses to save it', async ({ page }) => {
+    // ARRANGE
+    await page.addInitScript(() => {
+      Storage.prototype.setItem = () => {
+        throw new Error('QuotaExceededError');
+      };
+    });
+    const { root, modal } = await open(page, 'light');
+    // ACT
+    await openStage(page, 'Requirements');
+    await field(modal, 'spec').fill('# NOT SAVED');
+    await page.keyboard.press('Escape');
+    // ASSERT
+    await expect(root.locator('[data-progress-note="unsaved"]')).toBeVisible();
+    await expect(root.getByRole('button', { name: 'Download progress' })).toBeVisible();
+  });
+
   test('reports the problems of a broken uploaded Workflow and keeps the authored one', async ({ page }) => {
     // ARRANGE
     const authored = 'summer-party';
