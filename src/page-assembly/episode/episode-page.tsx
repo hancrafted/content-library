@@ -1,10 +1,5 @@
 import { toolingRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
-import {
-  eventEpisodeRoute,
-  matchPage,
-  type EpisodeId,
-  type EpisodesPathPage,
-} from '@/content-store/catalogue/record-routes';
+import { matchPage, type EpisodeId, type EpisodesPathPage } from '@/content-store/catalogue/record-routes';
 import {
   episodePublishedOn,
   episodesPathPageAt,
@@ -17,7 +12,7 @@ import {
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
 import { episodeCopy, findEpisode } from '@/episodes/lib/registry';
 import { findToolingPage } from '@/episodes/lib/tooling-pages';
-import { eventEpisodeChrome, EventEpisodeHeader, PlaylistNav } from '@/events/components/event-episode-chrome';
+import { eventEpisodeFrame } from '@/events/components/event-episode-frame';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import { episodeJsonLd } from '@/page-assembly/lib/structured-data.pure';
@@ -43,9 +38,6 @@ export function episodesPathPageOf(params: { readonly episode: string }): Episod
 export function eventEpisodePageOf(params: { readonly event: string; readonly episode: string }): EventEpisodePage {
   return eventEpisodePageAt(params) ?? notFound();
 }
-
-/** The insets every Slide wrapper takes, so the Event's chrome lines up with the Slides (FE-009 §2). */
-const INSET = 'pl-(--inset-l) pr-(--inset-r)';
 
 /**
  * Every Episode-shaped page (FE-007 §1), rendered through the one container (FE-002): an Episode's own page with its
@@ -89,22 +81,16 @@ function OwnEpisodePage({ episode, locale }: { episode: EpisodeRef<EpisodeId>; l
  * container, framed by the Event's breadcrumb and past notice above the Title slide, "Episode n of m" under the title,
  * and the Playlist walk after the last Slide. Its structured data stays on the Episode's own page.
  */
-async function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: Locale }) {
+function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: Locale }) {
   const shown = page.presented;
-  const chrome = await eventEpisodeChrome(shown, locale, (episode) => episodeCopy(episode.id, locale).title);
-  const frame = {
-    route: eventEpisodeRoute(shown.event.slug, shown.episode),
-    header: <EventEpisodeHeader chrome={chrome} buildDay={BUILD_DAY} className={INSET} />,
-    footer: <PlaylistNav chrome={chrome} className={INSET} />,
-    position: chrome.position,
-  };
+  const titleOf = (episode: EpisodeRef<EpisodeId>) => episodeCopy(episode.id, locale).title;
   return (
     <EpisodePageContainer
       locale={locale}
       presents={shown.episode}
       episode={findEpisode(shown.episode.id)}
       video={episodeVideo(shown.episode.id, locale)}
-      frame={frame}
+      frame={eventEpisodeFrame(shown, { locale, titleOf, buildDay: BUILD_DAY })}
     />
   );
 }
