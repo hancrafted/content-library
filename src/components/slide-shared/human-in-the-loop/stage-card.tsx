@@ -13,7 +13,7 @@ import type { Stage } from './workflow.types';
 
 const CARD = 'rounded-xl border border-border bg-card';
 
-const NAME_BUTTON =
+export const NAME_BUTTON =
   'relative z-10 cursor-pointer rounded-sm text-left outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring';
 
 /** A popover's copy with the name of the stage it explains as its title. */
@@ -37,7 +37,7 @@ export function CheckedMark({ word }: { readonly word: string }) {
   );
 }
 
-function Title({ stage, slot }: { readonly stage: Stage; readonly slot: StageSlot }) {
+export function Title({ stage, slot }: { readonly stage: Stage; readonly slot: StageSlot }) {
   const popover = popoverOf(slot.popover, stage.name);
   return (
     <p className="flex items-center gap-1 text-body font-semibold">
@@ -55,23 +55,28 @@ function Title({ stage, slot }: { readonly stage: Stage; readonly slot: StageSlo
   );
 }
 
+/** The gate's badge; on a narrow Scene, where no arc is drawn, it carries "send back" too. */
+export function GateBadge({ gate, sendBack }: { readonly gate: string; readonly sendBack: string }) {
+  return (
+    <span
+      data-gate=""
+      className="inline-flex w-fit items-center gap-1 rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground"
+    >
+      {gate}
+      <span className="inline-flex items-center gap-1 @2xl:hidden">
+        <Undo2 aria-hidden="true" className="size-3" />
+        {sendBack}
+      </span>
+    </span>
+  );
+}
+
 function Marks({ stage, gate, words }: { stage: Stage; gate: string | undefined; words: UiWords }) {
   if (!isChecked(stage) && !gate) return null;
   return (
     <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
       {isChecked(stage) && <CheckedMark word={words.checked} />}
-      {gate && (
-        <span
-          data-gate=""
-          className="inline-flex w-fit items-center gap-1 rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground"
-        >
-          {gate}
-          <span className="inline-flex items-center gap-1 @2xl:hidden">
-            <Undo2 aria-hidden="true" className="size-3" />
-            {words.sendBack}
-          </span>
-        </span>
-      )}
+      {gate && <GateBadge gate={gate} sendBack={words.sendBack} />}
     </div>
   );
 }

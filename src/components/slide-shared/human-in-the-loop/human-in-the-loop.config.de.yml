@@ -10,6 +10,8 @@ ui:
   viewSoon: 'Kommt bald'
   checked: geprüft
   sendBack: zurückgeben
+  repeats: '× jede Runde ({n})'
+  tryJob: '{job} in {stage} öffnen'
   level: Prompt-Stil
   chat: Chat
   chatTip: 'Chat: Prompts zum Einfügen in einen KI-Chat'

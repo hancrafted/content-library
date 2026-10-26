@@ -22,22 +22,22 @@ describe('success cases', () => {
     ]);
   });
 
-  it('enables Presentation, the one view built so far', () => {
+  it('enables Presentation and Detailed, the views built so far', () => {
     // ARRANGE
     // ACT
     const enabled = viewOptions(words).filter((option) => option.enabled);
     // ASSERT
-    expect(enabled.map(({ view }) => view)).toEqual(['presentation']);
+    expect(enabled.map(({ view }) => view)).toEqual(['presentation', 'detailed']);
   });
 });
 
 describe('failure cases', () => {
-  it('says "Coming soon" on each view that is not built yet, and nothing on the one that is', () => {
+  it('says "Coming soon" on the view that is not built yet, and nothing on the ones that are', () => {
     // ARRANGE
     // ACT
     const tips = viewOptions(words).map(({ tip }) => tip);
     // ASSERT
-    expect(tips).toEqual([undefined, 'Coming soon', 'Coming soon']);
+    expect(tips).toEqual([undefined, undefined, 'Coming soon']);
   });
 });
 

@@ -29,6 +29,9 @@ export interface UiWords {
   /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
   readonly sendBack: string;
+  /** The Detailed view's bracket round a repeated stage (`{n}` rounds) and a job card's hidden name (`{job}`, `{stage}`). */
+  readonly repeats: string;
+  readonly tryJob: string;
   readonly chat: string;
   readonly chatTip: string;
   readonly cli: string;
@@ -161,7 +164,8 @@ export interface DiagramProps {
   readonly words: UiWords;
   /** Where the stages show no "Try it" button: a readonly Preset. */
   readonly readonly: boolean;
-  readonly onOpenStage: (stageId: string) => void;
+  /** A press on a stage's "Try it" button, or on a job card of the Detailed view, which names its job. */
+  readonly onOpenStage: (stageId: string, jobId?: string) => void;
   readonly view: View;
   /** Rounds drawn per repeated stage, by stage id: the run model's count, else the teaching cap. */
   readonly rounds: Readonly<Record<string, number>>;
@@ -202,6 +206,8 @@ export interface ModalProps {
   readonly stage: StageView | null;
   /** The run of the open stage: job states and rounds. */
   readonly run: StageRun | null;
+  /** The job whose card opened the modal: the stepper opens at its first item. */
+  readonly jobId: string | null;
   /** The pasted slot values by marker name, shared by every stage of the Workflow. */
   readonly slotValues: Readonly<Record<string, string>>;
   readonly words: UiWords;

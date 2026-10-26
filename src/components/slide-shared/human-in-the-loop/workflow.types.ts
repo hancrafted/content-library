@@ -18,6 +18,8 @@ export interface Job {
   readonly detail?: string;
   /** Jobs of an earlier stage that must be done first: the producers of this job's slots. */
   readonly dependsOn: readonly string[];
+  /** Jobs of the same stage that run first, as the file's `needs` names them; the Detailed view draws them in this order. */
+  readonly needs: readonly string[];
   /** The slot ids this job takes in, each an output id of a job it depends on. */
   readonly inputs: readonly string[];
   /** What the job hands on: its output id. */

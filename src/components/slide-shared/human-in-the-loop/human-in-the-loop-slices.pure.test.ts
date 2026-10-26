@@ -59,6 +59,19 @@ describe('success cases', () => {
     expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'close' }]);
   });
 
+  it('sends the stage and the job a job card opens, and gives the modal the job', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const state = { ...createState(start), openStageId: 's', openJobId: 'j' };
+    // ACT
+    const slices = slicesOf(shown(flow('two'), state), on);
+    slices.diagram.onOpenStage('s', 'j');
+    // ASSERT
+    expect(slices.modal.jobId).toBe('j');
+    expect(sent).toEqual([{ type: 'open', stageId: 's', jobId: 'j' }]);
+  });
+
   it('gives the toolbar and the diagram the view, and the view control sends a view event', () => {
     // ARRANGE
     const sent: WorkflowEvent[] = [];
