@@ -1,6 +1,7 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
+import type { ProgressActions, ProgressNote, TeachingProps } from './progress-controls.types';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { StageRun } from './workflow-run.pure';
 import type { Level, View } from './workflow-state.pure';
@@ -63,6 +64,17 @@ export interface UiWords {
   readonly noteUnsaved: string;
   readonly downloadProgress: string;
   readonly downloadOldProgress: string;
+  /** The teaching switch: its name, tooltip, and the tooltip while it is locked. */
+  readonly teaching: string;
+  readonly teachingTip: string;
+  readonly teachingLocked: string;
+  /** Reset: its name, its tooltip when saved work was found, and its confirmation. */
+  readonly reset: string;
+  readonly resetTip: string;
+  readonly resetConfirm: string;
+  readonly resetDownload: string;
+  readonly resetNow: string;
+  readonly resetCancel: string;
   readonly discardProgress: string;
   readonly upload: string;
   /** The toolbar's save and load of the progress file; the refusals of a file that does not fit (`{workflow}` is its title). */
@@ -176,25 +188,8 @@ export interface DiagramProps {
   readonly rounds: Readonly<Record<string, number>>;
 }
 
-/** The note about saved progress: an entry of an edited Workflow waits for a choice, or storage refused a write. */
-export interface ProgressNote {
-  readonly kind: 'stale' | 'unsaved';
-  /** Saves the old entry (stale) or the current run (unsaved) as a file. */
-  readonly onDownload: () => void;
-  /** Forgets the old entry; stale only. */
-  readonly onDiscard: () => void;
-}
-
-/** What the toolbar does with the run of the shown Workflow; none for an uploaded one, whose run is not kept. */
-export interface ProgressActions {
-  /** Saves the current run as a YAML file. */
-  readonly onDownload: () => void;
-  /** The text of a progress file the viewer chose; the parent checks it against the shown Workflow. */
-  readonly onUpload: (yaml: string) => void;
-}
-
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
-export interface ToolbarProps {
+export interface ToolbarProps extends TeachingProps {
   readonly workflow: Workflow;
   /** Every authored Workflow, for the pills. */
   readonly choices: readonly { readonly id: string; readonly title: string }[];
@@ -216,7 +211,7 @@ export interface ToolbarProps {
 }
 
 /** What the modal part draws: the open stage's view (null: closed). */
-export interface ModalProps {
+export interface ModalProps extends TeachingProps {
   readonly stage: StageView | null;
   /** The run of the open stage: job states and rounds. */
   readonly run: StageRun | null;

@@ -1,14 +1,8 @@
 import { progressKeyOf, readProgressFile, type Refusal } from '@/lib/progress.pure';
 import { fillTemplate } from '@/lib/template.pure';
-import type {
-  DiagramProps,
-  HumanInTheLoopData,
-  ModalProps,
-  ProgressActions,
-  ProgressNote,
-  ToolbarProps,
-  UiWords,
-} from './human-in-the-loop.types';
+import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps, UiWords } from './human-in-the-loop.types';
+import type { ProgressActions, ProgressNote, TeachingProps, TeachingState } from './progress-controls.types';
+import { offers } from './toolbar-controls.pure';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { markerValuesOf, resultsOf, runOf, type Run } from './workflow-run.pure';
@@ -62,7 +56,10 @@ export function uploadEvent(yaml: string): WorkflowEvent {
 }
 
 /** The callbacks the parts send events up by. */
-export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onView' | 'onWorkflow' | 'onUpload'> &
+export type Callbacks = Pick<
+  ToolbarProps,
+  'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onTeaching' | 'onReset'
+> &
   Pick<DiagramProps, 'onOpenStage'> &
   Pick<ModalProps, 'onClose' | 'onSlots'>;
 
@@ -72,6 +69,8 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
     onLevel: (level) => dispatch({ type: 'level', level }),
     onView: (view) => dispatch({ type: 'view', view }),
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
+    onTeaching: (teaching) => dispatch({ type: 'teaching', teaching }),
+    onReset: () => dispatch({ type: 'reset' }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
     onOpenStage: (stageId, jobId) => dispatch({ type: 'open', stageId, ...(jobId !== undefined && { jobId }) }),
     onClose: () => dispatch({ type: 'close' }),
@@ -100,11 +99,12 @@ export interface Slices {
 
 /** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
-  const { data, state, workflow, view } = shown;
+  const { data, state, workflow } = shown;
   const { words, readonly } = data;
-  const toolbar = toolbarOf(shown, on);
   const { file } = workflow;
   const run = runOf(file, { results: state.slotValues, teaching: state.teaching });
+  const teachingProps = teachingPropsOf(shown, run.canChangeTeaching, on);
+  const toolbar = toolbarOf(shown, on, teachingProps);
   return {
     toolbar,
     diagram: {
@@ -116,26 +116,35 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       slots: data.diagram,
       words,
     },
-    modal: {
-      stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
-      run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
-      jobId: state.openJobId,
-      slotValues: markerValuesOf(file, state.slotValues),
-      words,
-      level: state.level,
-      onLevel: on.onLevel,
-      onClose: on.onClose,
-      onSlots: (values) => on.onSlots(resultsOf(file, values)),
-    },
+    modal: modalOf(shown, on, { run, teaching: teachingProps }),
   };
 }
 
-function toolbarOf({ data, state, workflow, note, progress }: Shown, on: Callbacks): ToolbarProps {
+/** The teaching switch and Reset for both places that hold them: the toolbar and the popover. */
+function teachingPropsOf({ data, state, progress }: Shown, canChange: boolean, on: Callbacks): TeachingProps {
+  const { controls, readonly } = data;
+  const teaching: TeachingState = {
+    show: offers(controls, 'teaching', readonly),
+    resetShow: offers(controls, 'reset', readonly),
+    on: state.teaching,
+    locked: !canChange,
+    hasWork: !canChange,
+  };
+  const onDownloadRun = progress?.onDownload ?? (() => undefined);
+  return { teaching, onTeaching: on.onTeaching, onReset: on.onReset, onDownloadRun };
+}
+
+function toolbarOf(
+  { data, state, workflow, note, progress }: Shown,
+  on: Callbacks,
+  teaching: TeachingProps,
+): ToolbarProps {
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
   const { level, view, uploadProblems } = state;
   const { onLevel, onView, onWorkflow, onUpload } = on;
   return {
+    ...teaching,
     workflow,
     choices,
     level,
@@ -160,4 +169,24 @@ function roundsOf(workflow: Workflow, run: Run): Record<string, number> {
     return stage.foreach ? [[stage.id, held || stage.foreach.teaching] as const] : [];
   });
   return Object.fromEntries(counts);
+}
+
+function modalOf(
+  { data, state, workflow, view }: Shown,
+  on: Callbacks,
+  { run, teaching }: { readonly run: Run; readonly teaching: TeachingProps },
+): ModalProps {
+  const { file } = workflow;
+  return {
+    stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
+    run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
+    jobId: state.openJobId,
+    slotValues: markerValuesOf(file, state.slotValues),
+    words: data.words,
+    level: state.level,
+    onLevel: on.onLevel,
+    onClose: on.onClose,
+    onSlots: (values) => on.onSlots(resultsOf(file, values)),
+    ...teaching,
+  };
 }

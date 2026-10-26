@@ -11,8 +11,9 @@ import {
   shownWorkflow,
   slicesOf,
 } from './human-in-the-loop-slices.pure';
-import type { HumanInTheLoopData, ProgressActions, ProgressNote } from './human-in-the-loop.types';
+import type { HumanInTheLoopData } from './human-in-the-loop.types';
 import { ModalPart } from './modal-part.client';
+import type { ProgressActions, ProgressNote } from './progress-controls.types';
 import { saveFile } from './save-file';
 import { ToolbarPart } from './toolbar-part.client';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
@@ -54,19 +55,28 @@ function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispat
   const progress = useMemo<Progress>(() => ({ results, teaching }), [results, teaching]);
   const onResume = useCallback((saved: Progress) => dispatch({ type: 'restore', ...saved }), [dispatch]);
   const key = target?.key ?? null;
-  const { status, kept, discard } = useProgress({ key, hash: target?.hash ?? '', progress, onResume });
+  const { status, kept, discard, reset } = useProgress({ key, hash: target?.hash ?? '', progress, onResume });
   const onDownload = () => target && saveFile(progressFile(target.id, kept));
   const actions = actionsOf(data, state, dispatch);
-  return { note: noteFor(status, { onDownload, onDiscard: discard }), actions };
+  return { note: noteFor(status, { onDownload, onDiscard: discard }), actions, resetSaved: reset };
 }
 
 export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   const start = { workflowId: data.workflowId, level: data.level, view: data.view };
   const [state, dispatch] = useReducer(reduce, start, createState);
-  const on = useMemo(() => callbacksFor(dispatch), []);
+  const { note, actions, resetSaved } = useSavedProgress(data, state, dispatch);
+  const on = useMemo(() => {
+    const callbacks = callbacksFor(dispatch);
+    return {
+      ...callbacks,
+      onReset: () => {
+        resetSaved();
+        callbacks.onReset();
+      },
+    };
+  }, [resetSaved]);
   const workflow = shownWorkflow(data, state);
   const { level } = state;
-  const { note, actions } = useSavedProgress(data, state, dispatch);
   const view = useMemo(() => workflow && workflowView(workflow, { level }), [workflow, level]);
   if (!workflow || !view) return null;
   const slices = slicesOf({ data, state, workflow, note, progress: actions, view }, on);

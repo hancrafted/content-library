@@ -47,6 +47,15 @@ ui:
   downloadProgress: Fortschritt herunterladen
   downloadOldProgress: Alten Fortschritt herunterladen
   discardProgress: Verwerfen
+  teaching: Lernmodus
+  teachingTip: 'Der Lernmodus hält den Durchlauf kurz: nur die ersten Epics und Tickets, kürzere Rückfragen.'
+  teachingLocked: Zurücksetzen, um zu ändern
+  reset: Zurücksetzen
+  resetTip: 'Frühere Arbeit wurde hier oder in einer anderen Episode gefunden. Zurücksetzen beginnt von vorn.'
+  resetConfirm: 'Zurücksetzen löscht die eingefügten Ergebnisse dieses Workflows, hier und in jeder Episode. Lade sie vorher herunter, um sie zu behalten.'
+  resetDownload: Fortschritt herunterladen
+  resetNow: Jetzt zurücksetzen
+  resetCancel: Abbrechen
   close: Schließen
   copied: Kopiert
   gate: 'Freigabe {n}'
