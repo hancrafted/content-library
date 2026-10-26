@@ -1,8 +1,8 @@
 // The `note` run command: a typed note recorded on an open Job, data the open-pr checklist, the staging test and the
 // dashboard read back from the event log.
+import { NOTE_TYPES, type NoteType } from '../../../src/pipeline/lib/run-log.pure.ts';
+import { openSpan } from '../../../src/pipeline/lib/run-spans.pure.ts';
 import { need, refuse, type Params } from './run-args.pure.ts';
-import { NOTE_TYPES, type NoteType } from './run-log.pure.ts';
-import { openSpan } from './run-spans.pure.ts';
 import { viewOf, write, type RunContext } from './run-view.ts';
 
 /** A typed note on the open Job: data the open-pr checklist, the staging test and the dashboard read back. */

@@ -3,8 +3,8 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { episodeOutline } from './episode-outline.ts';
-import { episodeText, type SlideMessages } from './episode-text.pure.ts';
+import { episodeOutline } from '../../../src/pipeline/lib/episode-outline.ts';
+import { episodeText, type SlideMessages } from '../../../src/pipeline/lib/episode-text.pure.ts';
 
 const args = process.argv.slice(2);
 const localeAt = args.indexOf('--locale');

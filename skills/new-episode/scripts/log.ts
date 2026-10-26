@@ -2,11 +2,11 @@
 // sequence, ids, and for start-run the template sha, branch and run id) and appends one line to the Episode's
 // events.jsonl under a lock, so concurrent writers never interleave. Prints the written line; a start's
 // `span_id` in it is what the caller passes as `parent_span_id` or `span_id` later. Stamping and
-// locking live in run-log-writer.ts; this file only parses argv.
+// locking live in src/pipeline/lib/run-log-writer.ts; this file only parses argv.
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { episodeLogPath } from './episode-run-log.ts';
-import { appendEvent } from './run-log-writer.ts';
+import { episodeLogPath } from '../../../src/pipeline/lib/episode-run-log.ts';
+import { appendEvent } from '../../../src/pipeline/lib/run-log-writer.ts';
 
 function main(): void {
   const slug = process.argv[2];

@@ -320,7 +320,7 @@ Drafts for the user, not applied. Each names its file, under `skills/new-episode
 
 ### Spec page UX, from the user's round-2 review
 
-The user's words, 2026-10-16: the note sits below the Slide where they can no longer see it; the intro is three text-heavy columns they do not read; save should be a full button that confirms and keeps their input. These change `assets/spec-frame.html`, `assets/spec-review.html` and the Spec contract in `src/lib/episode-spec*.pure.ts` with its staging test, so they are built by `/tdd`.
+The user's words, 2026-10-16: the note sits below the Slide where they can no longer see it; the intro is three text-heavy columns they do not read; save should be a full button that confirms and keeps their input. These change `assets/spec-frame.html`, `assets/spec-review.html` and the Spec contract in `src/pipeline/lib/episode-spec*.pure.ts` with its staging test, so they are built by `/tdd`.
 
 11. Pick by tab: the pick checkbox goes; the active tab is the Slide's pick, so every Slide always has exactly one, defaulting to the recommended Option. The contract and `feedback.md` read the pick from the active tab.
 12. Note as a speech bubble: a Note button to the right of the tabs opens a bubble over the stage, typed or dictated, so the Slide stays in view. It stays open with its text while the user switches tabs, has no save of its own, and closes with an × at its top right. The page's Submit saves every bubble's text.

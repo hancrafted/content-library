@@ -7,8 +7,8 @@ import { spawnSync } from 'node:child_process';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { previewPage, previewReport, WIDTH, type Rendered } from '../../../src/pipeline/lib/spec-preview.pure.ts';
 import { buildDesignCss } from './spec-css.ts';
-import { previewPage, previewReport, WIDTH, type Rendered } from './spec-preview.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 

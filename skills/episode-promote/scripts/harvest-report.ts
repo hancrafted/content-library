@@ -7,7 +7,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
-import { harvestReport, type Harvest } from './harvest-report.pure.ts';
+import { harvestReport, type Harvest } from '../../../src/pipeline/lib/harvest-report.pure.ts';
 
 const TEMPLATE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../assets/harvest-report.html');
 const staging = process.argv[2]?.replace(/\/$/, '');

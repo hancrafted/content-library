@@ -5,7 +5,7 @@
 # have collected what it needs, and Han approves it by setting
 # `status: approved` (design-ADR-0008).
 #
-# Schema (checked by src/lib/episode-pipeline.pure.ts in `npm run verify`):
+# Schema (checked by src/pipeline/lib/episode-pipeline.pure.ts in `npm run verify`):
 #   status    draft | approved
 #   template  per-run only: the main commit the pipeline was tailored
 #             from; the template is not merged into the Episode branch again until

@@ -239,7 +239,7 @@ export default tseslint.config(
         'error',
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
-          'src/{page-assembly,components,events,explorable-explanations,hooks}/**/*.tsx': OPTIONAL_CLIENT,
+          'src/{page-assembly,components,events,explorable-explanations,pipeline,hooks}/**/*.tsx': OPTIONAL_CLIENT,
           'src/**/*.ts': '!(*.client)',
         },
         {

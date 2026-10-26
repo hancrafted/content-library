@@ -35,12 +35,12 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 1. A file carrying a top-level `'use client'` directive MUST be named `*.client.tsx`.
 2. A file named `*.client.tsx` MUST carry the directive as its first statement.
-3. `.client` MUST be a `.tsx`-only suffix under `src/{page-assembly,components,events,explorable-explanations,hooks}/**`, never stacked with another classifier.
+3. `.client` MUST be a `.tsx`-only suffix under `src/{page-assembly,components,events,explorable-explanations,pipeline,hooks}/**`, never stacked with another classifier.
 4. No file under `src/app/**` MAY carry a classifier, so no `.client` file sits there.
 
 ### 3. Edges across the boundary
 
-1. `src/hooks/**` MUST be reached only from a `*.client.tsx` file, another hook, or a test; a hook carries no directive.
+1. A hook MUST be reached only from a `*.client.tsx` file, another hook, or a test; it carries no directive.
 2. A `*.client.tsx` file MUST NOT import from `src/app/**`.
 3. `src/lib/prefs-storage.ts` (`window.localStorage`) MUST be reached only from a hook, a `*.client.tsx` file, or a test: at build time it returns `{}`, rendering wrong.
 
@@ -62,7 +62,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 2. **DO** push interactivity down: extract the interactive part into its own `*.client.tsx` leaf, as `site-header.tsx` renders `ThemeToggle`. (Decision 1)
 3. **DO** name a client entry point `<subject>.client.tsx` and open it with `'use client';`. (Decision 2)
 4. **DO** rename the file when the directive is added or removed — the suffix and the directive move together. (Decision 2)
-5. **DO** keep hooks in `src/hooks/**` without the directive, imported from client leaves. (Decision 3)
+5. **DO** keep hooks in `src/**/hooks/**` without the directive, imported from client leaves. (Decision 3)
 6. **DO** reach `readPrefs` / `writePrefs` through a hook or a `*.client.tsx` leaf, as `use-theme.ts` and `locale-toggle.client.tsx` do. (Decision 3)
 7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
 8. **DO** put an Episode's interactive visualisation in its Slide folder as `<name>.client.tsx`, its logic in a `.pure.ts` beside it. (Decision 5)
@@ -104,9 +104,9 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 - §2.1: ESLint core `no-restricted-syntax`, selector `Program > ExpressionStatement[directive='use client']`, over `src/**/*.{ts,tsx}` ignoring `src/**/*.client.tsx`.
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
-- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,components,events,explorable-explanations,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
+- §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,components,events,explorable-explanations,pipeline,hooks}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
 - §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; dependency rules limit a Slide widget's and a `slide-shared` client leaf's reach.
-- §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
+- §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `pipeline-hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src`) inside `npm run lint`, which `npm run verify` and CI run.
 
 **Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.
 

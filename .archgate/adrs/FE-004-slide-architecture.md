@@ -25,6 +25,8 @@ flowchart TD
   pages --> comp["src/components — feature modules"]
   pages --> events["src/events — Events and their Playlists"]
   events --> lib
+  pages --> pipeline["src/pipeline — content pipeline, Run log, dashboard"]
+  pipeline --> lib
   comp --> hooks["src/hooks — browser state"]
   comp --> lib["src/lib — pure logic, no React"]
   hooks --> lib

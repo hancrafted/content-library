@@ -1,7 +1,7 @@
 // `npm run episode:status -- <slug>`: prints each job of the Episode's per-run pipeline with its state,
 // derived from pipeline.yml and events.jsonl. The reading is `readEpisodeStatus`; this file prints it.
-import { readEpisodeStatus } from './episode-status.ts';
-import { renderStatus } from './status.pure.ts';
+import { readEpisodeStatus } from '../../../src/pipeline/lib/episode-status.ts';
+import { renderStatus } from '../../../src/pipeline/lib/status.pure.ts';
 
 const slug = process.argv[2];
 if (!slug) {
