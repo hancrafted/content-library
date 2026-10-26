@@ -10,8 +10,7 @@ import {
   type EventEpisodePage,
 } from '@/content-store/store';
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
-import { episodeCopy, findEpisode } from '@/episodes/lib/registry';
-import { findToolingPage } from '@/episodes/lib/tooling-pages';
+import { compositionOf } from '@/episodes/lib/registry';
 import { eventEpisodeFrame } from '@/events/components/event-episode-frame';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
@@ -46,7 +45,11 @@ export function eventEpisodePageOf(params: { readonly event: string; readonly ep
 export function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
   return matchPage<EpisodePageRef, ReactNode>(page, {
     tooling: ({ tooling }) => (
-      <EpisodePageContainer locale={locale} presents={toolingRef(tooling)} episode={findToolingPage(tooling)} />
+      <EpisodePageContainer
+        locale={locale}
+        presents={toolingRef(tooling)}
+        episode={compositionOf(toolingRef(tooling))}
+      />
     ),
     episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} />,
     'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} />,
@@ -56,7 +59,8 @@ export function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Lo
 /** An Episode's own page: the container, with its recording, and its structured data once published. */
 function OwnEpisodePage({ episode, locale }: { episode: EpisodeRef<EpisodeId>; locale: Locale }) {
   const { id } = episode;
-  const { title, description } = episodeCopy(id, locale);
+  const composition = compositionOf(episode);
+  const { title, description } = composition.messages[locale];
   const video = episodeVideo(id, locale);
   const data =
     episodeStatus(id) === 'published'
@@ -71,7 +75,7 @@ function OwnEpisodePage({ episode, locale }: { episode: EpisodeRef<EpisodeId>; l
   return (
     <>
       {data && <JsonLdScript data={data} />}
-      <EpisodePageContainer locale={locale} presents={episode} episode={findEpisode(id)} video={video} />
+      <EpisodePageContainer locale={locale} presents={episode} episode={composition} video={video} />
     </>
   );
 }
@@ -83,12 +87,12 @@ function OwnEpisodePage({ episode, locale }: { episode: EpisodeRef<EpisodeId>; l
  */
 function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: Locale }) {
   const shown = page.presented;
-  const titleOf = (episode: EpisodeRef<EpisodeId>) => episodeCopy(episode.id, locale).title;
+  const titleOf = (episode: EpisodeRef<EpisodeId>) => compositionOf(episode).messages[locale].title;
   return (
     <EpisodePageContainer
       locale={locale}
       presents={shown.episode}
-      episode={findEpisode(shown.episode.id)}
+      episode={compositionOf(shown.episode)}
       video={episodeVideo(shown.episode.id, locale)}
       frame={eventEpisodeFrame(shown, { locale, titleOf, buildDay: BUILD_DAY })}
     />
@@ -102,14 +106,14 @@ function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: L
  */
 export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy {
   const treatment = treatmentOf(page);
-  const episodeOf = ({ episode: { id } }: { episode: EpisodeRef<EpisodeId> }): PageCopy => {
-    const { title, description } = episodeCopy(id, locale);
-    const publishedOn = episodePublishedOn(id);
+  const episodeOf = ({ episode }: { episode: EpisodeRef<EpisodeId> }): PageCopy => {
+    const { title, description } = compositionOf(episode).messages[locale];
+    const publishedOn = episodePublishedOn(episode.id);
     return { title, description, treatment, ...(publishedOn ? { publishedOn } : {}) };
   };
   return matchPage<EpisodePageRef, PageCopy>(page, {
     tooling: ({ tooling }) => {
-      const { title, description } = findToolingPage(tooling).messages[locale];
+      const { title, description } = compositionOf(toolingRef(tooling)).messages[locale];
       return { title, description, treatment };
     },
     episode: episodeOf,

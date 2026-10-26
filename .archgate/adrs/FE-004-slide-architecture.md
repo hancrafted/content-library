@@ -74,7 +74,7 @@ flowchart LR
 ```mermaid
 flowchart LR
   R["route"] --> P["Episode page template"]
-  P --> REG["registry: slug to record"]
+  P --> REG["registry: ref to record"]
   REG --> REC["Episode record: Sections of Slides"]
   P --> C["container"]
   REC --> C

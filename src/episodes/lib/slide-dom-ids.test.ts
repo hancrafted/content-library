@@ -5,7 +5,7 @@ import { placeSections } from '@/episodes/lib/episode.pure';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { findPageRecord } from './tooling-pages';
+import { compositionAt } from './compositions.fixture';
 
 /*
  * A copied Slide must never break `aria-labelledby` (#51): the same layout
@@ -22,7 +22,7 @@ interface PlacedSlide {
 /** Every Slide of every registered Episode and tooling page. */
 function allSlides(): PlacedSlide[] {
   return EPISODES_PATH_SLUGS.flatMap((episode) =>
-    findPageRecord(episode)
+    compositionAt(episode)
       .sections.flat()
       .map((slide) => ({ episode, slide })),
   );
@@ -30,10 +30,10 @@ function allSlides(): PlacedSlide[] {
 
 /** The Slide's Scene as the page renders it in English, localized into its own Episode. */
 function scene({ episode, slide }: PlacedSlide) {
-  const placed = placeSections<Slide>(findPageRecord(episode).sections).flat();
+  const placed = placeSections<Slide>(compositionAt(episode).sections).flat();
   const own = placed.find((entry) => entry.slide === slide);
   if (own === undefined) throw new Error(`No Slide "${slide.slug}" in "${episode}".`);
-  const header = headerModeOf(findPageRecord(episode));
+  const header = headerModeOf(compositionAt(episode));
   return localizeSlide(own, {
     episode,
     locale: 'en',

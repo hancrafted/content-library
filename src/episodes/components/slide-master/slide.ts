@@ -143,7 +143,8 @@ export type HeaderMode = 'shared' | 'authored';
  * text, so no other owner's Translation files hold any of it. What the Episode
  * declares about itself (status, visibility, Video) is its metadata record,
  * loaded by the content store (FE-013). A tooling page
- * composes its Slides the same way, but is no Episode (`tooling-pages.ts`).
+ * composes its Slides the same way, but is no Episode; both are read by ref
+ * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */
 export interface EpisodeComposition<Ep extends string = string> {
   /** Its folder's name: unique among its siblings, so an Event's copy usually keeps its original's (its id holds the Event). */

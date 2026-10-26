@@ -2,7 +2,7 @@ import { hasPage } from '@/content-store/catalogue/record-routes';
 import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { episodeMinutes } from '@/episodes/components/slide-master/localized-slide';
 import { overviewOrder } from '@/episodes/lib/episode-metadata.pure';
-import { episodeCopy, findEpisode } from '@/episodes/lib/registry';
+import { compositionOf } from '@/episodes/lib/registry';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { hasReadingTime, wholeMinutes } from '@/shared/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
@@ -10,8 +10,8 @@ import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './e
 
 /** A published Episode's whole reading time; none without a Voice script. */
 function minutesOf(entry: LoadedEpisode, locale: Locale): number | undefined {
-  if (entry.status !== 'published') return undefined;
-  const total = episodeMinutes(findEpisode(entry.ref.id), locale);
+  if (entry.status !== 'published' || !hasPage(entry.ref)) return undefined;
+  const total = episodeMinutes(compositionOf(entry.ref), locale);
   return hasReadingTime(total) ? wholeMinutes(total) : undefined;
 }
 
@@ -22,11 +22,18 @@ function youtubeOf(entry: LoadedEpisode, locale: Locale): { youtubeId?: string }
   return id === undefined ? {} : { youtubeId: id };
 }
 
-/** An Episode with a page (published, or upcoming with its id registered) with its title and caption from the registry, by id; a page-less upcoming one has no record. */
+/**
+ * An Episode with a page (published, or upcoming with its id registered) with its title and caption from the registry,
+ * by its ref; a page-less upcoming one has no record, and a page-less published one is a bug, so it throws.
+ */
 function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
-  if (entry.status !== 'published' && !hasPage(entry.ref)) return entry;
-  const { title, caption } = episodeCopy(entry.ref.id, locale);
-  return { ...entry, copy: { title, caption } };
+  const { ref } = entry;
+  if (hasPage(ref)) {
+    const { title, caption } = compositionOf(ref).messages[locale];
+    return { ...entry, copy: { title, caption } };
+  }
+  if (entry.status !== 'published') return entry;
+  throw new Error(`The published Episode "${ref.id}" has no page to read its title and caption from`);
 }
 
 /** The Episode's Featured slot, 1 first; none when it holds no slot. */
