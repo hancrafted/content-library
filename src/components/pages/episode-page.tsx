@@ -1,6 +1,6 @@
 import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
-import { findToolingPage } from '@/components/episodes/tooling-pages';
+import { findEpisodesPathPage, findToolingPage } from '@/components/episodes/tooling-pages';
 import { JsonLdScript } from '@/components/json-ld';
 import { episodePublishedOn, episodeStatus, episodeVideo, pageFacts } from '@/content-store/store';
 import type { Locale } from '@/lib/locale.pure';
@@ -8,7 +8,6 @@ import type { PageCopy } from '@/lib/page-metadata.pure';
 import {
   EPISODES_PATH_SLUGS,
   episodesPathPage,
-  isEpisodesPathSlug,
   matchPage,
   type EpisodeSlug,
   type EpisodesPathPage,
@@ -27,8 +26,7 @@ function isExported(page: EpisodesPathPage): boolean {
 
 /** The page a slug under `/episodes/` names, when the visibility predicate exports one there; else no page. */
 function exportedPage(slug: string): EpisodesPathPage {
-  if (!isEpisodesPathSlug(slug)) notFound();
-  const page = episodesPathPage(slug);
+  const page = findEpisodesPathPage(slug);
   if (!isExported(page)) notFound();
   return page;
 }
@@ -83,9 +81,7 @@ function OwnEpisodePage({ slug, locale }: { slug: EpisodeSlug; locale: Locale })
  * robots and canonical; a tooling page's from its own record, with no facts, since it is `noindex` as a tooling page.
  */
 export function episodePageCopy(slug: string, locale: Locale): PageCopy {
-  if (!isEpisodesPathSlug(slug)) notFound();
-  const page = episodesPathPage(slug);
-  return matchPage<EpisodesPathPage, PageCopy>(page, {
+  return matchPage<EpisodesPathPage, PageCopy>(findEpisodesPathPage(slug), {
     tooling: ({ tooling }) => {
       const { title, description } = findToolingPage(tooling).messages[locale];
       return { title, description };

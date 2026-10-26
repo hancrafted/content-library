@@ -25,11 +25,15 @@ export function findToolingPage(slug: string): EpisodeComposition<ToolingSlug> {
   return TOOLING_PAGES[slug];
 }
 
+/** The page a slug under `/episodes/<slug>/` names: a tooling page, or an Episode's own; any other slug is no page. */
+export function findEpisodesPathPage(slug: string): EpisodesPathPage {
+  if (!isEpisodesPathSlug(slug)) notFound();
+  return episodesPathPage(slug);
+}
+
 /** The Slides a page under `/episodes/<slug>/` renders: a tooling page's, else the Episode's from the registry. */
 export function findPageRecord(slug: string): EpisodeComposition {
-  if (!isEpisodesPathSlug(slug)) notFound();
-  const page = episodesPathPage(slug);
-  return matchPage<EpisodesPathPage, EpisodeComposition>(page, {
+  return matchPage<EpisodesPathPage, EpisodeComposition>(findEpisodesPathPage(slug), {
     tooling: ({ tooling }) => TOOLING_PAGES[tooling],
     episode: ({ episode }) => findEpisode(episode),
   });
