@@ -52,7 +52,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 
 1. An Episode's `*.client.tsx` files MUST live in a Slide folder `episodes/<ep>/slides/<slide>/`, nowhere else; the Slide's entry stays server.
 2. A Slide's client widget MUST reach only its own folder, hooks and lib.
-3. A `slide-shared` part's client leaf MUST sit in that part's folder and reach only it, hooks and lib; the part's entry stays server.
+3. A `slide-shared` part's client leaf MUST sit in that part's folder and reach only it, `slide-shared/core-components/`, `ui/`, hooks and lib; the part's entry stays server.
 
 ## Do's and Don'ts
 

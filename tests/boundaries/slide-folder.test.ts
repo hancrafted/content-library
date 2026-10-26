@@ -149,9 +149,15 @@ describe('success cases', () => {
 });
 
 describe('core-components', () => {
-  it('lets a slide-shared client leaf, a Slide server file and a core file reach core, hooks and lib', () => {
+  it('lets a slide-shared client leaf reach core and the UI kit, and a Slide server file and a core file reach core, hooks and lib', () => {
     // ARRANGE
-    const files = ['uses-core.client.tsx', 'uses-core.tsx', 'probe-core.tsx', 'probe-core.client.tsx'];
+    const files = [
+      'uses-core.client.tsx',
+      'uses-core.tsx',
+      'probe-core.tsx',
+      'probe-core.client.tsx',
+      'reaches-ui.client.tsx',
+    ];
     // ACT
     const found = violations().filter((line) => files.some((file) => line.includes(`: ${file} ->`)));
     // ASSERT
@@ -160,7 +166,7 @@ describe('core-components', () => {
 });
 
 describe('failure cases', () => {
-  it('rejects a Slide importing another Slide, the Episode file or a non-shared component, a client widget reaching the Slide master, a slide-shared client leaf leaving its part, and a slide-shared server part reaching a hook', () => {
+  it('rejects a Slide importing another Slide, the Episode file or a non-shared component, a client widget reaching the Slide master, a slide-shared client leaf reaching another part, and a slide-shared server part reaching a hook', () => {
     // ARRANGE
     const expected = [
       'core-components-are-a-leaf: reaches-part.tsx -> src/components/slide-shared/statement.tsx',
@@ -171,7 +177,6 @@ describe('failure cases', () => {
       'slide-folder-reaches-only-own-and-shared: reaches-other-slide.tsx -> src/components/episodes/probe/slides/other-slide/slide.tsx',
       'slide-folder-reaches-only-own-and-shared: reaches-toc.tsx -> src/components/table-of-contents/toc.tsx',
       'slide-shared-client-reaches-only-own-part-hooks-and-lib: reaches-other-part.client.tsx -> src/components/slide-shared/statement.tsx',
-      'slide-shared-client-reaches-only-own-part-hooks-and-lib: reaches-ui.client.tsx -> src/components/ui/button.tsx',
       'slide-shared-reaches-only-ui-and-lib: reaches-hook.tsx -> src/hooks/use-probe.ts',
     ];
     // ACT

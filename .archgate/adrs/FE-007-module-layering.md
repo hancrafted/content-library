@@ -51,7 +51,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 ### 5. A Slide folder imports only global shared code
 
 1. A Slide folder, `episodes/<ep>/slides/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `slide-shared/core-components/` only from its server files, never from a `*.client.tsx` widget.
-2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `slide-shared/core-components/`, hooks, lib.
+2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `slide-shared/core-components/`, `ui/`, hooks, lib. `ui/` imports no Slide, Episode or part, so a client leaf reaching it still travels with its part.
    1. (§5.2.1) `src/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
    2. (§5.2.2) Every `slide-shared` part, its `*.client.tsx` files included, MAY import `core-components/`.
 3. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing else. §4 holds inside.

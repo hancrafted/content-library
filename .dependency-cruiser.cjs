@@ -135,9 +135,17 @@ module.exports = {
       name: 'slide-shared-client-reaches-only-own-part-hooks-and-lib',
       severity: 'error',
       comment:
-        "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/components/slide-shared/<part>/) and reaches only that folder, src/hooks/ and src/lib/ — never another part, the UI kit, a Slide or the Slide master. The one exception is core-components/, which any slide-shared part, client leaf included, may import (FE-006 §5, FE-007 §5.2).",
+        "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/components/slide-shared/<part>/) and reaches only that folder, core-components/, the UI kit (src/components/ui/), src/hooks/ and src/lib/ — never another part, a Slide or the Slide master. The UI kit imports no Slide, Episode or part, so the leaf still travels with its part (FE-006 §5, FE-007 §5.2).",
       from: { path: SLIDE_SHARED_CLIENT },
-      to: { pathNot: ['^src/components/slide-shared/$1/', CORE_COMPONENTS, '^src/(hooks|lib)/', 'node_modules'] },
+      to: {
+        pathNot: [
+          '^src/components/slide-shared/$1/',
+          CORE_COMPONENTS,
+          '^src/components/ui/',
+          '^src/(hooks|lib)/',
+          'node_modules',
+        ],
+      },
     },
     {
       name: 'core-components-are-a-leaf',
