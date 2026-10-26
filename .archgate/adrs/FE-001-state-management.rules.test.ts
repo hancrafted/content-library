@@ -1,8 +1,8 @@
 /// <reference path="../rules.d.ts" />
 
 // Sibling test for FE-001-state-management.rules.ts — pass and fail path for
-// `single-storage-key`: calls passing the constant or the literal, calls
-// passing anything else, a drifted `PREFS_KEY`, and a missing or empty config.
+// `single-storage-key`: calls passing either kind's constant or literal, calls
+// passing anything else, a drifted constant, and a missing or empty config.
 
 import { describe, expect, it } from 'vitest';
 import ruleSet from './FE-001-state-management.rules';
@@ -15,13 +15,17 @@ interface Reported {
 
 const CONFIG = 'src/config.yaml';
 const KEY = 'hancrafted:prefs';
+const PROGRESS = 'hancrafted:progress';
 
 // Marks the config file as absent; a default parameter would swallow `undefined`.
 const MISSING = Symbol('missing');
 
 // Stands in for archgate's RuleContext. `config` is the already-parsed YAML
 // document, or MISSING for an absent file, so no YAML parser is needed.
-function makeCtx(files: Record<string, string>, config: unknown = { localStorageKey: KEY }) {
+function makeCtx(
+  files: Record<string, string>,
+  config: unknown = { localStorageKey: KEY, progressStorageKey: PROGRESS },
+) {
   const violations: Reported[] = [];
   const ctx = {
     projectRoot: '/repo',
@@ -67,6 +71,27 @@ describe('single-storage-key', () => {
     expect(violations).toEqual([]);
   });
 
+  it('passes on the progress key, as constant and as literal', async () => {
+    // ARRANGE
+    const { ctx, violations } = makeCtx({
+      [PURE]: `export const PROGRESS_KEY = '${PROGRESS}';\n`,
+      [STORAGE]: `localStorage.getItem(PROGRESS_KEY);\nlocalStorage.setItem('${PROGRESS}', raw);\n`,
+    });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it('fails when PROGRESS_KEY drifts from the config', async () => {
+    // ARRANGE
+    const { ctx, violations } = makeCtx({ [PURE]: `export const PROGRESS_KEY = 'hancrafted:runs';\n` });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations.map((v) => v.file)).toEqual([PURE]);
+  });
+
   it('fails on a call passing another key, on the line it sits on', async () => {
     // ARRANGE
     const expectedLine = 2;
@@ -100,8 +125,9 @@ describe('single-storage-key', () => {
 
   const badConfigs: [label: string, config: unknown][] = [
     ['a missing config', MISSING],
-    ['an empty key', { localStorageKey: '' }],
-    ['a non-string key', { localStorageKey: 1 }],
+    ['an empty key', { localStorageKey: '', progressStorageKey: PROGRESS }],
+    ['a non-string key', { localStorageKey: 1, progressStorageKey: PROGRESS }],
+    ['a missing progress key', { localStorageKey: KEY }],
     ['an empty document', null],
   ];
 
