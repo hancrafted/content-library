@@ -5,6 +5,9 @@ import type { Stage } from './workflow.types';
  * drawing to the pixel: a 24 wide box, branches 60 apart around the join, 20 from the edge.
  */
 
+/** Rounds drawn per repeated stage, by stage id. */
+export type Rounds = Readonly<Record<string, number>>;
+
 export type Connector = { readonly kind: 'straight' } | { readonly kind: 'out' | 'in'; readonly branches: number };
 
 export interface Fan {
@@ -15,19 +18,20 @@ export interface Fan {
   readonly heads: string;
 }
 
-const PITCH = 60;
+export const BRANCH_PITCH = 60;
+const PITCH = BRANCH_PITCH;
 const MARGIN = 20;
 const MIN_HEIGHT = 160;
 const WIDTH = 20;
 
-/** The most chats any job of a stage runs in parallel. */
-const widest = (stage: Stage): number => Math.max(1, ...stage.jobs.map((job) => job.fanOut ?? 1));
+/** The cards a stage draws side by side: one per round of a repeated stage, else one. */
+const widest = (stage: Stage, rounds: Rounds): number => Math.max(1, rounds[stage.id] ?? 1);
 
 /** The hairline into `stage`: out to its chats, back in from the previous stage's chats, else straight. */
-export function connectorInto(previous: Stage | undefined, stage: Stage): Connector {
-  const into = widest(stage);
+export function connectorInto(previous: Stage | undefined, stage: Stage, rounds: Rounds): Connector {
+  const into = widest(stage, rounds);
   if (into > 1) return { kind: 'out', branches: into };
-  const from = previous ? widest(previous) : 1;
+  const from = previous ? widest(previous, rounds) : 1;
   return from > 1 ? { kind: 'in', branches: from } : { kind: 'straight' };
 }
 

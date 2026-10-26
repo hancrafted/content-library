@@ -13,6 +13,7 @@ import { ProgressNote } from './progress-note.client';
 import { saveFile } from './save-file';
 import { ToolButton } from './tool-button.client';
 import { offers } from './toolbar-controls.pure';
+import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
@@ -141,11 +142,12 @@ function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; reado
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: Chat · CLI, progress save and load, download, upload. */
+/** The icon buttons the registry and the Preset allow, in order: view, Chat · CLI, progress save and load, download, upload. */
 function Icons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
   const { controls, readonly, words, level } = bar;
   return (
     <>
+      {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
       {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
       <ProgressIcons bar={bar} describedBy={describedBy} />
       {offers(controls, 'download') && (
@@ -169,6 +171,7 @@ function Icons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly desc
 
 const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
 const hasIcons = (bar: ToolbarProps) =>
+  offers(bar.controls, 'view') ||
   offers(bar.controls, 'level', bar.readonly) ||
   offers(bar.controls, 'download') ||
   offers(bar.controls, 'upload') ||

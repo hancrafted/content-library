@@ -9,10 +9,14 @@ import type { Workflow } from './workflow.types';
 /** Simple copies long prompts; Technical copies the matching `/skill` command. */
 export type Level = 'simple' | 'technical';
 
+/** What the diagram shows: a card per stage, every job, or the viewer's progress. Transient: never stored. */
+export type View = 'presentation' | 'detailed' | 'handson';
+
 export interface WorkflowState {
   /** The shown Workflow: an authored one, or the uploaded one's id. */
   readonly workflowId: string;
   readonly level: Level;
+  readonly view: View;
   /** The stage whose "Try it" modal is open, if any. */
   readonly openStageId: string | null;
   /** A Workflow the viewer uploaded and that is shown instead of an authored one. */
@@ -29,11 +33,14 @@ export interface WorkflowState {
 export interface Start {
   readonly workflowId: string;
   readonly level: Level;
+  /** The Preset's starting view; a reload returns to it. */
+  readonly view: View;
 }
 
 /** What a part can ask the parent for. */
 export type WorkflowEvent =
   | { readonly type: 'level'; readonly level: Level }
+  | { readonly type: 'view'; readonly view: View }
   | { readonly type: 'workflow'; readonly workflowId: string }
   | { readonly type: 'open'; readonly stageId: string }
   | { readonly type: 'close' }
@@ -70,6 +77,7 @@ const FRESH = {
 
 const HANDLERS: Handlers = {
   level: (state, { level }) => ({ ...state, level }),
+  view: (state, { view }) => ({ ...state, view }),
   workflow: (state, { workflowId }) => ({ ...state, ...FRESH, workflowId }),
   open: (state, { stageId }) => ({ ...state, openStageId: stageId }),
   close: (state) => (state.openStageId === null ? state : { ...state, openStageId: null }),
