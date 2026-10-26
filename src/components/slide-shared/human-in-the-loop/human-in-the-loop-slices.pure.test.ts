@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { callbacksFor, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
+import { callbacksFor, progressTarget, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
 import summerPartyEn from './summer-party.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
@@ -15,6 +15,7 @@ const words = {} as UiWords;
 const data: HumanInTheLoopData = {
   workflows: [flow('one'), flow('two')],
   workflowId: 'two',
+  hashes: {},
   locale: 'en',
   words,
   controls: {},
@@ -25,6 +26,7 @@ const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   data,
   state,
   workflow,
+  note: null,
   view: workflowView(workflow, state),
 });
 const start = { workflowId: data.workflowId, level: data.level };
@@ -86,6 +88,29 @@ describe('success cases', () => {
     expect(modal.run?.rounds.map((round) => round.number)).toEqual(rounds);
     expect(sent).toEqual([{ type: 'slots', values: { 'research.venue#3': 'R3' } }]);
   });
+
+  it('names the run of the shown authored Workflow by its key and the hash of its files', () => {
+    // ARRANGE
+    const withHashes = { ...data, hashes: { one: 'h1', two: 'h2' } };
+    // ACT
+    const target = progressTarget(withHashes, createState(start));
+    // ASSERT
+    expect(target).toEqual({ key: 'human-in-the-loop/two', hash: 'h2' });
+  });
+
+  it('hands the toolbar the note about saved progress', () => {
+    // ARRANGE
+    const state = createState(start);
+    const workflow = flow('two');
+    const note = { kind: 'stale', onDownload: () => undefined, onDiscard: () => undefined } as const;
+    // ACT
+    const slices = slicesOf(
+      { data, state, workflow, note, view: workflowView(workflow, state) },
+      callbacksFor(() => undefined),
+    );
+    // ASSERT
+    expect(slices.toolbar.note).toBe(note);
+  });
 });
 
 describe('failure cases', () => {
@@ -112,13 +137,22 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('keeps no run for an uploaded Workflow', () => {
+    // ARRANGE
+    const state = { ...createState(start), uploaded: flow('mine') };
+    // ACT
+    const target = progressTarget({ ...data, hashes: { two: 'h2' } }, state);
+    // ASSERT
+    expect(target).toBeNull();
+  });
+
   it('hands the parts the readonly flag of the Preset, so none shows a Try it button or the Technical toggle', () => {
     // ARRANGE
     const state = createState(start);
     const workflow = flow('two');
     // ACT
     const slices = slicesOf(
-      { data: { ...data, readonly: true }, state, workflow, view: workflowView(workflow, state) },
+      { data: { ...data, readonly: true }, state, workflow, note: null, view: workflowView(workflow, state) },
       callbacksFor(() => undefined),
     );
     // ASSERT

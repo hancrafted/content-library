@@ -1,3 +1,4 @@
+import { pairHash } from '@/lib/pair-hash.pure';
 import { parse } from 'yaml';
 import uiDe from './human-in-the-loop.config.de.yml';
 import uiEn from './human-in-the-loop.config.yml';
@@ -52,6 +53,9 @@ export const workflowFor = memoized(
     return workflowOf(result.file);
   },
 );
+
+/** The hash of one authored Workflow's English and German files together: a saved run resumes only under the same one. */
+export const hashFor = (id: WorkflowId): string => pairHash(SOURCES[id].en, SOURCES[id].de);
 
 /** The visual's own file of one locale, parsed once. */
 const chromeWordsOf = memoized(
