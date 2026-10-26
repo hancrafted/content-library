@@ -87,7 +87,7 @@ Static export runs no middleware, so locales are an explicit route tree; next-in
 - `src/app/(en)/` — default-locale routes, rendered with `locale="en"`.
 - `src/app/[locale]/` — prefixed routes; `generateStaticParams` returns only `de`.
 
-Both are root layouts that render the same `SiteShell`, header and page components from `src/components/`. Build URLs with `localizePath` from `src/lib/locale.pure.ts`; never hand-write a `/de` prefix.
+Both are root layouts that render the same `SiteShell` and header from `src/components/`; each route renders one page template from `src/page-assembly/`. Build URLs with `localizePath` from `src/lib/locale.pure.ts`; never hand-write a `/de` prefix.
 
 Strings live in `src/messages/<locale>.json`. Read them with `getTranslations({ locale, namespace })` from `next-intl/server`, passing the locale explicitly. Episode keys follow `docs/features/episode-translation-keys.md`. `de.json` is typed against `en.json`, so a missing German key fails `npm run typecheck`, and a missing key at render time fails the build.
 

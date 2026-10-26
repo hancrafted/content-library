@@ -4,8 +4,8 @@ id: FE-008
 title: 'Page Metadata'
 domain: frontend
 rules: true
-files: ['src/app/**/*.tsx', 'src/lib/structured-data*.ts']
-paths: ['src/app/**/*.{ts,tsx}', 'src/lib/{page-metadata,site-url,sitemap,structured-data}*.ts']
+files: ['src/app/**/*.tsx', 'src/page-assembly/{lib,sitemap}/*.ts']
+paths: ['src/app/**/*.{ts,tsx}', 'src/page-assembly/{lib,sitemap}/*.ts', 'src/lib/site-url*.ts']
 description: 'Every page exports metadata built by pageMetadata(): per-locale title and description from the next-intl Translation files, a canonical, and reciprocal en/de/x-default hreflang, resolved against a SITE_URL the deploy sets. Layouts hold site-wide metadata only. Indexable pages also carry social cards and structured data.'
 ---
 

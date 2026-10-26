@@ -1,8 +1,6 @@
 import { headerModeOf } from '@/components/slide-master/slide';
-import { listEpisodes, treatmentOf } from '@/content-store/store';
-import { episodeRefOf, matchEpisode } from '@/lib/episode-id.pure';
-import { pageMetadata } from '@/lib/page-metadata.pure';
-import { EPISODE_IDS, isEpisodeId, isEventSlug, type RecordPage } from '@/lib/routes';
+import { listEpisodes } from '@/content-store/store';
+import { EPISODE_IDS, isEpisodeId } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
 import { episodeCopy, findEpisode } from './registry';
 
@@ -21,17 +19,6 @@ const PUBLISHED_PUBLIC = listEpisodes()
   .filter(({ id, status, visibility }) => status === 'published' && visibility === 'public' && isEpisodeId(id))
   .map(({ id }) => id)
   .sort();
-
-/** The page an Episode is served at: its own under `/episodes/`, or, for an Event's copy, under its Event. */
-function servedPageOf(id: (typeof EPISODE_IDS)[number]): RecordPage {
-  return matchEpisode(episodeRefOf(id), {
-    standalone: (): RecordPage => ({ kind: 'episode', episode: id }),
-    'event-copy': ({ event }): RecordPage => {
-      if (!isEventSlug(event)) throw new Error(`"${id}" names no Event`);
-      return { kind: 'event-episode', event, episode: id };
-    },
-  });
-}
 
 /** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
 const COMPOSITION = [
@@ -125,21 +112,6 @@ describe('success cases', () => {
     // ASSERT
     expect(texts).toEqual([expected, expected]);
     expect(texts.flatMap(({ title, caption, description }) => [title, caption, description])).not.toContain('');
-  });
-
-  it.each(EPISODE_IDS)('produces page metadata for %s in en and de where it is served, canonical per locale', (id) => {
-    // ARRANGE
-    const [event, slug] = id.includes('__') ? id.split('__') : [undefined, id];
-    const path = event === undefined ? `/episodes/${slug}` : `/events/${event}/episodes/${slug}`;
-    const expectedCanonical = { en: path, de: `/de${path}` };
-    // ACT
-    const page = servedPageOf(id);
-    const meta = (['en', 'de'] as const).map((locale) =>
-      pageMetadata(page, locale, { ...findEpisode(id).messages[locale], treatment: treatmentOf(page) }),
-    );
-    // ASSERT
-    expect({ en: meta[0].alternates?.canonical, de: meta[1].alternates?.canonical }).toEqual(expectedCanonical);
-    expect(meta.map(({ title }) => title)).not.toContain('');
   });
 
   it("reads an Episode's German text from its own folder", () => {

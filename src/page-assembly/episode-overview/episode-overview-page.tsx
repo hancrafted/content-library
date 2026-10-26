@@ -66,10 +66,10 @@ function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
 }
 
 /**
- * The /episodes index page (FE-007 §1): lists every published Episode, and in dev mode
+ * The Episode overview, the page at /episodes (FE-007 §1): lists every published Episode, and in dev mode
  * also lists in-progress staging Episodes as a GUI entry point (#85). The tooling pages close the page.
  */
-export async function EpisodesIndexPage({ locale }: { locale: Locale }) {
+export async function EpisodeOverviewPage({ locale }: { locale: Locale }) {
   const isDev = process.env.NODE_ENV === 'development';
   const tLanding = await getTranslations({ locale, namespace: 'landing' });
   const tPage = await getTranslations({ locale, namespace: 'episodesPage' });

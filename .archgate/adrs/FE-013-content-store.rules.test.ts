@@ -235,7 +235,7 @@ describe('type-from-schema', () => {
       ['src/content-store/refusals.ts', 1],
       ['src/lib/episode-metadata.pure.ts', 1],
       ['src/lib/episode-metadata.pure.ts', 2],
-      ['src/lib/sitemap.pure.ts', 1],
+      ['src/page-assembly/sitemap/sitemap.pure.ts', 1],
     ];
     const { ctx, violations } = makeCtx({
       [MODEL]: diagram(STORE_LINE),
@@ -243,7 +243,7 @@ describe('type-from-schema', () => {
       'src/content-store/refusals.ts': 'export type Playlist = Readonly<{ episodes: string[] }>;\n',
       'src/lib/episode-metadata.pure.ts':
         'export interface PublishedEpisodeMetadata { slug: string }\nexport type WorkshopRecord = { slug: string };\n',
-      'src/lib/sitemap.pure.ts': 'interface Episode { slug: string }\n',
+      'src/page-assembly/sitemap/sitemap.pure.ts': 'interface Episode { slug: string }\n',
       [METADATA]: "export const episodeMetadata = { slug: 'probe' } as const satisfies { slug: string };\n",
     });
     // ACT

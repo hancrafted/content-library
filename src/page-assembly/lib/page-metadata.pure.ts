@@ -1,7 +1,6 @@
-import type { Metadata } from 'next';
-import type { IsoDate } from '../content-store/schemas/fields';
-import { TRANSLATIONS } from '../i18n/translations';
-import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
+import type { IsoDate } from '@/content-store/schemas/fields';
+import { TRANSLATIONS } from '@/i18n/translations';
+import { DEFAULT_LOCALE, localizePath, type Locale } from '@/lib/locale.pure';
 import {
   episodeRoute,
   matchPage,
@@ -11,23 +10,9 @@ import {
   type PageKind,
   type PageRef,
   type RecordPage,
-} from './routes';
-import { pageTreatment, type PageTreatment } from './visibility.pure';
-
-/** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
-const LOCAL_ORIGIN = 'http://localhost:3000';
-
-/**
- * The absolute URL the site is served from — origin plus base path, no trailing
- * slash. The Cloudflare Pages deploy sets `SITE_URL` to https://hancrafted.net;
- * unset, local and pull-request builds fall back to localhost (FE-008).
- */
-export function resolveSiteUrl(env: Readonly<Record<string, string | undefined>>): string {
-  const configured = env.SITE_URL?.replace(/\/+$/, '');
-  if (!configured) return `${LOCAL_ORIGIN}${env.NEXT_PUBLIC_BASE_PATH ?? ''}`;
-  if (!URL.canParse(configured)) throw new Error(`SITE_URL must be an absolute URL, got "${configured}"`);
-  return configured;
-}
+} from '@/lib/routes';
+import { pageTreatment, type PageTreatment } from '@/lib/visibility.pure';
+import type { Metadata } from 'next';
 
 /** A root layout's metadata: the absolute base and the site-name title frame. Nothing page-specific. */
 export function siteMetadata(locale: Locale, siteUrl: string): Metadata {

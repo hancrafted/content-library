@@ -4,8 +4,8 @@ import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
-/** The /events page: a title with a one-line intro, then one card per Event whose Playlist is public. */
-export async function EventsIndexPage({ locale }: { locale: Locale }) {
+/** The Events overview, the page at /events: a title with a one-line intro, then one card per Event whose Playlist is public. */
+export async function EventsOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'eventsPage' });
   const cards = await eventCards(locale, { listedOnly: true });
   return (

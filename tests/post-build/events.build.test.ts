@@ -13,7 +13,6 @@ import { episodeStatus, episodeVisibility, listEvents } from '../../src/content-
 import { episodeRefOf } from '../../src/lib/episode-id.pure';
 import { isPastEvent } from '../../src/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
-import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
 import {
   episodeRoute,
   eventEpisodeRoute,
@@ -23,6 +22,7 @@ import {
   type EpisodeId,
   type EventSlug,
 } from '../../src/lib/routes';
+import { resolveSiteUrl } from '../../src/lib/site-url.pure';
 import { exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);

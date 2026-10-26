@@ -1,8 +1,8 @@
-import { MethodRailSection } from '@/components/landing/method-rail-section.client';
-import type { MethodCard } from '@/components/landing/method-slide-item';
 import { externalHref } from '@/lib/external-link.pure';
 import { FRAMEWORK_SLIDES, type FrameworkSlideData } from '@/lib/framework-slides.pure';
 import type { Locale } from '@/lib/locale.pure';
+import { MethodRailSection } from '@/page-assembly/landing/method-rail-section.client';
+import type { MethodCard } from '@/page-assembly/landing/method-slide-item';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
