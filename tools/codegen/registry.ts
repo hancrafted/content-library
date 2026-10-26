@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
-import { pageFolders } from '../src/lib/episode-folders.ts';
+import { pageFolders } from '../../src/lib/episode-folders.ts';
 import { episodeRegistryFiles, type EpisodeFolder, type RegistryFile } from './episode-registry.pure.ts';
 import { eventRegistryFiles } from './event-registry.pure.ts';
 
