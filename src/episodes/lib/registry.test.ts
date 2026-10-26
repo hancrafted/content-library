@@ -7,90 +7,18 @@ import { compositionOf } from './registry';
 
 /*
  * The one composition lookup (FE-002): the Slides and own text a page renders, by the EpisodeRef of an Episode with a
- * page or the ref of a tooling page. What every registered Episode shares: a record under its Episode id carrying its folder's slug,
- * its own text from its folder's `i18n/` (what the Title slide, the page
- * metadata and the landing card read) and the Section list its Dossier fixes.
- * Every Episode comes from the Episode registry. The per-Episode facts in the tables below are written out by hand from
- * each published public Episode's Dossier, and every one has its rows, written at publication; an Episode still in the
- * pipeline gains Slides Section by Section, and an unlisted Episode is a copy made for one Event and left to drift
- * (product vision, rule 4), so neither has a fixed composition to pin.
+ * page or the ref of a tooling page. What every registered Episode shares: a record under its Episode id carrying its
+ * folder's slug, its own text from its folder's `i18n/` (what the Title slide, the page metadata and the landing card
+ * read), and Sections each opened by the Slide that names it. Each holds for every Episode the registry holds, so
+ * adding or publishing one adds no row here. The one per-Episode fact is the header mode, a deliberate content
+ * decision: only the Episodes built before the shared Slide header (design-ADR-0012) author their own.
  */
-
-/** The published public Episodes, by id: the ones the tables below must cover, no more, no less. */
-const PUBLISHED_PUBLIC = listEpisodes()
-  .filter(({ ref, status, visibility }) => status === 'published' && visibility === 'public' && hasPage(ref))
-  .map(({ ref }) => ref.id)
-  .sort();
 
 /** Every Episode with a page, by its EpisodeRef, as the store serves it. */
 const WITH_PAGE = listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : []));
 
-/** The Section openers and page-Slide counts each Episode composes, in Dossier (or approved Spec) order. */
-const COMPOSITION = [
-  {
-    slug: 'ai-token-economy',
-    sections: [
-      { opener: 'motivation', pageSlides: 4 },
-      { opener: 'what-is-a-token', pageSlides: 2 },
-      { opener: 'managing-context', pageSlides: 2 },
-      { opener: 'cost-of-agentic-ai', pageSlides: 1 },
-      { opener: 'model-tiers', pageSlides: 0 },
-      { opener: 'tools-and-tips', pageSlides: 0 },
-    ],
-  },
-  {
-    slug: 'maintaining-markdown-for-ai',
-    sections: [
-      { opener: 'markdown-in-ai-workflows', pageSlides: 0 },
-      { opener: 'volume-outruns-review', pageSlides: 0 },
-      { opener: 'where-the-effort-goes', pageSlides: 3 },
-      { opener: 'google-okf', pageSlides: 0 },
-      { opener: 'steering-the-ai', pageSlides: 3 },
-      { opener: 'the-verifying-half-is-yours', pageSlides: 0 },
-    ],
-  },
-  {
-    slug: 'ai-gives-you-more-work',
-    sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
-  },
-  {
-    slug: 'never-too-early-sales',
-    sections: [
-      { opener: 'why-watching-cashflow-is-mission-critical', pageSlides: 1 },
-      { opener: 'why-sales-is-more-than-just-selling', pageSlides: 1 },
-      { opener: 'how-to-start-doing-sales', pageSlides: 4 },
-      { opener: 'why-building-an-effective-sales-pipeline-takes-time', pageSlides: 3 },
-      { opener: 'start-before-you-need-the-money', pageSlides: 1 },
-    ],
-  },
-  {
-    slug: 'onboard-ai-every-time',
-    sections: [
-      { opener: 'the-thought-experiment', pageSlides: 3 },
-      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 2 },
-    ],
-  },
-  {
-    // Section openers only until each Section job adds its page Slides at its placement marker.
-    slug: 'ai-attention-span',
-    sections: [
-      { opener: 'thought-experiment', pageSlides: 2 },
-      { opener: 'the-ais-attention-span', pageSlides: 4 },
-      { opener: 'what-fills-the-window', pageSlides: 3 },
-      { opener: 'managing-the-attention-span', pageSlides: 4 },
-    ],
-  },
-] as const;
-
-/** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
-const HEADER_MODES = [
-  { slug: 'ai-token-economy', header: 'authored' },
-  { slug: 'maintaining-markdown-for-ai', header: 'authored' },
-  { slug: 'never-too-early-sales', header: 'shared' },
-  { slug: 'onboard-ai-every-time', header: 'shared' },
-  { slug: 'ai-attention-span', header: 'shared' },
-  { slug: 'ai-gives-you-more-work', header: 'shared' },
-] as const;
+/** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included. */
+const AUTHORED_HEADERS = ['ai-token-economy', 'maintaining-markdown-for-ai'];
 
 describe('success cases', () => {
   it.each(WITH_PAGE)("registers $id with a record carrying its folder's slug", (ref) => {
@@ -126,25 +54,15 @@ describe('success cases', () => {
     expect(title).toBe(expected);
   });
 
-  it.each(COMPOSITION)('composes $slug in Dossier order, each Section opened by the Slide that names it', (c) => {
+  it('renders the shared Slide header on every Episode but the ones built before it, which author their own', () => {
     // ARRANGE
-    const expectedSections = c.sections;
+    const expected = AUTHORED_HEADERS;
     // ACT
-    const composed = compositionOf(episodeRef(c.slug)).sections.map(([opener, ...pages]) => ({
-      opener: opener.slug,
-      pageSlides: pages.length,
-    }));
+    const authored = [
+      ...new Set(WITH_PAGE.filter((ref) => headerModeOf(compositionOf(ref)) === 'authored').map(({ slug }) => slug)),
+    ].sort();
     // ASSERT
-    expect(composed).toEqual(expectedSections);
-  });
-
-  it.each(HEADER_MODES)('renders the Slide headers of $slug in the $header mode', ({ slug, header }) => {
-    // ARRANGE
-    const expected = header;
-    // ACT
-    const mode = headerModeOf(compositionOf(episodeRef(slug)));
-    // ASSERT
-    expect(mode).toBe(expected);
+    expect(authored).toEqual(expected);
   });
 
   it.each(TOOLING_SLUGS)('finds the tooling page %s under its own slug', (slug) => {
@@ -193,18 +111,6 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('writes the composition and the header mode of every published public Episode by hand, and of no other', () => {
-    // ARRANGE
-    const expected = { composition: PUBLISHED_PUBLIC, header: PUBLISHED_PUBLIC };
-    // ACT
-    const covered = {
-      composition: COMPOSITION.map(({ slug }) => slug).sort(),
-      header: HEADER_MODES.map(({ slug }) => slug).sort(),
-    };
-    // ASSERT
-    expect(covered).toEqual(expected);
-  });
-
   it.each(TOOLING_SLUGS)('keeps the tooling page %s out of the Episode registry, so it is no Episode', (slug) => {
     // ARRANGE
     const expected = false;
@@ -225,6 +131,15 @@ describe('edge cases', () => {
     const lookup = () => compositionOf(toolingRef(deleted));
     // ASSERT
     expect(lookup).toThrow(deleted);
+  });
+
+  it.each(WITH_PAGE)('opens each Section of $id with a Slide of its own, never one another Section opens', (ref) => {
+    // ARRANGE
+    const openers = compositionOf(ref).sections.map(([opener]) => opener.slug);
+    // ACT
+    const repeated = openers.filter((slug, index) => openers.indexOf(slug) !== index);
+    // ASSERT
+    expect(repeated).toEqual([]);
   });
 
   it.each(WITH_PAGE)('gives $id at least one Section, each holding at least its opener', (ref) => {

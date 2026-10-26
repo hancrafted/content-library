@@ -1,7 +1,7 @@
 import { TOOLING_SLUGS, type PageRef } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../store';
-import { episodeRef } from './episode-id.pure';
+import { episodeRef, toolingRef } from './episode-id.pure';
 import { catalogueOf, episodesPathParamsOf, eventEpisodeParamsOf } from './page-catalogue';
 
 /*
@@ -56,6 +56,7 @@ describe('success cases', () => {
   it("I flip an Event's copy from unlisted to public by changing one field: it is published at its Event URL only.", () => {
     // ARRANGE
     const flipped = { ...RECORDS, episodes: [own(PUBLIC), copy({ ...UNLISTED, visibility: 'public' })] };
+    // @ts-expect-error -- an Event's copy has no page of its own under /episodes/; the predicate still fails closed
     const ownPage: PageRef = { kind: 'episode', episode: COPY };
     const underEvent: PageRef = { kind: 'event-episode', event: AXEL, episode: COPY };
     const seenIn = (input: Parameters<typeof loadContent>[0]) => {
@@ -120,7 +121,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       { kind: 'episode', episode: PUBLIC_REF },
-      ...TOOLING_SLUGS.map((tooling) => ({ kind: 'tooling', tooling })),
+      ...TOOLING_SLUGS.map((slug) => ({ kind: 'tooling', tooling: toolingRef(slug) })),
     ];
     const catalogue = catalogueOf(loadContent(RECORDS));
     const params = catalogue.episodesPathParams();
@@ -186,7 +187,8 @@ describe('failure cases', () => {
 
   it("resolves no page under /episodes/ for an Event's copy, which is never exported there, or a slug the records hold no page for", () => {
     // ARRANGE
-    const unexported = { kind: 'episode', episode: COPY } as const;
+    // @ts-expect-error -- an Event's copy has no page of its own under /episodes/; the predicate still fails closed
+    const unexported: PageRef = { kind: 'episode', episode: COPY };
     const params = [COPY.id, UNLISTED.slug, 'ai-token-economy', 'no-such-episode'].map((episode) => ({ episode }));
     // ACT
     const catalogue = catalogueOf(loadContent(RECORDS));
@@ -221,7 +223,7 @@ describe('edge cases', () => {
       { kind: 'episodes' },
       { kind: 'events' },
       { kind: 'episode', episode: PUBLIC_REF },
-      ...TOOLING_SLUGS.map((tooling) => ({ kind: 'tooling', tooling }) as const),
+      ...TOOLING_SLUGS.map((slug) => ({ kind: 'tooling', tooling: toolingRef(slug) }) as const),
       { kind: 'event', event: AXEL },
       { kind: 'event-episode', event: AXEL, episode: PUBLIC_REF },
       { kind: 'event-episode', event: AXEL, episode: COPY },

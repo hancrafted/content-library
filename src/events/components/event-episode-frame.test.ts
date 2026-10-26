@@ -1,6 +1,6 @@
-import { EVENT_SLUGS, hasPage } from '@/content-store/catalogue/record-routes';
+import { episodeRef } from '@/content-store/catalogue/episode-id.pure';
+import { EVENT_SLUGS } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import { listEpisodes } from '@/content-store/store';
 import { load } from 'cheerio';
 import type { ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -10,37 +10,38 @@ import { eventEpisodeFrame } from './event-episode-frame';
 /*
  * The frame an Event-scoped Episode page wears (design-ADR 0016, Routes and visibility), read at the one call page
  * assembly makes: the Episode's place in the Playlist, its breadcrumb and past notice above the Title slide, and the
- * Playlist walk after the last Slide. The Episodes are any three with a page, by the refs the store serves, and the
- * Event any registered one, so the test names no content; their titles are a stand-in for the function page assembly
- * hands in.
+ * Playlist walk after the last Slide. The presented Episode is a fixture: three Episodes no repo folder holds, one of
+ * them an Event's copy, in a Playlist of three, and their titles a stand-in for the function page assembly hands in.
+ * Only the Event is a registered one, any of them: the frame reads its title from the Events area's words, which are
+ * keyed by the Event registry's slugs.
  */
 
 const EVENT = EVENT_SLUGS[0];
-const [FIRST, MIDDLE, LAST] = listEpisodes()
-  .map(({ ref }) => ref)
-  .filter(hasPage)
-  .slice(0, 3);
+const FIRST = episodeRef('alpha');
+const MIDDLE = episodeRef('beta', EVENT);
+const LAST = episodeRef('gamma');
+const PLAYLIST = [FIRST, MIDDLE, LAST] as const;
 const BUILD_DAY: IsoDate = '2026-10-25';
 const UPCOMING: IsoDate = '2026-11-06';
 const titleOf = (episode: { readonly slug: string }) => `Title of ${episode.slug}`;
 
-/** The Event-scoped Episode the frame wraps: one of three in the Playlist, under an Event on `date`. */
-function presented(episode: typeof FIRST, date: IsoDate) {
-  const at = [FIRST, MIDDLE, LAST].indexOf(episode);
+/** The served Event, the Episode and its place in the Playlist, as the page catalogue presents it, for an Event on `date`. */
+function presented(episode: (typeof PLAYLIST)[number], date: IsoDate) {
+  const at = PLAYLIST.indexOf(episode);
   return {
     event: { slug: EVENT, date },
     episode,
     place: {
       position: at + 1,
-      count: 3,
-      ...(at > 0 && { previous: [FIRST, MIDDLE, LAST][at - 1] }),
-      ...(at < 2 && { next: [FIRST, MIDDLE, LAST][at + 1] }),
+      count: PLAYLIST.length,
+      ...(at > 0 && { previous: PLAYLIST[at - 1] }),
+      ...(at < PLAYLIST.length - 1 && { next: PLAYLIST[at + 1] }),
     },
-  } as const;
+  };
 }
 
 /** The frame of `episode` in English for an Event on `date`, built on `BUILD_DAY`. */
-const frameOf = (episode: typeof FIRST, date: IsoDate = UPCOMING) =>
+const frameOf = (episode: (typeof PLAYLIST)[number], date: IsoDate = UPCOMING) =>
   eventEpisodeFrame(presented(episode, date), { locale: 'en', titleOf, buildDay: BUILD_DAY });
 
 /** One rendered part of the frame, to query. */
@@ -100,13 +101,14 @@ describe('failure cases', () => {
   it('shows a past Event its notice above the title, and an upcoming one none', () => {
     // ARRANGE
     const past: IsoDate = '2026-10-23';
+    const expected = { past: 1, upcoming: 0 };
     // ACT
     const seen = {
       past: html(frameOf(MIDDLE, past).header)('[data-past-notice]').length,
       upcoming: html(frameOf(MIDDLE, UPCOMING).header)('[data-past-notice]').length,
     };
     // ASSERT
-    expect(seen).toEqual({ past: 1, upcoming: 0 });
+    expect(seen).toEqual(expected);
   });
 });
 

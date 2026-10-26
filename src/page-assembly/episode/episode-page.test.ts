@@ -2,6 +2,7 @@ import { matchEpisode, type EpisodeRef } from '@/content-store/catalogue/episode
 import { hasPage, type EpisodeId } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
+import { notFound } from 'next/navigation';
 import { describe, expect, it } from 'vitest';
 import { episodePageCopy, episodesPathPageOf, eventEpisodePageOf, type EpisodePageRef } from './episode-page';
 
@@ -29,6 +30,16 @@ function servedPathOf(episode: EpisodeRef<EpisodeId>): string {
     standalone: ({ slug }) => `/episodes/${slug}`,
     'event-copy': ({ event, slug }) => `/events/${event}/episodes/${slug}`,
   });
+}
+
+/** What Next's own `notFound()` throws: the 404 a page answers with. */
+function notFoundError(): Error {
+  try {
+    notFound();
+  } catch (error) {
+    return error as Error;
+  }
+  throw new Error('notFound() returned');
 }
 
 describe('success cases', () => {
@@ -66,13 +77,13 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('answers with the 404 where the page catalogue builds no page, under /episodes/ and under an Event', () => {
     // ARRANGE
-    const notFound = 'NEXT_HTTP_ERROR_FALLBACK;404';
+    const expected = notFoundError();
     // ACT
     const underEpisodes = () => episodesPathPageOf({ episode: 'no-such-episode' });
     const underEvent = () => eventEpisodePageOf({ event: 'no-such-event', episode: 'ai-attention-span' });
     // ASSERT
-    expect(underEpisodes).toThrow(notFound);
-    expect(underEvent).toThrow(notFound);
+    expect(underEpisodes).toThrow(expected);
+    expect(underEvent).toThrow(expected);
   });
 });
 

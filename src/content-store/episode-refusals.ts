@@ -14,10 +14,7 @@ import type { Episode } from './schemas/episode.schema';
  * cross-record rules that call them sit in `refusals.ts`.
  */
 
-/**
- * An Episode's record as the store serves it: with its EpisodeRef, parsed once from the Episode id its folder gives it
- * (never written in the record), so a caller reads its kind, slug and owning Event as fields and its id as `ref.id`.
- */
+/** An Episode's record as the store serves it: with its EpisodeRef (GLOSSARY), its id read as `ref.id`. */
 export type LoadedEpisode = Episode & { readonly ref: EpisodeRef };
 
 const LOCALE_LIST: readonly string[] = LOCALES;

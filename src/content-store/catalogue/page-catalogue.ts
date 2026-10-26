@@ -1,4 +1,4 @@
-import { matchEpisode } from '@/content-store/catalogue/episode-id.pure';
+import { matchEpisode, toolingRef } from '@/content-store/catalogue/episode-id.pure';
 import {
   hasPage,
   matchPage,
@@ -25,9 +25,8 @@ import type { PresentedEpisode, ServedEvent } from '../served-event';
  * The page catalogue (GLOSSARY, FE-005, FE-008): every page the site has, read from the records, each with its
  * treatment from the one visibility predicate (design-ADR 0016, Routes and visibility). Pages, routes, the sitemap,
  * page metadata and the site's own lists ask it "treatment of this page"; none fetches the facts of what a page
- * presents and pairs them with the predicate itself. It holds both directions between a page and its route's params:
- * the static params each built page exports, and the built page a route's params name, or none. The store serves one
- * catalogue over its records (`store.ts`); the page templates turn "none" into the 404.
+ * presents and pairs them with the predicate itself. It also maps each built page to its route's params and back
+ * (GLOSSARY, page catalogue). The store serves one catalogue over its records (`store.ts`).
  */
 
 /** The params of a page built under `/episodes/`: `/episodes/<episode>/`. */
@@ -40,6 +39,9 @@ export interface EventEpisodeParams {
   readonly event: EventSlug;
   readonly episode: string;
 }
+
+/** A route's params as the URL hands them in, each a plain string, before the catalogue names the page they build. */
+export type RouteParams<P> = { readonly [K in keyof P]: string };
 
 /**
  * An Episode's page under its Event, carrying the Episode it presents there: the served Event, its ref and its place
@@ -62,7 +64,7 @@ export interface PageCatalogue {
    * The page built at `/episodes/<episode>/`: an Episode's own page, or a tooling page. Undefined when none is built
    * there: an unknown slug, or an Event's copy, which lives only under its Event.
    */
-  readonly episodesPathPageAt: (params: { readonly episode: string }) => EpisodesPathPage | undefined;
+  readonly episodesPathPageAt: (params: RouteParams<EpisodesPathParams>) => EpisodesPathPage | undefined;
   /** One static param per Event page. */
   readonly eventParams: () => { event: EventSlug }[];
   /**
@@ -74,10 +76,7 @@ export interface PageCatalogue {
    * The page built at `/events/<event>/episodes/<episode>/`, with the Episode it presents. Undefined when none is
    * built there: an Event the records do not hold, or an Episode its Playlist does not list with a page.
    */
-  readonly eventEpisodePageAt: (params: {
-    readonly event: string;
-    readonly episode: string;
-  }) => EventEpisodePage | undefined;
+  readonly eventEpisodePageAt: (params: RouteParams<EventEpisodeParams>) => EventEpisodePage | undefined;
   /** The Episodes the site's own lists show (overview, Spotlight, Upcoming), in record order: never an unlisted one or a copy. */
   readonly listedEpisodes: () => readonly LoadedEpisode[];
   /** The Events `/events/` lists, in record order: those whose Playlist is public. */
@@ -118,7 +117,7 @@ function factsIn(content: Content, page: PageRef): PageFacts {
 function ownPageOf({ ref }: LoadedEpisode): PageRef[] {
   if (!hasPage(ref)) return [];
   return matchEpisode(ref, {
-    standalone: () => [{ kind: 'episode', episode: ref }],
+    standalone: (episode) => [{ kind: 'episode', episode }],
     'event-copy': () => [],
   });
 }
@@ -142,7 +141,7 @@ function pagesIn(content: Content): PageRef[] {
     { kind: 'episodes' },
     { kind: 'events' },
     ...content.episodes.flatMap(ownPageOf),
-    ...TOOLING_SLUGS.map((tooling) => ({ kind: 'tooling', tooling }) as const),
+    ...TOOLING_SLUGS.map((slug) => ({ kind: 'tooling', tooling: toolingRef(slug) }) as const),
     ...content.events.map(({ slug }) => ({ kind: 'event', event: slug }) as const),
     // The plain page reference: what it presents is the route resolution's, never part of `pages`.
     ...eventEpisodePagesIn(content).map(({ kind, event, episode }) => ({ kind, event, episode })),
@@ -152,8 +151,8 @@ function pagesIn(content: Content): PageRef[] {
 /** The params a page under `/episodes/` is built at: an Episode's own page at its slug, a tooling page at its. */
 export function episodesPathParamsOf(page: EpisodesPathPage): EpisodesPathParams {
   return matchPage(page, {
-    episode: ({ episode }) => ({ episode: episode.id }),
-    tooling: ({ tooling }) => ({ episode: tooling }),
+    episode: ({ episode }) => ({ episode: episode.slug }),
+    tooling: ({ tooling }) => ({ episode: tooling.slug }),
   });
 }
 

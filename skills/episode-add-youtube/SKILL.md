@@ -96,7 +96,7 @@ _Done when_ the post-build test passes and both locale pages show the same video
 ```mermaid
 flowchart TD
   R["Episode metadata record<br/>src/episodes/&lt;slug&gt;/episode-metadata.ts<br/>youtube: { en, de } or { id, language }"]
-  R --> S["Content store<br/>episodeVideo(id, locale): { id, recordedIn? }"]
+  R --> S["Content store<br/>episodeVideo(ref, locale): { id, recordedIn? }"]
   S --> C["EpisodePageContainer<br/>video prop from EpisodePage, own or Event-scoped"]
   S --> EC["episodeCards(locale)<br/>youtubeOf(entry, locale)"]
   C --> TS["TitleSlide<br/>TalkLauncher (data-video-id, data-recording-language)"]

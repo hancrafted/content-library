@@ -13,8 +13,8 @@ import { playlistEntries, type ServedEvent } from './served-event';
  * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 3, 4, 8 and 9): each record is parsed by its
  * schema, then the cross-record rules run over the sound ones and resolve each Event into the Playlist it presents.
  * Every refusal is one sentence naming the kind, the record and the field; a refused record is never dropped, the
- * whole load throws. An Episode is named by its Episode id, which its folder gives it; it is parsed into the Episode's
- * EpisodeRef here, once, and every rule after reads the ref.
+ * whole load throws. An Episode enters by the Episode id its folder gives it and is served with its EpisodeRef
+ * (GLOSSARY), which every rule reads.
  */
 
 /** One Episode as the generated registry hands it in: the id its folder gives it, and its record as its file writes it. */

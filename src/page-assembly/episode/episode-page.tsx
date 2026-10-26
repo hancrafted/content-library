@@ -1,4 +1,4 @@
-import { toolingRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
+import type { EpisodeRef, StandaloneRef } from '@/content-store/catalogue/episode-id.pure';
 import { matchPage, type EpisodeId, type EpisodesPathPage } from '@/content-store/catalogue/record-routes';
 import {
   episodePublishedOn,
@@ -7,7 +7,10 @@ import {
   episodeVideo,
   eventEpisodePageAt,
   treatmentOf,
+  type EpisodesPathParams,
   type EventEpisodePage,
+  type EventEpisodeParams,
+  type RouteParams,
 } from '@/content-store/store';
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
 import { compositionOf } from '@/episodes/lib/registry';
@@ -29,12 +32,12 @@ import type { ReactNode } from 'react';
 export type EpisodePageRef = EpisodesPathPage | EventEpisodePage;
 
 /** The page the page catalogue builds at `/episodes/<episode>/`: an Episode's own or a tooling page; else the 404. */
-export function episodesPathPageOf(params: { readonly episode: string }): EpisodesPathPage {
+export function episodesPathPageOf(params: RouteParams<EpisodesPathParams>): EpisodesPathPage {
   return episodesPathPageAt(params) ?? notFound();
 }
 
 /** The page the page catalogue builds at `/events/<event>/episodes/<episode>/`, with its Episode; else the 404. */
-export function eventEpisodePageOf(params: { readonly event: string; readonly episode: string }): EventEpisodePage {
+export function eventEpisodePageOf(params: RouteParams<EventEpisodeParams>): EventEpisodePage {
   return eventEpisodePageAt(params) ?? notFound();
 }
 
@@ -44,38 +47,31 @@ export function eventEpisodePageOf(params: { readonly event: string; readonly ep
  */
 export function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
   return matchPage<EpisodePageRef, ReactNode>(page, {
-    tooling: ({ tooling }) => (
-      <EpisodePageContainer
-        locale={locale}
-        presents={toolingRef(tooling)}
-        episode={compositionOf(toolingRef(tooling))}
-      />
-    ),
+    tooling: ({ tooling }) => <EpisodePageContainer locale={locale} page={tooling} episode={compositionOf(tooling)} />,
     episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} />,
     'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} />,
   });
 }
 
 /** An Episode's own page: the container, with its recording, and its structured data once published. */
-function OwnEpisodePage({ episode, locale }: { episode: EpisodeRef<EpisodeId>; locale: Locale }) {
-  const { id } = episode;
+function OwnEpisodePage({ episode, locale }: { episode: StandaloneRef<EpisodeId>; locale: Locale }) {
   const composition = compositionOf(episode);
   const { title, description } = composition.messages[locale];
-  const video = episodeVideo(id, locale);
+  const video = episodeVideo(episode, locale);
   const data =
-    episodeStatus(id) === 'published'
+    episodeStatus(episode) === 'published'
       ? episodeJsonLd(SITE_URL, locale, {
-          slug: id,
+          slug: episode.slug,
           title,
           description,
-          publishedOn: episodePublishedOn(id),
+          publishedOn: episodePublishedOn(episode),
           youtube: video?.id,
         })
       : undefined;
   return (
     <>
       {data && <JsonLdScript data={data} />}
-      <EpisodePageContainer locale={locale} presents={episode} episode={composition} video={video} />
+      <EpisodePageContainer locale={locale} page={episode} episode={composition} video={video} />
     </>
   );
 }
@@ -91,9 +87,9 @@ function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: L
   return (
     <EpisodePageContainer
       locale={locale}
-      presents={shown.episode}
+      page={shown.episode}
       episode={compositionOf(shown.episode)}
-      video={episodeVideo(shown.episode.id, locale)}
+      video={episodeVideo(shown.episode, locale)}
       frame={eventEpisodeFrame(shown, { locale, titleOf, buildDay: BUILD_DAY })}
     />
   );
@@ -108,12 +104,12 @@ export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy 
   const treatment = treatmentOf(page);
   const episodeOf = ({ episode }: { episode: EpisodeRef<EpisodeId> }): PageCopy => {
     const { title, description } = compositionOf(episode).messages[locale];
-    const publishedOn = episodePublishedOn(episode.id);
+    const publishedOn = episodePublishedOn(episode);
     return { title, description, treatment, ...(publishedOn ? { publishedOn } : {}) };
   };
   return matchPage<EpisodePageRef, PageCopy>(page, {
     tooling: ({ tooling }) => {
-      const { title, description } = compositionOf(toolingRef(tooling)).messages[locale];
+      const { title, description } = compositionOf(tooling).messages[locale];
       return { title, description, treatment };
     },
     episode: episodeOf,

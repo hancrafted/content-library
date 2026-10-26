@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episodeRef } from './episode-id.pure';
+import { episodeRef, toolingRef } from './episode-id.pure';
 import type { PageRef } from './record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
@@ -26,6 +26,7 @@ const EVENT_EPISODE_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episo
 /** The AXEL seminar's own copy, in its folder `by-event/<event>/ai-attention-span/`. */
 const COPY = episodeRef('ai-attention-span', EVENT);
 const COPY_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: COPY };
+// @ts-expect-error -- an Event's copy has no page of its own under /episodes/; the predicate still fails closed
 const COPY_OWN_PAGE: PageRef = { kind: 'episode', episode: COPY };
 /** Indexed and in the sitemap at its Event-scoped URL, canonical to itself, never on the site's own lists. */
 const SELF_INDEXED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: false, canonical: 'self' };
@@ -56,7 +57,7 @@ const TABLE: [string, PageRef, PageFacts, PageTreatment][] = [
   ],
   ['an upcoming Episode under an Event', EVENT_EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, HIDDEN],
   ['an upcoming Episode', EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, ANNOUNCED],
-  ['a tooling page', { kind: 'tooling', tooling: 'slide-master' }, {}, HIDDEN],
+  ['a tooling page', { kind: 'tooling', tooling: toolingRef('slide-master') }, {}, HIDDEN],
   ["a public, published Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_PUBLIC, copy: true }, SELF_INDEXED],
   ["an unlisted Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_UNLISTED, copy: true }, HIDDEN],
   [
