@@ -4,15 +4,15 @@
  * does. The pill toolbar draws them in registry order: the Workflow pills, a separator, then the icon buttons.
  */
 
-export type ControlId = 'picker' | 'view' | 'level' | 'download' | 'upload';
+export type ControlId = 'picker' | 'view' | 'level' | 'progressDownload' | 'progressUpload' | 'download' | 'upload';
 
 export interface ControlDef {
   readonly id: ControlId;
   /** `pills` is the Workflow picker, `segmented` the view control and the two-way Chat · CLI control, `action` an icon button that does one thing. */
   readonly type: 'pills' | 'segmented' | 'action';
   /** The keys of the visual's labels the control reads: its accessible name and its tooltip (`UiWords` keys). */
-  readonly label: 'workflow' | 'view' | 'level' | 'download' | 'upload';
-  readonly tip: 'workflow' | 'viewTip' | 'levelTip' | 'download' | 'upload';
+  readonly label: 'workflow' | 'view' | 'level' | 'progressSave' | 'progressLoad' | 'download' | 'upload';
+  readonly tip: 'workflow' | 'viewTip' | 'levelTip' | 'progressSave' | 'progressLoad' | 'download' | 'upload';
   /** Shown unless the Preset says otherwise. */
   readonly show: boolean;
 }
@@ -21,6 +21,8 @@ export const CONTROLS: readonly ControlDef[] = [
   { id: 'picker', type: 'pills', label: 'workflow', tip: 'workflow', show: true },
   { id: 'view', type: 'segmented', label: 'view', tip: 'viewTip', show: true },
   { id: 'level', type: 'segmented', label: 'level', tip: 'levelTip', show: true },
+  { id: 'progressDownload', type: 'action', label: 'progressSave', tip: 'progressSave', show: true },
+  { id: 'progressUpload', type: 'action', label: 'progressLoad', tip: 'progressLoad', show: true },
   { id: 'download', type: 'action', label: 'download', tip: 'download', show: true },
   { id: 'upload', type: 'action', label: 'upload', tip: 'upload', show: true },
 ];

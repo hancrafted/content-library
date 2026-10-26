@@ -63,6 +63,12 @@ export interface UiWords {
   readonly downloadOldProgress: string;
   readonly discardProgress: string;
   readonly upload: string;
+  /** The toolbar's save and load of the progress file; the refusals of a file that does not fit (`{workflow}` is its title). */
+  readonly progressSave: string;
+  readonly progressLoad: string;
+  readonly refuseUnreadable: string;
+  readonly refuseOtherWorkflow: string;
+  readonly refuseChanged: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
   readonly gate: string;
   /** The toolbar's accessible name. */
@@ -176,6 +182,14 @@ export interface ProgressNote {
   readonly onDiscard: () => void;
 }
 
+/** What the toolbar does with the run of the shown Workflow; none for an uploaded one, whose run is not kept. */
+export interface ProgressActions {
+  /** Saves the current run as a YAML file. */
+  readonly onDownload: () => void;
+  /** The text of a progress file the viewer chose; the parent checks it against the shown Workflow. */
+  readonly onUpload: (yaml: string) => void;
+}
+
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
 export interface ToolbarProps {
   readonly workflow: Workflow;
@@ -189,6 +203,7 @@ export interface ToolbarProps {
   readonly readonly: boolean;
   readonly uploadProblems: readonly string[];
   readonly note: ProgressNote | null;
+  readonly progress: ProgressActions | null;
   readonly words: UiWords;
   readonly onLevel: (level: Level) => void;
   readonly onView: (view: View) => void;

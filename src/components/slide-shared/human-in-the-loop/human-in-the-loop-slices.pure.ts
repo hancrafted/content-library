@@ -1,10 +1,13 @@
-import { progressKeyOf } from '@/lib/progress.pure';
+import { progressKeyOf, readProgressFile, type Refusal } from '@/lib/progress.pure';
+import { fillTemplate } from '@/lib/template.pure';
 import type {
   DiagramProps,
   HumanInTheLoopData,
   ModalProps,
+  ProgressActions,
   ProgressNote,
   ToolbarProps,
+  UiWords,
 } from './human-in-the-loop.types';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
@@ -23,11 +26,31 @@ export function shownWorkflow(data: HumanInTheLoopData, state: WorkflowState): W
   return state.uploaded ?? data.workflows.find((w) => w.id === state.workflowId) ?? data.workflows[0];
 }
 
-/** The saved run the shown Workflow belongs to: its key and source hash; none for an uploaded one, which is not kept. */
-export function progressTarget(data: HumanInTheLoopData, state: WorkflowState): { key: string; hash: string } | null {
+/** The saved run the shown Workflow belongs to: its id, key and source hash; none for an uploaded one, which is not kept. */
+export function progressTarget(
+  data: HumanInTheLoopData,
+  state: WorkflowState,
+): { id: string; key: string; hash: string } | null {
   const id = shownWorkflow(data, state)?.id;
   const hash = id === undefined || state.uploaded ? undefined : data.hashes[id];
-  return id !== undefined && hash !== undefined ? { key: progressKeyOf(id), hash } : null;
+  return id !== undefined && hash !== undefined ? { id, key: progressKeyOf(id), hash } : null;
+}
+
+const REFUSALS: Record<Refusal, 'refuseUnreadable' | 'refuseOtherWorkflow' | 'refuseChanged'> = {
+  unreadable: 'refuseUnreadable',
+  'other-workflow': 'refuseOtherWorkflow',
+  changed: 'refuseChanged',
+};
+
+/** What an uploaded progress file becomes: the run restored, or a refusal naming the shown Workflow by its title. */
+export function progressUploadEvent(
+  text: string,
+  shown: { readonly id: string; readonly hash: string; readonly title: string },
+  words: UiWords,
+): WorkflowEvent {
+  const read = readProgressFile(text, { workflow: shown.id, hash: shown.hash });
+  if ('entry' in read) return { type: 'restore', results: read.entry.results, teaching: read.entry.teaching };
+  return { type: 'upload-failed', problems: [fillTemplate(words[REFUSALS[read.refusal]], { workflow: shown.title })] };
 }
 
 /** What an uploaded file's text becomes: the event that loads it, or the one that reports its problems. */
@@ -63,6 +86,8 @@ export interface Shown {
   readonly workflow: Workflow;
   /** What to tell the viewer about their saved progress, if anything. */
   readonly note: ProgressNote | null;
+  /** Save and load of the run; none for an uploaded Workflow. */
+  readonly progress: ProgressActions | null;
   /** `workflowView` of the Workflow for the state's level, computed once per change by the parent. */
   readonly view: WorkflowView;
 }
@@ -104,7 +129,7 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
   };
 }
 
-function toolbarOf({ data, state, workflow, note }: Shown, on: Callbacks): ToolbarProps {
+function toolbarOf({ data, state, workflow, note, progress }: Shown, on: Callbacks): ToolbarProps {
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
   const { level, view, uploadProblems } = state;
@@ -119,6 +144,7 @@ function toolbarOf({ data, state, workflow, note }: Shown, on: Callbacks): Toolb
     words,
     uploadProblems,
     note,
+    progress,
     onLevel,
     onView,
     onWorkflow,
