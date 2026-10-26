@@ -2,8 +2,8 @@ import episodeBrowserDe from '@/episodes/components/episode-browser/i18n/de.json
 import episodeBrowserEn from '@/episodes/components/episode-browser/i18n/en.json';
 import episodePageDe from '@/episodes/components/episode-page/i18n/de.json';
 import episodePageEn from '@/episodes/components/episode-page/i18n/en.json';
-import eventsDe from '@/events/i18n/de.json';
-import eventsEn from '@/events/i18n/en.json';
+import eventsDe from '@/events/lib/i18n/de.json';
+import eventsEn from '@/events/lib/i18n/en.json';
 import { mergeTranslationFiles, translationOwner, type MergedMessages } from '@/shared/i18n/merge-translations.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import chromeDe from '@/shared/page-chrome/i18n/de.json';
@@ -38,7 +38,7 @@ export const TRANSLATION_OWNERS = [
   translationOwner('src/page-assembly/events-overview/i18n', eventsOverviewEn, eventsOverviewDe),
   translationOwner('src/page-assembly/event/i18n', eventEn, eventDe),
   translationOwner('src/page-assembly/dashboard/i18n', dashboardEn, dashboardDe),
-  translationOwner('src/events/i18n', eventsEn, eventsDe),
+  translationOwner('src/events/lib/i18n', eventsEn, eventsDe),
   translationOwner('src/episodes/components/episode-browser/i18n', episodeBrowserEn, episodeBrowserDe),
   translationOwner('src/episodes/components/episode-page/i18n', episodePageEn, episodePageDe),
 ] as const;

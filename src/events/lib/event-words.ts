@@ -1,7 +1,7 @@
 import type { EventSlug } from '@/content-store/catalogue/routes';
 import type { Locale } from '@/shared/lib/locale.pure';
-import de from '../i18n/de.json';
-import en from '../i18n/en.json';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
 
 /**
  * The Events area's words in one locale, from its own Translation files (`events.*`): each Event's card text by slug,

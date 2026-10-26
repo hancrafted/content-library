@@ -414,9 +414,9 @@ module.exports = {
       name: 'shared-knows-no-domain',
       severity: 'error',
       comment:
-        'src/shared/** knows nothing of the domain: it imports only other shared modules (and, until they move to their owners, the site-wide Translation files in src/messages/), never the content store, its schemas included, a product area, page assembly or a route. What page chrome needs from the domain arrives as props (FE-007).',
+        'src/shared/** knows nothing of the domain: it imports only other shared modules, never the content store, its schemas included, a product area, page assembly or a route. What page chrome needs from the domain arrives as props (FE-007).',
       from: { path: '^src/shared/' },
-      to: { path: '^src/', pathNot: ['^src/shared/', '^src/messages/'] },
+      to: { path: '^src/', pathNot: '^src/shared/' },
     },
     // Relies on options.exclude '\.css$': site-shell.tsx imports @/app/globals.css, so dropping that exclusion fires this rule.
     {

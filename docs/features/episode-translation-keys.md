@@ -10,7 +10,7 @@ Read before adding or changing an Episode, a Slide, or any Translation file. The
 
 ## Key shape
 
-A Slide keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`; its Episode's own text sits in `<episode>/i18n/`. Every other text sits in its owner's `i18n/` too, merged into one site message set (FE-003): page chrome's in `src/shared/page-chrome/i18n/`, each page template's in its folder, the Episode browser's in `src/episodes/components/episode-browser/i18n/`, the Events area's in `src/events/i18n/`. None holds a published Episode's text; an Upcoming Episode's card copy is Episode browser text ([Episode browser entries](#episode-browser-entries)):
+A Slide keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`; its Episode's own text sits in `<episode>/i18n/`. Every other text sits in its owner's `i18n/` too, merged into one site message set (FE-003): page chrome's in `src/shared/page-chrome/i18n/`, each page template's in its folder, the Episode browser's in `src/episodes/components/episode-browser/i18n/`, the Events area's in `src/events/lib/i18n/`. None holds a published Episode's text; an Upcoming Episode's card copy is Episode browser text ([Episode browser entries](#episode-browser-entries)):
 
 ```text
 <episode>/i18n/<locale>.json                  title, caption, description of the Episode
@@ -101,7 +101,7 @@ An entry reads its text from:
 
 ## Event keys
 
-An Event is a record in the content store that holds no string ([Events](events.md)). Its text sits with what renders it: `events.*` in the Events area's `src/events/i18n/`, `eventsOverview.*` in the `/events` template's `src/page-assembly/events-overview/i18n/`, `eventPage.*` in the Event page template's `src/page-assembly/event/i18n/`:
+An Event is a record in the content store that holds no string ([Events](events.md)). Its text sits with what renders it: `events.*` in the Events area's `src/events/lib/i18n/`, `eventsOverview.*` in the `/events` template's `src/page-assembly/events-overview/i18n/`, `eventPage.*` in the Event page template's `src/page-assembly/event/i18n/`:
 
 - `events.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Event page's `h1`, its breadcrumb's last step and its `<title>`; the description is the page's intro paragraph and its meta description. A missing pair fails the build.
 - `eventsOverview.title` and `eventsOverview.intro`: the `/events` heading and its one-line intro.
