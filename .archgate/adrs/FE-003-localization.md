@@ -22,7 +22,7 @@ Some text is completed only in the browser — "Show all 12", once a filter has 
 ### 1. Default locale unprefixed, every other locale a path segment
 
 1. The default locale (`en`) MUST be served at the bare path, its canonical URL; no `/en` route may exist.
-2. Every other locale MUST be served under a leading `/<locale>` segment — `/de`, `/de/episode/page-template`.
+2. Every other locale MUST be served under a leading `/<locale>` segment — `/de`, `/de/episode/episode-template`.
 
 ### 2. Every href is built one way (📜 Rule: `href-via-localize-path`)
 

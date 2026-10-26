@@ -41,7 +41,7 @@ async function translatorOf(): Promise<RuntimeTranslator> {
 
 /** The drawer's items for an Episode of these Sections, as the adapter builds them. */
 async function itemsOf(sections: readonly Section[]) {
-  const record = episode({ slug: 'page-template', messages: EPISODE, sections });
+  const record = episode({ slug: 'episode-template', messages: EPISODE, sections });
   return contextItemsOf((await recordContent(record, 'en', { translatorOf: translatorOf })).slides, EXPLAINER);
 }
 
@@ -70,7 +70,7 @@ const TITLE_TEXT = {
 async function titleOf(withText: boolean) {
   const messages = withText ? { ...EPISODE.en, ...TITLE_TEXT } : EPISODE.en;
   const record = episode({
-    slug: 'page-template',
+    slug: 'episode-template',
     messages: { en: messages, de: messages },
     ...(withText && { notes: [{ slug: 'n', target: 'title' }], segments: [{ slug: 's' }] }),
     sections: [[foundations]],
@@ -97,7 +97,7 @@ describe('success cases', () => {
     // ARRANGE
     const messages = { ...EPISODE.en, ...TITLE_TEXT };
     const record = episode({
-      slug: 'page-template',
+      slug: 'episode-template',
       messages: { en: messages, de: messages },
       segments: [{ slug: 's' }],
       sections: [[foundations]],

@@ -107,12 +107,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('finds the page-template Slide folders, so an empty walk cannot pass', () => {
+  it('finds the episode-template Slide folders, so an empty walk cannot pass', () => {
     // ARRANGE
     const expected = ['foundations', 'hero', 'next-steps', 'what-comes-next', 'why-a-template'];
     // ACT
     const folders = slideFolders()
-      .filter(({ episode }) => episode === 'page-template')
+      .filter(({ episode }) => episode === 'episode-template')
       .map(({ folder }) => folder)
       .sort();
     // ASSERT

@@ -35,15 +35,19 @@ const REFERENCE_LINK =
   'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
 
 /**
- * The tooling pages are no Episodes, so they sit under the browse grid: the page template, the Workshop template, the
- * Slide master, the Slides gallery.
+ * The tooling pages are no Episodes, so they sit under the browse grid: the Episode template, the Workshop template,
+ * the Slide master, the Explorable explanations page.
  */
 function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
   const links = [
-    { route: episodeRoute('page-template'), icon: Layers, label: t('references.pageTemplate') },
+    { route: episodeRoute('episode-template'), icon: Layers, label: t('references.episodeTemplate') },
     { route: episodeRoute('workshop-template'), icon: Presentation, label: t('references.workshopTemplate') },
     { route: episodeRoute('slide-master'), icon: LayoutTemplate, label: t('references.slideMaster') },
-    { route: episodeRoute('slides'), icon: GalleryHorizontalEnd, label: t('references.slides') },
+    {
+      route: episodeRoute('explorable-explanations'),
+      icon: GalleryHorizontalEnd,
+      label: t('references.explorableExplanations'),
+    },
   ];
   return (
     <nav

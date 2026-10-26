@@ -7,7 +7,7 @@ import { findToolingPage } from './tooling-pages';
  */
 
 describe('success cases', () => {
-  it.each(['page-template', 'workshop-template', 'slide-master', 'slides'])(
+  it.each(['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'])(
     'finds the tooling page %s under its own slug',
     (slug) => {
       // ARRANGE

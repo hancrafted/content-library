@@ -53,7 +53,7 @@ describe('dynamic-segment-static-params', () => {
     const { ctx, violations } = makeCtx({
       [LOCALE_PAGE]: FULL_SEGMENT,
       'src/app/[locale]/layout.tsx': asyncForm,
-      'src/app/[locale]/episode/page-template/page.tsx': FULL_SEGMENT,
+      'src/app/[locale]/episode/episode-template/page.tsx': FULL_SEGMENT,
     });
     // ACT
     await rule.check(ctx);
@@ -63,7 +63,7 @@ describe('dynamic-segment-static-params', () => {
 
   it('fails once per missing export', async () => {
     // ARRANGE
-    const nestedPage = 'src/app/[locale]/episode/page-template/page.tsx';
+    const nestedPage = 'src/app/[locale]/episode/episode-template/page.tsx';
     const { ctx, violations } = makeCtx({
       [LOCALE_PAGE]: `export const generateStaticParams = prefixedLocaleParams;\n`,
       [nestedPage]: `export default function Page() {}\n`,

@@ -1,5 +1,5 @@
-import { contextData } from '@/components/slide-shared/context/context-data';
-import type { Chat } from '@/components/slide-shared/context/context.types';
+import { contextData } from '@/components/explorable-explanations/context/context-data';
+import type { Chat } from '@/components/explorable-explanations/context/context.types';
 import { describe, expect, it } from 'vitest';
 import { SIZE_ROWS, sizeBars } from './size-bars.pure';
 

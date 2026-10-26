@@ -1,4 +1,4 @@
-// The Harvest report: Promotion's gate page. The harvesters' proposals, as data, go into the page template
+// The Harvest report: Promotion's gate page. The harvesters' proposals, as data, go into the report template
 // (`assets/harvest-report.html`), whose own script draws one card per proposal. Pure: template and harvest in, page
 // out; `harvest-report.ts` reads and writes the disk. The shapes below are what the template's renderer draws.
 

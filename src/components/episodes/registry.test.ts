@@ -239,7 +239,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it.each(['page-template', 'workshop-template', 'slide-master', 'slides'])(
+  it.each(['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'])(
     'keeps the tooling page %s out of the Episode registry, so it is no Episode',
     (slug) => {
       // ARRANGE

@@ -6,15 +6,20 @@
 
 // What an Episode file may reach: the Slide master (which holds the Episode
 // record, `slide-master/slide.ts`), slide-shared (parts several Slides
-// of any Episode share), the Episode folders and src/lib.
-const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|episodes)/', '^src/lib/'];
+// of any Episode share), explorable-explanations (the Explorable explanations Slides show), the Episode folders and
+// src/lib.
+const EPISODE_REACH = ['^src/components/(slide-master|slide-shared|explorable-explanations|episodes)/', '^src/lib/'];
 
 // A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/` (FE-002, FE-007 §5). The two capture
 // groups name the Episode and the Slide, so a rule's `to` can say "this same folder" as `$1`/`$2`.
 const SLIDE_FOLDER = '^src/components/episodes/([^/]+)/slides/([^/]+)/';
 const OWN_SLIDE_FOLDER = '^src/components/episodes/$1/slides/$2/';
-// The global shared locations a Slide may import: the Slide master, slide-shared, the UI kit, hooks and lib.
-const SLIDE_SHARED_REACH = ['^src/components/(slide-master|slide-shared|ui)/', '^src/(hooks|lib)/'];
+// The global shared locations a Slide may import: the Slide master, slide-shared, the Explorable explanations, the UI
+// kit, hooks and lib.
+const SLIDE_SHARED_REACH = [
+  '^src/components/(slide-master|slide-shared|explorable-explanations|ui)/',
+  '^src/(hooks|lib)/',
+];
 
 // The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2.1).
 // An Episode's metadata file: a record the content store loads (FE-013).
@@ -26,6 +31,11 @@ const CORE_COMPONENTS = '^src/components/slide-shared/core-components/';
 
 // A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
 const SLIDE_SHARED_CLIENT = '^src/components/slide-shared/([^/]+)/.+\\.client\\.tsx$';
+
+// An Explorable explanation lives in its own folder apart from plain shared parts (design-ADR 0016 decision 6);
+// its client leaf sits in that folder, the capture group names it.
+const EXPLANATIONS = '^src/components/explorable-explanations/';
+const EXPLANATION_CLIENT = '^src/components/explorable-explanations/([^/]+)/.+\\.client\\.tsx$';
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -111,7 +121,7 @@ module.exports = {
       name: 'slide-folder-reaches-only-own-and-shared',
       severity: 'error',
       comment:
-        'A Slide folder (episodes/<ep>/slides/<slide>/) imports only its own files and the global shared locations: src/components/slide-master/, src/components/slide-shared/, src/components/ui/, src/hooks/ and src/lib/. Never another Slide, the Episode file, or anything else Episode-local; a part two Slides share moves to src/components/slide-shared/ (FE-007).',
+        'A Slide folder (episodes/<ep>/slides/<slide>/) imports only its own files and the global shared locations: src/components/slide-master/, src/components/slide-shared/, src/components/explorable-explanations/, src/components/ui/, src/hooks/ and src/lib/. Never another Slide, the Episode file, or anything else Episode-local; a part two Slides share moves to src/components/slide-shared/ (FE-007).',
       from: { path: SLIDE_FOLDER },
       to: { pathNot: [OWN_SLIDE_FOLDER, ...SLIDE_SHARED_REACH, 'node_modules'], dependencyTypesNot: ['core'] },
     },
@@ -138,6 +148,24 @@ module.exports = {
         "A slide-shared part's *.client.tsx leaf runs in the browser. It sits in its part's folder (src/components/slide-shared/<part>/) and reaches only that folder, src/hooks/ and src/lib/ — never another part, the UI kit, a Slide or the Slide master. The one exception is core-components/, which any slide-shared part, client leaf included, may import (FE-006 §5, FE-007 §5.2).",
       from: { path: SLIDE_SHARED_CLIENT },
       to: { pathNot: ['^src/components/slide-shared/$1/', CORE_COMPONENTS, '^src/(hooks|lib)/', 'node_modules'] },
+    },
+    {
+      name: 'explorable-explanation-reaches-shared-ui-and-lib',
+      severity: 'error',
+      comment:
+        'src/components/explorable-explanations/ holds the Explorable explanations several Slides show. An explanation takes serializable props: its server files reach only other explanations, slide-shared parts, the UI kit (src/components/ui/) and src/lib — never a Slide, an Episode, the Slide master or its kit (FE-012, FE-007 §5, design-ADR 0016 decision 6).',
+      from: { path: EXPLANATIONS, pathNot: ['\\.test\\.ts$', EXPLANATION_CLIENT] },
+      to: { pathNot: ['^src/components/(explorable-explanations|slide-shared|ui)/', '^src/lib/', 'node_modules'] },
+    },
+    {
+      name: 'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib',
+      severity: 'error',
+      comment:
+        "An Explorable explanation's *.client.tsx leaf runs in the browser. It sits in its explanation's folder (src/components/explorable-explanations/<name>/) and reaches only that folder, slide-shared/core-components/, src/hooks/ and src/lib/ — never another explanation, a plain slide-shared part, the UI kit, a Slide or the Slide master (FE-006 §5, FE-007 §5.2).",
+      from: { path: EXPLANATION_CLIENT },
+      to: {
+        pathNot: ['^src/components/explorable-explanations/$1/', CORE_COMPONENTS, '^src/(hooks|lib)/', 'node_modules'],
+      },
     },
     {
       name: 'core-components-are-a-leaf',

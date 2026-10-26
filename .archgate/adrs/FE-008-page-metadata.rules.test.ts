@@ -40,7 +40,7 @@ function makeCtx(files: Record<string, string>) {
 }
 
 const EN_PAGE = 'src/app/(en)/page.tsx';
-const DE_PAGE = 'src/app/[locale]/episode/page-template/page.tsx';
+const DE_PAGE = 'src/app/[locale]/episode/episode-template/page.tsx';
 const EN_LAYOUT = 'src/app/(en)/layout.tsx';
 const STATIC_FORM = `export const metadata = pageMetadata('home', DEFAULT_LOCALE);\nexport default function Page() {}\n`;
 const FUNCTION_FORM = `export async function generateMetadata({ params }) {\n  return pageMetadata('episodeTemplate', await resolveLocale(params));\n}\n`;

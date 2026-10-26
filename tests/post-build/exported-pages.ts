@@ -76,3 +76,14 @@ export function resolveBasePath(): string {
   }
   return nextConfig.basePath ?? '';
 }
+
+/** The `_redirects` rules as source, target and status, comments and blank lines dropped. */
+export function redirectRules(): { from: string; to: string; status: string }[] {
+  return readFileSync(join(OUT_DIR, '_redirects'), 'utf8')
+    .split('\n')
+    .filter((line) => line.trim() !== '' && !line.startsWith('#'))
+    .map((line) => {
+      const [from, to, status] = line.trim().split(/\s+/);
+      return { from, to, status };
+    });
+}

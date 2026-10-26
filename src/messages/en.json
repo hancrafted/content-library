@@ -29,7 +29,7 @@
   },
   "landing": {
     "title": "Home",
-    "link": "Page template",
+    "link": "Episode template",
     "hero": {
       "eyebrow": "hancrafted / Human-led. AI-accelerated.",
       "offers": {
@@ -422,10 +422,10 @@
     "intro": "Interactive visuals I built because I never wanted to make another PowerPoint.",
     "references": {
       "label": "References",
-      "pageTemplate": "Episode Page Template",
+      "episodeTemplate": "Episode template",
       "workshopTemplate": "Workshop template",
       "slideMaster": "Slide master",
-      "slides": "Slides"
+      "explorableExplanations": "Explorable explanations"
     }
   },
   "slideHeader": {

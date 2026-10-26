@@ -19,7 +19,7 @@ const PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
 
 /** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
 const UNTITLED: Readonly<Record<string, readonly string[]>> = {
-  'page-template': ['next-steps--what-comes-next'],
+  'episode-template': ['next-steps--what-comes-next'],
 };
 
 /** Episodes whose Title slide carries its own Voice script: the drawer shows that script there, not its explainer. */

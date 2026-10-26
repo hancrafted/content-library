@@ -99,7 +99,7 @@ describe('success cases', () => {
       de: { title: 'Seitenvorlage', caption: 'Die kleinste Episode.', description: 'Kopieren.' },
     };
     // ACT
-    const record = episode({ slug: 'page-template', messages, sections });
+    const record = episode({ slug: 'episode-template', messages, sections });
     // ASSERT
     expect(record.sections).toBe(sections);
     expect(record.messages).toBe(messages);

@@ -97,7 +97,7 @@ flowchart LR
 
 ### Han (maintainer)
 
-- MNT-2.1 Add a skill, record kind or Shared visual without changing the existing ones.
+- MNT-2.1 Add a skill, record kind or Explorable explanation without changing the existing ones.
 - MNT-2.2 Trace a Run back through its Jobs, Attempts and Scores to see why it produced what it did.
 
 ## Horizon 3: platform (end of 2027)

@@ -14,3 +14,10 @@
 /de/workshops/axel-agentic-workflow-2026-10-23/ /de/events/2026-10-23-axel-agentic-workflow/ 301
 /workshops/2026-10-23-axel-agentic-workflow/    /events/2026-10-23-axel-agentic-workflow/    301
 /de/workshops/2026-10-23-axel-agentic-workflow/ /de/events/2026-10-23-axel-agentic-workflow/ 301
+
+# Two tooling pages were renamed with the Explorable explanation vocabulary (design-ADR 0016): the page template became
+# the Episode template, the Slides page the Explorable explanations page.
+/episodes/page-template/    /episodes/episode-template/           301
+/de/episodes/page-template/ /de/episodes/episode-template/        301
+/episodes/slides/           /episodes/explorable-explanations/    301
+/de/episodes/slides/        /de/episodes/explorable-explanations/ 301

@@ -1,7 +1,7 @@
+import { AttentionBubblePreset } from '@/components/explorable-explanations/context/context';
+import { SESSION_END } from '@/components/explorable-explanations/context/context-bars.pure';
 import { slide } from '@/components/slide-master/slide';
 import { SlideFrame } from '@/components/slide-master/slide-master';
-import { AttentionBubblePreset } from '@/components/slide-shared/context/context';
-import { SESSION_END } from '@/components/slide-shared/context/context-bars.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

@@ -26,7 +26,7 @@ const MARKED = [
   'cyberforum-onboard-ai-every-time',
   'cyberforum-ai-attention-span',
   'cyberforum-ai-gives-you-more-work',
-  'slides',
+  'explorable-explanations',
 ] as const;
 
 /** The marker module names of an Episode, without the extension; none when it keeps no `sections/` folder. */

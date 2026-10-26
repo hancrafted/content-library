@@ -1,4 +1,4 @@
-# Cornerstone grill: the context window shared visual
+# Cornerstone grill: the context window Explorable explanation
 
 Gate 1 of `.scratch/ai-attention-span/handoff.md`: the UI UX Pro Max grill on the context window cornerstone of Episode `ai-attention-span`, run in a forked session beside the Brief gate. Visual reference: Han's Miro mockup, `.scratch/ai-attention-span/context-window-cornerstone.png` ("Default: Bar, Simple" and "Toggled: Grid, Detailed"), the base to build on. Behaviour reference: the handoff's Spec 0. Style: Chat (`docs/design/design-guide.md`).
 
@@ -101,7 +101,7 @@ Rounds 1–6 answered (Q1–Q34). Round 7 is Han's feedback on the prototype, bu
 
 ## Mini bar (Slides 10 and 11)
 
-- A small sibling component, "mini bar", in the same shared-visual folder: static, no interaction, using the same pure functions (segments, percent used) and colour variables as the full cornerstone, so the numbers agree. Slide 10 shows two (old chat, fresh chat with the handoff card); Slide 11 shows the planner and the workers. _Han_ (Q17: "2")
+- A small sibling component, "mini bar", in the same explorable-explanation folder: static, no interaction, using the same pure functions (segments, percent used) and colour variables as the full cornerstone, so the numbers agree. Slide 10 shows two (old chat, fresh chat with the handoff card); Slide 11 shows the planner and the workers. _Han_ (Q17: "2")
 
 ## Round 7: feedback on the prototype
 
