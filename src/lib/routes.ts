@@ -53,8 +53,8 @@ export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
 }
 
 /**
- * Every Event, by slug: a hand-kept page list, checked against the content store's Event records by the store's
- * tests (lib cannot read the store, FE-007).
+ * Every Event, by slug: a hand-kept page list (lib cannot read the store, FE-007). The store refuses an Event record
+ * missing from it, and the store's tests refuse a slug no Event record carries.
  */
 export const EVENT_SLUGS = [
   '2026-10-23-axel-agentic-workflow',

@@ -1,17 +1,18 @@
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
-import { isEventSlug, matchPage, type EpisodeSlug, type EventSlug, type PageRef } from '@/lib/routes';
+import { matchPage, type EpisodeSlug, type PageRef } from '@/lib/routes';
 import { pageTreatment, type PageFacts } from '@/lib/visibility.pure';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { event as axelAgenticWorkflowEvent } from './events/2026-10-23-axel-agentic-workflow';
 import { event as cyberforumAkademieIntroAgenticWorkflowEvent } from './events/2026-10-28-cyberforum-akademie-intro-agentic-workflow';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
-import { crossRecordRefusals, parseRecords, type Content, type ContentInput } from './refusals';
+import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
 import type { Episode, EpisodeStatus } from './schemas/episode.schema';
-import type { Event } from './schemas/event.schema';
+import type { EventInput } from './schemas/event.schema';
 import type { IsoDate } from './schemas/fields';
-import type { Playlist } from './schemas/playlist.schema';
+import type { PlaylistInput } from './schemas/playlist.schema';
+import type { ServedEvent } from './served-event';
 
 /*
  * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here, parsed
@@ -21,8 +22,11 @@ import type { Playlist } from './schemas/playlist.schema';
  * records only through the functions below. The one seam a database would replace.
  */
 
-const EVENTS = [axelAgenticWorkflowEvent, cyberforumAkademieIntroAgenticWorkflowEvent];
-const PLAYLISTS = [axelAgenticWorkflowPlaylist, cyberforumAkademieIntroAgenticWorkflowPlaylist];
+const EVENTS: readonly EventInput[] = [axelAgenticWorkflowEvent, cyberforumAkademieIntroAgenticWorkflowEvent];
+const PLAYLISTS: readonly PlaylistInput[] = [
+  axelAgenticWorkflowPlaylist,
+  cyberforumAkademieIntroAgenticWorkflowPlaylist,
+];
 
 /** The slugs whose metadata says `published`. */
 type PublishedSlug = {
@@ -35,11 +39,15 @@ type PublishedSlug = {
  * that is itself refused.
  */
 export function loadContent(input: ContentInput): Content {
-  const { content, refused } = parseRecords(input);
-  const refusals = refused.length > 0 ? refused : crossRecordRefusals(content);
-  if (refusals.length > 0)
-    throw new Error(`The content store refused a record:\n${refusals.map((sentence) => `- ${sentence}`).join('\n')}`);
+  const parsed = parseRecords(input);
+  if (parsed.refused.length > 0) throw refusal(parsed.refused);
+  const { content, refused } = checkRecords(parsed.content);
+  if (refused.length > 0) throw refusal(refused);
   return content;
+}
+
+function refusal(sentences: readonly string[]): Error {
+  return new Error(`The content store refused a record:\n${sentences.map((sentence) => `- ${sentence}`).join('\n')}`);
 }
 
 const CONTENT = loadContent({
@@ -101,35 +109,19 @@ export function episodeVideo(slug: EpisodeSlug, locale: Locale): Video | undefin
   return id === undefined ? undefined : { id };
 }
 
-/** An Event as the store serves it: its slug names a page of the hand-kept `EVENT_SLUGS`. */
-export type ServedEvent = Event & { readonly slug: EventSlug };
+export type { PlaylistPlace, ServedEvent } from './served-event';
 
-/** Whether the Event has a page: its slug is one of `EVENT_SLUGS`. */
-function isServed(event: Event): event is ServedEvent {
-  return isEventSlug(event.slug);
-}
-
-/** Every Event, each with a page; one missing from `EVENT_SLUGS` throws, so the build and the fast suite stop. */
-const SERVED_EVENTS: readonly ServedEvent[] = CONTENT.events.map((event) => {
-  if (!isServed(event)) throw new Error(`Event ${event.slug} is missing from EVENT_SLUGS (src/lib/routes.ts)`);
-  return event;
-});
-
-/** Every Event, in record order. */
+/**
+ * Every Event, in record order, each served whole: its slug names a page, and its Playlist's Episodes come resolved
+ * in order, each with its place. An Event page and its Event-scoped Episode pages read this one value.
+ */
 export function listEvents(): readonly ServedEvent[] {
-  return SERVED_EVENTS;
+  return CONTENT.events;
 }
 
 /** One Event by slug; undefined when no Event carries it. */
 export function findEvent(slug: string): ServedEvent | undefined {
-  return SERVED_EVENTS.find((event) => event.slug === slug);
-}
-
-/** The one Playlist an Event presents; the load refused any Event naming a missing one. */
-export function playlistOf(event: Event): Playlist {
-  const playlist = CONTENT.playlists.find((entry) => entry.id === event.playlist);
-  if (!playlist) throw new Error(`Event ${event.slug}: playlist "${event.playlist}" does not exist`);
-  return playlist;
+  return CONTENT.events.find((event) => event.slug === slug);
 }
 
 /**
@@ -152,8 +144,7 @@ export function pageFactsIn(content: Content, page: PageRef): PageFacts {
     tooling: none,
     event: ({ event: slug }) => {
       const event = content.events.find((entry) => entry.slug === slug);
-      const playlist = content.playlists.find((entry) => entry.id === event?.playlist);
-      return playlist === undefined ? {} : { visibility: playlist.visibility };
+      return event === undefined ? {} : { visibility: event.playlist.visibility };
     },
     'event-episode': episodeFacts,
   });
@@ -166,10 +157,10 @@ export function pageFacts(page: PageRef): PageFacts {
 
 /**
  * The Events `/events/` lists, in record order, read from the given records: those whose page the visibility
- * predicate puts on the site's lists (a public Playlist). An Event with no page in `EVENT_SLUGS` is listed nowhere.
+ * predicate puts on the site's lists (a public Playlist).
  */
 export function listedEventsIn(content: Content): readonly ServedEvent[] {
-  return content.events.filter(isServed).filter((event) => {
+  return content.events.filter((event) => {
     const page = { kind: 'event', event: event.slug } as const;
     return pageTreatment(page, pageFactsIn(content, page)).listed;
   });

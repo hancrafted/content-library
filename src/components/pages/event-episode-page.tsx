@@ -1,19 +1,16 @@
 import { EpisodePageContainer } from '@/components/episode-page/episode-page-container';
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
-import { eventEpisodeChrome, EventEpisodeHeader, PlaylistNav } from '@/components/events/event-episode-chrome';
 import {
-  episodePublishedOn,
-  episodeVideo,
-  findEvent,
-  listEvents,
-  pageFacts,
-  playlistOf,
-  type ServedEvent,
-} from '@/content-store/store';
+  eventEpisodeChrome,
+  EventEpisodeHeader,
+  PlaylistNav,
+  type PresentedEpisode,
+} from '@/components/events/event-episode-chrome';
+import { episodePublishedOn, episodeVideo, findEvent, listEvents, pageFacts } from '@/content-store/store';
 import { BUILD_DAY } from '@/lib/build-day';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { eventEpisodeRoute, isEpisodeSlug, type EpisodeSlug, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, type EpisodeSlug, type EventSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 /** The insets every Slide wrapper takes, so the Event's chrome lines up with the Slides (FE-009 §2). */
@@ -25,17 +22,16 @@ const INSET = 'pl-(--inset-l) pr-(--inset-r)';
  */
 export function eventEpisodeParams(): { event: EventSlug; episode: EpisodeSlug }[] {
   return listEvents().flatMap((event) =>
-    playlistOf(event)
-      .episodes.filter(isEpisodeSlug)
-      .map((episode) => ({ event: event.slug, episode })),
+    event.playlist.episodes.flatMap(({ page }) => (page === undefined ? [] : [{ event: event.slug, episode: page }])),
   );
 }
 
-/** The Event and the Episode a page under it shows; a pair its Playlist does not hold is no page. */
-function presented(eventSlug: string, episode: string): { event: ServedEvent; episode: EpisodeSlug } {
+/** The Event and the Episode a page under it shows, with its place; a pair its Playlist does not hold is no page. */
+function presented(eventSlug: string, episode: string): PresentedEpisode {
   const event = findEvent(eventSlug);
-  if (event === undefined || !playlistOf(event).episodes.includes(episode) || !isEpisodeSlug(episode)) notFound();
-  return { event, episode };
+  const entry = event?.playlist.episodes.find(({ page }) => page === episode);
+  if (event === undefined || entry?.page === undefined) notFound();
+  return { event, episode: entry.page, place: entry.place };
 }
 
 /**
@@ -47,7 +43,7 @@ function presented(eventSlug: string, episode: string): { event: ServedEvent; ep
 export async function EventEpisodePage({ event, episode, locale }: { event: string; episode: string; locale: Locale }) {
   const shown = presented(event, episode);
   const composition = findEpisode(shown.episode);
-  const chrome = await eventEpisodeChrome(shown.event, shown.episode, locale);
+  const chrome = await eventEpisodeChrome(shown, locale);
   const frame = {
     route: eventEpisodeRoute(shown.event.slug, shown.episode),
     header: <EventEpisodeHeader chrome={chrome} buildDay={BUILD_DAY} className={INSET} />,

@@ -1,8 +1,7 @@
-import type { Event } from '@/content-store/schemas/event.schema';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import type { Playlist } from '@/content-store/schemas/playlist.schema';
+import type { ServedEvent } from '@/content-store/store';
 import type { Locale } from '@/lib/locale.pure';
-import { eventRoute, type EventSlug } from '@/lib/routes';
+import { eventRoute } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
 import { releaseDateOf, type ReadKey } from './episode-card.pure';
 
@@ -34,13 +33,14 @@ export interface EventCard {
 
 const ITEMS = 'eventsPage.items';
 
+/** What a card reads of an Event the store serves: its slug, its day and time, its place, and its Playlist's length. */
+type CardEvent = Pick<ServedEvent, 'slug' | 'date' | 'time' | 'location'> & {
+  readonly playlist: { readonly episodes: readonly unknown[] };
+};
+
 /** Assembles one card; throws when a string it needs is missing, so the build fails rather than ships a blank. */
-export function eventCard(
-  { event: record, playlist }: { event: Event & { readonly slug: EventSlug }; playlist: Pick<Playlist, 'episodes'> },
-  locale: Locale,
-  { read, episodeCount }: EventReads,
-): EventCard {
-  const count = playlist.episodes.length;
+export function eventCard(record: CardEvent, locale: Locale, { read, episodeCount }: EventReads): EventCard {
+  const count = record.playlist.episodes.length;
   return {
     slug: record.slug,
     route: eventRoute(record.slug),

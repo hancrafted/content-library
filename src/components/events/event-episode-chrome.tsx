@@ -1,10 +1,9 @@
 import { episodeCopy } from '@/components/episodes/registry';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import { playlistOf, type ServedEvent } from '@/content-store/store';
+import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
-import { playlistPlace } from '@/lib/events.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventEpisodeRoute, eventRoute, isEpisodeSlug, type EpisodeSlug, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, eventRoute, type EpisodeSlug, type EventSlug } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
@@ -34,15 +33,20 @@ export interface EventEpisodeChrome {
   readonly next?: Step;
 }
 
-/** The chrome of one Episode's page under one Event; throws for an Event or Episode its Playlist does not hold. */
+/** One Episode an Event presents: the served Event, the Episode's page, and its place in the Event's Playlist. */
+export interface PresentedEpisode {
+  readonly event: ServedEvent;
+  readonly episode: EpisodeSlug;
+  readonly place: PlaylistPlace;
+}
+
+/** The chrome of one Episode's page under one Event, read in one locale. */
 export async function eventEpisodeChrome(
-  event: ServedEvent,
-  slug: EpisodeSlug,
+  { event, episode: slug, place }: PresentedEpisode,
   locale: Locale,
 ): Promise<EventEpisodeChrome> {
   const labels = TRANSLATIONS[locale].eventsPage;
   const t = await getTranslations({ locale, namespace: 'eventsPage' });
-  const place = playlistPlace(playlistOf(event).episodes, slug, isEpisodeSlug);
   const stepOf = (episode: EpisodeSlug | undefined): Step | undefined =>
     episode === undefined
       ? undefined

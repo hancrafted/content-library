@@ -1,13 +1,16 @@
 import { LOCALES } from '@/lib/locale.pure';
+import { isEventSlug } from '@/lib/routes';
 import type { z } from 'zod';
 import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
+import { playlistEntries, type ServedEvent } from './served-event';
 
 /*
  * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 4, 8 and 9): each record is parsed by its
- * schema, then the cross-record rules run over the sound ones. Every refusal is one sentence naming the kind, the
- * record and the field; a refused record is never dropped, the whole load throws.
+ * schema, then the cross-record rules run over the sound ones and resolve each Event into the Playlist it presents.
+ * Every refusal is one sentence naming the kind, the record and the field; a refused record is never dropped, the
+ * whole load throws.
  */
 
 /** Every record kind as its file writes it, before parsing: what the store loads. */
@@ -17,10 +20,17 @@ export interface ContentInput {
   readonly playlists: readonly unknown[];
 }
 
-/** Every record kind, parsed and checked. */
-export interface Content {
+/** Every record kind, parsed by its schema, before the cross-record rules: an Event names its Playlist by id. */
+export interface ParsedContent {
   readonly episodes: readonly Episode[];
   readonly events: readonly Event[];
+  readonly playlists: readonly Playlist[];
+}
+
+/** Every record kind, parsed and checked, each Event served with the Playlist it presents. */
+export interface Content {
+  readonly episodes: readonly Episode[];
+  readonly events: readonly ServedEvent[];
   readonly playlists: readonly Playlist[];
 }
 
@@ -111,13 +121,11 @@ function episodeRefusals(episode: Episode, listedByEvents: ReadonlySet<string>):
   ].map((sentence) => `Episode ${episode.slug}: ${sentence}`);
 }
 
-function eventRefusals(event: Event, playlists: ReadonlySet<string>): string[] {
-  const own = (sentence: string) => `Event ${event.slug}: ${sentence}`;
+function eventRefusals(event: Event): string[] {
   const date = EVENT_SLUG.exec(event.slug)?.[1];
-  return [
-    ...(date === event.date ? [] : [own(`slug must be <date>-<name>, starting with its date ${event.date}`)]),
-    ...(playlists.has(event.playlist) ? [] : [own(`playlist "${event.playlist}" does not exist`)]),
-  ];
+  return date === event.date
+    ? []
+    : [`Event ${event.slug}: slug must be <date>-<name>, starting with its date ${event.date}`];
 }
 
 function playlistRefusals(playlist: Playlist, episodes: ReadonlyMap<string, Episode>, presented: boolean): string[] {
@@ -136,10 +144,9 @@ function playlistRefusals(playlist: Playlist, episodes: ReadonlyMap<string, Epis
   ];
 }
 
-/** The cross-record refusals over sound records, in the order kinds are listed. */
-export function crossRecordRefusals({ episodes, events, playlists }: Content): string[] {
+/** The cross-record refusals over sound records, in the order kinds are listed, with the Events' own from `serve`. */
+function crossRecordRefusals({ episodes, events, playlists }: ParsedContent, unserved: readonly string[]): string[] {
   const presented = new Set(events.map((event) => event.playlist));
-  const playlistIds = new Set(playlists.map((playlist) => playlist.id));
   const listedByEvents = new Set(
     playlists.filter((playlist) => presented.has(playlist.id)).flatMap((playlist) => playlist.episodes),
   );
@@ -152,7 +159,8 @@ export function crossRecordRefusals({ episodes, events, playlists }: Content): s
       events.map((event) => event.slug),
       'slug',
     ),
-    ...events.flatMap((event) => eventRefusals(event, playlistIds)),
+    ...events.flatMap(eventRefusals),
+    ...unserved,
     ...uniqueness(
       'Playlist',
       playlists.map((playlist) => playlist.id),
@@ -162,8 +170,46 @@ export function crossRecordRefusals({ episodes, events, playlists }: Content): s
   ];
 }
 
+/**
+ * The Event served with its Playlist resolved, or the sentences refusing it: a Playlist that does not exist, or a slug
+ * missing from `EVENT_SLUGS`, so it has no page. A slug the Playlist names that no Episode carries is the Playlist's
+ * own refusal, so the load throws before the resolved list is read.
+ */
+function serve(
+  event: Event,
+  playlists: ReadonlyMap<string, Playlist>,
+  episodes: ReadonlyMap<string, Episode>,
+): { served: ServedEvent[]; refused: string[] } {
+  const { slug } = event;
+  const playlist = playlists.get(event.playlist);
+  if (playlist !== undefined && isEventSlug(slug)) {
+    const listed = playlist.episodes.flatMap((each) => episodes.get(each) ?? []);
+    return { served: [{ ...event, slug, playlist: { ...playlist, episodes: playlistEntries(listed) } }], refused: [] };
+  }
+  const missing = playlist === undefined ? [`playlist "${event.playlist}" does not exist`] : [];
+  const pageless = isEventSlug(slug) ? [] : ['slug is missing from EVENT_SLUGS (src/lib/routes.ts), so it has no page'];
+  return { served: [], refused: [...missing, ...pageless].map((sentence) => `Event ${slug}: ${sentence}`) };
+}
+
+/**
+ * The records checked against each other and every Event served with the Playlist it presents, or the sentences
+ * refusing them. Run only over records that all parsed, so a refusal never rests on a record that is itself refused.
+ */
+export function checkRecords(content: ParsedContent): { content: Content; refused: string[] } {
+  const playlists = new Map(content.playlists.map((playlist) => [playlist.id, playlist]));
+  const episodes = new Map(content.episodes.map((episode) => [episode.slug, episode]));
+  const events = content.events.map((event) => serve(event, playlists, episodes));
+  return {
+    content: { ...content, events: events.flatMap(({ served }) => served) },
+    refused: crossRecordRefusals(
+      content,
+      events.flatMap(({ refused }) => refused),
+    ),
+  };
+}
+
 /** Every record parsed by its schema, with the sentences refusing the ones that do not parse. */
-export function parseRecords(input: ContentInput): { content: Content; refused: string[] } {
+export function parseRecords(input: ContentInput): { content: ParsedContent; refused: string[] } {
   const episodes = parseAll({ kind: 'Episode', key: 'slug', schema: episodeSchema }, input.episodes);
   const events = parseAll({ kind: 'Event', key: 'slug', schema: eventSchema }, input.events);
   const playlists = parseAll({ kind: 'Playlist', key: 'id', schema: playlistSchema }, input.playlists);

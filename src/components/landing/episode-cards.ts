@@ -49,31 +49,20 @@ export interface EpisodeCardsOptions {
  */
 export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions): Promise<EpisodeCard[]> {
   const entries = overviewOrder(listEpisodes({ includeDrafts: options?.includeDrafts }), featuredSlugs());
-  return cardsOf(entries, locale, options);
+  return entries.map(await episodeCardMaker(locale, options));
 }
 
 /**
- * The cards of the Episodes a Playlist lists, in its order, public or unlisted: what an Event page shows. Throws on
- * a slug no Episode carries, so the build fails rather than ships a gap.
+ * The card maker of one locale: each Episode it is handed as a localized card. The Event page hands it the Episodes its
+ * Playlist lists, public or unlisted, through `eventPlaylistCards`, which opens each linked card under the Event.
  */
-export async function playlistEpisodeCards(episodes: readonly string[], locale: Locale): Promise<EpisodeCard[]> {
-  const all = listEpisodes();
-  const entries = episodes.map((slug) => {
-    const entry = all.find((each) => each.slug === slug);
-    if (entry === undefined) throw new Error(`No Episode carries the slug "${slug}" a Playlist lists`);
-    return entry;
-  });
-  return cardsOf(entries, locale);
-}
-
-async function cardsOf(
-  entries: readonly Episode[],
+export async function episodeCardMaker(
   locale: Locale,
   options?: EpisodeCardsOptions,
-): Promise<EpisodeCard[]> {
+): Promise<(entry: Episode) => EpisodeCard> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
-  return entries.map((entry) =>
+  return (entry) =>
     episodeCard(withCopy(entry, locale), {
       locale,
       read,
@@ -81,6 +70,5 @@ async function cardsOf(
       ...youtubeOf(entry, locale),
       ...featuredRankOf(entry.slug),
       linkDrafts: options?.linkDrafts,
-    }),
-  );
+    });
 }

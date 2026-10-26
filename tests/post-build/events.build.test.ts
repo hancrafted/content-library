@@ -8,7 +8,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeStatus, episodeVisibility, listEvents, playlistOf } from '../../src/content-store/store';
+import { episodeStatus, episodeVisibility, listEvents } from '../../src/content-store/store';
 import { isPastEvent } from '../../src/lib/events.pure';
 import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
@@ -25,7 +25,7 @@ import { exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
 const SITE_URL = resolveSiteUrl(process.env);
 const EVENTS = listEvents();
-const LISTED = EVENTS.filter((event) => playlistOf(event).visibility === 'public');
+const LISTED = EVENTS.filter((event) => event.playlist.visibility === 'public');
 const AXEL = EVENTS.find((event) => event.slug === '2026-10-23-axel-agentic-workflow');
 if (AXEL === undefined) throw new Error('The AXEL Event is missing from the content store');
 /** A Playlist entry the test expects a page for: a registered Episode, or the test file is wrong. */
@@ -33,7 +33,7 @@ const registered = (slug: string): EpisodeSlug => {
   if (!isEpisodeSlug(slug)) throw new Error(`"${slug}" is no registered Episode`);
   return slug;
 };
-const AXEL_EPISODES = playlistOf(AXEL).episodes.map(registered);
+const AXEL_EPISODES = AXEL.playlist.episodes.map(({ episode }) => registered(episode.slug));
 const TODAY = new Date().toISOString().slice(0, 10) as `${number}-${number}-${number}`;
 
 /** Every Workshop URL that was ever published, and the Event it became. Written out: the Workshop pages are gone. */
@@ -327,8 +327,9 @@ describe('the 2026-10-28 Event', () => {
 describe('Episode pages under an Event', () => {
   /** Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports. */
   const PAGES_UNDER_EVENTS = EVENTS.flatMap((event) =>
-    playlistOf(event)
-      .episodes.filter((episode) => isEpisodeSlug(episode))
+    event.playlist.episodes
+      .map(({ episode }) => episode.slug)
+      .filter((episode) => isEpisodeSlug(episode))
       .flatMap((episode) => LOCALES.map((locale) => ({ event: event.slug, episode, locale }))),
   );
   const AXEL_PAGES = AXEL_EPISODES.filter((episode) => isEpisodeSlug(episode));
