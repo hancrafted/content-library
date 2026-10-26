@@ -40,13 +40,13 @@ describe('success cases', () => {
       status: 'published',
       title: 'Your AI token economy',
       caption: 'Hidden managing responsibilities.',
-      leadTag: { id: 'cost', label: '[landing.episodeOverview.tags.cost.name]' },
-      format: { id: 'foundations', label: '[landing.episodeOverview.formats.foundations]' },
+      leadTag: { id: 'cost', label: '[episodeBrowser.tags.cost.name]' },
+      format: { id: 'foundations', label: '[episodeBrowser.formats.foundations]' },
       tags: [
         {
           id: 'cost',
-          label: '[landing.episodeOverview.tags.cost.name]',
-          tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
+          label: '[episodeBrowser.tags.cost.name]',
+          tooltip: '[episodeBrowser.tags.cost.tooltip]',
         },
       ],
       minutes: 42,
@@ -81,27 +81,27 @@ describe('success cases', () => {
     expect({ route, href }).toEqual(expected);
   });
 
-  it('builds an upcoming card with no link, reading its copy from the landing Translation keys', () => {
+  it('builds an upcoming card with no link, reading its copy from the Episode browser Translation keys', () => {
     // ARRANGE
     const expected = {
       slug: 'choosing-the-right-model',
       route: null,
       href: null,
       status: 'upcoming',
-      title: '[landing.episodeOverview.upcoming.choosing-the-right-model.title]',
-      caption: '[landing.episodeOverview.upcoming.choosing-the-right-model.caption]',
-      leadTag: { id: 'cost', label: '[landing.episodeOverview.tags.cost.name]' },
-      format: { id: 'short', label: '[landing.episodeOverview.formats.short]' },
+      title: '[episodeBrowser.upcoming.choosing-the-right-model.title]',
+      caption: '[episodeBrowser.upcoming.choosing-the-right-model.caption]',
+      leadTag: { id: 'cost', label: '[episodeBrowser.tags.cost.name]' },
+      format: { id: 'short', label: '[episodeBrowser.formats.short]' },
       tags: [
         {
           id: 'cost',
-          label: '[landing.episodeOverview.tags.cost.name]',
-          tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
+          label: '[episodeBrowser.tags.cost.name]',
+          tooltip: '[episodeBrowser.tags.cost.tooltip]',
         },
         {
           id: 'sales',
-          label: '[landing.episodeOverview.tags.sales.name]',
-          tooltip: '[landing.episodeOverview.tags.sales.tooltip]',
+          label: '[episodeBrowser.tags.sales.name]',
+          tooltip: '[episodeBrowser.tags.sales.tooltip]',
         },
       ],
       featuredRank: null,
@@ -120,13 +120,13 @@ describe('success cases', () => {
     const expected = [
       {
         id: 'cost',
-        label: '[landing.episodeOverview.tags.cost.name]',
-        tooltip: '[landing.episodeOverview.tags.cost.tooltip]',
+        label: '[episodeBrowser.tags.cost.name]',
+        tooltip: '[episodeBrowser.tags.cost.tooltip]',
       },
       {
         id: 'workflow',
-        label: '[landing.episodeOverview.tags.workflow.name]',
-        tooltip: '[landing.episodeOverview.tags.workflow.tooltip]',
+        label: '[episodeBrowser.tags.workflow.name]',
+        tooltip: '[episodeBrowser.tags.workflow.tooltip]',
       },
     ];
     // ACT
@@ -170,7 +170,7 @@ describe('failure cases', () => {
     const strict = (key: string): string => {
       throw new Error(`MISSING_MESSAGE: ${key}`);
     };
-    const message = 'MISSING_MESSAGE: landing.episodeOverview.upcoming.choosing-the-right-model.title';
+    const message = 'MISSING_MESSAGE: episodeBrowser.upcoming.choosing-the-right-model.title';
     // ACT
     const build = () => episodeCard(UPCOMING, { locale: 'en', read: strict });
     // ASSERT

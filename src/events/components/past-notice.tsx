@@ -8,7 +8,7 @@ interface PastNoticeProps {
   date: IsoDate;
   /** The day the page is built; an Event dated before it is past. */
   buildDay: IsoDate;
-  /** The fixed line, read from `eventsPage.pastNotice` in the page's locale. */
+  /** The fixed line, read from `events.pastNotice` in the page's locale. */
   text: string;
   className?: string;
 }

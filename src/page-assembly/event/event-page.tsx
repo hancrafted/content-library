@@ -9,10 +9,10 @@ import { PastNotice } from '@/events/components/past-notice';
 import { PlaylistList, type PlaylistEntry } from '@/events/components/playlist-list';
 import type { EventCard } from '@/events/lib/event-card.pure';
 import { eventPlaylistCards, startOf, totalMinutes } from '@/events/lib/event-playlist.pure';
+import { EVENT_WORDS, eventCopy } from '@/events/lib/event-words';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import { Button } from '@/shared/components/ui/button';
-import { TRANSLATIONS } from '@/shared/i18n/translations';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { ArrowRight, CalendarDays, Clock, Layers, MapPin, Presentation, Users, type LucideIcon } from 'lucide-react';
@@ -26,11 +26,11 @@ import type { ReactNode } from 'react';
  * is unlisted is `noindex` and out of the sitemap.
  */
 export function eventPageCopy(slug: EventSlug, locale: Locale): PageCopy {
-  const { title, description } = TRANSLATIONS[locale].eventsPage.items[slug];
+  const { title, description } = eventCopy(slug, locale);
   return { title, description, treatment: treatmentOf({ kind: 'event', event: slug }) };
 }
 
-type EventT = Awaited<ReturnType<typeof getTranslations<'eventsPage'>>>;
+type EventT = Awaited<ReturnType<typeof getTranslations<'eventPage'>>>;
 
 function Fact({ icon: Icon, children }: { icon: LucideIcon; children: ReactNode }) {
   return (
@@ -131,23 +131,24 @@ function playlistEntries(cards: readonly EpisodeCard[], locale: Locale, labels: 
 export async function EventPage({ slug, locale }: { slug: string; locale: Locale }) {
   const record = findEvent(slug);
   if (record === undefined) notFound();
-  const t = await getTranslations({ locale, namespace: 'eventsPage' });
-  const landing = await getTranslations({ locale, namespace: 'landing' });
+  const t = await getTranslations({ locale, namespace: 'eventPage' });
+  const browser = await getTranslations({ locale, namespace: 'episodeBrowser' });
+  const words = EVENT_WORDS[locale];
   const card = await eventCardOf(record, locale);
   const episodes = eventPlaylistCards(record, await episodeCardMaker(locale), locale);
   return (
     <main data-testid="event-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
       <EventBreadcrumb
         locale={locale}
-        labels={{ breadcrumb: t('breadcrumb'), events: t('title') }}
+        labels={{ breadcrumb: words.breadcrumb.label, events: words.breadcrumb.events }}
         event={{ slug: record.slug, title: card.title }}
       />
       <h1 className="mt-6 text-heading font-semibold text-balance text-foreground">{card.title}</h1>
       <Facts card={card} record={record} minutes={totalMinutes(episodes)} t={t} />
       <p className="mt-6 max-w-2xl text-body text-pretty text-foreground">{card.description}</p>
-      <PastNotice date={record.date} buildDay={BUILD_DAY} text={t('pastNotice')} className="mt-8" />
+      <PastNotice date={record.date} buildDay={BUILD_DAY} text={words.pastNotice} className="mt-8" />
       <StartButton start={startOf(episodes)} locale={locale} t={t} />
-      <PlaylistList entries={playlistEntries(episodes, locale, cardLabels(landing))} title={t('playlist')} />
+      <PlaylistList entries={playlistEntries(episodes, locale, cardLabels(browser))} title={t('playlist')} />
     </main>
   );
 }

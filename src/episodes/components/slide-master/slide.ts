@@ -140,7 +140,7 @@ export type HeaderMode = 'shared' | 'authored';
 
 /**
  * An Episode's composition of Slides: static data. It carries its own
- * text, so the site-wide Translation files hold nothing of it. What the Episode
+ * text, so no other owner's Translation files hold any of it. What the Episode
  * declares about itself (status, visibility, Video) is its metadata record,
  * loaded by the content store (FE-013). A tooling page
  * composes its Slides the same way, but is no Episode (`tooling-pages.ts`).

@@ -34,7 +34,7 @@ Position stays the one source for structure: first in its Section is `h2`, the r
 
 ## Upcoming Episodes
 
-An Upcoming Episode has no record: only `episode-metadata.ts` and two landing strings, `landing.episodeOverview.upcoming.<slug>.{title,caption}`. Those strings are landing text, read by the overview alone, so they stay in the site-wide files. When the Episode is published they move into its folder's `i18n/` with the rest of its text; an existing test already refuses upcoming copy for a published Episode.
+An Upcoming Episode has no record: only `episode-metadata.ts` and two strings, `episodeBrowser.upcoming.<slug>.{title,caption}`. Those strings are Episode browser text, read by the browser alone, so they stay in its Translation files (`src/episodes/components/episode-browser/i18n/`). When the Episode is published they move into its folder's `i18n/` with the rest of its text; an existing test already refuses upcoming copy for a published Episode.
 
 ## Rejected
 

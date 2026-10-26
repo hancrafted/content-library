@@ -1,0 +1,177 @@
+{
+  "landing": {
+    "title": "Start",
+    "link": "Episoden-Vorlage",
+    "hero": {
+      "eyebrow": "hancrafted / Menschlich geführt. KI-beschleunigt.",
+      "offers": {
+        "consulting": "Beratung",
+        "coaching": "Coaching",
+        "leadership": "Engineering-Leadership"
+      },
+      "headline": "Die KI hat dich <accent>befördert.</accent> <br></br>Gefragt hat sie nicht.",
+      "caption": "Du wirst 10× so produktiv — wenn du lernst, zu <plan>planen,</plan> zu <spec>spezifizieren</spec> und zu <review>reviewen,</review> …",
+      "plan": "planen",
+      "spec": "spezifizieren",
+      "review": "reviewen",
+      "promotion": "Befördert von KI",
+      "episodes": "Erfahre, warum",
+      "open": "Deine Beförderung öffnen",
+      "skip": "Animation stoppen",
+      "motionHint": "Nähert sich der Mauszeiger „Erfahre, warum“, beginnt der Stapel zu schrumpfen; Mauszeiger oder Tastaturfokus darauf leeren ihn ganz. Außerhalb wächst er wieder.",
+      "tasks": {
+        "bug": "DEADLINE",
+        "ticket": "AUFGABE",
+        "release": "DEPLOY",
+        "tests": "PROJEKT",
+        "spec": "PLAN",
+        "review": "CODE REVIEW"
+      }
+    },
+    "episodesSectionTitle": "Verfügbare Episoden",
+    "episodesSectionSubtitle": "Interaktive Foliensätze und visualisierte Essays durchstöbern.",
+    "spotlightTitle": "Im Fokus",
+    "browseTitle": "Alle Episoden durchstöbern",
+    "method": {
+      "title": "So arbeite ich",
+      "hint": "Horizontal scrollen →",
+      "cards": {
+        "people-first": {
+          "title": "People first",
+          "claim": "KI beschleunigt, sie löst nichts. Trifft sie auf eine Kultur, die nicht bereit ist, bekommst du das Gute und das Schlechte schneller.",
+          "note": "Lesetipp: <link>Conways Gesetz</link>. Wenn deine Systeme schon dein Organigramm spiegeln, kopiert KI die Risse noch schneller."
+        },
+        "reason-backwards": {
+          "title": "Reason backwards",
+          "claim": "Plane rückwärts von einem messbaren Ergebnis, und jeder Schritt muss sich rechtfertigen. Blocker zeigen sich früh, nicht erst in Woche sechs. Das gilt für Projekte und für KI: Gib ihr ein Ziel, keine To-do-Liste.",
+          "note": "Schon mal von Graph Engineering gehört? Fühlt es sich für dich auch wie Projektmanagement für KI an?"
+        },
+        "outcomes-over-methods": {
+          "title": "Outcomes over methods",
+          "claim": "Auf der Autobahn einigen wir uns auf das Ziel, und niemand fährt als Geisterfahrer. Welches Auto du nimmst, entscheidest du."
+        },
+        "obsolete-by-design": {
+          "title": "Obsolete by design",
+          "claim": "Ich messe meine Arbeit daran, wie wenig du mich danach noch brauchst. Die Verantwortung bleibt bei den Menschen, nicht bei mir.",
+          "note": "Mein Lieblingszitat, Laotse: „Wenn die Arbeit des besten Anführers getan ist, sagen die Leute: ‚Das haben wir selbst gemacht.‘“"
+        },
+        "fast-feedback": {
+          "title": "Fast feedback",
+          "claim": "Kurze Feedbackschleifen lassen Menschen und KI den Kurs korrigieren, bevor der Eisberg kommt. Transparenz heißt: wissen, was schiefläuft, solange es noch günstig zu beheben ist."
+        }
+      }
+    },
+    "about": {
+      "eyebrow": "Über mich / Wirkung in der Praxis",
+      "edition": "Menschen × Prozesse × Technologie",
+      "headline": "Veränderung, die",
+      "headlineAccent": "sichtbar wird.",
+      "lead": "Weniger Abhängigkeiten. Bessere Entscheidungen. Software, die genutzt wird. Drei Veränderungen, die ich mit Teams umgesetzt habe.",
+      "exploreCase": "Fall erkunden",
+      "identity": {
+        "label": "Über Han Che",
+        "practice": "Engineering-Führung · Beratung · Coaching",
+        "body": "Ich verbinde die wirtschaftliche, technische und menschliche Seite von Veränderung. Entwickler, Teamleiter und Trainer mit über 2.000 Stunden Coaching und Training.",
+        "newTab": "neuer Tab"
+      },
+      "readingKey": "Je Fall: Ausgangslage → Beitrag → Ergebnis",
+      "schematic": "Schematische Illustrationen, keine Diagramme.",
+      "phases": {
+        "before": "Vorher",
+        "intervention": "Mein Beitrag",
+        "result": "Ergebnis"
+      },
+      "scope": "Umfang & Zeitraum",
+      "readNote": "Den Fall genauer ansehen",
+      "provenance": "Ausgewählte eigene Erfahrungsberichte, abgeglichen mit meinem Lebenslauf und beruflichen Profil. Sie beschreiben meinen Beitrag im Team, keine unabhängig geprüften Ergebnisse.",
+      "cases": {
+        "rib": {
+          "company": "RIB Software",
+          "role": "Engineering Manager",
+          "tag": "Verteilte Verantwortung",
+          "title": "Ein Team, das nicht auf den Chef wartet.",
+          "metric": "~5",
+          "unit": "Monate bis zum selbstständigen Scrum",
+          "before": {
+            "title": "Ein Gatekeeper",
+            "caption": "Jede Entscheidung wartete auf eine Person.",
+            "body": "Refinement, Schätzungen, Aufgabenverteilung und Reviews liefen bei einem Gatekeeper zusammen. Dem Team fehlte die Verantwortung, um eigenständig voranzukommen."
+          },
+          "intervention": {
+            "title": "Gemeinsam entscheiden",
+            "caption": "Gemeinsame Planung, Kapazität, Peer Review.",
+            "body": "Ich coachte gemeinsames Refinement und Schätzen, machte Kapazität sichtbar und baute Peer Review auf. Teammitglieder übernahmen Planung und eigene Scrum-Rituale."
+          },
+          "result": {
+            "title": "Eigenständiges Team",
+            "caption": "Nach ca. 5 Monaten trug sich das Team selbst.",
+            "body": "Nach ca. 5 Monaten lief der Scrum-Alltag weitgehend ohne meine Anwesenheit. Verteilte Verantwortung wurde zur täglichen Praxis."
+          },
+          "scope": "Rund fünf Monate Teamentwicklung. „Organisiert sich selbst“ bezieht sich auf den Teamalltag, nicht auf eine Organisation ohne Führung.",
+          "note": "Mein Beitrag war keine weitere Freigabeinstanz. Ich unterstützte das Team dabei, gemeinsam zu verfeinern und zu schätzen, seine Kapazität zu kommunizieren und Abhängigkeiten mit anderen Teams zu klären. Peer Review gab Kolleginnen und Kollegen einen Rahmen, um Entscheidungen gemeinsam zu tragen.",
+          "source": "Grundlage: eigene Praxisnotizen; Rolle als Engineering Manager und fünfmonatige Transformation im Lebenslauf."
+        },
+        "audi": {
+          "company": "Audi",
+          "role": "Tech Lead bei XL2",
+          "tag": "Ein gemeinsames Prozessverständnis",
+          "title": "Weniger Meeting. Mehr entscheiden.",
+          "metric": "30",
+          "unit": "Minuten weniger pro Meeting, im Schnitt",
+          "before": {
+            "title": "Gewachsene Freigabe",
+            "caption": "Gewünscht: der Excel-Ablauf als Software.",
+            "body": "Die letzte Freigabe vor der Serienproduktion hing an einem gewachsenen Prozess. Der erste Wunsch: den bestehenden Excel-Ablauf nachbauen."
+          },
+          "intervention": {
+            "title": "Prozess modellieren",
+            "caption": "Aus Terminen wurde ein Zustandsmodell.",
+            "body": "Mit einem Architekturkollegen erarbeitete ich in Stakeholder-Terminen Zustandsdiagramme und ein relationales Datenmodell. Wir setzten einen Kernprozess durchgängig um."
+          },
+          "result": {
+            "title": "Digital freigeben",
+            "caption": "Kernprozess-Demo, Meetings 30 Min. kürzer.",
+            "body": "Die Kernprozess-Demo machte das Modell greifbar. Die Digitalisierung verkürzte Freigabemeetings zudem im Durchschnitt um 30 Minuten."
+          },
+          "scope": "6–8 Wochen gelten für die lauffähige Kernprozess-Demo. Der erste Release erfolgte nach 6 Monaten. Die 30 Minuten sind die durchschnittliche Meeting-Verkürzung, kein Demo-Benchmark.",
+          "note": "Zustandsübergänge machten den Prozess in der Fachsprache der Stakeholder sichtbar. Die Demo lief auf der Vorproduktionsumgebung mit Datenimport und -export, neben dem bestehenden Werkzeug. Damit gab es eine konkrete Grundlage, um sich über den Ablauf zu verständigen.",
+          "source": "Grundlage: eigene Praxisnotizen zur Demo; Lebenslauf zum ersten Release nach sechs Monaten und zur durchschnittlichen Meeting-Verkürzung."
+        },
+        "selfbits": {
+          "company": "Selfbits",
+          "role": "Founding Engineer",
+          "tag": "Software im Einsatz",
+          "title": "Nach der Demo kommt der Einsatz.",
+          "metric": "5",
+          "unit": "Werke in Europa",
+          "before": {
+            "title": "Daten im Werk",
+            "caption": "Aufträge sollten zu nutzbaren OEE-Daten werden.",
+            "body": "Wie werden aus Produktionsaufträgen nutzbare Daten zur Anlageneffektivität? Dafür mussten Fertigungsprozesse und die Menschen an den Anlagen zusammengebracht werden."
+          },
+          "intervention": {
+            "title": "Bauen und pilotieren",
+            "caption": "Web-, Mobil- und TV-Software, gebaut und betrieben.",
+            "body": "Ich konzipierte, entwickelte und betrieb mit dem Team ein Manufacturing Execution System: Web-, Mobil- und TV-Oberflächen für Planung, Stammdaten und OEE."
+          },
+          "result": {
+            "title": "Software im Einsatz",
+            "caption": "200+ Nutzer, 3 HEPA-Linien in 9 Monaten pilotiert.",
+            "body": "Die Software erreichte insgesamt 200+ Nutzer. Ein abgegrenzter Pilot erfasste auftragsbezogene OEE-Daten an 3 HEPA-Linien in 2 Fabriken innerhalb von 9 Monaten."
+          },
+          "scope": "5 Fabriken und 200+ Nutzer bezeichnen den gesamten Einsatz laut Lebenslauf. Der Neunmonats-Meilenstein gilt für den Pilot mit 3 Linien in 2 Fabriken, nicht für den gesamten Rollout.",
+          "note": "Ein Manufacturing Execution System verbindet Produktionsplanung und Fabrikalltag. OEE steht für Overall Equipment Effectiveness, also Gesamtanlageneffektivität. Im Pilot ging es um die Datenerfassung je Produktionsauftrag; eine prozentuale OEE-Steigerung wird hier nicht behauptet.",
+          "source": "Grundlage: Lebenslauf zu Einsatz und Pilotumfang; berufliches Profil zur Arbeit an Planung, OEE-Dashboards und Stammdaten."
+        }
+      }
+    },
+    "contact": {
+      "title": "Wo kommt die Arbeit ins Stocken?",
+      "body": "Bei Menschen, Prozessen und Werkzeugen ansetzen. Nicht beim nächsten isolierten Tool.",
+      "schedule": "Kennenlerngespräch buchen",
+      "emailLabel": "Oder schreib mir",
+      "copy": "E-Mail-Adresse kopieren",
+      "copied": "Kopiert"
+    }
+  }
+}

@@ -222,8 +222,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 ## Localization
 
-**Translation file**: one locale's strings for one owner: the site's chrome and landing (`src/messages/`), one Episode, or one Slide (its folder's `i18n/`); English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
+**Translation file**: one locale's strings for one owner, in its folder's `i18n/`: a page template, a product area or its component, page chrome, one Episode, or one Slide. The owners' files outside Episodes and Slides merge into one message set (`src/page-assembly/translations.ts`), each top-level namespace defined by one owner; English is the source every other locale is checked against. Localization libraries call it a catalog; that jargon stays out of this project.
 _Avoid_: Catalog, messages file, dictionary
 
-**Translation key**: the dotted path naming one string in a Translation file, e.g. `tableOfContents.title` site-wide, or `notes.attention-valley.header` in a Slide's own file.
+**Translation key**: the dotted path naming one string in a Translation file, e.g. `tableOfContents.title` in page chrome's file, or `notes.attention-valley.header` in a Slide's own file.
 _Avoid_: Catalog key, catalog path, message id

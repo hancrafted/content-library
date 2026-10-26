@@ -1,7 +1,7 @@
 import type { Locale } from '@/shared/lib/locale.pure';
+import type { Messages } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { translationStrings, type TranslationNode } from './translation-strings.pure';
-import { TRANSLATIONS, type Messages } from './translations';
 
 /** A top-level Translation file namespace made only of strings, such as `tableOfContents` or `contextDrawer`. */
 type StringNamespace = { [N in keyof Messages]: Messages[N] extends TranslationNode ? N : never }[keyof Messages];
@@ -19,10 +19,14 @@ export async function readTranslationStrings<N extends StringNamespace, K extend
   omit: readonly K[] = [],
 ): Promise<Omit<Messages[N], K>> {
   const t = await getTranslations({ locale });
-  // Every key is a leaf path walked out of the typed Translation file itself, so it exists by construction.
+  // Every key, the namespace included, is a path walked out of the typed message set itself, so it exists by construction.
   const read = (key: string) => t(key as Parameters<typeof t>[0]);
-  return translationStrings(namespace, TRANSLATIONS[locale][namespace] as Messages[N] & TranslationNode, {
-    read,
-    omit,
-  });
+  return translationStrings(
+    namespace,
+    t.raw(namespace as Parameters<typeof t.raw>[0]) as Messages[N] & TranslationNode,
+    {
+      read,
+      omit,
+    },
+  );
 }

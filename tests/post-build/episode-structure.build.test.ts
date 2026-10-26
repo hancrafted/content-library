@@ -136,7 +136,10 @@ describe('episode structure', () => {
       // ARRANGE
       const $ = exportedPage(url);
       const translation = JSON.parse(
-        readFileSync(join(import.meta.dirname, '..', '..', 'src', 'messages', `${locale}.json`), 'utf8'),
+        readFileSync(
+          join(import.meta.dirname, '..', '..', 'src', 'shared', 'page-chrome', 'i18n', `${locale}.json`),
+          'utf8',
+        ),
       );
       const explainer = String(translation.contextDrawer.explainer).replace('{shortcut}', 'Alt+N');
       // A Title slide with its own Voice script shows it instead, so neither tab explains the drawer.

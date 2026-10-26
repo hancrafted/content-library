@@ -89,7 +89,7 @@ Static export runs no middleware, so locales are an explicit route tree; next-in
 
 Both are root layouts that render the same `SiteShell` and header from the page chrome, `src/shared/page-chrome/`; each route renders one page template from `src/page-assembly/`. Build URLs with `localizePath` from `src/shared/lib/locale.pure.ts`; never hand-write a `/de` prefix.
 
-Strings live in `src/messages/<locale>.json`. Read them with `getTranslations({ locale, namespace })` from `next-intl/server`, passing the locale explicitly. Episode keys follow `docs/features/episode-translation-keys.md`. `de.json` is typed against `en.json`, so a missing German key fails `npm run typecheck`, and a missing key at render time fails the build.
+Strings live with the folder that renders them, in its `i18n/<locale>.json`; `src/page-assembly/translations.ts` merges every owner's pair into one message set, and a namespace two owners define fails the fast suite and the build (FE-003). Read them with `getTranslations({ locale, namespace })` from `next-intl/server`, passing the locale explicitly. Episode keys follow `docs/features/episode-translation-keys.md`. Each `de.json` is typed against its `en.json`, so a missing German key fails `npm run typecheck` and the fast suite, and a missing key at render time fails the build.
 
 ## Preferences
 

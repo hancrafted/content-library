@@ -66,7 +66,7 @@ type Identified<E> = E & { readonly id: string };
 /**
  * The Episode a card draws, keyed on its status: a published one carries its
  * copy from the registry, so `tsc` refuses one without it; an upcoming one
- * reads its own from the landing Translation keys, unless it already has a page
+ * reads its own from the Episode browser's Translation keys, unless it already has a page
  * and so its own `i18n/` (`copy`), which it then carries as a published one does.
  * Its page is looked up by its Episode id, so an Event's copy never opens its original.
  */
@@ -86,7 +86,7 @@ export interface CardContext {
   readonly linkDrafts?: boolean;
 }
 
-const OVERVIEW_KEYS = 'landing.episodeOverview';
+const OVERVIEW_KEYS = 'episodeBrowser';
 
 function copyOf(entry: CardEntry, ctx: CardContext): EpisodeCopy {
   if (entry.copy) return { title: entry.copy.title, caption: entry.copy.caption };

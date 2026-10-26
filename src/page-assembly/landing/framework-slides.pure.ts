@@ -2,7 +2,7 @@ import type { Locale } from '@/shared/lib/locale.pure';
 
 /**
  * The landing rail's PROOF cards: data only. The copy (title, claim, note) lives in
- * `src/messages/{en,de}.json` under `landing.method.cards.<id>`; the title stays English
+ * `landing/i18n/{en,de}.json` under `landing.method.cards.<id>`; the title stays English
  * in both locales, so the letters spell PROOF on `/de` too.
  */
 interface SlideBase {

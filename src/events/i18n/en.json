@@ -1,0 +1,28 @@
+{
+  "events": {
+    "breadcrumb": {
+      "label": "Breadcrumb",
+      "events": "Events"
+    },
+    "episodeCount": {
+      "one": "1 Episode",
+      "other": "{count} Episodes"
+    },
+    "pastNotice": "This Event has already taken place. The content below is kept up to date and may differ from the recording.",
+    "position": "Episode {position} of {count}",
+    "playlistNav": "Playlist",
+    "previous": "Previous Episode",
+    "next": "Next Episode",
+    "backToEvent": "Back to the Event",
+    "items": {
+      "2026-10-23-axel-agentic-workflow": {
+        "title": "AXEL Seminar: Agentic Workflows",
+        "description": "Working with AI agents in three Episodes: onboard them every time, manage their attention span, and see why they add management work."
+      },
+      "2026-10-28-cyberforum-akademie-intro-agentic-workflow": {
+        "title": "CyberForum Akademie: Intro to Agentic Workflows",
+        "description": "An introduction to working with AI agents: the agenda first, then onboarding them every time, managing their attention span, and why they add management work."
+      }
+    }
+  }
+}

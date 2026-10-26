@@ -1,8 +1,8 @@
 import { agentElapsed, spanElapsed, type Elapsed } from '@/pipeline/lib/dashboard-elapsed.pure';
 import type { DashboardJob } from '@/pipeline/lib/dashboard-projection.pure';
 import { agentState, type DashboardState } from '@/pipeline/lib/dashboard-stages.pure';
-import type { Messages } from '@/shared/i18n/translations';
 import { fillTemplate } from '@/shared/lib/template.pure';
+import type { Messages } from 'next-intl';
 import { useContext } from 'react';
 import { formatDuration } from '../lib/run-log-tree.pure';
 import type { Score, Span } from '../lib/run-log.schema.pure';
