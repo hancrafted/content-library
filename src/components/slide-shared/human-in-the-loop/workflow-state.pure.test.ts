@@ -17,6 +17,16 @@ describe('success cases', () => {
     expect(later.slotValues).toEqual(pasted);
   });
 
+  it('takes back a saved run: its results and its teaching flag', () => {
+    // ARRANGE
+    const saved = { results: { 'a.b': 'text' }, teaching: false };
+    // ACT
+    const state = reduce(createState(start), { type: 'restore', ...saved });
+    // ASSERT
+    expect(state.slotValues).toEqual(saved.results);
+    expect(state.teaching).toBe(saved.teaching);
+  });
+
   it('forgets the pasted values when another Workflow is shown', () => {
     // ARRANGE
     const filled = reduce(createState(start), { type: 'slots', values: { spec: 'S' } });

@@ -1,7 +1,7 @@
 import { HumanInTheLoopClient } from './human-in-the-loop.client';
 import type { DiagramSlots, HumanInTheLoopData, WorkflowSlideWords } from './human-in-the-loop.types';
 import type { ControlMap } from './toolbar-controls.pure';
-import { WORKFLOW_IDS, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
+import { WORKFLOW_IDS, hashFor, uiWords, workflowFor, type WorkflowId, type WorkflowLocale } from './workflow-data';
 import type { Level } from './workflow-state.pure';
 
 /*
@@ -42,6 +42,7 @@ export function humanInTheLoopData({
   return {
     workflows: WORKFLOW_IDS.map((each) => workflowFor(each, lang)),
     workflowId: id,
+    hashes: Object.fromEntries(WORKFLOW_IDS.map((each) => [each, hashFor(each)])),
     locale: lang,
     words: { ...uiWords(lang), ...words?.ui },
     controls: controls ?? {},
