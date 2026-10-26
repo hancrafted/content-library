@@ -144,6 +144,7 @@ function pagesIn(content: Content): PageRef[] {
     ...content.episodes.flatMap(ownPageOf),
     ...TOOLING_SLUGS.map((tooling) => ({ kind: 'tooling', tooling }) as const),
     ...content.events.map(({ slug }) => ({ kind: 'event', event: slug }) as const),
+    // The plain page reference: what it presents is the route resolution's, never part of `pages`.
     ...eventEpisodePagesIn(content).map(({ kind, event, episode }) => ({ kind, event, episode })),
   ];
 }

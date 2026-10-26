@@ -6,8 +6,9 @@ import { catalogueOf, episodesPathParamsOf, eventEpisodeParamsOf } from './page-
 
 /*
  * The page catalogue (GLOSSARY): every page the site has, each with its treatment, the static params the routes
- * export, and the page a route's params name. Each test hands it records through the store's own load, as the store does with the record files, and asks
- * it what callers ask. Slugs are registered ones: only a registered Episode has a page.
+ * export, and the page a route's params name. Each test hands it records through the store's own load, as the store
+ * does with the record files, and asks it what callers ask. Slugs are registered ones: only a registered Episode has a
+ * page.
  */
 
 const PUBLIC = {
