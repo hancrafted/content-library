@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 
-const start = { workflowId: 'summer-party', level: 'simple' } as const;
+const start = { workflowId: 'summer-party', level: 'simple', view: 'presentation' } as const;
 const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {
@@ -53,6 +53,15 @@ describe('success cases', () => {
     expect(state).toEqual({ ...createState({ ...start, level: 'technical' }), openStageId: 'x' });
   });
 
+  it('takes back an uploaded progress file over the problems of an earlier refusal', () => {
+    // ARRANGE
+    const refused = reduce(createState(start), { type: 'upload-failed', problems: ['no'] });
+    // ACT
+    const state = reduce(refused, { type: 'restore', results: { 'a.b': 'x' }, teaching: true });
+    // ASSERT
+    expect(state.uploadProblems).toEqual([]);
+  });
+
   it('forgets the pasted values when another Workflow is shown', () => {
     // ARRANGE
     const filled = reduce(createState(start), { type: 'slots', values: { spec: 'S' } });
@@ -76,6 +85,17 @@ describe('success cases', () => {
     const state = createState(start);
     // ASSERT
     expect(state).toEqual(expected);
+  });
+
+  it('switches the view without touching the pasted values, and keeps it when the Workflow changes', () => {
+    // ARRANGE
+    const filled = reduce(createState(start), { type: 'slots', values: { a: 'b' } });
+    // ACT
+    const viewed = reduce(filled, { type: 'view', view: 'handson' });
+    const other = reduce(viewed, { type: 'workflow', workflowId: 'vacation' });
+    // ASSERT
+    expect(viewed).toEqual({ ...filled, view: 'handson' });
+    expect(other.view).toBe('handson');
   });
 
   it('switches the level', () => {

@@ -72,6 +72,22 @@ const storeProgress = (page: Page, store: object) =>
     [PROGRESS_KEY, JSON.stringify(store)],
   );
 
+/** Presses Save progress and reads the YAML file the browser is handed. */
+async function savedProgressFile(root: Locator): Promise<string> {
+  const download = root.page().waitForEvent('download');
+  await root.locator('[data-control="progressDownload"]').click();
+  const stream = await (await download).createReadStream();
+  const chunks: Buffer[] = [];
+  for await (const chunk of stream) chunks.push(Buffer.from(chunk));
+  return Buffer.concat(chunks).toString('utf8');
+}
+
+/** Hands the progress load a file with `text`. */
+const loadProgress = (root: Locator, text: string) =>
+  root
+    .locator('[data-control="progressUpload"] input[type=file]')
+    .setInputFiles({ name: 'progress.yml', mimeType: 'text/yaml', buffer: Buffer.from(text) });
+
 const copied = (page: Page) => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied);
 const copies = (page: Page) => copied(page).then((all) => all.length);
 
@@ -153,11 +169,21 @@ async function stageProblems(page: Page, id: string, language: Language): Promis
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Chat · CLI, teaching, reset, download and upload', async ({
+  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then the view, Chat · CLI, teaching, reset, saving and loading progress, download and upload', async ({
     page,
   }) => {
     // ARRANGE
-    const expectedControls = ['picker', 'level', 'teaching', 'reset', 'download', 'upload'];
+    const expectedControls = [
+      'picker',
+      'view',
+      'level',
+      'teaching',
+      'reset',
+      'progressDownload',
+      'progressUpload',
+      'download',
+      'upload',
+    ];
     const expectedLabel = 'Use case:';
     const expectedChosen = 'Plan company summer party';
     const { root, toolbar } = await open(page, 'light');
@@ -170,6 +196,24 @@ test.describe('success cases', () => {
     await expect(picker.locator('label')).toHaveText(expectedLabel);
     await expect(picker.getByRole('combobox')).toHaveText(expectedChosen);
     await expect(root).not.toContainText(/Watch|Try it yourself/);
+  });
+
+  test('opens in the Presentation view: a card per stage, the other views disabled, and nothing sideways on a phone', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const stages = 7;
+    const phone = 390;
+    const { root } = await open(page, 'light', { width: phone });
+    // ACT
+    const view = root.locator('[data-control="view"]');
+    const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    // ASSERT
+    await expect(root).toHaveAttribute('data-view', 'presentation');
+    await expect(root.locator('[data-stage-card]')).toHaveCount(stages - 1);
+    await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
+    await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Detailed', 'Hands-on']);
+    expect(await sideways()).toBeLessThanOrEqual(0);
   });
 
   test('opens a stage as a stepper: the stage title, the first job open, its prompt copied with no marker left', async ({
@@ -478,6 +522,29 @@ test.describe('success cases', () => {
     });
   }
 
+  test('restores the run from the progress file it downloaded, with every result as a block scalar', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const first = '# First spec\n\nline two';
+    const second = '# Second spec';
+    const { root, modal } = await open(page, 'light');
+    await openStage(page, 'Requirements');
+    await field(modal, 'spec').fill(first);
+    await page.keyboard.press('Escape');
+    // ACT
+    const file = await savedProgressFile(root);
+    await openStage(page, 'Requirements');
+    await field(modal, 'spec').fill(second);
+    await page.keyboard.press('Escape');
+    await loadProgress(root, file);
+    await openStage(page, 'Requirements');
+    // ASSERT
+    expect(file).toMatch(/^workflow: summer-party\nhash: [0-9a-f]{64}\nteaching: true\nresults:\n/);
+    expect(file).toContain('requirements.spec: |-\n    # First spec\n\n    line two');
+    await expect(field(modal, 'spec')).toHaveValue(first);
+  });
+
   test('shows a valid uploaded Workflow in place of the authored one', async ({ page }) => {
     // ARRANGE
     const mine = 'mine';
@@ -530,6 +597,45 @@ test.describe('failure cases', () => {
     // ASSERT
     await expect(root.locator('[data-progress-note="unsaved"]')).toBeVisible();
     await expect(root.getByRole('button', { name: 'Download progress' })).toBeVisible();
+  });
+
+  test('refuses a progress file of an edited Workflow, naming it, and keeps the run', async ({ page }) => {
+    // ARRANGE
+    const kept = '# Kept';
+    const { root, modal } = await open(page, 'light');
+    await openStage(page, 'Requirements');
+    await field(modal, 'spec').fill(kept);
+    await page.keyboard.press('Escape');
+    const file = (await savedProgressFile(root)).replace(/hash: [0-9a-f]{64}/, 'hash: edited');
+    // ACT
+    await loadProgress(root, file);
+    await openStage(page, 'Requirements');
+    // ASSERT
+    await expect(root.locator('[data-upload-problems] li')).toContainText('Plan company summer party changed');
+    await expect(field(modal, 'spec')).toHaveValue(kept);
+  });
+
+  test('refuses a progress file of another Workflow', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page, 'light');
+    const file = (await savedProgressFile(root)).replace('workflow: summer-party', 'workflow: vacation');
+    // ACT
+    await loadProgress(root, file);
+    // ASSERT
+    await expect(root.locator('[data-upload-problems] li')).toContainText('another Workflow');
+    await expect(root).toHaveAttribute('data-human-in-the-loop', 'summer-party');
+  });
+
+  test('has no progress save or load while an uploaded Workflow is shown, which is not kept', async ({ page }) => {
+    // ARRANGE
+    const { root } = await open(page, 'light');
+    // ACT
+    await root
+      .locator('[data-control="upload"] input[type=file]')
+      .setInputFiles({ name: 'mine.yml', mimeType: 'text/yaml', buffer: Buffer.from(OWN) });
+    // ASSERT
+    await expect(root).toHaveAttribute('data-human-in-the-loop', 'mine');
+    await expect(root.locator('[data-control="progressDownload"], [data-control="progressUpload"]')).toHaveCount(0);
   });
 
   test('reports the problems of a broken uploaded Workflow and keeps the authored one', async ({ page }) => {

@@ -26,6 +26,16 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('starts in the Presentation view unless the Preset names another', () => {
+    // ARRANGE
+    const props = { workflow: 'summer-party', locale: 'en' } as const;
+    // ACT
+    const plain = humanInTheLoopData(props).view;
+    const preset = humanInTheLoopData({ ...props, view: 'detailed' }).view;
+    // ASSERT
+    expect([plain, preset]).toEqual(['presentation', 'detailed']);
+  });
+
   it('keeps the Slide initials for German too: the letters stay English, only the tooltips are German', () => {
     // ARRANGE
     const props = { ...BASE, locale: 'de' };

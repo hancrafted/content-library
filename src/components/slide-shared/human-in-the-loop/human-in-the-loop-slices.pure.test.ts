@@ -1,5 +1,13 @@
+import { progressFile } from '@/lib/progress.pure';
 import { describe, expect, it } from 'vitest';
-import { callbacksFor, progressTarget, shownWorkflow, slicesOf, uploadEvent } from './human-in-the-loop-slices.pure';
+import {
+  callbacksFor,
+  progressTarget,
+  progressUploadEvent,
+  shownWorkflow,
+  slicesOf,
+  uploadEvent,
+} from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
 import summerPartyEn from './summer-party.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
@@ -12,7 +20,15 @@ import type { Workflow } from './workflow.types';
 const noop = () => undefined;
 const job = baseJob({ id: 'ask', title: 'Ask' });
 const flow = (id: string): Workflow => ({ ...baseFlow([stage('s', [job])]), id, title: id });
-const words = {} as UiWords;
+const words = {
+  refuseUnreadable: 'Not a progress file.',
+  refuseOtherWorkflow: 'This file is progress of another Workflow, not {workflow}.',
+  refuseChanged: '{workflow} changed since this file was made.',
+} as UiWords;
+const target = { id: 'two', key: 'human-in-the-loop/two', hash: 'h2' };
+const entry = { hash: 'h2', teaching: false, results: { 'a.b': 'text' } };
+const refusal = (text: string, shownTarget = target) =>
+  progressUploadEvent(text, { ...shownTarget, title: 'Two' }, words);
 const data: HumanInTheLoopData = {
   workflows: [flow('one'), flow('two')],
   workflowId: 'two',
@@ -21,6 +37,7 @@ const data: HumanInTheLoopData = {
   words,
   controls: {},
   level: 'simple',
+  view: 'presentation',
   readonly: false,
 };
 const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
@@ -28,10 +45,10 @@ const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   state,
   workflow,
   note: null,
-  onDownloadRun: noop,
+  progress: null,
   view: workflowView(workflow, state),
 });
-const start = { workflowId: data.workflowId, level: data.level };
+const start = { workflowId: data.workflowId, level: data.level, view: data.view };
 
 const slicesFor = (state: ReturnType<typeof createState>, controls = {}, sent: WorkflowEvent[] = []) =>
   slicesOf(
@@ -64,6 +81,19 @@ describe('success cases', () => {
     // ASSERT
     expect(slices.modal.stage?.id).toBe('s');
     expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'close' }]);
+  });
+
+  it('gives the toolbar and the diagram the view, and the view control sends a view event', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const state = { ...createState(start), view: 'detailed' as const };
+    // ACT
+    const slices = slicesOf(shown(flow('two'), state), on);
+    slices.toolbar.onView('handson');
+    // ASSERT
+    expect([slices.toolbar.view, slices.diagram.view]).toEqual(['detailed', 'detailed']);
+    expect(sent).toEqual([{ type: 'view', view: 'handson' }]);
   });
 
   it('gives the modal the pasted values and sends a change up as one slots event', () => {
@@ -103,7 +133,16 @@ describe('success cases', () => {
     // ACT
     const target = progressTarget(withHashes, createState(start));
     // ASSERT
-    expect(target).toEqual({ key: 'human-in-the-loop/two', hash: 'h2' });
+    expect(target).toEqual(target);
+  });
+
+  it('restores the run of a progress file made for the shown Workflow and its version', () => {
+    // ARRANGE
+    const { text } = progressFile('two', entry);
+    // ACT
+    const event = refusal(text);
+    // ASSERT
+    expect(event).toEqual({ type: 'restore', results: entry.results, teaching: entry.teaching });
   });
 
   it('hands the toolbar the note about saved progress', () => {
@@ -113,7 +152,7 @@ describe('success cases', () => {
     const note = { kind: 'stale', onDownload: () => undefined, onDiscard: () => undefined } as const;
     // ACT
     const slices = slicesOf(
-      { data, state, workflow, note, onDownloadRun: noop, view: workflowView(workflow, state) },
+      { data, state, workflow, note, progress: null, view: workflowView(workflow, state) },
       callbacksFor(() => undefined),
     );
     // ASSERT
@@ -187,6 +226,33 @@ describe('failure cases', () => {
     expect(slices.modal.stage).toBeNull();
   });
 
+  it('refuses a progress file of another Workflow, naming the shown one', () => {
+    // ARRANGE
+    const { text } = progressFile('one', entry);
+    // ACT
+    const event = refusal(text);
+    // ASSERT
+    expect(event).toEqual({ type: 'upload-failed', problems: ['This file is progress of another Workflow, not Two.'] });
+  });
+
+  it('refuses a progress file made against an edited Workflow, naming it', () => {
+    // ARRANGE
+    const { text } = progressFile('two', { ...entry, hash: 'older' });
+    // ACT
+    const event = refusal(text);
+    // ASSERT
+    expect(event).toEqual({ type: 'upload-failed', problems: ['Two changed since this file was made.'] });
+  });
+
+  it('refuses a file that is no progress file', () => {
+    // ARRANGE
+    const text = 'id: a Workflow, not progress';
+    // ACT
+    const event = refusal(text);
+    // ASSERT
+    expect(event).toEqual({ type: 'upload-failed', problems: ['Not a progress file.'] });
+  });
+
   it('turns a file that is not a Workflow into an upload-failed event with its problems', () => {
     // ARRANGE
     const notAWorkflow = 'stages: [';
@@ -198,6 +264,19 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('hands the toolbar no progress actions for an uploaded Workflow, which is not kept', () => {
+    // ARRANGE
+    const state = { ...createState(start), uploaded: flow('mine') };
+    const workflow = flow('mine');
+    // ACT
+    const slices = slicesOf(
+      { data, state, workflow, note: null, progress: null, view: workflowView(workflow, state) },
+      callbacksFor(() => undefined),
+    );
+    // ASSERT
+    expect(slices.toolbar.progress).toBeNull();
+  });
+
   it('keeps no run for an uploaded Workflow', () => {
     // ARRANGE
     const state = { ...createState(start), uploaded: flow('mine') };
@@ -218,7 +297,7 @@ describe('edge cases', () => {
         state,
         workflow,
         note: null,
-        onDownloadRun: noop,
+        progress: null,
         view: workflowView(workflow, state),
       },
       callbacksFor(() => undefined),

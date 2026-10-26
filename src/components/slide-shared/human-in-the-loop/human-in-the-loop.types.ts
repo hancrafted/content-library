@@ -1,9 +1,10 @@
 import type { TargetProps } from '@/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
+import type { ProgressActions, ProgressNote, TeachingProps } from './progress-controls.types';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { StageRun } from './workflow-run.pure';
-import type { Level } from './workflow-state.pure';
+import type { Level, View } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
@@ -19,6 +20,16 @@ export interface UiWords {
   readonly workflow: string;
   /** The Chat · CLI control: its group name, each segment's label and its tooltip. */
   readonly level: string;
+  /** The view control: its group name and tooltip, each view's label, and the tooltip of a view not built yet. */
+  readonly view: string;
+  readonly viewTip: string;
+  readonly viewPresentation: string;
+  readonly viewDetailed: string;
+  readonly viewHandson: string;
+  readonly viewSoon: string;
+  /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
+  readonly checked: string;
+  readonly sendBack: string;
   readonly chat: string;
   readonly chatTip: string;
   readonly cli: string;
@@ -64,6 +75,12 @@ export interface UiWords {
   readonly resetCancel: string;
   readonly discardProgress: string;
   readonly upload: string;
+  /** The toolbar's save and load of the progress file; the refusals of a file that does not fit (`{workflow}` is its title). */
+  readonly progressSave: string;
+  readonly progressLoad: string;
+  readonly refuseUnreadable: string;
+  readonly refuseOtherWorkflow: string;
+  readonly refuseChanged: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
   readonly gate: string;
   /** The toolbar's accessible name. */
@@ -163,38 +180,9 @@ export interface DiagramProps {
   /** Where the stages show no "Try it" button: a readonly Preset. */
   readonly readonly: boolean;
   readonly onOpenStage: (stageId: string) => void;
-}
-
-/** The note about saved progress: an entry of an edited Workflow waits for a choice, or storage refused a write. */
-export interface ProgressNote {
-  readonly kind: 'stale' | 'unsaved';
-  /** Saves the old entry (stale) or the current run (unsaved) as a file. */
-  readonly onDownload: () => void;
-  /** Forgets the old entry; stale only. */
-  readonly onDiscard: () => void;
-}
-
-/** What the teaching switch and Reset need to draw, the same in the toolbar and at the popover's top right. */
-export interface TeachingState {
-  /** The switch and Reset each show unless the Preset hides them (or the Preset is readonly). */
-  readonly show: boolean;
-  readonly resetShow: boolean;
-  /** Teaching mode is on. */
-  readonly on: boolean;
-  /** A result is pasted: the switch is disabled until Reset. */
-  readonly locked: boolean;
-  /** Saved work was found for this Workflow, here or in another Episode: Reset turns the warning colour. */
-  readonly hasWork: boolean;
-}
-
-/** The teaching switch and Reset, as props of the parts that hold them. */
-export interface TeachingProps {
-  readonly teaching: TeachingState;
-  readonly onTeaching: (teaching: boolean) => void;
-  /** Clears this Workflow's run and its saved entry; the parts confirm first. */
-  readonly onReset: () => void;
-  /** Saves the current run as a file: the download Reset offers first. */
-  readonly onDownloadRun: () => void;
+  readonly view: View;
+  /** Rounds drawn per repeated stage, by stage id: the run model's count, else the teaching cap. */
+  readonly rounds: Readonly<Record<string, number>>;
 }
 
 /** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
@@ -203,14 +191,17 @@ export interface ToolbarProps extends TeachingProps {
   /** Every authored Workflow, for the pills. */
   readonly choices: readonly { readonly id: string; readonly title: string }[];
   readonly level: Level;
+  readonly view: View;
   /** The Preset's overrides of the control registry. */
   readonly controls: ControlMap;
   /** A readonly Preset: no Chat · CLI control, since nothing is tried. */
   readonly readonly: boolean;
   readonly uploadProblems: readonly string[];
   readonly note: ProgressNote | null;
+  readonly progress: ProgressActions | null;
   readonly words: UiWords;
   readonly onLevel: (level: Level) => void;
+  readonly onView: (view: View) => void;
   readonly onWorkflow: (workflowId: string) => void;
   /** The text of a file the viewer chose; the parent validates it with `loadWorkflow`. */
   readonly onUpload: (yaml: string) => void;
@@ -241,6 +232,7 @@ export interface HumanInTheLoopData {
   readonly words: UiWords;
   readonly controls: ControlMap;
   readonly level: Level;
+  readonly view: View;
   /** A readonly Preset hides every "Try it" button and the Chat · CLI control; the diagram stays. */
   readonly readonly: boolean;
   /** The Slide's additions to the diagram. */

@@ -1,17 +1,11 @@
-import { progressKeyOf } from '@/lib/progress.pure';
-import type {
-  DiagramProps,
-  HumanInTheLoopData,
-  ModalProps,
-  ProgressNote,
-  TeachingProps,
-  TeachingState,
-  ToolbarProps,
-} from './human-in-the-loop.types';
+import { progressKeyOf, readProgressFile, type Refusal } from '@/lib/progress.pure';
+import { fillTemplate } from '@/lib/template.pure';
+import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps, UiWords } from './human-in-the-loop.types';
+import type { ProgressActions, ProgressNote, TeachingProps, TeachingState } from './progress-controls.types';
 import { offers } from './toolbar-controls.pure';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
-import { markerValuesOf, resultsOf, runOf } from './workflow-run.pure';
+import { markerValuesOf, resultsOf, runOf, type Run } from './workflow-run.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
 import type { WorkflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
@@ -26,11 +20,31 @@ export function shownWorkflow(data: HumanInTheLoopData, state: WorkflowState): W
   return state.uploaded ?? data.workflows.find((w) => w.id === state.workflowId) ?? data.workflows[0];
 }
 
-/** The saved run the shown Workflow belongs to: its key and source hash; none for an uploaded one, which is not kept. */
-export function progressTarget(data: HumanInTheLoopData, state: WorkflowState): { key: string; hash: string } | null {
+/** The saved run the shown Workflow belongs to: its id, key and source hash; none for an uploaded one, which is not kept. */
+export function progressTarget(
+  data: HumanInTheLoopData,
+  state: WorkflowState,
+): { id: string; key: string; hash: string } | null {
   const id = shownWorkflow(data, state)?.id;
   const hash = id === undefined || state.uploaded ? undefined : data.hashes[id];
-  return id !== undefined && hash !== undefined ? { key: progressKeyOf(id), hash } : null;
+  return id !== undefined && hash !== undefined ? { id, key: progressKeyOf(id), hash } : null;
+}
+
+const REFUSALS: Record<Refusal, 'refuseUnreadable' | 'refuseOtherWorkflow' | 'refuseChanged'> = {
+  unreadable: 'refuseUnreadable',
+  'other-workflow': 'refuseOtherWorkflow',
+  changed: 'refuseChanged',
+};
+
+/** What an uploaded progress file becomes: the run restored, or a refusal naming the shown Workflow by its title. */
+export function progressUploadEvent(
+  text: string,
+  shown: { readonly id: string; readonly hash: string; readonly title: string },
+  words: UiWords,
+): WorkflowEvent {
+  const read = readProgressFile(text, { workflow: shown.id, hash: shown.hash });
+  if ('entry' in read) return { type: 'restore', results: read.entry.results, teaching: read.entry.teaching };
+  return { type: 'upload-failed', problems: [fillTemplate(words[REFUSALS[read.refusal]], { workflow: shown.title })] };
 }
 
 /** What an uploaded file's text becomes: the event that loads it, or the one that reports its problems. */
@@ -42,7 +56,10 @@ export function uploadEvent(yaml: string): WorkflowEvent {
 }
 
 /** The callbacks the parts send events up by. */
-export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload' | 'onTeaching' | 'onReset'> &
+export type Callbacks = Pick<
+  ToolbarProps,
+  'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onTeaching' | 'onReset'
+> &
   Pick<DiagramProps, 'onOpenStage'> &
   Pick<ModalProps, 'onClose' | 'onSlots'>;
 
@@ -50,6 +67,7 @@ export type Callbacks = Pick<ToolbarProps, 'onLevel' | 'onWorkflow' | 'onUpload'
 export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callbacks {
   return {
     onLevel: (level) => dispatch({ type: 'level', level }),
+    onView: (view) => dispatch({ type: 'view', view }),
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
     onTeaching: (teaching) => dispatch({ type: 'teaching', teaching }),
     onReset: () => dispatch({ type: 'reset' }),
@@ -67,8 +85,8 @@ export interface Shown {
   readonly workflow: Workflow;
   /** What to tell the viewer about their saved progress, if anything. */
   readonly note: ProgressNote | null;
-  /** Saves the current run as a file. */
-  readonly onDownloadRun: () => void;
+  /** Save and load of the run; none for an uploaded Workflow. */
+  readonly progress: ProgressActions | null;
   /** `workflowView` of the Workflow for the state's level, computed once per change by the parent. */
   readonly view: WorkflowView;
 }
@@ -81,7 +99,7 @@ export interface Slices {
 
 /** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
-  const { data, state, workflow, view } = shown;
+  const { data, state, workflow } = shown;
   const { words, readonly } = data;
   const { file } = workflow;
   const run = runOf(file, { results: state.slotValues, teaching: state.teaching });
@@ -93,25 +111,17 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
       workflow,
       readonly,
       onOpenStage: on.onOpenStage,
+      view: state.view,
+      rounds: roundsOf(workflow, run),
       slots: data.diagram,
       words,
     },
-    modal: {
-      stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
-      run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
-      slotValues: markerValuesOf(file, state.slotValues),
-      words,
-      level: state.level,
-      onLevel: on.onLevel,
-      onClose: on.onClose,
-      onSlots: (values) => on.onSlots(resultsOf(file, values)),
-      ...teachingProps,
-    },
+    modal: modalOf(shown, on, { run, teaching: teachingProps }),
   };
 }
 
 /** The teaching switch and Reset for both places that hold them: the toolbar and the popover. */
-function teachingPropsOf({ data, state, onDownloadRun }: Shown, canChange: boolean, on: Callbacks): TeachingProps {
+function teachingPropsOf({ data, state, progress }: Shown, canChange: boolean, on: Callbacks): TeachingProps {
   const { controls, readonly } = data;
   const teaching: TeachingState = {
     show: offers(controls, 'teaching', readonly),
@@ -120,17 +130,62 @@ function teachingPropsOf({ data, state, onDownloadRun }: Shown, canChange: boole
     locked: !canChange,
     hasWork: !canChange,
   };
+  const onDownloadRun = progress?.onDownload ?? (() => undefined);
   return { teaching, onTeaching: on.onTeaching, onReset: on.onReset, onDownloadRun };
 }
 
-function toolbarOf({ data, state, workflow, note }: Shown, on: Callbacks, teaching: TeachingProps): ToolbarProps {
+function toolbarOf(
+  { data, state, workflow, note, progress }: Shown,
+  on: Callbacks,
+  teaching: TeachingProps,
+): ToolbarProps {
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
-  const { level, uploadProblems } = state;
-  const { onLevel, onWorkflow, onUpload } = on;
+  const { level, view, uploadProblems } = state;
+  const { onLevel, onView, onWorkflow, onUpload } = on;
   return {
     ...teaching,
-    ...{ workflow, choices, level, controls, readonly, words, uploadProblems, note },
-    ...{ onLevel, onWorkflow, onUpload },
+    workflow,
+    choices,
+    level,
+    view,
+    controls,
+    readonly,
+    words,
+    uploadProblems,
+    note,
+    progress,
+    onLevel,
+    onView,
+    onWorkflow,
+    onUpload,
+  };
+}
+
+/** How many rounds each repeated stage draws: the rounds the run holds, else the stage's teaching cap. */
+function roundsOf(workflow: Workflow, run: Run): Record<string, number> {
+  const counts = workflow.stages.flatMap((stage) => {
+    const held = run.stages.find((each) => each.id === stage.id)?.rounds.length ?? 0;
+    return stage.foreach ? [[stage.id, held || stage.foreach.teaching] as const] : [];
+  });
+  return Object.fromEntries(counts);
+}
+
+function modalOf(
+  { data, state, workflow, view }: Shown,
+  on: Callbacks,
+  { run, teaching }: { readonly run: Run; readonly teaching: TeachingProps },
+): ModalProps {
+  const { file } = workflow;
+  return {
+    stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
+    run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
+    slotValues: markerValuesOf(file, state.slotValues),
+    words: data.words,
+    level: state.level,
+    onLevel: on.onLevel,
+    onClose: on.onClose,
+    onSlots: (values) => on.onSlots(resultsOf(file, values)),
+    ...teaching,
   };
 }

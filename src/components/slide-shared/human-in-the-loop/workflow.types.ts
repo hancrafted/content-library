@@ -22,8 +22,6 @@ export interface Job {
   readonly inputs: readonly string[];
   /** What the job hands on: its output id. */
   readonly outputs: readonly { readonly id: string }[];
-  /** The rounds the diagram draws as parallel chats: the teaching cap of its repeated stage; absent for a single chat. */
-  readonly fanOut?: number;
   /** Whether the job has a review in a fresh chat; the diagram ticks each chat then. */
   readonly reviewed: boolean;
   /** Labels of the other parts of the task, drawn dimmed beside this job (the party's parked pieces). */

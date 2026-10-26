@@ -8,7 +8,6 @@ import type { Job, Stage, Workflow } from './workflow.types';
  */
 
 function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
-  const rounds = file.stages[stageIndex]?.foreach?.teaching;
   return {
     id: task.id,
     title: task.title,
@@ -16,7 +15,6 @@ function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
     dependsOn: producerIdsOf(file, stageIndex, task),
     inputs: task.slots.map((slot) => slot.id),
     outputs: task.output === undefined ? [] : [{ id: task.output }],
-    fanOut: rounds,
     reviewed: task.review !== undefined,
     task,
   };

@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Download, Upload } from 'lucide-react';
+import { Download, FileDown, FileUp, Upload } from 'lucide-react';
 import { useId, type ChangeEvent, type ReactNode } from 'react';
 import type { ToolbarProps } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
@@ -13,7 +13,8 @@ import { ProgressNote } from './progress-note.client';
 import { saveFile } from './save-file';
 import { ResetConfirm, TeachingControls, useTeachingProps } from './teaching-controls.client';
 import { ToolButton } from './tool-button.client';
-import { offers } from './toolbar-controls.pure';
+import { offers, type ControlId } from './toolbar-controls.pure';
+import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
@@ -65,22 +66,31 @@ function Picker({ bar }: { readonly bar: ToolbarProps }) {
 
 const UPLOAD_BUTTON = 'relative size-9 rounded-full focus-within:ring-[3px] focus-within:ring-ring/50';
 
-function UploadButton({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
+interface FileButtonProps {
+  readonly control: string;
+  readonly label: string;
+  readonly describedBy?: string;
+  readonly onText: (text: string) => void;
+  readonly children: ReactNode;
+}
+
+/** An icon button that opens the file chooser and hands the text of the chosen file on. */
+function FileButton({ control, label, describedBy, onText, children }: FileButtonProps) {
   const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) bar.onUpload(await file.text());
+    if (file) onText(await file.text());
     event.target.value = '';
   };
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <Button asChild variant="ghost" size="icon" className={UPLOAD_BUTTON}>
-          <label data-control="upload">
-            <Upload aria-hidden="true" />
+          <label data-control={control}>
+            {children}
             <input
               type="file"
               accept=".yml,.yaml,application/x-yaml,text/yaml"
-              aria-label={bar.words.upload}
+              aria-label={label}
               aria-describedby={describedBy}
               onChange={readChosenFile}
               className="absolute inset-0 size-full cursor-pointer opacity-0"
@@ -88,7 +98,7 @@ function UploadButton({ bar, describedBy }: { readonly bar: ToolbarProps; readon
           </label>
         </Button>
       </TooltipTrigger>
-      <TooltipContent>{bar.words.upload}</TooltipContent>
+      <TooltipContent>{label}</TooltipContent>
     </Tooltip>
   );
 }
@@ -103,13 +113,41 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: Chat · CLI, download, upload. */
-function Icons({ bar, teaching }: { readonly bar: ToolbarProps; readonly teaching: ReactNode }) {
-  const { controls, readonly, words, level } = bar;
+/** The progress file's save and load: the run of an authored Workflow only, so none while an uploaded one is shown. */
+function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
+  const { controls, words, progress } = bar;
+  if (!progress) return null;
   return (
     <>
-      {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
-      {teaching}
+      {offers(controls, 'progressDownload') && (
+        <ToolButton
+          label={words.progressSave}
+          data-control="progressDownload"
+          variant="ghost"
+          onClick={progress.onDownload}
+        >
+          <FileDown aria-hidden="true" />
+        </ToolButton>
+      )}
+      {offers(controls, 'progressUpload') && (
+        <FileButton
+          control="progressUpload"
+          label={words.progressLoad}
+          describedBy={describedBy}
+          onText={progress.onUpload}
+        >
+          <FileUp aria-hidden="true" />
+        </FileButton>
+      )}
+    </>
+  );
+}
+
+/** The Workflow file's own download and upload, after the progress file's. */
+function WorkflowFileIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
+  const { controls, words } = bar;
+  return (
+    <>
       {offers(controls, 'download') && (
         <ToolButton
           label={words.download}
@@ -120,17 +158,43 @@ function Icons({ bar, teaching }: { readonly bar: ToolbarProps; readonly teachin
           <Download aria-hidden="true" />
         </ToolButton>
       )}
+      {offers(controls, 'upload') && (
+        <FileButton control="upload" label={words.upload} describedBy={describedBy} onText={bar.onUpload}>
+          <Upload aria-hidden="true" />
+        </FileButton>
+      )}
+    </>
+  );
+}
+
+/** The icon buttons the registry and the Preset allow, in order: view, Chat · CLI, progress save and load, download, upload. */
+function Icons({
+  bar,
+  describedBy,
+  teaching,
+}: {
+  readonly bar: ToolbarProps;
+  readonly describedBy?: string;
+  readonly teaching: ReactNode;
+}) {
+  const { controls, readonly, words, level } = bar;
+  return (
+    <>
+      {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
+      {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
+      {teaching}
+      <ProgressIcons bar={bar} describedBy={describedBy} />
+      <WorkflowFileIcons bar={bar} describedBy={describedBy} />
     </>
   );
 }
 
 const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
+const ICON_CONTROLS: readonly ControlId[] = ['view', 'level', 'teaching', 'reset', 'download', 'upload'];
+const PROGRESS_CONTROLS: readonly ControlId[] = ['progressDownload', 'progressUpload'];
 const hasIcons = (bar: ToolbarProps) =>
-  offers(bar.controls, 'level', bar.readonly) ||
-  offers(bar.controls, 'teaching', bar.readonly) ||
-  offers(bar.controls, 'reset', bar.readonly) ||
-  offers(bar.controls, 'download') ||
-  offers(bar.controls, 'upload');
+  ICON_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)) ||
+  (bar.progress !== null && PROGRESS_CONTROLS.some((id) => offers(bar.controls, id)));
 
 /** What sits under the pill when there is something to say: the progress note, then an upload's problems. */
 function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
@@ -160,8 +224,7 @@ export function ToolbarPart(bar: ToolbarProps) {
       >
         <Picker bar={bar} />
         {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
-        <Icons bar={bar} teaching={<TeachingControls {...teachingProps} />} />
-        {offers(bar.controls, 'upload') && <UploadButton bar={bar} describedBy={describedBy} />}
+        <Icons bar={bar} describedBy={describedBy} teaching={<TeachingControls {...teachingProps} />} />
       </div>
       <ResetConfirm {...teachingProps} />
       <Notes bar={bar} id={problemsId} />

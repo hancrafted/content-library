@@ -2,8 +2,9 @@
 
 import { DialogClose, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { CircleHelp, X } from 'lucide-react';
-import type { TeachingProps, UiWords } from './human-in-the-loop.types';
+import type { UiWords } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
+import type { TeachingProps } from './progress-controls.types';
 import { TeachingControls } from './teaching-controls.client';
 import { ToolButton } from './tool-button.client';
 import { tryTitle } from './words.pure';

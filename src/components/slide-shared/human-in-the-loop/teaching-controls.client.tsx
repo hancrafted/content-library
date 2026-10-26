@@ -5,7 +5,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { cn } from '@/lib/utils';
 import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
-import type { TeachingProps, UiWords } from './human-in-the-loop.types';
+import type { UiWords } from './human-in-the-loop.types';
+import type { TeachingProps } from './progress-controls.types';
 
 /*
  * The teaching switch and Reset, side by side in the toolbar and at the popover's top right. The switch is disabled once
