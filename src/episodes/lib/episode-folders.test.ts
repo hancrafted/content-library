@@ -2,15 +2,13 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeFolders, pageFolders, slideFolders, toolingFolders } from './episode-folders';
+import { episodeFolders, pageFolders, slideFolders, toolingFolders, type PageFolder } from './episode-folders';
 
 /*
  * The one folder walker (design-ADR 0016 decision 3): every Episode, standalone and Event copy alike, and every tooling
  * page beside them. The registry generator and every test that reads the Episode folders take their list from it, so
- * the counts below fail when a folder drops out of the walk instead of silently out of every check.
+ * each case below walks a throwaway Episodes folder, never the repo's: adding an Episode breaks no test here.
  */
-
-const ROOT = process.cwd();
 
 /** A throwaway Episodes folder, one entry per relative path: a folder ending in `/`, else a file. */
 function tree(entries: readonly string[]): string {
@@ -27,12 +25,20 @@ function tree(entries: readonly string[]): string {
   return root;
 }
 
+/** An Event's copy among the page folders. */
+type CopyFolder = Extract<PageFolder, { readonly kind: 'event-copy' }>;
+
 describe('success cases', () => {
-  it('finds the 6 standalone Episodes and the 7 Event copies, counted apart', () => {
+  it('finds the standalone Episodes and the Event copies, counted apart', () => {
     // ARRANGE
-    const expected = { standalone: 6, copies: 7 };
+    const root = tree([
+      'alpha/episode-metadata.ts',
+      'beta/episode-metadata.ts',
+      'by-event/2026-01-01-x/alpha/episode-metadata.ts',
+    ]);
+    const expected = { standalone: 2, copies: 1 };
     // ACT
-    const episodes = episodeFolders(ROOT);
+    const episodes = episodeFolders(root);
     const seen = {
       standalone: episodes.filter(({ kind }) => kind === 'standalone').length,
       copies: episodes.filter(({ kind }) => kind === 'event-copy').length,
@@ -41,33 +47,43 @@ describe('success cases', () => {
     expect(seen).toEqual(expected);
   });
 
-  it('names each Event copy by its id, under its Event', () => {
+  it('names each Event copy by its Event and its slug, Event by Event', () => {
     // ARRANGE
+    const root = tree([
+      'by-event/2026-02-02-y/alpha/episode-metadata.ts',
+      'by-event/2026-01-01-x/beta/episode-metadata.ts',
+      'by-event/2026-01-01-x/alpha/episode-metadata.ts',
+    ]);
     const expected = [
-      '2026-10-23-axel-agentic-workflow__ai-attention-span',
-      '2026-10-23-axel-agentic-workflow__ai-gives-you-more-work',
-      '2026-10-23-axel-agentic-workflow__onboard-ai-every-time',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-gives-you-more-work',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro',
-      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
+      { event: '2026-01-01-x', slug: 'alpha' },
+      { event: '2026-01-01-x', slug: 'beta' },
+      { event: '2026-02-02-y', slug: 'alpha' },
     ];
     // ACT
-    const copies = episodeFolders(ROOT)
-      .filter(({ kind }) => kind === 'event-copy')
-      .map(({ id }) => id);
+    const copies = episodeFolders(root)
+      .filter((folder): folder is CopyFolder => folder.kind === 'event-copy')
+      .map(({ event, slug }) => ({ event, slug }));
     // ASSERT
     expect(copies).toEqual(expected);
   });
-  it('walks the 5 Slides of the Slide pool beside every page Slide, each owned by the pool', () => {
+
+  it('walks the Slides of the Slide pool after every page Slide, each owned by the pool', () => {
     // ARRANGE
-    const expected = ['brief-the-venue', 'manage-the-price', 'one-prompt', 'pay-the-price', 'you-are-the-new-hire'];
+    const root = tree([
+      'alpha/episode-metadata.ts',
+      'alpha/slides/opener/slide.tsx',
+      'slide-pool/pooled/slide.tsx',
+      'slide-pool/another/slide.tsx',
+    ]);
+    const expected = [
+      { owner: 'alpha', slug: 'opener' },
+      { owner: 'slide-pool', slug: 'another' },
+      { owner: 'slide-pool', slug: 'pooled' },
+    ];
     // ACT
-    const pool = slideFolders(ROOT)
-      .filter(({ owner }) => owner === 'slide-pool')
-      .map(({ slug }) => slug);
+    const slides = slideFolders(root).map(({ owner, slug }) => ({ owner, slug }));
     // ASSERT
-    expect(pool).toEqual(expected);
+    expect(slides).toEqual(expected);
   });
 });
 
@@ -107,20 +123,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('walks the 4 tooling pages under tooling/, by slug, none of them an Episode', () => {
+  it('walks the tooling pages under tooling/, by slug, none of them an Episode', () => {
     // ARRANGE
-    const expected = [
-      'tooling/episode-template',
-      'tooling/explorable-explanations',
-      'tooling/slide-master',
-      'tooling/workshop-template',
-    ];
+    const root = tree(['alpha/episode-metadata.ts', 'tooling/deck/episode.ts', 'tooling/bench/episode.ts']);
+    const expected = { tooling: ['tooling/bench', 'tooling/deck'], episodes: ['alpha'] };
     // ACT
-    const tooling = toolingFolders(ROOT).map(({ folder }) => folder);
-    const episodes = episodeFolders(ROOT).filter(({ folder }) => folder.startsWith('tooling/'));
+    const tooling = toolingFolders(root).map(({ folder }) => folder);
+    const episodes = episodeFolders(root).map(({ folder }) => folder);
     // ASSERT
-    expect(tooling).toEqual(expected);
-    expect(episodes).toEqual([]);
+    expect({ tooling, episodes }).toEqual(expected);
   });
 
   it('names a tooling page by its slug, after the Episodes and their copies, and walks its Slide folders', () => {
