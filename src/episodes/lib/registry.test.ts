@@ -160,9 +160,11 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [['agenda'], ['in-scope', 'out-of-scope'], ['orga']];
     // ACT
-    const composition = compositionOf(toolingRef('workshop-template'));
+    const sections = compositionOf(toolingRef('workshop-template')).sections.map((section) =>
+      section.map(({ slug }) => slug),
+    );
     // ASSERT
-    expect(composition.sections.map((section) => section.map(({ slug }) => slug))).toEqual(expected);
+    expect(sections).toEqual(expected);
   });
 });
 
