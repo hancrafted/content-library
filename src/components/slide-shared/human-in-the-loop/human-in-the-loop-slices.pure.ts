@@ -73,7 +73,7 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
     onView: (view) => dispatch({ type: 'view', view }),
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
-    onOpenStage: (stageId) => dispatch({ type: 'open', stageId }),
+    onOpenStage: (stageId, jobId) => dispatch({ type: 'open', stageId, ...(jobId !== undefined && { jobId }) }),
     onClose: () => dispatch({ type: 'close' }),
     onSlots: (values) => dispatch({ type: 'slots', values }),
   };
@@ -119,6 +119,7 @@ export function slicesOf(shown: Shown, on: Callbacks): Slices {
     modal: {
       stage: view.stages.find((stage) => stage.id === state.openStageId) ?? null,
       run: run.stages.find((stage) => stage.id === state.openStageId) ?? null,
+      jobId: state.openJobId,
       slotValues: markerValuesOf(file, state.slotValues),
       words,
       level: state.level,

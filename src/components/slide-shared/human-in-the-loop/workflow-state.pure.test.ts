@@ -51,6 +51,7 @@ describe('success cases', () => {
       ...start,
       teaching: true,
       openStageId: null,
+      openJobId: null,
       slotValues: {},
       uploaded: null,
       uploadProblems: [],
@@ -91,6 +92,19 @@ describe('success cases', () => {
     // ASSERT
     expect(open.openStageId).toBe(stage);
     expect(closed.openStageId).toBeNull();
+  });
+
+  it('opens the modal at the job whose card was pressed, and forgets the job when it closes or opens by stage', () => {
+    // ARRANGE
+    const initial = createState(start);
+    // ACT
+    const atJob = reduce(initial, { type: 'open', stageId: 'tickets', jobId: 'epics' });
+    const byStage = reduce(atJob, { type: 'open', stageId: 'tickets' });
+    const closed = reduce(atJob, { type: 'close' });
+    // ASSERT
+    expect([atJob.openStageId, atJob.openJobId]).toEqual(['tickets', 'epics']);
+    expect(byStage.openJobId).toBeNull();
+    expect(closed.openJobId).toBeNull();
   });
 
   it('switching Workflow resets the open stage, the pasted values and any upload', () => {

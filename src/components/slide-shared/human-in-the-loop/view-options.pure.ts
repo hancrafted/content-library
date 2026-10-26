@@ -10,13 +10,13 @@ export interface ViewOption {
   readonly tip?: string;
 }
 
-/** The views the diagram can show: Presentation now; Detailed (#384) and Hands-on (#385) are drawn disabled until they exist. */
+/** The views the diagram can show: Presentation and Detailed; Hands-on (#385) is drawn disabled until it exists. */
 export function viewOptions(
   words: Pick<UiWords, 'viewPresentation' | 'viewDetailed' | 'viewHandson' | 'viewSoon'>,
 ): readonly ViewOption[] {
   return [
     { view: 'presentation', label: words.viewPresentation, enabled: true },
-    { view: 'detailed', label: words.viewDetailed, enabled: false, tip: words.viewSoon },
+    { view: 'detailed', label: words.viewDetailed, enabled: true },
     { view: 'handson', label: words.viewHandson, enabled: false, tip: words.viewSoon },
   ];
 }

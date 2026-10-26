@@ -38,6 +38,7 @@ export const humanInTheLoopWorkflow = slide({
         <HumanInTheLoop
           workflow="summer-party"
           locale={locale}
+          view="detailed"
           diagram={{
             label: t('workflowLabel'),
             jobsLabel: template('jobsLabel'),

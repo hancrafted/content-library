@@ -188,7 +188,7 @@ test.describe('success cases', () => {
     await expect(root).not.toContainText(/Watch|Try it yourself/);
   });
 
-  test('opens in the Presentation view: a card per stage, the other views disabled, and nothing sideways on a phone', async ({
+  test('opens in the Presentation view: a card per stage, Hands-on disabled, and nothing sideways on a phone', async ({
     page,
   }) => {
     // ARRANGE
@@ -202,8 +202,29 @@ test.describe('success cases', () => {
     await expect(root).toHaveAttribute('data-view', 'presentation');
     await expect(root.locator('[data-stage-card]')).toHaveCount(stages - 1);
     await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
-    await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Detailed', 'Hands-on']);
+    await expect(view.locator('[aria-disabled="true"]')).toHaveText(['Hands-on']);
     expect(await sideways()).toBeLessThanOrEqual(0);
+  });
+
+  test('draws the Detailed view of a repeated stage once, in a bracket of its rounds, and a job card opens its modal', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const rounds = 3;
+    const { root, modal } = await open(page, 'light');
+    // ACT
+    await root.locator('[data-view-option="detailed"]').click();
+    const bracket = root.locator('[data-bracket]');
+    const card = bracket.locator('[data-job-card] button[data-try-job]');
+    // ASSERT
+    await expect(root).toHaveAttribute('data-view', 'detailed');
+    await expect(bracket).toHaveCount(1);
+    await expect(bracket.locator('[data-bracket-label]')).toHaveText(`× each round (${rounds})`);
+    await expect(bracket.locator('[data-job-card]')).toHaveCount(1);
+    await card.click();
+    await expect(modal).toHaveAttribute('data-stage', 'research');
+    await page.keyboard.press('Escape');
+    await expect(card).toBeFocused();
   });
 
   test('opens a stage as a stepper: the stage title, the first job open, its prompt copied with no marker left', async ({

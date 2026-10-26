@@ -113,18 +113,20 @@ describe('success cases', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('draws every stage as a card, with the fan-out and fan-in of brief the venue as three branch cards', () => {
+  it('draws every stage as a card holding its job cards, the repeated stage once in a bracket, and the interview keeps its "forgot" detail', () => {
     // ARRANGE
-    const expected = { cards: 6, branches: 3, connectors: 6, fans: 2, gated: 2 };
+    const expected = { cards: 7, brackets: 1, branches: 0, fans: 0, gated: 2, forgotLines: 1 };
     // ACT
     const $ = scene('en');
-    const pipeline = $('ol[aria-label="The steps of a brief, stage by stage"]');
+    const pipeline = $('ol[data-part="diagram"]');
+    const interview = pipeline.find('[data-job-card="interview"]');
     const actual = {
       cards: pipeline.find('[data-stage-card]').length,
+      brackets: pipeline.find('[data-bracket]').length,
       branches: pipeline.find('[data-branch]').length,
-      connectors: pipeline.find('> li > [aria-hidden="true"]').length,
       fans: pipeline.find('svg[data-fan]').length,
       gated: pipeline.find('[data-gate]').length,
+      forgotLines: interview.find('[data-summary] br').length,
     };
     // ASSERT
     expect(actual).toEqual(expected);

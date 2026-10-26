@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { itemsOf } from './stepper-items.pure';
+import { itemsOf, openItemOf } from './stepper-items.pure';
 import summerPartyEn from './summer-party.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
@@ -43,9 +43,28 @@ describe('success cases', () => {
     expect(items.map((item) => item.state)).toEqual(['open', 'done', 'open']);
     expect(text).toContain('### 2. Hotel with a conference floor');
   });
+
+  it('opens the item of the job whose card was pressed, the first round of a repeated one', () => {
+    // ARRANGE
+    const items = itemsFor('simple', {});
+    // ACT
+    const at = openItemOf(items, 'venue');
+    // ASSERT
+    expect(at).toBe('0');
+  });
 });
 
 describe('failure cases', () => {
+  it('opens the first item for no job and for a job the stage does not hold', () => {
+    // ARRANGE
+    const items = itemsFor('simple', {});
+    // ACT
+    const none = openItemOf(items, null);
+    const unknown = openItemOf(items, 'ghost');
+    // ASSERT
+    expect([none, unknown]).toEqual(['0', '0']);
+  });
+
   it('shows a single item without rounds in Technical, where one orchestrator runs them all', () => {
     // ARRANGE
     const results = {};

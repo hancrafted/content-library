@@ -10,6 +10,8 @@ ui:
   viewSoon: 'Coming soon'
   checked: checked
   sendBack: send back
+  repeats: '× each round ({n})'
+  tryJob: 'Open {job} in {stage}'
   level: Prompt style
   chat: Chat
   chatTip: 'Chat: prompts to paste into an AI chat'
