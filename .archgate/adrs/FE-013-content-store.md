@@ -49,7 +49,7 @@ For this project the reasons and the model — which entities are records, how t
 
 ### 3. Fail closed
 
-1. The store MUST parse every record and apply the cross-record refusals when it loads; a bad record throws, naming its kind, slug and field, so the build and the fast suite both fail.
+1. The store MUST parse every record and apply the cross-record refusals when it loads; a bad record throws, naming its kind, record and field, so the build and the fast suite both fail.
 2. A refusal MUST NOT become a silent filter: a record is loaded whole or the build stops.
 3. Which refusals exist is the model's business, held in the store's tests; this record fixes only that they fail closed.
 
@@ -100,7 +100,7 @@ For this project the reasons and the model — which entities are records, how t
 2. **Lint** (dependency-cruiser, error; probe tests run the whole rule set over a throwaway tree): Decision 1.
 3. **Tests** (fast suite): Decision 3 — each refusal throws its sentence for a bad record.
 
-**Manual review duties:** descriptions say what a field means; refusals name kind, slug and field and never filter silently (Decision 3); no reader bypasses the entry through a re-export; scripts and tests outside `src/` read records through the entry too.
+**Manual review duties:** descriptions say what a field means; refusals name kind, record and field and never filter silently (Decision 3); no reader bypasses the entry through a re-export; scripts and tests outside `src/` read records through the entry too.
 
 **Exceptions:** raise a separate ADR; human approval required.
 

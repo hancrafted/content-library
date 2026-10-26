@@ -19,8 +19,11 @@ _Avoid_: Post, article, video, tower
 **Episode overview**: the landing page's list of every Episode, published or upcoming, that a visitor browses and filters.
 _Avoid_: Episode index, catalog, episode list, manifest
 
-**Episode registry**: every Episode the code knows, generated from the Episode folders, so adding an Episode is adding its folder: a folder `src/components/episodes/<slug>/` holding `episode-metadata.ts` is an Episode, and with `episode.ts` beside it, one with a page. `npm run registry` writes it as one checked-in `episode-registry.generated.ts` per tier (the slugs in lib, the metadata the content store loads, the compositions); the fast suite fails while it is stale.
+**Episode registry**: every Episode the code knows, generated from the Episode folders, so adding an Episode is adding its folder: a folder `src/components/episodes/<slug>/`, or an Event's `src/components/episodes/by-event/<event-slug>/<slug>/`, holding `episode-metadata.ts` is an Episode, and with `episode.ts` beside it, one with a page. One folder walker (`src/lib/episode-folders.ts`) finds them for the generator and every test that reads the folders. `npm run registry` writes it as one checked-in `episode-registry.generated.ts` per tier (the Episode ids in lib, the metadata the content store loads, the compositions), each keyed by Episode id; the fast suite fails while it is stale.
 _Avoid_: Episode index, slug list, hand-kept registration
+
+**Episode id**: every Episode's one name across all Episodes, derived from its folder and never written in its record: its slug for an Episode no Event owns, `<event-slug>__<slug>` for an **Event copy**, an Episode an Event owns in its folder `by-event/<event-slug>/<slug>/`. A slug is unique among its siblings, so a copy usually keeps its original's slug; registries, the page catalogue and Playlists key on the id. Code passes an `EpisodeRef` and branches on its kind with `matchEpisode` (`src/lib/episode-id.pure.ts`). `by-event` is reserved, never a slug.
+_Avoid_: Episode key, full slug, prefixed slug
 
 **Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
@@ -28,8 +31,11 @@ _Avoid_: Draft, coming-soon episode, stub
 **Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
 _Avoid_: Topic, category, theme, label, keyword
 
-**Event**: a dated workshop or webinar that presents one Playlist. Its slug is its date then its name (`2026-10-23-axel-agentic-workflow`); it records its kind, the Audience it targets and an optional time and location. It owns no Slides, holds no text (its title and description are Translation keys) and has no visibility of its own. One record each in the content store (`src/content-store/events/`); its page is `/events/<event-slug>/`, and each Episode its Playlist lists has an **Event-scoped Episode page** at `/events/<event-slug>/episodes/<episode-slug>/`: the Episode's page with the Event's breadcrumb, past notice, place in the Playlist and walk to the previous and next Episode.
+**Event**: a dated workshop or webinar that presents one Playlist. Its slug is its date then its name (`2026-10-23-axel-agentic-workflow`); it records its kind, the Audience it targets, its Organizer and an optional time and location. It owns its Event copies, in `src/components/episodes/by-event/<event-slug>/`, and no Slides directly, holds no text (its title and description are Translation keys) and has no visibility of its own. One record each in the content store (`src/content-store/events/`); its page is `/events/<event-slug>/`, and each Episode its Playlist lists has an **Event-scoped Episode page** at `/events/<event-slug>/episodes/<episode-slug>/`: the Episode's page with the Event's breadcrumb, past notice, place in the Playlist and walk to the previous and next Episode.
 _Avoid_: Workshop (the old name; its `/workshops/` URLs 301 to the Event), session, occasion, course
+
+**Organizer**: who runs an Event, named on its record from a closed list, `ORGANIZERS` in the content store's `schemas/fields.ts` (`hancrafted`, `axel`, `cyberforum`). Required: the store refuses an Event without one or with one outside the list.
+_Avoid_: Host, client, partner, venue
 
 **Event registry**: every Event the code knows, generated from the Event files, so adding an Event is adding its file `src/content-store/events/<slug>.ts`. `npm run registry` writes it beside the Episode registry: the Event slugs in lib, the records the content store loads; the fast suite fails while it is stale.
 _Avoid_: Event slug list, hand-kept Event pages
@@ -40,8 +46,8 @@ _Avoid_: Agenda, series, collection
 **visibility**: whether a record is listed and indexed: `public` or `unlisted`, required on every Episode and Playlist, so a forgotten one is refused and fails closed. Unlisted is not private: anyone holding the URL can open the page. `attendees` is refused until the platform horizon gives it an enforcer.
 _Avoid_: Status, private, hidden, draft
 
-**unlisted Episode**: an Episode whose visibility is `unlisted`: a composition made for one Event, usually its Slides copied (`cp -r`) from a public Episode and left to drift. It is registered once like any Episode, lives only at its Event-scoped Episode page, has no `/episodes/` page, is `noindex`, never in the sitemap, the Episode overview or Upcoming Episodes, and is refused when no Event's Playlist lists it. Flipping its `visibility` to `public` is the one edit that gives it its own page. The page catalogue decides all of this.
-_Avoid_: Private Episode, hidden Episode, event copy, attendee page
+**unlisted Episode**: an Episode whose visibility is `unlisted`: a composition made for one Event, usually its Slides copied (`cp -r`) from a public Episode and left to drift. It is an Event copy: registered once like any Episode by its Episode id, its folder in its Event's `by-event/<event-slug>/`, it lives only at its Event-scoped Episode page, has no `/episodes/` page, is `noindex`, never in the sitemap, the Episode overview or Upcoming Episodes, and is refused when it lives outside `by-event/` or no Event's Playlist lists it. Flipping its `visibility` to `public` is the one edit that indexes its Event-scoped page and adds it to the sitemap; it gets no `/episodes/` page. The page catalogue decides all of this.
+_Avoid_: Private Episode, hidden Episode, attendee page
 
 **page catalogue**: every page the site has, read from the records, each with its treatment: built or not, in the sitemap, indexed, on the site's own lists, and where its canonical points (`src/content-store/page-catalogue.ts`, served by the content store as `PAGES` and `treatmentOf`). One visibility predicate (`pageTreatment`) gives each treatment; the routes' static params, page metadata, the sitemap, the Episode overview and the `/events/` list all ask the catalogue, so they cannot disagree.
 _Avoid_: route list, page list, hand-kept page list
