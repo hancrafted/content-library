@@ -62,7 +62,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 2. **DO** push interactivity down: extract the interactive part into its own `*.client.tsx` leaf, as `site-header.tsx` renders `ThemeToggle`. (Decision 1)
 3. **DO** name a client entry point `<subject>.client.tsx` and open it with `'use client';`. (Decision 2)
 4. **DO** rename the file when the directive is added or removed — the suffix and the directive move together. (Decision 2)
-5. **DO** keep hooks in `src/hooks/**` without the directive, imported from client leaves. (Decision 3)
+5. **DO** keep hooks in `src/**/hooks/**` without the directive, imported from client leaves. (Decision 3)
 6. **DO** reach `readPrefs` / `writePrefs` through a hook or a `*.client.tsx` leaf, as `use-theme.ts` and `locale-toggle.client.tsx` do. (Decision 3)
 7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
 8. **DO** put an Episode's interactive visualisation in its Slide folder as `<name>.client.tsx`, its logic in a `.pure.ts` beside it. (Decision 5)

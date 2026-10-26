@@ -377,7 +377,7 @@ module.exports = {
       name: 'pipeline-hooks-reached-only-from-client',
       severity: 'error',
       comment:
-        "A hook runs only in the browser. Reach src/pipeline/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component; a hook imports none of the area's components (FE-006).",
+        'A hook runs only in the browser. Reach src/pipeline/hooks/** from a *.client.tsx leaf, another hook, or a test — never from a Server Component (FE-006).',
       from: { pathNot: ['\\.client\\.tsx$', '^src/(pipeline/)?hooks/', '\\.test\\.tsx?$'] },
       to: { path: '^src/pipeline/hooks/' },
     },

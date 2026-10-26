@@ -2,8 +2,8 @@
 // PostToolUse on the Skill tool (`skill`) and the Read tool (`read`), and InstructionsLoaded (`instructions`). A plugin
 // over the core writer. It acts only
 // when some worktree's `.scratch/active-run` lists the hook's session; otherwise it prints nothing and exits 0, so
-// a retro or review session never touches a run's log. The mapping lives in claude-adapter.pure.ts; the line is
-// written by run-log-writer.ts, which owns the shape, the clock, the lock and the sequence.
+// a retro or review session never touches a run's log. The mapping lives in src/pipeline/lib/claude-adapter.pure.ts; the line is
+// written by src/pipeline/lib/run-log-writer.ts, which owns the shape, the clock, the lock and the sequence.
 // A lock timeout is the one failure it reports: a line on stderr and exit 1, which Claude Code does not treat as
 // blocking (exit 2 would block SubagentStop). A point-fact hook waits only 2 s, reports it too, and exits 0: what it
 // records already happened.

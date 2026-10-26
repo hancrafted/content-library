@@ -1,6 +1,6 @@
 // The active-run marker's disk side, internal to the run commands (run-commands.ts): write it, check it names the
 // Run, and at the Run's end record the orchestrator's usage inside the Run, over every session that drove it, and
-// remove it. The shape and liveness rules live in marker.pure.ts and episode-run-log.ts.
+// remove it. The shape and liveness rules live in src/pipeline/lib/marker.pure.ts and src/pipeline/lib/episode-run-log.ts.
 import { globSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
