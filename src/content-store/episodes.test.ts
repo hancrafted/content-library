@@ -8,7 +8,9 @@ import { episodeStatus, listEpisodes } from './store';
 
 /*
  * The store's Episode read API the Episode overview depends on (#40): one metadata
- * entry per Episode folder, so no Episode silently drops out of the overview.
+ * entry per Episode folder, so no Episode silently drops out of the overview. The
+ * Episode registry derives the entries from the folders; the first test checks that
+ * every folder but a tooling page's is an Episode.
  */
 
 const EPISODES_DIR = path.join(process.cwd(), 'src/components/episodes');
@@ -40,18 +42,6 @@ describe('success cases', () => {
       .sort();
     // ASSERT
     expect(listed).toEqual(expected);
-  });
-
-  it('lists every registered Episode, whatever its status', () => {
-    // ARRANGE
-    const expected = [...EPISODE_SLUGS].sort();
-    // ACT
-    const withPage = listEpisodes()
-      .filter(({ slug }) => isEpisodeSlug(slug))
-      .map(({ slug }) => slug)
-      .sort();
-    // ASSERT
-    expect(withPage).toEqual(expected);
   });
 
   it.each(listEpisodes().map(({ slug }) => slug))('keeps the metadata of %s in its own folder', (slug) => {

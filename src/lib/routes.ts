@@ -1,3 +1,4 @@
+import { EPISODE_SLUGS } from './episode-registry.generated';
 import { LOCALES, localizePath, type Locale } from './locale.pure';
 import { isToolingSlug, TOOLING_SLUGS, type ToolingSlug } from './tooling-pages';
 
@@ -14,25 +15,11 @@ export const ROUTES = {
 export const LEGACY_EPISODE_PREFIX = '/episode';
 
 /**
- * Every Episode, public or unlisted: each registered once. Which of them has an `/episodes/` page is the visibility
- * predicate's (`pageTreatment`): an unlisted one lives only under its Event. The tooling pages served beside them are
- * no Episodes: `TOOLING_SLUGS`.
+ * Every Episode, public or unlisted: each one folder, `src/components/episodes/<slug>/`, listed by the generated
+ * Episode registry. Which of them has an `/episodes/` page is the visibility predicate's (`pageTreatment`): an unlisted
+ * one lives only under its Event. The tooling pages served beside them are no Episodes: `TOOLING_SLUGS`.
  */
-export const EPISODE_SLUGS = [
-  'maintaining-markdown-for-ai',
-  'ai-token-economy',
-  'never-too-early-sales',
-  'onboard-ai-every-time',
-  'ai-attention-span',
-  'ai-gives-you-more-work',
-  'axel-onboard-ai-every-time',
-  'axel-ai-attention-span',
-  'axel-ai-gives-you-more-work',
-  'cyberforum-intro',
-  'cyberforum-onboard-ai-every-time',
-  'cyberforum-ai-attention-span',
-  'cyberforum-ai-gives-you-more-work',
-] as const;
+export { EPISODE_SLUGS };
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
 
