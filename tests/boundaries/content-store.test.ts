@@ -145,6 +145,7 @@ describe('failure cases', () => {
       'hooks-import-no-upper-tier: src/shared/hooks/use-store.ts -> src/content-store/store.ts',
       'lib-imports-no-upper-tier: src/episodes/lib/reaches-store.pure.ts -> src/content-store/store.ts',
       'lib-imports-no-upper-tier: src/shared/lib/reaches-store.pure.ts -> src/content-store/store.ts',
+      'page-assembly-reaches-areas-through-tier-folders: src/page-assembly/landing/reaches-metadata.tsx -> src/episodes/probe/episode-metadata.ts',
       'records-read-only-through-store: src/episodes/episode-repository.ts -> src/episodes/probe/episode-metadata.ts',
       'records-read-only-through-store: src/page-assembly/landing/reaches-event.tsx -> src/content-store/events/2026-10-23-axel.ts',
       'records-read-only-through-store: src/page-assembly/landing/reaches-metadata.tsx -> src/episodes/probe/episode-metadata.ts',
