@@ -40,6 +40,16 @@ export type ServedEvent = Omit<Event, 'slug' | 'playlist'> & {
   readonly playlist: Omit<Playlist, 'episodes'> & { readonly episodes: readonly PlaylistEntry[] };
 };
 
+/**
+ * One Episode an Event presents on its own page under the Event: the served Event, the Episode's page as its
+ * EpisodeRef, and its place in the Playlist. The page catalogue resolves it from the page's route params.
+ */
+export interface PresentedEpisode {
+  readonly event: ServedEvent;
+  readonly episode: EpisodeRef<EpisodeId>;
+  readonly place: PlaylistPlace;
+}
+
 /** Each Episode of a Playlist, in its order, with its place: the count is every one; the walk steps over the pageless. */
 export function playlistEntries(episodes: readonly LoadedEpisode[]): PlaylistEntry[] {
   const pages = episodes.map(({ ref }) => (hasPage(ref) ? ref : undefined));

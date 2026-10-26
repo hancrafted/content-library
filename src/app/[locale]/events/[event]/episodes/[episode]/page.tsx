@@ -11,13 +11,11 @@ export const dynamicParams = false;
 export const generateStaticParams = eventEpisodeParams;
 
 export async function generateMetadata({ params }: EventEpisodeParams) {
-  const { event, episode } = await params;
-  const page = eventEpisodePageOf(event, episode);
+  const page = eventEpisodePageOf(await params);
   const locale = await resolveLocale(params);
   return pageMetadata(page, locale, episodePageCopy(page, locale));
 }
 
 export default async function Page({ params }: EventEpisodeParams) {
-  const { event, episode } = await params;
-  return <EpisodePage page={eventEpisodePageOf(event, episode)} locale={await resolveLocale(params)} />;
+  return <EpisodePage page={eventEpisodePageOf(await params)} locale={await resolveLocale(params)} />;
 }

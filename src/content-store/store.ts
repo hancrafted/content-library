@@ -114,7 +114,8 @@ export function episodeVideo(id: EpisodeId, locale: Locale): Video | undefined {
   return local === undefined ? undefined : { id: local };
 }
 
-export type { PlaylistPlace, ServedEvent } from './served-event';
+export type { EventEpisodePage } from './catalogue/page-catalogue';
+export type { PresentedEpisode, ServedEvent } from './served-event';
 
 /**
  * Every Event, in record order, each served whole: its slug names a page, and its Playlist's Episodes come resolved
@@ -131,14 +132,17 @@ export function findEvent(slug: string): ServedEvent | undefined {
 
 /**
  * The page catalogue over the store's records: every page with its treatment, the static params the routes export,
- * and the Episodes and Events the site's own lists show (`./page-catalogue.ts`).
+ * the page a route's params name (or none), and the Episodes and Events the site's own lists show
+ * (`./catalogue/page-catalogue.ts`).
  */
 export const {
   pages: PAGES,
   treatmentOf,
   episodesPathParams,
+  episodesPathPageAt,
   eventParams,
   eventEpisodeParams,
+  eventEpisodePageAt,
   listedEpisodes,
   listedEvents,
 } = catalogueOf(CONTENT);
