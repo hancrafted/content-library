@@ -25,10 +25,8 @@ function tree(entries: readonly string[]): string {
   return root;
 }
 
-/** Where a page folder sits by kind: its Event, if it is a copy, and its slug. */
-function placeOf(folder: PageFolder): string {
-  return folder.kind === 'event-copy' ? `${folder.event}/${folder.slug}` : folder.slug;
-}
+/** An Event's copy among the page folders. */
+type CopyFolder = Extract<PageFolder, { readonly kind: 'event-copy' }>;
 
 describe('success cases', () => {
   it('finds the standalone Episodes and the Event copies, counted apart', () => {
@@ -56,11 +54,15 @@ describe('success cases', () => {
       'by-event/2026-01-01-x/beta/episode-metadata.ts',
       'by-event/2026-01-01-x/alpha/episode-metadata.ts',
     ]);
-    const expected = ['2026-01-01-x/alpha', '2026-01-01-x/beta', '2026-02-02-y/alpha'];
+    const expected = [
+      { event: '2026-01-01-x', slug: 'alpha' },
+      { event: '2026-01-01-x', slug: 'beta' },
+      { event: '2026-02-02-y', slug: 'alpha' },
+    ];
     // ACT
     const copies = episodeFolders(root)
-      .filter(({ kind }) => kind === 'event-copy')
-      .map(placeOf);
+      .filter((folder): folder is CopyFolder => folder.kind === 'event-copy')
+      .map(({ event, slug }) => ({ event, slug }));
     // ASSERT
     expect(copies).toEqual(expected);
   });

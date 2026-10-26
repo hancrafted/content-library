@@ -2,9 +2,9 @@
 // areas never import each other but for a Slide showing an Explorable explanation, page assembly reaches an area only
 // through its tier folders, an area's lib/ imports no React and no upper tier, its hooks/ are reached only from a
 // client leaf, shared knows no domain, the store's one upward edge is Episode metadata, and `src/` and
-// `skills/`/`tools/` meet only through an area's `lib/` or the store's entry. The one boundary suite for these rules:
-// the dependency-cruiser rules run once, as `npm run lint:boundaries` runs them over `src/`, `skills/` and `tools/`, on
-// a throwaway probe tree, so a rule that stopped firing, or started firing on a legal import, fails here.
+// `skills/`/`tools/` meet only through an area's `lib/` or the store's entry. Every area's probes, Events and pipeline
+// included, sit in one throwaway tree and the rules run over it in one cruise, as `npm run lint:boundaries` runs them
+// over `src/`, `skills/` and `tools/`, so a rule that stopped firing, or started firing on a legal import, fails here.
 
 import { cruise, type IForbiddenRuleType, type IReporterOutput } from 'dependency-cruiser';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
@@ -247,13 +247,13 @@ describe('failure cases', () => {
       'areas-never-import-each-other: src/explorable-explanations/probe/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.tsx',
       `areas-never-import-each-other: ${PIPELINE}/components/reaches-events.tsx -> ${EVENTS}/components/event-card.tsx`,
       `areas-never-import-each-other: ${PIPELINE}/lib/reaches-episodes.ts -> src/episodes/lib/episode.pure.ts`,
-      `content-store-tier: src/content-store/reaches-area.ts -> ${EVENTS}/components/event-card.tsx`,
       'content-store-tier: src/content-store/reaches-area.ts -> src/episodes/lib/probe.pure.ts',
+      `content-store-tier: src/content-store/reaches-area.ts -> ${EVENTS}/components/event-card.tsx`,
+      `hooks-reached-only-from-client: skills/probe/scripts/reaches-past.ts -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${DASHBOARD}/reaches-hook.tsx -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${LANDING}/reaches-past-tiers.tsx -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${PIPELINE}/components/server-reaches-hook.tsx -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${PIPELINE}/lib/reaches-hook.ts -> ${PIPELINE}/hooks/use-run.ts`,
-      `hooks-reached-only-from-client: skills/probe/scripts/reaches-past.ts -> ${PIPELINE}/hooks/use-run.ts`,
       `layers-never-import-app: ${EVENTS}/components/reaches-up.tsx -> src/app/page.tsx`,
       `lib-imports-no-react: ${PIPELINE}/lib/reaches-react.ts -> node_modules/react/index.js`,
       `lib-imports-no-upper-tier: ${PIPELINE}/lib/reaches-hook.ts -> ${PIPELINE}/hooks/use-run.ts`,
@@ -282,7 +282,7 @@ describe('failure cases', () => {
     // ACT
     const found = violations();
     // ASSERT
-    expect(found).toEqual(expected.sort());
+    expect(found).toEqual(expected);
   });
 
   it('fires every rule it runs on a probe, so no rule here passes for want of a violation', () => {

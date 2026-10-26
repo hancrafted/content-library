@@ -103,10 +103,10 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('finds Slide folders to check, so an empty walk cannot pass', () => {
     // ARRANGE
-    const folders = slideFolders();
+    const none = 0;
     // ACT
-    const walked = folders.length;
+    const walked = slideFolders().length;
     // ASSERT
-    expect(walked).toBeGreaterThan(0);
+    expect(walked).toBeGreaterThan(none);
   });
 });
