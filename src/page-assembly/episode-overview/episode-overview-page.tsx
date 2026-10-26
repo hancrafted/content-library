@@ -9,23 +9,23 @@ import { GalleryHorizontalEnd, Layers, LayoutTemplate, Presentation } from 'luci
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
-type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
+type BrowserT = Awaited<ReturnType<typeof getTranslations<'episodeBrowser'>>>;
 
-function browseLabels(t: LandingT): BrowseLabels {
+function browseLabels(t: BrowserT): BrowseLabels {
   return {
     ...cardLabels(t),
-    search: t('episodeOverview.search'),
-    searchPlaceholder: t('episodeOverview.searchPlaceholder'),
-    tagFilter: t('episodeOverview.tagFilter'),
-    showAll: t.raw('episodeOverview.showAll') as string,
-    showFewer: t('episodeOverview.showFewer'),
+    search: t('search'),
+    searchPlaceholder: t('searchPlaceholder'),
+    tagFilter: t('tagFilter'),
+    showAll: t.raw('showAll') as string,
+    showFewer: t('showFewer'),
     results: {
-      none: t('episodeOverview.results.none'),
-      one: t('episodeOverview.results.one'),
-      other: t.raw('episodeOverview.results.other') as string,
+      none: t('results.none'),
+      one: t('results.one'),
+      other: t.raw('results.other') as string,
     },
-    empty: t('episodeOverview.empty'),
-    reset: t('episodeOverview.reset'),
+    empty: t('empty'),
+    reset: t('reset'),
   };
 }
 
@@ -71,7 +71,7 @@ function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
  */
 export async function EpisodeOverviewPage({ locale }: { locale: Locale }) {
   const isDev = process.env.NODE_ENV === 'development';
-  const tLanding = await getTranslations({ locale, namespace: 'landing' });
+  const tBrowser = await getTranslations({ locale, namespace: 'episodeBrowser' });
   const tPage = await getTranslations({ locale, namespace: 'episodesPage' });
   const cards = await episodeCards(locale, {
     includeDrafts: isDev,
@@ -81,7 +81,7 @@ export async function EpisodeOverviewPage({ locale }: { locale: Locale }) {
   return (
     <main data-testid="episodes-index-page" className={PAGE_CONTAINER}>
       <PageHeader title={tPage('title')} intro={<p data-episodes-intro>{tPage('intro')}</p>} />
-      <EpisodeBrowser cards={newestFirst(cards)} locale={locale} labels={browseLabels(tLanding)} headingLevel={2} />
+      <EpisodeBrowser cards={newestFirst(cards)} locale={locale} labels={browseLabels(tBrowser)} headingLevel={2} />
       <ReferenceLinks locale={locale} t={tPage} />
     </main>
   );

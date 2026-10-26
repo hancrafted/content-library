@@ -1,12 +1,12 @@
 import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
-import { TRANSLATIONS } from '@/shared/i18n/translations';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
+import { EVENT_WORDS } from '../lib/event-words';
 import { EventBreadcrumb } from './event-breadcrumb';
 import { PastNotice } from './past-notice';
 
@@ -23,7 +23,7 @@ interface Step {
  */
 export interface EventEpisodeChrome {
   readonly locale: Locale;
-  readonly labels: (typeof TRANSLATIONS)[Locale]['eventsPage'];
+  readonly labels: (typeof EVENT_WORDS)[Locale];
   readonly event: { readonly slug: EventSlug; readonly title: string; readonly date: IsoDate };
   readonly episode: string;
   /** "Episode 2 of 3". */
@@ -48,8 +48,8 @@ export async function eventEpisodeChrome(
   locale: Locale,
   titleOf: (episode: EpisodeId) => string,
 ): Promise<EventEpisodeChrome> {
-  const labels = TRANSLATIONS[locale].eventsPage;
-  const t = await getTranslations({ locale, namespace: 'eventsPage' });
+  const labels = EVENT_WORDS[locale];
+  const t = await getTranslations({ locale, namespace: 'events' });
   const stepOf = (episode: EpisodeId | undefined): Step | undefined =>
     episode === undefined ? undefined : { title: titleOf(episode), route: eventEpisodeRoute(event.slug, episode) };
   const previous = stepOf(place.previous);
@@ -79,12 +79,7 @@ export function EventEpisodeHeader({
   const { locale, labels, event, episode } = chrome;
   return (
     <div data-event-episode-header className={cn('flex flex-col gap-4 pt-2 pb-6', className)}>
-      <EventBreadcrumb
-        locale={locale}
-        labels={{ breadcrumb: labels.breadcrumb, events: labels.title }}
-        event={event}
-        episode={episode}
-      />
+      <EventBreadcrumb locale={locale} labels={labels.breadcrumb} event={event} episode={episode} />
       <PastNotice date={event.date} buildDay={buildDay} text={labels.pastNotice} />
     </div>
   );

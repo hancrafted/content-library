@@ -1,10 +1,10 @@
 import { episodeRoute, type EpisodeId } from '@/content-store/catalogue/routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import { TRANSLATIONS } from '@/shared/i18n/translations';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { ROUTES, servedUrl } from '@/shared/lib/routes';
 import { SOCIAL_LINKS } from '@/shared/lib/social-links';
 import { OG_IMAGE } from './page-metadata.pure';
+import { PAGE_WORDS } from './page-words';
 
 /*
  * schema.org JSON-LD as plain data (FE-008 §6): the landing page's Person and WebSite, an Episode's Article and,
@@ -30,7 +30,7 @@ function person(siteUrl: string, locale: Locale): Node {
   return {
     '@type': 'Person',
     '@id': `${siteUrl}/#person`,
-    name: TRANSLATIONS[locale].landing.about.identity.name,
+    name: PAGE_WORDS[locale].person.name,
     url: `${siteUrl}/`,
     sameAs: SOCIAL_LINKS.map((link) => link.href),
   };
@@ -46,8 +46,8 @@ export function landingJsonLd(siteUrl: string, locale: Locale): JsonLd {
         '@type': 'WebSite',
         '@id': url,
         url,
-        name: TRANSLATIONS[locale].brand.name,
-        description: TRANSLATIONS[locale].meta.home.description,
+        name: PAGE_WORDS[locale].brand.name,
+        description: PAGE_WORDS[locale].meta.home.description,
         inLanguage: locale,
         publisher: { '@id': `${siteUrl}/#person` },
       },
@@ -78,7 +78,7 @@ export function episodeJsonLd(siteUrl: string, locale: Locale, episode: EpisodeL
   const { publishedOn, youtube } = episode;
   if (publishedOn === undefined) return undefined;
   const url = servedUrl(siteUrl, episodeRoute(episode.slug), locale);
-  const author = { '@type': 'Person', name: TRANSLATIONS[locale].landing.about.identity.name, url: `${siteUrl}/` };
+  const author = { '@type': 'Person', name: PAGE_WORDS[locale].person.name, url: `${siteUrl}/` };
   const article: Node = {
     '@type': 'Article',
     '@id': url,

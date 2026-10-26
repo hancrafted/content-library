@@ -16,8 +16,8 @@ const RULE_NAMES = new Set([...config.forbidden, ...config.required].map(({ name
 const ADRS = '.archgate/adrs';
 const ADR_FILES = readdirSync(ADRS).filter((file) => file.endsWith('.md'));
 
-/** The routes are the framework zone, and the site Translation files move to their owners: neither is an area. */
-const NOT_AN_AREA = new Set(['app', 'messages']);
+/** The routes are the framework zone, not an area. */
+const NOT_AN_AREA = new Set(['app']);
 const HOMES = [
   ...readdirSync('src', { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && !NOT_AN_AREA.has(entry.name))

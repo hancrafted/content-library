@@ -32,7 +32,7 @@ export interface EventCard {
   readonly episodeCountLabel: string;
 }
 
-const ITEMS = 'eventsPage.items';
+const ITEMS = 'events.items';
 
 /** What a card reads of an Event the store serves: its slug, its day and time, its place, and its Playlist's length. */
 type CardEvent = Pick<Event, 'date' | 'time' | 'location'> & {

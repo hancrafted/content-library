@@ -8,7 +8,7 @@ rules: false
 files: ['src/episodes/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
 paths: ['src/episodes/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
-description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR.'
+description: "The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text (each owner's Translation files), styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR."
 ---
 
 # Slide Architecture
@@ -121,7 +121,7 @@ For this project the map matters because handoffs run on agents with no session 
 
 ### 5. Text, styling and client code have fixed homes
 
-1. Text: site Translation files for page chrome, landing, Upcoming cards; else its owner's (Episode, Slide, Explorable explanation).
+1. Text: its owner's `i18n/`: page template, area, page chrome, Episode, Slide, Explorable explanation; one owner per namespace.
 2. Styling: tokens in `globals.css`; an Episode's remap in its scope; a Slide's in its CSS module.
 3. Client code: `*.client.tsx` leaves only; hooks hold browser state.
 
@@ -157,7 +157,7 @@ For this project the map matters because handoffs run on agents with no session 
 1. **DON'T** import upward, or from one Slide folder into another, a pool Slide included. (Decision 2, Decision 3)
 2. **DON'T** add an Episode-local `parts/` or `client/` folder, or put a Title or section slide in the Slide pool. (Decision 3)
 3. **DON'T** render Slide anchors or headings outside the container, or reach page chrome from anywhere but page assembly or the container. (Decisions 3 and 4)
-4. **DON'T** put a published Episode's text in the site-wide Translation files. (Decision 5)
+4. **DON'T** put a published Episode's text in another owner's Translation files. (Decision 5)
 5. **DON'T** style a Slide from `globals.css` or the Episode stylesheet. (Decision 5)
 6. **DON'T** add a tier, module or Slide schema without a new ADR. (Decision 6)
 

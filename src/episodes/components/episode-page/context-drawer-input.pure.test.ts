@@ -1,7 +1,8 @@
 import { episode, slide, type Section } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
-import { TRANSLATIONS } from '@/shared/i18n/translations';
 import type { SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
+import chromeDe from '@/shared/page-chrome/i18n/de.json';
+import chromeEn from '@/shared/page-chrome/i18n/en.json';
 import { describe, expect, it } from 'vitest';
 import { checkContext, checkDrawerStrings, contextItemsOf } from './context-drawer-input.pure';
 import { recordContent } from './record-content';
@@ -167,7 +168,7 @@ describe('success cases', () => {
 
   it("accepts the site's contextDrawer strings: every one that takes an argument stays out of the drawer's", () => {
     // ARRANGE
-    const namespaces = [TRANSLATIONS.en.contextDrawer, TRANSLATIONS.de.contextDrawer];
+    const namespaces = [chromeEn.contextDrawer, chromeDe.contextDrawer];
     // ACT
     const check = () => namespaces.forEach((namespace) => checkDrawerStrings(namespace));
     // ASSERT

@@ -1,7 +1,7 @@
-import de from '@/messages/de.json';
-import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
 import { FRAMEWORK_SLIDES } from './framework-slides.pure';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
 
 const MESSAGES = { en, de };
 interface CardCopy {

@@ -2,6 +2,7 @@ import { AboutAnchor } from '@/page-assembly/landing/about-anchor.client';
 import caseStyles from '@/page-assembly/landing/fieldnote-case.module.css';
 import { FieldnoteSketch } from '@/page-assembly/landing/fieldnote-sketch';
 import styles from '@/page-assembly/landing/fieldnotes.module.css';
+import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { SocialLinks } from '@/shared/page-chrome/social-links';
 import { ArrowDown, Plus } from 'lucide-react';
@@ -13,14 +14,14 @@ type CaseId = 'rib' | 'audi' | 'selfbits';
 const CASES = ['rib', 'audi', 'selfbits'] as const;
 const PHASES = ['before', 'intervention', 'result'] as const;
 
-function Identity({ t, locale }: { t: AboutT; locale: Locale }) {
+function Identity({ t, name, locale }: { t: AboutT; name: string; locale: Locale }) {
   return (
     <aside className={styles.identity} aria-label={t('identity.label')}>
       <span className={styles.monogram} aria-hidden="true">
         hc.
       </span>
       <div>
-        <p className={styles.name}>{t('identity.name')}</p>
+        <p className={styles.name}>{name}</p>
         <p className={styles.practice}>{t('identity.practice')}</p>
       </div>
       <p className={styles.identityBody}>{t('identity.body')}</p>
@@ -107,7 +108,7 @@ function CaseNote({ id, index, t }: { id: CaseId; index: number; t: AboutT }) {
   );
 }
 
-function Introduction({ t, locale }: { t: AboutT; locale: Locale }) {
+function Introduction({ t, name, locale }: { t: AboutT; name: string; locale: Locale }) {
   return (
     <div className={styles.intro}>
       <header>
@@ -116,7 +117,7 @@ function Introduction({ t, locale }: { t: AboutT; locale: Locale }) {
         </h2>
         <p className={styles.lead}>{t('lead')}</p>
       </header>
-      <Identity t={t} locale={locale} />
+      <Identity t={t} name={name} locale={locale} />
     </div>
   );
 }
@@ -124,6 +125,7 @@ function Introduction({ t, locale }: { t: AboutT; locale: Locale }) {
 /** Outcomes stay in each summary; native disclosure reveals the process and its scope. */
 export async function AboutSection({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'landing.about' });
+  const { name } = PAGE_WORDS[locale].person;
   return (
     <section id="about" className={styles.section} aria-labelledby="about-heading">
       <AboutAnchor />
@@ -132,7 +134,7 @@ export async function AboutSection({ locale }: { locale: Locale }) {
           <p>{t('eyebrow')}</p>
           <span>{t('edition')}</span>
         </div>
-        <Introduction t={t} locale={locale} />
+        <Introduction t={t} name={name} locale={locale} />
         <div className={styles.readingKey}>
           <p>{t('readingKey')}</p>
           <span>{t('schematic')}</span>

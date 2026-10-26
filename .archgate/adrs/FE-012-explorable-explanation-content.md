@@ -21,7 +21,7 @@ Without this record a plain `slide-shared` part owns no words, so that data has 
 
 1. **In every Slide's `i18n/`:** ten Slides repeat the same labels and the same chat; a fix lands in one and drifts in nine. A Slide cannot import another Slide's words, so there is no single copy to point at.
 2. **In the Episode folder:** a `slide-shared` part may not import an Episode, so the part cannot read it; each Slide would pass the whole chat down as props.
-3. **In the site-wide Translation files:** that home is for site chrome and cards, and a long chat log there swamps them.
+3. **In page chrome's or a template's Translation files:** those homes are for site chrome and cards, and a long chat log there swamps them.
 
 Chosen: the visual's folder holds the data and default words once per locale, and a Slide still has the last word.
 

@@ -73,7 +73,7 @@ export interface EpisodeContext {
 
 /**
  * next-intl's `createTranslator` over the Slide's own messages. Like the
- * site-wide config (`src/shared/i18n/request.ts`), any missing message or formatting
+ * site-wide config (`src/page-assembly/i18n-request.ts`), any missing message or formatting
  * error throws, so untranslated text fails the build instead of shipping.
  */
 function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {

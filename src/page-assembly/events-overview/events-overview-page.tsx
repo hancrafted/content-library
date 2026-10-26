@@ -6,7 +6,7 @@ import { getTranslations } from 'next-intl/server';
 
 /** The Events overview, the page at /events: a title with a one-line intro, then one card per Event whose Playlist is public. */
 export async function EventsOverviewPage({ locale }: { locale: Locale }) {
-  const t = await getTranslations({ locale, namespace: 'eventsPage' });
+  const t = await getTranslations({ locale, namespace: 'eventsOverview' });
   const cards = await eventCards(locale, { listedOnly: true });
   return (
     <main data-testid="events-index-page" className={PAGE_CONTAINER}>

@@ -6,7 +6,6 @@ import type { VideoLabels } from '@/episodes/components/episode-card/episode-you
 import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/shared/components/ui/card-variant.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
-import type { getTranslations } from 'next-intl/server';
 
 /** The strings a card draws that are not on the card itself. */
 export interface CardLabels extends VideoLabels {
@@ -14,15 +13,16 @@ export interface CardLabels extends VideoLabels {
   readonly comingSoon: string;
 }
 
-type LandingT = Awaited<ReturnType<typeof getTranslations<'landing'>>>;
+/** Reads one of the card's own labels, a key of the Episode browser's Translation files (`episodeBrowser.<key>`). */
+export type CardLabelRead = (key: 'open' | 'comingSoon' | 'watchVideo' | 'newTab') => string;
 
-/** The card's own labels, read from the landing Translation file; the one builder every page that draws cards uses. */
-export function cardLabels(t: LandingT): CardLabels {
+/** The card's own labels, read from the Episode browser's Translation file; the one builder every page that draws cards uses. */
+export function cardLabels(t: CardLabelRead): CardLabels {
   return {
-    open: t('episodeOverview.open'),
-    comingSoon: t('episodeOverview.comingSoon'),
-    watchVideo: t('episodeOverview.watchVideo'),
-    newTab: t('episodeOverview.newTab'),
+    open: t('open'),
+    comingSoon: t('comingSoon'),
+    watchVideo: t('watchVideo'),
+    newTab: t('newTab'),
   };
 }
 

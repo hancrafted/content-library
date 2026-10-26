@@ -17,8 +17,8 @@ describe('success cases', () => {
   it('reads the title and description by the Event slug and routes the card to its page', () => {
     // ARRANGE
     const expected = {
-      title: '«eventsPage.items.2026-10-23-axel-agentic-workflow.title»',
-      description: '«eventsPage.items.2026-10-23-axel-agentic-workflow.description»',
+      title: '«events.items.2026-10-23-axel-agentic-workflow.title»',
+      description: '«events.items.2026-10-23-axel-agentic-workflow.description»',
       route: '/events/2026-10-23-axel-agentic-workflow',
     };
     // ACT
@@ -59,7 +59,7 @@ describe('failure cases', () => {
     // ACT
     const build = () => eventCard(RECORD, 'en', reads);
     // ASSERT
-    expect(build).toThrow('Missing eventsPage.items.2026-10-23-axel-agentic-workflow.title');
+    expect(build).toThrow('Missing events.items.2026-10-23-axel-agentic-workflow.title');
   });
 });
 

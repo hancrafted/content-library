@@ -1,6 +1,6 @@
 import { episode, slide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
-import { TRANSLATIONS } from '@/shared/i18n/translations';
+import { TRANSLATIONS } from '@/page-assembly/translations';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { createElement, isValidElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';

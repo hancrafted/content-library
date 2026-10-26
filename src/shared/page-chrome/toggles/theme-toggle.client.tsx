@@ -2,10 +2,10 @@
 
 import { Button } from '@/shared/components/ui/button';
 import { useTheme } from '@/shared/hooks/use-theme';
-import type { Messages } from '@/shared/i18n/translations';
 import { THEMES, type Theme } from '@/shared/lib/prefs.pure';
 import { SEGMENTED_GROUP, segmentedItem } from '@/shared/page-chrome/toggles/segmented';
 import { Monitor, Moon, Sun, type LucideIcon } from 'lucide-react';
+import type { Messages } from 'next-intl';
 
 const ICONS: Record<Theme, LucideIcon> = { light: Sun, dark: Moon, system: Monitor };
 

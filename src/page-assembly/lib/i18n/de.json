@@ -1,0 +1,23 @@
+{
+  "person": {
+    "name": "Han Che"
+  },
+  "meta": {
+    "dashboard": {
+      "title": "Content-Pipeline",
+      "description": "So entsteht eine Episode: eine schreibgeschützte Ansicht ihrer Pipeline, Runs und Review-Belege, mit einem aufgezeichneten Demo-Run."
+    },
+    "episodes": {
+      "title": "Episoden",
+      "description": "Durchsuchen Sie alle visualisierten Theorie-Episoden der hancrafted-Trainingsvideos."
+    },
+    "home": {
+      "title": "Visualisierte Theorie · hancrafted",
+      "description": "Theorie aus den hancrafted-Schulungsvideos, Seite für Seite visualisiert."
+    },
+    "events": {
+      "title": "Veranstaltungen",
+      "description": "Workshops und Webinare, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
+    }
+  }
+}

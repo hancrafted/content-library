@@ -33,9 +33,9 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 2. Import direction
 
-1. Layers run `app → page-assembly → product areas → content-store → shared`; tiers run `components → hooks → lib`. An edge MAY skip downward, never upward. `src/shared/**` knows no domain: it imports only `shared/` (and the site Translation files).
+1. Layers run `app → page-assembly → product areas → content-store → shared`; tiers run `components → hooks → lib`. An edge MAY skip downward, never upward. `src/shared/**` knows no domain: it imports only `shared/`.
 2. No import cycle MAY exist under `src/`.
-3. `src/page-assembly/**` is flat, a folder per template plus `lib/`: only routes and tests import it; a template imports only its folder and `lib/`.
+3. `src/page-assembly/**` is flat, a folder per template plus `lib/` and a root Translation merge: only routes, tests and the next-intl config import it; a template imports only its folder and `lib/`.
 4. A stylesheet import is not a tier edge.
 5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/[by-event/<e>/]<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only schemas and lib. The store's `schemas/` is a leaf every tier may import, so a lib module takes a record type without an upward edge.
 6. Product areas (`episodes/`, `events/`, `explorable-explanations/`, `pipeline/`) never import each other; a Slide folder MAY import an Explorable explanation. Areas meet only in page assembly, which passes one's parts to another as props and reaches an area only via `components/` and `lib/` (an explanation via its folder).

@@ -10,13 +10,13 @@ import {
 } from '@/content-store/catalogue/routes';
 import { pageTreatment, type PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import type { IsoDate } from '@/content-store/schemas/fields';
-import { TRANSLATIONS } from '@/shared/i18n/translations';
 import { DEFAULT_LOCALE, localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { Metadata } from 'next';
+import { PAGE_WORDS } from './page-words';
 
 /** A root layout's metadata: the absolute base and the site-name title frame. Nothing page-specific. */
 export function siteMetadata(locale: Locale, siteUrl: string): Metadata {
-  const name = TRANSLATIONS[locale].brand.name;
+  const name = PAGE_WORDS[locale].brand.name;
   return {
     metadataBase: new URL(`${siteUrl}/`),
     title: { default: name, template: `%s · ${name}` },
@@ -62,7 +62,7 @@ function socialCards(
   text: { title: string; description: string; publishedOn?: IsoDate; canonical: string },
 ): Pick<Metadata, 'openGraph' | 'twitter'> {
   const { publishedOn, canonical, ...words } = text;
-  const siteName = TRANSLATIONS[locale].brand.name;
+  const siteName = PAGE_WORDS[locale].brand.name;
   const alternateLocale = pageLocales(page)
     .filter((each) => each !== locale)
     .map((each) => OG_LOCALES[each]);
@@ -84,7 +84,7 @@ function socialCards(
 /** The copy of a page: the copy its route hands in, else `meta.<kind>` of the Translation file for a page that presents no record. */
 function copyOf(page: PageRef, locale: Locale, copy: PageCopy | undefined): Pick<PageCopy, 'title' | 'description'> {
   if (copy !== undefined) return copy;
-  const { meta } = TRANSLATIONS[locale];
+  const { meta } = PAGE_WORDS[locale];
   const handedIn = ({ kind }: RecordPage) => {
     throw new Error(`A ${kind} page presents a record: its route hands in its copy`);
   };
@@ -102,7 +102,7 @@ function copyOf(page: PageRef, locale: Locale, copy: PageCopy | undefined): Pick
 
 /**
  * A page's metadata: its copy, its canonical, and reciprocal hreflang
- * alternates. The landing page's copy is `meta.home` of the site-wide
+ * alternates. The landing page's copy is `meta.home` of page assembly's
  * Translation file; an Episode's comes from its record, which this tier cannot
  * reach, so the route hands it in, with the page's treatment from the page
  * catalogue, which the sitemap reads too: robots and canonical follow it, and a

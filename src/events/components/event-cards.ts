@@ -6,7 +6,7 @@ import { getTranslations } from 'next-intl/server';
 /** What an Event card reads from the Translation file in one locale. */
 async function readsOf(locale: Locale): Promise<EventReads> {
   const t = await getTranslations({ locale });
-  const page = await getTranslations({ locale, namespace: 'eventsPage' });
+  const page = await getTranslations({ locale, namespace: 'events' });
   const episodeCount = { one: page('episodeCount.one'), other: page.raw('episodeCount.other') as string };
   return { read: t as unknown as EventReads['read'], episodeCount };
 }

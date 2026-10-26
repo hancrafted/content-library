@@ -5,8 +5,8 @@ import Link from 'next/link';
 
 interface EventBreadcrumbProps {
   locale: Locale;
-  /** The trail's accessible name and the Events list's own label, in the page's locale. */
-  labels: { readonly breadcrumb: string; readonly events: string };
+  /** `events.breadcrumb` in the page's locale: the trail's accessible name and the Events list's own label. */
+  labels: { readonly label: string; readonly events: string };
   /** The Event: its slug and title, a link on an Event-scoped Episode page and the current page on the Event's own. */
   event: { readonly slug: EventSlug; readonly title: string };
   /** The title of the Episode an Event-scoped Episode page shows; it ends the trail. */
@@ -36,7 +36,7 @@ function EventStep({ locale, event, current }: Pick<EventBreadcrumbProps, 'local
 /** The trail above an Event's pages (design-ADR 0016, Routes and visibility): Events / the Event, then the Episode under it. */
 export function EventBreadcrumb({ locale, labels, event, episode }: EventBreadcrumbProps) {
   return (
-    <nav aria-label={labels.breadcrumb} data-event-breadcrumb className="text-caption text-muted-foreground">
+    <nav aria-label={labels.label} data-event-breadcrumb className="text-caption text-muted-foreground">
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <li>
           <Link href={localizePath(ROUTES.events, locale)} className={LINK}>

@@ -4,9 +4,9 @@ import { featuredIds, listEpisodes } from '@/content-store/store';
 import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';
 import { findEpisode } from '@/episodes/lib/registry';
 import { FILTER_TAGS, TAGS } from '@/episodes/lib/tag-looks';
-import de from '@/messages/de.json';
-import en from '@/messages/en.json';
 import { describe, expect, it } from 'vitest';
+import de from '../episode-browser/i18n/de.json';
+import en from '../episode-browser/i18n/en.json';
 import { TAG_ACCENTS, TAG_ICONS } from './episode-visuals';
 
 /*
@@ -76,7 +76,7 @@ describe('success cases', () => {
     const expected: string[] = [];
     // ACT
     const missing = (['en', 'de'] as const).flatMap((locale) => {
-      const tags = TRANSLATIONS[locale].landing.episodeOverview.tags as Record<
+      const tags = TRANSLATIONS[locale].episodeBrowser.tags as Record<
         string,
         { name?: string; tooltip?: string } | undefined
       >;
@@ -114,13 +114,13 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it.each(['en', 'de'] as const)('leaves no string a card reads untranslated in %s', (locale) => {
     // ARRANGE
-    const { episodeOverview } = TRANSLATIONS[locale].landing;
-    const tags = episodeOverview.tags as Record<string, { name?: string; tooltip?: string } | undefined>;
-    const upcomingCopy = episodeOverview.upcoming as Record<string, { title?: string; caption?: string } | undefined>;
+    const { episodeBrowser } = TRANSLATIONS[locale];
+    const tags = episodeBrowser.tags as Record<string, { name?: string; tooltip?: string } | undefined>;
+    const upcomingCopy = episodeBrowser.upcoming as Record<string, { title?: string; caption?: string } | undefined>;
     const expected: string[] = [];
     // ACT
     const missing = [
-      ...FORMATS.filter((id) => !episodeOverview.formats[id]).map((id) => `formats.${id}`),
+      ...FORMATS.filter((id) => !episodeBrowser.formats[id]).map((id) => `formats.${id}`),
       ...TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `tags.${id}`),
       ...listEpisodes().flatMap(({ id, slug, status }) => {
         const copy = isEpisodeId(id) ? findEpisode(id).messages[locale] : upcomingCopy[slug];
@@ -138,7 +138,7 @@ describe('edge cases', () => {
     const expected: string[] = [];
     // ACT
     const stray = (['en', 'de'] as const).flatMap((locale) =>
-      Object.keys(TRANSLATIONS[locale].landing.episodeOverview.tags)
+      Object.keys(TRANSLATIONS[locale].episodeBrowser.tags)
         .filter((id) => !(TAG_IDS as readonly string[]).includes(id))
         .map((id) => `${locale}: ${id}`),
     );
@@ -153,7 +153,7 @@ describe('edge cases', () => {
       .map(({ slug }) => slug)
       .sort();
     // ACT
-    const keyed = Object.keys(en.landing.episodeOverview.upcoming).sort();
+    const keyed = Object.keys(en.episodeBrowser.upcoming).sort();
     // ASSERT
     expect(keyed).toEqual(expected);
   });

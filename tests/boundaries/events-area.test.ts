@@ -33,7 +33,7 @@ const reach = (from: string, names: readonly string[]) =>
 const PROBES: Readonly<Record<string, string>> = {
   'src/shared/components/ui/button.tsx': 'export const Button = 1;',
   'src/shared/hooks/use-probe.ts': 'export const useProbe = 1;',
-  'src/shared/i18n/translations.ts': 'export const TRANSLATIONS = 1;',
+  'src/shared/i18n/translation-strings.ts': 'export const readTranslationStrings = 1;',
   'src/shared/lib/probe.pure.ts': 'export const probe = 1;',
   'src/content-store/store.ts': 'export const store = 1;',
   'src/content-store/schemas/fields.ts': 'export const fields = 1;',
@@ -49,7 +49,7 @@ const PROBES: Readonly<Record<string, string>> = {
     '@/events/lib/probe-event.pure',
     '@/shared/components/ui/button',
     '@/shared/hooks/use-probe',
-    '@/shared/i18n/translations',
+    '@/shared/i18n/translation-strings',
     '@/content-store/store',
   ]),
   [`${AREA}/components/reaches-episodes.tsx`]: reach(`${AREA}/components/reaches-episodes.tsx`, [

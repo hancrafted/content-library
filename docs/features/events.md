@@ -62,7 +62,7 @@ A new Event starts from the **Workshop template** (GLOSSARY), a tooling page at 
 2. **Register them.** As in "Unlisted Episodes" step 4: `npm run registry`, and the new ids in `store.test.ts`'s unlisted list.
 3. **Append the Playlist.** Add `src/content-store/playlists/<id>.ts`: its id, visibility, and the Episode ids in teaching order, the template's copy (`<event-slug>__intro`) first. Import it into `PLAYLISTS` in `src/content-store/store.ts`.
 4. **Append the Event.** Add `src/content-store/events/<date>-<name>.ts`: slug, date, kind, Audience, Organizer, optional time (`17:00`, `17:00–19:00` or `17:00–19:00 CET`) and location, and the Playlist's id; the file is named after its slug and ends `as const satisfies EventInput`, as the others do, so `tsc` holds the slug to its file name. Run `npm run registry`: the Event registry (GLOSSARY) adds the slug and the record from the file.
-5. **Write the Translation keys.** `eventsPage.items.<event-slug>.title` and `.description` in `src/messages/en.json` and `de.json`. The other keys an Event page reads are in [Episode translation keys](episode-translation-keys.md#event-keys).
+5. **Write the Translation keys.** `events.items.<event-slug>.title` and `.description` in the Events area's `src/events/lib/i18n/en.json` and `de.json`. The other keys an Event page reads are in [Episode translation keys](episode-translation-keys.md#event-keys).
 6. **Run `npm run verify`.** The route files, sitemap and static params follow from the records.
 
 The template's own words stay placeholders: write the Event's agenda, scope and orga in the copy, never in the template.

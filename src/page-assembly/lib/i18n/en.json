@@ -1,0 +1,23 @@
+{
+  "person": {
+    "name": "Han Che"
+  },
+  "meta": {
+    "dashboard": {
+      "title": "Content pipeline",
+      "description": "How an Episode gets made: a read-only view of its pipeline, Runs and review evidence, with a recorded demo Run."
+    },
+    "episodes": {
+      "title": "Episodes",
+      "description": "Browse all visualised theory episodes from the hancrafted training videos."
+    },
+    "home": {
+      "title": "Visualised theory · hancrafted",
+      "description": "Theory from the hancrafted training videos, visualised page by page."
+    },
+    "events": {
+      "title": "Events",
+      "description": "Workshops and webinars that walk through a planned set of visualised theory episodes, in order."
+    }
+  }
+}

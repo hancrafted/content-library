@@ -33,15 +33,16 @@ function PartHeading({ children }: { children: string }) {
  * published Episodes to click straight into, plus a link to browse all Episodes; the tooling pages sit on /episodes.
  */
 export async function EpisodesSection({ locale }: { locale: Locale }) {
-  const t = await getTranslations({ locale, namespace: 'landing' });
+  const t = await getTranslations({ locale });
+  const labels = cardLabels((key) => t(`episodeBrowser.${key}`));
   const cards = await episodeCards(locale);
   return (
     <section id="episodes" tabIndex={-1} className="relative outline-none">
       <div className="mx-auto max-w-6xl space-y-16 px-6 pt-24 pb-96 sm:pt-32 sm:pb-112">
-        <EpisodesHeader title={t('episodesSectionTitle')} subtitle={t('episodesSectionSubtitle')} />
+        <EpisodesHeader title={t('landing.episodesSectionTitle')} subtitle={t('landing.episodesSectionSubtitle')} />
         <div>
-          <PartHeading>{t('episodeOverview.spotlightTitle')}</PartHeading>
-          <EpisodeSpotlight cards={cards} locale={locale} labels={cardLabels(t)} headingLevel={4} />
+          <PartHeading>{t('landing.spotlightTitle')}</PartHeading>
+          <EpisodeSpotlight cards={cards} locale={locale} labels={labels} headingLevel={4} />
         </div>
         <div className="flex flex-wrap items-center justify-end gap-4 pt-4 border-t border-border/40">
           <Button asChild variant="outline" className="rounded-full">
@@ -50,7 +51,7 @@ export async function EpisodesSection({ locale }: { locale: Locale }) {
               data-testid="landing-browse-episodes-link"
               className="inline-flex items-center gap-2"
             >
-              <span>{t('episodeOverview.browseTitle')}</span>
+              <span>{t('landing.browseTitle')}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
