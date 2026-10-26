@@ -12,7 +12,7 @@ export const dynamicParams = false;
 export const generateStaticParams = episodesPathParams;
 
 export async function generateMetadata({ params }: EpisodeParams) {
-  const page = episodesPathPageOf((await params).episode);
+  const page = episodesPathPageOf(await params);
   const locale = await resolveLocale(params);
   return pageMetadata(page, locale, episodePageCopy(page, locale));
 }

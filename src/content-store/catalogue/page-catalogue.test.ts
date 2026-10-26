@@ -2,12 +2,13 @@ import { TOOLING_SLUGS, type PageRef } from '@/content-store/catalogue/record-ro
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../store';
 import { episodeRef } from './episode-id.pure';
-import { catalogueOf } from './page-catalogue';
+import { catalogueOf, episodesPathParamsOf, eventEpisodeParamsOf } from './page-catalogue';
 
 /*
- * The page catalogue (GLOSSARY): every page the site has, each with its treatment, and the static params the routes
- * export. Each test hands it records through the store's own load, as the store does with the record files, and asks
- * it what callers ask. Slugs are registered ones: only a registered Episode has a page.
+ * The page catalogue (GLOSSARY): every page the site has, each with its treatment, the static params the routes
+ * export, and the page a route's params name. Each test hands it records through the store's own load, as the store
+ * does with the record files, and asks it what callers ask. Slugs are registered ones: only a registered Episode has a
+ * page.
  */
 
 const PUBLIC = {
@@ -114,6 +115,50 @@ describe('success cases', () => {
     // ASSERT
     expect(params).toEqual(expected);
   });
+
+  it('resolves each page built under /episodes/ from its params, and gives back the same params', () => {
+    // ARRANGE
+    const expected = [
+      { kind: 'episode', episode: PUBLIC_REF },
+      ...TOOLING_SLUGS.map((tooling) => ({ kind: 'tooling', tooling })),
+    ];
+    const catalogue = catalogueOf(loadContent(RECORDS));
+    const params = catalogue.episodesPathParams();
+    // ACT
+    const pages = params.map((param) => catalogue.episodesPathPageAt(param));
+    // ASSERT
+    expect(pages).toEqual(expected);
+    expect(pages.map((page) => page && episodesPathParamsOf(page))).toEqual(params);
+  });
+
+  it('resolves each page built under an Event from its params, with the Episode it presents, and gives back the same params', () => {
+    // ARRANGE
+    const presented = (episode: typeof PUBLIC_REF | typeof COPY, place: object) => ({ event: AXEL, episode, place });
+    const expected = [
+      {
+        kind: 'event-episode',
+        event: AXEL,
+        episode: PUBLIC_REF,
+        presented: presented(PUBLIC_REF, { position: 1, count: 2, next: COPY }),
+      },
+      {
+        kind: 'event-episode',
+        event: AXEL,
+        episode: COPY,
+        presented: presented(COPY, { position: 2, count: 2, previous: PUBLIC_REF }),
+      },
+    ];
+    const catalogue = catalogueOf(loadContent(RECORDS));
+    const params = catalogue.eventEpisodeParams();
+    // ACT
+    const pages = params.map((param) => catalogue.eventEpisodePageAt(param));
+    // ASSERT
+    const seen = pages.map(
+      (page) => page && { ...page, presented: { ...page.presented, event: page.presented.event.slug } },
+    );
+    expect(seen).toEqual(expected);
+    expect(pages.map((page) => page && eventEpisodeParamsOf(page))).toEqual(params);
+  });
 });
 
 describe('failure cases', () => {
@@ -137,6 +182,33 @@ describe('failure cases', () => {
     });
     // ASSERT
     expect(seen).toEqual(expected);
+  });
+
+  it("resolves no page under /episodes/ for an Event's copy, which is never exported there, or a slug the records hold no page for", () => {
+    // ARRANGE
+    const unexported = { kind: 'episode', episode: COPY } as const;
+    const params = [COPY.id, UNLISTED.slug, 'ai-token-economy', 'no-such-episode'].map((episode) => ({ episode }));
+    // ACT
+    const catalogue = catalogueOf(loadContent(RECORDS));
+    const pages = params.map((param) => catalogue.episodesPathPageAt(param));
+    // ASSERT
+    expect(catalogue.treatmentOf(unexported).exported).toBe(false);
+    expect(pages).toEqual([undefined, undefined, undefined, undefined]);
+  });
+
+  it('resolves no page under an Event for an Episode its Playlist does not hold, or an Event the records do not hold', () => {
+    // ARRANGE
+    const params = [
+      { event: AXEL, episode: 'ai-token-economy' },
+      { event: AXEL, episode: COPY.id },
+      { event: CYBERFORUM, episode: PUBLIC.slug },
+      { event: 'no-such-event', episode: PUBLIC.slug },
+    ];
+    // ACT
+    const catalogue = catalogueOf(loadContent(RECORDS));
+    const pages = params.map((param) => catalogue.eventEpisodePageAt(param));
+    // ASSERT
+    expect(pages).toEqual([undefined, undefined, undefined, undefined]);
   });
 });
 

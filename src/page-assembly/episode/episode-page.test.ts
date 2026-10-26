@@ -8,7 +8,8 @@ import { episodePageCopy, episodesPathPageOf, eventEpisodePageOf, type EpisodePa
 /*
  * The one Episode page template (FE-007 §1): every Episode is served where its folder puts it, an Event's copy under
  * its Event, the rest under `/episodes/`, and the tooling pages beside them; the template's copy function hands
- * `pageMetadata` each page's own words in both locales.
+ * `pageMetadata` each page's own words in both locales. Which params name a page, and which name none (the 404), is
+ * the page catalogue's, tested there.
  */
 
 /** Every Episode with a page, by the EpisodeRef the store serves it with. */
@@ -17,8 +18,8 @@ const EPISODES: readonly EpisodeRef<EpisodeId>[] = listEpisodes().flatMap(({ ref
 /** The page an Episode is served at, resolved as its route binds it: from the URL's params. */
 function servedPageOf(episode: EpisodeRef<EpisodeId>): EpisodePageRef {
   return matchEpisode<EpisodeId, EpisodePageRef>(episode, {
-    standalone: ({ slug }) => episodesPathPageOf(slug),
-    'event-copy': ({ event, slug }) => eventEpisodePageOf(event, slug),
+    standalone: ({ slug }) => episodesPathPageOf({ episode: slug }),
+    'event-copy': ({ event, slug }) => eventEpisodePageOf({ event, episode: slug }),
   });
 }
 
@@ -55,52 +56,35 @@ describe('success cases', () => {
       canonical: '/de/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
     };
     // ACT
-    const page = eventEpisodePageOf('2026-10-23-axel-agentic-workflow', 'ai-attention-span');
+    const page = eventEpisodePageOf({ event: '2026-10-23-axel-agentic-workflow', episode: 'ai-attention-span' });
     const metadata = pageMetadata(page, 'de', episodePageCopy(page, 'de'));
     // ASSERT
     expect({ title: metadata.title, canonical: metadata.alternates?.canonical }).toEqual(expected);
   });
-
-  it('serves a tooling page under /episodes/ with its own words, out of search', () => {
-    // ARRANGE
-    const expected = { kind: 'tooling', canonical: '/episodes/slide-master', robots: { index: false } };
-    // ACT
-    const page = episodesPathPageOf('slide-master');
-    const metadata = pageMetadata(page, 'en', episodePageCopy(page, 'en'));
-    // ASSERT
-    expect({ kind: page.kind, canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
-    expect(metadata.title).not.toBe('');
-  });
 });
 
 describe('failure cases', () => {
-  it('finds no page for a slug no Episode or tooling page has', () => {
+  it('answers with the 404 where the page catalogue builds no page, under /episodes/ and under an Event', () => {
     // ARRANGE
-    const unknown = 'non-existent-episode';
+    const notFound = 'NEXT_HTTP_ERROR_FALLBACK;404';
     // ACT
-    const resolve = () => episodesPathPageOf(unknown);
+    const underEpisodes = () => episodesPathPageOf({ episode: 'no-such-episode' });
+    const underEvent = () => eventEpisodePageOf({ event: 'no-such-event', episode: 'ai-attention-span' });
     // ASSERT
-    expect(resolve).toThrow();
-  });
-
-  it("finds no page under an Event for an Episode its Playlist doesn't hold", () => {
-    // ARRANGE
-    const event = '2026-10-23-axel-agentic-workflow';
-    // ACT
-    const resolve = () => eventEpisodePageOf(event, 'maintaining-markdown-for-ai');
-    // ASSERT
-    expect(resolve).toThrow();
+    expect(underEpisodes).toThrow(notFound);
+    expect(underEvent).toThrow(notFound);
   });
 });
 
 describe('edge cases', () => {
-  it("finds no page under /episodes/ for an Event's copy", () => {
+  it('serves a tooling page under /episodes/ with its own words, out of search', () => {
     // ARRANGE
-    const copy = EPISODES.find(({ kind }) => kind === 'event-copy')?.id;
+    const expected = { kind: 'tooling', canonical: '/episodes/slide-master', robots: { index: false } };
     // ACT
-    const resolve = () => episodesPathPageOf(copy ?? '');
+    const page = episodesPathPageOf({ episode: 'slide-master' });
+    const metadata = pageMetadata(page, 'en', episodePageCopy(page, 'en'));
     // ASSERT
-    expect(copy).toBeDefined();
-    expect(resolve).toThrow();
+    expect({ kind: page.kind, canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
+    expect(metadata.title).not.toBe('');
   });
 });
