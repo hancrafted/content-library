@@ -335,6 +335,17 @@
   }
 }
 
+/*
+ * The human-in-the-loop diagram crossfades when the viewer changes its view (issue #383: "View changes
+ * crossfade, and not at all under reduced motion"). `data-view-fade` is `on` only after a change, so the first paint
+ * and a reload stay still; the diagram is keyed by its view, so each change replays it.
+ */
+@media screen and (prefers-reduced-motion: no-preference) {
+  [data-view-fade='on'] {
+    animation: slide-fade 250ms ease-out;
+  }
+}
+
 @keyframes slide-fade {
   from {
     opacity: 0;

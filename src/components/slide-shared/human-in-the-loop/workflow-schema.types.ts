@@ -142,6 +142,8 @@ export interface ForeachDef {
   readonly over: string;
   /** Teaching mode takes the first N H3s, in document order; the example results cover these rounds only. */
   readonly teaching: number;
+  /** What one round is called in this file's language (`epic`): the Detailed bracket reads "× each epic (2)". Absent: "round". */
+  readonly item?: string;
 }
 
 export interface StageDef {

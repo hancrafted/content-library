@@ -1,8 +1,9 @@
+import { fillTemplate } from '@/lib/template.pure';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 import { ArrowDown, Connector, SendBack } from './diagram-arrows';
 import { connectorInto, type Rounds } from './diagram-layout.pure';
-import type { DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
+import type { DiagramProps, DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
 import { JobCard } from './job-card';
 import { MoveCircles } from './move-circles.client';
 import { GateBadge, gateLabelOf, Title } from './stage-card';
@@ -26,7 +27,7 @@ export function DiagramDetailed(props: {
   words: UiWords;
   readonly: boolean;
   rounds: Rounds;
-  onOpenStage: (stageId: string, jobId?: string) => void;
+  onOpenStage: DiagramProps['onOpenStage'];
 }) {
   const { workflow, slots = {} } = props;
   const ctx: Context = { ...props, slots };
@@ -56,7 +57,7 @@ interface Context {
   words: UiWords;
   readonly: boolean;
   rounds: Rounds;
-  onOpenStage: (stageId: string, jobId?: string) => void;
+  onOpenStage: DiagramProps['onOpenStage'];
 }
 
 function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; previous: Stage | undefined }) {
@@ -105,8 +106,13 @@ const runOfStage = (ctx: Context, stage: Stage): StageRun | undefined =>
   ctx.view === 'handson' ? ctx.run?.stages.find((each) => each.id === stage.id) : undefined;
 
 /** The job cards of one list: a stage's jobs, or one round's. `states` is what the run says; none outside Hands-on. */
-function Cards(props: { ctx: Context; stage: Stage; states: ReadonlyMap<string, JobState> | undefined }) {
-  const { ctx, stage, states } = props;
+function Cards(props: {
+  ctx: Context;
+  stage: Stage;
+  states: ReadonlyMap<string, JobState> | undefined;
+  round?: number;
+}) {
+  const { ctx, stage, states, round } = props;
   const label = ctx.slots.stages?.[stage.id]?.jobsLabel ?? ctx.slots.jobsLabel;
   return (
     <ol aria-label={label?.replace('{stage}', stage.name)} className="flex flex-col gap-4">
@@ -119,7 +125,8 @@ function Cards(props: { ctx: Context; stage: Stage; states: ReadonlyMap<string, 
           words={ctx.words}
           joined={at > 0}
           state={ctx.view === 'handson' ? (states?.get(job.id) ?? 'open') : undefined}
-          onOpen={ctx.readonly ? undefined : () => ctx.onOpenStage(stage.id, job.id)}
+          round={round}
+          onOpen={ctx.readonly ? undefined : () => ctx.onOpenStage(stage.id, job.id, round)}
         />
       ))}
     </ol>
@@ -138,7 +145,7 @@ function Rounds({ ctx, stage, run }: { ctx: Context; stage: Stage; run: StageRun
           <p data-round-title="" className="text-caption font-semibold text-muted-foreground">
             {round.title}
           </p>
-          <Cards ctx={ctx} stage={stage} states={statesOf(round.jobs)} />
+          <Cards ctx={ctx} stage={stage} states={statesOf(round.jobs)} round={round.number} />
         </li>
       ))}
     </ol>
@@ -149,13 +156,17 @@ function Rounds({ ctx, stage, run }: { ctx: Context; stage: Stage; run: StageRun
 const roundCount = (ctx: Context, stage: Stage, held: StageRun | undefined): number =>
   held?.rounds.length ?? ctx.rounds[stage.id] ?? stage.foreach?.teaching ?? 0;
 
+/** The bracket's words: "× each epic (2)", with the stage's own word for its item, else "round". */
+const bracketLabel = (ctx: Context, stage: Stage, count: number): string =>
+  fillTemplate(ctx.words.repeats, { item: stage.foreach?.item ?? ctx.words.round, n: count });
+
 function Jobs({ ctx, stage }: { ctx: Context; stage: Stage }) {
   const run = runOfStage(ctx, stage);
   const cards = <Cards ctx={ctx} stage={stage} states={run && statesOf(run.jobs)} />;
   if (!stage.foreach) return <div className="mt-1">{cards}</div>;
   const held = run && run.rounds.length > 0 ? run : undefined;
   return (
-    <Bracket label={ctx.words.repeats.replace('{n}', String(roundCount(ctx, stage, held)))}>
+    <Bracket label={bracketLabel(ctx, stage, roundCount(ctx, stage, held))}>
       {held ? <Rounds ctx={ctx} stage={stage} run={held} /> : cards}
     </Bracket>
   );

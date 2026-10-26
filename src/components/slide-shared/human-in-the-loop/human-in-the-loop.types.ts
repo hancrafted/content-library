@@ -29,7 +29,8 @@ export interface UiWords {
   /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
   readonly sendBack: string;
-  readonly repeats: string; // Detailed view: a repeated stage's bracket (`{n}` rounds)
+  readonly repeats: string; // Detailed view: a repeated stage's bracket (`{item}` it repeats over, `{n}` rounds)
+  readonly round: string; // Detailed view: what a round is called where the stage names no item
   readonly tryJob: string; // Detailed view: a job card's hidden name (`{job}`, `{stage}`)
   readonly chat: string;
   readonly chatTip: string;
@@ -38,7 +39,6 @@ export interface UiWords {
   /** The context toggle's name and tooltip: it shows or hides why a task matters, its techniques and an example result. */
   readonly context: string;
   readonly contextTip: string;
-  /** The line under the title of a stage's modal. */
   readonly intro: string;
   /** The stepper's sections, and the stepper's buttons. */
   readonly stepN: string;
@@ -55,7 +55,6 @@ export interface UiWords {
   readonly insertedAt: string;
   readonly resultHeading: string;
   readonly resultPlaceholder: string;
-  /** The checkbox label of a final job that hands nothing on. */
   readonly markDone: string;
   readonly markChecked: string;
   readonly download: string;
@@ -85,7 +84,6 @@ export interface UiWords {
   readonly refuseChanged: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
   readonly gate: string;
-  /** The toolbar's accessible name. */
   readonly toolbar: string;
   readonly close: string;
   readonly copied: string;
@@ -184,8 +182,8 @@ export interface DiagramProps {
   readonly words: UiWords;
   /** Where the stages show no "Try it" button: a readonly Preset. */
   readonly readonly: boolean;
-  /** A press on a stage's "Try it" button, or on a job card of the Detailed view, which names its job. */
-  readonly onOpenStage: (stageId: string, jobId?: string) => void;
+  /** A press on a stage's "Try it" button, or on a job card of the Detailed view, which names its job and, in a round, its round. */
+  readonly onOpenStage: (stageId: string, jobId?: string, round?: number) => void;
   readonly view: View;
   /** Rounds drawn per repeated stage, by stage id: the run model's count, else the teaching cap. */
   readonly rounds: Readonly<Record<string, number>>;
@@ -222,6 +220,8 @@ export interface ModalProps extends TeachingProps {
   readonly run: StageRun | null;
   /** The job whose card opened the modal: the stepper opens at its first item. */
   readonly jobId: string | null;
+  /** The round of a repeated stage the job card was pressed in: the stepper opens at that round's item. */
+  readonly round: number | null;
   /** The pasted slot values by marker name, shared by every stage of the Workflow. */
   readonly slotValues: Readonly<Record<string, string>>;
   readonly words: UiWords;

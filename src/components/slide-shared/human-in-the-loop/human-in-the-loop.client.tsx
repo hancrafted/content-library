@@ -1,8 +1,8 @@
 'use client';
 
 import { useProgress, type Progress, type ProgressStatus } from '@/hooks/use-progress';
-import { progressFile } from '@/lib/progress.pure';
-import { useCallback, useMemo, useReducer, type Dispatch } from 'react';
+import { progressFile } from '@/lib/progress-file.pure';
+import { useCallback, useMemo, useReducer, useState, type Dispatch } from 'react';
 import { DiagramPart } from './diagram-part';
 import {
   callbacksFor,
@@ -17,7 +17,7 @@ import type { ProgressActions, ProgressNote } from './progress-controls.types';
 import { saveFile } from './save-file';
 import { ToolbarPart } from './toolbar-part.client';
 import { roundsOf, runOf } from './workflow-run.pure';
-import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
+import { createState, reduce, type View, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 
 /*
@@ -74,20 +74,31 @@ function useViewOf(workflow: ReturnType<typeof shownWorkflow>, state: WorkflowSt
   );
 }
 
-export function HumanInTheLoopClient(data: HumanInTheLoopData) {
-  const start = { workflowId: data.workflowId, level: data.level, view: data.view };
-  const [state, dispatch] = useReducer(reduce, start, createState);
-  const { note, actions, resetSaved } = useSavedProgress(data, state, dispatch);
+/** The callbacks over one dispatch, with what the parent does besides: Reset empties storage, a view change starts the crossfade. */
+function useCallbacksOf(dispatch: Dispatch<WorkflowEvent>, resetSaved: () => void) {
+  const [viewChanged, setViewChanged] = useState(false);
   const on = useMemo(() => {
     const callbacks = callbacksFor(dispatch);
     return {
       ...callbacks,
+      onView: (view: View) => {
+        setViewChanged(true);
+        callbacks.onView(view);
+      },
       onReset: () => {
         resetSaved();
         callbacks.onReset();
       },
     };
-  }, [resetSaved]);
+  }, [dispatch, resetSaved]);
+  return { on, viewChanged };
+}
+
+export function HumanInTheLoopClient(data: HumanInTheLoopData) {
+  const start = { workflowId: data.workflowId, level: data.level, view: data.view };
+  const [state, dispatch] = useReducer(reduce, start, createState);
+  const { note, actions, resetSaved } = useSavedProgress(data, state, dispatch);
+  const { on, viewChanged } = useCallbacksOf(dispatch, resetSaved);
   const workflow = shownWorkflow(data, state);
   const view = useViewOf(workflow, state);
   if (!workflow || !view) return null;
@@ -95,7 +106,9 @@ export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   return (
     <div data-human-in-the-loop={workflow.id} data-level={state.level} data-view={state.view}>
       <ToolbarPart {...slices.toolbar} />
-      <DiagramPart {...slices.diagram} />
+      <div key={state.view} data-view-fade={viewChanged ? 'on' : 'off'}>
+        <DiagramPart {...slices.diagram} />
+      </div>
       <ModalPart {...slices.modal} />
     </div>
   );

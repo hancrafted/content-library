@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, UiWords } from './human-in-the-loop.types';
 import { job, stage, flow as workflow } from './workflow-fixture.pure';
@@ -27,8 +27,11 @@ const words = {
   gate: 'Gate {n}',
   checked: 'checked',
   sendBack: 'send back',
-  repeats: '× each round ({n})',
+  repeats: '× each {item} ({n})',
+  round: 'round',
 } as UiWords;
+/** What the diagram asked to open; a static render presses nothing, so a recording closure stands in for a spy. */
+const opened: string[] = [];
 const render = (props: Partial<DiagramProps> = {}) =>
   load(
     renderToStaticMarkup(
@@ -38,7 +41,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         readonly: false,
         view: 'detailed',
         rounds: { b: 3 },
-        onOpenStage: vi.fn(),
+        onOpenStage: (stageId) => void opened.push(stageId),
         ...props,
       }),
     ),
@@ -58,6 +61,17 @@ describe('success cases', () => {
       .get();
     // ASSERT
     expect(titles).toEqual(['First', 'Second']);
+  });
+
+  it('joins the job cards of a stage by an arrow into each card after the first, in the order their needs give', () => {
+    // ARRANGE
+    const $ = render();
+    // ACT
+    const cards = $(COLUMN).first().find('[data-job-card]');
+    const arrows = cards.map((_, el) => $(el).children('[data-job-arrow]').length).get();
+    // ASSERT
+    expect(arrows).toEqual([0, 1]);
+    expect(cards.map((_, el) => $(el).attr('data-job-card')).get()).toEqual(['first', 'second']);
   });
 
   it('shows a job card with its summary and a labelled check mark where the job is reviewed', () => {
@@ -81,6 +95,19 @@ describe('success cases', () => {
     expect(bracket.find('[data-job-card]')).toHaveLength(1);
     expect($('[data-bracket]')).toHaveLength(1);
     expect($('svg[data-fan]')).toHaveLength(0);
+  });
+
+  it('labels the bracket with the word the stage names for what it repeats, "round" when it names none', () => {
+    // ARRANGE
+    const named = workflow([
+      stage('a', [job({ id: 'a' })]),
+      { ...stage('b', [job({ id: 'b' })]), foreach: { over: 'o#epics', teaching: 2, item: 'epic' } },
+    ]);
+    // ACT
+    const label = (flowOf: Workflow) => render({ workflow: flowOf, rounds: { b: 2 } })('[data-bracket-label]').text();
+    // ASSERT
+    expect(label(named)).toBe('× each epic (2)');
+    expect(label(flow())).toBe('× each round (2)');
   });
 
   it('opens the stage and the job from a press on a job card, named for both', () => {

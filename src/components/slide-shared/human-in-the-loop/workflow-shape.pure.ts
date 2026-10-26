@@ -58,7 +58,7 @@ const stage = obj(
     title: str,
     learningGoal: str,
     summary: str,
-    foreach: obj({ over: str, teaching: int }),
+    foreach: obj({ over: str, teaching: int, item: str }, ['item']),
     move: enumOf(['B', 'R', 'I', 'E', 'F']),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),

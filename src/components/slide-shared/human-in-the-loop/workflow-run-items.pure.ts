@@ -25,7 +25,7 @@ function linesOf(markdown: string): { line: string; level: number }[] {
 }
 
 /** Whether the lines after a heading of `level` are under the H2 `slug`: an H1 or another H2 ends it. */
-const under = (was: boolean, heading: { line: string; level: number }, slug: string): boolean => {
+const insideAfter = (was: boolean, heading: { line: string; level: number }, slug: string): boolean => {
   if (heading.level !== 1 && heading.level !== 2) return was;
   return heading.level === 2 && slugOf(textOf(heading.line)) === slug;
 };
@@ -35,7 +35,7 @@ export function itemsUnder(markdown: string, slug: string): Item[] {
   const items: { title: string; lines: string[] }[] = [];
   let inside = false;
   for (const heading of linesOf(markdown)) {
-    inside = under(inside, heading, slug);
+    inside = insideAfter(inside, heading, slug);
     if (inside && heading.level === 3) items.push({ title: textOf(heading.line), lines: [] });
     if (inside) items.at(-1)?.lines.push(heading.line);
   }

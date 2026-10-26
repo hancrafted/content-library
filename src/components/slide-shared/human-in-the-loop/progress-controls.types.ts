@@ -31,8 +31,8 @@ export interface TeachingProps {
   readonly onTeaching: (teaching: boolean) => void;
   /** Clears this Workflow's run and its saved entry; the parts confirm first. */
   readonly onReset: () => void;
-  /** Saves the current run as a progress file: the download Reset offers first. */
-  readonly onDownloadRun: () => void;
+  /** Saves the current run as a progress file: the download Reset offers first. None for an uploaded Workflow, whose run no file can vouch for. */
+  readonly onDownloadRun?: () => void;
 }
 
 /** What the toolbar does with the run of the shown Workflow; none for an uploaded one, whose run is not kept. */

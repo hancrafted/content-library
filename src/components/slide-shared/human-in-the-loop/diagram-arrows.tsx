@@ -90,6 +90,7 @@ export function JobArrow() {
   return (
     <div
       aria-hidden="true"
+      data-job-arrow=""
       className="pointer-events-none absolute inset-x-0 bottom-full flex h-4 items-center justify-center"
     >
       <div className="rotate-90">{STRAIGHT}</div>

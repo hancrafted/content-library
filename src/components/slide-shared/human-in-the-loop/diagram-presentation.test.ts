@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, DiagramSlots, UiWords } from './human-in-the-loop.types';
 import { job, stage, flow as workflow } from './workflow-fixture.pure';
@@ -21,6 +21,8 @@ const words = {
   checked: 'checked',
   sendBack: 'send back',
 } as UiWords;
+/** What the diagram asked to open; a static render presses nothing, so a recording closure stands in for a spy. */
+const opened: string[] = [];
 const render = (props: Partial<DiagramProps> = {}) =>
   load(
     renderToStaticMarkup(
@@ -30,7 +32,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         readonly: false,
         view: 'presentation',
         rounds: { b: 2 },
-        onOpenStage: vi.fn(),
+        onOpenStage: (stageId) => void opened.push(stageId),
         ...props,
       }),
     ),

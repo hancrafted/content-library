@@ -1,4 +1,4 @@
-import { progressFile } from '@/lib/progress.pure';
+import { progressFile } from '@/lib/progress-file.pure';
 import { describe, expect, it } from 'vitest';
 import {
   callbacksFor,
@@ -96,6 +96,20 @@ describe('success cases', () => {
     expect(sent).toEqual([{ type: 'open', stageId: 's', jobId: 'j' }]);
   });
 
+  it('sends the round a job card of a repeated stage opens, and gives the modal the round', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const round = 2;
+    const state = { ...createState(start), openStageId: 's', openJobId: 'j', openRound: round };
+    // ACT
+    const slices = slicesOf(shown(flow('two'), state), on);
+    slices.diagram.onOpenStage('s', 'j', round);
+    // ASSERT
+    expect(slices.modal.round).toBe(round);
+    expect(sent).toEqual([{ type: 'open', stageId: 's', jobId: 'j', round }]);
+  });
+
   it('gives the toolbar and the diagram the view, and the view control sends a view event', () => {
     // ARRANGE
     const sent: WorkflowEvent[] = [];
@@ -170,6 +184,20 @@ describe('success cases', () => {
     const event = refusal(text);
     // ASSERT
     expect(event).toEqual({ type: 'restore', results: entry.results, teaching: entry.teaching });
+  });
+
+  it("offers Reset's download of the run only where progress can be saved to a file", () => {
+    // ARRANGE
+    const state = createState(start);
+    const download = () => undefined;
+    const kept = { onDownload: download, onUpload: noop };
+    // ACT
+    const authored = slicesOf({ ...shown(flow('two'), state), progress: kept }, callbacksFor(noop));
+    const uploaded = slicesOf(shown(flow('two'), state), callbacksFor(noop));
+    // ASSERT
+    expect(authored.toolbar.onDownloadRun).toBe(download);
+    expect(uploaded.toolbar.onDownloadRun).toBeUndefined();
+    expect(uploaded.modal.onDownloadRun).toBeUndefined();
   });
 
   it('hands the toolbar the note about saved progress', () => {

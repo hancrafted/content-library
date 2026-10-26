@@ -18,9 +18,11 @@ import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
- * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a native select), a
- * separator, then icon buttons (download, upload) after the Chat · CLI control, each with a tooltip. The control registry says what shows; a readonly Preset also drops
- * the Chat · CLI control. The parent validates an upload; this part only reads the chosen file.
+ * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a shadcn select), a
+ * separator, then the controls in order: view, Chat · CLI, teaching switch and Reset, save and load progress, download
+ * and upload of the Workflow file, each icon with a tooltip. The control registry says what shows; a readonly Preset
+ * also drops Chat · CLI, the teaching switch and Reset. Under the pill sit Reset's confirmation and the notes. The
+ * parent validates an upload; this part only reads the chosen file.
  */
 
 /** The picker's options: the Workflows, after an uploaded one that is none of them. */

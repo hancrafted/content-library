@@ -1,7 +1,7 @@
 import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, UiWords } from './human-in-the-loop.types';
 import { job, stage, flow as workflow } from './workflow-fixture.pure';
@@ -21,7 +21,8 @@ const words = {
   gate: 'Gate {n}',
   checked: 'checked',
   sendBack: 'send back',
-  repeats: '× each round ({n})',
+  repeats: '× each {item} ({n})',
+  round: 'round',
   stateOpen: 'open',
   stateDone: 'done',
 } as UiWords;
@@ -48,6 +49,8 @@ const RUN: Run = {
     }),
   ],
 };
+/** What the diagram asked to open; a static render presses nothing, so a recording closure stands in for a spy. */
+const opened: string[] = [];
 const render = (props: Partial<DiagramProps> = {}) =>
   load(
     renderToStaticMarkup(
@@ -58,7 +61,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         view: 'handson',
         rounds: { b: 2 },
         run: RUN,
-        onOpenStage: vi.fn(),
+        onOpenStage: (stageId) => void opened.push(stageId),
         ...props,
       }),
     ),
@@ -106,6 +109,17 @@ describe('success cases', () => {
       ['Search', 'open'],
     ]);
     expect($('[data-bracket-label]').text()).toBe('× each round (2)');
+  });
+
+  it('names the round on the press target of a job card inside a round, so the modal opens at that round', () => {
+    // ARRANGE
+    const $ = render();
+    // ACT
+    const rounds = $('[data-bracket] [data-round]')
+      .map((_, el) => $(el).find('button[data-try-job]').attr('data-try-round'))
+      .get();
+    // ASSERT
+    expect(rounds).toEqual(['1', '2']);
   });
 
   it('still opens the stage at the job from a job card', () => {

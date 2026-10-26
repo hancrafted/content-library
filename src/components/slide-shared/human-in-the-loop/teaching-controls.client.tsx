@@ -92,19 +92,14 @@ export function useTeachingProps(words: UiWords, props: TeachingProps): Props {
   return { words, ...props, confirming, onConfirming };
 }
 
-/** The question under the controls: download first, reset now, or cancel. Closes itself after either choice but Download. */
-export function ResetConfirm({ words, teaching, confirming, onDownloadRun, onReset, onConfirming }: Props) {
-  if (!confirming || !teaching.resetShow) return null;
+function ConfirmButtons({ words, onDownloadRun, onReset, onConfirming }: Props) {
   return (
-    <div
-      role="alert"
-      data-reset-confirm=""
-      className="flex flex-wrap items-center gap-2 rounded-md border border-(--warning) px-3 py-2 text-body"
-    >
-      <p className="min-w-0 flex-1">{words.resetConfirm}</p>
-      <Button type="button" variant="outline" size="sm" onClick={onDownloadRun}>
-        {words.resetDownload}
-      </Button>
+    <>
+      {onDownloadRun && (
+        <Button type="button" variant="outline" size="sm" onClick={onDownloadRun}>
+          {words.resetDownload}
+        </Button>
+      )}
       <Button
         type="button"
         size="sm"
@@ -119,6 +114,22 @@ export function ResetConfirm({ words, teaching, confirming, onDownloadRun, onRes
       <Button type="button" variant="ghost" size="sm" onClick={() => onConfirming(false)}>
         {words.resetCancel}
       </Button>
+    </>
+  );
+}
+
+/** The question under the controls: download first, reset now, or cancel. Closes itself after either choice but Download. */
+export function ResetConfirm(props: Props) {
+  const { words, teaching, confirming } = props;
+  if (!confirming || !teaching.resetShow) return null;
+  return (
+    <div
+      role="alert"
+      data-reset-confirm=""
+      className="flex flex-wrap items-center gap-2 rounded-md border border-(--warning) px-3 py-2 text-body"
+    >
+      <p className="min-w-0 flex-1">{words.resetConfirm}</p>
+      <ConfirmButtons {...props} />
     </div>
   );
 }

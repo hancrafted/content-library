@@ -144,6 +144,31 @@ describe('success cases', () => {
     expect(states).toEqual(['done', 'open']);
   });
 
+  it('reads the one CLI result of a repeated job as done in every round, and its check as checked in every round', () => {
+    // ARRANGE
+    const pasted = { 'plan.plan': PLAN, [resultKey('research', 'look')]: 'orchestrated' };
+    const passed = { ...pasted, [checkedKey('research', 'look')]: 'yes' };
+    const rounds = 2;
+    // ACT
+    const states = (results: Record<string, string>) =>
+      researchOf(results, true).rounds.map((round) => round.jobs.find((each) => each.id === 'look')?.state);
+    // ASSERT
+    expect(states(pasted)).toEqual(['done', 'done']);
+    expect(states(passed)).toEqual(['checked', 'checked']);
+    expect(researchOf(pasted, true).done).toBe(rounds);
+  });
+
+  it('keeps the CLI result of a repeated job under stage.job, whose marker is the bare output', () => {
+    // ARRANGE
+    const results = { [resultKey('research', 'look')]: 'orchestrated' };
+    // ACT
+    const markers = markerValuesOf(file(), results);
+    const back = resultsOf(file(), markers);
+    // ASSERT
+    expect(markers).toEqual({ look: 'orchestrated' });
+    expect(back).toEqual(results);
+  });
+
   it('lets teaching mode change only while nothing is pasted', () => {
     // ARRANGE
     const empty = runOf(file(), { results: { 'plan.plan': '  ' }, teaching: true });

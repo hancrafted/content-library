@@ -14,7 +14,7 @@ describe('success cases', () => {
     // ACT
     const options = viewOptions(words);
     // ASSERT
-    expect(options.map(({ view, label }) => [view, label])).toEqual([
+    expect(options.map(({ value, label }) => [value, label])).toEqual([
       ['presentation', 'Presentation'],
       ['detailed', 'Detailed'],
       ['handson', 'Hands-on'],
@@ -24,9 +24,9 @@ describe('success cases', () => {
   it('offers Hands-on as a view the viewer can pick, like the other two', () => {
     // ARRANGE
     // ACT
-    const handson = viewOptions(words).find(({ view }) => view === 'handson');
+    const handson = viewOptions(words).find(({ value }) => value === 'handson');
     // ASSERT
-    expect(handson).toEqual({ view: 'handson', label: 'Hands-on' });
+    expect(handson).toEqual({ value: 'handson', label: 'Hands-on' });
   });
 });
 
@@ -44,7 +44,7 @@ describe('edge cases', () => {
   it('never offers a view the state cannot hold twice', () => {
     // ARRANGE
     // ACT
-    const views = viewOptions(words).map(({ view }) => view);
+    const views = viewOptions(words).map(({ value }) => value);
     // ASSERT
     expect(new Set(views).size).toBe(views.length);
   });

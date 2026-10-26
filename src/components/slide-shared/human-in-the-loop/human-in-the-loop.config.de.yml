@@ -11,7 +11,8 @@ ui:
   stateOpen: offen
   stateDone: erledigt
   sendBack: zurückgeben
-  repeats: '× jede Runde ({n})'
+  repeats: '× pro {item} ({n})'
+  round: 'Runde'
   tryJob: '{job} in {stage} öffnen'
   level: Prompt-Stil
   chat: Chat

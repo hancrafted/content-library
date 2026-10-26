@@ -469,6 +469,7 @@ stages:
     foreach:
       over: plan#epics
       teaching: 2
+      item: epic
     jobs:
       - id: grill
         title: Grill the epic
@@ -1020,6 +1021,7 @@ stages:
     foreach:
       over: tickets#tickets
       teaching: 4
+      item: ticket
     jobs:
       - id: ticket
         title: Run the ticket

@@ -82,12 +82,14 @@ interface StepperProps {
   readonly slots: SlotState;
   /** The job whose card opened the modal: its first item starts open. */
   readonly jobId?: string | null;
+  /** The round of that job's card, in a repeated stage: its item starts open instead. */
+  readonly round?: number | null;
 }
 
-export function Stepper({ stage, run, kit, slots, jobId = null }: StepperProps) {
+export function Stepper({ stage, run, kit, slots, jobId = null, round = null }: StepperProps) {
   const items = itemsOf(stage, run);
   return (
-    <Accordion type="single" collapsible data-stepper="" defaultValue={openItemOf(items, jobId)}>
+    <Accordion type="single" collapsible data-stepper="" defaultValue={openItemOf(items, jobId, round)}>
       {items.map((item, at) => (
         <StepItem key={item.key} {...{ item, at, kit, slots }} />
       ))}

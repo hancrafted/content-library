@@ -40,13 +40,21 @@ interface Loaded {
 /** The last run known to be in storage, as text; null forces the next write. */
 type Saved = MutableRefObject<string | null>;
 
+/** What the three effects share: which entry they work on, what is known to be stored there, and whether a write was refused. */
+interface Store {
+  readonly key: string | null;
+  readonly hash: string;
+  readonly saved: Saved;
+  readonly setRefused: Dispatch<SetStateAction<boolean>>;
+}
+
 /** The run of a viewer who has pasted nothing and not touched teaching mode. */
 const EMPTY: Progress = { results: {}, teaching: true };
 
 const signature = (progress: Progress): string => JSON.stringify(progress);
 
 /** Reads the entry of `key` when it or its hash changes, resumes a matching one, and says what was found. */
-function useLoad({ key, hash, progress, onResume }: Options, saved: Saved, setRefused: (refused: boolean) => void) {
+function useLoad({ progress, onResume }: Options, { key, hash, saved, setRefused }: Store) {
   const [loaded, setLoaded] = useState<Loaded | null>(null);
   const latest = useRef({ progress, onResume });
   useEffect(() => {
@@ -65,12 +73,8 @@ function useLoad({ key, hash, progress, onResume }: Options, saved: Saved, setRe
 }
 
 /** Writes the run to storage when it differs from what is there, never while an old entry waits for a choice. */
-function useSave(
-  options: Options & { readonly active: boolean },
-  saved: Saved,
-  setRefused: Dispatch<SetStateAction<boolean>>,
-) {
-  const { key, hash, progress, active } = options;
+function useSave({ progress, active }: { readonly progress: Progress; readonly active: boolean }, store: Store) {
+  const { key, hash, saved, setRefused } = store;
   useEffect(() => {
     if (!active || key === null) return;
     const now = signature(progress);
@@ -87,16 +91,8 @@ function statusOf(loaded: boolean, stale: boolean, refused: boolean): ProgressSt
   return refused ? 'unsaved' : 'saved';
 }
 
-interface ClearOptions {
-  readonly key: string | null;
-  readonly hash: string;
-  readonly saved: Saved;
-  readonly setLoaded: (loaded: Loaded) => void;
-  readonly setRefused: (refused: boolean) => void;
-}
-
 /** `discard` forgets an old entry; `reset` clears the viewer's own run. Both remove the entry and let the page carry on. */
-function useClear({ key, hash, saved, setLoaded, setRefused }: ClearOptions) {
+function useClear({ key, hash, saved, setRefused }: Store, setLoaded: (loaded: Loaded) => void) {
   /** `next` is what the page then holds, so it is not written straight back. */
   const clear = useCallback(
     (next: Progress | null) => {
@@ -122,12 +118,13 @@ export function useProgress(options: Options) {
   const { key, hash, progress } = options;
   const saved: Saved = useRef(null);
   const [refused, setRefused] = useState(false);
-  const [loaded, setLoaded] = useLoad(options, saved, setRefused);
+  const store: Store = { key, hash, saved, setRefused };
+  const [loaded, setLoaded] = useLoad(options, store);
   const ready = key !== null && loaded?.key === key && loaded.hash === hash;
   const stale = ready ? loaded.stale : undefined;
-  useSave({ ...options, active: ready && !stale }, saved, setRefused);
+  useSave({ progress, active: ready && !stale }, store);
 
-  const { discard, reset } = useClear({ key, hash, saved, setLoaded, setRefused });
+  const { discard, reset } = useClear(store, setLoaded);
 
   return {
     status: statusOf(ready, stale !== undefined, refused),

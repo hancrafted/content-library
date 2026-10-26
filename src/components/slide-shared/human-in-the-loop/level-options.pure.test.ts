@@ -11,8 +11,8 @@ describe('success cases', () => {
     const options = levelOptions(words);
     // ASSERT
     expect(options).toEqual([
-      { level: 'simple', label: 'Chat', tip: 'Chat tip' },
-      { level: 'technical', label: 'CLI', tip: 'CLI tip' },
+      { value: 'simple', label: 'Chat', tip: 'Chat tip' },
+      { value: 'technical', label: 'CLI', tip: 'CLI tip' },
     ]);
   });
 });
