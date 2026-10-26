@@ -1,6 +1,6 @@
-import { episodeRefOf } from '@/content-store/catalogue/episode-id.pure';
-import { EPISODE_IDS, EVENT_SLUGS } from '@/content-store/catalogue/record-routes';
+import { EVENT_SLUGS, hasPage } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
+import { listEpisodes } from '@/content-store/store';
 import { load } from 'cheerio';
 import type { ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -10,12 +10,16 @@ import { eventEpisodeFrame } from './event-episode-frame';
 /*
  * The frame an Event-scoped Episode page wears (design-ADR 0016, Routes and visibility), read at the one call page
  * assembly makes: the Episode's place in the Playlist, its breadcrumb and past notice above the Title slide, and the
- * Playlist walk after the last Slide. The Episodes are any three registered ones and the Event any registered one, so
- * the test reads no content of its own; their titles are a stand-in for the function page assembly hands in.
+ * Playlist walk after the last Slide. The Episodes are any three with a page, by the refs the store serves, and the
+ * Event any registered one, so the test names no content; their titles are a stand-in for the function page assembly
+ * hands in.
  */
 
 const EVENT = EVENT_SLUGS[0];
-const [FIRST, MIDDLE, LAST] = EPISODE_IDS.slice(0, 3).map((id) => episodeRefOf(id));
+const [FIRST, MIDDLE, LAST] = listEpisodes()
+  .map(({ ref }) => ref)
+  .filter(hasPage)
+  .slice(0, 3);
 const BUILD_DAY: IsoDate = '2026-10-25';
 const UPCOMING: IsoDate = '2026-11-06';
 const titleOf = (episode: { readonly slug: string }) => `Title of ${episode.slug}`;
