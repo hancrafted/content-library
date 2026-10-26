@@ -8,6 +8,10 @@ import { aiTokenEconomy } from './ai-token-economy/episode';
 import { axelAiAttentionSpan } from './axel-ai-attention-span/episode';
 import { axelAiGivesYouMoreWork } from './axel-ai-gives-you-more-work/episode';
 import { axelOnboardAiEveryTime } from './axel-onboard-ai-every-time/episode';
+import { cyberforumAiAttentionSpan } from './cyberforum-ai-attention-span/episode';
+import { cyberforumAiGivesYouMoreWork } from './cyberforum-ai-gives-you-more-work/episode';
+import { cyberforumIntro } from './cyberforum-intro/episode';
+import { cyberforumOnboardAiEveryTime } from './cyberforum-onboard-ai-every-time/episode';
 import { maintainingMarkdownForAi } from './maintaining-markdown-for-ai/episode';
 import { neverTooEarlySales } from './never-too-early-sales/episode';
 import { onboardAiEveryTime } from './onboard-ai-every-time/episode';
@@ -28,6 +32,10 @@ const EPISODES: { readonly [S in EpisodeSlug]: EpisodeComposition & { readonly s
   'axel-onboard-ai-every-time': axelOnboardAiEveryTime,
   'axel-ai-attention-span': axelAiAttentionSpan,
   'axel-ai-gives-you-more-work': axelAiGivesYouMoreWork,
+  'cyberforum-intro': cyberforumIntro,
+  'cyberforum-onboard-ai-every-time': cyberforumOnboardAiEveryTime,
+  'cyberforum-ai-attention-span': cyberforumAiAttentionSpan,
+  'cyberforum-ai-gives-you-more-work': cyberforumAiGivesYouMoreWork,
 };
 
 export function findEpisode(slug: string): EpisodeComposition<EpisodeSlug> {

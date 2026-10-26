@@ -87,6 +87,35 @@ const COMPOSITION = [
     slug: 'axel-ai-gives-you-more-work',
     sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
   },
+  // The CyberForum Akademie webinar's: the Workshop template's copy, then `cp -r` of the same three, unedited so far.
+  {
+    slug: 'cyberforum-intro',
+    sections: [
+      { opener: 'agenda', pageSlides: 0 },
+      { opener: 'in-scope', pageSlides: 1 },
+      { opener: 'orga', pageSlides: 0 },
+    ],
+  },
+  {
+    slug: 'cyberforum-onboard-ai-every-time',
+    sections: [
+      { opener: 'the-thought-experiment', pageSlides: 3 },
+      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 2 },
+    ],
+  },
+  {
+    slug: 'cyberforum-ai-attention-span',
+    sections: [
+      { opener: 'thought-experiment', pageSlides: 2 },
+      { opener: 'the-ais-attention-span', pageSlides: 4 },
+      { opener: 'what-fills-the-window', pageSlides: 3 },
+      { opener: 'managing-the-attention-span', pageSlides: 4 },
+    ],
+  },
+  {
+    slug: 'cyberforum-ai-gives-you-more-work',
+    sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
+  },
 ] as const;
 
 /** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
@@ -99,6 +128,10 @@ const HEADER_MODES = [
   { slug: 'axel-onboard-ai-every-time', header: 'shared' },
   { slug: 'axel-ai-attention-span', header: 'shared' },
   { slug: 'axel-ai-gives-you-more-work', header: 'shared' },
+  { slug: 'cyberforum-intro', header: 'shared' },
+  { slug: 'cyberforum-onboard-ai-every-time', header: 'shared' },
+  { slug: 'cyberforum-ai-attention-span', header: 'shared' },
+  { slug: 'cyberforum-ai-gives-you-more-work', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */
@@ -206,7 +239,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it.each(['page-template', 'slide-master', 'slides'])(
+  it.each(['page-template', 'workshop-template', 'slide-master', 'slides'])(
     'keeps the tooling page %s out of the Episode registry, so it is no Episode',
     (slug) => {
       // ARRANGE

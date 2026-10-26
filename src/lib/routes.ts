@@ -28,6 +28,10 @@ export const EPISODE_SLUGS = [
   'axel-onboard-ai-every-time',
   'axel-ai-attention-span',
   'axel-ai-gives-you-more-work',
+  'cyberforum-intro',
+  'cyberforum-onboard-ai-every-time',
+  'cyberforum-ai-attention-span',
+  'cyberforum-ai-gives-you-more-work',
 ] as const;
 
 export type EpisodeSlug = (typeof EPISODE_SLUGS)[number];
@@ -67,7 +71,10 @@ export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
  * Every Event, by slug: a hand-kept page list, checked against the content store's Event records by the store's
  * tests (lib cannot read the store, FE-007).
  */
-export const EVENT_SLUGS = ['2026-10-23-axel-agentic-workflow'] as const;
+export const EVENT_SLUGS = [
+  '2026-10-23-axel-agentic-workflow',
+  '2026-10-28-cyberforum-akademie-intro-agentic-workflow',
+] as const;
 
 export type EventSlug = (typeof EVENT_SLUGS)[number];
 

@@ -5,6 +5,7 @@ import { pageTemplate } from './page-template/episode';
 import { findEpisode } from './registry';
 import { slideMaster } from './slide-master/episode';
 import { slides } from './slides/episode';
+import { workshopTemplate } from './workshop-template/episode';
 
 /**
  * Every tooling page's Slides, by slug (design-ADR 0016 decision 12): the authoring benches, composed like an
@@ -13,6 +14,7 @@ import { slides } from './slides/episode';
  */
 const TOOLING_PAGES: { readonly [S in ToolingSlug]: EpisodeComposition & { readonly slug: S } } = {
   'page-template': pageTemplate,
+  'workshop-template': workshopTemplate,
   'slide-master': slideMaster,
   slides,
 };

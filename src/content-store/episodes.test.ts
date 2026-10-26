@@ -140,7 +140,7 @@ describe('success cases', () => {
     expect(page).toBe(true);
   });
 
-  it.each(['page-template', 'slide-master', 'slides'])(
+  it.each(['page-template', 'workshop-template', 'slide-master', 'slides'])(
     'lists no tooling page in the overview or Upcoming Episodes: %s is no Episode',
     (slug) => {
       // ARRANGE

@@ -5,7 +5,7 @@ import { episodeCards } from '@/components/landing/episode-cards';
 import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { episodeRoute } from '@/lib/routes';
-import { GalleryHorizontalEnd, Layers, LayoutTemplate } from 'lucide-react';
+import { GalleryHorizontalEnd, Layers, LayoutTemplate, Presentation } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
@@ -34,10 +34,14 @@ type PageT = Awaited<ReturnType<typeof getTranslations<'episodesPage'>>>;
 const REFERENCE_LINK =
   'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
 
-/** The tooling pages are no Episodes, so they sit under the browse grid: the page template, the Slide master, the Slides gallery. */
+/**
+ * The tooling pages are no Episodes, so they sit under the browse grid: the page template, the Workshop template, the
+ * Slide master, the Slides gallery.
+ */
 function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
   const links = [
     { route: episodeRoute('page-template'), icon: Layers, label: t('references.pageTemplate') },
+    { route: episodeRoute('workshop-template'), icon: Presentation, label: t('references.workshopTemplate') },
     { route: episodeRoute('slide-master'), icon: LayoutTemplate, label: t('references.slideMaster') },
     { route: episodeRoute('slides'), icon: GalleryHorizontalEnd, label: t('references.slides') },
   ];

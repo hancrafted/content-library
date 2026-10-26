@@ -23,6 +23,9 @@ const MARKED = [
   'axel-onboard-ai-every-time',
   'axel-ai-attention-span',
   'axel-ai-gives-you-more-work',
+  'cyberforum-onboard-ai-every-time',
+  'cyberforum-ai-attention-span',
+  'cyberforum-ai-gives-you-more-work',
   'slides',
 ] as const;
 

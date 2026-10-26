@@ -1,0 +1,131 @@
+{
+  "title": "Das lange Telefonat",
+  "caption": "Angerufen, um eine Sache zu klären. Eine Stunde später erinnerst Du Dich an den Anfang, das Ende und einen Ausreißer, und die eine Sache, für die Du angerufen hast, ist noch offen.",
+  "call": {
+    "name": "Schwester",
+    "duration": "Anruf beendet · 1:21:40"
+  },
+  "bubbles": {
+    "0": "Lass uns den Urlaub klären!",
+    "1": "Ja! Aber erst: Hast Du von Mamas neuem Handy gehört?",
+    "2": "Nein, was ist passiert?",
+    "3": "Sie hat mir vierzig Fotos von ihrem Daumen geschickt.",
+    "4": "Ha! Hast Du den Umbau bei den Nachbarn gesehen?",
+    "5": "Fang bloß nicht davon an. Und mein Rücken tut wieder weh.",
+    "6": "Und Pepper hat eine ganze Geburtstagstorte gefressen, samt Kerzen!",
+    "7": "Hast Du das neue Rezept ausprobiert?",
+    "8": "Noch nicht. Oh, das Essen ist fertig, ich muss los.",
+    "9": "Bis bald, tschüss!"
+  },
+  "punchline": "…Moment, das Datum haben wir gar nicht festgelegt.",
+  "effects": {
+    "start": {
+      "title": "Der Anfang bleibt scharf",
+      "term": "Primacy-Effekt",
+      "termHref": "https://de.wikipedia.org/wiki/Primacy-Effekt",
+      "explanation": "der erste Satz setzt den Rahmen."
+    },
+    "middle": {
+      "title": "Die Mitte verschwimmt",
+      "term": "Serieller Positionseffekt",
+      "termHref": "https://de.wikipedia.org/wiki/Primacy-Recency-Effekt",
+      "explanation": "Mamas Handy, der Umbau, der Rücken: gesagt, nicht behalten."
+    },
+    "standout": {
+      "title": "Der Ausreißer bleibt hängen",
+      "term": "Von-Restorff-Effekt",
+      "termHref": "https://de.wikipedia.org/wiki/Restorff-Effekt",
+      "explanation": "die Torte ist anders als alles um sie herum."
+    },
+    "end": {
+      "title": "Das Ende bleibt scharf",
+      "term": "Recency-Effekt",
+      "termHref": "https://de.wikipedia.org/wiki/Rezenzeffekt",
+      "explanation": "die letzten Minuten sind noch frisch."
+    }
+  },
+  "labNote": "<marker>Gemessen wurde das Muster an Wortlisten im Labor; dass es für ein einstündiges Telefonat gilt, ist eine Schlussfolgerung</marker>",
+  "notes": {
+    "recall-is-u-shaped": {
+      "header": "Erinnern verläuft U-förmig",
+      "description": "Wer eine Wortliste frei wiedergibt, erinnert die ersten und die letzten Wörter am besten und die mittleren am schlechtesten [1].",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        }
+      }
+    },
+    "why-the-start-sticks": {
+      "header": "Warum der Anfang hängen bleibt",
+      "description": "Frühe Wörter wiederholen Menschen im Kopf öfter als mittlere, und die Zahl dieser Wiederholungen sagt voraus, was erinnert wird [1].",
+      "sources": {
+        "rundus-rehearsal": {
+          "title": "Rundus, Analysis of rehearsal processes in free recall"
+        }
+      }
+    },
+    "why-the-end-sticks": {
+      "header": "Warum das Ende hängen bleibt",
+      "description": "Schiebt eine Ablenkungsaufgabe das Erinnern auf, verschwindet der Vorteil des Endes, der des Anfangs bleibt: ein Hinweis auf zwei getrennte Speicher [1]. Woher der Vorteil des Endes kommt, ist noch umstritten [2].",
+      "sources": {
+        "glanzer-cunitz-two-stores": {
+          "title": "Glanzer and Cunitz, Two storage mechanisms in free recall"
+        },
+        "bjork-whitten-recency": {
+          "title": "Bjork and Whitten, Recency-sensitive retrieval processes in long-term free recall"
+        }
+      }
+    },
+    "the-standout-survives": {
+      "header": "Der Ausreißer bleibt hängen",
+      "description": "Ein Element, das sich von seinen Nachbarn unterscheidet, wird besser erinnert, und es hebt sich gegen sein Umfeld ab, nicht aus sich heraus [1][2].",
+      "sources": {
+        "von-restorff-isolation": {
+          "title": "von Restorff, Über die Wirkung von Bereichsbildungen im Spurenfeld"
+        },
+        "hunt-distinctiveness": {
+          "title": "Hunt, The subtlety of distinctiveness: What von Restorff really did"
+        }
+      }
+    },
+    "lab-lists-not-phone-calls": {
+      "header": "Laborlisten, keine Telefonate",
+      "description": "Jede Studie arbeitet mit Wortlisten oder kurzem Material. Dass dasselbe Muster für ein einstündiges Telefonat gilt, ist also eine Schlussfolgerung, auch wenn die Effekte Lehrbuchwissen sind [1].",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-start-sticks": {
+        "title": "Der Anfang bleibt hängen",
+        "keywords": "",
+        "script": "Sagen wir, Du rufst Deine Schwester an, um den Urlaub zu klären. \"Lass uns den Urlaub klären!\" ist der Anfang, und dieser erste Satz setzt den Rahmen für alles, was danach kommt. Deshalb erinnerst Du Dich am Ende noch daran. Das nennt man den Primacy-Effekt."
+      },
+      "the-end-sticks": {
+        "title": "Das Ende bleibt hängen",
+        "keywords": "",
+        "script": "Du erinnerst Dich auch daran, wie es geendet hat. \"Bis bald, tschüss\", und die letzten Minuten davor, weil sie gerade erst passiert und noch frisch sind. Das nennt man den Recency-Effekt."
+      },
+      "the-middle-blurs": {
+        "title": "Die Mitte verschwimmt",
+        "keywords": "",
+        "script": "Jetzt die Mitte. Eine Stunde voller Details ist vorbeigezogen: der Umbau bei den Nachbarn, Mamas neues Handy, die Rückenschmerzen Deiner Schwester. Und wenn Dich jemand fragen würde, was da alles drin war, könntest Du es kaum sagen. Gesagt wurde alles, hängen geblieben ist sehr wenig."
+      },
+      "one-thing-stands-out": {
+        "title": "Eine Sache sticht heraus",
+        "keywords": "",
+        "script": "Bis auf eine Sache. Pepper hat eine ganze Geburtstagstorte gefressen, samt Kerzen. Niemand hat Dich gebeten, Dir das zu merken, und trotzdem kannst Du es noch erzählen, weil das, was sich von allem um sich herum unterscheidet, hängen bleibt. Das nennt man den Von-Restorff-Effekt oder Isolationseffekt."
+      },
+      "we-never-fixed-the-date": {
+        "title": "Das Datum haben wir nie festgelegt",
+        "keywords": "",
+        "script": "Und dann die Pointe. Das Essen ist fertig, sie muss los, und Dir fällt auf: Das Datum haben wir gar nicht festgelegt. Die eine Sache, für die Du angerufen hast, ist nie geklärt worden. (Pause) Behalte das im Kopf, denn die Frage ist, ob ein Chat mit einer KI dasselbe tut."
+      }
+    }
+  },
+  "newTabHint": "öffnet in einem neuen Tab"
+}

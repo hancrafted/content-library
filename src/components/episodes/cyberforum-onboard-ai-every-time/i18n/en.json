@@ -1,0 +1,14 @@
+{
+  "title": "Treat AI like a brilliant freelancer with amnesia",
+  "caption": "It knows every trade and forgets you every time, so every job starts from day one.",
+  "description": "Name the five traits that make AI costly, and manage them with five moves: break it down, requirements first, interview yourself with AI, evaluate each step, and a fresh start for each piece.",
+  "voiceScript": {
+    "segments": {
+      "welcome": {
+        "title": "Welcome",
+        "keywords": "",
+        "script": "Welcome to hancrafted. Today's episode is about why you should treat AI like a brilliant freelancer with amnesia. The goal: a fresh perspective, so the next time AI leaves you confused or disappointed, you have a mental model to solve it. Let's get going."
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "title": "Workshop template · hancrafted",
+  "description": "Copy this tooling page to start the opening Episode of a new Event: title, agenda, scope and organisation.",
+  "toc": "Contents Loading 1 Agenda 2 In scope Out of scope 3 Organisation Open contents : Contents Contents 1 Agenda 2 In scope Out of scope 3 Organisation",
+  "slides": [
+    { "id": "top", "text": "Workshop template Replace with the workshop’s name, its date and who it is for." },
+    {
+      "id": "agenda",
+      "text": "Agenda Replace with the plan of the session: each block with its time slot. Time slot: first block Time slot: second block Time slot: third block Time slot: questions and wrap-up"
+    },
+    {
+      "id": "in-scope",
+      "text": "In scope Replace with what this session covers. A topic the session covers A second topic the session covers A third topic the session covers"
+    },
+    {
+      "id": "in-scope--out-of-scope",
+      "text": "In scope (1/1) Page 1 of 1 Out of scope Replace with what this session leaves out, so no one waits for it. A topic the session leaves out A second topic the session leaves out A third topic the session leaves out"
+    },
+    {
+      "id": "orga",
+      "text": "Organisation Replace with how the session runs. Breaks: when they are Questions: when and how to ask them Materials: where attendees find them afterwards Contact: how to reach the host"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "agenda", "text": "Agenda What to say about the agenda Replace with what you say while this Slide is up." },
+    {
+      "id": "in-scope",
+      "text": "In scope What to say about the scope Replace with what you say while this Slide is up."
+    },
+    {
+      "id": "in-scope--out-of-scope",
+      "text": "Out of scope What to say about what is left out Replace with what you say while this Slide is up."
+    },
+    {
+      "id": "orga",
+      "text": "Organisation What to say about the organisation Replace with what you say while this Slide is up."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "agenda", "text": "Agenda No voice script for this Slide." },
+    { "id": "in-scope", "text": "In scope No voice script for this Slide." },
+    { "id": "in-scope--out-of-scope", "text": "Out of scope No voice script for this Slide." },
+    { "id": "orga", "text": "Organisation No voice script for this Slide." }
+  ]
+}

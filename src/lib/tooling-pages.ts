@@ -6,6 +6,8 @@
 export const TOOLING_SLUGS = [
   // The Episode template: the copy source for a new Episode, linked from the bottom of /episodes.
   'page-template',
+  // The Workshop template: the copy source for the opening Episode of a new Event (title, agenda, scope, orga).
+  'workshop-template',
   // The Slide library: a catalogue of reusable Slide layouts, linked from the bottom of /episodes.
   'slide-master',
   // The Explorable explanations page: the cornerstone Slides one by one, a preview bench and a link to send one Slide.

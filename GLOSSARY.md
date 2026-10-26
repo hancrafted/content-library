@@ -43,8 +43,11 @@ _Avoid_: Clip, recording link
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
 
-**Tooling page**: an authoring bench with a previewable page at `/episodes/<slug>/`, composed of Slides like an Episode but no Episode: the Episode template (`page-template`), the Slide library (`slide-master`) and the Explorable explanations page (`slides`). It has no visibility and no status, is `noindex`, never in the sitemap, and in no Episode list: not the registry, the overview or Upcoming Episodes. Listed in `TOOLING_SLUGS` (`src/lib/tooling-pages.ts`).
+**Tooling page**: an authoring bench with a previewable page at `/episodes/<slug>/`, composed of Slides like an Episode but no Episode: the Episode template (`page-template`), the Workshop template (`workshop-template`), the Slide library (`slide-master`) and the Explorable explanations page (`slides`). It has no visibility and no status, is `noindex`, never in the sitemap, and in no Episode list: not the registry, the overview or Upcoming Episodes. Listed in `TOOLING_SLUGS` (`src/lib/tooling-pages.ts`).
 _Avoid_: Layout reference, reference Episode
+
+**Workshop template**: the tooling page a new Event's opening Episode is copied from (`src/components/episodes/workshop-template/`): a Title slide, then agenda, in-scope, out-of-scope and orga Slides, every word a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
+_Avoid_: Event template, intro template, workshop Episode
 
 **Slide library**: every Master slide a Slide copies from the Slide master tooling page (`src/components/episodes/slide-master/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/components/slide-master/`, `src/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
 _Avoid_: Catalog

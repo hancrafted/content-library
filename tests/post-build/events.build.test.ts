@@ -265,6 +265,63 @@ describe('Event page', () => {
   });
 });
 
+describe('the 2026-10-28 Event', () => {
+  const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
+  /** The Workshop template's copy, then the three Episodes AXEL taught, copied unedited. Written out: the store is not the oracle. */
+  const EPISODES = [
+    'cyberforum-intro',
+    'cyberforum-onboard-ai-every-time',
+    'cyberforum-ai-attention-span',
+    'cyberforum-ai-gives-you-more-work',
+  ];
+  const FACTS = {
+    en: { kind: 'Webinar', audience: 'For individuals', time: ' · 17:00–19:00 CET', location: 'remote' },
+    de: { kind: 'Webinar', audience: 'Für Einzelpersonen', time: ' · 17:00–19:00 CET', location: 'remote' },
+  } as const;
+
+  it.each(LOCALES)(
+    'The 2026-10-28 Event page lists the Workshop template copy first, then the three copies (%s)',
+    (locale) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(eventRoute(CYBERFORUM), locale));
+      const expected = {
+        slugs: EPISODES,
+        hrefs: EPISODES.map((episode) => `${localizePath(eventEpisodeRoute(CYBERFORUM, episode), locale)}/`),
+      };
+      // ACT
+      const steps = $('ol[data-event-playlist] > li[data-playlist-step]');
+      const seen = {
+        slugs: steps
+          .find('[data-episode-card]')
+          .map((_, card) => $(card).attr('data-episode-slug'))
+          .get(),
+        hrefs: steps
+          .find('a[data-card-link]')
+          .map((_, link) => $(link).attr('href'))
+          .get(),
+      };
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
+
+  it.each(LOCALES)('names the webinar, its Audience, time and location on the facts line (%s)', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(eventRoute(CYBERFORUM), locale));
+    const expected = FACTS[locale];
+    // ACT
+    const facts = $('[data-event-facts]');
+    const seen = {
+      kind: facts.find('[data-event-kind]').text(),
+      audience: facts.find('[data-event-audience]').text(),
+      time: facts.find('[data-event-time]').text(),
+      location: facts.find('[data-event-location]').text(),
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+});
+
 describe('Episode pages under an Event', () => {
   /** Every Episode of every Event's Playlist that has a page, in each locale: the closed set the route exports. */
   const PAGES_UNDER_EVENTS = EVENTS.flatMap((event) =>

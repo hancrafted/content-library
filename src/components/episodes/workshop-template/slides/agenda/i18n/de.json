@@ -1,0 +1,16 @@
+{
+  "title": "Agenda",
+  "caption": "Ersetze dies durch den Ablauf der Session: jeder Block mit seinem Zeitfenster.",
+  "items": {
+    "first": "Zeitfenster: erster Block",
+    "second": "Zeitfenster: zweiter Block",
+    "third": "Zeitfenster: dritter Block",
+    "fourth": "Zeitfenster: Fragen und Abschluss"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Was Du zur Agenda sagst",
+      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    }
+  }
+}

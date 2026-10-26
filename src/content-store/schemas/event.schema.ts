@@ -6,7 +6,8 @@ import { AUDIENCES, EVENT_KINDS, isoDate, slug } from './fields';
  * and description are Translation keys by slug (FE-003), and it has no visibility of its own (design-ADR 0016).
  */
 
-const CLOCK = /^\d{2}:\d{2}$/;
+/** A start, or a start and an end, then an optional time zone: `17:00`, `17:00–19:00`, `17:00–19:00 CET`. */
+const CLOCK = /^\d{2}:\d{2}(–\d{2}:\d{2})?( [A-Z]{2,5})?$/;
 
 export const eventSchema = z
   .object({
@@ -18,9 +19,11 @@ export const eventSchema = z
     audience: z.enum(AUDIENCES).describe('The Audience the Event targets'),
     time: z
       .string()
-      .regex(CLOCK, 'must be written HH:MM')
+      .regex(CLOCK, 'must be written HH:MM, or HH:MM–HH:MM, with an optional zone')
       .optional()
-      .describe('The start as the venue writes it, HH:MM; the same in every locale'),
+      .describe(
+        'The start, or start and end, as the venue writes it, with an optional zone: 17:00–19:00 CET; the same in every locale',
+      ),
     location: z.string().min(1).optional().describe('A place name, the same in every locale'),
     playlist: slug.describe("The id of the one Playlist the Event presents; that Playlist's visibility is the Event's"),
   })

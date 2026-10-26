@@ -4,6 +4,10 @@ import { episodeMetadata as aiTokenEconomy } from '@/components/episodes/ai-toke
 import { episodeMetadata as axelAiAttentionSpan } from '@/components/episodes/axel-ai-attention-span/episode-metadata';
 import { episodeMetadata as axelAiGivesYouMoreWork } from '@/components/episodes/axel-ai-gives-you-more-work/episode-metadata';
 import { episodeMetadata as axelOnboardAiEveryTime } from '@/components/episodes/axel-onboard-ai-every-time/episode-metadata';
+import { episodeMetadata as cyberforumAiAttentionSpan } from '@/components/episodes/cyberforum-ai-attention-span/episode-metadata';
+import { episodeMetadata as cyberforumAiGivesYouMoreWork } from '@/components/episodes/cyberforum-ai-gives-you-more-work/episode-metadata';
+import { episodeMetadata as cyberforumIntro } from '@/components/episodes/cyberforum-intro/episode-metadata';
+import { episodeMetadata as cyberforumOnboardAiEveryTime } from '@/components/episodes/cyberforum-onboard-ai-every-time/episode-metadata';
 import { episodeMetadata as maintainingMarkdownForAi } from '@/components/episodes/maintaining-markdown-for-ai/episode-metadata';
 import { episodeMetadata as neverTooEarlySales } from '@/components/episodes/never-too-early-sales/episode-metadata';
 import { episodeMetadata as onboardAiEveryTime } from '@/components/episodes/onboard-ai-every-time/episode-metadata';
@@ -19,7 +23,9 @@ import {
 } from '@/lib/routes';
 import type { PageFacts } from '@/lib/visibility.pure';
 import { event as axelAgenticWorkflowEvent } from './events/2026-10-23-axel-agentic-workflow';
+import { event as cyberforumAkademieIntroAgenticWorkflowEvent } from './events/2026-10-28-cyberforum-akademie-intro-agentic-workflow';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
+import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { crossRecordRefusals, parseRecords, type Content, type ContentInput } from './refusals';
 import type { Episode, EpisodeInput, EpisodeStatus } from './schemas/episode.schema';
 import type { Event } from './schemas/event.schema';
@@ -47,13 +53,17 @@ const REGISTERED = {
   'axel-onboard-ai-every-time': axelOnboardAiEveryTime,
   'axel-ai-attention-span': axelAiAttentionSpan,
   'axel-ai-gives-you-more-work': axelAiGivesYouMoreWork,
+  'cyberforum-intro': cyberforumIntro,
+  'cyberforum-onboard-ai-every-time': cyberforumOnboardAiEveryTime,
+  'cyberforum-ai-attention-span': cyberforumAiAttentionSpan,
+  'cyberforum-ai-gives-you-more-work': cyberforumAiGivesYouMoreWork,
 } as const satisfies { readonly [S in EpisodeSlug]: EpisodeInput & { readonly slug: S } };
 
 /** Upcoming Episodes without a page, in the order the overview lists them: a folder holding only its metadata. */
 const UPCOMING: readonly EpisodeInput[] = [];
 
-const EVENTS = [axelAgenticWorkflowEvent];
-const PLAYLISTS = [axelAgenticWorkflowPlaylist];
+const EVENTS = [axelAgenticWorkflowEvent, cyberforumAkademieIntroAgenticWorkflowEvent];
+const PLAYLISTS = [axelAgenticWorkflowPlaylist, cyberforumAkademieIntroAgenticWorkflowPlaylist];
 
 /** The slugs whose metadata says `published`. */
 type PublishedSlug = {

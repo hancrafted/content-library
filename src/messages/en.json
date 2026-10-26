@@ -423,6 +423,7 @@
     "references": {
       "label": "References",
       "pageTemplate": "Episode Page Template",
+      "workshopTemplate": "Workshop template",
       "slideMaster": "Slide master",
       "slides": "Slides"
     }
@@ -511,6 +512,10 @@
       "2026-10-23-axel-agentic-workflow": {
         "title": "AXEL Seminar: Agentic Workflows",
         "description": "Working with AI agents in three Episodes: onboard them every time, manage their attention span, and see why they add management work."
+      },
+      "2026-10-28-cyberforum-akademie-intro-agentic-workflow": {
+        "title": "CyberForum Akademie: Intro to Agentic Workflows",
+        "description": "An introduction to working with AI agents: the agenda first, then onboarding them every time, managing their attention span, and why they add management work."
       }
     }
   }

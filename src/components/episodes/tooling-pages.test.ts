@@ -7,13 +7,25 @@ import { findToolingPage } from './tooling-pages';
  */
 
 describe('success cases', () => {
-  it.each(['page-template', 'slide-master', 'slides'])('finds the tooling page %s under its own slug', (slug) => {
+  it.each(['page-template', 'workshop-template', 'slide-master', 'slides'])(
+    'finds the tooling page %s under its own slug',
+    (slug) => {
+      // ARRANGE
+      const expected = slug;
+      // ACT
+      const page = findToolingPage(slug);
+      // ASSERT
+      expect(page.slug).toBe(expected);
+    },
+  );
+
+  it('composes the Workshop template as agenda, in scope, out of scope and orga Slides after its Title slide', () => {
     // ARRANGE
-    const expected = slug;
+    const expected = [['agenda'], ['in-scope', 'out-of-scope'], ['orga']];
     // ACT
-    const page = findToolingPage(slug);
+    const sections = findToolingPage('workshop-template').sections.map((section) => section.map(({ slug }) => slug));
     // ASSERT
-    expect(page.slug).toBe(expected);
+    expect(sections).toEqual(expected);
   });
 });
 
