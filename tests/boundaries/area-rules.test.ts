@@ -212,16 +212,11 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('names the fix in every area rule, so a violation can be fixed without opening the ADR', () => {
+  it('points every area rule at FE-007, the record that explains it', () => {
     // ARRANGE
     const pointer = 'FE-007';
     // ACT
-    const silent = config.forbidden
-      .filter(
-        ({ name }) =>
-          RULES.includes(name) && !config.forbidden.find((rule) => rule.name === name)?.comment?.includes(pointer),
-      )
-      .map(({ name }) => name);
+    const silent = RULE_SET.forbidden.filter(({ comment }) => !comment?.includes(pointer)).map(({ name }) => name);
     // ASSERT
     expect(silent).toEqual([]);
   });

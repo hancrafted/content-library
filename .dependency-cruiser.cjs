@@ -21,9 +21,12 @@ const REGISTRY_TESTS =
 // below. AREA captures the area's name, so a rule's `to` can say "this same area" as `^src/$1/`.
 const AREA_NAMES = '(episodes|events|explorable-explanations|pipeline)';
 const AREA = `^src/${AREA_NAMES}/`;
-// The tier folders every area and shared may hold, named the same everywhere (FE-007): plain logic and browser hooks.
-const TIER_LIB = '^src/(shared|episodes|events|pipeline)/lib/';
-const TIER_HOOKS = '^src/(shared|episodes|events|pipeline)/hooks/';
+// The areas with tier folders, `components/`, `lib/` and `hooks/` as needed, named the same everywhere (FE-007); the
+// Explorable explanations area holds one self-contained folder per explanation instead. TIERED adds shared.
+const TIERED_AREAS = '(episodes|events|pipeline)';
+const TIERED = '(shared|episodes|events|pipeline)';
+const TIER_LIB = `^src/${TIERED}/lib/`;
+const TIER_HOOKS = `^src/${TIERED}/hooks/`;
 // What a Slide, a slide-shared part or an Episode may reach of plain logic: src/shared/lib/ and the Episodes area's lib/.
 const LIB = '^src/(shared|episodes)/lib/';
 // Browser hooks a Slide's client widget may reach: src/shared/hooks/ and the Episodes area's hooks/.
@@ -293,8 +296,8 @@ module.exports = {
       to: { path: '^src/episodes/components/episode-page/(title-slide|episode-page-container)\\.tsx$' },
     },
 
-    // FE-007: layering. Tiers run app → components → content-store → hooks → lib; an edge may
-    // skip a tier downward, never point upward. Boundary rules above (FE-006)
+    // FE-007: layering. Layers run app → page assembly → product areas → content store → shared, and tiers
+    // components → hooks → lib inside each; an edge may skip downward, never point upward. Boundary rules above (FE-006)
     // and the layering rules below can both fire on one edge.
     {
       name: 'no-circular',
@@ -328,7 +331,7 @@ module.exports = {
       to: {
         path: [
           '^src/(app|page-assembly)/',
-          '^src/(shared|episodes|events|pipeline)/(components|page-chrome|hooks)/',
+          `^src/${TIERED}/(components|page-chrome|hooks)/`,
           '^src/episodes/(?!lib/)',
           '^src/content-store/(?!(schemas|catalogue)/)',
         ],
@@ -343,7 +346,7 @@ module.exports = {
       to: {
         path: [
           '^src/(app|page-assembly|content-store)/',
-          '^src/(shared|episodes|events|pipeline)/(components|page-chrome)/',
+          `^src/${TIERED}/(components|page-chrome)/`,
           '^src/episodes/(?!(lib|hooks)/)',
         ],
         pathNot: STORE_SCHEMAS,
@@ -478,7 +481,7 @@ module.exports = {
       from: { path: '^src/page-assembly/' },
       to: {
         path: AREA,
-        pathNot: ['^src/(episodes|events|pipeline)/(components|lib)/', '^src/explorable-explanations/[^/]+/'],
+        pathNot: [`^src/${TIERED_AREAS}/(components|lib)/`, '^src/explorable-explanations/[^/]+/'],
       },
     },
     {
@@ -497,7 +500,7 @@ module.exports = {
       from: { path: '^(skills|tools)/' },
       to: {
         path: '^src/',
-        pathNot: ['^src/(episodes|events|pipeline)/lib/', '^src/content-store/store\\.ts$'],
+        pathNot: [`^src/${TIERED_AREAS}/lib/`, '^src/content-store/store\\.ts$'],
       },
     },
   ],
