@@ -40,9 +40,9 @@ const partsOf = ({ prompt }: Step): PromptParts => ({
 });
 
 /** Copy the prompt, open ChatGPT; and, at the right, copy the prompt wrapped in the request to explain it. */
-function Actions({ parts, kit, slots }: { parts: PromptParts; kit: StepKit; slots: SlotState }) {
+function Actions({ step, kit, slots }: { step: Step; kit: StepKit; slots: SlotState }) {
   const { words } = kit;
-  const text = joinPrompt(parts, slots.values);
+  const text = joinPrompt(partsOf(step), slots.values);
   const copy = tryWords(words);
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -68,6 +68,7 @@ function Result({ name, kit, slots }: { name: string; kit: StepKit; slots: SlotS
   const { words } = kit;
   return (
     <ContextField
+      field={name}
       label={words.resultHeading}
       placeholder={words.resultPlaceholder}
       value={slots.values[name] ?? ''}
@@ -96,7 +97,7 @@ function DoSteps({ step, task, kit, slots, first }: PanelProps) {
         </StepSection>
       )}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
-        <Actions parts={parts} kit={kit} slots={slots} />
+        <Actions step={step} kit={kit} slots={slots} />
         <Result name={resultKey(step, task)} kit={kit} slots={slots} />
       </StepSection>
     </>
@@ -111,7 +112,7 @@ export function StepPanel(props: PanelProps) {
         <DoSteps {...props} />
       ) : (
         <StepSection n={first} title={kit.words.stepCheck} info={kit.words.stepCheckInfo} kit={kit}>
-          <Actions parts={partsOf(step)} kit={kit} slots={slots} />
+          <Actions step={step} kit={kit} slots={slots} />
         </StepSection>
       )}
     </div>

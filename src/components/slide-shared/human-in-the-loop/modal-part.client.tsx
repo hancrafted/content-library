@@ -1,7 +1,7 @@
 'use client';
 
 import { Dialog, DialogContent, DialogDescription } from '@/components/ui/dialog';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ModalProps } from './human-in-the-loop.types';
 import { ModalHeader } from './modal-header.client';
 import type { SlotState, StepKit } from './step-kit.types';
@@ -68,12 +68,24 @@ function focusTitle(event: Event) {
   document.querySelector<HTMLElement>('[data-part="modal"] [data-autofocus]')?.focus();
 }
 
+/** Closing returns focus to the stage's Practice it button, found by its name: the column re-renders while open. */
+function focusOpener(event: Event, stageName: string | null) {
+  const button = document.querySelector<HTMLElement>(`[data-human-in-the-loop] [data-try="${stageName}"]`);
+  if (!button) return;
+  event.preventDefault();
+  button.focus();
+}
+
 /**
  * The stage modal part: a shadcn Dialog (Radix) open while a stage is open, so it gives the top layer, Escape, the
  * focus trap and a close on the overlay. The title takes the first focus, so no control greets the viewer; closing
  * returns focus to the opener. A copy announces `words.copied` in a polite live region.
  */
 export function ModalPart({ stage, slotValues, onSlots, onClose, ...rest }: ModalProps) {
+  const opener = useRef<string | null>(null);
+  useEffect(() => {
+    if (stage) opener.current = stage.name;
+  }, [stage]);
   return (
     <Dialog open={stage !== null} onOpenChange={(open) => !open && onClose()}>
       {stage && (
@@ -82,6 +94,7 @@ export function ModalPart({ stage, slotValues, onSlots, onClose, ...rest }: Moda
           data-stage={stage.id}
           aria-label={tryTitle(rest.words, stage.name)}
           onOpenAutoFocus={focusTitle}
+          onCloseAutoFocus={(event) => focusOpener(event, opener.current)}
           className="h-dvh md:h-auto md:max-h-[calc(100dvh-3rem)] md:max-w-5xl md:p-5"
         >
           <Panel {...{ stage, ...rest }} slots={{ values: slotValues, onChange: onSlots }} />

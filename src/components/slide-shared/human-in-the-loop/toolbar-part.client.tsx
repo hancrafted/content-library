@@ -52,7 +52,7 @@ function Picker({ bar }: { readonly bar: ToolbarProps }) {
   const known = bar.choices.some((c) => c.id === bar.workflow.id);
   return (
     <div className="flex min-w-0 items-center gap-2 pl-3" data-control="picker">
-      <Label htmlFor={id} className="text-caption text-muted-foreground">
+      <Label htmlFor={id} className="text-caption">
         {bar.words.workflow}:
       </Label>
       <Select value={bar.workflow.id} onValueChange={bar.onWorkflow}>

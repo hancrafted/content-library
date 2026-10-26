@@ -58,16 +58,18 @@ function EyeToggle({ full, words, onToggle }: { full: boolean; words: UiWords; o
 }
 
 export interface FieldProps extends Omit<Entry, 'key'> {
+  /** The slot or result key the field fills, as `data-field`, so a test finds it. */
+  readonly field: string;
   readonly value: string;
   readonly words: UiWords;
   readonly onValue: (value: string) => void;
 }
 
-export function ContextField({ label, info, placeholder, value, words, onValue }: FieldProps) {
+export function ContextField({ field, label, info, placeholder, value, words, onValue }: FieldProps) {
   const id = useId();
   const [full, setFull] = useState(false);
   return (
-    <div className="flex min-w-0 flex-col gap-1.5">
+    <div data-field={field} className="flex min-w-0 flex-col gap-1.5">
       <FieldLabel id={id} label={label} info={info} />
       <div className={cn('flex min-w-0 gap-2', full ? 'items-start' : 'items-center')}>
         <Textarea
@@ -92,13 +94,16 @@ interface FieldsProps {
 }
 
 export function Fields({ entries, slots, words }: FieldsProps) {
-  return entries.map(({ key, ...entry }) => (
+  return entries.map((entry) => (
     <ContextField
-      key={key}
-      {...entry}
-      value={slots.values[key] ?? ''}
+      key={entry.key}
+      field={entry.key}
+      label={entry.label}
+      info={entry.info}
+      placeholder={entry.placeholder}
+      value={slots.values[entry.key] ?? ''}
       words={words}
-      onValue={(value) => slots.onChange({ ...slots.values, [key]: value })}
+      onValue={(value) => slots.onChange({ ...slots.values, [entry.key]: value })}
     />
   ));
 }
