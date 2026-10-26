@@ -19,7 +19,7 @@ _Avoid_: Post, article, video, tower
 **Episode overview**: the landing page's list of every Episode, published or upcoming, that a visitor browses and filters.
 _Avoid_: Episode index, catalog, episode list, manifest
 
-**Episode registry**: every Episode the code knows, generated from the Episode folders, so adding an Episode is adding its folder: a folder `src/components/episodes/<slug>/` holding `episode-metadata.ts` is an Episode, and with `episode.ts` beside it, one with a page. `npm run episodes:registry` writes it as one checked-in `episode-registry.generated.ts` per tier (the slugs in lib, the metadata the content store loads, the compositions); the fast suite fails while it is stale.
+**Episode registry**: every Episode the code knows, generated from the Episode folders, so adding an Episode is adding its folder: a folder `src/components/episodes/<slug>/` holding `episode-metadata.ts` is an Episode, and with `episode.ts` beside it, one with a page. `npm run registry` writes it as one checked-in `episode-registry.generated.ts` per tier (the slugs in lib, the metadata the content store loads, the compositions); the fast suite fails while it is stale.
 _Avoid_: Episode index, slug list, hand-kept registration
 
 **Upcoming Episode**: an Episode announced in the Episode overview but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
@@ -31,14 +31,20 @@ _Avoid_: Topic, category, theme, label, keyword
 **Event**: a dated workshop or webinar that presents one Playlist. Its slug is its date then its name (`2026-10-23-axel-agentic-workflow`); it records its kind, the Audience it targets and an optional time and location. It owns no Slides, holds no text (its title and description are Translation keys) and has no visibility of its own. One record each in the content store (`src/content-store/events/`); its page is `/events/<event-slug>/`, and each Episode its Playlist lists has an **Event-scoped Episode page** at `/events/<event-slug>/episodes/<episode-slug>/`: the Episode's page with the Event's breadcrumb, past notice, place in the Playlist and walk to the previous and next Episode.
 _Avoid_: Workshop (the old name; its `/workshops/` URLs 301 to the Event), session, occasion, course
 
+**Event registry**: every Event the code knows, generated from the Event files, so adding an Event is adding its file `src/content-store/events/<slug>.ts`. `npm run registry` writes it beside the Episode registry: the Event slugs in lib, the records the content store loads; the fast suite fails while it is stale.
+_Avoid_: Event slug list, hand-kept Event pages
+
 **Playlist**: an ordered list of Episodes and its visibility, nothing else. An **event Playlist** is one an Event presents, read from the Event side, never stored; it may list unlisted Episodes, while a public Playlist no Event presents lists only public ones. One record each in the content store (`src/content-store/playlists/`).
 _Avoid_: Agenda, series, collection
 
 **visibility**: whether a record is listed and indexed: `public` or `unlisted`, required on every Episode and Playlist, so a forgotten one is refused and fails closed. Unlisted is not private: anyone holding the URL can open the page. `attendees` is refused until the platform horizon gives it an enforcer.
 _Avoid_: Status, private, hidden, draft
 
-**unlisted Episode**: an Episode whose visibility is `unlisted`: a composition made for one Event, usually its Slides copied (`cp -r`) from a public Episode and left to drift. It is registered once like any Episode, lives only at its Event-scoped Episode page, has no `/episodes/` page, is `noindex`, never in the sitemap, the Episode overview or Upcoming Episodes, and is refused when no Event's Playlist lists it. Flipping its `visibility` to `public` is the one edit that gives it its own page. One visibility predicate decides all of this (`pageTreatment`, `src/lib/visibility.pure.ts`).
+**unlisted Episode**: an Episode whose visibility is `unlisted`: a composition made for one Event, usually its Slides copied (`cp -r`) from a public Episode and left to drift. It is registered once like any Episode, lives only at its Event-scoped Episode page, has no `/episodes/` page, is `noindex`, never in the sitemap, the Episode overview or Upcoming Episodes, and is refused when no Event's Playlist lists it. Flipping its `visibility` to `public` is the one edit that gives it its own page. The page catalogue decides all of this.
 _Avoid_: Private Episode, hidden Episode, event copy, attendee page
+
+**page catalogue**: every page the site has, read from the records, each with its treatment: built or not, in the sitemap, indexed, on the site's own lists, and where its canonical points (`src/content-store/page-catalogue.ts`, served by the content store as `PAGES` and `treatmentOf`). One visibility predicate (`pageTreatment`) gives each treatment; the routes' static params, page metadata, the sitemap, the Episode overview and the `/events/` list all ask the catalogue, so they cannot disagree.
+_Avoid_: route list, page list, hand-kept page list
 
 **Video**: a YouTube video an Episode's page plays from its Title slide, declared as `youtube` in the Episode's metadata and optional until uploaded; visibility decides how many. A public Episode has at most one per locale: none, English, German or both. An unlisted Episode has at most one, its **Event recording**: one YouTube id with the language spoken at its Event, played on both locale pages and labelled with that language before play. The content store refuses a second Video on an unlisted Episode and a language that is not a site locale.
 _Avoid_: Clip, recording link

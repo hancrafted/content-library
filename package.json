@@ -8,7 +8,7 @@
     "lint": "eslint . && npm run lint:boundaries",
     "lint:boundaries": "depcruise src",
     "typecheck": "next typegen && tsc --noEmit",
-    "episodes:registry": "node scripts/episode-registry.ts",
+    "registry": "node scripts/registry.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",

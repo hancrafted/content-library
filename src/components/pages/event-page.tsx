@@ -7,7 +7,7 @@ import type { EventCard } from '@/components/landing/event-card.pure';
 import { eventCardOf } from '@/components/landing/event-cards';
 import { eventPlaylistCards, startOf, totalMinutes } from '@/components/landing/event-playlist.pure';
 import { Button } from '@/components/ui/button';
-import { findEvent, pageFacts, type ServedEvent } from '@/content-store/store';
+import { findEvent, treatmentOf, type ServedEvent } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { BUILD_DAY } from '@/lib/build-day';
 import { localizePath, type Locale } from '@/lib/locale.pure';
@@ -22,12 +22,12 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 /**
- * An Event page's title and description in one locale, for its metadata, with its Playlist's visibility: an Event
- * whose Playlist is unlisted is `noindex` and out of the sitemap.
+ * An Event page's title and description in one locale, for its metadata, with its treatment: an Event whose Playlist
+ * is unlisted is `noindex` and out of the sitemap.
  */
 export function eventPageCopy(slug: EventSlug, locale: Locale): PageCopy {
   const { title, description } = TRANSLATIONS[locale].eventsPage.items[slug];
-  return { title, description, facts: pageFacts({ kind: 'event', event: slug }) };
+  return { title, description, treatment: treatmentOf({ kind: 'event', event: slug }) };
 }
 
 type EventT = Awaited<ReturnType<typeof getTranslations<'eventsPage'>>>;

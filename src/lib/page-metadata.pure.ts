@@ -12,7 +12,7 @@ import {
   type PageRef,
   type RecordPage,
 } from './routes';
-import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
+import { pageTreatment, type PageTreatment } from './visibility.pure';
 
 /** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
 const LOCAL_ORIGIN = 'http://localhost:3000';
@@ -42,8 +42,8 @@ export function siteMetadata(locale: Locale, siteUrl: string): Metadata {
 export interface PageCopy {
   readonly title: string;
   readonly description: string;
-  /** What the page presents, for the visibility predicate (`pageTreatment`); left off, a page that needs it is `noindex`. */
-  readonly facts?: PageFacts;
+  /** How the site treats the page, from the page catalogue (`treatmentOf` in the content store): robots and canonical. */
+  readonly treatment: PageTreatment;
   /** An Episode's release date, the article's `publishedTime`. */
   readonly publishedOn?: IsoDate;
 }
@@ -119,16 +119,16 @@ function copyOf(page: PageRef, locale: Locale, copy: PageCopy | undefined): Pick
  * A page's metadata: its copy, its canonical, and reciprocal hreflang
  * alternates. The landing page's copy is `meta.home` of the site-wide
  * Translation file; an Episode's comes from its record, which this tier cannot
- * reach, so the route hands it in, with the facts of what the page presents.
- * The visibility predicate (`pageTreatment`), which the sitemap asks too, turns
- * those into robots and canonical: a page whose canonical is elsewhere carries
- * no hreflang alternates of its own.
+ * reach, so the route hands it in, with the page's treatment from the page
+ * catalogue, which the sitemap reads too: robots and canonical follow it, and a
+ * page whose canonical is elsewhere carries no hreflang alternates of its own.
+ * A page that presents no record is treated by its kind alone.
  */
 export function pageMetadata(page: Exclude<ListPage, { kind: 'dashboard' }>, locale: Locale): Metadata;
 export function pageMetadata(page: { readonly kind: 'dashboard' }, locale: 'en'): Metadata;
 export function pageMetadata(page: RecordPage, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {
-  const treatment = pageTreatment(page, copy?.facts ?? {});
+  const treatment = copy?.treatment ?? pageTreatment(page, {});
   const canonical = localizePath(canonicalRoute(page, treatment), locale);
   const { title, description } = copyOf(page, locale, copy);
   return {

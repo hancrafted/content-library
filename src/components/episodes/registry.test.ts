@@ -1,5 +1,5 @@
 import { headerModeOf } from '@/components/slide-master/slide';
-import { listEpisodes } from '@/content-store/store';
+import { listEpisodes, treatmentOf } from '@/content-store/store';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { EPISODE_SLUGS, isEpisodeSlug } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
@@ -119,8 +119,9 @@ describe('success cases', () => {
     // ARRANGE
     const expectedCanonical = { en: `/episodes/${slug}`, de: `/de/episodes/${slug}` };
     // ACT
+    const page = { kind: 'episode', episode: slug } as const;
     const meta = (['en', 'de'] as const).map((locale) =>
-      pageMetadata({ kind: 'episode', episode: slug }, locale, findEpisode(slug).messages[locale]),
+      pageMetadata(page, locale, { ...findEpisode(slug).messages[locale], treatment: treatmentOf(page) }),
     );
     // ASSERT
     expect({ en: meta[0].alternates?.canonical, de: meta[1].alternates?.canonical }).toEqual(expectedCanonical);

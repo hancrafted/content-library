@@ -9,4 +9,4 @@ export const event = {
   time: '17:00–19:00 CET',
   location: 'remote',
   playlist: 'cyberforum-akademie-intro-agentic-workflow',
-} satisfies EventInput;
+} as const satisfies EventInput;

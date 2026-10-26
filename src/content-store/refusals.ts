@@ -1,5 +1,5 @@
 import { LOCALES } from '@/lib/locale.pure';
-import { isEventSlug } from '@/lib/routes';
+import type { EventSlug } from '@/lib/routes';
 import type { z } from 'zod';
 import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
@@ -171,24 +171,23 @@ function crossRecordRefusals({ episodes, events, playlists }: ParsedContent, uns
 }
 
 /**
- * The Event served with its Playlist resolved, or the sentences refusing it: a Playlist that does not exist, or a slug
- * missing from `EVENT_SLUGS`, so it has no page. A slug the Playlist names that no Episode carries is the Playlist's
- * own refusal, so the load throws before the resolved list is read.
+ * The Event served with its Playlist resolved, or the sentence refusing it: a Playlist that does not exist. A slug the
+ * Playlist names that no Episode carries is the Playlist's own refusal, so the load throws before the resolved list is
+ * read.
  */
 function serve(
   event: Event,
   playlists: ReadonlyMap<string, Playlist>,
   episodes: ReadonlyMap<string, Episode>,
 ): { served: ServedEvent[]; refused: string[] } {
-  const { slug } = event;
+  // Every Event the store loads is an entry of the generated Event registry, keyed by its slug (`tsc` holds key =
+  // slug), so its slug names a page; the parse keeps the value the record's file wrote.
+  const slug = event.slug as EventSlug;
   const playlist = playlists.get(event.playlist);
-  if (playlist !== undefined && isEventSlug(slug)) {
-    const listed = playlist.episodes.flatMap((each) => episodes.get(each) ?? []);
-    return { served: [{ ...event, slug, playlist: { ...playlist, episodes: playlistEntries(listed) } }], refused: [] };
-  }
-  const missing = playlist === undefined ? [`playlist "${event.playlist}" does not exist`] : [];
-  const pageless = isEventSlug(slug) ? [] : ['slug is missing from EVENT_SLUGS (src/lib/routes.ts), so it has no page'];
-  return { served: [], refused: [...missing, ...pageless].map((sentence) => `Event ${slug}: ${sentence}`) };
+  if (playlist === undefined)
+    return { served: [], refused: [`Event ${slug}: playlist "${event.playlist}" does not exist`] };
+  const listed = playlist.episodes.flatMap((each) => episodes.get(each) ?? []);
+  return { served: [{ ...event, slug, playlist: { ...playlist, episodes: playlistEntries(listed) } }], refused: [] };
 }
 
 /**

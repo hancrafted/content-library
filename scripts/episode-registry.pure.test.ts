@@ -140,7 +140,7 @@ describe('edge cases', () => {
 
   it('marks every registry file as generated, naming the command that rewrites it', () => {
     // ARRANGE
-    const expected = 'npm run episodes:registry';
+    const expected = 'npm run registry';
     // ACT
     const texts = episodeRegistryFiles([WITH_PAGE]).map((file) => file.text);
     // ASSERT

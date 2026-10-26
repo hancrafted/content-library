@@ -14,7 +14,7 @@ async function readsOf(locale: Locale): Promise<EventReads> {
 
 /**
  * The Events as localized cards, in record order, read through the content store: every one, or with `listedOnly`
- * the ones `/events` lists, as the visibility predicate decides (design-ADR 0016, Routes and visibility).
+ * the ones `/events` lists, as the page catalogue decides (design-ADR 0016, Routes and visibility).
  */
 export async function eventCards(locale: Locale, options?: { listedOnly?: boolean }): Promise<EventCard[]> {
   const reads = await readsOf(locale);

@@ -1,8 +1,8 @@
 import type { MetadataRoute } from 'next';
 import type { IsoDate } from '../content-store/schemas/fields';
 import { DEFAULT_LOCALE } from './locale.pure';
-import { matchPage, pageLocales, PAGES, routeOf, servedUrl, type EpisodeSlug, type PageRef } from './routes';
-import { pageTreatment, type PageFacts } from './visibility.pure';
+import { matchPage, pageLocales, routeOf, servedUrl, type EpisodeSlug, type PageRef } from './routes';
+import type { PageTreatment } from './visibility.pure';
 
 /** A sitemap entry's `lastModified`: an Episode's own page carries its publish date, no other page one. */
 function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeSlug) => IsoDate | undefined): IsoDate | undefined {
@@ -20,17 +20,18 @@ function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeSlug) => Iso
 }
 
 /**
- * The sitemap: one entry per indexable page and locale, each carrying the full hreflang set, English canonical at
- * the bare root and German at `/de`. Episode entries carry `lastModified` from their publish date. Pages are the
- * `PAGES` the visibility predicate (`pageTreatment`) puts in the sitemap, the one `pageMetadata` asks too, so the two
- * cannot disagree: no dashboard, tooling page, upcoming or unlisted Episode, or Event whose Playlist is unlisted.
+ * The sitemap: one entry per page and locale whose treatment puts it in the sitemap, in the order given, each carrying
+ * the full hreflang set, English canonical at the bare root and German at `/de`. Episode entries carry `lastModified`
+ * from their publish date. The pages and treatments are the page catalogue's (`PAGES` in the content store), which
+ * `pageMetadata` reads too, so the two cannot disagree: no dashboard, tooling page, upcoming or unlisted Episode,
+ * Episode under an Event, or Event whose Playlist is unlisted.
  */
 export function sitemapEntries(
   siteUrl: string,
-  factsOf: (page: PageRef) => PageFacts,
+  pages: readonly { readonly page: PageRef; readonly treatment: PageTreatment }[],
   publishedOnOf: (slug: EpisodeSlug) => IsoDate | undefined,
 ): MetadataRoute.Sitemap {
-  const indexable = PAGES.filter((page) => pageTreatment(page, factsOf(page)).inSitemap);
+  const indexable = pages.filter(({ treatment }) => treatment.inSitemap).map(({ page }) => page);
   return indexable.flatMap((page) => {
     const route = routeOf(page);
     const locales = pageLocales(page);

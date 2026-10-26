@@ -1,43 +1,37 @@
 // Shared by the post-build tests: the page URLs the app derives and the file
-// `next build` writes for each. Derived from the modules the site renders from,
-// so no page list is hand-kept.
+// `next build` writes for each. Derived from the page catalogue the site renders
+// from, so no page list is hand-kept.
 
 import { load, type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import nextConfig from '../../next.config';
-import { pageFacts } from '../../src/content-store/store';
+import { episodesPathParams, PAGES } from '../../src/content-store/store';
 import { localizePath, type Locale } from '../../src/lib/locale.pure';
-import {
-  EPISODES_PATH_SLUGS,
-  PAGES,
-  episodesPathPage,
-  pageLocales,
-  routeOf,
-  type EpisodesPathSlug,
-  type PageRef,
-} from '../../src/lib/routes';
-import { pageTreatment } from '../../src/lib/visibility.pure';
+import { pageLocales, routeOf, type EpisodesPathSlug } from '../../src/lib/routes';
 
 export const OUT_DIR = join(import.meta.dirname, '..', '..', 'out');
 
 export interface ExportedPage {
   locale: Locale;
   url: string;
-}
-
-/** Whether the visibility predicate exports the page: an unlisted Episode has no `/episodes/` page. */
-function isExported(page: PageRef): boolean {
-  return pageTreatment(page, pageFacts(page)).exported;
+  /** Whether the page is its own canonical: a public Episode under an Event credits its own `/episodes/` page. */
+  selfCanonical: boolean;
 }
 
 /** Every slug with a page exported at `/episodes/<slug>/`: each tooling page and each public Episode. */
-export const EXPORTED_EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = EPISODES_PATH_SLUGS.filter((slug) =>
-  isExported(episodesPathPage(slug)),
+export const EXPORTED_EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = episodesPathParams().map(
+  ({ episode }) => episode,
 );
 
-export const EXPORTED_PAGES: readonly ExportedPage[] = PAGES.filter(isExported).flatMap((page) =>
-  pageLocales(page).map((locale) => ({ locale, url: localizePath(routeOf(page), locale) })),
+/** Every page the catalogue builds, in each locale it is built in: an unlisted Episode has no `/episodes/` page. */
+export const EXPORTED_PAGES: readonly ExportedPage[] = PAGES.filter(({ treatment }) => treatment.exported).flatMap(
+  ({ page, treatment }) =>
+    pageLocales(page).map((locale) => ({
+      locale,
+      url: localizePath(routeOf(page), locale),
+      selfCanonical: treatment.canonical === 'self',
+    })),
 );
 
 /** The file `next build` writes for a URL: `trailingSlash` puts `/de` at `de/index.html`, else `de.html`. */

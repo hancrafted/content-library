@@ -1,7 +1,8 @@
 import { EventPage, eventPageCopy } from '@/components/pages/event-page';
+import { eventParams } from '@/content-store/store';
 import { DEFAULT_LOCALE } from '@/lib/locale.pure';
 import { pageMetadata } from '@/lib/page-metadata.pure';
-import { eventParams, isEventSlug } from '@/lib/routes';
+import { isEventSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 interface EventParams {

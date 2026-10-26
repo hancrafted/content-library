@@ -1,5 +1,7 @@
-// FE-008 post-build check: every exported page carries one canonical pointing at
-// itself, and hreflang alternates that resolve to exported files and link back.
+// FE-008 post-build check: every exported page that is its own canonical carries
+// one canonical pointing at itself, and hreflang alternates that resolve to
+// exported files and link back. A public Episode under an Event credits its own
+// page instead, with no alternates: events.build.test.ts checks those.
 // Reads the built HTML, so it judges what crawlers see, not what the code meant.
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -7,6 +9,9 @@ import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { resolveSiteUrl } from '../../src/lib/page-metadata.pure';
 import { EXPORTED_PAGES, exportedFile, OUT_DIR } from './exported-pages';
+
+/** The pages that are their own canonical, each carrying its hreflang set. */
+const SELF_CANONICAL = EXPORTED_PAGES.filter(({ selfCanonical }) => selfCanonical);
 
 // The deploy passes its SITE_URL here too, so a build that lost its
 // SITE_URL — and emitted localhost canonicals — fails against the workflow's value.
@@ -71,7 +76,7 @@ describe('page metadata', () => {
     if (!existsSync(OUT_DIR)) {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);
     }
-    pages = EXPORTED_PAGES.map((page) => readLinks(exportedFile(page.url)));
+    pages = SELF_CANONICAL.map((page) => readLinks(exportedFile(page.url)));
     // A reciprocity walk over zero pages passes silently, so the count is printed as a diagnostic.
     const alternateCount = pages.reduce((sum, page) => sum + Object.keys(page.alternates).length, 0);
     console.info(`page metadata: walked ${pages.length} pages, ${alternateCount} alternates, site ${SITE_URL}`);
@@ -79,7 +84,7 @@ describe('page metadata', () => {
 
   it('gives every page exactly one canonical, pointing at the page itself', () => {
     // ARRANGE
-    const expected = EXPORTED_PAGES.map((page) => ({
+    const expected = SELF_CANONICAL.map((page) => ({
       file: exportedFile(page.url),
       canonicals: [servedUrl(page.url)],
     }));
@@ -94,7 +99,7 @@ describe('page metadata', () => {
     const englishOnlyRoute = '/dashboard';
     const englishOnlyLanguages = ['en', 'x-default'];
     const bilingualLanguages = ['de', 'en', 'x-default'];
-    const expected = EXPORTED_PAGES.map(({ url }) => ({
+    const expected = SELF_CANONICAL.map(({ url }) => ({
       file: exportedFile(url),
       langs: url === englishOnlyRoute ? englishOnlyLanguages : bilingualLanguages,
     }));

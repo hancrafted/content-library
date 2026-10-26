@@ -36,8 +36,11 @@ const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false,
 /** A public upcoming Episode: announced on the site's own lists, kept out of search. */
 const ANNOUNCED: PageTreatment = { ...HIDDEN, listed: true };
 
-/** An Episode's own page: listed when public and published, announced when public and upcoming, absent when unlisted, else hidden (fails closed). */
-function episodeTreatment({ visibility, status }: PageFacts): PageTreatment {
+/**
+ * An Episode's own page, or the one it will have: listed when public and published, announced when public and
+ * upcoming, absent when unlisted, else hidden (fails closed). An upcoming Episode without a page yet takes this row.
+ */
+export function episodePageTreatment({ visibility, status }: PageFacts): PageTreatment {
   if (visibility === 'unlisted') return ABSENT;
   if (visibility !== 'public') return HIDDEN;
   if (status === 'published') return LISTED;
@@ -46,7 +49,7 @@ function episodeTreatment({ visibility, status }: PageFacts): PageTreatment {
 
 /** An Episode under its Event: a public one credits its own page once that page is indexable; any other is hidden. */
 function eventEpisodeTreatment(episode: EpisodeSlug, facts: PageFacts): PageTreatment {
-  if (!episodeTreatment(facts).inSitemap) return HIDDEN;
+  if (!episodePageTreatment(facts).inSitemap) return HIDDEN;
   return { exported: true, inSitemap: false, index: true, listed: false, canonical: { episode } };
 }
 
@@ -62,7 +65,7 @@ export function pageTreatment(page: PageRef, facts: PageFacts): PageTreatment {
       dashboard: () => HIDDEN,
       episodes: () => LISTED,
       events: () => LISTED,
-      episode: () => episodeTreatment(facts),
+      episode: () => episodePageTreatment(facts),
       tooling: () => HIDDEN,
       event: () => (facts.visibility === 'public' ? LISTED : HIDDEN),
       'event-episode': ({ episode }) => eventEpisodeTreatment(episode, facts),

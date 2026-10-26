@@ -1,12 +1,14 @@
-// `npm run episodes:registry` writes the Episode registry from the Episode folders, formatted as Prettier would.
-// The fast suite fails while a checked-in registry file is stale (episode-registry.test.ts). What the registry
-// holds: episode-registry.pure.ts.
+// `npm run registry` writes the Episode registry from the Episode folders and the Event registry from the Event
+// files, formatted as Prettier would. The fast suite fails while a checked-in registry file is stale
+// (registry.test.ts). What each registry holds: episode-registry.pure.ts and event-registry.pure.ts.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { episodeRegistryFiles, type EpisodeFolder, type RegistryFile } from './episode-registry.pure.ts';
+import { eventRegistryFiles } from './event-registry.pure.ts';
 
 const EPISODES_DIR = 'src/components/episodes';
+const EVENTS_DIR = 'src/content-store/events';
 
 /** Every folder under `src/components/episodes/`, with its entries and its `episode.ts` text. */
 function readEpisodeFolders(root: string): EpisodeFolder[] {
@@ -20,10 +22,18 @@ function readEpisodeFolders(root: string): EpisodeFolder[] {
     });
 }
 
-/** Each registry file as the folders give it, in the repository's Prettier style, so `format:check` passes it. */
+/** Every file directly under `src/content-store/events/`. */
+function readEventFiles(root: string): string[] {
+  return readdirSync(path.join(root, EVENTS_DIR), { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map(({ name }) => name);
+}
+
+/** Each registry file as the folders and files give it, in the repository's Prettier style, so `format:check` passes it. */
 async function registryFiles(root: string): Promise<RegistryFile[]> {
+  const files = [...episodeRegistryFiles(readEpisodeFolders(root)), ...eventRegistryFiles(readEventFiles(root))];
   return Promise.all(
-    episodeRegistryFiles(readEpisodeFolders(root)).map(async (file) => {
+    files.map(async (file) => {
       const filepath = path.join(root, file.path);
       const options = await resolveConfig(filepath);
       return { path: file.path, text: await format(file.text, { ...options, filepath }) };
@@ -36,7 +46,7 @@ function onDisk(root: string, file: RegistryFile): string | undefined {
   return existsSync(at) ? readFileSync(at, 'utf8') : undefined;
 }
 
-/** The registry files whose checked-in text differs from what the folders give: none when the registry is current. */
+/** The registry files whose checked-in text differs from what the folders give: none when every registry is current. */
 export async function staleRegistryFiles(root: string): Promise<string[]> {
   return (await registryFiles(root)).filter((file) => onDisk(root, file) !== file.text).map((file) => file.path);
 }
@@ -45,5 +55,5 @@ if (import.meta.main) {
   const root = process.cwd();
   const written = (await registryFiles(root)).filter((file) => onDisk(root, file) !== file.text);
   written.forEach((file) => writeFileSync(path.join(root, file.path), file.text));
-  console.log(written.length === 0 ? 'Episode registry is current' : `wrote ${written.map((f) => f.path).join(', ')}`);
+  console.log(written.length === 0 ? 'Every registry is current' : `wrote ${written.map((f) => f.path).join(', ')}`);
 }

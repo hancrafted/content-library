@@ -1,4 +1,5 @@
 import { EPISODE_SLUGS } from './episode-registry.generated';
+import { EVENT_SLUGS } from './event-registry.generated';
 import { LOCALES, localizePath, type Locale } from './locale.pure';
 import { isToolingSlug, TOOLING_SLUGS, type ToolingSlug } from './tooling-pages';
 
@@ -16,7 +17,7 @@ export const LEGACY_EPISODE_PREFIX = '/episode';
 
 /**
  * Every Episode, public or unlisted: each one folder, `src/components/episodes/<slug>/`, listed by the generated
- * Episode registry. Which of them has an `/episodes/` page is the visibility predicate's (`pageTreatment`): an unlisted
+ * Episode registry. Which of them has an `/episodes/` page is the page catalogue's (`treatmentOf` in the content store): an unlisted
  * one lives only under its Event. The tooling pages served beside them are no Episodes: `TOOLING_SLUGS`.
  */
 export { EPISODE_SLUGS };
@@ -53,13 +54,10 @@ export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
 }
 
 /**
- * Every Event, by slug: a hand-kept page list (lib cannot read the store, FE-007). The store refuses an Event record
- * missing from it, and the store's tests refuse a slug no Event record carries.
+ * Every Event, by slug: each one file, `src/content-store/events/<slug>.ts`, listed by the generated Event registry
+ * (`npm run registry`), so a record and its page cannot drift apart.
  */
-export const EVENT_SLUGS = [
-  '2026-10-23-axel-agentic-workflow',
-  '2026-10-28-cyberforum-akademie-intro-agentic-workflow',
-] as const;
+export { EVENT_SLUGS };
 
 export type EventSlug = (typeof EVENT_SLUGS)[number];
 
@@ -77,16 +75,11 @@ export function eventEpisodeRoute(event: EventSlug, episode: EpisodeSlug): strin
   return `${eventRoute(event)}${ROUTES.episodes}/${episode}`;
 }
 
-/** One static param per Event; both Event routes export exactly these (FE-005). */
-export function eventParams(): { event: EventSlug }[] {
-  return EVENT_SLUGS.map((event) => ({ event }));
-}
-
 /**
  * A page with its own metadata and a closed set of exported locales, told apart by its `kind`. Every site that
  * branches on the kind does so through `matchPage` or a table keyed by `PageKind`, so a new kind fails `tsc` at each.
- * An Event-scoped Episode page is one too, but not in `PAGES`: which Episodes an Event presents is its Playlist's,
- * read through the content store (lib cannot).
+ * Which pages exist, and how each is treated, is the page catalogue's (`PAGES` in the content store): it reads them
+ * from the records, which lib cannot.
  */
 export type PageRef =
   | { readonly kind: 'home' }
@@ -129,20 +122,6 @@ export function matchPage<P extends PageRef, R>(page: P, cases: PageCases<P, R>,
   if (otherwise) return otherwise();
   throw new Error(`No case for page kind "${String(kind)}"`);
 }
-
-/**
- * Every page that may be exported: the one list the sitemap and the post-build tests derive from (FE-005, FE-008),
- * each filtered by the visibility predicate, which drops an unlisted Episode's `/episodes/` page.
- */
-export const PAGES: readonly PageRef[] = [
-  { kind: 'home' },
-  { kind: 'dashboard' },
-  { kind: 'episodes' },
-  { kind: 'events' },
-  ...EPISODE_SLUGS.map((episode) => ({ kind: 'episode', episode }) as const),
-  ...TOOLING_SLUGS.map((tooling) => ({ kind: 'tooling', tooling }) as const),
-  ...EVENT_SLUGS.map((event) => ({ kind: 'event', event }) as const),
-];
 
 /** The locales each kind of page is exported in: the English-only dashboard has no German counterpart. */
 const LOCALES_BY_KIND: Readonly<Record<PageKind, readonly Locale[]>> = {

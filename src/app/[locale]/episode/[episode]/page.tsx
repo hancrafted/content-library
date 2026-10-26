@@ -1,5 +1,6 @@
-import { episodePageCopy, episodePageParams } from '@/components/pages/episode-page';
+import { episodePageCopy } from '@/components/pages/episode-page';
 import { EpisodeStubPage } from '@/components/pages/episode-stub-page';
+import { episodesPathParams } from '@/content-store/store';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { episodesPathPage, isEpisodesPathSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
@@ -10,7 +11,7 @@ interface EpisodeParams {
 }
 
 export const dynamicParams = false;
-export const generateStaticParams = episodePageParams;
+export const generateStaticParams = episodesPathParams;
 
 export async function generateMetadata({ params }: EpisodeParams) {
   const { episode } = await params;

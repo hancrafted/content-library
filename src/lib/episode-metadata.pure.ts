@@ -1,8 +1,6 @@
 import type { Episode, PublishedEpisode } from '../content-store/schemas/episode.schema';
 import type { TagId } from '../content-store/schemas/fields';
 import { TAGS, type TagLook } from './episode-overview';
-import type { EpisodeSlug } from './routes';
-import { pageTreatment } from './visibility.pure';
 
 /*
  * How the Episode overview reads what an Episode declares about itself: its lead Tag, its card's look and the
@@ -25,20 +23,11 @@ function isPublished(episode: Episode): episode is PublishedEpisode {
 }
 
 /**
- * Whether the visibility predicate puts the Episode on the site's own lists. Its own-page row reads only the record's
- * facts, so an upcoming Episode with no page yet (a slug outside `EPISODE_SLUGS`) takes the row its page will have.
+ * The overview's order of the Episodes the site's own lists show (`listedEpisodes` of the page catalogue: never an
+ * unlisted one, design-ADR 0016): the Featured Episodes as listed, then every other published one newest first (ties
+ * by slug), then the upcoming ones in the order given. A Featured slug that names no published Episode is skipped.
  */
-function isListed(episode: Episode): boolean {
-  return pageTreatment({ kind: 'episode', episode: episode.slug as EpisodeSlug }, episode).listed;
-}
-
-/**
- * The overview's order, listed Episodes only (an unlisted one lives only under its Event, design-ADR 0016): the
- * Featured Episodes as listed, then every other published one newest first (ties by slug), then the upcoming ones
- * in the order given. A Featured slug that names no published public Episode is skipped.
- */
-export function overviewOrder(all: readonly Episode[], featured: readonly string[]): Episode[] {
-  const episodes = all.filter(isListed);
+export function overviewOrder(episodes: readonly Episode[], featured: readonly string[]): Episode[] {
   const published = episodes.filter(isPublished);
   const lead = featured.flatMap((slug) => published.filter((episode) => episode.slug === slug));
   const rest = published

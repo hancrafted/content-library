@@ -1,8 +1,5 @@
-import { overviewOrder } from '@/lib/episode-metadata.pure';
-import { EVENT_SLUGS, type PageRef } from '@/lib/routes';
-import { pageTreatment } from '@/lib/visibility.pure';
 import { describe, expect, it } from 'vitest';
-import { episodeVideo, findEvent, listedEventsIn, listEpisodes, listEvents, loadContent, pageFactsIn } from './store';
+import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
@@ -101,15 +98,6 @@ describe('success cases', () => {
     expect(event.time).toBe(expected);
   });
 
-  it('keeps the hand-kept Event slugs of the routes in step with the Event records', () => {
-    // ARRANGE
-    const expected = [...EVENT_SLUGS];
-    // ACT
-    const slugs = listEvents().map((event) => event.slug);
-    // ASSERT
-    expect(slugs).toEqual(expected);
-  });
-
   it('declares every Episode public but the ones the AXEL seminar and the CyberForum Akademie webinar present', () => {
     // ARRANGE
     // Written out, in slug order: the one list that says which Episodes are unlisted; the store is not the oracle.
@@ -126,59 +114,6 @@ describe('success cases', () => {
     const notPublic = listEpisodes().filter((episode) => episode.visibility !== 'public');
     // ASSERT
     expect(notPublic.map((episode) => episode.slug).sort()).toEqual(expected);
-  });
-
-  it('I flip an Episode from unlisted to public by changing one field.', () => {
-    // ARRANGE
-    const presented = { ...PLAYLIST, episodes: ['alpha', 'alpha-at-axel'] };
-    const unlisted = { episodes: [EPISODE, UNLISTED], events: [EVENT], playlists: [presented] };
-    const flipped = { ...unlisted, episodes: [EPISODE, { ...UNLISTED, visibility: 'public' }] };
-    const own = { kind: 'episode', episode: 'alpha-at-axel' } as unknown as PageRef;
-    const underEvent = { kind: 'event-episode', event: EVENT.slug, episode: 'alpha-at-axel' } as unknown as PageRef;
-    const seenIn = (input: Parameters<typeof loadContent>[0]) => {
-      const content = loadContent(input);
-      return {
-        own: pageTreatment(own, pageFactsIn(content, own)),
-        underEvent: pageTreatment(underEvent, pageFactsIn(content, underEvent)),
-        overview: overviewOrder(content.episodes, []).map((episode) => episode.slug),
-      };
-    };
-    const expected = {
-      unlisted: {
-        own: { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' },
-        underEvent: { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' },
-        overview: ['alpha'],
-      },
-      public: {
-        own: { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' },
-        underEvent: {
-          exported: true,
-          inSitemap: false,
-          index: true,
-          listed: false,
-          canonical: { episode: 'alpha-at-axel' },
-        },
-        overview: ['alpha', 'alpha-at-axel'],
-      },
-    };
-    // ACT
-    const seen = { unlisted: seenIn(unlisted), public: seenIn(flipped) };
-    // ASSERT
-    expect(seen).toEqual(expected);
-  });
-
-  it('lists on /events/ only the Events whose Playlist is public, leaving out one whose Playlist is unlisted', () => {
-    // ARRANGE
-    const [publicSlug, unlistedSlug] = EVENT_SLUGS;
-    const shown = { ...EVENT, slug: publicSlug, date: '2026-10-23' };
-    const private_ = { ...EVENT, slug: unlistedSlug, date: '2026-10-28', playlist: 'private' };
-    const unlistedPlaylist = { ...PLAYLIST, id: 'private', visibility: 'unlisted' };
-    const content = loadContent({ ...SOUND, events: [shown, private_], playlists: [PLAYLIST, unlistedPlaylist] });
-    const expected = [publicSlug];
-    // ACT
-    const listed = listedEventsIn(content).map((event) => event.slug);
-    // ASSERT
-    expect(listed).toEqual(expected);
   });
 
   it.each(RECORDINGS)(
@@ -291,17 +226,6 @@ describe('failure cases', () => {
     // ARRANGE
     const input = { ...SOUND, events: [{ ...EVENT, playlist: 'missing' }] };
     const expected = 'Event 2026-10-23-axel-agentic-workflow: playlist "missing" does not exist';
-    // ACT
-    const load = () => loadContent(input);
-    // ASSERT
-    expect(load).toThrow(expected);
-  });
-
-  it('refuses an Event whose slug is missing from the hand-kept Event pages, so it would have no page', () => {
-    // ARRANGE
-    const input = { ...SOUND, events: [{ ...EVENT, slug: '2026-10-23-elsewhere' }] };
-    const expected =
-      'Event 2026-10-23-elsewhere: slug is missing from EVENT_SLUGS (src/lib/routes.ts), so it has no page';
     // ACT
     const load = () => loadContent(input);
     // ASSERT

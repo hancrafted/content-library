@@ -66,7 +66,7 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 **Negative:**
 
 1. **No request-time escape hatch:** forms, auth, personalisation and server redirects need a third-party service or a client-side design.
-2. **A dropped page is only partly caught:** the post-build test expects every URL derived from the route and locale lists, so it can't see a page missing from those lists. It runs after build, so a dropped page blocks the pull request and deploy, not the commit.
+2. **A dropped page is only partly caught:** the post-build test expects every page the page catalogue lists × its locales, so it can't see a page missing from the catalogue. It runs after build, so a dropped page blocks the pull request and deploy, not the commit.
 
 **Risks:**
 
@@ -77,10 +77,10 @@ Rejected: a self-hosted Node server (gives up free static hosting for features a
 
 1. **Rules** (archgate, error): `dynamic-segment-static-params` (§1), `export-config-intact` (§2), `no-request-time-features` (§4).
 2. **Lint:** `no-restricted-imports` bans the three modules under `src/` (§3).
-3. **Post-build test** (`npm run test:build`, CI and deploy, before upload): every URL from the route list × locales has a file in `out/`; prints the page count so an empty walk can't pass.
+3. **Post-build test** (`npm run test:build`, CI and deploy, before upload): every page the page catalogue builds × its locales has a file in `out/`; prints the page count so an empty walk can't pass.
 4. **Build:** `npm run build` in CI fails on many request-time APIs.
 
-**Manual review duties:** new dependencies checked for request-time Next.js APIs; a new page has a route-list entry so the post-build test expects it.
+**Manual review duties:** new dependencies checked for request-time Next.js APIs; a new kind of page is listed by the page catalogue, which derives its pages and static params from the records, so the post-build test expects it.
 
 **Exceptions:** raise a separate ADR; human approval required.
 

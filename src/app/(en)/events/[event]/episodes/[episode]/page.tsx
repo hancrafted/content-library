@@ -1,4 +1,5 @@
-import { EventEpisodePage, eventEpisodePageCopy, eventEpisodeParams } from '@/components/pages/event-episode-page';
+import { EventEpisodePage, eventEpisodePageCopy } from '@/components/pages/event-episode-page';
+import { eventEpisodeParams } from '@/content-store/store';
 import { DEFAULT_LOCALE } from '@/lib/locale.pure';
 import { pageMetadata } from '@/lib/page-metadata.pure';
 import { isEpisodeSlug, isEventSlug } from '@/lib/routes';
