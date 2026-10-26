@@ -1,5 +1,5 @@
-import { toolingRef, type EpisodeRef, type ToolingRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, TOOLING_SLUGS, type EpisodeId, type ToolingSlug } from '@/content-store/catalogue/record-routes';
+import { toolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/episodes/components/slide-master/slide';
@@ -7,7 +7,7 @@ import { placeSections } from '@/episodes/lib/episode.pure';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { compositionOf } from './registry';
+import { compositionOf, type ComposedPage } from './registry';
 
 /*
  * A copied Slide must never break `aria-labelledby` (#51): the same layout
@@ -17,7 +17,7 @@ import { compositionOf } from './registry';
  */
 
 interface PlacedSlide {
-  readonly page: EpisodeRef<EpisodeId> | ToolingRef<ToolingSlug>;
+  readonly page: ComposedPage;
   readonly slide: Slide;
 }
 

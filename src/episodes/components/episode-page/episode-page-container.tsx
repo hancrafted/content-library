@@ -1,11 +1,11 @@
-import type { EpisodeRef, ToolingRef } from '@/content-store/catalogue/episode-id.pure';
-import { episodeRoute, type EpisodeId, type ToolingSlug } from '@/content-store/catalogue/record-routes';
+import { episodeRoute } from '@/content-store/catalogue/record-routes';
 import type { Video } from '@/content-store/store';
 import type { LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import type { EyebrowText } from '@/episodes/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
+import type { ComposedPage } from '@/episodes/lib/registry';
 import { DevSlideReporter } from '@/shared/components/design-system-token-editor/dev-slide-reporter';
 import { readTranslationStrings } from '@/shared/i18n/translation-strings';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -199,7 +199,7 @@ interface EpisodePageContainerProps {
    * The Episode the page presents, as the store served its ref, or the tooling page it is: its id is what
    * `data-episode` names, and its folder the source folder the token editor names.
    */
-  page: EpisodeRef<EpisodeId> | ToolingRef<ToolingSlug>;
+  page: ComposedPage;
   episode: EpisodeComposition;
   /** The Episode's Video in this locale, from the content store; none for a tooling page or before upload. */
   video?: Video;

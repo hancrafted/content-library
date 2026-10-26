@@ -5,7 +5,7 @@ import {
   type EpisodeRef,
   type ToolingRef,
 } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, TOOLING_SLUGS, type EpisodeId, type ToolingSlug } from '@/content-store/catalogue/record-routes';
+import { hasPage, TOOLING_SLUGS, type ToolingSlug } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
@@ -13,7 +13,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
-import { compositionOf } from './registry';
+import { compositionOf, type ComposedPage } from './registry';
 
 /*
  * Published anchors (FE-002): every Slide anchor an Episode has ever put in a
@@ -25,9 +25,6 @@ import { compositionOf } from './registry';
 
 /** A page whose anchors may be bound: an Episode, or a tooling page. */
 type Page = EpisodeRef | ToolingRef;
-
-/** A page the registry composes, by the ref the store serves it with: an Episode with a page, or a tooling page. */
-type ComposedPage = EpisodeRef<EpisodeId> | ToolingRef<ToolingSlug>;
 
 /** The snapshot in the page's folder: an Event's copy's under its Event, a tooling page's under `tooling/`. */
 function snapshotPath(page: Page): string {

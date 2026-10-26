@@ -1,11 +1,11 @@
-import { folderOf, toolingRef, type EpisodeRef, type ToolingRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, TOOLING_SLUGS, type EpisodeId, type ToolingSlug } from '@/content-store/catalogue/record-routes';
+import { folderOf, toolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { EPISODES_DIR } from '@/episodes/lib/episode-folders';
 import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { compositionOf } from './registry';
+import { compositionOf, type ComposedPage } from './registry';
 
 /*
  * Placement markers (FE-004 Decision 3, design-ADR-0008 Decision 7):
@@ -19,9 +19,6 @@ import { compositionOf } from './registry';
 
 const ROOT = process.cwd();
 const MARKERS_DIR = 'sections';
-
-/** A page the registry composes, by the ref the store serves it with: an Episode with a page, or a tooling page. */
-type ComposedPage = EpisodeRef<EpisodeId> | ToolingRef<ToolingSlug>;
 
 /** The markers folder of a page. */
 function markersDir(page: ComposedPage): string {
