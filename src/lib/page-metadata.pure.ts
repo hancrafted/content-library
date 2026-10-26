@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import type { Episode, EpisodeStatus } from '../content-store/schemas/episode.schema';
 import type { IsoDate } from '../content-store/schemas/fields';
 import { TRANSLATIONS } from '../i18n/translations';
 import { DEFAULT_LOCALE, localizePath, type Locale } from './locale.pure';
-import { isEpisodePage, isEventEpisodePage, isToolingPage, pageLocales, routeOf, type PageRef } from './routes';
+import { episodeRoute, isEpisodePage, isEventEpisodePage, pageLocales, routeOf, type PageRef } from './routes';
+import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
 /** Used when the deploy sets no `SITE_URL`: local and pull-request builds. */
 const LOCAL_ORIGIN = 'http://localhost:3000';
@@ -33,12 +33,10 @@ export function siteMetadata(locale: Locale, siteUrl: string): Metadata {
 export interface PageCopy {
   readonly title: string;
   readonly description: string;
-  /** An Episode page's status: an upcoming one is `noindex`. Left off for the landing page. */
-  readonly status?: EpisodeStatus;
+  /** What the page presents, for the visibility predicate (`pageTreatment`); left off, a page that needs it is `noindex`. */
+  readonly facts?: PageFacts;
   /** An Episode's release date, the article's `publishedTime`. */
   readonly publishedOn?: IsoDate;
-  /** An Episode's visibility: under an Event, only a public one hands its search credit to its own page. */
-  readonly visibility?: Episode['visibility'];
 }
 
 /** The site-wide fallback card image: a static file in `public/`, 1200x630 (FE-008 §6). */
@@ -46,22 +44,9 @@ export const OG_IMAGE = { url: '/og-image.png', width: 1200, height: 630 } as co
 
 const OG_LOCALES: Record<Locale, string> = { en: 'en_US', de: 'de_DE' };
 
-/**
- * Whether a page is kept out of search: the dashboard, a tooling page, an Episode still upcoming, and an Episode under
- * an Event unless it is public, failing closed when its visibility is not handed in. Metadata and sitemap both ask.
- */
-export function isNoindex(page: PageRef, status?: EpisodeStatus, visibility?: Episode['visibility']): boolean {
-  if (isEventEpisodePage(page) && visibility !== 'public') return true;
-  return page === 'dashboard' || isToolingPage(page) || status === 'upcoming';
-}
-
-/**
- * The page search credits for this one (design-ADR 0016, Routes and visibility): a public Episode an Event presents
- * names its own `/episodes/<slug>/` page once that page is indexable; every other page names itself.
- */
-function creditedPage(page: PageRef, copy?: PageCopy): PageRef {
-  if (isEventEpisodePage(page) && !isNoindex(page, copy?.status, copy?.visibility)) return { episode: page.episode };
-  return page;
+/** The logical path a page's canonical names: its own, or that of the public Episode it credits. */
+function canonicalRoute(page: PageRef, treatment: PageTreatment): string {
+  return treatment.canonical === 'self' ? routeOf(page) : episodeRoute(treatment.canonical.episode);
 }
 
 /** Open Graph and Twitter cards: the page's own title and description, the fallback image, its locale and the others. */
@@ -101,23 +86,24 @@ function listPageCopy(page: PageRef, locale: Locale): Pick<PageCopy, 'title' | '
  * A page's metadata: its copy, its canonical, and reciprocal hreflang
  * alternates. The landing page's copy is `meta.home` of the site-wide
  * Translation file; an Episode's comes from its record, which this tier cannot
- * reach, so the route hands it in, with its status: an upcoming Episode's page
- * is `noindex`, so the publish flip removes it from search. A public Episode
- * under an Event hands its canonical to its own page, with no alternates.
+ * reach, so the route hands it in, with the facts of what the page presents.
+ * The visibility predicate (`pageTreatment`), which the sitemap asks too, turns
+ * those into robots and canonical: a page whose canonical is elsewhere carries
+ * no hreflang alternates of its own.
  */
 export function pageMetadata(page: 'home' | 'episodes' | 'events', locale: Locale): Metadata;
 export function pageMetadata(page: 'dashboard', locale: 'en'): Metadata;
 export function pageMetadata(page: Exclude<PageRef, string>, locale: Locale, copy: PageCopy): Metadata;
 export function pageMetadata(page: PageRef, locale: Locale, copy?: PageCopy): Metadata {
-  const credited = creditedPage(page, copy);
-  const canonical = localizePath(routeOf(credited), locale);
+  const treatment = pageTreatment(page, copy?.facts ?? {});
+  const canonical = localizePath(canonicalRoute(page, treatment), locale);
   const { title, description } = copy ?? listPageCopy(page, locale);
   return {
     title,
     description,
     ...socialCards(page, locale, { title, description, publishedOn: copy?.publishedOn, canonical }),
-    alternates: { canonical, ...(credited === page ? { languages: alternatesOf(page) } : {}) },
-    ...(isNoindex(page, copy?.status, copy?.visibility) ? { robots: { index: false } } : {}),
+    alternates: { canonical, ...(treatment.canonical === 'self' ? { languages: alternatesOf(page) } : {}) },
+    ...(treatment.index ? {} : { robots: { index: false } }),
   };
 }
 

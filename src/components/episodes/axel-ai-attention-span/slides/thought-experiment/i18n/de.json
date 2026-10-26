@@ -1,0 +1,15 @@
+{
+  "title": "Gedankenexperiment",
+  "caption": "Wie Aufmerksamkeit funktioniert: Du gegen eine KI.",
+  "punchline": "Wir fangen leicht an. Du bist ja nur ein Mensch.",
+  "poll": "Na, wie ist Deine Aufmerksamkeit?",
+  "voiceScript": {
+    "segments": {
+      "a-long-chat-is-a-long-call": {
+        "title": "Ein langer Chat ist ein langes Telefonat",
+        "keywords": "",
+        "script": "Bereit? Wir fangen leicht an. Du bist ja nur ein Mensch. Zuerst geht es darum, wie Aufmerksamkeit funktioniert, Deine gegen die einer KI. Denk an Dein letztes langes Telefonat mit jemandem, der Dir nahesteht: Deiner Schwester, einem Freund, Deiner Mutter. Du hast angerufen, um eine Sache zu klären, und eine Stunde später hast Du aufgelegt. Bevor ich ein Wort über KI sage, sollst Du spüren, was Dir von diesem Gespräch geblieben ist. Denn ich will Dich fragen, ob ein langer Chat mit einer KI dasselbe mit Dir macht. Deshalb kommt zuerst das Telefonat und dann der Chat."
+      }
+    }
+  }
+}

@@ -11,12 +11,12 @@ import { join } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { EPISODES_PATH_SLUGS, episodeRoute } from '../../src/lib/routes';
+import { episodeRoute } from '../../src/lib/routes';
 import { isToolingSlug } from '../../src/lib/tooling-pages';
 import { episodeText, type EpisodeText } from './episode-text';
-import { exportedPage } from './exported-pages';
+import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage } from './exported-pages';
 
-const PAGES = EPISODES_PATH_SLUGS.flatMap((slug) =>
+const PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
 );
 

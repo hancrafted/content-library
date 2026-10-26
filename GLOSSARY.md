@@ -34,11 +34,14 @@ _Avoid_: Agenda, series, collection
 **visibility**: whether a record is listed and indexed: `public` or `unlisted`, required on every Episode and Playlist, so a forgotten one is refused and fails closed. Unlisted is not private: anyone holding the URL can open the page. `attendees` is refused until the platform horizon gives it an enforcer.
 _Avoid_: Status, private, hidden, draft
 
+**unlisted Episode**: an Episode whose visibility is `unlisted`: a composition made for one Event, usually its Slides copied (`cp -r`) from a public Episode and left to drift. It is registered once like any Episode, lives only at its Event-scoped Episode page, has no `/episodes/` page, is `noindex`, never in the sitemap, the Episode overview or Upcoming Episodes, and is refused when no Event's Playlist lists it. Flipping its `visibility` to `public` is the one edit that gives it its own page. One visibility predicate decides all of this (`pageTreatment`, `src/lib/visibility.pure.ts`).
+_Avoid_: Private Episode, hidden Episode, event copy, attendee page
+
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
 
 **Tooling page**: an authoring bench with a previewable page at `/episodes/<slug>/`, composed of Slides like an Episode but no Episode: the Episode template (`page-template`), the Slide library (`slide-master`) and the Explorable explanations page (`slides`). It has no visibility and no status, is `noindex`, never in the sitemap, and in no Episode list: not the registry, the overview or Upcoming Episodes. Listed in `TOOLING_SLUGS` (`src/lib/tooling-pages.ts`).
-_Avoid_: Layout reference, reference Episode, unlisted Episode
+_Avoid_: Layout reference, reference Episode
 
 **Slide library**: every Master slide a Slide copies from the Slide master tooling page (`src/components/episodes/slide-master/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/components/slide-master/`, `src/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
 _Avoid_: Catalog

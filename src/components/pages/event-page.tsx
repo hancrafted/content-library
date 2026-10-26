@@ -2,16 +2,17 @@ import { EventBreadcrumb } from '@/components/events/event-breadcrumb';
 import { PastNotice } from '@/components/events/past-notice';
 import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
 import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { episodeCards } from '@/components/landing/episode-cards';
+import { playlistEpisodeCards } from '@/components/landing/episode-cards';
 import type { EventCard } from '@/components/landing/event-card.pure';
 import { eventCards } from '@/components/landing/event-cards';
 import { eventPlaylistCards, startOf, totalMinutes } from '@/components/landing/event-playlist.pure';
 import { Button } from '@/components/ui/button';
 import type { Event } from '@/content-store/schemas/event.schema';
-import { findEvent, playlistOf } from '@/content-store/store';
+import { findEvent, pageFacts, playlistOf } from '@/content-store/store';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { BUILD_DAY } from '@/lib/build-day';
 import { localizePath, type Locale } from '@/lib/locale.pure';
+import type { PageCopy } from '@/lib/page-metadata.pure';
 import type { EventSlug } from '@/lib/routes';
 import { fillTemplate } from '@/lib/template.pure';
 import { cn } from '@/lib/utils';
@@ -21,9 +22,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-/** An Event page's title and description in one locale, for its metadata. */
-export function eventPageCopy(slug: EventSlug, locale: Locale) {
-  return TRANSLATIONS[locale].eventsPage.items[slug];
+/**
+ * An Event page's title and description in one locale, for its metadata, with its Playlist's visibility: an Event
+ * whose Playlist is unlisted is `noindex` and out of the sitemap.
+ */
+export function eventPageCopy(slug: EventSlug, locale: Locale): PageCopy {
+  const { title, description } = TRANSLATIONS[locale].eventsPage.items[slug];
+  return { title, description, facts: pageFacts({ event: slug }) };
 }
 
 type EventT = Awaited<ReturnType<typeof getTranslations<'eventsPage'>>>;
@@ -187,7 +192,7 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
   const card = (await eventCards(locale)).find((each) => each.slug === slug);
   if (card === undefined) notFound();
   const playlist = { event: slug, episodes: playlistOf(record).episodes };
-  const episodes = eventPlaylistCards(playlist, await episodeCards(locale), locale);
+  const episodes = eventPlaylistCards(playlist, await playlistEpisodeCards(playlist.episodes, locale), locale);
   return (
     <main data-testid="event-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
       <EventBreadcrumb

@@ -1,0 +1,13 @@
+{
+  "title": "Congratulations",
+  "voiceScript": {
+    "segments": {
+      "you-held-it-all": {
+        "title": "You held it all",
+        "keywords": "",
+        "script": "Congratulations, you made it to the end. Now you know how it feels to be an AI. You took in everything I said: the start stayed sharp, the end stayed sharp, and somewhere in the middle it got a little blurry. That is all the window ever is, so now go and manage yours. One more time? Or again in a minute?"
+      }
+    }
+  },
+  "punchline": "Now you know how it feels. One more time? Or again in a minute?"
+}

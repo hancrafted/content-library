@@ -1,0 +1,121 @@
+{
+  "title": "Was passiert, wenn der Kontext voll wird",
+  "caption": "Wenn der Chat das Fenster füllt, bleiben nur der allererste Anfang und das Neueste scharf, der Rest verschwimmt, auch Deine erste Nachricht, ein wiederholtes Detail überlebt, und die Antworten werden schlechter: <b>Context Rot</b>.",
+  "strip": {
+    "firstKicker": "Deine erste Nachricht",
+    "first": "… Budget <figure>30.000 Euro</figure>.",
+    "planKicker": "Der Plan der KI",
+    "plan": "… Gesamt <figure>42.300 Euro</figure>.",
+    "mayFill": "<marker>die KI füllt diese Lücke vielleicht selbst</marker>",
+    "forgotten": "das Budget wurde vergessen",
+    "reason": "<marker>Deine erste Nachricht fällt schon ab, und es ist eine kurze Zahl unter vielen ähnlichen</marker>",
+    "caveat": "<marker>Studien nutzen eingepflanzte Fakten, keine Chat-Apps</marker>"
+  },
+  "notes": {
+    "quality-falls-before-the-limit": {
+      "header": "Die Qualität sinkt vor der Grenze",
+      "description": "in einem Benchmark mit 13 Aufgaben verloren fast alle von 17 Modellen für lange Kontexte mit wachsender Eingabe deutlich an Genauigkeit, und nur die Hälfte blieb bei 32K Tokens zufriedenstellend, obwohl alle 32K oder mehr angaben [1].",
+      "sources": {
+        "hsieh-ruler": {
+          "title": "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
+        }
+      }
+    },
+    "length-alone-hurts": {
+      "header": "Länge allein schadet",
+      "description": "selbst bei perfektem Abruf sank die Leistung mit wachsender Eingabe um 13,9 % bis 85 %, und der Abfall blieb, als irrelevante Tokens ausgeblendet wurden [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "extra-material-makes-it-worse": {
+      "header": "Zusätzliches Material macht es schlimmer",
+      "description": "bei 18 Modellen sank die Leistung in jedem Experiment mit der Länge der Eingabe, und schon ein einziger Störtext senkte sie [1].",
+      "sources": {
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "what-the-studies-measure": {
+      "header": "Was die Studien messen",
+      "description": "die Studien messen verlorene Genauigkeit, keinen Mechanismus für Halluzinationen [1][2].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        },
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        }
+      }
+    },
+    "mostly-synthetic-tests": {
+      "header": "Meist künstliche Tests",
+      "description": "die meisten Studien nutzen einen eingepflanzten Fakt oder Fülltext und Modelle von 2024 und 2025, und wie stark die Leistung sinkt, hängt von Modell und Aufgabe ab [1].",
+      "sources": {
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "what-is-context-rot": {
+      "header": "Context Rot",
+      "description": "Context Rot ist der Qualitätsverlust der Antworten, wenn die Eingabe wächst, lange vor der angegebenen Grenze: fast alle von 17 Modellen für lange Kontexte verloren deutlich an Genauigkeit [1], schon die Länge allein schadete trotz perfektem Abruf [2], und bei 18 Modellen sank die Leistung in jedem Experiment [3]. Anthropic erklärt das mit einem Aufmerksamkeitsbudget, das jedes zusätzliche Token dünner verteilt; das ist eine Herstellerdarstellung und in den Studien nicht gemessen [4].",
+      "sources": {
+        "hsieh-ruler": {
+          "title": "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
+        },
+        "du-context-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        },
+        "hong-context-rot": {
+          "title": "Hong, Troynikov, Huber, Context Rot: How Increasing Input Tokens Impacts LLM Performance"
+        },
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "only-the-very-start-holds": {
+        "title": "Nur der allererste Anfang hält",
+        "keywords": "",
+        "script": "Jetzt schau, was passiert, wenn dieser Chat wächst. Nur der allererste Anfang des Fensters hält die Aufmerksamkeit der KI: die Startanweisungen. Deine eigene erste Nachricht kommt erst danach, und ihre Aufmerksamkeit fällt sofort ab, also schützt es nicht, im Chat ganz vorn zu stehen, und gleich siehst Du, warum. Eins vorweg: Die Zahlen auf dieser Folie sind zur Veranschaulichung. Ich habe ein 200K-Fenster gewählt und die kleinen Balken, die zeigen, wie stark die KI auf jede Nachricht schaut, um die Form zu zeigen, nicht um etwas zu messen."
+      },
+      "the-newest-stays-sharp": {
+        "title": "Das Neueste bleibt scharf",
+        "keywords": "",
+        "script": "Auch das Neueste bleibt scharf. Die letzten Nachrichten werden gut genutzt, wie die letzten Minuten des Telefonats, weil sie ganz am Ende dessen stehen, was die KI liest."
+      },
+      "the-middle-blurs": {
+        "title": "Die Mitte verschwimmt",
+        "keywords": "",
+        "script": "Die Mitte verschwimmt. Was Du vor einer Stunde gesagt hast, liegt im unscharfen Teil, und die KI behandelt es so, wie Du die Renovierung der Nachbarn behandelst: Es war da, aber es ist dünn."
+      },
+      "a-standout-survives": {
+        "title": "Ein Ausreißer überlebt",
+        "keywords": "",
+        "script": "Und ein Ausreißer überlebt. Die 60 vegetarischen Gäste, ein Detail, das im Chat immer wieder vorkommt, sind noch da, und der Plan kommt mit einem vegetarischen Menü zurück."
+      },
+      "answers-get-worse": {
+        "title": "Die Antworten werden schlechter",
+        "keywords": "",
+        "script": "Jetzt etwas Neues, und hier wird es unangenehm. Je voller der Chat, desto schlechter die Antworten. Das nennt man Context Rot."
+      },
+      "the-budget-is-forgotten": {
+        "title": "Das Budget ist vergessen",
+        "keywords": "",
+        "script": "Schau auf das Budget. Deine allererste Nachricht sagte 30.000 Euro, und jetzt kommt der Plan mit 42.300 zurück. Es war Deine erste Nachricht, aber nur die Startanweisungen halten den allerersten Anfang, also fällt schon Deine erste Nachricht ab. Es ging durch seine Position verloren, und es ist außerdem eine kurze Zahl unter vielen ähnlichen."
+      },
+      "filling-the-gap": {
+        "title": "Die Lücke füllen",
+        "keywords": "",
+        "script": "Da steht also eine kleine Zahl zwischen all den ähnlichen Zahlen aus den Angeboten und den Suchen, und wenn die KI sie nicht findet, füllt sie die Lücke, so vermute ich, selbst mit etwas, das plausibel klingt. Ich will da ehrlich sein: Das ist meine Hypothese, nicht bewiesen."
+      }
+    }
+  }
+}

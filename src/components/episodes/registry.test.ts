@@ -66,6 +66,27 @@ const COMPOSITION = [
       { opener: 'managing-the-attention-span', pageSlides: 4 },
     ],
   },
+  // The unlisted copies the AXEL seminar presented: `cp -r` of the three above, unedited so far.
+  {
+    slug: 'axel-onboard-ai-every-time',
+    sections: [
+      { opener: 'the-thought-experiment', pageSlides: 3 },
+      { opener: 'five-moves-to-brief-a-freelancer', pageSlides: 2 },
+    ],
+  },
+  {
+    slug: 'axel-ai-attention-span',
+    sections: [
+      { opener: 'thought-experiment', pageSlides: 2 },
+      { opener: 'the-ais-attention-span', pageSlides: 4 },
+      { opener: 'what-fills-the-window', pageSlides: 3 },
+      { opener: 'managing-the-attention-span', pageSlides: 4 },
+    ],
+  },
+  {
+    slug: 'axel-ai-gives-you-more-work',
+    sections: [{ opener: 'from-execution-to-management', pageSlides: 3 }],
+  },
 ] as const;
 
 /** Who renders each Slide header (design-ADR-0012): the Slide wrapper (`shared`) or each Scene (`authored`). */
@@ -75,6 +96,9 @@ const HEADER_MODES = [
   { slug: 'onboard-ai-every-time', header: 'shared' },
   { slug: 'ai-attention-span', header: 'shared' },
   { slug: 'ai-gives-you-more-work', header: 'shared' },
+  { slug: 'axel-onboard-ai-every-time', header: 'shared' },
+  { slug: 'axel-ai-attention-span', header: 'shared' },
+  { slug: 'axel-ai-gives-you-more-work', header: 'shared' },
 ] as const;
 
 /** The recorded YouTube video of the Episodes that have one asserted here. */
@@ -160,22 +184,22 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('rejects an unlisted slug in the route check and in the registry lookup', () => {
+  it('rejects an unregistered slug in the route check and in the registry lookup', () => {
     // ARRANGE
-    const unlisted = 'non-existent-episode';
+    const unregistered = 'non-existent-episode';
     // ACT
-    const valid = isEpisodeSlug(unlisted);
-    const lookup = () => findEpisode(unlisted);
+    const valid = isEpisodeSlug(unregistered);
+    const lookup = () => findEpisode(unregistered);
     // ASSERT
     expect(valid).toBe(false);
     expect(lookup).toThrow();
   });
 
-  it('finds no Episode text for an unlisted slug', () => {
+  it('finds no Episode text for an unregistered slug', () => {
     // ARRANGE
-    const unlisted = 'non-existent-episode';
+    const unregistered = 'non-existent-episode';
     // ACT
-    const read = () => episodeCopy(unlisted, 'en');
+    const read = () => episodeCopy(unregistered, 'en');
     // ASSERT
     expect(read).toThrow();
   });

@@ -1,0 +1,102 @@
+{
+  "title": "You're the new hire",
+  "caption": "Most of what you need to do the job well was never written down.",
+  "task": "Plan your company’s next summer party: 200 employees across five offices in Europe",
+  "obvious": {
+    "label": "The obvious questions",
+    "questions": {
+      "budget": "What is the budget?",
+      "stay": "Where does everyone stay?",
+      "signoff": "Who signs off on the plan?"
+    }
+  },
+  "riders": {
+    "dietary": "Dietary needs",
+    "accessibility": "Accessibility needs"
+  },
+  "hidden": {
+    "label": "The questions nobody thinks to ask",
+    "note": "<marker>Context that even people forget to hand over, because it lives in feedback, in the culture or in habit rather than in any document</marker>.",
+    "questions": {
+      "lastTime": "What went wrong last time?",
+      "unwrittenRules": "Which unwritten rules apply?",
+      "suppliers": "Which tools and suppliers may I use?"
+    }
+  },
+  "rail": {
+    "ask": "You ask",
+    "asked": "You are asked"
+  },
+  "switch": "Switch roles",
+  "handover": {
+    "title": "Now you hand it over.",
+    "body": "Your boss expects the plan by Friday, and the person taking over <marker>knows none of what you just learned</marker>.",
+    "due": "Due",
+    "dueDay": "Friday",
+    "echoes": {
+      "budget": "Budget?",
+      "stay": "Stay?",
+      "signoff": "Sign-off?",
+      "lastTime": "Last time?",
+      "unwrittenRules": "Unwritten rules?",
+      "suppliers": "Suppliers?"
+    }
+  },
+  "notes": {
+    "why-the-middle-zone-stays-unwritten": {
+      "header": "Why the middle zone stays unwritten",
+      "description": "Nonaka calls this tacit knowledge: \"highly personal\", \"hard to formalize and, therefore, difficult to communicate to others\"; in Polanyi's words, \"We can know more than we can tell\" [1].",
+      "sources": {
+        "nonaka-knowledge-creating-company": {
+          "title": "Ikujiro Nonaka, The Knowledge-Creating Company, Harvard Business Review (Nov-Dec 1991; reprinted as an HBR Classic, Jul-Aug 2007)"
+        }
+      }
+    },
+    "the-newcomer-has-the-least-to-absorb-with": {
+      "header": "The newcomer has the least to absorb with",
+      "description": "in 122 best-practice transfers between units in eight companies, knowledge-related barriers outweighed motivational ones; the recipient's lack of absorptive capacity weighed most (0.54), ahead of causal ambiguity (0.34) [1].",
+      "sources": {
+        "szulanski-internal-stickiness": {
+          "title": "Gabriel Szulanski, Exploring Internal Stickiness: Impediments to the Transfer of Best Practice Within the Firm, Strategic Management Journal 17 (1996)"
+        }
+      }
+    },
+    "even-the-experts-cannot-always-say-it": {
+      "header": "Even the experts cannot always say it",
+      "description": "a master baker's technique could not be read off X-rays of the dough; it took a developer's apprenticeship (\"observation, imitation, and practice\") and a year of trial and error before it was specified [1].",
+      "sources": {
+        "nonaka-knowledge-creating-company": {
+          "title": "Ikujiro Nonaka, The Knowledge-Creating Company, Harvard Business Review (Nov-Dec 1991; reprinted as an HBR Classic, Jul-Aug 2007)"
+        }
+      }
+    },
+    "one-caution-on-the-theory": {
+      "header": "One caution on the theory",
+      "description": "Gourlay disputes Nonaka's account of knowledge being created by converting between tacit and explicit forms; the claim here rests on the definition of tacit knowledge, not on that conversion model [1].",
+      "sources": {
+        "gourlay-critique-of-nonaka": {
+          "title": "Stephen Gourlay, Conceptualizing Knowledge Creation: A Critique of Nonaka's Theory, Journal of Management Studies 43(7) (2006)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "obvious-questions": {
+        "title": "Obvious questions",
+        "keywords": "",
+        "script": "Imagine you're a new hire. On day one, you get your first task: plan your company's next summer party: 200 employees across five offices in Europe. Your first questions are probably: what's the budget, where does everybody stay, who signs off? Maybe even dietary and accessibility needs."
+      },
+      "the-ones-you-forget": {
+        "title": "The ones you forget",
+        "keywords": "",
+        "script": "But the hard questions, the ones people usually don't think of but that matter just as much, are these: what went wrong last time, which unwritten rules apply (no paintball, for example), and which tools and suppliers are you allowed to use?"
+      },
+      "switch-of-roles": {
+        "title": "Switch of roles",
+        "keywords": "",
+        "script": "Now let's switch roles. You're the one handing this task to a new hire on their first day. It's Monday, and the plan is due Friday. After everything we just went through, I think you realise you need to onboard that person with this context and these limitations, so they can work on it independently without knocking on your door every few minutes."
+      }
+    }
+  }
+}

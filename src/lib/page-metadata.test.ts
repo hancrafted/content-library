@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isNoindex, pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
+import { pageMetadata, resolveSiteUrl, siteMetadata } from './page-metadata.pure';
 
 const UNDER_EVENT = { event: '2026-10-23-axel-agentic-workflow', episode: 'ai-attention-span' } as const;
 
@@ -123,16 +123,22 @@ describe('success cases', () => {
     // ARRANGE
     const expected = { index: false };
     // ACT
-    const metadata = pageMetadata({ episode: 'ai-token-economy' }, locale, { ...COPY, status: 'upcoming' });
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, locale, {
+      ...COPY,
+      facts: { visibility: 'public', status: 'upcoming' },
+    });
     // ASSERT
     expect(metadata.robots).toEqual(expected);
   });
 
-  it.each(['published', undefined] as const)('leaves a page with status %s indexable', (status) => {
+  it('leaves a public, published Episode page indexable', () => {
     // ARRANGE
     const expected = undefined;
     // ACT
-    const metadata = pageMetadata({ episode: 'ai-token-economy' }, 'en', { ...COPY, status });
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, 'en', {
+      ...COPY,
+      facts: { visibility: 'public', status: 'published' },
+    });
     // ASSERT
     expect(metadata.robots).toBe(expected);
   });
@@ -199,7 +205,7 @@ describe('success cases', () => {
       card: '/de/episodes/ai-attention-span',
     };
     // ACT
-    const metadata = pageMetadata(UNDER_EVENT, 'de', { ...COPY, status: 'published', visibility: 'public' });
+    const metadata = pageMetadata(UNDER_EVENT, 'de', { ...COPY, facts: { status: 'published', visibility: 'public' } });
     // ASSERT
     expect({
       canonical: metadata.alternates?.canonical,
@@ -264,19 +270,13 @@ describe('edge cases', () => {
     expect(metadata.alternates?.canonical).toBe(expected);
   });
 
-  it('keeps the dashboard and an upcoming Episode out of search, and every other page in', () => {
+  it('keeps an Episode page out of search when its facts are missing, so a forgotten field fails closed', () => {
     // ARRANGE
-    const episode = { episode: 'ai-token-economy' } as const;
+    const expected = { index: false };
     // ACT
-    const results = [
-      isNoindex('dashboard'),
-      isNoindex(episode, 'upcoming'),
-      isNoindex(episode, 'published'),
-      isNoindex('home'),
-      isNoindex('episodes'),
-    ];
+    const metadata = pageMetadata({ episode: 'ai-token-economy' }, 'en', COPY);
     // ASSERT
-    expect(results).toEqual([true, true, false, false, false]);
+    expect(metadata.robots).toEqual(expected);
   });
   it('keeps an upcoming or unlisted Episode under an Event out of search, canonical to itself', () => {
     // ARRANGE
@@ -287,8 +287,8 @@ describe('edge cases', () => {
     ];
     // ACT
     const seen = [
-      pageMetadata(UNDER_EVENT, 'de', { ...COPY, status: 'upcoming', visibility: 'public' }),
-      pageMetadata(UNDER_EVENT, 'de', { ...COPY, status: 'published', visibility: 'unlisted' }),
+      pageMetadata(UNDER_EVENT, 'de', { ...COPY, facts: { status: 'upcoming', visibility: 'public' } }),
+      pageMetadata(UNDER_EVENT, 'de', { ...COPY, facts: { status: 'published', visibility: 'unlisted' } }),
     ].map((metadata) => ({ canonical: metadata.alternates?.canonical, robots: metadata.robots }));
     // ASSERT
     expect(seen).toEqual(expected);

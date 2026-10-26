@@ -1,0 +1,102 @@
+{
+  "title": "Du bist die neue Kraft",
+  "caption": "Das meiste, was Du für einen guten Job brauchst, hat nie jemand aufgeschrieben.",
+  "task": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa",
+  "obvious": {
+    "label": "Die naheliegenden Fragen",
+    "questions": {
+      "budget": "Wie hoch ist das Budget?",
+      "stay": "Wo übernachten alle?",
+      "signoff": "Wer gibt den Plan frei?"
+    }
+  },
+  "riders": {
+    "dietary": "Ernährungswünsche",
+    "accessibility": "Barrierefreiheit"
+  },
+  "hidden": {
+    "label": "Die Fragen, an die niemand denkt",
+    "note": "<marker>Kontext, den selbst Menschen weiterzugeben vergessen, weil er in Feedback, in der Kultur oder in Gewohnheiten steckt statt in einem Dokument</marker>.",
+    "questions": {
+      "lastTime": "Was ist letztes Mal schiefgelaufen?",
+      "unwrittenRules": "Welche ungeschriebenen Regeln gelten?",
+      "suppliers": "Welche Tools und Lieferanten darf ich nutzen?"
+    }
+  },
+  "rail": {
+    "ask": "Du fragst",
+    "asked": "Du wirst gefragt"
+  },
+  "switch": "Rollenwechsel",
+  "handover": {
+    "title": "Jetzt gibst Du es ab.",
+    "body": "Deine Führungskraft erwartet den Plan bis Freitag, und die Person, die übernimmt, <marker>weiß nichts von dem, was Du gerade gelernt hast</marker>.",
+    "due": "Fällig",
+    "dueDay": "Freitag",
+    "echoes": {
+      "budget": "Budget?",
+      "stay": "Unterkunft?",
+      "signoff": "Freigabe?",
+      "lastTime": "Letztes Mal?",
+      "unwrittenRules": "Ungeschriebene Regeln?",
+      "suppliers": "Lieferanten?"
+    }
+  },
+  "notes": {
+    "why-the-middle-zone-stays-unwritten": {
+      "header": "Warum die mittlere Zone ungeschrieben bleibt",
+      "description": "Nonaka nennt das implizites Wissen: „highly personal“, „hard to formalize and, therefore, difficult to communicate to others“; mit Polanyi: „We can know more than we can tell“ [1].",
+      "sources": {
+        "nonaka-knowledge-creating-company": {
+          "title": "Ikujiro Nonaka, The Knowledge-Creating Company, Harvard Business Review (Nov-Dec 1991; reprinted as an HBR Classic, Jul-Aug 2007)"
+        }
+      }
+    },
+    "the-newcomer-has-the-least-to-absorb-with": {
+      "header": "Wer neu ist, kann am wenigsten aufnehmen",
+      "description": "Bei 122 Übertragungen bewährter Praktiken zwischen Einheiten in acht Unternehmen wogen Wissensbarrieren schwerer als fehlende Motivation; am stärksten wog die fehlende Aufnahmefähigkeit der Empfänger (0,54), vor kausaler Mehrdeutigkeit (0,34) [1].",
+      "sources": {
+        "szulanski-internal-stickiness": {
+          "title": "Gabriel Szulanski, Exploring Internal Stickiness: Impediments to the Transfer of Best Practice Within the Firm, Strategic Management Journal 17 (1996)"
+        }
+      }
+    },
+    "even-the-experts-cannot-always-say-it": {
+      "header": "Selbst Fachleute können es nicht immer sagen",
+      "description": "Die Technik eines Meisterbäckers ließ sich nicht an Röntgenbildern des Teigs ablesen; es brauchte die Lehrzeit einer Entwicklerin („observation, imitation, and practice“) und ein Jahr Versuch und Irrtum, bis sie beschrieben war [1].",
+      "sources": {
+        "nonaka-knowledge-creating-company": {
+          "title": "Ikujiro Nonaka, The Knowledge-Creating Company, Harvard Business Review (Nov-Dec 1991; reprinted as an HBR Classic, Jul-Aug 2007)"
+        }
+      }
+    },
+    "one-caution-on-the-theory": {
+      "header": "Ein Vorbehalt zur Theorie",
+      "description": "Gourlay bestreitet Nonakas Darstellung, Wissen entstehe durch Umwandlung zwischen impliziter und expliziter Form; die Aussage hier stützt sich auf die Definition impliziten Wissens, nicht auf dieses Umwandlungsmodell [1].",
+      "sources": {
+        "gourlay-critique-of-nonaka": {
+          "title": "Stephen Gourlay, Conceptualizing Knowledge Creation: A Critique of Nonaka's Theory, Journal of Management Studies 43(7) (2006)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "obvious-questions": {
+        "title": "Naheliegende Fragen",
+        "keywords": "",
+        "script": "Fang mit den Fragen an, die Dir sofort einfallen. Wie hoch ist das Budget, wo übernachten alle, wer gibt den Plan frei? Ernährungswünsche und Barrierefreiheit laufen dabei mit. Diese Fragen sind leicht aufzuschreiben und leicht beantwortet, und genau deshalb scheitert ein Plan nicht an ihnen."
+      },
+      "the-ones-you-forget": {
+        "title": "Die, die Du vergisst",
+        "keywords": "",
+        "script": "Der Ärger steckt in der zweiten Gruppe. Was ist beim letzten Sommerfest schiefgelaufen, welche ungeschriebenen Regeln gelten, welche Lieferanten und Tools darfst Du nutzen? Dieser Kontext steckt in Feedback, in der Kultur und in Gewohnheiten, nicht in einem Dokument, also vergessen Menschen, ihn weiterzugeben, weil ihn nie jemand aufgeschrieben hat. (Pause) Und Du kannst nicht nach etwas fragen, von dem Du nicht weißt, dass es existiert."
+      },
+      "switch-of-roles": {
+        "title": "Rollenwechsel",
+        "keywords": "",
+        "script": "Jetzt dreh es um. Nun gibst Du das Sommerfest ab, und Deine Führungskraft erwartet den Plan bis Freitag. Die Frage ist nicht mehr, was Du fragen musst, sondern was die neue Person von Dir braucht, und wie viel davon Du von Dir aus sagen würdest. Das gilt für jede neue Kraft, und damit sind wir bei der, die Du gleich einstellst."
+      }
+    }
+  }
+}

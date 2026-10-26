@@ -1,6 +1,8 @@
-import { EVENT_SLUGS } from '@/lib/routes';
+import { overviewOrder } from '@/lib/episode-metadata.pure';
+import { EVENT_SLUGS, type PageRef } from '@/lib/routes';
+import { pageTreatment } from '@/lib/visibility.pure';
 import { describe, expect, it } from 'vitest';
-import { episodeVideo, findEvent, listEpisodes, listEvents, loadContent, playlistOf } from './store';
+import { episodeVideo, findEvent, listEpisodes, listEvents, loadContent, pageFactsIn, playlistOf } from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
@@ -48,7 +50,7 @@ describe('success cases', () => {
     expect(content).toEqual(expected);
   });
 
-  it('loads the AXEL Workshop as the first Event, presenting a public Playlist of the three Episodes it taught', () => {
+  it('loads the AXEL seminar as the first Event, presenting a public Playlist of the three unlisted Episodes it taught', () => {
     // ARRANGE
     const expected = {
       event: {
@@ -61,7 +63,7 @@ describe('success cases', () => {
       playlist: {
         id: 'axel-agentic-workflow',
         visibility: 'public',
-        episodes: ['onboard-ai-every-time', 'ai-attention-span', 'ai-gives-you-more-work'],
+        episodes: ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'],
       },
     };
     // ACT
@@ -80,13 +82,46 @@ describe('success cases', () => {
     expect(slugs).toEqual(expected);
   });
 
-  it('declares every Episode public today', () => {
+  it('declares every Episode public but the three the AXEL seminar presented', () => {
     // ARRANGE
-    const expected: string[] = [];
+    const expected = ['axel-onboard-ai-every-time', 'axel-ai-attention-span', 'axel-ai-gives-you-more-work'];
     // ACT
     const notPublic = listEpisodes().filter((episode) => episode.visibility !== 'public');
     // ASSERT
     expect(notPublic.map((episode) => episode.slug)).toEqual(expected);
+  });
+
+  it('I flip an Episode from unlisted to public by changing one field.', () => {
+    // ARRANGE
+    const presented = { ...PLAYLIST, episodes: ['alpha', 'alpha-at-axel'] };
+    const unlisted = { episodes: [EPISODE, UNLISTED], events: [EVENT], playlists: [presented] };
+    const flipped = { ...unlisted, episodes: [EPISODE, { ...UNLISTED, visibility: 'public' }] };
+    const own = { episode: 'alpha-at-axel' } as unknown as PageRef;
+    const underEvent = { event: EVENT.slug, episode: 'alpha-at-axel' } as unknown as PageRef;
+    const seenIn = (input: Parameters<typeof loadContent>[0]) => {
+      const content = loadContent(input);
+      return {
+        own: pageTreatment(own, pageFactsIn(content, own)),
+        underEvent: pageTreatment(underEvent, pageFactsIn(content, underEvent)),
+        overview: overviewOrder(content.episodes, []).map((episode) => episode.slug),
+      };
+    };
+    const expected = {
+      unlisted: {
+        own: { exported: false, inSitemap: false, index: false, canonical: 'self' },
+        underEvent: { exported: true, inSitemap: false, index: false, canonical: 'self' },
+        overview: ['alpha'],
+      },
+      public: {
+        own: { exported: true, inSitemap: true, index: true, canonical: 'self' },
+        underEvent: { exported: true, inSitemap: false, index: true, canonical: { episode: 'alpha-at-axel' } },
+        overview: ['alpha', 'alpha-at-axel'],
+      },
+    };
+    // ACT
+    const seen = { unlisted: seenIn(unlisted), public: seenIn(flipped) };
+    // ASSERT
+    expect(seen).toEqual(expected);
   });
 
   it.each(RECORDINGS)(
