@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
 /** One card: a small kicker over its sentence; `lit` draws the card the Slide's claim rests on in primary. */

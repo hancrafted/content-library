@@ -1,9 +1,9 @@
-import { SocialLinks } from '@/components/social-links';
-import type { Locale } from '@/lib/locale.pure';
 import { AboutAnchor } from '@/page-assembly/landing/about-anchor.client';
 import caseStyles from '@/page-assembly/landing/fieldnote-case.module.css';
 import { FieldnoteSketch } from '@/page-assembly/landing/fieldnote-sketch';
 import styles from '@/page-assembly/landing/fieldnotes.module.css';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { SocialLinks } from '@/shared/page-chrome/header/social-links';
 import { ArrowDown, Plus } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 

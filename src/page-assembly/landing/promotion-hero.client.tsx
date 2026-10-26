@@ -1,10 +1,10 @@
 'use client';
 
 import { HeroTitle } from '@/episodes/components/slide-master/slide-master';
-import { usePromotionAnimation } from '@/hooks/use-promotion-animation';
-import { INK_DROPLETS } from '@/lib/ink-magnet.pure';
-import { localizePath, type Locale } from '@/lib/locale.pure';
-import type { PaperDrain } from '@/lib/paper-pile.pure';
+import { usePromotionAnimation } from '@/shared/hooks/use-promotion-animation';
+import { INK_DROPLETS } from '@/shared/lib/ink-magnet.pure';
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import type { PaperDrain } from '@/shared/lib/paper-pile.pure';
 import { ArrowDown } from 'lucide-react';
 import Link from 'next/link';
 import { useRef, useState, type MouseEvent, type ReactNode } from 'react';

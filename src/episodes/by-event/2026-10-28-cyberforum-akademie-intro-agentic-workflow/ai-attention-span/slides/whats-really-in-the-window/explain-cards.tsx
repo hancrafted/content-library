@@ -1,5 +1,5 @@
-import type { TargetProps } from '@/lib/context-link.pure';
-import { cn } from '@/lib/utils';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
 /* The cornerstone's two machine parts the Slide explains, in its colours: the starting instructions and memory. */

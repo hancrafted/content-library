@@ -1,5 +1,5 @@
+import { isEventSlug } from '@/content-store/catalogue/routes';
 import { eventParams } from '@/content-store/store';
-import { isEventSlug } from '@/lib/routes';
 import { EventPage, eventPageCopy } from '@/page-assembly/event/event-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { notFound } from 'next/navigation';

@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { FocusEvent, MouseEvent } from 'react';
 import type { BarCopy } from './horizontal-gantt-tooltip.client';
 import { barBox, elapsedShare, GANTT_BARS, TODAY, type GanttItem, type GanttLane } from './horizontal-gantt.pure';

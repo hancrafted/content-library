@@ -1,23 +1,29 @@
-import { ContextDrawerSlot } from '@/components/context-drawer/context-drawer-slot';
-import { DevSlideReporter } from '@/components/design-system-token-editor/dev-slide-reporter';
-import { TableOfContents, type TocLabels } from '@/components/table-of-contents/table-of-contents.client';
+import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
 import type { Video } from '@/content-store/store';
 import type { LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import type { EyebrowText } from '@/episodes/components/slide-master/slide-eyebrow';
 import type { SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
-import { readTranslationStrings } from '@/i18n/translation-strings';
-import type { Locale } from '@/lib/locale.pure';
-import { episodeRoute, type EpisodesPathSlug } from '@/lib/routes';
-import type { TocSection } from '@/lib/table-of-contents.pure';
-import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
-import { cn } from '@/lib/utils';
+import { DevSlideReporter } from '@/shared/components/design-system-token-editor/dev-slide-reporter';
+import { readTranslationStrings } from '@/shared/i18n/translation-strings';
+import type { Locale } from '@/shared/lib/locale.pure';
+import type { TocSection } from '@/shared/lib/table-of-contents.pure';
+import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
+import { cn } from '@/shared/lib/utils';
+import { ContextDrawerSlot } from '@/shared/page-chrome/context-drawer/context-drawer-slot';
+import { TableOfContents, type TocLabels } from '@/shared/page-chrome/table-of-contents/table-of-contents.client';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import { eyebrowsOf, INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
+import {
+  eyebrowsOf,
+  INSET_CLASSES,
+  sourceFolderOf,
+  TOC_RESERVE_CLASS,
+  tocSectionsOf,
+} from './episode-page-container.pure';
 import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -188,7 +194,7 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 
 interface EpisodePageContainerProps {
   locale: Locale;
-  /** The page's Episode id, or the tooling page's slug: what `data-episode` names and the token editor resolves to a folder. */
+  /** The page's Episode id, or the tooling page's slug: what `data-episode` names, and the source folder the token editor names. */
   id: EpisodesPathSlug;
   episode: EpisodeComposition;
   /** The Episode's Video in this locale, from the content store; none for a tooling page or before upload. */
@@ -229,7 +235,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
         <ContextDrawerSlot input={drawer} />
         {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
       </div>
-      <DevSlideReporter />
+      <DevSlideReporter folder={sourceFolderOf(id)} />
     </UrlStateProvider>
   );
 }

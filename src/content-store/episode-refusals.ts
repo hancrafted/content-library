@@ -3,8 +3,8 @@ import {
   EVENT_COPIES_FOLDER,
   RESERVED_FOLDER_NAMES,
   type EpisodeRef,
-} from '@/episodes/lib/episode-id.pure';
-import { LOCALES } from '@/lib/locale.pure';
+} from '@/content-store/catalogue/episode-id.pure';
+import { LOCALES } from '@/shared/lib/locale.pure';
 import type { Episode } from './schemas/episode.schema';
 
 /*

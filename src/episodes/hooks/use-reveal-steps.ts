@@ -1,7 +1,7 @@
 import { useSlideZone } from '@/episodes/hooks/use-slide-zone';
 import { advanceKey, nextRevealStep, startRevealStep } from '@/episodes/lib/reveal-steps.pure';
 import { inExcludedRegion } from '@/episodes/lib/slide-key-target.pure';
-import { prefersReducedMotion } from '@/hooks/prefers-reduced-motion';
+import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
 import { useCallback, useEffect, useState } from 'react';
 
 /**

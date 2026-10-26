@@ -26,35 +26,35 @@ const SLIDE = 'src/episodes/probe/slides/probe-slide';
 /** A Slide of an Event's copy, under `by-event/<event>/<slug>/`: the same fence holds there. */
 const COPY = 'src/episodes/by-event/2026-01-01-probe/probe';
 const PART = 'src/episodes/components/slide-shared/probe-visual';
-const CORE = 'src/episodes/components/slide-shared/core-components';
+const CORE = 'src/shared/components/core-components';
 
 /** Each probe file and what it imports, relative to the probe tree's root. */
 const PROBES: Readonly<Record<string, string>> = {
   'src/episodes/components/slide-master/slide.ts': 'export const slide = 1;',
   'src/episodes/components/slide-shared/statement.tsx': 'export const Statement = 1;',
-  'src/components/ui/button.tsx': 'export const Button = 1;',
-  'src/components/table-of-contents/toc.tsx': 'export const Toc = 1;',
-  'src/hooks/use-probe.ts': 'export const useProbe = 1;',
-  'src/lib/probe.pure.ts': 'export const probe = 1;',
+  'src/shared/components/ui/button.tsx': 'export const Button = 1;',
+  'src/shared/page-chrome/table-of-contents/toc.tsx': 'export const Toc = 1;',
+  'src/shared/hooks/use-probe.ts': 'export const useProbe = 1;',
+  'src/shared/lib/probe.pure.ts': 'export const probe = 1;',
   'src/episodes/probe/probe.ts': "import { legal } from './slides/probe-slide/slide';\nexport const ep = legal;",
   'src/episodes/probe/slides/other-slide/slide.tsx': 'export const other = 1;',
   [`${SLIDE}/part.tsx`]: 'export const part = 1;',
   [`${SLIDE}/widget.pure.ts`]: 'export const pure = 1;',
   [`${SLIDE}/widget.client.tsx`]:
-    "import { pure } from './widget.pure';\nimport { useProbe } from '../../../../hooks/use-probe';\nimport { probe } from '../../../../lib/probe.pure';\nexport const w = [pure, useProbe, probe];",
+    "import { pure } from './widget.pure';\nimport { useProbe } from '../../../../shared/hooks/use-probe';\nimport { probe } from '../../../../shared/lib/probe.pure';\nexport const w = [pure, useProbe, probe];",
   [`${SLIDE}/slide.tsx`]: [
     "import { part } from './part';",
     "import { w } from './widget.client';",
     "import { slide } from '../../../components/slide-master/slide';",
     "import { Statement } from '../../../components/slide-shared/statement';",
-    "import { Button } from '../../../../components/ui/button';",
-    "import { probe } from '../../../../lib/probe.pure';",
+    "import { Button } from '../../../../shared/components/ui/button';",
+    "import { probe } from '../../../../shared/lib/probe.pure';",
     'export const legal = [part, w, slide, Statement, Button, probe];',
   ].join('\n'),
   [`${SLIDE}/reaches-other-slide.tsx`]: "import { other } from '../other-slide/slide';\nexport const x = other;",
   [`${SLIDE}/reaches-episode.tsx`]: "import { ep } from '../../probe';\nexport const x = ep;",
   [`${SLIDE}/reaches-toc.tsx`]:
-    "import { Toc } from '../../../../components/table-of-contents/toc';\nexport const x = Toc;",
+    "import { Toc } from '../../../../shared/page-chrome/table-of-contents/toc';\nexport const x = Toc;",
   [`${SLIDE}/reaches-master.client.tsx`]:
     "import { slide } from '../../../components/slide-master/slide';\nexport const x = slide;",
   [`${COPY}/slides/other-slide/slide.tsx`]: 'export const copied = 1;',
@@ -64,35 +64,36 @@ const PROBES: Readonly<Record<string, string>> = {
     "import { copied } from '../other-slide/slide';\nexport const x = copied;",
   [`${PART}/probe-visual.pure.ts`]: 'export const view = 1;',
   [`${PART}/probe-visual.client.tsx`]:
-    "import { view } from './probe-visual.pure';\nimport { useProbe } from '../../../../hooks/use-probe';\nimport { probe } from '../../../../lib/probe.pure';\nexport const v = [view, useProbe, probe];",
+    "import { view } from './probe-visual.pure';\nimport { useProbe } from '../../../../shared/hooks/use-probe';\nimport { probe } from '../../../../shared/lib/probe.pure';\nexport const v = [view, useProbe, probe];",
   [`${PART}/probe-visual.tsx`]: [
     "import { v } from './probe-visual.client';",
     "import { view } from './probe-visual.pure';",
     "import { Statement } from '../statement';",
-    "import { Button } from '../../../../components/ui/button';",
+    "import { Button } from '../../../../shared/components/ui/button';",
     'export const visual = [v, view, Statement, Button];',
   ].join('\n'),
   [`${PART}/reaches-other-part.client.tsx`]: "import { Statement } from '../statement';\nexport const x = Statement;",
   [`${PART}/reaches-ui.client.tsx`]:
-    "import { Button } from '../../../../components/ui/button';\nexport const x = Button;",
-  [`${PART}/reaches-hook.tsx`]: "import { useProbe } from '../../../../hooks/use-probe';\nexport const x = useProbe;",
+    "import { Button } from '../../../../shared/components/ui/button';\nexport const x = Button;",
+  [`${PART}/reaches-hook.tsx`]:
+    "import { useProbe } from '../../../../shared/hooks/use-probe';\nexport const x = useProbe;",
   [`${CORE}/probe-core/probe-core.tsx`]: [
     "import { sibling } from '../probe-sibling/probe-sibling';",
-    "import { probe } from '../../../../../lib/probe.pure';",
+    "import { probe } from '../../../lib/probe.pure';",
     'export const core = [sibling, probe];',
   ].join('\n'),
   [`${CORE}/probe-core/probe-core.client.tsx`]:
-    "import { sibling } from '../probe-sibling/probe-sibling';\nimport { useProbe } from '../../../../../hooks/use-probe';\nexport const c = [sibling, useProbe];",
+    "import { sibling } from '../probe-sibling/probe-sibling';\nimport { useProbe } from '../../../hooks/use-probe';\nexport const c = [sibling, useProbe];",
   [`${CORE}/probe-sibling/probe-sibling.tsx`]: 'export const sibling = 1;',
-  [`${CORE}/probe-core/reaches-part.tsx`]: "import { Statement } from '../../statement';\nexport const x = Statement;",
-  [`${CORE}/probe-core/reaches-ui.tsx`]:
-    "import { Button } from '../../../../../components/ui/button';\nexport const x = Button;",
+  [`${CORE}/probe-core/reaches-part.tsx`]:
+    "import { Statement } from '../../../../episodes/components/slide-shared/statement';\nexport const x = Statement;",
+  [`${CORE}/probe-core/reaches-ui.tsx`]: "import { Button } from '../../ui/button';\nexport const x = Button;",
   [`${PART}/uses-core.client.tsx`]:
-    "import { core } from '../core-components/probe-core/probe-core';\nexport const x = core;",
+    "import { core } from '../../../../shared/components/core-components/probe-core/probe-core';\nexport const x = core;",
   [`${SLIDE}/uses-core.tsx`]:
-    "import { core } from '../../../components/slide-shared/core-components/probe-core/probe-core';\nexport const x = core;",
+    "import { core } from '../../../../shared/components/core-components/probe-core/probe-core';\nexport const x = core;",
   [`${SLIDE}/reaches-core.client.tsx`]:
-    "import { core } from '../../../components/slide-shared/core-components/probe-core/probe-core';\nexport const x = core;",
+    "import { core } from '../../../../shared/components/core-components/probe-core/probe-core';\nexport const x = core;",
 };
 
 let root = '';
@@ -173,16 +174,16 @@ describe('failure cases', () => {
     // ARRANGE
     const expected = [
       'core-components-are-a-leaf: reaches-part.tsx -> src/episodes/components/slide-shared/statement.tsx',
-      'core-components-are-a-leaf: reaches-ui.tsx -> src/components/ui/button.tsx',
-      'slide-client-reaches-only-hooks-and-lib: reaches-core.client.tsx -> src/episodes/components/slide-shared/core-components/probe-core/probe-core.tsx',
+      'core-components-are-a-leaf: reaches-ui.tsx -> src/shared/components/ui/button.tsx',
+      'slide-client-reaches-only-hooks-and-lib: reaches-core.client.tsx -> src/shared/components/core-components/probe-core/probe-core.tsx',
       'slide-client-reaches-only-hooks-and-lib: reaches-master.client.tsx -> src/episodes/components/slide-master/slide.ts',
       'slide-folder-reaches-only-own-and-shared: copy-reaches-other-slide.tsx -> src/episodes/by-event/2026-01-01-probe/probe/slides/other-slide/slide.tsx',
       'slide-folder-reaches-only-own-and-shared: reaches-episode.tsx -> src/episodes/probe/probe.ts',
       'slide-folder-reaches-only-own-and-shared: reaches-other-slide.tsx -> src/episodes/probe/slides/other-slide/slide.tsx',
-      'slide-folder-reaches-only-own-and-shared: reaches-toc.tsx -> src/components/table-of-contents/toc.tsx',
+      'slide-folder-reaches-only-own-and-shared: reaches-toc.tsx -> src/shared/page-chrome/table-of-contents/toc.tsx',
       'slide-shared-client-reaches-only-own-part-hooks-and-lib: reaches-other-part.client.tsx -> src/episodes/components/slide-shared/statement.tsx',
-      'slide-shared-client-reaches-only-own-part-hooks-and-lib: reaches-ui.client.tsx -> src/components/ui/button.tsx',
-      'slide-shared-reaches-only-ui-and-lib: reaches-hook.tsx -> src/hooks/use-probe.ts',
+      'slide-shared-client-reaches-only-own-part-hooks-and-lib: reaches-ui.client.tsx -> src/shared/components/ui/button.tsx',
+      'slide-shared-reaches-only-ui-and-lib: reaches-hook.tsx -> src/shared/hooks/use-probe.ts',
     ];
     // ACT
     const found = violations();
@@ -197,9 +198,9 @@ describe('edge cases', () => {
     const expected = [
       'src/episodes/components/slide-master/',
       'src/episodes/components/slide-shared/',
-      'src/components/ui/',
-      'src/hooks/',
-      'src/lib/',
+      'src/shared/components/ui/',
+      'src/shared/hooks/',
+      'src/shared/lib/',
       'src/episodes/hooks/',
       'src/episodes/lib/',
     ];

@@ -1,4 +1,4 @@
-import { placePopover, type Box, type Viewport } from '@/lib/popover-placement.pure';
+import { placePopover, type Box, type Viewport } from '@/shared/lib/popover-placement.pure';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';

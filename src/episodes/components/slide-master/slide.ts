@@ -1,6 +1,6 @@
 import type { SectionList } from '@/episodes/lib/episode.pure';
-import type { TargetProps } from '@/lib/context-link.pure';
-import type { Locale } from '@/lib/locale.pure';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
 import type { ReactNode } from 'react';
 import type {

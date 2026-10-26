@@ -12,7 +12,7 @@ Why the site's colours and type work the way they do, and which tokens exist. Th
 
 A Slide has a **governed frame** and a **free Scene**.
 
-- **Governed:** the base palette, the type scale, the Slide's title and caption, and the Foreground insets that clear the Chrome ([FE-009 Slide Frame](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md)).
+- **Governed:** the base palette, the type scale, the Slide's title and caption, and the Foreground insets that clear the page chrome and talk player ([FE-009 Slide Frame](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md)).
 - **Free:** the Scene's markup, props, layout and spacing.
 
 Tokens govern _values_, never _shape_. A Scene may lay itself out however it likes, but every colour, font size and weight in it is a token reference. This is how three Episodes built by separate agents still read as one body of work. The early prototype failed because structure was forced on it; values were never the problem.
@@ -67,11 +67,11 @@ After the three workshop Episodes, review every Slide token file. A colour that 
 
 The brand symbol is an ink coin with a hand cut out of it, four finger strokes and one thumb curve, and an accent dot in the palm. One geometry, `viewBox="0 0 100 100"`, serves every use:
 
-| Use              | File                              | Colours                                                                                  |
-| ---------------- | --------------------------------- | ---------------------------------------------------------------------------------------- |
-| Header           | `src/components/brand-symbol.tsx` | coin `var(--foreground)`, cuts `var(--background)`, dot `var(--brand-accent)`            |
-| Favicon          | `src/app/icon.svg`                | the same three as hex, light and dark through its own `prefers-color-scheme` query       |
-| Apple touch icon | `src/app/apple-icon.png`          | 180×180, rendered once from the light colours on a paper square, because iOS ignores SVG |
+| Use              | File                                             | Colours                                                                                  |
+| ---------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| Header           | `src/shared/page-chrome/header/brand-symbol.tsx` | coin `var(--foreground)`, cuts `var(--background)`, dot `var(--brand-accent)`            |
+| Favicon          | `src/app/icon.svg`                               | the same three as hex, light and dark through its own `prefers-color-scheme` query       |
+| Apple touch icon | `src/app/apple-icon.png`                         | 180×180, rendered once from the light colours on a paper square, because iOS ignores SVG |
 
 `src/app/icon.svg` is the geometry's source of truth. The header copies its shapes, and `tests/post-build/brand-symbol.build.test.ts` fails when the two differ.
 
@@ -96,7 +96,7 @@ Heading level and visual size are separate. The h1/h2/h3 elements follow the Epi
 | hero       | `text-hero`       | `clamp(2.5rem, 5.2vw, 4.5rem)`   | 1.05        | landing hero and Title slide, through `HeroTitle` only                     |
 | heading    | `text-heading`    | `clamp(2.25rem, 4.2vw, 3.75rem)` | 1.1         | section slide titles                                                       |
 | subheading | `text-subheading` | `clamp(1.875rem, 3.4vw, 3rem)`   | 1.15        | page slide titles                                                          |
-| body       | `text-body`       | `1rem`                           | 1.6         | everything else: prose, Chrome, Context drawer, cards, buttons, links      |
+| body       | `text-body`       | `1rem`                           | 1.6         | everything else: prose, page chrome, Context drawer, cards, buttons, links |
 | caption    | `text-caption`    | `0.875rem`                       | 1.5         | secondary text: Slide captions, table contents, labels, captions in Scenes |
 
 - **Four sizes, plus hero as the one exception.** `caption` is allowed everywhere, Scenes included. A Scene has no fifth size. Hierarchy inside a Scene comes from weight first, then colour.
@@ -140,11 +140,11 @@ Tailwind's default palette and size scale are not reset, because legacy files st
 
 ## Design-system token editor
 
-`src/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, so it is absent from `out/`). Its trigger is an icon button in the site header, beside the theme and locale toggles, and the panel drops down from it on every page. The panel keeps its own fixed palette (`token-panel.module.css`, the one token file outside a Slide that FE-011 allows raw colours in), so it keeps its look while the site's tokens are being edited.
+`src/shared/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, so it is absent from `out/`). Its trigger is an icon button in the site header, beside the theme and locale toggles, and the panel drops down from it on every page. The panel keeps its own fixed palette (`token-panel.module.css`, the one token file outside a Slide that FE-011 allows raw colours in), so it keeps its look while the site's tokens are being edited.
 
-The Global tab lists the global tokens in designer order, each in a group under a sticky header (Brand, Surface & text, Feedback, Lines & focus, Domain, Chrome, Typography, Shape, Layout, Other), a colour beside its `-foreground` pair, each with a one-line description. The order and the descriptions live in `src/lib/token-groups.pure.ts`; a token missing from its table shows no description and lands under Other. The Slide tab lists the active Slide's own tokens, one group per selector that declares them, colours first; it is disabled off an Episode page. Clicking a colour's swatch opens a picker (`react-colorful`) that writes the pick back in the token's own format: `oklch(L C H)` stays oklch, a hex token stays hex (`src/lib/colour-convert.pure.ts`).
+The Global tab lists the global tokens in designer order, each in a group under a sticky header (Brand, Surface & text, Feedback, Lines & focus, Domain, Chrome, Typography, Shape, Layout, Other), a colour beside its `-foreground` pair, each with a one-line description. The order and the descriptions live in `src/shared/lib/token-groups.pure.ts`; a token missing from its table shows no description and lands under Other. The Slide tab lists the active Slide's own tokens, one group per selector that declares them, colours first; it is disabled off an Episode page. Clicking a colour's swatch opens a picker (`react-colorful`) that writes the pick back in the token's own format: `oklch(L C H)` stays oklch, a hex token stays hex (`src/shared/lib/colour-convert.pure.ts`).
 
-The header is outside the Episode page and its URL-state service, so the active Slide reaches the editor through a dev-only relay: `DevSlideReporter` inside the page reads `useActiveSlide()` and hands the id to `src/hooks/use-dev-slide.ts`. The editor's hook is `src/hooks/use-page-tokens.ts`; its stylesheet and DOM logic are in `src/lib/page-tokens.ts`.
+The header is outside the Episode page and its URL-state service, so the active Slide reaches the editor through a dev-only relay: `DevSlideReporter` inside the page reads `useActiveSlide()` and hands the id to `src/shared/hooks/use-dev-slide.ts`. The editor's hook is `src/shared/hooks/use-page-tokens.ts`; its stylesheet and DOM logic are in `src/shared/lib/page-tokens.ts`.
 
 Each row has an experimental **Find usage** button that lists the elements in view using the token; it lives in one folder, `design-system-token-editor/token-usage/`, behind one `rowAddon` prop, and its limits are in `docs/adr/0003-token-usage-lookup-is-experimental.md`.
 
@@ -152,7 +152,7 @@ Edits are not saved. **Copy changed** exports only the tokens you changed, as a 
 
 ## Legacy
 
-The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list, `src/design-system/legacy.json`, which ESLint and Archgate both read. Legacy files are exempt from E2 and the raw-value rules, not from E1 and E3. The list only shrinks: touching one of these files is the moment to migrate it.
+The landing page, `ai-token-economy` and `maintaining-markdown-for-ai` predate these rules and sit on a legacy list, `src/shared/design-system/legacy.json`, which ESLint and Archgate both read. Legacy files are exempt from E2 and the raw-value rules, not from E1 and E3. The list only shrinks: touching one of these files is the moment to migrate it.
 
 ## Motion
 

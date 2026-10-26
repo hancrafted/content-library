@@ -1,7 +1,8 @@
-import { episodeRefOf } from '@/episodes/lib/episode-id.pure';
-import type { EventSlug } from '@/lib/routes';
+import { episodeRefOf } from '@/content-store/catalogue/episode-id.pure';
+import type { EventSlug } from '@/content-store/catalogue/routes';
 import type { z } from 'zod';
 import { duplicates, episodeRefusals, type LoadedEpisode } from './episode-refusals';
+import { featuredRefusals } from './featured';
 import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
@@ -27,6 +28,8 @@ export interface ContentInput {
   readonly episodes: readonly EpisodeEntry[];
   readonly events: readonly unknown[];
   readonly playlists: readonly unknown[];
+  /** The Featured slots by Episode id, checked against the Episodes when given (`./featured.ts`). */
+  readonly featured?: readonly string[];
 }
 
 /** Every record kind, parsed by its schema, before the cross-record rules: an Event names its Playlist by id. */
@@ -34,6 +37,7 @@ export interface ParsedContent {
   readonly episodes: readonly LoadedEpisode[];
   readonly events: readonly Event[];
   readonly playlists: readonly Playlist[];
+  readonly featured?: readonly string[];
 }
 
 /** Every record kind, parsed and checked, each Event served with the Playlist it presents. */
@@ -138,7 +142,10 @@ function playlistRefusals(
 }
 
 /** The cross-record refusals over sound records, in the order kinds are listed, with the Events' own from `serve`. */
-function crossRecordRefusals({ episodes, events, playlists }: ParsedContent, unserved: readonly string[]): string[] {
+function crossRecordRefusals(
+  { episodes, events, playlists, featured }: ParsedContent,
+  unserved: readonly string[],
+): string[] {
   const presented = new Set(events.map((event) => event.playlist));
   const listedByEvents = new Set(
     playlists.filter((playlist) => presented.has(playlist.id)).flatMap((playlist) => playlist.episodes),
@@ -157,6 +164,7 @@ function crossRecordRefusals({ episodes, events, playlists }: ParsedContent, uns
     ...unserved,
     ...uniqueness('Playlist', playlistIds, 'id'),
     ...playlists.flatMap((playlist) => playlistRefusals(playlist, byId, presenters(playlist))),
+    ...(featured === undefined ? [] : featuredRefusals(featured, byId)),
   ];
 }
 
@@ -212,7 +220,12 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
   const events = parseAll({ kind: 'Event', key: 'slug', schema: eventSchema }, input.events);
   const playlists = parseAll({ kind: 'Playlist', key: 'id', schema: playlistSchema }, input.playlists);
   return {
-    content: { episodes: episodes.parsed, events: events.parsed, playlists: playlists.parsed },
+    content: {
+      episodes: episodes.parsed,
+      events: events.parsed,
+      playlists: playlists.parsed,
+      ...(input.featured === undefined ? {} : { featured: input.featured }),
+    },
     refused: [...episodes.refused, ...events.refused, ...playlists.refused],
   };
 }

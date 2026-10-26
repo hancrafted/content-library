@@ -1,5 +1,5 @@
-import { PRIMARY_LOOK, type AccentClasses } from '@/components/ui/card-shell';
-import type { Accent, TagIcon } from '@/lib/episode-overview';
+import type { Accent, TagIcon } from '@/episodes/lib/tag-looks';
+import { PRIMARY_LOOK, type AccentClasses } from '@/shared/components/ui/card-shell';
 import { Coins, FileText, Handshake, Hourglass, ListPlus, Sparkles, type LucideIcon } from 'lucide-react';
 
 /** A Tag names its icon as data; this is the one place the landing turns the name into a drawing. */

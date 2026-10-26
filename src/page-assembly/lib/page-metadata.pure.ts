@@ -1,6 +1,3 @@
-import type { IsoDate } from '@/content-store/schemas/fields';
-import { TRANSLATIONS } from '@/i18n/translations';
-import { DEFAULT_LOCALE, localizePath, type Locale } from '@/lib/locale.pure';
 import {
   episodeRoute,
   matchPage,
@@ -10,8 +7,11 @@ import {
   type PageKind,
   type PageRef,
   type RecordPage,
-} from '@/lib/routes';
-import { pageTreatment, type PageTreatment } from '@/lib/visibility.pure';
+} from '@/content-store/catalogue/routes';
+import { pageTreatment, type PageTreatment } from '@/content-store/catalogue/visibility.pure';
+import type { IsoDate } from '@/content-store/schemas/fields';
+import { TRANSLATIONS } from '@/shared/i18n/translations';
+import { DEFAULT_LOCALE, localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { Metadata } from 'next';
 
 /** A root layout's metadata: the absolute base and the site-name title frame. Nothing page-specific. */

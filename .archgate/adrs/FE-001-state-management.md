@@ -4,8 +4,8 @@ id: FE-001
 title: 'State Management'
 domain: frontend
 rules: true
-files: ['src/**/*.{ts,tsx}', 'src/config.yaml', 'eslint.config.mjs']
-paths: ['src/**/*.{ts,tsx}', 'src/config.yaml', 'eslint.config.mjs']
+files: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'eslint.config.mjs']
+paths: ['src/**/*.{ts,tsx}', 'src/shared/config.yaml', 'eslint.config.mjs']
 description: 'Where state lives: application state in the URL, user preference in one localStorage key, the rest in memory. One module writes history, one writes storage.'
 ---
 
@@ -41,14 +41,14 @@ Cause: no rule for where state lives or who writes it. Fix: class every piece of
 
 ### 2. URL: one writer, one reader
 
-1. Only `src/lib/url-state.ts` MAY write browser history; one instance per page, disposed on leave.
+1. Only `src/shared/lib/url-state.ts` MAY write browser history; one instance per page, disposed on leave.
 2. Writes MUST be throttled. A click shows its Slide at once and wins over scroll reports until the scroll ends.
 3. Components MUST read the active Slide through `useActiveSlide()`, never mirror it into own state.
 
 ### 3. Preferences: one key (📜 Rule: `single-storage-key`)
 
-1. Every preference MUST be a field of one JSON object under one localStorage key, named once in `src/config.yaml`.
-2. Storage MUST be read and written only through the prefs module (`src/lib/prefs-storage.ts`); writes merge, never overwrite. Pre-paint theme script: read-only exception.
+1. Every preference MUST be a field of one JSON object under one localStorage key, named once in `src/shared/config.yaml`.
+2. Storage MUST be read and written only through the prefs module (`src/shared/lib/prefs-storage.ts`); writes merge, never overwrite. Pre-paint theme script: read-only exception.
 
 ## Do's and Don'ts
 
@@ -86,8 +86,8 @@ Cause: no rule for where state lives or who writes it. Fix: class every piece of
 
 ## Compliance and Enforcement
 
-1. **Rule** `single-storage-key` (`FE-001-state-management.rules.ts`, error): every `getItem`/`setItem` under `src/` passes the configured key; `PREFS_KEY` equals `src/config.yaml`.
-2. **Lint** (`eslint.config.mjs`): history writes refused outside `src/lib/url-state.ts`.
+1. **Rule** `single-storage-key` (`FE-001-state-management.rules.ts`, error): every `getItem`/`setItem` under `src/` passes the configured key; `PREFS_KEY` equals `src/shared/config.yaml`.
+2. **Lint** (`eslint.config.mjs`): history writes refused outside `src/shared/lib/url-state.ts`.
 3. **Tests** (`npm run verify`): URL service driven against a fake window — intent, throttle, dispose, isolation.
 
 **Manual review duties:** new state classed per §1; no `location.hash` or `router.push('#…')` writes; storage touched only via the prefs module.

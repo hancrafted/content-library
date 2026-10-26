@@ -3,8 +3,8 @@ import {
   type CallLight,
   type CallWho,
 } from '@/episodes/components/slide-shared/call-transcript/call-transcript';
-import { Sparkle } from '@/episodes/components/slide-shared/glyphs/glyphs';
-import type { TargetProps } from '@/lib/context-link.pure';
+import { Sparkle } from '@/shared/components/core-components/glyphs/glyphs';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 
 /** The three bands both threads share, in reading order. */

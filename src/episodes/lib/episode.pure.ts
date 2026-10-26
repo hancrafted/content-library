@@ -1,4 +1,4 @@
-import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
+import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 
 /** The least a Slide record carries to be placed: its stable slug. */
 export interface SlideOutline {

@@ -1,7 +1,7 @@
 import { episodesPathParams } from '@/content-store/store';
-import { DEFAULT_LOCALE } from '@/lib/locale.pure';
 import { EpisodePage, episodePageCopy, episodesPathPageOf } from '@/page-assembly/episode/episode-page';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
+import { DEFAULT_LOCALE } from '@/shared/lib/locale.pure';
 
 interface EpisodeParams {
   params: Promise<{ episode: string }>;

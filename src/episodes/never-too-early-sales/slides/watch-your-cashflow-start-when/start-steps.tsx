@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { StepIcon, type StepSlug } from './step-icon';
 
 /** The four steps, in the order the voice names them. */

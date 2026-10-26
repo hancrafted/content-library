@@ -1,4 +1,4 @@
-import { EPISODE_PORTAL_ROOT_ID } from '@/lib/episode-portal.pure';
+import { EPISODE_PORTAL_ROOT_ID } from '@/shared/lib/episode-portal.pure';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';

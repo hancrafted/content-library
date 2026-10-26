@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { Check } from 'lucide-react';
 import { useId, useRef, useState, type KeyboardEvent } from 'react';
 import {

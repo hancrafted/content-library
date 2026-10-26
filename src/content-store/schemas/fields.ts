@@ -12,7 +12,7 @@ export const VISIBILITIES = ['public', 'unlisted'] as const;
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];
 
-/** The closed Tag vocabulary: the only Tags an Episode may carry. Each Tag's look lives in `lib/episode-overview`. */
+/** The closed Tag vocabulary: the only Tags an Episode may carry. Each Tag's look lives in the Episodes area, `src/episodes/lib/tag-looks.ts`. */
 export const TAG_IDS = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'] as const;
 export type TagId = (typeof TAG_IDS)[number];
 

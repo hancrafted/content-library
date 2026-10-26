@@ -3,7 +3,7 @@
  * how wide a dot's toggletip grows. No DOM, no React.
  */
 
-import type { PopoverRules, PopoverSide } from '@/lib/popover-placement.pure';
+import type { PopoverRules, PopoverSide } from '@/shared/lib/popover-placement.pure';
 
 /** The milestones on the rail, in order; each names its Translation keys under `items.<key>`. */
 export const RAIL_ITEMS = ['a', 'b', 'c', 'd', 'e', 'f'] as const;
@@ -12,7 +12,7 @@ export type RailItem = (typeof RAIL_ITEMS)[number];
 
 export type RailSide = PopoverSide;
 
-/** The toggletip's widths and gaps for the shared popover placement (`@/lib/popover-placement.pure`). */
+/** The toggletip's widths and gaps for the shared popover placement (`@/shared/lib/popover-placement.pure`). */
 export const TOGGLETIP_RULES: PopoverRules = {
   /** The widest a toggletip grows; a phone narrows it to the viewport minus its margins. */
   maxWidth: 256,

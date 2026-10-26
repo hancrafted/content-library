@@ -4,7 +4,7 @@
  * route draws. No DOM, no React.
  */
 
-import type { PopoverRules } from '@/lib/popover-placement.pure';
+import type { PopoverRules } from '@/shared/lib/popover-placement.pure';
 
 export interface Point {
   readonly x: number;
@@ -168,7 +168,7 @@ export function contrastRatio(a: string, b: string): number {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-/** The station popover's widths and gaps for the shared popover placement (`@/lib/popover-placement.pure`); it prefers to open below its station. */
+/** The station popover's widths and gaps for the shared popover placement (`@/shared/lib/popover-placement.pure`); it prefers to open below its station. */
 export const POPOVER_RULES: PopoverRules = {
   /** The widest a popover grows; a phone narrows it to the viewport minus its margins. */
   maxWidth: 288,

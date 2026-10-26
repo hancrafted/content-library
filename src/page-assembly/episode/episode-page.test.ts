@@ -1,5 +1,5 @@
-import { episodeRefOf, matchEpisode } from '@/episodes/lib/episode-id.pure';
-import { EPISODE_IDS, type EpisodeId } from '@/lib/routes';
+import { episodeRefOf, matchEpisode } from '@/content-store/catalogue/episode-id.pure';
+import { EPISODE_IDS, type EpisodeId } from '@/content-store/catalogue/routes';
 import { pageMetadata } from '@/page-assembly/lib/page-metadata.pure';
 import { describe, expect, it } from 'vitest';
 import { episodePageCopy, episodesPathPageOf, eventEpisodePageOf, type EpisodePageRef } from './episode-page';

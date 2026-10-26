@@ -1,5 +1,5 @@
-import { localizePath, type Locale } from '@/lib/locale.pure';
-import { eventEpisodeRoute, type EpisodeId, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/routes';
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 
 /**
  * The card fields an Event's Playlist reads of each Episode card page assembly hands it: the logical path of its page

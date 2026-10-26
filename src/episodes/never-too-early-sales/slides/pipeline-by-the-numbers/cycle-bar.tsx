@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { CSSProperties } from 'react';
 import styles from './pipeline-by-the-numbers.module.css';
 

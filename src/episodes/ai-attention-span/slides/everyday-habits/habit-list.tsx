@@ -1,4 +1,4 @@
-import type { TargetProps } from '@/lib/context-link.pure';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 
 const HABIT = 'focus-group__item card-hover card-hover--raise flex flex-col gap-2 rounded-xl bg-card p-5 shadow-md';

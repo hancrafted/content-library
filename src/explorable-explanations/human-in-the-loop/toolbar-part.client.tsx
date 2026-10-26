@@ -1,8 +1,8 @@
 'use client';
 
-import { IconButton } from '@/episodes/components/slide-shared/core-components/icon-button/icon-button.client';
-import { Tip } from '@/episodes/components/slide-shared/core-components/tip/tip.client';
-import { useMotion } from '@/hooks/use-motion';
+import { IconButton } from '@/shared/components/core-components/icon-button/icon-button.client';
+import { Tip } from '@/shared/components/core-components/tip/tip.client';
+import { useMotion } from '@/shared/hooks/use-motion';
 import { ChevronDown, Code, Download, Upload } from 'lucide-react';
 import { useId, type ChangeEvent } from 'react';
 import styles from './human-in-the-loop.module.css';

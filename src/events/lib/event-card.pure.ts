@@ -1,9 +1,9 @@
+import { eventRoute } from '@/content-store/catalogue/routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { ServedEvent } from '@/content-store/store';
-import { dateLabelOf } from '@/lib/date-label.pure';
-import type { Locale } from '@/lib/locale.pure';
-import { eventRoute } from '@/lib/routes';
-import { fillTemplate } from '@/lib/template.pure';
+import { dateLabelOf } from '@/shared/lib/date-label.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 
 /** What an Event card reads from the Translation file: any key by its full path, and the Episode count's two sentences. */
 export interface EventReads {

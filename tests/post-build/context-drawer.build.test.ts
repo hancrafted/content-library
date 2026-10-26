@@ -6,8 +6,8 @@ import { type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { episodeRoute } from '../../src/lib/routes';
+import { episodeRoute } from '../../src/content-store/catalogue/routes';
+import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
 

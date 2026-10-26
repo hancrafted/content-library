@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useState } from 'react';
 import { nextSpineLevel, SPINE_LEVELS, type SpineLevel } from './spine-stepper.pure';
 

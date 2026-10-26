@@ -3,11 +3,11 @@
 import { useDockedPageMark, useTalkHostPlacement } from '@/episodes/hooks/use-talk-host-placement';
 import { closeTalkPlayer, openTalkPlayer, registerSlot, useTalkPlayer } from '@/episodes/hooks/use-talk-player';
 import { shouldDock } from '@/episodes/lib/talk-dock.pure';
-import { prefersReducedMotion } from '@/hooks/prefers-reduced-motion';
-import { useActiveSlide, useUrlState } from '@/hooks/use-url-state';
-import type { Locale } from '@/lib/locale.pure';
-import { TITLE_ANCHOR } from '@/lib/title-anchor.pure';
-import { cn } from '@/lib/utils';
+import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
+import { useActiveSlide, useUrlState } from '@/shared/hooks/use-url-state';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
+import { cn } from '@/shared/lib/utils';
 import { useState, useSyncExternalStore } from 'react';
 
 export interface TalkPlayerLabels {

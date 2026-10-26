@@ -1,6 +1,6 @@
-import type { TocSection } from '@/lib/table-of-contents.pure';
+import type { TocSection } from '@/shared/lib/table-of-contents.pure';
 import { describe, expect, it } from 'vitest';
-import { eyebrowsOf } from './episode-page-container.pure';
+import { eyebrowsOf, sourceFolderOf } from './episode-page-container.pure';
 
 /** A table-of-contents Section with page Slides of these ids, each titled after its id. */
 function section(id: string, title: string, items: readonly string[]): TocSection {
@@ -37,6 +37,15 @@ describe('success cases', () => {
     // ASSERT
     expect(eyebrow).toEqual(expected);
   });
+
+  it("names an Episode's own source folder for the dev token editor", () => {
+    // ARRANGE
+    const expected = 'src/episodes/ai-token-economy';
+    // ACT
+    const folder = sourceFolderOf('ai-token-economy');
+    // ASSERT
+    expect(folder).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -63,5 +72,20 @@ describe('edge cases', () => {
     // ASSERT
     expect(eyebrows.get('s--b')).toBeUndefined();
     expect(eyebrows.get('s--c')).toEqual(expected);
+  });
+
+  it("names an Event's copy's folder under its Event, and a tooling page's under tooling/", () => {
+    // ARRANGE
+    const expected = [
+      'src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time',
+      'src/episodes/tooling/slide-master',
+    ];
+    // ACT
+    const folders = [
+      sourceFolderOf('2026-10-23-axel-agentic-workflow__onboard-ai-every-time'),
+      sourceFolderOf('slide-master'),
+    ];
+    // ASSERT
+    expect(folders).toEqual(expected);
   });
 });

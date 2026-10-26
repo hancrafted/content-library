@@ -1,8 +1,8 @@
+import type { EpisodesPathSlug } from '@/content-store/catalogue/routes';
 import type { PlacedListSlide, SlideLevel } from '@/episodes/lib/episode.pure';
-import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
-import type { Locale } from '@/lib/locale.pure';
-import type { EpisodesPathSlug } from '@/lib/routes';
-import { segmentSpans, type SpokenSegment } from '@/lib/speaking-time.pure';
+import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { segmentSpans, type SpokenSegment } from '@/shared/lib/speaking-time.pure';
 import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './slide';
@@ -73,7 +73,7 @@ export interface EpisodeContext {
 
 /**
  * next-intl's `createTranslator` over the Slide's own messages. Like the
- * site-wide config (`src/i18n/request.ts`), any missing message or formatting
+ * site-wide config (`src/shared/i18n/request.ts`), any missing message or formatting
  * error throws, so untranslated text fails the build instead of shipping.
  */
 function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {

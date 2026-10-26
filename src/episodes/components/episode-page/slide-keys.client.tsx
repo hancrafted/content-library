@@ -1,8 +1,8 @@
 'use client';
 
 import { inExcludedRegion, slideKeyTarget } from '@/episodes/lib/slide-key-target.pure';
-import { prefersReducedMotion } from '@/hooks/prefers-reduced-motion';
-import { useActiveSlide } from '@/hooks/use-url-state';
+import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
+import { useActiveSlide } from '@/shared/hooks/use-url-state';
 import { useEffect, useRef } from 'react';
 
 /**

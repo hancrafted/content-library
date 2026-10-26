@@ -1,10 +1,10 @@
+import { episodeRoute, isEpisodeId } from '@/content-store/catalogue/routes';
 import type { EpisodeStatus, PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/episode.schema';
 import type { FormatId, TagId } from '@/content-store/schemas/fields';
 import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';
-import { dateLabelOf } from '@/lib/date-label.pure';
-import type { Accent, TagIcon } from '@/lib/episode-overview';
-import { localizePath, type Locale } from '@/lib/locale.pure';
-import { episodeRoute, isEpisodeId } from '@/lib/routes';
+import type { Accent, TagIcon } from '@/episodes/lib/tag-looks';
+import { dateLabelOf } from '@/shared/lib/date-label.pure';
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 
 /** One id with its label in the reader's locale. */
 export interface Labelled<Id extends string> {

@@ -6,9 +6,9 @@
 import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
-import legacy from '../../src/design-system/legacy.json';
-import { LOCALES, localizePath } from '../../src/lib/locale.pure';
-import { episodeRoute } from '../../src/lib/routes';
+import { episodeRoute } from '../../src/content-store/catalogue/routes';
+import legacy from '../../src/shared/design-system/legacy.json';
+import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles } from './stylesheets';
 

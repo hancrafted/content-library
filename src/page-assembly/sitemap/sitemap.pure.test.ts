@@ -1,5 +1,5 @@
-import type { PageRef } from '@/lib/routes';
-import type { PageTreatment } from '@/lib/visibility.pure';
+import type { PageRef } from '@/content-store/catalogue/routes';
+import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { robotsFor, sitemapEntries } from './sitemap.pure';
 

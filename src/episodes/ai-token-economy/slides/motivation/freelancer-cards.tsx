@@ -1,5 +1,5 @@
-import type { TargetProps } from '@/lib/context-link.pure';
-import { cn } from '@/lib/utils';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import { cn } from '@/shared/lib/utils';
 import Image from 'next/image';
 import type { ReactElement } from 'react';
 import styles from './freelancer-cards.module.css';

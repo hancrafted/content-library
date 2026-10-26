@@ -1,6 +1,6 @@
 import { Frame } from '@/episodes/components/slide-shared/exhibition/frame';
 import { WallLabel } from '@/episodes/components/slide-shared/exhibition/wall-label';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 import { ExhibitIcon, type ExhibitSlug } from './exhibit-icon';
 

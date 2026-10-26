@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 /**
  * episode-template's Hero motif (a Hero motif is authored per Episode): its Sections as stops on one track. The Title

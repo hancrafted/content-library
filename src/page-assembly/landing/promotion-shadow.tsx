@@ -1,5 +1,5 @@
-import { PAPER_PILE_ORIGIN, pileShadowPath } from '@/lib/paper-pile.pure';
 import { TRAY_OUTLINE } from '@/page-assembly/landing/promotion-office';
+import { PAPER_PILE_ORIGIN, pileShadowPath } from '@/shared/lib/paper-pile.pure';
 
 function ShadowMaterials() {
   return (

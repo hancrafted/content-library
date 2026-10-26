@@ -1,8 +1,8 @@
-import { fillTemplate } from '@/lib/template.pure';
 import { agentElapsed, spanElapsed } from '@/pipeline/lib/dashboard-elapsed.pure';
 import type { BranchGeometry, StageGeometry } from '@/pipeline/lib/dashboard-graph-geometry.pure';
 import type { AgentNode, JobNode, StageNode } from '@/pipeline/lib/dashboard-graph-view.pure';
 import { jobProgress } from '@/pipeline/lib/dashboard-scrub.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { useContext } from 'react';
 import { JobChipList } from './dashboard-chips';
 import { ElapsedTime, JobFailureNote, StateBadge, type DashboardCopy } from './dashboard-evidence';

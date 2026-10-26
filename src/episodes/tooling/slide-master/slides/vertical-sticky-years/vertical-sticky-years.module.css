@@ -19,7 +19,7 @@
       transform: scaleX(0);
     }
 
-    /* Lit while its group spans the reading line (35% from the viewport top, src/lib/reading-line.pure.ts): from the
+    /* Lit while its group spans the reading line (35% from the viewport top, src/shared/lib/reading-line.pure.ts): from the
        group's top reaching the line to its bottom leaving it. */
     .year {
       animation: year-light linear;

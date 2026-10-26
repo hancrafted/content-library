@@ -1,6 +1,6 @@
 import { listedEvents, listEvents, type ServedEvent } from '@/content-store/store';
 import { eventCard, type EventCard, type EventReads } from '@/events/lib/event-card.pure';
-import type { Locale } from '@/lib/locale.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
 /** What an Event card reads from the Translation file in one locale. */

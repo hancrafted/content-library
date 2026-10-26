@@ -1,7 +1,7 @@
-import { CardArrow, CardShell, CardTitle, PRIMARY_LOOK } from '@/components/ui/card-shell';
-import type { CardHeadingLevel } from '@/components/ui/card-variant.pure';
 import type { EventCard } from '@/events/lib/event-card.pure';
-import type { Locale } from '@/lib/locale.pure';
+import { CardArrow, CardShell, CardTitle, PRIMARY_LOOK } from '@/shared/components/ui/card-shell';
+import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { CalendarDays } from 'lucide-react';
 
 export interface EventCardProps {

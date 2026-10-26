@@ -3,9 +3,9 @@ import {
   type CallLight,
   type CallWho,
 } from '@/episodes/components/slide-shared/call-transcript/call-transcript';
-import type { TargetProps } from '@/lib/context-link.pure';
-import { externalHref } from '@/lib/external-link.pure';
-import { cn } from '@/lib/utils';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import { externalHref } from '@/shared/lib/external-link.pure';
+import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
 /** The four effects the call leaves: the start and end stay sharp, the middle blurs, the standout survives. */

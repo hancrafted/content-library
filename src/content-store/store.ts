@@ -1,9 +1,9 @@
-import { FEATURED } from '@/lib/episode-overview';
-import type { Locale } from '@/lib/locale.pure';
-import type { EpisodeId } from '@/lib/routes';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { catalogueOf } from './catalogue/page-catalogue';
+import type { EpisodeId } from './catalogue/routes';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { EVENT_RECORDS } from './event-registry.generated';
-import { catalogueOf } from './page-catalogue';
+import { FEATURED } from './featured';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { checkRecords, parseRecords, type Content, type ContentInput, type LoadedEpisode } from './refusals';
@@ -56,6 +56,7 @@ const CONTENT = loadContent({
   episodes: Object.entries({ ...EPISODE_METADATA, ...UPCOMING_METADATA }).map(([id, record]) => ({ id, record })),
   events: EVENTS,
   playlists: PLAYLISTS,
+  featured: FEATURED,
 });
 
 /** The Featured Episode ids, typed so `tsc` refuses one that names an upcoming Episode. */

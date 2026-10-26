@@ -1,4 +1,4 @@
-import { fillTemplate } from '@/lib/template.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { shortTokens } from './context-format.pure';
 import type { ContextWords } from './context-words.types';
 import { simpleOf, stepTokens } from './context.pure';

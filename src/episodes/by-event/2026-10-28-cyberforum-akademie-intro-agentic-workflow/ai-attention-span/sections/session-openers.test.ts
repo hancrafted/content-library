@@ -2,7 +2,7 @@ import { localizeSlide, localizeTitleScene } from '@/episodes/components/slide-m
 import type { Slide } from '@/episodes/components/slide-master/slide';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import { SessionBarPreset } from '@/explorable-explanations/context/context';
-import type { Locale } from '@/lib/locale.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { createElement, Fragment } from 'react';

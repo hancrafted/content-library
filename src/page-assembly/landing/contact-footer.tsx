@@ -1,9 +1,9 @@
-import { SocialLinks } from '@/components/social-links';
-import { Button } from '@/components/ui/button';
-import { BOOKING_URL, CONTACT_EMAIL } from '@/lib/contact';
-import { externalHref } from '@/lib/external-link.pure';
-import type { Locale } from '@/lib/locale.pure';
 import { CopyEmail } from '@/page-assembly/landing/copy-email.client';
+import { Button } from '@/shared/components/ui/button';
+import { BOOKING_URL, CONTACT_EMAIL } from '@/shared/lib/contact';
+import { externalHref } from '@/shared/lib/external-link.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { SocialLinks } from '@/shared/page-chrome/header/social-links';
 import { ArrowUpRight, CalendarDays } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 

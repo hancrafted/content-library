@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 
 /** One row of a badge's facts, a term and its value. */
 export interface BadgeFact {

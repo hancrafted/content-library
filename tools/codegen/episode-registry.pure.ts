@@ -25,7 +25,7 @@ export interface RegistryFile {
 
 /** Where each tier's registry lives. */
 export const REGISTRY_PATHS = {
-  ids: 'src/lib/episode-registry.generated.ts',
+  ids: 'src/content-store/catalogue/episode-ids.generated.ts',
   metadata: 'src/content-store/episode-registry.generated.ts',
   compositions: 'src/episodes/lib/episode-registry.generated.ts',
 } as const;
@@ -41,8 +41,8 @@ const HEADER = [
   '// Episode, keyed by its id; with `episode.ts`, a page. A folder `src/episodes/tooling/<slug>/` is a tooling page.',
 ].join('\n');
 const ID_TYPES = [
-  "import type { EpisodeSlugOf } from '@/episodes/lib/episode-id.pure';",
-  "import type { EpisodeId } from '@/lib/routes';",
+  "import type { EpisodeSlugOf } from '@/content-store/catalogue/episode-id.pure';",
+  "import type { EpisodeId } from '@/content-store/catalogue/routes';",
 ].join('\n');
 
 /** An Episode with a page: its id, its folder, the identifier it is imported under, and the name its `episode.ts` exports. */
@@ -129,8 +129,8 @@ function compositionsFile(episodes: readonly RegisteredEpisode[], tooling: reado
   const imports = [...episodes, ...tooling].map((each) => importOf(each, `@/episodes/${each.folder}/episode`));
   return `${HEADER}
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
-import type { EpisodeSlugOf } from '@/episodes/lib/episode-id.pure';
-import type { EpisodeId, ToolingSlug } from '@/lib/routes';
+import type { EpisodeSlugOf } from '@/content-store/catalogue/episode-id.pure';
+import type { EpisodeId, ToolingSlug } from '@/content-store/catalogue/routes';
 ${imports.join('\n')}
 
 /** Every Episode's composition by id, so a record's slug must be its folder's name. */

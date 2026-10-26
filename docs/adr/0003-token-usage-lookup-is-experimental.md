@@ -5,7 +5,7 @@ status: proposed
 
 # The token usage lookup is experimental
 
-The dev-only token editor's "Find usage" button lists the elements in view that use a token. It lives in one folder, `src/components/design-system-token-editor/token-usage/`, which the editor root reaches through a single `rowAddon` prop. It ships as an experiment: useful for a review session, not yet a feature to rely on. This record keeps why it is allowed to be approximate, and what would end the experiment.
+The dev-only token editor's "Find usage" button lists the elements in view that use a token. It lives in one folder, `src/shared/components/design-system-token-editor/token-usage/`, which the editor root reaches through a single `rowAddon` prop. It ships as an experiment: useful for a review session, not yet a feature to rely on. This record keeps why it is allowed to be approximate, and what would end the experiment.
 
 ## Why it is approximate
 
@@ -20,7 +20,7 @@ For one token, the lookup samples the computed style of the elements in view, se
 
 ## Removal
 
-Delete `src/components/design-system-token-editor/token-usage/` and the `rowAddon={usageRowAddon}` prop (with its import) in `token-editor.client.tsx`. `carriers` stays exported from `src/lib/page-tokens.ts`; the editor itself uses it.
+Delete `src/shared/components/design-system-token-editor/token-usage/` and the `rowAddon={usageRowAddon}` prop (with its import) in `token-editor.client.tsx`. `carriers` stays exported from `src/shared/lib/page-tokens.ts`; the editor itself uses it.
 
 ## Open hardening points
 

@@ -6,17 +6,17 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { listEpisodes, listEvents } from '../../src/content-store/store';
-import { LOCALES, localizePath, type Locale } from '../../src/lib/locale.pure';
 import {
   episodeRoute,
   eventEpisodeRoute,
   eventRoute,
   isEpisodeId,
   legacyEpisodeRoute,
-  ROUTES,
   type EventSlug,
-} from '../../src/lib/routes';
+} from '../../src/content-store/catalogue/routes';
+import { listEpisodes, listEvents } from '../../src/content-store/store';
+import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.pure';
+import { ROUTES } from '../../src/shared/lib/routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const AXEL: EventSlug = '2026-10-23-axel-agentic-workflow';

@@ -38,7 +38,7 @@ function makeCtx(files: Record<string, string>) {
   return { ctx, violations };
 }
 
-const FILE = 'src/components/site-header.tsx';
+const FILE = 'src/shared/page-chrome/header/site-header.tsx';
 const rule = ruleSet.rules['href-via-localize-path'];
 
 describe('href-via-localize-path', () => {
@@ -108,7 +108,7 @@ describe('href-via-localize-path', () => {
   it('leaves files outside src/**/*.tsx alone', async () => {
     // ARRANGE
     const source = `<a href="/de">x</a>\n`;
-    const { ctx, violations } = makeCtx({ 'src/lib/routes.ts': source, 'docs/page.tsx': source });
+    const { ctx, violations } = makeCtx({ 'src/content-store/catalogue/routes.ts': source, 'docs/page.tsx': source });
     // ACT
     await rule.check(ctx);
     // ASSERT

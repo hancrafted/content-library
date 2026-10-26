@@ -1,4 +1,4 @@
-import { isLocale, PREFIXED_LOCALES, type Locale } from '@/lib/locale.pure';
+import { isLocale, PREFIXED_LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';
 
 export interface LocaleParams {

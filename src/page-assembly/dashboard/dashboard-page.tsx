@@ -1,6 +1,6 @@
-import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
-import { TRANSLATIONS } from '@/i18n/translations';
 import { Dashboard } from '@/pipeline/components/dashboard.client';
+import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
+import { TRANSLATIONS } from '@/shared/i18n/translations';
 
 export function DashboardPage() {
   const copy = TRANSLATIONS.en.dashboard;

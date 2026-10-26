@@ -1,6 +1,6 @@
 'use client';
 
-import { useMotion } from '@/hooks/use-motion';
+import { useMotion } from '@/shared/hooks/use-motion';
 import { Play } from 'lucide-react';
 
 interface TryButtonProps {

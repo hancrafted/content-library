@@ -1,4 +1,3 @@
-import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import {
   episodesPathPage,
   isEpisodesPathSlug,
@@ -6,7 +5,8 @@ import {
   matchPage,
   type EpisodesPathPage,
   type ToolingSlug,
-} from '@/lib/routes';
+} from '@/content-store/catalogue/routes';
+import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { notFound } from 'next/navigation';
 import { TOOLING_PAGES } from './episode-registry.generated';
 import { findEpisode } from './registry';

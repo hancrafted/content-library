@@ -1,5 +1,5 @@
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
-import { externalHref } from '@/lib/external-link.pure';
+import { externalHref } from '@/shared/lib/external-link.pure';
 
 /** The strings the video link reads: its accessible name and the new-tab notice (FE-003 §2.2). */
 export interface VideoLabels {

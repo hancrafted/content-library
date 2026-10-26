@@ -1,7 +1,14 @@
-import { JsonLdScript } from '@/components/json-ld';
+import { episodeRefOf } from '@/content-store/catalogue/episode-id.pure';
+import {
+  eventEpisodeRoute,
+  isEventSlug,
+  matchPage,
+  type EpisodeId,
+  type EpisodesPathPage,
+  type PageOf,
+} from '@/content-store/catalogue/routes';
 import { episodePublishedOn, episodeStatus, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
 import { EpisodePageContainer } from '@/episodes/components/episode-page/episode-page-container';
-import { episodeRefOf } from '@/episodes/lib/episode-id.pure';
 import { episodeCopy, findEpisode } from '@/episodes/lib/registry';
 import { findEpisodesPathPage, findToolingPage } from '@/episodes/lib/tooling-pages';
 import {
@@ -10,19 +17,12 @@ import {
   PlaylistNav,
   type PresentedEpisode,
 } from '@/events/components/event-episode-chrome';
-import { BUILD_DAY } from '@/lib/build-day';
-import type { Locale } from '@/lib/locale.pure';
-import {
-  eventEpisodeRoute,
-  isEventSlug,
-  matchPage,
-  type EpisodeId,
-  type EpisodesPathPage,
-  type PageOf,
-} from '@/lib/routes';
-import { SITE_URL } from '@/lib/site-url';
+import { BUILD_DAY } from '@/page-assembly/lib/build-day';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import { episodeJsonLd } from '@/page-assembly/lib/structured-data.pure';
+import { JsonLdScript } from '@/shared/components/json-ld';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { SITE_URL } from '@/shared/lib/site-url';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 

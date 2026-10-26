@@ -6,7 +6,7 @@ import {
   RESERVED_FOLDER_NAMES,
   SLIDE_POOL_FOLDER,
   TOOLING_FOLDER,
-} from './episode-id.pure.ts';
+} from '../../content-store/catalogue/episode-id.pure.ts';
 
 /*
  * The one folder walker (design-ADR 0016 decision 3): every page folder under the Episodes folder, an Episode no Event

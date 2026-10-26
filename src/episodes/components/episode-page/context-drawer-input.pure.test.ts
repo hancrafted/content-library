@@ -1,7 +1,7 @@
 import { episode, slide, type Section } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
-import { TRANSLATIONS } from '@/i18n/translations';
-import type { SpeakerNoteItem, VoiceScriptSegment } from '@/lib/context-drawer.pure';
+import { TRANSLATIONS } from '@/shared/i18n/translations';
+import type { SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
 import { describe, expect, it } from 'vitest';
 import { checkContext, checkDrawerStrings, contextItemsOf } from './context-drawer-input.pure';
 import { recordContent } from './record-content';

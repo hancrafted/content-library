@@ -2,7 +2,7 @@
 
 import { useSlideZone } from '@/episodes/hooks/use-slide-zone';
 import { isPlaying } from '@/episodes/lib/slide-zone.pure';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import { useCallback, useEffect, useReducer, type ReactNode } from 'react';
 import type { BackLabels, FlipRow } from './trait-flip-card.client';
 import { ClosingLine, Row } from './trait-flip-row.client';

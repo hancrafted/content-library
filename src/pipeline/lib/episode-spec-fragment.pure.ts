@@ -5,7 +5,7 @@
  * run on a fragment with the checkbox added the way assembly adds it. The Slide's number is its Options' leading digit.
  */
 import { load } from 'cheerio';
-import { TITLE_ANCHOR } from '../../lib/title-anchor.pure.ts';
+import { TITLE_ANCHOR } from '../../shared/lib/title-anchor.pure.ts';
 import { OPTION } from './episode-spec-page.pure.ts';
 import { checkOption, checkOptionMarks, FORM, type OptionCount } from './episode-spec-slide.pure.ts';
 

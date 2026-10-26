@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button';
-import { fillTemplate } from '@/lib/template.pure';
 import { spanElapsed } from '@/pipeline/lib/dashboard-elapsed.pure';
 import type { EventScope } from '@/pipeline/lib/dashboard-events.pure';
 import type { JobNode, StageNode } from '@/pipeline/lib/dashboard-graph-view.pure';
 import type { EpisodeOutputs } from '@/pipeline/lib/dashboard-outputs.pure';
+import { Button } from '@/shared/components/ui/button';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { useContext } from 'react';
 import { JobChipDetail } from './dashboard-chips';
 import { ElapsedTime, JobFailureNote, StateBadge, type DashboardCopy } from './dashboard-evidence';

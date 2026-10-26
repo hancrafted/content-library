@@ -45,11 +45,11 @@ describe('success cases', () => {
     // ARRANGE
     const events = [
       event('skill.invoke', { 'skill.name': 'skill-creator:skill-creator' }),
-      event('file.read', { 'file.path': 'src/lib/a.ts' }),
+      event('file.read', { 'file.path': 'src/shared/lib/a.ts' }),
       event('instructions.load', {
         'file.path': '.claude/rules/fe-001-state-management.md',
         load_reason: 'path_glob_match',
-        'trigger_file.path': 'src/lib/a.ts',
+        'trigger_file.path': 'src/shared/lib/a.ts',
         adr: 'FE-001-state-management',
       }),
     ];

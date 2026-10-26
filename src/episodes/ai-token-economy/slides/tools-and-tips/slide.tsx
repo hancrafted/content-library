@@ -1,8 +1,8 @@
 import { SectionSlide } from '@/episodes/components/slide-master/section-slide';
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideProse } from '@/episodes/components/slide-master/slide-master';
-import type { TargetProps } from '@/lib/context-link.pure';
-import { externalHref } from '@/lib/external-link.pure';
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import { externalHref } from '@/shared/lib/external-link.pure';
 import type { ReactElement } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';

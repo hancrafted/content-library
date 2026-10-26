@@ -1,7 +1,7 @@
-import { PAGE_CONTAINER, PageHeader } from '@/components/page-header';
 import { EventCardView } from '@/events/components/event-card';
 import { eventCards } from '@/events/components/event-cards';
-import type { Locale } from '@/lib/locale.pure';
+import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
 /** The Events overview, the page at /events: a title with a one-line intro, then one card per Event whose Playlist is public. */

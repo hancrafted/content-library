@@ -1,10 +1,10 @@
+import { isEpisodeId } from '@/content-store/catalogue/routes';
 import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { episodeMinutes } from '@/episodes/components/slide-master/localized-slide';
 import { overviewOrder } from '@/episodes/lib/episode-metadata.pure';
 import { episodeCopy, findEpisode } from '@/episodes/lib/registry';
-import type { Locale } from '@/lib/locale.pure';
-import { isEpisodeId } from '@/lib/routes';
-import { hasReadingTime, wholeMinutes } from '@/lib/speaking-time.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { hasReadingTime, wholeMinutes } from '@/shared/lib/speaking-time.pure';
 import { getTranslations } from 'next-intl/server';
 import { episodeCard, type CardEntry, type EpisodeCard, type ReadKey } from './episode-card.pure';
 

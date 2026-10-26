@@ -86,10 +86,9 @@ episode-template/i18n/en.json              title, caption, description
 
 ## Episode browser entries
 
-Each Episode declares its own metadata record in `episodes/<slug>/episode-metadata.ts`: status, visibility, Format, Tags (lead Tag first), its Video and, once published, its publish date. It holds ids only, no strings. The content store (`src/content-store/store.ts`) loads every record through its schema, and the landing page reads only `listEpisodes()` from it. The closed vocabularies live in `src/content-store/schemas/fields.ts` (`TAG_IDS`, `FORMATS`); the Episode browser's lists in `src/lib/episode-overview.ts`:
+Each Episode declares its own metadata record in `episodes/<slug>/episode-metadata.ts`: status, visibility, Format, Tags (lead Tag first), its Video and, once published, its publish date. It holds ids only, no strings. The content store (`src/content-store/store.ts`) loads every record through its schema, and the landing page reads only `listEpisodes()` from it. The closed vocabularies live in `src/content-store/schemas/fields.ts` (`TAG_IDS`, `FORMATS`); the Episode browser's Tag looks in `src/episodes/lib/tag-looks.ts`, and the Featured slots, `FEATURED` (exactly three published public Episodes, lead first), in `src/content-store/featured.ts`:
 
 - `TAGS`: each Tag's icon and accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
-- `FEATURED`: exactly three published slugs, lead first.
 
 An entry reads its text from:
 

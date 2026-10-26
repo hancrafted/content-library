@@ -1,7 +1,7 @@
-import type { Locale } from '@/lib/locale.pure';
 import { PromotionDesk } from '@/page-assembly/landing/promotion-desk';
 import { PromotionHero } from '@/page-assembly/landing/promotion-hero.client';
 import styles from '@/page-assembly/landing/promotion-hero.module.css';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
 type HeroT = Awaited<ReturnType<typeof getTranslations<'landing.hero'>>>;

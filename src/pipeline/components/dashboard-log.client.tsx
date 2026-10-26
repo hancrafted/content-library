@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { fillTemplate } from '@/lib/template.pure';
 import { useDashboardLogDialog } from '@/pipeline/hooks/use-dashboard-log-dialog';
 import { selectEvents, type DashboardEvent, type EventScope } from '@/pipeline/lib/dashboard-events.pure';
+import { Button } from '@/shared/components/ui/button';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { X } from 'lucide-react';
 import { useMemo } from 'react';
 import type { RunLogLine } from '../lib/run-log.schema.pure';

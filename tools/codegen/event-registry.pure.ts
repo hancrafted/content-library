@@ -7,7 +7,7 @@ import type { RegistryFile } from './episode-registry.pure.ts';
 
 /** Where each tier's Event registry lives. */
 export const EVENT_REGISTRY_PATHS = {
-  slugs: 'src/lib/event-registry.generated.ts',
+  slugs: 'src/content-store/catalogue/event-slugs.generated.ts',
   records: 'src/content-store/event-registry.generated.ts',
 } as const;
 
@@ -46,7 +46,7 @@ function recordsFile(slugs: readonly string[]): string {
   const imports = slugs.map((slug) => `import { event as ${identifierOf(slug)} } from './events/${slug}';`);
   const entries = slugs.map((slug) => `  '${slug}': ${identifierOf(slug)},`);
   return `${HEADER}
-import type { EventSlug } from '@/lib/routes';
+import type { EventSlug } from '@/content-store/catalogue/routes';
 ${imports.join('\n')}
 import type { EventInput } from './schemas/event.schema';
 

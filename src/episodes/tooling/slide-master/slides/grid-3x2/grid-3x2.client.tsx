@@ -1,6 +1,6 @@
 'use client';
 
-import { prefersReducedMotion } from '@/hooks/prefers-reduced-motion';
+import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
 import { useId, type PointerEvent } from 'react';
 import { cellNumber, GRID_3X2_CELLS, spotlightPoint, type Grid3x2Cell } from './grid-3x2.pure';
 

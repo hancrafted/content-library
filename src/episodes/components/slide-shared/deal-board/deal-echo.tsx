@@ -1,5 +1,5 @@
 import tints from '@/episodes/components/slide-shared/note-tints/note-tints.module.css';
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import type { DealSlot } from './deal-board.pure';
 import { checkDealEcho } from './deal-echo.pure';
 import { slotOutline } from './deal-slot';

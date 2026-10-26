@@ -1,10 +1,10 @@
-import { LiquidInkTransition } from '@/components/animations/liquid-ink-transition.client';
-import { Button } from '@/components/ui/button';
 import { EpisodeSpotlight } from '@/episodes/components/episode-browser/episode-spotlight';
 import { cardLabels } from '@/episodes/components/episode-card/episode-card';
 import { episodeCards } from '@/episodes/components/episode-card/episode-cards';
-import { localizePath, type Locale } from '@/lib/locale.pure';
-import { ROUTES } from '@/lib/routes';
+import { LiquidInkTransition } from '@/shared/components/animations/liquid-ink-transition.client';
+import { Button } from '@/shared/components/ui/button';
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import { ROUTES } from '@/shared/lib/routes';
 import { ArrowRight } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

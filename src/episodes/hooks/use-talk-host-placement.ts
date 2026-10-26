@@ -7,7 +7,7 @@ import {
   tocReserveRem,
   type Rect,
 } from '@/episodes/lib/talk-dock.pure';
-import { prefersReducedMotion } from '@/hooks/prefers-reduced-motion';
+import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
 import { useEffect, useLayoutEffect, useRef } from 'react';
 
 function boxOf(element: Element): Rect {

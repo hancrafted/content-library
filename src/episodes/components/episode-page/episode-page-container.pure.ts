@@ -1,4 +1,6 @@
-import type { TocItem, TocSection } from '@/lib/table-of-contents.pure';
+import { episodeFolderOf, episodeRefOf, TOOLING_FOLDER } from '@/content-store/catalogue/episode-id.pure';
+import { isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import type { TocItem, TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
 
@@ -70,3 +72,12 @@ export const INSET_CLASSES =
  * never overlap; the panel reads `--toc-reserve` and scrolls inside itself. Written out literally for Tailwind; a unit test ties the attribute and the rem value to `talk-dock.pure`.
  */
 export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5625rem]';
+
+/**
+ * The source folder a page's Slides sit in, as the dev token editor names it in its prompt: an Episode's own folder,
+ * an Event's copy's under its Event, or a tooling page's under `tooling/`.
+ */
+export function sourceFolderOf(id: EpisodesPathSlug): string {
+  const folder = isToolingSlug(id) ? `${TOOLING_FOLDER}/${id}` : episodeFolderOf(episodeRefOf(id));
+  return `src/episodes/${folder}`;
+}

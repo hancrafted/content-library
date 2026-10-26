@@ -1,4 +1,4 @@
-import type { EpisodeId } from '@/lib/routes';
+import type { EpisodeId } from '@/content-store/catalogue/routes';
 import { describe, expect, it } from 'vitest';
 import { eventPlaylistCards, startOf, totalMinutes, type PlaylistCard } from './event-playlist.pure';
 

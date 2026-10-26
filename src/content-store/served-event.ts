@@ -1,4 +1,4 @@
-import { isEpisodeId, type EpisodeId, type EventSlug } from '@/lib/routes';
+import { isEpisodeId, type EpisodeId, type EventSlug } from '@/content-store/catalogue/routes';
 import type { Episode } from './schemas/episode.schema';
 import type { Event } from './schemas/event.schema';
 import type { Playlist } from './schemas/playlist.schema';

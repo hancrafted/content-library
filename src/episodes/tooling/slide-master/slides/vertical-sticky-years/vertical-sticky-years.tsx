@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/shared/lib/utils';
 import styles from './vertical-sticky-years.module.css';
 import {
   type ChipTone,

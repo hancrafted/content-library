@@ -77,7 +77,7 @@ function makeCtx(files: Record<string, string>) {
   return { ctx, violations };
 }
 
-const FILE = 'src/lib/legacy-parser.ts';
+const FILE = 'src/shared/lib/legacy-parser.ts';
 const ISSUE = 'https://github.com/hancrafted/content-library/issues/317';
 
 // Assembled rather than written literally, so this file never carries a live

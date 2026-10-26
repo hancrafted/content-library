@@ -6,7 +6,7 @@ domain: frontend
 rules: false
 files: ['src/**/*.{ts,tsx}']
 paths: ['src/**/*.{ts,tsx}']
-description: 'Two zones under different laws — src/app governed by content, the authored zone by position — one import direction app → page-assembly → components → content-store → hooks → lib with no cycles and no React in lib, a Slide folder importing only global shared code, and Slide internals ungoverned in shape — values, not shape: only colour, size and weight follow tokens.'
+description: 'Two zones under different laws — src/app governed by content, the authored zone by position — one import direction app → page-assembly → product areas → content-store → shared (components → hooks → lib inside each) with no cycles and no React in lib, a Slide folder importing only global shared code, and Slide internals ungoverned in shape — values, not shape: only colour, size and weight follow tokens.'
 ---
 
 # Module Layering
@@ -16,7 +16,7 @@ description: 'Two zones under different laws — src/app governed by content, th
 Under the App Router the directory **is** the URL: `src/app/[locale]/episode/episode-template/page.tsx` sits where it sits because `/de/episode/episode-template` exists. So the tree splits into two zones:
 
 - **Framework zone** — `src/app/**`. The router owns position; this record governs what a file there may _contain_.
-- **Authored zone** — `src/page-assembly/**`, `src/episodes/**`, `src/events/**`, `src/pipeline/**`, `src/components/**`, `src/explorable-explanations/**`, `src/content-store/**`, `src/hooks/**`, `src/lib/**`. Position is chosen, so the folder is the tier. The Episodes area's `components/`, `hooks/` and `lib/` are those tiers inside it, and the rules below on `src/components/**`, `src/hooks/**` and `src/lib/**` bind them alike; its other folders are Episode content. Its composition registries in `lib/` import every Episode, so they sit above it.
+- **Authored zone** — `src/page-assembly/**`, `src/episodes/**`, `src/events/**`, `src/pipeline/**`, `src/explorable-explanations/**`, `src/content-store/**`, `src/shared/**`. Position is chosen, so the folder is the tier. `src/shared/` and the Episodes area each hold `components/`, `hooks/` and `lib/` tiers, and the rules below on lib and hooks bind both; its other folders are Episode content. Its composition registries in `lib/` import every Episode, so they sit above it.
 
 One rule spans both: import direction. Lib stays React-free so a lib module is a plain module a test imports without a DOM.
 
@@ -29,21 +29,21 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 1. A `page.tsx` MUST render one template from `src/page-assembly/`, plus its segment exports.
 2. A root layout MUST render `SiteShell`, plus `metadata` and segment exports; a nested layout MUST NOT (`<html>`), it MAY wrap children.
 3. Route files MUST hold no layout markup, data shaping or business logic.
-4. A route MUST reach `src/components/**` only through `SiteShell`.
+4. A route MUST reach shared components and page chrome only through `SiteShell`, and no product area.
 
 ### 2. Import direction
 
-1. Tiers run `app → page-assembly → components → content-store → hooks → lib`. An edge MAY skip a tier downward; it MUST NOT point upward.
+1. Layers run `app → page-assembly → product areas → content-store → shared`; tiers run `components → hooks → lib`. An edge MAY skip downward, never upward. `src/shared/**` knows no domain: it imports only `shared/` (and the site Translation files).
 2. No import cycle MAY exist under `src/`.
 3. `src/page-assembly/**` is flat, a folder per template plus `lib/`: only routes and tests import it; a template imports only its folder and `lib/`.
 4. A stylesheet import is not a tier edge.
 5. `src/content-store/**` imports no React. Its one upward edge is an Episode's metadata file, `episodes/[by-event/<e>/]<slug>/episode-metadata.ts`, so an Episode stays one folder; that file imports only schemas and lib. The store's `schemas/` is a leaf every tier may import, so a lib module takes a record type without an upward edge.
-6. `src/events/**`, the Events area: only page assembly imports it; it imports only itself, `ui/`, hooks, i18n, lib and the store. Page assembly passes it another area's parts as props.
-7. `src/pipeline/**` (pipeline, Run log, dashboard) is a product area with tier folders `components/`, `lib/`, `hooks/`; page assembly alone reaches it, via `components/` and `lib/`; it imports only `ui/` of `src/components/`. `src/` never imports `skills/` or `tools/`.
+6. `src/events/**`, the Events area: only page assembly imports it; it imports only itself, `shared/` and the store. Page assembly passes it another area's parts as props.
+7. `src/pipeline/**` (pipeline, Run log, dashboard) is a product area with tier folders `components/`, `lib/`, `hooks/`; page assembly alone reaches it, via `components/` and `lib/`; of `src/shared/components/` it imports only `ui/`. `src/` never imports `skills/` or `tools/`.
 
-### 3. `src/lib/**` imports no React
+### 3. `src/shared/lib/**` imports no React
 
-1. `src/lib/**` MUST NOT import `react` or `react-dom` — not even types — and MUST hold no `.tsx` file.
+1. `src/shared/lib/**` MUST NOT import `react` or `react-dom` — not even types — and MUST hold no `.tsx` file.
 
 ### 4. The ungoverned zone: Slide internals
 
@@ -52,11 +52,11 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 ### 5. A Slide folder imports only global shared code
 
-1. A Slide folder, `episodes/[by-event/<e>/]<ep>/slides/<slide>/` or `episodes/slide-pool/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `src/explorable-explanations/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `slide-shared/core-components/` only from its server files, never from a `*.client.tsx` widget.
-2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `slide-shared/core-components/`, hooks, lib.
-   1. (§5.2.1) `src/episodes/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
+1. A Slide folder, `episodes/[by-event/<e>/]<ep>/slides/<slide>/` or `episodes/slide-pool/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `src/explorable-explanations/`, `ui/`, `src/shared/hooks/`, `src/shared/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `shared/components/core-components/` only from its server files, never from a `*.client.tsx` widget.
+2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/shared/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `shared/components/core-components/`, hooks, lib.
+   1. (§5.2.1) `src/shared/components/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/shared/hooks/`, `src/shared/lib/`, and own no words.
    2. (§5.2.2) Every `slide-shared` part, its `*.client.tsx` files included, MAY import `core-components/`.
-3. An Explorable explanation (`src/explorable-explanations/<name>/`) follows rule 2, client leaf included; from outside, only a Slide folder or page assembly imports it.
+3. An Explorable explanation (`src/explorable-explanations/<name>/`) imports only its own area, `core-components/`, `ui/` and `src/shared/lib/`, never `slide-shared/`; its client leaf as rule 2. From outside, only a Slide folder or page assembly imports it.
 4. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing else. §4 holds inside.
 
 ## Do's and Don'ts
@@ -65,20 +65,20 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 1. **DO** render one `<XxxPage locale={…} />` from `@/page-assembly/<template>/*`. (Decision 1)
 2. **DO** add a page template as its own folder in `src/page-assembly/`, its single-use parts beside it. (Decisions 1 and 2)
-3. **DO** move logic a route needs into its template or `src/lib/**`. (Decision 1)
-4. **DO** import downward or skip tiers downward: components → content-store, components → lib, hooks → lib, app → lib. (Decision 2)
-5. **DO** keep `src/lib/**` to `.ts` files that test without a DOM. (Decision 3)
+3. **DO** move logic a route needs into its template or `src/shared/lib/**`. (Decision 1)
+4. **DO** import or skip downward: an area → content-store, an area → shared lib, hooks → lib, app → lib. (Decision 2)
+5. **DO** keep `src/shared/lib/**` to `.ts` files that test without a DOM. (Decision 3)
 6. **DO** leave a Slide's internal markup to the visualization it serves; take its colour, size and weight from tokens. (Decision 4)
 7. **DO** move a part two Slides need into `slide-shared/` and import it from there. (Decision 5)
-8. **DO** put a primitive several `slide-shared` parts share in `slide-shared/core-components/<name>/`, taking its words and data as props. (Decision 5.2.1)
+8. **DO** put a primitive several `slide-shared` parts share in `shared/components/core-components/<name>/`, taking its words and data as props. (Decision 5.2.1)
 
 ### Don'ts
 
-1. **DON'T** import `src/components/ui/**` or any non-root component from a route. (Decision 1)
+1. **DON'T** import `src/shared/components/ui/**` or any non-root component from a route. (Decision 1)
 2. **DON'T** shape data, branch on content or lay out markup under `src/app/**`. (Decision 1)
-3. **DON'T** import upward: into page assembly from below, lib → hooks/content-store/components/app, hooks → content-store/components/app, content-store → app or any component but an Episode's metadata file. (Decision 2)
+3. **DON'T** import upward: into page assembly from below, lib → hooks/store/components/app, hooks → store/components/app, store → an area but an Episode's metadata file, shared → anything of the domain. (Decision 2)
 4. **DON'T** import a template from a component or another template, or create a cycle. (Decision 2)
-5. **DON'T** write `import type { ReactNode } from 'react'` or a `.tsx` file under `src/lib/**`. (Decision 3)
+5. **DON'T** write `import type { ReactNode } from 'react'` or a `.tsx` file under `src/shared/lib/**`. (Decision 3)
 6. **DON'T** invent a shared Slide type, prop interface or layout contract and route Slides through it. (Decision 4)
 7. **DON'T** import one Slide's folder from another, or an Episode file from a Slide — `import { x } from '../other-slide/part'`. (Decision 5)
 8. **DON'T** import a `slide-shared` part, `ui/` or a Slide from `core-components/`, or `core-components/` from a Slide's `*.client.tsx` widget. (Decision 5.1, 5.2.1)
@@ -109,9 +109,9 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 ## Compliance and Enforcement
 
 1. **Dependency rules** (dependency-cruiser, error; `npm run lint:boundaries`, pre-commit and CI): §1.1, §1.2, §1.4, §2.1–§2.3, §2.5–§2.7, §3, §5 including `core-components-are-a-leaf` and the core exception on the client-leaf rule (§5.2.2) (its message names the allowed locations; probe tests over a throwaway tree).
-2. **Unused-file check** (knip, pre-push and CI): an unimported `.tsx` under `src/lib/` (§3).
+2. **Unused-file check** (knip, pre-push and CI): an unimported `.tsx` under `src/shared/lib/` (§3).
 
-**Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/lib/` carry no classifier; left for a future lib-tree record.
+**Known gap:** `routes.ts`, `prefs-storage.ts` and `utils.ts` in `src/shared/lib/` carry no classifier; left for a future lib-tree record.
 
 **Manual review duties:** routes hold no markup, data shaping or logic (§1.3); no nested layout renders `<html>` (§1.2); no shared Slide shape (§4); core components own no words (§5.2.1); `slide-shared` parts take serializable props and own no words, except an Explorable explanation's locale pair of data and default words, which a Slide overrides (§5).
 

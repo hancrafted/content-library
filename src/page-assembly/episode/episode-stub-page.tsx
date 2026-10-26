@@ -1,6 +1,6 @@
-import type { Locale } from '@/lib/locale.pure';
-import { localizePath } from '@/lib/locale.pure';
-import { episodeRoute, isEpisodesPathSlug } from '@/lib/routes';
+import { episodeRoute, isEpisodesPathSlug } from '@/content-store/catalogue/routes';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { localizePath } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';
 
 /**

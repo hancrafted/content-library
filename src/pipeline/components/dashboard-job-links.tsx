@@ -1,4 +1,3 @@
-import { fillTemplate } from '@/lib/template.pure';
 import {
   isGlob,
   outputLabel,
@@ -7,6 +6,7 @@ import {
   type EpisodeOutputs,
 } from '@/pipeline/lib/dashboard-outputs.pure';
 import type { DashboardJob } from '@/pipeline/lib/dashboard-projection.pure';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { ExternalLink, FileText } from 'lucide-react';
 import { useContext } from 'react';
 import type { DashboardCopy } from './dashboard-evidence';

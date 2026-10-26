@@ -1,4 +1,4 @@
-import type { Locale } from '@/lib/locale.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 
 /** One lane of the count board: how many notes sit in it, its ratio to the next stage and its share of the cycle. */
 export interface PipelineStage {
