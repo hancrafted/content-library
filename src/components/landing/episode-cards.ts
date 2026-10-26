@@ -1,6 +1,6 @@
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { episodeMinutes } from '@/components/slide-master/localized-slide';
-import { episodeVideo, featuredSlugs, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
+import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { overviewOrder } from '@/lib/episode-metadata.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeId } from '@/lib/routes';
@@ -31,7 +31,7 @@ function withCopy(entry: LoadedEpisode, locale: Locale): CardEntry {
 
 /** The Episode's Featured slot, 1 first; none when it holds no slot. */
 function featuredRankOf(id: string): { featuredRank?: number } {
-  const slot = (featuredSlugs() as readonly string[]).indexOf(id);
+  const slot = (featuredIds() as readonly string[]).indexOf(id);
   return slot === -1 ? {} : { featuredRank: slot + 1 };
 }
 
@@ -49,7 +49,7 @@ export interface EpisodeCardsOptions {
 export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions): Promise<EpisodeCard[]> {
   const listed = listedEpisodes();
   const shown = (options?.includeDrafts ?? true) ? listed : listed.filter(({ status }) => status === 'published');
-  const entries = overviewOrder(shown, featuredSlugs());
+  const entries = overviewOrder(shown, featuredIds());
   return entries.map(await episodeCardMaker(locale, options));
 }
 

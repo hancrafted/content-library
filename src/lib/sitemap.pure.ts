@@ -5,7 +5,7 @@ import { matchPage, pageLocales, routeOf, servedUrl, type EpisodeId, type PageRe
 import type { TreatedPage } from './visibility.pure';
 
 /** A sitemap entry's `lastModified`: an Episode's own page carries its publish date, no other page one. */
-function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeId) => IsoDate | undefined): IsoDate | undefined {
+function lastModifiedOf(page: PageRef, publishedOnOf: (id: EpisodeId) => IsoDate | undefined): IsoDate | undefined {
   const none = () => undefined;
   return matchPage<PageRef, IsoDate | undefined>(page, {
     home: none,
@@ -29,7 +29,7 @@ function lastModifiedOf(page: PageRef, publishedOnOf: (slug: EpisodeId) => IsoDa
 export function sitemapEntries(
   siteUrl: string,
   pages: readonly TreatedPage[],
-  publishedOnOf: (slug: EpisodeId) => IsoDate | undefined,
+  publishedOnOf: (id: EpisodeId) => IsoDate | undefined,
 ): MetadataRoute.Sitemap {
   const indexable = pages.filter(({ treatment }) => treatment.inSitemap).map(({ page }) => page);
   return indexable.flatMap((page) => {

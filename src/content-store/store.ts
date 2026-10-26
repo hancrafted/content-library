@@ -59,7 +59,7 @@ const CONTENT = loadContent({
 });
 
 /** The Featured Episode ids, typed so `tsc` refuses one that names an upcoming Episode. */
-export function featuredSlugs(): readonly PublishedId[] {
+export function featuredIds(): readonly PublishedId[] {
   return FEATURED;
 }
 
