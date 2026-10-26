@@ -8,7 +8,7 @@ rules: false
 files: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
 paths: ['src/components/{episode-page,slide-master,slide-shared,explorable-explanations,episodes}/**', 'src/components/pages/**', 'src/app/**/{episode,episodes,events}/**']
-description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, and what an agent may change freely versus only by a new ADR.'
+description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR.'
 ---
 
 # Slide Architecture

@@ -14,13 +14,9 @@ import { describe, expect, it } from 'vitest';
 const ROOT = process.cwd();
 const ENTRY = 'slide.tsx';
 
-/** Every Slide folder of every Episode and tooling page, by the page's id, and of the Slide pool, by `slide-pool`. */
-function slideFolders(): { episode: string; folder: string; entry: string }[] {
-  return walkSlideFolders(ROOT).map(({ owner, slug, dir }) => ({
-    episode: owner,
-    folder: slug,
-    entry: path.join(dir, ENTRY),
-  }));
+/** Every Slide folder, its owner (a page's id, or `slide-pool`) and its server entry. */
+function slideFolders(): { owner: string; slug: string; entry: string }[] {
+  return walkSlideFolders(ROOT).map(({ owner, slug, dir }) => ({ owner, slug, entry: path.join(dir, ENTRY) }));
 }
 
 /** The slugs the Slides an entry module exports declare: each carries its own messages. */
@@ -49,12 +45,10 @@ describe('success cases', () => {
   it('names every Slide folder after the one Slide slug its server entry declares', async () => {
     // ARRANGE
     const folders = slideFolders();
-    const expected = folders.map(({ episode, folder }) => `${episode}/${folder}: ${folder}`);
+    const expected = folders.map(({ owner, slug }) => `${owner}/${slug}: ${slug}`);
     // ACT
     const actual = await Promise.all(
-      folders.map(
-        async ({ episode, folder, entry }) => `${episode}/${folder}: ${(await declaredSlugs(entry)).join(', ')}`,
-      ),
+      folders.map(async ({ owner, slug, entry }) => `${owner}/${slug}: ${(await declaredSlugs(entry)).join(', ')}`),
     );
     // ASSERT
     expect(actual).toEqual(expected);
@@ -68,7 +62,7 @@ describe('failure cases', () => {
     // ACT
     const missing = slideFolders()
       .filter(({ entry }) => !existsSync(entry))
-      .map(({ episode, folder }) => `${episode}/slides/${folder} has no ${ENTRY}`);
+      .map(({ owner, slug }) => `${owner}/${slug} has no ${ENTRY}`);
     // ASSERT
     expect(missing).toEqual(expected);
   });
@@ -112,8 +106,8 @@ describe('edge cases', () => {
     const expected = ['foundations', 'hero', 'next-steps', 'what-comes-next', 'why-a-template'];
     // ACT
     const folders = slideFolders()
-      .filter(({ episode }) => episode === 'episode-template')
-      .map(({ folder }) => folder)
+      .filter(({ owner }) => owner === 'episode-template')
+      .map(({ slug }) => slug)
       .sort();
     // ASSERT
     expect(folders).toEqual(expected);
@@ -124,8 +118,8 @@ describe('edge cases', () => {
     const expected = ['brief-the-venue', 'manage-the-price', 'one-prompt', 'pay-the-price', 'you-are-the-new-hire'];
     // ACT
     const pool = slideFolders()
-      .filter(({ episode }) => episode === 'slide-pool')
-      .map(({ folder }) => folder)
+      .filter(({ owner }) => owner === 'slide-pool')
+      .map(({ slug }) => slug)
       .sort();
     // ASSERT
     expect(pool).toEqual(expected);
