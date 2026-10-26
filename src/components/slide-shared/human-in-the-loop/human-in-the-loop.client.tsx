@@ -35,7 +35,7 @@ function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispat
 }
 
 export function HumanInTheLoopClient(data: HumanInTheLoopData) {
-  const start = { workflowId: data.workflowId, level: data.level };
+  const start = { workflowId: data.workflowId, level: data.level, view: data.view };
   const [state, dispatch] = useReducer(reduce, start, createState);
   const on = useMemo(() => callbacksFor(dispatch), []);
   const workflow = shownWorkflow(data, state);
@@ -45,7 +45,7 @@ export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   if (!workflow || !view) return null;
   const slices = slicesOf({ data, state, workflow, note, view }, on);
   return (
-    <div data-human-in-the-loop={workflow.id} data-level={state.level}>
+    <div data-human-in-the-loop={workflow.id} data-level={state.level} data-view={state.view}>
       <ToolbarPart {...slices.toolbar} />
       <DiagramPart {...slices.diagram} />
       <ModalPart {...slices.modal} />

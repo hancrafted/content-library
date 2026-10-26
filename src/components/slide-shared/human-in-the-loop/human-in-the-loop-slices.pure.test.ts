@@ -20,6 +20,7 @@ const data: HumanInTheLoopData = {
   words,
   controls: {},
   level: 'simple',
+  view: 'presentation',
   readonly: false,
 };
 const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
@@ -29,7 +30,7 @@ const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   note: null,
   view: workflowView(workflow, state),
 });
-const start = { workflowId: data.workflowId, level: data.level };
+const start = { workflowId: data.workflowId, level: data.level, view: data.view };
 
 describe('success cases', () => {
   it('shows the chosen Workflow, and an uploaded one over it', () => {
@@ -56,6 +57,19 @@ describe('success cases', () => {
     // ASSERT
     expect(slices.modal.stage?.id).toBe('s');
     expect(sent).toEqual([{ type: 'open', stageId: 's' }, { type: 'close' }]);
+  });
+
+  it('gives the toolbar and the diagram the view, and the view control sends a view event', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const state = { ...createState(start), view: 'detailed' as const };
+    // ACT
+    const slices = slicesOf(shown(flow('two'), state), on);
+    slices.toolbar.onView('handson');
+    // ASSERT
+    expect([slices.toolbar.view, slices.diagram.view]).toEqual(['detailed', 'detailed']);
+    expect(sent).toEqual([{ type: 'view', view: 'handson' }]);
   });
 
   it('gives the modal the pasted values and sends a change up as one slots event', () => {

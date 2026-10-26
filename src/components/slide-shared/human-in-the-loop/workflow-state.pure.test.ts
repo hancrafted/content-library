@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 
-const start = { workflowId: 'summer-party', level: 'simple' } as const;
+const start = { workflowId: 'summer-party', level: 'simple', view: 'presentation' } as const;
 const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {
@@ -50,6 +50,17 @@ describe('success cases', () => {
     const state = createState(start);
     // ASSERT
     expect(state).toEqual(expected);
+  });
+
+  it('switches the view without touching the pasted values, and keeps it when the Workflow changes', () => {
+    // ARRANGE
+    const filled = reduce(createState(start), { type: 'slots', values: { a: 'b' } });
+    // ACT
+    const viewed = reduce(filled, { type: 'view', view: 'handson' });
+    const other = reduce(viewed, { type: 'workflow', workflowId: 'vacation' });
+    // ASSERT
+    expect(viewed).toEqual({ ...filled, view: 'handson' });
+    expect(other.view).toBe('handson');
   });
 
   it('switches the level', () => {
