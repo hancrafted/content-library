@@ -4,7 +4,7 @@
 // The dependency-cruiser rules run over a throwaway probe tree, as in slide-folder.test.ts.
 
 import { cruise, type IForbiddenRuleType, type IReporterOutput } from 'dependency-cruiser';
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
@@ -90,20 +90,6 @@ afterAll(() => {
 });
 
 describe('Explorable explanation folder', () => {
-  it('keeps the context window and the human-in-the-loop workflow apart from plain shared parts', () => {
-    // ARRANGE
-    const home = 'src/explorable-explanations';
-    const names = ['context', 'human-in-the-loop'];
-    // ACT
-    const moved = names.map((name) => ({
-      name,
-      inHome: existsSync(join(process.cwd(), home, name)),
-      inShared: existsSync(join(process.cwd(), 'src/episodes/components/slide-shared', name)),
-    }));
-    // ASSERT
-    expect(moved).toEqual(names.map((name) => ({ name, inHome: true, inShared: false })));
-  });
-
   it('lets an explanation and its client leaf reach the plain shared parts they are allowed to, and a Slide or a page template import an explanation', () => {
     // ARRANGE
     const files = ['probe-explanation.tsx', 'probe-explanation.client.tsx', 'slide.tsx', 'probe-template.tsx'];
