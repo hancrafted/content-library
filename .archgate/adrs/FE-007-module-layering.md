@@ -16,7 +16,7 @@ description: 'Two zones under different laws — src/app governed by content, th
 Under the App Router the directory **is** the URL: `src/app/[locale]/episode/episode-template/page.tsx` sits where it sits because `/de/episode/episode-template` exists. So the tree splits into two zones:
 
 - **Framework zone** — `src/app/**`. The router owns position; this record governs what a file there may _contain_.
-- **Authored zone** — `src/page-assembly/**`, `src/components/**`, `src/explorable-explanations/**`, `src/content-store/**`, `src/hooks/**`, `src/lib/**`. Position is chosen, so the folder is the tier.
+- **Authored zone** — `src/page-assembly/**`, `src/components/**`, `src/episodes/**`, `src/explorable-explanations/**`, `src/content-store/**`, `src/hooks/**`, `src/lib/**`. Position is chosen, so the folder is the tier. The Episodes area's `components/`, `hooks/` and `lib/` are those tiers inside it, and the rules below on `src/components/**`, `src/hooks/**` and `src/lib/**` bind them alike; its other folders are Episode content. Its composition registries in `lib/` import every Episode, so they sit above it.
 
 One rule spans both: import direction. Lib stays React-free so a lib module is a plain module a test imports without a DOM.
 
@@ -52,7 +52,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 
 1. A Slide folder, `episodes/[by-event/<e>/]<ep>/slides/<slide>/` or `episodes/slide-pool/<slide>/`, MUST import only its own files and `slide-master/`, `slide-shared/`, `src/explorable-explanations/`, `ui/`, `src/hooks/`, `src/lib/` — never another Slide or its Episode; its `*.client.tsx` only own files, hooks, lib. A Slide reaches `slide-shared/core-components/` only from its server files, never from a `*.client.tsx` widget.
 2. A `slide-shared` part MUST import only `slide-shared/`, `ui/` and `src/lib/` — never a Slide, Episode or the Slide master; its `*.client.tsx` only own folder, `slide-shared/core-components/`, hooks, lib.
-   1. (§5.2.1) `src/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
+   1. (§5.2.1) `src/episodes/components/slide-shared/core-components/` holds the primitives parts share, one subfolder each. It is a leaf: it MUST import only `core-components/`, `src/hooks/`, `src/lib/`, and own no words.
    2. (§5.2.2) Every `slide-shared` part, its `*.client.tsx` files included, MAY import `core-components/`.
 3. An Explorable explanation (`src/explorable-explanations/<name>/`) follows rule 2, client leaf included; from outside, only a Slide folder or page assembly imports it.
 4. Why: a Slide copied with `cp -r`, one import and one list entry needs nothing else. §4 holds inside.
@@ -67,7 +67,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 4. **DO** import downward or skip tiers downward: components → content-store, components → lib, hooks → lib, app → lib. (Decision 2)
 5. **DO** keep `src/lib/**` to `.ts` files that test without a DOM. (Decision 3)
 6. **DO** leave a Slide's internal markup to the visualization it serves; take its colour, size and weight from tokens. (Decision 4)
-7. **DO** move a part two Slides need into `src/components/slide-shared/` and import it from there. (Decision 5)
+7. **DO** move a part two Slides need into `slide-shared/` and import it from there. (Decision 5)
 8. **DO** put a primitive several `slide-shared` parts share in `slide-shared/core-components/<name>/`, taking its words and data as props. (Decision 5.2.1)
 
 ### Don'ts

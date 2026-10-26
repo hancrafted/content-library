@@ -1,6 +1,6 @@
 'use client';
 
-import { Tip } from '@/components/slide-shared/core-components/tip/tip.client';
+import { Tip } from '@/episodes/components/slide-shared/core-components/tip/tip.client';
 import type { StageMove } from './workflow.types';
 
 /*

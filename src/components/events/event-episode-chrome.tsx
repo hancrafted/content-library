@@ -1,6 +1,6 @@
-import { episodeCopy } from '@/components/episodes/registry';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PlaylistPlace, ServedEvent } from '@/content-store/store';
+import { episodeCopy } from '@/episodes/lib/registry';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { eventEpisodeRoute, eventRoute, type EpisodeId, type EventSlug } from '@/lib/routes';

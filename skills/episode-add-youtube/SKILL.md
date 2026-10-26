@@ -28,7 +28,7 @@ _Done when_ both `en` and `de` have an 11-character video ID string.
 
 ### 2. Declare `youtube` on the Episode's metadata record
 
-In `src/components/episodes/<slug>/episode-metadata.ts`, add the `youtube` property:
+In `src/episodes/<slug>/episode-metadata.ts`, add the `youtube` property:
 
 ```ts
 export const episodeMetadata = {
@@ -73,7 +73,7 @@ _Done when_ `npm run verify` passes and the DOM probe confirms the presence of `
 ## The unlisted case
 
 1. Extract the one 11-character video ID, as in step 1, and ask which language was spoken at the Event if the user has not said: `en` or `de`, nothing else.
-2. In the copy's record, `src/components/episodes/by-event/<event-slug>/<slug>/episode-metadata.ts`, add one recording, never a per-locale pair:
+2. In the copy's record, `src/episodes/by-event/<event-slug>/<slug>/episode-metadata.ts`, add one recording, never a per-locale pair:
    ```ts
    export const episodeMetadata = {
      slug: 'onboard-ai-every-time',
@@ -95,7 +95,7 @@ _Done when_ the post-build test passes and both locale pages show the same video
 
 ```mermaid
 flowchart TD
-  R["Episode metadata record<br/>src/components/episodes/&lt;slug&gt;/episode-metadata.ts<br/>youtube: { en, de } or { id, language }"]
+  R["Episode metadata record<br/>src/episodes/&lt;slug&gt;/episode-metadata.ts<br/>youtube: { en, de } or { id, language }"]
   R --> S["Content store<br/>episodeVideo(id, locale): { id, recordedIn? }"]
   S --> C["EpisodePageContainer<br/>video prop from EpisodePage, own or Event-scoped"]
   S --> EC["episodeCards(locale)<br/>youtubeOf(entry, locale)"]
@@ -107,7 +107,7 @@ flowchart TD
 
 ### Exemplar: `maintaining-markdown-for-ai`
 
-- **Record**: `src/components/episodes/maintaining-markdown-for-ai/episode-metadata.ts` defines `youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' }`.
+- **Record**: `src/episodes/maintaining-markdown-for-ai/episode-metadata.ts` defines `youtube: { en: 'YxCVw4bUbW0', de: 'YxCVw4bUbW0' }`.
 - **Store test**: `src/content-store/store.test.ts` asserts `maintaining-markdown-for-ai` in `RECORDINGS`.
 - **Index test**: `tests/post-build/episodes-index.build.test.ts` includes `maintaining-markdown-for-ai` in `withVideo`.
 

@@ -3,7 +3,8 @@
   "globs": [
     "src/components/landing/**",
     "src/page-assembly/landing/**",
-    "src/components/episodes/ai-token-economy/**",
-    "src/components/episodes/maintaining-markdown-for-ai/**"
+    "src/episodes/components/episode-browser/**",
+    "src/episodes/ai-token-economy/**",
+    "src/episodes/maintaining-markdown-for-ai/**"
   ]
 }

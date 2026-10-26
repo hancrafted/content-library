@@ -16,7 +16,7 @@ function episodeFolder(slug: string, files: Record<string, string>): string {
 
 // The marker shape `implement-section` writes (never-too-early-sales, onboard-ai-every-time).
 const WITH_MARKERS = {
-  'episode.ts': `import { episode } from '@/components/slide-master/slide';
+  'episode.ts': `import { episode } from '@/episodes/components/slide-master/slide';
 import { howToStartSection } from './sections/how-to-start';
 import { whyCashSection } from './sections/why-cash';
 import { hero } from './slides/hero/slide';
@@ -27,13 +27,13 @@ export const cashFirst = episode({
   sections: [whyCashSection, howToStartSection],
 });
 `,
-  'sections/why-cash.ts': `import type { Section } from '@/components/slide-master/slide';
+  'sections/why-cash.ts': `import type { Section } from '@/episodes/components/slide-master/slide';
 import { watchCash } from '../slides/watch-cash/slide';
 import { whyCash } from '../slides/why-cash/slide';
 
 export const whyCashSection: Section = [whyCash, watchCash];
 `,
-  'sections/how-to-start.ts': `import type { Section } from '@/components/slide-master/slide';
+  'sections/how-to-start.ts': `import type { Section } from '@/episodes/components/slide-master/slide';
 import { firstCall } from '../slides/first-call/slide';
 import { howToStart } from '../slides/how-to-start/slide';
 import { leadList } from '../slides/lead-list/slide';
@@ -48,7 +48,7 @@ export const howToStartSection: Section = [
 
 // The inline shape of the hand-built Episodes (ai-token-economy, maintaining-markdown-for-ai).
 const INLINE = {
-  'episode.ts': `import { episode } from '@/components/slide-master/slide';
+  'episode.ts': `import { episode } from '@/episodes/components/slide-master/slide';
 import { motivation } from './slides/motivation/slide';
 import { toolsAndTips } from './slides/tools-and-tips/slide';
 import { whatIsAToken } from './slides/what-is-a-token/slide';

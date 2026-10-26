@@ -10,7 +10,7 @@ Read before adding or changing an Episode, a Slide, or any Translation file. The
 
 ## Key shape
 
-A Slide keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`; its Episode's own text sits in `<episode>/i18n/`. The site-wide Translation files (`src/messages/`) hold no published Episode's text; an Upcoming Episode's card copy is landing text ([Episode overview entries](#episode-overview-entries)):
+A Slide keeps its strings in its own folder, `slides/<slide>/i18n/en.json` and `de.json`; its Episode's own text sits in `<episode>/i18n/`. The site-wide Translation files (`src/messages/`) hold no published Episode's text; an Upcoming Episode's card copy is landing text ([Episode browser entries](#episode-browser-entries)):
 
 ```text
 <episode>/i18n/<locale>.json                  title, caption, description of the Episode
@@ -44,7 +44,7 @@ The record, not the Translation file, holds what is not a string: a note's `slug
 
 ## Worked example: episode-template
 
-`src/components/episodes/episode-template/slides/why-a-template/slide.tsx` declares slug `why-a-template`, its messages `{ en, de }` imported from `./i18n/`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in its own `i18n/en.json`:
+`src/episodes/tooling/episode-template/slides/why-a-template/slide.tsx` declares slug `why-a-template`, its messages `{ en, de }` imported from `./i18n/`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in its own `i18n/en.json`:
 
 ```text
 title
@@ -82,11 +82,11 @@ episode-template/i18n/en.json              title, caption, description
 - Template: a string a client widget completes after the reader acts keeps a plain `{name}` placeholder (`"showAll": "Show all {count}"`, no ICU plural; keys are camelCase, never `show-all`). The Slide reads it with `template('showAll')` and passes it as a prop; the widget renders `fillTemplate(label, { count })`. `template` accepts only a string leaf of the Slide's own file (or subtree).
 - A Section of one Slide needs no extra key: its section slide holds `title` and `caption` like any other Slide.
 - A `tsc` error from `t`, `ref` or `target` means the Translation file or the declaration is wrong; fix it, never cast ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
-- `src/components/episodes/episode-template/` is the copy source for a new Episode; the frame components in `src/components/slide-master/` and the Slide library, `src/components/episodes/slide-master/`, hold the Slide layouts.
+- `src/episodes/tooling/episode-template/` is the copy source for a new Episode; the frame components in `src/episodes/components/slide-master/` and the Slide library, `src/episodes/tooling/slide-master/`, hold the Slide layouts.
 
-## Episode overview entries
+## Episode browser entries
 
-Each Episode declares its own metadata record in `episodes/<slug>/episode-metadata.ts`: status, visibility, Format, Tags (lead Tag first), its Video and, once published, its publish date. It holds ids only, no strings. The content store (`src/content-store/store.ts`) loads every record through its schema, and the landing page reads only `listEpisodes()` from it. The closed vocabularies live in `src/content-store/schemas/fields.ts` (`TAG_IDS`, `FORMATS`); the overview's lists in `src/lib/episode-overview.ts`:
+Each Episode declares its own metadata record in `episodes/<slug>/episode-metadata.ts`: status, visibility, Format, Tags (lead Tag first), its Video and, once published, its publish date. It holds ids only, no strings. The content store (`src/content-store/store.ts`) loads every record through its schema, and the landing page reads only `listEpisodes()` from it. The closed vocabularies live in `src/content-store/schemas/fields.ts` (`TAG_IDS`, `FORMATS`); the Episode browser's lists in `src/lib/episode-overview.ts`:
 
 - `TAGS`: each Tag's icon and accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
 - `FEATURED`: exactly three published slugs, lead first.
@@ -97,7 +97,7 @@ An entry reads its text from:
 - An Upcoming Episode with no page: `landing.episodeOverview.upcoming.<slug>.title` and `.caption`. It has no record, so this is landing text and stays site-wide; move it into the Episode folder's `i18n/` when its page is written.
 - Every Episode: `landing.episodeOverview.formats.<format>`, one per id in `FORMATS`. The Format control and label stay hidden until two Formats are in use.
 - Every Tag in the vocabulary: `landing.episodeOverview.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; the store refuses an Episode that lists an id outside `TAG_IDS`, lists none or lists one twice, and a test fails when a Tag lacks either key in en or de.
-- Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the overview's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
+- Entry chrome: `landing.episodeOverview.open` and `landing.episodeOverview.comingSoon`; the Episode browser's search box: `landing.episodeOverview.search` (its accessible name) and `.searchPlaceholder`.
 - The `/episodes` heading and its one-line intro: `episodesPage.title` and `episodesPage.intro`.
 
 ## Event keys
@@ -120,4 +120,4 @@ An Event is a record in the content store that holds no string ([Events](events.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-`episode-template`, `workshop-template`, `slide-master` and `explorable-explanations` are tooling pages (`TOOLING_SLUGS` in `src/lib/tooling-pages.ts`, records in `src/components/episodes/tooling-pages.ts`), not Episodes: they are not in the Episode registry or overview, are `noindex`, stay out of the sitemap and need no metadata.
+`episode-template`, `workshop-template`, `slide-master` and `explorable-explanations` are tooling pages (one folder each under `src/episodes/tooling/`; `npm run registry` generates `TOOLING_SLUGS` and their compositions), not Episodes: they are not among the Episode ids or in the Episode browser, are `noindex`, stay out of the sitemap and need no metadata.

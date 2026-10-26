@@ -4,7 +4,7 @@ import { matchPage, type EpisodeId, type PageRef } from './routes';
 /*
  * The one visibility predicate (design-ADR 0016, Routes and visibility; FE-008): a page and the facts of what it
  * presents in, whether it is exported, listed in the sitemap, indexed, shown on the site's own lists, and where its
- * canonical points out. The sitemap, page metadata, the `/episodes/` static params, the Episode overview and the
+ * canonical points out. The sitemap, page metadata, the `/episodes/` static params, the Episode browser and the
  * `/events/` list all ask it, so they cannot disagree. Pure: the facts come from the content store (`pageFacts` in
  * `src/content-store/store.ts`).
  */
@@ -26,7 +26,7 @@ export interface PageTreatment {
   readonly inSitemap: boolean;
   /** `false` emits `robots: noindex`. */
   readonly index: boolean;
-  /** Shown on the site's own lists: the Episode overview, Spotlight, Upcoming and `/events/`. */
+  /** Shown on the site's own lists: the Episode browser, Spotlight, Upcoming and `/events/`. */
   readonly listed: boolean;
   /** `self`, with hreflang alternates, or the public Episode whose `/episodes/<slug>/` page takes the credit. */
   readonly canonical: 'self' | { readonly episode: EpisodeId };

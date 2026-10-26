@@ -25,7 +25,7 @@ const CSS_HOOK_CLASSES = [
   '^focus-group(--dim-others|__item)?$',
   '^hover-reveal(__detail)?$',
 ];
-const HERO_TITLE_FILE = 'src/components/slide-master/slide-master.tsx';
+const HERO_TITLE_FILE = 'src/episodes/components/slide-master/slide-master.tsx';
 const TAILWIND_ENTRY = 'src/app/globals.css';
 
 // FE-006: the `.client` classifier. A file carrying 'use client' is named
@@ -40,14 +40,18 @@ const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
 // FE-002: inside an Episode, headings h1–h3 mirror the Episode's spine and
 // come only from the container and the Slide layouts. A one-off slide may still
 // write `<SlideTitle as="h3">`; h4 and below are free.
-const EPISODE_FILES = 'src/components/episodes/**/*.{ts,tsx}';
+// Episode files are the Episodes area's content: its Episodes, Event copies, Slide pool and tooling pages, never
+// its code folders `components/`, `lib/` and `hooks/`.
+const EPISODE_FILES = 'src/episodes/**/*.{ts,tsx}';
+const EPISODE_CODE_FILES = ['src/episodes/{components,lib,hooks}/**'];
 // A `*.client.tsx` inside a Slide folder `episodes/<ep>/slides/<slide>/`, an Event's
-// copy's under `episodes/by-event/<event>/` or a pool Slide's `episodes/slide-pool/<slide>/`,
-// is the only place an Episode may carry 'use client'; it keeps the spine rule but not the directive ban.
+// copy's under `episodes/by-event/<event>/`, a tooling page's under `episodes/tooling/`
+// or a pool Slide's `episodes/slide-pool/<slide>/`, is the only place an Episode may carry
+// 'use client'; it keeps the spine rule but not the directive ban.
 const EPISODE_CLIENT_FILES = [
-  'src/components/episodes/*/slides/*/**/*.client.tsx',
-  'src/components/episodes/by-event/*/*/slides/*/**/*.client.tsx',
-  'src/components/episodes/slide-pool/*/**/*.client.tsx',
+  'src/episodes/*/slides/*/**/*.client.tsx',
+  'src/episodes/{by-event/*,tooling}/*/slides/*/**/*.client.tsx',
+  'src/episodes/slide-pool/*/**/*.client.tsx',
 ];
 const SPINE_HEADINGS = [
   {
@@ -75,7 +79,7 @@ const NO_RAW_READ = {
 // `history.replaceState(...)`; the selector catches `window.history.*` and
 // `globalThis.history.*`, which `object: 'history'` does not match.
 const URL_STATE_FILE = 'src/lib/url-state.ts';
-const SLIDE_OBSERVER_FILE = 'src/components/episode-page/slide-observer.client.tsx';
+const SLIDE_OBSERVER_FILE = 'src/episodes/components/episode-page/slide-observer.client.tsx';
 /** FE-009 §5.1: the one-shot reveal hook, the only other file allowed an IntersectionObserver. */
 const REVEAL_OBSERVER_FILE = 'src/hooks/use-revealed-on-view.ts';
 const HISTORY_WRITE = {
@@ -172,7 +176,7 @@ const allowSize = (size) => ({
   ],
 });
 const CITATION_FILE = 'src/components/context-drawer/slide-notes.tsx';
-const INLINE_CODE_FILE = 'src/components/slide-master/rich-tags.tsx';
+const INLINE_CODE_FILE = 'src/episodes/components/slide-master/rich-tags.tsx';
 
 export default tseslint.config(
   {
@@ -239,12 +243,12 @@ export default tseslint.config(
         'error',
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
-          'src/{page-assembly,components,explorable-explanations,hooks}/**/*.tsx': OPTIONAL_CLIENT,
+          'src/{page-assembly,components,episodes,explorable-explanations,hooks}/**/*.tsx': OPTIONAL_CLIENT,
           'src/**/*.ts': '!(*.client)',
         },
         {
           errorMessage:
-            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/components, src/explorable-explanations or src/hooks, never under src/app (FE-006).',
+            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/components, src/episodes, src/explorable-explanations or src/hooks, never under src/app (FE-006).',
         },
       ],
     },
@@ -283,7 +287,7 @@ export default tseslint.config(
   {
     // FE-002 headings and FE-003 raw reads, for Episode files; the directive stays out of them.
     files: [EPISODE_FILES],
-    ignores: EPISODE_CLIENT_FILES,
+    ignores: [...EPISODE_CLIENT_FILES, ...EPISODE_CODE_FILES],
     rules: {
       'no-restricted-syntax': [
         'error',
@@ -350,9 +354,9 @@ export default tseslint.config(
     // drops the per-function line cap; complexity and the file cap still hold.
     // Caps follow file kind: every other file in a Slide folder keeps every cap.
     files: [
-      'src/components/episodes/*/slides/*/slide.tsx',
-      'src/components/episodes/by-event/*/*/slides/*/slide.tsx',
-      'src/components/episodes/slide-pool/*/slide.tsx',
+      'src/episodes/*/slides/*/slide.tsx',
+      'src/episodes/{by-event/*,tooling}/*/slides/*/slide.tsx',
+      'src/episodes/slide-pool/*/slide.tsx',
     ],
     rules: { 'max-lines-per-function': 'off' },
   },

@@ -1,6 +1,9 @@
 'use client';
 
-import { IconButton, OUTLINED_ICON } from '@/components/slide-shared/core-components/icon-button/icon-button.client';
+import {
+  IconButton,
+  OUTLINED_ICON,
+} from '@/episodes/components/slide-shared/core-components/icon-button/icon-button.client';
 import { cn } from '@/lib/utils';
 import { Code, X } from 'lucide-react';
 import type { UiWords } from './human-in-the-loop.types';

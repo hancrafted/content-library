@@ -1,4 +1,4 @@
-import type { EpisodeCard } from './episode-card.pure';
+import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 
 /**
  * How big a card is drawn and what it carries. `lead` is the landing hero;

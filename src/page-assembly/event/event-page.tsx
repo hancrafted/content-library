@@ -1,14 +1,14 @@
 import { EventBreadcrumb } from '@/components/events/event-breadcrumb';
 import { PastNotice } from '@/components/events/past-notice';
 import { PlaylistList, type PlaylistEntry } from '@/components/events/playlist-list';
-import { cardLabels, EpisodeCardView, type CardLabels } from '@/components/landing/episode-card';
-import type { EpisodeCard } from '@/components/landing/episode-card.pure';
-import { episodeCardMaker } from '@/components/landing/episode-cards';
 import type { EventCard } from '@/components/landing/event-card.pure';
 import { eventCardOf } from '@/components/landing/event-cards';
 import { eventPlaylistCards, startOf, totalMinutes } from '@/components/landing/event-playlist.pure';
 import { Button } from '@/components/ui/button';
 import { findEvent, treatmentOf, type ServedEvent } from '@/content-store/store';
+import { cardLabels, EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
+import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
+import { episodeCardMaker } from '@/episodes/components/episode-card/episode-cards';
 import { TRANSLATIONS } from '@/i18n/translations';
 import { BUILD_DAY } from '@/lib/build-day';
 import { localizePath, type Locale } from '@/lib/locale.pure';

@@ -8,6 +8,7 @@
  */
 
 import { type CheerioAPI } from 'cheerio';
+import { TITLE_ANCHOR } from '../episodes/lib/episode.pure.ts';
 import { OPTION, SECTION, TITLE_SLIDE } from './episode-spec-page.pure.ts';
 import {
   checkOption,
@@ -17,7 +18,6 @@ import {
   type Selection,
   type SpecPage,
 } from './episode-spec-slide.pure.ts';
-import { TITLE_ANCHOR } from './episode.pure.ts';
 import { unless } from './finding.pure.ts';
 
 const TITLE_SLIDE_OPTIONS: OptionCount = { min: 3, max: 3, words: 'three' };

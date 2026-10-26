@@ -1,6 +1,6 @@
-import type { ReadKey } from '@/components/landing/episode-card.pure';
 import { eventCard, type EventCard, type EventReads } from '@/components/landing/event-card.pure';
 import { listedEvents, listEvents, type ServedEvent } from '@/content-store/store';
+import type { ReadKey } from '@/episodes/components/episode-card/episode-card.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 

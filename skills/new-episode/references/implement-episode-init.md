@@ -14,7 +14,7 @@ The implementor (`archgate:developer`) builds the Spec's `Episode page` section,
 
 ### Placement markers
 
-One module per Section ([design-ADR-0008](../../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) Decision 7, FE-004 Decision 3), `src/components/episodes/<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide list, which the Episode record imports into `sections` in order. `<section-slug>` is the Section's h3 title under the Brief's `## Slides` in kebab case, the one slug [`customize-pipeline`](customize-pipeline.md) gives the Section's job when it expands the `implement-section` foreach; never the Spec Section's `id`, which may differ. Its Section job adds its page Slides to that list alone, so parallel Section branches never edit one line, and its job id `implement-section-<section-slug>` names the module it owns.
+One module per Section ([design-ADR-0008](../../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) Decision 7, FE-004 Decision 3), `src/episodes/<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide list, which the Episode record imports into `sections` in order. `<section-slug>` is the Section's h3 title under the Brief's `## Slides` in kebab case, the one slug [`customize-pipeline`](customize-pipeline.md) gives the Section's job when it expands the `implement-section` foreach; never the Spec Section's `id`, which may differ. Its Section job adds its page Slides to that list alone, so parallel Section branches never edit one line, and its job id `implement-section-<section-slug>` names the module it owns.
 
 ### Metadata
 

@@ -1,4 +1,4 @@
-import { episodeFolders } from '@/lib/episode-folders';
+import { episodeFolders } from '@/episodes/lib/episode-folders';
 import { FEATURED } from '@/lib/episode-overview';
 import { EPISODE_IDS, isEpisodeId } from '@/lib/routes';
 import { readdirSync } from 'node:fs';
@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { episodeStatus, listEpisodes } from './store';
 
 /*
- * The store's Episode read API the Episode overview depends on (#40): one metadata
+ * The store's Episode read API the Episode browser depends on (#40): one metadata
  * entry per Episode folder, an Event's copies included, so no Episode silently drops out. The
  * Episode registry derives the entries from the folders the one folder walker finds; the first test checks that
  * every Episode it finds, and only those, is in the store, by its Episode id.

@@ -80,4 +80,4 @@ One `--selected` / `--selected-foreground` pair in `globals.css` marks the selec
 
 ## Sources of truth in code
 
-The Slide observer in `src/components/episode-page/` owns the one `IntersectionObserver`, at the shared reading line in `src/lib/reading-line.pure.ts`. `src/components/episode-page/context-drawer-input.ts` is the only adapter from an Episode record to the drawer's `ContextDrawerInput` (`src/components/context-drawer/context-drawer-input.ts`; rule: FE-010 §8).
+The Slide observer in `src/episodes/components/episode-page/` owns the one `IntersectionObserver`, at the shared reading line in `src/lib/reading-line.pure.ts`. `src/episodes/components/episode-page/context-drawer-input.ts` is the only adapter from an Episode record to the drawer's `ContextDrawerInput` (`src/components/context-drawer/context-drawer-input.ts`; rule: FE-010 §8).

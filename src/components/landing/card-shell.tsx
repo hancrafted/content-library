@@ -1,4 +1,4 @@
-import { TAG_ACCENTS } from '@/components/landing/episode-visuals';
+import { TAG_ACCENTS } from '@/episodes/components/episode-card/episode-visuals';
 import type { Accent } from '@/lib/episode-overview';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { ArrowRight, ArrowUpRight, type LucideIcon } from 'lucide-react';

@@ -1,4 +1,4 @@
-import { Check, FlowStub, ParkedStub, Sparkle } from '@/components/slide-shared/glyphs/glyphs';
+import { Check, FlowStub, ParkedStub, Sparkle } from '@/episodes/components/slide-shared/glyphs/glyphs';
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 import { chatNames, splitParked } from './diagram-model.pure';

@@ -5,7 +5,8 @@ title: 'Context Drawer'
 domain: frontend
 rules: true
 files: ['src/components/context-drawer/**/*', 'src/app/globals.css']
-paths: ['src/components/{context-drawer,episodes}/**', 'src/lib/context-{drawer,link}.pure*.ts', 'src/app/globals.css']
+# prettier-ignore
+paths: ['src/components/context-drawer/**', 'src/episodes/**', 'src/lib/context-{drawer,link}.pure*.ts', 'src/app/globals.css']
 description: 'The Context drawer: a non-modal floating card, side by side with or over the Slides, showing the current Slide Speaker notes and Voice script, both server-rendered into the page and printed in full, linked to the Slide by targets and context references, with the note and segment shapes typed as content and kept apart from design.'
 ---
 

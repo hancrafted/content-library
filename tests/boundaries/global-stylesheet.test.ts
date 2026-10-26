@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { pageFolders } from '../../src/lib/episode-folders';
+import { pageFolders } from '../../src/episodes/lib/episode-folders';
 
 /*
  * The site-wide stylesheet holds only tokens Episodes share (FE-002 §7): an

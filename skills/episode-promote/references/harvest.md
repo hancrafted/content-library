@@ -2,7 +2,7 @@
 
 Promotion's harvest: the last moment Staging and the built Episode sit side by side. Five harvesters read both and propose; none applies a change. Dispatch them as parallel subagents, each with the slug, the Staging path, its section below, and [the card shape](#the-card) to return its proposals in. Assemble the five returns into `docs/episodes/<staging>/harvest.json`, one section per harvester, then render the gate page with `npm run episode:harvest -- docs/episodes/<staging>`.
 
-Shared inputs: `brief.md`, `spec/spec.html`, `feedback/*/feedback.md`, `pipeline.yml`, `events.jsonl` (query it with `npm run episode:query`), the gate commits on the Episode's branch, and the code under `src/components/episodes/<slug>/`.
+Shared inputs: `brief.md`, `spec/spec.html`, `feedback/*/feedback.md`, `pipeline.yml`, `events.jsonl` (query it with `npm run episode:query`), the gate commits on the Episode's branch, and the code under `src/episodes/<slug>/`.
 
 ## Lessons
 
@@ -14,7 +14,7 @@ What the user's picks say about taste. For each Slide, the picked Option against
 
 ## Slide library
 
-Parts or Slides worth sharing. A part drawn on several Slides of this Episode, or close to one in another Episode, is a candidate for `src/components/slide-shared/`; a Slide shape that would serve other Episodes, for the Slide master (`docs/design/slide-library.md`). Each proposal names the files, what moves, and the import rule it keeps (design-ADR `0001-the-slide-is-a-self-contained-folder.md`).
+Parts or Slides worth sharing. A part drawn on several Slides of this Episode, or close to one in another Episode, is a candidate for `src/episodes/components/slide-shared/`; a Slide shape that would serve other Episodes, for the Slide master (`docs/design/slide-library.md`). Each proposal names the files, what moves, and the import rule it keeps (design-ADR `0001-the-slide-is-a-self-contained-folder.md`).
 
 ## Cleanups
 

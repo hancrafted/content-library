@@ -1,6 +1,6 @@
+import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { localizePath, type Locale } from '@/lib/locale.pure';
 import { eventEpisodeRoute, type EpisodeId, type EventSlug } from '@/lib/routes';
-import type { EpisodeCard } from './episode-card.pure';
 
 /** The card fields an Event's Playlist reads. */
 type PlaylistCard = Pick<EpisodeCard, 'slug' | 'route' | 'minutes'>;

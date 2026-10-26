@@ -111,7 +111,7 @@ The kit's `Title` maps a title's position to its role: Title slide → `hero`, s
 
 ### Slide header
 
-The Slide header ([`slide-header.tsx`](../../src/components/slide-master/slide-header.tsx)) sets three lines above a titled Slide's Scene, in tokens only:
+The Slide header ([`slide-header.tsx`](../../src/episodes/components/slide-master/slide-header.tsx)) sets three lines above a titled Slide's Scene, in tokens only:
 
 | Part    | Type                                                  | Space                                                                                                                                   |
 | ------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
@@ -119,7 +119,7 @@ The Slide header ([`slide-header.tsx`](../../src/components/slide-master/slide-h
 | Title   | its level's role: `heading` (h2) or `subheading` (h3) | none                                                                                                                                    |
 | Caption | `body`, muted; a `<b>` run semibold in `primary`      | `--space-header-tight` (half the gap) over it; the header's full width, no cap; `pb-(--space-header)` closes the header above the Scene |
 
-The Eyebrow is computed: the Section title the table of contents shows, then `(n/N)` in brackets right after it; assistive tech hears "Page n of N". Proximity groups the title with its caption; the Eyebrow reads as the label above both. The caption keeps its `<b>` runs, typed character by character like the rest ([`caption-emphasis.pure.ts`](../../src/lib/caption-emphasis.pure.ts)); `em` and `code` read as plain text. The Title slide's header is the `hero` `h1` and the caption, with no Eyebrow: the record's `title` Slide's own `caption` when it gives one, else the Episode's.
+The Eyebrow is computed: the Section title the table of contents shows, then `(n/N)` in brackets right after it; assistive tech hears "Page n of N". Proximity groups the title with its caption; the Eyebrow reads as the label above both. The caption keeps its `<b>` runs, typed character by character like the rest ([`caption-emphasis.pure.ts`](../../src/episodes/lib/caption-emphasis.pure.ts)); `em` and `code` read as plain text. The Title slide's header is the `hero` `h1` and the caption, with no Eyebrow: the record's `title` Slide's own `caption` when it gives one, else the Episode's.
 
 A section slide on the shared header sits on a full-bleed band, `bg-section-band` (`--section-band`: one step darker than the page in light, one step off it in dark), so the start of a Section reads at a glance even at `40svh`. On a Title slide with an authored hero Scene the header and the hero sit together, centred in the slide: the hero's frame hugs its content instead of filling the rest of the slide.
 
@@ -160,8 +160,8 @@ A Slide's motion is **CSS only**: the shared entrance and hover vocabulary in `g
 
 What starts a motion:
 
-- **The entrance is shared and plays once.** The first time a Slide is active, its Slide header types in (Eyebrow, then title, then caption, settled within 1.5s) and its Scene fades up: the Foreground rises `1.5rem` as it fades in, the Backdrop fades in place, in about 400ms. `SlideMount` carries `data-entry` (`pending`, `entering`, `done`) in the page's zone store, so a Slide that unmounts while far comes back settled. Only under the `js` class, set in `<head>` before first paint, does a pending Slide start hidden: without JavaScript, in print and under reduced motion everything shows at once. A Scene on the shared header staggers, draws on or fades in none of its elements on entry; its one emphasis motion aside (below). The typing pace comes from a seeded jitter ([`typewriter.pure.ts`](../../src/lib/typewriter.pure.ts)): uneven, and the same on every load. The record's `entrance` picks `typewriter` (default), `fade` or `none`.
-- **An Episode whose record sets `header: 'authored'`** keeps per-Slide entrances keyed on `[data-zone='active']`. `SlideMount` sets `data-zone` ([`slide-mount.client.tsx`](../../src/components/episode-page/slide-mount.client.tsx)), and [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 names it a stable CSS hook, so renaming it is a breaking change. Such an entrance replays when the reader returns.
+- **The entrance is shared and plays once.** The first time a Slide is active, its Slide header types in (Eyebrow, then title, then caption, settled within 1.5s) and its Scene fades up: the Foreground rises `1.5rem` as it fades in, the Backdrop fades in place, in about 400ms. `SlideMount` carries `data-entry` (`pending`, `entering`, `done`) in the page's zone store, so a Slide that unmounts while far comes back settled. Only under the `js` class, set in `<head>` before first paint, does a pending Slide start hidden: without JavaScript, in print and under reduced motion everything shows at once. A Scene on the shared header staggers, draws on or fades in none of its elements on entry; its one emphasis motion aside (below). The typing pace comes from a seeded jitter ([`typewriter.pure.ts`](../../src/episodes/lib/typewriter.pure.ts)): uneven, and the same on every load. The record's `entrance` picks `typewriter` (default), `fade` or `none`.
+- **An Episode whose record sets `header: 'authored'`** keeps per-Slide entrances keyed on `[data-zone='active']`. `SlideMount` sets `data-zone` ([`slide-mount.client.tsx`](../../src/episodes/components/episode-page/slide-mount.client.tsx)), and [FE-009](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md) §6 names it a stable CSS hook, so renaming it is a breaking change. Such an entrance replays when the reader returns.
 - **Scroll-driven (`animation-timeline`) only when the motion _is_ progress:** a timeline, growth, a sequence. `vertical-sticky-years` is the worked example.
 - **One emphasis motion per Scene** carries the Slide's message (see [Emphasis motion](#emphasis-motion)).
 - **Looping motion with a purpose** stays free in a Scene, and pauses outside `active` (FE-009 §6).
@@ -215,7 +215,7 @@ Name it in the Spec Option's build notes (`motion:`). A motion that only stagger
 
 ### Library motions
 
-A **Slide library motion** is a CSS module under `src/components/slide-shared/motions/`. The folder is empty today. A motion moves there when a second Slide needs it ([FE-007](../../.archgate/adrs/FE-007-module-layering.md) Do 7). A Slide's CSS module takes it with `composes:`, a relative import that [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §1 and the dependency rules allow, and that builds under Next.js CSS modules (verified with a throwaway module):
+A **Slide library motion** is a CSS module under `src/episodes/components/slide-shared/motions/`. The folder is empty today. A motion moves there when a second Slide needs it ([FE-007](../../.archgate/adrs/FE-007-module-layering.md) Do 7). A Slide's CSS module takes it with `composes:`, a relative import that [FE-007](../../.archgate/adrs/FE-007-module-layering.md) §1 and the dependency rules allow, and that builds under Next.js CSS modules (verified with a throwaway module):
 
 ```css
 .bar {

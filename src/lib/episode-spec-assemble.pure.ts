@@ -7,12 +7,12 @@
  */
 
 import { load } from 'cheerio';
+import { TITLE_ANCHOR } from '../episodes/lib/episode.pure.ts';
 import { briefCardMarkup } from './episode-spec-assemble-brief.pure.ts';
 import { escape, inline, notesList, visualPanel, voiceList, wordTabs } from './episode-spec-assemble-words.pure.ts';
 import { fragmentSlides, pickBox } from './episode-spec-fragment.pure.ts';
 import { FORM } from './episode-spec-slide.pure.ts';
 import { briefSource, dossierSource, mergedSource, type Source } from './episode-spec-source.pure.ts';
-import { TITLE_ANCHOR } from './episode.pure.ts';
 import { metaGateTier } from './staging-file.pure.ts';
 
 export interface SpecInputs {

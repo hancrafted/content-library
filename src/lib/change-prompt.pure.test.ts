@@ -18,7 +18,7 @@ describe('success cases', () => {
       '- `--primary` (dark theme): `white` -> `grey`',
       'Global tokens',
       'Slide `intro--hero`',
-      'src/components/episodes/ai-token-economy/',
+      'src/episodes/ai-token-economy/',
       '- `--sun` (light theme): `#fff` -> `#eee`',
     ];
     // ACT
@@ -69,7 +69,7 @@ describe('edge cases', () => {
         to: '2',
       },
     ];
-    const expectedPart = 'src/components/episodes/by-event/2026-10-23-axel-agentic-workflow/intro/';
+    const expectedPart = 'src/episodes/by-event/2026-10-23-axel-agentic-workflow/intro/';
     // ACT
     const prompt = formatChangePrompt(changes);
     // ASSERT

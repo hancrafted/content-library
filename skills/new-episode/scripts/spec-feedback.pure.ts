@@ -2,9 +2,9 @@
 // Spec's Title slide and Slides, the round number and the clock in, the `feedback.md` text out, or the Slides that
 // break the rule that a Slide with no pick carries a note. The server reads and writes; nothing here touches the disk.
 
+import { TITLE_ANCHOR } from '../../../src/episodes/lib/episode.pure.ts';
 import { BRIEF_KEYS } from '../../../src/lib/episode-spec-brief.pure.ts';
 import type { SpecSlide } from '../../../src/lib/episode-spec-page.pure.ts';
-import { TITLE_ANCHOR } from '../../../src/lib/episode.pure.ts';
 import { HAN_ACTOR, utcSeconds } from '../../../src/lib/staging-file.pure.ts';
 
 export interface Review {

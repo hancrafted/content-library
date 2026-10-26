@@ -5,9 +5,9 @@ title: 'Slide Architecture'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/components/{episode-page,slide-master,slide-shared,episodes}/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
+files: ['src/episodes/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
-paths: ['src/components/{episode-page,slide-master,slide-shared,episodes}/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
+paths: ['src/episodes/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 description: 'The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text, styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR.'
 ---
 
@@ -23,10 +23,13 @@ An agent opening this repo meets five Episode-shaped records, each deep on one c
 flowchart TD
   app["src/app — routes"] --> pages["src/page-assembly — page templates, one folder each"]
   pages --> comp["src/components — feature modules"]
+  pages --> area["src/episodes — Episodes area: content folders, then components/ hooks/ lib/ tiers"]
   comp --> hooks["src/hooks — browser state"]
   comp --> lib["src/lib — pure logic, no React"]
   hooks --> lib
 ```
+
+**The Episodes area.** `src/episodes/` keeps content (`<ep>/`, `by-event/`, `slide-pool/`, `tooling/`) apart from code (`components/`, `lib/`, `hooks/`); no Episode slug takes one of these names.
 
 **Modules an Episode is built from.** An arrow is an allowed import.
 
@@ -100,18 +103,18 @@ For this project the map matters because handoffs run on agents with no session 
 
 1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section.
 2. A Slide folder owns its Scene, widgets, logic, CSS, text, notes, Voice script; imports no other.
-3. `episodes/slide-pool/<slide>/`: shared content Slides, never a Title or section slide; only a Section imports one, via `@/`.
+3. `episodes/slide-pool/<slide>/`: content Slides Episodes share, never Title or section; only a Section imports one, via `@/`.
 4. `slide-master/` owns frame, layouts, record and kit types; `slide-shared/`, parts two Slides share.
 5. `episode-page/` owns the one container and Slide mechanics; chrome (`table-of-contents/`, `context-drawer/`) only via it.
 
 ### 4. One pass from Episode to page
 
-1. Route → Episode page template (by page kind) → registry → record → container → static HTML; anchors from position.
+1. Route → template (by page kind) → registry → record → container → static HTML; anchors from position.
 2. Routes (design-ADR 0016): `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`.
 
 ### 5. Text, styling and client code have fixed homes
 
-1. Text: site Translation files for chrome, landing, Upcoming cards; else the owning Episode's, Slide's or Explorable explanation's.
+1. Text: site Translation files for chrome, landing, Upcoming cards; else its owner's (Episode, Slide, Explorable explanation).
 2. Styling: tokens in `globals.css`; an Episode's remap in its scope; a Slide's in its CSS module.
 3. Client code: `*.client.tsx` leaves only; hooks hold browser state.
 

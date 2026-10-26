@@ -1,6 +1,6 @@
+import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import type { EpisodeId } from '@/lib/routes';
 import { describe, expect, it } from 'vitest';
-import type { EpisodeCard } from './episode-card.pure';
 import { eventPlaylistCards, startOf, totalMinutes } from './event-playlist.pure';
 
 /** A hand-written stand-in for the card fields an Event's Playlist reads. */

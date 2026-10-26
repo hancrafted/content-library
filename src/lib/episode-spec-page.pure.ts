@@ -7,7 +7,7 @@
  */
 
 import { load } from 'cheerio';
-import { TITLE_ANCHOR } from './episode.pure.ts';
+import { TITLE_ANCHOR } from '../episodes/lib/episode.pure.ts';
 
 /** The Spec page, relative to the Episode's staging folder. */
 export const SPEC_FILE = 'spec/spec.html';

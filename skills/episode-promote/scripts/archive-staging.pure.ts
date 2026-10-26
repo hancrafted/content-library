@@ -2,8 +2,8 @@
 // designer prompts in the run log and the design reference images the Spec cites. Pure text in, records out.
 
 import type { CheerioAPI } from 'cheerio';
+import { TITLE_ANCHOR } from '../../../src/episodes/lib/episode.pure.ts';
 import { OPTION, SLIDE, TITLE_SLIDE } from '../../../src/lib/episode-spec-page.pure.ts';
-import { TITLE_ANCHOR } from '../../../src/lib/episode.pure.ts';
 
 export interface SlidePage {
   /** The Slide's slug, `top` for the Title slide. */
