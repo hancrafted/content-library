@@ -1,12 +1,13 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 import { catalogueOf } from './catalogue/page-catalogue';
-import type { EpisodeId } from './catalogue/routes';
+import type { EpisodeId } from './catalogue/record-routes';
+import type { LoadedEpisode } from './episode-refusals';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { EVENT_RECORDS } from './event-registry.generated';
 import { FEATURED } from './featured';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
-import { checkRecords, parseRecords, type Content, type ContentInput, type LoadedEpisode } from './refusals';
+import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
 import type { Episode, EpisodeStatus } from './schemas/episode.schema';
 import type { EventInput } from './schemas/event.schema';
 import type { IsoDate } from './schemas/fields';
@@ -64,7 +65,7 @@ export function featuredIds(): readonly PublishedId[] {
   return FEATURED;
 }
 
-export type { LoadedEpisode } from './refusals';
+export type { LoadedEpisode } from './episode-refusals';
 
 /** Every Episode's metadata with its id: those with a page, then the upcoming ones without, each in id order. */
 export function listEpisodes(): readonly LoadedEpisode[] {

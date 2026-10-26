@@ -1,4 +1,4 @@
-import type { EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import type { EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import type { PlacedListSlide, SlideLevel } from '@/episodes/lib/episode.pure';
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
 import type { Locale } from '@/shared/lib/locale.pure';

@@ -1,8 +1,8 @@
-import { matchPage, pageLocales, routeOf, type EpisodeId, type PageRef } from '@/content-store/catalogue/routes';
+import { matchPage, pageLocales, routeOf, type EpisodeId, type PageRef } from '@/content-store/catalogue/record-routes';
 import type { TreatedPage } from '@/content-store/catalogue/visibility.pure';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import { DEFAULT_LOCALE } from '@/shared/lib/locale.pure';
-import { servedUrl } from '@/shared/lib/routes';
+import { servedUrl } from '@/shared/lib/static-routes';
 import type { MetadataRoute } from 'next';
 
 /** A sitemap entry's `lastModified`: an Episode's own page carries its publish date, no other page one. */

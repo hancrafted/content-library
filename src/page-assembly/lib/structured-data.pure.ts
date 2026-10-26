@@ -1,8 +1,8 @@
-import { episodeRoute, type EpisodeId } from '@/content-store/catalogue/routes';
+import { episodeRoute, type EpisodeId } from '@/content-store/catalogue/record-routes';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { Locale } from '@/shared/lib/locale.pure';
-import { ROUTES, servedUrl } from '@/shared/lib/routes';
 import { SOCIAL_LINKS } from '@/shared/lib/social-links';
+import { ROUTES, servedUrl } from '@/shared/lib/static-routes';
 import { OG_IMAGE } from './page-metadata.pure';
 import { PAGE_WORDS } from './page-words';
 

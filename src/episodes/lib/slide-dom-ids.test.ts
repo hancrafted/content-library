@@ -1,4 +1,4 @@
-import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import { EPISODES_PATH_SLUGS, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/episodes/components/slide-master/slide';
 import { placeSections } from '@/episodes/lib/episode.pure';

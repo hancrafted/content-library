@@ -46,7 +46,7 @@ function recordsFile(slugs: readonly string[]): string {
   const imports = slugs.map((slug) => `import { event as ${identifierOf(slug)} } from './events/${slug}';`);
   const entries = slugs.map((slug) => `  '${slug}': ${identifierOf(slug)},`);
   return `${HEADER}
-import type { EventSlug } from '@/content-store/catalogue/routes';
+import type { EventSlug } from '@/content-store/catalogue/record-routes';
 ${imports.join('\n')}
 import type { EventInput } from './schemas/event.schema';
 

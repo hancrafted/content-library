@@ -1,4 +1,4 @@
-import { eventRoute, type EventSlug } from '@/content-store/catalogue/routes';
+import { eventRoute, type EventSlug } from '@/content-store/catalogue/record-routes';
 import type { Event } from '@/content-store/schemas/event.schema';
 import type { IsoDate } from '@/content-store/schemas/fields';
 import { dateLabelOf } from '@/shared/lib/date-label.pure';

@@ -13,10 +13,10 @@ import {
   isEpisodeId,
   legacyEpisodeRoute,
   type EventSlug,
-} from '../../src/content-store/catalogue/routes';
+} from '../../src/content-store/catalogue/record-routes';
 import { listEpisodes, listEvents } from '../../src/content-store/store';
 import { LOCALES, localizePath, type Locale } from '../../src/shared/lib/locale.pure';
-import { ROUTES } from '../../src/shared/lib/routes';
+import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, exportedPage, OUT_DIR } from './exported-pages';
 
 const AXEL: EventSlug = '2026-10-23-axel-agentic-workflow';

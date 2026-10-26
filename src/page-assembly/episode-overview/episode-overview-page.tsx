@@ -1,4 +1,4 @@
-import { episodeRoute } from '@/content-store/catalogue/routes';
+import { episodeRoute } from '@/content-store/catalogue/record-routes';
 import { EpisodeBrowser, type BrowseLabels } from '@/episodes/components/episode-browser/episode-browser.client';
 import { newestFirst } from '@/episodes/components/episode-browser/episode-browser.pure';
 import { cardLabels } from '@/episodes/components/episode-card/episode-card';

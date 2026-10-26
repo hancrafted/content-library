@@ -1,4 +1,4 @@
-import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import {
   episodeMinutes,
   localizeSlide,

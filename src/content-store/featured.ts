@@ -1,4 +1,5 @@
-import type { EpisodeId } from './catalogue/routes';
+import type { EpisodeId } from './catalogue/record-routes';
+import { duplicates } from './duplicates';
 import type { LoadedEpisode } from './episode-refusals';
 
 /*
@@ -28,10 +29,9 @@ function slotRefusal(id: string, episodes: ReadonlyMap<string, LoadedEpisode>): 
 
 /** Every refusal of the Featured slots: not three, one named twice, or one that is no published public Episode. */
 export function featuredRefusals(featured: readonly string[], episodes: ReadonlyMap<string, LoadedEpisode>): string[] {
-  const twice = featured.filter((id, index) => featured.indexOf(id) !== index);
   return [
     ...(featured.length === SLOTS ? [] : [`names ${featured.length} slots, but Featured fills ${SLOTS}`]),
-    ...twice.map((id) => `slot "${id}" is named twice`),
+    ...duplicates(featured).map((id) => `slot "${id}" is named twice`),
     ...featured.flatMap((id) => slotRefusal(id, episodes) ?? []),
   ].map((sentence) => `Featured: ${sentence}`);
 }

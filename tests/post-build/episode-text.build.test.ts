@@ -10,7 +10,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
-import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/routes';
+import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/record-routes';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { episodeText, type EpisodeText } from './episode-text';
 import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage } from './exported-pages';

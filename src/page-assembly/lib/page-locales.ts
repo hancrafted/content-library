@@ -1,4 +1,4 @@
-import { pageLocales, routeOf } from '@/content-store/catalogue/routes';
+import { pageLocales, routeOf } from '@/content-store/catalogue/record-routes';
 import { PAGES } from '@/content-store/store';
 import { LOCALES, type LocalesByRoute } from '@/shared/lib/locale.pure';
 

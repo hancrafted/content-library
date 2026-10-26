@@ -1,6 +1,6 @@
-import { eventRoute, type EventSlug } from '@/content-store/catalogue/routes';
+import { eventRoute, type EventSlug } from '@/content-store/catalogue/record-routes';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import { ROUTES } from '@/shared/lib/routes';
+import { ROUTES } from '@/shared/lib/static-routes';
 import Link from 'next/link';
 
 interface EventBreadcrumbProps {

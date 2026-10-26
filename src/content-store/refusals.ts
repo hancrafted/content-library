@@ -1,7 +1,8 @@
-import { episodeRefOf } from '@/content-store/catalogue/episode-id.pure';
-import type { EventSlug } from '@/content-store/catalogue/routes';
+import { episodeRefOf, matchEpisode } from '@/content-store/catalogue/episode-id.pure';
+import type { EventSlug } from '@/content-store/catalogue/record-routes';
 import type { z } from 'zod';
-import { duplicates, episodeRefusals, type LoadedEpisode } from './episode-refusals';
+import { duplicates } from './duplicates';
+import { episodeRefusals, type LoadedEpisode } from './episode-refusals';
 import { featuredRefusals } from './featured';
 import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
@@ -20,8 +21,6 @@ export interface EpisodeEntry {
   readonly id: string;
   readonly record: unknown;
 }
-
-export type { LoadedEpisode } from './episode-refusals';
 
 /** Every record kind as its file writes it, before parsing: what the store loads. */
 export interface ContentInput {
@@ -108,12 +107,20 @@ function eventRefusals(event: Event): string[] {
 
 /** Why a Playlist may not list an Event's copy: an Event other than its owner presents the Playlist, or none does. */
 function foreignCopy(id: string, presenters: readonly string[]): string | undefined {
-  const ref = episodeRefOf(id);
-  if (ref.kind !== 'event-copy') return undefined;
-  const others = presenters.filter((event) => event !== ref.event);
-  if (presenters.length > 0 && others.length === 0) return undefined;
-  const by = others.length === 0 ? 'no Event presents' : `Event ${others.join(', ')} presents`;
-  return `episodes lists "${id}", a copy Event ${ref.event} owns, but ${by} this Playlist`;
+  return matchEpisode(episodeRefOf(id), {
+    standalone: () => undefined,
+    'event-copy': ({ event: owner }) => {
+      const others = presenters.filter((event) => event !== owner);
+      if (presenters.length > 0 && others.length === 0) return undefined;
+      const by = others.length === 0 ? 'no Event presents' : `Event ${others.join(', ')} presents`;
+      return `episodes lists "${id}", a copy Event ${owner} owns, but ${by} this Playlist`;
+    },
+  });
+}
+
+/** Whether no Event owns the Episode an id names. */
+function isStandalone(id: string): boolean {
+  return matchEpisode(episodeRefOf(id), { standalone: () => true, 'event-copy': () => false });
 }
 
 function playlistRefusals(
@@ -135,7 +142,7 @@ function playlistRefusals(
     ...playlist.episodes.flatMap((id) => foreignCopy(id, presenters) ?? []).map(own),
     ...(playlist.visibility === 'public' && presenters.length === 0
       ? unlisted
-          .filter((id) => episodeRefOf(id).kind === 'standalone')
+          .filter(isStandalone)
           .map((id) => own(`episodes lists the unlisted Episode "${id}", but no Event presents this public Playlist`))
       : []),
   ];

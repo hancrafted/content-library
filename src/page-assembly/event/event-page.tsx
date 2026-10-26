@@ -1,4 +1,4 @@
-import type { EventSlug } from '@/content-store/catalogue/routes';
+import type { EventSlug } from '@/content-store/catalogue/record-routes';
 import { findEvent, treatmentOf, type ServedEvent } from '@/content-store/store';
 import { cardLabels, EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';

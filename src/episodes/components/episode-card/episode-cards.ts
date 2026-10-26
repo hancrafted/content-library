@@ -1,4 +1,4 @@
-import { isEpisodeId } from '@/content-store/catalogue/routes';
+import { isEpisodeId } from '@/content-store/catalogue/record-routes';
 import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { episodeMinutes } from '@/episodes/components/slide-master/localized-slide';
 import { overviewOrder } from '@/episodes/lib/episode-metadata.pure';

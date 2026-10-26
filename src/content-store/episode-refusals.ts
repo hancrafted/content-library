@@ -1,10 +1,12 @@
 import {
   episodeRefOf,
   EVENT_COPIES_FOLDER,
+  matchEpisode,
   RESERVED_FOLDER_NAMES,
   type EpisodeRef,
 } from '@/content-store/catalogue/episode-id.pure';
 import { LOCALES } from '@/shared/lib/locale.pure';
+import { duplicates } from './duplicates';
 import type { Episode } from './schemas/episode.schema';
 
 /*
@@ -15,11 +17,6 @@ import type { Episode } from './schemas/episode.schema';
 
 /** An Episode's record as the store serves it: with its Episode id, derived from its folder, never written in it. */
 export type LoadedEpisode = Episode & { readonly id: string };
-
-/** Each item listed more than once, once. */
-export function duplicates(items: readonly string[]): string[] {
-  return [...new Set(items.filter((item, index) => items.indexOf(item) !== index))];
-}
 
 const LOCALE_LIST: readonly string[] = LOCALES;
 const NOT_A_LOCALE = `is not one of the site's locales (${LOCALE_LIST.join(', ')})`;
@@ -50,7 +47,7 @@ function videoRefusals({ visibility, youtube }: Episode): string[] {
 
 /** What is wrong with where an Episode lives: a reserved slug, a slug its folder does not carry, an Event that is not. */
 function folderRefusals({ slug, visibility }: LoadedEpisode, ref: EpisodeRef, events: ReadonlySet<string>): string[] {
-  const owner = ref.kind === 'event-copy' ? ref.event : undefined;
+  const owner = matchEpisode(ref, { standalone: () => undefined, 'event-copy': ({ event }) => event });
   const checks: readonly (readonly [boolean, string])[] = [
     [RESERVED_FOLDER_NAMES.includes(slug), `slug "${slug}" is a reserved folder name of the Episodes folder`],
     [slug !== ref.slug, `slug "${slug}" is not its folder's name "${ref.slug}"`],

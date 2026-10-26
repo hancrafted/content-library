@@ -4,7 +4,7 @@ import { episodeCards } from '@/episodes/components/episode-card/episode-cards';
 import { LiquidInkTransition } from '@/shared/components/animations/liquid-ink-transition.client';
 import { Button } from '@/shared/components/ui/button';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import { ROUTES } from '@/shared/lib/routes';
+import { ROUTES } from '@/shared/lib/static-routes';
 import { ArrowRight } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

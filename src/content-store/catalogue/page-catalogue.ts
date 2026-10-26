@@ -7,7 +7,7 @@ import {
   type EpisodesPathSlug,
   type EventSlug,
   type PageRef,
-} from '@/content-store/catalogue/routes';
+} from '@/content-store/catalogue/record-routes';
 import {
   episodePageTreatment,
   pageTreatment,
@@ -15,7 +15,8 @@ import {
   type PageTreatment,
   type TreatedPage,
 } from '@/content-store/catalogue/visibility.pure';
-import type { Content, LoadedEpisode } from '../refusals';
+import type { LoadedEpisode } from '../episode-refusals';
+import type { Content } from '../refusals';
 import type { ServedEvent } from '../served-event';
 
 /*

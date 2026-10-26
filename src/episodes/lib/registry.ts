@@ -1,4 +1,4 @@
-import { isEpisodeId } from '@/content-store/catalogue/routes';
+import { isEpisodeId } from '@/content-store/catalogue/record-routes';
 import type { EpisodeComposition, EpisodeMessages } from '@/episodes/components/slide-master/slide';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { notFound } from 'next/navigation';

@@ -1,5 +1,5 @@
-import { EPISODE_IDS, isEpisodeId } from '@/content-store/catalogue/routes';
-import { episodeFolders } from '@/episodes/lib/episode-folders';
+import { EPISODE_IDS, isEpisodeId } from '@/content-store/catalogue/record-routes';
+import { episodeFolders, METADATA_FILE } from '@/episodes/lib/episode-folders';
 import { readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { FEATURED } from './featured';
@@ -13,7 +13,6 @@ import { episodeStatus, listEpisodes } from './store';
  */
 
 const ROOT = process.cwd();
-const METADATA_FILE = 'episode-metadata.ts';
 const KEBAB_CASE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 /** Every Episode folder the walker finds, by Episode id. */

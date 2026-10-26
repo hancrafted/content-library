@@ -34,8 +34,8 @@ describe('success cases', () => {
     // ACT
     const episodes = episodeFolders(ROOT);
     const seen = {
-      standalone: episodes.filter(({ event }) => event === undefined).length,
-      copies: episodes.filter(({ event }) => event !== undefined).length,
+      standalone: episodes.filter(({ kind }) => kind === 'standalone').length,
+      copies: episodes.filter(({ kind }) => kind === 'event-copy').length,
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -54,7 +54,7 @@ describe('success cases', () => {
     ];
     // ACT
     const copies = episodeFolders(ROOT)
-      .filter(({ event }) => event !== undefined)
+      .filter(({ kind }) => kind === 'event-copy')
       .map(({ id }) => id);
     // ASSERT
     expect(copies).toEqual(expected);

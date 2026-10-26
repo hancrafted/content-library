@@ -1,5 +1,5 @@
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import { ROUTES } from '@/shared/lib/routes';
+import { ROUTES } from '@/shared/lib/static-routes';
 import { BrandSymbol } from '@/shared/page-chrome/header/brand-symbol';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

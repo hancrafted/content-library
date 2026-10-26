@@ -5,9 +5,9 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeRoute } from '../../src/content-store/catalogue/routes';
+import { episodeRoute } from '../../src/content-store/catalogue/record-routes';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
-import { ROUTES } from '../../src/shared/lib/routes';
+import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, exportedPage, OUT_DIR, redirectRules } from './exported-pages';
 
 const TOOLING = ['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'] as const;

@@ -1,4 +1,4 @@
-import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import type { Video } from '@/content-store/store';
 import type { LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';

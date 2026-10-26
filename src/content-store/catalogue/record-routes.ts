@@ -1,5 +1,5 @@
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
-import { ROUTES } from '@/shared/lib/routes';
+import { ROUTES } from '@/shared/lib/static-routes';
 import { episodeRefOf } from './episode-id.pure';
 import { EPISODE_IDS, TOOLING_SLUGS } from './episode-ids.generated';
 import { EVENT_SLUGS } from './event-slugs.generated';
@@ -7,7 +7,7 @@ import { EVENT_SLUGS } from './event-slugs.generated';
 /*
  * The record routes (spec #348, the content store's delivery policy): the Episode and Event slug lists and their
  * types, each record's logical path, and the page reference every page is known by. The static paths they build on,
- * `ROUTES`, are domain-free and sit in `src/shared/lib/routes.ts`.
+ * `ROUTES`, are domain-free and sit in `src/shared/lib/static-routes.ts`.
  */
 
 export const LEGACY_EPISODE_PREFIX = '/episode';

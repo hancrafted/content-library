@@ -1,5 +1,5 @@
 import { episodeFolderOf, episodeRefOf, TOOLING_FOLDER } from '@/content-store/catalogue/episode-id.pure';
-import { EPISODES_PATH_SLUGS, isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/routes';
+import { EPISODES_PATH_SLUGS, isToolingSlug, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';

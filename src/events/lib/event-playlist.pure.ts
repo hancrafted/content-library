@@ -1,4 +1,4 @@
-import { eventEpisodeRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/routes';
+import { eventEpisodeRoute, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 
 /**
