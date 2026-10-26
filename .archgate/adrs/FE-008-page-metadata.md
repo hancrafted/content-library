@@ -50,7 +50,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 ### 5. Scope
 
-1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list the `PAGES` that the visibility predicate `pageTreatment` admits, which `pageMetadata` also asks. `not-found.tsx` is a separate UI decision.
+1. `sitemap.ts` and `robots.ts` MUST be `force-static`, take the origin from `SITE_URL`, and list the pages the page catalogue's treatment admits, as `pageMetadata` reads it. `not-found.tsx` is a separate UI decision.
 2. An unknown locale prefix is no file in `out/`, so Pages serves its 404. `resolveLocale()`'s `notFound()` only narrows the type; nothing relies on it.
 
 ### 6. Indexable pages carry cards and structured data
@@ -97,7 +97,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 **Risks:**
 
 1. **A deploy loses `SITE_URL`:** canonicals publish as localhost. **Mitigation:** the deploy passes `SITE_URL` to the post-build test separately from the build, so a build that lost it fails. Dropping it from both is not caught.
-2. **A page missing from the walk:** the post-build test walks home and every Episode × locale. **Mitigation:** `pageMetadata` accepts only a known `PageRef`, so `tsc` fails first.
+2. **A page missing from the walk:** the post-build test walks every page the page catalogue builds × locale. **Mitigation:** `pageMetadata` accepts only a known `PageRef`, so `tsc` fails first.
 
 ## Compliance and Enforcement
 

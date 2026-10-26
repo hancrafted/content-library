@@ -1,7 +1,7 @@
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { episodeMinutes } from '@/components/slide-master/localized-slide';
 import type { Episode } from '@/content-store/schemas/episode.schema';
-import { episodeVideo, featuredSlugs, listEpisodes } from '@/content-store/store';
+import { episodeVideo, featuredSlugs, listedEpisodes } from '@/content-store/store';
 import { overviewOrder } from '@/lib/episode-metadata.pure';
 import type { Locale } from '@/lib/locale.pure';
 import { isEpisodeSlug } from '@/lib/routes';
@@ -48,7 +48,9 @@ export interface EpisodeCardsOptions {
  * unlisted Episode is never among them; it lives only under its Event.
  */
 export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions): Promise<EpisodeCard[]> {
-  const entries = overviewOrder(listEpisodes({ includeDrafts: options?.includeDrafts }), featuredSlugs());
+  const listed = listedEpisodes();
+  const shown = (options?.includeDrafts ?? true) ? listed : listed.filter(({ status }) => status === 'published');
+  const entries = overviewOrder(shown, featuredSlugs());
   return entries.map(await episodeCardMaker(locale, options));
 }
 

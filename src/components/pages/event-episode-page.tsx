@@ -6,25 +6,15 @@ import {
   PlaylistNav,
   type PresentedEpisode,
 } from '@/components/events/event-episode-chrome';
-import { episodePublishedOn, episodeVideo, findEvent, listEvents, pageFacts } from '@/content-store/store';
+import { episodePublishedOn, episodeVideo, findEvent, treatmentOf } from '@/content-store/store';
 import { BUILD_DAY } from '@/lib/build-day';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import { eventEpisodeRoute, type EpisodeSlug, type EventSlug } from '@/lib/routes';
+import { eventEpisodeRoute, type EventSlug } from '@/lib/routes';
 import { notFound } from 'next/navigation';
 
 /** The insets every Slide wrapper takes, so the Event's chrome lines up with the Slides (FE-009 §2). */
 const INSET = 'pl-(--inset-l) pr-(--inset-r)';
-
-/**
- * One static param per Episode an Event's Playlist presents that has a page (FE-005): read from the Playlists through
- * the content store, so the route set is exactly what the Event pages link to.
- */
-export function eventEpisodeParams(): { event: EventSlug; episode: EpisodeSlug }[] {
-  return listEvents().flatMap((event) =>
-    event.playlist.episodes.flatMap(({ page }) => (page === undefined ? [] : [{ event: event.slug, episode: page }])),
-  );
-}
 
 /** The Event and the Episode a page under it shows, with its place; a pair its Playlist does not hold is no page. */
 function presented(eventSlug: string, episode: string): PresentedEpisode {
@@ -61,8 +51,8 @@ export async function EventEpisodePage({ event, episode, locale }: { event: stri
 }
 
 /**
- * An Event-scoped Episode page's title, description and facts, for `pageMetadata` (FE-008): the Episode's own copy,
- * and its visibility and status, which decide whether it is `noindex` or its own page takes the search credit.
+ * An Event-scoped Episode page's title, description and treatment, for `pageMetadata` (FE-008): the Episode's own
+ * copy, and the page catalogue's treatment, which decides whether it is `noindex` or its own page takes the credit.
  */
 export function eventEpisodePageCopy(event: EventSlug, episode: string, locale: Locale): PageCopy {
   const shown = presented(event, episode);
@@ -72,7 +62,7 @@ export function eventEpisodePageCopy(event: EventSlug, episode: string, locale: 
   return {
     title,
     description,
-    facts: pageFacts({ kind: 'event-episode', event, episode: slug }),
+    treatment: treatmentOf({ kind: 'event-episode', event, episode: slug }),
     ...(publishedOn ? { publishedOn } : {}),
   };
 }

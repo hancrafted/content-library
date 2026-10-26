@@ -2,42 +2,20 @@ import { EpisodePageContainer } from '@/components/episode-page/episode-page-con
 import { episodeCopy, findEpisode } from '@/components/episodes/registry';
 import { findEpisodesPathPage, findToolingPage } from '@/components/episodes/tooling-pages';
 import { JsonLdScript } from '@/components/json-ld';
-import { episodePublishedOn, episodeStatus, episodeVideo, pageFacts } from '@/content-store/store';
+import { episodePublishedOn, episodeStatus, episodeVideo, treatmentOf } from '@/content-store/store';
 import type { Locale } from '@/lib/locale.pure';
 import type { PageCopy } from '@/lib/page-metadata.pure';
-import {
-  EPISODES_PATH_SLUGS,
-  episodesPathPage,
-  matchPage,
-  type EpisodeSlug,
-  type EpisodesPathPage,
-  type EpisodesPathSlug,
-} from '@/lib/routes';
+import { matchPage, type EpisodeSlug, type EpisodesPathPage } from '@/lib/routes';
 import { SITE_URL } from '@/lib/site-url';
 import { episodeJsonLd } from '@/lib/structured-data.pure';
-import { pageTreatment } from '@/lib/visibility.pure';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-/** Whether the visibility predicate exports a page at `/episodes/<slug>/`: every tooling page and public Episode, no unlisted one. */
-function isExported(page: EpisodesPathPage): boolean {
-  return pageTreatment(page, pageFacts(page)).exported;
-}
-
-/** The page a slug under `/episodes/` names, when the visibility predicate exports one there; else no page. */
+/** The page a slug under `/episodes/` names, when the page catalogue builds one there; else no page. */
 function exportedPage(slug: string): EpisodesPathPage {
   const page = findEpisodesPathPage(slug);
-  if (!isExported(page)) notFound();
+  if (!treatmentOf(page).exported) notFound();
   return page;
-}
-
-/**
- * One static param per page under `/episodes/` (FE-005): every tooling page and every Episode the visibility
- * predicate exports there, so an unlisted Episode has no `/episodes/` page, only its Event's. The `/episodes/` routes
- * and the legacy `/episode/` stubs export exactly these.
- */
-export function episodePageParams(): { episode: EpisodesPathSlug }[] {
-  return EPISODES_PATH_SLUGS.filter((slug) => isExported(episodesPathPage(slug))).map((episode) => ({ episode }));
 }
 
 /**
@@ -76,20 +54,22 @@ function OwnEpisodePage({ slug, locale }: { slug: EpisodeSlug; locale: Locale })
 }
 
 /**
- * A page's title, description, facts and release date under `/episodes/`, for `pageMetadata` (FE-008): an
- * Episode's read through the registry and the content store, whose visibility and status the predicate turns into
- * robots and canonical; a tooling page's from its own record, with no facts, since it is `noindex` as a tooling page.
+ * A page's title, description, treatment and release date under `/episodes/`, for `pageMetadata` (FE-008): an
+ * Episode's read through the registry and the content store, a tooling page's from its own record; the treatment,
+ * which decides robots and canonical, is the page catalogue's.
  */
 export function episodePageCopy(slug: string, locale: Locale): PageCopy {
-  return matchPage<EpisodesPathPage, PageCopy>(findEpisodesPathPage(slug), {
+  const page = findEpisodesPathPage(slug);
+  const treatment = treatmentOf(page);
+  return matchPage<EpisodesPathPage, PageCopy>(page, {
     tooling: ({ tooling }) => {
       const { title, description } = findToolingPage(tooling).messages[locale];
-      return { title, description };
+      return { title, description, treatment };
     },
-    episode: (own) => {
-      const { title, description } = episodeCopy(own.episode, locale);
-      const publishedOn = episodePublishedOn(own.episode);
-      return { title, description, facts: pageFacts(own), ...(publishedOn ? { publishedOn } : {}) };
+    episode: ({ episode }) => {
+      const { title, description } = episodeCopy(episode, locale);
+      const publishedOn = episodePublishedOn(episode);
+      return { title, description, treatment, ...(publishedOn ? { publishedOn } : {}) };
     },
   });
 }

@@ -1,10 +1,28 @@
 import { describe, expect, it } from 'vitest';
-import { EPISODE_SLUGS, type PageRef } from './routes';
+import type { PageRef } from './routes';
 import { robotsFor, sitemapEntries } from './sitemap.pure';
-import type { PageFacts } from './visibility.pure';
+import type { PageTreatment } from './visibility.pure';
 
 const SITE = 'https://hancrafted.net';
-const allPublished = (): PageFacts => ({ visibility: 'public', status: 'published' });
+const EVENT = '2026-10-23-axel-agentic-workflow';
+
+const LISTED: PageTreatment = { exported: true, inSitemap: true, index: true, listed: true, canonical: 'self' };
+const HIDDEN: PageTreatment = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' };
+const ABSENT: PageTreatment = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' };
+
+/** Pages with the treatment the page catalogue gives them, as the sitemap reads them. */
+function treated(treatment: PageTreatment, ...pages: PageRef[]) {
+  return pages.map((page) => ({ page, treatment }));
+}
+
+const SITE_PAGES = treated(
+  LISTED,
+  { kind: 'home' },
+  { kind: 'episodes' },
+  { kind: 'events' },
+  { kind: 'episode', episode: 'ai-attention-span' },
+  { kind: 'event', event: EVENT },
+);
 
 const undated = () => undefined;
 
@@ -19,7 +37,7 @@ describe('success cases', () => {
     };
     const german = { ...expected, url: `${SITE}/de/episodes/` };
     // ACT
-    const entries = sitemapEntries(SITE, allPublished, undated);
+    const entries = sitemapEntries(SITE, SITE_PAGES, undated);
     // ASSERT
     expect(entries).toContainEqual(expected);
     expect(entries).toContainEqual(german);
@@ -27,8 +45,7 @@ describe('success cases', () => {
 
   it('lists the Events page and each Event page in both locales with reciprocal alternates', () => {
     // ARRANGE
-    const slug = '2026-10-23-axel-agentic-workflow';
-    const route = `/events/${slug}/`;
+    const route = `/events/${EVENT}/`;
     const expected = {
       url: `${SITE}/de${route}`,
       alternates: {
@@ -36,7 +53,7 @@ describe('success cases', () => {
       },
     };
     // ACT
-    const entries = sitemapEntries(SITE, allPublished, undated);
+    const entries = sitemapEntries(SITE, SITE_PAGES, undated);
     // ASSERT
     expect(entries).toContainEqual(expected);
     expect(entries.map((entry) => entry.url)).toEqual(
@@ -48,7 +65,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [`${SITE}/`, `${SITE}/de/`];
     // ACT
-    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
+    const urls = sitemapEntries(SITE, SITE_PAGES, undated).map((entry) => entry.url);
     // ASSERT
     expect(urls).toEqual(expect.arrayContaining(expected));
   });
@@ -56,73 +73,54 @@ describe('success cases', () => {
   it('dates an Episode entry by its publish date and leaves undated pages without one', () => {
     // ARRANGE
     const publishedOn = (slug: string) => (slug === 'ai-attention-span' ? ('2026-10-21' as const) : undefined);
+    const expected = '2026-10-21';
     // ACT
-    const entries = sitemapEntries(SITE, allPublished, publishedOn);
+    const entries = sitemapEntries(SITE, SITE_PAGES, publishedOn);
     // ASSERT
-    expect(entries.find((e) => e.url === `${SITE}/de/episodes/ai-attention-span/`)?.lastModified).toBe('2026-10-21');
+    expect(entries.find((e) => e.url === `${SITE}/de/episodes/ai-attention-span/`)?.lastModified).toBe(expected);
     expect(entries.find((e) => e.url === `${SITE}/`)?.lastModified).toBeUndefined();
   });
 });
 
 describe('failure cases', () => {
-  it('leaves out an unlisted Episode and an Event whose Playlist is unlisted, in both locales', () => {
+  it('leaves out every page its treatment keeps out of the sitemap, in both locales', () => {
     // ARRANGE
-    const episode = EPISODE_SLUGS[1];
-    const event = '2026-10-23-axel-agentic-workflow';
-    const factsOf = (page: PageRef): PageFacts => {
-      const unlisted = (page.kind === 'episode' && page.episode === episode) || page.kind === 'event';
-      return { visibility: unlisted ? 'unlisted' : 'public', status: 'published' };
-    };
-    const hidden = [
-      `${SITE}/episodes/${episode}/`,
-      `${SITE}/de/episodes/${episode}/`,
-      `${SITE}/events/${event}/`,
-      `${SITE}/de/events/${event}/`,
+    const pages = [
+      ...SITE_PAGES,
+      ...treated(ABSENT, { kind: 'episode', episode: 'axel-ai-attention-span' }),
+      ...treated(HIDDEN, { kind: 'dashboard' }, { kind: 'tooling', tooling: 'slide-master' }),
+      ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: 'axel-ai-attention-span' }),
+    ];
+    const expected = [
+      `${SITE}/`,
+      `${SITE}/de/`,
+      `${SITE}/episodes/`,
+      `${SITE}/de/episodes/`,
+      `${SITE}/events/`,
+      `${SITE}/de/events/`,
+      `${SITE}/episodes/ai-attention-span/`,
+      `${SITE}/de/episodes/ai-attention-span/`,
+      `${SITE}/events/${EVENT}/`,
+      `${SITE}/de/events/${EVENT}/`,
     ];
     // ACT
-    const urls = sitemapEntries(SITE, factsOf, undated).map((entry) => entry.url);
+    const urls = sitemapEntries(SITE, pages, undated).map((entry) => entry.url);
     // ASSERT
-    expect(urls.filter((url) => hidden.includes(url))).toEqual([]);
-  });
-
-  it('leaves out the dashboard, which is noindex and English-only', () => {
-    // ARRANGE
-    const dashboard = `${SITE}/dashboard/`;
-    // ACT
-    const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
-    // ASSERT
-    expect(urls).not.toContain(dashboard);
+    expect(urls).toEqual(expected);
   });
 });
 
 describe('edge cases', () => {
-  it.each(['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'])(
-    'never lists the tooling page %s in either locale',
-    (slug) => {
-      // ARRANGE
-      const tooling = [`${SITE}/episodes/${slug}/`, `${SITE}/de/episodes/${slug}/`];
-      // ACT
-      const urls = sitemapEntries(SITE, allPublished, undated).map((entry) => entry.url);
-      // ASSERT
-      expect(urls.filter((url) => tooling.includes(url))).toEqual([]);
-    },
-  );
-
-  it('leaves out an upcoming Episode in both locales and keeps the published ones', () => {
+  it('keeps the order the pages come in', () => {
     // ARRANGE
-    const upcoming = EPISODE_SLUGS[0];
-    const published = EPISODE_SLUGS[1];
-    const factsOf = (page: PageRef): PageFacts => ({
-      visibility: 'public',
-      status: page.kind === 'episode' && page.episode === upcoming ? 'upcoming' : 'published',
-    });
+    const expected = [`${SITE}/events/${EVENT}/`, `${SITE}/de/events/${EVENT}/`, `${SITE}/`, `${SITE}/de/`];
+    const pages = treated(LISTED, { kind: 'event', event: EVENT }, { kind: 'home' });
     // ACT
-    const urls = sitemapEntries(SITE, factsOf, undated).map((entry) => entry.url);
+    const urls = sitemapEntries(SITE, pages, undated).map((entry) => entry.url);
     // ASSERT
-    expect(urls).not.toContain(`${SITE}/episodes/${upcoming}/`);
-    expect(urls).not.toContain(`${SITE}/de/episodes/${upcoming}/`);
-    expect(urls).toContain(`${SITE}/episodes/${published}/`);
+    expect(urls).toEqual(expected);
   });
+
   it('writes robots.txt that allows everything and points at the sitemap under the site URL', () => {
     // ARRANGE
     const expected = { rules: { userAgent: '*', allow: '/' }, sitemap: `${SITE}/sitemap.xml` };

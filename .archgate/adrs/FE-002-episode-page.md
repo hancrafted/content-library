@@ -99,7 +99,7 @@ flowchart LR
 
 ### Do's
 
-1. **DO** start an Episode by copying `episode-template/`: rename the slug; add `episode-metadata.ts` and run `npm run episodes:registry`; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
+1. **DO** start an Episode by copying `episode-template/`: rename the slug; add `episode-metadata.ts` and run `npm run registry`; write its `i18n/`; then each Slide as a whole folder (copy one with `cp -r`), listed in its Section's `sections/<section-slug>.ts`, which the record imports in order; at publication, `published-anchors.json`. (Decision 2, Decision 5)
 2. **DO** write a Voice script for every Slide the speaker talks over; its words are the reading time. (Decision 2)
 3. **DO** leave `title` off a purely visual Slide. (Decision 2)
 4. **DO** build a one-off Scene from `SlideFrame`; heading per design-ADR-0012. (Decisions 3 and 4)
@@ -144,8 +144,8 @@ flowchart LR
 
 ## Compliance and Enforcement
 
-1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, unregistered slug, foreign key, undeclared note or untitled Section opener fails `tsc`.
-2. **Unit tests:** anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
+1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, a slug the generated registry does not hold, foreign key, undeclared note or untitled Section opener fails `tsc`.
+2. **Unit tests:** the generated registry in step with the Episode folders, so an unregistered folder fails the fast suite; anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.
 

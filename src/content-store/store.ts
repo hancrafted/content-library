@@ -1,10 +1,9 @@
 import { FEATURED } from '@/lib/episode-overview';
 import type { Locale } from '@/lib/locale.pure';
-import { matchPage, type EpisodeSlug, type PageRef } from '@/lib/routes';
-import { pageTreatment, type PageFacts } from '@/lib/visibility.pure';
+import type { EpisodeSlug } from '@/lib/routes';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
-import { event as axelAgenticWorkflowEvent } from './events/2026-10-23-axel-agentic-workflow';
-import { event as cyberforumAkademieIntroAgenticWorkflowEvent } from './events/2026-10-28-cyberforum-akademie-intro-agentic-workflow';
+import { EVENT_RECORDS } from './event-registry.generated';
+import { catalogueOf } from './page-catalogue';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
@@ -17,12 +16,14 @@ import type { ServedEvent } from './served-event';
 /*
  * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here, parsed
  * by its schema and checked against the others when this module loads. Episode metadata arrives through the generated
- * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder), Events and Playlists by explicit
- * import. A bad record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read
- * records only through the functions below. The one seam a database would replace.
+ * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder), Events through the generated
+ * Event registry (`./event-registry.generated.ts`, one entry per Event file), Playlists by explicit import. A bad
+ * record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read records only
+ * through the functions below, and every page through the page catalogue served here. The one seam a database would
+ * replace.
  */
 
-const EVENTS: readonly EventInput[] = [axelAgenticWorkflowEvent, cyberforumAkademieIntroAgenticWorkflowEvent];
+const EVENTS: readonly EventInput[] = Object.values(EVENT_RECORDS);
 const PLAYLISTS: readonly PlaylistInput[] = [
   axelAgenticWorkflowPlaylist,
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
@@ -62,9 +63,8 @@ export function featuredSlugs(): readonly PublishedSlug[] {
 }
 
 /** Every Episode's metadata: those with a page, then the upcoming ones without, each in folder-name order. */
-export function listEpisodes(options?: { includeDrafts?: boolean }): readonly Episode[] {
-  if (options?.includeDrafts ?? true) return CONTENT.episodes;
-  return CONTENT.episodes.filter((entry) => entry.status === 'published');
+export function listEpisodes(): readonly Episode[] {
+  return CONTENT.episodes;
 }
 
 /** One registered Episode's metadata. A registered slug the store does not hold is a bug, so it throws. */
@@ -125,48 +125,15 @@ export function findEvent(slug: string): ServedEvent | undefined {
 }
 
 /**
- * What a page presents, for the visibility predicate (`pageTreatment`), read from the given records: an Episode's
- * visibility and status, on its own page or under an Event; an Event page's Playlist visibility; nothing for a page
- * that presents no record. An Episode or Event the records do not hold hands in nothing, so the page fails closed.
+ * The page catalogue over the store's records: every page with its treatment, the static params the routes export,
+ * and the Episodes and Events the site's own lists show (`./page-catalogue.ts`).
  */
-export function pageFactsIn(content: Content, page: PageRef): PageFacts {
-  const none = (): PageFacts => ({});
-  const episodeFacts = ({ episode: slug }: { readonly episode: EpisodeSlug }): PageFacts => {
-    const episode = content.episodes.find((entry) => entry.slug === slug);
-    return episode === undefined ? {} : { visibility: episode.visibility, status: episode.status };
-  };
-  return matchPage(page, {
-    home: none,
-    dashboard: none,
-    episodes: none,
-    events: none,
-    episode: episodeFacts,
-    tooling: none,
-    event: ({ event: slug }) => {
-      const event = content.events.find((entry) => entry.slug === slug);
-      return event === undefined ? {} : { visibility: event.playlist.visibility };
-    },
-    'event-episode': episodeFacts,
-  });
-}
-
-/** What a page presents, for the visibility predicate: the sitemap, page metadata and static params all ask this. */
-export function pageFacts(page: PageRef): PageFacts {
-  return pageFactsIn(CONTENT, page);
-}
-
-/**
- * The Events `/events/` lists, in record order, read from the given records: those whose page the visibility
- * predicate puts on the site's lists (a public Playlist).
- */
-export function listedEventsIn(content: Content): readonly ServedEvent[] {
-  return content.events.filter((event) => {
-    const page = { kind: 'event', event: event.slug } as const;
-    return pageTreatment(page, pageFactsIn(content, page)).listed;
-  });
-}
-
-/** The Events `/events/` lists. */
-export function listedEvents(): readonly ServedEvent[] {
-  return listedEventsIn(CONTENT);
-}
+export const {
+  pages: PAGES,
+  treatmentOf,
+  episodesPathParams,
+  eventParams,
+  eventEpisodeParams,
+  listedEpisodes,
+  listedEvents,
+} = catalogueOf(CONTENT);

@@ -7,4 +7,4 @@ export const event = {
   kind: 'workshop',
   audience: 'organization',
   playlist: 'axel-agentic-workflow',
-} satisfies EventInput;
+} as const satisfies EventInput;

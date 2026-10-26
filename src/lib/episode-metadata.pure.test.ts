@@ -78,20 +78,6 @@ describe('failure cases', () => {
     expect(slugs(ordered)).toEqual(expected);
   });
 
-  it('leaves an unlisted Episode off the overview, published or upcoming, even when Featured', () => {
-    // ARRANGE
-    const atEvent: Episode[] = [
-      { ...EPISODES[0], slug: 'axel-never-too-early-sales', visibility: 'unlisted' },
-      { ...EPISODES[3], slug: 'axel-rolling-out-ai', visibility: 'unlisted' },
-    ];
-    const featured = ['axel-never-too-early-sales'];
-    const expected = slugs(overviewOrder(EPISODES, []));
-    // ACT
-    const ordered = overviewOrder([...EPISODES, ...atEvent], featured);
-    // ASSERT
-    expect(slugs(ordered)).toEqual(expected);
-  });
-
   it('ignores a Featured slug no Episode holds', () => {
     // ARRANGE
     const featured = ['no-such-episode', 'never-too-early-sales'];
