@@ -15,7 +15,7 @@ Entities and relationships only, never fields: a renamed property never changes 
 
 ```mermaid
 erDiagram
-    %% store: EVENT, PLAYLIST, EPISODE
+    %% store: EVENT, PLAYLIST, EPISODE, RESOURCE
     %% planned: SHARED_SLIDE
 
     AUDIENCE ||--o{ EVENT : "is targeted by"
@@ -29,6 +29,8 @@ erDiagram
     SHARED_SLIDE |o--o{ SLIDE : "promoted from / copied into"
     SLIDE ||--o{ SPEAKER_NOTE_ITEM : carries
     SLIDE }o--o{ EXPLORABLE_EXPLANATION : "shows via Preset"
+    RESOURCE }o--|{ TAG : "carries (first = lead Tag)"
+    RESOURCE ||--|{ SLIDE : "composes, in order"
 ```
 
 A Playlist that no Event presents is a public Playlist (horizon 2); the diagram draws one Playlist entity for both kinds.
@@ -56,17 +58,19 @@ Out of the model: Concept, Research question and Source (the evidence layer, its
 ### Records
 
 11. **Every record loads through one content store** that parses each with a Zod schema and applies the cross-record refusals of decisions 2, 4 and 9; pages, routes, sitemap and metadata read records only through it. The rules are FE-013 _Content store_.
-12. **Tooling pages are not Episodes**: the Episode template, the Workshop template, the Explorable explanations page and the Slide library (`slide-master`). They carry no visibility, are not loaded as Episode records, keep their URLs, and are `noindex` and out of the sitemap.
+12. **Resources are not Episodes** (amended by _Resources overview_): the Context window and the Human in the loop Explorable explanations, the Episode template and the Workshop template, and the Timelines and Grids Master slides. A Resource is a record of its own, a slug, a type from the closed `RESOURCE_TYPES`, Tags and a visibility, and is composed like an Episode from `episodes/resources/<slug>/`; it is not loaded as an Episode record. Its route is worked out from type and slug, and it is public and indexed.
 13. **`slide-layouts` is deleted.** Its three layouts exist as frame components; the Slide library is the one catalogue of layouts.
 
 ## Routes and visibility
 
-| URL (`/de` prefix for German)                   | What it is                                                         |
-| ----------------------------------------------- | ------------------------------------------------------------------ |
-| `/events/`                                      | Events whose Playlist is public. Replaces `/workshops/`.           |
-| `/events/<event-slug>/`                         | The Event: facts, past notice, its Playlist as numbered cards.     |
-| `/events/<event-slug>/episodes/<episode-slug>/` | One Episode of that Playlist: "Episode n of m", previous and next. |
-| `/episodes/<episode-slug>/`                     | A public Episode no Event owns. An Event's copy has none.          |
+| URL (`/de` prefix for German)                   | What it is                                                                                                 |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `/events/`                                      | Events whose Playlist is public. Replaces `/workshops/`.                                                   |
+| `/events/<event-slug>/`                         | The Event: facts, past notice, its Playlist as numbered cards.                                             |
+| `/events/<event-slug>/episodes/<episode-slug>/` | One Episode of that Playlist: "Episode n of m", previous and next.                                         |
+| `/episodes/<episode-slug>/`                     | A public Episode no Event owns. An Event's copy has none.                                                  |
+| `/resources/`                                   | The Resources: Explorable explanations, Episode templates, Master slides.                                  |
+| `/<type plural>/<resource-slug>/`               | One Resource, by its type's plural: `/explorable-explanations/`, `/episode-templates/`, `/master-slides/`. |
 
 The Event page sits in the same container as the overview pages and is two columns from `lg`, no longer one. The main column holds the title, description, past notice, Start button, Playlist and, last, up to three related Episodes: public, published Episodes sharing a Tag with the Event, without the originals of the Playlist's copies, newest release first, and no section when none remain. The side panel holds the image, the facts line stacked, the Organizers, a link to the `listing` and the `references`. Below `lg` everything stacks, the image after the title. The Event page shows no reading time.
 
@@ -83,7 +87,9 @@ One predicate decides each page's sitemap entry, robots tag and canonical, and b
 | Public Episode under an Event     | no      | index     | its `/episodes/<slug>/` page |
 | Public Event copy under its Event | yes     | index     | itself, with hreflang        |
 | Upcoming Episode, anywhere        | no      | `noindex` | itself                       |
-| Tooling page                      | no      | `noindex` | itself                       |
+| Resources overview                | yes     | index     | itself, with hreflang        |
+| Resource page, public             | yes     | index     | itself, with hreflang        |
+| Resource page, unlisted           | no      | `noindex` | itself                       |
 
 `noindex` is a meta tag only; `robots.txt` keeps `allow: /` so a crawler can read it.
 
@@ -91,20 +97,20 @@ One predicate decides each page's sitemap entry, robots tag and canonical, and b
 
 ## Considered options
 
-| Option                                                    | Why not                                                                                                                                          |
-| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| An event-frame Episode type for agenda and orga           | A second kind of Episode with its own rules; a template copied into an ordinary unlisted Episode does the same with none.                        |
-| `canonicalEpisode` on an unlisted Episode copied from one | Needed only to share ranking with a page that stays `noindex` anyway; one more field to keep honest.                                             |
-| A stored Playlist `type: event \| standard`               | States the Event link twice and checks one copy against the other; no standard Playlist exists before horizon 2.                                 |
-| Reusing Slides by reference from first reuse              | Promotion becomes a merge, untouched copies miss fixes for weeks, and a promotion moves published anchors. Copying keeps the architecture plain. |
-| Separate entities for a Video and an Event recording      | Both are a YouTube video; count and language follow from visibility, so a second entity only repeats it.                                         |
-| The model as the full target, evidence included           | A box an agent cannot find in code costs a search; the evidence layer is its own effort and adds its section then.                               |
-| The model and its rules in one Archgate ADR               | The model changes with features, which fails GEN-001's altitude test, and an Archgate ADR may not link to its reasons.                           |
-| Tooling pages as public Episodes                          | Catalogue pages stay in search, and the overview needs a second rule to hide them.                                                               |
+| Option                                                    | Why not                                                                                                                                                   |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| An event-frame Episode type for agenda and orga           | A second kind of Episode with its own rules; a template copied into an ordinary unlisted Episode does the same with none.                                 |
+| `canonicalEpisode` on an unlisted Episode copied from one | Needed only to share ranking with a page that stays `noindex` anyway; one more field to keep honest.                                                      |
+| A stored Playlist `type: event \| standard`               | States the Event link twice and checks one copy against the other; no standard Playlist exists before horizon 2.                                          |
+| Reusing Slides by reference from first reuse              | Promotion becomes a merge, untouched copies miss fixes for weeks, and a promotion moves published anchors. Copying keeps the architecture plain.          |
+| Separate entities for a Video and an Event recording      | Both are a YouTube video; count and language follow from visibility, so a second entity only repeats it.                                                  |
+| The model as the full target, evidence included           | A box an agent cannot find in code costs a search; the evidence layer is its own effort and adds its section then.                                        |
+| The model and its rules in one Archgate ADR               | The model changes with features, which fails GEN-001's altitude test, and an Archgate ADR may not link to its reasons.                                    |
+| Tooling pages as public Episodes                          | They would enter every Episode list, and the overview needs a second rule to hide them. A Resource is a record of its own instead (_Resources overview_). |
 
 ## Consequences
 
 - An Event is one Event record, one Playlist record, an unlisted copy of the Workshop template and two Translation keys; routes, sitemap and static params follow.
 - Adding a recording is one YouTube id on its Episode.
-- The Episode registry shrinks to Episodes; the four tooling pages get their own list.
+- The Episode registry shrinks to Episodes; the Resources get their own list and records (_Resources overview_).
 - Each later effort (Slide reuse, the evidence layer, the first public Playlist) amends this record with its own section and redraws the diagram.

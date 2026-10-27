@@ -4,10 +4,7 @@
     "intro": "Interaktive Visualisierungen, die ich gebaut habe, weil ich nie wieder eine PowerPoint-Präsentation basteln wollte.",
     "references": {
       "label": "Referenzen",
-      "episodeTemplate": "Episoden-Vorlage",
-      "workshopTemplate": "Workshop-Vorlage",
-      "slideMaster": "Slide-Master",
-      "explorableExplanations": "Interaktive Erklärungen"
+      "resources": "Ressourcen"
     }
   }
 }

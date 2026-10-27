@@ -4,10 +4,7 @@
     "intro": "Interactive visuals I built because I never wanted to make another PowerPoint.",
     "references": {
       "label": "References",
-      "episodeTemplate": "Episode template",
-      "workshopTemplate": "Workshop template",
-      "slideMaster": "Slide master",
-      "explorableExplanations": "Explorable explanations"
+      "resources": "Resources"
     }
   }
 }

@@ -18,7 +18,7 @@ Under the App Router the directory **is** the URL: `src/app/[locale]/episodes/[e
 The tree follows the product, so an agent learns what the product is before its plumbing (design-ADR `docs/adr/0017-source-tree-follows-the-product.md` holds the reasoning and the rejected layouts). Five layers:
 
 1. **Routes**, `src/app/`: bind a URL to a template.
-2. **Page assembly**, `src/page-assembly/`: one folder per page template (landing, Events overview, Event, Episode overview, Episode, dashboard, sitemap), plus `lib/` (page metadata, structured data) and the root Translation merge. A part one template uses sits beside it.
+2. **Page assembly**, `src/page-assembly/`: one folder per page template (landing, Events overview, Event, Episode overview, Episode, Resources overview, Resource, dashboard, sitemap), plus `lib/` (page metadata, structured data) and the root Translation merge. A part one template uses sits beside it.
 3. **Product areas**: `src/episodes/` (Episode content, then `components/ hooks/ lib/`), `src/events/`, `src/explorable-explanations/` (one self-contained folder per explanation, no tiers) and `src/pipeline/` (the content pipeline, its Run log, the dashboard).
 4. **Content store**, `src/content-store/`: records, refusals and the delivery policy in `catalogue/`.
 5. **Shared**, `src/shared/`: UI primitives, design system, i18n, domain-free lib and hooks, and page chrome.

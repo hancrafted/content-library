@@ -8,7 +8,7 @@ import { episodePageCopy, episodesPathPageOf, eventEpisodePageOf, type EpisodePa
 
 /*
  * The one Episode page template (FE-007 §1): every Episode is served where its folder puts it, an Event's copy under
- * its Event, the rest under `/episodes/`, and the tooling pages beside them; the template's copy function hands
+ * its Event, the rest under `/episodes/`; the template's copy function hands
  * `pageMetadata` each page's own words in both locales. Which params name a page, and which name none (the 404), is
  * the page catalogue's, tested there.
  */
@@ -88,14 +88,12 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('serves a tooling page under /episodes/ with its own words, out of search', () => {
+  it('builds no page under /episodes/ for a Resource slug, which lives under its type', () => {
     // ARRANGE
-    const expected = { kind: 'tooling', canonical: '/episodes/slide-master', robots: { index: false } };
+    const expected = notFoundError();
     // ACT
-    const page = episodesPathPageOf({ episode: 'slide-master' });
-    const metadata = pageMetadata(page, 'en', episodePageCopy(page, 'en'));
+    const lookup = () => episodesPathPageOf({ episode: 'timelines' });
     // ASSERT
-    expect({ kind: page.kind, canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
-    expect(metadata.title).not.toBe('');
+    expect(lookup).toThrow(expected);
   });
 });

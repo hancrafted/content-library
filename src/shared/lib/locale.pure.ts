@@ -56,6 +56,11 @@ export function isSectionActive(pathname: string, section: string): boolean {
   return logical === base || logical.startsWith(`${base}/`);
 }
 
+/** Whether a pathname sits inside any of the logical sections. */
+export function isAnySectionActive(pathname: string, sections: readonly string[]): boolean {
+  return sections.some((section) => isSectionActive(pathname, section));
+}
+
 /**
  * The locales of each page not exported in every locale, by logical path: what a locale switch offers there. A page
  * the map leaves out is exported in every locale. The page catalogue knows which pages these are; page chrome is

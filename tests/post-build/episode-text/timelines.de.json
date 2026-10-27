@@ -1,0 +1,125 @@
+{
+  "title": "Zeitleisten · hancrafted",
+  "description": "Master-Folien für Zeitleisten: eine horizontale Schiene, Scroll-Snap, ein Gantt-Diagramm, eine Mittelachse, feste Jahreszahlen, ein Stepper, ein Kreislauf und ein Metro-Plan. Kopieren Sie eine in eine Episode und ersetzen Sie die Texte.",
+  "toc": "Inhalt Wird geladen noch 2 Min. 1 Zeitleisten Horizontale Schiene Scroll-Leiste Phasenbalken Mittelachse Haftende Jahre Schrittfolge Zyklus Liniennetz Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Zeitleisten Horizontale Schiene Scroll-Leiste Phasenbalken Mittelachse Haftende Jahre Schrittfolge Zyklus Liniennetz",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Zeitleisten Acht wiederverwendbare Folien-Layouts, um Dinge in der Zeit zu zeigen, nur mit Platzhaltertext."
+    },
+    {
+      "id": "timelines",
+      "text": "Zeitleisten Acht Arten, Ereignisse zu ordnen: drei horizontal, drei vertikal, zwei, die die Linie biegen."
+    },
+    {
+      "id": "timelines--horizontal-rail",
+      "text": "Zeitleisten (1/8) Seite 1 von 8 Horizontale Schiene Sechs Meilensteine auf einer Achse, Beschriftungen abwechselnd oben und unten. 01 2019 Auftakt 02 2020 Recherche 03 2021 Prototyp 04 2022 Pilot 05 2023 Start 06 2024 Rückblick"
+    },
+    {
+      "id": "timelines--horizontal-scroll-snap",
+      "text": "Zeitleisten (2/8) Seite 2 von 8 Scroll-Leiste Eine Kartenreihe breiter als die Folie: scrollen oder wischen, jede Karte rastet ein. 01 06 Jan Auftakt Ziel und Beteiligte benennen. 02 06 Mar Recherche Sammeln, was schon bekannt ist. 03 06 May Prototyp Das Kleinste bauen, das eine Frage beantwortet. 04 06 Jul Pilot Mit wenigen echten Nutzern ausprobieren. 05 06 Sep Start Für alle öffnen. 06 06 Nov Rückblick Messen, lernen und das Nächste entscheiden. 01 / 06"
+    },
+    {
+      "id": "timelines--horizontal-gantt",
+      "text": "Zeitleisten (3/8) Seite 3 von 8 Phasenbalken Phasen als Balken auf einer gemeinsamen Zeitachse, Überlappungen sind sofort sichtbar. 1 2 3 4 Produkt Auftakt Prototyp Forschung Recherche Rückblick Betrieb Pilot Start"
+    },
+    {
+      "id": "timelines--vertical-center-spine",
+      "text": "Zeitleisten (4/8) Seite 4 von 8 Mittelachse Eine Achse in der Mitte, Einträge abwechselnd links und rechts. 2019 01 / 06 Auftakt Ziel und Beteiligte benennen. 2020 02 / 06 Recherche Sammeln, was schon bekannt ist. 2021 03 / 06 Prototyp Das Kleinste bauen, das eine Frage beantwortet. 2022 04 / 06 Pilot Mit wenigen echten Nutzern ausprobieren. 2023 05 / 06 Start Für alle öffnen. 2024 06 / 06 Rückblick Messen, lernen und das Nächste entscheiden."
+    },
+    {
+      "id": "timelines--vertical-sticky-years",
+      "text": "Zeitleisten (5/8) Seite 5 von 8 Haftende Jahre Das Jahr bleibt links stehen, während seine Einträge vorbeiziehen. 2022 ◆ 01 Auftakt Ziel und Beteiligte benennen. → ● 02 Recherche Sammeln, was schon bekannt ist. → 2023 ▲ 03 Prototyp Das Kleinste bauen, das eine Frage beantwortet. → ■ 04 Pilot Mit wenigen echten Nutzern ausprobieren. → 2024 ✦ 05 Start Für alle öffnen. → ◐ 06 Rückblick Messen, lernen und das Nächste entscheiden. →"
+    },
+    {
+      "id": "timelines--vertical-stepper",
+      "text": "Zeitleisten (6/8) Seite 6 von 8 Schrittfolge Ein nummerierter Ablauf: einen Schritt öffnen, um Details zu lesen. Schritt 1 Auftakt , erledigt Ziel und Beteiligte benennen. Schritt 2 Recherche , erledigt Sammeln, was schon bekannt ist. 3 Schritt 3 Prototyp , aktuell Das Kleinste bauen, das eine Frage beantwortet. 4 Schritt 4 Pilot , ausstehend Mit wenigen echten Nutzern ausprobieren. 5 Schritt 5 Start , ausstehend Für alle öffnen. 6 Schritt 6 Rückblick , ausstehend Messen, lernen und das Nächste entscheiden."
+    },
+    {
+      "id": "timelines--radial-cycle",
+      "text": "Zeitleisten (7/8) Seite 7 von 8 Zyklus Eine Zeitleiste, die zu ihrem Anfang zurückkehrt: sechs Phasen auf einem Zifferblatt. Jan–Feb Mär–Apr Mai–Jun Jul–Aug Sep–Okt Nov–Dez 01 / 06 Jan–Feb Auftakt Ziel und Beteiligte benennen. Ziel und Beteiligte benennen. Jan–Feb : Auftakt . Ziel und Beteiligte benennen. Mär–Apr : Recherche . Sammeln, was schon bekannt ist. Mai–Jun : Prototyp . Das Kleinste bauen, das eine Frage beantwortet. Jul–Aug : Pilot . Mit wenigen echten Nutzern ausprobieren. Sep–Okt : Start . Für alle öffnen. Nov–Dez : Rückblick . Messen, lernen und das Nächste entscheiden."
+    },
+    {
+      "id": "timelines--metro-map",
+      "text": "Zeitleisten (8/8) Seite 8 von 8 Liniennetz Parallele Linien, die sich teilen und wieder treffen, gelesen wie ein U-Bahn-Plan. Produkt Forschung Betrieb 2019 Auftakt 2020 Recherche 2021 Prototyp 2022 Pilot 2023 Start 2024 Rückblick"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "timelines", "text": "Zeitleisten Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "timelines--horizontal-rail",
+      "text": "Horizontale Schiene So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    },
+    {
+      "id": "timelines--horizontal-scroll-snap",
+      "text": "Scroll-Leiste So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    },
+    {
+      "id": "timelines--horizontal-gantt",
+      "text": "Phasenbalken So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    },
+    {
+      "id": "timelines--vertical-center-spine",
+      "text": "Mittelachse So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    },
+    {
+      "id": "timelines--vertical-sticky-years",
+      "text": "Haftende Jahre So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    },
+    {
+      "id": "timelines--vertical-stepper",
+      "text": "Schrittfolge So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    },
+    {
+      "id": "timelines--radial-cycle",
+      "text": "Zyklus So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    },
+    {
+      "id": "timelines--metro-map",
+      "text": "Liniennetz So liest man die Zeitleiste Platzhalter-Meilensteine: Daten, Titel und Bildunterschriften durch die echte Geschichte ersetzen."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "timelines", "text": "Zeitleisten Kein Sprechtext für diese Folie." },
+    {
+      "id": "timelines--horizontal-rail",
+      "text": "Horizontale Schiene 0:00 – 0:12 Rundgang Horizontale Schiene Layout Platzhalter Das ist das Layout Horizontale Schiene. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    },
+    {
+      "id": "timelines--horizontal-scroll-snap",
+      "text": "Scroll-Leiste 0:00 – 0:11 Rundgang Scroll-Leiste Layout Platzhalter Das ist das Layout Scroll-Leiste. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    },
+    {
+      "id": "timelines--horizontal-gantt",
+      "text": "Phasenbalken 0:00 – 0:11 Rundgang Phasenbalken Layout Platzhalter Das ist das Layout Phasenbalken. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    },
+    {
+      "id": "timelines--vertical-center-spine",
+      "text": "Mittelachse 0:00 – 0:11 Rundgang Mittelachse Layout Platzhalter Das ist das Layout Mittelachse. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    },
+    {
+      "id": "timelines--vertical-sticky-years",
+      "text": "Haftende Jahre 0:00 – 0:12 Rundgang Haftende Jahre Layout Platzhalter Das ist das Layout Haftende Jahre. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    },
+    {
+      "id": "timelines--vertical-stepper",
+      "text": "Schrittfolge 0:00 – 0:11 Rundgang Schrittfolge Layout Platzhalter Das ist das Layout Schrittfolge. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    },
+    {
+      "id": "timelines--radial-cycle",
+      "text": "Zyklus 0:00 – 0:11 Rundgang Zyklus Layout Platzhalter Das ist das Layout Zyklus. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    },
+    {
+      "id": "timelines--metro-map",
+      "text": "Liniennetz 0:00 – 0:11 Rundgang Liniennetz Layout Platzhalter Das ist das Layout Liniennetz. Zeige auf jeden Teil, während du ihn nennst, und ersetze dann die Platzhalterwörter durch den echten Inhalt."
+    }
+  ]
+}

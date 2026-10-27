@@ -42,9 +42,9 @@ async function translatorOf(): Promise<RuntimeTranslator> {
 
 /** The drawer's items for an Episode of these Sections, as the adapter builds them. */
 async function itemsOf(sections: readonly Section[]) {
-  const record = episode({ slug: 'episode-template', messages: EPISODE, sections });
+  const record = episode({ slug: 'ai-token-economy', messages: EPISODE, sections });
   return contextItemsOf(
-    (await recordContent(record, 'en', { translatorOf: translatorOf, id: 'episode-template' })).slides,
+    (await recordContent(record, 'en', { translatorOf: translatorOf, id: 'ai-token-economy' })).slides,
     EXPLAINER,
   );
 }
@@ -74,12 +74,12 @@ const TITLE_TEXT = {
 async function titleOf(withText: boolean) {
   const messages = withText ? { ...EPISODE.en, ...TITLE_TEXT } : EPISODE.en;
   const record = episode({
-    slug: 'episode-template',
+    slug: 'ai-token-economy',
     messages: { en: messages, de: messages },
     ...(withText && { notes: [{ slug: 'n', target: 'title' }], segments: [{ slug: 's' }] }),
     sections: [[foundations]],
   });
-  const content = await recordContent(record, 'en', { translatorOf: translatorOf, id: 'episode-template' });
+  const content = await recordContent(record, 'en', { translatorOf: translatorOf, id: 'ai-token-economy' });
   return contextItemsOf(content.slides, EXPLAINER, content.titleContext)[0];
 }
 
@@ -101,14 +101,14 @@ describe('success cases', () => {
     // ARRANGE
     const messages = { ...EPISODE.en, ...TITLE_TEXT };
     const record = episode({
-      slug: 'episode-template',
+      slug: 'ai-token-economy',
       messages: { en: messages, de: messages },
       segments: [{ slug: 's' }],
       sections: [[foundations]],
     });
     const expected = 1 / 140;
     // ACT
-    const { minutes } = await recordContent(record, 'en', { translatorOf: translatorOf, id: 'episode-template' });
+    const { minutes } = await recordContent(record, 'en', { translatorOf: translatorOf, id: 'ai-token-economy' });
     // ASSERT
     expect(minutes).toBeCloseTo(expected);
   });

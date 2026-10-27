@@ -1,19 +1,20 @@
 'use client';
 
 import { Button } from '@/shared/components/ui/button';
-import { isSectionActive } from '@/shared/lib/locale.pure';
+import { isAnySectionActive } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ComponentProps } from 'react';
 
-/** A header link that highlights while the reader is anywhere inside `section`. */
+/** A header link that highlights while the reader is anywhere inside `section`, or inside any of `alsoIn`. */
 export function NavLink({
   section,
+  alsoIn = [],
   className,
   ...props
-}: { section: string } & Omit<ComponentProps<typeof Link>, 'aria-current'>) {
-  const active = isSectionActive(usePathname(), section);
+}: { section: string; alsoIn?: readonly string[] } & Omit<ComponentProps<typeof Link>, 'aria-current'>) {
+  const active = isAnySectionActive(usePathname(), [section, ...alsoIn]);
   return (
     <Button
       asChild

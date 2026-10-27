@@ -3,21 +3,23 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /*
- * `docs/design/slide-library.md` lists every Master slide: one `##` per folder of the Slide master Episode, each with
+ * `docs/design/slide-library.md` lists every Master slide: one `##` per Slide folder of the Master slide Resources (`timelines`, `grids`), each with
  * a Shows, a When and a Motion line (slide-authoring-context decision 15). The `##` that is not a Master slide is named below.
  */
 
 const ROOT = path.resolve(__dirname, '../..');
-const MASTER_SLIDES = path.join(ROOT, 'src/episodes/tooling/slide-master/slides');
+/** The Master slide Resources, `master-slide` records of the content store (design-ADR 0019). */
+const MASTER_SLIDE_RESOURCES = ['timelines', 'grids'];
 const LIBRARY_DOC = path.join(ROOT, 'docs/design/slide-library.md');
 const MOTIONS_DIR = path.join(ROOT, 'src/episodes/components/slide-shared/motions');
 const NOT_A_MASTER_SLIDE = ['Library motions'];
 
 function masterSlideFolders(): string[] {
-  return readdirSync(MASTER_SLIDES, { withFileTypes: true })
-    .filter((each) => each.isDirectory())
-    .map((each) => each.name)
-    .sort();
+  return MASTER_SLIDE_RESOURCES.flatMap((resource) =>
+    readdirSync(path.join(ROOT, 'src/episodes/resources', resource, 'slides'), { withFileTypes: true })
+      .filter((each) => each.isDirectory())
+      .map((each) => each.name),
+  ).sort();
 }
 
 /** Each `##` section of the doc: its heading with backticks stripped, and its body. */

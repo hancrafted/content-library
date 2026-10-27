@@ -1,7 +1,7 @@
-import { TOOLING_SLUGS, type PageRef } from '@/content-store/catalogue/record-routes';
+import { pageLocales, resourceRoute, routeOf, type PageRef } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../store';
-import { episodeRef, toolingRef } from './episode-id.pure';
+import { episodeRef, resourceRef } from './episode-id.pure';
 import { catalogueOf, episodesPathParamsOf, eventEpisodeParamsOf } from './page-catalogue';
 
 /*
@@ -49,7 +49,13 @@ const EVENT = {
 /** The records as the generated registry hands them in, each Episode under the id its folder gives it. */
 const own = (record: { readonly slug: string }) => ({ id: record.slug, record });
 const copy = (record: object) => ({ id: COPY.id, record });
-const RECORDS = { episodes: [own(PUBLIC), copy(UNLISTED)], events: [EVENT], playlists: [PLAYLIST] };
+const RECORDS = {
+  episodes: [own(PUBLIC), copy(UNLISTED)],
+  events: [EVENT],
+  playlists: [PLAYLIST],
+  resources: [],
+  resourceCompositions: [],
+};
 
 const HIDDEN = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' } as const;
 const ABSENT = { exported: false, inSitemap: false, index: false, listed: false, canonical: 'self' } as const;
@@ -76,13 +82,13 @@ describe('success cases', () => {
         own: ABSENT,
         underEvent: HIDDEN,
         overview: [PUBLIC.slug],
-        episodesPages: [PUBLIC.slug, ...TOOLING_SLUGS],
+        episodesPages: [PUBLIC.slug],
       },
       public: {
         own: ABSENT,
         underEvent: SELF_INDEXED,
         overview: [PUBLIC.slug],
-        episodesPages: [PUBLIC.slug, ...TOOLING_SLUGS],
+        episodesPages: [PUBLIC.slug],
       },
     };
     // ACT
@@ -122,10 +128,7 @@ describe('success cases', () => {
 
   it('resolves each page built under /episodes/ from its params, and gives back the same params', () => {
     // ARRANGE
-    const expected = [
-      { kind: 'episode', episode: PUBLIC_REF },
-      ...TOOLING_SLUGS.map((slug) => ({ kind: 'tooling', tooling: toolingRef(slug) })),
-    ];
+    const expected = [{ kind: 'episode', episode: PUBLIC_REF }];
     const catalogue = catalogueOf(loadContent(RECORDS));
     const params = catalogue.episodesPathParams();
     // ACT
@@ -162,6 +165,46 @@ describe('success cases', () => {
     );
     expect(seen).toEqual(expected);
     expect(pages.map((page) => page && eventEpisodeParamsOf(page))).toEqual(params);
+  });
+
+  it('lists the six Resource pages and the overview, indexed and in the sitemap, each at the URL its type and slug give', () => {
+    // ARRANGE
+    const expected = [
+      '/resources',
+      '/explorable-explanations/context-window',
+      '/explorable-explanations/human-in-the-loop',
+      '/episode-templates/episode-template',
+      '/episode-templates/workshop-template',
+      '/master-slides/timelines',
+      '/master-slides/grids',
+    ];
+    // ACT
+    const pages = catalogueOf(loadContent(WITH_RESOURCES)).pages.filter(
+      ({ page }) => page.kind === 'resource' || page.kind === 'resources',
+    );
+    // ASSERT
+    expect(pages.map(({ page }) => routeOf(page)).sort()).toEqual([...expected].sort());
+    expect(pages.every(({ treatment }) => treatment.inSitemap && treatment.index && treatment.exported)).toBe(true);
+  });
+
+  it('builds each Resource page in both locales', () => {
+    // ARRANGE
+    const expected = 12;
+    // ACT
+    const count = catalogueOf(loadContent(WITH_RESOURCES))
+      .pages.filter(({ page }) => page.kind === 'resource')
+      .flatMap(({ page }) => pageLocales(page)).length;
+    // ASSERT
+    expect(count).toBe(expected);
+  });
+
+  it('derives the route from the type and the slug alone', () => {
+    // ARRANGE
+    const expected = '/master-slides/grids';
+    // ACT
+    const route = resourceRoute('master-slide', 'grids');
+    // ASSERT
+    expect(route).toBe(expected);
   });
 });
 
@@ -215,18 +258,36 @@ describe('failure cases', () => {
     // ASSERT
     expect(pages).toEqual([undefined, undefined, undefined, undefined]);
   });
+
+  it('lists only public Resources on the overview and indexes no unlisted one', () => {
+    // ARRANGE
+    const hidden = RESOURCE_RECORDS.map((record) =>
+      record.slug === 'grids' ? { ...record, visibility: 'unlisted' } : record,
+    );
+    const records = { ...WITH_RESOURCES, resources: hidden };
+    // ACT
+    const catalogue = catalogueOf(loadContent(records));
+    const treatment = catalogue.treatmentOf({
+      kind: 'resource',
+      type: 'master-slide',
+      resource: resourceRef('grids' as never),
+    });
+    // ASSERT
+    expect(catalogue.listedResources().map(({ page }) => page.resource.slug)).not.toContain('grids');
+    expect(treatment).toMatchObject({ exported: true, index: false, inSitemap: false });
+  });
 });
 
 describe('edge cases', () => {
-  it("lists every page once: the site lists, each Episode but an Event's copy, each tooling page, each Event, then each Episode under it", () => {
+  it("lists every page once: the site lists, each Episode but an Event's copy, each Event, then each Episode under it", () => {
     // ARRANGE
     const expected: PageRef[] = [
       { kind: 'home' },
       { kind: 'dashboard' },
       { kind: 'episodes' },
       { kind: 'events' },
+      { kind: 'resources' },
       { kind: 'episode', episode: PUBLIC_REF },
-      ...TOOLING_SLUGS.map((slug) => ({ kind: 'tooling', tooling: toolingRef(slug) }) as const),
       { kind: 'event', event: AXEL },
       { kind: 'event-episode', event: AXEL, episode: PUBLIC_REF },
       { kind: 'event-episode', event: AXEL, episode: COPY },
@@ -250,4 +311,41 @@ describe('edge cases', () => {
     // ASSERT
     expect(seen).toEqual(expected);
   });
+
+  it('gives each type its own static params and resolves a slug only under its own type', () => {
+    // ARRANGE
+    const catalogue = catalogueOf(loadContent(WITH_RESOURCES));
+    // ACT
+    const seen = {
+      masterSlides: catalogue.resourceParams('master-slide'),
+      right: catalogue.resourcePageAt('master-slide', { resource: 'grids' })?.resource.slug,
+      wrongType: catalogue.resourcePageAt('episode-template', { resource: 'grids' }),
+    };
+    // ASSERT
+    expect(seen).toEqual({
+      masterSlides: [{ resource: 'timelines' }, { resource: 'grids' }],
+      right: 'grids',
+      wrongType: undefined,
+    });
+  });
 });
+
+/*
+ * Resources (design-ADR 0019): a Resource's page is built from its record, at `/<type plural>/<slug>/`, public and
+ * indexed. The slugs are registered ones: only a composition folder gives a Resource a page.
+ */
+const SIX = {
+  'context-window': 'explorable-explanation',
+  'human-in-the-loop': 'explorable-explanation',
+  'episode-template': 'episode-template',
+  'workshop-template': 'episode-template',
+  timelines: 'master-slide',
+  grids: 'master-slide',
+} as const;
+const RESOURCE_RECORDS = Object.entries(SIX).map(([slug, type]) => ({
+  slug,
+  type,
+  tags: ['workflow'],
+  visibility: 'public',
+}));
+const WITH_RESOURCES = { ...RECORDS, resources: RESOURCE_RECORDS, resourceCompositions: Object.keys(SIX) };

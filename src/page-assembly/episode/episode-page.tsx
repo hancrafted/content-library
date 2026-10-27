@@ -25,13 +25,13 @@ import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 /**
- * Every page the one Episode page template renders, told apart by kind: an Episode's own page under `/episodes/`, a
- * tooling page beside them, and an Episode as an Event presents it under `/events/<event>/episodes/`, carrying the
- * Episode it presents there.
+ * Every page the Episode page template renders, told apart by kind: an Episode's own page under `/episodes/`, and an
+ * Episode as an Event presents it under `/events/<event>/episodes/`, carrying the Episode it presents there. A
+ * Resource page renders through the same container, from its own template (`../resource/`).
  */
 export type EpisodePageRef = EpisodesPathPage | EventEpisodePage;
 
-/** The page the page catalogue builds at `/episodes/<episode>/`: an Episode's own or a tooling page; else the 404. */
+/** The page the page catalogue builds at `/episodes/<episode>/`: an Episode's own; else the 404. */
 export function episodesPathPageOf(params: RouteParams<EpisodesPathParams>): EpisodesPathPage {
   return episodesPathPageAt(params) ?? notFound();
 }
@@ -43,11 +43,10 @@ export function eventEpisodePageOf(params: RouteParams<EventEpisodeParams>): Eve
 
 /**
  * Every Episode-shaped page (FE-007 §1), rendered through the one container (FE-002): an Episode's own page with its
- * structured data once published, a tooling page with none, and an Episode under its Event framed by the Event.
+ * structured data once published, and an Episode under its Event framed by the Event.
  */
 export function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
   return matchPage<EpisodePageRef, ReactNode>(page, {
-    tooling: ({ tooling }) => <EpisodePageContainer locale={locale} page={tooling} episode={compositionOf(tooling)} />,
     episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} />,
     'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} />,
   });
@@ -97,8 +96,7 @@ function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: L
 
 /**
  * An Episode-shaped page's title, description, treatment and release date, for `pageMetadata` (FE-008): an Episode's,
- * under `/episodes/` or its Event, read through the registry and the content store; a tooling page's from its own
- * record. The treatment, which decides robots and canonical, is the page catalogue's.
+ * under `/episodes/` or its Event, read through the registry and the content store. The treatment, which decides robots and canonical, is the page catalogue's.
  */
 export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy {
   const treatment = treatmentOf(page);
@@ -108,10 +106,6 @@ export function episodePageCopy(page: EpisodePageRef, locale: Locale): PageCopy 
     return { title, description, treatment, ...(publishedOn ? { publishedOn } : {}) };
   };
   return matchPage<EpisodePageRef, PageCopy>(page, {
-    tooling: ({ tooling }) => {
-      const { title, description } = compositionOf(tooling).messages[locale];
-      return { title, description, treatment };
-    },
     episode: episodeOf,
     'event-episode': episodeOf,
   });

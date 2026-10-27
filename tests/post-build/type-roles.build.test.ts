@@ -6,10 +6,9 @@
 import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { episodeRoute } from '../../src/content-store/catalogue/record-routes';
 import legacy from '../../src/shared/design-system/legacy.json';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
-import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-pages';
+import { EXPORTED_EPISODE_SHAPED_PAGES, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles } from './stylesheets';
 
 /** Episodes whose files predate the token rules (FE-011 §6): their own `[data-episode=…]` palette is exempt until migrated. */
@@ -22,8 +21,8 @@ function episodeSelectors(css: string): string[] {
   return [...css.replace(/["']/g, '').matchAll(/\[data-episode=([^\]]+)\]/g)].map((match) => match[1]);
 }
 
-const EPISODE_PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
-  LOCALES.map((locale) => ({ url: localizePath(episodeRoute(slug), locale) })),
+const EPISODE_PAGES = EXPORTED_EPISODE_SHAPED_PAGES.flatMap(({ route }) =>
+  LOCALES.map((locale) => ({ url: localizePath(route, locale) })),
 );
 
 function classesOf($: CheerioAPI, elements: readonly unknown[]): string[][] {

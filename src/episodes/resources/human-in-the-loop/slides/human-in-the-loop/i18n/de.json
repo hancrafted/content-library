@@ -1,0 +1,21 @@
+{
+  "title": "Human-in-the-Loop-Workflow",
+  "caption": "Der Projektplan-Workflow: sechs Phasen von einer vagen Aufgabe zu einem geprüften Bericht, ein frischer Chat pro Aufgabe, und Sie prüfen jedes Ergebnis dazwischen.",
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Der Projektplan-Workflow in der Phasenansicht: sechs Phasen von einem vagen Ziel bis zum geprüften Bericht, je eine Karte.",
+    "tryit": "Klicken Sie auf eine Phase, um ihr Fenster „Jetzt üben“ zu öffnen und ihre Prompts in einen frischen KI-Chat zu kopieren. In der Werkzeugleiste wählen Sie einen anderen Anwendungsfall.",
+    "notice": "Das Häkchen auf einer Karte zeigt: Ein Mensch prüft dieses Ergebnis, bevor die nächste Phase beginnt."
+  },
+  "notes": {
+    "workflow": {
+      "header": "Die Visualisierung mit eigenen Worten",
+      "description": "Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Projektplan-Workflow, Urlaub eine Pille weiter, jedes „Ausprobieren“ offen."
+    }
+  }
+}

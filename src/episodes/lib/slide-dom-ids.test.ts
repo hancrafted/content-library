@@ -1,5 +1,5 @@
-import { toolingRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
+import { resourceRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, RESOURCE_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/episodes/components/slide-master/slide';
@@ -21,10 +21,10 @@ interface PlacedSlide {
   readonly slide: Slide;
 }
 
-/** Every page the registry composes, by the ref the store serves it with: each Episode with a page, each tooling page. */
-const PAGES = [...listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])), ...TOOLING_SLUGS.map(toolingRef)];
+/** Every page the registry composes, by the ref the store serves it with: each Episode with a page, each Resource. */
+const PAGES = [...listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])), ...RESOURCE_SLUGS.map(resourceRef)];
 
-/** Every Slide of every registered Episode and tooling page. */
+/** Every Slide of every registered Episode and Resource. */
 function allSlides(): PlacedSlide[] {
   return PAGES.flatMap((page) =>
     compositionOf(page)
@@ -62,8 +62,8 @@ function repeated(ids: readonly string[]): string[] {
 describe('success cases', () => {
   it('points every aria-labelledby of a twice-rendered grid Slide at an id in its own copy', () => {
     // ARRANGE
-    const grid = allSlides().find(({ page, slide }) => page.id === 'slide-master' && slide.slug === 'grid-2x2');
-    if (grid === undefined) throw new Error('No grid-2x2 Slide in slide-master.');
+    const grid = allSlides().find(({ page, slide }) => page.id === 'grids' && slide.slug === 'grid-2x2');
+    if (grid === undefined) throw new Error('No grid-2x2 Slide in grids.');
     const expected = 8;
     // ACT
     const html = renderToStaticMarkup(createElement(Fragment, null, scene(grid), scene(grid)));
@@ -91,11 +91,11 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('walks every slide-master Slide, so an empty walk cannot pass', () => {
+  it('walks every Master slide Slide, so an empty walk cannot pass', () => {
     // ARRANGE
     const expected = 20;
     // ACT
-    const count = allSlides().filter(({ page }) => page.id === 'slide-master').length;
+    const count = allSlides().filter(({ page }) => page.id === 'grids' || page.id === 'timelines').length;
     // ASSERT
     expect(count).toBe(expected);
   });

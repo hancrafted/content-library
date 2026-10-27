@@ -3,10 +3,13 @@ import type { EventSlug } from '@/content-store/catalogue/record-routes';
 import type { z } from 'zod';
 import { duplicates } from './duplicates';
 import { episodeRefusals, type LoadedEpisode } from './episode-refusals';
+import { eventRefusals } from './event-refusals';
 import { featuredRefusals } from './featured';
+import { resourceRefusals } from './resource-refusals';
 import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
+import { resourceSchema, type Resource } from './schemas/resource.schema';
 import { playlistEntries, type ServedEvent } from './served-event';
 
 /*
@@ -14,7 +17,7 @@ import { playlistEntries, type ServedEvent } from './served-event';
  * schema, then the cross-record rules run over the sound ones and resolve each Event into the Playlist it presents.
  * Every refusal is one sentence naming the kind, the record and the field; a refused record is never dropped, the
  * whole load throws. An Episode enters by the Episode id its folder gives it and is served with its EpisodeRef
- * (GLOSSARY), which every rule reads.
+ * (GLOSSARY), which every rule reads. A Resource (design-ADR 0019) is checked against its composition folders.
  */
 
 /** One Episode as the generated registry hands it in: the id its folder gives it, and its record as its file writes it. */
@@ -28,6 +31,9 @@ export interface ContentInput {
   readonly episodes: readonly EpisodeEntry[];
   readonly events: readonly unknown[];
   readonly playlists: readonly unknown[];
+  /** The Resource records, and the slugs of the composition folders they are checked against: both are always given. */
+  readonly resources: readonly unknown[];
+  readonly resourceCompositions: readonly string[];
   /** The Featured slots by Episode id, checked against the Episodes when given (`./featured.ts`). */
   readonly featured?: readonly string[];
 }
@@ -37,6 +43,8 @@ export interface ParsedContent {
   readonly episodes: readonly LoadedEpisode[];
   readonly events: readonly Event[];
   readonly playlists: readonly Playlist[];
+  readonly resources: readonly Resource[];
+  readonly resourceCompositions: readonly string[];
   readonly featured?: readonly string[];
 }
 
@@ -45,11 +53,10 @@ export interface Content {
   readonly episodes: readonly LoadedEpisode[];
   readonly events: readonly ServedEvent[];
   readonly playlists: readonly Playlist[];
+  readonly resources: readonly Resource[];
 }
 
-type Kind = 'Episode' | 'Event' | 'Playlist';
-
-const EVENT_SLUG = /^(\d{4}-\d{2}-\d{2})-[a-z0-9]/;
+type Kind = 'Episode' | 'Event' | 'Playlist' | 'Resource';
 
 /** One record kind as the parser reads it: its name in a sentence, the field naming a record, and its schema. */
 interface Reader<T> {
@@ -97,13 +104,6 @@ function parseAll<T>(
 
 function uniqueness(kind: Kind, names: readonly string[], field: 'slug' | 'id'): string[] {
   return duplicates(names).map((name) => `${kind} ${name}: ${field} is used by more than one ${kind}`);
-}
-
-function eventRefusals(event: Event): string[] {
-  const date = EVENT_SLUG.exec(event.slug)?.[1];
-  return date === event.date
-    ? []
-    : [`Event ${event.slug}: slug must be <date>-<name>, starting with its date ${event.date}`];
 }
 
 /** Why a Playlist may not list an Event's copy: an Event other than its owner presents the Playlist, or none does. */
@@ -154,7 +154,7 @@ function playlistRefusals(
 
 /** The cross-record refusals over sound records, in the order kinds are listed, with the Events' own from `serve`. */
 function crossRecordRefusals(
-  { episodes, events, playlists, featured }: ParsedContent,
+  { episodes, events, playlists, resources, resourceCompositions, featured }: ParsedContent,
   unserved: readonly string[],
 ): string[] {
   const presented = new Set(events.map((event) => event.playlist));
@@ -175,6 +175,7 @@ function crossRecordRefusals(
     ...unserved,
     ...uniqueness('Playlist', playlistIds, 'id'),
     ...playlists.flatMap((playlist) => playlistRefusals(playlist, byId, presenters(playlist))),
+    ...resourceRefusals(resources, resourceCompositions),
     ...(featured === undefined ? [] : featuredRefusals(featured, byId)),
   ];
 }
@@ -207,8 +208,9 @@ export function checkRecords(content: ParsedContent): { content: Content; refuse
   const playlists = new Map(content.playlists.map((playlist) => [playlist.id, playlist]));
   const episodes = new Map(content.episodes.map((episode) => [episode.ref.id, episode]));
   const events = content.events.map((event) => serve(event, playlists, episodes));
+  const served = events.flatMap((event) => event.served);
   return {
-    content: { ...content, events: events.flatMap(({ served }) => served) },
+    content: { episodes: content.episodes, events: served, playlists: content.playlists, resources: content.resources },
     refused: crossRecordRefusals(
       content,
       events.flatMap(({ refused }) => refused),
@@ -230,13 +232,16 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
   const episodes = parseEpisodes(input.episodes);
   const events = parseAll({ kind: 'Event', key: 'slug', schema: eventSchema }, input.events);
   const playlists = parseAll({ kind: 'Playlist', key: 'id', schema: playlistSchema }, input.playlists);
+  const resources = parseAll({ kind: 'Resource', key: 'slug', schema: resourceSchema }, input.resources);
   return {
     content: {
       episodes: episodes.parsed,
       events: events.parsed,
       playlists: playlists.parsed,
+      resources: resources.parsed,
+      resourceCompositions: input.resourceCompositions,
       ...(input.featured === undefined ? {} : { featured: input.featured }),
     },
-    refused: [...episodes.refused, ...events.refused, ...playlists.refused],
+    refused: [...episodes.refused, ...events.refused, ...playlists.refused, ...resources.refused],
   };
 }

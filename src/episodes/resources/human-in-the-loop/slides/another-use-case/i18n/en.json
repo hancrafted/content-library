@@ -1,0 +1,15 @@
+{
+  "title": "Another use case",
+  "caption": "The same loop around a personal task: planning a week away for two.",
+  "readme": {
+    "heading": "Read me",
+    "labels": {
+      "shows": "What it shows",
+      "tryit": "What to try",
+      "notice": "What to notice"
+    },
+    "shows": "The Vacation Workflow: five stages from a first plan to one recommendation, with the same checks between them.",
+    "tryit": "Open the Research stage, which repeats once per ticket. Use the Use case picker to switch back to the project plan.",
+    "notice": "The stages and their checks are authored, not fixed: a different task gets different stages around the same idea."
+  }
+}

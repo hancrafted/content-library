@@ -44,7 +44,7 @@ function DashboardNav({ locale, label }: { locale: Locale; label: string }) {
   );
 }
 
-function HeaderNav({ locale, t }: { locale: Locale; t: HeaderT }) {
+function HeaderNav({ locale, t, navSections }: { locale: Locale; t: HeaderT; navSections: readonly string[] }) {
   return (
     <nav aria-label={t('nav.label')} data-testid="site-nav" className="flex gap-1 max-lg:flex-col max-lg:self-stretch">
       <NavLink section={ROUTES.episodes} href={localizePath(ROUTES.episodes, locale)} data-testid="nav-episodes">
@@ -52,6 +52,14 @@ function HeaderNav({ locale, t }: { locale: Locale; t: HeaderT }) {
       </NavLink>
       <NavLink section={ROUTES.events} href={localizePath(ROUTES.events, locale)} data-testid="nav-events">
         {t('nav.events')}
+      </NavLink>
+      <NavLink
+        section={ROUTES.resources}
+        alsoIn={navSections}
+        href={localizePath(ROUTES.resources, locale)}
+        data-testid="nav-resources"
+      >
+        {t('nav.resources')}
       </NavLink>
       <DashboardNav locale={locale} label={t('nav.dashboard')} />
     </nav>
@@ -64,7 +72,15 @@ function HeaderNav({ locale, t }: { locale: Locale; t: HeaderT }) {
  * into the menu panel; the brand and the call to action stay in the row. The locale toggle offers each page's
  * locales from `localesByRoute`, handed down from the layout.
  */
-export async function SiteHeader({ locale, localesByRoute }: { locale: Locale; localesByRoute: LocalesByRoute }) {
+export async function SiteHeader({
+  locale,
+  localesByRoute,
+  navSections,
+}: {
+  locale: Locale;
+  localesByRoute: LocalesByRoute;
+  navSections: readonly string[];
+}) {
   const t = await getTranslations({ locale });
   return (
     <header
@@ -73,7 +89,7 @@ export async function SiteHeader({ locale, localesByRoute }: { locale: Locale; l
     >
       <SiteBrand locale={locale} />
       <HeaderMenu label={t('nav.menu')}>
-        <HeaderNav locale={locale} t={t} />
+        <HeaderNav locale={locale} t={t} navSections={navSections} />
         <SocialLinks locale={locale} className="lg:ml-auto lg:max-xl:hidden" />
         <div className="flex items-center gap-3 lg:max-xl:ml-auto">
           <ThemeToggle labels={themeLabels(t)} />

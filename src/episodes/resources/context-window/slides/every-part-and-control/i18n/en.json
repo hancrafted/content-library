@@ -1,0 +1,21 @@
+{
+  "title": "Every part and control",
+  "caption": "The summer party chat from the AI attention span episode at step 25 of 28, just after its compaction at step 24. All six parts shown, every toolbar and head control enabled.",
+  "notes": {
+    "preset": {
+      "header": "Preset gallery-full",
+      "description": "From the AI attention span episode: the summer party chat, cut one step after its compaction. Every part and control is on; the 200K | 1M switch stays off, since the chat compacts only on 200K."
+    }
+  },
+  "readme": {
+    "heading": "Read me",
+    "labels": {
+      "shows": "What it shows",
+      "tryit": "What to try",
+      "notice": "What to notice"
+    },
+    "shows": "The whole cornerstone: chat, timeline, window, category list, details and attention, with every toolbar and head control switched on.",
+    "tryit": "Drag the Show chips to reorder the parts. Press Technical in the toolbar. Hover a block, a row or a bubble. Download the chat as a Claude Code log.",
+    "notice": "All six parts light together: hover one thing and the same message, block and attention row light up everywhere."
+  }
+}

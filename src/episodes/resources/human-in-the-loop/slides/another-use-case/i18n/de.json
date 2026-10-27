@@ -1,0 +1,15 @@
+{
+  "title": "Ein anderer Anwendungsfall",
+  "caption": "Dieselbe Schleife um eine private Aufgabe: eine Woche zu zweit verreisen.",
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Der Urlaubs-Workflow: fünf Phasen von einem ersten Plan bis zu einer Empfehlung, mit denselben Prüfungen dazwischen.",
+    "tryit": "Öffnen Sie die Phase „Research“, die für jedes Ticket einmal läuft. Über die Auswahl „Anwendungsfall“ wechseln Sie zurück zum Projektplan.",
+    "notice": "Phasen und Prüfungen sind geschrieben, nicht festgelegt: Eine andere Aufgabe bekommt andere Phasen um denselben Gedanken."
+  }
+}

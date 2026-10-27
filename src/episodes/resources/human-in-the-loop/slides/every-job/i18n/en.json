@@ -1,0 +1,15 @@
+{
+  "title": "Every job",
+  "caption": "The same project plan, one level down: each stage holds its jobs, in the order they depend on each other.",
+  "readme": {
+    "heading": "Read me",
+    "labels": {
+      "shows": "What it shows",
+      "tryit": "What to try",
+      "notice": "What to notice"
+    },
+    "shows": "The project-plan Workflow in its Jobs view: every job of every stage as a card, joined by arrows.",
+    "tryit": "Click a job card to open its stage at exactly that job. Switch back to Stages in the toolbar and compare.",
+    "notice": "Epics and Execute repeat: each is drawn once, inside a dashed bracket that says it runs once per epic or ticket."
+  }
+}

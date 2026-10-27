@@ -1,7 +1,7 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { EpisodeRef } from './catalogue/episode-id.pure';
 import { catalogueOf } from './catalogue/page-catalogue';
-import type { EpisodeId } from './catalogue/record-routes';
+import { RESOURCE_SLUGS, type EpisodeId } from './catalogue/record-routes';
 import type { LoadedEpisode } from './episode-refusals';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { EVENT_RECORDS } from './event-registry.generated';
@@ -9,10 +9,12 @@ import { FEATURED } from './featured';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
+import { RESOURCE_RECORDS } from './resource-registry.generated';
 import type { EpisodeStatus } from './schemas/episode.schema';
 import type { EventInput } from './schemas/event.schema';
 import type { IsoDate } from './schemas/fields';
 import type { PlaylistInput } from './schemas/playlist.schema';
+import type { ResourceInput } from './schemas/resource.schema';
 import type { ServedEvent } from './served-event';
 
 /*
@@ -20,13 +22,15 @@ import type { ServedEvent } from './served-event';
  * by its schema and checked against the others when this module loads. Episode metadata arrives through the generated
  * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder, keyed by the Episode id its
  * folder gives it), Events through the generated
- * Event registry (`./event-registry.generated.ts`, one entry per Event file), Playlists by explicit import. A bad
+ * Event registry (`./event-registry.generated.ts`, one entry per Event file), Resources through theirs
+ * (`./resource-registry.generated.ts`, one per Resource file, checked against the composition folders), Playlists by explicit import. A bad
  * record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read records only
  * through the functions below, and every page through the page catalogue served here. The one seam a database would
  * replace.
  */
 
 const EVENTS: readonly EventInput[] = Object.values(EVENT_RECORDS);
+const RESOURCES: readonly ResourceInput[] = Object.values(RESOURCE_RECORDS);
 const PLAYLISTS: readonly PlaylistInput[] = [
   axelAgenticWorkflowPlaylist,
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
@@ -58,6 +62,8 @@ const CONTENT = loadContent({
   episodes: Object.entries({ ...EPISODE_METADATA, ...UPCOMING_METADATA }).map(([id, record]) => ({ id, record })),
   events: EVENTS,
   playlists: PLAYLISTS,
+  resources: RESOURCES,
+  resourceCompositions: RESOURCE_SLUGS,
   featured: FEATURED,
 });
 
@@ -110,7 +116,13 @@ export function episodeVideo(episode: EpisodeRef<EpisodeId>, locale: Locale): Vi
   return local === undefined ? undefined : { id: local };
 }
 
-export type { EpisodesPathParams, EventEpisodePage, EventEpisodeParams, RouteParams } from './catalogue/page-catalogue';
+export type {
+  EpisodesPathParams,
+  EventEpisodePage,
+  EventEpisodeParams,
+  ResourceParams,
+  RouteParams,
+} from './catalogue/page-catalogue';
 export type { PresentedEpisode, ServedEvent } from './served-event';
 
 /**
@@ -139,6 +151,9 @@ export const {
   eventParams,
   eventEpisodeParams,
   eventEpisodePageAt,
+  resourceParams,
+  resourcePageAt,
   listedEpisodes,
   listedEvents,
+  listedResources,
 } = catalogueOf(CONTENT);

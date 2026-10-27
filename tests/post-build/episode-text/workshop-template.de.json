@@ -1,11 +1,11 @@
 {
   "title": "Workshop-Vorlage · hancrafted",
-  "description": "Kopiere diese Werkzeugseite als erste Episode einer neuen Veranstaltung: Titel, Agenda, Fokus und Organisation.",
+  "description": "Kopieren Sie diese Episodenvorlage als erste Episode einer neuen Veranstaltung: Titel, Agenda, was dazugehört und was nicht, und wer sie organisiert, mit Platzhaltertexten zum Ersetzen.",
   "toc": "Inhalt Wird geladen 1 Agenda 2 Im Fokus Nicht im Fokus 3 Organisation Inhalt öffnen : Inhalt Inhalt 1 Agenda 2 Im Fokus Nicht im Fokus 3 Organisation",
   "slides": [
     {
       "id": "top",
-      "text": "Workshop-Vorlage Ersetze dies durch den Namen des Workshops, sein Datum und für wen er ist."
+      "text": "Workshop-Vorlage Die erste Episode eines Workshops: pro Veranstaltung einmal kopieren, für Agenda, Umfang und Organisation."
     },
     {
       "id": "agenda",

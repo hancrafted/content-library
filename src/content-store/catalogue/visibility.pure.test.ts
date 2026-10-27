@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episodeRef, toolingRef } from './episode-id.pure';
+import { episodeRef, resourceRef } from './episode-id.pure';
 import type { PageRef } from './record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
@@ -21,6 +21,11 @@ const PUBLISHED_PUBLIC: PageFacts = { visibility: 'public', status: 'published' 
 const PUBLISHED_UNLISTED: PageFacts = { visibility: 'unlisted', status: 'published' };
 
 const EPISODE_PAGE: PageRef = { kind: 'episode', episode: episodeRef('ai-attention-span') };
+const RESOURCE_PAGE: PageRef = {
+  kind: 'resource',
+  type: 'master-slide',
+  resource: resourceRef('timelines'),
+};
 const EVENT_PAGE: PageRef = { kind: 'event', event: EVENT };
 const EVENT_EPISODE_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: episodeRef('ai-attention-span') };
 /** The AXEL seminar's own copy, in its folder `by-event/<event>/ai-attention-span/`. */
@@ -35,6 +40,7 @@ const SELF_INDEXED: PageTreatment = { exported: true, inSitemap: true, index: tr
 const NEEDS_FACTS: [string, PageRef][] = [
   ['an Episode page', EPISODE_PAGE],
   ['an Event page', EVENT_PAGE],
+  ['a Resource page', RESOURCE_PAGE],
   ['an Episode under an Event', EVENT_EPISODE_PAGE],
 ];
 
@@ -57,7 +63,8 @@ const TABLE: [string, PageRef, PageFacts, PageTreatment][] = [
   ],
   ['an upcoming Episode under an Event', EVENT_EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, HIDDEN],
   ['an upcoming Episode', EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, ANNOUNCED],
-  ['a tooling page', { kind: 'tooling', tooling: toolingRef('slide-master') }, {}, HIDDEN],
+  ['a public Resource page', RESOURCE_PAGE, { visibility: 'public' }, LISTED],
+  ['an unlisted Resource page', RESOURCE_PAGE, { visibility: 'unlisted' }, HIDDEN],
   ["a public, published Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_PUBLIC, copy: true }, SELF_INDEXED],
   ["an unlisted Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_UNLISTED, copy: true }, HIDDEN],
   [
@@ -72,6 +79,7 @@ const NO_RECORD: [string, PageRef, PageTreatment][] = [
   ['the landing page', { kind: 'home' }, LISTED],
   ['the Episode overview', { kind: 'episodes' }, LISTED],
   ['the Events list', { kind: 'events' }, LISTED],
+  ['the Resources overview', { kind: 'resources' }, LISTED],
   ['the dashboard', { kind: 'dashboard' }, HIDDEN],
 ];
 

@@ -10,13 +10,12 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { format, resolveConfig } from 'prettier';
 import { describe, expect, it } from 'vitest';
-import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/record-routes';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { episodeText, type EpisodeText } from './episode-text';
-import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage } from './exported-pages';
+import { EXPORTED_EPISODE_SHAPED_PAGES, exportedPage } from './exported-pages';
 
-const PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
-  LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
+const PAGES = EXPORTED_EPISODE_SHAPED_PAGES.flatMap(({ slug, route, folder, isResource }) =>
+  LOCALES.map((locale) => ({ slug, folder, isResource, locale, url: localizePath(route, locale) })),
 );
 
 const FIXTURE_DIR = join(import.meta.dirname, 'episode-text');
@@ -29,7 +28,7 @@ function builtText(url: string): EpisodeText {
   return episodeText(exportedPage(url));
 }
 
-/** Whether the exported page asks search engines not to index it: an upcoming Episode's page and a tooling page do. */
+/** Whether the exported page asks search engines not to index it: an upcoming Episode's page does; a Resource is public and does not. */
 function isNoindex(url: string): boolean {
   const page = exportedPage(url);
   return (page('meta[name="robots"]').attr('content') ?? '').includes('noindex');
@@ -53,7 +52,7 @@ function allText(text: EpisodeText): string[] {
   ];
 }
 
-describe.each(PAGES)('$url', ({ slug, locale, url }) => {
+describe.each(PAGES)('$url', ({ slug, folder, isResource, locale, url }) => {
   it('shows the reader the same text it showed before the move', async () => {
     // ARRANGE
     const built = builtText(url);
@@ -66,10 +65,10 @@ describe.each(PAGES)('$url', ({ slug, locale, url }) => {
 
   it('renders its Slides under exactly the published anchors, or binds none while upcoming', () => {
     // ARRANGE
-    const file = join(EPISODES_DIR, isToolingSlug(slug) ? 'tooling' : '', slug, 'published-anchors.json');
+    const file = join(EPISODES_DIR, folder, 'published-anchors.json');
     // An upcoming Episode's page is built `noindex` and its anchors bind at publication (docs/features/episode-publishing.md).
-    // A tooling page is `noindex` too, but has no status: its anchors are bound.
-    if (isNoindex(url) && !isToolingSlug(slug)) {
+    // A Resource is public and has no status: its anchors are bound.
+    if (isNoindex(url) && !isResource) {
       expect(existsSync(file)).toBe(false);
       return;
     }

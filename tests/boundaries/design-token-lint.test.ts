@@ -15,7 +15,7 @@ const LEGACY: string[] = JSON.parse(
 ).globs;
 const eslint = new ESLint({ cwd: ROOT });
 
-const SLIDE = 'src/episodes/tooling/slide-master/slides/probe/slide.tsx';
+const SLIDE = 'src/episodes/resources/timelines/slides/probe/slide.tsx';
 const HERO_TITLE = 'src/episodes/components/slide-master/slide-master.tsx';
 const CITATION = 'src/shared/page-chrome/context-drawer/slide-notes.tsx';
 const INLINE_CODE = 'src/episodes/components/slide-master/rich-tags.tsx';

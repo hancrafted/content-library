@@ -32,9 +32,19 @@
 /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-onboard-ai-every-time/     /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/onboard-ai-every-time/     301
 /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-onboard-ai-every-time/  /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/onboard-ai-every-time/  301
 
-# Two tooling pages were renamed with the Explorable explanation vocabulary (design-ADR 0016): the page template became
-# the Episode template, the Slides page the Explorable explanations page.
-/episodes/page-template/    /episodes/episode-template/           301
-/de/episodes/page-template/ /de/episodes/episode-template/        301
-/episodes/slides/           /episodes/explorable-explanations/    301
-/de/episodes/slides/        /de/episodes/explorable-explanations/ 301
+# Resources (design-ADR 0019): the four pages that were served under /episodes/ moved to their type's path. The two
+# Explorable explanation pages and the two Master slide pages split out of one page each, so their old URLs land on the
+# overview; the two Episode templates keep a page of their own. An old page-template or slides link lands on the same
+# place, in one hop.
+/episodes/explorable-explanations/*        /resources/                                  301
+/de/episodes/explorable-explanations/*     /de/resources/                               301
+/episodes/slide-master/*                   /resources/                                  301
+/de/episodes/slide-master/*                /de/resources/                               301
+/episodes/episode-template/*               /episode-templates/episode-template/         301
+/de/episodes/episode-template/*            /de/episode-templates/episode-template/      301
+/episodes/workshop-template/*              /episode-templates/workshop-template/        301
+/de/episodes/workshop-template/*           /de/episode-templates/workshop-template/     301
+/episodes/page-template/                   /episode-templates/episode-template/         301
+/de/episodes/page-template/                /de/episode-templates/episode-template/      301
+/episodes/slides/                          /resources/                                  301
+/de/episodes/slides/                       /de/resources/                               301

@@ -20,6 +20,13 @@ export type FormatId = (typeof FORMATS)[number];
 export const TAG_IDS = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'] as const;
 export type TagId = (typeof TAG_IDS)[number];
 
+/**
+ * What kind of Resource a page is, which also decides its URL (design-ADR 0019): an Explorable explanation, an Episode
+ * template or a Master slide. The path of each is `RESOURCE_TYPE_PATHS` in the content store's record routes.
+ */
+export const RESOURCE_TYPES = ['explorable-explanation', 'episode-template', 'master-slide'] as const;
+export type ResourceType = (typeof RESOURCE_TYPES)[number];
+
 /** Where an Event takes place: at a venue, on a video platform, or both. */
 export const EVENT_FORMATS = ['onsite', 'remote', 'hybrid'] as const;
 export type EventFormat = (typeof EVENT_FORMATS)[number];

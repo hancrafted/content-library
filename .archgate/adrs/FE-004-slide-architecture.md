@@ -23,10 +23,10 @@ An agent opening this repo meets five Episode-shaped records, each deep on one c
 flowchart TD
   app["src/app — routes, one template each"] --> tpl
   subgraph pa["src/page-assembly — flat"]
-    tpl["a folder per template — landing, events-overview, event, episode-overview, episode, dashboard, sitemap"] --> palib["lib/ — page metadata, JSON-LD"]
+    tpl["a folder per template — landing, events-overview, event, episode-overview, episode, resources-overview, resource, dashboard, sitemap"] --> palib["lib/ — page metadata, JSON-LD"]
     merge["translations.ts — merges every owner's i18n/"]
   end
-  tpl --> episodes["src/episodes — content: ep/ by-event/ slide-pool/ tooling/; code: components/ hooks/ lib/"]
+  tpl --> episodes["src/episodes — content: ep/ by-event/ slide-pool/ resources/; code: components/ hooks/ lib/"]
   tpl --> events["src/events — Events, Playlists: components/ lib/"]
   tpl --> explain["src/explorable-explanations — one folder each"]
   tpl --> pipeline["src/pipeline — pipeline, Run log, dashboard"]
@@ -47,7 +47,7 @@ flowchart TD
 
 Two areas meet only in a template, which hands one's parts to the other as props: the Event template passes Episode cards to the Playlist list.
 
-**The Episodes area.** `src/episodes/` keeps content (`<ep>/`, `by-event/`, `slide-pool/`, `tooling/`) apart from code (`components/`, `lib/`, `hooks/`); no Episode slug takes one of these names.
+**The Episodes area.** `src/episodes/` keeps content (`<ep>/`, `by-event/`, `slide-pool/`, `resources/`) apart from code (`components/`, `lib/`, `hooks/`); no Episode slug takes one of these names.
 
 **Modules an Episode is built from.** An arrow is an allowed import.
 
@@ -125,11 +125,12 @@ For this project the map matters because handoffs run on agents with no session 
 3. `episodes/slide-pool/<slide>/`: content Slides Episodes share, never Title or section; only a Section imports one, via `@/`.
 4. `slide-master/` owns frame, layouts, record and kit types; `slide-shared/`, parts two Slides share.
 5. `episode-page/` owns the one container and Slide mechanics; page chrome is reached from page assembly or the container.
+6. `episodes/resources/<slug>/` owns one Resource: an `episode()` record, never an Episode (design-ADR 0019).
 
 ### 4. One pass from Episode to page
 
 1. Route → template (by page kind) → registry → record → container → static HTML; anchors from position.
-2. Routes (design-ADR 0016): `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`.
+2. Routes (design-ADR 0016): `/episodes/<ep>/`; `/events/`, its `<e>/` and `<e>/episodes/<ep>/`. Resources (design-ADR 0019): `/resources/`, `/<type>/<slug>/`.
 
 ### 5. Text, styling and client code have fixed homes
 

@@ -55,7 +55,7 @@ flowchart LR
 
 **The kit** gives a Slide `t` (built from the Slide's own messages; its `t.rich` knows `em`, `b`, `code`), `template`, `ref`, `target`, `slideHref`, `locale` and `Title`.
 
-**Reference implementation: `src/episodes/tooling/episode-template/`** is the copy source; the frame layouts are in `src/episodes/components/slide-master/`, and the Slide library (`slide-master/`) shows the rest. Both are tooling pages, not Episodes (design-ADR 0016). How to write a Slide lives there and in the feature guides.
+**Reference implementation: `src/episodes/resources/episode-template/`** is the copy source; the frame layouts are in `src/episodes/components/slide-master/`, and the Master slides (`resources/timelines/`, `resources/grids/`) show the rest. All are Resources, not Episodes (design-ADR 0019). How to write a Slide lives there and in the feature guides.
 
 ## Decision
 

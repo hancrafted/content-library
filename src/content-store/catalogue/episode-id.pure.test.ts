@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episodeRef, episodeRefOf, folderOf, matchEpisode, toolingRef } from './episode-id.pure';
+import { episodeRef, episodeRefOf, folderOf, matchEpisode, resourceRef } from './episode-id.pure';
 
 /*
  * The Episode id module (GLOSSARY, Episode id): the one place that knows an Event's copy is named
@@ -49,18 +49,18 @@ describe('success cases', () => {
     expect(parsed).toEqual(expected);
   });
 
-  it('gives the folder of an Episode no Event owns, of an Event copy, and of a tooling page', () => {
+  it('gives the folder of an Episode no Event owns, of an Event copy, and of a Resource', () => {
     // ARRANGE
     const expected = [
       'ai-attention-span',
       'by-event/2026-10-23-axel-agentic-workflow/ai-attention-span',
-      'tooling/slide-master',
+      'resources/slide-master',
     ];
     // ACT
     const folders = [
       folderOf(episodeRef('ai-attention-span')),
       folderOf(episodeRef('ai-attention-span', EVENT)),
-      folderOf(toolingRef('slide-master')),
+      folderOf(resourceRef('slide-master')),
     ];
     // ASSERT
     expect(folders).toEqual(expected);

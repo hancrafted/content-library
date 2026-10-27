@@ -1,4 +1,4 @@
-import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
+import { ownRouteOf, type ComposedId } from '@/content-store/catalogue/record-routes';
 import {
   episodeMinutes,
   localizeSlide,
@@ -34,8 +34,8 @@ export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 /** What the page lends the Episode: the site-wide translator, and the route it is served at when not its own. */
 export interface PageContext {
   readonly translatorOf: TranslatorOf;
-  /** The page's Episode id, or the tooling page's slug: an Event's copy is named by its id, never by its slug alone. */
-  readonly id: EpisodesPathSlug;
+  /** The page's Episode id, or the Resource's slug: an Event's copy is named by its id, never by its slug alone. */
+  readonly id: ComposedId;
   /** The logical path the page is served at, which `slideHref` links on: the Episode's own unless an Event presents it. */
   readonly route?: string;
 }
@@ -65,7 +65,7 @@ export interface EpisodeContent {
 export async function recordContent(
   record: EpisodeComposition,
   locale: Locale,
-  { translatorOf, id, route = episodeRoute(id) }: PageContext,
+  { translatorOf, id, route = ownRouteOf(id) }: PageContext,
 ): Promise<EpisodeContent> {
   const drawer = await translatorOf('contextDrawer');
   const episode: EpisodeContext = {

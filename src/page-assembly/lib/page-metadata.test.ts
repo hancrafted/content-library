@@ -1,4 +1,4 @@
-import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { pageMetadata, siteMetadata } from './page-metadata.pure';
@@ -178,14 +178,15 @@ describe('success cases', () => {
     expect(metadata.twitter?.images).toEqual(['/og-image.png']);
   });
 
-  it('keeps a tooling page out of search, canonical at its own URL under /episodes/', () => {
+  it('keeps an unlisted Resource out of search, canonical at its own URL under its type', () => {
     // ARRANGE
-    const expected = { canonical: '/de/episodes/slide-master', robots: { index: false } };
+    const expected = { canonical: '/de/master-slides/timelines', robots: { index: false } };
     // ACT
-    const metadata = pageMetadata({ kind: 'tooling', tooling: toolingRef('slide-master') }, 'de', {
-      ...COPY,
-      treatment: HIDDEN,
-    });
+    const metadata = pageMetadata(
+      { kind: 'resource', type: 'master-slide', resource: resourceRef('timelines') },
+      'de',
+      { ...COPY, treatment: HIDDEN },
+    );
     // ASSERT
     expect({ canonical: metadata.alternates?.canonical, robots: metadata.robots }).toEqual(expected);
   });

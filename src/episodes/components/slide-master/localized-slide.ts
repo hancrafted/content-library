@@ -1,4 +1,4 @@
-import type { EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
+import type { ComposedId } from '@/content-store/catalogue/record-routes';
 import type { PlacedListSlide, SlideLevel } from '@/episodes/lib/episode.pure';
 import type { NoteSource, SpeakerNoteItem, VoiceScriptSegment } from '@/shared/lib/context-drawer.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -59,7 +59,7 @@ export type LocalizedSlide = Placement &
 
 /** What a Slide needs to know of the Episode page it is localized into: the same for every Slide. */
 export interface EpisodeContext {
-  readonly episode: EpisodesPathSlug;
+  readonly episode: ComposedId;
   /** The logical path the page is served at, when an Event presents the Episode: what `slideHref` links on. */
   readonly route?: string;
   readonly locale: Locale;

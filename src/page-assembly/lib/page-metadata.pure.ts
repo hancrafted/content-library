@@ -50,7 +50,8 @@ const OPEN_GRAPH_TYPE: Readonly<Record<PageKind, 'article' | 'website'>> = {
   episodes: 'website',
   events: 'website',
   episode: 'article',
-  tooling: 'website',
+  resources: 'website',
+  resource: 'website',
   event: 'website',
   'event-episode': 'article',
 };
@@ -93,8 +94,9 @@ function copyOf(page: PageRef, locale: Locale, copy: PageCopy | undefined): Pick
     dashboard: () => meta.dashboard,
     episodes: () => meta.episodes,
     events: () => meta.events,
+    resources: () => meta.resources,
     episode: handedIn,
-    tooling: handedIn,
+    resource: handedIn,
     event: handedIn,
     'event-episode': handedIn,
   });

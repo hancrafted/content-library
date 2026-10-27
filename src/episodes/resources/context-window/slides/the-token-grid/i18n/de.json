@@ -1,0 +1,15 @@
+{
+  "title": "Das Token-Raster",
+  "caption": "Das Fenster allein, als Kästchen aus Tokens gezeichnet, so wie Claude Code es auflistet.",
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Nur das Kontextfenster in seiner technischen Ansicht: ein Kästchen pro festem Token-Anteil, nach Kategorien gruppiert.",
+    "tryit": "Fahren Sie über ein Kästchen, dann leuchtet es mit seiner Zeile. Mit der Klammer-Schaltfläche (Code) im Kopf des Fensters wechseln Sie zum einfachen Balken und zurück.",
+    "notice": "Die technische Ansicht nennt die echten Kategorien, etwa Systemwerkzeuge und Skills, und den freien Platz, den die KI als Reserve zurückhält."
+  }
+}
