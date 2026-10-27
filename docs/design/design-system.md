@@ -138,11 +138,22 @@ Raw values sit on `:root` and `.dark`; `@theme inline` maps each utility to the 
 
 Tailwind's default palette and size scale are not reset, because legacy files still use them. Checks ban them in new code instead: ESLint (`better-tailwindcss`, in `eslint.config.mjs`) rejects a class Tailwind does not generate (E1), a palette colour, off-role size or other weight (E2), and `text-hero` outside `HeroTitle` (E3); the Archgate rules in FE-011 (A1–A6) cover raw values in CSS and code, Slide token files, `globals.css` and the legacy list.
 
+`cn` (`src/shared/lib/utils.ts`) runs tailwind-merge, which only knows Tailwind's default sizes. It is extended with the type roles, so `text-caption` stays beside a colour class such as `text-muted-foreground`. A new role joins that list, or tailwind-merge drops it as a clashing colour.
+
+## Adding a shadcn component
+
+`components.json` points the shadcn CLI at `src/shared/components/ui/`. What the CLI writes does not meet FE-011 or ARCH-001 as-is, so after `npx shadcn@latest add <name>`:
+
+1. Uninstall the umbrella `radix-ui` package, and the `cn` package if it appears, and install the one scoped primitive the component needs (`@radix-ui/react-<name>`), screened under ARCH-001.
+2. Import `cn` from `@/shared/lib/utils`, never from `cn`.
+3. Replace off-role sizes and palette colours (`text-sm`, `text-xs`, `text-white`) with roles and tokens; `npm run lint` names each one.
+4. Keep only the parts the site renders; knip reports the unused exports.
+
 ## Design-system token editor
 
 `src/shared/components/design-system-token-editor/` is a dev-only popover (it renders only under `next dev`, so it is absent from `out/`). Its trigger is an icon button in the site header, beside the theme and locale toggles, and the panel drops down from it on every page. The panel keeps its own fixed palette (`token-panel.module.css`, the one token file outside a Slide that FE-011 allows raw colours in), so it keeps its look while the site's tokens are being edited.
 
-The Global tab lists the global tokens in designer order, each in a group under a sticky header (Brand, Surface & text, Feedback, Lines & focus, Domain, Chrome, Typography, Shape, Layout, Other), a colour beside its `-foreground` pair, each with a one-line description. The order and the descriptions live in `src/shared/lib/token-groups.pure.ts`; a token missing from its table shows no description and lands under Other. The Slide tab lists the active Slide's own tokens, one group per selector that declares them, colours first; it is disabled off an Episode page. Clicking a colour's swatch opens a picker (`react-colorful`) that writes the pick back in the token's own format: `oklch(L C H)` stays oklch, a hex token stays hex (`src/shared/lib/colour-convert.pure.ts`).
+The Global tab lists the global tokens in designer order, each in a group under a sticky header (Brand, Surface & text, Feedback, Lines & focus, Domain, Tags, Chrome, Typography, Shape, Layout, Other), a colour beside its `-foreground` pair, each with a one-line description. The order and the descriptions live in `src/shared/lib/token-groups.pure.ts`; a token missing from its table shows no description and lands under Other. The Slide tab lists the active Slide's own tokens, one group per selector that declares them, colours first; it is disabled off an Episode page. Clicking a colour's swatch opens a picker (`react-colorful`) that writes the pick back in the token's own format: `oklch(L C H)` stays oklch, a hex token stays hex (`src/shared/lib/colour-convert.pure.ts`).
 
 The header is outside the Episode page and its URL-state service, so the active Slide reaches the editor through a dev-only relay: `DevSlideReporter` inside the page reads `useActiveSlide()` and hands the id to `src/shared/hooks/use-dev-slide.ts`. The editor's hook is `src/shared/hooks/use-page-tokens.ts`; its stylesheet and DOM logic are in `src/shared/lib/page-tokens.ts`.
 
