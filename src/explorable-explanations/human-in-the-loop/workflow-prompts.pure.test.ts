@@ -1,36 +1,71 @@
 import { joinPrompt } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import summerPartyEn from './summer-party.en.yml';
-import { doPrompt, reviewPrompt, stepsOf } from './workflow-prompts.pure';
+import vacationEn from './vacation.en.yml';
+import { doPrompt, reviewPrompt, roundStep, stepsOf } from './workflow-prompts.pure';
 import type { TaskDef, WorkflowFile } from './workflow-schema.types';
 
-const file = parse(summerPartyEn) as WorkflowFile;
+const file = parse(vacationEn) as WorkflowFile;
 const task = (id: string): TaskDef =>
-  file.stages.flatMap((stage) => stage.tasks).find((each) => each.id === id) as TaskDef;
+  file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id) as TaskDef;
 const joined = (prompt: ReturnType<typeof doPrompt>) =>
   joinPrompt({ sections: prompt.sections ?? [], slots: prompt.slots ?? [] }, {});
 
 describe('success cases', () => {
-  it('fills {{n}} and places the template in a fenced block, leaving the slot markers for the paste-in', () => {
+  it('places the template in a fenced block, leaving {{item}} and the slot markers for later', () => {
     // ARRANGE
     const research = task('venue');
-    const chat = 2;
     // ACT
-    const prompt = doPrompt(file, research, { runtime: 'simple', chat });
+    const prompt = doPrompt(file, research, 'simple');
     const text = (prompt.sections ?? []).map((section) => section.text).join('\n');
     // ASSERT
-    expect(text).toContain(`This is chat ${chat}. Take ticket number ${chat}`);
+    expect(text).toContain('{{item}}');
     expect(text).toContain('```markdown\n# <What was researched>');
-    expect(text).toContain('{{tickets}}');
     expect(prompt.slots?.map((slot) => slot.id)).toEqual(['tickets']);
+  });
+
+  it('shows a section marked only for demo mode in demo mode, and one marked only for a full run in a full run', () => {
+    // ARRANGE
+    const practice = {
+      heading: 'Practice run',
+      purpose: 'scope',
+      only: 'demo',
+      text: 'Pick the simplest.',
+    } as const;
+    const whole = { heading: 'Full run', purpose: 'scope', only: 'full', text: 'Name what is open.' } as const;
+    const base = task('venue');
+    const research: TaskDef = { ...base, do: { ...base.do, simple: [...base.do.simple, practice, whole] } };
+    const headings = (demo: boolean) =>
+      (doPrompt(file, research, { runtime: 'simple', demo }).sections ?? []).map((section) => section.heading);
+    // ACT
+    const demo = headings(true);
+    const full = headings(false);
+    // ASSERT
+    expect(demo).toContain(practice.heading);
+    expect(demo).not.toContain(whole.heading);
+    expect(full).toContain(whole.heading);
+    expect(full).not.toContain(practice.heading);
+  });
+
+  it('leaves a reviewer section marked only for a full run out of the review in demo mode', () => {
+    // ARRANGE
+    const whole = { heading: 'Full run', only: 'full', text: 'Check every round.' } as const;
+    const withWhole: WorkflowFile = { ...file, reviewer: { sections: [...file.reviewer.sections, whole] } };
+    const headings = (demo: boolean) =>
+      (reviewPrompt(withWhole, task('venue'), { runtime: 'simple', demo }).sections ?? []).map((s) => s.heading);
+    // ACT
+    const demo = headings(true);
+    const full = headings(false);
+    // ASSERT
+    expect(demo).not.toContain(whole.heading);
+    expect(full).toContain(whole.heading);
   });
 
   it('hands the prompt the technique catalogue and keeps the technique ids of its sections', () => {
     // ARRANGE
     const research = task('venue');
     // ACT
-    const prompt = doPrompt(file, research, { runtime: 'simple', chat: 1 });
+    const prompt = doPrompt(file, research, 'simple');
     // ASSERT
     expect(prompt.techniques).toEqual(file.techniques);
     expect(prompt.sections?.some((section) => (section.techniques ?? []).length > 0)).toBe(true);
@@ -40,9 +75,9 @@ describe('success cases', () => {
     // ARRANGE
     const research = task('venue');
     // ACT
-    const text = joined(doPrompt(file, research, { runtime: 'simple', chat: 1 }));
+    const text = joined(doPrompt(file, research, 'technical'));
     // ASSERT
-    expect(text).toContain('## 3. Outdoor or garden venue');
+    expect(text).toContain('### 3. Villa or guesthouse');
     expect(text).not.toContain('{{');
   });
 
@@ -68,32 +103,57 @@ describe('success cases', () => {
     // ASSERT
     expect(text).toContain('### Research result of chat 1');
     expect(text).toContain('### Research result of chat 3');
-    expect(text).toContain('# Old Mill');
-    expect(text).toContain('# Riverside Garden Pavilion');
+    expect(text).toContain('# Casa Blu');
+    expect(text).toContain('# Villa Mare');
     expect(text).not.toContain('{{');
   });
 
-  it('makes one step per chat in Simple and one orchestrator step in Technical, each with its review', () => {
+  it('makes one do step and one review step at each level, which a repeated stage then plays once per round', () => {
     // ARRANGE
     const research = task('venue');
-    const chats = Array.from({ length: research.fanOut ?? 0 }, (_, at) => at + 1);
     // ACT
     const simple = stepsOf(file, research, 'simple');
     const technical = stepsOf(file, research, 'technical');
     // ASSERT
-    expect(simple.map((step) => step.chat)).toEqual([...chats, undefined]);
-    expect(simple.map((step) => step.id)).toEqual([...chats.map(() => 'do'), 'review']);
-    expect(technical.map((step) => [step.id, step.chat])).toEqual([
+    expect(simple.map((step) => [step.id, step.chat])).toEqual([
       ['do', undefined],
       ['review', undefined],
     ]);
+    expect(technical.map((step) => step.id)).toEqual(['do', 'review']);
+  });
+
+  it('fills a round: its item into the do prompt and its number on the step', () => {
+    // ARRANGE
+    const research = task('venue');
+    const [step] = stepsOf(file, research, 'simple');
+    const round = { number: 2, item: '### Hotel\nFind one hotel.' };
+    // ACT
+    const made = roundStep(step!, round, { previous: ['tickets'], output: 'research' });
+    const text = joined(made.prompt);
+    // ASSERT
+    expect(made.chat).toBe(round.number);
+    expect(text).toContain(round.item);
+    expect(text).not.toContain('{{item}}');
+  });
+
+  it('gives a round its own review field, and leaves the fields that take earlier results shared', () => {
+    // ARRANGE
+    const research = task('venue');
+    const review = stepsOf(file, research, 'simple')[1];
+    const round = { number: 3, item: '### Villa' };
+    // ACT
+    const made = roundStep(review!, round, { previous: ['tickets'], output: 'research' });
+    const text = joined(made.prompt);
+    // ASSERT
+    expect(made.prompt.slots?.map((slot) => slot.id)).toEqual(['tickets', 'research_result#3']);
+    expect(text).not.toContain('{{research_result}}');
   });
 });
 
 describe('failure cases', () => {
   it('has no review step for a task without a review', () => {
     // ARRANGE
-    const interview = task('interview');
+    const interview: TaskDef = { ...task('interview'), review: undefined };
     // ACT
     const ids = stepsOf(file, interview, 'simple').map((step) => step.id);
     // ASSERT
@@ -104,11 +164,11 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the whole technical prompt, including its template, free of unresolved built-in markers', () => {
     // ARRANGE
-    const all = file.stages.flatMap((stage) => stage.tasks);
+    const all = file.stages.flatMap((stage) => stage.jobs);
     // ACT
     const left = all.flatMap((each) => [
-      joined(doPrompt(file, each, { runtime: 'technical', chat: 1 })),
-      joined(doPrompt(file, each, { runtime: 'simple', chat: 1 })),
+      joined(doPrompt(file, each, 'technical')),
+      joined(doPrompt(file, each, 'simple')).replaceAll('{{item}}', ''),
     ]);
     // ASSERT
     expect(left.filter((text) => /\{\{/.test(text))).toEqual([]);

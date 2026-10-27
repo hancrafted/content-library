@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
-import summerPartyEn from './summer-party.en.yml';
+import vacationEn from './vacation.en.yml';
 import {
   BUILT_IN_MARKERS,
   PURPOSES,
@@ -10,21 +10,21 @@ import {
   type WorkflowFile,
 } from './workflow-schema.types';
 
-const proposal = parse(summerPartyEn) as WorkflowFile;
+const proposal = parse(vacationEn) as WorkflowFile;
 const RESEARCH = 4;
 
 const markersOf = (sections: readonly SectionDef[]) =>
   sections.flatMap((section) => [...section.text.matchAll(/\{\{([^}]+)\}\}/g)].map((match) => match[1]));
 
 describe('success cases', () => {
-  it('reads as a WorkflowFile with a fan-out task, slots, a template and a review', () => {
+  it('reads as a WorkflowFile with a repeated stage, slots, a template and a review', () => {
     // ARRANGE
     const chats = 3;
     const stage: StageDef = proposal.stages[RESEARCH] as StageDef;
     // ACT
-    const task = stage.tasks[0];
+    const task = stage.jobs[0];
     // ASSERT
-    expect(task.fanOut).toBe(chats);
+    expect(stage.foreach?.demo).toBe(chats);
     expect(task.slots.map((slot) => slot.id)).toEqual(['tickets']);
     expect(proposal.templates[task.template]).toContain('## Fit against the requirements');
     expect(task.review?.checks.length).toBeGreaterThan(0);
@@ -32,7 +32,7 @@ describe('success cases', () => {
 
   it('uses only known purposes and known markers, and keeps the scenario out of general instructions', () => {
     // ARRANGE
-    const task = proposal.stages[RESEARCH].tasks[0];
+    const task = proposal.stages[RESEARCH].jobs[0];
     const slotIds = [...task.slots, ...(task.review?.slots ?? [])].map((slot) => slot.id);
     const known = new Set<string>([...BUILT_IN_MARKERS, ...slotIds]);
     const doSections = [...task.do.simple, ...task.do.technical];
@@ -54,7 +54,7 @@ describe('success cases', () => {
 describe('failure cases', () => {
   it('has a marker outside the known set when a section names a slot no task declares', () => {
     // ARRANGE
-    const task = proposal.stages[RESEARCH].tasks[0];
+    const task = proposal.stages[RESEARCH].jobs[0];
     const known = new Set<string>([...BUILT_IN_MARKERS, ...task.slots.map((slot) => slot.id)]);
     const stray: SectionDef = { heading: 'Stray', text: '{{nowhere}}' };
     // ACT

@@ -5,7 +5,7 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 /**
- * The human in the loop workflow in its own words: the summer party Workflow (Vacation one pill away), every toolbar
+ * The human in the loop workflow in its own words: the project-plan Workflow (Vacation one pill away), every toolbar
  * control and every stage's "Try it". The AI attention span Episode shows it with that Slide's words on top.
  */
 export const humanInTheLoop = slide({
@@ -15,7 +15,7 @@ export const humanInTheLoop = slide({
   content: ({ locale, target }) => (
     <SlideFrame className="mt-10">
       <div {...target('workflow')}>
-        <HumanInTheLoop workflow="summer-party" locale={locale} />
+        <HumanInTheLoop workflow="project-plan" locale={locale} />
       </div>
     </SlideFrame>
   ),

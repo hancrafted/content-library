@@ -1,4 +1,4 @@
-import type { MoveLetter, TaskDef, WorkflowFile } from './workflow-schema.types';
+import type { ForeachDef, MoveLetter, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * The Workflow model the diagram draws, made from a loaded Workflow file by `workflowOf`. Every word is already
@@ -10,7 +10,7 @@ import type { MoveLetter, TaskDef, WorkflowFile } from './workflow-schema.types'
 /** The BRIEF move a Workflow stage makes, by its first letter; the initials are highlighted from it. */
 export type Move = MoveLetter;
 
-/** One Workflow job: one chat, or `fanOut` parallel chats from one template. */
+/** One Workflow job: one chat, or, in a repeated stage, one chat per round. */
 export interface Job {
   readonly id: string;
   readonly title: string;
@@ -18,12 +18,12 @@ export interface Job {
   readonly detail?: string;
   /** Jobs of an earlier stage that must be done first: the producers of this job's slots. */
   readonly dependsOn: readonly string[];
+  /** Jobs of the same stage that run first, as the file's `needs` names them; the Jobs view draws them in this order. */
+  readonly needs: readonly string[];
   /** The slot ids this job takes in, each an output id of a job it depends on. */
   readonly inputs: readonly string[];
   /** What the job hands on: its output id. */
   readonly outputs: readonly { readonly id: string }[];
-  /** N parallel chats from this one template; absent for a single chat. */
-  readonly fanOut?: number;
   /** Whether the job has a review in a fresh chat; the diagram ticks each chat then. */
   readonly reviewed: boolean;
   /** Labels of the other parts of the task, drawn dimmed beside this job (the party's parked pieces). */
@@ -50,18 +50,24 @@ export interface Stage {
   readonly name: string;
   /** The one-line learning goal under the title of the stage's popover. */
   readonly goal: string;
+  /** The Stages card's text, at most eight words. */
+  readonly summary?: string;
   /** The BRIEF letters this stage applies, in BRIEF order. */
   readonly moves: readonly StageMove[];
   /** The sign-off card, on the stage that holds the focal job. */
   readonly card?: GateCard;
   /** Gate number when a human signs off this stage before the next starts. */
   readonly gate?: number;
+  /** The stage repeats once per H3 of an earlier output; its jobs run once per round. */
+  readonly foreach?: ForeachDef;
   readonly jobs: readonly Job[];
 }
 
 export interface Workflow {
   readonly id: string;
   readonly title: string;
+  /** The one sentence the use case picker shows under the title; absent for a file that has none. */
+  readonly description?: string;
   /** The scenario in one sentence. */
   readonly scenario: string;
   /** The job drawn as the bordered focal card. */

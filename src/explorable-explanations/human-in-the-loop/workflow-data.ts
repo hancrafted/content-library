@@ -1,9 +1,10 @@
+import { pairHash } from '@/shared/lib/pair-hash.pure';
 import { parse } from 'yaml';
 import uiDe from './human-in-the-loop.config.de.yml';
 import uiEn from './human-in-the-loop.config.yml';
 import type { UiWords } from './human-in-the-loop.types';
-import summerPartyDe from './summer-party.de.yml';
-import summerPartyEn from './summer-party.en.yml';
+import projectPlanDe from './project-plan.de.yml';
+import projectPlanEn from './project-plan.en.yml';
 import vacationDe from './vacation.de.yml';
 import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
@@ -19,7 +20,7 @@ export type WorkflowLocale = 'en' | 'de';
 
 /** Each authored Workflow's source text in each locale: one language per file, rendered as written. Key order is picker order. */
 const SOURCES = {
-  'summer-party': { en: summerPartyEn, de: summerPartyDe },
+  'project-plan': { en: projectPlanEn, de: projectPlanDe },
   vacation: { en: vacationEn, de: vacationDe },
 } as const satisfies Record<string, Record<WorkflowLocale, string>>;
 
@@ -52,6 +53,9 @@ export const workflowFor = memoized(
     return workflowOf(result.file);
   },
 );
+
+/** The hash of one authored Workflow's English and German files together: a saved run resumes only under the same one. */
+export const hashFor = (id: WorkflowId): string => pairHash(SOURCES[id].en, SOURCES[id].de);
 
 /** The visual's own file of one locale, parsed once. */
 const chromeWordsOf = memoized(

@@ -2,8 +2,8 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
 import type { ControlMap } from './toolbar-controls.pure';
-import type { Level } from './workflow-state.pure';
-import type { StageView } from './workflow-view.pure';
+import type { Run } from './workflow-run.pure';
+import type { Level, View } from './workflow-state.pure';
 import type { Workflow } from './workflow.types';
 
 /*
@@ -16,14 +16,73 @@ import type { Workflow } from './workflow.types';
 export interface UiWords {
   /** The visible label and accessible name of the Workflow picker: the use case. */
   readonly workflow: string;
-  /** The Technical toggle's name, and its tooltip. */
-  readonly technical: string;
-  readonly technicalTip: string;
+  /** The view control: its group name and tooltip, and each view's label and tooltip. */
+  readonly view: string;
+  readonly viewTip: string;
+  readonly viewStages: string;
+  readonly viewStagesTip: string;
+  readonly viewJobs: string;
+  readonly viewJobsTip: string;
+  /** The Stages card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
+  readonly checked: string;
+  readonly repeats: string; // Jobs view: a repeated stage's bracket (`{item}` it repeats over, `{n}` rounds)
+  readonly round: string; // Jobs view: what a round is called where the stage names no item
+  readonly tryJob: string; // Jobs view: a job card's hidden name (`{job}`, `{stage}`)
+  /** The `</>` toggle (off is Chat, on is CLI): its accessible name and tooltip. */
+  readonly cli: string;
+  readonly cliTip: string;
+  /** The context toggle's name and tooltip: it shows or hides why a task matters, its techniques and an example result. */
+  readonly context: string;
+  readonly contextTip: string;
+  readonly intro: string;
+  /** The stepper's sections, and the stepper's buttons. */
+  readonly stepN: string;
+  readonly stepContext: string;
+  readonly stepContextInfo: string;
+  readonly stepDo: string;
+  readonly stepDoInfo: string;
+  readonly stepCheck: string;
+  readonly stepCheckInfo: string;
+  readonly copyExplanation: string;
+  readonly copyExplanationTip: string;
+  readonly explainWrapper: string;
+  readonly previousResults: string;
+  readonly insertedAt: string;
+  readonly resultHeading: string;
+  readonly resultPlaceholder: string;
+  readonly markDone: string;
+  readonly markChecked: string;
   readonly download: string;
+  /** The note over the toolbar when saved progress is stale or could not be written, and its buttons. */
+  readonly noteStale: string;
+  readonly noteUnsaved: string;
+  readonly downloadProgress: string;
+  readonly downloadOldProgress: string;
+  /** The demo switch: its name, tooltip, and the tooltip while it is locked. */
+  readonly demo: string;
+  readonly demoTip: string;
+  readonly demoLocked: string;
+  /** Debug mode: the switch's name and tooltip, and the instruction the copy buttons append (`{footer}` is the line to end replies with). */
+  readonly debug: string;
+  readonly debugTip: string;
+  readonly debugInstruction: string;
+  /** Reset: its name, its tooltip when saved work was found, and its confirmation. */
+  readonly reset: string;
+  readonly resetTip: string;
+  readonly resetConfirm: string;
+  readonly resetDownload: string;
+  readonly resetNow: string;
+  readonly resetCancel: string;
+  readonly discardProgress: string;
   readonly upload: string;
+  /** The toolbar's save and load of the progress file; the refusals of a file that does not fit (`{workflow}` is its title). */
+  readonly progressSave: string;
+  readonly progressLoad: string;
+  readonly refuseUnreadable: string;
+  readonly refuseOtherWorkflow: string;
+  readonly refuseChanged: string;
   /** A stage gate's label on its card, `{n}` its number, where the Slide gives none. */
   readonly gate: string;
-  /** The toolbar's accessible name. */
   readonly toolbar: string;
   readonly close: string;
   readonly copied: string;
@@ -62,6 +121,9 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly newTab: string;
+  /** Progress marks: job not started, job with its result in. */
+  readonly stateOpen: string;
+  readonly stateDone: string;
 }
 
 /** A Slide's words, laid over the visual's labels key by key. A Workflow has no words to override: it is written in one language. */
@@ -112,44 +174,20 @@ export interface DiagramSlots {
   readonly jobs?: Readonly<Record<string, JobSlot>>;
 }
 
-/** What the diagram part draws: the shown Workflow's stages. It reports a press on a stage's "Try it" button. */
+/** What the diagram part draws: the shown Workflow's stages. It reports a press on a stage's "Practice it" button. */
 export interface DiagramProps {
   readonly workflow: Workflow;
   readonly slots?: DiagramSlots;
   readonly words: UiWords;
   /** Where the stages show no "Try it" button: a readonly Preset. */
   readonly readonly: boolean;
-  readonly onOpenStage: (stageId: string) => void;
-}
-
-/** What the toolbar part draws: the Workflow pills, the Technical toggle, download and upload in one pill. */
-export interface ToolbarProps {
-  readonly workflow: Workflow;
-  /** Every authored Workflow, for the pills. */
-  readonly choices: readonly { readonly id: string; readonly title: string }[];
-  readonly level: Level;
-  /** The Preset's overrides of the control registry. */
-  readonly controls: ControlMap;
-  /** A readonly Preset: no Technical toggle, since nothing is tried. */
-  readonly readonly: boolean;
-  readonly uploadProblems: readonly string[];
-  readonly words: UiWords;
-  readonly onLevel: (level: Level) => void;
-  readonly onWorkflow: (workflowId: string) => void;
-  /** The text of a file the viewer chose; the parent validates it with `loadWorkflow`. */
-  readonly onUpload: (yaml: string) => void;
-}
-
-/** What the modal part draws: the open stage's view (null: closed). */
-export interface ModalProps {
-  readonly stage: StageView | null;
-  /** The pasted slot values by marker name, shared by every stage of the Workflow. */
-  readonly slotValues: Readonly<Record<string, string>>;
-  readonly words: UiWords;
-  readonly level: Level;
-  readonly onLevel: (level: Level) => void;
-  readonly onClose: () => void;
-  readonly onSlots: (values: Readonly<Record<string, string>>) => void;
+  /** A press on a stage's "Try it" button, or on a job card of the Jobs view, which names its job and, in a round, its round. */
+  readonly onOpenStage: (stageId: string, jobId?: string, round?: number) => void;
+  readonly view: View;
+  /** Rounds drawn per repeated stage, by stage id: the run model's count, else the demo cap. */
+  readonly rounds: Readonly<Record<string, number>>;
+  /** What the viewer has done, from the run model: given only once the run has work and the Preset is not readonly. Both views draw it. */
+  readonly run?: Run;
 }
 
 /** Everything the client parent is given by the server entry: plain and serializable. */
@@ -157,11 +195,14 @@ export interface HumanInTheLoopData {
   /** Every authored Workflow of the locale, with the Slide's words laid over the one `workflowId` names. */
   readonly workflows: readonly Workflow[];
   readonly workflowId: string;
+  /** The hash of each authored Workflow's English and German files together, by id: what a saved run is checked against. */
+  readonly hashes: Readonly<Record<string, string>>;
   readonly locale: 'en' | 'de';
   readonly words: UiWords;
   readonly controls: ControlMap;
   readonly level: Level;
-  /** A readonly Preset hides every "Try it" button and the Technical toggle; the diagram stays. */
+  readonly view: View;
+  /** A readonly Preset hides every "Try it" button and the Chat · CLI control; the diagram stays. */
   readonly readonly: boolean;
   /** The Slide's additions to the diagram. */
   readonly diagram?: DiagramSlots;

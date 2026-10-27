@@ -1,7 +1,6 @@
 /*
- * PROPOSAL (issue #281, spec #279): the new Workflow file schema, one language per file. Nothing imports this yet; it
- * replaces `workflow.types.ts` once Han approves the shape. The proposal YAML next to it is the Research stage of
- * summer-party written in this shape. Names carry a `Def` suffix or a distinct noun so they sit beside the old ones.
+ * The Workflow file schema, one language per file: what `loadWorkflow` returns once the shape and the meaning of a
+ * file hold. Names carry a `Def` suffix or a distinct noun so they sit beside the diagram model (`workflow.types.ts`).
  */
 
 /** The BRIEF move a stage makes, by its first letter. A move may repeat across stages and may be absent (Review). */
@@ -37,18 +36,26 @@ export type SlotMode = 'single' | 'multiple';
 /**
  * Markers a section's `text` may hold:
  * - `{{<slot id>}}` and `{{<slot id>_K}}`: a slot's value, or the Kth entry of a `multiple` slot;
- * - `{{n}}`: the index of a fan-out chat (1…fanOut);
+ * - `{{item}}`: in a repeated stage, the H3 section the round works on (also in the job's review `checks`);
+ * - `{{limit.<name>}}`: a number the job declares under `limits`, its full value or, in demo mode, its demo one;
+ * - `{{<slot id>_*}}`: every marker of a `multiple` slot, one per round, joined by a rule (the whole run, however many rounds);
  * - `{{template}}`: the task's handoff template;
  * and in `reviewer` sections only:
  * - `{{checks}}`: the task's tailored checks; `{{inputs}}`: the task's review slots, each under its label.
  * An unknown marker is a load problem.
  */
-export const BUILT_IN_MARKERS = ['n', 'template'] as const;
+export const BUILT_IN_MARKERS = ['item', 'template'] as const;
 export const REVIEWER_MARKERS = ['checks', 'inputs'] as const;
+
+/** The two modes of a run: demo mode keeps it short, a full run plays every round. */
+export const MODES = ['demo', 'full'] as const;
+export type Mode = (typeof MODES)[number];
 
 /** One part of a prompt: rendered as an H2, joined into one markdown prompt. */
 export interface SectionDef {
   readonly heading: string;
+  /** Absent: the section shows in both modes. Marked `demo`, it shows only in demo mode; `full`, only in a full run. */
+  readonly only?: Mode;
   /** Absent: no marker and no tooltip on this section. */
   readonly purpose?: Purpose;
   /** Overrides the top-level explanation of `purpose` for this section only. */
@@ -87,11 +94,17 @@ export interface ReviewDef {
 /** The right column of the popover, for the task in focus. */
 export interface DetailsDef {
   readonly why: string;
-  /** A markdown handoff of the task's template; a fan-out task has one per chat, in chat order. */
+  /** A markdown handoff of the task's template; a job of a repeated stage has one per demo round, in round order. */
   readonly example: string | readonly string[];
   readonly goodLooksLike: readonly string[];
   /** Ids from the `techniques` catalogue that the task's structure teaches; shown under "why it matters". */
   readonly techniques?: readonly string[];
+}
+
+/** A number a prompt names, such as how many questions a grill may ask: one value for a full run, one for demo mode. */
+export interface LimitDef {
+  readonly full: number;
+  readonly demo: number;
 }
 
 export interface TaskDef {
@@ -100,18 +113,25 @@ export interface TaskDef {
   readonly title: string;
   /** One short line under the title on the diagram: what the job does, so the diagram reads at rest. */
   readonly summary?: string;
-  /** The id this task hands on; a later slot with this id takes it. A fan-out `x` hands on `x_1` … `x_N`. */
-  readonly output: string;
+  /** The one-sentence goal of each step, shown as the stepper's title. `review` is required exactly when the job has a review. */
+  readonly goal: { readonly do: string; readonly review?: string };
+  /** Ids of jobs of the same stage that run first; a slot may take their outputs. Without it, slots take earlier stages' outputs only. */
+  readonly needs?: readonly string[];
+  /**
+   * The id this task hands on; a later slot with this id takes it. A job of a repeated stage hands on `x_1` … `x_N`, one per demo round. Absent only on
+   * the final job of the last stage, which the viewer marks done with a checkbox.
+   */
+  readonly output?: string;
   /** Key into `templates`; shared by the do prompt, the reviewer and the loader. */
   readonly template: string;
-  /** Each `id` names the `output` of a task in an earlier stage (or `x_K` of a fan-out). */
+  /** Each `id` names the `output` of a task in an earlier stage (or `x_K` of a repeated stage). */
   readonly slots: readonly SlotDef[];
-  /** N parallel chats from this one template; absent for a single chat. */
-  readonly fanOut?: number;
   /** One or two plain sentences on what the user does in the do step; shown above the slots in the popover. */
   readonly instructions?: string;
   readonly do: Readonly<Record<Runtime, readonly SectionDef[]>>;
   readonly review?: ReviewDef;
+  /** Named numbers the prompts and checks of this job take as `{{limit.<name>}}`: every demo cap sits here, next to its full value. */
+  readonly limits?: Readonly<Record<string, LimitDef>>;
   readonly details: DetailsDef;
 }
 
@@ -122,15 +142,29 @@ export interface CardDef {
   readonly status: string;
 }
 
+/** What a repeated stage repeats over, and how many rounds demo mode keeps. */
+export interface ForeachDef {
+  /** `<output>#<h2 slug>`: the output of an earlier job and the slug of an H2 of its template; each H3 under it is a round. */
+  readonly over: string;
+  /** Demo mode takes the first N H3s, in document order; the example results cover these rounds only. */
+  readonly demo: number;
+  /** What one round is called in this file's language (`epic`): the Detailed bracket reads "× each epic (2)". Absent: "round". */
+  readonly item?: string;
+}
+
 export interface StageDef {
   readonly id: string;
   readonly title: string;
   /** One line under the popover title. */
   readonly learningGoal: string;
+  /** The Stages card's text, at most eight words. */
+  readonly summary?: string;
+  /** The stage repeats: one round per H3 under an H2 of an earlier output; the jobs of the stage run once per round. */
+  readonly foreach?: ForeachDef;
   readonly move?: MoveLetter;
   readonly gate?: number;
   readonly card?: CardDef;
-  readonly tasks: readonly TaskDef[];
+  readonly jobs: readonly TaskDef[];
 }
 
 export interface ScenarioDef {
@@ -143,6 +177,8 @@ export interface ScenarioDef {
 export interface WorkflowFile {
   readonly id: string;
   readonly title: string;
+  /** One sentence, written for the use case picker: it sits under the title there. Optional: an uploaded file may lack it. */
+  readonly description?: string;
   readonly scenario: ScenarioDef;
   /** One explanation per purpose, written once; a section may override it with `explain`. */
   readonly purposes: Readonly<Record<Purpose, string>>;

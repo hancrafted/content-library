@@ -1,6 +1,8 @@
-# The one localStorage key the site may use (FE-001 §3). `PREFS_KEY` in
-# src/shared/lib/prefs.pure.ts must equal it; `archgate check` fails when they drift.
+# The two localStorage keys the site may use, one per kind (FE-001 §3).
+# `PREFS_KEY` and `PROGRESS_KEY` (src/shared/lib/) must equal them; `archgate check` fails when they drift.
 localStorageKey: 'hancrafted:prefs'
+# Hands-on progress: one entry per hands-on, e.g. a Workflow run.
+progressStorageKey: 'hancrafted:progress'
 
 # Visual style for the scroll transition between dark and light sections.
 # Available options:

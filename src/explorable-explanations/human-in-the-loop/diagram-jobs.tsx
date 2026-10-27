@@ -1,164 +1,186 @@
-import { Check, FlowStub, ParkedStub, Sparkle } from '@/shared/components/core-components/glyphs/glyphs';
+import { fillTemplate } from '@/shared/lib/template.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
-import { chatNames, splitParked } from './diagram-model.pure';
-import type { JobSlot, PopoverCopy } from './human-in-the-loop.types';
-import { NodePopover, type NodeCopy } from './node-popover.client';
-import type { GateCard, Job } from './workflow.types';
+import { ArrowDown, Connector } from './diagram-arrows';
+import { connectorInto, type Rounds } from './diagram-layout.pure';
+import type { DiagramProps, DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
+import { JobCard } from './job-card';
+import { MoveCircles } from './move-circles.client';
+import { GateBadge, gateLabelOf, Title } from './stage-card';
+import { Count } from './state-mark';
+import { orderedJobs } from './workflow-order.pure';
+import type { JobState, Run, StageRun } from './workflow-run.pure';
+import type { Stage, Workflow } from './workflow.types';
 
-/*
- * The job cards of the diagram, one per role, in the look the venue pipeline had. Static: a card opens a popover only
- * where the Slide gives it one.
+/**
+ * The Jobs view, the detailed one, with the viewer's run laid over it once the run has work: the same ordered list of stage columns as the Stages view, but each stage card holds its
+ * jobs as job cards in `needs` order, joined by arrows. A repeated stage is drawn once, its jobs inside a dashed
+ * bracket that says how many rounds it runs; a gated stage keeps its badge. A job card opens the
+ * stage's modal at that job. Once the run has work every job card says open, done or checked, each stage its count ("3/5"), and
+ * a repeated stage's bracket holds the rounds the run has, titled by their pasted H3s. All of it is read from the run
+ * model: the view never works out progress itself.
  */
-
-/** Every card of the diagram shares one quiet look; the AI's sparkle, not the frame, says the AI does the job. */
-const CARD = 'rounded-xl border border-border bg-card';
-
-const NODE_BUTTON =
-  'relative z-10 cursor-pointer outline-none transition-colors hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring';
-
-/** A job node: a button opening its popover where there is one, else a plain box of the same look. */
-function Node({ copy, className, children }: { copy?: NodeCopy; className: string; children: ReactNode }) {
-  if (!copy) return <span className={className}>{children}</span>;
+export function DiagramJobs(props: {
+  run?: Run;
+  workflow: Workflow;
+  slots?: DiagramSlots;
+  words: UiWords;
+  readonly: boolean;
+  rounds: Rounds;
+  onOpenStage: DiagramProps['onOpenStage'];
+}) {
+  const { workflow, slots = {} } = props;
+  const ctx: Context = { ...props, slots };
   return (
-    <NodePopover copy={copy} className={cn(NODE_BUTTON, className)}>
-      {children}
-    </NodePopover>
+    <div className="@container">
+      <div data-scroller="" className="@2xl:overflow-x-auto @2xl:overscroll-x-contain @2xl:pb-3">
+        <ol
+          data-part="diagram"
+          data-view="jobs"
+          aria-label={slots.label ?? workflow.title}
+          className="flex flex-col gap-6 @2xl:flex-row @2xl:items-stretch @2xl:gap-6"
+        >
+          {workflow.stages.map((stage, index) => (
+            <StageColumn key={stage.id} ctx={ctx} stage={stage} previous={workflow.stages[index - 1]} />
+          ))}
+        </ol>
+      </div>
+    </div>
   );
 }
 
-/** A popover's copy with the name of the stage it explains as its title. */
-export const popoverOf = (copy: PopoverCopy | undefined, stageName: string): NodeCopy | undefined =>
-  copy && { title: stageName, ...copy };
-
-export interface JobViewProps {
-  readonly job: Job;
-  readonly slot: JobSlot;
-  /** The name of the stage the job sits in: the title of its popover. */
-  readonly stageName: string;
-  /** The word for this job's stage gate; absent when the stage has none. */
-  readonly gateLabel?: string;
-  readonly words: { readonly checked: string };
-  /** The sign-off card of the job's stage, drawn on its focal job. */
-  readonly card?: GateCard;
+interface Context {
+  run?: Run;
+  workflow: Workflow;
+  slots: DiagramSlots;
+  words: UiWords;
+  readonly: boolean;
+  rounds: Rounds;
+  onOpenStage: DiagramProps['onOpenStage'];
 }
 
-const PIECE = 'flex h-full min-w-0 flex-1 items-center rounded-full px-3 text-left text-caption';
-
-/** The task's pieces: the one taken forward in the middle, the parked ones grey, each ending in a stub. */
-export function PieceJobs({ job, slot, stageName }: JobViewProps) {
-  const { before, after } = splitParked(job.parked ?? []);
-  const piece = (label: string, parked: boolean) => {
-    const tone = parked
-      ? 'bg-muted/50 text-muted-foreground'
-      : 'border border-foreground bg-card font-semibold text-foreground';
-    return (
-      <li key={`${parked}-${label}`} className="flex h-9 items-center gap-1.5">
-        <Node copy={popoverOf(slot.popover, stageName)} className={cn(PIECE, tone)}>
-          {label}
-        </Node>
-        {parked ? <ParkedStub /> : <FlowStub />}
-      </li>
-    );
-  };
-  return [...before.map((l) => piece(l, true)), piece(job.title, false), ...after.map((l) => piece(l, true))];
-}
-
-/** A job the AI does, as a card: the sparkle and its title, then its detail and, where it is gated, the gate. */
-export function AiJob({ job, slot, gateLabel }: JobViewProps) {
-  const detail = slot.detail ?? job.detail;
+function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; previous: Stage | undefined }) {
+  const slot = ctx.slots.stages?.[stage.id] ?? {};
+  const into = previous && connectorInto(previous, stage, {});
   return (
-    <>
-      <li className={cn('flex flex-col gap-1 p-3', CARD)}>
-        <span className="flex items-center gap-1.5 text-caption font-semibold">
-          <Sparkle className="size-3.5 shrink-0" />
-          {job.title}
-        </span>
-        {detail && <span className="text-caption text-muted-foreground">{detail}</span>}
-        {gateLabel && (
-          <span className="mt-1 inline-flex w-fit items-center gap-1 rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground">
-            {gateLabel}
-            {slot.marker && <span className="relative z-10">{slot.marker}</span>}
-          </span>
-        )}
-      </li>
-      {slot.after && <li className="relative z-10 flex justify-center">{slot.after}</li>}
-    </>
-  );
-}
-
-function CardLines({ lines }: { readonly lines: readonly string[] }) {
-  if (lines.length === 0) return null;
-  return (
-    <ul className="mt-2 flex flex-col gap-1 border-t border-border pt-2 text-caption text-muted-foreground">
-      {lines.map((line) => (
-        <li key={line}>{line}</li>
-      ))}
-    </ul>
-  );
-}
-
-/** The focal job as the stage's card, the one focal point: its gate, its lines, its status. */
-export function FocalJob({ job, slot, gateLabel, card }: JobViewProps) {
-  const { label, lines, status } = card ?? { label: job.title, lines: [], status: '' };
-  const detail = slot.detail ?? job.detail;
-  return (
-    <li className={cn('p-3 shadow-sm', CARD)}>
-      {gateLabel && (
-        <p className="w-fit rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground">{gateLabel}</p>
-      )}
-      <p className="mt-1.5 text-caption font-semibold">{label}</p>
-      {detail && <p className="text-caption text-muted-foreground">{detail}</p>}
-      <CardLines lines={lines} />
-      <div className="mt-2 flex flex-wrap items-center gap-1.5">
-        <p className="inline-flex items-center gap-1 text-caption font-medium text-foreground">
-          <Check className="size-3.5 shrink-0" />
-          {status}
-        </p>
-        {slot.marker && <span className="relative z-10">{slot.marker}</span>}
+    <li {...slot.target} className="focus-group__item relative flex min-w-0 flex-col gap-1 @2xl:flex-[1_0_14rem]">
+      {previous && <ArrowDown />}
+      <div className="relative flex flex-1 flex-col justify-start rounded-2xl bg-muted p-3">
+        {into && <Connector kind={into} />}
+        <StageCard ctx={ctx} stage={stage} slot={slot} />
       </div>
     </li>
   );
 }
 
-/** The chats of a fan-out: one card height each, so with the column's gap they stand one fan pitch apart. */
-const CHAT_PILL = 'flex h-12 w-full items-center justify-between gap-1 px-3 text-caption font-semibold';
-
-/**
- * The parallel chats of a fanned-out job, each ticked where the job is checked against its criteria. The job's summary
- * hangs under the last chat, out of the flow, so the chats keep standing on the fan's branches.
- */
-export function ChatJobs({ job, slot, stageName, words }: JobViewProps) {
-  const names = chatNames(job);
-  const detail = slot.detail ?? job.detail;
-  return names.map((name, at) => (
-    <li key={name} className="relative">
-      <Node copy={popoverOf(slot.popover, stageName)} className={cn(CHAT_PILL, CARD)}>
-        <span className="min-w-0 truncate">{name}</span>
-        {job.reviewed && (
-          <span className="flex items-center text-muted-foreground">
-            <Check className="size-4" />
-            <span className="sr-only">{words.checked}</span>
-          </span>
-        )}
-      </Node>
-      {detail && at === names.length - 1 && (
-        <p className="absolute inset-x-1 top-full mt-2 text-caption text-muted-foreground">{detail}</p>
+function StageCard({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: StageSlot }) {
+  const { words } = ctx;
+  const gate = gateLabelOf(stage, slot, words);
+  const run = runOfStage(ctx, stage);
+  return (
+    <div
+      data-stage-card=""
+      className={cn('flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3', gate && 'shadow-sm')}
+    >
+      <Title stage={stage} slot={slot} />
+      {ctx.slots.initials === true && stage.moves.length > 0 && (
+        <div className="relative z-10">
+          <MoveCircles moves={stage.moves} label={words.moveLabel} />
+        </div>
       )}
-    </li>
-  ));
+      {stage.summary && (
+        <p data-summary="" className="text-caption text-muted-foreground">
+          {stage.summary}
+        </p>
+      )}
+      {gate && <GateBadge gate={gate} />}
+      {run && <Count run={run} word={words.stateDone} />}
+      <Jobs ctx={ctx} stage={stage} />
+    </div>
+  );
 }
 
-/** What comes out: the document handed on. */
-export function DeliverableJob({ job, slot }: JobViewProps) {
-  const detail = slot.detail ?? job.detail;
+const runOfStage = (ctx: Context, stage: Stage): StageRun | undefined =>
+  ctx.run?.stages.find((each) => each.id === stage.id);
+
+/** The job cards of one list: a stage's jobs, or one round's. `states` is what the run says; none while the run has no work. */
+function Cards(props: {
+  ctx: Context;
+  stage: Stage;
+  states: ReadonlyMap<string, JobState> | undefined;
+  round?: number;
+}) {
+  const { ctx, stage, states, round } = props;
+  const label = ctx.slots.stages?.[stage.id]?.jobsLabel ?? ctx.slots.jobsLabel;
   return (
-    <li className={cn('relative p-3', CARD)}>
-      <svg viewBox="0 0 80 40" className="h-8 w-full" aria-hidden="true">
-        <path d="M2 6h60 M2 18h76 M2 30h48" className="fill-none stroke-border" strokeWidth="3" strokeLinecap="round" />
-      </svg>
-      <p className="mt-2 text-caption font-semibold">{job.title}</p>
-      {detail && <p className="text-caption text-muted-foreground">{detail}</p>}
-    </li>
+    <ol aria-label={label?.replace('{stage}', stage.name)} className="flex flex-col gap-4">
+      {orderedJobs(stage.jobs).map((job, at) => (
+        <JobCard
+          key={job.id}
+          stage={stage}
+          job={job}
+          slot={ctx.slots.jobs?.[job.id] ?? {}}
+          words={ctx.words}
+          joined={at > 0}
+          state={ctx.run ? (states?.get(job.id) ?? 'open') : undefined}
+          round={round}
+          onOpen={ctx.readonly ? undefined : () => ctx.onOpenStage(stage.id, job.id, round)}
+        />
+      ))}
+    </ol>
+  );
+}
+
+const statesOf = (jobs: readonly { id: string; state: JobState }[]) =>
+  new Map(jobs.map((each) => [each.id, each.state]));
+
+/** The viewer's rounds, one block each, titled by the H3 they work on. */
+function Rounds({ ctx, stage, run }: { ctx: Context; stage: Stage; run: StageRun }) {
+  return (
+    <ol className="flex flex-col gap-3">
+      {run.rounds.map((round) => (
+        <li key={round.number} data-round={round.number} className="flex flex-col gap-1.5">
+          <p data-round-title="" className="text-caption font-semibold text-muted-foreground">
+            {round.title}
+          </p>
+          <Cards ctx={ctx} stage={stage} states={statesOf(round.jobs)} round={round.number} />
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/** How many rounds the bracket names: the run's, else the layout's count, else the stage's demo cap. */
+const roundCount = (ctx: Context, stage: Stage, held: StageRun | undefined): number =>
+  held?.rounds.length ?? ctx.rounds[stage.id] ?? stage.foreach?.demo ?? 0;
+
+/** The bracket's words: "× each epic (2)", with the stage's own word for its item, else "round". */
+const bracketLabel = (ctx: Context, stage: Stage, count: number): string =>
+  fillTemplate(ctx.words.repeats, { item: stage.foreach?.item ?? ctx.words.round, n: count });
+
+function Jobs({ ctx, stage }: { ctx: Context; stage: Stage }) {
+  const run = runOfStage(ctx, stage);
+  const cards = <Cards ctx={ctx} stage={stage} states={run && statesOf(run.jobs)} />;
+  if (!stage.foreach) return <div className="mt-1">{cards}</div>;
+  const held = run && run.rounds.length > 0 ? run : undefined;
+  return (
+    <Bracket label={bracketLabel(ctx, stage, roundCount(ctx, stage, held))}>
+      {held ? <Rounds ctx={ctx} stage={stage} run={held} /> : cards}
+    </Bracket>
+  );
+}
+
+/** The dashed bracket round a repeated stage's jobs, labelled with how many rounds it runs. */
+function Bracket({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div data-bracket="" className="mt-2 rounded-lg border border-dashed border-border p-2 pt-0">
+      <p
+        data-bracket-label=""
+        className="-mt-2.5 mb-1 w-fit bg-card px-1 text-caption font-medium text-muted-foreground"
+      >
+        {label}
+      </p>
+      {children}
+    </div>
   );
 }

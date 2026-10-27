@@ -33,12 +33,3 @@ export function ParkedStub({ className }: { className?: string }) {
     </svg>
   );
 }
-
-/** The solid line on from the piece taken forward. */
-export function FlowStub({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 8" className={cn('h-2 w-6 shrink-0', className)} aria-hidden="true">
-      <path d="M0 4h24" className="fill-none stroke-foreground" strokeWidth="1.5" />
-    </svg>
-  );
-}

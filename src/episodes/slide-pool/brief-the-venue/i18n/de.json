@@ -8,63 +8,49 @@
     "out": "Raus:"
   },
   "stages": {
-    "party": {
+    "plan": {
       "popover": {
-        "in": "die ganze Feier.",
-        "out": "fünf Teile, nur die Location geht weiter."
+        "in": "die ganze Aufgabe.",
+        "out": "ein kurzer Plan, in Epics geteilt."
       }
     },
-    "interview": {
+    "epics": {
       "popover": {
-        "in": "Deine grobe Idee.",
-        "out": "die Fragen, an die Du nicht gedacht hast, beantwortet."
+        "in": "ein Epic.",
+        "out": "seine Fragen beantwortet und eine Spezifikation geschrieben."
       }
     },
     "requirements": {
       "popover": {
-        "in": "Deine Antworten.",
-        "out": "eine Anforderungskarte, die Du freigibst."
+        "in": "alle Epic-Spezifikationen.",
+        "out": "ein Anforderungsdokument und die Tickets, die Du freigibst."
       }
     },
-    "tickets": {
-      "popover": {
-        "in": "Deine freigegebene Anforderungskarte.",
-        "out": "ein Ticket pro Location-Typ, jedes mit seinen Muss-Kriterien."
-      }
-    },
-    "research": {
+    "execute": {
       "popover": {
         "in": "ein Ticket.",
-        "out": "eine Location, gegen jedes Kriterium geprüft."
+        "out": "sein Ergebnis, mit einer Zahlentabelle."
       }
     },
-    "compare": {
+    "aggregate": {
       "popover": {
-        "in": "drei geprüfte Locations.",
-        "out": "eine Rangfolge, gemessen an der Karte."
+        "in": "alle Ticket-Ergebnisse.",
+        "out": "ein Bericht mit Risiken und offenen Entscheidungen."
       }
     },
-    "recommendation": {
+    "review": {
       "popover": {
-        "in": "der Vergleich.",
-        "out": "der Location-Plan für Deine Chefin."
+        "in": "der Bericht.",
+        "out": "eine Seite, die Du freigibst oder zurückgibst."
       }
     }
   },
   "jobs": {
-    "interview": {
+    "scope": {
       "detail": "3 Fragen,",
       "forgot": "<marker>1 vergessen</marker>"
     },
-    "research": {
-      "checked": "Gegen die Karte geprüft"
-    },
-    "compare": {
-      "gate": "Prüfpunkt 2"
-    }
-  },
-  "card": {
-    "gate": "Prüfpunkt 1"
+    "checked": "Von einem zweiten Chat geprüft"
   },
   "legend": {
     "label": "Legende",

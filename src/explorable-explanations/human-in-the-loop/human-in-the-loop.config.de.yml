@@ -2,10 +2,63 @@
 ui:
   workflow: Anwendungsfall
   toolbar: Ablauf-Steuerung
-  technical: Technisch
-  technicalTip: 'Technisch: zeigt die einmalige Einrichtung und die /Skill-Befehle'
+  view: Ansicht des Diagramms
+  viewTip: 'Wähle, wie das Diagramm den Ablauf zeigt'
+  viewStages: Phasen
+  viewStagesTip: 'Die Übersicht: eine Karte pro Phase'
+  viewJobs: Aufgaben
+  viewJobsTip: 'Die Detailansicht: jede Aufgabe jeder Phase'
+  checked: geprüft
+  stateOpen: offen
+  stateDone: erledigt
+  repeats: '× pro {item} ({n})'
+  round: 'Runde'
+  tryJob: '{job} in {stage} öffnen'
+  cli: CLI
+  cliTip: 'CLI: zeigt die Einrichtung und die /Skill-Befehle'
+  context: Hilfe
+  intro: 'Gehe die Schritte der Reihe nach durch: Kopiere jeden Prompt in einen neuen KI-Chat und füge das Ergebnis hier wieder ein.'
+  stepContext: 'Kontext angeben'
+  stepContextInfo: 'Der Prompt unten braucht Ergebnisse früherer Aufgaben oder zusätzliche Eingaben. Sie werden hier eingetragen, wenn du das Ergebnis in einem früheren Schritt eingefügt hast. Jedes Feld enthält schon ein Beispiel oder dein früheres Ergebnis; ersetze es gern durch deinen eigenen Text.'
+  stepDo: 'Prompt in einem KI-Chat ausführen, dann das Ergebnis hier einfügen'
+  stepDoInfo: 'Führe den Prompt in einer neuen Unterhaltung aus und füge das Ergebnis hier ein. Schließe die Unterhaltung nicht.'
+  stepCheck: 'Ergebnis prüfen'
+  stepCheckInfo: 'Prüfe das Ergebnis in einer neuen Unterhaltung. Fällt es durch, füge das Feedback in die Unterhaltung des vorherigen Schritts ein und aktualisiere das Ergebnis. Wiederhole das, bis alle Prüfungen bestehen.'
+  copyExplanation: 'Erklär-Prompt kopieren'
+  copyExplanationTip: 'Füge diesen Prompt in einen Chat ein: Die KI erklärt den Prompt, warum er so gebaut ist und was du verbessern kannst, und bietet dann an, dich durch die Übung zu führen.'
+  explainWrapper: "Du bist mein Coach für Prompt Engineering, und ich lerne, Projekte mit KI zu planen. Unten steht der Prompt eines Schritts aus einer angeleiteten Übung. Führe ihn nicht aus: Erkläre ihn mir und begleite mich dann durch die Übung.\n\nPrompt:\n\"\"\"\n{prompt}\n\"\"\"\n\nIn einfachen Worten, kurz und konkret, mit Zitat der Zeilen, die du meinst:\n1. Was dieser Schritt tut und warum er für das ganze Projekt wichtig ist.\n2. Wofür jeder Teil des Prompts da ist.\n3. Welche Techniken er nutzt (Rolle, Kontext, Abgrenzung, Schritte, Ausgabeformat) und warum sie helfen.\n4. Wo er schwach ist und wie ich ihn an mein eigenes Projekt anpassen könnte.\nBiete mir danach an, mich durch die Übung zu führen: Schlag drei Fragen vor, die ich dir als Nächstes stellen könnte, etwa \"Erklär mir, was wir gerade gemacht haben\", \"Warum ist dieser Schritt wichtig?\" und \"Was wäre bei meinem eigenen Projekt anders?\", und warte auf meine Antwort."
+  stepN: 'Schritt {n}: {title}'
+  previousResults: Frühere Ergebnisse
+  insertedAt: 'Wird im Prompt unter "{section}" eingefügt'
+  resultHeading: Ergebnis
+  markDone: Diesen Schritt als erledigt markieren
+  markChecked: Ich habe dieses Ergebnis geprüft
+  resultPlaceholder: Ergebnis hier einfügen, um es für den nächsten Schritt zu speichern
+  contextTip: 'Hilfe: zeigt, was in jedem Schritt zu tun ist'
   download: Diesen Ablauf herunterladen
   upload: Eigenen Ablauf hochladen
+  progressSave: 'Fortschritt in eine Datei sichern'
+  progressLoad: 'Fortschritt aus einer Datei laden'
+  refuseUnreadable: 'Diese Datei ist keine Fortschrittsdatei.'
+  refuseOtherWorkflow: 'Diese Datei enthält den Fortschritt eines anderen Ablaufs, nicht von {workflow}.'
+  refuseChanged: '{workflow} hat sich geändert, seit diese Datei erstellt wurde, daher passt ihr Fortschritt nicht.'
+  noteStale: 'Dieser Ablauf hat sich geändert, seit dein Fortschritt gespeichert wurde, daher beginnst du neu. Dein alter Fortschritt bleibt erhalten, bis du entscheidest.'
+  noteUnsaved: 'Dein Fortschritt konnte in diesem Browser nicht gespeichert werden. Lade ihn herunter, um ihn zu behalten.'
+  downloadProgress: Fortschritt herunterladen
+  downloadOldProgress: Alten Fortschritt herunterladen
+  discardProgress: Verwerfen
+  demo: Demo-Modus
+  demoTip: 'Der Demo-Modus hält den Durchlauf kurz und einfach: nur die ersten Epics und Tickets, kürzere Rückfragen und die einfachste Option, wo eine Wahl am Ziel nichts ändert.'
+  demoLocked: Zurücksetzen, um zu ändern
+  debug: Debug
+  debugTip: 'Debug-Modus: Prompt kopieren und Erklär-Prompt kopieren fügen eine Anweisung an, damit die KI jede Antwort mit einer Fußzeile beendet, die Workflow, Stage, Job und mehr nennt. Füge eine Antwort samt Fußzeile als Feedback wieder ein.'
+  debugInstruction: "Debug-Modus: Beende JEDE Antwort, die du in diesem Chat schreibst, auch die erste, mit der Zeile unten, unverändert, allein in einem Codeblock, als allerletztes der Antwort. Ich füge deine Antwort damit als Feedback wieder ein.\n\n```\n{footer}\n```"
+  reset: Zurücksetzen
+  resetTip: 'Frühere Arbeit wurde hier oder in einer anderen Episode gefunden. Zurücksetzen beginnt von vorn.'
+  resetConfirm: 'Zurücksetzen löscht die eingefügten Ergebnisse dieses Workflows, hier und in jeder Episode. Lade sie vorher herunter, um sie zu behalten.'
+  resetDownload: Fortschritt herunterladen
+  resetNow: Jetzt zurücksetzen
+  resetCancel: Abbrechen
   close: Schließen
   copied: Kopiert
   gate: 'Freigabe {n}'

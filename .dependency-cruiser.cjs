@@ -259,13 +259,20 @@ module.exports = {
       },
     },
     {
-      name: 'explorable-explanation-client-reaches-only-own-folder-core-hooks-and-lib',
+      name: 'explorable-explanation-client-reaches-only-own-folder-core-ui-hooks-and-lib',
       severity: 'error',
       comment:
-        "An Explorable explanation's *.client.tsx leaf runs in the browser. It sits in its explanation's folder (src/explorable-explanations/<name>/) and reaches only that folder, src/shared/components/core-components/, src/shared/hooks/ and src/shared/lib/ — never another explanation, a slide-shared part, the UI kit, a Slide or the Slide master (FE-006 §5, FE-007 §5.2).",
+        "An Explorable explanation's *.client.tsx leaf runs in the browser. It sits in its explanation's folder (src/explorable-explanations/<name>/) and reaches only that folder, src/shared/components/core-components/, the UI kit (src/shared/components/ui/), src/shared/hooks/ and src/shared/lib/ — never another explanation, a slide-shared part, a Slide or the Slide master. The UI kit imports no Slide, Episode or explanation, so the leaf still travels with its explanation (FE-006 §5, FE-007 §5.2).",
       from: { path: EXPLANATION_CLIENT },
       to: {
-        pathNot: ['^src/explorable-explanations/$1/', CORE_COMPONENTS, SHARED_HOOKS, SHARED_LIB, 'node_modules'],
+        pathNot: [
+          '^src/explorable-explanations/$1/',
+          CORE_COMPONENTS,
+          SHARED_UI,
+          SHARED_HOOKS,
+          SHARED_LIB,
+          'node_modules',
+        ],
       },
     },
     {

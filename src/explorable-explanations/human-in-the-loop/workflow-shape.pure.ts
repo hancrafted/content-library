@@ -1,4 +1,4 @@
-import { PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
+import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
 
 /*
  * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type
@@ -23,56 +23,64 @@ const list = (of: Spec, min = 0): Spec => ({ t: 'list', of, min });
 const obj = (fields: Record<string, Spec>, optional: readonly string[] = []): Spec => ({ t: 'obj', fields, optional });
 
 const ids = list(str, 1);
-const section = obj({ heading: str, purpose: enumOf(PURPOSES), explain: str, techniques: ids, text: str }, [
-  'purpose',
-  'explain',
-  'techniques',
-]);
+const section = obj(
+  { heading: str, only: enumOf(MODES), purpose: enumOf(PURPOSES), explain: str, techniques: ids, text: str },
+  ['only', 'purpose', 'explain', 'techniques'],
+);
 const technique = obj({ id: str, tier: enumOf(TIERS), title: str, explain: str });
 const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool }, [
   'sample',
   'free',
 ]);
+const limit = obj({ full: int, demo: int });
 const task = obj(
   {
     id: str,
     title: str,
     summary: str,
+    goal: obj({ do: str, review: str }, ['review']),
+    needs: ids,
     output: str,
     template: str,
     slots: list(slot),
-    fanOut: int,
     instructions: str,
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
+    limits: { t: 'rec', of: limit },
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
   },
-  ['summary', 'fanOut', 'review', 'instructions'],
+  ['summary', 'needs', 'output', 'review', 'instructions', 'limits'],
 );
 const stage = obj(
   {
     id: str,
     title: str,
     learningGoal: str,
+    summary: str,
+    foreach: obj({ over: str, demo: int, item: str }, ['item']),
     move: enumOf(['B', 'R', 'I', 'E', 'F']),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),
-    tasks: list(task, 1),
+    jobs: list(task, 1),
   },
-  ['move', 'gate', 'card'],
+  ['summary', 'foreach', 'move', 'gate', 'card'],
 );
 
 /** The Spec of a whole Workflow file. */
-export const FILE_SPEC: Spec = obj({
-  id: str,
-  title: str,
-  scenario: obj({ summary: str, facts: list(str, 1) }),
-  purposes: { t: 'rec', of: str, keys: PURPOSES },
-  techniques: list(technique, 1),
-  reviewer: obj({ sections: list(section, 1) }),
-  templates: { t: 'rec', of: str },
-  stages: list(stage, 1),
-});
+export const FILE_SPEC: Spec = obj(
+  {
+    id: str,
+    title: str,
+    description: str,
+    scenario: obj({ summary: str, facts: list(str, 1) }),
+    purposes: { t: 'rec', of: str, keys: PURPOSES },
+    techniques: list(technique, 1),
+    reviewer: obj({ sections: list(section, 1) }),
+    templates: { t: 'rec', of: str },
+    stages: list(stage, 1),
+  },
+  ['description'],
+);
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);

@@ -1,93 +1,69 @@
 'use client';
 
-import { IconButton } from '@/shared/components/core-components/icon-button/icon-button.client';
-import { Tip } from '@/shared/components/core-components/tip/tip.client';
-import { useMotion } from '@/shared/hooks/use-motion';
-import { ChevronDown, Code, Download, Upload } from 'lucide-react';
-import { useId, type ChangeEvent } from 'react';
-import styles from './human-in-the-loop.module.css';
-import type { ToolbarProps } from './human-in-the-loop.types';
-import { offers } from './toolbar-controls.pure';
+import { Button } from '@/shared/components/ui/button';
+import { Separator } from '@/shared/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
+import { cn } from '@/shared/lib/utils';
+import { Download, FileDown, FileUp, Upload } from 'lucide-react';
+import { useId, type ChangeEvent, type ReactNode } from 'react';
+import { DebugToggle } from './debug-toggle.client';
+import { DemoToggle, Reset, ResetConfirm, useDemoProps } from './demo-controls.client';
+import { LevelControl } from './level-control.client';
+import type { ToolbarProps } from './part-props.types';
+import { ProgressNote } from './progress-note.client';
+import { saveFile } from './save-file';
+import { TOOLBAR_PILL, TOOLBAR_ROW, ToolButton } from './tool-button.client';
+import { offers, type ControlId } from './toolbar-controls.pure';
+import { hasPicker, Picker } from './use-case-picker.client';
+import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
- * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a native select), a
- * separator, then icon buttons (Technical `</>`, download, upload), each with a tooltip. The control registry says what shows; a readonly Preset also drops
- * the Technical toggle. The parent validates an upload; this part only reads the chosen file.
+ * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a shadcn select whose
+ * options carry a muted description), a separator, then the controls in order: view (Stages · Jobs), the `</>` CLI
+ * toggle, the Demo mode switch, the Debug toggle where it is available, save and load progress, download and upload of
+ * the Workflow file, each icon with a tooltip. Save progress and Reset show once the run has work; Load always does.
+ * Reset sits apart after the pill, as in the popover. The control registry says what shows; a readonly Preset also
+ * drops the `</>` toggle, Demo mode, Debug and Reset. Under the pill sit Reset's confirmation and the notes. The parent
+ * validates an upload; this part only reads the chosen file.
  */
 
-function download(workflow: ToolbarProps['workflow']) {
-  const { name, text, type } = workflowFile(workflow);
-  const url = URL.createObjectURL(new Blob([text], { type }));
-  const link = Object.assign(document.createElement('a'), { download: name });
-  link.setAttribute('href', url);
-  link.click();
-  URL.revokeObjectURL(url);
+const UPLOAD_BUTTON = 'relative size-9 rounded-full focus-within:ring-[3px] focus-within:ring-ring/50';
+
+interface FileButtonProps {
+  readonly control: string;
+  readonly label: string;
+  readonly describedBy?: string;
+  readonly onText: (text: string) => void;
+  readonly children: ReactNode;
 }
 
-/** The picker's options: the Workflows, after an uploaded one that is none of them. */
-function Options({ bar, known }: { readonly bar: ToolbarProps; readonly known: boolean }) {
-  return (
-    <>
-      {known ? null : (
-        <option value={bar.workflow.id} disabled>
-          {bar.workflow.title}
-        </option>
-      )}
-      {bar.choices.map((c) => (
-        <option key={c.id} value={c.id} data-workflow={c.id}>
-          {c.title}
-        </option>
-      ))}
-    </>
-  );
-}
-
-/** The use case picker: a visible label and a native select of the Workflows; an uploaded one joins as its own option. */
-function Picker({ bar }: { readonly bar: ToolbarProps }) {
-  const id = useId();
-  if (!offers(bar.controls, 'picker') || bar.choices.length < 2) return null;
-  const known = bar.choices.some((c) => c.id === bar.workflow.id);
-  return (
-    <div className={styles.picker} data-control="picker">
-      <label htmlFor={id} className="text-caption font-medium">
-        {bar.words.workflow}:
-      </label>
-      <span className={styles.select}>
-        <select
-          id={id}
-          value={bar.workflow.id}
-          onChange={(event) => bar.onWorkflow(event.target.value)}
-          className="text-caption font-semibold"
-        >
-          <Options bar={bar} known={known} />
-        </select>
-        <ChevronDown aria-hidden="true" />
-      </span>
-    </div>
-  );
-}
-
-function UploadButton({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
-  const motion = useMotion();
+/** An icon button that opens the file chooser and hands the text of the chosen file on. */
+function FileButton({ control, label, describedBy, onText, children }: FileButtonProps) {
   const readChosenFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) bar.onUpload(await file.text());
+    if (file) onText(await file.text());
     event.target.value = '';
   };
   return (
-    <Tip text={bar.words.upload} align="end">
-      <label className={`${styles.icon} ${styles.upload}`} data-control="upload" {...motion}>
-        <Upload aria-hidden="true" />
-        <input
-          type="file"
-          accept=".yml,.yaml,application/x-yaml,text/yaml"
-          aria-label={bar.words.upload}
-          aria-describedby={describedBy}
-          onChange={readChosenFile}
-        />
-      </label>
-    </Tip>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button asChild variant="ghost" size="icon" className={UPLOAD_BUTTON}>
+          <label data-control={control}>
+            {children}
+            <input
+              type="file"
+              accept=".yml,.yaml,application/x-yaml,text/yaml"
+              aria-label={label}
+              aria-describedby={describedBy}
+              onChange={readChosenFile}
+              className="absolute inset-0 size-full cursor-pointer opacity-0"
+            />
+          </label>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -101,67 +77,128 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: Technical, download, upload. */
-function Icons({ bar }: { readonly bar: ToolbarProps }) {
-  const { controls, readonly, words, level } = bar;
+/**
+ * The progress file's save and load: the run of an authored Workflow only, so none while an uploaded one is shown.
+ * Save waits for work to save, as Reset does; Load always shows, so a new device can restore a run.
+ */
+function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
+  const { controls, words, progress } = bar;
+  if (!progress) return null;
   return (
     <>
-      {offers(controls, 'level', readonly) && (
-        <IconButton
-          className={styles.icon}
-          label={words.technical}
-          tip={words.technicalTip}
-          data-control="level"
-          aria-pressed={level === 'technical'}
-          onClick={() => bar.onLevel(level === 'technical' ? 'simple' : 'technical')}
+      {offers(controls, 'progressDownload', bar.readonly) && bar.canSave && (
+        <ToolButton
+          label={words.progressSave}
+          data-control="progressDownload"
+          variant="ghost"
+          onClick={progress.onDownload}
         >
-          <Code aria-hidden="true" />
-        </IconButton>
+          <FileDown aria-hidden="true" />
+        </ToolButton>
       )}
-      {offers(controls, 'download') && (
-        <IconButton
-          className={styles.icon}
-          label={words.download}
-          align="end"
-          data-control="download"
-          onClick={() => download(bar.workflow)}
+      {offers(controls, 'progressUpload', bar.readonly) && (
+        <FileButton
+          control="progressUpload"
+          label={words.progressLoad}
+          describedBy={describedBy}
+          onText={progress.onUpload}
         >
-          <Download aria-hidden="true" />
-        </IconButton>
+          <FileUp aria-hidden="true" />
+        </FileButton>
       )}
     </>
   );
 }
 
-const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
-const hasIcons = (bar: ToolbarProps) =>
-  offers(bar.controls, 'level', bar.readonly) || offers(bar.controls, 'download') || offers(bar.controls, 'upload');
+/** The Workflow file's own download and upload, after the progress file's. */
+function WorkflowFileIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
+  const { controls, words } = bar;
+  return (
+    <>
+      {offers(controls, 'download') && (
+        <ToolButton
+          label={words.download}
+          data-control="download"
+          variant="ghost"
+          onClick={() => saveFile(workflowFile(bar.workflow))}
+        >
+          <Download aria-hidden="true" />
+        </ToolButton>
+      )}
+      {offers(controls, 'upload') && (
+        <FileButton control="upload" label={words.upload} describedBy={describedBy} onText={bar.onUpload}>
+          <Upload aria-hidden="true" />
+        </FileButton>
+      )}
+    </>
+  );
+}
 
-function UploadProblems({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
-  return bar.uploadProblems.length > 0 ? <Problems id={id} problems={bar.uploadProblems} /> : null;
+/** The icon buttons the registry and the Preset allow, in order: view, `</>`, Demo mode, Debug, progress save and load, download, upload. */
+function Icons({
+  bar,
+  describedBy,
+  demo,
+}: {
+  readonly bar: ToolbarProps;
+  readonly describedBy?: string;
+  readonly demo: ReactNode;
+}) {
+  const { controls, readonly, words, level } = bar;
+  return (
+    <>
+      {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
+      {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
+      {demo}
+      <DebugToggle words={words} debug={bar.debug} onDebug={bar.onDebug} />
+      <ProgressIcons bar={bar} describedBy={describedBy} />
+      <WorkflowFileIcons bar={bar} describedBy={describedBy} />
+    </>
+  );
+}
+
+const ICON_CONTROLS: readonly ControlId[] = ['view', 'level', 'demo', 'reset', 'download', 'upload'];
+const PROGRESS_CONTROLS: readonly ControlId[] = ['progressDownload', 'progressUpload'];
+const hasIcons = (bar: ToolbarProps) =>
+  bar.debug.show ||
+  ICON_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)) ||
+  (bar.progress !== null && PROGRESS_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)));
+
+/** What sits under the pill when there is something to say: the progress note, then an upload's problems. */
+function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {
+  return (
+    <>
+      {bar.note && <ProgressNote note={bar.note} words={bar.words} />}
+      {bar.uploadProblems.length > 0 && <Problems id={id} problems={bar.uploadProblems} />}
+    </>
+  );
 }
 
 export function ToolbarPart(bar: ToolbarProps) {
   const problemsId = useId();
-  const pills = hasPills(bar);
+  const demoProps = useDemoProps(bar.words, bar);
+  const pills = hasPicker(bar);
   const icons = hasIcons(bar);
-  if (!pills && !icons) return null;
+  if (!pills && !icons) return <Notes bar={bar} id={problemsId} />;
   const describedBy = bar.uploadProblems.length > 0 ? problemsId : undefined;
   return (
     <>
-      <div
-        className={styles.toolbar}
-        role="toolbar"
-        aria-label={bar.words.toolbar}
-        data-part="toolbar"
-        data-level={bar.level}
-      >
-        <Picker bar={bar} />
-        {pills && icons ? <span className={styles.sep} aria-hidden="true" /> : null}
-        <Icons bar={bar} />
-        {offers(bar.controls, 'upload') && <UploadButton bar={bar} describedBy={describedBy} />}
+      <div className={cn(TOOLBAR_ROW, 'mb-4')}>
+        <div
+          className={TOOLBAR_PILL}
+          role="toolbar"
+          aria-label={bar.words.toolbar}
+          data-part="toolbar"
+          data-level={bar.level}
+        >
+          <Picker bar={bar} />
+          {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
+          <Icons bar={bar} describedBy={describedBy} demo={<DemoToggle {...demoProps} />} />
+        </div>
+        <Reset {...demoProps} />
       </div>
-      <UploadProblems bar={bar} id={problemsId} />
+      <ResetConfirm {...demoProps} />
+      <Notes bar={bar} id={problemsId} />
     </>
   );
 }

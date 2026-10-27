@@ -13,9 +13,9 @@ function jobOf(file: WorkflowFile, task: TaskDef, stageIndex: number): Job {
     title: task.title,
     detail: task.summary,
     dependsOn: producerIdsOf(file, stageIndex, task),
+    needs: task.needs ?? [],
     inputs: task.slots.map((slot) => slot.id),
-    outputs: [{ id: task.output }],
-    fanOut: task.fanOut,
+    outputs: task.output === undefined ? [] : [{ id: task.output }],
     reviewed: task.review !== undefined,
     task,
   };
@@ -26,19 +26,22 @@ function stageOf(file: WorkflowFile, stage: StageDef, index: number): Stage {
     id: stage.id,
     name: stage.title,
     goal: stage.learningGoal,
+    summary: stage.summary,
     moves: stage.move ? [{ letter: stage.move, why: stage.learningGoal }] : [],
     card: stage.card,
     gate: stage.gate,
-    jobs: stage.tasks.map((task) => jobOf(file, task, index)),
+    foreach: stage.foreach,
+    jobs: stage.jobs.map((task) => jobOf(file, task, index)),
   };
 }
 
 /** The Workflow of a loaded file; the stage with a sign-off card holds the focal job. */
 export function workflowOf(file: WorkflowFile): Workflow {
-  const focal = file.stages.find((stage) => stage.card)?.tasks[0];
+  const focal = file.stages.find((stage) => stage.card)?.jobs[0];
   return {
     id: file.id,
     title: file.title,
+    description: file.description,
     scenario: file.scenario.summary,
     focalJobId: focal?.id,
     stages: file.stages.map((stage, index) => stageOf(file, stage, index)),

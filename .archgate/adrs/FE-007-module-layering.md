@@ -37,7 +37,7 @@ Tier folders are named the same in every area, so one rule pattern binds them al
 
 - **Slide folder:** own files, `slide-master/`, `slide-shared/`, `src/explorable-explanations/`, `ui/`, shared hooks and lib; `core-components/` from server files only. Its `*.client.tsx`: own files, shared hooks and lib.
 - **`slide-shared` part:** `slide-shared/`, `core-components/`, `ui/`, shared lib; its client leaf its own folder, `core-components/`, hooks, lib.
-- **Explorable explanation:** its own area, `core-components/`, `ui/`, shared lib, never `slide-shared/`; its client leaf its own folder, hooks, lib.
+- **Explorable explanation:** its own area, `core-components/`, `ui/`, shared lib, never `slide-shared/`; its client leaf its own folder, `core-components/`, `ui/`, hooks, lib (`ui/` imports no Slide, Episode or explanation, so the leaf still travels with it).
 - **`core-components/`:** itself, shared hooks and lib.
 
 **Slide internals.** A prototype's per-Slide type interface degraded every visualisation; governance binds boundaries, never a Slide's inside, because silence gets filled with structure.
