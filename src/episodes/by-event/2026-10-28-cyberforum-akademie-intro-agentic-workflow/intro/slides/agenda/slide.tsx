@@ -23,19 +23,21 @@ const BLOCKS: readonly {
   { key: 'qa', kind: 'close' },
 ];
 
-/** What a kind looks like: the number disc on the rail, the time pill and the label. Colour by kind, structure only. */
-const LOOK: Record<Kind, { disc: string; pill: string; label: string }> = {
-  start: { disc: 'bg-muted', pill: 'bg-muted', label: 'text-muted-foreground' },
-  close: { disc: 'bg-muted', pill: 'bg-muted', label: 'text-muted-foreground' },
-  theory: { disc: 'bg-(--info) text-info-foreground', pill: 'bg-(--info)/15', label: 'text-(--info)' },
-  demo: {
-    disc: 'bg-primary text-primary-foreground',
-    pill: 'bg-primary text-primary-foreground',
-    label: 'text-brand-accent',
-  },
+/**
+ * What a kind looks like: its disc on the rail and its label, in one of three colours (theory blue, demo orange,
+ * start and wrap-up grey); every other text is the foreground colour.
+ */
+const LOOK: Record<Kind, { disc: string; label: string }> = {
+  start: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
+  close: { disc: 'bg-muted-foreground text-background', label: 'text-muted-foreground' },
+  theory: { disc: 'bg-(--info) text-info-foreground', label: 'text-(--info)' },
+  demo: { disc: 'bg-brand-accent text-background', label: 'text-brand-accent' },
 };
 
-// The session plan as a numbered vertical rail: a time pill, the block and its kind per line, colour by kind. The Slide header shows the title and caption; the Scene holds the rail.
+/** One line of the rail beside a disc: as tall as the disc at least, its text centred on the disc's middle. */
+const BESIDE_DISC = 'flex min-h-12 items-center';
+
+// The session plan as a numbered vertical rail: per line a disc, the start time, the block and its kind, the disc and the kind in the kind's colour. The Slide header shows the title and caption; the Scene holds the rail.
 export const agenda = slide({
   slug: 'agenda',
   messages: { en, de },
@@ -51,7 +53,6 @@ export const agenda = slide({
         {BLOCKS.map(({ key, kind, n }, index) => {
           const look = LOOK[kind];
           const last = index === BLOCKS.length - 1;
-          const isDemo = kind === 'demo';
           return (
             <li key={key} className="focus-group__item flex gap-4 md:gap-6">
               <div className="flex flex-col items-center">
@@ -63,24 +64,20 @@ export const agenda = slide({
                 {!last && <span className="w-0.5 grow bg-border" />}
               </div>
               <div
-                className={`grid flex-1 grid-cols-1 items-start gap-2 md:grid-cols-12 md:gap-4 ${last ? '' : 'pb-6'}`}
+                className={`grid flex-1 grid-cols-1 items-start gap-x-4 md:grid-cols-[5rem_1fr_10rem] ${last ? '' : 'pb-6'}`}
               >
-                <span
-                  className={`inline-flex w-fit rounded-full px-4 py-1 text-body font-semibold md:col-span-2 ${look.pill}`}
-                >
-                  {t(`blocks.${key}.time`)}
-                </span>
-                <p
-                  className={`text-body font-semibold md:col-span-6 ${isDemo ? 'rounded-xl border-2 border-primary bg-brand-accent/15 px-4 py-2' : 'md:mt-1'}`}
-                >
-                  {t(`blocks.${key}.title`)}
-                  {n !== undefined && (
-                    <span className="block text-caption font-normal text-muted-foreground">{t('episode', { n })}</span>
-                  )}
+                <span className={`${BESIDE_DISC} text-body font-semibold tabular-nums`}>{t(`blocks.${key}.time`)}</span>
+                <p className={BESIDE_DISC}>
+                  <span className="text-body font-semibold">
+                    {t(`blocks.${key}.title`)}
+                    {n !== undefined && (
+                      <span className="block text-caption font-normal text-muted-foreground">
+                        {t('episode', { n })}
+                      </span>
+                    )}
+                  </span>
                 </p>
-                <span
-                  className={`text-caption font-semibold tracking-widest uppercase md:col-span-4 ${isDemo ? '' : 'md:mt-2'} ${look.label}`}
-                >
+                <span className={`${BESIDE_DISC} text-caption font-semibold tracking-widest uppercase ${look.label}`}>
                   {t(`kinds.${kind}`)}
                 </span>
               </div>

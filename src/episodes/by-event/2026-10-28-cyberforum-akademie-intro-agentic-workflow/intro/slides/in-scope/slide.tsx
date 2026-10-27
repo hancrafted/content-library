@@ -4,48 +4,72 @@ import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-type Tone = 'ai' | 'info' | 'brand-accent';
+type Tone = 'theory' | 'demo';
 
-/** The three announced terms, as keys of `pairs`: each tone tints its arrow, its landing card and its icon. Add or drop a pair in both Translation files. */
+/**
+ * The announced terms, as keys of `pairs`, and the kind of block each lands in, matching the agenda's colours (theory
+ * blue, demo orange): the tone tints its arrow, its landing card and its icon. Add or drop a pair in both Translation files.
+ */
 const PAIRS = [
-  { key: 'first', tone: 'ai' },
-  { key: 'second', tone: 'info' },
-  { key: 'third', tone: 'brand-accent' },
+  { key: 'first', tone: 'theory' },
+  { key: 'second', tone: 'demo' },
+  { key: 'third', tone: 'demo' },
 ] as const satisfies readonly { key: string; tone: Tone }[];
 
 /** What a tone looks like, spelled out so Tailwind finds each class: the arrow, the landing card. */
 const LOOK: Record<Tone, { arrow: string; card: string }> = {
-  ai: { arrow: 'stroke-ai', card: 'border-ai/60 border-l-ai bg-ai/20' },
-  info: { arrow: 'stroke-(--info)', card: 'border-(--info)/50 border-l-(--info) bg-(--info)/15' },
-  'brand-accent': {
-    arrow: 'stroke-brand-accent',
-    card: 'border-brand-accent/60 border-l-brand-accent bg-brand-accent/15',
-  },
+  theory: { arrow: 'stroke-(--info)', card: 'border-(--info)/50 border-l-(--info) bg-(--info)/15' },
+  demo: { arrow: 'stroke-brand-accent', card: 'border-brand-accent/60 border-l-brand-accent bg-brand-accent/15' },
 };
 
-/** One small drawing per pair, in its tone: a network, a stack of pages, a play button. */
+/** One small drawing per pair, in its tone: a network (the mental model), a play button, three linked steps. */
 const ICONS: Record<(typeof PAIRS)[number]['key'], ReactNode> = {
   first: (
     <svg viewBox="0 0 32 32" className="size-10 flex-none" aria-hidden="true">
-      <circle cx="16" cy="16" r="4" className="fill-ai" />
-      <circle cx="6" cy="8" r="3" className="fill-ai/50" />
-      <circle cx="26" cy="8" r="3" className="fill-ai/50" />
-      <circle cx="6" cy="25" r="3" className="fill-ai/50" />
-      <circle cx="26" cy="25" r="3" className="fill-ai/50" />
-      <path d="M8 10l5 4M24 10l-5 4M8 23l5-4M24 23l-5-4" className="fill-none stroke-ai" strokeWidth="1.5" />
+      <circle cx="16" cy="16" r="4" className="fill-(--info)" />
+      <circle cx="6" cy="8" r="3" className="fill-(--info)/50" />
+      <circle cx="26" cy="8" r="3" className="fill-(--info)/50" />
+      <circle cx="6" cy="25" r="3" className="fill-(--info)/50" />
+      <circle cx="26" cy="25" r="3" className="fill-(--info)/50" />
+      <path d="M8 10l5 4M24 10l-5 4M8 23l5-4M24 23l-5-4" className="fill-none stroke-(--info)" strokeWidth="1.5" />
     </svg>
   ),
   second: (
     <svg viewBox="0 0 32 32" className="size-10 flex-none" aria-hidden="true">
-      <rect x="9" y="3" width="18" height="22" rx="3" className="fill-(--info)/30 stroke-(--info)" strokeWidth="1.5" />
-      <rect x="5" y="7" width="18" height="22" rx="3" className="fill-background stroke-(--info)" strokeWidth="1.5" />
-      <path d="M9 14h10M9 19h10M9 24h6" className="fill-none stroke-(--info)" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="16" cy="16" r="13" className="fill-brand-accent/30 stroke-brand-accent" strokeWidth="1.5" />
+      <path d="M13 10l9 6-9 6z" className="fill-brand-accent" />
     </svg>
   ),
   third: (
     <svg viewBox="0 0 32 32" className="size-10 flex-none" aria-hidden="true">
-      <circle cx="16" cy="16" r="13" className="fill-brand-accent/30 stroke-brand-accent" strokeWidth="1.5" />
-      <path d="M13 10l9 6-9 6z" className="fill-brand-accent" />
+      <rect
+        x="2"
+        y="11"
+        width="8"
+        height="10"
+        rx="2"
+        className="fill-brand-accent/30 stroke-brand-accent"
+        strokeWidth="1.5"
+      />
+      <rect
+        x="12"
+        y="11"
+        width="8"
+        height="10"
+        rx="2"
+        className="fill-brand-accent/30 stroke-brand-accent"
+        strokeWidth="1.5"
+      />
+      <rect
+        x="22"
+        y="11"
+        width="8"
+        height="10"
+        rx="2"
+        className="fill-brand-accent stroke-brand-accent"
+        strokeWidth="1.5"
+      />
+      <path d="M10 16h2M20 16h2" className="fill-none stroke-brand-accent" strokeWidth="1.5" />
     </svg>
   ),
 };

@@ -1,13 +1,3 @@
 {
-  "kicker": "Zoom webinar · 28 Oct 2026",
-  "flow": {
-    "engine": "Engine",
-    "engineName": "Generative AI",
-    "engineHint": "ChatGPT, Copilot, Claude",
-    "you": "You check",
-    "youLabel": "You",
-    "promptChip": "prompt built in",
-    "way": "Agentic: the way of working",
-    "steps": { "first": "Research", "second": "Draft", "third": "Final" }
-  }
+  "kicker": "Zoom webinar · 28 Oct 2026"
 }

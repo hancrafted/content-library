@@ -1,6 +1,6 @@
 {
   "title": "In scope",
-  "caption": "Everything announced is in the room, in the layer where it helps you most.",
+  "caption": "Everything announced is in the room, as a model in your head or shown live.",
   "announced": "Announced",
   "lands": "Where it lands tonight",
   "pairs": {
@@ -10,20 +10,20 @@
       "detail": "Five traits of the AI, five moves against them"
     },
     "second": {
-      "term": "Prompting basics",
-      "lands": "Built into every prompt",
-      "detail": "Ready to copy, each with its why"
+      "term": "Prompting",
+      "lands": "Live demo: “Grill me”",
+      "detail": "Instead of writing the prompt yourself, you let the AI question you: prompting one level up"
     },
     "third": {
-      "term": "Meta-prompting",
-      "lands": "Live demo: “Grill me”",
-      "detail": "The AI helps you find the right prompt first"
+      "term": "Workflows",
+      "lands": "Live demo: a workflow",
+      "detail": "Agentic: one big task in steps, you check in between"
     }
   },
   "notes": {
     "talking-points": {
       "header": "Everything announced is here",
-      "description": "Each announced term is in the evening, just not as a lecture: basics as a mental model, prompting basics built into every copy-ready prompt, meta-prompting in the live demo “Grill me”."
+      "description": "Every announced term is in tonight: the basics as a mental model, prompting in the live demo “Grill me”, where the AI questions us instead of us writing the prompt, and workflows in the second live demo."
     }
   }
 }
