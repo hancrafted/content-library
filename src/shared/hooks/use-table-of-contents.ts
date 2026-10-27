@@ -1,32 +1,28 @@
-import { READING_LINE } from '@/shared/lib/reading-line.pure';
-import { openSectionIds, type TocSection } from '@/shared/lib/table-of-contents.pure';
+import { fractionInto, openSectionIds, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import { useEffect, useState } from 'react';
 
 /** How long the compact loading box holds after mount, so the table never visibly settles into place. */
 const REVEAL_AFTER_MS = 1000;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
 
-function fractionInto(element: Element | null): number {
-  const root = document.documentElement;
-  if (window.scrollY + window.innerHeight >= root.scrollHeight - 1) return 1;
-  if (!element) return 0;
-  const box = element.getBoundingClientRect();
-  return box.height > 0 ? (window.innerHeight * READING_LINE - box.top) / box.height : 0;
-}
-
 /** How far the reading line has travelled through the active element, sampled once per frame; 1 at the page end. */
 export function useFractionInto(active: string | null, targetAttribute: string): number {
   // Keyed by the entry it was measured on, so a new active entry never borrows the previous one's fraction.
   const [sample, setSample] = useState({ active, fraction: 0 });
   useEffect(() => {
-    const element = active && document.querySelector(`[${targetAttribute}="${CSS.escape(active)}"]`);
+    const element = active ? document.querySelector(`[${targetAttribute}="${CSS.escape(active)}"]`) : null;
     let frame = 0;
     const schedule = () => {
       cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() =>
-        // Hundredths are plenty for a progress bar and skip re-renders between them.
-        setSample({ active, fraction: Math.round(fractionInto(element || null) * 100) / 100 }),
-      );
+      frame = requestAnimationFrame(() => {
+        const page = {
+          scrollY: window.scrollY,
+          innerHeight: window.innerHeight,
+          scrollHeight: document.documentElement.scrollHeight,
+        };
+        const box = element ? element.getBoundingClientRect() : null;
+        setSample({ active, fraction: fractionInto(page, box) });
+      });
     };
     schedule();
     window.addEventListener('scroll', schedule, { passive: true });

@@ -22,6 +22,7 @@ export default defineConfig({
       '.worktrees/**',
       '.claude/**',
       '.agents/**',
+      '.stryker-tmp/**',
     ],
     coverage: {
       provider: 'v8',

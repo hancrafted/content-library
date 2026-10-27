@@ -6,7 +6,7 @@ domain: frontend
 rules: false
 files: ['src/**/*.{ts,tsx}', 'eslint.config.mjs', '.dependency-cruiser.cjs']
 paths: ['src/**/*.{ts,tsx}', 'eslint.config.mjs', '.dependency-cruiser.cjs']
-description: "Server Components by default; 'use client' only at leaves, never under src/app, and only in a file named *.client.tsx — the classifier that makes the client bundle glob-addressable."
+description: "Server Components by default; 'use client' only at leaves, never under src/app, and only in a file named *.client.tsx — the classifier that makes the client bundle glob-addressable; hooks and *.client.tsx leaves stay thin wiring shells."
 ---
 
 # Server/Client Boundary
@@ -15,13 +15,11 @@ description: "Server Components by default; 'use client' only at leaves, never u
 
 Under the App Router every component is a Server Component until a `'use client'` directive marks a module as a client entry point. Everything that module imports joins the client bundle. Where the directive sits therefore decides bundle size, which props must survive serialization, and — under `output: 'export'` — whether a component renders into the HTML at build time or only after hydration.
 
-A glob cannot see inside a file. With the directive alone, "which files are client entry points" is answerable only by reading every file, so no ADR `files:` scope, ESLint block or dependency-cruiser rule can address the client bundle. A filename suffix fixes that: it makes the boundary glob-addressable, the property the classifier suffixes of the reference ADRs (markdown-harness `ARCH-004 Folders and Files`) exist to provide.
+A glob cannot see inside a file. With the directive alone, "which files are client entry points" is answerable only by reading every file, so no ADR `files:` scope, ESLint block or dependency-cruiser rule can address the client bundle. Naming every client entry point `*.client.tsx` makes the boundary glob-addressable.
 
-**Deviation from the reference ADRs.** Their classifier axis is determinism — `.pure` / `.impure` / `.types`. In a React tree the architecturally consequential axis is server versus client. This is the reference ADR's own stated risk — "the suffix set is closed on no measured evidence" — arriving in a different stack. The two axes do not collide, because `src/shared/lib/**` holds no components — but `src/shared/lib/**` is only partly classified. `locale.pure.ts`, `theme.pure.ts` and `prefs.pure.ts` follow the determinism axis; `static-routes.ts`, `prefs-storage.ts` and `utils.ts` carry no classifier, and no ADR here governs them. `utils.ts` is a name the reference `ARCH-004` Decision 4 bans outright; it arrived with the shadcn scaffold, so it is inherited, not chosen. This record classifies and renames nothing under `src/shared/lib/**`.
+Hooks and `*.client.tsx` leaves sit on the browser boundary. When branching and arithmetic on data accumulate inside them, logic is trapped behind DOM APIs and React state where fast unit tests and mutation testing cannot reach it. Capping hooks and `*.client.tsx` files at `complexity: 3` and `max-depth: 1` keeps them thin wiring shells and pushes branching and math into `.pure.ts` modules.
 
-Repo state at adoption: four files carried the directive. Three are leaf components, renamed here — `src/shared/page-chrome/toggles/locale-toggle.client.tsx`, `nav-link.client.tsx`, `theme-toggle.client.tsx`. The fourth, `src/shared/hooks/use-theme.ts`, dropped its directive: a hook is not a boundary — it is imported only by client leaves and joins the bundle through them; the import-graph rule below holds that instead.
-
-Rejected alternatives: the directive alone (not addressable); a `client/` folder as the classifier (position cannot carry it — leaves sit beside the server components that render them; inside one Episode the Slide folder is the fence, §5); the third-party `server-only` / `client-only` marker packages (they fail the build on a wrong import but address nothing by glob, and pass the dependency admission bar for no gain today).
+Rejected alternatives: the directive alone (not addressable); a `client/` folder as the classifier (leaves sit beside the server components that render them; inside one Episode the Slide folder is the fence, §5); third-party `server-only` / `client-only` marker packages (address nothing by glob).
 
 ## Decision
 
@@ -54,6 +52,12 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 2. A Slide's client widget MUST reach only its own folder, hooks and lib.
 3. A `slide-shared` part's or Explorable explanation's client leaf MUST sit in its own folder and reach only it, hooks and lib (an explanation's also `ui/`); the entry stays server.
 
+### 6. Hooks and client leaves are thin shells
+
+1. A hook or `*.client.tsx` leaf MUST hold wiring only: browser APIs, React state, refs and effects, event handlers, and calls into `.pure.ts` functions. All branching and arithmetic on data MUST live in a `.pure.ts` module.
+2. Every hook and `*.client.tsx` file MUST stay within `complexity: 3` and `max-depth: 1` (while the global budget remains `7` and `3`).
+3. Pre-existing shells over budget sit in `src/shared/design-system/legacy-shells.json` at `7` / `3`; the list MUST only shrink, and any changed hook or `*.client.tsx` file MUST meet the shell rule and come off the list.
+
 ## Do's and Don'ts
 
 ### Do's
@@ -67,6 +71,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 7. **DO** pass serializable data from server to client: strings, numbers, plain objects, Translation file slices. (Decision 4)
 8. **DO** put an Episode's interactive visualisation in its Slide folder as `<name>.client.tsx`, its logic in a `.pure.ts` beside it. (Decision 5)
 9. **DO** put an Explorable explanation's client leaf in its own folder; its server entry takes the Slide's Preset and words. (Decision 5)
+10. **DO** extract branching and arithmetic from hooks and `*.client.tsx` leaves into a `.pure.ts` module — `fractionInto(page, box)` in `table-of-contents.pure.ts` — and remove a touched file from `legacy-shells.json`. (Decision 6)
 
 ### Don'ts
 
@@ -77,6 +82,7 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 5. **DON'T** pass a function, class instance or unregistered symbol as a prop to a `*.client.tsx` component. (Decision 4)
 6. **DON'T** put `'use client'` in a Slide's server entry, a part or an Episode file. (Decision 5)
 7. **DON'T** import the Slide master from a Slide's client widget. (Decision 5)
+8. **DON'T** branch over data or compute domain math inside a hook or `*.client.tsx` component, or add a file to `src/shared/design-system/legacy-shells.json`. (Decision 6)
 
 ## Consequences
 
@@ -106,13 +112,12 @@ Rejected alternatives: the directive alone (not addressable); a `client/` folder
 - §2.2: ESLint core `no-restricted-syntax`, selector `Program:not(:has(> ExpressionStatement[directive='use client']))`, over `src/**/*.client.tsx`.
 - §2.3, §2.4 and so §1.3: `check-file/filename-naming-convention` in `eslint.config.mjs` — `src/app/**/*.{ts,tsx}` is `KEBAB_CASE`, `src/{page-assembly,episodes,events,explorable-explanations,pipeline,shared}/**/*.tsx` is `+([a-z0-9-])?(.client)`, `src/**/*.ts` is `!(*.client)`. §1.3 needs no own check: an app file cannot carry the suffix (§2.4), and an unsuffixed file cannot carry the directive (§2.1).
 - §5: ESLint forbids the directive in Episode files except a Slide folder's `*.client.tsx`; dependency rules limit a Slide widget's and a `slide-shared` client leaf's reach.
+- §6: ESLint `complexity: 3` and `max-depth: 1` over hooks and `*.client.tsx`, with per-file overrides from `src/shared/design-system/legacy-shells.json`; a fast-suite boundaries test enforces that every listed entry exists and still exceeds the shell cap.
 - §3: `.dependency-cruiser.cjs` rules `hooks-reached-only-from-client`, `client-never-imports-app` and `prefs-storage-reached-only-from-client`, `error` severity, run by `npm run lint:boundaries` (`depcruise src skills tools`) inside `npm run lint`, which `npm run verify` and CI run.
 
-**Measured on introduction** (probe files under `src/`, removed after): a directive in `probe-a.tsx`, a directiveless `probe-b.client.tsx`, a `src/app/probe/probe-c.client.tsx` and a `src/shared/hooks/probe-d.client.ts` gave 5 errors, one per breach plus §2.1 on `probe-d`; a correct `probe-e.client.tsx` gave 0. Repo: 0 errors. dependency-cruiser with `tsPreCompilationDeps: true`: **77 dependencies cruised, 54 local, 12 type-only**; with `false`: 80 cruised, 49 local, 0 type-only, 15 injected `react/jsx-runtime`. A falling local count with a rising total is the failure signature.
+**Known reach gap.** §3.3 names one module by path, not by glob: no classifier marks "touches a browser API", so a second browser-API module under `src/shared/lib/**` is unguarded until the rule is widened by hand.
 
-**Known reach gap.** §3.3 names one module by path, not by glob: no classifier marks "touches a browser API", so the addressability argument this record makes for `.client` arrives again one directory over. A second browser-API module under `src/shared/lib/**` is unguarded until the rule is widened by hand.
-
-**Manual review duties** (never linted): props from a server parent to a `.client` component are serializable (§4); the directive sits at the smallest leaf, not a wrapper widened for convenience (§1.2).
+**Manual review duties** (never linted): props from a server parent to a `.client` component are serializable (§4); the directive sits at the smallest leaf, not a wrapper widened for convenience (§1.2); branch-free arithmetic in hooks and `*.client.tsx` leaves is extracted to `.pure.ts` and `legacy-shells.json` only shrinks (§6).
 
 **Exceptions:** raise a separate ADR; human approval required.
 

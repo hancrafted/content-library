@@ -28,6 +28,7 @@
     "skills/episode-promote/scripts",
     "skills/worktree",
     "skills/visual-check",
+    "skills/mutation-testing/scripts",
     "tools",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"

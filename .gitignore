@@ -43,3 +43,7 @@ playwright-report/
 
 # playwright-cli: session snapshots and logs.
 .playwright-cli/
+
+# Stryker mutation testing reports and in-place backup folder.
+reports/
+.stryker-tmp/
