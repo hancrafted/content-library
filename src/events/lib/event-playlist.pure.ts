@@ -4,12 +4,11 @@ import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 
 /**
  * The card fields an Event's Playlist reads of each Episode card page assembly hands it: the logical path of its page
- * (`null` while announced only), that path localized, and its reading time when counted.
+ * (`null` while announced only) and that path localized.
  */
 export interface PlaylistCard {
   readonly route: string | null;
   readonly href: string | null;
-  readonly minutes?: number;
 }
 
 /** What the cards read of an Event the store serves (`ServedEvent`): its slug, and each listed Episode with its page. */
@@ -35,12 +34,6 @@ export function eventPlaylistCards<Listed, Card extends PlaylistCard>(
     const route = eventEpisodeRoute(event.slug, page);
     return { ...card, route, href: localizePath(route, locale) };
   });
-}
-
-/** The Playlist's reading time: the counted minutes of the Episodes that have them; none when no Episode has one, so nothing shows. */
-export function totalMinutes(cards: readonly Pick<PlaylistCard, 'minutes'>[]): number | undefined {
-  const known = cards.flatMap((card) => (card.minutes === undefined ? [] : [card.minutes]));
-  return known.length === 0 ? undefined : known.reduce((sum, minutes) => sum + minutes, 0);
 }
 
 /** The first Episode a visitor can open, with its 1-based step in the Playlist; none while every Episode is upcoming. */

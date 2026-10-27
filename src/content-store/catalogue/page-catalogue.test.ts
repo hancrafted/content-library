@@ -39,7 +39,7 @@ const EVENT = {
   slug: AXEL,
   date: '2026-10-23',
   kind: 'workshop',
-  organizer: 'axel',
+  organizers: ['axel'],
   audience: 'organization',
   tags: ['agentic-ai'],
   format: 'remote',

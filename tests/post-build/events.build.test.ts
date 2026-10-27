@@ -6,6 +6,7 @@
 // the past notice above the title, and a canonical to its own /episodes/ page when it is public. An Event's copy lives
 // only under its Event: a public copy is its own canonical, and an unlisted one is never indexed.
 
+import { PAGE_CONTAINER } from '@/shared/components/page-header';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -56,7 +57,6 @@ const WORDS: Record<
     count: string;
     nav: string;
     start: string;
-    reading: RegExp;
     kind: string;
     audience: string;
     notice: string;
@@ -72,7 +72,6 @@ const WORDS: Record<
     count: '3 Episodes',
     nav: 'Events',
     start: 'Start with Episode 1',
-    reading: /^\d+ min total reading time$/,
     kind: 'Workshop',
     audience: 'For organizations',
     notice:
@@ -88,7 +87,6 @@ const WORDS: Record<
     count: '3 Episoden',
     nav: 'Veranstaltungen',
     start: 'Mit Episode 1 starten',
-    reading: /^\d+ Min\. Lesezeit insgesamt$/,
     kind: 'Workshop',
     audience: 'Für Unternehmen',
     notice:
@@ -268,20 +266,46 @@ describe('Event page', () => {
     expect(seen).toEqual(expected);
   });
 
-  it.each(LOCALES)('names kind, Audience, Episode count and reading time on the facts line for %s', (locale) => {
+  it.each(LOCALES)(
+    'names kind, Audience and Episode count on the facts line, and no reading time, for %s',
+    (locale) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(eventRoute(AXEL.slug), locale));
+      const expected = WORDS[locale];
+      // ACT
+      const facts = $('[data-event-facts]');
+      const seen = {
+        kind: facts.find('[data-event-kind]').text(),
+        audience: facts.find('[data-event-audience]').text(),
+        count: facts.find('[data-event-episode-count]').text(),
+      };
+      // ASSERT
+      expect(seen).toEqual({ kind: expected.kind, audience: expected.audience, count: expected.count });
+      expect($('[data-event-reading-time]')).toHaveLength(0);
+    },
+  );
+
+  it.each(LOCALES)('draws no image, listing or references for an Event that has none, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(eventRoute(AXEL.slug), locale));
-    const expected = WORDS[locale];
     // ACT
-    const facts = $('[data-event-facts]');
-    const seen = {
-      kind: facts.find('[data-event-kind]').text(),
-      audience: facts.find('[data-event-audience]').text(),
-      count: facts.find('[data-event-episode-count]').text(),
-    };
+    const seen = ['image', 'listing', 'references'].map((part) => $(`[data-event-${part}]`).length);
     // ASSERT
-    expect(seen).toEqual({ kind: expected.kind, audience: expected.audience, count: expected.count });
-    expect(facts.find('[data-event-reading-time]').text()).toMatch(expected.reading);
+    expect(seen).toEqual([0, 0, 0]);
+  });
+
+  it.each(LOCALES)('sits in the overview container and puts the side panel parts in reading order for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(eventRoute(AXEL.slug), locale));
+    // ACT
+    const order = $('main')
+      .children()
+      .toArray()
+      .map((el) => ($(el).attr('data-event-side-top') !== undefined ? 'top' : el.tagName));
+    // ASSERT
+    expect($('main').attr('class')).toContain(PAGE_CONTAINER);
+    expect(order).toEqual(['header', 'top', 'div', 'aside']);
+    expect($('aside[data-event-side] [data-event-organizers]')).toHaveLength(1);
   });
 
   it.each(LOCALES)('starts at the first Episode under the Event with a primary button for %s', (locale) => {

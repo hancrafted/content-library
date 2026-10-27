@@ -26,7 +26,7 @@ const EVENT = {
   slug: AXEL,
   date: '2026-10-23',
   kind: 'workshop',
-  organizer: 'axel',
+  organizers: ['axel'],
   audience: 'organization',
   tags: ['agentic-ai', 'workflow'],
   format: 'remote',
@@ -75,7 +75,7 @@ describe('success cases', () => {
       slug: '2026-10-23-axel-agentic-workflow',
       date: '2026-10-23',
       kind: 'workshop',
-      organizer: 'axel',
+      organizers: ['axel'],
       audience: 'organization',
       tags: ['agentic-ai', 'workflow'],
       format: 'remote',
@@ -409,17 +409,50 @@ describe('failure cases', () => {
   });
 
   it.each([
-    ['without one', without(EVENT, 'organizer'), 'organizer is required, one of hancrafted, axel, cyberforum'],
+    ['without any', without(EVENT, 'organizers'), 'organizers is required, one Organizer or more, the first its lead'],
+    ['empty', { ...EVENT, organizers: [] }, 'organizers.0 is required, one of hancrafted, axel, cyberforum'],
     [
       'outside the list',
-      { ...EVENT, organizer: 'acme' },
-      'organizer is "acme", but must be one of hancrafted, axel, cyberforum',
+      { ...EVENT, organizers: ['acme'] },
+      'organizers.0 is "acme", but must be one of hancrafted, axel, cyberforum',
     ],
-  ])('refuses an Event organizer %s, naming the Event', (_, event, field) => {
+  ])('refuses Event organizers %s, naming the Event', (_, event, field) => {
     // ARRANGE
     const expected = `Event ${AXEL}: ${field}`;
     // ACT
     const load = () => loadContent({ ...SOUND, events: [event] });
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it('serves an Event with its partners, listing, references and image', () => {
+    // ARRANGE
+    const extras = {
+      organizers: ['cyberforum', 'hancrafted'],
+      listing: 'https://example.org/event',
+      references: [{ label: 'Next_KARL', url: 'https://example.org/karl' }],
+      image: { src: '/images/events/a.webp', credit: '© Example' },
+    } as const;
+    // ACT
+    const served = loadContent({ ...SOUND, events: [{ ...EVENT, ...extras }] }).events[0];
+    // ASSERT
+    expect({
+      organizers: served.organizers,
+      listing: served.listing,
+      references: served.references,
+      image: served.image,
+    }).toEqual(extras);
+  });
+
+  it.each([
+    ['a listing that is not https', { listing: 'http://example.org/event' }, 'listing'],
+    ['a reference that is not https', { references: [{ label: 'x', url: 'http://example.org' }] }, 'references.0.url'],
+    ['an image outside /images/events/', { image: { src: '/images/other/a.webp', credit: 'c' } }, 'image.src'],
+  ])('refuses %s, naming the Event and the field', (_, extra, field) => {
+    // ARRANGE
+    const expected = `Event ${AXEL}: ${field}`;
+    // ACT
+    const load = () => loadContent({ ...SOUND, events: [{ ...EVENT, ...extra }] });
     // ASSERT
     expect(load).toThrow(expected);
   });
@@ -445,7 +478,7 @@ describe('failure cases', () => {
       ...EVENT,
       slug: '2026-10-28-cyberforum',
       date: '2026-10-28',
-      organizer: 'cyberforum',
+      organizers: ['cyberforum'],
       playlist: 'cyberforum',
     };
     const theirs = { id: 'cyberforum', visibility: 'public', episodes: [COPY_ID] } as const;

@@ -34,7 +34,24 @@ export const EVENT_KINDS = ['workshop', 'webinar'] as const;
 export const AUDIENCES = ['individual', 'organization'] as const;
 
 /** Who runs an Event: Han's own Events are `hancrafted`, a partner's carry its name, so a partner's Events group. */
-export const ORGANIZERS = ['hancrafted', 'axel', 'cyberforum'] as const;
+export const ORGANIZER_IDS = ['hancrafted', 'axel', 'cyberforum'] as const;
+export type OrganizerId = (typeof ORGANIZER_IDS)[number];
+
+/** An Organizer as the Event page names it: its name and, when the repo knows one, the page that names it. */
+export interface Organizer {
+  readonly name: string;
+  readonly url?: string;
+}
+
+/** The Organizer registry: each id's name and url, written once; a new Organizer joins `ORGANIZER_IDS` and this. */
+export const ORGANIZERS: Readonly<Record<OrganizerId, Organizer>> = {
+  hancrafted: { name: 'hancrafted', url: 'https://hancrafted.net' },
+  axel: { name: 'AXEL' },
+  cyberforum: {
+    name: 'CyberForum Akademie',
+    url: 'https://www.cyberforum.de/akademie/kuenstliche-intelligenz-karl',
+  },
+};
 
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;

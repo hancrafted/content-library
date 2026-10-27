@@ -2,7 +2,6 @@
   "eventPage": {
     "playlist": "Playlist",
     "start": "Mit Episode {step} starten",
-    "readingTime": "{minutes} Min. Lesezeit insgesamt",
     "kinds": {
       "workshop": "Workshop",
       "webinar": "Webinar"
@@ -10,6 +9,15 @@
     "audiences": {
       "individual": "Für Einzelpersonen",
       "organization": "Für Unternehmen"
+    },
+    "sideLabel": "Zur Veranstaltung",
+    "organizedBy": "Veranstaltet von",
+    "viewOn": "Ansehen bei {name}",
+    "seeAlso": "Siehe auch",
+    "related": "Weitere Episoden, die dich interessieren könnten",
+    "newTab": "(öffnet in neuem Tab)",
+    "imageAlt": {
+      "2026-10-28-cyberforum-akademie-intro-agentic-workflow": "Header-Grafik der CyberForum Akademie zum Webinar „Generative KI im Arbeitsalltag“"
     }
   }
 }
