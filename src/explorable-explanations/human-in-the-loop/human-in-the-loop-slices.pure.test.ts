@@ -9,12 +9,12 @@ import {
   uploadEvent,
 } from './human-in-the-loop-slices.pure';
 import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
-import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
 import { loadWorkflow } from './workflow-loader.pure';
 import { createState, type WorkflowEvent } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
+import fixtureEn from './workflow.fixture.en.yml';
 import type { Workflow } from './workflow.types';
 
 const noop = () => undefined;
@@ -177,34 +177,40 @@ describe('success cases', () => {
 
   it('shows the modal the results by marker name and sends a change up keyed by result', () => {
     // ARRANGE
-    const loaded = loadWorkflow(vacationEn);
+    const loaded = loadWorkflow(fixtureEn);
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const sent: WorkflowEvent[] = [];
     const on = callbacksFor((event) => sent.push(event));
-    const state = { ...createState(start), openStageId: 'research', slotValues: { 'research.stay#2': 'R2' } };
-    const rounds = [1, 2, 3];
+    const state = { ...createState(start), openStageId: 'each', slotValues: { 'each.look#2': 'R2' } };
+    const rounds = [1, 2];
     // ACT
     const { modal } = slicesOf(shown(real, state), on);
-    modal.onSlots({ research_3: 'R3' });
+    modal.onSlots({ note_1: 'R1' });
     // ASSERT
-    expect(modal.slotValues).toEqual({ research_2: 'R2' });
+    expect(modal.slotValues).toEqual({ note_2: 'R2' });
     expect(modal.run?.rounds.map((round) => round.number)).toEqual(rounds);
-    expect(sent).toEqual([{ type: 'slots', values: { 'research.stay#3': 'R3' } }]);
+    expect(sent).toEqual([{ type: 'slots', values: { 'each.look#1': 'R1' } }]);
   });
 
   it('hands the diagram the run of the pasted results, round states included, so both views show progress', () => {
     // ARRANGE
-    const loaded = loadWorkflow(vacationEn);
+    const loaded = loadWorkflow(fixtureEn);
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const on = callbacksFor(() => undefined);
-    const state = { ...createState(start), slotValues: { 'research.stay#2': 'R2', 'research.stay.checked#2': 'ok' } };
+    const checked = {
+      'each.look#2': 'R2',
+      'each.look.checked#2': 'ok',
+      'each.judge#2': 'J2',
+      'each.judge.checked#2': 'ok',
+    };
+    const state = { ...createState(start), slotValues: checked };
     // ACT
     const { diagram } = slicesOf(shown(real, state), on);
-    const research = diagram.run?.stages.find((each) => each.id === 'research');
+    const repeated = diagram.run?.stages.find((each) => each.id === 'each');
     // ASSERT
-    expect(research?.rounds.map((round) => round.state)).toEqual(['open', 'checked', 'open']);
+    expect(repeated?.rounds.map((round) => round.state)).toEqual(['open', 'checked']);
   });
 
   it('names the run of the shown authored Workflow by its key and the hash of its files', () => {
@@ -311,18 +317,18 @@ describe('success cases', () => {
 
   it('hands the diagram the run only once it has work, so both views show progress then', () => {
     // ARRANGE
-    const loaded = loadWorkflow(vacationEn);
+    const loaded = loadWorkflow(fixtureEn);
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const fresh = createState(start);
-    const worked = { ...fresh, slotValues: { 'research.stay#2': 'R2' } };
+    const worked = { ...fresh, slotValues: { 'each.look#2': 'R2' } };
     const on = callbacksFor(noop);
     // ACT
     const before = slicesOf(shown(real, fresh), on).diagram.run;
     const after = slicesOf(shown(real, worked), on).diagram.run;
     // ASSERT
     expect(before).toBeUndefined();
-    expect(after?.stages.find((each) => each.id === 'research')?.done).toBe(1);
+    expect(after?.stages.find((each) => each.id === 'each')?.done).toBe(1);
   });
 
   it('sends the switch and Reset up as events, from the toolbar and from the modal', () => {

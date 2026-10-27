@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { parse } from 'yaml';
 import { connectorInto } from './diagram-layout.pure';
-import vacationEn from './vacation.en.yml';
 import { workflowOf } from './workflow-file-adapter.pure';
 import type { WorkflowFile } from './workflow-schema.types';
 import { workflowView } from './workflow-view.pure';
+import fixtureEn from './workflow.fixture.en.yml';
 
-const workflow = workflowOf(parse(vacationEn) as WorkflowFile);
+const workflow = workflowOf(parse(fixtureEn) as WorkflowFile);
 const jobs = workflow.stages.flatMap((stage) => stage.jobs);
 
 describe('success cases', () => {
   it('hands the file description on to the Workflow the picker lists', () => {
     // ARRANGE
-    const file = parse(vacationEn) as WorkflowFile;
+    const file = parse(fixtureEn) as WorkflowFile;
     // ACT
     const described = workflowOf({ ...file, description: 'For the picker.' });
     // ASSERT
@@ -25,11 +25,11 @@ describe('success cases', () => {
   it('derives every edge of the diagram from the slots: a job depends on the producers of the outputs it takes', () => {
     // ARRANGE
     const expected = [
-      ['interview', []],
-      ['stay', ['interview']],
-      ['compare', ['interview', 'stay']],
-      ['pick', ['compare', 'stay', 'interview']],
-      ['page', ['pick']],
+      ['ask', []],
+      ['look', ['ask']],
+      ['judge', ['look']],
+      ['rank', ['look', 'ask']],
+      ['finish', ['rank']],
     ];
     // ACT
     const edges = jobs.map((job) => [job.id, job.dependsOn]);
@@ -40,11 +40,11 @@ describe('success cases', () => {
   it('gives every job its bold title and its one-line summary from the Workflow file', () => {
     // ARRANGE
     const expected = [
-      ['AI grills you', 'In rounds, then it writes the requirements'],
-      ['Chat', 'One fresh chat per kind of stay, with web search'],
-      ['Rank the stays', 'Against your acceptance criteria'],
-      ['You pick', 'Your choice, written up with everything the page needs'],
-      ['Make the page', 'One HTML file, opened in your browser'],
+      ['Ask', 'In rounds'],
+      ['Look', undefined],
+      ['Judge', undefined],
+      ['Rank', undefined],
+      ['Finish', undefined],
     ];
     // ACT
     const shown = jobs.map((job) => [job.title, job.detail]);
@@ -52,13 +52,13 @@ describe('success cases', () => {
     expect(shown).toEqual(expected);
   });
 
-  it('fans the hairlines out into the three research chats and back in', () => {
+  it('fans the hairlines out into the two chats of the repeated stage and back in', () => {
     // ARRANGE
-    const branches = 3;
-    const [brief, research, decide] = [0, 1, 2].map((at) => workflow.stages[at]!);
+    const branches = 2;
+    const [ask, each, end] = [0, 1, 2].map((at) => workflow.stages[at]!);
     // ACT
-    const out = connectorInto(brief, research!, { research: branches });
-    const back = connectorInto(research, decide!, { research: branches });
+    const out = connectorInto(ask, each!, { each: branches });
+    const back = connectorInto(each, end!, { each: branches });
     // ASSERT
     expect(out).toEqual({ kind: 'out', branches });
     expect(back).toEqual({ kind: 'in', branches });
@@ -79,20 +79,22 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the file on the Workflow and the task on each job, with the review and the stage goal and summary', () => {
     // ARRANGE
-    const stay = jobs.find((job) => job.id === 'stay');
-    const interview = jobs.find((job) => job.id === 'interview');
+    const look = jobs.find((job) => job.id === 'look');
+    const ask = jobs.find((job) => job.id === 'ask');
+    const id = 'fixture';
+    const learningGoal = 'Ask first.';
     // ACT
     const goal = workflow.stages[0]?.goal;
     // ASSERT
-    expect(workflow.file.id).toBe('vacation');
-    expect([stay?.reviewed, interview?.reviewed]).toEqual([false, true]);
-    expect(goal).toContain('Interview first');
+    expect(workflow.file.id).toBe(id);
+    expect([look?.reviewed, ask?.reviewed]).toEqual([false, true]);
+    expect(goal).toBe(learningGoal);
   });
 
   it('gives the popover of a task without a review only its do step, one template in each level', () => {
     // ARRANGE
     const find = (level: 'simple' | 'technical') =>
-      workflowView(workflow, { level }).stages.find((stage) => stage.id === 'research')?.jobs[0]?.task;
+      workflowView(workflow, { level }).stages.find((stage) => stage.id === 'each')?.jobs[0]?.task;
     // ACT
     const simple = find('simple');
     const technical = find('technical');

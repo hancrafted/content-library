@@ -156,6 +156,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
   'src/events/index.ts': [],
   'src/explorable-explanations/index.ts': [],
   'src/explorable-explanations/probe/probe.tsx': [],
+  'src/explorable-explanations/probe/workflow.node.ts': [],
   'src/page-assembly/landing/card.tsx': [],
   'skills/probe/scripts/helper.ts': [],
   // Legal: each file below draws only edges the rules allow.
@@ -191,6 +192,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
   [`${SLIDE}/slide.tsx`]: ['src/explorable-explanations/probe/probe'],
   'tools/probe/helper.ts': ['src/episodes/lib/probe.pure'],
   'skills/probe/scripts/run.ts': [`${PIPELINE}/lib/run-log.pure`, 'src/content-store/store'],
+  'skills/probe/scripts/render.ts': ['src/explorable-explanations/probe/workflow.node'],
   // Breaks: each file below draws edges the rules refuse.
   [STRAY_SLIDE]: [`${EVENTS}/components/event-card`],
   [`${LANDING}/reaches-past-tiers.tsx`]: [
@@ -229,6 +231,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
     'src/content-store/schemas/fields',
     'src/shared/lib/probe.pure',
     'src/episodes/probe/episode',
+    'src/explorable-explanations/probe/probe',
   ],
 };
 
@@ -426,7 +429,7 @@ afterAll(() => {
 });
 
 describe('success cases', () => {
-  it('lets page assembly reach each area through its tier folders, a Slide show an explanation, the store read Episode metadata, and skills and tools reach an area lib or the store entry', () => {
+  it("lets page assembly reach each area through its tier folders, a Slide show an explanation, the store read Episode metadata, and skills and tools reach an area lib, the store entry or an explanation's node entry", () => {
     // ARRANGE
     const legal = [
       `${LANDING}/landing-page.tsx`,
@@ -435,6 +438,7 @@ describe('success cases', () => {
       `${STORE}/store.ts`,
       'tools/probe/helper.ts',
       'skills/probe/scripts/run.ts',
+      'skills/probe/scripts/render.ts',
     ];
     // ACT
     const found = from(legal);
@@ -595,6 +599,7 @@ describe('failure cases', () => {
       `shared-knows-no-domain: src/shared/lib/reaches-events.pure.ts -> ${EVENTS}/lib/probe-event.pure.ts`,
       'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/content-store/schemas/fields.ts',
       'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/episodes/probe/episode.ts',
+      'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/explorable-explanations/probe/probe.tsx',
       `skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> ${PIPELINE}/hooks/use-run.ts`,
       'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/shared/lib/probe.pure.ts',
       `slide-folder-reaches-only-own-and-shared: ${STRAY_SLIDE} -> ${EVENTS}/components/event-card.tsx`,
