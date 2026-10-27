@@ -65,7 +65,7 @@ describe('/episodes index page', () => {
     const expected = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales'].length;
 
     // ACT
-    const chips = $('[data-browse-controls] [role="group"] button[aria-pressed]');
+    const chips = $('[data-browse-controls] [aria-label] button[aria-pressed][data-filter-tag]');
     const pressed = chips.filter('[aria-pressed="true"]');
     const uncounted = chips.toArray().filter((chip) => !/\d$/.test($(chip).text().trim()));
 

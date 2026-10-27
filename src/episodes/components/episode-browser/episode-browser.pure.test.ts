@@ -31,8 +31,6 @@ function card(slug: string, over: Partial<EpisodeCard> = {}): EpisodeCard {
     format: { id: 'foundations', label: 'Foundations' },
     tags,
     featuredRank: null,
-    accent: 'amber',
-    icon: 'coins',
     ...over,
   };
 }

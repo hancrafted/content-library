@@ -23,6 +23,7 @@ erDiagram
     EVENT ||--o{ EPISODE : owns
     PLAYLIST }o--|{ EPISODE : "orders"
     EPISODE }o--|{ TAG : "carries (first = lead Tag)"
+    EVENT }o--|{ TAG : "carries (first = lead Tag)"
     EPISODE ||--o{ VIDEO : "public: 0-2, one per locale | unlisted: 0-1, recorded at its Event"
     EPISODE ||--|{ SLIDE : "composes, in order (own copies)"
     SHARED_SLIDE |o--o{ SLIDE : "promoted from / copied into"
@@ -44,11 +45,11 @@ Out of the model: Concept, Research question and Source (the evidence layer, its
 4. **An unlisted Episode lives only under an Event**, in that Event's folder: one outside `by-event/`, or one that no Event's Playlist lists, is refused. It has no overview card and is never an Upcoming Episode. Unlisted is not private: anyone holding the URL can open it. A public copy in an Event's folder lives at its Event-scoped URL only, with no `/episodes/` page.
 5. **A Video is a YouTube video; visibility decides how many.** A public Episode has at most one per locale: none, English, German or both. An unlisted Episode has at most one, recorded at its Event in the language spoken there, played on both locale pages and labelled with that language: the recording belongs to the composition that was presented.
 6. **Slides are copied, then promoted deliberately** (vision rule 4). Reusing a Slide copies its folder into the Episode, slug kept (_The Slide is a self-contained folder_). Copies drift until Han promotes one to a **Shared Slide**. How promotion works is open in ticket _Slide reuse_.
-7. **Tags group Episodes** as _Tags replace Topics_ decides, until the evidence layer replaces them.
+7. **Tags group Episodes and Events** as _Tags replace Topics_ decides, until the evidence layer replaces them; an Event carries its own Tags, curated, never worked out from its Playlist (_Events overview_).
 
 ### Delivery
 
-8. **An Event** is a dated workshop or webinar: slug `<date>-<name>`, date, kind, the Audience it targets, its **Organizer** (one of a closed list), optional time and location, and the one Playlist it presents. It owns its copies of Episodes, each in its folder `by-event/<event-slug>/`, and its Playlist lists Episodes no Event owns and its own copies, never another Event's. It owns no Slides directly, holds no text (title and description are Translation keys, FE-003) and has no visibility of its own. A copy that moves under its Event keeps its old Event-scoped URL as a 301 in `public/_redirects`.
+8. **An Event** is a dated workshop or webinar: slug `<date>-<name>`, date, kind, the Audience it targets, its **Organizer** (one of a closed list), its Tags (lead Tag first, as an Episode's), optional time, where it takes place (a format of onsite, remote or hybrid, with a venue onsite and hybrid and a platform from a closed list remote and hybrid; amended by _Events overview_), and the one Playlist it presents. It owns its copies of Episodes, each in its folder `by-event/<event-slug>/`, and its Playlist lists Episodes no Event owns and its own copies, never another Event's. It owns no Slides directly, holds no text (title and description are Translation keys, FE-003) and has no visibility of its own. A copy that moves under its Event keeps its old Event-scoped URL as a 301 in `public/_redirects`.
 9. **A Playlist** is an ordered list of Episodes and its `visibility`, nothing else. Whether it is an event Playlist is read from the Event side. A public Playlist lists only public Episodes; an event Playlist may list unlisted ones. `attendees` is refused until horizon 3 gives it an enforcer.
 10. **The Workshop template** replaces the event-frame Episode: a copy source holding title, agenda, in-scope, out-of-scope and orga Slides, copied into an ordinary unlisted Episode placed first in an Event's Playlist. A `/new-event` skill waits until two real Events exist.
 

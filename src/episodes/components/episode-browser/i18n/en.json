@@ -17,32 +17,6 @@
     },
     "empty": "No Episodes match these filters yet.",
     "reset": "Reset filters",
-    "tags": {
-      "context-engineering": {
-        "name": "Context engineering",
-        "tooltip": "Giving the AI the right context at the right time"
-      },
-      "agentic-ai": {
-        "name": "Agentic AI",
-        "tooltip": "AI that plans and acts in steps, not just answers"
-      },
-      "markdown": {
-        "name": "Markdown",
-        "tooltip": "Plain-text documents that people and AI both read well"
-      },
-      "cost": {
-        "name": "Cost",
-        "tooltip": "What AI really costs, and where the spend goes"
-      },
-      "sales": {
-        "name": "Sales",
-        "tooltip": "Finding, winning and keeping customers"
-      },
-      "workflow": {
-        "name": "Workflow",
-        "tooltip": "How work is split into steps and handed between chats"
-      }
-    },
     "formats": {
       "foundations": "Foundations",
       "teardown": "Teardown",

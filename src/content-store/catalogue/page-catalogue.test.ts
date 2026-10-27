@@ -41,6 +41,9 @@ const EVENT = {
   kind: 'workshop',
   organizer: 'axel',
   audience: 'organization',
+  tags: ['agentic-ai'],
+  format: 'remote',
+  platform: 'zoom',
   playlist: 'axel',
 } as const;
 /** The records as the generated registry hands them in, each Episode under the id its folder gives it. */

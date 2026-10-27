@@ -19,5 +19,31 @@
       "title": "Veranstaltungen",
       "description": "Workshops und Webinare, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
     }
+  },
+  "tags": {
+    "context-engineering": {
+      "name": "Context Engineering",
+      "tooltip": "Der KI zur richtigen Zeit den richtigen Kontext geben"
+    },
+    "agentic-ai": {
+      "name": "Agentische KI",
+      "tooltip": "KI, die in Schritten plant und handelt, statt nur zu antworten"
+    },
+    "markdown": {
+      "name": "Markdown",
+      "tooltip": "Textdokumente, die Menschen und KI gleich gut lesen"
+    },
+    "cost": {
+      "name": "Kosten",
+      "tooltip": "Was KI wirklich kostet und wohin das Geld fließt"
+    },
+    "sales": {
+      "name": "Vertrieb",
+      "tooltip": "Kunden finden, gewinnen und halten"
+    },
+    "workflow": {
+      "name": "Workflow",
+      "tooltip": "Wie Arbeit in Schritte geteilt und zwischen Chats übergeben wird"
+    }
   }
 }

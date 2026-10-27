@@ -1,22 +1,16 @@
 import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { Episode, PublishedEpisode } from '@/content-store/schemas/episode.schema';
 import type { TagId } from '@/content-store/schemas/fields';
-import { TAGS, type TagLook } from '@/episodes/lib/tag-looks';
 
 /*
- * How the Episode browser reads what an Episode declares about itself: its lead Tag, its card's look and the
- * browser's order. The record and its type live in the content store's schema (FE-013); values arrive as
+ * How the Episode browser reads what an Episode declares about itself: its lead Tag, which gives its card's look,
+ * and the browser's order. The record and its type live in the content store's schema (FE-013); values arrive as
  * arguments. No React (FE-007 §3).
  */
 
 /** The Episode's lead Tag: its first, which fixes the look of its card. */
 export function leadTagOf(episode: Pick<Episode, 'tags'>): TagId {
   return episode.tags[0];
-}
-
-/** The icon and accent an Episode's card draws, from its lead Tag. */
-export function lookOf(episode: Pick<Episode, 'tags'>): TagLook {
-  return TAGS[leadTagOf(episode)];
 }
 
 function isPublished<E extends Episode>(episode: E): episode is E & PublishedEpisode {

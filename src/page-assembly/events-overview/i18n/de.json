@@ -1,6 +1,18 @@
 {
   "eventsOverview": {
     "title": "Veranstaltungen",
-    "intro": "Workshops und Webinare, die eine geplante Reihe von Episoden der Reihe nach durchgehen."
+    "intro": "Workshops und Webinare, die eine geplante Reihe von Episoden der Reihe nach durchgehen.",
+    "upcoming": "Demnächst",
+    "past": "Vergangen",
+    "noUpcoming": "Keine anstehenden Veranstaltungen.",
+    "noPast": "Keine vergangenen Veranstaltungen.",
+    "noMatch": "Keine Veranstaltung hier passt zu diesen Filtern.",
+    "search": "Veranstaltungen durchsuchen",
+    "searchPlaceholder": "Veranstaltungen suchen",
+    "tagFilter": "Nach Tag filtern",
+    "view": "Ansicht",
+    "grid": "Karten",
+    "list": "Liste",
+    "reset": "Filter zurücksetzen"
   }
 }

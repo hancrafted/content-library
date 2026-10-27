@@ -1,19 +1,20 @@
 import { hasPage } from '@/content-store/catalogue/record-routes';
 import { FORMATS, TAG_IDS } from '@/content-store/schemas/fields';
+import { TAG_ICONS } from '@/content-store/schemas/tag-looks';
 import { featuredIds, listEpisodes } from '@/content-store/store';
-import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';
+import { FILTER_TAGS } from '@/episodes/components/episode-browser/episode-browser.pure';
+import { leadTagOf } from '@/episodes/lib/episode-metadata.pure';
 import { compositionOf } from '@/episodes/lib/registry';
-import { FILTER_TAGS, TAGS } from '@/episodes/lib/tag-looks';
+import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import { describe, expect, it } from 'vitest';
 import de from '../episode-browser/i18n/de.json';
 import en from '../episode-browser/i18n/en.json';
-import { TAG_ACCENTS, TAG_ICONS } from './episode-visuals';
 
 /*
  * The Episode browser's central lists against the Episodes that exist (#40):
  * Featured names published Episodes, each Tag in the closed vocabulary (whose
- * use the content store refuses outside it) has a look the landing can draw, and every string a card
- * reads is translated, each Tag's name and tooltip included.
+ * use the content store refuses outside it) has an icon a card can draw, and every string a card
+ * reads is translated; the Tags' own words are page assembly's (`src/page-assembly/lib/tag-words.test.ts`).
  */
 
 const TRANSLATIONS = { en, de } as const;
@@ -45,15 +46,15 @@ describe('success cases', () => {
   it('gives each Featured Episode the look of its lead Tag, with no Episode declaring one', () => {
     // ARRANGE
     const expected = [
-      'onboard-ai-every-time: context-engineering sky/hourglass',
-      'ai-attention-span: context-engineering sky/hourglass',
-      'ai-gives-you-more-work: agentic-ai violet/sparkles',
+      'onboard-ai-every-time: context-engineering hourglass',
+      'ai-attention-span: context-engineering hourglass',
+      'ai-gives-you-more-work: agentic-ai sparkles',
     ];
     // ACT
     const looks = FEATURED.map((slug) => {
       const episode = listEpisodes().find((e) => e.slug === slug);
-      const { accent, icon } = lookOf(episode!);
-      return `${slug}: ${leadTagOf(episode!)} ${accent}/${icon}`;
+      const lead = leadTagOf(episode!);
+      return `${slug}: ${lead} ${TAG_ICONS[lead]}`;
     });
     // ASSERT
     expect(looks).toEqual(expected);
@@ -71,31 +72,13 @@ describe('success cases', () => {
     expect(declared).toEqual(expected);
   });
 
-  it('gives every Tag in the vocabulary a name and tooltip in both locales', () => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const missing = (['en', 'de'] as const).flatMap((locale) => {
-      const tags = TRANSLATIONS[locale].episodeBrowser.tags as Record<
-        string,
-        { name?: string; tooltip?: string } | undefined
-      >;
-      return TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `${locale}: ${id}`);
-    });
-    // ASSERT
-    expect(missing).toEqual(expected);
-  });
-
-  it('gives every Tag an icon and an accent the landing can draw', () => {
+  it('gives every Tag an icon a card can draw', () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT
     const undrawable = TAG_IDS.flatMap((tag) => {
-      const { icon, accent } = TAGS[tag];
-      return [
-        ...(TAG_ICONS[icon] === undefined ? [`${tag}: icon ${icon}`] : []),
-        ...(TAG_ACCENTS[accent] === undefined ? [`${tag}: accent ${accent}`] : []),
-      ];
+      const icon: string = TAG_ICONS[tag];
+      return icon in NAMED_ICONS ? [] : [`${tag}: icon ${icon}`];
     });
     // ASSERT
     expect(undrawable).toEqual(expected);
@@ -115,13 +98,11 @@ describe('failure cases', () => {
   it.each(['en', 'de'] as const)('leaves no string a card reads untranslated in %s', (locale) => {
     // ARRANGE
     const { episodeBrowser } = TRANSLATIONS[locale];
-    const tags = episodeBrowser.tags as Record<string, { name?: string; tooltip?: string } | undefined>;
     const upcomingCopy = episodeBrowser.upcoming as Record<string, { title?: string; caption?: string } | undefined>;
     const expected: string[] = [];
     // ACT
     const missing = [
       ...FORMATS.filter((id) => !episodeBrowser.formats[id]).map((id) => `formats.${id}`),
-      ...TAG_IDS.filter((id) => !(tags[id]?.name && tags[id]?.tooltip)).map((id) => `tags.${id}`),
       ...listEpisodes().flatMap(({ ref, slug, status }) => {
         const copy = hasPage(ref) ? compositionOf(ref).messages[locale] : upcomingCopy[slug];
         return copy?.title && copy.caption ? [] : [`${status}.${slug}`];
@@ -133,19 +114,6 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps no Translation key for a Tag outside the vocabulary', () => {
-    // ARRANGE
-    const expected: string[] = [];
-    // ACT
-    const stray = (['en', 'de'] as const).flatMap((locale) =>
-      Object.keys(TRANSLATIONS[locale].episodeBrowser.tags)
-        .filter((id) => !(TAG_IDS as readonly string[]).includes(id))
-        .map((id) => `${locale}: ${id}`),
-    );
-    // ASSERT
-    expect(stray).toEqual(expected);
-  });
-
   it('keeps site-wide upcoming copy only for Episodes with no page, so one with a page reads its own i18n', () => {
     // ARRANGE
     const expected = listEpisodes()

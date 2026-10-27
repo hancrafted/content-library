@@ -11,7 +11,19 @@ const SLUG = '2026-10-23-axel-agentic-workflow';
 const RECORD = {
   slug: SLUG,
   date: '2026-10-23',
+  tags: ['agentic-ai', 'workflow'],
+  format: 'remote',
+  platform: 'zoom',
   playlist: { episodes: ['alpha', 'beta', 'gamma'] },
+} as const;
+/** The Tags' names and tooltips as page assembly reads them from their Translation files, written out by hand. */
+const TAG_WORDS = {
+  'context-engineering': { name: 'Context engineering', tooltip: 'Right context, right time' },
+  'agentic-ai': { name: 'Agentic AI', tooltip: 'AI that plans and acts' },
+  markdown: { name: 'Markdown', tooltip: 'Plain-text documents' },
+  cost: { name: 'Cost', tooltip: 'What AI costs' },
+  sales: { name: 'Sales', tooltip: 'Winning customers' },
+  workflow: { name: 'Workflow', tooltip: 'Work split into steps' },
 } as const;
 
 describe('success cases', () => {
@@ -31,8 +43,8 @@ describe('success cases', () => {
       route: '/events/2026-10-23-axel-agentic-workflow',
     };
     // ACT
-    const english = eventCard(RECORD, 'en');
-    const german = eventCard(RECORD, 'de');
+    const english = eventCard(RECORD, 'en', TAG_WORDS);
+    const german = eventCard(RECORD, 'de', TAG_WORDS);
     // ASSERT
     expect({
       english: { title: english.title, description: english.description },
@@ -41,21 +53,65 @@ describe('success cases', () => {
     }).toEqual(expected);
   });
 
-  it('writes the date in the locale and keeps the machine-readable day', () => {
+  it('writes the date, its day of the month and its weekday in the locale, and keeps the machine-readable day', () => {
     // ARRANGE
-    const expected = { english: 'Oct 23, 2026', german: '23. Okt. 2026', date: '2026-10-23' };
+    const expected = {
+      english: { label: 'Oct 23, 2026', day: '23', weekday: 'Fri' },
+      german: { label: '23. Okt. 2026', day: '23', weekday: 'Fr' },
+      date: '2026-10-23',
+    };
     // ACT
-    const english = eventCard(RECORD, 'en');
-    const german = eventCard(RECORD, 'de');
+    const english = eventCard(RECORD, 'en', TAG_WORDS);
+    const german = eventCard(RECORD, 'de', TAG_WORDS);
+    const parts = (card: typeof english) => ({ label: card.dateLabel, day: card.day, weekday: card.weekday });
     // ASSERT
-    expect({ english: english.dateLabel, german: german.dateLabel, date: english.date }).toEqual(expected);
+    expect({ english: parts(english), german: parts(german), date: english.date }).toEqual(expected);
+  });
+
+  it('names its Tags in their order, the first its lead Tag, with each tooltip', () => {
+    // ARRANGE
+    const expected = {
+      leadTag: 'agentic-ai',
+      tags: [
+        { id: 'agentic-ai', label: 'Agentic AI', tooltip: 'AI that plans and acts' },
+        { id: 'workflow', label: 'Workflow', tooltip: 'Work split into steps' },
+      ],
+    };
+    // ACT
+    const card = eventCard(RECORD, 'en', TAG_WORDS);
+    // ASSERT
+    expect({ leadTag: card.leadTag, tags: card.tags }).toEqual(expected);
+  });
+
+  it.each([
+    { kind: 'a remote', record: RECORD, locale: 'en', expected: { format: 'remote', label: 'Remote · Zoom' } },
+    { kind: 'a remote', record: RECORD, locale: 'de', expected: { format: 'remote', label: 'Online · Zoom' } },
+    {
+      kind: 'an onsite',
+      record: { ...RECORD, format: 'onsite', venue: 'AXEL, Karlsruhe', platform: undefined },
+      locale: 'en',
+      expected: { format: 'onsite', label: 'AXEL, Karlsruhe' },
+    },
+    {
+      kind: 'a hybrid',
+      record: { ...RECORD, format: 'hybrid', venue: 'AXEL, Karlsruhe', platform: 'teams' },
+      locale: 'en',
+      expected: { format: 'hybrid', label: 'AXEL, Karlsruhe · Microsoft Teams' },
+    },
+  ] as const)('says where $kind Event takes place, in $locale', ({ record, locale, expected }) => {
+    // ARRANGE
+    const want = expected;
+    // ACT
+    const card = eventCard(record, locale, TAG_WORDS);
+    // ASSERT
+    expect(card.place).toEqual(want);
   });
 
   it('counts the Episodes and says so in the plural', () => {
     // ARRANGE
     const expected = { count: 3, label: '3 Episodes' };
     // ACT
-    const card = eventCard(RECORD, 'en');
+    const card = eventCard(RECORD, 'en', TAG_WORDS);
     // ASSERT
     expect({ count: card.episodeCount, label: card.episodeCountLabel }).toEqual(expected);
   });
@@ -68,7 +124,7 @@ describe('failure cases', () => {
     const expected = 'No words name the Event "no-such-event" in en';
     // ACT
     // @ts-expect-error -- an Event's words are keyed by the registered slugs only
-    const build = () => eventCard(unknown, 'en');
+    const build = () => eventCard(unknown, 'en', TAG_WORDS);
     // ASSERT
     expect(build).toThrow(expected);
   });
@@ -80,20 +136,20 @@ describe('edge cases', () => {
     const single = { ...RECORD, playlist: { episodes: ['alpha'] } };
     const expected = '1 Episode';
     // ACT
-    const card = eventCard(single, 'en');
+    const card = eventCard(single, 'en', TAG_WORDS);
     // ASSERT
     expect(card.episodeCountLabel).toBe(expected);
   });
 
-  it('carries the time and the location only when the record has them', () => {
+  it('carries the time only when the record has one', () => {
     // ARRANGE
-    const timed = { ...RECORD, time: '09:30', location: 'Berlin' };
-    const expected = { time: '09:30', location: 'Berlin' };
+    const timed = { ...RECORD, time: '09:30' };
+    const expected = '09:30';
     // ACT
-    const withDetails = eventCard(timed, 'en');
-    const without = eventCard(RECORD, 'en');
+    const withTime = eventCard(timed, 'en', TAG_WORDS);
+    const without = eventCard(RECORD, 'en', TAG_WORDS);
     // ASSERT
-    expect({ time: withDetails.time, location: withDetails.location }).toEqual(expected);
-    expect('time' in without || 'location' in without).toBe(false);
+    expect(withTime.time).toBe(expected);
+    expect(without).not.toHaveProperty('time');
   });
 });

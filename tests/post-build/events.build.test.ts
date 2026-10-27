@@ -45,6 +45,9 @@ const LEGACY_WORKSHOPS: readonly { workshop: string; event: EventSlug }[] = [
   { workshop: '2026-10-23-axel-agentic-workflow', event: '2026-10-23-axel-agentic-workflow' },
 ];
 
+/** Where the AXEL seminar took place, as its card writes it. */
+const PLACES: Record<Locale, string> = { en: 'Remote · Zoom', de: 'Online · Zoom' };
+
 const WORDS: Record<
   Locale,
   {
@@ -125,20 +128,45 @@ describe('old Workshop links', () => {
 });
 
 describe('/events page', () => {
-  it.each(LOCALES)('lists each Event whose Playlist is public as a card with name, date and count for %s', (locale) => {
+  it.each(LOCALES)('lists each Event whose Playlist is public as a card with name, date and place for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.events, locale));
-    const expected = { cards: LISTED.length, ...WORDS[locale] };
+    const expected = { cards: LISTED.length, ...WORDS[locale], place: PLACES[locale] };
     // ACT
     const cards = $('[data-event-list] [data-event-card]');
     const card = cards.filter(`[data-event-slug="${AXEL.slug}"]`);
     // ASSERT
     expect(cards.length).toBe(expected.cards);
-    expect(card.find('h2').text()).toBe(expected.title);
+    expect(card.find('h4').text()).toBe(expected.title);
     expect(card.find('time[data-event-date]').attr('datetime')).toBe(AXEL.date);
     expect(card.find('time[data-event-date]').text()).toBe(expected.date);
-    expect(card.find('[data-event-episode-count]').text()).toBe(expected.count);
+    expect(card.find('[data-event-place]').text()).toBe(expected.place);
+    expect(card.find('[data-event-episode-count]').length).toBe(0);
   });
+
+  it.each(LOCALES)(
+    'puts each Event under Upcoming or Past by its day against the build day, in its month, for %s',
+    (locale) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(ROUTES.events, locale));
+      const expected = LISTED.map((event) => ({
+        slug: event.slug,
+        section: isPastEvent(event.date, TODAY) ? 'past' : 'upcoming',
+        month: event.date.slice(0, 7),
+      }));
+      // ACT
+      const seen = LISTED.map((event) => {
+        const card = $(`[data-event-card][data-event-slug="${event.slug}"]`);
+        return {
+          slug: event.slug,
+          section: card.closest('[data-event-section]').attr('data-event-section'),
+          month: card.closest('[data-event-month]').attr('data-event-month'),
+        };
+      });
+      // ASSERT
+      expect(seen).toEqual(expected);
+    },
+  );
 
   it.each(LOCALES)('links each card to its Event page in the locale for %s', (locale) => {
     // ARRANGE
@@ -150,16 +178,43 @@ describe('/events page', () => {
     expect(href).toBe(expected);
   });
 
-  it.each(LOCALES)('draws the Event card with the quiet arrow and no Tags for %s', (locale) => {
+  it.each(LOCALES)('draws the Event card with the quiet arrow, its lead Tag and its Tags for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.events, locale));
+    const expected = { lead: AXEL.tags[0], tags: [...AXEL.tags] };
     // ACT
     const card = $(`[data-event-card][data-event-slug="${AXEL.slug}"]`);
+    const tags = card
+      .find('[data-event-tags] [data-tag]')
+      .toArray()
+      .map((tag) => $(tag).attr('data-tag'));
     // ASSERT
     expect(card.attr('data-card-variant')).toBe('event');
     expect(card.find('[data-open-cue="arrow"]').length).toBe(1);
-    expect(card.find('[data-tag], [data-episode-tags]').length).toBe(0);
+    expect(card.attr('data-lead-tag')).toBe(expected.lead);
+    expect(tags).toEqual(expected.tags);
   });
+
+  it.each(LOCALES)(
+    'offers a search and a Tag chip for each Tag a listed Event carries, none pressed, for %s',
+    (locale) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(ROUTES.events, locale));
+      const expected = [...new Set(LISTED.flatMap((event) => event.tags))].sort();
+      // ACT
+      const search = $('[data-event-controls] input[type="search"][data-event-search]');
+      const chips = $('[data-event-controls] [data-filter-tag]');
+      const pressed = chips.filter('[aria-pressed="true"]');
+      const offered = chips
+        .toArray()
+        .map((chip) => $(chip).attr('data-filter-tag'))
+        .sort();
+      // ASSERT
+      expect(search.length).toBe(1);
+      expect(offered).toEqual(expected);
+      expect(pressed.length).toBe(0);
+    },
+  );
 });
 
 describe('Event page', () => {
@@ -277,8 +332,8 @@ describe('the 2026-10-28 Event', () => {
   /** Each copy, the Event's own: its folder name under the Event's folder. */
   const EPISODES = SLUGS.map((slug) => episodeRef(slug, CYBERFORUM)) satisfies readonly EpisodeRef<EpisodeId>[];
   const FACTS = {
-    en: { kind: 'Webinar', audience: 'For individuals', time: ' · 17:00–19:00 CET', location: 'remote' },
-    de: { kind: 'Webinar', audience: 'Für Einzelpersonen', time: ' · 17:00–19:00 CET', location: 'remote' },
+    en: { kind: 'Webinar', audience: 'For individuals', time: ' · 17:00–19:00 CET', place: 'Remote · Zoom' },
+    de: { kind: 'Webinar', audience: 'Für Einzelpersonen', time: ' · 17:00–19:00 CET', place: 'Online · Zoom' },
   } as const;
 
   it.each(LOCALES)(
@@ -307,7 +362,7 @@ describe('the 2026-10-28 Event', () => {
     },
   );
 
-  it.each(LOCALES)('names the webinar, its Audience, time and location on the facts line (%s)', (locale) => {
+  it.each(LOCALES)('names the webinar, its Audience, time and place on the facts line (%s)', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(eventRoute(CYBERFORUM), locale));
     const expected = FACTS[locale];
@@ -317,7 +372,7 @@ describe('the 2026-10-28 Event', () => {
       kind: facts.find('[data-event-kind]').text(),
       audience: facts.find('[data-event-audience]').text(),
       time: facts.find('[data-event-time]').text(),
-      location: facts.find('[data-event-location]').text(),
+      place: facts.find('[data-event-place]').text(),
     };
     // ASSERT
     expect(seen).toEqual(expected);

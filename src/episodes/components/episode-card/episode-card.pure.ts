@@ -2,8 +2,7 @@ import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { episodeRoute, hasPage } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus, PublishedEpisode, UpcomingEpisode } from '@/content-store/schemas/episode.schema';
 import type { FormatId, TagId } from '@/content-store/schemas/fields';
-import { leadTagOf, lookOf } from '@/episodes/lib/episode-metadata.pure';
-import type { Accent, TagIcon } from '@/episodes/lib/tag-looks';
+import { leadTagOf } from '@/episodes/lib/episode-metadata.pure';
 import { dateLabelOf } from '@/shared/lib/date-label.pure';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 
@@ -20,7 +19,7 @@ export interface TagLabel extends Labelled<TagId> {
 
 /**
  * One Episode as a landing design draws it: the Episode's metadata with its
- * strings read in one locale and its look taken from its lead Tag. Plain
+ * strings read in one locale; its lead Tag gives it its look. Plain
  * values only, so a Server Component can hand it to a `*.client.tsx` leaf
  * (FE-006 §4).
  */
@@ -51,8 +50,6 @@ export interface EpisodeCard {
   readonly releaseDate?: string;
   /** Position in the Featured slots, 1 first; `null` for every other card. */
   readonly featuredRank: number | null;
-  readonly accent: Accent;
-  readonly icon: TagIcon;
 }
 
 /** Reads one Translation key by its full dotted path. */
@@ -131,8 +128,8 @@ export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
   const copy = copyOf(entry, ctx);
   const tags = entry.tags.map((id) => ({
     id,
-    label: read(`${OVERVIEW_KEYS}.tags.${id}.name`),
-    tooltip: read(`${OVERVIEW_KEYS}.tags.${id}.tooltip`),
+    label: read(`tags.${id}.name`),
+    tooltip: read(`tags.${id}.tooltip`),
   }));
   return {
     slug: entry.slug,
@@ -144,7 +141,6 @@ export function episodeCard(entry: CardEntry, ctx: CardContext): EpisodeCard {
     format: { id: entry.format, label: read(`${OVERVIEW_KEYS}.formats.${entry.format}`) },
     tags,
     featuredRank: null,
-    ...lookOf(entry),
     ...publishedFields(entry, ctx),
   };
 }
