@@ -5,7 +5,7 @@ export const event = {
   slug: '2026-10-23-axel-agentic-workflow',
   date: '2026-10-23',
   kind: 'workshop',
-  organizer: 'axel',
+  organizers: ['axel'],
   audience: 'organization',
   tags: ['agentic-ai', 'workflow'],
   format: 'remote',

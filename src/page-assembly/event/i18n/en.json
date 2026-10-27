@@ -2,7 +2,6 @@
   "eventPage": {
     "playlist": "Playlist",
     "start": "Start with Episode {step}",
-    "readingTime": "{minutes} min total reading time",
     "kinds": {
       "workshop": "Workshop",
       "webinar": "Webinar"
@@ -10,6 +9,15 @@
     "audiences": {
       "individual": "For individuals",
       "organization": "For organizations"
+    },
+    "sideLabel": "About this Event",
+    "organizedBy": "Organised by",
+    "viewOn": "View on {name}",
+    "seeAlso": "See also",
+    "related": "Other Episodes you might be interested in",
+    "newTab": "(opens in a new tab)",
+    "imageAlt": {
+      "2026-10-28-cyberforum-akademie-intro-agentic-workflow": "CyberForum Akademie header graphic for the webinar “Generative AI at work”"
     }
   }
 }

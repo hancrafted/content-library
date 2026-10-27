@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { AUDIENCES, EVENT_FORMATS, EVENT_KINDS, isoDate, ORGANIZERS, PLATFORMS, slug, TAG_IDS } from './fields';
+import { AUDIENCES, EVENT_FORMATS, EVENT_KINDS, isoDate, ORGANIZER_IDS, PLATFORMS, slug, TAG_IDS } from './fields';
 
 /*
  * An Event: a dated workshop or webinar that presents one Playlist. It owns no Slides and holds no text: its title
@@ -18,7 +18,14 @@ function closed<const T extends readonly [string, ...string[]]>(values: T) {
   });
 }
 
-const organizer = closed(ORGANIZERS);
+const organizer = closed(ORGANIZER_IDS);
+const ORGANIZERS_REQUIRED = 'is required, one Organizer or more, the first its lead';
+
+/** A URL held in data: only `https` passes, as `externalHref` will hold it again at render (FE-003 §1.4). */
+const httpsUrl = z.string().refine((url) => URL.canParse(url) && url.startsWith('https://'), 'must be an https URL');
+
+/** Where an Event's image lives under `public/`. */
+const IMAGE_FOLDER = '/images/events/';
 const tag = closed(TAG_IDS);
 const TAGS_REQUIRED = 'is required, one Tag or more, the first its lead Tag';
 
@@ -60,9 +67,40 @@ export const eventSchema = z
     ),
     date: isoDate.describe('The day the Event takes place; once it lies before the build day, the Event is past'),
     kind: z.enum(EVENT_KINDS).describe('What kind of occasion it is, shown in its facts line'),
-    organizer: organizer.describe(
-      "Who runs the Event, from the closed list: hancrafted for Han's own, else the partner; a typo fails at load",
-    ),
+    organizers: z
+      .tuple([organizer], organizer, { error: ORGANIZERS_REQUIRED })
+      .readonly()
+      .describe(
+        "Who runs the Event, lead first, from the closed list: hancrafted for Han's own, else the partner; a typo fails at load",
+      ),
+    listing: httpsUrl.optional().describe("The partner's own page for this Event, https only"),
+    references: z
+      .array(
+        z
+          .object({
+            label: z.string().min(1).describe('The link text, the same in every locale'),
+            url: httpsUrl.describe('Where the link goes, https only'),
+          })
+          .readonly(),
+      )
+      .readonly()
+      .optional()
+      .describe(
+        'Further links the Event page lists under See also: a label, the same in every locale, and an https url',
+      ),
+    image: z
+      .object({
+        src: z
+          .string()
+          .startsWith(IMAGE_FOLDER, `must sit under ${IMAGE_FOLDER}`)
+          .describe('The image file as a public path, under /images/events/'),
+        credit: z.string().min(1).describe('The credit line shown under the image, the same in every locale'),
+      })
+      .readonly()
+      .optional()
+      .describe(
+        'The Event page image: its path under /images/events/ and its credit; its alt is the Translation key `eventPage.imageAlt.<slug>`',
+      ),
     audience: z.enum(AUDIENCES).describe('The Audience the Event targets'),
     time: z
       .string()

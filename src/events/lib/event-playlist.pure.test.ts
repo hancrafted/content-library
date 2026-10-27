@@ -1,15 +1,14 @@
 import { episodeRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { EpisodeId } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
-import { eventPlaylistCards, startOf, totalMinutes, type PlaylistCard } from './event-playlist.pure';
+import { eventPlaylistCards, startOf, type PlaylistCard } from './event-playlist.pure';
 
 /** A hand-written stand-in for the card fields an Event's Playlist reads. */
 type Stub = PlaylistCard & { readonly slug: string };
-const linked = (slug: string, minutes?: number): Stub => ({
+const linked = (slug: string): Stub => ({
   slug,
   route: `/episodes/${slug}`,
   href: `/episodes/${slug}`,
-  ...(minutes === undefined ? {} : { minutes }),
 });
 const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
 /** An Episode as its Playlist lists it: its record (only the slug read here), and its page's EpisodeRef when it has one. */
@@ -24,16 +23,6 @@ const axel = (...episodes: ReturnType<typeof entry>[]) =>
 const linkedCard = (episode: { slug: string }): Stub => linked(episode.slug);
 
 describe('success cases', () => {
-  it('adds the counted minutes of every Episode that has them', () => {
-    // ARRANGE
-    const cards = [linked('alpha', 12), linked('beta', 9), linked('gamma', 20)];
-    const expected = 41;
-    // ACT
-    const total = totalMinutes(cards);
-    // ASSERT
-    expect(total).toBe(expected);
-  });
-
   it('starts with the first Episode, as step 1, when it is linked', () => {
     // ARRANGE
     const cards = [linked('alpha'), linked('beta')];
@@ -92,25 +81,6 @@ describe('edge cases', () => {
     const [card] = eventPlaylistCards(event, (episode) => upcoming(episode.slug), 'en');
     // ASSERT
     expect({ route: card.route, href: card.href }).toEqual(expected);
-  });
-
-  it('shows no total when no Episode has a counted time', () => {
-    // ARRANGE
-    const cards = [linked('alpha'), upcoming('beta')];
-    // ACT
-    const total = totalMinutes(cards);
-    // ASSERT
-    expect(total).toBeUndefined();
-  });
-
-  it('totals only the known minutes when some Episodes have none', () => {
-    // ARRANGE
-    const cards = [linked('alpha', 12), upcoming('beta')];
-    const expected = 12;
-    // ACT
-    const total = totalMinutes(cards);
-    // ASSERT
-    expect(total).toBe(expected);
   });
 
   it('starts with the first linked Episode and its step number when the opening ones are upcoming', () => {
