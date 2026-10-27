@@ -1,0 +1,36 @@
+{
+  "title": "Drei Ebenen, ein Abend",
+  "caption": "Generative KI ist der Motor, Prompting die Art, mit ihm zu sprechen, agentisch die Arbeitsweise.",
+  "you": "Ihr",
+  "layers": {
+    "agentic": {
+      "label": "Die Arbeitsweise",
+      "name": "Agentisch",
+      "line": "Große Aufgaben in Schritten, ihr als Kapitän dazwischen"
+    },
+    "prompting": {
+      "label": "Wie man mit dem Motor spricht",
+      "name": "Prompting",
+      "line": "Kommt fertig zum Kopieren, mit dem Warum"
+    },
+    "engine": {
+      "label": "Der Motor",
+      "name": "Generative KI",
+      "line": "ChatGPT, Copilot, Claude: Die nutzen wir den ganzen Abend"
+    }
+  },
+  "notes": {
+    "engine": {
+      "header": "Der Motor",
+      "description": "„ChatGPT, Copilot, Claude, das ist generative KI. Die nutzen wir heute die ganze Zeit.“"
+    },
+    "agentic": {
+      "header": "Die Arbeitsweise",
+      "description": "„Wenn eine Aufgabe zu groß für einen Prompt ist, zerlegt man sie in Schritte, und die KI arbeitet sie nacheinander ab, mit euch als Kapitän dazwischen. Darum geht es heute.“"
+    },
+    "prompting": {
+      "header": "Eingebaut",
+      "description": "„Prompt-Grundlagen und Meta-Prompting kommen nicht als Theorie, ihr bekommt sie fertig zum Kopieren. Jeder Prompt im Praxisteil zeigt euch, warum er funktioniert. Und ‚Grill me‘ ist im Grunde Meta-Prompting.“"
+    }
+  }
+}

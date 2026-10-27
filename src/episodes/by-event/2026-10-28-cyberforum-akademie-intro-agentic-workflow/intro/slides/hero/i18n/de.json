@@ -1,0 +1,13 @@
+{
+  "kicker": "Zoom-Webinar · 28.10.2026",
+  "flow": {
+    "engine": "Motor",
+    "engineName": "Generative KI",
+    "engineHint": "ChatGPT, Copilot, Claude",
+    "you": "Ihr prüft",
+    "youLabel": "Ihr",
+    "promptChip": "Prompt eingebaut",
+    "way": "Agentisch: die Arbeitsweise",
+    "steps": { "first": "Recherche", "second": "Entwurf", "third": "Endfassung" }
+  }
+}

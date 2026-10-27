@@ -1,16 +1,25 @@
 {
   "title": "Agenda",
-  "caption": "Replace with the plan of the session: each block with its time slot.",
-  "items": {
-    "first": "Time slot: first block",
-    "second": "Time slot: second block",
-    "third": "Time slot: third block",
-    "fourth": "Time slot: questions and wrap-up"
+  "caption": "Theory first, then a live demo, then you try it yourselves.",
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": { "time": "17:00", "title": "Welcome" },
+    "first": { "time": "17:10", "title": "Treat AI like a brilliant freelancer with amnesia" },
+    "second": { "time": "17:25", "title": "Why AI has a weird attention span you must learn to manage" },
+    "third": { "time": "17:40", "title": "Will AI reduce your work? It adds work: managing it." },
+    "demo": { "time": "17:55", "title": "Live demo: “Grill me”" },
+    "practice": { "time": "18:20", "title": "Hands-on and questions" }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theory",
+    "demo": "Demo",
+    "practice": "Practice"
   },
   "notes": {
     "talking-points": {
-      "header": "What to say about the agenda",
-      "description": "Replace with what you say while this Slide is up."
+      "header": "Times are placeholders",
+      "description": "Theory first in three Episodes, then the live demo “Grill me”, then the hands-on part with questions. The times (17:00 to 19:00) are placeholders until Han sets them."
     }
   }
 }

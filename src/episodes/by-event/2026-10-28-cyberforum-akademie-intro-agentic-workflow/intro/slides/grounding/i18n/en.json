@@ -1,0 +1,36 @@
+{
+  "title": "Three layers, one evening",
+  "caption": "Generative AI is the engine, prompting is how you talk to it, agentic is the way of working.",
+  "you": "You",
+  "layers": {
+    "agentic": {
+      "label": "The way of working",
+      "name": "Agentic",
+      "line": "Big tasks in steps, with you as captain in between"
+    },
+    "prompting": {
+      "label": "How to talk to the engine",
+      "name": "Prompting",
+      "line": "Arrives ready to copy, with the why"
+    },
+    "engine": {
+      "label": "The engine",
+      "name": "Generative AI",
+      "line": "ChatGPT, Copilot, Claude: we use it all evening"
+    }
+  },
+  "notes": {
+    "engine": {
+      "header": "The engine",
+      "description": "“ChatGPT, Copilot, Claude, that is generative AI. We use it all evening.”"
+    },
+    "agentic": {
+      "header": "The way of working",
+      "description": "“When a task is too big for one prompt, you split it into steps, and the AI works through them one after another, with you as captain in between. That is what tonight is about.”"
+    },
+    "prompting": {
+      "header": "Built in",
+      "description": "“Prompt basics and meta-prompting do not come as theory, you get them ready to copy. Every prompt in the hands-on part shows you why it works. And ‘Grill me’ is meta-prompting, really.”"
+    }
+  }
+}

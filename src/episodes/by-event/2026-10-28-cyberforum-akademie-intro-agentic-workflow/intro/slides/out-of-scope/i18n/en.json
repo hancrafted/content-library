@@ -1,15 +1,19 @@
 {
   "title": "Out of scope",
-  "caption": "Replace with what this session leaves out, so no one waits for it.",
+  "caption": "No tool shoot-out, no code, no list of magic phrases.",
+  "panel": {
+    "title": "Set aside, on purpose",
+    "line": "So nobody waits for it."
+  },
   "items": {
-    "first": "A topic the session leaves out",
-    "second": "A second topic the session leaves out",
-    "third": "A third topic the session leaves out"
+    "first": { "title": "Prompt tricks as theory", "reason": "The prompts come ready to copy." },
+    "second": { "title": "Tool comparisons", "reason": "The picture fits any tool." },
+    "third": { "title": "Programming", "reason": "Everything in plain words." }
   },
   "notes": {
     "talking-points": {
-      "header": "What to say about what is left out",
-      "description": "Replace with what you say while this Slide is up."
+      "header": "So no one waits",
+      "description": "Naming what is left out keeps expectations honest: no tool shoot-out, no code, no list of magic phrases."
     }
   }
 }

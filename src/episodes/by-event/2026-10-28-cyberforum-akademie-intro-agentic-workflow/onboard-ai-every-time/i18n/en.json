@@ -10,5 +10,11 @@
         "script": "Welcome to hancrafted. Today's episode is about why you should treat AI like a brilliant freelancer with amnesia. The goal: a fresh perspective, so the next time AI leaves you confused or disappointed, you have a mental model to solve it. Let's get going."
       }
     }
+  },
+  "notes": {
+    "junior-to-freelancer": {
+      "header": "From junior to freelancer",
+      "description": "The announcement spoke of a junior analogy, the Slides say “freelancer”. Say the bridge out loud: “Picture the AI as a new colleague, more an experienced freelancer than a junior: it knows an incredible amount, but it forgets everything after each conversation.”"
+    }
   }
 }

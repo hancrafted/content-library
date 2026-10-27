@@ -1,16 +1,28 @@
 {
   "title": "Agenda",
-  "caption": "Ersetze dies durch den Ablauf der Session: jeder Block mit seinem Zeitfenster.",
-  "items": {
-    "first": "Zeitfenster: erster Block",
-    "second": "Zeitfenster: zweiter Block",
-    "third": "Zeitfenster: dritter Block",
-    "fourth": "Zeitfenster: Fragen und Abschluss"
+  "caption": "Erst die Theorie, dann eine Live-Demo, dann probiert ihr es selbst aus.",
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": { "time": "17:00", "title": "Einstieg" },
+    "first": { "time": "17:10", "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie" },
+    "second": {
+      "time": "17:25",
+      "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst"
+    },
+    "third": { "time": "17:40", "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen." },
+    "demo": { "time": "17:55", "title": "Live-Demo „Grill me“" },
+    "practice": { "time": "18:20", "title": "Praxisteil und Fragen" }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theorie",
+    "demo": "Demo",
+    "practice": "Praxis"
   },
   "notes": {
     "talking-points": {
-      "header": "Was Du zur Agenda sagst",
-      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "header": "Die Zeiten sind Platzhalter",
+      "description": "Erst die Theorie in drei Episoden, dann die Live-Demo „Grill me“, dann der Praxisteil mit Fragen. Die Uhrzeiten (17:00 bis 19:00) sind Platzhalter, bis Han sie setzt."
     }
   }
 }

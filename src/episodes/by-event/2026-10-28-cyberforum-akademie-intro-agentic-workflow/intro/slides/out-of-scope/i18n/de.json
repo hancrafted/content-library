@@ -1,15 +1,19 @@
 {
   "title": "Nicht im Fokus",
-  "caption": "Ersetze dies durch das, was diese Session auslässt, damit niemand darauf wartet.",
+  "caption": "Kein Tool-Vergleich, kein Code, keine Liste magischer Formulierungen.",
+  "panel": {
+    "title": "Bewusst beiseitegelegt",
+    "line": "Damit niemand darauf wartet."
+  },
   "items": {
-    "first": "Ein Thema, das die Session auslässt",
-    "second": "Ein zweites Thema, das die Session auslässt",
-    "third": "Ein drittes Thema, das die Session auslässt"
+    "first": { "title": "Prompt-Tricks als Theorie", "reason": "Die Prompts kommen fertig zum Kopieren." },
+    "second": { "title": "Tool-Vergleiche", "reason": "Das Bild passt zu jedem Tool." },
+    "third": { "title": "Programmieren", "reason": "Alles in normalen Worten." }
   },
   "notes": {
     "talking-points": {
-      "header": "Was Du zu den ausgelassenen Themen sagst",
-      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "header": "Damit niemand wartet",
+      "description": "Wer benennt, was heute fehlt, hält die Erwartungen ehrlich: kein Tool-Wettstreit, kein Code, keine Liste magischer Sätze."
     }
   }
 }

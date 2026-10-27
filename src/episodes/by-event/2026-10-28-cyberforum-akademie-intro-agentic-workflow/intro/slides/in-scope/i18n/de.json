@@ -1,15 +1,29 @@
 {
   "title": "Im Fokus",
-  "caption": "Ersetze dies durch das, was diese Session behandelt.",
-  "items": {
-    "first": "Ein Thema, das die Session behandelt",
-    "second": "Ein zweites Thema, das die Session behandelt",
-    "third": "Ein drittes Thema, das die Session behandelt"
+  "caption": "Alles Angekündigte ist da, in der Ebene, wo es am meisten hilft.",
+  "announced": "Angekündigt",
+  "lands": "Wo es heute Abend landet",
+  "pairs": {
+    "first": {
+      "term": "Grundlagen",
+      "lands": "Ein mentales Modell",
+      "detail": "Fünf Eigenschaften der KI, fünf Gegenzüge"
+    },
+    "second": {
+      "term": "Prompting-Basics",
+      "lands": "Eingebaut in jeden Prompt",
+      "detail": "Fertig zum Kopieren, jeder mit seinem Warum"
+    },
+    "third": {
+      "term": "Meta-Prompting",
+      "lands": "Live-Demo „Grill me“",
+      "detail": "Die KI hilft euch, zuerst den richtigen Prompt zu finden"
+    }
   },
   "notes": {
     "talking-points": {
-      "header": "Was Du zum Fokus sagst",
-      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "header": "Alles Angekündigte ist da",
+      "description": "Jeder angekündigte Begriff kommt heute Abend vor, nur nicht als Vortrag: Grundlagen als mentales Modell, Prompting-Basics eingebaut in jeden Prompt zum Kopieren, Meta-Prompting in der Live-Demo „Grill me“."
     }
   }
 }

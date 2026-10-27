@@ -1,16 +1,23 @@
 {
   "title": "Organisation",
-  "caption": "Ersetze dies durch den organisatorischen Rahmen der Session.",
-  "items": {
-    "breaks": "Pausen: wann sie stattfinden",
-    "questions": "Fragen: wann und wie man sie stellt",
-    "materials": "Unterlagen: wo Teilnehmende sie danach finden",
-    "contact": "Kontakt: wie man den Host erreicht"
+  "caption": "Aufzeichnung und Fragen, in zwei Regeln.",
+  "recordingLabel": "Aufgezeichnet",
+  "recording": "Der Theorieteil wird aufgezeichnet und erscheint auf YouTube.",
+  "questionsLabel": "Fragen",
+  "questions": "Fragen: per „Hand heben“ in Zoom, dann pausiere ich die Aufnahme.",
+  "steps": {
+    "hand": "Hand heben",
+    "pause": "Aufnahme pausiert",
+    "ask": "Frage stellen"
   },
   "notes": {
     "talking-points": {
-      "header": "Was Du zur Organisation sagst",
-      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "header": "Aufzeichnung und Fragen",
+      "description": "Der Theorieteil wird aufgezeichnet. Wer eine Frage hat, hebt in Zoom die Hand, und ich pausiere die Aufnahme, bevor die Frage kommt."
+    },
+    "pause-first": {
+      "header": "Erst pausieren",
+      "description": "Pausiere die Aufnahme, bevor Du eine Frage annimmst, damit keine Stimme eines Teilnehmenden auf YouTube landet."
     }
   }
 }

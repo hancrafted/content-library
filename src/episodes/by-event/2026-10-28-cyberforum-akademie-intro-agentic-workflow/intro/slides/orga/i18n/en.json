@@ -1,16 +1,23 @@
 {
   "title": "Organisation",
-  "caption": "Replace with how the session runs.",
-  "items": {
-    "breaks": "Breaks: when they are",
-    "questions": "Questions: when and how to ask them",
-    "materials": "Materials: where attendees find them afterwards",
-    "contact": "Contact: how to reach the host"
+  "caption": "Recording and questions, in two rules.",
+  "recordingLabel": "Recorded",
+  "recording": "The theory part is recorded and published on YouTube.",
+  "questionsLabel": "Questions",
+  "questions": "Questions: raise your hand in Zoom, and I pause the recording first.",
+  "steps": {
+    "hand": "Raise hand",
+    "pause": "I pause",
+    "ask": "You ask"
   },
   "notes": {
     "talking-points": {
-      "header": "What to say about the organisation",
-      "description": "Replace with what you say while this Slide is up."
+      "header": "Recording and questions",
+      "description": "The theory part is recorded. Raise your hand in Zoom and I pause the recording before the question comes."
+    },
+    "pause-first": {
+      "header": "Pause first",
+      "description": "Pause the recording before taking a question, so no participant's voice lands on YouTube."
     }
   }
 }
