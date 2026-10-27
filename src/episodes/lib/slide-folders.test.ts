@@ -42,17 +42,22 @@ function isSlideRecord(value: unknown): value is SlideRecord {
 }
 
 describe('success cases', () => {
-  it('names every Slide folder after the one Slide slug its server entry declares', async () => {
-    // ARRANGE
-    const folders = slideFolders();
-    const expected = folders.map(({ owner, slug }) => `${owner}/${slug}: ${slug}`);
-    // ACT
-    const actual = await Promise.all(
-      folders.map(async ({ owner, slug, entry }) => `${owner}/${slug}: ${(await declaredSlugs(entry)).join(', ')}`),
-    );
-    // ASSERT
-    expect(actual).toEqual(expected);
-  });
+  /*
+   * One test per Slide folder: each import of a server entry loads its Slide's whole module graph, so one test over
+   * every folder outgrew the default timeout under load. Per folder, each import has its own budget and a failure
+   * names the folder.
+   */
+  it.each(slideFolders().map(({ owner, slug, entry }) => ({ name: `${owner}/${slug}`, slug, entry })))(
+    'names the Slide folder $name after the one Slide slug its server entry declares',
+    async ({ slug, entry }) => {
+      // ARRANGE
+      const expected = [slug];
+      // ACT
+      const actual = await declaredSlugs(entry);
+      // ASSERT
+      expect(actual).toEqual(expected);
+    },
+  );
 });
 
 describe('failure cases', () => {
