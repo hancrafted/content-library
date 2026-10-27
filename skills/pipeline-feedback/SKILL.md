@@ -11,7 +11,7 @@ The user's feedback on the machinery (the `new-episode` skill, its references, t
 
 ### 1. Commit on the run branch
 
-Write the change in `skills/new-episode/`, `docs/` or `GLOSSARY.md`: a markdown edit with `/writing-for-agents`; a code change (a script, a check) with `/tdd` ⇄ `/code-review` against the run branch's last commit before it until settled, then `/mutation-testing`. Commit with `/commit`, in a commit of its own that holds no other change.
+Write the change in `skills/new-episode/`, `docs/` or `GLOSSARY.md`: a markdown edit with `/writing-for-agents`; a code change (a script, a check) with `/tdd`, then `/code-review` against the run branch's last commit before it. Commit with `/commit`, in a commit of its own that holds no other change.
 
 A lesson whose fix is mechanical (a check, a script, a template change) is that code change, or a ticket on the issue tracker, never a `LEARNINGS.md` entry: the next Run hits the same bug while it sits in a list. Only a change to the frozen template is a lesson, below.
 

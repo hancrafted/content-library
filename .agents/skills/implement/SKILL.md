@@ -12,8 +12,6 @@ Call the Skill tool with "tdd" where possible, at pre-agreed seams.
 
 Run typechecking regularly, single test files regularly, and the full test suite once at the end.
 
-Once done, call the Skill tool with "code-review" to review the work and fix any issues until `/tdd` ⇄ `/code-review` have settled.
-
-Then call the Skill tool with "mutation-testing" to harden the change.
+Once done, call the Skill tool with "code-review" to review the work.
 
 Commit your work to the current branch.

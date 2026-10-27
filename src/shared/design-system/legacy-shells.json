@@ -1,5 +1,5 @@
 {
-  "description": "Hooks and *.client.tsx components that predate the thin-shell caps (FE-014: complexity <= 3, max-depth <= 1). The list only shrinks: extract logic into a .pure.ts when touching a file, then delete its entry. ESLint and the boundaries test both read this one file.",
+  "description": "Hooks and *.client.tsx components that predate the thin-shell caps (FE-006 §6: complexity <= 3, max-depth <= 1). The list only shrinks: extract logic into a .pure.ts when touching a file, then delete its entry. ESLint and the boundaries test both read this one file.",
   "files": [
     "src/episodes/ai-attention-span/slides/attention-is-a-budget/lost-bracket.client.tsx",
     "src/episodes/ai-gives-you-more-work/slides/every-revolution-one-card/reveal-steps.client.tsx",

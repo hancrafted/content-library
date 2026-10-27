@@ -12,7 +12,7 @@ import tseslint from 'typescript-eslint';
 const LEGACY_FILES = JSON.parse(
   readFileSync(new URL('./src/shared/design-system/legacy.json', import.meta.url), 'utf8'),
 ).globs;
-// Thin shells (FE-014): hooks and *.client.tsx leaves are capped at complexity 3 and max-depth 1;
+// Thin shells (FE-006 §6): hooks and *.client.tsx leaves are capped at complexity 3 and max-depth 1;
 // legacy offenders sit in legacy-shells.json at the global 7 and 3 budget, and the list only shrinks.
 const LEGACY_SHELL_FILES = JSON.parse(
   readFileSync(new URL('./src/shared/design-system/legacy-shells.json', import.meta.url), 'utf8'),
@@ -37,7 +37,7 @@ const TAILWIND_ENTRY = 'src/app/globals.css';
 // `*.client.tsx`, and a `*.client.tsx` file carries the directive, so the client
 // bundle's entry points are glob-addressable.
 const CLIENT_FILES = 'src/**/*.client.tsx';
-// FE-014: hooks and *.client.tsx leaves are thin shells (complexity 3, max-depth 1).
+// FE-006 §6: hooks and *.client.tsx leaves are thin shells (complexity 3, max-depth 1).
 const SHELL_FILES = [
   'src/{shared,episodes,pipeline}/hooks/**/*.ts',
   'src/explorable-explanations/*/use-*.ts',
@@ -355,7 +355,7 @@ export default tseslint.config(
     rules: { 'max-lines-per-function': 'off', 'max-lines': 'off' },
   },
   {
-    // FE-014: hooks and *.client.tsx leaves are thin shells; branching and math live in *.pure.ts.
+    // FE-006 §6: hooks and *.client.tsx leaves are thin shells; branching and math live in *.pure.ts.
     files: SHELL_FILES,
     ignores: ['**/*.pure.ts', '**/*.test.ts'],
     rules: {
@@ -364,7 +364,7 @@ export default tseslint.config(
     },
   },
   {
-    // FE-014: legacy shells keep the global budget until touched; the list only shrinks.
+    // FE-006 §6: legacy shells keep the global budget until touched; the list only shrinks.
     files: LEGACY_SHELL_FILES,
     rules: {
       complexity: ['error', 7],

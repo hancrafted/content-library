@@ -1,1 +1,0 @@
-../../.archgate/adrs/FE-014-thin-shells.md

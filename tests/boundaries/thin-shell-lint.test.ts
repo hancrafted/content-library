@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-// Probe and ratchet tests for the thin-shell lint rules (FE-014, eslint.config.mjs,
+// Probe and ratchet tests for the thin-shell lint rules (FE-006 §6, eslint.config.mjs,
 // src/shared/design-system/legacy-shells.json):
 // - Hooks (src/{shared,episodes,pipeline}/hooks/**/*.ts, src/explorable-explanations/*/use-*.ts)
 //   and client components (src/**/*.client.tsx) are capped at complexity: 3 and max-depth: 1.
