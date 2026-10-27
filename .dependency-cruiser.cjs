@@ -503,11 +503,15 @@ module.exports = {
       name: 'skills-and-tools-reach-src-through-area-lib-or-store-entry',
       severity: 'error',
       comment:
-        "skills/ and tools/ reach src/ only through a product area's lib/ folder (src/pipeline/lib/, src/episodes/lib/, …) or the content store's entry, src/content-store/store.ts: plain modules that run under node. Logic a skill or a tool needs moves into its area's lib/ (FE-007).",
+        "skills/ and tools/ reach src/ only through a product area's lib/ folder (src/pipeline/lib/, src/episodes/lib/, …), the content store's entry, src/content-store/store.ts, or an Explorable explanation's node entry, src/explorable-explanations/<name>/*.node.ts: plain modules that run under node. Logic a skill or a tool needs moves into its area's lib/ or the explanation's node entry (FE-007).",
       from: { path: '^(skills|tools)/' },
       to: {
         path: '^src/',
-        pathNot: [`^src/${TIERED_AREAS}/lib/`, '^src/content-store/store\\.ts$'],
+        pathNot: [
+          `^src/${TIERED_AREAS}/lib/`,
+          '^src/content-store/store\\.ts$',
+          '^src/explorable-explanations/[^/]+/[^/]+\\.node\\.ts$',
+        ],
       },
     },
   ],

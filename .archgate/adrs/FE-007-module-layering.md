@@ -31,7 +31,7 @@ Tier folders are named the same in every area, so one rule pattern binds them al
 
 **Why the store has readers, not callers.** Page assembly and the areas read records directly, so page assembly stays thin and products stay deep. `shared/` never does, schemas included, so a primitive never learns about Episodes or Events; what page chrome needs arrives as props. The store's one upward edge, each Episode's metadata file, keeps an Episode one folder.
 
-**Why `skills/` and `tools/` reach in only through `lib/`.** A skill or tool runs the product and never houses what it imports; a `src/` → `skills/` edge once passed unseen. Lib stays React-free, so a lib module is a plain module a test or a script under plain `node` imports without a DOM.
+**Why `skills/` and `tools/` reach in only through a node-safe door.** A skill or tool runs the product and never houses what it imports; a `src/` → `skills/` edge once passed unseen. Lib stays React-free, so a lib module is a plain module a test or a script under plain `node` imports without a DOM. An explanation has no `lib/`, so its door is a `*.node.ts` file in its own folder; a skill reaches nothing else of it.
 
 **Reach inside the Episodes area** (§5), named where rules check it:
 
@@ -60,7 +60,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 5. Page assembly reaches an area only via `components/` and `lib/`, no barrels; a tierless explanation via its folder. An explanation is a component, never a page.
 6. `shared/` knows no domain, never reads the store or its schemas, and is open to every area alike.
 7. Areas and page assembly read the store. Its one upward edge is an Episode's metadata file; `schemas/` is a leaf any tier imports.
-8. `src/` never imports `skills/` or `tools/`, which reach it only via an area's `lib/` or the store's entry.
+8. `src/` never imports `skills/` or `tools/`, which reach it only via an area's `lib/`, the store's entry, or an explanation's `*.node.ts` entry in its own folder.
 
 ### 3. Lib imports no React
 
@@ -84,7 +84,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 2. **DO** add a page template as its own folder in `src/page-assembly/`, its single-use parts beside it. (Decision 2)
 3. **DO** let page assembly hand one area's parts to another — `<PlaylistList entries={cards} />`. (Decision 2)
 4. **DO** import or skip downward: an area → the store, an area → shared lib, hooks → lib. (Decision 2)
-5. **DO** move logic a skill or tool needs into its area's `lib/`. (Decision 2)
+5. **DO** move logic a skill or tool needs into its area's `lib/`, or an explanation's `*.node.ts` entry. (Decision 2)
 6. **DO** keep a `lib/` folder to `.ts` files that test without a DOM. (Decision 3)
 7. **DO** take a Scene's colour, size and weight from tokens, its markup from the visual it serves. (Decision 4)
 8. **DO** move a part two Slides need into `slide-shared/`, a primitive parts share into `core-components/<name>/`. (Decision 5)
@@ -95,7 +95,7 @@ Rejected: a flat Package tree under `src/packages/` (markdown-harness's model). 
 2. **DON'T** import upward: into page assembly from below, lib → hooks or components, the store → an area but Episode metadata. (Decision 2)
 3. **DON'T** import one product area from another — `import { EpisodeCard } from '@/episodes/…'` inside `src/events/`. (Decision 2)
 4. **DON'T** reach an area's `hooks/`, an Episode folder or a barrel from page assembly, or a template from another. (Decision 2)
-5. **DON'T** import the store or a domain module from `src/shared/`, or `skills/`/`tools/` from `src/`. (Decision 2)
+5. **DON'T** import the store or a domain module from `src/shared/`, `skills/`/`tools/` from `src/`, or any file of an explanation but its `*.node.ts` from a skill. (Decision 2)
 6. **DON'T** write `import type { ReactNode } from 'react'` or a `.tsx` file in a `lib/` folder. (Decision 3)
 7. **DON'T** invent a shared Slide type or layout contract and route Slides through it. (Decision 4)
 8. **DON'T** import one Slide's folder from another — `'../other-slide/part'` — or an Episode file from a Slide. (Decision 5)

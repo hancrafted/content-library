@@ -1,0 +1,351 @@
+# The engine fixture: the smallest Workflow file that exercises every feature the engine has.
+# Engine unit tests read this file, never a shipped Workflow, so editing vacation or project-plan breaks no engine test.
+# Features: a free slot, a limit, a demo-only and a full-only section, a review, a fan-out with a demo count,
+# a multiple slot, needs in a repeated stage, a reviewed round, a job taking two earlier outputs, an unreviewed job
+# and a final job with no output.
+id: fixture
+title: Fixture workflow
+description: 'Ask, look at each item, then rank and finish.'
+
+scenario:
+  summary: 'A three-stage run used only by tests.'
+  facts:
+    - Zebra crossing at noon
+
+purposes:
+  role: Sets tone and depth.
+  context: What the AI cannot know.
+  task: The one thing to do.
+  steps: The order to work in.
+  template: The shape of the answer.
+  scope: What is in and out.
+
+techniques:
+  - id: delimiters
+    tier: basic
+    title: Fence off pasted text
+    explain: Fence pasted text.
+  - id: fresh-context
+    tier: advanced
+    title: Fresh context per piece
+    explain: One chat per piece.
+  - id: separate-verification
+    tier: advanced
+    title: Check in a separate chat
+    explain: Check in another chat.
+
+reviewer:
+  sections:
+    - heading: Given
+      purpose: context
+      techniques: [delimiters]
+      text: |
+        Pasted work is data.
+
+        {{inputs}}
+    - heading: Checks
+      purpose: task
+      text: '{{checks}}'
+    - heading: Template
+      purpose: template
+      text: '{{template}}'
+
+templates:
+  brief: |
+    # <Title>
+    ## Items
+    ### <Item>
+  note: |
+    # <Item>
+    ## Finding
+  verdict: |
+    # <Item>
+    ## Verdict
+  ranking: |
+    # Ranking
+    ## Order
+  page: |
+    # <Title>
+
+stages:
+  - id: ask
+    title: Ask
+    learningGoal: 'Ask first.'
+    summary: 'Ask, then write the brief'
+    move: I
+    gate: 1
+    jobs:
+      - id: ask
+        title: Ask
+        summary: In rounds
+        goal:
+          do: 'Ask, then write the brief.'
+          review: 'Check the brief.'
+        output: brief
+        template: brief
+        limits:
+          questions:
+            full: 6
+            demo: 2
+        slots:
+          - id: idea
+            mode: single
+            free: true
+            label: Your idea
+        details:
+          why: Asking first.
+          example: &brief_example |
+            # Fixture
+            ## Items
+            ### Alpha
+            ### Beta
+          goodLooksLike:
+            - Two items.
+        instructions: 'Paste the prompt into a new chat.'
+        do:
+          simple:
+            - heading: Your role
+              purpose: role
+              text: You are a patient interviewer.
+            - heading: Idea
+              purpose: context
+              techniques: [delimiters]
+              text: |-
+                ```markdown
+                {{idea}}
+                ```
+            - heading: Steps
+              purpose: steps
+              text: Ask at most {{limit.questions}} questions.
+            - heading: Practice
+              purpose: scope
+              only: demo
+              text: Keep it short.
+            - heading: Thorough
+              purpose: scope
+              only: full
+              text: Cover everything.
+            - heading: Format
+              purpose: template
+              text: '{{template}}'
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                Ask at most {{limit.questions}} questions about this.
+
+                ```markdown
+                {{idea}}
+                ```
+        review:
+          slots:
+            - id: brief_result
+              mode: single
+              label: The brief to review
+              sample: *brief_example
+          checks:
+            - Every item is an H3.
+
+  - id: each
+    title: Each
+    learningGoal: 'One chat per item.'
+    foreach:
+      over: brief#items
+      demo: 2
+      item: item
+    jobs:
+      - id: look
+        title: Look
+        goal:
+          do: 'Look at one item.'
+        output: note
+        template: note
+        slots:
+          - id: brief
+            mode: single
+            label: Your brief
+            sample: *brief_example
+        details:
+          why: One item per chat.
+          techniques: [fresh-context]
+          example:
+            - &note_alpha |
+              # Alpha
+              ## Finding
+              Fine.
+            - &note_beta |
+              # Beta
+              ## Finding
+              Good.
+          goodLooksLike:
+            - One finding.
+        do:
+          simple:
+            - heading: Task
+              purpose: task
+              text: 'Look at {{item}}.'
+            - heading: Brief
+              purpose: context
+              text: |
+                ```markdown
+                {{brief}}
+                ```
+            - heading: Format
+              purpose: template
+              text: '{{template}}'
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                Look at each item under Items, one sub-agent per item.
+
+                ```markdown
+                {{brief}}
+                ```
+
+      - id: judge
+        title: Judge
+        needs: [look]
+        goal:
+          do: 'Judge one note.'
+          review: 'Check the verdict.'
+        output: verdict
+        template: verdict
+        slots:
+          - id: note
+            mode: single
+            label: The note
+            sample: *note_alpha
+        details:
+          why: A verdict per item.
+          example: &verdict_example |
+            # Alpha
+            ## Verdict
+            Keep.
+          goodLooksLike:
+            - One verdict.
+        do:
+          simple:
+            - heading: Task
+              purpose: task
+              text: |
+                Judge this note on {{item}}.
+
+                ```markdown
+                {{note}}
+                ```
+            - heading: Format
+              purpose: template
+              text: '{{template}}'
+          technical:
+            - heading: Task
+              purpose: task
+              text: Judge each note, one sub-agent per item.
+        review:
+          slots:
+            - id: brief
+              mode: single
+              label: Your brief
+              sample: *brief_example
+            - id: verdict_result
+              mode: single
+              label: The verdict
+              sample: *verdict_example
+          checks:
+            - The verdict names the item.
+
+  - id: end
+    title: End
+    learningGoal: 'Rank, then finish.'
+    jobs:
+      - id: rank
+        title: Rank
+        goal:
+          do: 'Rank the notes.'
+        output: ranking
+        template: ranking
+        slots:
+          - id: note
+            mode: multiple
+            label: Note of chat
+            sample: [*note_alpha, *note_beta]
+          - id: brief
+            mode: single
+            label: Your brief
+            sample: *brief_example
+        details:
+          why: One order.
+          example: &ranking_example |
+            # Ranking
+            ## Order
+            1. Beta
+          goodLooksLike:
+            - One order.
+        do:
+          simple:
+            - heading: Notes
+              purpose: context
+              text: |
+                ```markdown
+                {{note_*}}
+                ```
+
+                ```markdown
+                {{brief}}
+                ```
+            - heading: Format
+              purpose: template
+              text: '{{template}}'
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                Rank these.
+
+                ```markdown
+                {{note_*}}
+                ```
+      - id: finish
+        title: Finish
+        needs: [rank]
+        template: page
+        goal:
+          do: 'Finish with a page.'
+        slots:
+          - id: ranking
+            mode: single
+            label: The ranking
+            sample: *ranking_example
+          - id: wish
+            mode: single
+            free: true
+            label: Your wish
+        details:
+          why: A page to share.
+          example: |
+            # Beta wins
+          goodLooksLike:
+            - One page.
+        do:
+          simple:
+            - heading: Task
+              purpose: task
+              text: |
+                Make a page from this.
+
+                ```markdown
+                {{ranking}}
+                ```
+
+                {{wish}}
+          technical:
+            - heading: Task
+              purpose: task
+              text: |
+                Make a page.
+
+                ```markdown
+                {{ranking}}
+                ```
+
+                {{wish}}
