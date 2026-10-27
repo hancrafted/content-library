@@ -1,0 +1,35 @@
+{
+  "title": "Where do you stand?",
+  "caption": "Two questions, ten seconds, on your phone.",
+  "poll": {
+    "voteUrl": "https://directpoll.com/PLACEHOLDER-vote",
+    "resultUrl": "https://directpoll.com/PLACEHOLDER-result",
+    "scan": "Scan to vote",
+    "qrLabel": "QR code to the directpoll vote page",
+    "createNote": "Create your poll at directpoll.com",
+    "q1": {
+      "question": "What is your role?",
+      "answers": { "a": "No tech link", "b": "I work with tech people", "c": "I am technical" }
+    },
+    "q2": {
+      "question": "Where are you with AI today?",
+      "answers": {
+        "a": "Not used yet",
+        "b": "A chat like ChatGPT",
+        "c": "An assistant in my tools",
+        "d": "Agents that act on their own"
+      }
+    },
+    "showResults": "Show live results",
+    "resultsHint": "Loads from directpoll.com only after the click.",
+    "resultsFallback": "Results in the second tab",
+    "resultsTitle": "Live poll results",
+    "newTabHint": "opens in a new tab"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "What to say about the poll",
+      "description": "Phones out: scan the code, two questions, ten seconds. The results load only on click, so nothing from directpoll loads before. Replace the questions in this file with your own."
+    }
+  }
+}

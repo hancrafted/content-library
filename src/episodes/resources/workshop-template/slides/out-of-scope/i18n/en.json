@@ -1,10 +1,14 @@
 {
   "title": "Out of scope",
   "caption": "Replace with what this session leaves out, so no one waits for it.",
+  "panel": {
+    "title": "Set aside, on purpose",
+    "line": "So nobody waits for it."
+  },
   "items": {
-    "first": "A topic the session leaves out",
-    "second": "A second topic the session leaves out",
-    "third": "A third topic the session leaves out"
+    "first": { "title": "A topic the session leaves out", "reason": "One line on why, or what to do instead" },
+    "second": { "title": "A second topic the session leaves out", "reason": "One line on why, or what to do instead" },
+    "third": { "title": "A third topic the session leaves out", "reason": "One line on why, or what to do instead" }
   },
   "notes": {
     "talking-points": {

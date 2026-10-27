@@ -1,16 +1,23 @@
 {
   "title": "Organisation",
-  "caption": "Ersetze dies durch den organisatorischen Rahmen der Session.",
-  "items": {
-    "breaks": "Pausen: wann sie stattfinden",
-    "questions": "Fragen: wann und wie man sie stellt",
-    "materials": "Unterlagen: wo Teilnehmende sie danach finden",
-    "contact": "Kontakt: wie man den Host erreicht"
+  "caption": "Ersetze dies durch den organisatorischen Rahmen der Session: die Aufzeichnung und wie man Fragen stellt.",
+  "recordingLabel": "Aufgezeichnet",
+  "recording": "Aufzeichnung: Ersetze dies durch das, was aufgezeichnet und wo es veröffentlicht wird.",
+  "questionsLabel": "Fragen",
+  "questions": "Fragen: Ersetze dies durch wann und wie man sie stellt.",
+  "steps": {
+    "hand": "Hand heben",
+    "pause": "Aufnahme pausiert",
+    "ask": "Frage stellen"
   },
   "notes": {
     "talking-points": {
       "header": "Was Du zur Organisation sagst",
       "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    "pause-first": {
+      "header": "Erst pausieren",
+      "description": "Pausiere die Aufnahme, bevor Du eine Frage annimmst, damit keine Stimme eines Teilnehmenden in der veröffentlichten Aufnahme landet. Ersetze oder streiche diese Notiz, wenn die Session nicht aufgezeichnet wird."
     }
   }
 }

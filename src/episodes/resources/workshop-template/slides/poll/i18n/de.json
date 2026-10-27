@@ -1,0 +1,35 @@
+{
+  "title": "Wo steht ihr?",
+  "caption": "Zwei Fragen, zehn Sekunden, auf dem Handy.",
+  "poll": {
+    "voteUrl": "https://directpoll.com/PLACEHOLDER-vote",
+    "resultUrl": "https://directpoll.com/PLACEHOLDER-result",
+    "scan": "Zum Abstimmen scannen",
+    "qrLabel": "QR-Code zur Abstimmungsseite von directpoll",
+    "createNote": "Create your poll at directpoll.com",
+    "q1": {
+      "question": "Wie ist deine Rolle?",
+      "answers": { "a": "kein Tech-Bezug", "b": "arbeite mit Tech-Leuten", "c": "technisch" }
+    },
+    "q2": {
+      "question": "Wie weit bist du mit KI?",
+      "answers": {
+        "a": "noch nicht genutzt",
+        "b": "ein Chat wie ChatGPT",
+        "c": "ein Assistent in meinen Tools",
+        "d": "Agenten, die selbst handeln"
+      }
+    },
+    "showResults": "Live-Ergebnisse zeigen",
+    "resultsHint": "Lädt erst nach dem Klick von directpoll.com.",
+    "resultsFallback": "Ergebnisse im zweiten Tab",
+    "resultsTitle": "Live-Ergebnisse der Umfrage",
+    "newTabHint": "öffnet in einem neuen Tab"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Was Du zur Umfrage sagst",
+      "description": "Handys raus: Code scannen, zwei Fragen, zehn Sekunden. Die Ergebnisse laden erst auf Klick, vorher geht nichts an directpoll. Ersetze die Fragen in dieser Datei durch Deine eigenen."
+    }
+  }
+}

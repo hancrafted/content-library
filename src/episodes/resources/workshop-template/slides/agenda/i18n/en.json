@@ -1,16 +1,25 @@
 {
   "title": "Agenda",
   "caption": "Replace with the plan of the session: each block with its time slot.",
-  "items": {
-    "first": "Time slot: first block",
-    "second": "Time slot: second block",
-    "third": "Time slot: third block",
-    "fourth": "Time slot: questions and wrap-up"
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": { "time": "00:00", "title": "Welcome" },
+    "first": { "time": "00:00", "title": "The first Episode" },
+    "second": { "time": "00:00", "title": "The second Episode" },
+    "third": { "time": "00:00", "title": "The third Episode" },
+    "demo": { "time": "00:00", "title": "Live demo" },
+    "practice": { "time": "00:00", "title": "Hands-on and questions" }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theory",
+    "demo": "Demo",
+    "practice": "Practice"
   },
   "notes": {
     "talking-points": {
       "header": "What to say about the agenda",
-      "description": "Replace with what you say while this Slide is up."
+      "description": "Replace with what you say while this Slide is up. The times are placeholders: set them in the copy."
     }
   }
 }

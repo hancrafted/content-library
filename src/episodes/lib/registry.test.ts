@@ -74,13 +74,24 @@ describe('success cases', () => {
     expect(page.slug).toBe(expected);
   });
 
-  it('composes the Workshop template as agenda, in scope, out of scope and orga Slides after its Title slide', () => {
+  it('composes the Workshop template as hook, agenda, scope, poll with About me, and orga Slides after its Title slide', () => {
     // ARRANGE
-    const expected = [['agenda'], ['in-scope', 'out-of-scope'], ['orga']];
+    const expected = [['hook'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll', 'about-me'], ['orga']];
     // ACT
     const sections = compositionOf(resourceRef('workshop-template')).sections.map((section) =>
       section.map(({ slug }) => slug),
     );
+    // ASSERT
+    expect(sections).toEqual(expected);
+  });
+
+  it('composes the CyberForum intro as the template does, its hook renamed grounding', () => {
+    // ARRANGE
+    const expected = [['grounding'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll', 'about-me'], ['orga']];
+    // ACT
+    const sections = compositionOf(
+      episodeRef('intro', '2026-10-28-cyberforum-akademie-intro-agentic-workflow'),
+    ).sections.map((section) => section.map(({ slug }) => slug));
     // ASSERT
     expect(sections).toEqual(expected);
   });

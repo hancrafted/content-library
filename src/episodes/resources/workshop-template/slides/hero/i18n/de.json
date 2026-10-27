@@ -1,0 +1,13 @@
+{
+  "kicker": "Webinar · Ersetze dies durch das Datum",
+  "flow": {
+    "engine": "Motor",
+    "engineName": "Generative KI",
+    "engineHint": "Das Werkzeug, das ihr nutzt",
+    "you": "Ihr prüft",
+    "youLabel": "Ihr",
+    "promptChip": "Prompt eingebaut",
+    "way": "Agentisch: die Arbeitsweise",
+    "steps": { "first": "Erster Schritt", "second": "Zweiter Schritt", "third": "Dritter Schritt" }
+  }
+}

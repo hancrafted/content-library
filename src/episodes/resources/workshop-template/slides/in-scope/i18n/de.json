@@ -1,10 +1,24 @@
 {
   "title": "Im Fokus",
-  "caption": "Ersetze dies durch das, was diese Session behandelt.",
-  "items": {
-    "first": "Ein Thema, das die Session behandelt",
-    "second": "Ein zweites Thema, das die Session behandelt",
-    "third": "Ein drittes Thema, das die Session behandelt"
+  "caption": "Ersetze dies durch das, was diese Session behandelt: jeder angekündigte Begriff und wo er landet.",
+  "announced": "Angekündigt",
+  "lands": "Wo es landet",
+  "pairs": {
+    "first": {
+      "term": "Ein erster angekündigter Begriff",
+      "lands": "Wo er landet",
+      "detail": "Eine Zeile dazu, wie"
+    },
+    "second": {
+      "term": "Ein zweiter angekündigter Begriff",
+      "lands": "Wo er landet",
+      "detail": "Eine Zeile dazu, wie"
+    },
+    "third": {
+      "term": "Ein dritter angekündigter Begriff",
+      "lands": "Wo er landet",
+      "detail": "Eine Zeile dazu, wie"
+    }
   },
   "notes": {
     "talking-points": {

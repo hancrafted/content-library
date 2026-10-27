@@ -1,16 +1,25 @@
 {
   "title": "Agenda",
   "caption": "Ersetze dies durch den Ablauf der Session: jeder Block mit seinem Zeitfenster.",
-  "items": {
-    "first": "Zeitfenster: erster Block",
-    "second": "Zeitfenster: zweiter Block",
-    "third": "Zeitfenster: dritter Block",
-    "fourth": "Zeitfenster: Fragen und Abschluss"
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": { "time": "00:00", "title": "Einstieg" },
+    "first": { "time": "00:00", "title": "Die erste Episode" },
+    "second": { "time": "00:00", "title": "Die zweite Episode" },
+    "third": { "time": "00:00", "title": "Die dritte Episode" },
+    "demo": { "time": "00:00", "title": "Live-Demo" },
+    "practice": { "time": "00:00", "title": "Praxisteil und Fragen" }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theorie",
+    "demo": "Demo",
+    "practice": "Praxis"
   },
   "notes": {
     "talking-points": {
       "header": "Was Du zur Agenda sagst",
-      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist. Die Zeiten sind Platzhalter: Setze sie in der Kopie."
     }
   }
 }

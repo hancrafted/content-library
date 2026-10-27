@@ -1,27 +1,39 @@
 {
   "title": "Workshop template · hancrafted",
-  "description": "Copy this Episode template as the opening Episode of a new Event: title, agenda, what is in and out of scope, and who organises it, with placeholder words to replace.",
-  "toc": "Contents Loading 1 Agenda 2 In scope Out of scope 3 Organisation Open contents : Contents Contents 1 Agenda 2 In scope Out of scope 3 Organisation",
+  "description": "Copy this tooling page to start the opening Episode of a new Event: title, agenda, scope and organisation.",
+  "toc": "Contents Loading 1 Hook 2 Agenda 3 In scope Out of scope 4 Where do you stand? About me 5 Organisation Open contents : Contents Contents 1 Hook 2 Agenda 3 In scope Out of scope 4 Where do you stand? About me 5 Organisation",
   "slides": [
     {
       "id": "top",
-      "text": "Workshop template The opening Episode of a workshop: copy it once per Event for the agenda, the scope and the organisers."
+      "text": "Workshop template Replace with the workshop’s name, its date and who it is for. Webinar · replace with the date Engine Generative AI The tool you use 1 First step prompt built in You 2 Second step prompt built in You 3 Third step prompt built in Agentic: the way of working"
+    },
+    {
+      "id": "hook",
+      "text": "Hook Replace with a hook or a grounding. A hook opens with one question or claim; a grounding sets the picture the evening builds on. A copy that grounds renames this slug to grounding. Replace with the one question or claim that opens the session."
     },
     {
       "id": "agenda",
-      "text": "Agenda Replace with the plan of the session: each block with its time slot. Time slot: first block Time slot: second block Time slot: third block Time slot: questions and wrap-up"
+      "text": "Agenda Replace with the plan of the session: each block with its time slot. 1 00:00 Welcome Start 2 00:00 The first Episode Episode 1 Theory 3 00:00 The second Episode Episode 2 Theory 4 00:00 The third Episode Episode 3 Theory 5 00:00 Live demo Demo 6 00:00 Hands-on and questions Practice"
     },
     {
       "id": "in-scope",
-      "text": "In scope Replace with what this session covers. A topic the session covers A second topic the session covers A third topic the session covers"
+      "text": "In scope Replace with what this session covers: each announced term and where it lands. Announced Where it lands A first announced term Where it lands One line on how A second announced term Where it lands One line on how A third announced term Where it lands One line on how"
     },
     {
       "id": "in-scope--out-of-scope",
-      "text": "In scope (1/1) Page 1 of 1 Out of scope Replace with what this session leaves out, so no one waits for it. A topic the session leaves out A second topic the session leaves out A third topic the session leaves out"
+      "text": "In scope (1/1) Page 1 of 1 Out of scope Replace with what this session leaves out, so no one waits for it. Set aside, on purpose So nobody waits for it. × A topic the session leaves out One line on why, or what to do instead × A second topic the session leaves out One line on why, or what to do instead × A third topic the session leaves out One line on why, or what to do instead"
+    },
+    {
+      "id": "poll",
+      "text": "Where do you stand? Two questions, ten seconds, on your phone. Create your poll at directpoll.com 1 What is your role? No tech link I work with tech people I am technical 2 Where are you with AI today? Not used yet A chat like ChatGPT An assistant in my tools Agents that act on their own Show live results Loads from directpoll.com only after the click."
+    },
+    {
+      "id": "poll--about-me",
+      "text": "Where do you stand? (1/1) Page 1 of 1 About me Who is talking, and what he builds. HC Han Che AI trainer and builder (placeholder) 1 Builds agentic workflows for teams (placeholder) 2 Trains people to work with AI every day (placeholder) 3 Turns research into visual teaching units (placeholder) hancrafted.net ( opens in a new tab )"
     },
     {
       "id": "orga",
-      "text": "Organisation Replace with how the session runs. Breaks: when they are Questions: when and how to ask them Materials: where attendees find them afterwards Contact: how to reach the host"
+      "text": "Organisation Replace with how the session runs: the recording and how to ask questions. Recorded Recording: replace with what is recorded and where it is published. Questions Questions: replace with when and how to ask them. Raise hand I pause You ask"
     }
   ],
   "notes": [
@@ -29,7 +41,11 @@
       "id": "top",
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
-    { "id": "agenda", "text": "Agenda What to say about the agenda Replace with what you say while this Slide is up." },
+    { "id": "hook", "text": "Hook What to say about the hook Replace with what you say while this Slide is up." },
+    {
+      "id": "agenda",
+      "text": "Agenda What to say about the agenda Replace with what you say while this Slide is up. The times are placeholders: set them in the copy."
+    },
     {
       "id": "in-scope",
       "text": "In scope What to say about the scope Replace with what you say while this Slide is up."
@@ -39,8 +55,16 @@
       "text": "Out of scope What to say about what is left out Replace with what you say while this Slide is up."
     },
     {
+      "id": "poll",
+      "text": "Where do you stand? What to say about the poll Phones out: scan the code, two questions, ten seconds. The results load only on click, so nothing from directpoll loads before. Replace the questions in this file with your own."
+    },
+    {
+      "id": "poll--about-me",
+      "text": "About me Bio facts are placeholders The role and the three facts are placeholders: replace them with what you want this audience to know about you, in both languages. Keep it to what you can say in one breath."
+    },
+    {
       "id": "orga",
-      "text": "Organisation What to say about the organisation Replace with what you say while this Slide is up."
+      "text": "Organisation What to say about the organisation Replace with what you say while this Slide is up. Pause first Pause the recording before you take a question, so no participant's voice lands in the published recording. Replace or drop this note if the session is not recorded."
     }
   ],
   "script": [
@@ -48,9 +72,12 @@
       "id": "top",
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
+    { "id": "hook", "text": "Hook No voice script for this Slide." },
     { "id": "agenda", "text": "Agenda No voice script for this Slide." },
     { "id": "in-scope", "text": "In scope No voice script for this Slide." },
     { "id": "in-scope--out-of-scope", "text": "Out of scope No voice script for this Slide." },
+    { "id": "poll", "text": "Where do you stand? No voice script for this Slide." },
+    { "id": "poll--about-me", "text": "About me No voice script for this Slide." },
     { "id": "orga", "text": "Organisation No voice script for this Slide." }
   ]
 }
