@@ -5,6 +5,7 @@
     "voteUrl": "https://directpoll.com/PLACEHOLDER-vote",
     "resultUrl": "https://directpoll.com/PLACEHOLDER-result",
     "scan": "Zum Abstimmen scannen",
+    "open": "Im Browser abstimmen",
     "qrLabel": "QR-Code zur Abstimmungsseite von directpoll",
     "createNote": "Create your poll at directpoll.com",
     "notice": "anonym – wir zählen nur Antworten, sie fließen in eine spätere Auswertung ein",

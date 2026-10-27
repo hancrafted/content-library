@@ -6,6 +6,7 @@
     "resultUrl": "https://directpoll.com/r?XEiD7vy5K5nQSWDbwPjNpL9e-pI8RDAn1wrCOhdFAQIn9ia7W1YIHQzmOERrf8H1v5C6Xx9C67ZvFiAZylxa6LB0B_abA5nzbz",
     "stillOpen": "Phone still open?",
     "scan": "Otherwise scan again",
+    "open": "Vote in the browser",
     "qrLabel": "QR code to the directpoll vote page",
     "createNote": "Create your poll at directpoll.com",
     "notice": "anonymous – we only count answers",

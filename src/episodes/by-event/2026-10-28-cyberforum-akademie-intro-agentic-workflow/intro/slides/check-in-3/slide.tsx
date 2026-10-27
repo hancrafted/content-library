@@ -67,6 +67,8 @@ export const checkIn3 = slide({
             label={t('poll.scan')}
             qrLabel={t('poll.qrLabel')}
             note={t('poll.createNote')}
+            openLabel={t('poll.open')}
+            newTab={t('poll.newTabHint')}
           />
           <p className="text-center text-caption opacity-80">{t('poll.notice')}</p>
         </div>

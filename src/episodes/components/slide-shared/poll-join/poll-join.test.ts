@@ -7,6 +7,8 @@ const props = {
   label: 'Scan to vote',
   note: 'Create your poll at directpoll.com',
   qrLabel: 'QR code to the vote page',
+  openLabel: 'Vote in the browser',
+  newTab: 'opens in a new tab',
 };
 
 function join(voteUrl: string): string {
@@ -32,18 +34,31 @@ describe('success cases', () => {
     // ASSERT
     expect(html).toContain('directpoll.com/v/abc123');
   });
+
+  it('links the Vote page in a new tab, for people on a laptop, and says so', () => {
+    // ARRANGE
+    const url = 'https://directpoll.com/v?XEM9-token';
+    const expected = `href="${url}" target="_blank" rel="noopener noreferrer"`;
+    // ACT
+    const html = join(url);
+    // ASSERT
+    expect(html).toContain(expected);
+    expect(html).toContain(props.openLabel);
+    expect(html).toContain(props.newTab);
+  });
 });
 
 describe('failure cases', () => {
-  it('prints no short link when the Vote link is too long to type', () => {
+  it('prints no short link as text when the Vote link is too long to type', () => {
     // ARRANGE
     const token = 'XEM9-nVikRs30Eoq4EuHs0V9UlTWbLs-Hfziio-v3jtQiPQJYBmxzzz';
     const url = `https://directpoll.com/v?${token}`;
+    const printed = `>directpoll.com/v?${token}<`;
     // ACT
     const html = join(url);
     // ASSERT
     expect(html).toContain('<svg');
-    expect(html).not.toContain(token);
+    expect(html).not.toContain(printed);
   });
 
   it('shows the note and no QR for a placeholder URL', () => {
@@ -54,6 +69,7 @@ describe('failure cases', () => {
     // ASSERT
     expect(html).toContain('Create your poll at directpoll.com');
     expect(html).not.toContain('<svg');
+    expect(html).not.toContain('href=');
   });
 });
 
