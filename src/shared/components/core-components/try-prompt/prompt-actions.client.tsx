@@ -23,6 +23,9 @@ const CHATGPT = 'https://chatgpt.com/';
 /** A button with its name beside the icon: the icon alone on a phone, the icon and its name from `md` up. */
 const WRITTEN_OUT = cn(OUTLINED_ICON, 'text-caption font-medium', 'md:w-auto md:gap-1.5 md:px-3');
 
+/** The button the viewer should press next: filled in the action colour, so the eye lands on it. */
+const LEAD = 'border-(--info) bg-(--info) text-(--info-foreground) hover:bg-(--info)/90 hover:text-(--info-foreground)';
+
 /** How long the copy button says "Copied" before it reads "Copy prompt" again. */
 const CONFIRM_MS = 1600;
 
@@ -64,10 +67,12 @@ interface CopyButtonProps {
   readonly label: string;
   readonly done: string;
   readonly onCopy: () => Promise<boolean>;
+  /** Whether this is the next thing to press. */
+  readonly lead?: boolean;
 }
 
 /** "Copy prompt": a press copies, and on success the icon turns into a tick and the label into "Copied", then back. */
-export function CopyButton({ label, done, onCopy }: CopyButtonProps) {
+export function CopyButton({ label, done, onCopy, lead = false }: CopyButtonProps) {
   const motion = useMotion();
   const [confirmed, confirm] = useConfirmed();
   const Icon = confirmed ? Check : Copy;
@@ -77,7 +82,8 @@ export function CopyButton({ label, done, onCopy }: CopyButtonProps) {
       {...motion}
       aria-label={label}
       data-copied={confirmed}
-      className={WRITTEN_OUT}
+      data-lead={lead || undefined}
+      className={cn(WRITTEN_OUT, lead && LEAD)}
       onClick={() => void onCopy().then((ok) => ok && confirm())}
     >
       <Icon key={String(confirmed)} aria-hidden="true" className={cn('size-4', confirmed && styles.pop)} />
@@ -86,12 +92,20 @@ export function CopyButton({ label, done, onCopy }: CopyButtonProps) {
   );
 }
 
+interface PromptActionsProps {
+  readonly text: string;
+  readonly copyLabel: string;
+  readonly kit: PromptKit;
+  /** Copy prompt is the next thing to press; Open in ChatGPT never leads. */
+  readonly lead?: boolean;
+}
+
 /** The buttons of a prompt: copy it, open it in ChatGPT. */
-export function PromptActions({ text, copyLabel, kit }: { text: string; copyLabel: string; kit: PromptKit }) {
+export function PromptActions({ text, copyLabel, kit, lead }: PromptActionsProps) {
   const { words } = kit;
   return (
     <>
-      <CopyButton label={copyLabel} done={words.copied ?? copyLabel} onCopy={() => kit.onCopy(text)} />
+      <CopyButton label={copyLabel} done={words.copied ?? copyLabel} onCopy={() => kit.onCopy(text)} lead={lead} />
       <ChatLink label={words.openChatgpt} newTab={words.newTab}>
         <ChatGptMark className="size-4" />
       </ChatLink>

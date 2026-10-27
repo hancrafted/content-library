@@ -103,6 +103,14 @@ const copyPrompt = (modal: Locator, name = COPY_PROMPT) => modal.getByRole('butt
 /** The input that fills `key`, a slot marker or a result. */
 const field = (modal: Locator, key: string) => modal.locator(`[data-field="${key}"] textarea`).first();
 
+/** Unfolds Step 1, Provide context, of the open job: it starts folded while every field holds a value or a sample. */
+async function openContext(modal: Locator) {
+  await modal
+    .getByRole('button', { name: /Provide context/ })
+    .first()
+    .click();
+}
+
 /** Picks a Workflow in the use case picker (a shadcn Select). */
 async function pickWorkflow(root: Locator, id: string) {
   await root.locator('[data-control="picker"] [role="combobox"]').click();
@@ -172,7 +180,7 @@ async function stageProblems(page: Page, id: string, language: Language): Promis
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then the view, Chat · CLI, teaching, reset, saving and loading progress, download and upload', async ({
+  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then the view, Chat · CLI, teaching, saving and loading progress, download and upload; Reset set apart after it', async ({
     page,
   }) => {
     // ARRANGE
@@ -181,7 +189,6 @@ test.describe('success cases', () => {
       'view',
       'level',
       'teaching',
-      'reset',
       'progressDownload',
       'progressUpload',
       'download',
@@ -517,8 +524,9 @@ test.describe('success cases', () => {
     const other = { 'human-in-the-loop/vacation': { hash: 'h', teaching: true, results: { 'a.b': 'keep' } } };
     await open(page, 'light');
     await storeProgress(page, other);
-    const { modal, toolbar } = await open(page, 'light');
-    const reset = toolbar.locator('[data-control="reset"]');
+    const { modal, root } = await open(page, 'light');
+    // Reset sits set apart after the toolbar pill, not inside it.
+    const reset = root.locator('[data-control="reset"]');
     // ACT
     await expect(reset).toHaveAttribute('data-has-work', 'false');
     await openStage(page, 'High-level plan');
@@ -567,6 +575,7 @@ test.describe('success cases', () => {
     const pasted = '# Pasted\n\nfirst line\nsecond line';
     const { modal } = await open(page, 'light');
     await openStage(page, 'High-level plan');
+    await openContext(modal);
     const input = field(modal, 'idea');
     // ACT
     await input.fill(pasted);
@@ -582,6 +591,7 @@ test.describe('success cases', () => {
     // ARRANGE
     const { modal } = await open(page, 'light');
     await openStage(page, 'High-level plan');
+    await openContext(modal);
     const input = field(modal, 'idea');
     const eye = modal.locator('[data-field="idea"] button[aria-pressed]');
     const rows = async () => Number(await input.getAttribute('rows'));

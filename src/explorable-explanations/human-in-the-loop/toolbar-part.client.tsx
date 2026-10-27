@@ -5,22 +5,23 @@ import { Label } from '@/shared/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import { Separator } from '@/shared/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
+import { cn } from '@/shared/lib/utils';
 import { Download, FileDown, FileUp, Upload } from 'lucide-react';
 import { useId, type ChangeEvent, type ReactNode } from 'react';
 import { LevelControl } from './level-control.client';
 import type { ToolbarProps } from './part-props.types';
 import { ProgressNote } from './progress-note.client';
 import { saveFile } from './save-file';
-import { DebugSwitch, ResetConfirm, TeachingControls, useTeachingProps } from './teaching-controls.client';
-import { ToolButton } from './tool-button.client';
+import { DebugSwitch, Reset, ResetConfirm, TeachingToggle, useTeachingProps } from './teaching-controls.client';
+import { TOOLBAR_PILL, TOOLBAR_ROW, ToolButton } from './tool-button.client';
 import { offers, type ControlId } from './toolbar-controls.pure';
 import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
  * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a shadcn select), a
- * separator, then the controls in order: view, Chat · CLI, teaching switch and Reset, the Debug switch where it is available, save and load progress, download
- * and upload of the Workflow file, each icon with a tooltip. The control registry says what shows; a readonly Preset
+ * separator, then the controls in order: view, Chat · CLI, teaching switch, the Debug switch where it is available, save and load progress, download
+ * and upload of the Workflow file, each icon with a tooltip. Reset sits apart after the pill, as in the popover. The control registry says what shows; a readonly Preset
  * also drops Chat · CLI, the teaching switch and Reset. Under the pill sit Reset's confirmation and the notes. The
  * parent validates an upload; this part only reads the chosen file.
  */
@@ -219,16 +220,19 @@ export function ToolbarPart(bar: ToolbarProps) {
   const describedBy = bar.uploadProblems.length > 0 ? problemsId : undefined;
   return (
     <>
-      <div
-        className="mb-4 flex w-fit max-w-full flex-wrap items-center gap-0.5 rounded-full border bg-muted p-[3px]"
-        role="toolbar"
-        aria-label={bar.words.toolbar}
-        data-part="toolbar"
-        data-level={bar.level}
-      >
-        <Picker bar={bar} />
-        {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
-        <Icons bar={bar} describedBy={describedBy} teaching={<TeachingControls {...teachingProps} />} />
+      <div className={cn(TOOLBAR_ROW, 'mb-4')}>
+        <div
+          className={TOOLBAR_PILL}
+          role="toolbar"
+          aria-label={bar.words.toolbar}
+          data-part="toolbar"
+          data-level={bar.level}
+        >
+          <Picker bar={bar} />
+          {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
+          <Icons bar={bar} describedBy={describedBy} teaching={<TeachingToggle {...teachingProps} />} />
+        </div>
+        <Reset {...teachingProps} />
       </div>
       <ResetConfirm {...teachingProps} />
       <Notes bar={bar} id={problemsId} />

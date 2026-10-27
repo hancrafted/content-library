@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/
 import { cn } from '@/shared/lib/utils';
 import { Eye, EyeOff, Info } from 'lucide-react';
 import { useId, useState } from 'react';
-import type { Entry } from './context-entries.pure';
+import { needsInput, shownValue, type Entry } from './context-entries.pure';
 import type { UiWords } from './human-in-the-loop.types';
 import type { SlotState } from './step-kit.types';
 
@@ -63,13 +63,22 @@ export interface FieldProps extends Omit<Entry, 'key'> {
   readonly value: string;
   readonly words: UiWords;
   readonly onValue: (value: string) => void;
+  /** The field is the next thing to fill: framed in the action colour. */
+  readonly lead?: boolean;
 }
 
-export function ContextField({ field, label, info, placeholder, value, words, onValue }: FieldProps) {
+/** The frame of a field or box the viewer should fill or tick next: one frame for every answer that leads. */
+export const LEAD_FRAME = 'border-(--info) ring-2 ring-(--info)';
+
+/** One line that scrolls sideways while folded, the full text while opened; framed when it leads. */
+const textareaClass = (full: boolean, lead: boolean) =>
+  cn('resize-none', !full && 'overflow-hidden whitespace-pre', lead && LEAD_FRAME);
+
+export function ContextField({ field, label, info, placeholder, value, words, onValue, lead = false }: FieldProps) {
   const id = useId();
   const [full, setFull] = useState(false);
   return (
-    <div data-field={field} className="flex min-w-0 flex-col gap-1.5">
+    <div data-field={field} data-lead={lead || undefined} className="flex min-w-0 flex-col gap-1.5">
       <FieldLabel id={id} label={label} info={info} />
       <div className={cn('flex min-w-0 gap-2', full ? 'items-start' : 'items-center')}>
         <Textarea
@@ -79,7 +88,7 @@ export function ContextField({ field, label, info, placeholder, value, words, on
           value={value}
           placeholder={placeholder}
           onChange={(event) => onValue(event.target.value)}
-          className={cn('resize-none', !full && 'overflow-hidden whitespace-pre')}
+          className={textareaClass(full, lead)}
         />
         <EyeToggle full={full} words={words} onToggle={() => setFull((now) => !now)} />
       </div>
@@ -91,9 +100,11 @@ interface FieldsProps {
   readonly entries: readonly Entry[];
   readonly slots: SlotState;
   readonly words: UiWords;
+  /** Frame the fields that still need the viewer's text. */
+  readonly lead?: boolean;
 }
 
-export function Fields({ entries, slots, words }: FieldsProps) {
+export function Fields({ entries, slots, words, lead = false }: FieldsProps) {
   return entries.map((entry) => (
     <ContextField
       key={entry.key}
@@ -101,9 +112,10 @@ export function Fields({ entries, slots, words }: FieldsProps) {
       label={entry.label}
       info={entry.info}
       placeholder={entry.placeholder}
-      value={slots.values[entry.key] ?? ''}
+      value={shownValue(entry, slots.values)}
       words={words}
       onValue={(value) => slots.onChange({ ...slots.values, [entry.key]: value })}
+      lead={lead && needsInput([entry], slots.values)}
     />
   ));
 }

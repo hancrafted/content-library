@@ -9,7 +9,8 @@ import type { UiWords } from './human-in-the-loop.types';
 import type { TeachingProps } from './progress-controls.types';
 
 /*
- * The teaching switch and Reset, side by side in the toolbar and at the popover's top right. The switch is disabled once
+ * The teaching switch, a control of the toolbar, and Reset, set apart just after it; the same in the visual's toolbar
+ * and in the popover's. The switch is disabled once
  * a result is pasted ("Reset to change"). Reset takes the warning token colour while saved work exists; it asks for
  * confirmation in the page (never a browser dialog), where the viewer may download the run first.
  */
@@ -107,15 +108,14 @@ function ResetButton({ words, teaching, confirming, onConfirming }: Props) {
   );
 }
 
-/** The switch and Reset, each only if the Preset shows it. */
-export function TeachingControls(props: Props) {
-  const { show, resetShow } = props.teaching;
-  return (
-    <>
-      {show && <TeachingSwitch {...props} />}
-      {resetShow && <ResetButton {...props} />}
-    </>
-  );
+/** The teaching switch, if the Preset shows it: a control of the toolbar. */
+export function TeachingToggle(props: Props) {
+  return props.teaching.show ? <TeachingSwitch {...props} /> : null;
+}
+
+/** Reset, if the Preset shows it: set apart beside the toolbar, never one of its controls. */
+export function Reset(props: Props) {
+  return props.teaching.resetShow ? <ResetButton {...props} /> : null;
 }
 
 /** The confirmation state of a part that holds the controls, with the props the controls and the question share. */

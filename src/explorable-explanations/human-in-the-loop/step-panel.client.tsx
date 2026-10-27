@@ -4,7 +4,7 @@ import { CopyButton, PromptActions } from '@/shared/components/core-components/t
 import { joinPrompt, type PromptParts } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
 import { CheckedBox } from './checked-box.client';
-import { contextEntries } from './context-entries.pure';
+import { contextEntries, needsInput, type Entry } from './context-entries.pure';
 import { ContextField } from './context-field.client';
 import { debugFooter } from './debug-footer.pure';
 import { Context } from './step-context.client';
@@ -40,13 +40,37 @@ export const resultKey = (step: Step, task: TaskModalView): string => {
   return step.chat === undefined ? task.output : `${task.output}_${step.chat}`;
 };
 
-const partsOf = ({ prompt }: Step): PromptParts => ({
+/** The name a step goes by in the item's lead: its kind and its chat. */
+export const panelKey = (kind: 'do' | 'review', step: Step): string => `${kind}#${step.chat ?? 0}`;
+
+/** What leads in this panel, if anything: its context, its Copy prompt, or its answer. */
+function leadOf(kit: StepKit, key: string) {
+  const next = kit.lead?.next;
+  return next?.key === key ? next.action : null;
+}
+
+export const partsOf = ({ prompt }: Step): PromptParts => ({
   sections: prompt.sections ?? [{ text: prompt.text }],
   slots: prompt.slots ?? [],
 });
 
+/** Copy explanation prompt: the prompt wrapped in a request to explain it. It never leads. */
+function ExplainButton({ kit, onCopy }: { kit: StepKit; onCopy: () => Promise<boolean> }) {
+  const { words } = kit;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span>
+          <CopyButton label={words.copyExplanation} done={words.copied} onCopy={onCopy} />
+        </span>
+      </TooltipTrigger>
+      <TooltipContent align="end">{words.copyExplanationTip}</TooltipContent>
+    </Tooltip>
+  );
+}
+
 /** Copy the prompt, open ChatGPT; and, at the right, copy the prompt wrapped in the request to explain it. */
-function Actions({ step, kit, slots }: { step: Step; kit: StepKit; slots: SlotState }) {
+function Actions({ step, kit, slots, panel }: { step: Step; kit: StepKit; slots: SlotState; panel: string }) {
   const { words } = kit;
   const plain = joinPrompt(partsOf(step), slots.values);
   const copy = tryWords(words);
@@ -54,29 +78,38 @@ function Actions({ step, kit, slots }: { step: Step; kit: StepKit; slots: SlotSt
   const footer = (prompt: 'copy' | 'explain') =>
     debug ? debugFooter(debug, { prompt, step: step.id, chat: step.chat }) : null;
   const text = debuggedPrompt(words, plain, footer('copy'));
+  const copied = (ok: boolean) => {
+    if (ok) kit.lead?.onCopied(panel);
+    return ok;
+  };
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <PromptActions text={text} copyLabel={copy.copyPrompt} kit={{ ...kit, words: copy }} />
+      <PromptActions
+        text={text}
+        copyLabel={copy.copyPrompt}
+        lead={leadOf(kit, panel) === 'copy'}
+        kit={{ ...kit, words: copy, onCopy: async (each) => copied(await kit.onCopy(each)) }}
+      />
       <span className="ml-auto" />
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span>
-            <CopyButton
-              label={words.copyExplanation}
-              done={words.copied}
-              onCopy={() => kit.onCopy(debuggedPrompt(words, explanationPrompt(words, plain), footer('explain')))}
-            />
-          </span>
-        </TooltipTrigger>
-        <TooltipContent align="end">{words.copyExplanationTip}</TooltipContent>
-      </Tooltip>
+      <ExplainButton
+        kit={kit}
+        onCopy={() => kit.onCopy(debuggedPrompt(words, explanationPrompt(words, plain), footer('explain')))}
+      />
     </div>
   );
 }
 
-function Result({ name, kit, slots, final }: { name: string; kit: StepKit; slots: SlotState; final: boolean }) {
+interface ResultProps {
+  readonly name: string;
+  readonly kit: StepKit;
+  readonly slots: SlotState;
+  readonly final: boolean;
+  readonly lead: boolean;
+}
+
+function Result({ name, kit, slots, final, lead }: ResultProps) {
   const { words } = kit;
-  if (final) return <CheckedBox name={name} label={words.markDone} slots={slots} mark="done" />;
+  if (final) return <CheckedBox name={name} label={words.markDone} slots={slots} mark="done" lead={lead} />;
   return (
     <ContextField
       field={name}
@@ -85,6 +118,7 @@ function Result({ name, kit, slots, final }: { name: string; kit: StepKit; slots
       value={slots.values[name] ?? ''}
       words={words}
       onValue={(value) => slots.onChange({ ...slots.values, [name]: value })}
+      lead={lead}
     />
   );
 }
@@ -95,21 +129,55 @@ export function contextCount(step: Step, task: TaskModalView, kit: StepKit): num
   return own.length + earlier.length > 0 ? 1 : 0;
 }
 
-function DoSteps({ step, task, kit, slots, first }: PanelProps) {
+/** Every input of a step's prompt, plain ones and earlier results alike. */
+export function entriesOfStep(step: Step, task: TaskModalView, kit: StepKit): Entry[] {
+  const { own, earlier } = contextEntries(partsOf(step), task.previous, kit.words);
+  return [...own, ...earlier];
+}
+
+/** Step 1, Provide context: folded, with a hint, while every field holds a value or a sample. */
+function ContextStep({ step, task, kit, slots, first }: PanelProps) {
   const { words } = kit;
-  const parts = partsOf(step);
-  const { own, earlier } = contextEntries(parts, task.previous, words);
-  const hasContext = own.length + earlier.length > 0;
+  const { own, earlier } = contextEntries(partsOf(step), task.previous, words);
+  const toFill = needsInput([...own, ...earlier], slots.values);
+  return (
+    <StepSection
+      n={first}
+      title={words.stepContext}
+      info={words.stepContextInfo}
+      kit={kit}
+      open={toFill}
+      hint={toFill ? undefined : words.stepContextNothing}
+    >
+      <Context
+        own={own}
+        earlier={earlier}
+        slots={slots}
+        words={words}
+        lead={leadOf(kit, panelKey('do', step)) === 'context'}
+      />
+    </StepSection>
+  );
+}
+
+function DoSteps(props: PanelProps) {
+  const { step, task, kit, slots, first } = props;
+  const { words } = kit;
+  const hasContext = entriesOfStep(step, task, kit).length > 0;
+  const panel = panelKey('do', step);
+  const lead = leadOf(kit, panel);
   return (
     <>
-      {hasContext && (
-        <StepSection n={first} title={words.stepContext} info={words.stepContextInfo} kit={kit}>
-          <Context own={own} earlier={earlier} slots={slots} words={words} />
-        </StepSection>
-      )}
+      {hasContext && <ContextStep {...props} />}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
-        <Actions step={step} kit={kit} slots={slots} />
-        <Result name={resultKey(step, task)} kit={kit} slots={slots} final={task.output === undefined} />
+        <Actions step={step} kit={kit} slots={slots} panel={panel} />
+        <Result
+          name={resultKey(step, task)}
+          kit={kit}
+          slots={slots}
+          final={task.output === undefined}
+          lead={lead === 'answer'}
+        />
       </StepSection>
     </>
   );
@@ -123,8 +191,15 @@ export function StepPanel(props: PanelProps) {
         <DoSteps {...props} />
       ) : (
         <StepSection n={first} title={kit.words.stepCheck} info={kit.words.stepCheckInfo} kit={kit}>
-          <Actions step={step} kit={kit} slots={slots} />
-          {checkedAs && <CheckedBox name={checkedAs} label={kit.words.markChecked} slots={slots} />}
+          <Actions step={step} kit={kit} slots={slots} panel={panelKey('review', step)} />
+          {checkedAs && (
+            <CheckedBox
+              name={checkedAs}
+              label={kit.words.markChecked}
+              slots={slots}
+              lead={leadOf(kit, panelKey('review', step)) === 'answer'}
+            />
+          )}
         </StepSection>
       )}
     </div>

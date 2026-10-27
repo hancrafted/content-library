@@ -2,12 +2,15 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/components/ui/accordion';
 import { Check } from 'lucide-react';
+import { useState } from 'react';
 import { ChatTabs } from './chat-tabs.client';
+import { needsInput } from './context-entries.pure';
 import { scopeOf, type DebugBase } from './debug-footer.pure';
+import { nextAction, type PanelProgress } from './next-action.pure';
 import type { SlotState, StepKit } from './step-kit.types';
-import { contextCount } from './step-panel.client';
+import { contextCount, entriesOfStep, panelKey, resultKey } from './step-panel.client';
 import { itemsOf, openItemOf, type Item } from './stepper-items.pure';
-import type { StageRun } from './workflow-run.pure';
+import { filled, type StageRun } from './workflow-run.pure';
 import type { StageView } from './workflow-view.pure';
 
 /*
@@ -76,8 +79,40 @@ function kitOf(kit: StepKit, { item, stage, debug, rounds }: Pick<StepItemProps,
   return { ...kit, debug: scopeOf(debug, at) };
 }
 
+/** Where each step of an item stands, in order: its do chats, then its review chats. */
+interface Run {
+  readonly values: SlotState['values'];
+  readonly copied: ReadonlySet<string>;
+}
+
+function progressOf(item: Item, kit: StepKit, { values, copied }: Run): PanelProgress[] {
+  const { job, doSteps, reviewSteps } = item;
+  const does = doSteps.map((step) => {
+    const key = panelKey('do', step);
+    const inputs = entriesOfStep(step, job.task, kit);
+    return {
+      key,
+      copied: copied.has(key),
+      done: filled(values, resultKey(step, job.task)),
+      needsInput: needsInput(inputs, values),
+    };
+  });
+  const reviews = reviewSteps.map((step) => {
+    const key = panelKey('review', step);
+    return { key, copied: copied.has(key), done: filled(values, item.checkedAs) };
+  });
+  return [...does, ...reviews];
+}
+
+/** The item's lead: which of its controls the viewer should use next, from the run and the prompts copied so far. */
+function useLead(item: Item, kit: StepKit, values: SlotState['values']): StepKit {
+  const [copied, setCopied] = useState<ReadonlySet<string>>(() => new Set());
+  const onCopied = (panel: string) => setCopied((now) => (now.has(panel) ? now : new Set(now).add(panel)));
+  return { ...kit, lead: { next: nextAction(progressOf(item, kit, { values, copied })), onCopied } };
+}
+
 function StepItem({ item, at, kit: shared, slots, stage, debug, rounds }: StepItemProps & Where) {
-  const kit = kitOf(shared, { item, stage, debug, rounds });
+  const kit = useLead(item, kitOf(shared, { item, stage, debug, rounds }), slots.values);
   const { job, doSteps } = item;
   const [lead] = doSteps;
   const reviewAt = (lead ? contextCount(lead, job.task, kit) + 1 : 0) + 1;

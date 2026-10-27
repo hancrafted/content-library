@@ -21,9 +21,10 @@ ui:
   context: Help
   intro: 'Work through the steps in order: copy each prompt into a new AI chat, then paste the result back here.'
   stepContext: 'Provide context'
-  stepContextInfo: 'The prompt below needs results from previous tasks or extra input. They are filled in here if you pasted the result in an earlier step. Leave a field empty to use the provided example.'
-  stepDo: 'Complete the prompt and paste the result'
+  stepContextInfo: 'The prompt below needs results from previous tasks or extra input. They are filled in here if you pasted the result in an earlier step. Each field already holds an example or your earlier result; replace it with your own text if you like.'
+  stepDo: 'Run the prompt in an AI chat, then paste the result back'
   stepDoInfo: "Run the prompt in a new conversation and paste the result back here. Don't close the conversation."
+  stepContextNothing: 'Nothing to do here: the fields hold examples or your earlier results. Open this step to read or change them.'
   stepCheck: 'Check the result'
   stepCheckInfo: 'Review the result in a new conversation. If it fails, paste the feedback into the conversation of the previous step and update the result. Repeat until all checks pass.'
   copyExplanation: 'Copy explanation prompt'
