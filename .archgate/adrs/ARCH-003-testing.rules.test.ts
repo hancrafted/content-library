@@ -27,6 +27,8 @@ function makeCtx(files: Record<string, string>) {
         'src/**/*.test.ts': (f) => f.startsWith('src/') && f.endsWith('.test.ts'),
         'tests/browser/**/*.browser.test.ts': (f) => f.startsWith('tests/browser/') && f.endsWith('.browser.test.ts'),
         'skills/**/*.browser.test.ts': (f) => f.startsWith('skills/') && f.endsWith('.browser.test.ts'),
+        'src/**/*.pure.ts': (f) => f.startsWith('src/') && f.endsWith('.pure.ts'),
+        'skills/**/scripts/**/*.ts': (f) => /^skills\/.+\/scripts\/.+\.ts$/.test(f),
       };
       if (!(pattern in shapes)) throw new Error(`unexpected glob ${pattern}`);
       return Object.keys(files).filter(shapes[pattern]);
@@ -301,6 +303,80 @@ describe('assert-no-magic', () => {
     const provenance = '(ARCH-003 [assert-no-magic])';
     const outside = makeCtx({ 'tests/post-build/x.build.test.ts': source });
     const inside = makeCtx({ [FILE]: source });
+    // ACT
+    await rule.check(outside.ctx);
+    await rule.check(inside.ctx);
+    // ASSERT
+    expect(outside.violations).toEqual([]);
+    expect(inside.violations[0].message).toContain(provenance);
+  });
+});
+
+describe('stryker-marker-reason', () => {
+  const rule = ruleSet.rules['stryker-marker-reason'];
+  const PURE_FILE = 'src/shared/lib/math.pure.ts';
+  const SKILL_SCRIPT = 'skills/mutation-testing/scripts/mutation-scope.pure.ts';
+
+  it('passes single-line and block disable markers that name mutator(s) and give a reason after a colon, plus restore comments', async () => {
+    // ARRANGE
+    const source = [
+      '// Stryker disable next-line EqualityOperator: boundary is clamped above',
+      'export const clamp = (n: number) => (n <= 0 ? 0 : n);',
+      '// Stryker disable next-line EqualityOperator, ArithmeticOperator: zero is identity',
+      'export const step = (n: number) => n + 0;',
+      '/* Stryker disable StringLiteral, ObjectLiteral: static display table */',
+      "export const LABELS = { a: 'Alpha' };",
+      '/* Stryker restore */',
+    ].join('\n');
+    const { ctx, violations } = makeCtx({ [PURE_FILE]: source, [SKILL_SCRIPT]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toEqual([]);
+  });
+
+  it.each([
+    ['bare disable all', '// Stryker disable all'],
+    ['next-line disable all with reason', '// Stryker disable next-line all: equivalent'],
+    ['block disable all with reason', '/* Stryker disable all: equivalent */'],
+    ['disable all mixed with a named mutator', '// Stryker disable next-line EqualityOperator, all: equivalent'],
+  ])('fails %s', async (_label, marker) => {
+    // ARRANGE
+    const source = `${marker}\nexport const x = 1;\n`;
+    const { ctx, violations } = makeCtx({ [PURE_FILE]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+    expect(violations[0].line).toBe(1);
+    expect(violations[0].message).toMatch(/disable all/i);
+  });
+
+  it.each([
+    ['a next-line marker without a reason', '// Stryker disable next-line EqualityOperator'],
+    ['a block marker without a reason', '/* Stryker disable StringLiteral */'],
+    ['a marker with an empty reason after the colon', '// Stryker disable next-line EqualityOperator:   '],
+    ['a marker with no mutator before the colon', '// Stryker disable next-line : missing mutator'],
+    ['a bare Stryker disable with nothing after it', '// Stryker disable'],
+  ])('fails %s, on its line', async (_label, marker) => {
+    // ARRANGE
+    const source = `export const a = 1;\n${marker}\nexport const b = 2;\n`;
+    const expectedLine = 2;
+    const { ctx, violations } = makeCtx({ [SKILL_SCRIPT]: source });
+    // ACT
+    await rule.check(ctx);
+    // ASSERT
+    expect(violations).toHaveLength(1);
+    expect(violations[0].file).toBe(SKILL_SCRIPT);
+    expect(violations[0].line).toBe(expectedLine);
+  });
+
+  it('leaves files outside src/**/*.pure.ts and skills/**/scripts/**/*.ts alone and carries the provenance tag', async () => {
+    // ARRANGE
+    const source = '// Stryker disable all\nexport const x = 1;\n';
+    const provenance = '(ARCH-003 [stryker-marker-reason])';
+    const outside = makeCtx({ 'src/shared/hooks/use-thing.ts': source });
+    const inside = makeCtx({ [PURE_FILE]: source });
     // ACT
     await rule.check(outside.ctx);
     await rule.check(inside.ctx);
