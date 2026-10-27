@@ -24,7 +24,7 @@ interface SectionProps {
 export function StepSection({ n, title, info, kit, open = true, hint, children }: SectionProps) {
   return (
     <Collapsible defaultOpen={open} data-step-section={n} className="group/step flex min-w-0 flex-col gap-3">
-      {n > 1 && <Separator className="mb-1" />}
+      {n > 1 && <Separator className="mb-2.5" />}
       <h4 className="text-body font-semibold">
         <CollapsibleTrigger className="flex w-fit cursor-pointer items-center gap-1.5 rounded-sm text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
           <ChevronRight

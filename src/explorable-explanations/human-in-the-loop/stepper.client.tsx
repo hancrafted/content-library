@@ -122,7 +122,8 @@ function StepItem({ item, at, kit: shared, slots, stage, debug, rounds }: StepIt
         <Marker done={item.state !== 'open'} at={at} />
         {item.round ? `${item.round.title}: ${job.goal.do}` : job.goal.do}
       </AccordionTrigger>
-      <AccordionContent className="flex flex-col gap-4 sm:pl-10">
+      {/* One column for every step of the item, its chat tabs and review goal: the one gap between steps. */}
+      <AccordionContent className="flex flex-col gap-5.5 sm:pl-10">
         {doSteps.length > 0 && <ChatTabs steps={doSteps} task={job.task} kind="do" kit={kit} slots={slots} first={1} />}
         <Review item={item} kit={kit} slots={slots} first={reviewAt} />
       </AccordionContent>

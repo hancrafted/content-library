@@ -81,7 +81,7 @@ export function ChatTabs({ steps, task, kind, kit, slots, first, checkedAs }: Ta
   const id = useId();
   const several = steps.length > 1;
   return (
-    <div className="flex flex-col gap-4">
+    <div className="contents">
       {several && <TabList steps={steps} words={kit.words} id={id} selected={selected} onSelect={setSelected} />}
       {steps.map((step, at) => (
         <div
@@ -89,6 +89,7 @@ export function ChatTabs({ steps, task, kind, kit, slots, first, checkedAs }: Ta
           role={several ? 'tabpanel' : undefined}
           id={`${id}-${at}-panel`}
           hidden={at !== selected}
+          className="contents"
         >
           <StepPanel {...{ step, task, kind, kit, slots, first, checkedAs }} />
         </div>

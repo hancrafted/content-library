@@ -186,7 +186,7 @@ function DoSteps(props: PanelProps) {
 export function StepPanel(props: PanelProps) {
   const { step, kind, kit, slots, first, checkedAs } = props;
   return (
-    <div className="flex flex-col gap-4" data-step-panel={kind}>
+    <div className="contents" data-step-panel={kind}>
       {kind === 'do' ? (
         <DoSteps {...props} />
       ) : (
