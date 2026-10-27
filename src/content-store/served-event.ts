@@ -2,7 +2,7 @@ import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { hasPage, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
 import type { LoadedEpisode } from './episode-refusals';
 import type { Event } from './schemas/event.schema';
-import type { Playlist, PlaylistItem } from './schemas/playlist.schema';
+import type { Playlist, StoredPlaylistEntry } from './schemas/playlist.schema';
 
 /*
  * An Event as the store serves it (design-ADR 0016, Delivery): resolved once, when the records load, into the Playlist
@@ -22,12 +22,15 @@ export interface PlaylistPlace {
 }
 
 /**
- * One entry of an Event's Playlist: the Episode's record with its ref, the anchor it opens at when it names one, its
- * ref again as `page` when it has a page (its URL slug and owning Event are fields of it), and its place.
+ * One entry of an Event's Playlist: the Episode's record with its ref, the anchor it opens at when it names one,
+ * `repeat` when an earlier entry already lists its Episode, its ref again as `page` when it has a page (its URL slug and
+ * owning Event are fields of it), and its place.
  */
 export interface PlaylistEntry {
   readonly episode: LoadedEpisode;
   readonly anchor?: string;
+  /** An earlier entry lists the same Episode: this one gets no page of its own and the walk steps over it. */
+  readonly repeat?: true;
   readonly page?: EpisodeRef<EpisodeId>;
   readonly place: PlaylistPlace;
 }
@@ -59,7 +62,7 @@ export interface PresentedEpisode {
 
 /** Each entry of a Playlist with its Episode loaded, in its order; an id no Episode holds is the Playlist's refusal. */
 export function listedEntries(
-  items: readonly PlaylistItem[],
+  items: readonly StoredPlaylistEntry[],
   episodes: ReadonlyMap<string, LoadedEpisode>,
 ): ListedEntry[] {
   return items.flatMap(({ episode, anchor }) => {
@@ -74,9 +77,11 @@ export function listedEntries(
  */
 export function playlistEntries(entries: readonly ListedEntry[]): PlaylistEntry[] {
   const pages = entries.map(({ episode: { ref } }) => (hasPage(ref) ? ref : undefined));
-  const isFirst = (index: number) =>
-    entries.findIndex(({ episode }) => episode.ref.id === entries[index].episode.ref.id) === index;
-  const stops = pages.map((page, index) => (isFirst(index) ? page : undefined));
+  // The one place the rule lives: an Episode's first entry places it; every later one is a repeat.
+  const repeats = entries.map(({ episode }, index) =>
+    entries.slice(0, index).some((earlier) => earlier.episode.ref.id === episode.ref.id),
+  );
+  const stops = pages.map((page, index) => (repeats[index] ? undefined : page));
   const isDefined = (page: EpisodeRef<EpisodeId> | undefined): page is EpisodeRef<EpisodeId> => page !== undefined;
   return entries.map(({ episode, anchor }, index) => {
     const page = pages[index];
@@ -85,6 +90,7 @@ export function playlistEntries(entries: readonly ListedEntry[]): PlaylistEntry[
     return {
       episode,
       ...(anchor === undefined ? {} : { anchor }),
+      ...(repeats[index] ? { repeat: true as const } : {}),
       ...(page === undefined ? {} : { page }),
       place: {
         position: index + 1,

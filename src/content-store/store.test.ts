@@ -210,6 +210,7 @@ describe('success cases', () => {
       {
         slug: 'ai-token-economy',
         anchor,
+        repeat: true,
         page: episodeRef('ai-token-economy'),
         place: { position: 3, count, previous: episodeRef('ai-attention-span') },
       },

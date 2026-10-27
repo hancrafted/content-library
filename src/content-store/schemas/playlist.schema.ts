@@ -46,4 +46,4 @@ export type Playlist = z.infer<typeof playlistSchema>;
 export type PlaylistInput = z.input<typeof playlistSchema>;
 
 /** One Playlist entry, as the store loads it: the Episode id, and the anchor it opens at. */
-export type PlaylistItem = Playlist['episodes'][number];
+export type StoredPlaylistEntry = Playlist['episodes'][number];
