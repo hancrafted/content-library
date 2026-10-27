@@ -142,6 +142,15 @@ function ending(file: File, over: object = {}): void {
 }
 
 describe('success cases', () => {
+  it('loads a job that hands on an output without a review, so only the gates need a check', () => {
+    // ARRANGE
+    const change = (file: File) => void delete (file.stages[0]!.jobs[0] as { review?: unknown }).review;
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toBe('');
+  });
+
   it('keeps the optional picker description of a file, and loads a file without one', () => {
     // ARRANGE
     const described = load((file) => Object.assign(file, { description: 'One sentence for the picker.' }));
@@ -362,15 +371,6 @@ describe('failure cases', () => {
     expect(problems).toContain(
       'Slot "plan" of task "check" takes the output of "plan" in its own stage; add it to needs.',
     );
-  });
-
-  it('reports a job without a review', () => {
-    // ARRANGE
-    const change = (file: File) => void delete (file.stages[0]!.jobs[0] as { review?: unknown }).review;
-    // ACT
-    const problems = problemsOf(load(change));
-    // ASSERT
-    expect(problems).toContain('Task "plan" has no review; every job has one but the final job without an output.');
   });
 
   it('reports a job that has no output unless it is the final job of the last stage', () => {
@@ -746,13 +746,14 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('asks a review of a final job that has an output', () => {
+  it('loads a final job that has an output and no review', () => {
     // ARRANGE
     const change = (file: File) => ending(file, { output: 'report' });
+    const finalJob = 'Task "finish"';
     // ACT
     const problems = problemsOf(load(change));
     // ASSERT
-    expect(problems).toContain('Task "finish" has no review; every job has one but the final job without an output.');
+    expect(problems).not.toContain(finalJob);
   });
 
   it('asks an output of a job of the last stage that is not its final job', () => {
