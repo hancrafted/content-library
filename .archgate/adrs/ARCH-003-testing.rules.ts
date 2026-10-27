@@ -20,10 +20,43 @@
 // between rules files.
 // Unit and browser tests under src/, plus the browser tests outside it (§2, §3). Post-build tests stay free-form.
 const TEST_GLOBS = ['src/**/*.test.ts', 'tests/browser/**/*.browser.test.ts', 'skills/**/*.browser.test.ts'];
+const MUTATION_GLOBS = ['src/**/*.pure.ts', 'skills/**/scripts/**/*.ts'];
 
 async function testFiles(ctx: RuleContext): Promise<string[]> {
   const found = await Promise.all(TEST_GLOBS.map((glob) => ctx.glob(glob)));
   return [...new Set(found.flat())];
+}
+
+async function mutationFiles(ctx: RuleContext): Promise<string[]> {
+  const found = await Promise.all(MUTATION_GLOBS.map((glob) => ctx.glob(glob)));
+  return [...new Set(found.flat())];
+}
+
+const STRYKER_DISABLE_RE = /^\s*(?:\/\/|\/\*)\s*Stryker\s+disable\b(.*)$/i;
+
+function checkStrykerDisable(tail: string): string | null {
+  const afterScope = tail
+    .replace(/\*\/\s*$/, '')
+    .trim()
+    .replace(/^next-line\b\s*/i, '')
+    .trim();
+  const colon = afterScope.indexOf(':');
+  const mutatorPart = (colon === -1 ? afterScope : afterScope.slice(0, colon)).trim();
+  const reason = colon === -1 ? '' : afterScope.slice(colon + 1).trim();
+  const mutators = mutatorPart
+    .split(',')
+    .map((m) => m.trim())
+    .filter(Boolean);
+  if (mutators.some((m) => /^all$/i.test(m))) {
+    return "'Stryker disable all' is forbidden — name the specific mutator(s) and give a reason after ':' (ARCH-003 [stryker-marker-reason]).";
+  }
+  if (mutators.length === 0 || !mutators.every((m) => /^[A-Za-z][A-Za-z0-9]*$/.test(m))) {
+    return "Stryker disable marker must name at least one mutator before ':' and give a reason after it (ARCH-003 [stryker-marker-reason]).";
+  }
+  if (colon === -1 || reason.length === 0) {
+    return `Stryker disable marker for '${mutators.join(', ')}' is missing a ': <reason>' explanation (ARCH-003 [stryker-marker-reason]).`;
+  }
+  return null;
 }
 const BLOCKS = ['success cases', 'failure cases', 'edge cases'];
 const MARKERS = ['ARRANGE', 'ACT', 'ASSERT'];
@@ -254,6 +287,28 @@ export default {
               });
             }
           }
+        }
+      },
+    },
+    'stryker-marker-reason': {
+      description:
+        "Every Stryker disable marker in a mutatable file names specific mutator(s) and gives a reason after ':' — 'Stryker disable all' is forbidden (§6.3).",
+      severity: 'error',
+      async check(ctx) {
+        for (const file of await mutationFiles(ctx)) {
+          const lines = (await ctx.readFile(file)).split('\n');
+          lines.forEach((text, index) => {
+            const m = STRYKER_DISABLE_RE.exec(text);
+            if (m === null) return;
+            const message = checkStrykerDisable(m[1]);
+            if (message !== null) {
+              ctx.report.violation({
+                message,
+                file,
+                line: index + 1,
+              });
+            }
+          });
         }
       },
     },
