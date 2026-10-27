@@ -1,3 +1,5 @@
+import { READING_LINE } from './reading-line.pure';
+
 /**
  * Pure logic behind the table of contents: which
  * sections are open, how much reading time is left. No DOM, no React.
@@ -121,4 +123,23 @@ export function readingTime(
   const current = activeIndex < 0 ? 0 : (minutes[activeIndex] ?? 0) * Math.min(Math.max(fraction, 0), 1);
   const elapsed = before + current;
   return { total, remaining: total - elapsed, progress: total === 0 ? 1 : elapsed / total };
+}
+
+/**
+ * How far the reading line has travelled through `box`, rounded to hundredths
+ * (plenty for a progress bar); `1` once the viewport reaches the bottom of the
+ * page, and `0` when there is no element or its height is not positive.
+ */
+export function fractionInto(
+  {
+    scrollY,
+    innerHeight,
+    scrollHeight,
+  }: { readonly scrollY: number; readonly innerHeight: number; readonly scrollHeight: number },
+  box: { readonly top: number; readonly height: number } | null,
+): number {
+  if (scrollY + innerHeight >= scrollHeight - 1) return 1;
+  if (!box || box.height <= 0) return 0;
+  // Hundredths are plenty for a progress bar and skip re-renders between them.
+  return Math.round(((innerHeight * READING_LINE - box.top) / box.height) * 100) / 100;
 }

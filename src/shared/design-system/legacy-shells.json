@@ -80,7 +80,6 @@
     "src/shared/hooks/use-popover-placement.ts",
     "src/shared/hooks/use-progress.ts",
     "src/shared/hooks/use-revealed-on-view.ts",
-    "src/shared/hooks/use-table-of-contents.ts",
     "src/shared/hooks/use-url-state.ts",
     "src/shared/page-chrome/context-drawer/context-drawer.client.tsx",
     "src/shared/page-chrome/header/header-menu.client.tsx",

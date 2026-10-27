@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   activeEntry,
+  fractionInto,
   openSectionIds,
   readingOrder,
   readingTime,
@@ -72,6 +73,17 @@ describe('success cases', () => {
     const time = readingTime({ minutes, total: 10 }, 1, 0.25);
     // ASSERT
     expect(time).toEqual(expected);
+  });
+
+  it('measures how far the reading line has travelled through the active slide, rounded to hundredths', () => {
+    // ARRANGE
+    const page = { scrollY: 200, innerHeight: 1000, scrollHeight: 2000 };
+    const halfway = 0.5;
+    const oneThirdRounded = 0.33;
+    // ACT
+    const fractions = [fractionInto(page, { top: 150, height: 400 }), fractionInto(page, { top: 250, height: 300 })];
+    // ASSERT
+    expect(fractions).toEqual([halfway, oneThirdRounded]);
   });
 
   describe('reading order with unlisted Slides', () => {
@@ -164,6 +176,17 @@ describe('failure cases', () => {
     // ASSERT
     expect(time).toEqual([atStart, atEnd]);
   });
+
+  it('reports 0 when the active element is missing or has no positive height', () => {
+    // ARRANGE
+    const page = { scrollY: 200, innerHeight: 1000, scrollHeight: 2000 };
+    const zeroHeight = { top: 150, height: 0 };
+    const negativeHeight = { top: 150, height: -10 };
+    // ACT
+    const fractions = [fractionInto(page, null), fractionInto(page, zeroHeight), fractionInto(page, negativeHeight)];
+    // ASSERT
+    expect(fractions).toEqual([0, 0, 0]);
+  });
 });
 
 describe('edge cases', () => {
@@ -220,6 +243,20 @@ describe('edge cases', () => {
     const time = readingTime({ minutes, total: 11 }, ids.indexOf('top'), 0.5);
     // ASSERT
     expect([time.remaining, time.progress]).toEqual([time.total, 0]);
+  });
+
+  it('reports 1 once the viewport reaches within 1px of the bottom of the page', () => {
+    // ARRANGE
+    const box = { top: 150, height: 400 };
+    const onePixelAboveBottom = 0.5;
+    // ACT
+    const fractions = [
+      fractionInto({ scrollY: 998, innerHeight: 1000, scrollHeight: 2000 }, box),
+      fractionInto({ scrollY: 999, innerHeight: 1000, scrollHeight: 2000 }, box),
+      fractionInto({ scrollY: 1000, innerHeight: 1000, scrollHeight: 2000 }, null),
+    ];
+    // ASSERT
+    expect(fractions).toEqual([onePixelAboveBottom, 1, 1]);
   });
 
   describe('the active entry', () => {
