@@ -88,12 +88,14 @@ function readLegacyShellFiles(): string[] {
   return raw.files;
 }
 
+function isShellCapViolation(message: { ruleId: string | null }): boolean {
+  return message.ruleId === 'complexity' || message.ruleId === 'max-depth';
+}
+
 /** The complexity / max-depth rule ids a snippet breaks when linted as `file` with the repo config. */
 async function shellViolations(code: string, file: string, linter: ESLint = eslint): Promise<string[]> {
   const [result] = await linter.lintText(code, { filePath: path.join(ROOT, file) });
-  return result.messages
-    .filter((m) => m.ruleId === 'complexity' || m.ruleId === 'max-depth')
-    .map((m) => m.ruleId ?? '');
+  return result.messages.filter(isShellCapViolation).map((m) => m.ruleId ?? '');
 }
 
 /** Listed entries that either do not exist on disk or no longer exceed the shell budget. */
@@ -102,7 +104,7 @@ async function staleLegacyEntries(files: readonly string[]): Promise<string[]> {
   const missing = files.filter((file) => !existsSync(path.join(ROOT, file)));
   const results = await shellCapEslint.lintFiles(existing.map((file) => path.join(ROOT, file)));
   const underBudget = results
-    .filter((r) => !r.messages.some((m) => m.ruleId === 'complexity' || m.ruleId === 'max-depth'))
+    .filter((r) => !r.messages.some(isShellCapViolation))
     .map((r) => path.relative(ROOT, r.filePath));
   return [...missing, ...underBudget];
 }

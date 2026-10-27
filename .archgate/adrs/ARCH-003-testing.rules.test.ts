@@ -326,6 +326,7 @@ describe('stryker-marker-reason', () => {
       'export const step = (n: number) => n + 0;',
       '/* Stryker disable StringLiteral, ObjectLiteral: static display table */',
       "export const LABELS = { a: 'Alpha' };",
+      '/* Stryker restore StringLiteral, ObjectLiteral */',
       '/* Stryker restore */',
     ].join('\n');
     const { ctx, violations } = makeCtx({ [PURE_FILE]: source, [SKILL_SCRIPT]: source });

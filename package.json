@@ -23,7 +23,7 @@
     "check:docs": "mh check && npm run check:skills",
     "test:build": "vitest run --config vitest.build.config.ts",
     "test:browser": "playwright test",
-    "test:mutation": "node skills/mutation-testing/scripts/mutation.ts",
+    "test:mutation": "node tools/mutation/mutation.ts",
     "wt:new": "node skills/worktree/scripts/worktree.ts new",
     "wt:done": "node skills/worktree/scripts/worktree.ts done",
     "wt:sync": "node skills/worktree/scripts/worktree.ts sync",

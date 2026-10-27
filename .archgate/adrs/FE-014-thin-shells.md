@@ -33,12 +33,12 @@ Options considered:
 ### 1. Hooks and client components are thin shells
 
 1. A hook (`src/{shared,episodes,pipeline}/hooks/**/*.ts`, `src/explorable-explanations/*/use-*.ts`) or client component (`src/**/*.client.tsx`) MUST hold wiring only: browser APIs, React state, refs and effects, event handlers, and calls into `.pure.ts` functions.
-2. All branching and arithmetic on data MUST live in a `.pure.ts` module taking plain inputs and returning plain outputs, tested by a sibling `.pure.test.ts` in the fast suite (`ARCH-003-testing`).
+2. All branching and arithmetic on data MUST live in a `.pure.ts` module taking plain inputs and returning plain outputs, tested by a sibling `.pure.test.ts` in the fast unit suite.
 3. Every shell file MUST stay within `complexity: 3` and `max-depth: 1` (while the global budget remains `7` and `3`).
 
 ### 2. Browser lane and GSAP motion
 
-1. End-to-end interactive behaviour that only a real browser can prove is verified in the Playwright browser lane (`*.browser.test.ts` against `out/`), governed by `ARCH-003-testing` and `design-ADR-0014` (`docs/adr/0014-browser-lane-runs-on-playwright.md`).
+1. End-to-end interactive behaviour that only a real browser can prove is verified in the Playwright browser lane (`*.browser.test.ts` against `out/`), governed by `design-ADR-0014` (`docs/adr/0014-browser-lane-runs-on-playwright.md`).
 2. Animating elements in Explorable explanations MUST report `data-motion="running|settled"` so browser tests wait on `data-motion="settled"`, never on fixed timeouts (`design-ADR-0014`).
 3. `npm run inspect-page` (`visual-check`) is development feedback for layout and visuals, never a test.
 
@@ -52,7 +52,7 @@ Options considered:
 
 ### Do's
 
-1. **DO** extract branching and arithmetic from hooks and `*.client.tsx` leaves into a `.pure.ts` module — `fractionInto(scrollY, innerHeight, scrollHeight, box)` in `table-of-contents.pure.ts`, called from `use-table-of-contents.ts`. (Decision 1)
+1. **DO** extract branching and arithmetic from hooks and `*.client.tsx` leaves into a `.pure.ts` module — `fractionInto(page, box)` in `table-of-contents.pure.ts`, called from `use-table-of-contents.ts`. (Decision 1)
 2. **DO** keep hooks and `*.client.tsx` files to DOM reads, React state/effects and calls into `.pure.ts` within `complexity: 3` and `max-depth: 1`. (Decision 1)
 3. **DO** test extracted `.pure.ts` logic in a sibling `.pure.test.ts` with `success cases`, `failure cases` and `edge cases`. (Decision 1)
 4. **DO** wait on `data-motion="settled"` and retrying assertions in `*.browser.test.ts`. (Decision 2)
@@ -94,5 +94,4 @@ Options considered:
 ## References
 
 - [`docs/adr/0014-browser-lane-runs-on-playwright.md`](../../docs/adr/0014-browser-lane-runs-on-playwright.md) (`design-ADR-0014`) — the Playwright browser lane against `out/`, `data-motion="settled"`, and why `inspect-page` is development feedback rather than a test.
-- `ARCH-003-testing` — fast-suite `.pure.test.ts` structure (`success cases`, `failure cases`, `edge cases`, `// ARRANGE` / `// ACT` / `// ASSERT`) and browser waiting rules.
 - [ESLint `complexity`](https://eslint.org/docs/latest/rules/complexity) and [`max-depth`](https://eslint.org/docs/latest/rules/max-depth).

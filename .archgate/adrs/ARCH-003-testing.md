@@ -49,7 +49,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 1. Mutation testing (`npm run test:mutation`) runs once after `/tdd` and `/code-review` settle, outside `verify`, `verify:commit` and CI.
 2. It covers `*.pure.ts` modules and `skills/**/scripts/**/*.ts` skill scripts only, mutating files changed since the merge-base with `origin/main` plus the `.pure.ts` or script subject of any changed test.
-3. Every surviving mutant in changed code MUST be killed with a test or marked as equivalent with a Stryker disable comment that names the mutator and gives a reason after a colon — `// Stryker disable next-line EqualityOperator: boundary clamped above` or `/* Stryker disable StringLiteral: display table */` paired with `/* Stryker restore */`. `Stryker disable all` is forbidden, and there is no numeric score threshold. (📜 Rule: `stryker-marker-reason`)
+3. Every surviving mutant in changed code MUST be killed with a test or marked as equivalent with a Stryker disable comment that names the mutator and gives a reason after a colon — `// Stryker disable next-line EqualityOperator: boundary clamped above` or `/* Stryker disable StringLiteral: display table */` paired with `/* Stryker restore <Mutator> */`. `Stryker disable all` is forbidden, and there is no numeric score threshold. (📜 Rule: `stryker-marker-reason`)
 
 ## Do's and Don'ts
 

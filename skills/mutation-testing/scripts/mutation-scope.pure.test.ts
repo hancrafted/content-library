@@ -6,10 +6,11 @@ describe('success cases', () => {
     // ARRANGE
     const changed = ['src/shared/lib/table-of-contents.pure.ts', 'skills/worktree/scripts/worktree.ts'];
     const existing = new Set(changed);
+    const expected = ['skills/worktree/scripts/worktree.ts', 'src/shared/lib/table-of-contents.pure.ts'];
     // ACT
     const scope = resolveMutationScope(changed, (file) => existing.has(file));
     // ASSERT
-    expect(scope).toEqual(['skills/worktree/scripts/worktree.ts', 'src/shared/lib/table-of-contents.pure.ts']);
+    expect(scope).toEqual(expected);
   });
 
   it('maps a changed test file to its *.pure.ts or skill-script subject', () => {
@@ -18,17 +19,24 @@ describe('success cases', () => {
       'src/shared/lib/table-of-contents.pure.test.ts',
       'src/shared/lib/url-state.test.ts',
       'skills/worktree/scripts/worktree-args.pure.test.ts',
+      'skills/worktree/scripts/preflight.test.ts',
+      'skills/worktree/scripts/worktree-merge.test.ts',
       'skills/visual-check/scripts/inspect-page.test.ts',
     ];
     const existing = new Set([
       'src/shared/lib/table-of-contents.pure.ts',
       'src/shared/lib/url-state.pure.ts',
       'skills/worktree/scripts/worktree-args.pure.ts',
+      'skills/worktree/scripts/preflight.pure.ts',
+      'skills/worktree/scripts/preflight.ts',
+      'skills/worktree/scripts/worktree-merge.ts',
       'skills/visual-check/scripts/inspect-page.ts',
     ]);
     const expected = [
       'skills/visual-check/scripts/inspect-page.ts',
+      'skills/worktree/scripts/preflight.pure.ts',
       'skills/worktree/scripts/worktree-args.pure.ts',
+      'skills/worktree/scripts/worktree-merge.ts',
       'src/shared/lib/table-of-contents.pure.ts',
       'src/shared/lib/url-state.pure.ts',
     ];
@@ -66,7 +74,7 @@ describe('failure cases', () => {
       'skills/new-episode/scripts/spec-preview.browser.test.ts',
       '.agents/skills/worktree/scripts/worktree.ts',
       'skills/worktree/scripts/worktree.tsx',
-      'skills/mutation-testing/scripts/mutation.ts',
+      'tools/mutation/mutation.ts',
       'package.json',
     ];
     // ACT
@@ -85,11 +93,12 @@ describe('edge cases', () => {
       'src/shared/lib/table-of-contents.pure.ts',
     ];
     const existing = new Set(['src/shared/lib/table-of-contents.pure.ts']);
+    const expected = ['src/shared/lib/table-of-contents.pure.ts'];
     // ACT
     const deduplicated = resolveMutationScope(changed, (file) => existing.has(file));
     const empty = resolveMutationScope([], () => true);
     // ASSERT
-    expect(deduplicated).toEqual(['src/shared/lib/table-of-contents.pure.ts']);
+    expect(deduplicated).toEqual(expected);
     expect(empty).toEqual([]);
   });
 });

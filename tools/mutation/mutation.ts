@@ -3,7 +3,7 @@
 // Restores `.agents` executable bits and removes stray `stryker-setup-*.js` files afterwards.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { chmodSync, existsSync, readdirSync, rmSync } from 'node:fs';
-import { resolveMutationScope } from './mutation-scope.pure.ts';
+import { resolveMutationScope } from '../../skills/mutation-testing/scripts/mutation-scope.pure.ts';
 
 function captureLines(args: string[]): string[] {
   return execFileSync('git', args, { encoding: 'utf8' })
