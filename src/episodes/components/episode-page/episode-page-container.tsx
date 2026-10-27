@@ -238,7 +238,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
         <SlideColumn titleSlide={titleSlide} slides={slides} page={header} />
         {frame.footer}
         <ContextDrawerSlot input={drawer} />
-        {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} labels={talkLabels} />}
+        {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} title={content.title} labels={talkLabels} />}
       </div>
       <DevSlideReporter folder={sourceFolderOf(page)} />
     </UrlStateProvider>

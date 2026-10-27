@@ -12,7 +12,6 @@ import { useState, useSyncExternalStore } from 'react';
 
 export interface TalkPlayerLabels {
   readonly watch: string;
-  readonly subtitle: string;
   readonly heading: string;
   readonly backToVideo: string;
   readonly close: string;
@@ -66,12 +65,13 @@ function RecordedIn({ recording }: { recording: RecordingLanguage | undefined })
 
 interface LauncherProps {
   youtubeId: string;
+  title: string;
   labels: TalkPlayerLabels;
   recording?: RecordingLanguage;
   hidden: boolean;
 }
 
-function LauncherButton({ youtubeId, labels, recording, hidden }: LauncherProps) {
+function LauncherButton({ youtubeId, title, labels, recording, hidden }: LauncherProps) {
   return (
     <button
       type="button"
@@ -89,7 +89,9 @@ function LauncherButton({ youtubeId, labels, recording, hidden }: LauncherProps)
         >
           {labels.watch}
         </span>
-        <span className="mt-0.5 block text-body leading-snug text-foreground/80">{labels.subtitle}</span>
+        <span data-talk-title className="mt-0.5 block text-body leading-snug text-foreground/80">
+          {title}
+        </span>
         <RecordedIn recording={recording} />
       </span>
     </button>
@@ -102,10 +104,12 @@ function LauncherButton({ youtubeId, labels, recording, hidden }: LauncherProps)
  */
 export function TalkLauncher({
   youtubeId,
+  title,
   labels,
   recording,
 }: {
   youtubeId: string;
+  title: string;
   labels: TalkPlayerLabels;
   /** An Event recording's language, labelled on the launcher; none for a public Episode's per-locale video. */
   recording?: RecordingLanguage;
@@ -113,7 +117,7 @@ export function TalkLauncher({
   const { isOpen } = useTalkPlayer();
   return (
     <>
-      <LauncherButton youtubeId={youtubeId} labels={labels} recording={recording} hidden={isOpen} />
+      <LauncherButton youtubeId={youtubeId} title={title} labels={labels} recording={recording} hidden={isOpen} />
       {/* mt-16: the strip above the frame where the player's 2rem header sits, plus a gap. */}
       <div
         ref={registerSlot}
@@ -197,7 +201,15 @@ const HOST = 'overflow-hidden rounded-xl border border-border bg-background shad
  * of contents when the active Slide leaves `top`. Below `lg` it never docks, so it follows the slot off screen with
  * the page. While the slot is unmounted (far from the Title slide) an undocked host parks out of sight, still playing.
  */
-export function TalkPlayer({ youtubeId, labels }: { youtubeId?: string; labels: TalkPlayerLabels }) {
+export function TalkPlayer({
+  youtubeId,
+  title,
+  labels,
+}: {
+  youtubeId?: string;
+  title?: string;
+  labels: TalkPlayerLabels;
+}) {
   const { isOpen, slot } = useTalkPlayer();
   const wide = useWide();
   const activeSlide = useActiveSlide();
@@ -209,7 +221,7 @@ export function TalkPlayer({ youtubeId, labels }: { youtubeId?: string; labels: 
   return (
     <div ref={setHost} id="talk-player" className={cn(HOST, 'z-40 origin-top-left')}>
       <TalkPlayerHeader isDocked={docked} labels={labels} />
-      <TalkPlayerFrame youtubeId={youtubeId} title={labels.heading} />
+      <TalkPlayerFrame youtubeId={youtubeId} title={title ?? labels.heading} />
     </div>
   );
 }

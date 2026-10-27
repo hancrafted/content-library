@@ -127,17 +127,39 @@ function recordingOf(episode: EpisodeRef): { id: string; language: Locale } | un
   return video !== undefined && 'language' in video ? { id: video.id, language: video.language as Locale } : undefined;
 }
 
+function episodeTitle(event: string, slug: string, locale: string): string {
+  const file = join(
+    import.meta.dirname,
+    '..',
+    '..',
+    'src',
+    'episodes',
+    'by-event',
+    event,
+    slug,
+    'i18n',
+    `${locale}.json`,
+  );
+  return JSON.parse(readFileSync(file, 'utf8')).title;
+}
+
 describe('an unlisted Episode plays its Event recording', () => {
   it.each(PER_LOCALE)(
-    'An unlisted Episode plays its event recording, labelled with the language it was recorded in. ($episode.id, $locale)',
+    'An unlisted Episode plays its event recording, labelled with its title and the language it was recorded in. ($episode.id, $locale)',
     ({ event, episode, locale }) => {
       // ARRANGE
       const $ = exportedPage(localizePath(eventEpisodeRoute(event, episode), locale));
       const recording = recordingOf(episode);
+      const title = episodeTitle(event, episode.slug, locale);
       const expected =
         recording === undefined
-          ? { video: undefined, language: undefined, label: '' }
-          : { video: recording.id, language: recording.language, label: RECORDED_IN[locale][recording.language] };
+          ? { video: undefined, language: undefined, label: '', title: '' }
+          : {
+              video: recording.id,
+              language: recording.language,
+              label: RECORDED_IN[locale][recording.language],
+              title,
+            };
       // ACT
       const launcher = $('[data-slot="title-slide"] #talk-launcher');
       const label = launcher.find('[data-recording-language]');
@@ -145,6 +167,7 @@ describe('an unlisted Episode plays its Event recording', () => {
         video: launcher.attr('data-video-id'),
         language: label.attr('data-recording-language'),
         label: label.text(),
+        title: launcher.find('[data-talk-title]').text(),
       };
       // ASSERT
       expect(seen).toEqual(expected);

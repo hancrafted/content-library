@@ -84,9 +84,9 @@ function AuthoredTitleSlide({
  * (design-ADR-0012), over the record's hero Scene or, without one, the shared glow.
  */
 export function TitleSlide(props: TitleSlideProps) {
-  const { youtubeId, talkLabels, recording, entrance, hero } = props;
+  const { youtubeId, talkLabels, recording, entrance, hero, title } = props;
   const launcher = youtubeId && talkLabels && (
-    <TalkLauncher youtubeId={youtubeId} labels={talkLabels} recording={recording} />
+    <TalkLauncher youtubeId={youtubeId} title={title} labels={talkLabels} recording={recording} />
   );
   if (props.mode === 'authored') return <AuthoredTitleSlide {...props} launcher={launcher} />;
   const header = {

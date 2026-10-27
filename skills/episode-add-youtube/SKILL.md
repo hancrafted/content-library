@@ -7,7 +7,7 @@ description: Add YouTube recording links to an Episode across its title slide pl
 
 Adding a YouTube recording to an Episode wires it across three defined surfaces from one declaration on its metadata record, `episode-metadata.ts`, which the content store loads:
 
-1. **Title slide launcher**: On `/episodes/<slug>`, the `TitleSlide` renders a `TalkLauncher` button ("Watch the talk") that opens the dockable companion `TalkPlayer` iframe (`https://www.youtube-nocookie.com/embed/<id>`).
+1. **Title slide launcher**: On `/episodes/<slug>`, the `TitleSlide` renders a `TalkLauncher` button ("Watch the talk") displaying the Episode's localized title that opens the dockable companion `TalkPlayer` iframe (`https://www.youtube-nocookie.com/embed/<id>`).
 2. **Cards on `/episodes` page**: On the browse grid, the Episode's card renders a direct YouTube link button (`[data-episode-video]`, `text-youtube`) opening `https://www.youtube.com/watch?v=<id>` in a new tab.
 3. **Landing page spotlight (optional)**: When the Episode is published and featured in the spotlight on `/`, its card displays the same direct YouTube link.
 
@@ -64,11 +64,11 @@ _Done when_ `npx vitest run src/content-store/store.test.ts` passes.
 Run verification and probe the DOM for the video elements:
 
 1. **Verify pipeline**: Run `npm run verify` to confirm types, lint, unit tests, and Archgate rules pass.
-2. **Title slide launcher**: Check `/episodes/<slug>` in preview (`npm run preview` or dev). Inspect that `[data-video-id="<id>"]` exists inside `[data-slot="title-slide"]`.
+2. **Title slide launcher**: Check `/episodes/<slug>` in preview (`npm run preview` or dev). Inspect that `[data-video-id="<id>"]` exists inside `[data-slot="title-slide"]` and that `[data-talk-title]` displays the Episode's localized title.
 3. **`/episodes` browse card**: Check `/episodes`. Inspect that `[data-episode-card][data-episode-slug="<slug>"] [data-episode-video]` exists with `href="https://www.youtube.com/watch?v=<id>"`.
 4. **Landing page spotlight**: If the Episode is published and ranked in the spotlight, inspect `/` to confirm `[data-episode-card][data-episode-slug="<slug>"] [data-episode-video]` renders on the landing page.
 
-_Done when_ `npm run verify` passes and the DOM probe confirms the presence of `[data-video-id]` on the title slide and `[data-episode-video]` on the browse card.
+_Done when_ `npm run verify` passes and the DOM probe confirms the presence of `[data-video-id]` with the Episode's localized title on the title slide and `[data-episode-video]` on the browse card.
 
 ## The unlisted case
 
@@ -85,9 +85,9 @@ _Done when_ `npm run verify` passes and the DOM probe confirms the presence of `
    ```
    The content store refuses a second Video on an unlisted Episode, a per-locale `youtube` on it, and a `language` that is not a site locale.
 3. Run `npm run verify`, then `npm run build && npm run test:build`. `tests/post-build/unlisted-episodes.build.test.ts` reads the recording from the store and checks both locale pages of every Episode in its `UNLISTED` table; an unlisted Episode of another Event joins that table first.
-4. Probe `/events/<event-slug>/episodes/<slug>/` and its `/de` twin: `[data-slot="title-slide"] [data-video-id="<id>"]` and, inside the launcher, `[data-recording-language="<language>"]` with the label in the page's language.
+4. Probe `/events/<event-slug>/episodes/<slug>/` and its `/de` twin: `[data-slot="title-slide"] [data-video-id="<id>"]`, that `[data-talk-title]` displays the Episode's localized title, and, inside the launcher, `[data-recording-language="<language>"]` with the label in the page's language.
 
-_Done when_ the post-build test passes and both locale pages show the same video id and the language label.
+_Done when_ the post-build test passes and both locale pages show the same video id, the Episode's localized title, and the language label.
 
 ## Reference
 
