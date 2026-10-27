@@ -18,13 +18,13 @@ function blockResults(doc: Document): Document {
   return doc;
 }
 
-/** The file a viewer downloads to keep a run: the Workflow, its hash, the teaching flag and the results, as YAML. */
+/** The file a viewer downloads to keep a run: the Workflow, its hash, the demo flag and the results, as YAML. */
 export function progressFile(workflowId: string, entry: ProgressEntry): { name: string; text: string; type: string } {
   const slug = workflowId.replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '') || 'workflow';
   const doc = new Document({
     workflow: workflowId,
     hash: entry.hash,
-    teaching: entry.teaching,
+    demo: entry.demo,
     results: entry.results,
   });
   return { name: `${slug}-progress.yml`, text: blockResults(doc).toString(), type: FILE_TYPE };
@@ -50,5 +50,5 @@ export function readProgressFile(
   if (!isRecord(value) || !isText(value.workflow) || !isEntry(value)) return { refusal: 'unreadable' };
   if (value.workflow !== shown.workflow) return { refusal: 'other-workflow' };
   if (value.hash !== shown.hash) return { refusal: 'changed' };
-  return { entry: { hash: value.hash, teaching: value.teaching, results: value.results } };
+  return { entry: { hash: value.hash, demo: value.demo, results: value.results } };
 }

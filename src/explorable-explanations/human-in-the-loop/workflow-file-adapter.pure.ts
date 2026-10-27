@@ -41,6 +41,7 @@ export function workflowOf(file: WorkflowFile): Workflow {
   return {
     id: file.id,
     title: file.title,
+    description: file.description,
     scenario: file.scenario.summary,
     focalJobId: focal?.id,
     stages: file.stages.map((stage, index) => stageOf(file, stage, index)),

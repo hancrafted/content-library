@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { mergeProgress, parseProgress, progressKeyOf, verdictOf } from './progress.pure';
 
-const entry = { hash: 'abc', teaching: true, results: { 'a.b': 'text' } };
+const entry = { hash: 'abc', demo: true, results: { 'a.b': 'text' } };
 
 describe('success cases', () => {
   it('keys a Workflow run by the hands-on, never by Episode', () => {
@@ -13,7 +13,7 @@ describe('success cases', () => {
     expect(key).toBe(expected);
   });
 
-  it('reads a stored entry back with its hash, teaching flag and results', () => {
+  it('reads a stored entry back with its hash, demo flag and results', () => {
     // ARRANGE
     const raw = JSON.stringify({ 'human-in-the-loop/x': entry });
     // ACT
@@ -75,7 +75,7 @@ describe('failure cases', () => {
     ['[1]'],
     ['null'],
     ['{"x":{"hash":1}}'],
-    ['{"x":{"hash":"h","teaching":true,"results":{"a":1}}}'],
+    ['{"x":{"hash":"h","demo":true,"results":{"a":1}}}'],
   ])('reads %s as no progress', (raw) => {
     // ARRANGE
     const expected = {};

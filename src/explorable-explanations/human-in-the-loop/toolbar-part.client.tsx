@@ -1,71 +1,32 @@
 'use client';
 
 import { Button } from '@/shared/components/ui/button';
-import { Label } from '@/shared/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import { Separator } from '@/shared/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
 import { cn } from '@/shared/lib/utils';
 import { Download, FileDown, FileUp, Upload } from 'lucide-react';
 import { useId, type ChangeEvent, type ReactNode } from 'react';
+import { DebugToggle } from './debug-toggle.client';
+import { DemoToggle, Reset, ResetConfirm, useDemoProps } from './demo-controls.client';
 import { LevelControl } from './level-control.client';
 import type { ToolbarProps } from './part-props.types';
 import { ProgressNote } from './progress-note.client';
 import { saveFile } from './save-file';
-import { DebugSwitch, Reset, ResetConfirm, TeachingToggle, useTeachingProps } from './teaching-controls.client';
 import { TOOLBAR_PILL, TOOLBAR_ROW, ToolButton } from './tool-button.client';
 import { offers, type ControlId } from './toolbar-controls.pure';
+import { hasPicker, Picker } from './use-case-picker.client';
 import { ViewControl } from './view-control.client';
 import { workflowFile } from './workflow-file.pure';
 
 /*
- * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a shadcn select), a
- * separator, then the controls in order: view, Chat · CLI, teaching switch, the Debug switch where it is available, save and load progress, download
- * and upload of the Workflow file, each icon with a tooltip. Reset sits apart after the pill, as in the popover. The control registry says what shows; a readonly Preset
- * also drops Chat · CLI, the teaching switch and Reset. Under the pill sit Reset's confirmation and the notes. The
- * parent validates an upload; this part only reads the chosen file.
+ * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a shadcn select whose
+ * options carry a muted description), a separator, then the controls in order: view (Stages · Jobs), the `</>` CLI
+ * toggle, the Demo mode switch, the Debug toggle where it is available, save and load progress, download and upload of
+ * the Workflow file, each icon with a tooltip. Save progress and Reset show once the run has work; Load always does.
+ * Reset sits apart after the pill, as in the popover. The control registry says what shows; a readonly Preset also
+ * drops the `</>` toggle, Demo mode, Debug and Reset. Under the pill sit Reset's confirmation and the notes. The parent
+ * validates an upload; this part only reads the chosen file.
  */
-
-/** The picker's options: the Workflows, after an uploaded one that is none of them. */
-function Options({ bar, known }: { readonly bar: ToolbarProps; readonly known: boolean }) {
-  return (
-    <>
-      {known ? null : (
-        <SelectItem value={bar.workflow.id} disabled>
-          {bar.workflow.title}
-        </SelectItem>
-      )}
-      {bar.choices.map((c) => (
-        <SelectItem key={c.id} value={c.id} data-workflow={c.id}>
-          {c.title}
-        </SelectItem>
-      ))}
-    </>
-  );
-}
-
-/** The use case picker: a visible label and a shadcn Select of the Workflows; an uploaded one joins as its own option. */
-function Picker({ bar }: { readonly bar: ToolbarProps }) {
-  const id = useId();
-  if (!offers(bar.controls, 'picker') || bar.choices.length < 2) return null;
-  const known = bar.choices.some((c) => c.id === bar.workflow.id);
-  return (
-    <div className="flex min-w-0 items-center gap-2 pl-3" data-control="picker">
-      <Label htmlFor={id} className="text-caption">
-        {bar.words.workflow}:
-      </Label>
-      <Select value={bar.workflow.id} onValueChange={bar.onWorkflow}>
-        <SelectTrigger id={id}>
-          {/* The title as children: Radix renders an empty value until hydration, so the static page would show none. */}
-          <SelectValue>{bar.workflow.title}</SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <Options bar={bar} known={known} />
-        </SelectContent>
-      </Select>
-    </div>
-  );
-}
 
 const UPLOAD_BUTTON = 'relative size-9 rounded-full focus-within:ring-[3px] focus-within:ring-ring/50';
 
@@ -116,13 +77,16 @@ function Problems({ id, problems }: { readonly id: string; readonly problems: re
   );
 }
 
-/** The progress file's save and load: the run of an authored Workflow only, so none while an uploaded one is shown. */
+/**
+ * The progress file's save and load: the run of an authored Workflow only, so none while an uploaded one is shown.
+ * Save waits for work to save, as Reset does; Load always shows, so a new device can restore a run.
+ */
 function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; readonly describedBy?: string }) {
   const { controls, words, progress } = bar;
   if (!progress) return null;
   return (
     <>
-      {offers(controls, 'progressDownload') && (
+      {offers(controls, 'progressDownload') && bar.canSave && (
         <ToolButton
           label={words.progressSave}
           data-control="progressDownload"
@@ -170,31 +134,30 @@ function WorkflowFileIcons({ bar, describedBy }: { readonly bar: ToolbarProps; r
   );
 }
 
-/** The icon buttons the registry and the Preset allow, in order: view, Chat · CLI, progress save and load, download, upload. */
+/** The icon buttons the registry and the Preset allow, in order: view, `</>`, Demo mode, Debug, progress save and load, download, upload. */
 function Icons({
   bar,
   describedBy,
-  teaching,
+  demo,
 }: {
   readonly bar: ToolbarProps;
   readonly describedBy?: string;
-  readonly teaching: ReactNode;
+  readonly demo: ReactNode;
 }) {
   const { controls, readonly, words, level } = bar;
   return (
     <>
       {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
       {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
-      {teaching}
-      <DebugSwitch words={words} debug={bar.debug} onDebug={bar.onDebug} />
+      {demo}
+      <DebugToggle words={words} debug={bar.debug} onDebug={bar.onDebug} />
       <ProgressIcons bar={bar} describedBy={describedBy} />
       <WorkflowFileIcons bar={bar} describedBy={describedBy} />
     </>
   );
 }
 
-const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.choices.length > 1;
-const ICON_CONTROLS: readonly ControlId[] = ['view', 'level', 'teaching', 'reset', 'download', 'upload'];
+const ICON_CONTROLS: readonly ControlId[] = ['view', 'level', 'demo', 'reset', 'download', 'upload'];
 const PROGRESS_CONTROLS: readonly ControlId[] = ['progressDownload', 'progressUpload'];
 const hasIcons = (bar: ToolbarProps) =>
   bar.debug.show ||
@@ -213,8 +176,8 @@ function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string })
 
 export function ToolbarPart(bar: ToolbarProps) {
   const problemsId = useId();
-  const teachingProps = useTeachingProps(bar.words, bar);
-  const pills = hasPills(bar);
+  const demoProps = useDemoProps(bar.words, bar);
+  const pills = hasPicker(bar);
   const icons = hasIcons(bar);
   if (!pills && !icons) return <Notes bar={bar} id={problemsId} />;
   const describedBy = bar.uploadProblems.length > 0 ? problemsId : undefined;
@@ -230,11 +193,11 @@ export function ToolbarPart(bar: ToolbarProps) {
         >
           <Picker bar={bar} />
           {pills && icons ? <Separator orientation="vertical" className="mx-1 my-2" /> : null}
-          <Icons bar={bar} describedBy={describedBy} teaching={<TeachingToggle {...teachingProps} />} />
+          <Icons bar={bar} describedBy={describedBy} demo={<DemoToggle {...demoProps} />} />
         </div>
-        <Reset {...teachingProps} />
+        <Reset {...demoProps} />
       </div>
-      <ResetConfirm {...teachingProps} />
+      <ResetConfirm {...demoProps} />
       <Notes bar={bar} id={problemsId} />
     </>
   );

@@ -4,8 +4,8 @@ export const PROGRESS_KEY = 'hancrafted:progress';
 /** What is saved of one hands-on's run: the hash of its source, so an edited source never loads old results. */
 export interface ProgressEntry {
   readonly hash: string;
-  /** Teaching mode is progress, not a preference. */
-  readonly teaching: boolean;
+  /** Demo mode is progress, not a preference. */
+  readonly demo: boolean;
   /** What the viewer pasted, keyed as the hands-on keys its results. */
   readonly results: Readonly<Record<string, string>>;
 }
@@ -33,7 +33,7 @@ export function isEntry(value: unknown): value is ProgressEntry {
   if (!isRecord(value)) return false;
   return (
     isText(value.hash) &&
-    typeof value.teaching === 'boolean' &&
+    typeof value.demo === 'boolean' &&
     isRecord(value.results) &&
     Object.values(value.results).every(isText)
   );

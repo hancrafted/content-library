@@ -41,9 +41,9 @@ function actionsOf(
   const target = progressTarget(data, state);
   if (!target) return null;
   const shown = { ...target, title: shownWorkflow(data, state)?.title ?? '' };
-  const { slotValues: results, teaching } = state;
+  const { slotValues: results, demo } = state;
   return {
-    onDownload: () => saveFile(progressFile(target.id, { hash: target.hash, results, teaching })),
+    onDownload: () => saveFile(progressFile(target.id, { hash: target.hash, results, demo })),
     onUpload: (text) => dispatch(progressUploadEvent(text, shown, data.words)),
   };
 }
@@ -54,8 +54,8 @@ function actionsOf(
  */
 function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispatch: Dispatch<WorkflowEvent>) {
   const target = progressTarget(data, state);
-  const { slotValues: results, teaching } = state;
-  const progress = useMemo<Progress>(() => ({ results, teaching }), [results, teaching]);
+  const { slotValues: results, demo } = state;
+  const progress = useMemo<Progress>(() => ({ results, demo }), [results, demo]);
   const onResume = useCallback((saved: Progress) => dispatch({ type: 'restore', ...saved }), [dispatch]);
   const key = target?.key ?? null;
   const { status, kept, discard, reset } = useProgress({ key, hash: target?.hash ?? '', progress, onResume });
@@ -65,14 +65,14 @@ function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispat
 }
 
 function useViewOf(workflow: ReturnType<typeof shownWorkflow>, state: WorkflowState) {
-  const { level, teaching, slotValues } = state;
+  const { level, demo, slotValues } = state;
   const rounds = useMemo(
-    () => (workflow ? JSON.stringify(roundsOf(runOf(workflow.file, { results: slotValues, teaching }))) : '{}'),
-    [workflow, slotValues, teaching],
+    () => (workflow ? JSON.stringify(roundsOf(runOf(workflow.file, { results: slotValues, demo }))) : '{}'),
+    [workflow, slotValues, demo],
   );
   return useMemo(
-    () => workflow && workflowView(workflow, { level, teaching, rounds: JSON.parse(rounds) as Record<string, number> }),
-    [workflow, level, teaching, rounds],
+    () => workflow && workflowView(workflow, { level, demo, rounds: JSON.parse(rounds) as Record<string, number> }),
+    [workflow, level, demo, rounds],
   );
 }
 

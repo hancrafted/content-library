@@ -16,7 +16,7 @@ const flow = (): Workflow =>
       ]),
       summary: 'Plan the whole thing',
     },
-    { ...stage('b', [job({ id: 'b' })]), foreach: { over: 'o#epics', teaching: 2 } },
+    { ...stage('b', [job({ id: 'b' })]), foreach: { over: 'o#epics', demo: 2 } },
     { ...stage('c', [job({ id: 'c' })]), gate: 2 },
   ]);
 const words = {
@@ -38,7 +38,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         workflow: flow(),
         words,
         readonly: false,
-        view: 'detailed',
+        view: 'jobs',
         rounds: { b: 3 },
         onOpenStage: (stageId) => void opened.push(stageId),
         ...props,
@@ -100,7 +100,7 @@ describe('success cases', () => {
     // ARRANGE
     const named = workflow([
       stage('a', [job({ id: 'a' })]),
-      { ...stage('b', [job({ id: 'b' })]), foreach: { over: 'o#epics', teaching: 2, item: 'epic' } },
+      { ...stage('b', [job({ id: 'b' })]), foreach: { over: 'o#epics', demo: 2, item: 'epic' } },
     ]);
     // ACT
     const label = (flowOf: Workflow) => render({ workflow: flowOf, rounds: { b: 2 } })('[data-bracket-label]').text();
@@ -176,7 +176,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('counts a repeated stage by its teaching cap when the run holds no rounds', () => {
+  it('counts a repeated stage by its demo cap when the run holds no rounds', () => {
     // ARRANGE
     const $ = render({ rounds: {} });
     // ACT
@@ -185,12 +185,12 @@ describe('edge cases', () => {
     expect(label).toBe('× each round (2)');
   });
 
-  it('names the whole diagram after the Workflow and marks the view as detailed', () => {
+  it('names the whole diagram after the Workflow and marks the view as jobs', () => {
     // ARRANGE
     const $ = render();
     // ACT
     const list = $('ol[data-part="diagram"]');
     // ASSERT
-    expect([list.attr('aria-label'), list.attr('data-view')]).toEqual(['W', 'detailed']);
+    expect([list.attr('aria-label'), list.attr('data-view')]).toEqual(['W', 'jobs']);
   });
 });

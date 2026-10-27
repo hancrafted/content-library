@@ -4,20 +4,18 @@ ui:
   toolbar: Ablauf-Steuerung
   view: Ansicht des Diagramms
   viewTip: 'Wähle, wie das Diagramm den Ablauf zeigt'
-  viewPresentation: Präsentation
-  viewDetailed: Detailliert
-  viewHandson: Praxis
+  viewStages: Phasen
+  viewStagesTip: 'Die Übersicht: eine Karte pro Phase'
+  viewJobs: Aufgaben
+  viewJobsTip: 'Die Detailansicht: jede Aufgabe jeder Phase'
   checked: geprüft
   stateOpen: offen
   stateDone: erledigt
   repeats: '× pro {item} ({n})'
   round: 'Runde'
   tryJob: '{job} in {stage} öffnen'
-  level: Prompt-Stil
-  chat: Chat
-  chatTip: 'Chat: Prompts zum Einfügen in einen KI-Chat'
   cli: CLI
-  cliTip: 'CLI: zeigt die einmalige Einrichtung und die /Skill-Befehle'
+  cliTip: 'CLI: zeigt die Einrichtung und die /Skill-Befehle'
   context: Hilfe
   intro: 'Gehe die Schritte der Reihe nach durch: Kopiere jeden Prompt in einen neuen KI-Chat und füge das Ergebnis hier wieder ein.'
   stepContext: 'Kontext angeben'
@@ -49,9 +47,9 @@ ui:
   downloadProgress: Fortschritt herunterladen
   downloadOldProgress: Alten Fortschritt herunterladen
   discardProgress: Verwerfen
-  teaching: Lernmodus
-  teachingTip: 'Der Lernmodus hält den Durchlauf kurz und einfach: nur die ersten Epics und Tickets, kürzere Rückfragen und die einfachste Option, wo eine Wahl am Ziel nichts ändert.'
-  teachingLocked: Zurücksetzen, um zu ändern
+  demo: Demo-Modus
+  demoTip: 'Der Demo-Modus hält den Durchlauf kurz und einfach: nur die ersten Epics und Tickets, kürzere Rückfragen und die einfachste Option, wo eine Wahl am Ziel nichts ändert.'
+  demoLocked: Zurücksetzen, um zu ändern
   debug: Debug
   debugTip: 'Debug-Modus: Prompt kopieren und Erklär-Prompt kopieren fügen eine Anweisung an, damit die KI jede Antwort mit einer Fußzeile beendet, die Workflow, Stage, Job und mehr nennt. Füge eine Antwort samt Fußzeile als Feedback wieder ein.'
   debugInstruction: "Debug-Modus: Beende JEDE Antwort, die du in diesem Chat schreibst, auch die erste, mit der Zeile unten, unverändert, allein in einem Codeblock, als allerletztes der Antwort. Ich füge deine Antwort damit als Feedback wieder ein.\n\n```\n{footer}\n```"

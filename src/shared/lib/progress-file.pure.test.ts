@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { progressFile, readProgressFile } from './progress-file.pure';
 
-const entry = { hash: 'abc', teaching: true, results: { 'a.b': 'text' } };
+const entry = { hash: 'abc', demo: true, results: { 'a.b': 'text' } };
 
 describe('success cases', () => {
-  it('names the file after the Workflow and writes workflow, hash, teaching and results as YAML', () => {
+  it('names the file after the Workflow and writes workflow, hash, demo and results as YAML', () => {
     // ARRANGE
-    const expected = 'workflow: project-plan\nhash: abc\nteaching: true\nresults:\n  a.b: |-\n    text\n';
+    const expected = 'workflow: project-plan\nhash: abc\ndemo: true\nresults:\n  a.b: |-\n    text\n';
     // ACT
     const file = progressFile('project-plan', entry);
     // ASSERT
@@ -59,8 +59,8 @@ describe('failure cases', () => {
     ['not: [yaml'],
     ['- a list'],
     ['just text'],
-    ['workflow: x\nhash: h\nteaching: yes\nresults: {}'],
-    ['workflow: x\nhash: abc\nteaching: true\nresults:\n  a: 1'],
+    ['workflow: x\nhash: h\ndemo: yes\nresults: {}'],
+    ['workflow: x\nhash: abc\ndemo: true\nresults:\n  a: 1'],
   ])('refuses %j as not a progress file', (text) => {
     // ARRANGE
     const expected = { refusal: 'unreadable' };
@@ -74,10 +74,10 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('reads a file with no results as an empty run', () => {
     // ARRANGE
-    const text = 'workflow: x\nhash: abc\nteaching: false\nresults: {}\n';
+    const text = 'workflow: x\nhash: abc\ndemo: false\nresults: {}\n';
     // ACT
     const read = readProgressFile(text, { workflow: 'x', hash: 'abc' });
     // ASSERT
-    expect(read).toEqual({ entry: { hash: 'abc', teaching: false, results: {} } });
+    expect(read).toEqual({ entry: { hash: 'abc', demo: false, results: {} } });
   });
 });

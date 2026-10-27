@@ -11,9 +11,9 @@ if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
 const WORKFLOW = workflowOf(loaded.file);
 const RESEARCH = 'research';
 
-const itemsFor = (level: 'simple' | 'technical', results: Record<string, string>, teaching = true) => {
+const itemsFor = (level: 'simple' | 'technical', results: Record<string, string>, demo = true) => {
   const stage = workflowView(WORKFLOW, { level }).stages.find((each) => each.id === RESEARCH)!;
-  const run = runOf(loaded.file, { results, teaching }).stages.find((each) => each.id === RESEARCH)!;
+  const run = runOf(loaded.file, { results, demo }).stages.find((each) => each.id === RESEARCH)!;
   return itemsOf(stage, run);
 };
 

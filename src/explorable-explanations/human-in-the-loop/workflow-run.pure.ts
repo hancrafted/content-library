@@ -4,7 +4,7 @@ import type { ForeachDef, StageDef, TaskDef, WorkflowFile } from './workflow-sch
 
 /*
  * The run model: the one seam for progress. From a loaded Workflow file, what the viewer pasted (`results`) and the
- * teaching flag it says every job's state, every repeated stage's rounds and every stage's count. The stepper, the
+ * demo flag it says every job's state, every repeated stage's rounds and every stage's count. The stepper, the
  * diagram views and the toolbar read from here and never derive progress themselves.
  *
  * Results are one flat map keyed `stage.job`, or `stage.job#k` for round k of a repeated stage. A job that hands on
@@ -20,8 +20,8 @@ export type JobState = 'open' | 'done' | 'checked';
 
 export interface RunInput {
   readonly results: Results;
-  /** Teaching mode takes the first N rounds of a repeated stage; full mode takes every H3 pasted. */
-  readonly teaching: boolean;
+  /** Demo mode takes the first N rounds of a repeated stage; full mode takes every H3 pasted. */
+  readonly demo: boolean;
 }
 
 export interface JobRun {
@@ -52,12 +52,14 @@ export interface StageRun {
   /** Jobs (in every round) whose result is in, out of every job to do: "3/5". */
   readonly done: number;
   readonly total: number;
+  /** The least advanced state of every job of the stage, rounds included: `open` where it has none. */
+  readonly state: JobState;
 }
 
 export interface Run {
   readonly stages: readonly StageRun[];
-  /** Teaching mode may change only while nothing is pasted: the shape of a run never changes under the viewer. */
-  readonly canChangeTeaching: boolean;
+  /** Demo mode may change only while nothing is pasted: the shape of a run never changes under the viewer. */
+  readonly canChangeDemo: boolean;
 }
 
 /** The key of a job's result, or of round `round` of it. */
@@ -111,7 +113,7 @@ function itemsOf(file: WorkflowFile, foreach: ForeachDef, input: RunInput): Item
   if (!over || !owner) return [];
   const pasted = itemsUnder(input.results[resultKey(owner.stage.id, owner.task.id)] ?? '', over.slug);
   const shown = pasted.length > 0 ? pasted : exampleItems(owner.task, over.slug);
-  return input.teaching ? shown.slice(0, foreach.teaching) : shown;
+  return input.demo ? shown.slice(0, foreach.demo) : shown;
 }
 
 function stageRun(file: WorkflowFile, stage: StageDef, input: RunInput): StageRun {
@@ -123,7 +125,8 @@ function stageRun(file: WorkflowFile, stage: StageDef, input: RunInput): StageRu
   });
   const jobs = stage.foreach ? [] : stage.jobs.map((task) => jobRun(task, { stage: stage.id }, results));
   const all = [...jobs, ...rounds.flatMap((round) => round.jobs)];
-  return { id: stage.id, jobs, rounds, done: all.filter((each) => each.state !== 'open').length, total: all.length };
+  const done = all.filter((each) => each.state !== 'open').length;
+  return { id: stage.id, jobs, rounds, done, total: all.length, state: all.length > 0 ? leastOf(all) : 'open' };
 }
 
 /** The rounds each repeated stage plays now, by stage id, as `workflowView` takes them. */
@@ -132,11 +135,11 @@ export const roundsOf = (run: Run): Record<string, number> =>
     run.stages.filter((stage) => stage.rounds.length > 0).map((stage) => [stage.id, stage.rounds.length]),
   );
 
-/** The run of a Workflow file: every stage's jobs, rounds and count, and whether teaching mode may still change. */
+/** The run of a Workflow file: every stage's jobs, rounds and count, and whether demo mode may still change. */
 export function runOf(file: WorkflowFile, input: RunInput): Run {
   return {
     stages: file.stages.map((stage) => stageRun(file, stage, input)),
-    canChangeTeaching: !Object.keys(input.results).some((key) => filled(input.results, key)),
+    canChangeDemo: !Object.keys(input.results).some((key) => filled(input.results, key)),
   };
 }
 

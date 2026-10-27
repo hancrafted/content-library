@@ -7,20 +7,20 @@ import type { DiagramProps, DiagramSlots, StageSlot, UiWords } from './human-in-
 import { JobCard } from './job-card';
 import { MoveCircles } from './move-circles.client';
 import { GateBadge, gateLabelOf, Title } from './stage-card';
+import { Count } from './state-mark';
 import { orderedJobs } from './workflow-order.pure';
 import type { JobState, Run, StageRun } from './workflow-run.pure';
 import type { Stage, Workflow } from './workflow.types';
 
 /**
- * The Detailed view and, with the viewer's run laid over it, the Hands-on view: the same ordered list of stage columns as the Presentation view, but each stage card holds its
+ * The Jobs view, the detailed one, with the viewer's run laid over it once the run has work: the same ordered list of stage columns as the Presentation view, but each stage card holds its
  * jobs as job cards in `needs` order, joined by arrows. A repeated stage is drawn once, its jobs inside a dashed
  * bracket that says how many rounds it runs; a gated stage keeps its badge. A job card opens the
- * stage's modal at that job. In Hands-on every job card says open, done or checked, each stage its count ("3/5"), and
+ * stage's modal at that job. Once the run has work every job card says open, done or checked, each stage its count ("3/5"), and
  * a repeated stage's bracket holds the rounds the run has, titled by their pasted H3s. All of it is read from the run
  * model: the view never works out progress itself.
  */
-export function DiagramDetailed(props: {
-  view: 'detailed' | 'handson';
+export function DiagramJobs(props: {
   run?: Run;
   workflow: Workflow;
   slots?: DiagramSlots;
@@ -36,7 +36,7 @@ export function DiagramDetailed(props: {
       <div data-scroller="" className="@2xl:overflow-x-auto @2xl:overscroll-x-contain @2xl:pb-3">
         <ol
           data-part="diagram"
-          data-view={props.view}
+          data-view="jobs"
           aria-label={slots.label ?? workflow.title}
           className="flex flex-col gap-6 @2xl:flex-row @2xl:items-stretch @2xl:gap-6"
         >
@@ -50,7 +50,6 @@ export function DiagramDetailed(props: {
 }
 
 interface Context {
-  view: 'detailed' | 'handson';
   run?: Run;
   workflow: Workflow;
   slots: DiagramSlots;
@@ -102,9 +101,9 @@ function StageCard({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: Sta
 }
 
 const runOfStage = (ctx: Context, stage: Stage): StageRun | undefined =>
-  ctx.view === 'handson' ? ctx.run?.stages.find((each) => each.id === stage.id) : undefined;
+  ctx.run?.stages.find((each) => each.id === stage.id);
 
-/** The job cards of one list: a stage's jobs, or one round's. `states` is what the run says; none outside Hands-on. */
+/** The job cards of one list: a stage's jobs, or one round's. `states` is what the run says; none while the run has no work. */
 function Cards(props: {
   ctx: Context;
   stage: Stage;
@@ -123,7 +122,7 @@ function Cards(props: {
           slot={ctx.slots.jobs?.[job.id] ?? {}}
           words={ctx.words}
           joined={at > 0}
-          state={ctx.view === 'handson' ? (states?.get(job.id) ?? 'open') : undefined}
+          state={ctx.run ? (states?.get(job.id) ?? 'open') : undefined}
           round={round}
           onOpen={ctx.readonly ? undefined : () => ctx.onOpenStage(stage.id, job.id, round)}
         />
@@ -151,9 +150,9 @@ function Rounds({ ctx, stage, run }: { ctx: Context; stage: Stage; run: StageRun
   );
 }
 
-/** How many rounds the bracket names: the run's, else the layout's count, else the stage's teaching cap. */
+/** How many rounds the bracket names: the run's, else the layout's count, else the stage's demo cap. */
 const roundCount = (ctx: Context, stage: Stage, held: StageRun | undefined): number =>
-  held?.rounds.length ?? ctx.rounds[stage.id] ?? stage.foreach?.teaching ?? 0;
+  held?.rounds.length ?? ctx.rounds[stage.id] ?? stage.foreach?.demo ?? 0;
 
 /** The bracket's words: "× each epic (2)", with the stage's own word for its item, else "round". */
 const bracketLabel = (ctx: Context, stage: Stage, count: number): string =>
@@ -168,16 +167,6 @@ function Jobs({ ctx, stage }: { ctx: Context; stage: Stage }) {
     <Bracket label={bracketLabel(ctx, stage, roundCount(ctx, stage, held))}>
       {held ? <Rounds ctx={ctx} stage={stage} run={held} /> : cards}
     </Bracket>
-  );
-}
-
-/** The stage's count of jobs done, such as "3/5", from the run. */
-function Count({ run, word }: { run: StageRun; word: string }) {
-  return (
-    <span data-count="" className="text-caption font-medium text-muted-foreground">
-      {run.done}/{run.total}
-      <span className="sr-only"> {word}</span>
-    </span>
   );
 }
 

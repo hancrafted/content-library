@@ -15,7 +15,7 @@ function fakeStorage(items: Record<string, string> = {}, full = false) {
 }
 
 const install = (storage: object) => Object.assign(globalThis, { window: { localStorage: storage } });
-const entry = { hash: 'h', teaching: true, results: { 'a.b': 'text' } };
+const entry = { hash: 'h', demo: true, results: { 'a.b': 'text' } };
 const KEY = 'human-in-the-loop/x';
 
 /** What `window` was before any test: put back after each, so no test leaks an ambient `window` into the next. */

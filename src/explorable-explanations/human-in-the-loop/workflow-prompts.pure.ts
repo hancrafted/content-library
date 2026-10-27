@@ -20,17 +20,17 @@ function resolve(text: string, fills: Readonly<Record<string, string>>): string 
 const slotsOf = (file: WorkflowFile, slots: readonly SlotDef[]): PromptSlot[] =>
   slots.map((slot) => ({ ...slot, sample: slotSample(file, slot) }));
 
-/** The rounds of the repeated stage that hands on `output`: its teaching cap, 0 when the stage does not repeat. */
+/** The rounds of the repeated stage that hands on `output`: its demo cap, 0 when the stage does not repeat. */
 const widthOf = (file: WorkflowFile, output: string): number => {
   const stage = file.stages.find((each) => each.jobs.some((task) => task.output === output));
-  return stage?.foreach?.teaching ?? 0;
+  return stage?.foreach?.demo ?? 0;
 };
 
-/** How a prompt is made: whether teaching mode is on (the limits it names), and the rounds each multiple slot takes. */
+/** How a prompt is made: whether demo mode is on (the limits it names), and the rounds each multiple slot takes. */
 export interface PromptOptions {
-  /** Teaching mode picks each limit's teaching value; default on. */
-  readonly teaching?: boolean;
-  /** Per multiple slot id, how many entries `{{id_*}}` expands into; default the teaching cap of its repeated stage. */
+  /** Demo mode picks each limit's demo value; default on. */
+  readonly demo?: boolean;
+  /** Per multiple slot id, how many entries `{{id_*}}` expands into; default the demo cap of its repeated stage. */
   readonly widths?: ReadonlyMap<string, number>;
 }
 
@@ -45,11 +45,11 @@ const limitsOf = (task: TaskDef, options: PromptOptions): Record<string, string>
   Object.fromEntries(
     Object.entries(task.limits ?? {}).map(([name, limit]) => [
       limitMarker(name),
-      String(limitValue(limit, options.teaching ?? true)),
+      String(limitValue(limit, options.demo ?? true)),
     ]),
   );
 
-/** The rounds each multiple slot of `slots` takes: given, else the teaching cap of the stage that hands its output on. */
+/** The rounds each multiple slot of `slots` takes: given, else the demo cap of the stage that hands its output on. */
 const widthsOf = (file: WorkflowFile, slots: readonly SlotDef[], options: PromptOptions): Map<string, number> =>
   new Map(slots.map((slot) => [slot.id, options.widths?.get(slot.id) ?? widthOf(file, slot.id)]));
 
@@ -86,7 +86,7 @@ function viewOf(
 
 /** The sections of the mode: those marked `only` for the other mode are left out. */
 const forMode = (sections: readonly SectionDef[], options: PromptOptions): SectionDef[] => {
-  const other = (options.teaching ?? true) ? 'full' : 'teaching';
+  const other = (options.demo ?? true) ? 'full' : 'demo';
   return sections.filter((section) => section.only !== other);
 };
 

@@ -37,7 +37,7 @@ export type SlotMode = 'single' | 'multiple';
  * Markers a section's `text` may hold:
  * - `{{<slot id>}}` and `{{<slot id>_K}}`: a slot's value, or the Kth entry of a `multiple` slot;
  * - `{{item}}`: in a repeated stage, the H3 section the round works on (also in the job's review `checks`);
- * - `{{limit.<name>}}`: a number the job declares under `limits`, its full value or, in teaching mode, its teaching one;
+ * - `{{limit.<name>}}`: a number the job declares under `limits`, its full value or, in demo mode, its demo one;
  * - `{{<slot id>_*}}`: every marker of a `multiple` slot, one per round, joined by a rule (the whole run, however many rounds);
  * - `{{template}}`: the task's handoff template;
  * and in `reviewer` sections only:
@@ -47,14 +47,14 @@ export type SlotMode = 'single' | 'multiple';
 export const BUILT_IN_MARKERS = ['item', 'template'] as const;
 export const REVIEWER_MARKERS = ['checks', 'inputs'] as const;
 
-/** The two modes of a run: teaching mode keeps it short, a full run plays every round. */
-export const MODES = ['teaching', 'full'] as const;
+/** The two modes of a run: demo mode keeps it short, a full run plays every round. */
+export const MODES = ['demo', 'full'] as const;
 export type Mode = (typeof MODES)[number];
 
 /** One part of a prompt: rendered as an H2, joined into one markdown prompt. */
 export interface SectionDef {
   readonly heading: string;
-  /** Absent: the section shows in both modes. Marked `teaching`, it shows only in teaching mode; `full`, only in a full run. */
+  /** Absent: the section shows in both modes. Marked `demo`, it shows only in demo mode; `full`, only in a full run. */
   readonly only?: Mode;
   /** Absent: no marker and no tooltip on this section. */
   readonly purpose?: Purpose;
@@ -94,17 +94,17 @@ export interface ReviewDef {
 /** The right column of the popover, for the task in focus. */
 export interface DetailsDef {
   readonly why: string;
-  /** A markdown handoff of the task's template; a job of a repeated stage has one per teaching round, in round order. */
+  /** A markdown handoff of the task's template; a job of a repeated stage has one per demo round, in round order. */
   readonly example: string | readonly string[];
   readonly goodLooksLike: readonly string[];
   /** Ids from the `techniques` catalogue that the task's structure teaches; shown under "why it matters". */
   readonly techniques?: readonly string[];
 }
 
-/** A number a prompt names, such as how many questions a grill may ask: one value for a full run, one for teaching mode. */
+/** A number a prompt names, such as how many questions a grill may ask: one value for a full run, one for demo mode. */
 export interface LimitDef {
   readonly full: number;
-  readonly teaching: number;
+  readonly demo: number;
 }
 
 export interface TaskDef {
@@ -118,7 +118,7 @@ export interface TaskDef {
   /** Ids of jobs of the same stage that run first; a slot may take their outputs. Without it, slots take earlier stages' outputs only. */
   readonly needs?: readonly string[];
   /**
-   * The id this task hands on; a later slot with this id takes it. A job of a repeated stage hands on `x_1` … `x_N`, one per teaching round. Absent only on
+   * The id this task hands on; a later slot with this id takes it. A job of a repeated stage hands on `x_1` … `x_N`, one per demo round. Absent only on
    * the final job of the last stage, which the viewer marks done with a checkbox.
    */
   readonly output?: string;
@@ -130,7 +130,7 @@ export interface TaskDef {
   readonly instructions?: string;
   readonly do: Readonly<Record<Runtime, readonly SectionDef[]>>;
   readonly review?: ReviewDef;
-  /** Named numbers the prompts and checks of this job take as `{{limit.<name>}}`: every teaching cap sits here, next to its full value. */
+  /** Named numbers the prompts and checks of this job take as `{{limit.<name>}}`: every demo cap sits here, next to its full value. */
   readonly limits?: Readonly<Record<string, LimitDef>>;
   readonly details: DetailsDef;
 }
@@ -142,12 +142,12 @@ export interface CardDef {
   readonly status: string;
 }
 
-/** What a repeated stage repeats over, and how many rounds teaching mode keeps. */
+/** What a repeated stage repeats over, and how many rounds demo mode keeps. */
 export interface ForeachDef {
   /** `<output>#<h2 slug>`: the output of an earlier job and the slug of an H2 of its template; each H3 under it is a round. */
   readonly over: string;
-  /** Teaching mode takes the first N H3s, in document order; the example results cover these rounds only. */
-  readonly teaching: number;
+  /** Demo mode takes the first N H3s, in document order; the example results cover these rounds only. */
+  readonly demo: number;
   /** What one round is called in this file's language (`epic`): the Detailed bracket reads "× each epic (2)". Absent: "round". */
   readonly item?: string;
 }
@@ -177,6 +177,8 @@ export interface ScenarioDef {
 export interface WorkflowFile {
   readonly id: string;
   readonly title: string;
+  /** One sentence, written for the use case picker: it sits under the title there. Optional: an uploaded file may lack it. */
+  readonly description?: string;
   readonly scenario: ScenarioDef;
   /** One explanation per purpose, written once; a section may override it with `explain`. */
   readonly purposes: Readonly<Record<Purpose, string>>;

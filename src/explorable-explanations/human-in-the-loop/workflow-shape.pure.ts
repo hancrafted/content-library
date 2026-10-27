@@ -32,7 +32,7 @@ const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sa
   'sample',
   'free',
 ]);
-const limit = obj({ full: int, teaching: int });
+const limit = obj({ full: int, demo: int });
 const task = obj(
   {
     id: str,
@@ -57,7 +57,7 @@ const stage = obj(
     title: str,
     learningGoal: str,
     summary: str,
-    foreach: obj({ over: str, teaching: int, item: str }, ['item']),
+    foreach: obj({ over: str, demo: int, item: str }, ['item']),
     move: enumOf(['B', 'R', 'I', 'E', 'F']),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),
@@ -67,16 +67,20 @@ const stage = obj(
 );
 
 /** The Spec of a whole Workflow file. */
-export const FILE_SPEC: Spec = obj({
-  id: str,
-  title: str,
-  scenario: obj({ summary: str, facts: list(str, 1) }),
-  purposes: { t: 'rec', of: str, keys: PURPOSES },
-  techniques: list(technique, 1),
-  reviewer: obj({ sections: list(section, 1) }),
-  templates: { t: 'rec', of: str },
-  stages: list(stage, 1),
-});
+export const FILE_SPEC: Spec = obj(
+  {
+    id: str,
+    title: str,
+    description: str,
+    scenario: obj({ summary: str, facts: list(str, 1) }),
+    purposes: { t: 'rec', of: str, keys: PURPOSES },
+    techniques: list(technique, 1),
+    reviewer: obj({ sections: list(section, 1) }),
+    templates: { t: 'rec', of: str },
+    stages: list(stage, 1),
+  },
+  ['description'],
+);
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);

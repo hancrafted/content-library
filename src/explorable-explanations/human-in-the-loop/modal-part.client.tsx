@@ -2,11 +2,11 @@
 
 import { Dialog, DialogContent, DialogDescription } from '@/shared/components/ui/dialog';
 import { useEffect, useRef, useState } from 'react';
+import { ResetConfirm, useDemoProps } from './demo-controls.client';
 import { ModalHeader } from './modal-header.client';
 import type { ModalProps } from './part-props.types';
 import type { SlotState, StepKit } from './step-kit.types';
 import { Stepper } from './stepper.client';
-import { ResetConfirm, useTeachingProps } from './teaching-controls.client';
 import { tryTitle } from './words.pure';
 import type { StageRun } from './workflow-run.pure';
 import type { StageView } from './workflow-view.pure';
@@ -44,13 +44,13 @@ function Panel({ stage, run, jobId, round, slots, level, onLevel, debug, ...chro
   const [announced, copy] = useCopy(chrome.words.copied);
   const [showContext, setShowContext] = useState(false);
   const { words } = chrome;
-  const teachingProps = useTeachingProps(words, chrome);
+  const demoProps = useDemoProps(words, chrome);
   const first = stage.jobs[0];
   const kit: StepKit = { words, onCopy: copy, info: showContext };
   return (
     <>
-      <ModalHeader {...{ stage, level, onLevel, showContext, ...teachingProps }} onContext={setShowContext} />
-      <ResetConfirm {...teachingProps} />
+      <ModalHeader {...{ stage, level, onLevel, showContext, ...demoProps }} onContext={setShowContext} />
+      <ResetConfirm {...demoProps} />
       {showContext && (
         <DialogDescription data-intro="" className="shrink-0">
           {[stage.goal, words.intro].filter(Boolean).join(' ')}

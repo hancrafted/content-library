@@ -12,8 +12,8 @@ import type { Job, Workflow } from './workflow.types';
 
 export interface ViewOptions {
   readonly level: Level;
-  /** Teaching mode: the limits the prompts name take their teaching values. Default on. */
-  readonly teaching?: boolean;
+  /** Demo mode: the limits the prompts name take their demo values. Default on. */
+  readonly demo?: boolean;
   /** The rounds each repeated stage plays now, by stage id (from the run); a `{{id_*}}` marker expands into as many. */
   readonly rounds?: Readonly<Record<string, number>>;
 }
@@ -30,7 +30,7 @@ export interface TaskModalView {
   /** The outputs of the jobs of the same stage this job needs: in a repeated stage each round takes its own. */
   readonly sameStage: readonly string[];
   readonly why: string;
-  /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a repeated stage one per teaching round. */
+  /** Markdown handoffs, drawn by the one generic markdown renderer: one, or for a repeated stage one per demo round. */
   readonly examples: readonly string[];
   readonly goodLooksLike: readonly string[];
   /** The techniques the task's structure teaches, from the file's catalogue, shown under "why it matters". */
@@ -62,26 +62,26 @@ export interface WorkflowView {
   readonly stages: readonly StageView[];
 }
 
-/** How many entries a `{{id_*}}` over each multiple slot of the job expands into: the larger of the teaching cap and the rounds played. */
+/** How many entries a `{{id_*}}` over each multiple slot of the job expands into: the larger of the demo cap and the rounds played. */
 function widthsOf(task: TaskDef, workflow: Workflow, at: { stage: number; rounds?: ViewOptions['rounds'] }) {
   const names = producersFor(workflow.file, at.stage, task);
   return new Map(
     task.slots.flatMap((slot): [string, number][] => {
       const producer = slot.mode === 'multiple' ? names.get(slot.id) : undefined;
       if (!producer?.stage.foreach) return [];
-      return [[slot.id, Math.max(producer.stage.foreach.teaching, at.rounds?.[producer.stage.id] ?? 0)]];
+      return [[slot.id, Math.max(producer.stage.foreach.demo, at.rounds?.[producer.stage.id] ?? 0)]];
     }),
   );
 }
 
-type TaskAt = { level: Level; stage: number } & Pick<ViewOptions, 'teaching' | 'rounds'>;
+type TaskAt = { level: Level; stage: number } & Pick<ViewOptions, 'demo' | 'rounds'>;
 
 function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView {
   const { level, stage: stageAt } = at;
   const sameStage = (task.needs ?? []).flatMap(
     (id) => workflow.stages[stageAt]?.jobs.find((job) => job.id === id)?.task.output ?? [],
   );
-  const options = { teaching: at.teaching, widths: widthsOf(task, workflow, at) };
+  const options = { demo: at.demo, widths: widthsOf(task, workflow, at) };
   const runtime: Runtime = level === 'technical' ? 'technical' : 'simple';
   const { example } = task.details;
   return {
@@ -100,7 +100,7 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
 }
 
 /** The view model of a Workflow for a level: one modal per stage. */
-export function workflowView(workflow: Workflow, { level, teaching, rounds }: ViewOptions): WorkflowView {
+export function workflowView(workflow: Workflow, { level, demo, rounds }: ViewOptions): WorkflowView {
   return {
     title: workflow.title,
     stages: workflow.stages.map((stage, stageAt) => ({
@@ -112,7 +112,7 @@ export function workflowView(workflow: Workflow, { level, teaching, rounds }: Vi
         id: job.id,
         title: job.title,
         goal: job.task.goal,
-        task: taskView(job, workflow, { level, stage: stageAt, teaching, rounds }),
+        task: taskView(job, workflow, { level, stage: stageAt, demo, rounds }),
       })),
     })),
   };

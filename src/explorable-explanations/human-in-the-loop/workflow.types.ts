@@ -66,6 +66,8 @@ export interface Stage {
 export interface Workflow {
   readonly id: string;
   readonly title: string;
+  /** The one sentence the use case picker shows under the title; absent for a file that has none. */
+  readonly description?: string;
   /** The scenario in one sentence. */
   readonly scenario: string;
   /** The job drawn as the bordered focal card. */

@@ -4,7 +4,7 @@ import { debugAvailable, debugFooter, scopeOf, withDebug, type DebugBase } from 
 const base: DebugBase = {
   workflow: { id: 'project-plan', title: 'Plan a project' },
   level: 'technical',
-  teaching: true,
+  demo: true,
   locale: 'en',
   source: 'ab12cd34',
 };
@@ -21,18 +21,18 @@ describe('success cases', () => {
     const line = debugFooter(scope, { prompt: 'copy', step: 'do' });
     // ASSERT
     expect(line).toBe(
-      '[hitl-debug] workflow=project-plan "Plan a project" · stage=epics "Epics" · job=grill-epic "Grill the epic" · round=2/2 · prompt=copy · step=do · level=cli · teaching=on · locale=en · source=ab12cd34',
+      '[hitl-debug] workflow=project-plan "Plan a project" · stage=epics "Epics" · job=grill-epic "Grill the epic" · round=2/2 · prompt=copy · step=do · level=cli · demo=on · locale=en · source=ab12cd34',
     );
   });
 
-  it('names the chat of a fan-out, the explain prompt, the simple level and teaching off', () => {
+  it('names the chat of a fan-out, the explain prompt, the simple level and demo off', () => {
     // ARRANGE
-    const scope = scopeOf({ ...base, level: 'simple', teaching: false, locale: 'de' }, at);
+    const scope = scopeOf({ ...base, level: 'simple', demo: false, locale: 'de' }, at);
     // ACT
     const line = debugFooter(scope, { prompt: 'explain', step: 'review', chat: 3 });
     // ASSERT
     expect(line).toBe(
-      '[hitl-debug] workflow=project-plan "Plan a project" · stage=epics "Epics" · job=grill-epic "Grill the epic" · prompt=explain · step=review · chat=3 · level=chat · teaching=off · locale=de · source=ab12cd34',
+      '[hitl-debug] workflow=project-plan "Plan a project" · stage=epics "Epics" · job=grill-epic "Grill the epic" · prompt=explain · step=review · chat=3 · level=chat · demo=off · locale=de · source=ab12cd34',
     );
   });
 

@@ -21,7 +21,7 @@ Cause: no rule for where state lives or who writes it. Fix: class every piece of
 | ----------------- | -------------------------------------------------------- | ------------------------- | ------------------------------------------------- |
 | Application       | reload, bookmark, shared link                            | URL                       | locale, active Slide — `/de/episodes/x#slide-4`   |
 | Preference        | reload on this device; never imposed by link             | one localStorage key      | theme, drawer beside/over                         |
-| Hands-on progress | reload, a visit from another Episode; exported as a file | a second localStorage key | a Workflow run's pasted results, teaching mode    |
+| Hands-on progress | reload, a visit from another Episode; exported as a file | a second localStorage key | a Workflow run's pasted results, demo mode        |
 | Transient         | nothing                                                  | memory                    | drawer open, selected tab, menu open, scroll zone |
 
 **Reload test** admits transient state: reload loses nothing reader would miss and can't get back in one action.

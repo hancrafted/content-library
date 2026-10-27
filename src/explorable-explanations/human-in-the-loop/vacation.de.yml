@@ -3,6 +3,7 @@
 # vacation.en.yml; ein Test hält beide in derselben Struktur, nur die Texte unterscheiden sich.
 id: vacation
 title: Privaten Urlaub planen
+description: 'Eine Urlaubswoche zu zweit planen: Anforderungen klären, Optionen recherchieren und eine Empfehlung bekommen.'
 
 scenario:
   summary: 'Plane einen Urlaub für zwei: eine Woche weg, und eine Empfehlung für Deinen Partner.'
@@ -546,7 +547,7 @@ stages:
     summary: 'Pro Ticket ein frischer Chat'
     foreach:
       over: tickets#tickets
-      teaching: 3
+      demo: 3
     move: F
     jobs:
       - id: venue

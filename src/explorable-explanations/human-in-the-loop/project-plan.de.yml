@@ -3,6 +3,7 @@
 # Datei ist project-plan.en.yml; ein Test hält beide auf derselben Struktur, nur die Wörter unterscheiden sich.
 id: project-plan
 title: Ein Projekt planen
+description: Aus einem großen Ziel einen Plan, Epics, Anforderungen und Tickets machen, dann ausführen und prüfen.
 
 scenario:
   summary: Plane ein Sommerfest der Firma im nächsten Jahr für 200 Mitarbeitende an 5 Standorten in Europa.
@@ -210,7 +211,7 @@ stages:
                 4. Sag, was fertig heißt, damit jeder erkennen kann, wann die Aufgabe erledigt ist.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: &practice 'Das ist ein Übungslauf, also halte es klein und einfach: ein paar Zeilen pro Abschnitt. Steuere auf die einfachste Lösung zu, die das Ziel noch erreicht: Wo eine Wahl am Ziel nichts ändert, nimm selbst die einfachste Option, und lass weg, was das Ziel nicht braucht. Nutze nur Zahlen und Fakten aus dem Material oben oder aus meinen Antworten. Fehlt eine, lass sie weg oder halte sie als offene Entscheidung fest, damit niemand eine Schätzung für eine Tatsache hält.'
             - heading: Umfang
@@ -236,7 +237,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -275,7 +276,7 @@ stages:
         limits:
           questions:
             full: 3
-            teaching: 3
+            demo: 3
         slots:
           - id: task
             mode: single
@@ -323,7 +324,7 @@ stages:
                 5. Fakten sind deine Sache, Entscheidungen meine: Frage nie, was der Brief schon sagt; nimm es als gegeben.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -349,7 +350,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -453,7 +454,7 @@ stages:
                 5. Liste unter Offene Entscheidungen auf, was noch nicht entschieden ist, oder schreibe 'Keine'.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -480,7 +481,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -519,7 +520,7 @@ stages:
     move: I
     foreach:
       over: plan#epics
-      teaching: 2
+      demo: 2
       item: Epic
     jobs:
       - id: grill
@@ -533,7 +534,7 @@ stages:
         limits:
           questions:
             full: 8
-            teaching: 5
+            demo: 5
         slots:
           - id: plan
             mode: single
@@ -601,7 +602,7 @@ stages:
                 6. Wenn nichts Wichtiges mehr zu fragen ist, sag es und bitte mich, "fertig" zu tippen.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -627,7 +628,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -744,7 +745,7 @@ stages:
                 4. Abhängigkeiten: was dieses Epic von einem anderen braucht, oder was ein anderes von ihm braucht.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -771,7 +772,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -866,7 +867,7 @@ stages:
                 3. Sammle unter Offene Fragen, was die Spezifikationen offen ließen.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -889,7 +890,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -972,7 +973,7 @@ stages:
                 3. Schreibe die endgültige Liste der Anforderungen, mit jedem Konflikt aufgelöst.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -995,7 +996,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1085,7 +1086,7 @@ stages:
                 3. Stelle sicher, dass jede Anforderung abgedeckt ist und sich keine zwei Tickets überschneiden.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1108,7 +1109,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1146,7 +1147,7 @@ stages:
     move: F
     foreach:
       over: tickets#tickets
-      teaching: 4
+      demo: 4
       item: Ticket
     jobs:
       - id: ticket
@@ -1249,7 +1250,7 @@ stages:
                 3. Nutze nur Zahlen aus dem Ticket oder den Anforderungen oder solche, die du daraus zählen oder berechnen kannst. Ist eine Zahl nicht bekannt, schreibe "nicht bekannt" in die Tabelle und nenne sie unter Offene Entscheidungen.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1272,7 +1273,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1374,7 +1375,7 @@ stages:
                 3. Sammle unter Offene Entscheidungen die offenen Entscheidungen jedes Ergebnisses, jede nur einmal.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1397,7 +1398,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1487,7 +1488,7 @@ stages:
                 4. Offene Entscheidungen: was als Nächstes entschieden werden muss, eine Frage je Entscheidung.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1510,7 +1511,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1608,7 +1609,7 @@ stages:
                 3. Nutze nur Zahlen aus dem Bericht oder gezählte Zeilen daraus. Sind es zu wenige Zahlen für ein Diagramm, zeige stattdessen eine kurze Tabelle.
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang
@@ -1634,7 +1635,7 @@ stages:
                 ```
             - heading: Übungslauf
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Umfang

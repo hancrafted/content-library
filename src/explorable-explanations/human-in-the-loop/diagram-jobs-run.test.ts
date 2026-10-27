@@ -14,7 +14,7 @@ const flow = (): Workflow =>
       job({ id: 'first', title: 'First', reviewed: true }),
       job({ id: 'second', title: 'Second', needs: ['first'] }),
     ]),
-    { ...stage('b', [job({ id: 'b', title: 'Build' })]), foreach: { over: 'o#epics', teaching: 2 } },
+    { ...stage('b', [job({ id: 'b', title: 'Build' })]), foreach: { over: 'o#epics', demo: 2 } },
   ]);
 const words = {
   tryJob: 'Open {job} in {stage}',
@@ -31,10 +31,11 @@ const stageRun = (over: Partial<StageRun> & { id: string }): StageRun => ({
   rounds: [],
   done: 0,
   total: 0,
+  state: 'open',
   ...over,
 });
 const RUN: Run = {
-  canChangeTeaching: false,
+  canChangeDemo: false,
   stages: [
     stageRun({ id: 'a', jobs: [runOf('first', 'checked'), runOf('second', 'open')], done: 1, total: 2 }),
     stageRun({
@@ -57,7 +58,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         workflow: flow(),
         words,
         readonly: false,
-        view: 'handson',
+        view: 'jobs',
         rounds: { b: 2 },
         run: RUN,
         onOpenStage: (stageId) => void opened.push(stageId),
@@ -132,25 +133,14 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('draws every job open and no count when no run is given', () => {
+  it('draws no state mark and no count when the run has no work, so the plain Jobs view shows', () => {
     // ARRANGE
     const $ = render({ run: undefined });
-    // ACT
-    const states = $('[data-job-card] [data-state]')
-      .map((_, el) => $(el).attr('data-state'))
-      .get();
-    // ASSERT
-    expect(states.every((state) => state === 'open')).toBe(true);
-    expect($('[data-count]')).toHaveLength(0);
-  });
-
-  it('draws the Detailed view without any state mark', () => {
-    // ARRANGE
-    const $ = render({ view: 'detailed' });
     // ACT
     const marks = $('[data-state]').length;
     // ASSERT
     expect(marks).toBe(0);
+    expect($('[data-count]')).toHaveLength(0);
   });
 });
 
@@ -166,12 +156,12 @@ describe('edge cases', () => {
     expect(bracket.find('[data-job-card] [data-state]').attr('data-state')).toBe('open');
   });
 
-  it('marks the view as handson', () => {
+  it('marks the view as jobs', () => {
     // ARRANGE
     const $ = render();
     // ACT
     const view = $('ol[data-part="diagram"]').attr('data-view');
     // ASSERT
-    expect(view).toBe('handson');
+    expect(view).toBe('jobs');
   });
 });

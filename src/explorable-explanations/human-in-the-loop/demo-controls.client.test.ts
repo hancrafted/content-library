@@ -2,9 +2,9 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { ResetConfirm } from './demo-controls.client';
 import type { UiWords } from './human-in-the-loop.types';
-import type { TeachingProps } from './progress-controls.types';
-import { ResetConfirm } from './teaching-controls.client';
+import type { DemoProps } from './progress-controls.types';
 
 const words = {
   resetConfirm: 'Reset?',
@@ -13,14 +13,14 @@ const words = {
   resetCancel: 'Cancel',
 };
 const noop = () => undefined;
-const teaching = { show: true, resetShow: true, on: true, locked: true, hasWork: true };
-const render = (over: Partial<TeachingProps>, confirming = true) =>
+const demo = { show: true, resetShow: true, on: true, locked: true, hasWork: true };
+const render = (over: Partial<DemoProps>, confirming = true) =>
   load(
     renderToStaticMarkup(
       createElement(ResetConfirm, {
         words: words as UiWords,
-        teaching,
-        onTeaching: noop,
+        demo,
+        onDemo: noop,
         onReset: noop,
         confirming,
         onConfirming: noop,
@@ -59,7 +59,7 @@ describe('edge cases', () => {
   it('draws nothing while not confirming, or where the Preset hides Reset', () => {
     // ARRANGE
     const idle = render({ onDownloadRun: noop }, false);
-    const hidden = render({ onDownloadRun: noop, teaching: { ...teaching, resetShow: false } });
+    const hidden = render({ onDownloadRun: noop, demo: { ...demo, resetShow: false } });
     // ACT
     const drawn = [idle('[data-reset-confirm]').length, hidden('[data-reset-confirm]').length];
     // ASSERT

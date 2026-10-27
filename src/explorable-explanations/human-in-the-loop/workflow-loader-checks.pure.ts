@@ -142,7 +142,7 @@ function doSlotOf(
     if (slotSample(file, slot) === undefined)
       return [...named, `Slot "${slot.id}" of task "${task.id}" needs a sample.`];
     const template = slot.free ? undefined : producer?.task.template;
-    const markers = markersOf(slot, task, producer?.stage.foreach?.teaching ?? 0);
+    const markers = markersOf(slot, task, producer?.stage.foreach?.demo ?? 0);
     return [...named, ...sampleProblems(slot, { file, task, template, markers })];
   };
 }
@@ -173,7 +173,7 @@ function reviewSlotOf(file: WorkflowFile, task: TaskDef, names: ReadonlyMap<stri
       file,
       task,
       template: producer?.task.template ?? task.template,
-      markers: producer?.stage.foreach?.teaching ?? 0,
+      markers: producer?.stage.foreach?.demo ?? 0,
       noun: 'review slot',
     };
     const named = producer ? slotNameProblems(slot, task, producer) : clashProblems(slot, task, used);
@@ -185,17 +185,17 @@ function reviewSlotProblems(file: WorkflowFile, task: TaskDef, names: ReadonlyMa
   return (task.review?.slots ?? []).flatMap(reviewSlotOf(file, task, names));
 }
 
-/** The example of a task: one text, or in a repeated stage a list with one per teaching round; each against its template. */
+/** The example of a task: one text, or in a repeated stage a list with one per demo round; each against its template. */
 function exampleProblems(file: WorkflowFile, task: TaskDef, stage: StageDef): string[] {
   const { example } = task.details;
   const where = `The example of task "${task.id}"`;
-  const rounds = stage.foreach?.teaching;
+  const rounds = stage.foreach?.demo;
   if (typeof example === 'string') {
     return againstTemplate(file, task.template, { source: example, what: where });
   }
   if (rounds === undefined) return [`${where} is a list but its stage does not repeat.`];
   if (example.length !== rounds) {
-    return [`${where} needs ${rounds} examples, one per teaching round, and has ${example.length}.`];
+    return [`${where} needs ${rounds} examples, one per demo round, and has ${example.length}.`];
   }
   return example.flatMap((source, at) =>
     againstTemplate(file, task.template, { source, what: `The example of round ${at + 1} of task "${task.id}"` }),
@@ -205,7 +205,7 @@ function exampleProblems(file: WorkflowFile, task: TaskDef, stage: StageDef): st
 function markerProblems(task: TaskDef, stage: StageDef, names: ReadonlyMap<string, Producer>): string[] {
   const { slots } = task;
   const repeated = stage.foreach !== undefined;
-  const widths = new Map(slots.map((slot) => [slot.id, names.get(slot.id)?.stage.foreach?.teaching ?? 0]));
+  const widths = new Map(slots.map((slot) => [slot.id, names.get(slot.id)?.stage.foreach?.demo ?? 0]));
   const limits = Object.keys(task.limits ?? {});
   return Object.entries(task.do).flatMap(([runtime, sections]) =>
     unknownMarkers(sections, { reviewer: false, slots, repeated, widths, limits }).map(

@@ -10,6 +10,18 @@ const workflow = workflowOf(parse(vacationEn) as WorkflowFile);
 const jobs = workflow.stages.flatMap((stage) => stage.jobs);
 
 describe('success cases', () => {
+  it('hands the file description on to the Workflow the picker lists', () => {
+    // ARRANGE
+    const file = parse(vacationEn) as WorkflowFile;
+    // ACT
+    const described = workflowOf({ ...file, description: 'For the picker.' });
+    // ASSERT
+    expect([described.description, workflowOf({ ...file, description: undefined }).description]).toEqual([
+      'For the picker.',
+      undefined,
+    ]);
+  });
+
   it('derives every edge of the diagram from the slots: a job depends on the producers of the outputs it takes', () => {
     // ARRANGE
     const expected = [

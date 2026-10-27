@@ -3,6 +3,7 @@
 # vacation.de.yml; a test holds both to the same structure, only the words differ.
 id: vacation
 title: Plan personal vacation
+description: 'Plan a week away for two: interview yourself, research the options and get one recommendation.'
 
 scenario:
   summary: 'Plan a vacation for two: one week away, and a recommendation for your partner.'
@@ -546,7 +547,7 @@ stages:
     summary: 'One fresh chat per ticket'
     foreach:
       over: tickets#tickets
-      teaching: 3
+      demo: 3
     move: F
     jobs:
       - id: venue

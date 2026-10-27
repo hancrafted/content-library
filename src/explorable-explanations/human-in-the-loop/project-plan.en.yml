@@ -3,6 +3,7 @@
 # project-plan.de.yml; a test holds both to the same structure, only the words differ.
 id: project-plan
 title: Plan a project
+description: Turn one big goal into a plan, epics, requirements and tickets, then execute and review them.
 
 scenario:
   summary: Plan a company summer party next year for 200 employees across 5 offices in Europe.
@@ -210,7 +211,7 @@ stages:
                 4. Say what done looks like, so anyone can tell when the task is finished.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: &practice 'This is a practice run, so keep it small and simple: a few lines per section. Steer toward the simplest version that still reaches the goal: where a choice does not change the goal, take the simplest option yourself, and leave out whatever the goal does not need. Use only numbers and facts from the material above or from my answers. Where one is missing, leave it out or write it down as an open decision, so nobody mistakes a guess for a fact.'
             - heading: Scope
@@ -236,7 +237,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -275,7 +276,7 @@ stages:
         limits:
           questions:
             full: 3
-            teaching: 3
+            demo: 3
         slots:
           - id: task
             mode: single
@@ -323,7 +324,7 @@ stages:
                 5. Facts are your job, decisions are mine: never ask what the brief already says; take it as given.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -349,7 +350,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -453,7 +454,7 @@ stages:
                 5. Under Open decisions, list what is still undecided, or write 'None'.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -480,7 +481,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -519,7 +520,7 @@ stages:
     move: I
     foreach:
       over: plan#epics
-      teaching: 2
+      demo: 2
       item: epic
     jobs:
       - id: grill
@@ -533,7 +534,7 @@ stages:
         limits:
           questions:
             full: 8
-            teaching: 5
+            demo: 5
         slots:
           - id: plan
             mode: single
@@ -601,7 +602,7 @@ stages:
                 6. When nothing important is left to ask, say so and ask me to type "done".
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -627,7 +628,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -744,7 +745,7 @@ stages:
                 4. Dependencies: what this epic needs from another epic, or what another epic needs from it.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -771,7 +772,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -866,7 +867,7 @@ stages:
                 3. Collect what the specs left open under Open questions.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -889,7 +890,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -972,7 +973,7 @@ stages:
                 3. Write the final list of requirements with every conflict resolved.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -995,7 +996,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1085,7 +1086,7 @@ stages:
                 3. Make sure every requirement is covered and no two tickets overlap.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1108,7 +1109,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1146,7 +1147,7 @@ stages:
     move: F
     foreach:
       over: tickets#tickets
-      teaching: 4
+      demo: 4
       item: ticket
     jobs:
       - id: ticket
@@ -1249,7 +1250,7 @@ stages:
                 3. Use only numbers from the ticket or the requirements, or ones you can count or work out from them. Where a number is not known, write "not known" in the table and name it under Open decisions.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1272,7 +1273,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1374,7 +1375,7 @@ stages:
                 3. Under Open decisions, collect the open decisions of every result, each once.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1397,7 +1398,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1487,7 +1488,7 @@ stages:
                 4. Open decisions: what must be decided next, one question each.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1510,7 +1511,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1608,7 +1609,7 @@ stages:
                 3. Use only numbers from the report, or counts of its lines. Where there are too few numbers for a chart, show a short table instead.
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope
@@ -1634,7 +1635,7 @@ stages:
                 ```
             - heading: Practice run
               purpose: scope
-              only: teaching
+              only: demo
               techniques: [simplest-first, allow-unknown]
               text: *practice
             - heading: Scope

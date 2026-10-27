@@ -4,7 +4,7 @@ import { fillTemplate } from '@/shared/lib/template.pure';
 import type { DebugBase } from './debug-footer.pure';
 import type { DiagramProps, HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
 import type { ModalProps, ToolbarProps } from './part-props.types';
-import type { ProgressActions, ProgressNote, TeachingProps, TeachingState } from './progress-controls.types';
+import type { DemoProps, DemoState, ProgressActions, ProgressNote } from './progress-controls.types';
 import { offers } from './toolbar-controls.pure';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
@@ -46,7 +46,7 @@ export function progressUploadEvent(
   words: UiWords,
 ): WorkflowEvent {
   const read = readProgressFile(text, { workflow: shown.id, hash: shown.hash });
-  if ('entry' in read) return { type: 'restore', results: read.entry.results, teaching: read.entry.teaching };
+  if ('entry' in read) return { type: 'restore', results: read.entry.results, demo: read.entry.demo };
   return { type: 'upload-failed', problems: [fillTemplate(words[REFUSALS[read.refusal]], { workflow: shown.title })] };
 }
 
@@ -61,7 +61,7 @@ export function uploadEvent(yaml: string): WorkflowEvent {
 /** The callbacks the parts send events up by. */
 export type Callbacks = Pick<
   ToolbarProps,
-  'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onTeaching' | 'onReset' | 'onDebug'
+  'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onDemo' | 'onReset' | 'onDebug'
 > &
   Pick<DiagramProps, 'onOpenStage'> &
   Pick<ModalProps, 'onClose' | 'onSlots'>;
@@ -72,7 +72,7 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
     onLevel: (level) => dispatch({ type: 'level', level }),
     onView: (view) => dispatch({ type: 'view', view }),
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
-    onTeaching: (teaching) => dispatch({ type: 'teaching', teaching }),
+    onDemo: (demo) => dispatch({ type: 'demo', demo }),
     onReset: () => dispatch({ type: 'reset' }),
     onDebug: (debug) => dispatch({ type: 'debug', debug }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
@@ -108,37 +108,39 @@ export interface Slices {
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
   const { state, workflow } = shown;
   const { file } = workflow;
-  const run = runOf(file, { results: state.slotValues, teaching: state.teaching });
-  const teachingProps = teachingPropsOf(shown, run.canChangeTeaching, on);
-  const toolbar = toolbarOf(shown, on, teachingProps);
+  const run = runOf(file, { results: state.slotValues, demo: state.demo });
+  const demoProps = demoPropsOf(shown, run.canChangeDemo, on);
+  const toolbar = toolbarOf(shown, on, demoProps);
   return {
     toolbar,
     diagram: diagramOf(shown, on, run),
-    modal: modalOf(shown, on, { run, teaching: teachingProps }),
+    modal: modalOf(shown, on, { run, demo: demoProps }),
   };
 }
 
-/** The teaching switch and Reset for both places that hold them: the toolbar and the popover. */
-function teachingPropsOf({ data, state, progress }: Shown, canChange: boolean, on: Callbacks): TeachingProps {
+/** The demo switch and Reset for both places that hold them: the toolbar and the popover. */
+function demoPropsOf({ data, state, progress }: Shown, canChange: boolean, on: Callbacks): DemoProps {
   const { controls, readonly } = data;
-  const teaching: TeachingState = {
-    show: offers(controls, 'teaching', readonly),
-    resetShow: offers(controls, 'reset', readonly),
-    on: state.teaching,
+  const demo: DemoState = {
+    show: offers(controls, 'demo', readonly),
+    resetShow: offers(controls, 'reset', readonly) && !canChange,
+    on: state.demo,
     locked: !canChange,
     hasWork: !canChange,
   };
-  return { teaching, onTeaching: on.onTeaching, onReset: on.onReset, onDownloadRun: progress?.onDownload };
+  return { demo, onDemo: on.onDemo, onReset: on.onReset, onDownloadRun: progress?.onDownload };
 }
 
+/** The run goes to the diagram only once it has work, and never to a readonly Preset: both views then show progress. */
 function diagramOf({ data, state, workflow }: Shown, on: Callbacks, run: Run): DiagramProps {
+  const shows = !data.readonly && !run.canChangeDemo;
   return {
     workflow,
     readonly: data.readonly,
     onOpenStage: on.onOpenStage,
     view: state.view,
     rounds: roundsOf(workflow, run),
-    run,
+    run: shows ? run : undefined,
     slots: data.diagram,
     words: data.words,
   };
@@ -147,17 +149,16 @@ function diagramOf({ data, state, workflow }: Shown, on: Callbacks, run: Run): D
 function toolbarOf(
   { data, state, workflow, note, progress, debugAvailable }: Shown,
   on: Callbacks,
-  teaching: TeachingProps,
+  demo: DemoProps,
 ): ToolbarProps {
-  const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
   const { level, view, uploadProblems } = state;
   const { onLevel, onView, onWorkflow, onUpload, onDebug } = on;
   const debug = { show: debugAvailable && offers(controls, 'debug', readonly), on: state.debug };
   return {
-    ...teaching,
+    ...demo,
     workflow,
-    choices,
+    choices: data.workflows.map(({ id, title, description }) => ({ id, title, description })),
     level,
     view,
     controls,
@@ -166,6 +167,7 @@ function toolbarOf(
     uploadProblems,
     note,
     progress,
+    canSave: demo.demo.hasWork,
     debug,
     onDebug,
     onLevel,
@@ -181,17 +183,17 @@ function debugBase({ data, state, workflow }: Pick<Shown, 'data' | 'state' | 'wo
   return {
     workflow: { id: workflow.id, title: workflow.title },
     level: state.level,
-    teaching: state.teaching,
+    demo: state.demo,
     locale: data.locale,
     source: hash?.slice(0, 8) ?? 'uploaded',
   };
 }
 
-/** How many rounds each repeated stage draws: the rounds the run holds, else the stage's teaching cap. */
+/** How many rounds each repeated stage draws: the rounds the run holds, else the stage's demo cap. */
 function roundsOf(workflow: Workflow, run: Run): Record<string, number> {
   const counts = workflow.stages.flatMap((stage) => {
     const held = run.stages.find((each) => each.id === stage.id)?.rounds.length ?? 0;
-    return stage.foreach ? [[stage.id, held || stage.foreach.teaching] as const] : [];
+    return stage.foreach ? [[stage.id, held || stage.foreach.demo] as const] : [];
   });
   return Object.fromEntries(counts);
 }
@@ -199,7 +201,7 @@ function roundsOf(workflow: Workflow, run: Run): Record<string, number> {
 function modalOf(
   { data, state, workflow, view, debugAvailable }: Shown,
   on: Callbacks,
-  { run, teaching }: { readonly run: Run; readonly teaching: TeachingProps },
+  { run, demo }: { readonly run: Run; readonly demo: DemoProps },
 ): ModalProps {
   const { file } = workflow;
   return {
@@ -214,6 +216,6 @@ function modalOf(
     onLevel: on.onLevel,
     onClose: on.onClose,
     onSlots: (values) => on.onSlots(resultsOf(file, values)),
-    ...teaching,
+    ...demo,
   };
 }

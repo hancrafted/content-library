@@ -3,6 +3,8 @@ import { RotateCw } from 'lucide-react';
 import type { PopoverCopy, StageSlot, UiWords } from './human-in-the-loop.types';
 import { MoveCircles } from './move-circles.client';
 import { NodePopover, type NodeCopy } from './node-popover.client';
+import { StageProgress, StateMark } from './state-mark';
+import type { RoundRun, StageRun } from './workflow-run.pure';
 import type { Stage } from './workflow.types';
 
 /*
@@ -67,19 +69,26 @@ export function GateBadge({ gate }: { readonly gate: string }) {
   );
 }
 
-function Marks({ stage, gate, words }: { stage: Stage; gate: string | undefined; words: UiWords }) {
-  if (!isChecked(stage) && !gate) return null;
+/** The mark of a stage whose run has no work: a labelled "checked" where a job is reviewed. */
+const ReviewedMark = ({ stage, words }: { stage: Stage; words: UiWords }) =>
+  isChecked(stage) ? <CheckedMark word={words.checked} /> : null;
+
+function Marks(props: { stage: Stage; gate: string | undefined; words: UiWords; run: StageRun | undefined }) {
+  const { stage, gate, words, run } = props;
   return (
-    <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-      {isChecked(stage) && <CheckedMark word={words.checked} />}
+    <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 empty:hidden">
+      {run ? <StageProgress run={run} words={words} /> : <ReviewedMark stage={stage} words={words} />}
       {gate && <GateBadge gate={gate} />}
     </div>
   );
 }
 
-/** One stage as a card: title, BRIEF letters, summary, the checked mark and the gate badge. */
-export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords; moves: boolean }) {
-  const { stage, slot, words, moves } = props;
+/**
+ * One stage as a card: title, BRIEF letters, summary, the checked mark and the gate badge. Where the run has work
+ * (`run`), the card says instead how many jobs are done and where the stage stands.
+ */
+export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords; moves: boolean; run?: StageRun }) {
+  const { stage, slot, words, moves, run } = props;
   const gate = gateLabelOf(stage, slot, words);
   return (
     <div data-stage-card="" className={cn('flex flex-col gap-1.5 p-3', CARD, gate && 'shadow-sm')}>
@@ -94,31 +103,37 @@ export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords
           {stage.summary}
         </p>
       )}
-      <Marks stage={stage} gate={gate} words={words} />
+      <Marks stage={stage} gate={gate} words={words} run={run} />
     </div>
   );
 }
 
 /**
  * One round of a repeated stage: one card height, so with the column's gap the branches stand one fan pitch apart. The
- * stage's name above the rounds carries its popover and aside.
+ * stage's name above the rounds carries its popover and aside. Where the run has the round, the card is titled by its
+ * pasted H3 and says where the round stands.
  */
-export function BranchCard(props: { stage: Stage; round: number; words: UiWords }) {
-  const { stage, round, words } = props;
+export function BranchCard(props: { stage: Stage; round: number; words: UiWords; run?: RoundRun }) {
+  const { stage, round, words, run } = props;
   return (
     <li
       data-branch=""
       className={cn('flex h-12 w-full items-center justify-between gap-1 px-3 text-caption font-semibold', CARD)}
     >
-      <span className="min-w-0 truncate">
-        {stage.name} {round}
+      <span data-branch-title="" className="min-w-0 truncate">
+        {run?.title ?? `${stage.name} ${round}`}
       </span>
-      {isChecked(stage) && (
-        <span className="flex items-center text-muted-foreground">
-          <RotateCw aria-hidden="true" className="size-4" />
-          <span className="sr-only">{words.checked}</span>
-        </span>
-      )}
+      {run ? <StateMark state={run.state} words={words} /> : <ReviewedTick stage={stage} words={words} />}
     </li>
+  );
+}
+
+function ReviewedTick({ stage, words }: { stage: Stage; words: UiWords }) {
+  if (!isChecked(stage)) return null;
+  return (
+    <span className="flex items-center text-muted-foreground">
+      <RotateCw aria-hidden="true" className="size-4" />
+      <span className="sr-only">{words.checked}</span>
+    </span>
   );
 }

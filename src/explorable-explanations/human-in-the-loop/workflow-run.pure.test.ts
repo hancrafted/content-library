@@ -16,7 +16,7 @@ const job = (id: string, over: Partial<TaskDef> = {}): TaskDef => ({
   ...over,
 });
 
-/** Plan hands on `plan`; Research repeats per piece (teaching cap 2); Report ends the run with a checkbox. */
+/** Plan hands on `plan`; Research repeats per piece (demo cap 2); Report ends the run with a checkbox. */
 const file = (): WorkflowFile => ({
   id: 'demo',
   title: 'Demo',
@@ -31,7 +31,7 @@ const file = (): WorkflowFile => ({
       id: 'research',
       title: 'Research',
       learningGoal: 'G',
-      foreach: { over: 'plan#pieces', teaching: 2 },
+      foreach: { over: 'plan#pieces', demo: 2 },
       jobs: [job('look'), job('rank')],
     },
     {
@@ -43,8 +43,7 @@ const file = (): WorkflowFile => ({
   ] satisfies StageDef[],
 });
 
-const researchOf = (results: Record<string, string>, teaching: boolean) =>
-  runOf(file(), { results, teaching }).stages[1]!;
+const researchOf = (results: Record<string, string>, demo: boolean) => runOf(file(), { results, demo }).stages[1]!;
 
 describe('success cases', () => {
   it('makes one round per H3 under the named H2 of the pasted result, in document order, in full mode', () => {
@@ -58,7 +57,7 @@ describe('success cases', () => {
     expect(stage.rounds.map((round) => round.number)).toEqual(numbers);
   });
 
-  it('takes only the first N H3s, in document order, in teaching mode', () => {
+  it('takes only the first N H3s, in document order, in demo mode', () => {
     // ARRANGE
     const results = { 'plan.plan': PLAN };
     // ACT
@@ -94,13 +93,27 @@ describe('success cases', () => {
     expect(keys).toEqual(expected);
   });
 
+  it("says a stage's state is the least advanced state of all its jobs, rounds included", () => {
+    // ARRANGE
+    const research = { 'research.look#1': 'x', 'research.rank#1': 'x', 'research.look#2': 'x' };
+    const finished = { ...research, 'research.rank#2': 'x' };
+    // ACT
+    const states = [
+      researchOf({}, true).state,
+      researchOf({ 'plan.plan': PLAN, ...research }, true).state,
+      researchOf({ 'plan.plan': PLAN, ...finished }, true).state,
+    ];
+    // ASSERT
+    expect(states).toEqual(['open', 'open', 'done']);
+  });
+
   it('says a job is open, done once its result is pasted and checked once its review is passed', () => {
     // ARRANGE
-    const none = runOf(file(), { results: {}, teaching: true }).stages[0]!.jobs[0];
-    const pasted = runOf(file(), { results: { 'plan.plan': PLAN }, teaching: true }).stages[0]!.jobs[0];
+    const none = runOf(file(), { results: {}, demo: true }).stages[0]!.jobs[0];
+    const pasted = runOf(file(), { results: { 'plan.plan': PLAN }, demo: true }).stages[0]!.jobs[0];
     const passed = runOf(file(), {
       results: { 'plan.plan': PLAN, [checkedKey('plan', 'plan')]: 'yes' },
-      teaching: true,
+      demo: true,
     }).stages[0]!.jobs[0];
     // ACT
     const states = [none, pasted, passed].map((each) => each?.state);
@@ -112,7 +125,7 @@ describe('success cases', () => {
     // ARRANGE
     const results = { [resultKey('report', 'final')]: 'done' };
     // ACT
-    const [last] = runOf(file(), { results, teaching: true }).stages[2]!.jobs;
+    const [last] = runOf(file(), { results, demo: true }).stages[2]!.jobs;
     // ASSERT
     expect(last?.state).toBe('done');
   });
@@ -126,7 +139,7 @@ describe('success cases', () => {
       [resultKey('research', 'look', 2)]: 'c',
     };
     // ACT
-    const stages = runOf(file(), { results, teaching: true }).stages;
+    const stages = runOf(file(), { results, demo: true }).stages;
     // ASSERT
     expect(stages.map(({ done, total }) => `${done}/${total}`)).toEqual(['1/1', '3/4', '0/1']);
   });
@@ -169,12 +182,12 @@ describe('success cases', () => {
     expect(back).toEqual(results);
   });
 
-  it('lets teaching mode change only while nothing is pasted', () => {
+  it('lets demo mode change only while nothing is pasted', () => {
     // ARRANGE
-    const empty = runOf(file(), { results: { 'plan.plan': '  ' }, teaching: true });
-    const started = runOf(file(), { results: { 'plan.plan': PLAN }, teaching: true });
+    const empty = runOf(file(), { results: { 'plan.plan': '  ' }, demo: true });
+    const started = runOf(file(), { results: { 'plan.plan': PLAN }, demo: true });
     // ACT
-    const may = [empty.canChangeTeaching, started.canChangeTeaching];
+    const may = [empty.canChangeDemo, started.canChangeDemo];
     // ASSERT
     expect(may).toEqual([true, false]);
   });
@@ -230,7 +243,7 @@ describe('edge cases', () => {
     // ARRANGE
     const results = { 'plan.plan': PLAN };
     // ACT
-    const stage = runOf(file(), { results, teaching: true }).stages[0]!;
+    const stage = runOf(file(), { results, demo: true }).stages[0]!;
     // ASSERT
     expect(stage.rounds).toEqual([]);
   });

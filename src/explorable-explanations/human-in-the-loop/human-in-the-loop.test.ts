@@ -26,14 +26,14 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('starts in the Presentation view unless the Preset names another', () => {
+  it('starts in the Stages view unless the Preset names another', () => {
     // ARRANGE
     const props = { workflow: 'project-plan', locale: 'en' } as const;
     // ACT
     const plain = humanInTheLoopData(props).view;
-    const preset = humanInTheLoopData({ ...props, view: 'detailed' }).view;
+    const preset = humanInTheLoopData({ ...props, view: 'jobs' }).view;
     // ASSERT
-    expect([plain, preset]).toEqual(['presentation', 'detailed']);
+    expect([plain, preset]).toEqual(['stages', 'jobs']);
   });
 
   it('keeps the Slide initials for German too: the letters stay English, only the tooltips are German', () => {

@@ -46,8 +46,8 @@ export const expandSections = (
 /** The marker a limit fills. */
 export const limitMarker = (name: string): string => `limit.${name}`;
 
-/** The value of a limit: its teaching value in teaching mode, else its full one. */
-export const limitValue = (limit: LimitDef, teaching: boolean): number => (teaching ? limit.teaching : limit.full);
+/** The value of a limit: its demo value in demo mode, else its full one. */
+export const limitValue = (limit: LimitDef, demo: boolean): number => (demo ? limit.demo : limit.full);
 
 export interface MarkerScope {
   /** The sections of a task's prompt, or the general reviewer. */

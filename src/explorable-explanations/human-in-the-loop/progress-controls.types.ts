@@ -1,5 +1,5 @@
 /*
- * The slices of the parent that the saved run, its note and the teaching switch need: kept apart from the part-slot
+ * The slices of the parent that the saved run, its note and the demo switch need: kept apart from the part-slot
  * contract of `human-in-the-loop.types.ts`, which holds the parts' own props.
  */
 
@@ -12,12 +12,12 @@ export interface ProgressNote {
   readonly onDiscard: () => void;
 }
 
-/** What the teaching switch and Reset need to draw, the same in the toolbar and at the popover's top right. */
-export interface TeachingState {
+/** What the demo switch and Reset need to draw, the same in the toolbar and at the popover's top right. */
+export interface DemoState {
   /** The switch and Reset each show unless the Preset hides them (or the Preset is readonly). */
   readonly show: boolean;
   readonly resetShow: boolean;
-  /** Teaching mode is on. */
+  /** Demo mode is on. */
   readonly on: boolean;
   /** A result is pasted: the switch is disabled until Reset. */
   readonly locked: boolean;
@@ -25,10 +25,10 @@ export interface TeachingState {
   readonly hasWork: boolean;
 }
 
-/** The teaching switch and Reset, as props of the parts that hold them. */
-export interface TeachingProps {
-  readonly teaching: TeachingState;
-  readonly onTeaching: (teaching: boolean) => void;
+/** The demo switch and Reset, as props of the parts that hold them. */
+export interface DemoProps {
+  readonly demo: DemoState;
+  readonly onDemo: (demo: boolean) => void;
   /** Clears this Workflow's run and its saved entry; the parts confirm first. */
   readonly onReset: () => void;
   /** Saves the current run as a progress file: the download Reset offers first. None for an uploaded Workflow, whose run no file can vouch for. */

@@ -25,14 +25,14 @@ function modeProblems(slot: SlotDef, producer: Producer, where: string): string[
   return [];
 }
 
-/** The checks of a review hold only `{{item}}` (in a repeated stage) and the job's limits; a limit's teaching value is at most its full one. */
+/** The checks of a review hold only `{{item}}` (in a repeated stage) and the job's limits; a limit's demo value is at most its full one. */
 export function limitProblems(task: TaskDef, stage: StageDef): string[] {
   const limits = Object.keys(task.limits ?? {});
   const checks = unknownCheckMarkers(task.review?.checks ?? [], { repeated: stage.foreach !== undefined, limits });
   return [
     ...checks.map((marker) => `The checks of task "${task.id}" have the unknown marker {{${marker}}}.`),
     ...Object.entries(task.limits ?? {})
-      .filter(([, limit]) => limit.teaching > limit.full)
-      .map(([name]) => `The limit "${name}" of task "${task.id}" has a teaching value above its full value.`),
+      .filter(([, limit]) => limit.demo > limit.full)
+      .map(([name]) => `The limit "${name}" of task "${task.id}" has a demo value above its full value.`),
   ];
 }

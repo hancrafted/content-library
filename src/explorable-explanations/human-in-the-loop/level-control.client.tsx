@@ -1,8 +1,9 @@
 'use client';
 
+import { Code } from 'lucide-react';
 import type { UiWords } from './human-in-the-loop.types';
-import { levelOptions } from './level-options.pure';
-import { SegmentedControl } from './segmented-control.client';
+import { toggledLevel } from './level-toggle.pure';
+import { ToolButton } from './tool-button.client';
 import type { Level } from './workflow-state.pure';
 
 interface LevelControlProps {
@@ -11,9 +12,18 @@ interface LevelControlProps {
   readonly onLevel: (level: Level) => void;
 }
 
-/** The two-way "Chat · CLI" segmented control: one pressed segment at a time, named by `words.level`. */
+/** The `</>` icon toggle: off is Chat (the default), on is CLI, which shows the setup and the /skill commands. */
 export function LevelControl({ words, level, onLevel }: LevelControlProps) {
   return (
-    <SegmentedControl name="level" label={words.level} options={levelOptions(words)} value={level} onValue={onLevel} />
+    <ToolButton
+      label={words.cli}
+      tip={words.cliTip}
+      pressed={level === 'technical'}
+      variant="ghost"
+      data-control="level"
+      onClick={() => onLevel(toggledLevel(level))}
+    >
+      <Code aria-hidden="true" />
+    </ToolButton>
   );
 }

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { flow } from './workflow-fixture.pure';
 import { createState, reduce, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
 
-const start = { workflowId: 'project-plan', level: 'simple', view: 'presentation' } as const;
+const start = { workflowId: 'project-plan', level: 'simple', view: 'stages' } as const;
 const uploaded = { ...flow([]), id: 'mine', title: 'Mine' };
 
 describe('success cases', () => {
@@ -17,25 +17,25 @@ describe('success cases', () => {
     expect(later.slotValues).toEqual(pasted);
   });
 
-  it('takes back a saved run: its results and its teaching flag', () => {
+  it('takes back a saved run: its results and its demo flag', () => {
     // ARRANGE
-    const saved = { results: { 'a.b': 'text' }, teaching: false };
+    const saved = { results: { 'a.b': 'text' }, demo: false };
     // ACT
     const state = reduce(createState(start), { type: 'restore', ...saved });
     // ASSERT
     expect(state.slotValues).toEqual(saved.results);
-    expect(state.teaching).toBe(saved.teaching);
+    expect(state.demo).toBe(saved.demo);
   });
 
-  it('switches teaching mode off and on', () => {
+  it('switches demo mode off and on', () => {
     // ARRANGE
     const initial = createState(start);
     // ACT
-    const off = reduce(initial, { type: 'teaching', teaching: false });
-    const on = reduce(off, { type: 'teaching', teaching: true });
+    const off = reduce(initial, { type: 'demo', demo: false });
+    const on = reduce(off, { type: 'demo', demo: true });
     // ASSERT
-    expect(off.teaching).toBe(false);
-    expect(on.teaching).toBe(true);
+    expect(off.demo).toBe(false);
+    expect(on.demo).toBe(true);
   });
 
   it('switches debug mode on and off, off at the start, and keeps it through a reset and a change of Workflow', () => {
@@ -49,12 +49,12 @@ describe('success cases', () => {
     expect([initial.debug, on.debug, kept.debug, off.debug]).toEqual([false, true, true, false]);
   });
 
-  it('a reset empties the pasted values, turns teaching back on and keeps the rest', () => {
+  it('a reset empties the pasted values, turns demo back on and keeps the rest', () => {
     // ARRANGE
     const events: WorkflowEvent[] = [
       { type: 'level', level: 'technical' },
       { type: 'open', stageId: 'x' },
-      { type: 'teaching', teaching: false },
+      { type: 'demo', demo: false },
       { type: 'slots', values: { 'a.b': 'text' } },
     ];
     const busy = events.reduce(reduce, createState(start));
@@ -68,7 +68,7 @@ describe('success cases', () => {
     // ARRANGE
     const refused = reduce(createState(start), { type: 'upload-failed', problems: ['no'] });
     // ACT
-    const state = reduce(refused, { type: 'restore', results: { 'a.b': 'x' }, teaching: true });
+    const state = reduce(refused, { type: 'restore', results: { 'a.b': 'x' }, demo: true });
     // ASSERT
     expect(state.uploadProblems).toEqual([]);
   });
@@ -86,7 +86,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected: WorkflowState = {
       ...start,
-      teaching: true,
+      demo: true,
       debug: false,
       openStageId: null,
       openJobId: null,
@@ -105,11 +105,11 @@ describe('success cases', () => {
     // ARRANGE
     const filled = reduce(createState(start), { type: 'slots', values: { a: 'b' } });
     // ACT
-    const viewed = reduce(filled, { type: 'view', view: 'handson' });
+    const viewed = reduce(filled, { type: 'view', view: 'jobs' });
     const other = reduce(viewed, { type: 'workflow', workflowId: 'vacation' });
     // ASSERT
-    expect(viewed).toEqual({ ...filled, view: 'handson' });
-    expect(other.view).toBe('handson');
+    expect(viewed).toEqual({ ...filled, view: 'jobs' });
+    expect(other.view).toBe('jobs');
   });
 
   it('switches the level', () => {

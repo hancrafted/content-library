@@ -3,45 +3,45 @@ import type { UiWords } from './human-in-the-loop.types';
 import { viewOptions } from './view-options.pure';
 
 const words = {
-  viewPresentation: 'Presentation',
-  viewDetailed: 'Detailed',
-  viewHandson: 'Hands-on',
+  viewStages: 'Stages',
+  viewStagesTip: 'The high-level view: one card per stage',
+  viewJobs: 'Jobs',
+  viewJobsTip: 'The detailed view: every job of each stage',
 } as UiWords;
 
 describe('success cases', () => {
-  it('lists Presentation, Detailed and Hands-on in that order', () => {
+  it('lists Stages and Jobs in that order', () => {
     // ARRANGE
     // ACT
     const options = viewOptions(words);
     // ASSERT
     expect(options.map(({ value, label }) => [value, label])).toEqual([
-      ['presentation', 'Presentation'],
-      ['detailed', 'Detailed'],
-      ['handson', 'Hands-on'],
+      ['stages', 'Stages'],
+      ['jobs', 'Jobs'],
     ]);
   });
 
-  it('offers Hands-on as a view the viewer can pick, like the other two', () => {
+  it('gives each view its tooltip: Stages the high-level view, Jobs the detailed one', () => {
     // ARRANGE
     // ACT
-    const handson = viewOptions(words).find(({ value }) => value === 'handson');
+    const tips = viewOptions(words).map(({ tip }) => tip);
     // ASSERT
-    expect(handson).toEqual({ value: 'handson', label: 'Hands-on' });
+    expect(tips).toEqual(['The high-level view: one card per stage', 'The detailed view: every job of each stage']);
   });
 });
 
 describe('failure cases', () => {
-  it('labels every view with its own word, so no segment is left blank', () => {
+  it('offers no Hands-on view: progress shows inside the two views, not as a third', () => {
     // ARRANGE
     // ACT
-    const labels = viewOptions(words).map(({ label }) => label);
+    const values: string[] = viewOptions(words).map(({ value }) => value);
     // ASSERT
-    expect(labels.every((label) => label.length > 0)).toBe(true);
+    expect(values).not.toContain('handson');
   });
 });
 
 describe('edge cases', () => {
-  it('never offers a view the state cannot hold twice', () => {
+  it('never offers a view twice', () => {
     // ARRANGE
     // ACT
     const views = viewOptions(words).map(({ value }) => value);

@@ -8,35 +8,26 @@ export type ControlId =
   | 'picker'
   | 'view'
   | 'level'
-  | 'teaching'
-  | 'reset'
+  | 'demo'
   | 'debug'
   | 'progressDownload'
   | 'progressUpload'
   | 'download'
-  | 'upload';
+  | 'upload'
+  | 'reset';
 
 export interface ControlDef {
   readonly id: ControlId;
-  /** `pills` is the Workflow picker, `segmented` the view control and the two-way Chat · CLI control, `switch` the teaching mode, `action` an icon button that does one thing. */
+  /** `pills` is the Workflow picker, `segmented` the view control, `switch` demo mode and the `</>` and Debug icon toggles, `action` an icon button that does one thing. */
   readonly type: 'pills' | 'segmented' | 'switch' | 'action';
   /** The keys of the visual's labels the control reads: its accessible name and its tooltip (`UiWords` keys). */
   readonly label:
-    | 'workflow'
-    | 'view'
-    | 'level'
-    | 'teaching'
-    | 'reset'
-    | 'debug'
-    | 'progressSave'
-    | 'progressLoad'
-    | 'download'
-    | 'upload';
+    'workflow' | 'view' | 'cli' | 'demo' | 'reset' | 'debug' | 'progressSave' | 'progressLoad' | 'download' | 'upload';
   readonly tip:
     | 'workflow'
     | 'viewTip'
-    | 'levelTip'
-    | 'teachingTip'
+    | 'cliTip'
+    | 'demoTip'
     | 'resetTip'
     | 'debugTip'
     | 'progressSave'
@@ -50,14 +41,14 @@ export interface ControlDef {
 export const CONTROLS: readonly ControlDef[] = [
   { id: 'picker', type: 'pills', label: 'workflow', tip: 'workflow', show: true },
   { id: 'view', type: 'segmented', label: 'view', tip: 'viewTip', show: true },
-  { id: 'level', type: 'segmented', label: 'level', tip: 'levelTip', show: true },
-  { id: 'teaching', type: 'switch', label: 'teaching', tip: 'teachingTip', show: true },
-  { id: 'reset', type: 'action', label: 'reset', tip: 'resetTip', show: true },
+  { id: 'level', type: 'switch', label: 'cli', tip: 'cliTip', show: true },
+  { id: 'demo', type: 'switch', label: 'demo', tip: 'demoTip', show: true },
   { id: 'debug', type: 'switch', label: 'debug', tip: 'debugTip', show: true },
   { id: 'progressDownload', type: 'action', label: 'progressSave', tip: 'progressSave', show: true },
   { id: 'progressUpload', type: 'action', label: 'progressLoad', tip: 'progressLoad', show: true },
   { id: 'download', type: 'action', label: 'download', tip: 'download', show: true },
   { id: 'upload', type: 'action', label: 'upload', tip: 'upload', show: true },
+  { id: 'reset', type: 'action', label: 'reset', tip: 'resetTip', show: true },
 ];
 
 /** What a Preset may say about one control. */
@@ -78,9 +69,9 @@ export function defOf(id: ControlId): ControlDef {
 /** A control as the Preset sets it: the registry's definition, then the Preset's own overrides. */
 export const controlOf = (controls: ControlMap, id: ControlId): ControlDef => ({ ...defOf(id), ...controls[id] });
 
-const PRACTICE = new Set<ControlId>(['level', 'teaching', 'reset', 'debug']);
+const PRACTICE = new Set<ControlId>(['level', 'demo', 'reset', 'debug']);
 
-/** Whether the toolbar draws a control: the Preset has not hidden it, and `readonly` hides what only a practising viewer uses: the Chat · CLI control, teaching and reset. */
+/** Whether the toolbar draws a control: the Preset has not hidden it, and `readonly` hides what only a practising viewer uses: the `</>` toggle, demo mode, Debug and Reset. */
 export function offers(controls: ControlMap, id: ControlId, readonly = false): boolean {
   return controlOf(controls, id).show && !(readonly && PRACTICE.has(id));
 }

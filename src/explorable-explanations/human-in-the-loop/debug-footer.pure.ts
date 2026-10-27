@@ -10,7 +10,7 @@ import type { Level } from './workflow-state.pure';
 export interface DebugBase {
   readonly workflow: { readonly id: string; readonly title: string };
   readonly level: Level;
-  readonly teaching: boolean;
+  readonly demo: boolean;
   readonly locale: string;
   /** The short hash of the Workflow's source pair, or `uploaded` for a Workflow the viewer uploaded. */
   readonly source: string;
@@ -51,7 +51,7 @@ export function debugFooter(scope: DebugScope, { prompt, step, chat }: DebugProm
     `step=${step}`,
     chat !== undefined && `chat=${chat}`,
     `level=${LEVELS[scope.level]}`,
-    `teaching=${scope.teaching ? 'on' : 'off'}`,
+    `demo=${scope.demo ? 'on' : 'off'}`,
     `locale=${scope.locale}`,
     `source=${scope.source}`,
   ].filter((field): field is string => typeof field === 'string');

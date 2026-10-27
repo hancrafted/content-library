@@ -36,7 +36,7 @@ export function humanInTheLoopData({
   locale,
   words,
   level = 'simple',
-  view = 'presentation',
+  view = 'stages',
   readonly = false,
   controls,
   diagram,

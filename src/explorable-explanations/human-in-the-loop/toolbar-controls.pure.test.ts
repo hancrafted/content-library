@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CONTROLS, controlOf, defOf, offers, type ControlId } from './toolbar-controls.pure';
 
 describe('success cases', () => {
-  it('shows the picker, the view control, the Chat · CLI control, teaching, reset, debug, saving and loading progress, then the Workflow download and upload by default, in that order', () => {
+  it('shows the picker, the view control, the CLI toggle, demo mode, debug, saving and loading progress, the Workflow download and upload, then Reset, by default, in that order', () => {
     // ARRANGE
     const none = {};
     // ACT
@@ -12,13 +12,13 @@ describe('success cases', () => {
       'picker',
       'view',
       'level',
-      'teaching',
-      'reset',
+      'demo',
       'debug',
       'progressDownload',
       'progressUpload',
       'download',
       'upload',
+      'reset',
     ]);
   });
 
@@ -32,7 +32,7 @@ describe('success cases', () => {
     expect(offers(preset, 'download')).toBe(true);
   });
 
-  it('hides the Chat · CLI control, teaching and reset for a readonly Preset, where nothing is tried', () => {
+  it('hides the CLI toggle, demo mode, debug and reset for a readonly Preset, where nothing is tried', () => {
     // ARRANGE
     const none = {};
     // ACT
@@ -43,11 +43,11 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('lets a Preset hide teaching and reset one by one', () => {
+  it('lets a Preset hide demo and reset one by one', () => {
     // ARRANGE
-    const preset = { teaching: { show: false } };
+    const preset = { demo: { show: false } };
     // ACT
-    const shown = [offers(preset, 'teaching'), offers(preset, 'reset')];
+    const shown = [offers(preset, 'demo'), offers(preset, 'reset')];
     // ASSERT
     expect(shown).toEqual([false, true]);
   });
@@ -81,13 +81,13 @@ describe('edge cases', () => {
     expect(shown).toEqual([
       'picker',
       'level',
-      'teaching',
-      'reset',
+      'demo',
       'debug',
       'progressDownload',
       'progressUpload',
       'download',
       'upload',
+      'reset',
     ]);
   });
 

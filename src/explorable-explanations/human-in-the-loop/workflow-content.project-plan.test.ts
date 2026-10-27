@@ -10,7 +10,7 @@ import { workflowView } from './workflow-view.pure';
 
 /*
  * The project-plan Workflow held to the decisions of epic #372: six stages that teach a discipline each, jobs in
- * `needs` order, caps of teaching mode next to their full values, prompts without the scenario, a practice run and a
+ * `needs` order, caps of demo mode next to their full values, prompts without the scenario, a practice run and a
  * subagent per round in the CLI prompts, and the summer party as the sample of the first job only.
  */
 
@@ -27,7 +27,7 @@ const joined = (step: { prompt: { sections?: readonly { text: string }[]; slots?
 const doStep = (
   id: string,
   level: 'simple' | 'technical',
-  options: { teaching?: boolean; rounds?: Record<string, number> } = {},
+  options: { demo?: boolean; rounds?: Record<string, number> } = {},
 ) =>
   workflowView(WORKFLOW, { level, ...options })
     .stages.flatMap((each) => each.jobs)
@@ -77,17 +77,17 @@ describe('success cases', () => {
     expect(items).toEqual(expected);
   });
 
-  it('keeps every cap of teaching mode next to its full value', () => {
+  it('keeps every cap of demo mode next to its full value', () => {
     // ARRANGE
     const rounds = { epics: 2, execute: 4 };
-    const questions = { full: 8, teaching: 5 };
+    const questions = { full: 8, demo: 5 };
     const scope = 3;
     // ACT
-    const actual = { epics: stage('epics').foreach?.teaching, execute: stage('execute').foreach?.teaching };
+    const actual = { epics: stage('epics').foreach?.demo, execute: stage('execute').foreach?.demo };
     // ASSERT
     expect(actual).toEqual(rounds);
     expect(task('grill').limits).toEqual({ questions });
-    expect(task('scope').limits).toEqual({ questions: { full: scope, teaching: scope } });
+    expect(task('scope').limits).toEqual({ questions: { full: scope, demo: scope } });
   });
 
   it('prefills the summer party as the sample of the task job and no other prompt names it', () => {
@@ -106,10 +106,10 @@ describe('success cases', () => {
     expect(mentions).toEqual([]);
   });
 
-  it('makes every prompt in teaching mode a practice run that takes the simplest option, in Chat and CLI', () => {
+  it('makes every prompt in demo mode a practice run that takes the simplest option, in Chat and CLI', () => {
     // ARRANGE
     const prompts = (level: 'simple' | 'technical') =>
-      tasksOf(file).map((each) => [each.id, textOf(doStep(each.id, level, { teaching: true }).prompt)] as const);
+      tasksOf(file).map((each) => [each.id, textOf(doStep(each.id, level, { demo: true }).prompt)] as const);
     // ACT
     const missing = [...prompts('simple'), ...prompts('technical')]
       .filter(([, text]) => !/practice run/i.test(text) || !/simplest/i.test(text))
@@ -121,7 +121,7 @@ describe('success cases', () => {
   it('calls no prompt of a full run a practice run, and has it name what is unknown as an open decision', () => {
     // ARRANGE
     const prompts = (level: 'simple' | 'technical') =>
-      tasksOf(file).map((each) => [each.id, textOf(doStep(each.id, level, { teaching: false }).prompt)] as const);
+      tasksOf(file).map((each) => [each.id, textOf(doStep(each.id, level, { demo: false }).prompt)] as const);
     // ACT
     const wrong = [...prompts('simple'), ...prompts('technical')]
       .filter(([, text]) => /practice run/i.test(text) || !/open decision/i.test(text))
@@ -139,22 +139,22 @@ describe('success cases', () => {
     expect(texts.every((text) => /orchestrator/.test(text) && /one subagent per/.test(text))).toBe(true);
   });
 
-  it('fills the grill cap by mode: five questions in teaching mode, eight in full mode', () => {
+  it('fills the grill cap by mode: five questions in demo mode, eight in full mode', () => {
     // ARRANGE
-    const asked = (teaching: boolean) => joined(doStep('grill', 'simple', { teaching }));
-    const { teaching: fewer, full: more } = task('grill').limits!.questions!;
+    const asked = (demo: boolean) => joined(doStep('grill', 'simple', { demo }));
+    const { demo: fewer, full: more } = task('grill').limits!.questions!;
     // ACT
-    const teaching = asked(true);
+    const demo = asked(true);
     const full = asked(false);
     // ASSERT
-    expect(teaching).toContain(`at most ${fewer} questions`);
+    expect(demo).toContain(`at most ${fewer} questions`);
     expect(full).toContain(`at most ${more} questions`);
-    expect(teaching).not.toContain('{{limit');
+    expect(demo).not.toContain('{{limit');
   });
 
   it('checks each round against its own H3 item in Chat', () => {
     // ARRANGE
-    const run = runOf(file, { results: {}, teaching: true }).stages.find((each) => each.id === 'epics')!;
+    const run = runOf(file, { results: {}, demo: true }).stages.find((each) => each.id === 'epics')!;
     const view = workflowView(WORKFLOW, { level: 'simple' }).stages.find((each) => each.id === 'epics')!;
     // ACT
     const items = itemsOf(view, run).filter((item) => item.job.id === 'grill');
@@ -166,7 +166,7 @@ describe('success cases', () => {
 
   it('gives each round of the spec job its own grill result, not the one of another round', () => {
     // ARRANGE
-    const run = runOf(file, { results: {}, teaching: true }).stages.find((each) => each.id === 'epics')!;
+    const run = runOf(file, { results: {}, demo: true }).stages.find((each) => each.id === 'epics')!;
     const view = workflowView(WORKFLOW, { level: 'simple' }).stages.find((each) => each.id === 'epics')!;
     // ACT
     const items = itemsOf(view, run).filter((item) => item.job.id === 'spec');
@@ -181,9 +181,9 @@ describe('success cases', () => {
   it('expands the merge of the epic specs into one entry per round played', () => {
     // ARRANGE
     const fields = (rounds: number) =>
-      doStep('aggregate', 'simple', { teaching: false, rounds: { epics: rounds } }).prompt.slots?.length;
+      doStep('aggregate', 'simple', { demo: false, rounds: { epics: rounds } }).prompt.slots?.length;
     const text = (rounds: number) =>
-      textOf(doStep('aggregate', 'simple', { teaching: false, rounds: { epics: rounds } }).prompt);
+      textOf(doStep('aggregate', 'simple', { demo: false, rounds: { epics: rounds } }).prompt);
     const three = 3;
     const five = 5;
     // ACT
@@ -270,7 +270,7 @@ describe('edge cases', () => {
     },
   );
 
-  it('gives each epic and ticket example one entry per teaching round', () => {
+  it('gives each epic and ticket example one entry per demo round', () => {
     // ARRANGE
     const expected = { grill: 2, spec: 2, ticket: 4 };
     // ACT

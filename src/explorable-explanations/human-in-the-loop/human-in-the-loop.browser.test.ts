@@ -180,20 +180,11 @@ async function stageProblems(page: Page, id: string, language: Language): Promis
 }
 
 test.describe('success cases', () => {
-  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then the view, Chat · CLI, teaching, saving and loading progress, download and upload; Reset set apart after it', async ({
+  test('has one pill toolbar: the "Use case" picker showing the chosen Workflow, then Stages · Jobs, the `</>` toggle, Demo mode, loading progress (Save and Reset wait for work), download and upload', async ({
     page,
   }) => {
     // ARRANGE
-    const expectedControls = [
-      'picker',
-      'view',
-      'level',
-      'teaching',
-      'progressDownload',
-      'progressUpload',
-      'download',
-      'upload',
-    ];
+    const expectedControls = ['picker', 'view', 'level', 'demo', 'progressUpload', 'download', 'upload'];
     const expectedLabel = 'Use case:';
     const expectedChosen = 'Plan a project';
     const { root, toolbar } = await open(page, 'light');
@@ -208,7 +199,39 @@ test.describe('success cases', () => {
     await expect(root).not.toContainText(/Watch|Try it yourself/);
   });
 
-  test('opens in the Presentation view: a card per stage, all three views offered, and nothing sideways on a phone', async ({
+  test('lists each use case with its description under the title, and the closed picker shows the title only', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const { root } = await open(page, 'light');
+    const picker = root.locator('[data-control="picker"]');
+    const workflows = 2;
+    // ACT
+    await expect(picker.getByRole('combobox')).toHaveText('Plan a project');
+    await picker.getByRole('combobox').click();
+    const options = page.locator('[role="option"] [data-choice-description]');
+    // ASSERT
+    await expect(options).toHaveCount(workflows);
+    await expect(options.first()).toContainText('Turn one big goal');
+    await page.keyboard.press('Escape');
+    await expect(picker.getByRole('combobox')).not.toContainText('Turn one big goal');
+  });
+
+  test('shows the Debug bug toggle, off by default, only on a page with ?debug', async ({ page }) => {
+    // ARRANGE
+    const plain = await open(page, 'light');
+    const without = await plain.toolbar.locator('[data-control="debug"]').count();
+    // ACT
+    const { toolbar } = await open(page, 'light', { url: `${EPISODE}?debug` });
+    const debug = toolbar.locator('[data-control="debug"]');
+    await expect(debug).toHaveAttribute('aria-pressed', 'false');
+    await debug.click();
+    // ASSERT
+    expect(without).toBe(0);
+    await expect(debug).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('opens in the Stages view: a card per stage, the two views Stages and Jobs offered, and nothing sideways on a phone', async ({
     page,
   }) => {
     // ARRANGE
@@ -220,10 +243,10 @@ test.describe('success cases', () => {
     const view = root.locator('[data-control="view"]');
     const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     // ASSERT
-    await expect(root).toHaveAttribute('data-view', 'presentation');
+    await expect(root).toHaveAttribute('data-view', 'stages');
     await expect(root.locator('[data-stage-card]')).toHaveCount(stages - repeated);
-    await expect(view.locator('[aria-pressed="true"]')).toHaveText('Presentation');
-    await expect(view.locator('[data-view-option]')).toHaveText(['Presentation', 'Detailed', 'Hands-on']);
+    await expect(view.locator('[aria-pressed="true"]')).toHaveText('Stages');
+    await expect(view.locator('[data-view-option]')).toHaveText(['Stages', 'Jobs']);
     expect(await sideways()).toBeLessThanOrEqual(0);
   });
 
@@ -237,12 +260,12 @@ test.describe('success cases', () => {
       }));
     // ACT
     const first = await fade();
-    await root.locator('[data-view-option="detailed"]').click();
-    await expect(root).toHaveAttribute('data-view', 'detailed');
+    await root.locator('[data-view-option="jobs"]').click();
+    await expect(root).toHaveAttribute('data-view', 'jobs');
     const moving = await fade();
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await root.locator('[data-view-option="handson"]').click();
-    await expect(root).toHaveAttribute('data-view', 'handson');
+    await root.locator('[data-view-option="stages"]').click();
+    await expect(root).toHaveAttribute('data-view', 'stages');
     const still = await fade();
     // ASSERT
     expect(first).toEqual({ state: 'off', animation: 'none' });
@@ -250,7 +273,7 @@ test.describe('success cases', () => {
     expect(still).toEqual({ state: 'on', animation: 'none' });
   });
 
-  test('draws the Detailed view of a repeated stage once, in a bracket of its rounds, and a job card opens its modal', async ({
+  test('draws the Jobs view of a repeated stage once, in a bracket of its rounds, and a job card opens its modal', async ({
     page,
   }) => {
     // ARRANGE
@@ -258,11 +281,11 @@ test.describe('success cases', () => {
     const brackets = 2;
     const { root, modal } = await open(page, 'light');
     // ACT
-    await root.locator('[data-view-option="detailed"]').click();
+    await root.locator('[data-view-option="jobs"]').click();
     const bracket = root.locator('[data-bracket]').last();
     const card = bracket.locator('[data-job-card] button[data-try-job]');
     // ASSERT
-    await expect(root).toHaveAttribute('data-view', 'detailed');
+    await expect(root).toHaveAttribute('data-view', 'jobs');
     await expect(root.locator('[data-bracket]')).toHaveCount(brackets);
     await expect(bracket.locator('[data-bracket-label]')).toHaveText(`× each ticket (${rounds})`);
     await expect(bracket.locator('[data-job-card]')).toHaveCount(1);
@@ -272,19 +295,19 @@ test.describe('success cases', () => {
     await expect(card).toBeFocused();
   });
 
-  test('pasting a result in the popover updates the Hands-on view: the job is done, then checked, and the rounds take the pasted titles, capped by teaching', async ({
+  test('pasting a result in the popover shows progress in the Jobs view: the job is done, then checked, and the rounds take the pasted titles, capped by demo', async ({
     page,
   }) => {
     // ARRANGE
     const pasted = '# Plan\n## Epics\n### Payments\nA.\n### Search\nB.\n### Reports\nC.';
     const taught = ['Payments', 'Search'];
     const { root, modal } = await open(page, 'light');
-    await root.locator('[data-view-option="handson"]').click();
+    await root.locator('[data-view-option="jobs"]').click();
     const epics = root.locator('[data-job-card="epics"] [data-state]');
     const titles = root.locator('[data-bracket]').first().locator('[data-round-title]');
     // ACT
-    await expect(root).toHaveAttribute('data-view', 'handson');
-    await expect(epics).toHaveAttribute('data-state', 'open');
+    await expect(root).toHaveAttribute('data-view', 'jobs');
+    await expect(root.locator('[data-job-card] [data-state], [data-count]')).toHaveCount(0);
     await root.locator('button[data-try-job="epics"]').click();
     await field(modal, 'plan').fill(pasted);
     await modal.getByRole('button', { name: 'Close' }).click();
@@ -295,6 +318,30 @@ test.describe('success cases', () => {
     await modal.getByLabel('I checked this result').check();
     await modal.getByRole('button', { name: 'Close' }).click();
     await expect(epics).toHaveAttribute('data-state', 'checked');
+  });
+
+  test('shows the same progress in the Stages view: each card its count and mark, the repeated stage its pasted titles', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# Plan\n## Epics\n### Payments\nA.\n### Search\nB.\n### Reports\nC.';
+    const taught = ['Payments', 'Search'];
+    const { root, modal } = await open(page, 'light');
+    // ACT
+    await expect(root.locator('[data-count]')).toHaveCount(0);
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill('# A plan');
+    await page.keyboard.press('Escape');
+    await root.locator('[data-view-option="jobs"]').click();
+    await root.locator('button[data-try-job="epics"]').click();
+    await field(modal, 'plan').fill(pasted);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await root.locator('[data-view-option="stages"]').click();
+    // ASSERT
+    await expect(root).toHaveAttribute('data-view', 'stages');
+    await expect(root.locator('[data-stage-progress] [data-count]').first()).toBeVisible();
+    await expect(root.locator('[data-branch] [data-branch-title]').first()).toHaveText(taught[0]!);
+    await expect(root.locator('[data-branch] [data-branch-title]')).toContainText(taught);
   });
 
   test('opens a stage as a stepper: the stage title, the first job open, its prompt copied with no marker left', async ({
@@ -379,31 +426,37 @@ test.describe('success cases', () => {
     const { root, modal } = await open(page, 'light');
     // ACT
     await pickWorkflow(root, 'vacation');
-    await root.locator('[data-control="level"]').getByRole('button', { name: 'CLI' }).click();
+    await root.locator('[data-control="level"]').click();
     await openStage(page, 'Interview');
     await copyPrompt(modal).click();
     // ASSERT
     await expect.poll(async () => (await copied(page)).at(-1)).toContain(command);
   });
 
-  test.describe('Chat and CLI labels', () => {
-    for (const [name, url] of [
-      ['English', EPISODE],
-      ['German', GERMAN_EPISODE],
+  test.describe('the </> toggle', () => {
+    for (const [name, url, tip] of [
+      ['English', EPISODE, 'CLI: show the setup and /skill commands'],
+      ['German', GERMAN_EPISODE, 'CLI: zeigt die Einrichtung und die /Skill-Befehle'],
     ] as const) {
-      test(`labels the two-way control Chat and CLI in ${name}`, async ({ page }) => {
+      test(`is one icon toggle named CLI that is off by default and turns on in ${name}`, async ({ page }) => {
         // ARRANGE
-        const expected = ['Chat', 'CLI'];
-        const { toolbar } = await open(page, 'light', { url });
+        const { root, toolbar } = await open(page, 'light', { url });
+        const toggle = toolbar.locator('[data-control="level"]');
         // ACT
-        const segments = toolbar.locator('[data-control="level"] button');
+        await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+        await toggle.click();
         // ASSERT
-        await expect(segments).toHaveText(expected);
+        await expect(toggle).toHaveAccessibleName('CLI');
+        await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+        await expect(root).toHaveAttribute('data-level', 'technical');
+        await page.mouse.move(0, 0);
+        await toggle.hover();
+        await expect(page.getByRole('tooltip')).toContainText(tip);
       });
     }
   });
 
-  test('runs the Epics stage as two rounds in teaching mode, each titled by an example epic, with the grill capped at five questions', async ({
+  test('runs the Epics stage as two rounds in demo mode, each titled by an example epic, with the grill capped at five questions', async ({
     page,
   }) => {
     // ARRANGE
@@ -487,7 +540,7 @@ test.describe('success cases', () => {
     await expect(field(modal, 'task')).toHaveValue(pasted);
   });
 
-  test('turns teaching off before the first paste so the rounds follow the pasted tickets, then locks the switch until Reset', async ({
+  test('turns demo off before the first paste so the rounds follow the pasted tickets, then locks the switch until Reset', async ({
     page,
   }) => {
     // ARRANGE
@@ -495,25 +548,25 @@ test.describe('success cases', () => {
     const fullRounds = 4;
     const { modal, root, toolbar } = await open(page, 'light');
     await pickWorkflow(root, 'vacation');
-    const teaching = toolbar.locator('[data-control="teaching"]');
+    const demo = toolbar.locator('[data-control="demo"]');
     const rounds = () => modal.locator('[data-job="venue"] [data-slot="accordion-trigger"]');
     // ACT
-    await expect(teaching).toBeEnabled();
-    await expect(teaching).toHaveAttribute('aria-checked', 'true');
-    await teaching.click();
+    await expect(demo).toBeEnabled();
+    await expect(demo).toHaveAttribute('aria-checked', 'true');
+    await demo.click();
     await openStage(page, 'Tickets');
     await field(modal, 'tickets').fill(pasted);
     await modal.getByRole('button', { name: 'Close' }).click();
     await openStage(page, 'Research');
     // ASSERT
     await expect(rounds()).toHaveCount(fullRounds);
-    await expect(modal.locator('[data-control="teaching"]')).toBeDisabled();
-    await modal.locator('[data-control="teaching"]').locator('xpath=..').hover();
+    await expect(modal.locator('[data-control="demo"]')).toBeDisabled();
+    await modal.locator('[data-control="demo"]').locator('xpath=..').hover();
     await expect(page.getByRole('tooltip')).toContainText('Reset to change');
     await modal.locator('[data-control="reset"]').click();
     await modal.locator('[data-reset-now]').click();
-    await expect(modal.locator('[data-control="teaching"]')).toBeEnabled();
-    await expect(modal.locator('[data-control="teaching"]')).toHaveAttribute('aria-checked', 'true');
+    await expect(modal.locator('[data-control="demo"]')).toBeEnabled();
+    await expect(modal.locator('[data-control="demo"]')).toHaveAttribute('aria-checked', 'true');
   });
 
   test('turns Reset to the warning colour once work is saved, confirms inside the popover and clears only this Workflow', async ({
@@ -521,14 +574,14 @@ test.describe('success cases', () => {
   }) => {
     // ARRANGE
     const pasted = '# RESET MARKER';
-    const other = { 'human-in-the-loop/vacation': { hash: 'h', teaching: true, results: { 'a.b': 'keep' } } };
+    const other = { 'human-in-the-loop/vacation': { hash: 'h', demo: true, results: { 'a.b': 'keep' } } };
     await open(page, 'light');
     await storeProgress(page, other);
     const { modal, root } = await open(page, 'light');
     // Reset sits set apart after the toolbar pill, not inside it.
     const reset = root.locator('[data-control="reset"]');
     // ACT
-    await expect(reset).toHaveAttribute('data-has-work', 'false');
+    await expect(reset).toHaveCount(0);
     await openStage(page, 'High-level plan');
     await field(modal, 'task').fill(pasted);
     const popoverReset = modal.locator('[data-control="reset"]');
@@ -541,7 +594,7 @@ test.describe('success cases', () => {
     await confirm.locator('[data-reset-now]').click();
     await expect(confirm).toHaveCount(0);
     await expect(field(modal, 'task')).toHaveValue('');
-    await expect(popoverReset).toHaveAttribute('data-has-work', 'false');
+    await expect(popoverReset).toHaveCount(0);
     await expect.poll(() => storedProgress(page)).not.toContain('RESET MARKER');
     expect(await storedProgress(page)).toContain('keep');
   });
@@ -640,9 +693,27 @@ test.describe('success cases', () => {
     await loadProgress(root, file);
     await openStage(page, 'High-level plan');
     // ASSERT
-    expect(file).toMatch(/^workflow: project-plan\nhash: [0-9a-f]{64}\nteaching: true\nresults:\n/);
+    expect(file).toMatch(/^workflow: project-plan\nhash: [0-9a-f]{64}\ndemo: true\nresults:\n/);
     expect(file).toContain('plan.task: |-\n    # First spec\n\n    line two');
     await expect(field(modal, 'task')).toHaveValue(first);
+  });
+
+  test('shows Save progress and Reset only once the run has work, and Load progress always', async ({ page }) => {
+    // ARRANGE
+    const { root, modal } = await open(page, 'light');
+    const save = root.locator('[data-control="progressDownload"]');
+    const load = root.locator('[data-control="progressUpload"]');
+    const reset = root.locator('[data-control="reset"]');
+    // ACT
+    const before = [await save.count(), await reset.count(), await load.count()];
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill('# Work');
+    await page.keyboard.press('Escape');
+    // ASSERT
+    expect(before).toEqual([0, 0, 1]);
+    await expect(save).toHaveCount(1);
+    await expect(reset).toHaveCount(1);
+    await expect(load).toHaveCount(1);
   });
 
   test('shows a valid uploaded Workflow in place of the authored one', async ({ page }) => {
@@ -664,7 +735,7 @@ test.describe('failure cases', () => {
     page,
   }) => {
     // ARRANGE
-    const stale = { hash: 'an-older-edit', teaching: true, results: { 'plan.task': '# OLD' } };
+    const stale = { hash: 'an-older-edit', demo: true, results: { 'plan.task': '# OLD' } };
     const { modal } = await open(page, 'light');
     await storeProgress(page, { 'human-in-the-loop/project-plan': stale });
     // ACT
@@ -717,7 +788,10 @@ test.describe('failure cases', () => {
 
   test('refuses a progress file of another Workflow', async ({ page }) => {
     // ARRANGE
-    const { root } = await open(page, 'light');
+    const { root, modal } = await open(page, 'light');
+    await openStage(page, 'High-level plan');
+    await field(modal, 'task').fill('# Some work');
+    await page.keyboard.press('Escape');
     const file = (await savedProgressFile(root)).replace('workflow: project-plan', 'workflow: vacation');
     // ACT
     await loadProgress(root, file);

@@ -16,21 +16,19 @@ import type { Workflow } from './workflow.types';
 export interface UiWords {
   /** The visible label and accessible name of the Workflow picker: the use case. */
   readonly workflow: string;
-  /** The Chat · CLI control: its group name, each segment's label and its tooltip. */
-  readonly level: string;
-  /** The view control: its group name and tooltip, and each view's label. */
+  /** The view control: its group name and tooltip, and each view's label and tooltip. */
   readonly view: string;
   readonly viewTip: string;
-  readonly viewPresentation: string;
-  readonly viewDetailed: string;
-  readonly viewHandson: string;
-  /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
+  readonly viewStages: string;
+  readonly viewStagesTip: string;
+  readonly viewJobs: string;
+  readonly viewJobsTip: string;
+  /** The Stages card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
-  readonly repeats: string; // Detailed view: a repeated stage's bracket (`{item}` it repeats over, `{n}` rounds)
-  readonly round: string; // Detailed view: what a round is called where the stage names no item
-  readonly tryJob: string; // Detailed view: a job card's hidden name (`{job}`, `{stage}`)
-  readonly chat: string;
-  readonly chatTip: string;
+  readonly repeats: string; // Jobs view: a repeated stage's bracket (`{item}` it repeats over, `{n}` rounds)
+  readonly round: string; // Jobs view: what a round is called where the stage names no item
+  readonly tryJob: string; // Jobs view: a job card's hidden name (`{job}`, `{stage}`)
+  /** The `</>` toggle (off is Chat, on is CLI): its accessible name and tooltip. */
   readonly cli: string;
   readonly cliTip: string;
   /** The context toggle's name and tooltip: it shows or hides why a task matters, its techniques and an example result. */
@@ -60,10 +58,10 @@ export interface UiWords {
   readonly noteUnsaved: string;
   readonly downloadProgress: string;
   readonly downloadOldProgress: string;
-  /** The teaching switch: its name, tooltip, and the tooltip while it is locked. */
-  readonly teaching: string;
-  readonly teachingTip: string;
-  readonly teachingLocked: string;
+  /** The demo switch: its name, tooltip, and the tooltip while it is locked. */
+  readonly demo: string;
+  readonly demoTip: string;
+  readonly demoLocked: string;
   /** Debug mode: the switch's name and tooltip, and the instruction the copy buttons append (`{footer}` is the line to end replies with). */
   readonly debug: string;
   readonly debugTip: string;
@@ -123,7 +121,7 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly newTab: string;
-  /** Hands-on marks: job not started, job with its result in. */
+  /** Progress marks: job not started, job with its result in. */
   readonly stateOpen: string;
   readonly stateDone: string;
 }
@@ -176,19 +174,19 @@ export interface DiagramSlots {
   readonly jobs?: Readonly<Record<string, JobSlot>>;
 }
 
-/** What the diagram part draws: the shown Workflow's stages. It reports a press on a stage's "Try it" button. */
+/** What the diagram part draws: the shown Workflow's stages. It reports a press on a stage's "Practice it" button. */
 export interface DiagramProps {
   readonly workflow: Workflow;
   readonly slots?: DiagramSlots;
   readonly words: UiWords;
   /** Where the stages show no "Try it" button: a readonly Preset. */
   readonly readonly: boolean;
-  /** A press on a stage's "Try it" button, or on a job card of the Detailed view, which names its job and, in a round, its round. */
+  /** A press on a stage's "Try it" button, or on a job card of the Jobs view, which names its job and, in a round, its round. */
   readonly onOpenStage: (stageId: string, jobId?: string, round?: number) => void;
   readonly view: View;
-  /** Rounds drawn per repeated stage, by stage id: the run model's count, else the teaching cap. */
+  /** Rounds drawn per repeated stage, by stage id: the run model's count, else the demo cap. */
   readonly rounds: Readonly<Record<string, number>>;
-  /** What the viewer has done, from the run model: the Hands-on view draws it, the other views ignore it. */
+  /** What the viewer has done, from the run model: given only once the run has work and the Preset is not readonly. Both views draw it. */
   readonly run?: Run;
 }
 

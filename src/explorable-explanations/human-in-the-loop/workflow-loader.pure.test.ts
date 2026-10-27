@@ -48,7 +48,7 @@ function base() {
         id: 'research',
         title: 'Research',
         learningGoal: 'Fresh chats.',
-        foreach: { over: 'plan#pieces', teaching: 2 },
+        foreach: { over: 'plan#pieces', demo: 2 },
         jobs: [
           {
             id: 'research',
@@ -142,6 +142,16 @@ function ending(file: File, over: object = {}): void {
 }
 
 describe('success cases', () => {
+  it('keeps the optional picker description of a file, and loads a file without one', () => {
+    // ARRANGE
+    const described = load((file) => Object.assign(file, { description: 'One sentence for the picker.' }));
+    const plain = load();
+    // ACT
+    const read = [described, plain].map((result) => ('file' in result ? result.file.description : 'refused'));
+    // ASSERT
+    expect(read).toEqual(['One sentence for the picker.', undefined]);
+  });
+
   it('lets a free slot without a sample take the scenario text as its sample', () => {
     // ARRANGE
     const free = (file: File) =>
@@ -240,7 +250,7 @@ describe('success cases', () => {
     expect(problemsOf(result)).toBe('');
   });
 
-  it('takes one example per teaching round of a repeated stage', () => {
+  it('takes one example per demo round of a repeated stage', () => {
     // ARRANGE
     const change = (file: File) => void (research(file).details.example = [RESEARCH, RESEARCH] as never);
     // ACT
@@ -249,10 +259,10 @@ describe('success cases', () => {
     expect(problemsOf(result)).toBe('');
   });
 
-  it('fills {{limit.name}} from the limits of a job, with a full and a teaching value', () => {
+  it('fills {{limit.name}} from the limits of a job, with a full and a demo value', () => {
     // ARRANGE
     const change = (file: File) => {
-      Object.assign(research(file), { limits: { questions: { full: 8, teaching: 5 } } });
+      Object.assign(research(file), { limits: { questions: { full: 8, demo: 5 } } });
       research(file).do.simple = [{ ...section, text: 'Ask at most {{limit.questions}}. {{item}} {{plan}}' }];
     };
     // ACT
@@ -270,7 +280,7 @@ describe('success cases', () => {
     expect(problemsOf(result)).toBe('');
   });
 
-  it('expands {{research_*}} of a multiple slot into one marker per teaching round', () => {
+  it('expands {{research_*}} of a multiple slot into one marker per demo round', () => {
     // ARRANGE
     const many = { id: 'research', mode: 'multiple', label: 'All', sample: [RESEARCH, RESEARCH] };
     // ACT
@@ -313,6 +323,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('reports a description that is not a text', () => {
+    // ARRANGE
+    const result = load((file) => Object.assign(file, { description: 3 }));
+    // ACT
+    const problems = problemsOf(result);
+    // ASSERT
+    expect(problems).toMatch(/description/);
+  });
+
   it('reports a needs id that names no job of the stage', () => {
     // ARRANGE
     const change = (file: File) => checking(file, { needs: ['ghost'] });
@@ -453,7 +472,7 @@ describe('failure cases', () => {
     const r0 = problemsOf(load(short));
     const r1 = problemsOf(load(list));
     // ASSERT
-    expect(r0).toMatch(/example of task "research" needs 2 examples, one per teaching round, and has 1/);
+    expect(r0).toMatch(/example of task "research" needs 2 examples, one per demo round, and has 1/);
     expect(r1).toMatch(/example of task "plan" is a list but its stage does not repeat/);
   });
 
@@ -486,18 +505,18 @@ describe('failure cases', () => {
     expect(problems).toMatch(/purpose is "vibes"/);
   });
 
-  it('accepts a section shown only in teaching mode or a full run, and rejects another mode', () => {
+  it('accepts a section shown only in demo mode or a full run, and rejects another mode', () => {
     // ARRANGE
     const only = (mode: string) => (file: File) =>
       void (research(file).do.simple = [...research(file).do.simple, { ...section, only: mode } as never]);
     const unknown = 'sometimes';
     // ACT
-    const teaching = problemsOf(load(only('teaching')));
+    const demo = problemsOf(load(only('demo')));
     const full = problemsOf(load(only('full')));
     const other = problemsOf(load(only(unknown)));
     // ASSERT
-    expect([teaching, full]).toEqual(['', '']);
-    expect(other).toContain(`only is "${unknown}", which is not one of teaching, full`);
+    expect([demo, full]).toEqual(['', '']);
+    expect(other).toContain(`only is "${unknown}", which is not one of demo, full`);
   });
 
   it('rejects a catalogue entry without a tier or with an unknown one', () => {
@@ -625,9 +644,9 @@ describe('failure cases', () => {
   });
 
   const foreach =
-    (over: string, teaching: unknown = 2) =>
+    (over: string, demo: unknown = 2) =>
     (file: File) =>
-      void Object.assign(file.stages[1]!, { foreach: { over, teaching } });
+      void Object.assign(file.stages[1]!, { foreach: { over, demo } });
 
   it('reports a foreach over an output no earlier stage hands on', () => {
     // ARRANGE
@@ -661,7 +680,7 @@ describe('failure cases', () => {
   it('accepts the word a round is called, and reports one that is not text', () => {
     // ARRANGE
     const named = (item: unknown) => (file: File) =>
-      void Object.assign(file.stages[1]!, { foreach: { over: 'plan#pieces', teaching: 2, item } });
+      void Object.assign(file.stages[1]!, { foreach: { over: 'plan#pieces', demo: 2, item } });
     // ACT
     const accepted = problemsOf(load(named('piece')));
     const number = problemsOf(load(named(3)));
@@ -672,37 +691,36 @@ describe('failure cases', () => {
     expect(blank).toContain('stages[1].foreach.item must be text.');
   });
 
-  it('reports a teaching cap below 1', () => {
+  it('reports a demo cap below 1', () => {
     // ARRANGE
     const change = foreach('plan#pieces', 0);
     // ACT
     const problems = problemsOf(load(change));
     // ASSERT
-    expect(problems).toContain('stages[1].foreach.teaching must be a whole number of at least 1.');
+    expect(problems).toContain('stages[1].foreach.demo must be a whole number of at least 1.');
   });
 
   it('reports a foreach in the first stage, which has no earlier output to repeat over', () => {
     // ARRANGE
-    const change = (file: File) =>
-      void Object.assign(file.stages[0]!, { foreach: { over: 'plan#pieces', teaching: 2 } });
+    const change = (file: File) => void Object.assign(file.stages[0]!, { foreach: { over: 'plan#pieces', demo: 2 } });
     // ACT
     const problems = problemsOf(load(change));
     // ASSERT
     expect(problems).toContain('Stage "plan" repeats over "plan#pieces", but no earlier stage hands on "plan".');
   });
 
-  it('rejects a {{limit.name}} the job does not declare, and a teaching value above the full one', () => {
+  it('rejects a {{limit.name}} the job does not declare, and a demo value above the full one', () => {
     // ARRANGE
     const undeclared = (file: File) =>
       void (research(file).do.simple = [{ ...section, text: '{{limit.questions}} {{item}} {{plan}}' }]);
     const inverted = (file: File) =>
-      void Object.assign(research(file), { limits: { questions: { full: 3, teaching: 5 } } });
+      void Object.assign(research(file), { limits: { questions: { full: 3, demo: 5 } } });
     // ACT
     const r0 = problemsOf(load(undeclared));
     const r1 = problemsOf(load(inverted));
     // ASSERT
     expect(r0).toMatch(/unknown marker \{\{limit\.questions\}\}/);
-    expect(r1).toContain('The limit "questions" of task "research" has a teaching value above its full value.');
+    expect(r1).toContain('The limit "questions" of task "research" has a demo value above its full value.');
   });
 
   it('rejects {{item}} in the checks of a job whose stage does not repeat, and an unknown marker in checks', () => {

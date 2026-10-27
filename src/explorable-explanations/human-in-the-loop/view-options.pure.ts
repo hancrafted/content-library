@@ -2,13 +2,12 @@ import type { UiWords } from './human-in-the-loop.types';
 import type { SegmentOption } from './segment-option.types';
 import type { View } from './workflow-state.pure';
 
-/** The views the diagram can show, in the order of the control: Presentation, Detailed, Hands-on. */
+/** The views the diagram can show, in the order of the control: Stages (the high-level view), Jobs (the detailed one). */
 export function viewOptions(
-  words: Pick<UiWords, 'viewPresentation' | 'viewDetailed' | 'viewHandson'>,
+  words: Pick<UiWords, 'viewStages' | 'viewStagesTip' | 'viewJobs' | 'viewJobsTip'>,
 ): readonly SegmentOption<View>[] {
   return [
-    { value: 'presentation', label: words.viewPresentation },
-    { value: 'detailed', label: words.viewDetailed },
-    { value: 'handson', label: words.viewHandson },
+    { value: 'stages', label: words.viewStages, tip: words.viewStagesTip },
+    { value: 'jobs', label: words.viewJobs, tip: words.viewJobsTip },
   ];
 }

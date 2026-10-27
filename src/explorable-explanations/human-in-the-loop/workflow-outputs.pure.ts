@@ -2,7 +2,7 @@ import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * What a task hands on, by name. A task's `output` is a name a later slot takes; in a repeated stage `x` hands on
- * `x_1` … `x_N` (N the teaching rounds), and `x` itself names them all (a `multiple` slot). Every name points at the producing task.
+ * `x_1` … `x_N` (N the demo rounds), and `x` itself names them all (a `multiple` slot). Every name points at the producing task.
  */
 
 export interface Producer {
@@ -19,7 +19,7 @@ export function producersOf(task: TaskDef, stage: StageDef): ReadonlyMap<string,
   if (output === undefined) return names;
   if (stage.foreach === undefined) return names.set(output, { task, stage, all: false });
   names.set(output, { task, stage, all: true });
-  for (let at = 1; at <= stage.foreach.teaching; at += 1) names.set(`${output}_${at}`, { task, stage, all: false });
+  for (let at = 1; at <= stage.foreach.demo; at += 1) names.set(`${output}_${at}`, { task, stage, all: false });
   return names;
 }
 

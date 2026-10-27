@@ -2,16 +2,16 @@
 
 import { DialogClose, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { CircleHelp, X } from 'lucide-react';
+import { DemoToggle, Reset } from './demo-controls.client';
 import type { UiWords } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
-import type { TeachingProps } from './progress-controls.types';
-import { Reset, TeachingToggle } from './teaching-controls.client';
+import type { DemoProps } from './progress-controls.types';
 import { TOOLBAR_PILL, TOOLBAR_ROW, ToolButton } from './tool-button.client';
 import { tryTitle } from './words.pure';
 import type { Level } from './workflow-state.pure';
 import type { StageView } from './workflow-view.pure';
 
-interface HeaderProps extends TeachingProps {
+interface HeaderProps extends DemoProps {
   readonly stage: StageView;
   readonly words: UiWords;
   readonly level: Level;
@@ -22,7 +22,7 @@ interface HeaderProps extends TeachingProps {
   readonly onConfirming: (open: boolean) => void;
 }
 
-/** The toolbar under the title, one pill as the visual's: Help, Chat · CLI, the teaching switch; Reset set apart after it. */
+/** The toolbar under the title, one pill as the visual's: Help, the `</>` toggle, the Demo mode switch; Reset set apart after it. */
 function Toolbar(props: Omit<HeaderProps, 'stage'>) {
   const { words, level, onLevel, showContext, onContext } = props;
   return (
@@ -39,7 +39,7 @@ function Toolbar(props: Omit<HeaderProps, 'stage'>) {
           <CircleHelp aria-hidden="true" />
         </ToolButton>
         <LevelControl words={words} level={level} onLevel={onLevel} />
-        <TeachingToggle {...props} />
+        <DemoToggle {...props} />
       </div>
       <Reset {...props} />
     </div>

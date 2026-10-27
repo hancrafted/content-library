@@ -4,20 +4,18 @@ ui:
   toolbar: Workflow controls
   view: Diagram view
   viewTip: 'Choose how the diagram shows the workflow'
-  viewPresentation: Presentation
-  viewDetailed: Detailed
-  viewHandson: Hands-on
+  viewStages: Stages
+  viewStagesTip: 'The high-level view: one card per stage'
+  viewJobs: Jobs
+  viewJobsTip: 'The detailed view: every job of each stage'
   checked: checked
   stateOpen: open
   stateDone: done
   repeats: '× each {item} ({n})'
   round: 'round'
   tryJob: 'Open {job} in {stage}'
-  level: Prompt style
-  chat: Chat
-  chatTip: 'Chat: prompts to paste into an AI chat'
   cli: CLI
-  cliTip: 'CLI: show the one-time setup and the /skill commands'
+  cliTip: 'CLI: show the setup and /skill commands'
   context: Help
   intro: 'Work through the steps in order: copy each prompt into a new AI chat, then paste the result back here.'
   stepContext: 'Provide context'
@@ -49,9 +47,9 @@ ui:
   downloadProgress: Download progress
   downloadOldProgress: Download old progress
   discardProgress: Discard
-  teaching: Teaching mode
-  teachingTip: 'Teaching mode keeps the run short and simple: the first epics and tickets only, shorter grills, and the simplest option wherever a choice does not change the goal.'
-  teachingLocked: Reset to change
+  demo: Demo mode
+  demoTip: 'Demo mode keeps the run short and simple: the first epics and tickets only, shorter grills, and the simplest option wherever a choice does not change the goal.'
+  demoLocked: Reset to change
   debug: Debug
   debugTip: 'Debug mode: Copy prompt and Copy explanation prompt add an instruction, so the AI ends every reply with a footer naming the workflow, stage, job and more. Paste a reply with its footer back as feedback.'
   debugInstruction: "Debug mode: end EVERY reply you write in this chat, the first one included, with the line below, unchanged, alone in a fenced code block as the very last thing of the reply. I paste your reply with it back as feedback.\n\n```\n{footer}\n```"

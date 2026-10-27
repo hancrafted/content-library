@@ -1,6 +1,6 @@
 import type { DebugBase } from './debug-footer.pure';
 import type { UiWords } from './human-in-the-loop.types';
-import type { ProgressActions, ProgressNote, TeachingProps } from './progress-controls.types';
+import type { DemoProps, ProgressActions, ProgressNote } from './progress-controls.types';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { StageRun } from './workflow-run.pure';
 import type { Level, View } from './workflow-state.pure';
@@ -9,21 +9,23 @@ import type { Workflow } from './workflow.types';
 
 /* The props of the toolbar part and of the modal part (FE-012 §4): each part's own slice of the parent's state. */
 
-/** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
-export interface ToolbarProps extends TeachingProps {
+/** What the toolbar part draws: the use case picker, the view, `</>`, Demo mode and Debug toggles, progress and Workflow files in one pill. */
+export interface ToolbarProps extends DemoProps {
   readonly workflow: Workflow;
   /** Every authored Workflow, for the pills. */
-  readonly choices: readonly { readonly id: string; readonly title: string }[];
+  readonly choices: readonly { readonly id: string; readonly title: string; readonly description?: string }[];
   readonly level: Level;
   readonly view: View;
   /** The Preset's overrides of the control registry. */
   readonly controls: ControlMap;
-  /** A readonly Preset: no Chat · CLI control, since nothing is tried. */
+  /** The run has work: Save progress shows then (Load always does), as Reset does. */
+  readonly canSave: boolean;
+  /** A readonly Preset: no `</>` toggle, since nothing is tried. */
   readonly readonly: boolean;
   readonly uploadProblems: readonly string[];
   readonly note: ProgressNote | null;
   readonly progress: ProgressActions | null;
-  /** The Debug switch: drawn only where available (development or `?debug`) and the Preset allows it. */
+  /** The Debug toggle: drawn only where available (development or `?debug`) and the Preset allows it. */
   readonly debug: { readonly show: boolean; readonly on: boolean };
   readonly words: UiWords;
   readonly onDebug: (debug: boolean) => void;
@@ -35,7 +37,7 @@ export interface ToolbarProps extends TeachingProps {
 }
 
 /** What the modal part draws: the open stage's view (null: closed). */
-export interface ModalProps extends TeachingProps {
+export interface ModalProps extends DemoProps {
   readonly stage: StageView | null;
   /** The run of the open stage: job states and rounds. */
   readonly run: StageRun | null;

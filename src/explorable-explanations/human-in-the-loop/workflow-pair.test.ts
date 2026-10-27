@@ -44,6 +44,7 @@ const taskShape = (task: TaskDef) => ({
 /** What must match across the pair. */
 const structureOf = (file: WorkflowFile) => ({
   id: file.id,
+  description: Boolean(file.description),
   facts: file.scenario.facts.length,
   purposes: Object.keys(file.purposes),
   techniques: file.techniques.map((entry) => [entry.id, entry.tier]),
@@ -116,6 +117,16 @@ describe('success cases', () => {
     // ASSERT
     expect(used.length).toBeGreaterThan(0);
     expect(used.filter((id) => !known.includes(id))).toEqual([]);
+  });
+
+  it.each(EACH)('carries a one-sentence picker description, in %s %s', (id, locale) => {
+    // ARRANGE
+    const file = fileOf(id, locale);
+    // ACT
+    const description = file.description ?? '';
+    // ASSERT
+    expect(description).not.toBe('');
+    expect((description.match(/[.!?](\s|$)/g) ?? []).length).toBe(1);
   });
 
   it.each(WORKFLOW_IDS)('holds the same structure in English and German for %s', (id) => {

@@ -48,8 +48,8 @@ interface Store {
   readonly setRefused: Dispatch<SetStateAction<boolean>>;
 }
 
-/** The run of a viewer who has pasted nothing and not touched teaching mode. */
-const EMPTY: Progress = { results: {}, teaching: true };
+/** The run of a viewer who has pasted nothing and not touched demo mode. */
+const EMPTY: Progress = { results: {}, demo: true };
 
 const signature = (progress: Progress): string => JSON.stringify(progress);
 

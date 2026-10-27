@@ -5,12 +5,13 @@ import { describe, expect, it } from 'vitest';
 import { DiagramPart } from './diagram-part';
 import type { DiagramProps, DiagramSlots, UiWords } from './human-in-the-loop.types';
 import { job, stage, flow as workflow } from './workflow-fixture.pure';
+import type { JobRun, JobState, Run } from './workflow-run.pure';
 import type { Workflow } from './workflow.types';
 
 const flow = (): Workflow =>
   workflow([
     { ...stage('a', [job({ id: 'a', reviewed: true })]), summary: 'Plan the whole thing' },
-    { ...stage('b', [job({ id: 'b' })]), foreach: { over: 'o#epics', teaching: 2 } },
+    { ...stage('b', [job({ id: 'b' })]), foreach: { over: 'o#epics', demo: 2 } },
     { ...stage('c', [job({ id: 'c' })]), gate: 2 },
   ]);
 const words = {
@@ -19,7 +20,28 @@ const words = {
   moveLabel: '{letter}: {why}',
   gate: 'Gate {n}',
   checked: 'checked',
+  stateOpen: 'open',
+  stateDone: 'done',
 } as UiWords;
+const jobRun = (id: string, state: JobState, round?: number): JobRun => ({ id, key: `k${round ?? ''}`, state });
+const RUN: Run = {
+  canChangeDemo: false,
+  stages: [
+    { id: 'a', jobs: [jobRun('a', 'checked')], rounds: [], done: 1, total: 1, state: 'checked' },
+    {
+      id: 'b',
+      jobs: [],
+      rounds: [
+        { number: 1, title: 'Payments', item: '### Payments', jobs: [jobRun('b', 'done', 1)], state: 'done' },
+        { number: 2, title: 'Search', item: '### Search', jobs: [jobRun('b', 'open', 2)], state: 'open' },
+      ],
+      done: 1,
+      total: 2,
+      state: 'open',
+    },
+    { id: 'c', jobs: [jobRun('c', 'done')], rounds: [], done: 1, total: 1, state: 'done' },
+  ],
+};
 /** What the diagram asked to open; a static render presses nothing, so a recording closure stands in for a spy. */
 const opened: string[] = [];
 const render = (props: Partial<DiagramProps> = {}) =>
@@ -29,7 +51,7 @@ const render = (props: Partial<DiagramProps> = {}) =>
         workflow: flow(),
         words,
         readonly: false,
-        view: 'presentation',
+        view: 'stages',
         rounds: { b: 2 },
         onOpenStage: (stageId) => void opened.push(stageId),
         ...props,
@@ -124,9 +146,62 @@ describe('success cases', () => {
     ).toEqual(['B: Split it.']);
     expect(hidden('[data-move]')).toHaveLength(0);
   });
+
+  it('gives each stage card its count and its open, done or checked mark once the run has work', () => {
+    // ARRANGE
+    const $ = render({ run: RUN });
+    // ACT
+    const cards = $(COLUMN)
+      .map((_, el) => [
+        [
+          $(el).find('[data-stage-progress] [data-count]').text(),
+          $(el).find('[data-stage-progress] [data-state]').attr('data-state'),
+        ],
+      ])
+      .get();
+    // ASSERT
+    expect(cards).toEqual([
+      ['1/1 done', 'checked'],
+      ['1/2 done', 'open'],
+      ['1/1 done', 'done'],
+    ]);
+  });
+
+  it('titles the round cards of a repeated stage by the pasted H3s, each with its own mark', () => {
+    // ARRANGE
+    const $ = render({ run: RUN });
+    // ACT
+    const branches = $('[data-branch]')
+      .map((_, el) => [[$(el).find('[data-branch-title]').text(), $(el).find('[data-state]').attr('data-state')]])
+      .get();
+    // ASSERT
+    expect(branches).toEqual([
+      ['Payments', 'done'],
+      ['Search', 'open'],
+    ]);
+  });
+
+  it('keeps the static checked mark only where there is no run', () => {
+    // ARRANGE
+    const plain = render();
+    const worked = render({ run: RUN });
+    // ACT
+    const marks = [plain('[data-checked]').length, worked('[data-checked]').length];
+    // ASSERT
+    expect(marks).toEqual([1, 0]);
+  });
 });
 
 describe('failure cases', () => {
+  it('draws no count and no state mark without a run, as the plain Stages view', () => {
+    // ARRANGE
+    const $ = render();
+    // ACT
+    const progress = $('[data-count], [data-state]').length;
+    // ASSERT
+    expect(progress).toBe(0);
+  });
+
   it('draws no "Try it" button for a readonly Preset, and the diagram stays', () => {
     // ARRANGE
     const stages = 3;
