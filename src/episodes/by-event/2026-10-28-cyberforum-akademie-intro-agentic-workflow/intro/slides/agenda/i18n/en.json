@@ -1,25 +1,42 @@
 {
   "title": "Agenda",
-  "caption": "Theory first, then a live demo, then you try it yourselves.",
+  "caption": "Theory and live demo in turn, with a short check-in after each Episode.",
   "episode": "Episode {n}",
   "blocks": {
-    "welcome": { "time": "17:00", "title": "Welcome" },
-    "first": { "time": "17:10", "title": "Treat AI like a brilliant freelancer with amnesia" },
-    "second": { "time": "17:25", "title": "Why AI has a weird attention span you must learn to manage" },
-    "third": { "time": "17:40", "title": "Will AI reduce your work? It adds work: managing it." },
-    "demo": { "time": "17:55", "title": "Live demo: “Grill me”" },
-    "practice": { "time": "18:20", "title": "Hands-on and questions" }
+    "welcome": {
+      "time": "17:00",
+      "title": "Welcome"
+    },
+    "first": {
+      "time": "17:15",
+      "title": "Treat AI like a brilliant freelancer with amnesia"
+    },
+    "grill": {
+      "time": "17:30",
+      "title": "Live demo: “Grill me”"
+    },
+    "second": {
+      "time": "17:50",
+      "title": "Why AI has a weird attention span you must learn to manage"
+    },
+    "workflow": {
+      "time": "18:10",
+      "title": "Live demo: an agentic workflow"
+    },
+    "third": {
+      "time": "18:35",
+      "title": "Will AI reduce your work? It adds work: managing it."
+    }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theory",
-    "demo": "Demo",
-    "practice": "Practice"
+    "demo": "Demo"
   },
   "notes": {
     "talking-points": {
       "header": "Times are placeholders",
-      "description": "Theory first in three Episodes, then the live demo “Grill me”, then the hands-on part with questions. The times (17:00 to 19:00) are placeholders until Han sets them."
+      "description": "Three Episodes of theory with two live demos between them: “Grill me” and an agentic workflow. A short poll check-in after each Episode. The times (17:00 to 19:00) are placeholders until Han sets them."
     }
   }
 }

@@ -15,6 +15,10 @@
     "junior-to-freelancer": {
       "header": "Von Junior zu Freelancer",
       "description": "Die Ankündigung sprach von einer Junior-Analogie, die Folien sagen „Freelancer“. Sag die Brücke laut: „Stellt euch die KI wie einen neuen Kollegen vor, eher einen erfahrenen Freelancer als einen Junior: Er weiß unglaublich viel, aber er vergisst nach jedem Gespräch alles wieder.“"
+    },
+    "check-in": {
+      "header": "Am Ende: Check-in 1",
+      "description": "Nach der letzten Slide die Aufnahme stoppen, dann auf der Event-Seite die Karte „Check-in 1“ öffnen: Sie springt in die Einstiegs-Episode zu den Fragen dieser Episode."
     }
   }
 }

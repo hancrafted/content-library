@@ -16,5 +16,6 @@ export const cyberforumAiGivesYouMoreWork = episode({
   slug: 'ai-gives-you-more-work',
   messages: { en, de },
   title: hero,
+  notes: [{ slug: 'check-in', target: 'title' }],
   sections: [fromExecutionToManagementSection],
 });

@@ -35,6 +35,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('prints no short link when the Vote link is too long to type', () => {
+    // ARRANGE
+    const token = 'XEM9-nVikRs30Eoq4EuHs0V9UlTWbLs-Hfziio-v3jtQiPQJYBmxzzz';
+    const url = `https://directpoll.com/v?${token}`;
+    // ACT
+    const html = join(url);
+    // ASSERT
+    expect(html).toContain('<svg');
+    expect(html).not.toContain(token);
+  });
+
   it('shows the note and no QR for a placeholder URL', () => {
     // ARRANGE
     const url = 'https://directpoll.com/v/PLACEHOLDER';

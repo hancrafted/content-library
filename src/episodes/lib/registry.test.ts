@@ -85,9 +85,18 @@ describe('success cases', () => {
     expect(sections).toEqual(expected);
   });
 
-  it('composes the CyberForum intro as the template does, its hook renamed grounding', () => {
+  it('composes the CyberForum intro as the template does, its hook renamed grounding, then a check-in per theory Episode', () => {
     // ARRANGE
-    const expected = [['grounding'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll', 'about-me'], ['orga']];
+    const expected = [
+      ['grounding'],
+      ['agenda'],
+      ['in-scope', 'out-of-scope'],
+      ['poll', 'about-me'],
+      ['orga'],
+      ['check-in-1'],
+      ['check-in-2'],
+      ['check-in-3'],
+    ];
     // ACT
     const sections = compositionOf(
       episodeRef('intro', '2026-10-28-cyberforum-akademie-intro-agentic-workflow'),

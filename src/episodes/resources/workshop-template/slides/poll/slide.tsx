@@ -2,10 +2,72 @@ import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { LoadOnClick } from '@/episodes/components/slide-shared/load-on-click/load-on-click.client';
 import { PollJoin } from '@/episodes/components/slide-shared/poll-join/poll-join';
+import { PollQuestion, type PollTone } from '@/episodes/components/slide-shared/poll-question/poll-question';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-// A live poll on directpoll: the QR (drawn at build time from `poll.voteUrl`) on a filled panel, the questions printed as text beside it, and a button that loads the Result page only after the click. The Slide header shows the title and caption; the Scene holds the poll.
+/**
+ * Poll v1's baseline questions as keys of `questions`, the picture of AI first so no ladder primes it,, with their answers' Translation keys in poll order. The wording is frozen: it is the
+ * question register of research AIE-0016 (docs/llm-wiki/research/AIE/AIE-0016__audience-ai-mental-model/dataset.md),
+ * and a change to it is a new poll version there first.
+ */
+const QUESTIONS = [
+  {
+    key: 'model',
+    answers: [
+      'questions.model.answers.search',
+      'questions.model.answers.chat',
+      'questions.model.answers.assistant',
+      'questions.model.answers.colleague',
+      'questions.model.answers.team',
+      'questions.model.answers.factory',
+      'questions.model.answers.unsure',
+    ],
+    tone: 'accent',
+  },
+  {
+    key: 'fluency',
+    answers: [
+      'questions.fluency.answers.beginner',
+      'questions.fluency.answers.basic',
+      'questions.fluency.answers.confident',
+      'questions.fluency.answers.advanced',
+      'questions.fluency.answers.expert',
+    ],
+    tone: 'info',
+  },
+  {
+    key: 'scope',
+    answers: [
+      'questions.scope.answers.self',
+      'questions.scope.answers.team',
+      'questions.scope.answers.unit',
+      'questions.scope.answers.org',
+      'questions.scope.answers.open',
+    ],
+    tone: 'accent',
+  },
+  {
+    key: 'usage',
+    answers: [
+      'questions.usage.answers.none',
+      'questions.usage.answers.ask',
+      'questions.usage.answers.documents',
+      'questions.usage.answers.embedded',
+      'questions.usage.answers.delegate',
+      'questions.usage.answers.build',
+      'questions.usage.answers.orchestrate',
+      'questions.usage.answers.product',
+    ],
+    tone: 'info',
+  },
+] as const satisfies readonly {
+  key: 'model' | 'fluency' | 'scope' | 'usage';
+  answers: readonly string[];
+  tone: PollTone;
+}[];
+
+// A live poll on directpoll: the QR (drawn at build time from `poll.voteUrl`) on a filled panel with the anonymity notice, the baseline questions printed as text beside it, and a button that loads the Result page only after the click. The Slide header shows the title and caption; the Scene holds the poll.
 export const poll = slide({
   slug: 'poll',
   messages: { en, de },
@@ -20,45 +82,19 @@ export const poll = slide({
             qrLabel={t('poll.qrLabel')}
             note={t('poll.createNote')}
           />
+          <p className="text-center text-caption opacity-80">{t('poll.notice')}</p>
         </div>
         <div className="flex flex-col gap-4 md:col-span-8">
-          <ol {...target('questions')} className="flex flex-col gap-4">
-            <li className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 shadow-sm">
-              <div className="flex items-center gap-3">
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-(--info) text-body font-semibold text-info-foreground">
-                  1
-                </span>
-                <p className="text-body font-semibold">{t('poll.q1.question')}</p>
-              </div>
-              <ul className="flex flex-wrap gap-2">
-                {(['a', 'b', 'c'] as const).map((answer) => (
-                  <li
-                    key={answer}
-                    className="rounded-full bg-(--info)/10 px-4 py-1.5 text-body font-medium text-foreground"
-                  >
-                    {t(`poll.q1.answers.${answer}`)}
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 shadow-sm">
-              <div className="flex items-center gap-3">
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-accent text-body font-semibold text-primary-foreground">
-                  2
-                </span>
-                <p className="text-body font-semibold">{t('poll.q2.question')}</p>
-              </div>
-              <ul className="flex flex-wrap gap-2">
-                {(['a', 'b', 'c', 'd'] as const).map((answer) => (
-                  <li
-                    key={answer}
-                    className="rounded-full bg-brand-accent/10 px-4 py-1.5 text-body font-medium text-foreground"
-                  >
-                    {t(`poll.q2.answers.${answer}`)}
-                  </li>
-                ))}
-              </ul>
-            </li>
+          <ol {...target('questions')} className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+            {QUESTIONS.map((question, index) => (
+              <PollQuestion
+                key={question.key}
+                marker={index + 1}
+                question={t(`questions.${question.key}.question`)}
+                answers={question.answers.map((answer) => t(answer))}
+                tone={question.tone}
+              />
+            ))}
           </ol>
           <LoadOnClick
             src={t('poll.resultUrl')}

@@ -155,6 +155,30 @@ frontmatter:
     # folder is `docs/episodes/<slug>/`. So the identifier lives in a folder and the kind is the file
     # name: `research/<question-slug>/research.md` and `feedback/<NN>/feedback.md`. The same name
     # governs research after Promotion moves it to `docs/llm-wiki/research/<category>/<ID>__<question-slug>/`.
+    # Primary data Han collects himself, beside the research it may later support: not a literature answer, so
+    # not `research.md`. The register is the dataset's schema; a change to it is a new version.
+    - ruleId: poll-dataset
+      fileNames: [dataset.md]
+      intent: 'A poll dataset is the frozen question register of one audience poll and the data file its Events add counts to, so answers from different Events add up and a claim can cite them with their limits.'
+      unknownKeys: forbidden
+      fields:
+        type:
+          presence: required
+          allowed:
+            - { value: poll-dataset, intent: 'Primary data: anonymous audience poll counts, collected per Event.' }
+        title: *title
+        description:
+          presence: required
+          maxLength: 200
+          intent: 'One sentence naming what the poll measures and how many Events it holds so far.'
+        generated.by:
+          presence: required
+          format: actor
+          intent: 'Who wrote the register, as an OKF actor.'
+        generated.at:
+          presence: required
+          format: datetime
+          intent: 'When the register or the counts last changed in substance.'
     - ruleId: research
       fileNames: [research.md]
       intent: 'A research file answers one question on its own, so any later Episode can cite it without the one that asked. Fail if understanding it needs the Brief or Episode that prompted it.'
@@ -519,6 +543,42 @@ body-structure:
                       },
                     ]
                   mayHold: [ordered-list]
+    - ruleId: poll-dataset-body
+      fileNames: [dataset.md]
+      intent: 'What the poll asks, its frozen questions, where the counts live, and what they cannot show, in that order.'
+      undefinedHeadings: forbid
+      headings:
+        - { purpose: heading, level: 1, intent: 'The question the poll answers over many Events.' }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed: [{ title: Question, intent: 'The claim the counts test, and why the questions stay frozen.' }],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Register,
+                  intent: 'Every question by id and version, its type, its wording in each locale, and its answers with the value the data file stores. Fail if a question lacks a locale or an answer lacks its stored value.',
+                },
+              ],
+            mayHold: [prose, unordered-list],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed: [{ title: Data file, intent: 'The data file, its columns, and the workflow step that fills it.' }],
+            mayHold: [prose],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed: [{ title: Caveats, intent: 'The sample and what self-reported, anonymous counts cannot show.' }],
+            mayHold: [unordered-list],
+          }
     - ruleId: research-body
       fileNames: [research.md]
       intent: 'Question, reason, answer, evidence and its limits, in that order, so a reader trusts the Answer as far as the Findings and Caveats carry it.'

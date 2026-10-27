@@ -1,5 +1,11 @@
 {
   "title": "Why AI has a weird attention span you must learn to manage",
   "caption": "A long chat behaves like a long call: its attention is a limited window, so you manage what goes into it.",
-  "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat."
+  "description": "AI's attention span, its context window, is a limited resource you have to actively manage: one chat per job, a handoff after real progress or before a break, and for bigger projects one planner chat that hands each step to a fresh chat.",
+  "notes": {
+    "check-in": {
+      "header": "At the end: check-in 2",
+      "description": "After the last Slide, stop the recording, then open the card “Check-in 2” on the Event page: it jumps into the intro Episode, to this Episode's questions."
+    }
+  }
 }

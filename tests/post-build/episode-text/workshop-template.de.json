@@ -1,11 +1,11 @@
 {
   "title": "Workshop-Vorlage · hancrafted",
-  "description": "Kopiere diese Werkzeugseite als erste Episode einer neuen Veranstaltung: Titel, Agenda, Fokus und Organisation.",
+  "description": "Kopieren Sie diese Episodenvorlage als erste Episode einer neuen Veranstaltung: Titel, Agenda, was dazugehört und was nicht, und wer sie organisiert, mit Platzhaltertexten zum Ersetzen.",
   "toc": "Inhalt Wird geladen 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? Über mich 5 Organisation Inhalt öffnen : Inhalt Inhalt 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? Über mich 5 Organisation",
   "slides": [
     {
       "id": "top",
-      "text": "Workshop-Vorlage Ersetze dies durch den Namen des Workshops, sein Datum und für wen er ist. Webinar · Ersetze dies durch das Datum Motor Generative KI Das Werkzeug, das ihr nutzt 1 Erster Schritt Prompt eingebaut Ihr 2 Zweiter Schritt Prompt eingebaut Ihr 3 Dritter Schritt Prompt eingebaut Agentisch: die Arbeitsweise"
+      "text": "Workshop-Vorlage Die erste Episode eines Workshops: pro Veranstaltung einmal kopieren, für Agenda, Umfang und Organisation. Webinar · Ersetze dies durch das Datum Motor Generative KI Das Werkzeug, das ihr nutzt 1 Erster Schritt Prompt eingebaut Ihr 2 Zweiter Schritt Prompt eingebaut Ihr 3 Dritter Schritt Prompt eingebaut Agentisch: die Arbeitsweise"
     },
     {
       "id": "hook",
@@ -25,7 +25,7 @@
     },
     {
       "id": "poll",
-      "text": "Wo steht ihr? Zwei Fragen, zehn Sekunden, auf dem Handy. Create your poll at directpoll.com 1 Wie ist deine Rolle? kein Tech-Bezug arbeite mit Tech-Leuten technisch 2 Wie weit bist du mit KI? noch nicht genutzt ein Chat wie ChatGPT ein Assistent in meinen Tools Agenten, die selbst handeln Live-Ergebnisse zeigen Lädt erst nach dem Klick von directpoll.com."
+      "text": "Wo steht ihr? Vier Fragen, eine halbe Minute, auf dem Handy. Create your poll at directpoll.com anonym – wir zählen nur Antworten, sie fließen in eine spätere Auswertung ein 1 Was ist KI für dich am ehesten? Suchmaschine Chat Assistent Kollege Team Fabrik Weiß ich noch nicht 2 Wie schätzt du deine KI-Kompetenz ein? Einsteiger Grundlagen Sicher Fortgeschritten Experte 3 Wofür entscheidest du beim KI-Einsatz mit? Eigene Arbeit Mein Team Abteilung Ganze Firma Noch offen 4 Was ist das Weitreichendste, das du heute mit KI machst? Noch nichts Chat Eigene Unterlagen In meinen Tools Aufgaben übergeben Eigene Agenten bauen Mehrere Agenten KI-Produkte bauen Live-Ergebnisse zeigen Lädt erst nach dem Klick von directpoll.com."
     },
     {
       "id": "poll--about-me",
@@ -59,7 +59,7 @@
     },
     {
       "id": "poll",
-      "text": "Wo steht ihr? Was Du zur Umfrage sagst Handys raus: Code scannen, zwei Fragen, zehn Sekunden. Die Ergebnisse laden erst auf Klick, vorher geht nichts an directpoll. Ersetze die Fragen in dieser Datei durch Deine eigenen."
+      "text": "Wo steht ihr? Was Du zur Umfrage sagst Handys raus: Code scannen, vier Fragen, eine halbe Minute, je eine Antwort. Die Fragen sind Poll v1 und bleiben gleich, damit die Antworten über alle Events vergleichbar sind (AIE-0016); ändere sie nur mit einer neuen Version im Fragenregister. Die Ergebnisse laden erst auf Klick, vorher geht nichts an directpoll."
     },
     {
       "id": "poll--about-me",

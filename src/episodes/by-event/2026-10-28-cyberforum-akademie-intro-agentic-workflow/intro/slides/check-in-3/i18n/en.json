@@ -1,0 +1,64 @@
+{
+  "title": "Check-in: from doing to managing",
+  "caption": "Two quick questions, then two to close.",
+  "poll": {
+    "voteUrl": "https://directpoll.com/v?XEM9-nVikRs30Eoq4EuHs0V9UlTWbLs-Hfziio-v3jtQiPQJYBmxzzz_Bsvwja4gGfGdNnDdkdiUWnjWHswt1D8RqGTye6zQ",
+    "resultUrl": "https://directpoll.com/r?XEiD7vy5K5nQSWDbwPjNpL9e-pI8RDAn1wrCOhdFAQIn9ia7W1YIHQzmOERrf8H1v5C6Xx9C67ZvFiAZylxa6LB0B_abA5nzbz",
+    "stillOpen": "Phone still open?",
+    "scan": "Otherwise scan again",
+    "qrLabel": "QR code to the directpoll vote page",
+    "createNote": "Create your poll at directpoll.com",
+    "notice": "anonymous – we only count answers",
+    "showResults": "Show live results",
+    "resultsHint": "Loads from directpoll.com only after the click.",
+    "resultsFallback": "Results in the second tab",
+    "resultsTitle": "Live poll results",
+    "newTabHint": "opens in a new tab"
+  },
+  "questions": {
+    "seen": {
+      "question": "Has AI ever created more work than it saved you, e.g. checking and reworking?",
+      "answers": {
+        "often": "often",
+        "sometimes": "sometimes",
+        "never": "never",
+        "forgot": "can't recall",
+        "unused": "don't use it"
+      }
+    },
+    "known": {
+      "question": "Did you know: with AI you become more manager than maker?",
+      "answers": {
+        "practice": "yes, and I work this way",
+        "heard": "yes, heard of it",
+        "new": "no, new to me"
+      }
+    },
+    "modelAfter": {
+      "question": "And now: what is AI most like for you?",
+      "answers": {
+        "search": "Search engine – just smarter, gives answers",
+        "chat": "Chat – a conversation partner for my questions",
+        "assistant": "Assistant – works along inside my tools",
+        "colleague": "Colleague – I let it take over whole tasks",
+        "team": "Team – several agents I direct",
+        "factory": "Factory – an AI organisation running for me",
+        "unsure": "Can't say yet"
+      }
+    },
+    "shift": {
+      "question": "Has your picture of AI changed today?",
+      "answers": {
+        "no": "no",
+        "somewhat": "somewhat",
+        "clearly": "clearly"
+      }
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Stop the recording, then check in",
+      "description": "Stop the recording, then step the directpoll cockpit to the ai-gives-you-more-work questions. Let people answer first, then show the results; the counts go anonymously into the analysis (AIE-0016). Last, the question from the start once more: has your picture of AI shifted?"
+    }
+  }
+}

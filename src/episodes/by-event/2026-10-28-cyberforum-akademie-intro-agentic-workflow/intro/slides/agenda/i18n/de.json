@@ -1,28 +1,42 @@
 {
   "title": "Agenda",
-  "caption": "Erst die Theorie, dann eine Live-Demo, dann probiert ihr es selbst aus.",
+  "caption": "Theorie und Live-Demo im Wechsel, nach jeder Episode ein kurzer Check-in.",
   "episode": "Episode {n}",
   "blocks": {
-    "welcome": { "time": "17:00", "title": "Einstieg" },
-    "first": { "time": "17:10", "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie" },
+    "welcome": {
+      "time": "17:00",
+      "title": "Einstieg"
+    },
+    "first": {
+      "time": "17:15",
+      "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie"
+    },
+    "grill": {
+      "time": "17:30",
+      "title": "Live-Demo „Grill me“"
+    },
     "second": {
-      "time": "17:25",
+      "time": "17:50",
       "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst"
     },
-    "third": { "time": "17:40", "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen." },
-    "demo": { "time": "17:55", "title": "Live-Demo „Grill me“" },
-    "practice": { "time": "18:20", "title": "Praxisteil und Fragen" }
+    "workflow": {
+      "time": "18:10",
+      "title": "Live-Demo: ein agentischer Workflow"
+    },
+    "third": {
+      "time": "18:35",
+      "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen."
+    }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theorie",
-    "demo": "Demo",
-    "practice": "Praxis"
+    "demo": "Demo"
   },
   "notes": {
     "talking-points": {
       "header": "Die Zeiten sind Platzhalter",
-      "description": "Erst die Theorie in drei Episoden, dann die Live-Demo „Grill me“, dann der Praxisteil mit Fragen. Die Uhrzeiten (17:00 bis 19:00) sind Platzhalter, bis Han sie setzt."
+      "description": "Drei Episoden Theorie, dazwischen zwei Live-Demos: „Grill me“ und ein agentischer Workflow. Nach jeder Episode ein kurzer Check-in per Umfrage. Die Uhrzeiten (17:00 bis 19:00) sind Platzhalter, bis Han sie setzt."
     }
   }
 }

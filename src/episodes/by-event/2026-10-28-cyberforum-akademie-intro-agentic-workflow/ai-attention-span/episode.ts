@@ -19,6 +19,7 @@ export const cyberforumAiAttentionSpan = episode({
   slug: 'ai-attention-span',
   messages: { en, de },
   title: hero,
+  notes: [{ slug: 'check-in', target: 'title' }],
   sections: [
     thoughtExperimentSection,
     theAisAttentionSpanSection,

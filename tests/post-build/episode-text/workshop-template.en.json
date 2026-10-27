@@ -1,11 +1,11 @@
 {
   "title": "Workshop template · hancrafted",
-  "description": "Copy this tooling page to start the opening Episode of a new Event: title, agenda, scope and organisation.",
+  "description": "Copy this Episode template as the opening Episode of a new Event: title, agenda, what is in and out of scope, and who organises it, with placeholder words to replace.",
   "toc": "Contents Loading 1 Hook 2 Agenda 3 In scope Out of scope 4 Where do you stand? About me 5 Organisation Open contents : Contents Contents 1 Hook 2 Agenda 3 In scope Out of scope 4 Where do you stand? About me 5 Organisation",
   "slides": [
     {
       "id": "top",
-      "text": "Workshop template Replace with the workshop’s name, its date and who it is for. Webinar · replace with the date Engine Generative AI The tool you use 1 First step prompt built in You 2 Second step prompt built in You 3 Third step prompt built in Agentic: the way of working"
+      "text": "Workshop template The opening Episode of a workshop: copy it once per Event for the agenda, the scope and the organisers. Webinar · replace with the date Engine Generative AI The tool you use 1 First step prompt built in You 2 Second step prompt built in You 3 Third step prompt built in Agentic: the way of working"
     },
     {
       "id": "hook",
@@ -25,7 +25,7 @@
     },
     {
       "id": "poll",
-      "text": "Where do you stand? Two questions, ten seconds, on your phone. Create your poll at directpoll.com 1 What is your role? No tech link I work with tech people I am technical 2 Where are you with AI today? Not used yet A chat like ChatGPT An assistant in my tools Agents that act on their own Show live results Loads from directpoll.com only after the click."
+      "text": "Where do you stand? Four questions, half a minute, on your phone. Create your poll at directpoll.com anonymous – we only count answers; they feed a later analysis 1 What is AI most like for you? Search engine Chat Assistant Colleague Team Factory Can't say yet 2 How would you rate your AI fluency? Beginner Basics Confident Advanced Expert 3 What do you have a say in when it comes to AI? My own work My team My department Whole company Still open 4 What's the most advanced thing you do with AI today? Nothing yet Chat My own documents In my tools Hand over tasks Build my own agents Several agents Build AI products Show live results Loads from directpoll.com only after the click."
     },
     {
       "id": "poll--about-me",
@@ -56,7 +56,7 @@
     },
     {
       "id": "poll",
-      "text": "Where do you stand? What to say about the poll Phones out: scan the code, two questions, ten seconds. The results load only on click, so nothing from directpoll loads before. Replace the questions in this file with your own."
+      "text": "Where do you stand? What you say about the poll Phones out: scan the code, four questions, half a minute, one answer each. The questions are poll v1 and stay the same so answers compare across Events (AIE-0016); change them only with a new version in the question register. The results load only on click, so nothing goes to directpoll before."
     },
     {
       "id": "poll--about-me",

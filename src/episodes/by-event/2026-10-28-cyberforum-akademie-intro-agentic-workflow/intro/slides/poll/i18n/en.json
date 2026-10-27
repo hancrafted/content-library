@@ -1,35 +1,70 @@
 {
   "title": "Where do you stand?",
-  "caption": "Two questions, ten seconds, on your phone.",
+  "caption": "Four questions, half a minute, on your phone.",
   "poll": {
-    "voteUrl": "https://directpoll.com/PLACEHOLDER-vote",
-    "resultUrl": "https://directpoll.com/PLACEHOLDER-result",
+    "voteUrl": "https://directpoll.com/v?XEM9-nVikRs30Eoq4EuHs0V9UlTWbLs-Hfziio-v3jtQiPQJYBmxzzz_Bsvwja4gGfGdNnDdkdiUWnjWHswt1D8RqGTye6zQ",
+    "resultUrl": "https://directpoll.com/r?XEiD7vy5K5nQSWDbwPjNpL9e-pI8RDAn1wrCOhdFAQIn9ia7W1YIHQzmOERrf8H1v5C6Xx9C67ZvFiAZylxa6LB0B_abA5nzbz",
     "scan": "Scan to vote",
     "qrLabel": "QR code to the directpoll vote page",
     "createNote": "Create your poll at directpoll.com",
-    "q1": {
-      "question": "What is your role?",
-      "answers": { "a": "No tech link", "b": "I work with tech people", "c": "I am technical" }
-    },
-    "q2": {
-      "question": "Where are you with AI today?",
-      "answers": {
-        "a": "Not used yet",
-        "b": "A chat like ChatGPT",
-        "c": "An assistant in my tools",
-        "d": "Agents that act on their own"
-      }
-    },
+    "notice": "anonymous – we only count answers; they feed a later analysis",
     "showResults": "Show live results",
     "resultsHint": "Loads from directpoll.com only after the click.",
     "resultsFallback": "Results in the second tab",
     "resultsTitle": "Live poll results",
     "newTabHint": "opens in a new tab"
   },
+  "questions": {
+    "model": {
+      "question": "What is AI most like for you?",
+      "answers": {
+        "search": "Search engine – just smarter, gives answers",
+        "chat": "Chat – a conversation partner for my questions",
+        "assistant": "Assistant – works along inside my tools",
+        "colleague": "Colleague – I let it take over whole tasks",
+        "team": "Team – several agents I direct",
+        "factory": "Factory – an AI organisation running for me",
+        "unsure": "Can't say yet"
+      }
+    },
+    "fluency": {
+      "question": "How would you rate your AI fluency?",
+      "answers": {
+        "beginner": "Beginner – little experience with AI",
+        "basic": "Basics – chat and simple prompts",
+        "confident": "Confident – context engineering, workflows",
+        "advanced": "Advanced – I build agents and harnesses",
+        "expert": "Expert – run agent systems in production"
+      }
+    },
+    "scope": {
+      "question": "What do you have a say in when it comes to AI?",
+      "answers": {
+        "self": "My own work – just for me",
+        "team": "My team – how we work",
+        "unit": "My department – for my area",
+        "org": "Whole company – company-wide",
+        "open": "Still open – no concrete goal"
+      }
+    },
+    "usage": {
+      "question": "What's the most advanced thing you do with AI today?",
+      "answers": {
+        "none": "Nothing yet – haven't used AI yet",
+        "ask": "Chat – ask questions, have text written",
+        "documents": "My own documents – upload, revise together",
+        "embedded": "In my tools – AI in office, mail, editor",
+        "delegate": "Hand over tasks – AI does several steps",
+        "build": "Build my own agents – workflows for my work",
+        "orchestrate": "Several agents – run and orchestrate in parallel",
+        "product": "Build AI products – for customers or users"
+      }
+    }
+  },
   "notes": {
     "talking-points": {
       "header": "Phones out",
-      "description": "Scan the code, two questions, ten seconds. Role: no tech link / I work with tech people / technical. Mental model: not used yet / a chat like ChatGPT / an assistant in my tools / agents that act on their own. The results load only on click, so nothing goes to directpoll before. The links are still placeholders until Han creates the poll."
+      "description": "Scan the code, four questions, half a minute, one answer each: what AI is most like for you, how you rate your AI fluency, what you have a say in when it comes to AI, and the most advanced thing you do with it today. Anonymous, only answers are counted; the numbers go into an analysis after the webinar (AIE-0016). The results load only on click, so nothing goes to directpoll before."
     }
   }
 }
