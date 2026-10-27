@@ -160,7 +160,7 @@ async function popoverProblems(page: Page, where: string, language: Language): P
 }
 
 /** How many stages each shipped Workflow draws. */
-const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 7 };
+const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 4 };
 
 /** Opens one Workflow, then every stage of it in turn, and reports what is wrong. */
 async function stageProblems(page: Page, id: string, language: Language): Promise<string[]> {
@@ -428,7 +428,7 @@ test.describe('success cases', () => {
     // ACT
     await pickWorkflow(root, 'vacation');
     await root.locator('[data-control="level"]').click();
-    await openStage(page, 'Interview');
+    await openStage(page, 'Brief');
     await copyPrompt(modal).click();
     // ASSERT
     await expect.poll(async () => (await copied(page)).at(-1)).toContain(command);
@@ -475,22 +475,22 @@ test.describe('success cases', () => {
     await expect.poll(async () => (await copied(page))[0]).toContain(questions);
   });
 
-  test("runs vacation's Research stage as rounds titled by the example tickets, then by the pasted tickets, capped at three", async ({
+  test("runs vacation's Research stage as rounds titled by the example kinds of stay, then by the pasted ones, capped at three", async ({
     page,
   }) => {
     // ARRANGE
-    const exampleTitles = ['1. Apartment:', '2. Small hotel:', '3. Villa or guesthouse:'];
+    const exampleTitles = ['Apartment:', 'Small hotel:', 'Guesthouse:'];
     const pastedTitles = ['Camper van:', 'Cabin:', 'Hostel:'];
-    const pasted = '# Tickets\n## Tickets\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
+    const pasted = '# Spec\n## Research\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
     const { modal, root } = await open(page, 'light');
     await pickWorkflow(root, 'vacation');
-    const rounds = () => modal.locator('[data-job="venue"] [data-slot="accordion-trigger"]');
+    const rounds = () => modal.locator('[data-job="stay"] [data-slot="accordion-trigger"]');
     // ACT
     await openStage(page, 'Research');
     await expect(rounds()).toContainText(exampleTitles);
     await modal.getByRole('button', { name: 'Close' }).click();
-    await openStage(page, 'Tickets');
-    await field(modal, 'tickets').fill(pasted);
+    await openStage(page, 'Brief');
+    await field(modal, 'spec').fill(pasted);
     await modal.getByRole('button', { name: 'Close' }).click();
     await openStage(page, 'Research');
     // ASSERT
@@ -541,22 +541,22 @@ test.describe('success cases', () => {
     await expect(field(modal, 'task')).toHaveValue(pasted);
   });
 
-  test('turns demo off before the first paste so the rounds follow the pasted tickets, then locks the switch until Reset', async ({
+  test('turns demo off before the first paste so the rounds follow the pasted kinds of stay, then locks the switch until Reset', async ({
     page,
   }) => {
     // ARRANGE
-    const pasted = '# Tickets\n## Tickets\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
+    const pasted = '# Spec\n## Research\n### Camper van\nA.\n### Cabin\nB.\n### Hostel\nC.\n### Tent\nD.';
     const fullRounds = 4;
     const { modal, root, toolbar } = await open(page, 'light');
     await pickWorkflow(root, 'vacation');
     const demo = toolbar.locator('[data-control="demo"]');
-    const rounds = () => modal.locator('[data-job="venue"] [data-slot="accordion-trigger"]');
+    const rounds = () => modal.locator('[data-job="stay"] [data-slot="accordion-trigger"]');
     // ACT
     await expect(demo).toBeEnabled();
     await expect(demo).toHaveAttribute('aria-checked', 'true');
     await demo.click();
-    await openStage(page, 'Tickets');
-    await field(modal, 'tickets').fill(pasted);
+    await openStage(page, 'Brief');
+    await field(modal, 'spec').fill(pasted);
     await modal.getByRole('button', { name: 'Close' }).click();
     await openStage(page, 'Research');
     // ASSERT

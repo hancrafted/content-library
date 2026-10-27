@@ -16,8 +16,8 @@ const jobOf = (view: ReturnType<typeof workflowView>, id: string) =>
 describe('success cases', () => {
   it('gives one modal per stage with its jobs in order and the stage goal under the title', () => {
     // ARRANGE
-    const stages = 7;
-    const firstTwo = ['Plan', 'Interview'];
+    const stages = 4;
+    const firstTwo = ['Brief', 'Research'];
     // ACT
     const view = workflowView(WORKFLOW, SIMPLE);
     // ASSERT
@@ -28,26 +28,30 @@ describe('success cases', () => {
 
   it('Both levels make one do step and one review, and only Simple plays a repeated stage once per round', () => {
     // ARRANGE
-    const research = (level: typeof SIMPLE | typeof TECHNICAL) =>
-      workflowView(WORKFLOW, level).stages.find((stage) => stage.id === 'research');
+    const stageOf = (level: typeof SIMPLE | typeof TECHNICAL, id: string) =>
+      workflowView(WORKFLOW, level).stages.find((stage) => stage.id === id);
     // ACT
-    const simple = research(SIMPLE);
-    const technical = research(TECHNICAL);
+    const steps = [SIMPLE, TECHNICAL].map((level) =>
+      stageOf(level, 'brief')?.jobs[0]?.task.steps.map((step) => step.id),
+    );
+    const repeats = [SIMPLE, TECHNICAL].map((level) => stageOf(level, 'research')?.repeats);
     // ASSERT
-    expect(simple?.jobs[0]?.task.steps.map((step) => step.id)).toEqual(['do', 'review']);
-    expect(technical?.jobs[0]?.task.steps.map((step) => step.id)).toEqual(['do', 'review']);
-    expect([simple?.repeats, technical?.repeats]).toEqual([true, false]);
+    expect(steps).toEqual([
+      ['do', 'review'],
+      ['do', 'review'],
+    ]);
+    expect(repeats).toEqual([true, false]);
   });
 
   it('hands the details the techniques of a task, resolved from the catalogue with their tier', () => {
     // ARRANGE
     const view = workflowView(WORKFLOW, SIMPLE);
     // ACT
-    const venue = jobOf(view, 'venue').task.techniques;
+    const stay = jobOf(view, 'stay').task.techniques;
     // ASSERT
-    expect(venue.map((each) => each.id)).toContain('fresh-context');
-    expect(venue.find((each) => each.id === 'fresh-context')).toMatchObject({ tier: 'advanced' });
-    expect(venue.every((each) => each.title && each.explain)).toBe(true);
+    expect(stay.map((each) => each.id)).toContain('fresh-context');
+    expect(stay.find((each) => each.id === 'fresh-context')).toMatchObject({ tier: 'advanced' });
+    expect(stay.every((each) => each.title && each.explain)).toBe(true);
   });
 
   it('hands the details one example per chat for a fan-out and one otherwise', () => {
@@ -56,19 +60,20 @@ describe('success cases', () => {
     // ACT
     const view = workflowView(WORKFLOW, SIMPLE);
     // ASSERT
-    expect(jobOf(view, 'venue').task.examples).toHaveLength(chats);
-    expect(jobOf(view, 'pieces').task.examples).toHaveLength(1);
+    expect(jobOf(view, 'stay').task.examples).toHaveLength(chats);
+    expect(jobOf(view, 'interview').task.examples).toHaveLength(1);
   });
 
   it("gives each job the goals of the Workflow file for the stepper's titles", () => {
     // ARRANGE
-    const pieces = loaded.file.stages[0]?.jobs[0];
-    const expected = { do: pieces?.goal.do, review: pieces?.goal.review };
+    const interview = loaded.file.stages[0]?.jobs[0];
+    const expected = { do: interview?.goal.do, review: interview?.goal.review };
+    const asks = 'interview you';
     // ACT
-    const goal = jobOf(workflowView(WORKFLOW, SIMPLE), 'pieces').goal;
+    const goal = jobOf(workflowView(WORKFLOW, SIMPLE), 'interview').goal;
     // ASSERT
     expect(goal).toEqual(expected);
-    expect(goal.do).toContain('high-level plan');
+    expect(goal.do).toContain(asks);
   });
 });
 
@@ -89,12 +94,14 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the prompt of the other level out of each step', () => {
     // ARRANGE
-    const simple = jobOf(workflowView(WORKFLOW, SIMPLE), 'spec').task.steps[0]?.prompt.text ?? '';
+    const simple = jobOf(workflowView(WORKFLOW, SIMPLE), 'interview').task.steps[0]?.prompt.text ?? '';
+    const role = 'friendly interviewer';
+    const command = '/grilling';
     // ACT
-    const technical = jobOf(workflowView(WORKFLOW, TECHNICAL), 'spec').task.steps[0]?.prompt.text ?? '';
+    const technical = jobOf(workflowView(WORKFLOW, TECHNICAL), 'interview').task.steps[0]?.prompt.text ?? '';
     // ASSERT
-    expect(simple).toContain('You are a spec writer');
-    expect(technical).toContain('/to-spec');
-    expect(simple).not.toContain('/to-spec');
+    expect(simple).toContain(role);
+    expect(technical).toContain(command);
+    expect(simple).not.toContain(command);
   });
 });

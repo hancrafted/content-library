@@ -182,7 +182,7 @@ describe('success cases', () => {
     const real = workflowOf(loaded.file);
     const sent: WorkflowEvent[] = [];
     const on = callbacksFor((event) => sent.push(event));
-    const state = { ...createState(start), openStageId: 'research', slotValues: { 'research.venue#2': 'R2' } };
+    const state = { ...createState(start), openStageId: 'research', slotValues: { 'research.stay#2': 'R2' } };
     const rounds = [1, 2, 3];
     // ACT
     const { modal } = slicesOf(shown(real, state), on);
@@ -190,7 +190,7 @@ describe('success cases', () => {
     // ASSERT
     expect(modal.slotValues).toEqual({ research_2: 'R2' });
     expect(modal.run?.rounds.map((round) => round.number)).toEqual(rounds);
-    expect(sent).toEqual([{ type: 'slots', values: { 'research.venue#3': 'R3' } }]);
+    expect(sent).toEqual([{ type: 'slots', values: { 'research.stay#3': 'R3' } }]);
   });
 
   it('hands the diagram the run of the pasted results, round states included, so both views show progress', () => {
@@ -199,7 +199,7 @@ describe('success cases', () => {
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const on = callbacksFor(() => undefined);
-    const state = { ...createState(start), slotValues: { 'research.venue#2': 'R2', 'research.venue.checked#2': 'ok' } };
+    const state = { ...createState(start), slotValues: { 'research.stay#2': 'R2', 'research.stay.checked#2': 'ok' } };
     // ACT
     const { diagram } = slicesOf(shown(real, state), on);
     const research = diagram.run?.stages.find((each) => each.id === 'research');
@@ -315,7 +315,7 @@ describe('success cases', () => {
     if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
     const real = workflowOf(loaded.file);
     const fresh = createState(start);
-    const worked = { ...fresh, slotValues: { 'research.venue#2': 'R2' } };
+    const worked = { ...fresh, slotValues: { 'research.stay#2': 'R2' } };
     const on = callbacksFor(noop);
     // ACT
     const before = slicesOf(shown(real, fresh), on).diagram.run;

@@ -71,21 +71,23 @@ describe('success cases', () => {
     const research = compare.slots.find((slot) => slot.id === 'research');
     // ASSERT
     expect(research?.mode).toBe('multiple');
-    expect(research?.sample).toEqual(taskOf(file, 'venue').details.example);
-    expect(taskOf(file, 'venue').details.example).toHaveLength(chats);
+    expect(research?.sample).toEqual(taskOf(file, 'stay').details.example);
+    expect(taskOf(file, 'stay').details.example).toHaveLength(chats);
   });
 
-  it.each(VACATION)('gives Plan a task slot with a sample and no placeholder, in %s %s', (id, locale) => {
-    // ARRANGE
-    const pieces = taskOf(fileOf(id, locale), 'pieces');
-    // ACT
-    const slot = pieces.slots.find((each) => each.id === 'task');
-    const texts = [...pieces.do.simple, ...pieces.do.technical].map((section) => section.text);
-    // ASSERT
-    expect(slot && slotSample(fileOf(id, locale), slot)).toBeTruthy();
-    expect(slot?.sample).toBeUndefined();
-    expect(texts.filter((text) => /<.*>/.test(text))).toEqual([]);
-  });
+  it.each(VACATION)(
+    'gives the interview an idea slot whose sample is the scenario, not a written one, in %s %s',
+    (id, locale) => {
+      // ARRANGE
+      const file = fileOf(id, locale);
+      const interview = taskOf(file, 'interview');
+      // ACT
+      const slot = interview.slots.find((each) => each.id === 'idea');
+      // ASSERT
+      expect(slot && slotSample(file, slot)).toContain(file.scenario.summary);
+      expect(slot?.sample).toBeUndefined();
+    },
+  );
   it.each(EACH)('gives every do and review step instructions of one or two sentences, in %s %s', (id, locale) => {
     // ARRANGE
     const tasks = fileOf(id, locale).stages.flatMap((stage) => stage.jobs);
