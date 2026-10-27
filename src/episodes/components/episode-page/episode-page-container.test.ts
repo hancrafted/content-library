@@ -51,9 +51,9 @@ async function translatorOf(): Promise<RuntimeTranslator> {
 /** The Slides of an Episode of these Sections, as the container hands them to the table of contents. */
 async function slidesOf(sections: readonly Section[]) {
   return (
-    await recordContent(episode({ slug: 'episode-template', messages: EPISODE, sections }), 'en', {
+    await recordContent(episode({ slug: 'ai-token-economy', messages: EPISODE, sections }), 'en', {
       translatorOf: translatorOf,
-      id: 'episode-template',
+      id: 'ai-token-economy',
     })
   ).slides;
 }

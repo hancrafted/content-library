@@ -40,17 +40,17 @@ const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
 // FE-002: inside an Episode, headings h1–h3 mirror the Episode's spine and
 // come only from the container and the Slide layouts. A one-off slide may still
 // write `<SlideTitle as="h3">`; h4 and below are free.
-// Episode files are the Episodes area's content: its Episodes, Event copies, Slide pool and tooling pages, never
+// Episode files are the Episodes area's content: its Episodes, Event copies, Slide pool and Resources, never
 // its code folders `components/`, `lib/` and `hooks/`.
 const EPISODE_FILES = 'src/episodes/**/*.{ts,tsx}';
 const EPISODE_CODE_FILES = ['src/episodes/{components,lib,hooks}/**'];
 // A `*.client.tsx` inside a Slide folder `episodes/<ep>/slides/<slide>/`, an Event's
-// copy's under `episodes/by-event/<event>/`, a tooling page's under `episodes/tooling/`
+// copy's under `episodes/by-event/<event>/`, a Resource's under `episodes/resources/`
 // or a pool Slide's `episodes/slide-pool/<slide>/`, is the only place an Episode may carry
 // 'use client'; it keeps the spine rule but not the directive ban.
 const EPISODE_CLIENT_FILES = [
   'src/episodes/*/slides/*/**/*.client.tsx',
-  'src/episodes/{by-event/*,tooling}/*/slides/*/**/*.client.tsx',
+  'src/episodes/{by-event/*,resources}/*/slides/*/**/*.client.tsx',
   'src/episodes/slide-pool/*/**/*.client.tsx',
 ];
 const SPINE_HEADINGS = [
@@ -355,7 +355,7 @@ export default tseslint.config(
     // Caps follow file kind: every other file in a Slide folder keeps every cap.
     files: [
       'src/episodes/*/slides/*/slide.tsx',
-      'src/episodes/{by-event/*,tooling}/*/slides/*/slide.tsx',
+      'src/episodes/{by-event/*,resources}/*/slides/*/slide.tsx',
       'src/episodes/slide-pool/*/slide.tsx',
     ],
     rules: { 'max-lines-per-function': 'off' },

@@ -1,5 +1,5 @@
-import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, isEpisodeId, TOOLING_SLUGS } from '@/content-store/catalogue/record-routes';
+import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, isEpisodeId, RESOURCE_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { headerModeOf } from '@/episodes/components/slide-master/slide';
 import { describe, expect, it } from 'vitest';
@@ -7,7 +7,7 @@ import { compositionOf } from './registry';
 
 /*
  * The one composition lookup (FE-002): the Slides and own text a page renders, by the EpisodeRef of an Episode with a
- * page or the ref of a tooling page. What every registered Episode shares: a record under its Episode id carrying its
+ * page or the ref of a Resource. What every registered Episode shares: a record under its Episode id carrying its
  * folder's slug, its own text from its folder's `i18n/` (what the Title slide, the page metadata and the landing card
  * read), and Sections each opened by the Slide that names it. Each holds for every Episode the registry holds, so
  * adding or publishing one adds no row here. The one per-Episode fact is the header mode, a deliberate content
@@ -65,11 +65,11 @@ describe('success cases', () => {
     expect(authored).toEqual(expected);
   });
 
-  it.each(TOOLING_SLUGS)('finds the tooling page %s under its own slug', (slug) => {
+  it.each(RESOURCE_SLUGS)('finds the Resource %s under its own slug', (slug) => {
     // ARRANGE
     const expected = slug;
     // ACT
-    const page = compositionOf(toolingRef(slug));
+    const page = compositionOf(resourceRef(slug));
     // ASSERT
     expect(page.slug).toBe(expected);
   });
@@ -78,7 +78,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [['agenda'], ['in-scope', 'out-of-scope'], ['orga']];
     // ACT
-    const sections = compositionOf(toolingRef('workshop-template')).sections.map((section) =>
+    const sections = compositionOf(resourceRef('workshop-template')).sections.map((section) =>
       section.map(({ slug }) => slug),
     );
     // ASSERT
@@ -99,36 +99,36 @@ describe('failure cases', () => {
     expect(lookup).toThrow(unregistered);
   });
 
-  it('finds no tooling page for an Episode slug', () => {
+  it('finds no Resource for an Episode slug', () => {
     // ARRANGE
     const episode = 'ai-attention-span';
     // ACT
-    // @ts-expect-error -- an Episode's slug names no tooling page
-    const lookup = () => compositionOf(toolingRef(episode));
+    // @ts-expect-error -- an Episode's slug names no Resource
+    const lookup = () => compositionOf(resourceRef(episode));
     // ASSERT
     expect(lookup).toThrow(episode);
   });
 });
 
 describe('edge cases', () => {
-  it.each(TOOLING_SLUGS)('keeps the tooling page %s out of the Episode registry, so it is no Episode', (slug) => {
+  it.each(RESOURCE_SLUGS)('keeps the Resource %s out of the Episode registry, so it is no Episode', (slug) => {
     // ARRANGE
     const expected = false;
     // ACT
     const valid = isEpisodeId(slug);
-    // @ts-expect-error -- a tooling page's slug names no Episode
+    // @ts-expect-error -- a Resource's slug names no Episode
     const lookup = () => compositionOf(episodeRef(slug));
     // ASSERT
     expect(valid).toBe(expected);
     expect(lookup).toThrow(slug);
   });
 
-  it('finds no tooling page for the deleted slide-layouts', () => {
+  it('finds no Resource for the deleted slide-layouts', () => {
     // ARRANGE
     const deleted = 'slide-layouts';
     // ACT
-    // @ts-expect-error -- a deleted tooling page has no composition
-    const lookup = () => compositionOf(toolingRef(deleted));
+    // @ts-expect-error -- a deleted Resource has no composition
+    const lookup = () => compositionOf(resourceRef(deleted));
     // ASSERT
     expect(lookup).toThrow(deleted);
   });

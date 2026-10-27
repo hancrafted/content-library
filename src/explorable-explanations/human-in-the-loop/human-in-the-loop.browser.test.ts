@@ -13,10 +13,11 @@ import { hydrated } from '../../../tests/browser/hydrated';
  * is a stepper of jobs; the first job opens with it, and every input carries `data-field` with the key it fills.
  */
 
-const EPISODE = '/episodes/explorable-explanations/';
-const GERMAN_EPISODE = '/de/episodes/explorable-explanations/';
+const EPISODE = '/explorable-explanations/human-in-the-loop/';
+const GERMAN_EPISODE = '/de/explorable-explanations/human-in-the-loop/';
 const SLIDE_ANCHOR = 'agentic-workflows--human-in-the-loop';
-const ROOT = '[data-human-in-the-loop]';
+/** Scoped to the Slide: the page shows the Workflow on four Slides, one per Preset. */
+const ROOT = `#${SLIDE_ANCHOR} [data-human-in-the-loop]`;
 const MODAL = '[role="dialog"][data-part="modal"]';
 /** The one progress key, as `src/config.yaml` names it (FE-001 §3). */
 const PROGRESS_KEY = 'hancrafted:progress';

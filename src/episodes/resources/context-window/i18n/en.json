@@ -1,0 +1,5 @@
+{
+  "title": "Context window",
+  "caption": "What fills an AI chat's window, step by step, and how much attention each part gets: try every part and control.",
+  "description": "An interactive explanation of the context window: what fills an AI chat, how compaction works and how attention thins out, with every control to try."
+}

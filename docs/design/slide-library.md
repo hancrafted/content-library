@@ -6,7 +6,7 @@ stale_after: 2027-01-13T00:00:00Z
 
 # Slide library
 
-Every Master slide a Slide can copy from the Slide master Episode (`src/episodes/tooling/slide-master/slides/`, `cp -r`), and the motions the library holds. The `write-spec` designers pick from it, and a vitest keeps the headings below equal to the folders.
+Every Master slide a Slide can copy from the Master slide Resources, Timelines and Grids (`src/episodes/resources/timelines/slides/` and `src/episodes/resources/grids/slides/`, `cp -r`; design-ADR 0019), and the motions the library holds. The `write-spec` designers pick from it, and a vitest keeps the headings below equal to the folders.
 
 Each entry has three lines.
 

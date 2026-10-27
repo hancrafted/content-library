@@ -19,9 +19,34 @@ export interface ExportedPage {
   selfCanonical: boolean;
 }
 
-/** Every slug with a page exported at `/episodes/<slug>/`: each tooling page and each public Episode. */
+/** Every slug with a page exported at `/episodes/<slug>/`: each public Episode. */
 export const EXPORTED_EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = episodesPathParams().map(
   ({ episode }) => episode,
+);
+
+/** A page rendered through the one Episode container: an Episode's own or a Resource's, with where its folder sits. */
+export interface EpisodeShapedPage {
+  readonly slug: string;
+  /** The logical path it is built at, before the locale prefix. */
+  readonly route: string;
+  /** Its folder under `src/episodes/`: the slug for an Episode, `resources/<slug>` for a Resource. */
+  readonly folder: string;
+  readonly isResource: boolean;
+}
+
+/** Every Episode page under `/episodes/` and every Resource page the catalogue builds: what the Episode checks run over. */
+export const EXPORTED_EPISODE_SHAPED_PAGES: readonly EpisodeShapedPage[] = PAGES.flatMap(
+  ({ page, treatment }): EpisodeShapedPage[] => {
+    if (!treatment.exported) return [];
+    if (page.kind === 'episode') {
+      return [{ slug: page.episode.slug, route: routeOf(page), folder: page.episode.slug, isResource: false }];
+    }
+    if (page.kind === 'resource') {
+      const { slug } = page.resource;
+      return [{ slug, route: routeOf(page), folder: `resources/${slug}`, isResource: true }];
+    }
+    return [];
+  },
 );
 
 /** Every page the catalogue builds, in each locale it is built in: an unlisted Episode has no `/episodes/` page. */

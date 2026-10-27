@@ -1,4 +1,4 @@
-import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
 import type { PageRef } from '@/content-store/catalogue/record-routes';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
@@ -91,7 +91,11 @@ describe('failure cases', () => {
       ...SITE_PAGES,
       // @ts-expect-error -- an Event's copy has no page of its own under /episodes/; were one handed in, it stays out
       ...treated(ABSENT, { kind: 'episode', episode: episodeRef('ai-attention-span', EVENT) }),
-      ...treated(HIDDEN, { kind: 'dashboard' }, { kind: 'tooling', tooling: toolingRef('slide-master') }),
+      ...treated(
+        HIDDEN,
+        { kind: 'dashboard' },
+        { kind: 'resource', type: 'master-slide', resource: resourceRef('timelines') },
+      ),
       ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: episodeRef('ai-attention-span', EVENT) }),
     ];
     const expected = [

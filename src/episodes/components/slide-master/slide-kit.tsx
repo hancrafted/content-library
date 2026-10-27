@@ -1,4 +1,4 @@
-import { episodeRoute, type EpisodesPathSlug } from '@/content-store/catalogue/record-routes';
+import { ownRouteOf, type ComposedId } from '@/content-store/catalogue/record-routes';
 import type { SlideLevel } from '@/episodes/lib/episode.pure';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
@@ -21,7 +21,7 @@ export interface ReferenceLabels {
 
 /** What the container knows about the whole Episode when it builds a kit: the same for every Slide. */
 export interface EpisodeKitInput {
-  readonly episode: EpisodesPathSlug;
+  readonly episode: ComposedId;
   /** The logical path the page is served at, when an Event presents the Episode; absent, the Episode's own. */
   readonly route?: string;
   readonly locale: Locale;
@@ -58,7 +58,7 @@ function slideHrefOf(episode: EpisodeKitInput, slideId: string): RuntimeKit['sli
   return (slug) => {
     const anchor = episode.anchors.get(slug);
     if (anchor === undefined) throw new Error(`No Slide "${slug}" in "${episode.episode}" to link from "${slideId}".`);
-    return localizePath(episode.route ?? episodeRoute(episode.episode), episode.locale, anchor);
+    return localizePath(episode.route ?? ownRouteOf(episode.episode), episode.locale, anchor);
   };
 }
 

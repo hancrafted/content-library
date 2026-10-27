@@ -21,6 +21,8 @@ import landingDe from './landing/i18n/de.json';
 import landingEn from './landing/i18n/en.json';
 import pageCopyDe from './lib/i18n/de.json';
 import pageCopyEn from './lib/i18n/en.json';
+import resourcesOverviewDe from './resources-overview/i18n/de.json';
+import resourcesOverviewEn from './resources-overview/i18n/en.json';
 
 /*
  * The site's message set, merged from every owner's Translation files (FE-003 §4). Page assembly sits above every
@@ -36,6 +38,7 @@ export const TRANSLATION_OWNERS = [
   translationOwner('src/page-assembly/landing/i18n', landingEn, landingDe),
   translationOwner('src/page-assembly/episode-overview/i18n', episodeOverviewEn, episodeOverviewDe),
   translationOwner('src/page-assembly/events-overview/i18n', eventsOverviewEn, eventsOverviewDe),
+  translationOwner('src/page-assembly/resources-overview/i18n', resourcesOverviewEn, resourcesOverviewDe),
   translationOwner('src/page-assembly/event/i18n', eventEn, eventDe),
   translationOwner('src/page-assembly/dashboard/i18n', dashboardEn, dashboardDe),
   translationOwner('src/events/lib/i18n', eventsEn, eventsDe),

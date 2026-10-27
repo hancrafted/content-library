@@ -5,16 +5,16 @@
 // cruise a thinner graph while still reporting success.
 
 // The Episodes product area keeps content apart from code: an Episode's folder, `<slug>/`, an Event's copies under
-// `by-event/`, the Slide pool and the tooling pages, beside the area's tier folders `components/`, `lib/` and `hooks/`.
+// `by-event/`, the Slide pool and the Resources, beside the area's tier folders `components/`, `lib/` and `hooks/`.
 // EPISODE_CONTENT is everything but the tier folders.
 const EPISODE_CONTENT = '^src/episodes/(?!(components|lib|hooks)/)';
 // The Episodes area's tier folders, each the tier its name says (FE-007): components, browser hooks, plain logic.
 const EPISODE_HOOKS = '^src/episodes/hooks/';
-// The composition registries in the area's lib/: they import every Episode's and tooling page's record, so they sit
+// The composition registries in the area's lib/: they import every Episode's and Resource's record, so they sit
 // above the Episodes they list and the lib rules below leave them out.
 const COMPOSITION_REGISTRY_NAMES = '(registry|episode-registry\\.generated)';
 const COMPOSITION_REGISTRY = `^src/episodes/lib/${COMPOSITION_REGISTRY_NAMES}\\.ts$`;
-// The tests that run over every composed Episode and tooling page through those registries, rendering Slides.
+// The tests that run over every composed Episode and Resource through those registries, rendering Slides.
 const REGISTRY_TESTS =
   '^src/episodes/lib/(placement-markers|published-anchors|registry|slide-dom-ids|slide-folders)\\.test\\.ts$';
 // The product areas (spec #348): each a top-level folder of src/, between page assembly above and the content store
@@ -54,16 +54,16 @@ const EPISODE_REACH = [
 ];
 
 // A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/`, `episodes/by-event/<event>/<ep>/slides/<slide>/`
-// in an Event's copy, `episodes/tooling/<page>/slides/<slide>/` on a tooling page, or `episodes/slide-pool/<slide>/` in
+// in an Event's copy, `episodes/resources/<page>/slides/<slide>/` on a Resource, or `episodes/slide-pool/<slide>/` in
 // the Slide pool (FE-002, FE-004 §3, FE-007 §5). The two capture groups name the folder that holds the Slide and the
 // Slide, so a rule's `to` can say "this same folder" as `$1/$2`.
 const SLIDE_FOLDER =
-  '^src/episodes/((?:by-event/[^/]+|tooling)/[^/]+/slides|(?!components/|lib/|hooks/)[^/]+/slides|slide-pool)/([^/]+)/';
+  '^src/episodes/((?:by-event/[^/]+|resources)/[^/]+/slides|(?!components/|lib/|hooks/)[^/]+/slides|slide-pool)/([^/]+)/';
 const OWN_SLIDE_FOLDER = '^src/episodes/$1/$2/';
 // The Slide pool: content Slides several Episodes compose (FE-004 §3).
 const SLIDE_POOL = '^src/episodes/slide-pool/';
 // A Section file, `<ep>/sections/<section-slug>.ts`, named after its section slide; the second capture group names it.
-const SECTION_FILE = '^src/episodes/((?:by-event/[^/]+|tooling)/[^/]+|[^/]+)/sections/([^/]+)\\.ts$';
+const SECTION_FILE = '^src/episodes/((?:by-event/[^/]+|resources)/[^/]+|[^/]+)/sections/([^/]+)\\.ts$';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the Explorable explanations, the UI
 // kit, the core components (server files only, see the client rule), hooks and lib.
 const SLIDE_SHARED_REACH = [
@@ -77,7 +77,7 @@ const SLIDE_SHARED_REACH = [
 // The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2).
 // An Episode's metadata file, an Event's copy's under `by-event/<event>/`: a record the content store loads (FE-013).
 const EPISODE_METADATA =
-  '^src/episodes/(by-event/[^/]+/[^/]+|(?!components/|lib/|hooks/|tooling/)[^/]+)/episode-metadata\\.ts$';
+  '^src/episodes/(by-event/[^/]+/[^/]+|(?!components/|lib/|hooks/|resources/)[^/]+)/episode-metadata\\.ts$';
 // The store's schemas: a leaf every tier may import record types from (FE-007 §2.7).
 const STORE_SCHEMAS = '^src/content-store/schemas/';
 // The store's catalogue, the delivery policy readers import beside the entry: every module but the page catalogue,

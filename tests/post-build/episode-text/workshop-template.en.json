@@ -1,9 +1,12 @@
 {
   "title": "Workshop template · hancrafted",
-  "description": "Copy this tooling page to start the opening Episode of a new Event: title, agenda, scope and organisation.",
+  "description": "Copy this Episode template as the opening Episode of a new Event: title, agenda, what is in and out of scope, and who organises it, with placeholder words to replace.",
   "toc": "Contents Loading 1 Agenda 2 In scope Out of scope 3 Organisation Open contents : Contents Contents 1 Agenda 2 In scope Out of scope 3 Organisation",
   "slides": [
-    { "id": "top", "text": "Workshop template Replace with the workshop’s name, its date and who it is for." },
+    {
+      "id": "top",
+      "text": "Workshop template The opening Episode of a workshop: copy it once per Event for the agenda, the scope and the organisers."
+    },
     {
       "id": "agenda",
       "text": "Agenda Replace with the plan of the session: each block with its time slot. Time slot: first block Time slot: second block Time slot: third block Time slot: questions and wrap-up"

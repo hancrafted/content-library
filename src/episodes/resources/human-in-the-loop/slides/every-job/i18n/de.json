@@ -1,0 +1,15 @@
+{
+  "title": "Jede Aufgabe",
+  "caption": "Derselbe Projektplan eine Ebene tiefer: Jede Phase enthält ihre Aufgaben, in der Reihenfolge ihrer Abhängigkeiten.",
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Der Projektplan-Workflow in der Aufgabenansicht: jede Aufgabe jeder Phase als Karte, durch Pfeile verbunden.",
+    "tryit": "Klicken Sie auf eine Aufgabenkarte, um ihre Phase genau an dieser Aufgabe zu öffnen. Wechseln Sie in der Werkzeugleiste zurück zu den Phasen und vergleichen Sie.",
+    "notice": "Epics und Ausführen wiederholen sich: Jede Phase ist einmal gezeichnet, in einer gestrichelten Klammer, die sagt, dass sie je Epic oder Ticket läuft."
+  }
+}

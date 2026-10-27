@@ -13,6 +13,8 @@ export const ROUTES = {
   episodes: '/episodes',
   /** The Events list; each Event's page sits under this path. */
   events: '/events',
+  /** The Resources list; each Resource's page sits under its type's plural, `record-routes.ts`. */
+  resources: '/resources',
 } as const;
 
 /** The URL a logical path is served at under `siteUrl`: `trailingSlash` makes it the canonical, the origin alone for the home page. */

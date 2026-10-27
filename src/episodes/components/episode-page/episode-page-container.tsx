@@ -1,4 +1,4 @@
-import { episodeRoute } from '@/content-store/catalogue/record-routes';
+import { ownRouteOf } from '@/content-store/catalogue/record-routes';
 import type { Video } from '@/content-store/store';
 import type { LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import type { EpisodeComposition, HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';
@@ -196,12 +196,12 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 interface EpisodePageContainerProps {
   locale: Locale;
   /**
-   * The Episode the page presents, as the store served its ref, or the tooling page it is: its id is what
+   * The Episode the page presents, as the store served its ref, or the Resource it is: its id is what
    * `data-episode` names, and its folder the source folder the token editor names.
    */
   page: ComposedPage;
   episode: EpisodeComposition;
-  /** The Episode's Video in this locale, from the content store; none for a tooling page or before upload. */
+  /** The Episode's Video in this locale, from the content store; none for a Resource or before upload. */
   video?: Video;
   /** Present when an Event presents the Episode at its own URL; absent on `/episodes/<slug>/`. */
   frame?: Partial<EpisodeFrame>;
@@ -221,7 +221,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const { locale, page, episode, video, frame = OWN_PAGE } = props;
   const { id } = page;
   const youtubeId = video?.id;
-  const route = frame.route ?? episodeRoute(id);
+  const route = frame.route ?? ownRouteOf(id);
   const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), id, route });
   const { minutes, slides, titleContext } = content;
   const sections = tocSectionsOf(slides);

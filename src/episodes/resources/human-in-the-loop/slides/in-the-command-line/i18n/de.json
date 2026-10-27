@@ -1,0 +1,15 @@
+{
+  "title": "In der Kommandozeile",
+  "caption": "Der Projektplan für alle, die im Terminal arbeiten: aus Prompts werden Befehle.",
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Der Projektplan-Workflow bei eingeschaltetem CLI-Schalter: Jede Phase kopiert CLI-Einrichtung und /Skill-Befehle statt Chat-Prompts.",
+    "tryit": "Öffnen Sie eine Phase und kopieren Sie ihren ersten Befehl. Mit dem CLI-Schalter wechseln Sie zurück zum Chat und sehen denselben Schritt als einfachen Prompt.",
+    "notice": "Nur das Kopierte ändert sich. Phasen, Prüfungen und Ihre Rolle in der Schleife bleiben dieselben."
+  }
+}

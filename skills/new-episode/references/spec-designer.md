@@ -12,7 +12,7 @@ Point, never paste: read each file yourself.
 - The Visual language the orchestrator gives you. Every Option follows it.
 - `GLOSSARY.md`, and `docs/design/`: `slide-library.md`, `design-guide.md` (the user's taste, its named styles, and run 1 as "not this"), `design-system.md` (tokens and motion rules).
 - The ADRs `.archgate/adrs/FE-002-episode-page.md`, `FE-007-module-layering.md`, `FE-009-slide-wrapper-and-scene.md`, `FE-011-design-tokens.md`.
-- The Master slides in `src/episodes/tooling/slide-master/slides/` and the frame components in `src/episodes/components/slide-master/`.
+- The Master slides in `src/episodes/resources/timelines/slides/` and `src/episodes/resources/grids/slides/` and the frame components in `src/episodes/components/slide-master/`.
 - [`write-spec.md`](write-spec.md): "What an Option settles", "Settle it as a Scene" and `## Rubric`. Your Options are judged by that rubric.
 - The `no-library-match` notes of the write-dossier Job for your Slides (`npm run episode:query -- "SELECT text FROM notes WHERE type = 'no-library-match'"`).
 - The sample Option `1a` in [`../assets/sample-episode/spec/spec.html`](../assets/sample-episode/spec/spec.html): the fragment's shape, and the fidelity bar below met.

@@ -7,14 +7,13 @@ import { type CheerioAPI } from 'cheerio';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { episodeRoute, isToolingSlug } from '../../src/content-store/catalogue/record-routes';
 import { DEFAULT_LOCALE, LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '../../src/shared/lib/title-anchor.pure';
-import { EXPORTED_EPISODES_PATH_SLUGS, exportedPage, OUT_DIR } from './exported-pages';
+import { EXPORTED_EPISODE_SHAPED_PAGES, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
 
-const PAGES = EXPORTED_EPISODES_PATH_SLUGS.flatMap((slug) =>
-  LOCALES.map((locale) => ({ slug, locale, url: localizePath(episodeRoute(slug), locale) })),
+const PAGES = EXPORTED_EPISODE_SHAPED_PAGES.flatMap(({ slug, route, folder }) =>
+  LOCALES.map((locale) => ({ slug, route, folder, locale, url: localizePath(route, locale) })),
 );
 
 /** Slides an Episode leaves untitled on purpose (FE-002 §2): rendered, never listed. */
@@ -26,18 +25,8 @@ const UNTITLED: Readonly<Record<string, readonly string[]>> = {
 const TITLE_SCRIPTED: readonly string[] = ['onboard-ai-every-time'];
 
 /** The scripts of an Episode's Title slide Voice script segments in `locale`, from its own Translation file. */
-function titleScripts(slug: string, locale: string): string[] {
-  const file = join(
-    import.meta.dirname,
-    '..',
-    '..',
-    'src',
-    'episodes',
-    isToolingSlug(slug) ? 'tooling' : '',
-    slug,
-    'i18n',
-    `${locale}.json`,
-  );
+function titleScripts(folder: string, locale: string): string[] {
+  const file = join(import.meta.dirname, '..', '..', 'src', 'episodes', folder, 'i18n', `${locale}.json`);
   const messages = JSON.parse(readFileSync(file, 'utf8'));
   const segments: Record<string, { script: string }> = messages.voiceScript?.segments ?? {};
   return Object.values(segments).map(({ script }) => script);
@@ -96,7 +85,7 @@ describe('episode structure', () => {
     console.info(`episode structure: walking ${PAGES.length} Episode pages`);
   });
 
-  describe.each(PAGES)('$url', ({ slug, locale, url }) => {
+  describe.each(PAGES)('$url', ({ slug, route, folder, locale, url }) => {
     it('holds the table of contents, then the slides', () => {
       // ARRANGE
       const expected = ['toc', 'slides', 'context'];
@@ -158,7 +147,7 @@ describe('episode structure', () => {
     it("shows the Title slide's own Voice script on its script tab, when it has one", () => {
       // ARRANGE
       const $ = exportedPage(url);
-      const scripts = titleScripts(slug, locale);
+      const scripts = titleScripts(folder, locale);
       // ACT
       const shown = $('#context-panel-script [data-context-for="top"]').text();
       const missing = scripts.filter((script) => !shown.includes(script));
@@ -378,7 +367,7 @@ describe('episode structure', () => {
 
     it('carries the same slide anchors as the default locale', () => {
       // ARRANGE
-      const reference = slideAnchors(exportedPage(localizePath(episodeRoute(slug), DEFAULT_LOCALE)));
+      const reference = slideAnchors(exportedPage(localizePath(route, DEFAULT_LOCALE)));
       // ACT
       const anchors = slideAnchors(exportedPage(url));
       // ASSERT

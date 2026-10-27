@@ -55,14 +55,25 @@ function own(record: Readonly<Record<string, unknown>>, id = String(record.slug)
 function copy(record: Readonly<Record<string, unknown>>, event: string = AXEL): { id: string; record: unknown } {
   return { id: episodeRef(String(record.slug), event).id, record };
 }
-const SOUND = { episodes: [own(EPISODE)], events: [EVENT], playlists: [PLAYLIST] };
+const SOUND = {
+  episodes: [own(EPISODE)],
+  events: [EVENT],
+  playlists: [PLAYLIST],
+  resources: [],
+  resourceCompositions: [],
+};
 
 describe('success cases', () => {
   it('loads a sound set of records whole, each Event holding the Playlist it presents with its Episodes', () => {
     // ARRANGE
     const loaded = { ...EPISODE, ref: episodeRef('alpha') };
     const presented = { ...PLAYLIST, episodes: [{ episode: loaded, place: { position: 1, count: 1 } }] };
-    const expected = { episodes: [loaded], events: [{ ...EVENT, playlist: presented }], playlists: [PLAYLIST] };
+    const expected = {
+      episodes: [loaded],
+      events: [{ ...EVENT, playlist: presented }],
+      playlists: [PLAYLIST],
+      resources: [],
+    };
     // ACT
     const content = loadContent(SOUND);
     // ASSERT
@@ -164,6 +175,15 @@ describe('success cases', () => {
       expect(video).toEqual(expected);
     },
   );
+
+  it('loads a Resource whose composition folder exists', () => {
+    // ARRANGE
+    const input = { ...RESOURCE_RECORDS, resourceCompositions: ['grids'] };
+    // ACT
+    const content = loadContent(input);
+    // ASSERT
+    expect(content.resources.map(({ slug }) => slug)).toEqual(['grids']);
+  });
 });
 
 describe('failure cases', () => {
@@ -340,7 +360,13 @@ describe('failure cases', () => {
     // ARRANGE
     const unlistedOwn = { ...EPISODE, slug: 'beta', visibility: 'unlisted' } as const;
     const curated = { id: 'curated', visibility: 'public', episodes: ['alpha', 'beta'] } as const;
-    const input = { episodes: [own(EPISODE), own(unlistedOwn)], events: [EVENT], playlists: [PLAYLIST, curated] };
+    const input = {
+      episodes: [own(EPISODE), own(unlistedOwn)],
+      events: [EVENT],
+      playlists: [PLAYLIST, curated],
+      resources: [],
+      resourceCompositions: [],
+    };
     const expected =
       'Playlist curated: episodes lists the unlisted Episode "beta", but no Event presents this public Playlist';
     // ACT
@@ -483,7 +509,13 @@ describe('failure cases', () => {
     };
     const theirs = { id: 'cyberforum', visibility: 'public', episodes: [COPY_ID] } as const;
     const ours = { ...PLAYLIST, episodes: [COPY_ID] };
-    const input = { episodes: [own(EPISODE), copy(UNLISTED)], events: [EVENT, other], playlists: [ours, theirs] };
+    const input = {
+      episodes: [own(EPISODE), copy(UNLISTED)],
+      events: [EVENT, other],
+      playlists: [ours, theirs],
+      resources: [],
+      resourceCompositions: [],
+    };
     const expected = `Playlist cyberforum: episodes lists "${COPY_ID}", a copy Event ${AXEL} owns, but Event 2026-10-28-cyberforum presents this Playlist`;
     // ACT
     const load = () => loadContent(input);
@@ -513,7 +545,7 @@ describe('failure cases', () => {
     expect(load).toThrow(expected);
   });
 
-  it.each(['slide-pool', 'tooling', 'components', 'lib', 'hooks'])(
+  it.each(['slide-pool', 'resources', 'components', 'lib', 'hooks'])(
     'refuses an Episode whose slug is the reserved folder name %s, naming the Episode',
     (slug) => {
       // ARRANGE
@@ -607,6 +639,46 @@ describe('failure cases', () => {
     for (const sentence of expected) expect(load).toThrow(sentence);
     for (const sentence of expectedUnlisted) expect(loadUnlisted).toThrow(sentence);
   });
+
+  it('refuses a Resource whose composition folder does not exist', () => {
+    // ARRANGE
+    const input = { ...RESOURCE_RECORDS, resourceCompositions: [] };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow('Resource grids: no composition folder src/episodes/resources/grids/ holds its Slides');
+  });
+
+  it('refuses a composition folder that has no Resource record', () => {
+    // ARRANGE
+    const input = { ...SOUND, resources: [], resourceCompositions: ['grids'] };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow('Resource grids: the composition folder src/episodes/resources/grids/ has no record');
+  });
+
+  it('refuses two Resources with one slug, and a Resource of an unknown type, naming the record', () => {
+    // ARRANGE
+    const input = {
+      ...SOUND,
+      resources: [RESOURCE, RESOURCE, { ...RESOURCE, slug: 'odd', type: 'deck' }],
+      resourceCompositions: ['grids', 'odd'],
+    };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow('Resource odd: type is "deck"');
+  });
+
+  it('refuses a duplicate Resource slug', () => {
+    // ARRANGE
+    const input = { ...RESOURCE_RECORDS, resources: [RESOURCE, RESOURCE], resourceCompositions: ['grids'] };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow('Resource grids: slug is used by more than one Resource');
+  });
 });
 
 describe('edge cases', () => {
@@ -616,7 +688,13 @@ describe('edge cases', () => {
     const attention = { ...UNLISTED, slug: 'ai-attention-span' };
     const copyId = episodeRef('ai-attention-span', AXEL).id;
     const atAxel = { ...PLAYLIST, episodes: [copyId] };
-    const input = { episodes: [own(EPISODE), copy(attention)], events: [EVENT], playlists: [atAxel] };
+    const input = {
+      episodes: [own(EPISODE), copy(attention)],
+      events: [EVENT],
+      playlists: [atAxel],
+      resources: [],
+      resourceCompositions: [],
+    };
     const expected = {
       episodes: [
         { kind: 'standalone', id: 'alpha', slug: 'alpha' },
@@ -639,7 +717,13 @@ describe('edge cases', () => {
     const tokens = { ...EPISODE, slug: 'ai-token-economy' };
     const attention = { ...EPISODE, slug: 'ai-attention-span' };
     const playlist = { ...PLAYLIST, episodes: ['ai-token-economy', 'alpha', 'ai-attention-span'] };
-    const input = { episodes: [own(tokens), own(EPISODE), own(attention)], events: [EVENT], playlists: [playlist] };
+    const input = {
+      episodes: [own(tokens), own(EPISODE), own(attention)],
+      events: [EVENT],
+      playlists: [playlist],
+      resources: [],
+      resourceCompositions: [],
+    };
     const expected = [
       {
         slug: 'ai-token-economy',
@@ -707,3 +791,10 @@ describe('edge cases', () => {
     expect(load).toThrow(expected);
   });
 });
+
+/*
+ * Resources (design-ADR 0019): a record and its composition folder go together, and the load throws on either one
+ * alone.
+ */
+const RESOURCE = { slug: 'grids', type: 'master-slide', tags: ['workflow'], visibility: 'public' } as const;
+const RESOURCE_RECORDS = { ...SOUND, resources: [RESOURCE] };

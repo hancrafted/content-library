@@ -58,7 +58,7 @@ const visual = slide({ slug: 'visual', messages: VISUAL, content: () => null });
 const nextSteps = slide({ slug: 'next-steps', messages: NEXT, content: () => null });
 
 const RECORD = episode({
-  slug: 'episode-template',
+  slug: 'ai-token-economy',
   messages: EPISODE,
   sections: [[foundations, whyATemplate, visual], [nextSteps]],
 });
@@ -70,7 +70,7 @@ describe('success cases', () => {
     // ACT
     const { title, caption } = await recordContent(RECORD, 'de', {
       translatorOf: translatorOf('de'),
-      id: 'episode-template',
+      id: 'ai-token-economy',
     });
     // ASSERT
     expect({ title, caption }).toEqual(expected);
@@ -85,7 +85,7 @@ describe('success cases', () => {
       { id: 'next-steps', section: 'next-steps', level: 'h2', title: 'Nächste Schritte' },
     ];
     // ACT
-    const { slides } = await recordContent(RECORD, 'de', { translatorOf: translatorOf('de'), id: 'episode-template' });
+    const { slides } = await recordContent(RECORD, 'de', { translatorOf: translatorOf('de'), id: 'ai-token-economy' });
     // ASSERT
     expect(slides.map(({ id, section, level, title }) => ({ id, section, level, title }))).toEqual(expected);
   });
@@ -100,7 +100,7 @@ describe('success cases', () => {
       content: () => null,
     });
     const record = episode({
-      slug: 'episode-template',
+      slug: 'ai-token-economy',
       messages: EPISODE,
       sections: [[foundations, captioned, visual]],
     });
@@ -112,7 +112,7 @@ describe('success cases', () => {
     // ACT
     const { slides, header } = await recordContent(record, 'en', {
       translatorOf: translatorOf('en'),
-      id: 'episode-template',
+      id: 'ai-token-economy',
     });
     // ASSERT
     expect(header).toBe('shared');
@@ -126,12 +126,12 @@ describe('success cases', () => {
       messages: { en: { motif: 'Rocket' }, de: { motif: 'Rakete' } },
       content: ({ t }) => createElement('p', null, t('motif')),
     });
-    const record = episode({ slug: 'episode-template', messages: EPISODE, title: hero, sections: [[foundations]] });
+    const record = episode({ slug: 'ai-token-economy', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = '<p>Rakete</p>';
     // ACT
     const { hero: scene } = await recordContent(record, 'de', {
       translatorOf: translatorOf('de'),
-      id: 'episode-template',
+      id: 'ai-token-economy',
     });
     // ASSERT
     expect(renderToStaticMarkup(scene)).toBe(expected);
@@ -144,10 +144,10 @@ describe('success cases', () => {
       messages: { en: { caption: 'An empty <b>pipeline</b>.' }, de: { caption: 'Eine leere <b>Pipeline</b>.' } },
       content: () => null,
     });
-    const record = episode({ slug: 'episode-template', messages: EPISODE, title: hero, sections: [[foundations]] });
+    const record = episode({ slug: 'ai-token-economy', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = 'Eine leere Pipeline.';
     // ACT
-    const { caption } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), id: 'episode-template' });
+    const { caption } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), id: 'ai-token-economy' });
     // ASSERT
     expect(caption).toBe(expected);
   });
@@ -162,10 +162,10 @@ describe('success cases', () => {
       },
       content: () => null,
     });
-    const record = episode({ slug: 'episode-template', messages: EPISODE, sections: [[bold]] });
+    const record = episode({ slug: 'ai-token-economy', messages: EPISODE, sections: [[bold]] });
     const expected = { title: 'Foundations', caption: 'Revenue lands here.', captionEmphasis: [{ start: 8, end: 13 }] };
     // ACT
-    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
+    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
     // ASSERT
     expect(slides[0].header).toEqual(expected);
   });
@@ -175,13 +175,13 @@ describe('failure cases', () => {
   it('rejects a Slide slug used twice in one Episode, as when a copied Slide collides', async () => {
     // ARRANGE
     const record = episode({
-      slug: 'episode-template',
+      slug: 'ai-token-economy',
       messages: EPISODE,
       sections: [[foundations], [foundations]],
     });
     const expected = 'foundations';
     // ACT
-    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
+    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -192,10 +192,10 @@ describe('failure cases', () => {
       messages: WHY,
       content: ({ t, Title }) => createElement(Title, null, t('title')),
     });
-    const record = episode({ slug: 'episode-template', messages: EPISODE, sections: [[foundations, titled]] });
+    const record = episode({ slug: 'ai-token-economy', messages: EPISODE, sections: [[foundations, titled]] });
     const expected = /header: 'authored'/;
     // ACT
-    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
+    const { slides } = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
     const render = () => renderToStaticMarkup(slides[1].content);
     // ASSERT
     expect(render).toThrow(expected);
@@ -210,10 +210,10 @@ describe('failure cases', () => {
       notes: [{ slug: 'n', target: 'title' }],
       content: () => null,
     });
-    const record = episode({ slug: 'episode-template', messages: EPISODE, title: hero, sections: [[foundations]] });
+    const record = episode({ slug: 'ai-token-economy', messages: EPISODE, title: hero, sections: [[foundations]] });
     const expected = 'hero';
     // ACT
-    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' });
+    const build = recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
     // ASSERT
     await expect(build).rejects.toThrow(expected);
   });
@@ -229,10 +229,10 @@ describe('edge cases', () => {
       notes: [{ slug: 'why', target: 'prose' }],
       content: (kit) => (kit as unknown as RuntimeKit).ref('why')('phrase'),
     });
-    const record = episode({ slug: 'episode-template', messages: EPISODE, sections: [[referring]] });
+    const record = episode({ slug: 'ai-token-economy', messages: EPISODE, sections: [[referring]] });
     const expected = 'öffnet Sprechernotiz';
     // ACT
-    const { slides } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), id: 'episode-template' });
+    const { slides } = await recordContent(record, 'de', { translatorOf: translatorOf('de'), id: 'ai-token-economy' });
     const [{ content }] = slides;
     const label = isValidElement<{ label: string }>(content) ? content.props.label : undefined;
     // ASSERT
@@ -246,7 +246,7 @@ describe('edge cases', () => {
       content: ({ t, Title }) => createElement(Title, null, t('title')),
     });
     const record = episode({
-      slug: 'episode-template',
+      slug: 'ai-token-economy',
       messages: EPISODE,
       header: 'authored',
       sections: [[foundations, titled]],
@@ -256,7 +256,7 @@ describe('edge cases', () => {
     // ACT
     const { slides, header } = await recordContent(record, 'en', {
       translatorOf: translatorOf('en'),
-      id: 'episode-template',
+      id: 'ai-token-economy',
     });
     // ASSERT
     expect(header).toBe('authored');
@@ -267,16 +267,16 @@ describe('edge cases', () => {
   it('types the header in by default, and takes the entrance the record names', async () => {
     // ARRANGE
     const record = episode({
-      slug: 'episode-template',
+      slug: 'ai-token-economy',
       messages: EPISODE,
       entrance: 'fade',
       sections: [[foundations]],
     });
     const expected = { byDefault: 'typewriter', named: 'fade' };
     // ACT
-    const byDefault = (await recordContent(RECORD, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' }))
+    const byDefault = (await recordContent(RECORD, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' }))
       .entrance;
-    const named = (await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'episode-template' }))
+    const named = (await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' }))
       .entrance;
     // ASSERT
     expect({ byDefault, named }).toEqual(expected);

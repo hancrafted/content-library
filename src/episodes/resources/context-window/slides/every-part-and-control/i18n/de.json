@@ -1,0 +1,21 @@
+{
+  "title": "Alle Teile und Bedienelemente",
+  "caption": "Der Sommerfest-Chat aus der Episode zur Aufmerksamkeitsspanne der KI bei Schritt 25 von 28, direkt nach der Komprimierung bei Schritt 24. Alle sechs Teile sichtbar, jedes Bedienelement in Werkzeugleiste und Köpfen aktiv.",
+  "notes": {
+    "preset": {
+      "header": "Preset gallery-full",
+      "description": "Aus der Episode zur Aufmerksamkeitsspanne der KI: der Sommerfest-Chat, einen Schritt nach seiner Komprimierung. Alle Teile und Bedienelemente sind an; der Schalter 200K | 1M bleibt aus, da der Chat nur bei 200K komprimiert."
+    }
+  },
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Der ganze Grundpfeiler: Chat, Zeitleiste, Fenster, Kategorienliste, Details und Aufmerksamkeit, mit jedem Bedienelement in Werkzeugleiste und Köpfen.",
+    "tryit": "Ziehen Sie die Chips unter „Teile zeigen“, um die Teile umzusortieren. Drücken Sie „Technisch“ in der Werkzeugleiste. Fahren Sie über einen Block, eine Zeile oder eine Sprechblase. Laden Sie den Chat als Claude-Code-Protokoll herunter.",
+    "notice": "Alle sechs Teile leuchten gemeinsam: Wer über eine Stelle fährt, sieht dieselbe Nachricht, denselben Block und dieselbe Aufmerksamkeitszeile überall hervorgehoben."
+  }
+}

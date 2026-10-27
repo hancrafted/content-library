@@ -18,6 +18,10 @@
     "events": {
       "title": "Events",
       "description": "Workshops and webinars that walk through a planned set of visualised theory episodes, in order."
+    },
+    "resources": {
+      "title": "Resources",
+      "description": "Interactive explanations, Episode templates and Master slides: the reusable teaching units behind the hancrafted Episodes."
     }
   },
   "tags": {

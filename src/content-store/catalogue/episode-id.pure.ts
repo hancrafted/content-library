@@ -14,17 +14,17 @@ export const EVENT_COPIES_FOLDER = 'by-event';
 /** The Slide pool: one folder of content Slides several Episodes compose, `slide-pool/<slide>/` (FE-004). */
 export const SLIDE_POOL_FOLDER = 'slide-pool';
 
-/** The tooling pages: authoring benches served under `/episodes/<slug>/` but no Episode, `tooling/<slug>/`. */
-export const TOOLING_FOLDER = 'tooling';
+/** The Resources' compositions: pages that are no Episode, one folder each, `resources/<slug>/` (design-ADR 0019). */
+export const RESOURCES_FOLDER = 'resources';
 
 /**
  * Folder names under the Episodes folder that hold no Episode, so no Episode may take one as its slug: the Event copies,
- * the Slide pool, the tooling pages, and the area's code (`components/`, `lib/`, `hooks/`).
+ * the Slide pool, the Resources, and the area's code (`components/`, `lib/`, `hooks/`).
  */
 export const RESERVED_FOLDER_NAMES: readonly string[] = [
   EVENT_COPIES_FOLDER,
   SLIDE_POOL_FOLDER,
-  TOOLING_FOLDER,
+  RESOURCES_FOLDER,
   'components',
   'lib',
   'hooks',
@@ -80,24 +80,24 @@ export function matchEpisode<Id extends string, R>(episode: EpisodeRef<Id>, case
   return episode.kind === 'standalone' ? cases.standalone(episode) : cases['event-copy'](episode);
 }
 
-/** A tooling page (design-ADR 0016 decision 12): an authoring bench, no Episode, named by its slug, which is its id. */
-export interface ToolingRef<Slug extends string = string> {
-  readonly kind: 'tooling';
+/** A Resource's composition (design-ADR 0019): a page that is no Episode, named by its slug, which is its id. */
+export interface ResourceRef<Slug extends string = string> {
+  readonly kind: 'resource';
   readonly id: Slug;
   readonly slug: Slug;
 }
 
-/** The tooling page in folder `tooling/<slug>/`. */
-export function toolingRef<Slug extends string>(slug: Slug): ToolingRef<Slug> {
-  return { kind: 'tooling', id: slug, slug };
+/** The Resource composition in folder `resources/<slug>/`. */
+export function resourceRef<Slug extends string>(slug: Slug): ResourceRef<Slug> {
+  return { kind: 'resource', id: slug, slug };
 }
 
 /**
  * A page's folder under the Episodes folder, the one place the folder layout is written: `<slug>` for an Episode no
- * Event owns, `by-event/<event>/<slug>` for an Event's copy, `tooling/<slug>` for a tooling page.
+ * Event owns, `by-event/<event>/<slug>` for an Event's copy, `resources/<slug>` for a Resource.
  */
-export function folderOf(page: EpisodeRef | ToolingRef): string {
-  if (page.kind === 'tooling') return `${TOOLING_FOLDER}/${page.slug}`;
+export function folderOf(page: EpisodeRef | ResourceRef): string {
+  if (page.kind === 'resource') return `${RESOURCES_FOLDER}/${page.slug}`;
   return matchEpisode(page, {
     standalone: ({ slug }) => slug,
     'event-copy': ({ event, slug }) => `${EVENT_COPIES_FOLDER}/${event}/${slug}`,

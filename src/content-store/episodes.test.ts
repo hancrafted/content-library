@@ -131,7 +131,7 @@ describe('success cases', () => {
   });
 
   it.each(['episode-template', 'workshop-template', 'slide-master', 'explorable-explanations'])(
-    'lists no tooling page in the overview or Upcoming Episodes: %s is no Episode',
+    'lists no Resource in the overview or Upcoming Episodes: %s is no Episode',
     (slug) => {
       // ARRANGE
       const expected = { listed: false, page: false };

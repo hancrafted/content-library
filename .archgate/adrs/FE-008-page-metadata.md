@@ -30,7 +30,7 @@ Why layouts stay site-wide: Next.js inherits a layout's field into every page th
 
 1. Every `page.tsx` MUST export `metadata` or `generateMetadata` returning `pageMetadata(<PageRef>, locale)`.
 2. `pageMetadata` derives the canonical and one alternate per locale plus `x-default` (the default-locale URL). No route writes a URL.
-3. Every page has a `PageRef` `kind`: `home`, `dashboard`, `episodes`, `events`, `episode`, `tooling`, `event` or `event-episode`. Code branching on it names every kind, so a new one fails `tsc`.
+3. Every page has a `PageRef` `kind`: `home`, `dashboard`, `episodes`, `events`, `episode`, `resources`, `resource`, `event` or `event-episode`. Code branching on it names every kind, so a new one fails `tsc`.
 
 ### 2. Title and description are translated strings
 

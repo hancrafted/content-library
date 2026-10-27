@@ -1,7 +1,8 @@
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { ROUTES } from '@/shared/lib/static-routes';
-import type { EpisodeRef, StandaloneRef, ToolingRef } from './episode-id.pure';
-import { EPISODE_IDS, TOOLING_SLUGS } from './episode-ids.generated';
+import type { ResourceType } from '../schemas/fields';
+import type { EpisodeRef, ResourceRef, StandaloneRef } from './episode-id.pure';
+import { EPISODE_IDS, RESOURCE_SLUGS } from './episode-ids.generated';
 import { EVENT_SLUGS } from './event-slugs.generated';
 
 /*
@@ -16,8 +17,8 @@ export const LEGACY_EPISODE_PREFIX = '/episode';
  * Every Episode with a page, public or unlisted, by its Episode id (GLOSSARY): one folder each,
  * `src/episodes/<slug>/`, or `…/by-event/<event-slug>/<slug>/` for an Event's copy, whose id is
  * `<event-slug>__<slug>`. Listed by the generated Episode registry. Which of them has an `/episodes/` page is the page
- * catalogue's (`treatmentOf` in the content store): an Event's copy lives only under its Event. The tooling pages
- * served beside them are no Episodes: `TOOLING_SLUGS`.
+ * catalogue's (`treatmentOf` in the content store): an Event's copy lives only under its Event. The Resources
+ * served beside them are no Episodes: `RESOURCE_SLUGS`.
  */
 export { EPISODE_IDS };
 
@@ -33,36 +34,53 @@ export function hasPage(episode: EpisodeRef): episode is EpisodeRef<EpisodeId> {
 }
 
 /**
- * Tooling pages: authoring benches served at `/episodes/<slug>/` beside the Episodes, but no Episode (design-ADR
- * 0016 decision 12), one folder each, `src/episodes/tooling/<slug>/`, listed by the generated registry. They have no
- * visibility and no status, are `noindex`, self-canonical and never in the sitemap, and no Episode list shows them.
+ * Resources: pages that are no Episode (design-ADR 0019), one composition folder each, `src/episodes/resources/<slug>/`,
+ * listed by the generated registry; each also has a record in `src/content-store/resources/<slug>.ts`. They are served at
+ * `/<type plural>/<slug>/`, public and indexed, and no Episode list shows them.
  */
-export { TOOLING_SLUGS };
+export { RESOURCE_SLUGS };
 
-export type ToolingSlug = (typeof TOOLING_SLUGS)[number];
+export type ResourceSlug = (typeof RESOURCE_SLUGS)[number];
 
-export function isToolingSlug(slug: string): slug is ToolingSlug {
-  return (TOOLING_SLUGS as readonly string[]).includes(slug);
+/** A page served at `/episodes/<slug>/`: an Episode's own. An Event's copy, whose id holds its Event's slug, and an unlisted Episode are never exported there. */
+export type EpisodesPathSlug = EpisodeId;
+
+/** The id of any page the Episode container renders: an Episode's id or a Resource's slug; what `data-episode` names. */
+export type ComposedId = EpisodeId | ResourceSlug;
+
+export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
+  return isEpisodeId(slug);
+}
+
+/** The logical path of one Episode. */
+export function episodeRoute(slug: EpisodesPathSlug): string {
+  return `${ROUTES.episodes}/${slug}`;
 }
 
 /**
- * A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. An Event's copy, whose id holds its
- * Event's slug, is never exported there; nor is an unlisted Episode.
+ * The path a page is served at on its own, `/episodes/<slug>/` for an Episode. A Resource's path depends on its type,
+ * which its slug does not carry, so a Resource's page hands its route in (`resourceRoute`); asking for it here throws.
  */
-export type EpisodesPathSlug = EpisodeId | ToolingSlug;
-
-export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
-  return isEpisodeId(slug) || isToolingSlug(slug);
-}
-
-/** The logical path of one Episode, or of a tooling page, which sits beside them. */
-export function episodeRoute(slug: EpisodesPathSlug): string {
-  return `${ROUTES.episodes}/${slug}`;
+export function ownRouteOf(id: ComposedId): string {
+  if (!isEpisodeId(id)) throw new Error(`The Resource page "${id}" hands in its own route`);
+  return episodeRoute(id);
 }
 
 /** The logical path of a legacy Episode stub. */
 export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
   return `${LEGACY_EPISODE_PREFIX}/${slug}`;
+}
+
+/** The URL path segment each Resource type is served under, its plural: the one place the rule is written. */
+export const RESOURCE_TYPE_PATHS: Readonly<Record<ResourceType, string>> = {
+  'explorable-explanation': 'explorable-explanations',
+  'episode-template': 'episode-templates',
+  'master-slide': 'master-slides',
+};
+
+/** The logical path of one Resource's page, worked out from its type and slug and never stored: `/<type plural>/<slug>`. */
+export function resourceRoute(type: ResourceType, slug: ResourceSlug): string {
+  return `/${RESOURCE_TYPE_PATHS[type]}/${slug}`;
 }
 
 /**
@@ -91,7 +109,7 @@ export function eventEpisodeRoute(event: EventSlug, episode: Pick<EpisodeRef, 's
  * A page with its own metadata and a closed set of exported locales, told apart by its `kind`. Every site that
  * branches on the kind does so through `matchPage` or a table keyed by `PageKind`, so a new kind fails `tsc` at each.
  * An Episode's page carries the EpisodeRef the store served, so its slug and owning Event are fields, never a parse;
- * its own page under `/episodes/` only one no Event owns. A tooling page carries its ToolingRef.
+ * its own page under `/episodes/` only one no Event owns. A Resource's page carries its type and its ResourceRef.
  * Which pages exist, and how each is treated, is the page catalogue's (`PAGES` in the content store): it reads them
  * from the records, which lib cannot.
  */
@@ -100,8 +118,9 @@ export type PageRef =
   | { readonly kind: 'dashboard' }
   | { readonly kind: 'episodes' }
   | { readonly kind: 'events' }
+  | { readonly kind: 'resources' }
   | { readonly kind: 'episode'; readonly episode: StandaloneRef<EpisodeId> }
-  | { readonly kind: 'tooling'; readonly tooling: ToolingRef<ToolingSlug> }
+  | { readonly kind: 'resource'; readonly type: ResourceType; readonly resource: ResourceRef<ResourceSlug> }
   | { readonly kind: 'event'; readonly event: EventSlug }
   | { readonly kind: 'event-episode'; readonly event: EventSlug; readonly episode: EpisodeRef<EpisodeId> };
 
@@ -112,13 +131,13 @@ export type PageKind = PageRef['kind'];
 export type PageOf<K extends PageKind> = Extract<PageRef, { readonly kind: K }>;
 
 /** A page that presents no record: its copy is `meta.<kind>` of the Translation file. */
-export type ListPage = PageOf<'home' | 'dashboard' | 'episodes' | 'events'>;
+export type ListPage = PageOf<'home' | 'dashboard' | 'episodes' | 'events' | 'resources'>;
 
 /** A page that presents a record, so its route hands in its copy and facts. */
-export type RecordPage = PageOf<'episode' | 'tooling' | 'event' | 'event-episode'>;
+export type RecordPage = PageOf<'episode' | 'resource' | 'event' | 'event-episode'>;
 
-/** A page served at `/episodes/<slug>/`: an Episode's own, or a tooling page. */
-export type EpisodesPathPage = PageOf<'episode' | 'tooling'>;
+/** A page served at `/episodes/<slug>/`: an Episode's own. */
+export type EpisodesPathPage = PageOf<'episode'>;
 
 /** One case per kind of the pages `P`, each handed its page narrowed to that kind. */
 export type PageCases<P extends PageRef, R> = {
@@ -143,8 +162,9 @@ const LOCALES_BY_KIND: Readonly<Record<PageKind, readonly Locale[]>> = {
   dashboard: ['en'],
   episodes: LOCALES,
   events: LOCALES,
+  resources: LOCALES,
   episode: LOCALES,
-  tooling: LOCALES,
+  resource: LOCALES,
   event: LOCALES,
   'event-episode': LOCALES,
 };
@@ -161,8 +181,9 @@ export function routeOf(page: PageRef): string {
     dashboard: () => ROUTES.dashboard,
     episodes: () => ROUTES.episodes,
     events: () => ROUTES.events,
+    resources: () => ROUTES.resources,
     episode: ({ episode }) => episodeRoute(episode.slug),
-    tooling: ({ tooling }) => episodeRoute(tooling.slug),
+    resource: ({ type, resource }) => resourceRoute(type, resource.slug),
     event: ({ event }) => eventRoute(event),
     'event-episode': ({ event, episode }) => eventEpisodeRoute(event, episode),
   });

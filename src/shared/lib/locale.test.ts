@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  isAnySectionActive,
   isLocale,
   isSectionActive,
   localeFromPathname,
@@ -12,6 +13,21 @@ import {
 const switchLocale = (pathname: string, target: Locale) => localizePath(stripLocale(pathname), target);
 
 describe('success cases', () => {
+  it('is active on any of its section paths, in either locale', () => {
+    // ARRANGE
+    const sections = ['/resources', '/explorable-explanations', '/master-slides'];
+    const pathnames = [
+      '/resources',
+      '/de/resources',
+      '/explorable-explanations/context-window',
+      '/de/master-slides/grids',
+    ];
+    // ACT
+    const active = pathnames.map((pathname) => isAnySectionActive(pathname, sections));
+    // ASSERT
+    expect(active).toEqual([true, true, true, true]);
+  });
+
   it('keeps the default locale unprefixed', () => {
     // ARRANGE
     const logicalPath = '/episode/episode-template';
@@ -92,6 +108,16 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('is not active on a page under none of its section paths', () => {
+    // ARRANGE
+    const sections = ['/resources', '/explorable-explanations', '/master-slides'];
+    const pathnames = ['/events/axel', '/episodes/context-window', '/de'];
+    // ACT
+    const active = pathnames.map((pathname) => isAnySectionActive(pathname, sections));
+    // ASSERT
+    expect(active).toEqual([false, false, false]);
+  });
+
   it('does not mark a section active on an unrelated page', () => {
     // ARRANGE
     const section = '/episode';

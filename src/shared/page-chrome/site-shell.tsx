@@ -12,15 +12,18 @@ const JS_CLASS_SCRIPT = "document.documentElement.classList.add('js')";
 /**
  * The `<html>` document every root layout renders. English and German each have
  * their own root layout (see README), and both delegate here. Page chrome reads no record: the layout hands in the
- * locales of each page not exported in every locale (`localesByRoute`), for the locale toggle.
+ * locales of each page not exported in every locale (`localesByRoute`), for the locale toggle, and the paths a Resource's
+ * pages sit under (`navSections`), for the Resources nav link.
  */
 export function SiteShell({
   locale,
   localesByRoute,
+  navSections,
   children,
 }: {
   locale: Locale;
   localesByRoute: LocalesByRoute;
+  navSections: readonly string[];
   children: ReactNode;
 }) {
   return (
@@ -31,7 +34,7 @@ export function SiteShell({
       <body className="min-h-screen antialiased">
         {/* First in <body>: sets the theme class before anything below paints. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        <SiteHeader locale={locale} localesByRoute={localesByRoute} />
+        <SiteHeader locale={locale} localesByRoute={localesByRoute} navSections={navSections} />
         {children}
       </body>
     </html>

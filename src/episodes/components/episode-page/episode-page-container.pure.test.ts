@@ -1,4 +1,4 @@
-import { episodeRef, toolingRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
 import type { TocSection } from '@/shared/lib/table-of-contents.pure';
 import { describe, expect, it } from 'vitest';
 import { eyebrowsOf, sourceFolderOf } from './episode-page-container.pure';
@@ -75,16 +75,16 @@ describe('edge cases', () => {
     expect(eyebrows.get('s--c')).toEqual(expected);
   });
 
-  it("names an Event's copy's folder under its Event, and a tooling page's under tooling/", () => {
+  it("names an Event's copy's folder under its Event, and a Resource's under resources/", () => {
     // ARRANGE
     const expected = [
       'src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time',
-      'src/episodes/tooling/slide-master',
+      'src/episodes/resources/timelines',
     ];
     // ACT
     const folders = [
       sourceFolderOf(episodeRef('onboard-ai-every-time', '2026-10-23-axel-agentic-workflow')),
-      sourceFolderOf(toolingRef('slide-master')),
+      sourceFolderOf(resourceRef('timelines')),
     ];
     // ASSERT
     expect(folders).toEqual(expected);
