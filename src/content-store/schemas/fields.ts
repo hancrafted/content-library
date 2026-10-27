@@ -46,7 +46,7 @@ export interface Organizer {
 /** The Organizer registry: each id's name and url, written once; a new Organizer joins `ORGANIZER_IDS` and this. */
 export const ORGANIZERS: Readonly<Record<OrganizerId, Organizer>> = {
   hancrafted: { name: 'hancrafted', url: 'https://hancrafted.net' },
-  axel: { name: 'AXEL' },
+  axel: { name: 'AXEL', url: 'https://axel.energy/' },
   cyberforum: {
     name: 'CyberForum Akademie',
     url: 'https://www.cyberforum.de/akademie/kuenstliche-intelligenz-karl',
