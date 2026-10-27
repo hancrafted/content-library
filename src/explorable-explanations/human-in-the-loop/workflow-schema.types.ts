@@ -157,7 +157,7 @@ export interface StageDef {
   readonly title: string;
   /** One line under the popover title. */
   readonly learningGoal: string;
-  /** The Presentation card's text, at most eight words. */
+  /** The Stages card's text, at most eight words. */
   readonly summary?: string;
   /** The stage repeats: one round per H3 under an H2 of an earlier output; the jobs of the stage run once per round. */
   readonly foreach?: ForeachDef;

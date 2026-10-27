@@ -86,7 +86,7 @@ function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; reado
   if (!progress) return null;
   return (
     <>
-      {offers(controls, 'progressDownload') && bar.canSave && (
+      {offers(controls, 'progressDownload', bar.readonly) && bar.canSave && (
         <ToolButton
           label={words.progressSave}
           data-control="progressDownload"
@@ -96,7 +96,7 @@ function ProgressIcons({ bar, describedBy }: { readonly bar: ToolbarProps; reado
           <FileDown aria-hidden="true" />
         </ToolButton>
       )}
-      {offers(controls, 'progressUpload') && (
+      {offers(controls, 'progressUpload', bar.readonly) && (
         <FileButton
           control="progressUpload"
           label={words.progressLoad}
@@ -162,7 +162,7 @@ const PROGRESS_CONTROLS: readonly ControlId[] = ['progressDownload', 'progressUp
 const hasIcons = (bar: ToolbarProps) =>
   bar.debug.show ||
   ICON_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)) ||
-  (bar.progress !== null && PROGRESS_CONTROLS.some((id) => offers(bar.controls, id)));
+  (bar.progress !== null && PROGRESS_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)));
 
 /** What sits under the pill when there is something to say: the progress note, then an upload's problems. */
 function Notes({ bar, id }: { readonly bar: ToolbarProps; readonly id: string }) {

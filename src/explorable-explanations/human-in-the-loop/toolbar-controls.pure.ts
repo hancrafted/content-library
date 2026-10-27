@@ -69,9 +69,9 @@ export function defOf(id: ControlId): ControlDef {
 /** A control as the Preset sets it: the registry's definition, then the Preset's own overrides. */
 export const controlOf = (controls: ControlMap, id: ControlId): ControlDef => ({ ...defOf(id), ...controls[id] });
 
-const PRACTICE = new Set<ControlId>(['level', 'demo', 'reset', 'debug']);
+const PRACTICE = new Set<ControlId>(['level', 'demo', 'reset', 'debug', 'progressDownload', 'progressUpload']);
 
-/** Whether the toolbar draws a control: the Preset has not hidden it, and `readonly` hides what only a practising viewer uses: the `</>` toggle, demo mode, Debug and Reset. */
+/** Whether the toolbar draws a control: the Preset has not hidden it, and `readonly` hides what only a practising viewer uses: the `</>` toggle, demo mode, Debug, saving and loading progress, and Reset. */
 export function offers(controls: ControlMap, id: ControlId, readonly = false): boolean {
   return controlOf(controls, id).show && !(readonly && PRACTICE.has(id));
 }

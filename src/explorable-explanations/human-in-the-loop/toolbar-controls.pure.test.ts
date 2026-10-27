@@ -32,13 +32,13 @@ describe('success cases', () => {
     expect(offers(preset, 'download')).toBe(true);
   });
 
-  it('hides the CLI toggle, demo mode, debug and reset for a readonly Preset, where nothing is tried', () => {
+  it('hides the CLI toggle, demo mode, debug, saving and loading progress and reset for a readonly Preset, where nothing is tried', () => {
     // ARRANGE
     const none = {};
     // ACT
     const shown = CONTROLS.filter(({ id }) => offers(none, id, true)).map(({ id }) => id);
     // ASSERT
-    expect(shown).toEqual(['picker', 'view', 'progressDownload', 'progressUpload', 'download', 'upload']);
+    expect(shown).toEqual(['picker', 'view', 'download', 'upload']);
   });
 });
 

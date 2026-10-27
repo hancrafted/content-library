@@ -8,7 +8,7 @@ import type { RoundRun, StageRun } from './workflow-run.pure';
 import type { Stage } from './workflow.types';
 
 /*
- * The stage card of the Presentation view, the one card that replaces the five job views: the stage's title, its short
+ * The stage card of the Stages view, the one card that replaces the five job views: the stage's title, its short
  * summary, a labelled "checked" mark where its jobs are reviewed, and its gate badge. Static: the column's "Try it"
  * button opens the modal, and the name opens a popover only where the Slide gives one.
  */

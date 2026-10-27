@@ -75,7 +75,7 @@ function focusTitle(event: Event) {
   document.querySelector<HTMLElement>('[data-part="modal"] [data-autofocus]')?.focus();
 }
 
-/** What opened the modal: a stage's name, and the job whose card was pressed in the Detailed view. */
+/** What opened the modal: a stage's name, and the job whose card was pressed in the Jobs view. */
 interface Opener {
   readonly stage: string;
   readonly jobId: string | null;

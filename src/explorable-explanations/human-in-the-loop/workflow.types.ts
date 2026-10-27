@@ -18,7 +18,7 @@ export interface Job {
   readonly detail?: string;
   /** Jobs of an earlier stage that must be done first: the producers of this job's slots. */
   readonly dependsOn: readonly string[];
-  /** Jobs of the same stage that run first, as the file's `needs` names them; the Detailed view draws them in this order. */
+  /** Jobs of the same stage that run first, as the file's `needs` names them; the Jobs view draws them in this order. */
   readonly needs: readonly string[];
   /** The slot ids this job takes in, each an output id of a job it depends on. */
   readonly inputs: readonly string[];
@@ -50,7 +50,7 @@ export interface Stage {
   readonly name: string;
   /** The one-line learning goal under the title of the stage's popover. */
   readonly goal: string;
-  /** The Presentation card's text, at most eight words. */
+  /** The Stages card's text, at most eight words. */
   readonly summary?: string;
   /** The BRIEF letters this stage applies, in BRIEF order. */
   readonly moves: readonly StageMove[];

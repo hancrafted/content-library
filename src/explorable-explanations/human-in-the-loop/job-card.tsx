@@ -10,7 +10,7 @@ import type { JobState } from './workflow-run.pure';
 import type { Job, Stage } from './workflow.types';
 
 /*
- * The job card of the Detailed view: the job's title, its one-line summary, a labelled check mark where the job is
+ * The job card of the Jobs view: the job's title, its one-line summary, a labelled check mark where the job is
  * reviewed. The Slide's `diagram.jobs` slot lays in its own detail, marker, popover and what hangs after the card.
  * Where the Scene can try, the whole card presses open the stage's modal at this job.
  */
