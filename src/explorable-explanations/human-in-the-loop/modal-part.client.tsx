@@ -2,8 +2,8 @@
 
 import { Dialog, DialogContent, DialogDescription } from '@/shared/components/ui/dialog';
 import { useEffect, useRef, useState } from 'react';
-import type { ModalProps } from './human-in-the-loop.types';
 import { ModalHeader } from './modal-header.client';
+import type { ModalProps } from './part-props.types';
 import type { SlotState, StepKit } from './step-kit.types';
 import { Stepper } from './stepper.client';
 import { ResetConfirm, useTeachingProps } from './teaching-controls.client';
@@ -40,7 +40,7 @@ type PanelProps = Omit<ModalProps, 'stage' | 'run' | 'jobId' | 'round' | 'slotVa
   readonly slots: SlotState;
 };
 
-function Panel({ stage, run, jobId, round, slots, level, onLevel, ...chrome }: PanelProps) {
+function Panel({ stage, run, jobId, round, slots, level, onLevel, debug, ...chrome }: PanelProps) {
   const [announced, copy] = useCopy(chrome.words.copied);
   const [showContext, setShowContext] = useState(false);
   const { words } = chrome;
@@ -60,7 +60,7 @@ function Panel({ stage, run, jobId, round, slots, level, onLevel, ...chrome }: P
         data-scroll=""
         className="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto overscroll-contain md:flex-initial md:pr-2"
       >
-        {first && <Stepper stage={stage} run={run} kit={kit} slots={slots} jobId={jobId} round={round} />}
+        {first && <Stepper stage={stage} run={run} kit={kit} slots={slots} jobId={jobId} round={round} debug={debug} />}
       </div>
       <p role="status" aria-live="polite" className="h-5 shrink-0 text-caption text-muted-foreground">
         {announced}

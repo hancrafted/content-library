@@ -31,6 +31,10 @@ A run (the pasted results and the teaching flag) is saved in the browser under t
 
 The registry's `teaching` and `reset` controls sit side by side after the Chat · CLI control in the toolbar and at the popover's top right (`teaching-controls.client.tsx`); a Preset hides either with `controls`, and a `readonly` Preset hides both. The parent holds `teaching` in its state (default on) and saves it with the run; the switch is disabled once `canChangeTeaching` of the run model is false, with the tooltip "Reset to change". Reset takes the `--warning` token colour while a result is pasted (saved work, here or in another Episode), asks to confirm in the page (no browser dialog) with "Download progress" first, then empties the run, turns teaching back on and removes this Workflow's entry only (`reset` of `use-progress.ts`).
 
+## Debug mode
+
+The registry's `debug` control is a "Debug" switch beside teaching, drawn only in development or on a page whose URL carries `?debug`, so a workshop viewer never sees it; its state lives in memory in the parent and is never stored. While it is on, "Copy prompt" and "Copy explanation prompt" append the `debugInstruction` word, which has the AI end every reply with a one-line `[hitl-debug] workflow=… · stage=… · job=… · round=… · prompt=… · step=… · level=… · teaching=… · locale=… · source=<short hash>` footer (`debug-footer.pure.ts`) to paste back as feedback; off, the copied text is unchanged.
+
 ## Adding a Workflow
 
 A Workflow is one YAML file per language; what is written renders as written. The authoring guide is [agentic-workflow.md](agentic-workflow.md): the schema, markers, slots, repeated stages, handoff templates and every loader problem. Start from `project-plan.en.yml` and `project-plan.de.yml`.

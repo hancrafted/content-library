@@ -7,11 +7,11 @@ import { Separator } from '@/shared/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
 import { Download, FileDown, FileUp, Upload } from 'lucide-react';
 import { useId, type ChangeEvent, type ReactNode } from 'react';
-import type { ToolbarProps } from './human-in-the-loop.types';
 import { LevelControl } from './level-control.client';
+import type { ToolbarProps } from './part-props.types';
 import { ProgressNote } from './progress-note.client';
 import { saveFile } from './save-file';
-import { ResetConfirm, TeachingControls, useTeachingProps } from './teaching-controls.client';
+import { DebugSwitch, ResetConfirm, TeachingControls, useTeachingProps } from './teaching-controls.client';
 import { ToolButton } from './tool-button.client';
 import { offers, type ControlId } from './toolbar-controls.pure';
 import { ViewControl } from './view-control.client';
@@ -19,7 +19,7 @@ import { workflowFile } from './workflow-file.pure';
 
 /*
  * The one pill toolbar, as the context window's: the use case picker ("Use case: <Workflow>", a shadcn select), a
- * separator, then the controls in order: view, Chat · CLI, teaching switch and Reset, save and load progress, download
+ * separator, then the controls in order: view, Chat · CLI, teaching switch and Reset, the Debug switch where it is available, save and load progress, download
  * and upload of the Workflow file, each icon with a tooltip. The control registry says what shows; a readonly Preset
  * also drops Chat · CLI, the teaching switch and Reset. Under the pill sit Reset's confirmation and the notes. The
  * parent validates an upload; this part only reads the chosen file.
@@ -185,6 +185,7 @@ function Icons({
       {offers(controls, 'view') && <ViewControl words={words} view={bar.view} onView={bar.onView} />}
       {offers(controls, 'level', readonly) && <LevelControl words={words} level={level} onLevel={bar.onLevel} />}
       {teaching}
+      <DebugSwitch words={words} debug={bar.debug} onDebug={bar.onDebug} />
       <ProgressIcons bar={bar} describedBy={describedBy} />
       <WorkflowFileIcons bar={bar} describedBy={describedBy} />
     </>
@@ -195,6 +196,7 @@ const hasPills = (bar: ToolbarProps) => offers(bar.controls, 'picker') && bar.ch
 const ICON_CONTROLS: readonly ControlId[] = ['view', 'level', 'teaching', 'reset', 'download', 'upload'];
 const PROGRESS_CONTROLS: readonly ControlId[] = ['progressDownload', 'progressUpload'];
 const hasIcons = (bar: ToolbarProps) =>
+  bar.debug.show ||
   ICON_CONTROLS.some((id) => offers(bar.controls, id, bar.readonly)) ||
   (bar.progress !== null && PROGRESS_CONTROLS.some((id) => offers(bar.controls, id)));
 

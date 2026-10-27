@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CONTROLS, controlOf, defOf, offers, type ControlId } from './toolbar-controls.pure';
 
 describe('success cases', () => {
-  it('shows the picker, the view control, the Chat · CLI control, teaching, reset, saving and loading progress, then the Workflow download and upload by default, in that order', () => {
+  it('shows the picker, the view control, the Chat · CLI control, teaching, reset, debug, saving and loading progress, then the Workflow download and upload by default, in that order', () => {
     // ARRANGE
     const none = {};
     // ACT
@@ -14,6 +14,7 @@ describe('success cases', () => {
       'level',
       'teaching',
       'reset',
+      'debug',
       'progressDownload',
       'progressUpload',
       'download',
@@ -82,6 +83,7 @@ describe('edge cases', () => {
       'level',
       'teaching',
       'reset',
+      'debug',
       'progressDownload',
       'progressUpload',
       'download',

@@ -6,10 +6,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/
 import { CheckedBox } from './checked-box.client';
 import { contextEntries } from './context-entries.pure';
 import { ContextField } from './context-field.client';
+import { debugFooter } from './debug-footer.pure';
 import { Context } from './step-context.client';
 import type { SlotState, StepKit } from './step-kit.types';
 import { StepSection } from './step-section.client';
-import { explanationPrompt, tryWords } from './words.pure';
+import { debuggedPrompt, explanationPrompt, tryWords } from './words.pure';
 import type { TaskModalView } from './workflow-view.pure';
 
 /*
@@ -47,8 +48,12 @@ const partsOf = ({ prompt }: Step): PromptParts => ({
 /** Copy the prompt, open ChatGPT; and, at the right, copy the prompt wrapped in the request to explain it. */
 function Actions({ step, kit, slots }: { step: Step; kit: StepKit; slots: SlotState }) {
   const { words } = kit;
-  const text = joinPrompt(partsOf(step), slots.values);
+  const plain = joinPrompt(partsOf(step), slots.values);
   const copy = tryWords(words);
+  const { debug } = kit;
+  const footer = (prompt: 'copy' | 'explain') =>
+    debug ? debugFooter(debug, { prompt, step: step.id, chat: step.chat }) : null;
+  const text = debuggedPrompt(words, plain, footer('copy'));
   return (
     <div className="flex flex-wrap items-center gap-2">
       <PromptActions text={text} copyLabel={copy.copyPrompt} kit={{ ...kit, words: copy }} />
@@ -59,7 +64,7 @@ function Actions({ step, kit, slots }: { step: Step; kit: StepKit; slots: SlotSt
             <CopyButton
               label={words.copyExplanation}
               done={words.copied}
-              onCopy={() => kit.onCopy(explanationPrompt(words, text))}
+              onCopy={() => kit.onCopy(debuggedPrompt(words, explanationPrompt(words, plain), footer('explain')))}
             />
           </span>
         </TooltipTrigger>

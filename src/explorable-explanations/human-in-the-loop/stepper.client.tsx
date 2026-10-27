@@ -3,6 +3,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/components/ui/accordion';
 import { Check } from 'lucide-react';
 import { ChatTabs } from './chat-tabs.client';
+import { scopeOf, type DebugBase } from './debug-footer.pure';
 import type { SlotState, StepKit } from './step-kit.types';
 import { contextCount } from './step-panel.client';
 import { itemsOf, openItemOf, type Item } from './stepper-items.pure';
@@ -56,7 +57,27 @@ function Review({ item, kit, slots, first }: Omit<StepItemProps, 'at'> & { first
   );
 }
 
-function StepItem({ item, at, kit, slots }: StepItemProps) {
+interface Where {
+  readonly stage: StageView;
+  readonly debug: DebugBase | null;
+  /** How many rounds the stage plays, for the debug footer's `round=n/total`. */
+  readonly rounds: number;
+}
+
+/** The kit of one item: while debug mode is on it knows where the item sits, for the footer of its copy buttons. */
+function kitOf(kit: StepKit, { item, stage, debug, rounds }: Pick<StepItemProps, 'item'> & Where): StepKit {
+  if (!debug) return kit;
+  const { job, round } = item;
+  const at = {
+    stage: { id: stage.id, name: stage.name },
+    job: { id: job.id, title: job.title },
+    ...(round && { round: { n: round.number, total: rounds } }),
+  };
+  return { ...kit, debug: scopeOf(debug, at) };
+}
+
+function StepItem({ item, at, kit: shared, slots, stage, debug, rounds }: StepItemProps & Where) {
+  const kit = kitOf(shared, { item, stage, debug, rounds });
   const { job, doSteps } = item;
   const [lead] = doSteps;
   const reviewAt = (lead ? contextCount(lead, job.task, kit) + 1 : 0) + 1;
@@ -84,14 +105,16 @@ interface StepperProps {
   readonly jobId?: string | null;
   /** The round of that job's card, in a repeated stage: its item starts open instead. */
   readonly round?: number | null;
+  /** What the footer of a debug copy shares; null while debug mode is off. */
+  readonly debug: DebugBase | null;
 }
 
-export function Stepper({ stage, run, kit, slots, jobId = null, round = null }: StepperProps) {
+export function Stepper({ stage, run, kit, slots, jobId = null, round = null, debug }: StepperProps) {
   const items = itemsOf(stage, run);
   return (
     <Accordion type="single" collapsible data-stepper="" defaultValue={openItemOf(items, jobId, round)}>
       {items.map((item, at) => (
-        <StepItem key={item.key} {...{ item, at, kit, slots }} />
+        <StepItem key={item.key} {...{ item, at, kit, slots, stage, debug }} rounds={run.rounds.length} />
       ))}
     </Accordion>
   );

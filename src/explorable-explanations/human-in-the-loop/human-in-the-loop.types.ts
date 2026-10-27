@@ -1,11 +1,9 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
-import type { ProgressActions, ProgressNote, TeachingProps } from './progress-controls.types';
 import type { ControlMap } from './toolbar-controls.pure';
-import type { Run, StageRun } from './workflow-run.pure';
+import type { Run } from './workflow-run.pure';
 import type { Level, View } from './workflow-state.pure';
-import type { StageView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
 /*
@@ -66,6 +64,10 @@ export interface UiWords {
   readonly teaching: string;
   readonly teachingTip: string;
   readonly teachingLocked: string;
+  /** Debug mode: the switch's name and tooltip, and the instruction the copy buttons append (`{footer}` is the line to end replies with). */
+  readonly debug: string;
+  readonly debugTip: string;
+  readonly debugInstruction: string;
   /** Reset: its name, its tooltip when saved work was found, and its confirmation. */
   readonly reset: string;
   readonly resetTip: string;
@@ -188,46 +190,6 @@ export interface DiagramProps {
   readonly rounds: Readonly<Record<string, number>>;
   /** What the viewer has done, from the run model: the Hands-on view draws it, the other views ignore it. */
   readonly run?: Run;
-}
-
-/** What the toolbar part draws: the Workflow pills, the Chat · CLI control, download and upload in one pill. */
-export interface ToolbarProps extends TeachingProps {
-  readonly workflow: Workflow;
-  /** Every authored Workflow, for the pills. */
-  readonly choices: readonly { readonly id: string; readonly title: string }[];
-  readonly level: Level;
-  readonly view: View;
-  /** The Preset's overrides of the control registry. */
-  readonly controls: ControlMap;
-  /** A readonly Preset: no Chat · CLI control, since nothing is tried. */
-  readonly readonly: boolean;
-  readonly uploadProblems: readonly string[];
-  readonly note: ProgressNote | null;
-  readonly progress: ProgressActions | null;
-  readonly words: UiWords;
-  readonly onLevel: (level: Level) => void;
-  readonly onView: (view: View) => void;
-  readonly onWorkflow: (workflowId: string) => void;
-  /** The text of a file the viewer chose; the parent validates it with `loadWorkflow`. */
-  readonly onUpload: (yaml: string) => void;
-}
-
-/** What the modal part draws: the open stage's view (null: closed). */
-export interface ModalProps extends TeachingProps {
-  readonly stage: StageView | null;
-  /** The run of the open stage: job states and rounds. */
-  readonly run: StageRun | null;
-  /** The job whose card opened the modal: the stepper opens at its first item. */
-  readonly jobId: string | null;
-  /** The round of a repeated stage the job card was pressed in: the stepper opens at that round's item. */
-  readonly round: number | null;
-  /** The pasted slot values by marker name, shared by every stage of the Workflow. */
-  readonly slotValues: Readonly<Record<string, string>>;
-  readonly words: UiWords;
-  readonly level: Level;
-  readonly onLevel: (level: Level) => void;
-  readonly onClose: () => void;
-  readonly onSlots: (values: Readonly<Record<string, string>>) => void;
 }
 
 /** Everything the client parent is given by the server entry: plain and serializable. */

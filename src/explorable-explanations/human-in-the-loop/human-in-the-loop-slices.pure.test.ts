@@ -47,6 +47,7 @@ const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
   note: null,
   progress: null,
   view: workflowView(workflow, state),
+  debugAvailable: false,
 });
 const start = { workflowId: data.workflowId, level: data.level, view: data.view };
 
@@ -108,6 +109,44 @@ describe('success cases', () => {
     // ASSERT
     expect(slices.modal.round).toBe(round);
     expect(sent).toEqual([{ type: 'open', stageId: 's', jobId: 'j', round }]);
+  });
+
+  it('shows the Debug switch only where it is available, and sends the choice up as a debug event', () => {
+    // ARRANGE
+    const sent: WorkflowEvent[] = [];
+    const on = callbacksFor((event) => sent.push(event));
+    const state = createState(start);
+    // ACT
+    const hidden = slicesOf(shown(flow('two'), state), on);
+    const visible = slicesOf({ ...shown(flow('two'), state), debugAvailable: true }, on);
+    visible.toolbar.onDebug(true);
+    // ASSERT
+    expect(hidden.toolbar.debug).toEqual({ show: false, on: false });
+    expect(visible.toolbar.debug).toEqual({ show: true, on: false });
+    expect(sent).toEqual([{ type: 'debug', debug: true }]);
+  });
+
+  it('gives the modal its debug base only while debug is on and available: workflow, level, teaching, locale and the short source hash', () => {
+    // ARRANGE
+    const on = callbacksFor(noop);
+    const state = { ...createState(start), debug: true, teaching: false, level: 'technical' as const };
+    const withHash = { ...shown(flow('two'), state), debugAvailable: true };
+    const hashed = { ...withHash, data: { ...data, hashes: { two: '0123456789abcdef' } } };
+    // ACT
+    const off = slicesOf({ ...hashed, state: { ...state, debug: false } }, on).modal.debug;
+    const unavailable = slicesOf({ ...hashed, debugAvailable: false }, on).modal.debug;
+    const base = slicesOf(hashed, on).modal.debug;
+    const uploaded = slicesOf({ ...hashed, state: { ...state, uploaded: flow('two') } }, on).modal.debug;
+    // ASSERT
+    expect([off, unavailable]).toEqual([null, null]);
+    expect(base).toEqual({
+      workflow: { id: 'two', title: 'two' },
+      level: 'technical',
+      teaching: false,
+      locale: 'en',
+      source: '01234567',
+    });
+    expect(uploaded?.source).toBe('uploaded');
   });
 
   it('gives the toolbar and the diagram the view, and the view control sends a view event', () => {
@@ -207,7 +246,7 @@ describe('success cases', () => {
     const note = { kind: 'stale', onDownload: () => undefined, onDiscard: () => undefined } as const;
     // ACT
     const slices = slicesOf(
-      { data, state, workflow, note, progress: null, view: workflowView(workflow, state) },
+      { data, state, workflow, note, progress: null, view: workflowView(workflow, state), debugAvailable: false },
       callbacksFor(() => undefined),
     );
     // ASSERT
@@ -325,7 +364,7 @@ describe('edge cases', () => {
     const workflow = flow('mine');
     // ACT
     const slices = slicesOf(
-      { data, state, workflow, note: null, progress: null, view: workflowView(workflow, state) },
+      { data, state, workflow, note: null, progress: null, view: workflowView(workflow, state), debugAvailable: false },
       callbacksFor(() => undefined),
     );
     // ASSERT
@@ -354,6 +393,7 @@ describe('edge cases', () => {
         note: null,
         progress: null,
         view: workflowView(workflow, state),
+        debugAvailable: false,
       },
       callbacksFor(() => undefined),
     );

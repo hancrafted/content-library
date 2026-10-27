@@ -84,11 +84,18 @@ function viewOf(
   };
 }
 
+/** The sections of the mode: those marked `only` for the other mode are left out. */
+const forMode = (sections: readonly SectionDef[], options: PromptOptions): SectionDef[] => {
+  const other = (options.teaching ?? true) ? 'full' : 'teaching';
+  return sections.filter((section) => section.only !== other);
+};
+
 /** The prompt of the do step for one runtime; a round's `{{item}}` stays in the text, for `roundStep` to fill. */
 export function doPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode): PromptView {
   const { runtime, options } = modeOf(mode);
   const fills = { template: fenced(file.templates[task.template] ?? ''), ...limitsOf(task, options) };
-  const expanded = expandSections(task.do[runtime], task.slots, widthsOf(file, task.slots, options));
+  const shown = forMode(task.do[runtime], options);
+  const expanded = expandSections(shown, task.slots, widthsOf(file, task.slots, options));
   const sections = expanded.map((section) => ({ ...section, text: resolve(section.text, fills) }));
   return viewOf({ sections, slots: task.slots, instructions: task.instructions }, file);
 }
@@ -110,7 +117,10 @@ export function reviewPrompt(file: WorkflowFile, task: TaskDef, mode: PromptMode
     checks: numbered(checks),
     inputs: inputsOf(review.slots, (slot) => widths.get(slot.id) ?? 0),
   };
-  const sections = file.reviewer.sections.map((section) => ({ ...section, text: resolve(section.text, fills) }));
+  const sections = forMode(file.reviewer.sections, options).map((section) => ({
+    ...section,
+    text: resolve(section.text, fills),
+  }));
   return viewOf({ sections, slots: review.slots, instructions: review.instructions }, file);
 }
 

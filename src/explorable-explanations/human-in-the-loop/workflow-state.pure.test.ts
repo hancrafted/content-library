@@ -38,6 +38,17 @@ describe('success cases', () => {
     expect(on.teaching).toBe(true);
   });
 
+  it('switches debug mode on and off, off at the start, and keeps it through a reset and a change of Workflow', () => {
+    // ARRANGE
+    const initial = createState(start);
+    // ACT
+    const on = reduce(initial, { type: 'debug', debug: true });
+    const kept = reduce(reduce(on, { type: 'reset' }), { type: 'workflow', workflowId: 'vacation' });
+    const off = reduce(kept, { type: 'debug', debug: false });
+    // ASSERT
+    expect([initial.debug, on.debug, kept.debug, off.debug]).toEqual([false, true, true, false]);
+  });
+
   it('a reset empties the pasted values, turns teaching back on and keeps the rest', () => {
     // ARRANGE
     const events: WorkflowEvent[] = [
@@ -76,6 +87,7 @@ describe('success cases', () => {
     const expected: WorkflowState = {
       ...start,
       teaching: true,
+      debug: false,
       openStageId: null,
       openJobId: null,
       openRound: null,

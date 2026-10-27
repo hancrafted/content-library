@@ -47,9 +47,15 @@ export type SlotMode = 'single' | 'multiple';
 export const BUILT_IN_MARKERS = ['item', 'template'] as const;
 export const REVIEWER_MARKERS = ['checks', 'inputs'] as const;
 
+/** The two modes of a run: teaching mode keeps it short, a full run plays every round. */
+export const MODES = ['teaching', 'full'] as const;
+export type Mode = (typeof MODES)[number];
+
 /** One part of a prompt: rendered as an H2, joined into one markdown prompt. */
 export interface SectionDef {
   readonly heading: string;
+  /** Absent: the section shows in both modes. Marked `teaching`, it shows only in teaching mode; `full`, only in a full run. */
+  readonly only?: Mode;
   /** Absent: no marker and no tooltip on this section. */
   readonly purpose?: Purpose;
   /** Overrides the top-level explanation of `purpose` for this section only. */

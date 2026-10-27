@@ -29,6 +29,8 @@ export interface WorkflowState {
   readonly teaching: boolean;
   /** What the viewer pasted, keyed as the run model keys results (`stage.job`, `stage.job#k`), plus free inputs by their own name. The hook saves these. */
   readonly slotValues: Readonly<Record<string, string>>;
+  /** Debug mode: the copy buttons add a footer instruction. In memory only, never stored (FE-001), off at the start. */
+  readonly debug: boolean;
   /** What was wrong with the last upload; empty when it loaded or none was tried. */
   readonly uploadProblems: readonly string[];
 }
@@ -50,6 +52,7 @@ export type WorkflowEvent =
   | { readonly type: 'close' }
   | { readonly type: 'teaching'; readonly teaching: boolean }
   | { readonly type: 'reset' }
+  | { readonly type: 'debug'; readonly debug: boolean }
   | { readonly type: 'slots'; readonly values: Readonly<Record<string, string>> }
   | { readonly type: 'upload'; readonly workflow: Workflow }
   | { readonly type: 'restore'; readonly results: Readonly<Record<string, string>>; readonly teaching: boolean }
@@ -59,6 +62,7 @@ export function createState(start: Start): WorkflowState {
   return {
     ...start,
     teaching: true,
+    debug: false,
     openStageId: null,
     openJobId: null,
     openRound: null,
@@ -99,6 +103,7 @@ const HANDLERS: Handlers = {
   close: (state) =>
     state.openStageId === null ? state : { ...state, openStageId: null, openJobId: null, openRound: null },
   teaching: (state, { teaching }) => ({ ...state, teaching }),
+  debug: (state, { debug }) => ({ ...state, debug }),
   reset: (state) => ({ ...state, slotValues: {}, teaching: true }),
   slots: (state, { values }) => ({ ...state, slotValues: values }),
   upload: (state, { workflow }) => ({ ...state, ...FRESH, workflowId: workflow.id, uploaded: workflow }),

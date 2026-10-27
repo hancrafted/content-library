@@ -52,7 +52,7 @@ Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`
 - `details`: `why`, `example`, `goodLooksLike` (at least one line) and optional `techniques`; the right column of the popover. `why` and `techniques` render under "why it matters".
 - Ids are unique across the file: stage ids, task ids and outputs.
 
-Section: `heading` (rendered as H2), `text` (markdown with markers), and optional `purpose` (no purpose, no marker or tooltip), `explain` (replaces the purpose's explanation for this section), `techniques` (catalogue ids, listed with their tier in the purpose tooltip). Every `techniques` list, on a section or on `details`, names catalogue ids only, each once, and is non-empty when present. Tag only where the technique genuinely applies.
+Section: `heading` (rendered as H2), `text` (markdown with markers), and optional `purpose` (no purpose, no marker or tooltip), `explain` (replaces the purpose's explanation for this section), `techniques` (catalogue ids, listed with their tier in the purpose tooltip), `only` (`teaching` or `full`: the section shows in that mode only, in a do prompt or the reviewer; absent, in both). `project-plan` gives every prompt a `Practice run` section with `only: teaching`, which steers toward the simplest option, and a `Scope` section with `only: full`; both say to name a missing number as an open decision rather than guess one. Every `techniques` list, on a section or on `details`, names catalogue ids only, each once, and is non-empty when present. Tag only where the technique genuinely applies.
 
 ## Slots are the edges
 
@@ -256,7 +256,7 @@ stages:
 `loadWorkflow` returns every problem at once, one sentence each; the shape problems come first and stop the meaning checks.
 
 - The text is not YAML: "The file is not valid YAML."
-- Shape, with a path such as `stages[0].jobs[1].do.simple`: `<path> is missing.`; `<path> is not a field of the schema.`; `<path> must be a mapping.` / `a list.`; `<path> needs at least N entries.`; `<path> must be text` (non-empty), `a whole number of at least 1`, `true or false`, or `text or a list of texts`; `<path> is "x", which is not one of ...` (a `purpose`, `tier`, `mode`, `move`); `purposes` lacking one of its six keys or holding another.
+- Shape, with a path such as `stages[0].jobs[1].do.simple`: `<path> is missing.`; `<path> is not a field of the schema.`; `<path> must be a mapping.` / `a list.`; `<path> needs at least N entries.`; `<path> must be text` (non-empty), `a whole number of at least 1`, `true or false`, or `text or a list of texts`; `<path> is "x", which is not one of ...` (a `purpose`, `tier`, `mode`, `only`, `move`); `purposes` lacking one of its six keys or holding another.
 - Templates: front matter; no H1; a `{{marker}}` inside.
 - Ids: a stage, task or technique id used twice; an output handed on by two tasks; a slot id twice in one task; a `teaching` cap below 1.
 - Slots: names no output of an earlier stage (and is not `free`); takes all rounds of a repeated stage but is `single`; is `multiple` but its output is not from a repeated stage; a non-free do slot with no sample; a `multiple` slot with a lone sample or a `single` slot with a list; a list whose length differs from the markers; a review slot id that clashes with another id.

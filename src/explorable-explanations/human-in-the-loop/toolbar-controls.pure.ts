@@ -5,7 +5,16 @@
  */
 
 export type ControlId =
-  'picker' | 'view' | 'level' | 'teaching' | 'reset' | 'progressDownload' | 'progressUpload' | 'download' | 'upload';
+  | 'picker'
+  | 'view'
+  | 'level'
+  | 'teaching'
+  | 'reset'
+  | 'debug'
+  | 'progressDownload'
+  | 'progressUpload'
+  | 'download'
+  | 'upload';
 
 export interface ControlDef {
   readonly id: ControlId;
@@ -13,13 +22,23 @@ export interface ControlDef {
   readonly type: 'pills' | 'segmented' | 'switch' | 'action';
   /** The keys of the visual's labels the control reads: its accessible name and its tooltip (`UiWords` keys). */
   readonly label:
-    'workflow' | 'view' | 'level' | 'teaching' | 'reset' | 'progressSave' | 'progressLoad' | 'download' | 'upload';
+    | 'workflow'
+    | 'view'
+    | 'level'
+    | 'teaching'
+    | 'reset'
+    | 'debug'
+    | 'progressSave'
+    | 'progressLoad'
+    | 'download'
+    | 'upload';
   readonly tip:
     | 'workflow'
     | 'viewTip'
     | 'levelTip'
     | 'teachingTip'
     | 'resetTip'
+    | 'debugTip'
     | 'progressSave'
     | 'progressLoad'
     | 'download'
@@ -34,6 +53,7 @@ export const CONTROLS: readonly ControlDef[] = [
   { id: 'level', type: 'segmented', label: 'level', tip: 'levelTip', show: true },
   { id: 'teaching', type: 'switch', label: 'teaching', tip: 'teachingTip', show: true },
   { id: 'reset', type: 'action', label: 'reset', tip: 'resetTip', show: true },
+  { id: 'debug', type: 'switch', label: 'debug', tip: 'debugTip', show: true },
   { id: 'progressDownload', type: 'action', label: 'progressSave', tip: 'progressSave', show: true },
   { id: 'progressUpload', type: 'action', label: 'progressLoad', tip: 'progressLoad', show: true },
   { id: 'download', type: 'action', label: 'download', tip: 'download', show: true },
@@ -58,7 +78,7 @@ export function defOf(id: ControlId): ControlDef {
 /** A control as the Preset sets it: the registry's definition, then the Preset's own overrides. */
 export const controlOf = (controls: ControlMap, id: ControlId): ControlDef => ({ ...defOf(id), ...controls[id] });
 
-const PRACTICE = new Set<ControlId>(['level', 'teaching', 'reset']);
+const PRACTICE = new Set<ControlId>(['level', 'teaching', 'reset', 'debug']);
 
 /** Whether the toolbar draws a control: the Preset has not hidden it, and `readonly` hides what only a practising viewer uses: the Chat · CLI control, teaching and reset. */
 export function offers(controls: ControlMap, id: ControlId, readonly = false): boolean {
