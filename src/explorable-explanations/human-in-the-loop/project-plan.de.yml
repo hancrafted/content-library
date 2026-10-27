@@ -27,7 +27,11 @@ techniques:
   - id: allow-unknown
     tier: basic
     title: '"Ich weiß es nicht" erlauben'
-    explain: Sag der KI, dass sie sagen darf, wenn sie etwas nicht weiß, oder eine Vermutung als Annahme kennzeichnen darf. Dann erfindet sie keine Antwort, nur um dir zu gefallen.
+    explain: Sag der KI, dass sie sagen darf, wenn sie etwas nicht weiß, und dass sie Fehlendes als offene Frage nennen soll. Dann denkt sie sich keine Antwort aus, nur um dir zu gefallen.
+  - id: simplest-first
+    tier: basic
+    title: Nach der einfachsten Lösung fragen
+    explain: Sag der KI, sie soll die einfachste Option nehmen und weglassen, was das Ziel nicht braucht. Weniger bewegliche Teile lassen weniger offene Fragen übrig und weniger Lücken, die die KI mit einer Schätzung füllen könnte.
   - id: few-shot
     tier: advanced
     title: Ein Beispiel zeigen
@@ -62,7 +66,7 @@ reviewer:
       purpose: steps
       text: |
         1. Die Arbeit nutzt genau die Überschriften der Vorlage unten, in derselben Reihenfolge.
-        2. Nichts ist erfunden: Jede Tatsache stützt sich auf etwas, das du bekommen hast. Eine Zahl, die für diesen Übungslauf erfunden wurde, ist als Annahme gekennzeichnet; eine nicht gekennzeichnete erfundene Zahl fällt durch.
+        2. Nichts ist ausgedacht: Jede Tatsache und jede Zahl stammt aus dem, was du bekommen hast, oder ist daraus gezählt oder berechnet. Eine fehlende Zahl ist als offene Entscheidung genannt; eine geschätzte fällt durch.
         3. Die Arbeit bleibt in dem, was verlangt war.
     - heading: Prüfungen für diese Aufgabe
       purpose: task
@@ -90,17 +94,17 @@ templates:
   scope: |
     # <Die Aufgabe>
     ## Fragen und Antworten
-    ## Annahmen
+    ## Offene Entscheidungen
   plan: |
     # <Titel des Plans>
     ## Ziel
     ## Epics
     ### <Titel des Epics>
-    ## Annahmen
+    ## Offene Entscheidungen
   grill: |
     # <Das Epic>
     ## Fragen und Antworten
-    ## Annahmen
+    ## Offene Entscheidungen
   spec: |
     # <Das Epic>
     ## Ziel
@@ -124,12 +128,12 @@ templates:
     # <Das Ticket>
     ## Ergebnis
     ## Zahlen
-    ## Annahmen
+    ## Offene Entscheidungen
   combined: |
     # <Titel>
     ## Ergebnisse
     ## Zahlen
-    ## Annahmen
+    ## Offene Entscheidungen
   report: |
     # <Titel>
     ## Zusammenfassung
@@ -175,13 +179,13 @@ stages:
             ## Rahmen
             - Nächster Sommer
             - Menschen reisen aus 5 Ländern an
-            - Ein Budget von etwa 100.000 Euro (Annahme)
+            - Budget: noch nicht festgelegt
             ## Fertig heißt
-            Ein Plan, den die Geschäftsführung freigeben kann: Termin, Ort, Programm, Budget und was jeder Standort beiträgt.
+            Ein Plan, den die Geschäftsführung freigeben kann: Termin, Ort, Programm und was jeder Standort beiträgt.
           goodLooksLike:
             - Das Ziel sagt, was erreicht wird, nicht wie.
             - Die Zielgruppe sagt, für wen es ist und wie viele.
-            - Jede Zahl, die nicht vorgegeben war, ist als Annahme gekennzeichnet.
+            - "Nichts ist geschätzt: Eine Größe, die nicht vorgegeben war, heißt 'noch nicht festgelegt'."
         instructions: 'Öffne einen neuen Chat (ChatGPT oder ein anderer KI-Chat), füge den Prompt ein und lies den Brief, den er schreibt. Kopiere ihn dann mit dem Kopieren-Knopf an seinem Feld: Jeder spätere Schritt braucht ihn.'
         do:
           simple:
@@ -202,12 +206,18 @@ stages:
               text: |
                 1. Schreibe das Ziel in ein bis zwei Sätzen auf: was erreicht wird, nicht wie.
                 2. Nenne die Zielgruppe: für wen es ist und wie viele Menschen.
-                3. Liste den Rahmen auf: Zeit, Geld, Menschen und Regeln. Wo ich keine Zahl genannt habe, erfinde eine plausible und kennzeichne sie mit (Annahme).
+                3. Liste den Rahmen auf: Zeit, Geld, Menschen und Regeln. Wo ich keine Größe genannt habe, schreibe 'noch nicht festgelegt' statt einer Schätzung.
                 4. Sag, was fertig heißt, damit jeder erkennen kann, wann die Aufgabe erledigt ist.
             - heading: Übungslauf
               purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: &practice 'Das ist ein Übungslauf, also halte es klein und einfach: ein paar Zeilen pro Abschnitt. Steuere auf die einfachste Lösung zu, die das Ziel noch erreicht: Wo eine Wahl am Ziel nichts ändert, nimm selbst die einfachste Option, und lass weg, was das Ziel nicht braucht. Nutze nur Zahlen und Fakten aus dem Material oben oder aus meinen Antworten. Fehlt eine, lass sie weg oder halte sie als offene Entscheidung fest, damit niemand eine Schätzung für eine Tatsache hält.'
+            - heading: Umfang
+              purpose: scope
+              only: full
               techniques: [allow-unknown]
-              text: &practice 'Das ist ein Übungslauf, also halte es kurz: ein paar Zeilen pro Abschnitt, keine langen Aufsätze. Wo du eine Zahl brauchst, die du nicht bekommen hast, erfinde eine plausible und kennzeichne sie als Annahme, damit niemand sie für eine Tatsache hält.'
+              text: &scope 'Bleib bei dem, was das Material oben verlangt. Nutze nur Zahlen und Fakten aus dem Material oder aus meinen Antworten. Fehlt eine, halte sie als offene Entscheidung fest, damit ich sie entscheiden oder herausfinden kann.'
             - heading: Format
               purpose: template
               text: &format |
@@ -219,11 +229,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Mach aus meiner groben Idee unten einen Aufgabenbrief: das Ziel in ein bis zwei Sätzen, die Zielgruppe, den Rahmen und was fertig heißt. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /grilling Mach aus meiner groben Idee unten einen Aufgabenbrief: das Ziel in ein bis zwei Sätzen, die Zielgruppe, den Rahmen und was fertig heißt.
 
                 ```markdown
                 {{idea}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -240,7 +260,7 @@ stages:
           checks:
             - Das Ziel besteht aus ein bis zwei Sätzen und sagt, was erreicht wird, nicht wie.
             - Die Zielgruppe sagt, für wen es ist und wie viele.
-            - Der Rahmen nennt Zeit, Geld, Menschen oder Regeln, und jede erfundene Zahl ist als Annahme gekennzeichnet.
+            - Der Rahmen nennt Zeit, Geld, Menschen oder Regeln, und wo eine Größe nicht vorgegeben war, steht 'noch nicht festgelegt' statt einer Schätzung.
             - Fertig heißt sagt, woran jeder erkennt, dass die Aufgabe erledigt ist.
 
       - id: scope
@@ -248,7 +268,7 @@ stages:
         summary: Höchstens drei Fragen vor jedem Plan
         goal:
           do: 'Lass die KI ein paar Fragen zur Aufgabe stellen, bevor sie rät.'
-          review: 'Lass einen zweiten KI-Chat die Fragen und die Annahmen prüfen.'
+          review: 'Lass einen zweiten KI-Chat die Fragen und die offenen Entscheidungen prüfen.'
         needs: [task]
         output: scope
         template: scope
@@ -263,20 +283,19 @@ stages:
             sample: *task_example
         details:
           why: Die KI fragt, bevor sie rät, und bringt zur Sprache, woran du nicht gedacht hast. Drei Fragen genügen, um die Entscheidung zu finden, die den ganzen Plan ändern würde.
-          techniques: [allow-unknown, delimiters]
+          techniques: [simplest-first, allow-unknown, delimiters]
           example: &scope_example |
             # Ein Sommerfest der Firma planen
             ## Fragen und Antworten
             1. Ein zentrales Fest oder fünf lokale? Empfohlen: ein zentrales Fest, weil es darum geht, Menschen der anderen Standorte zu treffen. Meine Antwort: ein zentrales Fest.
-            2. Übernachten die Gäste? Empfohlen: ja, alle, die mehr als zwei Stunden reisen. Meine Antwort: ja.
-            3. Die Frage, an die du vielleicht nicht gedacht hast: Wer entscheidet, wenn das Budget überschritten wird? Meine Antwort: die Geschäftsführung, ab 100.000 Euro.
-            ## Annahmen
-            - Etwa 100.000 Euro insgesamt (Annahme)
-            - Die Gäste kommen allein, ohne Partner (Annahme)
+            2. Übernachten die Gäste? Empfohlen: ja, eine Nacht, damit niemand an einem Tag hin- und zurückreist. Meine Antwort: ja.
+            3. Die Frage, an die du vielleicht nicht gedacht hast: Wer gibt den Plan frei? Empfohlen: die Geschäftsführung, in einer Sitzung. Meine Antwort: die Geschäftsführung.
+            ## Offene Entscheidungen
+            - Das Budget: Die Geschäftsführung legt es fest, sobald die ersten Angebote da sind
           goodLooksLike:
             - Höchstens drei Fragen, jede mit Optionen und einer Empfehlung.
             - Eine Frage betrifft etwas, woran du nicht gedacht hattest.
-            - Was die KI raten musste, steht als Annahme in der Liste.
+            - Was noch nicht entschieden ist, steht unter Offene Entscheidungen, nicht geraten.
         instructions: "Öffne einen neuen Chat, füge den Prompt ein und beantworte die Fragen mit deinen eigenen Worten; 'ja' übernimmt alle Empfehlungen. Kopiere dann das Ergebnis."
         do:
           simple:
@@ -301,15 +320,21 @@ stages:
                 2. Ist eine Frage eine Wahl, gib zwei Optionen, (A) und (B), und sag, welche du empfiehlst und warum, in wenigen Worten.
                 3. Betrifft eine Frage etwas, das nur ich weiß, frag offen, ohne Optionen.
                 4. Stelle mindestens eine Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe.
-                5. Fakten sind deine Sache, Entscheidungen meine: Frage nie, was der Brief schon sagt; halte es stattdessen als Annahme fest.
+                5. Fakten sind deine Sache, Entscheidungen meine: Frage nie, was der Brief schon sagt; nimm es als gegeben.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
-                Wenn ich geantwortet habe, schreibe das Ergebnis als einen Markdown-Codeblock, damit ich es mit einem Klick in den nächsten Chat kopieren kann. Liste unter Fragen und Antworten jede Frage mit meiner endgültigen Antwort auf. Liste unter Annahmen auf, was du angenommen hast und was ich nicht entschieden habe. Nutze im Block genau die Überschriften dieser Vorlage, in dieser Reihenfolge.
+                Wenn ich geantwortet habe, schreibe das Ergebnis als einen Markdown-Codeblock, damit ich es mit einem Klick in den nächsten Chat kopieren kann. Liste unter Fragen und Antworten jede Frage mit meiner endgültigen Antwort auf. Liste unter Offene Entscheidungen auf, was noch nicht entschieden ist, eine Zeile je Punkt, oder schreibe 'Keine'. Nutze im Block genau die Überschriften dieser Vorlage, in dieser Reihenfolge.
 
                 {{template}}
           technical:
@@ -317,11 +342,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Stelle mir höchstens {{limit.questions}} nummerierte Fragen zu dieser Aufgabe, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, einer offenen Frage für das, was nur ich weiß, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme. Wenn ich geantwortet habe, schreibe das Ergebnis.
+                /grilling Stelle mir höchstens {{limit.questions}} nummerierte Fragen zu dieser Aufgabe, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, einer offenen Frage für das, was nur ich weiß, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe. Wenn ich geantwortet habe, schreibe das Ergebnis.
 
                 ```markdown
                 {{task}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -343,7 +378,7 @@ stages:
             - Es gibt höchstens {{limit.questions}} Fragen, und jede Wahl kam mit zwei Optionen und einer Empfehlung.
             - Mindestens eine Frage betrifft etwas, das der Aufgabenbrief nicht sagte.
             - Keine Frage bleibt unbeantwortet, und keine zwei Antworten widersprechen sich.
-            - Alles, was die KI raten musste, steht unter Annahmen, und keine Zahl ist erfunden, ohne gekennzeichnet zu sein.
+            - Was noch nicht entschieden ist, steht unter Offene Entscheidungen, und es steht keine Zahl da, die der Brief oder die Antworten nicht nannten.
 
       - id: epics
         title: Epics planen
@@ -379,8 +414,8 @@ stages:
             Was an dem Tag passiert und was die Menschen essen und trinken.
             ### Einladungen und Anmeldung
             Allen Bescheid geben und wissen, wer kommt.
-            ## Annahmen
-            - Ein Budget von etwa 100.000 Euro (Annahme)
+            ## Offene Entscheidungen
+            - Das Budget: Die Geschäftsführung legt es fest, sobald die ersten Angebote da sind
           goodLooksLike:
             - Jedes Epic ist ein großes Arbeitspaket, das für sich geplant werden kann.
             - Jedes Epic ist ein H3 unter Epics, mit einem Satz dazu, was es entscheidet.
@@ -403,7 +438,7 @@ stages:
                 {{task}}
                 ```
 
-                Die Fragen und Antworten mit den Annahmen:
+                Die Fragen und Antworten mit den offenen Entscheidungen:
 
                 ```markdown
                 {{scope}}
@@ -415,11 +450,17 @@ stages:
                 2. Teile die Aufgabe in etwa vier Epics. Ein Epic ist ein großes Arbeitspaket, das ich in einem eigenen neuen Chat aus einer kurzen Übergabe planen kann.
                 3. Gib jedem Epic eine H3-Überschrift mit seinem Namen und einem Satz dazu, was es entscheidet.
                 4. Stelle sicher, dass die Epics zusammen das Ziel abdecken und sich nicht überschneiden.
-                5. Liste unter Annahmen auf, was du angenommen hast.
+                5. Liste unter Offene Entscheidungen auf, was noch nicht entschieden ist, oder schreibe 'Keine'.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -428,7 +469,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Schreibe einen Grobplan für diese Aufgabe: das Ziel, dann etwa vier Epics, jedes ein H3 unter der Überschrift Epics mit einem Satz dazu, was es entscheidet, und die Annahmen. Plane nichts innerhalb eines Epics. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /to-spec Schreibe einen Grobplan für diese Aufgabe: das Ziel, dann etwa vier Epics, jedes ein H3 unter der Überschrift Epics mit einem Satz dazu, was es entscheidet, und die offenen Entscheidungen. Plane nichts innerhalb eines Epics.
 
                 ```markdown
                 {{task}}
@@ -437,6 +478,16 @@ stages:
                 ```markdown
                 {{scope}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -459,7 +510,7 @@ stages:
             - Jedes Epic ist ein H3 unter Epics mit einem Satz dazu, was es entscheidet.
             - Die Epics überschneiden sich nicht und decken zusammen das Ziel ab.
             - Kein Epic ist im Detail geplant.
-            - Jede erfundene Zahl ist als Annahme gekennzeichnet.
+            - Jede Zahl im Plan stammt aus den Eingaben; nichts ist geschätzt.
 
   - id: epics
     title: Epics
@@ -476,7 +527,7 @@ stages:
         summary: Erst Fragen, in einem frischen Chat pro Epic
         goal:
           do: 'Lass dich von der KI zu einem Epic befragen, in einem eigenen frischen Chat.'
-          review: 'Lass einen zweiten KI-Chat die Fragen und die Annahmen prüfen.'
+          review: 'Lass einen zweiten KI-Chat die Fragen und die offenen Entscheidungen prüfen.'
         output: grill
         template: grill
         limits:
@@ -500,9 +551,8 @@ stages:
               3. Wie weit darf der Ort vom Flughafen entfernt sein? Empfohlen: höchstens eine Stunde. Meine Antwort: eine Stunde.
               4. Welche Wochen scheiden aus? Offene Frage. Meine Antwort: die ersten zwei Augustwochen, an mehreren Standorten sind Ferien.
               5. Die Frage, an die du vielleicht nicht gedacht hast: Arbeiten alle fünf Standorte am selben Tag? Meine Antwort: nein, zwei Standorte arbeiten samstags.
-              ## Annahmen
-              - Ein Ort kostet höchstens 30.000 Euro für den Tag (Annahme)
-              - Alle 200 Personen kommen (Annahme)
+              ## Offene Entscheidungen
+              - Samstag oder ein Werktag, weil zwei Standorte samstags arbeiten
             - &grill_2_example |
               # Anreise und Unterkunft
               ## Fragen und Antworten
@@ -511,13 +561,12 @@ stages:
               3. Wie viele Nächte? Empfohlen: eine Nacht. Meine Antwort: eine Nacht.
               4. Wer braucht ein Einzelzimmer? Offene Frage. Meine Antwort: Führungskräfte und Menschen mit gesundheitlichem Bedarf.
               5. Die Frage, an die du vielleicht nicht gedacht hast: Bringen Leute ihre Kinder mit? Meine Antwort: nein.
-              ## Annahmen
-              - Die Reise kostet im Schnitt etwa 250 Euro pro Person (Annahme)
-              - Ein Hotelzimmer kostet etwa 120 Euro pro Nacht (Annahme)
+              ## Offene Entscheidungen
+              - Wie viele Einzelzimmer: Jeder Standort meldet seine Führungskräfte und seinen Bedarf
           goodLooksLike:
             - Nie mehr Fragen als erlaubt, jede mit Optionen und einer Empfehlung.
             - Eine Antwort ist etwas, woran du nicht gedacht hattest.
-            - Was die KI geraten hat, steht unter Annahmen.
+            - Was noch nicht entschieden ist, steht unter Offene Entscheidungen, nicht geraten.
         instructions: "Öffne für jedes Epic einen neuen Chat und füge den Prompt dieses Chats ein; antworte mit eigenen Worten, 'ja' übernimmt alle Empfehlungen. Kopiere jedes Ergebnis."
         do:
           simple:
@@ -548,16 +597,22 @@ stages:
                 2. Ist eine Frage eine Wahl, gib zwei Optionen, (A) und (B), und sag, welche du empfiehlst und warum, in wenigen Worten.
                 3. Betrifft eine Frage etwas, das nur ich weiß, frag offen, ohne Optionen.
                 4. Stelle mindestens eine Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe.
-                5. Frage nie, was der Plan schon sagt; halte es stattdessen als Annahme fest.
+                5. Frage nie, was der Plan schon sagt; nimm es als gegeben.
                 6. Wenn nichts Wichtiges mehr zu fragen ist, sag es und bitte mich, "fertig" zu tippen.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
-                Wenn ich "fertig" tippe, schreibe das Ergebnis als einen Markdown-Codeblock, damit ich es mit einem Klick in den nächsten Chat kopieren kann. Liste unter Fragen und Antworten jede Frage mit meiner endgültigen Antwort auf. Liste unter Annahmen auf, was du angenommen hast. Nutze im Block genau die Überschriften dieser Vorlage, in dieser Reihenfolge.
+                Wenn ich "fertig" tippe, schreibe das Ergebnis als einen Markdown-Codeblock, damit ich es mit einem Klick in den nächsten Chat kopieren kann. Liste unter Fragen und Antworten jede Frage mit meiner endgültigen Antwort auf. Liste unter Offene Entscheidungen auf, was noch nicht entschieden ist, oder schreibe 'Keine'. Nutze im Block genau die Überschriften dieser Vorlage, in dieser Reihenfolge.
 
                 {{template}}
           technical:
@@ -565,11 +620,21 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /grilling Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Epics des Plans unten als ein Epic und starte pro Epic einen Subagenten, jeden mit frischem Kontext und nur seinem eigenen Epic. Jeder Subagent stellt mir höchstens {{limit.questions}} nummerierte Fragen zu seinem Epic, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /grilling Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Epics des Plans unten als ein Epic und starte pro Epic einen Subagenten, jeden mit frischem Kontext und nur seinem eigenen Epic. Jeder Subagent stellt mir höchstens {{limit.questions}} nummerierte Fragen zu seinem Epic, mit zwei Optionen und einer empfohlenen Antwort für jede Wahl, und einer Frage zu etwas, woran ich wahrscheinlich nicht gedacht habe.
 
                 ```markdown
                 {{plan}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -587,7 +652,7 @@ stages:
             - Das Ergebnis betrifft genau dieses Epic und schweift nicht in ein anderes ab. Das Epic ist {{item}}
             - Es gibt höchstens {{limit.questions}} Fragen, und jede Wahl kam mit zwei Optionen und einer Empfehlung.
             - Mindestens eine Frage betrifft etwas, das der Plan nicht sagte.
-            - Keine Frage bleibt unbeantwortet, und alles, was geraten wurde, steht unter Annahmen.
+            - Keine Frage bleibt unbeantwortet, und was noch nicht entschieden ist, steht unter Offene Entscheidungen.
 
       - id: spec
         title: Spezifikation schreiben
@@ -614,13 +679,12 @@ stages:
             - &spec_1_example |
               # Termin und Ort
               ## Ziel
-              Einen Tag im nächsten Sommer und einen Ort festlegen, den 200 Menschen an einem Tag erreichen.
+              Einen Tag im nächsten Sommer und einen Ort festlegen, den 200 Menschen erreichen.
               ## Anforderungen
               - Ein Tag, drinnen mit Außenbereich
               - Höchstens eine Stunde vom Flughafen
-              - Platz für 200 Personen (Annahme)
+              - Platz für 200 Personen
               - Nicht in den ersten zwei Augustwochen
-              - Kosten für den Ort höchstens 30.000 Euro (Annahme)
               ## Nicht dabei
               - Anreise, Hotels, Programm und Verpflegung
               ## Abhängigkeiten
@@ -634,7 +698,6 @@ stages:
               - Zug bis 6 Stunden, darüber Flugzeug
               - Eine Nacht im Hotel, ein Einzelzimmer für Führungskräfte und Menschen mit gesundheitlichem Bedarf
               - Keine Kinder
-              - Reise im Schnitt höchstens 250 Euro pro Person (Annahme)
               ## Nicht dabei
               - Termin und Ort sowie das Programm
               ## Abhängigkeiten
@@ -681,8 +744,14 @@ stages:
                 4. Abhängigkeiten: was dieses Epic von einem anderen braucht, oder was ein anderes von ihm braucht.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -691,7 +760,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-spec Du bist der Orchestrator. Starte pro Epic einen Subagenten, jeden mit frischem Kontext. Jeder Subagent macht aus den Fragen und Antworten seines Epics eine Spezifikation: das Ziel, Anforderungen, die sich jeweils mit Ja oder Nein abhaken lassen, was nicht dabei ist und die Abhängigkeiten zu anderen Epics. Befrage mich nicht noch einmal. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /to-spec Du bist der Orchestrator. Starte pro Epic einen Subagenten, jeden mit frischem Kontext. Jeder Subagent macht aus den Fragen und Antworten seines Epics eine Spezifikation: das Ziel, Anforderungen, die sich jeweils mit Ja oder Nein abhaken lassen, was nicht dabei ist und die Abhängigkeiten zu anderen Epics. Befrage mich nicht noch einmal.
 
                 ```markdown
                 {{plan}}
@@ -700,6 +769,16 @@ stages:
                 ```markdown
                 {{grill}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -752,12 +831,12 @@ stages:
             # Anforderungen an das Sommerfest
             ## Anforderungen
             - A1. Ein Tag im nächsten Sommer, nicht in den ersten zwei Augustwochen (Termin und Ort)
-            - A2. Ein Ort mit Platz für 200 Personen, drinnen mit Außenbereich, höchstens eine Stunde vom Flughafen, höchstens 30.000 Euro (Annahme) (Termin und Ort)
+            - A2. Ein Ort mit Platz für 200 Personen, drinnen mit Außenbereich, höchstens eine Stunde vom Flughafen (Termin und Ort)
             - A3. Die Firma bucht die Reise zentral: Zug bis 6 Stunden, darüber Flugzeug (Anreise und Unterkunft)
             - A4. Eine Nacht im Hotel, ein Einzelzimmer für Führungskräfte und Menschen mit gesundheitlichem Bedarf (Anreise und Unterkunft)
-            - A5. Reise im Schnitt höchstens 250 Euro pro Person (Annahme) (Anreise und Unterkunft)
             ## Offene Fragen
-            - Wer bestätigt den Termin für die zwei Standorte, die samstags arbeiten?
+            - Samstag oder ein Werktag, weil zwei Standorte samstags arbeiten?
+            - Wie viele Einzelzimmer braucht jeder Standort?
           goodLooksLike:
             - Jede Anforderung jeder Spezifikation steht in der Liste, einmal.
             - Jede Anforderung nennt das Epic, aus dem sie kam.
@@ -787,8 +866,14 @@ stages:
                 3. Sammle unter Offene Fragen, was die Spezifikationen offen ließen.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -797,11 +882,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Führe diese Epic-Spezifikationen zu einem Anforderungsdokument zusammen: eine nummerierte Liste mit dem Epic jeder Anforderung, nichts hinzugefügt und nichts weggelassen, und die offenen Fragen. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /to-spec Führe diese Epic-Spezifikationen zu einem Anforderungsdokument zusammen: eine nummerierte Liste mit dem Epic jeder Anforderung, nichts hinzugefügt und nichts weggelassen, und die offenen Fragen.
 
                 ```markdown
                 {{spec_*}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -817,9 +912,8 @@ stages:
               sample: *requirements_example
           checks:
             - Jede Anforderung ist nummeriert und nennt das Epic, aus dem sie kam.
-            - Keine Anforderung ist erfunden, und keine ist mit einer anderen verschmolzen.
+            - Keine Anforderung ist ausgedacht, und keine ist mit einer anderen verschmolzen.
             - Die offenen Fragen stehen unter Offene Fragen, nicht entschieden.
-            - Jede erfundene Zahl ist als Annahme gekennzeichnet.
 
       - id: resolve
         title: Überschneidungen auflösen
@@ -843,11 +937,11 @@ stages:
             ## Abhängigkeiten
             - A3 und A4 hängen von A1 und A2 ab, Reise und Zimmer folgen dem Termin und dem Ort
             ## Konflikte
-            - A2 erlaubt einen Ort bis eine Stunde vom Flughafen, aber A5 deckelt die Reise bei 250 Euro. Entscheidung, der Ort muss von mindestens drei Standorten mit dem Zug erreichbar sein
+            - A1 verlangt einen Tag, aber A3 erlaubt bis zu 6 Stunden Zugfahrt je Richtung. Entscheidung, alle übernachten eine Nacht (A4), die Rückreise ist am nächsten Tag
             ## Anforderungen
-            - A1. Ein Tag im nächsten Sommer, nicht in den ersten zwei Augustwochen
-            - A2. Ein Ort mit Platz für 200 Personen, höchstens eine Stunde vom Flughafen und von mindestens drei Standorten mit dem Zug erreichbar
-            - A3. Zentrale Buchung der Reise: Zug bis 6 Stunden, darüber Flugzeug, im Schnitt höchstens 250 Euro pro Person (Annahme)
+            - A1. Ein Tag im nächsten Sommer, nicht in den ersten zwei Augustwochen, mit Rückreise am nächsten Tag
+            - A2. Ein Ort mit Platz für 200 Personen, drinnen mit Außenbereich, höchstens eine Stunde vom Flughafen
+            - A3. Zentrale Buchung der Reise: Zug bis 6 Stunden, darüber Flugzeug
             - A4. Eine Nacht im Hotel, ein Einzelzimmer für Führungskräfte und Menschen mit gesundheitlichem Bedarf
           goodLooksLike:
             - Jede Abhängigkeit nennt die Anforderungen auf beiden Seiten.
@@ -874,12 +968,18 @@ stages:
               purpose: steps
               text: |
                 1. Liste die Abhängigkeiten auf: welche Anforderung zuerst eine andere braucht, mit beiden Namen.
-                2. Liste die Konflikte auf: zwei Anforderungen, die nicht beide gelten können. Schlage für jeden eine Entscheidung vor und nenne den Grund in wenigen Worten. Wo die Entscheidung bei mir liegt, sag es und kennzeichne sie als Annahme.
+                2. Liste die Konflikte auf: zwei Anforderungen, die nicht beide gelten können. Schlage für jeden eine Entscheidung vor und nenne den Grund in wenigen Worten. Wo die Entscheidung bei mir liegt, sag es und kennzeichne sie als offene Entscheidung.
                 3. Schreibe die endgültige Liste der Anforderungen, mit jedem Konflikt aufgelöst.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -888,11 +988,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Finde die Abhängigkeiten und die Konflikte zwischen diesen Anforderungen, schlage für jeden Konflikt eine Entscheidung mit dem Grund in wenigen Worten vor und schreibe die endgültige Liste ohne Konflikte. Das ist ein Übungslauf: halte es kurz und kennzeichne jede Entscheidung, die bei mir liegt, und jede erfundene Zahl als Annahme.
+                /grilling Finde die Abhängigkeiten und die Konflikte zwischen diesen Anforderungen, schlage für jeden Konflikt eine Entscheidung mit dem Grund in wenigen Worten vor und schreibe die endgültige Liste ohne Konflikte. Kennzeichne jede Entscheidung, die bei mir liegt, als offene Entscheidung.
 
                 ```markdown
                 {{requirements}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -936,16 +1046,16 @@ stages:
           example: &tickets_example |
             # Tickets für das Sommerfest
             ## Tickets
-            ### Drei Orte in die engere Wahl nehmen
-            Finde drei Orte mit Platz für 200 Personen, höchstens eine Stunde vom Flughafen und von mindestens drei Standorten mit dem Zug erreichbar, mit einem Preis für den Tag. Deckt A1 und A2 ab.
-            ### Den Termin festlegen
-            Nenne zwei Termine im nächsten Sommer, außerhalb der ersten zwei Augustwochen, und prüfe sie gegen die Feiertage der fünf Länder. Deckt A1 ab.
-            ### Die Reise schätzen
-            Schätze die Reisekosten je Standort zum ersten Ort, mit Zug oder Flugzeug. Deckt A3 ab.
-            ### Die Hotelzimmer blocken
-            Finde ein Hotel in der Nähe des ersten Orts mit Zimmern für 200 Personen für eine Nacht, und einen Preis. Deckt A4 ab.
-            ### Das Budget schreiben
-            Fasse Ort, Reise und Zimmer in einer Budgettabelle mit den Summen zusammen. Deckt A2, A3 und A4 ab.
+            ### Die Anfrage an Orte schreiben
+            Schreibe die Anfrage, die an Veranstaltungsorte geht: ein Tag im nächsten Sommer, 200 Personen, drinnen mit Außenbereich, höchstens eine Stunde vom Flughafen. Deckt A1 und A2 ab.
+            ### Zwei Wunschtermine wählen
+            Nenne zwei Termine im nächsten Sommer außerhalb der ersten zwei Augustwochen und sag, was jeder Standort bestätigen muss. Deckt A1 ab.
+            ### Die Reiseregeln schreiben
+            Schreibe die Reiseregeln, an die sich jeder Standort hält: zentrale Buchung, Zug bis 6 Stunden, darüber Flugzeug. Deckt A3 ab.
+            ### Die Anfrage an Hotels schreiben
+            Schreibe die Anfrage, die an Hotels in der Nähe des Orts geht: eine Nacht für 200 Personen, Einzelzimmer für Führungskräfte und Menschen mit gesundheitlichem Bedarf. Deckt A4 ab.
+            ### Die Angebote zu einem Budget machen
+            Sobald Orte und Hotels geantwortet haben, trage ihre Preise in eine Budgettabelle ein. Deckt A2 und A4 ab.
           goodLooksLike:
             - Jedes Ticket liefert eine kleine Sache von Anfang bis Ende.
             - Jedes Ticket nennt die Anforderungen, die es abdeckt.
@@ -975,8 +1085,14 @@ stages:
                 3. Stelle sicher, dass jede Anforderung abgedeckt ist und sich keine zwei Tickets überschneiden.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -985,11 +1101,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-tickets Schneide diese Anforderungen in etwa fünf Tickets als vertikale Scheiben, jedes ein H3 unter der Überschrift Tickets, mit dem, was zu liefern ist, und den Anforderungen, die es abdeckt, ohne Überschneidung, jede Anforderung abgedeckt. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /to-tickets Schneide diese Anforderungen in etwa fünf Tickets als vertikale Scheiben, jedes ein H3 unter der Überschrift Tickets, mit dem, was zu liefern ist, und den Anforderungen, die es abdeckt, ohne Überschneidung, jede Anforderung abgedeckt.
 
                 ```markdown
                 {{resolved}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1041,57 +1167,56 @@ stages:
           techniques: [fresh-context, allow-unknown, separate-verification]
           example:
             - &ticket_1_example |
-              # Drei Orte in die engere Wahl nehmen
+              # Die Anfrage an Orte schreiben
               ## Ergebnis
-              Drei Orte fassen 200 Personen und sind von mindestens drei Standorten mit dem Zug erreichbar: die Seehalle, die Alte Gießerei und der Gartenpavillon.
+              Eine kurze Anfrage an Veranstaltungsorte: ein Tag im nächsten Sommer für 200 Personen, drinnen mit Außenbereich, höchstens eine Stunde vom Flughafen, mit der Bitte um einen Preis für den Tag. Der Termin wird eingetragen, sobald die Wunschtermine feststehen.
               ## Zahlen
-              | Ort | Kapazität | Preis für den Tag |
-              |---|---|---|
-              | Seehalle | 250 | 28.000 Euro (Annahme) |
-              | Alte Gießerei | 220 | 24.000 Euro (Annahme) |
-              | Gartenpavillon | 300 | 31.000 Euro (Annahme) |
-              ## Annahmen
-              - Alle Preise sind für diesen Übungslauf erfunden
+              | Was der Ort bieten muss | Wert |
+              |---|---|
+              | Gäste | 200 |
+              | Tage | 1 |
+              | Stunden bis zum Flughafen, höchstens | 1 |
+              ## Offene Entscheidungen
+              - Welche Orte die Anfrage bekommen
             - &ticket_2_example |
-              # Den Termin festlegen
+              # Zwei Wunschtermine wählen
               ## Ergebnis
-              Zwei Termine passen: der dritte Samstag im Juni und der erste Samstag im Juli. Beide meiden die ersten zwei Augustwochen und die wichtigsten Feiertage der fünf Länder.
+              Zwei Wunschtermine: einer in der dritten Juniwoche und einer in der ersten Juliwoche. Beide liegen außerhalb der ersten zwei Augustwochen; ob Samstag oder Werktag, ist noch offen.
               ## Zahlen
-              | Termin | Freie Standorte | Feiertage getroffen |
-              |---|---|---|
-              | Dritter Samstag im Juni | 5 von 5 | 0 |
-              | Erster Samstag im Juli | 4 von 5 | 1 |
-              ## Annahmen
-              - Die Feiertagskalender wurden für diesen Übungslauf nicht geprüft
+              | Wunschtermin | Standorte, die bestätigen müssen |
+              |---|---|
+              | Dritte Juniwoche | 5 |
+              | Erste Juliwoche | 5 |
+              ## Offene Entscheidungen
+              - Jeder Standort bestätigt seine Feiertage für beide Termine
             - &ticket_3_example |
-              # Die Reise schätzen
+              # Die Reiseregeln schreiben
               ## Ergebnis
-              Für vier Standorte reicht der Zug; ein Standort braucht ein Flugzeug. Der Durchschnitt liegt unter der Grenze von 250 Euro pro Person.
+              Eine Seite Reiseregeln für alle Standorte: Die Firma bucht zentral, mit dem Zug, wenn die Fahrt bis zu 6 Stunden dauert, darüber mit dem Flugzeug. Jeder Standort schickt seine Liste der Reisenden.
               ## Zahlen
-              | Standort | Personen | Reise pro Person | Summe |
-              |---|---|---|---|
-              | Berlin | 60 | 120 Euro | 7.200 Euro |
-              | Paris | 40 | 180 Euro | 7.200 Euro |
-              | Madrid | 30 | 320 Euro | 9.600 Euro |
-              | Warschau | 40 | 210 Euro | 8.400 Euro |
-              | Rom | 30 | 280 Euro | 8.400 Euro |
-              ## Annahmen
-              - Jeder Preis ist für diesen Übungslauf erfunden
+              | Regel | Wert |
+              |---|---|
+              | Zug, höchstens Stunden | 6 |
+              | Standorte, die eine Liste schicken | 5 |
+              | Reisende insgesamt | 200 |
+              ## Offene Entscheidungen
+              - Wie viele Reisende jeder Standort hat
             - &ticket_4_example |
-              # Die Hotelzimmer blocken
+              # Die Anfrage an Hotels schreiben
               ## Ergebnis
-              Ein Hotel in der Nähe der Seehalle hat 150 Zimmer, ein zweites in der Nähe 60, genug für 200 Personen in Einzel- und Doppelzimmern.
+              Eine kurze Anfrage an Hotels in der Nähe des Orts: eine Nacht für 200 Personen, mit Einzelzimmern für Führungskräfte und Menschen mit gesundheitlichem Bedarf.
               ## Zahlen
-              | Hotel | Zimmer | Preis pro Nacht | Summe |
-              |---|---|---|---|
-              | Hotel Seeblick | 150 | 110 Euro | 16.500 Euro |
-              | Hotel Linde | 60 | 95 Euro | 5.700 Euro |
-              ## Annahmen
-              - Beide Hotels haben die Zimmer am gewählten Termin frei (Annahme)
+              | Was das Hotel bieten muss | Wert |
+              |---|---|
+              | Gäste | 200 |
+              | Nächte | 1 |
+              | Einzelzimmer | nicht bekannt |
+              ## Offene Entscheidungen
+              - Wie viele Einzelzimmer: Jeder Standort meldet seine Führungskräfte und seinen Bedarf
           goodLooksLike:
             - Das Ergebnis liefert, was das Ticket verlangte, und nicht mehr.
             - Die Zahlentabelle hat beschriftete Spalten und, wo sinnvoll, eine Summe.
-            - Jede erfundene Zahl ist als Annahme gekennzeichnet.
+            - "Jede Zahl stammt aus dem Ticket oder den Anforderungen; eine unbekannte heißt 'nicht bekannt'."
         instructions: 'Öffne für jedes Ticket einen neuen Chat und füge den Prompt dieses Chats ein. Kopiere jedes Ergebnis.'
         do:
           simple:
@@ -1121,11 +1246,17 @@ stages:
               text: |
                 1. Tu, was das Ticket verlangt, und schreibe das Ergebnis in ein paar Sätzen auf.
                 2. Setze jede Zahl, die du benutzt hast, in eine Tabelle mit beschrifteten Spalten und, wo sinnvoll, einer Summe.
-                3. Schreibe "nicht bekannt", statt zu raten. Wo du eine Zahl brauchst, die du nicht hast, erfinde eine plausible und kennzeichne sie als Annahme.
+                3. Nutze nur Zahlen aus dem Ticket oder den Anforderungen oder solche, die du daraus zählen oder berechnen kannst. Ist eine Zahl nicht bekannt, schreibe "nicht bekannt" in die Tabelle und nenne sie unter Offene Entscheidungen.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -1134,11 +1265,21 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-tickets Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Tickets der Anforderungen unten als ein Ticket und starte pro Ticket einen Subagenten, parallel, jeden mit frischem Kontext und nur seinem eigenen Ticket. Jeder Subagent tut, was sein Ticket verlangt, schreibt das Ergebnis in ein paar Sätzen auf und führt eine Tabelle mit Zahlen und beschrifteten Spalten. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /to-tickets Du bist der Orchestrator. Nimm jedes H3 unter der Überschrift Tickets der Anforderungen unten als ein Ticket und starte pro Ticket einen Subagenten, parallel, jeden mit frischem Kontext und nur seinem eigenen Ticket. Jeder Subagent tut, was sein Ticket verlangt, schreibt das Ergebnis in ein paar Sätzen auf und führt eine Tabelle mit Zahlen und beschrifteten Spalten.
 
                 ```markdown
                 {{resolved}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1155,7 +1296,7 @@ stages:
           checks:
             - Das Ergebnis liefert, was sein Ticket verlangt, und schweift nicht in ein anderes Ticket ab. Das Ticket ist {{item}}
             - Die Zahlen stehen in einer Tabelle mit beschrifteten Spalten und, wo sinnvoll, einer Summe.
-            - Jede erfundene Zahl ist als Annahme gekennzeichnet.
+            - Jede Zahl stammt aus dem Ticket oder den Anforderungen oder ist daraus gezählt oder berechnet.
             - Wo etwas nicht bekannt ist, sagt das Ergebnis es, statt zu raten.
 
   - id: aggregate
@@ -1186,22 +1327,28 @@ stages:
           example: &combined_example |
             # Ergebnisse des Sommerfests
             ## Ergebnisse
-            - Engere Wahl: drei Orte fassen 200 Personen, der günstigste kostet 24.000 Euro (Annahme)
-            - Termin: zwei Termine passen, der dritte Samstag im Juni ist für alle 5 Standorte frei
-            - Reise: für vier Standorte reicht der Zug, einer braucht ein Flugzeug
-            - Zimmer: zwei Hotels in der Nähe der Seehalle fassen die 200 Personen
+            - Anfrage an Orte: fertig zum Versand, für 200 Gäste, ein Tag, höchstens eine Stunde vom Flughafen
+            - Termine: zwei Wunschtermine, die dritte Juniwoche und die erste Juliwoche
+            - Reiseregeln: zentrale Buchung, Zug bis 6 Stunden, darüber Flugzeug
+            - Anfrage an Hotels: fertig zum Versand, eine Nacht für 200 Gäste
             ## Zahlen
-            | Posten | Betrag |
+            | Posten | Wert |
             |---|---|
-            | Ort, der günstigste | 24.000 Euro (Annahme) |
-            | Reise, alle Standorte | 40.800 Euro (Annahme) |
-            | Hotelzimmer | 22.200 Euro (Annahme) |
-            ## Annahmen
-            - Jeder Preis ist für diesen Übungslauf erfunden
+            | Gäste | 200 |
+            | Tage | 1 |
+            | Nächte | 1 |
+            | Wunschtermine | 2 |
+            | Zug, höchstens Stunden | 6 |
+            | Einzelzimmer | nicht bekannt |
+            ## Offene Entscheidungen
+            - Welche Orte und Hotels die Anfragen bekommen
+            - Jeder Standort bestätigt seine Feiertage für beide Termine
+            - Wie viele Reisende jeder Standort hat
+            - Wie viele Einzelzimmer jeder Standort braucht
           goodLooksLike:
             - Jedes Ticket-Ergebnis steht im Dokument, und keines ist verändert.
             - Die Zahlen aller Tickets stehen an einem Ort.
-            - Die Annahmen aller Ergebnisse sind gesammelt.
+            - Die offenen Entscheidungen aller Ergebnisse sind gesammelt.
         instructions: 'Öffne einen neuen Chat und füge den Prompt mit den Ticket-Ergebnissen ein. Kopiere das verbundene Dokument.'
         do:
           simple:
@@ -1224,11 +1371,17 @@ stages:
               text: |
                 1. Schreibe unter Ergebnisse für jedes Ticket-Ergebnis eine Zeile, in der Reihenfolge, in der sie kamen.
                 2. Setze unter Zahlen die Zahlen aller Ergebnisse in eine Tabelle und behalte die Beschriftung jeder.
-                3. Sammle unter Annahmen jede Annahme jedes Ergebnisses.
+                3. Sammle unter Offene Entscheidungen die offenen Entscheidungen jedes Ergebnisses, jede nur einmal.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -1237,11 +1390,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Verbinde diese Ticket-Ergebnisse zu einem Dokument: eine Zeile pro Ergebnis, eine Tabelle mit allen Zahlen und jede Annahme gesammelt. Ändere nichts an den Ergebnissen. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /to-spec Verbinde diese Ticket-Ergebnisse zu einem Dokument: eine Zeile pro Ergebnis, eine Tabelle mit allen Zahlen und jede offene Entscheidung gesammelt. Ändere nichts an den Ergebnissen.
 
                 ```markdown
                 {{ticket_*}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1258,7 +1421,7 @@ stages:
           checks:
             - Jedes Ticket-Ergebnis hat eine Zeile unter Ergebnisse.
             - Die Zahlen aller Ergebnisse stehen in einer Tabelle, mit ihren Beschriftungen.
-            - Jede Annahme jedes Ergebnisses ist unter Annahmen gesammelt.
+            - Jede offene Entscheidung jedes Ergebnisses ist unter Offene Entscheidungen gesammelt.
             - Es wurde nichts hinzugefügt, was kein Ergebnis sagte.
 
       - id: report
@@ -1281,18 +1444,19 @@ stages:
           example: &report_example |
             # Statusbericht Sommerfest
             ## Zusammenfassung
-            Termin, Orte in der engeren Wahl, Reise und Zimmer sind bereit für eine Entscheidung. Der günstigste Ort und der erste Termin passen für alle fünf Standorte.
+            Die Anfragen an Orte und Hotels sind fertig zum Versand, die Reiseregeln stehen und zwei Termine liegen auf dem Tisch. Preise kommen mit den Angeboten, das Budget ist also der nächste Schritt.
             ## Kennzahlen
-            - Ort: ab 24.000 Euro (Annahme)
-            - Reise: etwa 40.800 Euro für 200 Personen (Annahme)
-            - Hotelzimmer: etwa 22.200 Euro (Annahme)
-            - Summe bisher: etwa 87.000 Euro von 100.000 (Annahme)
+            - Gäste: 200
+            - Wunschtermine: 2
+            - Nächte im Hotel: 1
+            - Standorte, die Reisende und Zimmer noch melden: 5
             ## Risiken
-            - Ein Standort braucht ein Flugzeug, was die Reisekosten erhöht
-            - Die Hotels halten die Zimmer vielleicht nicht, bis der Ort gewählt ist
+            - Ohne Angebote gibt es noch kein Budget
+            - Die Hotels halten die Zimmer vielleicht nicht, bis Ort und Termin gewählt sind
             ## Offene Entscheidungen
-            - Welcher der drei Orte?
+            - Welche Orte und Hotels bekommen die Anfragen?
             - Welcher der zwei Termine?
+            - Wie viele Reisende und Einzelzimmer je Standort?
           goodLooksLike:
             - Die Zusammenfassung passt in drei Sätze.
             - Jede Kennzahl stammt aus den verbundenen Ergebnissen.
@@ -1318,13 +1482,19 @@ stages:
               purpose: steps
               text: |
                 1. Zusammenfassung: drei Sätze dazu, wo das Projekt steht.
-                2. Kennzahlen: die fünf Zahlen, die eine Führungskraft braucht, jede aus den Ergebnissen.
+                2. Kennzahlen: bis zu fünf Zahlen, die eine Führungskraft braucht, jede aus den Ergebnissen.
                 3. Risiken: was schiefgehen könnte, eine Zeile je Risiko.
                 4. Offene Entscheidungen: was als Nächstes entschieden werden muss, eine Frage je Entscheidung.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -1333,11 +1503,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Schreibe aus diesen verbundenen Ergebnissen einen Statusbericht: eine Zusammenfassung in drei Sätzen, die fünf Kennzahlen, die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus den Ergebnissen. Das ist ein Übungslauf: halte es kurz und kennzeichne jede erfundene Zahl als Annahme.
+                /to-spec Schreibe aus diesen verbundenen Ergebnissen einen Statusbericht: eine Zusammenfassung in drei Sätzen, bis zu fünf Kennzahlen, die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus den Ergebnissen.
 
                 ```markdown
                 {{combined}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1359,7 +1539,7 @@ stages:
             - Die Zusammenfassung hat höchstens drei Sätze und sagt, wo das Projekt steht.
             - Jede Kennzahl kommt in den verbundenen Ergebnissen vor.
             - Risiken und offene Entscheidungen sind getrennte Listen mit je einer Zeile oder Frage.
-            - Jede erfundene Zahl ist als Annahme gekennzeichnet.
+            - Jede offene Entscheidung der verbundenen Ergebnisse steht unter Offene Entscheidungen.
 
   - id: review
     title: Prüfen
@@ -1395,8 +1575,8 @@ stages:
             ## Zusammenfassung
             Drei Sätze aus dem Bericht, als Erstes auf der Seite.
             ## Diagramme
-            - Ein Balkendiagramm der Kostenposten gegen das Budget
-            - Ein Balkendiagramm der Reisekosten je Standort
+            - Ein Balkendiagramm der Kennzahlen aus dem Bericht
+            - Ein Balkendiagramm von Entschiedenem gegen noch Offenes
             ## Risiken und offene Entscheidungen
             - Zwei Listen nebeneinander, je eine Zeile
           goodLooksLike:
@@ -1425,11 +1605,17 @@ stages:
               text: |
                 1. Schreibe eine HTML-Datei mit dem CSS darin und ohne weitere Dateien. Diagramme dürfen eine kleine Bibliothek von einem CDN nutzen.
                 2. Zeige zuerst die Zusammenfassung, dann ein oder zwei Diagramme der Kennzahlen, dann die Risiken und die offenen Entscheidungen.
-                3. Nutze nur Zahlen aus dem Bericht. Wo eine Zahl eine Annahme ist, sag es in der Bildunterschrift des Diagramms.
+                3. Nutze nur Zahlen aus dem Bericht oder gezählte Zeilen daraus. Sind es zu wenige Zahlen für ein Diagramm, zeige stattdessen eine kurze Tabelle.
             - heading: Übungslauf
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1441,11 +1627,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Stelle diesen Bericht als eine eigenständige HTML-Seite dar: zuerst die Zusammenfassung, dann ein oder zwei Diagramme der Kennzahlen, dann die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus dem Bericht und kennzeichne Annahmen in den Bildunterschriften. Das ist ein Übungslauf: halte es kurz.
+                /to-spec Stelle diesen Bericht als eine eigenständige HTML-Seite dar: zuerst die Zusammenfassung, dann ein oder zwei Diagramme der Kennzahlen, dann die Risiken und die offenen Entscheidungen. Nutze nur Zahlen aus dem Bericht.
 
                 ```markdown
                 {{report}}
                 ```
+            - heading: Übungslauf
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Umfang
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |

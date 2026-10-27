@@ -27,7 +27,11 @@ techniques:
   - id: allow-unknown
     tier: basic
     title: Allow "I don't know"
-    explain: Tell the AI it may say it does not know, or mark a guess as an assumption. Then it does not invent an answer just to please you.
+    explain: Tell the AI it may say it does not know, and to name what is missing as an open question. Then it does not make up an answer just to please you.
+  - id: simplest-first
+    tier: basic
+    title: Ask for the simplest version
+    explain: Tell the AI to take the simplest option and leave out what the goal does not need. Fewer moving parts leave fewer open questions, and fewer gaps the AI might fill with a guess.
   - id: few-shot
     tier: advanced
     title: Show an example
@@ -62,7 +66,7 @@ reviewer:
       purpose: steps
       text: |
         1. The work uses exactly the headings of the template below, in the same order.
-        2. Nothing is invented: every fact is backed by something you were given. A number that was invented for this practice run is marked as an assumption; an unmarked invented number fails.
+        2. Nothing is made up: every fact and number comes from what you were given, or is counted or worked out from it. A missing number is named as an open decision; a guessed one fails.
         3. The work stays inside what it was asked for.
     - heading: Checks for this task
       purpose: task
@@ -90,17 +94,17 @@ templates:
   scope: |
     # <The task>
     ## Questions and answers
-    ## Assumptions
+    ## Open decisions
   plan: |
     # <Plan title>
     ## Goal
     ## Epics
     ### <Epic title>
-    ## Assumptions
+    ## Open decisions
   grill: |
     # <The epic>
     ## Questions and answers
-    ## Assumptions
+    ## Open decisions
   spec: |
     # <The epic>
     ## Goal
@@ -124,12 +128,12 @@ templates:
     # <The ticket>
     ## Result
     ## Numbers
-    ## Assumptions
+    ## Open decisions
   combined: |
     # <Title>
     ## Results
     ## Numbers
-    ## Assumptions
+    ## Open decisions
   report: |
     # <Title>
     ## Summary
@@ -175,13 +179,13 @@ stages:
             ## Constraints
             - Next summer
             - People travel from 5 countries
-            - A budget of about 100,000 euros (assumption)
+            - Budget: not set yet
             ## Done looks like
-            A plan the board can approve: date, place, programme, budget and what each office does.
+            A plan the board can approve: date, place, programme and what each office does.
           goodLooksLike:
             - The goal says what is achieved, not how.
             - The audience says who it is for and how many.
-            - Every number that was not given is marked as an assumption.
+            - "Nothing is guessed: a figure that was not given says 'not set yet'."
         instructions: 'Open a new chat (ChatGPT or any AI chat), paste the prompt and read the brief it writes. Then copy the brief with the copy button on its box: every later step needs it.'
         do:
           simple:
@@ -202,12 +206,18 @@ stages:
               text: |
                 1. Write down the goal in one or two sentences: what is achieved, not how.
                 2. Name the audience: who it is for, and how many people.
-                3. List the constraints: time, money, people and rules. Where I gave no number, invent a plausible one and mark it (assumption).
+                3. List the constraints: time, money, people and rules. Where I gave no figure, write 'not set yet' instead of a guess.
                 4. Say what done looks like, so anyone can tell when the task is finished.
             - heading: Practice run
               purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: &practice 'This is a practice run, so keep it small and simple: a few lines per section. Steer toward the simplest version that still reaches the goal: where a choice does not change the goal, take the simplest option yourself, and leave out whatever the goal does not need. Use only numbers and facts from the material above or from my answers. Where one is missing, leave it out or write it down as an open decision, so nobody mistakes a guess for a fact.'
+            - heading: Scope
+              purpose: scope
+              only: full
               techniques: [allow-unknown]
-              text: &practice 'This is a practice run, so keep it short: a few lines per section, no long essays. Where you need a number you were not given, invent a plausible one and mark it as an assumption, so nobody mistakes it for a fact.'
+              text: &scope 'Stay inside what the material above asks for. Use only numbers and facts from the material or from my answers. Where one is missing, write it down as an open decision, so I can decide it or find it out.'
             - heading: Format
               purpose: template
               text: &format |
@@ -219,11 +229,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Turn my rough idea below into a task brief: the goal in one or two sentences, the audience, the constraints and what done looks like. This is a practice run: keep it short, and mark every number you invent as an assumption.
+                /grilling Turn my rough idea below into a task brief: the goal in one or two sentences, the audience, the constraints and what done looks like.
 
                 ```markdown
                 {{idea}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -240,7 +260,7 @@ stages:
           checks:
             - The goal is one or two sentences and says what is achieved, not how.
             - The audience says who it is for and how many.
-            - The constraints name time, money, people or rules, and every invented number is marked as an assumption.
+            - The constraints name time, money, people or rules, and a figure that was not given says 'not set yet' instead of a guess.
             - Done looks like says how anyone can tell the task is finished.
 
       - id: scope
@@ -248,7 +268,7 @@ stages:
         summary: At most three questions before any plan
         goal:
           do: 'Let the AI ask a few questions about the task before it guesses.'
-          review: 'Have a second AI chat check the questions and the assumptions.'
+          review: 'Have a second AI chat check the questions and the open decisions.'
         needs: [task]
         output: scope
         template: scope
@@ -263,20 +283,19 @@ stages:
             sample: *task_example
         details:
           why: The AI asks before it guesses, and it brings up what you had not thought of. Three questions are enough to find the decision that would change the whole plan.
-          techniques: [allow-unknown, delimiters]
+          techniques: [simplest-first, allow-unknown, delimiters]
           example: &scope_example |
             # Plan a company summer party
             ## Questions and answers
             1. One central event or five local ones? Recommended: one central event, because the point is to meet people from the other offices. My answer: one central event.
-            2. Do people stay overnight? Recommended: yes, for everyone who travels more than two hours. My answer: yes.
-            3. The one you may not have thought of: who decides if the budget is exceeded? My answer: the managing board, above 100,000 euros.
-            ## Assumptions
-            - About 100,000 euros in total (assumption)
-            - Guests come as individuals, without partners (assumption)
+            2. Do people stay overnight? Recommended: yes, one night, so nobody travels there and back in one day. My answer: yes.
+            3. The one you may not have thought of: who signs off the plan? Recommended: the board, in one meeting. My answer: the board.
+            ## Open decisions
+            - The budget: the board sets it once the first quotes are in
           goodLooksLike:
             - No more than three questions, each with options and a recommendation.
             - One question is about something you had not thought of.
-            - What the AI had to guess is listed as an assumption.
+            - What is still undecided is listed under Open decisions, not guessed.
         instructions: "Open a new chat, paste the prompt and answer the questions in your own words; 'yes' takes all the recommendations. Then copy the result."
         do:
           simple:
@@ -301,15 +320,21 @@ stages:
                 2. When a question is a choice, give two options, (A) and (B), and say which one you recommend and why, in a few words.
                 3. When a question is about something only I know, ask it openly, without options.
                 4. Ask at least one question about something I probably have not thought of.
-                5. Facts are your job, decisions are mine: never ask what the brief already says; state it as an assumption instead.
+                5. Facts are your job, decisions are mine: never ask what the brief already says; take it as given.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
-                When I have answered, write the result as one markdown code block, so I can copy it with one click into the next chat. Under Questions and answers, list every question with my final answer. Under Assumptions, list what you assumed and what I did not decide. Inside the block, use exactly the headings of this template, in this order.
+                When I have answered, write the result as one markdown code block, so I can copy it with one click into the next chat. Under Questions and answers, list every question with my final answer. Under Open decisions, list what is still undecided, one line each, or write 'None'. Inside the block, use exactly the headings of this template, in this order.
 
                 {{template}}
           technical:
@@ -317,11 +342,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Ask me at most {{limit.questions}} numbered questions about this task, with two options and a recommended answer for each choice, an open question for what only I know, and one question about something I probably have not thought of. This is a practice run: keep it short, and mark every invented number as an assumption. When I have answered, write the result.
+                /grilling Ask me at most {{limit.questions}} numbered questions about this task, with two options and a recommended answer for each choice, an open question for what only I know, and one question about something I probably have not thought of. When I have answered, write the result.
 
                 ```markdown
                 {{task}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -343,7 +378,7 @@ stages:
             - There are at most {{limit.questions}} questions, and every choice came with two options and a recommendation.
             - At least one question is about something the task brief did not say.
             - No question is left unanswered, and no two answers contradict each other.
-            - Everything the AI had to guess is listed under Assumptions, and no number is invented without being marked.
+            - What is still undecided is listed under Open decisions, and no number appears that the brief or the answers did not give.
 
       - id: epics
         title: Plan the epics
@@ -379,8 +414,8 @@ stages:
             What happens during the day, and what people eat and drink.
             ### Invitations and registration
             Tell everyone, and know who comes.
-            ## Assumptions
-            - A budget of about 100,000 euros (assumption)
+            ## Open decisions
+            - The budget: the board sets it once the first quotes are in
           goodLooksLike:
             - Each epic is a big piece of work that can be planned on its own.
             - Every epic is an H3 under Epics, with one sentence on what it decides.
@@ -403,7 +438,7 @@ stages:
                 {{task}}
                 ```
 
-                The questions and answers, with the assumptions:
+                The questions and answers, with the open decisions:
 
                 ```markdown
                 {{scope}}
@@ -415,11 +450,17 @@ stages:
                 2. Split the task into about four epics. An epic is a big piece of work that I can plan in its own new chat from a short handoff.
                 3. Give every epic an H3 heading with its name and one sentence on what it decides.
                 4. Make sure the epics together cover the goal and do not overlap.
-                5. List what you assumed under Assumptions.
+                5. Under Open decisions, list what is still undecided, or write 'None'.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -428,7 +469,7 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Write a high-level plan for this task: the goal, then about four epics, each an H3 under the heading Epics with one sentence on what it decides, and the assumptions. Do not plan inside any epic. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /to-spec Write a high-level plan for this task: the goal, then about four epics, each an H3 under the heading Epics with one sentence on what it decides, and the open decisions. Do not plan inside any epic.
 
                 ```markdown
                 {{task}}
@@ -437,6 +478,16 @@ stages:
                 ```markdown
                 {{scope}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -459,7 +510,7 @@ stages:
             - Every epic is an H3 under Epics with one sentence on what it decides.
             - The epics do not overlap, and together they cover the goal.
             - No epic is planned in detail.
-            - Every invented number is marked as an assumption.
+            - Every number in the plan comes from the inputs; nothing is guessed.
 
   - id: epics
     title: Epics
@@ -476,7 +527,7 @@ stages:
         summary: Questions first, in a fresh chat per epic
         goal:
           do: 'Let the AI grill you about one epic, in its own fresh chat.'
-          review: 'Have a second AI chat check the questions and the assumptions.'
+          review: 'Have a second AI chat check the questions and the open decisions.'
         output: grill
         template: grill
         limits:
@@ -500,9 +551,8 @@ stages:
               3. How far may a venue be from an airport? Recommended: at most one hour. My answer: one hour.
               4. Which weeks are out? Open question. My answer: the first two weeks of August, in several offices it is holiday time.
               5. The one you may not have thought of: do all five offices work on the same day? My answer: no, two offices work on Saturdays.
-              ## Assumptions
-              - A venue costs at most 30,000 euros for the day (assumption)
-              - 200 people all come (assumption)
+              ## Open decisions
+              - Saturday or a weekday, since two offices work on Saturdays
             - &grill_2_example |
               # Travel and accommodation
               ## Questions and answers
@@ -511,13 +561,12 @@ stages:
               3. How many nights? Recommended: one night. My answer: one night.
               4. Who needs a single room? Open question. My answer: managers and people with a health need.
               5. The one you may not have thought of: do people bring their children? My answer: no.
-              ## Assumptions
-              - Travel costs about 250 euros per person on average (assumption)
-              - A hotel room costs about 120 euros a night (assumption)
+              ## Open decisions
+              - How many single rooms: each office reports its managers and needs
           goodLooksLike:
             - Never more than the allowed number of questions, each with options and a recommendation.
             - One answer is something you had not thought of.
-            - What the AI guessed is listed under Assumptions.
+            - What is still undecided is listed under Open decisions, not guessed.
         instructions: "Open a new chat for each epic and paste that chat's prompt; answer in your own words, 'yes' takes all the recommendations. Copy every result."
         do:
           simple:
@@ -548,16 +597,22 @@ stages:
                 2. When a question is a choice, give two options, (A) and (B), and say which one you recommend and why, in a few words.
                 3. When a question is about something only I know, ask it openly, without options.
                 4. Ask at least one question about something I probably have not thought of.
-                5. Never ask what the plan already says; state it as an assumption instead.
+                5. Never ask what the plan already says; take it as given.
                 6. When nothing important is left to ask, say so and ask me to type "done".
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
-                When I type "done", write the result as one markdown code block, so I can copy it with one click into the next chat. Under Questions and answers, list every question with my final answer. Under Assumptions, list what you assumed. Inside the block, use exactly the headings of this template, in this order.
+                When I type "done", write the result as one markdown code block, so I can copy it with one click into the next chat. Under Questions and answers, list every question with my final answer. Under Open decisions, list what is still undecided, or write 'None'. Inside the block, use exactly the headings of this template, in this order.
 
                 {{template}}
           technical:
@@ -565,11 +620,21 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /grilling You are the orchestrator. Take every H3 under the heading Epics of the plan below as one epic, and start one subagent per epic, each with a fresh context and only its own epic. Each subagent asks me at most {{limit.questions}} numbered questions about its epic, with two options and a recommended answer for each choice, and one question about something I probably have not thought of. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /grilling You are the orchestrator. Take every H3 under the heading Epics of the plan below as one epic, and start one subagent per epic, each with a fresh context and only its own epic. Each subagent asks me at most {{limit.questions}} numbered questions about its epic, with two options and a recommended answer for each choice, and one question about something I probably have not thought of.
 
                 ```markdown
                 {{plan}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -587,7 +652,7 @@ stages:
             - The result is about exactly this epic and does not drift into another. The epic is {{item}}
             - There are at most {{limit.questions}} questions, and every choice came with two options and a recommendation.
             - At least one question is about something the plan did not say.
-            - No question is left unanswered, and everything that was guessed is listed under Assumptions.
+            - No question is left unanswered, and what is still undecided is listed under Open decisions.
 
       - id: spec
         title: Write the spec
@@ -614,13 +679,12 @@ stages:
             - &spec_1_example |
               # Date and venue
               ## Goal
-              Fix one day next summer and one venue that 200 people can reach in a day.
+              Fix one day next summer and one venue that 200 people can reach.
               ## Requirements
               - One day, indoors with an outdoor area
               - At most one hour from an airport
-              - Room for 200 people (assumption)
+              - Room for 200 people
               - Not in the first two weeks of August
-              - Venue cost at most 30,000 euros (assumption)
               ## Out of scope
               - Travel, hotels, programme and catering
               ## Dependencies
@@ -634,7 +698,6 @@ stages:
               - Train up to 6 hours, plane above
               - One night in a hotel, a single room for managers and people with a health need
               - No children
-              - Travel at most 250 euros per person on average (assumption)
               ## Out of scope
               - The date and the venue, and the programme
               ## Dependencies
@@ -681,8 +744,14 @@ stages:
                 4. Dependencies: what this epic needs from another epic, or what another epic needs from it.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -691,7 +760,7 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-spec You are the orchestrator. Start one subagent per epic, each with a fresh context. Each subagent turns the questions and answers of its epic into a spec: the goal, requirements that can each be ticked yes or no, what is out of scope and the dependencies on other epics. Do not interview me again. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /to-spec You are the orchestrator. Start one subagent per epic, each with a fresh context. Each subagent turns the questions and answers of its epic into a spec: the goal, requirements that can each be ticked yes or no, what is out of scope and the dependencies on other epics. Do not interview me again.
 
                 ```markdown
                 {{plan}}
@@ -700,6 +769,16 @@ stages:
                 ```markdown
                 {{grill}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -752,12 +831,12 @@ stages:
             # Summer party requirements
             ## Requirements
             - R1. One day next summer, not in the first two weeks of August (Date and venue)
-            - R2. A venue with room for 200 people, indoors with an outdoor area, at most one hour from an airport, at most 30,000 euros (assumption) (Date and venue)
+            - R2. A venue with room for 200 people, indoors with an outdoor area, at most one hour from an airport (Date and venue)
             - R3. The company books the travel centrally: train up to 6 hours, plane above (Travel and accommodation)
             - R4. One night in a hotel, a single room for managers and people with a health need (Travel and accommodation)
-            - R5. Travel at most 250 euros per person on average (assumption) (Travel and accommodation)
             ## Open questions
-            - Who confirms the date for the two offices that work on Saturdays?
+            - Saturday or a weekday, since two offices work on Saturdays?
+            - How many single rooms does each office need?
           goodLooksLike:
             - Every requirement of every spec is in the list, once.
             - Each requirement says which epic it came from.
@@ -787,8 +866,14 @@ stages:
                 3. Collect what the specs left open under Open questions.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -797,11 +882,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Merge these epic specs into one requirements document: one numbered list with the epic of each requirement, nothing added and nothing dropped, and the open questions. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /to-spec Merge these epic specs into one requirements document: one numbered list with the epic of each requirement, nothing added and nothing dropped, and the open questions.
 
                 ```markdown
                 {{spec_*}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -817,9 +912,8 @@ stages:
               sample: *requirements_example
           checks:
             - Every requirement is numbered and names the epic it came from.
-            - No requirement is invented, and none is merged with another.
+            - No requirement is made up, and none is merged with another.
             - The open questions are listed under Open questions, not decided.
-            - Every invented number is marked as an assumption.
 
       - id: resolve
         title: Resolve the overlap
@@ -843,11 +937,11 @@ stages:
             ## Dependencies
             - R3 and R4 depend on R1 and R2: travel and rooms follow the date and the venue
             ## Conflicts
-            - R2 allows a venue up to one hour from an airport, but R5 caps travel at 250 euros: decision, the venue must be reachable by train from at least three offices
+            - R1 asks for one day, but R3 allows up to 6 hours by train each way: decision, everyone stays one night (R4), so the trip home is the next day
             ## Requirements
-            - R1. One day next summer, not in the first two weeks of August
-            - R2. A venue with room for 200 people, at most one hour from an airport and reachable by train from at least three offices
-            - R3. Central booking of travel: train up to 6 hours, plane above, at most 250 euros per person on average (assumption)
+            - R1. One day next summer, not in the first two weeks of August, with the trip home the next day
+            - R2. A venue with room for 200 people, indoors with an outdoor area, at most one hour from an airport
+            - R3. Central booking of travel: train up to 6 hours, plane above
             - R4. One night in a hotel, a single room for managers and people with a health need
           goodLooksLike:
             - Every dependency names the requirements on both sides.
@@ -874,12 +968,18 @@ stages:
               purpose: steps
               text: |
                 1. List the dependencies: which requirement needs another one first, naming both.
-                2. List the conflicts: two requirements that cannot both hold. For each, propose a decision and give the reason in a few words. Where a decision is mine to make, say so and mark it as an assumption.
+                2. List the conflicts: two requirements that cannot both hold. For each, propose a decision and give the reason in a few words. Where a decision is mine to make, say so and mark it as an open decision.
                 3. Write the final list of requirements with every conflict resolved.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -888,11 +988,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /grilling Find the dependencies and the conflicts between these requirements, propose a decision for each conflict with the reason in a few words, and write the final list without conflicts. This is a practice run: keep it short, and mark every decision that is mine to make and every invented number as an assumption.
+                /grilling Find the dependencies and the conflicts between these requirements, propose a decision for each conflict with the reason in a few words, and write the final list without conflicts. Mark every decision that is mine to make as an open decision.
 
                 ```markdown
                 {{requirements}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -936,16 +1046,16 @@ stages:
           example: &tickets_example |
             # Summer party tickets
             ## Tickets
-            ### Shortlist three venues
-            Find three venues with room for 200 people, at most one hour from an airport and reachable by train from at least three offices, with a price for the day. Covers R1 and R2.
-            ### Fix the date
-            Name two dates next summer, outside the first two weeks of August, and check them against the holidays of the five countries. Covers R1.
-            ### Estimate the travel
-            Estimate the travel cost per office to the first venue, by train or plane. Covers R3.
-            ### Block the hotel rooms
-            Find a hotel near the first venue with rooms for 200 people for one night, and a price. Covers R4.
-            ### Write the budget
-            Add venue, travel and rooms into one budget table with the totals. Covers R2, R3 and R4.
+            ### Write the venue request
+            Write the request that goes to venues: one day next summer, 200 people, indoors with an outdoor area, at most one hour from an airport. Covers R1 and R2.
+            ### Pick two candidate dates
+            Name two dates next summer outside the first two weeks of August, and say what each office must confirm. Covers R1.
+            ### Write the travel rules
+            Write the travel rules every office follows: central booking, train up to 6 hours, plane above. Covers R3.
+            ### Write the hotel request
+            Write the request that goes to hotels near the venue: one night for 200 people, single rooms for managers and people with a health need. Covers R4.
+            ### Put the quotes into a budget
+            Once venues and hotels have answered, put their prices into one budget table. Covers R2 and R4.
           goodLooksLike:
             - Each ticket delivers one small thing from start to finish.
             - Each ticket names the requirements it covers.
@@ -975,8 +1085,14 @@ stages:
                 3. Make sure every requirement is covered and no two tickets overlap.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -985,11 +1101,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-tickets Cut these requirements into about five vertical-slice tickets, each an H3 under the heading Tickets, saying what to deliver and which requirements it covers, none overlapping, every requirement covered. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /to-tickets Cut these requirements into about five vertical-slice tickets, each an H3 under the heading Tickets, saying what to deliver and which requirements it covers, none overlapping, every requirement covered.
 
                 ```markdown
                 {{resolved}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1041,57 +1167,56 @@ stages:
           techniques: [fresh-context, allow-unknown, separate-verification]
           example:
             - &ticket_1_example |
-              # Shortlist three venues
+              # Write the venue request
               ## Result
-              Three venues fit 200 people and are reachable by train from at least three offices: the Lakeside Hall, the Old Foundry and the Garden Pavilion.
+              A short request to send to venues: one day next summer for 200 people, indoors with an outdoor area, at most one hour from an airport, asking for a price for the day. The date is filled in once the candidates are fixed.
               ## Numbers
-              | Venue | Capacity | Price for the day |
-              |---|---|---|
-              | Lakeside Hall | 250 | 28,000 euros (assumption) |
-              | Old Foundry | 220 | 24,000 euros (assumption) |
-              | Garden Pavilion | 300 | 31,000 euros (assumption) |
-              ## Assumptions
-              - All prices are invented for this practice run
+              | What the venue must offer | Value |
+              |---|---|
+              | Guests | 200 |
+              | Days | 1 |
+              | Hours from an airport, at most | 1 |
+              ## Open decisions
+              - Which venues get the request
             - &ticket_2_example |
-              # Fix the date
+              # Pick two candidate dates
               ## Result
-              Two dates fit: the third Saturday of June and the first Saturday of July. Both avoid the first two weeks of August and the main holidays of the five countries.
+              Two candidate dates: one in the third week of June and one in the first week of July. Both are outside the first two weeks of August; whether it is a Saturday or a weekday is still open.
               ## Numbers
-              | Date | Offices free | Holidays hit |
-              |---|---|---|
-              | Third Saturday of June | 5 of 5 | 0 |
-              | First Saturday of July | 4 of 5 | 1 |
-              ## Assumptions
-              - Holiday calendars were not checked for this practice run
+              | Candidate | Offices that must confirm |
+              |---|---|
+              | Third week of June | 5 |
+              | First week of July | 5 |
+              ## Open decisions
+              - Each office confirms its public holidays for both dates
             - &ticket_3_example |
-              # Estimate the travel
+              # Write the travel rules
               ## Result
-              Train is enough for four offices; one office needs a plane. The average is under the cap of 250 euros per person.
+              One page of travel rules for all offices: the company books centrally, by train when the trip takes up to 6 hours, by plane above. Each office sends its list of travellers.
               ## Numbers
-              | Office | People | Travel per person | Total |
-              |---|---|---|---|
-              | Berlin | 60 | 120 euros | 7,200 euros |
-              | Paris | 40 | 180 euros | 7,200 euros |
-              | Madrid | 30 | 320 euros | 9,600 euros |
-              | Warsaw | 40 | 210 euros | 8,400 euros |
-              | Rome | 30 | 280 euros | 8,400 euros |
-              ## Assumptions
-              - Every price is invented for this practice run
+              | Rule | Value |
+              |---|---|
+              | Train, at most hours | 6 |
+              | Offices sending a list | 5 |
+              | Travellers in total | 200 |
+              ## Open decisions
+              - How many travellers each office has
             - &ticket_4_example |
-              # Block the hotel rooms
+              # Write the hotel request
               ## Result
-              One hotel near the Lakeside Hall has 150 rooms, and a second one nearby has 60, enough for 200 people in single and double rooms.
+              A short request to send to hotels near the venue: one night for 200 people, with single rooms for managers and people with a health need.
               ## Numbers
-              | Hotel | Rooms | Price per night | Total |
-              |---|---|---|---|
-              | Hotel Seeblick | 150 | 110 euros | 16,500 euros |
-              | Hotel Linde | 60 | 95 euros | 5,700 euros |
-              ## Assumptions
-              - Both hotels have the rooms free on the chosen date (assumption)
+              | What the hotel must offer | Value |
+              |---|---|
+              | Guests | 200 |
+              | Nights | 1 |
+              | Single rooms | not known |
+              ## Open decisions
+              - How many single rooms: each office reports its managers and needs
           goodLooksLike:
             - The result delivers what the ticket asked for, and no more.
             - The numbers table has labelled columns and a total where one makes sense.
-            - Every number that was invented is marked as an assumption.
+            - Every number comes from the ticket or the requirements; an unknown one says 'not known'.
         instructions: "Open a new chat for each ticket and paste that chat's prompt. Copy every result."
         do:
           simple:
@@ -1121,11 +1246,17 @@ stages:
               text: |
                 1. Do what the ticket asks and write the result in a few sentences.
                 2. Put every number you used into one table with labelled columns, and a total where one makes sense.
-                3. Write "not known" rather than guess. Where you must use a number you do not have, invent a plausible one and mark it as an assumption.
+                3. Use only numbers from the ticket or the requirements, or ones you can count or work out from them. Where a number is not known, write "not known" in the table and name it under Open decisions.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -1134,11 +1265,21 @@ stages:
               purpose: task
               techniques: [delimiters, fresh-context]
               text: |
-                /to-tickets You are the orchestrator. Take every H3 under the heading Tickets of the requirements below as one ticket, and start one subagent per ticket, in parallel, each with a fresh context and only its own ticket. Each subagent does what its ticket asks, writes the result in a few sentences and keeps one table of numbers with labelled columns. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /to-tickets You are the orchestrator. Take every H3 under the heading Tickets of the requirements below as one ticket, and start one subagent per ticket, in parallel, each with a fresh context and only its own ticket. Each subagent does what its ticket asks, writes the result in a few sentences and keeps one table of numbers with labelled columns.
 
                 ```markdown
                 {{resolved}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1155,7 +1296,7 @@ stages:
           checks:
             - The result delivers what its ticket asks and does not drift into another ticket. The ticket is {{item}}
             - The numbers sit in one table with labelled columns, and a total where one makes sense.
-            - Every invented number is marked as an assumption.
+            - Every number comes from the ticket or the requirements, or is counted or worked out from them.
             - Where something is not known, the result says so instead of a guess.
 
   - id: aggregate
@@ -1186,22 +1327,28 @@ stages:
           example: &combined_example |
             # Summer party results
             ## Results
-            - Shortlist: three venues fit 200 people, the cheapest costs 24,000 euros (assumption)
-            - Date: two dates fit, the third Saturday of June is free for all 5 offices
-            - Travel: train is enough for four offices, one needs a plane
-            - Rooms: two hotels near the Lakeside Hall hold the 200 people
+            - Venue request: ready to send, for 200 guests, one day, at most one hour from an airport
+            - Dates: two candidates, the third week of June and the first week of July
+            - Travel rules: central booking, train up to 6 hours, plane above
+            - Hotel request: ready to send, one night for 200 guests
             ## Numbers
-            | Item | Amount |
+            | Item | Value |
             |---|---|
-            | Venue, cheapest | 24,000 euros (assumption) |
-            | Travel, all offices | 40,800 euros (assumption) |
-            | Hotel rooms | 22,200 euros (assumption) |
-            ## Assumptions
-            - Every price is invented for this practice run
+            | Guests | 200 |
+            | Days | 1 |
+            | Nights | 1 |
+            | Candidate dates | 2 |
+            | Train, at most hours | 6 |
+            | Single rooms | not known |
+            ## Open decisions
+            - Which venues and hotels get the requests
+            - Each office confirms its public holidays for both dates
+            - How many travellers each office has
+            - How many single rooms each office needs
           goodLooksLike:
             - Every ticket result is in the document, and none is changed.
             - The numbers of all tickets are in one place.
-            - The assumptions of all results are collected.
+            - The open decisions of all results are collected.
         instructions: 'Open a new chat and paste the prompt with the ticket results filled in. Copy the combined document.'
         do:
           simple:
@@ -1224,11 +1371,17 @@ stages:
               text: |
                 1. Under Results, write one line for each ticket result, in the order they came.
                 2. Under Numbers, put the numbers of all results into one table, and keep the label of each.
-                3. Under Assumptions, collect every assumption of every result.
+                3. Under Open decisions, collect the open decisions of every result, each once.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -1237,11 +1390,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Combine these ticket results into one document: one line per result, one table with all numbers and every assumption collected. Change nothing in the results. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /to-spec Combine these ticket results into one document: one line per result, one table with all numbers and every open decision collected. Change nothing in the results.
 
                 ```markdown
                 {{ticket_*}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1258,7 +1421,7 @@ stages:
           checks:
             - Every ticket result has a line under Results.
             - The numbers of all results are in one table, with their labels.
-            - Every assumption of every result is collected under Assumptions.
+            - Every open decision of every result is collected under Open decisions.
             - Nothing was added that no result said.
 
       - id: report
@@ -1281,18 +1444,19 @@ stages:
           example: &report_example |
             # Summer party status report
             ## Summary
-            The date, the venue shortlist, the travel and the rooms are ready for a decision. The cheapest venue and the first date fit all five offices.
+            The venue and hotel requests are ready to send, the travel rules are written and two dates are on the table. Prices come with the quotes, so the budget is the next step.
             ## Key figures
-            - Venue: from 24,000 euros (assumption)
-            - Travel: about 40,800 euros for 200 people (assumption)
-            - Hotel rooms: about 22,200 euros (assumption)
-            - Total so far: about 87,000 euros of 100,000 (assumption)
+            - Guests: 200
+            - Candidate dates: 2
+            - Nights in a hotel: 1
+            - Offices still to report travellers and rooms: 5
             ## Risks
-            - One office needs a plane, which raises the travel cost
-            - The hotels may not hold the rooms until the venue is chosen
+            - Without quotes there is no budget yet
+            - The hotels may not hold rooms until the venue and the date are chosen
             ## Open decisions
-            - Which of the three venues?
+            - Which venues and hotels get the requests?
             - Which of the two dates?
+            - How many travellers and single rooms per office?
           goodLooksLike:
             - The summary fits in three sentences.
             - Every key figure comes from the combined results.
@@ -1318,13 +1482,19 @@ stages:
               purpose: steps
               text: |
                 1. Summary: three sentences on where the project stands.
-                2. Key figures: the five numbers a manager needs, each taken from the results.
+                2. Key figures: up to five numbers a manager needs, each taken from the results.
                 3. Risks: what could go wrong, one line each.
                 4. Open decisions: what must be decided next, one question each.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: *format
@@ -1333,11 +1503,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Write a status report from these combined results: a three-sentence summary, the five key figures, the risks and the open decisions. Use only numbers from the results. This is a practice run: keep it short, and mark every invented number as an assumption.
+                /to-spec Write a status report from these combined results: a three-sentence summary, up to five key figures, the risks and the open decisions. Use only numbers from the results.
 
                 ```markdown
                 {{combined}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1359,7 +1539,7 @@ stages:
             - The summary is at most three sentences and says where the project stands.
             - Every key figure appears in the combined results.
             - Risks and open decisions are separate lists with one line or question each.
-            - Every invented number is marked as an assumption.
+            - Every open decision of the combined results appears under Open decisions.
 
   - id: review
     title: Review
@@ -1395,8 +1575,8 @@ stages:
             ## Summary
             Three sentences from the report, as the first thing on the page.
             ## Charts
-            - A bar chart of the cost items against the budget
-            - A bar chart of the travel cost per office
+            - A bar chart of the key figures from the report
+            - A bar chart of what is decided against what is still open
             ## Risks and open decisions
             - Two lists side by side, one line each
           goodLooksLike:
@@ -1425,11 +1605,17 @@ stages:
               text: |
                 1. Write one HTML file with the CSS inside it and no other files. Charts may use a small library from a CDN.
                 2. Show the summary first, then one or two charts of the key figures, then the risks and the open decisions.
-                3. Use only numbers from the report. Where a number is an assumption, say so in the chart's caption.
+                3. Use only numbers from the report, or counts of its lines. Where there are too few numbers for a chart, show a short table instead.
             - heading: Practice run
               purpose: scope
-              techniques: [allow-unknown]
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
               text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |
@@ -1441,11 +1627,21 @@ stages:
               purpose: task
               techniques: [delimiters]
               text: |
-                /to-spec Render this report as one self-contained HTML page: the summary first, then one or two charts of the key figures, then the risks and the open decisions. Use only numbers from the report and mark assumptions in the captions. This is a practice run: keep it short.
+                /to-spec Render this report as one self-contained HTML page: the summary first, then one or two charts of the key figures, then the risks and the open decisions. Use only numbers from the report.
 
                 ```markdown
                 {{report}}
                 ```
+            - heading: Practice run
+              purpose: scope
+              only: teaching
+              techniques: [simplest-first, allow-unknown]
+              text: *practice
+            - heading: Scope
+              purpose: scope
+              only: full
+              techniques: [allow-unknown]
+              text: *scope
             - heading: Format
               purpose: template
               text: |

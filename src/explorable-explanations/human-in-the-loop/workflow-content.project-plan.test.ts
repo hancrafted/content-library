@@ -106,16 +106,28 @@ describe('success cases', () => {
     expect(mentions).toEqual([]);
   });
 
-  it('makes every prompt a practice run that marks invented numbers as assumptions, in Chat and CLI', () => {
+  it('makes every prompt in teaching mode a practice run that takes the simplest option, in Chat and CLI', () => {
     // ARRANGE
-    const texts = tasksOf(file).flatMap((each) => [
-      textOf({ sections: each.do.simple }),
-      textOf({ sections: each.do.technical }),
-    ]);
+    const prompts = (level: 'simple' | 'technical') =>
+      tasksOf(file).map((each) => [each.id, textOf(doStep(each.id, level, { teaching: true }).prompt)] as const);
     // ACT
-    const missing = texts.filter((text) => !/practice run/i.test(text) || !/assumption/i.test(text));
+    const missing = [...prompts('simple'), ...prompts('technical')]
+      .filter(([, text]) => !/practice run/i.test(text) || !/simplest/i.test(text))
+      .map(([id]) => id);
     // ASSERT
     expect(missing).toEqual([]);
+  });
+
+  it('calls no prompt of a full run a practice run, and has it name what is unknown as an open decision', () => {
+    // ARRANGE
+    const prompts = (level: 'simple' | 'technical') =>
+      tasksOf(file).map((each) => [each.id, textOf(doStep(each.id, level, { teaching: false }).prompt)] as const);
+    // ACT
+    const wrong = [...prompts('simple'), ...prompts('technical')]
+      .filter(([, text]) => /practice run/i.test(text) || !/open decision/i.test(text))
+      .map(([id]) => id);
+    // ASSERT
+    expect(wrong).toEqual([]);
   });
 
   it('asks the CLI prompt of a repeated stage to orchestrate one subagent per round', () => {
@@ -185,6 +197,32 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it.each(LOCALES)(
+    'never asks the AI to invent a number or keep assumptions, in any prompt, check, template or example, in %s',
+    (locale) => {
+      // ARRANGE
+      const { file: loaded } = workflowFor('project-plan', locale);
+      const invent = locale === 'en' ? /invent|plausible|assumption/i : /erfind|plausib|Annahme/i;
+      const sections = (sections: readonly { heading: string; text: string }[]) =>
+        sections.map((section) => `${section.heading}\n${section.text}`);
+      const texts = [
+        ...sections(loaded.reviewer.sections),
+        ...Object.values(loaded.templates),
+        ...tasksOf(loaded).flatMap((each) => [
+          ...sections(each.do.simple),
+          ...sections(each.do.technical),
+          ...(each.review?.checks ?? []),
+          ...[each.details.example].flat(),
+          ...each.details.goodLooksLike,
+        ]),
+      ];
+      // ACT
+      const found = texts.filter((text) => invent.test(text));
+      // ASSERT
+      expect(found).toEqual([]);
+    },
+  );
+
   it('gives the final job no review and no output, and every other job both', () => {
     // ARRANGE
     const all = tasksOf(file);

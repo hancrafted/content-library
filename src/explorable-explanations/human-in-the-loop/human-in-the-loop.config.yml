@@ -27,8 +27,8 @@ ui:
   stepCheck: 'Check the result'
   stepCheckInfo: 'Review the result in a new conversation. If it fails, paste the feedback into the conversation of the previous step and update the result. Repeat until all checks pass.'
   copyExplanation: 'Copy explanation prompt'
-  copyExplanationTip: 'Paste this prompt into a chat to let the AI explain the prompt, its structure, what is good and what can be improved.'
-  explainWrapper: "You are my prompt engineering coach. Below is a prompt I am about to use with an AI assistant. Explain it to me so I learn meta-prompting:\n1. What each part of the prompt is for.\n2. Why it works well: which techniques it uses (role, context, constraints, output format, examples) and why they help.\n3. Where it is weak, and how I could improve or adjust it for my own situation.\nKeep it short and concrete, and quote the lines you refer to.\n\nPrompt:\n\"\"\"\n{prompt}\n\"\"\""
+  copyExplanationTip: 'Paste this prompt into a chat: the AI explains the prompt, why it is built this way and what you could improve, then offers to guide you through the exercise.'
+  explainWrapper: "You are my prompt engineering coach, and I am learning to plan projects with AI. Below is the prompt of one step of a guided exercise. Do not carry it out: explain it to me, then help me through the exercise.\n\nPrompt:\n\"\"\"\n{prompt}\n\"\"\"\n\nIn plain words, short and concrete, quoting the lines you mean:\n1. What this step does and why it matters for the whole project.\n2. What each part of the prompt is for.\n3. Which techniques it uses (role, context, delimiters, steps, output format) and why they help.\n4. Where it is weak, and how I could adjust it for my own project.\nThen offer to guide me through the exercise: suggest three questions I could ask you next, such as \"Explain what we just did\", \"Why is this step important?\" and \"What would change for my own project?\", and wait for my answer."
   stepN: 'Step {n}: {title}'
   previousResults: Previous results
   insertedAt: 'Added to the prompt under "{section}"'
@@ -50,7 +50,7 @@ ui:
   downloadOldProgress: Download old progress
   discardProgress: Discard
   teaching: Teaching mode
-  teachingTip: 'Teaching mode keeps the run short: the first epics and tickets only, shorter grills.'
+  teachingTip: 'Teaching mode keeps the run short and simple: the first epics and tickets only, shorter grills, and the simplest option wherever a choice does not change the goal.'
   teachingLocked: Reset to change
   reset: Reset
   resetTip: 'Previous work was found here or in another Episode. Reset starts over.'
