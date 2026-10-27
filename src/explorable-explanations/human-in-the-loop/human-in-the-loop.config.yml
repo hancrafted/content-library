@@ -52,6 +52,9 @@ ui:
   teaching: Teaching mode
   teachingTip: 'Teaching mode keeps the run short and simple: the first epics and tickets only, shorter grills, and the simplest option wherever a choice does not change the goal.'
   teachingLocked: Reset to change
+  debug: Debug
+  debugTip: 'Debug mode: Copy prompt and Copy explanation prompt add an instruction, so the AI ends every reply with a footer naming the workflow, stage, job and more. Paste a reply with its footer back as feedback.'
+  debugInstruction: "Debug mode: end EVERY reply you write in this chat, the first one included, with the line below, unchanged, alone in a fenced code block as the very last thing of the reply. I paste your reply with it back as feedback.\n\n```\n{footer}\n```"
   reset: Reset
   resetTip: 'Previous work was found here or in another Episode. Reset starts over.'
   resetConfirm: 'Reset clears the results you pasted for this Workflow, here and in every Episode. Download them first to keep them.'

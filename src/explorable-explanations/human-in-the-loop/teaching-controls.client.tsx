@@ -21,6 +21,9 @@ export interface Props extends TeachingProps {
   readonly onConfirming: (open: boolean) => void;
 }
 
+const SWITCH =
+  'inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border bg-background px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60';
+
 function TeachingSwitch({ words, teaching, onTeaching }: Props) {
   const { on, locked } = teaching;
   return (
@@ -37,16 +40,45 @@ function TeachingSwitch({ words, teaching, onTeaching }: Props) {
             data-control="teaching"
             data-state={on ? 'on' : 'off'}
             onClick={() => onTeaching(!on)}
-            className={cn(
-              'inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border bg-background px-3 text-caption font-medium outline-none transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60',
-              on && 'bg-primary text-primary-foreground',
-            )}
+            className={cn(SWITCH, on && 'bg-primary text-primary-foreground')}
           >
             {words.teaching}
           </button>
         </span>
       </TooltipTrigger>
       <TooltipContent>{locked ? words.teachingLocked : words.teachingTip}</TooltipContent>
+    </Tooltip>
+  );
+}
+
+/** The Debug switch: the copy buttons add the footer instruction while it is on. Drawn only where it is available. */
+export function DebugSwitch({
+  words,
+  debug,
+  onDebug,
+}: {
+  readonly words: UiWords;
+  readonly debug: { readonly show: boolean; readonly on: boolean };
+  readonly onDebug: (debug: boolean) => void;
+}) {
+  if (!debug.show) return null;
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={debug.on}
+          aria-label={words.debug}
+          data-control="debug"
+          data-state={debug.on ? 'on' : 'off'}
+          onClick={() => onDebug(!debug.on)}
+          className={cn(SWITCH, debug.on && 'bg-primary text-primary-foreground')}
+        >
+          {words.debug}
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>{words.debugTip}</TooltipContent>
     </Tooltip>
   );
 }

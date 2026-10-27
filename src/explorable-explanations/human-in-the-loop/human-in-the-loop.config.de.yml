@@ -52,6 +52,9 @@ ui:
   teaching: Lernmodus
   teachingTip: 'Der Lernmodus hält den Durchlauf kurz und einfach: nur die ersten Epics und Tickets, kürzere Rückfragen und die einfachste Option, wo eine Wahl am Ziel nichts ändert.'
   teachingLocked: Zurücksetzen, um zu ändern
+  debug: Debug
+  debugTip: 'Debug-Modus: Prompt kopieren und Erklär-Prompt kopieren fügen eine Anweisung an, damit die KI jede Antwort mit einer Fußzeile beendet, die Workflow, Stage, Job und mehr nennt. Füge eine Antwort samt Fußzeile als Feedback wieder ein.'
+  debugInstruction: "Debug-Modus: Beende JEDE Antwort, die du in diesem Chat schreibst, auch die erste, mit der Zeile unten, unverändert, allein in einem Codeblock, als allerletztes der Antwort. Ich füge deine Antwort damit als Feedback wieder ein.\n\n```\n{footer}\n```"
   reset: Zurücksetzen
   resetTip: 'Frühere Arbeit wurde hier oder in einer anderen Episode gefunden. Zurücksetzen beginnt von vorn.'
   resetConfirm: 'Zurücksetzen löscht die eingefügten Ergebnisse dieses Workflows, hier und in jeder Episode. Lade sie vorher herunter, um sie zu behalten.'

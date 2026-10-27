@@ -1,7 +1,9 @@
 import { readProgressFile, type Refusal } from '@/shared/lib/progress-file.pure';
 import { progressKeyOf } from '@/shared/lib/progress.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import type { DiagramProps, HumanInTheLoopData, ModalProps, ToolbarProps, UiWords } from './human-in-the-loop.types';
+import type { DebugBase } from './debug-footer.pure';
+import type { DiagramProps, HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
+import type { ModalProps, ToolbarProps } from './part-props.types';
 import type { ProgressActions, ProgressNote, TeachingProps, TeachingState } from './progress-controls.types';
 import { offers } from './toolbar-controls.pure';
 import { workflowOf } from './workflow-file-adapter.pure';
@@ -59,7 +61,7 @@ export function uploadEvent(yaml: string): WorkflowEvent {
 /** The callbacks the parts send events up by. */
 export type Callbacks = Pick<
   ToolbarProps,
-  'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onTeaching' | 'onReset'
+  'onLevel' | 'onView' | 'onWorkflow' | 'onUpload' | 'onTeaching' | 'onReset' | 'onDebug'
 > &
   Pick<DiagramProps, 'onOpenStage'> &
   Pick<ModalProps, 'onClose' | 'onSlots'>;
@@ -72,6 +74,7 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
     onWorkflow: (workflowId) => dispatch({ type: 'workflow', workflowId }),
     onTeaching: (teaching) => dispatch({ type: 'teaching', teaching }),
     onReset: () => dispatch({ type: 'reset' }),
+    onDebug: (debug) => dispatch({ type: 'debug', debug }),
     onUpload: (yaml) => dispatch(uploadEvent(yaml)),
     onOpenStage: (stageId, jobId, round) =>
       dispatch({ type: 'open', stageId, ...(jobId !== undefined && { jobId }), ...(round !== undefined && { round }) }),
@@ -91,6 +94,8 @@ export interface Shown {
   readonly progress: ProgressActions | null;
   /** `workflowView` of the Workflow for the state's level, computed once per change by the parent. */
   readonly view: WorkflowView;
+  /** Whether the Debug switch may show: development or `?debug`, known only on the client after mount. */
+  readonly debugAvailable: boolean;
 }
 
 export interface Slices {
@@ -140,14 +145,15 @@ function diagramOf({ data, state, workflow }: Shown, on: Callbacks, run: Run): D
 }
 
 function toolbarOf(
-  { data, state, workflow, note, progress }: Shown,
+  { data, state, workflow, note, progress, debugAvailable }: Shown,
   on: Callbacks,
   teaching: TeachingProps,
 ): ToolbarProps {
   const choices = data.workflows.map(({ id, title }) => ({ id, title }));
   const { controls, words, readonly } = data;
   const { level, view, uploadProblems } = state;
-  const { onLevel, onView, onWorkflow, onUpload } = on;
+  const { onLevel, onView, onWorkflow, onUpload, onDebug } = on;
+  const debug = { show: debugAvailable && offers(controls, 'debug', readonly), on: state.debug };
   return {
     ...teaching,
     workflow,
@@ -160,10 +166,24 @@ function toolbarOf(
     uploadProblems,
     note,
     progress,
+    debug,
+    onDebug,
     onLevel,
     onView,
     onWorkflow,
     onUpload,
+  };
+}
+
+/** What every debug footer of the shown Workflow shares; the source is the short hash of its file pair, or `uploaded`. */
+function debugBase({ data, state, workflow }: Pick<Shown, 'data' | 'state' | 'workflow'>): DebugBase {
+  const hash = state.uploaded ? undefined : data.hashes[workflow.id];
+  return {
+    workflow: { id: workflow.id, title: workflow.title },
+    level: state.level,
+    teaching: state.teaching,
+    locale: data.locale,
+    source: hash?.slice(0, 8) ?? 'uploaded',
   };
 }
 
@@ -177,7 +197,7 @@ function roundsOf(workflow: Workflow, run: Run): Record<string, number> {
 }
 
 function modalOf(
-  { data, state, workflow, view }: Shown,
+  { data, state, workflow, view, debugAvailable }: Shown,
   on: Callbacks,
   { run, teaching }: { readonly run: Run; readonly teaching: TeachingProps },
 ): ModalProps {
@@ -188,6 +208,7 @@ function modalOf(
     jobId: state.openJobId,
     round: state.openRound,
     slotValues: markerValuesOf(file, state.slotValues),
+    debug: state.debug && debugAvailable ? debugBase({ data, state, workflow }) : null,
     words: data.words,
     level: state.level,
     onLevel: on.onLevel,

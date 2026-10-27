@@ -1,8 +1,10 @@
 'use client';
 
 import { useProgress, type Progress, type ProgressStatus } from '@/shared/hooks/use-progress';
+import { useSearch } from '@/shared/hooks/use-search';
 import { progressFile } from '@/shared/lib/progress-file.pure';
 import { useCallback, useMemo, useReducer, useState, type Dispatch } from 'react';
+import { debugAvailable } from './debug-footer.pure';
 import { DiagramPart } from './diagram-part';
 import {
   callbacksFor,
@@ -99,10 +101,12 @@ export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   const [state, dispatch] = useReducer(reduce, start, createState);
   const { note, actions, resetSaved } = useSavedProgress(data, state, dispatch);
   const { on, viewChanged } = useCallbacksOf(dispatch, resetSaved);
+  const search = useSearch();
+  const available = debugAvailable({ env: process.env.NODE_ENV, search });
   const workflow = shownWorkflow(data, state);
   const view = useViewOf(workflow, state);
   if (!workflow || !view) return null;
-  const slices = slicesOf({ data, state, workflow, note, progress: actions, view }, on);
+  const slices = slicesOf({ data, state, workflow, note, progress: actions, view, debugAvailable: available }, on);
   return (
     <div data-human-in-the-loop={workflow.id} data-level={state.level} data-view={state.view}>
       <ToolbarPart {...slices.toolbar} />
