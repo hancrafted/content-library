@@ -41,8 +41,6 @@ export interface UiWords {
   readonly stepN: string;
   readonly stepContext: string;
   readonly stepContextInfo: string;
-  /** Under a context step with nothing to fill in, which stays folded. */
-  readonly stepContextNothing: string;
   readonly stepDo: string;
   readonly stepDoInfo: string;
   readonly stepCheck: string;

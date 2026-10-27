@@ -135,20 +135,13 @@ export function entriesOfStep(step: Step, task: TaskModalView, kit: StepKit): En
   return [...own, ...earlier];
 }
 
-/** Step 1, Provide context: folded, with a hint, while every field holds a value or a sample. */
+/** Step 1, Provide context: folded while every field holds a value or a sample. */
 function ContextStep({ step, task, kit, slots, first }: PanelProps) {
   const { words } = kit;
   const { own, earlier } = contextEntries(partsOf(step), task.previous, words);
   const toFill = needsInput([...own, ...earlier], slots.values);
   return (
-    <StepSection
-      n={first}
-      title={words.stepContext}
-      info={words.stepContextInfo}
-      kit={kit}
-      open={toFill}
-      hint={toFill ? undefined : words.stepContextNothing}
-    >
+    <StepSection n={first} title={words.stepContext} info={words.stepContextInfo} kit={kit} open={toFill}>
       <Context
         own={own}
         earlier={earlier}

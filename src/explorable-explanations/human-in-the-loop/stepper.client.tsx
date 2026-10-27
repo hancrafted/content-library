@@ -42,11 +42,6 @@ function Review({ item, kit, slots, first }: Omit<StepItemProps, 'at'> & { first
   if (reviewSteps.length === 0) return null;
   return (
     <>
-      {job.goal.review && (
-        <p data-review-goal="" className="text-caption text-muted-foreground">
-          {job.goal.review}
-        </p>
-      )}
       <ChatTabs
         steps={reviewSteps}
         task={job.task}
@@ -123,7 +118,7 @@ function StepItem({ item, at, kit: shared, slots, stage, debug, rounds }: StepIt
         {item.round ? `${item.round.title}: ${job.goal.do}` : job.goal.do}
       </AccordionTrigger>
       {/* One column for every step of the item, its chat tabs and review goal: the one gap between steps. */}
-      <AccordionContent className="flex flex-col gap-5.5 sm:pl-10">
+      <AccordionContent className="flex flex-col gap-5.5 sm:pl-7">
         {doSteps.length > 0 && <ChatTabs steps={doSteps} task={job.task} kind="do" kit={kit} slots={slots} first={1} />}
         <Review item={item} kit={kit} slots={slots} first={reviewAt} />
       </AccordionContent>

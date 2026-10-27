@@ -24,7 +24,6 @@ ui:
   stepContextInfo: 'Der Prompt unten braucht Ergebnisse früherer Aufgaben oder zusätzliche Eingaben. Sie werden hier eingetragen, wenn du das Ergebnis in einem früheren Schritt eingefügt hast. Jedes Feld enthält schon ein Beispiel oder dein früheres Ergebnis; ersetze es gern durch deinen eigenen Text.'
   stepDo: 'Prompt in einem KI-Chat ausführen, dann das Ergebnis hier einfügen'
   stepDoInfo: 'Führe den Prompt in einer neuen Unterhaltung aus und füge das Ergebnis hier ein. Schließe die Unterhaltung nicht.'
-  stepContextNothing: 'Hier ist nichts zu tun: Die Felder enthalten Beispiele oder deine früheren Ergebnisse. Öffne den Schritt, um sie zu lesen oder zu ändern.'
   stepCheck: 'Ergebnis prüfen'
   stepCheckInfo: 'Prüfe das Ergebnis in einer neuen Unterhaltung. Fällt es durch, füge das Feedback in die Unterhaltung des vorherigen Schritts ein und aktualisiere das Ergebnis. Wiederhole das, bis alle Prüfungen bestehen.'
   copyExplanation: 'Erklär-Prompt kopieren'
