@@ -28,8 +28,13 @@ const EVENT = {
   kind: 'workshop',
   organizer: 'axel',
   audience: 'organization',
+  tags: ['agentic-ai', 'workflow'],
+  format: 'remote',
+  platform: 'zoom',
   playlist: 'axel',
 } as const;
+/** The same Event held at a venue, as an onsite Event's file writes it. */
+const ONSITE = { ...without(EVENT, 'platform'), format: 'onsite', venue: 'AXEL, Karlsruhe' } as const;
 /** The Episodes recorded so far, each with its video per locale. */
 const RECORDINGS = [
   { slug: 'ai-token-economy', en: 'S0Nx4faEebY', de: 'S0Nx4faEebY' },
@@ -72,6 +77,9 @@ describe('success cases', () => {
       kind: 'workshop',
       organizer: 'axel',
       audience: 'organization',
+      tags: ['agentic-ai', 'workflow'],
+      format: 'remote',
+      platform: 'zoom',
       playlist: {
         id: 'axel-agentic-workflow',
         visibility: 'public',
@@ -104,6 +112,18 @@ describe('success cases', () => {
     const episodes = event?.playlist.episodes.map(({ episode, ...entry }) => ({ slug: episode.slug, ...entry }));
     // ASSERT
     expect(event && { ...event, playlist: { ...event.playlist, episodes } }).toEqual(expected);
+  });
+
+  it.each([
+    ['an onsite Event with its venue', ONSITE],
+    ['a hybrid Event with its venue and platform', { ...EVENT, format: 'hybrid', venue: 'AXEL, Karlsruhe' }],
+  ])('loads %s', (_, event) => {
+    // ARRANGE
+    const expected = event;
+    // ACT
+    const [loaded] = loadContent({ ...SOUND, events: [event] }).events;
+    // ASSERT
+    expect({ ...loaded, playlist: event.playlist }).toEqual(expected);
   });
 
   it.each(['17:00', '17:00–19:00', '17:00–19:00 CET'])('loads an Event time as the venue writes it: %s', (time) => {
@@ -187,6 +207,39 @@ describe('failure cases', () => {
     const expected = `${record}: visibility is "attendees", which is refused until horizon 3 gives it an enforcer`;
     // ACT
     const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
+  it.each([
+    ['without Tags', without(EVENT, 'tags'), 'tags is required, one Tag or more, the first its lead Tag'],
+    [
+      'with no Tags',
+      { ...EVENT, tags: [] },
+      'tags.0 is required, one of context-engineering, agentic-ai, markdown, cost, sales, workflow',
+    ],
+    [
+      'with a Tag outside the vocabulary',
+      { ...EVENT, tags: ['ai'] },
+      'tags.0 is "ai", but must be one of context-engineering, agentic-ai, markdown, cost, sales, workflow',
+    ],
+    ['without a format', without(EVENT, 'format'), 'format is required, one of onsite, remote, hybrid'],
+    ['onsite with no venue', without(ONSITE, 'venue'), 'venue is required when the format is onsite'],
+    ['hybrid with no venue', { ...EVENT, format: 'hybrid' }, 'venue is required when the format is hybrid'],
+    ['remote with no platform', without(EVENT, 'platform'), 'platform is required when the format is remote'],
+    ['hybrid with no platform', { ...ONSITE, format: 'hybrid' }, 'platform is required when the format is hybrid'],
+    [
+      'on a platform outside the list',
+      { ...EVENT, platform: 'webex' },
+      'platform is "webex", but must be one of zoom, teams, google-meet',
+    ],
+    ['remote with a venue', { ...EVENT, venue: 'AXEL, Karlsruhe' }, 'venue is set, but a remote Event has none'],
+    ['onsite with a platform', { ...ONSITE, platform: 'zoom' }, 'platform is set, but an onsite Event has none'],
+  ])('refuses an Event %s, naming the Event and the field', (_, event, field) => {
+    // ARRANGE
+    const expected = `Event ${AXEL}: ${field}`;
+    // ACT
+    const load = () => loadContent({ ...SOUND, events: [event] });
     // ASSERT
     expect(load).toThrow(expected);
   });

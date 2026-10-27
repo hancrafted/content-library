@@ -1,6 +1,18 @@
 {
   "eventsOverview": {
     "title": "Events",
-    "intro": "Workshops and webinars that walk through a planned set of Episodes, in order."
+    "intro": "Workshops and webinars that walk through a planned set of Episodes, in order.",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "noUpcoming": "No upcoming Events.",
+    "noPast": "No past Events.",
+    "noMatch": "No Events here match these filters.",
+    "search": "Search Events",
+    "searchPlaceholder": "Search Events",
+    "tagFilter": "Filter by tag",
+    "view": "View",
+    "grid": "Cards",
+    "list": "List",
+    "reset": "Reset filters"
   }
 }

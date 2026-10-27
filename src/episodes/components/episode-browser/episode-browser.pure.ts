@@ -1,6 +1,5 @@
 import type { TagId } from '@/content-store/schemas/fields';
 import type { EpisodeCard, Labelled } from '@/episodes/components/episode-card/episode-card.pure';
-import { FILTER_TAGS } from '@/episodes/lib/tag-looks';
 import { fillTemplate } from '@/shared/lib/template.pure';
 
 /*
@@ -9,6 +8,15 @@ import { fillTemplate } from '@/shared/lib/template.pure';
  * search query, and what each filter chip counts. No React (FE-007 §3), so the leaf only wires
  * state to these answers.
  */
+
+/** The Tags the overview offers as filter chips, in order (design-ADR Tags replace Topics); search still matches every Tag name. */
+export const FILTER_TAGS = [
+  'context-engineering',
+  'agentic-ai',
+  'markdown',
+  'cost',
+  'sales',
+] as const satisfies readonly TagId[];
 
 /** A grid longer than this folds behind "Show all"; with 9 Episodes today the fold is not yet visible. */
 export const BROWSE_CAP = 9;

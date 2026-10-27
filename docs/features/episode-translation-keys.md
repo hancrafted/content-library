@@ -86,7 +86,7 @@ episode-template/i18n/en.json              title, caption, description
 
 ## Episode browser entries
 
-Each Episode declares its own metadata record in `episodes/<slug>/episode-metadata.ts`: status, visibility, Format, Tags (lead Tag first), its Video and, once published, its publish date. It holds ids only, no strings. The content store (`src/content-store/store.ts`) loads every record through its schema, and the landing page reads only `listEpisodes()` from it. The closed vocabularies live in `src/content-store/schemas/fields.ts` (`TAG_IDS`, `FORMATS`); the Episode browser's Tag looks in `src/episodes/lib/tag-looks.ts`, and the Featured slots, `FEATURED` (exactly three published public Episodes, lead first), in `src/content-store/featured.ts`:
+Each Episode declares its own metadata record in `episodes/<slug>/episode-metadata.ts`: status, visibility, Format, Tags (lead Tag first), its Video and, once published, its publish date. It holds ids only, no strings. The content store (`src/content-store/store.ts`) loads every record through its schema, and the landing page reads only `listEpisodes()` from it. The closed vocabularies live in `src/content-store/schemas/fields.ts` (`TAG_IDS`, `FORMATS`); each Tag's icon in `src/content-store/schemas/tag-looks.ts` and its colour as the token `--tag-<id>` in `src/app/globals.css`, its name and tooltip as `tags.<id>` in `src/page-assembly/lib/i18n/`, and the Featured slots, `FEATURED` (exactly three published public Episodes, lead first), in `src/content-store/featured.ts`:
 
 - `TAGS`: each Tag's icon and accent. An Episode's first Tag is its lead Tag and gives its card its icon and accent; an Episode declares no look of its own. `FILTER_TAGS` is the subset offered as filter chips.
 
@@ -95,7 +95,7 @@ An entry reads its text from:
 - An Episode with a page, published or still upcoming: its title and caption from its own `i18n/`, read through the registry by its EpisodeRef (`compositionOf(ref).messages[locale]`).
 - An Upcoming Episode with no page: `episodeBrowser.upcoming.<slug>.title` and `.caption`. It has no record, so this is Episode browser text and stays in the browser's files; move it into the Episode folder's `i18n/` when its page is written.
 - Every Episode: `episodeBrowser.formats.<format>`, one per id in `FORMATS`. The Format control and label stay hidden until two Formats are in use.
-- Every Tag in the vocabulary: `episodeBrowser.tags.<tag>.name` and `.tooltip`, one per id in `TAGS`. A Tag is only an id in the metadata; the store refuses an Episode that lists an id outside `TAG_IDS`, lists none or lists one twice, and a test fails when a Tag lacks either key in en or de.
+- Every Tag in the vocabulary: `tags.<tag>.name` and `.tooltip` in page assembly's lib (`src/page-assembly/lib/i18n/`), one per id in `TAG_IDS`; the Episode and Event cards both read them. A Tag is only an id in the metadata; the store refuses an Episode that lists an id outside `TAG_IDS`, lists none or lists one twice, and `src/page-assembly/lib/tag-words.test.ts` fails when a Tag lacks either key in en or de.
 - Entry chrome: `episodeBrowser.open` and `episodeBrowser.comingSoon`; the Episode browser's search box: `episodeBrowser.search` (its accessible name) and `.searchPlaceholder`.
 - The `/episodes` heading and its one-line intro: `episodesPage.title` and `episodesPage.intro`, in the Overview template's `src/page-assembly/episode-overview/i18n/`.
 

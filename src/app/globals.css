@@ -34,6 +34,13 @@
   --machine: oklch(0.58 0.16 242);
   --human: oklch(0.55 0.18 290);
   --ai: oklch(0.6 0.14 62);
+  /* Tag colours, one per Tag (design-ADR Tags replace Topics): a card's icon, ink and wash. Each reads 4.5:1 on the page. */
+  --tag-context-engineering: oklch(0.5 0.134 242.749);
+  --tag-agentic-ai: oklch(0.491 0.27 292.581);
+  --tag-markdown: oklch(0.514 0.222 16.935);
+  --tag-cost: oklch(0.555 0.163 48.998);
+  --tag-sales: oklch(0.508 0.118 165.612);
+  --tag-workflow: oklch(0.205 0 0);
   /* The brand accent: the hero's 'promotion', About emphasis, method deliverables. `--accent` is shadcn's neutral hover surface. */
   --brand-accent: oklch(0.636 0.171 41.8);
   /* The selected or active item (drawer tab, current nav link, active table-of-contents entry): 3:1 against the surface, text 4.5:1 (docs/features/episode-chrome.md). */
@@ -98,6 +105,12 @@
   --machine: oklch(0.72 0.14 235);
   --human: oklch(0.68 0.16 280);
   --ai: oklch(0.72 0.14 62);
+  --tag-context-engineering: oklch(0.746 0.16 232.661);
+  --tag-agentic-ai: oklch(0.702 0.183 293.541);
+  --tag-markdown: oklch(0.712 0.194 13.428);
+  --tag-cost: oklch(0.828 0.189 84.429);
+  --tag-sales: oklch(0.765 0.177 163.223);
+  --tag-workflow: oklch(0.922 0 0);
   --brand-accent: oklch(0.732 0.146 50.4);
   --selected: oklch(0.8 0 0);
   --selected-foreground: oklch(0.2 0 0);

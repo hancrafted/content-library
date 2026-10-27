@@ -1,7 +1,9 @@
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import { cn } from '@/shared/lib/utils';
 import { ArrowRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import { Card } from './card';
 import type { CardHeadingLevel, CardVariant, OpenCue } from './card-variant.pure';
 
 /*
@@ -11,22 +13,19 @@ import type { CardHeadingLevel, CardVariant, OpenCue } from './card-variant.pure
  * new variant adds a row here and its own body, never a second frame.
  */
 
-/** One colour family drawn as the classes a card needs; the card kind that places the shell picks it. */
-export interface AccentClasses {
-  /** The accent as plain text or an icon, 4.5:1 on the page in both themes. */
-  readonly ink: string;
-  /** The corner wash that tints a large card. */
-  readonly wash: string;
-  /** The card's border once hovered or focused. */
-  readonly edge: string;
-}
+/** A colour token's name (`--tag-agentic-ai`, `--primary`): the card draws its icon, ink, wash and edge from it. */
+export type AccentToken = `--${string}`;
 
-/** The site's primary as a card's colour family, in tokens: an Event card's look, and the primary Tag accent. */
-export const PRIMARY_LOOK: AccentClasses = {
-  ink: 'text-primary',
-  wash: 'from-primary/10',
-  edge: 'hover:border-primary/40 has-[a:focus-visible]:border-primary/40',
-};
+/**
+ * The accent drawn from the card's own `--card-accent`, which the shell sets to the token it is given: whole class
+ * strings Tailwind can see, so any token colours a card and none is named here. The ink is the token itself, which
+ * reads 4.5:1 on the page in both themes; the wash and the edge are tints of it.
+ */
+export const ACCENT = {
+  ink: 'text-(--card-accent)',
+  wash: 'from-(--card-accent)/15',
+  edge: 'hover:border-(--card-accent)/50 has-[a:focus-visible]:border-(--card-accent)/50',
+} as const;
 
 interface VariantClasses {
   /** The frame's corner radius, padding and height. */
@@ -65,7 +64,7 @@ export const VARIANTS: Record<CardVariant, VariantClasses> = {
 };
 
 const FRAME =
-  'group relative isolate flex w-full flex-col gap-4 overflow-hidden border bg-background transition-[border-color,box-shadow,translate] duration-300 has-[[data-card-link]:focus-visible]:ring-2 has-[[data-card-link]:focus-visible]:ring-foreground/50 motion-reduce:transition-none';
+  'group relative isolate w-full gap-4 overflow-hidden bg-background py-0 shadow-none transition-[border-color,box-shadow,translate] duration-300 has-[[data-card-link]:focus-visible]:ring-2 has-[[data-card-link]:focus-visible]:ring-foreground/50 motion-reduce:transition-none';
 const LINKED_FRAME = 'border-border/60 hover:shadow-lg motion-safe:hover:-translate-y-0.5';
 const UPCOMING_FRAME = 'border-dashed border-border bg-muted/40';
 
@@ -73,8 +72,8 @@ interface ShellProps {
   variant: CardVariant;
   /** False for an announced-only card: muted, no wash, no icon, no hover. */
   linked: boolean;
-  /** The card's colour family, as whole class strings so Tailwind can see each one. */
-  look: AccentClasses;
+  /** The colour token the card draws its accent from: a Tag's (`--tag-agentic-ai`) or the site's `--primary`. */
+  accent: AccentToken;
   icon: LucideIcon;
   /** The card's own data attributes, so each card kind keeps its own hooks for tests and probes. */
   data: Record<`data-${string}`, string | undefined>;
@@ -82,31 +81,31 @@ interface ShellProps {
   children: ReactNode;
 }
 
-export function CardShell({ variant, linked, look, icon, data, className = '', children }: ShellProps) {
-  const tone = linked ? `${LINKED_FRAME} ${look.edge}` : UPCOMING_FRAME;
+/** The card's frame: the shadcn card surface as an `<article>`, its accent token set once for every part inside. */
+export function CardShell({ variant, linked, accent, icon, data, className = '', children }: ShellProps) {
+  const tone = linked ? `${LINKED_FRAME} ${ACCENT.edge}` : UPCOMING_FRAME;
+  const style = { '--card-accent': `var(${accent})` } as CSSProperties;
   return (
-    <article
-      {...data}
-      data-card-variant={variant}
-      className={`${FRAME} ${VARIANTS[variant].frame} ${tone} ${className}`}
-    >
-      {linked && <CardArt look={look} icon={icon} classes={VARIANTS[variant].art} />}
-      {children}
-    </article>
+    <Card asChild className={cn(FRAME, VARIANTS[variant].frame, tone, className)}>
+      <article {...data} data-card-variant={variant} style={style}>
+        {linked && <CardArt icon={icon} classes={VARIANTS[variant].art} />}
+        {children}
+      </article>
+    </Card>
   );
 }
 
 /** The corner wash and the large faded icon behind the text; decorative, so they take no clicks and sit under the content. */
-function CardArt({ look, icon: Icon, classes }: { look: AccentClasses; icon: LucideIcon; classes: string }) {
+function CardArt({ icon: Icon, classes }: { icon: LucideIcon; classes: string }) {
   return (
     <>
       <span
         aria-hidden
-        className={`pointer-events-none absolute inset-0 -z-10 bg-linear-to-br ${look.wash} via-transparent to-transparent`}
+        className={`pointer-events-none absolute inset-0 -z-10 bg-linear-to-br ${ACCENT.wash} via-transparent to-transparent`}
       />
       <Icon
         aria-hidden
-        className={`pointer-events-none absolute -z-10 opacity-[0.08] transition-transform duration-500 motion-safe:group-hover:-rotate-3 motion-safe:group-hover:scale-105 motion-reduce:transition-none ${look.ink} ${classes}`}
+        className={`pointer-events-none absolute -z-10 opacity-[0.08] transition-transform duration-500 motion-safe:group-hover:-rotate-3 motion-safe:group-hover:scale-105 motion-reduce:transition-none ${ACCENT.ink} ${classes}`}
       />
     </>
   );

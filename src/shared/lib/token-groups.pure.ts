@@ -3,6 +3,10 @@
 // style: a colour beside its `-foreground` pair). No DOM, no React.
 import { classifyToken, type Token } from './token-discovery.pure';
 
+/** Tag colours are named by the store's vocabulary, which shared code never reads (FE-007 §2.6): one description fits them all. */
+const TAG_PREFIX = '--tag-';
+const TAG_DESCRIPTION = 'Colour of one Tag: icon, ink and wash of the cards it leads.';
+
 const DESCRIPTIONS: Record<string, string> = {
   '--primary': 'Main action colour: primary buttons and the strongest emphasis.',
   '--primary-foreground': 'Text and icons on a primary surface.',
@@ -60,6 +64,7 @@ const DESCRIPTIONS: Record<string, string> = {
 
 /** One line on what a global token affects; `undefined` for a token not in the table (a Slide's own, say). */
 export function describeToken(name: string): string | undefined {
+  if (name.startsWith(TAG_PREFIX)) return TAG_DESCRIPTION;
   return DESCRIPTIONS[name];
 }
 
@@ -111,6 +116,7 @@ const GROUPS: readonly { label: string; names?: readonly string[]; prefixes?: re
   },
   { label: 'Lines & focus', names: ['--border', '--input', '--ring', '--highlight-target'] },
   { label: 'Domain', names: ['--machine', '--human', '--ai'] },
+  { label: 'Tags', prefixes: [TAG_PREFIX] },
   { label: 'Chrome', names: ['--selected', '--selected-foreground', '--youtube', '--overlay'] },
   { label: 'Typography', prefixes: ['--size-', '--leading-', '--tracking-', '--weight-', '--font-'] },
   { label: 'Shape', names: ['--radius'] },

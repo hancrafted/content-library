@@ -14,6 +14,12 @@
     "previous": "Vorherige Episode",
     "next": "Nächste Episode",
     "backToEvent": "Zurück zur Veranstaltung",
+    "remote": "Online",
+    "platforms": {
+      "zoom": "Zoom",
+      "teams": "Microsoft Teams",
+      "google-meet": "Google Meet"
+    },
     "items": {
       "2026-10-23-axel-agentic-workflow": {
         "title": "AXEL Seminar: Agentic Workflows",

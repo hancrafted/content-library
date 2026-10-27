@@ -1,10 +1,12 @@
+import { TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { EpisodeLinks } from '@/episodes/components/episode-card/episode-links';
 import { ReleaseDate } from '@/episodes/components/episode-card/episode-release-date';
-import { TAG_ACCENTS, TAG_ICONS } from '@/episodes/components/episode-card/episode-visuals';
 import type { VideoLabels } from '@/episodes/components/episode-card/episode-youtube-link';
+import { BadgeList } from '@/shared/components/ui/badge-list';
 import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/shared/components/ui/card-variant.pure';
+import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import type { Locale } from '@/shared/lib/locale.pure';
 
 /** The strings a card draws that are not on the card itself. */
@@ -27,25 +29,6 @@ export function cardLabels(t: CardLabelRead): CardLabels {
 }
 
 const META = 'text-caption text-muted-foreground';
-
-/** The Episode's Tags as plain labels: no filter acts on them, and each explains itself on hover. */
-function CardTags({ card }: { card: EpisodeCard }) {
-  if (card.tags.length === 0) return null;
-  return (
-    <ul data-episode-tags className="relative z-20 flex flex-wrap gap-1.5">
-      {card.tags.map((tag) => (
-        <li
-          key={tag.id}
-          data-tag={tag.id}
-          title={tag.tooltip}
-          className="rounded-full bg-muted px-2 py-0.5 text-caption text-muted-foreground"
-        >
-          {tag.label}
-        </li>
-      ))}
-    </ul>
-  );
-}
 
 interface FooterProps {
   card: EpisodeCard;
@@ -110,14 +93,14 @@ export function EpisodeCardView({
     <CardShell
       variant={variant}
       linked={isLinked(card)}
-      look={TAG_ACCENTS[card.accent]}
-      icon={TAG_ICONS[card.icon]}
+      accent={tagToken(card.leadTag.id)}
+      icon={NAMED_ICONS[TAG_ICONS[card.leadTag.id]]}
       className={className}
       data={dataOf(card)}
     >
       <CardTitle variant={variant} title={card.title} route={card.route} locale={locale} level={headingLevel} />
       <CardCaption variant={variant}>{card.caption}</CardCaption>
-      <CardTags card={card} />
+      <BadgeList items={card.tags} data={{ 'data-episode-tags': '' }} />
       <CardFooter card={card} variant={variant} labels={labels} showFormat={showFormat} />
     </CardShell>
   );
