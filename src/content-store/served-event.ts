@@ -2,7 +2,7 @@ import type { EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import { hasPage, type EpisodeId, type EventSlug } from '@/content-store/catalogue/record-routes';
 import type { LoadedEpisode } from './episode-refusals';
 import type { Event } from './schemas/event.schema';
-import type { Playlist } from './schemas/playlist.schema';
+import type { Playlist, PlaylistItem } from './schemas/playlist.schema';
 
 /*
  * An Event as the store serves it (design-ADR 0016, Delivery): resolved once, when the records load, into the Playlist
@@ -22,13 +22,20 @@ export interface PlaylistPlace {
 }
 
 /**
- * One Episode an Event's Playlist lists: its record with its ref, its ref again as `page` when it has a page (its URL
- * slug and owning Event are fields of it), and its place.
+ * One entry of an Event's Playlist: the Episode's record with its ref, the anchor it opens at when it names one, its
+ * ref again as `page` when it has a page (its URL slug and owning Event are fields of it), and its place.
  */
 export interface PlaylistEntry {
   readonly episode: LoadedEpisode;
+  readonly anchor?: string;
   readonly page?: EpisodeRef<EpisodeId>;
   readonly place: PlaylistPlace;
+}
+
+/** One entry as the store resolves it before it is placed: the loaded Episode, and the anchor it opens at. */
+export interface ListedEntry {
+  readonly episode: LoadedEpisode;
+  readonly anchor?: string;
 }
 
 /**
@@ -50,20 +57,38 @@ export interface PresentedEpisode {
   readonly place: PlaylistPlace;
 }
 
-/** Each Episode of a Playlist, in its order, with its place: the count is every one; the walk steps over the pageless. */
-export function playlistEntries(episodes: readonly LoadedEpisode[]): PlaylistEntry[] {
-  const pages = episodes.map(({ ref }) => (hasPage(ref) ? ref : undefined));
+/** Each entry of a Playlist with its Episode loaded, in its order; an id no Episode holds is the Playlist's refusal. */
+export function listedEntries(
+  items: readonly PlaylistItem[],
+  episodes: ReadonlyMap<string, LoadedEpisode>,
+): ListedEntry[] {
+  return items.flatMap(({ episode, anchor }) => {
+    const loaded = episodes.get(episode);
+    return loaded === undefined ? [] : [{ episode: loaded, ...(anchor === undefined ? {} : { anchor }) }];
+  });
+}
+
+/**
+ * Each entry of a Playlist, in its order, with its place: every entry is a step the count includes; the walk from one
+ * Episode to the next steps over the pageless and over an Episode listed again, at an anchor or not.
+ */
+export function playlistEntries(entries: readonly ListedEntry[]): PlaylistEntry[] {
+  const pages = entries.map(({ episode: { ref } }) => (hasPage(ref) ? ref : undefined));
+  const isFirst = (index: number) =>
+    entries.findIndex(({ episode }) => episode.ref.id === entries[index].episode.ref.id) === index;
+  const stops = pages.map((page, index) => (isFirst(index) ? page : undefined));
   const isDefined = (page: EpisodeRef<EpisodeId> | undefined): page is EpisodeRef<EpisodeId> => page !== undefined;
-  return episodes.map((episode, index) => {
+  return entries.map(({ episode, anchor }, index) => {
     const page = pages[index];
-    const previous = pages.slice(0, index).reverse().find(isDefined);
-    const next = pages.slice(index + 1).find(isDefined);
+    const previous = stops.slice(0, index).reverse().find(isDefined);
+    const next = stops.slice(index + 1).find(isDefined);
     return {
       episode,
+      ...(anchor === undefined ? {} : { anchor }),
       ...(page === undefined ? {} : { page }),
       place: {
         position: index + 1,
-        count: episodes.length,
+        count: entries.length,
         ...(previous === undefined ? {} : { previous }),
         ...(next === undefined ? {} : { next }),
       },

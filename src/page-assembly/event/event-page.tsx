@@ -103,7 +103,8 @@ function StartButton({ start, locale, t }: { start: ReturnType<typeof startOf>; 
 /** The Playlist's Episodes as entries of the Playlist list, each card a compact Episode card built here. */
 function playlistEntries(cards: readonly EpisodeCard[], locale: Locale, labels: CardLabels): PlaylistEntry[] {
   return cards.map((card) => ({
-    key: card.slug,
+    // An Episode listed again at an anchor shares its slug, so its route (anchor and all) keys it.
+    key: card.route ?? card.slug,
     linked: card.route !== null,
     card: (className: string) => (
       <EpisodeCardView
@@ -188,7 +189,7 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
   const card = eventCard(record, locale, PAGE_WORDS[locale].tags);
   const makeCard = await episodeCardMaker(locale);
   const episodes = eventPlaylistCards(record, makeCard, locale);
-  const related = relatedEpisodes(record, listedEpisodes()).map(makeCard);
+  const related = relatedEpisodes(record, listedEpisodes()).map((episode) => makeCard(episode));
   const main = {
     entries: playlistEntries(episodes, locale, labels),
     related: <RelatedEpisodes cards={related} locale={locale} labels={labels} t={t} />,

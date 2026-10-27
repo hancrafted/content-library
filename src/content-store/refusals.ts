@@ -10,7 +10,7 @@ import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
 import { resourceSchema, type Resource } from './schemas/resource.schema';
-import { playlistEntries, type ServedEvent } from './served-event';
+import { listedEntries, playlistEntries, type ServedEvent } from './served-event';
 
 /*
  * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 3, 4, 8 and 9): each record is parsed by its
@@ -130,14 +130,15 @@ function playlistRefusals(
   presenters: readonly string[],
 ): string[] {
   const own = (sentence: string) => `Playlist ${playlist.id}: ${sentence}`;
-  const unknown = playlist.episodes.filter((id) => !episodes.has(id));
-  const listed = playlist.episodes.flatMap((id) => episodes.get(id) ?? []);
+  // An Episode listed again at an anchor is one Episode: each refusal below names it once.
+  const ids = [...new Set(playlist.episodes.map(({ episode }) => episode))];
+  const unknown = ids.filter((id) => !episodes.has(id));
+  const listed = ids.flatMap((id) => episodes.get(id) ?? []);
   const unlisted = listed.filter(({ visibility }) => visibility === 'unlisted').map(({ ref }) => ref);
-  const slugs = [...new Set(playlist.episodes)].flatMap((id) => episodes.get(id)?.slug ?? []);
+  const slugs = listed.map(({ slug }) => slug);
   return [
     ...(playlist.episodes.length === 0 ? [own('episodes lists none, but a Playlist lists at least one Episode')] : []),
     ...unknown.map((id) => own(`episodes names "${id}", which is no registered Episode`)),
-    ...duplicates(playlist.episodes).map((id) => own(`episodes lists "${id}" twice`)),
     ...duplicates(slugs).map((slug) =>
       own(`episodes lists two Episodes with the slug "${slug}", which would share one URL under its Event`),
     ),
@@ -159,7 +160,9 @@ function crossRecordRefusals(
 ): string[] {
   const presented = new Set(events.map((event) => event.playlist));
   const listedByEvents = new Set(
-    playlists.filter((playlist) => presented.has(playlist.id)).flatMap((playlist) => playlist.episodes),
+    playlists
+      .filter((playlist) => presented.has(playlist.id))
+      .flatMap((playlist) => playlist.episodes.map(({ episode }) => episode)),
   );
   const eventSlugs = events.map((event) => event.slug);
   const byId = new Map(episodes.map((episode) => [episode.ref.id, episode]));
@@ -196,8 +199,8 @@ function serve(
   const playlist = playlists.get(event.playlist);
   if (playlist === undefined)
     return { served: [], refused: [`Event ${slug}: playlist "${event.playlist}" does not exist`] };
-  const listed = playlist.episodes.flatMap((each) => episodes.get(each) ?? []);
-  return { served: [{ ...event, slug, playlist: { ...playlist, episodes: playlistEntries(listed) } }], refused: [] };
+  const served = { ...playlist, episodes: playlistEntries(listedEntries(playlist.episodes, episodes)) };
+  return { served: [{ ...event, slug, playlist: served }], refused: [] };
 }
 
 /**

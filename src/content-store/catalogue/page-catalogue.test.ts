@@ -298,6 +298,21 @@ describe('edge cases', () => {
     expect(pages).toEqual(expected);
   });
 
+  it('builds one page under the Event for an Episode the Playlist lists again at an anchor, placed by its first entry', () => {
+    // ARRANGE
+    const playlist = { ...PLAYLIST, episodes: [PUBLIC.slug, COPY.id, { episode: PUBLIC.slug, anchor: 'check-in-1' }] };
+    const count = playlist.episodes.length;
+    const expected = [
+      { episode: PUBLIC_REF.id, place: { position: 1, count, next: COPY } },
+      { episode: COPY.id, place: { position: 2, count, previous: PUBLIC_REF } },
+    ];
+    const catalogue = catalogueOf(loadContent({ ...RECORDS, playlists: [playlist] }));
+    // ACT
+    const pages = catalogue.eventEpisodeParams().map((param) => catalogue.eventEpisodePageAt(param));
+    // ASSERT
+    expect(pages.map((page) => page && { episode: page.episode.id, place: page.presented.place })).toEqual(expected);
+  });
+
   it('announces a public upcoming Episode on the overview before its folder holds a page', () => {
     // ARRANGE
     const records = { ...RECORDS, episodes: [own(PUBLIC), copy(UNLISTED), own(UPCOMING)] };

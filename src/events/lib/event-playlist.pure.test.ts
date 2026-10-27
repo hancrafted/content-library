@@ -12,9 +12,10 @@ const linked = (slug: string): Stub => ({
 });
 const upcoming = (slug: string): Stub => ({ slug, route: null, href: null });
 /** An Episode as its Playlist lists it: its record (only the slug read here), and its page's EpisodeRef when it has one. */
-const entry = (slug: string, page?: EpisodeRef<EpisodeId>) => ({
+const entry = (slug: string, page?: EpisodeRef<EpisodeId>, anchor?: string) => ({
   episode: { slug },
   ...(page === undefined ? {} : { page }),
+  ...(anchor === undefined ? {} : { anchor }),
 });
 /** The AXEL seminar presenting the given Episodes, in this order. */
 const axel = (...episodes: ReturnType<typeof entry>[]) =>
@@ -57,6 +58,20 @@ describe('success cases', () => {
     const [card] = eventPlaylistCards(event, linkedCard, 'de');
     // ASSERT
     expect({ route: card.route, href: card.href }).toEqual(expected);
+  });
+  it('opens an entry listed at an anchor at that Section of the Episode under its Event, and builds its card for it', () => {
+    // ARRANGE
+    const anchor = 'check-in-1';
+    const event = axel(entry('ai-token-economy', episodeRef('ai-token-economy'), anchor));
+    const expected = {
+      anchor,
+      route: '/events/2026-10-23-axel-agentic-workflow/episodes/ai-token-economy#check-in-1',
+      href: '/de/events/2026-10-23-axel-agentic-workflow/episodes/ai-token-economy#check-in-1',
+    };
+    // ACT
+    const [card] = eventPlaylistCards(event, (episode, at) => ({ ...linked(episode.slug), anchor: at }), 'de');
+    // ASSERT
+    expect({ anchor: card.anchor, route: card.route, href: card.href }).toEqual(expected);
   });
 });
 

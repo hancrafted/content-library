@@ -1,8 +1,9 @@
 import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
 import { hasPage, isEpisodeId, RESOURCE_SLUGS } from '@/content-store/catalogue/record-routes';
-import { listEpisodes } from '@/content-store/store';
+import { listEpisodes, listEvents } from '@/content-store/store';
 import { headerModeOf } from '@/episodes/components/slide-master/slide';
 import { describe, expect, it } from 'vitest';
+import { sectionOf } from './episode.pure';
 import { compositionOf } from './registry';
 
 /*
@@ -16,6 +17,13 @@ import { compositionOf } from './registry';
 
 /** Every Episode with a page, by its EpisodeRef, as the store serves it. */
 const WITH_PAGE = listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : []));
+
+/** Every Playlist entry that opens its Episode at an anchor, with the Event presenting it. */
+const ANCHORED = listEvents().flatMap(({ slug, playlist }) =>
+  playlist.episodes.flatMap(({ page, anchor }) =>
+    page === undefined || anchor === undefined ? [] : [{ label: `${page.id}#${anchor} in ${slug}`, page, anchor }],
+  ),
+);
 
 /** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included. */
 const AUTHORED_HEADERS = ['ai-token-economy', 'maintaining-markdown-for-ai'];
@@ -103,6 +111,15 @@ describe('success cases', () => {
     ).sections.map((section) => section.map(({ slug }) => slug));
     // ASSERT
     expect(sections).toEqual(expected);
+  });
+
+  it.each(ANCHORED)('opens $label at a Section the Episode has', ({ page, anchor }) => {
+    // ARRANGE
+    const { sections } = compositionOf(page);
+    // ACT
+    const section = sectionOf(sections, anchor);
+    // ASSERT
+    expect(section).toBeDefined();
   });
 });
 

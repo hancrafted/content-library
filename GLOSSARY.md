@@ -46,8 +46,11 @@ _Avoid_: Host, client, partner, venue
 **Event registry**: every Event the code knows, generated from the Event files, so adding an Event is adding its file `src/content-store/events/<slug>.ts`. `npm run registry` writes it beside the Episode registry: the Event slugs in lib, the records the content store loads; the fast suite fails while it is stale.
 _Avoid_: Event slug list, hand-kept Event pages
 
-**Playlist**: an ordered list of Episodes and its visibility, nothing else. An **event Playlist** is one an Event presents, read from the Event side, never stored; it may list unlisted Episodes, while a public Playlist no Event presents lists only public ones. One record each in the content store (`src/content-store/playlists/`).
+**Playlist**: an ordered list of Playlist entries and its visibility, nothing else. An **event Playlist** is one an Event presents, read from the Event side, never stored; it may list unlisted Episodes, while a public Playlist no Event presents lists only public ones. One record each in the content store (`src/content-store/playlists/`).
 _Avoid_: Agenda, series, collection
+
+**Playlist entry**: one numbered step of a Playlist: an Episode id, or an Episode with an `anchor`, opening it at that Section. An Episode may be listed again at another anchor, so the intro returns for each check-in; its card then shows only that Section's title. "n of m" counts every entry; the Episode's page takes its place from its first.
+_Avoid_: Playlist item, step
 
 **visibility**: whether a record is listed and indexed: `public` or `unlisted`, required on every Episode and Playlist, so a forgotten one is refused and fails closed. Unlisted is not private: anyone holding the URL can open the page. `attendees` is refused until the platform horizon gives it an enforcer.
 _Avoid_: Status, private, hidden, draft

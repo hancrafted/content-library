@@ -69,3 +69,12 @@ function assertUniqueSlideSlugs(slugs: readonly string[]): void {
     seen.add(slug);
   }
 }
+
+/**
+ * The section slide of the Section an anchor names: by its own anchor, or by a page Slide's under it. None when the
+ * Episode has no such anchor. A Playlist entry opening an Episode at an anchor shows this Slide's title.
+ */
+export function sectionOf<S extends SlideOutline>(sections: readonly SectionList<S>[], anchor: string): S | undefined {
+  const placed = placeSections(sections).find((section) => section.some(({ id }) => id === anchor));
+  return placed?.[0].slide;
+}
