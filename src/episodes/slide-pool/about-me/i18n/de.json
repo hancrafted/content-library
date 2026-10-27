@@ -1,0 +1,23 @@
+{
+  "title": "Über mich",
+  "caption": "Wer hier spricht, und was er baut.",
+  "aboutMe": {
+    "initials": "HC",
+    "name": "Han Che",
+    "role": "KI-Trainer und Entwickler (Platzhalter)",
+    "facts": {
+      "f1": "Baut agentische Workflows für Teams (Platzhalter)",
+      "f2": "Trainiert Menschen im täglichen Arbeiten mit KI (Platzhalter)",
+      "f3": "Macht aus Recherche visuelle Lerneinheiten (Platzhalter)"
+    },
+    "linkLabel": "hancrafted.net",
+    "linkHref": "https://hancrafted.net",
+    "newTabHint": "öffnet in einem neuen Tab"
+  },
+  "notes": {
+    "bio": {
+      "header": "Die Bio-Fakten sind Platzhalter",
+      "description": "Rolle und die drei Fakten sind Platzhalter: Ersetze sie durch das, was dieses Publikum über Dich wissen soll, in beiden Sprachen. Halte es auf das, was in einem Atemzug passt."
+    }
+  }
+}
