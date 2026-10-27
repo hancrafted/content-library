@@ -8,4 +8,5 @@ export const episodeMetadata = {
   format: 'foundations',
   tags: ['context-engineering', 'workflow'],
   publishedOn: '2026-10-23',
+  youtube: { id: '0Y3DPTrNhkI', language: 'en' },
 } as const satisfies EpisodeInput;
