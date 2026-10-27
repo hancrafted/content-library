@@ -24,6 +24,43 @@ describe('success cases', () => {
     expect(prompt.slots?.map((slot) => slot.id)).toEqual(['tickets']);
   });
 
+  it('shows a section marked only for teaching mode in teaching mode, and one marked only for a full run in a full run', () => {
+    // ARRANGE
+    const practice = {
+      heading: 'Practice run',
+      purpose: 'scope',
+      only: 'teaching',
+      text: 'Pick the simplest.',
+    } as const;
+    const whole = { heading: 'Full run', purpose: 'scope', only: 'full', text: 'Name what is open.' } as const;
+    const base = task('venue');
+    const research: TaskDef = { ...base, do: { ...base.do, simple: [...base.do.simple, practice, whole] } };
+    const headings = (teaching: boolean) =>
+      (doPrompt(file, research, { runtime: 'simple', teaching }).sections ?? []).map((section) => section.heading);
+    // ACT
+    const teaching = headings(true);
+    const full = headings(false);
+    // ASSERT
+    expect(teaching).toContain(practice.heading);
+    expect(teaching).not.toContain(whole.heading);
+    expect(full).toContain(whole.heading);
+    expect(full).not.toContain(practice.heading);
+  });
+
+  it('leaves a reviewer section marked only for a full run out of the review in teaching mode', () => {
+    // ARRANGE
+    const whole = { heading: 'Full run', only: 'full', text: 'Check every round.' } as const;
+    const withWhole: WorkflowFile = { ...file, reviewer: { sections: [...file.reviewer.sections, whole] } };
+    const headings = (teaching: boolean) =>
+      (reviewPrompt(withWhole, task('venue'), { runtime: 'simple', teaching }).sections ?? []).map((s) => s.heading);
+    // ACT
+    const teaching = headings(true);
+    const full = headings(false);
+    // ASSERT
+    expect(teaching).not.toContain(whole.heading);
+    expect(full).toContain(whole.heading);
+  });
+
   it('hands the prompt the technique catalogue and keeps the technique ids of its sections', () => {
     // ARRANGE
     const research = task('venue');

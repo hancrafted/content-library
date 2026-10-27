@@ -486,6 +486,20 @@ describe('failure cases', () => {
     expect(problems).toMatch(/purpose is "vibes"/);
   });
 
+  it('accepts a section shown only in teaching mode or a full run, and rejects another mode', () => {
+    // ARRANGE
+    const only = (mode: string) => (file: File) =>
+      void (research(file).do.simple = [...research(file).do.simple, { ...section, only: mode } as never]);
+    const unknown = 'sometimes';
+    // ACT
+    const teaching = problemsOf(load(only('teaching')));
+    const full = problemsOf(load(only('full')));
+    const other = problemsOf(load(only(unknown)));
+    // ASSERT
+    expect([teaching, full]).toEqual(['', '']);
+    expect(other).toContain(`only is "${unknown}", which is not one of teaching, full`);
+  });
+
   it('rejects a catalogue entry without a tier or with an unknown one', () => {
     // ARRANGE
     const none = (file: File) => void delete (file.techniques[0] as { tier?: string }).tier;

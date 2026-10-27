@@ -1,4 +1,4 @@
-import { PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
+import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
 
 /*
  * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type
@@ -23,11 +23,10 @@ const list = (of: Spec, min = 0): Spec => ({ t: 'list', of, min });
 const obj = (fields: Record<string, Spec>, optional: readonly string[] = []): Spec => ({ t: 'obj', fields, optional });
 
 const ids = list(str, 1);
-const section = obj({ heading: str, purpose: enumOf(PURPOSES), explain: str, techniques: ids, text: str }, [
-  'purpose',
-  'explain',
-  'techniques',
-]);
+const section = obj(
+  { heading: str, only: enumOf(MODES), purpose: enumOf(PURPOSES), explain: str, techniques: ids, text: str },
+  ['only', 'purpose', 'explain', 'techniques'],
+);
 const technique = obj({ id: str, tier: enumOf(TIERS), title: str, explain: str });
 const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sample: strs, free: bool }, [
   'sample',
