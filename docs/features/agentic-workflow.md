@@ -41,12 +41,12 @@ Every handoff is markdown: one H1, then H2 sections, and no front matter. A chat
 
 Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Stages card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `move` (`B`, `R`, `I`, `E` or `F`, the BRIEF letter; a stage teaches one move or none), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
 
-Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` and `review` (both required except on the final job of the last stage), and optional `needs`, `instructions`.
+Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` (required except on the final job of the last stage), and optional `review`, `needs`, `instructions`.
 
 - `goal`: `do` is the one-sentence goal of the do step, the stepper's title; `review` is the goal of the review step and is required when the job has a review.
 - `needs`: ids of jobs of the same stage that run first. A slot may take the output of a job it needs; a slot that takes a same-stage output without `needs`, an unknown id and a cycle are load problems.
 
-- `output` names what the task hands on. A later task's slot takes it by that id. The final job of the last stage may have none and no review; the viewer ticks a checkbox when it is done.
+- `output` names what the task hands on. A later task's slot takes it by that id. The final job of the last stage may have none; the viewer ticks a checkbox when it is done.
 - `template` is a key of `templates`, shared by the do prompt, the reviewer and the checks.
 - `do` carries `simple` and `technical`, each at least one section. Simple is a text-only chat; technical is a coding harness, so its prompt is the slash command plus the task. Both are full prompts; nothing is assembled between them.
 - `instructions`: one or two plain sentences on what the user does in the do step, shown above the slots.
@@ -135,7 +135,7 @@ A stage repeats with `foreach: { over: <output>#<h2 slug>, demo: N, item: <word>
 
 ## Review
 
-`review` is required on every job except the final job of the last stage when that job has no `output`. It runs in a fresh chat, only reports, then writes a fix handoff the user pastes back into the first chat. Fields: `slots` (at least one), `checks` (at least one, the tailored layer), optional `instructions`; the goal of the step sits in the job's `goal.review`.
+`review` is optional: give one where a mistake costs most, such as the job before a gate. It runs in a fresh chat, only reports, then writes a fix handoff the user pastes back into the first chat. Fields: `slots` (at least one), `checks` (at least one, the tailored layer), optional `instructions`; the goal of the step sits in the job's `goal.review`.
 
 - General checks live once in `reviewer`; `checks` are task-specific sanity checks a fresh reviewer can judge from the work and its inputs.
 - A review slot's sample is optional. Its `id` is either an output of an earlier stage (taken in the right mode, checked against that task's template) or a fresh id that clashes with no other id in the file; the task's own `output` is allowed too. A fresh id is checked against the task's own template.
@@ -261,7 +261,7 @@ stages:
 - Templates: front matter; no H1; a `{{marker}}` inside.
 - Ids: a stage, task or technique id used twice; an output handed on by two tasks; a slot id twice in one task; a `demo` cap below 1.
 - Slots: names no output of an earlier stage (and is not `free`); takes all rounds of a repeated stage but is `single`; is `multiple` but its output is not from a repeated stage; a non-free do slot with no sample; a `multiple` slot with a lone sample or a `single` slot with a list; a list whose length differs from the markers; a review slot id that clashes with another id.
-- Jobs: a `needs` id that is no job of the stage; a `needs` cycle; a slot taking a same-stage output without `needs`; a job with no review, or with a review and no `goal.review`; a job with no output that is not the final job of the last stage; a stage `summary` over eight words.
+- Jobs: a `needs` id that is no job of the stage; a `needs` cycle; a slot taking a same-stage output without `needs`; a job with a review and no `goal.review`; a job with no output that is not the final job of the last stage; a stage `summary` over eight words.
 - Techniques: a section or details naming an unknown technique id.
 - Markers: an unknown marker in a task prompt (either runtime) or in the reviewer, naming the marker.
 - Handoffs: a sample or example with front matter, with no H1, or whose H2 sections differ from the template's; a task naming an unknown template; a list example on a job whose stage does not repeat; an example list whose length is not the stage's demo cap.

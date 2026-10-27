@@ -11,7 +11,8 @@ import {
 } from './workflow-schema.types';
 
 const proposal = parse(vacationEn) as WorkflowFile;
-const RESEARCH = 4;
+const RESEARCH = 1;
+const DECIDE = 2;
 
 const markersOf = (sections: readonly SectionDef[]) =>
   sections.flatMap((section) => [...section.text.matchAll(/\{\{([^}]+)\}\}/g)].map((match) => match[1]));
@@ -21,13 +22,14 @@ describe('success cases', () => {
     // ARRANGE
     const chats = 3;
     const stage: StageDef = proposal.stages[RESEARCH] as StageDef;
+    const pick = proposal.stages[DECIDE]?.jobs.find((job) => job.id === 'pick');
     // ACT
     const task = stage.jobs[0];
     // ASSERT
     expect(stage.foreach?.demo).toBe(chats);
-    expect(task.slots.map((slot) => slot.id)).toEqual(['tickets']);
-    expect(proposal.templates[task.template]).toContain('## Fit against the requirements');
-    expect(task.review?.checks.length).toBeGreaterThan(0);
+    expect(task.slots.map((slot) => slot.id)).toEqual(['spec']);
+    expect(proposal.templates[task.template]).toContain('## Fit against the criteria');
+    expect(pick?.review?.checks.length).toBeGreaterThan(0);
   });
 
   it('uses only known purposes and known markers, and keeps the scenario out of general instructions', () => {

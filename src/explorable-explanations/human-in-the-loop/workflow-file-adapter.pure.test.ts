@@ -25,13 +25,11 @@ describe('success cases', () => {
   it('derives every edge of the diagram from the slots: a job depends on the producers of the outputs it takes', () => {
     // ARRANGE
     const expected = [
-      ['pieces', []],
-      ['interview', ['pieces']],
-      ['spec', ['interview']],
-      ['tickets', ['spec']],
-      ['venue', ['tickets']],
-      ['compare', ['spec', 'venue']],
-      ['recommend', ['compare']],
+      ['interview', []],
+      ['stay', ['interview']],
+      ['compare', ['interview', 'stay']],
+      ['pick', ['compare', 'stay', 'interview']],
+      ['page', ['pick']],
     ];
     // ACT
     const edges = jobs.map((job) => [job.id, job.dependsOn]);
@@ -42,13 +40,11 @@ describe('success cases', () => {
   it('gives every job its bold title and its one-line summary from the Workflow file', () => {
     // ARRANGE
     const expected = [
-      ['Break it up', 'Into smaller pieces, in order, with what depends on what'],
-      ['AI grills you', 'In an interactive interview, a few questions at a time'],
-      ['You sign off', 'The requirements card, line by line'],
-      ['Write tickets', 'One self-contained ticket per option to research'],
-      ['Chat', 'One fresh chat per ticket, with web search'],
-      ['Rank the results', 'Against your requirements, and you pick at Gate 2'],
-      ['Recommend one', 'A one-minute read with next steps'],
+      ['AI grills you', 'In rounds, then it writes the requirements'],
+      ['Chat', 'One fresh chat per kind of stay, with web search'],
+      ['Rank the stays', 'Against your acceptance criteria'],
+      ['You pick', 'Your choice, written up with everything the page needs'],
+      ['Make the page', 'One HTML file, opened in your browser'],
     ];
     // ACT
     const shown = jobs.map((job) => [job.title, job.detail]);
@@ -59,10 +55,10 @@ describe('success cases', () => {
   it('fans the hairlines out into the three research chats and back in', () => {
     // ARRANGE
     const branches = 3;
-    const [tickets, research, compare] = [3, 4, 5].map((at) => workflow.stages[at]!);
+    const [brief, research, decide] = [0, 1, 2].map((at) => workflow.stages[at]!);
     // ACT
-    const out = connectorInto(tickets, research!, { research: branches });
-    const back = connectorInto(research, compare!, { research: branches });
+    const out = connectorInto(brief, research!, { research: branches });
+    const back = connectorInto(research, decide!, { research: branches });
     // ASSERT
     expect(out).toEqual({ kind: 'out', branches });
     expect(back).toEqual({ kind: 'in', branches });
@@ -83,17 +79,17 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the file on the Workflow and the task on each job, with the review and the stage goal and summary', () => {
     // ARRANGE
-    const venue = jobs.find((job) => job.id === 'venue');
+    const stay = jobs.find((job) => job.id === 'stay');
     const interview = jobs.find((job) => job.id === 'interview');
     // ACT
     const goal = workflow.stages[0]?.goal;
     // ASSERT
     expect(workflow.file.id).toBe('vacation');
-    expect([venue?.reviewed, interview?.reviewed]).toEqual([true, true]);
-    expect(goal).toContain('Break it down');
+    expect([stay?.reviewed, interview?.reviewed]).toEqual([false, true]);
+    expect(goal).toContain('Interview first');
   });
 
-  it('gives the popover of a task its do and review steps, one template in each level, repeated per round in Simple only', () => {
+  it('gives the popover of a task without a review only its do step, one template in each level', () => {
     // ARRANGE
     const find = (level: 'simple' | 'technical') =>
       workflowView(workflow, { level }).stages.find((stage) => stage.id === 'research')?.jobs[0]?.task;
@@ -101,8 +97,8 @@ describe('edge cases', () => {
     const simple = find('simple');
     const technical = find('technical');
     // ASSERT
-    expect(simple?.steps.map((step) => step.id)).toEqual(['do', 'review']);
-    expect(technical?.steps.map((step) => step.id)).toEqual(['do', 'review']);
+    expect(simple?.steps.map((step) => step.id)).toEqual(['do']);
+    expect(technical?.steps.map((step) => step.id)).toEqual(['do']);
     expect(simple?.goodLooksLike.length).toBeGreaterThan(0);
   });
 });

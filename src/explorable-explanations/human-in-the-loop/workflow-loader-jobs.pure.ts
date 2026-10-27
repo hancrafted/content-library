@@ -3,7 +3,7 @@ import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*
  * The checks of the order and completeness of a stage's jobs: `needs` ids and cycles, slots that take a same-stage
- * output, a review on every job, the goals and the stage summary. One sentence per problem.
+ * output, an output on every job but the last, the goals and the stage summary. One sentence per problem.
  */
 
 const SUMMARY_WORDS = 8;
@@ -59,23 +59,14 @@ function cycleOf(stage: StageDef): string[] {
 const isFinal = (file: WorkflowFile, stage: StageDef, task: TaskDef): boolean =>
   stage === file.stages[file.stages.length - 1] && stage.jobs[stage.jobs.length - 1] === task;
 
-/** Only the final job of the last stage may have no output, and then it has no review either. */
+/** Only the final job of the last stage may have no output. A review is optional; one that exists needs its goal. */
 function completenessProblems(file: WorkflowFile, stage: StageDef, task: TaskDef): string[] {
   const where = `Task "${task.id}"`;
-  const ends = isFinal(file, stage, task) && task.output === undefined;
-  const missing = (has: boolean, ok: boolean, text: string): string[] => (has || ok ? [] : [`${where} ${text}`]);
+  const outputMissing = task.output === undefined && !isFinal(file, stage, task);
+  const reviewGoalMissing = task.review !== undefined && task.goal.review === undefined;
   return [
-    ...missing(
-      task.output !== undefined,
-      isFinal(file, stage, task),
-      'has no output; only the final job of the last stage may have none.',
-    ),
-    ...missing(
-      task.review !== undefined,
-      ends,
-      'has no review; every job has one but the final job without an output.',
-    ),
-    ...missing(task.review === undefined || task.goal.review !== undefined, false, 'has a review but no review goal.'),
+    ...(outputMissing ? [`${where} has no output; only the final job of the last stage may have none.`] : []),
+    ...(reviewGoalMissing ? [`${where} has a review but no review goal.`] : []),
   ];
 }
 
