@@ -12,9 +12,10 @@ import {
   type BrowseSelection,
   type ResultsLabels,
 } from '@/episodes/components/episode-browser/episode-browser.pure';
-import { SearchBox, TagChips, type FilterLabels } from '@/episodes/components/episode-browser/episode-filters';
 import { EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
+import { SearchInput } from '@/shared/components/filters/search-input';
+import { TagToggles } from '@/shared/components/filters/tag-toggles';
 import { Button } from '@/shared/components/ui/button';
 import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -22,6 +23,18 @@ import { fillTemplate } from '@/shared/lib/template.pure';
 import { cn } from '@/shared/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { useRef, useState } from 'react';
+
+/** The strings the search box and the Tag filter draw. */
+export interface FilterLabels {
+  readonly search: string;
+  readonly searchPlaceholder: string;
+  readonly tagFilter: string;
+}
+
+/** The one Tag a toggle group's new value adds or removes, against the current selection. */
+function toggledTag(selected: readonly TagId[], next: readonly string[]): TagId | undefined {
+  return [...selected, ...(next as TagId[])].find((id) => selected.includes(id) !== next.includes(id));
+}
 
 /** The strings the Browse block draws, resolved on the server so the leaf takes plain values (FE-006 §4). */
 export interface BrowseLabels extends CardLabels, FilterLabels {
@@ -102,8 +115,23 @@ function BrowseControls({ browse, labels }: { browse: Browse; labels: BrowseLabe
   const { selection, tags } = browse;
   return (
     <div data-browse-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
-      <SearchBox query={selection.query} labels={labels} onChange={browse.setQuery} inputRef={browse.search} />
-      <TagChips options={tags} selected={selection.tags} labels={labels} onToggle={browse.toggleTag} />
+      <SearchInput
+        query={selection.query}
+        label={labels.search}
+        placeholder={labels.searchPlaceholder}
+        onChange={browse.setQuery}
+        inputRef={browse.search}
+        data={{ 'data-episode-search': '' }}
+      />
+      <TagToggles
+        options={tags}
+        selected={selection.tags}
+        label={labels.tagFilter}
+        onChange={(next) => {
+          const tag = toggledTag(selection.tags, next);
+          if (tag !== undefined) browse.toggleTag(tag);
+        }}
+      />
     </div>
   );
 }

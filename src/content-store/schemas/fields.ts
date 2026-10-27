@@ -12,9 +12,20 @@ export const VISIBILITIES = ['public', 'unlisted'] as const;
 export const FORMATS = ['foundations', 'teardown', 'short'] as const;
 export type FormatId = (typeof FORMATS)[number];
 
-/** The closed Tag vocabulary: the only Tags an Episode may carry. Each Tag's look lives in the Episodes area, `src/episodes/lib/tag-looks.ts`. */
+/**
+ * The closed Tag vocabulary: the only Tags an Episode or an Event may carry. Each Tag's icon and colour
+ * token are in `./tag-looks.ts`, its colour per theme in `src/app/globals.css`; its name and tooltip are the
+ * Translation keys `tags.<id>` in page assembly's lib.
+ */
 export const TAG_IDS = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'] as const;
 export type TagId = (typeof TAG_IDS)[number];
+
+/** Where an Event takes place: at a venue, on a video platform, or both. */
+export const EVENT_FORMATS = ['onsite', 'remote', 'hybrid'] as const;
+export type EventFormat = (typeof EVENT_FORMATS)[number];
+
+/** The video platforms a remote or hybrid Event runs on; a new one joins this list first. */
+export const PLATFORMS = ['zoom', 'teams', 'google-meet'] as const;
 
 /** What kind of occasion an Event is. */
 export const EVENT_KINDS = ['workshop', 'webinar'] as const;

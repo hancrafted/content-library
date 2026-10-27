@@ -7,5 +7,8 @@ export const event = {
   kind: 'workshop',
   organizer: 'axel',
   audience: 'organization',
+  tags: ['agentic-ai', 'workflow'],
+  format: 'remote',
+  platform: 'zoom',
   playlist: 'axel-agentic-workflow',
 } as const satisfies EventInput;

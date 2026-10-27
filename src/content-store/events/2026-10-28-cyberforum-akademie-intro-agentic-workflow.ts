@@ -8,6 +8,8 @@ export const event = {
   organizer: 'cyberforum',
   audience: 'individual',
   time: '17:00–19:00 CET',
-  location: 'remote',
+  tags: ['agentic-ai', 'workflow'],
+  format: 'remote',
+  platform: 'zoom',
   playlist: 'cyberforum-akademie-intro-agentic-workflow',
 } as const satisfies EventInput;

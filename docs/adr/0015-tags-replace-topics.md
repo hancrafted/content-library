@@ -27,3 +27,12 @@ Topic is dropped. Tags are the only organising idea.
 - A new Tag is one edit in the central record plus its two Translation keys.
 - An Episode's card look follows from the order of its Tags; reordering Tags recolours the card.
 - The shared Episode card replaces the old cards: its lead Tag fixes the icon and accent colour that the Topic label used to name, and the filters work on Tags.
+
+## Amendment: Events overview (2026-10-27)
+
+Events carry Tags too, and the look moves out of the Episodes area, which no other area may import (FE-007-module-layering §2.3, §2.6):
+
+- Each Tag's icon, by name, sits beside the vocabulary in `src/content-store/schemas/tag-looks.ts`; `src/shared/components/ui/named-icons.ts` draws the name, knowing no Tag.
+- The accent is no colour family any more but one token per Tag and theme, `--tag-<id>` in `globals.css`, adjustable in the token editor; a card's ink, wash and edge are drawn from it. The palette classes it replaces broke FE-011-design-tokens §4.3.
+- A Tag's name and tooltip are Translation keys `tags.<id>` in page assembly's lib, the one owner above both areas.
+- Decision 3 holds for Episodes. The Events overview offers a chip for every Tag a listed Event carries (_Events overview_).

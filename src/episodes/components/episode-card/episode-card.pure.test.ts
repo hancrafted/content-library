@@ -41,21 +41,19 @@ describe('success cases', () => {
       status: 'published',
       title: 'Your AI token economy',
       caption: 'Hidden managing responsibilities.',
-      leadTag: { id: 'cost', label: '[episodeBrowser.tags.cost.name]' },
+      leadTag: { id: 'cost', label: '[tags.cost.name]' },
       format: { id: 'foundations', label: '[episodeBrowser.formats.foundations]' },
       tags: [
         {
           id: 'cost',
-          label: '[episodeBrowser.tags.cost.name]',
-          tooltip: '[episodeBrowser.tags.cost.tooltip]',
+          label: '[tags.cost.name]',
+          tooltip: '[tags.cost.tooltip]',
         },
       ],
       minutes: 42,
       publishedOn: '2026-10-09',
       releaseDate: 'Oct 9, 2026',
       featuredRank: 3,
-      accent: 'amber',
-      icon: 'coins',
     };
     // ACT
     const card = episodeCard(PUBLISHED, { locale: 'en', read, minutes: 42, featuredRank: 3 });
@@ -63,14 +61,14 @@ describe('success cases', () => {
     expect(card).toEqual(expected);
   });
 
-  it('draws the icon and accent of the lead Tag, whatever Tags follow it', () => {
+  it('leads with its first Tag, whatever Tags follow it, which gives the card its look', () => {
     // ARRANGE
     const entry = { ...PUBLISHED, tags: ['markdown', 'cost'] } as const;
-    const expected = { accent: 'rose', icon: 'file-text', leadTag: 'markdown' };
+    const expected = { id: 'markdown', label: '[tags.markdown.name]' };
     // ACT
-    const { accent, icon, leadTag } = episodeCard(entry, { locale: 'en', read });
+    const { leadTag } = episodeCard(entry, { locale: 'en', read });
     // ASSERT
-    expect({ accent, icon, leadTag: leadTag.id }).toEqual(expected);
+    expect(leadTag).toEqual(expected);
   });
 
   it('prefixes the link with the locale but leaves the route neutral, so a German card opens the German Episode', () => {
@@ -91,23 +89,21 @@ describe('success cases', () => {
       status: 'upcoming',
       title: '[episodeBrowser.upcoming.choosing-the-right-model.title]',
       caption: '[episodeBrowser.upcoming.choosing-the-right-model.caption]',
-      leadTag: { id: 'cost', label: '[episodeBrowser.tags.cost.name]' },
+      leadTag: { id: 'cost', label: '[tags.cost.name]' },
       format: { id: 'short', label: '[episodeBrowser.formats.short]' },
       tags: [
         {
           id: 'cost',
-          label: '[episodeBrowser.tags.cost.name]',
-          tooltip: '[episodeBrowser.tags.cost.tooltip]',
+          label: '[tags.cost.name]',
+          tooltip: '[tags.cost.tooltip]',
         },
         {
           id: 'sales',
-          label: '[episodeBrowser.tags.sales.name]',
-          tooltip: '[episodeBrowser.tags.sales.tooltip]',
+          label: '[tags.sales.name]',
+          tooltip: '[tags.sales.tooltip]',
         },
       ],
       featuredRank: null,
-      accent: 'amber',
-      icon: 'coins',
     };
     // ACT
     const card = episodeCard(UPCOMING, { locale: 'en', read });
@@ -121,13 +117,13 @@ describe('success cases', () => {
     const expected = [
       {
         id: 'cost',
-        label: '[episodeBrowser.tags.cost.name]',
-        tooltip: '[episodeBrowser.tags.cost.tooltip]',
+        label: '[tags.cost.name]',
+        tooltip: '[tags.cost.tooltip]',
       },
       {
         id: 'workflow',
-        label: '[episodeBrowser.tags.workflow.name]',
-        tooltip: '[episodeBrowser.tags.workflow.tooltip]',
+        label: '[tags.workflow.name]',
+        tooltip: '[tags.workflow.tooltip]',
       },
     ];
     // ACT
@@ -210,7 +206,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('leaves minutes off a published card whose reading time is not known, and ranks a card outside Featured as null', () => {
     // ARRANGE
-    const expectedKeys = ['accent', 'caption', 'featuredRank', 'format', 'href', 'icon'];
+    const expectedKeys = ['caption', 'featuredRank', 'format', 'href', 'leadTag'];
     const absent = 'minutes';
     // ACT
     const card = episodeCard(PUBLISHED, { locale: 'en', read });

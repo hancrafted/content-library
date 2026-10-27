@@ -11,10 +11,21 @@ import { eventPlaylistCards, startOf, totalMinutes } from '@/events/lib/event-pl
 import { EVENT_WORDS, eventCopy } from '@/events/lib/event-words';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
+import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { Button } from '@/shared/components/ui/button';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { ArrowRight, CalendarDays, Clock, Layers, MapPin, Presentation, Users, type LucideIcon } from 'lucide-react';
+import {
+  ArrowRight,
+  CalendarDays,
+  Clock,
+  Layers,
+  MapPin,
+  Presentation,
+  Users,
+  Video,
+  type LucideIcon,
+} from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -60,7 +71,7 @@ interface FactsProps {
 }
 
 /**
- * The one facts line: the kind, the date with the time when the Event has one, the place when it has one, the
+ * The one facts line: the kind, the date with the time when the Event has one, where it takes place, the
  * Audience, the Episode count, and the reading time when one is counted.
  */
 function Facts({ card, record, minutes, t }: FactsProps) {
@@ -70,11 +81,9 @@ function Facts({ card, record, minutes, t }: FactsProps) {
         <span data-event-kind>{t(`kinds.${record.kind}`)}</span>
       </Fact>
       <DateFact card={card} />
-      {card.location !== undefined && (
-        <Fact icon={MapPin}>
-          <span data-event-location>{card.location}</span>
-        </Fact>
-      )}
+      <Fact icon={card.place.format === 'remote' ? Video : MapPin}>
+        <span data-event-place={card.place.format}>{card.place.label}</span>
+      </Fact>
       <Fact icon={Users}>
         <span data-event-audience>{t(`audiences.${record.audience}`)}</span>
       </Fact>
@@ -133,7 +142,7 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
   const t = await getTranslations({ locale, namespace: 'eventPage' });
   const browser = await getTranslations({ locale, namespace: 'episodeBrowser' });
   const words = EVENT_WORDS[locale];
-  const card = eventCard(record, locale);
+  const card = eventCard(record, locale, PAGE_WORDS[locale].tags);
   const episodes = eventPlaylistCards(record, await episodeCardMaker(locale), locale);
   return (
     <main data-testid="event-page" className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
