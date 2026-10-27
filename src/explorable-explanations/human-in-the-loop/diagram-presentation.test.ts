@@ -19,7 +19,6 @@ const words = {
   moveLabel: '{letter}: {why}',
   gate: 'Gate {n}',
   checked: 'checked',
-  sendBack: 'send back',
 } as UiWords;
 /** What the diagram asked to open; a static render presses nothing, so a recording closure stands in for a spy. */
 const opened: string[] = [];
@@ -76,16 +75,34 @@ describe('success cases', () => {
     expect({ out: heads('out'), in: heads('in') }).toEqual({ out: rounds, in: 1 });
   });
 
-  it('draws a dashed send-back arc and its label under a gated stage, and a labelled gate badge', () => {
+  it('names a repeated stage on top of its column, above its branch cards, with its summary after them', () => {
+    // ARRANGE
+    const repeated: Workflow = {
+      ...flow(),
+      stages: flow().stages.map((each) => (each.id === 'b' ? { ...each, summary: 'Once per epic' } : each)),
+    };
+    const $ = render({ workflow: repeated });
+    // ACT
+    const order = $(COLUMN)
+      .eq(1)
+      .find('[data-title], [data-branch], [data-summary]')
+      .map((_, el) =>
+        $(el).is('[data-branch]') ? 'branch' : $(el).is('[data-title]') ? `title:${$(el).text()}` : 'summary',
+      )
+      .get();
+    // ASSERT
+    expect(order).toEqual(['title:B', 'branch', 'branch', 'summary']);
+  });
+
+  it('labels a gated stage with its gate badge and draws no send-back arc or word', () => {
     // ARRANGE
     const $ = render();
     // ACT
     const gated = $(COLUMN).eq(2);
     // ASSERT
-    expect(gated.find('[data-send-back] path[stroke-dasharray]')).toHaveLength(1);
-    expect(gated.find('[data-send-back]').text()).toContain('send back');
-    expect(gated.find('[data-gate]').text()).toContain('Gate 2');
-    expect($(COLUMN).first().find('[data-send-back]')).toHaveLength(0);
+    expect(gated.find('[data-gate]').text()).toBe('Gate 2');
+    expect(gated.find('[data-send-back]')).toHaveLength(0);
+    expect($.root().text()).not.toContain('send back');
   });
 
   it('lists the BRIEF letters of a stage as circles with their tooltips, only where the Slide shows them', () => {

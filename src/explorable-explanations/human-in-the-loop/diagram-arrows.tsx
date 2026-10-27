@@ -1,10 +1,8 @@
-import { cn } from '@/shared/lib/utils';
-import { Undo2 } from 'lucide-react';
-import { fanGeometry, type Connector as ConnectorKind } from './diagram-layout.pure';
+import { fanGeometry, TITLE_Y, type Connector as ConnectorKind } from './diagram-layout.pure';
 
 /*
- * The hairlines both diagram views share: the arrow into a stage, the fans of a repeated stage's rounds, the dashed
- * arc under a gated stage and the quarter-turned arrow where the stages stack.
+ * The hairlines both diagram views share: the arrow into a stage, the fans of a repeated stage's rounds and the
+ * quarter-turned arrow where the stages stack.
  */
 
 export const STRAIGHT = (
@@ -26,49 +24,18 @@ function Fan({ direction, branches }: { direction: 'out' | 'in'; branches: numbe
 
 /**
  * The hairline into a stage where the row runs across: straight, fanning out to its rounds, or fanning them back in.
- * It sits in the gap before the stage's body, centred on its cards (inside its padding), so every arrow meets the card
- * it points at.
+ * It sits in the gap before the stage's lane, measured from the lane's top where the cards stand: a straight arrow
+ * meets the stage's title line, a fan meets each round card.
  */
-export function Connector({ kind, opens }: { kind: ConnectorKind; opens: boolean }) {
-  const across = kind.kind === 'straight' ? STRAIGHT : <Fan direction={kind.kind} branches={kind.branches} />;
+export function Connector({ kind }: { kind: ConnectorKind }) {
+  const straight = kind.kind === 'straight';
   return (
     <div
       aria-hidden="true"
-      className={cn(
-        'pointer-events-none absolute top-3 right-full hidden w-6 items-center justify-center @2xl:flex',
-        opens ? 'bottom-14' : 'bottom-3',
-      )}
+      className="pointer-events-none absolute right-full hidden w-6 justify-center @2xl:flex"
+      style={{ top: straight ? TITLE_Y - 5 : 0 }}
     >
-      {across}
-    </div>
-  );
-}
-
-/**
- * The dashed arc under a gated stage, from its right edge round to its left, ending in an arrowhead into the stage:
- * the human sends the work back. Where the stages stack it gives way to the badge's "↩ send back".
- */
-export function SendBack({ word }: { word: string }) {
-  return (
-    <div data-send-back="" className="pointer-events-none relative mx-6 hidden h-8 @2xl:block">
-      <svg
-        viewBox="0 0 100 20"
-        preserveAspectRatio="none"
-        className="absolute inset-x-0 top-0 h-3 w-full"
-        aria-hidden="true"
-      >
-        <path
-          d="M100 0 V10 Q100 20 94 20 H6 Q0 20 0 10 V4"
-          vectorEffect="non-scaling-stroke"
-          strokeDasharray="4 3"
-          className="fill-none stroke-muted-foreground"
-          strokeWidth="1.5"
-        />
-      </svg>
-      <span className="absolute inset-x-0 bottom-0 mx-auto flex w-fit items-center gap-1 text-caption text-muted-foreground">
-        <Undo2 aria-hidden="true" className="size-3.5" />
-        {word}
-      </span>
+      {straight ? STRAIGHT : <Fan direction={kind.kind} branches={kind.branches} />}
     </div>
   );
 }

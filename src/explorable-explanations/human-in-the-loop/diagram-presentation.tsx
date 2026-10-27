@@ -1,8 +1,8 @@
 import { cn } from '@/shared/lib/utils';
-import { ArrowDown, Connector, SendBack } from './diagram-arrows';
+import { ArrowDown, Connector } from './diagram-arrows';
 import { connectorInto, type Connector as ConnectorKind, type Rounds } from './diagram-layout.pure';
 import type { DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
-import { BranchCard, StageCard } from './stage-card';
+import { BranchCard, StageCard, Title } from './stage-card';
 import { TryButton } from './try-button.client';
 import type { Stage, Workflow } from './workflow.types';
 
@@ -67,7 +67,6 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
         />
       )}
       <StageBody ctx={ctx} stage={stage} slot={slot} into={previous && connectorInto(previous, stage, ctx.rounds)} />
-      {stage.gate !== undefined && <SendBack word={ctx.words.sendBack} />}
     </li>
   );
 }
@@ -83,11 +82,11 @@ function StageBody(props: { ctx: Context; stage: Stage; slot: StageSlot; into: C
   return (
     <div
       className={cn(
-        'relative flex flex-1 flex-col justify-center rounded-2xl border border-transparent bg-muted p-3 transition-[border-color,box-shadow] duration-200',
+        'relative flex flex-1 flex-col justify-start rounded-2xl border border-transparent bg-muted p-3 transition-[border-color,box-shadow] duration-200',
         opens && 'pb-14 group-hover/column:border-border group-hover/column:shadow-sm',
       )}
     >
-      {into && <Connector kind={into} opens={opens} />}
+      {into && <Connector kind={into} />}
       {branches > 1 ? (
         <Branches ctx={ctx} stage={stage} branches={branches} />
       ) : (
@@ -98,23 +97,29 @@ function StageBody(props: { ctx: Context; stage: Stage; slot: StageSlot; into: C
 }
 
 /**
- * The rounds of a repeated stage as parallel cards, indented as branches where the stages stack. The stage's summary
- * hangs under the last card, out of the flow, so the cards keep standing on the fan's branches.
+ * A repeated stage: its name on top, at the height of every other stage's title, then its rounds as parallel cards,
+ * indented as branches where the stages stack, then its summary in the flow, above the lane's room for "Practice it".
  */
 function Branches({ ctx, stage, branches }: { ctx: Context; stage: Stage; branches: number }) {
+  const slot = ctx.slots.stages?.[stage.id] ?? {};
   return (
-    <ol
-      aria-label={stage.name}
-      className="ml-4 flex flex-col gap-3 border-l border-dashed border-border pl-3 @2xl:ml-0 @2xl:border-l-0 @2xl:pl-0"
-    >
-      {Array.from({ length: branches }, (_, at) => (
-        <BranchCard key={at} stage={stage} slot={ctx.slots.stages?.[stage.id] ?? {}} round={at + 1} words={ctx.words} />
-      ))}
+    <>
+      <div data-stage-head="" className="h-[50px] px-3 pt-[13px]">
+        <Title stage={stage} slot={slot} />
+      </div>
+      <ol
+        aria-label={stage.name}
+        className="ml-4 flex flex-col gap-3 border-l border-dashed border-border pl-3 @2xl:ml-0 @2xl:border-l-0 @2xl:pl-0"
+      >
+        {Array.from({ length: branches }, (_, at) => (
+          <BranchCard key={at} stage={stage} round={at + 1} words={ctx.words} />
+        ))}
+      </ol>
       {stage.summary && (
-        <li className="relative h-0">
-          <p className="absolute inset-x-1 top-0 text-caption text-muted-foreground">{stage.summary}</p>
-        </li>
+        <p data-summary="" className="mt-2 px-1 text-caption text-muted-foreground">
+          {stage.summary}
+        </p>
       )}
-    </ol>
+    </>
   );
 }

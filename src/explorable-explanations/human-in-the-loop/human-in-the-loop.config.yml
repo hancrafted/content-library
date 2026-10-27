@@ -10,7 +10,6 @@ ui:
   checked: checked
   stateOpen: open
   stateDone: done
-  sendBack: send back
   repeats: '× each {item} ({n})'
   round: 'round'
   tryJob: 'Open {job} in {stage}'

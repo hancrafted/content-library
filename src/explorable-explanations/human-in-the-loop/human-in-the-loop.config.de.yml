@@ -10,7 +10,6 @@ ui:
   checked: geprüft
   stateOpen: offen
   stateDone: erledigt
-  sendBack: zurückgeben
   repeats: '× pro {item} ({n})'
   round: 'Runde'
   tryJob: '{job} in {stage} öffnen'

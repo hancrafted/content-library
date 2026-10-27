@@ -26,7 +26,6 @@ const words = {
   moveLabel: '{letter}: {why}',
   gate: 'Gate {n}',
   checked: 'checked',
-  sendBack: 'send back',
   repeats: '× each {item} ({n})',
   round: 'round',
 } as UiWords;
@@ -120,14 +119,15 @@ describe('success cases', () => {
     expect(opener.attr('aria-label')).toBe('Open First in A');
   });
 
-  it('draws the gate badge and the send-back arc of a gated stage', () => {
+  it('draws the gate badge of a gated stage, and no send-back arc', () => {
     // ARRANGE
     const $ = render();
     // ACT
     const gated = $(COLUMN).eq(2);
     // ASSERT
     expect(gated.find('[data-gate]').text()).toContain('Gate 2');
-    expect(gated.find('[data-send-back] path[stroke-dasharray]')).toHaveLength(1);
+    expect(gated.find('[data-send-back]')).toHaveLength(0);
+    expect(gated.find('[data-gate]').text()).toBe('Gate 2');
   });
 
   it("restores the Slide's job slots: a popover from the job's title, its detail, its marker and what hangs after it", () => {

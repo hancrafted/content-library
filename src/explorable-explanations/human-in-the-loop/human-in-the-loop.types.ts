@@ -28,7 +28,6 @@ export interface UiWords {
   readonly viewHandson: string;
   /** The Presentation card's marks: a stage whose jobs are reviewed, and the arc back from a gate. */
   readonly checked: string;
-  readonly sendBack: string;
   readonly repeats: string; // Detailed view: a repeated stage's bracket (`{item}` it repeats over, `{n}` rounds)
   readonly round: string; // Detailed view: what a round is called where the stage names no item
   readonly tryJob: string; // Detailed view: a job card's hidden name (`{job}`, `{stage}`)

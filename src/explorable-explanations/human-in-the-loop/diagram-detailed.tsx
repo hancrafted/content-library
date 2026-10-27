@@ -1,7 +1,7 @@
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
-import { ArrowDown, Connector, SendBack } from './diagram-arrows';
+import { ArrowDown, Connector } from './diagram-arrows';
 import { connectorInto, type Rounds } from './diagram-layout.pure';
 import type { DiagramProps, DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
 import { JobCard } from './job-card';
@@ -14,7 +14,7 @@ import type { Stage, Workflow } from './workflow.types';
 /**
  * The Detailed view and, with the viewer's run laid over it, the Hands-on view: the same ordered list of stage columns as the Presentation view, but each stage card holds its
  * jobs as job cards in `needs` order, joined by arrows. A repeated stage is drawn once, its jobs inside a dashed
- * bracket that says how many rounds it runs; a gated stage keeps its badge and send-back arc. A job card opens the
+ * bracket that says how many rounds it runs; a gated stage keeps its badge. A job card opens the
  * stage's modal at that job. In Hands-on every job card says open, done or checked, each stage its count ("3/5"), and
  * a repeated stage's bracket holds the rounds the run has, titled by their pasted H3s. All of it is read from the run
  * model: the view never works out progress itself.
@@ -66,11 +66,10 @@ function StageColumn({ ctx, stage, previous }: { ctx: Context; stage: Stage; pre
   return (
     <li {...slot.target} className="focus-group__item relative flex min-w-0 flex-col gap-1 @2xl:flex-[1_0_14rem]">
       {previous && <ArrowDown />}
-      <div className="relative flex flex-1 flex-col justify-center rounded-2xl bg-muted p-3">
-        {into && <Connector kind={into} opens={false} />}
+      <div className="relative flex flex-1 flex-col justify-start rounded-2xl bg-muted p-3">
+        {into && <Connector kind={into} />}
         <StageCard ctx={ctx} stage={stage} slot={slot} />
       </div>
-      {stage.gate !== undefined && <SendBack word={ctx.words.sendBack} />}
     </li>
   );
 }
@@ -95,7 +94,7 @@ function StageCard({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: Sta
           {stage.summary}
         </p>
       )}
-      {gate && <GateBadge gate={gate} sendBack={words.sendBack} />}
+      {gate && <GateBadge gate={gate} />}
       {run && <Count run={run} word={words.stateDone} />}
       <Jobs ctx={ctx} stage={stage} />
     </div>

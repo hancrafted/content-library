@@ -20,7 +20,6 @@ const words = {
   tryJob: 'Open {job} in {stage}',
   gate: 'Gate {n}',
   checked: 'checked',
-  sendBack: 'send back',
   repeats: '× each {item} ({n})',
   round: 'round',
   stateOpen: 'open',

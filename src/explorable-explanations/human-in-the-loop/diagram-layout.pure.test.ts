@@ -6,13 +6,13 @@ import type { Stage } from './workflow.types';
 const stage = (id: string): Stage => baseStage(id, [job({ id })]);
 
 describe('success cases', () => {
-  it('draws the fan of three exactly as the venue pipeline drew it', () => {
+  it('fans out of the title line of the stage before into three branch cards standing under the stage name', () => {
     // ARRANGE
     const expected = {
-      height: 160,
-      ys: [20, 80, 140],
-      out: 'M0 80 C 12 80, 10 20, 20 20 M0 80h20 M0 80 C 12 80, 10 140, 20 140',
-      heads: 'M18 17 23 20l-5 3z M18 77 23 80l-5 3z M18 137 23 140l-5 3z',
+      height: 226,
+      ys: [86, 146, 206],
+      out: 'M0 38 C 12 38, 10 86, 20 86 M0 38 C 12 38, 10 146, 20 146 M0 38 C 12 38, 10 206, 20 206',
+      heads: 'M18 83 23 86l-5 3z M18 143 23 146l-5 3z M18 203 23 206l-5 3z',
     };
     // ACT
     const fan = fanGeometry('out', 3);
@@ -20,11 +20,11 @@ describe('success cases', () => {
     expect({ height: fan.height, ys: fan.ys, out: fan.lines, heads: fan.heads }).toEqual(expected);
   });
 
-  it('draws the fan-in of three with one head at the join', () => {
+  it('fans three branch cards back in to the title line of the stage after, with one head there', () => {
     // ARRANGE
     const expected = {
-      lines: 'M0 20 C 12 20, 10 80, 20 80 M0 80h20 M0 140 C 12 140, 10 80, 20 80',
-      heads: 'M18 77 23 80l-5 3z',
+      lines: 'M0 86 C 12 86, 10 38, 20 38 M0 146 C 12 146, 10 38, 20 38 M0 206 C 12 206, 10 38, 20 38',
+      heads: 'M18 35 23 38l-5 3z',
     };
     // ACT
     const fan = fanGeometry('in', 3);
@@ -32,25 +32,15 @@ describe('success cases', () => {
     expect({ lines: fan.lines, heads: fan.heads }).toEqual(expected);
   });
 
-  it.each([2, 4])('draws one branch per chat for a fan of %i, centred on the join', (n) => {
+  it.each([2, 4])('draws one branch per chat for a fan of %i, joined on the title line', (n) => {
     // ARRANGE
+    const titleLine = 'M0 38 C';
     // ACT
     const fan = fanGeometry('out', n);
     // ASSERT
     expect(fan.ys).toHaveLength(n);
     expect(fan.heads.split('z').filter(Boolean)).toHaveLength(n);
-    expect((fan.ys[0] ?? 0) + (fan.ys[n - 1] ?? 0)).toBe(fan.height);
-    expect(fan.lines.split('M').filter(Boolean)).toHaveLength(n);
-  });
-
-  it('has no straight branch for an even fan, since none lies on the join', () => {
-    // ARRANGE
-    const marker = 'h20';
-    const pair = 2;
-    // ACT
-    const fan = fanGeometry('out', pair);
-    // ASSERT
-    expect(fan.lines).not.toContain(marker);
+    expect(fan.lines.split(titleLine)).toHaveLength(n + 1);
   });
 
   it('fans out into a stage of N chats and back in after it', () => {

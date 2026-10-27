@@ -1,5 +1,5 @@
 import { cn } from '@/shared/lib/utils';
-import { RotateCw, Undo2 } from 'lucide-react';
+import { RotateCw } from 'lucide-react';
 import type { PopoverCopy, StageSlot, UiWords } from './human-in-the-loop.types';
 import { MoveCircles } from './move-circles.client';
 import { NodePopover, type NodeCopy } from './node-popover.client';
@@ -55,18 +55,14 @@ export function Title({ stage, slot }: { readonly stage: Stage; readonly slot: S
   );
 }
 
-/** The gate's badge; on a narrow Scene, where no arc is drawn, it carries "send back" too. */
-export function GateBadge({ gate, sendBack }: { readonly gate: string; readonly sendBack: string }) {
+/** The gate's badge: where the human decides whether the work goes on. */
+export function GateBadge({ gate }: { readonly gate: string }) {
   return (
     <span
       data-gate=""
       className="inline-flex w-fit items-center gap-1 rounded-full bg-muted px-2 text-caption font-medium text-muted-foreground"
     >
       {gate}
-      <span className="inline-flex items-center gap-1 @2xl:hidden">
-        <Undo2 aria-hidden="true" className="size-3" />
-        {sendBack}
-      </span>
     </span>
   );
 }
@@ -76,12 +72,12 @@ function Marks({ stage, gate, words }: { stage: Stage; gate: string | undefined;
   return (
     <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
       {isChecked(stage) && <CheckedMark word={words.checked} />}
-      {gate && <GateBadge gate={gate} sendBack={words.sendBack} />}
+      {gate && <GateBadge gate={gate} />}
     </div>
   );
 }
 
-/** One stage as a card; where the stage has a gate the badge carries "send back" on a narrow Scene, the arc on a wide one. */
+/** One stage as a card: title, BRIEF letters, summary, the checked mark and the gate badge. */
 export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords; moves: boolean }) {
   const { stage, slot, words, moves } = props;
   const gate = gateLabelOf(stage, slot, words);
@@ -103,26 +99,20 @@ export function StageCard(props: { stage: Stage; slot: StageSlot; words: UiWords
   );
 }
 
-/** One round of a repeated stage: one card height, so with the column's gap the branches stand one fan pitch apart. */
-export function BranchCard(props: { stage: Stage; slot: StageSlot; round: number; words: UiWords }) {
-  const { stage, slot, round, words } = props;
-  const popover = popoverOf(slot.popover, stage.name);
+/**
+ * One round of a repeated stage: one card height, so with the column's gap the branches stand one fan pitch apart. The
+ * stage's name above the rounds carries its popover and aside.
+ */
+export function BranchCard(props: { stage: Stage; round: number; words: UiWords }) {
+  const { stage, round, words } = props;
   return (
     <li
       data-branch=""
       className={cn('flex h-12 w-full items-center justify-between gap-1 px-3 text-caption font-semibold', CARD)}
     >
       <span className="min-w-0 truncate">
-        {popover ? (
-          <NodePopover copy={popover} className={NAME_BUTTON}>
-            {stage.name}
-          </NodePopover>
-        ) : (
-          stage.name
-        )}{' '}
-        {round}
+        {stage.name} {round}
       </span>
-      {round === 1 && slot.aside && <span className="relative z-10">{slot.aside}</span>}
       {isChecked(stage) && (
         <span className="flex items-center text-muted-foreground">
           <RotateCw aria-hidden="true" className="size-4" />
