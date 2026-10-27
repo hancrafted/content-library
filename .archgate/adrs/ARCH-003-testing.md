@@ -4,9 +4,9 @@ id: ARCH-003
 title: 'Testing'
 domain: architecture
 rules: true
-files: ['src/**/*.test.ts', '{tests/browser,skills}/**/*.browser.test.ts']
-paths: ['**/*.test.ts', 'src/**/*.pure.ts']
-description: "What a test file may do and how it is shaped: six behavioural Don'ts that keep green meaningful everywhere, a three-block suite split, marked test bodies and two import homes under src/, and browser tests that wait on the page, never on time."
+files: ['src/**/*.{test,pure}.ts', '{tests/browser,skills}/**/*.browser.test.ts', 'skills/**/scripts/**/*.ts']
+paths: ['**/*.test.ts', 'src/**/*.pure.ts', 'skills/**/scripts/**/*.ts']
+description: "What a test file may do and how it is shaped: six behavioural Don'ts that keep green meaningful everywhere, a three-block suite split, marked test bodies and two import homes under src/, browser tests that wait on the page, and scoped mutation testing with reasoned markers."
 ---
 
 # Testing
@@ -45,6 +45,12 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 2. It waits on what the page shows: a retrying assertion, or an animating element reaching `data-motion="settled"`.
 3. An assertion MUST retry: `await expect(drawer).toBeVisible()`, never `expect(await drawer.isVisible()).toBe(true)`, which reads once.
 
+### 6. Mutation testing
+
+1. Mutation testing (`npm run test:mutation`) runs once after `/tdd` and `/code-review` settle, outside `verify`, `verify:commit` and CI.
+2. It covers `*.pure.ts` modules and `skills/**/scripts/**/*.ts` skill scripts only, mutating files changed since the merge-base with `origin/main` plus the `.pure.ts` or script subject of any changed test.
+3. Every surviving mutant in changed code MUST be killed with a test or marked as equivalent with a Stryker disable comment that names the mutator and gives a reason after a colon — `// Stryker disable next-line EqualityOperator: boundary clamped above` or `/* Stryker disable StringLiteral: display table */` paired with `/* Stryker restore */`. `Stryker disable all` is forbidden, and there is no numeric score threshold. (📜 Rule: `stryker-marker-reason`)
+
 ## Do's and Don'ts
 
 ### Do's
@@ -58,6 +64,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 7. **DO** put pure logic in a `*.pure.ts` and test it from its same-name sibling. (Decision 4)
 8. **DO** assert an absence of side effects by comparing an observation taken before the action against the same observation taken after it. (Decision 1.2)
 9. **DO** wait in a browser test on a retrying `expect` or on `data-motion="settled"`. (Decision 5)
+10. **DO** run `npm run test:mutation` once after `/tdd` and `/code-review` settle, and kill every survivor in changed code with a test or mark it as equivalent with a reason. (Decision 6)
 
 ### Don'ts
 
@@ -71,6 +78,7 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 8. **DON'T** assert a side effect's absence against a pristine or empty baseline — that measures ambient repository state, and it fails on the very commit that changes the tree it guards. (Decision 1.2)
 9. **DON'T** sleep in a browser test — `page.waitForTimeout(500)`, `await delay(2000)`. (Decision 5)
 10. **DON'T** assert a browser read taken once — `expect(await el.isVisible())`, `expect(await el.textContent())`. (Decision 5)
+11. **DON'T** write `Stryker disable all`, or a Stryker disable marker without a mutator name and a colon-separated reason. (Decision 6, 📜 Rule: `stryker-marker-reason`)
 
 ## Consequences
 
@@ -94,17 +102,18 @@ Test-driven development (TDD) and the red-green-refactor cycle are the primary a
 
 ## Compliance and Enforcement
 
-1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts` and the browser tests in `tests/browser/` and `skills/`.
+1. **Rules** (archgate, error): `suite-three-blocks` (§2.1), `test-body-aaa` (§3.1), `assert-no-magic` (§3.2, numbers only), over `src/**/*.test.ts` and the browser tests in `tests/browser/` and `skills/`; `stryker-marker-reason` (§6.3), over `src/**/*.pure.ts` and `skills/**/scripts/**/*.ts`.
 2. **Dependency rules:** Episode tests reach only Slide parts and builtins (§4.3).
 3. **Test config:** the fast suite excludes `*.build.test.ts` and `*.browser.test.ts` (§4.2).
 4. **Lint** (Playwright plugin, from the Playwright browser lane on), over `**/*.browser.test.ts`: no fixed waits, web-first assertions (§5.1, §5.3). Until then §5 is a review duty.
 
-**Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3).
+**Manual review duties:** §5.2 — a wait names a page condition, and a shared helper never sleeps; §6 — equivalent-mutant reasons hold and changed-code survivors are triaged; §1 — no mocks, spies, snapshots, `.skip`/`.only`, ambient time or randomness, network, assertion-free or tautological bodies; nesting depth and a test per block (§2); no magic strings in `// ASSERT` (§3.2), rich matchers (§3.3).
 
-**Exceptions:** amend this record; never an inline suppression.
+**Exceptions:** amend this record; never an inline suppression of an ADR rule.
 
 ## References
 
 - [Vitest Test API](https://vitest.dev/api/) — assertions, runner controls, and test lifecycle.
 - [Playwright — auto-waiting](https://playwright.dev/docs/actionability) and [web-first assertions](https://playwright.dev/docs/test-assertions) — the waits §5 asks for.
 - [eslint-plugin-playwright](https://github.com/mskelton/eslint-plugin-playwright) — `no-wait-for-timeout`, `prefer-web-first-assertions`.
+- [StrykerJS — disable mutants](https://stryker-mutator.io/docs/stryker-js/disable-mutants/) — equivalent-mutant markers (§6.3).
