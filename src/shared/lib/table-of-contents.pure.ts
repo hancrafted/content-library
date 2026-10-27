@@ -120,6 +120,7 @@ export function readingTime(
   fraction: number,
 ): ReadingTime {
   const before = minutes.slice(0, Math.max(activeIndex, 0)).reduce((sum, value) => sum + value, 0);
+  // Stryker disable next-line ConditionalExpression: negative activeIndex reads undefined from minutes and coalesces to 0
   const current = activeIndex < 0 ? 0 : (minutes[activeIndex] ?? 0) * Math.min(Math.max(fraction, 0), 1);
   const elapsed = before + current;
   return { total, remaining: total - elapsed, progress: total === 0 ? 1 : elapsed / total };

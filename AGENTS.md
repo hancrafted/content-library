@@ -5,7 +5,7 @@ This project is a localized Next.js application which serves to visualize theory
 ## Rules
 
 - Do not edit`CLAUDE.md`, it is a symlink to `AGENTS.md`.
-- Always use `/commit` to commit, `/tdd` and `/code-review` for implementation.
+- Always use `/tdd` ⇄ `/code-review` until settled, then `/mutation-testing`, then `/commit`.
 - `/code-review` is the reviewer. `archgate check` is the ADR gate; `archgate:reviewer` findings are advisory: confirm each against the ADR text before acting.
 - Save a pasted handoff verbatim to `.scratch/<feature>/handoff.md` before starting; review agents read that file as the spec.
 - Use `npm run verify` frequently to verify that the changes are correct.

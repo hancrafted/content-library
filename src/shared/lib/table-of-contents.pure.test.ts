@@ -31,9 +31,12 @@ const owners = { 'a--visual': 'a--why' };
 describe('success cases', () => {
   it('tells the pill which numbered Section the reader is in, from a page Slide too', () => {
     // ARRANGE
-    const expected = { number: '3', title: 'Outro' };
+    const expected = [
+      { number: '1', title: 'Intro' },
+      { number: '3', title: 'Outro' },
+    ];
     // ACT
-    const where = whereAt(SECTIONS, 'outro--next');
+    const where = [whereAt(SECTIONS, 'intro'), whereAt(SECTIONS, 'outro--next')];
     // ASSERT
     expect(where).toEqual(expected);
   });
@@ -68,11 +71,12 @@ describe('success cases', () => {
   it('counts the rest of the active slide and every later one as time left', () => {
     // ARRANGE
     const minutes = [2, 4, 4];
-    const expected = { total: 10, remaining: 7, progress: 0.3 };
+    const inFirstSlide = { total: 10, remaining: 9, progress: 0.1 };
+    const inSecondSlide = { total: 10, remaining: 7, progress: 0.3 };
     // ACT
-    const time = readingTime({ minutes, total: 10 }, 1, 0.25);
+    const time = [readingTime({ minutes, total: 10 }, 0, 0.5), readingTime({ minutes, total: 10 }, 1, 0.25)];
     // ASSERT
-    expect(time).toEqual(expected);
+    expect(time).toEqual([inFirstSlide, inSecondSlide]);
   });
 
   it('measures how far the reading line has travelled through the active slide, rounded to hundredths', () => {
