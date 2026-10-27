@@ -3,14 +3,14 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-type Kind = 'start' | 'theory' | 'demo';
+type Kind = 'start' | 'theory' | 'demo' | 'close';
 
 /**
- * The session's blocks in the order they run, as keys of `blocks` and the kind each is: the kind picks its colour. Add
+ * The session's blocks in the order they run, each at its start from 0:00 (the clock time differs per Event), as keys of `blocks` and the kind each is: the kind picks its colour. Add
  * or drop a block here and in both Translation files; `n` numbers an Episode's block ("Episode 1").
  */
 const BLOCKS: readonly {
-  key: 'welcome' | 'first' | 'grill' | 'second' | 'workflow' | 'third';
+  key: 'welcome' | 'first' | 'grill' | 'second' | 'workflow' | 'third' | 'qa';
   kind: Kind;
   n?: number;
 }[] = [
@@ -20,11 +20,13 @@ const BLOCKS: readonly {
   { key: 'second', kind: 'theory', n: 2 },
   { key: 'workflow', kind: 'demo' },
   { key: 'third', kind: 'theory', n: 3 },
+  { key: 'qa', kind: 'close' },
 ];
 
 /** What a kind looks like: the number disc on the rail, the time pill and the label. Colour by kind, structure only. */
 const LOOK: Record<Kind, { disc: string; pill: string; label: string }> = {
   start: { disc: 'bg-muted', pill: 'bg-muted', label: 'text-muted-foreground' },
+  close: { disc: 'bg-muted', pill: 'bg-muted', label: 'text-muted-foreground' },
   theory: { disc: 'bg-(--info) text-info-foreground', pill: 'bg-(--info)/15', label: 'text-(--info)' },
   demo: {
     disc: 'bg-primary text-primary-foreground',

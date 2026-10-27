@@ -1,42 +1,47 @@
 {
   "title": "Agenda",
-  "caption": "Theorie und Live-Demo im Wechsel, nach jeder Episode ein kurzer Check-in.",
+  "caption": "Zwei Stunden, Zeiten ab Start: Theorie und Live-Demo im Wechsel, nach jeder Episode ein kurzer Check-in.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
-      "time": "17:00",
+      "time": "0:00",
       "title": "Einstieg"
     },
     "first": {
-      "time": "17:15",
+      "time": "0:20",
       "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie"
     },
     "grill": {
-      "time": "17:30",
+      "time": "0:35",
       "title": "Live-Demo „Grill me“"
     },
     "second": {
-      "time": "17:50",
+      "time": "0:50",
       "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst"
     },
     "workflow": {
-      "time": "18:10",
+      "time": "1:15",
       "title": "Live-Demo: ein agentischer Workflow"
     },
     "third": {
-      "time": "18:35",
+      "time": "1:30",
       "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen."
+    },
+    "qa": {
+      "time": "1:40",
+      "title": "Fragen und Puffer"
     }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theorie",
-    "demo": "Demo"
+    "demo": "Demo",
+    "close": "Abschluss"
   },
   "notes": {
     "talking-points": {
-      "header": "Die Zeiten sind Platzhalter",
-      "description": "Drei Episoden Theorie, dazwischen zwei Live-Demos: „Grill me“ und ein agentischer Workflow. Nach jeder Episode ein kurzer Check-in per Umfrage. Die Uhrzeiten (17:00 bis 19:00) sind Platzhalter, bis Han sie setzt."
+      "header": "Zwei Stunden, ab 0:00 gezählt",
+      "description": "20 Minuten Einstieg, dann Episode 1 (15), die Demo „Grill me“ (15), Episode 2 (25), der agentische Workflow (15) und Episode 3 (10); die letzten 20 Minuten sind Fragen und Puffer. Die Check-ins gehören zur Zeit ihrer Episode."
     }
   }
 }

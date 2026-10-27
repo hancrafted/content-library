@@ -1,42 +1,47 @@
 {
   "title": "Agenda",
-  "caption": "Theory and live demo in turn, with a short check-in after each Episode.",
+  "caption": "Two hours, times from the start: theory and live demo in turn, with a short check-in after each Episode.",
   "episode": "Episode {n}",
   "blocks": {
     "welcome": {
-      "time": "17:00",
+      "time": "0:00",
       "title": "Welcome"
     },
     "first": {
-      "time": "17:15",
+      "time": "0:20",
       "title": "Treat AI like a brilliant freelancer with amnesia"
     },
     "grill": {
-      "time": "17:30",
+      "time": "0:35",
       "title": "Live demo: “Grill me”"
     },
     "second": {
-      "time": "17:50",
+      "time": "0:50",
       "title": "Why AI has a weird attention span you must learn to manage"
     },
     "workflow": {
-      "time": "18:10",
+      "time": "1:15",
       "title": "Live demo: an agentic workflow"
     },
     "third": {
-      "time": "18:35",
+      "time": "1:30",
       "title": "Will AI reduce your work? It adds work: managing it."
+    },
+    "qa": {
+      "time": "1:40",
+      "title": "Questions and buffer"
     }
   },
   "kinds": {
     "start": "Start",
     "theory": "Theory",
-    "demo": "Demo"
+    "demo": "Demo",
+    "close": "Wrap-up"
   },
   "notes": {
     "talking-points": {
-      "header": "Times are placeholders",
-      "description": "Three Episodes of theory with two live demos between them: “Grill me” and an agentic workflow. A short poll check-in after each Episode. The times (17:00 to 19:00) are placeholders until Han sets them."
+      "header": "Two hours, counted from 0:00",
+      "description": "20 minutes of welcome, then Episode 1 (15), the “Grill me” demo (15), Episode 2 (25), the agentic workflow (15) and Episode 3 (10); the last 20 minutes are questions and buffer. Each check-in belongs to its Episode’s time."
     }
   }
 }
