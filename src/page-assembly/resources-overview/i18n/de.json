@@ -3,7 +3,6 @@
     "title": "Ressourcen",
     "intro": "Interaktive Erklärungen, Episodenvorlagen und Master-Folien: die wiederverwendbaren Lehrbausteine hinter den Episoden.",
     "types": {
-      "explorable-explanation": "Interaktive Erklärung",
       "episode-template": "Episodenvorlage",
       "master-slide": "Master-Folie"
     },
@@ -18,7 +17,6 @@
     "list": "Liste",
     "reset": "Filter zurücksetzen",
     "typePlurals": {
-      "explorable-explanation": "Interaktive Erklärungen",
       "episode-template": "Episodenvorlagen",
       "master-slide": "Master-Folien"
     }

@@ -25,12 +25,12 @@ const resource = (slug: string, type: string, { title, description, tags }: Word
   tags: tags.map(([id, label]) => ({ id, label })),
 });
 
-const CONTEXT = resource('context-window', 'explorable-explanation', {
+const CONTEXT = resource('context-window', 'master-slide', {
   title: 'Context window',
   description: 'How a model reads',
   tags: [['agentic-ai', 'Agentic AI']],
 });
-const HITL = resource('human-in-the-loop', 'explorable-explanation', {
+const HITL = resource('human-in-the-loop', 'master-slide', {
   title: 'Human in the loop',
   description: 'Where people step in',
   tags: [
@@ -45,7 +45,7 @@ const TEMPLATE = resource('episode-template', 'episode-template', {
 });
 const ALL: readonly FilterableResource[] = [CONTEXT, HITL, TEMPLATE];
 
-const NAMES = { 'explorable-explanation': 'Explorables', 'episode-template': 'Templates', 'master-slide': 'Masters' };
+const NAMES = { 'episode-template': 'Templates', 'master-slide': 'Masters' };
 const slugs = (set: ReadonlySet<string>) => [...set];
 
 describe('success cases', () => {
@@ -80,7 +80,7 @@ describe('success cases', () => {
 
   it('keeps a Resource of any chosen type', () => {
     // ARRANGE
-    const selection = { ...NO_SELECTION, types: ['episode-template', 'master-slide'] };
+    const selection = { ...NO_SELECTION, types: ['episode-template'] };
     // ACT
     const kept = matchingResources(ALL, selection);
     // ASSERT
@@ -89,7 +89,7 @@ describe('success cases', () => {
 
   it('combines the search, the Tags and the types with AND', () => {
     // ARRANGE
-    const selection = { query: 'loop', tags: ['workflow'], types: ['explorable-explanation'] };
+    const selection = { query: 'loop', tags: ['workflow'], types: ['master-slide'] };
     const excluded = { ...selection, types: ['episode-template'] };
     // ACT
     const kept = [matchingResources(ALL, selection), matchingResources(ALL, excluded)].map(slugs);
@@ -113,10 +113,10 @@ describe('success cases', () => {
 
   it('offers a chip for each type a Resource has, in the closed order, named by the words given', () => {
     // ARRANGE
-    const types = ['explorable-explanation', 'episode-template', 'master-slide'] as const;
+    const types = ['episode-template', 'master-slide'] as const;
     const expected = [
-      { id: 'explorable-explanation', label: 'Explorables', count: 2 },
       { id: 'episode-template', label: 'Templates', count: 1 },
+      { id: 'master-slide', label: 'Masters', count: 2 },
     ];
     // ACT
     const chips = resourceTypeChoices(ALL, types, NAMES);

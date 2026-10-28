@@ -1,8 +1,8 @@
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { ROUTES } from '@/shared/lib/static-routes';
 import type { ResourceType } from '../schemas/fields';
-import type { EpisodeRef, ResourceRef, StandaloneRef } from './episode-id.pure';
-import { EPISODE_IDS, RESOURCE_SLUGS } from './episode-ids.generated';
+import type { EpisodeRef, ExplorablePageRef, ResourceRef, StandaloneRef } from './episode-id.pure';
+import { EPISODE_IDS, EXPLORABLE_PAGE_SLUGS, RESOURCE_SLUGS } from './episode-ids.generated';
 import { EVENT_SLUGS } from './event-slugs.generated';
 
 /*
@@ -42,11 +42,20 @@ export { RESOURCE_SLUGS };
 
 export type ResourceSlug = (typeof RESOURCE_SLUGS)[number];
 
+/**
+ * Explorable pages: Episode-shaped pages about one primary Explorable, one composition folder each,
+ * `src/episodes/explorable-pages/<slug>/`, listed by the generated registry; each also has a record in
+ * `src/content-store/explorable-pages/<slug>.ts`. They are served at `/explorables/<slug>/`, public and indexed.
+ */
+export { EXPLORABLE_PAGE_SLUGS };
+
+export type ExplorablePageSlug = (typeof EXPLORABLE_PAGE_SLUGS)[number];
+
 /** A page served at `/episodes/<slug>/`: an Episode's own. An Event's copy, whose id holds its Event's slug, and an unlisted Episode are never exported there. */
 export type EpisodesPathSlug = EpisodeId;
 
-/** The id of any page the Episode container renders: an Episode's id or a Resource's slug; what `data-episode` names. */
-export type ComposedId = EpisodeId | ResourceSlug;
+/** The id of any page the Episode container renders: an Episode's id, a Resource's or an Explorable page's slug; what `data-episode` names. */
+export type ComposedId = EpisodeId | ResourceSlug | ExplorablePageSlug;
 
 export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
   return isEpisodeId(slug);
@@ -62,7 +71,7 @@ export function episodeRoute(slug: EpisodesPathSlug): string {
  * which its slug does not carry, so a Resource's page hands its route in (`resourceRoute`); asking for it here throws.
  */
 export function ownRouteOf(id: ComposedId): string {
-  if (!isEpisodeId(id)) throw new Error(`The Resource page "${id}" hands in its own route`);
+  if (!isEpisodeId(id)) throw new Error(`The page "${id}" hands in its own route`);
   return episodeRoute(id);
 }
 
@@ -71,9 +80,13 @@ export function legacyEpisodeRoute(slug: EpisodesPathSlug): string {
   return `${LEGACY_EPISODE_PREFIX}/${slug}`;
 }
 
+/** The logical path of one Explorable page: `/explorables/<slug>`. */
+export function explorablePageRoute(slug: ExplorablePageSlug): string {
+  return `${ROUTES.explorables}/${slug}`;
+}
+
 /** The URL path segment each Resource type is served under, its plural: the one place the rule is written. */
 export const RESOURCE_TYPE_PATHS: Readonly<Record<ResourceType, string>> = {
-  'explorable-explanation': 'explorable-explanations',
   'episode-template': 'episode-templates',
   'master-slide': 'master-slides',
 };
@@ -118,8 +131,10 @@ export type PageRef =
   | { readonly kind: 'dashboard' }
   | { readonly kind: 'episodes' }
   | { readonly kind: 'events' }
+  | { readonly kind: 'explorables' }
   | { readonly kind: 'resources' }
   | { readonly kind: 'episode'; readonly episode: StandaloneRef<EpisodeId> }
+  | { readonly kind: 'explorable-page'; readonly explorablePage: ExplorablePageRef<ExplorablePageSlug> }
   | { readonly kind: 'resource'; readonly type: ResourceType; readonly resource: ResourceRef<ResourceSlug> }
   | { readonly kind: 'event'; readonly event: EventSlug }
   | { readonly kind: 'event-episode'; readonly event: EventSlug; readonly episode: EpisodeRef<EpisodeId> };
@@ -131,10 +146,10 @@ export type PageKind = PageRef['kind'];
 export type PageOf<K extends PageKind> = Extract<PageRef, { readonly kind: K }>;
 
 /** A page that presents no record: its copy is `meta.<kind>` of the Translation file. */
-export type ListPage = PageOf<'home' | 'dashboard' | 'episodes' | 'events' | 'resources'>;
+export type ListPage = PageOf<'home' | 'dashboard' | 'episodes' | 'events' | 'explorables' | 'resources'>;
 
 /** A page that presents a record, so its route hands in its copy and facts. */
-export type RecordPage = PageOf<'episode' | 'resource' | 'event' | 'event-episode'>;
+export type RecordPage = PageOf<'episode' | 'explorable-page' | 'resource' | 'event' | 'event-episode'>;
 
 /** A page served at `/episodes/<slug>/`: an Episode's own. */
 export type EpisodesPathPage = PageOf<'episode'>;
@@ -163,8 +178,10 @@ export function pageKeyOf(page: PageRef): string {
     dashboard: () => [],
     episodes: () => [],
     events: () => [],
+    explorables: () => [],
     resources: () => [],
     episode: ({ episode }) => [episode.id],
+    'explorable-page': ({ explorablePage }) => [explorablePage.slug],
     resource: ({ resource }) => [resource.slug],
     event: ({ event }) => [event],
     'event-episode': ({ event, episode }) => [event, episode.id],
@@ -178,8 +195,10 @@ const LOCALES_BY_KIND: Readonly<Record<PageKind, readonly Locale[]>> = {
   dashboard: ['en'],
   episodes: LOCALES,
   events: LOCALES,
+  explorables: LOCALES,
   resources: LOCALES,
   episode: LOCALES,
+  'explorable-page': LOCALES,
   resource: LOCALES,
   event: LOCALES,
   'event-episode': LOCALES,
@@ -197,8 +216,10 @@ export function routeOf(page: PageRef): string {
     dashboard: () => ROUTES.dashboard,
     episodes: () => ROUTES.episodes,
     events: () => ROUTES.events,
+    explorables: () => ROUTES.explorables,
     resources: () => ROUTES.resources,
     episode: ({ episode }) => episodeRoute(episode.slug),
+    'explorable-page': ({ explorablePage }) => explorablePageRoute(explorablePage.slug),
     resource: ({ type, resource }) => resourceRoute(type, resource.slug),
     event: ({ event }) => eventRoute(event),
     'event-episode': ({ event, episode }) => eventEpisodeRoute(event, episode),

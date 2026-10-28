@@ -19,6 +19,10 @@
       "title": "Events",
       "description": "Workshops and webinars that walk through a planned set of visualised theory episodes, in order."
     },
+    "explorables": {
+      "title": "Explorables",
+      "description": "Hands-on explanations you can play with: one Explorable at a time, with its story and its Video."
+    },
     "resources": {
       "title": "Resources",
       "description": "Interactive explanations, Episode templates and Master slides: the reusable teaching units behind the hancrafted Episodes."

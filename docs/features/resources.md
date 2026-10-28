@@ -30,4 +30,4 @@ A projection over the page catalogue, never stored: every listed page maps to on
 
 ## Today
 
-`/resources/` lists the Templates and the three Explorable pages under the header item "Resources", with a type filter, as `docs/adr/0019-resources-overview.md` decided.
+`/resources/` lists the Templates (Episode templates and Master slides) under the header item "Resources", with a type filter, as `docs/adr/0019-resources-overview.md` decided. The three Explorable pages left it for `/explorables/` (`docs/features/explorables/README.md`); the umbrella listing is planned, #404.

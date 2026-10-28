@@ -14,7 +14,7 @@ Four disciplines on one language model, left to right: Prompting, Agents, Workfl
 
 Years, definitions and sources come from research LLM-0018 (`docs/llm-wiki/research/LLM/LLM-0018__ai-layers-model-to-factory/research.md`). A change to a year or a definition starts there.
 
-Its Resource page, `/explorable-explanations/ai-disciplines/`, shows the `timeline` Preset with a readme (`src/episodes/resources/ai-disciplines/`, design-ADR 0019).
+Its Explorable page, `/explorables/ai-disciplines/`, shows the `timeline` Preset with a readme (`src/episodes/explorable-pages/ai-disciplines/`).
 
 ## Placing it on a Slide
 

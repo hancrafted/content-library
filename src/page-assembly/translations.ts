@@ -17,6 +17,8 @@ import eventDe from './event/i18n/de.json';
 import eventEn from './event/i18n/en.json';
 import eventsOverviewDe from './events-overview/i18n/de.json';
 import eventsOverviewEn from './events-overview/i18n/en.json';
+import explorablesOverviewDe from './explorables-overview/i18n/de.json';
+import explorablesOverviewEn from './explorables-overview/i18n/en.json';
 import landingDe from './landing/i18n/de.json';
 import landingEn from './landing/i18n/en.json';
 import pageCopyDe from './lib/i18n/de.json';
@@ -38,6 +40,7 @@ export const TRANSLATION_OWNERS = [
   translationOwner('src/page-assembly/landing/i18n', landingEn, landingDe),
   translationOwner('src/page-assembly/episode-overview/i18n', episodeOverviewEn, episodeOverviewDe),
   translationOwner('src/page-assembly/events-overview/i18n', eventsOverviewEn, eventsOverviewDe),
+  translationOwner('src/page-assembly/explorables-overview/i18n', explorablesOverviewEn, explorablesOverviewDe),
   translationOwner('src/page-assembly/resources-overview/i18n', resourcesOverviewEn, resourcesOverviewDe),
   translationOwner('src/page-assembly/event/i18n', eventEn, eventDe),
   translationOwner('src/page-assembly/dashboard/i18n', dashboardEn, dashboardDe),

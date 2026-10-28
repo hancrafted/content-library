@@ -167,12 +167,40 @@ describe('success cases', () => {
     expect(pages.map((page) => page && eventEpisodeParamsOf(page))).toEqual(params);
   });
 
-  it('lists the six Resource pages and the overview, indexed and in the sitemap, each at the URL its type and slug give', () => {
+  it('lists the three Explorable pages and their overview, public and indexed, at /explorables/<slug>', () => {
+    // ARRANGE
+    const expected = [
+      '/explorables',
+      '/explorables/ai-disciplines',
+      '/explorables/context-window',
+      '/explorables/human-in-the-loop',
+    ];
+    // ACT
+    const pages = catalogueOf(loadContent(WITH_RESOURCES)).pages.filter(
+      ({ page }) => page.kind === 'explorable-page' || page.kind === 'explorables',
+    );
+    // ASSERT
+    expect(pages.map(({ page }) => routeOf(page)).sort()).toEqual(expected);
+    expect(pages.every(({ treatment }) => treatment.inSitemap && treatment.index && treatment.exported)).toBe(true);
+  });
+
+  it('builds each Explorable page in both locales, and lists it for the overview', () => {
+    // ARRANGE
+    const catalogue = catalogueOf(loadContent(WITH_RESOURCES));
+    // ACT
+    const params = catalogue.explorablePageParams();
+    const page = catalogue.explorablePageAt({ slug: 'context-window' });
+    // ASSERT
+    expect(params.map(({ slug }) => slug).sort()).toEqual(['ai-disciplines', 'context-window', 'human-in-the-loop']);
+    expect(page && pageLocales(page)).toEqual(['en', 'de']);
+    expect(catalogue.listedExplorablePages()).toHaveLength(THREE_EXPLORABLE_PAGES.length);
+    expect(catalogue.explorablePageAt({ slug: 'speech-bubble' })).toBeUndefined();
+  });
+
+  it('lists the four Template pages and the overview, indexed and in the sitemap, each at the URL its type and slug give', () => {
     // ARRANGE
     const expected = [
       '/resources',
-      '/explorable-explanations/context-window',
-      '/explorable-explanations/human-in-the-loop',
       '/episode-templates/episode-template',
       '/episode-templates/workshop-template',
       '/master-slides/timelines',
@@ -189,7 +217,7 @@ describe('success cases', () => {
 
   it('builds each Resource page in both locales', () => {
     // ARRANGE
-    const expected = 12;
+    const expected = 8;
     // ACT
     const count = catalogueOf(loadContent(WITH_RESOURCES))
       .pages.filter(({ page }) => page.kind === 'resource')
@@ -301,6 +329,7 @@ describe('edge cases', () => {
       { kind: 'dashboard' },
       { kind: 'episodes' },
       { kind: 'events' },
+      { kind: 'explorables' },
       { kind: 'resources' },
       { kind: 'episode', episode: PUBLIC_REF },
       { kind: 'event', event: AXEL },
@@ -365,8 +394,6 @@ describe('edge cases', () => {
  * indexed. The slugs are registered ones: only a composition folder gives a Resource a page.
  */
 const SIX = {
-  'context-window': 'explorable-explanation',
-  'human-in-the-loop': 'explorable-explanation',
   'episode-template': 'episode-template',
   'workshop-template': 'episode-template',
   timelines: 'master-slide',
@@ -378,4 +405,17 @@ const RESOURCE_RECORDS = Object.entries(SIX).map(([slug, type]) => ({
   tags: ['workflow'],
   visibility: 'public',
 }));
-const WITH_RESOURCES = { ...RECORDS, resources: RESOURCE_RECORDS, resourceCompositions: Object.keys(SIX) };
+const THREE_EXPLORABLE_PAGES = ['context-window', 'human-in-the-loop', 'ai-disciplines'];
+const EXPLORABLE_PAGE_RECORDS = THREE_EXPLORABLE_PAGES.map((slug) => ({
+  slug,
+  tags: ['workflow'],
+  visibility: 'public',
+}));
+const WITH_RESOURCES = {
+  ...RECORDS,
+  resources: RESOURCE_RECORDS,
+  resourceCompositions: Object.keys(SIX),
+  explorablePages: EXPLORABLE_PAGE_RECORDS,
+  explorablePageCompositions: THREE_EXPLORABLE_PAGES,
+  explorables: [...THREE_EXPLORABLE_PAGES, 'speech-bubble'],
+};

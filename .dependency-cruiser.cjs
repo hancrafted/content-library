@@ -54,16 +54,16 @@ const EPISODE_REACH = [
 ];
 
 // A self-contained Slide is one folder, `episodes/<ep>/slides/<slide>/`, `episodes/by-event/<event>/<ep>/slides/<slide>/`
-// in an Event's copy, `episodes/resources/<page>/slides/<slide>/` on a Resource, or `episodes/slide-pool/<slide>/` in
+// in an Event's copy, `episodes/resources/<page>/slides/<slide>/` on a Resource, `episodes/explorable-pages/<page>/slides/<slide>/` on an Explorable page, or `episodes/slide-pool/<slide>/` in
 // the Slide pool (FE-002, FE-004 §3, FE-007 §5). The two capture groups name the folder that holds the Slide and the
 // Slide, so a rule's `to` can say "this same folder" as `$1/$2`.
 const SLIDE_FOLDER =
-  '^src/episodes/((?:by-event/[^/]+|resources)/[^/]+/slides|(?!components/|lib/|hooks/)[^/]+/slides|slide-pool)/([^/]+)/';
+  '^src/episodes/((?:by-event/[^/]+|resources|explorable-pages)/[^/]+/slides|(?!components/|lib/|hooks/)[^/]+/slides|slide-pool)/([^/]+)/';
 const OWN_SLIDE_FOLDER = '^src/episodes/$1/$2/';
 // The Slide pool: content Slides several Episodes compose (FE-004 §3).
 const SLIDE_POOL = '^src/episodes/slide-pool/';
 // A Section file, `<ep>/sections/<section-slug>.ts`, named after its section slide; the second capture group names it.
-const SECTION_FILE = '^src/episodes/((?:by-event/[^/]+|resources)/[^/]+|[^/]+)/sections/([^/]+)\\.ts$';
+const SECTION_FILE = '^src/episodes/((?:by-event/[^/]+|resources|explorable-pages)/[^/]+|[^/]+)/sections/([^/]+)\\.ts$';
 // The global shared locations a Slide may import: the Slide master, slide-shared, the Explorable explanations, the UI
 // kit, the core components (server files only, see the client rule), hooks and lib.
 const SLIDE_SHARED_REACH = [
@@ -77,7 +77,7 @@ const SLIDE_SHARED_REACH = [
 // The primitives slide-shared parts share, one subfolder each: a leaf (FE-007 §5.2).
 // An Episode's metadata file, an Event's copy's under `by-event/<event>/`: a record the content store loads (FE-013).
 const EPISODE_METADATA =
-  '^src/episodes/(by-event/[^/]+/[^/]+|(?!components/|lib/|hooks/|resources/)[^/]+)/episode-metadata\\.ts$';
+  '^src/episodes/(by-event/[^/]+/[^/]+|(?!components/|lib/|hooks/|resources/|explorable-pages/)[^/]+)/episode-metadata\\.ts$';
 // The store's schemas: a leaf every tier may import record types from (FE-007 §2.7).
 const STORE_SCHEMAS = '^src/content-store/schemas/';
 // The store's catalogue, the delivery policy readers import beside the entry: every module but the page catalogue,

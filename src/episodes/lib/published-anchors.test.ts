@@ -1,11 +1,18 @@
 import {
   episodeRef,
+  explorablePageRef,
   folderOf,
   resourceRef,
   type EpisodeRef,
+  type ExplorablePageRef,
   type ResourceRef,
 } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, RESOURCE_SLUGS, type ResourceSlug } from '@/content-store/catalogue/record-routes';
+import {
+  EXPLORABLE_PAGE_SLUGS,
+  hasPage,
+  RESOURCE_SLUGS,
+  type ResourceSlug,
+} from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
 import { placeSections, type SlideOutline } from '@/episodes/lib/episode.pure';
@@ -23,8 +30,8 @@ import { compositionOf, type ComposedPage } from './registry';
  * Section lists alone, so they cannot differ by locale.
  */
 
-/** A page whose anchors may be bound: an Episode, or a Resource. */
-type Page = EpisodeRef | ResourceRef;
+/** A page whose anchors may be bound: an Episode, a Resource or an Explorable page. */
+type Page = EpisodeRef | ResourceRef | ExplorablePageRef;
 
 /** The snapshot in the page's folder: an Event's copy's under its Event, a Resource's under `resources/`. */
 function snapshotPath(page: Page): string {
@@ -69,7 +76,7 @@ function boundPages(
   tooling: readonly ResourceSlug[],
 ): ComposedPage[] {
   const bound = episodes.flatMap(({ ref, status }) => (status !== 'upcoming' && hasPage(ref) ? [ref] : []));
-  return [...tooling.map(resourceRef), ...bound];
+  return [...tooling.map(resourceRef), ...EXPLORABLE_PAGE_SLUGS.map(explorablePageRef), ...bound];
 }
 
 /** The anchors the walk produces for one page, as the Episode page does: its record's Section lists. */
@@ -143,7 +150,7 @@ describe('edge cases', () => {
       { ref: episodeRef('maintaining-markdown-for-ai'), status: 'published' },
       { ref: episodeRef('ai-token-economy'), status: 'upcoming' },
     ];
-    const expected = ['episode-template', 'maintaining-markdown-for-ai'];
+    const expected = ['episode-template', ...EXPLORABLE_PAGE_SLUGS, 'maintaining-markdown-for-ai'];
     // ACT
     const bound = boundPages(episodes, ['episode-template']).map(({ id }) => id);
     // ASSERT

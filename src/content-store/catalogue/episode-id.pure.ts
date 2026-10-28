@@ -17,6 +17,9 @@ export const SLIDE_POOL_FOLDER = 'slide-pool';
 /** The Resources' compositions: pages that are no Episode, one folder each, `resources/<slug>/` (design-ADR 0019). */
 export const RESOURCES_FOLDER = 'resources';
 
+/** The Explorable pages' compositions: Episode-shaped pages about one Explorable, one folder each, `explorable-pages/<slug>/`. */
+export const EXPLORABLE_PAGES_FOLDER = 'explorable-pages';
+
 /**
  * Folder names under the Episodes folder that hold no Episode, so no Episode may take one as its slug: the Event copies,
  * the Slide pool, the Resources, and the area's code (`components/`, `lib/`, `hooks/`).
@@ -25,6 +28,7 @@ export const RESERVED_FOLDER_NAMES: readonly string[] = [
   EVENT_COPIES_FOLDER,
   SLIDE_POOL_FOLDER,
   RESOURCES_FOLDER,
+  EXPLORABLE_PAGES_FOLDER,
   'components',
   'lib',
   'hooks',
@@ -92,12 +96,26 @@ export function resourceRef<Slug extends string>(slug: Slug): ResourceRef<Slug> 
   return { kind: 'resource', id: slug, slug };
 }
 
+/** An Explorable page's composition: Episode-shaped, named by its slug, which is also its primary Explorable's folder slug. */
+export interface ExplorablePageRef<Slug extends string = string> {
+  readonly kind: 'explorable-page';
+  readonly id: Slug;
+  readonly slug: Slug;
+}
+
+/** The Explorable page composition in folder `explorable-pages/<slug>/`. */
+export function explorablePageRef<Slug extends string>(slug: Slug): ExplorablePageRef<Slug> {
+  return { kind: 'explorable-page', id: slug, slug };
+}
+
 /**
  * A page's folder under the Episodes folder, the one place the folder layout is written: `<slug>` for an Episode no
- * Event owns, `by-event/<event>/<slug>` for an Event's copy, `resources/<slug>` for a Resource.
+ * Event owns, `by-event/<event>/<slug>` for an Event's copy, `resources/<slug>` for a Resource, `explorable-pages/<slug>`
+ * for an Explorable page.
  */
-export function folderOf(page: EpisodeRef | ResourceRef): string {
+export function folderOf(page: EpisodeRef | ResourceRef | ExplorablePageRef): string {
   if (page.kind === 'resource') return `${RESOURCES_FOLDER}/${page.slug}`;
+  if (page.kind === 'explorable-page') return `${EXPLORABLE_PAGES_FOLDER}/${page.slug}`;
   return matchEpisode(page, {
     standalone: ({ slug }) => slug,
     'event-copy': ({ event, slug }) => `${EVENT_COPIES_FOLDER}/${event}/${slug}`,
