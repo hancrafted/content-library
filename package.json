@@ -10,6 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "registry": "node tools/codegen/registry.ts",
     "youtube:transcript": "node tools/youtube/transcript.ts",
+    "youtube:recording": "node tools/youtube/recording.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",

@@ -64,6 +64,25 @@ export const tokenTalk = episode({
 };
 describe('success cases', () => {
   describe('episodeOutline', () => {
+    it('names a Slide-pool Slide by its pool folder, in Section order beside the Episode own Slides', () => {
+      // ARRANGE
+      const folder = episodeFolder('cash-first', {
+        ...WITH_MARKERS,
+        'sections/why-cash.ts': `import { onePrompt } from '@/episodes/slide-pool/one-prompt/slide';
+import { watchCash } from '../slides/watch-cash/slide';
+
+export const whyCashSection: Section = [onePrompt, watchCash];
+`,
+      });
+      const expected = ['one-prompt', 'watch-cash'];
+
+      // ACT
+      const outline = episodeOutline(folder);
+
+      // ASSERT
+      expect(outline.sections[0]).toEqual(expected);
+    });
+
     it('reads the Title slide and each Section placement marker, Slides in marker order, not import order', () => {
       // ARRANGE
       const folder = episodeFolder('cash-first', WITH_MARKERS);
