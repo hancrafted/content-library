@@ -1,7 +1,7 @@
 ---
 type: poll-dataset
 title: 'How do workshop audiences picture working with AI, and does a session shift it?'
-description: 'Poll v1: picture of AI, fluency, say over AI, usage, and per Episode whether its problem was seen and its idea known; shares per question, no Event counted yet.'
+description: 'Poll v1: picture of AI, fluency, say over AI, usage, and per Episode whether its problem was seen and its idea known; shares per question; responses.csv holds the counts of each Event.'
 generated:
   by: claude-code/opus-5.5
   at: 2026-10-27T22:30:00+01:00
@@ -34,7 +34,7 @@ Poll v1. Every question is single choice; none takes free text and none asks for
 
 ## Data file
 
-`responses.csv` beside this file holds one row per Event, question and answer: `event_slug,date,locale,poll_version,question,answer,count,respondents`. `respondents` is how many people answered that question, the denominator of its shares. Copying an Event's counts here is the last step of "Add an Event" in `docs/features/events.md`, within 30 days, because a directpoll poll expires 30 days after it was created or last saved; directpoll exports totals per question only.
+`responses.csv` beside this file holds one row per Event, question and answer: `event_slug,date,locale,poll_version,question,answer,count,respondents`. `respondents` is how many people answered that question, the denominator of its shares. Copying an Event's counts here is the last step of "Add an Event" in `docs/features/events.md`, within 30 days, because a directpoll poll expires 30 days after it was created or last saved; directpoll exports totals per question only. A question nobody answered at an Event gets no rows: `baseline.model_after` has none for the CyberForum Akademie Event (2026-10-28), which had no respondents for it.
 
 So the data carries shares per question, and no more. It tests whether most attendees picture AI as a search engine or a chat (`model`), whether they rate themselves higher than they act (the share of `fluency` at `confident` or above against the share of `usage` at `delegate` or above), and whether each Episode's problem is common and its concept new (`.seen`, `.known`). Two questions it cannot answer in v1: whether a session shifts one person's picture, because no answer is linked to the person who gave it, and which attendees combine an intent with a usage level, because two questions' totals cannot be cross-tabulated; the most they give is a bound, at least `a + b − n` people in both groups. `model_after` reports the stated picture at the end, and `shift` the change people say they noticed.
 

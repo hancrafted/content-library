@@ -10,10 +10,12 @@ import en from './i18n/en.json';
  * The check-in's questions as keys of `questions`, with their answers' Translation keys in poll order: poll v1's `ai-gives-you-more-work.seen`, `ai-gives-you-more-work.known`, `baseline.model_after` and `baseline.shift`. The wording is
  * frozen in the question register of research AIE-0016
  * (docs/llm-wiki/research/AIE/AIE-0016__audience-ai-mental-model/dataset.md); a change is a new poll version there first.
+ * `votes` are the Event's counts of 2026-10-28 in answer order, copied from AIE-0016's `responses.csv` (the figures live there; this is a printed copy).
  */
 const QUESTIONS = [
   {
     key: 'seen',
+    votes: [0, 3, 2, 0, 0],
     answers: [
       'questions.seen.answers.often',
       'questions.seen.answers.sometimes',
@@ -25,6 +27,7 @@ const QUESTIONS = [
   },
   {
     key: 'known',
+    votes: [0, 3, 0],
     answers: ['questions.known.answers.practice', 'questions.known.answers.heard', 'questions.known.answers.new'],
     tone: 'accent',
   },
@@ -39,16 +42,20 @@ const QUESTIONS = [
       'questions.modelAfter.answers.factory',
       'questions.modelAfter.answers.unsure',
     ],
+    // No respondents on 2026-10-28, so no counts; the key keeps the entries one shape.
+    votes: undefined,
     tone: 'info',
   },
   {
     key: 'shift',
+    votes: [1, 2, 1],
     answers: ['questions.shift.answers.no', 'questions.shift.answers.somewhat', 'questions.shift.answers.clearly'],
     tone: 'accent',
   },
 ] as const satisfies readonly {
   key: 'seen' | 'known' | 'modelAfter' | 'shift';
   answers: readonly string[];
+  votes?: readonly number[];
   tone: PollTone;
 }[];
 
@@ -74,12 +81,13 @@ export const checkIn3 = slide({
         </div>
         <div className="flex flex-col gap-4 md:col-span-8">
           <ol {...target('questions')} className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-            {QUESTIONS.map(({ key, answers, tone }, index) => (
+            {QUESTIONS.map(({ key, answers, votes, tone }, index) => (
               <PollQuestion
                 key={key}
                 marker={index + 1}
                 question={t(`questions.${key}.question`)}
                 answers={answers.map((answer) => t(answer))}
+                votes={votes}
                 tone={tone}
               />
             ))}

@@ -33,6 +33,15 @@ describe('success cases', () => {
     // ASSERT
     expect(html).toContain(hint);
   });
+
+  it("prints each answer's vote count on its chip, zero included", () => {
+    // ARRANGE
+    const answers = ['often', 'sometimes', 'never'];
+    // ACT
+    const html = render({ marker: 1, question: 'Seen it?', answers, votes: [3, 6, 0], tone: 'info' });
+    // ASSERT
+    expect([...html.matchAll(/data-poll-votes=""[^>]*>(\d+)</g)].map((m) => m[1])).toEqual(['3', '6', '0']);
+  });
 });
 
 describe('failure cases', () => {
@@ -74,5 +83,14 @@ describe('edge cases', () => {
     // ASSERT
     expect(html.match(/data-poll-answer/g)).toHaveLength(answers.length);
     expect(html.indexOf(first)).toBeLessThan(html.indexOf(last));
+  });
+
+  it('prints no vote count when the question has none', () => {
+    // ARRANGE
+    const answers = ['often'];
+    // ACT
+    const html = render({ marker: 1, question: 'Seen it?', answers, tone: 'info' });
+    // ASSERT
+    expect(html).not.toContain('data-poll-votes');
   });
 });

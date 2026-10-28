@@ -10,6 +10,8 @@ export interface PollQuestionProps {
   hint?: string;
   /** The answers in the order the poll lists them. */
   answers: readonly string[];
+  /** Votes per answer, in the order of `answers`: a played Event's result, printed on each chip. */
+  votes?: readonly number[];
   tone: PollTone;
 }
 
@@ -30,7 +32,7 @@ const LOOK: Record<PollTone, { disc: string; chip: string }> = {
  * One poll question printed on a Slide (a server part, an `<li>` for an ordered list): a numbered disc, the question,
  * its hint, and the tag of each answer as a chip (the whole answer as its title): the phone shows the whole answer, the Slide only what to look for.
  */
-export function PollQuestion({ marker, question, hint, answers, tone }: PollQuestionProps) {
+export function PollQuestion({ marker, question, hint, answers, votes, tone }: PollQuestionProps) {
   const look = LOOK[tone];
   return (
     <li className="flex flex-col gap-2.5 rounded-xl border border-border bg-card p-4 shadow-sm">
@@ -49,16 +51,24 @@ export function PollQuestion({ marker, question, hint, answers, tone }: PollQues
           )}
         </p>
       </div>
-      <AnswerChips answers={answers} chip={look.chip} />
+      <AnswerChips answers={answers} votes={votes} chip={look.chip} />
     </li>
   );
 }
 
-/** Each answer as a chip showing its tag, the whole answer as its title. */
-function AnswerChips({ answers, chip }: { answers: readonly string[]; chip: string }) {
+/** Each answer as a chip showing its tag, the whole answer as its title, and its vote count when the question has votes. */
+function AnswerChips({
+  answers,
+  votes,
+  chip,
+}: {
+  answers: readonly string[];
+  votes?: readonly number[];
+  chip: string;
+}) {
   return (
     <ul className="flex flex-wrap gap-1.5">
-      {answers.map((answer) => (
+      {answers.map((answer, index) => (
         <li
           key={answer}
           data-poll-answer=""
@@ -66,6 +76,11 @@ function AnswerChips({ answers, chip }: { answers: readonly string[]; chip: stri
           className={`rounded-full px-3 py-1 text-caption font-medium text-foreground ${chip}`}
         >
           {tagOf(answer)}
+          {votes !== undefined && (
+            <span data-poll-votes="" className="ml-1.5 font-semibold tabular-nums">
+              {votes[index]}
+            </span>
+          )}
         </li>
       ))}
     </ul>
