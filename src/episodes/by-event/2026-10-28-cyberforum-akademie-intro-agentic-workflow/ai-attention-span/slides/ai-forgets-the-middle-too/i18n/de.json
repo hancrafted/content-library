@@ -93,7 +93,7 @@
       "it-happens-in-a-long-chat-too": {
         "title": "Im langen Chat passiert es auch",
         "keywords": "",
-        "script": "Jetzt lass ihn eine Stunde laufen. Nur die allerersten Anweisungen werden eher genutzt, die neuesten Nachrichten werden eher genutzt, und alles dazwischen geht verloren, selbst Deine eigenen ersten Nachrichten. Früh im Chat legst Du das Budget auf 30.000 Euro fest. Viel später bittest Du um den ganzen Plan, und die KI liefert einen selbstsicheren Plan über 42.300 Euro, als hättest Du nie 30.000 gesagt. Warum das passiert, kommt auf einer späteren Folie."
+        "script": "Das ist einer der größten Gründe, warum die KI in einer langen Konversation Dinge aus der Mitte vergisst. Nehmen wir an, Du hast zwischendrin festgelegt, dass das Budget 30.000 Euro beträgt, und redest danach eine Stunde lang weiter. Am Ende kommt ein Ergebnis heraus, in dem das Budget auf einmal 42.000 Euro beträgt, und Du denkst: Moment mal, ich habe Dir das doch schwarz auf weiß geschrieben, ich sehe es in der Historie, dass ich 30.000 gesagt habe. Warum halluzinierst Du mir jetzt 42.000?"
       },
       "a-shape-not-a-brain": {
         "title": "Eine Form, kein Gehirn",
@@ -103,7 +103,7 @@
       "what-a-lost-detail-costs": {
         "title": "Was ein verlorenes Detail kostet",
         "keywords": "",
-        "script": "Bei Deiner Schwester ist ein verlorenes Detail lustig. Bei einer Deadline wird es teuer. Also frag Dich, welcher Chat Deiner ist: der mit den Fotos von Mamas Daumen oder der mit Deinem Budget darin."
+        "script": "Das ist der Kern dieser Episode: Ich möchte Dir nahebringen, wie die KI funktioniert, und zwar über ein sehr menschliches Konzept, die Aufmerksamkeit, auf Englisch Attention. Dann weißt Du, wie Du mit der KI umgehen solltest und vor allem warum. Ich habe vorhin gesagt: neue Chats anfangen. Das erklärt, warum das so wichtig ist. Und wenn die KI halluziniert, kann das teuer werden, weil wir mit ihr arbeiten. Das ist kein lustiges Detail wie bei der Schwester, und genau deshalb ist das Thema aus meiner Sicht so wichtig. Also fangen wir an: Was ist die Aufmerksamkeitsspanne der KI?"
       }
     }
   }

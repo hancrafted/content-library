@@ -35,7 +35,7 @@
       "human-in-the-loop": {
         "title": "Human in the Loop",
         "keywords": "",
-        "script": "Diese Arbeitsweise nennen wir einen Human-in-the-Loop-Workflow. Du bist der Orchestrator, der Kapitän am Steuer, und Du setzt die KI ein, wie ein Kapitän seine Crew einsetzt."
+        "script": "Versteh diesen Prozess, diesen Workflow, als Baseline, als Grundlage. Später gibt es mit besseren Tools Möglichkeiten, diese Nachrichten automatisiert zu schicken, abzuspeichern und zu reviewen. Für das grundlegende Verständnis genügt aber das einfachste Tool, und darum geht es hier: Mit einer kostenlosen ChatGPT-Variante kannst Du diesen Workflow durchführen. Das führt zurück auf die Idee, einen agentischen Workflow oder ein Projekt so runterzubrechen, dass die einzelnen Aufgaben eine klare Anforderung haben und Du in der Ausführung innerhalb der Kontextgrenzen bleibst, um möglichst gute Ergebnisse zu erzielen. Ein anderer Workflow, etwas generischer und zum Beispiel aus der Softwareentwicklung: Man hat erst ein großes Ziel und bricht es in Epics herunter, ein Begriff aus dem Agilen für grobe Punkte. Daraus erzeugt man die Anforderungen, bricht sie vielleicht nochmals herunter, führt sie in einzelnen Schritten aus und führt alles am Ende zu einem Gesamtergebnis zusammen, das man prüft. Das war schon vor der KI eine schlaue Art, mit komplexen Problemen umzugehen, und in Zeiten von KI ist es eine sehr bewährte Methode."
       },
       "planner-and-handoff": {
         "title": "Planer und Übergabe",

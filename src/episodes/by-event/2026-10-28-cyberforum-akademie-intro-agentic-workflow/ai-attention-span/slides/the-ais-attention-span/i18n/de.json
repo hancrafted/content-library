@@ -8,7 +8,7 @@
       "why-it-happens": {
         "title": "Warum das passiert",
         "keywords": "",
-        "script": "Jetzt drehe ich auf. Hoffentlich bist Du bereit? Bisher hast Du gesehen, was passiert. Jetzt kommt die Ursache. Denn sobald Du weißt, wie die KI einen Chat im Blick behält, überrascht Dich das Muster nicht mehr, und erst danach schauen wir, was es mit Deinen Antworten macht."
+        "script": "Ich habe dazu ein Tool gebaut, das ich Dir kurz vorstellen möchte, und Du kannst gern selbst damit herumspielen. Links haben wir einen Chat nachgebildet, eine Konversation. Dazu gibt es eine Zeitleiste, auf der wir vor und zurück navigieren können, und sie simuliert den Verlauf des Chats. In diesem Fall haben wir 21 Nachrichten hin- und hergeschrieben."
       }
     }
   }

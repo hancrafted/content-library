@@ -38,15 +38,23 @@ export interface SlideRow {
   readonly title: string;
 }
 
+/** Where a Slide's i18n file for a language is: the Episode's own `slides/<slug>/`, else the Slide pool's (shared by every Episode that uses it). */
+export function slideI18nFile(
+  dirs: { root: string; episodeDir: string },
+  slug: string,
+  language: SpokenLanguage,
+): { file: string; pool: boolean } | undefined {
+  const own = path.join(dirs.episodeDir, 'slides', slug, 'i18n', `${language}.json`);
+  if (existsSync(own)) return { file: own, pool: false };
+  const pooled = path.join(dirs.root, EPISODES_DIR, SLIDE_POOL, slug, 'i18n', `${language}.json`);
+  return existsSync(pooled) ? { file: pooled, pool: true } : undefined;
+}
+
 /** A Slide's title in `language`, from its own i18n file or the Slide pool's. */
 function slideTitle(dirs: { root: string; episodeDir: string }, slug: string, language: SpokenLanguage): string {
-  const { root, episodeDir } = dirs;
-  const candidates = [
-    path.join(episodeDir, 'slides', slug, 'i18n', `${language}.json`),
-    path.join(root, EPISODES_DIR, SLIDE_POOL, slug, 'i18n', `${language}.json`),
-  ];
-  const file = candidates.find((candidate) => existsSync(candidate));
-  const title = file === undefined ? undefined : (JSON.parse(readFileSync(file, 'utf8')) as { title?: unknown }).title;
+  const found = slideI18nFile(dirs, slug, language);
+  const title =
+    found === undefined ? undefined : (JSON.parse(readFileSync(found.file, 'utf8')) as { title?: unknown }).title;
   return typeof title === 'string' ? title : slug;
 }
 

@@ -11,6 +11,7 @@
     "registry": "node tools/codegen/registry.ts",
     "youtube:transcript": "node tools/youtube/transcript.ts",
     "youtube:recording": "node tools/youtube/recording.ts",
+    "youtube:voice-script": "node tools/youtube/voice-script.ts",
     "youtube:chapters": "node tools/youtube/chapters.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

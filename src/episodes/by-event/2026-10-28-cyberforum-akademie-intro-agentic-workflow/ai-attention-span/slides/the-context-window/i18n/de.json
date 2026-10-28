@@ -56,12 +56,12 @@
       "there-is-a-size-limit": {
         "title": "Es gibt eine Größengrenze",
         "keywords": "",
-        "script": "Dieses Paket hat eine Höchstgröße. Stell es Dir als Balken vor, der sich Block für Block füllt, ein Block für jede Frage und jede Antwort, bis kein Platz mehr ist. Dieser Balken ist das Kontextfenster. Diese Grenze ist die Aufmerksamkeitsspanne der KI: wie viel sie auf einmal im Blick behalten kann."
+        "script": "Das ist ein technischer Begriff, auf Englisch Context Window, aber er ist relativ einfach erklärt: Stell Dir einen Fortschrittsbalken vor. Wichtig ist, dass dieser Balken begrenzt ist, er ist nicht unendlich. Dahinter steckt Speicher, den die Firmen da draußen bereitstellen, und Speicher kostet Geld, deshalb ist er limitiert. Mit unserem Chatverlauf füllt sich dieser Speicher nach und nach. Das ist genau wie bei unserer Aufmerksamkeit: Je länger Du mir zuhörst, desto mehr schwindet sie. Es ist schon spät, Du hattest einen langen Arbeitstag, und da kann es gut sein, dass Deine Aufmerksamkeitsspanne schon ziemlich voll ist. Genauso funktioniert es bei der KI: Mit zunehmender Konversation füllt sich das Fenster."
       },
       "the-term-to-keep": {
         "title": "Der Begriff zum Merken",
         "keywords": "",
-        "script": "Der Begriff zum Merken ist Kontextfenster. Wenn Du Dir heute nur ein Wort merkst, dann dieses: Kontextfenster."
+        "script": "Das war's. Mehr musst Du an dieser Stelle gar nicht wissen: Das ist das Kontextfenster, mehr ist es nicht. Für alle, die es aus der Entwicklerwelt kennen, so sieht dieselbe Ansicht in Claude aus. Sie ist ähnlich, aber für das Konzept ist es gleich: Etwas füllt sich, und das Ding ist begrenzt. Interessant ist jetzt, was passiert, wenn es voll wird."
       },
       "context-engineering": {
         "title": "Context Engineering",

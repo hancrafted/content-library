@@ -71,32 +71,32 @@
       "break-it-down": {
         "title": "Zerleg es",
         "keywords": "",
-        "script": "Stell Dir vor, Du planst das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. Zerleg es. Teile das Projekt in Jobs, bevor der erste Chat beginnt: Du teilst eine große Aufgabe in kleine Schritte, und jeder Schritt ist klein genug, um ihn im Blick zu behalten."
+        "script": "Die Gewohnheiten sind stark an die fünf Aktionen von vorhin angelehnt. Erstens: Zerlege die Aufgabe. Plane vorher, oder nutze die KI, um die Aufgabe zu planen und zu zerlegen."
       },
       "one-chat-one-job": {
         "title": "Neuer Job, neuer Chat",
         "keywords": "",
-        "script": "Neuer Job, neuer Chat. Wenn das Thema wechselt, öffne einen neuen Chat, damit die Hotelfrage nicht das Catering-PDF mitschleppen muss. Ein Neustart gibt das ganze Fenster der Arbeit vor Dir und nichts davon dem, was vor einer Stunde passiert ist."
+        "script": "Zweitens: Arbeite in einem Chat nur an einer Aufgabe. Neuer Job, neuer Chat."
       },
       "ask-for-a-handoff": {
         "title": "Bitte um eine Übergabe",
         "keywords": "",
-        "script": "Bitte um eine Übergabe. Nach echtem Fortschritt oder vor einer Kaffeepause hältst Du an und bittest die KI um eine Übergabe: eine kurze Karte mit dem Ziel, mit dem, was entschieden ist, und mit dem, was als Nächstes kommt."
+        "script": "Drittens: Wenn Du merkst, dass Du eine längere Konversation führen müsstest, weil der aufgebaute Kontext so wertvoll ist, fordere zwischendurch eine Übergabedatei an, einen sogenannten Handoff. Bitte die KI, die Konversation bis zum letzten Handoff zusammenzufassen und als Datei anzulegen. Du kannst auch eine Struktur vorgeben, zum Beispiel diesen Titel und jenen Untertitel."
       },
       "read-and-correct-it": {
         "title": "Lies und korrigiere sie",
         "keywords": "",
-        "script": "Dann lies sie und korrigiere, was falsch ist. Eine Zusammenfassung kann Dinge weglassen oder etwas falsch wiedergeben, und Du bist verantwortlich dafür, was der nächste Chat glaubt."
+        "script": "Diese Datei ist ein Zwischenergebnis, das Du selbst überprüfen und korrigieren kannst."
       },
       "start-the-next-chat-with-it": {
         "title": "Beginne den nächsten Chat damit",
         "keywords": "",
-        "script": "Und beginne den nächsten Chat damit. Füge die Übergabe als erste Nachricht ein, und der neue Chat startet klein und klar, mit dem Ort, dem Caterer, dem Budget und dem nächsten Schritt, und sonst nichts."
+        "script": "Hat das Zwischenergebnis einen verwertbaren Stand, kannst Du damit in einem nächsten Chat weiterarbeiten. Außerdem sind die Zwischenschritte abgesichert, und Du kannst der KI später sagen: Lade bitte den Zwischenstand von XY. Das sind alles Gewohnheiten, mit denen wir auch ohne Blick auf das Kontextfenster mit der KI umgehen können, um bessere Ergebnisse zu erzielen und Halluzinationen zu vermeiden."
       },
       "check-the-context": {
         "title": "Prüfe den Kontext",
         "keywords": "",
-        "script": "Und prüfe den Kontext, wenn Du kannst. In agentischen Tools führst Du regelmäßig den Befehl Slash Context aus, und Du siehst, wie voll das Fenster ist, bevor es zum Problem wird."
+        "script": "Und als Letztes, wenn es Dir möglich ist und Du Tools in der Konsole nutzt: Führe regelmäßig den Kontextbefehl aus. Er zeigt Dir die Ansicht, die ich hier nachgebaut habe."
       }
     }
   }

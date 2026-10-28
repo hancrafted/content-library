@@ -74,12 +74,12 @@
       "the-app-does-something-like-it": {
         "title": "Die App macht etwas Ähnliches",
         "keywords": "",
-        "script": "Die App macht etwas Ähnliches. Wenn ein Chat lang wird, können ältere Nachrichten zu einer kurzen Zusammenfassung zusammengedrückt werden, damit das Gespräch weitergehen kann, statt gegen die Wand zu laufen."
+        "script": "Das Verwalten des Kontextfensters, auch die Zusammenfassung, macht die Software automatisch für Dich im Hintergrund. Du kannst Deine Chat-Historie weit hochscrollen und sagen: Ich habe das doch hier geschrieben. Aber es kann sein, dass die KI zwischendurch schon dreimal zusammengefasst hat, und es kann auch passieren, dass sie Zusammenfassungen noch einmal zusammenfasst. Dadurch geht Information verloren."
       },
       "you-cant-watch-the-meter": {
         "title": "Eine Anzeige kannst Du nicht ablesen",
         "keywords": "",
-        "script": "Und hier ist der Haken: Der Chat sieht gleich aus. Jede Sprechblase ist noch da, also kannst Du Dich nicht auf eine Anzeige verlassen, Du verlässt Dich auf Gewohnheiten."
+        "script": "Das Problem an der Geschichte ist: Die meisten Nutzer sehen das Kontextfenster nicht. Das ist bisher ein Werkzeug, das den Entwicklern vorbehalten ist. Die Darstellung, die ich Dir vorhin gezeigt habe, können Entwickler in ihrer Konsole, diesem Programm, in dem meistens nur Text steht, jederzeit aufrufen, um zu überwachen, wie schnell sich das Kontextfenster füllt. In den modernen Chat-Anwendungen, die die meisten nutzen, gibt es darauf keinen Zugriff. Also bleibt es beim Bauchgefühl. Und es füllen nicht nur Deine Prompts das Kontextfenster, sondern vor allem die Werkzeuge, die die KI aufruft, um mehr Information einzuholen, und davon siehst Du sehr wenig."
       },
       "why-the-budget-survived": {
         "title": "Warum das Budget überlebt hat",

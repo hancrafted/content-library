@@ -68,7 +68,7 @@
       "the-catering-pdf": {
         "title": "Das Catering-PDF",
         "keywords": "",
-        "script": "Dann zeigst Du auf die Catering-Angebote im Projektordner und fragst, welches passt. Die Antwort ist eine Zeile, Sabor Verde. Um sie zu geben, hat die KI das ganze Catering-PDF gelesen, alle zwanzig Seiten, und diese eine Frage hat das Fenster weit mehr gefüllt als alles davor."
+        "script": "Wie kann es sein, dass ein ganz harmloser Prompt auf einmal 50 Prozent meines Kontextfensters füllt? Dafür habe ich ein Beispiel aufgehängt: Hier wurden mitten im Chat gefühlt 30 Prozent des Fensters befüllt. Was wir sehen: Die KI hat eine Datei aufgemacht. Im Chat steht davor die Frage: Die Catering-Angebote liegen im Projektordner, welches passt? Der Chat fing an, diese Datei ausfindig zu machen und durchzulesen. Das war ein einfacher Prompt vom Nutzer."
       },
       "the-intern": {
         "title": "Die Praktikantin",
@@ -78,7 +78,7 @@
       "a-big-bite": {
         "title": "Ein großer Happen",
         "keywords": "",
-        "script": "Eine kurze Frage kann also einen großen Happen aus dem Fenster nehmen, während der Chat so klein aussieht wie vorher. Denk daran, wenn sich ein Chat früher voll anfühlt, als Du erwartet hast."
+        "script": "Wenn die KI agentisch arbeitet, wie wir es besprochen haben, darf sie eigenständig Aktionen ausführen, zum Beispiel in Deinem SharePoint oder online Ressourcen suchen und herunterladen. Dann muss sie die Datei komplett lesen, und Lesen und Verarbeiten kostet Platz im Kontextfenster. Wenn Du der KI also das nächste Mal eine Aufgabe gibst, bei der sie zehn oder Dutzende Dateien lesen muss, kannst Du ziemlich sicher sein, dass das einen Großteil des Kontextfensters füllt."
       }
     }
   }
