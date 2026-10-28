@@ -11,7 +11,7 @@ const LANE_REM = 0.9;
 /** The wire to the model, with the messages on their way down or back up, each on its lane. */
 function Wire({ frame }: { readonly frame: Frame }) {
   return (
-    <div aria-hidden="true" className={`${styles.wire} relative mt-auto w-20`}>
+    <div aria-hidden="true" data-wire="" className={`${styles.wire} relative mt-auto w-20`}>
       <span className="absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-2 border-dashed border-(--tone)/50" />
       {onWire(frame).map(({ key, dir, lane, delay }) => (
         <span

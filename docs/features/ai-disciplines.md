@@ -41,4 +41,4 @@ Shown by the CyberForum intro: Slide `grounding` (`timeline`) and Slide `check-i
 
 - `scene-frames.pure.test.ts`: the choreography of each scene.
 - `ai-disciplines.test.ts`: the config pair's parity, the server render, the words override, the Presets.
-- `ai-disciplines.browser.test.ts` (`npm run test:browser`, on the built export): a card turns to its definition, hover lights a column, a turned-away face keeps its link out of the tab order, the recap lights workflows.
+- `ai-disciplines.browser.test.ts` (`npm run test:browser`, on the built export): a card and the model band turn to their definition, hover lights a column, a turned-away face keeps its link out of the tab order, the recap lights workflows, the scenes rest until hovered, a square travels its wire, and the four wires end level in both locales.
