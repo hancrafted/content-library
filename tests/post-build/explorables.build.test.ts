@@ -2,7 +2,7 @@
 // locales, each an Episode-shaped page; the overview that lists them; the redirects that keep the old
 // /explorable-explanations/ links working.
 
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
@@ -12,7 +12,7 @@ import { exportedPage, OUT_DIR, redirectRules, resolveBasePath } from './exporte
 const basePath = resolveBasePath();
 
 /** The three Explorable pages and their URLs, written out: the spec's table is the expectation. */
-const SLUGS = ['context-window', 'human-in-the-loop', 'ai-disciplines'] as const;
+const SLUGS = ['context-window', 'human-in-the-loop', 'ai-capability'] as const;
 const PAGES = SLUGS.flatMap((slug) =>
   LOCALES.map((locale) => ({
     slug,
@@ -87,6 +87,33 @@ describe('the old /explorable-explanations/ URLs', () => {
   });
 });
 
+describe('the renamed /explorables/ai-disciplines/ URL', () => {
+  // Renamed to ai-capability; the old path redirects so shared links keep working, and keeps its published anchor.
+  it.each(LOCALES)('redirects with a 301 to /explorables/ai-capability/ for %s', (locale) => {
+    // ARRANGE
+    const expected = {
+      from: `${localizePath('/explorables/ai-disciplines', locale)}/*`,
+      to: `${localizePath('/explorables/ai-capability', locale)}/:splat`,
+      status: '301',
+    };
+    // ACT
+    const rules = redirectRules();
+    // ASSERT
+    expect(rules).toContainEqual(expected);
+  });
+
+  it.each(LOCALES)('exports no page of its own for %s', (locale) => {
+    // ARRANGE
+    const retired = 'ai-disciplines';
+    const renamed = 'ai-capability';
+    // ACT
+    const exported = readdirSync(join(OUT_DIR, localizePath('/explorables', locale)));
+    // ASSERT
+    expect(exported).toContain(renamed);
+    expect(exported).not.toContain(retired);
+  });
+});
+
 describe('the "Explore it →" link on an Explorable shown in a Slide', () => {
   const link = (slug: string) => `[data-explore-it="${slug}"]`;
 
@@ -114,12 +141,12 @@ describe('the "Explore it →" link on an Explorable shown in a Slide', () => {
 
   it.each(LOCALES)('still links an Explorable that is not the page primary, for %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath('/explorables/ai-disciplines', locale));
+    const $ = exportedPage(localizePath('/explorables/ai-capability', locale));
     // ACT
     const others = $('[data-explore-it]')
       .toArray()
       .map((anchor) => $(anchor).attr('data-explore-it'));
     // ASSERT
-    expect(others).not.toContain('ai-disciplines');
+    expect(others).not.toContain('ai-capability');
   });
 });

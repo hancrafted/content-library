@@ -1,0 +1,21 @@
+{
+  "title": "The timeline",
+  "caption": "Four Levels on one language model, from prompting in 2022–23 to the factory emerging in 2026.",
+  "readme": {
+    "heading": "Read me",
+    "labels": {
+      "shows": "What it shows",
+      "tryit": "What to try",
+      "notice": "What to notice"
+    },
+    "shows": "Four Levels on one language model, each with its card, a scene and its wire down to the model. The toolbar adds rows that tell the same timeline from other angles: the role each Level compares to, its productivity ceiling, and the mismatch between how most people use AI and what leaders expect.",
+    "tryit": "Switch on Ceiling, then Mismatch. Move the mouse onto a Level to play its scene; click a card or the model band for its definition and source. On a phone, swipe from Level to Level.",
+    "notice": "The claimed ceilings are hypotheses; the measured line under each says what studies found, and no study has measured a workflow or a factory yet. The 20× promise sits far right of where most people work."
+  },
+  "notes": {
+    "timeline": {
+      "header": "Where the years and definitions come from",
+      "description": "Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for prompting, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory. The measured ceilings come from research LLM-0019, the mismatch evidence from LLM-0020."
+    }
+  }
+}

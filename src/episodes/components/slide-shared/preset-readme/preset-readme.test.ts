@@ -36,6 +36,21 @@ describe('success cases', () => {
     expect($('code').text()).toBe('slide-5');
     expect(rows).toEqual(expected);
   });
+
+  it('folds into a closed disclosure whose summary is the heading when the Slide asks for it collapsed', () => {
+    // ARRANGE
+    const props = { ...PROPS, collapsed: true };
+    const heading = 'Read me';
+    const items = 3;
+    // ACT
+    const $ = render(props);
+    const details = $('section > details');
+    // ASSERT
+    expect(details).toHaveLength(1);
+    expect(details.attr('open')).toBeUndefined();
+    expect(details.find('> summary h4').text()).toBe(heading);
+    expect(details.find('dl > div')).toHaveLength(items);
+  });
 });
 
 describe('failure cases', () => {

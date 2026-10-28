@@ -174,7 +174,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       '/explorables',
-      '/explorables/ai-disciplines',
+      '/explorables/ai-capability',
       '/explorables/context-window',
       '/explorables/human-in-the-loop',
     ];
@@ -194,7 +194,7 @@ describe('success cases', () => {
     const params = catalogue.explorablePageParams();
     const page = catalogue.explorablePageAt({ slug: 'context-window' });
     // ASSERT
-    expect(params.map(({ slug }) => slug).sort()).toEqual(['ai-disciplines', 'context-window', 'human-in-the-loop']);
+    expect(params.map(({ slug }) => slug).sort()).toEqual(['ai-capability', 'context-window', 'human-in-the-loop']);
     expect(page && pageLocales(page)).toEqual(['en', 'de']);
     expect(catalogue.listedExplorablePages()).toHaveLength(THREE_EXPLORABLE_PAGES.length);
     expect(catalogue.explorablePageAt({ slug: 'speech-bubble' })).toBeUndefined();
@@ -410,7 +410,7 @@ const TEMPLATE_RECORDS = Object.entries(SIX).map(([slug, type]) => ({
   tags: ['workflow'],
   visibility: 'public',
 }));
-const THREE_EXPLORABLE_PAGES = ['context-window', 'human-in-the-loop', 'ai-disciplines'];
+const THREE_EXPLORABLE_PAGES = ['context-window', 'human-in-the-loop', 'ai-capability'];
 const EXPLORABLE_PAGE_RECORDS = THREE_EXPLORABLE_PAGES.map((slug) => ({
   slug,
   tags: ['workflow'],

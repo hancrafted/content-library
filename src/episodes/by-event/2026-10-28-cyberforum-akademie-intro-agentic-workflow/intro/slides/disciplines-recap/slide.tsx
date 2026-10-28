@@ -1,6 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { AiDisciplines } from '@/explorables/ai-disciplines/ai-disciplines';
+import { AiCapability } from '@/explorables/ai-capability/ai-capability';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -20,7 +20,7 @@ export const disciplinesRecap = slide({
   notes: [{ slug: 'path-fixed', target: 'workflows', sources: [AGENTS] }],
   content: ({ locale, target, Marker }) => (
     <SlideFrame className="mt-6 gap-6">
-      <AiDisciplines
+      <AiCapability
         preset="recap"
         locale={locale}
         targets={{ workflows: target('workflows') }}

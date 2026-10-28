@@ -30,4 +30,4 @@ export const TEMPLATE_SLUGS = [
 ] as const;
 
 /** Every Explorable page, by slug: an Episode-shaped page about its primary Explorable, served at `/explorables/<slug>/`. */
-export const EXPLORABLE_PAGE_SLUGS = ['ai-disciplines', 'context-window', 'human-in-the-loop'] as const;
+export const EXPLORABLE_PAGE_SLUGS = ['ai-capability', 'context-window', 'human-in-the-loop'] as const;

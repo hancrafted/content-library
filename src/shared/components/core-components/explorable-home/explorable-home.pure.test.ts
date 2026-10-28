@@ -4,7 +4,7 @@ import { explorableHomeSlugs } from './explorable-home.pure';
 describe('success cases', () => {
   it('keeps each built Explorable page, so an Explorable links to the page of its own slug', () => {
     // ARRANGE
-    const pages = ['context-window', 'ai-disciplines'];
+    const pages = ['context-window', 'ai-capability'];
     // ACT
     const slugs = explorableHomeSlugs(pages);
     // ASSERT
@@ -13,11 +13,11 @@ describe('success cases', () => {
 
   it('leaves out the page being rendered, so a page does not link to itself', () => {
     // ARRANGE
-    const pages = ['context-window', 'ai-disciplines'];
+    const pages = ['context-window', 'ai-capability'];
     // ACT
     const slugs = explorableHomeSlugs(pages, 'context-window');
     // ASSERT
-    expect(slugs).toEqual(['ai-disciplines']);
+    expect(slugs).toEqual(['ai-capability']);
   });
 });
 

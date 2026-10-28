@@ -2,17 +2,17 @@
 // folders: never edit by hand. A file `src/content-store/explorable-pages/<slug>.ts` is an Explorable page record, named
 // after its slug; a folder `src/explorables/<slug>/` is an Explorable.
 import type { ExplorablePageSlug } from '@/content-store/catalogue/record-routes';
-import { explorablePage as aiDisciplines } from './explorable-pages/ai-disciplines';
+import { explorablePage as aiCapability } from './explorable-pages/ai-capability';
 import { explorablePage as contextWindow } from './explorable-pages/context-window';
 import { explorablePage as humanInTheLoop } from './explorable-pages/human-in-the-loop';
 import type { ExplorablePageInput } from './schemas/explorable-page.schema';
 
 /** Every Explorable page record by slug, so a key and its record's slug must match, and every composition has one. */
 export const EXPLORABLE_PAGE_RECORDS = {
-  'ai-disciplines': aiDisciplines,
+  'ai-capability': aiCapability,
   'context-window': contextWindow,
   'human-in-the-loop': humanInTheLoop,
 } as const satisfies { readonly [S in ExplorablePageSlug]: ExplorablePageInput & { readonly slug: S } };
 
 /** Every Explorable by folder slug, `src/explorables/<slug>/`: an Explorable page's slug names one. */
-export const EXPLORABLE_SLUGS: readonly string[] = ['ai-disciplines', 'context-window', 'human-in-the-loop'];
+export const EXPLORABLE_SLUGS: readonly string[] = ['ai-capability', 'context-window', 'human-in-the-loop'];
