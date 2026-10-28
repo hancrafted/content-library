@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { validateRecording, type Composition } from './recording.pure.ts';
 
-const COMPOSITION: Composition = { slides: ['hero', 'intro', 'middle', 'outro'] };
+const COMPOSITION: Composition = {
+  slides: ['hero', 'intro', 'middle', 'outro'],
+  titleSlide: 'hero',
+  sections: [['intro', 'middle'], ['outro']],
+  titles: { de: { intro: 'Einstieg', middle: 'Mitte', outro: 'Schluss' } },
+};
 const FILE = 'slide-starts.de.json';
 const VIDEO = 'atPa8aTd-PQ';
 
