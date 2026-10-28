@@ -1,8 +1,11 @@
 {
   "resourcesOverview": {
     "title": "Resources",
-    "intro": "Interactive explanations, Episode templates and Master slides: the reusable teaching units behind the Episodes.",
-    "types": {
+    "intro": "Everything the site offers in one place: Episodes, Events, Explorable pages, Episode templates and Master slides.",
+    "kinds": {
+      "episode": "Episode",
+      "event": "Event",
+      "explorable-page": "Explorable page",
       "episode-template": "Episode template",
       "master-slide": "Master slide"
     },
@@ -11,12 +14,15 @@
     "search": "Search Resources",
     "searchPlaceholder": "Search Resources",
     "tagFilter": "Filter by tag",
-    "typeFilter": "Filter by type",
+    "kindFilter": "Filter by kind",
     "view": "View",
     "grid": "Cards",
     "list": "List",
     "reset": "Reset filters",
-    "typePlurals": {
+    "kindPlurals": {
+      "episode": "Episodes",
+      "event": "Events",
+      "explorable-page": "Explorable pages",
       "episode-template": "Episode templates",
       "master-slide": "Master slides"
     }

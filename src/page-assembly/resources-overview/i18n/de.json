@@ -1,8 +1,11 @@
 {
   "resourcesOverview": {
     "title": "Ressourcen",
-    "intro": "Interaktive Erklärungen, Episodenvorlagen und Master-Folien: die wiederverwendbaren Lehrbausteine hinter den Episoden.",
-    "types": {
+    "intro": "Alles, was die Seite bietet, an einem Ort: Episoden, Events, Explorable-Seiten, Episodenvorlagen und Master-Folien.",
+    "kinds": {
+      "episode": "Episode",
+      "event": "Event",
+      "explorable-page": "Explorable-Seite",
       "episode-template": "Episodenvorlage",
       "master-slide": "Master-Folie"
     },
@@ -11,12 +14,15 @@
     "search": "Ressourcen durchsuchen",
     "searchPlaceholder": "Ressourcen durchsuchen",
     "tagFilter": "Nach Tag filtern",
-    "typeFilter": "Nach Art filtern",
+    "kindFilter": "Nach Art filtern",
     "view": "Ansicht",
     "grid": "Karten",
     "list": "Liste",
     "reset": "Filter zurücksetzen",
-    "typePlurals": {
+    "kindPlurals": {
+      "episode": "Episoden",
+      "event": "Events",
+      "explorable-page": "Explorable-Seiten",
       "episode-template": "Episodenvorlagen",
       "master-slide": "Master-Folien"
     }
