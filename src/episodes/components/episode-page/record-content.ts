@@ -3,7 +3,6 @@ import {
   episodeMinutes,
   localizeSlide,
   localizeTitleScene,
-  titleCaptionOf,
   titleContext,
   type EpisodeContext,
   type LocalizedSlide,
@@ -17,6 +16,7 @@ import {
   type SlideEntrance,
 } from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
+import { titleLinesOf } from '@/episodes/components/slide-master/title-lines';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
@@ -77,10 +77,11 @@ export async function recordContent(
     header: headerModeOf(record),
   };
   const { title, caption } = record.messages[locale];
+  const lines = record.title ? titleLinesOf(record.title, locale) : {};
   return {
-    title,
+    title: lines.heading ?? title,
     // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
-    caption: (record.title && titleCaptionOf(record.title, locale)) ?? caption,
+    caption: lines.caption ?? caption,
     minutes: episodeMinutes(record, locale),
     titleContext: titleContext(record, locale),
     ...(record.title && { hero: localizeTitleScene(record.title, episode) }),

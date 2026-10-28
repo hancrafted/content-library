@@ -1,0 +1,50 @@
+{
+  "heading": "Die KI liefert ein Ergebnis, das richtig aussieht und es nicht ist.",
+  "caption": "Ein Workflow, in dem KI-Chats die Arbeit machen und Sie steuern: sechs Phasen, für jede ein frischer Chat, und Ihre Prüfung, bevor die nächste beginnt.",
+  "tryIt": "Ausprobieren",
+  "why": "Warum es wichtig ist",
+  "share": {
+    "title": "Zeigen Sie es Ihrem Team",
+    "copy": "Link kopieren",
+    "copied": "Link kopiert",
+    "text": "Führen Sie ein Team live durch eine Phase und geben Sie ihm dann die Workflow-Datei, damit es sie anpasst."
+  },
+  "motion": {
+    "pause": "Hintergrundanimation pausieren",
+    "play": "Hintergrundanimation abspielen",
+    "stilled": "Der Hintergrund steht still: Bewegung reduzieren ist aktiv"
+  },
+  "preview": {
+    "label": "Stilisierte Vorschau des Explorables Human in the Loop: sechs Workflow-Phasen vom Interview bis zum Bericht, jede mit einem Haken, sobald ein Mensch sie geprüft hat, und ein kopierbarer Prompt für die aktuelle Phase.",
+    "title": "Projektplan",
+    "tag": "Phasen",
+    "prompt": "„Lies requirements.md und entwirf dann die Epics …“",
+    "copy": "Prompt kopieren",
+    "stages": {
+      "interview": {
+        "name": "Interview",
+        "kind": "Briefing"
+      },
+      "plan": {
+        "name": "Plan",
+        "kind": "Anforderungen"
+      },
+      "epics": {
+        "name": "Epics",
+        "kind": "Je Epic"
+      },
+      "tickets": {
+        "name": "Tickets",
+        "kind": "Je Epic"
+      },
+      "execute": {
+        "name": "Umsetzung",
+        "kind": "Je Ticket"
+      },
+      "report": {
+        "name": "Bericht",
+        "kind": "Geprüft"
+      }
+    }
+  }
+}

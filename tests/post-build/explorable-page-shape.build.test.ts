@@ -53,6 +53,63 @@ describe('explorable page shape', () => {
     });
   });
 
+  describe.each(
+    SHAPED.filter(({ folder }) => folder !== TEMPLATE_FOLDER).flatMap(({ slug, route }) =>
+      LOCALES.map((locale) => ({ slug, locale, url: localizePath(route, locale) })),
+    ),
+  )('hero of $url', ({ url }) => {
+    const play = `${url.replace(/\/$/, '')}/#play`;
+    const about = `${url.replace(/\/$/, '')}/#about`;
+
+    it('links Try it to the Explorable and Why it matters to Why, How and What by their registered Slide anchors', () => {
+      // ARRANGE
+      const $ = exportedPage(url);
+      const expected = [play, about];
+      // ACT
+      const links = $('[data-slot="title-slide"] a')
+        .toArray()
+        .map((link) => $(link).attr('href'));
+      // ASSERT
+      expect(links).toEqual(expected);
+    });
+
+    it('states the payoff as its h1 while the page title stays the Explorable name', () => {
+      // ARRANGE
+      const $ = exportedPage(url);
+      // ACT
+      const heading = $('[data-slot="title-slide"] h1').text();
+      const title = $('title').text();
+      // ASSERT
+      expect(heading.length).toBeGreaterThan(title.split(' · ')[0].length);
+      expect(title).not.toContain(heading);
+    });
+
+    it('keeps its pause button outside the decorative Backdrop, named and pressed-state ready', () => {
+      // ARRANGE
+      const $ = exportedPage(url);
+      const button = $('[data-slot="title-slide"] [data-hero-motion-button]');
+      // ACT
+      const inside = button.closest('[aria-hidden="true"]').length;
+      const pressed = button.attr('aria-pressed');
+      const name = button.attr('aria-label');
+      // ASSERT
+      expect(inside).toBe(0);
+      expect(pressed).toBe('false');
+      expect(name).toBeTruthy();
+    });
+
+    it('draws its background on one canvas inside the Backdrop and requests nothing from the network', () => {
+      // ARRANGE
+      const $ = exportedPage(url);
+      // ACT
+      const canvases = $('[data-slot="title-slide"] [data-slot="slide-backdrop"] canvas').length;
+      const remote = $('[data-slot="title-slide"] [src^="http"], [data-slot="title-slide"] [srcset]').length;
+      // ASSERT
+      expect(canvases).toBe(1);
+      expect(remote).toBe(0);
+    });
+  });
+
   describe('placeholders', () => {
     const [template] = SHAPED.filter(({ folder }) => folder === TEMPLATE_FOLDER);
     const pages = SHAPED.filter(({ folder }) => folder !== TEMPLATE_FOLDER);

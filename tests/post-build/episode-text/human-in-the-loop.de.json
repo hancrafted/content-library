@@ -5,7 +5,7 @@
   "slides": [
     {
       "id": "top",
-      "text": "Human in the Loop Ein Workflow, in dem KI-Chats die Arbeit machen und Sie steuern: jede Phase, ihre Übergabe und ihre Prüfung."
+      "text": "Die KI liefert ein Ergebnis, das richtig aussieht und es nicht ist. Ein Workflow, in dem KI-Chats die Arbeit machen und Sie steuern: sechs Phasen, für jede ein frischer Chat, und Ihre Prüfung, bevor die nächste beginnt. Ausprobieren Warum es wichtig ist Zeigen Sie es Ihrem Team Führen Sie ein Team live durch eine Phase und geben Sie ihm dann die Workflow-Datei, damit es sie anpasst. Link kopieren Projektplan Phasen 1 Interview Briefing 2 Plan Anforderungen 3 Epics Je Epic 4 Tickets Je Epic 5 Umsetzung Je Ticket 6 Bericht Geprüft „Lies requirements.md und entwirf dann die Epics …“ Prompt kopieren"
     },
     {
       "id": "play",

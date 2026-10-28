@@ -5,7 +5,7 @@
   "slides": [
     {
       "id": "top",
-      "text": "Context window What fills an AI chat's window, step by step, and how much attention each part gets: try every part and control."
+      "text": "The AI forgets what you told it an hour ago. See what fills an AI chat’s window and how much attention each part gets. Replay a real chat step by step and watch the middle blur. Try it Why it matters Show it to your team Put it on the screen in your next AI session: one hover explains why the long chat drifted. Copy link Context window 200K Window · 64% full Attention per message"
     },
     {
       "id": "play",

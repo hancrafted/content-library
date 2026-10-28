@@ -3,6 +3,7 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { aboutSection } from './sections/about';
 import { playSection } from './sections/play';
+import { hero } from './slides/hero/slide';
 
 /*
  * The Human in the loop Explorable as a Template (design-ADR 0019): a Title slide, then Why, How and What, then the Explorable with every option on. A change to the explanation is previewed here before it reaches an
@@ -11,5 +12,6 @@ import { playSection } from './sections/play';
 export const humanInTheLoop = episode({
   slug: 'human-in-the-loop',
   messages: { en, de },
+  title: hero,
   sections: [playSection, aboutSection],
 });

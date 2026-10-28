@@ -54,9 +54,18 @@ export function titleTakenBy(slideId: string): string {
   );
 }
 
-/** A caption a Slide's own messages give, as plain text; undefined when they give none. */
-export function captionTextOf(t: RuntimeTranslator): string | undefined {
-  return t.has('caption') ? plain(t, 'caption') : undefined;
+/** The lines of the Title slide a hero Scene gives in its own messages. */
+export interface TitleLines {
+  readonly heading?: string;
+  readonly caption?: string;
+}
+
+/** The `h1` and caption a Title slide Scene gives in its own messages, as plain text; each undefined when it gives none. */
+export function titleLinesOf(t: RuntimeTranslator): TitleLines {
+  return {
+    ...(t.has(ON_SCREEN_TITLE_KEY) && { heading: plain(t, ON_SCREEN_TITLE_KEY) }),
+    ...(t.has('caption') && { caption: plain(t, 'caption') }),
+  };
 }
 
 /** The marker a Slide's caption ends on: the note it names must be one the Slide declares. */

@@ -1,0 +1,24 @@
+{
+  "heading": "The AI forgets what you told it an hour ago.",
+  "caption": "See what fills an AI chat’s window and how much attention each part gets. Replay a real chat step by step and watch the middle blur.",
+  "tryIt": "Try it",
+  "why": "Why it matters",
+  "share": {
+    "title": "Show it to your team",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "text": "Put it on the screen in your next AI session: one hover explains why the long chat drifted."
+  },
+  "motion": {
+    "pause": "Pause background animation",
+    "play": "Play background animation",
+    "stilled": "The background is still: reduced motion is on"
+  },
+  "preview": {
+    "label": "Stylised preview of the Context window Explorable: a window bar filling with system, memory, chat and search tokens, and an attention chart that dips in the middle.",
+    "title": "Context window",
+    "tag": "200K",
+    "window": "Window · 64% full",
+    "attention": "Attention per message"
+  }
+}

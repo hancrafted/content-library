@@ -1,0 +1,46 @@
+{
+  "heading": "Alle sagen Agent und Workflow, und niemand sagt, was der Unterschied ist.",
+  "caption": "Vier Disziplinen auf einem Sprachmodell, von 2022 bis 2026. Spielen Sie jede Szene ab und sehen Sie, wie Prompting, Agenten, Workflows und die Factory das Modell erreichen.",
+  "tryIt": "Ausprobieren",
+  "why": "Warum es wichtig ist",
+  "share": {
+    "title": "Zeigen Sie es Ihrem Team",
+    "copy": "Link kopieren",
+    "copied": "Link kopiert",
+    "text": "Klären Sie die Begriffe in einem Meeting: Drücken Sie „Alle abspielen“ und lassen Sie die Zeitleiste sprechen."
+  },
+  "motion": {
+    "pause": "Hintergrundanimation pausieren",
+    "play": "Hintergrundanimation abspielen",
+    "stilled": "Der Hintergrund steht still: Bewegung reduzieren ist aktiv"
+  },
+  "preview": {
+    "label": "Stilisierte Vorschau des Explorables KI-Disziplinen: vier Spalten, Prompting, Agenten, Workflows und die Factory, jede mit ihrem Jahr und einer Leitung hinab zu einem Sprachmodell, das das nächste Token vorhersagt.",
+    "title": "KI-Disziplinen",
+    "tag": "2022–2026",
+    "model": "Sprachmodell",
+    "predicts": "sagt das nächste Token voraus",
+    "cards": {
+      "prompting": {
+        "year": "2022",
+        "name": "Prompting",
+        "like": "wie eine Aufgabe"
+      },
+      "agents": {
+        "year": "2024",
+        "name": "Agenten",
+        "like": "wie ein Spezialist"
+      },
+      "workflows": {
+        "year": "2024",
+        "name": "Workflows",
+        "like": "wie ein Team"
+      },
+      "factory": {
+        "year": "2026",
+        "name": "Factory",
+        "like": "wie eine Organisation"
+      }
+    }
+  }
+}
