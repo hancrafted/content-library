@@ -35,6 +35,6 @@ for (const { section, slug, title } of slideRows(ROOT, dir, language)) {
   const start = stored.starts?.[slug] ?? (stored.unmatched?.includes(slug) ? 'unmatched' : '');
   console.log(`${section}\t${slug}\t${title}\t${start}`);
 }
-const violations = recordingViolations(dir);
+const violations = recordingViolations(ROOT, dir);
 for (const { file, message } of violations) console.error(`${file}: ${message}`);
 if (violations.length > 0) process.exit(1);
