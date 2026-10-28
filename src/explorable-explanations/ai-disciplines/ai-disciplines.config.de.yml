@@ -20,7 +20,7 @@ words:
       line: Ihr schreibt, die KI antwortet. Der Einstieg.
       scale: einer Aufgabe
       interface: Chat
-      interfaceHint: ein Gespräch, Nachricht für Nachricht
+      interfaceHint: 'ein Gespräch: Sie schreiben, es antwortet, Nachricht für Nachricht'
       definition: Prompting heißt, dem Modell wirksame Anweisungen zu schreiben, damit es verlässlich liefert, was ihr braucht.
       sourceLabel: OpenAI, Prompt-Engineering-Leitfaden
       sourceUrl: https://developers.openai.com/api/docs/guides/prompt-engineering
@@ -30,7 +30,7 @@ words:
       line: Die KI nutzt Werkzeuge und arbeitet in einer Schleife.
       scale: einer Fachkraft
       interface: Harness
-      interfaceHint: 'die Software drumherum: Rechte, Werkzeuge, Schleife'
+      interfaceHint: 'die Software drumherum: Rechte, Werkzeuge, eine Schleife bis zum Ziel'
       definition: Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt und selbst entscheidet, wie es ein Ziel erreicht.
       sourceLabel: Anthropic, Building effective agents (2024)
       sourceUrl: https://www.anthropic.com/engineering/building-effective-agents
@@ -40,7 +40,7 @@ words:
       line: Mehrere Agenten, Schritt für Schritt nach Plan.
       scale: einem Team
       interface: Ablaufplan
-      interfaceHint: 'ein Graph: verzweigen, zusammenführen, prüfen'
+      interfaceHint: ein Graph aus Agenten, mit dem Menschen in oder an der Schleife
       definition: Ein Workflow verkettet Modell- und Werkzeugschritte nach einem vorher festgelegten Ablauf.
       sourceLabel: Anthropic, Building effective agents (2024)
       sourceUrl: https://www.anthropic.com/engineering/building-effective-agents
@@ -50,7 +50,7 @@ words:
       line: Anfragen rein, Ergebnis raus. Wie es innen aussieht, ist offen.
       scale: einer Organisation
       interface: End-to-End
-      interfaceHint: Anfrage rein, Ergebnis raus
+      interfaceHint: Kundenanfragen rein, Magie passiert, Ergebnisse raus, 24/7/365
       definition: 'Eine Factory macht aus Anforderungen Software, als Blackbox: Agenten arbeiten die ganze Strecke ab, kein Mensch schreibt oder prüft jeden Schritt.'
       sourceLabel: Shapiro, The Five Levels (2026)
       sourceUrl: https://www.danshapiro.com/blog/2026/01/the-five-levels-from-spicy-autocomplete-to-the-software-factory/

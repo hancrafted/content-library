@@ -22,7 +22,7 @@ words:
       line: You write, the AI answers. The entry point.
       scale: a task
       interface: Chat
-      interfaceHint: a conversation, message by message
+      interfaceHint: 'a conversation: you write, it answers, message by message'
       definition: Prompting is writing effective instructions so the model reliably gives you what you need.
       sourceLabel: OpenAI, prompt engineering guide
       sourceUrl: https://developers.openai.com/api/docs/guides/prompt-engineering
@@ -32,7 +32,7 @@ words:
       line: The AI uses tools and works in a loop.
       scale: a specialist
       interface: Harness
-      interfaceHint: 'the software around it: permissions, tools, loop'
+      interfaceHint: 'the software around it: permissions, tools and a loop until done'
       definition: An agent is a language model that uses tools in a loop and decides for itself how to reach a goal.
       sourceLabel: Anthropic, Building effective agents (2024)
       sourceUrl: https://www.anthropic.com/engineering/building-effective-agents
@@ -42,7 +42,7 @@ words:
       line: Several agents, step by step, to a plan.
       scale: a team
       interface: Flowchart
-      interfaceHint: 'a graph: branch out, merge, check'
+      interfaceHint: a graph of agents with a human in or on the loop
       definition: A workflow chains model and tool steps along a path fixed in advance.
       sourceLabel: Anthropic, Building effective agents (2024)
       sourceUrl: https://www.anthropic.com/engineering/building-effective-agents
@@ -52,7 +52,7 @@ words:
       line: Requests in, results out. What happens inside is still open.
       scale: an organisation
       interface: End to end
-      interfaceHint: request in, result out
+      interfaceHint: customer requests go in, magic happens, results come out, 24/7/365
       definition: A factory turns specifications into software as a black box, agents working the whole line with no person writing or reviewing each step.
       sourceLabel: Shapiro, The Five Levels (2026)
       sourceUrl: https://www.danshapiro.com/blog/2026/01/the-five-levels-from-spicy-autocomplete-to-the-software-factory/
