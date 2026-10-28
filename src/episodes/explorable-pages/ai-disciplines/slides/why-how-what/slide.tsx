@@ -5,6 +5,7 @@ import { useId, type ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
+const STRONGDM_SOFTWARE_FACTORY = { slug: 'strongdm-software-factory', url: 'https://factory.strongdm.ai/' };
 const GRANT_DARK_FACTORIES = { slug: 'grant-dark-factories', url: 'https://chadgrant.github.io/dark-factories/' };
 const OPENAI_PROMPT_ENGINEERING = {
   slug: 'openai-prompt-engineering',
@@ -30,7 +31,7 @@ interface ColumnCopy {
 
 /** One column of the Grids Master slide `grid-1x3`, copied: its accent stub on the hairline, the word, then claim and caption. */
 function Column({ cell, targetProps }: { cell: ColumnCopy; targetProps: TargetProps }) {
-  const id = `about-${useId()}`;
+  const id = `column-${useId()}`;
   return (
     <article
       {...targetProps}
@@ -64,7 +65,7 @@ export const whyHowWhat = slide({
   slug: 'why-how-what',
   messages: { en, de },
   notes: [
-    { slug: 'why', target: 'why', sources: [GRANT_DARK_FACTORIES] },
+    { slug: 'why', target: 'why', sources: [STRONGDM_SOFTWARE_FACTORY, GRANT_DARK_FACTORIES] },
     {
       slug: 'how',
       target: 'how',
@@ -73,7 +74,7 @@ export const whyHowWhat = slide({
     {
       slug: 'what',
       target: 'what',
-      sources: [OPENAI_INTRODUCING_CHATGPT, ANTHROPIC_BUILDING_EFFECTIVE_AGENTS, GRANT_DARK_FACTORIES],
+      sources: [OPENAI_INTRODUCING_CHATGPT, ANTHROPIC_BUILDING_EFFECTIVE_AGENTS, STRONGDM_SOFTWARE_FACTORY],
     },
   ],
   content: ({ t, marker, target }) => {

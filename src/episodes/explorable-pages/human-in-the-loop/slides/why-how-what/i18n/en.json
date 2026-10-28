@@ -23,7 +23,7 @@
   "notes": {
     "why": {
       "header": "Unchecked output has cost real money",
-      "description": "In a New York federal case, lawyers filed a brief citing six cases ChatGPT had invented and were fined; the court held that rules give attorneys a gatekeeping role for the accuracy of their filings [1]. In one study, programmers with an AI assistant wrote less secure code and were more sure it was secure, a result a larger study disputes [2] (research AIE-0005).",
+      "description": "In a New York federal case, lawyers filed a brief citing six cases ChatGPT had invented and were fined; the court held that rules give attorneys a gatekeeping role for the accuracy of their filings [1]. In one study, programmers with an AI assistant wrote less secure code and were more sure it was secure, a result a larger study disputes [2] (research AIE-0005, AIE-0010).",
       "sources": {
         "castel-mata-v-avianca": {
           "title": "Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (S.D.N.Y. June 22, 2023)"

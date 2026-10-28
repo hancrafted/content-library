@@ -130,6 +130,26 @@ test.describe('success cases', () => {
       expect(errors).toEqual(expected);
     });
   }
+
+  for (const slug of PAGES) {
+    test(`${slug}: the floor's last Slide is the #play Slide`, async ({ page }) => {
+      // ARRANGE
+      const expected = 'play';
+      // ACT
+      const slide = await openLastSlide(page, slug);
+      // ASSERT
+      await expect(slide).toHaveAttribute('id', expected);
+    });
+  }
+
+  test('ai-disciplines: the #play Slide shows "Play all"', async ({ page }) => {
+    // ARRANGE
+    const expected = 'Play all';
+    // ACT
+    const slide = await openLastSlide(page, 'ai-disciplines');
+    // ASSERT
+    await expect(slide.getByRole('button', { name: expected })).toBeVisible({ timeout: SETTLE });
+  });
 });
 
 test.describe('failure cases', () => {

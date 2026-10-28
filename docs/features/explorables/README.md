@@ -50,7 +50,7 @@ Convention, not enforced, except where the build suite pins it. Start a new page
 2. **Section `about`**: one text Slide, **Why · How · What**, in three columns from the Grids Master slide `grid-1x3` (copied, never imported), stacked Why-first on a phone. Why is a relatable human problem or pain; the Short cuts it. Each column's claim carries a Speaker note that cites a Research question or a high-trust Source (vision rule 3).
 3. **Section `play`**: the primary Explorable with every option on, so the visitor plays with all of it after the story. The template shows Context window as a stand-in: swap in the page's own Explorable and add the slug to `PAGES` in the browser suite.
 
-Both Sections switch the section slide off (`withoutSectionSlide`), so the anchors are `#about` and `#play`. `published-anchors.json` holds those two. The Presets that earlier pages showed as a gallery stay in each Explorable's config, where Episodes use them. Pinned by `tests/post-build/explorable-page-shape.build.test.ts`. The full Golden Circle story (why, how, what, then play) is a follow-up.
+Both Sections switch the section slide off (`withoutSectionSlide`), so the anchors are `#about` and `#play`. `published-anchors.json` holds those two. The Presets that earlier pages showed as a gallery stay in each Explorable's config, where Episodes use them. Pinned by `tests/post-build/explorable-page-shape.build.test.ts`. The full Golden Circle story (why, how, what, then play) is a follow-up, issue #425.
 
 ### Short framing
 
