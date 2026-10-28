@@ -5,8 +5,8 @@ import en from './i18n/en.json';
 import { PromptToPlan, TRAITS } from './prompt-to-plan';
 
 /**
- * "What happens with one prompt" (practice round, .scratch/onboard-ai-every-time/handoff.md): one prompt in, a
- * polished stack of twelve documents out, and each PRICE trait wired to the mark it left in them; the callout says
+ * "What happens with one prompt" (practice round, .scratch/onboard-ai-every-time/handoff.md): one short prompt in one chat, one
+ * long polished answer out, and each PRICE trait wired to the mark it left in them; the callout says
  * what that costs you. Its last segment is the Section's Bridge.
  */
 export const onePrompt = slide({
@@ -30,7 +30,9 @@ export const onePrompt = slide({
         traitsLabel={t('traitsLabel')}
         cracks={TRAITS.map((slug) => ({
           slug,
+          initial: t(`cracks.${slug}.initial`),
           trait: t(`cracks.${slug}.trait`),
+          gloss: t(`cracks.${slug}.gloss`),
           why: t(`cracks.${slug}.why`),
           produced: t(`cracks.${slug}.produced`),
         }))}

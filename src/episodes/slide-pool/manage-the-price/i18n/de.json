@@ -8,36 +8,51 @@
   "footLabel": "Schritte, die jeder Eigenschaft entgegenwirken",
   "movesCount": "<figure>{count}</figure> {count, plural, one {Schritt} other {Schritte}}",
   "traits": {
-    "probabilistic": { "initial": "", "rest": "Probabilistisch" },
-    "relentless": { "initial": "", "rest": "Unermüdlich" },
-    "informed": { "initial": "", "rest": "Informiert" },
-    "confident": { "initial": "", "rest": "Selbstsicher" },
-    "every-word-billed": { "initial": "", "rest": "Jedes Wort berechnet" }
+    "probabilistic": {
+      "initial": "P",
+      "rest": "robabilistic"
+    },
+    "relentless": {
+      "initial": "R",
+      "rest": "elentless"
+    },
+    "informed": {
+      "initial": "I",
+      "rest": "nformed"
+    },
+    "confident": {
+      "initial": "C",
+      "rest": "onfident"
+    },
+    "every-word-billed": {
+      "initial": "E",
+      "rest": "very word billed"
+    }
   },
   "moves": {
     "break-it-down": {
-      "initial": "",
-      "rest": "Zerlege es",
+      "initial": "B",
+      "rest": "rich es auf",
       "line": "Gib ein Stück nach dem anderen ab. Kleine Stücke lassen weniger Raum für Fehler und kosten weniger."
     },
     "requirements-first": {
-      "initial": "",
-      "rest": "Erst die Anforderungen",
+      "initial": "R",
+      "rest": "equirements zuerst",
       "line": "Schreib auf, wie gut aussieht, bevor die Arbeit beginnt. Dann bringt dasselbe Briefing Ergebnisse, die übereinstimmen."
     },
     "interview-yourself-with-ai": {
-      "initial": "",
-      "rest": "Interviewe Dich mit KI",
+      "initial": "I",
+      "rest": "nterviewe Dich mit KI",
       "line": "Lass Dir zuerst die Fragen der KI stellen. Dein ungeschriebener Kontext kommt heraus, bevor sie rät."
     },
     "evaluate-each-step": {
-      "initial": "",
-      "rest": "Prüfe jeden Schritt",
+      "initial": "E",
+      "rest": "valuiere jeden Schritt",
       "line": "Prüfe jeden Schritt gegen die Anforderungen. Ein Irrweg fällt früh auf, nicht erst nach der letzten Seite."
     },
     "fresh-start-for-each-piece": {
-      "initial": "",
-      "rest": "Frischer Start für jedes Teil",
+      "initial": "F",
+      "rest": "rischer Start für jedes Teil",
       "line": "Öffne für jedes Stück einen neuen Chat. Alte Worte türmen sich nicht mehr auf der Rechnung und im Weg."
     }
   },
@@ -79,7 +94,9 @@
       "header": "Prüfe jeden Schritt",
       "description": "Auf einem Mathe-Benchmark schneidet Feedback zu jedem Denkschritt deutlich besser ab als Feedback nur zum Endergebnis [1]. Modelle tun sich außerdem schwer, ihre Antworten ohne Feedback von außen zu korrigieren, also braucht die Prüfung etwas außerhalb des Modells, hier die Anforderungen [2].",
       "sources": {
-        "lightman-verify-step-by-step": { "title": "Lightman et al., Let's Verify Step by Step" },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        },
         "huang-cannot-self-correct": {
           "title": "Huang et al., Large Language Models Cannot Self-Correct Reasoning Yet"
         }
@@ -101,7 +118,9 @@
       "header": "Eine Grenze des Zerlegens",
       "description": "Zerlegen macht ein Modell nicht verlässlich darin, die Stücke wieder zusammenzusetzen; Fehler in frühen Schritten wandern weiter in spätere, und deshalb ist der nächste Schritt das Prüfen [1].",
       "sources": {
-        "dziri-faith-and-fate": { "title": "Dziri et al., Faith and Fate: Limits of Transformers on Compositionality" }
+        "dziri-faith-and-fate": {
+          "title": "Dziri et al., Faith and Fate: Limits of Transformers on Compositionality"
+        }
       }
     }
   },

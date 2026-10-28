@@ -14,7 +14,7 @@ const WORKERS = 'workers';
 const LOOP_NOTE = 'loop-note';
 
 /**
- * The human in the loop workflow: the brief-the-venue Workflow whole (its columns, connectors and the fan-out to the
+ * The human in the loop workflow: the project-plan Workflow whole (its columns, connectors and the fan-out to the
  * worker chats and back in), only without bold first letters and the acronym unnamed. The loop strip did not fit
  * beside it at 1280x800, so its message (planner chat, worker chats, you checking) lives in the caption.
  */

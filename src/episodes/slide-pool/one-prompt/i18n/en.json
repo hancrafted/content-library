@@ -4,33 +4,43 @@
   "caption": "It looks finished. Look closer.",
   "promptLabel": "The one prompt",
   "prompt": "Plan your company's next summer party: 200 employees across five offices in Europe.",
-  "stackLabel": "12 documents back, polished",
+  "stackLabel": "One long answer, polished",
   "traitsLabel": "What each trait left in the plan",
   "cracks": {
     "probabilistic": {
+      "initial": "P",
       "trait": "Probabilistic",
-      "why": "Ask again, and you get a whole new plan.",
-      "produced": "Plan v1: Lisbon, 14 June. Plan v2: Berlin, 5 July."
+      "gloss": "",
+      "why": "Ask again, get a different answer.",
+      "produced": "“Where should we hold it?” Lisbon. New chat, same question: Berlin."
     },
     "relentless": {
+      "initial": "R",
       "trait": "Relentless",
-      "why": "Never asked where your people travel from, and buried you in documents.",
-      "produced": "Picked the top 10 hotels on Tripadvisor, regardless of location"
+      "gloss": "",
+      "why": "One prompt, pages back in seconds, all to check.",
+      "produced": "9 pages: venues, menus, a 40-song playlist"
     },
     "informed": {
+      "initial": "I",
       "trait": "Informed",
-      "why": "Knows a thousand activities, not your culture.",
-      "produced": "Team activity: paintball, 3 hours, all 200"
+      "gloss": "",
+      "why": "Knows every party, not yours.",
+      "produced": "Rooftop club, DJ until 2 a.m."
     },
     "confident": {
+      "initial": "C",
       "trait": "Confident",
-      "why": "Prices that look like facts, and are made up.",
-      "produced": "Venue: €48 per head, catering included, availability confirmed"
+      "gloss": "",
+      "why": "Fills your gaps with guesses, stated as facts.",
+      "produced": "Budget: €250 per head"
     },
     "every-word-billed": {
+      "initial": "E",
       "trait": "Every word billed",
-      "why": "You paid for every page of it.",
-      "produced": "Invoice: 6,400 words read and written × €0.08"
+      "gloss": "",
+      "why": "Each follow-up re-sends the whole chat.",
+      "produced": "Follow-up #6: all 9 pages read again, billed again"
     }
   },
   "callout": "<strong>Hard to review.</strong> You are likely to throw it away and do it yourself.",
@@ -39,32 +49,32 @@
       "one-prompt-in": {
         "title": "One prompt in",
         "keywords": "",
-        "script": "So what happens if you just hand them one prompt: plan your company's next summer party, 200 employees across five offices in Europe? You get a plan. A polished one. Look closer."
+        "script": "So what happens if you do it all in one chat, with one short prompt: plan your company's next summer party, 200 employees across five offices in Europe? You get one long answer. A polished one. Look closer."
       },
       "probabilistic": {
         "title": "Probabilistic",
         "keywords": "",
-        "script": "They're probabilistic: ask again, and you get a whole new plan, in Lisbon instead of Berlin."
+        "script": "They're probabilistic: ask where to hold it, and the answer is Lisbon. Open a new chat, ask the same question, and it's Berlin."
       },
       "relentless": {
         "title": "Relentless",
         "keywords": "",
-        "script": "They're relentless: they compared hotels in twelve cities by rating, never asked where your people travel from, and buried you in documents."
+        "script": "They're relentless: one short prompt, and nine pages come back in seconds, venues, menus, even a forty-song playlist, and you have to check every line."
       },
       "informed": {
         "title": "Informed",
         "keywords": "",
-        "script": "They're informed: they know a thousand team-building activities, and they picked paintball, because they don't know your culture."
+        "script": "They're informed: they know every kind of party, just not yours. They suggest a rooftop club with a DJ until two, and nobody told them last year's party was too loud to talk."
       },
       "confident": {
         "title": "Confident",
         "keywords": "",
-        "script": "They're confident: the venue prices look like facts, and they're made up."
+        "script": "They're confident: you never named a budget, so they picked one, 250 euros per head, and planned everything around it as if it were a fact."
       },
       "every-word-billed": {
         "title": "Every word billed",
         "keywords": "",
-        "script": "And they bill per word: you paid for every page of it."
+        "script": "And they bill every word: by your sixth follow-up, each message sends the whole chat again, all nine pages, read again and billed again."
       },
       "you-saw-the-ai": {
         "title": "You saw the AI",

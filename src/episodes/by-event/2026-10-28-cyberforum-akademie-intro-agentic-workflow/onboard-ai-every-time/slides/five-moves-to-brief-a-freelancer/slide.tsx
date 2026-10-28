@@ -21,7 +21,11 @@ export const fiveMovesToBriefAFreelancer = slide({
           {MOVES.map((move) => (
             <li key={move} className="rounded-full border border-border bg-card px-4 py-1">
               {t.rich(`moves.${move}`, {
-                initial: (chunks: ReactNode) => <span className="font-semibold">{chunks}</span>,
+                initial: (chunks: ReactNode) => (
+                  <span data-move-initial className="font-semibold">
+                    {chunks}
+                  </span>
+                ),
               })}
             </li>
           ))}

@@ -6,13 +6,11 @@ import { Sparkle } from '@/shared/components/core-components/glyphs/glyphs';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { InterviewChat, type ChatTurnCopy } from './interview-chat.client';
-import { Legend } from './legend';
 
 const INTERVIEW = 'interview';
 const REQUIREMENTS = 'requirements';
 const RESEARCH = 'research';
-const COMPARE = 'compare';
-const LEGEND = 'legend';
+const PAGE = 'page';
 
 /** Matt Pocock's skills the worked chat invokes: a grilling to interview you, then a spec from the answers. */
 const GRILLING = {
@@ -54,13 +52,13 @@ const TURNS: readonly (['reply', Reply] | ['question', Asked])[] = [
 type StageId = keyof typeof en.stages;
 
 /**
- * Brief the venue (Spec Option 4a): one task walked through BRIEF as a Workflow drawn in stages. Seven stage columns hold their
- * jobs, every job a fresh chat; hairlines fan out to three venue chats and back in, and the signed-off requirements
- * card is the one focal point. Static at rest, hover only: pointing at a stage dims the others, every node opens a
- * two-line popover, and the Interview opens its worked chat. The markup reads as an ordered list of stages.
+ * Your first human-in-the-loop agentic workflow: the whole summer party walked through BRIEF as the `summer-party`
+ * Workflow, opening in the Stages view. Four stage cards carry their BRIEF letters, the worked Interview chat of the Plan
+ * stage opens from under the diagram (a `<dialog>` cannot sit in a stage title), Requirements is the gate you sign off before research, Research is one fresh chat per ticket, and
+ * Page is the second gate. Every stage name opens a two-line popover. The markup reads as an ordered list of stages.
  */
-export const briefTheVenue = slide({
-  slug: 'brief-the-venue',
+export const firstHumanInTheLoopAgenticWorkflow = slide({
+  slug: 'first-human-in-the-loop-agentic-workflow',
   messages: { en, de },
   notes: [
     {
@@ -80,27 +78,26 @@ export const briefTheVenue = slide({
     },
     {
       slug: 'plan-then-fresh-session',
-      target: LEGEND,
+      target: RESEARCH,
       sources: [
         { slug: 'anthropic-claude-code-best-practices', url: 'https://code.claude.com/docs/en/best-practices' },
       ],
     },
     {
       slug: 'the-answer-can-be-right-and-the-work-wrong',
-      target: COMPARE,
+      target: PAGE,
       sources: [{ slug: 'uesato-process-and-outcome-feedback', url: 'https://arxiv.org/abs/2211.14275' }],
     },
   ],
   segments: [
     { slug: 'restate' },
-    { slug: 'break-it-down' },
-    { slug: 'interview' },
+    { slug: 'interview-and-plan' },
     { slug: 'requirements' },
     { slug: 'research-fresh-each-time' },
-    { slug: 'compare-and-check' },
-    { slug: 'recommendation-and-on' },
+    { slug: 'one-page' },
+    { slug: 'live-next' },
   ],
-  content: ({ t, template, locale, target, marker, Marker }) => {
+  content: ({ t, locale, target, Marker }) => {
     const popover = (id: StageId): PopoverCopy => ({
       in: t(`stages.${id}.popover.in`),
       out: t(`stages.${id}.popover.out`),
@@ -137,57 +134,46 @@ export const briefTheVenue = slide({
     );
     const stageSlot = (id: StageId) => ({ popover: popover(id) });
     return (
-      <SlideFrame className="mt-10 gap-10">
+      <SlideFrame className="mt-10 gap-6">
         <HumanInTheLoop
-          workflow="project-plan"
+          workflow="summer-party"
           locale={locale}
-          view="jobs"
+          view="stages"
           diagram={{
             label: t('workflowLabel'),
-            jobsLabel: template('jobsLabel'),
-            checked: t('jobs.checked'),
             initials: true,
             stages: {
-              plan: { ...stageSlot('plan'), target: target(INTERVIEW) },
-              epics: stageSlot('epics'),
-              requirements: { ...stageSlot('requirements'), target: target(REQUIREMENTS) },
-              execute: {
-                ...stageSlot('execute'),
-                target: target(RESEARCH),
-                aside: <Marker note="focus-beats-volume" placement="beside" />,
+              plan: {
+                ...stageSlot('plan'),
+                target: target(INTERVIEW),
+                aside: <Marker note="a-wrong-early-guess-sticks" placement="beside" />,
               },
-              aggregate: stageSlot('aggregate'),
-              review: { ...stageSlot('review'), target: target(COMPARE) },
-            },
-            jobs: {
-              task: { popover: popover('plan') },
-              scope: {
-                detail: (
+              requirements: {
+                ...stageSlot('requirements'),
+                target: target(REQUIREMENTS),
+                aside: <Marker note="why-the-sign-off-is-a-gate" placement="beside" />,
+              },
+              research: {
+                ...stageSlot('research'),
+                target: target(RESEARCH),
+                aside: (
                   <>
-                    {t('jobs.scope.detail')}
-                    <br />
-                    {t.rich('jobs.scope.forgot', { marker: marker('a-wrong-early-guess-sticks') })}
+                    <Marker note="focus-beats-volume" placement="beside" />
+                    <Marker note="plan-then-fresh-session" placement="beside" />
                   </>
                 ),
-                after: chat,
               },
-              tickets: {
-                marker: <Marker note="why-the-sign-off-is-a-gate" placement="beside" />,
-              },
-              ticket: { popover: popover('execute') },
-              html: {
-                marker: <Marker note="the-answer-can-be-right-and-the-work-wrong" placement="beside" />,
+              page: {
+                ...stageSlot('page'),
+                target: target(PAGE),
+                aside: <Marker note="the-answer-can-be-right-and-the-work-wrong" placement="beside" />,
               },
             },
           }}
         />
-        <div {...target(LEGEND)}>
-          <Legend
-            label={t('legend.label')}
-            freshChat={t.rich('legend.freshChat', { marker: marker('plan-then-fresh-session') })}
-            checked={t('legend.checked')}
-            parked={t('legend.parked')}
-          />
+        <div className="flex flex-wrap items-center gap-3 text-caption text-muted-foreground">
+          {t('chat.lead')}
+          {chat}
         </div>
       </SlideFrame>
     );

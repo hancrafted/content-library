@@ -7,7 +7,11 @@ type Trait = (typeof TRAITS)[number];
 /** One trait's crack: its name, why it cracked the plan, and what it left in the documents. */
 export interface Crack {
   slug: Trait;
+  /** The letter on the chip: the acronym's, so German still spells PRICE. */
+  initial: string;
   trait: string;
+  /** The name in the viewer's language under an English name; empty where the name already is. */
+  gloss: string;
   why: string;
   produced: string;
 }
@@ -23,7 +27,7 @@ interface PromptToPlanProps {
 /** The four columns at width: the traits, right-aligned to their chips in the middle, the connectors, the pile. */
 const COLUMNS = '@3xl:grid-cols-[minmax(0,1fr)_auto_4rem_minmax(0,1fr)]';
 
-/** The documents with no mark of their own, scattered under the five marked ones: 12 in all. */
+/** The pages with no mark of their own, scattered under the five marked ones. */
 const LOOSE = [
   { top: '2%', left: '6%', turn: -6 },
   { top: '14%', left: '22%', turn: 4 },
@@ -44,14 +48,15 @@ const SCATTER = [
 ] as const;
 
 /** The trait's letter on a chip, the PRICE chip in miniature. */
-function Letter({ name }: { name: string }) {
+function Letter({ initial }: { initial: string }) {
   return (
     <span
+      data-trait-initial
       translate="no"
       aria-hidden="true"
       className="order-first grid size-10 shrink-0 place-items-center rounded-full bg-primary text-body font-semibold text-primary-foreground shadow-md @3xl:order-none"
     >
-      {name[0]}
+      {initial}
     </span>
   );
 }
@@ -122,9 +127,14 @@ function CrackRow({ crack, place }: { crack: Crack; place: (typeof SCATTER)[numb
         <span translate="no" className="text-body font-semibold">
           {crack.trait}
         </span>
+        {crack.gloss === '' ? null : (
+          <span data-trait-gloss className="text-caption text-muted-foreground">
+            {crack.gloss}
+          </span>
+        )}
         <span className="text-body text-muted-foreground">{crack.why}</span>
       </p>
-      <Letter name={crack.trait} />
+      <Letter initial={crack.initial} />
       <Connector />
       <div className="w-full @3xl:pl-4">
         <Page produced={crack.produced} place={place} />
