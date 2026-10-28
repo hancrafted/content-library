@@ -5,7 +5,7 @@ description: Rewrite an Episode's Voice script from the recording's transcript, 
 
 # Episode transcript to Voice script
 
-Han recorded the talk from the Voice script, and said something close to it. This skill moves each segment's `voiceScript` text to what he said, edited into prose a reader enjoys and a blog article could later reuse. It writes `voiceScript` and nothing else, and ends on a Voice script diff per Slide for Han's review. It needs `recording/slide-starts.<lang>.json` (from `/episode-match-slide-starts`).
+Han recorded the talk from the Voice script, and said something close to it. This skill moves each segment's `voiceScript` text to what he said, edited into prose a reader enjoys and a blog article could later reuse. It writes `voiceScript` and nothing else, and ends on a Voice script diff per Slide for Han's review. It needs `recording/slide-starts.<lang>.json` (from `/episode-match-slide-starts`). It runs alone, given an Episode folder, page URL or video ID, or as a step of `/episode-post-production`.
 
 ## Steps
 
