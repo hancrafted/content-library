@@ -40,8 +40,8 @@ describe('success cases', () => {
     const textRight = 936;
     const gap = 24;
     const copyTop = 300;
-    const wide = { width: 1440, height: 900, text: copy, top: 72 };
-    const narrow = { width: 390, height: 844, text: [{ x: 16, y: 300, width: 358, height: 300 }], top: 72 };
+    const wide = { width: 1440, height: 900, text: copy, top: 72, right: 1380 };
+    const narrow = { width: 390, height: 844, text: [{ x: 16, y: 300, width: 358, height: 300 }], top: 72, right: 330 };
     // ACT
     const beside = areaOf(wide);
     const above = areaOf(narrow);
@@ -139,6 +139,18 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('moves the art above the copy when an open drawer takes the room on its right', () => {
+    // ARRANGE
+    const copy = [{ x: 336, y: 400, width: 600, height: 300 }];
+    const drawerLeft = 1000;
+    const hero = { width: 1440, height: 900, text: copy, top: 72, right: drawerLeft };
+    // ACT
+    const area = areaOf(hero);
+    // ASSERT
+    expect(area.compact).toBe(true);
+    expect(area.x + area.w).toBeLessThanOrEqual(drawerLeft);
+  });
+
   it('does not count paused time: a resume carries on from where the clock stopped', () => {
     // ARRANGE
     const clock = createClock();

@@ -38,12 +38,6 @@ export interface ExplorableHeroProps {
 const ACTION =
   'inline-flex min-h-12 items-center justify-center rounded-full border px-6 text-body font-medium outline-offset-3 transition-colors focus-visible:outline-3 focus-visible:outline-primary-foreground';
 
-/**
- * The Title slide hero Scene of an Explorable page (a record's `title`): an inverted, full-bleed Backdrop of faint
- * bubbles whose one accent beat tells the Explorable's story, then the actions, the team-share block and the tool
- * preview under the container's headline and lede. It owns no words: every string arrives as a prop, from the Slide
- * that renders it. The pause button sits outside the decorative Backdrop and shares its state with the canvas.
- */
 /** A Slide link (`slideHref`) taken apart: the logical path and the anchor, for `localizePath`. */
 function partsOf(link: string) {
   const [path, anchor] = link.split('#');
@@ -72,6 +66,12 @@ function Actions({ tryIt, why, locale }: Pick<ExplorableHeroProps, 'tryIt' | 'wh
   );
 }
 
+/**
+ * The Title slide hero Scene of an Explorable page (a record's `title`): an inverted, full-bleed Backdrop of faint
+ * bubbles whose one accent beat tells the Explorable's story, then the actions, the team-share block and the tool
+ * preview under the container's headline and lede. It owns no words: every string arrives as a prop, from the Slide
+ * that renders it. The pause button sits outside the decorative Backdrop and shares its state with the canvas.
+ */
 export function ExplorableHero({ layers, story, locale, tryIt, why, share, motion, preview }: ExplorableHeroProps) {
   return (
     <HeroMotion labels={motion}>

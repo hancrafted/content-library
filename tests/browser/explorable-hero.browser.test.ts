@@ -139,4 +139,22 @@ test.describe('edge cases', () => {
     expect(box?.height).toBeGreaterThanOrEqual(minimum);
     expect(overflow).toBe(0);
   });
+
+  test('an open Context drawer does not cover the pause button', async ({ page }) => {
+    // ARRANGE
+    await openHero(page, 'context-window');
+    const centre = 2;
+    // ACT
+    await page.keyboard.press('Alt+n');
+    // ASSERT
+    await expect(page.locator('[data-slot="title-slide"] h1')).toHaveCSS('max-width', /px/);
+    await expect
+      .poll(() =>
+        page.locator(BUTTON).evaluate((button, half) => {
+          const box = button.getBoundingClientRect();
+          return button.contains(document.elementFromPoint(box.x + box.width / half, box.y + box.height / half));
+        }, centre),
+      )
+      .toBe(true);
+  });
 });

@@ -56,15 +56,24 @@ export interface Area {
   readonly compact: boolean;
 }
 
-/** The art's area from the hero's size and the headline and lede boxes: beside them when 220px is left, else above. */
-export function areaOf(hero: { width: number; height: number; text: readonly Box[]; top: number }): Area {
-  const { width, height, text, top } = hero;
+/**
+ * The art's area from the hero's height, the headline and lede boxes, and `right`, the left edge of the pause button,
+ * which sits at the Foreground's right inset and so clears an open drawer: beside the copy when 220px is left, else above.
+ */
+export function areaOf(hero: {
+  width: number;
+  height: number;
+  text: readonly Box[];
+  top: number;
+  right: number;
+}): Area {
+  const { height, text, top, right } = hero;
   const textRight = Math.max(...text.map((box) => box.x + box.width));
   const copyTop = Math.min(...text.map((box) => box.y));
-  const room = width - textRight - 72;
+  const room = right - 12 - textRight;
   if (room >= 220)
     return { x: textRight + 24, y: top + 4, w: room, h: Math.max(180, height - top - 270), compact: false };
-  return { x: 24, y: top, w: width - 104, h: Math.max(24, copyTop - top - 20), compact: true };
+  return { x: 24, y: top, w: right - 12 - 24, h: Math.max(24, copyTop - top - 20), compact: true };
 }
 
 /** What the page lets the background do now. */

@@ -88,7 +88,7 @@ export function HeroMotionButton() {
       title={reduced ? labels.stilled : name}
       disabled={reduced}
       onClick={toggle}
-      className="absolute top-3 right-4 z-10 grid size-11 place-items-center rounded-full border border-primary-foreground/25 bg-primary text-primary-foreground outline-offset-3 hover:border-primary-foreground focus-visible:outline-3 focus-visible:outline-primary-foreground disabled:opacity-60 md:right-12"
+      className="absolute top-3 right-(--inset-r) z-10 grid size-11 place-items-center rounded-full border border-primary-foreground/25 bg-primary text-primary-foreground outline-offset-3 hover:border-primary-foreground focus-visible:outline-3 focus-visible:outline-primary-foreground disabled:opacity-60"
     >
       <Icon aria-hidden className="size-[18px] fill-current" />
     </button>

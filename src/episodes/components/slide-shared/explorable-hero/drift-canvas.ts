@@ -34,11 +34,13 @@ function measure(canvas: HTMLCanvasElement, layer: HTMLCanvasElement, hero: HTML
     surface.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
   }
   const text = [...hero.querySelectorAll('h1, [data-target="caption"]')].map((element) => boxOf(element, bounds));
+  const button = hero.querySelector('[data-hero-motion-button]');
+  const right = button ? boxOf(button, bounds).x : bounds.width - 60;
   const style = getComputedStyle(canvas);
   return {
     width: bounds.width,
     height: bounds.height,
-    area: areaOf({ width: bounds.width, height: bounds.height, text, top: ART_TOP }),
+    area: areaOf({ width: bounds.width, height: bounds.height, text, top: ART_TOP, right }),
     ink: style.getPropertyValue('--primary-foreground').trim(),
     accent: style.getPropertyValue('--brand-accent').trim(),
   };
@@ -110,7 +112,10 @@ export function mountDrift(canvas: HTMLCanvasElement, hero: HTMLElement, scene: 
     draw();
   };
   const resize = new ResizeObserver(remeasure);
-  resize.observe(hero);
+  // The hero's own size, and its Foreground's (which an open drawer narrows without resizing the hero).
+  for (const watched of [hero, hero.querySelector('[data-hero-motion-button]')?.parentElement]) {
+    if (watched) resize.observe(watched);
+  }
   const stopWatching = watchPixelRatio(remeasure);
   draw();
   const dispose = () => {
