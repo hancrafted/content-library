@@ -1,6 +1,7 @@
 import { cn } from '@/shared/lib/utils';
+import { useEffect, useState } from 'react';
 
-export const RING_RADIUS = 12;
+export const RING_RADIUS = 11;
 export const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
 interface ProgressRingProps {
@@ -8,8 +9,8 @@ interface ProgressRingProps {
   settled: boolean;
 }
 
-function ProgressArc({ offset, settled }: { offset: number; settled: boolean }) {
-  const transition = settled ? 'transition-[stroke-dashoffset] duration-300 ease-out' : 'transition-none';
+function ProgressArc({ offset, visible, settled }: { offset: number; visible: boolean; settled: boolean }) {
+  const transition = settled ? 'transition-[stroke-dashoffset,opacity] duration-300 ease-out' : 'transition-none';
   return (
     <circle
       cx="16"
@@ -21,7 +22,7 @@ function ProgressArc({ offset, settled }: { offset: number; settled: boolean }) 
       strokeDasharray={RING_CIRCUMFERENCE}
       strokeDashoffset={offset}
       strokeLinecap="round"
-      className={cn('text-foreground motion-reduce:transition-none', transition)}
+      className={cn('text-foreground motion-reduce:transition-none', transition, !visible && 'opacity-0')}
     />
   );
 }
@@ -32,7 +33,13 @@ function ProgressArc({ offset, settled }: { offset: number; settled: boolean }) 
  */
 export function ProgressRing({ progress, settled }: ProgressRingProps) {
   const clamped = Math.min(Math.max(progress, 0), 1);
-  const offset = RING_CIRCUMFERENCE * (1 - clamped);
+  // The arc mounts empty and fills on the next frame, so it animates in rather than popping.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  const offset = RING_CIRCUMFERENCE * (1 - (mounted ? clamped : 0));
   return (
     <svg
       aria-hidden
@@ -49,7 +56,7 @@ export function ProgressRing({ progress, settled }: ProgressRingProps) {
         strokeWidth={2}
         className="text-border"
       />
-      {clamped > 0 && <ProgressArc offset={offset} settled={settled} />}
+      <ProgressArc offset={offset} visible={mounted && clamped > 0} settled={settled} />
     </svg>
   );
 }

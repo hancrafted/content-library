@@ -66,8 +66,8 @@ function HeadingDetails(props: HeadingDetailsProps) {
       aria-hidden={collapsed}
       className={cn(
         'flex min-w-0 flex-1 items-center justify-between gap-2 overflow-hidden whitespace-nowrap',
-        'motion-reduce:transition-none transition-[max-width,opacity] duration-300 ease-out',
-        collapsed ? 'max-w-0 opacity-0 pointer-events-none' : 'max-w-[14rem] opacity-100',
+        'motion-reduce:transition-none transition-[max-width,opacity,margin] duration-300 ease-out',
+        collapsed ? 'mr-0 max-w-0 opacity-0 pointer-events-none' : 'mr-2 max-w-[14rem] opacity-100',
       )}
     >
       <Link
@@ -113,7 +113,7 @@ export function TocHeading(props: {
       className={cn(
         'flex min-h-8 items-center text-caption whitespace-nowrap text-muted-foreground',
         'motion-reduce:transition-none transition-[padding] duration-300 ease-out',
-        collapsed ? 'justify-center px-0' : 'justify-between gap-2 px-2',
+        collapsed ? 'justify-center px-0' : 'justify-between px-2',
       )}
     >
       <HeadingDetails {...props} />

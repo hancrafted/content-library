@@ -70,7 +70,8 @@ function SectionItems({ view, section, collapsed }: { view: TocView; section: To
         open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
       )}
     >
-      <ol className="ml-10 min-h-0 overflow-hidden">
+      {/* From `md` the list always keeps the expanded panel's width, so its items never rewrap while the panel narrows or widens. */}
+      <ol className={'ml-10 min-h-0 overflow-hidden md:min-w-[12.875rem]'}>
         {section.items.map((item) => (
           <ItemEntry key={item.id} view={view} item={item} />
         ))}
@@ -150,10 +151,10 @@ function SectionTitle(props: { view: TocView; id: string; title: string; collaps
       id={id}
       className={cn(
         'flex-1 rounded-lg text-pretty whitespace-nowrap overflow-hidden',
-        'motion-reduce:transition-none transition-[max-width,opacity,padding] duration-300 ease-out',
+        'motion-reduce:transition-none transition-[max-width,opacity,padding,margin] duration-300 ease-out',
         collapsed
-          ? 'max-w-0 opacity-0 pointer-events-none p-0'
-          : 'max-w-[15rem] opacity-100 px-2 py-1.5 hover:bg-accent/70 hover:text-foreground',
+          ? 'ml-0 max-w-0 opacity-0 pointer-events-none px-0 py-1.5'
+          : 'ml-1 max-w-[15rem] opacity-100 px-2 py-1.5 hover:bg-accent/70 hover:text-foreground',
         active && !collapsed && 'bg-selected text-selected-foreground',
       )}
     >
@@ -179,7 +180,7 @@ export function SectionEntry(props: SectionEntryProps) {
 
   return (
     <li>
-      <div className={cn('flex items-start gap-1', tone)}>
+      <div className={cn('flex items-start', tone)}>
         <SectionMarker
           view={view}
           section={section}

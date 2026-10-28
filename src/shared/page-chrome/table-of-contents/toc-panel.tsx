@@ -17,11 +17,7 @@ interface SectionListProps {
 }
 
 function SectionList({ view, sections, toggleLabel, collapsed }: SectionListProps) {
-  const listClass = cn(
-    '-mr-1 flex min-h-0 flex-col gap-0.5 overflow-y-auto pr-1',
-    'motion-reduce:transition-none transition-all duration-300 ease-out',
-    collapsed && 'mr-0 pr-0 items-center gap-2 mt-2',
-  );
+  const listClass = cn('-mr-1 flex min-h-0 flex-col gap-0.5 overflow-y-auto pr-1', collapsed && 'overflow-x-hidden');
   return (
     <ol className={listClass}>
       {sections.map((section, index) => (
@@ -59,8 +55,8 @@ function TocBody(props: {
       <div className="flex min-h-0 flex-col overflow-hidden">
         <div
           className={cn(
-            'overflow-hidden motion-reduce:transition-none transition-[max-height,opacity] duration-300 ease-out',
-            collapsed ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-8 opacity-100',
+            'overflow-hidden motion-reduce:transition-none transition-opacity duration-300 ease-out',
+            collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100',
           )}
         >
           <ProgressBar labels={labels} locale={view.locale} time={props.time} settled={view.settled} />
@@ -115,8 +111,9 @@ export function TocPanel(props: {
       data-collapsed={props.collapsed ? 'true' : undefined}
       className={cn(
         'flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl overflow-hidden',
-        'motion-reduce:transition-none transition-[width,padding] duration-300 ease-out',
-        props.collapsed ? 'w-[3.5rem] p-2.5 items-center' : 'w-full p-3',
+        'motion-reduce:transition-none transition-[width] duration-300 ease-out p-3',
+        // 3.625rem = 2rem marker + 2 × p-3 + 2px border: the numbers keep their place.
+        props.collapsed ? 'w-[3.625rem]' : 'w-full',
         props.className,
       )}
     >

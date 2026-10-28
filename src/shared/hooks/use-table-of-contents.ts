@@ -1,10 +1,9 @@
-import { readPrefs, writePrefs } from '@/shared/lib/prefs-storage';
 import { READING_LINE } from '@/shared/lib/reading-line.pure';
 import { openSectionIds, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import { useEffect, useState } from 'react';
 
 /** How long the compact loading box holds after mount, so the table never visibly settles into place. */
-const REVEAL_AFTER_MS = 1000;
+const REVEAL_AFTER_MS = 300;
 const NOTHING_TOGGLED: ReadonlySet<string> = new Set();
 
 function fractionInto(element: Element | null): number {
@@ -58,7 +57,7 @@ export function useSettled(observed: string | null): boolean {
   return settled;
 }
 
-/** True once a second has passed since mount and the first observation has painted; until then the table shows its loading box. */
+/** True once 300ms have passed since mount and the first observation has painted; until then the table shows its loading box. */
 export function useRevealed(settled: boolean): boolean {
   const [elapsed, setElapsed] = useState(false);
   useEffect(() => {
@@ -87,23 +86,11 @@ export function useOpenSections(sections: readonly TocSection[], active: string 
 }
 
 /**
- * Remembers the collapsed state of the table of contents chrome across reloads (FE-001 §3).
- * Starts expanded on the default and adopts the stored choice after mount, so the static page
- * and the first client render agree.
+ * Whether the table of contents chrome is collapsed. Transient (FE-001): a reload always
+ * starts expanded, so the static page and the first client render agree.
  */
 export function useTocCollapse(): [boolean, () => void] {
   const [collapsed, setCollapsed] = useState(false);
-  useEffect(() => {
-    setCollapsed(readPrefs().tocCollapsed ?? false);
-  }, []);
-
-  const toggle = () => {
-    setCollapsed((prev) => {
-      const next = !prev;
-      writePrefs({ tocCollapsed: next });
-      return next;
-    });
-  };
-
+  const toggle = () => setCollapsed((prev) => !prev);
   return [collapsed, toggle];
 }
