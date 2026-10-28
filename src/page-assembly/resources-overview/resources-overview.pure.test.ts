@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 import {
   matchingResources,
   NO_SELECTION,
+  resourceKindChoices,
   resourceTagChoices,
-  resourceTypeChoices,
   type FilterableResource,
 } from './resources-overview.pure';
 
 /*
  * The Resources overview's filter (design-ADR 0019): a search over title, description and Tag names, any chosen
- * Tag, any chosen type; the groups combine with AND. Words are written out by hand, in one locale.
+ * Tag, any chosen kind; the groups combine with AND. Words are written out by hand, in one locale.
  */
 
 interface Words {
@@ -17,9 +17,9 @@ interface Words {
   readonly description: string;
   readonly tags: readonly (readonly [string, string])[];
 }
-const resource = (slug: string, type: string, { title, description, tags }: Words) => ({
+const resource = (slug: string, kind: string, { title, description, tags }: Words) => ({
   slug,
-  type,
+  kind,
   title,
   description,
   tags: tags.map(([id, label]) => ({ id, label })),
@@ -78,19 +78,19 @@ describe('success cases', () => {
     expect(slugs(kept)).toEqual(['context-window', 'human-in-the-loop']);
   });
 
-  it('keeps a Resource of any chosen type', () => {
+  it('keeps a Resource of any chosen kind', () => {
     // ARRANGE
-    const selection = { ...NO_SELECTION, types: ['episode-template'] };
+    const selection = { ...NO_SELECTION, kinds: ['episode-template'] };
     // ACT
     const kept = matchingResources(ALL, selection);
     // ASSERT
     expect(slugs(kept)).toEqual(['episode-template']);
   });
 
-  it('combines the search, the Tags and the types with AND', () => {
+  it('combines the search, the Tags and the kinds with AND', () => {
     // ARRANGE
-    const selection = { query: 'loop', tags: ['workflow'], types: ['master-slide'] };
-    const excluded = { ...selection, types: ['episode-template'] };
+    const selection = { query: 'loop', tags: ['workflow'], kinds: ['master-slide'] };
+    const excluded = { ...selection, kinds: ['episode-template'] };
     // ACT
     const kept = [matchingResources(ALL, selection), matchingResources(ALL, excluded)].map(slugs);
     // ASSERT
@@ -111,15 +111,15 @@ describe('success cases', () => {
     expect(chips).toEqual(expected);
   });
 
-  it('offers a chip for each type a Resource has, in the closed order, named by the words given', () => {
+  it('offers a chip for each kind a Resource has, in the closed order, named by the words given', () => {
     // ARRANGE
-    const types = ['episode-template', 'master-slide'] as const;
+    const kinds = ['episode-template', 'master-slide'] as const;
     const expected = [
       { id: 'episode-template', label: 'Templates', count: 1 },
       { id: 'master-slide', label: 'Masters', count: 2 },
     ];
     // ACT
-    const chips = resourceTypeChoices(ALL, types, NAMES);
+    const chips = resourceKindChoices(ALL, kinds, NAMES);
     // ASSERT
     expect(chips).toEqual(expected);
   });
@@ -139,7 +139,7 @@ describe('failure cases', () => {
     // ARRANGE
     const none: readonly FilterableResource[] = [];
     // ACT
-    const chips = [resourceTagChoices(none, ['workflow']), resourceTypeChoices(none, ['master-slide'], NAMES)];
+    const chips = [resourceTagChoices(none, ['workflow']), resourceKindChoices(none, ['master-slide'], NAMES)];
     // ASSERT
     expect(chips).toEqual([[], []]);
   });

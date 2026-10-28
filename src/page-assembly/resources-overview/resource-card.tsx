@@ -13,9 +13,9 @@ export interface ResourceCard {
   readonly slug: string;
   /** The Resource page's locale-neutral logical path. */
   readonly route: string;
-  readonly type: string;
-  /** The type's name in the reader's locale ("Master slide"). */
-  readonly typeLabel: string;
+  readonly kind: string;
+  /** The kind's name in the reader's locale ("Master slide"). */
+  readonly kindLabel: string;
   readonly title: string;
   readonly description: string;
   /** The Resource's first Tag, which gives its card the icon and accent. */
@@ -24,7 +24,7 @@ export interface ResourceCard {
 }
 
 /**
- * One Resource as a card, laid out as an Episode card is: the lead Tag's icon and accent, its type, the title as the
+ * One Resource as a card, laid out as an Episode card is: the lead Tag's icon and accent, its kind, the title as the
  * card's one link, the description, the Tags and the cue that it opens.
  */
 export function ResourceCardView({
@@ -43,10 +43,10 @@ export function ResourceCardView({
       accent={tagToken(card.leadTag)}
       icon={NAMED_ICONS[TAG_ICONS[card.leadTag]]}
       className={className}
-      data={{ 'data-resource-card': card.slug, 'data-resource-type': card.type, 'data-lead-tag': card.leadTag }}
+      data={{ 'data-resource-card': card.slug, 'data-resource-kind': card.kind, 'data-lead-tag': card.leadTag }}
     >
-      <p data-resource-type-label className="text-caption font-medium tracking-widest text-muted-foreground uppercase">
-        {card.typeLabel}
+      <p data-resource-kind-label className="text-caption font-medium tracking-widest text-muted-foreground uppercase">
+        {card.kindLabel}
       </p>
       <CardTitle variant="compact" title={card.title} route={card.route} locale={locale} level={2} />
       <CardCaption variant="compact">{card.description}</CardCaption>

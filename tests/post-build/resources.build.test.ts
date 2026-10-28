@@ -67,13 +67,18 @@ describe.each(PAGES)('the Template page $url', ({ type, slug, path, url }) => {
   });
 });
 
+const KINDS = ['episode', 'event', 'explorable-page', 'episode-template', 'master-slide'];
+
 describe('the Resources overview', () => {
   it.each(LOCALES)('lists the five Templates, each linking to its page, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.resources, locale));
     const expected = TEMPLATES.map(({ path }) => `${basePath}${localizePath(path, locale)}/`).sort();
     // ACT
-    const hrefs = $('[data-resource-card] h2 a')
+    const hrefs = $(
+      '[data-resource-card][data-resource-kind$="-template"], [data-resource-card][data-resource-kind="master-slide"]',
+    )
+      .find('h2 a')
       .toArray()
       .map((link) => $(link).attr('href') ?? '')
       .sort();
@@ -81,25 +86,58 @@ describe('the Resources overview', () => {
     expect(hrefs).toEqual(expected);
   });
 
-  it.each(LOCALES)('offers a search, a type filter with counts, Tag chips and the view switch, for %s', (locale) => {
+  it.each(LOCALES)('lists all five kinds, each card linking to a page of its own kind, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.resources, locale));
-    const expectedTypeCounts = ['3', '2'];
+    const prefix = `${basePath}${localizePath('/', locale)}`.replace(/\/$/, '');
+    const pathOf = (kind: string) =>
+      ({
+        episode: '/episodes/',
+        event: '/events/',
+        'explorable-page': '/explorables/',
+        'episode-template': '/episode-templates/',
+        'master-slide': '/master-slides/',
+      })[kind] ?? '';
     // ACT
-    const search = $('[data-resource-controls] input[type="search"][data-resource-search]').length;
-    const typeCounts = $('[data-resource-type-filter] [data-filter-tag] span')
+    const cards = $('[data-resource-card]')
       .toArray()
-      .map((count) => $(count).text());
-    const chips = $('[data-resource-controls] [data-filter-tag]').length;
-    const views = $('[data-resource-view]').length;
+      .map((card) => ({
+        kind: $(card).attr('data-resource-kind') ?? '',
+        href: $(card).find('h2 a').attr('href') ?? '',
+      }));
+    const kinds = [...new Set(cards.map(({ kind }) => kind))];
+    const misplaced = cards.filter(({ kind, href }) => !href.startsWith(`${prefix}${pathOf(kind)}`));
     // ASSERT
-    expect(search).toBe(1);
-    expect(typeCounts).toEqual(expectedTypeCounts);
-    expect(chips).toBeGreaterThan(typeCounts.length);
-    expect(views).toBe(2);
+    expect(kinds.sort()).toEqual([...KINDS].sort());
+    expect(misplaced).toEqual([]);
   });
 
-  it.each(LOCALES)('is indexed and in the sitemap with the five pages, for %s', (locale) => {
+  it.each(LOCALES)(
+    'offers a search, a kind filter with a chip and count per kind, Tag chips and the view switch, for %s',
+    (locale) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(ROUTES.resources, locale));
+      // ACT
+      const search = $('[data-resource-controls] input[type="search"][data-resource-search]').length;
+      const chips = $('[data-resource-kind-filter] [data-filter-tag]')
+        .toArray()
+        .map((chip) => ({
+          kind: $(chip).attr('data-filter-tag'),
+          count: Number($(chip).find('span').text()),
+        }));
+      const cardsOf = (kind: string) => $(`[data-resource-card][data-resource-kind="${kind}"]`).length;
+      const allChips = $('[data-resource-controls] [data-filter-tag]').length;
+      const views = $('[data-resource-view]').length;
+      // ASSERT
+      expect(search).toBe(1);
+      expect(chips.map(({ kind }) => kind)).toEqual(KINDS);
+      expect(chips.map(({ count }) => count)).toEqual(KINDS.map(cardsOf));
+      expect(allChips).toBeGreaterThan(chips.length);
+      expect(views).toBe(2);
+    },
+  );
+
+  it.each(LOCALES)('is indexed and in the sitemap with the five Template pages, for %s', (locale) => {
     // ARRANGE
     const sitemap = readFileSync(join(OUT_DIR, 'sitemap.xml'), 'utf8');
     const urls = [ROUTES.resources, ...TEMPLATES.map(({ path }) => path)].map(
