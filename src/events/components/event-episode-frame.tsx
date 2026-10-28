@@ -3,7 +3,6 @@ import { eventEpisodeRoute, eventRoute } from '@/content-store/catalogue/record-
 import type { IsoDate } from '@/content-store/schemas/fields';
 import type { PresentedEpisode } from '@/content-store/store';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import { fillTemplate } from '@/shared/lib/template.pure';
 import { cn } from '@/shared/lib/utils';
 import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
 import Link from 'next/link';
@@ -15,15 +14,15 @@ import { PastNotice } from './past-notice';
 /**
  * What an Event adds around an Episode it presents at its own URL (design-ADR 0016, Routes and visibility), ready for
  * the Episode page container: the route the page is served at, the header above the Title slide (the breadcrumb, then
- * for a past Event the notice), "Episode n of m" under the title, and the Playlist walk after the last Slide.
+ * for a past Event the notice), the Event's time under the title, and the Playlist walk after the last Slide.
  */
 export interface EventEpisodeFrame {
   /** The logical path of the Episode under its Event; the contents and Slide links point there. */
   readonly route: string;
   readonly header: ReactNode;
   readonly footer: ReactNode;
-  /** "Episode 2 of 3". */
-  readonly position: string;
+  /** The Event's time as the venue writes it, "17:00–19:00 CET"; under the title, none when the Event has none. */
+  readonly time: string | undefined;
 }
 
 /**
@@ -31,9 +30,9 @@ export interface EventEpisodeFrame {
  * Any Episode will do: the frame reads only its slug and hands it to `titleOf`, so `Id` is whatever page assembly holds.
  */
 interface FramedEpisode<Id extends string> {
-  readonly event: Pick<PresentedEpisode['event'], 'slug' | 'date'>;
+  readonly event: Pick<PresentedEpisode['event'], 'slug' | 'date' | 'time'>;
   readonly episode: EpisodeRef<Id>;
-  readonly place: Pick<PresentedEpisode['place'], 'position' | 'count'> & {
+  readonly place: {
     readonly previous?: EpisodeRef<Id>;
     readonly next?: EpisodeRef<Id>;
   };
@@ -91,7 +90,7 @@ export function eventEpisodeFrame<Id extends string>(
     route: eventEpisodeRoute(event.slug, episode),
     header: <EventEpisodeHeader parts={parts} buildDay={buildDay} />,
     footer: <PlaylistNav parts={parts} />,
-    position: fillTemplate(labels.position, { position: place.position, count: place.count }),
+    time: event.time,
   };
 }
 

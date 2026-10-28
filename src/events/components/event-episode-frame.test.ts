@@ -23,13 +23,14 @@ const LAST = episodeRef('gamma');
 const PLAYLIST = [FIRST, MIDDLE, LAST] as const;
 const BUILD_DAY: IsoDate = '2026-10-25';
 const UPCOMING: IsoDate = '2026-11-06';
+const EVENT_TIME = '17:00–19:00 CET';
 const titleOf = (episode: { readonly slug: string }) => `Title of ${episode.slug}`;
 
 /** The served Event, the Episode and its place in the Playlist, as the page catalogue presents it, for an Event on `date`. */
 function presented(episode: (typeof PLAYLIST)[number], date: IsoDate) {
   const at = PLAYLIST.indexOf(episode);
   return {
-    event: { slug: EVENT, date },
+    event: { slug: EVENT, date, time: EVENT_TIME },
     episode,
     place: {
       position: at + 1,
@@ -54,13 +55,13 @@ function stepOf(footer: ReactNode, walk: 'previous' | 'next' | 'back') {
 }
 
 describe('success cases', () => {
-  it('says where the Episode sits in its Playlist, under the title', () => {
+  it('shows the Event time under the title', () => {
     // ARRANGE
-    const expected = 'Episode 2 of 3';
+    const expected = '17:00–19:00 CET';
     // ACT
     const frame = frameOf(MIDDLE);
     // ASSERT
-    expect(frame.position).toBe(expected);
+    expect(frame.time).toBe(expected);
   });
 
   it('serves the page at the Episode under its Event', () => {
