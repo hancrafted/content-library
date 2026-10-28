@@ -1,9 +1,11 @@
-// `npm run check:sources -- <research.md>...`: GETs every `sources[].resource` of the given research files
-// with a browser user agent, following redirects, and prints one line per URL: ok, dead or unverifiable.
+// `npm run check:sources -- [--links] <file>...`: GETs every `sources[].resource` of the given research files
+// (with `--links`, every link in the files' text: a Workflow run's results or page) with a browser user agent,
+// following redirects, and prints one line per URL: ok, dead or unverifiable.
 // Exits 1 only when a link is dead; a 403 or a timeout may be a bot wall, so it is left to a human.
 import { readFileSync } from 'node:fs';
 import {
   classify,
+  linksIn,
   resourcesOf,
   summarize,
   type Outcome,
@@ -15,9 +17,11 @@ const CONCURRENCY = 8;
 const USER_AGENT =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
 
-const files = process.argv.slice(2);
+const args = process.argv.slice(2);
+const links = args.includes('--links');
+const files = args.filter((arg) => arg !== '--links');
 if (files.length === 0) {
-  console.error('✖ usage: npm run check:sources -- <research.md>...');
+  console.error('✖ usage: npm run check:sources -- [--links] <file>...');
   process.exit(1);
 }
 
@@ -37,7 +41,8 @@ async function fetchOutcome(url: string): Promise<Outcome> {
   }
 }
 
-const jobs = files.flatMap((file) => resourcesOf(readFileSync(file, 'utf8')).map((url) => ({ file, url })));
+const urlsOf = links ? linksIn : resourcesOf;
+const jobs = files.flatMap((file) => urlsOf(readFileSync(file, 'utf8')).map((url) => ({ file, url })));
 const results: { file: string; url: string; verdict: Verdict; detail: string }[] = [];
 let next = 0;
 await Promise.all(

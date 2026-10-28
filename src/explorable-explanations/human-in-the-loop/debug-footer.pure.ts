@@ -37,6 +37,14 @@ export interface DebugPrompt {
 
 const LEVELS: Record<Level, string> = { simple: 'chat', technical: 'cli' };
 
+/** Each footer level name back to its level: `chat` is Simple, `cli` Technical. */
+export const LEVEL_OF: Readonly<Record<string, Level>> = Object.fromEntries(
+  Object.entries(LEVELS).map(([level, name]) => [name, level as Level]),
+);
+
+/** How many hex characters of the source pair's hash a footer carries. */
+export const SOURCE_CHARS = 8;
+
 /** A name on one line, its quotes softened, so the footer stays one greppable line. */
 const named = (id: string, name: string): string => `${id} "${name.replace(/\s+/g, ' ').replace(/"/g, "'").trim()}"`;
 
@@ -73,4 +81,71 @@ export function debugAvailable({
   readonly search: string;
 }): boolean {
   return env === 'development' || new URLSearchParams(search).has('debug');
+}
+
+const MARK = '[hitl-debug] ';
+const REQUIRED = ['workflow', 'stage', 'job', 'prompt', 'step', 'level', 'demo', 'locale', 'source'] as const;
+
+/** What a reply's footer says: the scope and the prompt it was written from, or why it can't be read. */
+export type ReadFooter =
+  { readonly scope: DebugScope; readonly prompt: DebugPrompt } | { readonly problems: readonly string[] };
+
+/** `id "name"` back into its id and name. */
+const fromNamed = (value: string): { id: string; title: string } => {
+  const at = value.indexOf(' "');
+  return at < 0 ? { id: value, title: '' } : { id: value.slice(0, at), title: value.slice(at + 2, -1) };
+};
+
+/** The fields of the last footer line in a reply, by key; none when the reply has no footer. */
+function fieldsOf(reply: string): Map<string, string> | undefined {
+  const at = reply.lastIndexOf(MARK);
+  if (at < 0) return undefined;
+  const line = (reply.slice(at + MARK.length).split('\n')[0] ?? '').replace(/[`*\s]+$/, '');
+  return new Map(
+    line.split(' · ').map((field): [string, string] => {
+      const eq = field.indexOf('=');
+      return [field.slice(0, eq), field.slice(eq + 1)];
+    }),
+  );
+}
+
+type Fields = ReadonlyMap<string, string>;
+
+/** The scope a footer names; a round only when it has one. */
+function scopeFrom(fields: Fields): DebugScope {
+  const get = (key: string): string => fields.get(key) ?? '';
+  const stage = fromNamed(get('stage'));
+  const [n = 0, total = 0] = get('round').split('/').map(Number);
+  return {
+    workflow: fromNamed(get('workflow')),
+    stage: { id: stage.id, name: stage.title },
+    job: fromNamed(get('job')),
+    ...(n > 0 && total > 0 ? { round: { n, total } } : {}),
+    level: LEVEL_OF[get('level')] ?? 'simple',
+    demo: get('demo') === 'on',
+    locale: get('locale'),
+    source: get('source'),
+  };
+}
+
+/** The prompt a footer names; a chat only when it has one. */
+function promptFrom(fields: Fields): DebugPrompt {
+  const chat = fields.get('chat');
+  return {
+    prompt: fields.get('prompt') === 'explain' ? 'explain' : 'copy',
+    step: fields.get('step') === 'review' ? 'review' : 'do',
+    ...(chat === undefined ? {} : { chat: Number(chat) }),
+  };
+}
+
+/** The footer `debugFooter` wrote, read back from a pasted reply: the last one, if the AI repeated it. */
+export function parseDebugFooter(reply: string): ReadFooter {
+  const fields = fieldsOf(reply);
+  if (fields === undefined) return { problems: [`The reply has no ${MARK.trim()} line.`] };
+  const missing = REQUIRED.filter((key) => !fields.has(key));
+  if (missing.length > 0) return { problems: missing.map((key) => `The ${MARK.trim()} line has no ${key}.`) };
+  const level = fields.get('level') ?? '';
+  if (!Object.hasOwn(LEVEL_OF, level))
+    return { problems: [`The ${MARK.trim()} line has level=${level}; it reads chat or cli.`] };
+  return { scope: scopeFrom(fields), prompt: promptFrom(fields) };
 }

@@ -253,6 +253,30 @@ stages:
             - The message is two sentences or fewer.
 ```
 
+## Prompts that survive the free tier
+
+What a free consumer chat got wrong in real runs, and the prompt fix that held. Each lesson is about the chat product or the model, never the scenario; the `author-hitl-workflow` skill appends one after every fix. Why the general checks work is in its `references/prompt-checks.md`. Observed in logged-out ChatGPT free and Gemini, 2026-10.
+
+| The chat did                                                                | The prompt now says                                                                                                                   |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Returned an empty or broken reply, then apologised and offered to redo it   | Each step's instructions: "If an answer breaks off or looks wrong, start a new chat and paste the prompt again." Never argue with it. |
+| Answered as a "Writing" document or a canvas, so copying lost the headings  | "One markdown code block that starts with \`\`\`markdown, not a document or a canvas."                                                |
+| Ignored the code-block instruction now and then                             | The same sentence, plus the template block itself in the prompt; the next job reads headings, so a lost block shows at once.          |
+| Left out the closing line that tells the participant what to do with a file | Give the exact closing sentence to write: "Save this as `<name>.html` and open it in your browser."                                   |
+| Failed the artifact job (an HTML page) where Gemini passed                  | Recommend Gemini for an artifact job in the step's instructions.                                                                      |
+| Quoted a figure in another unit than the one the next job checks against    | Name the unit and say: convert, and say so, when the source has only another one.                                                     |
+| Took a picture or link of something near the item, not the item itself      | Say what the picture or link must show and what it must not; else the gallery or the item's own page.                                 |
+| Linked a list of many items where one item's page was asked                 | "The URL of its own page, never a list of many."                                                                                      |
+| Printed "not found" notes into the deliverable                              | The artifact job: "Leave out anything my note marks as not found."                                                                    |
+| Dropped a field between two jobs                                            | The handing job's template gets an H2 for it, so the next job reads it by heading.                                                    |
+| Listed every doubt it had, so the result read unsure                        | "At most three open doubts, the ones that could change the decision"; the artifact shows them in one box.                             |
+| Numbered criteria only from the second job on                               | The interview's template numbers needs (N1…) and criteria ("A2 (N2).") from the start.                                                |
+| Wrote fan-out H3s with no body                                              | "Under each H3, one line: …"                                                                                                          |
+
+The free tier's limits as of 2026-10-27: web search works; Canvas needs a login; the code block's Preview button does nothing; "New chat" asks "Clear current chat?" and discards the old chat, so a participant copies each result first.
+
+Reviews earn their extra chat only at a gate: a review after every job doubled the chats without catching more. A stand-in model (Haiku) keeps the format where the free tier breaks it, so a stand-in run proves the prompts and the chain, and only a run in the target tool proves robustness.
+
 ## Problems the loader reports
 
 `loadWorkflow` returns every problem at once, one sentence each; the shape problems come first and stop the meaning checks.

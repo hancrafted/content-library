@@ -1,5 +1,5 @@
-import { producersFor } from './workflow-outputs.pure';
-import { stepsOf, type TaskStep } from './workflow-prompts.pure';
+import { producersFor } from './workflow-outputs.pure.ts';
+import { stepsOf, type TaskStep } from './workflow-prompts.pure.ts';
 import type { ChatButtonDef, Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
 import type { Job, Workflow } from './workflow.types';

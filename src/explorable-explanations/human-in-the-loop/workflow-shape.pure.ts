@@ -1,5 +1,5 @@
-import { CHAT_MARK_NAMES } from '@/shared/components/core-components/chat-icons/chat-marks.pure';
-import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
+import { CHAT_MARK_NAMES } from '../../shared/components/core-components/chat-icons/chat-marks.pure.ts';
+import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
 
 /*
  * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type

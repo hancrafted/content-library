@@ -50,6 +50,8 @@ export async function connect(port: number): Promise<Connection> {
 }
 
 export async function evaluate<T>(send: Send, expression: string): Promise<T> {
-  const { result } = (await send('Runtime.evaluate', { expression, returnByValue: true })) as { result: { value: T } };
+  const { result } = (await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })) as {
+    result: { value: T };
+  };
   return result.value;
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { classify, resourcesOf, summarize } from './check-sources.pure.ts';
+import { classify, linksIn, resourcesOf, summarize } from './check-sources.pure.ts';
 
 /*
  * `npm run check:sources`: which URLs a research file cites, how one fetch outcome is judged,
@@ -53,6 +53,19 @@ describe('success cases', () => {
       expect(verdict).toBe(expected);
     });
   });
+
+  it('finds every link of a page or a markdown result once, in order: markdown links, bare URLs, src and href', () => {
+    // ARRANGE
+    const text = [
+      'See [the stay](https://a.example/stay) and https://b.example/map.',
+      '<img src="https://c.example/p.jpg"> <a href="https://a.example/stay">again</a>',
+    ].join('\n');
+    const expected = ['https://a.example/stay', 'https://b.example/map', 'https://c.example/p.jpg'];
+    // ACT
+    const links = linksIn(text);
+    // ASSERT
+    expect(links).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -70,6 +83,15 @@ describe('failure cases', () => {
       expect(failed.failed).toBe(true);
     });
   });
+
+  it('finds no link in text that holds none', () => {
+    // ARRANGE
+    const text = 'No sources were found; see the open doubts.';
+    // ACT
+    const links = linksIn(text);
+    // ASSERT
+    expect(links).toEqual([]);
+  });
 });
 
 describe('edge cases', () => {
@@ -82,5 +104,15 @@ describe('edge cases', () => {
       // ASSERT
       expect(resources).toEqual([[], [], []]);
     });
+  });
+
+  it('leaves the punctuation and backticks around a link out of it, and keeps a query', () => {
+    // ARRANGE
+    const text = 'Rates (https://d.example/rates?week=36), map: `https://e.example/m`; end https://f.example/.';
+    const expected = ['https://d.example/rates?week=36', 'https://e.example/m', 'https://f.example/'];
+    // ACT
+    const links = linksIn(text);
+    // ASSERT
+    expect(links).toEqual(expected);
   });
 });

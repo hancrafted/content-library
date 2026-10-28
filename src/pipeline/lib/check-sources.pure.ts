@@ -26,6 +26,12 @@ export function resourcesOf(text: string): string[] {
   }
 }
 
+/** Every http(s) link in a text, once, in order of first mention, without the punctuation that closes a sentence or a link. */
+export function linksIn(text: string): string[] {
+  const found = [...text.matchAll(/https?:\/\/[^\s"'`<>\]]+/g)].map(([url]) => url.replace(/[).,;:!?]+$/, ''));
+  return [...new Set(found)];
+}
+
 /** 2xx is ok; 404, 410 and a host that does not resolve are dead; everything else cannot be told from a blocked bot. */
 export function classify(outcome: Outcome): Verdict {
   if ('error' in outcome) return DEAD_ERRORS.includes(outcome.error) ? 'dead' : 'unverifiable';

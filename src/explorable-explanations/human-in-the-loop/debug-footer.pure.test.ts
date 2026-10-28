@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { debugAvailable, debugFooter, scopeOf, withDebug, type DebugBase } from './debug-footer.pure';
+import { debugAvailable, debugFooter, parseDebugFooter, scopeOf, withDebug, type DebugBase } from './debug-footer.pure';
 
 const base: DebugBase = {
   workflow: { id: 'project-plan', title: 'Plan a project' },
@@ -55,6 +55,17 @@ describe('success cases', () => {
     // ASSERT
     expect(shown).toEqual([true, true, true]);
   });
+
+  it('reads a footer back into the scope and the prompt it was written from', () => {
+    // ARRANGE
+    const scope = scopeOf(base, { ...at, round: { n: 2, total: 3 } });
+    const prompt = { prompt: 'copy', step: 'review', chat: 2 } as const;
+    const reply = `Here is the result.\n\n${debugFooter(scope, prompt)}`;
+    // ACT
+    const read = parseDebugFooter(reply);
+    // ASSERT
+    expect(read).toEqual({ scope, prompt });
+  });
 });
 
 describe('failure cases', () => {
@@ -74,6 +85,35 @@ describe('failure cases', () => {
     const shown = lookalikes.map((search) => debugAvailable({ env: 'production', search }));
     // ASSERT
     expect(shown).toEqual([false, false, false, false]);
+  });
+
+  it('reports a reply without a footer', () => {
+    // ARRANGE
+    const expected = { problems: ['The reply has no [hitl-debug] line.'] };
+    // ACT
+    const read = parseDebugFooter('Just an answer.');
+    // ASSERT
+    expect(read).toEqual(expected);
+  });
+
+  it('names each field a footer lacks', () => {
+    // ARRANGE
+    const line = debugFooter(scopeOf(base, at), { prompt: 'copy', step: 'do' }).replace(/ · job=[^·]*?(?= · )/, '');
+    const expected = { problems: ['The [hitl-debug] line has no job.'] };
+    // ACT
+    const read = parseDebugFooter(line);
+    // ASSERT
+    expect(read).toEqual(expected);
+  });
+
+  it('reports a level that is neither chat nor cli', () => {
+    // ARRANGE
+    const line = debugFooter(scopeOf(base, at), { prompt: 'copy', step: 'do' }).replace('level=cli', 'level=voice');
+    const expected = { problems: ['The [hitl-debug] line has level=voice; it reads chat or cli.'] };
+    // ACT
+    const read = parseDebugFooter(line);
+    // ASSERT
+    expect(read).toEqual(expected);
   });
 });
 
@@ -98,5 +138,23 @@ describe('edge cases', () => {
     const text = withDebug('x', '{footer}', footer);
     // ASSERT
     expect(text).toBe('x\n\na $& b');
+  });
+
+  it('reads the last footer of a reply, inside backticks, with names that held quotes', () => {
+    // ARRANGE
+    const first = debugFooter(scopeOf(base, at), { prompt: 'copy', step: 'do' });
+    const named = { ...at, job: { id: 'pick', title: 'The "best" pick' } };
+    const last = debugFooter(scopeOf({ ...base, level: 'simple', demo: false }, named), {
+      prompt: 'explain',
+      step: 'do',
+    });
+    const softened = "The 'best' pick";
+    // ACT
+    const read = parseDebugFooter(`${first}\n\nMore.\n\n\`${last}\``);
+    // ASSERT
+    expect(read).toMatchObject({
+      scope: { job: { id: named.job.id, title: softened }, level: 'simple', demo: false },
+      prompt: { prompt: 'explain', step: 'do' },
+    });
   });
 });
