@@ -11,6 +11,8 @@ const INTERVIEW = 'interview';
 const REQUIREMENTS = 'requirements';
 const RESEARCH = 'research';
 const PAGE = 'page';
+/** The caption's "One fresh chat per step": the claim the fresh-session note backs. */
+const CAPTION = 'caption';
 
 /** Matt Pocock's skills the worked chat invokes: a grilling to interview you, then a spec from the answers. */
 const GRILLING = {
@@ -60,6 +62,7 @@ type StageId = keyof typeof en.stages;
 export const firstHumanInTheLoopAgenticWorkflow = slide({
   slug: 'first-human-in-the-loop-agentic-workflow',
   messages: { en, de },
+  captionNote: 'plan-then-fresh-session',
   notes: [
     {
       slug: 'why-the-sign-off-is-a-gate',
@@ -78,7 +81,7 @@ export const firstHumanInTheLoopAgenticWorkflow = slide({
     },
     {
       slug: 'plan-then-fresh-session',
-      target: RESEARCH,
+      target: CAPTION,
       sources: [
         { slug: 'anthropic-claude-code-best-practices', url: 'https://code.claude.com/docs/en/best-practices' },
       ],
@@ -156,12 +159,7 @@ export const firstHumanInTheLoopAgenticWorkflow = slide({
               research: {
                 ...stageSlot('research'),
                 target: target(RESEARCH),
-                aside: (
-                  <>
-                    <Marker note="focus-beats-volume" placement="beside" />
-                    <Marker note="plan-then-fresh-session" placement="beside" />
-                  </>
-                ),
+                aside: <Marker note="focus-beats-volume" placement="beside" />,
               },
               page: {
                 ...stageSlot('page'),

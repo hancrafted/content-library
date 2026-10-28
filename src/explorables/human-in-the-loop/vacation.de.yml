@@ -161,7 +161,9 @@ stages:
     title: Auftrag
     learningGoal: 'Erst das Interview: Die KI fragt, bevor sie rät, und schreibt dann die Anforderungen, die du abzeichnest.'
     summary: 'Interview, dann Anforderungen abzeichnen'
-    move: I
+    moves:
+      - letter: I
+        why: 'Erst das Interview: Die KI fragt, bevor sie rät, und schreibt dann die Anforderungen, die du abzeichnest.'
     gate: 1
     card:
       label: Du zeichnest ab
@@ -337,7 +339,9 @@ stages:
       over: spec#research
       demo: 3
       item: stay
-    move: F
+    moves:
+      - letter: F
+        why: 'Frischer Kontext pro Teil: Jede Art von Unterkunft bekommt einen eigenen Chat, mit Websuche und einer Quelle für jede Tatsache.'
     jobs:
       - id: stay
         title: Chat
@@ -517,7 +521,9 @@ stages:
     title: Entscheiden
     learningGoal: 'Der Mensch im Kreis: Die KI ordnet, du wählst, und deine Notiz enthält alles, was die Seite braucht.'
     summary: 'Ordne die Unterkünfte, dann wählst du eine'
-    move: E
+    moves:
+      - letter: E
+        why: 'Der Mensch im Kreis: Die KI ordnet, du wählst, und deine Notiz enthält alles, was die Seite braucht.'
     gate: 2
     jobs:
       - id: compare

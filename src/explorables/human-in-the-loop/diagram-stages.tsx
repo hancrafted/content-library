@@ -2,6 +2,7 @@ import { cn } from '@/shared/lib/utils';
 import { ArrowDown, Connector } from './diagram-arrows';
 import { connectorInto, type Connector as ConnectorKind, type Rounds } from './diagram-layout.pure';
 import type { DiagramSlots, StageSlot, UiWords } from './human-in-the-loop.types';
+import { MoveCircles } from './move-circles.client';
 import { BranchCard, StageCard, Title } from './stage-card';
 import { StageProgress } from './state-mark';
 import { TryButton } from './try-button.client';
@@ -111,8 +112,22 @@ function StageBody(props: { ctx: Context; stage: Stage; slot: StageSlot; into: C
   );
 }
 
+/** A repeated stage's head: its name, then its BRIEF letters where the Slide draws them, like every other stage. */
+function BranchesHead({ ctx, stage, slot }: { ctx: Context; stage: Stage; slot: StageSlot }) {
+  return (
+    <div data-stage-head="" className="flex min-h-[50px] flex-col gap-1.5 px-3 pt-[13px] pb-2">
+      <Title stage={stage} slot={slot} />
+      {ctx.slots.initials === true && stage.moves.length > 0 && (
+        <div className="relative z-10">
+          <MoveCircles moves={stage.moves} label={ctx.words.moveLabel} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 /**
- * A repeated stage: its name on top, at the height of every other stage's title, then its rounds as parallel cards,
+ * A repeated stage: its name and BRIEF letters on top, at the height of every other stage's title, then its rounds as parallel cards,
  * indented as branches where the stages stack, then its summary in the flow, above the lane's room for "Practice it".
  */
 function Branches({ ctx, stage, branches }: { ctx: Context; stage: Stage; branches: number }) {
@@ -120,9 +135,7 @@ function Branches({ ctx, stage, branches }: { ctx: Context; stage: Stage; branch
   const run = runOfStage(ctx, stage);
   return (
     <>
-      <div data-stage-head="" className="h-[50px] px-3 pt-[13px]">
-        <Title stage={stage} slot={slot} />
-      </div>
+      <BranchesHead ctx={ctx} stage={stage} slot={slot} />
       <ol
         aria-label={stage.name}
         className="ml-4 flex flex-col gap-3 border-l border-dashed border-border pl-3 @2xl:ml-0 @2xl:border-l-0 @2xl:pl-0"

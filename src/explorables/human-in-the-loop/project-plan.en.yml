@@ -152,7 +152,9 @@ stages:
     title: High-level plan
     learningGoal: 'Project planning: turn a vague task into a clear goal, a few questions answered, and a short list of epics.'
     summary: 'From a vague task to epics'
-    move: B
+    moves:
+      - letter: B
+        why: 'Project planning: turn a vague task into a clear goal, a few questions answered, and a short list of epics.'
     gate: 1
     jobs:
       - id: task
@@ -517,7 +519,9 @@ stages:
     title: Epics
     learningGoal: 'Requirements engineering: grill each epic until the open questions are asked, then write its spec.'
     summary: 'Grill, then spec, once per epic'
-    move: I
+    moves:
+      - letter: I
+        why: 'Requirements engineering: grill each epic until the open questions are asked, then write its spec.'
     foreach:
       over: plan#epics
       demo: 2
@@ -807,7 +811,9 @@ stages:
     title: Requirements
     learningGoal: 'Requirements engineering: merge the specs, resolve their overlap and conflicts, and cut vertical-slice tickets.'
     summary: 'Merge specs, resolve conflicts, cut tickets'
-    move: R
+    moves:
+      - letter: R
+        why: 'Requirements engineering: merge the specs, resolve their overlap and conflicts, and cut vertical-slice tickets.'
     gate: 2
     jobs:
       - id: aggregate
@@ -1144,7 +1150,9 @@ stages:
     title: Execute
     learningGoal: 'Project management: run every ticket in its own fresh chat, side by side, and bring back numbers for the report.'
     summary: 'One fresh chat per ticket'
-    move: F
+    moves:
+      - letter: F
+        why: 'Project management: run every ticket in its own fresh chat, side by side, and bring back numbers for the report.'
     foreach:
       over: tickets#tickets
       demo: 4
@@ -1546,7 +1554,9 @@ stages:
     title: Review
     learningGoal: 'Quality assurance: see the report as a page, then sign it off or send it back.'
     summary: 'The report as a page, then your sign-off'
-    move: E
+    moves:
+      - letter: E
+        why: 'Quality assurance: see the report as a page, then sign it off or send it back.'
     gate: 3
     card:
       label: You sign off

@@ -5,8 +5,14 @@ import type { ChatMarkName } from '@/shared/components/core-components/chat-icon
  * file hold. Names carry a `Def` suffix or a distinct noun so they sit beside the diagram model (`workflow.types.ts`).
  */
 
-/** The BRIEF move a stage makes, by its first letter. A move may repeat across stages and may be absent (Review). */
+/** A BRIEF move, by its first letter. A move may repeat across stages and may be absent (Review). */
 export type MoveLetter = 'B' | 'R' | 'I' | 'E' | 'F';
+
+/** One BRIEF move a stage applies, and why it applies there: the circle's tooltip. */
+export interface MoveDef {
+  readonly letter: MoveLetter;
+  readonly why: string;
+}
 
 /** What a prompt section teaches. A typed enum, so a typo fails the loader. */
 export const PURPOSES = ['role', 'context', 'task', 'steps', 'template', 'scope'] as const;
@@ -174,7 +180,8 @@ export interface StageDef {
   readonly summary?: string;
   /** The stage repeats: one round per H3 under an H2 of an earlier output; the jobs of the stage run once per round. */
   readonly foreach?: ForeachDef;
-  readonly move?: MoveLetter;
+  /** The BRIEF moves the stage applies, in BRIEF order; a stage may apply several or none. */
+  readonly moves?: readonly MoveDef[];
   readonly gate?: number;
   readonly card?: CardDef;
   readonly jobs: readonly TaskDef[];

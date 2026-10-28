@@ -39,7 +39,7 @@ Every handoff is markdown: one H1, then H2 sections, and no front matter. A chat
 
 ## Stage and task fields
 
-Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Stages card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `move` (`B`, `R`, `I`, `E` or `F`, the BRIEF letter; a stage teaches one move or none), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
+Stage: `id`, `title`, `learningGoal` (one line under the popover title), `jobs` (at least one), and optional `summary` (the Stages card's text, at most eight words), `foreach` (the stage repeats; see Repeated stage), `moves` (a list of `letter`, one of `B`, `R`, `I`, `E` or `F`, and `why`, the circle's tooltip: why that BRIEF move applies to this stage; a stage applies several moves, one or none, listed in BRIEF order), `gate` (a whole number, the stage's gate) and `card` (`label`, `lines`, `status`, the sign-off card). The first stage with a `card` holds the focal job of the diagram.
 
 Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`, and `output` (required except on the final job of the last stage), and optional `review`, `needs`, `instructions`, `limits`, `openAIButtons`.
 
@@ -191,7 +191,11 @@ stages:
     title: Write
     learningGoal: 'Break it down: one small piece, written in a fresh chat.'
     summary: One small piece, in a fresh chat
-    move: B
+    moves:
+      - letter: B
+        why: 'One small piece of the welcome, not all of it.'
+      - letter: F
+        why: 'Written in a fresh chat.'
     jobs:
       - id: greet
         title: Greeting

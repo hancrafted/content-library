@@ -17,7 +17,7 @@ import { fiveMovesToBriefAFreelancerSection } from './five-moves-to-brief-a-free
 const PLACED = placeSections<Slide>([fiveMovesToBriefAFreelancerSection]).flat();
 
 /** A Slide's Scene as the page renders it, with the shared Slide header. */
-function sceneOf(slug: string, locale: Locale) {
+function localizedOf(slug: string, locale: Locale) {
   const own = PLACED.find((entry) => entry.slide.slug === slug);
   if (own === undefined) throw new Error(`No Slide "${slug}" in the Section.`);
   const localized = localizeSlide(own, {
@@ -27,8 +27,10 @@ function sceneOf(slug: string, locale: Locale) {
     referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
     header: 'shared',
   });
-  return load(renderToStaticMarkup(localized.content));
+  return localized;
 }
+
+const sceneOf = (slug: string, locale: Locale) => load(renderToStaticMarkup(localizedOf(slug, locale).content));
 
 /** The letters a Scene sets off as an acronym, in reading order. */
 const initialsOf = ($: ReturnType<typeof sceneOf>, attribute: string): string =>
@@ -76,6 +78,37 @@ describe('success cases', () => {
       stages: $('ol[data-view="stages"]').length,
       chat: $('dialog [data-forgotten="true"]').length,
     }).toEqual(expected);
+  });
+
+  it('circles the BRIEF moves each stage applies: B I, R I E, E F, E', () => {
+    // ARRANGE
+    const expected = ['BI', 'RIE', 'EF', 'E'];
+    // ACT
+    const $ = sceneOf('first-human-in-the-loop-agentic-workflow', 'de');
+    const perStage = $('ol[data-view="stages"] > li')
+      .map((_, stage) =>
+        $(stage)
+          .find('[data-move]')
+          .map((__, circle) => $(circle).attr('data-move'))
+          .get()
+          .join(''),
+      )
+      .get();
+    // ASSERT
+    expect(perStage).toEqual(expected);
+  });
+
+  it('opens one speech bubble per stage, and the fresh-chat note from the caption', () => {
+    // ARRANGE
+    const expected = { perStage: [1, 1, 1, 1], caption: 'plan-then-fresh-session' };
+    // ACT
+    const $ = sceneOf('first-human-in-the-loop-agentic-workflow', 'de');
+    const perStage = $('ol[data-view="stages"] > li')
+      .map((_, stage) => $(stage).find('[data-context-ref]').length)
+      .get();
+    const caption = localizedOf('first-human-in-the-loop-agentic-workflow', 'de').header?.captionNote?.note;
+    // ASSERT
+    expect({ perStage, caption }).toEqual(expected);
   });
 });
 

@@ -27,7 +27,7 @@ function stageOf(file: WorkflowFile, stage: StageDef, index: number): Stage {
     name: stage.title,
     goal: stage.learningGoal,
     summary: stage.summary,
-    moves: stage.move ? [{ letter: stage.move, why: stage.learningGoal }] : [],
+    moves: stage.moves ?? [],
     card: stage.card,
     gate: stage.gate,
     foreach: stage.foreach,
