@@ -2,26 +2,25 @@ import styles from './ai-disciplines.module.css';
 import type { SceneWords } from './ai-disciplines.types';
 import { ChatSceneView } from './chat-scene-view';
 import { FactorySceneView } from './factory-scene-view';
-import type { Discipline, Frame } from './scene-frames.pure';
+import { onWire, type Discipline, type Frame } from './scene-frames.pure';
 import { WorkflowSceneView } from './workflow-scene-view';
 
-/** Side by side, each message leaves a beat after the one before. */
-const STAGGER_MS = 100;
+/** How far apart two lanes of the wire sit. */
+const LANE_REM = 0.9;
 
-/** The wire to the model, with the messages on their way down or back up. */
-function Wire({ dot }: { readonly dot: Frame['dot'] }) {
+/** The wire to the model, with the messages on their way down or back up, each on its lane. */
+function Wire({ frame }: { readonly frame: Frame }) {
   return (
-    <div aria-hidden="true" className={`${styles.wire} relative flex w-16 justify-center gap-1.5`}>
+    <div aria-hidden="true" className={`${styles.wire} relative w-20`}>
       <span className="absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-2 border-dashed border-(--tone)/50" />
-      {dot &&
-        Array.from({ length: dot.count }, (_, index) => (
-          <span
-            key={`${dot?.dir}-${index}`}
-            data-dir={dot?.dir}
-            style={{ animationDelay: `${index * STAGGER_MS}ms` }}
-            className={`${styles.dot} relative size-3.5 rounded-sm bg-(--tone) ring-3 ring-(--tone)/25`}
-          />
-        ))}
+      {onWire(frame).map(({ key, dir, lane, delay }) => (
+        <span
+          key={key}
+          data-dir={dir}
+          style={{ left: `calc(50% + ${lane * LANE_REM}rem)`, animationDelay: `${delay}ms` }}
+          className={`${styles.dot} absolute top-0 size-3.5 -translate-x-1/2 rounded-sm bg-(--tone) ring-3 ring-(--tone)/25`}
+        />
+      ))}
     </div>
   );
 }
@@ -45,7 +44,7 @@ export function DisciplineSceneView(props: {
       <div className="flex flex-col items-center gap-0.5 text-center">
         <p className="text-body font-semibold text-(--tone)">{props.interfaceName}</p>
         <p className="text-caption text-muted-foreground">{props.interfaceHint}</p>
-        <Wire dot={frame.dot} />
+        <Wire frame={frame} />
       </div>
     </>
   );

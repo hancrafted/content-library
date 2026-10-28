@@ -7,7 +7,7 @@ import type { AiDisciplinesPreset, AiDisciplinesWords } from './ai-disciplines.t
 import { DisciplineColumn } from './discipline-column.client';
 import { LlmBand } from './llm-band.client';
 import { ScaleRowView } from './scale-row-view';
-import { DISCIPLINES, type Discipline, type Frame } from './scene-frames.pure';
+import { DISCIPLINES, onWire, type Discipline, type Frame } from './scene-frames.pure';
 import { useScenePlayer } from './scene-player.client';
 
 export interface AiDisciplinesClientProps {
@@ -48,7 +48,7 @@ type Turnable = Discipline | 'llm';
 
 /** Which wires carry a message in their current frame. */
 const busyOf = (frames: Readonly<Record<Discipline, Frame>>) =>
-  Object.fromEntries(DISCIPLINES.map((each) => [each, frames[each].dot !== undefined])) as Record<Discipline, boolean>;
+  Object.fromEntries(DISCIPLINES.map((each) => [each, onWire(frames[each]).length > 0])) as Record<Discipline, boolean>;
 
 /** The parent's state: the lit discipline, the turned cards, the scene player and the card labels. */
 function useTimeline(root: RefObject<HTMLDivElement | null>, preset: AiDisciplinesPreset, words: AiDisciplinesWords) {
@@ -61,7 +61,10 @@ function useTimeline(root: RefObject<HTMLDivElement | null>, preset: AiDisciplin
     () => ({ definition: words.definition, flip: words.flip, source: words.source, newTab: words.newTab }),
     [words],
   );
-  const band = { active: busyOf(frames), flipped: flipped.llm ?? false, onFlip: () => onFlip('llm') };
+  const active = busyOf(frames);
+  // The tokens keep coming while a wire is busy or the mouse is on any column.
+  const working = hovered !== null || Object.values(active).some(Boolean);
+  const band = { active, working, flipped: flipped.llm ?? false, onFlip: () => onFlip('llm') };
   return { lit, frames, playAll, flipped, onFlip, setHovered, labels, band };
 }
 

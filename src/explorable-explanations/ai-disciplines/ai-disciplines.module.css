@@ -117,24 +117,15 @@
   }
 }
 
-/* The factory: requests slide in, results slide out, smoke rises while it runs. */
-.item {
-  opacity: 0;
+/* The factory: one request slides in, one result slides out, smoke rises while it works. */
+.enter {
+  animation: feed 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
-.running .in {
-  animation: feed 2.4s linear infinite;
-}
-.running .out {
-  animation: ship 2.4s linear infinite;
+.leave {
+  animation: ship 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .running .smoke {
   animation: smoke 2.4s ease-out infinite;
-}
-.later {
-  animation-delay: 0.8s !important;
-}
-.latest {
-  animation-delay: 1.6s !important;
 }
 .smoke {
   opacity: 0;
@@ -142,31 +133,23 @@
   transform-origin: center;
 }
 @keyframes feed {
-  0% {
-    transform: translateX(0);
+  from {
+    transform: translateX(-1.2rem);
     opacity: 0;
   }
-  15%,
-  70% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(2.8rem);
+  to {
+    transform: translateX(1.2rem);
     opacity: 0;
   }
 }
 @keyframes ship {
-  0% {
-    transform: translateX(0);
+  from {
+    transform: translateX(-1rem);
     opacity: 0;
   }
-  20%,
-  85% {
+  to {
+    transform: translateX(1.2rem);
     opacity: 1;
-  }
-  100% {
-    transform: translateX(2.4rem);
-    opacity: 0;
   }
 }
 @keyframes smoke {
@@ -221,8 +204,8 @@
   .inner,
   .dot,
   .pop,
-  .running .in,
-  .running .out,
+  .enter,
+  .leave,
   .running .smoke,
   .next,
   .gloss .tip,

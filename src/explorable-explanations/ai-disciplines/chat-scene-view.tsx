@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import styles from './ai-disciplines.module.css';
 import type { SceneWords } from './ai-disciplines.types';
-import type { Frame, Message } from './scene-frames.pure';
+import { AGENT_LOOPS, type Frame, type Message } from './scene-frames.pure';
 
 /** The tool an agent reached for, by the word key that names it: a globe for the web, a lens for a search. */
 const TOOL_ICONS: Record<string, ReactNode> = {
@@ -27,7 +27,7 @@ const LINE: Record<Message['from'], string> = {
 
 function loopLabel(loop: Frame['loop'], words: SceneWords): string | null {
   if (loop === undefined) return null;
-  return loop === 'done' ? words.loopDone : `${words.loop} ${loop}/2`;
+  return loop === 'done' ? words.loopDone : `${words.loop} ${loop}/${AGENT_LOOPS}`;
 }
 
 /** The window's title bar: three dots on the left, an agent's loop counter on the right. */

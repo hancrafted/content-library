@@ -49,7 +49,7 @@ export function ScaleRowView(props: {
   readonly lit: Discipline | null;
 }) {
   return (
-    <div className="relative rounded-2xl border border-border bg-card pt-7 pb-2">
+    <div className="relative rounded-2xl border border-border bg-card pt-12 pb-3">
       <p className="absolute top-2.5 left-4 text-caption font-medium tracking-wide text-muted-foreground uppercase">
         {props.label}
       </p>

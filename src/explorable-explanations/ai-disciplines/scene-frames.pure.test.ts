@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SCENES, finalFrame, type Frame } from './scene-frames.pure';
+import { SCENES, finalFrame, onWire, type Frame } from './scene-frames.pure';
 
 /** The frames that send a message down to the model, and the dots each sends. */
 function downs(frames: readonly Frame[]): number[] {
@@ -17,10 +17,10 @@ describe('success cases', () => {
     expect(finalFrame('prompting').messages.map(({ from }) => from)).toEqual(expected);
   });
 
-  it('an agent loops to the model twice, each loop sent by the tool it calls, before its answer returns', () => {
+  it('an agent loops to the model three times: once for the request, once for each tool it calls, then answers', () => {
     // ARRANGE
     const expected = ['me', 'tool', 'tool', 'ai'];
-    const loops = [1, 1];
+    const loops = [1, 1, 1];
     // ACT
     const agent = SCENES.agents;
     // ASSERT
@@ -63,6 +63,22 @@ describe('failure cases', () => {
     expect(tools).toEqual(expected);
   });
 
+  it('a result leaves the factory only for a request that entered and went to the model and back', () => {
+    // ARRANGE
+    const cycle = ['enter', 'down', 'up', 'leave'];
+    // ACT
+    const steps = new Map<number, string[]>();
+    for (const { jobs } of SCENES.factory) {
+      for (const { id, step } of jobs ?? []) {
+        const seen = steps.get(id) ?? [];
+        if (seen.at(-1) !== step) steps.set(id, [...seen, step]);
+      }
+    }
+    // ASSERT
+    expect(steps.size).toBeGreaterThan(1);
+    for (const seen of steps.values()) expect(seen).toEqual(cycle);
+  });
+
   it('the factory never opens: requests go in and results come out, its inside stays a question', () => {
     // ARRANGE
     const expected: string[] = [];
@@ -85,14 +101,34 @@ describe('edge cases', () => {
     expect(running).toBe(false);
   });
 
-  it('a tool line shows before the round trip it sends, so the wire moves with the chat', () => {
+  it('each tool line shows between two round trips: the model asks for it, its result goes back', () => {
     // ARRANGE
     const frames = SCENES.agents;
+    const tools = (frame: Frame) => frame.messages.filter(({ from }) => from === 'tool').length;
+    const tripsBeforeEachTool = [1, 2];
     // ACT
-    const firstTool = frames.findIndex(({ messages }) => messages.some(({ from }) => from === 'tool'));
-    const firstTrip = frames.findIndex(({ dot }) => dot?.dir === 'down');
+    const tripsBefore = [1, 2].map((count) => {
+      const shown = frames.findIndex((frame) => tools(frame) === count);
+      return frames.slice(0, shown).filter(({ dot }) => dot?.dir === 'up').length;
+    });
     // ASSERT
-    expect(firstTool).toBeLessThan(firstTrip);
+    expect(tripsBefore).toEqual(tripsBeforeEachTool);
+  });
+
+  it('up to five requests travel to the model at once, never more, arriving at uneven times', () => {
+    // ARRANGE
+    const most = 5;
+    // ACT
+    const inFlight = SCENES.factory.map(({ jobs }) => jobs?.length ?? 0);
+    const wire = SCENES.factory.map((frame) => onWire(frame).length);
+    const firstSeen = new Map<number, number>();
+    SCENES.factory.forEach(({ jobs }, tick) => jobs?.forEach(({ id }) => firstSeen.set(id, firstSeen.get(id) ?? tick)));
+    const arrivals = [...firstSeen.values()];
+    const gaps = new Set(arrivals.slice(1).map((tick, index) => tick - (arrivals[index] ?? 0)));
+    // ASSERT
+    expect(Math.max(...inFlight)).toBe(most);
+    expect(Math.max(...wire)).toBeGreaterThan(1);
+    expect(gaps.size).toBeGreaterThan(1);
   });
 
   it('every scene has a positive duration on every frame, so a loop never spins', () => {

@@ -67,7 +67,7 @@ words:
     factory: Eine Fabrik mit Fragezeichen, Anfragen gehen hinein, Ergebnisse kommen heraus
   llm:
     kicker: Das Fundament, unter jeder Stufe
-    name: Großes Sprachmodell (LLM)
+    name: Large Language Model (LLM)
     before: Es sagt
     token: Token
     after: für Token voraus, welches Wortstück am wahrscheinlichsten als Nächstes folgt, gelernt aus riesigen Mengen Trainingstext. ChatGPT, Copilot, Claude.

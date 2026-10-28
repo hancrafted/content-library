@@ -1,8 +1,6 @@
 import styles from './ai-disciplines.module.css';
 import type { Frame } from './scene-frames.pure';
 
-const LATER = ['', styles.later, styles.latest] as const;
-
 /** The building: a chimney with smoke, a saw-tooth roof and a question mark where its inside would show. */
 function Building() {
   return (
@@ -22,26 +20,28 @@ function Building() {
   );
 }
 
+const BOX = 'absolute top-[69%] h-4 w-3 rounded-sm';
+
 /**
- * The factory (a pure view): a building with a question mark on it, requests sliding in on the left, results sliding
- * out on the right while it runs. What happens inside is the open question, so it never opens.
+ * The factory (a pure view): a building with a question mark on it. Each request slides in at its door, its message goes
+ * to the model and back, and only then does a result slide out. Its inside never opens.
  */
 export function FactorySceneView({ frame, label }: { readonly frame: Frame; readonly label: string }) {
+  const jobs = frame.jobs ?? [];
   return (
     <div role="img" aria-label={label} className={`absolute inset-0 ${frame.running ? styles.running : ''}`}>
       <Building />
-      {LATER.map((delay, index) => (
-        <span
-          key={`in-${index}`}
-          className={`${styles.item} ${styles.in} ${delay} absolute top-[67%] left-[4%] h-5 w-4 rounded-sm border-2 border-muted-foreground bg-card`}
-        />
-      ))}
-      {LATER.map((delay, index) => (
-        <span
-          key={`out-${index}`}
-          className={`${styles.item} ${styles.out} ${delay} absolute top-[67%] left-[74%] h-5 w-4 rounded-sm bg-(--success)`}
-        />
-      ))}
+      {jobs.map(({ id, step }) =>
+        step === 'enter' ? (
+          <span
+            key={`in-${id}`}
+            data-step="enter"
+            className={`${styles.enter} ${BOX} left-[22%] border-2 border-muted-foreground bg-card`}
+          />
+        ) : step === 'leave' ? (
+          <span key={`out-${id}`} data-step="leave" className={`${styles.leave} ${BOX} left-[74%] bg-(--success)`} />
+        ) : null,
+      )}
     </div>
   );
 }

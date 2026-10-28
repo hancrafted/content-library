@@ -85,6 +85,7 @@ function Front(props: {
   readonly words: LlmWords;
   readonly hint: string;
   readonly active: Readonly<Record<Discipline, boolean>>;
+  readonly working: boolean;
 }) {
   const { words, active } = props;
   return (
@@ -101,7 +102,7 @@ function Front(props: {
           {TURN}
         </p>
       </div>
-      <Typing tokens={words.tokens} working={Object.values(active).some(Boolean)} />
+      <Typing tokens={words.tokens} working={props.working} />
     </div>
   );
 }
@@ -114,6 +115,8 @@ export function LlmBand(props: {
   readonly words: LlmWords;
   readonly labels: CardLabels;
   readonly active: Readonly<Record<Discipline, boolean>>;
+  /** The model writes tokens: a wire is busy, or the mouse is on a column. */
+  readonly working: boolean;
   readonly flipped: boolean;
   readonly onFlip: () => void;
 }) {
@@ -123,7 +126,7 @@ export function LlmBand(props: {
       onFlip={props.onFlip}
       label={`${props.words.name}: ${props.labels.definition}`}
       className={styles.llm}
-      front={<Front words={props.words} hint={props.labels.flip} active={props.active} />}
+      front={<Front words={props.words} hint={props.labels.flip} active={props.active} working={props.working} />}
       back={<CardBackView words={props.words} labels={props.labels} />}
     />
   );

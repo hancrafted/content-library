@@ -23,7 +23,7 @@ describe('success cases', () => {
     // ARRANGE
     const order = ['Prompting', 'Agenten', 'Workflows', 'Factory?'];
     const scale = 'einem Team';
-    const model = 'Sprachmodell (LLM)';
+    const model = 'Large Language Model (LLM)';
     // ACT
     const html = render({ preset: 'timeline', locale: 'de' });
     const shown = order.map((name) => html.indexOf(`>${name}<`));
