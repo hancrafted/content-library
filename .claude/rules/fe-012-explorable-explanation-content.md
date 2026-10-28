@@ -1,1 +1,0 @@
-../../.archgate/adrs/FE-012-explorable-explanation-content.md

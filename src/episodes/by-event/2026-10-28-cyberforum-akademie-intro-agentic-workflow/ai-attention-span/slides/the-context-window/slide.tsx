@@ -1,6 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { Context } from '@/explorable-explanations/context/context';
+import { Context } from '@/explorables/context-window/context';
 import { DefinitionCards } from './definition-cards';
 import de from './i18n/de.json';
 import en from './i18n/en.json';

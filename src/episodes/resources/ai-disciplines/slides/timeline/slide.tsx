@@ -1,7 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { PresetReadme } from '@/episodes/components/slide-shared/preset-readme/preset-readme';
-import { AiDisciplines } from '@/explorable-explanations/ai-disciplines/ai-disciplines';
+import { AiDisciplines } from '@/explorables/ai-disciplines/ai-disciplines';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

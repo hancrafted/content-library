@@ -1,7 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { PresetReadme } from '@/episodes/components/slide-shared/preset-readme/preset-readme';
-import { HumanInTheLoop } from '@/explorable-explanations/human-in-the-loop/human-in-the-loop';
+import { HumanInTheLoop } from '@/explorables/human-in-the-loop/human-in-the-loop';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

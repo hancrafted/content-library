@@ -1,7 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { AttentionBubblePreset } from '@/explorable-explanations/context/context';
-import { SESSION_END } from '@/explorable-explanations/context/context-bars.pure';
+import { AttentionBubblePreset } from '@/explorables/context-window/context';
+import { SESSION_END } from '@/explorables/context-window/context-bars.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 

@@ -1,6 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { ContextBarsPreset } from '@/explorable-explanations/context/context';
+import { ContextBarsPreset } from '@/explorables/context-window/context';
 import { CompareMotion } from './compare-motion.client';
 import { ComparePanel } from './compare-panel';
 import de from './i18n/de.json';
