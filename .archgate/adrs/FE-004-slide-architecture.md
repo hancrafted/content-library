@@ -5,9 +5,9 @@ title: 'Slide Architecture'
 domain: frontend
 rules: false
 # prettier-ignore
-files: ['src/episodes/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
+files: ['src/episodes/**', 'src/explorables/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
-paths: ['src/episodes/**', 'src/explorable-explanations/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
+paths: ['src/episodes/**', 'src/explorables/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 description: "The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text (each owner's Translation files), styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR."
 ---
 
@@ -28,7 +28,7 @@ flowchart TD
   end
   tpl --> episodes["src/episodes — content: ep/ by-event/ slide-pool/ resources/; code: components/ hooks/ lib/"]
   tpl --> events["src/events — Events, Playlists: components/ lib/"]
-  tpl --> explain["src/explorable-explanations — one folder each"]
+  tpl --> explain["src/explorables — one folder each"]
   tpl --> pipeline["src/pipeline — pipeline, Run log, dashboard"]
   tpl --> chrome["src/shared/page-chrome — header, footer bar, toggles, contents, drawer"]
   episodes -- "a Slide shows one" --> explain
@@ -58,7 +58,7 @@ flowchart LR
   ep -- "sections/ only" --> pool["episodes/slide-pool — content Slides Episodes share"]
   pool --> master
   pool --> shared
-  ep --> explain["src/explorable-explanations — product area, Slides show by Preset"]
+  ep --> explain["src/explorables — product area, Slides show by Preset"]
   explain --> core["core-components — primitives parts share"]
   explain --> ui
   shared --> core

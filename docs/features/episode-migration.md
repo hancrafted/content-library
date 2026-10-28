@@ -6,7 +6,7 @@ stale_after: 2027-01-11T00:00:00Z
 
 # Episode migration
 
-Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); colour and type: [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/episodes/resources/episode-template/`. Layouts: the frame components in `src/episodes/components/slide-master/` and the Slide library, the Master slide Resources in `src/episodes/resources/timelines/slides/` and `src/episodes/resources/grids/slides/`.
+Read before turning a prototype (for example an HTML tower page) into an Episode, or before adding any Episode. Binding rules: [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); colour and type: [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md). Key roles: [episode-translation-keys.md](episode-translation-keys.md). Copy source: `src/episodes/templates/episode-template/`. Layouts: the frame components in `src/episodes/components/slide-master/` and the Slide library, the Master slide Templates in `src/episodes/templates/timelines/slides/` and `src/episodes/templates/grids/slides/`.
 
 Each step ends on a completion criterion. Stop at a step only when its criterion holds. Work in a worktree; commit through `/commit`.
 
@@ -17,7 +17,7 @@ Each step ends on a completion criterion. Stop at a step only when its criterion
 List the source's Sections and Slides, in order.
 
 - Each prototype beat is one Slide; each group of beats is one Section.
-- The first Slide of a Section is its section slide: it names the Section (a title and caption). Add a section slide only where a source heading has no beat of its own:
+- The first Slide of a Section is its section slide: it names the Section (a title and caption). A Section can declare none with `withoutSectionSlide([...])`; see `docs/features/explorables/README.md`. Add a section slide only where a source heading has no beat of its own:
   - Bare heading over beats (`<h2>Cost</h2>`, then three beats): add a section slide from the heading; the three beats become page slides.
   - Heading inside a beat (a full-height frame titled "Cost", with its own prose or visual): that beat is the section slide; add nothing.
 - The Episode's own title and caption are the Title slide, not a Slide.

@@ -7,7 +7,7 @@ import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
-import { captionTextOf, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
+import { captionTextOf, requireTitle, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /*
@@ -52,6 +52,7 @@ export type LocalizedSlide = Placement &
     readonly content: ReactNode;
     /** The Slide header's text: set for a titled Slide of an Episode on the shared header (design-ADR-0012). */
     readonly header?: SlideHeaderText;
+    readonly withoutSectionSlide?: true;
   } & (
     | { readonly level: Extract<SlideLevel, 'h2'>; readonly title: string }
     | { readonly level: Extract<SlideLevel, 'h3'>; readonly title?: string }
@@ -210,6 +211,10 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
   return slide.content(kit);
 }
 
+/** The title a Section takes from the Slide that names it: its section slide, or the one it declares it has not. */
+const sectionTitleOf = (namer: Slide, locale: Locale) =>
+  requireTitle(namer.slug, textOf(namer, ownTranslator(namer.messages[locale], locale), locale).title);
+
 /**
  * One placed Slide of an Episode, localized: its text, and its Scene rendered
  * with the kit (FE-002 §3). Throws on a missing message, a bad `ref`,
@@ -217,7 +222,7 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
  * Episode fails `next dev` and the static build alike.
  */
 export function localizeSlide(
-  { id, slide, section, level }: PlacedListSlide<Slide>,
+  { id, slide, section, level, standsInFor }: PlacedListSlide<Slide>,
   episode: EpisodeContext,
 ): LocalizedSlide {
   const { locale } = episode;
@@ -240,6 +245,6 @@ export function localizeSlide(
     : undefined;
   const placed = { id, section, ...text, ...(header && { header }), content: slide.content(kit) };
   if (level === 'h3') return { ...placed, level };
-  if (text.title === undefined) throw new Error(`Section "${slide.slug}" opens with a Slide that has no title.`);
-  return { ...placed, level, title: text.title };
+  const title = sectionTitleOf(standsInFor ?? slide, locale);
+  return { ...placed, level, title, ...(standsInFor && { withoutSectionSlide: true as const }) };
 }

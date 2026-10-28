@@ -4,9 +4,9 @@
 // repo's `<id>.en.yml` and `<id>.de.yml`) has changed since the reply; it is left out for an uploaded Workflow.
 // Exits 1 when the reply has no readable footer.
 import { existsSync, readFileSync } from 'node:fs';
-import { parseDebugFooter, sourceOf } from '../../../src/explorable-explanations/human-in-the-loop/workflow.node.ts';
+import { parseDebugFooter, sourceOf } from '../../../src/explorables/human-in-the-loop/workflow.node.ts';
 
-const AREA = 'src/explorable-explanations/human-in-the-loop';
+const AREA = 'src/explorables/human-in-the-loop';
 
 const [file, english, german] = process.argv.slice(2);
 if (file === undefined) {

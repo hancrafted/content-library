@@ -1,0 +1,53 @@
+{
+  "title": "Replace with the payoff: what the visitor can do after trying it · hancrafted",
+  "description": "Copy this Episode template as the start of a new Explorable page: a title that states the payoff, a hook, what it is, why it matters and how to use it, ending on the Explorable with every option on. Every word is a placeholder.",
+  "toc": "Contents Loading 1 Hook The proof 2 What it is 3 Why it matters 4 How to use it Open contents : Contents Contents 1 Hook The proof 2 What it is 3 Why it matters 4 How to use it",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Replace with the payoff: what the visitor can do after trying it Replace with one sentence on what the Explorable shows and who it is for."
+    },
+    {
+      "id": "hook",
+      "text": "The payoff Replace with what the visitor gets, in the words and order the Short used: the Short is the 60-second version of this page. Replace with the value in one claim."
+    },
+    {
+      "id": "hook--the-proof",
+      "text": "Hook (1/1) Page 1 of 1 The proof Replace with the moment the Short showed the result working. Replace with the result the visitor sees first: one concrete outcome, not an explanation."
+    },
+    {
+      "id": "what-it-is",
+      "text": "What it is Replace with what the Explorable shows and what it lets the visitor change. Replace with a plain description of the Explorable."
+    },
+    {
+      "id": "why-it-matters",
+      "text": "Why it matters Replace with the problem it solves and the claim behind it. Cite a Research question or a high-trust Source in the Speaker note. Replace with why a visitor should care."
+    },
+    {
+      "id": "how-to-use-it",
+      "text": "Every option on Replace with a line inviting the visitor to play. Context window stands in for the page's primary Explorable: swap it for yours, with every option on. Conversation Timeline Context window Context category Details Attention Conversation Hover or drag the timeline to replay Summer party Starting instructions, hidden System prompt · tools · MCP · skills Recalled memory CLAUDE.md Memory files · CLAUDE.md Plan your company's next summer party: 200 employees across five offices in Europe, end of June, budget 30,000 euro. Faded: the AI may fill this gap itself Happy to help! Indoor or outdoor? Any dietary needs I should know about? Outdoor if we can. 60 guests are vegetarian, please keep that in mind. Noted: 60 vegetarian guests. Shall I look for venues? Find three venues in Lisbon. Searched the web Searched the web · 10 pages · 1 retry WebSearch(\"outdoor event venue Lisbon 200 guests\") WebSearch(\"Lisbon garden venue summer party\") WebFetch × 10 ⎿ Fetched 10 pages · 15k of extracts Three options: Quinta terrace, LX Factory rooftop, Estrela garden pavilion. The catering offers are in the project folder. Which one fits? Read a file Read catering-offers.pdf · 20 pages Glob(\"**/*catering*.pdf\") Read(\"offers/catering-offers.pdf\", pages: \"1-20\") ⎿ Read 20 pages · 55k Sabor Verde fits best: it includes a vegetarian menu for 60. Check hotels near the venue for 150 guests from abroad. Searched the web Searched the web · 12 pages WebSearch(\"hotels near Estrela Lisbon 27 June\") WebFetch × 12 ⎿ Fetched 12 pages · 14.5k of extracts Hotel Lumen and Casa do Rio both have 150 rooms free on 27 June. The guest list is in there too. Ran a command Opened guests.xlsx · 200 rows Bash(python3 -c \"import pandas as pd; print(pd.read_excel('guests.xlsx').t…) ⎿ 200 rows · 1.8k Got it: 200 guests, 150 travelling, 60 vegetarian. Great, put the full plan together. Ran a command Added up the costs Bash(python3 budget.py) ⎿ Total 42,300 · 350 tokens Full plan: venue 11,800, catering with the vegetarian menu 17,500, hotels 8,000, music 5,000. Total 42,300 euro. That's 12,300 over our budget. Also check the venue contract. Read a file Read venue-contract.pdf · 21 pages Read(\"venue-contract.pdf\", pages: \"1-21\") ⎿ Read 21 pages · 57k Conversation compacted The contract allows music until 23:00 and asks for a 30% deposit. Put the plan together again. Ran a command Added up the costs Bash(python3 budget.py --limit 30000) ⎿ Total 30,000 · 350 tokens Plan: venue 11,800, catering with the vegetarian menu 10,500, hotels 5,700, music 2,000. Total 30,000 euro, on budget. 25 28 steps Context window ( 22 %) 44.1K of 200K Smart zone by Matt Pocock 80K Limit 200k Context category Starting instructions 34.1k · 17% Memory 2k · 1% You 0 · 0% AI replies 16 · 0% What the AI read 0 · 0% Hidden notes from the app 0 · 0% Summary 8k · 4% Free space 139.4k · 70% Kept free for summaries 16.5k · 8% Explain Simple Step 25 of 28 The AI answers from the summary +16 tokens 22% used Hover or tap a bubble, a part of the bar or a category to see what it is. Attention illustrative Step 25 of 28 · 100 units of attention Only the very first lines and the newest messages stay sharp. Your first message and the rest spread thin. 50% Starting instructions, hidden 15% Memory loaded 0% Summary: Conversation compacted 45% AI replies: The contract allows music until 23:00 and asks for a 30% deposit. 40% Step 25 of 28: The AI answers from the summary, +16 tokens, 22% used. Explore it →"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "hook", "text": "Hook What to say Replace with what you say while this Slide is up." },
+    { "id": "hook--the-proof", "text": "The proof What to say Replace with what you say while this Slide is up." },
+    { "id": "what-it-is", "text": "What it is What to say Replace with what you say while this Slide is up." },
+    { "id": "why-it-matters", "text": "Why it matters What to say Replace with what you say while this Slide is up." },
+    { "id": "how-to-use-it", "text": "How to use it No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "hook", "text": "Hook No voice script for this Slide." },
+    { "id": "hook--the-proof", "text": "The proof No voice script for this Slide." },
+    { "id": "what-it-is", "text": "What it is No voice script for this Slide." },
+    { "id": "why-it-matters", "text": "Why it matters No voice script for this Slide." },
+    { "id": "how-to-use-it", "text": "How to use it No voice script for this Slide." }
+  ]
+}

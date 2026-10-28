@@ -27,7 +27,7 @@ import type { ReactNode } from 'react';
 /**
  * Every page the Episode page template renders, told apart by kind: an Episode's own page under `/episodes/`, and an
  * Episode as an Event presents it under `/events/<event>/episodes/`, carrying the Episode it presents there. A
- * Resource page renders through the same container, from its own template (`../resource/`).
+ * Template page renders through the same container, from its own page template (`../template/`).
  */
 export type EpisodePageRef = EpisodesPathPage | EventEpisodePage;
 

@@ -67,22 +67,30 @@ _Avoid_: Clip, recording link
 **Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
 _Avoid_: Type, kind, length
 
-**Resource**: a public page that is not an Episode, shaped like one: an `episode()` composition of Slides rendered through the one Episode container, so it has the table of contents and the Context drawer. Its record (`src/content-store/resources/<slug>.ts`) holds a slug, a type from the closed `RESOURCE_TYPES` (Explorable explanation, Episode template, Master slide), Tags and a visibility; its title and description are the composition's own words. The URL is worked out from type and slug, `/<type plural>/<slug>/`, and is public, indexed and in the sitemap; `/resources/` lists them. One composition folder each, `src/episodes/resources/<slug>/`; `npm run registry` generates `RESOURCE_SLUGS` and the compositions from the folders, and the store refuses a record without a folder and a folder without a record. A Resource is in no Episode list: not the Episode ids, the Episode browser, Featured or a Playlist. The six: Context window and Human in the loop (Explorable explanations), Episode template and Workshop template (Episode templates), Timelines and Grids (Master slides). Design-ADR `docs/adr/0019-resources-overview.md`.
-_Avoid_: Tooling page, Layout reference, reference Episode
+**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, an Episode template or a Master slide. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
+_Avoid_: Tooling page, Layout reference, reference Episode, Asset
 
-**Workshop template**: the Resource (an Episode template, `/episode-templates/workshop-template/`) a new Event's opening Episode is copied from (`src/episodes/resources/workshop-template/`): a Title slide, then a hook, agenda, in-scope and out-of-scope, a poll, About me (from the Slide pool) and orga Slides, every word a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
+**Resource index**: the projection of the page catalogue onto one entry shape (`ResourceEntry`: kind, title, description, Tags, URL, locale), one entry per listed page. Derived, never stored, so it cannot list a page the site does not list. The groundwork for search and retrieval by people and agents. Feature doc `docs/features/resources.md`.
+_Avoid_: Resource list, Resource catalogue
+
+**Template**: the record kind of an Episode template or a Master slide (types `episode-template` and `master-slide`), a page shaped like an Episode: an `episode()` composition of Slides rendered through the one Episode container, so it has the table of contents and the Context drawer. Its record holds a slug, a type, Tags and a visibility; its title and description are the composition's own words. It keeps its URL, `/episode-templates/<slug>/` or `/master-slides/<slug>/`, is public, indexed and in the sitemap, and is in no Episode list. Records in `src/content-store/templates/` and compositions in `src/episodes/templates/`. The five: Episode template, Workshop template and Explorable page template (Episode templates), Timelines and Grids (Master slides). Replaces the old Resource record kind.
+_Avoid_: Resource (that is the umbrella), Tooling page
+
+**Workshop template**: the Template (an Episode template, `/episode-templates/workshop-template/`) a new Event's opening Episode is copied from (`src/episodes/templates/workshop-template/`): a Title slide, then a hook, agenda, in-scope and out-of-scope, a poll, About me (from the Slide pool) and orga Slides, every word a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
 _Avoid_: Event template, intro template, workshop Episode
+
+**Explorable page template**: the Template (an Episode template, `/episode-templates/explorable-page/`) a new Explorable page is copied from (`src/episodes/templates/explorable-page/`): a Title slide whose title states the payoff, a hook Section, what it is, why it matters, and how to use it, ending on the primary Explorable with every option on (Context window stands in). Every word is a placeholder; the structure is convention, not enforced. Its hook and how-to-use Sections have their section slide off. See `docs/features/explorables/README.md`.
 
 **Hook slide**: the Workshop template's `hook` Slide, right after the Title slide: one placeholder Slide that is either a hook (one question or claim that opens the session) or a grounding (the picture the session builds on). A copy that grounds renames its slug to `grounding`; a copy that hooks keeps it.
 _Avoid_: Intro slide, opener
 
-**Slide library**: every Master slide a Slide copies from the Master slide Resources, Timelines and Grids (`src/episodes/resources/timelines/slides/`, `src/episodes/resources/grids/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/episodes/components/slide-master/`, `src/episodes/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
+**Slide library**: every Master slide a Slide copies from the Master slide Templates, Timelines and Grids (`src/episodes/templates/timelines/slides/`, `src/episodes/templates/grids/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/episodes/components/slide-master/`, `src/episodes/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
 _Avoid_: Catalog
 
 **Slide pool**: the content Slides several Episodes compose as they are, one folder each under `src/episodes/slide-pool/`, beside the Episode folders. Each Episode keeps its own Title slide, section slides and Section files, which import a pool Slide through the `@/` alias; a Title slide or section slide never enters it. A Slide is promoted to the pool deliberately; copying stays the default. A fix to a pool Slide changes every Episode that composes it, past Events' copies included. Where else a reused thing goes: FE-004-slide-architecture.
 _Avoid_: shared Slides, Slide library (the Master slides a Slide is copied from), common Slides
 
-**Master slide**: one entry of the Slide library, a Slide folder of a Master slide Resource (Timelines or Grids). The Dossier's `master:` key stays.
+**Master slide**: one entry of the Slide library, a Slide folder of a Master slide Template (Timelines or Grids). The Dossier's `master:` key stays.
 _Avoid_: Catalog entry, template
 
 **Context drawer**: the floating card beside or over an Episode's Slides that shows the current Slide's Speaker notes and Voice script; a view onto text already in the page.
@@ -93,7 +101,7 @@ _Avoid_: Sitenav, sidebar
 
 ## Episode structure
 
-**Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Slide's heading level comes from its place in the Section, not from the Slide.
+**Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Section may declare it has no section slide (default: it has one); the Slide stays authored for the title but is not shown, the table of contents takes the Section's title from it, and the Section's anchor lands on the first page Slide. The Title slide is never optional. The section slide is on by default and a Section may declare it has none: the Section then takes its table-of-contents title from its own words and its anchor lands on its first Slide (planned, #404). A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
 **Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
@@ -105,13 +113,16 @@ _Avoid_: Fragment, hash, slide id
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide
 
-**Explorable explanation**: one interactive visual several Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Each lives in its own folder under `src/explorable-explanations/`, the Explorable explanations product area, apart from the plain shared parts in `slide-shared/`.
-_Avoid_: Shared visual, cornerstone component, shared component, widget
+**Explorable**: the reusable interactive component: one visual that Slides show, each by its own Preset, so a new Slide that shows it is new data, not a new drawing. Usable anywhere on the site, foremost in Slides. Each lives in its own folder under `src/explorables/`, apart from the plain shared parts in `slide-shared/`. A Slide that shows an Explorable links "Explore it →" to the Explorable's page when one exists. The floor every Explorable meets: `docs/features/explorables/README.md`.
+_Avoid_: Explorable explanation (the long form, as Wikipedia names it), Shared visual, cornerstone component, shared component, widget
 
-**Preset**: one Slide's settings of an Explorable explanation: the view it opens in and what it lights, so the Slide tells its own story at rest.
+**Explorable page**: the product built on one Explorable: an Episode-shaped composition of Slides about its primary Explorable, rendered through the one Episode container, so it has the table of contents, the Context drawer, Speaker notes citing Research and a YouTube Video played from its Title slide. Its slug equals the primary Explorable's folder slug, and the content store refuses a page whose slug names no Explorable. URL `/explorables/<slug>/`, listed on `/explorables/`; `/explorable-explanations/*` redirects there. A product unit beside the Episode (`docs/steering/product-vision.md`, rule 4); its convention and Short framing: `docs/features/explorables/README.md`.
+_Avoid_: Explorable explanation page, Resource page
+
+**Preset**: one Slide's settings of an Explorable: the view it opens in and what it lights, so the Slide tells its own story at rest.
 _Avoid_: State, configuration, variant
 
-**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Explorable explanation, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
+**Workflow**: a way of working with AI that a viewer can watch and then try: ordered **Workflow stages**, each holding **Workflow jobs**, every job a fresh chat with its prompt and an example result. It belongs to the human-in-the-loop Explorable, not to an Episode's per-run pipeline, so a Workflow stage or Workflow job is never a Run's **Stage** or **Job**.
 _Avoid_: Pipeline, flow, process
 
 **Title slide**: an Episode's opening Slide: its title, caption, optional Voice script and Speaker notes and, once recorded, its video. Not listed in the table of contents.

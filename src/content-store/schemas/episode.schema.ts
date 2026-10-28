@@ -1,13 +1,11 @@
 import { z } from 'zod';
-import { FORMATS, isoDate, slug, tags, visibility } from './fields';
+import { FORMATS, isoDate, slug, tags, visibility, YOUTUBE_ID } from './fields';
 
 /*
  * What an Episode declares about itself, in its own folder (`episodes/<slug>/episode-metadata.ts`, or
  * `episodes/by-event/<event-slug>/<slug>/` for an Event's copy): its overview entry, its visibility and its Video. Its
  * Episode id is its folder's, never written here. Ids and dates only; titles and captions stay Translation keys (FE-003).
  */
-
-const YOUTUBE_ID = /^[\w-]{11}$/;
 
 const shared = z.object({
   slug: slug.describe(

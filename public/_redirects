@@ -32,12 +32,12 @@
 /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-onboard-ai-every-time/     /events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/onboard-ai-every-time/     301
 /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/cyberforum-onboard-ai-every-time/  /de/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/onboard-ai-every-time/  301
 
-# Resources (design-ADR 0019): the four pages that were served under /episodes/ moved to their type's path. The two
-# Explorable explanation pages and the two Master slide pages split out of one page each, so their old URLs land on the
-# overview; the two Episode templates keep a page of their own. An old page-template or slides link lands on the same
+# Resources (design-ADR 0019): the four pages that were served under /episodes/ moved to their type's path. The
+# Explorable explanation pages (now Explorable pages, below) and the two Master slide pages split out of one page each, so
+# their old URLs land on an overview; the two Episode templates keep a page of their own. An old page-template or slides link lands on the same
 # place, in one hop.
-/episodes/explorable-explanations/*        /resources/                                  301
-/de/episodes/explorable-explanations/*     /de/resources/                               301
+/episodes/explorable-explanations/*        /explorables/                                301
+/de/episodes/explorable-explanations/*     /de/explorables/                             301
 /episodes/slide-master/*                   /resources/                                  301
 /de/episodes/slide-master/*                /de/resources/                               301
 /episodes/episode-template/*               /episode-templates/episode-template/         301
@@ -48,3 +48,8 @@
 /de/episodes/page-template/                /de/episode-templates/episode-template/      301
 /episodes/slides/                          /resources/                                  301
 /de/episodes/slides/                       /de/resources/                               301
+
+# Explorable pages (spec #404): the three pages that were Resources at /explorable-explanations/<slug>/ moved to
+# /explorables/<slug>/, same slug, same locale, in one hop.
+/explorable-explanations/*                 /explorables/:splat                          301
+/de/explorable-explanations/*              /de/explorables/:splat                       301

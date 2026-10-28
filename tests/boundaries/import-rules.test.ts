@@ -4,7 +4,7 @@
 // A rule that stopped firing, or started firing on a legal import, fails here, not in review. The probes come in five
 // groups, one per concern; each group's violations are asserted whole, so a stray one in any group fails too:
 // - areas (spec #348, #354, #358, FE-007 §2 and §3, FE-006 §3.1): layers import only downward, product areas never
-//   import each other but for a Slide showing an Explorable explanation, page assembly reaches an area only through its
+//   import each other but for a Slide showing an Explorable, page assembly reaches an area only through its
 //   tier folders, an area's lib/ imports no React and no upper tier, its hooks/ are reached only from a client leaf,
 //   shared knows no domain, and `src/` and `skills/`/`tools/` meet only through an area's `lib/` or the store's entry.
 // - the content store (FE-013 Decision 1, FE-007 §2): records are read only through the store's entry, which sits
@@ -13,7 +13,7 @@
 //   own files and the shared locations; client leaves reach only hooks and lib; core components are a leaf.
 // - the Slide pool (FE-004 §3, FE-007 §5): only a Section reaches a pool Slide, through the alias; never as its section
 //   slide, never from the Episode file (the Title slide), never from another Slide.
-// - Explorable explanations (design-ADR 0016 decision 6, FE-012): one folder each in their own area, apart from
+// - Explorables (design-ADR 0016 decision 6, FE-012): one folder each in their own area, apart from
 //   slide-shared, which they never import; only a Slide or page assembly imports one.
 
 import { cruise, type IForbiddenRuleType, type IReporterOutput } from 'dependency-cruiser';
@@ -34,8 +34,8 @@ const PINNED = [
   'content-store-tier',
   'core-components-are-a-leaf',
   'episode-metadata-reaches-only-schemas-and-lib',
-  'explorable-explanation-client-reaches-only-own-folder-core-ui-hooks-and-lib',
-  'explorable-explanation-reaches-shared-ui-and-lib',
+  'explorable-client-reaches-only-own-folder-core-ui-hooks-and-lib',
+  'explorable-reaches-shared-ui-and-lib',
   'hooks-import-no-upper-tier',
   'hooks-reached-only-from-client',
   'layers-never-import-app',
@@ -127,7 +127,7 @@ const POOL = 'src/episodes/slide-pool';
 const POOLED = '@/episodes/slide-pool/pooled/slide';
 /** The Episode whose Sections, Slides and Title slide reach the pool. */
 const POOL_EPISODE = 'src/episodes/pooling';
-const EXPLANATION = 'src/explorable-explanations/probe-explanation';
+const EXPLORABLE = 'src/explorables/probe-explorable';
 const STORE = 'src/content-store';
 const SCHEMA = `${STORE}/schemas/episode.schema`;
 const LANDING = 'src/page-assembly/landing';
@@ -154,9 +154,9 @@ const AREAS: Readonly<Record<string, Probe>> = {
   'src/episodes/probe/episode.ts': [],
   'src/episodes/probe/episode-metadata.ts': [],
   'src/events/index.ts': [],
-  'src/explorable-explanations/index.ts': [],
-  'src/explorable-explanations/probe/probe.tsx': [],
-  'src/explorable-explanations/probe/workflow.node.ts': [],
+  'src/explorables/index.ts': [],
+  'src/explorables/probe/probe.tsx': [],
+  'src/explorables/probe/workflow.node.ts': [],
   'src/page-assembly/landing/card.tsx': [],
   'skills/probe/scripts/helper.ts': [],
   // Legal: each file below draws only edges the rules allow.
@@ -184,22 +184,22 @@ const AREAS: Readonly<Record<string, Probe>> = {
     'src/episodes/lib/probe.pure',
     `${EVENTS}/components/event-card`,
     `${PIPELINE}/lib/run-log.pure`,
-    'src/explorable-explanations/probe/probe',
+    'src/explorables/probe/probe',
     'src/content-store/store',
   ],
   [`${EVENT}/event-page.tsx`]: [`${EVENTS}/components/probe-card`, `${EVENTS}/lib/probe-event.pure`],
   [`${DASHBOARD}/dashboard-page.tsx`]: [`${PIPELINE}/components/dashboard`, `${PIPELINE}/lib/run-log.pure`],
-  [`${SLIDE}/slide.tsx`]: ['src/explorable-explanations/probe/probe'],
+  [`${SLIDE}/slide.tsx`]: ['src/explorables/probe/probe'],
   'tools/probe/helper.ts': ['src/episodes/lib/probe.pure'],
   'skills/probe/scripts/run.ts': [`${PIPELINE}/lib/run-log.pure`, 'src/content-store/store'],
-  'skills/probe/scripts/render.ts': ['src/explorable-explanations/probe/workflow.node'],
+  'skills/probe/scripts/render.ts': ['src/explorables/probe/workflow.node'],
   // Breaks: each file below draws edges the rules refuse.
   [STRAY_SLIDE]: [`${EVENTS}/components/event-card`],
   [`${LANDING}/reaches-past-tiers.tsx`]: [
     'src/episodes/probe/episode',
     `${PIPELINE}/hooks/use-run`,
     `${EVENTS}/index`,
-    'src/explorable-explanations/index',
+    'src/explorables/index',
   ],
   [`${DASHBOARD}/reaches-hook.tsx`]: [`${PIPELINE}/hooks/use-run`],
   [`${EVENTS}/lib/reaches-episodes.pure.ts`]: ['src/episodes/lib/probe.pure'],
@@ -215,7 +215,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
   [`${PIPELINE}/lib/reaches-episodes.ts`]: ['src/episodes/lib/episode.pure'],
   [`${PIPELINE}/lib/reaches-react.ts`]: ['react'],
   [`${PIPELINE}/lib/reaches-hook.ts`]: [`${PIPELINE}/hooks/use-run`],
-  'src/explorable-explanations/probe/reaches-episodes.tsx': ['src/episodes/components/episode-card/episode-card'],
+  'src/explorables/probe/reaches-episodes.tsx': ['src/episodes/components/episode-card/episode-card'],
   'src/content-store/reaches-area.ts': [`${EVENTS}/components/event-card`, 'src/episodes/lib/probe.pure'],
   'src/shared/lib/reaches-domain.pure.ts': [
     'src/content-store/store',
@@ -231,7 +231,7 @@ const AREAS: Readonly<Record<string, Probe>> = {
     'src/content-store/schemas/fields',
     'src/shared/lib/probe.pure',
     'src/episodes/probe/episode',
-    'src/explorable-explanations/probe/probe',
+    'src/explorables/probe/probe',
   ],
 };
 
@@ -353,33 +353,33 @@ const SLIDE_POOL: Readonly<Record<string, Probe>> = {
   [`${POOL_EPISODE}/episode.ts`]: [POOLED],
 };
 
-/** An Explorable explanation's folder, and who may import it. */
-const EXPLANATIONS: Readonly<Record<string, Probe>> = {
+/** An Explorable's folder, and who may import it. */
+const EXPLORABLES: Readonly<Record<string, Probe>> = {
   'src/episodes/components/slide-shared/statement.tsx': [],
   'src/shared/components/ui/button.tsx': [],
   'src/shared/hooks/use-probe.ts': [],
   'src/shared/lib/probe.pure.ts': [],
   [`${CORE}/probe-core/probe-core.tsx`]: [],
-  'src/explorable-explanations/other-explanation/other.tsx': [],
-  [`${EXPLANATION}/probe-explanation.client.tsx`]: [
+  'src/explorables/other-explorable/other.tsx': [],
+  [`${EXPLORABLE}/probe-explorable.client.tsx`]: [
     `${CORE}/probe-core/probe-core`,
     'src/shared/components/ui/button',
     'src/shared/hooks/use-probe',
   ],
-  [`${EXPLANATION}/probe-explanation.tsx`]: [
-    `${EXPLANATION}/probe-explanation.client`,
+  [`${EXPLORABLE}/probe-explorable.tsx`]: [
+    `${EXPLORABLE}/probe-explorable.client`,
     `${CORE}/probe-core/probe-core`,
     'src/shared/components/ui/button',
     'src/shared/lib/probe.pure',
   ],
-  [`${SLIDE}/slide.tsx`]: [`${EXPLANATION}/probe-explanation`],
-  'src/page-assembly/probe-template/probe-template.tsx': [`${EXPLANATION}/probe-explanation`],
+  [`${SLIDE}/slide.tsx`]: [`${EXPLORABLE}/probe-explorable`],
+  'src/page-assembly/probe-template/probe-template.tsx': [`${EXPLORABLE}/probe-explorable`],
   // Breaks.
-  [`${EXPLANATION}/reaches-other.client.tsx`]: ['src/explorable-explanations/other-explanation/other'],
-  [`${EXPLANATION}/reaches-statement.tsx`]: ['src/episodes/components/slide-shared/statement'],
-  [`${EXPLANATION}/reaches-statement.client.tsx`]: ['src/episodes/components/slide-shared/statement'],
-  'src/shared/lib/reaches-explanation.pure.ts': [`${EXPLANATION}/probe-explanation`],
-  'src/episodes/components/slide-shared/reaches-explanation.tsx': [`${EXPLANATION}/probe-explanation`],
+  [`${EXPLORABLE}/reaches-other.client.tsx`]: ['src/explorables/other-explorable/other'],
+  [`${EXPLORABLE}/reaches-statement.tsx`]: ['src/episodes/components/slide-shared/statement'],
+  [`${EXPLORABLE}/reaches-statement.client.tsx`]: ['src/episodes/components/slide-shared/statement'],
+  'src/shared/lib/reaches-explorable.pure.ts': [`${EXPLORABLE}/probe-explorable`],
+  'src/episodes/components/slide-shared/reaches-explorable.tsx': [`${EXPLORABLE}/probe-explorable`],
 };
 
 const TSCONFIG = JSON.stringify({ compilerOptions: { baseUrl: '.', paths: { '@/*': ['./src/*'] } } });
@@ -400,7 +400,7 @@ function from(files: readonly string[]): string[] {
 
 beforeAll(async () => {
   root = mkdtempSync(join(tmpdir(), 'import-rules-'));
-  const files = { ...tree([AREAS, CONTENT_STORE, SLIDES, SLIDE_POOL, EXPLANATIONS]), 'tsconfig.json': TSCONFIG };
+  const files = { ...tree([AREAS, CONTENT_STORE, SLIDES, SLIDE_POOL, EXPLORABLES]), 'tsconfig.json': TSCONFIG };
   for (const [file, source] of Object.entries(files)) {
     mkdirSync(dirname(join(root, file)), { recursive: true });
     writeFileSync(join(root, file), source);
@@ -429,7 +429,7 @@ afterAll(() => {
 });
 
 describe('success cases', () => {
-  it("lets page assembly reach each area through its tier folders, a Slide show an explanation, the store read Episode metadata, and skills and tools reach an area lib, the store entry or an explanation's node entry", () => {
+  it("lets page assembly reach each area through its tier folders, a Slide show an Explorable, the store read Episode metadata, and skills and tools reach an area lib, the store entry or an Explorable's node entry", () => {
     // ARRANGE
     const legal = [
       `${LANDING}/landing-page.tsx`,
@@ -535,11 +535,11 @@ describe('success cases', () => {
     expect(found).toEqual([]);
   });
 
-  it('lets an explanation and its client leaf reach the plain shared parts they are allowed to, and a Slide or a page template import an explanation', () => {
+  it('lets an Explorable and its client leaf reach the plain shared parts they are allowed to, and a Slide or a page template import an Explorable', () => {
     // ARRANGE
     const legal = [
-      `${EXPLANATION}/probe-explanation.tsx`,
-      `${EXPLANATION}/probe-explanation.client.tsx`,
+      `${EXPLORABLE}/probe-explorable.tsx`,
+      `${EXPLORABLE}/probe-explorable.client.tsx`,
       `${SLIDE}/slide.tsx`,
       'src/page-assembly/probe-template/probe-template.tsx',
     ];
@@ -551,7 +551,7 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('rejects a Slide importing any area but the Explorable explanations, through its own folder rule', () => {
+  it('rejects a Slide importing any area but the Explorables, through its own folder rule', () => {
     // ARRANGE
     const expected = [
       `slide-folder-reaches-only-own-and-shared: ${STRAY_SLIDE} -> ${EVENTS}/components/event-card.tsx`,
@@ -569,12 +569,12 @@ describe('failure cases', () => {
       `areas-never-import-each-other: ${EVENTS}/components/reaches-episodes.tsx -> src/episodes/lib/probe.pure.ts`,
       `areas-never-import-each-other: ${EVENTS}/components/reaches-episodes.tsx -> src/episodes/lib/registry.ts`,
       `areas-never-import-each-other: ${EVENTS}/lib/reaches-episodes.pure.ts -> src/episodes/lib/probe.pure.ts`,
-      'areas-never-import-each-other: src/explorable-explanations/probe/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.tsx',
+      'areas-never-import-each-other: src/explorables/probe/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.tsx',
       `areas-never-import-each-other: ${PIPELINE}/components/reaches-events.tsx -> ${EVENTS}/components/event-card.tsx`,
       `areas-never-import-each-other: ${PIPELINE}/lib/reaches-episodes.ts -> src/episodes/lib/episode.pure.ts`,
       'content-store-tier: src/content-store/reaches-area.ts -> src/episodes/lib/probe.pure.ts',
       `content-store-tier: src/content-store/reaches-area.ts -> ${EVENTS}/components/event-card.tsx`,
-      'explorable-explanation-reaches-shared-ui-and-lib: src/explorable-explanations/probe/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.tsx',
+      'explorable-reaches-shared-ui-and-lib: src/explorables/probe/reaches-episodes.tsx -> src/episodes/components/episode-card/episode-card.tsx',
       `hooks-reached-only-from-client: skills/probe/scripts/reaches-past.ts -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${DASHBOARD}/reaches-hook.tsx -> ${PIPELINE}/hooks/use-run.ts`,
       `hooks-reached-only-from-client: ${LANDING}/reaches-past-tiers.tsx -> ${PIPELINE}/hooks/use-run.ts`,
@@ -590,7 +590,7 @@ describe('failure cases', () => {
       `page-assembly-reaches-areas-through-tier-folders: ${DASHBOARD}/reaches-hook.tsx -> ${PIPELINE}/hooks/use-run.ts`,
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> src/episodes/probe/episode.ts`,
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> ${EVENTS}/index.ts`,
-      `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> src/explorable-explanations/index.ts`,
+      `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> src/explorables/index.ts`,
       `page-assembly-reaches-areas-through-tier-folders: ${LANDING}/reaches-past-tiers.tsx -> ${PIPELINE}/hooks/use-run.ts`,
       `shared-knows-no-domain: src/shared/components/reaches-events.tsx -> ${EVENTS}/components/probe-card.tsx`,
       'shared-knows-no-domain: src/shared/lib/reaches-domain.pure.ts -> src/content-store/schemas/fields.ts',
@@ -599,7 +599,7 @@ describe('failure cases', () => {
       `shared-knows-no-domain: src/shared/lib/reaches-events.pure.ts -> ${EVENTS}/lib/probe-event.pure.ts`,
       'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/content-store/schemas/fields.ts',
       'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/episodes/probe/episode.ts',
-      'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/explorable-explanations/probe/probe.tsx',
+      'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/explorables/probe/probe.tsx',
       `skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> ${PIPELINE}/hooks/use-run.ts`,
       'skills-and-tools-reach-src-through-area-lib-or-store-entry: skills/probe/scripts/reaches-past.ts -> src/shared/lib/probe.pure.ts',
       `slide-folder-reaches-only-own-and-shared: ${STRAY_SLIDE} -> ${EVENTS}/components/event-card.tsx`,
@@ -684,22 +684,22 @@ describe('failure cases', () => {
     expect(found).toEqual(expected);
   });
 
-  it('rejects an explanation reaching a slide-shared part (another product area), a client leaf leaving its explanation for another or a plain shared part, and a shared part or lib module importing an explanation', () => {
+  it('rejects an Explorable reaching a slide-shared part (another product area), a client leaf leaving its Explorable for another or a plain shared part, and a shared part or lib module importing an Explorable', () => {
     // ARRANGE
     const statement = 'src/episodes/components/slide-shared/statement.tsx';
-    const explanation = `${EXPLANATION}/probe-explanation.tsx`;
+    const explorable = `${EXPLORABLE}/probe-explorable.tsx`;
     const expected = [
-      `areas-never-import-each-other: src/episodes/components/slide-shared/reaches-explanation.tsx -> ${explanation}`,
-      `areas-never-import-each-other: ${EXPLANATION}/reaches-statement.client.tsx -> ${statement}`,
-      `areas-never-import-each-other: ${EXPLANATION}/reaches-statement.tsx -> ${statement}`,
-      `explorable-explanation-client-reaches-only-own-folder-core-ui-hooks-and-lib: ${EXPLANATION}/reaches-other.client.tsx -> src/explorable-explanations/other-explanation/other.tsx`,
-      `explorable-explanation-client-reaches-only-own-folder-core-ui-hooks-and-lib: ${EXPLANATION}/reaches-statement.client.tsx -> ${statement}`,
-      `explorable-explanation-reaches-shared-ui-and-lib: ${EXPLANATION}/reaches-statement.tsx -> ${statement}`,
-      `shared-knows-no-domain: src/shared/lib/reaches-explanation.pure.ts -> ${explanation}`,
-      `slide-shared-reaches-only-ui-and-lib: src/episodes/components/slide-shared/reaches-explanation.tsx -> ${explanation}`,
+      `areas-never-import-each-other: src/episodes/components/slide-shared/reaches-explorable.tsx -> ${explorable}`,
+      `areas-never-import-each-other: ${EXPLORABLE}/reaches-statement.client.tsx -> ${statement}`,
+      `areas-never-import-each-other: ${EXPLORABLE}/reaches-statement.tsx -> ${statement}`,
+      `explorable-client-reaches-only-own-folder-core-ui-hooks-and-lib: ${EXPLORABLE}/reaches-other.client.tsx -> src/explorables/other-explorable/other.tsx`,
+      `explorable-client-reaches-only-own-folder-core-ui-hooks-and-lib: ${EXPLORABLE}/reaches-statement.client.tsx -> ${statement}`,
+      `explorable-reaches-shared-ui-and-lib: ${EXPLORABLE}/reaches-statement.tsx -> ${statement}`,
+      `shared-knows-no-domain: src/shared/lib/reaches-explorable.pure.ts -> ${explorable}`,
+      `slide-shared-reaches-only-ui-and-lib: src/episodes/components/slide-shared/reaches-explorable.tsx -> ${explorable}`,
     ];
     // ACT
-    const found = from(Object.keys(EXPLANATIONS));
+    const found = from(Object.keys(EXPLORABLES));
     // ASSERT
     expect(found).toEqual(expected);
   });

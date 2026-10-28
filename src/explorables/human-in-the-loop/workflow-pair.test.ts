@@ -1,0 +1,175 @@
+import { describe, expect, it } from 'vitest';
+import { WORKFLOW_IDS, workflowFor } from './workflow-data';
+import { slotSample } from './workflow-sample.pure';
+import type { SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
+
+/*
+ * FE-012-explorables §1.3: both files of a pair hold the same structure and only the words differ. The
+ * structure is the stage, task and slot ids, each job's `needs`, `limits` and goals, a stage's summary, the slot modes and sample counts, the section count, purposes and modes, the
+ * fan-out and the example counts; strings are ignored.
+ */
+
+const fileOf = (id: (typeof WORKFLOW_IDS)[number], locale: 'en' | 'de'): WorkflowFile => {
+  const { file } = workflowFor(id, locale);
+  if (!file) throw new Error(`${id} (${locale}) has no file`);
+  return file;
+};
+
+const count = (value: string | readonly string[] | undefined): number | undefined =>
+  value === undefined ? undefined : typeof value === 'string' ? 1 : value.length;
+
+const sectionShape = (section: SectionDef) => [section.purpose, section.only, section.techniques ?? []];
+const slotShape = (slot: SlotDef) => [slot.id, slot.mode, slot.free ?? false, count(slot.sample)];
+const taskShape = (task: TaskDef) => ({
+  id: task.id,
+  output: task.output,
+  needs: task.needs ?? [],
+  goal: [Boolean(task.goal.do), Boolean(task.goal.review)],
+  template: task.template,
+  slots: task.slots.map(slotShape),
+  simple: task.do.simple.map(sectionShape),
+  technical: task.do.technical.map(sectionShape),
+  instructions: Boolean(task.instructions),
+  limits: task.limits ?? {},
+  review: task.review && {
+    instructions: Boolean(task.review.instructions),
+    slots: task.review.slots.map(slotShape),
+    checks: task.review.checks.length,
+  },
+  examples: count(task.details.example),
+  good: task.details.goodLooksLike.length,
+  techniques: task.details.techniques ?? [],
+});
+
+/** What must match across the pair. */
+const structureOf = (file: WorkflowFile) => ({
+  id: file.id,
+  description: Boolean(file.description),
+  facts: file.scenario.facts.length,
+  purposes: Object.keys(file.purposes),
+  techniques: file.techniques.map((entry) => [entry.id, entry.tier]),
+  reviewer: file.reviewer.sections.map(sectionShape),
+  templates: Object.keys(file.templates),
+  stages: file.stages.map((stage) => ({
+    id: stage.id,
+    move: stage.move,
+    gate: stage.gate,
+    summary: Boolean(stage.summary),
+    foreach: stage.foreach && { ...stage.foreach, item: Boolean(stage.foreach.item) },
+    card: stage.card?.lines.length,
+    jobs: stage.jobs.map(taskShape),
+  })),
+});
+
+describe('success cases', () => {
+  it.each(VACATION)('gives Compare one research slot of the three Research examples, in %s %s', (id, locale) => {
+    // ARRANGE
+    const file = fileOf(id, locale);
+    const chats = 3;
+    // ACT
+    const compare = taskOf(file, 'compare');
+    const research = compare.slots.find((slot) => slot.id === 'research');
+    // ASSERT
+    expect(research?.mode).toBe('multiple');
+    expect(research?.sample).toEqual(taskOf(file, 'stay').details.example);
+    expect(taskOf(file, 'stay').details.example).toHaveLength(chats);
+  });
+
+  it.each(VACATION)(
+    'gives the interview an idea slot whose sample is the scenario, not a written one, in %s %s',
+    (id, locale) => {
+      // ARRANGE
+      const file = fileOf(id, locale);
+      const interview = taskOf(file, 'interview');
+      // ACT
+      const slot = interview.slots.find((each) => each.id === 'idea');
+      // ASSERT
+      expect(slot && slotSample(file, slot)).toContain(file.scenario.summary);
+      expect(slot?.sample).toBeUndefined();
+    },
+  );
+  it.each(EACH)('gives every do and review step instructions of one or two sentences, in %s %s', (id, locale) => {
+    // ARRANGE
+    const tasks = fileOf(id, locale).stages.flatMap((stage) => stage.jobs);
+    // ACT
+    const texts = tasks.flatMap((task) => [task.instructions, task.review?.instructions]);
+    const longest = 2;
+    const steps = tasks.length + tasks.filter((task) => task.review).length;
+    // ASSERT
+    expect(texts.filter((text) => text !== undefined)).toHaveLength(steps);
+    expect(texts.every((text) => text === undefined || (text.match(/[.!?](\s|$)/g) ?? []).length <= longest)).toBe(
+      true,
+    );
+  });
+
+  it.each(EACH)('tags sections and tasks only with techniques of the catalogue, in %s %s', (id, locale) => {
+    // ARRANGE
+    const file = fileOf(id, locale);
+    const known = file.techniques.map((entry) => entry.id);
+    // ACT
+    const used = [
+      ...file.reviewer.sections.flatMap((section) => section.techniques ?? []),
+      ...file.stages.flatMap((stage) =>
+        stage.jobs.flatMap((task) => [
+          ...[...task.do.simple, ...task.do.technical].flatMap((section) => section.techniques ?? []),
+          ...(task.details.techniques ?? []),
+        ]),
+      ),
+    ];
+    // ASSERT
+    expect(used.length).toBeGreaterThan(0);
+    expect(used.filter((id) => !known.includes(id))).toEqual([]);
+  });
+
+  it.each(EACH)('carries a one-sentence picker description, in %s %s', (id, locale) => {
+    // ARRANGE
+    const file = fileOf(id, locale);
+    // ACT
+    const description = file.description ?? '';
+    // ASSERT
+    expect(description).not.toBe('');
+    expect((description.match(/[.!?](\s|$)/g) ?? []).length).toBe(1);
+  });
+
+  it.each(WORKFLOW_IDS)('holds the same structure in English and German for %s', (id) => {
+    // ARRANGE
+    const en = structureOf(fileOf(id, 'en'));
+    // ACT
+    const de = structureOf(fileOf(id, 'de'));
+    // ASSERT
+    expect(de).toEqual(en);
+  });
+});
+
+const EACH = WORKFLOW_IDS.flatMap((id) => (['en', 'de'] as const).map((locale) => [id, locale] as const));
+/** The tests that name the vacation Workflow's jobs. */
+const VACATION = EACH.filter(([id]) => id === 'vacation');
+const taskOf = (file: WorkflowFile, id: string): TaskDef => {
+  const found = file.stages.flatMap((stage) => stage.jobs).find((each) => each.id === id);
+  if (!found) throw new Error(`no task ${id}`);
+  return found;
+};
+
+describe('failure cases', () => {
+  it('reads a difference of structure: a stage with one task fewer is not the same pair', () => {
+    // ARRANGE
+    const en = fileOf('project-plan', 'en');
+    const fewer = { ...en, stages: en.stages.map((stage, at) => (at === 0 ? { ...stage, jobs: [] } : stage)) };
+    // ACT
+    const same = JSON.stringify(structureOf(fewer)) === JSON.stringify(structureOf(en));
+    // ASSERT
+    expect(same).toBe(false);
+  });
+});
+
+describe('edge cases', () => {
+  it.each(WORKFLOW_IDS)('writes the German file in German: no German string equals its English one in %s', (id) => {
+    // ARRANGE
+    const en = fileOf(id, 'en');
+    const de = fileOf(id, 'de');
+    // ACT
+    const same = de.stages.filter((stage, at) => stage.learningGoal === en.stages[at]?.learningGoal);
+    // ASSERT
+    expect(same).toEqual([]);
+  });
+});

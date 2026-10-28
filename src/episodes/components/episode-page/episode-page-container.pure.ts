@@ -1,7 +1,20 @@
-import { folderOf, type EpisodeRef, type ResourceRef } from '@/content-store/catalogue/episode-id.pure';
+import {
+  folderOf,
+  type EpisodeRef,
+  type ExplorablePageRef,
+  type TemplateRef,
+} from '@/content-store/catalogue/episode-id.pure';
 import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
+
+/**
+ * The size a Slide wrapper gives its Slide: `section` for a shown section slide, `page` for every other. A page Slide
+ * that stands in for a section slide its Section declares it has not keeps the page size.
+ */
+export function slideSizeOf(slide: Pick<LocalizedSlide, 'level' | 'withoutSectionSlide'>): 'section' | 'page' {
+  return slide.level === 'h2' && !slide.withoutSectionSlide ? 'section' : 'page';
+}
 
 /** One table-of-contents entry while the fold builds it: its items still open to more. */
 type OpenSection = TocSection & { items: TocItem[] };
@@ -77,8 +90,8 @@ export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5
 
 /**
  * The source folder a page's Slides sit in, as the dev token editor names it in its prompt: an Episode's own folder,
- * an Event's copy's under its Event, or a Resource's under `resources/`.
+ * an Event's copy's under its Event, a Template's under `templates/` or an Explorable page's under `explorable-pages/`.
  */
-export function sourceFolderOf(page: EpisodeRef | ResourceRef): string {
+export function sourceFolderOf(page: EpisodeRef | TemplateRef | ExplorablePageRef): string {
   return `src/episodes/${folderOf(page)}`;
 }

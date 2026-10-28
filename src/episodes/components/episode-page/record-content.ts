@@ -22,7 +22,7 @@ import type { Locale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
 
 /*
- * Turns an Episode record into what one locale of its page renders: the
+ * Turns an Episode record (or the composition of a Template or an Explorable page) into what one locale of its page renders: the
  * Title slide's text and every Slide, localized, in page order. The table of
  * contents, the Context drawer and the Slide wrappers all fold this one list,
  * each Slide under the id its position gives it.
@@ -34,7 +34,7 @@ export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 /** What the page lends the Episode: the site-wide translator, and the route it is served at when not its own. */
 export interface PageContext {
   readonly translatorOf: TranslatorOf;
-  /** The page's Episode id, or the Resource's slug: an Event's copy is named by its id, never by its slug alone. */
+  /** The page's Episode id, or the slug of its Template or Explorable page: an Event's copy is named by its id, never by its slug alone. */
   readonly id: ComposedId;
   /** The logical path the page is served at, which `slideHref` links on: the Episode's own unless an Event presents it. */
   readonly route?: string;

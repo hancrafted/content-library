@@ -21,10 +21,12 @@ import { contextDrawerInput } from './context-drawer-input';
 import {
   eyebrowsOf,
   INSET_CLASSES,
+  slideSizeOf,
   sourceFolderOf,
   TOC_RESERVE_CLASS,
   tocSectionsOf,
 } from './episode-page-container.pure';
+import { ExplorableHomes } from './explorable-homes';
 import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -66,7 +68,7 @@ function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; pa
         <SlideWrapper
           key={slide.slug}
           id={slide.id}
-          size={slide.level === 'h2' ? 'section' : 'page'}
+          size={slideSizeOf(slide)}
           mode={page.mode}
           header={headerOf(slide, page)}
         >
@@ -135,7 +137,6 @@ function EpisodeToc(props: {
   );
 }
 
-/** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
 /** The table of contents' labels; `remaining` stays raw, `{count}` unfilled, for the client to fill as the reader scrolls. */
 async function tocLabelsOf(locale: Locale): Promise<TocLabels> {
   const t = await getTranslations({ locale, namespace: 'tableOfContents' });
@@ -146,6 +147,7 @@ async function tocLabelsOf(locale: Locale): Promise<TocLabels> {
   };
 }
 
+/** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
 function translatorOf(locale: Locale): TranslatorOf {
   return async (namespace) =>
     (await getTranslations({ locale, namespace: namespace as never })) as unknown as RuntimeTranslator;
@@ -198,13 +200,10 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 
 interface EpisodePageContainerProps {
   locale: Locale;
-  /**
-   * The Episode the page presents, as the store served its ref, or the Resource it is: its id is what
-   * `data-episode` names, and its folder the source folder the token editor names.
-   */
+  /** The page's ref (an Episode, a Template or an Explorable page) as the store served it: its id is `data-episode`, its folder the token editor's source. */
   page: ComposedPage;
   episode: EpisodeComposition;
-  /** The Episode's Video in this locale, from the content store; none for a Resource or before upload. */
+  /** The Episode's Video in this locale, from the content store; none for a Template or before upload. */
   video?: Video;
   /** Present when an Event presents the Episode at its own URL; absent on `/episodes/<slug>/`. */
   frame?: Partial<EpisodeFrame>;
@@ -234,16 +233,18 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (
-    <UrlStateProvider key={`${locale}/${id}`}>
-      <div data-slot="episode-page" data-episode={id} className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}>
-        <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
-        {frame.header}
-        <SlideColumn titleSlide={titleSlide} slides={slides} page={header} />
-        {frame.footer}
-        <ContextDrawerSlot input={drawer} />
-        {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} title={content.title} labels={talkLabels} />}
-      </div>
-      <DevSlideReporter folder={sourceFolderOf(page)} />
-    </UrlStateProvider>
+    <ExplorableHomes page={page} locale={locale}>
+      <UrlStateProvider key={`${locale}/${id}`}>
+        <div data-slot="episode-page" data-episode={id} className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}>
+          <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
+          {frame.header}
+          <SlideColumn titleSlide={titleSlide} slides={slides} page={header} />
+          {frame.footer}
+          <ContextDrawerSlot input={drawer} />
+          {youtubeId && talkLabels && <TalkPlayer youtubeId={youtubeId} title={content.title} labels={talkLabels} />}
+        </div>
+        <DevSlideReporter folder={sourceFolderOf(page)} />
+      </UrlStateProvider>
+    </ExplorableHomes>
   );
 }

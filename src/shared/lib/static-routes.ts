@@ -13,6 +13,8 @@ export const ROUTES = {
   episodes: '/episodes',
   /** The Events list; each Event's page sits under this path. */
   events: '/events',
+  /** The Explorable pages list; each Explorable page sits under this path at its slug. */
+  explorables: '/explorables',
   /** The Resources list; each Resource's page sits under its type's plural, `record-routes.ts`. */
   resources: '/resources',
 } as const;

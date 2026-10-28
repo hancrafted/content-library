@@ -1,36 +1,45 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { EpisodeRef } from './catalogue/episode-id.pure';
 import { catalogueOf } from './catalogue/page-catalogue';
-import { RESOURCE_SLUGS, type EpisodeId } from './catalogue/record-routes';
+import {
+  EXPLORABLE_PAGE_SLUGS,
+  TEMPLATE_SLUGS,
+  type EpisodeId,
+  type ExplorablePageSlug,
+} from './catalogue/record-routes';
 import type { LoadedEpisode } from './episode-refusals';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
 import { EVENT_RECORDS } from './event-registry.generated';
+import { EXPLORABLE_PAGE_RECORDS, EXPLORABLE_SLUGS } from './explorable-page-registry.generated';
 import { FEATURED } from './featured';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
-import { RESOURCE_RECORDS } from './resource-registry.generated';
 import type { EpisodeStatus } from './schemas/episode.schema';
 import type { EventInput } from './schemas/event.schema';
+import type { ExplorablePageInput } from './schemas/explorable-page.schema';
 import type { IsoDate } from './schemas/fields';
 import type { PlaylistInput } from './schemas/playlist.schema';
-import type { ResourceInput } from './schemas/resource.schema';
+import type { TemplateInput } from './schemas/template.schema';
 import type { ServedEvent } from './served-event';
+import { TEMPLATE_RECORDS } from './template-registry.generated';
 
 /*
  * The content store's one entry (FE-013): every record — Episode metadata, Event, Playlist — is collected here, parsed
  * by its schema and checked against the others when this module loads. Episode metadata arrives through the generated
  * Episode registry (`./episode-registry.generated.ts`, one entry per Episode folder, keyed by the Episode id its
  * folder gives it), Events through the generated
- * Event registry (`./event-registry.generated.ts`, one entry per Event file), Resources through theirs
- * (`./resource-registry.generated.ts`, one per Resource file, checked against the composition folders), Playlists by explicit import. A bad
+ * Event registry (`./event-registry.generated.ts`, one entry per Event file), Templates through theirs
+ * (`./template-registry.generated.ts`, one per Template file, checked against the composition folders), Explorable pages through
+ * theirs (`./explorable-page-registry.generated.ts`, checked against the composition folders and the Explorables), Playlists by explicit import. A bad
  * record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read records only
  * through the functions below, and every page through the page catalogue served here. The one seam a database would
  * replace.
  */
 
 const EVENTS: readonly EventInput[] = Object.values(EVENT_RECORDS);
-const RESOURCES: readonly ResourceInput[] = Object.values(RESOURCE_RECORDS);
+const TEMPLATES: readonly TemplateInput[] = Object.values(TEMPLATE_RECORDS);
+const EXPLORABLE_PAGES: readonly ExplorablePageInput[] = Object.values(EXPLORABLE_PAGE_RECORDS);
 const PLAYLISTS: readonly PlaylistInput[] = [
   axelAgenticWorkflowPlaylist,
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
@@ -62,8 +71,11 @@ const CONTENT = loadContent({
   episodes: Object.entries({ ...EPISODE_METADATA, ...UPCOMING_METADATA }).map(([id, record]) => ({ id, record })),
   events: EVENTS,
   playlists: PLAYLISTS,
-  resources: RESOURCES,
-  resourceCompositions: RESOURCE_SLUGS,
+  templates: TEMPLATES,
+  templateCompositions: TEMPLATE_SLUGS,
+  explorablePages: EXPLORABLE_PAGES,
+  explorablePageCompositions: EXPLORABLE_PAGE_SLUGS,
+  explorables: EXPLORABLE_SLUGS,
   featured: FEATURED,
 });
 
@@ -116,12 +128,22 @@ export function episodeVideo(episode: EpisodeRef<EpisodeId>, locale: Locale): Vi
   return local === undefined ? undefined : { id: local };
 }
 
+/**
+ * The Video an Explorable page plays in this locale; none until uploaded. An Explorable page's `youtube` holds at most
+ * one id per locale.
+ */
+export function explorablePageVideo(slug: ExplorablePageSlug, locale: Locale): Video | undefined {
+  const id = CONTENT.explorablePages.find((page) => page.slug === slug)?.youtube?.[locale];
+  return id === undefined ? undefined : { id };
+}
+
 export type {
   EpisodesPathParams,
   EventEpisodePage,
   EventEpisodeParams,
-  ResourceParams,
+  ExplorablePageParams,
   RouteParams,
+  TemplateParams,
 } from './catalogue/page-catalogue';
 export type { PresentedEpisode, ServedEvent } from './served-event';
 
@@ -151,9 +173,12 @@ export const {
   eventParams,
   eventEpisodeParams,
   eventEpisodePageAt,
-  resourceParams,
-  resourcePageAt,
+  explorablePageParams,
+  explorablePageAt,
+  templateParams,
+  templatePageAt,
   listedEpisodes,
   listedEvents,
-  listedResources,
+  listedExplorablePages,
+  listedTemplates,
 } = catalogueOf(CONTENT);

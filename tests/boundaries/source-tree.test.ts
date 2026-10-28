@@ -13,7 +13,7 @@ describe('source tree', () => {
       'content-store',
       'episodes',
       'events',
-      'explorable-explanations',
+      'explorables',
       'page-assembly',
       'pipeline',
       'shared',

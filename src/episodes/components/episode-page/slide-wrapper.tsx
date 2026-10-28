@@ -40,6 +40,7 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
     <div
       id={id}
       data-slide={id}
+      data-size={size}
       className={cn('relative isolate flex w-full scroll-mt-24 flex-col', MIN_HEIGHT[size], band, className)}
       {...props}
     >

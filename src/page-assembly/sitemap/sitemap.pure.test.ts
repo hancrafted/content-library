@@ -1,4 +1,4 @@
-import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import type { PageRef } from '@/content-store/catalogue/record-routes';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
@@ -94,7 +94,7 @@ describe('failure cases', () => {
       ...treated(
         HIDDEN,
         { kind: 'dashboard' },
-        { kind: 'resource', type: 'master-slide', resource: resourceRef('timelines') },
+        { kind: 'template', type: 'master-slide', template: templateRef('timelines') },
       ),
       ...treated(HIDDEN, { kind: 'event-episode', event: EVENT, episode: episodeRef('ai-attention-span', EVENT) }),
     ];

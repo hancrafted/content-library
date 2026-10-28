@@ -6,7 +6,7 @@ import { type CheerioAPI } from 'cheerio';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeRoute, resourceRoute } from '../../src/content-store/catalogue/record-routes';
+import { episodeRoute, templateRoute } from '../../src/content-store/catalogue/record-routes';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { EXPORTED_EPISODE_SHAPED_PAGES, exportedPage, OUT_DIR } from './exported-pages';
 import { cssFiles, printBlocks } from './stylesheets';
@@ -234,7 +234,7 @@ describe('never-too-early-sales', () => {
 describe('episode-template', () => {
   it.each(LOCALES)('has notes on why-a-template alone and the empty state elsewhere in %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath(resourceRoute('episode-template', 'episode-template'), locale));
+    const $ = exportedPage(localizePath(templateRoute('episode-template', 'episode-template'), locale));
     // ACT
     const withNotes = $('#context-panel-notes [data-context-for]')
       .toArray()
@@ -246,7 +246,7 @@ describe('episode-template', () => {
 
   it.each(LOCALES)('wraps phrases in context references that resolve to their own note, in %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath(resourceRoute('episode-template', 'episode-template'), locale));
+    const $ = exportedPage(localizePath(templateRoute('episode-template', 'episode-template'), locale));
     const refs = $('[data-slot="slides"] button[data-context-ref]').toArray();
     // ACT
     const resolved = refs.map((ref) => {

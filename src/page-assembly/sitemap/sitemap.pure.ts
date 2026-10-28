@@ -17,9 +17,11 @@ function lastModifiedOf(
     dashboard: none,
     episodes: none,
     events: none,
+    explorables: none,
     resources: none,
     episode: ({ episode }) => publishedOnOf(episode),
-    resource: none,
+    'explorable-page': none,
+    template: none,
     event: none,
     'event-episode': none,
   });

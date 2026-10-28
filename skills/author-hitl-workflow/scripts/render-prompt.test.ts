@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 
 const SCRIPT = 'skills/author-hitl-workflow/scripts/render-prompt.ts';
-const FIXTURE = 'src/explorable-explanations/human-in-the-loop/workflow.fixture.en.yml';
+const FIXTURE = 'src/explorables/human-in-the-loop/workflow.fixture.en.yml';
 const dir = mkdtempSync(join(tmpdir(), 'render-prompt-'));
 /** A pasted value, written to a file the script reads. */
 const pasted = (name: string, text: string): string => {

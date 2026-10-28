@@ -11,7 +11,7 @@ import { matchPage, type EpisodeId, type PageRef } from './record-routes';
 
 /** What a page presents, as far as its treatment depends on it. A page that presents no record passes `{}`. */
 export interface PageFacts {
-  /** The presented record's visibility: an Episode's own, a Resource's own, or, on an Event page, its Playlist's. */
+  /** The presented record's visibility: an Episode's own, a Template's own, or, on an Event page, its Playlist's. */
   readonly visibility?: Episode['visibility'];
   /** An Episode's status: an upcoming one is kept out of search. */
   readonly status?: EpisodeStatus;
@@ -80,9 +80,11 @@ export function pageTreatment(page: PageRef, facts: PageFacts): PageTreatment {
       dashboard: () => HIDDEN,
       episodes: () => LISTED,
       events: () => LISTED,
+      explorables: () => LISTED,
       resources: () => LISTED,
       episode: () => episodePageTreatment(facts),
-      resource: () => (facts.visibility === 'public' ? LISTED : HIDDEN),
+      'explorable-page': () => (facts.visibility === 'public' ? LISTED : HIDDEN),
+      template: () => (facts.visibility === 'public' ? LISTED : HIDDEN),
       event: () => (facts.visibility === 'public' ? LISTED : HIDDEN),
       'event-episode': ({ episode }) => eventEpisodeTreatment(episode.id, facts),
     },

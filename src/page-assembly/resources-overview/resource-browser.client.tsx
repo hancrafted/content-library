@@ -1,6 +1,6 @@
 'use client';
 
-import type { ResourceType, TagId } from '@/content-store/schemas/fields';
+import type { TagId } from '@/content-store/schemas/fields';
 import { SearchInput } from '@/shared/components/filters/search-input';
 import { TagToggles } from '@/shared/components/filters/tag-toggles';
 import { Button } from '@/shared/components/ui/button';
@@ -10,11 +10,12 @@ import { cn } from '@/shared/lib/utils';
 import { LayoutGrid, List } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { ResourceCardView, type ResourceCard } from './resource-card';
+import type { ResourceKind } from './resource-index.pure';
 import {
   matchingResources,
   NO_SELECTION,
+  resourceKindChoices,
   resourceTagChoices,
-  resourceTypeChoices,
   type ResourceSelection,
 } from './resources-overview.pure';
 
@@ -27,13 +28,13 @@ export interface ResourceBrowserLabels {
   readonly search: string;
   readonly searchPlaceholder: string;
   readonly tagFilter: string;
-  readonly typeFilter: string;
+  readonly kindFilter: string;
   readonly view: string;
   readonly grid: string;
   readonly list: string;
   readonly reset: string;
-  /** The type names, as the type filter writes them in plural ("Master slides"). */
-  readonly typeNames: Readonly<Record<ResourceType, string>>;
+  /** The kind names, as the kind filter writes them in plural ("Master slides"). */
+  readonly kindNames: Readonly<Record<ResourceKind, string>>;
 }
 
 type View = 'grid' | 'list';
@@ -45,8 +46,8 @@ interface BrowserProps {
   cards: ResourceCard[];
   /** The Tags' order, the vocabulary's, so the chips read as on the other overviews. */
   vocabulary: readonly TagId[];
-  /** The closed list of types, in the order the filter offers them. */
-  types: readonly ResourceType[];
+  /** The closed list of kinds, in the order the filter offers them. */
+  kinds: readonly ResourceKind[];
   locale: Locale;
   labels: ResourceBrowserLabels;
 }
@@ -61,10 +62,10 @@ function useResourceBrowser(cards: readonly ResourceCard[]) {
     view,
     search,
     visible: matchingResources(cards, selection),
-    active: selection.tags.length > 0 || selection.types.length > 0 || selection.query.trim() !== '',
+    active: selection.tags.length > 0 || selection.kinds.length > 0 || selection.query.trim() !== '',
     setQuery: (query: string) => setSelection((prev) => ({ ...prev, query })),
     setTags: (tags: string[]) => setSelection((prev) => ({ ...prev, tags })),
-    setTypes: (types: string[]) => setSelection((prev) => ({ ...prev, types })),
+    setKinds: (kinds: string[]) => setSelection((prev) => ({ ...prev, kinds })),
     setView,
     reset: () => {
       setSelection(NO_SELECTION);
@@ -115,8 +116,8 @@ interface ControlsProps extends Omit<BrowserProps, 'locale'> {
   browse: Browse;
 }
 
-/** The search, the type and Tag chips, the view switch, and the way back to everything while a filter is on. */
-function Controls({ browse, cards, vocabulary, types, labels }: ControlsProps) {
+/** The search, the kind and Tag chips, the view switch, and the way back to everything while a filter is on. */
+function Controls({ browse, cards, vocabulary, kinds, labels }: ControlsProps) {
   return (
     <div data-resource-controls className="flex flex-wrap items-center gap-x-6 gap-y-4">
       <SearchInput
@@ -127,12 +128,12 @@ function Controls({ browse, cards, vocabulary, types, labels }: ControlsProps) {
         inputRef={browse.search}
         data={{ 'data-resource-search': '' }}
       />
-      <div data-resource-type-filter>
+      <div data-resource-kind-filter>
         <TagToggles
-          options={resourceTypeChoices(cards, types, labels.typeNames)}
-          selected={browse.selection.types}
-          label={labels.typeFilter}
-          onChange={browse.setTypes}
+          options={resourceKindChoices(cards, kinds, labels.kindNames)}
+          selected={browse.selection.kinds}
+          label={labels.kindFilter}
+          onChange={browse.setKinds}
         />
       </div>
       <TagToggles
@@ -148,12 +149,12 @@ function Controls({ browse, cards, vocabulary, types, labels }: ControlsProps) {
 }
 
 /**
- * The Resources overview's interactive part: a search, the type and Tag chips and the grid or list switch, then
+ * The Resources overview's interactive part: a search, the kind and Tag chips and the grid or list switch, then
  * every Resource as a card. Every Resource is in the server HTML; filtering only toggles `hidden`, so find-in-page
  * and a visit without scripts still see all of them. The selection and the view are transient (FE-001): a reload
  * starts afresh.
  */
-export function ResourceBrowser({ cards, vocabulary, types, locale, labels }: BrowserProps) {
+export function ResourceBrowser({ cards, vocabulary, kinds, locale, labels }: BrowserProps) {
   const browse = useResourceBrowser(cards);
   const empty = cards.length === 0 ? labels.none : browse.visible.size === 0 ? labels.noMatch : null;
   return (
@@ -161,7 +162,7 @@ export function ResourceBrowser({ cards, vocabulary, types, locale, labels }: Br
       <noscript>
         <style>{NO_SCRIPT_CSS}</style>
       </noscript>
-      <Controls browse={browse} cards={cards} vocabulary={vocabulary} types={types} labels={labels} />
+      <Controls browse={browse} cards={cards} vocabulary={vocabulary} kinds={kinds} labels={labels} />
       <ul
         data-resource-list
         data-view={browse.view}

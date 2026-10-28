@@ -1,8 +1,8 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { Context } from '@/explorable-explanations/context/context';
-import { contextData } from '@/explorable-explanations/context/context-data';
-import { shortTokens } from '@/explorable-explanations/context/context-format.pure';
+import { Context } from '@/explorables/context-window/context';
+import { contextData } from '@/explorables/context-window/context-data';
+import { shortTokens } from '@/explorables/context-window/context-format.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { JumpCard, SizeBars, type BarTone } from './jump-parts';

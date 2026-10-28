@@ -11,5 +11,8 @@
       "en": "Aufgezeichnet auf Englisch",
       "de": "Aufgezeichnet auf Deutsch"
     }
+  },
+  "explorableHome": {
+    "exploreIt": "Selbst ausprobieren →"
   }
 }

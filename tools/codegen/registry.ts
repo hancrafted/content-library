@@ -1,4 +1,4 @@
-// `npm run registry` writes the Episode registry from the Episode folders and the Event and Resource registries from
+// `npm run registry` writes the Episode registry from the Episode folders and the Event and Template registries from
 // their record files, formatted as Prettier would. The fast suite fails while a checked-in registry file is stale
 // (registry.test.ts). What each registry holds: episode-registry.pure.ts and event-registry.pure.ts.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -7,10 +7,13 @@ import { format, resolveConfig } from 'prettier';
 import { pageFolders } from '../../src/episodes/lib/episode-folders.ts';
 import { episodeRegistryFiles, type EpisodeFolder, type RegistryFile } from './episode-registry.pure.ts';
 import { eventRegistryFiles } from './event-registry.pure.ts';
-import { resourceRegistryFile } from './resource-registry.pure.ts';
+import { explorablePageRegistryFile } from './explorable-page-registry.pure.ts';
+import { templateRegistryFile } from './template-registry.pure.ts';
 
 const EVENTS_DIR = 'src/content-store/events';
-const RESOURCES_DIR = 'src/content-store/resources';
+const TEMPLATES_DIR = 'src/content-store/templates';
+const EXPLORABLE_PAGES_DIR = 'src/content-store/explorable-pages';
+const EXPLORABLES_DIR = 'src/explorables';
 
 /** Every page folder the one folder walker finds, an Event's copies included, with its entries and `episode.ts` text. */
 function readEpisodeFolders(root: string): EpisodeFolder[] {
@@ -28,12 +31,20 @@ function readFilesIn(root: string, dir: string): string[] {
     .map(({ name }) => name);
 }
 
+/** The folders directly under a directory: each Explorable is one. */
+function readFoldersIn(root: string, dir: string): string[] {
+  return readdirSync(path.join(root, dir), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map(({ name }) => name);
+}
+
 /** Each registry file as the folders and files give it, in the repository's Prettier style, so `format:check` passes it. */
 async function registryFiles(root: string): Promise<RegistryFile[]> {
   const files = [
     ...episodeRegistryFiles(readEpisodeFolders(root)),
     ...eventRegistryFiles(readFilesIn(root, EVENTS_DIR)),
-    resourceRegistryFile(readFilesIn(root, RESOURCES_DIR)),
+    templateRegistryFile(readFilesIn(root, TEMPLATES_DIR)),
+    explorablePageRegistryFile(readFilesIn(root, EXPLORABLE_PAGES_DIR), readFoldersIn(root, EXPLORABLES_DIR)),
   ];
   return Promise.all(
     files.map(async (file) => {

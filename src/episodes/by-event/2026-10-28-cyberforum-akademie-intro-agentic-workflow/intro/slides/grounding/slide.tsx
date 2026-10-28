@@ -1,6 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { AiDisciplines } from '@/explorable-explanations/ai-disciplines/ai-disciplines';
+import { AiDisciplines } from '@/explorables/ai-disciplines/ai-disciplines';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -23,7 +23,7 @@ const FIVE_LEVELS = {
 const STRONGDM = { slug: 'strongdm-software-factory', url: 'https://factory.strongdm.ai/' };
 
 /**
- * The grounding of the evening: the disciplines timeline (Explorable explanation `ai-disciplines`, Preset `timeline`).
+ * The grounding of the evening: the disciplines timeline (Explorable `ai-disciplines`, Preset `timeline`).
  * Prompting, agents, workflows and the factory as stages on one language model, each with what it is comparable to and
  * the interface it reaches the model through. One Speaker note per stage dates it (LLM-0018 findings 4 and 10 to 13);
  * its marker sits on the stage's card, and hovering the note lights the column.

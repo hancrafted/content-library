@@ -1,5 +1,5 @@
-import { resourceRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, RESOURCE_SLUGS } from '@/content-store/catalogue/record-routes';
+import { templateRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, TEMPLATE_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
 import { headerModeOf, type Slide } from '@/episodes/components/slide-master/slide';
@@ -21,16 +21,19 @@ interface PlacedSlide {
   readonly slide: Slide;
 }
 
-/** Every page the registry composes, by the ref the store serves it with: each Episode with a page, each Resource. */
-const PAGES = [...listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])), ...RESOURCE_SLUGS.map(resourceRef)];
+/** Every page the registry composes, by the ref the store serves it with: each Episode with a page, each Template. */
+const PAGES = [...listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])), ...TEMPLATE_SLUGS.map(templateRef)];
 
-/** Every Slide of every registered Episode and Resource. */
+/** Every Slide of every registered Episode and Template that the page renders: a Section without a section slide has none to render. */
 function allSlides(): PlacedSlide[] {
-  return PAGES.flatMap((page) =>
-    compositionOf(page)
-      .sections.flat()
-      .map((slide) => ({ page, slide })),
-  );
+  return PAGES.flatMap((page) => {
+    const composition = compositionOf(page);
+    const rendered = placeSections<Slide>(composition.sections).flat();
+    return composition.sections
+      .flat()
+      .filter((slide) => rendered.some((entry) => entry.slide === slide))
+      .map((slide) => ({ page, slide }));
+  });
 }
 
 /** The Slide's Scene as the page renders it in English, localized into its own Episode. */

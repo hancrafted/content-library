@@ -1,4 +1,4 @@
-import type { SectionList } from '@/episodes/lib/episode.pure';
+import { withoutSectionSlide as markWithoutSectionSlide, type SectionList } from '@/episodes/lib/episode.pure';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
@@ -122,6 +122,13 @@ export function slide<
 /** A Section of Slides: its section slide, which names it, then its page Slides. */
 export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
 
+/**
+ * A Section that declares it has no section slide (FE-002): list it as usual, its section slide first, which stays
+ * authored for the Section's title and slug but is not shown. The first page Slide takes the Section's anchor. The
+ * one implementation is `markWithoutSectionSlide` (`@/episodes/lib/episode.pure`); this is it, typed to the Slides.
+ */
+export const withoutSectionSlide = markWithoutSectionSlide as (section: readonly [TitledSlide, ...Slide[]]) => Section;
+
 /** An Episode's own text, from `i18n/<locale>.json` in its folder: the Title slide's and the page metadata's. */
 export interface EpisodeMessages {
   readonly title: string;
@@ -142,7 +149,7 @@ export type HeaderMode = 'shared' | 'authored';
  * An Episode's composition of Slides: static data. It carries its own
  * text, so no other owner's Translation files hold any of it. What the Episode
  * declares about itself (status, visibility, Video) is its metadata record,
- * loaded by the content store (FE-013). A Resource
+ * loaded by the content store (FE-013). A Template
  * composes its Slides the same way, but is no Episode; both are read by ref
  * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */

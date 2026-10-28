@@ -2,10 +2,10 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeFolders, pageFolders, resourceFolders, slideFolders, type PageFolder } from './episode-folders';
+import { episodeFolders, pageFolders, slideFolders, templateFolders, type PageFolder } from './episode-folders';
 
 /*
- * The one folder walker (design-ADR 0016 decision 3): every Episode, standalone and Event copy alike, and every resources
+ * The one folder walker (design-ADR 0016 decision 3): every Episode, standalone and Event copy alike, and every templates
  * page beside them. The registry generator and every test that reads the Episode folders take their list from it, so
  * each case below walks a throwaway Episodes folder, never the repo's: adding an Episode breaks no test here.
  */
@@ -88,7 +88,7 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('never takes the reserved slide-pool folder for an Episode or a Resource', () => {
+  it('never takes the reserved slide-pool folder for an Episode or a Template', () => {
     // ARRANGE
     const root = tree(['alpha/episode-metadata.ts', 'slide-pool/pooled/slide.tsx']);
     const expected = ['alpha'];
@@ -98,7 +98,7 @@ describe('failure cases', () => {
     expect(ids).toEqual(expected);
   });
 
-  it.each(['components', 'lib', 'hooks'])('never takes the reserved %s folder for an Episode or a Resource', (name) => {
+  it.each(['components', 'lib', 'hooks'])('never takes the reserved %s folder for an Episode or a Template', (name) => {
     // ARRANGE
     const root = tree(['alpha/episode-metadata.ts', `${name}/part/part.ts`]);
     const expected = ['alpha'];
@@ -108,7 +108,7 @@ describe('failure cases', () => {
     expect(ids).toEqual(expected);
   });
 
-  it('never takes the reserved by-event folder for an Episode or a Resource', () => {
+  it('never takes the reserved by-event folder for an Episode or a Template', () => {
     // ARRANGE
     const root = tree(['alpha/episode-metadata.ts', 'by-event/2026-01-01-x/beta/episode-metadata.ts']);
     const expected = ['alpha', '2026-01-01-x__beta'];
@@ -120,23 +120,23 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('walks the Resources under resources/, by slug, none of them an Episode', () => {
+  it('walks the Templates under templates/, by slug, none of them an Episode', () => {
     // ARRANGE
-    const root = tree(['alpha/episode-metadata.ts', 'resources/deck/episode.ts', 'resources/bench/episode.ts']);
-    const expected = { resources: ['resources/bench', 'resources/deck'], episodes: ['alpha'] };
+    const root = tree(['alpha/episode-metadata.ts', 'templates/deck/episode.ts', 'templates/bench/episode.ts']);
+    const expected = { templates: ['templates/bench', 'templates/deck'], episodes: ['alpha'] };
     // ACT
-    const resources = resourceFolders(root).map(({ folder }) => folder);
+    const templates = templateFolders(root).map(({ folder }) => folder);
     const episodes = episodeFolders(root).map(({ folder }) => folder);
     // ASSERT
-    expect({ resources, episodes }).toEqual(expected);
+    expect({ templates, episodes }).toEqual(expected);
   });
 
-  it('names a Resource by its slug, after the Episodes and their copies, and walks its Slide folders', () => {
+  it('names a Template by its slug, after the Episodes and their copies, and walks its Slide folders', () => {
     // ARRANGE
     const root = tree([
       'alpha/episode-metadata.ts',
-      'resources/bench/episode.ts',
-      'resources/bench/slides/demo/slide.tsx',
+      'templates/bench/episode.ts',
+      'templates/bench/slides/demo/slide.tsx',
     ]);
     const expected = { pages: ['alpha', 'bench'], slides: [{ owner: 'bench', slug: 'demo' }] };
     // ACT
