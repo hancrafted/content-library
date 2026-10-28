@@ -16,7 +16,7 @@ One feature doc per Explorable, in this folder:
 
 - `context-window.md`: the context window.
 - `human-in-the-loop.md`: the human-in-the-loop Explorable; `agentic-workflow.md` is the authoring guide for its Workflow files.
-- `ai-disciplines.md`: the AI disciplines timeline.
+- `ai-capability.md`: the AI capability timeline: four Levels and the rows the toolbar adds.
 
 ## Explorable floor
 
@@ -37,9 +37,9 @@ Record: `src/content-store/explorable-pages/<slug>.ts` (slug, Tags, visibility, 
 A page behaves like an Episode: table of contents, Context drawer, Slide kit, Speaker notes citing a Research question or a high-trust Source, and a YouTube Video played from the Title slide (at most one per locale, the `youtube` field of the Episode). Its content is what makes it a product.
 
 - **Slug.** The page's slug is its primary Explorable's folder slug. The content store refuses a page whose slug names no Explorable folder `src/explorables/<slug>/`, in a sentence naming the page.
-- **URL.** `/explorables/<slug>/`, listed on `/explorables/`, both locales, public, indexed, in the sitemap. The three pages (Context window, Human in the loop, AI disciplines) live there; `/explorable-explanations/*` answers with a 301 to `/explorables/:splat` (`public/_redirects`).
+- **URL.** `/explorables/<slug>/`, listed on `/explorables/`, both locales, public, indexed, in the sitemap. The three pages (Context window, Human in the loop, AI capability) live there; `/explorable-explanations/*` answers with a 301 to `/explorables/:splat` (`public/_redirects`).
 - **Other Explorables.** Its Slides may show any Explorable; the product, not the code, decides what a page covers.
-- **Home link.** An Explorable shown in a Slide renders "Explore it →" to the page whose slug equals its own, in the visitor's locale, when that page is built. Derived from the slug join, no stored pointer. The page whose primary it is shows none for itself; its Slides that show another Explorable keep the link. How: the page container (`episode-page-container.tsx`) reads the built pages from the content store and provides them, with the words (`explorableHome.exploreIt` in the container's `i18n/`), to the `ExploreItLink` leaf in `src/shared/components/core-components/explorable-home/`. Each Explorable's server entry (`Context`, `HumanInTheLoop`, `AiDisciplines`) places the link by its own slug; a new Explorable does the same, and no Slide passes anything. Build test: `tests/post-build/explorables.build.test.ts`.
+- **Home link.** An Explorable shown in a Slide renders "Explore it →" to the page whose slug equals its own, in the visitor's locale, when that page is built. Derived from the slug join, no stored pointer. The page whose primary it is shows none for itself; its Slides that show another Explorable keep the link. How: the page container (`episode-page-container.tsx`) reads the built pages from the content store and provides them, with the words (`explorableHome.exploreIt` in the container's `i18n/`), to the `ExploreItLink` leaf in `src/shared/components/core-components/explorable-home/`. Each Explorable's server entry (`Context`, `HumanInTheLoop`, `AiCapability`) places the link by its own slug; a new Explorable does the same, and no Slide passes anything. Build test: `tests/post-build/explorables.build.test.ts`.
 - **Sections.** All three pages switch their section slide off, so a page does not repeat its title: wrap the Section list in `withoutSectionSlide([...])` (`src/episodes/components/slide-master/slide.ts`). The section slide stays the first entry, a Slide folder holding the Section's title, and is not rendered. The first page Slide takes the Section's anchor (`context-window`) and the table-of-contents entry; the Section's other Slides keep `<section>--<slide>`. The Title slide stays: it plays the Video. Pinned by `tests/post-build/section-slide.build.test.ts`.
 
 ### Page convention

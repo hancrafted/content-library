@@ -1,0 +1,32 @@
+{
+  "title": "KI-Fähigkeiten · hancrafted",
+  "description": "Eine interaktive Zeitleiste der vier Stufen der Arbeit mit KI, vom Prompting bis zur entstehenden Factory: womit jede vergleichbar ist, ihre Produktivitätsobergrenze neben dem, was Studien gemessen haben, und die Lücke zwischen Chat-Nutzung und der Factory, die Führungskräfte erwarten.",
+  "toc": "Inhalt Wird geladen 1 Voreinstellungen Inhalt öffnen : Inhalt Inhalt 1 Voreinstellungen",
+  "slides": [
+    {
+      "id": "top",
+      "text": "KI-Fähigkeiten Vier Stufen der Arbeit mit KI auf einem Large Language Model, aus drei Blickwinkeln: welche Rolle jede spielt, welche Produktivität sie erreicht und wie weit die Nutzung der Menschen von dem entfernt ist, was Führungskräfte erwarten."
+    },
+    {
+      "id": "ai-disciplines",
+      "text": "Die Zeitleiste Vier Stufen auf einem Sprachmodell, vom Prompting 2022–23 bis zur Factory, die 2026 entsteht. Rolle Obergrenze Diskrepanz Erklären ▶ Alle abspielen 2022–23 Prompting Ihr schreibt, die KI antwortet. Der Einstieg. Klicken: Definition Definition : Prompting heißt, dem Modell wirksame Anweisungen zu schreiben, damit es verlässlich liefert, was ihr braucht. Quelle : OpenAI, Prompt-Engineering-Leitfaden ↗ ( öffnet in neuem Tab ) Fasse diesen Bericht in 3 Punkten zusammen. Gern: 1. … 2. … 3. … Chat ein Gespräch: Sie schreiben, es antwortet, Nachricht für Nachricht 2024–25 Agenten Die KI nutzt Werkzeuge und arbeitet in einer Schleife. Klicken: Definition Definition : Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt und selbst entscheidet, wie es ein Ziel erreicht. Quelle : Anthropic, Building effective agents (2024) ↗ ( öffnet in neuem Tab ) fertig Plane die Messe-Anreise fürs Team. Web öffnen Flüge suchen Drei Optionen, günstigste zuerst. Harness die Software drumherum: Rechte, Werkzeuge, eine Schleife bis zum Ziel 2024–25 Workflows Mehrere Agenten, Schritt für Schritt nach Plan. Klicken: Definition Definition : Ein Workflow verkettet Modell- und Werkzeugschritte nach einem vorher festgelegten Ablauf. Quelle : Anthropic, Building effective agents (2024) ↗ ( öffnet in neuem Tab ) Ablaufplan ein Graph aus Agenten, mit dem Menschen in oder an der Schleife 2026 → · entsteht Factory? Anfragen rein, Ergebnis raus. Wie es innen aussieht, ist offen. Klicken: Definition Definition : Eine Factory macht aus Anforderungen Software, als Blackbox: Agenten arbeiten die ganze Strecke ab, kein Mensch schreibt oder prüft jeden Schritt. Quelle : Shapiro, The Five Levels (2026) ↗ ( öffnet in neuem Tab ) ? End-to-End Kundenanfragen rein, Magie passiert, Ergebnisse raus, 24/7/365 ‹ › Large Language Model (LLM) Das Fundament, unter jeder Stufe Es sagt Token Ein Token ist ein Wortstück, etwa „Fach“ + „kraft“. Modelle lesen und schreiben Text in Tokens. für Token voraus, welches Wortstück am wahrscheinlichsten als Nächstes folgt, gelernt aus riesigen Mengen Trainingstext. ChatGPT, Copilot, Claude. Klicken: Definition Neue Tech nik bringt ? Definition : Ein großes Sprachmodell ist ein KI-Modell, mit riesigen Textmengen trainiert, das Text Token für Token fortsetzt und sich allein durch Text anweisen lässt. Quelle : Brown et al. 2020, „Language Models are Few-Shot Learners“ ↗ ( öffnet in neuem Tab ) Lies mich timeline Was es zeigt Vier Stufen auf einem Sprachmodell, jede mit ihrer Karte, einer Szene und ihrer Leitung zum Modell. Die Werkzeugleiste blendet Zeilen ein, die dieselbe Zeitleiste aus anderen Blickwinkeln erzählen: womit jede Stufe vergleichbar ist, ihre Produktivitätsobergrenze und die Diskrepanz zwischen der Nutzung der meisten Menschen und den Erwartungen der Führungskräfte. Was Sie ausprobieren Schalten Sie Obergrenze ein, dann Diskrepanz. Fahren Sie mit der Maus auf eine Stufe, um ihre Szene abzuspielen; klicken Sie eine Karte oder das Modellband für Definition und Quelle. Auf dem Handy wischen Sie von Stufe zu Stufe. Worauf Sie achten Die behaupteten Obergrenzen sind Hypothesen; die gemessene Zeile darunter sagt, was Studien fanden, und für Workflows und Factory gibt es noch keine Studie. Das 20×-Versprechen liegt weit rechts davon, wo die meisten arbeiten."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "ai-disciplines",
+      "text": "Voreinstellungen Woher Jahre und Definitionen kommen Jedes Jahr, jede Definition und jede Quelle auf den Karten stammt aus der Recherche LLM-0018, die jede Disziplin über ihre Primärquelle datiert: der Start von ChatGPT für Prompting, Anthropics Agentendefinition und Claude Code für Agenten, LangGraph für Workflows sowie Dan Shapiros fünf Stufen und StrongDM für die Factory. Die gemessenen Obergrenzen stammen aus der Recherche LLM-0019, die Belege zur Diskrepanz aus LLM-0020."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "ai-disciplines", "text": "Voreinstellungen Kein Sprechtext für diese Folie." }
+  ]
+}

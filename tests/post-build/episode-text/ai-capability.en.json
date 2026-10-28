@@ -1,0 +1,32 @@
+{
+  "title": "AI capability · hancrafted",
+  "description": "An interactive timeline of four Levels of working with AI, from prompting to the emerging factory, with the role each compares to, its productivity ceiling against what studies measured, and the gap between chat-bound users and the factory leaders expect.",
+  "toc": "Contents Loading 1 Presets Open contents : Contents Contents 1 Presets",
+  "slides": [
+    {
+      "id": "top",
+      "text": "AI capability Four Levels of working with AI on one large language model, seen from three angles: the role each plays, the productivity ceiling it reaches, and the gap between how people use AI and what leaders expect."
+    },
+    {
+      "id": "ai-disciplines",
+      "text": "The timeline Four Levels on one language model, from prompting in 2022–23 to the factory emerging in 2026. Role Ceiling Mismatch Explain ▶ Play all 2022–23 Prompting You write, the AI answers. The entry point. Click: definition Definition : Prompting is writing effective instructions so the model reliably gives you what you need. Source : OpenAI, prompt engineering guide ↗ ( opens in a new tab ) Summarise this report in 3 points. Sure: 1. … 2. … 3. … Chat a conversation: you write, it answers, message by message 2024–25 Agents The AI uses tools and works in a loop. Click: definition Definition : An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. Source : Anthropic, Building effective agents (2024) ↗ ( opens in a new tab ) done Plan the team's trip to the trade fair. Open the web Search flights Three options, cheapest first. Harness the software around it: permissions, tools and a loop until done 2024–25 Workflows Several agents, step by step, to a plan. Click: definition Definition : A workflow chains model and tool steps along a path fixed in advance. Source : Anthropic, Building effective agents (2024) ↗ ( opens in a new tab ) Flowchart a graph of agents with a human in or on the loop 2026 → · emerging Factory? Requests in, results out. What happens inside is still open. Click: definition Definition : A factory turns specifications into software as a black box, agents working the whole line with no person writing or reviewing each step. Source : Shapiro, The Five Levels (2026) ↗ ( opens in a new tab ) ? End to end customer requests go in, magic happens, results come out, 24/7/365 ‹ › Large language model (LLM) The foundation, under every stage It predicts, token A token is a piece of a word, such as \"special\" + \"ist\". Models read and write text in tokens. by token, which word piece most likely comes next, learnt from vast amounts of training text. ChatGPT, Copilot, Claude. Click: definition New tech nology brings ? Definition : A large language model is an AI model trained on vast amounts of text that continues text token by token and is steered by text alone. Source : Brown et al. 2020, Language Models are Few-Shot Learners ↗ ( opens in a new tab ) Read me timeline What it shows Four Levels on one language model, each with its card, a scene and its wire down to the model. The toolbar adds rows that tell the same timeline from other angles: the role each Level compares to, its productivity ceiling, and the mismatch between how most people use AI and what leaders expect. What to try Switch on Ceiling, then Mismatch. Move the mouse onto a Level to play its scene; click a card or the model band for its definition and source. On a phone, swipe from Level to Level. What to notice The claimed ceilings are hypotheses; the measured line under each says what studies found, and no study has measured a workflow or a factory yet. The 20× promise sits far right of where most people work."
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "ai-disciplines",
+      "text": "Presets Where the years and definitions come from Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for prompting, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory. The measured ceilings come from research LLM-0019, the mismatch evidence from LLM-0020."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "ai-disciplines", "text": "Presets No voice script for this Slide." }
+  ]
+}

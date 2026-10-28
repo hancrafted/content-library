@@ -15,7 +15,7 @@ import { cyberforumAiGivesYouMoreWork as _20261028CyberforumAkademieIntroAgentic
 import { cyberforumIntro as _20261028CyberforumAkademieIntroAgenticWorkflow__intro } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/episode';
 import { cyberforumOnboardAiEveryTime as _20261028CyberforumAkademieIntroAgenticWorkflow__onboardAiEveryTime } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/episode';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
-import { aiDisciplines } from '@/episodes/explorable-pages/ai-disciplines/episode';
+import { aiCapability } from '@/episodes/explorable-pages/ai-capability/episode';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
 import { humanInTheLoop } from '@/episodes/explorable-pages/human-in-the-loop/episode';
 import { maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai/episode';
@@ -59,7 +59,7 @@ export const TEMPLATE_PAGES: { readonly [S in TemplateSlug]: EpisodeComposition 
 
 /** Every Explorable page's Slides by slug: composed like an Episode, rendered by the same container. */
 export const EXPLORABLE_PAGES: { readonly [S in ExplorablePageSlug]: EpisodeComposition & { readonly slug: S } } = {
-  'ai-disciplines': aiDisciplines,
+  'ai-capability': aiCapability,
   'context-window': contextWindow,
   'human-in-the-loop': humanInTheLoop,
 };

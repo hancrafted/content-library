@@ -8,7 +8,7 @@ import { violations } from './axe';
  * its follow-up issue.
  */
 
-const PAGES = ['context-window', 'human-in-the-loop', 'ai-disciplines'];
+const PAGES = ['context-window', 'human-in-the-loop', 'ai-capability'];
 const WIDTHS = [390, 1440] as const;
 const HEIGHT = 900;
 const SETTLE = 15_000;
@@ -18,7 +18,7 @@ type Floor = 'fits' | 'axe' | 'reduced-motion' | 'offline';
 /** `<slug>:<case>` to the follow-up issue that tracks the failure. */
 const EXPECTED_FAIL: Readonly<Record<string, string>> = {
   'context-window:axe': 'https://github.com/hancrafted/content-library/issues/422',
-  'ai-disciplines:axe': 'https://github.com/hancrafted/content-library/issues/423',
+  'ai-capability:axe': 'https://github.com/hancrafted/content-library/issues/423',
 };
 
 /** Opens the page, scrolls its last Slide into view and returns it once it has mounted. */
