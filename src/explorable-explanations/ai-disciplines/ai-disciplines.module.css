@@ -1,0 +1,207 @@
+/*
+ * The disciplines timeline's motion and its one colour variable. Each column sets `--tone` from a global token, so its
+ * card, scene, wire and dots share one colour; the classes in the parts read it as `bg-(--tone)`. No raw colours: every
+ * value is a global token (FE-011). Under reduced motion nothing moves and every part shows its final frame.
+ */
+.prompting {
+  --tone: var(--info);
+}
+.agents,
+.workflows {
+  --tone: var(--brand-accent);
+}
+.factory {
+  --tone: var(--muted-foreground);
+}
+.llm {
+  --tone: var(--ai);
+}
+
+/* Columns share rows through a subgrid, so the cards, the scenes, the labels and the wires each end level. */
+.columns {
+  grid-template-rows: repeat(4, auto);
+}
+.column {
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+}
+
+/* The rail behind the dots, from the first discipline's colour to the last. */
+.rail::before {
+  content: '';
+  position: absolute;
+  top: 0.55rem;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--info), var(--brand-accent) 65%, var(--muted-foreground));
+}
+
+/* A flip card: both faces in one grid cell, the back turned away until the card flips. */
+.flip {
+  perspective: 1200px;
+}
+.inner {
+  display: grid;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.flip[data-flipped='true'] .inner {
+  transform: rotateY(180deg);
+}
+.face {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.back {
+  transform: rotateY(180deg);
+}
+
+/* A message on the wire: down to the model or back up. */
+.wire {
+  --wire: 2.5rem;
+  height: var(--wire);
+}
+.dot {
+  animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.dot[data-dir='down'] {
+  animation-name: down;
+}
+.dot[data-dir='up'] {
+  animation-name: up;
+}
+@keyframes down {
+  from {
+    transform: translateY(-0.4rem);
+  }
+  to {
+    transform: translateY(calc(var(--wire) - 0.5rem));
+  }
+}
+@keyframes up {
+  from {
+    transform: translateY(calc(var(--wire) - 0.5rem));
+  }
+  to {
+    transform: translateY(-0.4rem);
+  }
+}
+
+.pop {
+  animation: pop 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+
+/* The factory: requests slide in, results slide out, smoke rises while it runs. */
+.item {
+  opacity: 0;
+}
+.running .in {
+  animation: feed 2.4s linear infinite;
+}
+.running .out {
+  animation: ship 2.4s linear infinite;
+}
+.running .smoke {
+  animation: smoke 2.4s ease-out infinite;
+}
+.later {
+  animation-delay: 0.8s !important;
+}
+.latest {
+  animation-delay: 1.6s !important;
+}
+.smoke {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes feed {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  15%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(2.8rem);
+    opacity: 0;
+  }
+}
+@keyframes ship {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  20%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(2.4rem);
+    opacity: 0;
+  }
+}
+@keyframes smoke {
+  from {
+    transform: translateY(0) scale(0.6);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(-14px) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* The next token the model is about to pick, blinking. */
+.next {
+  animation: blink 1s steps(2) infinite;
+}
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* The token gloss: shown on hover and focus. */
+.gloss .tip {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+.gloss:hover .tip,
+.gloss:focus-visible .tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inner,
+  .dot,
+  .pop,
+  .running .in,
+  .running .out,
+  .running .smoke,
+  .next,
+  .gloss .tip {
+    animation: none;
+    transition: none;
+  }
+  .dot {
+    display: none;
+  }
+}
