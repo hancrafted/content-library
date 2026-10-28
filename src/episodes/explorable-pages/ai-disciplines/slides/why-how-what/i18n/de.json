@@ -1,0 +1,64 @@
+{
+  "title": "Warum · Wie · Was",
+  "caption": "Prompt, Agent, Workflow, Fabrik: vier Begriffe, die durcheinandergehen, auf einer Zeitleiste.",
+  "words": {
+    "why": "Warum",
+    "how": "Wie",
+    "what": "Was"
+  },
+  "columns": {
+    "why": {
+      "title": "Alle sagen Agent und Workflow, und niemand sagt, was der Unterschied ist.",
+      "caption": "<marker>Die Begriffe fliegen herum, und für „Fabrik“ gibt es gar keine feste Definition.</marker> So ist schwer zu wissen, welchen Du brauchst."
+    },
+    "how": {
+      "title": "Jede Ebene fügt demselben Modell eine Sache hinzu.",
+      "caption": "<marker>Prompting schreibt Anweisungen; ein Agent steuert seine Werkzeugnutzung selbst in einer Schleife; ein Workflow verkettet Schritte auf einem vorab festgelegten Weg.</marker>"
+    },
+    "what": {
+      "title": "Vier Disziplinen auf einer Zeitleiste, von 2022 bis 2026.",
+      "caption": "<marker>ChatGPT startete im November 2022, Agenten und Workflows wurden im Dezember 2024 definiert, und die Fabrik entstand Anfang 2026.</marker> Spiel jede Szene ab oder drück „Alle abspielen“."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "Die Begriffe sind nicht gefestigt",
+      "description": "Prompting, Agenten und Workflows haben Definitionen der Hersteller, aber „Fabrik“ ist ein Begriff von Praktikern aus 2026, dessen Definitionen sich darin unterscheiden, wie viel menschliche Kontrolle bleibt [1] (Recherche LLM-0018).",
+      "sources": {
+        "grant-dark-factories": {
+          "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
+        }
+      }
+    },
+    "how": {
+      "header": "Drei Definitionen der Hersteller",
+      "description": "OpenAI definiert Prompt Engineering als das Schreiben wirksamer Anweisungen für ein Modell [1]. Anthropic nennt Workflows Systeme, in denen LLMs und Werkzeuge vordefinierten Codepfaden folgen, und Agenten Systeme, in denen LLMs ihre Werkzeugnutzung selbst steuern [2]. Willison einigt sich auf: Ein Agent ist ein LLM, das Werkzeuge in einer Schleife nutzt, um ein Ziel zu erreichen [3] (Recherche LLM-0018).",
+      "sources": {
+        "openai-prompt-engineering": {
+          "title": "OpenAI, Prompt engineering guide"
+        },
+        "anthropic-building-effective-agents": {
+          "title": "Anthropic, Building effective agents"
+        },
+        "willison-agent-definition": {
+          "title": "Willison, I think \"agent\" may finally have a widely enough agreed upon definition"
+        }
+      }
+    },
+    "what": {
+      "header": "Daten aus Primärquellen",
+      "description": "ChatGPT startete am 30. November 2022 [1]; Anthropic definierte Agenten und Workflows am 19. Dezember 2024 [2]; der Begriff Fabrik stammt von Anfang 2026, die Praxis begann Mitte 2025 in einem Team [3] (Recherche LLM-0018).",
+      "sources": {
+        "openai-introducing-chatgpt": {
+          "title": "OpenAI, Introducing ChatGPT"
+        },
+        "anthropic-building-effective-agents": {
+          "title": "Anthropic, Building effective agents"
+        },
+        "grant-dark-factories": {
+          "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
+        }
+      }
+    }
+  }
+}
