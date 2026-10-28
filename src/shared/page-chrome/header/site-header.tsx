@@ -2,10 +2,10 @@ import { DevTokenEditor } from '@/shared/components/design-system-token-editor/d
 import { Button } from '@/shared/components/ui/button';
 import { BOOKING_URL } from '@/shared/lib/contact';
 import { externalHref } from '@/shared/lib/external-link.pure';
-import { localizePath, type Locale, type LocalesByRoute } from '@/shared/lib/locale.pure';
+import { type Locale, type LocalesByRoute } from '@/shared/lib/locale.pure';
 import { ROUTES } from '@/shared/lib/static-routes';
 import { HeaderMenu } from '@/shared/page-chrome/header/header-menu.client';
-import { NavLink } from '@/shared/page-chrome/header/nav-link.client';
+import { HeaderNav as ClientHeaderNav, type HeaderNavLink } from '@/shared/page-chrome/header/header-nav.client';
 import { SiteBrand } from '@/shared/page-chrome/header/site-brand';
 import { SocialLinks } from '@/shared/page-chrome/social-links';
 import { LocaleToggle } from '@/shared/page-chrome/toggles/locale-toggle.client';
@@ -35,34 +35,27 @@ function ContactButton({ label, newTab }: { label: string; newTab: string }) {
   );
 }
 
-function DashboardNav({ locale, label }: { locale: Locale; label: string }) {
-  if (locale !== 'en') return null;
-  return (
-    <NavLink section={ROUTES.dashboard} href={localizePath(ROUTES.dashboard, locale)} data-testid="nav-dashboard">
-      {label}
-    </NavLink>
-  );
-}
-
 function HeaderNav({ locale, t, navSections }: { locale: Locale; t: HeaderT; navSections: readonly string[] }) {
+  const link = (route: string, testId: string, label: string): HeaderNavLink => ({
+    label,
+    section: route,
+    testId,
+  });
   return (
-    <nav aria-label={t('nav.label')} data-testid="site-nav" className="flex gap-1 max-lg:flex-col max-lg:self-stretch">
-      <NavLink section={ROUTES.episodes} href={localizePath(ROUTES.episodes, locale)} data-testid="nav-episodes">
-        {t('nav.episodes')}
-      </NavLink>
-      <NavLink section={ROUTES.events} href={localizePath(ROUTES.events, locale)} data-testid="nav-events">
-        {t('nav.events')}
-      </NavLink>
-      <NavLink
-        section={ROUTES.resources}
-        alsoIn={navSections}
-        href={localizePath(ROUTES.resources, locale)}
-        data-testid="nav-resources"
-      >
-        {t('nav.resources')}
-      </NavLink>
-      <DashboardNav locale={locale} label={t('nav.dashboard')} />
-    </nav>
+    <ClientHeaderNav
+      locale={locale}
+      label={t('nav.label')}
+      lead={[
+        link(ROUTES.explorables, 'nav-explorables', t('nav.explorables')),
+        link(ROUTES.events, 'nav-events', t('nav.events')),
+      ]}
+      learnLabel={t('nav.learn')}
+      learn={[
+        link(ROUTES.episodes, 'nav-episodes', t('nav.episodes')),
+        { ...link(ROUTES.resources, 'nav-resources', t('nav.resources')), alsoIn: navSections },
+      ]}
+      trail={locale === 'en' ? [link(ROUTES.dashboard, 'nav-dashboard', t('nav.dashboard'))] : []}
+    />
   );
 }
 

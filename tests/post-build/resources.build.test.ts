@@ -110,7 +110,7 @@ describe('the Resources overview', () => {
     expect(missing).toEqual([]);
   });
 
-  it.each(LOCALES)('is reached by the Resources nav link, between Events and the rest, for %s', (locale) => {
+  it.each(LOCALES)('is reached by the Resources nav link, inside the Learn group, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.events, locale));
     // ACT
@@ -118,7 +118,7 @@ describe('the Resources overview', () => {
       .toArray()
       .map((link) => $(link).attr('data-testid'));
     // ASSERT
-    expect(links.slice(0, 3)).toEqual(['nav-episodes', 'nav-events', 'nav-resources']);
+    expect(links.slice(0, 4)).toEqual(['nav-explorables', 'nav-events', 'nav-episodes', 'nav-resources']);
   });
 });
 

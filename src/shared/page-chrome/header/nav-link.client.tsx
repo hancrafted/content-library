@@ -7,7 +7,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { ComponentProps } from 'react';
 
-/** A header link that highlights while the reader is anywhere inside `section`, or inside any of `alsoIn`. */
+/**
+ * A header link that highlights while the reader is anywhere inside `section`, or inside any of `alsoIn`. Its own
+ * active state wins over one a wrapping menu link passes down.
+ */
 export function NavLink({
   section,
   alsoIn = [],
@@ -27,7 +30,7 @@ export function NavLink({
         className,
       )}
     >
-      <Link aria-current={active ? 'page' : undefined} data-active={active} {...props} />
+      <Link {...props} aria-current={active ? 'page' : undefined} data-active={active} />
     </Button>
   );
 }
