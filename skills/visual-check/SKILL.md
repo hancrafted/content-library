@@ -16,7 +16,7 @@ Numbers first, pictures last: a probe answers most layout questions in a few hun
 
 `npm run inspect-page -- --url <url> [--url …] --probe <selector> [--probe …] [--styles prop,prop] [--theme light,dark] [--width 1280 --height 800]`
 
-Prints a JSON array, one entry per url x theme: per selector its match `count`, the first match's `box` (page coordinates) and the requested computed `styles`. `--wait <ms>` (default 500) lets motion settle after load. Repeat `--url` and list themes to check many pages in one call; that is the fast path.
+Prints a JSON array, one entry per url x theme: per selector its match `count`, the first match's `box` (page coordinates) and the requested computed `styles`, plus the page's `health`: `overflowX` (wider than the viewport) and `brokenImages` (the `src` of every image that did not load). `--wait <ms>` (default 500) lets motion settle after load. Repeat `--url` and list themes to check many pages in one call; that is the fast path.
 
 ## Screenshot
 
