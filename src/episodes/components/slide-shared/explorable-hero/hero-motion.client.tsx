@@ -8,6 +8,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   useSyncExternalStore,
@@ -15,7 +16,7 @@ import {
   type RefObject,
 } from 'react';
 import { mountDrift, type Drift } from './drift-canvas';
-import { createClock, motionOf, type Motion, type Story } from './drift.pure';
+import { createClock, FIELD_INK, motionOf, type Motion, type Story } from './drift.pure';
 
 /** The words on the pause button, in the page's language. */
 export interface MotionLabels {
@@ -95,6 +96,14 @@ export function HeroMotionButton() {
   );
 }
 
+/** The two canvases of one drift: the faint field and the accent beat. */
+interface CanvasRefs {
+  readonly beat: RefObject<HTMLCanvasElement | null>;
+  readonly field: RefObject<HTMLCanvasElement | null>;
+  /** The field's blurred half, softened once by CSS instead of by a canvas filter every frame. */
+  readonly soft: RefObject<HTMLCanvasElement | null>;
+}
+
 /** What the loop shares with the mounted drift: the drift to draw and the timeline's seconds. */
 interface Shared {
   drift: Drift | undefined;
@@ -102,20 +111,22 @@ interface Shared {
 }
 
 /** Mounts the drift while the story, the theme or the reduced preference stand: the tokens are read once per mount. */
-function useDrift(canvasRef: RefObject<HTMLCanvasElement | null>, story: Story, staticFrame: boolean) {
+function useDrift(refs: CanvasRefs, story: Story, staticFrame: boolean) {
   const shared = useRef<Shared>({ drift: undefined, seconds: 0 });
   const theme = useResolvedTheme();
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const hero = canvas?.closest<HTMLElement>('[data-slide]');
-    if (!canvas || !hero) return;
+    const beat = refs.beat.current;
+    const field = refs.field.current;
+    const soft = refs.soft.current;
+    const hero = beat?.closest<HTMLElement>('[data-slide]');
+    if (!beat || !field || !soft || !hero) return;
     const state = shared.current;
-    state.drift = mountDrift(canvas, hero, { story, staticFrame, seconds: () => state.seconds });
+    state.drift = mountDrift({ beat, field, soft }, hero, { story, staticFrame, seconds: () => state.seconds });
     return () => {
       state.drift?.dispose();
       state.drift = undefined;
     };
-  }, [canvasRef, story, theme, staticFrame]);
+  }, [refs, story, theme, staticFrame]);
   return shared;
 }
 
@@ -146,7 +157,26 @@ export function HeroCanvas({ story }: { story: Story }) {
   const active = isPlaying(useSlideZone());
   const hidden = useDocumentHidden();
   const motion = motionOf({ reduced, paused, hidden, active });
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  useLoop(motion, useDrift(canvasRef, story, motion === 'reduced'));
-  return <canvas ref={canvasRef} data-hero-motion={motion} className="absolute inset-0 size-full" />;
+  const beat = useRef<HTMLCanvasElement>(null);
+  const field = useRef<HTMLCanvasElement>(null);
+  const soft = useRef<HTMLCanvasElement>(null);
+  const refs = useMemo(() => ({ beat, field, soft }), []);
+  useLoop(motion, useDrift(refs, story, motion === 'reduced'));
+  return (
+    <>
+      <canvas
+        ref={field}
+        aria-hidden
+        style={{ opacity: FIELD_INK }}
+        className="absolute inset-x-0 top-0 h-[min(100%,100svh)] w-full"
+      />
+      <canvas
+        ref={soft}
+        aria-hidden
+        style={{ opacity: FIELD_INK }}
+        className="absolute inset-x-0 top-0 h-[min(100%,100svh)] w-full blur-[2.5px]"
+      />
+      <canvas ref={beat} data-hero-motion={motion} className="absolute inset-x-0 top-0 h-[min(100%,100svh)] w-full" />
+    </>
+  );
 }

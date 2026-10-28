@@ -101,14 +101,16 @@ describe('explorable page shape', () => {
       expect(name).toBeTruthy();
     });
 
-    it('draws its background on one canvas inside the Backdrop and requests nothing from the network', () => {
+    it('draws its background on its canvas layers inside the Backdrop and requests nothing from the network', () => {
       // ARRANGE
       const $ = exportedPage(url);
+      // The faint field, its blurred half and the accent beat: one drawing, three layers.
+      const layers = 3;
       // ACT
       const canvases = $('[data-slot="title-slide"] [data-slot="slide-backdrop"] canvas').length;
       const remote = $('[data-slot="title-slide"] [src^="http"], [data-slot="title-slide"] [srcset]').length;
       // ASSERT
-      expect(canvases).toBe(1);
+      expect(canvases).toBe(layers);
       expect(remote).toBe(0);
     });
   });

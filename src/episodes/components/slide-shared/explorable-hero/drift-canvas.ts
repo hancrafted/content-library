@@ -1,5 +1,8 @@
 import { momentOf, paintBeat, paintField } from './drift-paint';
-import { areaOf, FIELD_INK, type Area, type Box, type Story } from './drift.pure';
+import { areaOf, type Area, type Box, type Story } from './drift.pure';
+
+/** The drawing's pixel ratio is capped: the art is faint hairlines and blur, so a retina canvas would cost four times the fill for no visible gain. */
+const MAX_RATIO = 1;
 
 /** The safe top of the art: under the floating header band and the pause button. */
 const ART_TOP = 96;
@@ -25,24 +28,27 @@ function boxOf(element: Element, origin: DOMRect): Box {
 }
 
 /** Sizes both surfaces to the hero at the current pixel ratio and reads the headline, lede and tokens once. */
-function measure(canvas: HTMLCanvasElement, layer: HTMLCanvasElement, hero: HTMLElement): Frame {
+function measure(surfaces: readonly HTMLCanvasElement[], hero: HTMLElement): Frame {
   const bounds = hero.getBoundingClientRect();
-  const ratio = window.devicePixelRatio || 1;
-  for (const surface of [canvas, layer]) {
-    surface.width = Math.round(bounds.width * ratio);
-    surface.height = Math.round(bounds.height * ratio);
+  // The canvas covers the hero's first screen only (the art never reaches further), so each frame repaints a
+  // viewport, not the whole tall Slide.
+  const own = surfaces[0].getBoundingClientRect();
+  const ratio = Math.min(window.devicePixelRatio || 1, MAX_RATIO);
+  for (const surface of surfaces) {
+    surface.width = Math.round(own.width * ratio);
+    surface.height = Math.round(own.height * ratio);
     surface.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
   }
   const text = [...hero.querySelectorAll('h1, [data-target="caption"]')].map((element) => boxOf(element, bounds));
   const button = hero.querySelector('[data-hero-motion-button]');
   const right = button ? boxOf(button, bounds).x : bounds.width - 60;
-  const style = getComputedStyle(canvas);
+  const style = getComputedStyle(surfaces[0]);
   return {
-    width: bounds.width,
-    height: bounds.height,
+    width: own.width,
+    height: own.height,
     area: areaOf({
       width: bounds.width,
-      height: Math.min(bounds.height, window.innerHeight),
+      height: own.height,
       text,
       top: ART_TOP,
       right,
@@ -52,28 +58,23 @@ function measure(canvas: HTMLCanvasElement, layer: HTMLCanvasElement, hero: HTML
   };
 }
 
-/** Draws the ambient field at `FIELD_INK` and then the accent beat on top, each through the offscreen layer. */
+/** Draws the ambient field on its canvas (faded to `FIELD_INK` by CSS) and the accent beat on the other: no offscreen copy. */
 function drawFrame(
-  surfaces: { context: CanvasRenderingContext2D; layer: HTMLCanvasElement; pen: CanvasRenderingContext2D },
+  contexts: { field: CanvasRenderingContext2D; soft: CanvasRenderingContext2D; beat: CanvasRenderingContext2D },
   frame: Frame,
   scene: { story: Story; seconds: number; staticFrame: boolean },
 ) {
-  const { context, layer, pen } = surfaces;
   const { width, height, area } = frame;
   const moment = momentOf(scene.seconds, scene.staticFrame);
-  context.clearRect(0, 0, width, height);
-  for (const beat of [false, true]) {
+  for (const pen of Object.values(contexts)) {
     pen.clearRect(0, 0, width, height);
     pen.save();
-    pen.fillStyle = pen.strokeStyle = beat ? frame.accent : frame.ink;
+    pen.fillStyle = pen.strokeStyle = pen === contexts.beat ? frame.accent : frame.ink;
     pen.lineCap = pen.lineJoin = 'round';
-    if (beat) paintBeat(pen, { story: scene.story, area, progress: moment.progress, strength: moment.strength });
-    else paintField(pen, { story: scene.story, area, width, height, t: moment.t });
-    pen.restore();
-    context.globalAlpha = beat ? 1 : FIELD_INK;
-    context.drawImage(layer, 0, 0, width, height);
   }
-  context.globalAlpha = 1;
+  paintBeat(contexts.beat, { story: scene.story, area, progress: moment.progress, strength: moment.strength });
+  paintField(contexts.field, { story: scene.story, area, width, height, t: moment.t, soft: contexts.soft });
+  for (const pen of Object.values(contexts)) pen.restore();
 }
 
 /** Re-measures on a pixel-ratio change, which a resize observer does not see; returns its teardown. */
@@ -92,6 +93,18 @@ function watchPixelRatio(onChange: () => void): () => void {
   return () => query?.removeEventListener('change', changed);
 }
 
+function readyPens(contexts: Record<'beat' | 'field' | 'soft', CanvasRenderingContext2D | null>) {
+  const { beat, field, soft } = contexts;
+  return beat && field && soft ? { beat, field, soft } : undefined;
+}
+
+/** Watches the hero's own size, the canvas's, and its Foreground's (which an open drawer narrows without resizing the hero). */
+function watchSizes(resize: ResizeObserver, hero: HTMLElement, canvas: HTMLCanvasElement) {
+  for (const watched of [hero, canvas, hero.querySelector('[data-hero-motion-button]')?.parentElement]) {
+    if (watched) resize.observe(watched);
+  }
+}
+
 /** What one drift is drawn from: the story, whether it is the static end state, and the loop's timeline. */
 export interface DriftScene {
   readonly story: Story;
@@ -103,25 +116,26 @@ export interface DriftScene {
  * Mounts Message drift on `canvas`, sized to the `hero` Slide wrapper that holds it: the canvas stays out of layout,
  * scales with the device pixel ratio and re-measures on resize.
  */
-export function mountDrift(canvas: HTMLCanvasElement, hero: HTMLElement, scene: DriftScene): Drift | undefined {
-  const context = canvas.getContext('2d');
-  const layer = document.createElement('canvas');
-  const pen = layer.getContext('2d');
-  if (!context || !pen) return undefined;
-  let frame = measure(canvas, layer, hero);
+export function mountDrift(
+  canvases: { beat: HTMLCanvasElement; field: HTMLCanvasElement; soft: HTMLCanvasElement },
+  hero: HTMLElement,
+  scene: DriftScene,
+): Drift | undefined {
+  const { beat, field, soft } = canvases;
+  const contexts = { beat: beat.getContext('2d'), field: field.getContext('2d'), soft: soft.getContext('2d') };
+  const pens = readyPens(contexts);
+  if (!pens) return undefined;
+  const surfaces = [beat, field, soft];
+  let frame = measure(surfaces, hero);
   const draw = () => {
-    const now = { story: scene.story, seconds: scene.seconds(), staticFrame: scene.staticFrame };
-    drawFrame({ context, layer, pen }, frame, now);
+    drawFrame(pens, frame, { story: scene.story, seconds: scene.seconds(), staticFrame: scene.staticFrame });
   };
   const remeasure = () => {
-    frame = measure(canvas, layer, hero);
+    frame = measure(surfaces, hero);
     draw();
   };
   const resize = new ResizeObserver(remeasure);
-  // The hero's own size, and its Foreground's (which an open drawer narrows without resizing the hero).
-  for (const watched of [hero, hero.querySelector('[data-hero-motion-button]')?.parentElement]) {
-    if (watched) resize.observe(watched);
-  }
+  watchSizes(resize, hero, beat);
   const stopWatching = watchPixelRatio(remeasure);
   draw();
   const dispose = () => {

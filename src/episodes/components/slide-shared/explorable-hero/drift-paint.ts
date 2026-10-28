@@ -26,6 +26,9 @@ export interface Pen {
   fill(): void;
 }
 
+/** How far into the window's middle a bubble is drawn on the blurred pen. */
+const SOFT_FROM = 0.3;
+
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 
 type Point = readonly [number, number];
@@ -79,8 +82,51 @@ function sizeOf(area: Area) {
   return area.compact ? Math.max(7, Math.min(18, area.h * 0.21)) : Math.min(48, area.h * 0.13);
 }
 
-/** The ambient field: faint bubbles in ink, shaped by the story, plus the Human checkpoint line. */
-export function paintField(g: Pen, scene: { story: Story; area: Area; width: number; height: number; t: number }) {
+interface Placed {
+  x: number;
+  y: number;
+  alpha: number;
+  /** How far into the window's blurred middle the bubble is, 0 to 1. */
+  middle: number;
+}
+
+/** Where bubble `i` of `count` sits at time `t`, in the story's own motion. */
+function placeOf(story: Story, at: { i: number; count: number; t: number; a: Area; size: number }): Placed {
+  const { i, count, t, a, size } = at;
+  const phase = (i / count + t / LOOP_SECONDS) % 1;
+  const fade = ease(phase * 7) * ease((1 - phase) * 6) * 0.8;
+  const y = a.y + a.h * (1 - phase);
+  if (story === 'context-window') {
+    const middle = Math.exp(-Math.pow((phase - 0.5) / 0.2, 2));
+    return { x: a.x + a.w * (0.5 + Math.sin(i * 2.8) * 0.08), y, alpha: fade * (1 - middle * 0.8), middle };
+  }
+  const x = a.x + a.w * (0.5 + Math.sin(i * 2.8) * 0.27);
+  if (story !== 'ai-disciplines') return { x, y, alpha: fade, middle: 0 };
+  const turn = (t / LOOP_SECONDS) * Math.PI * 2 + i;
+  return {
+    x: a.x + a.w * (0.27 + (Math.floor(i / 4) % 3) * 0.23),
+    y: a.y + a.h * (0.13 + (i % 4) * 0.24) + Math.sin(turn) * size * 0.14,
+    alpha: 0.45 + 0.2 * Math.sin(turn),
+    middle: 0,
+  };
+}
+
+/** The pen a bubble draws on: the blurred one in the middle of the window, else `g` (blurred by its own filter when no soft pen exists). */
+function penFor(g: Pen, at: { soft: Pen | undefined; middle: number; compact: boolean }): Pen {
+  if (at.soft) return at.middle > SOFT_FROM ? at.soft : g;
+  if (at.middle > 0) g.filter = `blur(${at.middle * (at.compact ? 0.8 : 2.5)}px)`;
+  return g;
+}
+
+/**
+ * The ambient field: faint bubbles in ink, shaped by the story, plus the Human checkpoint line. The Context window's
+ * middle blurs: a canvas `filter` blurs on the CPU every frame, so a hero given a `soft` pen (a canvas the page blurs
+ * once, in CSS) draws those bubbles there instead.
+ */
+export function paintField(
+  g: Pen,
+  scene: { story: Story; area: Area; width: number; height: number; t: number; soft?: Pen },
+) {
   const { story, area, t } = scene;
   const a = fieldAreaOf(area);
   const size = sizeOf(area);
@@ -88,22 +134,9 @@ export function paintField(g: Pen, scene: { story: Story; area: Area; width: num
   if (story === 'human-in-the-loop')
     line(g, { from: [area.x, checkpointOf(area)], to: [area.x + area.w, checkpointOf(area)], alpha: 0.65 });
   for (let i = 0; i < count; i++) {
-    const phase = (i / count + t / LOOP_SECONDS) % 1;
-    let x = a.x + a.w * (0.5 + Math.sin(i * 2.8) * (story === 'context-window' ? 0.08 : 0.27));
-    let y = a.y + a.h * (1 - phase);
-    let alpha = ease(phase * 7) * ease((1 - phase) * 6) * 0.8;
-    if (story === 'context-window') {
-      const middle = Math.exp(-Math.pow((phase - 0.5) / 0.2, 2));
-      alpha *= 1 - middle * 0.8;
-      g.filter = `blur(${middle * (a.compact ? 0.8 : 2.5)}px)`;
-    }
-    if (story === 'ai-disciplines') {
-      const turn = (t / LOOP_SECONDS) * Math.PI * 2 + i;
-      y = a.y + a.h * (0.13 + (i % 4) * 0.24) + Math.sin(turn) * size * 0.14;
-      x = a.x + a.w * (0.27 + (Math.floor(i / 4) % 3) * 0.23);
-      alpha = 0.45 + 0.2 * Math.sin(turn);
-    }
-    bubble(g, { x, y, w: size * 2.6 * (0.8 + (i % 3) * 0.12), h: size, alpha });
+    const { x, y, alpha, middle } = placeOf(story, { i, count, t, a, size });
+    const pen = penFor(g, { soft: scene.soft, middle, compact: a.compact });
+    bubble(pen, { x, y, w: size * 2.6 * (0.8 + (i % 3) * 0.12), h: size, alpha });
     g.filter = 'none';
   }
 }

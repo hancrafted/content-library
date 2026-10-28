@@ -24,6 +24,82 @@ const orangePixels = (page: Page) =>
     return count;
   });
 
+/** WCAG's floors: 4.5 for text, 3 for an icon or the logo's glyph. */
+const MIN_TEXT = 4.5;
+const MIN_ICON = 3;
+
+interface HeaderContrast {
+  readonly text: Record<string, number>;
+  readonly icons: Record<string, number>;
+}
+
+/**
+ * Contrast of each header item against what it is drawn on, measured in the page: every ancestor background is
+ * composited down to the header and over the tone's paper, so a translucent cell is judged on what shows through.
+ */
+const headerContrast = (page: Page) =>
+  page.evaluate((): HeaderContrast => {
+    const rgba = (css: string) => {
+      const c = document.createElement('canvas');
+      c.width = c.height = 1;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      if (!g) return [0, 0, 0, 0];
+      g.clearRect(0, 0, 1, 1);
+      g.fillStyle = css;
+      g.fillRect(0, 0, 1, 1);
+      const d = g.getImageData(0, 0, 1, 1).data;
+      return [d[0], d[1], d[2], d[3] / 255];
+    };
+    const over = (top: number[], below: number[]) =>
+      [0, 1, 2].map((i) => top[i] * top[3] + below[i] * (1 - top[3])).concat([1]);
+    const lum = (c: number[]) =>
+      [0.2126, 0.7152, 0.0722].reduce((sum, w, i) => {
+        const v = c[i] / 255;
+        return sum + w * (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+      }, 0);
+    const ratio = (a: number[], b: number[]) => {
+      const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+    const paper = rgba(getComputedStyle(document.documentElement).getPropertyValue('--tone-paper'));
+    const behind = (el: Element) => {
+      let colour = paper;
+      const chain: Element[] = [];
+      for (let e: Element | null = el; e; e = e.parentElement) {
+        chain.push(e);
+        if (e.matches('[data-testid="site-header"]')) break;
+      }
+      for (const e of chain.reverse()) colour = over(rgba(getComputedStyle(e).backgroundColor), colour);
+      return colour;
+    };
+    const textOf = (selector: string) => {
+      const el = document.querySelector(selector);
+      if (!el) return 0;
+      const bg = behind(el);
+      return ratio(over(rgba(getComputedStyle(el).color), bg), bg);
+    };
+    const glyph = document.querySelector('[data-testid="brand-symbol"]');
+    const coin = glyph?.querySelector('circle');
+    const stroke = glyph?.querySelector('path');
+    const logo = coin && stroke ? ratio(rgba(getComputedStyle(stroke).stroke), rgba(getComputedStyle(coin).fill)) : 0;
+    return {
+      text: {
+        nav: textOf('[data-testid="site-header"] nav a[aria-current]'),
+        workWithMe: textOf('[data-testid="header-contact"]'),
+        selectedLanguage: textOf('[data-testid="locale-en"]'),
+        otherLanguage: textOf('[data-testid="locale-de"]'),
+      },
+      icons: {
+        logo,
+        selectedTheme: textOf('[data-testid="theme-toggle"] [data-active="true"]'),
+        otherTheme: textOf(
+          '[data-testid="theme-light"][data-active="false"], [data-testid="theme-dark"][data-active="false"]',
+        ),
+        social: textOf('[data-testid="site-header"] a[href*="github.com"]'),
+      },
+    };
+  });
+
 test.describe('success cases', () => {
   for (const slug of PAGES) {
     test(`${slug}: the pause button stops the background and names the way back`, async ({ page }) => {
@@ -50,6 +126,21 @@ test.describe('success cases', () => {
       // ASSERT
       await expect(page.locator(CANVAS)).toHaveAttribute('data-hero-motion', 'running');
       await expect(button).toHaveAttribute('aria-pressed', 'false');
+    });
+  }
+
+  for (const scheme of ['light', 'dark'] as const) {
+    test(`header items stay visible over the inverse hero in the ${scheme} site theme`, async ({ page }) => {
+      // ARRANGE
+      await page.emulateMedia({ colorScheme: scheme });
+      await openHero(page, 'context-window');
+      await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' });
+      await expect(page.locator('html')).toHaveAttribute('data-page-tone', 'inverse');
+      // ACT
+      const { text, icons } = await headerContrast(page);
+      // ASSERT
+      for (const ratio of Object.values(text)) expect(ratio).toBeGreaterThanOrEqual(MIN_TEXT);
+      for (const ratio of Object.values(icons)) expect(ratio).toBeGreaterThanOrEqual(MIN_ICON);
     });
   }
 
