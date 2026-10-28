@@ -60,13 +60,17 @@
   transform: rotateY(180deg);
 }
 
-/* A message on the wire: down to the model or back up. */
+/* A message on the wire: down to the model or back up, gone once it arrives. Longhands only: the CSS-module compiler
+ * reads a shorthand without a name as `animation: none`. */
 .wire {
   --wire: 2.5rem;
   height: var(--wire);
 }
 .dot {
-  animation: 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  opacity: 0;
+  animation-duration: 0.6s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
 }
 .dot[data-dir='down'] {
   animation-name: down;
@@ -75,18 +79,30 @@
   animation-name: up;
 }
 @keyframes down {
-  from {
+  0% {
+    opacity: 1;
     transform: translateY(-0.4rem);
   }
-  to {
+  85% {
+    opacity: 1;
+    transform: translateY(calc(var(--wire) - 0.5rem));
+  }
+  100% {
+    opacity: 0;
     transform: translateY(calc(var(--wire) - 0.5rem));
   }
 }
 @keyframes up {
-  from {
+  0% {
+    opacity: 1;
     transform: translateY(calc(var(--wire) - 0.5rem));
   }
-  to {
+  85% {
+    opacity: 1;
+    transform: translateY(-0.4rem);
+  }
+  100% {
+    opacity: 0;
     transform: translateY(-0.4rem);
   }
 }
