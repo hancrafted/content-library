@@ -5,8 +5,8 @@
 // Each <marker>=<file> fills a slot with a file's text: idea=idea.md, note_1=a.md, verdict_result#2=v.md.
 // Exits 1 with every problem on stderr.
 import { readFileSync } from 'node:fs';
-import type { RenderRequest } from '../../../src/explorable-explanations/human-in-the-loop/workflow.node.ts';
-import { LEVEL_OF, renderPrompt } from '../../../src/explorable-explanations/human-in-the-loop/workflow.node.ts';
+import type { RenderRequest } from '../../../src/explorables/human-in-the-loop/workflow.node.ts';
+import { LEVEL_OF, renderPrompt } from '../../../src/explorables/human-in-the-loop/workflow.node.ts';
 
 type Options = Omit<RenderRequest, 'job' | 'values'>;
 const read = (path: string): string => readFileSync(path, 'utf8').trim();

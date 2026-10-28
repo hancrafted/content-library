@@ -243,12 +243,12 @@ export default tseslint.config(
         'error',
         {
           'src/app/**/*.{ts,tsx}': 'KEBAB_CASE',
-          'src/{page-assembly,episodes,events,explorable-explanations,pipeline,shared}/**/*.tsx': OPTIONAL_CLIENT,
+          'src/{page-assembly,episodes,events,explorables,pipeline,shared}/**/*.tsx': OPTIONAL_CLIENT,
           'src/**/*.ts': '!(*.client)',
         },
         {
           errorMessage:
-            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/episodes, src/events, src/explorable-explanations, src/pipeline or src/shared, never under src/app (FE-006).',
+            '"{{ target }}" does not match "{{ pattern }}". A `.client` file is a `.tsx` leaf under src/page-assembly, src/episodes, src/events, src/explorables, src/pipeline or src/shared, never under src/app (FE-006).',
         },
       ],
     },
