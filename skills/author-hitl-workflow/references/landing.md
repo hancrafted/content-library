@@ -1,6 +1,6 @@
 # Landing a Workflow
 
-The repo checklist for step 7. The page reads only the repo's `<id>.{en,de}.yml` in `src/explorable-explanations/human-in-the-loop/`; registration is _Adding a Workflow_ in `docs/features/human-in-the-loop.md`. Below are the steps in order and the gotchas no config confesses.
+The repo checklist for step 7. The page reads only the repo's `<id>.{en,de}.yml` in `src/explorable-explanations/human-in-the-loop/`; registration is _Adding a Workflow_ in `docs/features/explorables/human-in-the-loop.md`. Below are the steps in order and the gotchas no config confesses.
 
 ## 1. Branch
 

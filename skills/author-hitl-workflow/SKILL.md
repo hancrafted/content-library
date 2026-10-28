@@ -5,7 +5,7 @@ description: Create, update or fix a human-in-the-loop Workflow file, the YAML b
 
 # Author a HITL Workflow
 
-A **Workflow** (`GLOSSARY.md`) is a chain of prompts a participant pastes into a free chat, one job at a time, each answer handed to the next job. You write the file, prove its prompts on stand-in runs, have Han prove them in the target tool, then land it. The contract of the file is `docs/features/agentic-workflow.md`: read it before writing YAML. Its section _Prompts that survive the free tier_ holds the lessons earlier runs paid for.
+A **Workflow** (`GLOSSARY.md`) is a chain of prompts a participant pastes into a free chat, one job at a time, each answer handed to the next job. You write the file, prove its prompts on stand-in runs, have Han prove them in the target tool, then land it. The contract of the file is `docs/features/explorables/agentic-workflow.md`: read it before writing YAML. Its section _Prompts that survive the free tier_ holds the lessons earlier runs paid for.
 
 The **target tool** is logged-out ChatGPT free unless the user names another. Every prompt must work **unsupervised**: the participant watches it once at an Event, then runs it alone.
 
@@ -90,7 +90,7 @@ _Done when_ the PR is open and Han has read the German file.
 1. **Locate.** For a reply with a footer, save it and run `node skills/author-hitl-workflow/scripts/parse-debug-footer.ts <reply.md>`: it names the Workflow, stage, job, round, step, level, mode and locale, and `changed: true` when the repo's file pair has changed since the reply (for a draft in `.scratch/`, pass its two files after the reply). A changed file: say so and work on the current one. For a report in words, name the job yourself and confirm it with Han.
 2. **Reproduce.** Render that job's prompt at that level and mode, run it once on a stand-in, and see the failure. A failure only the target tool shows (an empty reply, a document instead of a code block) is reproduced in Han's report itself.
 3. **Fix the prompt** at the earliest job whose prompt allowed the failure, against the [prompt checks](references/prompt-checks.md).
-4. **Feed the lesson back.** Write it, domain-agnostic, into _Prompts that survive the free tier_ in `docs/features/agentic-workflow.md`: what the model did, and the prompt fix. A lesson that names the scenario (a vacation, a project) is not yet general.
+4. **Feed the lesson back.** Write it, domain-agnostic, into _Prompts that survive the free tier_ in `docs/features/explorables/agentic-workflow.md`: what the model did, and the prompt fix. A lesson that names the scenario (a vacation, a project) is not yet general.
 5. Rerun [step 5](#5-stand-in-run) from the fixed job on, then [step 6](#6-hans-run).
 
 _Done when_ the stand-in run passes, the lesson is in the guide, and Han confirms the fix in the target tool.

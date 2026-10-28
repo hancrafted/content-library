@@ -12,7 +12,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Read `docs/steering/product-vision.md` before any decision. Its ranked trade-off rules decide conflicts, and its escalation steps apply whenever a change would trade architecture or agent legibility for delivery.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
 - Start with `.archgate/adrs/FE-004-slide-architecture.md` for the architecture map.
-- `docs/agents/` holds method and procedure, product-agnostic. Feature reference (Episodes, Context drawer, Translation keys) lives in `docs/features/`.
+- `docs/agents/` holds method and procedure, product-agnostic. Feature reference (Episodes, Context drawer, Translation keys) lives in `docs/features/`; start at `docs/features/explorables/README.md` for Explorables and the Explorable floor, `docs/features/resources.md` for the Learn menu and Resource index.
 - An ADR's `files:`/`paths:` name where authors of governed code work, two or three globs, and cover every file its checks fire in. Compliance names kinds of enforcer (types, lint, tests), not config files.
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
 - Skills: author a new one in `skills/<name>/`, symlinked from `.claude/skills/` and `.agents/skills/`, with `/writing-for-agents`, then review it once with `/skill-creator:skill-creator`. The format and gate are in `docs/adr/0006-skills-follow-agentskills.md`.
@@ -25,7 +25,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Browser checks of GSAP motion (the landing hero): a background or occluded tab never fires `requestAnimationFrame`, so the animation stays paused and any window resize finishes it by design. Bring the tab to the front before judging motion; DOM counts (`[data-task-paper]` opacity, `[data-completed-papers]`, `[data-overflow-papers]`) verify the mechanics without it.
 
 - `*.test.ts` is the fast suite in `npm run verify`; `*.build.test.ts` needs `out/` and runs only via `npm run test:build` after `npm run build`; `*.browser.test.ts` runs on Playwright against the built export via `npm run test:browser`: pre-push when a push touches its paths, and nightly on `main` in CI; pull-request CI opens no browser. Keep the vitest configs split — `verify` must stay fast and must not require a build.
-- When the user corrects an Explorable explanation's behaviour (animation, Preset, state, layout) for the first time after looking at it, propose a browser test that pins the corrected behaviour, titled in the user's words, and write it once they confirm. Episode Slides and copy changes never trigger one.
+- When the user corrects an Explorable's behaviour (animation, Preset, state, layout) for the first time after looking at it, propose a browser test that pins the corrected behaviour, titled in the user's words, and write it once they confirm. Episode Slides and copy changes never trigger one.
 
 ## Audiences and locales
 

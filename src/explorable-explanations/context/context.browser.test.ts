@@ -7,7 +7,7 @@ import { settled } from '../../../tests/browser/settled';
  * "Every part and control" Slide (`gallery-full`) in the built export, and Slide 5 on the AI attention span Episode.
  * Only the behaviours the user corrected after looking at them are pinned here, each titled in the user's words; the
  * logic under them lives in the `*.pure.test.ts` files beside the parts. Every wait is a retrying assertion or
- * `data-motion="settled"` (ARCH-003 §5). See docs/features/context.md.
+ * `data-motion="settled"` (ARCH-003 §5). See docs/features/explorables/context-window.md.
  */
 
 const SLIDES = '/explorable-explanations/context-window/#context-window--every-part-and-control';

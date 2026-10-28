@@ -5,6 +5,8 @@ status: accepted
 
 # Resources overview
 
+Amended by #404: a Resource becomes every public, listed item, the Template record kind replaces the old Resource record kind, and Explorable pages move to `/explorables/`. See `docs/features/explorables/README.md` and `docs/features/resources.md`; where they differ from the decisions below, they win.
+
 The four authoring pages (the Episode template, the Workshop template, the Slide library and the Explorable explanations page) sat under `/episodes/` as tooling pages: `noindex`, out of the sitemap, reachable only from links under the Episode browser. They are content a visitor should find: the interactive explanations bring visitors back (horizon 2), and the templates and Master slides show what the library is made of. They are not Episodes, so they cannot live in the Episode overview. This record gives them a header nav item, an overview and a page each, and retires the tooling page from _Content data model_.
 
 Settled with Han in a grilling session on 2026-10-27. The Archgate amendments it needed (FE-002, FE-004, FE-007, FE-008) were made by Han. The model changes are amendments to _Content data model_ and _Source tree follows the product_.

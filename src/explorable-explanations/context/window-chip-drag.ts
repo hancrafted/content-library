@@ -6,7 +6,7 @@ import { crossedChip } from './window-chip-drag.pure';
  * Mouse drag and drop of the part chips, on native pointer events. A drag starts after the pointer moves a few pixels
  * from a chip pressed with the primary mouse button; every chip the pointer then crosses past its middle takes the
  * dragged chip's place, so the order follows the pointer live. There is no keyboard or touch alternative (Han's
- * decision; docs/features/context.md names the WCAG 2.5.7 gap).
+ * decision; docs/features/explorables/context-window.md names the WCAG 2.5.7 gap).
  */
 
 const THRESHOLD = 4;

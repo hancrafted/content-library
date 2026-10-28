@@ -1,6 +1,6 @@
 # The context window cornerstone's config: numbers, Presets and English words. context-preset.config.de.yml holds the
 # German words and story under the same keys; the build picks the pair from the URL's locale. The chat itself is
-# summer-party.jsonl (summer-party.de.jsonl), a Claude Code session log; docs/features/context.md says which
+# summer-party.jsonl (summer-party.de.jsonl), a Claude Code session log; docs/features/explorables/context-window.md says which
 # fields it reads. Token counts follow the cornerstone fact-check and are illustrative.
 
 # The starting instructions, as Claude Code's /context splits them. The log never holds them.
