@@ -1,5 +1,5 @@
 # The project-plan Workflow, English. One language per file: what is written is what renders.
-# How to write or change one: docs/features/agentic-workflow.md. Types: workflow-schema.types.ts. The German file is
+# How to write or change one: docs/features/explorables/agentic-workflow.md. Types: workflow-schema.types.ts. The German file is
 # project-plan.de.yml; a test holds both to the same structure, only the words differ.
 id: project-plan
 title: Plan a project

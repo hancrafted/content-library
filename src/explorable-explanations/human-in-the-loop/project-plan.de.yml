@@ -1,5 +1,5 @@
 # Der project-plan-Workflow, Deutsch. Eine Sprache pro Datei: was dasteht, wird angezeigt.
-# Wie man einen schreibt oder ändert: docs/features/agentic-workflow.md. Typen: workflow-schema.types.ts. Die englische
+# Wie man einen schreibt oder ändert: docs/features/explorables/agentic-workflow.md. Typen: workflow-schema.types.ts. Die englische
 # Datei ist project-plan.en.yml; ein Test hält beide auf derselben Struktur, nur die Wörter unterscheiden sich.
 id: project-plan
 title: Ein Projekt planen

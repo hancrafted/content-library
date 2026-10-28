@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { loadWorkflow } from './workflow-loader.pure';
 
 /*
- * docs/features/agentic-workflow.md carries a complete one-stage Workflow file, written from the guide alone. This
+ * docs/features/explorables/agentic-workflow.md carries a complete one-stage Workflow file, written from the guide alone. This
  * loads that block, so the guide cannot drift from the loader.
  */
 
-const GUIDE = new URL('../../../docs/features/agentic-workflow.md', import.meta.url);
+const GUIDE = new URL('../../../docs/features/explorables/agentic-workflow.md', import.meta.url);
 
 const fixture = (): string => {
   const block = /```yaml\n(# guide-fixture\n[\s\S]*?)```/.exec(readFileSync(GUIDE, 'utf8'));

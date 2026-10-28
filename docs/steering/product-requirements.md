@@ -26,6 +26,8 @@ flowchart LR
     subgraph Individual
         YT[YouTube video] --> EP["Episode page<br/>ALL-1.1 IND-1.2"]
         EP --> SUB["Subscribe<br/>IND-2.5"]
+        SHORT[YouTube Short] --> XP["Explorable page<br/>IND-2.6 IND-1.3"]
+        XP --> SUB
         SUB --> PAID["Paid webinar or cohort<br/>IND-2.4 IND-3.1"]
     end
     subgraph Organization
@@ -34,6 +36,7 @@ flowchart LR
         CALL --> PROJ[Consulting or engineering project]
     end
     EP -. shared link .-> REF
+    XP -. shared link .-> REF2["Explorable pages as training<br/>ORG-1.6"]
 ```
 
 ## Horizon 1: workshops (now to Jan 2027)
@@ -52,11 +55,13 @@ flowchart LR
 - ORG-1.3 Watch an Event's recording on the Episodes presented there, labelled with the language spoken.
 - ORG-1.4 Book a call with Han, or email him, from any page.
 - ORG-1.5 Use Episodes as upskilling material in its own organization, by link.
+- ORG-1.6 Use Explorable pages in its own training, by link to their own URLs.
 
 ### Individual
 
 - IND-1.1 Browse every public Episode, filter it by Tag and search it.
 - IND-1.2 Watch an Episode's video in my locale on its page.
+- IND-1.3 Open an Explorable page on its own URL and play with its Explorable.
 
 ### Han (author)
 
@@ -78,15 +83,14 @@ flowchart LR
 ### Organization
 
 - ORG-2.1 See the workshop topics Han offers, each with the Episodes behind it.
-- ORG-2.2 Use Explorable explanations in its own training, by link to their own URLs.
 
 ### Individual
 
 - IND-2.1 Follow a public Playlist, a series of Episodes in order.
-- IND-2.2 Open an Explorable explanation on its own URL and play with it.
 - IND-2.3 See the Research questions and Sources an Episode rests on.
 - IND-2.4 Sign up for a paid webinar or cohort Han runs, without an account on the site.
 - IND-2.5 Hear about new Episodes and Events by subscribing on YouTube.
+- IND-2.6 Land on an Explorable page from a YouTube Short about it.
 
 ### Han (author)
 
@@ -97,7 +101,7 @@ flowchart LR
 
 ### Han (maintainer)
 
-- MNT-2.1 Add a skill, record kind or Explorable explanation without changing the existing ones.
+- MNT-2.1 Add a skill, record kind or Explorable without changing the existing ones.
 - MNT-2.2 Trace a Run back through its Jobs, Attempts and Scores to see why it produced what it did.
 
 ## Horizon 3: platform (end of 2027)

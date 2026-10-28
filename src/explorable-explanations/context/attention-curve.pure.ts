@@ -12,7 +12,7 @@ export type Curve = Readonly<Record<CurveKey, number>>;
 
 export const CURVE_KEYS: readonly CurveKey[] = ['start', 'recent', 'middle', 'newest'];
 /*
- * The defaults follow the serial-position curve (docs/features/context.md#attention-layouts): the start and the newest
+ * The defaults follow the serial-position curve (docs/features/explorables/context-window.md#attention-layouts): the start and the newest
  * rows are strongest, the middle weakest, and the newest rows beat the start (recency over primacy). The whole
  * middle, many rows, still gets a quarter, its seeded peaks keeping the "lost in the middle" rows visible.
  */
