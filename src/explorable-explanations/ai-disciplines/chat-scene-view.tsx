@@ -30,6 +30,24 @@ function loopLabel(loop: Frame['loop'], words: SceneWords): string | null {
   return loop === 'done' ? words.loopDone : `${words.loop} ${loop}/2`;
 }
 
+/** The window's title bar: three dots on the left, an agent's loop counter on the right. */
+function ChatHeader({ loop }: { readonly loop: string | null }) {
+  return (
+    <div className="flex h-6 shrink-0 items-center justify-between px-2">
+      <span aria-hidden="true" className="flex gap-1">
+        <span className="size-1.5 rounded-full bg-border" />
+        <span className="size-1.5 rounded-full bg-border" />
+        <span className="size-1.5 rounded-full bg-border" />
+      </span>
+      {loop && (
+        <span data-loop="" className="text-caption font-semibold text-(--tone) tabular-nums">
+          {loop}
+        </span>
+      )}
+    </div>
+  );
+}
+
 /**
  * A chat window (a pure view): the person's message, the tools an agent reached for and the model's answer, each line
  * popping in as its frame shows it; on an agent, the loop counter in the corner.
@@ -37,27 +55,20 @@ function loopLabel(loop: Frame['loop'], words: SceneWords): string | null {
 export function ChatSceneView({ frame, words }: { readonly frame: Frame; readonly words: SceneWords }) {
   const loop = loopLabel(frame.loop, words);
   return (
-    <div className="absolute inset-3 flex flex-col justify-end gap-1.5 overflow-hidden rounded-xl border border-border bg-card px-2 pt-6 pb-2">
-      <span aria-hidden="true" className="absolute top-1.5 left-2 flex gap-1">
-        <span className="size-1.5 rounded-full bg-border" />
-        <span className="size-1.5 rounded-full bg-border" />
-        <span className="size-1.5 rounded-full bg-border" />
-      </span>
-      {loop && (
-        <span data-loop="" className="absolute top-1 right-2 text-caption font-semibold text-(--tone) tabular-nums">
-          {loop}
-        </span>
-      )}
-      {frame.messages.map(({ from, key }) => (
-        <p
-          key={key}
-          data-from={from}
-          className={`${styles.pop} max-w-[85%] rounded-xl px-2.5 py-1 text-caption ${LINE[from]}`}
-        >
-          {TOOL_ICONS[key]}
-          {words[key as keyof SceneWords]}
-        </p>
-      ))}
+    <div className="absolute inset-3 flex flex-col overflow-hidden rounded-xl border border-border bg-card">
+      <ChatHeader loop={loop} />
+      <div className="flex min-h-0 flex-1 flex-col justify-end gap-1.5 overflow-hidden px-2 pb-2">
+        {frame.messages.map(({ from, key }) => (
+          <p
+            key={key}
+            data-from={from}
+            className={`${styles.pop} max-w-[85%] shrink-0 rounded-xl px-2.5 py-1 text-caption ${LINE[from]}`}
+          >
+            {TOOL_ICONS[key]}
+            {words[key as keyof SceneWords]}
+          </p>
+        ))}
+      </div>
     </div>
   );
 }

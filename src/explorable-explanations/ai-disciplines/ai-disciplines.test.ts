@@ -62,10 +62,11 @@ describe('failure cases', () => {
   it('refuses a Preset the config does not hold', () => {
     // ARRANGE
     const unknown = 'nonsense' as 'timeline';
+    const refusal = 'unknown Preset';
     // ACT
     const attempt = () => render({ preset: unknown, locale: 'en' });
     // ASSERT
-    expect(attempt).toThrow('unknown Preset');
+    expect(attempt).toThrow(refusal);
   });
 
   it('falls back to the English words for a locale it has no pair for', () => {

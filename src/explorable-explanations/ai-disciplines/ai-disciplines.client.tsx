@@ -7,7 +7,7 @@ import type { AiDisciplinesPreset, AiDisciplinesWords } from './ai-disciplines.t
 import { DisciplineColumn } from './discipline-column.client';
 import { LlmBand } from './llm-band.client';
 import { ScaleRowView } from './scale-row-view';
-import { DISCIPLINES, type Discipline } from './scene-frames.pure';
+import { DISCIPLINES, type Discipline, type Frame } from './scene-frames.pure';
 import { useScenePlayer } from './scene-player.client';
 
 export interface AiDisciplinesClientProps {
@@ -43,18 +43,26 @@ function PlayAll({ label, onPlay }: { readonly label: string; readonly onPlay: (
   );
 }
 
+/** What turns over: each discipline's card and the model band. */
+type Turnable = Discipline | 'llm';
+
+/** Which wires carry a message in their current frame. */
+const busyOf = (frames: Readonly<Record<Discipline, Frame>>) =>
+  Object.fromEntries(DISCIPLINES.map((each) => [each, frames[each].dot !== undefined])) as Record<Discipline, boolean>;
+
 /** The parent's state: the lit discipline, the turned cards, the scene player and the card labels. */
 function useTimeline(root: RefObject<HTMLDivElement | null>, preset: AiDisciplinesPreset, words: AiDisciplinesWords) {
   const [hovered, setHovered] = useState<Discipline | null>(null);
-  const [flipped, setFlipped] = useState<Partial<Record<Discipline, boolean>>>({});
+  const [flipped, setFlipped] = useState<Partial<Record<Turnable, boolean>>>({});
   const lit = hovered ?? preset.lit;
   const { frames, playAll } = useScenePlayer(root, preset.autoplay, hovered);
-  const onFlip = useCallback((each: Discipline) => setFlipped((now) => ({ ...now, [each]: !now[each] })), []);
+  const onFlip = useCallback((each: Turnable) => setFlipped((now) => ({ ...now, [each]: !now[each] })), []);
   const labels = useMemo(
     () => ({ definition: words.definition, flip: words.flip, source: words.source, newTab: words.newTab }),
     [words],
   );
-  return { lit, frames, playAll, flipped, onFlip, setHovered, labels };
+  const band = { active: busyOf(frames), flipped: flipped.llm ?? false, onFlip: () => onFlip('llm') };
+  return { lit, frames, playAll, flipped, onFlip, setHovered, labels, band };
 }
 
 /**
@@ -63,7 +71,7 @@ function useTimeline(root: RefObject<HTMLDivElement | null>, preset: AiDisciplin
  */
 export function AiDisciplinesClient({ preset, words, targets, markers }: AiDisciplinesClientProps) {
   const root = useRef<HTMLDivElement>(null);
-  const { lit, frames, playAll, flipped, onFlip, setHovered, labels } = useTimeline(root, preset, words);
+  const { lit, frames, playAll, flipped, onFlip, setHovered, labels, band } = useTimeline(root, preset, words);
   return (
     <div ref={root} className="flex flex-col gap-4">
       <ScaleRowView label={words.comparable} scales={scalesOf(words)} lit={lit} />
@@ -86,7 +94,7 @@ export function AiDisciplinesClient({ preset, words, targets, markers }: AiDisci
           />
         ))}
       </Rail>
-      <LlmBand words={words.llm} labels={labels} />
+      <LlmBand words={words.llm} labels={labels} {...band} />
       <PlayAll label={words.playAll} onPlay={playAll} />
     </div>
   );

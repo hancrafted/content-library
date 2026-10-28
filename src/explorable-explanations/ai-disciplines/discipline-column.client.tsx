@@ -47,6 +47,29 @@ function RailStop({ year }: { readonly year: string }) {
   );
 }
 
+/** The column's card: the front names the stage and lifts when lit, the back gives its definition. */
+function Card(props: DisciplineColumnProps) {
+  const { discipline, words } = props;
+  return (
+    <Flip
+      className={`transition-transform duration-300 motion-reduce:transition-none ${props.on ? '-translate-y-1' : ''}`}
+      flipped={props.flipped}
+      onFlip={() => props.onFlip(discipline)}
+      label={`${words.name}: ${props.labels.definition}`}
+      front={
+        <CardFrontView
+          words={words}
+          labels={props.labels}
+          lifted={props.on}
+          emerging={discipline === 'factory'}
+          marker={props.marker}
+        />
+      }
+      back={<CardBackView words={words} labels={props.labels} />}
+    />
+  );
+}
+
 /**
  * One discipline's column: its dot and years on the rail, its card, its scene and its wire to the model. Memoised, so
  * a hover redraws only the columns whose `on` or `dimmed` flipped, and the playing one.
@@ -62,13 +85,7 @@ export const DisciplineColumn = memo(function DisciplineColumn(props: Discipline
       className={`${styles[discipline]} ${styles.column} grid gap-3 transition-opacity motion-reduce:transition-none ${props.dimmed ? 'opacity-35' : ''}`}
     >
       <RailStop year={words.year} />
-      <Flip
-        flipped={props.flipped}
-        onFlip={() => props.onFlip(discipline)}
-        label={`${words.name}: ${props.labels.definition}`}
-        front={<CardFrontView words={words} labels={props.labels} marker={props.marker} />}
-        back={<CardBackView words={words} labels={props.labels} />}
-      />
+      <Card {...props} />
       <DisciplineSceneView
         discipline={discipline}
         frame={props.frame}

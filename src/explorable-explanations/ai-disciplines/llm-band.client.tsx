@@ -6,18 +6,21 @@ import styles from './ai-disciplines.module.css';
 import type { LlmWords } from './ai-disciplines.types';
 import { CardBackView, type CardLabels } from './discipline-card-view';
 import { Flip } from './flip.client';
+import { DISCIPLINES, type Discipline } from './scene-frames.pure';
 
-const TYPE_MS = 450;
+/** How many tokens the carousel shows at once, the newest last; the next one still a question after them. */
+const SHOWN = 4;
+const STEP_MS = 900;
 
-/** The tokens typed so far: all of them at rest, one more every beat while the band plays, then from the start again. */
-function useTyped(count: number): number {
-  const [typed, setTyped] = useState(count);
+/** The carousel's first token: it moves on one every beat, and wraps when the last token has shown. */
+function useOffset(count: number): number {
+  const [offset, setOffset] = useState(0);
   useEffect(() => {
     if (prefersReducedMotion()) return;
-    const timer = window.setInterval(() => setTyped((now) => (now >= count ? 1 : now + 1)), TYPE_MS);
+    const timer = window.setInterval(() => setOffset((now) => (now + 1) % (count - SHOWN + 1)), STEP_MS);
     return () => window.clearInterval(timer);
   }, [count]);
-  return typed;
+  return offset;
 }
 
 /** The word "token", glossed on hover and focus. */
@@ -35,33 +38,57 @@ function Gloss({ words }: { readonly words: LlmWords }) {
   );
 }
 
-/** The model typing a sentence token by token, the next one still a question. */
+/** The model writing, as a carousel of fixed width: a few tokens, the newest popping in, the next one a question. */
 function Typing({ tokens }: { readonly tokens: readonly string[] }) {
-  const typed = useTyped(tokens.length);
+  const offset = useOffset(tokens.length);
+  const shown = tokens.slice(offset, offset + SHOWN);
   return (
-    <p aria-hidden="true" className="flex flex-wrap gap-1 md:w-1/2">
-      {tokens.slice(0, typed).map((token, index) => (
+    <p aria-hidden="true" className="flex w-80 max-w-full shrink-0 justify-end gap-1 self-end overflow-hidden">
+      {shown.map((token, index) => (
         <span
-          key={`${index}-${token}`}
-          className={`${styles.pop} rounded-md bg-muted px-1.5 py-0.5 text-caption font-medium`}
+          key={`${offset + index}-${token}`}
+          className={`${index === shown.length - 1 ? styles.pop : ''} rounded-md border border-(--tone)/40 bg-card px-1.5 py-0.5 text-caption font-medium`}
         >
           {token}
         </span>
       ))}
-      <span className={`${styles.next} rounded-md border border-dashed border-(--tone) px-1.5 py-0.5 text-caption`}>
+      <span className={`${styles.next} rounded-md border border-dashed border-(--tone) px-2 py-0.5 text-caption`}>
         ?
       </span>
     </p>
   );
 }
 
-/** The front: the sentence with "token" glossed, and the model typing a sentence token by token. */
-function Front({ words }: { readonly words: LlmWords }) {
+/** One port per column on the band's top edge, under its wire; lit while a message travels that wire. */
+function Ports({ active }: { readonly active: Readonly<Record<Discipline, boolean>> }) {
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-border border-t-4 border-t-(--tone) bg-card p-4 md:flex-row md:items-center md:gap-6">
-      <div className="flex flex-col gap-1 md:w-1/2">
-        <p className="text-caption font-semibold tracking-widest text-muted-foreground uppercase">{words.kicker}</p>
-        <p className="text-subheading font-semibold text-(--tone)">{words.name}</p>
+    <div aria-hidden="true" className="absolute inset-x-0 -top-1.5 hidden grid-cols-4 gap-x-4 md:grid">
+      {DISCIPLINES.map((each) => (
+        <span
+          key={each}
+          data-port={each}
+          data-on={active[each]}
+          className={`mx-auto h-3 w-6 rounded-full transition-[background-color,box-shadow] duration-200 ${active[each] ? 'bg-(--tone) ring-6 ring-(--tone)/25' : 'bg-(--tone)/45'}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** The front: the sentence with "token" glossed on the left, the model writing at the bottom right. */
+function Front({
+  words,
+  active,
+}: {
+  readonly words: LlmWords;
+  readonly active: Readonly<Record<Discipline, boolean>>;
+}) {
+  return (
+    <div className="relative grid h-full gap-4 rounded-2xl border border-(--tone)/50 bg-(--tone)/15 p-4 md:grid-cols-[1fr_auto] md:gap-6">
+      <Ports active={active} />
+      <div className="flex flex-col gap-1">
+        <p className="text-caption font-semibold tracking-widest text-(--tone) uppercase">{words.kicker}</p>
+        <p className="text-subheading font-semibold text-foreground">{words.name}</p>
         <p className="text-body text-foreground">
           {words.before} <Gloss words={words} /> {words.after}
         </p>
@@ -71,17 +98,25 @@ function Front({ words }: { readonly words: LlmWords }) {
   );
 }
 
-/** The model under every discipline: it predicts the next token; turned over, its definition and source. */
-export function LlmBand({ words, labels }: { readonly words: LlmWords; readonly labels: CardLabels }) {
-  const [flipped, setFlipped] = useState(false);
+/**
+ * The model under every discipline: it predicts the next token; turned over, its definition and source. The parent owns
+ * whether it is turned, and which wires are busy.
+ */
+export function LlmBand(props: {
+  readonly words: LlmWords;
+  readonly labels: CardLabels;
+  readonly active: Readonly<Record<Discipline, boolean>>;
+  readonly flipped: boolean;
+  readonly onFlip: () => void;
+}) {
   return (
     <Flip
-      flipped={flipped}
-      onFlip={() => setFlipped((now) => !now)}
-      label={`${words.name}: ${labels.definition}`}
+      flipped={props.flipped}
+      onFlip={props.onFlip}
+      label={`${props.words.name}: ${props.labels.definition}`}
       className={styles.llm}
-      front={<Front words={words} />}
-      back={<CardBackView words={words} labels={labels} />}
+      front={<Front words={props.words} active={props.active} />}
+      back={<CardBackView words={props.words} labels={props.labels} />}
     />
   );
 }

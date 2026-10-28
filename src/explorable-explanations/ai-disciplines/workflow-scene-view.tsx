@@ -1,3 +1,4 @@
+import styles from './ai-disciplines.module.css';
 import type { SceneWords } from './ai-disciplines.types';
 import { NODES, type Frame, type Node, type NodeState } from './scene-frames.pure';
 
@@ -19,7 +20,7 @@ const EDGES: readonly (readonly [Node, Node])[] = [
 ];
 const BOX: Record<NodeState, string> = {
   idle: 'fill-card stroke-border',
-  active: 'fill-card stroke-(--tone)',
+  active: 'fill-(--tone)/10 stroke-(--tone)',
   done: 'fill-(--success) stroke-(--success)',
 };
 
@@ -37,7 +38,7 @@ function AgentNode({ node, state, label }: { readonly node: Node; readonly state
         </text>
       )}
       {state === 'active' && (
-        <rect x="6" y="20" width="32" height="3" rx="1.5" className="animate-pulse fill-(--tone)" />
+        <rect x="6" y="20" width="32" height="3" rx="1.5" className={`${styles.load} fill-(--tone)`} />
       )}
     </g>
   );

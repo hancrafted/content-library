@@ -11,6 +11,11 @@ const EPISODE = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/e
 const TIMELINE = 'grounding';
 const RECAP = 'check-in-3--disciplines-recap';
 const AGENTS_SOURCE = 'Anthropic, Building effective agents';
+/** What the attributes read: a turned card, a settled motion, a lit and an unlit column. */
+const TURNED = 'true';
+const SETTLED = 'settled';
+const LIT = 'true';
+const UNLIT = 'false';
 /** An inert ancestor: a face turned away, whose link Tab never reaches. */
 const INERT = 'xpath=ancestor::*[@inert]';
 
@@ -34,8 +39,8 @@ test.describe('success cases', () => {
     // ACT
     await card.locator('button').first().click();
     // ASSERT
-    await expect(card).toHaveAttribute('data-flipped', 'true');
-    await expect(card.locator('[data-motion]')).toHaveAttribute('data-motion', 'settled');
+    await expect(card).toHaveAttribute('data-flipped', TURNED);
+    await expect(card.locator('[data-motion]')).toHaveAttribute('data-motion', SETTLED);
     await expect(card.getByRole('link', { name: AGENTS_SOURCE })).toBeVisible();
     await expect(card.getByRole('link', { name: AGENTS_SOURCE }).locator(INERT)).toHaveCount(0);
   });
@@ -46,8 +51,8 @@ test.describe('success cases', () => {
     // ACT
     await column('workflows').hover();
     // ASSERT
-    await expect(column('workflows')).toHaveAttribute('data-on', 'true');
-    await expect(column('prompting')).toHaveAttribute('data-on', 'false');
+    await expect(column('workflows')).toHaveAttribute('data-on', LIT);
+    await expect(column('prompting')).toHaveAttribute('data-on', UNLIT);
   });
 });
 
@@ -69,7 +74,7 @@ test.describe('edge cases', () => {
     // ACT
     await page.mouse.move(0, 0);
     // ASSERT
-    await expect(column('workflows')).toHaveAttribute('data-on', 'true');
-    await expect(column('agents')).toHaveAttribute('data-on', 'false');
+    await expect(column('workflows')).toHaveAttribute('data-on', LIT);
+    await expect(column('agents')).toHaveAttribute('data-on', UNLIT);
   });
 });

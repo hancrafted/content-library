@@ -9,13 +9,13 @@ import { WorkflowSceneView } from './workflow-scene-view';
 function Wire({ dot }: { readonly dot: Frame['dot'] }) {
   return (
     <div aria-hidden="true" className={`${styles.wire} relative flex w-6 justify-center gap-1`}>
-      <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 bg-(--tone) opacity-40" />
+      <span className="absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-2 border-dashed border-(--tone)/50" />
       {dot &&
         Array.from({ length: dot.count }, (_, index) => (
           <span
             key={`${dot?.dir}-${index}`}
             data-dir={dot?.dir}
-            className={`${styles.dot} relative size-2.5 rounded-full bg-(--tone)`}
+            className={`${styles.dot} relative size-3.5 rounded-sm bg-(--tone) ring-3 ring-(--tone)/25`}
           />
         ))}
     </div>
@@ -33,7 +33,7 @@ export function DisciplineSceneView(props: {
   const { discipline, frame, words } = props;
   return (
     <>
-      <div className="relative h-56 overflow-hidden rounded-2xl border border-border bg-muted/40">
+      <div className="relative h-64 overflow-hidden rounded-2xl border border-(--tone)/30 bg-(--tone)/5">
         {discipline === 'workflows' && <WorkflowSceneView frame={frame} words={words} />}
         {discipline === 'factory' && <FactorySceneView frame={frame} label={words.factory} />}
         {(discipline === 'prompting' || discipline === 'agents') && <ChatSceneView frame={frame} words={words} />}
