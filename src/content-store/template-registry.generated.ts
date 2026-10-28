@@ -3,6 +3,7 @@
 import type { TemplateSlug } from '@/content-store/catalogue/record-routes';
 import type { TemplateInput } from './schemas/template.schema';
 import { template as episodeTemplate } from './templates/episode-template';
+import { template as explorablePage } from './templates/explorable-page';
 import { template as grids } from './templates/grids';
 import { template as timelines } from './templates/timelines';
 import { template as workshopTemplate } from './templates/workshop-template';
@@ -10,6 +11,7 @@ import { template as workshopTemplate } from './templates/workshop-template';
 /** Every Template record by slug, so a key and its record's slug must match, and every composition has one. */
 export const TEMPLATE_RECORDS = {
   'episode-template': episodeTemplate,
+  'explorable-page': explorablePage,
   grids: grids,
   timelines: timelines,
   'workshop-template': workshopTemplate,

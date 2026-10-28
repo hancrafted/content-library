@@ -1,0 +1,65 @@
+{
+  "title": "Ersetze dies durch den Nutzen: was Besucher nach dem Ausprobieren können · hancrafted",
+  "description": "Kopieren Sie diese Episodenvorlage als Start einer neuen Explorable-Seite: ein Titel, der den Nutzen nennt, ein Einstieg, was es ist, warum es wichtig ist und wie man es nutzt, am Ende das Explorable mit allen Optionen. Jedes Wort ist ein Platzhalter.",
+  "toc": "Inhalt Wird geladen 1 Hook Der Beweis 2 Was es ist 3 Warum es wichtig ist 4 So nutzt du es Inhalt öffnen : Inhalt Inhalt 1 Hook Der Beweis 2 Was es ist 3 Warum es wichtig ist 4 So nutzt du es",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Ersetze dies durch den Nutzen: was Besucher nach dem Ausprobieren können Ersetze dies durch einen Satz dazu, was das Explorable zeigt und für wen es ist."
+    },
+    {
+      "id": "hook",
+      "text": "Der Nutzen Ersetze dies durch das, was Besucher davon haben, in den Worten und der Reihenfolge des Shorts: das Short ist die 60-Sekunden-Version dieser Seite. Ersetze dies durch den Nutzen in einer Aussage."
+    },
+    {
+      "id": "hook--the-proof",
+      "text": "Hook (1/1) Seite 1 von 1 Der Beweis Ersetze dies durch den Moment, in dem das Short das Ergebnis in Aktion zeigte. Ersetze dies durch das Ergebnis, das Besucher zuerst sehen: ein konkretes Resultat, keine Erklärung."
+    },
+    {
+      "id": "what-it-is",
+      "text": "Was es ist Ersetze dies durch das, was das Explorable zeigt und was Besucher daran verändern können. Ersetze dies durch eine einfache Beschreibung des Explorables."
+    },
+    {
+      "id": "why-it-matters",
+      "text": "Warum es wichtig ist Ersetze dies durch das Problem, das es löst, und die Aussage dahinter. Belege sie in der Sprechernotiz mit einer Forschungsfrage oder einer vertrauenswürdigen Quelle. Ersetze dies durch den Grund, warum es Besucher interessieren sollte."
+    },
+    {
+      "id": "how-to-use-it",
+      "text": "Alle Optionen an Ersetze dies durch einen Satz, der zum Ausprobieren einlädt. Das Kontextfenster steht für das primäre Explorable der Seite: tausche es gegen deins aus, mit allen Optionen an. Unterhaltung Zeitleiste Kontextfenster Kontextkategorien Details Aufmerksamkeit Unterhaltung Zeitleiste überfahren oder ziehen, um nachzuspielen Sommerfest Startanweisungen, verborgen Systemprompt · Werkzeuge · MCP · Skills Gedächtnis CLAUDE.md abgerufen Memory-Dateien · CLAUDE.md Plane das nächste Sommerfest unserer Firma: 200 Mitarbeitende an fünf Standorten in Europa, Ende Juni, Budget 30.000 Euro. Verblasst: die KI füllt diese Lücke vielleicht selbst Gern! Drinnen oder draußen? Gibt es Ernährungswünsche, die ich kennen sollte? Draußen, wenn es geht. 60 Gäste essen vegetarisch, bitte denk daran. Notiert: 60 vegetarische Gäste. Soll ich nach Orten suchen? Finde drei Orte in Lissabon. Im Web gesucht Im Web gesucht · 10 Seiten · 1 Wiederholung WebSearch(\"outdoor event venue Lisbon 200 guests\") WebSearch(\"Lisbon garden venue summer party\") WebFetch × 10 ⎿ 10 Seiten abgerufen · 15k Auszüge Drei Optionen: Quinta-Terrasse, LX-Factory-Dachterrasse, Estrela-Gartenpavillon. Die Catering-Angebote liegen im Projektordner. Welches passt? Eine Datei gelesen catering-offers.pdf gelesen · 20 Seiten Glob(\"**/*catering*.pdf\") Read(\"offers/catering-offers.pdf\", pages: \"1-20\") ⎿ 20 Seiten gelesen · 55k Sabor Verde passt am besten: mit vegetarischem Menü für 60. Such Hotels nahe dem Ort für 150 Gäste aus dem Ausland. Im Web gesucht Im Web gesucht · 12 Seiten WebSearch(\"hotels near Estrela Lisbon 27 June\") WebFetch × 12 ⎿ 12 Seiten abgerufen · 14,5k Auszüge Hotel Lumen und Casa do Rio haben beide am 27. Juni 150 Zimmer frei. Die Gästeliste liegt auch dort. Einen Befehl ausgeführt guests.xlsx geöffnet · 200 Zeilen Bash(python3 -c \"import pandas as pd; print(pd.read_excel('guests.xlsx').t…) ⎿ 200 Zeilen · 1,8k Alles klar: 200 Gäste, 150 reisen an, 60 vegetarisch. Super, stell den ganzen Plan zusammen. Einen Befehl ausgeführt Kosten zusammengerechnet Bash(python3 budget.py) ⎿ Summe 42.300 · 350 Tokens Der ganze Plan: Ort 11.800, Catering mit vegetarischem Menü 17.500, Hotels 8.000, Musik 5.000. Summe 42.300 Euro. Das sind 12.300 über dem Budget. Prüf bitte auch den Vertrag mit dem Ort. Eine Datei gelesen venue-contract.pdf gelesen · 21 Seiten Read(\"venue-contract.pdf\", pages: \"1-21\") ⎿ 21 Seiten gelesen · 57k Unterhaltung verdichtet Der Vertrag erlaubt Musik bis 23:00 und verlangt 30 % Anzahlung. Stell den Plan noch einmal zusammen. Einen Befehl ausgeführt Kosten zusammengerechnet Bash(python3 budget.py --limit 30000) ⎿ Summe 30.000 · 350 Tokens Plan: Ort 11.800, Catering mit vegetarischem Menü 10.500, Hotels 5.700, Musik 2.000. Summe 30.000 Euro, im Budget. 25 28 Schritte Kontextfenster ( 22 %) 44,1K von 200K Smart Zone nach Matt Pocock 80K Grenze 200k Kontextkategorien Startanweisungen 34,1k · 17% Gedächtnis 2k · 1% Du 0 · 0% Antworten der KI 16 · 0% Was die KI gelesen hat 0 · 0% Versteckte Notizen der App 0 · 0% Zusammenfassung 8k · 4% Freier Platz 139,4k · 70% Frei gehalten für Zusammenfassungen 16,5k · 8% Erklären Einfach Schritt 25 von 28 Die KI antwortet aus der Zusammenfassung +16 Tokens 22% belegt Eine Blase, einen Teil des Balkens oder eine Kategorie überfahren oder antippen, um zu sehen, was es ist. Aufmerksamkeit zur Veranschaulichung Schritt 25 von 28 · 100 Einheiten Aufmerksamkeit Nur die allerersten Zeilen und die neuesten Nachrichten bleiben scharf. Deine erste Nachricht und der Rest werden dünner. 50% Startanweisungen, verborgen 15% Gedächtnis geladen 0% Zusammenfassung: Unterhaltung verdichtet 45% Antworten der KI: Der Vertrag erlaubt Musik bis 23:00 und verlangt 30 % Anzahlung. 40% Schritt 25 von 28: Die KI antwortet aus der Zusammenfassung, +16 Tokens, 22 % belegt. Selbst ausprobieren →"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "hook",
+      "text": "Hook Was Du sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    {
+      "id": "hook--the-proof",
+      "text": "Der Beweis Was Du sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    {
+      "id": "what-it-is",
+      "text": "Was es ist Was Du sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    {
+      "id": "why-it-matters",
+      "text": "Warum es wichtig ist Was Du sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    { "id": "how-to-use-it", "text": "So nutzt du es Keine Sprechernotizen für diese Folie." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "hook", "text": "Hook Kein Sprechtext für diese Folie." },
+    { "id": "hook--the-proof", "text": "Der Beweis Kein Sprechtext für diese Folie." },
+    { "id": "what-it-is", "text": "Was es ist Kein Sprechtext für diese Folie." },
+    { "id": "why-it-matters", "text": "Warum es wichtig ist Kein Sprechtext für diese Folie." },
+    { "id": "how-to-use-it", "text": "So nutzt du es Kein Sprechtext für diese Folie." }
+  ]
+}

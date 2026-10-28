@@ -44,12 +44,14 @@ A page behaves like an Episode: table of contents, Context drawer, Slide kit, Sp
 
 ### Page convention
 
-Convention, not enforced. The template is `/episode-templates/explorable-page/` (planned, #404):
+Convention, not enforced. Start a new page from the Template at `/episode-templates/explorable-page/` (`src/episodes/templates/explorable-page/`): copy it, rename the folder to the page's slug, replace every placeholder word in both locales, and register the page record (above). It follows this list:
 
 1. Title slide whose title states the payoff.
 2. A hook Section that lands the value in its first Slides.
 3. What it is, why it matters, how to use it.
-4. A last Slide that shows the primary Explorable with every option on, so the visitor plays with all of it after the story.
+4. A last Slide that shows the primary Explorable with every option on, so the visitor plays with all of it after the story. The template shows Context window as a stand-in: swap in the page's own Explorable and add the slug to `PAGES` in the browser suite.
+
+The template switches the section slide off in its hook and how-to-use Sections (`withoutSectionSlide`), where it would repeat the title.
 
 ### Short framing
 

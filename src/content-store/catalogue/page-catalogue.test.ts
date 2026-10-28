@@ -197,12 +197,13 @@ describe('success cases', () => {
     expect(catalogue.explorablePageAt({ slug: 'speech-bubble' })).toBeUndefined();
   });
 
-  it('lists the four Template pages and the overview, indexed and in the sitemap, each at the URL its type and slug give', () => {
+  it('lists the five Template pages and the overview, indexed and in the sitemap, each at the URL its type and slug give', () => {
     // ARRANGE
     const expected = [
       '/resources',
       '/episode-templates/episode-template',
       '/episode-templates/workshop-template',
+      '/episode-templates/explorable-page',
       '/master-slides/timelines',
       '/master-slides/grids',
     ];
@@ -217,7 +218,7 @@ describe('success cases', () => {
 
   it('builds each Template page in both locales', () => {
     // ARRANGE
-    const expected = 8;
+    const expected = 10;
     // ACT
     const count = catalogueOf(loadContent(WITH_TEMPLATES))
       .pages.filter(({ page }) => page.kind === 'template')
@@ -396,6 +397,7 @@ describe('edge cases', () => {
 const SIX = {
   'episode-template': 'episode-template',
   'workshop-template': 'episode-template',
+  'explorable-page': 'episode-template',
   timelines: 'master-slide',
   grids: 'master-slide',
 } as const;
