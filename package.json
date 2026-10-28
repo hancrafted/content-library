@@ -9,6 +9,7 @@
     "lint:boundaries": "depcruise src skills tools",
     "typecheck": "next typegen && tsc --noEmit",
     "registry": "node tools/codegen/registry.ts",
+    "youtube:transcript": "node tools/youtube/transcript.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
