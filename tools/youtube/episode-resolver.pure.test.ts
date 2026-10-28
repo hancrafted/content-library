@@ -139,6 +139,27 @@ describe('failure cases', () => {
   });
 });
 
+describe('failure cases: ambiguity', () => {
+  it('refuses a bare slug that an Episode and its Event copy share, naming both', () => {
+    // ARRANGE
+    const expected = [PUBLIC.id, COPY.id];
+    // ACT
+    const result = resolveEpisode(PUBLIC.slug, EPISODES);
+    // ASSERT
+    expect(result.ok).toBe(false);
+    expect(!result.ok && expected.every((id) => result.reason.includes(id))).toBe(true);
+  });
+
+  it('still resolves the folder of the shared slug', () => {
+    // ARRANGE
+    const expected = PUBLIC.id;
+    // ACT
+    const id = resolvedId(`src/episodes/${PUBLIC.folder}`);
+    // ASSERT
+    expect(id).toBe(expected);
+  });
+});
+
 describe('edge cases', () => {
   it('reads no video ID from a URL that is not YouTube', () => {
     // ARRANGE

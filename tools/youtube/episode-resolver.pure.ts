@@ -84,10 +84,19 @@ function byFolder(folder: string | undefined, episodes: readonly EpisodeEntry[],
   return match ? { ok: true, episode: match } : { ok: false, reason: `no Episode matches ${input}` };
 }
 
+/** A refusal when a bare slug (no folder separator) is shared by several Episodes, else undefined. */
+function ambiguousSlug(text: string, episodes: readonly EpisodeEntry[]): Resolution | undefined {
+  const sharing = text.includes('/') ? [] : episodes.filter((episode) => episode.slug === text);
+  if (sharing.length < 2) return undefined;
+  const ids = sharing.map(({ id }) => id).join(', ');
+  return { ok: false, reason: `${text} is ambiguous: it names ${ids}; pass the Episode folder or the page URL` };
+}
+
 /**
  * The Episode `input` names: a video ID or YouTube URL (the Episode that declares the video), an Episode folder
  * (relative or absolute), or a page URL on localhost or hancrafted.net, in either locale, own or Event-scoped.
- * Refuses an input that matches no Episode, or a video that more than one Episode declares.
+ * Refuses an input that matches no Episode, a video that more than one Episode declares, and a bare slug that an
+ * Episode and its Event copies share.
  */
 export function resolveEpisode(input: string, episodes: readonly EpisodeEntry[]): Resolution {
   const text = input.trim();
@@ -103,5 +112,5 @@ export function resolveEpisode(input: string, episodes: readonly EpisodeEntry[])
     if (!SITE_HOSTS.includes(url.hostname)) return { ok: false, reason: `no Episode matches ${text}: unknown host` };
     return byFolder(folderFromPageUrl(url), episodes, text);
   }
-  return byFolder(folderFromPath(text), episodes, text);
+  return ambiguousSlug(text, episodes) ?? byFolder(folderFromPath(text), episodes, text);
 }
