@@ -1,5 +1,5 @@
-// One URL x theme on its own tab: load, probe, optionally screenshot. The tab is
-// closed afterwards and nothing else in the shared browser is touched.
+// One URL x theme on its own tab: load, probe, report its health (sideways scroll, broken images), optionally
+// screenshot. The tab is closed afterwards and nothing else in the shared browser is touched.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -28,6 +28,24 @@ function probeExpression(selectors: string[], styles: string[]): string {
     };
   })`;
 }
+
+/**
+ * Whether the page scrolls sideways at this width, and the images that did not load, by their source. A lazy or
+ * still-loading image is made eager and waited for (at most 5 s), so a slow image is not reported as broken.
+ */
+const HEALTH = `(async () => {
+  const images = [...document.images];
+  const settled = (image) => image.complete || new Promise((done) => {
+    image.addEventListener('load', done, { once: true });
+    image.addEventListener('error', done, { once: true });
+  });
+  for (const image of images) image.loading = 'eager';
+  await Promise.race([Promise.all(images.map(settled)), new Promise((done) => setTimeout(done, 5000))]);
+  return {
+    overflowX: document.documentElement.scrollWidth > innerWidth,
+    brokenImages: images.filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.currentSrc || image.src),
+  };
+})()`;
 
 async function load(tab: Tab, job: Job, args: InspectArgs): Promise<void> {
   const { send } = tab;
@@ -92,8 +110,16 @@ export async function inspect(connection: Connection, args: InspectArgs, job: Jo
     const send = connection.sender(sessionId);
     await load({ send, events: connection.events, sessionId }, job, args);
     const probes = await evaluate<unknown[]>(send, probeExpression(args.probes, args.styles));
+    const health = await evaluate<unknown>(send, HEALTH);
     const image = job.out ? await screenshot(send, args, job.out) : undefined;
-    return { url: job.url, theme: job.theme, viewport: { width: args.width, height: args.height }, image, probes };
+    return {
+      url: job.url,
+      theme: job.theme,
+      viewport: { width: args.width, height: args.height },
+      image,
+      health,
+      probes,
+    };
   } finally {
     await browser('Target.closeTarget', { targetId }).catch(() => undefined);
   }

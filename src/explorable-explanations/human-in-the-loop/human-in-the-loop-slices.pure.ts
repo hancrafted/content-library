@@ -1,7 +1,7 @@
 import { readProgressFile, type Refusal } from '@/shared/lib/progress-file.pure';
 import { progressKeyOf } from '@/shared/lib/progress.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import type { DebugBase } from './debug-footer.pure';
+import { SOURCE_CHARS, type DebugBase } from './debug-footer.pure';
 import type { DiagramProps, HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
 import type { ModalProps, ToolbarProps } from './part-props.types';
 import type { DemoProps, DemoState, ProgressActions, ProgressNote } from './progress-controls.types';
@@ -221,7 +221,7 @@ function debugBase({ data, state, workflow }: Pick<Shown, 'data' | 'state' | 'wo
     level: state.level,
     demo: state.demo,
     locale: data.locale,
-    source: hash?.slice(0, 8) ?? 'uploaded',
+    source: hash?.slice(0, SOURCE_CHARS) ?? 'uploaded',
   };
 }
 

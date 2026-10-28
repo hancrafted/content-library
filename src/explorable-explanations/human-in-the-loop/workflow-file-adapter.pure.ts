@@ -1,4 +1,4 @@
-import { producerIdsOf } from './workflow-outputs.pure';
+import { producerIdsOf } from './workflow-outputs.pure.ts';
 import type { StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 import type { Job, Stage, Workflow } from './workflow.types';
 

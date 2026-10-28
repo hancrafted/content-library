@@ -1,5 +1,5 @@
-import { readTemplate } from './markdown-handoff.pure';
-import { producersBefore } from './workflow-outputs.pure';
+import { readTemplate } from './markdown-handoff.pure.ts';
+import { producersBefore } from './workflow-outputs.pure.ts';
 import type { ForeachDef, StageDef, WorkflowFile } from './workflow-schema.types';
 
 /*
