@@ -64,25 +64,44 @@ export const orga = slide({
           <p className="text-subheading font-semibold text-balance">{t('questions')}</p>
           <ol className="mt-auto flex flex-col gap-3 sm:flex-row">
             <li className="flex flex-1 flex-col items-center gap-2 rounded-xl bg-human/10 p-4 text-center text-human">
-              <HandIcon className="size-7" />
+              <span className="flex h-8 items-center justify-center">
+                <HandIcon className="size-7" />
+              </span>
               <p className="text-body font-semibold">{t('steps.hand')}</p>
             </li>
             <li className="flex flex-1 flex-col items-center gap-2 rounded-xl bg-youtube/10 p-4 text-center text-youtube">
-              <svg viewBox="0 0 24 24" className="size-7" aria-hidden="true">
-                <path d="M8 5v14M16 5v14" className="fill-none stroke-current" strokeWidth="3" strokeLinecap="round" />
-              </svg>
+              <span className="flex h-8 items-center justify-center">
+                <svg viewBox="0 0 24 24" className="size-7" aria-hidden="true">
+                  <path
+                    d="M8 3v18M16 3v18"
+                    className="fill-none stroke-current"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
               <p className="text-body font-semibold">{t('steps.pause')}</p>
             </li>
             <li className="flex flex-1 flex-col items-center gap-2 rounded-xl bg-(--info)/10 p-4 text-center text-(--info)">
-              <svg viewBox="0 0 24 24" className="size-7" aria-hidden="true">
-                <rect x="9" y="3" width="6" height="11" rx="3" className="fill-none stroke-current" strokeWidth="1.8" />
-                <path
-                  d="M5 11a7 7 0 0 0 14 0M12 18v3"
-                  className="fill-none stroke-current"
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <span className="flex h-8 items-center justify-center">
+                <svg viewBox="0 0 24 24" className="size-7" aria-hidden="true">
+                  <rect
+                    x="9"
+                    y="3"
+                    width="6"
+                    height="11"
+                    rx="3"
+                    className="fill-none stroke-current"
+                    strokeWidth="1.8"
+                  />
+                  <path
+                    d="M5 11a7 7 0 0 0 14 0M12 18v3"
+                    className="fill-none stroke-current"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
               <p className="text-body font-semibold">{t('steps.ask')}</p>
             </li>
           </ol>

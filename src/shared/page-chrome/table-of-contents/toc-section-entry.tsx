@@ -150,7 +150,7 @@ function SectionTitle(props: { view: TocView; id: string; title: string; collaps
       view={view}
       id={id}
       className={cn(
-        'flex-1 rounded-lg text-pretty whitespace-nowrap overflow-hidden',
+        'flex-1 rounded-lg text-pretty whitespace-nowrap overflow-hidden text-ellipsis',
         'motion-reduce:transition-none transition-[max-width,opacity,padding,margin] duration-300 ease-out',
         collapsed
           ? 'ml-0 max-w-0 opacity-0 pointer-events-none px-0 py-1.5'

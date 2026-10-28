@@ -9,7 +9,6 @@
       "other": "{count} Episodes"
     },
     "pastNotice": "This Event has already taken place. The content below is kept up to date and may differ from the recording.",
-    "position": "Episode {position} of {count}",
     "playlistNav": "Playlist",
     "previous": "Previous Episode",
     "next": "Next Episode",

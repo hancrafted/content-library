@@ -5,7 +5,7 @@ import en from './i18n/en.json';
 
 /**
  * The Events area's words in one locale, from its own Translation files (`events.*`): each Event's card text by slug,
- * the Episode count, the breadcrumb, the past-Event notice, the position line and the cues of the Playlist walk. The
+ * the Episode count, the breadcrumb, the past-Event notice, the time line and the cues of the Playlist walk. The
  * area's one word map: everything it draws reads its words here, never through next-intl.
  */
 export const EVENT_WORDS: Record<Locale, (typeof en)['events']> = { en: en.events, de: de.events };

@@ -99,7 +99,7 @@ function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly Loca
 function titleSlideOf(
   content: EpisodeContent,
   page: PageHeader,
-  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'recording' | 'position'>,
+  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'recording' | 'time'>,
 ): TitleSlideProps {
   return {
     title: content.title,
@@ -166,8 +166,8 @@ export interface EpisodeFrame {
   readonly route: string;
   readonly header: ReactNode;
   readonly footer: ReactNode;
-  /** The Episode's place in the Playlist, "Episode 2 of 3", under the title. */
-  readonly position: string;
+  /** The Event's time, "17:00–19:00 CET", under the title; none when the Event has none. */
+  readonly time: string | undefined;
 }
 
 /** How the page's Slide headers render: the Episode's header mode and entrance, and each page Slide's Eyebrow. */
@@ -229,7 +229,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const sections = tocSectionsOf(slides);
   const header = await pageHeaderOf(content, locale, sections);
   const { talkLabels, recording } = await talkOf(locale, video);
-  const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, position: frame.position });
+  const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, time: frame.time });
   const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   return (

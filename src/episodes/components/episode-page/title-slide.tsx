@@ -34,18 +34,18 @@ export interface TitleSlideProps {
   talkLabels?: TalkPlayerLabels;
   /** An unlisted Episode's Event recording: the language spoken in it, labelled on the launcher before play. */
   recording?: RecordingLanguage;
-  /** On an Event-scoped Episode page, its place in the Event's Playlist, "Episode 2 of 3"; it follows the title. */
-  position?: string;
+  /** On an Event-scoped Episode page, the Event's time as the venue writes it, "17:00–19:00 CET"; it follows the title. */
+  time?: string;
   /** On an Episode with authored headers, the short names the Title slide's notes target; only these carry a `data-target`. The Slide header marks both. */
   targets?: readonly TitleTarget[];
 }
 
-/** The Episode's place in its Event's Playlist, under the title and caption; nothing off an Event. */
-function PlaylistPosition({ position }: { position: string | undefined }) {
-  if (position === undefined) return null;
+/** The Event's time, under the title and caption; nothing off an Event or when the Event has none. */
+function EventTime({ time }: { time: string | undefined }) {
+  if (time === undefined) return null;
   return (
-    <p data-playlist-position className="text-caption font-medium text-muted-foreground">
-      {position}
+    <p data-event-time className="text-caption font-medium text-muted-foreground">
+      {time}
     </p>
   );
 }
@@ -57,7 +57,7 @@ function AuthoredTitleSlide({
   hero,
   launcher,
   targets,
-  position,
+  time,
 }: TitleSlideProps & { launcher: ReactNode }) {
   const targetOf = (name: TitleTarget) => (targets?.includes(name) ? { 'data-target': name } : {});
   return (
@@ -66,7 +66,7 @@ function AuthoredTitleSlide({
       <SlideFrame className="justify-center">
         <HeroTitle {...targetOf('title')}>{title}</HeroTitle>
         {caption && <SlideCaption {...targetOf('caption')}>{caption}</SlideCaption>}
-        <PlaylistPosition position={position} />
+        <EventTime time={time} />
         {launcher}
       </SlideFrame>
     </SlideWrapper>
@@ -99,7 +99,7 @@ export function TitleSlide(props: TitleSlideProps) {
     className: hero === undefined ? 'my-auto pb-16 md:pb-24' : 'mt-auto',
     children: (
       <>
-        <PlaylistPosition position={props.position} />
+        <EventTime time={props.time} />
         {launcher}
       </>
     ),
