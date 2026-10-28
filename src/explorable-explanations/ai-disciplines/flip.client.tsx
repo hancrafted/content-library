@@ -4,7 +4,10 @@ import { useMotion } from '@/shared/hooks/use-motion';
 import type { ReactNode } from 'react';
 import styles from './ai-disciplines.module.css';
 
-/** One face: the stretched button that turns the card, under what the face shows; inert while it faces away. */
+/**
+ * One face: what it shows, and over it the stretched button that turns the card, so no positioned content covers the
+ * button; a link, a marker or a gloss on the face sits above it (`z-10`). Inert while it faces away.
+ */
 function Face(props: {
   readonly away: boolean;
   readonly back?: boolean;
@@ -15,6 +18,7 @@ function Face(props: {
 }) {
   return (
     <div className={`${styles.face} ${props.back ? styles.back : ''} relative`} inert={props.away}>
+      {props.children}
       <button
         type="button"
         aria-label={props.label}
@@ -22,7 +26,6 @@ function Face(props: {
         onClick={props.onFlip}
         className="absolute inset-0 z-0 cursor-pointer rounded-2xl focus-visible:outline-2 focus-visible:outline-(--tone)"
       />
-      {props.children}
     </div>
   );
 }

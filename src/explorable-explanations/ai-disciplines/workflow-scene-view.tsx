@@ -24,6 +24,9 @@ const BOX: Record<NodeState, string> = {
   done: 'fill-(--success) stroke-(--success)',
 };
 
+/** The node label drawn smaller than the caption role, by scaling the text: it must fit a node 44 units wide. */
+const LABEL_SCALE = 0.6;
+
 /** One agent of the graph: idle, active with its loading bar, or done with a tick. */
 function AgentNode({ node, state, label }: { readonly node: Node; readonly state: NodeState; readonly label: string }) {
   const [x, y] = AT[node];
@@ -33,7 +36,12 @@ function AgentNode({ node, state, label }: { readonly node: Node; readonly state
       {state === 'done' ? (
         <path d="M15 14l5 5 9-10" className="fill-none stroke-background" strokeWidth="2.5" />
       ) : (
-        <text x="22" y="14" textAnchor="middle" className="fill-foreground text-caption font-semibold">
+        <text
+          transform={`translate(22 13) scale(${LABEL_SCALE})`}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className="fill-foreground text-caption font-semibold"
+        >
           {label}
         </text>
       )}

@@ -11,6 +11,8 @@ const EPISODE = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/e
 const TIMELINE = 'grounding';
 const RECAP = 'check-in-3--disciplines-recap';
 const AGENTS_SOURCE = 'Anthropic, Building effective agents';
+/** The button that turns the agents card, first on its front face; the speech-bubble marker is a button too. */
+const AGENTS_TURN = 'Agents: Definition';
 /** What the attributes read: a turned card, a settled motion, a lit and an unlit column. */
 const TURNED = 'true';
 const SETTLED = 'settled';
@@ -37,7 +39,7 @@ test.describe('success cases', () => {
     const { column } = await open(page, TIMELINE);
     const card = column('agents').locator('[data-flipped]');
     // ACT
-    await card.locator('button').first().click();
+    await card.getByRole('button', { name: AGENTS_TURN }).first().click();
     // ASSERT
     await expect(card).toHaveAttribute('data-flipped', TURNED);
     await expect(card.locator('[data-motion]')).toHaveAttribute('data-motion', SETTLED);

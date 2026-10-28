@@ -17,10 +17,10 @@ describe('success cases', () => {
     expect(finalFrame('prompting').messages.map(({ from }) => from)).toEqual(expected);
   });
 
-  it('an agent loops to the model twice, a tool popping up each time, before its answer returns', () => {
+  it('an agent loops to the model twice, each loop sent by the tool it calls, before its answer returns', () => {
     // ARRANGE
     const expected = ['me', 'tool', 'tool', 'ai'];
-    const loops = [1, 1, 1];
+    const loops = [1, 1];
     // ACT
     const agent = SCENES.agents;
     // ASSERT
@@ -68,13 +68,33 @@ describe('failure cases', () => {
     const expected: string[] = [];
     // ACT
     const shown = SCENES.factory.flatMap(({ messages }) => messages);
+    const playing = SCENES.factory.slice(0, -1).map(({ running }) => running ?? false);
     // ASSERT
     expect(shown).toEqual(expected);
-    expect(SCENES.factory.every(({ running }) => running)).toBe(true);
+    expect(playing).not.toContain(false);
   });
 });
 
 describe('edge cases', () => {
+  it('a scene at rest is still: the factory stops running once it has played', () => {
+    // ARRANGE
+    const atRest = finalFrame('factory');
+    // ACT
+    const running = atRest.running ?? false;
+    // ASSERT
+    expect(running).toBe(false);
+  });
+
+  it('a tool line shows before the round trip it sends, so the wire moves with the chat', () => {
+    // ARRANGE
+    const frames = SCENES.agents;
+    // ACT
+    const firstTool = frames.findIndex(({ messages }) => messages.some(({ from }) => from === 'tool'));
+    const firstTrip = frames.findIndex(({ dot }) => dot?.dir === 'down');
+    // ASSERT
+    expect(firstTool).toBeLessThan(firstTrip);
+  });
+
   it('every scene has a positive duration on every frame, so a loop never spins', () => {
     // ARRANGE
     const scenes = Object.values(SCENES);

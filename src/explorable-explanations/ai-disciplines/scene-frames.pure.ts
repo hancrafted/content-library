@@ -33,7 +33,7 @@ export interface Frame {
   readonly ms: number;
 }
 
-const TRAVEL = 600;
+const TRAVEL = 750;
 const READ = 700;
 const PAUSE = 1400;
 
@@ -63,12 +63,12 @@ function agents(): Frame[] {
   const asked = [me('agentPrompt')];
   const firstTool = [...asked, tool('tool1')];
   const secondTool = [...firstTool, tool('tool2')];
+  // Each loop is one tool call: the tool line shows, then its result travels to the model and back.
   return [
     { messages: [], ms: READ },
     { messages: asked, ms: READ },
-    ...roundTrip(asked, { loop: 1 }),
     { messages: firstTool, loop: 1, ms: READ },
-    ...roundTrip(firstTool, { loop: 2 }),
+    ...roundTrip(firstTool, { loop: 1 }),
     { messages: secondTool, loop: 2, ms: READ },
     ...roundTrip(secondTool, { loop: 2 }),
     { messages: [...secondTool, ai('agentAnswer')], loop: 'done', ms: PAUSE },
@@ -94,11 +94,11 @@ function workflows(): Frame[] {
   return frames;
 }
 
-/** The factory: requests in, results out, many messages at once, its inside never shown. */
+/** The factory: requests in, results out, many messages at once, its inside never shown; still once played. */
 function factory(): Frame[] {
   const busy = { running: true };
   const BATCH = 3;
-  return [...roundTrip([], busy, BATCH), ...roundTrip([], busy, BATCH), { messages: [], ...busy, ms: PAUSE }];
+  return [...roundTrip([], busy, BATCH), ...roundTrip([], busy, BATCH), { messages: [], ms: PAUSE }];
 }
 
 export const SCENES: Readonly<Record<Discipline, readonly Frame[]>> = {

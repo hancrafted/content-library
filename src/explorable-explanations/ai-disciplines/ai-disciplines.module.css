@@ -66,7 +66,7 @@
   height: var(--wire);
 }
 .dot {
-  animation: 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .dot[data-dir='down'] {
   animation-name: down;

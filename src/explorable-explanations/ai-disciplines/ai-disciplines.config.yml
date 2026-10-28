@@ -3,7 +3,7 @@
 # docs/llm-wiki/research/LLM/LLM-0018__ai-layers-model-to-factory/research.md. German twin: ai-disciplines.config.de.yml.
 presets:
   timeline:
-    autoplay: true
+    autoplay: false
     lit: null
   recap:
     autoplay: false
@@ -69,7 +69,7 @@ words:
     factory: A factory with a question mark on it, requests going in and results coming out
   llm:
     kicker: The foundation, under every stage
-    name: Language model (LLM)
+    name: Large language model (LLM)
     before: It predicts,
     token: token
     after: by token, which word piece most likely comes next, learnt from vast amounts of training text. ChatGPT, Copilot, Claude.

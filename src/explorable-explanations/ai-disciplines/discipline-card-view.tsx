@@ -11,7 +11,7 @@ export interface CardLabels {
 }
 
 /** The turn icon beside the hint: the card turns over on a click. */
-const TURN = (
+export const TURN = (
   <svg viewBox="0 0 24 24" className="size-3.5 fill-none stroke-current" strokeWidth="2" aria-hidden="true">
     <path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>

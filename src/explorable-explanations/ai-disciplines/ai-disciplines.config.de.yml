@@ -1,7 +1,7 @@
 # Die Disziplinen-Zeitleiste, deutsche Worte; Schlüssel und Schritte wie ai-disciplines.config.yml.
 presets:
   timeline:
-    autoplay: true
+    autoplay: false
     lit: null
   recap:
     autoplay: false
@@ -67,7 +67,7 @@ words:
     factory: Eine Fabrik mit Fragezeichen, Anfragen gehen hinein, Ergebnisse kommen heraus
   llm:
     kicker: Das Fundament, unter jeder Stufe
-    name: Sprachmodell (LLM)
+    name: Großes Sprachmodell (LLM)
     before: Es sagt
     token: Token
     after: für Token voraus, welches Wortstück am wahrscheinlichsten als Nächstes folgt, gelernt aus riesigen Mengen Trainingstext. ChatGPT, Copilot, Claude.

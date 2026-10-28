@@ -5,16 +5,20 @@ import { FactorySceneView } from './factory-scene-view';
 import type { Discipline, Frame } from './scene-frames.pure';
 import { WorkflowSceneView } from './workflow-scene-view';
 
+/** Side by side, each message leaves a beat after the one before. */
+const STAGGER_MS = 100;
+
 /** The wire to the model, with the messages on their way down or back up. */
 function Wire({ dot }: { readonly dot: Frame['dot'] }) {
   return (
-    <div aria-hidden="true" className={`${styles.wire} relative flex w-6 justify-center gap-1`}>
+    <div aria-hidden="true" className={`${styles.wire} relative flex w-16 justify-center gap-1.5`}>
       <span className="absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-2 border-dashed border-(--tone)/50" />
       {dot &&
         Array.from({ length: dot.count }, (_, index) => (
           <span
             key={`${dot?.dir}-${index}`}
             data-dir={dot?.dir}
+            style={{ animationDelay: `${index * STAGGER_MS}ms` }}
             className={`${styles.dot} relative size-3.5 rounded-sm bg-(--tone) ring-3 ring-(--tone)/25`}
           />
         ))}
