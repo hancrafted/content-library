@@ -2,6 +2,7 @@ import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { hasReadingTime, remainingLabel, wholeMinutes, type RemainingTemplates } from '@/shared/lib/speaking-time.pure';
 import type { ReadingTime } from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import Link from 'next/link';
 import type { MouseEvent } from 'react';
 
@@ -14,6 +15,8 @@ export interface TocLabels {
   loading: string;
   open: string;
   close: string;
+  collapse: string;
+  expand: string;
 }
 
 /** Time left, kept in the HTML for a reader without JavaScript; nothing for an Episode without a Voice script. */
@@ -26,10 +29,71 @@ function TimeLeft(props: { labels: TocLabels; locale: Locale; time: ReadingTime;
   );
 }
 
+function CollapseToggleButton(props: { labels: TocLabels; collapsed?: boolean; onToggleCollapse?: () => void }) {
+  const { labels, collapsed, onToggleCollapse } = props;
+  if (!onToggleCollapse) return null;
+  const label = collapsed ? labels.expand : labels.collapse;
+  return (
+    <button
+      type="button"
+      onClick={onToggleCollapse}
+      aria-label={label}
+      title={label}
+      data-testid="toc-collapse-toggle"
+      className="grid size-8 shrink-0 cursor-pointer place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:ring-ring"
+    >
+      {collapsed ? <PanelLeftOpen aria-hidden className="size-4" /> : <PanelLeftClose aria-hidden className="size-4" />}
+    </button>
+  );
+}
+
+interface HeadingDetailsProps {
+  labels: TocLabels;
+  locale: Locale;
+  route: string;
+  topId: string;
+  atTop: boolean;
+  onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
+  time: ReadingTime;
+  revealed: boolean;
+  collapsed?: boolean;
+}
+
+function HeadingDetails(props: HeadingDetailsProps) {
+  const { labels, collapsed } = props;
+  return (
+    <div
+      aria-hidden={collapsed}
+      className={cn(
+        'flex min-w-0 flex-1 items-center justify-between gap-2 overflow-hidden whitespace-nowrap',
+        'motion-reduce:transition-none transition-[max-width,opacity,margin] duration-300 ease-out',
+        collapsed ? 'mr-0 max-w-0 opacity-0 pointer-events-none' : 'mr-2 max-w-[14rem] opacity-100',
+      )}
+    >
+      <Link
+        href={localizePath(props.route, props.locale, props.topId)}
+        replace
+        tabIndex={collapsed ? -1 : undefined}
+        onClick={(event) => props.onGlide(event, props.topId)}
+        aria-current={props.atTop ? 'location' : undefined}
+        data-testid="toc-top"
+        className="rounded font-medium tracking-widest uppercase hover:text-foreground focus-visible:outline-2"
+      >
+        {labels.title}
+      </Link>
+      <div className="flex shrink-0 items-center gap-1.5">
+        {props.revealed ? null : <span className="animate-pulse noscript:hidden">{labels.loading}</span>}
+        <TimeLeft {...props} />
+      </div>
+    </div>
+  );
+}
+
 /**
  * Title on the left, a link to the top of the page (the Title slide), current
- * while the reader is there; time left on the right, or "Loading" while the box
- * masks the first settle. An Episode without a Voice script has no time to show.
+ * while the reader is there; time left and the collapse toggle on the right,
+ * or "Loading" while the box masks the first settle. When collapsed, details fade
+ * out and the toggle centers smoothly.
  */
 export function TocHeading(props: {
   labels: TocLabels;
@@ -40,22 +104,20 @@ export function TocHeading(props: {
   onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
   time: ReadingTime;
   revealed: boolean;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
 }) {
-  const { labels } = props;
+  const { collapsed, labels, onToggleCollapse } = props;
   return (
-    <div className="flex items-baseline justify-between gap-3 px-2 text-caption whitespace-nowrap text-muted-foreground">
-      <Link
-        href={localizePath(props.route, props.locale, props.topId)}
-        replace
-        onClick={(event) => props.onGlide(event, props.topId)}
-        aria-current={props.atTop ? 'location' : undefined}
-        data-testid="toc-top"
-        className="rounded font-medium tracking-widest uppercase hover:text-foreground focus-visible:outline-2"
-      >
-        {labels.title}
-      </Link>
-      {props.revealed ? null : <span className="animate-pulse noscript:hidden">{labels.loading}</span>}
-      <TimeLeft {...props} />
+    <div
+      className={cn(
+        'flex min-h-8 items-center text-caption whitespace-nowrap text-muted-foreground',
+        'motion-reduce:transition-none transition-[padding] duration-300 ease-out',
+        collapsed ? 'justify-center px-0' : 'justify-between px-2',
+      )}
+    >
+      <HeadingDetails {...props} />
+      <CollapseToggleButton labels={labels} collapsed={collapsed} onToggleCollapse={onToggleCollapse} />
     </div>
   );
 }

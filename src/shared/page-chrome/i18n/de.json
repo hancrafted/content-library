@@ -38,7 +38,9 @@
     "toggle": "Folien ein- oder ausblenden",
     "loading": "Wird geladen",
     "open": "Inhalt öffnen",
-    "close": "Inhalt schließen"
+    "close": "Inhalt schließen",
+    "collapse": "Inhalt einklappen",
+    "expand": "Inhalt ausklappen"
   },
   "contextDrawer": {
     "title": "Kontext",

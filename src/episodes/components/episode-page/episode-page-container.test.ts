@@ -3,7 +3,7 @@ import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide
 import { DRAWER_BESIDE_ATTR } from '@/shared/lib/context-drawer.pure';
 import { describe, expect, it } from 'vitest';
 import { TALK_DOCKED_ATTR, tocReserveRem } from '../../lib/talk-dock.pure';
-import { INSET_CLASSES, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
+import { INSET_CLASSES, TOC_COLLAPSED_ATTR, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
 import { recordContent } from './record-content';
 
 /*
@@ -191,10 +191,19 @@ describe('edge cases', () => {
     expect(matching).toEqual(expect.arrayContaining([expect.stringContaining(prefix)]));
   });
 
+  it('narrows the left inset on the very attribute the table of contents sets when collapsed', () => {
+    // ARRANGE
+    const prefix = `md:data-[${TOC_COLLAPSED_ATTR.replace('data-', '')}=true]:`;
+    // ACT
+    const matching = INSET_CLASSES.split(/\s+/).filter((name) => name.startsWith(prefix));
+    // ASSERT
+    expect(matching).toEqual(expect.arrayContaining([expect.stringContaining(prefix)]));
+  });
+
   it('set both inset variables for narrow screens and again from md', () => {
     // ARRANGE
     const classes = INSET_CLASSES.split(/\s+/);
-    const leftCount = 2;
+    const leftCount = 3;
     const rightCount = 3;
     // ACT
     const names = classes.map((name) => /\[(--inset-[lr]):/.exec(name)?.[1]);

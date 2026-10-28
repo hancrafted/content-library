@@ -1,176 +1,79 @@
-import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import {
-  ownerOf,
-  sectionNumber,
-  type ReadingTime,
-  type TocItem,
-  type TocSection,
-} from '@/shared/lib/table-of-contents.pure';
+import type { ReadingTime, TocSection } from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
-import Link from 'next/link';
-import { useId, type MouseEvent, type ReactNode } from 'react';
+import { useId } from 'react';
 import { ProgressBar, TocHeading, type TocLabels } from './toc-heading';
-import { NumberToggle, SECTION_NUMBER } from './toc-number-toggle';
+import { SectionEntry } from './toc-section-entry';
+import type { TocView } from './toc-view';
 
-/** Everything a part of the table reads besides its own entry. */
-export interface TocView {
-  locale: Locale;
-  route: string;
-  /** The Slide id that means the top of the page: no entry is current while it is active, and the heading links to it. */
-  topId: string;
-  /** True while `topId` is the active Slide. */
-  atTop: boolean;
-  /** The click handler of every link: tells the page the reader chose that Slide, then glides to it. */
-  glideTo: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
-  active: string | null;
-  open: ReadonlySet<string>;
-  toggle: (id: string) => void;
-  /** False until the first observation has painted; motion stays off until then, so a reload mid-page never animates its way there. */
-  settled: boolean;
-  /** False while the compact loading box stands in for the table, masking the first settle. */
-  revealed: boolean;
-  /** Unique per rendered panel, since the desktop panel and the drawer both render one. */
-  idPrefix?: string;
-}
+export type { TocView } from './toc-view';
 
-function EntryLink(props: { view: TocView; id: string; className: string; children: ReactNode }) {
-  const { locale, route, active } = props.view;
-  return (
-    <Link
-      href={localizePath(route, locale, props.id)}
-      replace
-      onClick={(event) => props.view.glideTo(event, props.id)}
-      aria-current={active === props.id ? 'location' : undefined}
-      data-testid={`toc-${props.id}`}
-      className={props.className}
-    >
-      {props.children}
-    </Link>
-  );
-}
-
-const ITEM = 'block rounded-lg px-2 py-1.5 text-pretty transition-colors duration-200';
-
-function ItemEntry({ view, item }: { view: TocView; item: TocItem }) {
-  const active = view.active === item.id;
-  return (
-    <li className="first:pt-0.5 last:pb-1">
-      <EntryLink
-        view={view}
-        id={item.id}
-        className={cn(
-          ITEM,
-          active
-            ? 'bg-selected font-medium text-selected-foreground'
-            : 'text-muted-foreground hover:bg-accent/70 hover:text-foreground',
-        )}
-      >
-        {item.title}
-      </EntryLink>
-    </li>
-  );
-}
-
-function SectionItems({ view, section }: { view: TocView; section: TocSection }) {
-  const open = view.open.has(section.id);
-  return (
-    <div
-      id={`${view.idPrefix}toc-items-${section.id}`}
-      inert={!open}
-      className={cn(
-        'grid motion-reduce:transition-none',
-        view.settled ? 'transition-[grid-template-rows,opacity] duration-300 ease-out' : 'transition-none',
-        open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
-      )}
-    >
-      <ol className="ml-10 min-h-0 overflow-hidden">
-        {section.items.map((item) => (
-          <ItemEntry key={item.id} view={view} item={item} />
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-/** The section number: a disclosure when the section owns slides, plain otherwise. */
-function SectionMarker(props: { view: TocView; section: TocSection; number: string; toggleLabel: string }) {
-  const { view, section } = props;
-  if (section.items.length === 0) {
-    return (
-      <span aria-hidden className={SECTION_NUMBER}>
-        {props.number}
-      </span>
-    );
-  }
-  return (
-    <NumberToggle
-      open={view.open.has(section.id)}
-      controls={`${view.idPrefix}toc-items-${section.id}`}
-      label={`${props.number}. ${props.toggleLabel}: ${section.title}`}
-      testId={`toc-toggle-${section.id}`}
-      settled={view.settled}
-      onToggle={() => view.toggle(section.id)}
-    >
-      {props.number}
-    </NumberToggle>
-  );
-}
-
-function SectionEntry(props: { view: TocView; section: TocSection; index: number; toggleLabel: string }) {
-  const { view, section } = props;
-  const current = ownerOf([section], view.active) !== undefined;
-  const number = sectionNumber(props.index);
-  const tone = current ? 'font-semibold text-foreground' : 'text-muted-foreground';
-  return (
-    <li>
-      <div className={cn('flex items-start gap-1', tone)}>
-        <SectionMarker view={view} section={section} number={number} toggleLabel={props.toggleLabel} />
-        <EntryLink
-          view={view}
-          id={section.id}
-          className={cn(
-            'flex-1 rounded-lg px-2 py-1.5 text-pretty transition-colors hover:bg-accent/70 hover:text-foreground',
-            view.active === section.id && 'bg-selected text-selected-foreground',
-          )}
-        >
-          {section.title}
-        </EntryLink>
-      </div>
-      {section.items.length > 0 && <SectionItems view={view} section={section} />}
-    </li>
-  );
-}
-
-/** The box keeps the column's width and shape throughout, so the reveal is one beat: the body unfolds beneath the heading. */
 const UNFOLD = 'duration-500 ease-out motion-reduce:transition-none';
 
+interface SectionListProps {
+  view: TocView;
+  sections: readonly TocSection[];
+  toggleLabel: string;
+  collapsed?: boolean;
+}
+
+function SectionList({ view, sections, toggleLabel, collapsed }: SectionListProps) {
+  const listClass = cn('-mr-1 flex min-h-0 flex-col gap-0.5 overflow-y-auto pr-1', collapsed && 'overflow-x-hidden');
+  return (
+    <ol className={listClass}>
+      {sections.map((section, index) => (
+        <SectionEntry
+          key={section.id}
+          view={view}
+          section={section}
+          index={index}
+          toggleLabel={toggleLabel}
+          allSections={sections}
+          collapsed={collapsed}
+        />
+      ))}
+    </ol>
+  );
+}
+
 /** Progress bar and sections, folded away while the loading box shows. */
-function TocBody(props: { view: TocView; sections: readonly TocSection[]; labels: TocLabels; time: ReadingTime }) {
-  const { view, labels } = props;
-  const { revealed } = view;
+function TocBody(props: {
+  view: TocView;
+  sections: readonly TocSection[];
+  labels: TocLabels;
+  time: ReadingTime;
+  collapsed?: boolean;
+}) {
+  const { view, labels, collapsed } = props;
   return (
     <div
-      inert={!revealed}
+      inert={!view.revealed}
       className={cn(
-        // Height animates straight to the measured `auto` (`interpolate-size` on the panel). The 0fr→1fr grid
-        // trick sized the box ahead of its row and opened an empty band; browsers without support show the body at once.
         `flex min-h-0 flex-col overflow-hidden transition-[height] ${UNFOLD}`,
-        revealed ? 'h-auto' : 'h-0 noscript:h-auto',
+        view.revealed ? 'h-auto' : 'h-0 noscript:h-auto',
       )}
     >
       <div className="flex min-h-0 flex-col overflow-hidden">
-        <ProgressBar labels={labels} locale={view.locale} time={props.time} settled={view.settled} />
-        <ol className="-mr-1 flex min-h-0 flex-col gap-0.5 overflow-y-auto pr-1">
-          {props.sections.map((section, index) => (
-            <SectionEntry key={section.id} view={view} section={section} index={index} toggleLabel={labels.toggle} />
-          ))}
-        </ol>
+        <div
+          className={cn(
+            'overflow-hidden motion-reduce:transition-none transition-opacity duration-300 ease-out',
+            collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100',
+          )}
+        >
+          <ProgressBar labels={labels} locale={view.locale} time={props.time} settled={view.settled} />
+        </div>
+        <SectionList view={view} sections={props.sections} toggleLabel={labels.toggle} collapsed={collapsed} />
       </div>
     </div>
   );
 }
 
-function PanelHeading(props: { view: TocView; labels: TocLabels; time: ReadingTime }) {
+function PanelHeading(props: {
+  view: TocView;
+  labels: TocLabels;
+  time: ReadingTime;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
+}) {
   const { view } = props;
   return (
     <TocHeading
@@ -182,6 +85,8 @@ function PanelHeading(props: { view: TocView; labels: TocLabels; time: ReadingTi
       onGlide={view.glideTo}
       time={props.time}
       revealed={view.revealed}
+      collapsed={props.collapsed}
+      onToggleCollapse={props.onToggleCollapse}
     />
   );
 }
@@ -192,20 +97,23 @@ export function TocPanel(props: {
   sections: readonly TocSection[];
   labels: TocLabels;
   time: ReadingTime;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
   className?: string;
   testId?: string;
 }) {
-  const { labels } = props;
   const view = { ...props.view, idPrefix: useId() };
-  const { revealed } = view;
   return (
     <nav
-      aria-label={labels.title}
-      aria-busy={!revealed}
+      aria-label={props.labels.title}
+      aria-busy={!view.revealed}
       data-testid={props.testId}
+      data-collapsed={props.collapsed ? 'true' : undefined}
       className={cn(
-        'flex flex-col border bg-background/70 p-3 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords]',
-        'w-full rounded-2xl',
+        'flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl overflow-hidden',
+        'motion-reduce:transition-none transition-[width] duration-300 ease-out p-3',
+        // 3.625rem = 2rem marker + 2 × p-3 + 2px border: the numbers keep their place.
+        props.collapsed ? 'w-[3.625rem]' : 'w-full',
         props.className,
       )}
     >

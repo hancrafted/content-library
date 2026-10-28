@@ -1,5 +1,5 @@
 import { folderOf, type EpisodeRef, type ResourceRef } from '@/content-store/catalogue/episode-id.pure';
-import type { TocItem, TocSection } from '@/shared/lib/table-of-contents.pure';
+import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
 
@@ -56,15 +56,18 @@ export function eyebrowsOf(
   );
 }
 
+/** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
+export { TOC_COLLAPSED_ATTR };
+
 /*
  * The Foreground's insets (FE-009 §2), the only width mechanism: every Slide wrapper pads itself with these two
  * variables. Below `md` a small even margin. From `md` the left inset clears the fixed table of contents
- * (1rem + 17rem + 3rem) and the right keeps 3rem; from `xl`, while the drawer sits beside and open, the attribute
- * `DRAWER_BESIDE_ATTR` widens the right inset past the card. Tailwind reads the class written out, so a test ties
- * the attribute name to the one the drawer sets.
+ * (1rem + 17rem + 3rem) and the right keeps 3rem; from `md`, while the table of contents is collapsed, `TOC_COLLAPSED_ATTR`
+ * narrows the left inset to 7.5rem (1rem + 3.5rem + 3rem) making room for the content area to grow. From `xl`, while the
+ * drawer sits beside and open, `DRAWER_BESIDE_ATTR` widens the right inset past the card. Tailwind reads the class written out.
  */
 export const INSET_CLASSES =
-  '[--inset-l:1rem] [--inset-r:1rem] md:[--inset-l:21rem] md:[--inset-r:3rem] xl:data-[drawer-beside=true]:[--inset-r:calc(var(--drawer-width)+4rem)]';
+  '[--inset-l:1rem] [--inset-r:1rem] md:[--inset-l:21rem] md:data-[toc-collapsed=true]:[--inset-l:7.5rem] md:[--inset-r:3rem] xl:data-[drawer-beside=true]:[--inset-r:calc(var(--drawer-width)+4rem)]';
 
 /**
  * While the talk player is docked bottom-left (from `lg`), the table of contents gives up that much height so the two

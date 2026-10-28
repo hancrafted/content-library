@@ -25,3 +25,23 @@ export function activeId(
   const crossing = order.find((id) => intersecting.has(id));
   return crossing ?? previous ?? order[0] ?? null;
 }
+
+/** The active Slide's box in the viewport, before or after chrome changes the Slides' width. */
+export interface SlideBox {
+  /** Its top, from the viewport top. */
+  readonly top: number;
+  readonly height: number;
+}
+
+/**
+ * How far to scroll after page chrome changes the Slides' width, so the reading line (`line`, px from the
+ * viewport top) stays as far into the active Slide as before: the Slides narrow or widen, so they and everything above
+ * them reflow. Anchoring at the reading line keeps that Slide the one under it, so the active Slide does not change. A
+ * Slide that starts below the line keeps its top where it was.
+ */
+export function keepReadingScroll(before: SlideBox, after: SlideBox, line: number): number {
+  if (before.height <= 0) return after.top - before.top;
+  const anchor = Math.min(before.top + before.height, Math.max(before.top, line));
+  const progress = (anchor - before.top) / before.height;
+  return after.top + progress * after.height - anchor;
+}

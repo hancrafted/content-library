@@ -5,6 +5,7 @@ import {
   readingOrder,
   readingTime,
   sectionNumber,
+  sectionProgress,
   whereAt,
   type TocSection,
 } from './table-of-contents.pure';
@@ -239,6 +240,105 @@ describe('edge cases', () => {
       const active = activeEntry(owners, activeSlide, 'top');
       // ASSERT
       expect(active).toBeNull();
+    });
+  });
+
+  describe('sectionProgress', () => {
+    const multiSlideSections: readonly TocSection[] = [
+      {
+        id: 'sec-1',
+        title: 'Section 1',
+        minutes: 1,
+        items: [
+          { id: 'sec-1--s1', title: 'Slide 1', minutes: 1 },
+          { id: 'sec-1--s2', title: 'Slide 2', minutes: 1 },
+          { id: 'sec-1--s3', title: 'Slide 3', minutes: 1 },
+        ],
+      },
+      {
+        id: 'sec-2',
+        title: 'Section 2',
+        minutes: 1,
+        items: [{ id: 'sec-2--s1', title: 'Only One', minutes: 1 }],
+      },
+      {
+        id: 'sec-3',
+        title: 'Section 3',
+        minutes: 1,
+        items: [
+          { id: 'sec-3--s1', title: 'Slide A', minutes: 1 },
+          { id: 'sec-3--s2', title: 'Slide B', minutes: 1 },
+        ],
+      },
+    ];
+
+    it('returns null when a section has 1 or 0 slides because there are no multiple slides', () => {
+      // ARRANGE
+      const sectionWithOne = multiSlideSections[1];
+      // ACT
+      const progress = sectionProgress(sectionWithOne, 'sec-2--s1', multiSlideSections);
+      // ASSERT
+      expect(progress).toBeNull();
+    });
+
+    it('returns 0 when on the section title slide (section title does not count)', () => {
+      // ARRANGE
+      const section = multiSlideSections[0];
+      // ACT
+      const progress = sectionProgress(section, 'sec-1', multiSlideSections);
+      // ASSERT
+      expect(progress).toBe(0);
+    });
+
+    it('fills 1/3 when showing the 1st slide of 3', () => {
+      // ARRANGE
+      const section = multiSlideSections[0];
+      const oneThird = 1 / 3;
+      // ACT
+      const progress = sectionProgress(section, 'sec-1--s1', multiSlideSections);
+      // ASSERT
+      expect(progress).toBeCloseTo(oneThird);
+    });
+
+    it('fills 2/3 when showing the 2nd slide of 3', () => {
+      // ARRANGE
+      const section = multiSlideSections[0];
+      const twoThirds = 2 / 3;
+      // ACT
+      const progress = sectionProgress(section, 'sec-1--s2', multiSlideSections);
+      // ASSERT
+      expect(progress).toBeCloseTo(twoThirds);
+    });
+
+    it('fills 3/3 (1) when showing the 3rd slide of 3', () => {
+      // ARRANGE
+      const section = multiSlideSections[0];
+      // ACT
+      const progress = sectionProgress(section, 'sec-1--s3', multiSlideSections);
+      // ASSERT
+      expect(progress).toBe(1);
+    });
+
+    it('returns 1 when active slide is in a later section', () => {
+      // ARRANGE
+      const section = multiSlideSections[0];
+      // ACT
+      const progress = sectionProgress(section, 'sec-3--s1', multiSlideSections);
+      // ASSERT
+      expect(progress).toBe(1);
+    });
+
+    it('returns 0 when active slide is in an earlier section or top', () => {
+      // ARRANGE
+      const section = multiSlideSections[2];
+      // ACT
+      const earlier = sectionProgress(section, 'sec-1--s2', multiSlideSections);
+      const top = sectionProgress(section, 'top', multiSlideSections);
+      const none = sectionProgress(section, null, multiSlideSections);
+      // ASSERT
+      expect(earlier).toBe(0);
+      expect(top).toBe(0);
+      expect(none).toBe(0);
     });
   });
 });
