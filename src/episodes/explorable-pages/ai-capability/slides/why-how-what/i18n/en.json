@@ -1,0 +1,64 @@
+{
+  "title": "Why · How · What",
+  "caption": "Prompt, agent, workflow, factory: four words that get mixed up, on one timeline.",
+  "words": {
+    "why": "Why",
+    "how": "How",
+    "what": "What"
+  },
+  "columns": {
+    "why": {
+      "title": "Everyone says agent and workflow, and nobody says what differs.",
+      "caption": "<marker>The words fly around, and \"factory\" has no settled definition at all.</marker> So it is hard to know which one you need."
+    },
+    "how": {
+      "title": "Each layer adds one thing to the same model.",
+      "caption": "<marker>Prompting writes instructions; an agent directs its own tool use in a loop; a workflow chains steps along a path fixed in advance.</marker>"
+    },
+    "what": {
+      "title": "Four disciplines on one timeline, from 2022 to 2026.",
+      "caption": "<marker>ChatGPT launched in November 2022, agents and workflows were defined in December 2024, and the factory emerged in early 2026.</marker> Play each scene or press \"Play all\"."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "The words are not settled",
+      "description": "Prompting, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label whose definitions differ in how much human review remains [1] (research LLM-0018).",
+      "sources": {
+        "grant-dark-factories": {
+          "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
+        }
+      }
+    },
+    "how": {
+      "header": "Three first-party definitions",
+      "description": "OpenAI defines prompt engineering as writing effective instructions for a model [1]. Anthropic calls workflows systems where LLMs and tools follow predefined code paths, and agents systems where LLMs direct their own tool use [2]. Willison settles on an agent as an LLM that runs tools in a loop to achieve a goal [3] (research LLM-0018).",
+      "sources": {
+        "openai-prompt-engineering": {
+          "title": "OpenAI, Prompt engineering guide"
+        },
+        "anthropic-building-effective-agents": {
+          "title": "Anthropic, Building effective agents"
+        },
+        "willison-agent-definition": {
+          "title": "Willison, I think \"agent\" may finally have a widely enough agreed upon definition"
+        }
+      }
+    },
+    "what": {
+      "header": "Dates from primary sources",
+      "description": "ChatGPT launched on 30 November 2022 [1]; Anthropic defined agents and workflows on 19 December 2024 [2]; the factory label dates from early 2026, and the practice began in mid-2025 at one team [3] (research LLM-0018).",
+      "sources": {
+        "openai-introducing-chatgpt": {
+          "title": "OpenAI, Introducing ChatGPT"
+        },
+        "anthropic-building-effective-agents": {
+          "title": "Anthropic, Building effective agents"
+        },
+        "grant-dark-factories": {
+          "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
+        }
+      }
+    }
+  }
+}
