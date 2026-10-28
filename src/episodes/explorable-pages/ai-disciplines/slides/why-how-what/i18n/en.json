@@ -23,8 +23,11 @@
   "notes": {
     "why": {
       "header": "The words are not settled",
-      "description": "Prompting, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label whose definitions differ in how much human review remains [1] (research LLM-0018).",
+      "description": "Prompting, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label [1], and its definitions differ in how much human review remains [2] (research LLM-0018).",
       "sources": {
+        "strongdm-software-factory": {
+          "title": "StrongDM, The Software Factory"
+        },
         "grant-dark-factories": {
           "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
         }
@@ -55,8 +58,8 @@
         "anthropic-building-effective-agents": {
           "title": "Anthropic, Building effective agents"
         },
-        "grant-dark-factories": {
-          "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
+        "strongdm-software-factory": {
+          "title": "StrongDM, The Software Factory"
         }
       }
     }
