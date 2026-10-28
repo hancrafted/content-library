@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { NodeCopy } from './node-popover.client';
 import type { ControlMap } from './toolbar-controls.pure';
 import type { Run } from './workflow-run.pure';
+import type { ChatButtonDef } from './workflow-schema.types';
 import type { Level, View } from './workflow-state.pure';
 import type { Workflow } from './workflow.types';
 
@@ -97,7 +98,6 @@ export interface UiWords {
   readonly commandLabel: string;
   readonly copyPrompt: string;
   readonly copyCommand: string;
-  readonly openChatgpt: string;
   readonly sectionAbout: string;
   readonly sectionCriteria: string;
   readonly sectionExample: string;
@@ -121,6 +121,8 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly newTab: string;
+  /** The AI chats a prompt opens in, unless its job names its own: one shadcn button each, "ChatGPT | Gemini". */
+  readonly openAIButtons: readonly ChatButtonDef[];
   /** Progress marks: job not started, job with its result in. */
   readonly stateOpen: string;
   readonly stateDone: string;

@@ -10,16 +10,14 @@ import {
   type TryPromptWords,
 } from './try-prompt.client';
 
-/** The ChatGPT link as the page writes it: an empty chat, never a prefilled one. */
-const EMPTY_CHAT = 'href="https://chatgpt.com/"';
+/** Any link: the prompt row offers none, so no prompt ever travels in a URL; the caller adds its chat buttons. */
+const LINK = 'href=';
 const PREFILL = '?q=';
 const WORDS: TryPromptWords = {
   promptLabel: 'Prompt',
   commandLabel: 'Command',
   copyPrompt: 'Copy prompt',
   copyCommand: 'Copy command',
-  openChatgpt: 'Open in ChatGPT',
-  newTab: 'new tab',
   whatToDo: 'What to do',
   preview: 'Prompt preview',
   showFull: 'Show full text',
@@ -181,13 +179,13 @@ describe('success cases', () => {
     expect(html).toContain('data-slot-add');
   });
 
-  it('opens ChatGPT empty, without the prompt in the link, and offers no Claude link', () => {
+  it('offers no chat link of its own, so the prompt never travels in a URL, and no Claude link', () => {
     // ARRANGE
     const props = { sections: SECTIONS, slots: [SPEC] };
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain(EMPTY_CHAT);
+    expect(html).not.toContain(LINK);
     expect(html).not.toContain(PREFILL);
     expect(html).not.toContain('claude.ai');
     expect(html).not.toContain('Claude');
@@ -328,22 +326,12 @@ describe('failure cases', () => {
     // ACT
     const html = render(props);
     // ASSERT
-    expect(html).toContain(EMPTY_CHAT);
+    expect(html).not.toContain(LINK);
     expect(html).not.toContain(PREFILL);
   });
 });
 
 describe('edge cases', () => {
-  it('puts Copy prompt before Open in ChatGPT, the order the viewer follows', () => {
-    // ARRANGE
-    const props = { sections: SECTIONS, slots: [SPEC] };
-    // ACT
-    const html = render(props);
-    // ASSERT
-    expect(html.indexOf(WORDS.copyPrompt)).toBeGreaterThan(-1);
-    expect(html.indexOf(WORDS.copyPrompt)).toBeLessThan(html.indexOf(EMPTY_CHAT));
-  });
-
   it('treats a whitespace-only paste as empty and keeps the sample', () => {
     // ARRANGE
     const props = { sections: SECTIONS, slots: [SPEC], values: { spec: '   ' } };

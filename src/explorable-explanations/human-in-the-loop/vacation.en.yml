@@ -849,6 +849,10 @@ stages:
         goal:
           do: 'Have the AI turn your note into one web page, then open it in your browser.'
         template: page
+        openAIButtons:
+          - label: Gemini
+            url: https://gemini.google.com/app
+            icon: null
         slots:
           - id: pick
             mode: single

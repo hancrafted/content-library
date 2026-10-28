@@ -12,3 +12,9 @@ export const NAMED_ICONS = {
   'file-text': FileText,
   coins: Coins,
 } as const satisfies Record<string, LucideIcon>;
+
+/** A name the map holds. */
+export type NamedIcon = keyof typeof NAMED_ICONS;
+
+/** Every name the map holds, for a loader that checks a name given as data. */
+export const NAMED_ICON_NAMES = Object.keys(NAMED_ICONS) as readonly NamedIcon[];

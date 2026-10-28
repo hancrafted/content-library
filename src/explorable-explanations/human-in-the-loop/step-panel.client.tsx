@@ -3,6 +3,7 @@
 import { CopyButton, PromptActions } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
 import { joinPrompt, type PromptParts } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
+import { ChatButtons } from './chat-buttons';
 import { CheckedBox } from './checked-box.client';
 import { contextEntries, needsInput, type Entry } from './context-entries.pure';
 import { ContextField } from './context-field.client';
@@ -16,7 +17,8 @@ import type { TaskModalView } from './workflow-view.pure';
 /*
  * The body of one chat of a stepper step, as a plain list of numbered steps: the context that fills the prompt (when
  * there is any), the prompt with its result box, or, for a review, the check. No cards, no previews: a button copies
- * the prompt, another copies it wrapped in a request that has an AI explain it, so the viewer learns to prompt.
+ * the prompt, another copies it wrapped in a request that has an AI explain it, so the viewer learns to prompt. The
+ * check is optional: it starts folded, and a pasted result already ends the item.
  */
 
 type Step = TaskModalView['steps'][number];
@@ -69,8 +71,16 @@ function ExplainButton({ kit, onCopy }: { kit: StepKit; onCopy: () => Promise<bo
   );
 }
 
-/** Copy the prompt, open ChatGPT; and, at the right, copy the prompt wrapped in the request to explain it. */
-function Actions({ step, kit, slots, panel }: { step: Step; kit: StepKit; slots: SlotState; panel: string }) {
+interface ActionsProps {
+  readonly step: Step;
+  readonly task: TaskModalView;
+  readonly kit: StepKit;
+  readonly slots: SlotState;
+  readonly panel: string;
+}
+
+/** Copy the prompt, then the AI chats to paste it into; and, at the right, copy the prompt wrapped in the request to explain it. */
+function Actions({ step, task, kit, slots, panel }: ActionsProps) {
   const { words } = kit;
   const plain = joinPrompt(partsOf(step), slots.values);
   const copy = tryWords(words);
@@ -90,6 +100,7 @@ function Actions({ step, kit, slots, panel }: { step: Step; kit: StepKit; slots:
         lead={leadOf(kit, panel) === 'copy'}
         kit={{ ...kit, words: copy, onCopy: async (each) => copied(await kit.onCopy(each)) }}
       />
+      <ChatButtons buttons={task.openAIButtons ?? words.openAIButtons} newTab={words.newTab} />
       <span className="ml-auto" />
       <ExplainButton
         kit={kit}
@@ -163,7 +174,7 @@ function DoSteps(props: PanelProps) {
     <>
       {hasContext && <ContextStep {...props} />}
       <StepSection n={first + Number(hasContext)} title={words.stepDo} info={words.stepDoInfo} kit={kit}>
-        <Actions step={step} kit={kit} slots={slots} panel={panel} />
+        <Actions step={step} task={task} kit={kit} slots={slots} panel={panel} />
         <Result
           name={resultKey(step, task)}
           kit={kit}
@@ -177,14 +188,14 @@ function DoSteps(props: PanelProps) {
 }
 
 export function StepPanel(props: PanelProps) {
-  const { step, kind, kit, slots, first, checkedAs } = props;
+  const { step, task, kind, kit, slots, first, checkedAs } = props;
   return (
     <div className="contents" data-step-panel={kind}>
       {kind === 'do' ? (
         <DoSteps {...props} />
       ) : (
-        <StepSection n={first} title={kit.words.stepCheck} info={kit.words.stepCheckInfo} kit={kit}>
-          <Actions step={step} kit={kit} slots={slots} panel={panelKey('review', step)} />
+        <StepSection n={first} title={kit.words.stepCheck} info={kit.words.stepCheckInfo} kit={kit} open={false}>
+          <Actions step={step} task={task} kit={kit} slots={slots} panel={panelKey('review', step)} />
           {checkedAs && (
             <CheckedBox
               name={checkedAs}

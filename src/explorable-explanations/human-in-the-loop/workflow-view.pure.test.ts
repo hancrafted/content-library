@@ -73,6 +73,17 @@ describe('success cases', () => {
     expect(goal).toEqual(expected);
     expect(goal.do).toContain(asks);
   });
+  it('hands a job the AI chat buttons it names, and none to a job that names none', () => {
+    // ARRANGE
+    const gemini = [{ label: 'Gemini', url: 'https://gemini.google.com/app', icon: null }];
+    const view = workflowView(WORKFLOW, SIMPLE);
+    // ACT
+    const named = jobOf(view, 'finish').task.openAIButtons;
+    const none = jobOf(view, 'rank').task.openAIButtons;
+    // ASSERT
+    expect(named).toEqual(gemini);
+    expect(none).toBeUndefined();
+  });
 });
 
 describe('failure cases', () => {

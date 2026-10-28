@@ -1,6 +1,6 @@
 import { producersFor } from './workflow-outputs.pure';
 import { stepsOf, type TaskStep } from './workflow-prompts.pure';
-import type { Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
+import type { ChatButtonDef, Runtime, TaskDef, TechniqueDef } from './workflow-schema.types';
 import type { Level } from './workflow-state.pure';
 import type { Job, Workflow } from './workflow.types';
 
@@ -35,6 +35,8 @@ export interface TaskModalView {
   readonly goodLooksLike: readonly string[];
   /** The techniques the task's structure teaches, from the file's catalogue, shown under "why it matters". */
   readonly techniques: readonly TechniqueDef[];
+  /** The AI chats the job's prompts open in; absent: the visual's default buttons. */
+  readonly openAIButtons?: readonly ChatButtonDef[];
 }
 
 /** One job inside a stage's modal. */
@@ -96,6 +98,7 @@ function taskView({ task }: Job, workflow: Workflow, at: TaskAt): TaskModalView 
     techniques: (task.details.techniques ?? []).flatMap((id) =>
       workflow.file.techniques.filter((each) => each.id === id),
     ),
+    ...(task.openAIButtons && { openAIButtons: task.openAIButtons }),
   };
 }
 

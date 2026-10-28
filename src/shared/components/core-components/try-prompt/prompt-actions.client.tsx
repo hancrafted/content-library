@@ -1,24 +1,18 @@
 'use client';
 
 import { useMotion } from '@/shared/hooks/use-motion';
-import { externalHref } from '@/shared/lib/external-link.pure';
 import { cn } from '@/shared/lib/utils';
 import { Check, Copy } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
-import { ChatGptMark } from '../chat-icons/chat-icons';
+import { useEffect, useState } from 'react';
 import { OUTLINED_ICON } from '../icon-button/icon-button.client';
 import styles from './prompt-actions.module.css';
 import type { PromptKit } from './try-prompt.types';
 
 /*
- * The buttons of a prompt row, each written out next to its icon and read left to right: "Copy prompt", which confirms
- * a copy with a tick and "Copied" for a moment, then "Open in ChatGPT", an empty chat to paste it into. The link never
- * carries the prompt: a prefilled chat breaks once a pasted result makes the prompt long, so every prompt goes the
- * same way. No tooltips: the words are on the buttons.
+ * The copy button of a prompt row, written out next to its icon: "Copy prompt", which confirms a copy with a tick and
+ * "Copied" for a moment. The row carries no chat link: the caller adds the chats to paste into, so a prompt never
+ * travels in a URL. No tooltips: the words are on the button.
  */
-
-/** Where "Open in ChatGPT" goes: a new, empty chat. */
-const CHATGPT = 'https://chatgpt.com/';
 
 /** A button with its name beside the icon: the icon alone on a phone, the icon and its name from `md` up. */
 const WRITTEN_OUT = cn(OUTLINED_ICON, 'text-caption font-medium', 'md:w-auto md:gap-1.5 md:px-3');
@@ -28,29 +22,6 @@ const LEAD = 'border-(--info) bg-(--info) text-(--info-foreground) hover:bg-(--i
 
 /** How long the copy button says "Copied" before it reads "Copy prompt" again. */
 const CONFIRM_MS = 1600;
-
-interface ChatLinkProps {
-  readonly label: string;
-  readonly newTab: string;
-  readonly children: ReactNode;
-}
-
-function ChatLink({ label, newTab, children }: ChatLinkProps) {
-  const motion = useMotion();
-  return (
-    <a
-      {...motion}
-      className={WRITTEN_OUT}
-      href={externalHref(CHATGPT)}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${label}, ${newTab}`}
-    >
-      {children}
-      <span className="hidden md:inline">{label}</span>
-    </a>
-  );
-}
 
 /** Whether the last copy just succeeded: true for `CONFIRM_MS` after `confirm()`, then false again. */
 function useConfirmed() {
@@ -96,19 +67,12 @@ interface PromptActionsProps {
   readonly text: string;
   readonly copyLabel: string;
   readonly kit: PromptKit;
-  /** Copy prompt is the next thing to press; Open in ChatGPT never leads. */
+  /** Copy prompt is the next thing to press. */
   readonly lead?: boolean;
 }
 
-/** The buttons of a prompt: copy it, open it in ChatGPT. */
+/** The button of a prompt: copy it. */
 export function PromptActions({ text, copyLabel, kit, lead }: PromptActionsProps) {
   const { words } = kit;
-  return (
-    <>
-      <CopyButton label={copyLabel} done={words.copied ?? copyLabel} onCopy={() => kit.onCopy(text)} lead={lead} />
-      <ChatLink label={words.openChatgpt} newTab={words.newTab}>
-        <ChatGptMark className="size-4" />
-      </ChatLink>
-    </>
-  );
+  return <CopyButton label={copyLabel} done={words.copied ?? copyLabel} onCopy={() => kit.onCopy(text)} lead={lead} />;
 }

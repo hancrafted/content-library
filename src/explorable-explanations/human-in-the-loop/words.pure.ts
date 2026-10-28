@@ -16,8 +16,6 @@ export const tryWords = (words: UiWords): TryPromptWords => ({
   commandLabel: words.commandLabel,
   copyPrompt: words.copyPrompt,
   copyCommand: words.copyCommand,
-  openChatgpt: words.openChatgpt,
-  newTab: words.newTab,
   upload: words.slotUpload,
   addEntry: words.slotAdd,
   whatToDo: words.whatToDo,
