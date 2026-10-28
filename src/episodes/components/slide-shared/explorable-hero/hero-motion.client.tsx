@@ -174,7 +174,7 @@ export function HeroCanvas({ story }: { story: Story }) {
         ref={soft}
         aria-hidden
         style={{ opacity: FIELD_INK }}
-        className="absolute inset-x-0 top-0 h-[min(100%,100svh)] w-full blur-[2.5px]"
+        className="absolute inset-x-0 top-0 h-[min(100%,100svh)] w-full blur-[1px] lg:blur-[2.5px]"
       />
       <canvas ref={beat} data-hero-motion={motion} className="absolute inset-x-0 top-0 h-[min(100%,100svh)] w-full" />
     </>
