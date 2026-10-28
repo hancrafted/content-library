@@ -10,6 +10,7 @@ import {
   callbacksFor,
   progressTarget,
   progressUploadEvent,
+  showWorkflow,
   shownWorkflow,
   slicesOf,
 } from './human-in-the-loop-slices.pure';
@@ -18,9 +19,7 @@ import { ModalPart } from './modal-part.client';
 import type { ProgressActions, ProgressNote } from './progress-controls.types';
 import { saveFile } from './save-file';
 import { ToolbarPart } from './toolbar-part.client';
-import { roundsOf, runOf } from './workflow-run.pure';
 import { createState, reduce, type View, type WorkflowEvent, type WorkflowState } from './workflow-state.pure';
-import { workflowView } from './workflow-view.pure';
 
 /*
  * The visual's one client parent: it owns the state and hands each part its slice and callbacks (FE-012 §4). A part
@@ -64,16 +63,13 @@ function useSavedProgress(data: HumanInTheLoopData, state: WorkflowState, dispat
   return { note: noteFor(status, { onDownload, onDiscard: discard }), actions, resetSaved: reset };
 }
 
-function useViewOf(workflow: ReturnType<typeof shownWorkflow>, state: WorkflowState) {
-  const { level, demo, slotValues } = state;
-  const rounds = useMemo(
-    () => (workflow ? JSON.stringify(roundsOf(runOf(workflow.file, { results: slotValues, demo }))) : '{}'),
-    [workflow, slotValues, demo],
-  );
-  return useMemo(
-    () => workflow && workflowView(workflow, { level, demo, rounds: JSON.parse(rounds) as Record<string, number> }),
-    [workflow, level, demo, rounds],
-  );
+/** The shown Workflow with its run, view and rounds, computed once per change of what they read. */
+function useShown(data: HumanInTheLoopData, state: WorkflowState) {
+  const { workflowId, uploaded, level, demo, slotValues } = state;
+  return useMemo(() => {
+    const workflow = shownWorkflow(data, { workflowId, uploaded });
+    return workflow && showWorkflow(workflow, { level, demo, slotValues });
+  }, [data, workflowId, uploaded, level, demo, slotValues]);
 }
 
 /** The callbacks over one dispatch, with what the parent does besides: Reset empties storage, a view change starts the crossfade. */
@@ -103,10 +99,10 @@ export function HumanInTheLoopClient(data: HumanInTheLoopData) {
   const { on, viewChanged } = useCallbacksOf(dispatch, resetSaved);
   const search = useSearch();
   const available = debugAvailable({ env: process.env.NODE_ENV, search });
-  const workflow = shownWorkflow(data, state);
-  const view = useViewOf(workflow, state);
-  if (!workflow || !view) return null;
-  const slices = slicesOf({ data, state, workflow, note, progress: actions, view, debugAvailable: available }, on);
+  const shown = useShown(data, state);
+  if (!shown) return null;
+  const { workflow } = shown;
+  const slices = slicesOf({ ...shown, data, state, note, progress: actions, debugAvailable: available }, on);
   return (
     <div data-human-in-the-loop={workflow.id} data-level={state.level} data-view={state.view}>
       <ToolbarPart {...slices.toolbar} />

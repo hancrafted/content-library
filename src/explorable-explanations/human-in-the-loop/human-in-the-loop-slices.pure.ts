@@ -8,9 +8,9 @@ import type { DemoProps, DemoState, ProgressActions, ProgressNote } from './prog
 import { offers } from './toolbar-controls.pure';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { loadWorkflow } from './workflow-loader.pure';
-import { markerValuesOf, resultsOf, runOf, type Run } from './workflow-run.pure';
+import { markerValuesOf, roundsOf as playedRounds, resultsOf, runOf, type Run } from './workflow-run.pure';
 import type { WorkflowEvent, WorkflowState } from './workflow-state.pure';
-import type { WorkflowView } from './workflow-view.pure';
+import { workflowView, type WorkflowView } from './workflow-view.pure';
 import type { Workflow } from './workflow.types';
 
 /*
@@ -19,7 +19,10 @@ import type { Workflow } from './workflow.types';
  */
 
 /** The shown Workflow: an uploaded one wins, then the chosen authored one, then the first. */
-export function shownWorkflow(data: HumanInTheLoopData, state: WorkflowState): Workflow | undefined {
+export function shownWorkflow(
+  data: HumanInTheLoopData,
+  state: Pick<WorkflowState, 'uploaded' | 'workflowId'>,
+): Workflow | undefined {
   return state.uploaded ?? data.workflows.find((w) => w.id === state.workflowId) ?? data.workflows[0];
 }
 
@@ -83,17 +86,52 @@ export function callbacksFor(dispatch: (event: WorkflowEvent) => void): Callback
   };
 }
 
-/** What the parent knows: the data it was given, its state, the Workflow it shows and that Workflow's view. */
-export interface Shown {
+/** What is computed of the shown Workflow and the state: one run, and everything the parts show of it. */
+export interface WorkflowShown {
+  readonly workflow: Workflow;
+  /** The run of the pasted results, computed once. */
+  readonly run: Run;
+  /** `workflowView` of the Workflow for the state's level, widths taken from the run. */
+  readonly view: WorkflowView;
+  /** The rounds each repeated stage plays now: only stages whose run holds rounds. The view widens these to the demo cap. */
+  readonly played: Readonly<Record<string, number>>;
+  /** The rounds each repeated stage draws: the rounds played, else the stage's demo cap, so an empty stage still shows its cards. */
+  readonly drawn: Readonly<Record<string, number>>;
+}
+
+/** What `showWorkflow` reads of the state. */
+export type ShownState = Pick<WorkflowState, 'level' | 'demo' | 'slotValues'>;
+
+/** How many rounds each repeated stage draws: the rounds the run holds, else the stage's demo cap. */
+function drawnRounds(workflow: Workflow, run: Run): Record<string, number> {
+  const counts = workflow.stages.flatMap((stage) => {
+    const held = run.stages.find((each) => each.id === stage.id)?.rounds.length ?? 0;
+    return stage.foreach ? [[stage.id, held || stage.foreach.demo] as const] : [];
+  });
+  return Object.fromEntries(counts);
+}
+
+/** The one entry that computes the Run of the shown Workflow, and its view and rounds from that same run. */
+export function showWorkflow(workflow: Workflow, { level, demo, slotValues }: ShownState): WorkflowShown {
+  const run = runOf(workflow.file, { results: slotValues, demo });
+  const played = playedRounds(run);
+  return {
+    workflow,
+    run,
+    view: workflowView(workflow, { level, demo, rounds: played }),
+    played,
+    drawn: drawnRounds(workflow, run),
+  };
+}
+
+/** What the parent knows: the data it was given, its state, and what `showWorkflow` computed of the shown Workflow. */
+export interface Shown extends WorkflowShown {
   readonly data: HumanInTheLoopData;
   readonly state: WorkflowState;
-  readonly workflow: Workflow;
   /** What to tell the viewer about their saved progress, if anything. */
   readonly note: ProgressNote | null;
   /** Save and load of the run; none for an uploaded Workflow. */
   readonly progress: ProgressActions | null;
-  /** `workflowView` of the Workflow for the state's level, computed once per change by the parent. */
-  readonly view: WorkflowView;
   /** Whether the Debug switch may show: development or `?debug`, known only on the client after mount. */
   readonly debugAvailable: boolean;
 }
@@ -106,14 +144,12 @@ export interface Slices {
 
 /** Each part's props from what the parent shows: a part gets its own slice of the view, never the whole. */
 export function slicesOf(shown: Shown, on: Callbacks): Slices {
-  const { state, workflow } = shown;
-  const { file } = workflow;
-  const run = runOf(file, { results: state.slotValues, demo: state.demo });
+  const { run } = shown;
   const demoProps = demoPropsOf(shown, run.canChangeDemo, on);
   const toolbar = toolbarOf(shown, on, demoProps);
   return {
     toolbar,
-    diagram: diagramOf(shown, on, run),
+    diagram: diagramOf(shown, on),
     modal: modalOf(shown, on, { run, demo: demoProps }),
   };
 }
@@ -132,14 +168,14 @@ function demoPropsOf({ data, state, progress }: Shown, canChange: boolean, on: C
 }
 
 /** The run goes to the diagram only once it has work, and never to a readonly Preset: both views then show progress. */
-function diagramOf({ data, state, workflow }: Shown, on: Callbacks, run: Run): DiagramProps {
+function diagramOf({ data, state, workflow, run, drawn }: Shown, on: Callbacks): DiagramProps {
   const shows = !data.readonly && !run.canChangeDemo;
   return {
     workflow,
     readonly: data.readonly,
     onOpenStage: on.onOpenStage,
     view: state.view,
-    rounds: roundsOf(workflow, run),
+    rounds: drawn,
     run: shows ? run : undefined,
     slots: data.diagram,
     words: data.words,
@@ -187,15 +223,6 @@ function debugBase({ data, state, workflow }: Pick<Shown, 'data' | 'state' | 'wo
     locale: data.locale,
     source: hash?.slice(0, 8) ?? 'uploaded',
   };
-}
-
-/** How many rounds each repeated stage draws: the rounds the run holds, else the stage's demo cap. */
-function roundsOf(workflow: Workflow, run: Run): Record<string, number> {
-  const counts = workflow.stages.flatMap((stage) => {
-    const held = run.stages.find((each) => each.id === stage.id)?.rounds.length ?? 0;
-    return stage.foreach ? [[stage.id, held || stage.foreach.demo] as const] : [];
-  });
-  return Object.fromEntries(counts);
 }
 
 function modalOf(
