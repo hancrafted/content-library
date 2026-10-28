@@ -1,0 +1,21 @@
+{
+  "title": "The timeline",
+  "caption": "Four disciplines on one language model, from prompting in 2022–23 to the factory emerging in 2026.",
+  "readme": {
+    "heading": "Read me",
+    "labels": {
+      "shows": "What it shows",
+      "tryit": "What to try",
+      "notice": "What to notice"
+    },
+    "shows": "The scale each discipline compares to, the four cards on the rail, a scene per discipline, its wire down to the model, and the model band. At rest nothing moves.",
+    "tryit": "Move the mouse onto a column to play its scene. Click a card or the model band to turn it to its definition and source. Press \"Play all\" to play the four in turn.",
+    "notice": "Every message to the model is a square down the wire and back: one for a prompt, three loops for an agent, three side by side at a workflow's fan-out, up to five at once for the factory."
+  },
+  "notes": {
+    "timeline": {
+      "header": "Where the years and definitions come from",
+      "description": "Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for prompting, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory."
+    }
+  }
+}

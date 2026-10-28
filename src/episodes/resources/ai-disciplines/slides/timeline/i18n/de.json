@@ -1,0 +1,21 @@
+{
+  "title": "Die Zeitleiste",
+  "caption": "Vier Disziplinen auf einem Sprachmodell, vom Prompting 2022–23 bis zur Factory, die 2026 entsteht.",
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Womit jede Disziplin vergleichbar ist, die vier Karten auf der Zeitleiste, eine Szene je Disziplin, ihre Leitung zum Modell und das Modellband. In Ruhe bewegt sich nichts.",
+    "tryit": "Fahren Sie mit der Maus auf eine Spalte, um ihre Szene abzuspielen. Klicken Sie eine Karte oder das Modellband, um Definition und Quelle zu sehen. „Alle abspielen“ spielt die vier nacheinander.",
+    "notice": "Jede Nachricht an das Modell ist ein Quadrat die Leitung hinunter und zurück: eines für einen Prompt, drei Schleifen für einen Agenten, drei nebeneinander beim Verzweigen eines Workflows, bis zu fünf gleichzeitig bei der Factory."
+  },
+  "notes": {
+    "timeline": {
+      "header": "Woher Jahre und Definitionen kommen",
+      "description": "Jedes Jahr, jede Definition und jede Quelle auf den Karten stammt aus der Recherche LLM-0018, die jede Disziplin über ihre Primärquelle datiert: der Start von ChatGPT für Prompting, Anthropics Agentendefinition und Claude Code für Agenten, LangGraph für Workflows sowie Dan Shapiros fünf Stufen und StrongDM für die Factory."
+    }
+  }
+}

@@ -17,6 +17,7 @@ import type { EpisodeComposition } from '@/episodes/components/slide-master/slid
 import { maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai/episode';
 import { neverTooEarlySales } from '@/episodes/never-too-early-sales/episode';
 import { onboardAiEveryTime } from '@/episodes/onboard-ai-every-time/episode';
+import { aiDisciplines } from '@/episodes/resources/ai-disciplines/episode';
 import { contextWindow } from '@/episodes/resources/context-window/episode';
 import { episodeTemplate } from '@/episodes/resources/episode-template/episode';
 import { grids } from '@/episodes/resources/grids/episode';
@@ -47,6 +48,7 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
 
 /** Every Resource's Slides by slug: composed like an Episode, rendered by the same container, but no Episode. */
 export const RESOURCE_PAGES: { readonly [S in ResourceSlug]: EpisodeComposition & { readonly slug: S } } = {
+  'ai-disciplines': aiDisciplines,
   'context-window': contextWindow,
   'episode-template': episodeTemplate,
   grids: grids,

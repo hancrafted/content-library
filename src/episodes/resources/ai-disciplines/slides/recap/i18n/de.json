@@ -1,0 +1,21 @@
+{
+  "title": "Der Rückblick",
+  "caption": "Dieselbe Zeitleiste mit einer hervorgehobenen Disziplin, um zu zeigen, wo eine Demo steht.",
+  "readme": {
+    "heading": "Lies mich",
+    "labels": {
+      "shows": "Was es zeigt",
+      "tryit": "Was Sie ausprobieren",
+      "notice": "Worauf Sie achten"
+    },
+    "shows": "Die Zeitleiste mit hervorgehobenen Workflows, die anderen Disziplinen abgeblendet, jede Szene in Ruhe.",
+    "tryit": "Fahren Sie mit der Maus auf eine andere Spalte: Sie leuchtet und spielt, solange die Maus dort bleibt. Danach sind wieder die Workflows hervorgehoben.",
+    "notice": "Die hervorgehobene Disziplin kommt aus der Voreinstellung, so fasst eine Folie eine Disziplin zusammen, ohne eigenen Zustand."
+  },
+  "notes": {
+    "recap": {
+      "header": "Ein Rückblick ohne eigenen Zustand",
+      "description": "Die Voreinstellung recap hebt die Workflows hervor, so kann eine spätere Folie einer Episode zeigen, wo eine Demo auf der Zeitleiste steht. Die Intro-Episode des CyberForum-Webinars nutzt sie nach ihrem dritten Check-in."
+    }
+  }
+}
