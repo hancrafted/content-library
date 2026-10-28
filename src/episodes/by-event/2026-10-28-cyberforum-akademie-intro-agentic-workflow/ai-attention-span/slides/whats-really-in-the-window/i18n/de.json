@@ -87,12 +87,12 @@
       "starting-instructions": {
         "title": "Startanweisungen",
         "keywords": "",
-        "script": "Zuerst die Startanweisungen: Text, der vor Deine erste Nachricht gestellt wird, bevor Du ein einziges Wort tippst. So ist die KI schon eingewiesen, bevor Du etwas sagst."
+        "script": "Zuerst die Startanweisungen. Das sind sogenannte System-Prompts, also Nachrichten, die das System für Dich abschickt, ohne dass Du Einfluss darauf hast. Die Ingenieure von ChatGPT, Claude und Co. schicken sie selbst mit jeder Nachricht am Anfang mit, um die KI für Dich vorzubereiten. Und die KI ist so trainiert, dass sie diesen Startanweisungen verstärkt Aufmerksamkeit schenkt."
       },
       "memory": {
         "title": "Gedächtnis",
         "keywords": "",
-        "script": "Zweitens das Gedächtnis: kurze Notizen über Dich, früher gespeichert und der KI wieder vorgelegt. Darum weiß ein neuer Chat schon ein paar Dinge über Dich. Das ist nützlich, und es ist noch etwas mehr im Fenster."
+        "script": "Zweitens das Gedächtnis, die Memory-Funktionen. Das sind teilweise Projektdateien, die Du in ChatGPT- oder Claude-Projekten hinterlegt hast, oder Einstellungen in einem Profil, das Du für Dich festgelegt hast, zum Beispiel: Ich möchte immer akademisch und sachlich angesprochen werden. Heutzutage können auch viele Tools selbst Gedächtnisdateien anlegen: In den Startanweisungen steht etwa, dass die KI alle zehn Nachrichten schauen soll, worauf der Nutzer in seinen Prompts Wert gelegt hat, und das als Gedächtnisdatei zusammenfasst. Auch diese werden geladen. Und dann haben wir hauptsächlich zwei wesentliche Buckets: das, was Du schreibst, und das, was die KI schreibt."
       },
       "the-rest": {
         "title": "Der Rest",

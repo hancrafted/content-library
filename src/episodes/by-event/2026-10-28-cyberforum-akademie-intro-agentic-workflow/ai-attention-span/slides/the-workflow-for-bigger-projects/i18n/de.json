@@ -46,12 +46,12 @@
       "one-planner": {
         "title": "Ein Planer",
         "keywords": "",
-        "script": "Dann bleibt ein Chat der Planer. Er behält nur den Plan und die Ergebnisse, also bleibt er klein und hat Platz übrig."
+        "script": "Für größere Projekte und komplexere Aufgaben kann es sinnvoll sein, verschiedene Agenten parallel zu verwalten. Stell Dir vor, ich habe meinen Planer: Mit ihm habe ich den Grobplan und meine ersten Anforderungen ausgearbeitet und die Aufgaben aufgebrochen."
       },
       "a-fresh-chat-per-step": {
         "title": "Ein frischer Chat pro Schritt",
         "keywords": "",
-        "script": "Jeder Schritt geht an einen frischen Chat: Orte, Catering, Einladungen. Dieser Chat liest seine Dateien und füllt sich so weit, wie er muss, gibt das Ergebnis als eine kleine Karte an den Planer zurück, und dann lässt Du ihn gehen. Nächster Schritt, nächster frischer Chat."
+        "script": "Will ich mit der ersten Aufgabe anfangen, lasse ich mir daraus ein Übergabedokument erzeugen und arbeite damit in einem zweiten Chat weiter. Kommen aus diesem Chat neue Erkenntnisse, die für den Plan relevant sind, fordere ich einen Handoff an und füttere ihn zurück an den Planer. Das klingt erst einmal sehr manuell, ist aber eine der gängigen Methoden, die wir unter dem Human-in-the-Loop-Prozess zusammenfassen."
       },
       "you-coordinate": {
         "title": "Du koordinierst",

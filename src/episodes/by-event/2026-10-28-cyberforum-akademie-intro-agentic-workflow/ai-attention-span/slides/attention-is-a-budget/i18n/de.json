@@ -56,22 +56,22 @@
       "a-hundred-units": {
         "title": "Aufmerksamkeit als Budget",
         "keywords": "",
-        "script": "Stell Dir Aufmerksamkeit als Budget vor. Links ist die Zeitleiste, in der Mitte das Fenster als Balken und rechts die Aufmerksamkeit, die jede Nachricht bekommt. Und ich sage es klar: Diese Zahlen, die Token-Zahlen und die Fenstergrößen auf dieser Folie sind zur Veranschaulichung. Ich habe sie mir ausgedacht, um die Form zu zeigen, also nimm sie bitte nicht als Messwerte."
+        "script": "Unter der Haube hat die KI 100 Einheiten, 100 Prozent Aufmerksamkeit. Bei der ersten Nachricht liegt die volle Aufmerksamkeit auf dieser Nachricht. Das ist eine Veranschaulichung: Darunter funktioniert alles mit Tokens, also Wörtern, aber für die einfache Darstellung gehen wir davon aus, dass die erste Nachricht die volle Aufmerksamkeit bekommt. Mit jeder weiteren Nachricht wird mehr oder weniger berechnet, wie sich die Aufmerksamkeit verteilt. Je länger der Chat, desto weniger bekommt manche Stelle davon."
       },
       "where-it-goes": {
         "title": "Wohin es geht",
         "keywords": "",
-        "script": "Wohin geht das Budget? Ein großer Teil an die allerersten Zeilen, die Startanweisungen, ein großer Teil an die neuesten Nachrichten, und was übrig bleibt, wird über alles dazwischen verteilt, auch über Deine erste Nachricht, dünner und dünner mit jeder Nachricht, die Du hinzufügst. Deshalb verblasst die Mitte."
+        "script": "An der Kurve siehst Du, was ich zu simulieren versucht habe: Die KI hat, wie wir Menschen, einen Primacy-Effekt. An die Startanweisungen erinnert sie sich gut, und auf den jüngsten Nachrichten liegt viel Aufmerksamkeit, während die Nachrichten in der Mitte relativ wenig bekommen. Das hängt damit zusammen, wie die KI funktioniert: Sie versucht, Wörter vorherzusagen. Dafür schaut sie auf sämtliche bisherigen Wörter und berechnet, welcher Nachricht sie mehr Aufmerksamkeit schenken muss, weil das die Wahrscheinlichkeit beeinflusst, welches Wort als nächstes kommt."
       },
       "a-spike-in-the-middle": {
         "title": "Ein Ausschlag in der Mitte",
         "keywords": "",
-        "script": "Aber ein Detail, das Du immer wieder sagst, behält seinen Anteil und zeigt sich als Ausschlag in der Mitte. Die 60 vegetarischen Gäste kamen wieder und wieder vor, also bleiben sie hell, während das Budget, einmal gesagt, verblasst."
+        "script": "In der Mitte gibt es Ausnahmen: Wo ein Highlight war oder etwas sehr häufig vorkam, bekommt die KI mehr Aufmerksamkeit. Ist aber ein wichtiges Detail, zum Beispiel das Budget von 30.000 Euro, in einer Nachricht mit wenig Aufmerksamkeit vergraben, ignoriert die KI es nicht, sie schenkt ihm nur nicht genug Aufmerksamkeit für die Vorhersage des nächsten Wortes. Dann fängt sie an zu halluzinieren und denkt sich etwas aus, das Sinn ergibt. Das erklärt die Halluzination in langen Gesprächen."
       },
       "smart-zone-and-dumb-zone": {
         "title": "Smart Zone und Dumb Zone",
         "keywords": "",
-        "script": "Irgendwann wird die Mitte zu dünn, um ihr zu trauen. Vor dieser Linie ist die KI in der Smart Zone, dahinter in der Dumb Zone. Matt Pocock setzt die Linie bei 80K Tokens auf einem 200K-Fenster und bei 150K auf einem 1M-Fenster. Das ist seine Zahl, eine Faustregel, und die Namen der Zonen bekommst Du erst jetzt, weil Du schon gesehen hast, wie die Mitte verblasst."
+        "script": "Neben dem Lost-in-the-Middle-Effekt, der vergessenen Mitte, gibt es einen zweiten: Irgendwann hat das Kontextfenster seine Grenze erreicht. Dann macht die KI eine sogenannte Compaction, sie fasst die gesamte bisherige Konversation in einer Nachricht zusammen, um wieder Platz im Fenster zu haben. Diese Zusammenfassung macht die KI selbst, und in jeder Zusammenfassung gehen Details verloren. Das sind die zwei Gründe, die die meisten Halluzinationen erklären, die uns heute betreffen: Aufmerksamkeit in der Mitte geht verloren, oder wichtige Details fallen bei der Zusammenfassung weg. Deshalb ist das Kontextfenster eine Ressource, die wir managen müssen. Aus der Entwicklerwelt kennt man den Tech Educator Matt Pocock. Er sagt, wir sollten das Fenster selbst bei modernen KIs mit sehr viel Spielraum nur zu etwa 20 bis 40 Prozent füllen, weil die Aufmerksamkeit in dieser Zone noch stark auf meinen Nachrichten und Entscheidungen liegt. Alles andere in der Mitte verliert mit der Länge der Konversation Aufmerksamkeit."
       },
       "having-it-is-not-using-it": {
         "title": "Haben ist nicht Nutzen",

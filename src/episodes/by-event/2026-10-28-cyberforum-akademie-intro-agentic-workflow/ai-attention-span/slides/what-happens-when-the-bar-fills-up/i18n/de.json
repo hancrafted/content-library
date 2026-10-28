@@ -84,7 +84,7 @@
       "only-the-very-start-holds": {
         "title": "Nur der allererste Anfang hält",
         "keywords": "",
-        "script": "Jetzt schau, was passiert, wenn dieser Chat wächst. Nur der allererste Anfang des Fensters hält die Aufmerksamkeit der KI: die Startanweisungen. Deine eigene erste Nachricht kommt erst danach, und ihre Aufmerksamkeit fällt sofort ab, also schützt es nicht, im Chat ganz vorn zu stehen, und gleich siehst Du, warum. Eins vorweg: Die Zahlen auf dieser Folie sind zur Veranschaulichung. Ich habe ein 200K-Fenster gewählt und die kleinen Balken, die zeigen, wie stark die KI auf jede Nachricht schaut, um die Form zu zeigen, nicht um etwas zu messen."
+        "script": "Das Kernkonzept: Was passiert, wenn dieser Kontext voll ist? Warum halluziniert die KI dann? Genau darüber können wir bei dieser Thematik von Aufmerksamkeit sprechen. Jetzt schau, was passiert, wenn dieser Chat wächst. Nur der allererste Anfang des Fensters hält die Aufmerksamkeit der KI: die Startanweisungen. Deine eigene erste Nachricht kommt erst danach, und ihre Aufmerksamkeit fällt sofort ab, also schützt es nicht, im Chat ganz vorn zu stehen, und gleich siehst Du, warum. Eins vorweg: Die Zahlen auf dieser Folie sind zur Veranschaulichung. Ich habe ein 200K-Fenster gewählt und die kleinen Balken, die zeigen, wie stark die KI auf jede Nachricht schaut, um die Form zu zeigen, nicht um etwas zu messen."
       },
       "the-newest-stays-sharp": {
         "title": "Das Neueste bleibt scharf",
