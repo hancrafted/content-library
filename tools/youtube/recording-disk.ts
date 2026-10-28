@@ -6,7 +6,7 @@ import path from 'node:path';
 import { episodeFolders, EPISODES_DIR } from '../../src/episodes/lib/episode-folders.ts';
 import { episodeOutline } from '../../src/pipeline/lib/episode-outline.ts';
 import { validateRecording, type Composition, type RecordingFolder, type Violation } from './recording.pure.ts';
-import { RECORDING_FOLDER, type SpokenLanguage } from './transcript.pure.ts';
+import { RECORDING_FOLDER, SPOKEN_LANGUAGES, type SpokenLanguage } from './transcript.pure.ts';
 
 const SLIDE_POOL = 'slide-pool';
 
@@ -18,9 +18,16 @@ export function readRecordingFolder(episodeDir: string): RecordingFolder {
 }
 
 /** The Slides of an Episode folder in composition order: the Title slide, then each Section's Slides. */
-export function compositionOf(episodeDir: string): Composition {
+export function compositionOf(root: string, episodeDir: string): Composition {
   const outline = episodeOutline(episodeDir);
-  return { slides: [...(outline.title === undefined ? [] : [outline.title]), ...outline.sections.flat()] };
+  const titleOf = (language: SpokenLanguage) =>
+    Object.fromEntries(slideRows(root, episodeDir, language).map(({ slug, title }) => [slug, title]));
+  return {
+    slides: [...(outline.title === undefined ? [] : [outline.title]), ...outline.sections.flat()],
+    ...(outline.title === undefined ? {} : { titleSlide: outline.title }),
+    sections: outline.sections,
+    titles: Object.fromEntries(SPOKEN_LANGUAGES.map((language) => [language, titleOf(language)])),
+  };
 }
 
 /** One Slide of the composition with its Section and its title in a language, for the Slide start table. */
@@ -58,14 +65,14 @@ export function slideRows(root: string, episodeDir: string, language: SpokenLang
 }
 
 /** The violations of one Episode folder's Recording folder. */
-export function recordingViolations(episodeDir: string): Violation[] {
+export function recordingViolations(root: string, episodeDir: string): Violation[] {
   const recording = readRecordingFolder(episodeDir);
-  return Object.keys(recording).length === 0 ? [] : validateRecording(compositionOf(episodeDir), recording);
+  return Object.keys(recording).length === 0 ? [] : validateRecording(compositionOf(root, episodeDir), recording);
 }
 
 /** The violations of every Recording folder under `root`, by Episode folder, none for a sound repo. */
 export function allRecordingViolations(root: string): { folder: string; violations: Violation[] }[] {
   return episodeFolders(root)
-    .map(({ folder, dir }) => ({ folder, violations: recordingViolations(dir) }))
+    .map(({ folder, dir }) => ({ folder, violations: recordingViolations(root, dir) }))
     .filter(({ violations }) => violations.length > 0);
 }
