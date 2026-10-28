@@ -1,0 +1,52 @@
+{
+  "title": "Warum · Wie · Was",
+  "caption": "Ersetze das durch eine Zeile, die die drei Spalten einordnet.",
+  "words": {
+    "why": "Warum",
+    "how": "Wie",
+    "what": "Was"
+  },
+  "columns": {
+    "why": {
+      "title": "Warum: ersetze das durch die Aussage",
+      "caption": "<marker>Ersetze das durch das menschliche Problem, das der Short abgeschnitten hat: nachvollziehbar, in einem Satz.</marker>"
+    },
+    "how": {
+      "title": "Wie: ersetze das durch die Aussage",
+      "caption": "<marker>Ersetze das durch den Weg, wie der Explorable es löst, in einem Satz.</marker>"
+    },
+    "what": {
+      "title": "Was: ersetze das durch die Aussage",
+      "caption": "<marker>Ersetze das durch das, womit der Besucher unten spielen kann, in einem Satz.</marker>"
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "Ersetze das durch die Überschrift der Notiz",
+      "description": "Ersetze das durch den Befund, der diese Aussage stützt, mit Verweis auf eine Research question oder eine hochwertige Quelle [1].",
+      "sources": {
+        "replace-with-a-source": {
+          "title": "Ersetze das durch den Titel der Quelle"
+        }
+      }
+    },
+    "how": {
+      "header": "Ersetze das durch die Überschrift der Notiz",
+      "description": "Ersetze das durch den Befund, der diese Aussage stützt, mit Verweis auf eine Research question oder eine hochwertige Quelle [1].",
+      "sources": {
+        "replace-with-a-source": {
+          "title": "Ersetze das durch den Titel der Quelle"
+        }
+      }
+    },
+    "what": {
+      "header": "Ersetze das durch die Überschrift der Notiz",
+      "description": "Ersetze das durch den Befund, der diese Aussage stützt, mit Verweis auf eine Research question oder eine hochwertige Quelle [1].",
+      "sources": {
+        "replace-with-a-source": {
+          "title": "Ersetze das durch den Titel der Quelle"
+        }
+      }
+    }
+  }
+}

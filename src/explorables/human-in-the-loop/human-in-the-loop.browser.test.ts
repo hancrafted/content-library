@@ -15,8 +15,8 @@ import { hydrated } from '../../../tests/browser/hydrated';
 
 const EPISODE = '/explorables/human-in-the-loop/';
 const GERMAN_EPISODE = '/de/explorables/human-in-the-loop/';
-/** The Section anchor sits on the first Slide since the section Slide is opted out (#408). */
-const SLIDE_ANCHOR = 'agentic-workflows';
+/** The `play` Section's anchor sits on its Explorable Slide, since the section Slide is opted out. */
+const SLIDE_ANCHOR = 'play';
 /** Scoped to the Slide: the page shows the Workflow on four Slides, one per Preset. */
 const ROOT = `#${SLIDE_ANCHOR} [data-human-in-the-loop]`;
 const MODAL = '[role="dialog"][data-part="modal"]';

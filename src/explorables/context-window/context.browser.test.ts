@@ -10,7 +10,7 @@ import { settled } from '../../../tests/browser/settled';
  * `data-motion="settled"` (ARCH-003 §5). See docs/features/explorables/context-window.md.
  */
 
-const SLIDES = '/explorables/context-window/#context-window--every-part-and-control';
+const SLIDES = '/explorables/context-window/#play';
 const ATTENTION_SPAN = '/episodes/ai-attention-span/#the-ais-attention-span--attention-is-a-budget';
 const FULL = 'gallery-full';
 const SLIDE_5 = 'slide-5';
