@@ -2,7 +2,7 @@ import { cn } from '@/shared/lib/utils';
 import { useId } from 'react';
 
 /*
- * The readme an Explorable explanation Slide carries about its Preset: what it shows, what to try, what to notice.
+ * The readme an Explorable Slide carries about its Preset: what it shows, what to try, what to notice.
  * A static server part: the Slide hands it every word. Three short items side by side on a wide container, stacked on
  * a narrow one, so the visual below keeps the whole width.
  */

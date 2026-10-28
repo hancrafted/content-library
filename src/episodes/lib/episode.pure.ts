@@ -35,7 +35,7 @@ export interface PlacedListSlide<S> {
   readonly section: string;
   readonly level: SlideLevel;
   /** The section slide this Slide stands in for, when its Section declares none: it names the Section, it is not shown. */
-  readonly opens?: S;
+  readonly standsInFor?: S;
 }
 
 /** Lowercase kebab-case; a single hyphen only, since `--` joins section and slide. */
@@ -68,17 +68,17 @@ export function placeSections<S extends SlideOutline>(
 function placeList<S extends SlideOutline>(list: SectionList<S>): PlacedListSlide<S>[] {
   const [head, ...pages] = list;
   const section = checkedSlug(head.slug);
-  const standsIn = list.sectionSlide === false && pages.length > 0;
-  const [first, ...rest] = standsIn ? pages : [head];
-  return [
-    { id: section, slide: first, section, level: 'h2', ...(standsIn && { opens: head }) },
-    ...(standsIn ? rest : pages).map((slide): PlacedListSlide<S> => ({
-      id: `${section}--${checkedSlug(slide.slug)}`,
-      slide,
-      section,
-      level: 'h3',
-    })),
-  ];
+  const pageSlide = (slide: S): PlacedListSlide<S> => ({
+    id: `${section}--${checkedSlug(slide.slug)}`,
+    slide,
+    section,
+    level: 'h3',
+  });
+  if (list.sectionSlide === false && pages.length > 0) {
+    const [first, ...rest] = pages;
+    return [{ id: section, slide: first, section, level: 'h2', standsInFor: head }, ...rest.map(pageSlide)];
+  }
+  return [{ id: section, slide: head, section, level: 'h2' }, ...pages.map(pageSlide)];
 }
 
 function assertUniqueSlideSlugs(slugs: readonly string[]): void {
@@ -97,5 +97,5 @@ function assertUniqueSlideSlugs(slugs: readonly string[]): void {
  */
 export function sectionOf<S extends SlideOutline>(sections: readonly SectionList<S>[], anchor: string): S | undefined {
   const placed = placeSections(sections).find((section) => section.some(({ id }) => id === anchor));
-  return placed?.[0].opens ?? placed?.[0].slide;
+  return placed?.[0].standsInFor ?? placed?.[0].slide;
 }

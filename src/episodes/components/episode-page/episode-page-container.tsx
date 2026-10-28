@@ -21,6 +21,7 @@ import { contextDrawerInput } from './context-drawer-input';
 import {
   eyebrowsOf,
   INSET_CLASSES,
+  slideSizeOf,
   sourceFolderOf,
   TOC_RESERVE_CLASS,
   tocSectionsOf,
@@ -67,7 +68,7 @@ function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; pa
         <SlideWrapper
           key={slide.slug}
           id={slide.id}
-          size={slide.level === 'h2' && !slide.withoutSectionSlide ? 'section' : 'page'}
+          size={slideSizeOf(slide)}
           mode={page.mode}
           header={headerOf(slide, page)}
         >
@@ -199,7 +200,7 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 
 interface EpisodePageContainerProps {
   locale: Locale;
-  /** The page's ref (an Episode or a Template) as the store served it: its id is `data-episode`, its folder the token editor's source. */
+  /** The page's ref (an Episode, a Template or an Explorable page) as the store served it: its id is `data-episode`, its folder the token editor's source. */
   page: ComposedPage;
   episode: EpisodeComposition;
   /** The Episode's Video in this locale, from the content store; none for a Template or before upload. */

@@ -1,4 +1,5 @@
 import type { TagId } from '@/content-store/schemas/fields';
+import type { ResourceKind } from './resource-index.pure';
 
 /*
  * The Resources overview's filter (design-ADR 0019, mirroring the Events overview's): a search over title,
@@ -62,8 +63,8 @@ export function resourceTagChoices(
 /** A chip for each kind at least one Resource has, in the closed order, named by `names`, with how many have it. */
 export function resourceKindChoices(
   cards: readonly FilterableResource[],
-  kinds: readonly string[],
-  names: Readonly<Record<string, string>>,
+  kinds: readonly ResourceKind[],
+  names: Readonly<Record<ResourceKind, string>>,
 ): ResourceChoice[] {
   return kinds.flatMap((id) => {
     const count = cards.filter((card) => card.kind === id).length;

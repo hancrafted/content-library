@@ -3,7 +3,7 @@ import { violations } from './axe';
 
 /*
  * The browser lane (`npm run test:browser`): axe-core over the landing page and the three
- * workshop Episodes and the two Explorable explanation pages (every Context Preset), light and dark, against the built export served by Playwright's `webServer`. Serious and critical
+ * workshop Episodes and the two Explorable pages (every Context Preset), light and dark, against the built export served by Playwright's `webServer`. Serious and critical
  * violations fail; moderate and minor ones are only printed.
  */
 

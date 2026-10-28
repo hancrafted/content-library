@@ -5,6 +5,8 @@ status: accepted
 
 # Content data model
 
+Amended by #404 (terminology and paths): "Explorable explanation" is now **Explorable**, and the `EXPLORABLE_EXPLANATION` entity of the model is the Explorable. The old Resource record kind is now the **Template** (types `episode-template` and `master-slide`), and **Resource** is the umbrella for every public, listed item (GLOSSARY). In decision 12, `episodes/resources/<slug>/` is now `episodes/templates/<slug>/` for Templates and `episodes/explorable-pages/<slug>/` for Explorable pages, whose record kind is its own. Read the body below with those terms and paths.
+
 The site described a workshop as a Workshop: one record listing public Episode slugs. It could not hold what was presented at an Event, so an Event recording had nowhere to live; nothing stopped a page meant for attendees from reaching the sitemap; and the four authoring pages sat in the Episode registry, indexed, as if a viewer watched them. This record fixes the content model for horizons 1 and 2 of `docs/steering/product-vision.md`, without the evidence layer, and the delivery contract the Tuesday epic implements.
 
 Settled live with Han on 2026-10-25, in ticket _Delivery contract: Event, Playlist, routes and visibility_ and a grill of this record (map _Content data model and product vision_). The enforceable part lives in the Archgate ADR FE-013 _Content store_; what each unit is for, per Audience, lives in `docs/steering/product-requirements.md`.

@@ -120,15 +120,15 @@ function playlistRefusals(
   ];
 }
 
-/** The cross-record refusals over sound records, in the order kinds are listed, with the Events' own from `serve`. */
 /** The refusals of the kinds served by slug, each checked against its composition folder. */
-function kindRefusals(content: ParsedContent): string[] {
+function slugKindRefusals(content: ParsedContent): string[] {
   return [
     ...templateRefusals(content.templates, content.templateCompositions),
     ...explorablePageRefusals(content.explorablePages, content.explorablePageCompositions, content.explorables),
   ];
 }
 
+/** The cross-record refusals over sound records, in the order kinds are listed, with the Events' own from `serve`. */
 function crossRecordRefusals(content: ParsedContent, unserved: readonly string[]): string[] {
   const { episodes, events, playlists, featured } = content;
   const presented = new Set(events.map((event) => event.playlist));
@@ -151,7 +151,7 @@ function crossRecordRefusals(content: ParsedContent, unserved: readonly string[]
     ...unserved,
     ...uniqueness('Playlist', playlistIds, 'id'),
     ...playlists.flatMap((playlist) => playlistRefusals(playlist, byId, presenters(playlist))),
-    ...kindRefusals(content),
+    ...slugKindRefusals(content),
     ...(featured === undefined ? [] : featuredRefusals(featured, byId)),
   ];
 }
@@ -217,7 +217,7 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
   const templates = parseAll({ kind: 'Template', key: 'slug', schema: templateSchema }, input.templates);
   const explorablePages = parseAll(
     { kind: 'Explorable page', key: 'slug', schema: explorablePageSchema },
-    input.explorablePages ?? [],
+    input.explorablePages,
   );
   return {
     content: {
@@ -227,8 +227,8 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
       templates: templates.parsed,
       templateCompositions: input.templateCompositions,
       explorablePages: explorablePages.parsed,
-      explorablePageCompositions: input.explorablePageCompositions ?? [],
-      explorables: input.explorables ?? [],
+      explorablePageCompositions: input.explorablePageCompositions,
+      explorables: input.explorables,
       ...(input.featured === undefined ? {} : { featured: input.featured }),
     },
     refused: [

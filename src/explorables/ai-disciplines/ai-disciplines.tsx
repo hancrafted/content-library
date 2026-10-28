@@ -7,7 +7,7 @@ import type { AiDisciplinesPresetId, WordsOverride } from './ai-disciplines.type
 import type { Discipline } from './scene-frames.pure';
 
 /*
- * The disciplines timeline, an Explorable explanation: Prompting, Agents, Workflows and the Factory on one language
+ * The disciplines timeline, an Explorable: Prompting, Agents, Workflows and the Factory on one language
  * model, each with the scale it compares to, the interface it reaches the model through and a scene that plays it. A
  * Slide names a Preset and may override any word (FE-012); the client parent is the one interactive leaf.
  */

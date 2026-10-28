@@ -124,11 +124,10 @@ export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
 
 /**
  * A Section that declares it has no section slide (FE-002): list it as usual, its section slide first, which stays
- * authored for the Section's title and slug but is not shown. The first page Slide takes the Section's anchor.
+ * authored for the Section's title and slug but is not shown. The first page Slide takes the Section's anchor. The
+ * one implementation is `markWithoutSectionSlide` (`@/episodes/lib/episode.pure`); this is it, typed to the Slides.
  */
-export function withoutSectionSlide(section: readonly [TitledSlide, ...Slide[]]): Section {
-  return markWithoutSectionSlide(section) as Section;
-}
+export const withoutSectionSlide = markWithoutSectionSlide as (section: readonly [TitledSlide, ...Slide[]]) => Section;
 
 /** An Episode's own text, from `i18n/<locale>.json` in its folder: the Title slide's and the page metadata's. */
 export interface EpisodeMessages {

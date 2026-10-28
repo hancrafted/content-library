@@ -61,6 +61,9 @@ const SOUND = {
   playlists: [PLAYLIST],
   templates: [],
   templateCompositions: [],
+  explorablePages: [],
+  explorablePageCompositions: [],
+  explorables: [],
 };
 
 describe('success cases', () => {
@@ -451,6 +454,9 @@ describe('failure cases', () => {
       playlists: [PLAYLIST, curated],
       templates: [],
       templateCompositions: [],
+      explorablePages: [],
+      explorablePageCompositions: [],
+      explorables: [],
     };
     const expected =
       'Playlist curated: episodes lists the unlisted Episode "beta", but no Event presents this public Playlist';
@@ -600,6 +606,9 @@ describe('failure cases', () => {
       playlists: [ours, theirs],
       templates: [],
       templateCompositions: [],
+      explorablePages: [],
+      explorablePageCompositions: [],
+      explorables: [],
     };
     const expected = `Playlist cyberforum: episodes lists "${COPY_ID}", a copy Event ${AXEL} owns, but Event 2026-10-28-cyberforum presents this Playlist`;
     // ACT
@@ -810,6 +819,9 @@ describe('edge cases', () => {
       playlists: [atAxel],
       templates: [],
       templateCompositions: [],
+      explorablePages: [],
+      explorablePageCompositions: [],
+      explorables: [],
     };
     const expected = {
       episodes: [
@@ -839,6 +851,9 @@ describe('edge cases', () => {
       playlists: [playlist],
       templates: [],
       templateCompositions: [],
+      explorablePages: [],
+      explorablePageCompositions: [],
+      explorables: [],
     };
     const expected = [
       {

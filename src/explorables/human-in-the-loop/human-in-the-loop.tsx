@@ -6,7 +6,7 @@ import { WORKFLOW_IDS, hashFor, uiWords, workflowFor, type WorkflowId, type Work
 import type { Level, View } from './workflow-state.pure';
 
 /*
- * The human-in-the-loop workflow, an Explorable explanation. A Slide names a Workflow by id and its own words; the Workflow, the
+ * The human-in-the-loop workflow, an Explorable. A Slide names a Workflow by id and its own words; the Workflow, the
  * prompts and the labels come from the YAML pairs of this folder at build time (FE-012), and a Slide may override any
  * word key by key. The interactive parent is the one client leaf.
  */

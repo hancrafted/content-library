@@ -26,11 +26,11 @@ export interface ContentInput {
   readonly templateCompositions: readonly string[];
   /**
    * The Explorable page records, the slugs of their composition folders and the slugs of the Explorables
-   * (`src/explorables/<slug>/`) they are checked against; each defaults to none.
+   * (`src/explorables/<slug>/`) they are checked against: all are always given.
    */
-  readonly explorablePages?: readonly unknown[];
-  readonly explorablePageCompositions?: readonly string[];
-  readonly explorables?: readonly string[];
+  readonly explorablePages: readonly unknown[];
+  readonly explorablePageCompositions: readonly string[];
+  readonly explorables: readonly string[];
   /** The Featured slots by Episode id, checked against the Episodes when given (`./featured.ts`). */
   readonly featured?: readonly string[];
 }

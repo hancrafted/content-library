@@ -1,6 +1,6 @@
 import type { Plugin } from 'vitest/config';
 
-// An Explorable explanation's data files, a Claude Code `.jsonl` log and a `.yml` config, are imported as text and parsed at
+// An Explorable's data files, a Claude Code `.jsonl` log and a `.yml` config, are imported as text and parsed at
 // build time. `next.config.ts` loads them with Turbopack's `raw` rule; this plugin does the same for the vitest lanes.
 const RAW_TEXT = /\.(?:jsonl|yml)$/;
 

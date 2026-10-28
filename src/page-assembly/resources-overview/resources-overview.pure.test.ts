@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { ResourceKind } from './resource-index.pure';
 import {
   matchingResources,
   NO_SELECTION,
@@ -45,7 +46,13 @@ const TEMPLATE = resource('episode-template', 'episode-template', {
 });
 const ALL: readonly FilterableResource[] = [CONTEXT, HITL, TEMPLATE];
 
-const NAMES = { 'episode-template': 'Templates', 'master-slide': 'Masters' };
+const NAMES: Record<ResourceKind, string> = {
+  episode: 'Episodes',
+  event: 'Events',
+  'explorable-page': 'Explorables',
+  'episode-template': 'Templates',
+  'master-slide': 'Masters',
+};
 const slugs = (set: ReadonlySet<string>) => [...set];
 
 describe('success cases', () => {

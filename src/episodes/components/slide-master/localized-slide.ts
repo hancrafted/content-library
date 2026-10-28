@@ -211,10 +211,9 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
   return slide.content(kit);
 }
 
-function sectionNameOf(namer: Slide, locale: Locale, standsIn: boolean) {
-  const { title } = textOf(namer, ownTranslator(namer.messages[locale], locale), locale);
-  return { title: requireTitle(namer.slug, title), ...(standsIn && { withoutSectionSlide: true as const }) };
-}
+/** The title a Section takes from the Slide that names it: its section slide, or the one it declares it has not. */
+const sectionTitleOf = (namer: Slide, locale: Locale) =>
+  requireTitle(namer.slug, textOf(namer, ownTranslator(namer.messages[locale], locale), locale).title);
 
 /**
  * One placed Slide of an Episode, localized: its text, and its Scene rendered
@@ -223,7 +222,7 @@ function sectionNameOf(namer: Slide, locale: Locale, standsIn: boolean) {
  * Episode fails `next dev` and the static build alike.
  */
 export function localizeSlide(
-  { id, slide, section, level, opens }: PlacedListSlide<Slide>,
+  { id, slide, section, level, standsInFor }: PlacedListSlide<Slide>,
   episode: EpisodeContext,
 ): LocalizedSlide {
   const { locale } = episode;
@@ -246,5 +245,6 @@ export function localizeSlide(
     : undefined;
   const placed = { id, section, ...text, ...(header && { header }), content: slide.content(kit) };
   if (level === 'h3') return { ...placed, level };
-  return { ...placed, level, ...sectionNameOf(opens ?? slide, locale, opens !== undefined) };
+  const title = sectionTitleOf(standsInFor ?? slide, locale);
+  return { ...placed, level, title, ...(standsInFor && { withoutSectionSlide: true as const }) };
 }

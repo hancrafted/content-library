@@ -31,13 +31,13 @@ export interface ExplorablePageParams {
   readonly slug: ExplorablePageSlug;
 }
 
-/** An Explorable page the overview lists: its page and its record's Tags. */
+/** An Explorable page `/explorables/` and `/resources/` list: its page and its record's Tags. */
 export interface ListedExplorablePage {
   readonly page: PageOf<'explorable-page'>;
   readonly tags: ExplorablePage['tags'];
 }
 
-/** A Template the overview lists: its page, its record's type, Tags and slug. */
+/** A Template `/resources/` lists: its page, whose ref carries its type and slug, and its record's Tags. */
 export interface ListedTemplate {
   readonly page: PageOf<'template'>;
   readonly tags: Template['tags'];
@@ -61,7 +61,7 @@ export type EventEpisodePage = PageOf<'event-episode'> & { readonly presented: P
 export interface PageCatalogue {
   /**
    * Every page, each once, with its treatment: the site's own lists, each Episode's own page (public or not), each
-   * Template page, each Event, then each Episode under its Event. Only a page whose treatment says `exported` is built;
+   * Explorable page, each Template page, each Event, then each Episode under its Event. Only a page whose treatment says `exported` is built;
    * the sitemap keeps this order.
    */
   readonly pages: readonly TreatedPage[];
@@ -98,7 +98,7 @@ export interface PageCatalogue {
   readonly listedEpisodes: () => readonly LoadedEpisode[];
   /** The Events `/events/` lists, in record order: those whose Playlist is public. */
   readonly listedEvents: () => readonly ServedEvent[];
-  /** The Explorable pages `/explorables/` lists, in record order: those whose record says `public`. */
+  /** The Explorable pages `/explorables/` and `/resources/` list, in record order: those whose record says `public`. */
   readonly listedExplorablePages: () => readonly ListedExplorablePage[];
   /** The Templates `/resources/` lists, in record order: those whose record says `public`. */
   readonly listedTemplates: () => readonly ListedTemplate[];

@@ -3,7 +3,7 @@ import { hydrated } from '../../../tests/browser/hydrated';
 import { settled } from '../../../tests/browser/settled';
 
 /*
- * The browser seam of Context (`npm run test:browser`, local only until the nightly lands): the Explorable explanations page's
+ * The browser seam of Context (`npm run test:browser`, local only until the nightly lands): the Context window Explorable page's
  * "Every part and control" Slide (`gallery-full`) in the built export, and Slide 5 on the AI attention span Episode.
  * Only the behaviours the user corrected after looking at them are pinned here, each titled in the user's words; the
  * logic under them lives in the `*.pure.test.ts` files beside the parts. Every wait is a retrying assertion or

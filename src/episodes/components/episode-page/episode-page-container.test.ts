@@ -1,9 +1,25 @@
-import { episode, slide, type Section, type Slide, type TitledSlide } from '@/episodes/components/slide-master/slide';
+import { explorablePageRef } from '@/content-store/catalogue/episode-id.pure';
+import { EXPLORABLE_PAGE_SLUGS } from '@/content-store/catalogue/record-routes';
+import {
+  episode,
+  slide,
+  withoutSectionSlide,
+  type Section,
+  type Slide,
+  type TitledSlide,
+} from '@/episodes/components/slide-master/slide';
 import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
+import { compositionOf } from '@/episodes/lib/registry';
 import { DRAWER_BESIDE_ATTR } from '@/shared/lib/context-drawer.pure';
 import { describe, expect, it } from 'vitest';
 import { TALK_DOCKED_ATTR, tocReserveRem } from '../../lib/talk-dock.pure';
-import { INSET_CLASSES, TOC_COLLAPSED_ATTR, TOC_RESERVE_CLASS, tocSectionsOf } from './episode-page-container.pure';
+import {
+  INSET_CLASSES,
+  slideSizeOf,
+  TOC_COLLAPSED_ATTR,
+  TOC_RESERVE_CLASS,
+  tocSectionsOf,
+} from './episode-page-container.pure';
 import { recordContent } from './record-content';
 
 /*
@@ -134,6 +150,75 @@ describe('success cases', () => {
     const owned = { section: toc.unlisted, item: toc.items[0].unlisted };
     // ASSERT
     expect(owned).toEqual(expected);
+  });
+
+  /*
+   * A Section declares it has no section slide with a property on its array, which a spread, a `map` or a `slice` drops.
+   * The flag must survive each place the container walks a Section: the placement, the localized Slide, the table of
+   * contents and the Slide wrapper's size.
+   */
+  describe('a Section without a section slide', () => {
+    const tour = () =>
+      withoutSectionSlide([titled('tour', 'Tour', 1), titled('first', 'First', 2), untitled('second', 3)]);
+
+    it("stands its first page Slide in at the Section's anchor, flagged, and no other Slide", async () => {
+      // ARRANGE
+      const expected = [
+        { id: 'tour', level: 'h2', title: 'Tour', flagged: true },
+        { id: 'tour--second', level: 'h3', title: undefined, flagged: false },
+      ];
+      // ACT
+      const slides = (await slidesOf([tour()])).map(({ id, level, title, withoutSectionSlide: flag }) => ({
+        id,
+        level,
+        title,
+        flagged: flag === true,
+      }));
+      // ASSERT
+      expect(slides).toEqual(expected);
+    });
+
+    it("keeps the Section's table-of-contents entry and anchor, titled in the Section's own words", async () => {
+      // ARRANGE
+      const slides = await slidesOf([tour()]);
+      const expected = [{ id: 'tour', title: 'Tour' }];
+      // ACT
+      const toc = tocSectionsOf(slides).map(({ id, title }) => ({ id, title }));
+      // ASSERT
+      expect(toc).toEqual(expected);
+    });
+
+    it('gives the Slide that stands in the page size and a shown section slide the section size', async () => {
+      // ARRANGE
+      const slides = await slidesOf([tour(), [titled('plain', 'Plain', 1)]]);
+      const expected = ['page', 'page', 'section'];
+      // ACT
+      const sizes = slides.map(slideSizeOf);
+      // ASSERT
+      expect(sizes).toEqual(expected);
+    });
+
+    it.each(EXPLORABLE_PAGE_SLUGS)(
+      'survives on the real Explorable page %s: every Section keeps its entry and flag',
+      async (slug) => {
+        // ARRANGE
+        const composition = compositionOf(explorablePageRef(slug));
+        const declared = composition.sections.filter((section) => section.sectionSlide === false);
+        // ACT
+        const content = await recordContent(composition, 'en', {
+          translatorOf,
+          id: slug,
+          route: `/explorables/${slug}`,
+        });
+        const flagged = content.slides.filter((entry) => entry.withoutSectionSlide === true);
+        const toc = tocSectionsOf(content.slides);
+        // ASSERT
+        expect({ flagged: flagged.length, entries: toc.length }).toEqual({
+          flagged: declared.length,
+          entries: composition.sections.length,
+        });
+      },
+    );
   });
 });
 

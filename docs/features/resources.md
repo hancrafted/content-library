@@ -6,7 +6,7 @@ stale_after: 2027-04-28T00:00:00Z
 
 # Resources
 
-Read before changing the header's Learn menu, the Resource index or the `/resources/` overview. Terms: `GLOSSARY.md` (Resource, Resource index, Template). Decision record: `docs/adr/0019-resources-overview.md`. Spec: #404; what #404 has not built yet is marked "planned, #404".
+Read before changing the header's Learn menu, the Resource index or the `/resources/` overview. Terms: `GLOSSARY.md` (Resource, Resource index, Template). Decision record: `docs/adr/0019-resources-overview.md`. Spec: #404.
 
 A **Resource** is every public, listed item: an Episode, an Event, an Explorable page, an Episode template or a Master slide.
 
@@ -36,4 +36,4 @@ A projection over the page catalogue's lists, never stored: `resourceIndex()` in
 
 ## Today
 
-The Template record kind (#412) is `src/content-store/templates/` with compositions in `src/episodes/templates/`; `npm run registry` regenerates `template-registry.generated.ts`. The three Explorable pages live at `/explorables/` (`docs/features/explorables/README.md`). The Learn menu is planned, #404.
+The Template record kind (#412) is `src/content-store/templates/` with compositions in `src/episodes/templates/`; `npm run registry` regenerates `template-registry.generated.ts`. The three Explorable pages live at `/explorables/` (`docs/features/explorables/README.md`). The Learn menu and the Resource index are built (#404, #413).
