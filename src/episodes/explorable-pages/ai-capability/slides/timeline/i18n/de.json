@@ -5,11 +5,11 @@
     "heading": "Lies mich",
     "labels": {
       "shows": "Was es zeigt",
-      "tryit": "Was Sie ausprobieren",
-      "notice": "Worauf Sie achten"
+      "tryit": "Was Du ausprobierst",
+      "notice": "Worauf Du achtest"
     },
     "shows": "Vier Stufen auf einem Sprachmodell, jede mit ihrer Karte, einer Szene und ihrer Leitung zum Modell. Die Werkzeugleiste blendet Zeilen ein, die dieselbe Zeitleiste aus anderen Blickwinkeln erzählen: womit jede Stufe vergleichbar ist, ihre Produktivitätsobergrenze und die Diskrepanz zwischen der Nutzung der meisten Menschen und den Erwartungen der Führungskräfte.",
-    "tryit": "Schalten Sie Obergrenze ein, dann Diskrepanz. Fahren Sie mit der Maus auf eine Stufe, um ihre Szene abzuspielen; klicken Sie eine Karte oder das Modellband für Definition und Quelle. Auf dem Handy wischen Sie von Stufe zu Stufe.",
+    "tryit": "Schalte Obergrenze ein, dann Diskrepanz. Fahr mit der Maus auf eine Stufe, um ihre Szene abzuspielen; klick eine Karte oder das Modellband für Definition und Quelle. Auf dem Handy wischst Du von Stufe zu Stufe.",
     "notice": "Die behaupteten Obergrenzen sind Hypothesen; die gemessene Zeile darunter sagt, was Studien fanden, und für Workflows und Factory gibt es noch keine Studie. Das 20×-Versprechen liegt weit rechts davon, wo die meisten arbeiten."
   },
   "notes": {
