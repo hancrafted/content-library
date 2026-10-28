@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { episodeRef, resourceRef } from './episode-id.pure';
+import { episodeRef, templateRef } from './episode-id.pure';
 import type { PageRef } from './record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from './visibility.pure';
 
@@ -21,10 +21,10 @@ const PUBLISHED_PUBLIC: PageFacts = { visibility: 'public', status: 'published' 
 const PUBLISHED_UNLISTED: PageFacts = { visibility: 'unlisted', status: 'published' };
 
 const EPISODE_PAGE: PageRef = { kind: 'episode', episode: episodeRef('ai-attention-span') };
-const RESOURCE_PAGE: PageRef = {
-  kind: 'resource',
+const TEMPLATE_PAGE: PageRef = {
+  kind: 'template',
   type: 'master-slide',
-  resource: resourceRef('timelines'),
+  template: templateRef('timelines'),
 };
 const EVENT_PAGE: PageRef = { kind: 'event', event: EVENT };
 const EVENT_EPISODE_PAGE: PageRef = { kind: 'event-episode', event: EVENT, episode: episodeRef('ai-attention-span') };
@@ -40,7 +40,7 @@ const SELF_INDEXED: PageTreatment = { exported: true, inSitemap: true, index: tr
 const NEEDS_FACTS: [string, PageRef][] = [
   ['an Episode page', EPISODE_PAGE],
   ['an Event page', EVENT_PAGE],
-  ['a Resource page', RESOURCE_PAGE],
+  ['a Template page', TEMPLATE_PAGE],
   ['an Episode under an Event', EVENT_EPISODE_PAGE],
 ];
 
@@ -63,8 +63,8 @@ const TABLE: [string, PageRef, PageFacts, PageTreatment][] = [
   ],
   ['an upcoming Episode under an Event', EVENT_EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, HIDDEN],
   ['an upcoming Episode', EPISODE_PAGE, { visibility: 'public', status: 'upcoming' }, ANNOUNCED],
-  ['a public Resource page', RESOURCE_PAGE, { visibility: 'public' }, LISTED],
-  ['an unlisted Resource page', RESOURCE_PAGE, { visibility: 'unlisted' }, HIDDEN],
+  ['a public Template page', TEMPLATE_PAGE, { visibility: 'public' }, LISTED],
+  ['an unlisted Template page', TEMPLATE_PAGE, { visibility: 'unlisted' }, HIDDEN],
   ["a public, published Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_PUBLIC, copy: true }, SELF_INDEXED],
   ["an unlisted Event's copy under its Event", COPY_PAGE, { ...PUBLISHED_UNLISTED, copy: true }, HIDDEN],
   [

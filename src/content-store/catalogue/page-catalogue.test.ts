@@ -1,7 +1,7 @@
-import { pageLocales, resourceRoute, routeOf, type PageRef } from '@/content-store/catalogue/record-routes';
+import { pageLocales, routeOf, templateRoute, type PageRef } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../store';
-import { episodeRef, resourceRef } from './episode-id.pure';
+import { episodeRef, templateRef } from './episode-id.pure';
 import { catalogueOf, episodesPathParamsOf, eventEpisodeParamsOf } from './page-catalogue';
 
 /*
@@ -53,8 +53,8 @@ const RECORDS = {
   episodes: [own(PUBLIC), copy(UNLISTED)],
   events: [EVENT],
   playlists: [PLAYLIST],
-  resources: [],
-  resourceCompositions: [],
+  templates: [],
+  templateCompositions: [],
 };
 
 const HIDDEN = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' } as const;
@@ -176,7 +176,7 @@ describe('success cases', () => {
       '/explorables/human-in-the-loop',
     ];
     // ACT
-    const pages = catalogueOf(loadContent(WITH_RESOURCES)).pages.filter(
+    const pages = catalogueOf(loadContent(WITH_TEMPLATES)).pages.filter(
       ({ page }) => page.kind === 'explorable-page' || page.kind === 'explorables',
     );
     // ASSERT
@@ -186,7 +186,7 @@ describe('success cases', () => {
 
   it('builds each Explorable page in both locales, and lists it for the overview', () => {
     // ARRANGE
-    const catalogue = catalogueOf(loadContent(WITH_RESOURCES));
+    const catalogue = catalogueOf(loadContent(WITH_TEMPLATES));
     // ACT
     const params = catalogue.explorablePageParams();
     const page = catalogue.explorablePageAt({ slug: 'context-window' });
@@ -207,20 +207,20 @@ describe('success cases', () => {
       '/master-slides/grids',
     ];
     // ACT
-    const pages = catalogueOf(loadContent(WITH_RESOURCES)).pages.filter(
-      ({ page }) => page.kind === 'resource' || page.kind === 'resources',
+    const pages = catalogueOf(loadContent(WITH_TEMPLATES)).pages.filter(
+      ({ page }) => page.kind === 'template' || page.kind === 'resources',
     );
     // ASSERT
     expect(pages.map(({ page }) => routeOf(page)).sort()).toEqual([...expected].sort());
     expect(pages.every(({ treatment }) => treatment.inSitemap && treatment.index && treatment.exported)).toBe(true);
   });
 
-  it('builds each Resource page in both locales', () => {
+  it('builds each Template page in both locales', () => {
     // ARRANGE
     const expected = 8;
     // ACT
-    const count = catalogueOf(loadContent(WITH_RESOURCES))
-      .pages.filter(({ page }) => page.kind === 'resource')
+    const count = catalogueOf(loadContent(WITH_TEMPLATES))
+      .pages.filter(({ page }) => page.kind === 'template')
       .flatMap(({ page }) => pageLocales(page)).length;
     // ASSERT
     expect(count).toBe(expected);
@@ -230,7 +230,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = '/master-slides/grids';
     // ACT
-    const route = resourceRoute('master-slide', 'grids');
+    const route = templateRoute('master-slide', 'grids');
     // ASSERT
     expect(route).toBe(expected);
   });
@@ -287,35 +287,35 @@ describe('failure cases', () => {
     expect(pages).toEqual([undefined, undefined, undefined, undefined]);
   });
 
-  it('lists only public Resources on the overview and indexes no unlisted one', () => {
+  it('lists only public Templates on the overview and indexes no unlisted one', () => {
     // ARRANGE
-    const hidden = RESOURCE_RECORDS.map((record) =>
+    const hidden = TEMPLATE_RECORDS.map((record) =>
       record.slug === 'grids' ? { ...record, visibility: 'unlisted' } : record,
     );
-    const records = { ...WITH_RESOURCES, resources: hidden };
+    const records = { ...WITH_TEMPLATES, templates: hidden };
     // ACT
     const catalogue = catalogueOf(loadContent(records));
     const treatment = catalogue.treatmentOf({
-      kind: 'resource',
+      kind: 'template',
       type: 'master-slide',
-      resource: resourceRef('grids' as never),
+      template: templateRef('grids' as never),
     });
     // ASSERT
-    expect(catalogue.listedResources().map(({ page }) => page.resource.slug)).not.toContain('grids');
+    expect(catalogue.listedTemplates().map(({ page }) => page.template.slug)).not.toContain('grids');
     expect(treatment).toMatchObject({ exported: true, index: false, inSitemap: false });
   });
 
-  it('pairs each listed Resource with its own record Tags, whatever its place among the records', () => {
+  it('pairs each listed Template with its own record Tags, whatever its place among the records', () => {
     // ARRANGE
     const TAGS = ['workflow', 'cost', 'sales'] as const;
-    const records = RESOURCE_RECORDS.map((record, at) => ({
+    const records = TEMPLATE_RECORDS.map((record, at) => ({
       ...record,
       tags: [TAGS[at % TAGS.length]],
       visibility: at === 1 ? 'unlisted' : 'public',
     }));
     // ACT
-    const catalogue = catalogueOf(loadContent({ ...WITH_RESOURCES, resources: records }));
-    const listed = catalogue.listedResources().map(({ page, tags }) => [page.resource.slug, tags]);
+    const catalogue = catalogueOf(loadContent({ ...WITH_TEMPLATES, templates: records }));
+    const listed = catalogue.listedTemplates().map(({ page, tags }) => [page.template.slug, tags]);
     // ASSERT
     expect(listed).toEqual(records.filter((_, at) => at !== 1).map(({ slug, tags }) => [slug, tags]));
   });
@@ -373,16 +373,16 @@ describe('edge cases', () => {
 
   it('gives each type its own static params and resolves a slug only under its own type', () => {
     // ARRANGE
-    const catalogue = catalogueOf(loadContent(WITH_RESOURCES));
+    const catalogue = catalogueOf(loadContent(WITH_TEMPLATES));
     // ACT
     const seen = {
-      masterSlides: catalogue.resourceParams('master-slide'),
-      right: catalogue.resourcePageAt('master-slide', { resource: 'grids' })?.resource.slug,
-      wrongType: catalogue.resourcePageAt('episode-template', { resource: 'grids' }),
+      masterSlides: catalogue.templateParams('master-slide'),
+      right: catalogue.templatePageAt('master-slide', { template: 'grids' })?.template.slug,
+      wrongType: catalogue.templatePageAt('episode-template', { template: 'grids' }),
     };
     // ASSERT
     expect(seen).toEqual({
-      masterSlides: [{ resource: 'timelines' }, { resource: 'grids' }],
+      masterSlides: [{ template: 'timelines' }, { template: 'grids' }],
       right: 'grids',
       wrongType: undefined,
     });
@@ -390,8 +390,8 @@ describe('edge cases', () => {
 });
 
 /*
- * Resources (design-ADR 0019): a Resource's page is built from its record, at `/<type plural>/<slug>/`, public and
- * indexed. The slugs are registered ones: only a composition folder gives a Resource a page.
+ * Templates (design-ADR 0019): a Template's page is built from its record, at `/<type plural>/<slug>/`, public and
+ * indexed. The slugs are registered ones: only a composition folder gives a Template a page.
  */
 const SIX = {
   'episode-template': 'episode-template',
@@ -399,7 +399,7 @@ const SIX = {
   timelines: 'master-slide',
   grids: 'master-slide',
 } as const;
-const RESOURCE_RECORDS = Object.entries(SIX).map(([slug, type]) => ({
+const TEMPLATE_RECORDS = Object.entries(SIX).map(([slug, type]) => ({
   slug,
   type,
   tags: ['workflow'],
@@ -411,10 +411,10 @@ const EXPLORABLE_PAGE_RECORDS = THREE_EXPLORABLE_PAGES.map((slug) => ({
   tags: ['workflow'],
   visibility: 'public',
 }));
-const WITH_RESOURCES = {
+const WITH_TEMPLATES = {
   ...RECORDS,
-  resources: RESOURCE_RECORDS,
-  resourceCompositions: Object.keys(SIX),
+  templates: TEMPLATE_RECORDS,
+  templateCompositions: Object.keys(SIX),
   explorablePages: EXPLORABLE_PAGE_RECORDS,
   explorablePageCompositions: THREE_EXPLORABLE_PAGES,
   explorables: [...THREE_EXPLORABLE_PAGES, 'speech-bubble'],

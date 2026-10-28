@@ -15,7 +15,7 @@ Entities and relationships only, never fields: a renamed property never changes 
 
 ```mermaid
 erDiagram
-    %% store: EVENT, PLAYLIST, EPISODE, RESOURCE, EXPLORABLE_PAGE
+    %% store: EVENT, PLAYLIST, EPISODE, TEMPLATE, EXPLORABLE_PAGE
     %% planned: SHARED_SLIDE
 
     AUDIENCE ||--o{ EVENT : "is targeted by"
@@ -29,8 +29,8 @@ erDiagram
     SHARED_SLIDE |o--o{ SLIDE : "promoted from / copied into"
     SLIDE ||--o{ SPEAKER_NOTE_ITEM : carries
     SLIDE }o--o{ EXPLORABLE_EXPLANATION : "shows via Preset"
-    RESOURCE }o--|{ TAG : "carries (first = lead Tag)"
-    RESOURCE ||--|{ SLIDE : "composes, in order"
+    TEMPLATE }o--|{ TAG : "carries (first = lead Tag)"
+    TEMPLATE ||--|{ SLIDE : "composes, in order"
     EXPLORABLE_PAGE }o--|{ TAG : "carries (first = lead Tag)"
     EXPLORABLE_PAGE ||--|{ SLIDE : "composes, in order"
 ```
@@ -60,7 +60,7 @@ Out of the model: Concept, Research question and Source (the evidence layer, its
 ### Records
 
 11. **Every record loads through one content store** that parses each with a Zod schema and applies the cross-record refusals of decisions 2, 4 and 9; pages, routes, sitemap and metadata read records only through it. The rules are FE-013 _Content store_.
-12. **Resources are not Episodes** (amended by _Resources overview_; the Explorable pages left for their own record kind, `EXPLORABLE_PAGE`, a slug that names its primary Explorable, Tags, a visibility and an optional `youtube`, composed from `episodes/explorable-pages/<slug>/`, served at `/explorables/<slug>/`, spec #404): the Episode template and the Workshop template, and the Timelines and Grids Master slides. A Resource is a record of its own, a slug, a type from the closed `RESOURCE_TYPES`, Tags and a visibility, and is composed like an Episode from `episodes/resources/<slug>/`; it is not loaded as an Episode record. Its route is worked out from type and slug, and it is public and indexed.
+12. **Resources are not Episodes** (amended by _Resources overview_; the Explorable pages left for their own record kind, `EXPLORABLE_PAGE`, a slug that names its primary Explorable, Tags, a visibility and an optional `youtube`, composed from `episodes/explorable-pages/<slug>/`, served at `/explorables/<slug>/`, spec #404): the Episode template and the Workshop template, and the Timelines and Grids Master slides. A Resource is a record of its own, a slug, a type from the closed `TEMPLATE_TYPES`, Tags and a visibility, and is composed like an Episode from `episodes/resources/<slug>/`; it is not loaded as an Episode record. Its route is worked out from type and slug, and it is public and indexed.
 13. **`slide-layouts` is deleted.** Its three layouts exist as frame components; the Slide library is the one catalogue of layouts.
 
 ## Routes and visibility

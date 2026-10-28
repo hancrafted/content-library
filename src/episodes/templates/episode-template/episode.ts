@@ -12,7 +12,7 @@ import { whyATemplate } from './slides/why-a-template/slide';
  * Slide is one folder under `slides/`, named after its slug, holding its server
  * entry, client widgets, CSS and its own Translation files. The Episode's own
  * title, caption and description sit in `i18n/`. Copying a Slide in from
- * another Episode is one import and one list entry. A Resource, not an
+ * another Episode is one import and one list entry. A Template, not an
  * Episode: the Slide layouts are the frame components in `slide-master/` and
  * the Slide library.
  *

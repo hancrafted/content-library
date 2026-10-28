@@ -59,8 +59,8 @@ const SOUND = {
   episodes: [own(EPISODE)],
   events: [EVENT],
   playlists: [PLAYLIST],
-  resources: [],
-  resourceCompositions: [],
+  templates: [],
+  templateCompositions: [],
 };
 
 describe('success cases', () => {
@@ -72,7 +72,7 @@ describe('success cases', () => {
       episodes: [loaded],
       events: [{ ...EVENT, playlist: presented }],
       playlists: [{ ...PLAYLIST, episodes: [{ episode: 'alpha' }] }],
-      resources: [],
+      templates: [],
       explorablePages: [],
     };
     // ACT
@@ -177,13 +177,13 @@ describe('success cases', () => {
     },
   );
 
-  it('loads a Resource whose composition folder exists', () => {
+  it('loads a Template whose composition folder exists', () => {
     // ARRANGE
-    const input = { ...RESOURCE_RECORDS, resourceCompositions: ['grids'] };
+    const input = { ...TEMPLATE_RECORDS, templateCompositions: ['grids'] };
     // ACT
     const content = loadContent(input);
     // ASSERT
-    expect(content.resources.map(({ slug }) => slug)).toEqual(['grids']);
+    expect(content.templates.map(({ slug }) => slug)).toEqual(['grids']);
   });
 
   it('serves a repeated Episode at an anchor as a step of its own, the walk stepping over it', () => {
@@ -274,12 +274,12 @@ describe('failure cases', () => {
         events: [{ ...without(EVENT, 'tags'), ...(tags === undefined ? {} : { tags }) }],
       }),
     ],
-    Resource: [
-      'Resource grids',
+    Template: [
+      'Template grids',
       (tags?: unknown) => ({
         ...SOUND,
-        resources: [{ ...without(RESOURCE, 'tags'), ...(tags === undefined ? {} : { tags }) }],
-        resourceCompositions: ['grids'],
+        templates: [{ ...without(TEMPLATE, 'tags'), ...(tags === undefined ? {} : { tags }) }],
+        templateCompositions: ['grids'],
       }),
     ],
   } as const;
@@ -287,10 +287,10 @@ describe('failure cases', () => {
   it.each([
     ['Episode', undefined, 'tags is required, one Tag or more, the first its lead Tag'],
     ['Event', undefined, 'tags is required, one Tag or more, the first its lead Tag'],
-    ['Resource', undefined, 'tags is required, one Tag or more, the first its lead Tag'],
+    ['Template', undefined, 'tags is required, one Tag or more, the first its lead Tag'],
     ['Episode', ['ai'], `tags.0 is "ai", but must be one of ${TAG_LIST}`],
     ['Event', ['ai'], `tags.0 is "ai", but must be one of ${TAG_LIST}`],
-    ['Resource', ['ai'], `tags.0 is "ai", but must be one of ${TAG_LIST}`],
+    ['Template', ['ai'], `tags.0 is "ai", but must be one of ${TAG_LIST}`],
   ] as const)('refuses the Tags of an %s (%j) in the one shared wording', (kind, tags, sentence) => {
     // ARRANGE
     const [record, build] = TAG_RECORDS[kind];
@@ -449,8 +449,8 @@ describe('failure cases', () => {
       episodes: [own(EPISODE), own(unlistedOwn)],
       events: [EVENT],
       playlists: [PLAYLIST, curated],
-      resources: [],
-      resourceCompositions: [],
+      templates: [],
+      templateCompositions: [],
     };
     const expected =
       'Playlist curated: episodes lists the unlisted Episode "beta", but no Event presents this public Playlist';
@@ -598,8 +598,8 @@ describe('failure cases', () => {
       episodes: [own(EPISODE), copy(UNLISTED)],
       events: [EVENT, other],
       playlists: [ours, theirs],
-      resources: [],
-      resourceCompositions: [],
+      templates: [],
+      templateCompositions: [],
     };
     const expected = `Playlist cyberforum: episodes lists "${COPY_ID}", a copy Event ${AXEL} owns, but Event 2026-10-28-cyberforum presents this Playlist`;
     // ACT
@@ -630,7 +630,7 @@ describe('failure cases', () => {
     expect(load).toThrow(expected);
   });
 
-  it.each(['slide-pool', 'resources', 'components', 'lib', 'hooks'])(
+  it.each(['slide-pool', 'templates', 'components', 'lib', 'hooks'])(
     'refuses an Episode whose slug is the reserved folder name %s, naming the Episode',
     (slug) => {
       // ARRANGE
@@ -725,35 +725,35 @@ describe('failure cases', () => {
     for (const sentence of expectedUnlisted) expect(loadUnlisted).toThrow(sentence);
   });
 
-  it('refuses a Resource whose composition folder does not exist', () => {
+  it('refuses a Template whose composition folder does not exist', () => {
     // ARRANGE
-    const input = { ...RESOURCE_RECORDS, resourceCompositions: [] };
+    const input = { ...TEMPLATE_RECORDS, templateCompositions: [] };
     // ACT
     const load = () => loadContent(input);
     // ASSERT
-    expect(load).toThrow('Resource grids: no composition folder src/episodes/resources/grids/ holds its Slides');
+    expect(load).toThrow('Template grids: no composition folder src/episodes/templates/grids/ holds its Slides');
   });
 
-  it('refuses a composition folder that has no Resource record', () => {
+  it('refuses a composition folder that has no Template record', () => {
     // ARRANGE
-    const input = { ...SOUND, resources: [], resourceCompositions: ['grids'] };
+    const input = { ...SOUND, templates: [], templateCompositions: ['grids'] };
     // ACT
     const load = () => loadContent(input);
     // ASSERT
-    expect(load).toThrow('Resource grids: the composition folder src/episodes/resources/grids/ has no record');
+    expect(load).toThrow('Template grids: the composition folder src/episodes/templates/grids/ has no record');
   });
 
-  it('refuses two Resources with one slug, and a Resource of an unknown type, naming the record', () => {
+  it('refuses two Templates with one slug, and a Template of an unknown type, naming the record', () => {
     // ARRANGE
     const input = {
       ...SOUND,
-      resources: [RESOURCE, RESOURCE, { ...RESOURCE, slug: 'odd', type: 'deck' }],
-      resourceCompositions: ['grids', 'odd'],
+      templates: [TEMPLATE, TEMPLATE, { ...TEMPLATE, slug: 'odd', type: 'deck' }],
+      templateCompositions: ['grids', 'odd'],
     };
     // ACT
     const load = () => loadContent(input);
     // ASSERT
-    expect(load).toThrow('Resource odd: type is "deck"');
+    expect(load).toThrow('Template odd: type is "deck"');
   });
 
   it('refuses an Explorable page whose slug names no Explorable, in a sentence naming it', () => {
@@ -787,13 +787,13 @@ describe('failure cases', () => {
     expect(load).toThrow('Explorable page context-window: youtube.en');
   });
 
-  it('refuses a duplicate Resource slug', () => {
+  it('refuses a duplicate Template slug', () => {
     // ARRANGE
-    const input = { ...RESOURCE_RECORDS, resources: [RESOURCE, RESOURCE], resourceCompositions: ['grids'] };
+    const input = { ...TEMPLATE_RECORDS, templates: [TEMPLATE, TEMPLATE], templateCompositions: ['grids'] };
     // ACT
     const load = () => loadContent(input);
     // ASSERT
-    expect(load).toThrow('Resource grids: slug is used by more than one Resource');
+    expect(load).toThrow('Template grids: slug is used by more than one Template');
   });
 });
 
@@ -808,8 +808,8 @@ describe('edge cases', () => {
       episodes: [own(EPISODE), copy(attention)],
       events: [EVENT],
       playlists: [atAxel],
-      resources: [],
-      resourceCompositions: [],
+      templates: [],
+      templateCompositions: [],
     };
     const expected = {
       episodes: [
@@ -837,8 +837,8 @@ describe('edge cases', () => {
       episodes: [own(tokens), own(EPISODE), own(attention)],
       events: [EVENT],
       playlists: [playlist],
-      resources: [],
-      resourceCompositions: [],
+      templates: [],
+      templateCompositions: [],
     };
     const expected = [
       {
@@ -909,8 +909,8 @@ describe('edge cases', () => {
 });
 
 /*
- * Resources (design-ADR 0019): a record and its composition folder go together, and the load throws on either one
+ * Templates (design-ADR 0019): a record and its composition folder go together, and the load throws on either one
  * alone.
  */
-const RESOURCE = { slug: 'grids', type: 'master-slide', tags: ['workflow'], visibility: 'public' } as const;
-const RESOURCE_RECORDS = { ...SOUND, resources: [RESOURCE] };
+const TEMPLATE = { slug: 'grids', type: 'master-slide', tags: ['workflow'], visibility: 'public' } as const;
+const TEMPLATE_RECORDS = { ...SOUND, templates: [TEMPLATE] };

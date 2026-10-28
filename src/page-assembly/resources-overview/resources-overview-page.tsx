@@ -1,6 +1,6 @@
 import { routeOf } from '@/content-store/catalogue/record-routes';
-import { RESOURCE_TYPES, TAG_IDS } from '@/content-store/schemas/fields';
-import { listedResources } from '@/content-store/store';
+import { TAG_IDS, TEMPLATE_TYPES } from '@/content-store/schemas/fields';
+import { listedTemplates } from '@/content-store/store';
 import { compositionOf } from '@/episodes/lib/registry';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
@@ -14,10 +14,10 @@ type OverviewT = Awaited<ReturnType<typeof getTranslations<'resourcesOverview'>>
 /** Every public Resource as a card: its words from its composition, its Tags' names from page assembly. */
 function resourceCards(locale: Locale, t: OverviewT): ResourceCard[] {
   const tagWords = PAGE_WORDS[locale].tags;
-  return listedResources().map(({ page, tags }) => {
-    const { title, description } = compositionOf(page.resource).messages[locale];
+  return listedTemplates().map(({ page, tags }) => {
+    const { title, description } = compositionOf(page.template).messages[locale];
     return {
-      slug: page.resource.slug,
+      slug: page.template.slug,
       route: routeOf(page),
       type: page.type,
       typeLabel: t(`types.${page.type}`),
@@ -61,7 +61,7 @@ export async function ResourcesOverviewPage({ locale }: { locale: Locale }) {
       <ResourceBrowser
         cards={resourceCards(locale, t)}
         vocabulary={TAG_IDS}
-        types={RESOURCE_TYPES}
+        types={TEMPLATE_TYPES}
         locale={locale}
         labels={browserLabels(t)}
       />

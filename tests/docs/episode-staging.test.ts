@@ -69,14 +69,14 @@ function namesEndingIn(folder: string, suffix: string): string[] {
 
 /**
  * What a Dossier `Visual` may name: the frame components in the Slide master
- * (`basic-page-slide.tsx` is `basic-page`), the Master slide Resources' Slide
+ * (`basic-page-slide.tsx` is `basic-page`), the Master slide Templates' Slide
  * folders. A library motion is a CSS module in `slide-shared/motions/`, which
  * a Slide's CSS module may `composes:` from; its name is the file name without
  * `.module.css`. The folder is empty today, so `motions` is too.
  */
 function knownVisuals(): KnownVisuals {
-  const masterSlides = ['timelines', 'grids'].flatMap((resource) =>
-    readdirSync(path.join(ROOT, `src/episodes/resources/${resource}/slides`), { withFileTypes: true })
+  const masterSlides = ['timelines', 'grids'].flatMap((template) =>
+    readdirSync(path.join(ROOT, `src/episodes/templates/${template}/slides`), { withFileTypes: true })
       .filter((entry) => entry.isDirectory())
       .map(({ name }) => name),
   );

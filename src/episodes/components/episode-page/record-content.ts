@@ -34,7 +34,7 @@ export type TranslatorOf = (namespace: string) => Promise<RuntimeTranslator>;
 /** What the page lends the Episode: the site-wide translator, and the route it is served at when not its own. */
 export interface PageContext {
   readonly translatorOf: TranslatorOf;
-  /** The page's Episode id, or the Resource's slug: an Event's copy is named by its id, never by its slug alone. */
+  /** The page's Episode id, or the Template's slug: an Event's copy is named by its id, never by its slug alone. */
   readonly id: ComposedId;
   /** The logical path the page is served at, which `slideHref` links on: the Episode's own unless an Event presents it. */
   readonly route?: string;

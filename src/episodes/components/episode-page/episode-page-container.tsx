@@ -199,12 +199,12 @@ const OWN_PAGE: Partial<EpisodeFrame> = {};
 interface EpisodePageContainerProps {
   locale: Locale;
   /**
-   * The Episode the page presents, as the store served its ref, or the Resource it is: its id is what
+   * The Episode the page presents, as the store served its ref, or the Template it is: its id is what
    * `data-episode` names, and its folder the source folder the token editor names.
    */
   page: ComposedPage;
   episode: EpisodeComposition;
-  /** The Episode's Video in this locale, from the content store; none for a Resource or before upload. */
+  /** The Episode's Video in this locale, from the content store; none for a Template or before upload. */
   video?: Video;
   /** Present when an Event presents the Episode at its own URL; absent on `/episodes/<slug>/`. */
   frame?: Partial<EpisodeFrame>;

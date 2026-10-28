@@ -1,4 +1,4 @@
-import { explorablePageRef, matchEpisode, resourceRef } from '@/content-store/catalogue/episode-id.pure';
+import { explorablePageRef, matchEpisode, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import {
   hasPage,
   pageKeyOf,
@@ -7,13 +7,13 @@ import {
   type ExplorablePageSlug,
   type PageOf,
   type PageRef,
-  type ResourceSlug,
+  type TemplateSlug,
 } from '@/content-store/catalogue/record-routes';
 import { pageTreatment, type PageFacts, type PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import type { LoadedEpisode } from '../episode-refusals';
 import type { Content } from '../refusals';
 import type { ExplorablePage } from '../schemas/explorable-page.schema';
-import type { Resource } from '../schemas/resource.schema';
+import type { Template } from '../schemas/template.schema';
 import type { EpisodesPathParams, EventEpisodePage, EventEpisodeParams, PageCatalogue } from './page-catalogue.types';
 
 /*
@@ -65,11 +65,11 @@ function explorablePageOf({ slug }: ExplorablePage): PageOf<'explorable-page'> {
   return { kind: 'explorable-page', explorablePage: explorablePageRef(slug as ExplorablePageSlug) };
 }
 
-/** Each Resource's page, in record order: its type from its record, its slug naming the composition folder. */
-function resourcePageOf({ type, slug }: Resource): PageOf<'resource'> {
-  // Every Resource the store loads is an entry of the generated Resource registry, keyed by its slug (`tsc` holds key
+/** Each Template's page, in record order: its type from its record, its slug naming the composition folder. */
+function templatePageOf({ type, slug }: Template): PageOf<'template'> {
+  // Every Template the store loads is an entry of the generated Template registry, keyed by its slug (`tsc` holds key
   // = slug, and the load refuses a record without a composition folder), so its slug names a composition.
-  return { kind: 'resource', type, resource: resourceRef(slug as ResourceSlug) };
+  return { kind: 'template', type, template: templateRef(slug as TemplateSlug) };
 }
 
 /**
@@ -109,7 +109,7 @@ function entriesIn(content: Content) {
   });
   const episodes = records.filter(({ hasOwnPage }) => hasOwnPage);
   const explorablePages = slugged(content.explorablePages, explorablePageOf);
-  const resources = slugged(content.resources, resourcePageOf);
+  const templates = slugged(content.templates, templatePageOf);
   const events = content.events.map((record) =>
     entryOf({ kind: 'event', event: record.slug } as const, record, { visibility: record.playlist.visibility }),
   );
@@ -120,7 +120,7 @@ function entriesIn(content: Content) {
     ),
     presenting: page,
   }));
-  return { lists, records, episodes, explorablePages, resources, events, underEvents };
+  return { lists, records, episodes, explorablePages, templates, events, underEvents };
 }
 
 /** The params a page under `/episodes/` is built at: an Episode's own page at its slug. */
@@ -138,7 +138,7 @@ type Entries = ReturnType<typeof entriesIn>;
 function routesOf({
   episodes,
   explorablePages,
-  resources,
+  templates,
   events,
   underEvents,
 }: Entries): Omit<PageCatalogue, 'pages' | 'treatmentOf' | `listed${string}`> {
@@ -150,12 +150,12 @@ function routesOf({
     explorablePageParams: () => exported(explorablePages).map(({ page }) => ({ slug: page.explorablePage.slug })),
     explorablePageAt: ({ slug }) =>
       exported(explorablePages).find(({ page }) => page.explorablePage.slug === slug)?.page,
-    resourceParams: (type) =>
-      exported(resources)
+    templateParams: (type) =>
+      exported(templates)
         .filter(({ page }) => page.type === type)
-        .map(({ page }) => ({ resource: page.resource.slug })),
-    resourcePageAt: (type, { resource }) =>
-      exported(resources).find(({ page }) => page.type === type && page.resource.slug === resource)?.page,
+        .map(({ page }) => ({ template: page.template.slug })),
+    templatePageAt: (type, { template }) =>
+      exported(templates).find(({ page }) => page.type === type && page.template.slug === template)?.page,
     eventParams: () => exported(events).map(({ page }) => ({ event: page.event })),
     eventEpisodeParams: () => exported(underEvents).map(({ page }) => eventEpisodeParamsOf(page)),
     eventEpisodePageAt: (params) =>
@@ -169,12 +169,12 @@ function routesOf({
 /** The catalogue of the pages these records give: what the store serves over its own records. */
 export function catalogueOf(content: Content): PageCatalogue {
   const all = entriesIn(content);
-  const { lists, records, episodes, explorablePages, resources, events, underEvents } = all;
+  const { lists, records, episodes, explorablePages, templates, events, underEvents } = all;
   const entries: readonly Entry[] = [
     ...lists,
     ...episodes,
     ...explorablePages,
-    ...resources,
+    ...templates,
     ...events,
     ...underEvents,
   ];
@@ -187,6 +187,6 @@ export function catalogueOf(content: Content): PageCatalogue {
     listedEpisodes: () => listed(records).map(({ record }) => record),
     listedEvents: () => listed(events).map(({ record }) => record),
     listedExplorablePages: () => listed(explorablePages).map(({ page, record }) => ({ page, tags: record.tags })),
-    listedResources: () => listed(resources).map(({ page, record }) => ({ page, tags: record.tags })),
+    listedTemplates: () => listed(templates).map(({ page, record }) => ({ page, tags: record.tags })),
   };
 }

@@ -1,5 +1,5 @@
-import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, isEpisodeId, RESOURCE_SLUGS } from '@/content-store/catalogue/record-routes';
+import { episodeRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, isEpisodeId, TEMPLATE_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes, listEvents } from '@/content-store/store';
 import { headerModeOf } from '@/episodes/components/slide-master/slide';
 import { describe, expect, it } from 'vitest';
@@ -8,7 +8,7 @@ import { compositionOf } from './registry';
 
 /*
  * The one composition lookup (FE-002): the Slides and own text a page renders, by the EpisodeRef of an Episode with a
- * page or the ref of a Resource. What every registered Episode shares: a record under its Episode id carrying its
+ * page or the ref of a Template. What every registered Episode shares: a record under its Episode id carrying its
  * folder's slug, its own text from its folder's `i18n/` (what the Title slide, the page metadata and the landing card
  * read), and Sections each opened by the Slide that names it. Each holds for every Episode the registry holds, so
  * adding or publishing one adds no row here. The one per-Episode fact is the header mode, a deliberate content
@@ -73,11 +73,11 @@ describe('success cases', () => {
     expect(authored).toEqual(expected);
   });
 
-  it.each(RESOURCE_SLUGS)('finds the Resource %s under its own slug', (slug) => {
+  it.each(TEMPLATE_SLUGS)('finds the Template %s under its own slug', (slug) => {
     // ARRANGE
     const expected = slug;
     // ACT
-    const page = compositionOf(resourceRef(slug));
+    const page = compositionOf(templateRef(slug));
     // ASSERT
     expect(page.slug).toBe(expected);
   });
@@ -86,7 +86,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [['hook'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll', 'about-me'], ['orga']];
     // ACT
-    const sections = compositionOf(resourceRef('workshop-template')).sections.map((section) =>
+    const sections = compositionOf(templateRef('workshop-template')).sections.map((section) =>
       section.map(({ slug }) => slug),
     );
     // ASSERT
@@ -136,36 +136,36 @@ describe('failure cases', () => {
     expect(lookup).toThrow(unregistered);
   });
 
-  it('finds no Resource for an Episode slug', () => {
+  it('finds no Template for an Episode slug', () => {
     // ARRANGE
     const episode = 'ai-attention-span';
     // ACT
-    // @ts-expect-error -- an Episode's slug names no Resource
-    const lookup = () => compositionOf(resourceRef(episode));
+    // @ts-expect-error -- an Episode's slug names no Template
+    const lookup = () => compositionOf(templateRef(episode));
     // ASSERT
     expect(lookup).toThrow(episode);
   });
 });
 
 describe('edge cases', () => {
-  it.each(RESOURCE_SLUGS)('keeps the Resource %s out of the Episode registry, so it is no Episode', (slug) => {
+  it.each(TEMPLATE_SLUGS)('keeps the Template %s out of the Episode registry, so it is no Episode', (slug) => {
     // ARRANGE
     const expected = false;
     // ACT
     const valid = isEpisodeId(slug);
-    // @ts-expect-error -- a Resource's slug names no Episode
+    // @ts-expect-error -- a Template's slug names no Episode
     const lookup = () => compositionOf(episodeRef(slug));
     // ASSERT
     expect(valid).toBe(expected);
     expect(lookup).toThrow(slug);
   });
 
-  it('finds no Resource for the deleted slide-layouts', () => {
+  it('finds no Template for the deleted slide-layouts', () => {
     // ARRANGE
     const deleted = 'slide-layouts';
     // ACT
-    // @ts-expect-error -- a deleted Resource has no composition
-    const lookup = () => compositionOf(resourceRef(deleted));
+    // @ts-expect-error -- a deleted Template has no composition
+    const lookup = () => compositionOf(templateRef(deleted));
     // ASSERT
     expect(lookup).toThrow(deleted);
   });

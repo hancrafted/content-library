@@ -2,16 +2,16 @@ import {
   episodeRef,
   explorablePageRef,
   folderOf,
-  resourceRef,
+  templateRef,
   type EpisodeRef,
   type ExplorablePageRef,
-  type ResourceRef,
+  type TemplateRef,
 } from '@/content-store/catalogue/episode-id.pure';
 import {
   EXPLORABLE_PAGE_SLUGS,
   hasPage,
-  RESOURCE_SLUGS,
-  type ResourceSlug,
+  TEMPLATE_SLUGS,
+  type TemplateSlug,
 } from '@/content-store/catalogue/record-routes';
 import type { EpisodeStatus } from '@/content-store/schemas/episode.schema';
 import { listEpisodes } from '@/content-store/store';
@@ -30,10 +30,10 @@ import { compositionOf, type ComposedPage } from './registry';
  * Section lists alone, so they cannot differ by locale.
  */
 
-/** A page whose anchors may be bound: an Episode, a Resource or an Explorable page. */
-type Page = EpisodeRef | ResourceRef | ExplorablePageRef;
+/** A page whose anchors may be bound: an Episode, a Template or an Explorable page. */
+type Page = EpisodeRef | TemplateRef | ExplorablePageRef;
 
-/** The snapshot in the page's folder: an Event's copy's under its Event, a Resource's under `resources/`. */
+/** The snapshot in the page's folder: an Event's copy's under its Event, a Template's under `templates/`. */
 function snapshotPath(page: Page): string {
   return path.join(__dirname, '..', folderOf(page), 'published-anchors.json');
 }
@@ -69,14 +69,14 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
 
 /**
  * The pages whose anchors are bound: every Episode with a page but an upcoming one, whose anchors bind when it is
- * published (docs/features/episode-publishing.md), and every Resource, which has no status and is always bound.
+ * published (docs/features/episode-publishing.md), and every Template, which has no status and is always bound.
  */
 function boundPages(
   episodes: readonly { ref: EpisodeRef; status: EpisodeStatus }[],
-  tooling: readonly ResourceSlug[],
+  tooling: readonly TemplateSlug[],
 ): ComposedPage[] {
   const bound = episodes.flatMap(({ ref, status }) => (status !== 'upcoming' && hasPage(ref) ? [ref] : []));
-  return [...tooling.map(resourceRef), ...EXPLORABLE_PAGE_SLUGS.map(explorablePageRef), ...bound];
+  return [...tooling.map(templateRef), ...EXPLORABLE_PAGE_SLUGS.map(explorablePageRef), ...bound];
 }
 
 /** The anchors the walk produces for one page, as the Episode page does: its record's Section lists. */
@@ -87,7 +87,7 @@ function producedAnchors(page: ComposedPage): string[] {
 describe('success cases', () => {
   it('still produces every published anchor of every registered Episode', async () => {
     // ARRANGE
-    const cases = boundPages(listEpisodes(), RESOURCE_SLUGS);
+    const cases = boundPages(listEpisodes(), TEMPLATE_SLUGS);
     // ACT
     const lostPerEpisode = await Promise.all(
       cases.map(async (page) => {
@@ -103,7 +103,7 @@ describe('success cases', () => {
   it('keeps each published-anchors.json a sorted array of unique strings', async () => {
     // ARRANGE
     const snapshots = await Promise.all(
-      boundPages(listEpisodes(), RESOURCE_SLUGS).map((page) => publishedAnchorsOf(page, producedAnchors(page))),
+      boundPages(listEpisodes(), TEMPLATE_SLUGS).map((page) => publishedAnchorsOf(page, producedAnchors(page))),
     );
     // ACT
     const unsorted = snapshots.filter((anchors) => anchors.join() !== [...new Set(anchors)].sort().join());

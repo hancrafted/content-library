@@ -1,5 +1,5 @@
-import { folderOf, resourceRef } from '@/content-store/catalogue/episode-id.pure';
-import { hasPage, RESOURCE_SLUGS } from '@/content-store/catalogue/record-routes';
+import { folderOf, templateRef } from '@/content-store/catalogue/episode-id.pure';
+import { hasPage, TEMPLATE_SLUGS } from '@/content-store/catalogue/record-routes';
 import { listEpisodes } from '@/content-store/store';
 import { EPISODES_DIR } from '@/episodes/lib/episode-folders';
 import { existsSync, readdirSync } from 'node:fs';
@@ -13,7 +13,7 @@ import { compositionOf, type ComposedPage } from './registry';
  * `<ep>/sections/<section-slug>.ts`, exporting that Section's ordered Slide
  * list, section slide first. The record imports them into `sections` in order,
  * so each Section job edits its own module and no two jobs edit one line. Which pages keep such a folder is read
- * from the folders of every page the registry composes, an Event's copies included: an Episode or Resource with
+ * from the folders of every page the registry composes, an Event's copies included: an Episode or Template with
  * `sections/`.
  */
 
@@ -45,7 +45,7 @@ async function markerExports(page: ComposedPage, name: string): Promise<unknown[
  */
 const MARKED: readonly ComposedPage[] = [
   ...listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])),
-  ...RESOURCE_SLUGS.map(resourceRef),
+  ...TEMPLATE_SLUGS.map(templateRef),
 ].filter((page) => existsSync(markersDir(page)));
 
 describe('success cases', () => {

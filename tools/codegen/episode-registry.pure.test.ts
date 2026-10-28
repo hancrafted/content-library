@@ -23,9 +23,9 @@ const UPCOMING: EpisodeFolder = {
   folder: 'specs-an-agent-can-follow',
   files: ['episode-metadata.ts'],
 };
-const RESOURCE: EpisodeFolder = {
+const TEMPLATE: EpisodeFolder = {
   id: 'workshop-template',
-  folder: 'resources/workshop-template',
+  folder: 'templates/workshop-template',
   files: ['episode.ts', 'i18n', 'slides'],
   episodeSource: 'export const workshopTemplate = episode({\n',
 };
@@ -99,24 +99,24 @@ describe('success cases', () => {
     expect(seen.compositions).toContain(expected.compositions);
   });
 
-  it('lists each Resource by its slug beside the Episode ids, so routes need no hand-written list', () => {
+  it('lists each Template by its slug beside the Episode ids, so routes need no hand-written list', () => {
     // ARRANGE
-    const expected = "export const RESOURCE_SLUGS = ['workshop-template'] as const;";
+    const expected = "export const TEMPLATE_SLUGS = ['workshop-template'] as const;";
     // ACT
-    const ids = fileAt([RESOURCE, WITH_PAGE], REGISTRY_PATHS.ids);
+    const ids = fileAt([TEMPLATE, WITH_PAGE], REGISTRY_PATHS.ids);
     // ASSERT
     expect(ids).toContain(expected);
   });
 
-  it('composes each Resource from its folder under resources/, keyed by its slug and typed against it', () => {
+  it('composes each Template from its folder under templates/, keyed by its slug and typed against it', () => {
     // ARRANGE
     const expected = [
-      "import { workshopTemplate } from '@/episodes/resources/workshop-template/episode';",
-      'export const RESOURCE_PAGES: { readonly [S in ResourceSlug]: EpisodeComposition & { readonly slug: S } } = {',
+      "import { workshopTemplate } from '@/episodes/templates/workshop-template/episode';",
+      'export const TEMPLATE_PAGES: { readonly [S in TemplateSlug]: EpisodeComposition & { readonly slug: S } } = {',
       "  'workshop-template': workshopTemplate,",
     ];
     // ACT
-    const compositions = fileAt([RESOURCE, WITH_PAGE], REGISTRY_PATHS.compositions);
+    const compositions = fileAt([TEMPLATE, WITH_PAGE], REGISTRY_PATHS.compositions);
     // ASSERT
     expected.forEach((line) => expect(compositions).toContain(line));
   });
@@ -155,24 +155,24 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it("leaves a Resource out of the Episode ids and the store's metadata: a Resource is no Episode", () => {
+  it("leaves a Template out of the Episode ids and the store's metadata: a Template is no Episode", () => {
     // ARRANGE
     const expected = "export const EPISODE_IDS = ['ai-token-economy'] as const;";
     // ACT
-    const ids = fileAt([RESOURCE, WITH_PAGE], REGISTRY_PATHS.ids);
-    const metadata = fileAt([RESOURCE, WITH_PAGE], REGISTRY_PATHS.metadata);
+    const ids = fileAt([TEMPLATE, WITH_PAGE], REGISTRY_PATHS.ids);
+    const metadata = fileAt([TEMPLATE, WITH_PAGE], REGISTRY_PATHS.metadata);
     // ASSERT
     expect(ids).toContain(expected);
-    expect(metadata).not.toContain(RESOURCE.id);
+    expect(metadata).not.toContain(TEMPLATE.id);
   });
 
-  it('refuses a Resource whose episode.ts exports no record, naming its folder under resources/', () => {
+  it('refuses a Template whose episode.ts exports no record, naming its folder under templates/', () => {
     // ARRANGE
-    const broken: EpisodeFolder = { ...RESOURCE, episodeSource: 'export const notes = [];\n' };
+    const broken: EpisodeFolder = { ...TEMPLATE, episodeSource: 'export const notes = [];\n' };
     // ACT
     const generate = () => episodeRegistryFiles([broken]);
     // ASSERT
-    expect(generate).toThrow(/resources\/workshop-template\/episode\.ts/);
+    expect(generate).toThrow(/templates\/workshop-template\/episode\.ts/);
   });
 
   it("lists a folder holding only its metadata as an upcoming Episode: in the store's registry, with no page", () => {

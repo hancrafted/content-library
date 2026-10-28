@@ -1,12 +1,12 @@
-// Post-build check of the Resources (design-ADR 0019): four public, indexed pages in both locales, each an Episode-shaped
+// Post-build check of the Templates (design-ADR 0019): four public, indexed pages in both locales, each an Episode-shaped
 // page; the overview that lists them and the nav that leads there; no Episode list shows one; the old tooling URLs
 // are gone or redirected; `slide-layouts` stays deleted.
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { resourceRoute, type ResourceSlug } from '../../src/content-store/catalogue/record-routes';
-import type { ResourceType } from '../../src/content-store/schemas/fields';
+import { templateRoute, type TemplateSlug } from '../../src/content-store/catalogue/record-routes';
+import type { TemplateType } from '../../src/content-store/schemas/fields';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, exportedPage, OUT_DIR, redirectRules, resolveBasePath } from './exported-pages';
@@ -14,15 +14,15 @@ import { exportedFile, exportedPage, OUT_DIR, redirectRules, resolveBasePath } f
 const basePath = resolveBasePath();
 
 /** The four Resources and their URLs, written out: the handoff's table is the expectation. */
-const RESOURCES: readonly { slug: ResourceSlug; type: ResourceType; path: string }[] = [
+const TEMPLATES: readonly { slug: TemplateSlug; type: TemplateType; path: string }[] = [
   { slug: 'episode-template', type: 'episode-template', path: '/episode-templates/episode-template' },
   { slug: 'workshop-template', type: 'episode-template', path: '/episode-templates/workshop-template' },
   { slug: 'timelines', type: 'master-slide', path: '/master-slides/timelines' },
   { slug: 'grids', type: 'master-slide', path: '/master-slides/grids' },
 ];
 
-const PAGES = RESOURCES.flatMap((resource) =>
-  LOCALES.map((locale) => ({ ...resource, locale, url: localizePath(resource.path, locale) })),
+const PAGES = TEMPLATES.flatMap((template) =>
+  LOCALES.map((locale) => ({ ...template, locale, url: localizePath(template.path, locale) })),
 );
 
 /** Every exported HTML file, relative to `out/`. */
@@ -34,7 +34,7 @@ function htmlFiles(dir = OUT_DIR): string[] {
   });
 }
 
-describe.each(PAGES)('the Resource page $url', ({ type, slug, path, url }) => {
+describe.each(PAGES)('the Template page $url', ({ type, slug, path, url }) => {
   it('renders its Slides in the Episode container, with a title slide', () => {
     // ARRANGE
     const $ = exportedPage(url);
@@ -60,17 +60,17 @@ describe.each(PAGES)('the Resource page $url', ({ type, slug, path, url }) => {
     // ARRANGE
     const expected = path;
     // ACT
-    const route = resourceRoute(type, slug);
+    const route = templateRoute(type, slug);
     // ASSERT
     expect(route).toBe(expected);
   });
 });
 
 describe('the Resources overview', () => {
-  it.each(LOCALES)('lists the four Resources, each linking to its page, for %s', (locale) => {
+  it.each(LOCALES)('lists the four Templates, each linking to its page, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.resources, locale));
-    const expected = RESOURCES.map(({ path }) => `${basePath}${localizePath(path, locale)}/`).sort();
+    const expected = TEMPLATES.map(({ path }) => `${basePath}${localizePath(path, locale)}/`).sort();
     // ACT
     const hrefs = $('[data-resource-card] h2 a')
       .toArray()
@@ -101,7 +101,7 @@ describe('the Resources overview', () => {
   it.each(LOCALES)('is indexed and in the sitemap with the four pages, for %s', (locale) => {
     // ARRANGE
     const sitemap = readFileSync(join(OUT_DIR, 'sitemap.xml'), 'utf8');
-    const urls = [ROUTES.resources, ...RESOURCES.map(({ path }) => path)].map(
+    const urls = [ROUTES.resources, ...TEMPLATES.map(({ path }) => path)].map(
       (route) => `${localizePath(route, locale)}/`,
     );
     // ACT
@@ -123,14 +123,14 @@ describe('the Resources overview', () => {
 });
 
 describe('Episode lists', () => {
-  it.each(LOCALES)('show no Resource as an Episode card for %s', (locale) => {
+  it.each(LOCALES)('show no Template as an Episode card for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.episodes, locale));
     // ACT
     const cards = $('a[href*="/episodes/"]')
       .toArray()
       .map((link) => $(link).attr('href') ?? '')
-      .filter((href) => RESOURCES.some(({ slug }) => href.includes(`/episodes/${slug}/`)));
+      .filter((href) => TEMPLATES.some(({ slug }) => href.includes(`/episodes/${slug}/`)));
     // ASSERT
     expect(cards).toEqual([]);
   });

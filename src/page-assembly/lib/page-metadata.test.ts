@@ -1,4 +1,4 @@
-import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import type { PageTreatment } from '@/content-store/catalogue/visibility.pure';
 import { describe, expect, it } from 'vitest';
 import { pageMetadata, siteMetadata } from './page-metadata.pure';
@@ -178,12 +178,12 @@ describe('success cases', () => {
     expect(metadata.twitter?.images).toEqual(['/og-image.png']);
   });
 
-  it('keeps an unlisted Resource out of search, canonical at its own URL under its type', () => {
+  it('keeps an unlisted Template out of search, canonical at its own URL under its type', () => {
     // ARRANGE
     const expected = { canonical: '/de/master-slides/timelines', robots: { index: false } };
     // ACT
     const metadata = pageMetadata(
-      { kind: 'resource', type: 'master-slide', resource: resourceRef('timelines') },
+      { kind: 'template', type: 'master-slide', template: templateRef('timelines') },
       'de',
       { ...COPY, treatment: HIDDEN },
     );

@@ -28,7 +28,7 @@ _Done when_ `npm run verify` passes. Prettier formats the YAML too.
 
 ## 5. Slide text
 
-`src/episodes/resources/human-in-the-loop/slides/another-use-case/i18n/{en,de}.json` describes vacation's stages in words. Update it when vacation's shape changes; a new Workflow that a Slide describes gets the same treatment.
+`src/episodes/explorable-pages/human-in-the-loop/slides/another-use-case/i18n/{en,de}.json` describes vacation's stages in words. Update it when vacation's shape changes; a new Workflow that a Slide describes gets the same treatment.
 
 _Done when_ every stage the text names exists in the file, in both languages.
 

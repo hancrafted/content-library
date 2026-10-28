@@ -2,7 +2,7 @@ import type { LoadedEpisode } from './episode-refusals';
 import type { Event } from './schemas/event.schema';
 import type { ExplorablePage } from './schemas/explorable-page.schema';
 import type { Playlist } from './schemas/playlist.schema';
-import type { Resource } from './schemas/resource.schema';
+import type { Template } from './schemas/template.schema';
 import type { ServedEvent } from './served-event';
 
 /*
@@ -21,9 +21,9 @@ export interface ContentInput {
   readonly episodes: readonly EpisodeEntry[];
   readonly events: readonly unknown[];
   readonly playlists: readonly unknown[];
-  /** The Resource records, and the slugs of the composition folders they are checked against: both are always given. */
-  readonly resources: readonly unknown[];
-  readonly resourceCompositions: readonly string[];
+  /** The Template records, and the slugs of the composition folders they are checked against: both are always given. */
+  readonly templates: readonly unknown[];
+  readonly templateCompositions: readonly string[];
   /**
    * The Explorable page records, the slugs of their composition folders and the slugs of the Explorables
    * (`src/explorables/<slug>/`) they are checked against; each defaults to none.
@@ -40,8 +40,8 @@ export interface ParsedContent {
   readonly episodes: readonly LoadedEpisode[];
   readonly events: readonly Event[];
   readonly playlists: readonly Playlist[];
-  readonly resources: readonly Resource[];
-  readonly resourceCompositions: readonly string[];
+  readonly templates: readonly Template[];
+  readonly templateCompositions: readonly string[];
   readonly explorablePages: readonly ExplorablePage[];
   readonly explorablePageCompositions: readonly string[];
   readonly explorables: readonly string[];
@@ -53,8 +53,8 @@ export interface Content {
   readonly episodes: readonly LoadedEpisode[];
   readonly events: readonly ServedEvent[];
   readonly playlists: readonly Playlist[];
-  readonly resources: readonly Resource[];
+  readonly templates: readonly Template[];
   readonly explorablePages: readonly ExplorablePage[];
 }
 
-export type Kind = 'Episode' | 'Event' | 'Playlist' | 'Resource' | 'Explorable page';
+export type Kind = 'Episode' | 'Event' | 'Playlist' | 'Template' | 'Explorable page';

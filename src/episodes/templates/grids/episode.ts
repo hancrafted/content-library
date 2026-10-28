@@ -14,8 +14,8 @@ import { gridBento } from './slides/grid-bento/slide';
 import { grids as gridsSection } from './slides/grids/slide';
 
 /*
- * The Grids Master slide, a Resource (design-ADR 0019): a Title slide, then one Section of reusable Slide layouts,
- * 1x1 through 3x3 and a bento. Each Slide is one folder under `slides/`; the Resource's title, caption and description
+ * The Grids Master slide, a Template (design-ADR 0019): a Title slide, then one Section of reusable Slide layouts,
+ * 1x1 through 3x3 and a bento. Each Slide is one folder under `slides/`; the Template's title, caption and description
  * sit in `i18n/`. The frame layouts they compose are in `src/episodes/components/slide-master/`.
  */
 export const grids = episode({

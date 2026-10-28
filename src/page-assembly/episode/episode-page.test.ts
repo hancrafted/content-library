@@ -88,7 +88,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('builds no page under /episodes/ for a Resource slug, which lives under its type', () => {
+  it('builds no page under /episodes/ for a Template slug, which lives under its type', () => {
     // ARRANGE
     const expected = notFoundError();
     // ACT
