@@ -103,7 +103,7 @@ describe('success cases', () => {
       ['orga'],
       ['check-in-1'],
       ['check-in-2'],
-      ['check-in-3'],
+      ['check-in-3', 'disciplines-recap'],
     ];
     // ACT
     const sections = compositionOf(
