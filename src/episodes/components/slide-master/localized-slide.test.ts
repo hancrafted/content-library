@@ -5,7 +5,7 @@ import { createElement, Fragment, isValidElement, type ReactElement, type ReactN
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { episodeMinutes, localizeSlide, type EpisodeContext, type LocalizedSlide } from './localized-slide';
-import { episode, slide, type Slide } from './slide';
+import { episode, slide, withoutSectionSlide, type Slide } from './slide';
 import type { RuntimeKit } from './slide-base';
 
 /*
@@ -122,6 +122,26 @@ function headingOf(kit: RuntimeKit): ReactElement<{ as: string; 'data-target': s
 }
 
 describe('success cases', () => {
+  describe('a Section without a section slide', () => {
+    it("stands its first page Slide in at the Section anchor, titled in the Section's own words for the contents", () => {
+      // ARRANGE
+      const sections = [withoutSectionSlide([foundations, whyATemplate, visual])] as const;
+      const expected = [
+        { id: 'foundations', level: 'h2', title: 'Grundlagen', withoutSectionSlide: true },
+        { id: 'foundations--visual', level: 'h3', title: undefined, withoutSectionSlide: undefined },
+      ];
+      // ACT
+      const slides = localized('de', sections).map(({ id, level, title, ...rest }) => ({
+        id,
+        level,
+        title,
+        withoutSectionSlide: 'withoutSectionSlide' in rest ? rest.withoutSectionSlide : undefined,
+      }));
+      // ASSERT
+      expect(slides).toEqual(expected);
+    });
+  });
+
   it('places each Slide under the id, Section and level its position gives it, titled from its own file', () => {
     // ARRANGE
     const expected = [

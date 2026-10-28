@@ -1,4 +1,4 @@
-import type { SectionList } from '@/episodes/lib/episode.pure';
+import { withoutSectionSlide as markWithoutSectionSlide, type SectionList } from '@/episodes/lib/episode.pure';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { createTranslator, MessageKeys, NestedKeyOf } from 'next-intl';
@@ -121,6 +121,14 @@ export function slide<
 
 /** A Section of Slides: its section slide, which names it, then its page Slides. */
 export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
+
+/**
+ * A Section that declares it has no section slide (FE-002): list it as usual, its section slide first, which stays
+ * authored for the Section's title and slug but is not shown. The first page Slide takes the Section's anchor.
+ */
+export function withoutSectionSlide(section: readonly [TitledSlide, ...Slide[]]): Section {
+  return markWithoutSectionSlide(section) as Section;
+}
 
 /** An Episode's own text, from `i18n/<locale>.json` in its folder: the Title slide's and the page metadata's. */
 export interface EpisodeMessages {

@@ -78,3 +78,9 @@ export function sharedHeaderOf(input: Parameters<typeof captionNoteOf>[0]): Slid
   const captionNote = captionNoteOf(input);
   return text && { ...text, ...(captionNote && { captionNote }) };
 }
+
+/** The title of the Slide that names a Section; a section slide always has one. */
+export function requireTitle(slug: string, title: string | undefined): string {
+  if (title === undefined) throw new Error(`Section "${slug}" opens with a Slide that has no title.`);
+  return title;
+}

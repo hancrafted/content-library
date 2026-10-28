@@ -1,6 +1,6 @@
-import type { Section } from '@/episodes/components/slide-master/slide';
+import { withoutSectionSlide, type Section } from '@/episodes/components/slide-master/slide';
 import { aiDisciplinesPresets } from '../slides/ai-disciplines/slide';
 import { timeline } from '../slides/timeline/slide';
 
-/** The Section "Presets": the section slide, then the timeline Preset with its readme on the Slide. */
-export const aiDisciplinesSection: Section = [aiDisciplinesPresets, timeline];
+/** The Section "Presets": its section slide kept for the title but not shown, then the timeline Preset with its readme on the Slide. */
+export const aiDisciplinesSection: Section = withoutSectionSlide([aiDisciplinesPresets, timeline]);

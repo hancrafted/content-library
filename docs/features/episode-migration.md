@@ -17,7 +17,7 @@ Each step ends on a completion criterion. Stop at a step only when its criterion
 List the source's Sections and Slides, in order.
 
 - Each prototype beat is one Slide; each group of beats is one Section.
-- The first Slide of a Section is its section slide: it names the Section (a title and caption). Add a section slide only where a source heading has no beat of its own:
+- The first Slide of a Section is its section slide: it names the Section (a title and caption). A Section can declare none with `withoutSectionSlide([...])`; see `docs/features/explorables/README.md`. Add a section slide only where a source heading has no beat of its own:
   - Bare heading over beats (`<h2>Cost</h2>`, then three beats): add a section slide from the heading; the three beats become page slides.
   - Heading inside a beat (a full-height frame titled "Cost", with its own prose or visual): that beat is the section slide; add nothing.
 - The Episode's own title and caption are the Title slide, not a Slide.
