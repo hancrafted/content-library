@@ -22,8 +22,6 @@ export interface TryPromptWords {
   readonly commandLabel: string;
   readonly copyPrompt: string;
   readonly copyCommand: string;
-  readonly openChatgpt: string;
-  readonly newTab: string;
   /** The name of a slot's upload button, and of its add-entry button; each falls back to the slot's label. */
   readonly upload?: string;
   readonly addEntry?: string;

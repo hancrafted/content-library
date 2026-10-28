@@ -22,7 +22,7 @@ ui:
   stepContextInfo: 'The prompt below needs results from previous tasks or extra input. They are filled in here if you pasted the result in an earlier step. Each field already holds an example or your earlier result; replace it with your own text if you like.'
   stepDo: 'Run the prompt in an AI chat, then paste the result back'
   stepDoInfo: "Run the prompt in a new conversation and paste the result back here. Don't close the conversation."
-  stepCheck: 'Check the result'
+  stepCheck: 'Check the result (optional)'
   stepCheckInfo: 'Review the result in a new conversation. If it fails, paste the feedback into the conversation of the previous step and update the result. Repeat until all checks pass.'
   copyExplanation: 'Copy explanation prompt'
   copyExplanationTip: 'Paste this prompt into a chat: the AI explains the prompt, why it is built this way and what you could improve, then offers to guide you through the exercise.'
@@ -70,7 +70,6 @@ ui:
   commandLabel: Command
   copyPrompt: Copy prompt
   copyCommand: Copy command
-  openChatgpt: Open in ChatGPT
   sectionAbout: About this step
   sectionCriteria: What good looks like
   sectionExample: Example result
@@ -90,3 +89,12 @@ ui:
   slotUpload: Upload a markdown file
   slotAdd: Add another entry
   newTab: opens in a new tab
+  openAIChats: Open an AI chat
+  openAIChatTip: 'Open an empty {chat} chat in a new tab, then paste the prompt'
+  openAIButtons:
+    - label: ChatGPT
+      url: https://chatgpt.com/
+      icon: chatgpt
+    - label: Gemini
+      url: https://gemini.google.com/app
+      icon: gemini

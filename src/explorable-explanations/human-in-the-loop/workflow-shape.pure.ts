@@ -1,3 +1,4 @@
+import { CHAT_MARK_NAMES } from '../../shared/components/core-components/chat-icons/chat-marks.pure.ts';
 import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
 
 /*
@@ -7,7 +8,8 @@ import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
  */
 
 type Spec =
-  | { readonly t: 'str' | 'int' | 'bool' | 'strs' }
+  | { readonly t: 'str' | 'int' | 'bool' | 'strs' | 'https' }
+  | { readonly t: 'nullOr'; readonly of: Spec }
   | { readonly t: 'enum'; readonly of: readonly string[] }
   | { readonly t: 'list'; readonly of: Spec; readonly min: number }
   | { readonly t: 'rec'; readonly of: Spec; readonly keys?: readonly string[] }
@@ -33,6 +35,9 @@ const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sa
   'free',
 ]);
 const limit = obj({ full: int, demo: int });
+const chatButton = obj({ label: str, url: { t: 'https' }, icon: { t: 'nullOr', of: enumOf(CHAT_MARK_NAMES) } }, [
+  'icon',
+]);
 const task = obj(
   {
     id: str,
@@ -47,9 +52,10 @@ const task = obj(
     do: obj(Object.fromEntries(RUNTIMES.map((runtime) => [runtime, list(section, 1)]))),
     review: obj({ slots: list(slot, 1), checks: list(str, 1), instructions: str }, ['instructions']),
     limits: { t: 'rec', of: limit },
+    openAIButtons: list(chatButton, 1),
     details: obj({ why: str, example: strs, goodLooksLike: list(str, 1), techniques: ids }, ['techniques']),
   },
-  ['summary', 'needs', 'output', 'review', 'instructions', 'limits'],
+  ['summary', 'needs', 'output', 'review', 'instructions', 'limits', 'openAIButtons'],
 );
 const stage = obj(
   {
@@ -145,7 +151,14 @@ function scalarProblems(value: unknown, spec: Spec, path: string): string[] {
   return SCALAR[spec.t](value) ? [] : [`${path} must be ${word}.`];
 }
 
+function httpsProblems(value: unknown, path: string): string[] {
+  if (!isText(value)) return [`${path} must be text.`];
+  return String(value).startsWith('https://') ? [] : [`${path} "${String(value)}" must start with https://.`];
+}
+
 function walk(value: unknown, spec: Spec, path: string): string[] {
+  if (spec.t === 'https') return httpsProblems(value, path);
+  if (spec.t === 'nullOr') return value === null ? [] : walk(value, spec.of, path);
   const composite = { obj: objectProblems, list: listProblems, rec: recordProblems, enum: enumProblems } as Record<
     string,
     Walk

@@ -142,6 +142,21 @@ function ending(file: File, over: object = {}): void {
 }
 
 describe('success cases', () => {
+  it('loads the AI chat buttons a job offers, each a label, an https link and an icon or none', () => {
+    // ARRANGE
+    const buttons = [
+      { label: 'ChatGPT', url: 'https://chatgpt.com/', icon: 'chatgpt' },
+      { label: 'Gemini', url: 'https://gemini.google.com/app', icon: 'gemini' },
+      { label: 'Other', url: 'https://example.com/chat', icon: null },
+    ];
+    const change = (file: File) => void Object.assign(research(file), { openAIButtons: buttons });
+    // ACT
+    const result = load(change);
+    const read = 'file' in result ? result.file.stages[1]?.jobs[0]?.openAIButtons : problemsOf(result);
+    // ASSERT
+    expect(read).toEqual(buttons);
+  });
+
   it('loads a job that hands on an output without a review, so only the gates need a check', () => {
     // ARRANGE
     const change = (file: File) => void delete (file.stages[0]!.jobs[0] as { review?: unknown }).review;
@@ -332,6 +347,20 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('rejects a chat button whose link is not https, whose icon is unknown, and an empty list', () => {
+    // ARRANGE
+    const buttons = (list: object[]) => (file: File) => void Object.assign(research(file), { openAIButtons: list });
+    const insecure = buttons([{ label: 'Chat', url: 'http://example.com/', icon: null }]);
+    const unknownIcon = buttons([{ label: 'Chat', url: 'https://example.com/', icon: 'sparkles' }]);
+    const where = 'stages[1].jobs[0].openAIButtons';
+    // ACT
+    const [link, icon, empty] = [insecure, unknownIcon, buttons([])].map((change) => problemsOf(load(change)));
+    // ASSERT
+    expect(link).toContain(`${where}[0].url "http://example.com/" must start with https://.`);
+    expect(icon).toContain(`${where}[0].icon is "sparkles", which is not one of chatgpt, gemini.`);
+    expect(empty).toContain(`${where} needs at least 1 entries.`);
+  });
+
   it('reports a description that is not a text', () => {
     // ARRANGE
     const result = load((file) => Object.assign(file, { description: 3 }));

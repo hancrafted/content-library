@@ -22,7 +22,7 @@ ui:
   stepContextInfo: 'Der Prompt unten braucht Ergebnisse früherer Aufgaben oder zusätzliche Eingaben. Sie werden hier eingetragen, wenn du das Ergebnis in einem früheren Schritt eingefügt hast. Jedes Feld enthält schon ein Beispiel oder dein früheres Ergebnis; ersetze es gern durch deinen eigenen Text.'
   stepDo: 'Prompt in einem KI-Chat ausführen, dann das Ergebnis hier einfügen'
   stepDoInfo: 'Führe den Prompt in einer neuen Unterhaltung aus und füge das Ergebnis hier ein. Schließe die Unterhaltung nicht.'
-  stepCheck: 'Ergebnis prüfen'
+  stepCheck: 'Ergebnis prüfen (optional)'
   stepCheckInfo: 'Prüfe das Ergebnis in einer neuen Unterhaltung. Fällt es durch, füge das Feedback in die Unterhaltung des vorherigen Schritts ein und aktualisiere das Ergebnis. Wiederhole das, bis alle Prüfungen bestehen.'
   copyExplanation: 'Erklär-Prompt kopieren'
   copyExplanationTip: 'Füge diesen Prompt in einen Chat ein: Die KI erklärt den Prompt, warum er so gebaut ist und was du verbessern kannst, und bietet dann an, dich durch die Übung zu führen.'
@@ -70,7 +70,6 @@ ui:
   commandLabel: Befehl
   copyPrompt: Prompt kopieren
   copyCommand: Befehl kopieren
-  openChatgpt: In ChatGPT öffnen
   sectionAbout: Über diesen Schritt
   sectionCriteria: So sieht gut aus
   sectionExample: Beispielergebnis
@@ -90,3 +89,12 @@ ui:
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
   newTab: öffnet in neuem Tab
+  openAIChats: Einen KI-Chat öffnen
+  openAIChatTip: 'Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein'
+  openAIButtons:
+    - label: ChatGPT
+      url: https://chatgpt.com/
+      icon: chatgpt
+    - label: Gemini
+      url: https://gemini.google.com/app
+      icon: gemini

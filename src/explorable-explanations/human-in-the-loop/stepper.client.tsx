@@ -1,6 +1,7 @@
 'use client';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/shared/components/ui/accordion';
+import { cn } from '@/shared/lib/utils';
 import { Check } from 'lucide-react';
 import { useState } from 'react';
 import { ChatTabs } from './chat-tabs.client';
@@ -23,7 +24,11 @@ function Marker({ done, at }: { done: boolean; at: number }) {
   return (
     <span
       aria-hidden="true"
-      className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-caption font-semibold text-primary-foreground"
+      data-done={done || undefined}
+      className={cn(
+        'flex size-7 shrink-0 items-center justify-center rounded-full text-caption font-semibold',
+        done ? 'bg-(--success) text-(--success-foreground)' : 'bg-primary text-primary-foreground',
+      )}
     >
       {done ? <Check className="size-4" /> : at + 1}
     </span>
@@ -94,7 +99,7 @@ function progressOf(item: Item, kit: StepKit, { values, copied }: Run): PanelPro
   });
   const reviews = reviewSteps.map((step) => {
     const key = panelKey('review', step);
-    return { key, copied: copied.has(key), done: filled(values, item.checkedAs) };
+    return { key, copied: copied.has(key), done: filled(values, item.checkedAs), optional: true };
   });
   return [...does, ...reviews];
 }

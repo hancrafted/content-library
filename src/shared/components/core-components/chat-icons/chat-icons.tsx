@@ -1,9 +1,15 @@
+import type { ChatMarkName } from './chat-marks.pure';
+
 /*
- * A small mark for the "open in a chat tool" buttons, drawn here because no icon set ships brand marks: a
- * six-petal rosette for ChatGPT. Decorative: the buttons carry the names.
+ * Small marks for the "open in a chat tool" buttons, drawn here because no icon set ships brand marks: a six-petal
+ * rosette for ChatGPT, a four-point star for Gemini. Decorative: the buttons carry the names.
  */
 
-export function ChatGptMark({ className }: { readonly className?: string }) {
+interface MarkProps {
+  readonly className?: string;
+}
+
+function ChatGptMark({ className }: MarkProps) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -20,3 +26,17 @@ export function ChatGptMark({ className }: { readonly className?: string }) {
     </svg>
   );
 }
+
+function GeminiMark({ className }: MarkProps) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M12 2c.6 5.2 4.8 9.4 10 10-5.2.6-9.4 4.8-10 10-.6-5.2-4.8-9.4-10-10 5.2-.6 9.4-4.8 10-10Z" />
+    </svg>
+  );
+}
+
+/** Each mark by its name. */
+export const CHAT_MARKS: Record<ChatMarkName, (props: MarkProps) => React.JSX.Element> = {
+  chatgpt: ChatGptMark,
+  gemini: GeminiMark,
+};

@@ -112,6 +112,14 @@ async function openContext(modal: Locator) {
     .click();
 }
 
+/** Unfolds the optional check step of the open job: it starts folded. */
+async function openCheck(modal: Locator) {
+  await modal
+    .getByRole('button', { name: /Check the result \(optional\)/ })
+    .first()
+    .click();
+}
+
 /** Picks a Workflow in the use case picker (a shadcn Select). */
 async function pickWorkflow(root: Locator, id: string) {
   await root.locator('[data-control="picker"] [role="combobox"]').click();
@@ -160,7 +168,7 @@ async function popoverProblems(page: Page, where: string, language: Language): P
 }
 
 /** How many stages each shipped Workflow draws. */
-const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 4 };
+const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 4, 'summer-party': 4 };
 
 /** Opens one Workflow, then every stage of it in turn, and reports what is wrong. */
 async function stageProblems(page: Page, id: string, language: Language): Promise<string[]> {
@@ -206,7 +214,7 @@ test.describe('success cases', () => {
     // ARRANGE
     const { root } = await open(page, 'light');
     const picker = root.locator('[data-control="picker"]');
-    const workflows = 2;
+    const workflows = 3;
     // ACT
     await expect(picker.getByRole('combobox')).toHaveText('Plan a project');
     await picker.getByRole('combobox').click();
@@ -316,9 +324,42 @@ test.describe('success cases', () => {
     await expect(epics).toHaveAttribute('data-state', 'done');
     await expect(titles).toHaveText(taught);
     await root.locator('button[data-try-job="epics"]').click();
+    await openCheck(modal);
     await modal.getByLabel('I checked this result').check();
     await modal.getByRole('button', { name: 'Close' }).click();
     await expect(epics).toHaveAttribute('data-state', 'checked');
+  });
+
+  test('once the result is pasted the step is done: green filled circle, check folded and optional, ChatGPT|Gemini buttons, page job offers only Gemini', async ({
+    page,
+  }) => {
+    // ARRANGE
+    const pasted = '# Plan\n## Epics\n### Payments\nA.\n### Search\nB.';
+    const both = ['ChatGPT', 'Gemini'];
+    const geminiOnly = ['Gemini'];
+    const gemini = 'https://gemini.google.com/app';
+    const { root, modal } = await open(page, 'light');
+    await root.locator('[data-view-option="jobs"]').click();
+    await root.locator('button[data-try-job="epics"]').click();
+    const job = modal.locator('[data-job="epics"]').first();
+    const chats = (where: Locator) => where.locator('[data-chat-buttons]').first().locator('a[data-chat]');
+    const labels = (where: Locator) => chats(where).evaluateAll((els) => els.map((el) => el.getAttribute('data-chat')));
+    // ACT
+    await field(modal, 'plan').fill(pasted);
+    // ASSERT
+    await expect(job.locator('[data-done]')).toBeVisible();
+    await expect(job.locator('[data-done]')).toHaveClass(/--success/);
+    await expect(job.getByRole('button', { name: /Check the result \(optional\)/ })).toBeVisible();
+    await expect(job.getByLabel('I checked this result')).toHaveCount(0);
+    await expect(job.locator('[data-lead]')).toHaveCount(0);
+    await expect.poll(() => labels(job)).toEqual(both);
+    await modal.getByRole('button', { name: 'Close' }).click();
+    await pickWorkflow(root, 'vacation');
+    await root.locator('[data-view-option="stages"]').click();
+    await openStage(page, 'Page');
+    await expect.poll(() => labels(modal)).toEqual(geminiOnly);
+    await expect(chats(modal).first()).toHaveAttribute('href', gemini);
+    await expect(chats(modal).first()).toHaveAttribute('target', '_blank');
   });
 
   test('shows the same progress in the Stages view: each card its count and mark, the repeated stage its pasted titles', async ({
@@ -506,7 +547,7 @@ test.describe('success cases', () => {
       { name: 'German', url: GERMAN_EPISODE, title: /Üben$/, copy: 'Prompt kopieren' },
     ];
     for (const language of languages) {
-      test(`opens every stage of both Workflows in ${language.name} with its title, jobs and no unfilled marker`, async ({
+      test(`opens every stage of every Workflow in ${language.name} with its title, jobs and no unfilled marker`, async ({
         page,
       }) => {
         // ARRANGE
@@ -514,7 +555,8 @@ test.describe('success cases', () => {
         await open(page, 'light', { url: language.url });
         const problems: string[] = [];
         // ACT
-        for (const id of ['project-plan', 'vacation']) problems.push(...(await stageProblems(page, id, language)));
+        for (const id of ['project-plan', 'vacation', 'summer-party'])
+          problems.push(...(await stageProblems(page, id, language)));
         // ASSERT
         expect(problems).toEqual(expected);
       });

@@ -1563,6 +1563,10 @@ stages:
         goal:
           do: 'Have the AI render the report as an HTML page with charts, then sign it off or send it back.'
         template: page
+        openAIButtons:
+          - label: Gemini
+            url: https://gemini.google.com/app
+            icon: gemini
         slots:
           - id: report
             mode: single

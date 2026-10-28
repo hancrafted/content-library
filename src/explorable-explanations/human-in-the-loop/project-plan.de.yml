@@ -1563,6 +1563,10 @@ stages:
         goal:
           do: 'Lass die KI den Bericht als HTML-Seite mit Diagrammen darstellen, dann gib ihn frei oder gib ihn zurück.'
         template: page
+        openAIButtons:
+          - label: Gemini
+            url: https://gemini.google.com/app
+            icon: gemini
         slots:
           - id: report
             mode: single

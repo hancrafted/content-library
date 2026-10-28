@@ -15,11 +15,12 @@ describe('success cases', () => {
 
   it('hands the client every authored Workflow and the chosen id, with no control overridden by default', () => {
     // ARRANGE
+    const authored = ['project-plan', 'vacation', 'summer-party'];
     const props = { ...BASE, locale: 'en' };
     // ACT
     const data = humanInTheLoopData(props);
     // ASSERT
-    expect(data.workflows.map((w) => w.id)).toEqual(['project-plan', 'vacation']);
+    expect(data.workflows.map((w) => w.id)).toEqual(authored);
     expect(data.workflowId).toBe('project-plan');
     expect(data.controls).toEqual({});
   });

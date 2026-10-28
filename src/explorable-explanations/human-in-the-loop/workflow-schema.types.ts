@@ -1,3 +1,5 @@
+import type { ChatMarkName } from '@/shared/components/core-components/chat-icons/chat-marks.pure';
+
 /*
  * The Workflow file schema, one language per file: what `loadWorkflow` returns once the shape and the meaning of a
  * file hold. Names carry a `Def` suffix or a distinct noun so they sit beside the diagram model (`workflow.types.ts`).
@@ -107,6 +109,15 @@ export interface LimitDef {
   readonly demo: number;
 }
 
+/** One button that opens an empty AI chat in a new tab, for the prompt to be pasted into. */
+export interface ChatButtonDef {
+  readonly label: string;
+  /** An `https://` link to a new, empty chat; it never carries the prompt. */
+  readonly url: string;
+  /** The chat tool's mark shown before the label (`chatgpt`, `gemini`); `null` or absent: the label alone. */
+  readonly icon?: ChatMarkName | null;
+}
+
 export interface TaskDef {
   readonly id: string;
   /** The job's bold name on the diagram, and its heading in a stage's modal. */
@@ -132,6 +143,8 @@ export interface TaskDef {
   readonly review?: ReviewDef;
   /** Named numbers the prompts and checks of this job take as `{{limit.<name>}}`: every demo cap sits here, next to its full value. */
   readonly limits?: Readonly<Record<string, LimitDef>>;
+  /** The AI chats this job's prompts open in, overriding the visual's default buttons: a page job names Gemini alone. */
+  readonly openAIButtons?: readonly ChatButtonDef[];
   readonly details: DetailsDef;
 }
 

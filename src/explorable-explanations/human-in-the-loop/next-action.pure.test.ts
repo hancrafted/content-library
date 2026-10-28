@@ -18,7 +18,7 @@ describe('success cases', () => {
     expect(next).toEqual({ key: 'do', action: 'copy' });
   });
 
-  it('moves to the result once the prompt is copied, never to Open in ChatGPT', () => {
+  it('moves to the result once the prompt is copied, never to the chat buttons', () => {
     // ARRANGE
     const panels = [panel('do', { copied: true }), panel('review')];
     // ACT
@@ -27,13 +27,13 @@ describe('success cases', () => {
     expect(next).toEqual({ key: 'do', action: 'answer' });
   });
 
-  it('moves to the check step’s Copy prompt once the result is pasted', () => {
+  it('leads nowhere once the result is pasted: the check step is optional', () => {
     // ARRANGE
-    const panels = [panel('do', { done: true }), panel('review')];
+    const panels = [panel('do', { done: true }), panel('review', { optional: true })];
     // ACT
     const next = nextAction(panels);
     // ASSERT
-    expect(next).toEqual({ key: 'review', action: 'copy' });
+    expect(next).toBeNull();
   });
 });
 

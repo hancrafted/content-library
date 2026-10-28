@@ -309,6 +309,10 @@ stages:
         title: Finish
         needs: [rank]
         template: page
+        openAIButtons:
+          - label: Gemini
+            url: https://gemini.google.com/app
+            icon: gemini
         goal:
           do: 'Finish with a page.'
         slots:

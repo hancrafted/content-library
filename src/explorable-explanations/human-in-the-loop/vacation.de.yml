@@ -849,6 +849,10 @@ stages:
         goal:
           do: 'Lass die KI aus deiner Notiz eine Webseite machen und öffne sie dann in deinem Browser.'
         template: page
+        openAIButtons:
+          - label: Gemini
+            url: https://gemini.google.com/app
+            icon: gemini
         slots:
           - id: pick
             mode: single
