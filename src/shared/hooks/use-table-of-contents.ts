@@ -86,12 +86,16 @@ export function useOpenSections(sections: readonly TocSection[], active: string 
   return { open: openSectionIds(sections, active, toggled), toggle };
 }
 
-/** Remembers the collapsed state of the table of contents chrome across reloads. */
+/**
+ * Remembers the collapsed state of the table of contents chrome across reloads (FE-001 §3).
+ * Starts expanded on the default and adopts the stored choice after mount, so the static page
+ * and the first client render agree.
+ */
 export function useTocCollapse(): [boolean, () => void] {
-  const [collapsed, setCollapsed] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return readPrefs().tocCollapsed ?? false;
-  });
+  const [collapsed, setCollapsed] = useState(false);
+  useEffect(() => {
+    setCollapsed(readPrefs().tocCollapsed ?? false);
+  }, []);
 
   const toggle = () => {
     setCollapsed((prev) => {

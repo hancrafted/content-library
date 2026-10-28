@@ -120,7 +120,7 @@ function EpisodeToc(props: {
   return (
     <aside
       data-slot="toc"
-      className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:data-[toc-collapsed=true]:w-[3.5rem]"
+      className="motion-reduce:transition-none md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:transition-[width] md:duration-300 md:ease-out md:data-[toc-collapsed=true]:w-[3.5rem]"
     >
       <TableOfContents
         locale={props.locale}

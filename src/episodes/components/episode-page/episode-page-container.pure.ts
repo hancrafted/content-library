@@ -1,5 +1,5 @@
 import { folderOf, type EpisodeRef, type ResourceRef } from '@/content-store/catalogue/episode-id.pure';
-import type { TocItem, TocSection } from '@/shared/lib/table-of-contents.pure';
+import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
 
@@ -57,7 +57,7 @@ export function eyebrowsOf(
 }
 
 /** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
-export const TOC_COLLAPSED_ATTR = 'data-toc-collapsed';
+export { TOC_COLLAPSED_ATTR };
 
 /*
  * The Foreground's insets (FE-009 §2), the only width mechanism: every Slide wrapper pads itself with these two

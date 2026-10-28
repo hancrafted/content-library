@@ -29,42 +29,25 @@ function TimeLeft(props: { labels: TocLabels; locale: Locale; time: ReadingTime;
   );
 }
 
-function CollapsedHeading({ labels, onToggleCollapse }: { labels: TocLabels; onToggleCollapse?: () => void }) {
-  return (
-    <div className="flex items-center justify-center p-0.5 text-muted-foreground">
-      {onToggleCollapse && (
-        <button
-          type="button"
-          onClick={onToggleCollapse}
-          aria-label={labels.expand}
-          title={labels.expand}
-          data-testid="toc-collapse-toggle"
-          className="grid size-8 cursor-pointer place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:ring-ring"
-        >
-          <PanelLeftOpen aria-hidden className="size-4" />
-        </button>
-      )}
-    </div>
-  );
-}
-
-function CollapseToggleButton({ labels, onToggleCollapse }: { labels: TocLabels; onToggleCollapse?: () => void }) {
+function CollapseToggleButton(props: { labels: TocLabels; collapsed?: boolean; onToggleCollapse?: () => void }) {
+  const { labels, collapsed, onToggleCollapse } = props;
   if (!onToggleCollapse) return null;
+  const label = collapsed ? labels.expand : labels.collapse;
   return (
     <button
       type="button"
       onClick={onToggleCollapse}
-      aria-label={labels.collapse}
-      title={labels.collapse}
+      aria-label={label}
+      title={label}
       data-testid="toc-collapse-toggle"
-      className="grid size-6 cursor-pointer place-items-center rounded text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:ring-ring"
+      className="grid size-8 shrink-0 cursor-pointer place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:ring-ring"
     >
-      <PanelLeftClose aria-hidden className="size-4" />
+      {collapsed ? <PanelLeftOpen aria-hidden className="size-4" /> : <PanelLeftClose aria-hidden className="size-4" />}
     </button>
   );
 }
 
-interface ExpandedHeadingProps {
+interface HeadingDetailsProps {
   labels: TocLabels;
   locale: Locale;
   route: string;
@@ -73,16 +56,24 @@ interface ExpandedHeadingProps {
   onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
   time: ReadingTime;
   revealed: boolean;
-  onToggleCollapse?: () => void;
+  collapsed?: boolean;
 }
 
-function ExpandedHeading(props: ExpandedHeadingProps) {
-  const { labels, onToggleCollapse } = props;
+function HeadingDetails(props: HeadingDetailsProps) {
+  const { labels, collapsed } = props;
   return (
-    <div className="flex items-center justify-between gap-2 px-2 text-caption whitespace-nowrap text-muted-foreground">
+    <div
+      aria-hidden={collapsed}
+      className={cn(
+        'flex min-w-0 flex-1 items-center justify-between gap-2 overflow-hidden whitespace-nowrap',
+        'motion-reduce:transition-none transition-[max-width,opacity] duration-300 ease-out',
+        collapsed ? 'max-w-0 opacity-0 pointer-events-none' : 'max-w-[14rem] opacity-100',
+      )}
+    >
       <Link
         href={localizePath(props.route, props.locale, props.topId)}
         replace
+        tabIndex={collapsed ? -1 : undefined}
         onClick={(event) => props.onGlide(event, props.topId)}
         aria-current={props.atTop ? 'location' : undefined}
         data-testid="toc-top"
@@ -90,10 +81,9 @@ function ExpandedHeading(props: ExpandedHeadingProps) {
       >
         {labels.title}
       </Link>
-      <div className="flex items-center gap-1.5">
+      <div className="flex shrink-0 items-center gap-1.5">
         {props.revealed ? null : <span className="animate-pulse noscript:hidden">{labels.loading}</span>}
         <TimeLeft {...props} />
-        <CollapseToggleButton labels={labels} onToggleCollapse={onToggleCollapse} />
       </div>
     </div>
   );
@@ -102,8 +92,8 @@ function ExpandedHeading(props: ExpandedHeadingProps) {
 /**
  * Title on the left, a link to the top of the page (the Title slide), current
  * while the reader is there; time left and the collapse toggle on the right,
- * or "Loading" while the box masks the first settle. When collapsed, only
- * the expand toggle is shown.
+ * or "Loading" while the box masks the first settle. When collapsed, details fade
+ * out and the toggle centers smoothly.
  */
 export function TocHeading(props: {
   labels: TocLabels;
@@ -117,10 +107,19 @@ export function TocHeading(props: {
   collapsed?: boolean;
   onToggleCollapse?: () => void;
 }) {
-  if (props.collapsed) {
-    return <CollapsedHeading labels={props.labels} onToggleCollapse={props.onToggleCollapse} />;
-  }
-  return <ExpandedHeading {...props} />;
+  const { collapsed, labels, onToggleCollapse } = props;
+  return (
+    <div
+      className={cn(
+        'flex min-h-8 items-center text-caption whitespace-nowrap text-muted-foreground',
+        'motion-reduce:transition-none transition-[padding] duration-300 ease-out',
+        collapsed ? 'justify-center px-0' : 'justify-between gap-2 px-2',
+      )}
+    >
+      <HeadingDetails {...props} />
+      <CollapseToggleButton labels={labels} collapsed={collapsed} onToggleCollapse={onToggleCollapse} />
+    </div>
+  );
 }
 
 /** The time-weighted progress bar beneath the heading; only its spacing where the Episode has no Voice script. */

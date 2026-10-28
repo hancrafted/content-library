@@ -18,7 +18,6 @@ import {
   type ReadingTime,
   type TocSection,
 } from '@/shared/lib/table-of-contents.pure';
-import { cn } from '@/shared/lib/utils';
 import { useMemo, useSyncExternalStore } from 'react';
 import { TocCollapseFlag } from './toc-collapse-flag.client';
 import { TocDrawer } from './toc-drawer';
@@ -76,10 +75,7 @@ function DesktopPanel(props: {
   toggleCollapse: () => void;
 }) {
   const { panel, collapsed, toggleCollapse } = props;
-  const panelClass = cn(
-    'hidden max-h-[calc(100svh-7rem-var(--toc-reserve,0px))] md:flex',
-    collapsed ? 'w-[3.5rem] p-2.5' : 'w-full p-3',
-  );
+  const panelClass = 'hidden max-h-[calc(100svh-7rem-var(--toc-reserve,0px))] md:flex';
   return (
     <TocPanel {...panel} collapsed={collapsed} onToggleCollapse={toggleCollapse} testId="toc" className={panelClass} />
   );
