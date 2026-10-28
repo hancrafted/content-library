@@ -6,7 +6,7 @@ stale_after: 2027-04-28T00:00:00Z
 
 # Explorables
 
-Read before building, changing or reviewing an Explorable or an Explorable page. Terms: `GLOSSARY.md` (Explorable, Explorable page, Preset). Binding code rules: the Archgate ADR on Explorable content (`.archgate/adrs/FE-012-explorable-explanation-content.md`). Spec: #404; what #404 builds is marked "planned, #404".
+Read before building, changing or reviewing an Explorable or an Explorable page. Terms: `GLOSSARY.md` (Explorable, Explorable page, Preset). Binding code rules: the Archgate ADR on Explorables (`.archgate/adrs/FE-012-explorables.md`). Spec: #404; what #404 builds is marked "planned, #404".
 
 An **Explorable** is the reusable interactive component. An **Explorable page** is the product about one primary Explorable. The long form "Explorable explanation" is the name Wikipedia gives the genre (https://en.wikipedia.org/wiki/Explorable_explanation); this repo says Explorable.
 

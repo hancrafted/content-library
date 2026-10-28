@@ -6,7 +6,7 @@ stale_after: 2027-04-28T00:00:00Z
 
 # AI disciplines Explorable explanation
 
-Read before placing, changing or testing the AI disciplines timeline (`src/explorables/ai-disciplines/`). Binding rules: [FE-012 Explorable Explanation Content](../../../.archgate/adrs/FE-012-explorable-explanation-content.md), [FE-006](../../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind.
+Read before placing, changing or testing the AI disciplines timeline (`src/explorables/ai-disciplines/`). Binding rules: [FE-012 Explorables](../../../.archgate/adrs/FE-012-explorables.md), [FE-006](../../../.archgate/adrs/FE-006-server-client-boundary.md) §5, [FE-007](../../../.archgate/adrs/FE-007-module-layering.md) §5 and [FE-011](../../../.archgate/adrs/FE-011-design-tokens.md). This guide holds the detail that does not bind.
 
 ## What it shows
 
