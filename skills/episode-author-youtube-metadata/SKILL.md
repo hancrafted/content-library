@@ -5,7 +5,7 @@ description: Write the YouTube description and pinned comment for an Episode's r
 
 # Episode author YouTube metadata
 
-The description and pinned comment are what a viewer and YouTube's search read first. This skill writes both in the recorded language, from what the Episode teaches, and ends on the copy for Han's review. It never edits the chapter block between `chapters:start` and `chapters:end`; `npm run youtube:chapters` owns it.
+The description and pinned comment are what a viewer and YouTube's search read first. This skill writes both in the recorded language, from what the Episode teaches, and ends on the copy for Han's review. It never edits the chapter block between `chapters:start` and `chapters:end`; `npm run youtube:chapters` owns it. It runs alone, given an Episode folder, page URL or video ID, or as a step of `/episode-post-production`.
 
 ## Steps
 

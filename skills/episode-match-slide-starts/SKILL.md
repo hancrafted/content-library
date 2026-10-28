@@ -5,7 +5,7 @@ description: Find the second each Slide starts in a recorded Episode by matching
 
 # Episode match Slide starts
 
-Han reads each Slide's title aloud as he starts the Slide. This skill finds that moment in the raw transcript and stores it as the Slide's start. It writes one file, `recording/slide-starts.<lang>.json`, and ends on a table for Han's review. It needs `recording/transcript.<lang>.vtt` (from `npm run youtube:transcript`).
+Han reads each Slide's title aloud as he starts the Slide. This skill finds that moment in the raw transcript and stores it as the Slide's start. It writes one file, `recording/slide-starts.<lang>.json`, and ends on a table for Han's review. It needs `recording/transcript.<lang>.vtt` (from `npm run youtube:transcript`). It runs alone, given an Episode folder, page URL or video ID, or as a step of `/episode-post-production`.
 
 ## Steps
 
