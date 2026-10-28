@@ -167,7 +167,11 @@ stages:
     title: Plan
     learningGoal: 'Erst das Interview: Die KI fragt, bevor sie rät, teilt dann das Ziel in Epics auf und nennt das, mit dem du beginnst.'
     summary: Interview, dann ein kurzer Plan aus Epics
-    move: B
+    moves:
+      - letter: B
+        why: 'Zerlegt das Fest in Epics und nennt das, mit dem du beginnst.'
+      - letter: I
+        why: 'Die KI interviewt dich in Runden, bevor sie plant.'
     jobs:
       - id: plan
         title: Die KI befragt dich
@@ -304,7 +308,13 @@ stages:
     title: Anforderungen
     learningGoal: 'Ein Epic im Detail: Die KI befragt dich dazu und schreibt dann Anforderungen und Tickets, die du abzeichnest.'
     summary: Ein Epic befragen, dann die Tickets abzeichnen
-    move: R
+    moves:
+      - letter: R
+        why: 'Anforderungen und Tickets, die du abzeichnest, bevor die Recherche beginnt.'
+      - letter: I
+        why: 'Die KI befragt dich gründlich zu dem einen Epic.'
+      - letter: E
+        why: 'Ein zweiter Chat prüft Anforderungen und Tickets, bevor du abzeichnest.'
     gate: 1
     card:
       label: Du zeichnest ab
@@ -479,7 +489,11 @@ stages:
       over: spec#tickets
       demo: 2
       item: Ticket
-    move: F
+    moves:
+      - letter: E
+        why: 'Eine Quelle für jede Zahl, damit sich jede Antwort prüfen lässt.'
+      - letter: F
+        why: 'Ein frischer Chat pro Ticket, damit kein Chat die ganze Vorgeschichte mitschleppt.'
     jobs:
       - id: ticket
         title: Chat
@@ -635,7 +649,9 @@ stages:
     title: Seite
     learningGoal: 'Zeigen statt erzählen: alles Gesammelte in einer Notiz, dann eine Seite, die die Person öffnen kann, die abzeichnet.'
     summary: Zusammentragen, dann eine Seite zum Abzeichnen
-    move: E
+    moves:
+      - letter: E
+        why: 'Du zeichnest die eine Seite ab oder gibst sie zurück: die zweite Freigabe.'
     gate: 2
     jobs:
       - id: gather

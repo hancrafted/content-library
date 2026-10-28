@@ -168,7 +168,11 @@ stages:
     title: Plan
     learningGoal: 'Interview first: the AI asks before it guesses, then splits the goal into epics and names the one to start with.'
     summary: Get interviewed, then a short plan of epics
-    move: B
+    moves:
+      - letter: B
+        why: 'Breaks the party down into epics and names the one to start with.'
+      - letter: I
+        why: 'The AI interviews you in rounds before it plans.'
     jobs:
       - id: plan
         title: AI grills you
@@ -305,7 +309,13 @@ stages:
     title: Requirements
     learningGoal: 'One epic in depth: the AI grills you on it, then writes requirements and tickets you sign off.'
     summary: Grill one epic, then sign off its tickets
-    move: R
+    moves:
+      - letter: R
+        why: 'Requirements and tickets you sign off before any research starts.'
+      - letter: I
+        why: 'The AI grills you on the one epic in depth.'
+      - letter: E
+        why: 'A second chat checks the requirements and tickets before you sign off.'
     gate: 1
     card:
       label: You sign off
@@ -480,7 +490,11 @@ stages:
       over: spec#tickets
       demo: 2
       item: ticket
-    move: F
+    moves:
+      - letter: E
+        why: 'A source for every number, so each answer can be checked.'
+      - letter: F
+        why: 'One fresh chat per ticket, so no chat drags the whole history along.'
     jobs:
       - id: ticket
         title: Chat
@@ -636,7 +650,9 @@ stages:
     title: Page
     learningGoal: 'Show, do not tell: everything gathered into one note, then one page the person who signs off can open.'
     summary: Gather it, then one page to sign off
-    move: E
+    moves:
+      - letter: E
+        why: 'You sign off the one page, or send it back: the second gate.'
     gate: 2
     jobs:
       - id: gather

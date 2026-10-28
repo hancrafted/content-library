@@ -15,7 +15,11 @@ import type { FlipEvent, Side, Trait } from './trait-flip.pure';
 /** One row of the mirror: its trait, the two fronts, and the strings its chip and backs show. */
 export interface FlipRow {
   slug: Trait;
+  /** The letter on the chip: the acronym's, so German still spells PRICE. */
+  initial: string;
   name: string;
+  /** The name in the viewer's language under an English name; empty where the name already is. */
+  gloss: string;
   /** The short line both backs show beside their beat. */
   back: string;
   /** The trait's aside in plain words, the chip's accessible description. */

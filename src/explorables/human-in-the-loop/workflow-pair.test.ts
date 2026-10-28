@@ -52,7 +52,7 @@ const structureOf = (file: WorkflowFile) => ({
   templates: Object.keys(file.templates),
   stages: file.stages.map((stage) => ({
     id: stage.id,
-    move: stage.move,
+    moves: stage.moves?.map((move) => move.letter),
     gate: stage.gate,
     summary: Boolean(stage.summary),
     foreach: stage.foreach && { ...stage.foreach, item: Boolean(stage.foreach.item) },

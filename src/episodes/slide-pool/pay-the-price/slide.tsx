@@ -76,7 +76,9 @@ export const payThePrice = slide({
         columns={{ freelancer: t('columns.freelancer'), traits: t('columns.traits'), ai: t('columns.ai') }}
         rows={TRAITS.map((slug) => ({
           slug,
+          initial: t(`traits.${slug}.initial`),
           name: t(`traits.${slug}.name`),
+          gloss: t(`traits.${slug}.gloss`),
           back: t(`traits.${slug}.back`),
           aside: t(`traits.${slug}.popover`),
           freelancer: t(`traits.${slug}.freelancer`),

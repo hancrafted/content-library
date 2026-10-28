@@ -1,8 +1,7 @@
 {
-  "title": "Die Location briefen",
-  "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. <b>Ein frischer Chat pro Aufgabe</b>, und zwei Prüfpunkte, bevor Deine Chefin einen Plan sieht.",
-  "workflowLabel": "Die Schritte zur Location, Stufe für Stufe",
-  "jobsLabel": "{stage}: Aufgaben",
+  "title": "Dein erster agentischer Workflow mit Dir in der Schleife",
+  "caption": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa. <b>Ein frischer Chat pro Schritt</b>, und Du gibst die Anforderungen frei, bevor recherchiert wird.",
+  "workflowLabel": "Das Sommerfest, Stufe für Stufe",
   "popover": {
     "in": "Rein:",
     "out": "Raus:"
@@ -11,54 +10,30 @@
     "plan": {
       "popover": {
         "in": "die ganze Aufgabe.",
-        "out": "ein kurzer Plan, in Epics geteilt."
-      }
-    },
-    "epics": {
-      "popover": {
-        "in": "ein Epic.",
-        "out": "seine Fragen beantwortet und eine Spezifikation geschrieben."
+        "out": "Deine Antworten auf ihre Fragen, dann ein kurzer Plan aus Epics."
       }
     },
     "requirements": {
       "popover": {
-        "in": "alle Epic-Spezifikationen.",
-        "out": "ein Anforderungsdokument und die Tickets, die Du freigibst."
+        "in": "das wichtigste Epic.",
+        "out": "Anforderungen und Tickets, die Du freigibst."
       }
     },
-    "execute": {
+    "research": {
       "popover": {
-        "in": "ein Ticket.",
-        "out": "sein Ergebnis, mit einer Zahlentabelle."
+        "in": "ein Ticket, in einem frischen Chat.",
+        "out": "seine Antwort, mit einer Quelle für jede Zahl."
       }
     },
-    "aggregate": {
+    "page": {
       "popover": {
-        "in": "alle Ticket-Ergebnisse.",
-        "out": "ein Bericht mit Risiken und offenen Entscheidungen."
-      }
-    },
-    "review": {
-      "popover": {
-        "in": "der Bericht.",
+        "in": "Plan, Anforderungen und Recherche.",
         "out": "eine Seite, die Du freigibst oder zurückgibst."
       }
     }
   },
-  "jobs": {
-    "scope": {
-      "detail": "3 Fragen,",
-      "forgot": "<marker>1 vergessen</marker>"
-    },
-    "checked": "Von einem zweiten Chat geprüft"
-  },
-  "legend": {
-    "label": "Legende",
-    "freshChat": "<marker>Ein frischer Chat pro Aufgabe</marker>",
-    "checked": "Gegen die Anforderungskarte geprüft",
-    "parked": "Wartet, bis es dran ist"
-  },
   "chat": {
+    "lead": "Die Plan-Stufe beginnt mit einem Interview:",
     "title": "Interview · der Chat im Beispiel",
     "open": "Chat ansehen",
     "close": "Chat schließen",
@@ -152,39 +127,34 @@
   "voiceScript": {
     "segments": {
       "restate": {
-        "title": "Die Aufgabe",
+        "title": "Die ganze Aufgabe",
         "keywords": "",
-        "script": "Die Aufgabe: Plane das nächste Sommerfest Deiner Firma, 200 Mitarbeitende an fünf Standorten in Europa. Würdest Du die KI um all das in einem einzigen Prompt bitten, bekämst Du seitenweise geschliffene, selbstsichere Antworten, und Du könntest fast keiner davon trauen."
+        "script": "Jetzt setzen wir die fünf Schritte an der ganzen Aufgabe ein: Plane das nächste Sommerfest Deiner Firma, 200 Mitarbeitende an fünf Standorten in Europa. Das ist Dein erster agentischer Workflow mit Dir in der Schleife: Die KI arbeitet in Stufen, und Du bleibst an den Stellen dabei, auf die es ankommt."
       },
-      "break-it-down": {
-        "title": "Zerlegen",
+      "interview-and-plan": {
+        "title": "Erst das Interview, dann der Plan",
         "keywords": "",
-        "script": "Also zuerst: zerlegen. Die Feier zerfällt in fünf Teile: Location, Anreise, Catering, Einladungen und Budget. Wir nehmen jetzt nur die Location, die anderen vier warten, bis sie dran sind, denn ein Teil ist klein genug, um ihn richtig hinzubekommen."
-      },
-      "interview": {
-        "title": "Interview",
-        "keywords": "",
-        "script": "Als Nächstes das Interview. Bevor sie loslegt, stellt Dir die KI Fragen, so wie es eine Ansprechpartnerin bei einer Agentur tun würde. Drei Fragen kommen, und eine davon betrifft etwas, das Du vergessen hattest: ob es zur Feier im letzten Jahr Feedback gab, das sich zu behalten lohnt. Das ist der ungeschriebene Kontext, der herauskommt, bevor die KI rät."
+        "script": "Es beginnt mit einem Plan, und der Plan beginnt mit einem Interview. Bevor sie rät, stellt Dir die KI Fragen, eine nach der anderen, und eine davon ist die, die Du vergessen hast: was letztes Mal schiefgelaufen ist. Dann zerlegt sie das Fest in Epics und nennt das, mit dem Ihr anfangt."
       },
       "requirements": {
         "title": "Anforderungen",
         "keywords": "",
-        "script": "Dann die Anforderungen, und diese Stufe gibst Du frei, bevor irgendeine Recherche beginnt. Alles kommt auf eine Karte, kurz und nur das Wesentliche, und jede spätere Aufgabe liest daraus. Ist die Karte falsch, willst Du es hier merken, solange es billig ist."
+        "script": "Als Nächstes die Anforderungen für dieses eine Epic. Die KI fragt Dich gründlich dazu aus, schreibt dann Anforderungen und Tickets, und Du gibst sie frei, bevor irgendeine Recherche beginnt. Wenn die Karte falsch ist, willst Du es hier merken, solange es billig ist."
       },
       "research-fresh-each-time": {
         "title": "Recherche, jedes Mal frisch",
         "keywords": "",
-        "script": "Jetzt die Recherche. Drei Locations bekommen drei frische Chats, und jeder wird gegen die Karte geprüft. Arbeit an mehrere gleichzeitig abzugeben, ist ein eigenes Thema, und das ist die Episode über die Beförderung."
+        "script": "Jetzt die Recherche. Jedes Ticket bekommt seinen eigenen frischen Chat, mit Websuche und einer Quelle für jede Zahl, damit kein Chat die ganze Vorgeschichte mitschleppt."
       },
-      "compare-and-check": {
-        "title": "Vergleichen und prüfen",
+      "one-page": {
+        "title": "Eine Seite",
         "keywords": "",
-        "script": "Die drei Ergebnisse kommen zusammen und werden verglichen, wieder gegen die Karte, nicht nach Gefühl. Damit hat der ganze Ablauf zwei Prüfpunkte: die Karte und den Vergleich. Ein Fehler muss an beiden vorbei."
+        "script": "Zum Schluss werden Plan, Anforderungen und Recherche auf einer Seite zusammengeführt, und diese Seite ist Deine zweite Freigabe: Du gibst sie frei oder schickst sie zurück. Ein Fehler muss an beiden Freigaben vorbei."
       },
-      "recommendation-and-on": {
-        "title": "Empfehlung, und weiter",
+      "live-next": {
+        "title": "Als Nächstes live",
         "keywords": "",
-        "script": "Heraus kommt der Location-Plan für Deine Chefin, und das Ganze lief mit demselben Briefing, das Du für jede Aufgabe nutzen würdest. (Pause) Jetzt machen wir es live: Ich zeige Dir, wie sich dieses Interview anfühlt, wenn Du es selbst führst."
+        "script": "Dieselben fünf Schritte, für jede Aufgabe. (Pause) Jetzt machen wir es live: Ich zeige Dir, wie sich dieses Interview anfühlt, wenn Du es selbst durchführst."
       }
     }
   }

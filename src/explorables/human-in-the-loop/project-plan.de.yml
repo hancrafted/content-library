@@ -152,7 +152,9 @@ stages:
     title: Grobplan
     learningGoal: 'Projektplanung: aus einer vagen Aufgabe ein klares Ziel, ein paar beantwortete Fragen und eine kurze Liste von Epics machen.'
     summary: 'Von der vagen Aufgabe zu Epics'
-    move: B
+    moves:
+      - letter: B
+        why: 'Projektplanung: aus einer vagen Aufgabe ein klares Ziel, ein paar beantwortete Fragen und eine kurze Liste von Epics machen.'
     gate: 1
     jobs:
       - id: task
@@ -517,7 +519,9 @@ stages:
     title: Epics
     learningGoal: 'Requirements Engineering: jedes Epic befragen, bis die offenen Fragen gestellt sind, dann seine Spezifikation schreiben.'
     summary: 'Befragen, dann spezifizieren, je Epic'
-    move: I
+    moves:
+      - letter: I
+        why: 'Requirements Engineering: jedes Epic befragen, bis die offenen Fragen gestellt sind, dann seine Spezifikation schreiben.'
     foreach:
       over: plan#epics
       demo: 2
@@ -807,7 +811,9 @@ stages:
     title: Anforderungen
     learningGoal: 'Requirements Engineering: die Spezifikationen zusammenführen, Überschneidungen und Konflikte auflösen und Tickets als vertikale Scheiben schneiden.'
     summary: 'Zusammenführen, Konflikte lösen, Tickets schneiden'
-    move: R
+    moves:
+      - letter: R
+        why: 'Requirements Engineering: die Spezifikationen zusammenführen, Überschneidungen und Konflikte auflösen und Tickets als vertikale Scheiben schneiden.'
     gate: 2
     jobs:
       - id: aggregate
@@ -1144,7 +1150,9 @@ stages:
     title: Ausführen
     learningGoal: 'Projektmanagement: jedes Ticket in seinem eigenen frischen Chat nebeneinander ausführen und Zahlen für den Bericht mitbringen.'
     summary: 'Ein frischer Chat pro Ticket'
-    move: F
+    moves:
+      - letter: F
+        why: 'Projektmanagement: jedes Ticket in seinem eigenen frischen Chat nebeneinander ausführen und Zahlen für den Bericht mitbringen.'
     foreach:
       over: tickets#tickets
       demo: 4
@@ -1546,7 +1554,9 @@ stages:
     title: Prüfen
     learningGoal: 'Qualitätssicherung: den Bericht als Seite ansehen, dann freigeben oder zurückgeben.'
     summary: 'Der Bericht als Seite, dann deine Freigabe'
-    move: E
+    moves:
+      - letter: E
+        why: 'Qualitätssicherung: den Bericht als Seite ansehen, dann freigeben oder zurückgeben.'
     gate: 3
     card:
       label: Du gibst frei

@@ -237,6 +237,20 @@ describe('success cases', () => {
     });
   });
 
+  it('loads several BRIEF moves on one stage, each with its own why', () => {
+    // ARRANGE
+    const expected = [
+      { letter: 'R', why: 'Sign off before research.' },
+      { letter: 'I', why: 'Grilled on the epic first.' },
+    ];
+    const change = (file: File) => void Object.assign(file.stages[0]!, { moves: expected });
+    // ACT
+    const result = load(change);
+    // ASSERT
+    expect(problemsOf(result)).toBe('');
+    expect('file' in result && result.file.stages[0]!.moves).toEqual(expected);
+  });
+
   it('loads a file with a repeated stage, a slot on an earlier output and a review', () => {
     // ARRANGE
     const expected = 'demo';
@@ -455,6 +469,15 @@ describe('failure cases', () => {
     const problems = problemsOf(load(change));
     // ASSERT
     expect(problems).toContain('stages[0].tasks is not a field of the schema.');
+  });
+
+  it('reports a stage that still uses the old move: key as an unknown field', () => {
+    // ARRANGE
+    const change = (file: File) => void Object.assign(file.stages[0]!, { move: 'B' });
+    // ACT
+    const problems = problemsOf(load(change));
+    // ASSERT
+    expect(problems).toContain('stages[0].move is not a field of the schema.');
   });
 
   const many = (sample: unknown) => ({ id: 'research', mode: 'multiple', label: 'All', sample });

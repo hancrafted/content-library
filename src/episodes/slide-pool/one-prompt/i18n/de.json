@@ -4,33 +4,43 @@
   "caption": "Er sieht fertig aus. Schau genauer hin.",
   "promptLabel": "Der eine Prompt",
   "prompt": "Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa.",
-  "stackLabel": "12 Dokumente zurück, poliert",
+  "stackLabel": "Eine lange Antwort, poliert",
   "traitsLabel": "Was jede Eigenschaft im Plan hinterlassen hat",
   "cracks": {
     "probabilistic": {
-      "trait": "Probabilistisch",
-      "why": "Frag noch einmal, und Du bekommst einen ganz neuen Plan.",
-      "produced": "Plan v1: Lissabon, 14. Juni. Plan v2: Berlin, 5. Juli."
+      "initial": "P",
+      "trait": "Probabilistic",
+      "gloss": "probabilistisch",
+      "why": "Frag noch einmal, und Du bekommst eine andere Antwort.",
+      "produced": "„Wo sollen wir feiern?“ Lissabon. Neuer Chat, gleiche Frage: Berlin."
     },
     "relentless": {
-      "trait": "Unermüdlich",
-      "why": "Nie gefragt, woher Deine Leute anreisen, und Dich unter Dokumenten begraben.",
-      "produced": "Die Top 10 Hotels auf Tripadvisor gewählt, egal wo sie liegen"
+      "initial": "R",
+      "trait": "Relentless",
+      "gloss": "unermüdlich",
+      "why": "Ein Prompt, Seiten in Sekunden, alles zu prüfen.",
+      "produced": "9 Seiten: Locations, Menüs, eine Playlist mit 40 Songs"
     },
     "informed": {
-      "trait": "Informiert",
-      "why": "Kennt tausend Aktivitäten, aber nicht Deine Kultur.",
-      "produced": "Teamaktivität: Paintball, 3 Stunden, alle 200"
+      "initial": "I",
+      "trait": "Informed",
+      "gloss": "informiert",
+      "why": "Kennt jede Party, nur nicht Eure.",
+      "produced": "Rooftop-Club, DJ bis 2 Uhr"
     },
     "confident": {
-      "trait": "Selbstsicher",
-      "why": "Preise, die wie Fakten aussehen und erfunden sind.",
-      "produced": "Location: 48 € pro Kopf, Catering inklusive, Verfügbarkeit bestätigt"
+      "initial": "C",
+      "trait": "Confident",
+      "gloss": "selbstsicher",
+      "why": "Füllt Deine Lücken mit Vermutungen, als wären es Fakten.",
+      "produced": "Budget: 250 € pro Kopf"
     },
     "every-word-billed": {
-      "trait": "Jedes Wort berechnet",
-      "why": "Du hast jede Seite davon bezahlt.",
-      "produced": "Rechnung: 6.400 Wörter gelesen und geschrieben × 0,08 €"
+      "initial": "E",
+      "trait": "Every word billed",
+      "gloss": "jedes Wort berechnet",
+      "why": "Jede Nachfrage schickt den ganzen Chat noch einmal.",
+      "produced": "Nachfrage Nr. 6: alle 9 Seiten noch einmal gelesen, noch einmal berechnet"
     }
   },
   "callout": "<strong>Schwer zu prüfen.</strong> Wahrscheinlich wirfst Du es weg und machst es selbst.",
@@ -39,32 +49,32 @@
       "one-prompt-in": {
         "title": "Ein Prompt rein",
         "keywords": "",
-        "script": "Was passiert also, wenn Du ihnen nur einen Prompt gibst: Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa? Du bekommst einen Plan. Einen polierten. Schau genauer hin."
+        "script": "Was passiert also, wenn Du alles in einem Chat machst, mit einem kurzen Prompt: Plane das nächste Sommerfest Deiner Firma: 200 Mitarbeitende an fünf Standorten in Europa? Du bekommst eine lange Antwort. Eine polierte. Schau genauer hin."
       },
       "probabilistic": {
         "title": "Probabilistisch",
         "keywords": "",
-        "script": "Sie sind probabilistisch: Frag noch einmal, und Du bekommst einen ganz neuen Plan, in Lissabon statt Berlin."
+        "script": "Sie sind probabilistisch: Frag, wo Ihr feiern sollt, und die Antwort ist Lissabon. Öffne einen neuen Chat, stell dieselbe Frage, und es ist Berlin."
       },
       "relentless": {
         "title": "Unermüdlich",
         "keywords": "",
-        "script": "Sie sind unermüdlich: Sie haben Hotels in zwölf Städten nach Bewertung verglichen, nie gefragt, woher Deine Leute anreisen, und Dich unter Dokumenten begraben."
+        "script": "Sie sind unermüdlich: ein kurzer Prompt, und in Sekunden kommen neun Seiten zurück, Locations, Menüs, sogar eine Playlist mit vierzig Songs, und Du musst jede Zeile prüfen."
       },
       "informed": {
         "title": "Informiert",
         "keywords": "",
-        "script": "Sie sind informiert: Sie kennen tausend Teambuilding-Aktivitäten, und sie haben Paintball gewählt, weil sie Deine Kultur nicht kennen."
+        "script": "Sie sind informiert: Sie kennen jede Art von Party, nur nicht Eure. Sie schlagen einen Rooftop-Club mit DJ bis zwei Uhr vor, und niemand hat ihnen gesagt, dass es letztes Jahr zu laut zum Reden war."
       },
       "confident": {
         "title": "Selbstsicher",
         "keywords": "",
-        "script": "Sie sind selbstsicher: Die Preise der Locations sehen aus wie Fakten, und sie sind erfunden."
+        "script": "Sie sind selbstsicher: Du hast nie ein Budget genannt, also haben sie eins gewählt, 250 Euro pro Kopf, und alles darum herum geplant, als wäre es ein Fakt."
       },
       "every-word-billed": {
         "title": "Jedes Wort berechnet",
         "keywords": "",
-        "script": "Und sie rechnen pro Wort ab: Du hast jede Seite davon bezahlt."
+        "script": "Und sie berechnen jedes Wort: Bei Deiner sechsten Nachfrage schickt jede Nachricht den ganzen Chat noch einmal, alle neun Seiten, noch einmal gelesen und noch einmal berechnet."
       },
       "you-saw-the-ai": {
         "title": "Du hast die KI gesehen",

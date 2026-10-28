@@ -72,7 +72,9 @@ stages:
     title: Ask
     learningGoal: 'Ask first.'
     summary: 'Ask, then write the brief'
-    move: I
+    moves:
+      - letter: I
+        why: 'Ask first.'
     gate: 1
     jobs:
       - id: ask

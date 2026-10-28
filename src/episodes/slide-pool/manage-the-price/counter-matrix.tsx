@@ -39,11 +39,17 @@ interface CounterMatrixProps {
   };
 }
 
-/** A word with its first letter set off, so the five spell an acronym; an empty `initial` (German) sets nothing off. */
-function Initialled({ initial, rest, className }: { initial: string; rest: string; className?: string }) {
+/** Which acronym a set-off letter belongs to, as the data attribute that names it. */
+type Acronym = 'data-move-initial' | 'data-trait-initial';
+
+/** A word with its first letter set off, so the five spell an acronym in every locale. */
+function Initialled(props: { initial: string; rest: string; acronym: Acronym; className?: string }) {
+  const { initial, rest, acronym, className } = props;
   return (
     <span>
-      {initial === '' ? null : <span className={className ?? 'font-semibold'}>{initial}</span>}
+      <span {...{ [acronym]: '' }} className={className ?? 'font-semibold'}>
+        {initial}
+      </span>
       {rest}
     </span>
   );
@@ -92,7 +98,7 @@ function MatrixHead({ traits, corner }: { traits: readonly MatrixTrait[]; corner
         {traits.map((trait) => (
           <th key={trait.slug} scope="col" className="pb-3 align-bottom font-normal">
             <span className="flex min-h-10 items-end justify-center text-center text-caption leading-tight">
-              <Initialled initial={trait.initial} rest={trait.rest} />
+              <Initialled initial={trait.initial} rest={trait.rest} acronym="data-trait-initial" />
             </span>
           </th>
         ))}
@@ -107,7 +113,7 @@ function MatrixRow({ move, traits, tick }: { move: MatrixMove; traits: readonly 
     <tr {...move.target} className={cn('focus-group__item border-t border-border', styles.row)}>
       <th scope="row" className="py-3 pr-4 text-left align-middle font-normal @4xl:pr-8">
         <span className="flex items-center gap-1 text-body font-semibold">
-          <Initialled initial={move.initial} rest={move.rest} className="text-primary" />
+          <Initialled initial={move.initial} rest={move.rest} acronym="data-move-initial" className="text-primary" />
           {move.marker}
         </span>
         <span className="mt-0.5 block text-caption text-muted-foreground">{move.line}</span>

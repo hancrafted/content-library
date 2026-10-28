@@ -47,7 +47,7 @@ interface ChipProps {
   handlers: ReturnType<typeof controlHandlers>;
 }
 
-/** The chip: the trait's first letter large, its full name under it; the control that brings in its row. */
+/** The chip: the acronym's letter large, the full name under it, a gloss under that where one is set; the control that brings in its row. */
 function Chip({ row, expanded, handlers }: ChipProps) {
   const asideId = useId();
   return (
@@ -58,15 +58,20 @@ function Chip({ row, expanded, handlers }: ChipProps) {
       {...handlers}
       className={cn(
         styles.chip,
-        'flex w-40 touch-manipulation flex-col items-center gap-1 rounded-full bg-primary px-4 py-2 text-primary-foreground shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        'flex w-44 touch-manipulation flex-col items-center gap-1 rounded-full bg-primary px-4 py-2 text-primary-foreground shadow-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
       )}
     >
-      <span translate="no" className="text-heading leading-none font-semibold">
-        {row.name[0]}
+      <span data-trait-initial translate="no" className="text-heading leading-none font-semibold">
+        {row.initial}
       </span>
       <span translate="no" className="text-caption whitespace-nowrap text-primary-foreground/80">
         {row.name}
       </span>
+      {row.gloss === '' ? null : (
+        <span data-trait-gloss className="text-caption leading-none whitespace-nowrap text-primary-foreground/70">
+          {row.gloss}
+        </span>
+      )}
       <span id={asideId} className="sr-only">
         {row.aside}
       </span>

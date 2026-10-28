@@ -64,12 +64,12 @@ const stage = obj(
     learningGoal: str,
     summary: str,
     foreach: obj({ over: str, demo: int, item: str }, ['item']),
-    move: enumOf(['B', 'R', 'I', 'E', 'F']),
+    moves: list(obj({ letter: enumOf(['B', 'R', 'I', 'E', 'F']), why: str }), 1),
     gate: int,
     card: obj({ label: str, lines: list(str), status: str }),
     jobs: list(task, 1),
   },
-  ['summary', 'foreach', 'move', 'gate', 'card'],
+  ['summary', 'foreach', 'moves', 'gate', 'card'],
 );
 
 /** The Spec of a whole Workflow file. */

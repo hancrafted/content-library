@@ -1,8 +1,7 @@
 {
-  "title": "Brief the venue",
-  "caption": "Plan your company's next summer party: 200 employees across five offices in Europe. <b>One fresh chat per job</b>, and two gates before your boss sees a plan.",
-  "workflowLabel": "The venue steps, stage by stage",
-  "jobsLabel": "{stage}: jobs",
+  "title": "Your first human-in-the-loop agentic workflow",
+  "caption": "Plan your company's next summer party: 200 employees across five offices in Europe. <b>One fresh chat per step</b>, and you sign off the requirements before any research starts.",
+  "workflowLabel": "The summer party, stage by stage",
   "popover": {
     "in": "In:",
     "out": "Out:"
@@ -11,54 +10,30 @@
     "plan": {
       "popover": {
         "in": "the whole task.",
-        "out": "a short plan, split into epics."
-      }
-    },
-    "epics": {
-      "popover": {
-        "in": "one epic.",
-        "out": "its questions answered and a spec written."
+        "out": "your answers to its questions, then a short plan of epics."
       }
     },
     "requirements": {
       "popover": {
-        "in": "all epic specs.",
-        "out": "one requirements document and the tickets you sign off."
+        "in": "the most important epic.",
+        "out": "requirements and tickets you sign off."
       }
     },
-    "execute": {
+    "research": {
       "popover": {
-        "in": "one ticket.",
-        "out": "its result, with a table of numbers."
+        "in": "one ticket, in a fresh chat.",
+        "out": "its answer, with a source for every number."
       }
     },
-    "aggregate": {
+    "page": {
       "popover": {
-        "in": "all ticket results.",
-        "out": "one report with risks and open decisions."
-      }
-    },
-    "review": {
-      "popover": {
-        "in": "the report.",
-        "out": "a page you sign off or send back."
+        "in": "the plan, the requirements and the research.",
+        "out": "one page you sign off or send back."
       }
     }
   },
-  "jobs": {
-    "scope": {
-      "detail": "3 questions,",
-      "forgot": "<marker>1 you forgot</marker>"
-    },
-    "checked": "Checked by a second chat"
-  },
-  "legend": {
-    "label": "Legend",
-    "freshChat": "<marker>A fresh chat per job</marker>",
-    "checked": "Checked against the requirements card",
-    "parked": "Waits for its turn"
-  },
   "chat": {
+    "lead": "The Plan stage starts with an interview:",
     "title": "Interview · the worked chat",
     "open": "See the chat",
     "close": "Close the chat",
@@ -152,39 +127,34 @@
   "voiceScript": {
     "segments": {
       "restate": {
-        "title": "Restate",
+        "title": "The whole task",
         "keywords": "",
-        "script": "The task: plan your company's next summer party, 200 employees across five offices in Europe. If you asked AI for all of that in one prompt, you would get pages of polished and confident answers, and you could trust almost none of them."
+        "script": "Now let's put the five moves to work on the whole task: plan your company's next summer party, 200 employees across five offices in Europe. This is your first human-in-the-loop agentic workflow: the AI does the work in stages, and you stay in the loop at the points that matter."
       },
-      "break-it-down": {
-        "title": "Break it down",
+      "interview-and-plan": {
+        "title": "Interview, then plan",
         "keywords": "",
-        "script": "So first, break it down. The party falls into five pieces: venue, travel, catering, invitations and budget. We take only the venue now, and the other four wait for their turn, because one piece is small enough to get right."
-      },
-      "interview": {
-        "title": "Interview",
-        "keywords": "",
-        "script": "Next, the interview. Before it starts, the AI asks you questions, the way a contact at an agency would. Three questions come up, and one of them is something you had forgotten: whether last year's party left feedback worth keeping. That is the unwritten context coming out before the AI guesses."
+        "script": "It starts with a plan, and the plan starts with an interview. Before it guesses, the AI asks you questions, one at a time, and one of them is the one you forgot: what went wrong last time. Then it breaks the party down into epics and names the one to start with."
       },
       "requirements": {
         "title": "Requirements",
         "keywords": "",
-        "script": "Then requirements, and this is a stage you sign off before any research starts. Everything gets written onto one card, short and made of essentials, and every later job reads from it. If the card is wrong, you want to find out here, while it is cheap."
+        "script": "Next, requirements for that one epic. The AI grills you on it in depth, then writes requirements and tickets, and you sign them off before any research starts. If the card is wrong, you want to find out here, while it is cheap."
       },
       "research-fresh-each-time": {
         "title": "Research, fresh each time",
         "keywords": "",
-        "script": "Now the research. Three venues get three fresh chats, and each one is checked against the card. Handing work to several of them at once is its own topic, and it is the promotion Episode."
+        "script": "Now the research. Every ticket gets its own fresh chat, with web search and a source for every number, so no chat drags the whole history along."
       },
-      "compare-and-check": {
-        "title": "Compare and check",
+      "one-page": {
+        "title": "One page",
         "keywords": "",
-        "script": "The three results come back together and are compared, again against the card, not against a feeling. That makes two gates in the whole flow: the card, and the comparison. A mistake has to get past both."
+        "script": "Finally, the plan, the requirements and the research are gathered into one page, and that page is your second gate: you sign it off or send it back. A mistake has to get past both gates."
       },
-      "recommendation-and-on": {
-        "title": "Recommendation, and on",
+      "live-next": {
+        "title": "Live next",
         "keywords": "",
-        "script": "What comes out is the venue plan for your boss, and the whole thing ran on the same brief you would use for any task. (pause) Now let's do it live: I will show you how that interview feels when you run it yourself."
+        "script": "Same five moves, any task. (pause) Now let's do it live: I will show you how that interview feels when you run it yourself."
       }
     }
   }

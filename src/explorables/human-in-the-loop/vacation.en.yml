@@ -161,7 +161,9 @@ stages:
     title: Brief
     learningGoal: 'Interview first: the AI asks before it guesses, then writes the requirements you sign off.'
     summary: 'Get interviewed, then sign off the requirements'
-    move: I
+    moves:
+      - letter: I
+        why: 'Interview first: the AI asks before it guesses, then writes the requirements you sign off.'
     gate: 1
     card:
       label: You sign off
@@ -337,7 +339,9 @@ stages:
       over: spec#research
       demo: 3
       item: stay
-    move: F
+    moves:
+      - letter: F
+        why: 'Fresh context per piece: each kind of stay gets its own chat, with web search and a source for every fact.'
     jobs:
       - id: stay
         title: Chat
@@ -517,7 +521,9 @@ stages:
     title: Decide
     learningGoal: 'Human in the loop: the AI ranks, you pick, and your note carries everything the page needs.'
     summary: 'Rank the stays, then you pick one'
-    move: E
+    moves:
+      - letter: E
+        why: 'Human in the loop: the AI ranks, you pick, and your note carries everything the page needs.'
     gate: 2
     jobs:
       - id: compare
