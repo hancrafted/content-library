@@ -89,3 +89,19 @@ export const visibility = z.enum(VISIBILITIES, {
     return `is "${String(issue.input)}", but must be public or unlisted`;
   },
 });
+
+/** A value from a closed list, refusing a missing or unknown one in words the refusal can repeat. */
+export function closed<const T extends readonly [string, ...string[]]>(values: T) {
+  const list = values.join(', ');
+  return z.enum(values, {
+    error: (issue) =>
+      issue.input === undefined
+        ? `is required, one of ${list}`
+        : `is "${String(issue.input)}", but must be one of ${list}`,
+  });
+}
+
+const tag = closed(TAG_IDS);
+
+/** A record's Tags, lead first, refusing none and an unknown one in the same words on every kind. */
+export const tags = z.tuple([tag], tag, { error: 'is required, one Tag or more, the first its lead Tag' }).readonly();

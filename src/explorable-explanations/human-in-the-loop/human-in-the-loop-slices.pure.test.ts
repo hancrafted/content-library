@@ -5,6 +5,7 @@ import {
   progressTarget,
   progressUploadEvent,
   shownWorkflow,
+  showWorkflow,
   slicesOf,
   uploadEvent,
 } from './human-in-the-loop-slices.pure';
@@ -12,6 +13,7 @@ import type { HumanInTheLoopData, UiWords } from './human-in-the-loop.types';
 import { workflowOf } from './workflow-file-adapter.pure';
 import { flow as baseFlow, job as baseJob, stage } from './workflow-fixture.pure';
 import { loadWorkflow } from './workflow-loader.pure';
+import { runOf } from './workflow-run.pure';
 import { createState, type WorkflowEvent } from './workflow-state.pure';
 import { workflowView } from './workflow-view.pure';
 import fixtureEn from './workflow.fixture.en.yml';
@@ -41,14 +43,18 @@ const data: HumanInTheLoopData = {
   readonly: false,
 };
 const shown = (workflow: Workflow, state: ReturnType<typeof createState>) => ({
+  ...showWorkflow(workflow, state),
   data,
   state,
-  workflow,
   note: null,
   progress: null,
-  view: workflowView(workflow, state),
   debugAvailable: false,
 });
+const realFlow = (): Workflow => {
+  const loaded = loadWorkflow(fixtureEn);
+  if ('problems' in loaded) throw new Error(loaded.problems.join('\n'));
+  return workflowOf(loaded.file);
+};
 const start = { workflowId: data.workflowId, level: data.level, view: data.view };
 
 const slicesFor = (state: ReturnType<typeof createState>, controls = {}, sent: WorkflowEvent[] = []) =>
@@ -268,7 +274,7 @@ describe('success cases', () => {
     const note = { kind: 'stale', onDownload: () => undefined, onDiscard: () => undefined } as const;
     // ACT
     const slices = slicesOf(
-      { data, state, workflow, note, progress: null, view: workflowView(workflow, state), debugAvailable: false },
+      { ...showWorkflow(workflow, state), data, state, note, progress: null, debugAvailable: false },
       callbacksFor(() => undefined),
     );
     // ASSERT
@@ -364,6 +370,31 @@ describe('success cases', () => {
     // ASSERT
     expect(toolbar.demo).toMatchObject({ show: false, resetShow: false });
   });
+
+  it('draws the rounds the run plays, from the example before anything is pasted', () => {
+    // ARRANGE
+    const real = realFlow();
+    const empty = createState(start);
+    const pasted = { ...empty, slotValues: { 'each.look#2': 'R2' } };
+    // ACT
+    const before = showWorkflow(real, empty);
+    const after = showWorkflow(real, pasted);
+    // ASSERT
+    expect(before.played.each).toBe(before.drawn.each);
+    expect(before.drawn.each).toBe(real.stages.find((s) => s.id === 'each')?.foreach?.demo);
+    expect(after.drawn.each).toBe(after.played.each);
+  });
+
+  it('gives the view and the run of the same results, so the diagram and the modal agree', () => {
+    // ARRANGE
+    const real = realFlow();
+    const state = { ...createState(start), slotValues: { 'each.look#2': 'R2' } };
+    // ACT
+    const shownNow = showWorkflow(real, state);
+    // ASSERT
+    expect(shownNow.run).toEqual(runOf(real.file, { results: state.slotValues, demo: state.demo }));
+    expect(shownNow.view).toEqual(workflowView(real, { ...state, rounds: shownNow.played }));
+  });
 });
 
 describe('failure cases', () => {
@@ -435,7 +466,7 @@ describe('edge cases', () => {
     const workflow = flow('mine');
     // ACT
     const slices = slicesOf(
-      { data, state, workflow, note: null, progress: null, view: workflowView(workflow, state), debugAvailable: false },
+      { ...showWorkflow(workflow, state), data, state, note: null, progress: null, debugAvailable: false },
       callbacksFor(() => undefined),
     );
     // ASSERT
@@ -458,12 +489,11 @@ describe('edge cases', () => {
     // ACT
     const slices = slicesOf(
       {
+        ...showWorkflow(workflow, state),
         data: { ...data, readonly: true },
         state,
-        workflow,
         note: null,
         progress: null,
-        view: workflowView(workflow, state),
         debugAvailable: false,
       },
       callbacksFor(() => undefined),

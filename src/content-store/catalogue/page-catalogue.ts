@@ -1,7 +1,7 @@
 import { matchEpisode, resourceRef } from '@/content-store/catalogue/episode-id.pure';
 import {
   hasPage,
-  matchPage,
+  pageKeyOf,
   type EpisodeId,
   type EpisodesPathPage,
   type EpisodesPathSlug,
@@ -11,7 +11,6 @@ import {
   type ResourceSlug,
 } from '@/content-store/catalogue/record-routes';
 import {
-  episodePageTreatment,
   pageTreatment,
   type PageFacts,
   type PageTreatment,
@@ -104,40 +103,29 @@ export interface PageCatalogue {
 
 const NO_FACTS: PageFacts = {};
 
-/** What an Episode presents, as the predicate reads it: its visibility, its status, and whether it is an Event's copy. */
+/** What an Episode presents, as the predicate reads it: visibility, status, and whether it is an Event's copy. */
 function episodeFactsOf({ ref, visibility, status }: LoadedEpisode): PageFacts {
   const copy = matchEpisode(ref, { standalone: () => false, 'event-copy': () => true });
   return { visibility, status, ...(copy && { copy }) };
 }
 
-/** What a page presents, as the predicate reads it; an Episode or Event the records do not hold hands in nothing. */
-function factsIn(content: Content, page: PageRef): PageFacts {
-  const none = () => NO_FACTS;
-  const episodeFacts = ({ episode: { id } }: { readonly episode: { readonly id: EpisodeId } }): PageFacts => {
-    const episode = content.episodes.find(({ ref }) => ref.id === id);
-    return episode === undefined ? NO_FACTS : episodeFactsOf(episode);
-  };
-  return matchPage(page, {
-    home: none,
-    dashboard: none,
-    episodes: none,
-    events: none,
-    episode: episodeFacts,
-    resources: none,
-    resource: ({ resource: { slug } }) => {
-      const resource = content.resources.find((entry) => entry.slug === slug);
-      return resource === undefined ? NO_FACTS : { visibility: resource.visibility };
-    },
-    event: ({ event: slug }) => {
-      const event = content.events.find((entry) => entry.slug === slug);
-      return event === undefined ? NO_FACTS : { visibility: event.playlist.visibility };
-    },
-    'event-episode': episodeFacts,
-  });
+/**
+ * A page, its record, the facts the predicate reads from it and the treatment those give, paired once. `record` is
+ * undefined for a site list or a page whose record is not held (no facts, so it fails closed).
+ */
+interface Entry<P extends PageRef = PageRef, R = unknown> {
+  readonly page: P;
+  readonly record: R;
+  readonly facts: PageFacts;
+  readonly treatment: PageTreatment;
+}
+
+function entryOf<P extends PageRef, R>(page: P, record: R, facts: PageFacts): Entry<P, R> {
+  return { page, record, facts, treatment: pageTreatment(page, facts) };
 }
 
 /** The page an Episode has at `/episodes/<slug>/`: one no Event owns, with a page; an Event's copy has none there. */
-function ownPageOf({ ref }: LoadedEpisode): PageRef[] {
+function ownPageOf({ ref }: LoadedEpisode): PageOf<'episode'>[] {
   if (!hasPage(ref)) return [];
   return matchEpisode(ref, {
     standalone: (episode) => [{ kind: 'episode', episode }],
@@ -146,14 +134,10 @@ function ownPageOf({ ref }: LoadedEpisode): PageRef[] {
 }
 
 /** Each Resource's page, in record order: its type from its record, its slug naming the composition folder. */
-function resourcePagesIn(content: Content): PageOf<'resource'>[] {
+function resourcePageOf({ type, slug }: Resource): PageOf<'resource'> {
   // Every Resource the store loads is an entry of the generated Resource registry, keyed by its slug (`tsc` holds key
   // = slug, and the load refuses a record without a composition folder), so its slug names a composition.
-  return content.resources.map(({ type, slug }) => ({
-    kind: 'resource',
-    type,
-    resource: resourceRef(slug as ResourceSlug),
-  }));
+  return { kind: 'resource', type, resource: resourceRef(slug as ResourceSlug) };
 }
 
 /**
@@ -170,20 +154,34 @@ function eventEpisodePagesIn(content: Content): EventEpisodePage[] {
   );
 }
 
-/** Every page the records give, in the catalogue's order. */
-function pagesIn(content: Content): PageRef[] {
-  return [
-    { kind: 'home' },
-    { kind: 'dashboard' },
-    { kind: 'episodes' },
-    { kind: 'events' },
-    { kind: 'resources' },
-    ...content.episodes.flatMap(ownPageOf),
-    ...resourcePagesIn(content),
-    ...content.events.map(({ slug }) => ({ kind: 'event', event: slug }) as const),
-    // The plain page reference: what it presents is the route resolution's, never part of `pages`.
-    ...eventEpisodePagesIn(content).map(({ kind, event, episode }) => ({ kind, event, episode })),
-  ];
+/** Every page the records give, in the catalogue's order, each read once with its record, facts and treatment. */
+function entriesIn(content: Content) {
+  const kinds = ['home', 'dashboard', 'episodes', 'events', 'resources'] as const;
+  const lists = kinds.map((kind) => entryOf({ kind }, undefined, NO_FACTS));
+  const episodeOf = (id: EpisodeId) => content.episodes.find(({ ref }) => ref.id === id);
+  const episodeEntry = <P extends PageRef>(page: P, record: LoadedEpisode | undefined) =>
+    entryOf(page, record, record === undefined ? NO_FACTS : episodeFactsOf(record));
+  // Every Episode record, for the site's lists; only one with a page at `/episodes/` is a page of its own.
+  const records = content.episodes.map((record) => {
+    const [page] = ownPageOf(record);
+    const standIn = page ?? ({ kind: 'episode', episode: record.ref } as PageOf<'episode'>);
+    return { ...entryOf(standIn, record, episodeFactsOf(record)), hasOwnPage: page !== undefined };
+  });
+  const episodes = records.filter(({ hasOwnPage }) => hasOwnPage);
+  const resources = content.resources.map((record) =>
+    entryOf(resourcePageOf(record), record, { visibility: record.visibility }),
+  );
+  const events = content.events.map((record) =>
+    entryOf({ kind: 'event', event: record.slug } as const, record, { visibility: record.playlist.visibility }),
+  );
+  const underEvents = eventEpisodePagesIn(content).map((page) => ({
+    ...episodeEntry(
+      { kind: page.kind, event: page.event, episode: page.episode } as PageOf<'event-episode'>,
+      episodeOf(page.episode.id),
+    ),
+    presenting: page,
+  }));
+  return { lists, records, episodes, resources, events, underEvents };
 }
 
 /** The params a page under `/episodes/` is built at: an Episode's own page at its slug. */
@@ -195,52 +193,49 @@ export function episodesPathParamsOf({ episode }: EpisodesPathPage): EpisodesPat
 export function eventEpisodeParamsOf({ event, episode }: PageOf<'event-episode'>): EventEpisodeParams {
   return { event, episode: episode.slug };
 }
+type Entries = ReturnType<typeof entriesIn>;
 
-const isEpisodesPathPage = (page: PageRef): page is EpisodesPathPage => page.kind === 'episode';
-const isResourcePage = (page: PageRef): page is PageOf<'resource'> => page.kind === 'resource';
-
-/** The static params and page lookup of the built Resource pages, one set per type's path. */
-function resourceRoutesOf(
-  built: readonly PageOf<'resource'>[],
-): Pick<PageCatalogue, 'resourceParams' | 'resourcePageAt'> {
+/** The static params and page lookups of the built pages: the entries whose treatment exports. */
+function routesOf({
+  episodes,
+  resources,
+  events,
+  underEvents,
+}: Entries): Omit<PageCatalogue, 'pages' | 'treatmentOf' | `listed${string}`> {
+  const exported = <E extends Entry>(of: readonly E[]) => of.filter(({ treatment }) => treatment.exported);
   return {
+    episodesPathParams: () => exported(episodes).map(({ page }) => episodesPathParamsOf(page)),
+    episodesPathPageAt: ({ episode }) =>
+      exported(episodes).find(({ page }) => episodesPathParamsOf(page).episode === episode)?.page,
     resourceParams: (type) =>
-      built.filter((page) => page.type === type).map(({ resource }) => ({ resource: resource.slug })),
-    resourcePageAt: (type, { resource }) => built.find((page) => page.type === type && page.resource.slug === resource),
+      exported(resources)
+        .filter(({ page }) => page.type === type)
+        .map(({ page }) => ({ resource: page.resource.slug })),
+    resourcePageAt: (type, { resource }) =>
+      exported(resources).find(({ page }) => page.type === type && page.resource.slug === resource)?.page,
+    eventParams: () => exported(events).map(({ page }) => ({ event: page.event })),
+    eventEpisodeParams: () => exported(underEvents).map(({ page }) => eventEpisodeParamsOf(page)),
+    eventEpisodePageAt: (params) =>
+      exported(underEvents).find(({ page }) => {
+        const { event, episode } = eventEpisodeParamsOf(page);
+        return event === params.event && episode === params.episode;
+      })?.presenting,
   };
-}
-
-/** The Resources the overview lists: those whose page is listed, with the Tags their record carries. */
-function listedResourcesIn(content: Content, treatmentOf: (page: PageRef) => PageTreatment): ListedResource[] {
-  return resourcePagesIn(content).flatMap((page, at) =>
-    treatmentOf(page).listed ? [{ page, tags: content.resources[at].tags }] : [],
-  );
 }
 
 /** The catalogue of the pages these records give: what the store serves over its own records. */
 export function catalogueOf(content: Content): PageCatalogue {
-  const treatmentOf = (page: PageRef) => pageTreatment(page, factsIn(content, page));
-  const pages = pagesIn(content).map((page) => ({ page, treatment: treatmentOf(page) }));
-  const built = pages.filter(({ treatment }) => treatment.exported).map(({ page }) => page);
-  const builtUnderEpisodes = built.filter(isEpisodesPathPage);
-  const builtResources = built.filter(isResourcePage);
-  const builtUnderEvents = eventEpisodePagesIn(content).filter((page) => treatmentOf(page).exported);
+  const all = entriesIn(content);
+  const { lists, records, episodes, resources, events, underEvents } = all;
+  const entries: readonly Entry[] = [...lists, ...episodes, ...resources, ...events, ...underEvents];
+  const listed = <E extends Entry>(of: readonly E[]) => of.filter(({ treatment }) => treatment.listed);
+  const byKey = new Map([...records, ...entries].map((entry) => [pageKeyOf(entry.page), entry]));
   return {
-    pages,
-    treatmentOf,
-    episodesPathParams: () => builtUnderEpisodes.map(episodesPathParamsOf),
-    episodesPathPageAt: ({ episode }) =>
-      builtUnderEpisodes.find((page) => episodesPathParamsOf(page).episode === episode),
-    ...resourceRoutesOf(builtResources),
-    eventParams: () => built.flatMap((page) => (page.kind === 'event' ? [{ event: page.event }] : [])),
-    eventEpisodeParams: () => builtUnderEvents.map(eventEpisodeParamsOf),
-    eventEpisodePageAt: (params) =>
-      builtUnderEvents.find((page) => {
-        const { event, episode } = eventEpisodeParamsOf(page);
-        return event === params.event && episode === params.episode;
-      }),
-    listedEpisodes: () => content.episodes.filter((episode) => episodePageTreatment(episodeFactsOf(episode)).listed),
-    listedEvents: () => content.events.filter(({ slug }) => treatmentOf({ kind: 'event', event: slug }).listed),
-    listedResources: () => listedResourcesIn(content, treatmentOf),
+    pages: entries.map(({ page, treatment }) => ({ page, treatment })),
+    treatmentOf: (page) => byKey.get(pageKeyOf(page))?.treatment ?? pageTreatment(page, NO_FACTS),
+    ...routesOf(all),
+    listedEpisodes: () => listed(records).map(({ record }) => record),
+    listedEvents: () => listed(events).map(({ record }) => record),
+    listedResources: () => listed(resources).map(({ page, record }) => ({ page, tags: record.tags })),
   };
 }

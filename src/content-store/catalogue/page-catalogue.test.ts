@@ -276,6 +276,21 @@ describe('failure cases', () => {
     expect(catalogue.listedResources().map(({ page }) => page.resource.slug)).not.toContain('grids');
     expect(treatment).toMatchObject({ exported: true, index: false, inSitemap: false });
   });
+
+  it('pairs each listed Resource with its own record Tags, whatever its place among the records', () => {
+    // ARRANGE
+    const TAGS = ['workflow', 'cost', 'sales'] as const;
+    const records = RESOURCE_RECORDS.map((record, at) => ({
+      ...record,
+      tags: [TAGS[at % TAGS.length]],
+      visibility: at === 1 ? 'unlisted' : 'public',
+    }));
+    // ACT
+    const catalogue = catalogueOf(loadContent({ ...WITH_RESOURCES, resources: records }));
+    const listed = catalogue.listedResources().map(({ page, tags }) => [page.resource.slug, tags]);
+    // ASSERT
+    expect(listed).toEqual(records.filter((_, at) => at !== 1).map(({ slug, tags }) => [slug, tags]));
+  });
 });
 
 describe('edge cases', () => {
