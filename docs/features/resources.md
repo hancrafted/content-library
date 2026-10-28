@@ -10,7 +10,7 @@ Read before changing the header's Learn menu, the Resource index or the `/resour
 
 A **Resource** is every public, listed item: an Episode, an Event, an Explorable page, an Episode template or a Master slide.
 
-## Learn menu (planned, #404)
+## Learn menu
 
 The header reads Explorables, Events, Learn (Episodes, Resources), then the Dashboard (English only).
 
