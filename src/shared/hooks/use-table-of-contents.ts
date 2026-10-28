@@ -1,3 +1,4 @@
+import { readPrefs, writePrefs } from '@/shared/lib/prefs-storage';
 import { READING_LINE } from '@/shared/lib/reading-line.pure';
 import { openSectionIds, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import { useEffect, useState } from 'react';
@@ -83,4 +84,22 @@ export function useOpenSections(sections: readonly TocSection[], active: string 
     setState({ owner, toggled: next });
   };
   return { open: openSectionIds(sections, active, toggled), toggle };
+}
+
+/** Remembers the collapsed state of the table of contents chrome across reloads. */
+export function useTocCollapse(): [boolean, () => void] {
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return readPrefs().tocCollapsed ?? false;
+  });
+
+  const toggle = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      writePrefs({ tocCollapsed: next });
+      return next;
+    });
+  };
+
+  return [collapsed, toggle];
 }

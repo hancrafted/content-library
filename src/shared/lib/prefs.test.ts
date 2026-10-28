@@ -49,6 +49,26 @@ describe('success cases', () => {
       expect(JSON.parse(merged)).toEqual({ theme: 'dark', locale: 'de', drawerMode: 'over' });
     });
   });
+
+  describe('tocCollapsed', () => {
+    it('parses a stored tocCollapsed boolean', () => {
+      // ARRANGE
+      const raw = '{"theme":"dark","tocCollapsed":true}';
+      // ACT
+      const prefs = parsePrefs(raw);
+      // ASSERT
+      expect(prefs).toEqual({ theme: 'dark', tocCollapsed: true });
+    });
+
+    it('merges a tocCollapsed patch without dropping other fields', () => {
+      // ARRANGE
+      const raw = '{"theme":"dark","locale":"de"}';
+      // ACT
+      const merged = mergePrefs(raw, { tocCollapsed: true });
+      // ASSERT
+      expect(JSON.parse(merged)).toEqual({ theme: 'dark', locale: 'de', tocCollapsed: true });
+    });
+  });
 });
 
 describe('failure cases', () => {

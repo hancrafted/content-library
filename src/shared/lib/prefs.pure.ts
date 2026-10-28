@@ -18,6 +18,7 @@ export interface Prefs {
   theme?: Theme;
   locale?: Locale;
   drawerMode?: DrawerMode;
+  tocCollapsed?: boolean;
 }
 
 export function isDrawerMode(value: unknown): value is DrawerMode {
@@ -27,6 +28,8 @@ export function isDrawerMode(value: unknown): value is DrawerMode {
 export function isTheme(value: unknown): value is Theme {
   return typeof value === 'string' && (THEMES as readonly string[]).includes(value);
 }
+
+const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean';
 
 function parseJson(raw: string): unknown {
   try {
@@ -40,6 +43,7 @@ const FIELD_GUARDS: { [K in keyof Prefs]-?: (value: unknown) => value is NonNull
   theme: isTheme,
   locale: isLocale,
   drawerMode: isDrawerMode,
+  tocCollapsed: isBoolean,
 };
 
 /** Reads a stored prefs value, keeping only fields that are valid; anything malformed yields `{}`. */

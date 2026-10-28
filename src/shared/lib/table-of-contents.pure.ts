@@ -3,6 +3,9 @@
  * sections are open, how much reading time is left. No DOM, no React.
  */
 
+/** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
+export const TOC_COLLAPSED_ATTR = 'data-toc-collapsed';
+
 /** One link; `id` equals the target's data-attribute value and URL fragment. */
 export interface TocItem {
   id: string;
@@ -97,6 +100,43 @@ export function openSectionIds(
 ): ReadonlySet<string> {
   const owner = ownerOf(sections, active);
   return new Set(sections.filter((section) => (section.id === owner) !== toggled.has(section.id)).map((s) => s.id));
+}
+
+function itemProgress(items: readonly TocItem[], active: string): number {
+  const index = items.findIndex((item) => item.id === active);
+  return index < 0 ? 0 : (index + 1) / items.length;
+}
+
+function compareSectionOrder(allSections: readonly TocSection[], ownerId: string, sectionId: string): number | null {
+  const currentIdx = allSections.findIndex((s) => s.id === ownerId);
+  const thisIdx = allSections.findIndex((s) => s.id === sectionId);
+  if (currentIdx !== thisIdx) return currentIdx > thisIdx ? 1 : 0;
+  return null;
+}
+
+/**
+ * Progress of the active Slide through a section's items (excluding the section title).
+ * Returns `null` if the section does not have multiple slides (items.length <= 1).
+ * When active is in a later section, progress is 1 (completed).
+ * When active is in an earlier section or top, progress is 0.
+ * When active is the section title, progress is 0 ("section title does not count").
+ * When active is item k (0-indexed) of N items, progress is (k + 1) / N.
+ */
+export function sectionProgress(
+  section: TocSection,
+  active: string | null,
+  allSections: readonly TocSection[],
+): number | null {
+  if (section.items.length <= 1) return null;
+  if (!active || active === section.id) return 0;
+
+  const owner = ownerOf(allSections, active);
+  if (!owner) return 0;
+
+  const order = compareSectionOrder(allSections, owner, section.id);
+  if (order !== null) return order;
+
+  return itemProgress(section.items, active);
 }
 
 export interface ReadingTime {

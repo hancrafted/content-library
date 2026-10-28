@@ -118,7 +118,10 @@ function EpisodeToc(props: {
   labels: TocLabels;
 }) {
   return (
-    <aside data-slot="toc" className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem]">
+    <aside
+      data-slot="toc"
+      className="md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:data-[toc-collapsed=true]:w-[3.5rem]"
+    >
       <TableOfContents
         locale={props.locale}
         route={props.route}
