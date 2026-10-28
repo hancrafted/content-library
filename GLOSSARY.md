@@ -99,7 +99,7 @@ _Avoid_: Sitenav, sidebar
 
 ## Episode structure
 
-**Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. The section slide is on by default and a Section may declare it has none: the Section then takes its table-of-contents title from its own words and its anchor lands on its first Slide (planned, #404). A Slide's heading level comes from its place in the Section, not from the Slide.
+**Section**: an Episode's second level: an ordered group of Slides whose first is its section slide, which names the Section. A Section may declare it has no section slide (default: it has one); the Slide stays authored for the title but is not shown, the table of contents takes the Section's title from it, and the Section's anchor lands on the first page Slide. The Title slide is never optional. The section slide is on by default and a Section may declare it has none: the Section then takes its table-of-contents title from its own words and its anchor lands on its first Slide (planned, #404). A Slide's heading level comes from its place in the Section, not from the Slide.
 _Avoid_: Chapter, part
 
 **Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.

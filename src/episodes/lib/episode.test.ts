@@ -1,6 +1,6 @@
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { describe, expect, it } from 'vitest';
-import { placeSections, sectionOf, type SectionList, type SlideOutline } from './episode.pure';
+import { placeSections, sectionOf, withoutSectionSlide, type SectionList, type SlideOutline } from './episode.pure';
 
 /** A Section as a Slide record lists it: its section slide's slug first, then its page Slides'. */
 function list(...slugs: [string, ...string[]]): readonly [SlideOutline, ...SlideOutline[]] {
@@ -16,6 +16,53 @@ function idsAndSlugs(sections: readonly (readonly [SlideOutline, ...SlideOutline
 }
 
 describe('success cases', () => {
+  describe('a Section without a section slide', () => {
+    const without = () => withoutSectionSlide(list('tour', 'first', 'second'));
+
+    it('places only its page Slides, the first under the Section anchor as an h2', () => {
+      // ARRANGE
+      const expected = [
+        { id: 'tour', slug: 'first', level: 'h2' },
+        { id: 'tour--second', slug: 'second', level: 'h3' },
+      ];
+      // ACT
+      const placed = placeSections([without()])
+        .flat()
+        .map(({ id, slide, level }) => ({ id, slug: slide.slug, level }));
+      // ASSERT
+      expect(placed).toEqual(expected);
+    });
+
+    it('hands the section slide it does not render to the Slide that stands in for it', () => {
+      // ARRANGE
+      const expected = ['tour', undefined];
+      // ACT
+      const opens = placeSections([without()])
+        .flat()
+        .map((slide) => slide.opens?.slug);
+      // ASSERT
+      expect(opens).toEqual(expected);
+    });
+
+    it('keeps a lone section slide as the Section when it has no page Slide to stand in', () => {
+      // ARRANGE
+      const expected = [['tour', 'tour']];
+      // ACT
+      const placed = idsAndSlugs([withoutSectionSlide(list('tour'))]);
+      // ASSERT
+      expect(placed).toEqual(expected);
+    });
+
+    it('still lets an anchor name its Section by the section slide', () => {
+      // ARRANGE
+      const sections = [without()];
+      // ACT
+      const found = sectionOf(sections, 'tour--second');
+      // ASSERT
+      expect(found?.slug).toBe('tour');
+    });
+  });
+
   it('places every section slide and page Slide in page order, each with its anchor, a slideless Section included', () => {
     // ARRANGE
     const sections = [

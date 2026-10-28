@@ -15,7 +15,7 @@ description: 'How an Episode page is built: the Slide is the unit, one folder ca
 
 ## Context
 
-Episode = one page: Title slide, then Sections, each a list of Slides whose first, the section slide, names it, beside a table of contents. Every Episode shares this shape, and the Markdown Dossier shares its H1/H2/H3 spine, so a later pipeline can map one onto the other.
+Episode = one page: Title slide, then Sections, each a list of Slides whose first, the section slide, names it (optional), beside a table of contents. Every Episode shares this shape, and the Markdown Dossier shares its H1/H2/H3 spine, so a later pipeline can map one onto the other.
 
 **Structure is schema, content is not.** A prototype forced each slide through a typed interface; the agent bent visuals to fit and they degraded. Visualisations need freedom no schema anticipates. One level up it flips: title, Sections, anchors, reading time and table of contents are identical for every Episode, and drift there breaks navigation, translation and the Dossier mapping.
 
@@ -66,7 +66,7 @@ flowchart LR
 ### 2. The Slide is the unit
 
 1. Each Slide MUST be one flat folder `slides/<slide>/` or `slide-pool/<slide>/`, named after its slug: `slide.tsx`, `*.client.tsx`, `*.pure.ts`, CSS module, `i18n/`. `episode.ts` only composes.
-2. A Section MUST be a list of Slides, the first, titled, naming it. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
+2. A Section MUST be a list of Slides, the first, titled, naming it, unless it declares no section slide: then its table-of-contents title MUST come from its own words and its anchor MUST land on its first Slide. The Title slide MUST stay. Anchor `<section>--<slide>`; slugs kebab-case, unique, not `top`; untitled Slides render unlisted.
 3. Reading time MUST be counted from Voice script words per locale.
 
 ### 3. Scene is free
@@ -144,7 +144,7 @@ flowchart LR
 
 ## Compliance and Enforcement
 
-1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, a slug the generated registry does not hold, foreign key, undeclared note or untitled Section opener fails `tsc`.
+1. **Types:** record, registry, kit and Translation files typed; a missing locale, a German Slide file missing an English key, a slug the generated registry does not hold, foreign key, undeclared note or untitled Section opener fails `tsc`, unless the Section declares none.
 2. **Unit tests:** the generated registry in step with the Episode folders, so an unregistered folder fails the fast suite; anchor derivation — `top` reserved, duplicate slugs rejected, untitled Slides counted but unlisted; `slideHref` to a slug outside the Episode rejected; every Slide folder named after its slug; reading time from words, 0 hidden; published anchors still produced, and a missing snapshot prints the file to paste.
 3. **Lint and dependency rules:** Episode files can't write `h1`–`h3`, carry `'use client'` outside a Slide's `*.client.tsx`, render the table of contents or import the container; a Slide folder reaches only its own files and shared locations; no Episode keeps a `parts/` or `client/` folder; the per-function line cap is off only for Slide server files (complexity and file caps hold; `*.client.tsx` and `*.pure.ts` keep every cap).
 4. **Post-build test:** every Episode in every locale — slot order, one `h1`, heading level by position, note targets resolve, no duplicate ids, anchors equal the snapshot, no raw key, reader text equals its capture.

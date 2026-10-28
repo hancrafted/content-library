@@ -67,7 +67,7 @@ function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; pa
         <SlideWrapper
           key={slide.slug}
           id={slide.id}
-          size={slide.level === 'h2' ? 'section' : 'page'}
+          size={slide.level === 'h2' && !slide.withoutSectionSlide ? 'section' : 'page'}
           mode={page.mode}
           header={headerOf(slide, page)}
         >
