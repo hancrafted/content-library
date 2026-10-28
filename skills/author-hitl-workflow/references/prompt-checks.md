@@ -1,6 +1,6 @@
 # Prompt checks
 
-Apply every row to every do and review prompt of a Workflow, rendered with `render-prompt.ts`. The evidence column points to the research question that holds the finding; read it before changing or arguing a check. A check whose research stops supporting it is cut, not softened. Lessons from our own runs, which are about chat products rather than models, live in _Prompts that survive the free tier_ in `docs/features/agentic-workflow.md`.
+Apply every row to every do and review prompt of a Workflow, rendered with `render-prompt.ts`. The evidence column points to the research question that holds the finding; read it before changing or arguing a check. A check whose research stops supporting it is cut, not softened. Lessons from our own runs, which are about chat products rather than models, live in _Prompts that survive the free tier_ in `docs/features/explorables/agentic-workflow.md`.
 
 ## Every prompt
 

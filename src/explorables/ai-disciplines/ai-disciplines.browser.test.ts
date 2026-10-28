@@ -4,7 +4,7 @@ import { hydrated } from '../../../tests/browser/hydrated';
 /*
  * The browser seam of the disciplines timeline (`npm run test:browser`), on the CyberForum intro in the built export:
  * the grounding Slide shows Preset `timeline`, the check-in-3 recap Preset `recap`. Every wait is a retrying assertion
- * or `data-motion="settled"` on the turning card (ARCH-003 §5). See docs/features/ai-disciplines.md.
+ * or `data-motion="settled"` on the turning card (ARCH-003 §5). See docs/features/explorables/ai-disciplines.md.
  */
 
 const EPISODE = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/intro/';

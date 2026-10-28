@@ -22,7 +22,7 @@ export type { LogOptions } from './claude-log-reader.pure';
  * request (input plus cache read plus cache write) and of every compaction, but not how a request splits into parts.
  * So each measured growth goes first to the reply before it (its `output_tokens`), then to reminders and memory (by
  * text length, or the configured memory size), and what is left to the messages that arrived since, by their length.
- * docs/features/context.md lists the subset of the log this reads.
+ * docs/features/explorables/context-window.md lists the subset of the log this reads.
  */
 
 function readUserPart(reader: LogReader, line: Json, part: Json) {

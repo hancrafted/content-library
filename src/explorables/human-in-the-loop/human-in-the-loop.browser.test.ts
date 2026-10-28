@@ -7,7 +7,7 @@ import { hydrated } from '../../../tests/browser/hydrated';
 /*
  * The browser seam (`npm run test:browser`, local only until the nightly lands): the Slide "Human in the loop" of the
  * Explorable explanations page in the built export, walked end to end the way a viewer does it. Every wait is a retrying assertion
- * (ARCH-003 §5). See docs/features/human-in-the-loop.md.
+ * (ARCH-003 §5). See docs/features/explorables/human-in-the-loop.md.
  *
  * The popover is a shadcn Dialog, portalled out of the visual: it is found on the page, not inside the root. Each stage
  * is a stepper of jobs; the first job opens with it, and every input carries `data-field` with the key it fills.
