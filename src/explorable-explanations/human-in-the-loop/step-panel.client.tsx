@@ -100,7 +100,7 @@ function Actions({ step, task, kit, slots, panel }: ActionsProps) {
         lead={leadOf(kit, panel) === 'copy'}
         kit={{ ...kit, words: copy, onCopy: async (each) => copied(await kit.onCopy(each)) }}
       />
-      <ChatButtons buttons={task.openAIButtons ?? words.openAIButtons} newTab={words.newTab} />
+      <ChatButtons buttons={task.openAIButtons ?? words.openAIButtons} words={words} />
       <span className="ml-auto" />
       <ExplainButton
         kit={kit}

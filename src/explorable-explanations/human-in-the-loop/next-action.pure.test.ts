@@ -18,7 +18,7 @@ describe('success cases', () => {
     expect(next).toEqual({ key: 'do', action: 'copy' });
   });
 
-  it('moves to the result once the prompt is copied, never to Open in ChatGPT', () => {
+  it('moves to the result once the prompt is copied, never to the chat buttons', () => {
     // ARRANGE
     const panels = [panel('do', { copied: true }), panel('review')];
     // ACT

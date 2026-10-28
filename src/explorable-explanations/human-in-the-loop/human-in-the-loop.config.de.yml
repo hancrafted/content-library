@@ -89,6 +89,7 @@ ui:
   slotUpload: Markdown-Datei hochladen
   slotAdd: Weiteren Eintrag hinzufügen
   newTab: öffnet in neuem Tab
+  openAIChats: Einen KI-Chat öffnen
   openAIButtons:
     - label: ChatGPT
       url: https://chatgpt.com/
