@@ -1,10 +1,24 @@
 {
   "title": "In scope",
-  "caption": "Replace with what this session covers.",
-  "items": {
-    "first": "A topic the session covers",
-    "second": "A second topic the session covers",
-    "third": "A third topic the session covers"
+  "caption": "Replace with what this session covers: each announced term and where it lands.",
+  "announced": "Announced",
+  "lands": "Where it lands",
+  "pairs": {
+    "first": {
+      "term": "A first announced term",
+      "lands": "Where it lands",
+      "detail": "One line on how"
+    },
+    "second": {
+      "term": "A second announced term",
+      "lands": "Where it lands",
+      "detail": "One line on how"
+    },
+    "third": {
+      "term": "A third announced term",
+      "lands": "Where it lands",
+      "detail": "One line on how"
+    }
   },
   "notes": {
     "talking-points": {

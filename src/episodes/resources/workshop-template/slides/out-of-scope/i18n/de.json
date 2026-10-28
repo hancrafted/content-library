@@ -1,10 +1,23 @@
 {
   "title": "Nicht im Fokus",
   "caption": "Ersetze dies durch das, was diese Session auslässt, damit niemand darauf wartet.",
+  "panel": {
+    "title": "Bewusst beiseitegelegt",
+    "line": "Damit niemand darauf wartet."
+  },
   "items": {
-    "first": "Ein Thema, das die Session auslässt",
-    "second": "Ein zweites Thema, das die Session auslässt",
-    "third": "Ein drittes Thema, das die Session auslässt"
+    "first": {
+      "title": "Ein Thema, das die Session auslässt",
+      "reason": "Eine Zeile dazu, warum, oder was stattdessen hilft"
+    },
+    "second": {
+      "title": "Ein zweites Thema, das die Session auslässt",
+      "reason": "Eine Zeile dazu, warum, oder was stattdessen hilft"
+    },
+    "third": {
+      "title": "Ein drittes Thema, das die Session auslässt",
+      "reason": "Eine Zeile dazu, warum, oder was stattdessen hilft"
+    }
   },
   "notes": {
     "talking-points": {

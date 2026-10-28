@@ -1,6 +1,6 @@
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { describe, expect, it } from 'vitest';
-import { placeSections, type SectionList, type SlideOutline } from './episode.pure';
+import { placeSections, sectionOf, type SectionList, type SlideOutline } from './episode.pure';
 
 /** A Section as a Slide record lists it: its section slide's slug first, then its page Slides'. */
 function list(...slugs: [string, ...string[]]): readonly [SlideOutline, ...SlideOutline[]] {
@@ -80,9 +80,31 @@ describe('success cases', () => {
       expect(anchor).toBe(reserved);
     });
   });
+
+  it('finds the Section an anchor names, by its section slide or one of its page Slides', () => {
+    // ARRANGE
+    const sections = [list('agenda'), list('in-scope', 'out-of-scope'), list('check-in-1')];
+    const expected = { section: 'check-in-1', page: 'in-scope' };
+    // ACT
+    const seen = {
+      section: sectionOf(sections, 'check-in-1')?.slug,
+      page: sectionOf(sections, 'in-scope--out-of-scope')?.slug,
+    };
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('finds no Section for an anchor the Episode does not have', () => {
+    // ARRANGE
+    const sections = [list('agenda'), list('in-scope', 'out-of-scope')];
+    // ACT
+    const found = sectionOf(sections, 'check-in-1');
+    // ASSERT
+    expect(found).toBeUndefined();
+  });
+
   it('rejects two slides sharing a slug within a section', () => {
     // ARRANGE
     const sections = [list('next-steps', 'recap', 'recap')];

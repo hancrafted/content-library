@@ -1,5 +1,11 @@
 {
   "title": "Will AI reduce your work? It adds work: managing it.",
   "caption": "AI takes over the execution and hands you the management, and that is what lets one person take on far more complex work.",
-  "description": "Why AI adds work rather than removing it, and the management skills that let you take on far more complex tasks with it: hand off work with enough context, onboard a new team member like a new AI session, and break a complex project into chunks with clear seams between them."
+  "description": "Why AI adds work rather than removing it, and the management skills that let you take on far more complex tasks with it: hand off work with enough context, onboard a new team member like a new AI session, and break a complex project into chunks with clear seams between them.",
+  "notes": {
+    "check-in": {
+      "header": "At the end: check-in 3",
+      "description": "After the last Slide, stop the recording, then open the card “Check-in 3” on the Event page: it jumps into the intro Episode, to this Episode's questions."
+    }
+  }
 }

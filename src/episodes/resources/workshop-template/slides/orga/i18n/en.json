@@ -1,16 +1,23 @@
 {
   "title": "Organisation",
-  "caption": "Replace with how the session runs.",
-  "items": {
-    "breaks": "Breaks: when they are",
-    "questions": "Questions: when and how to ask them",
-    "materials": "Materials: where attendees find them afterwards",
-    "contact": "Contact: how to reach the host"
+  "caption": "Replace with how the session runs: the recording and how to ask questions.",
+  "recordingLabel": "Recorded",
+  "recording": "Recording: replace with what is recorded and where it is published.",
+  "questionsLabel": "Questions",
+  "questions": "Questions: replace with when and how to ask them.",
+  "steps": {
+    "hand": "Raise hand",
+    "pause": "I pause",
+    "ask": "You ask"
   },
   "notes": {
     "talking-points": {
       "header": "What to say about the organisation",
       "description": "Replace with what you say while this Slide is up."
+    },
+    "pause-first": {
+      "header": "Pause first",
+      "description": "Pause the recording before you take a question, so no participant's voice lands in the published recording. Replace or drop this note if the session is not recorded."
     }
   }
 }

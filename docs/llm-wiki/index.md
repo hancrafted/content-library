@@ -36,6 +36,7 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does permission to answer "unknown" reduce made-up answers?](research/LLM/LLM-0015__permission-to-say-unknown/research.md) — An explicit "I don't know" option removes the pressure to guess, but in prompt-only tests it helps only modestly and mostly turns wrong answers into refusals.
 - [Why does asking for a source per claim help with unsupported claims in a web-search answer?](research/LLM/LLM-0016__source-per-claim-checkable/research.md) — A source per claim makes each claim checkable by a person and a later chat, but the studies do not show it makes the model state fewer unsupported claims, and cited sources are often wrong.
 - [Why does a fresh chat catch errors the chat that wrote the answer misses?](research/LLM/LLM-0017__fresh-chat-review-catches-errors/research.md) — A review in the chat that wrote the answer leans toward approving it; a fresh chat drops that context, but the gain over one self-review is thin.
+- [Why are a model, prompting, an agent, a workflow and a factory distinct layers of working with AI?](research/LLM/LLM-0018__ai-layers-model-to-factory/research.md) — A large language model is the foundation; prompting, agents and workflows have first-party definitions, while "factory" is a 2026 practitioner label with no settled definition.
 
 ### Organizations (ORG)
 

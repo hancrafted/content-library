@@ -1,0 +1,13 @@
+{
+  "title": "Wo die Demo von heute steht",
+  "caption": "Die Live-Demo war ein Workflow: mehrere Agentenschritte auf einem Modell, nach einem Plan, den ihr festlegt, und ihr prüft dazwischen.",
+  "notes": {
+    "path-fixed": {
+      "header": "Workflow oder Agent?",
+      "description": "Ein Workflow führt Modell- und Werkzeugschritte auf einem vorab festgelegten Pfad aus; ein Agent entscheidet Pfad und Werkzeuge selbst [1]. Darum bleibt der Plan der Demo eurer.",
+      "sources": {
+        "anthropic-effective-agents": { "title": "Anthropic, Building effective agents" }
+      }
+    }
+  }
+}

@@ -1,15 +1,28 @@
 {
   "title": "Out of scope",
-  "caption": "Replace with what this session leaves out, so no one waits for it.",
+  "caption": "No choice of model or software, no tool comparison, no vibe coding.",
+  "panel": {
+    "title": "Set aside, on purpose",
+    "line": "So nobody waits for it."
+  },
   "items": {
-    "first": "A topic the session leaves out",
-    "second": "A second topic the session leaves out",
-    "third": "A third topic the session leaves out"
+    "first": {
+      "title": "Which model, which software",
+      "reason": "Happy to take it in the Q&A at the end."
+    },
+    "second": {
+      "title": "Tool comparisons",
+      "reason": "The picture fits every tool."
+    },
+    "third": {
+      "title": "Vibe coding",
+      "reason": "No code tonight, all in plain words."
+    }
   },
   "notes": {
     "talking-points": {
-      "header": "What to say about what is left out",
-      "description": "Replace with what you say while this Slide is up."
+      "header": "So no one waits",
+      "description": "Naming what is missing tonight keeps expectations honest: which model or which software, we can take in the Q&A; no tool contest and no vibe coding, all in plain words."
     }
   }
 }

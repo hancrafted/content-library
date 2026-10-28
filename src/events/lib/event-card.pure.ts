@@ -58,10 +58,13 @@ export interface EventCard {
   readonly episodeCountLabel: string;
 }
 
-/** What a card reads of an Event the store serves: its slug, day and time, Tags, place, and its Playlist's length. */
+/**
+ * What a card reads of an Event the store serves: its slug, day and time, Tags, place, and the Episode of each
+ * Playlist entry by its slug, unique within a Playlist.
+ */
 type CardEvent = Pick<Event, 'date' | 'time' | 'tags' | 'format' | 'venue' | 'platform'> & {
   readonly slug: EventSlug;
-  readonly playlist: { readonly episodes: readonly unknown[] };
+  readonly playlist: { readonly episodes: readonly { readonly episode: { readonly slug: string } }[] };
 };
 
 /** The place line: the venue onsite, "Remote · Zoom" remote, both joined for a hybrid Event. */
@@ -83,7 +86,8 @@ function placeOf(record: CardEvent, locale: Locale): EventPlace {
  * The Tags' words arrive from page assembly.
  */
 export function eventCard(record: CardEvent, locale: Locale, tagWords: TagWordMap): EventCard {
-  const count = record.playlist.episodes.length;
+  // An Episode listed again at an anchor is still one Episode.
+  const count = new Set(record.playlist.episodes.map(({ episode }) => episode.slug)).size;
   const { title, description } = eventCopy(record.slug, locale);
   const { episodeCount } = EVENT_WORDS[locale];
   return {

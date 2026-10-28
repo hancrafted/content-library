@@ -361,13 +361,32 @@ describe('the 2026-10-28 Event', () => {
   } as const;
 
   it.each(LOCALES)(
-    'The 2026-10-28 Event page lists the Workshop template copy first, then the three copies (%s)',
+    'The 2026-10-28 Event page lists the Workshop template copy first, then each copy followed by its check-in (%s)',
     (locale) => {
       // ARRANGE
       const $ = exportedPage(localizePath(eventRoute(CYBERFORUM), locale));
+      const [intro, onboard, attention, work] = EPISODES.map((episode) =>
+        localizePath(eventEpisodeRoute(CYBERFORUM, episode), locale),
+      );
       const expected = {
-        slugs: SLUGS,
-        hrefs: EPISODES.map((episode) => `${localizePath(eventEpisodeRoute(CYBERFORUM, episode), locale)}/`),
+        slugs: [
+          'intro',
+          'onboard-ai-every-time',
+          'intro',
+          'ai-attention-span',
+          'intro',
+          'ai-gives-you-more-work',
+          'intro',
+        ],
+        hrefs: [
+          `${intro}/`,
+          `${onboard}/`,
+          `${intro}/#check-in-1`,
+          `${attention}/`,
+          `${intro}/#check-in-2`,
+          `${work}/`,
+          `${intro}/#check-in-3`,
+        ],
       };
       // ACT
       const steps = $('ol[data-event-playlist] > li[data-playlist-step]');

@@ -156,11 +156,14 @@ function resourcePagesIn(content: Content): PageOf<'resource'>[] {
   }));
 }
 
-/** Each Episode every Event's Playlist presents with a page, in record order, with its page under the Event. */
+/**
+ * Each Episode every Event's Playlist presents with a page, in record order, with its page under the Event: one page
+ * per Episode, placed by its first entry; an entry the served Event marks `repeat` gets none.
+ */
 function eventEpisodePagesIn(content: Content): EventEpisodePage[] {
   return content.events.flatMap((event) =>
-    event.playlist.episodes.flatMap(({ page: episode, place }) =>
-      episode === undefined
+    event.playlist.episodes.flatMap(({ page: episode, place, repeat }) =>
+      episode === undefined || repeat === true
         ? []
         : [{ kind: 'event-episode', event: event.slug, episode, presented: { event, episode, place } } as const],
     ),

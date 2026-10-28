@@ -1,0 +1,23 @@
+{
+  "title": "About me",
+  "caption": "Who is talking, and what he builds.",
+  "aboutMe": {
+    "initials": "HC",
+    "name": "Han Che",
+    "role": "AI trainer and builder (placeholder)",
+    "facts": {
+      "f1": "Builds agentic workflows for teams (placeholder)",
+      "f2": "Trains people to work with AI every day (placeholder)",
+      "f3": "Turns research into visual teaching units (placeholder)"
+    },
+    "linkLabel": "hancrafted.net",
+    "linkHref": "https://hancrafted.net",
+    "newTabHint": "opens in a new tab"
+  },
+  "notes": {
+    "bio": {
+      "header": "Bio facts are placeholders",
+      "description": "The role and the three facts are placeholders: replace them with what you want this audience to know about you, in both languages. Keep it to what you can say in one breath."
+    }
+  }
+}

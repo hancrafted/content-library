@@ -1,8 +1,9 @@
 import { episodeRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
 import { hasPage, isEpisodeId, RESOURCE_SLUGS } from '@/content-store/catalogue/record-routes';
-import { listEpisodes } from '@/content-store/store';
+import { listEpisodes, listEvents } from '@/content-store/store';
 import { headerModeOf } from '@/episodes/components/slide-master/slide';
 import { describe, expect, it } from 'vitest';
+import { sectionOf } from './episode.pure';
 import { compositionOf } from './registry';
 
 /*
@@ -16,6 +17,13 @@ import { compositionOf } from './registry';
 
 /** Every Episode with a page, by its EpisodeRef, as the store serves it. */
 const WITH_PAGE = listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : []));
+
+/** Every Playlist entry that opens its Episode at an anchor, with the Event presenting it. */
+const ANCHORED = listEvents().flatMap(({ slug, playlist }) =>
+  playlist.episodes.flatMap(({ page, anchor }) =>
+    page === undefined || anchor === undefined ? [] : [{ label: `${page.id}#${anchor} in ${slug}`, page, anchor }],
+  ),
+);
 
 /** The Episodes whose Scenes render their own Slide header, by slug, an Event's copy of one included. */
 const AUTHORED_HEADERS = ['ai-token-economy', 'maintaining-markdown-for-ai'];
@@ -74,15 +82,44 @@ describe('success cases', () => {
     expect(page.slug).toBe(expected);
   });
 
-  it('composes the Workshop template as agenda, in scope, out of scope and orga Slides after its Title slide', () => {
+  it('composes the Workshop template as hook, agenda, scope, poll with About me, and orga Slides after its Title slide', () => {
     // ARRANGE
-    const expected = [['agenda'], ['in-scope', 'out-of-scope'], ['orga']];
+    const expected = [['hook'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll', 'about-me'], ['orga']];
     // ACT
     const sections = compositionOf(resourceRef('workshop-template')).sections.map((section) =>
       section.map(({ slug }) => slug),
     );
     // ASSERT
     expect(sections).toEqual(expected);
+  });
+
+  it('composes the CyberForum intro as the template does, its hook renamed grounding, then a check-in per theory Episode', () => {
+    // ARRANGE
+    const expected = [
+      ['grounding'],
+      ['agenda'],
+      ['in-scope', 'out-of-scope'],
+      ['poll', 'about-me'],
+      ['orga'],
+      ['check-in-1'],
+      ['check-in-2'],
+      ['check-in-3', 'disciplines-recap'],
+    ];
+    // ACT
+    const sections = compositionOf(
+      episodeRef('intro', '2026-10-28-cyberforum-akademie-intro-agentic-workflow'),
+    ).sections.map((section) => section.map(({ slug }) => slug));
+    // ASSERT
+    expect(sections).toEqual(expected);
+  });
+
+  it.each(ANCHORED)('opens $label at a Section the Episode has', ({ page, anchor }) => {
+    // ARRANGE
+    const { sections } = compositionOf(page);
+    // ACT
+    const section = sectionOf(sections, anchor);
+    // ASSERT
+    expect(section).toBeDefined();
   });
 });
 

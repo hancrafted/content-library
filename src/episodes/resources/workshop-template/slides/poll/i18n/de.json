@@ -1,0 +1,71 @@
+{
+  "title": "Wo steht ihr?",
+  "caption": "Vier Fragen, eine halbe Minute, auf dem Handy.",
+  "poll": {
+    "voteUrl": "https://directpoll.com/PLACEHOLDER-vote",
+    "resultUrl": "https://directpoll.com/PLACEHOLDER-result",
+    "scan": "Zum Abstimmen scannen",
+    "open": "Im Browser abstimmen",
+    "qrLabel": "QR-Code zur Abstimmungsseite von directpoll",
+    "createNote": "Create your poll at directpoll.com",
+    "notice": "anonym – wir zählen nur Antworten, sie fließen in eine spätere Auswertung ein",
+    "showResults": "Live-Ergebnisse zeigen",
+    "resultsHint": "Lädt erst nach dem Klick von directpoll.com.",
+    "resultsFallback": "Ergebnisse im zweiten Tab",
+    "resultsTitle": "Live-Ergebnisse der Umfrage",
+    "newTabHint": "öffnet in einem neuen Tab"
+  },
+  "questions": {
+    "model": {
+      "question": "Was ist KI für dich am ehesten?",
+      "answers": {
+        "search": "Suchmaschine – nur schlauer, liefert Antworten",
+        "chat": "Chat – ein Gesprächspartner für meine Fragen",
+        "assistant": "Assistent – arbeitet in meinen Tools mit",
+        "colleague": "Kollege – dem ich ganze Aufgaben übernehmen lasse",
+        "team": "Team – mehrere Agenten, die ich steuere",
+        "factory": "Fabrik – eine KI-Organisation, die für mich läuft",
+        "unsure": "Weiß ich noch nicht"
+      }
+    },
+    "fluency": {
+      "question": "Wie schätzt du deine KI-Kompetenz ein?",
+      "answers": {
+        "beginner": "Einsteiger – kaum Erfahrung mit KI",
+        "basic": "Grundlagen – Chat und einfache Prompts",
+        "confident": "Sicher – Context Engineering, Workflows",
+        "advanced": "Fortgeschritten – baue Agenten und Harnesses",
+        "expert": "Experte – Agenten-Systeme betreiben"
+      }
+    },
+    "scope": {
+      "question": "Wofür entscheidest du beim KI-Einsatz mit?",
+      "answers": {
+        "self": "Eigene Arbeit – nur für mich",
+        "team": "Mein Team – wie wir arbeiten",
+        "unit": "Abteilung – für meinen Bereich",
+        "org": "Ganze Firma – unternehmensweit",
+        "open": "Noch offen – kein konkretes Ziel"
+      }
+    },
+    "usage": {
+      "question": "Was ist das Weitreichendste, das du heute mit KI machst?",
+      "answers": {
+        "none": "Noch nichts – habe KI noch nicht genutzt",
+        "ask": "Chat – Fragen stellen, Texte schreiben lassen",
+        "documents": "Eigene Unterlagen – hochladen, gemeinsam überarbeiten",
+        "embedded": "In meinen Tools – KI in Office, Mail, Editor",
+        "delegate": "Aufgaben übergeben – KI erledigt mehrere Schritte",
+        "build": "Eigene Agenten bauen – Workflows für meine Arbeit",
+        "orchestrate": "Mehrere Agenten – parallel steuern und orchestrieren",
+        "product": "KI-Produkte bauen – für Kunden oder Nutzer"
+      }
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Was Du zur Umfrage sagst",
+      "description": "Handys raus: Code scannen, vier Fragen, eine halbe Minute, je eine Antwort. Die Fragen sind Poll v1 und bleiben gleich, damit die Antworten über alle Events vergleichbar sind (AIE-0016); ändere sie nur mit einer neuen Version im Fragenregister. Die Ergebnisse laden erst auf Klick, vorher geht nichts an directpoll."
+    }
+  }
+}

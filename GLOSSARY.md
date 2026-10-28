@@ -46,8 +46,11 @@ _Avoid_: Host, client, partner, venue
 **Event registry**: every Event the code knows, generated from the Event files, so adding an Event is adding its file `src/content-store/events/<slug>.ts`. `npm run registry` writes it beside the Episode registry: the Event slugs in lib, the records the content store loads; the fast suite fails while it is stale.
 _Avoid_: Event slug list, hand-kept Event pages
 
-**Playlist**: an ordered list of Episodes and its visibility, nothing else. An **event Playlist** is one an Event presents, read from the Event side, never stored; it may list unlisted Episodes, while a public Playlist no Event presents lists only public ones. One record each in the content store (`src/content-store/playlists/`).
+**Playlist**: an ordered list of Playlist entries and its visibility, nothing else. An **event Playlist** is one an Event presents, read from the Event side, never stored; it may list unlisted Episodes, while a public Playlist no Event presents lists only public ones. One record each in the content store (`src/content-store/playlists/`).
 _Avoid_: Agenda, series, collection
+
+**Playlist entry**: one numbered step of a Playlist: an Episode id, or an Episode with an `anchor`, opening it at that Section. An Episode may be listed again at another anchor, so the intro returns for each check-in; its card then shows only that Section's title. "n of m" counts every entry; the Episode's page takes its place from its first.
+_Avoid_: Playlist item, step
 
 **visibility**: whether a record is listed and indexed: `public` or `unlisted`, required on every Episode and Playlist, so a forgotten one is refused and fails closed. Unlisted is not private: anyone holding the URL can open the page. `attendees` is refused until the platform horizon gives it an enforcer.
 _Avoid_: Status, private, hidden, draft
@@ -67,8 +70,11 @@ _Avoid_: Type, kind, length
 **Resource**: a public page that is not an Episode, shaped like one: an `episode()` composition of Slides rendered through the one Episode container, so it has the table of contents and the Context drawer. Its record (`src/content-store/resources/<slug>.ts`) holds a slug, a type from the closed `RESOURCE_TYPES` (Explorable explanation, Episode template, Master slide), Tags and a visibility; its title and description are the composition's own words. The URL is worked out from type and slug, `/<type plural>/<slug>/`, and is public, indexed and in the sitemap; `/resources/` lists them. One composition folder each, `src/episodes/resources/<slug>/`; `npm run registry` generates `RESOURCE_SLUGS` and the compositions from the folders, and the store refuses a record without a folder and a folder without a record. A Resource is in no Episode list: not the Episode ids, the Episode browser, Featured or a Playlist. The six: Context window and Human in the loop (Explorable explanations), Episode template and Workshop template (Episode templates), Timelines and Grids (Master slides). Design-ADR `docs/adr/0019-resources-overview.md`.
 _Avoid_: Tooling page, Layout reference, reference Episode
 
-**Workshop template**: the Resource (an Episode template, `/episode-templates/workshop-template/`) a new Event's opening Episode is copied from (`src/episodes/resources/workshop-template/`): a Title slide, then agenda, in-scope, out-of-scope and orga Slides, every word a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
+**Workshop template**: the Resource (an Episode template, `/episode-templates/workshop-template/`) a new Event's opening Episode is copied from (`src/episodes/resources/workshop-template/`): a Title slide, then a hook, agenda, in-scope and out-of-scope, a poll, About me (from the Slide pool) and orga Slides, every word a placeholder. Its copy becomes an unlisted Episode, first in the Event's Playlist; the steps are the Events guide's "Add an Event" (`docs/features/events.md`).
 _Avoid_: Event template, intro template, workshop Episode
+
+**Hook slide**: the Workshop template's `hook` Slide, right after the Title slide: one placeholder Slide that is either a hook (one question or claim that opens the session) or a grounding (the picture the session builds on). A copy that grounds renames its slug to `grounding`; a copy that hooks keeps it.
+_Avoid_: Intro slide, opener
 
 **Slide library**: every Master slide a Slide copies from the Master slide Resources, Timelines and Grids (`src/episodes/resources/timelines/slides/`, `src/episodes/resources/grids/slides/`, `cp -r`), and every frame component, shared part and shared motion it imports (`src/episodes/components/slide-master/`, `src/episodes/components/slide-shared/`). Listed in `docs/design/slide-library.md`.
 _Avoid_: Catalog
@@ -92,6 +98,9 @@ _Avoid_: Chapter, part
 
 **Slide**: one frame in an Episode, stacked under the one before it: a page slide at least the viewport's height, a section slide at least 40% of it and, on the shared Slide header, on a band one step off the page; one folder named after its slug, carrying its own Scene, Speaker notes, Voice script and text, so an Episode is a composition of Slides and a Slide copies into another Episode with one import and one list entry. A Section's own slide is a **section slide**; the slides it holds are **page slides**.
 _Avoid_: Card, panel; page, which means the Next.js route the whole Episode renders as; "self-contained Slide", since every Slide is one
+
+**Anchor**: a Slide's id in its Episode page's URL, given by its position: a section slide's is its Section's slug (`check-in-1`), a page Slide's `<section>--<slide>` (`in-scope--out-of-scope`); the Title slide's is `top`. A published Episode keeps its anchors, since shared links point at them, and a Playlist entry opens its Episode at one.
+_Avoid_: Fragment, hash, slide id
 
 **Cornerstone Slide**: a Slide whose content, knowledge and definitions make it a building block other Slides and Episodes cite; it is often, not always, reused. Every Episode stands on its own, so a citing Slide quotes the cornerstone's words that carry meaning on their own and never its acronyms.
 _Avoid_: Key slide, anchor slide

@@ -17,6 +17,10 @@ export const cyberforumOnboardAiEveryTime = episode({
   slug: 'onboard-ai-every-time',
   messages: { en, de },
   title: hero,
+  notes: [
+    { slug: 'junior-to-freelancer', target: 'title' },
+    { slug: 'check-in', target: 'title' },
+  ],
   segments: [{ slug: 'welcome' }],
   sections: [theThoughtExperimentSection, fiveMovesToBriefAFreelancerSection],
 });

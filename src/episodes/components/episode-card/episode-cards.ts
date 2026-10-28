@@ -2,6 +2,7 @@ import { hasPage } from '@/content-store/catalogue/record-routes';
 import { episodeVideo, featuredIds, listedEpisodes, type LoadedEpisode } from '@/content-store/store';
 import { episodeMinutes } from '@/episodes/components/slide-master/localized-slide';
 import { overviewOrder } from '@/episodes/lib/episode-metadata.pure';
+import { sectionOf } from '@/episodes/lib/episode.pure';
 import { compositionOf } from '@/episodes/lib/registry';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { hasReadingTime, wholeMinutes } from '@/shared/lib/speaking-time.pure';
@@ -57,21 +58,40 @@ export async function episodeCards(locale: Locale, options?: EpisodeCardsOptions
   const listed = listedEpisodes();
   const shown = (options?.includeDrafts ?? true) ? listed : listed.filter(({ status }) => status === 'published');
   const entries = overviewOrder(shown, featuredIds());
-  return entries.map(await episodeCardMaker(locale, options));
+  const makeCard = await episodeCardMaker(locale, options);
+  return entries.map((entry) => makeCard(entry));
 }
 
 /**
- * The card maker of one locale: each Episode it is handed as a localized card. The Event page hands it the Episodes its
- * Playlist lists, public or unlisted, through `eventPlaylistCards`, which opens each linked card under the Event.
+ * The card of a Playlist entry that opens its Episode at an anchor: the title of the Section the anchor names, and
+ * nothing else of the Episode's (no caption, Tags, date, video or reading time), since it is a step inside one. An
+ * anchor the Episode does not have is a bug, so it throws.
+ */
+function atSection(
+  card: EpisodeCard,
+  { entry, anchor }: { entry: LoadedEpisode; anchor: string },
+  locale: Locale,
+): EpisodeCard {
+  const section = hasPage(entry.ref) ? sectionOf(compositionOf(entry.ref).sections, anchor) : undefined;
+  const title = section?.messages[locale].title;
+  if (typeof title !== 'string') throw new Error(`The Episode "${entry.ref.id}" has no Section at "${anchor}"`);
+  const { slug, route, href, status, leadTag, format, featuredRank } = card;
+  return { slug, route, href, status, title, caption: '', leadTag, format, tags: [], featuredRank };
+}
+
+/**
+ * The card maker of one locale: each Episode it is handed as a localized card. The Event page hands it each entry its
+ * Playlist lists, public or unlisted, through `eventPlaylistCards`, which opens each linked card under the Event; an
+ * entry at an anchor gets that Section's card.
  */
 export async function episodeCardMaker(
   locale: Locale,
   options?: EpisodeCardsOptions,
-): Promise<(entry: LoadedEpisode) => EpisodeCard> {
+): Promise<(entry: LoadedEpisode, anchor?: string) => EpisodeCard> {
   const t = await getTranslations({ locale });
   const read = t as unknown as ReadKey;
-  return (entry) =>
-    episodeCard(withCopy(entry, locale), {
+  return (entry, anchor) => {
+    const card = episodeCard(withCopy(entry, locale), {
       locale,
       read,
       minutes: minutesOf(entry, locale),
@@ -79,4 +99,6 @@ export async function episodeCardMaker(
       ...featuredRankOf(entry.ref.id),
       linkDrafts: options?.linkDrafts,
     });
+    return anchor === undefined ? card : atSection(card, { entry, anchor }, locale);
+  };
 }

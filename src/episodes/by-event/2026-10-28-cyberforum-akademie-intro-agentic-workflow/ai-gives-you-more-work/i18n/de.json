@@ -1,5 +1,11 @@
 {
   "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen.",
   "caption": "KI übernimmt die Ausführung und überlässt Dir das Management, und genau das lässt einen einzelnen Menschen weit komplexere Aufgaben stemmen.",
-  "description": "Warum KI Arbeit hinzufügt, statt sie wegzunehmen, und welche Management-Fähigkeiten Dich mit ihr deutlich komplexere Aufgaben übernehmen lassen: Arbeit mit genug Kontext übergeben, neue Teammitglieder wie eine neue KI-Sitzung einarbeiten und ein komplexes Projekt in Teile mit klaren Schnittstellen zerlegen."
+  "description": "Warum KI Arbeit hinzufügt, statt sie wegzunehmen, und welche Management-Fähigkeiten Dich mit ihr deutlich komplexere Aufgaben übernehmen lassen: Arbeit mit genug Kontext übergeben, neue Teammitglieder wie eine neue KI-Sitzung einarbeiten und ein komplexes Projekt in Teile mit klaren Schnittstellen zerlegen.",
+  "notes": {
+    "check-in": {
+      "header": "Am Ende: Check-in 3",
+      "description": "Nach der letzten Slide die Aufnahme stoppen, dann auf der Event-Seite die Karte „Check-in 3“ öffnen: Sie springt in die Einstiegs-Episode zu den Fragen dieser Episode."
+    }
+  }
 }

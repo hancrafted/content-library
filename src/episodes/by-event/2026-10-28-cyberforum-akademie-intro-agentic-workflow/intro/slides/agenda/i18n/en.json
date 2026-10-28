@@ -1,16 +1,47 @@
 {
   "title": "Agenda",
-  "caption": "Replace with the plan of the session: each block with its time slot.",
-  "items": {
-    "first": "Time slot: first block",
-    "second": "Time slot: second block",
-    "third": "Time slot: third block",
-    "fourth": "Time slot: questions and wrap-up"
+  "caption": "Two hours, times from the start: theory and live demo in turn, with a short check-in after each Episode.",
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": {
+      "time": "0:00",
+      "title": "Welcome"
+    },
+    "first": {
+      "time": "0:20",
+      "title": "Treat AI like a brilliant freelancer with amnesia"
+    },
+    "grill": {
+      "time": "0:35",
+      "title": "Live demo: “Grill me”"
+    },
+    "second": {
+      "time": "0:50",
+      "title": "Why AI has a weird attention span you must learn to manage"
+    },
+    "workflow": {
+      "time": "1:15",
+      "title": "Live demo: an agentic workflow"
+    },
+    "third": {
+      "time": "1:30",
+      "title": "Will AI reduce your work? It adds work: managing it."
+    },
+    "qa": {
+      "time": "1:40",
+      "title": "Questions and buffer"
+    }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theory",
+    "demo": "Demo",
+    "close": "Wrap-up"
   },
   "notes": {
     "talking-points": {
-      "header": "What to say about the agenda",
-      "description": "Replace with what you say while this Slide is up."
+      "header": "Two hours, counted from 0:00",
+      "description": "20 minutes of welcome, then Episode 1 (15), the “Grill me” demo (15), Episode 2 (25), the agentic workflow (15) and Episode 3 (10); the last 20 minutes are questions and buffer. Each check-in belongs to its Episode’s time."
     }
   }
 }

@@ -1,15 +1,29 @@
 {
   "title": "In scope",
-  "caption": "Replace with what this session covers.",
-  "items": {
-    "first": "A topic the session covers",
-    "second": "A second topic the session covers",
-    "third": "A third topic the session covers"
+  "caption": "Everything announced is in the room, as a model in your head or shown live.",
+  "announced": "Announced",
+  "lands": "Where it lands tonight",
+  "pairs": {
+    "first": {
+      "term": "Basics",
+      "lands": "A mental model",
+      "detail": "Five traits of the AI, five moves against them"
+    },
+    "second": {
+      "term": "Prompting",
+      "lands": "Live demo: “Grill me”",
+      "detail": "Instead of writing the prompt yourself, you let the AI question you: prompting one level up"
+    },
+    "third": {
+      "term": "Workflows",
+      "lands": "Live demo: a workflow",
+      "detail": "Agentic: one big task in steps, you check in between"
+    }
   },
   "notes": {
     "talking-points": {
-      "header": "What to say about the scope",
-      "description": "Replace with what you say while this Slide is up."
+      "header": "Everything announced is here",
+      "description": "Every announced term is in tonight: the basics as a mental model, prompting in the live demo “Grill me”, where the AI questions us instead of us writing the prompt, and workflows in the second live demo."
     }
   }
 }

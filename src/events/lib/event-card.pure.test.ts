@@ -8,13 +8,15 @@ import { eventCard } from './event-card.pure';
  */
 
 const SLUG = '2026-10-23-axel-agentic-workflow';
+/** A Playlist entry as the served Event lists it: only its Episode's slug read here, and the anchor it opens at. */
+const listed = (slug: string, anchor?: string) => ({ episode: { slug }, ...(anchor === undefined ? {} : { anchor }) });
 const RECORD = {
   slug: SLUG,
   date: '2026-10-23',
   tags: ['agentic-ai', 'workflow'],
   format: 'remote',
   platform: 'zoom',
-  playlist: { episodes: ['alpha', 'beta', 'gamma'] },
+  playlist: { episodes: [listed('alpha'), listed('beta'), listed('gamma')] },
 } as const;
 /** The Tags' names and tooltips as page assembly reads them from their Translation files, written out by hand. */
 const TAG_WORDS = {
@@ -115,6 +117,19 @@ describe('success cases', () => {
     // ASSERT
     expect({ count: card.episodeCount, label: card.episodeCountLabel }).toEqual(expected);
   });
+
+  it('counts an Episode the Playlist lists again at an anchor once', () => {
+    // ARRANGE
+    const record = {
+      ...RECORD,
+      playlist: { episodes: [listed('alpha'), listed('beta'), listed('alpha', 'check-in-1')] },
+    };
+    const expected = { count: 2, label: '2 Episodes' };
+    // ACT
+    const card = eventCard(record, 'en', TAG_WORDS);
+    // ASSERT
+    expect({ count: card.episodeCount, label: card.episodeCountLabel }).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -133,7 +148,7 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('uses the singular for an Event of one Episode', () => {
     // ARRANGE
-    const single = { ...RECORD, playlist: { episodes: ['alpha'] } };
+    const single = { ...RECORD, playlist: { episodes: [listed('alpha')] } };
     const expected = '1 Episode';
     // ACT
     const card = eventCard(single, 'en', TAG_WORDS);

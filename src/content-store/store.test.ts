@@ -71,7 +71,7 @@ describe('success cases', () => {
     const expected = {
       episodes: [loaded],
       events: [{ ...EVENT, playlist: presented }],
-      playlists: [PLAYLIST],
+      playlists: [{ ...PLAYLIST, episodes: [{ episode: 'alpha' }] }],
       resources: [],
     };
     // ACT
@@ -183,6 +183,44 @@ describe('success cases', () => {
     const content = loadContent(input);
     // ASSERT
     expect(content.resources.map(({ slug }) => slug)).toEqual(['grids']);
+  });
+
+  it('serves a repeated Episode at an anchor as a step of its own, the walk stepping over it', () => {
+    // ARRANGE
+    const intro = { ...EPISODE, slug: 'ai-token-economy' };
+    const theory = { ...EPISODE, slug: 'ai-attention-span' };
+    const anchor = 'check-in-1';
+    const playlist = {
+      ...PLAYLIST,
+      episodes: ['ai-token-economy', 'ai-attention-span', { episode: 'ai-token-economy', anchor }],
+    };
+    const input = { ...SOUND, episodes: [own(intro), own(theory)], playlists: [playlist] };
+    const count = playlist.episodes.length;
+    const expected = [
+      {
+        slug: 'ai-token-economy',
+        page: episodeRef('ai-token-economy'),
+        place: { position: 1, count, next: episodeRef('ai-attention-span') },
+      },
+      {
+        slug: 'ai-attention-span',
+        page: episodeRef('ai-attention-span'),
+        place: { position: 2, count, previous: episodeRef('ai-token-economy') },
+      },
+      {
+        slug: 'ai-token-economy',
+        anchor,
+        repeat: true,
+        page: episodeRef('ai-token-economy'),
+        place: { position: 3, count, previous: episodeRef('ai-attention-span') },
+      },
+    ];
+    // ACT
+    const [event] = loadContent(input).events;
+    // ASSERT
+    expect(event.playlist.episodes.map(({ episode, ...entry }) => ({ slug: episode.slug, ...entry }))).toEqual(
+      expected,
+    );
   });
 });
 
@@ -346,10 +384,13 @@ describe('failure cases', () => {
     expect(load).toThrow(expected);
   });
 
-  it('refuses a Playlist listing one Episode twice', () => {
+  it('refuses a Playlist entry whose anchor is no slug', () => {
     // ARRANGE
-    const input = { ...SOUND, playlists: [{ ...PLAYLIST, episodes: ['alpha', 'alpha'] }] };
-    const expected = 'Playlist axel: episodes lists "alpha" twice';
+    const input = {
+      ...SOUND,
+      playlists: [{ ...PLAYLIST, episodes: ['alpha', { episode: 'alpha', anchor: 'Check In' }] }],
+    };
+    const expected = 'Playlist axel: episodes.1.anchor';
     // ACT
     const load = () => loadContent(input);
     // ASSERT

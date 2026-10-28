@@ -1,0 +1,13 @@
+{
+  "kicker": "Webinar · replace with the date",
+  "flow": {
+    "engine": "Engine",
+    "engineName": "Generative AI",
+    "engineHint": "The tool you use",
+    "you": "You check",
+    "youLabel": "You",
+    "promptChip": "prompt built in",
+    "way": "Agentic: the way of working",
+    "steps": { "first": "First step", "second": "Second step", "third": "Third step" }
+  }
+}

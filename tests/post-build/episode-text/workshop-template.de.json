@@ -1,27 +1,39 @@
 {
   "title": "Workshop-Vorlage · hancrafted",
   "description": "Kopieren Sie diese Episodenvorlage als erste Episode einer neuen Veranstaltung: Titel, Agenda, was dazugehört und was nicht, und wer sie organisiert, mit Platzhaltertexten zum Ersetzen.",
-  "toc": "Inhalt Wird geladen 1 Agenda 2 Im Fokus Nicht im Fokus 3 Organisation Inhalt öffnen : Inhalt Inhalt 1 Agenda 2 Im Fokus Nicht im Fokus 3 Organisation",
+  "toc": "Inhalt Wird geladen 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? Über mich 5 Organisation Inhalt öffnen : Inhalt Inhalt 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? Über mich 5 Organisation",
   "slides": [
     {
       "id": "top",
-      "text": "Workshop-Vorlage Die erste Episode eines Workshops: pro Veranstaltung einmal kopieren, für Agenda, Umfang und Organisation."
+      "text": "Workshop-Vorlage Die erste Episode eines Workshops: pro Veranstaltung einmal kopieren, für Agenda, Umfang und Organisation. Webinar · Ersetze dies durch das Datum Motor Generative KI Das Werkzeug, das ihr nutzt 1 Erster Schritt Prompt eingebaut Ihr 2 Zweiter Schritt Prompt eingebaut Ihr 3 Dritter Schritt Prompt eingebaut Agentisch: die Arbeitsweise"
+    },
+    {
+      "id": "hook",
+      "text": "Einstieg Ersetze dies durch einen Hook oder eine Grundlegung. Ein Hook eröffnet mit einer Frage oder Behauptung; eine Grundlegung setzt das Bild, auf dem der Abend aufbaut. Eine Kopie, die grundlegt, benennt diesen Slug in grounding um. Ersetze dies durch die eine Frage oder Behauptung, mit der die Session beginnt."
     },
     {
       "id": "agenda",
-      "text": "Agenda Ersetze dies durch den Ablauf der Session: jeder Block mit seinem Zeitfenster. Zeitfenster: erster Block Zeitfenster: zweiter Block Zeitfenster: dritter Block Zeitfenster: Fragen und Abschluss"
+      "text": "Agenda Ersetze dies durch den Ablauf der Session: jeder Block mit seinem Zeitfenster. 1 00:00 Einstieg Start 2 00:00 Die erste Episode Episode 1 Theorie 3 00:00 Die zweite Episode Episode 2 Theorie 4 00:00 Die dritte Episode Episode 3 Theorie 5 00:00 Live-Demo Demo 6 00:00 Praxisteil und Fragen Praxis"
     },
     {
       "id": "in-scope",
-      "text": "Im Fokus Ersetze dies durch das, was diese Session behandelt. Ein Thema, das die Session behandelt Ein zweites Thema, das die Session behandelt Ein drittes Thema, das die Session behandelt"
+      "text": "Im Fokus Ersetze dies durch das, was diese Session behandelt: jeder angekündigte Begriff und wo er landet. Angekündigt Wo es landet Ein erster angekündigter Begriff Wo er landet Eine Zeile dazu, wie Ein zweiter angekündigter Begriff Wo er landet Eine Zeile dazu, wie Ein dritter angekündigter Begriff Wo er landet Eine Zeile dazu, wie"
     },
     {
       "id": "in-scope--out-of-scope",
-      "text": "Im Fokus (1/1) Seite 1 von 1 Nicht im Fokus Ersetze dies durch das, was diese Session auslässt, damit niemand darauf wartet. Ein Thema, das die Session auslässt Ein zweites Thema, das die Session auslässt Ein drittes Thema, das die Session auslässt"
+      "text": "Im Fokus (1/1) Seite 1 von 1 Nicht im Fokus Ersetze dies durch das, was diese Session auslässt, damit niemand darauf wartet. Bewusst beiseitegelegt Damit niemand darauf wartet. × Ein Thema, das die Session auslässt Eine Zeile dazu, warum, oder was stattdessen hilft × Ein zweites Thema, das die Session auslässt Eine Zeile dazu, warum, oder was stattdessen hilft × Ein drittes Thema, das die Session auslässt Eine Zeile dazu, warum, oder was stattdessen hilft"
+    },
+    {
+      "id": "poll",
+      "text": "Wo steht ihr? Vier Fragen, eine halbe Minute, auf dem Handy. Create your poll at directpoll.com anonym – wir zählen nur Antworten, sie fließen in eine spätere Auswertung ein 1 Was ist KI für dich am ehesten? Suchmaschine Chat Assistent Kollege Team Fabrik Weiß ich noch nicht 2 Wie schätzt du deine KI-Kompetenz ein? Einsteiger Grundlagen Sicher Fortgeschritten Experte 3 Wofür entscheidest du beim KI-Einsatz mit? Eigene Arbeit Mein Team Abteilung Ganze Firma Noch offen 4 Was ist das Weitreichendste, das du heute mit KI machst? Noch nichts Chat Eigene Unterlagen In meinen Tools Aufgaben übergeben Eigene Agenten bauen Mehrere Agenten KI-Produkte bauen Live-Ergebnisse zeigen Lädt erst nach dem Klick von directpoll.com."
+    },
+    {
+      "id": "poll--about-me",
+      "text": "Wo steht ihr? (1/1) Seite 1 von 1 Über mich Wer hier spricht, und was er baut. HC Han Che KI-Trainer und Entwickler (Platzhalter) 1 Baut agentische Workflows für Teams (Platzhalter) 2 Trainiert Menschen im täglichen Arbeiten mit KI (Platzhalter) 3 Macht aus Recherche visuelle Lerneinheiten (Platzhalter) hancrafted.net ( öffnet in einem neuen Tab )"
     },
     {
       "id": "orga",
-      "text": "Organisation Ersetze dies durch den organisatorischen Rahmen der Session. Pausen: wann sie stattfinden Fragen: wann und wie man sie stellt Unterlagen: wo Teilnehmende sie danach finden Kontakt: wie man den Host erreicht"
+      "text": "Organisation Ersetze dies durch den organisatorischen Rahmen der Session: die Aufzeichnung und wie man Fragen stellt. Aufgezeichnet Aufzeichnung: Ersetze dies durch das, was aufgezeichnet und wo es veröffentlicht wird. Fragen Fragen: Ersetze dies durch wann und wie man sie stellt. Hand heben Aufnahme pausiert Frage stellen"
     }
   ],
   "notes": [
@@ -30,8 +42,12 @@
       "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
     },
     {
+      "id": "hook",
+      "text": "Einstieg Was Du zum Einstieg sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+    },
+    {
       "id": "agenda",
-      "text": "Agenda Was Du zur Agenda sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "text": "Agenda Was Du zur Agenda sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist. Die Zeiten sind Platzhalter: Setze sie in der Kopie."
     },
     {
       "id": "in-scope",
@@ -42,8 +58,16 @@
       "text": "Nicht im Fokus Was Du zu den ausgelassenen Themen sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
     },
     {
+      "id": "poll",
+      "text": "Wo steht ihr? Was Du zur Umfrage sagst Handys raus: Code scannen, vier Fragen, eine halbe Minute, je eine Antwort. Die Fragen sind Poll v1 und bleiben gleich, damit die Antworten über alle Events vergleichbar sind (AIE-0016); ändere sie nur mit einer neuen Version im Fragenregister. Die Ergebnisse laden erst auf Klick, vorher geht nichts an directpoll."
+    },
+    {
+      "id": "poll--about-me",
+      "text": "Über mich Die Bio-Fakten sind Platzhalter Rolle und die drei Fakten sind Platzhalter: Ersetze sie durch das, was dieses Publikum über Dich wissen soll, in beiden Sprachen. Halte es auf das, was in einem Atemzug passt."
+    },
+    {
       "id": "orga",
-      "text": "Organisation Was Du zur Organisation sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "text": "Organisation Was Du zur Organisation sagst Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist. Erst pausieren Pausiere die Aufnahme, bevor Du eine Frage annimmst, damit keine Stimme eines Teilnehmenden in der veröffentlichten Aufnahme landet. Ersetze oder streiche diese Notiz, wenn die Session nicht aufgezeichnet wird."
     }
   ],
   "script": [
@@ -51,9 +75,12 @@
       "id": "top",
       "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
     },
+    { "id": "hook", "text": "Einstieg Kein Sprechtext für diese Folie." },
     { "id": "agenda", "text": "Agenda Kein Sprechtext für diese Folie." },
     { "id": "in-scope", "text": "Im Fokus Kein Sprechtext für diese Folie." },
     { "id": "in-scope--out-of-scope", "text": "Nicht im Fokus Kein Sprechtext für diese Folie." },
+    { "id": "poll", "text": "Wo steht ihr? Kein Sprechtext für diese Folie." },
+    { "id": "poll--about-me", "text": "Über mich Kein Sprechtext für diese Folie." },
     { "id": "orga", "text": "Organisation Kein Sprechtext für diese Folie." }
   ]
 }

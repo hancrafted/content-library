@@ -21,6 +21,7 @@ export const EPISODE_IDS = [
 
 /** Every Resource, by slug: an authoring bench served at `/episodes/<slug>/`, no Episode (design-ADR 0019). */
 export const RESOURCE_SLUGS = [
+  'ai-disciplines',
   'context-window',
   'episode-template',
   'grids',

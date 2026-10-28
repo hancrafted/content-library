@@ -1,16 +1,47 @@
 {
   "title": "Agenda",
-  "caption": "Ersetze dies durch den Ablauf der Session: jeder Block mit seinem Zeitfenster.",
-  "items": {
-    "first": "Zeitfenster: erster Block",
-    "second": "Zeitfenster: zweiter Block",
-    "third": "Zeitfenster: dritter Block",
-    "fourth": "Zeitfenster: Fragen und Abschluss"
+  "caption": "Zwei Stunden, Zeiten ab Start: Theorie und Live-Demo im Wechsel, nach jeder Episode ein kurzer Check-in.",
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": {
+      "time": "0:00",
+      "title": "Einstieg"
+    },
+    "first": {
+      "time": "0:20",
+      "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie"
+    },
+    "grill": {
+      "time": "0:35",
+      "title": "Live-Demo „Grill me“"
+    },
+    "second": {
+      "time": "0:50",
+      "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst"
+    },
+    "workflow": {
+      "time": "1:15",
+      "title": "Live-Demo: ein agentischer Workflow"
+    },
+    "third": {
+      "time": "1:30",
+      "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen."
+    },
+    "qa": {
+      "time": "1:40",
+      "title": "Fragen und Puffer"
+    }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theorie",
+    "demo": "Demo",
+    "close": "Abschluss"
   },
   "notes": {
     "talking-points": {
-      "header": "Was Du zur Agenda sagst",
-      "description": "Ersetze dies durch das, was Du sagst, während diese Folie zu sehen ist."
+      "header": "Zwei Stunden, ab 0:00 gezählt",
+      "description": "20 Minuten Einstieg, dann Episode 1 (15), die Demo „Grill me“ (15), Episode 2 (25), der agentische Workflow (15) und Episode 3 (10); die letzten 20 Minuten sind Fragen und Puffer. Die Check-ins gehören zur Zeit ihrer Episode."
     }
   }
 }

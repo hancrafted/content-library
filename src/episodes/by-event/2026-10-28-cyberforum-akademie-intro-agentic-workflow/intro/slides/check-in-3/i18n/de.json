@@ -1,0 +1,65 @@
+{
+  "title": "Check-in: vom Ausführen zum Managen",
+  "caption": "Zwei kurze Fragen, dann zwei zum Abschluss.",
+  "poll": {
+    "voteUrl": "https://directpoll.com/v?XEM9-nVikRs30Eoq4EuHs0V9UlTWbLs-Hfziio-v3jtQiPQJYBmxzzz_Bsvwja4gGfGdNnDdkdiUWnjWHswt1D8RqGTye6zQ",
+    "resultUrl": "https://directpoll.com/r?XEiD7vy5K5nQSWDbwPjNpL9e-pI8RDAn1wrCOhdFAQIn9ia7W1YIHQzmOERrf8H1v5C6Xx9C67ZvFiAZylxa6LB0B_abA5nzbz",
+    "stillOpen": "Handy noch offen?",
+    "scan": "Sonst neu scannen",
+    "open": "Im Browser abstimmen",
+    "qrLabel": "QR-Code zur Abstimmungsseite von directpoll",
+    "createNote": "Create your poll at directpoll.com",
+    "notice": "anonym – wir zählen nur Antworten",
+    "showResults": "Live-Ergebnisse zeigen",
+    "resultsHint": "Lädt erst nach dem Klick von directpoll.com.",
+    "resultsFallback": "Ergebnisse im zweiten Tab",
+    "resultsTitle": "Live-Ergebnisse der Umfrage",
+    "newTabHint": "öffnet in einem neuen Tab"
+  },
+  "questions": {
+    "seen": {
+      "question": "Hat dir KI schon mehr Arbeit gemacht als abgenommen, etwa durchs Prüfen und Nacharbeiten?",
+      "answers": {
+        "often": "oft",
+        "sometimes": "manchmal",
+        "never": "nie",
+        "forgot": "weiß nicht mehr",
+        "unused": "nutze das nicht"
+      }
+    },
+    "known": {
+      "question": "Kanntest du: Mit KI wirst du eher Manager als Macher?",
+      "answers": {
+        "practice": "ja, und ich arbeite so",
+        "heard": "ja, schon gehört",
+        "new": "nein, neu für mich"
+      }
+    },
+    "modelAfter": {
+      "question": "Und jetzt: Was ist KI für dich am ehesten?",
+      "answers": {
+        "search": "Suchmaschine – nur schlauer, liefert Antworten",
+        "chat": "Chat – ein Gesprächspartner für meine Fragen",
+        "assistant": "Assistent – arbeitet in meinen Tools mit",
+        "colleague": "Kollege – dem ich ganze Aufgaben übernehmen lasse",
+        "team": "Team – mehrere Agenten, die ich steuere",
+        "factory": "Fabrik – eine KI-Organisation, die für mich läuft",
+        "unsure": "Weiß ich noch nicht"
+      }
+    },
+    "shift": {
+      "question": "Hat sich dein Bild von KI heute verändert?",
+      "answers": {
+        "no": "nein",
+        "somewhat": "etwas",
+        "clearly": "deutlich"
+      }
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Aufnahme stoppen, dann Check-in",
+      "description": "Aufnahme stoppen, dann im directpoll-Cockpit auf die Fragen zu ai-gives-you-more-work weiterschalten. Erst erzählen lassen, dann die Ergebnisse zeigen; die Zahlen landen anonym in der Auswertung (AIE-0016). Zum Schluss noch einmal die Frage vom Anfang: Hat sich euer Bild von KI verschoben?"
+    }
+  }
+}

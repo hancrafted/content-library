@@ -99,7 +99,7 @@ export function EpisodeCardView({
       data={dataOf(card)}
     >
       <CardTitle variant={variant} title={card.title} route={card.route} locale={locale} level={headingLevel} />
-      <CardCaption variant={variant}>{card.caption}</CardCaption>
+      {card.caption !== '' && <CardCaption variant={variant}>{card.caption}</CardCaption>}
       <BadgeList items={card.tags} data={{ 'data-episode-tags': '' }} />
       <CardFooter card={card} variant={variant} labels={labels} showFormat={showFormat} />
     </CardShell>
