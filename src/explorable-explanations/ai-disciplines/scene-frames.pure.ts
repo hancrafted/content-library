@@ -122,10 +122,10 @@ function seeded(seed: number): () => number {
 /** The factory runs on a fast clock: one tick, and each step's length in ticks (a trip matches the dot's 0.6s). */
 const TICK = 150;
 const STEPS: readonly (readonly [FactoryStep, number])[] = [
-  ['enter', 2],
+  ['enter', 4],
   ['down', 4],
   ['up', 4],
-  ['leave', 2],
+  ['leave', 4],
 ];
 const LIFE = STEPS.reduce((sum, [, ticks]) => sum + ticks, 0);
 /** At most five requests in flight at once, one lane each. */

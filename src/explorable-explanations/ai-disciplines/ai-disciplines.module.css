@@ -119,10 +119,10 @@
 
 /* The factory: one request slides in, one result slides out, smoke rises while it works. */
 .enter {
-  animation: feed 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: feed 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .leave {
-  animation: ship 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: ship 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .running .smoke {
   animation: smoke 2.4s ease-out infinite;
@@ -133,23 +133,31 @@
   transform-origin: center;
 }
 @keyframes feed {
-  from {
-    transform: translateX(-1.2rem);
+  0% {
+    transform: translateX(-3.5rem);
     opacity: 0;
   }
-  to {
-    transform: translateX(1.2rem);
+  20%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
     opacity: 0;
   }
 }
 @keyframes ship {
-  from {
-    transform: translateX(-1rem);
+  0% {
+    transform: translateX(-0.5rem);
     opacity: 0;
   }
-  to {
-    transform: translateX(1.2rem);
+  20%,
+  80% {
     opacity: 1;
+  }
+  100% {
+    transform: translateX(3rem);
+    opacity: 0;
   }
 }
 @keyframes smoke {

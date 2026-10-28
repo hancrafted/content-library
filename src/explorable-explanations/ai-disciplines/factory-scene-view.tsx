@@ -20,26 +20,34 @@ function Building() {
   );
 }
 
-const BOX = 'absolute top-[69%] h-4 w-3 rounded-sm';
+const BOX = 'absolute size-3 rounded-sm';
+/** Each request travels on its lane, one above the other, so five in flight stay apart. */
+const laneTop = (lane: number) => ({ top: `calc(50% + ${lane * 0.85}rem)` });
 
 /**
- * The factory (a pure view): a building with a question mark on it. Each request slides in at its door, its message goes
- * to the model and back, and only then does a result slide out. Its inside never opens.
+ * The factory (a pure view): a building with a question mark on it. Each request slides in at its door on its lane, its
+ * message goes to the model and back, and only then does its result slide out. Its inside never opens.
  */
 export function FactorySceneView({ frame, label }: { readonly frame: Frame; readonly label: string }) {
   const jobs = frame.jobs ?? [];
   return (
     <div role="img" aria-label={label} className={`absolute inset-0 ${frame.running ? styles.running : ''}`}>
       <Building />
-      {jobs.map(({ id, step }) =>
+      {jobs.map(({ id, lane, step }) =>
         step === 'enter' ? (
           <span
             key={`in-${id}`}
             data-step="enter"
-            className={`${styles.enter} ${BOX} left-[22%] border-2 border-muted-foreground bg-card`}
+            style={laneTop(lane)}
+            className={`${styles.enter} ${BOX} left-[23%] border-2 border-muted-foreground bg-card`}
           />
         ) : step === 'leave' ? (
-          <span key={`out-${id}`} data-step="leave" className={`${styles.leave} ${BOX} left-[74%] bg-(--success)`} />
+          <span
+            key={`out-${id}`}
+            data-step="leave"
+            style={laneTop(lane)}
+            className={`${styles.leave} ${BOX} left-[76%] bg-(--success)`}
+          />
         ) : null,
       )}
     </div>
