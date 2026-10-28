@@ -1,6 +1,6 @@
 // Explorable page shape (#416): every Explorable page and the page template, in both locales, is a Title slide, the
-// Section `about` (one Why, How, What slide whose columns each carry a cited Speaker note) and the Section `play`
-// (the Explorable). No Preset gallery Slide remains.
+// Section `play` (the Explorable), then the Section `about` (one Why, How, What slide whose columns each carry a
+// cited Speaker note). No Preset gallery Slide remains.
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -27,10 +27,10 @@ describe('explorable page shape', () => {
   });
 
   describe.each(CASES)('$url', ({ url }) => {
-    it('has exactly a Title slide, #about and #play', () => {
+    it('shows play as the first slide and about afterwards', () => {
       // ARRANGE
       const $ = exportedPage(url);
-      const expected = ['top', 'about', 'play'];
+      const expected = ['top', 'play', 'about'];
       // ACT
       const ids = $('[data-slot="slides"] [data-slide]')
         .toArray()

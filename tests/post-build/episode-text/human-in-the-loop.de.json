@@ -1,19 +1,19 @@
 {
   "title": "Human in the Loop · hancrafted",
   "description": "Eine interaktive Erklärung des Human-in-the-Loop-Workflows: sechs Phasen von der vagen Aufgabe zum geprüften Bericht, ein frischer Chat für jede Aufgabe, und Sie prüfen jedes Ergebnis dazwischen.",
-  "toc": "Inhalt Wird geladen 1 Worum es geht 2 Ausprobieren Inhalt öffnen : Inhalt Inhalt 1 Worum es geht 2 Ausprobieren",
+  "toc": "Inhalt Wird geladen 1 Ausprobieren 2 Worum es geht Inhalt öffnen : Inhalt Inhalt 1 Ausprobieren 2 Worum es geht",
   "slides": [
     {
       "id": "top",
       "text": "Human in the Loop Ein Workflow, in dem KI-Chats die Arbeit machen und Sie steuern: jede Phase, ihre Übergabe und ihre Prüfung."
     },
     {
-      "id": "about",
-      "text": "Warum · Wie · Was Gib der KI einen großen Auftrag, und das Ergebnis sieht richtig aus: warum Du im Loop bleibst, wie, und ein Workflow zum Ausprobieren. Warum Die KI liefert ein Ergebnis, das richtig aussieht und es nicht ist. Anwälte reichten einmal einen Schriftsatz mit sechs Fällen ein, die ChatGPT erfunden hatte. ( ) Er sah richtig aus, und niemand prüfte nach. Wie Teile den Auftrag in Stufen und prüfe jede einzeln. Zerlege die Aufgabe in Schritte, schreib die Anforderungen auf, lass die KI vorher nachfragen und prüfe jeden Schritt, nicht nur das Ende. ( ) Was Ein Workflow, in dem KI-Chats die Arbeit machen und Du steuerst. Jede Stufe kopiert einen Prompt für einen frischen Chat, und Du prüfst das Ergebnis, bevor die nächste Stufe beginnt. ( ) Probier unten den Projektplan aus."
-    },
-    {
       "id": "play",
       "text": "Human-in-the-Loop-Workflow Der Projektplan-Workflow: sechs Phasen von einer vagen Aufgabe zu einem geprüften Bericht, ein frischer Chat pro Aufgabe, und Sie prüfen jedes Ergebnis dazwischen. Lies mich Was es zeigt Der Projektplan-Workflow in der Phasenansicht: sechs Phasen von einem vagen Ziel bis zum geprüften Bericht, je eine Karte. Was Sie ausprobieren Klicken Sie auf eine Phase, um ihr Fenster „Jetzt üben“ zu öffnen und ihre Prompts in einen frischen KI-Chat zu kopieren. In der Werkzeugleiste wählen Sie einen anderen Anwendungsfall. Worauf Sie achten Das Häkchen auf einer Karte zeigt: Ein Mensch prüft dieses Ergebnis, bevor die nächste Phase beginnt. Anwendungsfall : Ein Projekt planen Phasen Aufgaben Demo-Modus Jetzt üben für Grobplan Grobplan Von der vagen Aufgabe zu Epics geprüft Freigabe 1 Jetzt üben für Epics Epics Epics 1 geprüft Epics 2 geprüft Befragen, dann spezifizieren, je Epic Jetzt üben für Anforderungen Anforderungen Zusammenführen, Konflikte lösen, Tickets schneiden geprüft Freigabe 2 Jetzt üben für Ausführen Ausführen Ausführen 1 geprüft Ausführen 2 geprüft Ausführen 3 geprüft Ausführen 4 geprüft Ein frischer Chat pro Ticket Jetzt üben für Zusammenführen Zusammenführen Ergebnisse zu einem Bericht verbunden geprüft Jetzt üben für Prüfen Prüfen Der Bericht als Seite, dann deine Freigabe Freigabe 3"
+    },
+    {
+      "id": "about",
+      "text": "Warum · Wie · Was Gib der KI einen großen Auftrag, und das Ergebnis sieht richtig aus: warum Du im Loop bleibst, wie, und ein Workflow zum Ausprobieren. Warum Die KI liefert ein Ergebnis, das richtig aussieht und es nicht ist. Anwälte reichten einmal einen Schriftsatz mit sechs Fällen ein, die ChatGPT erfunden hatte. ( ) Er sah richtig aus, und niemand prüfte nach. Wie Teile den Auftrag in Stufen und prüfe jede einzeln. Zerlege die Aufgabe in Schritte, schreib die Anforderungen auf, lass die KI vorher nachfragen und prüfe jeden Schritt, nicht nur das Ende. ( ) Was Ein Workflow, in dem KI-Chats die Arbeit machen und Du steuerst. Jede Stufe kopiert einen Prompt für einen frischen Chat, und Du prüfst das Ergebnis, bevor die nächste Stufe beginnt. ( ) Probier oben den Projektplan aus."
     }
   ],
   "notes": [
@@ -22,12 +22,12 @@
       "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
     },
     {
-      "id": "about",
-      "text": "Worum es geht Ungeprüfte Ausgabe hat echtes Geld gekostet In einem Bundesverfahren in New York reichten Anwälte einen Schriftsatz mit sechs von ChatGPT erfundenen Fällen ein und wurden bestraft; das Gericht stellte fest, dass Anwälte als Kontrollinstanz für die Richtigkeit ihrer Schriftsätze zuständig sind 1 . In einer Studie schrieben Programmierer mit KI-Assistent weniger sicheren Code und hielten ihn eher für sicher, ein Ergebnis, das eine größere Studie bestreitet 2 (Recherche AIE-0005, AIE-0010). Quellen (2) Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (S.D.N.Y. June 22, 2023) ( öffnet in neuem Tab ) storage.courtlistener.com Perry et al., Do Users Write More Insecure Code with AI Assistants? ( öffnet in neuem Tab ) arxiv.org Kleine Schritte, genannte Anforderungen, Schrittprüfung Modelle lösen oft jede Teilaufgabe, scheitern aber am Zusammensetzen; Zerlegen hilft 1 . Eine genannte Anforderung wird gleichmäßiger erfüllt als eine erratene 2 . Rückfragen erhöhen die Genauigkeit bei unterbestimmten Aufgaben 3 . Prüfungen einzelner Schritte finden Fehler, die eine Prüfung der Endantwort durchlässt 4 (Recherche AIE-0007, AIE-0008, AIE-0009, AIE-0010). Quellen (4) Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models ( öffnet in neuem Tab ) arxiv.org Yang et al., What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts ( öffnet in neuem Tab ) arxiv.org Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering ( öffnet in neuem Tab ) arxiv.org Lightman et al., Let's Verify Step by Step ( öffnet in neuem Tab ) arxiv.org Frischer Chat pro Stufe, dazwischen geprüft Die Genauigkeit sinkt, je länger ein Chat wird, und ein Modell, das falsch abgebogen ist, stützt sich auf seine früheren Antworten; ein frischer, fokussierter Kontext pro Aufgabe hilft 1 . Die Antwort eines Schritts kann stimmen, während die Begründung falsch ist, deshalb prüft ein Außenstehender jedes Ergebnis 2 (Recherche AIE-0011, AIE-0010). Quellen (2) Laban et al., LLMs Get Lost In Multi-Turn Conversation ( öffnet in neuem Tab ) arxiv.org Lightman et al., Let's Verify Step by Step ( öffnet in neuem Tab ) arxiv.org"
-    },
-    {
       "id": "play",
       "text": "Ausprobieren Die Visualisierung mit eigenen Worten Die Episode zur Aufmerksamkeitsspanne der KI zeigt diesen Workflow mit den Worten ihrer Folie. Hier behält er seine Vorgaben: der Projektplan-Workflow, Urlaub eine Pille weiter, jedes „Ausprobieren“ offen."
+    },
+    {
+      "id": "about",
+      "text": "Worum es geht Ungeprüfte Ausgabe hat echtes Geld gekostet In einem Bundesverfahren in New York reichten Anwälte einen Schriftsatz mit sechs von ChatGPT erfundenen Fällen ein und wurden bestraft; das Gericht stellte fest, dass Anwälte als Kontrollinstanz für die Richtigkeit ihrer Schriftsätze zuständig sind 1 . In einer Studie schrieben Programmierer mit KI-Assistent weniger sicheren Code und hielten ihn eher für sicher, ein Ergebnis, das eine größere Studie bestreitet 2 (Recherche AIE-0005, AIE-0010). Quellen (2) Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (S.D.N.Y. June 22, 2023) ( öffnet in neuem Tab ) storage.courtlistener.com Perry et al., Do Users Write More Insecure Code with AI Assistants? ( öffnet in neuem Tab ) arxiv.org Kleine Schritte, genannte Anforderungen, Schrittprüfung Modelle lösen oft jede Teilaufgabe, scheitern aber am Zusammensetzen; Zerlegen hilft 1 . Eine genannte Anforderung wird gleichmäßiger erfüllt als eine erratene 2 . Rückfragen erhöhen die Genauigkeit bei unterbestimmten Aufgaben 3 . Prüfungen einzelner Schritte finden Fehler, die eine Prüfung der Endantwort durchlässt 4 (Recherche AIE-0007, AIE-0008, AIE-0009, AIE-0010). Quellen (4) Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models ( öffnet in neuem Tab ) arxiv.org Yang et al., What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts ( öffnet in neuem Tab ) arxiv.org Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering ( öffnet in neuem Tab ) arxiv.org Lightman et al., Let's Verify Step by Step ( öffnet in neuem Tab ) arxiv.org Frischer Chat pro Stufe, dazwischen geprüft Die Genauigkeit sinkt, je länger ein Chat wird, und ein Modell, das falsch abgebogen ist, stützt sich auf seine früheren Antworten; ein frischer, fokussierter Kontext pro Aufgabe hilft 1 . Die Antwort eines Schritts kann stimmen, während die Begründung falsch ist, deshalb prüft ein Außenstehender jedes Ergebnis 2 (Recherche AIE-0011, AIE-0010). Quellen (2) Laban et al., LLMs Get Lost In Multi-Turn Conversation ( öffnet in neuem Tab ) arxiv.org Lightman et al., Let's Verify Step by Step ( öffnet in neuem Tab ) arxiv.org"
     }
   ],
   "script": [
@@ -35,7 +35,7 @@
       "id": "top",
       "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
     },
-    { "id": "about", "text": "Worum es geht Kein Sprechtext für diese Folie." },
-    { "id": "play", "text": "Ausprobieren Kein Sprechtext für diese Folie." }
+    { "id": "play", "text": "Ausprobieren Kein Sprechtext für diese Folie." },
+    { "id": "about", "text": "Worum es geht Kein Sprechtext für diese Folie." }
   ]
 }
