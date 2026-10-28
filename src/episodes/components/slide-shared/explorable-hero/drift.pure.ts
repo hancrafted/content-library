@@ -76,6 +76,12 @@ export function areaOf(hero: {
   return { x: 24, y: top, w: right - 12 - 24, h: Math.max(24, copyTop - top - 20), compact: true };
 }
 
+/** The ambient field's area: the art area half as wide again, extending left under the headline, within the hero. */
+export function fieldAreaOf(area: Area): Area {
+  const x = Math.max(0, area.x - area.w * 0.5);
+  return { ...area, x, w: area.x + area.w - x };
+}
+
 /** What the page lets the background do now. */
 export type Motion = 'running' | 'reduced' | 'paused' | 'hidden' | 'offscreen';
 

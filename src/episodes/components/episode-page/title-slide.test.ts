@@ -24,6 +24,17 @@ describe('success cases', () => {
     expect(html).toMatch(/data-slot="slide-header"[^>]*class="[^"]*\bmt-auto\b/);
     expect(html).toMatch(/<\/h1>.*<figure>board<\/figure>/);
   });
+
+  it('marks its wrapper with the declared tone', () => {
+    // ARRANGE
+    const props = { ...TEXT, mode: 'shared' as const, entrance: 'none' as const, tone: 'inverse' as const };
+    // ACT
+    const html = renderToStaticMarkup(createElement(TitleSlide, props));
+    // ASSERT
+    expect(html).toMatch(
+      /data-slot="title-slide"[^>]*data-tone="inverse"|data-tone="inverse"[^>]*data-slot="title-slide"/,
+    );
+  });
 });
 
 describe('failure cases', () => {
@@ -46,5 +57,14 @@ describe('edge cases', () => {
     // ASSERT
     expect(html).toContain(glow);
     expect(html).toMatch(/data-slot="slide-header"[^>]*class="[^"]*\bmy-auto\b/);
+  });
+
+  it('carries no tone mark when the record declares none', () => {
+    // ARRANGE
+    const attribute = 'data-tone';
+    // ACT
+    const html = render('board');
+    // ASSERT
+    expect(html).not.toContain(attribute);
   });
 });

@@ -9,7 +9,7 @@
   "columns": {
     "why": {
       "title": "Alle sagen Agent und Workflow, und niemand sagt, was der Unterschied ist.",
-      "caption": "<marker>Die Begriffe fliegen herum, und für „Fabrik“ gibt es gar keine feste Definition.</marker> So ist schwer zu wissen, welchen Du brauchst."
+      "caption": "<marker>Die Begriffe fliegen herum, und für „Fabrik“ gibt es gar keine feste Definition.</marker> So ist schwer zu wissen, welchen Du brauchst. <claim>Selbst „20-fache Produktivität“ ist eine Schätzung, keine Messung.</claim>"
     },
     "how": {
       "title": "Jede Ebene fügt demselben Modell eine Sache hinzu.",
@@ -21,6 +21,18 @@
     }
   },
   "notes": {
+    "claim": {
+      "header": "Woher „20x“ kommt",
+      "description": "Marc Andreessen sagt, führende Programmierer in a16z-Portfoliofirmen seien „like 20x more productive than they were a year ago“, eine Schätzung eines Investors ohne genannte Methode [1]. Ein randomisierter Versuch maß erfahrene Entwickler mit KI um 19 % langsamer [2] (research AIE-0017).",
+      "sources": {
+        "a16z-andreessen-builder-culture": {
+          "title": "a16z Show, Marc Andreessen on Builder Culture in the Age of AI"
+        },
+        "metr-developer-study": {
+          "title": "Becker et al., Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
     "why": {
       "header": "Die Begriffe sind nicht gefestigt",
       "description": "Prompting, Agenten und Workflows haben Definitionen der Anbieter selbst, aber „Fabrik“ ist ein Begriff von Praktikern aus 2026 [1], und seine Definitionen unterscheiden sich darin, wie viel menschliche Kontrolle bleibt [2] (Recherche LLM-0018).",

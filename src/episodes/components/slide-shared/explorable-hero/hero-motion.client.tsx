@@ -42,7 +42,7 @@ function useMotionState(): MotionState {
 
 const REDUCED = '(prefers-reduced-motion: reduce)';
 
-function useReducedMotion(): boolean {
+export function useReducedMotion(): boolean {
   return useSyncExternalStore(
     (onChange) => {
       const query = window.matchMedia(REDUCED);
@@ -88,7 +88,7 @@ export function HeroMotionButton() {
       title={reduced ? labels.stilled : name}
       disabled={reduced}
       onClick={toggle}
-      className="absolute top-3 right-(--inset-r) z-10 grid size-11 place-items-center rounded-full border border-primary-foreground/25 bg-primary text-primary-foreground outline-offset-3 hover:border-primary-foreground focus-visible:outline-3 focus-visible:outline-primary-foreground disabled:opacity-60"
+      className="absolute top-[calc(var(--header-block)+0.75rem)] right-(--inset-r) z-10 grid size-11 place-items-center rounded-full border border-foreground/25 bg-(--tone-paper) text-foreground outline-offset-3 hover:border-foreground focus-visible:outline-3 focus-visible:outline-foreground disabled:opacity-60"
     >
       <Icon aria-hidden className="size-[18px] fill-current" />
     </button>

@@ -13,5 +13,6 @@ export const contextWindow = episode({
   slug: 'context-window',
   messages: { en, de },
   title: hero,
+  tone: 'inverse',
   sections: [playSection, aboutSection],
 });

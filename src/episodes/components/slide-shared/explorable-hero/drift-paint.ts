@@ -4,6 +4,7 @@ import {
   bubbleCountOf,
   checkpointOf,
   ease,
+  fieldAreaOf,
   LOOP_SECONDS,
   mix,
   STATIC_SECONDS,
@@ -80,11 +81,12 @@ function sizeOf(area: Area) {
 
 /** The ambient field: faint bubbles in ink, shaped by the story, plus the Human checkpoint line. */
 export function paintField(g: Pen, scene: { story: Story; area: Area; width: number; height: number; t: number }) {
-  const { story, area: a, t } = scene;
-  const size = sizeOf(a);
+  const { story, area, t } = scene;
+  const a = fieldAreaOf(area);
+  const size = sizeOf(area);
   const count = bubbleCountOf(scene.width, scene.height);
   if (story === 'human-in-the-loop')
-    line(g, { from: [a.x, checkpointOf(a)], to: [a.x + a.w, checkpointOf(a)], alpha: 0.65 });
+    line(g, { from: [area.x, checkpointOf(area)], to: [area.x + area.w, checkpointOf(area)], alpha: 0.65 });
   for (let i = 0; i < count; i++) {
     const phase = (i / count + t / LOOP_SECONDS) % 1;
     let x = a.x + a.w * (0.5 + Math.sin(i * 2.8) * (story === 'context-window' ? 0.08 : 0.27));

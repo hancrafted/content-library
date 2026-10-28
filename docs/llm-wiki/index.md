@@ -21,6 +21,7 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does letting an LLM ask clarifying questions before a task improve the result?](research/AIE/AIE-0009__clarifying-questions-before-task/research.md) — Clarifying questions improve results because they replace the model's guesses about missing requirements with the user's answers, but only for underspecified tasks.
 - [Why does checking intermediate steps catch errors that a review of only the final result misses?](research/AIE/AIE-0010__checking-intermediate-steps/research.md) — A correct-looking final answer can rest on flawed reasoning, so step-level checks find errors that final-result checks pass, though models cannot reliably find those errors in themselves.
 - [Why does a fresh, focused context outperform a long, accumulated chat?](research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md) — A fresh, focused context outperforms a long chat because accuracy falls as input grows and a model that took a wrong turn leans on its own earlier attempts and does not recover.
+- [Why does the claim of 20x productivity from AI rest on estimates rather than measurement?](research/AIE/AIE-0017__twenty-x-productivity-claim/research.md) — The 20x figure is an estimate from interested parties about leading-edge programmers, not a measurement; controlled studies find gains far smaller, and sometimes a slowdown.
 
 ### Large language models (LLM)
 

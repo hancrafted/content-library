@@ -5,7 +5,7 @@
   "slides": [
     {
       "id": "top",
-      "text": "The AI hands back a result that looks right and is not. A workflow where AI chats do the jobs and you steer: six stages, a fresh chat for each, and your check before the next one starts. Try it Why it matters Show it to your team Walk a team through one stage live, then hand them the workflow file to make their own. Copy link Project plan Stages 1 Interview Brief 2 Plan Requirements 3 Epics Per epic 4 Tickets Per epic 5 Execute Per ticket 6 Report Reviewed “Read requirements.md, then draft the epics…” Copy prompt"
+      "text": "Run your first AI workflow. You’re the manager. Explore six stages with ready-made prompts: AI does each job, you check every hand-off. Try it Why it matters Show it to your team Walk a team through one stage live, then hand them the workflow file to make their own. Copy link Project plan Stages 1 Interview Brief 2 Plan Requirements 3 Epics Per epic 4 Tickets Per epic 5 Execute Per ticket 6 Report Reviewed “Read requirements.md, then draft the epics…” Copy prompt"
     },
     {
       "id": "play",

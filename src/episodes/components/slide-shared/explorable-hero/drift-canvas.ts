@@ -1,8 +1,8 @@
 import { momentOf, paintBeat, paintField } from './drift-paint';
 import { areaOf, FIELD_INK, type Area, type Box, type Story } from './drift.pure';
 
-/** The safe top of the art: under the pause button. */
-const ART_TOP = 64;
+/** The safe top of the art: under the floating header band and the pause button. */
+const ART_TOP = 96;
 
 /** What the canvas needs from one measurement of the hero. */
 interface Frame {
@@ -40,8 +40,14 @@ function measure(canvas: HTMLCanvasElement, layer: HTMLCanvasElement, hero: HTML
   return {
     width: bounds.width,
     height: bounds.height,
-    area: areaOf({ width: bounds.width, height: bounds.height, text, top: ART_TOP, right }),
-    ink: style.getPropertyValue('--primary-foreground').trim(),
+    area: areaOf({
+      width: bounds.width,
+      height: Math.min(bounds.height, window.innerHeight),
+      text,
+      top: ART_TOP,
+      right,
+    }),
+    ink: style.getPropertyValue('--foreground').trim(),
     accent: style.getPropertyValue('--brand-accent').trim(),
   };
 }

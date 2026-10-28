@@ -12,6 +12,7 @@ import {
   headerModeOf,
   type EpisodeComposition,
   type HeaderMode,
+  type PageTone,
   type Slide,
   type SlideEntrance,
 } from '@/episodes/components/slide-master/slide';
@@ -54,6 +55,8 @@ export interface EpisodeContent {
   /** Whether the Slide wrapper renders each Slide's header (`shared`) or each Scene does (`authored`). */
   readonly header: HeaderMode;
   readonly entrance: SlideEntrance;
+  /** The Title slide's declared tone, when it has one. */
+  readonly tone?: PageTone;
 }
 
 /**
@@ -87,6 +90,7 @@ export async function recordContent(
     ...(record.title && { hero: localizeTitleScene(record.title, episode) }),
     header: episode.header,
     entrance: record.entrance ?? 'typewriter',
+    tone: record.tone,
     slides: episode.placed.map((placed) => localizeSlide(placed, episode)),
   };
 }

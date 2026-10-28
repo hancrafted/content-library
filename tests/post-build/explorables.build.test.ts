@@ -45,7 +45,29 @@ describe.each(PAGES)('the Explorable page $url', ({ path, url }) => {
   });
 });
 
+describe.each(PAGES)('the Explorable page $url title slide', ({ url }) => {
+  it('declares the inverse tone, so the page chrome can follow it', () => {
+    // ARRANGE
+    const $ = exportedPage(url);
+    // ACT
+    const tone = $('[data-slot="title-slide"]').attr('data-tone');
+    // ASSERT
+    expect(tone).toBe('inverse');
+  });
+});
+
 describe('the Explorables overview', () => {
+  it.each(LOCALES)("draws each card's drift as a static still, never a canvas, for %s", (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(ROUTES.explorables, locale));
+    // ACT
+    const stills = $('[data-explorable-card] [data-card-media] svg[data-drift-still]').toArray();
+    const canvases = $('[data-explorable-card] canvas').length;
+    // ASSERT
+    expect(stills.map((still) => $(still).attr('data-drift-still')).sort()).toEqual([...SLUGS].sort());
+    expect(canvases).toBe(0);
+  });
+
   it.each(LOCALES)('lists the three Explorable pages, each linking to its page, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.explorables, locale));

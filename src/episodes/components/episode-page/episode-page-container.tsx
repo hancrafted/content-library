@@ -11,21 +11,13 @@ import { readTranslationStrings } from '@/shared/i18n/translation-strings';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { TocSection } from '@/shared/lib/table-of-contents.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
-import { cn } from '@/shared/lib/utils';
 import { ContextDrawerSlot } from '@/shared/page-chrome/context-drawer/context-drawer-slot';
 import { TableOfContents, type TocLabels } from '@/shared/page-chrome/table-of-contents/table-of-contents.client';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
-import {
-  eyebrowsOf,
-  INSET_CLASSES,
-  slideSizeOf,
-  sourceFolderOf,
-  TOC_RESERVE_CLASS,
-  tocSectionsOf,
-} from './episode-page-container.pure';
+import { eyebrowsOf, pageClassOf, slideSizeOf, sourceFolderOf, tocSectionsOf } from './episode-page-container.pure';
 import { ExplorableHomes } from './explorable-homes';
 import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
@@ -107,6 +99,8 @@ function titleSlideOf(
     mode: page.mode,
     entrance: page.entrance,
     hero: content.hero,
+    tone: content.tone,
+    inkTarget: content.slides[0]?.id,
     ...talk,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
   };
@@ -122,7 +116,7 @@ function EpisodeToc(props: {
   return (
     <aside
       data-slot="toc"
-      className="motion-reduce:transition-none md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:transition-[width] md:duration-300 md:ease-out md:data-[toc-collapsed=true]:w-[3.5rem]"
+      className="motion-reduce:transition-none [html[data-page-tone=inverse]_&]:invisible md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:transition-[width] md:duration-300 md:ease-out md:data-[toc-collapsed=true]:w-[3.5rem]"
     >
       <TableOfContents
         locale={props.locale}
@@ -235,7 +229,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   return (
     <ExplorableHomes page={page} locale={locale}>
       <UrlStateProvider key={`${locale}/${id}`}>
-        <div data-slot="episode-page" data-episode={id} className={cn('mt-6', INSET_CLASSES, TOC_RESERVE_CLASS)}>
+        <div data-slot="episode-page" data-episode={id} className={pageClassOf(content.tone)}>
           <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
           {frame.header}
           <SlideColumn titleSlide={titleSlide} slides={slides} page={header} />

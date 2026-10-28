@@ -9,7 +9,7 @@
   "columns": {
     "why": {
       "title": "Everyone says agent and workflow, and nobody says what differs.",
-      "caption": "<marker>The words fly around, and \"factory\" has no settled definition at all.</marker> So it is hard to know which one you need."
+      "caption": "<marker>The words fly around, and \"factory\" has no settled definition at all.</marker> So it is hard to know which one you need. <claim>Even “20x productivity” is an estimate, not a measurement.</claim>"
     },
     "how": {
       "title": "Each layer adds one thing to the same model.",
@@ -21,6 +21,18 @@
     }
   },
   "notes": {
+    "claim": {
+      "header": "Where “20x” comes from",
+      "description": "Marc Andreessen says leading-edge programmers at a16z portfolio companies are “like 20x more productive than they were a year ago”, an estimate by an investor with no method given [1]. A randomized trial measured experienced developers 19% slower with AI [2] (research AIE-0017).",
+      "sources": {
+        "a16z-andreessen-builder-culture": {
+          "title": "a16z Show, Marc Andreessen on Builder Culture in the Age of AI"
+        },
+        "metr-developer-study": {
+          "title": "Becker et al., Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
     "why": {
       "header": "The words are not settled",
       "description": "Prompting, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label [1], and its definitions differ in how much human review remains [2] (research LLM-0018).",

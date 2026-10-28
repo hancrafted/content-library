@@ -19,6 +19,7 @@ export function ToolPreview({
   return (
     <div
       role="img"
+      data-tone-flip
       aria-label={label}
       className="w-full rounded-t-[20px] border border-border bg-card p-4 text-caption text-card-foreground"
     >

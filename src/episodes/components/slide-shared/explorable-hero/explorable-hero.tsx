@@ -2,7 +2,6 @@ import { localizePath, stripLocale, type Locale } from '@/shared/lib/locale.pure
 import Link from 'next/link';
 import type { ComponentType, ReactNode } from 'react';
 import type { Story } from './drift.pure';
-import styles from './explorable-hero.module.css';
 import { HeroCanvas, HeroMotion, HeroMotionButton, type MotionLabels } from './hero-motion.client';
 import { ShareLink, type ShareLinkLabels } from './share-link.client';
 
@@ -36,7 +35,7 @@ export interface ExplorableHeroProps {
 }
 
 const ACTION =
-  'inline-flex min-h-12 items-center justify-center rounded-full border px-6 text-body font-medium outline-offset-3 transition-colors focus-visible:outline-3 focus-visible:outline-primary-foreground';
+  'inline-flex min-h-12 items-center justify-center rounded-full border px-6 text-body font-medium outline-offset-3 transition-colors focus-visible:outline-3 focus-visible:outline-foreground';
 
 /** A Slide link (`slideHref`) taken apart: the logical path and the anchor, for `localizePath`. */
 function partsOf(link: string) {
@@ -52,13 +51,13 @@ function Actions({ tryIt, why, locale }: Pick<ExplorableHeroProps, 'tryIt' | 'wh
     <div className="flex flex-wrap gap-3">
       <Link
         href={localizePath(go.path, locale, go.anchor)}
-        className={`${ACTION} border-transparent bg-primary-foreground text-primary hover:bg-primary-foreground/90`}
+        className={`${ACTION} border-transparent bg-brand-accent text-(--tone-paper) hover:bg-brand-accent/90 dark:text-(--tone-ink)`}
       >
         {tryIt.label}
       </Link>
       <Link
         href={localizePath(learn.path, locale, learn.anchor)}
-        className={`${ACTION} border-primary-foreground/55 text-primary-foreground hover:bg-primary-foreground/15`}
+        className={`${ACTION} border-foreground/55 text-foreground hover:bg-foreground/15`}
       >
         {why.label}
       </Link>
@@ -76,10 +75,12 @@ export function ExplorableHero({ layers, story, locale, tryIt, why, share, motio
   return (
     <HeroMotion labels={motion}>
       <layers.Backdrop mobile>
-        <div className="absolute inset-0 bg-primary" />
+        <div className="absolute inset-0 bg-(--tone-paper)" />
+        <div className="hero-glow absolute inset-0 text-brand-accent opacity-60" />
+        <div className="hero-glow hero-glow--accent absolute inset-0 text-brand-accent opacity-60" />
         <HeroCanvas story={story} />
       </layers.Backdrop>
-      <layers.Frame className={`${styles.hero} gap-7 pb-0 md:pb-0`}>
+      <layers.Frame className="gap-7 pb-0 md:pb-0">
         <HeroMotionButton />
         <Actions tryIt={tryIt} why={why} locale={locale} />
         <ShareLink title={share.title} text={share.text} labels={share.labels} />
@@ -89,6 +90,8 @@ export function ExplorableHero({ layers, story, locale, tryIt, why, share, motio
         >
           {preview}
         </div>
+        {/* Height for the Title slide's ink transition to bleed through, so the preview no longer sits on the Slide's edge. */}
+        <div aria-hidden="true" className="h-[45svh]" />
       </layers.Frame>
     </HeroMotion>
   );

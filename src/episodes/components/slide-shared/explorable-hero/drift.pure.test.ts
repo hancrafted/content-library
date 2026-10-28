@@ -6,6 +6,7 @@ import {
   bubbleCountOf,
   createClock,
   END_PROGRESS,
+  fieldAreaOf,
   motionOf,
   type Area,
 } from './drift.pure';
@@ -50,6 +51,18 @@ describe('success cases', () => {
     expect(beside.x).toBe(textRight + gap);
     expect(above.compact).toBe(true);
     expect(above.y + above.h).toBeLessThanOrEqual(copyTop);
+  });
+
+  it('makes the field half as wide again as the art area, extending left, with the same right edge, top and height', () => {
+    // ARRANGE
+    const area: Area = { x: 960, y: 76, w: 400, h: 500, compact: false };
+    const wider = 1.5;
+    // ACT
+    const field = fieldAreaOf(area);
+    // ASSERT
+    expect(field.w).toBe(area.w * wider);
+    expect(field.x + field.w).toBe(area.x + area.w);
+    expect([field.y, field.h]).toEqual([area.y, area.h]);
   });
 
   it('adds up to a dozen ambient bubbles in proportion to the area', () => {
@@ -113,6 +126,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('never lets the field reach past the left edge of the hero', () => {
+    // ARRANGE
+    const nearTheEdge: Area = { x: 100, y: 100, w: 400, h: 500, compact: true };
+    const edge = 0;
+    // ACT
+    const field = fieldAreaOf(nearTheEdge);
+    // ASSERT
+    expect(field.x).toBe(edge);
+    expect(field.x + field.w).toBe(nearTheEdge.x + nearTheEdge.w);
+  });
+
   it('draws nothing of the Context bubble once its beat is over: it was forgotten', () => {
     // ARRANGE
     const finished = END_PROGRESS;

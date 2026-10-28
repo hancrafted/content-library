@@ -13,5 +13,6 @@ export const aiCapability = episode({
   slug: 'ai-capability',
   messages: { en, de },
   title: hero,
+  tone: 'inverse',
   sections: [playSection, aboutSection],
 });

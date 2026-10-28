@@ -12,6 +12,8 @@ const SHAPED = EXPORTED_EPISODE_SHAPED_PAGES.filter(
   ({ folder }) => folder.startsWith('explorable-pages/') || folder === 'templates/explorable-page',
 );
 const COLUMNS = ['why', 'how', 'what'];
+/** The AI disciplines page cites the evidence behind its hero's "20x" headline in one more note. */
+const CLAIM_NOTE_PAGE = 'ai-disciplines';
 const TEMPLATE_FOLDER = 'templates/explorable-page';
 /** What only the page template may ship: its placeholder source URL and its "Replace with ..." words. */
 const PLACEHOLDER = /example\.com\/replace-with-a-source|replace with/i;
@@ -26,7 +28,7 @@ describe('explorable page shape', () => {
     if (!existsSync(OUT_DIR)) throw new Error('No out/ directory: run `npm run build` before `npm run test:build`.');
   });
 
-  describe.each(CASES)('$url', ({ url }) => {
+  describe.each(CASES)('$url', ({ url, slug }) => {
     it('shows play as the first slide and about afterwards', () => {
       // ARRANGE
       const $ = exportedPage(url);
@@ -42,6 +44,7 @@ describe('explorable page shape', () => {
     it('shows Why, How and What on #about, each column with a Speaker note that cites a source', () => {
       // ARRANGE
       const $ = exportedPage(url);
+      const noteCount = COLUMNS.length + (slug === CLAIM_NOTE_PAGE ? 1 : 0);
       // ACT
       const columns = $('#about [data-column]')
         .toArray()
@@ -49,7 +52,7 @@ describe('explorable page shape', () => {
       const notes = $('#context-panel-notes [data-context-for="about"]').text();
       // ASSERT
       expect(columns).toEqual(COLUMNS);
-      expect(notes.match(/Sources \(\d+\)|Quellen \(\d+\)/g)).toHaveLength(COLUMNS.length);
+      expect(notes.match(/Sources \(\d+\)|Quellen \(\d+\)/g)).toHaveLength(noteCount);
     });
   });
 

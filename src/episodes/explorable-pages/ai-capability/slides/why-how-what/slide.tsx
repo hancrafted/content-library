@@ -19,6 +19,11 @@ const WILLISON_AGENT_DEFINITION = {
   slug: 'willison-agent-definition',
   url: 'https://simonwillison.net/2025/Sep/18/agents/',
 };
+const A16Z_ANDREESSEN_BUILDER_CULTURE = {
+  slug: 'a16z-andreessen-builder-culture',
+  url: 'https://a16z.com/podcast/marc-andreessen-on-builder-culture-in-the-age-of-ai/',
+};
+const METR_DEVELOPER_STUDY = { slug: 'metr-developer-study', url: 'https://arxiv.org/abs/2507.09089' };
 const OPENAI_INTRODUCING_CHATGPT = { slug: 'openai-introducing-chatgpt', url: 'https://openai.com/index/chatgpt/' };
 
 interface ColumnCopy {
@@ -65,6 +70,7 @@ export const whyHowWhat = slide({
   slug: 'why-how-what',
   messages: { en, de },
   notes: [
+    { slug: 'claim', target: 'why', sources: [A16Z_ANDREESSEN_BUILDER_CULTURE, METR_DEVELOPER_STUDY] },
     { slug: 'why', target: 'why', sources: [STRONGDM_SOFTWARE_FACTORY, GRANT_DARK_FACTORIES] },
     {
       slug: 'how',
@@ -84,7 +90,7 @@ export const whyHowWhat = slide({
         word: t('words.why'),
         accent: 'bg-primary',
         title: t('columns.why.title'),
-        caption: t.rich('columns.why.caption', { marker: marker('why') }),
+        caption: t.rich('columns.why.caption', { marker: marker('why'), claim: marker('claim') }),
       },
       {
         slug: 'how',

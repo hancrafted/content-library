@@ -82,6 +82,7 @@ A new layer picks a rung here. The `isolate` wrapper would trap a popover under 
 
 1. A looping island MUST pause outside `active`, and in a Backdrop also while hidden or under reduced motion. One-shot entrances are exempt.
 2. `SlideMount`'s `data-zone` and its values MUST stay a stable CSS hook for entrance motion on an Episode with `header: 'authored'`.
+3. The page tone mark (FE-004 §5.4) MUST be set only while its Title slide is `active` and cleared when the Slide leaves `active`, or unmounts.
 
 ### 7. Backdrop
 

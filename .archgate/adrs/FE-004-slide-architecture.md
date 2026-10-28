@@ -137,6 +137,7 @@ For this project the map matters because handoffs run on agents with no session 
 1. Text: its owner's `i18n/`: page template, area, page chrome, Episode, Slide, Explorable explanation; one owner per namespace.
 2. Styling: tokens in `globals.css`; an Episode's remap in its scope; a Slide's in its CSS module.
 3. Client code: `*.client.tsx` leaves only; hooks hold browser state.
+4. Page tone: the record MAY declare `tone: 'inverse'`; while the Title slide is `active` the container sets `data-page-tone` on `<html>`, which only page chrome follows; the Slide ends in the landing's ink transition into the first page Slide.
 
 ### 6. What an agent may change
 
@@ -173,6 +174,7 @@ For this project the map matters because handoffs run on agents with no session 
 4. **DON'T** put a published Episode's text in another owner's Translation files. (Decision 5)
 5. **DON'T** style a Slide from `globals.css` or the Episode stylesheet. (Decision 5)
 6. **DON'T** add a tier, module or Slide schema without a new ADR. (Decision 6)
+7. **DON'T** restyle chrome from a Scene or infer tone from the DOM. (Decision 5)
 
 ## Consequences
 
@@ -180,19 +182,19 @@ For this project the map matters because handoffs run on agents with no session 
 
 1. **One entry point:** an agent learns the whole shape from one short record.
 2. **No overlap:** each rule has one owner; the map only points.
-3. **Refactor-stable:** module and flow names outlive function renames.
+3. **Refactor-stable:** names outlive function renames.
 4. **Slides travel:** ownership by folder keeps a Slide copyable.
 
 **Negative:**
 
 1. **Two reads:** a change needs this map plus its owning record.
-2. **Restatement:** a few owner rules appear here in summary.
-3. **Diagrams by hand:** Mermaid blocks are not generated from the import graph.
-4. **A pool fix travels:** changing a pool Slide changes every Episode that composes it, past Events' copies included; copy the Slide out first when one Episode needs it different.
+2. **Restatement:** some owner rules recur here.
+3. **Diagrams by hand:** Mermaid is not generated.
+4. **A pool fix travels:** a pool Slide change reaches every Episode that composes it; copy it out first to differ.
 
 **Risks:**
 
-1. **Map drifts from the tree** after a module is added or renamed. **Mitigation:** `files:` globs fail when their folders move; reviewers update this map in the change that adds a module.
+1. **Map drifts from the tree.** **Mitigation:** `files:` globs fail when folders move; reviewers update this map with a new module.
 2. **Summary contradicts its owner.** **Mitigation:** Decision 1 makes the owner win; review fixes the map.
 
 ## Compliance and Enforcement
@@ -212,4 +214,3 @@ For this project the map matters because handoffs run on agents with no session 
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.
 - [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
 - [`docs/adr/0016-content-data-model.md`](../../docs/adr/0016-content-data-model.md) — the Event routes and the Event-scoped Episode page (§4.2).
-- [Mermaid flowcharts](https://mermaid.js.org/syntax/flowchart.html)
