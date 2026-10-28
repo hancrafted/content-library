@@ -60,7 +60,6 @@ const WORDS: Record<
     kind: string;
     audience: string;
     notice: string;
-    position: (position: number, count: number) => string;
     previous: string;
     next: string;
     back: string;
@@ -76,7 +75,6 @@ const WORDS: Record<
     audience: 'For organizations',
     notice:
       'This Event has already taken place. The content below is kept up to date and may differ from the recording.',
-    position: (position, count) => `Episode ${position} of ${count}`,
     previous: 'Previous Episode',
     next: 'Next Episode',
     back: 'Back to the Event',
@@ -91,7 +89,6 @@ const WORDS: Record<
     audience: 'Für Unternehmen',
     notice:
       'Diese Veranstaltung hat bereits stattgefunden. Die Inhalte werden laufend aktualisiert und können von der Aufzeichnung abweichen.',
-    position: (position, count) => `Episode ${position} von ${count}`,
     previous: 'Vorherige Episode',
     next: 'Nächste Episode',
     back: 'Zurück zur Veranstaltung',
@@ -449,14 +446,14 @@ describe('Episode pages under an Event', () => {
   );
 
   it.each(LOCALES)(
-    'An Event-scoped page shows "Episode n of m", previous and next in Playlist order, and a link back to the Event on the last one (%s)',
+    'An Event-scoped page shows the Event time under the title, not "Episode n of m", and previous and next in Playlist order, with a link back to the Event on the last one (%s)',
     (locale) => {
       // ARRANGE
-      const count = AXEL_EPISODES.length;
       const hrefOf = (episode: EpisodeRef<EpisodeId> | undefined) =>
         episode === undefined ? undefined : `${urlOf(AXEL.slug, episode, locale)}/`;
       const expected = AXEL_EPISODES.map((episode, index) => ({
-        position: WORDS[locale].position(AXEL_EPISODES.indexOf(episode) + 1, count),
+        time: AXEL.time ?? '',
+        position: '',
         previous: hrefOf(AXEL_EPISODES[index - 1]),
         next: hrefOf(AXEL_EPISODES[index + 1]),
         back: index === AXEL_EPISODES.length - 1 ? `${localizePath(eventRoute(AXEL.slug), locale)}/` : undefined,
@@ -466,6 +463,7 @@ describe('Episode pages under an Event', () => {
         const $ = exportedPage(urlOf(AXEL.slug, episode, locale));
         const nav = $('nav[data-playlist-nav]');
         return {
+          time: $('[data-slot="title-slide"] [data-event-time]').text(),
           position: $('[data-slot="title-slide"] [data-playlist-position]').text(),
           previous: nav.find('a[data-playlist-previous]').attr('href'),
           next: nav.find('a[data-playlist-next]').attr('href'),
