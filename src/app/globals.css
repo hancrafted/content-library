@@ -547,3 +547,65 @@
     opacity: 0 !important;
   }
 }
+
+/*
+ * Page tone (FE-004 §5.4). `--tone-paper` and `--tone-ink` are the page's own `primary` pair as they resolve in the
+ * active theme, kept under names the scope below can read without a cycle. A Title slide that declares
+ * `tone: 'inverse'` carries `data-tone`, and while it is the active Slide the container marks `<html>`: both scopes
+ * remap the text tokens to the inverse pair, so the Slide and the site header read as one dark (or, in the dark theme,
+ * light) surface. `--background` stays the page's own, so what follows the Slide can match it.
+ */
+:root,
+.dark {
+  --tone-paper: var(--primary);
+  --tone-ink: var(--primary-foreground);
+  --header-block: 4.75rem;
+}
+
+[data-tone='inverse'],
+html[data-page-tone='inverse'] [data-testid='site-header'] {
+  --foreground: var(--tone-ink);
+  --muted-foreground: color-mix(in oklab, var(--tone-ink) 85%, transparent);
+  --header: var(--tone-paper);
+  --accent: color-mix(in oklab, var(--tone-ink) 14%, transparent);
+  --accent-foreground: var(--tone-ink);
+  --border: color-mix(in oklab, var(--tone-ink) 22%, transparent);
+  --primary: var(--tone-ink);
+  --primary-foreground: var(--tone-paper);
+  color: var(--tone-ink);
+}
+
+/* The header also swaps the surfaces its toggles, logo and buttons draw on, so each item keeps its contrast pair. */
+html[data-page-tone='inverse'] [data-testid='site-header'] {
+  --background: var(--tone-paper);
+  --muted: color-mix(in oklab, var(--tone-ink) 18%, transparent);
+  background-color: color-mix(in oklab, var(--tone-paper) 88%, transparent);
+  --selected: var(--tone-ink);
+  --selected-foreground: var(--tone-paper);
+}
+
+/* An inverse Title slide keeps its headline to a readable measure, so the art has room beside it. */
+/* The toned Title slide runs up under the floating header, so its copy starts below the header's band. */
+[data-tone='inverse'][data-slot='title-slide'] {
+  padding-top: calc(var(--header-block) + 1rem);
+}
+
+[data-tone='inverse'] [data-slot='slide-header'] h1 {
+  max-width: 16ch;
+}
+
+[data-tone='inverse'] [data-slot='slide-header'] [data-target='caption'] {
+  max-width: 40rem;
+}
+
+/* A part that sits on an inverse Slide but is drawn for the page's own tone, such as a tool preview, flips back. */
+[data-tone='inverse'] [data-tone-flip] {
+  --foreground: var(--tone-paper);
+  --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);
+  --accent: color-mix(in oklab, var(--tone-paper) 8%, transparent);
+  --accent-foreground: var(--tone-paper);
+  --border: color-mix(in oklab, var(--tone-paper) 12%, transparent);
+  --primary: var(--tone-paper);
+  --primary-foreground: var(--tone-ink);
+  color: var(--tone-paper);
+}

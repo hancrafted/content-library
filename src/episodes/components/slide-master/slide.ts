@@ -129,6 +129,9 @@ export type Section = SectionList<Slide> & readonly [TitledSlide, ...Slide[]];
  */
 export const withoutSectionSlide = markWithoutSectionSlide as (section: readonly [TitledSlide, ...Slide[]]) => Section;
 
+/** The tone a Title slide may declare: the page's inverse, which its header and Contents panel follow. */
+export type PageTone = 'inverse';
+
 /** An Episode's own text, from `i18n/<locale>.json` in its folder: the Title slide's and the page metadata's. */
 export interface EpisodeMessages {
   readonly title: string;
@@ -167,6 +170,11 @@ export interface EpisodeComposition<Ep extends string = string> {
    * notes and Voice script stay on the record.
    */
   readonly title?: Slide;
+  /**
+   * The Title slide's tone (FE-004 §5.4): `'inverse'` marks the page while that Slide is active, and page chrome
+   * (the header, the Contents panel) follows the mark. Absent, the page keeps its own tone.
+   */
+  readonly tone?: PageTone;
   /**
    * Who renders each Slide's Eyebrow, title and caption. Absent, the Slide
    * wrapper renders the shared Slide header and a Scene holds the visual only;

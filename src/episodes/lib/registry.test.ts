@@ -93,13 +93,11 @@ describe('success cases', () => {
     expect(sections).toEqual(expected);
   });
 
-  it('composes the Explorable page template as hook with its proof, what, why, and how ending on the Explorable, after its Title slide', () => {
+  it('composes the Explorable page template as play (the Explorable), then about with Why, How and What, after its Title slide', () => {
     // ARRANGE
     const expected = [
-      ['hook', 'the-payoff', 'the-proof'],
-      ['what-it-is'],
-      ['why-it-matters'],
-      ['how-to-use-it', 'every-option-on'],
+      ['play', 'every-option-on'],
+      ['about', 'why-how-what'],
     ];
     // ACT
     const sections = compositionOf(templateRef('explorable-page')).sections.map((section) =>

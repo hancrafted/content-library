@@ -1,0 +1,67 @@
+{
+  "title": "Why · How · What",
+  "caption": "Hand AI a big job and it comes back looking right: why you stay in the loop, how, and a workflow to try.",
+  "words": {
+    "why": "Why",
+    "how": "How",
+    "what": "What"
+  },
+  "columns": {
+    "why": {
+      "title": "The AI hands back a result that looks right and is not.",
+      "caption": "<marker>Lawyers once filed a brief citing six cases ChatGPT had invented.</marker> It looked right, and nobody checked."
+    },
+    "how": {
+      "title": "Split the job into stages and check each one.",
+      "caption": "<marker>Break the task into steps, write the requirements down, let the AI ask before it starts, and review every step, not only the end.</marker>"
+    },
+    "what": {
+      "title": "A workflow where AI chats do the jobs and you steer.",
+      "caption": "<marker>Each stage copies a prompt for a fresh chat, and you check its result before the next stage.</marker> Try the project plan above."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "Unchecked output has cost real money",
+      "description": "In a New York federal case, lawyers filed a brief citing six cases ChatGPT had invented and were fined; the court held that rules give attorneys a gatekeeping role for the accuracy of their filings [1]. In one study, programmers with an AI assistant wrote less secure code and were more sure it was secure, a result a larger study disputes [2] (research AIE-0005, AIE-0010).",
+      "sources": {
+        "castel-mata-v-avianca": {
+          "title": "Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (S.D.N.Y. June 22, 2023)"
+        },
+        "perry-insecure-code": {
+          "title": "Perry et al., Do Users Write More Insecure Code with AI Assistants?"
+        }
+      }
+    },
+    "how": {
+      "header": "Small steps, stated needs, step checks",
+      "description": "Models often solve each sub-problem yet fail to compose them, and decomposing helps [1]. A stated requirement is met more steadily than a guessed one [2]. Clarifying questions raise accuracy on underspecified tasks [3]. Step-level checks catch flaws that a check of the final answer passes [4] (research AIE-0007, AIE-0008, AIE-0009, AIE-0010).",
+      "sources": {
+        "zhou-least-to-most": {
+          "title": "Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models"
+        },
+        "yang-what-prompts-dont-say": {
+          "title": "Yang et al., What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts"
+        },
+        "vijayvargiya-ambig-swe": {
+          "title": "Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering"
+        },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        }
+      }
+    },
+    "what": {
+      "header": "Fresh chat per stage, checked in between",
+      "description": "Accuracy falls as a chat grows, and a model that took a wrong turn leans on its earlier answers, so a fresh, focused context per job helps [1]; the answer to a step can be right while the reasoning is wrong, so an outside reader checks each artifact [2] (research AIE-0011, AIE-0010).",
+      "sources": {
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost In Multi-Turn Conversation"
+        },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        }
+      }
+    }
+  }
+}

@@ -88,6 +88,11 @@ export const INSET_CLASSES =
  */
 export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5625rem]';
 
+/** The page's own classes: a toned page runs up under the floating header (its Title slide fills that band), any other starts below it. */
+export function pageClassOf(tone: 'inverse' | undefined): string {
+  return `${tone === 'inverse' ? '-mt-(--header-block)' : 'mt-6'} ${INSET_CLASSES} ${TOC_RESERVE_CLASS}`;
+}
+
 /**
  * The source folder a page's Slides sit in, as the dev token editor names it in its prompt: an Episode's own folder,
  * an Event's copy's under its Event, a Template's under `templates/` or an Explorable page's under `explorable-pages/`.

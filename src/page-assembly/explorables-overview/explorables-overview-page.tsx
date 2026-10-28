@@ -1,6 +1,7 @@
 import { routeOf } from '@/content-store/catalogue/record-routes';
 import { listedExplorablePages } from '@/content-store/store';
 import { compositionOf } from '@/episodes/lib/registry';
+import { STORY_OF } from '@/page-assembly/lib/explorable-story';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -16,6 +17,7 @@ function explorableCards(locale: Locale, typeLabel: string): ExplorableCard[] {
       slug: page.explorablePage.slug,
       route: routeOf(page),
       typeLabel,
+      story: STORY_OF[page.explorablePage.slug],
       title,
       description,
       leadTag: tags[0],

@@ -1,0 +1,24 @@
+{
+  "heading": "Deine KI hat nicht vergessen. Sie hat aufgehört, aufzupassen.",
+  "caption": "Entdecke, was einen KI-Chat füllt und warum die Mitte verblasst.",
+  "tryIt": "Ausprobieren",
+  "why": "Warum es wichtig ist",
+  "share": {
+    "title": "Zeigen Sie es Ihrem Team",
+    "copy": "Link kopieren",
+    "copied": "Link kopiert",
+    "text": "Zeigen Sie es in Ihrer nächsten KI-Session auf dem Bildschirm: Ein Hover erklärt, warum der lange Chat abgedriftet ist."
+  },
+  "motion": {
+    "pause": "Hintergrundanimation pausieren",
+    "play": "Hintergrundanimation abspielen",
+    "stilled": "Der Hintergrund steht still: Bewegung reduzieren ist aktiv"
+  },
+  "preview": {
+    "label": "Stilisierte Vorschau des Explorables Kontextfenster: ein Fensterbalken, der sich mit System-, Gedächtnis-, Chat- und Such-Token füllt, und ein Aufmerksamkeitsdiagramm, das in der Mitte einbricht.",
+    "title": "Kontextfenster",
+    "tag": "200K",
+    "window": "Fenster · 64 % voll",
+    "attention": "Aufmerksamkeit pro Nachricht"
+  }
+}

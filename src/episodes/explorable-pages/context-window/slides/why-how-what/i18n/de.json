@@ -1,0 +1,70 @@
+{
+  "title": "Warum · Wie · Was",
+  "caption": "Ein langer Chat verblasst in der Mitte, aus einem anderen Grund als ein langes Telefonat: was das Fenster füllt und wie Du es siehst.",
+  "words": {
+    "why": "Warum",
+    "how": "Wie",
+    "what": "Was"
+  },
+  "columns": {
+    "why": {
+      "title": "Die KI vergisst, was Du ihr vor einer Stunde gesagt hast.",
+      "caption": "<marker>Denk an ein langes Telefonat: Du weißt noch, wie es anfing, wie es endete und einen seltsamen Moment, und die Mitte verschwimmt.</marker> Ein langer Chat verblasst genauso."
+    },
+    "how": {
+      "title": "Die Aufmerksamkeit wird dünner, je voller das Fenster ist.",
+      "caption": "<marker>Jede Nachricht geht erneut hinein, und die ersten Zeilen und die neuesten Nachrichten ziehen die meiste Aufmerksamkeit an; die Mitte und der Rest verblassen.</marker>"
+    },
+    "what": {
+      "title": "Im Fenster steckt weit mehr als Dein Chat.",
+      "caption": "<marker>Gespeicherte Erinnerungen werden zu Beginn geladen, eine Websuche legt ganze Seiten hinein, und nahe am Limit fasst die App alte Nachrichten womöglich zusammen.</marker> Probier oben jeden Teil und jede Steuerung aus."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "Auch Menschen vergessen die Mitte",
+      "description": "Beim freien Abrufen einer Wortliste bleiben die ersten und die letzten Wörter am besten haften, die mittleren am schlechtesten, und ein Wort, das heraussticht, bleibt besser als seine Nachbarn [1][2]. Das ist Laborevidenz mit Wortlisten; sie auf ein langes Telefonat oder einen Chat zu übertragen, ist ein Schluss (Recherche COG-0001).",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        },
+        "glanzer-cunitz-two-stores": {
+          "title": "Glanzer and Cunitz, Two storage mechanisms in free recall"
+        }
+      }
+    },
+    "how": {
+      "header": "Position und Länge zählen beide",
+      "description": "Modelle nutzen Informationen am Anfang und am Ende der Eingabe am besten und in der Mitte am schlechtesten, und die ersten Tokens ziehen viel Aufmerksamkeit an, auch wenn sie nichts bedeuten [1][2]. Die Qualität sinkt außerdem, je voller das Fenster wird, selbst bei perfektem Abruf [3][4]. Wie stark, hängt vom Modell ab, und der Mechanismus ist die Erklärung der Autoren, kein Beweis für jedes Produkt (Recherche LLM-0006, LLM-0007).",
+      "sources": {
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        },
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        },
+        "hsieh-ruler": {
+          "title": "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
+        },
+        "du-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "what": {
+      "header": "Was das Fenster sonst noch füllt",
+      "description": "Claude Code lädt seinen Speicher zu Beginn jeder Unterhaltung, als Kontext, der auf das Fenster zählt [1]. Ein Suchwerkzeug liefert Seiteninhalt, der als Eingabe-Tokens im Fenster liegt [2]. Nahe am Limit fasst die Claude-App frühere Nachrichten zusammen; für andere Apps dokumentiert das kein Anbieter [3] (Recherche LLM-0008, LLM-0009, LLM-0010).",
+      "sources": {
+        "anthropic-claude-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        },
+        "anthropic-web-search-tool": {
+          "title": "Anthropic, Web search tool (Claude API documentation)"
+        },
+        "anthropic-compaction": {
+          "title": "Anthropic, Compaction overview"
+        }
+      }
+    }
+  }
+}

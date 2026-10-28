@@ -1,0 +1,67 @@
+{
+  "title": "Warum · Wie · Was",
+  "caption": "Gib der KI einen großen Auftrag, und das Ergebnis sieht richtig aus: warum Du im Loop bleibst, wie, und ein Workflow zum Ausprobieren.",
+  "words": {
+    "why": "Warum",
+    "how": "Wie",
+    "what": "Was"
+  },
+  "columns": {
+    "why": {
+      "title": "Die KI liefert ein Ergebnis, das richtig aussieht und es nicht ist.",
+      "caption": "<marker>Anwälte reichten einmal einen Schriftsatz mit sechs Fällen ein, die ChatGPT erfunden hatte.</marker> Er sah richtig aus, und niemand prüfte nach."
+    },
+    "how": {
+      "title": "Teile den Auftrag in Stufen und prüfe jede einzeln.",
+      "caption": "<marker>Zerlege die Aufgabe in Schritte, schreib die Anforderungen auf, lass die KI vorher nachfragen und prüfe jeden Schritt, nicht nur das Ende.</marker>"
+    },
+    "what": {
+      "title": "Ein Workflow, in dem KI-Chats die Arbeit machen und Du steuerst.",
+      "caption": "<marker>Jede Stufe kopiert einen Prompt für einen frischen Chat, und Du prüfst das Ergebnis, bevor die nächste Stufe beginnt.</marker> Probier oben den Projektplan aus."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "Ungeprüfte Ausgabe hat echtes Geld gekostet",
+      "description": "In einem Bundesverfahren in New York reichten Anwälte einen Schriftsatz mit sechs von ChatGPT erfundenen Fällen ein und wurden bestraft; das Gericht stellte fest, dass Anwälte als Kontrollinstanz für die Richtigkeit ihrer Schriftsätze zuständig sind [1]. In einer Studie schrieben Programmierer mit KI-Assistent weniger sicheren Code und hielten ihn eher für sicher, ein Ergebnis, das eine größere Studie bestreitet [2] (Recherche AIE-0005, AIE-0010).",
+      "sources": {
+        "castel-mata-v-avianca": {
+          "title": "Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (S.D.N.Y. June 22, 2023)"
+        },
+        "perry-insecure-code": {
+          "title": "Perry et al., Do Users Write More Insecure Code with AI Assistants?"
+        }
+      }
+    },
+    "how": {
+      "header": "Kleine Schritte, genannte Anforderungen, Schrittprüfung",
+      "description": "Modelle lösen oft jede Teilaufgabe, scheitern aber am Zusammensetzen; Zerlegen hilft [1]. Eine genannte Anforderung wird gleichmäßiger erfüllt als eine erratene [2]. Rückfragen erhöhen die Genauigkeit bei unterbestimmten Aufgaben [3]. Prüfungen einzelner Schritte finden Fehler, die eine Prüfung der Endantwort durchlässt [4] (Recherche AIE-0007, AIE-0008, AIE-0009, AIE-0010).",
+      "sources": {
+        "zhou-least-to-most": {
+          "title": "Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models"
+        },
+        "yang-what-prompts-dont-say": {
+          "title": "Yang et al., What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts"
+        },
+        "vijayvargiya-ambig-swe": {
+          "title": "Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering"
+        },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        }
+      }
+    },
+    "what": {
+      "header": "Frischer Chat pro Stufe, dazwischen geprüft",
+      "description": "Die Genauigkeit sinkt, je länger ein Chat wird, und ein Modell, das falsch abgebogen ist, stützt sich auf seine früheren Antworten; ein frischer, fokussierter Kontext pro Aufgabe hilft [1]. Die Antwort eines Schritts kann stimmen, während die Begründung falsch ist, deshalb prüft ein Außenstehender jedes Ergebnis [2] (Recherche AIE-0011, AIE-0010).",
+      "sources": {
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost In Multi-Turn Conversation"
+        },
+        "lightman-verify-step-by-step": {
+          "title": "Lightman et al., Let's Verify Step by Step"
+        }
+      }
+    }
+  }
+}

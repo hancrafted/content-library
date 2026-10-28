@@ -44,7 +44,7 @@ async function open(page: Page, anchor: string, locale = '') {
 
 /** The Explorable page, where the toolbar's rows and the phone carousel are pinned. */
 const PAGE = '/explorables/ai-capability/';
-const PAGE_ANCHOR = 'ai-disciplines';
+const PAGE_ANCHOR = 'play';
 /** The viewport the Explorable must fit with one row on, and a phone. */
 const DESKTOP = { width: 1440, height: 900 };
 const PHONE = { width: 390, height: 844 };

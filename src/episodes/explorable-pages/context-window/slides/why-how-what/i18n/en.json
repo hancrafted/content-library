@@ -1,0 +1,70 @@
+{
+  "title": "Why · How · What",
+  "caption": "A long chat blurs in the middle, for a different reason than a long phone call: what fills the window, and how to see it.",
+  "words": {
+    "why": "Why",
+    "how": "How",
+    "what": "What"
+  },
+  "columns": {
+    "why": {
+      "title": "The AI forgets what you told it an hour ago.",
+      "caption": "<marker>Think of a long phone call: you remember how it began, how it ended and one odd moment, and the middle blurs.</marker> A long chat blurs the same way."
+    },
+    "how": {
+      "title": "Attention thins out as the window fills.",
+      "caption": "<marker>Every message goes in again, and the first lines and the newest messages draw the most attention; the middle and the rest fade.</marker>"
+    },
+    "what": {
+      "title": "Far more than your chat sits in the window.",
+      "caption": "<marker>Saved memory loads at the start, a web search drops whole pages in, and near the limit the app may summarise old messages.</marker> Try every part and control above."
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "People forget the middle too",
+      "description": "In free recall of a word list, the first and the last items are remembered best and the middle worst, and an item that stands out is remembered better than its neighbours [1][2]. This is lab evidence from word lists, so applying it to a long call or chat is an inference (research COG-0001).",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        },
+        "glanzer-cunitz-two-stores": {
+          "title": "Glanzer and Cunitz, Two storage mechanisms in free recall"
+        }
+      }
+    },
+    "how": {
+      "header": "Position and length both matter",
+      "description": "Models use information best at the start and end of the input and worst in the middle, and the first tokens draw strong attention even when they mean nothing [1][2]. Quality also falls as the window fills, even with perfect retrieval [3][4]. The strength differs per model, and the mechanism is the authors' account, not proof for every product (research LLM-0006, LLM-0007).",
+      "sources": {
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        },
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        },
+        "hsieh-ruler": {
+          "title": "Hsieh et al., RULER: What's the Real Context Size of Your Long-Context Language Models?"
+        },
+        "du-length-alone-hurts": {
+          "title": "Du et al., Context Length Alone Hurts LLM Performance Despite Perfect Retrieval"
+        }
+      }
+    },
+    "what": {
+      "header": "What else fills the window",
+      "description": "Claude Code loads its memory at the start of every conversation, as context that counts against the window [1]. A search tool returns page content that sits in the window as input tokens [2]. Near the limit the Claude app summarises earlier messages; for other apps no vendor documents it [3] (research LLM-0008, LLM-0009, LLM-0010).",
+      "sources": {
+        "anthropic-claude-memory": {
+          "title": "Anthropic, How Claude remembers your project"
+        },
+        "anthropic-web-search-tool": {
+          "title": "Anthropic, Web search tool (Claude API documentation)"
+        },
+        "anthropic-compaction": {
+          "title": "Anthropic, Compaction overview"
+        }
+      }
+    }
+  }
+}

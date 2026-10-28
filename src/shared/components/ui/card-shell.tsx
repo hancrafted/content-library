@@ -34,6 +34,8 @@ interface VariantClasses {
   readonly art: string;
   readonly title: string;
   readonly caption: string;
+  /** Pulls the media strip out to the frame's edges, cancelling its padding. */
+  readonly media: string;
   /** Moves the cue to the footer's start (the lead's button) or leaves it at the end. */
   readonly cue: string;
 }
@@ -42,6 +44,7 @@ interface VariantClasses {
 export const VARIANTS: Record<CardVariant, VariantClasses> = {
   lead: {
     frame: 'rounded-3xl p-7 sm:p-10 lg:min-h-[22rem]',
+    media: '-mx-7 -mt-7 sm:-mx-10 sm:-mt-10',
     art: '-bottom-8 -right-8 size-64',
     title: 'max-w-xl text-subheading font-semibold',
     caption: 'max-w-lg text-body',
@@ -49,6 +52,7 @@ export const VARIANTS: Record<CardVariant, VariantClasses> = {
   },
   compact: {
     frame: 'rounded-2xl p-6',
+    media: '-mx-6 -mt-6',
     art: '-bottom-5 -right-5 size-32',
     title: 'text-body font-semibold',
     caption: 'line-clamp-3 text-caption',
@@ -56,6 +60,7 @@ export const VARIANTS: Record<CardVariant, VariantClasses> = {
   },
   event: {
     frame: 'rounded-2xl p-6',
+    media: '-mx-6 -mt-6',
     art: '-bottom-6 -right-6 size-36',
     title: 'text-body font-semibold',
     caption: 'line-clamp-3 text-caption',
@@ -77,18 +82,34 @@ interface ShellProps {
   icon: LucideIcon;
   /** The card's own data attributes, so each card kind keeps its own hooks for tests and probes. */
   data: Record<`data-${string}`, string | undefined>;
+  /**
+   * A decorative picture for a dark strip across the card's top, in place of the corner wash and faded icon: static
+   * by contract (a grid of cards runs no loops). The strip is dark in both themes (ink on `--primary`, or on `--background`
+   * in the dark theme), so the picture draws in `currentColor`.
+   */
+  media?: ReactNode;
   className?: string;
   children: ReactNode;
 }
 
 /** The card's frame: the shadcn card surface as an `<article>`, its accent token set once for every part inside. */
-export function CardShell({ variant, linked, accent, icon, data, className = '', children }: ShellProps) {
+export function CardShell({ variant, linked, accent, icon, data, media, className = '', children }: ShellProps) {
   const tone = linked ? `${LINKED_FRAME} ${ACCENT.edge}` : UPCOMING_FRAME;
   const style = { '--card-accent': `var(${accent})` } as CSSProperties;
   return (
     <Card asChild className={cn(FRAME, VARIANTS[variant].frame, tone, className)}>
       <article {...data} data-card-variant={variant} style={style}>
-        {linked && <CardArt icon={icon} classes={VARIANTS[variant].art} />}
+        {media ? (
+          <div
+            aria-hidden
+            data-card-media
+            className={`h-24 shrink-0 overflow-hidden bg-primary text-primary-foreground dark:border-b dark:border-border/60 dark:bg-background dark:text-foreground ${VARIANTS[variant].media}`}
+          >
+            {media}
+          </div>
+        ) : (
+          linked && <CardArt icon={icon} classes={VARIANTS[variant].art} />
+        )}
         {children}
       </article>
     </Card>

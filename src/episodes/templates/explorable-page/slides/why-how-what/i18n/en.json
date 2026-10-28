@@ -1,0 +1,52 @@
+{
+  "title": "Why · How · What",
+  "caption": "Replace with one line that frames the three columns.",
+  "words": {
+    "why": "Why",
+    "how": "How",
+    "what": "What"
+  },
+  "columns": {
+    "why": {
+      "title": "Why: replace with the claim",
+      "caption": "<marker>Replace with the human problem or pain the Short cut: relatable, in one sentence.</marker>"
+    },
+    "how": {
+      "title": "How: replace with the claim",
+      "caption": "<marker>Replace with how the Explorable solves it, in one sentence.</marker>"
+    },
+    "what": {
+      "title": "What: replace with the claim",
+      "caption": "<marker>Replace with what the visitor gets to play with above, in one sentence.</marker>"
+    }
+  },
+  "notes": {
+    "why": {
+      "header": "Replace with the note heading",
+      "description": "Replace with the finding that backs this claim, citing a Research question or a high-trust Source [1].",
+      "sources": {
+        "replace-with-a-source": {
+          "title": "Replace with the Source title"
+        }
+      }
+    },
+    "how": {
+      "header": "Replace with the note heading",
+      "description": "Replace with the finding that backs this claim, citing a Research question or a high-trust Source [1].",
+      "sources": {
+        "replace-with-a-source": {
+          "title": "Replace with the Source title"
+        }
+      }
+    },
+    "what": {
+      "header": "Replace with the note heading",
+      "description": "Replace with the finding that backs this claim, citing a Research question or a high-trust Source [1].",
+      "sources": {
+        "replace-with-a-source": {
+          "title": "Replace with the Source title"
+        }
+      }
+    }
+  }
+}

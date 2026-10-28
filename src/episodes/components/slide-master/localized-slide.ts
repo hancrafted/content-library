@@ -7,7 +7,7 @@ import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
-import { captionTextOf, requireTitle, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
+import { requireTitle, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /*
@@ -77,7 +77,7 @@ export interface EpisodeContext {
  * site-wide config (`src/page-assembly/i18n-request.ts`), any missing message or formatting
  * error throws, so untranslated text fails the build instead of shipping.
  */
-function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
+export function ownTranslator(messages: SlideMessages, locale: Locale): RuntimeTranslator {
   const t = createTranslator({
     locale,
     messages,
@@ -180,11 +180,6 @@ export function episodeMinutes(record: EpisodeComposition, locale: Locale): numb
       (sum, slide) => sum + textOf(slide, ownTranslator(slide.messages[locale], locale), locale).minutes,
       titleContext(record, locale).minutes,
     );
-}
-
-/** The caption the record's Title slide Scene (`title`) gives in its own messages, which the Title slide shows. */
-export function titleCaptionOf(slide: Slide, locale: Locale): string | undefined {
-  return captionTextOf(ownTranslator(slide.messages[locale], locale));
 }
 
 /**

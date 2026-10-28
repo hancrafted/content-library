@@ -1,0 +1,50 @@
+{
+  "heading": "Run your first AI workflow. You’re the manager.",
+  "caption": "Explore six stages with ready-made prompts: AI does each job, you check every hand-off.",
+  "tryIt": "Try it",
+  "why": "Why it matters",
+  "share": {
+    "title": "Show it to your team",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "text": "Walk a team through one stage live, then hand them the workflow file to make their own."
+  },
+  "motion": {
+    "pause": "Pause background animation",
+    "play": "Play background animation",
+    "stilled": "The background is still: reduced motion is on"
+  },
+  "preview": {
+    "label": "Stylised preview of the Human in the loop Explorable: six workflow stages from interview to report, each with a check mark once a person has reviewed it, and a copyable prompt for the current stage.",
+    "title": "Project plan",
+    "tag": "Stages",
+    "prompt": "“Read requirements.md, then draft the epics…”",
+    "copy": "Copy prompt",
+    "stages": {
+      "interview": {
+        "name": "Interview",
+        "kind": "Brief"
+      },
+      "plan": {
+        "name": "Plan",
+        "kind": "Requirements"
+      },
+      "epics": {
+        "name": "Epics",
+        "kind": "Per epic"
+      },
+      "tickets": {
+        "name": "Tickets",
+        "kind": "Per epic"
+      },
+      "execute": {
+        "name": "Execute",
+        "kind": "Per ticket"
+      },
+      "report": {
+        "name": "Report",
+        "kind": "Reviewed"
+      }
+    }
+  }
+}

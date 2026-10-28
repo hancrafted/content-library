@@ -1,27 +1,19 @@
 {
   "title": "Human in the loop · hancrafted",
   "description": "An interactive explanation of the human in the loop workflow: six stages from a vague task to a reviewed report, a fresh chat for each job, and you checking every artifact in between.",
-  "toc": "Contents Loading 1 Presets Every job Another use case In the command line Open contents : Contents Contents 1 Presets Every job Another use case In the command line",
+  "toc": "Contents Loading 1 Play 2 About Open contents : Contents Contents 1 Play 2 About",
   "slides": [
     {
       "id": "top",
-      "text": "Human in the loop A workflow where AI chats do the jobs and you steer: each stage, its handoff and its check."
+      "text": "Run your first AI workflow. You’re the manager. Explore six stages with ready-made prompts: AI does each job, you check every hand-off. Try it Why it matters Show it to your team Walk a team through one stage live, then hand them the workflow file to make their own. Copy link Project plan Stages 1 Interview Brief 2 Plan Requirements 3 Epics Per epic 4 Tickets Per epic 5 Execute Per ticket 6 Report Reviewed “Read requirements.md, then draft the epics…” Copy prompt"
     },
     {
-      "id": "agentic-workflows",
+      "id": "play",
       "text": "Human in the loop workflow The project-plan workflow: six stages from a vague task to a reviewed report, a fresh chat for each job, and you check every artifact in between. Read me What it shows The project-plan Workflow in its Stages view: six stages from a vague goal to a reviewed report, one card each. What to try Click a stage to open its Practice it window and copy its prompts into a fresh AI chat. Pick another use case in the toolbar. What to notice The checked mark on a card says a person reviews that result before the next stage starts. Use case : Plan a project Stages Jobs Demo mode Practice it for High-level plan High-level plan From a vague task to epics checked Gate 1 Practice it for Epics Epics Epics 1 checked Epics 2 checked Grill, then spec, once per epic Practice it for Requirements Requirements Merge specs, resolve conflicts, cut tickets checked Gate 2 Practice it for Execute Execute Execute 1 checked Execute 2 checked Execute 3 checked Execute 4 checked One fresh chat per ticket Practice it for Aggregate Aggregate Results combined into one report checked Practice it for Review Review The report as a page, then your sign-off Gate 3"
     },
     {
-      "id": "agentic-workflows--every-job",
-      "text": "Presets (1/3) Page 1 of 3 Every job The same project plan, one level down: each stage holds its jobs, in the order they depend on each other. Read me What it shows The project-plan Workflow in its Jobs view: every job of every stage as a card, joined by arrows. What to try Click a job card to open its stage at exactly that job. Switch back to Stages in the toolbar and compare. What to notice Epics and Execute repeat: each is drawn once, inside a dashed bracket that says it runs once per epic or ticket. Use case : Plan a project Stages Jobs Demo mode High-level plan From a vague task to epics Gate 1 Describe the task Goal, audience, constraints, what done looks like checked Grill the scope At most three questions before any plan checked Plan the epics A short plan, one H3 per epic checked Epics Grill, then spec, once per epic × each epic (2) Grill the epic Questions first, in a fresh chat per epic checked Write the spec Goal, requirements, dependencies of one epic checked Requirements Merge specs, resolve conflicts, cut tickets Gate 2 Merge the specs One requirements document from all epic specs checked Resolve the overlap Dependencies and conflicts between the specs checked Cut the tickets Vertical slices, one H3 each checked Execute One fresh chat per ticket × each ticket (4) Run the ticket One fresh chat per ticket, with a numbers table checked Aggregate Results combined into one report Combine the results All ticket results in one document checked Write the report Summary, key figures, risks, open decisions checked Review The report as a page, then your sign-off Gate 3 Render the report The report as an HTML page with charts"
-    },
-    {
-      "id": "agentic-workflows--another-use-case",
-      "text": "Presets (2/3) Page 2 of 3 Another use case The same loop around a personal task: planning a week away for two. Read me What it shows The Vacation Workflow: four stages from an interview to a web page for your partner, with a check at each gate. What to try Open the Research stage, which repeats once per kind of stay. Use the Use case picker to switch back to the project plan. What to notice The stages and their checks are authored, not fixed: a different task gets different stages around the same idea. Use case : Plan personal vacation Stages Jobs Demo mode Practice it for Brief Brief Get interviewed, then sign off the requirements checked Gate 1 Practice it for Research Research Research 1 Research 2 Research 3 One fresh chat per kind of stay Practice it for Decide Decide Rank the stays, then you pick one checked Gate 2 Practice it for Page Page Your pick as a page for your partner"
-    },
-    {
-      "id": "agentic-workflows--in-the-command-line",
-      "text": "Presets (3/3) Page 3 of 3 In the command line The project plan for people who work in a terminal: prompts become commands. Read me What it shows The project-plan Workflow with the CLI toggle on, so every stage copies CLI setup and /skill commands instead of chat prompts. What to try Open a stage and copy its first command. Switch the CLI toggle off to go back to Chat and see the same step as a plain prompt. What to notice Only what a step copies changes. The stages, the checks and your place in the loop stay the same. Use case : Plan a project Stages Jobs Demo mode Practice it for High-level plan High-level plan From a vague task to epics checked Gate 1 Practice it for Epics Epics Epics 1 checked Epics 2 checked Grill, then spec, once per epic Practice it for Requirements Requirements Merge specs, resolve conflicts, cut tickets checked Gate 2 Practice it for Execute Execute Execute 1 checked Execute 2 checked Execute 3 checked Execute 4 checked One fresh chat per ticket Practice it for Aggregate Aggregate Results combined into one report checked Practice it for Review Review The report as a page, then your sign-off Gate 3"
+      "id": "about",
+      "text": "Why · How · What Hand AI a big job and it comes back looking right: why you stay in the loop, how, and a workflow to try. Why The AI hands back a result that looks right and is not. Lawyers once filed a brief citing six cases ChatGPT had invented. ( ) It looked right, and nobody checked. How Split the job into stages and check each one. Break the task into steps, write the requirements down, let the AI ask before it starts, and review every step, not only the end. ( ) What A workflow where AI chats do the jobs and you steer. Each stage copies a prompt for a fresh chat, and you check its result before the next stage. ( ) Try the project plan above."
     }
   ],
   "notes": [
@@ -30,21 +22,20 @@
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
     {
-      "id": "agentic-workflows",
-      "text": "Presets The Explorable explanation in its own words The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the project-plan Workflow, Vacation one pill away, every \"Try it\" open."
+      "id": "play",
+      "text": "Play The Explorable explanation in its own words The AI attention span episode shows this Workflow with that Slide's own words on top. Here it keeps its defaults: the project-plan Workflow, Vacation one pill away, every \"Try it\" open."
     },
-    { "id": "agentic-workflows--every-job", "text": "Every job No speaker notes for this Slide." },
-    { "id": "agentic-workflows--another-use-case", "text": "Another use case No speaker notes for this Slide." },
-    { "id": "agentic-workflows--in-the-command-line", "text": "In the command line No speaker notes for this Slide." }
+    {
+      "id": "about",
+      "text": "About Unchecked output has cost real money In a New York federal case, lawyers filed a brief citing six cases ChatGPT had invented and were fined; the court held that rules give attorneys a gatekeeping role for the accuracy of their filings 1 . In one study, programmers with an AI assistant wrote less secure code and were more sure it was secure, a result a larger study disputes 2 (research AIE-0005, AIE-0010). Sources (2) Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (S.D.N.Y. June 22, 2023) ( opens in a new tab ) storage.courtlistener.com Perry et al., Do Users Write More Insecure Code with AI Assistants? ( opens in a new tab ) arxiv.org Small steps, stated needs, step checks Models often solve each sub-problem yet fail to compose them, and decomposing helps 1 . A stated requirement is met more steadily than a guessed one 2 . Clarifying questions raise accuracy on underspecified tasks 3 . Step-level checks catch flaws that a check of the final answer passes 4 (research AIE-0007, AIE-0008, AIE-0009, AIE-0010). Sources (4) Zhou et al., Least-to-Most Prompting Enables Complex Reasoning in Large Language Models ( opens in a new tab ) arxiv.org Yang et al., What Prompts Don't Say: Understanding and Managing Underspecification in LLM Prompts ( opens in a new tab ) arxiv.org Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering ( opens in a new tab ) arxiv.org Lightman et al., Let's Verify Step by Step ( opens in a new tab ) arxiv.org Fresh chat per stage, checked in between Accuracy falls as a chat grows, and a model that took a wrong turn leans on its earlier answers, so a fresh, focused context per job helps 1 ; the answer to a step can be right while the reasoning is wrong, so an outside reader checks each artifact 2 (research AIE-0011, AIE-0010). Sources (2) Laban et al., LLMs Get Lost In Multi-Turn Conversation ( opens in a new tab ) arxiv.org Lightman et al., Let's Verify Step by Step ( opens in a new tab ) arxiv.org"
+    }
   ],
   "script": [
     {
       "id": "top",
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
-    { "id": "agentic-workflows", "text": "Presets No voice script for this Slide." },
-    { "id": "agentic-workflows--every-job", "text": "Every job No voice script for this Slide." },
-    { "id": "agentic-workflows--another-use-case", "text": "Another use case No voice script for this Slide." },
-    { "id": "agentic-workflows--in-the-command-line", "text": "In the command line No voice script for this Slide." }
+    { "id": "play", "text": "Play No voice script for this Slide." },
+    { "id": "about", "text": "About No voice script for this Slide." }
   ]
 }
