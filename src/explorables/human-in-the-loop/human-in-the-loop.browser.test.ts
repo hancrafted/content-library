@@ -13,8 +13,8 @@ import { hydrated } from '../../../tests/browser/hydrated';
  * is a stepper of jobs; the first job opens with it, and every input carries `data-field` with the key it fills.
  */
 
-const EPISODE = '/explorable-explanations/human-in-the-loop/';
-const GERMAN_EPISODE = '/de/explorable-explanations/human-in-the-loop/';
+const EPISODE = '/explorables/human-in-the-loop/';
+const GERMAN_EPISODE = '/de/explorables/human-in-the-loop/';
 const SLIDE_ANCHOR = 'agentic-workflows--human-in-the-loop';
 /** Scoped to the Slide: the page shows the Workflow on four Slides, one per Preset. */
 const ROOT = `#${SLIDE_ANCHOR} [data-human-in-the-loop]`;

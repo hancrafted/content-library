@@ -32,9 +32,9 @@ describe('success cases', () => {
     expect(parsed.success).toBe(true);
   });
 
-  it('knows exactly the three Resource types', () => {
+  it('knows exactly the two Resource types', () => {
     // ARRANGE
-    const expected = ['explorable-explanation', 'episode-template', 'master-slide'];
+    const expected = ['episode-template', 'master-slide'];
     // ACT
     const types = [...RESOURCE_TYPES];
     // ASSERT
@@ -49,9 +49,7 @@ describe('failure cases', () => {
     // ACT
     const sentence = refusal(record);
     // ASSERT
-    expect(sentence).toBe(
-      'type is "page-template", but must be one of explorable-explanation, episode-template, master-slide',
-    );
+    expect(sentence).toBe('type is "page-template", but must be one of episode-template, master-slide');
   });
 
   it('refuses a Resource with no type', () => {
@@ -60,7 +58,7 @@ describe('failure cases', () => {
     // ACT
     const sentence = refusal(record);
     // ASSERT
-    expect(sentence).toBe('type is required, one of explorable-explanation, episode-template, master-slide');
+    expect(sentence).toBe('type is required, one of episode-template, master-slide');
   });
 
   it('refuses a Resource with no visibility, so a forgotten field fails closed', () => {

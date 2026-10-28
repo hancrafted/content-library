@@ -42,7 +42,6 @@ function browserLabels(t: OverviewT): ResourceBrowserLabels {
     list: t('list'),
     reset: t('reset'),
     typeNames: {
-      'explorable-explanation': t('typePlurals.explorable-explanation'),
       'episode-template': t('typePlurals.episode-template'),
       'master-slide': t('typePlurals.master-slide'),
     },

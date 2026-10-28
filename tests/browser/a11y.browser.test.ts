@@ -12,8 +12,8 @@ const PAGES = [
   '/episodes/onboard-ai-every-time/',
   '/episodes/ai-attention-span/',
   '/episodes/ai-gives-you-more-work/',
-  '/explorable-explanations/context-window/',
-  '/explorable-explanations/human-in-the-loop/',
+  '/explorables/context-window/',
+  '/explorables/human-in-the-loop/',
 ];
 const THEMES = ['light', 'dark'] as const;
 const SETTLE = 15_000;

@@ -19,6 +19,10 @@
       "title": "Veranstaltungen",
       "description": "Workshops und Webinare, die eine geplante Reihe visualisierter Theorie-Episoden der Reihe nach durchgehen."
     },
+    "explorables": {
+      "title": "Explorables",
+      "description": "Interaktive Erklärungen zum Ausprobieren: je ein Explorable mit seiner Geschichte und seinem Video."
+    },
     "resources": {
       "title": "Ressourcen",
       "description": "Interaktive Erklärungen, Episodenvorlagen und Master-Folien: die wiederverwendbaren Lehrbausteine hinter den hancrafted-Episoden."

@@ -32,10 +32,12 @@ Test: one shared browser suite runs against the last Slide (every option on) of 
 
 ## Explorable page
 
+Record: `src/content-store/explorable-pages/<slug>.ts` (slug, Tags, visibility, optional `youtube` with at most one id per locale, played from the Title slide). Composition: `src/episodes/explorable-pages/<slug>/`. Overview: `/explorables/`, a card per public page. `npm run registry` lists both and the Explorables.
+
 A page behaves like an Episode: table of contents, Context drawer, Slide kit, Speaker notes citing a Research question or a high-trust Source, and a YouTube Video played from the Title slide (at most one per locale, the `youtube` field of the Episode). Its content is what makes it a product.
 
-- **Slug.** The page's slug is its primary Explorable's folder slug. The content store refuses a page whose slug names no Explorable (planned, #404).
-- **URL.** `/explorables/<slug>/`, listed on `/explorables/`, both locales, public, indexed, in the sitemap (planned, #404). Until then the three pages (Context window, Human in the loop, AI disciplines) sit under `/explorable-explanations/`.
+- **Slug.** The page's slug is its primary Explorable's folder slug. The content store refuses a page whose slug names no Explorable folder `src/explorables/<slug>/`, in a sentence naming the page.
+- **URL.** `/explorables/<slug>/`, listed on `/explorables/`, both locales, public, indexed, in the sitemap. The three pages (Context window, Human in the loop, AI disciplines) live there; `/explorable-explanations/*` answers with a 301 to `/explorables/:splat` (`public/_redirects`).
 - **Other Explorables.** Its Slides may show any Explorable; the product, not the code, decides what a page covers.
 - **Home link.** An Explorable shown in any Slide links "Explore it →" to the page whose slug equals its own, when one exists. Derived, no stored pointer (planned, #404).
 - **Sections.** A Section's section slide may be switched off, so the page does not repeat its title (`GLOSSARY.md`, Section). The Title slide stays: it plays the Video.

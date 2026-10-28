@@ -24,12 +24,12 @@ export const EXPORTED_EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = episode
   ({ episode }) => episode,
 );
 
-/** A page rendered through the one Episode container: an Episode's own or a Resource's, with where its folder sits. */
+/** A page rendered through the one Episode container: an Episode's own a Resource's or an Explorable page's, with where its folder sits. */
 export interface EpisodeShapedPage {
   readonly slug: string;
   /** The logical path it is built at, before the locale prefix. */
   readonly route: string;
-  /** Its folder under `src/episodes/`: the slug for an Episode, `resources/<slug>` for a Resource. */
+  /** Its folder under `src/episodes/`: the slug for an Episode, `resources/<slug>` for a Resource, `explorable-pages/<slug>` for an Explorable page. */
   readonly folder: string;
   readonly isResource: boolean;
 }
@@ -40,6 +40,10 @@ export const EXPORTED_EPISODE_SHAPED_PAGES: readonly EpisodeShapedPage[] = PAGES
     if (!treatment.exported) return [];
     if (page.kind === 'episode') {
       return [{ slug: page.episode.slug, route: routeOf(page), folder: page.episode.slug, isResource: false }];
+    }
+    if (page.kind === 'explorable-page') {
+      const { slug } = page.explorablePage;
+      return [{ slug, route: routeOf(page), folder: `explorable-pages/${slug}`, isResource: true }];
     }
     if (page.kind === 'resource') {
       const { slug } = page.resource;

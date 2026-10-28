@@ -73,6 +73,7 @@ describe('success cases', () => {
       events: [{ ...EVENT, playlist: presented }],
       playlists: [{ ...PLAYLIST, episodes: [{ episode: 'alpha' }] }],
       resources: [],
+      explorablePages: [],
     };
     // ACT
     const content = loadContent(SOUND);
@@ -753,6 +754,37 @@ describe('failure cases', () => {
     const load = () => loadContent(input);
     // ASSERT
     expect(load).toThrow('Resource odd: type is "deck"');
+  });
+
+  it('refuses an Explorable page whose slug names no Explorable, in a sentence naming it', () => {
+    // ARRANGE
+    const input = {
+      ...SOUND,
+      explorablePages: [{ slug: 'timeline-of-nothing', tags: ['workflow'], visibility: 'public' }],
+      explorablePageCompositions: ['timeline-of-nothing'],
+      explorables: ['context-window'],
+    };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(
+      'Explorable page timeline-of-nothing: its slug names no Explorable, no folder src/explorables/timeline-of-nothing/ exists',
+    );
+  });
+
+  it('refuses an Explorable page with a YouTube id that is no id, and two pages with one slug', () => {
+    // ARRANGE
+    const page = { slug: 'context-window', tags: ['workflow'], visibility: 'public' };
+    const input = {
+      ...SOUND,
+      explorablePages: [{ ...page, youtube: { en: 'nope' } }, page],
+      explorablePageCompositions: ['context-window'],
+      explorables: ['context-window'],
+    };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow('Explorable page context-window: youtube.en');
   });
 
   it('refuses a duplicate Resource slug', () => {

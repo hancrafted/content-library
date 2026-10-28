@@ -3,7 +3,6 @@
     "title": "Resources",
     "intro": "Interactive explanations, Episode templates and Master slides: the reusable teaching units behind the Episodes.",
     "types": {
-      "explorable-explanation": "Explorable explanation",
       "episode-template": "Episode template",
       "master-slide": "Master slide"
     },
@@ -18,7 +17,6 @@
     "list": "List",
     "reset": "Reset filters",
     "typePlurals": {
-      "explorable-explanation": "Explorable explanations",
       "episode-template": "Episode templates",
       "master-slide": "Master slides"
     }
