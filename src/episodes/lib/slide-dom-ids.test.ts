@@ -24,13 +24,16 @@ interface PlacedSlide {
 /** Every page the registry composes, by the ref the store serves it with: each Episode with a page, each Template. */
 const PAGES = [...listEpisodes().flatMap(({ ref }) => (hasPage(ref) ? [ref] : [])), ...TEMPLATE_SLUGS.map(templateRef)];
 
-/** Every Slide of every registered Episode and Template. */
+/** Every Slide of every registered Episode and Template that the page renders: a Section without a section slide has none to render. */
 function allSlides(): PlacedSlide[] {
-  return PAGES.flatMap((page) =>
-    compositionOf(page)
-      .sections.flat()
-      .map((slide) => ({ page, slide })),
-  );
+  return PAGES.flatMap((page) => {
+    const composition = compositionOf(page);
+    const rendered = placeSections<Slide>(composition.sections).flat();
+    return composition.sections
+      .flat()
+      .filter((slide) => rendered.some((entry) => entry.slide === slide))
+      .map((slide) => ({ page, slide }));
+  });
 }
 
 /** The Slide's Scene as the page renders it in English, localized into its own Episode. */

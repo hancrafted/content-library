@@ -21,7 +21,13 @@ export const EPISODE_IDS = [
 ] as const;
 
 /** Every Template, by slug: an authoring bench served at `/episodes/<slug>/`, no Episode (design-ADR 0019). */
-export const TEMPLATE_SLUGS = ['episode-template', 'grids', 'timelines', 'workshop-template'] as const;
+export const TEMPLATE_SLUGS = [
+  'episode-template',
+  'explorable-page',
+  'grids',
+  'timelines',
+  'workshop-template',
+] as const;
 
 /** Every Explorable page, by slug: an Episode-shaped page about its primary Explorable, served at `/explorables/<slug>/`. */
 export const EXPLORABLE_PAGE_SLUGS = ['ai-disciplines', 'context-window', 'human-in-the-loop'] as const;

@@ -93,6 +93,22 @@ describe('success cases', () => {
     expect(sections).toEqual(expected);
   });
 
+  it('composes the Explorable page template as hook with its proof, what, why, and how ending on the Explorable, after its Title slide', () => {
+    // ARRANGE
+    const expected = [
+      ['hook', 'the-payoff', 'the-proof'],
+      ['what-it-is'],
+      ['why-it-matters'],
+      ['how-to-use-it', 'every-option-on'],
+    ];
+    // ACT
+    const sections = compositionOf(templateRef('explorable-page')).sections.map((section) =>
+      section.map(({ slug }) => slug),
+    );
+    // ASSERT
+    expect(sections).toEqual(expected);
+  });
+
   it('composes the CyberForum intro as the template does, its hook renamed grounding, then a check-in per theory Episode', () => {
     // ARRANGE
     const expected = [

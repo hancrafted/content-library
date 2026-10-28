@@ -1,4 +1,4 @@
-// Post-build check of the Templates (design-ADR 0019): four public, indexed pages in both locales, each an Episode-shaped
+// Post-build check of the Templates (design-ADR 0019): five public, indexed pages in both locales, each an Episode-shaped
 // page; the overview that lists them and the nav that leads there; no Episode list shows one; the old tooling URLs
 // are gone or redirected; `slide-layouts` stays deleted.
 
@@ -13,10 +13,11 @@ import { exportedFile, exportedPage, OUT_DIR, redirectRules, resolveBasePath } f
 
 const basePath = resolveBasePath();
 
-/** The four Resources and their URLs, written out: the handoff's table is the expectation. */
+/** The five Templates and their URLs, written out: the handoff's table is the expectation. */
 const TEMPLATES: readonly { slug: TemplateSlug; type: TemplateType; path: string }[] = [
   { slug: 'episode-template', type: 'episode-template', path: '/episode-templates/episode-template' },
   { slug: 'workshop-template', type: 'episode-template', path: '/episode-templates/workshop-template' },
+  { slug: 'explorable-page', type: 'episode-template', path: '/episode-templates/explorable-page' },
   { slug: 'timelines', type: 'master-slide', path: '/master-slides/timelines' },
   { slug: 'grids', type: 'master-slide', path: '/master-slides/grids' },
 ];
@@ -67,7 +68,7 @@ describe.each(PAGES)('the Template page $url', ({ type, slug, path, url }) => {
 });
 
 describe('the Resources overview', () => {
-  it.each(LOCALES)('lists the four Templates, each linking to its page, for %s', (locale) => {
+  it.each(LOCALES)('lists the five Templates, each linking to its page, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.resources, locale));
     const expected = TEMPLATES.map(({ path }) => `${basePath}${localizePath(path, locale)}/`).sort();
@@ -83,7 +84,7 @@ describe('the Resources overview', () => {
   it.each(LOCALES)('offers a search, a type filter with counts, Tag chips and the view switch, for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.resources, locale));
-    const expectedTypeCounts = ['2', '2'];
+    const expectedTypeCounts = ['3', '2'];
     // ACT
     const search = $('[data-resource-controls] input[type="search"][data-resource-search]').length;
     const typeCounts = $('[data-resource-type-filter] [data-filter-tag] span')
@@ -98,7 +99,7 @@ describe('the Resources overview', () => {
     expect(views).toBe(2);
   });
 
-  it.each(LOCALES)('is indexed and in the sitemap with the four pages, for %s', (locale) => {
+  it.each(LOCALES)('is indexed and in the sitemap with the five pages, for %s', (locale) => {
     // ARRANGE
     const sitemap = readFileSync(join(OUT_DIR, 'sitemap.xml'), 'utf8');
     const urls = [ROUTES.resources, ...TEMPLATES.map(({ path }) => path)].map(
