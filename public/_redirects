@@ -54,7 +54,7 @@
 /explorable-explanations/*                 /explorables/:splat                          301
 /de/explorable-explanations/*              /de/explorables/:splat                       301
 
-# The AI disciplines Explorable became AI capability: its old URL lands on the new page, and its published anchor
-# #ai-disciplines is kept there (FE-002 §5.2), so a shared link with the anchor lands where it did.
+# The AI disciplines Explorable became AI capability: its old URL lands on the new page. The page's Explorable now
+# sits at #play, so an old #ai-disciplines link lands at the top of the page, on its hero.
 /explorables/ai-disciplines/*              /explorables/ai-capability/:splat            301
 /de/explorables/ai-disciplines/*           /de/explorables/ai-capability/:splat         301
