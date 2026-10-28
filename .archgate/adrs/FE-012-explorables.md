@@ -1,21 +1,21 @@
 ---
 type: adr
 id: FE-012
-title: 'Explorable Explanation Content'
+title: 'Explorables'
 domain: frontend
 rules: false
-files: ['src/explorable-explanations/**', 'src/episodes/components/slide-shared/**']
-paths: ['src/explorable-explanations/**', 'src/episodes/components/slide-shared/**']
-description: 'An Explorable explanation may own one locale pair of data and default words in its own folder, picked by the path locale at build time; every Slide that shows it overrides any default word by props, and a plain slide-shared part still owns no words.'
+files: ['src/explorables/**', 'src/episodes/components/slide-shared/**']
+paths: ['src/explorables/**', 'src/episodes/components/slide-shared/**']
+description: 'An Explorable may own one locale pair of data and default words in its own folder, picked by the path locale at build time; every Slide that shows it overrides any default word by props, and a plain slide-shared part still owns no words.'
 ---
 
-# Explorable Explanation Content
+# Explorables
 
 ## Context
 
-> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): an Explorable explanation lives in its own folder, `src/explorable-explanations/<name>/` in the Explorable explanations product area, apart from plain shared parts; the rules below are unchanged.
+> Amended by the design-ADR _Content data model_ (docs/adr/0016-content-data-model.md): an Explorable lives in its own folder, `src/explorables/<name>/` in the Explorables product area, apart from plain shared parts; the rules below are unchanged.
 
-An **Explorable explanation** is one interactive visual several Slides show, each by its own **Preset** — the context window cornerstone shows on about ten Slides of one Episode. It is drawn from data: a chat log of dozens of steps, category labels, token budgets, the Presets themselves, in English and German.
+An **Explorable** is one interactive visual several Slides show, each by its own **Preset** — the context window cornerstone shows on about ten Slides of one Episode. It is drawn from data: a chat log of dozens of steps, category labels, token budgets, the Presets themselves, in English and German.
 
 Without this record a plain `slide-shared` part owns no words, so that data has no home:
 
@@ -25,13 +25,13 @@ Without this record a plain `slide-shared` part owns no words, so that data has 
 
 Chosen: the visual's folder holds the data and default words once per locale, and a Slide still has the last word.
 
-For this project the chat and its labels are one artifact, authored together from a real session log and translated together; splitting them across ten folders breaks the "a new Slide is new data, not a new drawing" promise an Explorable explanation exists for.
+For this project the chat and its labels are one artifact, authored together from a real session log and translated together; splitting them across ten folders breaks the "a new Slide is new data, not a new drawing" promise an Explorable exists for.
 
 ## Decision
 
-### 1. One locale pair per Explorable explanation
+### 1. One locale pair per Explorable
 
-1. An Explorable explanation MAY hold, in its own folder, one config pair (`<name>.config.yml` and `<name>.config.de.yml`) carrying its Presets, numbers and default words, and data pairs such as `<name>.jsonl` and `<name>.de.jsonl`.
+1. An Explorable MAY hold, in its own folder, one config pair (`<name>.config.yml` and `<name>.config.de.yml`) carrying its Presets, numbers and default words, and data pairs such as `<name>.jsonl` and `<name>.de.jsonl`.
 2. The pair MUST be picked by the path locale at build time, through static imports — never fetched, never chosen by the browser.
 3. Both files of a pair MUST hold the same keys and the same steps; only the words differ.
 
@@ -42,10 +42,10 @@ For this project the chat and its labels are one artifact, authored together fro
 
 ### 3. Scope
 
-1. This admits a text home for an Explorable explanation only: a part with Presets, used by two or more Slides. Any plain `slide-shared` part owns no words and takes them as props.
-2. An Explorable explanation's data is content: it owns no route, no anchor and no Episode metadata.
+1. This admits a text home for an Explorable only: a part with Presets, used by two or more Slides. Any plain `slide-shared` part owns no words and takes them as props.
+2. An Explorable's data is content: it owns no route, no anchor and no Episode metadata.
 
-### 4. Parts of an interactive Explorable explanation
+### 4. Parts of an interactive Explorable
 
 1. A visual with several panels MUST be built from controlled parts: the parent owns all state and the Preset; each part gets its own slice as props and sends events up by callbacks. No part sees the whole state.
 2. Hover and pin MUST be brushing and linking: the parent holds the lit key, each part turns it into one `on` boolean per item and passes that to a memoised item, so a hover redraws only items whose `on` flipped.
@@ -57,7 +57,7 @@ For this project the chat and its labels are one artifact, authored together fro
 
 ### Do's
 
-1. **DO** keep an Explorable explanation's chat, labels and Presets in its folder as one pair per locale — `summer-party.jsonl` beside `summer-party.de.jsonl`. (Decision 1)
+1. **DO** keep an Explorable's chat, labels and Presets in its folder as one pair per locale — `summer-party.jsonl` beside `summer-party.de.jsonl`. (Decision 1)
 2. **DO** import both locales statically and pick by the path locale. (Decision 1)
 3. **DO** give the server entry a `words` prop that overrides any default word. (Decision 2)
 4. **DO** put a Slide's own title, caption and callouts in its own `i18n/`. (Decision 2)
@@ -70,7 +70,7 @@ For this project the chat and its labels are one artifact, authored together fro
 
 ### Don'ts
 
-1. **DON'T** copy an Explorable explanation's chat or labels into each Slide that shows it. (Decision 1)
+1. **DON'T** copy an Explorable's chat or labels into each Slide that shows it. (Decision 1)
 2. **DON'T** read the pair at runtime or by `Accept-Language`. (Decision 1)
 3. **DON'T** put a Slide's argument in the visual's config — `story:` holds the visual's data, not a Slide's caption. (Decision 2)
 4. **DON'T** give words to a `slide-shared` part that has no Presets or one user. (Decision 3)
@@ -98,14 +98,14 @@ For this project the chat and its labels are one artifact, authored together fro
 
 ## Compliance and Enforcement
 
-1. **Tests:** each Explorable explanation tests its pair for matching keys and steps, and that `words` overrides a default.
+1. **Tests:** each Explorable tests its pair for matching keys and steps, and that `words` overrides a default.
 2. **Types:** the words type keys the config and the `words` prop alike.
 
-**Manual review duties:** words sit in an Explorable explanation's pair only when it has Presets and two users (§3); no Slide caption or callout hides in `story:` (§2); the pair is picked statically (§1).
+**Manual review duties:** words sit in an Explorable's pair only when it has Presets and two users (§3); no Slide caption or callout hides in `story:` (§2); the pair is picked statically (§1).
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
-- [`GLOSSARY.md`](../../GLOSSARY.md) — Explorable explanation, Preset.
+- [`GLOSSARY.md`](../../GLOSSARY.md) — Explorable, Preset.
 - [Next.js — Static Exports](https://nextjs.org/docs/app/guides/static-exports) — build-time rendering of both locales.
