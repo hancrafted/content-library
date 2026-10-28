@@ -10,10 +10,12 @@ import en from './i18n/en.json';
  * Poll v1's baseline questions as keys of `questions`, the picture of AI first so no ladder primes it,, with their answers' Translation keys in poll order. The wording is frozen: it is the
  * question register of research AIE-0016 (docs/llm-wiki/research/AIE/AIE-0016__audience-ai-mental-model/dataset.md),
  * and a change to it is a new poll version there first.
+ * `votes` are the Event's counts of 2026-10-28 in answer order, copied from AIE-0016's `responses.csv` (the figures live there; this is a printed copy).
  */
 const QUESTIONS = [
   {
     key: 'model',
+    votes: [0, 3, 2, 2, 2, 0, 0],
     answers: [
       'questions.model.answers.search',
       'questions.model.answers.chat',
@@ -27,6 +29,7 @@ const QUESTIONS = [
   },
   {
     key: 'fluency',
+    votes: [0, 3, 6, 1, 0],
     answers: [
       'questions.fluency.answers.beginner',
       'questions.fluency.answers.basic',
@@ -38,6 +41,7 @@ const QUESTIONS = [
   },
   {
     key: 'scope',
+    votes: [7, 1, 2, 0, 0],
     answers: [
       'questions.scope.answers.self',
       'questions.scope.answers.team',
@@ -49,6 +53,7 @@ const QUESTIONS = [
   },
   {
     key: 'usage',
+    votes: [0, 1, 3, 1, 2, 2, 1, 0],
     answers: [
       'questions.usage.answers.none',
       'questions.usage.answers.ask',
@@ -64,6 +69,7 @@ const QUESTIONS = [
 ] as const satisfies readonly {
   key: 'model' | 'fluency' | 'scope' | 'usage';
   answers: readonly string[];
+  votes?: readonly number[];
   tone: PollTone;
 }[];
 
@@ -94,6 +100,7 @@ export const poll = slide({
                 marker={index + 1}
                 question={t(`questions.${question.key}.question`)}
                 answers={question.answers.map((answer) => t(answer))}
+                votes={question.votes}
                 tone={question.tone}
               />
             ))}

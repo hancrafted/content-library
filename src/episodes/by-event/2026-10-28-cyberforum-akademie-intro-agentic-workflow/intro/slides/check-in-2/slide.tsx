@@ -10,10 +10,12 @@ import en from './i18n/en.json';
  * The check-in's questions as keys of `questions`, with their answers' Translation keys in poll order: poll v1's `ai-attention-span.seen`, `ai-attention-span.known`. The wording is
  * frozen in the question register of research AIE-0016
  * (docs/llm-wiki/research/AIE/AIE-0016__audience-ai-mental-model/dataset.md); a change is a new poll version there first.
+ * `votes` are the Event's counts of 2026-10-28 in answer order, copied from AIE-0016's `responses.csv` (the figures live there; this is a printed copy).
  */
 const QUESTIONS = [
   {
     key: 'seen',
+    votes: [4, 2, 0, 0, 0],
     answers: [
       'questions.seen.answers.often',
       'questions.seen.answers.sometimes',
@@ -25,10 +27,16 @@ const QUESTIONS = [
   },
   {
     key: 'known',
+    votes: [0, 6, 1],
     answers: ['questions.known.answers.practice', 'questions.known.answers.heard', 'questions.known.answers.new'],
     tone: 'accent',
   },
-] as const satisfies readonly { key: 'seen' | 'known'; answers: readonly string[]; tone: PollTone }[];
+] as const satisfies readonly {
+  key: 'seen' | 'known';
+  answers: readonly string[];
+  votes?: readonly number[];
+  tone: PollTone;
+}[];
 
 // A check-in after the Episode ai-attention-span: the way back into the poll (QR from `poll.voteUrl`) on a filled panel for anyone whose phone closed the tab, the questions printed as text beside it, and the Result page loaded only after the click. The Slide header shows the title and caption; the Scene holds the check-in.
 export const checkIn2 = slide({
@@ -52,12 +60,13 @@ export const checkIn2 = slide({
         </div>
         <div className="flex flex-col gap-4 md:col-span-8">
           <ol {...target('questions')} className="grid grid-cols-1 gap-3 xl:grid-cols-2">
-            {QUESTIONS.map(({ key, answers, tone }, index) => (
+            {QUESTIONS.map(({ key, answers, votes, tone }, index) => (
               <PollQuestion
                 key={key}
                 marker={index + 1}
                 question={t(`questions.${key}.question`)}
                 answers={answers.map((answer) => t(answer))}
+                votes={votes}
                 tone={tone}
               />
             ))}

@@ -8,4 +8,5 @@ export const episodeMetadata = {
   format: 'foundations',
   tags: ['context-engineering', 'agentic-ai', 'workflow'],
   publishedOn: '2026-10-28',
+  youtube: { id: 'mmnFtI5zRPk', language: 'de' },
 } as const satisfies EpisodeInput;
