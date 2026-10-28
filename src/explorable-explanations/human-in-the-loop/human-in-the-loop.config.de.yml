@@ -90,10 +90,11 @@ ui:
   slotAdd: Weiteren Eintrag hinzufügen
   newTab: öffnet in neuem Tab
   openAIChats: Einen KI-Chat öffnen
+  openAIChatTip: 'Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein'
   openAIButtons:
     - label: ChatGPT
       url: https://chatgpt.com/
-      icon: null
+      icon: chatgpt
     - label: Gemini
       url: https://gemini.google.com/app
-      icon: null
+      icon: gemini

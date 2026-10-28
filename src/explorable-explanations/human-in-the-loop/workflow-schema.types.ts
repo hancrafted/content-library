@@ -1,4 +1,4 @@
-import type { NamedIcon } from '@/shared/components/ui/named-icons';
+import type { ChatMarkName } from '@/shared/components/core-components/chat-icons/chat-marks.pure';
 
 /*
  * The Workflow file schema, one language per file: what `loadWorkflow` returns once the shape and the meaning of a
@@ -114,8 +114,8 @@ export interface ChatButtonDef {
   readonly label: string;
   /** An `https://` link to a new, empty chat; it never carries the prompt. */
   readonly url: string;
-  /** A name from the UI kit's named icons, shown before the label; `null` or absent: the label alone. */
-  readonly icon?: NamedIcon | null;
+  /** The chat tool's mark shown before the label (`chatgpt`, `gemini`); `null` or absent: the label alone. */
+  readonly icon?: ChatMarkName | null;
 }
 
 export interface TaskDef {

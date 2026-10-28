@@ -852,7 +852,7 @@ stages:
         openAIButtons:
           - label: Gemini
             url: https://gemini.google.com/app
-            icon: null
+            icon: gemini
         slots:
           - id: pick
             mode: single

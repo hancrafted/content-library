@@ -145,8 +145,9 @@ describe('success cases', () => {
   it('loads the AI chat buttons a job offers, each a label, an https link and an icon or none', () => {
     // ARRANGE
     const buttons = [
-      { label: 'Gemini', url: 'https://gemini.google.com/app', icon: null },
-      { label: 'Spark', url: 'https://example.com/chat', icon: 'sparkles' },
+      { label: 'ChatGPT', url: 'https://chatgpt.com/', icon: 'chatgpt' },
+      { label: 'Gemini', url: 'https://gemini.google.com/app', icon: 'gemini' },
+      { label: 'Other', url: 'https://example.com/chat', icon: null },
     ];
     const change = (file: File) => void Object.assign(research(file), { openAIButtons: buttons });
     // ACT
@@ -350,13 +351,13 @@ describe('failure cases', () => {
     // ARRANGE
     const buttons = (list: object[]) => (file: File) => void Object.assign(research(file), { openAIButtons: list });
     const insecure = buttons([{ label: 'Chat', url: 'http://example.com/', icon: null }]);
-    const unknownIcon = buttons([{ label: 'Chat', url: 'https://example.com/', icon: 'rocket' }]);
+    const unknownIcon = buttons([{ label: 'Chat', url: 'https://example.com/', icon: 'sparkles' }]);
     const where = 'stages[1].jobs[0].openAIButtons';
     // ACT
     const [link, icon, empty] = [insecure, unknownIcon, buttons([])].map((change) => problemsOf(load(change)));
     // ASSERT
     expect(link).toContain(`${where}[0].url "http://example.com/" must start with https://.`);
-    expect(icon).toContain(`${where}[0].icon is "rocket"`);
+    expect(icon).toContain(`${where}[0].icon is "sparkles", which is not one of chatgpt, gemini.`);
     expect(empty).toContain(`${where} needs at least 1 entries.`);
   });
 

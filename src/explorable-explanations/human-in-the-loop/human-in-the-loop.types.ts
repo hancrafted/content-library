@@ -121,8 +121,9 @@ export interface UiWords {
   readonly slotUpload: string;
   readonly slotAdd: string;
   readonly newTab: string;
-  /** The accessible name of the chat button group. */
+  /** The accessible name of the chat button group, and each button's tooltip (`{chat}`: its label). */
   readonly openAIChats: string;
+  readonly openAIChatTip: string;
   /** The AI chats a prompt opens in, unless its job names its own: one shadcn button each, "ChatGPT | Gemini". */
   readonly openAIButtons: readonly ChatButtonDef[];
   /** Progress marks: job not started, job with its result in. */

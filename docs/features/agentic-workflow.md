@@ -45,7 +45,7 @@ Task: `id`, `title`, `goal`, `template`, `slots` (may be empty), `do`, `details`
 
 - `goal`: `do` is the one-sentence goal of the do step, the stepper's title; `review` is the goal of the review step and is required when the job has a review.
 - `needs`: ids of jobs of the same stage that run first. A slot may take the output of a job it needs; a slot that takes a same-stage output without `needs`, an unknown id and a cycle are load problems.
-- `openAIButtons`: the AI chats this job's prompts open in, each `{ label, url, icon }`, shown as one button group ("ChatGPT | Gemini") beside Copy prompt. Without it a job shows the visual's default, `ui.openAIButtons` in `human-in-the-loop.config.yml`. A page job names Gemini alone, since the free ChatGPT has failed to return a page. `url` starts with `https://` and opens an empty chat, never a prefilled one; `icon` is `null` or a name from the UI kit's named icons.
+- `openAIButtons`: the AI chats this job's prompts open in, each `{ label, url, icon }`, shown as one button group ("ChatGPT | Gemini") beside Copy prompt. Without it a job shows the visual's default, `ui.openAIButtons` in `human-in-the-loop.config.yml`. A page job names Gemini alone, since the free ChatGPT has failed to return a page. `url` starts with `https://` and opens an empty chat, never a prefilled one; `icon` is `chatgpt`, `gemini` (the chat marks in `core-components/chat-icons/`) or `null` for the label alone.
 
 - `output` names what the task hands on. A later task's slot takes it by that id. The final job of the last stage may have none; the viewer ticks a checkbox when it is done.
 - `template` is a key of `templates`, shared by the do prompt, the reviewer and the checks.

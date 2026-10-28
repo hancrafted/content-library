@@ -1,4 +1,4 @@
-import { NAMED_ICON_NAMES } from '@/shared/components/ui/named-icons';
+import { CHAT_MARK_NAMES } from '@/shared/components/core-components/chat-icons/chat-marks.pure';
 import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
 
 /*
@@ -35,7 +35,7 @@ const slot = obj({ id: str, mode: enumOf(['single', 'multiple']), label: str, sa
   'free',
 ]);
 const limit = obj({ full: int, demo: int });
-const chatButton = obj({ label: str, url: { t: 'https' }, icon: { t: 'nullOr', of: enumOf(NAMED_ICON_NAMES) } }, [
+const chatButton = obj({ label: str, url: { t: 'https' }, icon: { t: 'nullOr', of: enumOf(CHAT_MARK_NAMES) } }, [
   'icon',
 ]);
 const task = obj(
