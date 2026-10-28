@@ -6,6 +6,8 @@ dist
 # Agent-written staging research files, and their fixture: research.md keeps `[n]: <url> "title"`, which Prettier rewrites.
 skills/new-episode/assets/sample-episode
 docs/episodes/*/research/
+# Han's LinkedIn posts, kept byte for byte as he posted them: the learn branch diffs against them.
+skills/linkedin-author-post/examples
 .vitest
 .claude/settings.local.json
 .next
