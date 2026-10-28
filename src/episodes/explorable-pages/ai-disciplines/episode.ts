@@ -11,5 +11,5 @@ import { playSection } from './sections/play';
 export const aiDisciplines = episode({
   slug: 'ai-disciplines',
   messages: { en, de },
-  sections: [aboutSection, playSection],
+  sections: [playSection, aboutSection],
 });

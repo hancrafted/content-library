@@ -3,7 +3,7 @@ import { violations } from './axe';
 
 /*
  * The Explorable floor (`docs/features/explorables/README.md`, `npm run test:browser`): one suite holds every Explorable page to
- * the floor, run against the page's last Slide, where every option is on. A new Explorable page adds a name to PAGES and
+ * the floor, run against the page's `#play` Slide, where every option is on. A new Explorable page adds a name to PAGES and
  * needs no new spec. A case a page fails and that is too large to fix here is listed in EXPECTED_FAIL with the URL of
  * its follow-up issue.
  */
@@ -21,10 +21,10 @@ const EXPECTED_FAIL: Readonly<Record<string, string>> = {
   'ai-disciplines:axe': 'https://github.com/hancrafted/content-library/issues/423',
 };
 
-/** Opens the page, scrolls its last Slide into view and returns it once it has mounted. */
-async function openLastSlide(page: Page, slug: string): Promise<Locator> {
+/** Opens the page, scrolls its `#play` Slide into view and returns it once it has mounted. */
+async function openPlaySlide(page: Page, slug: string): Promise<Locator> {
   await page.goto(`/explorables/${slug}/`);
-  const slide = page.locator('[data-slide]').last();
+  const slide = page.locator('[data-slide]#play');
   await slide.scrollIntoViewIfNeeded();
   await expect(slide.locator('article')).toBeVisible();
   return slide;
@@ -61,7 +61,7 @@ function expectFloorFail(info: TestInfo, slug: string, name: Floor) {
 test.describe('success cases', () => {
   for (const slug of PAGES) {
     for (const width of WIDTHS) {
-      test(`${slug}: the last Slide fits its frame at ${width}px with no horizontal overflow`, async ({
+      test(`${slug}: the #play Slide fits its frame at ${width}px with no horizontal overflow`, async ({
         page,
       }, info) => {
         // ARRANGE
@@ -69,18 +69,18 @@ test.describe('success cases', () => {
         await page.setViewportSize({ width, height: HEIGHT });
         const expected = { page: 0, content: 0 };
         // ACT
-        const slide = await openLastSlide(page, slug);
+        const slide = await openPlaySlide(page, slug);
         // ASSERT
         await expect.poll(() => overflowOf(page, slide), { timeout: SETTLE }).toEqual(expected);
       });
     }
 
-    test(`${slug}: the last Slide has no serious or critical axe violation`, async ({ page }, info) => {
+    test(`${slug}: the #play Slide has no serious or critical axe violation`, async ({ page }, info) => {
       // ARRANGE
       expectFloorFail(info, slug, 'axe');
       const expected: string[] = [];
       // ACT
-      await openLastSlide(page, slug);
+      await openPlaySlide(page, slug);
       // ASSERT
       await expect
         .poll(async () => (await violations(page)).filter((l) => BLOCKING.some((i) => l.startsWith(i))), {
@@ -89,13 +89,13 @@ test.describe('success cases', () => {
         .toEqual(expected);
     });
 
-    test(`${slug}: reduced motion shows the end state of the last Slide`, async ({ page }, info) => {
+    test(`${slug}: reduced motion shows the end state of the #play Slide`, async ({ page }, info) => {
       // ARRANGE
       expectFloorFail(info, slug, 'reduced-motion');
       await page.emulateMedia({ reducedMotion: 'reduce' });
       const expected = { unsettled: 0, running: 0 };
       // ACT
-      const slide = await openLastSlide(page, slug);
+      const slide = await openPlaySlide(page, slug);
       // ASSERT
       // The end state is reached: every animating element reports `settled` and the browser runs no animation on the Slide.
       const motions = await slide.locator('[data-motion]').count();
@@ -112,7 +112,7 @@ test.describe('success cases', () => {
         .toEqual(expected);
     });
 
-    test(`${slug}: the last Slide renders with every off-origin request blocked`, async ({ page }, info) => {
+    test(`${slug}: the #play Slide renders with every off-origin request blocked`, async ({ page }, info) => {
       // ARRANGE
       expectFloorFail(info, slug, 'offline');
       const origin = new URL(test.info().project.use.baseURL ?? 'http://localhost').origin;
@@ -124,7 +124,7 @@ test.describe('success cases', () => {
       page.on('pageerror', (error) => errors.push(error.message));
       const expected: string[] = [];
       // ACT
-      const slide = await openLastSlide(page, slug);
+      const slide = await openPlaySlide(page, slug);
       // ASSERT
       await expect(slide.locator('article')).toBeVisible();
       expect(errors).toEqual(expected);
@@ -132,13 +132,15 @@ test.describe('success cases', () => {
   }
 
   for (const slug of PAGES) {
-    test(`${slug}: the floor's last Slide is the #play Slide`, async ({ page }) => {
+    test(`${slug}: shows play as the first slide and about afterwards`, async ({ page }) => {
       // ARRANGE
-      const expected = 'play';
+      const expected = ['top', 'play', 'about'];
       // ACT
-      const slide = await openLastSlide(page, slug);
+      await page.goto(`/explorables/${slug}/`);
       // ASSERT
-      await expect(slide).toHaveAttribute('id', expected);
+      const slides = page.locator('[data-slot="slides"] [data-slide]');
+      await expect(slides).toHaveCount(expected.length);
+      expect(await slides.evaluateAll((els) => els.map((el) => el.id))).toEqual(expected);
     });
   }
 
@@ -146,7 +148,7 @@ test.describe('success cases', () => {
     // ARRANGE
     const expected = 'Play all';
     // ACT
-    const slide = await openLastSlide(page, 'ai-disciplines');
+    const slide = await openPlaySlide(page, 'ai-disciplines');
     // ASSERT
     await expect(slide.getByRole('button', { name: expected })).toBeVisible({ timeout: SETTLE });
   });

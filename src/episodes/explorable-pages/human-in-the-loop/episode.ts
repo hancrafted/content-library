@@ -11,5 +11,5 @@ import { playSection } from './sections/play';
 export const humanInTheLoop = episode({
   slug: 'human-in-the-loop',
   messages: { en, de },
-  sections: [aboutSection, playSection],
+  sections: [playSection, aboutSection],
 });

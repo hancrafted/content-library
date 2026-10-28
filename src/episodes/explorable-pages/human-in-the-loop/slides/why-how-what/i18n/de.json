@@ -17,7 +17,7 @@
     },
     "what": {
       "title": "Ein Workflow, in dem KI-Chats die Arbeit machen und Du steuerst.",
-      "caption": "<marker>Jede Stufe kopiert einen Prompt für einen frischen Chat, und Du prüfst das Ergebnis, bevor die nächste Stufe beginnt.</marker> Probier unten den Projektplan aus."
+      "caption": "<marker>Jede Stufe kopiert einen Prompt für einen frischen Chat, und Du prüfst das Ergebnis, bevor die nächste Stufe beginnt.</marker> Probier oben den Projektplan aus."
     }
   },
   "notes": {

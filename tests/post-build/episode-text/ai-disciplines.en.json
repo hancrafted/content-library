@@ -1,19 +1,19 @@
 {
   "title": "AI disciplines over time · hancrafted",
   "description": "An interactive timeline of the AI disciplines from 2022 to today: prompting, agents, workflows and the emerging factory, each with a definition, its primary source and a scene showing how it reaches the language model.",
-  "toc": "Contents Loading 1 About 2 Play Open contents : Contents Contents 1 About 2 Play",
+  "toc": "Contents Loading 1 Play 2 About Open contents : Contents Contents 1 Play 2 About",
   "slides": [
     {
       "id": "top",
       "text": "AI disciplines over time Prompting, agents, workflows and the factory on one large language model: how each reaches the model, and how much work it takes on."
     },
     {
-      "id": "about",
-      "text": "Why · How · What Prompt, agent, workflow, factory: four words that get mixed up, on one timeline. Why Everyone says agent and workflow, and nobody says what differs. The words fly around, and \"factory\" has no settled definition at all. ( ) So it is hard to know which one you need. How Each layer adds one thing to the same model. Prompting writes instructions; an agent directs its own tool use in a loop; a workflow chains steps along a path fixed in advance. ( ) What Four disciplines on one timeline, from 2022 to 2026. ChatGPT launched in November 2022, agents and workflows were defined in December 2024, and the factory emerged in early 2026. ( ) Play each scene or press \"Play all\"."
-    },
-    {
       "id": "play",
       "text": "The timeline Four disciplines on one language model, from prompting in 2022–23 to the factory emerging in 2026. Read me timeline What it shows The scale each discipline compares to, the four cards on the rail, a scene per discipline, its wire down to the model, and the model band. At rest nothing moves. What to try Move the mouse onto a column to play its scene. Click a card or the model band to turn it to its definition and source. Press \"Play all\" to play the four in turn. What to notice Every message to the model is a square down the wire and back: one for a prompt, three loops for an agent, three side by side at a workflow's fan-out, up to five at once for the factory. Comparable to a task a specialist a team an organisation 2022–23 Prompting You write, the AI answers. The entry point. Click: definition Definition Prompting is writing effective instructions so the model reliably gives you what you need. Source : OpenAI, prompt engineering guide ↗ ( opens in a new tab ) Summarise this report in 3 points. Sure: 1. … 2. … 3. … Chat a conversation: you write, it answers, message by message 2024–25 Agents The AI uses tools and works in a loop. Click: definition Definition An agent is a language model that uses tools in a loop and decides for itself how to reach a goal. Source : Anthropic, Building effective agents (2024) ↗ ( opens in a new tab ) done Plan the team's trip to the trade fair. Open the web Search flights Three options, cheapest first. Harness the software around it: permissions, tools and a loop until done 2024–25 Workflows Several agents, step by step, to a plan. Click: definition Definition A workflow chains model and tool steps along a path fixed in advance. Source : Anthropic, Building effective agents (2024) ↗ ( opens in a new tab ) Flowchart a graph of agents with a human in or on the loop 2026 → · emerging Factory? Requests in, results out. What happens inside is still open. Click: definition Definition A factory turns specifications into software as a black box, agents working the whole line with no person writing or reviewing each step. Source : Shapiro, The Five Levels (2026) ↗ ( opens in a new tab ) ? End to end customer requests go in, magic happens, results come out, 24/7/365 The foundation, under every stage Large language model (LLM) It predicts, token A token is a piece of a word, such as \"special\" + \"ist\". Models read and write text in tokens. by token, which word piece most likely comes next, learnt from vast amounts of training text. ChatGPT, Copilot, Claude. Click: definition New tech nology brings ? Definition A large language model is an AI model trained on vast amounts of text that continues text token by token and is steered by text alone. Source : Brown et al. 2020, Language Models are Few-Shot Learners ↗ ( opens in a new tab ) ▶ Play all"
+    },
+    {
+      "id": "about",
+      "text": "Why · How · What Prompt, agent, workflow, factory: four words that get mixed up, on one timeline. Why Everyone says agent and workflow, and nobody says what differs. The words fly around, and \"factory\" has no settled definition at all. ( ) So it is hard to know which one you need. How Each layer adds one thing to the same model. Prompting writes instructions; an agent directs its own tool use in a loop; a workflow chains steps along a path fixed in advance. ( ) What Four disciplines on one timeline, from 2022 to 2026. ChatGPT launched in November 2022, agents and workflows were defined in December 2024, and the factory emerged in early 2026. ( ) Play each scene or press \"Play all\"."
     }
   ],
   "notes": [
@@ -22,12 +22,12 @@
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
     {
-      "id": "about",
-      "text": "About The words are not settled Prompting, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label 1 , and its definitions differ in how much human review remains 2 (research LLM-0018). Sources (2) StrongDM, The Software Factory ( opens in a new tab ) factory.strongdm.ai Grant, Dark Factories: Agentic Software Factories (briefing, secondary) ( opens in a new tab ) chadgrant.github.io Three first-party definitions OpenAI defines prompt engineering as writing effective instructions for a model 1 . Anthropic calls workflows systems where LLMs and tools follow predefined code paths, and agents systems where LLMs direct their own tool use 2 . Willison settles on an agent as an LLM that runs tools in a loop to achieve a goal 3 (research LLM-0018). Sources (3) OpenAI, Prompt engineering guide ( opens in a new tab ) developers.openai.com Anthropic, Building effective agents ( opens in a new tab ) anthropic.com Willison, I think \"agent\" may finally have a widely enough agreed upon definition ( opens in a new tab ) simonwillison.net Dates from primary sources ChatGPT launched on 30 November 2022 1 ; Anthropic defined agents and workflows on 19 December 2024 2 ; the factory label dates from early 2026, and the practice began in mid-2025 at one team 3 (research LLM-0018). Sources (3) OpenAI, Introducing ChatGPT ( opens in a new tab ) openai.com Anthropic, Building effective agents ( opens in a new tab ) anthropic.com StrongDM, The Software Factory ( opens in a new tab ) factory.strongdm.ai"
-    },
-    {
       "id": "play",
       "text": "Play Where the years and definitions come from Every year, definition and source on the cards comes from research LLM-0018, which dates each discipline by its primary source: ChatGPT's launch for prompting, Anthropic's agent definition and Claude Code for agents, LangGraph for workflows, and Dan Shapiro's five levels and StrongDM for the factory."
+    },
+    {
+      "id": "about",
+      "text": "About The words are not settled Prompting, agents and workflows have first-party definitions, but \"factory\" is a 2026 practitioner label 1 , and its definitions differ in how much human review remains 2 (research LLM-0018). Sources (2) StrongDM, The Software Factory ( opens in a new tab ) factory.strongdm.ai Grant, Dark Factories: Agentic Software Factories (briefing, secondary) ( opens in a new tab ) chadgrant.github.io Three first-party definitions OpenAI defines prompt engineering as writing effective instructions for a model 1 . Anthropic calls workflows systems where LLMs and tools follow predefined code paths, and agents systems where LLMs direct their own tool use 2 . Willison settles on an agent as an LLM that runs tools in a loop to achieve a goal 3 (research LLM-0018). Sources (3) OpenAI, Prompt engineering guide ( opens in a new tab ) developers.openai.com Anthropic, Building effective agents ( opens in a new tab ) anthropic.com Willison, I think \"agent\" may finally have a widely enough agreed upon definition ( opens in a new tab ) simonwillison.net Dates from primary sources ChatGPT launched on 30 November 2022 1 ; Anthropic defined agents and workflows on 19 December 2024 2 ; the factory label dates from early 2026, and the practice began in mid-2025 at one team 3 (research LLM-0018). Sources (3) OpenAI, Introducing ChatGPT ( opens in a new tab ) openai.com Anthropic, Building effective agents ( opens in a new tab ) anthropic.com StrongDM, The Software Factory ( opens in a new tab ) factory.strongdm.ai"
     }
   ],
   "script": [
@@ -35,7 +35,7 @@
       "id": "top",
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
-    { "id": "about", "text": "About No voice script for this Slide." },
-    { "id": "play", "text": "Play No voice script for this Slide." }
+    { "id": "play", "text": "Play No voice script for this Slide." },
+    { "id": "about", "text": "About No voice script for this Slide." }
   ]
 }
