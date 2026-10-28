@@ -6,7 +6,7 @@ import { hydrated } from './hydrated';
  * the way it stops when its Slide is not the active one. Waits on the page's own `data-hero-motion`, never on time.
  */
 
-const PAGES = ['context-window', 'human-in-the-loop', 'ai-disciplines'];
+const PAGES = ['context-window', 'human-in-the-loop', 'ai-capability'];
 const BUTTON = '[data-hero-motion-button]';
 const CANVAS = '[data-hero-motion]';
 
@@ -182,7 +182,7 @@ test.describe('failure cases', () => {
 
   test('a live change to reduced motion stills a running background', async ({ page }) => {
     // ARRANGE
-    await openHero(page, 'ai-disciplines');
+    await openHero(page, 'ai-capability');
     await expect(page.locator(CANVAS)).toHaveAttribute('data-hero-motion', 'running');
     // ACT
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -194,7 +194,7 @@ test.describe('failure cases', () => {
 test.describe('edge cases', () => {
   test('the background stops when its Slide is not the active one', async ({ page }) => {
     // ARRANGE
-    await openHero(page, 'ai-disciplines');
+    await openHero(page, 'ai-capability');
     await expect(page.locator(CANVAS)).toHaveAttribute('data-hero-motion', 'running');
     // ACT
     await page.locator('[data-slide]#about').scrollIntoViewIfNeeded();
@@ -204,7 +204,7 @@ test.describe('edge cases', () => {
 
   test('the background runs again on return to its Slide', async ({ page }) => {
     // ARRANGE
-    await openHero(page, 'ai-disciplines');
+    await openHero(page, 'ai-capability');
     await page.locator('[data-slide]#about').scrollIntoViewIfNeeded();
     await expect(page.locator(CANVAS)).toHaveCount(0);
     // ACT

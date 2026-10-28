@@ -1,6 +1,6 @@
 {
   "heading": "“20× productivity with AI.” Here’s what that actually means.",
-  "caption": "Explore four AI disciplines on one timeline, and what each one adds.",
+  "caption": "Explore four Levels of working with AI on one timeline, and what each one adds.",
   "tryIt": "Try it",
   "why": "Why it matters",
   "share": {
@@ -15,29 +15,29 @@
     "stilled": "The background is still: reduced motion is on"
   },
   "preview": {
-    "label": "Stylised preview of the AI disciplines Explorable: four columns, prompting, agents, workflows and the factory, each with its year and a wire down to a language model that predicts the next token.",
-    "title": "AI disciplines",
+    "label": "Stylised preview of the AI capability Explorable: four Levels, prompting, agents, workflows and the factory, each with its year and a wire down to a language model that predicts the next token.",
+    "title": "AI capability",
     "tag": "2022–2026",
     "model": "Language model",
     "predicts": "predicts the next token",
     "cards": {
       "prompting": {
-        "year": "2022",
+        "year": "2022–23",
         "name": "Prompting",
         "like": "like a task"
       },
       "agents": {
-        "year": "2024",
+        "year": "2024–25",
         "name": "Agents",
         "like": "like a specialist"
       },
       "workflows": {
-        "year": "2024",
+        "year": "2024–25",
         "name": "Workflows",
         "like": "like a team"
       },
       "factory": {
-        "year": "2026",
+        "year": "2026 →",
         "name": "Factory",
         "like": "like an organisation"
       }

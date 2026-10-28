@@ -144,11 +144,11 @@ test.describe('success cases', () => {
     });
   }
 
-  test('ai-disciplines: the #play Slide shows "Play all"', async ({ page }) => {
+  test('ai-capability: the #play Slide shows "Play all"', async ({ page }) => {
     // ARRANGE
     const expected = 'Play all';
     // ACT
-    const slide = await openPlaySlide(page, 'ai-disciplines');
+    const slide = await openPlaySlide(page, 'ai-capability');
     // ASSERT
     await expect(slide.getByRole('button', { name: expected })).toBeVisible({ timeout: SETTLE });
   });

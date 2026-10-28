@@ -101,7 +101,7 @@ function placeOf(story: Story, at: { i: number; count: number; t: number; a: Are
     return { x: a.x + a.w * (0.5 + Math.sin(i * 2.8) * 0.08), y, alpha: fade * (1 - middle * 0.8), middle };
   }
   const x = a.x + a.w * (0.5 + Math.sin(i * 2.8) * 0.27);
-  if (story !== 'ai-disciplines') return { x, y, alpha: fade, middle: 0 };
+  if (story !== 'ai-capability') return { x, y, alpha: fade, middle: 0 };
   const turn = (t / LOOP_SECONDS) * Math.PI * 2 + i;
   return {
     x: a.x + a.w * (0.27 + (Math.floor(i / 4) % 3) * 0.23),

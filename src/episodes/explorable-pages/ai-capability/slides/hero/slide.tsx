@@ -5,13 +5,13 @@ import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The four disciplines, in time order; their words are the Slide's own. */
+/** The four Levels, in time order; their words are the Slide's own. */
 const DISCIPLINES = ['prompting', 'agents', 'workflows', 'factory'] as const;
 
 /**
- * The Title slide's hero Scene for the AI disciplines page (the record's `title`): its own headline and lede, the
+ * The Title slide's hero Scene for the AI capability page (the record's `title`): its own headline and lede, the
  * Explorable hero over a drift of bubbles in which one climbs four tiers and gains a chip at each, and a preview of the
- * four disciplines wired down to one language model.
+ * four Levels wired down to one language model.
  */
 export const hero = slide({
   slug: 'hero',
@@ -20,7 +20,7 @@ export const hero = slide({
     return (
       <ExplorableHero
         layers={{ Backdrop: SlideBackdrop, Frame: SlideFrame }}
-        story="ai-disciplines"
+        story="ai-capability"
         locale={locale}
         tryIt={{ label: t('tryIt'), href: slideHref('timeline') }}
         why={{ label: t('why'), href: slideHref('why-how-what') }}

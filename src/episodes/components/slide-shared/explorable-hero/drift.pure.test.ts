@@ -116,7 +116,7 @@ describe('success cases', () => {
     const threeChips = 3;
     // ACT
     const chips = quarters.map(
-      (p) => beatPoseOf({ story: 'ai-disciplines', progress: p, area: AREA, size: 40 })?.chips ?? -1,
+      (p) => beatPoseOf({ story: 'ai-capability', progress: p, area: AREA, size: 40 })?.chips ?? -1,
     );
     // ASSERT
     expect(chips[first]).toBeLessThan(1);
@@ -199,7 +199,7 @@ describe('edge cases', () => {
     const allChips = 4;
     // ACT
     const checked = beatPoseOf({ story: 'human-in-the-loop', progress: human, area: AREA, size: 40 });
-    const grown = beatPoseOf({ story: 'ai-disciplines', progress: human, area: AREA, size: 40 });
+    const grown = beatPoseOf({ story: 'ai-capability', progress: human, area: AREA, size: 40 });
     // ASSERT
     expect(checked?.check).toBe(1);
     expect(checked?.y).toBeCloseTo(top);

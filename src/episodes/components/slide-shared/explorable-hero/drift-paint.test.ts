@@ -33,7 +33,7 @@ describe('success cases', () => {
     const moment = momentOf(0, true);
     const chips = 4;
     // ACT
-    paintBeat(pen, { story: 'ai-disciplines', area: AREA, progress: moment.progress, strength: moment.strength });
+    paintBeat(pen, { story: 'ai-capability', area: AREA, progress: moment.progress, strength: moment.strength });
     // ASSERT
     expect(log.fills).toBe(chips);
   });

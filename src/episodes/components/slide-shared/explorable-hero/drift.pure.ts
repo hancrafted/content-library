@@ -4,7 +4,7 @@
  */
 
 /** Which Explorable's story the beat tells. */
-export type Story = 'context-window' | 'human-in-the-loop' | 'ai-disciplines';
+export type Story = 'context-window' | 'human-in-the-loop' | 'ai-capability';
 
 /** One ambient cycle, the gap between subject beats and a beat's length, in seconds. */
 export const LOOP_SECONDS = 18;
@@ -161,7 +161,7 @@ function humanBeat({ progress, area }: Scene): Placed {
 }
 
 /** The Disciplines bubble climbs one tier per quarter of the beat and gains a chip as it settles on each. */
-function disciplinesBeat({ progress, area }: Scene): Placed {
+function capabilityBeat({ progress, area }: Scene): Placed {
   const step = Math.min(3, Math.floor(progress * 4));
   const local = ease(Math.min(1, (progress * 4 - step) / 0.65));
   const previousTier = step === 0 ? 0.98 : 0.85 - (step - 1) * 0.24;
@@ -173,11 +173,11 @@ function disciplinesBeat({ progress, area }: Scene): Placed {
   };
 }
 
-const BEATS = { 'context-window': contextBeat, 'human-in-the-loop': humanBeat, 'ai-disciplines': disciplinesBeat };
+const BEATS = { 'context-window': contextBeat, 'human-in-the-loop': humanBeat, 'ai-capability': capabilityBeat };
 
 /** The subject bubble of one story at beat `progress`. Nothing visible once the Context bubble has dissolved. */
 export function beatPoseOf(scene: Scene): Pose {
   const placed = BEATS[scene.story](scene);
-  const grown = scene.story === 'ai-disciplines' ? placed.chips * scene.size * 0.12 : 0;
+  const grown = scene.story === 'ai-capability' ? placed.chips * scene.size * 0.12 : 0;
   return { ...placed, x: scene.area.x + scene.area.w * 0.53, width: scene.size * 2.6 + grown };
 }

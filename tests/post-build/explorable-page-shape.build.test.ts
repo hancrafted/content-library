@@ -13,7 +13,7 @@ const SHAPED = EXPORTED_EPISODE_SHAPED_PAGES.filter(
 );
 const COLUMNS = ['why', 'how', 'what'];
 /** The AI disciplines page cites the evidence behind its hero's "20x" headline in one more note. */
-const CLAIM_NOTE_PAGE = 'ai-disciplines';
+const CLAIM_NOTE_PAGE = 'ai-capability';
 const TEMPLATE_FOLDER = 'templates/explorable-page';
 /** What only the page template may ship: its placeholder source URL and its "Replace with ..." words. */
 const PLACEHOLDER = /example\.com\/replace-with-a-source|replace with/i;
