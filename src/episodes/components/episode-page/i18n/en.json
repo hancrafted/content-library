@@ -11,5 +11,8 @@
       "en": "Recorded in English",
       "de": "Recorded in German"
     }
+  },
+  "explorableHome": {
+    "exploreIt": "Explore it →"
   }
 }

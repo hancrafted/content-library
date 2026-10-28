@@ -1,4 +1,5 @@
 import { SpeechBubble } from '@/explorables/context-window/speech-bubble/speech-bubble';
+import { ExploreItLink } from '@/shared/components/core-components/explorable-home/explorable-home.client';
 import type { ReactNode } from 'react';
 import { ContextBars } from './context-bars-view';
 import { contextData, type ContextLocale, type ContextPresetId, type MiniPresetId } from './context-data';
@@ -42,7 +43,12 @@ export function contextViewData({ preset: id, locale, words }: Props<ContextPres
 
 /** The interactive cornerstone in one Preset's state. */
 export function Context(props: Props<ContextPresetId>) {
-  return <ContextClient {...contextViewData(props)} />;
+  return (
+    <>
+      <ContextClient {...contextViewData(props)} />
+      <ExploreItLink slug="context-window" />
+    </>
+  );
 }
 
 /** Static bars drawn horizontally: chats one under the other on one window size. */
