@@ -23,7 +23,7 @@
   "notes": {
     "why": {
       "header": "Ungeprüfte Ausgabe hat echtes Geld gekostet",
-      "description": "In einem Bundesverfahren in New York reichten Anwälte einen Schriftsatz mit sechs von ChatGPT erfundenen Fällen ein und wurden bestraft; das Gericht stellte fest, dass Anwälte als Torwächter für die Richtigkeit ihrer Schriftsätze zuständig sind [1]. In einer Studie schrieben Programmierer mit KI-Assistent weniger sicheren Code und hielten ihn eher für sicher, ein Ergebnis, das eine größere Studie bestreitet [2] (Recherche AIE-0005).",
+      "description": "In einem Bundesverfahren in New York reichten Anwälte einen Schriftsatz mit sechs von ChatGPT erfundenen Fällen ein und wurden bestraft; das Gericht stellte fest, dass Anwälte als Kontrollinstanz für die Richtigkeit ihrer Schriftsätze zuständig sind [1]. In einer Studie schrieben Programmierer mit KI-Assistent weniger sicheren Code und hielten ihn eher für sicher, ein Ergebnis, das eine größere Studie bestreitet [2] (Recherche AIE-0005, AIE-0010).",
       "sources": {
         "castel-mata-v-avianca": {
           "title": "Judge P. Kevin Castel, Mata v. Avianca, Inc., Opinion and Order, No. 22-cv-1461 (S.D.N.Y. June 22, 2023)"

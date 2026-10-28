@@ -23,16 +23,19 @@
   "notes": {
     "why": {
       "header": "Die Begriffe sind nicht gefestigt",
-      "description": "Prompting, Agenten und Workflows haben Definitionen der Hersteller, aber „Fabrik“ ist ein Begriff von Praktikern aus 2026, dessen Definitionen sich darin unterscheiden, wie viel menschliche Kontrolle bleibt [1] (Recherche LLM-0018).",
+      "description": "Prompting, Agenten und Workflows haben Definitionen der Anbieter selbst, aber „Fabrik“ ist ein Begriff von Praktikern aus 2026 [1], und seine Definitionen unterscheiden sich darin, wie viel menschliche Kontrolle bleibt [2] (Recherche LLM-0018).",
       "sources": {
+        "strongdm-software-factory": {
+          "title": "StrongDM, The Software Factory"
+        },
         "grant-dark-factories": {
           "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
         }
       }
     },
     "how": {
-      "header": "Drei Definitionen der Hersteller",
-      "description": "OpenAI definiert Prompt Engineering als das Schreiben wirksamer Anweisungen für ein Modell [1]. Anthropic nennt Workflows Systeme, in denen LLMs und Werkzeuge vordefinierten Codepfaden folgen, und Agenten Systeme, in denen LLMs ihre Werkzeugnutzung selbst steuern [2]. Willison einigt sich auf: Ein Agent ist ein LLM, das Werkzeuge in einer Schleife nutzt, um ein Ziel zu erreichen [3] (Recherche LLM-0018).",
+      "header": "Drei Definitionen aus Primärquellen",
+      "description": "OpenAI definiert Prompt Engineering als das Schreiben wirksamer Anweisungen für ein Modell [1]. Anthropic nennt Workflows Systeme, in denen LLMs und Werkzeuge vordefinierten Codepfaden folgen, und Agenten Systeme, in denen LLMs ihre Werkzeugnutzung selbst steuern [2]. Willison legt sich fest: Ein Agent ist ein LLM, das Werkzeuge in einer Schleife nutzt, um ein Ziel zu erreichen [3] (Recherche LLM-0018).",
       "sources": {
         "openai-prompt-engineering": {
           "title": "OpenAI, Prompt engineering guide"
@@ -55,8 +58,8 @@
         "anthropic-building-effective-agents": {
           "title": "Anthropic, Building effective agents"
         },
-        "grant-dark-factories": {
-          "title": "Grant, Dark Factories: Agentic Software Factories (briefing, secondary)"
+        "strongdm-software-factory": {
+          "title": "StrongDM, The Software Factory"
         }
       }
     }

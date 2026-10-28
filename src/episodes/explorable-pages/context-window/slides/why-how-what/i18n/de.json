@@ -9,7 +9,7 @@
   "columns": {
     "why": {
       "title": "Die KI vergisst, was Du ihr vor einer Stunde gesagt hast.",
-      "caption": "<marker>Denk an ein langes Telefonat: Du weißt noch, wie es anfing, wie es endete und einen seltsamen Moment, die Mitte verschwimmt.</marker> Ein langer Chat verblasst genauso."
+      "caption": "<marker>Denk an ein langes Telefonat: Du weißt noch, wie es anfing, wie es endete und einen seltsamen Moment, und die Mitte verschwimmt.</marker> Ein langer Chat verblasst genauso."
     },
     "how": {
       "title": "Die Aufmerksamkeit wird dünner, je voller das Fenster ist.",
@@ -17,7 +17,7 @@
     },
     "what": {
       "title": "Im Fenster steckt weit mehr als Dein Chat.",
-      "caption": "<marker>Gespeicherter Speicher wird zu Beginn geladen, eine Websuche legt ganze Seiten hinein, und nahe am Limit fasst die App alte Nachrichten womöglich zusammen.</marker> Probier unten jeden Teil und jede Steuerung aus."
+      "caption": "<marker>Gespeicherte Erinnerungen werden zu Beginn geladen, eine Websuche legt ganze Seiten hinein, und nahe am Limit fasst die App alte Nachrichten womöglich zusammen.</marker> Probier unten jeden Teil und jede Steuerung aus."
     }
   },
   "notes": {
