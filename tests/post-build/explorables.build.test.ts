@@ -86,3 +86,40 @@ describe('the old /explorable-explanations/ URLs', () => {
     expect(rules).toContainEqual(expected);
   });
 });
+
+describe('the "Explore it →" link on an Explorable shown in a Slide', () => {
+  const link = (slug: string) => `[data-explore-it="${slug}"]`;
+
+  it.each(LOCALES)('links the Context window in an Episode Slide to its page, for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath('/episodes/ai-attention-span', locale));
+    const expected = `${basePath}${localizePath('/explorables/context-window', locale)}/`;
+    // ACT
+    const hrefs = $(link('context-window'))
+      .toArray()
+      .map((anchor) => $(anchor).attr('href'));
+    // ASSERT
+    expect(hrefs.length).toBeGreaterThan(0);
+    expect(new Set(hrefs)).toEqual(new Set([expected]));
+  });
+
+  it.each(LOCALES)('shows none on the Explorable page whose primary it is, for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath('/explorables/context-window', locale));
+    // ACT
+    const own = $(link('context-window')).length;
+    // ASSERT
+    expect(own).toBe(0);
+  });
+
+  it.each(LOCALES)('still links an Explorable that is not the page primary, for %s', (locale) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath('/explorables/ai-disciplines', locale));
+    // ACT
+    const others = $('[data-explore-it]')
+      .toArray()
+      .map((anchor) => $(anchor).attr('data-explore-it'));
+    // ASSERT
+    expect(others).not.toContain('ai-disciplines');
+  });
+});

@@ -1,3 +1,4 @@
+import { ExploreItLink } from '@/shared/components/core-components/explorable-home/explorable-home.client';
 import { HumanInTheLoopClient } from './human-in-the-loop.client';
 import type { DiagramSlots, HumanInTheLoopData, WorkflowSlideWords } from './human-in-the-loop.types';
 import type { ControlMap } from './toolbar-controls.pure';
@@ -57,5 +58,10 @@ export function humanInTheLoopData({
 }
 
 export function HumanInTheLoop(props: HumanInTheLoopProps) {
-  return <HumanInTheLoopClient {...humanInTheLoopData(props)} />;
+  return (
+    <>
+      <HumanInTheLoopClient {...humanInTheLoopData(props)} />
+      <ExploreItLink slug="human-in-the-loop" />
+    </>
+  );
 }
