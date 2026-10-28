@@ -1,8 +1,8 @@
 import type { PromptSlot } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
-import { joinPrompt } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import type { PromptView } from '@/shared/components/core-components/try-prompt/try-prompt.types';
-import { expandSections, limitMarker, limitValue } from './workflow-markers.pure';
-import { slotSample } from './workflow-sample.pure';
+import { joinPrompt } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
+import { expandSections, limitMarker, limitValue } from './workflow-markers.pure.ts';
+import { slotSample } from './workflow-sample.pure.ts';
 import type { Runtime, SectionDef, SlotDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*

@@ -1,4 +1,4 @@
-import { unknownCheckMarkers } from './workflow-markers.pure';
+import { unknownCheckMarkers } from './workflow-markers.pure.ts';
 import type { Producer } from './workflow-outputs.pure';
 import type { SlotDef, StageDef, TaskDef } from './workflow-schema.types';
 

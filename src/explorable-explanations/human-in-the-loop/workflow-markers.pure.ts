@@ -4,7 +4,7 @@ import {
   type LimitDef,
   type SectionDef,
   type SlotDef,
-} from './workflow-schema.types';
+} from './workflow-schema.types.ts';
 
 /* The `{{markers}}` of a section's text, and which of them a scope may use. */
 

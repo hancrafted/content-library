@@ -1,10 +1,10 @@
-import { markerCount } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
-import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure';
-import { unneededOutputs } from './workflow-loader-jobs.pure';
-import { limitProblems, slotNameProblems } from './workflow-loader-slots.pure';
-import { expandSections, unknownMarkers } from './workflow-markers.pure';
-import { producersFor, producersOf, tasksOf, type Producer } from './workflow-outputs.pure';
-import { slotSample } from './workflow-sample.pure';
+import { markerCount } from '../../shared/components/core-components/try-prompt/prompt-sections.pure.ts';
+import { handoffProblems, hasFrontMatter, readTemplate } from './markdown-handoff.pure.ts';
+import { unneededOutputs } from './workflow-loader-jobs.pure.ts';
+import { limitProblems, slotNameProblems } from './workflow-loader-slots.pure.ts';
+import { expandSections, unknownMarkers } from './workflow-markers.pure.ts';
+import { producersFor, producersOf, tasksOf, type Producer } from './workflow-outputs.pure.ts';
+import { slotSample } from './workflow-sample.pure.ts';
 import type { SectionDef, SlotDef, StageDef, TaskDef, WorkflowFile } from './workflow-schema.types';
 
 /*

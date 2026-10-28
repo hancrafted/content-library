@@ -1,4 +1,4 @@
-import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types';
+import { MODES, PURPOSES, RUNTIMES, TIERS } from './workflow-schema.types.ts';
 
 /*
  * The shape of a Workflow file as data: a descriptor tree and one walker that reports every field of the wrong type

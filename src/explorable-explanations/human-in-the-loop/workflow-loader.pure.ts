@@ -1,15 +1,15 @@
 import { parse } from 'yaml';
-import { foreachProblems } from './workflow-foreach.pure';
+import { foreachProblems } from './workflow-foreach.pure.ts';
 import {
   contentProblems,
   idProblems,
   reviewerProblems,
   techniqueProblems,
   templateProblems,
-} from './workflow-loader-checks.pure';
-import { jobOrderProblems } from './workflow-loader-jobs.pure';
+} from './workflow-loader-checks.pure.ts';
+import { jobOrderProblems } from './workflow-loader-jobs.pure.ts';
 import type { WorkflowFile } from './workflow-schema.types';
-import { shapeProblems } from './workflow-shape.pure';
+import { shapeProblems } from './workflow-shape.pure.ts';
 
 /*
  * The loading seam of the new Workflow schema: one YAML text, written in one language, into a WorkflowFile or into
