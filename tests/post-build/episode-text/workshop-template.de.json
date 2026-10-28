@@ -1,7 +1,7 @@
 {
   "title": "Workshop-Vorlage · hancrafted",
   "description": "Kopieren Sie diese Episodenvorlage als erste Episode einer neuen Veranstaltung: Titel, Agenda, was dazugehört und was nicht, und wer sie organisiert, mit Platzhaltertexten zum Ersetzen.",
-  "toc": "Inhalt Wird geladen 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? Über mich 5 Organisation Inhalt öffnen : Inhalt Inhalt 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? Über mich 5 Organisation",
+  "toc": "Inhalt Wird geladen 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? 5 Über mich 6 Organisation Inhalt öffnen : Inhalt Inhalt 1 Einstieg 2 Agenda 3 Im Fokus Nicht im Fokus 4 Wo steht ihr? 5 Über mich 6 Organisation",
   "slides": [
     {
       "id": "top",
@@ -28,8 +28,8 @@
       "text": "Wo steht ihr? Vier Fragen, eine halbe Minute, auf dem Handy. Create your poll at directpoll.com anonym – wir zählen nur Antworten, sie fließen in eine spätere Auswertung ein 1 Was ist KI für dich am ehesten? Suchmaschine Chat Assistent Kollege Team Fabrik Weiß ich noch nicht 2 Wie schätzt du deine KI-Kompetenz ein? Einsteiger Grundlagen Sicher Fortgeschritten Experte 3 Wofür entscheidest du beim KI-Einsatz mit? Eigene Arbeit Mein Team Abteilung Ganze Firma Noch offen 4 Was ist das Weitreichendste, das du heute mit KI machst? Noch nichts Chat Eigene Unterlagen In meinen Tools Aufgaben übergeben Eigene Agenten bauen Mehrere Agenten KI-Produkte bauen Live-Ergebnisse zeigen Lädt erst nach dem Klick von directpoll.com."
     },
     {
-      "id": "poll--about-me",
-      "text": "Wo steht ihr? (1/1) Seite 1 von 1 Über mich Wer hier spricht, und was er baut. HC Han Che KI-Trainer und Entwickler (Platzhalter) 1 Baut agentische Workflows für Teams (Platzhalter) 2 Trainiert Menschen im täglichen Arbeiten mit KI (Platzhalter) 3 Macht aus Recherche visuelle Lerneinheiten (Platzhalter) hancrafted.net ( öffnet in einem neuen Tab )"
+      "id": "about-me",
+      "text": "Über mich Wer hier spricht, und was er gebaut hat. 2026 → AI-Enablement RIB und Startups, heute 2025 Führung Engineering Manager, RIB 2023 Anforderungen & UX Tech Lead, XL2 für Audi 2018 Full-Stack Founding Engineer, Startup Selfbits 2012 Vertrieb Sales Director, Infobip · Kuala Lumpur, Shenzhen, Peking Unter jeder Stufe: Coaching & Training seit 2010 · 2.000+ Stunden · AEVO-Ausbilder (IHK) Han Che Engineering-Führung · Beratung · Coaching Ich kenne jedes Glied der SaaS-Wertschöpfungskette. Jetzt bringe ich KI hinein. Beleg · Vertrieb 50+ Verträge in Asien abgeschlossen 30 %+ des weltweiten Umsatzes einer Produktlinie Beleg · Full-Stack 200+ Nutzer eines SaaS-MES in 5 europäischen Werken 9 Mon. bis zu OEE-Kennzahlen in 2 Werken, über 2 Zeitzonen Beleg · Anforderungen & UX 7 Mio. € Modernisierungsprojekt in meiner Verantwortung 6–8 Wo. bis zum laufenden Kernprozess, nach 2–3 Jahren ohne Ergebnis Beleg · Führung ~5 Mon. vom größten Engpass der Organisation zum selbstständigen Team 6 Entwickler in Indien und Deutschland, die selbst verfeinern und schätzen Beleg · AI-Enablement 6 KI-Workshops in 3 Monaten, für RIB und Startups 15–20 Senior-Entwickler lernen, eigene Agent-Skills zu schreiben Kennenlerngespräch buchen ( öffnet in einem neuen Tab )"
     },
     {
       "id": "orga",
@@ -62,8 +62,8 @@
       "text": "Wo steht ihr? Was Du zur Umfrage sagst Handys raus: Code scannen, vier Fragen, eine halbe Minute, je eine Antwort. Die Fragen sind Poll v1 und bleiben gleich, damit die Antworten über alle Events vergleichbar sind (AIE-0016); ändere sie nur mit einer neuen Version im Fragenregister. Die Ergebnisse laden erst auf Klick, vorher geht nichts an directpoll."
     },
     {
-      "id": "poll--about-me",
-      "text": "Über mich Die Bio-Fakten sind Platzhalter Rolle und die drei Fakten sind Platzhalter: Ersetze sie durch das, was dieses Publikum über Dich wissen soll, in beiden Sprachen. Halte es auf das, was in einem Atemzug passt."
+      "id": "about-me",
+      "text": "Über mich Woher die Zahlen kommen Jede Zahl ist eine eigene Angabe, aus Hans Lebenslauf und LinkedIn-Profil (Juli 2026) und den Fallnotizen hinter dem Über-mich-Abschnitt der Startseite. Sie beschreiben seinen Beitrag im Team, keine geprüften Ergebnisse. Fahre über eine Stufe, um ihre zwei Belege zu zeigen; verlässt Du die Kette, kommt KI-Befähigung zurück."
     },
     {
       "id": "orga",
@@ -80,7 +80,7 @@
     { "id": "in-scope", "text": "Im Fokus Kein Sprechtext für diese Folie." },
     { "id": "in-scope--out-of-scope", "text": "Nicht im Fokus Kein Sprechtext für diese Folie." },
     { "id": "poll", "text": "Wo steht ihr? Kein Sprechtext für diese Folie." },
-    { "id": "poll--about-me", "text": "Über mich Kein Sprechtext für diese Folie." },
+    { "id": "about-me", "text": "Über mich Kein Sprechtext für diese Folie." },
     { "id": "orga", "text": "Organisation Kein Sprechtext für diese Folie." }
   ]
 }

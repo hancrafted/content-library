@@ -1,0 +1,81 @@
+{
+  "title": "About me",
+  "caption": "Who is talking, and what he has built.",
+  "name": "Han Che",
+  "role": "Engineering leader · Consultant · Coach",
+  "portraitAlt": "Han Che",
+  "statement": "I have worked every link of the SaaS value chain.",
+  "statementAccent": "Now I enable AI across it.",
+  "rail": "Under every stage: coaching & training since 2010 · 2,000+ hours · AEVO trainer (IHK)",
+  "proofLabel": "Proof",
+  "bookingLabel": "Book a get-to-know call",
+  "newTabHint": "opens in a new tab",
+  "stages": {
+    "sales": {
+      "label": "Sales",
+      "where": "Sales Director, Infobip · Kuala Lumpur, Shenzhen, Beijing",
+      "p1": {
+        "metric": "50+",
+        "text": "contracts closed across Asia"
+      },
+      "p2": {
+        "metric": "30%+",
+        "text": "of global revenue for one product line"
+      }
+    },
+    "build": {
+      "label": "Full-stack",
+      "where": "Founding engineer, Selfbits startup",
+      "p1": {
+        "metric": "200+",
+        "text": "users of a SaaS MES across 5 European factories"
+      },
+      "p2": {
+        "metric": "9 mo",
+        "text": "to OEE KPIs in 2 factories, across 2 time zones"
+      }
+    },
+    "ux": {
+      "label": "Requirements & UX",
+      "where": "Tech lead, XL2 for Audi",
+      "p1": {
+        "metric": "€7M",
+        "text": "modernisation project I was responsible for"
+      },
+      "p2": {
+        "metric": "6–8 wk",
+        "text": "to a working core process, after 2–3 years without a result"
+      }
+    },
+    "lead": {
+      "label": "Leadership",
+      "where": "Engineering Manager, RIB",
+      "p1": {
+        "metric": "~5 mo",
+        "text": "from the organisation's biggest bottleneck to a self-running team"
+      },
+      "p2": {
+        "metric": "6",
+        "text": "developers in India and Germany refining and estimating on their own"
+      }
+    },
+    "ai": {
+      "label": "AI enablement",
+      "where": "RIB and startups, today",
+      "p1": {
+        "metric": "6",
+        "text": "AI workshops in 3 months, for RIB and startups"
+      },
+      "p2": {
+        "metric": "15–20",
+        "text": "senior engineers learning to write their own agent skills"
+      }
+    }
+  },
+  "notes": {
+    "sources": {
+      "header": "Where the figures come from",
+      "description": "Every figure is first-person, from Han's CV and LinkedIn profile (July 2026) and the case notes behind the landing page's About section. They describe his contribution within teams, not audited results. Hover a stage to show its two proofs; leave the chain and AI enablement returns."
+    }
+  }
+}

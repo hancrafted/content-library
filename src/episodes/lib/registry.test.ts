@@ -82,9 +82,9 @@ describe('success cases', () => {
     expect(page.slug).toBe(expected);
   });
 
-  it('composes the Workshop template as hook, agenda, scope, poll with About me, and orga Slides after its Title slide', () => {
+  it('composes the Workshop template as hook, agenda, scope, poll, About me as its own Section, and orga Slides after its Title slide', () => {
     // ARRANGE
-    const expected = [['hook'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll', 'about-me'], ['orga']];
+    const expected = [['hook'], ['agenda'], ['in-scope', 'out-of-scope'], ['poll'], ['about-me'], ['orga']];
     // ACT
     const sections = compositionOf(templateRef('workshop-template')).sections.map((section) =>
       section.map(({ slug }) => slug),
@@ -115,7 +115,8 @@ describe('success cases', () => {
       ['grounding'],
       ['agenda'],
       ['in-scope', 'out-of-scope'],
-      ['poll', 'about-me'],
+      ['poll'],
+      ['about-me'],
       ['orga'],
       ['check-in-1'],
       ['check-in-2'],

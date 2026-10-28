@@ -1,0 +1,81 @@
+{
+  "title": "Über mich",
+  "caption": "Wer hier spricht, und was er gebaut hat.",
+  "name": "Han Che",
+  "role": "Engineering-Führung · Beratung · Coaching",
+  "portraitAlt": "Han Che",
+  "statement": "Ich kenne jedes Glied der SaaS-Wertschöpfungskette.",
+  "statementAccent": "Jetzt bringe ich KI hinein.",
+  "rail": "Unter jeder Stufe: Coaching & Training seit 2010 · 2.000+ Stunden · AEVO-Ausbilder (IHK)",
+  "proofLabel": "Beleg",
+  "bookingLabel": "Kennenlerngespräch buchen",
+  "newTabHint": "öffnet in einem neuen Tab",
+  "stages": {
+    "sales": {
+      "label": "Vertrieb",
+      "where": "Sales Director, Infobip · Kuala Lumpur, Shenzhen, Peking",
+      "p1": {
+        "metric": "50+",
+        "text": "Verträge in Asien abgeschlossen"
+      },
+      "p2": {
+        "metric": "30 %+",
+        "text": "des weltweiten Umsatzes einer Produktlinie"
+      }
+    },
+    "build": {
+      "label": "Full-Stack",
+      "where": "Founding Engineer, Startup Selfbits",
+      "p1": {
+        "metric": "200+",
+        "text": "Nutzer eines SaaS-MES in 5 europäischen Werken"
+      },
+      "p2": {
+        "metric": "9 Mon.",
+        "text": "bis zu OEE-Kennzahlen in 2 Werken, über 2 Zeitzonen"
+      }
+    },
+    "ux": {
+      "label": "Anforderungen & UX",
+      "where": "Tech Lead, XL2 für Audi",
+      "p1": {
+        "metric": "7 Mio. €",
+        "text": "Modernisierungsprojekt in meiner Verantwortung"
+      },
+      "p2": {
+        "metric": "6–8 Wo.",
+        "text": "bis zum laufenden Kernprozess, nach 2–3 Jahren ohne Ergebnis"
+      }
+    },
+    "lead": {
+      "label": "Führung",
+      "where": "Engineering Manager, RIB",
+      "p1": {
+        "metric": "~5 Mon.",
+        "text": "vom größten Engpass der Organisation zum selbstständigen Team"
+      },
+      "p2": {
+        "metric": "6",
+        "text": "Entwickler in Indien und Deutschland, die selbst verfeinern und schätzen"
+      }
+    },
+    "ai": {
+      "label": "AI-Enablement",
+      "where": "RIB und Startups, heute",
+      "p1": {
+        "metric": "6",
+        "text": "KI-Workshops in 3 Monaten, für RIB und Startups"
+      },
+      "p2": {
+        "metric": "15–20",
+        "text": "Senior-Entwickler lernen, eigene Agent-Skills zu schreiben"
+      }
+    }
+  },
+  "notes": {
+    "sources": {
+      "header": "Woher die Zahlen kommen",
+      "description": "Jede Zahl ist eine eigene Angabe, aus Hans Lebenslauf und LinkedIn-Profil (Juli 2026) und den Fallnotizen hinter dem Über-mich-Abschnitt der Startseite. Sie beschreiben seinen Beitrag im Team, keine geprüften Ergebnisse. Fahre über eine Stufe, um ihre zwei Belege zu zeigen; verlässt Du die Kette, kommt KI-Befähigung zurück."
+    }
+  }
+}
