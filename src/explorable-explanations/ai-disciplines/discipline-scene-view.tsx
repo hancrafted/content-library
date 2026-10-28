@@ -11,7 +11,7 @@ const LANE_REM = 0.9;
 /** The wire to the model, with the messages on their way down or back up, each on its lane. */
 function Wire({ frame }: { readonly frame: Frame }) {
   return (
-    <div aria-hidden="true" className={`${styles.wire} relative w-20`}>
+    <div aria-hidden="true" className={`${styles.wire} relative mt-auto w-20`}>
       <span className="absolute inset-y-0 left-1/2 -translate-x-1/2 border-l-2 border-dashed border-(--tone)/50" />
       {onWire(frame).map(({ key, dir, lane, delay }) => (
         <span
@@ -41,7 +41,7 @@ export function DisciplineSceneView(props: {
         {discipline === 'factory' && <FactorySceneView frame={frame} label={words.factory} />}
         {(discipline === 'prompting' || discipline === 'agents') && <ChatSceneView frame={frame} words={words} />}
       </div>
-      <div className="flex flex-col items-center gap-0.5 text-center">
+      <div className="flex h-full flex-col items-center gap-0.5 text-center">
         <p className="text-body font-semibold text-(--tone)">{props.interfaceName}</p>
         <p className="text-caption text-muted-foreground">{props.interfaceHint}</p>
         <Wire frame={frame} />
