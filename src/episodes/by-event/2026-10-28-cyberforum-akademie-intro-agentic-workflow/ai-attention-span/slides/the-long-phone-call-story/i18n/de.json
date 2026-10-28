@@ -103,27 +103,27 @@
       "the-start-sticks": {
         "title": "Der Anfang bleibt hängen",
         "keywords": "",
-        "script": "Sagen wir, Du rufst Deine Schwester an, um den Urlaub zu klären. \"Lass uns den Urlaub klären!\" ist der Anfang, und dieser erste Satz setzt den Rahmen für alles, was danach kommt. Deshalb erinnerst Du Dich am Ende noch daran. Das nennt man den Primacy-Effekt."
+        "script": "Stell Dir ein Telefonat vor, mit Deiner Schwester, einem Freund oder Verwandten, das eigentlich nur ein paar Minuten, vielleicht ein paar Zehn Minuten dauern sollte und am Ende in zwei Stunden ausgeartet ist. So ein Telefonat hatten die meisten schon einmal. Eine andere Analogie ist ein sehr langes Meeting, das zwei Stunden ging. Am Anfang hattet Ihr eine Absicht, Ihr wolltet etwas klären. Dazu gibt es einige interessante Effekte aus der Kognitionswissenschaft, die beschreiben, wie wir uns erinnern und Dinge verarbeiten. Der erste ist der Primacy-Effekt: Wir erinnern uns sehr stark an den Anfang."
       },
       "the-end-sticks": {
         "title": "Das Ende bleibt hängen",
         "keywords": "",
-        "script": "Du erinnerst Dich auch daran, wie es geendet hat. \"Bis bald, tschüss\", und die letzten Minuten davor, weil sie gerade erst passiert und noch frisch sind. Das nennt man den Recency-Effekt."
+        "script": "Der zweite ist der Recency-Effekt: Wir erinnern uns an das Jüngste, an das, was zuletzt gesagt wurde. Das macht auch Sinn."
       },
       "the-middle-blurs": {
         "title": "Die Mitte verschwimmt",
         "keywords": "",
-        "script": "Jetzt die Mitte. Eine Stunde voller Details ist vorbeigezogen: der Umbau bei den Nachbarn, Mamas neues Handy, die Rückenschmerzen Deiner Schwester. Und wenn Dich jemand fragen würde, was da alles drin war, könntest Du es kaum sagen. Gesagt wurde alles, hängen geblieben ist sehr wenig."
+        "script": "Alles andere in der Mitte ist verschwommen. Vielleicht kannst Du ein bisschen nachdenken und Dich erinnern, was Ihr besprochen habt, aber größtenteils verschwimmt die Konversation in der Mitte. Das liegt daran, dass unsere Aufmerksamkeit nicht so aufgebaut ist, dass wir uns immer an alles erinnern."
       },
       "one-thing-stands-out": {
         "title": "Eine Sache sticht heraus",
         "keywords": "",
-        "script": "Bis auf eine Sache. Pepper hat eine ganze Geburtstagstorte gefressen, samt Kerzen. Niemand hat Dich gebeten, Dir das zu merken, und trotzdem kannst Du es noch erzählen, weil das, was sich von allem um sich herum unterscheidet, hängen bleibt. Das nennt man den Von-Restorff-Effekt oder Isolationseffekt."
+        "script": "Dazu kommt der Von-Restorff-Effekt: Wir erinnern uns an die Highlights. Wenn irgendetwas ganz Komisches oder Drastisches dabei war, bleibt auch das hängen."
       },
       "we-never-fixed-the-date": {
         "title": "Das Datum haben wir nie festgelegt",
         "keywords": "",
-        "script": "Und dann die Pointe. Das Essen ist fertig, sie muss los, und Dir fällt auf: Das Datum haben wir gar nicht festgelegt. Die eine Sache, für die Du angerufen hast, ist nie geklärt worden. (Pause) Behalte das im Kopf, denn die Frage ist, ob ein Chat mit einer KI dasselbe tut."
+        "script": "Und am Ende merkst Du: Eigentlich haben wir das gar nicht geregelt, was wir am Anfang regeln wollten. Mir passiert das ständig: Wir reden gerade über ein Thema, und ich frage mich, wie wir überhaupt zu diesem Thema gekommen sind. Und genauso funktioniert auch die KI."
       }
     }
   },
