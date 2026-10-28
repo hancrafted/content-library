@@ -19,7 +19,7 @@ The tree follows the product, so an agent learns what the product is before its 
 
 1. **Routes**, `src/app/`: bind a URL to a template.
 2. **Page assembly**, `src/page-assembly/`: one folder per page template (landing, Events overview, Event, Episode overview, Episode, Resources overview, Resource, dashboard, sitemap), plus `lib/` (page metadata, structured data) and the root Translation merge. A part one template uses sits beside it.
-3. **Product areas**: `src/episodes/` (Episode content, then `components/ hooks/ lib/`), `src/events/`, `src/explorable-explanations/` (one self-contained folder per explanation, no tiers) and `src/pipeline/` (the content pipeline, its Run log, the dashboard).
+3. **Product areas**: `src/episodes/` (Episode content, then `components/ hooks/ lib/`), `src/events/`, `src/explorables/` (one self-contained folder per explanation, no tiers) and `src/pipeline/` (the content pipeline, its Run log, the dashboard).
 4. **Content store**, `src/content-store/`: records, refusals and the delivery policy in `catalogue/`.
 5. **Shared**, `src/shared/`: UI primitives, design system, i18n, domain-free lib and hooks, and page chrome.
 
@@ -35,7 +35,7 @@ Tier folders are named the same in every area, so one rule pattern binds them al
 
 **Reach inside the Episodes area** (§5), named where rules check it:
 
-- **Slide folder:** own files, `slide-master/`, `slide-shared/`, `src/explorable-explanations/`, `ui/`, shared hooks and lib; `core-components/` from server files only. Its `*.client.tsx`: own files, shared hooks and lib.
+- **Slide folder:** own files, `slide-master/`, `slide-shared/`, `src/explorables/`, `ui/`, shared hooks and lib; `core-components/` from server files only. Its `*.client.tsx`: own files, shared hooks and lib.
 - **`slide-shared` part:** `slide-shared/`, `core-components/`, `ui/`, shared lib; its client leaf its own folder, `core-components/`, hooks, lib.
 - **Explorable explanation:** its own area, `core-components/`, `ui/`, shared lib, never `slide-shared/`; its client leaf its own folder, `core-components/`, `ui/`, hooks, lib (`ui/` imports no Slide, Episode or explanation, so the leaf still travels with it).
 - **`core-components/`:** itself, shared hooks and lib.
