@@ -2,7 +2,7 @@ import { localizeSlide, localizeTitleScene } from '@/episodes/components/slide-m
 import type { Slide } from '@/episodes/components/slide-master/slide';
 import { episodeRef } from '@/episodes/lib/episode-folders';
 import { placeSections } from '@/episodes/lib/episode.pure';
-import { SessionBarPreset } from '@/explorable-explanations/context/context';
+import { SessionBarPreset } from '@/explorables/context-window/context';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
 import { readFileSync } from 'node:fs';
@@ -329,7 +329,7 @@ describe('success cases', () => {
 
   it('pulses only the in-progress segment, and only when motion is welcome', () => {
     // ARRANGE
-    const css = readFileSync('src/explorable-explanations/context/context.module.css', 'utf8');
+    const css = readFileSync('src/explorables/context-window/context.module.css', 'utf8');
     // ACT
     const block = css.match(
       /@media \(prefers-reduced-motion: no-preference\) \{\s*\.sessionPart\[data-state='current'\][^}]*animation:[^}]*\}/,

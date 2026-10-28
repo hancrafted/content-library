@@ -17,7 +17,7 @@ src/
   page-assembly/             one folder per page template, lib/, translations.ts
   episodes/                  <slug>/ by-event/ slide-pool/ resources/ | components/ hooks/ lib/
   events/                    components/ lib/
-  explorable-explanations/   one self-contained folder per explanation
+  explorables/               one self-contained folder per explanation
   pipeline/                  components/ hooks/ lib/ (pipeline logic, Run log, dashboard)
   content-store/             records, refusals, catalogue/, featured.ts
   shared/                    components/ hooks/ lib/ i18n/ design-system/ page-chrome/
@@ -33,7 +33,7 @@ tests/                       post-build, browser and boundary suites
 1. **Five layers, importing only downward:** routes, page assembly, product areas, the content store, shared. The product areas are Episodes, Events, Explorable explanations and the pipeline; each is named for what a reader of the vision would call it. `evidence/` arrives only when Concepts first render: no empty placeholder folders.
 2. **Tier folders are named the same in every area:** `components/`, `lib/`, `hooks/`, as needed, so one rule pattern binds every area.
 3. **Product areas never import each other.** Page assembly composes: it builds one area's parts and passes them to another as props, the one way two areas meet. The Event page hands its Playlist list ready-made Episode cards, so Events never learns what an Episode card is. The one exception is a Slide showing an Explorable explanation, so Slides keep their visuals.
-4. **An Explorable explanation is a component, never a page.** Its area has no tier folders (one self-contained folder each), so page assembly reaches an explanation's folder as a Slide does. An explanation's own page, a Resource (design-ADR 0019), is a page-assembly template, `src/page-assembly/resource/`, composing Slides that show it; `src/explorable-explanations/` stays components only.
+4. **An Explorable explanation is a component, never a page.** Its area has no tier folders (one self-contained folder each), so page assembly reaches an explanation's folder as a Slide does. An explanation's own page, a Resource (design-ADR 0019), is a page-assembly template, `src/page-assembly/resource/`, composing Slides that show it; `src/explorables/` stays components only.
 5. **Page assembly reaches an area only through `components/` and `lib/`,** with no per-area barrel, so Slide and Episode internals stay sealed and no barrel bloats a client bundle.
 6. **`shared/` knows nothing of the domain,** and is open to every layer and area alike, the pipeline included. It never reads the content store, schemas included; what page chrome needs from the domain (the language toggle's locales) arrives as props.
 7. **Product areas and page assembly read the content store directly,** so page assembly stays thin and products stay deep. The store keeps exactly one upward edge: each Episode's metadata file.

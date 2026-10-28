@@ -1,7 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { HumanInTheLoop } from '@/explorable-explanations/human-in-the-loop/human-in-the-loop';
-import type { PopoverCopy } from '@/explorable-explanations/human-in-the-loop/human-in-the-loop.types';
+import { HumanInTheLoop } from '@/explorables/human-in-the-loop/human-in-the-loop';
+import type { PopoverCopy } from '@/explorables/human-in-the-loop/human-in-the-loop.types';
 import { Sparkle } from '@/shared/components/core-components/glyphs/glyphs';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
