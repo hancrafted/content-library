@@ -1,3 +1,4 @@
+import { ExploreItLink } from '@/shared/components/core-components/explorable-home/explorable-home.client';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { ReactNode } from 'react';
 import { aiDisciplinesData, mergeWords } from './ai-disciplines-data';
@@ -27,6 +28,9 @@ export function AiDisciplines({ preset, locale, words, targets, markers }: AiDis
   const chosen = data.presets[preset];
   if (chosen === undefined) throw new Error(`ai-disciplines: unknown Preset "${preset}"`);
   return (
-    <AiDisciplinesClient preset={chosen} words={mergeWords(data.words, words)} targets={targets} markers={markers} />
+    <>
+      <AiDisciplinesClient preset={chosen} words={mergeWords(data.words, words)} targets={targets} markers={markers} />
+      <ExploreItLink slug="ai-disciplines" />
+    </>
   );
 }
