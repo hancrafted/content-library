@@ -34,7 +34,7 @@ type PageT = Awaited<ReturnType<typeof getTranslations<'episodesPage'>>>;
 const REFERENCE_LINK =
   'inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-primary';
 
-/** The Resources are no Episodes, so one link under the browse grid leads to their overview. */
+/** The Templates are no Episodes, so one link under the browse grid leads to the Resources overview. */
 function ReferenceLinks({ locale, t }: { locale: Locale; t: PageT }) {
   return (
     <nav

@@ -21,11 +21,11 @@ export const TAG_IDS = ['context-engineering', 'agentic-ai', 'markdown', 'cost',
 export type TagId = (typeof TAG_IDS)[number];
 
 /**
- * What kind of Resource record a page is, which also decides its URL (design-ADR 0019): an Episode template or a Master
- * slide (the Template kind, renamed in #412). An Explorable page is its own record kind. The path of each is `RESOURCE_TYPE_PATHS` in the content store's record routes.
+ * What kind of Template record a page is, which also decides its URL (design-ADR 0019): an Episode template or a Master
+ * slide. An Explorable page is its own record kind. The path of each is `TEMPLATE_TYPE_PATHS` in the content store's record routes.
  */
-export const RESOURCE_TYPES = ['episode-template', 'master-slide'] as const;
-export type ResourceType = (typeof RESOURCE_TYPES)[number];
+export const TEMPLATE_TYPES = ['episode-template', 'master-slide'] as const;
+export type TemplateType = (typeof TEMPLATE_TYPES)[number];
 
 /** A YouTube video id: eleven characters of letters, digits, `-` and `_`. */
 export const YOUTUBE_ID = /^[\w-]{11}$/;

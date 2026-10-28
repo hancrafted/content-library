@@ -1,4 +1,4 @@
-import { pageLocales, RESOURCE_TYPE_PATHS, routeOf } from '@/content-store/catalogue/record-routes';
+import { pageLocales, routeOf, TEMPLATE_TYPE_PATHS } from '@/content-store/catalogue/record-routes';
 import { PAGES } from '@/content-store/store';
 import { LOCALES, type LocalesByRoute } from '@/shared/lib/locale.pure';
 
@@ -15,9 +15,9 @@ export function localesByRoute(): LocalesByRoute {
 }
 
 /**
- * The logical path each Resource type's pages sit under (`/explorable-explanations`, ...), so the header's Resources
- * link stays lit on a Resource page: page chrome reads no record, and the root layouts hand these in.
+ * The logical path each Template type's pages sit under (`/episode-templates`, `/master-slides`), so the header's Resources
+ * link stays lit on a Template page: page chrome reads no record, and the root layouts hand these in.
  */
-export function resourceSections(): readonly string[] {
-  return Object.values(RESOURCE_TYPE_PATHS).map((path) => `/${path}`);
+export function templateSections(): readonly string[] {
+  return Object.values(TEMPLATE_TYPE_PATHS).map((path) => `/${path}`);
 }

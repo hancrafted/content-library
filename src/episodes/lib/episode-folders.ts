@@ -7,17 +7,17 @@ import {
   explorablePageRef,
   folderOf,
   RESERVED_FOLDER_NAMES,
-  resourceRef,
-  RESOURCES_FOLDER,
   SLIDE_POOL_FOLDER,
+  templateRef,
+  TEMPLATES_FOLDER,
   type EpisodeRef,
   type ExplorablePageRef,
-  type ResourceRef,
+  type TemplateRef,
 } from '../../content-store/catalogue/episode-id.pure.ts';
 
 /*
  * The one folder walker (design-ADR 0016 decision 3): every page folder under the Episodes folder, an Episode no Event
- * owns at `<slug>/`, an Event's copy at `by-event/<event-slug>/<slug>/`, and the Resources at `resources/<slug>/`. It
+ * owns at `<slug>/`, an Event's copy at `by-event/<event-slug>/<slug>/`, and the Templates at `templates/<slug>/`. It
  * skips the reserved folders. The registry generator and every test that reads the Episode folders walk with it, so a copy
  * is never missed by one of them. It also walks every Slide folder, a page's and the Slide pool's, so the Slide-folder
  * checks reach a pool Slide. Reads the disk, so only Node code (the generator, tests) imports it.
@@ -31,15 +31,15 @@ export const METADATA_FILE = 'episode-metadata.ts';
 
 /**
  * Passed on for `tools/` and the tests inside an Episode's folder, which FE-007 lets reach `src/` only through an
- * area's `lib/` or the store's entry, never the store's catalogue (§2.8, §5.1): the folder the Resources sit in,
- * `resources/<slug>/`, and `episodeRef`, which names the Episode in a folder, `<slug>/` or `by-event/<event>/<slug>/`, so
+ * area's `lib/` or the store's entry, never the store's catalogue (§2.8, §5.1): the folder the Templates sit in,
+ * `templates/<slug>/`, and `episodeRef`, which names the Episode in a folder, `<slug>/` or `by-event/<event>/<slug>/`, so
  * a test never writes an Episode id out by hand. Every other test imports them from the catalogue itself.
  */
-export { episodeRef, EXPLORABLE_PAGES_FOLDER, RESOURCES_FOLDER };
+export { episodeRef, EXPLORABLE_PAGES_FOLDER, TEMPLATES_FOLDER };
 
-/** One page folder: the Episode it holds, as code passes an Episode, or a Resource; where it sits; what it holds. */
-export type PageFolder = (EpisodeRef | ResourceRef | ExplorablePageRef) & {
-  /** Its path under the Episodes folder: `<slug>`, `by-event/<event>/<slug>`, or `resources/<slug>` for a Resource. */
+/** One page folder: the Episode it holds, as code passes an Episode, or a Template; where it sits; what it holds. */
+export type PageFolder = (EpisodeRef | TemplateRef | ExplorablePageRef) & {
+  /** Its path under the Episodes folder: `<slug>`, `by-event/<event>/<slug>`, or `templates/<slug>` for a Template. */
   readonly folder: string;
   /** Its absolute path. */
   readonly dir: string;
@@ -55,17 +55,17 @@ function subfolders(dir: string): string[] {
     .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 }
 
-/** The page folder of an Episode, a Resource's, at the folder its ref names (`folderOf`). */
-function atFolder(episodesDir: string, page: EpisodeRef | ResourceRef | ExplorablePageRef): PageFolder {
+/** The page folder of an Episode, a Template's, at the folder its ref names (`folderOf`). */
+function atFolder(episodesDir: string, page: EpisodeRef | TemplateRef | ExplorablePageRef): PageFolder {
   const folder = folderOf(page);
   const dir = path.join(episodesDir, folder);
   return { ...page, folder, dir, files: readdirSync(dir) };
 }
 
-/** Every Resource folder, `resources/<slug>/`, in slug order: its id is its slug, and it holds no Episode metadata. */
-export function resourceFolders(root: string): PageFolder[] {
+/** Every Template folder, `templates/<slug>/`, in slug order: its id is its slug, and it holds no Episode metadata. */
+export function templateFolders(root: string): PageFolder[] {
   const episodesDir = path.join(root, EPISODES_DIR);
-  return subfolders(path.join(episodesDir, RESOURCES_FOLDER)).map((slug) => atFolder(episodesDir, resourceRef(slug)));
+  return subfolders(path.join(episodesDir, TEMPLATES_FOLDER)).map((slug) => atFolder(episodesDir, templateRef(slug)));
 }
 
 /** Every Explorable page folder, `explorable-pages/<slug>/`, in slug order: its id is its slug, and it holds no Episode metadata. */
@@ -78,7 +78,7 @@ export function explorablePageFolders(root: string): PageFolder[] {
 
 /**
  * Every page folder under `<root>/src/episodes/`, in folder-name order: the standalone Episodes, then each Event's
- * copies, Event by Event, then the Resources and the Explorable pages. The reserved folders hold no page and are walked into, never listed.
+ * copies, Event by Event, then the Templates and the Explorable pages. The reserved folders hold no page and are walked into, never listed.
  */
 export function pageFolders(root: string): PageFolder[] {
   const episodesDir = path.join(root, EPISODES_DIR);
@@ -90,7 +90,7 @@ export function pageFolders(root: string): PageFolder[] {
       atFolder(episodesDir, episodeRef(slug, event)),
     ),
   );
-  return [...own, ...copies, ...resourceFolders(root), ...explorablePageFolders(root)];
+  return [...own, ...copies, ...templateFolders(root), ...explorablePageFolders(root)];
 }
 
 /** Every Episode folder, standalone and Event copy alike: a page folder holding its metadata record. */
@@ -102,7 +102,7 @@ const SLIDES_DIR = 'slides';
 
 /** One Slide folder: who owns it, its slug (the folder's name) and its absolute path. */
 export interface SlideFolder {
-  /** The page that owns it, by Episode id (a Resource's slug), or `slide-pool` for a pool Slide. */
+  /** The page that owns it, by Episode id (a Template's slug), or `slide-pool` for a pool Slide. */
   readonly owner: string;
   readonly slug: string;
   readonly dir: string;

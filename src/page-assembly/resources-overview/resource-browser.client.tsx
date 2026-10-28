@@ -1,6 +1,6 @@
 'use client';
 
-import type { ResourceType, TagId } from '@/content-store/schemas/fields';
+import type { TagId, TemplateType } from '@/content-store/schemas/fields';
 import { SearchInput } from '@/shared/components/filters/search-input';
 import { TagToggles } from '@/shared/components/filters/tag-toggles';
 import { Button } from '@/shared/components/ui/button';
@@ -33,7 +33,7 @@ export interface ResourceBrowserLabels {
   readonly list: string;
   readonly reset: string;
   /** The type names, as the type filter writes them in plural ("Master slides"). */
-  readonly typeNames: Readonly<Record<ResourceType, string>>;
+  readonly typeNames: Readonly<Record<TemplateType, string>>;
 }
 
 type View = 'grid' | 'list';
@@ -46,7 +46,7 @@ interface BrowserProps {
   /** The Tags' order, the vocabulary's, so the chips read as on the other overviews. */
   vocabulary: readonly TagId[];
   /** The closed list of types, in the order the filter offers them. */
-  types: readonly ResourceType[];
+  types: readonly TemplateType[];
   locale: Locale;
   labels: ResourceBrowserLabels;
 }

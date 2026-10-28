@@ -33,7 +33,7 @@ tests/                       post-build, browser and boundary suites
 1. **Five layers, importing only downward:** routes, page assembly, product areas, the content store, shared. The product areas are Episodes, Events, Explorable explanations and the pipeline; each is named for what a reader of the vision would call it. `evidence/` arrives only when Concepts first render: no empty placeholder folders.
 2. **Tier folders are named the same in every area:** `components/`, `lib/`, `hooks/`, as needed, so one rule pattern binds every area.
 3. **Product areas never import each other.** Page assembly composes: it builds one area's parts and passes them to another as props, the one way two areas meet. The Event page hands its Playlist list ready-made Episode cards, so Events never learns what an Episode card is. The one exception is a Slide showing an Explorable explanation, so Slides keep their visuals.
-4. **An Explorable explanation is a component, never a page.** Its area has no tier folders (one self-contained folder each), so page assembly reaches an explanation's folder as a Slide does. An explanation's own page, a Resource (design-ADR 0019), is a page-assembly template, `src/page-assembly/resource/`, composing Slides that show it; `src/explorables/` stays components only.
+4. **An Explorable explanation is a component, never a page.** Its area has no tier folders (one self-contained folder each), so page assembly reaches an explanation's folder as a Slide does. An explanation's own page, a Resource (design-ADR 0019), is a page-assembly template, `src/page-assembly/template/`, composing Slides that show it; `src/explorables/` stays components only.
 5. **Page assembly reaches an area only through `components/` and `lib/`,** with no per-area barrel, so Slide and Episode internals stay sealed and no barrel bloats a client bundle.
 6. **`shared/` knows nothing of the domain,** and is open to every layer and area alike, the pipeline included. It never reads the content store, schemas included; what page chrome needs from the domain (the language toggle's locales) arrives as props.
 7. **Product areas and page assembly read the content store directly,** so page assembly stays thin and products stay deep. The store keeps exactly one upward edge: each Episode's metadata file.
@@ -42,7 +42,7 @@ tests/                       post-build, browser and boundary suites
 
 8. **Flat: one folder per template,** plus `lib/` for page metadata and structured data, and the Translation merge at its root. It is regrouped when the new navigation ships. Next.js reserves `src/pages/`, so the layer cannot take that name.
 9. **A part one template uses sits beside it,** and is promoted into a product area only when a second template needs it.
-10. **One Episode page template** serves an Episode's own page and an Event-scoped Episode page, branching on the page reference's kind. A Resource page (design-ADR 0019) is its own template, `src/page-assembly/resource/`, rendering through the same container, and the Resources overview is another, `src/page-assembly/resources-overview/`.
+10. **One Episode page template** serves an Episode's own page and an Event-scoped Episode page, branching on the page reference's kind. A Resource page (design-ADR 0019) is its own template, `src/page-assembly/template/`, rendering through the same container, and the Resources overview is another, `src/page-assembly/resources-overview/`.
 
 ### Content store and Episodes
 

@@ -2,7 +2,7 @@ import {
   folderOf,
   type EpisodeRef,
   type ExplorablePageRef,
-  type ResourceRef,
+  type TemplateRef,
 } from '@/content-store/catalogue/episode-id.pure';
 import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
@@ -82,8 +82,8 @@ export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5
 
 /**
  * The source folder a page's Slides sit in, as the dev token editor names it in its prompt: an Episode's own folder,
- * an Event's copy's under its Event, a Resource's under `resources/` or an Explorable page's under `explorable-pages/`.
+ * an Event's copy's under its Event, a Template's under `templates/` or an Explorable page's under `explorable-pages/`.
  */
-export function sourceFolderOf(page: EpisodeRef | ResourceRef | ExplorablePageRef): string {
+export function sourceFolderOf(page: EpisodeRef | TemplateRef | ExplorablePageRef): string {
   return `src/episodes/${folderOf(page)}`;
 }

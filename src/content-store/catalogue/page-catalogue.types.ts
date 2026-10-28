@@ -1,7 +1,7 @@
 import type { LoadedEpisode } from '../episode-refusals';
 import type { ExplorablePage } from '../schemas/explorable-page.schema';
-import type { ResourceType } from '../schemas/fields';
-import type { Resource } from '../schemas/resource.schema';
+import type { TemplateType } from '../schemas/fields';
+import type { Template } from '../schemas/template.schema';
 import type { PresentedEpisode, ServedEvent } from '../served-event';
 import type {
   EpisodesPathPage,
@@ -10,7 +10,7 @@ import type {
   ExplorablePageSlug,
   PageOf,
   PageRef,
-  ResourceSlug,
+  TemplateSlug,
 } from './record-routes';
 import type { PageTreatment, TreatedPage } from './visibility.pure';
 
@@ -21,9 +21,9 @@ export interface EpisodesPathParams {
   readonly episode: EpisodesPathSlug;
 }
 
-/** The params of a page built under a Resource type's path: `/<type plural>/<resource>/`. */
-export interface ResourceParams {
-  readonly resource: ResourceSlug;
+/** The params of a page built under a Template type's path: `/<type plural>/<template>/`. */
+export interface TemplateParams {
+  readonly template: TemplateSlug;
 }
 
 /** The params of a page built under `/explorables/`: `/explorables/<slug>/`. */
@@ -37,10 +37,10 @@ export interface ListedExplorablePage {
   readonly tags: ExplorablePage['tags'];
 }
 
-/** A Resource the overview lists: its page, its record's type, Tags and slug. */
-export interface ListedResource {
-  readonly page: PageOf<'resource'>;
-  readonly tags: Resource['tags'];
+/** A Template the overview lists: its page, its record's type, Tags and slug. */
+export interface ListedTemplate {
+  readonly page: PageOf<'template'>;
+  readonly tags: Template['tags'];
 }
 
 /** The params of an Episode's page under its Event: `/events/<event>/episodes/<episode>/`, the Episode's slug. */
@@ -61,7 +61,7 @@ export type EventEpisodePage = PageOf<'event-episode'> & { readonly presented: P
 export interface PageCatalogue {
   /**
    * Every page, each once, with its treatment: the site's own lists, each Episode's own page (public or not), each
-   * Resource page, each Event, then each Episode under its Event. Only a page whose treatment says `exported` is built;
+   * Template page, each Event, then each Episode under its Event. Only a page whose treatment says `exported` is built;
    * the sitemap keeps this order.
    */
   readonly pages: readonly TreatedPage[];
@@ -78,10 +78,10 @@ export interface PageCatalogue {
   readonly explorablePageParams: () => ExplorablePageParams[];
   /** The Explorable page built at `/explorables/<slug>/`; undefined for a slug no Explorable page has. */
   readonly explorablePageAt: (params: RouteParams<ExplorablePageParams>) => PageOf<'explorable-page'> | undefined;
-  /** One static param per built Resource page of this type, for the route under that type's path. */
-  readonly resourceParams: (type: ResourceType) => ResourceParams[];
-  /** The Resource page built at `/<type plural>/<resource>/`; undefined for a slug of another type or none. */
-  readonly resourcePageAt: (type: ResourceType, params: RouteParams<ResourceParams>) => PageOf<'resource'> | undefined;
+  /** One static param per built Template page of this type, for the route under that type's path. */
+  readonly templateParams: (type: TemplateType) => TemplateParams[];
+  /** The Template page built at `/<type plural>/<template>/`; undefined for a slug of another type or none. */
+  readonly templatePageAt: (type: TemplateType, params: RouteParams<TemplateParams>) => PageOf<'template'> | undefined;
   /** One static param per Event page. */
   readonly eventParams: () => { event: EventSlug }[];
   /**
@@ -100,6 +100,6 @@ export interface PageCatalogue {
   readonly listedEvents: () => readonly ServedEvent[];
   /** The Explorable pages `/explorables/` lists, in record order: those whose record says `public`. */
   readonly listedExplorablePages: () => readonly ListedExplorablePage[];
-  /** The Resources `/resources/` lists, in record order: those whose record says `public`. */
-  readonly listedResources: () => readonly ListedResource[];
+  /** The Templates `/resources/` lists, in record order: those whose record says `public`. */
+  readonly listedTemplates: () => readonly ListedTemplate[];
 }

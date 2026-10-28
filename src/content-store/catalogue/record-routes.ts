@@ -1,8 +1,8 @@
 import { LOCALES, type Locale } from '@/shared/lib/locale.pure';
 import { ROUTES } from '@/shared/lib/static-routes';
-import type { ResourceType } from '../schemas/fields';
-import type { EpisodeRef, ExplorablePageRef, ResourceRef, StandaloneRef } from './episode-id.pure';
-import { EPISODE_IDS, EXPLORABLE_PAGE_SLUGS, RESOURCE_SLUGS } from './episode-ids.generated';
+import type { TemplateType } from '../schemas/fields';
+import type { EpisodeRef, ExplorablePageRef, StandaloneRef, TemplateRef } from './episode-id.pure';
+import { EPISODE_IDS, EXPLORABLE_PAGE_SLUGS, TEMPLATE_SLUGS } from './episode-ids.generated';
 import { EVENT_SLUGS } from './event-slugs.generated';
 
 /*
@@ -17,8 +17,8 @@ export const LEGACY_EPISODE_PREFIX = '/episode';
  * Every Episode with a page, public or unlisted, by its Episode id (GLOSSARY): one folder each,
  * `src/episodes/<slug>/`, or `…/by-event/<event-slug>/<slug>/` for an Event's copy, whose id is
  * `<event-slug>__<slug>`. Listed by the generated Episode registry. Which of them has an `/episodes/` page is the page
- * catalogue's (`treatmentOf` in the content store): an Event's copy lives only under its Event. The Resources
- * served beside them are no Episodes: `RESOURCE_SLUGS`.
+ * catalogue's (`treatmentOf` in the content store): an Event's copy lives only under its Event. The Templates
+ * served beside them are no Episodes: `TEMPLATE_SLUGS`.
  */
 export { EPISODE_IDS };
 
@@ -34,13 +34,13 @@ export function hasPage(episode: EpisodeRef): episode is EpisodeRef<EpisodeId> {
 }
 
 /**
- * Resources: pages that are no Episode (design-ADR 0019), one composition folder each, `src/episodes/resources/<slug>/`,
- * listed by the generated registry; each also has a record in `src/content-store/resources/<slug>.ts`. They are served at
+ * Templates: pages that are no Episode (design-ADR 0019), one composition folder each, `src/episodes/templates/<slug>/`,
+ * listed by the generated registry; each also has a record in `src/content-store/templates/<slug>.ts`. They are served at
  * `/<type plural>/<slug>/`, public and indexed, and no Episode list shows them.
  */
-export { RESOURCE_SLUGS };
+export { TEMPLATE_SLUGS };
 
-export type ResourceSlug = (typeof RESOURCE_SLUGS)[number];
+export type TemplateSlug = (typeof TEMPLATE_SLUGS)[number];
 
 /**
  * Explorable pages: Episode-shaped pages about one primary Explorable, one composition folder each,
@@ -54,8 +54,8 @@ export type ExplorablePageSlug = (typeof EXPLORABLE_PAGE_SLUGS)[number];
 /** A page served at `/episodes/<slug>/`: an Episode's own. An Event's copy, whose id holds its Event's slug, and an unlisted Episode are never exported there. */
 export type EpisodesPathSlug = EpisodeId;
 
-/** The id of any page the Episode container renders: an Episode's id, a Resource's or an Explorable page's slug; what `data-episode` names. */
-export type ComposedId = EpisodeId | ResourceSlug | ExplorablePageSlug;
+/** The id of any page the Episode container renders: an Episode's id, a Template's or an Explorable page's slug; what `data-episode` names. */
+export type ComposedId = EpisodeId | TemplateSlug | ExplorablePageSlug;
 
 export function isEpisodesPathSlug(slug: string): slug is EpisodesPathSlug {
   return isEpisodeId(slug);
@@ -67,8 +67,8 @@ export function episodeRoute(slug: EpisodesPathSlug): string {
 }
 
 /**
- * The path a page is served at on its own, `/episodes/<slug>/` for an Episode. A Resource's path depends on its type,
- * which its slug does not carry, so a Resource's page hands its route in (`resourceRoute`); asking for it here throws.
+ * The path a page is served at on its own, `/episodes/<slug>/` for an Episode. A Template's path depends on its type,
+ * which its slug does not carry, so a Template's page hands its route in (`templateRoute`); asking for it here throws.
  */
 export function ownRouteOf(id: ComposedId): string {
   if (!isEpisodeId(id)) throw new Error(`The page "${id}" hands in its own route`);
@@ -85,15 +85,15 @@ export function explorablePageRoute(slug: ExplorablePageSlug): string {
   return `${ROUTES.explorables}/${slug}`;
 }
 
-/** The URL path segment each Resource type is served under, its plural: the one place the rule is written. */
-export const RESOURCE_TYPE_PATHS: Readonly<Record<ResourceType, string>> = {
+/** The URL path segment each Template type is served under, its plural: the one place the rule is written. */
+export const TEMPLATE_TYPE_PATHS: Readonly<Record<TemplateType, string>> = {
   'episode-template': 'episode-templates',
   'master-slide': 'master-slides',
 };
 
-/** The logical path of one Resource's page, worked out from its type and slug and never stored: `/<type plural>/<slug>`. */
-export function resourceRoute(type: ResourceType, slug: ResourceSlug): string {
-  return `/${RESOURCE_TYPE_PATHS[type]}/${slug}`;
+/** The logical path of one Template's page, worked out from its type and slug and never stored: `/<type plural>/<slug>`. */
+export function templateRoute(type: TemplateType, slug: TemplateSlug): string {
+  return `/${TEMPLATE_TYPE_PATHS[type]}/${slug}`;
 }
 
 /**
@@ -122,7 +122,7 @@ export function eventEpisodeRoute(event: EventSlug, episode: Pick<EpisodeRef, 's
  * A page with its own metadata and a closed set of exported locales, told apart by its `kind`. Every site that
  * branches on the kind does so through `matchPage` or a table keyed by `PageKind`, so a new kind fails `tsc` at each.
  * An Episode's page carries the EpisodeRef the store served, so its slug and owning Event are fields, never a parse;
- * its own page under `/episodes/` only one no Event owns. A Resource's page carries its type and its ResourceRef.
+ * its own page under `/episodes/` only one no Event owns. A Template's page carries its type and its TemplateRef.
  * Which pages exist, and how each is treated, is the page catalogue's (`PAGES` in the content store): it reads them
  * from the records, which lib cannot.
  */
@@ -135,7 +135,7 @@ export type PageRef =
   | { readonly kind: 'resources' }
   | { readonly kind: 'episode'; readonly episode: StandaloneRef<EpisodeId> }
   | { readonly kind: 'explorable-page'; readonly explorablePage: ExplorablePageRef<ExplorablePageSlug> }
-  | { readonly kind: 'resource'; readonly type: ResourceType; readonly resource: ResourceRef<ResourceSlug> }
+  | { readonly kind: 'template'; readonly type: TemplateType; readonly template: TemplateRef<TemplateSlug> }
   | { readonly kind: 'event'; readonly event: EventSlug }
   | { readonly kind: 'event-episode'; readonly event: EventSlug; readonly episode: EpisodeRef<EpisodeId> };
 
@@ -149,7 +149,7 @@ export type PageOf<K extends PageKind> = Extract<PageRef, { readonly kind: K }>;
 export type ListPage = PageOf<'home' | 'dashboard' | 'episodes' | 'events' | 'explorables' | 'resources'>;
 
 /** A page that presents a record, so its route hands in its copy and facts. */
-export type RecordPage = PageOf<'episode' | 'explorable-page' | 'resource' | 'event' | 'event-episode'>;
+export type RecordPage = PageOf<'episode' | 'explorable-page' | 'template' | 'event' | 'event-episode'>;
 
 /** A page served at `/episodes/<slug>/`: an Episode's own. */
 export type EpisodesPathPage = PageOf<'episode'>;
@@ -182,7 +182,7 @@ export function pageKeyOf(page: PageRef): string {
     resources: () => [],
     episode: ({ episode }) => [episode.id],
     'explorable-page': ({ explorablePage }) => [explorablePage.slug],
-    resource: ({ resource }) => [resource.slug],
+    template: ({ template }) => [template.slug],
     event: ({ event }) => [event],
     'event-episode': ({ event, episode }) => [event, episode.id],
   });
@@ -199,7 +199,7 @@ const LOCALES_BY_KIND: Readonly<Record<PageKind, readonly Locale[]>> = {
   resources: LOCALES,
   episode: LOCALES,
   'explorable-page': LOCALES,
-  resource: LOCALES,
+  template: LOCALES,
   event: LOCALES,
   'event-episode': LOCALES,
 };
@@ -220,7 +220,7 @@ export function routeOf(page: PageRef): string {
     resources: () => ROUTES.resources,
     episode: ({ episode }) => episodeRoute(episode.slug),
     'explorable-page': ({ explorablePage }) => explorablePageRoute(explorablePage.slug),
-    resource: ({ type, resource }) => resourceRoute(type, resource.slug),
+    template: ({ type, template }) => templateRoute(type, template.slug),
     event: ({ event }) => eventRoute(event),
     'event-episode': ({ event, episode }) => eventEpisodeRoute(event, episode),
   });

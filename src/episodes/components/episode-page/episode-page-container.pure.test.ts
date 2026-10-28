@@ -1,4 +1,4 @@
-import { episodeRef, explorablePageRef, resourceRef } from '@/content-store/catalogue/episode-id.pure';
+import { episodeRef, explorablePageRef, templateRef } from '@/content-store/catalogue/episode-id.pure';
 import type { TocSection } from '@/shared/lib/table-of-contents.pure';
 import { describe, expect, it } from 'vitest';
 import { eyebrowsOf, sourceFolderOf } from './episode-page-container.pure';
@@ -75,17 +75,17 @@ describe('edge cases', () => {
     expect(eyebrows.get('s--c')).toEqual(expected);
   });
 
-  it("names an Event's copy's folder under its Event, a Resource's under resources/ and an Explorable page's under explorable-pages/", () => {
+  it("names an Event's copy's folder under its Event, a Template's under templates/ and an Explorable page's under explorable-pages/", () => {
     // ARRANGE
     const expected = [
       'src/episodes/by-event/2026-10-23-axel-agentic-workflow/onboard-ai-every-time',
-      'src/episodes/resources/timelines',
+      'src/episodes/templates/timelines',
       'src/episodes/explorable-pages/context-window',
     ];
     // ACT
     const folders = [
       sourceFolderOf(episodeRef('onboard-ai-every-time', '2026-10-23-axel-agentic-workflow')),
-      sourceFolderOf(resourceRef('timelines')),
+      sourceFolderOf(templateRef('timelines')),
       sourceFolderOf(explorablePageRef('context-window')),
     ];
     // ASSERT

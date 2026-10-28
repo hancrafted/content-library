@@ -150,7 +150,7 @@ export type HeaderMode = 'shared' | 'authored';
  * An Episode's composition of Slides: static data. It carries its own
  * text, so no other owner's Translation files hold any of it. What the Episode
  * declares about itself (status, visibility, Video) is its metadata record,
- * loaded by the content store (FE-013). A Resource
+ * loaded by the content store (FE-013). A Template
  * composes its Slides the same way, but is no Episode; both are read by ref
  * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */

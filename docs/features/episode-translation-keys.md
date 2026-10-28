@@ -44,7 +44,7 @@ The record, not the Translation file, holds what is not a string: a note's `slug
 
 ## Worked example: episode-template
 
-`src/episodes/resources/episode-template/slides/why-a-template/slide.tsx` declares slug `why-a-template`, its messages `{ en, de }` imported from `./i18n/`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in its own `i18n/en.json`:
+`src/episodes/templates/episode-template/slides/why-a-template/slide.tsx` declares slug `why-a-template`, its messages `{ en, de }` imported from `./i18n/`, notes `reference-episode` and `spine`, and segments `one-breath` and `the-spine` (the second with `bridge: true`). Every key it reads, in its own `i18n/en.json`:
 
 ```text
 title
@@ -82,7 +82,7 @@ episode-template/i18n/en.json              title, caption, description
 - Template: a string a client widget completes after the reader acts keeps a plain `{name}` placeholder (`"showAll": "Show all {count}"`, no ICU plural; keys are camelCase, never `show-all`). The Slide reads it with `template('showAll')` and passes it as a prop; the widget renders `fillTemplate(label, { count })`. `template` accepts only a string leaf of the Slide's own file (or subtree).
 - A Section of one Slide needs no extra key: its section slide holds `title` and `caption` like any other Slide.
 - A `tsc` error from `t`, `ref` or `target` means the Translation file or the declaration is wrong; fix it, never cast ([FE-002 §3](../../.archgate/adrs/FE-002-episode-page.md#3-scene-is-free)).
-- `src/episodes/resources/episode-template/` is the copy source for a new Episode; the frame components in `src/episodes/components/slide-master/` and the Slide library, the Master slide Resources in `src/episodes/resources/timelines/slides/` and `src/episodes/resources/grids/slides/`, hold the Slide layouts.
+- `src/episodes/templates/episode-template/` is the copy source for a new Episode; the frame components in `src/episodes/components/slide-master/` and the Slide library, the Master slide Templates in `src/episodes/templates/timelines/slides/` and `src/episodes/templates/grids/slides/`, hold the Slide layouts.
 
 ## Episode browser entries
 
@@ -119,4 +119,4 @@ An Event is a record in the content store that holds no string ([Events](events.
 
 To announce an Upcoming Episode, create `episodes/<slug>/` holding only `episode-metadata.ts` with `status: 'upcoming'`, add it to `UPCOMING` in the repository, and write its two `upcoming` keys in en and de.
 
-The four Resources (`episode-template`, `workshop-template`, `timelines`, `grids`; see the GLOSSARY) are one folder each under `src/episodes/resources/`, and the three Explorable pages (`context-window`, `human-in-the-loop`, `ai-disciplines`) one folder each under `src/episodes/explorable-pages/`; `npm run registry` generates `RESOURCE_SLUGS`, `EXPLORABLE_PAGE_SLUGS` and their compositions. They are not Episodes: not among the Episode ids or in the Episode browser, and they need no Episode metadata. Their title, caption and description are the composition's own `i18n/` pair (the record holds no text); the overview's and the nav's words are `resourcesOverview.*` and `nav.resources`, and `meta.resources` is the overview's page metadata.
+The four Templates (`episode-template`, `workshop-template`, `timelines`, `grids`; see the GLOSSARY) are one folder each under `src/episodes/templates/`, and the three Explorable pages (`context-window`, `human-in-the-loop`, `ai-disciplines`) one folder each under `src/episodes/explorable-pages/`; `npm run registry` generates `TEMPLATE_SLUGS`, `EXPLORABLE_PAGE_SLUGS` and their compositions. They are not Episodes: not among the Episode ids or in the Episode browser, and they need no Episode metadata. Their title, caption and description are the composition's own `i18n/` pair (the record holds no text); the overview's and the nav's words are `resourcesOverview.*` and `nav.resources`, and `meta.resources` is the overview's page metadata.

@@ -30,4 +30,4 @@ A projection over the page catalogue, never stored: every listed page maps to on
 
 ## Today
 
-`/resources/` lists the Templates (Episode templates and Master slides) under the header item "Resources", with a type filter, as `docs/adr/0019-resources-overview.md` decided. The three Explorable pages left it for `/explorables/` (`docs/features/explorables/README.md`); the umbrella listing is planned, #404.
+`/resources/` lists the Templates (Episode templates and Master slides) under the header item "Resources", with a type filter, as `docs/adr/0019-resources-overview.md` decided. The Template record kind (#412) is `src/content-store/templates/` with compositions in `src/episodes/templates/`; `npm run registry` regenerates `template-registry.generated.ts`. The three Explorable pages left it for `/explorables/` (`docs/features/explorables/README.md`); the umbrella listing is planned, #404.

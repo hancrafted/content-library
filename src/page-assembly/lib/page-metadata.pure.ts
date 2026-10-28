@@ -53,7 +53,7 @@ const OPEN_GRAPH_TYPE: Readonly<Record<PageKind, 'article' | 'website'>> = {
   explorables: 'website',
   resources: 'website',
   'explorable-page': 'website',
-  resource: 'website',
+  template: 'website',
   event: 'website',
   'event-episode': 'article',
 };
@@ -100,7 +100,7 @@ function copyOf(page: PageRef, locale: Locale, copy: PageCopy | undefined): Pick
     resources: () => meta.resources,
     episode: handedIn,
     'explorable-page': handedIn,
-    resource: handedIn,
+    template: handedIn,
     event: handedIn,
     'event-episode': handedIn,
   });

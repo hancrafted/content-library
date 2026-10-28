@@ -5,7 +5,7 @@ import { staleRegistryFiles } from './registry.ts';
 const ROOT = path.resolve(__dirname, '../..');
 
 describe('success cases', () => {
-  it('keeps the checked-in Episode, Event and Resource registries in step with the Episode folders and record files (else run `npm run registry`)', async () => {
+  it('keeps the checked-in Episode, Event and Template registries in step with the Episode folders and record files (else run `npm run registry`)', async () => {
     // ARRANGE
     const expected: string[] = [];
     // ACT

@@ -6,20 +6,20 @@ import { episodeRefusals, type LoadedEpisode } from './episode-refusals';
 import { eventRefusals } from './event-refusals';
 import { explorablePageRefusals } from './explorable-page-refusals';
 import { featuredRefusals } from './featured';
-import { resourceRefusals } from './resource-refusals';
 import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
 import { explorablePageSchema } from './schemas/explorable-page.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
-import { resourceSchema } from './schemas/resource.schema';
+import { templateSchema } from './schemas/template.schema';
 import { listedEntries, playlistEntries, type ServedEvent } from './served-event';
+import { templateRefusals } from './template-refusals';
 
 /*
  * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 3, 4, 8 and 9): each record is parsed by its
  * schema, then the cross-record rules run over the sound ones and resolve each Event into the Playlist it presents.
  * Every refusal is one sentence naming the kind, the record and the field; a refused record is never dropped, the
  * whole load throws. An Episode enters by the Episode id its folder gives it and is served with its EpisodeRef
- * (GLOSSARY), which every rule reads. A Resource (design-ADR 0019) is checked against its composition folders.
+ * (GLOSSARY), which every rule reads. A Template (design-ADR 0019) is checked against its composition folders.
  */
 
 import type { Content, ContentInput, EpisodeEntry, Kind, ParsedContent } from './content-shapes';
@@ -124,7 +124,7 @@ function playlistRefusals(
 /** The refusals of the kinds served by slug, each checked against its composition folder. */
 function kindRefusals(content: ParsedContent): string[] {
   return [
-    ...resourceRefusals(content.resources, content.resourceCompositions),
+    ...templateRefusals(content.templates, content.templateCompositions),
     ...explorablePageRefusals(content.explorablePages, content.explorablePageCompositions, content.explorables),
   ];
 }
@@ -190,7 +190,7 @@ export function checkRecords(content: ParsedContent): { content: Content; refuse
       episodes: content.episodes,
       events: served,
       playlists: content.playlists,
-      resources: content.resources,
+      templates: content.templates,
       explorablePages: content.explorablePages,
     },
     refused: crossRecordRefusals(
@@ -214,7 +214,7 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
   const episodes = parseEpisodes(input.episodes);
   const events = parseAll({ kind: 'Event', key: 'slug', schema: eventSchema }, input.events);
   const playlists = parseAll({ kind: 'Playlist', key: 'id', schema: playlistSchema }, input.playlists);
-  const resources = parseAll({ kind: 'Resource', key: 'slug', schema: resourceSchema }, input.resources);
+  const templates = parseAll({ kind: 'Template', key: 'slug', schema: templateSchema }, input.templates);
   const explorablePages = parseAll(
     { kind: 'Explorable page', key: 'slug', schema: explorablePageSchema },
     input.explorablePages ?? [],
@@ -224,8 +224,8 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
       episodes: episodes.parsed,
       events: events.parsed,
       playlists: playlists.parsed,
-      resources: resources.parsed,
-      resourceCompositions: input.resourceCompositions,
+      templates: templates.parsed,
+      templateCompositions: input.templateCompositions,
       explorablePages: explorablePages.parsed,
       explorablePageCompositions: input.explorablePageCompositions ?? [],
       explorables: input.explorables ?? [],
@@ -235,7 +235,7 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
       ...episodes.refused,
       ...events.refused,
       ...playlists.refused,
-      ...resources.refused,
+      ...templates.refused,
       ...explorablePages.refused,
     ],
   };
