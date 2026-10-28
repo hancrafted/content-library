@@ -1,0 +1,42 @@
+/*
+ * Motion of the value chain: a stage's proofs rise in when it becomes active (keyed by stage, so each change replays),
+ * and its circle pulses once. Reduced motion keeps a plain fade and no pulse.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .proof {
+    animation: rise 380ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .proof + .proof {
+    animation-delay: 90ms;
+  }
+
+  .pulse {
+    animation: pulse 420ms ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proof {
+    animation: fade 200ms ease-out both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  40% {
+    scale: 1.45;
+  }
+}

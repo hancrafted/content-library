@@ -1,6 +1,7 @@
 import { episode } from '@/episodes/components/slide-master/slide';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { aboutMeSection } from './sections/about-me';
 import { agendaSection } from './sections/agenda';
 import { checkIn1Section } from './sections/check-in-1';
 import { checkIn2Section } from './sections/check-in-2';
@@ -14,8 +15,8 @@ import { hero } from './slides/hero/slide';
 /*
  * The opening Episode the CyberForum Akademie webinar (Event 2026-10-28-cyberforum-akademie-intro-agentic-workflow)
  * presents: a copy of the Workshop template (docs/features/events.md, "Add an Event"), its hook renamed `grounding`
- * because it grounds: the three layers of the evening. Then the agenda, the scope, a poll with the About me Slide from
- * the Slide pool, and the organisation. Then one check-in Section per theory Episode, which the Event's Playlist
+ * because it grounds: the three layers of the evening. Then the agenda, the scope, a poll, About me (the value chain) as its
+ * own Section, and the organisation. Then one check-in Section per theory Episode, which the Event's Playlist
  * links to by anchor between the Episodes. Unlisted: it lives only under its Event.
  */
 export const cyberforumIntro = episode({
@@ -27,6 +28,7 @@ export const cyberforumIntro = episode({
     agendaSection,
     inScopeSection,
     pollSection,
+    aboutMeSection,
     orgaSection,
     checkIn1Section,
     checkIn2Section,
