@@ -22,6 +22,7 @@ import { maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai
 import { neverTooEarlySales } from '@/episodes/never-too-early-sales/episode';
 import { onboardAiEveryTime } from '@/episodes/onboard-ai-every-time/episode';
 import { episodeTemplate } from '@/episodes/templates/episode-template/episode';
+import { explorablePageTemplate as explorablePage } from '@/episodes/templates/explorable-page/episode';
 import { grids } from '@/episodes/templates/grids/episode';
 import { timelines } from '@/episodes/templates/timelines/episode';
 import { workshopTemplate } from '@/episodes/templates/workshop-template/episode';
@@ -50,6 +51,7 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
 /** Every Template's Slides by slug: composed like an Episode, rendered by the same container, but no Episode. */
 export const TEMPLATE_PAGES: { readonly [S in TemplateSlug]: EpisodeComposition & { readonly slug: S } } = {
   'episode-template': episodeTemplate,
+  'explorable-page': explorablePage,
   grids: grids,
   timelines: timelines,
   'workshop-template': workshopTemplate,

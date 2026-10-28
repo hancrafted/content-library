@@ -8,9 +8,12 @@ import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { EXPORTED_EPISODE_SHAPED_PAGES, exportedPage, OUT_DIR } from './exported-pages';
 
 const EXPLORABLE_PAGES = EXPORTED_EPISODE_SHAPED_PAGES.filter(({ folder }) => folder.startsWith('explorable-pages/'));
+/** The Explorable page template switches the section slide off in only two of its Sections. */
+const MIXED = 'templates/explorable-page';
 const WITH_SECTION_SLIDE = EXPORTED_EPISODE_SHAPED_PAGES.filter(
-  ({ folder }) => !folder.startsWith('explorable-pages/'),
+  ({ folder }) => !folder.startsWith('explorable-pages/') && folder !== MIXED,
 );
+const MIXED_PAGES = EXPORTED_EPISODE_SHAPED_PAGES.filter(({ folder }) => folder === MIXED);
 
 const CASES = (pages: typeof EXPLORABLE_PAGES) =>
   pages.flatMap(({ slug, route }) => LOCALES.map((locale) => ({ slug, url: localizePath(route, locale) })));
@@ -60,6 +63,28 @@ describe('section slide opt-out', () => {
       // ASSERT
       expect(firsts.length).toBeGreaterThan(0);
       expect(firsts.every((size) => size === 'section')).toBe(true);
+    });
+  });
+
+  describe.each(CASES(MIXED_PAGES))('Explorable page template $url', ({ url }) => {
+    it('switches the section slide off in its hook and how-to-use Sections only', () => {
+      // ARRANGE
+      const $ = exportedPage(url);
+      const expected = [
+        ['hook', false],
+        ['what-it-is', true],
+        ['why-it-matters', true],
+        ['how-to-use-it', false],
+      ];
+      // ACT
+      const sections = $('[data-slot="slides"] > section[data-section]')
+        .toArray()
+        .map((section) => [
+          $(section).attr('data-section'),
+          $(section).children('[data-slide]').first().attr('data-size') === 'section',
+        ]);
+      // ASSERT
+      expect(sections).toEqual(expected);
     });
   });
 });

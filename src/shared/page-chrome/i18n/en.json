@@ -5,6 +5,8 @@
   },
   "nav": {
     "label": "Main",
+    "explorables": "Explorables",
+    "learn": "Learn",
     "episodes": "Episodes",
     "events": "Events",
     "resources": "Resources",
