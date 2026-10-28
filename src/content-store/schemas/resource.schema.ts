@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { RESOURCE_TYPES, slug, TAG_IDS, visibility } from './fields';
+import { RESOURCE_TYPES, slug, tags, visibility } from './fields';
 
 /*
  * A Resource: a page that is not an Episode, an Explorable explanation, an Episode template or a Master slide, shaped
@@ -7,7 +7,6 @@ import { RESOURCE_TYPES, slug, TAG_IDS, visibility } from './fields';
  * title, caption and description in its own Translation files. Its route is worked out from its type and slug, never stored.
  */
 
-const tag = z.enum(TAG_IDS);
 const type = z.enum(RESOURCE_TYPES, {
   error: (issue) =>
     issue.input === undefined
@@ -23,10 +22,9 @@ export const resourceSchema = z
     type: type.describe(
       'What kind of Resource it is; it decides the URL path (`/explorable-explanations/<slug>/`, `/episode-templates/<slug>/`, `/master-slides/<slug>/`) and the overview filter',
     ),
-    tags: z
-      .tuple([tag], tag, { error: 'is required, one Tag or more, the first its lead Tag' })
-      .readonly()
-      .describe('Tag ids from the closed vocabulary, lead Tag first: the overview searches and filters by them'),
+    tags: tags.describe(
+      'Tag ids from the closed vocabulary, lead Tag first: the overview searches and filters by them',
+    ),
     visibility: visibility.describe(
       'public is listed on /resources/ and indexed; unlisted is built but noindex and not listed. A missing one is refused, so a forgotten field fails closed',
     ),

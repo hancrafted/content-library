@@ -257,6 +257,49 @@ describe('failure cases', () => {
     expect(load).toThrow(expected);
   });
 
+  const TAG_LIST = 'context-engineering, agentic-ai, markdown, cost, sales, workflow';
+  const TAG_RECORDS = {
+    Episode: [
+      'Episode alpha',
+      (tags?: unknown) => ({
+        ...SOUND,
+        episodes: [own({ ...without(EPISODE, 'tags'), ...(tags === undefined ? {} : { tags }) })],
+      }),
+    ],
+    Event: [
+      `Event ${AXEL}`,
+      (tags?: unknown) => ({
+        ...SOUND,
+        events: [{ ...without(EVENT, 'tags'), ...(tags === undefined ? {} : { tags }) }],
+      }),
+    ],
+    Resource: [
+      'Resource grids',
+      (tags?: unknown) => ({
+        ...SOUND,
+        resources: [{ ...without(RESOURCE, 'tags'), ...(tags === undefined ? {} : { tags }) }],
+        resourceCompositions: ['grids'],
+      }),
+    ],
+  } as const;
+
+  it.each([
+    ['Episode', undefined, 'tags is required, one Tag or more, the first its lead Tag'],
+    ['Event', undefined, 'tags is required, one Tag or more, the first its lead Tag'],
+    ['Resource', undefined, 'tags is required, one Tag or more, the first its lead Tag'],
+    ['Episode', ['ai'], `tags.0 is "ai", but must be one of ${TAG_LIST}`],
+    ['Event', ['ai'], `tags.0 is "ai", but must be one of ${TAG_LIST}`],
+    ['Resource', ['ai'], `tags.0 is "ai", but must be one of ${TAG_LIST}`],
+  ] as const)('refuses the Tags of an %s (%j) in the one shared wording', (kind, tags, sentence) => {
+    // ARRANGE
+    const [record, build] = TAG_RECORDS[kind];
+    const expected = `${record}: ${sentence}`;
+    // ACT
+    const load = () => loadContent(build(tags));
+    // ASSERT
+    expect(load).toThrow(expected);
+  });
+
   it.each([
     ['Episode', { ...SOUND, episodes: [own({ ...EPISODE, visibility: 'attendees' })] }, 'Episode alpha'],
     ['Playlist', { ...SOUND, playlists: [{ ...PLAYLIST, visibility: 'attendees' }] }, 'Playlist axel'],

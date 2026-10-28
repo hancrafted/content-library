@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { FORMATS, isoDate, slug, TAG_IDS, visibility } from './fields';
+import { FORMATS, isoDate, slug, tags, visibility } from './fields';
 
 /*
  * What an Episode declares about itself, in its own folder (`episodes/<slug>/episode-metadata.ts`, or
@@ -8,7 +8,6 @@ import { FORMATS, isoDate, slug, TAG_IDS, visibility } from './fields';
  */
 
 const YOUTUBE_ID = /^[\w-]{11}$/;
-const tag = z.enum(TAG_IDS);
 
 const shared = z.object({
   slug: slug.describe(
@@ -18,10 +17,9 @@ const shared = z.object({
     "public is listed and indexed at /episodes/<slug>/, or, for an Event's copy, at its Event-scoped URL only; unlisted lives only in its Event's folder and under that Event, never listed. A missing one is refused, so a forgotten field fails closed",
   ),
   format: z.enum(FORMATS).describe('The Episode format the overview filters by'),
-  tags: z
-    .tuple([tag], tag)
-    .readonly()
-    .describe('Tag ids from the closed vocabulary, lead Tag first: the lead Tag gives the card its icon and accent'),
+  tags: tags.describe(
+    'Tag ids from the closed vocabulary, lead Tag first: the lead Tag gives the card its icon and accent',
+  ),
   youtube: z
     .union([
       z
