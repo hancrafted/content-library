@@ -156,6 +156,22 @@ export function matchPage<P extends PageRef, R>(page: P, cases: PageCases<P, R>,
   throw new Error(`No case for page kind "${String(kind)}"`);
 }
 
+/** A page's identity: its kind and the ids its reference names, so two references to one page share it. */
+export function pageKeyOf(page: PageRef): string {
+  const ids = matchPage<PageRef, readonly string[]>(page, {
+    home: () => [],
+    dashboard: () => [],
+    episodes: () => [],
+    events: () => [],
+    resources: () => [],
+    episode: ({ episode }) => [episode.id],
+    resource: ({ resource }) => [resource.slug],
+    event: ({ event }) => [event],
+    'event-episode': ({ event, episode }) => [event, episode.id],
+  });
+  return [page.kind, ...ids].join(':');
+}
+
 /** The locales each kind of page is exported in: the English-only dashboard has no German counterpart. */
 const LOCALES_BY_KIND: Readonly<Record<PageKind, readonly Locale[]>> = {
   home: LOCALES,
