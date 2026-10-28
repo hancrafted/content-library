@@ -168,7 +168,7 @@ async function popoverProblems(page: Page, where: string, language: Language): P
 }
 
 /** How many stages each shipped Workflow draws. */
-const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 4 };
+const STAGES: Record<string, number> = { 'project-plan': 6, vacation: 4, 'summer-party': 4 };
 
 /** Opens one Workflow, then every stage of it in turn, and reports what is wrong. */
 async function stageProblems(page: Page, id: string, language: Language): Promise<string[]> {
@@ -214,7 +214,7 @@ test.describe('success cases', () => {
     // ARRANGE
     const { root } = await open(page, 'light');
     const picker = root.locator('[data-control="picker"]');
-    const workflows = 2;
+    const workflows = 3;
     // ACT
     await expect(picker.getByRole('combobox')).toHaveText('Plan a project');
     await picker.getByRole('combobox').click();
@@ -547,7 +547,7 @@ test.describe('success cases', () => {
       { name: 'German', url: GERMAN_EPISODE, title: /Üben$/, copy: 'Prompt kopieren' },
     ];
     for (const language of languages) {
-      test(`opens every stage of both Workflows in ${language.name} with its title, jobs and no unfilled marker`, async ({
+      test(`opens every stage of every Workflow in ${language.name} with its title, jobs and no unfilled marker`, async ({
         page,
       }) => {
         // ARRANGE
@@ -555,7 +555,8 @@ test.describe('success cases', () => {
         await open(page, 'light', { url: language.url });
         const problems: string[] = [];
         // ACT
-        for (const id of ['project-plan', 'vacation']) problems.push(...(await stageProblems(page, id, language)));
+        for (const id of ['project-plan', 'vacation', 'summer-party'])
+          problems.push(...(await stageProblems(page, id, language)));
         // ASSERT
         expect(problems).toEqual(expected);
       });
