@@ -1,4 +1,4 @@
-import { duplicates } from './duplicates';
+import { compositionRefusals } from './composition-refusals';
 import type { Template } from './schemas/template.schema';
 
 /*
@@ -11,18 +11,11 @@ import type { Template } from './schemas/template.schema';
  * folder, each folder a record.
  */
 export function templateRefusals(templates: readonly Template[], compositions: readonly string[]): string[] {
-  const slugs = templates.map(({ slug }) => slug);
-  const unique = duplicates(slugs).map((slug) => `Template ${slug}: slug is used by more than one Template`);
-  return [
-    ...unique,
-    ...slugs
-      .filter((slug) => !compositions.includes(slug))
-      .map((slug) => `Template ${slug}: no composition folder src/episodes/templates/${slug}/ holds its Slides`),
-    ...compositions
-      .filter((slug) => !slugs.includes(slug))
-      .map(
-        (slug) =>
-          `Template ${slug}: the composition folder src/episodes/templates/${slug}/ has no record src/content-store/templates/${slug}.ts`,
-      ),
-  ];
+  return compositionRefusals({
+    noun: 'Template',
+    slugs: templates.map(({ slug }) => slug),
+    compositions,
+    folders: 'src/episodes/templates',
+    records: 'src/content-store/templates',
+  });
 }

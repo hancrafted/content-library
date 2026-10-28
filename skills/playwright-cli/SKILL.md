@@ -1,6 +1,6 @@
 ---
 name: playwright-cli
-description: Explore a page of the built export interactively with Playwright's own CLI — find controls by role, click them, read attributes such as data-motion and data-state — before writing a *.browser.test.ts spec. Use before writing or fixing a browser spec, or whenever an Explorable explanation's controls, roles or state must be discovered by clicking, not measured; layout numbers and screenshots belong to visual-check.
+description: Explore a page of the built export interactively with Playwright's own CLI — find controls by role, click them, read attributes such as data-motion and data-state — before writing a *.browser.test.ts spec. Use before writing or fixing a browser spec, or whenever an Explorable's controls, roles or state must be discovered by clicking, not measured; layout numbers and screenshots belong to visual-check.
 ---
 
 # Playwright CLI

@@ -59,14 +59,14 @@ function ownPageOf({ ref }: LoadedEpisode): PageOf<'episode'>[] {
 }
 
 /** Each Explorable page's page reference, in record order: its slug names its composition folder. */
-function explorablePageOf({ slug }: ExplorablePage): PageOf<'explorable-page'> {
+function pageOfExplorablePage({ slug }: ExplorablePage): PageOf<'explorable-page'> {
   // Every Explorable page the store loads is an entry of the generated registry, keyed by its slug (`tsc` holds key =
   // slug, and the load refuses a record without a composition folder), so its slug names a composition.
   return { kind: 'explorable-page', explorablePage: explorablePageRef(slug as ExplorablePageSlug) };
 }
 
 /** Each Template's page, in record order: its type from its record, its slug naming the composition folder. */
-function templatePageOf({ type, slug }: Template): PageOf<'template'> {
+function pageOfTemplate({ type, slug }: Template): PageOf<'template'> {
   // Every Template the store loads is an entry of the generated Template registry, keyed by its slug (`tsc` holds key
   // = slug, and the load refuses a record without a composition folder), so its slug names a composition.
   return { kind: 'template', type, template: templateRef(slug as TemplateSlug) };
@@ -87,7 +87,7 @@ function eventEpisodePagesIn(content: Content): EventEpisodePage[] {
 }
 
 /** The entries of a kind served by slug, each with the visibility its record states. */
-function slugged<R extends { visibility: PageFacts['visibility'] }, P extends PageRef>(
+function entriesBySlug<R extends { visibility: PageFacts['visibility'] }, P extends PageRef>(
   of: readonly R[],
   page: (record: R) => P,
 ) {
@@ -108,8 +108,8 @@ function entriesIn(content: Content) {
     return { ...entryOf(standIn, record, episodeFactsOf(record)), hasOwnPage: page !== undefined };
   });
   const episodes = records.filter(({ hasOwnPage }) => hasOwnPage);
-  const explorablePages = slugged(content.explorablePages, explorablePageOf);
-  const templates = slugged(content.templates, templatePageOf);
+  const explorablePages = entriesBySlug(content.explorablePages, pageOfExplorablePage);
+  const templates = entriesBySlug(content.templates, pageOfTemplate);
   const events = content.events.map((record) =>
     entryOf({ kind: 'event', event: record.slug } as const, record, { visibility: record.playlist.visibility }),
   );

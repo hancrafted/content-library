@@ -1,6 +1,6 @@
 ---
 name: author-hitl-workflow
-description: Create, update or fix a human-in-the-loop Workflow file, the YAML behind the human-in-the-loop Explorable explanation, and land it in the repo. Use when the user has an idea for a new Workflow, names a Workflow file to rework, reports that a Workflow prompt goes wrong in ChatGPT or Gemini, or pastes a reply ending in a `[hitl-debug]` line.
+description: Create, update or fix a human-in-the-loop Workflow file, the YAML behind the human-in-the-loop Explorable, and land it in the repo. Use when the user has an idea for a new Workflow, names a Workflow file to rework, reports that a Workflow prompt goes wrong in ChatGPT or Gemini, or pastes a reply ending in a `[hitl-debug]` line.
 ---
 
 # Author a HITL Workflow

@@ -22,7 +22,7 @@ const REGISTRY_TESTS =
 const AREA_NAMES = '(episodes|events|explorables|pipeline)';
 const AREA = `^src/${AREA_NAMES}/`;
 // The areas with tier folders, `components/`, `lib/` and `hooks/` as needed, named the same everywhere (FE-007); the
-// Explorable explanations area holds one self-contained folder per explanation instead. TIERED adds shared.
+// Explorables area holds one self-contained folder per Explorable instead. TIERED adds shared.
 const TIERED_AREAS = '(episodes|events|pipeline)';
 const TIERED = '(shared|episodes|events|pipeline)';
 const TIER_LIB = `^src/${TIERED}/lib/`;
@@ -44,7 +44,7 @@ const EPISODE_CONTAINER =
 
 // What an Episode file may reach: the Slide master (which holds the Episode
 // record, `slide-master/slide.ts`), slide-shared (parts several Slides
-// of any Episode share), the Explorable explanations product area (the visuals Slides show), the Episode folders and
+// of any Episode share), the Explorables product area (the visuals Slides show), the Episode folders and
 // lib.
 const EPISODE_REACH = [
   '^src/episodes/components/(slide-master|slide-shared)/',
@@ -64,7 +64,7 @@ const OWN_SLIDE_FOLDER = '^src/episodes/$1/$2/';
 const SLIDE_POOL = '^src/episodes/slide-pool/';
 // A Section file, `<ep>/sections/<section-slug>.ts`, named after its section slide; the second capture group names it.
 const SECTION_FILE = '^src/episodes/((?:by-event/[^/]+|templates|explorable-pages)/[^/]+|[^/]+)/sections/([^/]+)\\.ts$';
-// The global shared locations a Slide may import: the Slide master, slide-shared, the Explorable explanations, the UI
+// The global shared locations a Slide may import: the Slide master, slide-shared, the Explorables, the UI
 // kit, the core components (server files only, see the client rule), hooks and lib.
 const SLIDE_SHARED_REACH = [
   '^src/episodes/components/(slide-master|slide-shared)/',
@@ -89,10 +89,10 @@ const CORE_COMPONENTS = '^src/shared/components/core-components/';
 // A slide-shared part's client leaf, inside its part folder; the capture group names the part (FE-007 §5.2).
 const SLIDE_SHARED_CLIENT = '^src/episodes/components/slide-shared/([^/]+)/.+\\.client\\.tsx$';
 
-// An Explorable explanation lives in its own folder of the Explorable explanations product area, apart from plain
+// An Explorable lives in its own folder of the Explorables product area, apart from plain
 // shared parts (design-ADR 0016 decision 6); its client leaf sits in that folder, the capture group names it.
-const EXPLANATIONS = '^src/explorables/';
-const EXPLANATION_CLIENT = '^src/explorables/([^/]+)/.+\\.client\\.tsx$';
+const EXPLORABLES = '^src/explorables/';
+const EXPLORABLE_CLIENT = '^src/explorables/([^/]+)/.+\\.client\\.tsx$';
 
 /** @type {import('dependency-cruiser').IConfiguration} */
 module.exports = {
@@ -249,21 +249,21 @@ module.exports = {
       to: { pathNot: ['^src/episodes/components/slide-shared/$1/', CORE_COMPONENTS, HOOKS, LIB, 'node_modules'] },
     },
     {
-      name: 'explorable-explanation-reaches-shared-ui-and-lib',
+      name: 'explorable-reaches-shared-ui-and-lib',
       severity: 'error',
       comment:
-        'src/explorables/ holds the Explorable explanations several Slides show. An explanation takes serializable props: its server files reach only other explanations, the core components (src/shared/components/core-components/), the UI kit (src/shared/components/ui/) and lib — never another product area (a Slide, an Episode, slide-shared, the Slide master) (FE-012, FE-007 §5, design-ADR 0016 decision 6).',
-      from: { path: EXPLANATIONS, pathNot: ['\\.test\\.ts$', EXPLANATION_CLIENT] },
+        'src/explorables/ holds the Explorables several Slides show. An Explorable takes serializable props: its server files reach only other Explorables, the core components (src/shared/components/core-components/), the UI kit (src/shared/components/ui/) and lib — never another product area (a Slide, an Episode, slide-shared, the Slide master) (FE-012, FE-007 §5, design-ADR 0016 decision 6).',
+      from: { path: EXPLORABLES, pathNot: ['\\.test\\.ts$', EXPLORABLE_CLIENT] },
       to: {
-        pathNot: [EXPLANATIONS, CORE_COMPONENTS, SHARED_UI, SHARED_LIB, 'node_modules'],
+        pathNot: [EXPLORABLES, CORE_COMPONENTS, SHARED_UI, SHARED_LIB, 'node_modules'],
       },
     },
     {
-      name: 'explorable-explanation-client-reaches-only-own-folder-core-ui-hooks-and-lib',
+      name: 'explorable-client-reaches-only-own-folder-core-ui-hooks-and-lib',
       severity: 'error',
       comment:
-        "An Explorable explanation's *.client.tsx leaf runs in the browser. It sits in its explanation's folder (src/explorables/<name>/) and reaches only that folder, src/shared/components/core-components/, the UI kit (src/shared/components/ui/), src/shared/hooks/ and src/shared/lib/ — never another explanation, a slide-shared part, a Slide or the Slide master. The UI kit imports no Slide, Episode or explanation, so the leaf still travels with its explanation (FE-006 §5, FE-007 §5.2).",
-      from: { path: EXPLANATION_CLIENT },
+        "An Explorable's *.client.tsx leaf runs in the browser. It sits in its Explorable's folder (src/explorables/<name>/) and reaches only that folder, src/shared/components/core-components/, the UI kit (src/shared/components/ui/), src/shared/hooks/ and src/shared/lib/ — never another Explorable, a slide-shared part, a Slide or the Slide master. The UI kit imports no Slide, Episode or Explorable, so the leaf still travels with its Explorable (FE-006 §5, FE-007 §5.2).",
+      from: { path: EXPLORABLE_CLIENT },
       to: {
         pathNot: ['^src/explorables/$1/', CORE_COMPONENTS, SHARED_UI, SHARED_HOOKS, SHARED_LIB, 'node_modules'],
       },
@@ -469,7 +469,7 @@ module.exports = {
       name: 'areas-never-import-each-other',
       severity: 'error',
       comment:
-        "A product area (src/episodes/, src/events/, src/explorables/, src/pipeline/) imports no other area. Two areas meet only in page assembly, which builds one area's parts and passes them to the other as props, as the Event page passes ready-made Episode cards to the Playlist list. The one exception is a Slide folder showing an Explorable explanation; slide-folder-reaches-only-own-and-shared holds a Slide, and episode-tests-reach-only-slide-parts the Episode tests that render one (FE-007).",
+        "A product area (src/episodes/, src/events/, src/explorables/, src/pipeline/) imports no other area. Two areas meet only in page assembly, which builds one area's parts and passes them to the other as props, as the Event page passes ready-made Episode cards to the Playlist list. The one exception is a Slide folder showing an Explorable; slide-folder-reaches-only-own-and-shared holds a Slide, and episode-tests-reach-only-slide-parts the Episode tests that render one (FE-007).",
       from: { path: AREA, pathNot: [SLIDE_FOLDER, `${EPISODE_CONTENT}.+\\.test\\.tsx?$`] },
       to: { path: AREA, pathNot: '^src/$1/' },
     },
@@ -477,7 +477,7 @@ module.exports = {
       name: 'page-assembly-reaches-areas-through-tier-folders',
       severity: 'error',
       comment:
-        "Page assembly reaches a product area only through its components/ and lib/ folders — never its hooks/, an Episode's own folder or a file at the area's root, and there are no per-area index.ts barrels. The Explorable explanations area holds one self-contained folder per explanation (FE-012), so page assembly reaches an explanation's folder (FE-007).",
+        "Page assembly reaches a product area only through its components/ and lib/ folders — never its hooks/, an Episode's own folder or a file at the area's root, and there are no per-area index.ts barrels. The Explorables area holds one self-contained folder per Explorable (FE-012), so page assembly reaches an Explorable's folder (FE-007).",
       from: { path: '^src/page-assembly/' },
       to: {
         path: AREA,
@@ -496,7 +496,7 @@ module.exports = {
       name: 'skills-and-tools-reach-src-through-area-lib-or-store-entry',
       severity: 'error',
       comment:
-        "skills/ and tools/ reach src/ only through a product area's lib/ folder (src/pipeline/lib/, src/episodes/lib/, …), the content store's entry, src/content-store/store.ts, or an Explorable explanation's node entry, src/explorables/<name>/*.node.ts: plain modules that run under node. Logic a skill or a tool needs moves into its area's lib/ or the explanation's node entry (FE-007).",
+        "skills/ and tools/ reach src/ only through a product area's lib/ folder (src/pipeline/lib/, src/episodes/lib/, …), the content store's entry, src/content-store/store.ts, or an Explorable's node entry, src/explorables/<name>/*.node.ts: plain modules that run under node. Logic a skill or a tool needs moves into its area's lib/ or the Explorable's node entry (FE-007).",
       from: { path: '^(skills|tools)/' },
       to: {
         path: '^src/',

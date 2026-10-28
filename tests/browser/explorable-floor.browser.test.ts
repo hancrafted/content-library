@@ -1,6 +1,5 @@
 import { expect, test, type Locator, type Page, type TestInfo } from '@playwright/test';
 import { violations } from './axe';
-import { settled } from './settled';
 
 /*
  * The Explorable floor (`docs/features/explorables/README.md`, `npm run test:browser`): one suite holds every Explorable page to
@@ -94,12 +93,23 @@ test.describe('success cases', () => {
       // ARRANGE
       expectFloorFail(info, slug, 'reduced-motion');
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      const expected = 0;
+      const expected = { unsettled: 0, running: 0 };
       // ACT
       const slide = await openLastSlide(page, slug);
       // ASSERT
-      for (const el of await slide.locator('[data-motion]').all()) await settled(el);
-      await expect(slide.locator('[data-motion="running"]')).toHaveCount(expected);
+      // The end state is reached: every animating element reports `settled` and the browser runs no animation on the Slide.
+      const motions = await slide.locator('[data-motion]').count();
+      await expect(slide.locator('[data-motion="settled"]')).toHaveCount(motions, { timeout: SETTLE });
+      await expect
+        .poll(
+          () =>
+            slide.evaluate((el) => ({
+              unsettled: el.querySelectorAll('[data-motion]:not([data-motion="settled"])').length,
+              running: el.getAnimations({ subtree: true }).filter((a) => a.playState === 'running').length,
+            })),
+          { timeout: SETTLE },
+        )
+        .toEqual(expected);
     });
 
     test(`${slug}: the last Slide renders with every off-origin request blocked`, async ({ page }, info) => {

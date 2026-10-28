@@ -5,6 +5,8 @@ status: accepted
 
 # Source tree follows the product
 
+Amended by #404 (terminology and paths): "Explorable explanation" is now **Explorable**, its area is `src/explorables/` (one folder per Explorable, the rules `explorable-reaches-shared-ui-and-lib` and `explorable-client-reaches-only-own-folder-core-ui-hooks-and-lib`), and the old Resource record kind is now the **Template** (`src/episodes/templates/`), with Explorable pages in `src/episodes/explorable-pages/`. Decision 4 reads "An Explorable is a component, never a page": the Explorable page is the page. Read the body below with those terms and paths.
+
 The source tree followed technical tiers: `src/components/` mixed product records, page compositions, the landing page's parts and site chrome; `src/lib/` held 186 flat files whose name said nothing; `scripts/` held anything that ran on the repo; and the pipeline's Run log model lived in a skill that `src/` imported from, so an agent new to the repo could not tell what the product was, or where to go. The tree now follows the product as the horizons of `docs/steering/product-vision.md` grow it, and vision rule 2 (agent legibility) is the test for every layout choice.
 
 Settled with Han on 2026-10-26 in a grilling while reviewing the Events and Playlists pull request (spec _Source tree follows the product_), revised the same day after an adversarial architecture review and its grilling, and amended on 2026-10-27 for four readings left open by the area rules. The enforceable part lives in the Archgate ADRs FE-007 _Module layering_ (who imports whom) and FE-004 _Slide architecture_ (the map); the content model it serves is design-ADR-0016.

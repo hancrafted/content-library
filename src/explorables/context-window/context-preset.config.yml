@@ -195,7 +195,7 @@ presets:
     show: { chat: false, timeline: false, context: true, panel: false }
     motion: off
     windows: [{ size: 200k, lines: [] }]
-  # The Explorable explanations page (/episodes/explorable-explanations): the whole cornerstone at once. The summer party run on past its compaction,
+  # The Context window Explorable page (/explorables/context-window/): the whole cornerstone at once. The summer party run on past its compaction,
   # every part shown and every control on, upload included. One 200K window, so no 200K | 1M switch: the chat compacts
   # only there, at 185K of 200K, and on 1M the compaction would follow a window not yet full.
   gallery-full:

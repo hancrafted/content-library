@@ -37,11 +37,11 @@ describe('success cases', () => {
       // ARRANGE
       const expected = ['tour', undefined];
       // ACT
-      const opens = placeSections([without()])
+      const stoodInFor = placeSections([without()])
         .flat()
-        .map((slide) => slide.opens?.slug);
+        .map((slide) => slide.standsInFor?.slug);
       // ASSERT
-      expect(opens).toEqual(expected);
+      expect(stoodInFor).toEqual(expected);
     });
 
     it('keeps a lone section slide as the Section when it has no page Slide to stand in', () => {

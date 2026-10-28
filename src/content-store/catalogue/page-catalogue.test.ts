@@ -55,6 +55,9 @@ const RECORDS = {
   playlists: [PLAYLIST],
   templates: [],
   templateCompositions: [],
+  explorablePages: [],
+  explorablePageCompositions: [],
+  explorables: [],
 };
 
 const HIDDEN = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' } as const;

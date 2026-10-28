@@ -5,6 +5,8 @@ status: accepted
 
 # The browser lane runs on Playwright and grows from UI feedback
 
+Amended by #404 (terminology): "Explorable explanation" is now **Explorable** (GLOSSARY); a spec in this record's decisions sits in `src/explorables/<name>/`, and the site-wide Explorable floor spec is `tests/browser/explorable-floor.browser.test.ts` (`docs/features/explorables/README.md`). Read the body below with those terms.
+
 The browser lane (`*.browser.test.ts`) drove `chrome-headless-shell` over raw CDP from Vitest and passed by sleeping: 52 fixed waits in the Context test alone, about 60 of the lane's 115 seconds. It was not flaky against the built export, only slow and fragile, and it broke whenever its target Slide changed. The lane moves to Playwright Test, runs against the built export, waits only on the page, and holds only what a browser alone can prove: the Explorable explanation behaviours the user had to correct by looking.
 
 ## Decisions

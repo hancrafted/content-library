@@ -1,6 +1,7 @@
 'use client';
 
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import { ROUTES } from '@/shared/lib/static-routes';
 import Link from 'next/link';
 import { createContext, useContext, type ReactNode } from 'react';
 
@@ -31,7 +32,7 @@ export function ExploreItLink({ slug }: { readonly slug: string }) {
   return (
     <p className="mt-2 text-right">
       <Link
-        href={localizePath(`/explorables/${slug}`, context.locale)}
+        href={localizePath(`${ROUTES.explorables}/${slug}`, context.locale)}
         data-explore-it={slug}
         className="text-caption font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
       >

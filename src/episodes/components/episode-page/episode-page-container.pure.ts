@@ -8,6 +8,14 @@ import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
 
+/**
+ * The size a Slide wrapper gives its Slide: `section` for a shown section slide, `page` for every other. A page Slide
+ * that stands in for a section slide its Section declares it has not keeps the page size.
+ */
+export function slideSizeOf(slide: Pick<LocalizedSlide, 'level' | 'withoutSectionSlide'>): 'section' | 'page' {
+  return slide.level === 'h2' && !slide.withoutSectionSlide ? 'section' : 'page';
+}
+
 /** One table-of-contents entry while the fold builds it: its items still open to more. */
 type OpenSection = TocSection & { items: TocItem[] };
 
