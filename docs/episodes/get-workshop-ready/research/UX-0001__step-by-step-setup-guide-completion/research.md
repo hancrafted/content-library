@@ -50,9 +50,9 @@ Three mechanisms work together. Small steps with minimal, task-focused instructi
 
 Disputed and conditional claims:
 
-- Minimalism versus guidance. The minimal manual result [4] compares manuals for a word processor, and its sample is students. Against it, the expertise reversal literature shows that instructional support helps novices and the same support hurts experts [5]. Detailed guidance can therefore serve true beginners better than a bare minimum; the minimal manual is task-focused, not information-free, and the Brief's help prompt and troubleshooting box play the role of the error-recovery material.
+- Minimalism versus guidance. The minimal manual result [4] compares manuals for a word processor, and its sample is students. Against it, the expertise reversal literature shows that instructional support helps novices and the same support hurts experts [5]. Detailed guidance can therefore serve true beginners better than a bare minimum; the minimal manual is task-focused, not information-free. Minimal instructions therefore still need error-recovery material for true beginners.
 - The endowed-progress effect depends on a believable reason for the head start and on how progress is counted [2]. Findings 3 to 5 come from rewards (coffee, car washes, song ratings), not instructional tasks, so the transfer to a setup guide is an inference. The sources also show progress speeding purchases up near the goal, not removing early drop-off.
-- Finding 1 is a theory paper, not a test of step-by-step guides. Linking it to one step per screen is an inference.
+- Finding 1 rests on a theory paper with problem-solving experiments [6], not a test of step-by-step guides. Linking it to one step per screen is an inference.
 - No source here measures completion rates of setup guides for people who have never opened a terminal.
 
 [1]: <https://www.w3.org/WAI/tutorials/forms/multi-page/> "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms"
