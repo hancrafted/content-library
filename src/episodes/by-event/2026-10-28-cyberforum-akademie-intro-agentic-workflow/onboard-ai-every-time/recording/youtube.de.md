@@ -32,7 +32,7 @@ Die Forschungsfragen hinter den Aussagen:
 hancrafted.net: https://hancrafted.net/de/
 LinkedIn: https://www.linkedin.com/in/han-che/
 
-#KI #Prompting #AgenticWorkflow
+#KI #Prompting #AgenticWorkflow #AIEnablement
 
 ## Pinned comment
 
