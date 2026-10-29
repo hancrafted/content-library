@@ -1,6 +1,7 @@
 'use client';
 
 import { Dialog, DialogContent, DialogDescription } from '@/shared/components/ui/dialog';
+import { useCopy } from '@/shared/hooks/use-copy';
 import { useEffect, useRef, useState } from 'react';
 import { ResetConfirm, useDemoProps } from './demo-controls.client';
 import { ModalHeader } from './modal-header.client';
@@ -10,27 +11,6 @@ import { Stepper } from './stepper.client';
 import { tryTitle } from './words.pure';
 import type { StageRun } from './workflow-run.pure';
 import type { StageView } from './workflow-view.pure';
-
-/** Copies text; `true` when the clipboard took it. */
-async function copyText(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/** What the live region says after a copy (`done`, or nothing when the clipboard refused), and the copy itself. */
-function useCopy(done: string) {
-  const [announced, setAnnounced] = useState('');
-  const copy = async (text: string): Promise<boolean> => {
-    const ok = await copyText(text);
-    setAnnounced(ok ? done : '');
-    return ok;
-  };
-  return [announced, copy] as const;
-}
 
 type PanelProps = Omit<ModalProps, 'stage' | 'run' | 'jobId' | 'round' | 'slotValues' | 'onSlots' | 'onClose'> & {
   readonly stage: StageView;
