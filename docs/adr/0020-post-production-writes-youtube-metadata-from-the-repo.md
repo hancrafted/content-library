@@ -18,7 +18,7 @@ After an Episode's recording is on YouTube, its description, chapters and pinned
 
 ## Why
 
-Nothing from a recording stayed in the repo, and the description was written by hand each time. Writing from the repo makes the copy reviewable, keeps chapters derived from the Slide starts so they cannot drift, and lets a re-run fix a mistake without a second source of truth.
+Nothing from a recording stayed in the repo, and the description was written by hand each time. Writing from the repo makes the copy reviewable, keeps chapters derived from the Slide starts (plus any extra chapters listed beside them) so they cannot drift, and lets a re-run fix a mistake without a second source of truth.
 
 ## Rejected
 

@@ -1,7 +1,15 @@
 // The Recording model of the post-production tools (`npm run youtube:*`): the schemas of the files in an Episode's
 // Recording folder and one validation entry point, `validateRecording`, which `verify` runs over every Recording
 // folder. Pure: the shell (`recording.ts`) reads the folder from disk. New Recording files add their rules here.
-import { chapterLines, deriveChapters, parseChapterLines, unstartedMessage, type Chapter } from './chapters.pure.ts';
+import {
+  chapterLines,
+  deriveChapters,
+  extraChapterProblems,
+  parseChapterLines,
+  tooFewChaptersMessage,
+  unstartedMessage,
+  type Chapter,
+} from './chapters.pure.ts';
 import { lastChapterProblems, VIDEO_FILE, videoViolations } from './recording-video.pure.ts';
 import { chapterBlockLines, parseYoutubeFile, publishedDescription, YOUTUBE_FILE } from './youtube-file.pure.ts';
 
@@ -34,10 +42,11 @@ interface SlideStarts {
   readonly unmatched: readonly string[];
   /** The Slides in `starts` whose title was not heard: the start is inferred and Han reviews it. Absent means none. */
   readonly guessed?: readonly string[];
+  /** YouTube chapters inside a Section, merged into the Section chapters. Absent means none. */
+  readonly extraChapters?: readonly Chapter[];
 }
 
 /** YouTube's rules for chapters (YouTube Help 9884579) and descriptions (12948449). */
-const MIN_CHAPTERS = 3;
 const MIN_CHAPTER_SECONDS = 10;
 const MAX_DESCRIPTION_CHARACTERS = 5000;
 
@@ -60,13 +69,14 @@ function startProblems(starts: unknown): string[] {
 }
 
 function shapeProblems(json: Record<string, unknown>): string[] {
-  const { videoId, unmatched, guessed } = json;
+  const { videoId, unmatched, guessed, extraChapters } = json;
   const problems = startProblems(json.starts);
   if (typeof videoId !== 'string' || !YOUTUBE_ID.test(videoId)) {
     problems.push('videoId must be an 11-character YouTube id');
   }
   if (!isSlugList(unmatched)) problems.push('unmatched must be a list of Slide slugs');
   if (guessed !== undefined && !isSlugList(guessed)) problems.push('guessed must be a list of Slide slugs');
+  problems.push(...extraChapterProblems(extraChapters));
   return problems;
 }
 
@@ -135,9 +145,8 @@ function slideStartsViolations(composition: Composition, file: string, text: str
 }
 
 function chapterRuleProblems(chapters: readonly Chapter[]): string[] {
-  const problems: string[] = [];
-  if (chapters.length < MIN_CHAPTERS)
-    problems.push(`needs at least ${MIN_CHAPTERS} YouTube chapters, has ${chapters.length}`);
+  const tooFew = tooFewChaptersMessage(chapters);
+  const problems: string[] = tooFew === undefined ? [] : [tooFew];
   if (chapters[0] !== undefined && chapters[0].start !== 0) problems.push('the first YouTube chapter must be at 00:00');
   chapters.forEach((chapter, index) => {
     const next = chapters[index + 1];
@@ -157,6 +166,7 @@ function derivedChapters(composition: Composition, language: string, starts: Sli
     sections: composition.sections,
     titles: composition.titles[language] ?? {},
     starts: starts.starts,
+    ...(starts.extraChapters === undefined ? {} : { extraChapters: starts.extraChapters }),
   });
 }
 

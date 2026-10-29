@@ -18,7 +18,12 @@ export interface ChapterSource {
   readonly titles: Readonly<Record<string, string>>;
   /** Slide slug → the second it starts. */
   readonly starts: Readonly<Record<string, number>>;
+  /** Chapters Han adds inside a Section, such as a turn mid-Slide; merged with the Section chapters in time order. */
+  readonly extraChapters?: readonly Chapter[];
 }
+
+/** YouTube shows chapters only from this many on (YouTube Help 9884579). */
+export const MIN_CHAPTERS = 3;
 
 export const CHAPTER_START_MARKER = '<!-- chapters:start -->';
 export const CHAPTER_END_MARKER = '<!-- chapters:end -->';
@@ -43,9 +48,35 @@ export function parseTimestamp(text: string): number | undefined {
 /**
  * One chapter per Section, at its first Slide's start, titled with that Slide's title. A Section whose first Slide was
  * not found starts at its first found Slide; one with none has no chapter (`unstartedSections` names it). The first
- * Section also covers the Title slide, so the first chapter starts where the video does.
+ * Section also covers the Title slide, so the first chapter starts where the video does. Extra chapters merge in by
+ * start.
  */
 export function deriveChapters(source: ChapterSource): Chapter[] {
+  const extra = (source.extraChapters ?? []).map(({ start, title }) => ({ start: Math.floor(start), title }));
+  return [...sectionChapters(source), ...extra].sort((a, b) => a.start - b.start);
+}
+
+function isChapter(value: unknown): boolean {
+  if (typeof value !== 'object' || value === null) return false;
+  const { start, title } = value as Record<string, unknown>;
+  const timed = typeof start === 'number' && Number.isFinite(start) && start >= 0;
+  return timed && typeof title === 'string' && title.trim() !== '';
+}
+
+/** Why `extraChapters` of a Slide starts file is no list of chapters; none when it is one, or absent. */
+export function extraChapterProblems(value: unknown): string[] {
+  if (value === undefined || (Array.isArray(value) && value.every(isChapter))) return [];
+  return ['extraChapters must be a list of {start, title}: a second, 0 or more, and a title'];
+}
+
+/** The refusal YouTube would give silently: under `MIN_CHAPTERS` it shows no chapters. Undefined when enough. */
+export function tooFewChaptersMessage(chapters: readonly Chapter[]): string | undefined {
+  return chapters.length < MIN_CHAPTERS
+    ? `needs at least ${MIN_CHAPTERS} YouTube chapters, has ${chapters.length}`
+    : undefined;
+}
+
+function sectionChapters(source: ChapterSource): Chapter[] {
   const { titleSlide, sections, titles, starts } = source;
   const titleStart = titleSlide === undefined ? undefined : starts[titleSlide];
   return sections.flatMap((slides, index) => {

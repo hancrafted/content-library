@@ -180,3 +180,48 @@ describe('video length and Sections without a start', () => {
     );
   });
 });
+
+describe('extra YouTube chapters', () => {
+  const TWO_SECTIONS: Composition = {
+    slides: ['hero', 'a', 'b', 'c'],
+    titleSlide: 'hero',
+    sections: [['a', 'b'], ['c']],
+    titles: { de: { a: 'Eins', b: 'Zwei', c: 'Drei' } },
+  };
+  const starts = { hero: 0, a: 5, b: 100, c: 300 };
+  const extraChapters = [{ start: 146, title: '5 Eigenschaften der KI' }];
+
+  function found(slideStarts: Record<string, unknown>, block: string): string[] {
+    const recording = {
+      'slide-starts.de.json': JSON.stringify({ videoId: 'atPa8aTd-PQ', starts, unmatched: [], ...slideStarts }),
+      [YOUTUBE]: youtube(block),
+    };
+    return validateRecording(TWO_SECTIONS, recording).map((violation) => violation.message);
+  }
+
+  it('accepts a block that carries the extra chapters of the Slide starts', () => {
+    // ARRANGE
+    const block = chapterBlock(
+      deriveChapters({ ...TWO_SECTIONS, titles: TWO_SECTIONS.titles.de ?? {}, starts, extraChapters }),
+    );
+    // ACT
+    const messages = found({ extraChapters }, block);
+    // ASSERT
+    expect(messages).toEqual([]);
+  });
+
+  it('flags an extra chapter without a start or a title', () => {
+    // ARRANGE
+    const block = chapterBlock(deriveChapters({ ...TWO_SECTIONS, titles: TWO_SECTIONS.titles.de ?? {}, starts }));
+    const bad = [
+      { start: -1, title: 'X' },
+      { start: 10, title: '' },
+    ];
+    // ACT
+    const messages = found({ extraChapters: bad }, block);
+    // ASSERT
+    expect(messages).toEqual(
+      expect.arrayContaining([expect.stringMatching(/extraChapters must be a list of \{start, title\}/)]),
+    );
+  });
+});

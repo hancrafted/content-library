@@ -18,7 +18,7 @@ Each takes `<episode folder | page url | video id>` and infers the language from
 | `youtube:chapters`     | Slide starts                           | the chapter block of `youtube.<lang>.md`         |
 | `youtube:apply`        | `youtube.<lang>.md`, the remote video  | the video description, a comment; the comment ID |
 
-`slide-starts.<lang>.json` is `{videoId, starts, unmatched, guessed}`: `guessed` lists the started Slides whose start was inferred, for Han's review.
+`slide-starts.<lang>.json` is `{videoId, starts, unmatched, guessed, extraChapters}`: `guessed` lists the started Slides whose start was inferred, for Han's review; `extraChapters` (`[{start, title}]`, optional) adds YouTube chapters inside a Section, which `youtube:chapters` merges with the Section chapters in time order.
 
 ## youtube:apply setup
 
