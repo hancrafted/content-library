@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-10-29T16:01:06Z
+  - by: human:han
+    at: 2026-10-29T16:04:37Z
 ---
 
 # Get workshop-ready: your AI agent on your laptop
