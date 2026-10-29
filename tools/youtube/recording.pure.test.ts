@@ -149,3 +149,70 @@ describe('edge cases', () => {
     expect(found).toHaveLength(expected);
   });
 });
+
+describe('guessed Slide starts', () => {
+  function withGuessed(guessed: string[], unmatched: string[] = []): Record<string, string> {
+    return {
+      [FILE]: JSON.stringify({
+        videoId: VIDEO,
+        starts: { hero: 0, intro: 5, middle: 9 },
+        unmatched: ['outro', ...unmatched],
+        guessed,
+      }),
+    };
+  }
+
+  it('accepts a guessed slug that is started', () => {
+    // ARRANGE
+    const recording = withGuessed(['middle']);
+    // ACT
+    const found = messages(recording);
+    // ASSERT
+    expect(found).toEqual([]);
+  });
+
+  it('flags a slug both guessed and unmatched', () => {
+    // ARRANGE
+    const recording = withGuessed(['outro']);
+    // ACT
+    const found = messages(recording);
+    // ASSERT
+    expect(found).toEqual(['"outro" is both guessed and unmatched']);
+  });
+
+  it('flags a guessed slug that has no start', () => {
+    // ARRANGE
+    const recording = {
+      [FILE]: JSON.stringify({
+        videoId: VIDEO,
+        starts: { hero: 0, intro: 5 },
+        unmatched: ['outro'],
+        guessed: ['middle'],
+      }),
+    };
+    // ACT
+    const found = messages(recording);
+    // ASSERT
+    expect(found).toEqual(['"middle" is guessed but has no start', '"middle" is neither started nor unmatched']);
+  });
+
+  it('flags a guessed list that is no list of slugs', () => {
+    // ARRANGE
+    const recording = { [FILE]: JSON.stringify({ videoId: VIDEO, starts: {}, unmatched: [], guessed: 'middle' }) };
+    // ACT
+    const found = messages(recording);
+    // ASSERT
+    expect(found).toEqual(['guessed must be a list of Slide slugs']);
+  });
+});
+
+describe('video facts', () => {
+  it('flags a video file without a duration', () => {
+    // ARRANGE
+    const recording = { 'video.de.json': JSON.stringify({ videoId: VIDEO }) };
+    // ACT
+    const found = messages(recording);
+    // ASSERT
+    expect(found).toEqual(['durationSeconds must be a number of seconds above 0']);
+  });
+});

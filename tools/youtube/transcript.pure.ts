@@ -1,8 +1,11 @@
 // `npm run youtube:transcript`: the pure half — which language, which file yt-dlp's captions land in, where they are
 // stored. The shell (`transcript.ts`) runs yt-dlp and the disk.
-
+/** The languages a recording can be spoken in: the site's locales (`src/shared/lib/locale.pure.ts`, which tools may not import; `site-tables.test.ts` asserts the two agree). */
 export const SPOKEN_LANGUAGES = ['en', 'de'] as const;
 export type SpokenLanguage = (typeof SPOKEN_LANGUAGES)[number];
+
+/** The language the site serves unprefixed. */
+export const DEFAULT_SPOKEN_LANGUAGE: SpokenLanguage = 'en';
 
 /** The Recording folder inside an Episode's folder, next to the Brief. */
 export const RECORDING_FOLDER = 'recording';
@@ -42,4 +45,25 @@ export function ytDlpArgs(videoId: string, language: SpokenLanguage, dir: string
     `${dir}/%(id)s`,
     `https://www.youtube.com/watch?v=${videoId}`,
   ];
+}
+
+/** The Recording folder file the video's length is stored in, relative to the Episode's folder. */
+export function videoFile(language: SpokenLanguage): string {
+  return `${RECORDING_FOLDER}/video.${language}.json`;
+}
+
+/** The yt-dlp arguments that print only the length of a video, in seconds. */
+export function ytDlpDurationArgs(videoId: string): string[] {
+  return ['--skip-download', '--print', 'duration', `https://www.youtube.com/watch?v=${videoId}`];
+}
+
+/** The seconds yt-dlp printed, or undefined when the output is no positive whole number. */
+export function parseDuration(output: string): number | undefined {
+  const seconds = Number(output.trim());
+  return Number.isInteger(seconds) && seconds > 0 ? seconds : undefined;
+}
+
+/** The text of the video file: the video and its length, as the Recording model reads them. */
+export function videoFileText(videoId: string, durationSeconds: number): string {
+  return `${JSON.stringify({ videoId, durationSeconds }, null, 2)}\n`;
 }

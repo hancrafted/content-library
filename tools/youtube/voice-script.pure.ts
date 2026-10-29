@@ -10,7 +10,7 @@ export interface Cue {
 }
 
 /** Spoken words per minute (design-ADR 0002). `src/shared/lib/speaking-time.pure.ts` holds the site's copy; tools cannot import it under plain node, so change both together. */
-const WORDS_PER_MINUTE: Readonly<Record<SpokenLanguage, number>> = { en: 140, de: 120 };
+export const WORDS_PER_MINUTE: Readonly<Record<SpokenLanguage, number>> = { en: 140, de: 120 };
 
 const TIMING = /^(\d+):(\d\d):(\d\d)\.(\d{3}) -->/;
 const INLINE_TAG = /<[^>]*>/g;

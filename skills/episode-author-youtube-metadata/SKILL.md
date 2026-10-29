@@ -15,7 +15,7 @@ The description and pinned comment are what a viewer and YouTube's search read f
    - **Content**: `npm run youtube:voice-script -- <episode> --lang <lang>` for what the talk says; the Episode's `i18n/<lang>.json` for its title, caption and description.
    - **Episode link**: `https://hancrafted.net` + `/de` for German (English has no prefix) + `/episodes/<slug>/` for a public Episode, or `/events/<event>/episodes/<slug>/` for an Event copy. The trailing slash stays.
    - **About links**: the `linkedin` entry of `SOCIAL_LINKS` in `src/shared/lib/social-links.ts`, and the site root. Copy each URL from the file.
-   - **Research questions**: the titles of the research files the Episode's claims rest on, found under `docs/llm-wiki/research/` through its index. The site publishes no page per Research question, so the list carries titles only and no URL.
+   - **Research questions**: the titles of the research files the Episode's claims rest on, found under `docs/llm-wiki/research/` through its index. The site publishes no page per Research question, so the list carries titles only and no URL, until #446 publishes them.
      _Done when_ every fact has its source named in your notes.
 4. Write the description into `recording/youtube.<lang>.md` under `## Description`, in the template's block order, with the existing chapter block (markers included) left byte for byte as it is. If the block is absent, run `npm run youtube:chapters -- <episode>` first. Write the hook and summary as the speaker would say them, naming one or two keywords the title already carries.
 5. Write the pinned comment under `## Pinned comment`, as the template says. Leave `## Comment ID` as it is.

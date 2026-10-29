@@ -1,6 +1,8 @@
 // The Episode resolver of the post-production tools (`npm run youtube:*`): turns what Han pastes — a video ID or
 // YouTube URL, an Episode folder, or a page URL of the site — into the one Episode it names, or refuses. Pure: the
 // shell (`episode-index.ts`) lists the Episodes, so every later `youtube` entry point resolves the same way.
+import { EPISODES_DIR } from '../../src/episodes/lib/episode-folders.ts';
+import { DEFAULT_SPOKEN_LANGUAGE, SPOKEN_LANGUAGES } from './transcript.pure.ts';
 
 /** One Episode the resolver can match: standalone or Event copy, where it sits, the videos it declares. */
 export interface EpisodeEntry {
@@ -11,8 +13,10 @@ export interface EpisodeEntry {
   readonly event?: string;
   /** Its path under the Episodes folder: `<slug>` or `by-event/<event>/<slug>`. */
   readonly folder: string;
-  /** Every YouTube video ID its metadata declares, whatever the locale. */
+  /** Every distinct YouTube video ID its metadata declares: one video declared for both locales counts once. */
   readonly videoIds: readonly string[];
+  /** Language → the video ID declared for it. */
+  readonly videosByLanguage?: Readonly<Record<string, string>>;
 }
 
 export type Resolution =
@@ -26,15 +30,52 @@ const YOUTUBE_HOSTS = ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'music
 const ID_PATH_PREFIXES = ['shorts', 'embed', 'live', 'v'];
 const SHORT_HOST = 'youtu.be';
 const SITE_HOSTS = ['localhost', '127.0.0.1', 'hancrafted.net', 'www.hancrafted.net'];
-const LOCALE_PREFIX = /^\/de(?=\/|$)/;
-const EPISODES_FOLDER = 'src/episodes';
+/** The prefix of every locale but the default, which is served bare: `/de`. */
+const LOCALE_PREFIX = new RegExp(
+  `^/(?:${SPOKEN_LANGUAGES.filter((language) => language !== DEFAULT_SPOKEN_LANGUAGE).join('|')})(?=/|$)`,
+);
+const EPISODES_FOLDER = EPISODES_DIR;
 const EVENT_COPIES_FOLDER = 'by-event';
 
-/** The video IDs an Episode's `youtube` metadata declares. */
+/** The video IDs an Episode's `youtube` metadata declares, each once. */
 export function videoIdsOf(youtube: YoutubeMetadata | undefined): string[] {
-  if (!youtube) return [];
-  if (typeof youtube.id === 'string') return [youtube.id];
-  return Object.values(youtube).filter((value) => VIDEO_ID.test(value));
+  return [...new Set(Object.values(videosByLanguageOf(youtube)))];
+}
+
+/** The video ID each language's metadata declares: an Event recording's one video under its spoken language. */
+export function videosByLanguageOf(youtube: YoutubeMetadata | undefined): Record<string, string> {
+  if (!youtube) return {};
+  if (typeof youtube.id === 'string') {
+    const language = (youtube as { language?: unknown }).language;
+    return typeof language === 'string' ? { [language]: youtube.id } : { '': youtube.id };
+  }
+  return Object.fromEntries(Object.entries(youtube).filter(([, value]) => VIDEO_ID.test(value)));
+}
+
+/**
+ * The video to work on for a recorded `language`: the one a pasted video URL names, else the Episode's only video,
+ * else the one declared for that language. Refused when several differ and none is named.
+ */
+export function pickVideo(
+  episode: EpisodeEntry,
+  language: string,
+  pasted: string | undefined,
+): { ok: true; videoId: string } | { ok: false; reason: string } {
+  if (pasted !== undefined) {
+    return episode.videoIds.includes(pasted)
+      ? { ok: true, videoId: pasted }
+      : { ok: false, reason: `${episode.id} does not declare the video ${pasted}` };
+  }
+  const [only, ...others] = episode.videoIds;
+  if (only === undefined)
+    return { ok: false, reason: `${episode.id} declares no video; run /episode-add-youtube first` };
+  if (others.length === 0) return { ok: true, videoId: only };
+  const declared = episode.videosByLanguage?.[language];
+  if (declared !== undefined) return { ok: true, videoId: declared };
+  return {
+    ok: false,
+    reason: `${episode.id} declares several videos (${episode.videoIds.join(', ')}) and none for ${language}; pass the video's YouTube URL`,
+  };
 }
 
 /** The video ID a YouTube URL carries (watch, short link, shorts, embed, live), or undefined. */

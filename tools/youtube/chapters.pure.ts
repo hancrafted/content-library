@@ -42,8 +42,8 @@ export function parseTimestamp(text: string): number | undefined {
 
 /**
  * One chapter per Section, at its first Slide's start, titled with that Slide's title. A Section whose first Slide was
- * not found starts at its first found Slide; one with none is left out. The first Section also covers the Title slide,
- * so the first chapter starts where the video does.
+ * not found starts at its first found Slide; one with none has no chapter (`unstartedSections` names it). The first
+ * Section also covers the Title slide, so the first chapter starts where the video does.
  */
 export function deriveChapters(source: ChapterSource): Chapter[] {
   const { titleSlide, sections, titles, starts } = source;
@@ -55,6 +55,23 @@ export function deriveChapters(source: ChapterSource): Chapter[] {
     const start = index === 0 ? (titleStart ?? starts[found]) : starts[found];
     return [{ start: Math.floor(start ?? 0), title: titles[first] ?? first }];
   });
+}
+
+/** Each Section none of whose Slides has a start, as its number from 1 and its first Slide: it gets no chapter. */
+export function unstartedSections(source: ChapterSource): { section: number; slide: string }[] {
+  return source.sections.flatMap((slides, index) => {
+    const slide = slides[0];
+    const started = slides.some((slug) => source.starts[slug] !== undefined);
+    return slide === undefined || started ? [] : [{ section: index + 1, slide }];
+  });
+}
+
+/** The refusal for Sections without a start, undefined when there are none. */
+export function unstartedMessage(source: ChapterSource): string | undefined {
+  const missing = unstartedSections(source);
+  if (missing.length === 0) return undefined;
+  const list = missing.map(({ section, slide }) => `Section ${section} ("${slide}")`).join(', ');
+  return `${list} has no Slide start, so it would get no YouTube chapter; fix its Slide starts first`;
 }
 
 /** The chapter lines, one `timestamp title` per chapter. */

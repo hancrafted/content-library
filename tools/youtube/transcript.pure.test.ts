@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { captionFile, parseSpokenLanguage, transcriptFile, ytDlpArgs } from './transcript.pure.ts';
+import {
+  captionFile,
+  parseDuration,
+  parseSpokenLanguage,
+  transcriptFile,
+  videoFile,
+  videoFileText,
+  ytDlpArgs,
+  ytDlpDurationArgs,
+} from './transcript.pure.ts';
 
 const VIDEO = 'atPa8aTd-PQ';
 
@@ -79,5 +88,36 @@ describe('edge cases', () => {
     const file = captionFile(['other.de.vtt'], VIDEO, 'de');
     // ASSERT
     expect(file).toBe(expected);
+  });
+});
+
+describe('video length', () => {
+  it('reads the seconds yt-dlp prints', () => {
+    // ARRANGE
+    const output = '1523\n';
+    // ACT
+    const seconds = parseDuration(output);
+    // ASSERT
+    expect(seconds).toBe(1523);
+  });
+
+  it.each(['NA\n', '', '0', '12.5'])('reads %j as no duration', (output) => {
+    // ARRANGE
+    // ACT
+    const seconds = parseDuration(output);
+    // ASSERT
+    expect(seconds).toBeUndefined();
+  });
+
+  it('asks yt-dlp for the duration only and stores it beside the captions', () => {
+    // ARRANGE
+    // ACT
+    const args = ytDlpDurationArgs(VIDEO);
+    // ASSERT
+    expect([args, videoFile('de'), videoFileText(VIDEO, 1523)]).toEqual([
+      ['--skip-download', '--print', 'duration', `https://www.youtube.com/watch?v=${VIDEO}`],
+      'recording/video.de.json',
+      '{\n  "videoId": "atPa8aTd-PQ",\n  "durationSeconds": 1523\n}\n',
+    ]);
   });
 });
