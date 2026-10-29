@@ -52,7 +52,7 @@
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
-status: draft
+status: approved
 template: 6358c22
 dev_port: 4000
 spec_port: 4001
@@ -120,28 +120,9 @@ jobs:
         references: [references/retrieval.md, docs/episodes/get-workshop-ready/brief.md, docs/llm-wiki/index.md]
         model: inherit
 
-  # Runs `npm run convert-reference` once per file the Brief lists under
-  # References: a script, so no reviewer. A run with no References drops it.
-  - id: convert-references
-    stage: setup
-    needs: [brief-grill]
-    before: [mh-query]
-    outputs: [docs/episodes/get-workshop-ready/reference/*/design-reference.md]
-    checks: [mh, vitest]
-    retries: 1
-    agents:
-      - type: implementor
-        skills: []
-        references: [references/convert-references.md, docs/episodes/get-workshop-ready/brief.md]
-        model: inherit
-        session: orchestrator
-
-  # Wants convert-references rather than needing it: a missing conversion tool
-  # leaves the design references out instead of blocking the Episode.
   - id: customize-pipeline
     stage: setup
     needs: [retrieval]
-    wants: [convert-references]
     outputs: [docs/episodes/get-workshop-ready/pipeline.yml]
     checks: [vitest]
     retries: 0
@@ -156,15 +137,110 @@ jobs:
         model: inherit
         session: orchestrator
 
-  # One job per question retrieval lists under Research jobs, new or refresh;
-  # a reused question has none.
-  - id: write-research
-    stage: research
+  # A one-off: the guide is a new Resource kind, so the Resources overview
+  # design-ADR changes before the Spec is written.
+  - id: amend-resources-overview
+    stage: setup
+    intent: >-
+      Amend docs/adr/0019-resources-overview.md (design-ADR) so the closed Resource kind list gains `guide` at /guides/<slug>, built through the Episode pipeline, and the Brief's Format rule (markdown-harness staging-brief-body) allows it; follow docs/agents/domain.md for design-ADRs. This is a decision that needs Han: return the proposed amendment text and open question as a `needs-human:` note, do not decide alone.
     needs: [customize-pipeline]
     isolation: worktree
-    foreach: docs/episodes/get-workshop-ready/research-plan.md#research-jobs
+    outputs: []
+    checks: [mh]
+    retries: 0
+    agents:
+      - type: implementor
+        skills: [domain-modeling]
+        references:
+          [docs/adr/0019-resources-overview.md, docs/agents/domain.md, docs/episodes/get-workshop-ready/brief.md]
+        model: opus
+
+  - id: write-research-step-by-step-setup-guide-completion
+    stage: research
+    intent: >-
+      Research the Brief's question "Why do first-timers finish a multi-step setup guide when it shows one step per screen, minimal instructions and visible progress?" and write it to research/UX-0001__step-by-step-setup-guide-completion/research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
     before: [mh-query]
-    outputs: [docs/episodes/get-workshop-ready/research/*/research.md]
+    outputs: [docs/episodes/get-workshop-ready/research/UX-0001__step-by-step-setup-guide-completion/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/get-workshop-ready/brief.md,
+            docs/episodes/get-workshop-ready/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-terminal-avoidance-by-non-experts
+    stage: research
+    intent: >-
+      Research the Brief's question "Why do non-technical people, and even some software engineers, hesitate to open a terminal, up to avoiding it altogether?" and write it to research/UX-0002__terminal-avoidance-by-non-experts/research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/get-workshop-ready/research/UX-0002__terminal-avoidance-by-non-experts/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/get-workshop-ready/brief.md,
+            docs/episodes/get-workshop-ready/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-approachable-terminal-for-beginners
+    stage: research
+    intent: >-
+      Research the Brief's question "Why have the attempts to make the terminal approachable for first-timers worked or failed? Examples: Software Carpentry's shell lessons, Warp, Windows Terminal onboarding, Fig." and write it to research/UX-0003__approachable-terminal-for-beginners/research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/get-workshop-ready/research/UX-0003__approachable-terminal-for-beginners/research.md]
+    checks: [mh, vitest, sources]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [research, writing-for-agents]
+        references:
+          [
+            references/write-research.md,
+            docs/episodes/get-workshop-ready/brief.md,
+            docs/episodes/get-workshop-ready/research-plan.md,
+          ]
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references: [references/write-research.md]
+        rubric: references/write-research.md#rubric
+        model: opus
+
+  - id: write-research-agent-permission-before-commands
+    stage: research
+    intent: >-
+      Research the Brief's question "Why does each AI agent ask permission before a skill runs a command?" and write it to research/LLM-0021__agent-permission-before-commands/research.md.
+    needs: [customize-pipeline]
+    isolation: worktree
+    before: [mh-query]
+    outputs: [docs/episodes/get-workshop-ready/research/LLM-0021__agent-permission-before-commands/research.md]
     checks: [mh, vitest, sources]
     retries: 2
     agents:
@@ -188,7 +264,14 @@ jobs:
   - id: write-dossier
     stage: dossier
     needs: [customize-pipeline]
-    wants: [write-research]
+    isolation: worktree
+    wants:
+      [
+        write-research-step-by-step-setup-guide-completion,
+        write-research-terminal-avoidance-by-non-experts,
+        write-research-approachable-terminal-for-beginners,
+        write-research-agent-permission-before-commands,
+      ]
     before: [mh-query]
     outputs: [docs/episodes/get-workshop-ready/dossier.md]
     checks: [mh, vitest]
@@ -200,8 +283,10 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/get-workshop-ready/brief.md
           - docs/episodes/get-workshop-ready/research-plan.md
-          - docs/episodes/get-workshop-ready/research/*/research.md
-          - docs/episodes/get-workshop-ready/reference/*/design-reference.md
+          - docs/episodes/get-workshop-ready/research/UX-0001__step-by-step-setup-guide-completion/research.md
+          - docs/episodes/get-workshop-ready/research/UX-0002__terminal-avoidance-by-non-experts/research.md
+          - docs/episodes/get-workshop-ready/research/UX-0003__approachable-terminal-for-beginners/research.md
+          - docs/episodes/get-workshop-ready/research/LLM-0021__agent-permission-before-commands/research.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
           - docs/profile/mental-model-guide.md
@@ -219,6 +304,7 @@ jobs:
   - id: write-voice-script
     stage: dossier
     needs: [write-dossier]
+    isolation: worktree
     before: [mh-query]
     outputs: [docs/episodes/get-workshop-ready/dossier.md]
     checks: [mh, vitest]
@@ -251,7 +337,7 @@ jobs:
   # review round is a new Attempt, and the user approves the Spec at the gate.
   - id: write-spec
     stage: specification
-    needs: [write-voice-script]
+    needs: [write-voice-script, amend-resources-overview]
     outputs: [docs/episodes/get-workshop-ready/spec/spec.html]
     checks: [vitest]
     retries: 2
@@ -271,7 +357,6 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
-          - docs/episodes/get-workshop-ready/reference/*/design-reference.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -284,7 +369,6 @@ jobs:
           - docs/episodes/get-workshop-ready/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
-          - docs/episodes/get-workshop-ready/reference/*/design-reference.md
         rubric: references/write-spec.md#rubric
         model: opus
 
@@ -318,13 +402,14 @@ jobs:
         model: opus
         session: orchestrator
 
-  # One job per Section, the h3s under the Brief's Slides, in parallel: each
-  # builds its Slides at its own placement marker.
-  - id: implement-section
+  # One job per Section, the h3s under the Brief's Slides.
+  - id: implement-section-your-terminal
     stage: build
+    intent: >-
+      Build Section 1 of 5, "Your terminal" in the Brief's Slides, at its placement marker.
     needs: [implement-episode-init]
     isolation: worktree
-    foreach: docs/episodes/get-workshop-ready/brief.md#slides
+    port: 4002
     outputs: []
     checks: [verify, build, test:build, impeccable, visual-check]
     retries: 2
@@ -336,7 +421,6 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/get-workshop-ready/spec/spec.html
-          - docs/episodes/get-workshop-ready/reference/*/design-reference.md
         model: opus
       # code-review spawns its own subagents, so the reviewer runs in the
       # orchestrator's session; its subagents give the fresh eyes.
@@ -352,14 +436,168 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/get-workshop-ready/spec/spec.html
-          - docs/episodes/get-workshop-ready/reference/*/design-reference.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-your-ai-agent
+    stage: build
+    intent: >-
+      Build Section 2 of 5, "Your AI agent" in the Brief's Slides, at its placement marker.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4003
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-your-folder
+    stage: build
+    intent: >-
+      Build Section 3 of 5, "Your folder" in the Brief's Slides, at its placement marker.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4004
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-your-first-skill
+    stage: build
+    intent: >-
+      Build Section 4 of 5, "Your first skill" in the Brief's Slides, at its placement marker.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4005
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+
+  - id: implement-section-the-technical-route
+    stage: build
+    intent: >-
+      Build Section 5 of 5, "The technical route" in the Brief's Slides, at its placement marker.
+    needs: [implement-episode-init]
+    isolation: worktree
+    port: 4006
+    outputs: []
+    checks: [verify, build, test:build, impeccable, visual-check]
+    retries: 2
+    agents:
+      - type: implementor
+        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
+        model: opus
+      # code-review spawns its own subagents, so the reviewer runs in the
+      # orchestrator's session; its subagents give the fresh eyes.
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/get-workshop-ready/spec/spec.html
         rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
 
   - id: open-pr
     stage: pr
-    needs: [implement-section]
+    needs:
+      [
+        implement-section-your-terminal,
+        implement-section-your-ai-agent,
+        implement-section-your-folder,
+        implement-section-your-first-skill,
+        implement-section-the-technical-route,
+      ]
     outputs: []
     checks: []
     retries: 0
