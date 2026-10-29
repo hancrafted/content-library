@@ -47,7 +47,7 @@ Hesitation has two documented roots. First, computer anxiety, the tendency to be
 6. The same respondents said a command line is "less intuitive" and that "you cannot click your way around it in an attempt to figure it out"; another wrote it is "much easier to cause catastrophic failure quickly and effectively" [3].
 7. Only 32% of those administrators preferred a command line for managing firewalls, against 60% who preferred a graphical interface [3].
 8. A design analysis of Git calls it powerful but complicated and explains well-known difficulties as misfits in its design, not user error; the authors checked this against questions users post on Stack Overflow [4].
-9. A widely used usability standard asks interfaces to make elements, actions and options visible so users need not recall them, to prevent errors in the first place, and to give plain-language error messages; a bare prompt offers none of these by default [5].
+9. A widely used usability standard asks interfaces to make elements, actions and options visible so users need not recall them, to prevent errors in the first place, and to give plain-language error messages [5].
 10. Counter-evidence: in a survey of 60 cloud developers, the command line was the most favoured modality overall, especially for create, read, update and delete tasks, and all 4 observed participants chose it [6].
 
 ## Caveats
