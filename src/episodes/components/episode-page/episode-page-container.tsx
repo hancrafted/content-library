@@ -212,8 +212,8 @@ interface EpisodePageContainerProps {
  * `h1`, each Section's wrapper and anchors, the table of contents and the
  * Context drawer. It walks the Episode once (`placeSections`) and every one of them
  * reads that list, so no id is derived twice and none can drift. It also
- * provides the page's one URL-state service (FE-001 §2) and its one picks
- * store, the page-wide toolbar picks its Slides read (FE-001 §1, transient).
+ * provides the page's one URL-state service (FE-001 §2) and, around its
+ * Slides, the page-wide toolbar picks they read (FE-001 §1, transient).
  * Under an Event, the frame's header and Playlist walk sit around the Content area, and the
  * contents and Slide links point at the Event's URL for the Episode.
  */
