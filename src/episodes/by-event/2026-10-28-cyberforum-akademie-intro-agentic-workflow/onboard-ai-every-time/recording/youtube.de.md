@@ -41,3 +41,5 @@ Mehr zum Webinar der CyberForum Akademie, alle Folien und der Weg zur nächsten 
 Kapitel: Das Gedankenexperiment · 5 Eigenschaften der KI · Wie arbeiten wir mit diesem Freelancer?
 
 ## Comment ID
+
+UgyJA7LyvI8s4PVLKRh4AaABAg

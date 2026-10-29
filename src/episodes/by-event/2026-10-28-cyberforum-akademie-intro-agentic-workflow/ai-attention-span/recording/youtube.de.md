@@ -35,3 +35,5 @@ Mehr zum Webinar der CyberForum Akademie, alle Folien und der Weg zur nächsten 
 Kapitel: Gedankenexperiment · Die Aufmerksamkeitsspanne der KI · Was das Fenster füllt · Die Aufmerksamkeitsspanne managen
 
 ## Comment ID
+
+Ugxl3clwmw3QzRvXwFp4AaABAg
