@@ -1,7 +1,8 @@
 // The Recording model of the post-production tools (`npm run youtube:*`): the schemas of the files in an Episode's
 // Recording folder and one validation entry point, `validateRecording`, which `verify` runs over every Recording
 // folder. Pure: the shell (`recording.ts`) reads the folder from disk. New Recording files add their rules here.
-import { chapterLines, deriveChapters, parseChapterLines, type Chapter } from './chapters.pure.ts';
+import { chapterLines, deriveChapters, parseChapterLines, unstartedMessage, type Chapter } from './chapters.pure.ts';
+import { lastChapterProblems, VIDEO_FILE, videoViolations } from './recording-video.pure.ts';
 import { chapterBlockLines, parseYoutubeFile, publishedDescription, YOUTUBE_FILE } from './youtube-file.pure.ts';
 
 /** An Episode's Slides in composition order: the Title slide, then each Section's Slides, as Slide slugs. */
@@ -31,6 +32,8 @@ interface SlideStarts {
   readonly starts: Readonly<Record<string, number>>;
   /** The Slides not found in the recording. */
   readonly unmatched: readonly string[];
+  /** The Slides in `starts` whose title was not heard: the start is inferred and Han reviews it. Absent means none. */
+  readonly guessed?: readonly string[];
 }
 
 /** YouTube's rules for chapters (YouTube Help 9884579) and descriptions (12948449). */
@@ -45,6 +48,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+function isSlugList(value: unknown): boolean {
+  return Array.isArray(value) && value.every((slug) => typeof slug === 'string');
+}
+
 function startProblems(starts: unknown): string[] {
   if (!isRecord(starts)) return ['starts must be an object of Slide slug → second'];
   return Object.entries(starts)
@@ -53,14 +60,13 @@ function startProblems(starts: unknown): string[] {
 }
 
 function shapeProblems(json: Record<string, unknown>): string[] {
-  const { videoId, unmatched } = json;
+  const { videoId, unmatched, guessed } = json;
   const problems = startProblems(json.starts);
   if (typeof videoId !== 'string' || !YOUTUBE_ID.test(videoId)) {
     problems.push('videoId must be an 11-character YouTube id');
   }
-  if (!Array.isArray(unmatched) || unmatched.some((slug) => typeof slug !== 'string')) {
-    problems.push('unmatched must be a list of Slide slugs');
-  }
+  if (!isSlugList(unmatched)) problems.push('unmatched must be a list of Slide slugs');
+  if (guessed !== undefined && !isSlugList(guessed)) problems.push('guessed must be a list of Slide slugs');
   return problems;
 }
 
@@ -77,19 +83,30 @@ function parseSlideStarts(text: string): { value: SlideStarts } | { problems: st
   return problems.length > 0 ? { problems } : { value: json as unknown as SlideStarts };
 }
 
-function unknownSlugs(composition: Composition, { starts, unmatched }: SlideStarts): string[] {
+function unknownSlugs(composition: Composition, { starts, unmatched, guessed = [] }: SlideStarts): string[] {
   const known = new Set(composition.slides);
-  return [...Object.keys(starts), ...unmatched]
+  return [...Object.keys(starts), ...unmatched, ...guessed]
     .filter((slug) => !known.has(slug))
     .map((slug) => `"${slug}" is not a Slide of the Episode`);
 }
 
-function accountingProblems(composition: Composition, { starts, unmatched }: SlideStarts): string[] {
+function guessProblems(slug: string, { starts, unmatched, guessed = [] }: SlideStarts): string[] {
+  if (!guessed.includes(slug)) return [];
+  if (unmatched.includes(slug)) return [`"${slug}" is both guessed and unmatched`];
+  return starts[slug] === undefined ? [`"${slug}" is guessed but has no start`] : [];
+}
+
+function accountingProblems(composition: Composition, slideStarts: SlideStarts): string[] {
+  const { starts, unmatched } = slideStarts;
   return composition.slides.flatMap((slug) => {
     const started = starts[slug] !== undefined;
     const lost = unmatched.includes(slug);
-    if (started && lost) return [`"${slug}" is both started and unmatched`];
-    return started || lost ? [] : [`"${slug}" is neither started nor unmatched`];
+    const own = started && lost ? [`"${slug}" is both started and unmatched`] : [];
+    return [
+      ...guessProblems(slug, slideStarts),
+      ...own,
+      ...(started || lost ? [] : [`"${slug}" is neither started nor unmatched`]),
+    ];
   });
 }
 
@@ -143,6 +160,18 @@ function derivedChapters(composition: Composition, language: string, starts: Sli
   });
 }
 
+function sectionProblems(composition: Composition, language: string, recording: RecordingFolder): string[] {
+  const startsText = recording[`slide-starts.${language}.json`];
+  const parsed = startsText === undefined ? undefined : parseSlideStarts(startsText);
+  if (parsed === undefined || 'problems' in parsed) return [];
+  const message = unstartedMessage({
+    sections: composition.sections,
+    titles: {},
+    starts: parsed.value.starts,
+  });
+  return message === undefined ? [] : [message];
+}
+
 function stepProblems(
   context: { composition: Composition; language: string; recording: RecordingFolder },
   lines: string[],
@@ -178,6 +207,8 @@ function youtubeViolations(composition: Composition, recording: RecordingFolder,
             ];
           })(),
           ...stepProblems({ composition, language, recording }, lines),
+          ...lastChapterProblems(parseChapterLines(lines).chapters, recording[`video.${language}.json`]),
+          ...sectionProblems(composition, language, recording),
         ];
   if (description.length > MAX_DESCRIPTION_CHARACTERS) {
     messages.push(`the description is ${description.length} characters, YouTube allows ${MAX_DESCRIPTION_CHARACTERS}`);
@@ -192,6 +223,7 @@ export function validateRecording(composition: Composition, recording: Recording
     ...files
       .filter((file) => SLIDE_STARTS_FILE.test(file))
       .flatMap((file) => slideStartsViolations(composition, file, recording[file] ?? '')),
+    ...files.filter((file) => VIDEO_FILE.test(file)).flatMap((file) => videoViolations(file, recording[file] ?? '')),
     ...files
       .filter((file) => YOUTUBE_FILE.test(file))
       .flatMap((file) => youtubeViolations(composition, recording, file)),

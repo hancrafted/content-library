@@ -3,7 +3,7 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { episodeFolders } from '../../src/episodes/lib/episode-folders.ts';
-import { videoIdsOf, type EpisodeEntry, type YoutubeMetadata } from './episode-resolver.pure.ts';
+import { videoIdsOf, videosByLanguageOf, type EpisodeEntry, type YoutubeMetadata } from './episode-resolver.pure.ts';
 
 const METADATA_FILE = 'episode-metadata.ts';
 
@@ -20,6 +20,7 @@ export async function loadEpisodeEntries(root: string): Promise<EpisodeEntry[]> 
         ...(page.kind === 'event-copy' ? { event: page.event } : {}),
         folder: page.folder,
         videoIds: videoIdsOf(module.episodeMetadata.youtube),
+        videosByLanguage: videosByLanguageOf(module.episodeMetadata.youtube),
       };
     }),
   );

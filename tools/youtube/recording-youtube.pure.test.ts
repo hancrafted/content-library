@@ -136,3 +136,47 @@ describe('edge cases', () => {
     expect(found).toEqual([]);
   });
 });
+
+describe('video length and Sections without a start', () => {
+  const VIDEO_FILE = 'video.de.json';
+
+  function withVideo(durationSeconds: number): string[] {
+    const recording = {
+      'slide-starts.de.json': startsFile(STARTS),
+      [VIDEO_FILE]: JSON.stringify({ videoId: 'atPa8aTd-PQ', durationSeconds }),
+      [YOUTUBE]: youtube(blockOf(STARTS)),
+    };
+    return validateRecording(COMPOSITION, recording).map((violation) => violation.message);
+  }
+
+  it('accepts a last chapter of at least 10 seconds', () => {
+    // ARRANGE
+    // ACT
+    const found = withVideo(310);
+    // ASSERT
+    expect(found).toEqual([]);
+  });
+
+  it('flags a last chapter shorter than 10 seconds against the video length', () => {
+    // ARRANGE
+    // ACT
+    const found = withVideo(305);
+    // ASSERT
+    expect(found).toEqual(['the last chapter "Vier" must be at least 10s long: the video is 305s']);
+  });
+
+  it('flags a Section none of whose Slides has a start, instead of dropping it silently', () => {
+    // ARRANGE
+    const starts = { hero: 0, a: 5, b: 100, d: 300 };
+    const recording = {
+      'slide-starts.de.json': JSON.stringify({ videoId: 'atPa8aTd-PQ', starts, unmatched: ['c'] }),
+      [YOUTUBE]: youtube(blockOf(starts)),
+    };
+    // ACT
+    const found = validateRecording(COMPOSITION, recording).map((violation) => violation.message);
+    // ASSERT
+    expect(found).toContain(
+      'Section 3 ("c") has no Slide start, so it would get no YouTube chapter; fix its Slide starts first',
+    );
+  });
+});

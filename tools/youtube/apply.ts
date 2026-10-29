@@ -5,33 +5,25 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { EPISODES_DIR } from '../../src/episodes/lib/episode-folders.ts';
 import { envProblem, parseCredentials, planApply } from './apply.pure.ts';
-import { loadEpisodeEntries } from './episode-index.ts';
-import { resolveEpisode } from './episode-resolver.pure.ts';
+import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';
+import { pickVideo, youtubeVideoId } from './episode-resolver.pure.ts';
 import { readRecordingFolder, recordingViolations } from './recording-disk.ts';
-import { parseSpokenLanguage, RECORDING_FOLDER } from './transcript.pure.ts';
+import { RECORDING_FOLDER } from './transcript.pure.ts';
 import { connect } from './youtube-client.ts';
 import { parseYoutubeFile, serializeYoutubeFile, youtubeFileName } from './youtube-file.pure.ts';
 
-const ROOT = path.resolve(import.meta.dirname, '../..');
 const ENV_FILE = '.env';
-
-function fail(message: string): never {
-  console.error(message);
-  process.exit(1);
-}
 
 function git(...args: string[]): boolean {
   return spawnSync('git', args, { cwd: ROOT, stdio: 'ignore' }).status === 0;
 }
 
-const args = process.argv.slice(2);
-const dryRun = args.includes('--dry-run');
-const langAt = args.indexOf('--lang');
-const language = parseSpokenLanguage(langAt === -1 ? 'de' : (args[langAt + 1] ?? ''));
-const input = args.find((arg, index) => !arg.startsWith('--') && (langAt === -1 || index !== langAt + 1));
-if (!input || !language) fail('usage: npm run youtube:apply -- <episode folder | page url> [--lang en|de] [--dry-run]');
+const {
+  input,
+  dryRun,
+  language: requested,
+} = commandArgs('npm run youtube:apply -- <episode folder | page url> [--lang en|de] [--dry-run]');
 
 const envPath = path.join(ROOT, ENV_FILE);
 const problem = envProblem({
@@ -43,18 +35,16 @@ if (problem) fail(problem);
 const credentials = parseCredentials(readFileSync(envPath, 'utf8'));
 if ('missing' in credentials) fail(`.env lacks ${credentials.missing.join(', ')}`);
 
-const resolution = resolveEpisode(input, await loadEpisodeEntries(ROOT));
-if (!resolution.ok) fail(resolution.reason);
-const { episode } = resolution;
-const dir = path.join(ROOT, EPISODES_DIR, episode.folder);
+const { episode, dir } = await resolvedEpisode(input);
+const language = recordingLanguage(requested, dir);
 const violations = recordingViolations(ROOT, dir);
 if (violations.length > 0) {
   for (const { file, message } of violations) console.error(`${file}: ${message}`);
   fail(`${episode.id}: the Recording folder fails validation; fix it before applying`);
 }
-const [videoId, ...others] = episode.videoIds;
-if (!videoId || others.length > 0)
-  fail(`${episode.id} must declare exactly one video, it declares ${episode.videoIds.length}`);
+const video = pickVideo(episode, language, youtubeVideoId(input));
+if (!video.ok) fail(video.reason);
+const videoId = video.videoId;
 
 const name = youtubeFileName(language);
 const text = readRecordingFolder(dir)[name];

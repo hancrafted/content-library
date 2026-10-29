@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveEpisode, videoIdsOf, youtubeVideoId, type EpisodeEntry } from './episode-resolver.pure.ts';
+import { pickVideo, resolveEpisode, videoIdsOf, youtubeVideoId, type EpisodeEntry } from './episode-resolver.pure.ts';
 
 const EVENT = '2026-10-28-cyberforum';
 const COPY_VIDEO = 'atPa8aTd-PQ';
@@ -168,5 +168,64 @@ describe('edge cases', () => {
     const id = youtubeVideoId(`https://example.com/watch?v=${COPY_VIDEO}`);
     // ASSERT
     expect(id).toBe(expected);
+  });
+});
+
+describe('one video declared for both locales', () => {
+  it('counts a public Episode that declares the same id for en and de as one video', () => {
+    // ARRANGE
+    const expected = [PUBLIC_VIDEO_EN];
+    // ACT
+    const ids = videoIdsOf({ en: PUBLIC_VIDEO_EN, de: PUBLIC_VIDEO_EN });
+    // ASSERT
+    expect(ids).toEqual(expected);
+  });
+
+  it('picks that video for either language without a pasted URL', () => {
+    // ARRANGE
+    const episode: EpisodeEntry = { ...PUBLIC, videoIds: [PUBLIC_VIDEO_EN] };
+    // ACT
+    const picks = [pickVideo(episode, 'en', undefined), pickVideo(episode, 'de', undefined)];
+    // ASSERT
+    expect(picks).toEqual([
+      { ok: true, videoId: PUBLIC_VIDEO_EN },
+      { ok: true, videoId: PUBLIC_VIDEO_EN },
+    ]);
+  });
+
+  it('picks the video declared for the language when the locales differ', () => {
+    // ARRANGE
+    const episode: EpisodeEntry = { ...PUBLIC, videosByLanguage: { en: PUBLIC_VIDEO_EN, de: PUBLIC_VIDEO_DE } };
+    // ACT
+    const pick = pickVideo(episode, 'de', undefined);
+    // ASSERT
+    expect(pick).toEqual({ ok: true, videoId: PUBLIC_VIDEO_DE });
+  });
+
+  it('picks the video a pasted URL names', () => {
+    // ARRANGE
+    const episode: EpisodeEntry = { ...PUBLIC, videosByLanguage: { en: PUBLIC_VIDEO_EN, de: PUBLIC_VIDEO_DE } };
+    // ACT
+    const pick = pickVideo(episode, 'de', PUBLIC_VIDEO_EN);
+    // ASSERT
+    expect(pick).toEqual({ ok: true, videoId: PUBLIC_VIDEO_EN });
+  });
+
+  it('refuses when several videos differ and none is declared for the language', () => {
+    // ARRANGE
+    const episode: EpisodeEntry = { ...PUBLIC, videosByLanguage: { en: PUBLIC_VIDEO_EN } };
+    // ACT
+    const pick = pickVideo(episode, 'de', undefined);
+    // ASSERT
+    expect(pick.ok).toBe(false);
+  });
+
+  it('prefixes only the non-default locales when reading a page URL', () => {
+    // ARRANGE
+    const url = 'https://hancrafted.net/de/episodes/ai-attention-span/';
+    // ACT
+    const id = resolvedId(url);
+    // ASSERT
+    expect(id).toBe(PUBLIC.id);
   });
 });

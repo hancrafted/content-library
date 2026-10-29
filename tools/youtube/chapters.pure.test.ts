@@ -5,6 +5,7 @@ import {
   formatTimestamp,
   parseChapterLines,
   parseTimestamp,
+  unstartedMessage,
   type ChapterSource,
 } from './chapters.pure.ts';
 
@@ -115,5 +116,26 @@ describe('edge cases', () => {
     const back = seconds.map((value) => parseTimestamp(formatTimestamp(value)));
     // ASSERT
     expect(back).toEqual(seconds);
+  });
+});
+
+describe('a Section without a Slide start', () => {
+  it('is named in a message with its number and first Slide', () => {
+    // ARRANGE
+    const starts = { hero: 0, intro: 30, detail: 60, outro: 3725 };
+    // ACT
+    const message = unstartedMessage({ ...SOURCE, starts });
+    // ASSERT
+    expect(message).toBe(
+      'Section 2 ("middle") has no Slide start, so it would get no YouTube chapter; fix its Slide starts first',
+    );
+  });
+
+  it('gives no message when every Section has a start', () => {
+    // ARRANGE
+    // ACT
+    const message = unstartedMessage(SOURCE);
+    // ASSERT
+    expect(message).toBeUndefined();
   });
 });

@@ -20,5 +20,13 @@
     "human-in-the-loop-workflow": 1331,
     "now-you-know-how-it-feels": 1425
   },
-  "unmatched": []
+  "unmatched": [],
+  "guessed": [
+    "ai-forgets-the-middle-too",
+    "attention-is-a-budget",
+    "what-we-learned-so-far",
+    "what-fills-the-window",
+    "whats-really-in-the-window",
+    "you-cant-watch-the-meter"
+  ]
 }

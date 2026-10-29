@@ -3,43 +3,33 @@
 // creating the file if missing and rewriting only the block if not. Pure halves: `chapters.pure.ts`, `youtube-file.pure.ts`.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { EPISODES_DIR } from '../../src/episodes/lib/episode-folders.ts';
-import { chapterBlock, deriveChapters } from './chapters.pure.ts';
-import { loadEpisodeEntries } from './episode-index.ts';
-import { resolveEpisode } from './episode-resolver.pure.ts';
+import { chapterBlock, deriveChapters, unstartedMessage } from './chapters.pure.ts';
+import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';
 import { compositionOf, readRecordingFolder } from './recording-disk.ts';
-import { parseSpokenLanguage, RECORDING_FOLDER } from './transcript.pure.ts';
+import { RECORDING_FOLDER } from './transcript.pure.ts';
 import { parseYoutubeFile, serializeYoutubeFile, withChapterBlock, youtubeFileName } from './youtube-file.pure.ts';
 
-const ROOT = path.resolve(import.meta.dirname, '../..');
+const { input, language: requested } = commandArgs(
+  'npm run youtube:chapters -- <episode folder | page url | video id> [--lang en|de]',
+);
 
-function fail(message: string): never {
-  console.error(message);
-  process.exit(1);
-}
-
-const args = process.argv.slice(2);
-const langAt = args.indexOf('--lang');
-const language = parseSpokenLanguage(langAt === -1 ? 'de' : (args[langAt + 1] ?? ''));
-const input = args.find((arg, index) => !arg.startsWith('--') && (langAt === -1 || index !== langAt + 1));
-if (!input || !language)
-  fail('usage: npm run youtube:chapters -- <episode folder | page url | video id> [--lang en|de]');
-
-const resolution = resolveEpisode(input, await loadEpisodeEntries(ROOT));
-if (!resolution.ok) fail(resolution.reason);
-const dir = path.join(ROOT, EPISODES_DIR, resolution.episode.folder);
+const { dir } = await resolvedEpisode(input);
+const language = recordingLanguage(requested, dir);
 const recording = readRecordingFolder(dir);
 const startsText = recording[`slide-starts.${language}.json`];
 if (startsText === undefined) fail(`no slide-starts.${language}.json; run /episode-match-slide-starts first`);
 
 const composition = compositionOf(ROOT, dir);
 const { starts } = JSON.parse(startsText) as { starts: Record<string, number> };
-const chapters = deriveChapters({
+const source = {
   ...(composition.titleSlide === undefined ? {} : { titleSlide: composition.titleSlide }),
   sections: composition.sections,
   titles: composition.titles[language] ?? {},
   starts,
-});
+};
+const unstarted = unstartedMessage(source);
+if (unstarted) fail(unstarted);
+const chapters = deriveChapters(source);
 const block = chapterBlock(chapters);
 
 const name = youtubeFileName(language);

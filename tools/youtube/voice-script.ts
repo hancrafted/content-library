@@ -4,34 +4,20 @@
 // authored, the transcript text of the window, and the Voice script's reading time; then the Episode's total.
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { EPISODES_DIR } from '../../src/episodes/lib/episode-folders.ts';
-import { loadEpisodeEntries } from './episode-index.ts';
-import { resolveEpisode } from './episode-resolver.pure.ts';
+import { commandArgs, fail, recordingLanguage, resolvedEpisode, REPO_ROOT as ROOT } from './command.ts';
 import { readRecordingFolder, slideI18nFile, slideRows } from './recording-disk.ts';
-import { parseSpokenLanguage } from './transcript.pure.ts';
 import { cutBySlide, parseCues, readingMinutes, spokenWords } from './voice-script.pure.ts';
-
-const ROOT = path.resolve(import.meta.dirname, '../..');
-
-function fail(message: string): never {
-  console.error(message);
-  process.exit(1);
-}
 
 interface Messages {
   voiceScript?: { segments?: Record<string, { title?: string; script?: string; bridge?: string }> } | null;
 }
 
-const args = process.argv.slice(2);
-const langAt = args.indexOf('--lang');
-const language = parseSpokenLanguage(langAt === -1 ? 'de' : (args[langAt + 1] ?? ''));
-const input = args.find((arg, index) => !arg.startsWith('--') && (langAt === -1 || index !== langAt + 1));
-if (!input || !language)
-  fail('usage: npm run youtube:voice-script -- <episode folder | page url | video id> [--lang en|de]');
+const { input, language: requested } = commandArgs(
+  'npm run youtube:voice-script -- <episode folder | page url | video id> [--lang en|de]',
+);
 
-const resolution = resolveEpisode(input, await loadEpisodeEntries(ROOT));
-if (!resolution.ok) fail(resolution.reason);
-const dir = path.join(ROOT, EPISODES_DIR, resolution.episode.folder);
+const { episode, dir } = await resolvedEpisode(input);
+const language = recordingLanguage(requested, dir);
 const recording = readRecordingFolder(dir);
 const transcript = recording[`transcript.${language}.vtt`];
 const startsFile = recording[`slide-starts.${language}.json`];
@@ -51,7 +37,7 @@ const speech = cutBySlide(
 const clock = (seconds: number): string =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 const scripts: string[] = [];
-console.log(`# ${resolution.episode.id} (${language})`);
+console.log(`# ${episode.id} (${language})`);
 for (const { slug, section, title } of rows) {
   const found = slideI18nFile({ root: ROOT, episodeDir: dir }, slug, language);
   const messages = found === undefined ? {} : (JSON.parse(readFileSync(found.file, 'utf8')) as Messages);
