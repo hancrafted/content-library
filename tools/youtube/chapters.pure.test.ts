@@ -5,6 +5,7 @@ import {
   formatTimestamp,
   parseChapterLines,
   parseTimestamp,
+  tooFewChaptersMessage,
   unstartedMessage,
   type ChapterSource,
 } from './chapters.pure.ts';
@@ -54,6 +55,44 @@ describe('success cases', () => {
     const parsed = parseChapterLines(lines);
     // ASSERT
     expect(parsed).toEqual({ chapters, bad: [] });
+  });
+});
+
+describe('extra YouTube chapters', () => {
+  it('merges an extra chapter into the Section chapters in time order', () => {
+    // ARRANGE
+    const source = { ...SOURCE, extraChapters: [{ start: 90, title: 'Zwischenstopp' }] };
+    const expected = [
+      { start: 0, title: 'Einstieg' },
+      { start: 90, title: 'Zwischenstopp' },
+      { start: 125, title: 'Mitte' },
+      { start: 3725, title: 'Schluss' },
+    ];
+    // ACT
+    const chapters = deriveChapters(source);
+    // ASSERT
+    expect(chapters).toEqual(expected);
+  });
+
+  it('warns when fewer than 3 YouTube chapters result', () => {
+    // ARRANGE
+    const chapters = [
+      { start: 0, title: 'Eins' },
+      { start: 60, title: 'Zwei' },
+    ];
+    // ACT
+    const message = tooFewChaptersMessage(chapters);
+    // ASSERT
+    expect(message).toMatch(/at least 3 YouTube chapters, has 2/);
+  });
+
+  it('has no warning from 3 YouTube chapters on', () => {
+    // ARRANGE
+    const chapters = deriveChapters(SOURCE);
+    // ACT
+    const message = tooFewChaptersMessage(chapters);
+    // ASSERT
+    expect(message).toBeUndefined();
   });
 });
 

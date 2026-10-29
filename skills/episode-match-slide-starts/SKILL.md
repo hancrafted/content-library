@@ -30,4 +30,4 @@ Han reads each Slide's title aloud as he starts the Slide. This skill finds that
 
 ## Boundaries
 
-Section starts are derived from each Section's first Slide, never written. The transcript stays as fetched.
+Section starts are derived from each Section's first Slide, never written. `extraChapters` is Han's to add at the chapters step, not this skill's. The transcript stays as fetched.
