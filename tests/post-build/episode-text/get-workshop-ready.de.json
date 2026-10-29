@@ -1,7 +1,7 @@
 {
   "title": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop · hancrafted",
   "description": "Eine Schritt-für-Schritt-Anleitung für Einsteiger auf Mac, Windows oder Linux: Terminal öffnen, KI-Agent installieren und anmelden, ihn im Starter-Ordner starten und den ersten Skill ausführen, damit der Workshop sofort beginnen kann.",
-  "toc": "Inhalt Wird geladen noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg",
+  "toc": "Inhalt Wird geladen noch 3 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Die Matt-Pocock-Skills selbst einrichten Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 3 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Die Matt-Pocock-Skills selbst einrichten",
   "slides": [
     {
       "id": "top",
@@ -20,6 +20,10 @@
     {
       "id": "the-technical-route",
       "text": "Der technische Weg Optional: dieselbe Kette, von Hand gebaut. Schritt 8 $ npx skills@latest add mattpocock/skills"
+    },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "Der technische Weg (1/1) Seite 1 von 1 Die Matt-Pocock-Skills selbst einrichten Fünf Zeilen in einem eigenen, leeren Ordner. Lass das Starter-Zip weg: Es würde die Matt-Pocock-Skills ein zweites Mal mitbringen. Schritt 8 von 8 1 Node.js installieren Darauf läuft der Skill-Installer. Nimm die Version, die die Seite empfiehlt. Node.js · offizielle Download-Seite (öffnet in einem neuen Tab) 2 Die Haupt-Skills von Matt Pocock hinzufügen In Deinem Terminal. Wenn es fragt, welche Skills Du willst, lass die Hauptgruppe angehakt und Other leer. $ npx skills@latest add mattpocock/skills ? Which skills do you want to install? mattpocock-skills Hauptgruppe, mit dem Setup-Skill Other misc · in-progress, nicht nötig 3 Seinen Setup-Skill in Deinem KI-Agenten ausführen Er stellt ein paar Fragen, eine nach der anderen. Gib diese vier Antworten. ✻ > /setup-matt-pocock-skills 1 · Issue-Tracker Lokales Markdown, kein GitHub 2 · Domain-Doku Eine einzige GLOSSARY.md 3 · Triage-Labels Die Vorgaben behalten 4 · Welche Datei AGENTS.md , dazu eine CLAUDE.md mit @AGENTS.md 4 Unseren Check und den hancrafted-Eintrag hinzufügen Die einzigen zwei Teile von uns. Entpack den Skill in den Skills-Ordner, den der Installer angelegt hat; füg den Eintrag in GLOSSARY.md ein oder leg die Datei damit an. check-workshop-readiness · nur der Skill-Ordner kleines Zip GLOSSARY.md · diesen Eintrag hinzufügen **hancrafted**: Han's workshop homepage, https://hancrafted.net 5 Denselben Check wie in Schritt 7 ausführen Er prüft, ob die Matt-Pocock-Skills da sind. Erlaube seinen Befehl, und die hancrafted-Homepage öffnet sich. ✻ > /check-workshop-readiness hancrafted.net hancrafted Die Homepage öffnet sich Hängst Du fest? Füg den Fehler ein, kopier den Prompt, frag das kostenlose ChatGPT. Dein Fehler Prompt kopieren Der Prompt ergänzt Mac Claude Code Schritt 8: Die Matt-Pocock-Skills selbst einrichten"
     }
   ],
   "notes": [
@@ -31,7 +35,11 @@
     { "id": "your-ai-agent", "text": "Dein KI-Agent Keine Sprechernotizen für diese Folie." },
     { "id": "your-folder", "text": "Dein Ordner Keine Sprechernotizen für diese Folie." },
     { "id": "your-first-skill", "text": "Dein erster Skill Keine Sprechernotizen für diese Folie." },
-    { "id": "the-technical-route", "text": "Der technische Weg Keine Sprechernotizen für diese Folie." }
+    { "id": "the-technical-route", "text": "Der technische Weg Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "Die Matt-Pocock-Skills selbst einrichten Keine Sprechernotizen für diese Folie."
+    }
   ],
   "script": [
     {
@@ -57,6 +65,10 @@
     {
       "id": "the-technical-route",
       "text": "Der technische Weg 0:00 – 0:19 Für alle, die selbst bauen Dieser letzte Abschnitt ist für alle, die selbst bauen, und er ist optional. Wenn Du Dich im Terminal wohlfühlst, erreichst Du dasselbe ohne den Starter-Ordner, indem Du die Teile selbst installierst. Alle anderen können bei der Homepage aufhören."
+    },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "Die Matt-Pocock-Skills selbst einrichten 0:00 – 0:35 Dieselbe Kette, von Hand gebaut Was der Starter-Ordner für Dich erledigt hat, sind im Kern vier kurze Schritte. Du installierst Node.js von der offiziellen Seite, fügst die Skills von Matt Pocock hinzu, führst seinen Setup-Skill aus, damit alles lokal bleibt und Du kein GitHub-Konto brauchst, und dann startest Du den Check. Die genauen Zeilen stehen auf der Seite, denn ich möchte lieber, dass Du sie von dort kopierst, als sie von mir zu hören. 0:35 – 0:55 Derselbe Beweis Der Beweis ist derselbe wie vorher. Du führst check-workshop-readiness aus, und die hancrafted-Homepage öffnet sich. Eins solltest Du wissen: Dieser Skill kommt mit dem Starter-Ordner, nicht mit den Skills von Matt Pocock, deshalb steht auf der Seite, woher Du ihn bekommst."
     }
   ]
 }

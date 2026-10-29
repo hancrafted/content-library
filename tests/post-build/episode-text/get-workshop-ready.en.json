@@ -1,7 +1,7 @@
 {
   "title": "Get workshop-ready: your AI agent on your laptop · hancrafted",
   "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
-  "toc": "Contents Loading 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
+  "toc": "Contents Loading 3 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Set up the Matt Pocock skills yourself Open contents : Contents · Loading Contents 3 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Set up the Matt Pocock skills yourself",
   "slides": [
     {
       "id": "top",
@@ -20,6 +20,10 @@
     {
       "id": "the-technical-route",
       "text": "The technical route Optional: the same chain, built by hand. Step 8 $ npx skills@latest add mattpocock/skills"
+    },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "The technical route (1/1) Page 1 of 1 Set up the Matt Pocock skills yourself Five lines in an empty folder of your own. Skip the starter zip: it would bring the Matt Pocock skills a second time. Step 8 of 8 1 Install Node.js The skills installer runs on it. Take the version the page recommends. Node.js · official download page (opens in a new tab) 2 Add the main Matt Pocock skills In your terminal. When it asks which skills, keep the main group and leave Other unticked. $ npx skills@latest add mattpocock/skills ? Which skills do you want to install? mattpocock-skills main group, with the setup skill Other misc · in-progress, not needed 3 Run his setup skill in your AI agent It asks a few questions, one at a time. Give these four answers. ✻ > /setup-matt-pocock-skills 1 · Issue tracker Local markdown, no GitHub 2 · Domain docs A single GLOSSARY.md 3 · Triage labels Keep the defaults 4 · Which file AGENTS.md , plus a CLAUDE.md holding @AGENTS.md 4 Add our check and the hancrafted entry The only two pieces from us. Unzip the skill into the skills folder the installer made; paste the entry into GLOSSARY.md , or create the file with it. check-workshop-readiness · skill folder only small zip GLOSSARY.md · add this entry **hancrafted**: Han's workshop homepage, https://hancrafted.net 5 Run the same check as step 7 It confirms the Matt Pocock skills are in place. Approve its command, and the hancrafted homepage opens. ✻ > /check-workshop-readiness hancrafted.net hancrafted The homepage opens Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 8: Set up the Matt Pocock skills yourself"
     }
   ],
   "notes": [
@@ -31,7 +35,11 @@
     { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
     { "id": "your-folder", "text": "Your folder No speaker notes for this Slide." },
     { "id": "your-first-skill", "text": "Your first skill No speaker notes for this Slide." },
-    { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." }
+    { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "Set up the Matt Pocock skills yourself No speaker notes for this Slide."
+    }
   ],
   "script": [
     {
@@ -57,6 +65,10 @@
     {
       "id": "the-technical-route",
       "text": "The technical route 0:00 – 0:18 For people who build This last Section is for people who build, and it is optional. If you are comfortable with a terminal, you can get the same result without the starter folder by installing the pieces yourself. Everyone else can stop at the homepage."
+    },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "Set up the Matt Pocock skills yourself 0:00 – 0:27 Same chain, built by hand What the starter folder did for you comes down to four short steps. You install Node.js from its official page, add the Matt Pocock skills, run his setup skill so everything stays local without a GitHub account, and then run the check. The exact lines are on the page, because I would rather you copy them from there than hear them from me. 0:27 – 0:45 Same proof The proof is the same as before. You run check-workshop-readiness, and the hancrafted homepage opens. One thing to know: that skill comes with the starter folder, not with the Matt Pocock skills, so the page tells you where to take it from."
     }
   ]
 }
