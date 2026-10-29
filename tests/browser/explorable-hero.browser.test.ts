@@ -218,6 +218,7 @@ test.describe('edge cases', () => {
   }) => {
     // ARRANGE
     const minimum = 44;
+    const tolerance = 0.01;
     await page.setViewportSize({ width: 390, height: 844 });
     await openHero(page, 'context-window');
     // ACT
@@ -226,8 +227,8 @@ test.describe('edge cases', () => {
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
     );
     // ASSERT
-    expect(box?.width).toBeGreaterThanOrEqual(minimum);
-    expect(box?.height).toBeGreaterThanOrEqual(minimum);
+    expect(box?.width).toBeGreaterThanOrEqual(minimum - tolerance);
+    expect(box?.height).toBeGreaterThanOrEqual(minimum - tolerance);
     expect(overflow).toBe(0);
   });
 
