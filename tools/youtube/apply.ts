@@ -43,6 +43,11 @@ const snippet = await client.readSnippet(videoId);
 const plan = planApply(file, snippet.description, { force });
 if (plan.description.action === 'refuse')
   fail(`${episode.id} (${language}), video ${videoId}: ${plan.description.reason}`);
+if (plan.description.action === 'update' && file.appliedFingerprint === undefined) {
+  console.warn(
+    'warning: no applied fingerprint stored, so a Studio edit cannot be told apart; run `npm run youtube:pull` first',
+  );
+}
 
 console.log(`${episode.id} (${language}), video ${videoId}${dryRun ? ', dry run: nothing is written' : ''}`);
 console.log(`description: ${plan.description.action}`);
@@ -52,8 +57,10 @@ if (plan.comment.action === 'post') console.log(`--- comment ---\n${plan.comment
 if (dryRun) process.exit(0);
 
 if (plan.description.action === 'update') await client.updateDescription(videoId, snippet, plan.description.text);
-const sent = plan.description.action === 'update' ? plan.description.text : snippet.description;
-let next = { ...file, appliedDescription: descriptionFingerprint(sent) };
+// Fingerprint what YouTube stores, read back after the write: YouTube may normalise the text it was sent.
+const shown =
+  plan.description.action === 'update' ? (await client.readSnippet(videoId)).description : snippet.description;
+let next = { ...file, appliedFingerprint: descriptionFingerprint(shown) };
 if (plan.comment.action === 'post') {
   const commentId = await client.postComment(videoId, plan.comment.text);
   console.log(`posted comment ${commentId}`);

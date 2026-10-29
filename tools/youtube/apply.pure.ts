@@ -33,8 +33,8 @@ const EDITED_ON_YOUTUBE =
 function descriptionPlan(file: YoutubeFile, remote: string, force: boolean): DescriptionPlan {
   const local = normalized(publishedDescription(file));
   if (local === normalized(remote)) return { action: 'none' };
-  const { appliedDescription } = file;
-  const edited = appliedDescription !== undefined && descriptionFingerprint(remote) !== appliedDescription;
+  const { appliedFingerprint } = file;
+  const edited = appliedFingerprint !== undefined && descriptionFingerprint(remote) !== appliedFingerprint;
   return edited && !force ? { action: 'refuse', reason: EDITED_ON_YOUTUBE } : { action: 'update', text: local };
 }
 

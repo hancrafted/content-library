@@ -48,7 +48,8 @@ function wordDiff(label: string, part: PartComparison, verdict: string): void {
       encoding: 'utf8',
     });
     console.log(`${label}: ${verdict} ([-repo-] {+YouTube+})`);
-    console.log(diff.stdout.split('\n').slice(5).join('\n'));
+    const lines = diff.stdout.split('\n');
+    console.log(lines.slice(lines.findIndex((line) => line.startsWith('@@')) + 1).join('\n'));
   } finally {
     rmSync(scratch, { recursive: true, force: true });
   }
@@ -63,4 +64,4 @@ const VERDICTS = {
 } as const;
 wordDiff('description', comparison.description, VERDICTS[comparison.descriptionChange]);
 if (file.commentId !== '' && comment === undefined) console.log(`comment: ${file.commentId} not found on YouTube`);
-else wordDiff('comment', comparison.comment, 'edited on YouTube: input for Learn');
+else wordDiff('comment', comparison.comment, 'differs from the repo; ask Han whether he edited it on YouTube');

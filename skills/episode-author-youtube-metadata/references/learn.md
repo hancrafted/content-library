@@ -16,9 +16,14 @@ _Done when_ every changed line is listed as added, cut, reworded or reordered.
 
 ### 2. Take the edit in
 
-Write Han's edits into `recording/youtube.<lang>.md`, so the repo shows what YouTube shows and the next apply keeps them. Chapter lines are the exception: they come from the Slide starts, so an edited chapter goes into `recording/slide-starts.<lang>.json` (a start, or `extraChapters`), then `npm run youtube:chapters -- <episode>`. Then run `npm run youtube:recording -- <episode>`.
+Write Han's edits into `recording/youtube.<lang>.md`, so the repo shows what YouTube shows and the next apply keeps them. Chapter lines are the exception, because `youtube:chapters` regenerates them:
 
-_Done when_ `npm run youtube:pull -- <episode>` reports the description the same on both sides, and `youtube:recording` reports no violations.
+- A moved or added chapter goes into `recording/slide-starts.<lang>.json` (a start, or `extraChapters`).
+- A renamed chapter is a Section's first Slide title: propose renaming that Slide's title to Han. An `extraChapters` title is edited in place. A title Han wants on YouTube only stays a difference, named in the PR.
+
+Then run `npm run youtube:chapters -- <episode>` and `npm run youtube:recording -- <episode>`.
+
+_Done when_ `npm run youtube:pull -- <episode>` reports no difference beyond the ones Han chose to keep, and `youtube:recording` reports no violations.
 
 ### 3. Propose rules
 
@@ -28,6 +33,6 @@ _Done when_ Han has answered every proposal.
 
 ### 4. Ship
 
-From a branch `chore/youtube-copy-<slug>`, commit the Recording folder and the template change with `/commit`, then open a PR to `main` with `/pr`. After the merge, `npm run youtube:apply -- <episode>` finds nothing to change and stores the new fingerprint.
+From a branch `chore/youtube-copy-<slug>`, commit the Recording folder and the template change with `/commit`, then open a PR to `main` with `/pr`. After the merge, run `npm run youtube:apply -- <episode>` from `main`: it stores the new fingerprint, which lands with `/commit` and `/pr` like the comment ID. Until it lands, the guard on `main` is off.
 
 _Done when_ the PR is open; give the user its URL.

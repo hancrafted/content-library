@@ -4,7 +4,7 @@
 //   ## Description        the video description; holds the generated block between the chapter markers
 //   ## Pinned comment     the comment text
 //   ## Comment ID         the posted comment's ID, empty until apply posted one
-//   ## Applied description  optional: the fingerprint of the description apply last sent, so it can see Studio edits
+//   ## Applied fingerprint  optional: the fingerprint of the description apply last sent, so it can see Studio edits
 //
 // The markers are `<!-- chapters:start -->` / `<!-- chapters:end -->`; they are for the repo and never reach YouTube:
 // send `publishedDescription(file)`, not `file.description`.
@@ -17,11 +17,11 @@ export interface YoutubeFile {
   /** The posted comment's ID; '' until posted. */
   readonly commentId: string;
   /** The fingerprint of the description `youtube:apply` last sent; absent until it sent or confirmed one. */
-  readonly appliedDescription?: string;
+  readonly appliedFingerprint?: string;
 }
 
 const HEADINGS = ['## Description', '## Pinned comment', '## Comment ID'] as const;
-const APPLIED_HEADING = '## Applied description';
+const APPLIED_HEADING = '## Applied fingerprint';
 
 /** The `youtube.<lang>.md` file names; the language is the capture. */
 export const YOUTUBE_FILE = /^youtube\.([a-z]{2})\.md$/;
@@ -39,7 +39,7 @@ export function serializeYoutubeFile(file: YoutubeFile): string {
     return body === '' ? `${heading}\n` : `${heading}\n\n${body}\n`;
   };
   const sections = HEADINGS.map((heading, index) => section(heading, parts[index] ?? ''));
-  if (file.appliedDescription) sections.push(section(APPLIED_HEADING, file.appliedDescription));
+  if (file.appliedFingerprint) sections.push(section(APPLIED_HEADING, file.appliedFingerprint));
   return sections.join('\n');
 }
 
@@ -64,7 +64,7 @@ export function parseYoutubeFile(text: string): { value: YoutubeFile } | { probl
       .join('\n')
       .trim();
   const file = { description: body(0), pinnedComment: body(1), commentId: body(2) };
-  return { value: applied === '' ? file : { ...file, appliedDescription: applied } };
+  return { value: applied === '' ? file : { ...file, appliedFingerprint: applied } };
 }
 
 /** The chapter lines between the markers of a description, or undefined when it has no complete block. */

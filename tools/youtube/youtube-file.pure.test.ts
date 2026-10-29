@@ -106,7 +106,7 @@ describe('edge cases', () => {
 describe('applied fingerprint', () => {
   it('round-trips the fingerprint of the last applied description', () => {
     // ARRANGE
-    const file: YoutubeFile = { ...FILE, commentId: 'Ugx1', appliedDescription: 'a1b2c3d4e5f60718' };
+    const file: YoutubeFile = { ...FILE, commentId: 'Ugx1', appliedFingerprint: 'a1b2c3d4e5f60718' };
     // ACT
     const parsed = parseYoutubeFile(serializeYoutubeFile(file));
     // ASSERT
@@ -117,7 +117,7 @@ describe('applied fingerprint', () => {
     // ARRANGE
     const text = serializeYoutubeFile(FILE);
     // ACT
-    const hasHeading = text.includes('## Applied description');
+    const hasHeading = text.includes('## Applied fingerprint');
     // ASSERT
     expect(hasHeading).toBe(false);
   });

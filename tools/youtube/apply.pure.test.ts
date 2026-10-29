@@ -105,7 +105,7 @@ describe('YouTube edits since the last apply', () => {
 
   it('refuses to overwrite a description edited on YouTube since the last apply', () => {
     // ARRANGE
-    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    const stored = file({ appliedFingerprint: descriptionFingerprint(lastSent) });
     // ACT
     const plan = planApply(stored, 'old description, edited in Studio');
     // ASSERT
@@ -114,7 +114,7 @@ describe('YouTube edits since the last apply', () => {
 
   it('overwrites the edit when forced', () => {
     // ARRANGE
-    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    const stored = file({ appliedFingerprint: descriptionFingerprint(lastSent) });
     // ACT
     const plan = planApply(stored, 'old description, edited in Studio', { force: true });
     // ASSERT
@@ -123,7 +123,7 @@ describe('YouTube edits since the last apply', () => {
 
   it('updates when YouTube still shows what apply last sent', () => {
     // ARRANGE
-    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    const stored = file({ appliedFingerprint: descriptionFingerprint(lastSent) });
     // ACT
     const plan = planApply(stored, `${lastSent}\r\n`);
     // ASSERT
@@ -132,7 +132,7 @@ describe('YouTube edits since the last apply', () => {
 
   it('writes nothing when the repo already took the YouTube edit in', () => {
     // ARRANGE
-    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    const stored = file({ appliedFingerprint: descriptionFingerprint(lastSent) });
     // ACT
     const plan = planApply(stored, PUBLISHED);
     // ASSERT

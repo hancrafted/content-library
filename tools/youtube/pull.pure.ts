@@ -31,8 +31,8 @@ export interface PullComparison {
 
 function descriptionChange(file: YoutubeFile, part: PartComparison): DescriptionChange {
   if (!part.edited) return 'none';
-  if (file.appliedDescription === undefined) return 'unknown';
-  return descriptionFingerprint(part.youtube) === file.appliedDescription ? 'repo' : 'youtube';
+  if (file.appliedFingerprint === undefined) return 'unknown';
+  return descriptionFingerprint(part.youtube) === file.appliedFingerprint ? 'repo' : 'youtube';
 }
 
 function compare(repo: string, youtube: string | undefined): PartComparison {

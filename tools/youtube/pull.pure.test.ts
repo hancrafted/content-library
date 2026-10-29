@@ -49,7 +49,7 @@ describe('who changed the description', () => {
 
   it('calls it a YouTube edit when YouTube no longer shows what apply last sent', () => {
     // ARRANGE
-    const file = { ...FILE, appliedDescription: descriptionFingerprint(sent) };
+    const file = { ...FILE, appliedFingerprint: descriptionFingerprint(sent) };
     // ACT
     const result = comparePull(file, { description: 'Hook aus Studio\n\n00:00 Intro', comment: 'Kommentar' });
     // ASSERT
@@ -58,7 +58,7 @@ describe('who changed the description', () => {
 
   it('calls it a repo change not yet applied when YouTube still shows what apply last sent', () => {
     // ARRANGE
-    const file = { ...FILE, description: 'Neuer Hook', appliedDescription: descriptionFingerprint(sent) };
+    const file = { ...FILE, description: 'Neuer Hook', appliedFingerprint: descriptionFingerprint(sent) };
     // ACT
     const result = comparePull(file, { description: sent, comment: 'Kommentar' });
     // ASSERT
