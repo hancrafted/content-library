@@ -1,6 +1,7 @@
 import type { LoadedEpisode } from './episode-refusals';
 import type { Event } from './schemas/event.schema';
 import type { ExplorablePage } from './schemas/explorable-page.schema';
+import type { Guide } from './schemas/guide.schema';
 import type { Playlist } from './schemas/playlist.schema';
 import type { Template } from './schemas/template.schema';
 import type { ServedEvent } from './served-event';
@@ -31,6 +32,9 @@ export interface ContentInput {
   readonly explorablePages: readonly unknown[];
   readonly explorablePageCompositions: readonly string[];
   readonly explorables: readonly string[];
+  /** The Guide records and the slugs of the composition folders they are checked against: both are always given. */
+  readonly guides: readonly unknown[];
+  readonly guideCompositions: readonly string[];
   /** The Featured slots by Episode id, checked against the Episodes when given (`./featured.ts`). */
   readonly featured?: readonly string[];
 }
@@ -45,6 +49,8 @@ export interface ParsedContent {
   readonly explorablePages: readonly ExplorablePage[];
   readonly explorablePageCompositions: readonly string[];
   readonly explorables: readonly string[];
+  readonly guides: readonly Guide[];
+  readonly guideCompositions: readonly string[];
   readonly featured?: readonly string[];
 }
 
@@ -55,6 +61,7 @@ export interface Content {
   readonly playlists: readonly Playlist[];
   readonly templates: readonly Template[];
   readonly explorablePages: readonly ExplorablePage[];
+  readonly guides: readonly Guide[];
 }
 
-export type Kind = 'Episode' | 'Event' | 'Playlist' | 'Template' | 'Explorable page';
+export type Kind = 'Episode' | 'Event' | 'Playlist' | 'Template' | 'Explorable page' | 'Guide';

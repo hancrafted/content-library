@@ -7,6 +7,8 @@ status: accepted
 
 Amended by #404 (terminology and paths): "Explorable explanation" is now **Explorable**, and the `EXPLORABLE_EXPLANATION` entity of the model is the Explorable. The old Resource record kind is now the **Template** (types `episode-template` and `master-slide`), and **Resource** is the umbrella for every public, listed item (GLOSSARY). In decision 12, `episodes/resources/<slug>/` is now `episodes/templates/<slug>/` for Templates and `episodes/explorable-pages/<slug>/` for Explorable pages, whose record kind is its own. Read the body below with those terms and paths.
 
+Amended by #450: the **Guide** is a record kind of its own, `GUIDE` on the `%% store:` line (`src/content-store/schemas/guide.schema.ts`, records in `src/content-store/guides/<slug>.ts`): a slug, Tags, a visibility and an optional `youtube` with at most one id per locale, composed from `episodes/guides/<slug>/`, served at `/guides/<slug>/` beside the overview `/guides/`, public and indexed. Like a Template it is no Episode (decision 12's reasons), and the store refuses a record without a composition folder and the reverse. Why a Guide is neither a Template nor an Episode: `docs/adr/0019-resources-overview.md`.
+
 The site described a workshop as a Workshop: one record listing public Episode slugs. It could not hold what was presented at an Event, so an Event recording had nowhere to live; nothing stopped a page meant for attendees from reaching the sitemap; and the four authoring pages sat in the Episode registry, indexed, as if a viewer watched them. This record fixes the content model for horizons 1 and 2 of `docs/steering/product-vision.md`, without the evidence layer, and the delivery contract the Tuesday epic implements.
 
 Settled live with Han on 2026-10-25, in ticket _Delivery contract: Event, Playlist, routes and visibility_ and a grill of this record (map _Content data model and product vision_). The enforceable part lives in the Archgate ADR FE-013 _Content store_; what each unit is for, per Audience, lives in `docs/steering/product-requirements.md`.
@@ -17,7 +19,7 @@ Entities and relationships only, never fields: a renamed property never changes 
 
 ```mermaid
 erDiagram
-    %% store: EVENT, PLAYLIST, EPISODE, TEMPLATE, EXPLORABLE_PAGE
+    %% store: EVENT, PLAYLIST, EPISODE, TEMPLATE, EXPLORABLE_PAGE, GUIDE
     %% planned: SHARED_SLIDE
 
     AUDIENCE ||--o{ EVENT : "is targeted by"
@@ -35,6 +37,8 @@ erDiagram
     TEMPLATE ||--|{ SLIDE : "composes, in order"
     EXPLORABLE_PAGE }o--|{ TAG : "carries (first = lead Tag)"
     EXPLORABLE_PAGE ||--|{ SLIDE : "composes, in order"
+    GUIDE }o--|{ TAG : "carries (first = lead Tag)"
+    GUIDE ||--|{ SLIDE : "composes, in order"
 ```
 
 A Playlist that no Event presents is a public Playlist (horizon 2); the diagram draws one Playlist entity for both kinds.
@@ -76,6 +80,8 @@ Out of the model: Concept, Research question and Source (the evidence layer, its
 | `/resources/`                                   | The Resources: Episode templates, Master slides.                              |
 | `/explorables/`                                 | The Explorable pages.                                                         |
 | `/explorables/<slug>/`                          | One Explorable page, its slug its primary Explorable's folder slug.           |
+| `/guides/`                                      | The Guides.                                                                   |
+| `/guides/<slug>/`                               | One Guide.                                                                    |
 | `/<type plural>/<resource-slug>/`               | One Resource, by its type's plural: `/episode-templates/`, `/master-slides/`. |
 
 The Event page sits in the same container as the overview pages and is two columns from `lg`, no longer one. The main column holds the title, description, past notice, Start button, Playlist and, last, up to three related Episodes: public, published Episodes sharing a Tag with the Event, without the originals of the Playlist's copies, newest release first, and no section when none remain. The side panel holds the image, the facts line stacked, the Organizers, a link to the `listing` and the `references`. Below `lg` everything stacks, the image after the title. The Event page shows no reading time.

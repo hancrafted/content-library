@@ -64,6 +64,8 @@ const SOUND = {
   explorablePages: [],
   explorablePageCompositions: [],
   explorables: [],
+  guides: [],
+  guideCompositions: [],
 };
 
 describe('success cases', () => {
@@ -77,6 +79,7 @@ describe('success cases', () => {
       playlists: [{ ...PLAYLIST, episodes: [{ episode: 'alpha' }] }],
       templates: [],
       explorablePages: [],
+      guides: [],
     };
     // ACT
     const content = loadContent(SOUND);
@@ -457,6 +460,8 @@ describe('failure cases', () => {
       explorablePages: [],
       explorablePageCompositions: [],
       explorables: [],
+      guides: [],
+      guideCompositions: [],
     };
     const expected =
       'Playlist curated: episodes lists the unlisted Episode "beta", but no Event presents this public Playlist';
@@ -609,6 +614,8 @@ describe('failure cases', () => {
       explorablePages: [],
       explorablePageCompositions: [],
       explorables: [],
+      guides: [],
+      guideCompositions: [],
     };
     const expected = `Playlist cyberforum: episodes lists "${COPY_ID}", a copy Event ${AXEL} owns, but Event 2026-10-28-cyberforum presents this Playlist`;
     // ACT
@@ -796,6 +803,46 @@ describe('failure cases', () => {
     expect(load).toThrow('Explorable page context-window: youtube.en');
   });
 
+  it('refuses a Guide without a composition folder, naming the Guide', () => {
+    // ARRANGE
+    const input = {
+      ...SOUND,
+      guides: [{ slug: 'get-workshop-ready', tags: ['workflow'], visibility: 'public' }],
+      guideCompositions: [],
+    };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(
+      'Guide get-workshop-ready: no composition folder src/episodes/guides/get-workshop-ready/ holds its Slides',
+    );
+  });
+
+  it('refuses a Guide composition folder that has no Guide record', () => {
+    // ARRANGE
+    const input = { ...SOUND, guides: [], guideCompositions: ['get-workshop-ready'] };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow(
+      'Guide get-workshop-ready: the composition folder src/episodes/guides/get-workshop-ready/ has no record src/content-store/guides/get-workshop-ready.ts',
+    );
+  });
+
+  it('refuses a Guide without a visibility or with a YouTube id that is no id, naming the Guide', () => {
+    // ARRANGE
+    const input = {
+      ...SOUND,
+      guides: [{ slug: 'get-workshop-ready', tags: ['workflow'], youtube: { en: 'nope' } }],
+      guideCompositions: ['get-workshop-ready'],
+    };
+    // ACT
+    const load = () => loadContent(input);
+    // ASSERT
+    expect(load).toThrow('Guide get-workshop-ready: visibility');
+    expect(load).toThrow('Guide get-workshop-ready: youtube.en');
+  });
+
   it('refuses a duplicate Template slug', () => {
     // ARRANGE
     const input = { ...TEMPLATE_RECORDS, templates: [TEMPLATE, TEMPLATE], templateCompositions: ['grids'] };
@@ -822,6 +869,8 @@ describe('edge cases', () => {
       explorablePages: [],
       explorablePageCompositions: [],
       explorables: [],
+      guides: [],
+      guideCompositions: [],
     };
     const expected = {
       episodes: [
@@ -854,6 +903,8 @@ describe('edge cases', () => {
       explorablePages: [],
       explorablePageCompositions: [],
       explorables: [],
+      guides: [],
+      guideCompositions: [],
     };
     const expected = [
       {

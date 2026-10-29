@@ -1,4 +1,4 @@
-// `npm run registry` writes the Episode registry from the Episode folders and the Event and Template registries from
+// `npm run registry` writes the Episode registry from the Episode folders and the Event, Template, Explorable page and Guide registries from
 // their record files, formatted as Prettier would. The fast suite fails while a checked-in registry file is stale
 // (registry.test.ts). What each registry holds: episode-registry.pure.ts and event-registry.pure.ts.
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -8,12 +8,14 @@ import { pageFolders } from '../../src/episodes/lib/episode-folders.ts';
 import { episodeRegistryFiles, type EpisodeFolder, type RegistryFile } from './episode-registry.pure.ts';
 import { eventRegistryFiles } from './event-registry.pure.ts';
 import { explorablePageRegistryFile } from './explorable-page-registry.pure.ts';
+import { guideRegistryFile } from './guide-registry.pure.ts';
 import { templateRegistryFile } from './template-registry.pure.ts';
 
 const EVENTS_DIR = 'src/content-store/events';
 const TEMPLATES_DIR = 'src/content-store/templates';
 const EXPLORABLE_PAGES_DIR = 'src/content-store/explorable-pages';
 const EXPLORABLES_DIR = 'src/explorables';
+const GUIDES_DIR = 'src/content-store/guides';
 
 /** Every page folder the one folder walker finds, an Event's copies included, with its entries and `episode.ts` text. */
 function readEpisodeFolders(root: string): EpisodeFolder[] {
@@ -24,8 +26,9 @@ function readEpisodeFolders(root: string): EpisodeFolder[] {
   });
 }
 
-/** Every file directly under a record folder of the content store. */
+/** Every file directly under a record folder of the content store; none while the folder does not exist yet. */
 function readFilesIn(root: string, dir: string): string[] {
+  if (!existsSync(path.join(root, dir))) return [];
   return readdirSync(path.join(root, dir), { withFileTypes: true })
     .filter((entry) => entry.isFile())
     .map(({ name }) => name);
@@ -45,6 +48,7 @@ async function registryFiles(root: string): Promise<RegistryFile[]> {
     ...eventRegistryFiles(readFilesIn(root, EVENTS_DIR)),
     templateRegistryFile(readFilesIn(root, TEMPLATES_DIR)),
     explorablePageRegistryFile(readFilesIn(root, EXPLORABLE_PAGES_DIR), readFoldersIn(root, EXPLORABLES_DIR)),
+    guideRegistryFile(readFilesIn(root, GUIDES_DIR)),
   ];
   return Promise.all(
     files.map(async (file) => {

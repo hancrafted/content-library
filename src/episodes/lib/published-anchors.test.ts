@@ -2,13 +2,16 @@ import {
   episodeRef,
   explorablePageRef,
   folderOf,
+  guideRef,
   templateRef,
   type EpisodeRef,
   type ExplorablePageRef,
+  type GuideRef,
   type TemplateRef,
 } from '@/content-store/catalogue/episode-id.pure';
 import {
   EXPLORABLE_PAGE_SLUGS,
+  GUIDE_SLUGS,
   hasPage,
   TEMPLATE_SLUGS,
   type TemplateSlug,
@@ -30,8 +33,8 @@ import { compositionOf, type ComposedPage } from './registry';
  * Section lists alone, so they cannot differ by locale.
  */
 
-/** A page whose anchors may be bound: an Episode, a Template or an Explorable page. */
-type Page = EpisodeRef | TemplateRef | ExplorablePageRef;
+/** A page whose anchors may be bound: an Episode, a Template, an Explorable page or a Guide. */
+type Page = EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef;
 
 /** The snapshot in the page's folder: an Event's copy's under its Event, a Template's under `templates/`. */
 function snapshotPath(page: Page): string {
@@ -69,14 +72,19 @@ function lostAnchors(walk: { slug: string; published: readonly string[]; produce
 
 /**
  * The pages whose anchors are bound: every Episode with a page but an upcoming one, whose anchors bind when it is
- * published (docs/features/episode-publishing.md), and every Template, which has no status and is always bound.
+ * published (docs/features/episode-publishing.md), and every Template, Explorable page and Guide, which has no status and is always bound.
  */
 function boundPages(
   episodes: readonly { ref: EpisodeRef; status: EpisodeStatus }[],
   tooling: readonly TemplateSlug[],
 ): ComposedPage[] {
   const bound = episodes.flatMap(({ ref, status }) => (status !== 'upcoming' && hasPage(ref) ? [ref] : []));
-  return [...tooling.map(templateRef), ...EXPLORABLE_PAGE_SLUGS.map(explorablePageRef), ...bound];
+  return [
+    ...tooling.map(templateRef),
+    ...EXPLORABLE_PAGE_SLUGS.map(explorablePageRef),
+    ...GUIDE_SLUGS.map(guideRef),
+    ...bound,
+  ];
 }
 
 /** The anchors the walk produces for one page, as the Episode page does: its record's Section lists. */

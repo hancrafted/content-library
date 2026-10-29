@@ -23,9 +23,13 @@
       "title": "Explorables",
       "description": "Hands-on explanations you can play with: one Explorable at a time, with its story and its Video."
     },
+    "guides": {
+      "title": "Guides",
+      "description": "Step-by-step setup guides: one step per page, each ending in a result you can check, so you arrive at a workshop ready to start."
+    },
     "resources": {
       "title": "Resources",
-      "description": "Everything hancrafted offers in one place: Episodes, Events, Explorable pages, Episode templates and Master slides."
+      "description": "Everything hancrafted offers in one place: Episodes, Events, Explorable pages, Guides, Episode templates and Master slides."
     }
   },
   "tags": {

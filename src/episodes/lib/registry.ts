@@ -1,10 +1,11 @@
-import type { EpisodeRef, ExplorablePageRef, TemplateRef } from '@/content-store/catalogue/episode-id.pure';
-import type { EpisodeId, ExplorablePageSlug, TemplateSlug } from '@/content-store/catalogue/record-routes';
+import type { EpisodeRef, ExplorablePageRef, GuideRef, TemplateRef } from '@/content-store/catalogue/episode-id.pure';
+import type { EpisodeId, ExplorablePageSlug, GuideSlug, TemplateSlug } from '@/content-store/catalogue/record-routes';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
-import { EPISODES, EXPLORABLE_PAGES, TEMPLATE_PAGES } from './episode-registry.generated';
+import { EPISODES, EXPLORABLE_PAGES, GUIDES, TEMPLATE_PAGES } from './episode-registry.generated';
 
-/** A page the registry composes, by the ref the store serves it with: an Episode with a page, a Template or an Explorable page. */
-export type ComposedPage = EpisodeRef<EpisodeId> | TemplateRef<TemplateSlug> | ExplorablePageRef<ExplorablePageSlug>;
+/** A page the registry composes, by the ref the store serves it with: an Episode with a page, a Template, an Explorable page or a Guide. */
+export type ComposedPage =
+  EpisodeRef<EpisodeId> | TemplateRef<TemplateSlug> | ExplorablePageRef<ExplorablePageSlug> | GuideRef<GuideSlug>;
 
 /** The generated registry each kind of page is composed in: the one place a new kind of composed page is added; an Episode's two kinds of ref share the Episodes' registry. */
 const REGISTRY_BY_KIND: Readonly<Record<ComposedPage['kind'], Readonly<Record<string, EpisodeComposition>>>> = {
@@ -12,6 +13,7 @@ const REGISTRY_BY_KIND: Readonly<Record<ComposedPage['kind'], Readonly<Record<st
   'event-copy': EPISODES,
   template: TEMPLATE_PAGES,
   'explorable-page': EXPLORABLE_PAGES,
+  guide: GUIDES,
 };
 
 /**

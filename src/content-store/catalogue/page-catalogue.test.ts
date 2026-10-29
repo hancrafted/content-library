@@ -1,4 +1,10 @@
-import { pageLocales, routeOf, templateRoute, type PageRef } from '@/content-store/catalogue/record-routes';
+import {
+  pageLocales,
+  routeOf,
+  templateRoute,
+  type GuideSlug,
+  type PageRef,
+} from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
 import { loadContent } from '../store';
 import { episodeRef, templateRef } from './episode-id.pure';
@@ -58,6 +64,8 @@ const RECORDS = {
   explorablePages: [],
   explorablePageCompositions: [],
   explorables: [],
+  guides: [],
+  guideCompositions: [],
 };
 
 const HIDDEN = { exported: true, inSitemap: false, index: false, listed: false, canonical: 'self' } as const;
@@ -200,6 +208,32 @@ describe('success cases', () => {
     expect(catalogue.explorablePageAt({ slug: 'speech-bubble' })).toBeUndefined();
   });
 
+  it('lists each Guide and the Guides overview, public and indexed, at /guides/<slug>, built in both locales', () => {
+    // ARRANGE
+    const expected = ['/guides', '/guides/get-workshop-ready'];
+    // ACT
+    const catalogue = catalogueOf(loadContent(WITH_GUIDES));
+    const pages = catalogue.pages.filter(({ page }) => page.kind === 'guide' || page.kind === 'guides');
+    const page = catalogue.guideAt({ slug: 'get-workshop-ready' });
+    // ASSERT
+    expect(pages.map(({ page }) => routeOf(page)).sort()).toEqual(expected);
+    expect(pages.every(({ treatment }) => treatment.inSitemap && treatment.index && treatment.exported)).toBe(true);
+    expect(catalogue.guideParams()).toEqual([{ slug: 'get-workshop-ready' }]);
+    expect(page && pageLocales(page)).toEqual(['en', 'de']);
+    expect(catalogue.listedGuides().map(({ page }) => page.guide.slug)).toEqual(['get-workshop-ready']);
+  });
+
+  it('builds an unlisted Guide noindex and keeps it off the Guide lists', () => {
+    // ARRANGE
+    const unlisted = { ...WITH_GUIDES, guides: [{ ...GUIDE, visibility: 'unlisted' }] };
+    // ACT
+    const catalogue = catalogueOf(loadContent(unlisted));
+    const page = catalogue.guideAt({ slug: 'get-workshop-ready' });
+    // ASSERT
+    expect(page && catalogue.treatmentOf(page)).toEqual(HIDDEN);
+    expect(catalogue.listedGuides()).toEqual([]);
+  });
+
   it('lists the five Template pages and the overview, indexed and in the sitemap, each at the URL its type and slug give', () => {
     // ARRANGE
     const expected = [
@@ -334,6 +368,7 @@ describe('edge cases', () => {
       { kind: 'episodes' },
       { kind: 'events' },
       { kind: 'explorables' },
+      { kind: 'guides' },
       { kind: 'resources' },
       { kind: 'episode', episode: PUBLIC_REF },
       { kind: 'event', event: AXEL },
@@ -424,3 +459,10 @@ const WITH_TEMPLATES = {
   explorablePageCompositions: THREE_EXPLORABLE_PAGES,
   explorables: [...THREE_EXPLORABLE_PAGES, 'speech-bubble'],
 };
+
+/*
+ * Guides (design-ADR 0019 as amended by #450): a Guide's page is built from its record at `/guides/<slug>/`. Its slug
+ * is cast: the repo holds no Guide yet, so no registered Guide slug exists for a test to name.
+ */
+const GUIDE = { slug: 'get-workshop-ready' as GuideSlug, tags: ['workflow'], visibility: 'public' } as const;
+const WITH_GUIDES = { ...RECORDS, guides: [GUIDE], guideCompositions: [GUIDE.slug] };

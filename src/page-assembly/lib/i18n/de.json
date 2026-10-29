@@ -23,9 +23,13 @@
       "title": "Explorables",
       "description": "Interaktive Erklärungen zum Ausprobieren: je ein Explorable mit seiner Geschichte und seinem Video."
     },
+    "guides": {
+      "title": "Anleitungen",
+      "description": "Schritt-für-Schritt-Anleitungen zum Einrichten: ein Schritt pro Seite, jeder mit einem Ergebnis zum Prüfen, damit Sie startklar in den Workshop kommen."
+    },
     "resources": {
       "title": "Ressourcen",
-      "description": "Alles, was hancrafted bietet, an einem Ort: Episoden, Events, Explorable-Seiten, Episodenvorlagen und Master-Folien."
+      "description": "Alles, was hancrafted bietet, an einem Ort: Episoden, Events, Explorable-Seiten, Anleitungen, Episodenvorlagen und Master-Folien."
     }
   },
   "tags": {
