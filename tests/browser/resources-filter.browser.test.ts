@@ -7,7 +7,7 @@ import { hydrated } from './hydrated';
  * toggles `hidden`, so the visible cards are what a visitor sees.
  */
 
-const KINDS = ['episode', 'event', 'explorable-page', 'episode-template', 'master-slide'];
+const KINDS = ['episode', 'event', 'explorable-page', 'guide', 'episode-template', 'master-slide'];
 const PATHS = ['/resources/', '/de/resources/'];
 
 const visibleKinds = (page: Page) =>

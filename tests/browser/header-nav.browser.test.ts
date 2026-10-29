@@ -18,25 +18,32 @@ async function focusLearn(page: Page) {
 }
 
 test.describe('success cases', () => {
-  test('opens the Learn menu on Enter and shows Episodes and Resources as links', async ({ page }) => {
+  test('opens the Learn menu on Enter and shows Episodes, Guides and Resources as links', async ({ page }) => {
     // ARRANGE
     const trigger = await focusLearn(page);
     // ACT
     await page.keyboard.press('Enter');
     // ASSERT
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    await expect(page.locator(LEARN).getByRole('link')).toHaveText(['Episodes', 'Resources']);
+    await expect(page.locator(LEARN).getByRole('link')).toHaveText(['Episodes', 'Guides', 'Resources']);
   });
 
-  test('moves focus through the Learn links with ArrowDown', async ({ page }) => {
+  test('moves focus through the three Learn links with ArrowDown, Episodes then Guides then Resources', async ({
+    page,
+  }) => {
     // ARRANGE
+    const link = (name: string) => page.locator(LEARN).getByRole('link', { name });
     await focusLearn(page);
     await page.keyboard.press('Enter');
     // ACT
+    // Radix moves focus between menu items on a timer: each press waits for the last to land, as a reader's would.
     await page.keyboard.press('ArrowDown');
+    await expect(link('Episodes')).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(link('Guides')).toBeFocused();
     await page.keyboard.press('ArrowDown');
     // ASSERT
-    await expect(page.locator(LEARN).getByRole('link', { name: 'Resources' })).toBeFocused();
+    await expect(link('Resources')).toBeFocused();
   });
 
   test('closes the Learn menu on Escape', async ({ page }) => {
@@ -77,7 +84,7 @@ test.describe('failure cases', () => {
 test.describe('edge cases', () => {
   test.use({ viewport: { width: 390, height: 800 } });
 
-  test('shows Learn as a labelled group with its two links in the phone menu panel', async ({ page }) => {
+  test('shows Learn as a labelled group with its three links in the phone menu panel', async ({ page }) => {
     // ARRANGE
     await page.goto('/events/');
     const menu = page.getByTestId('header-menu');
@@ -87,7 +94,7 @@ test.describe('edge cases', () => {
     // ASSERT
     const group = page.locator(LEARN);
     await expect(group.getByTestId('nav-learn-label')).toBeVisible();
-    await expect(group.getByRole('link')).toHaveText(['Episodes', 'Resources']);
+    await expect(group.getByRole('link')).toHaveText(['Episodes', 'Guides', 'Resources']);
     await expect(group.getByRole('link').first()).toBeVisible();
     await expect(group.locator('button')).toBeHidden();
   });
