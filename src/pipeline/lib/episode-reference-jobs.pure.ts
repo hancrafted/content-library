@@ -23,17 +23,18 @@ function briefReferences(brief: string): string[] {
 
 /**
  * Checks one per-run pipeline against its Brief. A pipeline that does not
- * parse is the schema check's finding, not this one's.
+ * parse is the schema check's finding, and a draft whose convert-references
+ * output is still the template's glob is not expanded yet, so neither has
+ * findings here.
  */
 export function checkReferenceJobs(file: string, yaml: string, brief: string): Finding[] {
   const pipeline = readPipeline(yaml);
   if (pipeline === null) return [];
+  const converted = pipeline.jobs.filter(({ id }) => id === JOB).flatMap(({ outputs }) => outputs);
+  if (converted.some((output) => output.includes('*'))) return [];
   const staging = file.slice(0, file.lastIndexOf('/'));
   const listed = briefReferences(brief).map((reference) => `${staging}/${reference}`);
-  const written = pipeline.jobs
-    .filter(({ id }) => id === JOB)
-    .flatMap(({ outputs }) => outputs)
-    .filter((output) => output.endsWith('/design-reference.md'));
+  const written = converted.filter((output) => output.endsWith('/design-reference.md'));
   const finding = (message: string): Finding => ({ kind: 'pipeline', file, message });
   return [
     ...listed

@@ -90,6 +90,16 @@ describe('edge cases', () => {
     expect(findings).toEqual(expected);
   });
 
+  it('leaves a draft whose convert-references output is still the template glob to customize-pipeline', () => {
+    // ARRANGE
+    const text = brief('reference/sales-deck/design-reference.md');
+    const yaml = pipeline('docs/episodes/demo/reference/*/design-reference.md');
+    // ACT
+    const findings = messages(yaml, text);
+    // ASSERT
+    expect(findings).toEqual([]);
+  });
+
   it('leaves a pipeline that does not parse to the schema check', () => {
     // ARRANGE
     const text = brief('reference/sales-deck/design-reference.md');
