@@ -128,7 +128,7 @@ The two halves show the step in order. Left: one download button for the zip, wi
 
 #### Voice script
 
-1. **One link, one zip** — There is one link to one zip file. Download it, and then double-click it to unzip it, which works the same on a Mac and on Windows. Inside you will find the files the workshop needs, already in place, so there is nothing to assemble.
+1. **One link, one zip** — There is one link to one zip file. Download it, and then unzip it. On a Mac, double-click the zip. On Windows, right-click it and choose Extract All. On Linux, use Extract here in your file manager. Inside you will find the files the workshop needs, already in place, so there is nothing to assemble.
 2. **Where it lives** — Take a second to notice where the folder landed, usually in your Downloads. The next step goes into exactly this folder, so if you remember where it is, the rest is easy.
 
 ### Start the agent inside that folder {#start-the-agent-inside-that-folder}
