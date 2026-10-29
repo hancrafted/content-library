@@ -1,0 +1,84 @@
+{
+  "title": "Starter-Ordner herunterladen und entpacken",
+  "caption": "Ein Zip mit allem, was der Workshop braucht. Entpacke es zu einem echten Ordner: <b>unter Windows mit Rechtsklick und „Alle extrahieren“</b>.",
+  "step": "Schritt 5 von 8",
+  "toolbar": {
+    "os": "Betriebssystem",
+    "names": {
+      "mac": "Mac",
+      "windows": "Windows",
+      "linux": "Linux"
+    }
+  },
+  "agents": {
+    "claude-code": "Claude Code",
+    "antigravity": "Antigravity",
+    "codex": "Codex",
+    "copilot": "GitHub Copilot"
+  },
+  "download": {
+    "heading": "Herunterladen",
+    "label": "Starter-Ordner herunterladen",
+    "downloads": "Downloads",
+    "justNow": "gerade eben",
+    "older": "rechnung-oktober.pdf",
+    "lastWeek": "letzte Woche"
+  },
+  "unzip": {
+    "mac": "Doppelklick",
+    "windows": "Alle extrahieren…",
+    "linux": "Hier entpacken",
+    "menuLabel": "Das Rechtsklick-Menü des Zips",
+    "menu": {
+      "windows": {
+        "open": "Öffnen",
+        "openWith": "Öffnen mit",
+        "share": "Teilen",
+        "copyPath": "Als Pfad kopieren"
+      },
+      "linux": {
+        "openWith": "Mit Archivverwaltung öffnen",
+        "rename": "Umbenennen …",
+        "trash": "In den Papierkorb verschieben"
+      }
+    },
+    "windowsWarning": "<b>Rechtsklick, kein Doppelklick.</b> Unter Windows schaut ein Doppelklick nur ins Zip hinein; entpackt wird dabei nichts."
+  },
+  "folder": {
+    "heading": "Dein Ordner",
+    "label": "Der entpackte Starter-Ordner",
+    "rows": {
+      "skills": "was Dein KI-Agent kann",
+      "agents": "wie hier gearbeitet wird",
+      "glossary": "die Wörter, die er kennt"
+    },
+    "worked": "<b>Es hat geklappt, wenn</b> Du ein normales Ordnersymbol siehst, kein Zip, mit diesen vier Einträgen darin.",
+    "remember": "<b>Merk Dir, wo er gelandet ist:</b> <muted>Downloads › starter-folder. Schritt 6 geht genau in diesen Ordner.</muted>"
+  },
+  "stuck": {
+    "title": "Hängst Du fest?",
+    "hint": "Fehler einfügen, Prompt kopieren, das kostenlose ChatGPT fragen.",
+    "label": "Dein Fehler oder was Du siehst",
+    "placeholder": "Füge Deinen Fehler ein oder beschreibe, was Du siehst …",
+    "adds": "Der Prompt ergänzt",
+    "step": "Schritt 5: Starter-Ordner herunterladen und entpacken",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert. Füge ihn ins kostenlose ChatGPT ein.",
+    "noError": "(Ich habe keinen Fehler eingefügt; ich komme bei diesem Schritt nicht weiter.)",
+    "template": "Ich bin Einsteiger und folge einer Schritt-für-Schritt-Anleitung, um für einen Workshop einen KI-Agenten auf meinem Laptop zum Laufen zu bringen.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nMein Schritt: {step}\n\nDas ist der Fehler oder das, was ich sehe:\n{error}\n\nErkläre mir in einfachen Worten, was schiefgelaufen ist, und sag mir, was ich als Nächstes tun soll, in kleinen Schritten. Geh nicht davon aus, dass ich mich mit dem Terminal auskenne."
+  },
+  "voiceScript": {
+    "segments": {
+      "one-link-one-zip": {
+        "title": "Ein Link, ein Zip",
+        "keywords": "",
+        "script": "Es gibt einen Link zu einer Zip-Datei. Lade sie herunter und entpacke sie dann. Auf dem Mac doppelklickst Du das Zip. Unter Windows klickst Du es mit der rechten Maustaste an und wählst „Alle extrahieren“. Unter Linux nimmst Du „Hier entpacken“ in Deinem Dateimanager. Darin liegen schon alle Dateien, die der Workshop braucht, Du musst also nichts zusammensuchen."
+      },
+      "where-it-lives": {
+        "title": "Wo er liegt",
+        "keywords": "",
+        "script": "Schau kurz, wo der Ordner gelandet ist, meistens in Deinen Downloads. Der nächste Schritt geht genau in diesen Ordner. Wenn Du Dir merkst, wo er liegt, ist der Rest einfach."
+      }
+    }
+  }
+}
