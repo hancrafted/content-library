@@ -82,7 +82,7 @@ The OS toolbar (Mac, Windows, Linux) sits above the step, and the viewer's pick 
 
 master: basic-page · motion: none
 
-Both toolbars show here, because the content differs: the OS toolbar (Mac, Windows, Linux) and the AI agent toolbar (Claude Code preferred, then Antigravity, Codex, GitHub Copilot), both synced across the page. Under the picks the step shows one button, "Open the official install page for <your AI agent>", and one line on what to do there for the viewer's OS. It gives no command or version number; the official page is the source and the step stays short. A line says the preferred pick is Claude Code, and that the other three work too. The troubleshooting box below wraps the pasted error with the picked OS, AI agent and "Step 3: Install your AI agent".
+Both toolbars show here, because the content differs: the OS toolbar (Mac, Windows, Linux) and the AI agent toolbar (Claude Code preferred, then Antigravity, Codex, GitHub Copilot), both synced across the page. Under the picks the step shows one button, "Open the official install page for <your AI agent>", and one line on what to do there for the viewer's OS. It gives no command or version number; the official page is the source and the step stays short. A line says the preferred pick is Claude Code, and that the other three work too. A last line shows the success state: the agent's start screen or version output in the terminal, and the words "it worked when you see this". The troubleshooting box below wraps the pasted error with the picked OS, AI agent and "Step 3: Install your AI agent".
 
 #### Speaker notes
 
@@ -90,7 +90,7 @@ Both toolbars show here, because the content differs: the OS toolbar (Mac, Windo
 
 1. **Official page only** — the install page of your AI agent knows the current steps better than we could, so we link to it and keep ours short.
 2. **Claude Code preferred** — pick yours in the toolbar, and the other three work as well.
-3. **It tells you when it worked** — what success looks like, then on to logging in.
+3. **It tells you when it worked** — you see the agent's start screen in the terminal, that is the success state shown on the page, then on to logging in.
 
 ### Log in {#log-in}
 
@@ -160,9 +160,14 @@ Two halves in sequence. Left: the AI agent's permission prompt after the viewer 
 
 #### Speaker notes
 
-1. **The prompt is a safeguard, not an error** — a model can be steered by text it reads, such as a web page or a project file, so OWASP recommends requiring a human to approve high-impact actions; each vendor builds that approval into its default mode [1][2].
+1. **The prompt is a safeguard, not an error** — a model can be steered by text it reads, such as a web page or a project file, so OWASP recommends requiring a human to approve high-impact actions; each vendor builds that approval into its default mode [1][2][5][6][7][8][9].
    - sources: [1] OWASP, LLM01: Prompt Injection — https://genai.owasp.org/llmrisk/llm01-prompt-injection/
    - sources: [2] OWASP, LLM06:2025 Excessive Agency — https://genai.owasp.org/llmrisk/llm062025-excessive-agency/
+   - sources: [5] OpenAI, Codex: Agent approvals and security — https://learn.chatgpt.com/docs/agent-approvals-security
+   - sources: [6] Google, Gemini CLI: Policy engine — https://geminicli.com/docs/reference/policy-engine/
+   - sources: [7] GitHub, About GitHub Copilot CLI — https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-copilot-cli
+   - sources: [8] Google, Antigravity: Permissions — https://antigravity.google/docs/permissions/
+   - sources: [9] Anthropic, Claude Code: Configure permissions — https://code.claude.com/docs/en/permissions
    - target: the permission prompt
 2. **Claude Code's prompt** — in manual mode, commands outside a built-in read-only set trigger a "Bash command" dialog asking "Do you want to proceed?" with Yes, "Yes, and don't ask again" and No. Prompt names and defaults differ by AI agent and version and change often, so recheck before showing one on screen [3].
    - sources: [3] Anthropic, Claude Code: Configure permissions — https://code.claude.com/docs/en/permissions
@@ -187,11 +192,11 @@ Two halves in sequence. Left: the AI agent's permission prompt after the viewer 
 
 master: basic-page · motion: none
 
-The commands as a short numbered list, each line a code block with a one-line reason: install Node.js (linking to the official Node.js download page), add the Matt Pocock skills with `npx skills add`, run his setup skill for a local setup without GitHub, then run check-workshop-readiness so the homepage opens. A short explanation sits above the list. The OS and AI agent toolbars do not show: this route assumes the viewer already has a working terminal and AI agent. The troubleshooting box below wraps the pasted error with the OS, the AI agent and "Step 8: Set up the Matt Pocock skills yourself".
+The commands as a short numbered list, each line a code block with a one-line reason: install Node.js (linking to the official Node.js download page), add the Matt Pocock skills with `npx skills@latest add mattpocock/skills` (the `skills` CLI; it asks which skills to install, so the line says to include `setup-matt-pocock-skills`), run his setup skill by typing `/setup-matt-pocock-skills` in the AI agent for a local setup without GitHub, then run check-workshop-readiness so the homepage opens. The Spec's designers must resolve one placeholder: how check-workshop-readiness reaches this route, because it ships in the starter folder and not in the Matt Pocock repository; the step shows it as the last command with a note that it comes from the starter folder. A short explanation sits above the list. The OS and AI agent toolbars do not show: this route assumes the viewer already has a working terminal and AI agent. The troubleshooting box below wraps the pasted error with the OS, the AI agent and "Step 8: Set up the Matt Pocock skills yourself".
 
 #### Speaker notes
 
 #### Voice script
 
-1. **Same chain, built by hand** — what the starter folder did for you is four short commands.
+1. **Same chain, built by hand** — what the starter folder did for you is four short steps: install Node.js, add the skills, run the setup skill, then the check.
 2. **Same proof** — run check-workshop-readiness, and the homepage opens.
