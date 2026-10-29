@@ -1,10 +1,12 @@
 ---
 type: research
 title: 'Why does each AI agent ask permission before a skill runs a command?'
-description: 'A model can be steered by text it reads, so each agent gates shell commands behind a human approval step; the vendors and OWASP name prompt injection and unintended actions as the reason.'
+description: 'A model can be steered by text it reads, so each agent gates shell
+  commands behind a human approval step; the vendors and OWASP name prompt
+  injection and unintended actions as the reason.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-29T00:00:00Z
+  at: 2026-10-29T16:17:42Z
 stale_after: 2027-04-29T00:00:00Z
 sources:
   - id: 1
@@ -39,7 +41,8 @@ sources:
     title: 'OWASP, LLM06:2025 Excessive Agency'
   - id: 11
     resource: https://arxiv.org/abs/2302.12173
-    title: 'Greshake et al., Not what you''ve signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection'
+    title: 'Greshake et al., Not what you''ve signed up for: Compromising Real-World
+      LLM-Integrated Applications with Indirect Prompt Injection'
 ---
 
 # Why does each AI agent ask permission before a skill runs a command?
