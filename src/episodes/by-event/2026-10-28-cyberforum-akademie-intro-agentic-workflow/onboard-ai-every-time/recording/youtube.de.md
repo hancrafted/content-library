@@ -32,7 +32,7 @@ Die Forschungsfragen hinter den Aussagen:
 hancrafted.net: https://hancrafted.net/de/
 LinkedIn: https://www.linkedin.com/in/han-che/
 
-#KI #Prompting #AgenticWorkflow
+#KI #Prompting #AgenticWorkflow #AIEnablement
 
 ## Pinned comment
 
@@ -41,3 +41,5 @@ Mehr zum Webinar der CyberForum Akademie, alle Folien und der Weg zur nächsten 
 Kapitel: Das Gedankenexperiment · 5 Eigenschaften der KI · Wie arbeiten wir mit diesem Freelancer?
 
 ## Comment ID
+
+UgyJA7LyvI8s4PVLKRh4AaABAg

@@ -26,7 +26,7 @@ Die Forschungsfragen hinter den Aussagen:
 hancrafted.net: https://hancrafted.net/de/
 LinkedIn: https://www.linkedin.com/in/han-che/
 
-#KI #Kontextfenster #AgenticWorkflow
+#KI #Kontextfenster #AgenticWorkflow #AIEnablement
 
 ## Pinned comment
 
@@ -35,3 +35,5 @@ Mehr zum Webinar der CyberForum Akademie, alle Folien und der Weg zur nächsten 
 Kapitel: Gedankenexperiment · Die Aufmerksamkeitsspanne der KI · Was das Fenster füllt · Die Aufmerksamkeitsspanne managen
 
 ## Comment ID
+
+Ugxl3clwmw3QzRvXwFp4AaABAg

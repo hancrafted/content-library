@@ -18,7 +18,7 @@ Grounded in YouTube Help 12948449 (descriptions) and 9884579 (chapters):
 | 5   | Call to action     | One line, one link: for an Event copy the Event page `https://hancrafted.net/de/events/<event>/`, else the Episode link.                |
 | 6   | Research questions | Heading `Die Forschungsfragen hinter den Aussagen`, one title per line, `- `. Titles only until the site publishes a page per question. |
 | 7   | About              | `Über hancrafted`, one line on Han, then `hancrafted.net` and LinkedIn from `SOCIAL_LINKS`.                                             |
-| 8   | Hashtags           | Last line, exactly three, the first is the main keyword.                                                                                |
+| 8   | Hashtags           | Last line: three topical, the first is the main keyword, then always `#AIEnablement`.                                                   |
 
 Pinned comment: the call-to-action line of block 5 with its link, then one line recapping the chapters as their titles joined by `·`.
 
@@ -40,5 +40,5 @@ Die Forschungsfragen hinter den Aussagen:
 hancrafted.net: https://hancrafted.net/de/
 LinkedIn: <linkedin href>
 
-#<keyword> #<tag> #<tag>
+#<keyword> #<tag> #<tag> #AIEnablement
 ```
