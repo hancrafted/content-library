@@ -1,0 +1,47 @@
+{
+  "title": "Install your AI agent",
+  "caption": "The official page always has the current steps. This page only tells you what to look for.",
+  "progress": "Step 3 of 8",
+  "toolbar": {
+    "os": "Your computer",
+    "agent": "AI agent"
+  },
+  "doThis": "Do this",
+  "openInstall": "Open the official install page for {agent}",
+  "newTab": "opens in a new tab",
+  "osLine": "On that page, follow the steps marked <b>{os}</b>, then come back here.",
+  "preferred": "Claude Code is preferred: the workshop is built around it. Antigravity, Codex and GitHub Copilot work too.",
+  "prompt": ">",
+  "worked": "It worked when you see this.",
+  "stuck": {
+    "title": "Stuck?",
+    "hint": "Paste the error, copy the prompt, ask free ChatGPT.",
+    "pasteLabel": "Your error",
+    "placeholder": "Paste your error here…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "adds": "The prompt adds",
+    "step": "Step 3: Install your AI agent",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
+    "noError": "(I see no error message, it just does not work.)"
+  },
+  "voiceScript": {
+    "segments": {
+      "official-page-only": {
+        "title": "Official page only",
+        "keywords": "",
+        "script": "Installing an AI agent changes more often than a guide like this can keep up with, so I do not read steps to you here. We link to the official install page of your AI agent, which always has the current steps, and we only tell you what to look for. You can follow that page line by line and come straight back."
+      },
+      "claude-code-preferred": {
+        "title": "Claude Code preferred",
+        "keywords": "",
+        "script": "I prefer Claude Code, and the workshop is built around it. Antigravity, Codex and GitHub Copilot work as well, so pick yours in the toolbar and the page follows your choice. If you have no preference, choose Claude Code and you will see the same screens as I do."
+      },
+      "it-tells-you-when-it-worked": {
+        "title": "It tells you when it worked",
+        "keywords": "",
+        "script": "You know the install worked when your AI agent shows its start screen in the terminal, and the page shows you what that looks like. If you see it, you are done with this step. If you do not, that is what the troubleshooting box is for."
+      }
+    }
+  }
+}
