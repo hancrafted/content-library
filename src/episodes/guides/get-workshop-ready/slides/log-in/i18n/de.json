@@ -1,0 +1,57 @@
+{
+  "title": "Melde dich an",
+  "caption": "Dein KI-Agent öffnet einmal eine Anmeldung. Melde dich mit deinem eigenen Konto an und komm zurück ins Terminal.",
+  "progress": "Schritt 4 von 8",
+  "toolbar": {
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
+  },
+  "trip": {
+    "terminal": "1 · In deinem Terminal",
+    "browser": "2 · In deinem Browser",
+    "back": "3 · Zurück im Terminal",
+    "lines": {
+      "claude-code": "Öffnet die Anmeldung in deinem Browser …",
+      "antigravity": "Öffnet die Anmeldung in deinem Browser …",
+      "codex": "„Sign in with ChatGPT“ öffnet deinen Browser …",
+      "github-copilot": "Tippe /login, dann öffnet sich dein Browser …"
+    },
+    "page": "Anmeldeseite",
+    "signInTitle": "Bei {agent} anmelden",
+    "signIn": "Anmelden",
+    "useOwn": "Nimm dein eigenes Konto",
+    "loggedIn": "Angemeldet",
+    "toLogin": "Zur Anmeldung",
+    "toTerminal": "Zurück ins Terminal"
+  },
+  "once": "Das machst du einmal, dann bleibt es so.",
+  "openLogin": "{agent} · offizielle Anmeldeseite",
+  "newTab": "öffnet in neuem Tab",
+  "ownAccount": "Welches Konto passt, steht auf dieser Seite. Nimm dein eigenes, kein geteiltes.",
+  "stuck": {
+    "title": "Hängst du fest?",
+    "hint": "Fehlermeldung einfügen, Prompt kopieren, das kostenlose ChatGPT fragen.",
+    "pasteLabel": "Deine Fehlermeldung",
+    "placeholder": "Füge hier deine Fehlermeldung ein …",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "adds": "Der Prompt ergänzt",
+    "step": "Schritt 4: Melde dich an",
+    "prompt": "Ich mache meinen Laptop für einen Workshop startklar und komme nicht weiter. Ich habe noch nie mit einem Terminal gearbeitet.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich gerade bin: {step}\n\nDiese Fehlermeldung sehe ich:\n\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist, und sag mir dann Schritt für Schritt, was ich als Nächstes tun soll.",
+    "noError": "(Ich sehe keine Fehlermeldung, es funktioniert einfach nicht.)"
+  },
+  "voiceScript": {
+    "segments": {
+      "sign-in-once": {
+        "title": "Einmal anmelden",
+        "keywords": "",
+        "script": "Jetzt muss der KI-Agent wissen, wer du bist. Beim ersten Mal öffnet er dir eine Anmeldung, du meldest dich an und kommst zurück ins Terminal. Das machst du einmal, dann bleibt es so."
+      },
+      "your-own-account": {
+        "title": "Dein eigenes Konto",
+        "keywords": "",
+        "script": "Welches Konto zu welchem KI-Agenten passt, ist unterschiedlich, und die offizielle Seite deines KI-Agenten erklärt das besser, als ich es könnte. Deshalb ist der Link gleich hier. Nimm dein eigenes Konto, kein geteiltes, damit der KI-Agent wirklich deiner ist."
+      }
+    }
+  }
+}

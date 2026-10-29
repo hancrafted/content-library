@@ -1,0 +1,48 @@
+{
+  "title": "Installiere deinen KI-Agenten",
+  "caption": "Die offizielle Seite hat immer die aktuellen Schritte. Hier steht nur, worauf du achten musst.",
+  "progress": "Schritt 3 von 8",
+  "toolbar": {
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
+  },
+  "doThis": "So geht's",
+  "openInstall": "Offizielle Installationsseite von {agent} öffnen",
+  "newTab": "öffnet in neuem Tab",
+  "osLine": "Folge dort den Schritten für <b>{os}</b> und komm dann hierher zurück.",
+  "preferred": "Am liebsten Claude Code: Der Workshop ist darauf aufgebaut. Antigravity, Codex und GitHub Copilot gehen aber auch.",
+  "screen": "Sein Startbildschirm in deinem Terminal",
+  "prompt": ">",
+  "worked": "Geschafft, wenn du das hier siehst.",
+  "stuck": {
+    "title": "Hängst du fest?",
+    "hint": "Fehlermeldung einfügen, Prompt kopieren, das kostenlose ChatGPT fragen.",
+    "pasteLabel": "Deine Fehlermeldung",
+    "placeholder": "Füge hier deine Fehlermeldung ein …",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "adds": "Der Prompt ergänzt",
+    "step": "Schritt 3: Installiere deinen KI-Agenten",
+    "prompt": "Ich mache meinen Laptop für einen Workshop startklar und komme nicht weiter. Ich habe noch nie mit einem Terminal gearbeitet.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich gerade bin: {step}\n\nDiese Fehlermeldung sehe ich:\n\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist, und sag mir dann Schritt für Schritt, was ich als Nächstes tun soll.",
+    "noError": "(Ich sehe keine Fehlermeldung, es funktioniert einfach nicht.)"
+  },
+  "voiceScript": {
+    "segments": {
+      "official-page-only": {
+        "title": "Nur die offizielle Seite",
+        "keywords": "",
+        "script": "Wie man einen KI-Agenten installiert, ändert sich öfter, als eine Anleitung wie diese hinterherkommt. Deshalb lese ich dir hier keine Schritte vor. Wir verlinken die offizielle Installationsseite deines KI-Agenten, die immer die aktuellen Schritte hat, und sagen dir nur, worauf du achten musst. Du kannst der Seite Zeile für Zeile folgen und dann direkt zurückkommen."
+      },
+      "claude-code-preferred": {
+        "title": "Am liebsten Claude Code",
+        "keywords": "",
+        "script": "Ich arbeite am liebsten mit Claude Code, und der Workshop ist darauf aufgebaut. Antigravity, Codex und GitHub Copilot funktionieren auch. Wähl deinen KI-Agenten oben in der Leiste aus, und die Seite passt sich an. Wenn du keine Vorliebe hast, nimm Claude Code, dann siehst du dieselben Bildschirme wie ich."
+      },
+      "it-tells-you-when-it-worked": {
+        "title": "Du siehst, wann es geklappt hat",
+        "keywords": "",
+        "script": "Die Installation hat geklappt, wenn dein KI-Agent seinen Startbildschirm im Terminal zeigt, und die Seite zeigt dir, wie der aussieht. Siehst du ihn, ist dieser Schritt erledigt. Wenn nicht, ist der Kasten zur Fehlersuche genau dafür da."
+      }
+    }
+  }
+}

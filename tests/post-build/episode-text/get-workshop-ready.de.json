@@ -1,7 +1,7 @@
 {
   "title": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop · hancrafted",
   "description": "Eine Schritt-für-Schritt-Anleitung für Einsteiger auf Mac, Windows oder Linux: Terminal öffnen, KI-Agent installieren und anmelden, ihn im Starter-Ordner starten und den ersten Skill ausführen, damit der Workshop sofort beginnen kann.",
-  "toc": "Inhalt Wird geladen noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg",
+  "toc": "Inhalt Wird geladen noch 4 Min. 1 Dein Terminal 2 Dein KI-Agent Installiere deinen KI-Agenten Melde dich an 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 4 Min. 1 Dein Terminal 2 Dein KI-Agent Installiere deinen KI-Agenten Melde dich an 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg",
   "slides": [
     {
       "id": "top",
@@ -9,6 +9,14 @@
     },
     { "id": "your-terminal", "text": "Dein Terminal Ein Fenster, das auf Worte wartet. Schritte 1–2 ~ %" },
     { "id": "your-ai-agent", "text": "Dein KI-Agent Der KI-Agent, der darin wohnt. Schritte 3–4 ✻ KI-Agent bereit >" },
+    {
+      "id": "your-ai-agent--install-your-ai-agent",
+      "text": "Dein KI-Agent (1/2) Seite 1 von 2 Installiere deinen KI-Agenten Die offizielle Seite hat immer die aktuellen Schritte. Hier steht nur, worauf du achten musst. Schritt 3 von 8 Dein Computer Mac Windows Linux KI-Agent Claude Code Antigravity Codex GitHub Copilot So geht's Offizielle Installationsseite von Claude Code öffnen ( öffnet in neuem Tab ) Folge dort den Schritten für macOS und komm dann hierher zurück. Am liebsten Claude Code: Der Workshop ist darauf aufgebaut. Antigravity, Codex und GitHub Copilot gehen aber auch. Terminal ✻ Claude Code Sein Startbildschirm in deinem Terminal > Geschafft, wenn du das hier siehst. Hängst du fest? Fehlermeldung einfügen, Prompt kopieren, das kostenlose ChatGPT fragen. Deine Fehlermeldung Prompt kopieren Der Prompt ergänzt Mac Claude Code Schritt 3: Installiere deinen KI-Agenten"
+    },
+    {
+      "id": "your-ai-agent--log-in",
+      "text": "Dein KI-Agent (2/2) Seite 2 von 2 Melde dich an Dein KI-Agent öffnet einmal eine Anmeldung. Melde dich mit deinem eigenen Konto an und komm zurück ins Terminal. Schritt 4 von 8 KI-Agent Claude Code Antigravity Codex GitHub Copilot 1 · In deinem Terminal Claude Code ✻ Claude Code Öffnet die Anmeldung in deinem Browser … 2 · In deinem Browser Anmeldeseite ✻ Bei Claude Code anmelden Anmelden Nimm dein eigenes Konto 3 · Zurück im Terminal Angemeldet Das machst du einmal, dann bleibt es so. Claude Code · offizielle Anmeldeseite ( öffnet in neuem Tab ) Welches Konto passt, steht auf dieser Seite. Nimm dein eigenes, kein geteiltes. Hängst du fest? Fehlermeldung einfügen, Prompt kopieren, das kostenlose ChatGPT fragen. Deine Fehlermeldung Prompt kopieren Der Prompt ergänzt Mac Claude Code Schritt 4: Melde dich an"
+    },
     {
       "id": "your-folder",
       "text": "Dein Ordner Ein Ort, an dem der KI-Agent arbeitet. Schritte 5–6 workshop-starter AGENTS.md GLOSSARY.md skills/"
@@ -29,6 +37,11 @@
     },
     { "id": "your-terminal", "text": "Dein Terminal Keine Sprechernotizen für diese Folie." },
     { "id": "your-ai-agent", "text": "Dein KI-Agent Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "your-ai-agent--install-your-ai-agent",
+      "text": "Installiere deinen KI-Agenten Keine Sprechernotizen für diese Folie."
+    },
+    { "id": "your-ai-agent--log-in", "text": "Melde dich an Keine Sprechernotizen für diese Folie." },
     { "id": "your-folder", "text": "Dein Ordner Keine Sprechernotizen für diese Folie." },
     { "id": "your-first-skill", "text": "Dein erster Skill Keine Sprechernotizen für diese Folie." },
     { "id": "the-technical-route", "text": "Der technische Weg Keine Sprechernotizen für diese Folie." }
@@ -45,6 +58,14 @@
     {
       "id": "your-ai-agent",
       "text": "Dein KI-Agent 0:00 – 0:14 Terminal erledigt Du hast jetzt also ein Fenster, das auf Worte wartet. Weil ein leeres Fenster allein nicht viel kann, ist das nächste Teil der KI-Agent, der darin wohnen wird."
+    },
+    {
+      "id": "your-ai-agent--install-your-ai-agent",
+      "text": "Installiere deinen KI-Agenten 0:00 – 0:28 Nur die offizielle Seite Wie man einen KI-Agenten installiert, ändert sich öfter, als eine Anleitung wie diese hinterherkommt. Deshalb lese ich dir hier keine Schritte vor. Wir verlinken die offizielle Installationsseite deines KI-Agenten, die immer die aktuellen Schritte hat, und sagen dir nur, worauf du achten musst. Du kannst der Seite Zeile für Zeile folgen und dann direkt zurückkommen. 0:28 – 0:52 Am liebsten Claude Code Ich arbeite am liebsten mit Claude Code, und der Workshop ist darauf aufgebaut. Antigravity, Codex und GitHub Copilot funktionieren auch. Wähl deinen KI-Agenten oben in der Leiste aus, und die Seite passt sich an. Wenn du keine Vorliebe hast, nimm Claude Code, dann siehst du dieselben Bildschirme wie ich. 0:52 – 1:11 Du siehst, wann es geklappt hat Die Installation hat geklappt, wenn dein KI-Agent seinen Startbildschirm im Terminal zeigt, und die Seite zeigt dir, wie der aussieht. Siehst du ihn, ist dieser Schritt erledigt. Wenn nicht, ist der Kasten zur Fehlersuche genau dafür da."
+    },
+    {
+      "id": "your-ai-agent--log-in",
+      "text": "Melde dich an 0:00 – 0:17 Einmal anmelden Jetzt muss der KI-Agent wissen, wer du bist. Beim ersten Mal öffnet er dir eine Anmeldung, du meldest dich an und kommst zurück ins Terminal. Das machst du einmal, dann bleibt es so. 0:17 – 0:36 Dein eigenes Konto Welches Konto zu welchem KI-Agenten passt, ist unterschiedlich, und die offizielle Seite deines KI-Agenten erklärt das besser, als ich es könnte. Deshalb ist der Link gleich hier. Nimm dein eigenes Konto, kein geteiltes, damit der KI-Agent wirklich deiner ist."
     },
     {
       "id": "your-folder",

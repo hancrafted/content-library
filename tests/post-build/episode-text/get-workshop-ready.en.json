@@ -1,7 +1,7 @@
 {
   "title": "Get workshop-ready: your AI agent on your laptop · hancrafted",
   "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
-  "toc": "Contents Loading 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
+  "toc": "Contents Loading 4 min left 1 Your terminal 2 Your AI agent Install your AI agent Log in 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 4 min left 1 Your terminal 2 Your AI agent Install your AI agent Log in 3 Your folder 4 Your first skill 5 The technical route",
   "slides": [
     {
       "id": "top",
@@ -9,6 +9,14 @@
     },
     { "id": "your-terminal", "text": "Your terminal A window that waits for words. Steps 1–2 ~ %" },
     { "id": "your-ai-agent", "text": "Your AI agent The AI agent that lives in it. Steps 3–4 ✻ AI agent ready >" },
+    {
+      "id": "your-ai-agent--install-your-ai-agent",
+      "text": "Your AI agent (1/2) Page 1 of 2 Install your AI agent The official page always has the current steps. This page only tells you what to look for. Step 3 of 8 Your computer Mac Windows Linux AI agent Claude Code Antigravity Codex GitHub Copilot Do this Open the official install page for Claude Code ( opens in a new tab ) On that page, follow the steps marked macOS , then come back here. Claude Code is preferred: the workshop is built around it. Antigravity, Codex and GitHub Copilot work too. Terminal ✻ Claude Code Its start screen, in your terminal > It worked when you see this. Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 3: Install your AI agent"
+    },
+    {
+      "id": "your-ai-agent--log-in",
+      "text": "Your AI agent (2/2) Page 2 of 2 Log in Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal. Step 4 of 8 AI agent Claude Code Antigravity Codex GitHub Copilot 1 · In your terminal Claude Code ✻ Claude Code Opens a sign-in in your browser… 2 · In your browser Sign-in page ✻ Sign in to Claude Code Sign in Use your own account 3 · Back in your terminal Logged in You do this once, and it stays. Claude Code · official login page ( opens in a new tab ) Which account fits is on that page. Use your own, not a shared one. Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 4: Log in"
+    },
     {
       "id": "your-folder",
       "text": "Your folder A place for the AI agent to work. Steps 5–6 workshop-starter AGENTS.md GLOSSARY.md skills/"
@@ -29,6 +37,8 @@
     },
     { "id": "your-terminal", "text": "Your terminal No speaker notes for this Slide." },
     { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
+    { "id": "your-ai-agent--install-your-ai-agent", "text": "Install your AI agent No speaker notes for this Slide." },
+    { "id": "your-ai-agent--log-in", "text": "Log in No speaker notes for this Slide." },
     { "id": "your-folder", "text": "Your folder No speaker notes for this Slide." },
     { "id": "your-first-skill", "text": "Your first skill No speaker notes for this Slide." },
     { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." }
@@ -45,6 +55,14 @@
     {
       "id": "your-ai-agent",
       "text": "Your AI agent 0:00 – 0:14 Terminal done So you now have a window that waits for words. Because an empty window cannot do much on its own, the next piece is the AI agent that will live inside it."
+    },
+    {
+      "id": "your-ai-agent--install-your-ai-agent",
+      "text": "Install your AI agent 0:00 – 0:27 Official page only Installing an AI agent changes more often than a guide like this can keep up with, so I do not read steps to you here. We link to the official install page of your AI agent, which always has the current steps, and we only tell you what to look for. You can follow that page line by line and come straight back. 0:27 – 0:48 Claude Code preferred I prefer Claude Code, and the workshop is built around it. Antigravity, Codex and GitHub Copilot work as well, so pick yours in the toolbar and the page follows your choice. If you have no preference, choose Claude Code and you will see the same screens as I do. 0:48 – 1:08 It tells you when it worked You know the install worked when your AI agent shows its start screen in the terminal, and the page shows you what that looks like. If you see it, you are done with this step. If you do not, that is what the troubleshooting box is for."
+    },
+    {
+      "id": "your-ai-agent--log-in",
+      "text": "Log in 0:00 – 0:15 Sign in once Now the AI agent needs to know who you are. It opens a sign-in for you the first time, you log in, and you come back to the terminal. You do this once, and it stays. 0:15 – 0:34 Your own account Which account fits which AI agent differs, and the official page of your AI agent says it better than I could, so the link is right here. Use your own account, not a shared one, so that the AI agent is yours to run."
     },
     {
       "id": "your-folder",
