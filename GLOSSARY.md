@@ -241,6 +241,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **START**: Startups: how an early-stage company builds and funds itself, and how its cash, costs and revenue move over time.
 
+**UX**: User experience: how a person takes up a tool through its interface, from a setup guide's first screen to the command line, and what makes them finish, hesitate or give up.
+
 **WORK**: Technology and work: how tools and machines, from the plough to the computer, have changed how much people work, what work they do and who rises with them.
 
 ## Localization
