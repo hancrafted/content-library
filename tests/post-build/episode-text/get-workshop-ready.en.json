@@ -1,7 +1,7 @@
 {
   "title": "Get workshop-ready: your AI agent on your laptop · hancrafted",
   "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
-  "toc": "Contents Loading 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
+  "toc": "Contents Loading 3 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill Run your first skill 5 The technical route Open contents : Contents · Loading Contents 3 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill Run your first skill 5 The technical route",
   "slides": [
     {
       "id": "top",
@@ -18,6 +18,10 @@
       "text": "Your first skill The piece that proves the chain. Step 7 Do you want to proceed? › Yes No"
     },
     {
+      "id": "your-first-skill--run-your-first-skill",
+      "text": "Your first skill (1/1) Page 1 of 1 Run your first skill Type the skill's name, say yes when your AI agent asks, and the hancrafted homepage opens. Step 7 of 8 AI agent Claude Code Antigravity Codex GitHub Copilot 1 Say yes to the command workshop-starter · Claude Code > /check-workshop-readiness ● Looking up hancrafted in GLOSSARY.md … found https://hancrafted.net Bash command open https://hancrafted.net Open the hancrafted homepage in your browser Do you want to proceed? ❯ 1. Yes 2. Yes, and don't ask again 3. No Approving it is the step. Your AI agent asks before it runs anything on your computer, so you stay the one who decides ( ) . 2 Your browser opens hancrafted hancrafted.net hancrafted Episodes Learn Events Human-led. AI-accelerated. AI gave you a promotion you never asked for. You get to 10x your productivity — if you learn to plan, spec and review … Explore why You just ran a skill. See you at the workshop; meanwhile browse hancrafted. Page didn't open? The skill prints the link instead: open https://hancrafted.net in your browser by hand. Stuck? Mac · Claude Code · Step 7: Run your first skill Your error, or what you see on screen Copy prompt Paste the copied prompt into free ChatGPT; it already says which system, AI agent and step you are on."
+    },
+    {
       "id": "the-technical-route",
       "text": "The technical route Optional: the same chain, built by hand. Step 8 $ npx skills@latest add mattpocock/skills"
     }
@@ -31,6 +35,10 @@
     { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
     { "id": "your-folder", "text": "Your folder No speaker notes for this Slide." },
     { "id": "your-first-skill", "text": "Your first skill No speaker notes for this Slide." },
+    {
+      "id": "your-first-skill--run-your-first-skill",
+      "text": "Run your first skill The prompt is a safeguard, not an error A model can be steered by text it reads, such as a web page or a project file, so OWASP recommends requiring a human to approve high-impact actions; each vendor builds that approval into its default mode 1 2 3 4 5 6 7 . Sources (7) OWASP, LLM01: Prompt Injection ( opens in a new tab ) genai.owasp.org OWASP, LLM06:2025 Excessive Agency ( opens in a new tab ) genai.owasp.org OpenAI, Codex: Agent approvals and security ( opens in a new tab ) learn.chatgpt.com Google, Gemini CLI: Policy engine ( opens in a new tab ) geminicli.com GitHub, About GitHub Copilot CLI ( opens in a new tab ) docs.github.com Google, Antigravity: Permissions ( opens in a new tab ) antigravity.google Anthropic, Claude Code: Configure permissions ( opens in a new tab ) code.claude.com Claude Code's prompt In manual mode, commands outside a built-in read-only set trigger a \"Bash command\" dialog asking \"Do you want to proceed?\" with Yes, \"Yes, and don't ask again\" and No. Prompt names and defaults differ by AI agent and version and change often, so recheck before showing one on screen 1 . Sources (1) Anthropic, Claude Code: Configure permissions ( opens in a new tab ) code.claude.com Why approvals are kept Anthropic says broad file access is risky especially under prompt injection; this is a vendor statement, not an independent study 1 . Sources (1) Anthropic, Making Claude Code more secure and autonomous with sandboxing ( opens in a new tab ) anthropic.com"
+    },
     { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." }
   ],
   "script": [
@@ -53,6 +61,10 @@
     {
       "id": "your-first-skill",
       "text": "Your first skill 0:00 – 0:17 Everything in place So everything is in place: a terminal, an AI agent and a folder. What is left is a skill, which is a small set of instructions your AI agent can follow, and running it shows that the chain is real."
+    },
+    {
+      "id": "your-first-skill--run-your-first-skill",
+      "text": "Run your first skill 0:00 – 0:18 Type the skill Type the name of the skill, check-workshop-readiness, and your AI agent reads it. Before it does anything on your computer, it stops and asks you. That pause is not an error, it is the AI agent handing the decision to you. 0:18 – 0:44 Say yes You are the one who decides here, so look at what it wants to run. For this skill, it opens one web page, and the answer is yes. If you were ever unsure what a command does, you could ask the AI agent to explain it before you approve. Would you rather have a tool that asks, or one that does not? 0:44 – 1:09 The proof Approve it, and the hancrafted homepage opens in your browser. That is the whole check, and there is nothing more to submit. You just ran a skill, so see you at the workshop, and until then, have a look around hancrafted. If the page does not open, the skill prints the link, and you can open it by hand."
     },
     {
       "id": "the-technical-route",

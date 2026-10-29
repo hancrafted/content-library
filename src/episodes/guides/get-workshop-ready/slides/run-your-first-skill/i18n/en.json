@@ -1,0 +1,117 @@
+{
+  "title": "Run your first skill",
+  "caption": "Type the skill's name, say yes when your AI agent asks, and <b>the hancrafted homepage opens</b>.",
+  "step": "Step 7 of 8",
+  "toolbar": {
+    "agent": "AI agent"
+  },
+  "approve": {
+    "label": "Say yes to the command",
+    "hint": "Approving it is the step. Your AI agent asks before it runs anything on your computer, <marker>so you stay the one who decides</marker>."
+  },
+  "prompt": {
+    "window": "workshop-starter · {agent}",
+    "lookup": "● Looking up hancrafted in GLOSSARY.md … found https://hancrafted.net",
+    "reason": "Open the hancrafted homepage in your browser",
+    "claude-code": {
+      "typed": "> /check-workshop-readiness",
+      "heading": "Bash command",
+      "question": "Do you want to proceed?",
+      "choices": {
+        "yes": "Yes",
+        "always": "Yes, and don't ask again",
+        "no": "No"
+      }
+    },
+    "antigravity": {
+      "typed": "> check-workshop-readiness",
+      "asks": "Antigravity may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
+    },
+    "codex": {
+      "typed": "> check-workshop-readiness",
+      "asks": "Codex may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
+    },
+    "copilot": {
+      "typed": "> check-workshop-readiness",
+      "asks": "GitHub Copilot may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
+    }
+  },
+  "result": {
+    "label": "Your browser opens hancrafted",
+    "address": "hancrafted.net",
+    "nav": {
+      "episodes": "Episodes",
+      "learn": "Learn",
+      "events": "Events"
+    },
+    "hero": {
+      "eyebrow": "Human-led. AI-accelerated.",
+      "headline": "AI gave you a <accent>promotion</accent> you never asked for.",
+      "caption": "You get to 10x your productivity — if you learn to plan, spec and review …",
+      "cta": "Explore why"
+    },
+    "done": "<b>You just ran a skill.</b> See you at the workshop; meanwhile browse hancrafted."
+  },
+  "fallback": "Page didn't open? The skill prints the link instead: open <url>https://hancrafted.net</url> in your browser by hand.",
+  "stuck": {
+    "title": "Stuck?",
+    "step": "Step 7: Run your first skill",
+    "field": "Your error, or what you see on screen",
+    "placeholder": "Paste the error or what you see on screen …",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "hint": "Paste the copied prompt into free ChatGPT; it already says which system, AI agent and step you are on.",
+    "empty": "(I have not pasted anything yet.)",
+    "prompt": "I am getting ready for a workshop and got stuck while setting up my AI agent.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am in the guide: {step}\n\nThis is the error, or what I see on my screen:\n\n{error}\n\nI have never used a terminal before. Explain in simple words what went wrong and what I should do next, one step at a time."
+  },
+  "notes": {
+    "the-prompt-is-a-safeguard": {
+      "header": "The prompt is a safeguard, not an error",
+      "description": "A model can be steered by text it reads, such as a web page or a project file, so OWASP recommends requiring a human to approve high-impact actions; each vendor builds that approval into its default mode [1][2][3][4][5][6][7].",
+      "sources": {
+        "owasp-prompt-injection": { "title": "OWASP, LLM01: Prompt Injection" },
+        "owasp-excessive-agency": { "title": "OWASP, LLM06:2025 Excessive Agency" },
+        "codex-approvals": { "title": "OpenAI, Codex: Agent approvals and security" },
+        "gemini-cli-policy-engine": { "title": "Google, Gemini CLI: Policy engine" },
+        "copilot-cli": { "title": "GitHub, About GitHub Copilot CLI" },
+        "antigravity-permissions": { "title": "Google, Antigravity: Permissions" },
+        "claude-code-permissions": { "title": "Anthropic, Claude Code: Configure permissions" }
+      }
+    },
+    "claude-codes-prompt": {
+      "header": "Claude Code's prompt",
+      "description": "In manual mode, commands outside a built-in read-only set trigger a \"Bash command\" dialog asking \"Do you want to proceed?\" with Yes, \"Yes, and don't ask again\" and No. Prompt names and defaults differ by AI agent and version and change often, so recheck before showing one on screen [1].",
+      "sources": {
+        "claude-code-permissions": { "title": "Anthropic, Claude Code: Configure permissions" }
+      }
+    },
+    "why-approvals-are-kept": {
+      "header": "Why approvals are kept",
+      "description": "Anthropic says broad file access is risky especially under prompt injection; this is a vendor statement, not an independent study [1].",
+      "sources": {
+        "claude-code-sandboxing": {
+          "title": "Anthropic, Making Claude Code more secure and autonomous with sandboxing"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "type-the-skill": {
+        "title": "Type the skill",
+        "keywords": "",
+        "script": "Type the name of the skill, check-workshop-readiness, and your AI agent reads it. Before it does anything on your computer, it stops and asks you. That pause is not an error, it is the AI agent handing the decision to you."
+      },
+      "say-yes": {
+        "title": "Say yes",
+        "keywords": "",
+        "script": "You are the one who decides here, so look at what it wants to run. For this skill, it opens one web page, and the answer is yes. If you were ever unsure what a command does, you could ask the AI agent to explain it before you approve. Would you rather have a tool that asks, or one that does not?"
+      },
+      "the-proof": {
+        "title": "The proof",
+        "keywords": "",
+        "script": "Approve it, and the hancrafted homepage opens in your browser. That is the whole check, and there is nothing more to submit. You just ran a skill, so see you at the workshop, and until then, have a look around hancrafted. If the page does not open, the skill prints the link, and you can open it by hand."
+      }
+    }
+  }
+}
