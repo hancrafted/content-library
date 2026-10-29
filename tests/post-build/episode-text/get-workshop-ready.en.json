@@ -1,13 +1,21 @@
 {
   "title": "Get workshop-ready: your AI agent on your laptop · hancrafted",
   "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
-  "toc": "Contents Loading 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
+  "toc": "Contents Loading 4 min left 1 Your terminal Overview Open your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 4 min left 1 Your terminal Overview Open your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
   "slides": [
     {
       "id": "top",
       "text": "Get workshop-ready: your AI agent on your laptop You've never opened a terminal. By the end of this page you'll have run your first skill in one. Guide · 8 steps · about 20 minutes Start here Your terminal Steps 1–2 · it waits for words 2 Your AI agent Steps 3–4 · installed, signed in 3 Your folder Steps 5–6 · unzipped, opened 4 Your first skill Step 7 · approved and run hancrafted.net hancrafted The proof: the homepage opens Each piece hands the next one a working piece, until the homepage opening proves the whole chain."
     },
     { "id": "your-terminal", "text": "Your terminal A window that waits for words. Steps 1–2 ~ %" },
+    {
+      "id": "your-terminal--overview",
+      "text": "Your terminal (1/2) Page 1 of 2 Eight steps to your first skill You've never opened a terminal. By the end of this page you'll have run your first skill in one. 8 steps · about 20 minutes Four pieces, one chain: each works because the one before it does. AI agent already installed? Jump to step 5 A terminal Your terminal Overview ( ) 2 Open your terminal An AI agent Your AI agent 3 Install your AI agent 4 Log in A folder Your folder 5 Download and unzip the starter folder 6 Start the agent inside that folder A skill Your first skill 7 Run your first skill hancrafted opens 8 The technical route Set up the Matt Pocock skills yourself Want the technical route? Jump to the last Section Every step has a Stuck? box: paste your error, get a prompt for free ChatGPT ( )"
+    },
+    {
+      "id": "your-terminal--open-your-terminal",
+      "text": "Your terminal (2/2) Page 2 of 2 Open your terminal Find it, open it, look at it: a blinking cursor in an empty window means it worked. Step 2 of 8 Mac Windows Linux On a Mac: press ⌘ Space , type Terminal , press Return . Find it Terminal Terminal Application Terminal User Guide It worked when you see this you — -zsh — 80×24 Last login: Thu Oct 29 09:12 on console you@MacBook ~ % Blinking cursor, empty prompt: it's not frozen, it's waiting for you. Feeling a little odd here is normal ( ) There's nothing to click: the window waits for you to type ( ) Setup is the hardest part of any new tool, not you ( ) Stuck? Paste what you see, copy the prompt, ask free ChatGPT. What you see on your screen Your prompt includes Mac Claude Code Step 2: Open your terminal Copy prompt"
+    },
     { "id": "your-ai-agent", "text": "Your AI agent The AI agent that lives in it. Steps 3–4 ✻ AI agent ready >" },
     {
       "id": "your-folder",
@@ -28,6 +36,14 @@
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
     { "id": "your-terminal", "text": "Your terminal No speaker notes for this Slide." },
+    {
+      "id": "your-terminal--overview",
+      "text": "Overview Say how many steps The W3C advises saying on the first step how many steps follow and on each step how far along the user is, for example \"Step 2 of 4\" 1 . Sources (1) W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms ( opens in a new tab ) w3.org A head start finishes more Car-wash loyalty cards with two pre-stamped stamps out of ten were redeemed by 34% of customers, against 19% for blank cards; the transfer from loyalty cards to a setup guide is an inference 1 . Sources (1) Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement Increases Effort ( opens in a new tab ) doi.org Minimal still needs a way out A minimal manual, centred on real tasks, taught faster than a standard manual in a study of 64 students, but beginners still need error-recovery material, which is why every step has a troubleshooting box 1 2 . Sources (2) Lazonder and van der Meij, The minimal manual: is less really more? ( opens in a new tab ) doi.org Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect ( opens in a new tab ) doi.org"
+    },
+    {
+      "id": "your-terminal--open-your-terminal",
+      "text": "Open your terminal Hesitation is normal Computer anxiety is a long-studied, widespread reaction; about 80% of the 89 studies on experience found more experience went with less anxiety, and a relaxed first experience was linked to lower anxiety. No study measures fear of the terminal itself, so applying this to the terminal is an inference 1 . Sources (1) Powell, Computer anxiety: Comparison of research from the 1990s and 2000s ( opens in a new tab ) doi.org Why the command line feels scary System administrators said you cannot click your way around a command line to figure it out, and that it may be scary or overwhelming for a beginner; this is a survey quote, not a measured rate of mistakes 1 . Sources (1) Voronkov, Martucci and Lindskog, System Administrators Prefer Command Line Interfaces, Don't They? An Exploratory Study of Firewall Interfaces ( opens in a new tab ) arxiv.org Setup is the hard part Software Carpentry reports that installing software is often harder than using it, and that every new tool fails for at least one person in the room across Mac, Windows and Linux 1 . Sources (1) Wilson, Software Carpentry: lessons learned ( opens in a new tab ) doi.org Feedback builds confidence In a university Unix course with near-instant per-answer feedback, 78.2% of 2021 respondents said they had procedural Unix knowledge, against 38.8% before; the authors call this self-report possibly subjective, and the students were not solo first-timers 1 . Sources (1) Berry et al., ShellOnYou: learning by doing Unix command line ( opens in a new tab ) ctiber.github.io"
+    },
     { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
     { "id": "your-folder", "text": "Your folder No speaker notes for this Slide." },
     { "id": "your-first-skill", "text": "Your first skill No speaker notes for this Slide." },
@@ -41,6 +57,14 @@
     {
       "id": "your-terminal",
       "text": "Your terminal 0:00 – 0:09 Hook You have never opened a terminal. By the end of this page you will have run your first skill in one. 0:09 – 0:37 Why this page I split this into one step per screen, because a long setup guide feels like a wall and a single step feels like something you can finish. Every step hands you one thing that works and the next step needs it, so when you arrive at the workshop, we can start with a grilling session right away and nobody spends the first hour on setup."
+    },
+    {
+      "id": "your-terminal--overview",
+      "text": "Overview 0:00 – 0:24 Four pieces, one chain Here is the whole route in four pieces: a terminal, an AI agent, a folder and a skill. Each piece only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes, and you can stop after any step and come back. 0:24 – 0:42 Skip what you have If you already have an AI agent installed, jump straight to step five, because nothing before it changes for you. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end."
+    },
+    {
+      "id": "your-terminal--open-your-terminal",
+      "text": "Open your terminal 0:00 – 0:30 Not a personal failing If opening a terminal feels a little odd, that is a common reaction, and I would not read it as a sign that you are bad with computers. I think the fear comes from the blank window that gives you no hint what to press, and that is my hypothesis, not a proven fact. Nothing here asks you to prove anything, we only open the window and look at it. 0:30 – 0:52 One window, one cursor Pick your system in the toolbar, then find Terminal on a Mac, PowerShell on Windows, or the terminal on Linux, and open it. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you. 0:52 – 1:19 Stuck? Paste it If something looks different on your screen, you do not have to work it out alone. Paste your error into the troubleshooting box under the step, and it wraps your system, your AI agent and the step number into a prompt you can hand to a free ChatGPT. Every step below has one, so asking for help is part of the route."
     },
     {
       "id": "your-ai-agent",
