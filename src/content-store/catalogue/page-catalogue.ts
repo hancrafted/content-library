@@ -169,22 +169,21 @@ function routesOf({
   events,
   underEvents,
 }: Entries): Omit<PageCatalogue, 'pages' | 'treatmentOf' | `listed${string}`> {
-  const exported = exportedOf;
   return {
-    episodesPathParams: () => exported(episodes).map(({ page }) => episodesPathParamsOf(page)),
+    episodesPathParams: () => exportedOf(episodes).map(({ page }) => episodesPathParamsOf(page)),
     episodesPathPageAt: ({ episode }) =>
-      exported(episodes).find(({ page }) => episodesPathParamsOf(page).episode === episode)?.page,
+      exportedOf(episodes).find(({ page }) => episodesPathParamsOf(page).episode === episode)?.page,
     ...slugRoutesOf(explorablePages, guides),
     templateParams: (type) =>
-      exported(templates)
+      exportedOf(templates)
         .filter(({ page }) => page.type === type)
         .map(({ page }) => ({ template: page.template.slug })),
     templatePageAt: (type, { template }) =>
-      exported(templates).find(({ page }) => page.type === type && page.template.slug === template)?.page,
-    eventParams: () => exported(events).map(({ page }) => ({ event: page.event })),
-    eventEpisodeParams: () => exported(underEvents).map(({ page }) => eventEpisodeParamsOf(page)),
+      exportedOf(templates).find(({ page }) => page.type === type && page.template.slug === template)?.page,
+    eventParams: () => exportedOf(events).map(({ page }) => ({ event: page.event })),
+    eventEpisodeParams: () => exportedOf(underEvents).map(({ page }) => eventEpisodeParamsOf(page)),
     eventEpisodePageAt: (params) =>
-      exported(underEvents).find(({ page }) => {
+      exportedOf(underEvents).find(({ page }) => {
         const { event, episode } = eventEpisodeParamsOf(page);
         return event === params.event && episode === params.episode;
       })?.presenting,
