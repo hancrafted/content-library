@@ -11,7 +11,7 @@
     { "id": "your-ai-agent", "text": "Your AI agent The AI agent that lives in it. Steps 3–4 ✻ AI agent ready >" },
     {
       "id": "your-ai-agent--install-your-ai-agent",
-      "text": "Your AI agent (1/2) Page 1 of 2 Install your AI agent The official page always has the current steps. This page only tells you what to look for. Step 3 of 8 Your computer Mac Windows Linux AI agent Claude Code Antigravity Codex GitHub Copilot Do this Open the official install page for Claude Code ( opens in a new tab ) On that page, follow the steps marked macOS , then come back here. Claude Code is preferred: the workshop is built around it. Antigravity, Codex and GitHub Copilot work too. Terminal ✻ Claude Code Its start screen, in your terminal > It worked when you see this. Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 3: Install your AI agent"
+      "text": "Your AI agent (1/2) Page 1 of 2 Install your AI agent The official page always has the current steps. This page only tells you what to look for. Step 3 of 8 Your computer Mac Windows Linux AI agent Claude Code Antigravity Codex GitHub Copilot Do this Open the official install page for Claude Code ( opens in a new tab ) On that page, follow the steps marked macOS , then come back here. Claude Code is preferred: the workshop is built around it. Antigravity, Codex and GitHub Copilot work too. Terminal ✻ Welcome to Claude Code ! /help for help > It worked when you see this. Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 3: Install your AI agent"
     },
     {
       "id": "your-ai-agent--log-in",

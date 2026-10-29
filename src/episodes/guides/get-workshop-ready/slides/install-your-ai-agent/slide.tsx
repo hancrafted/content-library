@@ -10,12 +10,50 @@ import {
   DEFAULT_AGENT,
   DEFAULT_OS,
   OPERATING_SYSTEMS,
+  type StartScreen,
 } from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
 import { StepProgress } from '@/episodes/components/slide-shared/agent-setup-step/step-progress';
 import { StuckBox } from '@/episodes/components/slide-shared/agent-setup-step/stuck-box.client';
 import { TerminalWindow } from '@/episodes/components/slide-shared/agent-setup-step/terminal-window';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+
+/** The agent's name, set bold wherever its banner title names it, as the mock sets "Welcome to **Claude Code**!". */
+function BannerTitle({ title, name }: { title: string; name: string }) {
+  const at = title.indexOf(name);
+  if (at < 0) return <b className="font-semibold">{title}</b>;
+  return (
+    <>
+      {title.slice(0, at)}
+      <b className="font-semibold">{name}</b>
+      {title.slice(at + name.length)}
+    </>
+  );
+}
+
+/**
+ * The AI agent's start screen, the vendor's own words in the language the agent shows them: its banner (mark and
+ * title) in the `ai` edge, then its lines muted. An agent whose vendor quotes no start screen shows its banner only.
+ */
+function StartScreenBox({ name, screen }: { name: string; screen: StartScreen }) {
+  return (
+    <div className="rounded-md border border-ai/50 px-4 py-3" lang="en" data-start-screen="">
+      <p>
+        {screen.mark === '' ? null : (
+          <span className="text-ai" aria-hidden="true">
+            {screen.mark}{' '}
+          </span>
+        )}
+        <BannerTitle title={screen.title} name={name} />
+      </p>
+      {screen.lines.map((line) => (
+        <p key={line} className="mt-2 text-muted-foreground">
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+}
 
 /*
  * Step 3, Option 3a: one step card split into "do this" (the official install page of the picked AI agent, and which
@@ -71,17 +109,13 @@ export const installYourAiAgent = slide({
                 <PickSwitch name="os" fallback={DEFAULT_OS} cases={casesOf(OPERATING_SYSTEMS, (os) => os.shell)} />
               }
             >
-              <div className="rounded-md border border-ai/50 px-4 py-3">
-                <p>
-                  <span className="text-ai" aria-hidden="true">
-                    ✻
-                  </span>{' '}
-                  <b className="font-semibold">
-                    <PickSwitch name="agent" fallback={DEFAULT_AGENT} cases={casesOf(AGENTS, (agent) => agent.name)} />
-                  </b>
-                </p>
-                <p className="mt-2 text-muted-foreground">{t('screen')}</p>
-              </div>
+              <PickSwitch
+                name="agent"
+                fallback={DEFAULT_AGENT}
+                cases={casesOf(AGENTS, (agent) => (
+                  <StartScreenBox name={agent.name} screen={agent.startScreen} />
+                ))}
+              />
               <p className="text-muted-foreground">
                 {t('prompt')} <span className="inline-block h-4 w-2 bg-primary align-middle" aria-hidden="true" />
               </p>

@@ -14,7 +14,7 @@
       "claude-code": "Öffnet die Anmeldung in deinem Browser …",
       "antigravity": "Öffnet die Anmeldung in deinem Browser …",
       "codex": "„Sign in with ChatGPT“ öffnet deinen Browser …",
-      "github-copilot": "Tippe /login, dann öffnet sich dein Browser …"
+      "copilot": "Tippe /login, dann öffnet sich dein Browser …"
     },
     "page": "Anmeldeseite",
     "signInTitle": "Bei {agent} anmelden",

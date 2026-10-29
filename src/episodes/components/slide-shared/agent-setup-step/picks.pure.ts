@@ -19,10 +19,22 @@ export interface OperatingSystem extends PickOption {
   readonly shell: string;
 }
 
-/** An AI agent, and its vendor's own pages. */
+/**
+ * What an AI agent shows in the terminal when it starts, as its vendor's own text: the banner's mark and title, then
+ * its lines. An agent whose vendor page quotes no start screen draws its name only, never invented lines.
+ */
+export interface StartScreen {
+  /** The glyph before the title, as the agent draws it; empty when the vendor shows none. */
+  readonly mark: string;
+  readonly title: string;
+  readonly lines: readonly string[];
+}
+
+/** An AI agent, its vendor's own pages, and its start screen. */
 export interface Agent extends PickOption {
   readonly installHref: string;
   readonly loginHref: string;
+  readonly startScreen: StartScreen;
 }
 
 export const OPERATING_SYSTEMS: readonly OperatingSystem[] = [
@@ -38,24 +50,36 @@ export const AGENTS: readonly Agent[] = [
     name: 'Claude Code',
     installHref: 'https://code.claude.com/docs/en/setup#install-claude-code',
     loginHref: 'https://code.claude.com/docs/en/authentication#log-in-to-claude-code',
+    // The Spec mock's own text: the vendor's docs name "the Claude Code welcome screen" but quote none of it.
+    startScreen: { mark: '✻', title: 'Welcome to Claude Code!', lines: ['/help for help'] },
   },
   {
     id: 'antigravity',
     name: 'Antigravity',
     installHref: 'https://antigravity.google/docs/getting-started',
     loginHref: 'https://antigravity.google/docs/install',
+    // The vendor's getting-started page describes the first run's setup choices but quotes no start screen.
+    startScreen: { mark: '', title: 'Antigravity', lines: [] },
   },
   {
     id: 'codex',
     name: 'Codex',
     installHref: 'https://learn.chatgpt.com/docs/codex/cli',
     loginHref: 'https://learn.chatgpt.com/docs/auth',
+    // The Codex CLI page's own start screen, without its model and folder lines, which differ on every laptop.
+    startScreen: {
+      mark: '>_',
+      title: 'OpenAI Codex',
+      lines: ['To get started, describe a task or try one of these commands:'],
+    },
   },
   {
-    id: 'github-copilot',
+    id: 'copilot',
     name: 'GitHub Copilot',
     installHref: 'https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli',
     loginHref: 'https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/authenticate-copilot-cli',
+    // GitHub's pages show the welcome screen only as a screenshot, so its words are not quoted here.
+    startScreen: { mark: '', title: 'GitHub Copilot', lines: [] },
   },
 ];
 

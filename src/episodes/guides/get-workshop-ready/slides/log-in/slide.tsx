@@ -82,7 +82,7 @@ export const logIn = slide({
                       'claude-code': t('trip.lines.claude-code'),
                       antigravity: t('trip.lines.antigravity'),
                       codex: t('trip.lines.codex'),
-                      'github-copilot': t('trip.lines.github-copilot'),
+                      copilot: t('trip.lines.copilot'),
                     }}
                   />
                 </p>

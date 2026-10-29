@@ -11,7 +11,6 @@
   "newTab": "opens in a new tab",
   "osLine": "On that page, follow the steps marked <b>{os}</b>, then come back here.",
   "preferred": "Claude Code is preferred: the workshop is built around it. Antigravity, Codex and GitHub Copilot work too.",
-  "screen": "Its start screen, in your terminal",
   "prompt": ">",
   "worked": "It worked when you see this.",
   "stuck": {

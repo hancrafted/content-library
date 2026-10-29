@@ -14,7 +14,7 @@
       "claude-code": "Opens a sign-in in your browser…",
       "antigravity": "Opens a sign-in in your browser…",
       "codex": "Sign in with ChatGPT opens your browser…",
-      "github-copilot": "Type /login, and it opens your browser…"
+      "copilot": "Type /login, and it opens your browser…"
     },
     "page": "Sign-in page",
     "signInTitle": "Sign in to {agent}",

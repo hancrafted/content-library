@@ -35,6 +35,20 @@ describe('success cases', () => {
     expect(cases).toEqual(expected);
   });
 
+  it("draws each AI agent's start screen only as far as its vendor's page shows it", () => {
+    // ARRANGE
+    const expected = [
+      { mark: '✻', title: 'Welcome to Claude Code!', lines: ['/help for help'] },
+      { mark: '', title: 'Antigravity', lines: [] },
+      { mark: '>_', title: 'OpenAI Codex', lines: ['To get started, describe a task or try one of these commands:'] },
+      { mark: '', title: 'GitHub Copilot', lines: [] },
+    ];
+    // ACT
+    const screens = AGENTS.map((agent) => agent.startScreen);
+    // ASSERT
+    expect(screens).toEqual(expected);
+  });
+
   it('offers Claude Code first, then Antigravity, Codex and GitHub Copilot', () => {
     // ARRANGE
     const expected = ['Claude Code', 'Antigravity', 'Codex', 'GitHub Copilot'];
@@ -86,10 +100,10 @@ describe('edge cases', () => {
     expect(hrefs).toEqual(expected);
   });
 
-  it('shares the pick values the page provider is tested with, so every Slide of the page reads one pick', () => {
+  it('shares the pick values every Section of the Guide stores, so the page-wide pick syncs', () => {
     // ARRANGE
     const expectedOs = ['mac', 'windows', 'linux'];
-    const expectedAgents = ['claude-code', 'antigravity', 'codex', 'github-copilot'];
+    const expectedAgents = ['claude-code', 'antigravity', 'codex', 'copilot'];
     // ACT
     const os = OPERATING_SYSTEMS.map((option) => option.id);
     const agents = AGENTS.map((option) => option.id);
