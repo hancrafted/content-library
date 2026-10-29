@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why do non-technical people, and even some software engineers, hesitate to open a terminal, up to avoiding it altogether?'
-description: 'Hesitation stems from computer anxiety and low self-efficacy plus a command line with no visible options and easy mistakes; no study measures terminal fear itself.'
+title: 'Why do non-technical people, and even some software engineers, hesitate
+  to open a terminal, up to avoiding it altogether?'
+description: 'Hesitation stems from computer anxiety and low self-efficacy plus
+  a command line with no visible options and easy mistakes; no study measures
+  terminal fear itself.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-29T00:00:00Z
+  at: 2026-10-29T16:24:41Z
 stale_after: 2027-10-29T00:00:00Z
 sources:
   - id: 1
@@ -12,19 +15,23 @@ sources:
     title: 'Powell, Computer anxiety: Comparison of research from the 1990s and 2000s'
   - id: 2
     resource: https://aisel.aisnet.org/misq/vol19/iss2/4/
-    title: 'Compeau and Higgins, Computer Self-Efficacy: Development of a Measure and Initial Test'
+    title: 'Compeau and Higgins, Computer Self-Efficacy: Development of a Measure
+      and Initial Test'
   - id: 3
     resource: https://arxiv.org/abs/1905.13582
-    title: 'Voronkov, Martucci and Lindskog, System Administrators Prefer Command Line Interfaces, Don''t They? An Exploratory Study of Firewall Interfaces'
+    title: 'Voronkov, Martucci and Lindskog, System Administrators Prefer Command
+      Line Interfaces, Don''t They? An Exploratory Study of Firewall Interfaces'
   - id: 4
     resource: https://dspace.mit.edu/handle/1721.1/106271
-    title: 'Perez De Rosso and Jackson, Purposes, Concepts, Misfits, and a Redesign of Git'
+    title: 'Perez De Rosso and Jackson, Purposes, Concepts, Misfits, and a Redesign
+      of Git'
   - id: 5
     resource: https://www.nngroup.com/articles/ten-usability-heuristics/
     title: 'Nielsen, 10 Usability Heuristics for User Interface Design'
   - id: 6
     resource: https://arxiv.org/abs/2209.07365
-    title: 'Coleman, Griswold and Mitchell, Do Cloud Developers Prefer CLIs or Web Consoles? CLIs Mostly, Though It Varies by Task'
+    title: 'Coleman, Griswold and Mitchell, Do Cloud Developers Prefer CLIs or Web
+      Consoles? CLIs Mostly, Though It Varies by Task'
 ---
 
 # Why do non-technical people, and even some software engineers, hesitate to open a terminal, up to avoiding it altogether?
