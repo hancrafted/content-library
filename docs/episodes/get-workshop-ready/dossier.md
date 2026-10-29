@@ -19,7 +19,7 @@ verified:
 #### Voice script
 
 1. **Hook** — You have never opened a terminal. By the end of this page you will have run your first skill in one.
-2. **Why this page** — one step per screen, each a working piece that the next one needs, so the workshop starts with a grilling session and no setup.
+2. **Why this page** — I split this into one step per screen, because a long setup guide feels like a wall and a single step feels like something you can finish. Every step hands you one thing that works and the next step needs it, so when you arrive at the workshop, we can start with a grilling session right away and nobody spends the first hour on setup.
 
 ### Overview {#overview}
 
@@ -44,8 +44,8 @@ The whole route as a short numbered step list, one line per step, grouped under 
 
 #### Voice script
 
-1. **Four pieces, one chain** — terminal, AI agent, folder, skill: each step hands the next one something that works.
-2. **Skip what you have** — already installed an AI agent, jump ahead; want the technical route, jump to the end.
+1. **Four pieces, one chain** — Here is the whole route in four pieces: a terminal, an AI agent, a folder and a skill. Each piece only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes, and you can stop after any step and come back.
+2. **Skip what you have** — If you already have an AI agent installed, jump straight to step five, because nothing before it changes for you. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end.
 
 ### Open your terminal {#open-your-terminal}
 
@@ -69,15 +69,15 @@ The OS toolbar (Mac, Windows, Linux) sits above the step, and the viewer's pick 
 
 #### Voice script
 
-1. **Not a personal failing** — if opening it feels odd, that is a common reaction, and you have nothing to prove here.
-2. **One window, one cursor** — find it for your system, open it, and see the cursor wait for you.
-3. **Stuck? Paste it** — the troubleshooting box turns your error into a prompt for ChatGPT.
+1. **Not a personal failing** — If opening a terminal feels a little odd, that is a common reaction, and I would not read it as a sign that you are bad with computers. I think the fear comes from the blank window that gives you no hint what to press, and that is my hypothesis, not a proven fact. Nothing here asks you to prove anything, we only open the window and look at it.
+2. **One window, one cursor** — Pick your system in the toolbar, then find Terminal on a Mac, PowerShell on Windows, or the terminal on Linux, and open it. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you.
+3. **Stuck? Paste it** — If something looks different on your screen, you do not have to work it out alone. Paste your error into the troubleshooting box under the step, and it wraps your system, your AI agent and the step number into a prompt you can hand to a free ChatGPT. Every step below has one, so asking for help is part of the route.
 
 ## Your AI agent {#your-ai-agent}
 
 #### Voice script
 
-1. **Terminal done** — you have a window that waits for words, and next the AI agent goes into it.
+1. **Terminal done** — So you now have a window that waits for words. Because an empty window cannot do much on its own, the next piece is the AI agent that will live inside it.
 
 ### Install your AI agent {#install-your-ai-agent}
 
@@ -91,9 +91,9 @@ Both toolbars show here, because the content differs: the OS toolbar (Mac, Windo
 
 #### Voice script
 
-1. **Official page only** — the install page of your AI agent knows the current steps better than we could, so we link to it and keep ours short.
-2. **Claude Code preferred** — pick yours in the toolbar, and the other three work as well.
-3. **It tells you when it worked** — you see the agent's start screen in the terminal, that is the success state shown on the page, then on to logging in.
+1. **Official page only** — Installing an AI agent changes more often than a guide like this can keep up with, so I do not read steps to you here. We link to the official install page of your AI agent, which always has the current steps, and we only tell you what to look for. You can follow that page line by line and come straight back.
+2. **Claude Code preferred** — I prefer Claude Code, and the workshop is built around it. Antigravity, Codex and GitHub Copilot work as well, so pick yours in the toolbar and the page follows your choice. If you have no preference, choose Claude Code and you will see the same screens as I do.
+3. **It tells you when it worked** — You know the install worked when your AI agent shows its start screen in the terminal, and the page shows you what that looks like. If you see it, you are done with this step. If you do not, that is what the troubleshooting box is for.
 
 ### Log in {#log-in}
 
@@ -107,14 +107,14 @@ The AI agent toolbar shows here (Claude Code, Antigravity, Codex, GitHub Copilot
 
 #### Voice script
 
-1. **Sign in once** — the AI agent opens a sign-in, and you use your account.
-2. **Your own account** — which account fits which AI agent is on its official page, linked here.
+1. **Sign in once** — Now the AI agent needs to know who you are. It opens a sign-in for you the first time, you log in, and you come back to the terminal. You do this once, and it stays.
+2. **Your own account** — Which account fits which AI agent differs, and the official page of your AI agent says it better than I could, so the link is right here. Use your own account, not a shared one, so that the AI agent is yours to run.
 
 ## Your folder {#your-folder}
 
 #### Voice script
 
-1. **Terminal and AI agent, now the place to work** — the AI agent works inside one folder, so we give it one: the starter folder.
+1. **Terminal and AI agent, now the place to work** — You have a terminal and an AI agent, so what is missing is a place to work. An AI agent works inside one folder and reads what is there, so we give it one on purpose: the starter folder.
 
 ### Download and unzip the starter folder {#download-and-unzip-the-starter-folder}
 
@@ -128,8 +128,8 @@ The two halves show the step in order. Left: one download button for the zip, wi
 
 #### Voice script
 
-1. **One link, one zip** — download the starter folder, and unzip it by double-clicking.
-2. **Where it lives** — note where the folder sits, because the next step goes into it.
+1. **One link, one zip** — There is one link to one zip file. Download it, and then double-click it to unzip it, which works the same on a Mac and on Windows. Inside you will find the files the workshop needs, already in place, so there is nothing to assemble.
+2. **Where it lives** — Take a second to notice where the folder landed, usually in your Downloads. The next step goes into exactly this folder, so if you remember where it is, the rest is easy.
 
 ### Start the agent inside that folder {#start-the-agent-inside-that-folder}
 
@@ -143,15 +143,15 @@ Both toolbars show here, since the commands and the launch differ by OS and by A
 
 #### Voice script
 
-1. **Go in, then start** — navigate into the folder, and start your AI agent there.
-2. **Same folder every time** — the AI agent reads what is in the folder it starts in, and that is how it will find your skill.
-3. **Chain so far** — terminal, AI agent, folder: one piece away from the proof.
+1. **Go in, then start** — In your terminal you first move into the unzipped folder, and only then you start your AI agent. The page draws the terminal at each point, so you can check that the folder name appears in front of your cursor before you start. The AI agent may ask whether you trust this folder. For this one, you do, so say yes.
+2. **Same folder every time** — The order matters because an AI agent reads what is in the folder it starts in. That is how it will find your skill in a moment, and if you start it somewhere else, the skill is simply not there. So whenever you work with this starter folder, start the AI agent from inside it.
+3. **Chain so far** — Look at what you have. A terminal that waits, an AI agent inside it, and a folder it can read. One piece is left, and it is the one that proves all the others work.
 
 ## Your first skill {#your-first-skill}
 
 #### Voice script
 
-1. **Everything in place** — a terminal, an AI agent, a folder, and now the piece that proves the chain.
+1. **Everything in place** — So everything is in place: a terminal, an AI agent and a folder. What is left is a skill, which is a small set of instructions your AI agent can follow, and running it shows that the chain is real.
 
 ### Run your first skill {#run-your-first-skill}
 
@@ -179,15 +179,15 @@ Two halves in sequence. Left: the AI agent's permission prompt after the viewer 
 
 #### Voice script
 
-1. **Type the skill** — run check-workshop-readiness, and the AI agent stops to ask you.
-2. **Say yes** — you are the one who decides, and for this skill the answer is yes.
-3. **The proof** — the hancrafted homepage opens, and that is the whole check.
+1. **Type the skill** — Type the name of the skill, check-workshop-readiness, and your AI agent reads it. Before it does anything on your computer, it stops and asks you. That pause is not an error, it is the AI agent handing the decision to you.
+2. **Say yes** — You are the one who decides here, so look at what it wants to run. For this skill, it opens one web page, and the answer is yes. If you were ever unsure what a command does, you could ask the AI agent to explain it before you approve. Would you rather have a tool that asks, or one that does not?
+3. **The proof** — Approve it, and the hancrafted homepage opens in your browser. That is the whole check, and there is nothing more to submit. You just ran a skill, so see you at the workshop, and until then, have a look around hancrafted. If the page does not open, the skill prints the link, and you can open it by hand.
 
 ## The technical route {#the-technical-route}
 
 #### Voice script
 
-1. **For people who build** — the same result without the starter folder, by installing the pieces yourself.
+1. **For people who build** — This last Section is for people who build, and it is optional. If you are comfortable with a terminal, you can get the same result without the starter folder by installing the pieces yourself. Everyone else can stop at the homepage.
 
 ### Set up the Matt Pocock skills yourself {#set-up-the-matt-pocock-skills-yourself}
 
@@ -201,5 +201,5 @@ The commands as a short numbered list, each line a code block with a one-line re
 
 #### Voice script
 
-1. **Same chain, built by hand** — what the starter folder did for you is four short steps: install Node.js, add the skills, run the setup skill, then the check.
-2. **Same proof** — run check-workshop-readiness, and the homepage opens.
+1. **Same chain, built by hand** — What the starter folder did for you comes down to four short steps. You install Node.js from its official page, add the Matt Pocock skills, run his setup skill so everything stays local without a GitHub account, and then run the check. The exact lines are on the page, because I would rather you copy them from there than hear them from me.
+2. **Same proof** — The proof is the same as before. You run check-workshop-readiness, and the hancrafted homepage opens. One thing to know: that skill comes with the starter folder, not with the Matt Pocock skills, so the page tells you where to take it from.
