@@ -4,7 +4,7 @@ import { chooseLanguage, parseCommandArgs, recordingLanguages } from './command-
 describe('success cases', () => {
   it('reads the input, the language and the dry run from the command line', () => {
     // ARRANGE
-    const expected = { ok: true, args: { input: 'ai-attention-span', language: 'en', dryRun: true } };
+    const expected = { ok: true, args: { input: 'ai-attention-span', language: 'en', dryRun: true, force: false } };
     // ACT
     const parsed = parseCommandArgs(['--lang', 'en', 'ai-attention-span', '--dry-run']);
     // ASSERT
@@ -13,7 +13,7 @@ describe('success cases', () => {
 
   it('leaves the language open when --lang is absent', () => {
     // ARRANGE
-    const expected = { ok: true, args: { input: 'x', dryRun: false } };
+    const expected = { ok: true, args: { input: 'x', dryRun: false, force: false } };
     // ACT
     const parsed = parseCommandArgs(['x']);
     // ASSERT
@@ -85,5 +85,17 @@ describe('failure cases', () => {
     const parsed = parseCommandArgs(['--lang', 'de']);
     // ASSERT
     expect(parsed.ok).toBe(false);
+  });
+});
+
+describe('--force', () => {
+  it('reads --force, off by default', () => {
+    // ARRANGE
+    const argv = ['ep', '--force'];
+    // ACT
+    const forced = parseCommandArgs(argv);
+    const plain = parseCommandArgs(['ep']);
+    // ASSERT
+    expect([forced.ok && forced.args.force, plain.ok && plain.args.force]).toEqual([true, false]);
   });
 });

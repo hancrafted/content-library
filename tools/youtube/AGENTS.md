@@ -8,21 +8,24 @@ The post-production tools: the Episode resolver, and the `youtube:*` entry point
 
 ## Commands
 
-Each takes `<episode folder | page url | video id>` and infers the language from the Recording folder's file names (`--lang en|de` when several exist); the rules are decision 6 of the design-ADR above. `--dry-run` belongs to `youtube:apply` alone.
+Each takes `<episode folder | page url | video id>` and infers the language from the Recording folder's file names (`--lang en|de` when several exist); the rules are decision 7 of the design-ADR above. `--dry-run` and `--force` belong to `youtube:apply` alone.
 
-| Command                | Reads                                  | Writes                                           |
-| ---------------------- | -------------------------------------- | ------------------------------------------------ |
-| `youtube:transcript`   | YouTube captions and length (`yt-dlp`) | `transcript.<lang>.vtt`, `video.<lang>.json`     |
-| `youtube:recording`    | the composition, the Recording folder  | nothing; prints the Slide table, then violations |
-| `youtube:voice-script` | transcript, Slide starts, Slide i18n   | nothing; prints the reading copy                 |
-| `youtube:chapters`     | Slide starts                           | the chapter block of `youtube.<lang>.md`         |
-| `youtube:apply`        | `youtube.<lang>.md`, the remote video  | the video description, a comment; the comment ID |
+| Command                | Reads                                  | Writes                                                                    |
+| ---------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
+| `youtube:transcript`   | YouTube captions and length (`yt-dlp`) | `transcript.<lang>.vtt`, `video.<lang>.json`                              |
+| `youtube:recording`    | the composition, the Recording folder  | nothing; prints the Slide table, then violations                          |
+| `youtube:voice-script` | transcript, Slide starts, Slide i18n   | nothing; prints the reading copy                                          |
+| `youtube:chapters`     | Slide starts                           | the chapter block of `youtube.<lang>.md`                                  |
+| `youtube:apply`        | `youtube.<lang>.md`, the remote video  | the video description, a comment; the comment ID, the applied fingerprint |
+| `youtube:pull`         | `youtube.<lang>.md`, the remote video  | nothing; prints the word diff and who changed it                          |
 
 `slide-starts.<lang>.json` is `{videoId, starts, unmatched, guessed, extraChapters}`: `guessed` lists the started Slides whose start was inferred, for Han's review; `extraChapters` (`[{start, title}]`, optional) adds YouTube chapters inside a Section, which `youtube:chapters` merges with the Section chapters in time order.
 
+`youtube.<lang>.md` ends with an optional `## Applied fingerprint`: the fingerprint of the description apply last sent. Apply refuses a description edited on YouTube since then, unless `--force`; `youtube:pull` uses it to tell a Studio edit from a repo change not yet applied. Edits on YouTube come back through the Learn branch of `/episode-author-youtube-metadata`. The fingerprint is a `node:crypto` hash: deterministic, so it may sit in a `*.pure.ts` file.
+
 ## youtube:apply setup
 
-`npm run youtube:apply -- <episode folder | page url> [--lang de] [--dry-run]` writes the description and posts the pinned comment after the PR merged; `--dry-run` only prints the plan.
+`npm run youtube:apply -- <episode folder | page url> [--lang de] [--dry-run] [--force]` writes the description and posts the pinned comment after the PR merged; `--dry-run` only prints the plan.
 
 1. In Google Cloud, enable the YouTube Data API v3 and create an OAuth client (Desktop app) on the channel's project.
 2. Set the OAuth consent screen's publishing status to "In production". In "Testing" the refresh token expires after 7 days.
