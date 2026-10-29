@@ -52,12 +52,12 @@
       "the-window-is-the-span": {
         "title": "Das Fenster ist die Spanne",
         "keywords": "",
-        "script": "Der Grund: Die Aufmerksamkeitsspanne der KI ist ihr Kontextfenster, ein begrenzter Platz, der sich mit jeder Nachricht füllt. Daraus folgen zwei Lehren: Wichtige Informationen und Entscheidungen gehen in der Mitte verloren, und ist das Fenster voll, kann die automatische Verdichtung Details verwerfen, ohne dass Du es merkst. Mit dem Schalter am Fenster wechselst Du zwischen der einfachen und der technischen Ansicht."
+        "script": "Wenn Du mit einem Chat-Interface, einem Chatbot, arbeitest, hast Du das mentale Modell, dass das Ganze eine Historie ist. Und Du kannst sagen: Moment, wenn ich hochscrolle, sehe ich doch, dass ich 30.000 Euro geschrieben habe. Aber so funktioniert die KI darunter nicht: Sie verarbeitet sämtliche Informationen im gesamten Verlauf und versucht damit, die nächste Nachricht zu erzeugen."
       },
       "manage-it": {
         "title": "Verwalte es",
         "keywords": "",
-        "script": "Lerne also, Aufmerksamkeit zu steuern. Für Dich ist das optional, Du kommst auch mit einem schlechten Gedächtnis durch; für die KI ist es Pflicht. Der Rest der Episode dreht sich darum, was in dieses Fenster kommt und was Du dagegen tust."
+        "script": "Das erklärt, warum es wichtig ist, das Ganze zu managen. Für uns Menschen war es schon immer schlau zu wissen, wann ich am produktivsten bin, und diese Zeit zu blocken. Mit KI wird es Pflicht zu überlegen, wie ich so arbeite, dass die KI in ihrem optimalen Bereich arbeitet und die Aufmerksamkeit genug auf die wichtigen Dinge verteilt ist. Das erklärt auch, warum wir Aufgaben klein halten und ein neues Chatfenster starten sollten: So profitieren wir jedes Mal von einem frischen Kontextfenster. Jetzt haben wir darüber gesprochen, wie sich diese Aufmerksamkeitsspanne füllt und welche Mechanismen darunter liegen."
       }
     }
   }

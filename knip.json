@@ -8,5 +8,5 @@
   ],
   "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts", "tools/**/*.ts"],
   "ignoreExportsUsedInFile": true,
-  "ignoreBinaries": ["magick", "marker_single", "pdfinfo", "pdftoppm"]
+  "ignoreBinaries": ["magick", "marker_single", "pdfinfo", "pdftoppm", "yt-dlp"]
 }

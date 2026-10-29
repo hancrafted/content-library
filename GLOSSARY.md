@@ -173,6 +173,9 @@ _Avoid_: Paragraph, line, cue card
 **Bridge**: the closing line of a Voice script segment that hands the speaker over to the next Section.
 _Avoid_: Transition, segue
 
+**Slide starts**: the second each Slide begins in an Episode's recording, stored per Slide in the Recording folder. Each Section's start is derived from its first Slide's start, never stored.
+_Avoid_: Timestamps, cue points, chapters (a chapter is a YouTube line derived from them)
+
 ## Episode production
 
 **Brief**: the goals an Episode is written towards, fixed before any research: its audience, learning goal, actionables, hook and Threads, and the Spine that carries them out. The structured result of a grilling session; just enough to start. Its goals stay as settled once the draft exists; its Spine is kept in step with the Dossier until the Spec Gate and with the Spec after it.
@@ -197,6 +200,9 @@ _Avoid_: Drafts, workspace
 
 **Promotion**: the step that closes a final Episode's making: it harvests Staging into lessons, cleanups and tickets, files the Spec's Options into the Design archive, keeps the Brief beside the Episode, and deletes Staging. No words move; the Slides already own them.
 _Avoid_: Publish, migration, release
+
+**Recording folder**: the `recording/` folder next to an Episode's Brief, for a public Episode and an Event copy alike, holding what post-production keeps of the recording: the raw transcript, the Slide starts and the YouTube copy. Its file names carry the spoken language (`transcript.de.vtt`).
+_Avoid_: Media folder, transcript folder
 
 **Design archive**: every promoted Episode's design Options, one page per Slide with the picked one marked and the feedback that chose it, kept to browse and reuse in later Episodes.
 _Avoid_: Spec archive, gallery
