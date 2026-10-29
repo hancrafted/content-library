@@ -1,7 +1,7 @@
 {
   "title": "Get workshop-ready: your AI agent on your laptop · hancrafted",
   "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
-  "toc": "Contents Loading 4 min left 1 Your terminal Overview Open your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 4 min left 1 Your terminal Overview Open your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
+  "toc": "Contents Loading 10 min left 1 Your terminal Overview Open your terminal 2 Your AI agent Install your AI agent Log in 3 Your folder Download and unzip the starter folder Start the agent inside that folder 4 Your first skill Run your first skill 5 The technical route Set up the Matt Pocock skills yourself Open contents : Contents · Loading Contents 10 min left 1 Your terminal Overview Open your terminal 2 Your AI agent Install your AI agent Log in 3 Your folder Download and unzip the starter folder Start the agent inside that folder 4 Your first skill Run your first skill 5 The technical route Set up the Matt Pocock skills yourself",
   "slides": [
     {
       "id": "top",
@@ -18,16 +18,40 @@
     },
     { "id": "your-ai-agent", "text": "Your AI agent The AI agent that lives in it. Steps 3–4 ✻ AI agent ready >" },
     {
+      "id": "your-ai-agent--install-your-ai-agent",
+      "text": "Your AI agent (1/2) Page 1 of 2 Install your AI agent The official page always has the current steps. This page only tells you what to look for. Step 3 of 8 Your computer Mac Windows Linux AI agent Claude Code Antigravity Codex GitHub Copilot Do this Open the official install page for Claude Code ( opens in a new tab ) On that page, follow the steps marked macOS , then come back here. Claude Code is preferred: the workshop is built around it. Antigravity, Codex and GitHub Copilot work too. Terminal ✻ Welcome to Claude Code ! /help for help > It worked when you see this. Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 3: Install your AI agent"
+    },
+    {
+      "id": "your-ai-agent--log-in",
+      "text": "Your AI agent (2/2) Page 2 of 2 Log in Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal. Step 4 of 8 AI agent Claude Code Antigravity Codex GitHub Copilot 1 · In your terminal Claude Code ✻ Claude Code Opens a sign-in in your browser… 2 · In your browser Sign-in page ✻ Sign in to Claude Code Sign in Use your own account 3 · Back in your terminal Logged in You do this once, and it stays. Claude Code · official login page ( opens in a new tab ) Which account fits is on that page. Use your own, not a shared one. Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 4: Log in"
+    },
+    {
       "id": "your-folder",
       "text": "Your folder A place for the AI agent to work. Steps 5–6 workshop-starter AGENTS.md GLOSSARY.md skills/"
+    },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Your folder (1/2) Page 1 of 2 Download and unzip the starter folder One zip with everything the workshop needs. Unzip it into a real folder: on Windows, right-click it and choose Extract All. Step 5 of 8 Mac Windows Linux 01 · Download Download the starter folder Downloads starter-folder.zip just now invoice-october.pdf last week Double-click 02 · Your folder Downloads › starter-folder skills what your AI agent can do AGENTS.md how to work here CLAUDE.md GLOSSARY.md the words it knows It worked when you see a plain folder icon, not a zip, with these four items inside. Remember where it landed: Downloads › starter-folder. Step 6 goes into exactly this folder. Stuck? Paste your error, copy the prompt, ask free ChatGPT. Your error, or what you see The prompt adds Mac · Claude Code · Step 5: Download and unzip the starter folder Copy prompt"
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Your folder (2/2) Page 2 of 2 Start the agent inside that folder Open the terminal from the folder itself, then start your AI agent: it reads only the folder it starts in. Step 6 of 8 Mac Windows Linux Claude Code Antigravity Codex GitHub Copilot 1 Open a terminal in the folder In Finder, right-click starter-folder , then Services › New Terminal at Folder . No path to type. It worked when the folder name sits in front of your cursor. starter-folder Open Get Info Rename Compress “starter-folder” Services › New Terminal at Folder New Terminal Tab at Folder Not in the menu? Turn it on once: System Settings › Keyboard › Keyboard Shortcuts › Services , tick New Terminal at Folder . Terminal · starter-folder han@MacBook starter-folder % 2 Start your AI agent Type its name and press Enter. If it asks whether you trust this folder, yes is expected here . Claude Code: Quickstart (opens in a new tab) Terminal · starter-folder han@MacBook starter-folder % claude Do you trust the files in this folder? ~/Downloads/starter-folder › 1. Yes, proceed 2. No, exit Fallback, if the menu won't work: open the terminal as in step 2, type cd Downloads/starter-folder and press Enter. Stuck? Paste your error, copy the prompt, ask free ChatGPT. Your error, or what you see The prompt adds Mac · Claude Code · Step 6: Start the agent inside that folder Copy prompt"
     },
     {
       "id": "your-first-skill",
       "text": "Your first skill The piece that proves the chain. Step 7 Do you want to proceed? › Yes No"
     },
     {
+      "id": "your-first-skill--run-your-first-skill",
+      "text": "Your first skill (1/1) Page 1 of 1 Run your first skill Type the skill's name, say yes when your AI agent asks, and the hancrafted homepage opens. Step 7 of 8 AI agent Claude Code Antigravity Codex GitHub Copilot 1 Say yes to the command workshop-starter · Claude Code > /check-workshop-readiness ● Looking up hancrafted in GLOSSARY.md … found https://hancrafted.net Bash command open https://hancrafted.net Open the hancrafted homepage in your browser Do you want to proceed? ❯ 1. Yes 2. Yes, and don't ask again 3. No Approving it is the step. Your AI agent asks before it runs anything on your computer, so you stay the one who decides ( ) . 2 Your browser opens hancrafted hancrafted.net hancrafted Episodes Learn Events Human-led. AI-accelerated. AI gave you a promotion you never asked for. You get to 10x your productivity — if you learn to plan, spec and review … Explore why You just ran a skill. See you at the workshop; meanwhile browse hancrafted. Page didn't open? The skill prints the link instead: open https://hancrafted.net in your browser by hand. Stuck? Mac · Claude Code · Step 7: Run your first skill Your error, or what you see on screen Copy prompt Paste the copied prompt into free ChatGPT; it already says which system, AI agent and step you are on."
+    },
+    {
       "id": "the-technical-route",
       "text": "The technical route Optional: the same chain, built by hand. Step 8 $ npx skills@latest add mattpocock/skills"
+    },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "The technical route (1/1) Page 1 of 1 Set up the Matt Pocock skills yourself Five lines in an empty folder of your own. Skip the starter zip: it would bring the Matt Pocock skills a second time. Step 8 of 8 1 Install Node.js The skills installer runs on it. Take the version the page recommends. Node.js · official download page (opens in a new tab) 2 Add the main Matt Pocock skills In your terminal. When it asks which skills, keep the main group and leave Other unticked. $ npx skills@latest add mattpocock/skills ? Which skills do you want to install? mattpocock-skills main group, with the setup skill Other misc · in-progress, not needed 3 Run his setup skill in your AI agent It asks a few questions, one at a time. Give these four answers. ✻ > /setup-matt-pocock-skills 1 · Issue tracker Local markdown, no GitHub 2 · Domain docs A single GLOSSARY.md 3 · Triage labels Keep the defaults 4 · Which file AGENTS.md , plus a CLAUDE.md holding @AGENTS.md 4 Add our check and the hancrafted entry The only two pieces from us. Unzip the skill into the skills folder the installer made; paste the entry into GLOSSARY.md , or create the file with it. check-workshop-readiness · skill folder only small zip GLOSSARY.md · add this entry **hancrafted**: Han's workshop homepage, https://hancrafted.net 5 Run the same check as step 7 It confirms the Matt Pocock skills are in place. Approve its command, and the hancrafted homepage opens. ✻ > /check-workshop-readiness hancrafted.net hancrafted The homepage opens Stuck? Paste the error, copy the prompt, ask free ChatGPT. Your error Copy prompt The prompt adds Mac Claude Code Step 8: Set up the Matt Pocock skills yourself"
     }
   ],
   "notes": [
@@ -45,9 +69,27 @@
       "text": "Open your terminal Hesitation is normal Computer anxiety is a long-studied, widespread reaction; about 80% of the 89 studies on experience found more experience went with less anxiety, and a relaxed first experience was linked to lower anxiety. No study measures fear of the terminal itself, so applying this to the terminal is an inference 1 . Sources (1) Powell, Computer anxiety: Comparison of research from the 1990s and 2000s ( opens in a new tab ) doi.org Why the command line feels scary System administrators said you cannot click your way around a command line to figure it out, and that it may be scary or overwhelming for a beginner; this is a survey quote, not a measured rate of mistakes 1 . Sources (1) Voronkov, Martucci and Lindskog, System Administrators Prefer Command Line Interfaces, Don't They? An Exploratory Study of Firewall Interfaces ( opens in a new tab ) arxiv.org Setup is the hard part Software Carpentry reports that installing software is often harder than using it, and that every new tool fails for at least one person in the room across Mac, Windows and Linux 1 . Sources (1) Wilson, Software Carpentry: lessons learned ( opens in a new tab ) doi.org Feedback builds confidence In a university Unix course with near-instant per-answer feedback, 78.2% of 2021 respondents said they had procedural Unix knowledge, against 38.8% before; the authors call this self-report possibly subjective, and the students were not solo first-timers 1 . Sources (1) Berry et al., ShellOnYou: learning by doing Unix command line ( opens in a new tab ) ctiber.github.io"
     },
     { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
+    { "id": "your-ai-agent--install-your-ai-agent", "text": "Install your AI agent No speaker notes for this Slide." },
+    { "id": "your-ai-agent--log-in", "text": "Log in No speaker notes for this Slide." },
     { "id": "your-folder", "text": "Your folder No speaker notes for this Slide." },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Download and unzip the starter folder No speaker notes for this Slide."
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Start the agent inside that folder No speaker notes for this Slide."
+    },
     { "id": "your-first-skill", "text": "Your first skill No speaker notes for this Slide." },
-    { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." }
+    {
+      "id": "your-first-skill--run-your-first-skill",
+      "text": "Run your first skill The prompt is a safeguard, not an error A model can be steered by text it reads, such as a web page or a project file, so OWASP recommends requiring a human to approve high-impact actions; each vendor builds that approval into its default mode 1 2 3 4 5 6 7 . Sources (7) OWASP, LLM01: Prompt Injection ( opens in a new tab ) genai.owasp.org OWASP, LLM06:2025 Excessive Agency ( opens in a new tab ) genai.owasp.org OpenAI, Codex: Agent approvals and security ( opens in a new tab ) learn.chatgpt.com Google, Gemini CLI: Policy engine ( opens in a new tab ) geminicli.com GitHub, About GitHub Copilot CLI ( opens in a new tab ) docs.github.com Google, Antigravity: Permissions ( opens in a new tab ) antigravity.google Anthropic, Claude Code: Configure permissions ( opens in a new tab ) code.claude.com Claude Code's prompt In manual mode, commands outside a built-in read-only set trigger a \"Bash command\" dialog asking \"Do you want to proceed?\" with Yes, \"Yes, and don't ask again\" and No. Prompt names and defaults differ by AI agent and version and change often, so recheck before showing one on screen 1 . Sources (1) Anthropic, Claude Code: Configure permissions ( opens in a new tab ) code.claude.com Why approvals are kept Anthropic says broad file access is risky especially under prompt injection; this is a vendor statement, not an independent study 1 . Sources (1) Anthropic, Making Claude Code more secure and autonomous with sandboxing ( opens in a new tab ) anthropic.com"
+    },
+    { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "Set up the Matt Pocock skills yourself No speaker notes for this Slide."
+    }
   ],
   "script": [
     {
@@ -71,16 +113,40 @@
       "text": "Your AI agent 0:00 – 0:14 Terminal done So you now have a window that waits for words. Because an empty window cannot do much on its own, the next piece is the AI agent that will live inside it."
     },
     {
+      "id": "your-ai-agent--install-your-ai-agent",
+      "text": "Install your AI agent 0:00 – 0:27 Official page only Installing an AI agent changes more often than a guide like this can keep up with, so I do not read steps to you here. We link to the official install page of your AI agent, which always has the current steps, and we only tell you what to look for. You can follow that page line by line and come straight back. 0:27 – 0:48 Claude Code preferred I prefer Claude Code, and the workshop is built around it. Antigravity, Codex and GitHub Copilot work as well, so pick yours in the toolbar and the page follows your choice. If you have no preference, choose Claude Code and you will see the same screens as I do. 0:48 – 1:08 It tells you when it worked You know the install worked when your AI agent shows its start screen in the terminal, and the page shows you what that looks like. If you see it, you are done with this step. If you do not, that is what the troubleshooting box is for."
+    },
+    {
+      "id": "your-ai-agent--log-in",
+      "text": "Log in 0:00 – 0:15 Sign in once Now the AI agent needs to know who you are. It opens a sign-in for you the first time, you log in, and you come back to the terminal. You do this once, and it stays. 0:15 – 0:34 Your own account Which account fits which AI agent differs, and the official page of your AI agent says it better than I could, so the link is right here. Use your own account, not a shared one, so that the AI agent is yours to run."
+    },
+    {
       "id": "your-folder",
       "text": "Your folder 0:00 – 0:17 Terminal and AI agent, now the place to work You have a terminal and an AI agent, so what is missing is a place to work. An AI agent works inside one folder and reads what is there, so we give it one on purpose: the starter folder."
+    },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Download and unzip the starter folder 0:00 – 0:24 One link, one zip There is one link to one zip file. Download it, and then unzip it. On a Mac, double-click the zip. On Windows, right-click it and choose Extract All. On Linux, use Extract here in your file manager. Inside you will find the files the workshop needs, already in place, so there is nothing to assemble. 0:24 – 0:37 Where it lives Take a second to notice where the folder landed, usually in your Downloads. The next step goes into exactly this folder, so if you remember where it is, the rest is easy."
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Start the agent inside that folder 0:00 – 0:26 Go in, then start In your terminal you first move into the unzipped folder, and only then you start your AI agent. The page draws the terminal at each point, so you can check that the folder name appears in front of your cursor before you start. The AI agent may ask whether you trust this folder. For this one, you do, so say yes. 0:26 – 0:50 Same folder every time The order matters because an AI agent reads what is in the folder it starts in. That is how it will find your skill in a moment, and if you start it somewhere else, the skill is simply not there. So whenever you work with this starter folder, start the AI agent from inside it. 0:50 – 1:05 Chain so far Look at what you have. A terminal that waits, an AI agent inside it, and a folder it can read. One piece is left, and it is the one that proves all the others work."
     },
     {
       "id": "your-first-skill",
       "text": "Your first skill 0:00 – 0:17 Everything in place So everything is in place: a terminal, an AI agent and a folder. What is left is a skill, which is a small set of instructions your AI agent can follow, and running it shows that the chain is real."
     },
     {
+      "id": "your-first-skill--run-your-first-skill",
+      "text": "Run your first skill 0:00 – 0:18 Type the skill Type the name of the skill, check-workshop-readiness, and your AI agent reads it. Before it does anything on your computer, it stops and asks you. That pause is not an error, it is the AI agent handing the decision to you. 0:18 – 0:44 Say yes You are the one who decides here, so look at what it wants to run. For this skill, it opens one web page, and the answer is yes. If you were ever unsure what a command does, you could ask the AI agent to explain it before you approve. Would you rather have a tool that asks, or one that does not? 0:44 – 1:09 The proof Approve it, and the hancrafted homepage opens in your browser. That is the whole check, and there is nothing more to submit. You just ran a skill, so see you at the workshop, and until then, have a look around hancrafted. If the page does not open, the skill prints the link, and you can open it by hand."
+    },
+    {
       "id": "the-technical-route",
       "text": "The technical route 0:00 – 0:18 For people who build This last Section is for people who build, and it is optional. If you are comfortable with a terminal, you can get the same result without the starter folder by installing the pieces yourself. Everyone else can stop at the homepage."
+    },
+    {
+      "id": "the-technical-route--set-up-the-matt-pocock-skills-yourself",
+      "text": "Set up the Matt Pocock skills yourself 0:00 – 0:27 Same chain, built by hand What the starter folder did for you comes down to four short steps. You install Node.js from its official page, add the Matt Pocock skills, run his setup skill so everything stays local without a GitHub account, and then run the check. The exact lines are on the page, because I would rather you copy them from there than hear them from me. 0:27 – 0:45 Same proof The proof is the same as before. You run check-workshop-readiness, and the hancrafted homepage opens. One thing to know: that skill comes with the starter folder, not with the Matt Pocock skills, so the page tells you where to take it from."
     }
   ]
 }

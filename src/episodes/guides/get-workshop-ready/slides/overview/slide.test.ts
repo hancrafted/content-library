@@ -19,7 +19,10 @@ const standIn = (slug: string, title: string) =>
 
 const PLACED = placeSections<Slide>([
   [standIn('your-terminal', 'Your terminal'), overview],
-  [standIn('your-folder', 'Your folder')],
+  [
+    standIn('your-folder', 'Your folder'),
+    standIn('download-and-unzip-the-starter-folder', 'Download and unzip the starter folder'),
+  ],
   [standIn('the-technical-route', 'The technical route')],
 ]).flat();
 
@@ -122,10 +125,10 @@ describe('success cases', () => {
     expect(shape).toEqual(expected);
   });
 
-  it('jumps the AI agent piece to the folder Section and sends the technical route to the last Section', () => {
+  it('jumps the AI agent piece to the step-5 Slide and sends the technical route to the last Section', () => {
     // ARRANGE
     const expected = {
-      agent: '/guides/get-workshop-ready#your-folder',
+      agent: '/guides/get-workshop-ready#your-folder--download-and-unzip-the-starter-folder',
       technical: '/guides/get-workshop-ready#the-technical-route',
     };
     // ACT

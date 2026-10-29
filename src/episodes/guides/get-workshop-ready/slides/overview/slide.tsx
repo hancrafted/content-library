@@ -68,7 +68,7 @@ export const overview = slide({
           <span className="text-caption text-muted-foreground">{t('chainLine')}</span>
         </div>
         <div className="flex flex-col">
-          <SkipArc label={t('skip.agent')} link={slideHref('your-folder')} locale={locale} />
+          <SkipArc label={t('skip.agent')} link={slideHref('download-and-unzip-the-starter-folder')} locale={locale} />
           <ol
             className="focus-group focus-group--dim-others flex flex-col gap-3 @3xl:flex-row @3xl:items-stretch @3xl:gap-0"
             aria-label={t('chainLabel')}
