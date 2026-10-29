@@ -1,7 +1,7 @@
 {
   "title": "Get workshop-ready: your AI agent on your laptop · hancrafted",
   "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
-  "toc": "Contents Loading 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
+  "toc": "Contents Loading 4 min left 1 Your terminal 2 Your AI agent 3 Your folder Download and unzip the starter folder Start the agent inside that folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 4 min left 1 Your terminal 2 Your AI agent 3 Your folder Download and unzip the starter folder Start the agent inside that folder 4 Your first skill 5 The technical route",
   "slides": [
     {
       "id": "top",
@@ -12,6 +12,14 @@
     {
       "id": "your-folder",
       "text": "Your folder A place for the AI agent to work. Steps 5–6 workshop-starter AGENTS.md GLOSSARY.md skills/"
+    },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Your folder (1/2) Page 1 of 2 Download and unzip the starter folder One zip with everything the workshop needs. Unzip it into a real folder: on Windows, right-click it and choose Extract All. Step 5 of 8 Mac Windows Linux 01 · Download Download the starter folder Downloads starter-folder.zip just now invoice-october.pdf last week Double-click 02 · Your folder Downloads › starter-folder skills what your AI agent can do AGENTS.md how to work here CLAUDE.md GLOSSARY.md the words it knows It worked when you see a plain folder icon, not a zip, with these four items inside. Remember where it landed: Downloads › starter-folder. Step 6 goes into exactly this folder. Stuck? Paste your error, copy the prompt, ask free ChatGPT. Your error, or what you see The prompt adds Mac · Claude Code · Step 5: Download and unzip the starter folder Copy prompt"
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Your folder (2/2) Page 2 of 2 Start the agent inside that folder Open the terminal from the folder itself, then start your AI agent: it reads only the folder it starts in. Step 6 of 8 Mac Windows Linux Claude Code Antigravity Codex GitHub Copilot 1 Open a terminal in the folder In Finder, right-click starter-folder , then Services › New Terminal at Folder . No path to type. It worked when the folder name sits in front of your cursor. starter-folder Open Get Info Rename Compress “starter-folder” Services › New Terminal at Folder New Terminal Tab at Folder Not in the menu? Turn it on once: System Settings › Keyboard › Keyboard Shortcuts › Services , tick New Terminal at Folder . Terminal · starter-folder han@MacBook starter-folder % 2 Start your AI agent Type its name and press Enter. If it asks whether you trust this folder, yes is expected here . Claude Code: Quickstart (opens in a new tab) Terminal · starter-folder han@MacBook starter-folder % claude Do you trust the files in this folder? ~/Downloads/starter-folder › 1. Yes, proceed 2. No, exit Fallback, if the menu won't work: open the terminal as in step 2, type cd Downloads/starter-folder and press Enter. Stuck? Paste your error, copy the prompt, ask free ChatGPT. Your error, or what you see The prompt adds Mac · Claude Code · Step 6: Start the agent inside that folder Copy prompt"
     },
     {
       "id": "your-first-skill",
@@ -30,6 +38,14 @@
     { "id": "your-terminal", "text": "Your terminal No speaker notes for this Slide." },
     { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
     { "id": "your-folder", "text": "Your folder No speaker notes for this Slide." },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Download and unzip the starter folder No speaker notes for this Slide."
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Start the agent inside that folder No speaker notes for this Slide."
+    },
     { "id": "your-first-skill", "text": "Your first skill No speaker notes for this Slide." },
     { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." }
   ],
@@ -49,6 +65,14 @@
     {
       "id": "your-folder",
       "text": "Your folder 0:00 – 0:17 Terminal and AI agent, now the place to work You have a terminal and an AI agent, so what is missing is a place to work. An AI agent works inside one folder and reads what is there, so we give it one on purpose: the starter folder."
+    },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Download and unzip the starter folder 0:00 – 0:24 One link, one zip There is one link to one zip file. Download it, and then unzip it. On a Mac, double-click the zip. On Windows, right-click it and choose Extract All. On Linux, use Extract here in your file manager. Inside you will find the files the workshop needs, already in place, so there is nothing to assemble. 0:24 – 0:37 Where it lives Take a second to notice where the folder landed, usually in your Downloads. The next step goes into exactly this folder, so if you remember where it is, the rest is easy."
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Start the agent inside that folder 0:00 – 0:26 Go in, then start In your terminal you first move into the unzipped folder, and only then you start your AI agent. The page draws the terminal at each point, so you can check that the folder name appears in front of your cursor before you start. The AI agent may ask whether you trust this folder. For this one, you do, so say yes. 0:26 – 0:50 Same folder every time The order matters because an AI agent reads what is in the folder it starts in. That is how it will find your skill in a moment, and if you start it somewhere else, the skill is simply not there. So whenever you work with this starter folder, start the AI agent from inside it. 0:50 – 1:05 Chain so far Look at what you have. A terminal that waits, an AI agent inside it, and a folder it can read. One piece is left, and it is the one that proves all the others work."
     },
     {
       "id": "your-first-skill",

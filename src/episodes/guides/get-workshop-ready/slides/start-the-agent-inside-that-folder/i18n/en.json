@@ -1,0 +1,109 @@
+{
+  "title": "Start the agent inside that folder",
+  "caption": "Open the terminal from the folder itself, then start your AI agent: <b>it reads only the folder it starts in</b>.",
+  "step": "Step 6 of 8",
+  "toolbar": {
+    "os": "Operating system",
+    "agent": "AI agent",
+    "names": {
+      "mac": "Mac",
+      "windows": "Windows",
+      "linux": "Linux"
+    }
+  },
+  "agents": {
+    "claude-code": "Claude Code",
+    "antigravity": "Antigravity",
+    "codex": "Codex",
+    "copilot": "GitHub Copilot"
+  },
+  "terminal": "Terminal",
+  "moves": {
+    "open": {
+      "title": "Open a terminal in the folder",
+      "detail": {
+        "mac": "In Finder, right-click <b>starter-folder</b>, then <b>Services › New Terminal at Folder</b>. No path to type.",
+        "windows": "In File Explorer, right-click <b>starter-folder</b>, then <b>Open in Terminal</b>. No path to type.",
+        "linux": "Right-click the folder in your file manager › <b>Open in Terminal</b>. No path to type."
+      },
+      "worked": "<b>It worked when</b> the folder name sits in front of your cursor.",
+      "menuLabel": "The folder's right-click menu",
+      "menu": {
+        "mac": {
+          "open": "Open",
+          "getInfo": "Get Info",
+          "rename": "Rename",
+          "compress": "Compress “{folder}”",
+          "services": "Services",
+          "newTerminal": "New Terminal at Folder",
+          "newTab": "New Terminal Tab at Folder"
+        },
+        "windows": {
+          "newTab": "Open in new tab",
+          "newWindow": "Open in new window",
+          "pin": "Pin to Quick access",
+          "compress": "Compress to ZIP file",
+          "copyPath": "Copy as path",
+          "properties": "Properties",
+          "terminal": "Open in Terminal",
+          "more": "Show more options"
+        }
+      },
+      "note": {
+        "mac": "Not in the menu? Turn it on once: <b>System Settings › Keyboard › Keyboard Shortcuts › Services</b>, tick <b>New Terminal at Folder</b>.",
+        "windows": "Windows 10 without it? Open the folder, click the address bar, type <code>powershell</code>, press Enter."
+      }
+    },
+    "start": {
+      "title": "Start your AI agent",
+      "detail": "Type its name and press Enter. If it asks whether you trust this folder, <b>yes is expected here</b>.",
+      "antigravity": "Start Antigravity in this folder as its official page shows.",
+      "opensNewTab": "(opens in a new tab)",
+      "link": {
+        "claude-code": "Claude Code: Quickstart",
+        "antigravity": "Antigravity: Docs",
+        "codex": "Codex CLI",
+        "copilot": "GitHub Copilot CLI"
+      }
+    }
+  },
+  "trust": {
+    "question": "Do you trust the files in this folder?",
+    "yes": "1. Yes, proceed",
+    "no": "2. No, exit"
+  },
+  "fallback": {
+    "text": "Fallback, if the menu won't work: open the terminal as in step 2, type <command></command> and press Enter."
+  },
+  "stuck": {
+    "title": "Stuck?",
+    "hint": "Paste your error, copy the prompt, ask free ChatGPT.",
+    "label": "Your error, or what you see",
+    "placeholder": "Paste your error or describe what you see…",
+    "adds": "The prompt adds",
+    "step": "Step 6: Start the agent inside that folder",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied. Paste it into free ChatGPT.",
+    "noError": "(I have not pasted an error; I am stuck on this step.)",
+    "template": "I am a beginner following a step-by-step guide to get an AI agent running on my laptop for a workshop.\n\nMy computer: {os}\nMy AI agent: {agent}\nThe step I am on: {step}\n\nThis is the error, or what I see:\n{error}\n\nExplain in plain words what went wrong and tell me what to do next, one small step at a time. Do not assume I know the terminal."
+  },
+  "voiceScript": {
+    "segments": {
+      "go-in-then-start": {
+        "title": "Go in, then start",
+        "keywords": "",
+        "script": "In your terminal you first move into the unzipped folder, and only then you start your AI agent. The page draws the terminal at each point, so you can check that the folder name appears in front of your cursor before you start. The AI agent may ask whether you trust this folder. For this one, you do, so say yes."
+      },
+      "same-folder-every-time": {
+        "title": "Same folder every time",
+        "keywords": "",
+        "script": "The order matters because an AI agent reads what is in the folder it starts in. That is how it will find your skill in a moment, and if you start it somewhere else, the skill is simply not there. So whenever you work with this starter folder, start the AI agent from inside it."
+      },
+      "chain-so-far": {
+        "title": "Chain so far",
+        "keywords": "",
+        "script": "Look at what you have. A terminal that waits, an AI agent inside it, and a folder it can read. One piece is left, and it is the one that proves all the others work."
+      }
+    }
+  }
+}

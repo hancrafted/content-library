@@ -1,7 +1,7 @@
 {
   "title": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop · hancrafted",
   "description": "Eine Schritt-für-Schritt-Anleitung für Einsteiger auf Mac, Windows oder Linux: Terminal öffnen, KI-Agent installieren und anmelden, ihn im Starter-Ordner starten und den ersten Skill ausführen, damit der Workshop sofort beginnen kann.",
-  "toc": "Inhalt Wird geladen noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg",
+  "toc": "Inhalt Wird geladen noch 4 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner Starter-Ordner herunterladen und entpacken Den Agenten in diesem Ordner starten 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 4 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner Starter-Ordner herunterladen und entpacken Den Agenten in diesem Ordner starten 4 Dein erster Skill 5 Der technische Weg",
   "slides": [
     {
       "id": "top",
@@ -12,6 +12,14 @@
     {
       "id": "your-folder",
       "text": "Dein Ordner Ein Ort, an dem der KI-Agent arbeitet. Schritte 5–6 workshop-starter AGENTS.md GLOSSARY.md skills/"
+    },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Dein Ordner (1/2) Seite 1 von 2 Starter-Ordner herunterladen und entpacken Ein Zip mit allem, was der Workshop braucht. Entpacke es zu einem echten Ordner: unter Windows mit Rechtsklick und „Alle extrahieren“. Schritt 5 von 8 Mac Windows Linux 01 · Herunterladen Starter-Ordner herunterladen Downloads starter-folder.zip gerade eben rechnung-oktober.pdf letzte Woche Doppelklick 02 · Dein Ordner Downloads › starter-folder skills was Dein KI-Agent kann AGENTS.md wie hier gearbeitet wird CLAUDE.md GLOSSARY.md die Wörter, die er kennt Es hat geklappt, wenn Du ein normales Ordnersymbol siehst, kein Zip, mit diesen vier Einträgen darin. Merk Dir, wo er gelandet ist: Downloads › starter-folder. Schritt 6 geht genau in diesen Ordner. Hängst Du fest? Fehler einfügen, Prompt kopieren, das kostenlose ChatGPT fragen. Dein Fehler oder was Du siehst Der Prompt ergänzt Mac · Claude Code · Schritt 5: Starter-Ordner herunterladen und entpacken Prompt kopieren"
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Dein Ordner (2/2) Seite 2 von 2 Den Agenten in diesem Ordner starten Öffne das Terminal direkt aus dem Ordner und starte dann Deinen KI-Agenten: Er liest nur den Ordner, in dem er startet. Schritt 6 von 8 Mac Windows Linux Claude Code Antigravity Codex GitHub Copilot 1 Ein Terminal im Ordner öffnen Klicke im Finder mit der rechten Maustaste auf starter-folder , dann auf Dienste › Neues Terminal beim Ordner . Kein Pfad zum Eintippen. Es hat geklappt, wenn der Ordnername direkt vor Deinem Cursor steht. starter-folder Öffnen Informationen Umbenennen „starter-folder“ komprimieren Dienste › Neues Terminal beim Ordner Neuer Terminal-Tab beim Ordner Nicht im Menü? Einmal einschalten: Systemeinstellungen › Tastatur › Tastaturkurzbefehle › Dienste , dort Neues Terminal beim Ordner ankreuzen. Terminal · starter-folder han@MacBook starter-folder % 2 Deinen KI-Agenten starten Tippe seinen Namen und drücke Enter. Fragt er, ob Du diesem Ordner vertraust, ist Ja hier richtig . Claude Code: Quickstart (öffnet in einem neuen Tab) Terminal · starter-folder han@MacBook starter-folder % claude Vertraust Du den Dateien in diesem Ordner? ~/Downloads/starter-folder › 1. Ja, weiter 2. Nein, beenden Notlösung, falls das Menü nicht klappt: Öffne das Terminal wie in Schritt 2, tippe cd Downloads/starter-folder und drücke Enter. Hängst Du fest? Fehler einfügen, Prompt kopieren, das kostenlose ChatGPT fragen. Dein Fehler oder was Du siehst Der Prompt ergänzt Mac · Claude Code · Schritt 6: Den Agenten in diesem Ordner starten Prompt kopieren"
     },
     {
       "id": "your-first-skill",
@@ -30,6 +38,14 @@
     { "id": "your-terminal", "text": "Dein Terminal Keine Sprechernotizen für diese Folie." },
     { "id": "your-ai-agent", "text": "Dein KI-Agent Keine Sprechernotizen für diese Folie." },
     { "id": "your-folder", "text": "Dein Ordner Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Starter-Ordner herunterladen und entpacken Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Den Agenten in diesem Ordner starten Keine Sprechernotizen für diese Folie."
+    },
     { "id": "your-first-skill", "text": "Dein erster Skill Keine Sprechernotizen für diese Folie." },
     { "id": "the-technical-route", "text": "Der technische Weg Keine Sprechernotizen für diese Folie." }
   ],
@@ -49,6 +65,14 @@
     {
       "id": "your-folder",
       "text": "Dein Ordner 0:00 – 0:17 Terminal und KI-Agent, jetzt der Ort zum Arbeiten Du hast ein Terminal und einen KI-Agenten, also fehlt noch ein Ort zum Arbeiten. Ein KI-Agent arbeitet in einem Ordner und liest, was darin liegt. Deshalb geben wir ihm ganz bewusst einen: den Starter-Ordner."
+    },
+    {
+      "id": "your-folder--download-and-unzip-the-starter-folder",
+      "text": "Starter-Ordner herunterladen und entpacken 0:00 – 0:29 Ein Link, ein Zip Es gibt einen Link zu einer Zip-Datei. Lade sie herunter und entpacke sie dann. Auf dem Mac doppelklickst Du das Zip. Unter Windows klickst Du es mit der rechten Maustaste an und wählst „Alle extrahieren“. Unter Linux nimmst Du „Hier entpacken“ in Deinem Dateimanager. Darin liegen schon alle Dateien, die der Workshop braucht, Du musst also nichts zusammensuchen. 0:29 – 0:44 Wo er liegt Schau kurz, wo der Ordner gelandet ist, meistens in Deinen Downloads. Der nächste Schritt geht genau in diesen Ordner. Wenn Du Dir merkst, wo er liegt, ist der Rest einfach."
+    },
+    {
+      "id": "your-folder--start-the-agent-inside-that-folder",
+      "text": "Den Agenten in diesem Ordner starten 0:00 – 0:28 Erst hinein, dann starten In Deinem Terminal gehst Du zuerst in den entpackten Ordner, und erst dann startest Du Deinen KI-Agenten. Die Seite zeigt Dir das Terminal an jeder Stelle, so kannst Du prüfen, ob der Ordnername vor Deinem Cursor steht, bevor Du startest. Der KI-Agent fragt vielleicht, ob Du diesem Ordner vertraust. Diesem hier vertraust Du, also sag Ja. 0:28 – 0:52 Jedes Mal derselbe Ordner Die Reihenfolge ist wichtig, weil ein KI-Agent liest, was in dem Ordner liegt, in dem er startet. So findet er gleich Deinen Skill. Startest Du ihn woanders, ist der Skill einfach nicht da. Wann immer Du mit diesem Starter-Ordner arbeitest, starte den KI-Agenten also aus ihm heraus. 0:52 – 1:07 Die Kette bis hierher Schau, was Du jetzt hast: ein Terminal, das wartet, einen KI-Agenten darin und einen Ordner, den er lesen kann. Ein Teil fehlt noch, und genau das beweist, dass alle anderen funktionieren."
     },
     {
       "id": "your-first-skill",
