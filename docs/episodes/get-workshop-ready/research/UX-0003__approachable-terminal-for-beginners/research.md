@@ -1,15 +1,15 @@
 ---
 type: research
 title: 'Why have the attempts to make the terminal approachable for first-timers worked or failed?'
-description: 'Attempts that removed friction around the terminal (guided setup, live demonstration, instant feedback) show first-timer gains, but no primary source measures the redesigned terminals.'
+description: 'Setup is hard for novices and instant feedback raised self-reported confidence in one Unix course, but no primary source measures whether redesigned terminals help first-timers.'
 generated:
   by: claude-code/sonnet-5.5
   at: 2026-10-29T00:00:00Z
 stale_after: 2027-04-29T00:00:00Z
 sources:
   - id: 1
-    resource: https://arxiv.org/abs/1307.5448
-    title: 'Wilson, Software Carpentry: Lessons Learned'
+    resource: https://doi.org/10.12688/f1000research.3-62.v2
+    title: 'Wilson, Software Carpentry: lessons learned'
   - id: 2
     resource: https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf
     title: 'Berry et al., ShellOnYou: learning by doing Unix command line'
@@ -41,9 +41,9 @@ The evidence that something worked comes from teaching programmes, not from rede
 
 1. Software Carpentry reports that getting software installed is often harder than using it for its inexperienced audience, that every new tool fails for at least one person in the room across Mac, Windows and Linux variants, and that detailed documentation "has not proven effective" because some learners will not read it and it is incomprehensible to some and lacking for others [1].
 2. Its shell session shows learners only a dozen basic commands; the stated aim is the idea of combining single-purpose tools and having the computer repeat things, not command coverage [1].
-3. It teaches by live coding rather than slides, which its authors say is more convincing and answers "what if?" questions; this is the authors' belief, not a measured result [1].
+3. It teaches by live coding rather than slides, because "watching code emerge on the screen is much more convincing than looking at pre-made slides" and it lets instructors answer "what if?" questions; this is the author's belief, not a measured result [1].
 4. Whatever the pace, "20% or more of the room will be lost" and a different 20% bored; learners misjudge their own level, so the project added a short pre-assessment asking whether they could accomplish specific tasks [1].
-5. The authors state that they have not done the long-term follow-up needed to prove impact; their evidence is verbal feedback and informal pre/post surveys [1].
+5. The author states "we have not yet done a large-scale, long-term follow-up", calls the assessment results "still preliminary", and notes that survey response rates "are usually low" and the opt-in nature "undoubtedly biases the data"; 80-90% of attendees report being glad they attended [1].
 6. The current Software Carpentry shell lesson keeps the onboarding minimal: it defines the shell as "a program that enables us to send commands to the computer and receive output", names it as the terminal or command line, and has the first command be `cd`. Its setup steers each OS to one terminal (Terminal on macOS, Git Bash on Windows) and warns about a Windows unzip pitfall [3].
 7. In a university Unix course with 41 to 46 students per cohort over four years, an exercise platform that scores each attempt and gives specific feedback almost instantly was used for two weeks. About 11% of responding students had never heard of Unix, 14% were greatly worried about studying it and 34% felt some apprehension [2].
 8. Afterwards, 78.2% of 2021 respondents said they had procedural Unix knowledge, against 38.8% before; students named confidence, retrying with feedback and the game-like score as reasons. The authors call this self-report possibly subjective [2].
@@ -54,9 +54,9 @@ The evidence that something worked comes from teaching programmes, not from rede
 
 ## Caveats
 
-No peer-reviewed or vendor source reviewed here tests a redesigned terminal (Windows Terminal, Warp, Fig) with first-timers, so the Answer cannot say whether those attempts worked; it says only that they are undocumented on that point. A search for a controlled study of novice terminal difficulty found Berry et al. only; Shell Tutor (ITiCSE 2024) could not be read and is not used. The Software Carpentry paper text read was the arXiv PDF, headed as a pre-submission draft of the F1000Research article, so wording may differ from the published version. The Software Carpentry and ShellOnYou findings concern classroom learners (researchers and engineering students), not people who have never opened a terminal and are working alone; applying them to a solo guide is an inference. The Fig outcome is taken from the announcement only, not from a later primary notice of the shutdown.
+No peer-reviewed or vendor source reviewed here tests a redesigned terminal (Windows Terminal, Warp, Fig) with first-timers, so the Answer cannot say whether those attempts worked; it says only that they are undocumented on that point. A search for a controlled study of novice terminal difficulty found Berry et al. only; Shell Tutor (ITiCSE 2024) could not be read and is not used. The Software Carpentry and ShellOnYou findings concern classroom learners (researchers and engineering students), not people who have never opened a terminal and are working alone; applying them to a solo guide is an inference. The Fig outcome is taken from the announcement only, not from a later primary notice of the shutdown.
 
-[1]: <https://arxiv.org/abs/1307.5448> "Wilson, Software Carpentry: Lessons Learned"
+[1]: <https://doi.org/10.12688/f1000research.3-62.v2> "Wilson, Software Carpentry: lessons learned"
 [2]: <https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf> "Berry et al., ShellOnYou: learning by doing Unix command line"
 [3]: <https://swcarpentry.github.io/shell-novice/> "Software Carpentry, The Unix Shell (shell-novice lesson)"
 [4]: <https://learn.microsoft.com/en-us/windows/terminal/> "Microsoft, An overview on Windows Terminal"
