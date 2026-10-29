@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why have the attempts to make the terminal approachable for first-timers worked or failed?'
-description: 'Setup is hard for novices and instant feedback raised self-reported confidence in one Unix course, but no primary source measures whether redesigned terminals help first-timers.'
+title: 'Why have the attempts to make the terminal approachable for first-timers
+  worked or failed?'
+description: 'Setup is hard for novices and instant feedback raised
+  self-reported confidence in one Unix course, but no primary source measures
+  whether redesigned terminals help first-timers.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-29T00:00:00Z
+  at: 2026-10-29T16:23:47Z
 stale_after: 2027-04-29T00:00:00Z
 sources:
   - id: 1
