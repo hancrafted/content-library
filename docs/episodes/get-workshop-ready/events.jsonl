@@ -752,3 +752,6 @@
 {"kind":"score","t":"2026-10-29T18:47:01Z","seq":752,"trace_id":"81d6378c5e01cf7ec8799e5f3e2e02c1","span_id":"2264bcdf730c3274","name":"check","value":"pass","source":"check:mh"}
 {"kind":"score","t":"2026-10-29T18:47:02Z","seq":753,"trace_id":"81d6378c5e01cf7ec8799e5f3e2e02c1","span_id":"2264bcdf730c3274","name":"check","value":"pass","source":"check:vitest"}
 {"kind":"end","t":"2026-10-29T18:47:02Z","seq":754,"trace_id":"81d6378c5e01cf7ec8799e5f3e2e02c1","span_id":"2264bcdf730c3274","status":"ok","summary":"Feedback round 1 folded in: 6a/6b/6c open the terminal from the folder, 8a/8b/8c drop the starter zip; reviewer passed attempt 4."}
+{"kind":"start","t":"2026-10-29T18:47:14Z","seq":755,"trace_id":"81d6378c5e01cf7ec8799e5f3e2e02c1","span_id":"0dd2bf30aeeee677","type":"gate","name":"draft spec-2","job":"write-spec","parent_span_id":"0b4b8c84e019d31d"}
+{"kind":"score","t":"2026-10-29T19:15:26Z","seq":756,"trace_id":"81d6378c5e01cf7ec8799e5f3e2e02c1","span_id":"0dd2bf30aeeee677","name":"gate","value":"approved","source":"human:han","via":"commit","comment":"approved in chat after round 1"}
+{"kind":"end","t":"2026-10-29T19:15:26Z","seq":757,"trace_id":"81d6378c5e01cf7ec8799e5f3e2e02c1","span_id":"0dd2bf30aeeee677","status":"ok"}
