@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why do first-timers finish a multi-step setup guide when it shows one step per screen, minimal instructions and visible progress?'
-description: 'Visible progress and a head start raise completion through goal-gradient motivation, while small steps and minimal task-focused instructions keep working-memory load low for novices.'
+title: 'Why do first-timers finish a multi-step setup guide when it shows one
+  step per screen, minimal instructions and visible progress?'
+description: 'Visible progress and a head start raise completion through
+  goal-gradient motivation, while small steps and minimal task-focused
+  instructions keep working-memory load low for novices.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-29T00:00:00Z
+  at: 2026-10-29T16:20:56Z
 stale_after: 2027-10-29T00:00:00Z
 sources:
   - id: 1
@@ -12,10 +15,12 @@ sources:
     title: 'W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms'
   - id: 2
     resource: https://doi.org/10.1086/500480
-    title: 'Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement Increases Effort'
+    title: 'Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement
+      Increases Effort'
   - id: 3
     resource: https://doi.org/10.1509/jmkr.43.1.39
-    title: 'Kivetz, Urminsky and Zheng, The Goal-Gradient Hypothesis Resurrected: Purchase Acceleration, Illusionary Goal Progress, and Customer Retention'
+    title: 'Kivetz, Urminsky and Zheng, The Goal-Gradient Hypothesis Resurrected:
+      Purchase Acceleration, Illusionary Goal Progress, and Customer Retention'
   - id: 4
     resource: https://doi.org/10.1006/imms.1993.1081
     title: 'Lazonder and van der Meij, The minimal manual: is less really more?'
