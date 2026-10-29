@@ -514,7 +514,7 @@
         "status": "draft",
         "generated": {
           "by": "process:spec-assemble",
-          "at": "2026-10-29T16:58:35Z"
+          "at": "2026-10-29T18:46:13Z"
         },
         "locale": "en",
         "brief": "../brief.md"
@@ -754,7 +754,7 @@
             Section, which echoes the motif and brings in its own Section. Picking an Option picks the set.
           </p>
           <div class="spec-options">
-            <figure data-spec="option" data-option="0a" data-recommended="">
+            <figure data-spec="option" data-option="0a" data-recommended="" data-picked="">
               <div data-spec="mock" class="flex flex-col justify-between gap-12 bg-background p-12">
                 <div class="max-w-4xl">
                   <p
@@ -1568,7 +1568,7 @@
                 </div>
               </details>
               <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:top" value="0a" /> Pick 0a</label
+                ><input type="checkbox" form="spec-review" name="pick:top" value="0a" checked="" /> Pick 0a</label
               >
             </figure>
             <figure data-spec="option" data-option="0b">
@@ -2876,7 +2876,7 @@
                   ><input type="checkbox" form="spec-review" name="pick:overview" value="1a" /> Pick 1a</label
                 >
               </figure>
-              <figure data-spec="option" data-option="1b" data-recommended="">
+              <figure data-spec="option" data-option="1b" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -3272,7 +3272,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:overview" value="1b" /> Pick 1b</label
+                  ><input type="checkbox" form="spec-review" name="pick:overview" value="1b" checked="" /> Pick
+                  1b</label
                 >
               </figure>
               <figure data-spec="option" data-option="1c">
@@ -3642,7 +3643,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="2a" data-recommended="">
+              <figure data-spec="option" data-option="2a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-7 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -3926,7 +3927,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:open-your-terminal" value="2a" /> Pick 2a</label
+                  ><input type="checkbox" form="spec-review" name="pick:open-your-terminal" value="2a" checked="" />
+                  Pick 2a</label
                 >
               </figure>
               <figure data-spec="option" data-option="2b">
@@ -4580,7 +4582,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="3a" data-recommended="">
+              <figure data-spec="option" data-option="3a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-4">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -4773,8 +4775,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:install-your-ai-agent" value="3a" /> Pick
-                  3a</label
+                  ><input type="checkbox" form="spec-review" name="pick:install-your-ai-agent" value="3a" checked="" />
+                  Pick 3a</label
                 >
               </figure>
 
@@ -5261,7 +5263,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="4a" data-recommended="">
+              <figure data-spec="option" data-option="4a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-4">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -5495,7 +5497,7 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:log-in" value="4a" /> Pick 4a</label
+                  ><input type="checkbox" form="spec-review" name="pick:log-in" value="4a" checked="" /> Pick 4a</label
                 >
               </figure>
 
@@ -5788,7 +5790,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="5a" data-recommended="">
+              <figure data-spec="option" data-option="5a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -6079,6 +6081,7 @@
                     form="spec-review"
                     name="pick:download-and-unzip-the-starter-folder"
                     value="5a"
+                    checked=""
                   />
                   Pick 5a</label
                 >
@@ -6626,7 +6629,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="6a" data-recommended="">
+              <figure data-spec="option" data-option="6a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -6636,7 +6639,7 @@
                       Start the agent inside that folder
                     </h3>
                     <p class="text-body text-muted-foreground">
-                      Go into the folder first, then start your AI agent:
+                      Open the terminal from the folder itself, then start your AI agent:
                       <b class="font-semibold text-primary">it reads only the folder it starts in</b>.
                     </p>
                   </div>
@@ -6681,36 +6684,98 @@
                     </div>
                   </div>
                   <ol
-                    class="focus-group focus-group--dim-others flex flex-col gap-6 rounded-3xl border border-border bg-card p-8"
+                    class="focus-group focus-group--dim-others flex flex-col gap-8 rounded-3xl border border-border bg-card p-8"
                   >
                     <li class="focus-group__item grid grid-cols-12 items-start gap-6">
-                      <div class="col-span-4 flex flex-col gap-2 pt-2">
+                      <div class="col-span-4 flex flex-col gap-3 pt-2">
                         <p class="flex items-center gap-3 text-body font-semibold text-foreground">
                           <span
-                            class="flex size-8 items-center justify-center rounded-full bg-foreground text-caption text-background"
+                            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-caption text-background"
                             >1</span
-                          >Go into the folder
+                          >Open a terminal in the folder
                         </p>
                         <p class="pl-11 text-caption text-muted-foreground">
-                          Type this and press Enter.
-                          <span class="font-semibold text-foreground"
-                            >It worked when the folder name sits in front of your cursor.</span
-                          >
+                          In Finder, right-click <span class="font-semibold text-foreground">starter-folder</span>, then
+                          <span class="font-semibold text-foreground">Services › New Terminal at Folder</span>. No path
+                          to type.
+                        </p>
+                        <p class="pl-11 text-caption text-muted-foreground">
+                          <span class="font-semibold text-foreground">It worked when</span> the folder name sits in
+                          front of your cursor.
                         </p>
                       </div>
-                      <div class="col-span-8 rounded-2xl border border-border bg-background">
-                        <div class="flex items-center gap-2 border-b border-border px-4 py-2.5">
-                          <span class="size-3 rounded-full bg-border"></span
-                          ><span class="size-3 rounded-full bg-border"></span
-                          ><span class="size-3 rounded-full bg-border"></span>
-                          <span class="ml-3 text-caption text-muted-foreground">Terminal</span>
+                      <div class="col-span-8 flex flex-col gap-4">
+                        <div class="grid grid-cols-12 items-start gap-3 rounded-2xl border border-border bg-muted p-5">
+                          <div class="col-span-3 flex flex-col items-center gap-2 pt-2">
+                            <svg viewBox="0 0 64 52" class="h-14 w-16" aria-hidden="true">
+                              <path
+                                d="M4 10a4 4 0 0 1 4-4h14l5 5h29a4 4 0 0 1 4 4v29a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"
+                                class="fill-primary/20 stroke-primary"
+                                stroke-width="2"
+                              ></path>
+                            </svg>
+                            <span
+                              class="rounded-md bg-primary px-2 py-0.5 text-caption font-semibold text-primary-foreground"
+                              >starter-folder</span
+                            >
+                          </div>
+                          <ul
+                            class="col-span-4 flex flex-col gap-0.5 rounded-xl border border-border bg-card p-1.5 text-caption shadow-md"
+                          >
+                            <li class="rounded-md px-3 py-1 text-foreground">Open</li>
+                            <li class="rounded-md px-3 py-1 text-foreground">Get Info</li>
+                            <li class="rounded-md px-3 py-1 text-foreground">Rename</li>
+                            <li class="rounded-md px-3 py-1 text-foreground">Compress “starter-folder”</li>
+                            <li class="my-1 h-px bg-border"></li>
+                            <li
+                              class="flex items-center justify-between rounded-md bg-primary/10 px-3 py-1 font-semibold text-primary"
+                            >
+                              Services<span aria-hidden="true">›</span>
+                            </li>
+                          </ul>
+                          <ul
+                            class="col-span-5 mt-24 flex flex-col gap-0.5 rounded-xl border border-border bg-card p-1.5 text-caption shadow-md"
+                          >
+                            <li
+                              class="flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 font-semibold text-primary-foreground"
+                            >
+                              <svg viewBox="0 0 24 24" class="size-4" aria-hidden="true">
+                                <path
+                                  d="M3 5h18v14H3zM6 9l3 3-3 3M11 15h5"
+                                  class="fill-none stroke-current"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                ></path></svg
+                              >New Terminal at Folder
+                            </li>
+                            <li class="rounded-md px-3 py-1 text-muted-foreground">New Terminal Tab at Folder</li>
+                          </ul>
                         </div>
-                        <div class="flex flex-col gap-2 p-5 font-mono text-body">
-                          <p>
-                            <span class="text-muted-foreground">han@MacBook ~ %</span>
-                            <span class="font-semibold text-primary">cd Downloads/starter-folder</span>
-                          </p>
-                          <p class="flex items-center gap-2">
+                        <p class="flex items-start gap-2 text-caption text-muted-foreground">
+                          <svg viewBox="0 0 24 24" class="mt-0.5 size-4 shrink-0" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" class="fill-none stroke-current" stroke-width="2"></circle>
+                            <path
+                              d="M12 11v6M12 7.5v.5"
+                              class="stroke-current"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                            ></path></svg
+                          ><span
+                            >Not in the menu? Turn it on once:
+                            <span class="font-semibold text-foreground"
+                              >System Settings › Keyboard › Keyboard Shortcuts › Services</span
+                            >, tick <span class="font-semibold text-foreground">New Terminal at Folder</span>.</span
+                          >
+                        </p>
+                        <div class="rounded-2xl border border-border bg-background">
+                          <div class="flex items-center gap-2 border-b border-border px-4 py-2.5">
+                            <span class="size-3 rounded-full bg-border"></span
+                            ><span class="size-3 rounded-full bg-border"></span
+                            ><span class="size-3 rounded-full bg-border"></span>
+                            <span class="ml-3 text-caption text-muted-foreground">Terminal · starter-folder</span>
+                          </div>
+                          <p class="flex items-center gap-2 p-5 font-mono text-body">
                             <span class="text-muted-foreground">han@MacBook</span
                             ><span
                               class="rounded-md bg-primary/10 px-1.5 font-semibold text-primary ring-1 ring-primary"
@@ -6724,7 +6789,7 @@
                       <div class="col-span-4 flex flex-col gap-3 pt-2">
                         <p class="flex items-center gap-3 text-body font-semibold text-foreground">
                           <span
-                            class="flex size-8 items-center justify-center rounded-full bg-foreground text-caption text-background"
+                            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-caption text-background"
                             >2</span
                           >Start your AI agent
                         </p>
@@ -6769,6 +6834,13 @@
                         </div>
                       </div>
                     </li>
+                    <li class="border-t border-border pt-5 text-caption text-muted-foreground">
+                      Fallback, if the menu won't work: open the terminal as in step 2, type
+                      <span class="rounded-md bg-muted px-1.5 font-mono text-foreground"
+                        >cd Downloads/starter-folder</span
+                      >
+                      and press Enter.
+                    </li>
                   </ol>
                   <div class="flex flex-col gap-3 rounded-2xl border border-border bg-background p-5">
                     <div class="flex items-center justify-between">
@@ -6803,57 +6875,84 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>6a</b> Two terminal snapshots, one per move, each beside its instruction and its "it worked when"
-                  line: the viewer checks the folder name before starting the AI agent, exactly the order the Voice
-                  script asks for. Recommended over 6b and 6c because each snapshot is a state the viewer can match on
-                  their own screen. Build cost: Scene.
+                  <b>6a</b> The terminal opens from the folder's own right-click menu, so a first-timer never types or
+                  describes a path, the step most likely to fail; then the AI agent starts in that window, each move
+                  beside the state the viewer matches on their own screen, with a quiet <code>cd</code> line as
+                  fallback. Recommended over 6b and 6c because the right-click picture is the same gesture on every OS
+                  (Mac Services, Windows "Open in Terminal", Linux "Open in Terminal") and checks itself by the folder
+                  name in the prompt. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
                   <div data-spec="build-notes">
                     <p>
                       Keeps <code>master: basic-page</code> and <code>motion: none</code>; hover is the shared
-                      <code>focus-group--dim-others</code> on the two moves (each a <code>focus-group__item</code>), so
-                      the presenter points at one. Both toolbars show (Visual language).
+                      <code>focus-group--dim-others</code> on the two moves (each a <code>focus-group__item</code>).
+                      Both toolbars show (Visual language).
+                      <b>Overrules the Dossier's Visual and Voice script on one point:</b> "go into the unzipped folder
+                      in the terminal" becomes "open the terminal from the folder"; the Voice script line "In your
+                      terminal you first move into the unzipped folder" is rewritten to match before build, and step 2's
+                      own Slide is unchanged (the fallback points back to it).
                     </p>
                     <p>
                       Parts: the Visual language's step pill and rail, both toolbars, the terminal window, the
-                      official-link pill and the troubleshooting box (not restated). Slide-own <code>Move</code>
+                      official-link pill and the troubleshooting box (not restated). Slide-own <code>ContextMenu</code>
                       <code
-                        >{ n: 1 | 2; title: string; detail: ReactNode; link?: { label: string; href: string }; terminal:
-                        TerminalLine[] }</code
-                      >, <code>TerminalLine</code>
+                        >{ target: string; items: string[]; open: string; submenu?: { items: string[]; pick: string }
+                        }</code
+                      >, drawn as a file-manager surface (<code>bg-muted</code>) with the folder tile, the menu and its
+                      submenu as <code>bg-card shadow-md</code> cards, the path to click in <code>primary</code>;
+                      <code>SetupNote</code> <code>{ text: ReactNode } | null</code>; <code>Move</code>
                       <code
-                        >{ prompt: string; typed?: string; highlight?: string } | { trust: { question: string; path:
-                        string; options: string[] } }</code
-                      >. The second window carries the <code>ai</code> edge (<code>border-ai/40</code>,
-                      <code>ring-ai/10</code>, the trust box's <code>from-ai/10</code> gradient) because it is the AI
-                      agent; the typed line is <code>text-primary</code>, the folder name in the prompt
-                      <code>bg-primary/10</code> with <code>ring-primary</code>.
+                        >{ n: 1 | 2; title: string; detail: ReactNode; link?: { label: string; href: string }; menu?:
+                        ContextMenu; note?: SetupNote; terminal: TerminalLine[] }</code
+                      >, <code>TerminalLine</code> as before (<code>{ prompt; typed?; highlight? } | { trust }</code>);
+                      <code>Fallback</code> <code>{ text: ReactNode; command: string }</code>, a muted last row under
+                      the moves, never a step of its own. The second window carries the <code>ai</code> edge.
                     </p>
                     <p>
-                      Per pick. Move 1 per OS: Mac and Linux <code>cd Downloads/starter-folder</code> after a
-                      <code>~</code> prompt; Windows PowerShell <code>cd Downloads\starter-folder</code> after
-                      <code>PS C:\Users\han&gt;</code>, landing at
-                      <code>PS C:\Users\han\Downloads\starter-folder&gt;</code>. This assumes the terminal opens in the
-                      home folder (step 2) and the zip unzips without a nested top folder (see 5a). Move 2 per AI agent:
-                      the typed name and the official start page.
-                      <b
-                        >The start commands (<code>claude</code>, <code>codex</code>, <code>copilot</code>) and
-                        Antigravity's way to start in a folder are not in the Dossier or research; confirm each against
-                        its official start page before build</b
-                      >, and if Antigravity has no terminal start, its pick shows the official "open folder" step
-                      instead. The trust box: GitHub documents that Copilot CLI asks to confirm trust for the launch
-                      directory (research LLM-0021, finding 9); the Claude Code wording shown is illustrative and is
-                      rechecked against the current version, as the research's caveat says for every prompt.
+                      Per OS, move 1. <b>Mac</b> (shown): right-click the folder in Finder › Services › New Terminal at
+                      Folder; the setup note tells where to tick it if it is missing. <b>Windows</b>: right-click the
+                      folder in File Explorer › <b>Open in Terminal</b> (Windows 11; also Windows 10 with Windows
+                      Terminal installed); the prompt lands at
+                      <code>PS C:\Users\han\Downloads\starter-folder&gt;</code>; the drawn menu is the Windows 11 short
+                      menu with no submenu. Windows note in place of the Mac one: "Windows 10 without it? Open the
+                      folder, click the address bar, type <code>powershell</code>, press Enter." <b>Linux</b>: one line,
+                      no menu drawing: "Right-click the folder in your file manager › Open in Terminal." Fallback per
+                      OS: <code>cd Downloads/starter-folder</code> (Mac, Linux),
+                      <code>cd Downloads\starter-folder</code> (Windows), assuming the terminal opens in the home folder
+                      (step 2) and the zip unzips without a nested top folder (see 5a).
+                    </p>
+                    <p>
+                      Sources and what is verified. Apple, Terminal User Guide, "Open new Terminal windows and tabs"
+                      (<code>https://support.apple.com/guide/terminal/open-new-terminal-windows-and-tabs-trmlb20c7888/mac</code>):
+                      documents the Finder route by Control-clicking the folder in the path bar, "Open in Terminal"
+                      (window) and "Services › New Terminal Tab at Folder"; a no-setup alternative if the Services item
+                      proves unreliable. Apple, Mac User Guide, "Use services in apps"
+                      (<code>https://support.apple.com/guide/mac-help/use-services-in-apps-mchlp1012/mac</code>):
+                      services are turned on in System Settings › Keyboard › Keyboard Shortcuts › Services.
+                      <b>Unverified on an Apple page:</b> the exact label "New Terminal at Folder" and its group "Files
+                      and Folders" (community sources only), and whether it is on by default on current macOS; check on
+                      the build Mac. <b>Windows "Open in Terminal": no Microsoft Learn page documents it</b>; the label
+                      is confirmed only by Microsoft maintainers in the <code>microsoft/terminal</code> repo
+                      (<code>https://github.com/microsoft/terminal/issues/18401</code>,
+                      <code>https://github.com/microsoft/terminal/issues/16605</code>, the latter on Windows 10).
+                      <b>Unverified on an official page:</b> the Windows 10 address-bar <code>powershell</code> trick
+                      (Microsoft Q&amp;A community answers only) and the Linux label (varies by file manager; GNOME
+                      Files' wording assumed). The start commands (<code>claude</code>, <code>codex</code>,
+                      <code>copilot</code>) and Antigravity's start remain to be confirmed against each official start
+                      page, as before; Copilot CLI's launch-directory trust prompt is documented (research LLM-0021,
+                      finding 9), the Claude Code wording shown is illustrative.
                     </p>
                     <p>
                       No Context markers: the Slide has no sourced Speaker note. i18n keys: <code>title</code>,
-                      <code>caption</code>, <code>moves.cd.title</code>, <code>moves.cd.detail</code>,
-                      <code>moves.cd.command.mac|windows|linux</code>, <code>moves.start.title</code>,
-                      <code>moves.start.detail</code>,
+                      <code>caption</code>, <code>moves.open.title</code>,
+                      <code>moves.open.detail.mac|windows|linux</code>, <code>moves.open.worked</code>,
+                      <code>moves.open.menu.mac|windows</code>, <code>moves.open.note.mac|windows</code>,
+                      <code>moves.start.title</code>, <code>moves.start.detail</code>,
                       <code>moves.start.command.claudeCode|antigravity|codex|copilot</code>,
-                      <code>moves.start.link.*</code>, <code>trust.*</code>.
+                      <code>moves.start.link.*</code>, <code>trust.*</code>, <code>fallback.text</code>,
+                      <code>fallback.command.mac|windows|linux</code>.
                     </p>
                   </div>
                 </details>
@@ -6863,6 +6962,7 @@
                     form="spec-review"
                     name="pick:start-the-agent-inside-that-folder"
                     value="6a"
+                    checked=""
                   />
                   Pick 6a</label
                 >
@@ -6877,8 +6977,8 @@
                       Start the agent inside that folder
                     </h3>
                     <p class="text-body text-muted-foreground">
-                      Two lines in one window:
-                      <b class="font-semibold text-primary">into the folder, then your AI agent</b>.
+                      One window, opened from the folder:
+                      <b class="font-semibold text-primary">check the folder name, then start your AI agent</b>.
                     </p>
                   </div>
                   <div class="flex items-center justify-between gap-6">
@@ -6931,13 +7031,11 @@
                         <span class="size-3 rounded-full bg-border"></span
                         ><span class="size-3 rounded-full bg-border"></span
                         ><span class="size-3 rounded-full bg-border"></span>
-                        <span class="ml-3 text-caption text-muted-foreground">Windows PowerShell</span>
+                        <span class="ml-3 text-caption text-muted-foreground"
+                          >Terminal · opened from File Explorer</span
+                        >
                       </div>
                       <div class="flex flex-col gap-4 p-6 font-mono text-body">
-                        <p>
-                          <span class="text-muted-foreground">PS C:\Users\han&gt;</span>
-                          <span class="font-semibold text-primary">cd Downloads\starter-folder</span>
-                        </p>
                         <p>
                           <span class="text-muted-foreground">PS C:\Users\han\Downloads\</span
                           ><span class="rounded-md bg-primary/10 px-1 font-semibold text-primary ring-1 ring-primary"
@@ -6964,8 +7062,11 @@
                           <circle cx="54" cy="10" r="4" class="fill-primary"></circle>
                         </svg>
                         <div>
-                          <p class="text-body font-semibold text-foreground">1 · Go into the folder</p>
-                          <p class="text-caption text-muted-foreground">Type the first line, press Enter.</p>
+                          <p class="text-body font-semibold text-foreground">1 · Open it from the folder</p>
+                          <p class="text-caption text-muted-foreground">
+                            In File Explorer, right-click starter-folder › Open in Terminal. Windows 10 without it:
+                            address bar, type powershell, Enter.
+                          </p>
                         </div>
                       </div>
                       <div class="flex items-start gap-3">
@@ -6992,6 +7093,12 @@
                           </p>
                         </div>
                       </div>
+                      <p class="text-caption text-muted-foreground">
+                        Fallback:
+                        <span class="rounded-md bg-muted px-1.5 font-mono text-foreground"
+                          >cd Downloads\starter-folder</span
+                        >
+                      </p>
                       <span
                         class="ml-15 inline-flex w-fit items-center gap-2 rounded-full border border-border bg-background px-4 py-1.5 text-caption font-semibold text-foreground"
                         >Copilot CLI: Getting started<svg viewBox="0 0 24 24" class="size-4" aria-hidden="true">
@@ -7039,9 +7146,10 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>6b</b> One whole terminal session as a single window, annotated in the margin with leader lines:
-                  compact and true to how the screen really looks, but the viewer has to map three notes onto one
-                  window. Build cost: Scene.
+                  <b>6b</b> One whole terminal session as a single window, opened from the folder's right-click menu and
+                  annotated in the margin with leader lines: compact and true to how the screen really looks, but the
+                  right-click itself is only words, not drawn, and the viewer maps three notes onto one window. Build
+                  cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
@@ -7060,9 +7168,12 @@
                       drop their leaders.
                     </p>
                     <p>
-                      Per pick as in 6a (Windows path <code>Downloads\starter-folder</code>). Copilot CLI asking to
-                      confirm trust for the launch directory is documented (research LLM-0021, finding 9); the dialog's
-                      wording here is illustrative.
+                      Per pick as in 6a: note 1 per OS is 6a's move 1 in words (Mac Services › New Terminal at Folder
+                      with its setup line, Windows "Open in Terminal" with the Windows 10 address-bar line, Linux "Open
+                      in Terminal"); the fallback line per OS is <code>cd Downloads/starter-folder</code> or
+                      <code>cd Downloads\starter-folder</code>. Sources and unverified labels: see 6a. Copilot CLI
+                      asking to confirm trust for the launch directory is documented (research LLM-0021, finding 9); the
+                      dialog's wording here is illustrative.
                       <b
                         >The start commands, Copilot's included, and the official page names are not sourced; confirm
                         before build.</b
@@ -7070,8 +7181,8 @@
                       No Context markers.
                     </p>
                     <p>
-                      i18n keys: <code>title</code>, <code>caption</code>, <code>notes.cd</code>,
-                      <code>notes.check</code>, <code>notes.start</code>, <code>commands.cd.mac|windows|linux</code>,
+                      i18n keys: <code>title</code>, <code>caption</code>, <code>notes.open.mac|windows|linux</code>,
+                      <code>fallback.*</code>, <code>notes.check</code>, <code>notes.start</code>,
                       <code>commands.start.*</code>, <code>trust.*</code>, <code>link.*</code>.
                     </p>
                   </div>
@@ -7096,8 +7207,9 @@
                       Start the agent inside that folder
                     </h3>
                     <p class="text-body text-muted-foreground">
-                      No path to type: <b class="font-semibold text-primary">drag the folder into the terminal</b>, then
-                      start your AI agent.
+                      No path to type:
+                      <b class="font-semibold text-primary">open the terminal from the folder itself</b>, then start
+                      your AI agent.
                     </p>
                   </div>
                   <div class="flex items-center gap-4">
@@ -7143,9 +7255,11 @@
                     </div>
                   </div>
                   <div class="grid grid-cols-12 gap-8 rounded-3xl border border-border bg-card p-8">
-                    <div class="col-span-4 flex flex-col gap-3">
+                    <div class="col-span-5 flex flex-col gap-3">
                       <p class="text-caption font-semibold uppercase text-muted-foreground">Files · Downloads</p>
-                      <div class="flex flex-col gap-1 rounded-2xl border border-border bg-background p-3 text-caption">
+                      <div
+                        class="relative flex flex-col gap-3 rounded-2xl border border-border bg-background p-4 text-caption"
+                      >
                         <p class="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground">
                           <svg viewBox="0 0 24 24" class="size-5" aria-hidden="true">
                             <path
@@ -7156,62 +7270,70 @@
                             ></path></svg
                           >starter-folder.zip
                         </p>
-                        <p
-                          class="flex -rotate-2 items-center gap-3 rounded-lg border-2 border-primary bg-card px-3 py-2 font-semibold text-foreground shadow-md"
-                        >
-                          <svg viewBox="0 0 24 24" class="size-6" aria-hidden="true">
-                            <path
-                              d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4l2 2h9A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"
-                              class="fill-primary/20 stroke-primary"
-                              stroke-width="1.5"
-                            ></path></svg
-                          >starter-folder<svg viewBox="0 0 64 20" class="ml-auto h-5 w-16" aria-hidden="true">
-                            <path
-                              d="M2 10 H 56"
-                              class="stroke-primary"
-                              stroke-width="2.5"
-                              stroke-dasharray="5 4"
-                            ></path>
-                            <path
-                              d="M50 4 L58 10 L50 16"
-                              class="fill-none stroke-primary"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            ></path>
-                          </svg>
-                        </p>
+                        <div class="flex items-start gap-3">
+                          <p
+                            class="flex items-center gap-3 rounded-lg border-2 border-primary bg-card px-3 py-2 font-semibold text-foreground shadow-md"
+                          >
+                            <svg viewBox="0 0 24 24" class="size-6" aria-hidden="true">
+                              <path
+                                d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4l2 2h9A1.5 1.5 0 0 1 21 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 17.5z"
+                                class="fill-primary/20 stroke-primary"
+                                stroke-width="1.5"
+                              ></path></svg
+                            >starter-folder
+                          </p>
+                          <ul
+                            class="mt-6 flex w-1/2 -rotate-1 flex-col gap-0.5 rounded-xl border border-border bg-card p-1.5 shadow-md"
+                          >
+                            <li class="rounded-md px-3 py-1.5 text-muted-foreground">Open</li>
+                            <li class="rounded-md px-3 py-1.5 text-muted-foreground">Open With…</li>
+                            <li class="rounded-md bg-foreground px-3 py-1.5 font-semibold text-background">
+                              Open in Terminal
+                            </li>
+                            <li class="rounded-md px-3 py-1.5 text-muted-foreground">Rename…</li>
+                          </ul>
+                        </div>
                       </div>
                       <p class="text-body font-semibold text-foreground">
-                        1 · Type <span class="rounded-md bg-muted px-1.5 font-mono text-primary">cd</span> and a space
+                        1 · Right-click <span class="text-primary">starter-folder</span> › Open in Terminal
                       </p>
-                      <p class="text-body font-semibold text-foreground">2 · Drag the folder onto the terminal</p>
                       <p class="text-caption text-muted-foreground">
-                        The terminal writes the folder's path for you. Press Enter.
+                        No path to type. The terminal opens already inside the folder.
                       </p>
                     </div>
-                    <div class="col-span-8 flex flex-col gap-4">
-                      <div class="rounded-2xl border border-border bg-background">
-                        <div class="flex items-center gap-2 border-b border-border px-4 py-2.5">
-                          <span class="size-3 rounded-full bg-border"></span
-                          ><span class="size-3 rounded-full bg-border"></span
-                          ><span class="size-3 rounded-full bg-border"></span>
-                          <span class="ml-3 text-caption text-muted-foreground">Terminal</span>
-                        </div>
-                        <div class="flex flex-col gap-2 p-5 font-mono text-body">
-                          <p>
-                            <span class="text-muted-foreground">han@laptop:~$</span>
-                            <span class="font-semibold text-primary">cd</span>
-                            <span class="rounded-md bg-primary/10 px-1 text-primary"
-                              >'/home/han/Downloads/starter-folder'</span
+                    <div class="col-span-7 flex flex-col gap-4">
+                      <div class="flex items-center gap-3">
+                        <svg viewBox="0 0 64 20" class="h-5 w-16 shrink-0" aria-hidden="true">
+                          <path d="M2 10 H 56" class="stroke-primary" stroke-width="2.5"></path>
+                          <path
+                            d="M50 4 L58 10 L50 16"
+                            class="fill-none stroke-primary"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <div class="flex-1 rounded-2xl border border-border bg-background">
+                          <div class="flex items-center gap-2 border-b border-border px-4 py-2.5">
+                            <span class="size-3 rounded-full bg-border"></span
+                            ><span class="size-3 rounded-full bg-border"></span
+                            ><span class="size-3 rounded-full bg-border"></span>
+                            <span class="ml-3 text-caption text-muted-foreground"
+                              >Terminal · opened from the folder</span
                             >
-                          </p>
-                          <p class="flex items-center gap-1">
-                            <span class="text-muted-foreground">han@laptop:~/Downloads/</span
-                            ><span class="rounded-md bg-primary/10 px-1 font-semibold text-primary ring-1 ring-primary"
-                              >starter-folder</span
-                            ><span class="text-muted-foreground">$</span>
-                          </p>
+                          </div>
+                          <div class="flex flex-col gap-2 p-5 font-mono text-body">
+                            <p class="flex items-center gap-1">
+                              <span class="text-muted-foreground">han@laptop:~/Downloads/</span
+                              ><span
+                                class="rounded-md bg-primary/10 px-1 font-semibold text-primary ring-1 ring-primary"
+                                >starter-folder</span
+                              ><span class="text-muted-foreground">$</span>
+                            </p>
+                            <p class="font-sans text-caption text-muted-foreground">
+                              2 · It worked when the folder name sits in front of your cursor.
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div class="rounded-2xl border border-ai/40 bg-background ring-4 ring-ai/10">
@@ -7240,6 +7362,43 @@
                             stroke-linejoin="round"
                           ></path></svg
                       ></span>
+                    </div>
+                    <div class="col-span-12 flex flex-col gap-4 border-t border-border pt-6">
+                      <p class="text-caption font-semibold uppercase text-muted-foreground">
+                        The same move on every computer
+                      </p>
+                      <ul class="grid grid-cols-3 gap-4">
+                        <li
+                          class="card-hover card-hover--raise flex flex-col gap-1 rounded-xl border border-border bg-background px-4 py-3"
+                        >
+                          <span class="text-caption font-semibold text-muted-foreground">Mac · Finder</span>
+                          <span class="text-body text-foreground"
+                            >Right-click › Services › <b class="font-semibold">New Terminal at Folder</b></span
+                          >
+                        </li>
+                        <li
+                          class="card-hover card-hover--raise flex flex-col gap-1 rounded-xl border border-border bg-background px-4 py-3"
+                        >
+                          <span class="text-caption font-semibold text-muted-foreground">Windows · File Explorer</span>
+                          <span class="text-body text-foreground"
+                            >Right-click › <b class="font-semibold">Open in Terminal</b></span
+                          >
+                        </li>
+                        <li
+                          class="card-hover card-hover--raise flex flex-col gap-1 rounded-xl border-2 border-primary bg-background px-4 py-3 shadow-sm"
+                        >
+                          <span class="text-caption font-semibold text-muted-foreground">Linux · Files</span>
+                          <span class="text-body text-foreground"
+                            >Right-click › <b class="font-semibold">Open in Terminal</b></span
+                          >
+                        </li>
+                      </ul>
+                      <p class="text-caption text-muted-foreground">
+                        Menu item missing? Open the terminal as in step 2 and type
+                        <span class="rounded-md bg-muted px-1.5 font-mono text-foreground"
+                          >cd Downloads/starter-folder</span
+                        >. Some terminals also take the folder dragged onto their window.
+                      </p>
                     </div>
                   </div>
                   <div class="flex flex-col gap-3 rounded-2xl border border-border bg-background p-5">
@@ -7276,41 +7435,61 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>6c</b> The drag trick: the folder from step 5's file window dragged onto the terminal after
-                  <code>cd</code>, so a first-timer types no path and cannot misspell one; it bets on a gesture whose
-                  behaviour varies by terminal. Build cost: Scene.
+                  <b>6c</b> Folder and terminal side by side: the file window on the left with its right-click menu, the
+                  terminal it opens on the right, and under both a strip of the same move on all three computers at
+                  once, so a mixed room sees its own menu item without switching the toolbar; the cost is a busier Slide
+                  than 6a and only one menu drawn, the other two in words. <code>cd</code> and drag-onto-terminal stay a
+                  quiet fallback line. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
                   <div data-spec="build-notes">
                     <p>
-                      Keeps <code>master: basic-page</code>; <code>motion: none</code> (the drag shows as its end state,
-                      the dashed arrow). Both toolbars show.
+                      Keeps <code>master: basic-page</code>; <code>motion: none</code> (the opened menu and the arrow to
+                      the terminal show as their end state). Both toolbars show; the OS toolbar picks the drawn menu and
+                      the highlighted strip card, the strip itself always shows all three.
                     </p>
                     <p>
                       Parts: the Visual language's step pill and rail, toolbars, terminal window, official-link pill and
-                      troubleshooting box. Slide-own <code>DragSource</code>
+                      troubleshooting box. Slide-own <code>FolderMenu</code>
                       <code
-                        >{ location: string; items: { name: string; kind: 'zip' | 'folder'; dragged?: boolean }[]
-                        }</code
+                        >{ location: string; items: { name: string; kind: 'zip' | 'folder'; picked?: boolean }[]; menu:
+                        { label: string; pick?: boolean }[] }</code
                       >
-                      (the dragged folder lifted with <code>-rotate-2</code> and <code>shadow-md</code>), the drag arrow
-                      a dashed inline <code>&lt;svg&gt;</code> on the dragged row pointing at the terminal
-                      (<code>stroke-primary</code>), two terminal windows as in 6a, the second with the
-                      <code>ai</code> edge.
+                      (the picked folder in <code>border-primary</code>, the menu a
+                      <code>bg-card shadow-md -rotate-1</code> card with the picked item on <code>bg-foreground</code>);
+                      a solid inline <code>&lt;svg&gt;</code> arrow (<code>stroke-primary</code>) from the folder column
+                      into the first terminal window; two terminal windows as in 6a, the second with the
+                      <code>ai</code> edge; Slide-own <code>OsStrip</code>
+                      <code
+                        >{ cards: { os: 'mac' | 'windows' | 'linux'; app: string; path: ReactNode }[]; current: 'mac' |
+                        'windows' | 'linux' }</code
+                      >, each card <code>card-hover--raise</code>, the current one in <code>border-primary</code>; a
+                      muted <code>Fallback</code> line under it.
                     </p>
                     <p>
-                      <b>Unverified, confirm before build:</b> that dropping a folder onto the terminal pastes its path
-                      in Terminal on Mac, in Windows PowerShell (Windows Terminal and the classic console differ) and in
-                      GNOME Terminal on Linux, and how each quotes it (the mock's single quotes are GNOME Terminal's
-                      style as remembered, not sourced). The start commands (<code>codex</code> and the others) and the
-                      official page names are not sourced either. Should drag-and-drop fail on any pick, that pick falls
-                      back to 6a's typed <code>cd Downloads/starter-folder</code>. No Context markers.
+                      Primary route per OS, as 6a's move 1: <b>Mac</b> Finder › right-click › Services › New Terminal at
+                      Folder (with 6a's setup note when it is missing); <b>Windows</b> File Explorer › right-click ›
+                      Open in Terminal (Windows 11; Windows 10 with Windows Terminal), prompt
+                      <code>PS C:\Users\han\Downloads\starter-folder&gt;</code>, the Windows 10 address-bar
+                      <code>powershell</code> line in the Windows pick's fallback; <b>Linux</b> Files › right-click ›
+                      Open in Terminal (shown). Sources and unverified labels: see 6a.
                     </p>
                     <p>
-                      i18n keys: <code>title</code>, <code>caption</code>, <code>drag.location</code>,
-                      <code>drag.typeCd</code>, <code>drag.drop</code>, <code>drag.detail</code>,
-                      <code>start.note</code>, <code>commands.start.*</code>, <code>link.*</code>.
+                      Fallback line, secondary and muted: <code>cd Downloads/starter-folder</code> (Mac, Linux) or
+                      <code>cd Downloads\starter-folder</code> (Windows), assuming the terminal opens in the home folder
+                      (step 2). <b>Unverified, confirm before build:</b> the half-sentence that some terminals take a
+                      folder dragged onto their window (pasting its path) is not sourced for Terminal on Mac, Windows
+                      Terminal or GNOME Terminal; drop it from the fallback line if a pick cannot be confirmed. The
+                      start commands (<code>codex</code> and the others) and the official page names are not sourced
+                      either. No Context markers.
+                    </p>
+                    <p>
+                      i18n keys: <code>title</code>, <code>caption</code>, <code>open.location</code>,
+                      <code>open.menu.*</code>, <code>open.step</code>, <code>open.detail</code>,
+                      <code>open.worked</code>, <code>start.note</code>, <code>commands.start.*</code>,
+                      <code>link.*</code>, <code>strip.title</code>, <code>strip.{mac,windows,linux}.{app,path}</code>,
+                      <code>fallback.text</code>, <code>fallback.command.{mac,windows,linux}</code>.
                     </p>
                   </div>
                 </details>
@@ -7497,7 +7676,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="7a" data-recommended="">
+              <figure data-spec="option" data-option="7a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -7810,8 +7989,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:run-your-first-skill" value="7a" /> Pick
-                  7a</label
+                  ><input type="checkbox" form="spec-review" name="pick:run-your-first-skill" value="7a" checked="" />
+                  Pick 7a</label
                 >
               </figure>
 
@@ -8464,7 +8643,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="8a" data-recommended="">
+              <figure data-spec="option" data-option="8a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-4">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -8473,8 +8652,8 @@
                     <div>
                       <h3 class="text-subheading font-semibold">Set up the Matt Pocock skills yourself</h3>
                       <p class="mt-2 text-body text-muted-foreground">
-                        What the starter folder did for you, in four lines. Copy them from here, run them in an empty
-                        folder of your own.
+                        Five lines in an empty folder of your own. Skip the starter zip: it would bring the Matt Pocock
+                        skills a second time.
                       </p>
                     </div>
                     <div class="flex items-center gap-4">
@@ -8525,47 +8704,85 @@
                         </a>
                       </div>
                     </li>
-                    <li class="focus-group__item grid grid-cols-12 items-center gap-8 border-b border-border p-6">
+
+                    <li class="focus-group__item grid grid-cols-12 items-start gap-8 border-b border-border p-6">
                       <div class="col-span-5 flex gap-4">
                         <span
                           class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border text-caption font-semibold"
                           >2</span
                         >
                         <div>
-                          <p class="text-body font-semibold">Add the Matt Pocock skills</p>
+                          <p class="text-body font-semibold">Add the main Matt Pocock skills</p>
                           <p class="mt-1 text-caption text-muted-foreground">
-                            It asks which skills to install: include
-                            <code class="font-mono">setup-matt-pocock-skills</code>.
+                            In your terminal. When it asks which skills, keep the main group and leave
+                            <b class="text-foreground">Other</b> unticked.
                           </p>
                         </div>
                       </div>
-                      <div
-                        class="col-span-7 flex items-center justify-between gap-4 rounded-lg border border-border bg-muted px-4 py-3 font-mono text-body"
-                      >
-                        <span
-                          ><span class="text-muted-foreground">$ </span
-                          ><span class="text-primary">npx skills@latest add mattpocock/skills</span></span
+                      <div class="col-span-7 flex flex-col gap-3">
+                        <div
+                          class="flex items-center justify-between gap-4 rounded-lg border border-border bg-muted px-4 py-3 font-mono text-body"
                         >
-                        <svg viewBox="0 0 16 16" class="size-4 shrink-0 text-muted-foreground" aria-label="Copy">
-                          <rect
-                            x="5"
-                            y="5"
-                            width="8"
-                            height="9"
-                            rx="1.5"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                          ></rect>
-                          <path
-                            d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                          ></path>
-                        </svg>
+                          <span
+                            ><span class="text-muted-foreground">$ </span
+                            ><span class="text-primary">npx skills@latest add mattpocock/skills</span></span
+                          >
+                          <svg viewBox="0 0 16 16" class="size-4 shrink-0 text-muted-foreground" aria-label="Copy">
+                            <rect
+                              x="5"
+                              y="5"
+                              width="8"
+                              height="9"
+                              rx="1.5"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                            ></rect>
+                            <path
+                              d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                            ></path>
+                          </svg>
+                        </div>
+                        <div
+                          class="flex flex-col gap-2 rounded-lg border border-border bg-background px-4 py-3 font-mono text-caption"
+                        >
+                          <p class="text-muted-foreground">? Which skills do you want to install?</p>
+                          <p class="flex items-center gap-3 rounded-md border border-primary bg-primary/10 px-2 py-1">
+                            <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
+                              <rect x="1.5" y="1.5" width="13" height="13" rx="3" class="fill-primary"></rect>
+                              <path
+                                d="M4.5 8.5 7 11l4.5-5.5"
+                                class="fill-none stroke-primary-foreground"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ></path>
+                            </svg>
+                            <span class="whitespace-nowrap font-semibold text-foreground">mattpocock-skills</span>
+                            <span class="text-muted-foreground">main group, with the setup skill</span>
+                          </p>
+                          <p class="flex items-center gap-3 px-2 py-1 text-muted-foreground">
+                            <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
+                              <rect
+                                x="1.5"
+                                y="1.5"
+                                width="13"
+                                height="13"
+                                rx="3"
+                                class="fill-none stroke-muted-foreground"
+                                stroke-width="1.5"
+                              ></rect>
+                            </svg>
+                            <span>Other</span>
+                            <span>misc · in-progress, not needed</span>
+                          </p>
+                        </div>
                       </div>
                     </li>
-                    <li class="focus-group__item grid grid-cols-12 items-center gap-8 border-b border-border p-6">
+
+                    <li class="focus-group__item grid grid-cols-12 items-start gap-8 border-b border-border p-6">
                       <div class="col-span-5 flex gap-4">
                         <span
                           class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border text-caption font-semibold"
@@ -8574,74 +8791,137 @@
                         <div>
                           <p class="text-body font-semibold">Run his setup skill in your AI agent</p>
                           <p class="mt-1 text-caption text-muted-foreground">
-                            Pick <b class="text-foreground">Local markdown</b> as the issue tracker: everything stays in
-                            the folder, no GitHub account.
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        class="col-span-7 flex items-center justify-between gap-4 rounded-lg border border-ai/40 bg-background px-4 py-3 font-mono text-body shadow-md shadow-ai/15"
-                      >
-                        <span
-                          ><span class="text-ai">✻ </span><span class="text-muted-foreground">&gt; </span
-                          ><span class="text-primary">/setup-matt-pocock-skills</span></span
-                        >
-                        <svg viewBox="0 0 16 16" class="size-4 shrink-0 text-muted-foreground" aria-label="Copy">
-                          <rect
-                            x="5"
-                            y="5"
-                            width="8"
-                            height="9"
-                            rx="1.5"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                          ></rect>
-                          <path
-                            d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                          ></path>
-                        </svg>
-                      </div>
-                    </li>
-                    <li class="focus-group__item grid grid-cols-12 items-start gap-8 p-6">
-                      <div class="col-span-5 flex gap-4">
-                        <span
-                          class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-caption font-semibold text-primary-foreground"
-                          >4</span
-                        >
-                        <div>
-                          <p class="text-body font-semibold">Run the same check as step 7</p>
-                          <p class="mt-1 text-caption text-muted-foreground">
-                            Approve its command, and the hancrafted homepage opens.
+                            It asks a few questions, one at a time. Give these four answers.
                           </p>
                         </div>
                       </div>
                       <div class="col-span-7 flex flex-col gap-3">
                         <div
-                          class="flex flex-col gap-3 rounded-lg border border-dashed border-primary bg-background p-4"
+                          class="flex items-center justify-between gap-4 rounded-lg border border-ai/40 bg-background px-4 py-3 font-mono text-body shadow-md shadow-ai/15"
                         >
-                          <p class="text-caption">
-                            <b>This skill ships in the starter folder</b>, not with the Matt Pocock skills. From the
-                            zip, copy the <code class="font-mono">check-workshop-readiness</code> skill next to your
-                            other skills, and <code class="font-mono">GLOSSARY.md</code> into your folder.
-                          </p>
-                          <a
-                            class="card-hover card-hover--raise inline-flex items-center gap-2 self-start rounded-full border border-border bg-card px-4 py-1.5 text-caption font-semibold shadow-sm"
+                          <span
+                            ><span class="text-ai">✻ </span><span class="text-muted-foreground">&gt; </span
+                            ><span class="text-primary">/setup-matt-pocock-skills</span></span
                           >
-                            <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
+                          <svg viewBox="0 0 16 16" class="size-4 shrink-0 text-muted-foreground" aria-label="Copy">
+                            <rect
+                              x="5"
+                              y="5"
+                              width="8"
+                              height="9"
+                              rx="1.5"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                            ></rect>
+                            <path
+                              d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                            ></path>
+                          </svg>
+                        </div>
+                        <dl
+                          class="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border text-caption"
+                        >
+                          <div class="flex flex-col gap-1 bg-background px-4 py-3">
+                            <dt class="uppercase text-muted-foreground">1 · Issue tracker</dt>
+                            <dd class="font-semibold">Local markdown, no GitHub</dd>
+                          </div>
+                          <div class="flex flex-col gap-1 bg-background px-4 py-3">
+                            <dt class="uppercase text-muted-foreground">2 · Domain docs</dt>
+                            <dd class="font-semibold">A single <code class="font-mono">GLOSSARY.md</code></dd>
+                          </div>
+                          <div class="flex flex-col gap-1 bg-background px-4 py-3">
+                            <dt class="uppercase text-muted-foreground">3 · Triage labels</dt>
+                            <dd class="font-semibold">Keep the defaults</dd>
+                          </div>
+                          <div class="flex flex-col gap-1 bg-background px-4 py-3">
+                            <dt class="uppercase text-muted-foreground">4 · Which file</dt>
+                            <dd class="font-semibold">
+                              <code class="font-mono">AGENTS.md</code>, plus a
+                              <code class="font-mono">CLAUDE.md</code> holding
+                              <code class="font-mono text-primary">@AGENTS.md</code>
+                            </dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </li>
+
+                    <li class="focus-group__item grid grid-cols-12 items-start gap-8 border-b border-border p-6">
+                      <div class="col-span-5 flex gap-4">
+                        <span
+                          class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border text-caption font-semibold"
+                          >4</span
+                        >
+                        <div>
+                          <p class="text-body font-semibold">Add our check and the hancrafted entry</p>
+                          <p class="mt-1 text-caption text-muted-foreground">
+                            The only two pieces from us. Unzip the skill into the skills folder the installer made;
+                            paste the entry into <code class="font-mono">GLOSSARY.md</code>, or create the file with it.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-span-7 flex flex-col gap-3">
+                        <a
+                          class="card-hover card-hover--raise inline-flex items-center gap-2 self-start rounded-full border border-dashed border-primary bg-background px-4 py-2 text-caption font-semibold shadow-sm"
+                        >
+                          <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
+                            <path
+                              d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></path>
+                          </svg>
+                          check-workshop-readiness · skill folder only
+                          <span class="font-normal text-muted-foreground">small zip</span>
+                        </a>
+                        <div
+                          class="flex flex-col gap-1 rounded-lg border border-border bg-muted px-4 py-3 font-mono text-caption"
+                        >
+                          <div class="flex items-center justify-between gap-4">
+                            <span class="text-muted-foreground">GLOSSARY.md · add this entry</span>
+                            <svg viewBox="0 0 16 16" class="size-4 shrink-0 text-muted-foreground" aria-label="Copy">
+                              <rect
+                                x="5"
+                                y="5"
+                                width="8"
+                                height="9"
+                                rx="1.5"
+                                class="fill-none stroke-current"
+                                stroke-width="1.5"
+                              ></rect>
                               <path
-                                d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"
+                                d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
                                 class="fill-none stroke-current"
                                 stroke-width="1.5"
                                 stroke-linecap="round"
-                                stroke-linejoin="round"
                               ></path>
                             </svg>
-                            Starter folder · same zip as step 5
-                          </a>
+                          </div>
+                          <p class="font-semibold text-foreground">**hancrafted**:</p>
+                          <p class="text-foreground">Han's workshop homepage, https://hancrafted.net</p>
                         </div>
+                      </div>
+                    </li>
+
+                    <li class="focus-group__item grid grid-cols-12 items-start gap-8 p-6">
+                      <div class="col-span-5 flex gap-4">
+                        <span
+                          class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-caption font-semibold text-primary-foreground"
+                          >5</span
+                        >
+                        <div>
+                          <p class="text-body font-semibold">Run the same check as step 7</p>
+                          <p class="mt-1 text-caption text-muted-foreground">
+                            It confirms the Matt Pocock skills are in place. Approve its command, and the hancrafted
+                            homepage opens.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-span-7 flex flex-col gap-3">
                         <div
                           class="flex items-center justify-between gap-4 rounded-lg border-2 border-primary bg-background px-4 py-3 font-mono text-body shadow-md shadow-ai/15"
                         >
@@ -8754,10 +9034,11 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>8a</b> A four-row recipe card, reason on the left and the exact line on the right, with the
-                  readiness check's origin settled inside step 4 as a link to the same starter zip as step 5.
-                  Recommended over 8b and 8c because it is the Dossier's numbered list at its plainest, every line
-                  copyable, and the zip link adds nothing new to host or keep in step. Build cost: Scene.
+                  <b>8a</b> A five-row recipe card, reason on the left and the exact line on the right: the main Matt
+                  Pocock skills drawn as the one ticked group, the setup skill's four answers as a small card, and only
+                  our check and the hancrafted entry taken from us, as a small separate download and a paste.
+                  Recommended over 8b and 8c because every line is copyable, nothing is installed twice, and the viewer
+                  never has to judge what the setup skill asks. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
@@ -8772,35 +9053,61 @@
                     >; reads the page's transient pick, which earlier Slides set, so the chips show whatever was picked
                     there). New in the Slide's folder: <code>CommandRow</code> (<code
                       >{ n: number; title: string; reason: ReactNode; line?: string; where: 'shell' | 'agent'; focal?:
-                      boolean }</code
+                      boolean; children?: ReactNode }</code
                     >; <code>agent</code> adds the <code>border-ai/40</code> edge and <code>✻</code> mark,
-                    <code>focal</code> the <code>border-2 border-primary</code> and filled number) and
-                    <code>CopyLine</code> (<code>{ text: string }</code>, copies the line to the clipboard, a
-                    <code>*.client.tsx</code>). Row 4 holds <code>StarterZipNote</code> (<code>{ zipHref: string }</code
-                    >, the dashed <code>border-primary</code> note with a download pill pointing at the same
-                    <code>public/</code> zip as Slide 5) and the homepage result strip. Tokens <code>bg-card</code>,
-                    <code>bg-muted</code>, <code>border-ai</code>, <code>shadow-ai</code>, <code>text-primary</code>,
-                    <code>stroke-success</code>. Hover: <code>focus-group--dim-others</code> over the four rows so Han
+                    <code>focal</code> the <code>border-2 border-primary</code> and filled number;
+                    <code>children</code> sit under the line), <code>CopyLine</code> (<code>{ text: string }</code>,
+                    copies to the clipboard, a <code>*.client.tsx</code>), <code>SkillPicker</code> (<code
+                      >{ groups: { name: string; holds: string; picked: boolean }[] }</code
+                    >, a static drawing of the installer's question, two groups), <code>SetupAnswers</code> (<code
+                      >{ answers: { question: string; answer: ReactNode }[] }</code
+                    >, the 2 × 2 hairline card), <code>CheckBundle</code> (<code
+                      >{ zipHref: string; glossaryEntry: string }</code
+                    >: the dashed download pill and the copyable entry block) and the homepage result strip. Tokens
+                    <code>bg-card</code>, <code>bg-muted</code>, <code>bg-primary/10</code>, <code>border-ai</code>,
+                    <code>shadow-ai</code>, <code>text-primary</code>, <code>fill-primary</code>,
+                    <code>stroke-success</code>. Hover: <code>focus-group--dim-others</code> over the five rows so Han
                     can point at one while presenting, <code>card-hover--raise</code> on the two pills,
                     <code>card-hover--outline</code> on Copy prompt. i18n keys <code>title</code>, <code>caption</code>,
-                    <code>rows.{node,add,setup,check}.{title,reason}</code>, <code>zipNote</code>, <code>zipLink</code>,
-                    <code>homepage</code>, <code>stuck.*</code>; the command lines are not translated. The
-                    <code>/check-workshop-readiness</code>
-                    form follows whatever invocation Slide 7 settles. No Context markers: the Slide has no Speaker
-                    notes.
+                    <code>rows.{node,add,setup,check,run}.{title,reason}</code>,
+                    <code>picker.{question,main,other}</code>,
+                    <code>answers.{tracker,docs,labels,file}.{question,answer}</code>,
+                    <code>bundle.{link,size,entryLabel}</code>, <code>homepage</code>, <code>stuck.*</code>; the command
+                    lines, group names and the glossary entry are not translated. The
+                    <code>/check-workshop-readiness</code> form follows whatever invocation Slide 7 settles. No Context
+                    markers: the Slide has no Speaker notes. The Dossier's Visual and Voice script say "four steps" and
+                    "the page tells you where to take it from"; the Voice script needs a matching pass to five lines and
+                    the check bundle. <br /><br />
+                    <b>Settled: how check-workshop-readiness reaches this route.</b> Not the starter zip of Slide 5: for
+                    the fast route that zip may still carry the whole Matt Pocock set (Brief, Open ideas "Base zip"), so
+                    unzipping it here would put every Matt Pocock skill in the folder a second time, beside the ones
+                    step 2 installed. Instead the viewer takes two things from us: the
+                    <code>check-workshop-readiness</code> skill folder as a small zip, and the hancrafted entry as a
+                    snippet to paste. Why this split: a technical viewer pastes one entry faster than merging a file, a
+                    paste can never overwrite a <code>GLOSSARY.md</code> the setup or the viewer already wrote, and a
+                    skill is a folder, which only a download carries in one piece. <b>Flag for the user:</b> this needs
+                    a second, small download artifact in <code>public/</code> (the check skill folder alone), which
+                    changes the Brief's open idea "Base zip" from one zip to two: the base zip for the fast route, the
+                    check bundle for this one. The check skill itself must also check that the Matt Pocock skills are
+                    installed (row 5's reason), which its separate build has to add. The glossary entry's exact wording
+                    is drawn as a placeholder; it follows the entry the base zip's <code>GLOSSARY.md</code> holds.
                     <br /><br />
-                    <b>Open question settled: how check-workshop-readiness reaches this route.</b> Three ways were
-                    weighed. A link to the same starter zip (this Option): one source, nothing new to host. The AI agent
-                    fetching it from this page (8b): no extra download step, but it depends on the agent's web access
-                    and two more approvals. One more <code>npx skills@latest add …</code> line: rejected, because no
-                    public source holds the skill alone (<code>hancrafted/content-library</code> is public, but adding
-                    it would pull every skill in the repo), and the Brief already dropped an own npx package over
-                    company-laptop blockers. <b>Flag for the user:</b> the skill looks up hancrafted in
-                    <code>GLOSSARY.md</code> (Brief, Slide 7), which <code>/setup-matt-pocock-skills</code> does not
-                    write, so this route must copy <code>GLOSSARY.md</code> as well, or the skill must carry the
-                    homepage URL as a fallback. The separate build of <code>check-workshop-readiness</code> decides
-                    which; the mock assumes the copy. "Local markdown" is the setup skill's own name for the no-GitHub
-                    tracker (its SKILL.md, Section A).
+                    <b>Checked against <code>mattpocock/skills</code> (GitHub, today):</b> the repo's
+                    <code>.claude-plugin/plugin.json</code> names the main set <code>mattpocock-skills</code> (the
+                    <code>engineering</code> and <code>productivity</code> folders,
+                    <code>setup-matt-pocock-skills</code> among them); <code>misc</code>, <code>in-progress</code> and
+                    <code>deprecated</code> sit outside it ("not promoted in the plugin", <code>misc/README.md</code>).
+                    The setup skill's SKILL.md asks, in order: issue tracker (its options include "Local markdown"),
+                    triage labels ("keep the default triage labels? yes", only when <code>triage</code> is installed,
+                    which the main group installs), and domain docs, which it defaults to single-context, one
+                    <code>GLOSSARY.md</code>, "without asking" in a non-monorepo, so answer 2 may never be asked. It
+                    asks which file to create only when neither <code>CLAUDE.md</code> nor
+                    <code>AGENTS.md</code> exists, and it never writes a <code>CLAUDE.md</code> holding
+                    <code>@AGENTS.md</code>: the answer card has the viewer ask for that in their reply.
+                    <b>Unverified:</b> how the <code>npx skills</code> picker draws the choice (whether it shows the
+                    plugin's name as a group and the rest as "Other", or a flat multiselect of every skill); the mock
+                    draws the user's description, two groups with the main one ticked. Recheck by running the command
+                    once before drawing the Slide, and redraw <code>SkillPicker</code> to what the installer shows.
                   </div>
                 </details>
                 <label class="spec-pick"
@@ -8809,6 +9116,7 @@
                     form="spec-review"
                     name="pick:set-up-the-matt-pocock-skills-yourself"
                     value="8a"
+                    checked=""
                   />
                   Pick 8a</label
                 >
@@ -8878,8 +9186,8 @@
                           </p>
                           <p class="text-muted-foreground"># it asks which skills to install</p>
                           <p class="text-muted-foreground">
-                            # include <span class="text-foreground">setup-matt-pocock-skills</span>, then start your AI
-                            agent here
+                            # tick the main group <span class="text-foreground">mattpocock-skills</span>, leave Other,
+                            then start your AI agent here
                           </p>
                         </div>
                       </div>
@@ -8924,15 +9232,21 @@
                               ><span class="text-body text-primary">/setup-matt-pocock-skills</span>
                             </p>
                             <p class="mt-1 text-muted-foreground">
-                              Issue tracker? <span class="rounded bg-muted px-1.5 text-foreground">Local markdown</span>
+                              Issue tracker?
+                              <span class="rounded bg-muted px-1.5 text-foreground">Local markdown</span> Domain docs?
+                              <span class="rounded bg-muted px-1.5 text-foreground">A single GLOSSARY.md</span> Labels?
+                              <span class="rounded bg-muted px-1.5 text-foreground">Defaults</span> File?
+                              <span class="rounded bg-muted px-1.5 text-foreground"
+                                >AGENTS.md + CLAUDE.md with @AGENTS.md</span
+                              >
                             </p>
                           </div>
                           <div>
                             <p>
                               <span class="text-muted-foreground">&gt; </span
                               ><span class="text-body text-primary"
-                                >Copy check-workshop-readiness and GLOSSARY.md from the starter folder on
-                                hancrafted.net/guides/get-workshop-ready into this folder</span
+                                >Add the check-workshop-readiness skill and the hancrafted glossary entry from
+                                hancrafted.net/guides/get-workshop-ready to this folder</span
                               >
                             </p>
                             <p class="mt-1 text-muted-foreground">
@@ -8967,7 +9281,9 @@
                               <span class="text-muted-foreground">2 · </span>Run his setup skill
                             </p>
                             <p class="mt-1 text-caption text-muted-foreground">
-                              Local markdown keeps everything in the folder: no GitHub account.
+                              Local markdown, a single GLOSSARY.md, default labels, AGENTS.md plus a CLAUDE.md with
+                              <code class="font-mono">@AGENTS.md</code>: everything stays in the folder, no GitHub
+                              account.
                             </p>
                           </div>
                         </li>
@@ -8986,8 +9302,8 @@
                               <span class="text-muted-foreground">3 · </span>Let your AI agent fetch the check
                             </p>
                             <p class="mt-1 text-caption text-muted-foreground">
-                              It ships in the starter folder, not with the Matt Pocock skills. Ask in plain words;
-                              approve the download.
+                              Only the check and the glossary entry, not the starter zip, which would bring the Matt
+                              Pocock skills twice. Ask in plain words; approve the download.
                             </p>
                           </div>
                         </li>
@@ -9104,12 +9420,13 @@
                     <code>notes.{add,setup,fetch,check}.{title,body}</code>, <code>fetchRequest</code>,
                     <code>homepage</code>, <code>stuck.*</code>; commands untranslated, the fetch request translated. No
                     Context markers: the Slide has no Speaker notes. <br /><br />
-                    <b>Open question settled differently:</b> the AI agent fetches
-                    <code>check-workshop-readiness</code> and <code>GLOSSARY.md</code> from this guide's own URL
-                    (<code>/guides/get-workshop-ready</code>, settled in the page notes), so the viewer types a
-                    sentence, not a URL to the zip. Cost: it needs web access and an unzip the AI agent may not be
-                    allowed on a company laptop, and the result is less predictable than a download.
-                    <b>Flag for the user:</b> as in 8a, the skill needs the hancrafted entry in
+                    <b>Open question settled differently:</b> the AI agent fetches the
+                    <code>check-workshop-readiness</code> skill folder and the hancrafted <code>GLOSSARY.md</code> entry
+                    (the same small check bundle as 8a, never the starter zip, which would duplicate the Matt Pocock
+                    skills) from this guide's own URL (<code>/guides/get-workshop-ready</code>, settled in the page
+                    notes), so the viewer types a sentence, not a URL to the zip. Cost: it needs web access and an unzip
+                    the AI agent may not be allowed on a company laptop, and the result is less predictable than a
+                    download. <b>Flag for the user:</b> as in 8a, the skill needs the hancrafted entry in
                     <code>GLOSSARY.md</code>, which the Matt Pocock setup does not write.
                   </div>
                 </details>
@@ -9222,8 +9539,7 @@
                             ><span class="text-primary">npx skills@latest add mattpocock/skills</span>
                           </p>
                           <p class="text-caption text-muted-foreground">
-                            In your terminal. When it asks which skills, include
-                            <code class="font-mono">setup-matt-pocock-skills</code>.
+                            In your terminal. Tick the main group only, not <b class="text-foreground">Other</b>.
                           </p>
                         </div>
                       </li>
@@ -9263,7 +9579,8 @@
                             ><span class="text-primary">/setup-matt-pocock-skills</span>
                           </p>
                           <p class="text-caption text-muted-foreground">
-                            In your AI agent. Pick <b class="text-foreground">Local markdown</b> as the issue tracker.
+                            In your AI agent. Answer <b class="text-foreground">Local markdown</b>, one GLOSSARY.md,
+                            default labels, AGENTS.md plus a CLAUDE.md with <code class="font-mono">@AGENTS.md</code>.
                           </p>
                         </div>
                       </li>
@@ -9312,11 +9629,11 @@
                                 stroke-linejoin="round"
                               ></path>
                             </svg>
-                            Starter folder zip
+                            Check skill · small zip
                           </a>
                           <p class="text-caption text-muted-foreground">
-                            The one piece with no command: it is not in the Matt Pocock skills. Copy these two from the
-                            zip of step 5.
+                            The one piece with no command. Unzip the skill, paste the hancrafted entry; not the step 5
+                            zip, which repeats the Matt Pocock skills.
                           </p>
                         </div>
                       </li>
@@ -9412,8 +9729,8 @@
                 </div>
                 <figcaption>
                   <b>8c</b> A map from each piece of the starter folder to the line that builds it by hand, so the one
-                  piece with no command, the readiness check from the zip, stands out as the focal row. Teaches what the
-                  zip was made of, at the cost of a denser read than 8a. Build cost: Scene.
+                  piece with no command, the readiness check from its small bundle, stands out as the focal row. Teaches
+                  what the zip was made of, at the cost of a denser read than 8a. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
                   <summary>Build notes</summary>
@@ -9429,17 +9746,18 @@
                       >{ line: string }</code
                     >, the <code>border-2 border-primary</code> strip ending on the homepage window). The pieces follow
                     the Brief's zip list (Open ideas: the Matt Pocock skills, check-workshop-readiness, AGENTS.md,
-                    GLOSSARY.md, the local setup output); CLAUDE.md with <code>@AGENTS.md</code> is left off because the
-                    check does not need it. Hover: <code>focus-group--dim-others</code> and
-                    <code>card-hover--raise</code> on the three map rows, <code>card-hover--raise</code> on the Node.js
-                    pill, <code>card-hover--outline</code> on Copy prompt. i18n keys <code>title</code>,
-                    <code>caption</code>, <code>columns.{zip,byHand}</code>,
+                    GLOSSARY.md, the local setup output); CLAUDE.md with <code>@AGENTS.md</code> sits in the setup row's
+                    answer, since the setup skill does not write it unasked. Hover:
+                    <code>focus-group--dim-others</code> and <code>card-hover--raise</code> on the three map rows,
+                    <code>card-hover--raise</code> on the Node.js pill, <code>card-hover--outline</code> on Copy prompt.
+                    i18n keys <code>title</code>, <code>caption</code>, <code>columns.{zip,byHand}</code>,
                     <code>rows.{node,skills,setup,check}.{piece,what,note}</code>, <code>zipLink</code>,
                     <code>thenCheck</code>, <code>homepage</code>, <code>stuck.*</code>. No Context markers: the Slide
                     has no Speaker notes. <br /><br />
-                    <b>Open question:</b> settled as in 8a, a link to the same starter zip, here made the focal row so a
-                    technical viewer sees exactly which piece the Matt Pocock skills do not cover.
-                    <b>Flag for the user:</b> the GLOSSARY.md dependency in 8a's notes holds here too.
+                    <b>Open question:</b> settled as in 8a, a small check bundle (the skill folder zip and a glossary
+                    entry to paste), never the step 5 starter zip, here made the focal row so a technical viewer sees
+                    exactly which piece the Matt Pocock skills do not cover. <b>Flag for the user:</b> the second
+                    download artifact and the unverified installer picker in 8a's notes hold here too.
                   </div>
                 </details>
                 <label class="spec-pick"
