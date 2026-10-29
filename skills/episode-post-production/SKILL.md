@@ -9,7 +9,7 @@ You are the **orchestrator**: you order the steps, stop for Han three times and 
 
 ## Steps
 
-1. **Branch.** Run `npm run wt:new -- post-production/<video id>` and work in that worktree. _Done when_ `git branch --show-current` prints that branch.
+1. **Branch.** Run `npm run youtube:recording -- <url>`; it only reads, and its first lines name the Episode's `slug`. Then `git fetch origin`, `npm run wt:new -- post-production/<slug>`, and work in that worktree. _Done when_ `git branch --show-current` prints `post-production/<slug>`.
 2. **Transcript.** Run `npm run youtube:transcript -- <url>`; it asks which language was spoken. No captions yet: stop and tell Han to retry later. _Done when_ `recording/transcript.<lang>.vtt` exists; take `<episode>` from the folder the tool reports.
 3. **Slide starts.** Run `/episode-match-slide-starts <episode>`. **Review stop 1:** show the Slide start table; wait for Han's fixes, then apply them to `recording/slide-starts.<lang>.json`.
 4. **Voice script.** Run `/episode-transcript-to-voice-script <episode>`. **Review stop 2:** show the Voice script diff per Slide; wait for Han's edits.

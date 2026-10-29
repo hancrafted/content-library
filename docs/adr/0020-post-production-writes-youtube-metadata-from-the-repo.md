@@ -14,6 +14,7 @@ After an Episode's recording is on YouTube, its description, chapters and pinned
 3. **The repo is the source, and the copy is applied only after the merge.** The description, the chapter block and the comment text are reviewed in one PR with the transcript, the Slide starts and the Voice script; nothing reaches YouTube unseen.
 4. **Writes are idempotent.** The description is overwritten, and does nothing when unchanged. The comment is posted once and its ID is stored in the Recording folder; a re-run never posts a duplicate.
 5. **The comment is pinned by hand.** The API has no method to pin a comment, so apply ends by telling Han to pin it in YouTube Studio.
+6. **The commands share one contract.** Every `youtube:*` command takes an Episode folder, a page URL or a video ID. The spoken language comes from the language-named files in the Recording folder (`transcript.de.vtt`); `--lang` is needed only when several languages exist, and the command then refuses and lists them. `youtube:recording` and `youtube:voice-script` are the reading copies for the judgment skills and write nothing; `youtube:apply --dry-run` reads the remote state, prints the plan and writes nothing. What each command reads and writes: `tools/youtube/AGENTS.md`. One video declared for both locales counts as one video.
 
 ## Why
 

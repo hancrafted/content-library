@@ -6,6 +6,20 @@ The post-production tools: the Episode resolver, and the `youtube:*` entry point
 - Why the repo writes YouTube metadata: `docs/adr/0020-post-production-writes-youtube-metadata-from-the-repo.md`.
 - Tests: ARCH-003-testing.
 
+## Commands
+
+Each takes `<episode folder | page url | video id>` and infers the language from the Recording folder's file names (`--lang en|de` when several exist); the rules are decision 6 of the design-ADR above. `--dry-run` belongs to `youtube:apply` alone.
+
+| Command                | Reads                                  | Writes                                           |
+| ---------------------- | -------------------------------------- | ------------------------------------------------ |
+| `youtube:transcript`   | YouTube captions and length (`yt-dlp`) | `transcript.<lang>.vtt`, `video.<lang>.json`     |
+| `youtube:recording`    | the composition, the Recording folder  | nothing; prints the Slide table, then violations |
+| `youtube:voice-script` | transcript, Slide starts, Slide i18n   | nothing; prints the reading copy                 |
+| `youtube:chapters`     | Slide starts                           | the chapter block of `youtube.<lang>.md`         |
+| `youtube:apply`        | `youtube.<lang>.md`, the remote video  | the video description, a comment; the comment ID |
+
+`slide-starts.<lang>.json` is `{videoId, starts, unmatched, guessed}`: `guessed` lists the started Slides whose start was inferred, for Han's review.
+
 ## youtube:apply setup
 
 `npm run youtube:apply -- <episode folder | page url> [--lang de] [--dry-run]` writes the description and posts the pinned comment after the PR merged; `--dry-run` only prints the plan.
