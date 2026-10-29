@@ -1,0 +1,27 @@
+{
+  "videoId": "mmnFtI5zRPk",
+  "starts": {
+    "hero": 0,
+    "the-thought-experiment": 20,
+    "you-are-the-new-hire": 47,
+    "pay-the-price": 183,
+    "one-prompt": 321,
+    "five-moves-to-brief-a-freelancer": 430,
+    "manage-the-price": 495,
+    "first-human-in-the-loop-agentic-workflow": 517
+  },
+  "unmatched": [],
+  "guessed": [
+    "you-are-the-new-hire",
+    "one-prompt",
+    "five-moves-to-brief-a-freelancer",
+    "manage-the-price",
+    "first-human-in-the-loop-agentic-workflow"
+  ],
+  "extraChapters": [
+    {
+      "start": 146,
+      "title": "5 Eigenschaften der KI"
+    }
+  ]
+}
