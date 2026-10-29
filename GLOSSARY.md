@@ -64,10 +64,10 @@ _Avoid_: route list, page list, hand-kept page list
 **Video**: a YouTube video an Episode's page plays from its Title slide, declared as `youtube` in the Episode's metadata and optional until uploaded; visibility decides how many. A public Episode has at most one per locale: none, English, German or both. An unlisted Episode has at most one, its **Event recording**: one YouTube id with the language spoken at its Event, played on both locale pages and labelled with that language before play. The content store refuses a second Video on an unlisted Episode and a language that is not a site locale.
 _Avoid_: Clip, recording link
 
-**Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
+**Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short. A Brief's Format `guide` names the Guide Resource kind instead of an Episode.
 _Avoid_: Type, kind, length
 
-**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, an Episode template or a Master slide. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
+**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, a Guide, an Episode template or a Master slide. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
 _Avoid_: Tooling page, Layout reference, reference Episode, Asset
 
 **Resource index**: the projection of the page catalogue onto one entry shape (`ResourceEntry`: kind, title, description, Tags, URL, locale), one entry per listed page. Derived, never stored, so it cannot list a page the site does not list. The groundwork for search and retrieval by people and agents. Feature doc `docs/features/resources.md`.

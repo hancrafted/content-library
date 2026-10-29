@@ -2,6 +2,7 @@ import {
   folderOf,
   type EpisodeRef,
   type ExplorablePageRef,
+  type GuideRef,
   type TemplateRef,
 } from '@/content-store/catalogue/episode-id.pure';
 import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/table-of-contents.pure';
@@ -95,8 +96,9 @@ export function pageClassOf(tone: 'inverse' | undefined): string {
 
 /**
  * The source folder a page's Slides sit in, as the dev token editor names it in its prompt: an Episode's own folder,
- * an Event's copy's under its Event, a Template's under `templates/` or an Explorable page's under `explorable-pages/`.
+ * an Event's copy's under its Event, a Template's under `templates/`, an Explorable page's under `explorable-pages/` or a
+ * Guide's under `guides/`.
  */
-export function sourceFolderOf(page: EpisodeRef | TemplateRef | ExplorablePageRef): string {
+export function sourceFolderOf(page: EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef): string {
   return `src/episodes/${folderOf(page)}`;
 }

@@ -24,17 +24,17 @@ export const EXPORTED_EPISODES_PATH_SLUGS: readonly EpisodesPathSlug[] = episode
   ({ episode }) => episode,
 );
 
-/** A page rendered through the one Episode container: an Episode's own a Template's or an Explorable page's, with where its folder sits. */
+/** A page rendered through the one Episode container: an Episode's own, a Template's, an Explorable page's or a Guide's, with where its folder sits. */
 export interface EpisodeShapedPage {
   readonly slug: string;
   /** The logical path it is built at, before the locale prefix. */
   readonly route: string;
-  /** Its folder under `src/episodes/`: the slug for an Episode, `templates/<slug>` for a Template, `explorable-pages/<slug>` for an Explorable page. */
+  /** Its folder under `src/episodes/`: the slug for an Episode, `templates/<slug>` for a Template, `explorable-pages/<slug>` for an Explorable page, `guides/<slug>` for a Guide. */
   readonly folder: string;
   readonly isNotEpisode: boolean;
 }
 
-/** Every Episode page under `/episodes/` and every Template page the catalogue builds: what the Episode checks run over. */
+/** Every Episode page under `/episodes/` and every Template, Explorable page and Guide page the catalogue builds: what the Episode checks run over. */
 export const EXPORTED_EPISODE_SHAPED_PAGES: readonly EpisodeShapedPage[] = PAGES.flatMap(
   ({ page, treatment }): EpisodeShapedPage[] => {
     if (!treatment.exported) return [];
@@ -44,6 +44,10 @@ export const EXPORTED_EPISODE_SHAPED_PAGES: readonly EpisodeShapedPage[] = PAGES
     if (page.kind === 'explorable-page') {
       const { slug } = page.explorablePage;
       return [{ slug, route: routeOf(page), folder: `explorable-pages/${slug}`, isNotEpisode: true }];
+    }
+    if (page.kind === 'guide') {
+      const { slug } = page.guide;
+      return [{ slug, route: routeOf(page), folder: `guides/${slug}`, isNotEpisode: true }];
     }
     if (page.kind === 'template') {
       const { slug } = page.template;

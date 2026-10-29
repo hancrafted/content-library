@@ -1,11 +1,12 @@
 {
   "resourcesOverview": {
     "title": "Ressourcen",
-    "intro": "Alles, was die Seite bietet, an einem Ort: Episoden, Events, Explorable-Seiten, Episodenvorlagen und Master-Folien.",
+    "intro": "Alles, was die Seite bietet, an einem Ort: Episoden, Events, Explorable-Seiten, Anleitungen, Episodenvorlagen und Master-Folien.",
     "kinds": {
       "episode": "Episode",
       "event": "Event",
       "explorable-page": "Explorable-Seite",
+      "guide": "Anleitung",
       "episode-template": "Episodenvorlage",
       "master-slide": "Master-Folie"
     },
@@ -23,6 +24,7 @@
       "episode": "Episoden",
       "event": "Events",
       "explorable-page": "Explorable-Seiten",
+      "guide": "Anleitungen",
       "episode-template": "Episodenvorlagen",
       "master-slide": "Master-Folien"
     }

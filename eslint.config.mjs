@@ -45,12 +45,12 @@ const OPTIONAL_CLIENT = '+([a-z0-9-])?(.client)';
 const EPISODE_FILES = 'src/episodes/**/*.{ts,tsx}';
 const EPISODE_CODE_FILES = ['src/episodes/{components,lib,hooks}/**'];
 // A `*.client.tsx` inside a Slide folder `episodes/<ep>/slides/<slide>/`, an Event's
-// copy's under `episodes/by-event/<event>/`, a Template's or an Explorable page's under `episodes/templates/` or `episodes/explorable-pages/`
+// copy's under `episodes/by-event/<event>/`, a Template's, an Explorable page's or a Guide's under `episodes/templates/`, `episodes/explorable-pages/` or `episodes/guides/`
 // or a pool Slide's `episodes/slide-pool/<slide>/`, is the only place an Episode may carry
 // 'use client'; it keeps the spine rule but not the directive ban.
 const EPISODE_CLIENT_FILES = [
   'src/episodes/*/slides/*/**/*.client.tsx',
-  'src/episodes/{by-event/*,templates,explorable-pages}/*/slides/*/**/*.client.tsx',
+  'src/episodes/{by-event/*,templates,explorable-pages,guides}/*/slides/*/**/*.client.tsx',
   'src/episodes/slide-pool/*/**/*.client.tsx',
 ];
 const SPINE_HEADINGS = [
@@ -355,7 +355,7 @@ export default tseslint.config(
     // Caps follow file kind: every other file in a Slide folder keeps every cap.
     files: [
       'src/episodes/*/slides/*/slide.tsx',
-      'src/episodes/{by-event/*,templates,explorable-pages}/*/slides/*/slide.tsx',
+      'src/episodes/{by-event/*,templates,explorable-pages,guides}/*/slides/*/slide.tsx',
       'src/episodes/slide-pool/*/slide.tsx',
     ],
     rules: { 'max-lines-per-function': 'off' },

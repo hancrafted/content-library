@@ -19,6 +19,7 @@ import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
 import { eyebrowsOf, pageClassOf, slideSizeOf, sourceFolderOf, tocSectionsOf } from './episode-page-container.pure';
 import { ExplorableHomes } from './explorable-homes';
+import { PagePicksProvider } from './page-picks-provider.client';
 import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -74,16 +75,18 @@ function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; pa
 function SlideColumn(props: { titleSlide: TitleSlideProps; slides: readonly LocalizedSlide[]; page: PageHeader }) {
   const ids = [TITLE_ANCHOR, ...props.slides.map(({ id }) => id)];
   return (
-    <SlideZones>
-      <SlideObserver ids={ids} />
-      <SlideKeys ids={ids} />
-      <ContentArea>
-        <TitleSlide {...props.titleSlide} />
-        {bySection(props.slides).map((section) => (
-          <SectionSlides key={section[0].id} slides={section} page={props.page} />
-        ))}
-      </ContentArea>
-    </SlideZones>
+    <PagePicksProvider>
+      <SlideZones>
+        <SlideObserver ids={ids} />
+        <SlideKeys ids={ids} />
+        <ContentArea>
+          <TitleSlide {...props.titleSlide} />
+          {bySection(props.slides).map((section) => (
+            <SectionSlides key={section[0].id} slides={section} page={props.page} />
+          ))}
+        </ContentArea>
+      </SlideZones>
+    </PagePicksProvider>
   );
 }
 
@@ -209,8 +212,9 @@ interface EpisodePageContainerProps {
  * `h1`, each Section's wrapper and anchors, the table of contents and the
  * Context drawer. It walks the Episode once (`placeSections`) and every one of them
  * reads that list, so no id is derived twice and none can drift. It also
- * provides the page's one URL-state service (FE-001 §2). Under an Event, the
- * frame's header and Playlist walk sit around the Content area, and the
+ * provides the page's one URL-state service (FE-001 §2) and, around its
+ * Slides, the page-wide toolbar picks they read (FE-001 §1, transient).
+ * Under an Event, the frame's header and Playlist walk sit around the Content area, and the
  * contents and Slide links point at the Event's URL for the Episode.
  */
 export async function EpisodePageContainer(props: EpisodePageContainerProps) {

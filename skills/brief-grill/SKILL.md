@@ -23,7 +23,7 @@ Settle the frame before any creative work, so Explore does not drift towards the
 
 1. **Topic**: the idea in one line.
 2. **Audience**: who watches, and what they already know and want. The English YouTube audience wants reach; German businesses want a reason to hire the user.
-3. **Format or length**: Foundations, Teardown or Short, and the planned minutes. The length decides later whether the Episode gets Threads.
+3. **Format or length**: Foundations, Teardown or Short, and the planned minutes; or `guide` for a Guide, the step-by-step Resource at `/guides/<slug>/` built by the same pipeline. The length decides later whether the Episode gets Threads.
 
 _Done when_ you have read all three back in one sentence and the user has confirmed it.
 
@@ -87,7 +87,7 @@ generated:
 
 ## Format
 
-Foundations, Teardown or Short, and the planned length in minutes.
+Foundations, Teardown or Short, and the planned length in minutes; or `guide` for a Guide.
 
 ## Audience
 

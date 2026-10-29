@@ -1,6 +1,6 @@
 # implement-episode-init
 
-Output: the Episode's page in `src/`, on the integration branch `episode/<slug>`: its wiring, metadata, Title slide, section slides and one placement marker per Section, so the `implement-section` jobs that follow build in parallel without touching the same file. Built from the `Episode page` section of the approved Spec, `docs/episodes/<slug>/spec/spec.html`.
+Output: the Episode's page in `src/` (a Guide's by [A Guide](#a-guide)), on the integration branch `episode/<slug>`: its wiring, metadata, Title slide, section slides and one placement marker per Section, so the `implement-section` jobs that follow build in parallel without touching the same file. Built from the `Episode page` section of the approved Spec, `docs/episodes/<slug>/spec/spec.html`.
 
 ## Prompt
 
@@ -23,6 +23,16 @@ The Episode is a draft: it has no video and no Promotion. This overrides the met
 - Write `episode-metadata.ts` with `status: 'upcoming'`, `visibility: 'public'` and no `publishedOn`; the schema (`src/content-store/schemas/episode.schema.ts`) refuses one, and refuses a record without a visibility. Publishing flips both and is the user's separate step ([episode-publishing](../../../docs/features/episode-publishing.md)), never this job's or Promotion's.
 - Format and Tags come from the Brief. `format` and at least one Tag are required by the Episode schema (`src/content-store/schemas/episode.schema.ts`), so a required field the Brief does not name gets a `needs-human` note plus the closest honest value (the nearest existing Format or Tag), never an invented one.
 - Register the Episode by running `npm run registry`: the Episode registry derives the slug, the metadata and the record from the folder, whatever its `status`, so an upcoming Episode with a page type-checks; the fast suite fails while the registry is stale. The page is built `noindex` and its card stays unlinked until publishing; write no `published-anchors.json` here.
+
+### A Guide
+
+A Brief whose `## Format` names `guide` builds a Guide, not an Episode (`docs/features/resources.md`, Guides): every step above holds, with these paths and records in place of the Episode's.
+
+- The folder is `src/episodes/guides/<slug>/`, its placement markers `src/episodes/guides/<slug>/sections/<section-slug>.ts`; `episode.ts` exports the `episode()` composition as for an Episode.
+- The record is `src/content-store/guides/<slug>.ts`, exporting `guide` with `slug`, `tags` from the Brief and `visibility: 'public'`, `satisfies GuideInput` (`src/content-store/schemas/guide.schema.ts`). It replaces [Metadata](#metadata): no `episode-metadata.ts`, `status` or `format`. `npm run registry` lists both.
+- Write `src/episodes/guides/<slug>/published-anchors.json` with the anchors the page renders: a Guide's anchors bind from the start, as a Template's and an Explorable page's do, and `src/episodes/lib/published-anchors.test.ts` prints the file to write.
+- The first Guide adds its page, which static export refuses while no Guide exists: `src/page-assembly/guide/guide-page.tsx` and the route pair `src/app/(en)/guides/[slug]/page.tsx` and `src/app/[locale]/guides/[slug]/page.tsx`, each mirroring its Explorable page counterpart (`explorable-page/explorable-page.tsx`, `explorables/[slug]/page.tsx`) through `guideParams`, `guideAt` and `PageOf<'guide'>`, and a `guideVideo(slug, locale)` in `src/content-store/store.ts` beside `explorablePageVideo`, with `GuideParams` re-exported there.
+- The page-wide toolbar picks (operating system, AI agent) are `usePagePick` from `src/episodes/hooks/use-page-pick.ts`; the Episode container already provides them. A troubleshooting box is the shared `TryPrompt` with `useCopy` from `src/shared/hooks/use-copy.ts`.
 
 ## Review
 

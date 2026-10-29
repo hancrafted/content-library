@@ -1,6 +1,7 @@
 import type { LoadedEpisode } from '../episode-refusals';
 import type { ExplorablePage } from '../schemas/explorable-page.schema';
 import type { TemplateType } from '../schemas/fields';
+import type { Guide } from '../schemas/guide.schema';
 import type { Template } from '../schemas/template.schema';
 import type { PresentedEpisode, ServedEvent } from '../served-event';
 import type {
@@ -8,6 +9,7 @@ import type {
   EpisodesPathSlug,
   EventSlug,
   ExplorablePageSlug,
+  GuideSlug,
   PageOf,
   PageRef,
   TemplateSlug,
@@ -37,6 +39,17 @@ export interface ListedExplorablePage {
   readonly tags: ExplorablePage['tags'];
 }
 
+/** The params of a page built under `/guides/`: `/guides/<slug>/`. */
+export interface GuideParams {
+  readonly slug: GuideSlug;
+}
+
+/** A Guide `/guides/` and `/resources/` list: its page and its record's Tags. */
+export interface ListedGuide {
+  readonly page: PageOf<'guide'>;
+  readonly tags: Guide['tags'];
+}
+
 /** A Template `/resources/` lists: its page, whose ref carries its type and slug, and its record's Tags. */
 export interface ListedTemplate {
   readonly page: PageOf<'template'>;
@@ -61,7 +74,7 @@ export type EventEpisodePage = PageOf<'event-episode'> & { readonly presented: P
 export interface PageCatalogue {
   /**
    * Every page, each once, with its treatment: the site's own lists, each Episode's own page (public or not), each
-   * Explorable page, each Template page, each Event, then each Episode under its Event. Only a page whose treatment says `exported` is built;
+   * Explorable page, each Guide, each Template page, each Event, then each Episode under its Event. Only a page whose treatment says `exported` is built;
    * the sitemap keeps this order.
    */
   readonly pages: readonly TreatedPage[];
@@ -78,6 +91,10 @@ export interface PageCatalogue {
   readonly explorablePageParams: () => ExplorablePageParams[];
   /** The Explorable page built at `/explorables/<slug>/`; undefined for a slug no Explorable page has. */
   readonly explorablePageAt: (params: RouteParams<ExplorablePageParams>) => PageOf<'explorable-page'> | undefined;
+  /** One static param per built Guide, for the route under `/guides/`. */
+  readonly guideParams: () => GuideParams[];
+  /** The Guide built at `/guides/<slug>/`; undefined for a slug no Guide has. */
+  readonly guideAt: (params: RouteParams<GuideParams>) => PageOf<'guide'> | undefined;
   /** One static param per built Template page of this type, for the route under that type's path. */
   readonly templateParams: (type: TemplateType) => TemplateParams[];
   /** The Template page built at `/<type plural>/<template>/`; undefined for a slug of another type or none. */
@@ -100,6 +117,8 @@ export interface PageCatalogue {
   readonly listedEvents: () => readonly ServedEvent[];
   /** The Explorable pages `/explorables/` and `/resources/` list, in record order: those whose record says `public`. */
   readonly listedExplorablePages: () => readonly ListedExplorablePage[];
+  /** The Guides `/guides/` and `/resources/` list, in record order: those whose record says `public`. */
+  readonly listedGuides: () => readonly ListedGuide[];
   /** The Templates `/resources/` lists, in record order: those whose record says `public`. */
   readonly listedTemplates: () => readonly ListedTemplate[];
 }

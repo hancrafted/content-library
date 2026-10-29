@@ -8,7 +8,7 @@ import type { Locale } from '@/shared/lib/locale.pure';
  */
 
 /** What a Resource is, the closed list the kind filter offers in its order: a Template is its type. */
-export const RESOURCE_KINDS = ['episode', 'event', 'explorable-page', ...TEMPLATE_TYPES] as const;
+export const RESOURCE_KINDS = ['episode', 'event', 'explorable-page', 'guide', ...TEMPLATE_TYPES] as const;
 
 export type ResourceKind = (typeof RESOURCE_KINDS)[number];
 

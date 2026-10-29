@@ -4,15 +4,15 @@ import type { z } from 'zod';
 import { duplicates } from './duplicates';
 import { episodeRefusals, type LoadedEpisode } from './episode-refusals';
 import { eventRefusals } from './event-refusals';
-import { explorablePageRefusals } from './explorable-page-refusals';
 import { featuredRefusals } from './featured';
 import { episodeSchema, type Episode } from './schemas/episode.schema';
 import { eventSchema, type Event } from './schemas/event.schema';
 import { explorablePageSchema } from './schemas/explorable-page.schema';
+import { guideSchema } from './schemas/guide.schema';
 import { playlistSchema, type Playlist } from './schemas/playlist.schema';
 import { templateSchema } from './schemas/template.schema';
 import { listedEntries, playlistEntries, type ServedEvent } from './served-event';
-import { templateRefusals } from './template-refusals';
+import { slugKindRefusals } from './slug-kind-refusals';
 
 /*
  * The store's refusals (FE-013 Decision 3, design-ADR 0016 decisions 2, 3, 4, 8 and 9): each record is parsed by its
@@ -120,14 +120,6 @@ function playlistRefusals(
   ];
 }
 
-/** The refusals of the kinds served by slug, each checked against its composition folder. */
-function slugKindRefusals(content: ParsedContent): string[] {
-  return [
-    ...templateRefusals(content.templates, content.templateCompositions),
-    ...explorablePageRefusals(content.explorablePages, content.explorablePageCompositions, content.explorables),
-  ];
-}
-
 /** The cross-record refusals over sound records, in the order kinds are listed, with the Events' own from `serve`. */
 function crossRecordRefusals(content: ParsedContent, unserved: readonly string[]): string[] {
   const { episodes, events, playlists, featured } = content;
@@ -192,6 +184,7 @@ export function checkRecords(content: ParsedContent): { content: Content; refuse
       playlists: content.playlists,
       templates: content.templates,
       explorablePages: content.explorablePages,
+      guides: content.guides,
     },
     refused: crossRecordRefusals(
       content,
@@ -209,16 +202,24 @@ function parseEpisodes(entries: readonly EpisodeEntry[]): { parsed: LoadedEpisod
   };
 }
 
+/** The kinds served by slug and composed like an Episode, each parsed by its schema: Templates, Explorable pages, Guides. */
+function parseComposedKinds(input: ContentInput) {
+  return {
+    templates: parseAll({ kind: 'Template', key: 'slug', schema: templateSchema }, input.templates),
+    explorablePages: parseAll(
+      { kind: 'Explorable page', key: 'slug', schema: explorablePageSchema },
+      input.explorablePages,
+    ),
+    guides: parseAll({ kind: 'Guide', key: 'slug', schema: guideSchema }, input.guides),
+  };
+}
+
 /** Every record parsed by its schema, with the sentences refusing the ones that do not parse. */
 export function parseRecords(input: ContentInput): { content: ParsedContent; refused: string[] } {
   const episodes = parseEpisodes(input.episodes);
   const events = parseAll({ kind: 'Event', key: 'slug', schema: eventSchema }, input.events);
   const playlists = parseAll({ kind: 'Playlist', key: 'id', schema: playlistSchema }, input.playlists);
-  const templates = parseAll({ kind: 'Template', key: 'slug', schema: templateSchema }, input.templates);
-  const explorablePages = parseAll(
-    { kind: 'Explorable page', key: 'slug', schema: explorablePageSchema },
-    input.explorablePages,
-  );
+  const { templates, explorablePages, guides } = parseComposedKinds(input);
   return {
     content: {
       episodes: episodes.parsed,
@@ -229,6 +230,8 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
       explorablePages: explorablePages.parsed,
       explorablePageCompositions: input.explorablePageCompositions,
       explorables: input.explorables,
+      guides: guides.parsed,
+      guideCompositions: input.guideCompositions,
       ...(input.featured === undefined ? {} : { featured: input.featured }),
     },
     refused: [
@@ -237,6 +240,7 @@ export function parseRecords(input: ContentInput): { content: ParsedContent; ref
       ...playlists.refused,
       ...templates.refused,
       ...explorablePages.refused,
+      ...guides.refused,
     ],
   };
 }

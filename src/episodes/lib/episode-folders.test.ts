@@ -2,7 +2,14 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { episodeFolders, pageFolders, slideFolders, templateFolders, type PageFolder } from './episode-folders';
+import {
+  episodeFolders,
+  guideFolders,
+  pageFolders,
+  slideFolders,
+  templateFolders,
+  type PageFolder,
+} from './episode-folders';
 
 /*
  * The one folder walker (design-ADR 0016 decision 3): every Episode, standalone and Event copy alike, and every templates
@@ -144,6 +151,26 @@ describe('edge cases', () => {
     const slides = slideFolders(root).map(({ owner, slug }) => ({ owner, slug }));
     // ASSERT
     expect({ pages, slides }).toEqual(expected);
+  });
+
+  it('walks the Guides under guides/, by slug, none of them an Episode, and their Slide folders', () => {
+    // ARRANGE
+    const root = tree([
+      'alpha/episode-metadata.ts',
+      'guides/get-workshop-ready/episode.ts',
+      'guides/get-workshop-ready/slides/open-your-terminal/slide.tsx',
+    ]);
+    const expected = {
+      guides: ['guides/get-workshop-ready'],
+      episodes: ['alpha'],
+      slides: [{ owner: 'get-workshop-ready', slug: 'open-your-terminal' }],
+    };
+    // ACT
+    const guides = guideFolders(root).map(({ folder }) => folder);
+    const episodes = episodeFolders(root).map(({ folder }) => folder);
+    const slides = slideFolders(root).map(({ owner, slug }) => ({ owner, slug }));
+    // ASSERT
+    expect({ guides, episodes, slides }).toEqual(expected);
   });
 
   it("gives each folder its path under the Episodes folder, a copy's under its Event", () => {

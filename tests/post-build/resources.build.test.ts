@@ -7,6 +7,8 @@ import { join, relative } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { templateRoute, type TemplateSlug } from '../../src/content-store/catalogue/record-routes';
 import type { TemplateType } from '../../src/content-store/schemas/fields';
+import { PAGES as CATALOGUE } from '../../src/content-store/store';
+import { RESOURCE_KINDS } from '../../src/page-assembly/resources-overview/resource-index.pure';
 import { LOCALES, localizePath } from '../../src/shared/lib/locale.pure';
 import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedFile, exportedPage, OUT_DIR, redirectRules, resolveBasePath } from './exported-pages';
@@ -67,7 +69,10 @@ describe.each(PAGES)('the Template page $url', ({ type, slug, path, url }) => {
   });
 });
 
-const KINDS = ['episode', 'event', 'explorable-page', 'episode-template', 'master-slide'];
+/** Every Resource kind with a listed page: a Guide's only once the first Guide exists (design-ADR 0019, #450). */
+const KINDS = RESOURCE_KINDS.filter(
+  (kind) => kind !== 'guide' || CATALOGUE.some(({ page, treatment }) => page.kind === 'guide' && treatment.listed),
+);
 
 describe('the Resources overview', () => {
   it.each(LOCALES)('lists the five Templates, each linking to its page, for %s', (locale) => {
@@ -86,31 +91,35 @@ describe('the Resources overview', () => {
     expect(hrefs).toEqual(expected);
   });
 
-  it.each(LOCALES)('lists all five kinds, each card linking to a page of its own kind, for %s', (locale) => {
-    // ARRANGE
-    const $ = exportedPage(localizePath(ROUTES.resources, locale));
-    const prefix = `${basePath}${localizePath('/', locale)}`.replace(/\/$/, '');
-    const pathOf = (kind: string) =>
-      ({
-        episode: '/episodes/',
-        event: '/events/',
-        'explorable-page': '/explorables/',
-        'episode-template': '/episode-templates/',
-        'master-slide': '/master-slides/',
-      })[kind] ?? '';
-    // ACT
-    const cards = $('[data-resource-card]')
-      .toArray()
-      .map((card) => ({
-        kind: $(card).attr('data-resource-kind') ?? '',
-        href: $(card).find('h2 a').attr('href') ?? '',
-      }));
-    const kinds = [...new Set(cards.map(({ kind }) => kind))];
-    const misplaced = cards.filter(({ kind, href }) => !href.startsWith(`${prefix}${pathOf(kind)}`));
-    // ASSERT
-    expect(kinds.sort()).toEqual([...KINDS].sort());
-    expect(misplaced).toEqual([]);
-  });
+  it.each(LOCALES)(
+    'lists every kind with a listed page, each card linking to a page of its own kind, for %s',
+    (locale) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(ROUTES.resources, locale));
+      const prefix = `${basePath}${localizePath('/', locale)}`.replace(/\/$/, '');
+      const pathOf = (kind: string) =>
+        ({
+          episode: '/episodes/',
+          event: '/events/',
+          'explorable-page': '/explorables/',
+          guide: '/guides/',
+          'episode-template': '/episode-templates/',
+          'master-slide': '/master-slides/',
+        })[kind] ?? '';
+      // ACT
+      const cards = $('[data-resource-card]')
+        .toArray()
+        .map((card) => ({
+          kind: $(card).attr('data-resource-kind') ?? '',
+          href: $(card).find('h2 a').attr('href') ?? '',
+        }));
+      const kinds = [...new Set(cards.map(({ kind }) => kind))];
+      const misplaced = cards.filter(({ kind, href }) => !href.startsWith(`${prefix}${pathOf(kind)}`));
+      // ASSERT
+      expect(kinds.sort()).toEqual([...KINDS].sort());
+      expect(misplaced).toEqual([]);
+    },
+  );
 
   it.each(LOCALES)(
     'offers a search, a kind filter with a chip and count per kind, Tag chips and the view switch, for %s',
@@ -157,7 +166,7 @@ describe('the Resources overview', () => {
       .toArray()
       .map((link) => $(link).attr('data-testid'));
     // ASSERT
-    expect(links.slice(0, 4)).toEqual(['nav-explorables', 'nav-events', 'nav-episodes', 'nav-resources']);
+    expect(links.slice(0, 5)).toEqual(['nav-explorables', 'nav-events', 'nav-episodes', 'nav-guides', 'nav-resources']);
   });
 });
 

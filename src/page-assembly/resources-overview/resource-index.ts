@@ -4,6 +4,7 @@ import {
   listedEpisodes,
   listedEvents,
   listedExplorablePages,
+  listedGuides,
   listedTemplates,
   type LoadedEpisode,
 } from '@/content-store/store';
@@ -61,6 +62,16 @@ function listedExplorablePagePages(): Listed[] {
   }));
 }
 
+function listedGuidePages(): Listed[] {
+  return listedGuides().map(({ page, tags }) => ({
+    kind: 'guide',
+    slug: page.guide.slug,
+    page,
+    tags,
+    words: (locale) => compositionOf(page.guide).messages[locale],
+  }));
+}
+
 function listedTemplatePages(): Listed[] {
   return listedTemplates().map(({ page, tags }) => ({
     kind: page.type,
@@ -81,6 +92,7 @@ export function resourceIndex(): ResourceEntry[] {
     ...listedEpisodePages(),
     ...listedEventPages(),
     ...listedExplorablePagePages(),
+    ...listedGuidePages(),
     ...listedTemplatePages(),
   ];
   return listed.flatMap(({ kind, slug, page, tags, words }) =>

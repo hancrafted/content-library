@@ -3,6 +3,7 @@ import type { EpisodeRef } from './catalogue/episode-id.pure';
 import { catalogueOf } from './catalogue/page-catalogue';
 import {
   EXPLORABLE_PAGE_SLUGS,
+  GUIDE_SLUGS,
   TEMPLATE_SLUGS,
   type EpisodeId,
   type ExplorablePageSlug,
@@ -12,6 +13,7 @@ import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generate
 import { EVENT_RECORDS } from './event-registry.generated';
 import { EXPLORABLE_PAGE_RECORDS, EXPLORABLE_SLUGS } from './explorable-page-registry.generated';
 import { FEATURED } from './featured';
+import { GUIDE_RECORDS } from './guide-registry.generated';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
@@ -19,6 +21,7 @@ import type { EpisodeStatus } from './schemas/episode.schema';
 import type { EventInput } from './schemas/event.schema';
 import type { ExplorablePageInput } from './schemas/explorable-page.schema';
 import type { IsoDate } from './schemas/fields';
+import type { GuideInput } from './schemas/guide.schema';
 import type { PlaylistInput } from './schemas/playlist.schema';
 import type { TemplateInput } from './schemas/template.schema';
 import type { ServedEvent } from './served-event';
@@ -31,7 +34,8 @@ import { TEMPLATE_RECORDS } from './template-registry.generated';
  * folder gives it), Events through the generated
  * Event registry (`./event-registry.generated.ts`, one entry per Event file), Templates through theirs
  * (`./template-registry.generated.ts`, one per Template file, checked against the composition folders), Explorable pages through
- * theirs (`./explorable-page-registry.generated.ts`, checked against the composition folders and the Explorables), Playlists by explicit import. A bad
+ * theirs (`./explorable-page-registry.generated.ts`, checked against the composition folders and the Explorables), Guides through
+ * theirs (`./guide-registry.generated.ts`, checked against the composition folders), Playlists by explicit import. A bad
  * record throws, so the build and the fast suite stop. Pages, routes, the sitemap and metadata read records only
  * through the functions below, and every page through the page catalogue served here. The one seam a database would
  * replace.
@@ -40,6 +44,7 @@ import { TEMPLATE_RECORDS } from './template-registry.generated';
 const EVENTS: readonly EventInput[] = Object.values(EVENT_RECORDS);
 const TEMPLATES: readonly TemplateInput[] = Object.values(TEMPLATE_RECORDS);
 const EXPLORABLE_PAGES: readonly ExplorablePageInput[] = Object.values(EXPLORABLE_PAGE_RECORDS);
+const GUIDES: readonly GuideInput[] = Object.values(GUIDE_RECORDS);
 const PLAYLISTS: readonly PlaylistInput[] = [
   axelAgenticWorkflowPlaylist,
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
@@ -76,6 +81,8 @@ const CONTENT = loadContent({
   explorablePages: EXPLORABLE_PAGES,
   explorablePageCompositions: EXPLORABLE_PAGE_SLUGS,
   explorables: EXPLORABLE_SLUGS,
+  guides: GUIDES,
+  guideCompositions: GUIDE_SLUGS,
   featured: FEATURED,
 });
 
@@ -175,10 +182,13 @@ export const {
   eventEpisodePageAt,
   explorablePageParams,
   explorablePageAt,
+  guideParams,
+  guideAt,
   templateParams,
   templatePageAt,
   listedEpisodes,
   listedEvents,
   listedExplorablePages,
+  listedGuides,
   listedTemplates,
 } = catalogueOf(CONTENT);

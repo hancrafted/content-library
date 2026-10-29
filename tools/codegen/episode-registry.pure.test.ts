@@ -30,6 +30,13 @@ const TEMPLATE: EpisodeFolder = {
   episodeSource: 'export const workshopTemplate = episode({\n',
 };
 
+const GUIDE: EpisodeFolder = {
+  id: 'get-workshop-ready',
+  folder: 'guides/get-workshop-ready',
+  files: ['episode.ts', 'i18n', 'slides'],
+  episodeSource: 'export const getWorkshopReady = episode({\n',
+};
+
 /** The text of one generated file. */
 function fileAt(folders: readonly EpisodeFolder[], path: string): string {
   return episodeRegistryFiles(folders).find((file) => file.path === path)?.text ?? '';
@@ -119,6 +126,23 @@ describe('success cases', () => {
     const compositions = fileAt([TEMPLATE, WITH_PAGE], REGISTRY_PATHS.compositions);
     // ASSERT
     expected.forEach((line) => expect(compositions).toContain(line));
+  });
+
+  it('lists each Guide by its slug and composes it from its folder under guides/, never as an Episode', () => {
+    // ARRANGE
+    const expected = [
+      "export const GUIDE_SLUGS = ['get-workshop-ready'] as const;",
+      "import { getWorkshopReady } from '@/episodes/guides/get-workshop-ready/episode';",
+      'export const GUIDES: { readonly [S in GuideSlug]: EpisodeComposition & { readonly slug: S } } = {',
+      "  'get-workshop-ready': getWorkshopReady,",
+    ];
+    // ACT
+    const ids = fileAt([GUIDE, WITH_PAGE], REGISTRY_PATHS.ids);
+    const compositions = fileAt([GUIDE, WITH_PAGE], REGISTRY_PATHS.compositions);
+    const episodeIds = ids.slice(ids.indexOf('EPISODE_IDS'), ids.indexOf('TEMPLATE_SLUGS'));
+    // ASSERT
+    expected.forEach((line) => expect(`${ids}${compositions}`).toContain(line));
+    expect(episodeIds).not.toContain('get-workshop-ready');
   });
 });
 
