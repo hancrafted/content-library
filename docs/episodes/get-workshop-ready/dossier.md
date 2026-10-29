@@ -4,9 +4,12 @@ title: 'Get workshop-ready: your AI agent on your laptop'
 status: draft
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-10-29T17:00:00Z
+  at: 2026-10-29T16:35:30Z
 locale: en
 brief: ./brief.md
+verified:
+  - by: process:markdown-harness
+    at: 2026-10-29T16:35:30Z
 ---
 
 # Get workshop-ready: your AI agent on your laptop {#get-workshop-ready}
