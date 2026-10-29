@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { envProblem, parseCredentials, planApply } from './apply.pure.ts';
+import { descriptionFingerprint, envProblem, parseCredentials, planApply } from './apply.pure.ts';
 import { CHAPTER_END_MARKER, CHAPTER_START_MARKER } from './chapters.pure.ts';
 
 const BLOCK = `${CHAPTER_START_MARKER}\n00:00 Intro\n${CHAPTER_END_MARKER}`;
@@ -97,5 +97,45 @@ describe('edge cases', () => {
     const plan = planApply(file({ pinnedComment: '' }), PUBLISHED);
     // ASSERT
     expect(plan.comment.action).toBe(expected);
+  });
+});
+
+describe('YouTube edits since the last apply', () => {
+  const lastSent = 'old description';
+
+  it('refuses to overwrite a description edited on YouTube since the last apply', () => {
+    // ARRANGE
+    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    // ACT
+    const plan = planApply(stored, 'old description, edited in Studio');
+    // ASSERT
+    expect(plan.description).toMatchObject({ action: 'refuse', reason: expect.stringMatching(/youtube:pull/) });
+  });
+
+  it('overwrites the edit when forced', () => {
+    // ARRANGE
+    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    // ACT
+    const plan = planApply(stored, 'old description, edited in Studio', { force: true });
+    // ASSERT
+    expect(plan.description).toEqual({ action: 'update', text: PUBLISHED });
+  });
+
+  it('updates when YouTube still shows what apply last sent', () => {
+    // ARRANGE
+    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    // ACT
+    const plan = planApply(stored, `${lastSent}\r\n`);
+    // ASSERT
+    expect(plan.description).toEqual({ action: 'update', text: PUBLISHED });
+  });
+
+  it('writes nothing when the repo already took the YouTube edit in', () => {
+    // ARRANGE
+    const stored = file({ appliedDescription: descriptionFingerprint(lastSent) });
+    // ACT
+    const plan = planApply(stored, PUBLISHED);
+    // ASSERT
+    expect(plan.description).toEqual({ action: 'none' });
   });
 });

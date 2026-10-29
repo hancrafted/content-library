@@ -42,3 +42,9 @@ LinkedIn: <linkedin href>
 
 #<keyword> #<tag> #<tag> #AIEnablement
 ```
+
+## Learned rules
+
+The Learn branch (`references/learn.md`) appends here; each line names the Episode it came from and binds every description.
+
+- Every description ends its hashtags with `#AIEnablement`. (onboard-ai-every-time, ai-attention-span)

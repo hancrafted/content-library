@@ -1,4 +1,4 @@
-// The pure half of every `youtube:*` entry point's command line: `<input> [--lang en|de] [--dry-run]`, and which spoken
+// The pure half of every `youtube:*` entry point's command line: `<input> [--lang en|de] [--dry-run] [--force]`, and which spoken
 // language a Recording folder holds. The shell (`command.ts`) reads the folder and exits.
 import { parseSpokenLanguage, SPOKEN_LANGUAGES, type SpokenLanguage } from './transcript.pure.ts';
 
@@ -8,6 +8,8 @@ export interface CommandArgs {
   /** The language passed with `--lang`; undefined when the Recording folder decides. */
   readonly language?: SpokenLanguage;
   readonly dryRun: boolean;
+  /** `--force`: `youtube:apply` overwrites a description edited on YouTube since its last apply. */
+  readonly force: boolean;
 }
 
 function langProblem(argv: readonly string[]): string | undefined {
@@ -28,7 +30,12 @@ export function parseCommandArgs(
   if (input === undefined) return { ok: false, reason: 'no Episode folder, page URL or video ID given' };
   return {
     ok: true,
-    args: { input, ...(language === undefined ? {} : { language }), dryRun: argv.includes('--dry-run') },
+    args: {
+      input,
+      ...(language === undefined ? {} : { language }),
+      dryRun: argv.includes('--dry-run'),
+      force: argv.includes('--force'),
+    },
   };
 }
 

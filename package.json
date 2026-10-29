@@ -14,6 +14,7 @@
     "youtube:voice-script": "node tools/youtube/voice-script.ts",
     "youtube:chapters": "node tools/youtube/chapters.ts",
     "youtube:apply": "node tools/youtube/apply.ts",
+    "youtube:pull": "node tools/youtube/pull.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",

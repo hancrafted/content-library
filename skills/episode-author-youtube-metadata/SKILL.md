@@ -1,16 +1,21 @@
 ---
 name: episode-author-youtube-metadata
-description: Write the YouTube description and pinned comment for an Episode's recording into recording/youtube.<lang>.md, around the generated chapter block. Use when post-production needs the video's description or pinned comment, when the user says write, redo or update the YouTube description or comment, or hands over an Episode folder, page URL or video ID whose recording has Slide starts.
+description: Write the YouTube description and pinned comment for an Episode's recording into recording/youtube.<lang>.md, around the generated chapter block, then learn from Han's edits on YouTube. Use when post-production needs the video's description or pinned comment, when the user says write, redo or update the YouTube description or comment, hands over an Episode folder, page URL or video ID whose recording has Slide starts, or says he changed a description or comment on YouTube ("Beschreibung geändert").
 ---
 
 # Episode author YouTube metadata
 
 The description and pinned comment are what a viewer and YouTube's search read first. This skill writes both in the recorded language, from what the Episode teaches, and ends on the copy for Han's review. It never edits the chapter block between `chapters:start` and `chapters:end`; `npm run youtube:chapters` owns it. It runs alone, given an Episode folder, page URL or video ID, or as a step of `/episode-post-production`.
 
+Two branches:
+
+- **Write**: the user gives an Episode. Steps 1 to 7.
+- **Learn**: Han changed the description or comment on YouTube, or `npm run youtube:pull` reports an edit on YouTube. Follow [`references/learn.md`](references/learn.md).
+
 ## Steps
 
 1. Run `npm run youtube:recording -- <episode> --lang <lang>`; take `<lang>` from the file names in `recording/`. _Done when_ the composition table prints, the Slide starts are present and the Event (if any) is known from the folder path.
-2. Read `references/description.<lang>.md`: the template, its budgets and the YouTube Help sentences behind them. Open only the file of the recorded language.
+2. Read `references/description.<lang>.md`: the template, its budgets, the YouTube Help sentences behind them and its Learned rules, which bind like the template. Open only the file of the recorded language.
 3. Gather the facts:
    - **Content**: `npm run youtube:voice-script -- <episode> --lang <lang>` for what the talk says; the Episode's `i18n/<lang>.json` for its title, caption and description.
    - **Episode link**: `https://hancrafted.net` + `/de` for German (English has no prefix) + `/episodes/<slug>/` for a public Episode, or `/events/<event>/episodes/<slug>/` for an Event copy. The trailing slash stays.

@@ -1,5 +1,5 @@
-// The thin YouTube Data API adapter of `youtube:apply`: refresh the access token, read a video's snippet, update its
-// description, insert a top-level comment. No logic beyond the HTTP calls; the decisions are in `apply.pure.ts`.
+// The thin YouTube Data API adapter of `youtube:apply` and `youtube:pull`: refresh the access token, read a video's
+// snippet, update its description, insert a top-level comment, read a comment's text. No logic beyond the HTTP calls; the decisions are in `apply.pure.ts`.
 import type { Credentials } from './apply.pure.ts';
 
 const API = 'https://www.googleapis.com/youtube/v3';
@@ -15,10 +15,16 @@ async function call(url: string, init: RequestInit): Promise<Record<string, unkn
   return body;
 }
 
+interface CommentThread {
+  snippet: { topLevelComment: { snippet: { textOriginal?: string; textDisplay?: string } } };
+}
+
 export interface YoutubeClient {
   readSnippet(videoId: string): Promise<Snippet>;
   updateDescription(videoId: string, snippet: Snippet, description: string): Promise<void>;
   postComment(videoId: string, text: string): Promise<string>;
+  /** The comment thread's top-level text, or undefined when it is gone. */
+  readComment(threadId: string): Promise<string | undefined>;
 }
 
 async function accessToken(credentials: Credentials): Promise<string> {
@@ -57,6 +63,11 @@ export async function connect(credentials: Credentials): Promise<YoutubeClient> 
         body: JSON.stringify({ snippet }),
       });
       return String(body.id);
+    },
+    async readComment(threadId) {
+      const body = await call(`${API}/commentThreads?part=snippet&id=${encodeURIComponent(threadId)}`, { headers });
+      const comment = (body.items as CommentThread[] | undefined)?.[0]?.snippet.topLevelComment.snippet;
+      return comment === undefined ? undefined : (comment.textOriginal ?? comment.textDisplay);
     },
   };
 }
