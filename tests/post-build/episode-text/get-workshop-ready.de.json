@@ -1,13 +1,21 @@
 {
   "title": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop · hancrafted",
   "description": "Eine Schritt-für-Schritt-Anleitung für Einsteiger auf Mac, Windows oder Linux: Terminal öffnen, KI-Agent installieren und anmelden, ihn im Starter-Ordner starten und den ersten Skill ausführen, damit der Workshop sofort beginnen kann.",
-  "toc": "Inhalt Wird geladen noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg",
+  "toc": "Inhalt Wird geladen noch 5 Min. 1 Dein Terminal Überblick Öffne Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 5 Min. 1 Dein Terminal Überblick Öffne Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg",
   "slides": [
     {
       "id": "top",
       "text": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt. Anleitung · 8 Schritte · etwa 20 Minuten Hier starten Dein Terminal Schritte 1–2 · es wartet auf Worte 2 Dein KI-Agent Schritte 3–4 · installiert, angemeldet 3 Dein Ordner Schritte 5–6 · entpackt, geöffnet 4 Dein erster Skill Schritt 7 · freigegeben und ausgeführt hancrafted.net hancrafted Der Beweis: Die Homepage öffnet sich Jedes Teil gibt dem nächsten ein funktionierendes Teil weiter, bis die Homepage sich öffnet und die ganze Kette beweist."
     },
     { "id": "your-terminal", "text": "Dein Terminal Ein Fenster, das auf Worte wartet. Schritte 1–2 ~ %" },
+    {
+      "id": "your-terminal--overview",
+      "text": "Dein Terminal (1/2) Seite 1 von 2 Acht Schritte zu Deinem ersten Skill Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt. 8 Schritte · etwa 20 Minuten Vier Teile, eine Kette: Jedes funktioniert, weil das davor funktioniert. KI-Agent schon installiert? Spring zu Schritt 5 Ein Terminal Dein Terminal Überblick ( ) 2 Öffne Dein Terminal Ein KI-Agent Dein KI-Agent 3 Installiere Deinen KI-Agenten 4 Melde Dich an Ein Ordner Dein Ordner 5 Lade den Starter-Ordner herunter und entpacke ihn 6 Starte den Agenten in diesem Ordner Ein Skill Dein erster Skill 7 Führe Deinen ersten Skill aus hancrafted öffnet sich 8 Der technische Weg Richte die Skills von Matt Pocock selbst ein Lieber den technischen Weg? Spring zum letzten Abschnitt Jeder Schritt hat eine Hängst Du fest? -Box: Füg Deinen Fehler ein und hol Dir einen Prompt für das kostenlose ChatGPT ( )"
+    },
+    {
+      "id": "your-terminal--open-your-terminal",
+      "text": "Dein Terminal (2/2) Seite 2 von 2 Öffne Dein Terminal Finden, öffnen, anschauen: Ein blinkender Cursor in einem leeren Fenster heißt, es hat geklappt. Schritt 2 von 8 Mac Windows Linux Auf dem Mac: Drück ⌘ Leertaste , tipp Terminal , drück Return . Finde es Terminal Terminal Programm Terminal – Benutzerhandbuch Es hat geklappt, wenn Du das siehst you — -zsh — 80×24 Last login: Thu Oct 29 09:12 on console you@MacBook ~ % Blinkender Cursor, leere Eingabezeile: Es hängt nicht, es wartet auf Dich. Wenn sich das komisch anfühlt, ist das normal ( ) Hier gibt es nichts zu klicken: Das Fenster wartet, dass Du tippst ( ) Bei jedem neuen Werkzeug ist die Einrichtung das Schwerste, nicht Du ( ) Hängst Du fest? Füg ein, was Du siehst, kopier den Prompt und frag das kostenlose ChatGPT. Was Du auf Deinem Bildschirm siehst Dein Prompt enthält Mac Claude Code Schritt 2: Öffne Dein Terminal Prompt kopieren"
+    },
     { "id": "your-ai-agent", "text": "Dein KI-Agent Der KI-Agent, der darin wohnt. Schritte 3–4 ✻ KI-Agent bereit >" },
     {
       "id": "your-folder",
@@ -28,6 +36,14 @@
       "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
     },
     { "id": "your-terminal", "text": "Dein Terminal Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "your-terminal--overview",
+      "text": "Überblick Sag, wie viele Schritte es sind Das W3C empfiehlt, schon im ersten Schritt zu sagen, wie viele Schritte folgen, und in jedem Schritt, wie weit man schon ist, etwa „Schritt 2 von 4“ 1 . Quellen (1) W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms ( öffnet in neuem Tab ) w3.org Mit Vorsprung kommt man öfter ans Ziel Treuekarten einer Autowaschanlage, auf denen schon zwei von zehn Stempeln standen, lösten 34 % der Kundinnen und Kunden ein, leere Karten nur 19 %; dass sich das von Treuekarten auf eine Einrichtungsanleitung überträgt, ist eine Schlussfolgerung 1 . Quellen (1) Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement Increases Effort ( öffnet in neuem Tab ) doi.org Auch knapp braucht einen Ausweg Ein knappes Handbuch, das sich an echten Aufgaben orientiert, brachte 64 Studierenden den Stoff schneller bei als ein übliches Handbuch; Einsteiger brauchen trotzdem Hilfe, wenn etwas schiefgeht. Darum hat jeder Schritt eine Box für Probleme 1 2 . Quellen (2) Lazonder and van der Meij, The minimal manual: is less really more? ( öffnet in neuem Tab ) doi.org Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect ( öffnet in neuem Tab ) doi.org"
+    },
+    {
+      "id": "your-terminal--open-your-terminal",
+      "text": "Öffne Dein Terminal Zögern ist normal Angst vor dem Computer ist eine lange erforschte, weit verbreitete Reaktion: Rund 80 % der 89 Studien zur Erfahrung fanden, dass mehr Erfahrung mit weniger Angst einherging, und eine entspannte erste Erfahrung hing mit geringerer Angst zusammen. Keine Studie misst die Angst vor dem Terminal selbst; das auf das Terminal zu übertragen, ist eine Schlussfolgerung 1 . Quellen (1) Powell, Computer anxiety: Comparison of research from the 1990s and 2000s ( öffnet in neuem Tab ) doi.org Warum die Kommandozeile abschreckt Systemadministratoren sagten, durch eine Kommandozeile könne man sich nicht durchklicken, um sie zu verstehen, und für Einsteiger könne sie beängstigend oder überwältigend sein; das ist ein Zitat aus einer Befragung, keine gemessene Fehlerquote 1 . Quellen (1) Voronkov, Martucci and Lindskog, System Administrators Prefer Command Line Interfaces, Don't They? An Exploratory Study of Firewall Interfaces ( öffnet in neuem Tab ) arxiv.org Die Einrichtung ist das Schwerste Software Carpentry berichtet, dass das Installieren von Software oft schwerer ist als ihre Benutzung und dass jedes neue Werkzeug bei mindestens einer Person im Raum scheitert, egal ob Mac, Windows oder Linux 1 . Quellen (1) Wilson, Software Carpentry: lessons learned ( öffnet in neuem Tab ) doi.org Rückmeldung macht sicher In einem Unix-Kurs an einer Universität mit fast sofortiger Rückmeldung zu jeder Antwort gaben 2021 78,2 % der Befragten an, praktisches Unix-Wissen zu haben, vorher waren es 38,8 %; die Autoren nennen diese Selbstauskunft möglicherweise subjektiv, und die Studierenden waren keine Erstnutzer, die allein lernten 1 . Quellen (1) Berry et al., ShellOnYou: learning by doing Unix command line ( öffnet in neuem Tab ) ctiber.github.io"
+    },
     { "id": "your-ai-agent", "text": "Dein KI-Agent Keine Sprechernotizen für diese Folie." },
     { "id": "your-folder", "text": "Dein Ordner Keine Sprechernotizen für diese Folie." },
     { "id": "your-first-skill", "text": "Dein erster Skill Keine Sprechernotizen für diese Folie." },
@@ -41,6 +57,14 @@
     {
       "id": "your-terminal",
       "text": "Dein Terminal 0:00 – 0:09 Hook Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt. 0:09 – 0:40 Warum diese Seite Ich habe das in einen Schritt pro Bildschirm aufgeteilt, denn eine lange Einrichtungsanleitung fühlt sich an wie eine Wand, und ein einzelner Schritt wie etwas, das Du schaffen kannst. Jeder Schritt gibt Dir ein Teil, das funktioniert, und der nächste Schritt braucht es. So können wir im Workshop direkt mit einer Grilling-Session starten, und niemand verbringt die erste Stunde mit der Einrichtung."
+    },
+    {
+      "id": "your-terminal--overview",
+      "text": "Überblick 0:00 – 0:26 Vier Teile, eine Kette Hier ist der ganze Weg in vier Teilen: ein Terminal, ein KI-Agent, ein Ordner und ein Skill. Jedes Teil funktioniert nur, weil das davor funktioniert. Wenn also das letzte läuft, weißt Du, dass die ganze Kette hält. Das dauert etwa zwanzig Minuten, und Du kannst nach jedem Schritt aufhören und später weitermachen. 0:26 – 0:46 Überspring, was Du schon hast Wenn Du schon einen KI-Agenten installiert hast, spring direkt zu Schritt fünf, denn davor ändert sich für Dich nichts. Und wenn Du die Einrichtung lieber selbst baust, statt sie herunterzuladen, ist der letzte Abschnitt für Dich, also spring ans Ende."
+    },
+    {
+      "id": "your-terminal--open-your-terminal",
+      "text": "Öffne Dein Terminal 0:00 – 0:35 Kein persönliches Versagen Wenn sich das Öffnen eines Terminals ein bisschen seltsam anfühlt, ist das eine häufige Reaktion, und ich würde es nicht als Zeichen lesen, dass Du schlecht mit Computern bist. Ich glaube, die Angst kommt von dem leeren Fenster, das Dir keinen Hinweis gibt, was Du drücken sollst, und das ist meine Vermutung, keine bewiesene Tatsache. Hier musst Du nichts beweisen, wir öffnen nur das Fenster und schauen es uns an. 0:35 – 0:58 Ein Fenster, ein Cursor Wähl oben Dein System, dann finde das Terminal auf dem Mac, PowerShell unter Windows oder das Terminal unter Linux, und öffne es. Du siehst ein fast leeres Fenster mit einem blinkenden Cursor, und genau so sieht hier Erfolg aus. Es hängt nicht, es wartet auf Dich. 0:58 – 1:27 Hängst Du fest? Füg es ein Wenn auf Deinem Bildschirm etwas anders aussieht, musst Du das nicht allein herausfinden. Füg Deinen Fehler in die Box unter dem Schritt ein, und sie packt Dein System, Deinen KI-Agenten und die Nummer des Schritts in einen Prompt, den Du einem kostenlosen ChatGPT geben kannst. Jeder Schritt hat so eine Box, Hilfe holen gehört also zum Weg dazu."
     },
     {
       "id": "your-ai-agent",

@@ -1,0 +1,75 @@
+{
+  "title": "Überblick",
+  "heading": "Acht Schritte zu Deinem ersten Skill",
+  "caption": "Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin <b>Deinen ersten Skill</b> ausgeführt.",
+  "count": "8 Schritte",
+  "time": "etwa 20 Minuten",
+  "chainLine": "Vier Teile, eine Kette: Jedes funktioniert, weil das davor funktioniert.",
+  "chainLabel": "Der Weg",
+  "pieces": {
+    "terminal": { "label": "Ein Terminal", "section": "Dein Terminal" },
+    "agent": { "label": "Ein KI-Agent", "section": "Dein KI-Agent" },
+    "folder": { "label": "Ein Ordner", "section": "Dein Ordner" },
+    "skill": { "label": "Ein Skill", "section": "Dein erster Skill" }
+  },
+  "steps": {
+    "1": "<marker>Überblick</marker>",
+    "2": "Öffne Dein Terminal",
+    "3": "Installiere Deinen KI-Agenten",
+    "4": "Melde Dich an",
+    "5": "Lade den Starter-Ordner herunter und entpacke ihn",
+    "6": "Starte den Agenten in diesem Ordner",
+    "7": "Führe Deinen ersten Skill aus"
+  },
+  "result": "hancrafted öffnet sich",
+  "skip": {
+    "agent": "KI-Agent schon installiert? Spring zu Schritt 5",
+    "technical": {
+      "section": "Der technische Weg",
+      "title": "Richte die Skills von Matt Pocock selbst ein",
+      "lead": "Lieber den technischen Weg?",
+      "action": "Spring zum letzten Abschnitt"
+    }
+  },
+  "stuck": "Jeder Schritt hat eine <b>Hängst Du fest?</b>-Box: Füg Deinen Fehler ein und hol Dir einen Prompt für <marker>das kostenlose ChatGPT</marker>",
+  "notes": {
+    "say-how-many-steps": {
+      "header": "Sag, wie viele Schritte es sind",
+      "description": "Das W3C empfiehlt, schon im ersten Schritt zu sagen, wie viele Schritte folgen, und in jedem Schritt, wie weit man schon ist, etwa „Schritt 2 von 4“ [1].",
+      "sources": {
+        "w3c-multi-page-forms": { "title": "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms" }
+      }
+    },
+    "a-head-start-finishes-more": {
+      "header": "Mit Vorsprung kommt man öfter ans Ziel",
+      "description": "Treuekarten einer Autowaschanlage, auf denen schon zwei von zehn Stempeln standen, lösten 34 % der Kundinnen und Kunden ein, leere Karten nur 19 %; dass sich das von Treuekarten auf eine Einrichtungsanleitung überträgt, ist eine Schlussfolgerung [1].",
+      "sources": {
+        "nunes-dreze-endowed-progress": {
+          "title": "Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement Increases Effort"
+        }
+      }
+    },
+    "minimal-still-needs-a-way-out": {
+      "header": "Auch knapp braucht einen Ausweg",
+      "description": "Ein knappes Handbuch, das sich an echten Aufgaben orientiert, brachte 64 Studierenden den Stoff schneller bei als ein übliches Handbuch; Einsteiger brauchen trotzdem Hilfe, wenn etwas schiefgeht. Darum hat jeder Schritt eine Box für Probleme [1][2].",
+      "sources": {
+        "lazonder-minimal-manual": { "title": "Lazonder and van der Meij, The minimal manual: is less really more?" },
+        "kalyuga-expertise-reversal": { "title": "Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect" }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-pieces-one-chain": {
+        "title": "Vier Teile, eine Kette",
+        "keywords": "",
+        "script": "Hier ist der ganze Weg in vier Teilen: ein Terminal, ein KI-Agent, ein Ordner und ein Skill. Jedes Teil funktioniert nur, weil das davor funktioniert. Wenn also das letzte läuft, weißt Du, dass die ganze Kette hält. Das dauert etwa zwanzig Minuten, und Du kannst nach jedem Schritt aufhören und später weitermachen."
+      },
+      "skip-what-you-have": {
+        "title": "Überspring, was Du schon hast",
+        "keywords": "",
+        "script": "Wenn Du schon einen KI-Agenten installiert hast, spring direkt zu Schritt fünf, denn davor ändert sich für Dich nichts. Und wenn Du die Einrichtung lieber selbst baust, statt sie herunterzuladen, ist der letzte Abschnitt für Dich, also spring ans Ende."
+      }
+    }
+  }
+}
