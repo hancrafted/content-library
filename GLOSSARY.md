@@ -119,6 +119,9 @@ _Avoid_: Explorable explanation (the long form, as Wikipedia names it), Shared v
 **Explorable page**: the product built on one Explorable: an Episode-shaped composition of Slides about its primary Explorable, rendered through the one Episode container, so it has the table of contents, the Context drawer, Speaker notes citing Research and a YouTube Video played from its Title slide. Its slug equals the primary Explorable's folder slug, and the content store refuses a page whose slug names no Explorable. URL `/explorables/<slug>/`, listed on `/explorables/`; `/explorable-explanations/*` redirects there. A product unit beside the Episode (`docs/steering/product-vision.md`, rule 4); its convention and Short framing: `docs/features/explorables/README.md`.
 _Avoid_: Explorable explanation page, Resource page
 
+**Guide**: a step-by-step page that takes a viewer through a setup, one step per Slide, ending in a working result they can check. A product unit beside the Episode and the Explorable page, its own Resource kind: URL `/guides/<slug>/`, listed on `/guides/` and on `/resources/`. Built through the Episode pipeline from a Brief. Design-ADR `docs/adr/0019-resources-overview.md`.
+_Avoid_: Tutorial, How-to, Walkthrough, Setup page, feature guide (a document for agents)
+
 **Preset**: one Slide's settings of an Explorable: the view it opens in and what it lights, so the Slide tells its own story at rest.
 _Avoid_: State, configuration, variant
 
