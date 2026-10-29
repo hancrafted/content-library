@@ -3,7 +3,7 @@ import { checkScope } from './scope.pure.ts';
 
 /*
  * pipeline-feedback commits machinery feedback on a run branch, then cherry-picks it to `main`.
- * Only the skill, the docs and the glossary may ride along; an Episode's files never do.
+ * Only the skill, the pipeline area, the docs and the glossary may ride along; an Episode's files never do.
  */
 describe('checkScope', () => {
   it('accepts the skill folder, docs and the glossary', () => {
@@ -12,6 +12,14 @@ describe('checkScope', () => {
       'skills/new-episode/references/write-spec.md',
       'docs/adr/0008-x.md',
       'GLOSSARY.md',
+    ];
+    expect(checkScope(paths)).toEqual({ ok: true, episode: [], outside: [], frozen: [] });
+  });
+
+  it('accepts the pipeline area, where the run log, the checks and the dashboard live', () => {
+    const paths = [
+      'src/pipeline/lib/episode-reference-jobs.pure.ts',
+      'src/pipeline/lib/episode-reference-jobs.pure.test.ts',
     ];
     expect(checkScope(paths)).toEqual({ ok: true, episode: [], outside: [], frozen: [] });
   });
@@ -30,7 +38,7 @@ describe('checkScope', () => {
     });
   });
 
-  it('names a file outside the three places', () => {
+  it('names a file outside the four places', () => {
     const result = checkScope(['src/episodes/my-slug/page.tsx', 'skills/brief-grill/SKILL.md', 'GLOSSARY.md']);
     expect(result).toEqual({
       ok: false,
