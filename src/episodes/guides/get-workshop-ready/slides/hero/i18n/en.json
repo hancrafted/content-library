@@ -1,0 +1,29 @@
+{
+  "meta": "Guide · 8 steps · about 20 minutes",
+  "chain": {
+    "label": "The chain: four working pieces and the proof",
+    "terminal": {
+      "title": "Your terminal",
+      "sub": "Steps 1–2 · it waits for words"
+    },
+    "agent": {
+      "title": "Your AI agent",
+      "sub": "Steps 3–4 · installed, signed in"
+    },
+    "folder": {
+      "title": "Your folder",
+      "sub": "Steps 5–6 · unzipped, opened"
+    },
+    "skill": {
+      "title": "Your first skill",
+      "sub": "Step 7 · approved and run"
+    },
+    "proof": {
+      "title": "The proof: the homepage opens",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    },
+    "start": "Start here"
+  },
+  "chainNote": "Each piece hands the next one a working piece, until the homepage opening proves the whole chain."
+}

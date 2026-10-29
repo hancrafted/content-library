@@ -1,0 +1,62 @@
+{
+  "title": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop · hancrafted",
+  "description": "Eine Schritt-für-Schritt-Anleitung für Einsteiger auf Mac, Windows oder Linux: Terminal öffnen, KI-Agent installieren und anmelden, ihn im Starter-Ordner starten und den ersten Skill ausführen, damit der Workshop sofort beginnen kann.",
+  "toc": "Inhalt Wird geladen noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg Inhalt öffnen : Inhalt · Wird geladen Inhalt noch 2 Min. 1 Dein Terminal 2 Dein KI-Agent 3 Dein Ordner 4 Dein erster Skill 5 Der technische Weg",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt. Anleitung · 8 Schritte · etwa 20 Minuten Hier starten Dein Terminal Schritte 1–2 · es wartet auf Worte 2 Dein KI-Agent Schritte 3–4 · installiert, angemeldet 3 Dein Ordner Schritte 5–6 · entpackt, geöffnet 4 Dein erster Skill Schritt 7 · freigegeben und ausgeführt hancrafted.net hancrafted Der Beweis: Die Homepage öffnet sich Jedes Teil gibt dem nächsten ein funktionierendes Teil weiter, bis die Homepage sich öffnet und die ganze Kette beweist."
+    },
+    { "id": "your-terminal", "text": "Dein Terminal Ein Fenster, das auf Worte wartet. Schritte 1–2 ~ %" },
+    { "id": "your-ai-agent", "text": "Dein KI-Agent Der KI-Agent, der darin wohnt. Schritte 3–4 ✻ KI-Agent bereit >" },
+    {
+      "id": "your-folder",
+      "text": "Dein Ordner Ein Ort, an dem der KI-Agent arbeitet. Schritte 5–6 workshop-starter AGENTS.md GLOSSARY.md skills/"
+    },
+    {
+      "id": "your-first-skill",
+      "text": "Dein erster Skill Das Teil, das die Kette beweist. Schritt 7 Do you want to proceed? › Yes No"
+    },
+    {
+      "id": "the-technical-route",
+      "text": "Der technische Weg Optional: dieselbe Kette, von Hand gebaut. Schritt 8 $ npx skills@latest add mattpocock/skills"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "your-terminal", "text": "Dein Terminal Keine Sprechernotizen für diese Folie." },
+    { "id": "your-ai-agent", "text": "Dein KI-Agent Keine Sprechernotizen für diese Folie." },
+    { "id": "your-folder", "text": "Dein Ordner Keine Sprechernotizen für diese Folie." },
+    { "id": "your-first-skill", "text": "Dein erster Skill Keine Sprechernotizen für diese Folie." },
+    { "id": "the-technical-route", "text": "Der technische Weg Keine Sprechernotizen für diese Folie." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "your-terminal",
+      "text": "Dein Terminal 0:00 – 0:09 Hook Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt. 0:09 – 0:40 Warum diese Seite Ich habe das in einen Schritt pro Bildschirm aufgeteilt, denn eine lange Einrichtungsanleitung fühlt sich an wie eine Wand, und ein einzelner Schritt wie etwas, das Du schaffen kannst. Jeder Schritt gibt Dir ein Teil, das funktioniert, und der nächste Schritt braucht es. So können wir im Workshop direkt mit einer Grilling-Session starten, und niemand verbringt die erste Stunde mit der Einrichtung."
+    },
+    {
+      "id": "your-ai-agent",
+      "text": "Dein KI-Agent 0:00 – 0:14 Terminal erledigt Du hast jetzt also ein Fenster, das auf Worte wartet. Weil ein leeres Fenster allein nicht viel kann, ist das nächste Teil der KI-Agent, der darin wohnen wird."
+    },
+    {
+      "id": "your-folder",
+      "text": "Dein Ordner 0:00 – 0:17 Terminal und KI-Agent, jetzt der Ort zum Arbeiten Du hast ein Terminal und einen KI-Agenten, also fehlt noch ein Ort zum Arbeiten. Ein KI-Agent arbeitet in einem Ordner und liest, was darin liegt. Deshalb geben wir ihm ganz bewusst einen: den Starter-Ordner."
+    },
+    {
+      "id": "your-first-skill",
+      "text": "Dein erster Skill 0:00 – 0:20 Alles an seinem Platz Jetzt ist also alles an seinem Platz: ein Terminal, ein KI-Agent und ein Ordner. Was noch fehlt, ist ein Skill, also eine kleine Anleitung, der Dein KI-Agent folgen kann. Wenn Du ihn ausführst, zeigt sich, dass die Kette echt ist."
+    },
+    {
+      "id": "the-technical-route",
+      "text": "Der technische Weg 0:00 – 0:19 Für alle, die selbst bauen Dieser letzte Abschnitt ist für alle, die selbst bauen, und er ist optional. Wenn Du Dich im Terminal wohlfühlst, erreichst Du dasselbe ohne den Starter-Ordner, indem Du die Teile selbst installierst. Alle anderen können bei der Homepage aufhören."
+    }
+  ]
+}

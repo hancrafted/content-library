@@ -1,0 +1,37 @@
+{
+  "title": "Your first skill",
+  "caption": "The piece that proves the chain.",
+  "steps": "Step 7",
+  "question": "Do you want to proceed?",
+  "yes": "Yes",
+  "no": "No",
+  "voiceScript": {
+    "segments": {
+      "everything-in-place": {
+        "title": "Everything in place",
+        "keywords": "",
+        "script": "So everything is in place: a terminal, an AI agent and a folder. What is left is a skill, which is a small set of instructions your AI agent can follow, and running it shows that the chain is real."
+      }
+    }
+  },
+  "chain": {
+    "label": "The chain: four working pieces and the proof",
+    "terminal": {
+      "title": "Your terminal"
+    },
+    "agent": {
+      "title": "Your AI agent"
+    },
+    "folder": {
+      "title": "Your folder"
+    },
+    "skill": {
+      "title": "Your first skill"
+    },
+    "proof": {
+      "title": "The proof: the homepage opens",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    }
+  }
+}

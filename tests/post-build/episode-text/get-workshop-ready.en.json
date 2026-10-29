@@ -1,0 +1,62 @@
+{
+  "title": "Get workshop-ready: your AI agent on your laptop · hancrafted",
+  "description": "A step-by-step guide for first-timers on Mac, Windows or Linux: open your terminal, install and sign in to your AI agent, start it in the starter folder and run your first skill, so the workshop can begin right away.",
+  "toc": "Contents Loading 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route Open contents : Contents · Loading Contents 2 min left 1 Your terminal 2 Your AI agent 3 Your folder 4 Your first skill 5 The technical route",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Get workshop-ready: your AI agent on your laptop You've never opened a terminal. By the end of this page you'll have run your first skill in one. Guide · 8 steps · about 20 minutes Start here Your terminal Steps 1–2 · it waits for words 2 Your AI agent Steps 3–4 · installed, signed in 3 Your folder Steps 5–6 · unzipped, opened 4 Your first skill Step 7 · approved and run hancrafted.net hancrafted The proof: the homepage opens Each piece hands the next one a working piece, until the homepage opening proves the whole chain."
+    },
+    { "id": "your-terminal", "text": "Your terminal A window that waits for words. Steps 1–2 ~ %" },
+    { "id": "your-ai-agent", "text": "Your AI agent The AI agent that lives in it. Steps 3–4 ✻ AI agent ready >" },
+    {
+      "id": "your-folder",
+      "text": "Your folder A place for the AI agent to work. Steps 5–6 workshop-starter AGENTS.md GLOSSARY.md skills/"
+    },
+    {
+      "id": "your-first-skill",
+      "text": "Your first skill The piece that proves the chain. Step 7 Do you want to proceed? › Yes No"
+    },
+    {
+      "id": "the-technical-route",
+      "text": "The technical route Optional: the same chain, built by hand. Step 8 $ npx skills@latest add mattpocock/skills"
+    }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "your-terminal", "text": "Your terminal No speaker notes for this Slide." },
+    { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
+    { "id": "your-folder", "text": "Your folder No speaker notes for this Slide." },
+    { "id": "your-first-skill", "text": "Your first skill No speaker notes for this Slide." },
+    { "id": "the-technical-route", "text": "The technical route No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "your-terminal",
+      "text": "Your terminal 0:00 – 0:09 Hook You have never opened a terminal. By the end of this page you will have run your first skill in one. 0:09 – 0:37 Why this page I split this into one step per screen, because a long setup guide feels like a wall and a single step feels like something you can finish. Every step hands you one thing that works and the next step needs it, so when you arrive at the workshop, we can start with a grilling session right away and nobody spends the first hour on setup."
+    },
+    {
+      "id": "your-ai-agent",
+      "text": "Your AI agent 0:00 – 0:14 Terminal done So you now have a window that waits for words. Because an empty window cannot do much on its own, the next piece is the AI agent that will live inside it."
+    },
+    {
+      "id": "your-folder",
+      "text": "Your folder 0:00 – 0:17 Terminal and AI agent, now the place to work You have a terminal and an AI agent, so what is missing is a place to work. An AI agent works inside one folder and reads what is there, so we give it one on purpose: the starter folder."
+    },
+    {
+      "id": "your-first-skill",
+      "text": "Your first skill 0:00 – 0:17 Everything in place So everything is in place: a terminal, an AI agent and a folder. What is left is a skill, which is a small set of instructions your AI agent can follow, and running it shows that the chain is real."
+    },
+    {
+      "id": "the-technical-route",
+      "text": "The technical route 0:00 – 0:18 For people who build This last Section is for people who build, and it is optional. If you are comfortable with a terminal, you can get the same result without the starter folder by installing the pieces yourself. Everyone else can stop at the homepage."
+    }
+  ]
+}

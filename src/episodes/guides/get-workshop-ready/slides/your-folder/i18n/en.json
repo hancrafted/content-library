@@ -1,0 +1,36 @@
+{
+  "title": "Your folder",
+  "caption": "A place for the AI agent to work.",
+  "steps": "Steps 5–6",
+  "folder": "workshop-starter",
+  "filesLabel": "What the starter folder holds",
+  "voiceScript": {
+    "segments": {
+      "the-place-to-work": {
+        "title": "Terminal and AI agent, now the place to work",
+        "keywords": "",
+        "script": "You have a terminal and an AI agent, so what is missing is a place to work. An AI agent works inside one folder and reads what is there, so we give it one on purpose: the starter folder."
+      }
+    }
+  },
+  "chain": {
+    "label": "The chain: four working pieces and the proof",
+    "terminal": {
+      "title": "Your terminal"
+    },
+    "agent": {
+      "title": "Your AI agent"
+    },
+    "folder": {
+      "title": "Your folder"
+    },
+    "skill": {
+      "title": "Your first skill"
+    },
+    "proof": {
+      "title": "The proof: the homepage opens",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    }
+  }
+}

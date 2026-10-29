@@ -1,0 +1,35 @@
+{
+  "title": "Der technische Weg",
+  "caption": "Optional: dieselbe Kette, von Hand gebaut.",
+  "steps": "Schritt 8",
+  "command": "npx skills@latest add mattpocock/skills",
+  "voiceScript": {
+    "segments": {
+      "for-people-who-build": {
+        "title": "Für alle, die selbst bauen",
+        "keywords": "",
+        "script": "Dieser letzte Abschnitt ist für alle, die selbst bauen, und er ist optional. Wenn Du Dich im Terminal wohlfühlst, erreichst Du dasselbe ohne den Starter-Ordner, indem Du die Teile selbst installierst. Alle anderen können bei der Homepage aufhören."
+      }
+    }
+  },
+  "chain": {
+    "label": "Die Kette: vier funktionierende Teile und der Beweis",
+    "terminal": {
+      "title": "Dein Terminal"
+    },
+    "agent": {
+      "title": "Dein KI-Agent"
+    },
+    "folder": {
+      "title": "Dein Ordner"
+    },
+    "skill": {
+      "title": "Dein erster Skill"
+    },
+    "proof": {
+      "title": "Der Beweis: Die Homepage öffnet sich",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    }
+  }
+}

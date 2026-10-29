@@ -1,0 +1,36 @@
+{
+  "title": "Dein Ordner",
+  "caption": "Ein Ort, an dem der KI-Agent arbeitet.",
+  "steps": "Schritte 5–6",
+  "folder": "workshop-starter",
+  "filesLabel": "Was der Starter-Ordner enthält",
+  "voiceScript": {
+    "segments": {
+      "the-place-to-work": {
+        "title": "Terminal und KI-Agent, jetzt der Ort zum Arbeiten",
+        "keywords": "",
+        "script": "Du hast ein Terminal und einen KI-Agenten, also fehlt noch ein Ort zum Arbeiten. Ein KI-Agent arbeitet in einem Ordner und liest, was darin liegt. Deshalb geben wir ihm ganz bewusst einen: den Starter-Ordner."
+      }
+    }
+  },
+  "chain": {
+    "label": "Die Kette: vier funktionierende Teile und der Beweis",
+    "terminal": {
+      "title": "Dein Terminal"
+    },
+    "agent": {
+      "title": "Dein KI-Agent"
+    },
+    "folder": {
+      "title": "Dein Ordner"
+    },
+    "skill": {
+      "title": "Dein erster Skill"
+    },
+    "proof": {
+      "title": "Der Beweis: Die Homepage öffnet sich",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    }
+  }
+}

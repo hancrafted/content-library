@@ -1,0 +1,40 @@
+{
+  "title": "Dein Terminal",
+  "caption": "Ein Fenster, das auf Worte wartet.",
+  "steps": "Schritte 1–2",
+  "prompt": "~ %",
+  "voiceScript": {
+    "segments": {
+      "hook": {
+        "title": "Hook",
+        "keywords": "",
+        "script": "Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt."
+      },
+      "why-this-page": {
+        "title": "Warum diese Seite",
+        "keywords": "",
+        "script": "Ich habe das in einen Schritt pro Bildschirm aufgeteilt, denn eine lange Einrichtungsanleitung fühlt sich an wie eine Wand, und ein einzelner Schritt wie etwas, das Du schaffen kannst. Jeder Schritt gibt Dir ein Teil, das funktioniert, und der nächste Schritt braucht es. So können wir im Workshop direkt mit einer Grilling-Session starten, und niemand verbringt die erste Stunde mit der Einrichtung."
+      }
+    }
+  },
+  "chain": {
+    "label": "Die Kette: vier funktionierende Teile und der Beweis",
+    "terminal": {
+      "title": "Dein Terminal"
+    },
+    "agent": {
+      "title": "Dein KI-Agent"
+    },
+    "folder": {
+      "title": "Dein Ordner"
+    },
+    "skill": {
+      "title": "Dein erster Skill"
+    },
+    "proof": {
+      "title": "Der Beweis: Die Homepage öffnet sich",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Your terminal",
+  "caption": "A window that waits for words.",
+  "steps": "Steps 1–2",
+  "prompt": "~ %",
+  "voiceScript": {
+    "segments": {
+      "hook": {
+        "title": "Hook",
+        "keywords": "",
+        "script": "You have never opened a terminal. By the end of this page you will have run your first skill in one."
+      },
+      "why-this-page": {
+        "title": "Why this page",
+        "keywords": "",
+        "script": "I split this into one step per screen, because a long setup guide feels like a wall and a single step feels like something you can finish. Every step hands you one thing that works and the next step needs it, so when you arrive at the workshop, we can start with a grilling session right away and nobody spends the first hour on setup."
+      }
+    }
+  },
+  "chain": {
+    "label": "The chain: four working pieces and the proof",
+    "terminal": {
+      "title": "Your terminal"
+    },
+    "agent": {
+      "title": "Your AI agent"
+    },
+    "folder": {
+      "title": "Your folder"
+    },
+    "skill": {
+      "title": "Your first skill"
+    },
+    "proof": {
+      "title": "The proof: the homepage opens",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    }
+  }
+}

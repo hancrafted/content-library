@@ -1,0 +1,36 @@
+{
+  "title": "Your AI agent",
+  "caption": "The AI agent that lives in it.",
+  "steps": "Steps 3–4",
+  "ready": "✻ AI agent ready",
+  "prompt": ">",
+  "voiceScript": {
+    "segments": {
+      "terminal-done": {
+        "title": "Terminal done",
+        "keywords": "",
+        "script": "So you now have a window that waits for words. Because an empty window cannot do much on its own, the next piece is the AI agent that will live inside it."
+      }
+    }
+  },
+  "chain": {
+    "label": "The chain: four working pieces and the proof",
+    "terminal": {
+      "title": "Your terminal"
+    },
+    "agent": {
+      "title": "Your AI agent"
+    },
+    "folder": {
+      "title": "Your folder"
+    },
+    "skill": {
+      "title": "Your first skill"
+    },
+    "proof": {
+      "title": "The proof: the homepage opens",
+      "site": "hancrafted.net",
+      "name": "hancrafted"
+    }
+  }
+}

@@ -7,6 +7,7 @@ import {
   TEMPLATE_SLUGS,
   type EpisodeId,
   type ExplorablePageSlug,
+  type GuideSlug,
 } from './catalogue/record-routes';
 import type { LoadedEpisode } from './episode-refusals';
 import { EPISODE_METADATA, UPCOMING_METADATA } from './episode-registry.generated';
@@ -144,11 +145,21 @@ export function explorablePageVideo(slug: ExplorablePageSlug, locale: Locale): V
   return id === undefined ? undefined : { id };
 }
 
+/**
+ * The Video a Guide's page plays in this locale; none until uploaded. A Guide's `youtube` holds at most one id per
+ * locale.
+ */
+export function guideVideo(slug: GuideSlug, locale: Locale): Video | undefined {
+  const id = CONTENT.guides.find((guide) => guide.slug === slug)?.youtube?.[locale];
+  return id === undefined ? undefined : { id };
+}
+
 export type {
   EpisodesPathParams,
   EventEpisodePage,
   EventEpisodeParams,
   ExplorablePageParams,
+  GuideParams,
   RouteParams,
   TemplateParams,
 } from './catalogue/page-catalogue';
