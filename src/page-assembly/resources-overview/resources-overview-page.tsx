@@ -46,6 +46,7 @@ function browserLabels(t: OverviewT): ResourceBrowserLabels {
       episode: t('kindPlurals.episode'),
       event: t('kindPlurals.event'),
       'explorable-page': t('kindPlurals.explorable-page'),
+      guide: t('kindPlurals.guide'),
       'episode-template': t('kindPlurals.episode-template'),
       'master-slide': t('kindPlurals.master-slide'),
     },

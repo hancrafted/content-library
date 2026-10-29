@@ -13,7 +13,7 @@ describe('dashboard static contract', () => {
     const expectedButtons = ['Open the demo', 'Choose folder'];
     const expectedRobots = 'noindex';
     const expectedLangs = ['en', 'x-default'];
-    const expectedNavigation = ['Explorables', 'Events', 'Episodes', 'Resources', 'Content pipeline'];
+    const expectedNavigation = ['Explorables', 'Events', 'Episodes', 'Guides', 'Resources', 'Content pipeline'];
     // ACT
     const exists = existsSync(file);
     const germanExists = existsSync(germanFile);

@@ -158,7 +158,7 @@ describe('edge cases', () => {
       { ref: episodeRef('maintaining-markdown-for-ai'), status: 'published' },
       { ref: episodeRef('ai-token-economy'), status: 'upcoming' },
     ];
-    const expected = ['episode-template', ...EXPLORABLE_PAGE_SLUGS, 'maintaining-markdown-for-ai'];
+    const expected = ['episode-template', ...EXPLORABLE_PAGE_SLUGS, ...GUIDE_SLUGS, 'maintaining-markdown-for-ai'];
     // ACT
     const bound = boundPages(episodes, ['episode-template']).map(({ id }) => id);
     // ASSERT
