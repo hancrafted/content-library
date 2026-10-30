@@ -23,6 +23,10 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does a fresh, focused context outperform a long, accumulated chat?](research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md) — A fresh, focused context outperforms a long chat because accuracy falls as input grows and a model that took a wrong turn leans on its own earlier attempts and does not recover.
 - [Why does the claim of 20x productivity from AI rest on estimates rather than measurement?](research/AIE/AIE-0017__twenty-x-productivity-claim/research.md) — The 20x figure is an estimate from interested parties about leading-edge programmers, not a measurement; controlled studies find gains far smaller, and sometimes a slowdown.
 
+### AI Software Factory (AISF)
+
+- [Why does the factory metaphor fit AI-driven software production, and where does it break?](research/AISF/AISF-0001__factory-metaphor-fit-and-limits/research.md) — It fits as a flow of Jobs with stop-on-defect gates, mistake-proofing and standard work; it breaks where software differs: building is free copying, parts need no order, and Workers vary.
+
 ### Large language models (LLM)
 
 - [Why do large language models give different answers to the same prompt?](research/LLM/LLM-0001__llm-output-nondeterminism/research.md) — Models sample each next token from a probability distribution, and even with sampling switched off, server-side numerical effects still change the output between runs.
