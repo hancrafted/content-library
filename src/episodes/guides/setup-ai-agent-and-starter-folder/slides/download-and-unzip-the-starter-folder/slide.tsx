@@ -108,7 +108,7 @@ export const downloadAndUnzipTheStarterFolder = slide({
     return (
       <SlideFrame>
         <div className="flex flex-col gap-8">
-          <GuideToolbar active={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+          <GuideToolbar active={['os']} show={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
           <div className="focus-group focus-group--dim-others grid grid-cols-1 divide-y divide-border rounded-3xl border border-border bg-card md:grid-cols-2 md:divide-x md:divide-y-0">
             <section className="focus-group__item flex min-w-0 flex-col gap-6 p-5 md:p-8">
               <HalfIndex index="01" accent="bg-foreground">
