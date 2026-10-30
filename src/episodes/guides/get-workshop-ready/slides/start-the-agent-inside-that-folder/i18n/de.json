@@ -61,7 +61,7 @@
     "no": "2. Nein, beenden"
   },
   "fallback": {
-    "text": "Notlösung, falls das Menü nicht klappt: Öffne das Terminal wie in Schritt 2, tippe <command></command> und drücke Enter."
+    "text": "Notlösung, falls das Menü nicht klappt: Öffne das Terminal wie in Schritt 1, tippe <command></command> und drücke Enter."
   },
   "voiceScript": {
     "segments": {
@@ -90,7 +90,7 @@
     "copied": "Prompt kopiert. Füge ihn ins kostenlose ChatGPT ein.",
     "prompt": "Ich bin Einsteiger und folge einer Schritt-für-Schritt-Anleitung, um für einen Workshop einen KI-Agenten auf meinem Laptop zum Laufen zu bringen.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nMein Schritt: {step}\n\nDas ist der Fehler oder das, was ich sehe:\n{error}\n\nErkläre mir in einfachen Worten, was schiefgelaufen ist, und sag mir, was ich als Nächstes tun soll, in kleinen Schritten. Geh nicht davon aus, dass ich mich mit dem Terminal auskenne.",
     "noError": "(Ich habe keinen Fehler eingefügt; ich komme bei diesem Schritt nicht weiter.)",
-    "step": "Schritt 6: Den Agenten in diesem Ordner starten",
+    "step": "Schritt 3: Den Agenten in diesem Ordner starten",
     "chats": {
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",

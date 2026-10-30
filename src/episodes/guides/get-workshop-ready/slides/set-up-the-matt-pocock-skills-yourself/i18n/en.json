@@ -22,7 +22,7 @@
       "reason": "The only two pieces from us. Unzip the skill into the skills folder the installer made; paste the entry into <code>GLOSSARY.md</code>, or create the file with it."
     },
     "run": {
-      "title": "Run the same check as step 7",
+      "title": "Run the same check as step 4",
       "reason": "It confirms the Matt Pocock skills are in place. Approve its command, and the hancrafted homepage opens."
     }
   },
@@ -79,7 +79,7 @@
     "copied": "Prompt copied",
     "prompt": "I am getting my laptop ready for a workshop and I am stuck.\nOperating system: {os}\nAI agent: {agent}\nStep: {step}\n\nThis is the error I see:\n{error}\n\nExplain in plain words what went wrong and what I should do next, one step at a time.",
     "noError": "(I have not pasted an error.)",
-    "step": "Step 8: Set up the Matt Pocock skills yourself",
+    "step": "Bonus: Set up the Matt Pocock skills yourself",
     "chats": {
       "openAIChats": "Open an AI chat",
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",

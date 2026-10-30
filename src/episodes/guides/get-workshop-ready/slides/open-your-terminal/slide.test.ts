@@ -45,7 +45,7 @@ describe('success cases', () => {
     const expected = {
       title: 'Open your terminal',
       heading: 'Open your terminal',
-      caption: 'Find it, open it, look at it: a blinking cursor in an empty window means it worked.',
+      caption: 'Open it, look at it, done: a blinking cursor in an empty window means it worked.',
     };
     // ACT
     const slideText = localized('en');
@@ -65,12 +65,12 @@ describe('success cases', () => {
       {
         title: 'One window, one cursor',
         script:
-          'Pick your system in the toolbar, then find Terminal on a Mac, PowerShell on Windows, or the terminal on Linux, and open it. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you.',
+          'Pick your system in the toolbar, then open Terminal on a Mac, PowerShell on Windows, or the terminal on Linux. It takes one shortcut and a few letters. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you.',
       },
       {
         title: 'Stuck? Paste it',
         script:
-          'If something looks different on your screen, you do not have to work it out alone. Paste your error into the troubleshooting box under the step, and it wraps your system, your AI agent and the step number into a prompt you can hand to a free ChatGPT. Every step below has one, so asking for help is part of the route.',
+          'If something looks different on your screen, you do not have to work it out alone. Press Help at the top right of the slide, paste what you see, and it wraps your system, your AI agent and the step into a prompt you can hand to a free ChatGPT or Gemini. Every step has that button, so asking for help is part of the route.',
       },
     ];
     // ACT

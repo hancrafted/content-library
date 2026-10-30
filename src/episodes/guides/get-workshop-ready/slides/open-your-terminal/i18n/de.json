@@ -1,9 +1,9 @@
 {
   "title": "Öffne Dein Terminal",
-  "caption": "Finden, öffnen, anschauen: <b>Ein blinkender Cursor</b> in einem leeren Fenster heißt, es hat geklappt.",
+  "caption": "Öffnen, anschauen, fertig: <b>Ein blinkender Cursor</b> in einem leeren Fenster heißt, es hat geklappt.",
   "findLabel": "Finde es",
   "seeLabel": "Es hat geklappt, wenn Du das siehst",
-  "success": "Blinkender Cursor, leere Eingabezeile: Es hängt nicht, es wartet auf Dich.",
+  "success": "Super, das war's schon. Ein blinkender Cursor heißt: Es hängt nicht, es wartet auf Dich.",
   "os": {
     "mac": {
       "label": "Mac",
@@ -96,12 +96,12 @@
       "one-window-one-cursor": {
         "title": "Ein Fenster, ein Cursor",
         "keywords": "",
-        "script": "Wähl oben Dein System, dann finde das Terminal auf dem Mac, PowerShell unter Windows oder das Terminal unter Linux, und öffne es. Du siehst ein fast leeres Fenster mit einem blinkenden Cursor, und genau so sieht hier Erfolg aus. Es hängt nicht, es wartet auf Dich."
+        "script": "Wähl oben Dein System, dann öffne das Terminal auf dem Mac, PowerShell unter Windows oder das Terminal unter Linux. Dafür reichen eine Tastenkombination und ein paar Buchstaben. Du siehst ein fast leeres Fenster mit einem blinkenden Cursor, und genau so sieht hier Erfolg aus. Es hängt nicht, es wartet auf Dich."
       },
       "stuck-paste-it": {
         "title": "Hängst Du fest? Füg es ein",
         "keywords": "",
-        "script": "Wenn auf Deinem Bildschirm etwas anders aussieht, musst Du das nicht allein herausfinden. Füg Deinen Fehler in die Box unter dem Schritt ein, und sie packt Dein System, Deinen KI-Agenten und die Nummer des Schritts in einen Prompt, den Du einem kostenlosen ChatGPT geben kannst. Jeder Schritt hat so eine Box, Hilfe holen gehört also zum Weg dazu."
+        "script": "Wenn auf Deinem Bildschirm etwas anders aussieht, musst Du das nicht allein herausfinden. Drück oben rechts auf Hilfe und füg ein, was Du siehst, dann packt sie Dein System, Deinen KI-Agenten und den Schritt in einen Prompt, den Du einem kostenlosen ChatGPT oder Gemini geben kannst. Jeder Schritt hat diesen Knopf, Hilfe holen gehört also zum Weg dazu."
       }
     }
   },
@@ -117,7 +117,7 @@
     "copied": "Prompt kopiert",
     "prompt": "Ich richte für einen Workshop einen KI-Agenten auf meinem Laptop ein und komme nicht weiter.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich bin: {step}\n\nWas ich sehe:\n{error}\n\nIch bin neu im Terminal. Erklär mir in einfachen Worten, was das bedeutet, und nenn mir den einen nächsten Schritt, den ich versuchen kann.",
     "noError": "(Ich habe noch nichts eingefügt: Frag mich, was ich sehe.)",
-    "step": "Schritt 2: Öffne Dein Terminal",
+    "step": "Schritt 1: Öffne Dein Terminal",
     "chats": {
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",

@@ -5,7 +5,7 @@ generated:
   by: human:han
   at: 2026-10-30T09:00:00Z
 round: 2
-via: chat
+via: app
 ---
 
 # Feedback round 2

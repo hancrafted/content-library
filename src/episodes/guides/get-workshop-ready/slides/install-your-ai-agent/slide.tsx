@@ -1,5 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { docsHref, installCommand } from '@/episodes/components/slide-shared/agent-setup-step/agent-commands.pure';
+import { CopyLine } from '@/episodes/components/slide-shared/agent-setup-step/copy-line.client';
 import { DoneMark } from '@/episodes/components/slide-shared/agent-setup-step/done-mark';
 import { OfficialLink } from '@/episodes/components/slide-shared/agent-setup-step/official-link';
 import { PickSwitch } from '@/episodes/components/slide-shared/agent-setup-step/pick-switch.client';
@@ -9,65 +11,23 @@ import {
   DEFAULT_AGENT,
   DEFAULT_OS,
   OPERATING_SYSTEMS,
-  type StartScreen,
 } from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
-import { TerminalWindow } from '@/episodes/components/slide-shared/agent-setup-step/terminal-window';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
+import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-/** The agent's name, set bold wherever its banner title names it, as the mock sets "Welcome to **Claude Code**!". */
-function BannerTitle({ title, name }: { title: string; name: string }) {
-  const at = title.indexOf(name);
-  if (at < 0) return <b className="font-semibold">{title}</b>;
-  return (
-    <>
-      {title.slice(0, at)}
-      <b className="font-semibold">{name}</b>
-      {title.slice(at + name.length)}
-    </>
-  );
-}
-
-/**
- * The AI agent's start screen, the vendor's own words in the language the agent shows them: its banner (mark and
- * title) in the `ai` edge, then its lines muted. An agent whose vendor quotes no start screen shows its banner only.
- */
-function StartScreenBox({ name, screen }: { name: string; screen: StartScreen }) {
-  return (
-    <div className="rounded-md border border-ai/50 px-4 py-3" lang="en" data-start-screen="">
-      <p>
-        {screen.mark === '' ? null : (
-          <span className="text-ai" aria-hidden="true">
-            {screen.mark}{' '}
-          </span>
-        )}
-        <BannerTitle title={screen.title} name={name} />
-      </p>
-      {screen.lines.map((line) => (
-        <p key={line} className="mt-2 text-muted-foreground">
-          {line}
-        </p>
-      ))}
-    </div>
-  );
-}
-
 /*
- * Step 3, Option 3a: one step card split into "do this" (the official install page of the picked AI agent, and which
- * steps to follow there for the picked system) and "it worked when you see this" (the agent's start screen in the
- * terminal). Both toolbars show, because both picks change the card. No commands, no versions: the vendor's page is
- * the source.
+ * Step 2, first Slide: the first command a first-timer types is the install command of their AI agent. The exact
+ * line for the picked system and AI agent sits in a command box with a big Copy button; the vendor's official docs
+ * are one button away regardless, because some install pages need scrolling with no anchor. Under it, per AI agent,
+ * what might happen, each pointing to Help (in the header). Only the vendor's bare minimum: nothing that goes stale.
  */
 export const installYourAiAgent = slide({
   slug: 'install-your-ai-agent',
   messages: { en, de },
-  segments: [
-    { slug: 'official-page-only' },
-    { slug: 'claude-code-preferred' },
-    { slug: 'it-tells-you-when-it-worked' },
-  ],
+  segments: [{ slug: 'your-first-command' }, { slug: 'official-docs-always' }, { slug: 'what-might-happen' }],
   headerAction: ({ t, template }) => (
     <GuideHelp
       step={t('help.step')}
@@ -87,63 +47,98 @@ export const installYourAiAgent = slide({
       }}
     />
   ),
-  content: ({ t }) => (
-    <SlideFrame>
-      <div className="flex flex-col gap-8">
-        <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+  content: ({ t }) => {
+    const words = { copy: t('copy'), copied: t('copied') };
+    const code = (chunks: ReactNode) => <code className="font-mono text-foreground">{chunks}</code>;
+    const happen = {
+      'claude-code': [t.rich('happen.claude-code.one', { code }), t.rich('happen.claude-code.two', { code })],
+      antigravity: [t.rich('happen.antigravity.one', { code }), t.rich('happen.antigravity.two', { code })],
+      codex: [t.rich('happen.codex.one', { code }), t.rich('happen.codex.two', { code })],
+      copilot: [t.rich('happen.copilot.one', { code }), t.rich('happen.copilot.two', { code })],
+    } as const;
+    return (
+      <SlideFrame>
+        <div className="flex flex-col gap-8">
+          <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
 
-        <div className="grid gap-8 rounded-xl border border-border bg-card p-6 md:grid-cols-12 md:p-8">
-          <div className="flex flex-col justify-between gap-6 md:col-span-6">
-            <div className="flex flex-col gap-4">
-              <p className="text-caption font-semibold uppercase text-primary">{t('doThis')}</p>
+          <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8">
+            <div className="flex flex-col gap-2">
+              <p className="text-caption font-semibold uppercase text-primary">{t('firstCommand')}</p>
+              <p className="text-body">{t('paste')}</p>
+            </div>
+
+            <PickSwitch
+              name="agent"
+              fallback={DEFAULT_AGENT}
+              cases={casesOf(AGENTS, (agent) => (
+                <PickSwitch
+                  name="os"
+                  fallback={DEFAULT_OS}
+                  cases={casesOf(OPERATING_SYSTEMS, (os) => {
+                    const command = installCommand(agent.id, os.id);
+                    return (
+                      <div className="flex flex-col gap-3">
+                        <CopyLine text={command.text} where="shell" focal big words={words} />
+                        {command.shell === 'powershell' ? (
+                          <p className="text-caption text-muted-foreground">{t.rich('powershellHint', { code })}</p>
+                        ) : null}
+                        {command.commandPrompt === undefined ? null : (
+                          <details className="text-caption" data-command-prompt="">
+                            <summary className="cursor-pointer font-semibold text-primary">
+                              {t('commandPromptSummary')}
+                            </summary>
+                            <div className="mt-3 flex flex-col gap-3">
+                              <p className="text-muted-foreground">{t.rich('commandPromptHint', { code })}</p>
+                              <CopyLine text={command.commandPrompt} where="shell" words={words} />
+                            </div>
+                          </details>
+                        )}
+                      </div>
+                    );
+                  })}
+                />
+              ))}
+            />
+
+            <div className="flex flex-wrap items-center gap-4">
               <PickSwitch
                 name="agent"
                 fallback={DEFAULT_AGENT}
                 cases={casesOf(AGENTS, (agent) => (
                   <OfficialLink
-                    variant="filled"
-                    url={agent.installHref}
-                    label={t('openInstall', { agent: agent.name })}
+                    variant="outlined"
+                    url={docsHref(agent.id)}
+                    label={t('officialDocs', { agent: agent.name })}
                     newTab={t('newTab')}
                   />
                 ))}
               />
-              <p className="text-body">
-                <PickSwitch
-                  name="os"
-                  fallback={DEFAULT_OS}
-                  cases={casesOf(OPERATING_SYSTEMS, (os) => t.rich('osLine', { os: os.pageLabel }))}
-                />
-              </p>
+              <p className="min-w-0 flex-1 text-caption text-muted-foreground">{t('docsWhy')}</p>
             </div>
-            <p className="border-t border-border pt-4 text-caption text-muted-foreground">{t('preferred')}</p>
-          </div>
 
-          <div className="flex flex-col gap-3 md:col-span-6">
-            <TerminalWindow
-              agent
-              title={
-                <PickSwitch name="os" fallback={DEFAULT_OS} cases={casesOf(OPERATING_SYSTEMS, (os) => os.shell)} />
-              }
-            >
+            <div className="flex flex-col gap-3 border-t border-border pt-6" data-happen="">
+              <p className="text-caption font-semibold uppercase text-muted-foreground">{t('happenTitle')}</p>
               <PickSwitch
                 name="agent"
                 fallback={DEFAULT_AGENT}
                 cases={casesOf(AGENTS, (agent) => (
-                  <StartScreenBox name={agent.name} screen={agent.startScreen} />
+                  <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
+                    {happen[agent.id as keyof typeof happen].map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
                 ))}
               />
-              <p className="text-muted-foreground">
-                {t('prompt')} <span className="inline-block h-4 w-2 bg-primary align-middle" aria-hidden="true" />
-              </p>
-            </TerminalWindow>
-            <p className="inline-flex items-center gap-2 text-body font-semibold">
+              <p className="text-body font-semibold">{t('helpLine')}</p>
+            </div>
+
+            <p className="inline-flex items-center gap-2 border-t border-border pt-4 text-body font-semibold">
               <DoneMark />
               {t('worked')}
             </p>
           </div>
         </div>
-      </div>
-    </SlideFrame>
-  ),
+      </SlideFrame>
+    );
+  },
 });

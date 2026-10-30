@@ -22,7 +22,7 @@
       "reason": "Die einzigen zwei Teile von uns. Entpack den Skill in den Skills-Ordner, den der Installer angelegt hat; füg den Eintrag in <code>GLOSSARY.md</code> ein oder leg die Datei damit an."
     },
     "run": {
-      "title": "Denselben Check wie in Schritt 7 ausführen",
+      "title": "Denselben Check wie in Schritt 4 ausführen",
       "reason": "Er prüft, ob die Matt-Pocock-Skills da sind. Erlaube seinen Befehl, und die hancrafted-Homepage öffnet sich."
     }
   },
@@ -79,7 +79,7 @@
     "copied": "Prompt kopiert",
     "prompt": "Ich mache meinen Laptop für einen Workshop bereit und komme nicht weiter.\nBetriebssystem: {os}\nKI-Agent: {agent}\nSchritt: {step}\n\nDiese Fehlermeldung sehe ich:\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist und was ich als Nächstes tun soll, Schritt für Schritt.",
     "noError": "(Ich habe keinen Fehler eingefügt.)",
-    "step": "Schritt 8: Die Matt-Pocock-Skills selbst einrichten",
+    "step": "Bonus: Die Matt-Pocock-Skills selbst einrichten",
     "chats": {
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",

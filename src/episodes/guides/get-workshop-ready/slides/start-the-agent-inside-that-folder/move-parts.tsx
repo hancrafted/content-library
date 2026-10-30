@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-/* Step 6's own small parts: the icons, a move's text column and the AI agent's trust question. */
+/* Step 3's own small parts: the icons, a move's text column and the AI agent's trust question. */
 
 export function ExternalIcon() {
   return (

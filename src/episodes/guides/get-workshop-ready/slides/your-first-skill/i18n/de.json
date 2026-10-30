@@ -1,10 +1,10 @@
 {
   "title": "Dein erster Skill",
   "caption": "Das Teil, das die Kette beweist.",
-  "steps": "Schritt 7",
   "question": "Do you want to proceed?",
   "yes": "Yes",
-  "no": "No",
+  "steps": "Schritt 4",
+  "window": "Terminal",
   "voiceScript": {
     "segments": {
       "everything-in-place": {
@@ -12,26 +12,6 @@
         "keywords": "",
         "script": "Jetzt ist also alles an seinem Platz: ein Terminal, ein KI-Agent und ein Ordner. Was noch fehlt, ist ein Skill, also eine kleine Anleitung, der Dein KI-Agent folgen kann. Wenn Du ihn ausführst, zeigt sich, dass die Kette echt ist."
       }
-    }
-  },
-  "chain": {
-    "label": "Die Kette: vier funktionierende Teile und der Beweis",
-    "terminal": {
-      "title": "Dein Terminal"
-    },
-    "agent": {
-      "title": "Dein KI-Agent"
-    },
-    "folder": {
-      "title": "Dein Ordner"
-    },
-    "skill": {
-      "title": "Dein erster Skill"
-    },
-    "proof": {
-      "title": "Der Beweis: Die Homepage öffnet sich",
-      "site": "hancrafted.net",
-      "name": "hancrafted"
     }
   }
 }

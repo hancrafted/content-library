@@ -1,8 +1,9 @@
+import { TickIcon } from '@/episodes/components/slide-shared/agent-setup-step/copy-icons';
+import { CopyButton, type CopyWords } from '@/episodes/components/slide-shared/agent-setup-step/copy-line.client';
 import { externalHref } from '@/shared/lib/external-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
-import { CopyButton, type CopyWords } from './copy-line.client';
-import { ArrowIcon, CheckboxIcon, DownloadIcon, ExternalIcon, TickIcon } from './icons';
+import { ArrowIcon, CheckboxIcon, DownloadIcon, ExternalIcon } from './icons';
 
 /*
  * The static drawings of Option 8a: the vendor link, the installer's question, the setup

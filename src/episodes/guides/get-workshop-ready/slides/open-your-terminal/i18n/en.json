@@ -1,9 +1,9 @@
 {
   "title": "Open your terminal",
-  "caption": "Find it, open it, look at it: <b>a blinking cursor</b> in an empty window means it worked.",
+  "caption": "Open it, look at it, done: <b>a blinking cursor</b> in an empty window means it worked.",
   "findLabel": "Find it",
   "seeLabel": "It worked when you see this",
-  "success": "Blinking cursor, empty prompt: it's not frozen, it's waiting for you.",
+  "success": "Nice, that's it. A blinking cursor means it isn't frozen, it's waiting for you.",
   "os": {
     "mac": {
       "label": "Mac",
@@ -96,12 +96,12 @@
       "one-window-one-cursor": {
         "title": "One window, one cursor",
         "keywords": "",
-        "script": "Pick your system in the toolbar, then find Terminal on a Mac, PowerShell on Windows, or the terminal on Linux, and open it. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you."
+        "script": "Pick your system in the toolbar, then open Terminal on a Mac, PowerShell on Windows, or the terminal on Linux. It takes one shortcut and a few letters. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you."
       },
       "stuck-paste-it": {
         "title": "Stuck? Paste it",
         "keywords": "",
-        "script": "If something looks different on your screen, you do not have to work it out alone. Paste your error into the troubleshooting box under the step, and it wraps your system, your AI agent and the step number into a prompt you can hand to a free ChatGPT. Every step below has one, so asking for help is part of the route."
+        "script": "If something looks different on your screen, you do not have to work it out alone. Press Help at the top right of the slide, paste what you see, and it wraps your system, your AI agent and the step into a prompt you can hand to a free ChatGPT or Gemini. Every step has that button, so asking for help is part of the route."
       }
     }
   },
@@ -117,7 +117,7 @@
     "copied": "Prompt copied",
     "prompt": "I'm setting up an AI agent on my laptop for a workshop and I'm stuck.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm new to the terminal. Tell me in plain words what this means and the one next thing to try.",
     "noError": "(I haven't pasted anything yet: ask me what I see.)",
-    "step": "Step 2: Open your terminal",
+    "step": "Step 1: Open your terminal",
     "chats": {
       "openAIChats": "Open an AI chat",
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",

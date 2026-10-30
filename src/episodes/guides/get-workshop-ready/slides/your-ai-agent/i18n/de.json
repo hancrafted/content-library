@@ -1,9 +1,11 @@
 {
   "title": "Dein KI-Agent",
   "caption": "Der KI-Agent, der darin wohnt.",
-  "steps": "Schritte 3–4",
-  "ready": "✻ KI-Agent bereit",
-  "prompt": ">",
+  "ready": "✻ Dein KI-Agent ist bereit",
+  "steps": "Schritt 2",
+  "window": "Terminal",
+  "prompt": "~ %",
+  "hint": "Angemeldet · schreib eine Nachricht",
   "voiceScript": {
     "segments": {
       "terminal-done": {
@@ -11,26 +13,6 @@
         "keywords": "",
         "script": "Du hast jetzt also ein Fenster, das auf Worte wartet. Weil ein leeres Fenster allein nicht viel kann, ist das nächste Teil der KI-Agent, der darin wohnen wird."
       }
-    }
-  },
-  "chain": {
-    "label": "Die Kette: vier funktionierende Teile und der Beweis",
-    "terminal": {
-      "title": "Dein Terminal"
-    },
-    "agent": {
-      "title": "Dein KI-Agent"
-    },
-    "folder": {
-      "title": "Dein Ordner"
-    },
-    "skill": {
-      "title": "Dein erster Skill"
-    },
-    "proof": {
-      "title": "Der Beweis: Die Homepage öffnet sich",
-      "site": "hancrafted.net",
-      "name": "hancrafted"
     }
   }
 }

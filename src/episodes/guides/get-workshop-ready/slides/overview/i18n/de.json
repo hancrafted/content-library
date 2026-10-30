@@ -1,43 +1,18 @@
 {
   "title": "Überblick",
-  "heading": "Acht Schritte zu Deinem ersten Skill",
+  "heading": "Vier Schritte zu Deinem ersten Skill",
   "caption": "Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin <b>Deinen ersten Skill</b> ausgeführt.",
-  "count": "8 Schritte",
+  "count": "4 Schritte",
   "time": "etwa 20 Minuten",
-  "chainLine": "Vier Teile, eine Kette: Jedes funktioniert, weil das davor funktioniert.",
-  "chainLabel": "Der Weg",
-  "pieces": {
-    "terminal": { "label": "Ein Terminal", "section": "Dein Terminal" },
-    "agent": { "label": "Ein KI-Agent", "section": "Dein KI-Agent" },
-    "folder": { "label": "Ein Ordner", "section": "Dein Ordner" },
-    "skill": { "label": "Ein Skill", "section": "Dein erster Skill" }
-  },
-  "steps": {
-    "1": "<marker>Überblick</marker>",
-    "2": "Öffne Dein Terminal",
-    "3": "Installiere Deinen KI-Agenten",
-    "4": "Melde Dich an",
-    "5": "Lade den Starter-Ordner herunter und entpacke ihn",
-    "6": "Starte den Agenten in diesem Ordner",
-    "7": "Führe Deinen ersten Skill aus"
-  },
-  "result": "hancrafted öffnet sich",
-  "skip": {
-    "agent": "KI-Agent schon installiert? Spring zu Schritt 5",
-    "technical": {
-      "section": "Der technische Weg",
-      "title": "Richte die Skills von Matt Pocock selbst ein",
-      "lead": "Lieber den technischen Weg?",
-      "action": "Spring zum letzten Abschnitt"
-    }
-  },
-  "stuck": "Jeder Schritt hat eine <b>Hängst Du fest?</b>-Box: Füg Deinen Fehler ein und hol Dir einen Prompt für <marker>das kostenlose ChatGPT</marker>",
+  "stuck": "Jede Seite hat oben rechts einen <b>Hilfe</b>-Knopf: Füge Deinen Fehler ein und erhalte einen Prompt für <marker>kostenloses ChatGPT oder Gemini</marker>",
   "notes": {
     "say-how-many-steps": {
       "header": "Sag, wie viele Schritte es sind",
       "description": "Das W3C empfiehlt, schon im ersten Schritt zu sagen, wie viele Schritte folgen, und in jedem Schritt, wie weit man schon ist, etwa „Schritt 2 von 4“ [1].",
       "sources": {
-        "w3c-multi-page-forms": { "title": "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms" }
+        "w3c-multi-page-forms": {
+          "title": "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms"
+        }
       }
     },
     "a-head-start-finishes-more": {
@@ -51,25 +26,71 @@
     },
     "minimal-still-needs-a-way-out": {
       "header": "Auch knapp braucht einen Ausweg",
-      "description": "Ein knappes Handbuch, das sich an echten Aufgaben orientiert, brachte 64 Studierenden den Stoff schneller bei als ein übliches Handbuch; Einsteiger brauchen trotzdem Hilfe, wenn etwas schiefgeht. Darum hat jeder Schritt eine Box für Probleme [1][2].",
+      "description": "Ein knappes Handbuch, das sich an echten Aufgaben orientiert, brachte 64 Studierenden den Stoff schneller bei als ein übliches Handbuch; Einsteiger brauchen trotzdem Hilfe, wenn etwas schiefgeht. Darum hat jeder Schritt eine Hilfe für Probleme [1][2].",
       "sources": {
-        "lazonder-minimal-manual": { "title": "Lazonder and van der Meij, The minimal manual: is less really more?" },
-        "kalyuga-expertise-reversal": { "title": "Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect" }
+        "lazonder-minimal-manual": {
+          "title": "Lazonder and van der Meij, The minimal manual: is less really more?"
+        },
+        "kalyuga-expertise-reversal": {
+          "title": "Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect"
+        }
       }
     }
   },
   "voiceScript": {
     "segments": {
       "four-pieces-one-chain": {
-        "title": "Vier Teile, eine Kette",
+        "title": "Vier Schritte, eine Kette",
         "keywords": "",
-        "script": "Hier ist der ganze Weg in vier Teilen: ein Terminal, ein KI-Agent, ein Ordner und ein Skill. Jedes Teil funktioniert nur, weil das davor funktioniert. Wenn also das letzte läuft, weißt Du, dass die ganze Kette hält. Das dauert etwa zwanzig Minuten, und Du kannst nach jedem Schritt aufhören und später weitermachen."
+        "script": "Hier ist der ganze Weg in vier Schritten: ein Terminal, ein KI-Agent, ein Ordner und ein Skill. Jeder Schritt funktioniert nur, weil der davor funktioniert. Wenn der letzte läuft, weißt Du also, dass die ganze Kette hält. Es dauert etwa zwanzig Minuten. Hake ab, was Du schon hast, und die Karte rechts sagt Dir, bei welchem Schritt Du anfängst."
       },
       "skip-what-you-have": {
         "title": "Überspring, was Du schon hast",
         "keywords": "",
-        "script": "Wenn Du schon einen KI-Agenten installiert hast, spring direkt zu Schritt fünf, denn davor ändert sich für Dich nichts. Und wenn Du die Einrichtung lieber selbst baust, statt sie herunterzuladen, ist der letzte Abschnitt für Dich, also spring ans Ende."
+        "script": "Hake ab, was Du schon hast, zum Beispiel einen installierten KI-Agenten, und die Karte springt zum ersten Schritt, der noch offen ist. Und wenn Du die Einrichtung lieber selbst baust, statt sie herunterzuladen, ist der letzte Abschnitt für Dich, also spring ans Ende."
       }
     }
+  },
+  "chainLine": "Vier Schritte, jeder funktioniert, weil der davor funktioniert.",
+  "checklist": {
+    "label": "Die vier Schritte",
+    "intro": "Hake ab, was Du schon hast. Die Karte rechts zeigt Dir, wo Du anfängst.",
+    "steps": {
+      "1": {
+        "section": "Dein Terminal",
+        "title": "Öffne Dein Terminal"
+      },
+      "2": {
+        "section": "Dein KI-Agent",
+        "title": "Installiere Deinen KI-Agenten und melde Dich an"
+      },
+      "3": {
+        "section": "Dein Ordner",
+        "title": "Lade den Ordner herunter und starte den Agenten darin"
+      },
+      "4": {
+        "section": "Dein erster Skill",
+        "title": "Führe Deinen ersten Skill aus"
+      }
+    },
+    "boxes": {
+      "terminal-open": "Ich weiß, wie ich ein Terminal öffne",
+      "agent-installed": "Mein KI-Agent ist installiert",
+      "agent-logged-in": "Ich bin angemeldet",
+      "folder-unzipped": "Starter-Ordner heruntergeladen und entpackt",
+      "agent-in-folder": "Der Agent startet in diesem Ordner",
+      "skill-ran": "Ich habe check-workshop-readiness ausgeführt"
+    }
+  },
+  "card": {
+    "open": "Dein nächster Schritt",
+    "start": "Starte bei Schritt {n}",
+    "allDone": "Alles bereit: spring zu Schritt 4"
+  },
+  "technical": {
+    "section": "Der technische Weg",
+    "title": "Richte die Skills von Matt Pocock selbst ein",
+    "lead": "Lieber den technischen Weg?",
+    "action": "Spring zum letzten Abschnitt"
   }
 }

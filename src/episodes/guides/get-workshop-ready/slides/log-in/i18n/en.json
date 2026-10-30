@@ -1,6 +1,27 @@
 {
   "title": "Log in",
-  "caption": "Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal.",
+  "caption": "Your second command starts your AI agent and signs you in. Use a new terminal window.",
+  "newWindowTitle": "Open a new terminal window first",
+  "newWindow": "The install may not be known to your old window. Close it, open a new one, and only then type the line below.",
+  "newWindowHow": {
+    "mac": "On a Mac: press Cmd and N in Terminal, or open Terminal again.",
+    "windows": "On Windows: close PowerShell, then open it again from the Start menu.",
+    "linux": "On Linux: close the terminal, then open it again."
+  },
+  "backToStep1": "How to open a terminal, step 1",
+  "secondCommand": "Your second command",
+  "type": "Paste this line and press Enter.",
+  "insideTitle": "Then, inside {agent}, type",
+  "copy": "Copy",
+  "copied": "Copied",
+  "failTitle": "Does it say “command not found” or “not recognized”?",
+  "failFix": "You are still in the old window. Close it, open a new one as above, and paste the line again.",
+  "flow": {
+    "claude-code": "Your browser opens on its own. If it does not, press <code>c</code> in the terminal to copy the link and open it yourself. The page may show a code: copy it and paste it into the terminal.",
+    "antigravity": "On your own computer your browser opens on its own. Answer its first questions (colours, trust this folder) in the terminal; if it shows a link and asks for a code, open the link and paste the code back.",
+    "codex": "Choose Sign in with ChatGPT when it asks. Your browser opens for the sign-in.",
+    "copilot": "If you are not signed in yet, it asks you to type <code>/login</code>. Follow the on-screen steps, they take you to your browser."
+  },
   "toolbar": {
     "os": "Your computer",
     "agent": "AI agent"
@@ -29,15 +50,15 @@
   "ownAccount": "Which account fits is on that page. Use your own, not a shared one.",
   "voiceScript": {
     "segments": {
-      "sign-in-once": {
-        "title": "Sign in once",
+      "open-a-new-window": {
+        "title": "Open a new terminal window",
         "keywords": "",
-        "script": "Now the AI agent needs to know who you are. It opens a sign-in for you the first time, you log in, and you come back to the terminal. You do this once, and it stays."
+        "script": "Before you type anything, close your terminal and open a new one. The install put your AI agent on your computer, but the old window does not know it yet. If your terminal says command not found or not recognized, this is why. Step one shows you how to open a terminal."
       },
-      "your-own-account": {
-        "title": "Your own account",
+      "second-command": {
+        "title": "Your second command",
         "keywords": "",
-        "script": "Which account fits which AI agent differs, and the official page of your AI agent says it better than I could, so the link is right here. Use your own account, not a shared one, so that the AI agent is yours to run."
+        "script": "Your second command starts your AI agent. Press Copy, paste it and press Enter. Your browser opens for the sign-in; if it does not, the terminal shows a link you can open yourself. Log in with your own account, not a shared one. You do this once, and it stays."
       }
     }
   },
@@ -49,7 +70,7 @@
     "copied": "Prompt copied",
     "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
     "noError": "(I see no error message, it just does not work.)",
-    "step": "Step 4: Log in",
+    "step": "Step 2: Log in, your second command",
     "chats": {
       "openAIChats": "Open an AI chat",
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",

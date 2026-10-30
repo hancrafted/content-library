@@ -31,7 +31,7 @@ const TRUST_PATH = {
   linux: '~/Downloads/starter-folder',
 } as const;
 
-// Step 6, Option 6a: the terminal opens from the folder's own right-click menu, so a first-timer types no path, then
+// Step 3 (second Slide), Option 6a: the terminal opens from the folder's own right-click menu, so a first-timer types no path, then
 // the AI agent starts in that window; each move beside the state the viewer matches on their own screen, a quiet `cd`
 // line as fallback. Both toolbars show. Hover dims the other move (`focus-group--dim-others`). Motion: none.
 export const startTheAgentInsideThatFolder = slide({

@@ -11,7 +11,7 @@ import { UnzipView } from './unzip-view.client';
 /*
  * The zip's file name and the folder's files are names, not words, so they stay out of the Translation files. Both are
  * placeholders until the separate starter-folder build: it puts the zip in public/ with its files at the zip's root
- * (no top folder, or Windows' Extract All nests starter-folder\starter-folder and step 6's path breaks).
+ * (no top folder, or Windows' Extract All nests starter-folder\starter-folder and the next Slide's path breaks).
  */
 const ZIP = 'starter-folder.zip';
 const FOLDER = 'starter-folder';
@@ -74,7 +74,7 @@ function FolderRow({ name, note, folder = false }: { name: string; note?: string
   );
 }
 
-// Step 5, Option 5a: a copy of the grid-1x2 Master slide, download on the left and the unzipped folder on the right,
+// Step 3 (first Slide), Option 5a: a copy of the grid-1x2 Master slide, download on the left and the unzipped folder on the right,
 // hover dimming the other half. The OS toolbar group is live, since the unzip gesture differs by OS (the build notes overrule
 // the Visual's "neither toolbar shows"); the AI-agent group is dimmed. Help sits in the header.
 export const downloadAndUnzipTheStarterFolder = slide({

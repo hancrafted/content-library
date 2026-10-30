@@ -1,6 +1,27 @@
 {
   "title": "Melde dich an",
-  "caption": "Dein KI-Agent öffnet einmal eine Anmeldung. Melde dich mit deinem eigenen Konto an und komm zurück ins Terminal.",
+  "caption": "Dein zweiter Befehl startet deinen KI-Agenten und meldet dich an. Nimm ein neues Terminalfenster.",
+  "newWindowTitle": "Öffne zuerst ein neues Terminalfenster",
+  "newWindow": "Dein altes Fenster kennt die Installation vielleicht noch nicht. Schließe es, öffne ein neues und tippe erst dann die Zeile unten.",
+  "newWindowHow": {
+    "mac": "Am Mac: Drücke im Terminal Cmd und N oder öffne das Terminal neu.",
+    "windows": "Unter Windows: Schließe PowerShell und öffne es im Startmenü neu.",
+    "linux": "Unter Linux: Schließe das Terminal und öffne es neu."
+  },
+  "backToStep1": "So öffnest du ein Terminal, Schritt 1",
+  "secondCommand": "Dein zweiter Befehl",
+  "type": "Füge diese Zeile ein und drücke Enter.",
+  "insideTitle": "Tippe dann in {agent}",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "failTitle": "Steht dort „command not found“ oder „not recognized“?",
+  "failFix": "Du bist noch im alten Fenster. Schließe es, öffne wie oben ein neues und füge die Zeile erneut ein.",
+  "flow": {
+    "claude-code": "Dein Browser öffnet sich von selbst. Tut er es nicht, drücke im Terminal <code>c</code>, um den Link zu kopieren, und öffne ihn selbst. Die Seite zeigt vielleicht einen Code: Kopiere ihn und füge ihn ins Terminal ein.",
+    "antigravity": "Auf deinem eigenen Computer öffnet sich dein Browser von selbst. Beantworte die ersten Fragen (Farben, diesem Ordner vertrauen) im Terminal. Zeigt es einen Link und fragt nach einem Code, öffne den Link und füge den Code zurück ein.",
+    "codex": "Wähle „Sign in with ChatGPT“, wenn es fragt. Dein Browser öffnet sich für die Anmeldung.",
+    "copilot": "Bist du noch nicht angemeldet, fordert es dich auf, <code>/login</code> zu tippen. Folge den Schritten auf dem Bildschirm, sie führen dich in deinen Browser."
+  },
   "toolbar": {
     "os": "Dein Computer",
     "agent": "KI-Agent"
@@ -29,15 +50,15 @@
   "ownAccount": "Welches Konto passt, steht auf dieser Seite. Nimm dein eigenes, kein geteiltes.",
   "voiceScript": {
     "segments": {
-      "sign-in-once": {
-        "title": "Einmal anmelden",
+      "open-a-new-window": {
+        "title": "Öffne ein neues Terminalfenster",
         "keywords": "",
-        "script": "Jetzt muss der KI-Agent wissen, wer du bist. Beim ersten Mal öffnet er dir eine Anmeldung, du meldest dich an und kommst zurück ins Terminal. Das machst du einmal, dann bleibt es so."
+        "script": "Bevor du etwas tippst, schließe dein Terminal und öffne ein neues. Die Installation hat deinen KI-Agenten auf deinen Computer gebracht, aber das alte Fenster kennt ihn noch nicht. Steht in deinem Terminal command not found oder not recognized, liegt es daran. Schritt eins zeigt dir, wie du ein Terminal öffnest."
       },
-      "your-own-account": {
-        "title": "Dein eigenes Konto",
+      "second-command": {
+        "title": "Dein zweiter Befehl",
         "keywords": "",
-        "script": "Welches Konto zu welchem KI-Agenten passt, ist unterschiedlich, und die offizielle Seite deines KI-Agenten erklärt das besser, als ich es könnte. Deshalb ist der Link gleich hier. Nimm dein eigenes Konto, kein geteiltes, damit der KI-Agent wirklich deiner ist."
+        "script": "Dein zweiter Befehl startet deinen KI-Agenten. Drücke Kopieren, füge ihn ein und drücke Enter. Dein Browser öffnet sich für die Anmeldung. Tut er es nicht, zeigt das Terminal einen Link, den du selbst öffnen kannst. Melde dich mit deinem eigenen Konto an, nicht mit einem geteilten. Das machst du einmal, und es bleibt."
       }
     }
   },
@@ -49,7 +70,7 @@
     "copied": "Prompt kopiert",
     "prompt": "Ich mache meinen Laptop für einen Workshop startklar und komme nicht weiter. Ich habe noch nie mit einem Terminal gearbeitet.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich gerade bin: {step}\n\nDiese Fehlermeldung sehe ich:\n\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist, und sag mir dann Schritt für Schritt, was ich als Nächstes tun soll.",
     "noError": "(Ich sehe keine Fehlermeldung, es funktioniert einfach nicht.)",
-    "step": "Schritt 4: Melde dich an",
+    "step": "Schritt 2: Melde dich an, dein zweiter Befehl",
     "chats": {
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",

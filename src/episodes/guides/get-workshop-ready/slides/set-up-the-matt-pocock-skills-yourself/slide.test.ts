@@ -51,14 +51,14 @@ describe('success cases', () => {
         'Add the main Matt Pocock skills',
         'Run his setup skill in your AI agent',
         'Add our check and the hancrafted entry',
-        'Run the same check as step 7',
+        'Run the same check as step 4',
       ],
       de: [
         'Node.js installieren',
         'Die Haupt-Skills von Matt Pocock hinzufügen',
         'Seinen Setup-Skill in Deinem KI-Agenten ausführen',
         'Unseren Check und den hancrafted-Eintrag hinzufügen',
-        'Denselben Check wie in Schritt 7 ausführen',
+        'Denselben Check wie in Schritt 4 ausführen',
       ],
     };
     // ACT

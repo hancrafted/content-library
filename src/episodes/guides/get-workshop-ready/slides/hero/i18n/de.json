@@ -1,29 +1,14 @@
 {
-  "meta": "Anleitung · 8 Schritte · etwa 20 Minuten",
-  "chain": {
-    "label": "Die Kette: vier funktionierende Teile und der Beweis",
-    "terminal": {
-      "title": "Dein Terminal",
-      "sub": "Schritte 1–2 · es wartet auf Worte"
-    },
-    "agent": {
-      "title": "Dein KI-Agent",
-      "sub": "Schritte 3–4 · installiert, angemeldet"
-    },
-    "folder": {
-      "title": "Dein Ordner",
-      "sub": "Schritte 5–6 · entpackt, geöffnet"
-    },
-    "skill": {
-      "title": "Dein erster Skill",
-      "sub": "Schritt 7 · freigegeben und ausgeführt"
-    },
-    "proof": {
-      "title": "Der Beweis: Die Homepage öffnet sich",
-      "site": "hancrafted.net",
-      "name": "hancrafted"
-    },
-    "start": "Hier starten"
-  },
-  "chainNote": "Jedes Teil gibt dem nächsten ein funktionierendes Teil weiter, bis die Homepage sich öffnet und die ganze Kette beweist."
+  "meta": "Anleitung · 4 Schritte · etwa 20 Minuten",
+  "window": "Terminal",
+  "preview": "Das zeigt das Terminal am Ende dieser Seite",
+  "prompt": "~ %",
+  "ready": "✻ Dein KI-Agent ist bereit",
+  "hint": "Angemeldet · schreib eine Nachricht",
+  "question": "Do you want to proceed?",
+  "yes": "Yes",
+  "tags": {
+    "agent": "KI-Agent",
+    "skill": "Skill"
+  }
 }

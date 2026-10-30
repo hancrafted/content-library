@@ -10,8 +10,8 @@ import { hero } from './slides/hero/slide';
 
 /*
  * "Get workshop-ready": a Guide (design-ADR 0019 as amended by #450), not an Episode, built from the approved Spec. A
- * first-timer opens a terminal, installs an AI agent, starts it in the starter folder and runs a first skill; the
- * homepage opening proves the chain. Its Title slide's hero is the chain itself.
+ * first-timer opens a terminal, installs an AI agent, starts it in the starter folder and runs a first skill, in
+ * four steps. Its Title slide's hero is a terminal window previewing the end (Title-slide Option 0b).
  *
  * Each Section is one placement marker under `sections/`, named after the Section's slug and listed here in Spec
  * order: a Section job adds its page Slides to its own marker, so parallel Section branches never edit one line.

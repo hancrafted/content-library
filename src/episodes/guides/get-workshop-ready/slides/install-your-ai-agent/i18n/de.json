@@ -1,35 +1,59 @@
 {
   "title": "Installiere deinen KI-Agenten",
-  "caption": "Die offizielle Seite hat immer die aktuellen Schritte. Hier steht nur, worauf du achten musst.",
+  "caption": "Dein erster Befehl: kopieren, ins Terminal einfügen, Enter drücken.",
+  "firstCommand": "Dein erster Befehl",
+  "paste": "Öffne dein Terminal aus Schritt 1, füge diese Zeile ein und drücke Enter. Sie installiert deinen KI-Agenten.",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "officialDocs": "Offizielle Doku von {agent}",
+  "newTab": "öffnet in neuem Tab",
+  "docsWhy": "Immer da, auch wenn sich diese Zeile einmal ändert. Manche Installationsseiten muss man scrollen, darum steht die Zeile hier.",
+  "powershellHint": "Nimm unter Windows PowerShell: Die Eingabezeile beginnt mit <code>PS C:\\</code>.",
+  "commandPromptSummary": "Stattdessen in der Eingabeaufforderung?",
+  "commandPromptHint": "Die Eingabeaufforderung zeigt etwa <code>C:\\&gt;</code>, ohne <code>PS</code> davor. Füge diese Zeile dort ein.",
+  "happenTitle": "Was passieren kann",
+  "happen": {
+    "claude-code": {
+      "one": "Unter Windows heißt <code>'irm' is not recognized</code>: Du bist in der Eingabeaufforderung. Öffne PowerShell oder nimm die Zeile für die Eingabeaufforderung oben.",
+      "two": "Claude Code braucht einen bezahlten Claude-Tarif. Der kostenlose enthält es nicht, und die Anmeldung auf der nächsten Folie sagt es dir."
+    },
+    "antigravity": {
+      "one": "Unter Windows heißt <code>'irm' is not recognized</code>: Du bist in der Eingabeaufforderung, nicht in PowerShell. Öffne PowerShell und füge erneut ein.",
+      "two": "Die Zeile bricht mit roter Schrift ab: Dafür ist Hilfe da."
+    },
+    "codex": {
+      "one": "Eine Zeile, die nicht zu deinem Computer passt, scheitert sofort: Prüfe, ob oben das richtige System gewählt ist.",
+      "two": "Die Zeile bricht mit roter Schrift ab: Dafür ist Hilfe da."
+    },
+    "copilot": {
+      "one": "GitHub Copilot braucht ein aktives Copilot-Abo auf deinem GitHub-Konto. Ohne scheitert die Anmeldung auf der nächsten Folie.",
+      "two": "Unter Windows verlangt GitHub PowerShell 6 oder höher, und <code>winget</code> muss vorhanden sein. Heißt es, es sei nicht erkannt: Nimm Hilfe."
+    }
+  },
+  "helpLine": "Hängst du fest oder siehst rote Schrift, die du nicht verstehst? Drücke oben rechts auf Hilfe und füge den Fehler ein.",
+  "worked": "Geschafft, wenn die Eingabezeile zurückkommt. Öffne als Nächstes ein neues Terminalfenster.",
+  "voiceScript": {
+    "segments": {
+      "your-first-command": {
+        "title": "Dein erster Befehl",
+        "keywords": "",
+        "script": "Das ist der erste Befehl, den du in dein Terminal tippst. Er installiert deinen KI-Agenten. Wähle in der Leiste deinen Computer und deinen KI-Agenten, dann zeigt die Seite dir die genaue Zeile. Drücke den großen Kopieren-Knopf, füge sie in dein Terminal ein und drücke Enter."
+      },
+      "official-docs-always": {
+        "title": "Offizielle Doku, immer",
+        "keywords": "",
+        "script": "Neben der Zeile ist ein Knopf zur offiziellen Doku deines KI-Agenten. Ich gebe dir die Zeile, damit du nicht durch eine Seite ohne Anker scrollen musst, aber die Quelle ist der Hersteller. Wenn die Zeile also einmal nicht mehr geht, ist die Doku einen Klick entfernt."
+      },
+      "what-might-happen": {
+        "title": "Was passieren kann",
+        "keywords": "",
+        "script": "Ein paar Dinge können schiefgehen, und sie stehen unter der Zeile für deinen KI-Agenten. Unter Windows ist es meist das falsche Fenster: PowerShell und Eingabeaufforderung brauchen verschiedene Zeilen. Siehst du rote Schrift, die du nicht verstehst, drücke oben rechts auf Hilfe, füge den Fehler ein und frag nach."
+      }
+    }
+  },
   "toolbar": {
     "os": "Dein Computer",
     "agent": "KI-Agent"
-  },
-  "doThis": "So geht's",
-  "openInstall": "Offizielle Installationsseite von {agent} öffnen",
-  "newTab": "öffnet in neuem Tab",
-  "osLine": "Folge dort den Schritten für <b>{os}</b> und komm dann hierher zurück.",
-  "preferred": "Am liebsten Claude Code: Der Workshop ist darauf aufgebaut. Antigravity, Codex und GitHub Copilot gehen aber auch.",
-  "prompt": ">",
-  "worked": "Geschafft, wenn du das hier siehst.",
-  "voiceScript": {
-    "segments": {
-      "official-page-only": {
-        "title": "Nur die offizielle Seite",
-        "keywords": "",
-        "script": "Wie man einen KI-Agenten installiert, ändert sich öfter, als eine Anleitung wie diese hinterherkommt. Deshalb lese ich dir hier keine Schritte vor. Wir verlinken die offizielle Installationsseite deines KI-Agenten, die immer die aktuellen Schritte hat, und sagen dir nur, worauf du achten musst. Du kannst der Seite Zeile für Zeile folgen und dann direkt zurückkommen."
-      },
-      "claude-code-preferred": {
-        "title": "Am liebsten Claude Code",
-        "keywords": "",
-        "script": "Ich arbeite am liebsten mit Claude Code, und der Workshop ist darauf aufgebaut. Antigravity, Codex und GitHub Copilot funktionieren auch. Wähl deinen KI-Agenten oben in der Leiste aus, und die Seite passt sich an. Wenn du keine Vorliebe hast, nimm Claude Code, dann siehst du dieselben Bildschirme wie ich."
-      },
-      "it-tells-you-when-it-worked": {
-        "title": "Du siehst, wann es geklappt hat",
-        "keywords": "",
-        "script": "Die Installation hat geklappt, wenn dein KI-Agent seinen Startbildschirm im Terminal zeigt, und die Seite zeigt dir, wie der aussieht. Siehst du ihn, ist dieser Schritt erledigt. Wenn nicht, ist der Kasten zur Fehlersuche genau dafür da."
-      }
-    }
   },
   "help": {
     "button": "Hilfe",
@@ -39,7 +63,7 @@
     "copied": "Prompt kopiert",
     "prompt": "Ich mache meinen Laptop für einen Workshop startklar und komme nicht weiter. Ich habe noch nie mit einem Terminal gearbeitet.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich gerade bin: {step}\n\nDiese Fehlermeldung sehe ich:\n\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist, und sag mir dann Schritt für Schritt, was ich als Nächstes tun soll.",
     "noError": "(Ich sehe keine Fehlermeldung, es funktioniert einfach nicht.)",
-    "step": "Schritt 3: Installiere deinen KI-Agenten",
+    "step": "Schritt 2: Installiere deinen KI-Agenten, dein erster Befehl",
     "chats": {
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",

@@ -1,7 +1,7 @@
 import { osOf, type AiAgent, type Os } from './picks.pure';
 
 /*
- * What step 6 draws per pick. The folder name is the starter folder's; the user name `han` and the machine names are
+ * What step 3 draws per pick. The folder name is the starter folder's; the user name `han` and the machine names are
  * the drawing's, as the Spec's mock shows them.
  */
 
@@ -31,7 +31,7 @@ export function terminalPrompt(os: string): TerminalPrompt {
   return PROMPTS[osOf(os)];
 }
 
-/** The quiet fallback: from the home folder step 2 opens, into the unzipped folder. */
+/** The quiet fallback: from the home folder step 1 opens, into the unzipped folder. */
 export function fallbackCommand(os: string): string {
   return osOf(os) === 'windows' ? `cd Downloads\\${FOLDER}` : `cd Downloads/${FOLDER}`;
 }

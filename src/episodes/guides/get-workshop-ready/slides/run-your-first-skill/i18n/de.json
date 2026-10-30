@@ -127,7 +127,7 @@
     "copied": "Prompt kopiert",
     "prompt": "Ich bereite mich auf einen Workshop vor und komme beim Einrichten meines KI-Agenten nicht weiter.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich in der Anleitung bin: {step}\n\nDas ist die Fehlermeldung, oder was ich auf dem Bildschirm sehe:\n\n{error}\n\nIch habe noch nie ein Terminal benutzt. Erklär mir in einfachen Worten, was schiefgelaufen ist und was ich als Nächstes tun soll, Schritt für Schritt.",
     "noError": "(Ich habe noch nichts eingefügt.)",
-    "step": "Schritt 7: Deinen ersten Skill ausführen",
+    "step": "Schritt 4: Deinen ersten Skill ausführen",
     "chats": {
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",

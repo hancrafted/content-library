@@ -6,8 +6,6 @@ export type Os = (typeof OSES)[number];
 export const AGENTS = ['claude-code', 'antigravity', 'codex', 'copilot'] as const;
 export type Agent = (typeof AGENTS)[number];
 
-/** Product names: the same in every locale. */
-export const OS_NAMES: Readonly<Record<Os, string>> = { mac: 'Mac', windows: 'Windows', linux: 'Linux' };
 export const AGENT_NAMES: Readonly<Record<Agent, string>> = {
   'claude-code': 'Claude Code',
   antigravity: 'Antigravity',

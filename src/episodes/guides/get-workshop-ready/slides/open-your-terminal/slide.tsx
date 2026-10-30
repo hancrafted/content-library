@@ -45,7 +45,7 @@ const Kbd = (chunks: ReactNode) => (
 );
 
 /**
- * Open your terminal (Spec Option 2a): find it, then see it. Above the card the page's toolbar, the OS group live; in the card the way in for the picked system beside the window the viewer gets, linked by one
+ * Open your terminal (Spec Option 2a, Feedback round 2: the first thing a viewer does in the terminal, so short and friendly): find it, then see it. Above the card the page's toolbar, the OS group live; in the card the way in for the picked system beside the window the viewer gets, linked by one
  * arrow, and three reassurance lines; Help in the header. The AI agent group is dimmed (nothing here differs by
  * AI agent), no motion: the cursor is drawn still.
  */

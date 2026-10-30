@@ -9,25 +9,24 @@ import { describe, expect, it } from 'vitest';
 import { overview } from './slide';
 
 /*
- * Overview (Spec Option 1b), read through the one interface the page reads a Slide by: localized into a stand-in Guide
+ * Overview (Spec Option 1a, the checklist of feedback round 2), read through the one interface the page reads a Slide by: localized into a stand-in Guide
  * on the shared Slide header, its notes and Voice script as the drawer gets them and its Scene as the page renders it.
- * The section slides are stand-ins, so the test reaches no Guide file; the two skip links land on them.
+ * The section slides are stand-ins, so the test reaches no Guide file; the card and the technical link land on them.
  */
 
 const standIn = (slug: string, title: string) =>
   slide({ slug, messages: { en: { title }, de: { title } }, content: () => null });
 
 const PLACED = placeSections<Slide>([
-  [standIn('your-terminal', 'Your terminal'), overview],
-  [
-    standIn('your-folder', 'Your folder'),
-    standIn('download-and-unzip-the-starter-folder', 'Download and unzip the starter folder'),
-  ],
+  [standIn('your-terminal', 'Your terminal'), standIn('open-your-terminal', 'Open your terminal'), overview],
+  [standIn('your-ai-agent', 'Your AI agent'), standIn('install-your-ai-agent', 'Install your AI agent')],
+  [standIn('your-folder', 'Your folder'), standIn('download-and-unzip-the-starter-folder', 'Download')],
+  [standIn('your-first-skill', 'Your first skill'), standIn('run-your-first-skill', 'Run your first skill')],
   [standIn('the-technical-route', 'The technical route')],
 ]).flat();
 
 function localized(locale: Locale): LocalizedSlide {
-  return localizeSlide(PLACED[1] as never, {
+  return localizeSlide(PLACED.find((placed) => placed.slide.slug === 'overview') as never, {
     episode: 'get-workshop-ready',
     route: '/guides/get-workshop-ready',
     locale,
@@ -44,7 +43,7 @@ describe('success cases', () => {
     // ARRANGE
     const expected = {
       title: 'Overview',
-      heading: 'Eight steps to your first skill',
+      heading: 'Four steps to your first skill',
       caption: "You've never opened a terminal. By the end of this page you'll have run your first skill in one.",
     };
     // ACT
@@ -58,14 +57,14 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       {
-        title: 'Four pieces, one chain',
+        title: 'Four steps, one chain',
         script:
-          'Here is the whole route in four pieces: a terminal, an AI agent, a folder and a skill. Each piece only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes, and you can stop after any step and come back.',
+          'Here is the whole route in four steps: a terminal, an AI agent, a folder and a skill. Each step only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes. Tick what you already have, and the card on the right tells you which step to start at.',
       },
       {
         title: 'Skip what you have',
         script:
-          'If you already have an AI agent installed, jump straight to step five, because nothing before it changes for you. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end.',
+          'Tick the boxes you already have, like an installed AI agent, and the card jumps you to the first step that is still open. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end.',
       },
     ];
     // ACT
@@ -93,55 +92,36 @@ describe('success cases', () => {
     expect(notes).toEqual(expected);
   });
 
-  it('draws the route as four pieces holding the seven steps in order, step 1 done and step 2 in focus', () => {
+  it('lists four steps with their boxes: 1, 2, 2, 3, 3 and 4 in order, and starts at step 1', () => {
     // ARRANGE
-    const expected = {
-      pieces: ['terminal', 'agent', 'folder', 'skill'],
-      states: ['current', 'upcoming', 'upcoming', 'upcoming'],
-      steps: [
-        ['1', 'done'],
-        ['2', 'current'],
-        ['3', 'upcoming'],
-        ['4', 'upcoming'],
-        ['5', 'upcoming'],
-        ['6', 'upcoming'],
-        ['7', 'upcoming'],
-      ],
-    };
+    const expected = { steps: ['1', '2', '3', '4'], boxes: [1, 2, 2, 3, 3, 4].length, start: '1' };
     // ACT
     const $ = scene('en');
     const shape = {
-      pieces: $('[data-piece]')
-        .map((_, el) => $(el).attr('data-piece'))
-        .get(),
-      states: $('[data-piece]')
-        .map((_, el) => $(el).attr('data-state'))
-        .get(),
       steps: $('[data-step]')
-        .map((_, el) => [[$(el).attr('data-step'), $(el).attr('data-state')]])
+        .map((_, el) => $(el).attr('data-step'))
         .get(),
+      boxes: $('input[type="checkbox"]').length,
+      start: $('[data-start-at]').attr('data-start-at'),
     };
     // ASSERT
     expect(shape).toEqual(expected);
   });
 
-  it('jumps the AI agent piece to the step-5 Slide and sends the technical route to the last Section', () => {
+  it('links the start card to step 1 and the technical route to the last Section', () => {
     // ARRANGE
     const expected = {
-      agent: '/guides/get-workshop-ready#your-folder--download-and-unzip-the-starter-folder',
+      start: '/guides/get-workshop-ready#your-terminal--open-your-terminal',
       technical: '/guides/get-workshop-ready#the-technical-route',
     };
     // ACT
     const $ = scene('en');
-    const links = {
-      agent: $('[data-skip="agent"]').attr('href'),
-      technical: $('[data-skip="technical"]').attr('href'),
-    };
+    const links = { start: $('[data-start-at]').attr('href'), technical: $('[data-skip="technical"]').attr('href') };
     // ASSERT
     expect(links).toEqual(expected);
   });
 
-  it('puts a Context marker beside the step count, after step 1 and in the Stuck note, in that order', () => {
+  it('puts a Context marker beside the step count, after the checklist intro and in the Stuck note, in that order', () => {
     // ARRANGE
     const expected = ['say-how-many-steps', 'a-head-start-finishes-more', 'minimal-still-needs-a-way-out'];
     // ACT
@@ -155,9 +135,9 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('renders no heading and no toolbar in its Scene, since the header shows the title and nothing differs by pick', () => {
+  it('renders no heading, no toolbar and no "Jump to step 5" skip link in its Scene, since the header shows the title and nothing differs by pick', () => {
     // ARRANGE
-    const absent = 'h1, h2, h3, [role="radiogroup"]';
+    const absent = 'h1, h2, h3, [role="radiogroup"], [data-skip="agent"]';
     // ACT
     const $ = scene('en');
     // ASSERT
@@ -169,10 +149,10 @@ describe('edge cases', () => {
   it('keeps the same notes, segments and step count in German, under German words', () => {
     // ARRANGE
     const expected = {
-      heading: 'Acht Schritte zu Deinem ersten Skill',
+      heading: 'Vier Schritte zu Deinem ersten Skill',
       notes: ['say-how-many-steps', 'a-head-start-finishes-more', 'minimal-still-needs-a-way-out'],
       segments: ['four-pieces-one-chain', 'skip-what-you-have'],
-      steps: 7,
+      steps: 4,
     };
     // ACT
     const de = localized('de');

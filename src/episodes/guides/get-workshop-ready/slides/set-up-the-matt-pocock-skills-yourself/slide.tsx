@@ -1,9 +1,9 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { CopyLine } from '@/episodes/components/slide-shared/agent-setup-step/copy-line.client';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
 import type { ReactNode } from 'react';
 import { CommandRow } from './command-row';
-import { CopyLine } from './copy-line.client';
 import { CheckBundle, HomepageResult, OfficialLink, SetupAnswers, SkillPicker } from './drawings';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -21,7 +21,7 @@ const OTHER_GROUP = 'Other';
 const GLOSSARY_ENTRY = "**hancrafted**:\nHan's workshop homepage, https://hancrafted.net";
 
 /*
- * Step 8, "Set up the Matt Pocock skills yourself" (Spec Option 8a): a five-row recipe card, the reason on the left
+ * Bonus, "Set up the Matt Pocock skills yourself" (Spec Option 8a): a five-row recipe card, the reason on the left
  * and the exact line on the right, with Help in the header. No toolbar: nothing here differs by operating system or AI
  * agent. The rows are a `focus-group--dim-others`, so Han can point at one while presenting. No motion of its own.
  */

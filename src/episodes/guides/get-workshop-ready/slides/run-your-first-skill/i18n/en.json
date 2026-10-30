@@ -127,7 +127,7 @@
     "copied": "Prompt copied",
     "prompt": "I am getting ready for a workshop and got stuck while setting up my AI agent.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am in the guide: {step}\n\nThis is the error, or what I see on my screen:\n\n{error}\n\nI have never used a terminal before. Explain in simple words what went wrong and what I should do next, one step at a time.",
     "noError": "(I have not pasted anything yet.)",
-    "step": "Step 7: Run your first skill",
+    "step": "Step 4: Run your first skill",
     "chats": {
       "openAIChats": "Open an AI chat",
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",

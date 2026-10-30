@@ -1,8 +1,10 @@
 {
   "title": "The technical route",
   "caption": "Optional: the same chain, built by hand.",
-  "steps": "Step 8",
   "command": "npx skills@latest add mattpocock/skills",
+  "steps": "Bonus",
+  "window": "terminal",
+  "prompt": "$",
   "voiceScript": {
     "segments": {
       "for-people-who-build": {
@@ -10,26 +12,6 @@
         "keywords": "",
         "script": "This last Section is for people who build, and it is optional. If you are comfortable with a terminal, you can get the same result without the starter folder by installing the pieces yourself. Everyone else can stop at the homepage."
       }
-    }
-  },
-  "chain": {
-    "label": "The chain: four working pieces and the proof",
-    "terminal": {
-      "title": "Your terminal"
-    },
-    "agent": {
-      "title": "Your AI agent"
-    },
-    "folder": {
-      "title": "Your folder"
-    },
-    "skill": {
-      "title": "Your first skill"
-    },
-    "proof": {
-      "title": "The proof: the homepage opens",
-      "site": "hancrafted.net",
-      "name": "hancrafted"
     }
   }
 }

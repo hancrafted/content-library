@@ -1,43 +1,18 @@
 {
   "title": "Overview",
-  "heading": "Eight steps to your first skill",
+  "heading": "Four steps to your first skill",
   "caption": "You've never opened a terminal. By the end of this page you'll have run <b>your first skill</b> in one.",
-  "count": "8 steps",
+  "count": "4 steps",
   "time": "about 20 minutes",
-  "chainLine": "Four pieces, one chain: each works because the one before it does.",
-  "chainLabel": "The route",
-  "pieces": {
-    "terminal": { "label": "A terminal", "section": "Your terminal" },
-    "agent": { "label": "An AI agent", "section": "Your AI agent" },
-    "folder": { "label": "A folder", "section": "Your folder" },
-    "skill": { "label": "A skill", "section": "Your first skill" }
-  },
-  "steps": {
-    "1": "<marker>Overview</marker>",
-    "2": "Open your terminal",
-    "3": "Install your AI agent",
-    "4": "Log in",
-    "5": "Download and unzip the starter folder",
-    "6": "Start the agent inside that folder",
-    "7": "Run your first skill"
-  },
-  "result": "hancrafted opens",
-  "skip": {
-    "agent": "AI agent already installed? Jump to step 5",
-    "technical": {
-      "section": "The technical route",
-      "title": "Set up the Matt Pocock skills yourself",
-      "lead": "Want the technical route?",
-      "action": "Jump to the last Section"
-    }
-  },
-  "stuck": "Every step has a <b>Stuck?</b> box: paste your error, get a prompt for <marker>free ChatGPT</marker>",
+  "stuck": "Every Slide has a <b>Help</b> button at the top right: paste your error, get a prompt for <marker>free ChatGPT or Gemini</marker>",
   "notes": {
     "say-how-many-steps": {
       "header": "Say how many steps",
       "description": "The W3C advises saying on the first step how many steps follow and on each step how far along the user is, for example \"Step 2 of 4\" [1].",
       "sources": {
-        "w3c-multi-page-forms": { "title": "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms" }
+        "w3c-multi-page-forms": {
+          "title": "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms"
+        }
       }
     },
     "a-head-start-finishes-more": {
@@ -51,25 +26,71 @@
     },
     "minimal-still-needs-a-way-out": {
       "header": "Minimal still needs a way out",
-      "description": "A minimal manual, centred on real tasks, taught faster than a standard manual in a study of 64 students, but beginners still need error-recovery material, which is why every step has a troubleshooting box [1][2].",
+      "description": "A minimal manual, centred on real tasks, taught faster than a standard manual in a study of 64 students, but beginners still need error-recovery material, which is why every step has a Stuck? help [1][2].",
       "sources": {
-        "lazonder-minimal-manual": { "title": "Lazonder and van der Meij, The minimal manual: is less really more?" },
-        "kalyuga-expertise-reversal": { "title": "Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect" }
+        "lazonder-minimal-manual": {
+          "title": "Lazonder and van der Meij, The minimal manual: is less really more?"
+        },
+        "kalyuga-expertise-reversal": {
+          "title": "Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect"
+        }
       }
     }
   },
   "voiceScript": {
     "segments": {
       "four-pieces-one-chain": {
-        "title": "Four pieces, one chain",
+        "title": "Four steps, one chain",
         "keywords": "",
-        "script": "Here is the whole route in four pieces: a terminal, an AI agent, a folder and a skill. Each piece only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes, and you can stop after any step and come back."
+        "script": "Here is the whole route in four steps: a terminal, an AI agent, a folder and a skill. Each step only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes. Tick what you already have, and the card on the right tells you which step to start at."
       },
       "skip-what-you-have": {
         "title": "Skip what you have",
         "keywords": "",
-        "script": "If you already have an AI agent installed, jump straight to step five, because nothing before it changes for you. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end."
+        "script": "Tick the boxes you already have, like an installed AI agent, and the card jumps you to the first step that is still open. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end."
       }
     }
+  },
+  "chainLine": "Four steps, each works because the one before it does.",
+  "checklist": {
+    "label": "The four steps",
+    "intro": "Tick what you already have. The card on the right shows where to start.",
+    "steps": {
+      "1": {
+        "section": "Your terminal",
+        "title": "Open your terminal"
+      },
+      "2": {
+        "section": "Your AI agent",
+        "title": "Install and log in to your AI agent"
+      },
+      "3": {
+        "section": "Your folder",
+        "title": "Download the folder and start the agent in it"
+      },
+      "4": {
+        "section": "Your first skill",
+        "title": "Run your first skill"
+      }
+    },
+    "boxes": {
+      "terminal-open": "I know how to open a terminal",
+      "agent-installed": "My AI agent is installed",
+      "agent-logged-in": "I'm logged in",
+      "folder-unzipped": "Starter folder downloaded and unzipped",
+      "agent-in-folder": "The agent starts inside that folder",
+      "skill-ran": "I ran check-workshop-readiness"
+    }
+  },
+  "card": {
+    "open": "Your next step",
+    "start": "Start at step {n}",
+    "allDone": "All set: jump to step 4"
+  },
+  "technical": {
+    "section": "The technical route",
+    "title": "Set up the Matt Pocock skills yourself",
+    "lead": "Want the technical route?",
+    "action": "Jump to the last Section"
   }
 }
