@@ -59,6 +59,11 @@
         "title": "Dein zweiter Befehl",
         "keywords": "",
         "script": "Dein zweiter Befehl startet deinen KI-Agenten. Drücke Kopieren, füge ihn ein und drücke Enter. Dein Browser öffnet sich für die Anmeldung. Tut er es nicht, zeigt das Terminal einen Link, den du selbst öffnen kannst. Melde dich mit deinem eigenen Konto an, nicht mit einem geteilten. Das machst du einmal, und es bleibt."
+      },
+      "which-option": {
+        "title": "Welche Option nehme ich?",
+        "keywords": "",
+        "script": "Bei der Anmeldung musst du wählen, und die Seite listet die Optionen in der Reihenfolge deines KI-Agenten, eine ist mit Nimm diese markiert. Bei Codex ist es Sign in with ChatGPT, wenn du für ChatGPT bezahlst. Bei Claude Code ist es dein Claude-Konto. Bei GitHub Copilot wählst du GitHub.com und dann den Gerätecode. Bei Antigravity nimmst du dein persönliches Google-Konto. Danach wirst du vielleicht gefragt, ob du dem Ordner vertraust: Sag nur beim Starterordner ja."
       }
     }
   },
@@ -76,6 +81,49 @@
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
       "newTab": "öffnet in neuem Tab"
+    }
+  },
+  "pick": {
+    "title": "Welche Option nehme ich?",
+    "recommended": "Nimm diese",
+    "options": {
+      "codex": {
+        "chatgpt": "Nutzung in den Tarifen Plus, Pro, Business und Enterprise enthalten. Nimm diese, wenn du für ChatGPT bezahlst.",
+        "device-code": "Nur wenn sich dein Browser nicht öffnen kann, zum Beispiel auf einem entfernten Rechner. Sie muss in deinen ChatGPT-Sicherheitseinstellungen eingeschaltet sein.",
+        "other": "Ein API-Schlüssel, bezahlt pro Nutzung. Überspringe diese."
+      },
+      "claude-code": {
+        "account": "Dein Claude-Konto: Claude Pro, Max, Ultra, Team oder Enterprise. Das ist die Option für alle, die für Claude bezahlen.",
+        "console": "Ein Claude-Console-Konto, bezahlt pro Nutzung mit API-Guthaben. Nicht für ein normales Abo.",
+        "platform": "Eine Cloud-Plattform wie Amazon Bedrock, Google Cloud oder Microsoft Foundry; im Menü heißt sie „3rd-party platform“. Für Unternehmen, überspringe sie."
+      },
+      "copilot": {
+        "github-com": "Die erste Frage, „What account do you want to log into?“. Nimm das für ein normales GitHub-Konto.",
+        "enterprise": "Nur wenn deine Firma es nutzt. Sonst überspringen.",
+        "device-code": "Die nächste Frage, „How do you want to sign in?“. Wähle den Gerätecode: Das Terminal zeigt einen Einmalcode wie 1234-5678. Öffne github.com/login/device im Browser und gib ihn ein."
+      },
+      "antigravity": {
+        "personal": "Dein persönliches Google-Konto, im Browser. Nimm dieses.",
+        "business": "Für Gemini Enterprise bei der Arbeit. Überspringe es."
+      }
+    },
+    "after": {
+      "codex": {
+        "one": "Nach der Anmeldung fragt es <code>Trust this folder?</code>. Wähle <code>1. Trust and continue</code> nur für den Starterordner, bei jedem anderen <code>2. Quit</code>.",
+        "two": "Öffnet sich dein Browser nicht, drücke die Taste, die das Terminal zeigt, um den Link zu kopieren, und öffne ihn selbst."
+      },
+      "claude-code": {
+        "one": "Der kostenlose Claude-Tarif enthält Claude Code nicht: Du brauchst einen bezahlten Tarif.",
+        "two": "Öffnet sich dein Browser nicht, drücke <key>c</key>, um den Link zu kopieren. Zeigt die Seite einen Code, füge ihn dort ein, wo das Terminal <code>Paste code here if prompted</code> sagt."
+      },
+      "copilot": {
+        "one": "Du brauchst ein aktives GitHub-Copilot-Abo auf deinem Konto. Tippe zum Start <code>/login</code> in Copilot.",
+        "two": "Nach dem Code autorisierst du GitHub Copilot CLI im Browser. Das Terminal sagt dir dann, dass du angemeldet bist."
+      },
+      "antigravity": {
+        "one": "Nach der Anmeldung wirst du gebeten, ein Farbdesign und einen Darstellungsmodus zu wählen und zu bestätigen, dass du dem Ordner vertraust. Die Reihenfolge kann abweichen.",
+        "two": "Vertraue dem Ordner nur, wenn es der Starterordner ist."
+      }
     }
   }
 }

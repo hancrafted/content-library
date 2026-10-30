@@ -44,6 +44,11 @@
         "keywords": "",
         "script": "Next to the line is a button to the official docs of your AI agent. I give you the line so you do not have to scroll through a page that has no anchor, but the vendor is the source, so if the line ever stops working, the docs are one click away."
       },
+      "what-you-will-see": {
+        "title": "What you will see at the end",
+        "keywords": "",
+        "script": "At the end of the install, your terminal may ask you a question. For Codex on Mac and Linux it is Start Codex now, with y or N: type y and press Enter to go straight to the sign-in. Just pressing Enter means no, and then you open a new terminal and type codex. For GitHub Copilot, answer y if it asks to add itself to your shell file; the last line says copilot help, but you type copilot. For Claude Code you see Installation complete; open a new terminal and type claude."
+      },
       "what-might-happen": {
         "title": "What might happen",
         "keywords": "",
@@ -69,6 +74,22 @@
       "openAIChats": "Open an AI chat",
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
       "newTab": "opens in a new tab"
+    }
+  },
+  "endTitle": "What you will see at the end",
+  "end": {
+    "generic": "Wait until the prompt comes back, then go on.",
+    "codex": {
+      "one": "On Mac and Linux the last line asks <code>Start Codex now? [y/N]</code>. Type <key>y</key> and press <key>Enter</key> to go straight on to the sign-in.",
+      "two": "Pressing only <key>Enter</key> means no. Then open a new terminal and type <code>codex</code>."
+    },
+    "claude-code": {
+      "one": "The installer ends with <code>Installation complete</code>. If a <code>Setup notes</code> block talks about your PATH, follow the fix it prints there.",
+      "two": "Then open a new terminal window and type <code>claude</code>."
+    },
+    "copilot": {
+      "one": "On Mac and Linux it may ask <code>Would you like to add it to … ? [y/N]</code>. Type <key>y</key> and press <key>Enter</key>.",
+      "two": "The last line says <code>copilot help</code>, but your next step is just <code>copilot</code>, in a new terminal."
     }
   }
 }

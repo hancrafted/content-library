@@ -18,6 +18,7 @@ import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { PickOptions } from './pick-options';
 import { RoundTrip } from './round-trip';
 
 /** The drawn sign-in card in the browser window: a picture of the step, not a screenshot of the vendor's page. */
@@ -58,7 +59,7 @@ function SignInCard({ page, title, button, own }: { page: string; title: ReactNo
 export const logIn = slide({
   slug: 'log-in',
   messages: { en, de },
-  segments: [{ slug: 'open-a-new-window' }, { slug: 'second-command' }],
+  segments: [{ slug: 'open-a-new-window' }, { slug: 'second-command' }, { slug: 'which-option' }],
   headerAction: ({ t, template }) => (
     <GuideHelp
       step={t('help.step')}
@@ -84,6 +85,21 @@ export const logIn = slide({
     const back = { path: backPath, anchor: backAnchor };
     const words = { copy: t('copy'), copied: t('copied') };
     const code = (chunks: ReactNode) => <code className="font-mono text-foreground">{chunks}</code>;
+    const key = (chunks: ReactNode) => (
+      <kbd className="rounded border border-border bg-muted px-1.5 font-mono text-foreground">{chunks}</kbd>
+    );
+    const after = {
+      'claude-code': [
+        t.rich('pick.after.claude-code.one', { code, key }),
+        t.rich('pick.after.claude-code.two', { code, key }),
+      ],
+      antigravity: [
+        t.rich('pick.after.antigravity.one', { code, key }),
+        t.rich('pick.after.antigravity.two', { code, key }),
+      ],
+      codex: [t.rich('pick.after.codex.one', { code, key }), t.rich('pick.after.codex.two', { code, key })],
+      copilot: [t.rich('pick.after.copilot.one', { code, key }), t.rich('pick.after.copilot.two', { code, key })],
+    } as const;
     const flow = {
       'claude-code': t.rich('flow.claude-code', { code }),
       antigravity: t.rich('flow.antigravity', { code }),
@@ -147,6 +163,13 @@ export const logIn = slide({
                 <p className="mt-1 text-body">{t('failFix')}</p>
               </div>
             </div>
+
+            <PickOptions
+              title={t('pick.title')}
+              badge={t('pick.recommended')}
+              describe={(agent, option) => t(`pick.options.${agent}.${option}` as never)}
+              after={after}
+            />
 
             <RoundTrip
               labels={{ terminal: t('trip.terminal'), browser: t('trip.browser'), back: t('trip.back') }}

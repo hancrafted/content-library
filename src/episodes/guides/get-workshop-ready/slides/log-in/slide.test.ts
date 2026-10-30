@@ -46,9 +46,9 @@ const scene = (locale: Locale, picks: Record<string, string> = {}) => load(rende
  */
 
 describe('success cases', () => {
-  it('speaks its two Voice script segments, in order', () => {
+  it('speaks its three Voice script segments, in order', () => {
     // ARRANGE
-    const expected = ['open-a-new-window', 'second-command'];
+    const expected = ['open-a-new-window', 'second-command', 'which-option'];
     // ACT
     const segments = localized('en').voiceScript.map(({ slug }) => slug);
     // ASSERT
@@ -87,6 +87,37 @@ describe('success cases', () => {
     // ASSERT
     expect(href).toContain('your-ai-agent');
   });
+
+  it('lists the real Codex sign-in labels in order and marks only ChatGPT as the one to pick', () => {
+    // ARRANGE
+    const expected = ['Sign in with ChatGPT', 'Sign in with Device Code', 'Sign in another way'];
+    // ACT
+    const options = scene('en', { agent: 'codex' })('[data-pick] [data-option]');
+    const labels = options.map((_, el) => scene('en')(el).attr('data-label')).get();
+    const recommended = scene('en', { agent: 'codex' })('[data-pick] [data-recommended]');
+    // ASSERT
+    expect(labels).toEqual(expected);
+    expect(recommended).toHaveLength(1);
+    expect(recommended.attr('data-option')).toBe('chatgpt');
+  });
+
+  it('asks Codex users to trust the folder only for the starter folder', () => {
+    // ARRANGE
+    const expected = ['Trust this folder?', '1. Trust and continue'];
+    // ACT
+    const text = scene('en', { agent: 'codex' })('[data-after]').text();
+    // ASSERT
+    for (const phrase of expected) expect(text).toContain(phrase);
+  });
+
+  it('tells Copilot users to open the device login page', () => {
+    // ARRANGE
+    const expected = 'github.com/login/device';
+    // ACT
+    const text = scene('en', { agent: 'copilot' })('[data-pick]').text();
+    // ASSERT
+    expect(text).toContain(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -102,6 +133,25 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('describes the Claude Code options in words, since their labels are not published', () => {
+    // ARRANGE
+    const $ = scene('en', { agent: 'claude-code' });
+    // ACT
+    const labels = $('[data-pick] [data-option]').filter((_, el) => $(el).attr('data-label') !== undefined);
+    // ASSERT
+    expect(labels).toHaveLength(0);
+    expect($('[data-pick]').text()).toContain('Pro, Max, Ultra, Team or Enterprise');
+  });
+
+  it('gives every AI agent one option to pick, in German too', () => {
+    // ARRANGE
+    const agents = ['claude-code', 'antigravity', 'codex', 'copilot'];
+    // ACT
+    const counts = agents.map((agent) => scene('de', { agent })('[data-pick] [data-recommended]').length);
+    // ASSERT
+    expect(counts.every((count) => count >= 1)).toBe(true);
+  });
+
   it('says how to open a new window on each of the three systems', () => {
     // ARRANGE
     const expected = { mac: 'On a Mac', windows: 'On Windows', linux: 'On Linux' };

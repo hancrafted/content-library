@@ -44,6 +44,11 @@
         "keywords": "",
         "script": "Neben der Zeile ist ein Knopf zur offiziellen Doku deines KI-Agenten. Ich gebe dir die Zeile, damit du nicht durch eine Seite ohne Anker scrollen musst, aber die Quelle ist der Hersteller. Wenn die Zeile also einmal nicht mehr geht, ist die Doku einen Klick entfernt."
       },
+      "what-you-will-see": {
+        "title": "Was du am Ende siehst",
+        "keywords": "",
+        "script": "Am Ende der Installation stellt dein Terminal vielleicht eine Frage. Bei Codex auf Mac und Linux ist es Start Codex now mit y oder N: Tippe y und drücke Enter, dann geht es direkt zur Anmeldung. Nur Enter heißt nein, dann öffnest du ein neues Terminal und tippst codex. Bei GitHub Copilot antwortest du mit y, wenn es fragt, ob es sich in deine Shell-Datei eintragen soll. Die letzte Zeile nennt copilot help, du tippst aber copilot. Bei Claude Code siehst du Installation complete, öffne ein neues Terminal und tippe claude."
+      },
       "what-might-happen": {
         "title": "Was passieren kann",
         "keywords": "",
@@ -69,6 +74,22 @@
       "openAIChats": "Einen KI-Chat öffnen",
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
       "newTab": "öffnet in neuem Tab"
+    }
+  },
+  "endTitle": "Was du am Ende siehst",
+  "end": {
+    "generic": "Warte, bis die Eingabezeile zurückkommt, und mach dann weiter.",
+    "codex": {
+      "one": "Auf Mac und Linux fragt die letzte Zeile <code>Start Codex now? [y/N]</code>. Tippe <key>y</key> und drücke <key>Enter</key>, dann geht es direkt weiter zur Anmeldung.",
+      "two": "Nur <key>Enter</key> heißt nein. Öffne dann ein neues Terminal und tippe <code>codex</code>."
+    },
+    "claude-code": {
+      "one": "Der Installer endet mit <code>Installation complete</code>. Spricht ein Block <code>Setup notes</code> von deinem PATH, folge der Lösung, die er dort ausgibt.",
+      "two": "Öffne dann ein neues Terminalfenster und tippe <code>claude</code>."
+    },
+    "copilot": {
+      "one": "Auf Mac und Linux fragt es vielleicht <code>Would you like to add it to … ? [y/N]</code>. Tippe <key>y</key> und drücke <key>Enter</key>.",
+      "two": "Die letzte Zeile nennt <code>copilot help</code>, aber dein nächster Schritt ist nur <code>copilot</code>, in einem neuen Terminal."
     }
   }
 }

@@ -46,9 +46,9 @@ const scene = (locale: Locale, picks: Record<string, string> = {}) => load(rende
  */
 
 describe('success cases', () => {
-  it('speaks its three Voice script segments, in order', () => {
+  it('speaks its four Voice script segments, in order', () => {
     // ARRANGE
-    const expected = ['your-first-command', 'official-docs-always', 'what-might-happen'];
+    const expected = ['your-first-command', 'official-docs-always', 'what-you-will-see', 'what-might-happen'];
     // ACT
     const segments = localized('en').voiceScript.map(({ slug }) => slug);
     // ASSERT
@@ -106,9 +106,42 @@ describe('success cases', () => {
     expect(counts).toEqual(agents.map(() => perAgent));
     expect(scene('en')('[data-happen]').text()).toContain('Press Help');
   });
+
+  it('tells Codex that Enter alone answers no to "Start Codex now? [y/N]", and what to type instead', () => {
+    // ARRANGE
+    const question = 'Start Codex now? [y/N]';
+    const fallback = 'codex';
+    // ACT
+    const block = scene('en', { agent: 'codex' })('[data-end]');
+    // ASSERT
+    expect(block.text()).toContain(question);
+    expect(block.find('kbd').first().text()).toBe('y');
+    expect(block.text()).toContain(fallback);
+  });
+
+  it('tells Copilot that the next step is copilot, not the copilot help of the last line', () => {
+    // ARRANGE
+    const expected = ['copilot help', 'copilot'];
+    // ACT
+    const codes = scene('en', { agent: 'copilot' })('[data-end] code')
+      .map((_, el) => scene('en')(el).text())
+      .get();
+    // ASSERT
+    expect(codes).toEqual(expect.arrayContaining(expected));
+  });
 });
 
 describe('failure cases', () => {
+  it('says nothing specific about Antigravity, whose final output is unverified', () => {
+    // ARRANGE
+    const expected = 'Wait until the prompt comes back, then go on.';
+    // ACT
+    const block = scene('en', { agent: 'antigravity' })('[data-end]');
+    // ASSERT
+    expect(block.find('code')).toHaveLength(0);
+    expect(block.text()).toContain(expected);
+  });
+
   it('offers the Command Prompt line for Claude Code on Windows only', () => {
     // ARRANGE
     const line = 'curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd';

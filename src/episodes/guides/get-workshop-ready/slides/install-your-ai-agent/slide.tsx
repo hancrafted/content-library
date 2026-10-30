@@ -27,7 +27,12 @@ import en from './i18n/en.json';
 export const installYourAiAgent = slide({
   slug: 'install-your-ai-agent',
   messages: { en, de },
-  segments: [{ slug: 'your-first-command' }, { slug: 'official-docs-always' }, { slug: 'what-might-happen' }],
+  segments: [
+    { slug: 'your-first-command' },
+    { slug: 'official-docs-always' },
+    { slug: 'what-you-will-see' },
+    { slug: 'what-might-happen' },
+  ],
   headerAction: ({ t, template }) => (
     <GuideHelp
       step={t('help.step')}
@@ -51,6 +56,15 @@ export const installYourAiAgent = slide({
   content: ({ t }) => {
     const words = { copy: t('copy'), copied: t('copied') };
     const code = (chunks: ReactNode) => <code className="font-mono text-foreground">{chunks}</code>;
+    const key = (chunks: ReactNode) => (
+      <kbd className="rounded border border-border bg-muted px-1.5 font-mono text-foreground">{chunks}</kbd>
+    );
+    // Needs human: Windows installer output and Antigravity's final output are unverified, so they say nothing specific.
+    const end = {
+      'claude-code': [t.rich('end.claude-code.one', { code, key }), t.rich('end.claude-code.two', { code, key })],
+      codex: [t.rich('end.codex.one', { code, key }), t.rich('end.codex.two', { code, key })],
+      copilot: [t.rich('end.copilot.one', { code, key }), t.rich('end.copilot.two', { code, key })],
+    } as const;
     const happen = {
       'claude-code': [t.rich('happen.claude-code.one', { code }), t.rich('happen.claude-code.two', { code })],
       antigravity: [t.rich('happen.antigravity.one', { code }), t.rich('happen.antigravity.two', { code })],
@@ -115,6 +129,26 @@ export const installYourAiAgent = slide({
                 ))}
               />
               <p className="min-w-0 flex-1 text-caption text-muted-foreground">{t('docsWhy')}</p>
+            </div>
+
+            <div className="flex flex-col gap-3 border-t border-border pt-6" data-end="">
+              <p className="text-caption font-semibold uppercase text-muted-foreground">{t('endTitle')}</p>
+              <PickSwitch
+                name="agent"
+                fallback={DEFAULT_AGENT}
+                cases={casesOf(AGENTS, (agent) => {
+                  const lines = end[agent.id as keyof typeof end];
+                  return lines === undefined ? (
+                    <p className="text-body">{t('end.generic')}</p>
+                  ) : (
+                    <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
+                      {lines.map((line, index) => (
+                        <li key={index}>{line}</li>
+                      ))}
+                    </ul>
+                  );
+                })}
+              />
             </div>
 
             <div className="flex flex-col gap-3 border-t border-border pt-6" data-happen="">
