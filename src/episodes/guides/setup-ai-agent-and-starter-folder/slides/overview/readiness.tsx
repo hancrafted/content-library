@@ -1,7 +1,8 @@
-import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import { WatchCard, type WatchCardProps } from '@/episodes/components/slide-shared/watch-card/watch-card';
+import { type Locale } from '@/shared/lib/locale.pure';
 import { ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
-import type { OverviewView } from './ready-state.pure';
+import type { OverviewView, ReadyFlags } from './ready-state.pure';
 
 export interface ReadinessWords {
   readonly readyTitle: string;
@@ -15,11 +16,8 @@ export interface ReadinessWords {
   readonly reopen: string;
 }
 
-/** An unlisted Episode to watch while waiting: its localized href and its title. */
-export interface WatchLink {
-  readonly path: string;
-  readonly title: string;
-}
+/** An unlisted Episode to watch while waiting, as its card draws it. */
+export type WatchLink = Omit<WatchCardProps, 'locale'>;
 
 export interface ViewBodyProps {
   readonly view: OverviewView;
@@ -97,8 +95,32 @@ function Reopen({ label, onReopen }: { label: string; onReopen: () => void }) {
   );
 }
 
+/** The three lines of what is done, each with a green check. */
+function RecapList({ recap }: { recap: readonly string[] }) {
+  return (
+    <ul className="flex flex-col gap-2">
+      {recap.map((line) => (
+        <li key={line} className="flex items-start gap-3 text-body">
+          <span className={`${DONE_DISC} size-6`}>
+            <Check className="size-4" />
+          </span>
+          <span data-recap="done">{line}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** The ready card: a green check and a prominent title over the three done lines. */
-function ReadyCard({ words, onReopen }: { words: ReadinessWords; onReopen?: () => void }) {
+function ReadyCard({
+  words,
+  onReopen,
+  children,
+}: {
+  words: ReadinessWords;
+  onReopen?: () => void;
+  children: ReactNode;
+}) {
   return (
     <section
       data-view="ready"
@@ -110,26 +132,16 @@ function ReadyCard({ words, onReopen }: { words: ReadinessWords; onReopen?: () =
         </span>
         {words.readyTitle}
       </p>
-      <ul className="flex flex-col gap-2">
-        {words.recap.map((line) => (
-          <li key={line} className="flex items-start gap-3 text-body">
-            <span className={`${DONE_DISC} size-6`}>
-              <Check className="size-4" />
-            </span>
-            <span data-recap="done">{line}</span>
-          </li>
-        ))}
-      </ul>
+      <RecapList recap={words.recap} />
       {onReopen && <Reopen label={words.reopen} onReopen={onReopen} />}
+      {children}
     </section>
   );
 }
 
-/** The recap card: three done lines when ready, one line per reported piece when something is missing. */
-function RecapCard({ view, words, onReopen }: Pick<ViewBodyProps, 'view' | 'words' | 'onReopen'>) {
-  if (view.kind === 'ready') return <ReadyCard words={words} onReopen={onReopen} />;
-  if (view.kind !== 'missing') return null;
-  const { skills, localSetup } = view.flags;
+/** The missing card: one line per reported piece, each done or open. */
+function MissingCard({ flags, words }: { flags: ReadyFlags; words: ReadinessWords }) {
+  const { skills, localSetup } = flags;
   return (
     <section
       data-view="missing"
@@ -146,22 +158,32 @@ function RecapCard({ view, words, onReopen }: Pick<ViewBodyProps, 'view' | 'word
   );
 }
 
+/** The recap card: three done lines when ready, one line per reported piece when something is missing. */
+function RecapCard({
+  view,
+  words,
+  watch,
+  locale,
+  onReopen,
+}: Pick<ViewBodyProps, 'view' | 'words' | 'watch' | 'locale' | 'onReopen'>) {
+  if (view.kind === 'ready') {
+    return (
+      <ReadyCard words={words} onReopen={onReopen}>
+        <Watch words={words} watch={watch} locale={locale} />
+      </ReadyCard>
+    );
+  }
+  if (view.kind !== 'missing') return null;
+  return <MissingCard flags={view.flags} words={words} />;
+}
+
 function Watch({ words, watch, locale }: Pick<ViewBodyProps, 'words' | 'watch' | 'locale'>) {
   return (
     <section data-watch className="flex flex-col gap-3">
       <p className="text-body font-semibold">{words.watchTitle}</p>
       <div className="grid gap-4 @3xl:grid-cols-2">
         {watch.map((link) => (
-          <a
-            key={link.path}
-            data-watch-card
-            href={localizePath(link.path, locale)}
-            className="card-hover card-hover--outline flex flex-col items-start gap-2 rounded-2xl border border-border bg-card px-6 py-5"
-          >
-            <span lang="de" className="text-body font-semibold">
-              {link.title}
-            </span>
-          </a>
+          <WatchCard key={link.route} {...link} locale={locale} />
         ))}
       </div>
     </section>
@@ -176,9 +198,9 @@ export function ViewBody({ view, words, watch, locale, normal, stuck, onReopen }
   if (view.kind === 'normal') return <>{normal}</>;
   return (
     <div className="flex flex-col gap-6">
-      <RecapCard view={view} words={words} onReopen={onReopen} />
+      <RecapCard view={view} words={words} watch={watch} locale={locale} onReopen={onReopen} />
       {view.kind === 'missing' ? normal : stuck}
-      <Watch words={words} watch={watch} locale={locale} />
+      {view.kind === 'missing' && <Watch words={words} watch={watch} locale={locale} />}
     </div>
   );
 }

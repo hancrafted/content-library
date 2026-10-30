@@ -87,5 +87,6 @@
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
       "newTab": "öffnet in neuem Tab"
     }
-  }
+  },
+  "skip": "<b>Nur ein kurzer Einstieg ins Terminal.</b> Du kannst diese Slide überspringen und direkt zum nächsten Schritt gehen."
 }

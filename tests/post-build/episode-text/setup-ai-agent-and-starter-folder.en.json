@@ -18,7 +18,7 @@
     },
     {
       "id": "your-terminal--what-youre-looking-at",
-      "text": "Your terminal (3/3) Page 3 of 3 What you're looking at Five parts, nothing more. Point at one to see what it does: you can't break anything here. Help What you see on your screen Copy prompt ChatGPT Gemini Your computer Mac Windows Linux Terminal you@MacBook ~ % echo hello hello you@MacBook ~ % Close button Command Output Prompt Cursor Prompt . This says \"I'm ready for your next command\". The letters in front show who and where you are; you can ignore them. Previous Next Point at a part, or step through. You can't break anything here Closing the window ends it. To leave, close the window like any other."
+      "text": "Your terminal (3/3) Page 3 of 3 What you're looking at Five parts, nothing more. Point at one to see what it does: you can't break anything here. Help What you see on your screen Copy prompt ChatGPT Gemini Your computer Mac Windows Linux Just a short intro to the terminal. You can skip this Slide and go straight to the next step. Terminal you@MacBook ~ % echo hello hello you@MacBook ~ % Close button Command Output Prompt Cursor Prompt . This says \"I'm ready for your next command\". The letters in front show who and where you are; you can ignore them. Previous Next Point at a part, or step through. You can't break anything here Closing the window ends it. To leave, close the window like any other."
     },
     {
       "id": "your-ai-agent",

@@ -92,6 +92,11 @@
       "missing": "Die lokale Einrichtung fehlt. Führe den Setup-Skill aus, prüfe dann erneut oder drücke Hilfe."
     },
     "watchTitle": "Oder schau Dir in der Zwischenzeit das an",
-    "reopen": "Noch nicht fertig? Zurück zur Checkliste"
+    "reopen": "Noch nicht fertig? Zurück zur Checkliste",
+    "tags": {
+      "context-engineering": "Context Engineering",
+      "agentic-ai": "Agentic AI",
+      "workflow": "Workflow"
+    }
   }
 }

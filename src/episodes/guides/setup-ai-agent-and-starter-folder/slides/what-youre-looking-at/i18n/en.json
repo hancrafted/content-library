@@ -87,5 +87,6 @@
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
       "newTab": "opens in a new tab"
     }
-  }
+  },
+  "skip": "<b>Just a short intro to the terminal.</b> You can skip this Slide and go straight to the next step."
 }

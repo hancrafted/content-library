@@ -53,10 +53,15 @@ const WORDS: ReadinessWords = {
   reopen: en.ready.reopen,
 };
 
-const WATCH = [
-  { path: '/episode/a', title: 'Titel A' },
-  { path: '/episode/b', title: 'Titel B' },
-];
+const card = (route: string, title: string) => ({
+  route,
+  title,
+  caption: 'Beschreibung',
+  tags: [{ id: 'workflow', label: 'Workflow' }],
+  day: '2026-10-28',
+  dateLabel: '28. Okt. 2026',
+});
+const WATCH = [card('/episode/a', 'Titel A'), card('/episode/b', 'Titel B')];
 
 /** The view body as the client part hands it the view read from a query string. */
 function viewOf(search: string, onReopen?: () => void) {
@@ -187,7 +192,7 @@ describe('success cases', () => {
       recap: $('[data-recap="done"]')
         .map((_, el) => $(el).text())
         .get(),
-      watch: $('[data-watch-card]')
+      watch: $('[data-watch-card] a')
         .map((_, el) => $(el).attr('href'))
         .get(),
       normal: $('[data-normal]').length,

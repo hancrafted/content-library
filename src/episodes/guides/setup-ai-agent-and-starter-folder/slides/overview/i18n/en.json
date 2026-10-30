@@ -92,6 +92,11 @@
       "missing": "The local setup is missing. Run the setup skill, then check again, or press Help."
     },
     "watchTitle": "Or check out these in the meantime",
-    "reopen": "Not done yet? Back to the checklist"
+    "reopen": "Not done yet? Back to the checklist",
+    "tags": {
+      "context-engineering": "Context engineering",
+      "agentic-ai": "Agentic AI",
+      "workflow": "Workflow"
+    }
   }
 }

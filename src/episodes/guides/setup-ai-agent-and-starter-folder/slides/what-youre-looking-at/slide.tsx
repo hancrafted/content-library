@@ -2,6 +2,8 @@ import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
+import { Alert, AlertDescription } from '@/shared/components/ui/alert';
+import { Info } from 'lucide-react';
 import { Anatomy } from './anatomy.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -42,6 +44,12 @@ export const whatYoureLookingAt = slide({
   content: ({ t, target, Marker }) => (
     <SlideFrame className="@container gap-7">
       <GuideToolbar active={['os']} show={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+      <Alert role="note" className="border-primary/40 bg-primary/10" data-skip-note="">
+        <Info aria-hidden="true" />
+        <AlertDescription className="text-foreground">
+          {t.rich('skip', { b: (chunks) => <b>{chunks}</b> })}
+        </AlertDescription>
+      </Alert>
       <div className="grid items-start gap-6 @3xl:grid-cols-12">
         <div className="relative @3xl:col-span-8">
           <Anatomy

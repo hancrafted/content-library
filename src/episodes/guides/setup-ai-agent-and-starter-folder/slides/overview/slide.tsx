@@ -1,5 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { dateLabelOf } from '@/shared/lib/date-label.pure';
 import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
 import { Checklist, type ChecklistStep, type LinkParts } from './checklist.client';
 import de from './i18n/de.json';
@@ -85,7 +86,14 @@ export const overview = slide({
         </div>
         <OverviewView
           locale={locale}
-          watch={watchFor(locale)}
+          watch={watchFor(locale).map((episode) => ({
+            title: episode.title,
+            caption: episode.caption,
+            tags: episode.tags.map((id) => ({ id, label: t(`ready.tags.${id}`) })),
+            day: episode.day,
+            dateLabel: dateLabelOf(episode.day, locale),
+            route: episode.path,
+          }))}
           words={{
             readyTitle: t('ready.title'),
             missingTitle: t('ready.missingTitle'),
