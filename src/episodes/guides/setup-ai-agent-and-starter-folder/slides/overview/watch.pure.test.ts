@@ -7,8 +7,8 @@ describe('success cases', () => {
   it('links the AXEL freelancer and attention-span Episodes in English', () => {
     // ARRANGE
     const expected = [
-      '/episode/2026-10-23-axel-agentic-workflow__onboard-ai-every-time',
-      '/episode/2026-10-23-axel-agentic-workflow__ai-attention-span',
+      '/events/2026-10-23-axel-agentic-workflow/episodes/onboard-ai-every-time',
+      '/events/2026-10-23-axel-agentic-workflow/episodes/ai-attention-span',
     ];
     // ACT
     const found = watchFor('en').map((episode) => episode.path);
@@ -19,8 +19,8 @@ describe('success cases', () => {
   it('links the Akademie freelancer and attention-span Episodes in German', () => {
     // ARRANGE
     const expected = [
-      '/episode/2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
-      '/episode/2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
+      '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/onboard-ai-every-time',
+      '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/ai-attention-span',
     ];
     // ACT
     const found = watchFor('de').map((episode) => episode.path);

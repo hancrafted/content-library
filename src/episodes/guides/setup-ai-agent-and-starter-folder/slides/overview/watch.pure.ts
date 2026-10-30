@@ -11,8 +11,8 @@ export interface WatchEpisode {
   readonly tags: readonly ('context-engineering' | 'agentic-ai' | 'workflow')[];
 }
 
-const AXEL = '/episode/2026-10-23-axel-agentic-workflow__';
-const AKADEMIE = '/episode/2026-10-28-cyberforum-akademie-intro-agentic-workflow__';
+const AXEL = '/events/2026-10-23-axel-agentic-workflow/episodes/';
+const AKADEMIE = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/';
 const FREELANCER = ['context-engineering', 'agentic-ai', 'workflow'] as const;
 const ATTENTION = ['context-engineering', 'workflow'] as const;
 
