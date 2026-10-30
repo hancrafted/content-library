@@ -68,6 +68,7 @@ export const openYourTerminal = slide({
         placeholder: t('help.placeholder'),
         copy: t('help.copy'),
         copied: t('help.copied'),
+        copyTip: t('help.copyTip'),
         prompt: template('help.prompt'),
         noError: t('help.noError'),
         chats: {
@@ -112,7 +113,7 @@ export const openYourTerminal = slide({
     );
     return (
       <SlideFrame className="@container gap-7">
-        <GuideToolbar active={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+        <GuideToolbar active={['os']} show={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
         <div className="rounded-2xl border border-border bg-card p-6 @3xl:p-8">
           <OsView views={{ mac: view('mac'), windows: view('windows'), linux: view('linux') }} />
           <ul className="mt-8 grid gap-4 border-t border-border pt-5 text-caption text-muted-foreground @3xl:grid-cols-3">

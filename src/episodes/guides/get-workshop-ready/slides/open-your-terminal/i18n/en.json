@@ -115,6 +115,7 @@
     "placeholder": "Paste your error, or describe what you see…",
     "copy": "Copy prompt",
     "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
     "prompt": "I'm setting up an AI agent on my laptop for a workshop and I'm stuck.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm new to the terminal. Tell me in plain words what this means and the one next thing to try.",
     "noError": "(I haven't pasted anything yet: ask me what I see.)",
     "step": "Step 1: Open your terminal",

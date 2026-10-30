@@ -22,6 +22,8 @@ export interface HelpWords {
   readonly placeholder: string;
   readonly copy: string;
   readonly copied: string;
+  /** The tooltip on Copy prompt: where the prompt goes. */
+  readonly copyTip: string;
   /** The prompt template: `{os}`, `{agent}`, `{step}` and `{error}`. */
   readonly prompt: string;
   /** What the prompt says when nothing was typed. */
@@ -71,13 +73,12 @@ function HelpButton({
       data-help-button=""
       onClick={onToggle}
       className={cn(
-        'ml-auto inline-flex min-h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-border px-4 py-1 text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        open
-          ? 'bg-accent text-accent-foreground'
-          : 'bg-background text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+        'ml-auto inline-flex min-h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full border-2 px-4 py-1 text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'border-brand-accent text-foreground hover:bg-brand-accent/10',
+        open ? 'bg-brand-accent/15' : 'bg-background',
       )}
     >
-      <LifeBuoy aria-hidden="true" className="size-4" />
+      <LifeBuoy aria-hidden="true" className="size-4 text-brand-accent" />
       {label}
     </button>
   );
@@ -114,7 +115,7 @@ function HelpField({ id, words, text, onText, inputRef }: FieldProps) {
 function HelpActions({ words, onCopy }: { words: HelpWords; onCopy: () => Promise<boolean> }) {
   return (
     <div className="flex flex-wrap items-center gap-3 sm:shrink-0">
-      <CopyButton label={words.copy} done={words.copied} onCopy={onCopy} lead />
+      <CopyButton label={words.copy} done={words.copied} tip={words.copyTip} onCopy={onCopy} lead />
       <ChatButtons buttons={DEFAULT_CHAT_BUTTONS} words={words.chats} />
     </div>
   );

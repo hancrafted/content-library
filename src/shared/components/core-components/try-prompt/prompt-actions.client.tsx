@@ -40,10 +40,12 @@ interface CopyButtonProps {
   readonly onCopy: () => Promise<boolean>;
   /** Whether this is the next thing to press. */
   readonly lead?: boolean;
+  /** A tooltip saying where the copied text goes. */
+  readonly tip?: string;
 }
 
 /** "Copy prompt": a press copies, and on success the icon turns into a tick and the label into "Copied", then back. */
-export function CopyButton({ label, done, onCopy, lead = false }: CopyButtonProps) {
+export function CopyButton({ label, done, onCopy, lead = false, tip }: CopyButtonProps) {
   const motion = useMotion();
   const [confirmed, confirm] = useConfirmed();
   const Icon = confirmed ? Check : Copy;
@@ -52,6 +54,7 @@ export function CopyButton({ label, done, onCopy, lead = false }: CopyButtonProp
       type="button"
       {...motion}
       aria-label={label}
+      title={tip}
       data-copied={confirmed}
       data-lead={lead || undefined}
       className={cn(WRITTEN_OUT, lead && LEAD)}

@@ -153,9 +153,9 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('renders no heading and dims the AI agent group, since this step does not differ by AI agent', () => {
+  it('renders no heading and no AI agent group, since none is picked yet', () => {
     // ARRANGE
-    const expected = { headings: 0, disabled: { os: 'false', agent: 'true' } };
+    const expected = { headings: 0, disabled: { os: 'false', agent: undefined } };
     // ACT
     const $ = scene('en');
     const found = {

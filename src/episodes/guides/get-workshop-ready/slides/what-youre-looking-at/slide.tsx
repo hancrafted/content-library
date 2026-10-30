@@ -6,7 +6,6 @@ import { Anatomy } from './anatomy.client';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
-const SHELL_NOVICE = { slug: 'swcarpentry-shell-novice', url: 'https://swcarpentry.github.io/shell-novice/' };
 const BERRY = { slug: 'berry-shellonyou', url: 'https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf' };
 
 /**
@@ -18,10 +17,7 @@ const BERRY = { slug: 'berry-shellonyou', url: 'https://ctiber.github.io/papers/
 export const whatYoureLookingAt = slide({
   slug: 'what-youre-looking-at',
   messages: { en, de },
-  notes: [
-    { slug: 'what-the-shell-is', target: 'anatomy', sources: [SHELL_NOVICE] },
-    { slug: 'try-and-see-what-happens', target: 'safe', sources: [BERRY] },
-  ],
+  notes: [{ slug: 'try-and-see-what-happens', target: 'safe', sources: [BERRY] }],
   segments: [{ slug: 'five-parts' }, { slug: 'point-at-anything' }, { slug: 'you-cant-break-it' }],
   headerAction: ({ t, template }) => (
     <GuideHelp
@@ -32,6 +28,7 @@ export const whatYoureLookingAt = slide({
         placeholder: t('help.placeholder'),
         copy: t('help.copy'),
         copied: t('help.copied'),
+        copyTip: t('help.copyTip'),
         prompt: template('help.prompt'),
         noError: t('help.noError'),
         chats: {
@@ -44,10 +41,9 @@ export const whatYoureLookingAt = slide({
   ),
   content: ({ t, target, Marker }) => (
     <SlideFrame className="@container gap-7">
-      <GuideToolbar active={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+      <GuideToolbar active={['os']} show={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
       <div className="grid items-start gap-6 @3xl:grid-cols-12">
-        <div className="relative @3xl:col-span-8" {...target('anatomy')}>
-          <Marker note="what-the-shell-is" className="top-0 right-0 z-10" />
+        <div className="relative @3xl:col-span-8">
           <Anatomy
             words={{
               parts: {

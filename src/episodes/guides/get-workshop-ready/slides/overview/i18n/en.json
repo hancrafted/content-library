@@ -6,24 +6,6 @@
   "time": "about 20 minutes",
   "stuck": "Every Slide has a <b>Help</b> button at the top right: paste your error, get a prompt for <marker>free ChatGPT or Gemini</marker>",
   "notes": {
-    "say-how-many-steps": {
-      "header": "Say how many steps",
-      "description": "The W3C advises saying on the first step how many steps follow and on each step how far along the user is, for example \"Step 2 of 4\" [1].",
-      "sources": {
-        "w3c-multi-page-forms": {
-          "title": "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms"
-        }
-      }
-    },
-    "a-head-start-finishes-more": {
-      "header": "A head start finishes more",
-      "description": "Car-wash loyalty cards with two pre-stamped stamps out of ten were redeemed by 34% of customers, against 19% for blank cards; the transfer from loyalty cards to a setup guide is an inference [1].",
-      "sources": {
-        "nunes-dreze-endowed-progress": {
-          "title": "Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement Increases Effort"
-        }
-      }
-    },
     "minimal-still-needs-a-way-out": {
       "header": "Minimal still needs a way out",
       "description": "A minimal manual, centred on real tasks, taught faster than a standard manual in a study of 64 students, but beginners still need error-recovery material, which is why every step has a Stuck? help [1][2].",

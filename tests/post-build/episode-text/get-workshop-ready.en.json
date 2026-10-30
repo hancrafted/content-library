@@ -14,11 +14,11 @@
     },
     {
       "id": "your-terminal--open-your-terminal",
-      "text": "Your terminal (2/3) Page 2 of 3 Open your terminal Open it, look at it, done: a blinking cursor in an empty window means it worked. Help What you see on your screen Copy prompt ChatGPT Gemini Your computer Mac Windows Linux AI agent Claude Code Antigravity Codex GitHub Copilot On a Mac: press ⌘ Space , type Terminal , press Return . Find it Terminal Terminal Application Terminal User Guide It worked when you see this you — -zsh — 80×24 Last login: Thu Oct 29 09:12 on console you@MacBook ~ % Nice, that's it. A blinking cursor means it isn't frozen, it's waiting for you. Feeling a little odd here is normal ( ) There's nothing to click: the window waits for you to type ( ) Setup is the hardest part of any new tool, not you ( )"
+      "text": "Your terminal (2/3) Page 2 of 3 Open your terminal Open it, look at it, done: a blinking cursor in an empty window means it worked. Help What you see on your screen Copy prompt ChatGPT Gemini Your computer Mac Windows Linux On a Mac: press ⌘ Space , type Terminal , press Return . Find it Terminal Terminal Application Terminal User Guide It worked when you see this you — -zsh — 80×24 Last login: Thu Oct 29 09:12 on console you@MacBook ~ % Nice, that's it. A blinking cursor means it isn't frozen, it's waiting for you. Feeling a little odd here is normal ( ) There's nothing to click: the window waits for you to type ( ) Setup is the hardest part of any new tool, not you ( )"
     },
     {
       "id": "your-terminal--what-youre-looking-at",
-      "text": "Your terminal (3/3) Page 3 of 3 What you're looking at Five parts, nothing more. Point at one to see what it does: you can't break anything here. Help What you see on your screen Copy prompt ChatGPT Gemini Your computer Mac Windows Linux AI agent Claude Code Antigravity Codex GitHub Copilot Terminal you@MacBook ~ % echo hello hello you@MacBook ~ % Close button Command Output Prompt Cursor Prompt . This says \"I'm ready for your next command\". The letters in front show who and where you are; you can ignore them. Previous Next Point at a part, or step through. You can't break anything here Closing the window ends it. To leave, close the window like any other."
+      "text": "Your terminal (3/3) Page 3 of 3 What you're looking at Five parts, nothing more. Point at one to see what it does: you can't break anything here. Help What you see on your screen Copy prompt ChatGPT Gemini Your computer Mac Windows Linux Terminal you@MacBook ~ % echo hello hello you@MacBook ~ % Close button Command Output Prompt Cursor Prompt . This says \"I'm ready for your next command\". The letters in front show who and where you are; you can ignore them. Previous Next Point at a part, or step through. You can't break anything here Closing the window ends it. To leave, close the window like any other."
     },
     {
       "id": "your-ai-agent",
@@ -69,7 +69,7 @@
     { "id": "your-terminal", "text": "Your terminal No speaker notes for this Slide." },
     {
       "id": "your-terminal--overview",
-      "text": "Overview Say how many steps The W3C advises saying on the first step how many steps follow and on each step how far along the user is, for example \"Step 2 of 4\" 1 . Sources (1) W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms ( opens in a new tab ) w3.org A head start finishes more Car-wash loyalty cards with two pre-stamped stamps out of ten were redeemed by 34% of customers, against 19% for blank cards; the transfer from loyalty cards to a setup guide is an inference 1 . Sources (1) Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement Increases Effort ( opens in a new tab ) doi.org Minimal still needs a way out A minimal manual, centred on real tasks, taught faster than a standard manual in a study of 64 students, but beginners still need error-recovery material, which is why every step has a Stuck? help 1 2 . Sources (2) Lazonder and van der Meij, The minimal manual: is less really more? ( opens in a new tab ) doi.org Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect ( opens in a new tab ) doi.org"
+      "text": "Overview Minimal still needs a way out A minimal manual, centred on real tasks, taught faster than a standard manual in a study of 64 students, but beginners still need error-recovery material, which is why every step has a Stuck? help 1 2 . Sources (2) Lazonder and van der Meij, The minimal manual: is less really more? ( opens in a new tab ) doi.org Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect ( opens in a new tab ) doi.org"
     },
     {
       "id": "your-terminal--open-your-terminal",
@@ -77,7 +77,7 @@
     },
     {
       "id": "your-terminal--what-youre-looking-at",
-      "text": "What you're looking at What you are typing into The Software Carpentry shell lesson defines the shell as a program that lets us send commands to the computer and receive output, and it names it the terminal or command line; the window you see is the place you do that 1 . Sources (1) Software Carpentry, The Unix Shell (shell-novice lesson) ( opens in a new tab ) swcarpentry.github.io Try it and see In a university Unix course with near-instant feedback on every attempt, 78.2% of 2021 respondents said they had procedural Unix knowledge, against 38.8% before; the authors call this self-report possibly subjective, and the students were not solo first-timers 1 . Sources (1) Berry et al., ShellOnYou: learning by doing Unix command line ( opens in a new tab ) ctiber.github.io"
+      "text": "What you're looking at Try it and see In a university Unix course with near-instant feedback on every attempt, 78.2% of 2021 respondents said they had procedural Unix knowledge, against 38.8% before; the authors call this self-report possibly subjective, and the students were not solo first-timers 1 . Sources (1) Berry et al., ShellOnYou: learning by doing Unix command line ( opens in a new tab ) ctiber.github.io"
     },
     { "id": "your-ai-agent", "text": "Your AI agent No speaker notes for this Slide." },
     { "id": "your-ai-agent--install-your-ai-agent", "text": "Install your AI agent No speaker notes for this Slide." },

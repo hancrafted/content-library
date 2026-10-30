@@ -77,6 +77,7 @@
     "placeholder": "Paste your error here…",
     "copy": "Copy prompt",
     "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
     "prompt": "I am getting my laptop ready for a workshop and I am stuck.\nOperating system: {os}\nAI agent: {agent}\nStep: {step}\n\nThis is the error I see:\n{error}\n\nExplain in plain words what went wrong and what I should do next, one step at a time.",
     "noError": "(I have not pasted an error.)",
     "step": "Bonus: Set up the Matt Pocock skills yourself",

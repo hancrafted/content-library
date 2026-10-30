@@ -77,6 +77,7 @@
     "placeholder": "Füg Deinen Fehler hier ein…",
     "copy": "Prompt kopieren",
     "copied": "Prompt kopiert",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
     "prompt": "Ich mache meinen Laptop für einen Workshop bereit und komme nicht weiter.\nBetriebssystem: {os}\nKI-Agent: {agent}\nSchritt: {step}\n\nDiese Fehlermeldung sehe ich:\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist und was ich als Nächstes tun soll, Schritt für Schritt.",
     "noError": "(Ich habe keinen Fehler eingefügt.)",
     "step": "Bonus: Die Matt-Pocock-Skills selbst einrichten",

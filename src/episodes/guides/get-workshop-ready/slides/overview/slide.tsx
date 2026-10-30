@@ -6,8 +6,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { BOXES, STEP_SLIDE, STEPS, type BoxId, type StepNumber } from './start-step.pure';
 
-const W3C_MULTI_PAGE = { slug: 'w3c-multi-page-forms', url: 'https://www.w3.org/WAI/tutorials/forms/multi-page/' };
-const ENDOWED_PROGRESS = { slug: 'nunes-dreze-endowed-progress', url: 'https://doi.org/10.1086/500480' };
 const MINIMAL_MANUAL = { slug: 'lazonder-minimal-manual', url: 'https://doi.org/10.1006/imms.1993.1081' };
 const EXPERTISE_REVERSAL = { slug: 'kalyuga-expertise-reversal', url: 'https://doi.org/10.1207/S15326985EP3801_4' };
 
@@ -39,13 +37,9 @@ function ArrowRight() {
 export const overview = slide({
   slug: 'overview',
   messages: { en, de },
-  notes: [
-    { slug: 'say-how-many-steps', target: 'count', sources: [W3C_MULTI_PAGE] },
-    { slug: 'a-head-start-finishes-more', target: 'head-start', sources: [ENDOWED_PROGRESS] },
-    { slug: 'minimal-still-needs-a-way-out', target: 'stuck', sources: [MINIMAL_MANUAL, EXPERTISE_REVERSAL] },
-  ],
+  notes: [{ slug: 'minimal-still-needs-a-way-out', target: 'stuck', sources: [MINIMAL_MANUAL, EXPERTISE_REVERSAL] }],
   segments: [{ slug: 'four-pieces-one-chain' }, { slug: 'skip-what-you-have' }],
-  content: ({ t, locale, slideHref, target, marker, Marker }) => {
+  content: ({ t, locale, slideHref, target, marker }) => {
     const steps: ChecklistStep[] = STEPS.map((n: StepNumber) => ({
       n,
       section: t(`checklist.steps.${n}.section`),
@@ -62,13 +56,9 @@ export const overview = slide({
     return (
       <SlideFrame className="@container gap-6">
         <div className="flex flex-col gap-3 @3xl:flex-row @3xl:items-center @3xl:justify-between">
-          <span
-            {...target('count')}
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card py-1.5 pr-1.5 pl-4 text-caption"
-          >
+          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-border bg-card py-1.5 pr-1.5 pl-4 text-caption">
             <b className="font-semibold">{t('count')}</b>
             <span className="text-muted-foreground">· {t('time')}</span>
-            <Marker note="say-how-many-steps" placement="beside" />
           </span>
           <span className="text-caption text-muted-foreground">{t('chainLine')}</span>
         </div>
@@ -82,12 +72,7 @@ export const overview = slide({
             start: t('card.start', { n: '{n}' }),
             allDone: t('card.allDone'),
           }}
-          intro={
-            <span {...target('head-start')}>
-              {t('checklist.intro')}
-              <Marker note="a-head-start-finishes-more" placement="beside" />
-            </span>
-          }
+          intro={<span>{t('checklist.intro')}</span>}
         >
           <a
             data-skip="technical"

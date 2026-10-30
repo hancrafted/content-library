@@ -125,6 +125,7 @@
     "placeholder": "Paste the error or what you see on screen …",
     "copy": "Copy prompt",
     "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
     "prompt": "I am getting ready for a workshop and got stuck while setting up my AI agent.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am in the guide: {step}\n\nThis is the error, or what I see on my screen:\n\n{error}\n\nI have never used a terminal before. Explain in simple words what went wrong and what I should do next, one step at a time.",
     "noError": "(I have not pasted anything yet.)",
     "step": "Step 4: Run your first skill",

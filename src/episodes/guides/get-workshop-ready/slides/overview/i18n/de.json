@@ -6,24 +6,6 @@
   "time": "etwa 20 Minuten",
   "stuck": "Jede Seite hat oben rechts einen <b>Hilfe</b>-Knopf: Füge Deinen Fehler ein und erhalte einen Prompt für <marker>kostenloses ChatGPT oder Gemini</marker>",
   "notes": {
-    "say-how-many-steps": {
-      "header": "Sag, wie viele Schritte es sind",
-      "description": "Das W3C empfiehlt, schon im ersten Schritt zu sagen, wie viele Schritte folgen, und in jedem Schritt, wie weit man schon ist, etwa „Schritt 2 von 4“ [1].",
-      "sources": {
-        "w3c-multi-page-forms": {
-          "title": "W3C Web Accessibility Initiative, Forms Tutorial: Multi-page Forms"
-        }
-      }
-    },
-    "a-head-start-finishes-more": {
-      "header": "Mit Vorsprung kommt man öfter ans Ziel",
-      "description": "Treuekarten einer Autowaschanlage, auf denen schon zwei von zehn Stempeln standen, lösten 34 % der Kundinnen und Kunden ein, leere Karten nur 19 %; dass sich das von Treuekarten auf eine Einrichtungsanleitung überträgt, ist eine Schlussfolgerung [1].",
-      "sources": {
-        "nunes-dreze-endowed-progress": {
-          "title": "Nunes and Drèze, The Endowed Progress Effect: How Artificial Advancement Increases Effort"
-        }
-      }
-    },
     "minimal-still-needs-a-way-out": {
       "header": "Auch knapp braucht einen Ausweg",
       "description": "Ein knappes Handbuch, das sich an echten Aufgaben orientiert, brachte 64 Studierenden den Stoff schneller bei als ein übliches Handbuch; Einsteiger brauchen trotzdem Hilfe, wenn etwas schiefgeht. Darum hat jeder Schritt eine Hilfe für Probleme [1][2].",

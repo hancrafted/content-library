@@ -68,6 +68,7 @@
     "placeholder": "Paste your error here…",
     "copy": "Copy prompt",
     "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
     "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
     "noError": "(I see no error message, it just does not work.)",
     "step": "Step 2: Log in, your second command",

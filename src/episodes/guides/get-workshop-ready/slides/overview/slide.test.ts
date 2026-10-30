@@ -73,11 +73,9 @@ describe('success cases', () => {
     expect(segments).toEqual(expected);
   });
 
-  it('carries the three Spec Speaker notes, each with its sources', () => {
+  it('carries the one Speaker note that stays, with its sources', () => {
     // ARRANGE
     const expected = [
-      { header: 'Say how many steps', urls: ['https://www.w3.org/WAI/tutorials/forms/multi-page/'] },
-      { header: 'A head start finishes more', urls: ['https://doi.org/10.1086/500480'] },
       {
         header: 'Minimal still needs a way out',
         urls: ['https://doi.org/10.1006/imms.1993.1081', 'https://doi.org/10.1207/S15326985EP3801_4'],
@@ -121,9 +119,9 @@ describe('success cases', () => {
     expect(links).toEqual(expected);
   });
 
-  it('puts a Context marker beside the step count, after the checklist intro and in the Stuck note, in that order', () => {
+  it('puts a Context marker in the Stuck note only', () => {
     // ARRANGE
-    const expected = ['say-how-many-steps', 'a-head-start-finishes-more', 'minimal-still-needs-a-way-out'];
+    const expected = ['minimal-still-needs-a-way-out'];
     // ACT
     const $ = scene('en');
     const markers = $('[data-context-ref]')
@@ -150,7 +148,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = {
       heading: 'Vier Schritte zu Deinem ersten Skill',
-      notes: ['say-how-many-steps', 'a-head-start-finishes-more', 'minimal-still-needs-a-way-out'],
+      notes: ['minimal-still-needs-a-way-out'],
       segments: ['four-pieces-one-chain', 'skip-what-you-have'],
       steps: 4,
     };

@@ -101,14 +101,11 @@ describe('success cases', () => {
     expect(text).toContain(expected);
   });
 
-  it('gives the header a Help button and carries the two Speaker notes and three Voice script segments', () => {
+  it('gives the header a Help button and carries the one Speaker note and three Voice script segments', () => {
     // ARRANGE
     const expected = {
       button: 'Help',
-      notes: [
-        { header: 'What you are typing into', urls: ['https://swcarpentry.github.io/shell-novice/'] },
-        { header: 'Try it and see', urls: ['https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf'] },
-      ],
+      notes: [{ header: 'Try it and see', urls: ['https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf'] }],
       segments: ['five-parts', 'point-at-anything', 'you-cant-break-it'],
     };
     // ACT
@@ -124,9 +121,9 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('renders no heading and dims the AI agent group, since this step does not differ by AI agent', () => {
+  it('renders no heading and no AI agent group, since none is picked yet', () => {
     // ARRANGE
-    const expected = { headings: 0, disabled: { os: 'false', agent: 'true' } };
+    const expected = { headings: 0, disabled: { os: 'false', agent: undefined } };
     // ACT
     const $ = scene('en');
     const found = {
@@ -148,7 +145,7 @@ describe('edge cases', () => {
       explanation: 'Eingabezeile.',
       parts: 5,
       button: 'Hilfe',
-      notes: ['what-the-shell-is', 'try-and-see-what-happens'],
+      notes: ['try-and-see-what-happens'],
       segments: ['five-parts', 'point-at-anything', 'you-cant-break-it'],
     };
     // ACT

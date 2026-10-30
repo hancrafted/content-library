@@ -90,6 +90,7 @@ export const downloadAndUnzipTheStarterFolder = slide({
         placeholder: t('help.placeholder'),
         copy: t('help.copy'),
         copied: t('help.copied'),
+        copyTip: t('help.copyTip'),
         prompt: template('help.prompt'),
         noError: t('help.noError'),
         chats: {

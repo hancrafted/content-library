@@ -1,7 +1,10 @@
 {
   "title": "Was Du da siehst",
   "caption": "Fünf Teile, mehr nicht. Zeig auf eins, dann siehst Du, was es tut: <b>Du kannst hier nichts kaputt machen.</b>",
-  "toolbar": { "os": "Dein Computer", "agent": "KI-Agent" },
+  "toolbar": {
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
+  },
   "windowTitle": "Terminal",
   "command": "echo hello",
   "output": "hello",
@@ -40,15 +43,6 @@
     "text": "Schließt Du das Fenster, ist alles beendet. Zum Verlassen schließt Du das Fenster wie jedes andere."
   },
   "notes": {
-    "what-the-shell-is": {
-      "header": "Worin Du tippst",
-      "description": "Die Shell-Lektion von Software Carpentry beschreibt die Shell als ein Programm, mit dem wir dem Computer Befehle schicken und Ausgaben zurückbekommen, und nennt sie Terminal oder Kommandozeile; das Fenster, das Du siehst, ist der Ort dafür [1].",
-      "sources": {
-        "swcarpentry-shell-novice": {
-          "title": "Software Carpentry, The Unix Shell (shell-novice lesson)"
-        }
-      }
-    },
     "try-and-see-what-happens": {
       "header": "Ausprobieren und sehen",
       "description": "In einem Unix-Kurs an einer Universität mit fast sofortiger Rückmeldung zu jedem Versuch sagten 78,2 % der Befragten von 2021, sie hätten prozedurales Unix-Wissen, gegenüber 38,8 % vorher; die Autoren nennen das eine möglicherweise subjektive Selbstauskunft, und die Studierenden waren keine Einsteiger allein zu Hause [1].",
@@ -84,6 +78,7 @@
     "placeholder": "Füg Deinen Fehler ein oder beschreib, was Du siehst …",
     "copy": "Prompt kopieren",
     "copied": "Prompt kopiert",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
     "prompt": "Ich richte für einen Workshop einen KI-Agenten auf meinem Laptop ein und komme nicht weiter.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich bin: {step}\n\nWas ich sehe:\n{error}\n\nIch bin neu im Terminal. Erklär mir in einfachen Worten, was das bedeutet, und nenn mir den einen nächsten Schritt, den ich versuchen kann.",
     "noError": "(Ich habe noch nichts eingefügt: Frag mich, was ich sehe.)",
     "step": "Schritt 1: Was Du da siehst",

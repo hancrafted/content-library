@@ -125,6 +125,7 @@
     "placeholder": "Füg die Fehlermeldung ein oder was Du auf dem Bildschirm siehst …",
     "copy": "Prompt kopieren",
     "copied": "Prompt kopiert",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
     "prompt": "Ich bereite mich auf einen Workshop vor und komme beim Einrichten meines KI-Agenten nicht weiter.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich in der Anleitung bin: {step}\n\nDas ist die Fehlermeldung, oder was ich auf dem Bildschirm sehe:\n\n{error}\n\nIch habe noch nie ein Terminal benutzt. Erklär mir in einfachen Worten, was schiefgelaufen ist und was ich als Nächstes tun soll, Schritt für Schritt.",
     "noError": "(Ich habe noch nichts eingefügt.)",
     "step": "Schritt 4: Deinen ersten Skill ausführen",

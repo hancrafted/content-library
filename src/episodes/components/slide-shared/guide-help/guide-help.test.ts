@@ -15,6 +15,7 @@ const WORDS: HelpWords = {
   placeholder: 'Paste your error…',
   copy: 'Copy prompt',
   copied: 'Prompt copied',
+  copyTip: 'Paste this prompt into an AI you are allowed to use.',
   prompt: 'Computer: {os}. AI agent: {agent}. Step: {step}. {error}',
   noError: '(nothing pasted)',
   chats: { openAIChats: 'Open an AI chat', openAIChatTip: 'Open an empty {chat} chat', newTab: 'opens in a new tab' },
