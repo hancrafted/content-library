@@ -41,7 +41,7 @@
       "agents": "wie hier gearbeitet wird",
       "glossary": "die Wörter, die er kennt"
     },
-    "worked": "<b>Es hat geklappt, wenn</b> Du ein normales Ordnersymbol siehst, kein Zip, mit diesen vier Einträgen darin.",
+    "worked": "Du siehst ein normales Ordnersymbol, kein Zip, mit diesen vier Einträgen darin.",
     "remember": "<b>Merk Dir, wo er gelandet ist:</b> <muted>Downloads › hancrafted-workshop-starter. Die nächste Seite geht genau in diesen Ordner.</muted>"
   },
   "voiceScript": {
@@ -73,5 +73,6 @@
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
       "newTab": "öffnet in neuem Tab"
     }
-  }
+  },
+  "doneLabel": "So sieht „fertig“ aus"
 }

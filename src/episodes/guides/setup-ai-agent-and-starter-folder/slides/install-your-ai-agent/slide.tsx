@@ -2,7 +2,6 @@ import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { docsHref, installCommand } from '@/episodes/components/slide-shared/agent-setup-step/agent-commands.pure';
 import { CopyLine } from '@/episodes/components/slide-shared/agent-setup-step/copy-line.client';
-import { DoneMark } from '@/episodes/components/slide-shared/agent-setup-step/done-mark';
 import { OfficialLink } from '@/episodes/components/slide-shared/agent-setup-step/official-link';
 import { PickSwitch } from '@/episodes/components/slide-shared/agent-setup-step/pick-switch.client';
 import {
@@ -13,6 +12,7 @@ import {
   OPERATING_SYSTEMS,
 } from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { DoneStrip, MoreHelp } from '@/episodes/components/slide-shared/guide-step/guide-step';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
@@ -115,62 +115,64 @@ export const installYourAiAgent = slide({
               ))}
             />
 
-            <div className="flex flex-wrap items-center gap-4">
-              <PickSwitch
-                name="agent"
-                fallback={DEFAULT_AGENT}
-                cases={casesOf(AGENTS, (agent) => (
-                  <OfficialLink
-                    variant="outlined"
-                    url={docsHref(agent.id)}
-                    label={t('officialDocs', { agent: agent.name })}
-                    newTab={t('newTab')}
+            <DoneStrip label={t('doneLabel')}>
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 " data-end="">
+                  <PickSwitch
+                    name="agent"
+                    fallback={DEFAULT_AGENT}
+                    cases={casesOf(AGENTS, (agent) => {
+                      const lines = end[agent.id as keyof typeof end];
+                      return lines === undefined ? (
+                        <p className="text-body">{t('end.generic')}</p>
+                      ) : (
+                        <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
+                          {lines.map((line, index) => (
+                            <li key={index}>{line}</li>
+                          ))}
+                        </ul>
+                      );
+                    })}
                   />
-                ))}
-              />
-              <p className="min-w-0 flex-1 text-caption text-muted-foreground">{t('docsWhy')}</p>
-            </div>
+                </div>
 
-            <div className="flex flex-col gap-3 border-t border-border pt-6" data-end="">
-              <p className="text-caption font-semibold uppercase text-muted-foreground">{t('endTitle')}</p>
-              <PickSwitch
-                name="agent"
-                fallback={DEFAULT_AGENT}
-                cases={casesOf(AGENTS, (agent) => {
-                  const lines = end[agent.id as keyof typeof end];
-                  return lines === undefined ? (
-                    <p className="text-body">{t('end.generic')}</p>
-                  ) : (
+                <p className="text-body font-semibold">{t('worked')}</p>
+              </div>
+            </DoneStrip>
+
+            <MoreHelp title={t('moreTitle')}>
+              <div className="flex flex-wrap items-center gap-4">
+                <PickSwitch
+                  name="agent"
+                  fallback={DEFAULT_AGENT}
+                  cases={casesOf(AGENTS, (agent) => (
+                    <OfficialLink
+                      variant="outlined"
+                      url={docsHref(agent.id)}
+                      label={t('officialDocs', { agent: agent.name })}
+                      newTab={t('newTab')}
+                    />
+                  ))}
+                />
+                <p className="min-w-0 flex-1 text-caption text-muted-foreground">{t('docsWhy')}</p>
+              </div>
+
+              <div className="flex flex-col gap-3 " data-happen="">
+                <p className="text-caption font-semibold uppercase text-muted-foreground">{t('happenTitle')}</p>
+                <PickSwitch
+                  name="agent"
+                  fallback={DEFAULT_AGENT}
+                  cases={casesOf(AGENTS, (agent) => (
                     <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
-                      {lines.map((line, index) => (
+                      {happen[agent.id as keyof typeof happen].map((line, index) => (
                         <li key={index}>{line}</li>
                       ))}
                     </ul>
-                  );
-                })}
-              />
-            </div>
-
-            <div className="flex flex-col gap-3 border-t border-border pt-6" data-happen="">
-              <p className="text-caption font-semibold uppercase text-muted-foreground">{t('happenTitle')}</p>
-              <PickSwitch
-                name="agent"
-                fallback={DEFAULT_AGENT}
-                cases={casesOf(AGENTS, (agent) => (
-                  <ul className="flex list-disc flex-col gap-2 pl-5 text-body">
-                    {happen[agent.id as keyof typeof happen].map((line, index) => (
-                      <li key={index}>{line}</li>
-                    ))}
-                  </ul>
-                ))}
-              />
-              <p className="text-body font-semibold">{t('helpLine')}</p>
-            </div>
-
-            <p className="inline-flex items-center gap-2 border-t border-border pt-4 text-body font-semibold">
-              <DoneMark />
-              {t('worked')}
-            </p>
+                  ))}
+                />
+                <p className="text-body font-semibold">{t('helpLine')}</p>
+              </div>
+            </MoreHelp>
           </div>
         </div>
       </SlideFrame>

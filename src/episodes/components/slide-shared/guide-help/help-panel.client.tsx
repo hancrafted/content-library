@@ -74,7 +74,7 @@ function HelpButton({
       onClick={onToggle}
       className={cn(
         'ml-auto inline-flex min-h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full border-2 px-4 py-1 text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        'border-brand-accent bg-brand-accent text-foreground hover:bg-brand-accent/85 dark:text-background',
+        'border-brand-accent bg-brand-accent text-on-brand-accent hover:bg-brand-accent/85',
         open && 'ring-2 ring-ring',
       )}
     >

@@ -125,5 +125,7 @@
         "two": "Trust the folder only if it is the starter folder."
       }
     }
-  }
+  },
+  "doneLabel": "Done looks like",
+  "moreTitle": "More help: what you will see, options, fixes"
 }

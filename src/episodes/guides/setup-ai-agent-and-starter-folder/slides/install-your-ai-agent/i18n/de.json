@@ -76,7 +76,6 @@
       "newTab": "öffnet in neuem Tab"
     }
   },
-  "endTitle": "Was du am Ende siehst",
   "end": {
     "generic": "Warte, bis die Eingabezeile zurückkommt, und mach dann weiter.",
     "codex": {
@@ -91,5 +90,7 @@
       "one": "Auf Mac und Linux fragt es vielleicht <code>Would you like to add it to … ? [y/N]</code>. Tippe <key>y</key> und drücke <key>Enter</key>.",
       "two": "Die letzte Zeile nennt <code>copilot help</code>, aber dein nächster Schritt ist nur <code>copilot</code>, in einem neuen Terminal."
     }
-  }
+  },
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe"
 }

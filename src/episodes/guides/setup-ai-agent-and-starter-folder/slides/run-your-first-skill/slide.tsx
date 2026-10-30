@@ -1,6 +1,8 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { CopyLine } from '@/episodes/components/slide-shared/agent-setup-step/copy-line.client';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { DoneStrip, MoreHelp } from '@/episodes/components/slide-shared/guide-step/guide-step';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import type { ReactNode } from 'react';
 import { AgentView } from './agent-view.client';
@@ -12,6 +14,7 @@ import { OpenCommand } from './open-command.client';
 import { Approval, Choices, PermissionPrompt } from './permission-prompt';
 
 /* The homepage the skill opens; the Slide draws it, it links nowhere. */
+const SKILL_COMMAND = '/hancrafted-check-setup';
 const HOMEPAGE = 'https://hancrafted.net';
 
 const CLAUDE_CODE_PERMISSIONS = { slug: 'claude-code-permissions', url: 'https://code.claude.com/docs/en/permissions' };
@@ -42,25 +45,6 @@ function Arrow() {
           strokeLinejoin="round"
         />
       </svg>
-    </div>
-  );
-}
-
-/** The done line under the homepage: a filled check and the Slide's closing words. */
-function Done({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex items-start gap-3 rounded-xl border border-(--success)/40 bg-(--success)/10 p-4">
-      <svg viewBox="0 0 20 20" className="mt-1 size-5 shrink-0" aria-hidden>
-        <circle cx="10" cy="10" r="9" className="fill-(--success)" />
-        <path
-          d="M6 10.5 L 9 13 L 14 7.5"
-          className="fill-none stroke-(--success-foreground)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p className="text-body">{children}</p>
     </div>
   );
 }
@@ -169,6 +153,15 @@ export const runYourFirstSkill = slide({
       <SlideFrame>
         <div className="@container flex flex-col gap-8">
           <GuideToolbar active={['agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+          <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6 @3xl:p-8">
+            <div className="flex flex-col gap-2">
+              <p className="text-caption font-semibold uppercase text-primary">{t('doLabel')}</p>
+              <p className="text-body">{t('doText')}</p>
+            </div>
+            <CopyLine text={SKILL_COMMAND} where="agent" focal big words={{ copy: t('copy'), copied: t('copied') }} />
+          </div>
+          <DoneStrip label={t('doneLabel')}>{t.rich('result.done')}</DoneStrip>
+
           <div className="rounded-2xl border border-border bg-card p-4 @3xl:p-8">
             <div className="focus-group focus-group--dim-others grid grid-cols-1 items-start gap-4 @3xl:grid-cols-12">
               <div className="focus-group__item flex min-w-0 flex-col gap-4 @3xl:col-span-6">
@@ -194,14 +187,15 @@ export const runYourFirstSkill = slide({
                     cta={t('result.hero.cta')}
                   />
                 </BrowserWindow>
-                <Done>{t.rich('result.done')}</Done>
               </div>
             </div>
-            <p className="mt-6 border-t border-border pt-4 text-caption text-muted-foreground">
-              {t.rich('fallback', {
-                url: (chunks) => <span className="font-mono break-all text-foreground">{chunks}</span>,
-              })}
-            </p>
+            <MoreHelp title={t('moreTitle')}>
+              <p className="text-body">
+                {t.rich('fallback', {
+                  url: (chunks) => <span className="font-mono break-all text-foreground">{chunks}</span>,
+                })}
+              </p>
+            </MoreHelp>
           </div>
         </div>
       </SlideFrame>

@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { DoneStrip, MoreHelp } from '@/episodes/components/slide-shared/guide-step/guide-step';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import type { ReactNode } from 'react';
 import { FindPicture } from './find-picture';
@@ -106,7 +107,6 @@ export const openYourTerminal = slide({
               target={target('open-window')}
               marker={<Marker note="feedback-builds-confidence" className="top-2 right-2 z-10" />}
             />
-            <p className="text-caption text-muted-foreground">{t('success')}</p>
           </div>
         </div>
       </>
@@ -116,14 +116,17 @@ export const openYourTerminal = slide({
         <GuideToolbar active={['os']} show={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
         <div className="rounded-2xl border border-border bg-card p-6 @3xl:p-8">
           <OsView views={{ mac: view('mac'), windows: view('windows'), linux: view('linux') }} />
-          <ul className="mt-8 grid gap-4 border-t border-border pt-5 text-caption text-muted-foreground @3xl:grid-cols-3">
+        </div>
+        <DoneStrip label={t('doneLabel')}>{t('success')}</DoneStrip>
+        <MoreHelp title={t('moreTitle')}>
+          <ul className="grid gap-4 text-caption text-muted-foreground @3xl:grid-cols-3">
             {REASSURANCE.map((line) => (
               <li key={line.key} {...target(line.target)}>
                 {t.rich(`reassurance.${line.key}`, { marker: marker(line.note) })}
               </li>
             ))}
           </ul>
-        </div>
+        </MoreHelp>
       </SlideFrame>
     );
   },

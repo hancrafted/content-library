@@ -14,7 +14,7 @@
         "windows": "Klicke im Datei-Explorer mit der rechten Maustaste auf <b>hancrafted-workshop-starter</b>, dann auf <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen.",
         "linux": "Rechtsklick auf den Ordner in Deinem Dateimanager › <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen."
       },
-      "worked": "<b>Es hat geklappt, wenn</b> der Ordnername direkt vor Deinem Cursor steht.",
+      "worked": "Der Ordnername steht direkt vor Deinem Cursor.",
       "menuLabel": "Das Rechtsklick-Menü des Ordners",
       "menu": {
         "mac": {
@@ -52,7 +52,8 @@
         "antigravity": "Antigravity: Doku",
         "codex": "Codex CLI",
         "copilot": "GitHub Copilot CLI"
-      }
+      },
+      "worked": "Dein KI-Agent startet und wartet darauf, dass Du etwas eingibst."
     }
   },
   "trust": {
@@ -97,5 +98,7 @@
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
       "newTab": "öffnet in neuem Tab"
     }
-  }
+  },
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe: wenn das Menü nicht klappt"
 }

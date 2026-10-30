@@ -13,6 +13,7 @@ import {
 } from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
 import { TerminalWindow } from '@/episodes/components/slide-shared/agent-setup-step/terminal-window';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { DoneStrip, MoreHelp } from '@/episodes/components/slide-shared/guide-step/guide-step';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
@@ -20,35 +21,7 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { PickOptions } from './pick-options';
 import { RoundTrip } from './round-trip';
-
-/** The drawn sign-in card in the browser window: a picture of the step, not a screenshot of the vendor's page. */
-function SignInCard({ page, title, button, own }: { page: string; title: ReactNode; button: string; own: string }) {
-  return (
-    <div className="overflow-hidden rounded-xl border border-border bg-background shadow-md">
-      <div className="flex items-center gap-2 border-b border-border bg-muted px-4 py-2" aria-hidden="true">
-        <span className="size-2.5 shrink-0 rounded-full bg-muted-foreground/30" />
-        <span className="size-2.5 shrink-0 rounded-full bg-muted-foreground/30" />
-        <span className="size-2.5 shrink-0 rounded-full bg-muted-foreground/30" />
-        <span className="ml-3 min-w-0 flex-1 truncate rounded-full bg-card px-3 py-0.5 text-caption text-muted-foreground">
-          {page}
-        </span>
-      </div>
-      <div className="flex flex-col items-center gap-3 p-5 text-center">
-        <span
-          className="flex size-9 items-center justify-center rounded-full bg-ai/15 text-ai ring-1 ring-ai/40"
-          aria-hidden="true"
-        >
-          ✻
-        </span>
-        <p className="text-body font-semibold">{title}</p>
-        <span className="w-full rounded-full bg-primary py-2 text-caption font-semibold text-primary-foreground">
-          {button}
-        </span>
-        <p className="text-caption text-muted-foreground">{own}</p>
-      </div>
-    </div>
-  );
-}
+import { SignInCard } from './sign-in-card';
 
 /*
  * Step 2, second Slide: the second command a first-timer types starts the AI agent and signs them in. First it says to
@@ -158,89 +131,105 @@ export const logIn = slide({
               <p className="text-body" data-flow="">
                 <PickSwitch name="agent" fallback={DEFAULT_AGENT} cases={flow} />
               </p>
+            </div>
+
+            <DoneStrip label={t('doneLabel')}>
+              <p className="text-body font-semibold">{t('trip.loggedIn')}</p>
+              <p className="text-caption text-muted-foreground">{t('once')}</p>
+            </DoneStrip>
+
+            <MoreHelp title={t('moreTitle')}>
+              <RoundTrip
+                labels={{ terminal: t('trip.terminal'), browser: t('trip.browser'), back: t('trip.back') }}
+                arrows={{ out: t('trip.toLogin'), back: t('trip.toTerminal') }}
+                terminal={
+                  <TerminalWindow
+                    agent
+                    title={
+                      <PickSwitch
+                        name="agent"
+                        fallback={DEFAULT_AGENT}
+                        cases={casesOf(AGENTS, (agent) => agent.name)}
+                      />
+                    }
+                  >
+                    <p>
+                      <span className="text-ai" aria-hidden="true">
+                        ✻
+                      </span>{' '}
+                      <PickSwitch
+                        name="agent"
+                        fallback={DEFAULT_AGENT}
+                        cases={casesOf(AGENTS, (agent) => agent.name)}
+                      />
+                    </p>
+                    <p className="text-muted-foreground">
+                      <PickSwitch
+                        name="agent"
+                        fallback={DEFAULT_AGENT}
+                        cases={{
+                          'claude-code': t('trip.lines.claude-code'),
+                          antigravity: t('trip.lines.antigravity'),
+                          codex: t('trip.lines.codex'),
+                          copilot: t('trip.lines.copilot'),
+                        }}
+                      />
+                    </p>
+                  </TerminalWindow>
+                }
+                browser={
+                  <SignInCard
+                    page={t('trip.page')}
+                    title={
+                      <PickSwitch
+                        name="agent"
+                        fallback={DEFAULT_AGENT}
+                        cases={casesOf(AGENTS, (agent) => t('trip.signInTitle', { agent: agent.name }))}
+                      />
+                    }
+                    button={t('trip.signIn')}
+                    own={t('trip.useOwn')}
+                  />
+                }
+                back={
+                  <div className="flex flex-col gap-2 rounded-xl border border-border bg-background p-5">
+                    <p className="inline-flex items-center gap-2 text-body font-semibold">
+                      <DoneMark />
+                      {t('trip.loggedIn')}
+                    </p>
+                    <p className="text-caption text-muted-foreground">{t('once')}</p>
+                  </div>
+                }
+              />
+
               <div className="rounded-lg border border-border bg-background p-4" data-not-found="">
                 <p className="text-body font-semibold">{t('failTitle')}</p>
                 <p className="mt-1 text-body">{t('failFix')}</p>
               </div>
-            </div>
 
-            <PickOptions
-              title={t('pick.title')}
-              badge={t('pick.recommended')}
-              describe={(agent, option) => t(`pick.options.${agent}.${option}` as never)}
-              after={after}
-            />
-
-            <RoundTrip
-              labels={{ terminal: t('trip.terminal'), browser: t('trip.browser'), back: t('trip.back') }}
-              arrows={{ out: t('trip.toLogin'), back: t('trip.toTerminal') }}
-              terminal={
-                <TerminalWindow
-                  agent
-                  title={
-                    <PickSwitch name="agent" fallback={DEFAULT_AGENT} cases={casesOf(AGENTS, (agent) => agent.name)} />
-                  }
-                >
-                  <p>
-                    <span className="text-ai" aria-hidden="true">
-                      ✻
-                    </span>{' '}
-                    <PickSwitch name="agent" fallback={DEFAULT_AGENT} cases={casesOf(AGENTS, (agent) => agent.name)} />
-                  </p>
-                  <p className="text-muted-foreground">
-                    <PickSwitch
-                      name="agent"
-                      fallback={DEFAULT_AGENT}
-                      cases={{
-                        'claude-code': t('trip.lines.claude-code'),
-                        antigravity: t('trip.lines.antigravity'),
-                        codex: t('trip.lines.codex'),
-                        copilot: t('trip.lines.copilot'),
-                      }}
-                    />
-                  </p>
-                </TerminalWindow>
-              }
-              browser={
-                <SignInCard
-                  page={t('trip.page')}
-                  title={
-                    <PickSwitch
-                      name="agent"
-                      fallback={DEFAULT_AGENT}
-                      cases={casesOf(AGENTS, (agent) => t('trip.signInTitle', { agent: agent.name }))}
-                    />
-                  }
-                  button={t('trip.signIn')}
-                  own={t('trip.useOwn')}
-                />
-              }
-              back={
-                <div className="flex flex-col gap-2 rounded-xl border border-border bg-background p-5">
-                  <p className="inline-flex items-center gap-2 text-body font-semibold">
-                    <DoneMark />
-                    {t('trip.loggedIn')}
-                  </p>
-                  <p className="text-caption text-muted-foreground">{t('once')}</p>
-                </div>
-              }
-            />
-
-            <div className="flex flex-wrap items-center gap-4 border-t border-border pt-6">
-              <PickSwitch
-                name="agent"
-                fallback={DEFAULT_AGENT}
-                cases={casesOf(AGENTS, (agent) => (
-                  <OfficialLink
-                    variant="outlined"
-                    url={agent.loginHref}
-                    label={t('openLogin', { agent: agent.name })}
-                    newTab={t('newTab')}
-                  />
-                ))}
+              <PickOptions
+                title={t('pick.title')}
+                badge={t('pick.recommended')}
+                describe={(agent, option) => t(`pick.options.${agent}.${option}` as never)}
+                after={after}
               />
-              <p className="text-caption text-muted-foreground">{t('ownAccount')}</p>
-            </div>
+
+              <div className="flex flex-wrap items-center gap-4 border-t border-border pt-6">
+                <PickSwitch
+                  name="agent"
+                  fallback={DEFAULT_AGENT}
+                  cases={casesOf(AGENTS, (agent) => (
+                    <OfficialLink
+                      variant="outlined"
+                      url={agent.loginHref}
+                      label={t('openLogin', { agent: agent.name })}
+                      newTab={t('newTab')}
+                    />
+                  ))}
+                />
+                <p className="text-caption text-muted-foreground">{t('ownAccount')}</p>
+              </div>
+            </MoreHelp>
           </div>
         </div>
       </SlideFrame>

@@ -76,7 +76,6 @@
       "newTab": "opens in a new tab"
     }
   },
-  "endTitle": "What you will see at the end",
   "end": {
     "generic": "Wait until the prompt comes back, then go on.",
     "codex": {
@@ -91,5 +90,7 @@
       "one": "On Mac and Linux it may ask <code>Would you like to add it to … ? [y/N]</code>. Type <key>y</key> and press <key>Enter</key>.",
       "two": "The last line says <code>copilot help</code>, but your next step is just <code>copilot</code>, in a new terminal."
     }
-  }
+  },
+  "doneLabel": "Done looks like",
+  "moreTitle": "More help"
 }

@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { DoneStrip } from '@/episodes/components/slide-shared/guide-step/guide-step';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import { DEFAULT_LOCALE, localizePath } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
@@ -148,6 +149,7 @@ export const downloadAndUnzipTheStarterFolder = slide({
               <HalfIndex index="02" accent="bg-primary">
                 {t('folder.heading')}
               </HalfIndex>
+              <DoneStrip label={t('doneLabel')}>{t.rich('folder.worked')}</DoneStrip>
               <div className="rounded-2xl border border-border bg-background">
                 <p className="flex items-center gap-2 border-b border-border px-4 py-2 text-caption text-muted-foreground">
                   {t('download.downloads')} <span aria-hidden="true">›</span>
@@ -160,18 +162,6 @@ export const downloadAndUnzipTheStarterFolder = slide({
                   <FolderRow name="GLOSSARY.md" note={t('folder.rows.glossary')} />
                 </ul>
               </div>
-              <p className="flex items-center gap-3 rounded-xl bg-(--success)/15 px-4 py-3 text-caption text-foreground">
-                <svg viewBox="0 0 24 24" className="size-5 shrink-0" aria-hidden="true">
-                  <path
-                    d="M5 12.5l4.5 4.5L19 7.5"
-                    className="fill-none stroke-(--success)"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span>{t.rich('folder.worked')}</span>
-              </p>
               <p className="text-body text-foreground">
                 {t.rich('folder.remember', {
                   muted: (chunks) => <span className="text-muted-foreground">{chunks}</span>,

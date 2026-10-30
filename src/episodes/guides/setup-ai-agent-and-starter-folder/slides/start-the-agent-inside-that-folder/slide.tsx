@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { DoneStrip, MoreHelp } from '@/episodes/components/slide-shared/guide-step/guide-step';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import { externalHref } from '@/shared/lib/external-link.pure';
 import { ByAgent, ByOs } from './by-pick.client';
@@ -91,7 +92,7 @@ export const startTheAgentInsideThatFolder = slide({
                     }}
                   />
                 </p>
-                <p>{t.rich('moves.open.worked')}</p>
+                <DoneStrip label={t('doneLabel')}>{t.rich('moves.open.worked')}</DoneStrip>
               </MoveText>
               <div className="flex min-w-0 flex-col gap-4 md:col-span-8">
                 <ByOs
@@ -173,6 +174,7 @@ export const startTheAgentInsideThatFolder = slide({
                     </a>
                   ))}
                 />
+                <DoneStrip label={t('doneLabel')}>{t('moves.start.worked')}</DoneStrip>
               </MoveText>
               <div className="md:col-span-8">
                 <TerminalWindow title={terminalTitle} ai>
@@ -199,14 +201,18 @@ export const startTheAgentInsideThatFolder = slide({
                 </TerminalWindow>
               </div>
             </li>
-            <li className="border-t border-border pt-5 text-caption text-muted-foreground">
-              {t.rich('fallback.text', {
-                command: () => (
-                  <code className="rounded-md bg-muted px-1.5 font-mono text-foreground">
-                    <ByOs variants={byOs(fallbackCommand)} />
-                  </code>
-                ),
-              })}
+            <li>
+              <MoreHelp title={t('moreTitle')}>
+                <p className="text-caption text-muted-foreground">
+                  {t.rich('fallback.text', {
+                    command: () => (
+                      <code className="rounded-md bg-muted px-1.5 font-mono text-foreground">
+                        <ByOs variants={byOs(fallbackCommand)} />
+                      </code>
+                    ),
+                  })}
+                </p>
+              </MoreHelp>
             </li>
           </ol>
         </div>

@@ -34,7 +34,12 @@ const INSTALL: Readonly<Record<string, Readonly<Record<string, InstallCommand>>>
   antigravity: {
     mac: UNIX('curl -fsSL https://antigravity.google/cli/install.sh | bash'),
     linux: UNIX('curl -fsSL https://antigravity.google/cli/install.sh | bash'),
-    windows: { text: 'irm https://antigravity.google/cli/install.ps1 | iex', shell: 'powershell' },
+    windows: {
+      text: 'irm https://antigravity.google/cli/install.ps1 | iex',
+      shell: 'powershell',
+      commandPrompt:
+        'curl -fsSL https://antigravity.google/cli/install.cmd -o install.cmd && install.cmd && del install.cmd',
+    },
   },
   codex: {
     mac: UNIX('curl -fsSL https://chatgpt.com/codex/install.sh | sh'),

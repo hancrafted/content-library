@@ -24,15 +24,15 @@
       }
     },
     "antigravity": {
-      "typed": "> hancrafted-check-setup",
+      "typed": "> /hancrafted-check-setup",
       "asks": "Antigravity hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
     },
     "codex": {
-      "typed": "> hancrafted-check-setup",
+      "typed": "> /hancrafted-check-setup",
       "asks": "Codex hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
     },
     "copilot": {
-      "typed": "> hancrafted-check-setup",
+      "typed": "> /hancrafted-check-setup",
       "asks": "GitHub Copilot hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
     }
   },
@@ -134,5 +134,11 @@
       "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
       "newTab": "öffnet in neuem Tab"
     }
-  }
+  },
+  "doLabel": "Dein vierter Schritt",
+  "doText": "Gib das in Deinen KI-Agenten ein und drücke Enter. Wenn er fragt, sag ja.",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe: Seite öffnet sich nicht"
 }

@@ -24,15 +24,15 @@
       }
     },
     "antigravity": {
-      "typed": "> hancrafted-check-setup",
+      "typed": "> /hancrafted-check-setup",
       "asks": "Antigravity may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
     },
     "codex": {
-      "typed": "> hancrafted-check-setup",
+      "typed": "> /hancrafted-check-setup",
       "asks": "Codex may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
     },
     "copilot": {
-      "typed": "> hancrafted-check-setup",
+      "typed": "> /hancrafted-check-setup",
       "asks": "GitHub Copilot may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
     }
   },
@@ -134,5 +134,11 @@
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
       "newTab": "opens in a new tab"
     }
-  }
+  },
+  "doLabel": "Your fourth step",
+  "doText": "Type this into your AI agent and press Enter. When it asks, say yes.",
+  "copy": "Copy",
+  "copied": "Copied",
+  "doneLabel": "Done looks like",
+  "moreTitle": "More help: page did not open"
 }

@@ -41,7 +41,7 @@
       "agents": "how to work here",
       "glossary": "the words it knows"
     },
-    "worked": "<b>It worked when</b> you see a plain folder icon, not a zip, with these four items inside.",
+    "worked": "You see a plain folder icon, not a zip, with these four items inside.",
     "remember": "<b>Remember where it landed:</b> <muted>Downloads › hancrafted-workshop-starter. The next Slide goes into exactly this folder.</muted>"
   },
   "voiceScript": {
@@ -73,5 +73,6 @@
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
       "newTab": "opens in a new tab"
     }
-  }
+  },
+  "doneLabel": "Done looks like"
 }

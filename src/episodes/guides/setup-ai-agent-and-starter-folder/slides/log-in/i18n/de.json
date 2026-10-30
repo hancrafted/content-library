@@ -125,5 +125,7 @@
         "two": "Vertraue dem Ordner nur, wenn es der Starterordner ist."
       }
     }
-  }
+  },
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe: was Du siehst, Optionen, Lösungen"
 }
