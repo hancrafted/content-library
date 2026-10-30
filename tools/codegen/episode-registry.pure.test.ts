@@ -31,10 +31,10 @@ const TEMPLATE: EpisodeFolder = {
 };
 
 const GUIDE: EpisodeFolder = {
-  id: 'get-workshop-ready',
-  folder: 'guides/get-workshop-ready',
+  id: 'setup-ai-agent-and-starter-folder',
+  folder: 'guides/setup-ai-agent-and-starter-folder',
   files: ['episode.ts', 'i18n', 'slides'],
-  episodeSource: 'export const getWorkshopReady = episode({\n',
+  episodeSource: 'export const setupAiAgentAndStarterFolder = episode({\n',
 };
 
 /** The text of one generated file. */
@@ -131,10 +131,10 @@ describe('success cases', () => {
   it('lists each Guide by its slug and composes it from its folder under guides/, never as an Episode', () => {
     // ARRANGE
     const expected = [
-      "export const GUIDE_SLUGS = ['get-workshop-ready'] as const;",
-      "import { getWorkshopReady } from '@/episodes/guides/get-workshop-ready/episode';",
+      "export const GUIDE_SLUGS = ['setup-ai-agent-and-starter-folder'] as const;",
+      "import { setupAiAgentAndStarterFolder } from '@/episodes/guides/setup-ai-agent-and-starter-folder/episode';",
       'export const GUIDES: { readonly [S in GuideSlug]: EpisodeComposition & { readonly slug: S } } = {',
-      "  'get-workshop-ready': getWorkshopReady,",
+      "  'setup-ai-agent-and-starter-folder': setupAiAgentAndStarterFolder,",
     ];
     // ACT
     const ids = fileAt([GUIDE, WITH_PAGE], REGISTRY_PATHS.ids);
@@ -142,7 +142,7 @@ describe('success cases', () => {
     const episodeIds = ids.slice(ids.indexOf('EPISODE_IDS'), ids.indexOf('TEMPLATE_SLUGS'));
     // ASSERT
     expected.forEach((line) => expect(`${ids}${compositions}`).toContain(line));
-    expect(episodeIds).not.toContain('get-workshop-ready');
+    expect(episodeIds).not.toContain('setup-ai-agent-and-starter-folder');
   });
 });
 

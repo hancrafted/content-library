@@ -17,7 +17,7 @@ const HEADER = [
 /** A slug as a record's `slug` field allows: lowercase words joined by hyphens. */
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
-/** The identifier a slug is imported under: `get-workshop-ready` -> `getWorkshopReady`. */
+/** The identifier a slug is imported under: `setup-ai-agent-and-starter-folder` -> `setupAiAgentAndStarterFolder`. */
 function identifierOf(slug: string): string {
   const camel = slug.replace(/-([a-z0-9])/g, (_, next: string) => next.toUpperCase());
   return /^[0-9]/.test(camel) ? `_${camel}` : camel;

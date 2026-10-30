@@ -157,13 +157,13 @@ describe('edge cases', () => {
     // ARRANGE
     const root = tree([
       'alpha/episode-metadata.ts',
-      'guides/get-workshop-ready/episode.ts',
-      'guides/get-workshop-ready/slides/open-your-terminal/slide.tsx',
+      'guides/setup-ai-agent-and-starter-folder/episode.ts',
+      'guides/setup-ai-agent-and-starter-folder/slides/open-your-terminal/slide.tsx',
     ]);
     const expected = {
-      guides: ['guides/get-workshop-ready'],
+      guides: ['guides/setup-ai-agent-and-starter-folder'],
       episodes: ['alpha'],
-      slides: [{ owner: 'get-workshop-ready', slug: 'open-your-terminal' }],
+      slides: [{ owner: 'setup-ai-agent-and-starter-folder', slug: 'open-your-terminal' }],
     };
     // ACT
     const guides = guideFolders(root).map(({ folder }) => folder);

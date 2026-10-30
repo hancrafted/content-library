@@ -134,7 +134,7 @@ describe('success cases', () => {
 
   it('offers the Guides chip, between the Explorable pages and the Templates, once a Guide is listed', () => {
     // ARRANGE
-    const guide = resource('get-workshop-ready', 'guide', {
+    const guide = resource('setup-ai-agent-and-starter-folder', 'guide', {
       title: 'Get workshop-ready',
       description: 'Your AI agent on your laptop',
       tags: [['workflow', 'Workflow']],
@@ -148,7 +148,7 @@ describe('success cases', () => {
     const kept = matchingResources([...ALL, guide], { ...NO_SELECTION, kinds: ['guide'] });
     // ASSERT
     expect(chips.filter(({ id }) => id !== 'master-slide')).toEqual(expected);
-    expect(slugs(kept)).toEqual(['get-workshop-ready']);
+    expect(slugs(kept)).toEqual(['setup-ai-agent-and-starter-folder']);
   });
 });
 

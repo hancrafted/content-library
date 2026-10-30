@@ -807,25 +807,25 @@ describe('failure cases', () => {
     // ARRANGE
     const input = {
       ...SOUND,
-      guides: [{ slug: 'get-workshop-ready', tags: ['workflow'], visibility: 'public' }],
+      guides: [{ slug: 'setup-ai-agent-and-starter-folder', tags: ['workflow'], visibility: 'public' }],
       guideCompositions: [],
     };
     // ACT
     const load = () => loadContent(input);
     // ASSERT
     expect(load).toThrow(
-      'Guide get-workshop-ready: no composition folder src/episodes/guides/get-workshop-ready/ holds its Slides',
+      'Guide setup-ai-agent-and-starter-folder: no composition folder src/episodes/guides/setup-ai-agent-and-starter-folder/ holds its Slides',
     );
   });
 
   it('refuses a Guide composition folder that has no Guide record', () => {
     // ARRANGE
-    const input = { ...SOUND, guides: [], guideCompositions: ['get-workshop-ready'] };
+    const input = { ...SOUND, guides: [], guideCompositions: ['setup-ai-agent-and-starter-folder'] };
     // ACT
     const load = () => loadContent(input);
     // ASSERT
     expect(load).toThrow(
-      'Guide get-workshop-ready: the composition folder src/episodes/guides/get-workshop-ready/ has no record src/content-store/guides/get-workshop-ready.ts',
+      'Guide setup-ai-agent-and-starter-folder: the composition folder src/episodes/guides/setup-ai-agent-and-starter-folder/ has no record src/content-store/guides/setup-ai-agent-and-starter-folder.ts',
     );
   });
 
@@ -833,14 +833,14 @@ describe('failure cases', () => {
     // ARRANGE
     const input = {
       ...SOUND,
-      guides: [{ slug: 'get-workshop-ready', tags: ['workflow'], youtube: { en: 'nope' } }],
-      guideCompositions: ['get-workshop-ready'],
+      guides: [{ slug: 'setup-ai-agent-and-starter-folder', tags: ['workflow'], youtube: { en: 'nope' } }],
+      guideCompositions: ['setup-ai-agent-and-starter-folder'],
     };
     // ACT
     const load = () => loadContent(input);
     // ASSERT
-    expect(load).toThrow('Guide get-workshop-ready: visibility');
-    expect(load).toThrow('Guide get-workshop-ready: youtube.en');
+    expect(load).toThrow('Guide setup-ai-agent-and-starter-folder: visibility');
+    expect(load).toThrow('Guide setup-ai-agent-and-starter-folder: youtube.en');
   });
 
   it('refuses a duplicate Template slug', () => {

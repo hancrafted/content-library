@@ -33,4 +33,4 @@ export const TEMPLATE_SLUGS = [
 export const EXPLORABLE_PAGE_SLUGS = ['ai-capability', 'context-window', 'human-in-the-loop'] as const;
 
 /** Every Guide, by slug: a step-by-step page served at `/guides/<slug>/`, no Episode (design-ADR 0019, #450). */
-export const GUIDE_SLUGS = ['get-workshop-ready'] as const;
+export const GUIDE_SLUGS = ['setup-ai-agent-and-starter-folder'] as const;

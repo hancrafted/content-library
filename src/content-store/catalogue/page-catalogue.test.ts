@@ -210,17 +210,17 @@ describe('success cases', () => {
 
   it('lists each Guide and the Guides overview, public and indexed, at /guides/<slug>, built in both locales', () => {
     // ARRANGE
-    const expected = ['/guides', '/guides/get-workshop-ready'];
+    const expected = ['/guides', '/guides/setup-ai-agent-and-starter-folder'];
     // ACT
     const catalogue = catalogueOf(loadContent(WITH_GUIDES));
     const pages = catalogue.pages.filter(({ page }) => page.kind === 'guide' || page.kind === 'guides');
-    const page = catalogue.guideAt({ slug: 'get-workshop-ready' });
+    const page = catalogue.guideAt({ slug: 'setup-ai-agent-and-starter-folder' });
     // ASSERT
     expect(pages.map(({ page }) => routeOf(page)).sort()).toEqual(expected);
     expect(pages.every(({ treatment }) => treatment.inSitemap && treatment.index && treatment.exported)).toBe(true);
-    expect(catalogue.guideParams()).toEqual([{ slug: 'get-workshop-ready' }]);
+    expect(catalogue.guideParams()).toEqual([{ slug: 'setup-ai-agent-and-starter-folder' }]);
     expect(page && pageLocales(page)).toEqual(['en', 'de']);
-    expect(catalogue.listedGuides().map(({ page }) => page.guide.slug)).toEqual(['get-workshop-ready']);
+    expect(catalogue.listedGuides().map(({ page }) => page.guide.slug)).toEqual(['setup-ai-agent-and-starter-folder']);
   });
 
   it('builds an unlisted Guide noindex and keeps it off the Guide lists', () => {
@@ -228,7 +228,7 @@ describe('success cases', () => {
     const unlisted = { ...WITH_GUIDES, guides: [{ ...GUIDE, visibility: 'unlisted' }] };
     // ACT
     const catalogue = catalogueOf(loadContent(unlisted));
-    const page = catalogue.guideAt({ slug: 'get-workshop-ready' });
+    const page = catalogue.guideAt({ slug: 'setup-ai-agent-and-starter-folder' });
     // ASSERT
     expect(page && catalogue.treatmentOf(page)).toEqual(HIDDEN);
     expect(catalogue.listedGuides()).toEqual([]);
@@ -464,5 +464,9 @@ const WITH_TEMPLATES = {
  * Guides (design-ADR 0019 as amended by #450): a Guide's page is built from its record at `/guides/<slug>/`. Its slug
  * is cast: the repo holds no Guide yet, so no registered Guide slug exists for a test to name.
  */
-const GUIDE = { slug: 'get-workshop-ready' as GuideSlug, tags: ['workflow'], visibility: 'public' } as const;
+const GUIDE = {
+  slug: 'setup-ai-agent-and-starter-folder' as GuideSlug,
+  tags: ['workflow'],
+  visibility: 'public',
+} as const;
 const WITH_GUIDES = { ...RECORDS, guides: [GUIDE], guideCompositions: [GUIDE.slug] };

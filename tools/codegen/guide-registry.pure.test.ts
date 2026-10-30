@@ -7,12 +7,12 @@ describe('success cases', () => {
   it('maps each Guide record file by its slug, typed against the Guide compositions', () => {
     // ARRANGE
     const expected = [
-      "import { guide as getWorkshopReady } from './guides/get-workshop-ready';",
-      "  'get-workshop-ready': getWorkshopReady,",
+      "import { guide as setupAiAgentAndStarterFolder } from './guides/setup-ai-agent-and-starter-folder';",
+      "  'setup-ai-agent-and-starter-folder': setupAiAgentAndStarterFolder,",
       '} as const satisfies { readonly [S in GuideSlug]: GuideInput & { readonly slug: S } };',
     ];
     // ACT
-    const file = guideRegistryFile(['get-workshop-ready.ts']);
+    const file = guideRegistryFile(['setup-ai-agent-and-starter-folder.ts']);
     // ASSERT
     expect(file.path).toBe(GUIDE_REGISTRY_PATH);
     expected.forEach((line) => expect(file.text).toContain(line));
