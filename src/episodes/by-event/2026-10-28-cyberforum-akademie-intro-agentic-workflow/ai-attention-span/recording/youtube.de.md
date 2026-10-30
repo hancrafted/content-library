@@ -37,3 +37,7 @@ Kapitel: Gedankenexperiment · Die Aufmerksamkeitsspanne der KI · Was das Fenst
 ## Comment ID
 
 Ugxl3clwmw3QzRvXwFp4AaABAg
+
+## Applied fingerprint
+
+4b1ede45d52298dd

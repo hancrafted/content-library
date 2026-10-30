@@ -43,3 +43,7 @@ Kapitel: Das Gedankenexperiment · 5 Eigenschaften der KI · Wie arbeiten wir mi
 ## Comment ID
 
 UgyJA7LyvI8s4PVLKRh4AaABAg
+
+## Applied fingerprint
+
+631b56f8c1ebf7ba
