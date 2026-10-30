@@ -239,6 +239,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **COG**: Cognition: how a person's attention and memory work, what they notice, keep and forget of what they hear and live through.
 
+**EVAL**: Evals: how the output of models and agents is measured, compared and attributed to what they were given.
+
 **LLM**: Large language models: how a model works, from its training data to its context window and sampling, and why that makes it behave as it does.
 
 **ORG**: Organizations: how a company passes knowledge between its people, from onboarding a new hire to the know-how that never gets written down.
