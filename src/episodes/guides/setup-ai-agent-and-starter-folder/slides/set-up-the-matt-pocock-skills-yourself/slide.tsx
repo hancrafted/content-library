@@ -13,7 +13,7 @@ const NODE_DOWNLOAD = 'https://nodejs.org/en/download';
 /** The exact lines to type: never translated. */
 const ADD_SKILLS = 'npx skills@latest add mattpocock/skills';
 const SETUP_SKILL = '/setup-matt-pocock-skills';
-const CHECK_SKILL = '/check-workshop-readiness';
+const CHECK_SKILL = '/hancrafted-check-setup';
 /** The installer's main group, by the name `mattpocock/skills` gives it in `.claude-plugin/plugin.json`. */
 const MAIN_GROUP = 'mattpocock-skills';
 const OTHER_GROUP = 'Other';

@@ -10,11 +10,11 @@
     "hint": "Die Zustimmung ist der Schritt. Dein KI-Agent fragt, bevor er etwas auf Deinem Computer ausführt, <marker>damit die Entscheidung bei Dir bleibt</marker>."
   },
   "prompt": {
-    "window": "workshop-starter · {agent}",
+    "window": "hancrafted-workshop-starter · {agent}",
     "lookup": "● Looking up hancrafted in GLOSSARY.md … found https://hancrafted.net",
     "reason": "Open the hancrafted homepage in your browser",
     "claude-code": {
-      "typed": "> /check-workshop-readiness",
+      "typed": "> /hancrafted-check-setup",
       "heading": "Bash command",
       "question": "Do you want to proceed?",
       "choices": {
@@ -24,15 +24,15 @@
       }
     },
     "antigravity": {
-      "typed": "> check-workshop-readiness",
+      "typed": "> hancrafted-check-setup",
       "asks": "Antigravity hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
     },
     "codex": {
-      "typed": "> check-workshop-readiness",
+      "typed": "> hancrafted-check-setup",
       "asks": "Codex hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
     },
     "copilot": {
-      "typed": "> check-workshop-readiness",
+      "typed": "> hancrafted-check-setup",
       "asks": "GitHub Copilot hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
     }
   },
@@ -105,7 +105,7 @@
       "type-the-skill": {
         "title": "Den Skill eintippen",
         "keywords": "",
-        "script": "Tipp den Namen des Skills ein, check-workshop-readiness, und Dein KI-Agent liest ihn. Bevor er irgendetwas auf Deinem Computer tut, hält er an und fragt Dich. Diese Pause ist kein Fehler: Dein KI-Agent gibt Dir die Entscheidung in die Hand."
+        "script": "Tipp den Namen des Skills ein, hancrafted-check-setup, und Dein KI-Agent liest ihn. Bevor er irgendetwas auf Deinem Computer tut, hält er an und fragt Dich. Diese Pause ist kein Fehler: Dein KI-Agent gibt Dir die Entscheidung in die Hand."
       },
       "say-yes": {
         "title": "Ja sagen",

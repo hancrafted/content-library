@@ -10,8 +10,8 @@
     "open": {
       "title": "Open a terminal in the folder",
       "detail": {
-        "mac": "In Finder, right-click <b>starter-folder</b>, then <b>Services › New Terminal at Folder</b>. No path to type.",
-        "windows": "In File Explorer, right-click <b>starter-folder</b>, then <b>Open in Terminal</b>. No path to type.",
+        "mac": "In Finder, right-click <b>hancrafted-workshop-starter</b>, then <b>Services › New Terminal at Folder</b>. No path to type.",
+        "windows": "In File Explorer, right-click <b>hancrafted-workshop-starter</b>, then <b>Open in Terminal</b>. No path to type.",
         "linux": "Right-click the folder in your file manager › <b>Open in Terminal</b>. No path to type."
       },
       "worked": "<b>It worked when</b> the folder name sits in front of your cursor.",

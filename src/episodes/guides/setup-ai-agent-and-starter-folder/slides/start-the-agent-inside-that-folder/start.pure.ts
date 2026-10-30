@@ -5,7 +5,7 @@ import { osOf, type AiAgent, type Os } from './picks.pure';
  * the drawing's, as the Spec's mock shows them.
  */
 
-export const FOLDER = 'starter-folder';
+export const FOLDER = 'hancrafted-workshop-starter';
 
 /** Which folder menu move 1 draws: Mac's with its Services submenu, Windows 11's short menu, none on Linux. */
 export function openMenu(os: string): 'services' | 'short' | null {

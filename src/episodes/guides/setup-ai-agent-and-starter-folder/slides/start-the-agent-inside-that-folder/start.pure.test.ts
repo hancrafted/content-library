@@ -14,9 +14,9 @@ describe('success cases', () => {
   it('shows the folder name in front of the cursor, in each OS its own prompt', () => {
     // ARRANGE
     const expected = [
-      { before: 'han@MacBook ', folder: 'starter-folder', after: ' %' },
-      { before: 'PS C:\\Users\\han\\Downloads\\', folder: 'starter-folder', after: '>' },
-      { before: 'han@laptop:~/Downloads/', folder: 'starter-folder', after: '$' },
+      { before: 'han@MacBook ', folder: 'hancrafted-workshop-starter', after: ' %' },
+      { before: 'PS C:\\Users\\han\\Downloads\\', folder: 'hancrafted-workshop-starter', after: '>' },
+      { before: 'han@laptop:~/Downloads/', folder: 'hancrafted-workshop-starter', after: '$' },
     ];
     // ACT
     const prompts = [terminalPrompt('mac'), terminalPrompt('windows'), terminalPrompt('linux')];
@@ -48,7 +48,11 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('writes the fallback path with the separator of the picked OS', () => {
     // ARRANGE
-    const expected = ['cd Downloads/starter-folder', 'cd Downloads\\starter-folder', 'cd Downloads/starter-folder'];
+    const expected = [
+      'cd Downloads/hancrafted-workshop-starter',
+      'cd Downloads\\hancrafted-workshop-starter',
+      'cd Downloads/hancrafted-workshop-starter',
+    ];
     // ACT
     const commands = [fallbackCommand('mac'), fallbackCommand('windows'), fallbackCommand('linux')];
     // ASSERT

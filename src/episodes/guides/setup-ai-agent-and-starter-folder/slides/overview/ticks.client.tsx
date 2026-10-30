@@ -9,7 +9,7 @@ export interface Ticks {
   readonly toggle: (id: BoxId) => void;
 }
 
-/** Set by the Overview view, so ticking "I ran check-workshop-readiness" can switch the whole Scene to ready. */
+/** Set by the Overview view, so ticking "I ran hancrafted-check-setup" can switch the whole Scene to ready. */
 export const TicksContext = createContext<Ticks | null>(null);
 
 /** The ticked boxes: transient client state (FE-001), so a reload starts clean. */

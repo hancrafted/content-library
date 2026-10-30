@@ -61,7 +61,7 @@
       "agent-logged-in": "I'm logged in",
       "folder-unzipped": "Starter folder downloaded and unzipped",
       "agent-in-folder": "The agent starts inside that folder",
-      "skill-ran": "I ran check-workshop-readiness"
+      "skill-ran": "I ran hancrafted-check-setup"
     }
   },
   "card": {

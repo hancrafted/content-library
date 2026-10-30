@@ -60,7 +60,7 @@ describe('success cases', () => {
   it("shows Claude Code's prompt by default, asking to open the homepage on a Mac", () => {
     // ARRANGE
     const expected = {
-      window: 'workshop-starter · Claude Code',
+      window: 'hancrafted-workshop-starter · Claude Code',
       command: 'open https://hancrafted.net',
       question: 'Do you want to proceed?',
     };

@@ -74,7 +74,7 @@ describe('success cases', () => {
   it('offers the three exact lines to copy, untranslated, the check as the focal one', () => {
     // ARRANGE
     const expected = {
-      lines: ['npx skills@latest add mattpocock/skills', '/setup-matt-pocock-skills', '/check-workshop-readiness'],
+      lines: ['npx skills@latest add mattpocock/skills', '/setup-matt-pocock-skills', '/hancrafted-check-setup'],
       focal: 'run',
     };
     // ACT

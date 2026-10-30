@@ -52,7 +52,7 @@
     }
   },
   "bundle": {
-    "link": "check-workshop-readiness · skill folder only",
+    "link": "hancrafted-check-setup · skill folder only",
     "size": "small zip",
     "entryLabel": "GLOSSARY.md · add this entry"
   },
@@ -67,7 +67,7 @@
       "same-proof": {
         "title": "Same proof",
         "keywords": "",
-        "script": "The proof is the same as before. You run check-workshop-readiness, and the hancrafted homepage opens. One thing to know: that skill comes with the starter folder, not with the Matt Pocock skills, so the page tells you where to take it from."
+        "script": "The proof is the same as before. You run hancrafted-check-setup, and the hancrafted homepage opens. One thing to know: that skill comes with the starter folder, not with the Matt Pocock skills, so the page tells you where to take it from."
       }
     }
   },

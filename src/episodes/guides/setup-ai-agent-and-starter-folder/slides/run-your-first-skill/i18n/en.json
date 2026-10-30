@@ -10,11 +10,11 @@
     "hint": "Approving it is the step. Your AI agent asks before it runs anything on your computer, <marker>so you stay the one who decides</marker>."
   },
   "prompt": {
-    "window": "workshop-starter · {agent}",
+    "window": "hancrafted-workshop-starter · {agent}",
     "lookup": "● Looking up hancrafted in GLOSSARY.md … found https://hancrafted.net",
     "reason": "Open the hancrafted homepage in your browser",
     "claude-code": {
-      "typed": "> /check-workshop-readiness",
+      "typed": "> /hancrafted-check-setup",
       "heading": "Bash command",
       "question": "Do you want to proceed?",
       "choices": {
@@ -24,15 +24,15 @@
       }
     },
     "antigravity": {
-      "typed": "> check-workshop-readiness",
+      "typed": "> hancrafted-check-setup",
       "asks": "Antigravity may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
     },
     "codex": {
-      "typed": "> check-workshop-readiness",
+      "typed": "> hancrafted-check-setup",
       "asks": "Codex may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
     },
     "copilot": {
-      "typed": "> check-workshop-readiness",
+      "typed": "> hancrafted-check-setup",
       "asks": "GitHub Copilot may stop here and ask, in its own words, whether it may run this command. If it does, say yes."
     }
   },
@@ -105,7 +105,7 @@
       "type-the-skill": {
         "title": "Type the skill",
         "keywords": "",
-        "script": "Type the name of the skill, check-workshop-readiness, and your AI agent reads it. Before it does anything on your computer, it stops and asks you. That pause is not an error, it is the AI agent handing the decision to you."
+        "script": "Type the name of the skill, hancrafted-check-setup, and your AI agent reads it. Before it does anything on your computer, it stops and asks you. That pause is not an error, it is the AI agent handing the decision to you."
       },
       "say-yes": {
         "title": "Say yes",

@@ -52,7 +52,7 @@
     }
   },
   "bundle": {
-    "link": "check-workshop-readiness · nur der Skill-Ordner",
+    "link": "hancrafted-check-setup · nur der Skill-Ordner",
     "size": "kleines Zip",
     "entryLabel": "GLOSSARY.md · diesen Eintrag hinzufügen"
   },
@@ -67,7 +67,7 @@
       "same-proof": {
         "title": "Derselbe Beweis",
         "keywords": "",
-        "script": "Der Beweis ist derselbe wie vorher. Du führst check-workshop-readiness aus, und die hancrafted-Homepage öffnet sich. Eins solltest Du wissen: Dieser Skill kommt mit dem Starter-Ordner, nicht mit den Skills von Matt Pocock, deshalb steht auf der Seite, woher Du ihn bekommst."
+        "script": "Der Beweis ist derselbe wie vorher. Du führst hancrafted-check-setup aus, und die hancrafted-Homepage öffnet sich. Eins solltest Du wissen: Dieser Skill kommt mit dem Starter-Ordner, nicht mit den Skills von Matt Pocock, deshalb steht auf der Seite, woher Du ihn bekommst."
       }
     }
   },

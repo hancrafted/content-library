@@ -26,9 +26,9 @@ const START_PAGES: Readonly<Record<AiAgent, string>> = {
 
 /** Where the trust question shows the folder, as the AI agent sees it on each OS. */
 const TRUST_PATH = {
-  mac: '~/Downloads/starter-folder',
-  windows: 'C:\\Users\\han\\Downloads\\starter-folder',
-  linux: '~/Downloads/starter-folder',
+  mac: '~/Downloads/hancrafted-workshop-starter',
+  windows: 'C:\\Users\\han\\Downloads\\hancrafted-workshop-starter',
+  linux: '~/Downloads/hancrafted-workshop-starter',
 } as const;
 
 // Step 3 (second Slide), Option 6a: the terminal opens from the folder's own right-click menu, so a first-timer types no path, then

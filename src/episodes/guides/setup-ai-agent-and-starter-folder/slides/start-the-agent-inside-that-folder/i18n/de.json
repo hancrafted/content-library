@@ -10,8 +10,8 @@
     "open": {
       "title": "Ein Terminal im Ordner öffnen",
       "detail": {
-        "mac": "Klicke im Finder mit der rechten Maustaste auf <b>starter-folder</b>, dann auf <b>Dienste › Neues Terminal beim Ordner</b>. Kein Pfad zum Eintippen.",
-        "windows": "Klicke im Datei-Explorer mit der rechten Maustaste auf <b>starter-folder</b>, dann auf <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen.",
+        "mac": "Klicke im Finder mit der rechten Maustaste auf <b>hancrafted-workshop-starter</b>, dann auf <b>Dienste › Neues Terminal beim Ordner</b>. Kein Pfad zum Eintippen.",
+        "windows": "Klicke im Datei-Explorer mit der rechten Maustaste auf <b>hancrafted-workshop-starter</b>, dann auf <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen.",
         "linux": "Rechtsklick auf den Ordner in Deinem Dateimanager › <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen."
       },
       "worked": "<b>Es hat geklappt, wenn</b> der Ordnername direkt vor Deinem Cursor steht.",

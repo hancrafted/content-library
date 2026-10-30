@@ -4,7 +4,7 @@
   "filesLabel": "What the starter folder holds",
   "steps": "Step 3",
   "window": "terminal",
-  "prompt": "workshop-starter %",
+  "prompt": "hancrafted-workshop-starter %",
   "voiceScript": {
     "segments": {
       "the-place-to-work": {

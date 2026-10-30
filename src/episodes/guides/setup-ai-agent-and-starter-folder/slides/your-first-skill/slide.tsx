@@ -16,7 +16,7 @@ export const yourFirstSkill = slide({
           {t('steps')}
         </p>
         <TitleTerminal title={t('window')} size="section" ai>
-          <span className="block text-primary">&gt; check-workshop-readiness</span>
+          <span className="block text-primary">&gt; hancrafted-check-setup</span>
           <PermissionAsk question={t('question')} yes={t('yes')} />
         </TitleTerminal>
       </div>

@@ -9,12 +9,14 @@ import en from './i18n/en.json';
 import { UnzipView } from './unzip-view.client';
 
 /*
- * The zip's file name and the folder's files are names, not words, so they stay out of the Translation files. Both are
- * placeholders until the separate starter-folder build: it puts the zip in public/ with its files at the zip's root
- * (no top folder, or Windows' Extract All nests starter-folder\starter-folder and the next Slide's path breaks).
+ * The zip's file name and the folder's files are names, not words, so they stay out of the Translation files. The zip
+ * lives in public/ with its files at the zip's root and no top folder: Windows' Extract All names the folder after the
+ * zip, so a top folder would nest hancrafted-workshop-starter\\hancrafted-workshop-starter and the next Slide's path
+ * would break. Its skills are real folders, not symlinks, because Windows extracts a symlink as a plain text file.
+ * Build it from the folder, not from its parent: `cd hancrafted-workshop-starter && zip -qr -X ../<zip> .`.
  */
-const ZIP = 'starter-folder.zip';
-const FOLDER = 'starter-folder';
+const ZIP = 'hancrafted-workshop-starter.zip';
+const FOLDER = 'hancrafted-workshop-starter';
 /** One file for both locales, so its URL is the default locale's bare path. */
 const ZIP_PATH = `/${ZIP}`;
 

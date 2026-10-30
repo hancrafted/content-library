@@ -41,7 +41,7 @@ export const hero = slide({
               </li>
               <li className="focus-group__item flex items-start justify-between gap-4">
                 <span>
-                  <span className="block text-primary">&gt; check-workshop-readiness</span>
+                  <span className="block text-primary">&gt; hancrafted-check-setup</span>
                   <span className="mt-2 block">
                     <PermissionAsk question={t('question')} yes={t('yes')} />
                   </span>

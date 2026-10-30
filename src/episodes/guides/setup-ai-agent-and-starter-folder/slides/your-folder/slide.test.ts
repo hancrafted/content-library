@@ -48,9 +48,9 @@ describe('success cases', () => {
     expect(text).toContain(expected);
   });
 
-  it('shows "workshop-starter %" in the terminal', () => {
+  it('shows "hancrafted-workshop-starter %" in the terminal', () => {
     // ARRANGE
-    const expected = 'workshop-starter %';
+    const expected = 'hancrafted-workshop-starter %';
     // ACT
     const text = textOf('en');
     // ASSERT
