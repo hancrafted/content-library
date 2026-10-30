@@ -12,6 +12,7 @@ export interface ReadinessWords {
   readonly localSetupMissing: string;
   readonly watchTitle: string;
   readonly germanTag: string;
+  readonly reopen: string;
 }
 
 /** An unlisted Episode to watch while waiting: its localized href and its (German) title. */
@@ -31,6 +32,8 @@ export interface ViewBodyProps {
   readonly normal: ReactNode;
   /** The Help note, shown under the ready card, where the checklist is gone. */
   readonly stuck: ReactNode;
+  /** Set when the ready view came from ticking the check skill: takes the tick back and shows the checklist again. */
+  readonly onReopen?: () => void;
 }
 
 function Mark({ done }: { done: boolean }) {
@@ -39,8 +42,8 @@ function Mark({ done }: { done: boolean }) {
       data-mark={done ? 'done' : 'open'}
       className={
         done
-          ? 'grid size-6 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground'
-          : 'grid size-6 shrink-0 place-items-center rounded-full border border-border text-muted-foreground'
+          ? 'grid size-6 shrink-0 place-items-center rounded-full bg-(--success) text-(--success-foreground)'
+          : 'grid size-6 shrink-0 place-items-center rounded-full border-2 border-brand-accent text-brand-accent'
       }
     >
       <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
@@ -65,40 +68,74 @@ function Line({ done, children }: { done: boolean; children: ReactNode }) {
   );
 }
 
-/** The ready card: a prominent title over the three done lines. */
-function ReadyCard({ words }: { words: ReadinessWords }) {
+function Check({ className }: { className: string }) {
   return (
-    <section data-view="ready" className="flex flex-col gap-4 rounded-2xl bg-primary p-6 text-primary-foreground">
-      <p className="text-subheading font-semibold">{words.readyTitle}</p>
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <path
+        d="M5 12.5l4.5 4.5L19 7.5"
+        className="fill-none stroke-current"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+const DONE_DISC = 'grid shrink-0 place-items-center rounded-full bg-(--success) text-(--success-foreground)';
+
+/** Takes the "I ran the check skill" tick back, so the checklist shows again. */
+function Reopen({ label, onReopen }: { label: string; onReopen: () => void }) {
+  return (
+    <button
+      type="button"
+      data-reopen
+      onClick={onReopen}
+      className="min-h-11 w-fit cursor-pointer rounded-full border border-border bg-background px-4 text-caption font-medium outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      {label}
+    </button>
+  );
+}
+
+/** The ready card: a green check and a prominent title over the three done lines. */
+function ReadyCard({ words, onReopen }: { words: ReadinessWords; onReopen?: () => void }) {
+  return (
+    <section
+      data-view="ready"
+      className="flex flex-col gap-4 rounded-2xl border-2 border-(--success) bg-(--success)/10 p-6"
+    >
+      <p className="flex items-center gap-3 text-subheading font-semibold">
+        <span className={`${DONE_DISC} size-9`}>
+          <Check className="size-6" />
+        </span>
+        {words.readyTitle}
+      </p>
       <ul className="flex flex-col gap-2">
         {words.recap.map((line) => (
           <li key={line} className="flex items-start gap-3 text-body">
-            <span className="grid size-6 shrink-0 place-items-center rounded-full bg-primary-foreground text-primary">
-              <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-                <path
-                  d="M5 12.5l4.5 4.5L19 7.5"
-                  className="fill-none stroke-current"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            <span className={`${DONE_DISC} size-6`}>
+              <Check className="size-4" />
             </span>
             <span data-recap="done">{line}</span>
           </li>
         ))}
       </ul>
+      {onReopen && <Reopen label={words.reopen} onReopen={onReopen} />}
     </section>
   );
 }
 
 /** The recap card: three done lines when ready, one line per reported piece when something is missing. */
-function RecapCard({ view, words }: Pick<ViewBodyProps, 'view' | 'words'>) {
-  if (view.kind === 'ready') return <ReadyCard words={words} />;
+function RecapCard({ view, words, onReopen }: Pick<ViewBodyProps, 'view' | 'words' | 'onReopen'>) {
+  if (view.kind === 'ready') return <ReadyCard words={words} onReopen={onReopen} />;
   if (view.kind !== 'missing') return null;
   const { skills, localSetup } = view.flags;
   return (
-    <section data-view="missing" className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6">
+    <section
+      data-view="missing"
+      className="flex flex-col gap-4 rounded-2xl border-2 border-brand-accent bg-brand-accent/10 p-6"
+    >
       <p className="text-subheading font-semibold">{words.missingTitle}</p>
       <ul className="flex flex-col gap-2">
         {skills !== undefined && <Line done={skills}>{skills ? words.skillsDone : words.skillsMissing}</Line>}
@@ -141,11 +178,11 @@ function Watch({ words, watch, tagGerman, locale }: Pick<ViewBodyProps, 'words' 
  * The Overview Scene body for one view: pure and presentational, so the test renders each view directly. `normal`
  * shows the checklist; `ready` replaces it with the recap card; `missing` puts the recap above the checklist.
  */
-export function ViewBody({ view, words, watch, tagGerman, locale, normal, stuck }: ViewBodyProps) {
+export function ViewBody({ view, words, watch, tagGerman, locale, normal, stuck, onReopen }: ViewBodyProps) {
   if (view.kind === 'normal') return <>{normal}</>;
   return (
     <div className="flex flex-col gap-6">
-      <RecapCard view={view} words={words} />
+      <RecapCard view={view} words={words} onReopen={onReopen} />
       {view.kind === 'missing' ? normal : stuck}
       <Watch words={words} watch={watch} tagGerman={tagGerman} locale={locale} />
     </div>

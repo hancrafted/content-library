@@ -3,8 +3,9 @@
 import type { Locale } from '@/shared/lib/locale.pure';
 import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
-import { useState, type ReactNode } from 'react';
+import { useContext, type ReactNode } from 'react';
 import { BOXES, isStepDone, startStep, type BoxId, type StepNumber } from './start-step.pure';
+import { TicksContext, useTicks } from './ticks.client';
 
 /** One step of the checklist, its words already in the viewer's language. */
 export interface ChecklistStep {
@@ -96,7 +97,7 @@ function StepItem({ step, ticked, start, toggle }: StepItemProps) {
         <span
           className={cn(
             'grid size-8 shrink-0 place-items-center rounded-full text-caption font-semibold',
-            done ? 'bg-primary text-primary-foreground' : ring,
+            done ? 'bg-(--success) text-(--success-foreground)' : ring,
           )}
         >
           {step.n}
@@ -129,7 +130,7 @@ function StartCard({
     <a
       data-start-at={step?.n}
       href={localizePath(stripLocale(link.path), locale, link.anchor)}
-      className="card-hover card-hover--raise flex items-center justify-between gap-4 rounded-2xl bg-primary px-6 py-5 text-primary-foreground"
+      className="card-hover card-hover--raise flex items-center justify-between gap-4 rounded-2xl border-2 border-brand-accent bg-brand-accent/10 px-6 py-5 text-foreground"
     >
       <span className="flex flex-col">
         <span className="text-caption opacity-80">{allDone ? words.allDone : words.open}</span>
@@ -143,24 +144,13 @@ function StartCard({
   );
 }
 
-/** The ticked boxes: transient client state (FE-001), so a reload starts clean. */
-function useTicks() {
-  const [ticked, setTicked] = useState<ReadonlySet<BoxId>>(new Set());
-  const toggle = (id: BoxId) =>
-    setTicked((current) => {
-      const next = new Set(current);
-      if (!next.delete(id)) next.add(id);
-      return next;
-    });
-  return { ticked, toggle };
-}
-
 /**
  * The Overview's checklist and its "Start at step N" card: the viewer ticks what they already have, the card names the
  * first step with an open box and links to its first Slide. Ticks are transient (FE-001): they live until a reload.
  */
 export function Checklist({ steps, words, hrefs, locale, intro, children }: ChecklistProps) {
-  const { ticked, toggle } = useTicks();
+  const own = useTicks();
+  const { ticked, toggle } = useContext(TicksContext) ?? own;
   const { step: start, allDone } = startStep(ticked);
   return (
     <div className="grid gap-6 @3xl:grid-cols-12 @3xl:items-start">

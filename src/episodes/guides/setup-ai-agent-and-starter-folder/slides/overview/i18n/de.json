@@ -92,6 +92,7 @@
       "missing": "Die lokale Einrichtung fehlt. Führe den Setup-Skill aus, prüfe dann erneut oder drücke Hilfe."
     },
     "watchTitle": "Schau Dir in der Zwischenzeit das an",
-    "germanTag": "Deutsch"
+    "germanTag": "Deutsch",
+    "reopen": "Noch nicht fertig? Zurück zur Checkliste"
   }
 }

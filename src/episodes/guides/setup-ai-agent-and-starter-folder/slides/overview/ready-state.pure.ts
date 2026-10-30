@@ -34,3 +34,8 @@ export function decideView(flags: ReadyFlags): OverviewView {
   if (flags.skills === true && flags.localSetup === true) return { kind: 'ready' };
   return { kind: 'normal' };
 }
+
+/** The view for the query flags, or `ready` once the viewer ticks that they ran the check skill: it only runs after the rest works. */
+export function viewFor(flags: ReadyFlags, skillRan: boolean): OverviewView {
+  return skillRan ? { kind: 'ready' } : decideView(flags);
+}

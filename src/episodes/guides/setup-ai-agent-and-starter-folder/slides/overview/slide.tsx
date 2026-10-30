@@ -108,6 +108,7 @@ export const overview = slide({
             localSetupMissing: t('ready.localSetup.missing'),
             watchTitle: t('ready.watchTitle'),
             germanTag: t('ready.germanTag'),
+            reopen: t('ready.reopen'),
           }}
           stuck={stuck}
           normal={

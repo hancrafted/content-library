@@ -51,6 +51,7 @@ const WORDS: ReadinessWords = {
   localSetupMissing: en.ready.localSetup.missing,
   watchTitle: en.ready.watchTitle,
   germanTag: en.ready.germanTag,
+  reopen: en.ready.reopen,
 };
 
 const WATCH = [
@@ -59,7 +60,7 @@ const WATCH = [
 ];
 
 /** The view body as the client part hands it the view read from a query string. */
-function viewOf(search: string, tagGerman = true) {
+function viewOf(search: string, tagGerman = true, onReopen?: () => void) {
   const html = renderToStaticMarkup(
     createElement(ViewBody, {
       view: decideView(parseReadyFlags(search)),
@@ -67,6 +68,7 @@ function viewOf(search: string, tagGerman = true) {
       watch: WATCH,
       tagGerman,
       locale: 'en' as const,
+      onReopen,
       normal: createElement('div', { 'data-normal': true }),
       stuck: createElement('div', { 'data-stuck': true }),
     }),
@@ -227,6 +229,19 @@ describe('success cases', () => {
       .get();
     // ASSERT
     expect(marks).toEqual(expected);
+  });
+
+  it('offers a way back to the checklist only when the ready view came from ticking the check skill', () => {
+    // ARRANGE
+    const query = 'skills=true&local-setup=true';
+    const expected = { ticked: 1, flagged: 0 };
+    // ACT
+    const found = {
+      ticked: viewOf(query, true, () => undefined)('[data-reopen]').length,
+      flagged: viewOf(query)('[data-reopen]').length,
+    };
+    // ASSERT
+    expect(found).toEqual(expected);
   });
 
   it('shows only the checklist without flags, and tags the watch cards "German" only outside German', () => {

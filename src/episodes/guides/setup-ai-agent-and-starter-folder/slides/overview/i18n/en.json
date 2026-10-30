@@ -92,6 +92,7 @@
       "missing": "The local setup is missing. Run the setup skill, then check again, or press Help."
     },
     "watchTitle": "Meanwhile watch these",
-    "germanTag": "German"
+    "germanTag": "German",
+    "reopen": "Not done yet? Back to the checklist"
   }
 }

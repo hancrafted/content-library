@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { decideView, parseReadyFlags } from './ready-state.pure';
+import { decideView, parseReadyFlags, viewFor } from './ready-state.pure';
 
 describe('success cases', () => {
   it('reads both flags from the query string', () => {
@@ -67,5 +67,23 @@ describe('edge cases', () => {
     const view = decideView(flags);
     // ASSERT
     expect(view).toEqual({ kind: 'missing', flags, missing: ['skills'] });
+  });
+
+  it('is ready once the viewer ticks the check skill, whatever the flags say', () => {
+    // ARRANGE
+    const flags = parseReadyFlags('skills=false&local-setup=false');
+    // ACT
+    const view = viewFor(flags, true);
+    // ASSERT
+    expect(view).toEqual({ kind: 'ready' });
+  });
+
+  it('follows the flags while the check skill is not ticked', () => {
+    // ARRANGE
+    const flags = parseReadyFlags('skills=true&local-setup=true');
+    // ACT
+    const view = viewFor(flags, false);
+    // ASSERT
+    expect(view).toEqual({ kind: 'ready' });
   });
 });
