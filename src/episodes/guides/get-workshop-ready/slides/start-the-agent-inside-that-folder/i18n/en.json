@@ -1,21 +1,9 @@
 {
   "title": "Start the agent inside that folder",
   "caption": "Open the terminal from the folder itself, then start your AI agent: <b>it reads only the folder it starts in</b>.",
-  "step": "Step 6 of 8",
   "toolbar": {
-    "os": "Operating system",
-    "agent": "AI agent",
-    "names": {
-      "mac": "Mac",
-      "windows": "Windows",
-      "linux": "Linux"
-    }
-  },
-  "agents": {
-    "claude-code": "Claude Code",
-    "antigravity": "Antigravity",
-    "codex": "Codex",
-    "copilot": "GitHub Copilot"
+    "os": "Your computer",
+    "agent": "AI agent"
   },
   "terminal": "Terminal",
   "moves": {
@@ -75,18 +63,6 @@
   "fallback": {
     "text": "Fallback, if the menu won't work: open the terminal as in step 2, type <command></command> and press Enter."
   },
-  "stuck": {
-    "title": "Stuck?",
-    "hint": "Paste your error, copy the prompt, ask free ChatGPT.",
-    "label": "Your error, or what you see",
-    "placeholder": "Paste your error or describe what you see…",
-    "adds": "The prompt adds",
-    "step": "Step 6: Start the agent inside that folder",
-    "copy": "Copy prompt",
-    "copied": "Prompt copied. Paste it into free ChatGPT.",
-    "noError": "(I have not pasted an error; I am stuck on this step.)",
-    "template": "I am a beginner following a step-by-step guide to get an AI agent running on my laptop for a workshop.\n\nMy computer: {os}\nMy AI agent: {agent}\nThe step I am on: {step}\n\nThis is the error, or what I see:\n{error}\n\nExplain in plain words what went wrong and tell me what to do next, one small step at a time. Do not assume I know the terminal."
-  },
   "voiceScript": {
     "segments": {
       "go-in-then-start": {
@@ -104,6 +80,21 @@
         "keywords": "",
         "script": "Look at what you have. A terminal that waits, an AI agent inside it, and a folder it can read. One piece is left, and it is the one that proves all the others work."
       }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error, or what you see",
+    "placeholder": "Paste your error or describe what you see…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied. Paste it into free ChatGPT.",
+    "prompt": "I am a beginner following a step-by-step guide to get an AI agent running on my laptop for a workshop.\n\nMy computer: {os}\nMy AI agent: {agent}\nThe step I am on: {step}\n\nThis is the error, or what I see:\n{error}\n\nExplain in plain words what went wrong and tell me what to do next, one small step at a time. Do not assume I know the terminal.",
+    "noError": "(I have not pasted an error; I am stuck on this step.)",
+    "step": "Step 6: Start the agent inside that folder",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
     }
   }
 }

@@ -1,12 +1,12 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
 import type { ReactNode } from 'react';
 import { CommandRow } from './command-row';
 import { CopyLine } from './copy-line.client';
-import { CheckBundle, HomepageResult, OfficialLink, SetupAnswers, SkillPicker, StepProgress } from './drawings';
+import { CheckBundle, HomepageResult, OfficialLink, SetupAnswers, SkillPicker } from './drawings';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { StuckBox } from './stuck-box.client';
 
 /** The Node.js project's own download page: the install instructions stay there (Visual language, "Official links"). */
 const NODE_DOWNLOAD = 'https://nodejs.org/en/download';
@@ -22,20 +22,38 @@ const GLOSSARY_ENTRY = "**hancrafted**:\nHan's workshop homepage, https://hancra
 
 /*
  * Step 8, "Set up the Matt Pocock skills yourself" (Spec Option 8a): a five-row recipe card, the reason on the left
- * and the exact line on the right, then the "Stuck?" box. No toolbar: nothing here differs by operating system or AI
+ * and the exact line on the right, with Help in the header. No toolbar: nothing here differs by operating system or AI
  * agent. The rows are a `focus-group--dim-others`, so Han can point at one while presenting. No motion of its own.
  */
 export const setUpTheMattPocockSkillsYourself = slide({
   slug: 'set-up-the-matt-pocock-skills-yourself',
   messages: { en, de },
   segments: [{ slug: 'same-chain-built-by-hand' }, { slug: 'same-proof' }],
-  content: ({ t, template }) => {
+  headerAction: ({ t, template }) => (
+    <GuideHelp
+      step={t('help.step')}
+      words={{
+        button: t('help.button'),
+        label: t('help.label'),
+        placeholder: t('help.placeholder'),
+        copy: t('help.copy'),
+        copied: t('help.copied'),
+        prompt: template('help.prompt'),
+        noError: t('help.noError'),
+        chats: {
+          openAIChats: t('help.chats.openAIChats'),
+          openAIChatTip: template('help.chats.openAIChatTip'),
+          newTab: t('help.chats.newTab'),
+        },
+      }}
+    />
+  ),
+  content: ({ t }) => {
     const copy = { copy: t('copy'), copied: t('copied') };
     const code = (chunks: ReactNode) => <code className="font-mono">{chunks}</code>;
     return (
       <SlideFrame>
         <div className="@container flex flex-col gap-8">
-          <StepProgress step={8} total={8} pill={t('step')} label={t('progress')} />
           <ol
             aria-label={t('rows.label')}
             className="focus-group focus-group--dim-others flex flex-col rounded-xl border border-border bg-card"
@@ -84,27 +102,6 @@ export const setUpTheMattPocockSkillsYourself = slide({
               <HomepageResult site="hancrafted.net" name="hancrafted" opens={t('homepage')} />
             </CommandRow>
           </ol>
-          <StuckBox
-            words={{
-              title: t('stuck.title'),
-              hint: t('stuck.hint'),
-              pasteLabel: t('stuck.pasteLabel'),
-              placeholder: t('stuck.placeholder'),
-              copy: t('stuck.copy'),
-              copied: t('stuck.copied'),
-              adds: t('stuck.adds'),
-              step: t('stuck.step'),
-              noError: t('stuck.noError'),
-              prompt: template('stuck.prompt'),
-              os: { mac: t('stuck.os.mac'), windows: t('stuck.os.windows'), linux: t('stuck.os.linux') },
-              agent: {
-                'claude-code': t('stuck.agent.claude-code'),
-                antigravity: t('stuck.agent.antigravity'),
-                codex: t('stuck.agent.codex'),
-                copilot: t('stuck.agent.copilot'),
-              },
-            }}
-          />
         </div>
       </SlideFrame>
     );

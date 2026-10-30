@@ -1,13 +1,11 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import { DEFAULT_LOCALE, localizePath } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { PickGroup } from './pick-toolbar.client';
-import { StepRail } from './step-rail';
-import { StuckBox } from './stuck-box.client';
-import { OPERATING_SYSTEMS } from './stuck-prompt.pure';
 import { UnzipView } from './unzip-view.client';
 
 /*
@@ -77,36 +75,36 @@ function FolderRow({ name, note, folder = false }: { name: string; note?: string
 }
 
 // Step 5, Option 5a: a copy of the grid-1x2 Master slide, download on the left and the unzipped folder on the right,
-// hover dimming the other half. The OS toolbar shows, since the unzip gesture differs by OS (the build notes overrule
-// the Visual's "neither toolbar shows"); the AI-agent toolbar does not. The troubleshooting box closes the step.
+// hover dimming the other half. The OS toolbar group is live, since the unzip gesture differs by OS (the build notes overrule
+// the Visual's "neither toolbar shows"); the AI-agent group is dimmed. Help sits in the header.
 export const downloadAndUnzipTheStarterFolder = slide({
   slug: 'download-and-unzip-the-starter-folder',
   messages: { en, de },
   segments: [{ slug: 'one-link-one-zip' }, { slug: 'where-it-lives' }],
-  content: ({ t, template }) => {
-    const osNames = {
-      mac: t('toolbar.names.mac'),
-      windows: t('toolbar.names.windows'),
-      linux: t('toolbar.names.linux'),
-    };
-    const agentNames = {
-      'claude-code': t('agents.claude-code'),
-      antigravity: t('agents.antigravity'),
-      codex: t('agents.codex'),
-      copilot: t('agents.copilot'),
-    };
+  headerAction: ({ t, template }) => (
+    <GuideHelp
+      step={t('help.step')}
+      words={{
+        button: t('help.button'),
+        label: t('help.label'),
+        placeholder: t('help.placeholder'),
+        copy: t('help.copy'),
+        copied: t('help.copied'),
+        prompt: template('help.prompt'),
+        noError: t('help.noError'),
+        chats: {
+          openAIChats: t('help.chats.openAIChats'),
+          openAIChatTip: template('help.chats.openAIChatTip'),
+          newTab: t('help.chats.newTab'),
+        },
+      }}
+    />
+  ),
+  content: ({ t }) => {
     return (
       <SlideFrame>
         <div className="flex flex-col gap-8">
-          <StepRail step={5} pill={t('step')} />
-          <div className="flex flex-wrap items-center gap-3">
-            <PickGroup
-              name="os"
-              fallback="mac"
-              label={t('toolbar.os')}
-              options={OPERATING_SYSTEMS.map((os) => ({ value: os, label: osNames[os] }))}
-            />
-          </div>
+          <GuideToolbar active={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
           <div className="focus-group focus-group--dim-others grid grid-cols-1 divide-y divide-border rounded-3xl border border-border bg-card md:grid-cols-2 md:divide-x md:divide-y-0">
             <section className="focus-group__item flex min-w-0 flex-col gap-6 p-5 md:p-8">
               <HalfIndex index="01" accent="bg-foreground">
@@ -178,21 +176,6 @@ export const downloadAndUnzipTheStarterFolder = slide({
               </p>
             </section>
           </div>
-          <StuckBox
-            names={{ os: osNames, agent: agentNames }}
-            words={{
-              title: t('stuck.title'),
-              hint: t('stuck.hint'),
-              label: t('stuck.label'),
-              placeholder: t('stuck.placeholder'),
-              adds: t('stuck.adds'),
-              step: t('stuck.step'),
-              copy: t('stuck.copy'),
-              copied: t('stuck.copied'),
-              noError: t('stuck.noError'),
-              template: template('stuck.template'),
-            }}
-          />
         </div>
       </SlideFrame>
     );

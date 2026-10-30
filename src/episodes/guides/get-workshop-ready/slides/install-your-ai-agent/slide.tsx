@@ -3,7 +3,6 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { DoneMark } from '@/episodes/components/slide-shared/agent-setup-step/done-mark';
 import { OfficialLink } from '@/episodes/components/slide-shared/agent-setup-step/official-link';
 import { PickSwitch } from '@/episodes/components/slide-shared/agent-setup-step/pick-switch.client';
-import { PickToolbar } from '@/episodes/components/slide-shared/agent-setup-step/pick-toolbar.client';
 import {
   AGENTS,
   casesOf,
@@ -12,9 +11,9 @@ import {
   OPERATING_SYSTEMS,
   type StartScreen,
 } from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
-import { StepProgress } from '@/episodes/components/slide-shared/agent-setup-step/step-progress';
-import { StuckBox } from '@/episodes/components/slide-shared/agent-setup-step/stuck-box.client';
 import { TerminalWindow } from '@/episodes/components/slide-shared/agent-setup-step/terminal-window';
+import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -69,11 +68,29 @@ export const installYourAiAgent = slide({
     { slug: 'claude-code-preferred' },
     { slug: 'it-tells-you-when-it-worked' },
   ],
-  content: ({ t, template }) => (
+  headerAction: ({ t, template }) => (
+    <GuideHelp
+      step={t('help.step')}
+      words={{
+        button: t('help.button'),
+        label: t('help.label'),
+        placeholder: t('help.placeholder'),
+        copy: t('help.copy'),
+        copied: t('help.copied'),
+        prompt: template('help.prompt'),
+        noError: t('help.noError'),
+        chats: {
+          openAIChats: t('help.chats.openAIChats'),
+          openAIChatTip: template('help.chats.openAIChatTip'),
+          newTab: t('help.chats.newTab'),
+        },
+      }}
+    />
+  ),
+  content: ({ t }) => (
     <SlideFrame>
       <div className="flex flex-col gap-8">
-        <StepProgress step={3} total={8} label={t('progress')} />
-        <PickToolbar show={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+        <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
 
         <div className="grid gap-8 rounded-xl border border-border bg-card p-6 md:grid-cols-12 md:p-8">
           <div className="flex flex-col justify-between gap-6 md:col-span-6">
@@ -126,21 +143,6 @@ export const installYourAiAgent = slide({
             </p>
           </div>
         </div>
-
-        <StuckBox
-          step={t('stuck.step')}
-          words={{
-            title: t('stuck.title'),
-            hint: t('stuck.hint'),
-            pasteLabel: t('stuck.pasteLabel'),
-            placeholder: t('stuck.placeholder'),
-            copy: t('stuck.copy'),
-            copied: t('stuck.copied'),
-            adds: t('stuck.adds'),
-            prompt: template('stuck.prompt'),
-            noError: t('stuck.noError'),
-          }}
-        />
       </div>
     </SlideFrame>
   ),

@@ -1,16 +1,15 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import { externalHref } from '@/shared/lib/external-link.pure';
 import { ByAgent, ByOs } from './by-pick.client';
 import { MacMenu, WindowsMenu } from './folder-menu';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { ExternalIcon, InfoIcon, MoveText, TrustBox } from './move-parts';
-import { PickGroup } from './pick-toolbar.client';
+import { type AiAgent, type Os } from './picks.pure';
 import { fallbackCommand, FOLDER, startCommand, terminalPrompt } from './start.pure';
-import { StepRail } from './step-rail';
-import { StuckBox } from './stuck-box.client';
-import { AI_AGENTS, OPERATING_SYSTEMS, type AiAgent } from './stuck-prompt.pure';
 import { PromptLine, TerminalWindow } from './terminal-window';
 
 /*
@@ -39,21 +38,28 @@ export const startTheAgentInsideThatFolder = slide({
   slug: 'start-the-agent-inside-that-folder',
   messages: { en, de },
   segments: [{ slug: 'go-in-then-start' }, { slug: 'same-folder-every-time' }, { slug: 'chain-so-far' }],
-  content: ({ t, template }) => {
-    const osNames = {
-      mac: t('toolbar.names.mac'),
-      windows: t('toolbar.names.windows'),
-      linux: t('toolbar.names.linux'),
-    };
-    const agentNames = {
-      'claude-code': t('agents.claude-code'),
-      antigravity: t('agents.antigravity'),
-      codex: t('agents.codex'),
-      copilot: t('agents.copilot'),
-    };
+  headerAction: ({ t, template }) => (
+    <GuideHelp
+      step={t('help.step')}
+      words={{
+        button: t('help.button'),
+        label: t('help.label'),
+        placeholder: t('help.placeholder'),
+        copy: t('help.copy'),
+        copied: t('help.copied'),
+        prompt: template('help.prompt'),
+        noError: t('help.noError'),
+        chats: {
+          openAIChats: t('help.chats.openAIChats'),
+          openAIChatTip: template('help.chats.openAIChatTip'),
+          newTab: t('help.chats.newTab'),
+        },
+      }}
+    />
+  ),
+  content: ({ t }) => {
     const terminalTitle = `${t('terminal')} · ${FOLDER}`;
-    const byOs = <T,>(of: (os: (typeof OPERATING_SYSTEMS)[number]) => T) =>
-      ({ mac: of('mac'), windows: of('windows'), linux: of('linux') }) as const;
+    const byOs = <T,>(of: (os: Os) => T) => ({ mac: of('mac'), windows: of('windows'), linux: of('linux') }) as const;
     const byAgent = <T,>(of: (agent: AiAgent) => T) =>
       ({
         'claude-code': of('claude-code'),
@@ -71,22 +77,7 @@ export const startTheAgentInsideThatFolder = slide({
     return (
       <SlideFrame>
         <div className="flex flex-col gap-8">
-          <StepRail step={6} pill={t('step')} />
-          <div className="flex flex-wrap items-center gap-3">
-            <PickGroup
-              name="os"
-              fallback="mac"
-              label={t('toolbar.os')}
-              options={OPERATING_SYSTEMS.map((os) => ({ value: os, label: osNames[os] }))}
-            />
-            <PickGroup
-              name="agent"
-              fallback="claude-code"
-              label={t('toolbar.agent')}
-              ai
-              options={AI_AGENTS.map((agent) => ({ value: agent, label: agentNames[agent] }))}
-            />
-          </div>
+          <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
           <ol className="focus-group focus-group--dim-others flex flex-col gap-8 rounded-3xl border border-border bg-card p-5 md:p-8">
             <li className="focus-group__item grid grid-cols-1 items-start gap-6 md:grid-cols-12">
               <MoveText n={1} title={t('moves.open.title')}>
@@ -217,21 +208,6 @@ export const startTheAgentInsideThatFolder = slide({
               })}
             </li>
           </ol>
-          <StuckBox
-            names={{ os: osNames, agent: agentNames }}
-            words={{
-              title: t('stuck.title'),
-              hint: t('stuck.hint'),
-              label: t('stuck.label'),
-              placeholder: t('stuck.placeholder'),
-              adds: t('stuck.adds'),
-              step: t('stuck.step'),
-              copy: t('stuck.copy'),
-              copied: t('stuck.copied'),
-              noError: t('stuck.noError'),
-              template: template('stuck.template'),
-            }}
-          />
         </div>
       </SlideFrame>
     );

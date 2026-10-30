@@ -1,5 +1,3 @@
-import { fillTemplate } from '@/shared/lib/template.pure';
-
 /** The operating systems the page-wide OS pick names; the Slide hides its toggle but reads the pick. */
 export const OSES = ['mac', 'windows', 'linux'] as const;
 export type Os = (typeof OSES)[number];
@@ -37,26 +35,4 @@ const OPENERS: Readonly<Record<Os, string>> = { mac: 'open', windows: 'start', l
 /** The command the skill asks to run: open the homepage in the default browser. */
 export function openCommand(os: Os, url: string): string {
   return `${OPENERS[os]} ${url}`;
-}
-
-/** The troubleshooting box's head: where the viewer is, as the prompt will say it. */
-export function stuckContext(at: { os: Os; agent: Agent; step: string }): string {
-  return [OS_NAMES[at.os], AGENT_NAMES[at.agent], at.step].join(' · ');
-}
-
-/**
- * The prompt the troubleshooting box copies: the Translation file's template with the OS, AI agent, step and the
- * viewer's pasted error filled in; an empty paste says so instead of leaving a gap.
- */
-export function stuckPrompt(
-  template: string,
-  input: { os: Os; agent: Agent; step: string; error: string; empty: string },
-): string {
-  const error = input.error.trim();
-  return fillTemplate(template, {
-    os: OS_NAMES[input.os],
-    agent: AGENT_NAMES[input.agent],
-    step: input.step,
-    error: error === '' ? input.empty : error,
-  });
 }

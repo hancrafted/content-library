@@ -3,11 +3,10 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { DoneMark } from '@/episodes/components/slide-shared/agent-setup-step/done-mark';
 import { OfficialLink } from '@/episodes/components/slide-shared/agent-setup-step/official-link';
 import { PickSwitch } from '@/episodes/components/slide-shared/agent-setup-step/pick-switch.client';
-import { PickToolbar } from '@/episodes/components/slide-shared/agent-setup-step/pick-toolbar.client';
 import { AGENTS, casesOf, DEFAULT_AGENT } from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
-import { StepProgress } from '@/episodes/components/slide-shared/agent-setup-step/step-progress';
-import { StuckBox } from '@/episodes/components/slide-shared/agent-setup-step/stuck-box.client';
 import { TerminalWindow } from '@/episodes/components/slide-shared/agent-setup-step/terminal-window';
+import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -44,18 +43,36 @@ function SignInCard({ page, title, button, own }: { page: string; title: ReactNo
 
 /*
  * Step 4, Option 4a: the login as a round trip, terminal to browser and back, the browser's Sign in button the one
- * lit thing. Only the AI agent toolbar shows: login does not differ by system, though the Stuck box still wraps the
+ * lit thing. The toolbar dims the system group: login does not differ by system, though Help still wraps the
  * page's system pick. The official login link is outlined, so the Sign in button keeps the one `primary` fill.
  */
 export const logIn = slide({
   slug: 'log-in',
   messages: { en, de },
   segments: [{ slug: 'sign-in-once' }, { slug: 'your-own-account' }],
-  content: ({ t, template }) => (
+  headerAction: ({ t, template }) => (
+    <GuideHelp
+      step={t('help.step')}
+      words={{
+        button: t('help.button'),
+        label: t('help.label'),
+        placeholder: t('help.placeholder'),
+        copy: t('help.copy'),
+        copied: t('help.copied'),
+        prompt: template('help.prompt'),
+        noError: t('help.noError'),
+        chats: {
+          openAIChats: t('help.chats.openAIChats'),
+          openAIChatTip: template('help.chats.openAIChatTip'),
+          newTab: t('help.chats.newTab'),
+        },
+      }}
+    />
+  ),
+  content: ({ t }) => (
     <SlideFrame>
       <div className="flex flex-col gap-8">
-        <StepProgress step={4} total={8} label={t('progress')} />
-        <PickToolbar show={['agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
+        <GuideToolbar active={['agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
 
         <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8">
           <RoundTrip
@@ -129,21 +146,6 @@ export const logIn = slide({
             <p className="text-caption text-muted-foreground">{t('ownAccount')}</p>
           </div>
         </div>
-
-        <StuckBox
-          step={t('stuck.step')}
-          words={{
-            title: t('stuck.title'),
-            hint: t('stuck.hint'),
-            pasteLabel: t('stuck.pasteLabel'),
-            placeholder: t('stuck.placeholder'),
-            copy: t('stuck.copy'),
-            copied: t('stuck.copied'),
-            adds: t('stuck.adds'),
-            prompt: template('stuck.prompt'),
-            noError: t('stuck.noError'),
-          }}
-        />
       </div>
     </SlideFrame>
   ),

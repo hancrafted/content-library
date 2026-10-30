@@ -1,4 +1,4 @@
-import { osOf, type AiAgent, type Os } from './stuck-prompt.pure';
+import { osOf, type AiAgent, type Os } from './picks.pure';
 
 /*
  * What step 6 draws per pick. The folder name is the starter folder's; the user name `han` and the machine names are

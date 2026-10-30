@@ -7,7 +7,7 @@ import { createTranslator } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './slide';
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
-import { requireTitle, sharedHeaderOf, titleTakenBy, type SlideHeaderText } from './slide-header-text';
+import { headerWithAction, requireTitle, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /*
@@ -236,7 +236,7 @@ export function localizeSlide(
     },
   );
   const header = shared
-    ? sharedHeaderOf({ t, note: slide.captionNote, declared: notes, markerLabel: episode.referenceLabels.marker })
+    ? headerWithAction(slide, { t, kit, notes, markerLabel: episode.referenceLabels.marker })
     : undefined;
   const placed = { id, section, ...text, ...(header && { header }), content: slide.content(kit) };
   if (level === 'h3') return { ...placed, level };

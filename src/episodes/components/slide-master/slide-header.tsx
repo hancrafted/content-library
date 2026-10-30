@@ -30,6 +30,8 @@ export interface SlideHeaderProps {
   readonly captionNote?: CaptionNote;
   /** Page Slides only; a section slide and the Title slide have none. */
   readonly eyebrow?: EyebrowText;
+  /** A Slide's header action (a Help button and its panel), right-aligned in the title row; its panel wraps full width under it. */
+  readonly action?: ReactNode;
   readonly entrance?: SlideEntrance;
   readonly className?: string;
   /** Rendered after the caption, e.g. the Title slide's talk launcher. */
@@ -53,10 +55,10 @@ interface TitleGroupProps extends Pick<
   readonly ends: readonly number[];
 }
 
-/** The title and its caption, half a gap apart so they read as one. */
+/** The title and its caption, half a gap apart so they read as one; the Slide's action sits at the row's right end. */
 function TitleGroup({ level, title, caption, captionEmphasis, captionNote, delays, ends }: TitleGroupProps) {
   return (
-    <div className="flex flex-col gap-(--space-header-tight)">
+    <div className="flex min-w-0 flex-1 flex-col gap-(--space-header-tight)">
       <Heading level={level}>
         <TypedText text={title} delays={delays[1]} next={ends[1]} />
       </Heading>
@@ -80,6 +82,17 @@ function TitleGroup({ level, title, caption, captionEmphasis, captionNote, delay
   );
 }
 
+/** The title group, and beside it the Slide's action (a Help button; its panel wraps full width under the row). */
+function TitleRow({ action, children }: { action: ReactNode; children: ReactNode }) {
+  if (!action) return children;
+  return (
+    <div data-slot="slide-header-row" className="flex flex-wrap items-start gap-x-6 gap-y-(--space-header-tight)">
+      {children}
+      {action}
+    </div>
+  );
+}
+
 /**
  * The Slide header (design-ADR-0012): Eyebrow, title and caption, rendered by the
  * Slide wrapper above the Scene. A server component: the typewriter is CSS
@@ -95,6 +108,7 @@ export function SlideHeader({
   captionEmphasis,
   captionNote,
   eyebrow,
+  action,
   entrance = 'typewriter',
   ...rest
 }: SlideHeaderProps) {
@@ -107,7 +121,9 @@ export function SlideHeader({
       className={cn('flex flex-col gap-(--space-header) pt-16 pb-(--space-header) md:pt-24', rest.className)}
     >
       {eyebrow && <SlideEyebrow eyebrow={eyebrow} delays={delays[0]} next={ends[0]} />}
-      <TitleGroup {...{ level, title, caption, captionEmphasis, captionNote, delays, ends }} />
+      <TitleRow action={action}>
+        <TitleGroup {...{ level, title, caption, captionEmphasis, captionNote, delays, ends }} />
+      </TitleRow>
       {rest.children}
     </div>
   );

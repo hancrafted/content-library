@@ -1,8 +1,8 @@
 {
   "title": "Run your first skill",
   "caption": "Type the skill's name, say yes when your AI agent asks, and <b>the hancrafted homepage opens</b>.",
-  "step": "Step 7 of 8",
   "toolbar": {
+    "os": "Your computer",
     "agent": "AI agent"
   },
   "approve": {
@@ -53,36 +53,41 @@
     "done": "<b>You just ran a skill.</b> See you at the workshop; meanwhile browse hancrafted."
   },
   "fallback": "Page didn't open? The skill prints the link instead: open <url>https://hancrafted.net</url> in your browser by hand.",
-  "stuck": {
-    "title": "Stuck?",
-    "step": "Step 7: Run your first skill",
-    "field": "Your error, or what you see on screen",
-    "placeholder": "Paste the error or what you see on screen …",
-    "copy": "Copy prompt",
-    "copied": "Prompt copied",
-    "hint": "Paste the copied prompt into free ChatGPT; it already says which system, AI agent and step you are on.",
-    "empty": "(I have not pasted anything yet.)",
-    "prompt": "I am getting ready for a workshop and got stuck while setting up my AI agent.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am in the guide: {step}\n\nThis is the error, or what I see on my screen:\n\n{error}\n\nI have never used a terminal before. Explain in simple words what went wrong and what I should do next, one step at a time."
-  },
   "notes": {
     "the-prompt-is-a-safeguard": {
       "header": "The prompt is a safeguard, not an error",
       "description": "A model can be steered by text it reads, such as a web page or a project file, so OWASP recommends requiring a human to approve high-impact actions; each vendor builds that approval into its default mode [1][2][3][4][5][6][7].",
       "sources": {
-        "owasp-prompt-injection": { "title": "OWASP, LLM01: Prompt Injection" },
-        "owasp-excessive-agency": { "title": "OWASP, LLM06:2025 Excessive Agency" },
-        "codex-approvals": { "title": "OpenAI, Codex: Agent approvals and security" },
-        "gemini-cli-policy-engine": { "title": "Google, Gemini CLI: Policy engine" },
-        "copilot-cli": { "title": "GitHub, About GitHub Copilot CLI" },
-        "antigravity-permissions": { "title": "Google, Antigravity: Permissions" },
-        "claude-code-permissions": { "title": "Anthropic, Claude Code: Configure permissions" }
+        "owasp-prompt-injection": {
+          "title": "OWASP, LLM01: Prompt Injection"
+        },
+        "owasp-excessive-agency": {
+          "title": "OWASP, LLM06:2025 Excessive Agency"
+        },
+        "codex-approvals": {
+          "title": "OpenAI, Codex: Agent approvals and security"
+        },
+        "gemini-cli-policy-engine": {
+          "title": "Google, Gemini CLI: Policy engine"
+        },
+        "copilot-cli": {
+          "title": "GitHub, About GitHub Copilot CLI"
+        },
+        "antigravity-permissions": {
+          "title": "Google, Antigravity: Permissions"
+        },
+        "claude-code-permissions": {
+          "title": "Anthropic, Claude Code: Configure permissions"
+        }
       }
     },
     "claude-codes-prompt": {
       "header": "Claude Code's prompt",
       "description": "In manual mode, commands outside a built-in read-only set trigger a \"Bash command\" dialog asking \"Do you want to proceed?\" with Yes, \"Yes, and don't ask again\" and No. Prompt names and defaults differ by AI agent and version and change often, so recheck before showing one on screen [1].",
       "sources": {
-        "claude-code-permissions": { "title": "Anthropic, Claude Code: Configure permissions" }
+        "claude-code-permissions": {
+          "title": "Anthropic, Claude Code: Configure permissions"
+        }
       }
     },
     "why-approvals-are-kept": {
@@ -112,6 +117,21 @@
         "keywords": "",
         "script": "Approve it, and the hancrafted homepage opens in your browser. That is the whole check, and there is nothing more to submit. You just ran a skill, so see you at the workshop, and until then, have a look around hancrafted. If the page does not open, the skill prints the link, and you can open it by hand."
       }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error, or what you see on screen",
+    "placeholder": "Paste the error or what you see on screen …",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "prompt": "I am getting ready for a workshop and got stuck while setting up my AI agent.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am in the guide: {step}\n\nThis is the error, or what I see on my screen:\n\n{error}\n\nI have never used a terminal before. Explain in simple words what went wrong and what I should do next, one step at a time.",
+    "noError": "(I have not pasted anything yet.)",
+    "step": "Step 7: Run your first skill",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
     }
   }
 }

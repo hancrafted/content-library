@@ -1,8 +1,6 @@
 {
   "title": "Set up the Matt Pocock skills yourself",
   "caption": "Five lines in an empty folder of your own. Skip the starter zip: it would bring the Matt Pocock skills a second time.",
-  "step": "Step 8 of 8",
-  "progress": "Progress",
   "copy": "Copy",
   "copied": "Copied",
   "rows": {
@@ -59,29 +57,6 @@
     "entryLabel": "GLOSSARY.md · add this entry"
   },
   "homepage": "The homepage opens",
-  "stuck": {
-    "title": "Stuck?",
-    "hint": "Paste the error, copy the prompt, ask free ChatGPT.",
-    "pasteLabel": "Your error",
-    "placeholder": "Paste your error here…",
-    "copy": "Copy prompt",
-    "copied": "Prompt copied",
-    "adds": "The prompt adds",
-    "step": "Step 8: Set up the Matt Pocock skills yourself",
-    "noError": "(I have not pasted an error.)",
-    "prompt": "I am getting my laptop ready for a workshop and I am stuck.\nOperating system: {os}\nAI agent: {agent}\nStep: {step}\n\nThis is the error I see:\n{error}\n\nExplain in plain words what went wrong and what I should do next, one step at a time.",
-    "os": {
-      "mac": "Mac",
-      "windows": "Windows",
-      "linux": "Linux"
-    },
-    "agent": {
-      "claude-code": "Claude Code",
-      "antigravity": "Antigravity",
-      "codex": "Codex",
-      "copilot": "GitHub Copilot"
-    }
-  },
   "voiceScript": {
     "segments": {
       "same-chain-built-by-hand": {
@@ -94,6 +69,21 @@
         "keywords": "",
         "script": "The proof is the same as before. You run check-workshop-readiness, and the hancrafted homepage opens. One thing to know: that skill comes with the starter folder, not with the Matt Pocock skills, so the page tells you where to take it from."
       }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error",
+    "placeholder": "Paste your error here…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck.\nOperating system: {os}\nAI agent: {agent}\nStep: {step}\n\nThis is the error I see:\n{error}\n\nExplain in plain words what went wrong and what I should do next, one step at a time.",
+    "noError": "(I have not pasted an error.)",
+    "step": "Step 8: Set up the Matt Pocock skills yourself",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
     }
   }
 }

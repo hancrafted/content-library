@@ -5,41 +5,9 @@ import { CopyButton, type CopyWords } from './copy-line.client';
 import { ArrowIcon, CheckboxIcon, DownloadIcon, ExternalIcon, TickIcon } from './icons';
 
 /*
- * The static drawings of Option 8a: the step pill and rail, the vendor link, the installer's question, the setup
+ * The static drawings of Option 8a: the vendor link, the installer's question, the setup
  * skill's four answers, the check bundle and the homepage strip. Each takes its words as props.
  */
-
-/** "Step n of total" and the thin rail under the header: the finished segments in `primary`, the current one lighter. */
-export function StepProgress({
-  step,
-  total,
-  label,
-  pill,
-}: {
-  step: number;
-  total: number;
-  label: string;
-  pill: string;
-}) {
-  return (
-    <div className="flex items-center gap-4">
-      <span className="shrink-0 rounded-full border border-border px-3 py-1 text-caption text-muted-foreground">
-        {pill}
-      </span>
-      <ol className="flex flex-1 gap-1" aria-label={label}>
-        {Array.from({ length: total }, (_, i) => (
-          <li
-            key={i}
-            className={cn(
-              'h-1 flex-1 rounded-full',
-              i + 1 < step ? 'bg-primary' : i + 1 === step ? 'bg-primary/40' : 'bg-border',
-            )}
-          />
-        ))}
-      </ol>
-    </div>
-  );
-}
 
 /** A labelled pill to a vendor's own page, with the external-link mark: never a pasted URL (Visual language). */
 export function OfficialLink({ url, newTab, children }: { url: string; newTab: string; children: ReactNode }) {

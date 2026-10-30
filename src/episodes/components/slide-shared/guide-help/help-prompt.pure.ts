@@ -1,7 +1,7 @@
 import { fillTemplate } from '@/shared/lib/template.pure';
 
-/** What the troubleshooting box's prompt wraps: the picks, the step, and what the viewer pasted. */
-export interface StuckInput {
+/** What the Help panel's prompt wraps: the picks, the step, and what the viewer pasted. */
+export interface HelpPromptInput {
   readonly os: string;
   readonly agent: string;
   readonly step: string;
@@ -12,10 +12,10 @@ export interface StuckInput {
 }
 
 /**
- * The prompt the troubleshooting box copies: its Slide's template (`{os}`, `{agent}`, `{step}`, `{error}`) filled once,
+ * The prompt the Help panel copies: its Slide's template (`{os}`, `{agent}`, `{step}`, `{error}`) filled once,
  * so braces in a pasted error stay as written. The error loses only its blank edges.
  */
-export function stuckPrompt(template: string, input: StuckInput): string {
+export function helpPrompt(template: string, input: HelpPromptInput): string {
   const error = input.error.trim();
   return fillTemplate(template, {
     os: input.os,

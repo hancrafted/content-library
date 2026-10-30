@@ -1,7 +1,6 @@
 {
   "title": "Log in",
   "caption": "Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal.",
-  "progress": "Step 4 of 8",
   "toolbar": {
     "os": "Your computer",
     "agent": "AI agent"
@@ -28,18 +27,6 @@
   "openLogin": "{agent} · official login page",
   "newTab": "opens in a new tab",
   "ownAccount": "Which account fits is on that page. Use your own, not a shared one.",
-  "stuck": {
-    "title": "Stuck?",
-    "hint": "Paste the error, copy the prompt, ask free ChatGPT.",
-    "pasteLabel": "Your error",
-    "placeholder": "Paste your error here…",
-    "copy": "Copy prompt",
-    "copied": "Prompt copied",
-    "adds": "The prompt adds",
-    "step": "Step 4: Log in",
-    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
-    "noError": "(I see no error message, it just does not work.)"
-  },
   "voiceScript": {
     "segments": {
       "sign-in-once": {
@@ -52,6 +39,21 @@
         "keywords": "",
         "script": "Which account fits which AI agent differs, and the official page of your AI agent says it better than I could, so the link is right here. Use your own account, not a shared one, so that the AI agent is yours to run."
       }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error",
+    "placeholder": "Paste your error here…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
+    "noError": "(I see no error message, it just does not work.)",
+    "step": "Step 4: Log in",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
     }
   }
 }

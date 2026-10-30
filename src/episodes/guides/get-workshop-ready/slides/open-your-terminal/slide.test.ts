@@ -11,7 +11,7 @@ import { openYourTerminal } from './slide';
 /*
  * Open your terminal (Spec Option 2a), read through the one interface the page reads a Slide by: localized into a
  * stand-in Guide on the shared Slide header. Its Scene renders as the static export renders it: before the viewer
- * picks, so on the toolbar's defaults (Mac, Claude Code). Which pick shows which view is `stuck-prompt.pure.ts`'s.
+ * picks, so on the toolbar's defaults (Mac, Claude Code). Which pick shows which view is `os-pick.pure.ts`'s.
  */
 
 const SECTION = slide({
@@ -35,10 +35,9 @@ function localized(locale: Locale): LocalizedSlide {
 
 const scene = (locale: Locale) => load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).content)));
 
-const chips = ($: ReturnType<typeof scene>) =>
-  $('[data-stuck] [data-chip]')
-    .map((_, el) => $(el).text())
-    .get();
+/** The Help button and panel the Slide gives the header, as the header renders them. */
+const help = (locale: Locale) =>
+  load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).header?.action)));
 
 describe('success cases', () => {
   it('lists the Spec title and shows it on screen, under the Spec caption', () => {
@@ -100,18 +99,21 @@ describe('success cases', () => {
     expect(notes).toEqual(expected);
   });
 
-  it('shows step 2 of 8 on a pill and a rail of eight segments, two of them finished', () => {
+  it('gives the header a Help button, closed, with the field, Copy prompt and the two chats in its panel', () => {
     // ARRANGE
-    const expected = { pill: 'Step 2 of 8', segments: 8, finished: 2 };
+    const expected = { button: 'Help', expanded: 'false', fields: 1, chats: ['ChatGPT', 'Gemini'] };
     // ACT
-    const $ = scene('en');
-    const progress = {
-      pill: $('[data-step-pill]').text(),
-      segments: $('[data-rail] > span').length,
-      finished: $('[data-rail] > [data-done]').length,
+    const $ = help('en');
+    const found = {
+      button: $('[data-help-button]').text(),
+      expanded: $('[data-help-button]').attr('aria-expanded'),
+      fields: $('[data-help-panel] textarea').length,
+      chats: $('[data-help-panel] a[data-chat]')
+        .map((_, el) => $(el).attr('data-chat'))
+        .get(),
     };
     // ASSERT
-    expect(progress).toEqual(expected);
+    expect(found).toEqual(expected);
   });
 
   it('shows the Mac way in and the Mac prompt until the viewer picks, with Mac checked in the toolbar', () => {
@@ -120,15 +122,13 @@ describe('success cases', () => {
       checked: 'Mac',
       prompt: 'you@MacBook ~ %',
       query: 'Terminal',
-      chips: ['Mac', 'Claude Code', 'Step 2: Open your terminal'],
     };
     // ACT
     const $ = scene('en');
     const view = {
-      checked: $('[role="radiogroup"] input:checked').parent().text(),
+      checked: $('[data-pick="os"] input:checked').attr('aria-label'),
       prompt: $('[data-open-window] [data-prompt-line]').text(),
       query: $('[data-find] [data-query]').text(),
-      chips: chips($),
     };
     // ASSERT
     expect(view).toEqual(expected);
@@ -153,16 +153,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('renders no heading and no AI agent toggle, since this step does not differ by AI agent', () => {
+  it('renders no heading and dims the AI agent group, since this step does not differ by AI agent', () => {
     // ARRANGE
-    const expected = { headings: 0, toolbars: ['Your computer'] };
+    const expected = { headings: 0, disabled: { os: 'false', agent: 'true' } };
     // ACT
     const $ = scene('en');
     const found = {
       headings: $('h1, h2, h3').length,
-      toolbars: $('[role="radiogroup"]')
-        .map((_, el) => $(el).attr('aria-label'))
-        .get(),
+      disabled: {
+        os: $('[data-pick="os"]').attr('aria-disabled'),
+        agent: $('[data-pick="agent"]').attr('aria-disabled'),
+      },
     };
     // ASSERT
     expect(found).toEqual(expected);
@@ -174,7 +175,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = {
       line: 'Auf dem Mac: Drück ⌘ Leertaste, tipp Terminal, drück Return.',
-      step: 'Schritt 2: Öffne Dein Terminal',
+      button: 'Hilfe',
       notes: [
         'hesitation-is-normal',
         'why-the-command-line-feels-scary',
@@ -188,7 +189,7 @@ describe('edge cases', () => {
     const de = localized('de');
     const shape = {
       line: $('[data-os-line]').text(),
-      step: chips($)[2],
+      button: help('de')('[data-help-button]').text(),
       notes: de.notes.map((note) => note.slug),
       segments: de.voiceScript.map((segment) => segment.slug),
     };

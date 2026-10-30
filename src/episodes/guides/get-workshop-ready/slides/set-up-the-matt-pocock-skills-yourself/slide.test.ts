@@ -88,18 +88,6 @@ describe('success cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
-
-  it('wraps the troubleshooting prompt with the default picks and this step, before the viewer picks', () => {
-    // ARRANGE
-    const expected = ['Mac', 'Claude Code', 'Step 8: Set up the Matt Pocock skills yourself'];
-    // ACT
-    const $ = scene('en');
-    const chips = $('[data-stuck] [data-chip]')
-      .map((_, el) => $(el).text().trim())
-      .get();
-    // ASSERT
-    expect(chips).toEqual(expected);
-  });
 });
 
 describe('failure cases', () => {

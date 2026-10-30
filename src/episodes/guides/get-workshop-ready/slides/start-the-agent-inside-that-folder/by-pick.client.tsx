@@ -2,7 +2,7 @@
 
 import { usePagePick } from '@/episodes/hooks/use-page-pick';
 import type { ReactNode } from 'react';
-import { agentOf, osOf, type AiAgent, type Os } from './stuck-prompt.pure';
+import { agentOf, osOf, type AiAgent, type Os } from './picks.pure';
 
 /**
  * Shows the variant of a part for the page's OS pick. The server renders every variant with its own words and rich

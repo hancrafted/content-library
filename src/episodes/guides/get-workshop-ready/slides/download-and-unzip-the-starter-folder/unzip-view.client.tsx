@@ -2,7 +2,7 @@
 
 import { usePagePick } from '@/episodes/hooks/use-page-pick';
 import type { ReactNode } from 'react';
-import { osOf, type Os } from './stuck-prompt.pure';
+import { osOf, type Os } from './picks.pure';
 import { unzipGesture } from './unzip.pure';
 
 /** What the Downloads window and the unzip gesture say, in the viewer's language. */

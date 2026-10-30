@@ -1,7 +1,5 @@
-import { fillTemplate } from '@/shared/lib/template.pure';
-
 /*
- * The troubleshooting box's logic: which page picks it knows, and the prompt it wraps a pasted error in. The picks are
+ * Which page picks this Slide knows. The picks are
  * the page-wide toolbar's values (`usePagePick`, names 'os' and 'agent'), the same strings every step Slide reads.
  */
 
@@ -24,19 +22,3 @@ export const osOf = (value: string): OsPick => known(OS_PICKS, value, DEFAULT_OS
 
 /** The page's AI-agent pick, or the default for a value no toolbar offers. */
 export const agentOf = (value: string): AgentPick => known(AGENT_PICKS, value, DEFAULT_AGENT);
-
-/** What the prompt names: the computer, the AI agent and the step, in words, and the pasted error. */
-export interface StuckParts {
-  readonly os: string;
-  readonly agent: string;
-  readonly step: string;
-  readonly error: string;
-  /** What stands in for the error while the paste area is empty. */
-  readonly empty: string;
-}
-
-/** The prompt for free ChatGPT: the template's `{os}`, `{agent}`, `{step}` and `{error}` filled in once. */
-export function stuckPrompt(template: string, { os, agent, step, error, empty }: StuckParts): string {
-  const pasted = error.trim();
-  return fillTemplate(template, { os, agent, step, error: pasted === '' ? empty : pasted });
-}

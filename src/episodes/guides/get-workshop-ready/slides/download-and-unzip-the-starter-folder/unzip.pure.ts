@@ -1,4 +1,4 @@
-import { osOf } from './stuck-prompt.pure';
+import { osOf } from './picks.pure';
 
 /**
  * How the picked OS unzips the starter folder: a double-click on Mac; the zip's right-click menu on Windows (Extract

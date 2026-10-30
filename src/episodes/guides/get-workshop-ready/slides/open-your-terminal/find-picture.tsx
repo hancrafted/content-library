@@ -1,4 +1,4 @@
-import type { OsPick } from './stuck-prompt.pure';
+import type { OsPick } from './os-pick.pure';
 
 export interface FindPictureProps {
   readonly os: OsPick;

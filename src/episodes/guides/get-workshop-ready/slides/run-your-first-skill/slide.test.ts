@@ -85,24 +85,18 @@ describe('success cases', () => {
     // ASSERT
     expect(markers).toEqual(expected);
   });
-
-  it('names the default OS, AI agent and step above the troubleshooting box', () => {
-    // ARRANGE
-    const expected = 'Mac · Claude Code · Schritt 7: Deinen ersten Skill ausführen';
-    // ACT
-    const line = scene('de')('[data-stuck-context]').text();
-    // ASSERT
-    expect(line).toBe(expected);
-  });
 });
 
 describe('failure cases', () => {
-  it('shows no OS toggle, since its content does not differ by operating system', () => {
+  it('dims the OS group, since its content does not differ by operating system', () => {
     // ARRANGE
-    const expected = { os: 0, agent: 1 };
+    const expected = { os: 'true', agent: 'false' };
     // ACT
     const $ = scene('en');
-    const seen = { os: $('[data-toolbar="os"]').length, agent: $('[data-toolbar="agent"]').length };
+    const seen = {
+      os: $('[data-pick="os"]').attr('aria-disabled'),
+      agent: $('[data-pick="agent"]').attr('aria-disabled'),
+    };
     // ASSERT
     expect(seen).toEqual(expected);
   });
@@ -113,8 +107,8 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = ['Claude Code'];
     // ACT
-    const pressed = scene('en')('[data-toolbar="agent"] button[aria-pressed="true"]')
-      .map((_, el) => scene('en')(el).text())
+    const pressed = scene('en')('[data-pick="agent"] input:checked')
+      .map((_, el) => el.attribs['aria-label'])
       .get();
     // ASSERT
     expect(pressed).toEqual(expected);

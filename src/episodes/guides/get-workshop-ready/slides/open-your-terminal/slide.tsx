@@ -1,24 +1,19 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import type { ReactNode } from 'react';
 import { FindPicture } from './find-picture';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { OpenWindow } from './open-window';
-import { OsToolbar } from './os-toolbar.client';
+import { type OsPick } from './os-pick.pure';
 import { OsView } from './os-view.client';
-import { StepProgress } from './step-progress';
-import { StuckBox } from './stuck-box.client';
-import { OS_PICKS, type OsPick } from './stuck-prompt.pure';
 
 const POWELL = { slug: 'powell-computer-anxiety', url: 'https://doi.org/10.1016/j.chb.2013.05.012' };
 const VORONKOV = { slug: 'voronkov-sysadmins-cli', url: 'https://arxiv.org/abs/1905.13582' };
 const WILSON = { slug: 'wilson-software-carpentry', url: 'https://doi.org/10.12688/f1000research.3-62.v2' };
 const BERRY = { slug: 'berry-shellonyou', url: 'https://ctiber.github.io/papers/2022/VBetAl_ITICSE_2022.pdf' };
-
-/** This step on the route, and how many steps the route has (the Overview's "8 steps"). */
-const STEP = 2;
-const TOTAL = 8;
 
 /** The three reassurance lines, each with the target it lights and the Speaker note its Context marker opens. */
 const REASSURANCE = [
@@ -50,9 +45,8 @@ const Kbd = (chunks: ReactNode) => (
 );
 
 /**
- * Open your terminal (Spec Option 2a): find it, then see it. Above the card the step pill, the eight-segment rail and
- * the page's OS toolbar; in the card the way in for the picked system beside the window the viewer gets, linked by one
- * arrow, and three reassurance lines; under it the troubleshooting box. No AI agent toggle (nothing here differs by
+ * Open your terminal (Spec Option 2a): find it, then see it. Above the card the page's toolbar, the OS group live; in the card the way in for the picked system beside the window the viewer gets, linked by one
+ * arrow, and three reassurance lines; Help in the header. The AI agent group is dimmed (nothing here differs by
  * AI agent), no motion: the cursor is drawn still.
  */
 export const openYourTerminal = slide({
@@ -65,7 +59,26 @@ export const openYourTerminal = slide({
     { slug: 'feedback-builds-confidence', target: 'open-window', sources: [BERRY] },
   ],
   segments: [{ slug: 'not-a-personal-failing' }, { slug: 'one-window-one-cursor' }, { slug: 'stuck-paste-it' }],
-  content: ({ t, template, target, marker, Marker }) => {
+  headerAction: ({ t, template }) => (
+    <GuideHelp
+      step={t('help.step')}
+      words={{
+        button: t('help.button'),
+        label: t('help.label'),
+        placeholder: t('help.placeholder'),
+        copy: t('help.copy'),
+        copied: t('help.copied'),
+        prompt: template('help.prompt'),
+        noError: t('help.noError'),
+        chats: {
+          openAIChats: t('help.chats.openAIChats'),
+          openAIChatTip: template('help.chats.openAIChatTip'),
+          newTab: t('help.chats.newTab'),
+        },
+      }}
+    />
+  ),
+  content: ({ t, target, marker, Marker }) => {
     const view = (os: OsPick) => (
       <>
         <p data-os-line className="text-body text-pretty">
@@ -99,13 +112,7 @@ export const openYourTerminal = slide({
     );
     return (
       <SlideFrame className="@container gap-7">
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-          <StepProgress step={STEP} total={TOTAL} label={t('progress')} />
-          <OsToolbar
-            label={t('toolbarLabel')}
-            options={OS_PICKS.map((os) => ({ value: os, label: t(`os.${os}.label`) }))}
-          />
-        </div>
+        <GuideToolbar active={['os']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
         <div className="rounded-2xl border border-border bg-card p-6 @3xl:p-8">
           <OsView views={{ mac: view('mac'), windows: view('windows'), linux: view('linux') }} />
           <ul className="mt-8 grid gap-4 border-t border-border pt-5 text-caption text-muted-foreground @3xl:grid-cols-3">
@@ -116,27 +123,6 @@ export const openYourTerminal = slide({
             ))}
           </ul>
         </div>
-        <StuckBox
-          words={{
-            title: t('stuck.title'),
-            hint: t('stuck.hint'),
-            paste: t('stuck.paste'),
-            placeholder: t('stuck.placeholder'),
-            includes: t('stuck.includes'),
-            copy: t('stuck.copy'),
-            copied: t('stuck.copied'),
-            prompt: template('stuck.prompt'),
-            empty: t('stuck.empty'),
-            step: t('stuck.step'),
-            os: { mac: t('os.mac.label'), windows: t('os.windows.label'), linux: t('os.linux.label') },
-            agents: {
-              'claude-code': t('agents.claude-code'),
-              antigravity: t('agents.antigravity'),
-              codex: t('agents.codex'),
-              copilot: t('agents.copilot'),
-            },
-          }}
-        />
       </SlideFrame>
     );
   },

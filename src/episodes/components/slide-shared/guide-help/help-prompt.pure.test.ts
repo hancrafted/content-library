@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { stuckPrompt } from './stuck-prompt.pure';
+import { helpPrompt } from './help-prompt.pure';
 
 /*
- * The troubleshooting box's prompt (Visual language "The troubleshooting box"): the viewer's pasted error, wrapped
+ * The Help panel's prompt (Visual language "Help"): the viewer's pasted error, wrapped
  * with the picked operating system, AI agent and step, ready to paste into free ChatGPT.
  */
 
@@ -15,7 +15,7 @@ describe('success cases', () => {
     const expected =
       'Computer: Windows. AI agent: Codex. Step: Step 3: Install your AI agent.\n\nError:\ncodex: not found';
     // ACT
-    const prompt = stuckPrompt(TEMPLATE, {
+    const prompt = helpPrompt(TEMPLATE, {
       os: 'Windows',
       agent: 'Codex',
       step: 'Step 3: Install your AI agent',
@@ -32,7 +32,7 @@ describe('failure cases', () => {
     // ARRANGE
     const expected = 'Computer: Mac. AI agent: Claude Code. Step: Step 4: Log in.\n\nError:\n(no error pasted)';
     // ACT
-    const prompt = stuckPrompt(TEMPLATE, {
+    const prompt = helpPrompt(TEMPLATE, {
       os: 'Mac',
       agent: 'Claude Code',
       step: 'Step 4: Log in',
@@ -50,7 +50,7 @@ describe('edge cases', () => {
     const expected =
       'Computer: Linux. AI agent: Antigravity. Step: Step 4: Log in.\n\nError:\nunexpected {os} in line 2\n  at login';
     // ACT
-    const prompt = stuckPrompt(TEMPLATE, {
+    const prompt = helpPrompt(TEMPLATE, {
       os: 'Linux',
       agent: 'Antigravity',
       step: 'Step 4: Log in',

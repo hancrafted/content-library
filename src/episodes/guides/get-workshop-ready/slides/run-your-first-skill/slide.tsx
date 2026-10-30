@@ -1,7 +1,8 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
+import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
 import type { ReactNode } from 'react';
-import { AgentToolbar } from './agent-toolbar.client';
 import { AgentView } from './agent-view.client';
 import { BrowserWindow, Homepage } from './browser-window';
 import { AGENT_NAMES, type Agent } from './first-skill.pure';
@@ -9,8 +10,6 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { OpenCommand } from './open-command.client';
 import { Approval, Choices, PermissionPrompt } from './permission-prompt';
-import { StepProgress } from './step-progress';
-import { StuckBox } from './stuck-box.client';
 
 /* The homepage the skill opens; the Slide draws it, it links nowhere. */
 const HOMEPAGE = 'https://hancrafted.net';
@@ -103,7 +102,26 @@ export const runYourFirstSkill = slide({
     },
   ],
   segments: [{ slug: 'type-the-skill' }, { slug: 'say-yes' }, { slug: 'the-proof' }],
-  content: ({ t, template, marker, Marker, target }) => {
+  headerAction: ({ t, template }) => (
+    <GuideHelp
+      step={t('help.step')}
+      words={{
+        button: t('help.button'),
+        label: t('help.label'),
+        placeholder: t('help.placeholder'),
+        copy: t('help.copy'),
+        copied: t('help.copied'),
+        prompt: template('help.prompt'),
+        noError: t('help.noError'),
+        chats: {
+          openAIChats: t('help.chats.openAIChats'),
+          openAIChatTip: template('help.chats.openAIChatTip'),
+          newTab: t('help.chats.newTab'),
+        },
+      }}
+    />
+  ),
+  content: ({ t, marker, Marker, target }) => {
     const corner = <Marker note="the-prompt-is-a-safeguard" placement="beside" />;
     const command = <OpenCommand url={HOMEPAGE} />;
     const prompt = (agent: Agent, dialog: ReactNode) => (
@@ -149,8 +167,7 @@ export const runYourFirstSkill = slide({
     return (
       <SlideFrame>
         <div className="@container flex flex-col gap-8">
-          <StepProgress label={t('step')} />
-          <AgentToolbar label={t('toolbar.agent')} />
+          <GuideToolbar active={['agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
           <div className="rounded-2xl border border-border bg-card p-4 @3xl:p-8">
             <div className="focus-group focus-group--dim-others grid grid-cols-1 items-start gap-4 @3xl:grid-cols-12">
               <div className="focus-group__item flex min-w-0 flex-col gap-4 @3xl:col-span-6">
@@ -185,19 +202,6 @@ export const runYourFirstSkill = slide({
               })}
             </p>
           </div>
-          <StuckBox
-            words={{
-              title: t('stuck.title'),
-              step: t('stuck.step'),
-              field: t('stuck.field'),
-              placeholder: t('stuck.placeholder'),
-              copy: t('stuck.copy'),
-              copied: t('stuck.copied'),
-              hint: t('stuck.hint'),
-              empty: t('stuck.empty'),
-              prompt: template('stuck.prompt'),
-            }}
-          />
         </div>
       </SlideFrame>
     );

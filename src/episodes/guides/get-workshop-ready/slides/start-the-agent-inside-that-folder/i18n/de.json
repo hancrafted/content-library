@@ -1,21 +1,9 @@
 {
   "title": "Den Agenten in diesem Ordner starten",
   "caption": "Öffne das Terminal direkt aus dem Ordner und starte dann Deinen KI-Agenten: <b>Er liest nur den Ordner, in dem er startet</b>.",
-  "step": "Schritt 6 von 8",
   "toolbar": {
-    "os": "Betriebssystem",
-    "agent": "KI-Agent",
-    "names": {
-      "mac": "Mac",
-      "windows": "Windows",
-      "linux": "Linux"
-    }
-  },
-  "agents": {
-    "claude-code": "Claude Code",
-    "antigravity": "Antigravity",
-    "codex": "Codex",
-    "copilot": "GitHub Copilot"
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
   },
   "terminal": "Terminal",
   "moves": {
@@ -75,18 +63,6 @@
   "fallback": {
     "text": "Notlösung, falls das Menü nicht klappt: Öffne das Terminal wie in Schritt 2, tippe <command></command> und drücke Enter."
   },
-  "stuck": {
-    "title": "Hängst Du fest?",
-    "hint": "Fehler einfügen, Prompt kopieren, das kostenlose ChatGPT fragen.",
-    "label": "Dein Fehler oder was Du siehst",
-    "placeholder": "Füge Deinen Fehler ein oder beschreibe, was Du siehst …",
-    "adds": "Der Prompt ergänzt",
-    "step": "Schritt 6: Den Agenten in diesem Ordner starten",
-    "copy": "Prompt kopieren",
-    "copied": "Prompt kopiert. Füge ihn ins kostenlose ChatGPT ein.",
-    "noError": "(Ich habe keinen Fehler eingefügt; ich komme bei diesem Schritt nicht weiter.)",
-    "template": "Ich bin Einsteiger und folge einer Schritt-für-Schritt-Anleitung, um für einen Workshop einen KI-Agenten auf meinem Laptop zum Laufen zu bringen.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nMein Schritt: {step}\n\nDas ist der Fehler oder das, was ich sehe:\n{error}\n\nErkläre mir in einfachen Worten, was schiefgelaufen ist, und sag mir, was ich als Nächstes tun soll, in kleinen Schritten. Geh nicht davon aus, dass ich mich mit dem Terminal auskenne."
-  },
   "voiceScript": {
     "segments": {
       "go-in-then-start": {
@@ -104,6 +80,21 @@
         "keywords": "",
         "script": "Schau, was Du jetzt hast: ein Terminal, das wartet, einen KI-Agenten darin und einen Ordner, den er lesen kann. Ein Teil fehlt noch, und genau das beweist, dass alle anderen funktionieren."
       }
+    }
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Dein Fehler oder was Du siehst",
+    "placeholder": "Füge Deinen Fehler ein oder beschreibe, was Du siehst …",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert. Füge ihn ins kostenlose ChatGPT ein.",
+    "prompt": "Ich bin Einsteiger und folge einer Schritt-für-Schritt-Anleitung, um für einen Workshop einen KI-Agenten auf meinem Laptop zum Laufen zu bringen.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nMein Schritt: {step}\n\nDas ist der Fehler oder das, was ich sehe:\n{error}\n\nErkläre mir in einfachen Worten, was schiefgelaufen ist, und sag mir, was ich als Nächstes tun soll, in kleinen Schritten. Geh nicht davon aus, dass ich mich mit dem Terminal auskenne.",
+    "noError": "(Ich habe keinen Fehler eingefügt; ich komme bei diesem Schritt nicht weiter.)",
+    "step": "Schritt 6: Den Agenten in diesem Ordner starten",
+    "chats": {
+      "openAIChats": "Einen KI-Chat öffnen",
+      "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
+      "newTab": "öffnet in neuem Tab"
     }
   }
 }
