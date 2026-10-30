@@ -1,4 +1,5 @@
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import { ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { OverviewView } from './ready-state.pure';
 
@@ -11,11 +12,10 @@ export interface ReadinessWords {
   readonly localSetupDone: string;
   readonly localSetupMissing: string;
   readonly watchTitle: string;
-  readonly germanTag: string;
   readonly reopen: string;
 }
 
-/** An unlisted Episode to watch while waiting: its localized href and its (German) title. */
+/** An unlisted Episode to watch while waiting: its localized href and its title. */
 export interface WatchLink {
   readonly path: string;
   readonly title: string;
@@ -26,8 +26,6 @@ export interface ViewBodyProps {
   readonly words: ReadinessWords;
   readonly watch: readonly WatchLink[];
   readonly locale: Locale;
-  /** True when the page is not German, so the German-only Episodes carry a "German" tag. */
-  readonly tagGerman: boolean;
   /** The normal checklist with its "Start at" card. */
   readonly normal: ReactNode;
   /** The Help note, shown under the ready card, where the checklist is gone. */
@@ -91,8 +89,9 @@ function Reopen({ label, onReopen }: { label: string; onReopen: () => void }) {
       type="button"
       data-reopen
       onClick={onReopen}
-      className="min-h-11 w-fit cursor-pointer rounded-full border border-border bg-background px-4 text-caption font-medium outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+      className="inline-flex min-h-11 w-fit cursor-pointer items-center gap-2 rounded-full border border-border bg-background px-4 text-caption font-medium outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
     >
+      <ArrowLeft aria-hidden="true" className="size-4 shrink-0" />
       {label}
     </button>
   );
@@ -147,7 +146,7 @@ function RecapCard({ view, words, onReopen }: Pick<ViewBodyProps, 'view' | 'word
   );
 }
 
-function Watch({ words, watch, tagGerman, locale }: Pick<ViewBodyProps, 'words' | 'watch' | 'tagGerman' | 'locale'>) {
+function Watch({ words, watch, locale }: Pick<ViewBodyProps, 'words' | 'watch' | 'locale'>) {
   return (
     <section data-watch className="flex flex-col gap-3">
       <p className="text-body font-semibold">{words.watchTitle}</p>
@@ -159,11 +158,6 @@ function Watch({ words, watch, tagGerman, locale }: Pick<ViewBodyProps, 'words' 
             href={localizePath(link.path, locale)}
             className="card-hover card-hover--outline flex flex-col items-start gap-2 rounded-2xl border border-border bg-card px-6 py-5"
           >
-            {tagGerman && (
-              <span className="rounded-full border border-border px-2 py-0.5 text-caption text-muted-foreground">
-                {words.germanTag}
-              </span>
-            )}
             <span lang="de" className="text-body font-semibold">
               {link.title}
             </span>
@@ -178,13 +172,13 @@ function Watch({ words, watch, tagGerman, locale }: Pick<ViewBodyProps, 'words' 
  * The Overview Scene body for one view: pure and presentational, so the test renders each view directly. `normal`
  * shows the checklist; `ready` replaces it with the recap card; `missing` puts the recap above the checklist.
  */
-export function ViewBody({ view, words, watch, tagGerman, locale, normal, stuck, onReopen }: ViewBodyProps) {
+export function ViewBody({ view, words, watch, locale, normal, stuck, onReopen }: ViewBodyProps) {
   if (view.kind === 'normal') return <>{normal}</>;
   return (
     <div className="flex flex-col gap-6">
       <RecapCard view={view} words={words} onReopen={onReopen} />
       {view.kind === 'missing' ? normal : stuck}
-      <Watch words={words} watch={watch} tagGerman={tagGerman} locale={locale} />
+      <Watch words={words} watch={watch} locale={locale} />
     </div>
   );
 }

@@ -91,8 +91,7 @@
       "done": "The local setup is in place.",
       "missing": "The local setup is missing. Run the setup skill, then check again, or press Help."
     },
-    "watchTitle": "Meanwhile watch these",
-    "germanTag": "German",
+    "watchTitle": "Or check out these in the meantime",
     "reopen": "Not done yet? Back to the checklist"
   }
 }

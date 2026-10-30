@@ -6,18 +6,7 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { BOXES, STEP_SLIDE, STEPS, type BoxId, type StepNumber } from './start-step.pure';
 import { OverviewView } from './view.client';
-
-/** The unlisted German Akademie Episodes offered while a viewer is ready: linked, never copied; German in both locales. */
-const WATCH = [
-  {
-    path: '/episode/2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
-    title: 'Behandle KI wie einen brillanten Freelancer mit Amnesie',
-  },
-  {
-    path: '/episode/2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
-    title: 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst',
-  },
-] as const;
+import { watchFor } from './watch.pure';
 
 const MINIMAL_MANUAL = { slug: 'lazonder-minimal-manual', url: 'https://doi.org/10.1006/imms.1993.1081' };
 const EXPERTISE_REVERSAL = { slug: 'kalyuga-expertise-reversal', url: 'https://doi.org/10.1207/S15326985EP3801_4' };
@@ -95,9 +84,8 @@ export const overview = slide({
           <span className="text-caption text-muted-foreground">{t('chainLine')}</span>
         </div>
         <OverviewView
-          tagGerman={locale !== 'de'}
           locale={locale}
-          watch={WATCH.map((link) => ({ path: link.path, title: link.title }))}
+          watch={watchFor(locale)}
           words={{
             readyTitle: t('ready.title'),
             missingTitle: t('ready.missingTitle'),
@@ -107,7 +95,6 @@ export const overview = slide({
             localSetupDone: t('ready.localSetup.done'),
             localSetupMissing: t('ready.localSetup.missing'),
             watchTitle: t('ready.watchTitle'),
-            germanTag: t('ready.germanTag'),
             reopen: t('ready.reopen'),
           }}
           stuck={stuck}

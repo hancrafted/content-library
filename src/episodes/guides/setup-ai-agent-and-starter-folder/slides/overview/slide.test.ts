@@ -50,7 +50,6 @@ const WORDS: ReadinessWords = {
   localSetupDone: en.ready.localSetup.done,
   localSetupMissing: en.ready.localSetup.missing,
   watchTitle: en.ready.watchTitle,
-  germanTag: en.ready.germanTag,
   reopen: en.ready.reopen,
 };
 
@@ -60,13 +59,12 @@ const WATCH = [
 ];
 
 /** The view body as the client part hands it the view read from a query string. */
-function viewOf(search: string, tagGerman = true, onReopen?: () => void) {
+function viewOf(search: string, onReopen?: () => void) {
   const html = renderToStaticMarkup(
     createElement(ViewBody, {
       view: decideView(parseReadyFlags(search)),
       words: WORDS,
       watch: WATCH,
-      tagGerman,
       locale: 'en' as const,
       onReopen,
       normal: createElement('div', { 'data-normal': true }),
@@ -237,27 +235,23 @@ describe('success cases', () => {
     const expected = { ticked: 1, flagged: 0 };
     // ACT
     const found = {
-      ticked: viewOf(query, true, () => undefined)('[data-reopen]').length,
+      ticked: viewOf(query, () => undefined)('[data-reopen]').length,
       flagged: viewOf(query)('[data-reopen]').length,
     };
     // ASSERT
     expect(found).toEqual(expected);
   });
 
-  it('shows only the checklist without flags, and tags the watch cards "German" only outside German', () => {
+  it('shows only the checklist without flags, and the watch cards only when flagged', () => {
     // ARRANGE
-    const expected = { normal: 1, watch: 0, tagEn: ['German', 'German'], tagDe: 0 };
+    const expected = { normal: 1, watchPlain: 0, watchReady: WATCH.length };
     // ACT
     const plain = viewOf('');
-    const english = viewOf('?skills=true&local-setup=true');
-    const german = viewOf('?skills=true&local-setup=true', false);
+    const ready = viewOf('?skills=true&local-setup=true');
     const shape = {
       normal: plain('[data-normal]').length,
-      watch: plain('[data-watch-card]').length,
-      tagEn: english('[data-watch-card] span:not([lang])')
-        .map((_, el) => english(el).text())
-        .get(),
-      tagDe: german('[data-watch-card] span:not([lang])').length,
+      watchPlain: plain('[data-watch-card]').length,
+      watchReady: ready('[data-watch-card]').length,
     };
     // ASSERT
     expect(shape).toEqual(expected);
