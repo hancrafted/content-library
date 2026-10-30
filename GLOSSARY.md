@@ -237,6 +237,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 
 **AIE**: AI Enablement: how people and organizations learn to work with AI, and what it changes in their work.
 
+**AISF**: AI Software Factory: how software is produced by pipelines of AI agents and checks, and which ideas from industrial manufacturing carry over to it.
+
 **COG**: Cognition: how a person's attention and memory work, what they notice, keep and forget of what they hear and live through.
 
 **LLM**: Large language models: how a model works, from its training data to its context window and sampling, and why that makes it behave as it does.
