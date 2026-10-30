@@ -9,7 +9,7 @@ import {
 import { CopyButton } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
 import { useCopy } from '@/shared/hooks/use-copy';
 import { cn } from '@/shared/lib/utils';
-import { LifeBuoy } from 'lucide-react';
+import { CircleQuestionMark } from 'lucide-react';
 import { useEffect, useId, useRef, useState, type RefObject } from 'react';
 import { helpPrompt } from './help-prompt.pure';
 
@@ -74,11 +74,11 @@ function HelpButton({
       onClick={onToggle}
       className={cn(
         'ml-auto inline-flex min-h-9 shrink-0 cursor-pointer items-center gap-2 rounded-full border-2 px-4 py-1 text-caption font-medium outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        'border-brand-accent text-foreground hover:bg-brand-accent/10',
-        open ? 'bg-brand-accent/15' : 'bg-background',
+        'border-brand-accent bg-brand-accent text-foreground hover:bg-brand-accent/85 dark:text-background',
+        open && 'ring-2 ring-ring',
       )}
     >
-      <LifeBuoy aria-hidden="true" className="size-4 text-brand-accent" />
+      <CircleQuestionMark aria-hidden="true" className="size-4" />
       {label}
     </button>
   );

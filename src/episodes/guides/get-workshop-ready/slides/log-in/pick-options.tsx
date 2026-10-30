@@ -4,6 +4,7 @@ import {
   signInOptions,
   type SignInOption,
 } from '@/episodes/components/slide-shared/agent-setup-step/sign-in-options.pure';
+import { ChevronDown } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 function Badge({ children }: { children: string }) {
@@ -57,31 +58,44 @@ interface PickOptionsProps {
   readonly after: Readonly<Record<string, readonly ReactNode[]>>;
 }
 
+interface AgentOptionsProps {
+  readonly agent: string;
+  readonly badge: string;
+  readonly describe: PickOptionsProps['describe'];
+  readonly after: readonly ReactNode[];
+}
+
+/** One AI agent's sign-in options in the vendor's order, then what follows the sign-in. */
+function AgentOptions({ agent, badge, describe, after }: AgentOptionsProps) {
+  return (
+    <div className="flex flex-col gap-3">
+      <ol className="flex flex-col gap-2 text-body">
+        {signInOptions(agent).map((option, index) => (
+          <Option key={option.id} option={option} number={index + 1} badge={badge} text={describe(agent, option.id)} />
+        ))}
+      </ol>
+      <After lines={after} />
+    </div>
+  );
+}
+
 /** "Which option do I pick?": the agent's real sign-in options in the vendor's order, one marked, then what follows. */
 export function PickOptions({ title, badge, describe, after }: PickOptionsProps) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4" data-pick="">
-      <p className="text-body font-semibold">{title}</p>
-      <PickSwitch
-        name="agent"
-        fallback={DEFAULT_AGENT}
-        cases={casesOf(AGENTS, (agent) => (
-          <div className="flex flex-col gap-3">
-            <ol className="flex flex-col gap-2 text-body">
-              {signInOptions(agent.id).map((option, index) => (
-                <Option
-                  key={option.id}
-                  option={option}
-                  number={index + 1}
-                  badge={badge}
-                  text={describe(agent.id, option.id)}
-                />
-              ))}
-            </ol>
-            <After lines={after[agent.id] ?? []} />
-          </div>
-        ))}
-      />
-    </div>
+    <details className="group rounded-lg border border-border bg-background p-4" data-pick="">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-body font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
+        {title}
+        <ChevronDown aria-hidden="true" className="size-4 shrink-0 transition-transform group-open:rotate-180" />
+      </summary>
+      <div className="mt-3 flex flex-col gap-3">
+        <PickSwitch
+          name="agent"
+          fallback={DEFAULT_AGENT}
+          cases={casesOf(AGENTS, (agent) => (
+            <AgentOptions agent={agent.id} badge={badge} describe={describe} after={after[agent.id] ?? []} />
+          ))}
+        />
+      </div>
+    </details>
   );
 }
