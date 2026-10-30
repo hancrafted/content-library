@@ -1,0 +1,17 @@
+{
+  "title": "Dein Ordner",
+  "caption": "Ein Ort, an dem der KI-Agent arbeiten kann.",
+  "filesLabel": "Was der Starter-Ordner enthält",
+  "steps": "Schritt 3",
+  "window": "Terminal",
+  "prompt": "hancrafted-workshop-starter %",
+  "voiceScript": {
+    "segments": {
+      "the-place-to-work": {
+        "title": "Terminal und KI-Agent, jetzt der Ort zum Arbeiten",
+        "keywords": "",
+        "script": "Du hast ein Terminal und einen KI-Agenten, also fehlt noch ein Ort zum Arbeiten. Ein KI-Agent arbeitet in einem Ordner und liest, was darin liegt. Deshalb geben wir ihm ganz bewusst einen: den Starter-Ordner."
+      }
+    }
+  }
+}

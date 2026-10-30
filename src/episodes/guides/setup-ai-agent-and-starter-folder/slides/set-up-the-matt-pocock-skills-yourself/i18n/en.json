@@ -1,0 +1,90 @@
+{
+  "title": "Set up the Matt Pocock skills yourself",
+  "caption": "Five lines in an empty folder of your own. Skip the starter zip: it would bring the Matt Pocock skills a second time.",
+  "copy": "Copy",
+  "copied": "Copied",
+  "rows": {
+    "label": "Five lines to set up the Matt Pocock skills yourself",
+    "node": {
+      "title": "Install Node.js",
+      "reason": "The skills installer runs on it. Take the version the page recommends."
+    },
+    "add": {
+      "title": "Add the main Matt Pocock skills",
+      "reason": "In your terminal. When it asks which skills, keep the main group and leave <b>Other</b> unticked."
+    },
+    "setup": {
+      "title": "Run his setup skill in your AI agent",
+      "reason": "It asks a few questions, one at a time. Give these four answers."
+    },
+    "check": {
+      "title": "Add our check and the hancrafted entry",
+      "reason": "The only two pieces from us. Unzip the skill into the skills folder the installer made; paste the entry into <code>GLOSSARY.md</code>, or create the file with it."
+    },
+    "run": {
+      "title": "Run the same check as step 4",
+      "reason": "It confirms the Matt Pocock skills are in place. Approve its command, and the hancrafted homepage opens."
+    }
+  },
+  "nodeLink": "Node.js · official download page",
+  "newTab": "(opens in a new tab)",
+  "picker": {
+    "question": "? Which skills do you want to install?",
+    "main": "main group, with the setup skill",
+    "other": "misc · in-progress, not needed"
+  },
+  "answers": {
+    "tracker": {
+      "question": "1 · Issue tracker",
+      "answer": "Local markdown, no GitHub"
+    },
+    "docs": {
+      "question": "2 · Domain docs",
+      "answer": "A single <code>GLOSSARY.md</code>"
+    },
+    "labels": {
+      "question": "3 · Triage labels",
+      "answer": "Keep the defaults"
+    },
+    "file": {
+      "question": "4 · Which file",
+      "answer": "<code>AGENTS.md</code>, plus a <code>CLAUDE.md</code> holding <at>@AGENTS.md</at>"
+    }
+  },
+  "bundle": {
+    "link": "hancrafted-check-setup · skill folder only",
+    "size": "small zip",
+    "entryLabel": "GLOSSARY.md · add this entry"
+  },
+  "homepage": "The homepage opens",
+  "voiceScript": {
+    "segments": {
+      "same-chain-built-by-hand": {
+        "title": "Same chain, built by hand",
+        "keywords": "",
+        "script": "What the starter folder did for you comes down to four short steps. You install Node.js from its official page, add the Matt Pocock skills, run his setup skill so everything stays local without a GitHub account, and then run the check. The exact lines are on the page, because I would rather you copy them from there than hear them from me."
+      },
+      "same-proof": {
+        "title": "Same proof",
+        "keywords": "",
+        "script": "The proof is the same as before. You run hancrafted-check-setup, and the hancrafted homepage opens. One thing to know: that skill comes with the starter folder, not with the Matt Pocock skills, so the page tells you where to take it from."
+      }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error",
+    "placeholder": "Paste your error here…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck.\nOperating system: {os}\nAI agent: {agent}\nStep: {step}\n\nThis is the error I see:\n{error}\n\nExplain in plain words what went wrong and what I should do next, one step at a time.",
+    "noError": "(I have not pasted an error.)",
+    "step": "Bonus: Set up the Matt Pocock skills yourself",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    }
+  }
+}

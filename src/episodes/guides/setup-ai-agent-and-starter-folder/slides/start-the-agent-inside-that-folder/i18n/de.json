@@ -1,0 +1,104 @@
+{
+  "title": "Den Agenten in diesem Ordner starten",
+  "caption": "Öffne das Terminal direkt aus dem Ordner und starte dann Deinen KI-Agenten: <b>Er liest nur den Ordner, in dem er startet</b>.",
+  "toolbar": {
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
+  },
+  "terminal": "Terminal",
+  "moves": {
+    "open": {
+      "title": "Ein Terminal im Ordner öffnen",
+      "detail": {
+        "mac": "Klicke im Finder mit der rechten Maustaste auf <b>hancrafted-workshop-starter</b>, dann auf <b>Dienste › Neues Terminal beim Ordner</b>. Kein Pfad zum Eintippen.",
+        "windows": "Klicke im Datei-Explorer mit der rechten Maustaste auf <b>hancrafted-workshop-starter</b>, dann auf <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen.",
+        "linux": "Rechtsklick auf den Ordner in Deinem Dateimanager › <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen."
+      },
+      "worked": "Der Ordnername steht direkt vor Deinem Cursor.",
+      "menuLabel": "Das Rechtsklick-Menü des Ordners",
+      "menu": {
+        "mac": {
+          "open": "Öffnen",
+          "getInfo": "Informationen",
+          "rename": "Umbenennen",
+          "compress": "„{folder}“ komprimieren",
+          "services": "Dienste",
+          "newTerminal": "Neues Terminal beim Ordner",
+          "newTab": "Neuer Terminal-Tab beim Ordner"
+        },
+        "windows": {
+          "newTab": "In neuem Tab öffnen",
+          "newWindow": "In neuem Fenster öffnen",
+          "pin": "An Schnellzugriff anheften",
+          "compress": "In ZIP-Datei komprimieren",
+          "copyPath": "Als Pfad kopieren",
+          "properties": "Eigenschaften",
+          "terminal": "Im Terminal öffnen",
+          "more": "Weitere Optionen anzeigen"
+        }
+      },
+      "note": {
+        "mac": "Nicht im Menü? Einmal einschalten: <b>Systemeinstellungen › Tastatur › Tastaturkurzbefehle › Dienste</b>, dort <b>Neues Terminal beim Ordner</b> ankreuzen.",
+        "windows": "Windows 10 ohne diesen Eintrag? Öffne den Ordner, klicke in die Adressleiste, tippe <code>powershell</code> und drücke Enter."
+      }
+    },
+    "start": {
+      "title": "Deinen KI-Agenten starten",
+      "detail": "Tippe seinen Namen und drücke Enter. Fragt er, ob Du diesem Ordner vertraust, <b>ist Ja hier richtig</b>.",
+      "antigravity": "Starte Antigravity in diesem Ordner so, wie es seine offizielle Seite zeigt.",
+      "opensNewTab": "(öffnet in einem neuen Tab)",
+      "link": {
+        "claude-code": "Claude Code: Quickstart",
+        "antigravity": "Antigravity: Doku",
+        "codex": "Codex CLI",
+        "copilot": "GitHub Copilot CLI"
+      },
+      "worked": "Dein KI-Agent startet und wartet darauf, dass Du etwas eingibst."
+    }
+  },
+  "trust": {
+    "question": "Vertraust Du den Dateien in diesem Ordner?",
+    "yes": "1. Ja, weiter",
+    "no": "2. Nein, beenden"
+  },
+  "fallback": {
+    "text": "Notlösung, falls das Menü nicht klappt: Öffne das Terminal wie in Schritt 1, tippe <command></command> und drücke Enter."
+  },
+  "voiceScript": {
+    "segments": {
+      "go-in-then-start": {
+        "title": "Erst hinein, dann starten",
+        "keywords": "",
+        "script": "In Deinem Terminal gehst Du zuerst in den entpackten Ordner, und erst dann startest Du Deinen KI-Agenten. Die Seite zeigt Dir das Terminal an jeder Stelle, so kannst Du prüfen, ob der Ordnername vor Deinem Cursor steht, bevor Du startest. Der KI-Agent fragt vielleicht, ob Du diesem Ordner vertraust. Diesem hier vertraust Du, also sag Ja."
+      },
+      "same-folder-every-time": {
+        "title": "Jedes Mal derselbe Ordner",
+        "keywords": "",
+        "script": "Die Reihenfolge ist wichtig, weil ein KI-Agent liest, was in dem Ordner liegt, in dem er startet. So findet er gleich Deinen Skill. Startest Du ihn woanders, ist der Skill einfach nicht da. Wann immer Du mit diesem Starter-Ordner arbeitest, starte den KI-Agenten also aus ihm heraus."
+      },
+      "chain-so-far": {
+        "title": "Die Kette bis hierher",
+        "keywords": "",
+        "script": "Schau, was Du jetzt hast: ein Terminal, das wartet, einen KI-Agenten darin und einen Ordner, den er lesen kann. Ein Teil fehlt noch, und genau das beweist, dass alle anderen funktionieren."
+      }
+    }
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Dein Fehler oder was Du siehst",
+    "placeholder": "Füge Deinen Fehler ein oder beschreibe, was Du siehst …",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert. Füge ihn ins kostenlose ChatGPT ein.",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
+    "prompt": "Ich bin Einsteiger und folge einer Schritt-für-Schritt-Anleitung, um für einen Workshop einen KI-Agenten auf meinem Laptop zum Laufen zu bringen.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nMein Schritt: {step}\n\nDas ist der Fehler oder das, was ich sehe:\n{error}\n\nErkläre mir in einfachen Worten, was schiefgelaufen ist, und sag mir, was ich als Nächstes tun soll, in kleinen Schritten. Geh nicht davon aus, dass ich mich mit dem Terminal auskenne.",
+    "noError": "(Ich habe keinen Fehler eingefügt; ich komme bei diesem Schritt nicht weiter.)",
+    "step": "Schritt 3: Den Agenten in diesem Ordner starten",
+    "chats": {
+      "openAIChats": "Einen KI-Chat öffnen",
+      "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
+      "newTab": "öffnet in neuem Tab"
+    }
+  },
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe: wenn das Menü nicht klappt"
+}

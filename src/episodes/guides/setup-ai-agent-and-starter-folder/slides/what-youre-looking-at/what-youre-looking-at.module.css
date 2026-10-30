@@ -1,0 +1,43 @@
+/*
+ * The drawn window's three bits of motion: the cursor blinks, the command types itself in once, the output fades in
+ * after it. The base rules are the finished picture (command typed, output shown, cursor solid), which is also what
+ * reduced motion shows; the motion only plays under no-preference.
+ */
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes type {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+}
+
+/* The typed command is ten characters, "echo hello"; the width is what the typing grows. */
+.command {
+  width: 10ch;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cursor {
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  .command {
+    animation: type 900ms steps(10) 300ms backwards;
+  }
+
+  .output {
+    animation: appear 400ms ease-out 1300ms backwards;
+  }
+}

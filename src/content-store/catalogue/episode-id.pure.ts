@@ -20,6 +20,9 @@ export const TEMPLATES_FOLDER = 'templates';
 /** The Explorable pages' compositions: Episode-shaped pages about one Explorable, one folder each, `explorable-pages/<slug>/`. */
 export const EXPLORABLE_PAGES_FOLDER = 'explorable-pages';
 
+/** The Guides' compositions: step-by-step pages, one folder each, `guides/<slug>/` (design-ADR 0019, #450). */
+export const GUIDES_FOLDER = 'guides';
+
 /**
  * Folder names under the Episodes folder that hold no Episode, so no Episode may take one as its slug: the Event copies,
  * the Slide pool, the Templates, and the area's code (`components/`, `lib/`, `hooks/`).
@@ -29,6 +32,7 @@ export const RESERVED_FOLDER_NAMES: readonly string[] = [
   SLIDE_POOL_FOLDER,
   TEMPLATES_FOLDER,
   EXPLORABLE_PAGES_FOLDER,
+  GUIDES_FOLDER,
   'components',
   'lib',
   'hooks',
@@ -108,13 +112,26 @@ export function explorablePageRef<Slug extends string>(slug: Slug): ExplorablePa
   return { kind: 'explorable-page', id: slug, slug };
 }
 
+/** A Guide's composition: a step-by-step page, named by its slug, which is its id. */
+export interface GuideRef<Slug extends string = string> {
+  readonly kind: 'guide';
+  readonly id: Slug;
+  readonly slug: Slug;
+}
+
+/** The Guide composition in folder `guides/<slug>/`. */
+export function guideRef<Slug extends string>(slug: Slug): GuideRef<Slug> {
+  return { kind: 'guide', id: slug, slug };
+}
+
 /**
  * A page's folder under the Episodes folder, the one place the folder layout is written: `<slug>` for an Episode no
  * Event owns, `by-event/<event>/<slug>` for an Event's copy, `templates/<slug>` for a Template, `explorable-pages/<slug>`
- * for an Explorable page.
+ * for an Explorable page, `guides/<slug>` for a Guide.
  */
-export function folderOf(page: EpisodeRef | TemplateRef | ExplorablePageRef): string {
+export function folderOf(page: EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef): string {
   if (page.kind === 'template') return `${TEMPLATES_FOLDER}/${page.slug}`;
+  if (page.kind === 'guide') return `${GUIDES_FOLDER}/${page.slug}`;
   if (page.kind === 'explorable-page') return `${EXPLORABLE_PAGES_FOLDER}/${page.slug}`;
   return matchEpisode(page, {
     standalone: ({ slug }) => slug,

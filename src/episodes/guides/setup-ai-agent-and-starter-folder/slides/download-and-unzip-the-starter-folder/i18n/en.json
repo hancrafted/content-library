@@ -1,0 +1,78 @@
+{
+  "title": "Download and unzip the starter folder",
+  "caption": "One zip with everything the workshop needs. Unzip it into a real folder: <b>on Windows, right-click it and choose Extract All</b>.",
+  "toolbar": {
+    "os": "Your computer",
+    "agent": "AI agent"
+  },
+  "download": {
+    "heading": "Download",
+    "label": "Download the starter folder",
+    "downloads": "Downloads",
+    "justNow": "just now",
+    "older": "invoice-october.pdf",
+    "lastWeek": "last week"
+  },
+  "unzip": {
+    "mac": "Double-click",
+    "windows": "Extract All…",
+    "linux": "Extract Here",
+    "menuLabel": "The zip's right-click menu",
+    "menu": {
+      "windows": {
+        "open": "Open",
+        "openWith": "Open with",
+        "share": "Share",
+        "copyPath": "Copy as path"
+      },
+      "linux": {
+        "openWith": "Open With Archive Manager",
+        "rename": "Rename…",
+        "trash": "Move to Trash"
+      }
+    },
+    "windowsWarning": "<b>Right-click, not double-click.</b> On Windows a double-click only looks inside the zip; it does not unzip it."
+  },
+  "folder": {
+    "heading": "Your folder",
+    "label": "The unzipped starter folder",
+    "rows": {
+      "skills": "what your AI agent can do",
+      "agents": "how to work here",
+      "glossary": "the words it knows"
+    },
+    "worked": "You see a plain folder icon, not a zip, with these four items inside.",
+    "remember": "<b>Remember where it landed:</b> <muted>Downloads › hancrafted-workshop-starter. The next Slide goes into exactly this folder.</muted>"
+  },
+  "voiceScript": {
+    "segments": {
+      "one-link-one-zip": {
+        "title": "One link, one zip",
+        "keywords": "",
+        "script": "There is one link to one zip file. Download it, and then unzip it. On a Mac, double-click the zip. On Windows, right-click it and choose Extract All. On Linux, use Extract here in your file manager. Inside you will find the files the workshop needs, already in place, so there is nothing to assemble."
+      },
+      "where-it-lives": {
+        "title": "Where it lives",
+        "keywords": "",
+        "script": "Take a second to notice where the folder landed, usually in your Downloads. The next step goes into exactly this folder, so if you remember where it is, the rest is easy."
+      }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error, or what you see",
+    "placeholder": "Paste your error or describe what you see…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied. Paste it into free ChatGPT.",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I am a beginner following a step-by-step guide to get an AI agent running on my laptop for a workshop.\n\nMy computer: {os}\nMy AI agent: {agent}\nThe step I am on: {step}\n\nThis is the error, or what I see:\n{error}\n\nExplain in plain words what went wrong and tell me what to do next, one small step at a time. Do not assume I know the terminal.",
+    "noError": "(I have not pasted an error; I am stuck on this step.)",
+    "step": "Step 3: Download and unzip the starter folder",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    }
+  },
+  "doneLabel": "Done looks like"
+}

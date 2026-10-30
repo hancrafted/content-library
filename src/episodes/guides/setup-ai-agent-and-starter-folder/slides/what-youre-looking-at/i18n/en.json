@@ -1,0 +1,92 @@
+{
+  "title": "What you're looking at",
+  "caption": "Five parts, nothing more. Point at one to see what it does: <b>you can't break anything here.</b>",
+  "toolbar": {
+    "os": "Your computer",
+    "agent": "AI agent"
+  },
+  "windowTitle": "Terminal",
+  "command": "echo hello",
+  "output": "hello",
+  "prompts": {
+    "mac": "you@MacBook ~ %",
+    "windows": "PS C:\\Users\\you>",
+    "linux": "you@laptop:~$"
+  },
+  "previous": "Previous",
+  "next": "Next",
+  "hint": "Point at a part, or step through.",
+  "parts": {
+    "prompt": {
+      "name": "Prompt",
+      "explanation": "This says \"I'm ready for your next command\". The letters in front show who and where you are; you can ignore them."
+    },
+    "cursor": {
+      "name": "Cursor",
+      "explanation": "The blinking block marks where what you type will appear. It blinks because it is waiting for you, not because something is wrong."
+    },
+    "command": {
+      "name": "Command",
+      "explanation": "A command is a short instruction you type and confirm with Enter (Return on a Mac). This one, echo hello, just says hello back."
+    },
+    "output": {
+      "name": "Output",
+      "explanation": "The computer's answer, printed right under your command. Here it simply says hello. No answer is also fine: it means done."
+    },
+    "close": {
+      "name": "Close button",
+      "explanation": "Closing the window ends everything in it. Nothing you try here can break your computer, and closing the window is always the way out."
+    }
+  },
+  "safe": {
+    "title": "You can't break anything here",
+    "text": "Closing the window ends it. To leave, close the window like any other."
+  },
+  "notes": {
+    "try-and-see-what-happens": {
+      "header": "Try it and see",
+      "description": "In a university Unix course with near-instant feedback on every attempt, 78.2% of 2021 respondents said they had procedural Unix knowledge, against 38.8% before; the authors call this self-report possibly subjective, and the students were not solo first-timers [1].",
+      "sources": {
+        "berry-shellonyou": {
+          "title": "Berry et al., ShellOnYou: learning by doing Unix command line"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "five-parts": {
+        "title": "Five parts",
+        "keywords": "",
+        "script": "This is what the window you just opened is made of, and there are only five parts: the prompt, the cursor, the command you type, the answer the computer prints, and the close button. That is the whole picture."
+      },
+      "point-at-anything": {
+        "title": "Point at anything",
+        "keywords": "",
+        "script": "Point at any part, or tap it, and a short explanation appears. If you prefer, use Next and Previous and walk through them one by one. The prompt says it is ready, the cursor shows where your typing lands, and the answer comes back right under your command."
+      },
+      "you-cant-break-it": {
+        "title": "You can't break it",
+        "keywords": "",
+        "script": "Here is the part I would like you to remember: you cannot break anything by looking around in here. If you ever feel lost, close the window, and everything in it ends. Open a new one whenever you like."
+      }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "What you see on your screen",
+    "placeholder": "Paste your error, or describe what you see…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I'm setting up an AI agent on my laptop for a workshop and I'm stuck.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nWhat I see:\n{error}\n\nI'm new to the terminal. Tell me in plain words what this means and the one next thing to try.",
+    "noError": "(I haven't pasted anything yet: ask me what I see.)",
+    "step": "Step 1: What you're looking at",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    }
+  },
+  "skip": "<b>Just a short intro to the terminal.</b> You can skip this Slide and go straight to the next step."
+}

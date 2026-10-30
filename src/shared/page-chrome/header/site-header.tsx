@@ -52,6 +52,7 @@ function HeaderNav({ locale, t, navSections }: { locale: Locale; t: HeaderT; nav
       learnLabel={t('nav.learn')}
       learn={[
         link(ROUTES.episodes, 'nav-episodes', t('nav.episodes')),
+        link(ROUTES.guides, 'nav-guides', t('nav.guides')),
         { ...link(ROUTES.resources, 'nav-resources', t('nav.resources')), alsoIn: navSections },
       ]}
       trail={locale === 'en' ? [link(ROUTES.dashboard, 'nav-dashboard', t('nav.dashboard'))] : []}

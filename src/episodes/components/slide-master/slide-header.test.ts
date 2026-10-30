@@ -121,4 +121,35 @@ describe('edge cases', () => {
     // ASSERT
     expect(html).not.toContain(expected);
   });
+
+  describe('the header action', () => {
+    const ACTION = createElement('button', { 'data-action': '' }, 'Help');
+
+    it('sits in the title row after the title group, so it reads at the right end of the title line', () => {
+      // ARRANGE
+      const expected = /data-slot="slide-header-row"[^>]*>.*data-target="title".*<button data-action="">Help<\/button>/;
+      // ACT
+      const html = header({ entrance: 'none', action: ACTION });
+      // ASSERT
+      expect(html).toMatch(expected);
+    });
+
+    it('draws no title row for a Slide without an action', () => {
+      // ARRANGE
+      const expected = 'slide-header-row';
+      // ACT
+      const html = header({ entrance: 'none' });
+      // ASSERT
+      expect(html).not.toContain(expected);
+    });
+
+    it('keeps the Eyebrow above the row, never inside it', () => {
+      // ARRANGE
+      const expected = true;
+      // ACT
+      const html = header({ entrance: 'none', action: ACTION, eyebrow: EYEBROW });
+      // ASSERT
+      expect(html.indexOf('The long phone call') < html.indexOf('slide-header-row')).toBe(expected);
+    });
+  });
 });

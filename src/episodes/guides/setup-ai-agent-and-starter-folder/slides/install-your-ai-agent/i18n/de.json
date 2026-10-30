@@ -1,0 +1,96 @@
+{
+  "title": "Installiere deinen KI-Agenten",
+  "caption": "Dein erster Befehl: kopieren, ins Terminal einfügen, Enter drücken.",
+  "firstCommand": "Dein erster Befehl",
+  "paste": "Öffne dein Terminal aus Schritt 1, füge diese Zeile ein und drücke Enter. Sie installiert deinen KI-Agenten.",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "officialDocs": "Offizielle Doku von {agent}",
+  "newTab": "öffnet in neuem Tab",
+  "docsWhy": "Immer da, auch wenn sich diese Zeile einmal ändert. Manche Installationsseiten muss man scrollen, darum steht die Zeile hier.",
+  "powershellHint": "Nimm unter Windows PowerShell: Die Eingabezeile beginnt mit <code>PS C:\\</code>.",
+  "commandPromptSummary": "Stattdessen in der Eingabeaufforderung?",
+  "commandPromptHint": "Die Eingabeaufforderung zeigt etwa <code>C:\\&gt;</code>, ohne <code>PS</code> davor. Füge diese Zeile dort ein.",
+  "happenTitle": "Was passieren kann",
+  "happen": {
+    "claude-code": {
+      "one": "Unter Windows heißt <code>'irm' is not recognized</code>: Du bist in der Eingabeaufforderung. Öffne PowerShell oder nimm die Zeile für die Eingabeaufforderung oben.",
+      "two": "Claude Code braucht einen bezahlten Claude-Tarif. Der kostenlose enthält es nicht, und die Anmeldung auf der nächsten Folie sagt es dir."
+    },
+    "antigravity": {
+      "one": "Unter Windows heißt <code>'irm' is not recognized</code>: Du bist in der Eingabeaufforderung, nicht in PowerShell. Öffne PowerShell und füge erneut ein.",
+      "two": "Die Zeile bricht mit roter Schrift ab: Dafür ist Hilfe da."
+    },
+    "codex": {
+      "one": "Eine Zeile, die nicht zu deinem Computer passt, scheitert sofort: Prüfe, ob oben das richtige System gewählt ist.",
+      "two": "Die Zeile bricht mit roter Schrift ab: Dafür ist Hilfe da."
+    },
+    "copilot": {
+      "one": "GitHub Copilot braucht ein aktives Copilot-Abo auf deinem GitHub-Konto. Ohne scheitert die Anmeldung auf der nächsten Folie.",
+      "two": "Unter Windows verlangt GitHub PowerShell 6 oder höher, und <code>winget</code> muss vorhanden sein. Heißt es, es sei nicht erkannt: Nimm Hilfe."
+    }
+  },
+  "helpLine": "Hängst du fest oder siehst rote Schrift, die du nicht verstehst? Drücke oben rechts auf Hilfe und füge den Fehler ein.",
+  "worked": "Geschafft, wenn die Eingabezeile zurückkommt. Öffne als Nächstes ein neues Terminalfenster.",
+  "voiceScript": {
+    "segments": {
+      "your-first-command": {
+        "title": "Dein erster Befehl",
+        "keywords": "",
+        "script": "Das ist der erste Befehl, den du in dein Terminal tippst. Er installiert deinen KI-Agenten. Wähle in der Leiste deinen Computer und deinen KI-Agenten, dann zeigt die Seite dir die genaue Zeile. Drücke den großen Kopieren-Knopf, füge sie in dein Terminal ein und drücke Enter."
+      },
+      "official-docs-always": {
+        "title": "Offizielle Doku, immer",
+        "keywords": "",
+        "script": "Neben der Zeile ist ein Knopf zur offiziellen Doku deines KI-Agenten. Ich gebe dir die Zeile, damit du nicht durch eine Seite ohne Anker scrollen musst, aber die Quelle ist der Hersteller. Wenn die Zeile also einmal nicht mehr geht, ist die Doku einen Klick entfernt."
+      },
+      "what-you-will-see": {
+        "title": "Was du am Ende siehst",
+        "keywords": "",
+        "script": "Am Ende der Installation stellt dein Terminal vielleicht eine Frage. Bei Codex auf Mac und Linux ist es Start Codex now mit y oder N: Tippe y und drücke Enter, dann geht es direkt zur Anmeldung. Nur Enter heißt nein, dann öffnest du ein neues Terminal und tippst codex. Bei GitHub Copilot antwortest du mit y, wenn es fragt, ob es sich in deine Shell-Datei eintragen soll. Die letzte Zeile nennt copilot help, du tippst aber copilot. Bei Claude Code siehst du Installation complete, öffne ein neues Terminal und tippe claude."
+      },
+      "what-might-happen": {
+        "title": "Was passieren kann",
+        "keywords": "",
+        "script": "Ein paar Dinge können schiefgehen, und sie stehen unter der Zeile für deinen KI-Agenten. Unter Windows ist es meist das falsche Fenster: PowerShell und Eingabeaufforderung brauchen verschiedene Zeilen. Siehst du rote Schrift, die du nicht verstehst, drücke oben rechts auf Hilfe, füge den Fehler ein und frag nach."
+      }
+    }
+  },
+  "toolbar": {
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Deine Fehlermeldung",
+    "placeholder": "Füge hier deine Fehlermeldung ein …",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
+    "prompt": "Ich mache meinen Laptop für einen Workshop startklar und komme nicht weiter. Ich habe noch nie mit einem Terminal gearbeitet.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich gerade bin: {step}\n\nDiese Fehlermeldung sehe ich:\n\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist, und sag mir dann Schritt für Schritt, was ich als Nächstes tun soll.",
+    "noError": "(Ich sehe keine Fehlermeldung, es funktioniert einfach nicht.)",
+    "step": "Schritt 2: Installiere deinen KI-Agenten, dein erster Befehl",
+    "chats": {
+      "openAIChats": "Einen KI-Chat öffnen",
+      "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
+      "newTab": "öffnet in neuem Tab"
+    }
+  },
+  "end": {
+    "generic": "Warte, bis die Eingabezeile zurückkommt, und mach dann weiter.",
+    "codex": {
+      "one": "Auf Mac und Linux fragt die letzte Zeile <code>Start Codex now? [y/N]</code>. Tippe <key>y</key> und drücke <key>Enter</key>, dann geht es direkt weiter zur Anmeldung.",
+      "two": "Nur <key>Enter</key> heißt nein. Öffne dann ein neues Terminal und tippe <code>codex</code>."
+    },
+    "claude-code": {
+      "one": "Der Installer endet mit <code>Installation complete</code>. Spricht ein Block <code>Setup notes</code> von deinem PATH, folge der Lösung, die er dort ausgibt.",
+      "two": "Öffne dann ein neues Terminalfenster und tippe <code>claude</code>."
+    },
+    "copilot": {
+      "one": "Auf Mac und Linux fragt es vielleicht <code>Would you like to add it to … ? [y/N]</code>. Tippe <key>y</key> und drücke <key>Enter</key>.",
+      "two": "Die letzte Zeile nennt <code>copilot help</code>, aber dein nächster Schritt ist nur <code>copilot</code>, in einem neuen Terminal."
+    }
+  },
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe"
+}

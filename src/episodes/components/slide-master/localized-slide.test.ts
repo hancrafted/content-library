@@ -454,4 +454,46 @@ describe('edge cases', () => {
     // ASSERT
     expect(present).toEqual([]);
   });
+
+  describe('the header action slot', () => {
+    const helped = slide({
+      slug: 'helped',
+      messages: { en: { title: 'Helped', help: 'Help' }, de: { title: 'Geholfen', help: 'Hilfe' } },
+      headerAction: ({ t }) => createElement('button', null, t('help')),
+      content: () => null,
+    });
+    const sharedEpisode = (locale: Locale): EpisodeContext => ({
+      ...episodeOf(locale, [[foundations, helped]]),
+      header: 'shared',
+    });
+    const headerOf = (context: EpisodeContext, index: number) =>
+      localizeSlide(context.placed[index] as never, context).header;
+
+    it('renders the Slide header action from its own file, in the locale of the page', () => {
+      // ARRANGE
+      const expected = '<button>Hilfe</button>';
+      // ACT
+      const action = headerOf(sharedEpisode('de'), 1)?.action;
+      // ASSERT
+      expect(renderToStaticMarkup(action)).toBe(expected);
+    });
+
+    it('gives a Slide that declares no action a header without one', () => {
+      // ARRANGE
+      const expected = false;
+      // ACT
+      const header = headerOf(sharedEpisode('en'), 0);
+      // ASSERT
+      expect(header !== undefined && 'action' in header).toBe(expected);
+    });
+
+    it('leaves the action to the Scene when the Episode renders its own headers', () => {
+      // ARRANGE
+      const context = episodeOf('en', [[foundations, helped]]);
+      // ACT
+      const header = headerOf(context, 1);
+      // ASSERT
+      expect(header).toBeUndefined();
+    });
+  });
 });

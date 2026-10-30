@@ -1,0 +1,144 @@
+{
+  "title": "Deinen ersten Skill ausführen",
+  "caption": "Tipp den Namen des Skills ein, sag Ja, wenn Dein KI-Agent fragt, und <b>die hancrafted-Homepage öffnet sich</b>.",
+  "toolbar": {
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
+  },
+  "approve": {
+    "label": "Sag Ja zum Befehl",
+    "hint": "Die Zustimmung ist der Schritt. Dein KI-Agent fragt, bevor er etwas auf Deinem Computer ausführt, <marker>damit die Entscheidung bei Dir bleibt</marker>."
+  },
+  "prompt": {
+    "window": "hancrafted-workshop-starter · {agent}",
+    "lookup": "● Looking up hancrafted in GLOSSARY.md … found https://hancrafted.net",
+    "reason": "Open the hancrafted homepage in your browser",
+    "claude-code": {
+      "typed": "> /hancrafted-check-setup",
+      "heading": "Bash command",
+      "question": "Do you want to proceed?",
+      "choices": {
+        "yes": "Yes",
+        "always": "Yes, and don't ask again",
+        "no": "No"
+      }
+    },
+    "antigravity": {
+      "typed": "> /hancrafted-check-setup",
+      "asks": "Antigravity hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
+    },
+    "codex": {
+      "typed": "> /hancrafted-check-setup",
+      "asks": "Codex hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
+    },
+    "copilot": {
+      "typed": "> /hancrafted-check-setup",
+      "asks": "GitHub Copilot hält hier vielleicht an und fragt in eigenen Worten, ob es diesen Befehl ausführen darf. Wenn ja, sag Ja."
+    }
+  },
+  "result": {
+    "label": "Dein Browser öffnet hancrafted",
+    "address": "hancrafted.net",
+    "nav": {
+      "episodes": "Episoden",
+      "learn": "Lernen",
+      "events": "Veranstaltungen"
+    },
+    "hero": {
+      "eyebrow": "Menschlich geführt. KI-beschleunigt.",
+      "headline": "Die KI hat dich <accent>befördert.</accent> Gefragt hat sie nicht.",
+      "caption": "Du wirst 10× so produktiv — wenn du lernst, zu planen, zu spezifizieren und zu reviewen, …",
+      "cta": "Erfahre, warum"
+    },
+    "done": "<b>Du hast gerade einen Skill ausgeführt.</b> Wir sehen uns im Workshop; schau Dich bis dahin auf hancrafted um."
+  },
+  "fallback": "Die Seite hat sich nicht geöffnet? Dann gibt der Skill den Link aus: Öffne <url>https://hancrafted.net</url> von Hand in Deinem Browser.",
+  "notes": {
+    "the-prompt-is-a-safeguard": {
+      "header": "Die Abfrage ist eine Schutzmaßnahme, kein Fehler",
+      "description": "Ein Modell lässt sich von Text lenken, den es liest, etwa von einer Webseite oder einer Projektdatei. Deshalb empfiehlt OWASP, folgenreiche Aktionen von einem Menschen freigeben zu lassen, und jeder Anbieter baut diese Freigabe in seinen Standardmodus ein [1][2][3][4][5][6][7].",
+      "sources": {
+        "owasp-prompt-injection": {
+          "title": "OWASP, LLM01: Prompt Injection"
+        },
+        "owasp-excessive-agency": {
+          "title": "OWASP, LLM06:2025 Excessive Agency"
+        },
+        "codex-approvals": {
+          "title": "OpenAI, Codex: Agent approvals and security"
+        },
+        "gemini-cli-policy-engine": {
+          "title": "Google, Gemini CLI: Policy engine"
+        },
+        "copilot-cli": {
+          "title": "GitHub, About GitHub Copilot CLI"
+        },
+        "antigravity-permissions": {
+          "title": "Google, Antigravity: Permissions"
+        },
+        "claude-code-permissions": {
+          "title": "Anthropic, Claude Code: Configure permissions"
+        }
+      }
+    },
+    "claude-codes-prompt": {
+      "header": "Die Abfrage von Claude Code",
+      "description": "Im manuellen Modus lösen Befehle außerhalb einer eingebauten Liste reiner Lesebefehle einen Dialog „Bash command“ aus. Er fragt „Do you want to proceed?“ und bietet Yes, „Yes, and don't ask again“ und No an. Name und Voreinstellung der Abfrage unterscheiden sich je nach KI-Agent und Version und ändern sich oft; prüf sie deshalb erneut, bevor Du eine auf dem Bildschirm zeigst [1].",
+      "sources": {
+        "claude-code-permissions": {
+          "title": "Anthropic, Claude Code: Configure permissions"
+        }
+      }
+    },
+    "why-approvals-are-kept": {
+      "header": "Warum es Freigaben weiter gibt",
+      "description": "Anthropic nennt breiten Dateizugriff riskant, besonders bei Prompt Injection; das ist eine Aussage des Anbieters, keine unabhängige Studie [1].",
+      "sources": {
+        "claude-code-sandboxing": {
+          "title": "Anthropic, Making Claude Code more secure and autonomous with sandboxing"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "type-the-skill": {
+        "title": "Den Skill eintippen",
+        "keywords": "",
+        "script": "Tipp den Namen des Skills ein, hancrafted-check-setup, und Dein KI-Agent liest ihn. Bevor er irgendetwas auf Deinem Computer tut, hält er an und fragt Dich. Diese Pause ist kein Fehler: Dein KI-Agent gibt Dir die Entscheidung in die Hand."
+      },
+      "say-yes": {
+        "title": "Ja sagen",
+        "keywords": "",
+        "script": "Hier entscheidest Du, also schau Dir an, was er ausführen will. Bei diesem Skill öffnet er eine einzige Webseite, und die Antwort ist Ja. Wenn Du einmal nicht sicher bist, was ein Befehl tut, kannst Du Deinen KI-Agenten bitten, ihn Dir zu erklären, bevor Du zustimmst. Wäre Dir ein Werkzeug lieber, das fragt, oder eines, das es nicht tut?"
+      },
+      "the-proof": {
+        "title": "Der Beweis",
+        "keywords": "",
+        "script": "Stimm zu, und die hancrafted-Homepage öffnet sich in Deinem Browser. Das ist der ganze Check, Du musst nichts weiter einreichen. Du hast gerade einen Skill ausgeführt, also bis zum Workshop, und schau Dich bis dahin auf hancrafted um. Wenn sich die Seite nicht öffnet, gibt der Skill den Link aus, und Du kannst ihn von Hand öffnen."
+      }
+    }
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Deine Fehlermeldung oder was Du auf dem Bildschirm siehst",
+    "placeholder": "Füg die Fehlermeldung ein oder was Du auf dem Bildschirm siehst …",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
+    "prompt": "Ich bereite mich auf einen Workshop vor und komme beim Einrichten meines KI-Agenten nicht weiter.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich in der Anleitung bin: {step}\n\nDas ist die Fehlermeldung, oder was ich auf dem Bildschirm sehe:\n\n{error}\n\nIch habe noch nie ein Terminal benutzt. Erklär mir in einfachen Worten, was schiefgelaufen ist und was ich als Nächstes tun soll, Schritt für Schritt.",
+    "noError": "(Ich habe noch nichts eingefügt.)",
+    "step": "Schritt 4: Deinen ersten Skill ausführen",
+    "chats": {
+      "openAIChats": "Einen KI-Chat öffnen",
+      "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
+      "newTab": "öffnet in neuem Tab"
+    }
+  },
+  "doLabel": "Dein vierter Schritt",
+  "doText": "Gib das in Deinen KI-Agenten ein und drücke Enter. Wenn er fragt, sag ja.",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe: Seite öffnet sich nicht"
+}

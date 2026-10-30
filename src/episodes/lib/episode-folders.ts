@@ -6,12 +6,15 @@ import {
   EXPLORABLE_PAGES_FOLDER,
   explorablePageRef,
   folderOf,
+  guideRef,
+  GUIDES_FOLDER,
   RESERVED_FOLDER_NAMES,
   SLIDE_POOL_FOLDER,
   templateRef,
   TEMPLATES_FOLDER,
   type EpisodeRef,
   type ExplorablePageRef,
+  type GuideRef,
   type TemplateRef,
 } from '../../content-store/catalogue/episode-id.pure.ts';
 
@@ -35,10 +38,10 @@ export const METADATA_FILE = 'episode-metadata.ts';
  * `templates/<slug>/`, and `episodeRef`, which names the Episode in a folder, `<slug>/` or `by-event/<event>/<slug>/`, so
  * a test never writes an Episode id out by hand. Every other test imports them from the catalogue itself.
  */
-export { episodeRef, EXPLORABLE_PAGES_FOLDER, TEMPLATES_FOLDER };
+export { episodeRef, EXPLORABLE_PAGES_FOLDER, GUIDES_FOLDER, TEMPLATES_FOLDER };
 
 /** One page folder: the Episode it holds, as code passes an Episode, or a Template; where it sits; what it holds. */
-export type PageFolder = (EpisodeRef | TemplateRef | ExplorablePageRef) & {
+export type PageFolder = (EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef) & {
   /** Its path under the Episodes folder: `<slug>`, `by-event/<event>/<slug>`, or `templates/<slug>` for a Template. */
   readonly folder: string;
   /** Its absolute path. */
@@ -56,7 +59,7 @@ function subfolders(dir: string): string[] {
 }
 
 /** The page folder of an Episode, a Template's, at the folder its ref names (`folderOf`). */
-function atFolder(episodesDir: string, page: EpisodeRef | TemplateRef | ExplorablePageRef): PageFolder {
+function atFolder(episodesDir: string, page: EpisodeRef | TemplateRef | ExplorablePageRef | GuideRef): PageFolder {
   const folder = folderOf(page);
   const dir = path.join(episodesDir, folder);
   return { ...page, folder, dir, files: readdirSync(dir) };
@@ -76,9 +79,15 @@ export function explorablePageFolders(root: string): PageFolder[] {
   );
 }
 
+/** Every Guide folder, `guides/<slug>/`, in slug order: its id is its slug, and it holds no Episode metadata. */
+export function guideFolders(root: string): PageFolder[] {
+  const episodesDir = path.join(root, EPISODES_DIR);
+  return subfolders(path.join(episodesDir, GUIDES_FOLDER)).map((slug) => atFolder(episodesDir, guideRef(slug)));
+}
+
 /**
  * Every page folder under `<root>/src/episodes/`, in folder-name order: the standalone Episodes, then each Event's
- * copies, Event by Event, then the Templates and the Explorable pages. The reserved folders hold no page and are walked into, never listed.
+ * copies, Event by Event, then the Templates, the Explorable pages and the Guides. The reserved folders hold no page and are walked into, never listed.
  */
 export function pageFolders(root: string): PageFolder[] {
   const episodesDir = path.join(root, EPISODES_DIR);
@@ -90,7 +99,7 @@ export function pageFolders(root: string): PageFolder[] {
       atFolder(episodesDir, episodeRef(slug, event)),
     ),
   );
-  return [...own, ...copies, ...templateFolders(root), ...explorablePageFolders(root)];
+  return [...own, ...copies, ...templateFolders(root), ...explorablePageFolders(root), ...guideFolders(root)];
 }
 
 /** Every Episode folder, standalone and Event copy alike: a page folder holding its metadata record. */

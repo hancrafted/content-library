@@ -186,3 +186,230 @@ run,episode,job,agent,attempt,result,failed_rubric,duration_s,tokens,cache_read_
 2026-10-19T13-29-27Z,onboard-ai-every-time,implement-section-the-thought-experiment,reviewer-spec,1,pass,,181,13406,1813994,2026-10-19T20:54:43.328Z
 2026-10-19T13-29-27Z,onboard-ai-every-time,implement-section-the-thought-experiment,orchestrator,,pass,,3253,34232,12106076,2026-10-19T20:55:54Z
 2026-10-19T13-29-27Z,onboard-ai-every-time,implement-episode-init,implementor,1,pass,,4961,,,2026-10-19T20:57:02Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,brief-grill,reviewer,1,pass,,137,14064,312582,2026-10-19T14:43:59.554Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,brief-grill,reviewer,2,pass,,85,7271,600649,2026-10-19T15:23:04.614Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,brief-grill,orchestrator,,pass,,3795,34262,5645359,2026-10-19T15:44:13Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,categorize-research,implementor,1,pass,,67,3860,363842,2026-10-19T16:39:46.905Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,retrieval,implementor,1,pass,,43,2735,276008,2026-10-19T16:41:40.216Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,customize-pipeline,orchestrator,,pass,,65,3461,698849,2026-10-19T16:43:41Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-enables-more-complex-tasks,implementor,1,fail,"The answer to the h1 in 2–5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",151,7395,784505,2026-10-19T18:19:24.946Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-llm-non-deterministic-output,implementor,1,pass,,189,6618,794439,2026-10-19T18:20:10.174Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-skills-as-language-barrier,implementor,1,fail,"Every Finding's claim is supported by the source it cites. The reviewer reads the source; the `sources` check output is evidence; a link reported `unverifiable` is `needs human`, not a pass.; Findings: The evidence behind the Answer, one finding per item, each citing its source. Fail if a finding cites no source, or gives an opinion instead of what a source shows.",217,5639,643547,2026-10-19T18:20:35.125Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-users-execute-instead-of-manage,implementor,1,fail,"Answer: The answer to the h1 in 2-5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",255,7326,1238641,2026-10-19T18:21:19.438Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-llm-non-deterministic-output,reviewer,1,pass,,71,3685,219004,2026-10-19T18:21:49.287Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-enables-more-complex-tasks,reviewer,1,pass,,95,4055,396779,2026-10-19T18:21:52.100Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-productivity-tools-increase-work,implementor,1,fail,"Limits of the Findings: what the Sources do not show, and any inference the Answer makes beyond them.; A claim the Answer takes from a disputed study names the dispute and the strongest counter-evidence.; Every Finding's claim is supported by the source it cites. The reviewer reads the source; the `sources` check output is evidence; a link reported `unverifiable` is `needs human`, not a pass.",311,10180,1828386,2026-10-19T18:22:02.613Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-skills-as-language-barrier,reviewer,1,pass,,101,5424,396595,2026-10-19T18:22:40.758Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-users-execute-instead-of-manage,reviewer,1,pass,,93,6272,366914,2026-10-19T18:23:07.328Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-enables-more-complex-tasks,implementor,2,pass,,45,2460,182602,2026-10-19T18:24:55.561Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-skills-as-language-barrier,implementor,2,pass,,54,1524,253555,2026-10-19T18:25:10.291Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-users-execute-instead-of-manage,implementor,2,pass,,77,2276,334828,2026-10-19T18:25:37.134Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-enables-more-complex-tasks,reviewer,2,pass,,78,6853,506146,2026-10-19T18:26:32.490Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-users-execute-instead-of-manage,reviewer,2,pass,,50,3147,583624,2026-10-19T18:26:37.169Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-productivity-tools-increase-work,reviewer,1,pass,,153,8406,827895,2026-10-19T18:26:37.544Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-ai-skills-as-language-barrier,reviewer,2,pass,,75,4079,406665,2026-10-19T18:26:42.372Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-productivity-tools-increase-work,implementor,2,pass,,51,3015,336405,2026-10-19T18:29:04.358Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-machine-workers-became-managers,implementor,1,pass,,300,15186,1921707,2026-10-19T18:29:25.137Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-productivity-tools-increase-work,reviewer,2,pass,,42,3543,221639,2026-10-19T18:30:01.349Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-new-technology-and-social-mobility,implementor,1,fail,"One sentence stating the Answer, which the retrieval job reads to decide whether this file answers a new question. Fail if it names the topic without stating the answer.",175,11151,1081725,2026-10-19T18:31:13.249Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-machine-workers-became-managers,reviewer,1,pass,,162,12628,973174,2026-10-19T18:32:17.649Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-new-technology-and-social-mobility,reviewer,1,pass,,69,4961,407708,2026-10-19T18:32:33.396Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-new-technology-and-social-mobility,implementor,2,pass,,41,1724,169907,2026-10-19T18:33:33.823Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-research-new-technology-and-social-mobility,reviewer,2,pass,,36,2482,307649,2026-10-19T18:34:21.098Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-dossier,implementor,1,fail,"Speaker notes: each adding a fact the speaker leaves out, with its source; fail if a note's claim is already spoken beside it, or its source does not support it.",115,12142,730246,2026-10-19T18:37:17.809Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-dossier,reviewer,1,pass,,131,13826,681439,2026-10-19T18:41:09.628Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-dossier,implementor,2,pass,,95,4969,773241,2026-10-19T18:42:56.899Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-dossier,reviewer,2,pass,,63,4749,679515,2026-10-19T18:44:10.882Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-voice-script,implementor,1,fail,"Fail if a note's claim is already spoken in the prose beside it, or its source does not support it.",52,3617,265262,2026-10-19T18:45:43.197Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-voice-script,reviewer,1,pass,,118,11682,289199,2026-10-19T18:47:51.050Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-voice-script,implementor,2,pass,,38,2000,215623,2026-10-19T18:48:39.351Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-voice-script,reviewer,2,pass,,80,10206,400678,2026-10-19T18:50:09.303Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,skill-spawned,,pass,,318,29901,2376762,2026-10-19T18:56:20.911Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,skill-spawned,,pass,,723,61173,6362103,2026-10-19T19:03:16.088Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,reviewer,1,pass,,213,17525,2023443,2026-10-19T19:07:37.939Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,skill-spawned,,pass,,31,1715,222672,2026-10-19T19:08:18.786Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,reviewer,2,pass,,78,6716,922163,2026-10-19T19:09:47.916Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,skill-spawned,,pass,,112,8311,412632,2026-10-19T20:10:45.291Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,skill-spawned,,pass,,546,41931,3827704,2026-10-19T20:39:09.408Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,reviewer,3,pass,,202,17186,2155880,2026-10-19T20:43:26.177Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,skill-spawned,,pass,,215,16592,1371501,2026-10-19T20:47:13.450Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,reviewer,4,pass,,95,9091,1104320,2026-10-19T20:49:05.410Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,write-spec,orchestrator,,pass,,9139,36157,19986711,2026-10-19T21:23:04Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-episode-init,implementor,1,pass,,325,25125,3926257,2026-10-19T22:11:21.608Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-episode-init,skill-spawned,,pass,,45,4334,530556,2026-10-19T22:14:11.264Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-episode-init,skill-spawned,,pass,,58,5816,523653,2026-10-19T22:14:30.718Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-episode-init,orchestrator,,pass,,561,8317,2056315,2026-10-19T22:14:59Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,implementor,1,pass,,2468,129738,32168923,2026-10-19T22:56:51.772Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,implementor,2,fail,"code-review Standards: FE-011 Consequences §2, agents work around a check with a style form it cannot see; code-review Standards: design-guide 'A Slide stands on its own': disclosure holds depth, never the claim; Exhibition: the exhibit's meaning shows at rest",755,49566,8135401,2026-10-20T06:54:49.898Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,skill-spawned,,pass,,134,12866,1154632,2026-10-20T06:58:01.317Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,skill-spawned,,pass,,131,12531,1547608,2026-10-20T06:58:07.733Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,implementor,3,pass,,967,57470,6900434,2026-10-20T07:14:50.334Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,skill-spawned,,pass,,30,2555,250595,2026-10-20T07:16:13.540Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,orchestrator,,pass,,32517,44303,12661290,2026-10-20T07:17:29Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,implement-section-from-execution-to-management,implementor,1,pass,,32509,,,2026-10-20T07:17:33Z
+2026-10-19T14-40-50Z,ai-gives-you-more-work,open-pr,implementor,1,pass,,58,5749,207060,2026-10-20T07:19:14.845Z
+2026-10-20T15-06-22Z,ai-attention-span,brief-grill,reviewer,1,pass,,177,17409,494806,2026-10-20T15:27:37.323Z
+2026-10-20T15-06-22Z,ai-attention-span,brief-grill,orchestrator,,pass,,1288,36018,7500467,2026-10-20T15:27:58Z
+2026-10-20T15-06-22Z,ai-attention-span,convert-references,orchestrator,,error,,7,736,300714,2026-10-20T19:03:43Z
+2026-10-20T15-06-22Z,ai-attention-span,categorize-research,implementor,1,pass,,54,4406,314019,2026-10-20T19:04:27.398Z
+2026-10-20T15-06-22Z,ai-attention-span,retrieval,implementor,1,pass,,21,2533,188050,2026-10-20T19:05:58.371Z
+2026-10-20T15-06-22Z,ai-attention-span,customize-pipeline,orchestrator,,pass,,80,5581,1586057,2026-10-20T19:08:23Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-memory-of-start-end-and-standouts,implementor,1,fail,"The primary sources the Findings rest on, as OKF §5.1 `sources`, each cited in the body as a `[n]` link, whose definition `[n]: <url> ""title""` closes the file. Fail if a source reports on a work instead of being it, unless it is an earlier research file this one extends.",46,4151,376470,2026-10-20T19:09:57.947Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-llm-lost-in-the-middle,implementor,1,fail,"The answer to the h1 in 2–5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",50,4229,309995,2026-10-20T19:10:08.392Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-context-rot-as-window-fills,implementor,1,fail,"The source as a reader would name it: `<author>, <title>`.",63,5194,387958,2026-10-20T19:10:28.749Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-web-search-fills-context-window,implementor,1,fail,"The answer to the h1 in 2–5 quotable sentences. Fail if it hedges without saying what is known, or states something no Finding supports and the Caveats do not flag as inference.",68,4907,602112,2026-10-20T19:10:46.918Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-saved-memory-loaded-at-chat-start,implementor,1,pass,,107,7287,652796,2026-10-20T19:11:20.226Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-llm-lost-in-the-middle,reviewer,1,pass,,58,4023,189066,2026-10-20T19:12:02.353Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-hidden-summary-of-older-messages,implementor,1,pass,,110,5633,540575,2026-10-20T19:12:43.501Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-llm-lost-in-the-middle,implementor,2,pass,,25,1277,190506,2026-10-20T19:12:45.574Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-web-search-fills-context-window,reviewer,1,pass,,66,4324,320835,2026-10-20T19:13:05.484Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-context-rot-as-window-fills,reviewer,1,pass,,84,4906,336508,2026-10-20T19:13:19.390Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-web-search-fills-context-window,implementor,2,pass,,17,1226,145655,2026-10-20T19:13:38.669Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-context-rot-as-window-fills,implementor,2,pass,,38,1599,230189,2026-10-20T19:14:18.239Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-memory-of-start-end-and-standouts,reviewer,1,pass,,222,12988,1566725,2026-10-20T19:14:42.194Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-saved-memory-loaded-at-chat-start,reviewer,1,pass,,82,5799,483158,2026-10-20T19:14:49.534Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-llm-lost-in-the-middle,reviewer,2,pass,,79,4869,499321,2026-10-20T19:15:24.410Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-hidden-summary-of-older-messages,reviewer,1,pass,,89,5727,424587,2026-10-20T19:15:28.674Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-web-search-fills-context-window,reviewer,2,pass,,59,3939,448412,2026-10-20T19:15:37.305Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-memory-of-start-end-and-standouts,implementor,2,pass,,52,2519,279070,2026-10-20T19:15:48.152Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-memory-of-start-end-and-standouts,reviewer,2,pass,,57,3868,312464,2026-10-20T19:20:34.890Z
+2026-10-20T15-06-22Z,ai-attention-span,write-research-context-rot-as-window-fills,reviewer,2,pass,,70,4574,557260,2026-10-20T19:20:52.788Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,implementor,1,fail,"A section slide naming one Section, one step of the Red thread, under a short title that names the step. It carries no Visual: it uses the kit's section layout with motion none. Its own `#### Voice script` block, directly under the heading, holds what the speaker says on the section slide, one `**<beat>** — <text>` item per spoken paragraph, as a page slide's does. Fail if the Section does not advance the Red thread, material here serves only one of its Slides, or a Voice script item would not stand as one spoken passage.; Talking points a viewer opens beside the Slide, each adding a fact the speaker leaves out, with its source. Fail if a note's claim is already spoken in the prose beside it, or its source does not support it.; One item per spoken paragraph, `**<beat>** — <text>`: first the beat and its keywords, which the speaker recalls at a glance, then the spoken paragraph in the same item, in order. Fail if an item would not stand as one spoken passage, or the text only makes sense while seeing a Slide.; The Dossier is the Episode's one staging file: the spine, and per Slide what is shown, what is cited and what is said, written backwards from its Brief so that every actionable is spoken. The implementation is built from it without inventing material. Fail if an actionable of the Brief is never spoken, a page slide's material would leave an implementer guessing, or the file specifies styling or code.; Every Slide carries out the purpose its Brief entry states, and every Brief Constraint holds on every Slide.; No Voice script item repeats a claim a Speaker note on the same Slide makes.",154,19663,611182,2026-10-20T19:25:28.293Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,reviewer,1,pass,,155,16057,504913,2026-10-20T19:28:25.746Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,implementor,2,fail,"Talking points a viewer opens beside the Slide, each adding a fact the speaker leaves out, with its source. Fail if a note's claim is already spoken in the prose beside it, or its source does not support it.; No Voice script item repeats a claim a Speaker note on the same Slide makes.",143,19511,154872,2026-10-20T19:31:16.312Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,reviewer,2,pass,,162,20672,784061,2026-10-20T19:34:24.058Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,implementor,3,pass,,26,1275,174390,2026-10-20T19:35:03.412Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,reviewer,3,pass,,66,4807,476677,2026-10-20T19:36:44.723Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,implementor,3,pass,,168,,,2026-10-20T19:37:25Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,implementor,4,fail,"Headings are the Episode's Slides, their titles copied verbatim into the Episode and their slugs keeping them addressable when a title changes; a heading without a slug adds material and may sit anywhere. Fail if any material contradicts the Voice script it sits beside.; The master slide and motion (`none` for no motion) that show this Slide's point, an optional `title:` line naming a different on-screen title than the heading, then prose on what the viewer sees, required when the master alone does not say it. Fail if the choice does not show the prose's point, or the master alone leaves that unsaid and no prose follows.; The Dossier is the Episode's one staging file: the spine, and per Slide what is shown, what is cited and what is said, written backwards from its Brief so that every actionable is spoken. The implementation is built from it without inventing material. Fail if an actionable of the Brief is never spoken, a page slide's material would leave an implementer guessing, or the file specifies styling or code.; Every Slide carries out the purpose its Brief entry states, and every Brief Constraint holds on every Slide.",171,22401,690232,2026-10-20T20:15:55.169Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,reviewer,4,pass,,345,31318,2688319,2026-10-20T20:22:06.769Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,implementor,5,pass,,68,7454,511242,2026-10-20T20:23:34.857Z
+2026-10-20T15-06-22Z,ai-attention-span,write-dossier,reviewer,5,pass,,82,6408,660188,2026-10-20T20:25:16.715Z
+2026-10-20T15-06-22Z,ai-attention-span,write-voice-script,implementor,1,fail,"Talking points a viewer opens beside the Slide, each adding a fact the speaker leaves out, with its source. Fail if a note's claim is already spoken in the prose beside it, or its source does not support it.; One item per spoken paragraph, `**<beat>** — <text>`: first the beat and its keywords, which the speaker recalls at a glance, then the spoken paragraph in the same item, in order. Fail if an item would not stand as one spoken passage, or the text only makes sense while seeing a Slide.; It follows `docs/profile/storytelling-guide.md`, when that guide exists.",114,14144,431687,2026-10-20T20:27:56.127Z
+2026-10-20T15-06-22Z,ai-attention-span,write-voice-script,reviewer,1,pass,,252,24521,537475,2026-10-20T20:32:29.406Z
+2026-10-20T15-06-22Z,ai-attention-span,write-voice-script,implementor,2,pass,,33,3644,160600,2026-10-20T20:33:18.422Z
+2026-10-20T15-06-22Z,ai-attention-span,write-voice-script,reviewer,2,pass,,131,11797,838379,2026-10-20T20:35:47.799Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,438,34181,3159162,2026-10-20T21:25:36.031Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,630,48258,5849087,2026-10-20T21:28:47.785Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,723,39705,5107650,2026-10-20T21:30:21.359Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,1029,81098,8801665,2026-10-20T21:35:26.991Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,1117,68663,12307690,2026-10-20T21:36:54.693Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,reviewer,1,pass,,820,38500,8861347,2026-10-20T21:52:59.605Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,reviewer,2,pass,,155,12085,1609854,2026-10-20T21:58:00.235Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,reviewer,3,pass,,484,36346,7024663,2026-10-20T22:36:24.346Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,reviewer,4,pass,,99,6957,950444,2026-10-20T22:40:34.822Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,reviewer,5,pass,,86,6542,754284,2026-10-20T22:43:09.195Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,reviewer,6,pass,,67,4661,495438,2026-10-20T22:45:11.210Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,orchestrator,,pass,,6875,86679,30598599,2026-10-20T23:11:38Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6814,,,2026-10-20T23:11:52Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6814,,,2026-10-20T23:11:52Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6819,,,2026-10-20T23:11:57Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6819,,,2026-10-20T23:11:57Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6819,,,2026-10-20T23:11:57Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6820,,,2026-10-20T23:11:58Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6820,,,2026-10-20T23:11:58Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6820,,,2026-10-20T23:11:58Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6821,,,2026-10-20T23:11:59Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6822,,,2026-10-20T23:12:00Z
+2026-10-20T15-06-22Z,ai-attention-span,write-spec,skill-spawned,,pass,,6822,,,2026-10-20T23:12:00Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-episode-init,implementor,1,fail,"Standards: ARCH-003 Don't 7, no magic string in the ASSERT block; Standards: ARCH-003 Decision 2, failure cases hold a failure case",563,50390,7983453,2026-10-20T23:22:04.758Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-episode-init,skill-spawned,,pass,,38,3414,284987,2026-10-20T23:24:42.329Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-episode-init,skill-spawned,,pass,,86,7400,721144,2026-10-20T23:25:37.395Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-episode-init,reviewer,2,pass,,31,2842,241882,2026-10-20T23:32:49.371Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-episode-init,orchestrator,,pass,,1228,25112,16109033,2026-10-20T23:32:55Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-episode-init,implementor,1,pass,,1214,,,2026-10-20T23:32:56Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-shared-visuals,implementor,1,fail,"Prototype comparison: slide-3; Prototype comparison: slide-4; Prototype comparison: slide-5; Prototype comparison: slide-7; Prototype comparison: slide-8; 5. The visual check ... its numbers show no overflow; Standards: a slide-shared part owns no words (FE-007 manual review duties, FE-006 Do 9, FE-004 §5.1/§6.2); Intent: round trip fromClaudeLog(toClaudeLog(chat)) deep-equals chat",4581,417077,66623616,2026-10-21T00:51:05Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-shared-visuals,skill-spawned,,pass,,137,12075,1031033,2026-10-21T00:54:00.139Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-shared-visuals,skill-spawned,,pass,,268,19811,3730136,2026-10-21T00:56:19.399Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-shared-visuals,skill-spawned,,pass,,682,40639,7194577,2026-10-21T01:02:47.424Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-shared-visuals,implementor,1,pass,,20789,,,2026-10-21T05:21:13Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-shared-visuals,reviewer,2,pass,,168,9016,1298247,2026-10-21T05:24:15Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-shared-visuals,orchestrator,,pass,,21011,27334,6099293,2026-10-21T05:24:34Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-the-long-phone-call,implementor,1,pass,,1217,68684,19433419,2026-10-21T05:46:59Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-managing-the-attention-span,implementor,1,fail,"Every Slide follows its picked Option, with no layout, component or motion the Option does not give, and a `ContextMarker` opening its named Speaker note wherever the mock shows a Context marker; a Slide whose Option names a `Design reference:` page keeps what the Option keeps from that page image.",1250,75071,21347870,2026-10-21T05:47:39Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-the-ais-attention-span,implementor,1,pass,,1447,74827,27371048,2026-10-21T05:50:51Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-the-long-phone-call,reviewer,1,pass,,632,32703,8910284,2026-10-21T05:58:41Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-the-long-phone-call,orchestrator,,pass,,1996,21115,8247520,2026-10-21T05:59:11Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-what-fills-the-window,implementor,1,pass,,1984,62815,25511893,2026-10-21T05:59:50Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-the-ais-attention-span,reviewer,1,pass,,595,28871,8837661,2026-10-21T06:00:55Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-the-ais-attention-span,orchestrator,,pass,,2159,26182,10929930,2026-10-21T06:02:00Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-managing-the-attention-span,reviewer,1,pass,,921,34598,10824409,2026-10-21T06:03:30Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-managing-the-attention-span,implementor,1,pass,,2492,,,2026-10-21T06:08:21Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-what-fills-the-window,reviewer,1,pass,,531,27922,8028527,2026-10-21T06:08:52Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-managing-the-attention-span,reviewer,2,pass,,57,2419,190273,2026-10-21T06:09:28Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-what-fills-the-window,orchestrator,,pass,,2670,34872,15705539,2026-10-21T06:10:37Z
+2026-10-20T15-06-22Z,ai-attention-span,implement-section-managing-the-attention-span,orchestrator,,pass,,2665,34872,15705539,2026-10-21T06:10:38Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,brief-grill,skill-spawned,,pass,,18,2012,182030,2026-10-29T15:34:19.300Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,brief-grill,skill-spawned,,pass,,15,1660,101717,2026-10-29T15:34:20.836Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,brief-grill,skill-spawned,,pass,,18,2097,132513,2026-10-29T15:50:45.439Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,brief-grill,reviewer,1,pass,,176,16650,603577,2026-10-29T15:57:49.982Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,brief-grill,reviewer,2,pass,,73,6156,778557,2026-10-29T16:01:01.076Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,brief-grill,orchestrator,,pass,,2159,43326,11582388,2026-10-29T16:01:35Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,categorize-research,implementor,1,pass,,76,4933,448767,2026-10-29T16:06:36.328Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,retrieval,implementor,1,pass,,40,2305,247115,2026-10-29T16:08:06.073Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,customize-pipeline,implementor,1,pass,,138,6901,916590,2026-10-29T16:11:20.415Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,customize-pipeline,orchestrator,,pass,,162,3292,918325,2026-10-29T16:11:31Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-step-by-step-setup-guide-completion,implementor,1,fail,"A research file answers one question on its own, so any later Episode can cite it without the one that asked. Fail if understanding it needs the Brief or Episode that prompted it.",110,7952,666641,2026-10-29T16:14:55.872Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,amend-resources-overview,implementor,1,pass,,94,8438,807683,2026-10-29T16:15:06.388Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-agent-permission-before-commands,implementor,1,pass,,120,7988,702440,2026-10-29T16:15:25.216Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-approachable-terminal-for-beginners,implementor,1,fail,"One sentence stating the Answer, which the retrieval job reads to decide whether this file answers a new question. Fail if it names the topic without stating the answer.; The URL or repo path of the source itself, the work and not a page about it.",133,8634,942084,2026-10-29T16:15:31.036Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-terminal-avoidance-by-non-experts,implementor,1,fail,"The evidence behind the Answer, one finding per item, each citing its source as `[n]`, the `id` of a frontmatter `sources` entry, whose link definitions close the file. Fail if a finding cites no source, or gives an opinion instead of what a source shows.; 3. Every Finding's claim is supported by the source it cites. The reviewer reads the source; the `sources` check output is evidence; a link reported `unverifiable` is `needs human`, not a pass.",194,11490,1244882,2026-10-29T16:16:26.927Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-step-by-step-setup-guide-completion,reviewer,1,pass,,114,9663,447356,2026-10-29T16:17:17.494Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-agent-permission-before-commands,reviewer,1,pass,,85,7682,454705,2026-10-29T16:17:28.810Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-approachable-terminal-for-beginners,reviewer,1,pass,,102,8511,675105,2026-10-29T16:17:51.873Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-step-by-step-setup-guide-completion,implementor,2,pass,,107,2507,380058,2026-10-29T16:19:19.792Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-terminal-avoidance-by-non-experts,reviewer,1,pass,,167,10890,1220651,2026-10-29T16:19:30.461Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-step-by-step-setup-guide-completion,reviewer,2,pass,,76,5223,593995,2026-10-29T16:20:44.547Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-terminal-avoidance-by-non-experts,implementor,2,pass,,78,2156,351830,2026-10-29T16:20:56.927Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-approachable-terminal-for-beginners,implementor,2,pass,,158,4668,693796,2026-10-29T16:21:52.646Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-approachable-terminal-for-beginners,reviewer,2,pass,,56,4878,500934,2026-10-29T16:23:40.822Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-research-terminal-avoidance-by-non-experts,reviewer,2,pass,,54,4573,572586,2026-10-29T16:23:44.218Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-dossier,implementor,1,fail,"staging-dossier: Fail if an actionable of the Brief is never spoken, a page slide's material would leave an implementer guessing, or the file specifies styling or code.; #### Speaker notes: Fail if a note's claim is already spoken in the prose beside it, or its source does not support it.",120,10543,993237,2026-10-29T16:28:04.311Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-dossier,reviewer,1,pass,,203,22486,805496,2026-10-29T16:31:49.682Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-dossier,implementor,2,pass,,55,4091,387716,2026-10-29T16:32:59.913Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-dossier,reviewer,2,pass,,121,10578,1085515,2026-10-29T16:35:23.445Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-voice-script,implementor,1,fail,Spoken instructions are accurate on every OS the step covers.,61,4329,276583,2026-10-29T16:37:21.562Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-voice-script,reviewer,1,pass,,116,10137,510978,2026-10-29T16:39:53.385Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-voice-script,implementor,2,pass,,29,1272,250304,2026-10-29T16:40:32.997Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-voice-script,reviewer,2,pass,,64,5196,674502,2026-10-29T16:41:45.946Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,1,pass,,343,31803,3284609,2026-10-29T16:50:23.044Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,1,pass,,333,35116,2100379,2026-10-29T16:50:23.392Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,1,pass,,475,55377,3030051,2026-10-29T16:52:54.363Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,1,pass,,513,47414,3820858,2026-10-29T16:53:27.548Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,1,pass,,557,52117,3873674,2026-10-29T16:54:01.839Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,1,pass,,302,31501,2004130,2026-10-29T16:55:31.282Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,reviewer,1,pass,,143,19131,2069581,2026-10-29T16:58:15.662Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,reviewer,2,pass,,21,1626,204549,2026-10-29T16:59:05.875Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,3,pass,,171,16599,1215353,2026-10-29T18:41:26.501Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,3,pass,,200,15897,1004512,2026-10-29T18:41:48.005Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,reviewer,3,pass,,126,11311,758745,2026-10-29T18:44:08.679Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,designer,4,pass,,114,9922,991578,2026-10-29T18:46:10.560Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,reviewer,4,pass,,37,2727,446083,2026-10-29T18:46:55.652Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,write-spec,orchestrator,,pass,,9195,30853,9177014,2026-10-29T19:16:02Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,build-guide-kind,implementor,1,pass,,8106,133798,38215399,2026-10-29T22:06:00.713Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,,skill-spawned,,pass,,68,6397,812975,2026-10-29T22:07:26.646Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,,skill-spawned,,pass,,78,7182,902628,2026-10-29T22:07:34.493Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-episode-init,implementor,1,pass,,645,53649,11820330,2026-10-29T22:22:53.074Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-episode-init,reviewer,1,pass,,65,6119,543431,2026-10-29T22:24:38.118Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-episode-init,reviewer,1,pass,,68,6197,616365,2026-10-29T22:24:40.829Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-episode-init,orchestrator,,pass,,763,4721,1636439,2026-10-29T22:24:51Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-the-technical-route,implementor,1,pass,,858,64992,13761843,2026-10-29T22:40:41.842Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-first-skill,implementor,1,pass,,1061,76288,15009795,2026-10-29T22:44:05.167Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-folder,implementor,1,pass,,1224,87261,21486159,2026-10-29T22:46:48.624Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-terminal,implementor,1,pass,,1234,89126,22214241,2026-10-29T22:46:57.774Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-ai-agent,implementor,1,fail,"Every Slide follows its picked Option, with no layout, component or motion the Option does not give, and a `ContextMarker` opening its named Speaker note wherever the mock shows a Context marker; a Slide whose Option names a `Design reference:` page keeps what the Option keeps from that page image.",1267,79559,20300410,2026-10-29T22:47:30.687Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-the-technical-route,reviewer,1,pass,,83,7511,997466,2026-10-29T22:49:32.781Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-terminal,reviewer,1,pass,,148,14123,1707523,2026-10-29T22:50:13.567Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-first-skill,reviewer,1,pass,,205,18138,3086509,2026-10-29T22:51:28.828Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-ai-agent,reviewer,1,pass,,222,20141,2562539,2026-10-29T22:51:34.601Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-folder,reviewer,1,pass,,261,23551,3635517,2026-10-29T22:52:19.762Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-terminal,orchestrator,,pass,,1658,23175,4186069,2026-10-29T22:52:48Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-first-skill,orchestrator,,pass,,1719,26486,5982762,2026-10-29T22:54:05Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-folder,orchestrator,,pass,,1778,28346,6892205,2026-10-29T22:54:59Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-the-technical-route,orchestrator,,pass,,1811,29743,7502598,2026-10-29T22:55:43Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-ai-agent,reviewer,2,pass,,36,3601,294412,2026-10-29T22:57:36.467Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-ai-agent,orchestrator,,pass,,2140,37150,13230101,2026-10-29T23:00:55Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,fix-browser-tests,implementor,1,pass,,1485,92466,16320947,2026-10-29T23:28:03.447Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,amend-resources-overview,implementor,1,pass,,26182,,,2026-10-29T23:29:55Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,build-guide-kind,implementor,1,pass,,13142,,,2026-10-29T23:29:56Z
+2026-10-29T15-25-29Z,setup-ai-agent-and-starter-folder,implement-section-your-ai-agent,implementor,1,pass,,3812,,,2026-10-29T23:29:56Z

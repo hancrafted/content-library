@@ -1,0 +1,102 @@
+{
+  "title": "Overview",
+  "heading": "Four steps to your first skill",
+  "caption": "You've never opened a terminal. By the end of this page you'll have run <b>your first skill</b> in one.",
+  "count": "4 steps",
+  "time": "about 20 minutes",
+  "stuck": "Every Slide has a <b>Help</b> button at the top right: paste your error, get a prompt for <marker>free ChatGPT or Gemini</marker>",
+  "notes": {
+    "minimal-still-needs-a-way-out": {
+      "header": "Minimal still needs a way out",
+      "description": "A minimal manual, centred on real tasks, taught faster than a standard manual in a study of 64 students, but beginners still need error-recovery material, which is why every step has a Stuck? help [1][2].",
+      "sources": {
+        "lazonder-minimal-manual": {
+          "title": "Lazonder and van der Meij, The minimal manual: is less really more?"
+        },
+        "kalyuga-expertise-reversal": {
+          "title": "Kalyuga, Ayres, Chandler and Sweller, The Expertise Reversal Effect"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "four-pieces-one-chain": {
+        "title": "Four steps, one chain",
+        "keywords": "",
+        "script": "Here is the whole route in four steps: a terminal, an AI agent, a folder and a skill. Each step only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes. Tick what you already have, and the card on the right tells you which step to start at."
+      },
+      "skip-what-you-have": {
+        "title": "Skip what you have",
+        "keywords": "",
+        "script": "Tick the boxes you already have, like an installed AI agent, and the card jumps you to the first step that is still open. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end."
+      }
+    }
+  },
+  "chainLine": "Four steps, each works because the one before it does.",
+  "checklist": {
+    "label": "The four steps",
+    "intro": "Tick what you already have. The card on the right shows where to start.",
+    "steps": {
+      "1": {
+        "section": "Your terminal",
+        "title": "Open your terminal"
+      },
+      "2": {
+        "section": "Your AI agent",
+        "title": "Install and log in to your AI agent"
+      },
+      "3": {
+        "section": "Your folder",
+        "title": "Download the folder and start the agent in it"
+      },
+      "4": {
+        "section": "Your first skill",
+        "title": "Run your first skill"
+      }
+    },
+    "boxes": {
+      "terminal-open": "I know how to open a terminal",
+      "agent-installed": "My AI agent is installed",
+      "agent-logged-in": "I'm logged in",
+      "folder-unzipped": "Starter folder downloaded and unzipped",
+      "agent-in-folder": "The agent starts inside that folder",
+      "skill-ran": "I ran hancrafted-check-setup"
+    }
+  },
+  "card": {
+    "open": "Your next step",
+    "start": "Start at step {n}",
+    "allDone": "All set: jump to step 4"
+  },
+  "technical": {
+    "section": "The technical route",
+    "title": "Set up the Matt Pocock skills yourself",
+    "lead": "Want the technical route?",
+    "action": "Jump to the last Section"
+  },
+  "ready": {
+    "title": "You're ready for the workshop",
+    "missingTitle": "Almost ready",
+    "recap": {
+      "1": "AI agent installed and signed in",
+      "2": "Starter folder in place and skills installed",
+      "3": "First skill run, the homepage opened"
+    },
+    "skills": {
+      "done": "The Matt Pocock skills are installed.",
+      "missing": "The Matt Pocock skills are not installed yet. Run the check again after installing them, or press Help."
+    },
+    "localSetup": {
+      "done": "The local setup is in place.",
+      "missing": "The local setup is missing. Run the setup skill, then check again, or press Help."
+    },
+    "watchTitle": "Or check out these in the meantime",
+    "reopen": "Not done yet? Back to the checklist",
+    "tags": {
+      "context-engineering": "Context engineering",
+      "agentic-ai": "Agentic AI",
+      "workflow": "Workflow"
+    }
+  }
+}

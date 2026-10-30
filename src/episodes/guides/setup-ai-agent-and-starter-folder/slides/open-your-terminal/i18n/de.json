@@ -1,0 +1,130 @@
+{
+  "title": "Öffne Dein Terminal",
+  "caption": "Öffnen, anschauen, fertig: <b>Ein blinkender Cursor</b> in einem leeren Fenster heißt, es hat geklappt.",
+  "findLabel": "Finde es",
+  "seeLabel": "Es hat geklappt, wenn Du das siehst",
+  "success": "Super, das war's schon. Ein blinkender Cursor heißt: Es hängt nicht, es wartet auf Dich.",
+  "os": {
+    "mac": {
+      "label": "Mac",
+      "line": "<b>Auf dem Mac:</b> Drück <kbd>⌘ Leertaste</kbd>, tipp <b>Terminal</b>, drück <kbd>Return</kbd>.",
+      "query": "Terminal",
+      "result": "Terminal",
+      "resultKind": "Programm",
+      "other": "Terminal – Benutzerhandbuch",
+      "window": "you — -zsh — 80×24",
+      "output": "Last login: Thu Oct 29 09:12 on console",
+      "prompt": "you@MacBook ~ %"
+    },
+    "windows": {
+      "label": "Windows",
+      "line": "<b>Unter Windows:</b> Drück die <kbd>Windows</kbd>-Taste, tipp <b>PowerShell</b>, drück <kbd>Enter</kbd>.",
+      "query": "PowerShell",
+      "result": "Windows PowerShell",
+      "resultKind": "App",
+      "window": "Windows PowerShell",
+      "output": "Windows PowerShell",
+      "prompt": "PS C:\\Users\\you>"
+    },
+    "linux": {
+      "label": "Linux",
+      "line": "<b>Unter Linux:</b> Drück <kbd>Strg Alt T</kbd> oder öffne <b>Terminal</b> aus Deinen Apps.",
+      "query": "Terminal",
+      "result": "Terminal",
+      "resultKind": "App",
+      "window": "you@laptop: ~",
+      "output": "",
+      "prompt": "you@laptop:~$"
+    }
+  },
+  "agents": {
+    "claude-code": "Claude Code",
+    "antigravity": "Antigravity",
+    "codex": "Codex",
+    "copilot": "GitHub Copilot"
+  },
+  "reassurance": {
+    "normal": "<marker>Wenn sich das komisch anfühlt, ist das normal</marker>",
+    "noClicking": "<marker>Hier gibt es nichts zu klicken: Das Fenster wartet, dass Du tippst</marker>",
+    "setup": "<marker>Bei jedem neuen Werkzeug ist die Einrichtung das Schwerste, nicht Du</marker>"
+  },
+  "notes": {
+    "hesitation-is-normal": {
+      "header": "Zögern ist normal",
+      "description": "Angst vor dem Computer ist eine lange erforschte, weit verbreitete Reaktion: Rund 80 % der 89 Studien zur Erfahrung fanden, dass mehr Erfahrung mit weniger Angst einherging, und eine entspannte erste Erfahrung hing mit geringerer Angst zusammen. Keine Studie misst die Angst vor dem Terminal selbst; das auf das Terminal zu übertragen, ist eine Schlussfolgerung [1].",
+      "sources": {
+        "powell-computer-anxiety": {
+          "title": "Powell, Computer anxiety: Comparison of research from the 1990s and 2000s"
+        }
+      }
+    },
+    "why-the-command-line-feels-scary": {
+      "header": "Warum die Kommandozeile abschreckt",
+      "description": "Systemadministratoren sagten, durch eine Kommandozeile könne man sich nicht durchklicken, um sie zu verstehen, und für Einsteiger könne sie beängstigend oder überwältigend sein; das ist ein Zitat aus einer Befragung, keine gemessene Fehlerquote [1].",
+      "sources": {
+        "voronkov-sysadmins-cli": {
+          "title": "Voronkov, Martucci and Lindskog, System Administrators Prefer Command Line Interfaces, Don't They? An Exploratory Study of Firewall Interfaces"
+        }
+      }
+    },
+    "setup-is-the-hard-part": {
+      "header": "Die Einrichtung ist das Schwerste",
+      "description": "Software Carpentry berichtet, dass das Installieren von Software oft schwerer ist als ihre Benutzung und dass jedes neue Werkzeug bei mindestens einer Person im Raum scheitert, egal ob Mac, Windows oder Linux [1].",
+      "sources": {
+        "wilson-software-carpentry": {
+          "title": "Wilson, Software Carpentry: lessons learned"
+        }
+      }
+    },
+    "feedback-builds-confidence": {
+      "header": "Rückmeldung macht sicher",
+      "description": "In einem Unix-Kurs an einer Universität mit fast sofortiger Rückmeldung zu jeder Antwort gaben 2021 78,2 % der Befragten an, praktisches Unix-Wissen zu haben, vorher waren es 38,8 %; die Autoren nennen diese Selbstauskunft möglicherweise subjektiv, und die Studierenden waren keine Erstnutzer, die allein lernten [1].",
+      "sources": {
+        "berry-shellonyou": {
+          "title": "Berry et al., ShellOnYou: learning by doing Unix command line"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "not-a-personal-failing": {
+        "title": "Kein persönliches Versagen",
+        "keywords": "",
+        "script": "Wenn sich das Öffnen eines Terminals ein bisschen seltsam anfühlt, ist das eine häufige Reaktion, und ich würde es nicht als Zeichen lesen, dass Du schlecht mit Computern bist. Ich glaube, die Angst kommt von dem leeren Fenster, das Dir keinen Hinweis gibt, was Du drücken sollst, und das ist meine Vermutung, keine bewiesene Tatsache. Hier musst Du nichts beweisen, wir öffnen nur das Fenster und schauen es uns an."
+      },
+      "one-window-one-cursor": {
+        "title": "Ein Fenster, ein Cursor",
+        "keywords": "",
+        "script": "Wähl oben Dein System, dann öffne das Terminal auf dem Mac, PowerShell unter Windows oder das Terminal unter Linux. Dafür reichen eine Tastenkombination und ein paar Buchstaben. Du siehst ein fast leeres Fenster mit einem blinkenden Cursor, und genau so sieht hier Erfolg aus. Es hängt nicht, es wartet auf Dich."
+      },
+      "stuck-paste-it": {
+        "title": "Hängst Du fest? Füg es ein",
+        "keywords": "",
+        "script": "Wenn auf Deinem Bildschirm etwas anders aussieht, musst Du das nicht allein herausfinden. Drück oben rechts auf Hilfe und füg ein, was Du siehst, dann packt sie Dein System, Deinen KI-Agenten und den Schritt in einen Prompt, den Du einem kostenlosen ChatGPT oder Gemini geben kannst. Jeder Schritt hat diesen Knopf, Hilfe holen gehört also zum Weg dazu."
+      }
+    }
+  },
+  "toolbar": {
+    "os": "Dein Computer",
+    "agent": "KI-Agent"
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Was Du auf Deinem Bildschirm siehst",
+    "placeholder": "Füg Deinen Fehler ein oder beschreib, was Du siehst …",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
+    "prompt": "Ich richte für einen Workshop einen KI-Agenten auf meinem Laptop ein und komme nicht weiter.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich bin: {step}\n\nWas ich sehe:\n{error}\n\nIch bin neu im Terminal. Erklär mir in einfachen Worten, was das bedeutet, und nenn mir den einen nächsten Schritt, den ich versuchen kann.",
+    "noError": "(Ich habe noch nichts eingefügt: Frag mich, was ich sehe.)",
+    "step": "Schritt 1: Öffne Dein Terminal",
+    "chats": {
+      "openAIChats": "Einen KI-Chat öffnen",
+      "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
+      "newTab": "öffnet in neuem Tab"
+    }
+  },
+  "doneLabel": "So sieht „fertig“ aus",
+  "moreTitle": "Mehr Hilfe: Unsicherheit ist normal"
+}

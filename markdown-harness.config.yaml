@@ -301,7 +301,7 @@ body-structure:
               [
                 {
                   title: Format,
-                  intent: 'Foundations, Teardown or Short, and the planned duration; together they set the scale of everything below. Fail if either is missing.',
+                  intent: 'Foundations, Teardown or Short, and the planned duration; or, for a Brief that is not an Episode, the Resource kind it builds (`guide`) and the planned duration. Together they set the scale of everything below. Fail if either is missing.',
                 },
               ],
             mayHold: [prose],

@@ -81,6 +81,8 @@ export interface Slide<S extends string = string, M extends SlideMessages = Slid
   readonly segments: readonly SegmentSpec[];
   /** The slug of the note whose Context marker follows the caption, when a term in it needs a source. */
   readonly captionNote?: string;
+  /** The Slide's header action, drawn right-aligned in the title row, and the panel it opens under the header. */
+  readonly headerAction?: (kit: RuntimeKit) => ReactNode;
   readonly content: (kit: RuntimeKit) => ReactNode;
 }
 
@@ -99,6 +101,12 @@ export interface OwnSlideSpec<S extends string, M extends SlideMessages, N exten
   readonly segments?: readonly SegmentSpec<OwnSegmentSlug<M>>[];
   /** One of the Slide's notes: its Context marker follows the caption (a term in the caption that needs a source). */
   readonly captionNote?: N['slug'];
+  /**
+   * An action beside the title, such as a Guide's Help button: the Slide header renders it right-aligned in the title
+   * row (wrapping under the caption on a phone). The node may render a panel too; it sits under the header, full width,
+   * and pushes the Scene down. Read only on the shared header.
+   */
+  readonly headerAction?: (kit: OwnSlideKit<M, N>) => ReactNode;
   readonly content: (kit: OwnSlideKit<M, N>) => ReactNode;
 }
 
@@ -115,6 +123,9 @@ export function slide<
     segments: spec.segments ?? [],
     ...(spec.captionNote !== undefined && { captionNote: spec.captionNote }),
     // The runtime kit is assignable to every concrete `OwnSlideKit` (proved in the test); generics hide that here.
+    ...(spec.headerAction !== undefined && {
+      headerAction: spec.headerAction as unknown as NonNullable<Slide['headerAction']>,
+    }),
     content: spec.content as unknown as Slide['content'],
   };
 }

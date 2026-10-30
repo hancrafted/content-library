@@ -1,0 +1,14 @@
+{
+  "meta": "Guide · 4 steps · about 20 minutes",
+  "window": "terminal",
+  "preview": "What the terminal shows by the end of this page",
+  "prompt": "~ %",
+  "ready": "✻ Your AI agent is ready",
+  "hint": "Signed in · type a message",
+  "question": "Do you want to proceed?",
+  "yes": "Yes",
+  "tags": {
+    "agent": "AI agent",
+    "skill": "Skill"
+  }
+}

@@ -1,4 +1,6 @@
-import type { ChatMarkName } from '@/shared/components/core-components/chat-icons/chat-marks.pure';
+import type { ChatButtonDef } from '@/shared/components/core-components/chat-buttons/chat-buttons';
+
+export type { ChatButtonDef };
 
 /*
  * The Workflow file schema, one language per file: what `loadWorkflow` returns once the shape and the meaning of a
@@ -113,15 +115,6 @@ export interface DetailsDef {
 export interface LimitDef {
   readonly full: number;
   readonly demo: number;
-}
-
-/** One button that opens an empty AI chat in a new tab, for the prompt to be pasted into. */
-export interface ChatButtonDef {
-  readonly label: string;
-  /** An `https://` link to a new, empty chat; it never carries the prompt. */
-  readonly url: string;
-  /** The chat tool's mark shown before the label (`chatgpt`, `gemini`); `null` or absent: the label alone. */
-  readonly icon?: ChatMarkName | null;
 }
 
 export interface TaskDef {

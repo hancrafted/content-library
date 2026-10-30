@@ -1,0 +1,96 @@
+{
+  "title": "Install your AI agent",
+  "caption": "Your first command: copy it, paste it into your terminal, press Enter.",
+  "firstCommand": "Your first command",
+  "paste": "Open your terminal from step 1, paste this line and press Enter. It installs your AI agent.",
+  "copy": "Copy",
+  "copied": "Copied",
+  "officialDocs": "Official docs for {agent}",
+  "newTab": "opens in a new tab",
+  "docsWhy": "Always there, even if this line ever changes. Some install pages need scrolling, so the line is here.",
+  "powershellHint": "On Windows, use PowerShell: its prompt starts with <code>PS C:\\</code>.",
+  "commandPromptSummary": "In Command Prompt instead?",
+  "commandPromptHint": "Command Prompt shows a prompt like <code>C:\\&gt;</code>, with no <code>PS</code> in front. Paste this line there.",
+  "happenTitle": "What might happen",
+  "happen": {
+    "claude-code": {
+      "one": "On Windows, <code>'irm' is not recognized</code> means you are in Command Prompt: open PowerShell, or use the Command Prompt line above.",
+      "two": "Claude Code needs a paid Claude plan. The free plan does not include it, and the sign-in on the next Slide says so."
+    },
+    "antigravity": {
+      "one": "On Windows, <code>'irm' is not recognized</code> means you are in Command Prompt, not PowerShell: open PowerShell and paste again.",
+      "two": "The line stops with red text: that is what Help is for."
+    },
+    "codex": {
+      "one": "A line that does not fit your computer fails at once: check that the right system is picked above.",
+      "two": "The line stops with red text: that is what Help is for."
+    },
+    "copilot": {
+      "one": "GitHub Copilot needs an active Copilot subscription on your GitHub account; without it, the sign-in on the next Slide fails.",
+      "two": "On Windows, GitHub asks for PowerShell 6 or higher, and <code>winget</code> must exist. A message saying it is not recognized: use Help."
+    }
+  },
+  "helpLine": "Stuck, or red text you do not understand? Press Help at the top right and paste the error.",
+  "worked": "Done when the prompt comes back. Next, open a new terminal window.",
+  "voiceScript": {
+    "segments": {
+      "your-first-command": {
+        "title": "Your first command",
+        "keywords": "",
+        "script": "This is the first command you type in your terminal. It installs your AI agent. Pick your computer and your AI agent in the toolbar, and the page shows you the exact line. Press the big Copy button, paste into your terminal and press Enter."
+      },
+      "official-docs-always": {
+        "title": "Official docs, always",
+        "keywords": "",
+        "script": "Next to the line is a button to the official docs of your AI agent. I give you the line so you do not have to scroll through a page that has no anchor, but the vendor is the source, so if the line ever stops working, the docs are one click away."
+      },
+      "what-you-will-see": {
+        "title": "What you will see at the end",
+        "keywords": "",
+        "script": "At the end of the install, your terminal may ask you a question. For Codex on Mac and Linux it is Start Codex now, with y or N: type y and press Enter to go straight to the sign-in. Just pressing Enter means no, and then you open a new terminal and type codex. For GitHub Copilot, answer y if it asks to add itself to your shell file; the last line says copilot help, but you type copilot. For Claude Code you see Installation complete; open a new terminal and type claude."
+      },
+      "what-might-happen": {
+        "title": "What might happen",
+        "keywords": "",
+        "script": "A few things can go wrong, and they are listed under the line for your AI agent. On Windows the usual one is the wrong window: PowerShell and Command Prompt need different lines. If you see red text you do not understand, press Help at the top right, paste the error, and ask."
+      }
+    }
+  },
+  "toolbar": {
+    "os": "Your computer",
+    "agent": "AI agent"
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error",
+    "placeholder": "Paste your error here…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
+    "noError": "(I see no error message, it just does not work.)",
+    "step": "Step 2: Install your AI agent, your first command",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    }
+  },
+  "end": {
+    "generic": "Wait until the prompt comes back, then go on.",
+    "codex": {
+      "one": "On Mac and Linux the last line asks <code>Start Codex now? [y/N]</code>. Type <key>y</key> and press <key>Enter</key> to go straight on to the sign-in.",
+      "two": "Pressing only <key>Enter</key> means no. Then open a new terminal and type <code>codex</code>."
+    },
+    "claude-code": {
+      "one": "The installer ends with <code>Installation complete</code>. If a <code>Setup notes</code> block talks about your PATH, follow the fix it prints there.",
+      "two": "Then open a new terminal window and type <code>claude</code>."
+    },
+    "copilot": {
+      "one": "On Mac and Linux it may ask <code>Would you like to add it to … ? [y/N]</code>. Type <key>y</key> and press <key>Enter</key>.",
+      "two": "The last line says <code>copilot help</code>, but your next step is just <code>copilot</code>, in a new terminal."
+    }
+  },
+  "doneLabel": "Done looks like",
+  "moreTitle": "More help"
+}

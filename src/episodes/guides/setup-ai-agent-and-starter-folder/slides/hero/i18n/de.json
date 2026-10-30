@@ -1,0 +1,14 @@
+{
+  "meta": "Anleitung · 4 Schritte · etwa 20 Minuten",
+  "window": "Terminal",
+  "preview": "Das zeigt das Terminal am Ende dieser Seite",
+  "prompt": "~ %",
+  "ready": "✻ Dein KI-Agent ist bereit",
+  "hint": "Angemeldet · schreib eine Nachricht",
+  "question": "Do you want to proceed?",
+  "yes": "Yes",
+  "tags": {
+    "agent": "KI-Agent",
+    "skill": "Skill"
+  }
+}

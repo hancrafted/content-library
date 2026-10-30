@@ -9,7 +9,7 @@ import { RESOURCE_KINDS } from './resource-index.pure';
  * the catalogue lists it, in every locale the page is exported in.
  */
 
-const KINDS = new Set<string>(['episode', 'event', 'explorable-page', 'template']);
+const KINDS = new Set<string>(['episode', 'event', 'explorable-page', 'guide', 'template']);
 const listedUrls = () =>
   PAGES.filter(({ page, treatment }) => KINDS.has(page.kind) && treatment.listed).flatMap(({ page }) =>
     pageLocales(page).map((locale) => `${locale}:${routeOf(page)}`),
@@ -41,9 +41,11 @@ describe('success cases', () => {
     expect(leaked).toEqual([]);
   });
 
-  it('has entries of all five kinds', () => {
+  it('has entries of every Resource kind the catalogue lists a page of', () => {
     // ARRANGE
-    const expected = [...RESOURCE_KINDS];
+    // No Guide exists until the first is scaffolded, so a kind with no listed page is not expected yet.
+    const guideListed = PAGES.some(({ page, treatment }) => page.kind === 'guide' && treatment.listed);
+    const expected = RESOURCE_KINDS.filter((kind) => kind !== 'guide' || guideListed);
     // ACT
     const kinds = new Set(resourceIndex().map(({ kind }) => kind));
     // ASSERT

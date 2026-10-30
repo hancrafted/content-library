@@ -1,0 +1,18 @@
+{
+  "title": "Dein KI-Agent",
+  "caption": "Der KI-Agent, der darin wohnt.",
+  "ready": "✻ Dein KI-Agent ist bereit",
+  "steps": "Schritt 2",
+  "window": "Terminal",
+  "prompt": "~ %",
+  "hint": "Angemeldet · schreib eine Nachricht",
+  "voiceScript": {
+    "segments": {
+      "terminal-done": {
+        "title": "Terminal erledigt",
+        "keywords": "",
+        "script": "Du hast jetzt also ein Fenster, das auf Worte wartet. Weil ein leeres Fenster allein nicht viel kann, ist das nächste Teil der KI-Agent, der darin wohnen wird."
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-// Post-build check of the header's navigation (spec #404): Explorables, Events, Learn (Episodes, Resources), then the
+// Post-build check of the header's navigation (spec #404): Explorables, Events, Learn (Episodes, Guides, Resources), then the
 // Dashboard in English only; one copy of every link; Learn as a menu trigger with no page of its own; the active
 // state on an Episode, a Resource and an Explorable page.
 
@@ -9,14 +9,22 @@ import { exportedPage } from './exported-pages';
 
 const LABELS: Record<
   Locale,
-  { explorables: string; events: string; learn: string; episodes: string; resources: string }
+  { explorables: string; events: string; learn: string; episodes: string; guides: string; resources: string }
 > = {
-  en: { explorables: 'Explorables', events: 'Events', learn: 'Learn', episodes: 'Episodes', resources: 'Resources' },
+  en: {
+    explorables: 'Explorables',
+    events: 'Events',
+    learn: 'Learn',
+    episodes: 'Episodes',
+    guides: 'Guides',
+    resources: 'Resources',
+  },
   de: {
     explorables: 'Explorables',
     events: 'Veranstaltungen',
     learn: 'Lernen',
     episodes: 'Episoden',
+    guides: 'Anleitungen',
     resources: 'Ressourcen',
   },
 };
@@ -58,6 +66,7 @@ describe.each(LOCALES)('the header nav in %s', (locale) => {
       'nav-events',
       'nav-learn',
       'nav-episodes',
+      'nav-guides',
       'nav-resources',
       ...dashboard,
     ]);
@@ -73,6 +82,7 @@ describe.each(LOCALES)('the header nav in %s', (locale) => {
     expect(text('nav-events')).toBe(labels.events);
     expect(group.find('button').text().trim()).toBe(labels.learn);
     expect(group.find('[data-testid="nav-episodes"]').text().trim()).toBe(labels.episodes);
+    expect(group.find('[data-testid="nav-guides"]').text().trim()).toBe(labels.guides);
     expect(group.find('[data-testid="nav-resources"]').text().trim()).toBe(labels.resources);
   });
 
@@ -80,10 +90,12 @@ describe.each(LOCALES)('the header nav in %s', (locale) => {
     // ARRANGE
     const { $, scope } = nav(home);
     // ACT
-    const hrefs = ['nav-episodes', 'nav-resources'].map((id) => scope.find(`a[data-testid="${id}"]`).attr('href'));
+    const hrefs = ['nav-episodes', 'nav-guides', 'nav-resources'].map((id) =>
+      scope.find(`a[data-testid="${id}"]`).attr('href'),
+    );
     // ASSERT
     expect(hrefs).toEqual(
-      [localizePath(ROUTES.episodes, locale), localizePath(ROUTES.resources, locale)].map((href) => `${href}/`),
+      [ROUTES.episodes, ROUTES.guides, ROUTES.resources].map((route) => `${localizePath(route, locale)}/`),
     );
     expect(scope.find('[data-testid="nav-learn"] button').attr('aria-expanded')).toBe('false');
     expect($('a[href*="/learn"]').length).toBe(0);
@@ -91,6 +103,7 @@ describe.each(LOCALES)('the header nav in %s', (locale) => {
 
   it.each([
     { where: 'an Episode', path: '/episodes/ai-attention-span', learn: true, active: ['nav-episodes'] },
+    { where: 'the Guides overview', path: ROUTES.guides, learn: true, active: ['nav-guides'] },
     { where: 'the Resources overview', path: ROUTES.resources, learn: true, active: ['nav-resources'] },
     { where: 'a Resource', path: '/episode-templates/episode-template', learn: true, active: ['nav-resources'] },
     { where: 'an Explorable page', path: '/explorables/context-window', learn: false, active: ['nav-explorables'] },

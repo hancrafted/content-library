@@ -64,10 +64,10 @@ _Avoid_: route list, page list, hand-kept page list
 **Video**: a YouTube video an Episode's page plays from its Title slide, declared as `youtube` in the Episode's metadata and optional until uploaded; visibility decides how many. A public Episode has at most one per locale: none, English, German or both. An unlisted Episode has at most one, its **Event recording**: one YouTube id with the language spoken at its Event, played on both locale pages and labelled with that language before play. The content store refuses a second Video on an unlisted Episode and a language that is not a site locale.
 _Avoid_: Clip, recording link
 
-**Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short.
+**Format**: the shape an Episode is written in, one per Episode: Foundations, Teardown or Short. A Brief's Format `guide` names the Guide Resource kind instead of an Episode.
 _Avoid_: Type, kind, length
 
-**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, an Episode template or a Master slide. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
+**Resource**: every public, listed item of the site: an Episode, an Event, an Explorable page, a Guide, an Episode template or a Master slide. `/resources/` lists them all with a kind filter, as the **Resource index**. The header's Learn menu links to it. Feature doc `docs/features/resources.md`; design-ADR `docs/adr/0019-resources-overview.md`.
 _Avoid_: Tooling page, Layout reference, reference Episode, Asset
 
 **Resource index**: the projection of the page catalogue onto one entry shape (`ResourceEntry`: kind, title, description, Tags, URL, locale), one entry per listed page. Derived, never stored, so it cannot list a page the site does not list. The groundwork for search and retrieval by people and agents. Feature doc `docs/features/resources.md`.
@@ -118,6 +118,9 @@ _Avoid_: Explorable explanation (the long form, as Wikipedia names it), Shared v
 
 **Explorable page**: the product built on one Explorable: an Episode-shaped composition of Slides about its primary Explorable, rendered through the one Episode container, so it has the table of contents, the Context drawer, Speaker notes citing Research and a YouTube Video played from its Title slide. Its slug equals the primary Explorable's folder slug, and the content store refuses a page whose slug names no Explorable. URL `/explorables/<slug>/`, listed on `/explorables/`; `/explorable-explanations/*` redirects there. A product unit beside the Episode (`docs/steering/product-vision.md`, rule 4); its convention and Short framing: `docs/features/explorables/README.md`.
 _Avoid_: Explorable explanation page, Resource page
+
+**Guide**: a step-by-step page that takes a viewer through a setup, one step per Slide, ending in a working result they can check. A product unit beside the Episode and the Explorable page, its own Resource kind: URL `/guides/<slug>/`, listed on `/guides/` and on `/resources/`. Built through the Episode pipeline from a Brief. Design-ADR `docs/adr/0019-resources-overview.md`.
+_Avoid_: Tutorial, How-to, Walkthrough, Setup page, feature guide (a document for agents)
 
 **Preset**: one Slide's settings of an Explorable: the view it opens in and what it lights, so the Slide tells its own story at rest.
 _Avoid_: State, configuration, variant
@@ -246,6 +249,8 @@ A research folder is named `<category>-<####>__<question-slug>`: the category be
 **SALES**: Sales: how a company finds, wins and closes its customers, from first lead to signed deal, and how a buyer finds, trusts and chooses a coach or consultant.
 
 **START**: Startups: how an early-stage company builds and funds itself, and how its cash, costs and revenue move over time.
+
+**UX**: User experience: how a person takes up a tool through its interface, from a setup guide's first screen to the command line, and what makes them finish, hesitate or give up.
 
 **WORK**: Technology and work: how tools and machines, from the plough to the computer, have changed how much people work, what work they do and who rises with them.
 

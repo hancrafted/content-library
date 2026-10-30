@@ -1,0 +1,21 @@
+{
+  "title": "Dein Terminal",
+  "caption": "Dein neuer bester Freund.",
+  "steps": "Schritt 1",
+  "window": "Terminal",
+  "prompt": "~ %",
+  "voiceScript": {
+    "segments": {
+      "hook": {
+        "title": "Hook",
+        "keywords": "",
+        "script": "Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt."
+      },
+      "why-this-page": {
+        "title": "Warum diese Seite",
+        "keywords": "",
+        "script": "Ich habe das in einen Schritt pro Bildschirm aufgeteilt, denn eine lange Einrichtungsanleitung fühlt sich an wie eine Wand, und ein einzelner Schritt wie etwas, das Du schaffen kannst. Jeder Schritt gibt Dir ein Teil, das funktioniert, und der nächste Schritt braucht es. So können wir im Workshop direkt mit einer Grilling-Session starten, und niemand verbringt die erste Stunde mit der Einrichtung."
+      }
+    }
+  }
+}

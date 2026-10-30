@@ -1,0 +1,90 @@
+{
+  "title": "Die Matt-Pocock-Skills selbst einrichten",
+  "caption": "Fünf Zeilen in einem eigenen, leeren Ordner. Lass das Starter-Zip weg: Es würde die Matt-Pocock-Skills ein zweites Mal mitbringen.",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "rows": {
+    "label": "Fünf Zeilen, um die Matt-Pocock-Skills selbst einzurichten",
+    "node": {
+      "title": "Node.js installieren",
+      "reason": "Darauf läuft der Skill-Installer. Nimm die Version, die die Seite empfiehlt."
+    },
+    "add": {
+      "title": "Die Haupt-Skills von Matt Pocock hinzufügen",
+      "reason": "In Deinem Terminal. Wenn es fragt, welche Skills Du willst, lass die Hauptgruppe angehakt und <b>Other</b> leer."
+    },
+    "setup": {
+      "title": "Seinen Setup-Skill in Deinem KI-Agenten ausführen",
+      "reason": "Er stellt ein paar Fragen, eine nach der anderen. Gib diese vier Antworten."
+    },
+    "check": {
+      "title": "Unseren Check und den hancrafted-Eintrag hinzufügen",
+      "reason": "Die einzigen zwei Teile von uns. Entpack den Skill in den Skills-Ordner, den der Installer angelegt hat; füg den Eintrag in <code>GLOSSARY.md</code> ein oder leg die Datei damit an."
+    },
+    "run": {
+      "title": "Denselben Check wie in Schritt 4 ausführen",
+      "reason": "Er prüft, ob die Matt-Pocock-Skills da sind. Erlaube seinen Befehl, und die hancrafted-Homepage öffnet sich."
+    }
+  },
+  "nodeLink": "Node.js · offizielle Download-Seite",
+  "newTab": "(öffnet in einem neuen Tab)",
+  "picker": {
+    "question": "? Which skills do you want to install?",
+    "main": "Hauptgruppe, mit dem Setup-Skill",
+    "other": "misc · in-progress, nicht nötig"
+  },
+  "answers": {
+    "tracker": {
+      "question": "1 · Issue-Tracker",
+      "answer": "Lokales Markdown, kein GitHub"
+    },
+    "docs": {
+      "question": "2 · Domain-Doku",
+      "answer": "Eine einzige <code>GLOSSARY.md</code>"
+    },
+    "labels": {
+      "question": "3 · Triage-Labels",
+      "answer": "Die Vorgaben behalten"
+    },
+    "file": {
+      "question": "4 · Welche Datei",
+      "answer": "<code>AGENTS.md</code>, dazu eine <code>CLAUDE.md</code> mit <at>@AGENTS.md</at>"
+    }
+  },
+  "bundle": {
+    "link": "hancrafted-check-setup · nur der Skill-Ordner",
+    "size": "kleines Zip",
+    "entryLabel": "GLOSSARY.md · diesen Eintrag hinzufügen"
+  },
+  "homepage": "Die Homepage öffnet sich",
+  "voiceScript": {
+    "segments": {
+      "same-chain-built-by-hand": {
+        "title": "Dieselbe Kette, von Hand gebaut",
+        "keywords": "",
+        "script": "Was der Starter-Ordner für Dich erledigt hat, sind im Kern vier kurze Schritte. Du installierst Node.js von der offiziellen Seite, fügst die Skills von Matt Pocock hinzu, führst seinen Setup-Skill aus, damit alles lokal bleibt und Du kein GitHub-Konto brauchst, und dann startest Du den Check. Die genauen Zeilen stehen auf der Seite, denn ich möchte lieber, dass Du sie von dort kopierst, als sie von mir zu hören."
+      },
+      "same-proof": {
+        "title": "Derselbe Beweis",
+        "keywords": "",
+        "script": "Der Beweis ist derselbe wie vorher. Du führst hancrafted-check-setup aus, und die hancrafted-Homepage öffnet sich. Eins solltest Du wissen: Dieser Skill kommt mit dem Starter-Ordner, nicht mit den Skills von Matt Pocock, deshalb steht auf der Seite, woher Du ihn bekommst."
+      }
+    }
+  },
+  "help": {
+    "button": "Hilfe",
+    "label": "Dein Fehler",
+    "placeholder": "Füg Deinen Fehler hier ein…",
+    "copy": "Prompt kopieren",
+    "copied": "Prompt kopiert",
+    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
+    "prompt": "Ich mache meinen Laptop für einen Workshop bereit und komme nicht weiter.\nBetriebssystem: {os}\nKI-Agent: {agent}\nSchritt: {step}\n\nDiese Fehlermeldung sehe ich:\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist und was ich als Nächstes tun soll, Schritt für Schritt.",
+    "noError": "(Ich habe keinen Fehler eingefügt.)",
+    "step": "Bonus: Die Matt-Pocock-Skills selbst einrichten",
+    "chats": {
+      "openAIChats": "Einen KI-Chat öffnen",
+      "openAIChatTip": "Öffnet einen leeren {chat}-Chat in einem neuen Tab; füge dort den Prompt ein",
+      "newTab": "öffnet in neuem Tab"
+    }
+  }
+}

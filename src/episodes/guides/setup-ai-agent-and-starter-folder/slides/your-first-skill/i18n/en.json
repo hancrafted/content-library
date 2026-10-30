@@ -1,0 +1,17 @@
+{
+  "title": "Your first skill",
+  "caption": "The piece that proves the chain.",
+  "question": "Do you want to proceed?",
+  "yes": "Yes",
+  "steps": "Step 4",
+  "window": "terminal",
+  "voiceScript": {
+    "segments": {
+      "everything-in-place": {
+        "title": "Everything in place",
+        "keywords": "",
+        "script": "So everything is in place: a terminal, an AI agent and a folder. What is left is a skill, which is a small set of instructions your AI agent can follow, and running it shows that the chain is real."
+      }
+    }
+  }
+}

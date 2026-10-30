@@ -1,0 +1,18 @@
+{
+  "title": "Your AI agent",
+  "caption": "The AI agent that lives in it.",
+  "ready": "✻ Your AI agent is ready",
+  "steps": "Step 2",
+  "window": "terminal",
+  "prompt": "~ %",
+  "hint": "Signed in · type a message",
+  "voiceScript": {
+    "segments": {
+      "terminal-done": {
+        "title": "Terminal done",
+        "keywords": "",
+        "script": "So you now have a window that waits for words. Because an empty window cannot do much on its own, the next piece is the AI agent that will live inside it."
+      }
+    }
+  }
+}

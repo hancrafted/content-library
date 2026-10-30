@@ -1,0 +1,131 @@
+{
+  "title": "Log in",
+  "caption": "Your second command starts your AI agent and signs you in. Use a new terminal window.",
+  "newWindowTitle": "Open a new terminal window first",
+  "newWindow": "The install may not be known to your old window. Close it, open a new one, and only then type the line below.",
+  "newWindowHow": {
+    "mac": "On a Mac: press Cmd and N in Terminal, or open Terminal again.",
+    "windows": "On Windows: close PowerShell, then open it again from the Start menu.",
+    "linux": "On Linux: close the terminal, then open it again."
+  },
+  "backToStep1": "How to open a terminal, step 1",
+  "secondCommand": "Your second command",
+  "type": "Paste this line and press Enter.",
+  "insideTitle": "Then, inside {agent}, type",
+  "copy": "Copy",
+  "copied": "Copied",
+  "failTitle": "Does it say “command not found” or “not recognized”?",
+  "failFix": "You are still in the old window. Close it, open a new one as above, and paste the line again.",
+  "flow": {
+    "claude-code": "Your browser opens on its own. If it does not, press <code>c</code> in the terminal to copy the link and open it yourself. The page may show a code: copy it and paste it into the terminal.",
+    "antigravity": "On your own computer your browser opens on its own. Answer its first questions (colours, trust this folder) in the terminal; if it shows a link and asks for a code, open the link and paste the code back.",
+    "codex": "Choose Sign in with ChatGPT when it asks. Your browser opens for the sign-in.",
+    "copilot": "If you are not signed in yet, it asks you to type <code>/login</code>. Follow the on-screen steps, they take you to your browser."
+  },
+  "toolbar": {
+    "os": "Your computer",
+    "agent": "AI agent"
+  },
+  "trip": {
+    "terminal": "1 · In your terminal",
+    "browser": "2 · In your browser",
+    "back": "3 · Back in your terminal",
+    "lines": {
+      "claude-code": "Opens a sign-in in your browser…",
+      "antigravity": "Opens a sign-in in your browser…",
+      "codex": "Sign in with ChatGPT opens your browser…",
+      "copilot": "Type /login, and it opens your browser…"
+    },
+    "page": "Sign-in page",
+    "signInTitle": "Sign in to {agent}",
+    "signIn": "Sign in",
+    "useOwn": "Use your own account",
+    "loggedIn": "Logged in",
+    "toLogin": "To the sign-in",
+    "toTerminal": "Back to the terminal"
+  },
+  "once": "You do this once, and it stays.",
+  "openLogin": "{agent} · official login page",
+  "newTab": "opens in a new tab",
+  "ownAccount": "Which account fits is on that page. Use your own, not a shared one.",
+  "voiceScript": {
+    "segments": {
+      "open-a-new-window": {
+        "title": "Open a new terminal window",
+        "keywords": "",
+        "script": "Before you type anything, close your terminal and open a new one. The install put your AI agent on your computer, but the old window does not know it yet. If your terminal says command not found or not recognized, this is why. Step one shows you how to open a terminal."
+      },
+      "second-command": {
+        "title": "Your second command",
+        "keywords": "",
+        "script": "Your second command starts your AI agent. Press Copy, paste it and press Enter. Your browser opens for the sign-in; if it does not, the terminal shows a link you can open yourself. Log in with your own account, not a shared one. You do this once, and it stays."
+      },
+      "which-option": {
+        "title": "Which option do I pick?",
+        "keywords": "",
+        "script": "The sign-in asks you to choose, and the page lists the options in the order your AI agent shows them, with one marked Pick this. For Codex it is Sign in with ChatGPT, if you pay for ChatGPT. For Claude Code it is your Claude account. For GitHub Copilot you choose GitHub.com and then the device code. For Antigravity you use your personal Google Account. Afterwards you may be asked whether you trust the folder: say yes only for the starter folder."
+      }
+    }
+  },
+  "help": {
+    "button": "Help",
+    "label": "Your error",
+    "placeholder": "Paste your error here…",
+    "copy": "Copy prompt",
+    "copied": "Prompt copied",
+    "copyTip": "Paste this prompt into an AI you are allowed to use.",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
+    "noError": "(I see no error message, it just does not work.)",
+    "step": "Step 2: Log in, your second command",
+    "chats": {
+      "openAIChats": "Open an AI chat",
+      "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
+      "newTab": "opens in a new tab"
+    }
+  },
+  "pick": {
+    "title": "Which option do I pick?",
+    "recommended": "Pick this",
+    "options": {
+      "codex": {
+        "chatgpt": "Usage included with Plus, Pro, Business and Enterprise plans. Pick this if you pay for ChatGPT.",
+        "device-code": "Only if your browser cannot open, for example on a remote machine. It needs to be switched on in your ChatGPT security settings.",
+        "other": "An API key, paid per use. Skip this one."
+      },
+      "claude-code": {
+        "account": "Your Claude account: Claude Pro, Max, Ultra, Team or Enterprise. This is the one for people who pay for Claude.",
+        "console": "A Claude Console account, paid per use with API credits. Not for a normal subscription.",
+        "platform": "A cloud platform such as Amazon Bedrock, Google Cloud or Microsoft Foundry; the menu calls it “3rd-party platform”. For companies, skip it."
+      },
+      "copilot": {
+        "github-com": "The first question, “What account do you want to log into?”. Pick this for a normal GitHub account.",
+        "enterprise": "Only if your company uses it. Skip it otherwise.",
+        "device-code": "The next question, “How do you want to sign in?”. Choose the device code: the terminal shows a one-time code like 1234-5678. Open github.com/login/device in your browser and enter it."
+      },
+      "antigravity": {
+        "personal": "Your personal Google Account, in your browser. Pick this.",
+        "business": "For Gemini Enterprise at work. Skip it."
+      }
+    },
+    "after": {
+      "codex": {
+        "one": "After the sign-in it asks <code>Trust this folder?</code>. Choose <code>1. Trust and continue</code> only for the starter folder, and <code>2. Quit</code> for any other.",
+        "two": "If your browser does not open, press the key the terminal shows to copy the link, then open it yourself."
+      },
+      "claude-code": {
+        "one": "The free Claude plan does not include Claude Code: you need a paid plan.",
+        "two": "If your browser does not open, press <key>c</key> to copy the link. If the page shows a code, paste it where the terminal says <code>Paste code here if prompted</code>."
+      },
+      "copilot": {
+        "one": "You need an active GitHub Copilot subscription on your account. Type <code>/login</code> inside Copilot to start.",
+        "two": "After you enter the code, authorize GitHub Copilot CLI in your browser. The terminal then tells you that you are signed in."
+      },
+      "antigravity": {
+        "one": "After the sign-in you will be asked to choose a theme, a rendering mode and whether you trust the folder. The order can differ.",
+        "two": "Trust the folder only if it is the starter folder."
+      }
+    }
+  },
+  "doneLabel": "Done looks like",
+  "moreTitle": "More help: what you will see, options, fixes"
+}

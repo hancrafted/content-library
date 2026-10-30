@@ -301,6 +301,9 @@ test.describe('success cases', () => {
     await expect(bracket.locator('[data-job-card]')).toHaveCount(1);
     await card.click();
     await expect(modal).toHaveAttribute('data-stage', 'execute');
+    // Escape reaches the modal only once Radix has made it the top dismissable layer, which it shows by taking pointer
+    // events back from the page it blocks; until then the Learn menu's always-mounted panel, a layer too, takes the key.
+    await expect(modal).toHaveCSS('pointer-events', 'auto');
     await page.keyboard.press('Escape');
     await expect(card).toBeFocused();
   });

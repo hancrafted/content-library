@@ -1,0 +1,17 @@
+{
+  "title": "Dein erster Skill",
+  "caption": "Das Teil, das die Kette beweist.",
+  "question": "Do you want to proceed?",
+  "yes": "Yes",
+  "steps": "Schritt 4",
+  "window": "Terminal",
+  "voiceScript": {
+    "segments": {
+      "everything-in-place": {
+        "title": "Alles an seinem Platz",
+        "keywords": "",
+        "script": "Jetzt ist also alles an seinem Platz: ein Terminal, ein KI-Agent und ein Ordner. Was noch fehlt, ist ein Skill, also eine kleine Anleitung, der Dein KI-Agent folgen kann. Wenn Du ihn ausführst, zeigt sich, dass die Kette echt ist."
+      }
+    }
+  }
+}

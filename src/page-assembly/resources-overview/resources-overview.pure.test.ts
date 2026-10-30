@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { ResourceKind } from './resource-index.pure';
+import { RESOURCE_KINDS, type ResourceKind } from './resource-index.pure';
 import {
   matchingResources,
   NO_SELECTION,
@@ -50,6 +50,7 @@ const NAMES: Record<ResourceKind, string> = {
   episode: 'Episodes',
   event: 'Events',
   'explorable-page': 'Explorables',
+  guide: 'Guides',
   'episode-template': 'Templates',
   'master-slide': 'Masters',
 };
@@ -129,6 +130,25 @@ describe('success cases', () => {
     const chips = resourceKindChoices(ALL, kinds, NAMES);
     // ASSERT
     expect(chips).toEqual(expected);
+  });
+
+  it('offers the Guides chip, between the Explorable pages and the Templates, once a Guide is listed', () => {
+    // ARRANGE
+    const guide = resource('setup-ai-agent-and-starter-folder', 'guide', {
+      title: 'Get workshop-ready',
+      description: 'Your AI agent on your laptop',
+      tags: [['workflow', 'Workflow']],
+    });
+    const expected = [
+      { id: 'guide', label: 'Guides', count: 1 },
+      { id: 'episode-template', label: 'Templates', count: 1 },
+    ];
+    // ACT
+    const chips = resourceKindChoices([...ALL, guide], RESOURCE_KINDS, NAMES);
+    const kept = matchingResources([...ALL, guide], { ...NO_SELECTION, kinds: ['guide'] });
+    // ASSERT
+    expect(chips.filter(({ id }) => id !== 'master-slide')).toEqual(expected);
+    expect(slugs(kept)).toEqual(['setup-ai-agent-and-starter-folder']);
   });
 });
 

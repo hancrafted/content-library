@@ -1,5 +1,7 @@
 import { EMPHASIS_CLOSE, EMPHASIS_OPEN, splitEmphasis, type TextRange } from '@/episodes/lib/caption-emphasis.pure';
-import type { RuntimeTranslator } from './slide-base';
+import type { ReactNode } from 'react';
+import type { Slide } from './slide';
+import type { RuntimeKit, RuntimeTranslator } from './slide-base';
 import { ON_SCREEN_TITLE_KEY } from './slide-kit';
 
 /*
@@ -15,6 +17,8 @@ export interface SlideHeaderText {
   readonly captionEmphasis?: readonly TextRange[];
   /** The Speaker note the caption ends on with a Context marker: its slug and the marker's accessible name. */
   readonly captionNote?: CaptionNote;
+  /** The Slide's `headerAction`, rendered: the header draws it right-aligned in the title row. */
+  readonly action?: ReactNode;
 }
 
 /** A caption's Context marker: the note it opens and the marker's accessible name. */
@@ -86,6 +90,21 @@ export function sharedHeaderOf(input: Parameters<typeof captionNoteOf>[0]): Slid
   const text = headerTextOf(input.t);
   const captionNote = captionNoteOf(input);
   return text && { ...text, ...(captionNote && { captionNote }) };
+}
+
+/** The shared header's text for a Slide, with the action its `headerAction` renders, when it declares one. */
+export function headerWithAction(
+  slide: Slide,
+  input: { t: RuntimeTranslator; kit: RuntimeKit; notes: readonly string[]; markerLabel: (title: string) => string },
+): SlideHeaderText | undefined {
+  const header = sharedHeaderOf({
+    t: input.t,
+    note: slide.captionNote,
+    declared: input.notes,
+    markerLabel: input.markerLabel,
+  });
+  const action = header && slide.headerAction?.(input.kit);
+  return header && (action ? { ...header, action } : header);
 }
 
 /** The title of the Slide that names a Section; a section slide always has one. */

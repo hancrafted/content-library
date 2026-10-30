@@ -1,0 +1,297 @@
+import { localizeSlide, type LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
+import { slide, type Slide } from '@/episodes/components/slide-master/slide';
+import { placeSections } from '@/episodes/lib/episode.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { load } from 'cheerio';
+import { createElement, Fragment } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it } from 'vitest';
+import en from './i18n/en.json';
+import { ViewBody, type ReadinessWords } from './readiness';
+import { decideView, parseReadyFlags } from './ready-state.pure';
+import { overview } from './slide';
+
+/*
+ * Overview (Spec Option 1a, the checklist of feedback round 2), read through the one interface the page reads a Slide by: localized into a stand-in Guide
+ * on the shared Slide header, its notes and Voice script as the drawer gets them and its Scene as the page renders it.
+ * The section slides are stand-ins, so the test reaches no Guide file; the card and the technical link land on them.
+ */
+
+const standIn = (slug: string, title: string) =>
+  slide({ slug, messages: { en: { title }, de: { title } }, content: () => null });
+
+const PLACED = placeSections<Slide>([
+  [standIn('your-terminal', 'Your terminal'), standIn('open-your-terminal', 'Open your terminal'), overview],
+  [standIn('your-ai-agent', 'Your AI agent'), standIn('install-your-ai-agent', 'Install your AI agent')],
+  [standIn('your-folder', 'Your folder'), standIn('download-and-unzip-the-starter-folder', 'Download')],
+  [standIn('your-first-skill', 'Your first skill'), standIn('run-your-first-skill', 'Run your first skill')],
+  [standIn('the-technical-route', 'The technical route')],
+]).flat();
+
+function localized(locale: Locale): LocalizedSlide {
+  return localizeSlide(PLACED.find((placed) => placed.slide.slug === 'overview') as never, {
+    episode: 'setup-ai-agent-and-starter-folder',
+    route: '/guides/setup-ai-agent-and-starter-folder',
+    locale,
+    placed: PLACED,
+    referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
+    header: 'shared',
+  });
+}
+
+const scene = (locale: Locale) => load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).content)));
+
+const WORDS: ReadinessWords = {
+  readyTitle: en.ready.title,
+  missingTitle: en.ready.missingTitle,
+  recap: [en.ready.recap['1'], en.ready.recap['2'], en.ready.recap['3']],
+  skillsDone: en.ready.skills.done,
+  skillsMissing: en.ready.skills.missing,
+  localSetupDone: en.ready.localSetup.done,
+  localSetupMissing: en.ready.localSetup.missing,
+  watchTitle: en.ready.watchTitle,
+  reopen: en.ready.reopen,
+};
+
+const card = (route: string, title: string) => ({
+  route,
+  title,
+  caption: 'Beschreibung',
+  tags: [{ id: 'workflow', label: 'Workflow' }],
+  day: '2026-10-28',
+  dateLabel: '28. Okt. 2026',
+});
+const WATCH = [card('/episode/a', 'Titel A'), card('/episode/b', 'Titel B')];
+
+/** The view body as the client part hands it the view read from a query string. */
+function viewOf(search: string, onReopen?: () => void) {
+  const html = renderToStaticMarkup(
+    createElement(ViewBody, {
+      view: decideView(parseReadyFlags(search)),
+      words: WORDS,
+      watch: WATCH,
+      locale: 'en' as const,
+      onReopen,
+      normal: createElement('div', { 'data-normal': true }),
+      stuck: createElement('div', { 'data-stuck': true }),
+    }),
+  );
+  return load(html);
+}
+
+describe('success cases', () => {
+  it('lists the Spec title in the table of contents and shows its own heading and the Hook on screen', () => {
+    // ARRANGE
+    const expected = {
+      title: 'Overview',
+      heading: 'Four steps to your first skill',
+      caption: "You've never opened a terminal. By the end of this page you'll have run your first skill in one.",
+    };
+    // ACT
+    const slideText = localized('en');
+    const shown = { title: slideText.title, heading: slideText.header?.title, caption: slideText.header?.caption };
+    // ASSERT
+    expect(shown).toEqual(expected);
+  });
+
+  it('speaks the two Spec Voice script items verbatim, in order', () => {
+    // ARRANGE
+    const expected = [
+      {
+        title: 'Four steps, one chain',
+        script:
+          'Here is the whole route in four steps: a terminal, an AI agent, a folder and a skill. Each step only works because the one before it works, so when the last one runs, you know the whole chain holds. It takes about twenty minutes. Tick what you already have, and the card on the right tells you which step to start at.',
+      },
+      {
+        title: 'Skip what you have',
+        script:
+          'Tick the boxes you already have, like an installed AI agent, and the card jumps you to the first step that is still open. And if you would rather build the setup yourself than download it, the last Section is for you, so skip to the end.',
+      },
+    ];
+    // ACT
+    const segments = localized('en').voiceScript.map(({ title, script }) => ({ title, script }));
+    // ASSERT
+    expect(segments).toEqual(expected);
+  });
+
+  it('carries the one Speaker note that stays, with its sources', () => {
+    // ARRANGE
+    const expected = [
+      {
+        header: 'Minimal still needs a way out',
+        urls: ['https://doi.org/10.1006/imms.1993.1081', 'https://doi.org/10.1207/S15326985EP3801_4'],
+      },
+    ];
+    // ACT
+    const notes = localized('en').notes.map((note) => ({
+      header: note.header,
+      urls: (note.sources ?? []).map((source) => source.url),
+    }));
+    // ASSERT
+    expect(notes).toEqual(expected);
+  });
+
+  it('lists four steps with their boxes: 1, 2, 2, 3, 3 and 4 in order, and starts at step 1', () => {
+    // ARRANGE
+    const expected = { steps: ['1', '2', '3', '4'], boxes: [1, 2, 2, 3, 3, 4].length, start: '1' };
+    // ACT
+    const $ = scene('en');
+    const shape = {
+      steps: $('[data-step]')
+        .map((_, el) => $(el).attr('data-step'))
+        .get(),
+      boxes: $('input[type="checkbox"]').length,
+      start: $('[data-start-at]').attr('data-start-at'),
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
+  });
+
+  it('links the start card to step 1 and the technical route to the last Section', () => {
+    // ARRANGE
+    const expected = {
+      start: '/guides/setup-ai-agent-and-starter-folder#your-terminal--open-your-terminal',
+      technical: '/guides/setup-ai-agent-and-starter-folder#the-technical-route',
+    };
+    // ACT
+    const $ = scene('en');
+    const links = { start: $('[data-start-at]').attr('href'), technical: $('[data-skip="technical"]').attr('href') };
+    // ASSERT
+    expect(links).toEqual(expected);
+  });
+
+  it('puts a Context marker in the Stuck note only', () => {
+    // ARRANGE
+    const expected = ['minimal-still-needs-a-way-out'];
+    // ACT
+    const $ = scene('en');
+    const markers = $('[data-context-ref]')
+      .map((_, el) => $(el).attr('data-context-ref'))
+      .get();
+    // ASSERT
+    expect(markers).toEqual(expected);
+  });
+
+  it('shows the ready card with its three done lines and the watch cards, and no checklist', () => {
+    // ARRANGE
+    const expected = {
+      title: "You're ready for the workshop",
+      recap: [
+        'AI agent installed and signed in',
+        'Starter folder in place and skills installed',
+        'First skill run, the homepage opened',
+      ],
+      watch: ['/episode/a', '/episode/b'],
+      normal: 0,
+      stuck: 1,
+    };
+    // ACT
+    const $ = viewOf('?skills=true&local-setup=true');
+    const shape = {
+      title: $('[data-view="ready"] > p').text(),
+      recap: $('[data-recap="done"]')
+        .map((_, el) => $(el).text())
+        .get(),
+      watch: $('[data-watch-card] a')
+        .map((_, el) => $(el).attr('href'))
+        .get(),
+      normal: $('[data-normal]').length,
+      stuck: $('[data-stuck]').length,
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
+  });
+
+  it('names each missing piece with its line, keeps the checklist below and still offers the watch cards', () => {
+    // ARRANGE
+    const expected = {
+      lines: [en.ready.skills.missing, en.ready.localSetup.missing],
+      normal: 1,
+      watch: WATCH.length,
+    };
+    // ACT
+    const $ = viewOf('?skills=false&local-setup=false');
+    const shape = {
+      lines: $('[data-view="missing"] li')
+        .map((_, el) => $(el).text())
+        .get(),
+      normal: $('[data-normal]').length,
+      watch: $('[data-watch-card]').length,
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
+  });
+
+  it('ticks the piece that is done and leaves the other open', () => {
+    // ARRANGE
+    const expected = ['done', 'open'];
+    // ACT
+    const $ = viewOf('?skills=true&local-setup=false');
+    const marks = $('[data-view="missing"] [data-mark]')
+      .map((_, el) => $(el).attr('data-mark'))
+      .get();
+    // ASSERT
+    expect(marks).toEqual(expected);
+  });
+
+  it('offers a way back to the checklist only when the ready view came from ticking the check skill', () => {
+    // ARRANGE
+    const query = 'skills=true&local-setup=true';
+    const expected = { ticked: 1, flagged: 0 };
+    // ACT
+    const found = {
+      ticked: viewOf(query, () => undefined)('[data-reopen]').length,
+      flagged: viewOf(query)('[data-reopen]').length,
+    };
+    // ASSERT
+    expect(found).toEqual(expected);
+  });
+
+  it('shows only the checklist without flags, and the watch cards only when flagged', () => {
+    // ARRANGE
+    const expected = { normal: 1, watchPlain: 0, watchReady: WATCH.length };
+    // ACT
+    const plain = viewOf('');
+    const ready = viewOf('?skills=true&local-setup=true');
+    const shape = {
+      normal: plain('[data-normal]').length,
+      watchPlain: plain('[data-watch-card]').length,
+      watchReady: ready('[data-watch-card]').length,
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
+  });
+});
+
+describe('failure cases', () => {
+  it('renders no heading, no toolbar and no "Jump to step 5" skip link in its Scene, since the header shows the title and nothing differs by pick', () => {
+    // ARRANGE
+    const absent = 'h1, h2, h3, [role="radiogroup"], [data-skip="agent"]';
+    // ACT
+    const $ = scene('en');
+    // ASSERT
+    expect($(absent)).toHaveLength(0);
+  });
+});
+
+describe('edge cases', () => {
+  it('keeps the same notes, segments and step count in German, under German words', () => {
+    // ARRANGE
+    const expected = {
+      heading: 'Vier Schritte zu Deinem ersten Skill',
+      notes: ['minimal-still-needs-a-way-out'],
+      segments: ['four-pieces-one-chain', 'skip-what-you-have'],
+      steps: 4,
+    };
+    // ACT
+    const de = localized('de');
+    const shape = {
+      heading: de.header?.title,
+      notes: de.notes.map((note) => note.slug),
+      segments: de.voiceScript.map((segment) => segment.slug),
+      steps: scene('de')('[data-step]').length,
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
+  });
+});

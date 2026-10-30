@@ -1,9 +1,9 @@
 'use client';
 
+import { ChatButtons } from '@/shared/components/core-components/chat-buttons/chat-buttons';
 import { CopyButton, PromptActions } from '@/shared/components/core-components/try-prompt/prompt-actions.client';
 import { joinPrompt, type PromptParts } from '@/shared/components/core-components/try-prompt/prompt-sections.pure';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/tooltip';
-import { ChatButtons } from './chat-buttons';
 import { CheckedBox } from './checked-box.client';
 import { contextEntries, needsInput, type Entry } from './context-entries.pure';
 import { ContextField } from './context-field.client';
