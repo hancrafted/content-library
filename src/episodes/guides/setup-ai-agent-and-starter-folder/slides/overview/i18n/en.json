@@ -74,5 +74,24 @@
     "title": "Set up the Matt Pocock skills yourself",
     "lead": "Want the technical route?",
     "action": "Jump to the last Section"
+  },
+  "ready": {
+    "title": "You're ready for the workshop",
+    "missingTitle": "Almost ready",
+    "recap": {
+      "1": "AI agent installed and signed in",
+      "2": "Starter folder in place and skills installed",
+      "3": "First skill run, the homepage opened"
+    },
+    "skills": {
+      "done": "The Matt Pocock skills are installed.",
+      "missing": "The Matt Pocock skills are not installed yet. Run the check again after installing them, or press Help."
+    },
+    "localSetup": {
+      "done": "The local setup is in place.",
+      "missing": "The local setup is missing. Run the setup skill, then check again, or press Help."
+    },
+    "watchTitle": "Meanwhile watch these",
+    "germanTag": "German"
   }
 }

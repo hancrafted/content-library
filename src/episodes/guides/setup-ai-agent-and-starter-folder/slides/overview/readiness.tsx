@@ -1,0 +1,153 @@
+import { localizePath, type Locale } from '@/shared/lib/locale.pure';
+import type { ReactNode } from 'react';
+import type { OverviewView } from './ready-state.pure';
+
+export interface ReadinessWords {
+  readonly readyTitle: string;
+  readonly missingTitle: string;
+  readonly recap: readonly string[];
+  readonly skillsDone: string;
+  readonly skillsMissing: string;
+  readonly localSetupDone: string;
+  readonly localSetupMissing: string;
+  readonly watchTitle: string;
+  readonly germanTag: string;
+}
+
+/** An unlisted Episode to watch while waiting: its localized href and its (German) title. */
+export interface WatchLink {
+  readonly path: string;
+  readonly title: string;
+}
+
+export interface ViewBodyProps {
+  readonly view: OverviewView;
+  readonly words: ReadinessWords;
+  readonly watch: readonly WatchLink[];
+  readonly locale: Locale;
+  /** True when the page is not German, so the German-only Episodes carry a "German" tag. */
+  readonly tagGerman: boolean;
+  /** The normal checklist with its "Start at" card. */
+  readonly normal: ReactNode;
+  /** The Help note, shown under the ready card, where the checklist is gone. */
+  readonly stuck: ReactNode;
+}
+
+function Mark({ done }: { done: boolean }) {
+  return (
+    <span
+      data-mark={done ? 'done' : 'open'}
+      className={
+        done
+          ? 'grid size-6 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground'
+          : 'grid size-6 shrink-0 place-items-center rounded-full border border-border text-muted-foreground'
+      }
+    >
+      <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
+        <path
+          d={done ? 'M5 12.5l4.5 4.5L19 7.5' : 'M12 7v6M12 17h.01'}
+          className="fill-none stroke-current"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
+function Line({ done, children }: { done: boolean; children: ReactNode }) {
+  return (
+    <li className="flex items-start gap-3 text-body">
+      <Mark done={done} />
+      <span>{children}</span>
+    </li>
+  );
+}
+
+/** The ready card: a prominent title over the three done lines. */
+function ReadyCard({ words }: { words: ReadinessWords }) {
+  return (
+    <section data-view="ready" className="flex flex-col gap-4 rounded-2xl bg-primary p-6 text-primary-foreground">
+      <p className="text-subheading font-semibold">{words.readyTitle}</p>
+      <ul className="flex flex-col gap-2">
+        {words.recap.map((line) => (
+          <li key={line} className="flex items-start gap-3 text-body">
+            <span className="grid size-6 shrink-0 place-items-center rounded-full bg-primary-foreground text-primary">
+              <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
+                <path
+                  d="M5 12.5l4.5 4.5L19 7.5"
+                  className="fill-none stroke-current"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+            <span data-recap="done">{line}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** The recap card: three done lines when ready, one line per reported piece when something is missing. */
+function RecapCard({ view, words }: Pick<ViewBodyProps, 'view' | 'words'>) {
+  if (view.kind === 'ready') return <ReadyCard words={words} />;
+  if (view.kind !== 'missing') return null;
+  const { skills, localSetup } = view.flags;
+  return (
+    <section data-view="missing" className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-6">
+      <p className="text-subheading font-semibold">{words.missingTitle}</p>
+      <ul className="flex flex-col gap-2">
+        {skills !== undefined && <Line done={skills}>{skills ? words.skillsDone : words.skillsMissing}</Line>}
+        {localSetup !== undefined && (
+          <Line done={localSetup}>{localSetup ? words.localSetupDone : words.localSetupMissing}</Line>
+        )}
+      </ul>
+    </section>
+  );
+}
+
+function Watch({ words, watch, tagGerman, locale }: Pick<ViewBodyProps, 'words' | 'watch' | 'tagGerman' | 'locale'>) {
+  return (
+    <section data-watch className="flex flex-col gap-3">
+      <p className="text-body font-semibold">{words.watchTitle}</p>
+      <div className="grid gap-4 @3xl:grid-cols-2">
+        {watch.map((link) => (
+          <a
+            key={link.path}
+            data-watch-card
+            href={localizePath(link.path, locale)}
+            className="card-hover card-hover--outline flex flex-col items-start gap-2 rounded-2xl border border-border bg-card px-6 py-5"
+          >
+            {tagGerman && (
+              <span className="rounded-full border border-border px-2 py-0.5 text-caption text-muted-foreground">
+                {words.germanTag}
+              </span>
+            )}
+            <span lang="de" className="text-body font-semibold">
+              {link.title}
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * The Overview Scene body for one view: pure and presentational, so the test renders each view directly. `normal`
+ * shows the checklist; `ready` replaces it with the recap card; `missing` puts the recap above the checklist.
+ */
+export function ViewBody({ view, words, watch, tagGerman, locale, normal, stuck }: ViewBodyProps) {
+  if (view.kind === 'normal') return <>{normal}</>;
+  return (
+    <div className="flex flex-col gap-6">
+      <RecapCard view={view} words={words} />
+      {view.kind === 'missing' ? normal : stuck}
+      <Watch words={words} watch={watch} tagGerman={tagGerman} locale={locale} />
+    </div>
+  );
+}

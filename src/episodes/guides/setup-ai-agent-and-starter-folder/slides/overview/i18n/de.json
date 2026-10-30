@@ -74,5 +74,24 @@
     "title": "Richte die Skills von Matt Pocock selbst ein",
     "lead": "Lieber den technischen Weg?",
     "action": "Spring zum letzten Abschnitt"
+  },
+  "ready": {
+    "title": "Du bist bereit für den Workshop",
+    "missingTitle": "Fast bereit",
+    "recap": {
+      "1": "KI-Agent installiert und angemeldet",
+      "2": "Starter-Ordner bereit und Skills installiert",
+      "3": "Ersten Skill ausgeführt, die Startseite hat sich geöffnet"
+    },
+    "skills": {
+      "done": "Die Skills von Matt Pocock sind installiert.",
+      "missing": "Die Skills von Matt Pocock sind noch nicht installiert. Führe die Prüfung nach der Installation erneut aus oder drücke Hilfe."
+    },
+    "localSetup": {
+      "done": "Die lokale Einrichtung steht.",
+      "missing": "Die lokale Einrichtung fehlt. Führe den Setup-Skill aus, prüfe dann erneut oder drücke Hilfe."
+    },
+    "watchTitle": "Schau Dir in der Zwischenzeit das an",
+    "germanTag": "Deutsch"
   }
 }

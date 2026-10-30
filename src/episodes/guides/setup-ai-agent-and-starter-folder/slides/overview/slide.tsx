@@ -5,6 +5,19 @@ import { Checklist, type ChecklistStep, type LinkParts } from './checklist.clien
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { BOXES, STEP_SLIDE, STEPS, type BoxId, type StepNumber } from './start-step.pure';
+import { OverviewView } from './view.client';
+
+/** The unlisted German Akademie Episodes offered while a viewer is ready: linked, never copied; German in both locales. */
+const WATCH = [
+  {
+    path: '/episode/2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time',
+    title: 'Behandle KI wie einen brillanten Freelancer mit Amnesie',
+  },
+  {
+    path: '/episode/2026-10-28-cyberforum-akademie-intro-agentic-workflow__ai-attention-span',
+    title: 'Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst',
+  },
+] as const;
 
 const MINIMAL_MANUAL = { slug: 'lazonder-minimal-manual', url: 'https://doi.org/10.1006/imms.1993.1081' };
 const EXPERTISE_REVERSAL = { slug: 'kalyuga-expertise-reversal', url: 'https://doi.org/10.1207/S15326985EP3801_4' };
@@ -53,6 +66,25 @@ export const overview = slide({
       StepNumber,
       LinkParts
     >;
+    const stuck = (
+      <div {...target('stuck')} className="flex items-start gap-3 rounded-2xl border border-dashed border-border p-5">
+        <svg viewBox="0 0 24 24" className="mt-0.5 size-5 shrink-0" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" className="fill-none stroke-muted-foreground" strokeWidth="1.5" />
+          <path
+            d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"
+            className="fill-none stroke-muted-foreground"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+        <p className="text-caption text-muted-foreground">
+          {t.rich('stuck', {
+            b: (chunks) => <b className="font-semibold text-foreground">{chunks}</b>,
+            marker: marker('minimal-still-needs-a-way-out'),
+          })}
+        </p>
+      </div>
+    );
     return (
       <SlideFrame className="@container gap-6">
         <div className="flex flex-col gap-3 @3xl:flex-row @3xl:items-center @3xl:justify-between">
@@ -62,51 +94,57 @@ export const overview = slide({
           </span>
           <span className="text-caption text-muted-foreground">{t('chainLine')}</span>
         </div>
-        <Checklist
-          steps={steps}
-          hrefs={hrefs}
+        <OverviewView
+          tagGerman={locale !== 'de'}
           locale={locale}
+          watch={WATCH.map((link) => ({ path: link.path, title: link.title }))}
           words={{
-            label: t('checklist.label'),
-            open: t('card.open'),
-            start: t('card.start', { n: '{n}' }),
-            allDone: t('card.allDone'),
+            readyTitle: t('ready.title'),
+            missingTitle: t('ready.missingTitle'),
+            recap: [t('ready.recap.1'), t('ready.recap.2'), t('ready.recap.3')],
+            skillsDone: t('ready.skills.done'),
+            skillsMissing: t('ready.skills.missing'),
+            localSetupDone: t('ready.localSetup.done'),
+            localSetupMissing: t('ready.localSetup.missing'),
+            watchTitle: t('ready.watchTitle'),
+            germanTag: t('ready.germanTag'),
           }}
-          intro={<span>{t('checklist.intro')}</span>}
-        >
-          <a
-            data-skip="technical"
-            href={localizePath(stripLocale(technical.path), locale, technical.anchor)}
-            className="card-hover card-hover--outline flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-6 py-5"
-          >
-            <span className="flex flex-col">
-              <span className="text-caption text-muted-foreground">{t('technical.lead')}</span>
-              <span className="text-body font-semibold">{t('technical.action')}</span>
-            </span>
-            <ArrowRight />
-          </a>
-          <div
-            {...target('stuck')}
-            className="flex items-start gap-3 rounded-2xl border border-dashed border-border p-5"
-          >
-            <svg viewBox="0 0 24 24" className="mt-0.5 size-5 shrink-0" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" className="fill-none stroke-muted-foreground" strokeWidth="1.5" />
-              <path
-                d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"
-                className="fill-none stroke-muted-foreground"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-            <p className="text-caption text-muted-foreground">
-              {t.rich('stuck', {
-                b: (chunks) => <b className="font-semibold text-foreground">{chunks}</b>,
-                marker: marker('minimal-still-needs-a-way-out'),
-              })}
-            </p>
-          </div>
-        </Checklist>
+          stuck={stuck}
+          normal={
+            <Checklist
+              steps={steps}
+              hrefs={hrefs}
+              locale={locale}
+              words={{
+                label: t('checklist.label'),
+                open: t('card.open'),
+                start: t('card.start', { n: '{n}' }),
+                allDone: t('card.allDone'),
+              }}
+              intro={<span>{t('checklist.intro')}</span>}
+            >
+              <a
+                data-skip="technical"
+                href={localizePath(stripLocale(technical.path), locale, technical.anchor)}
+                className="card-hover card-hover--outline flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-6 py-5"
+              >
+                <span className="flex flex-col">
+                  <span className="text-caption text-muted-foreground">{t('technical.lead')}</span>
+                  <span className="text-body font-semibold">{t('technical.action')}</span>
+                </span>
+                <ArrowRight />
+              </a>
+              {stuck}
+            </Checklist>
+          }
+        />
       </SlideFrame>
     );
   },
 });
+
+/*
+ * Needs human: the check skill must open
+ * https://hancrafted.net/guides/setup-ai-agent-and-starter-folder/?skills=<true|false>&local-setup=<true|false>#your-terminal--overview
+ * and the GLOSSARY entry holds that URL; the skill and the glossary entry do not exist yet.
+ */

@@ -6,6 +6,9 @@ import { load } from 'cheerio';
 import { createElement, Fragment } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import en from './i18n/en.json';
+import { ViewBody, type ReadinessWords } from './readiness';
+import { decideView, parseReadyFlags } from './ready-state.pure';
 import { overview } from './slide';
 
 /*
@@ -37,6 +40,39 @@ function localized(locale: Locale): LocalizedSlide {
 }
 
 const scene = (locale: Locale) => load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).content)));
+
+const WORDS: ReadinessWords = {
+  readyTitle: en.ready.title,
+  missingTitle: en.ready.missingTitle,
+  recap: [en.ready.recap['1'], en.ready.recap['2'], en.ready.recap['3']],
+  skillsDone: en.ready.skills.done,
+  skillsMissing: en.ready.skills.missing,
+  localSetupDone: en.ready.localSetup.done,
+  localSetupMissing: en.ready.localSetup.missing,
+  watchTitle: en.ready.watchTitle,
+  germanTag: en.ready.germanTag,
+};
+
+const WATCH = [
+  { path: '/episode/a', title: 'Titel A' },
+  { path: '/episode/b', title: 'Titel B' },
+];
+
+/** The view body as the client part hands it the view read from a query string. */
+function viewOf(search: string, tagGerman = true) {
+  const html = renderToStaticMarkup(
+    createElement(ViewBody, {
+      view: decideView(parseReadyFlags(search)),
+      words: WORDS,
+      watch: WATCH,
+      tagGerman,
+      locale: 'en' as const,
+      normal: createElement('div', { 'data-normal': true }),
+      stuck: createElement('div', { 'data-stuck': true }),
+    }),
+  );
+  return load(html);
+}
 
 describe('success cases', () => {
   it('lists the Spec title in the table of contents and shows its own heading and the Hook on screen', () => {
@@ -129,6 +165,87 @@ describe('success cases', () => {
       .get();
     // ASSERT
     expect(markers).toEqual(expected);
+  });
+
+  it('shows the ready card with its three done lines and the watch cards, and no checklist', () => {
+    // ARRANGE
+    const expected = {
+      title: "You're ready for the workshop",
+      recap: [
+        'AI agent installed and signed in',
+        'Starter folder in place and skills installed',
+        'First skill run, the homepage opened',
+      ],
+      watch: ['/episode/a', '/episode/b'],
+      normal: 0,
+      stuck: 1,
+    };
+    // ACT
+    const $ = viewOf('?skills=true&local-setup=true');
+    const shape = {
+      title: $('[data-view="ready"] > p').text(),
+      recap: $('[data-recap="done"]')
+        .map((_, el) => $(el).text())
+        .get(),
+      watch: $('[data-watch-card]')
+        .map((_, el) => $(el).attr('href'))
+        .get(),
+      normal: $('[data-normal]').length,
+      stuck: $('[data-stuck]').length,
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
+  });
+
+  it('names each missing piece with its line, keeps the checklist below and still offers the watch cards', () => {
+    // ARRANGE
+    const expected = {
+      lines: [en.ready.skills.missing, en.ready.localSetup.missing],
+      normal: 1,
+      watch: WATCH.length,
+    };
+    // ACT
+    const $ = viewOf('?skills=false&local-setup=false');
+    const shape = {
+      lines: $('[data-view="missing"] li')
+        .map((_, el) => $(el).text())
+        .get(),
+      normal: $('[data-normal]').length,
+      watch: $('[data-watch-card]').length,
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
+  });
+
+  it('ticks the piece that is done and leaves the other open', () => {
+    // ARRANGE
+    const expected = ['done', 'open'];
+    // ACT
+    const $ = viewOf('?skills=true&local-setup=false');
+    const marks = $('[data-view="missing"] [data-mark]')
+      .map((_, el) => $(el).attr('data-mark'))
+      .get();
+    // ASSERT
+    expect(marks).toEqual(expected);
+  });
+
+  it('shows only the checklist without flags, and tags the watch cards "German" only outside German', () => {
+    // ARRANGE
+    const expected = { normal: 1, watch: 0, tagEn: ['German', 'German'], tagDe: 0 };
+    // ACT
+    const plain = viewOf('');
+    const english = viewOf('?skills=true&local-setup=true');
+    const german = viewOf('?skills=true&local-setup=true', false);
+    const shape = {
+      normal: plain('[data-normal]').length,
+      watch: plain('[data-watch-card]').length,
+      tagEn: english('[data-watch-card] span:not([lang])')
+        .map((_, el) => english(el).text())
+        .get(),
+      tagDe: german('[data-watch-card] span:not([lang])').length,
+    };
+    // ASSERT
+    expect(shape).toEqual(expected);
   });
 });
 
