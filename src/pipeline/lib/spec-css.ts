@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
+import { inlineDesignCss } from './spec-inline.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const GLOBALS = path.join(ROOT, 'src/app/globals.css');
@@ -20,4 +21,10 @@ export async function buildDesignCss(folder: string): Promise<string> {
   });
   writeFileSync(out, result.css);
   return out;
+}
+
+/** Compiles the design.css for the page's folder and writes the page with that css inline, so it stands alone. */
+export async function inlineSpecPage(page: string): Promise<void> {
+  const css = readFileSync(await buildDesignCss(path.dirname(page)), 'utf8');
+  writeFileSync(page, inlineDesignCss(readFileSync(page, 'utf8'), css));
 }

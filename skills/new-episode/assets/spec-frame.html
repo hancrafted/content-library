@@ -10,9 +10,9 @@
     -->
     <style>
       /*
-       * The Spec's page frame. design.css (compiled from the site's globals.css by `npm run episode:spec`) supplies
+       * The Spec's page frame. design.css (compiled from the site's globals.css, inlined by `npm run episode:spec-assemble`) supplies
        * the tokens and every utility the mocks use; this block only lays out the review page around them. The
-       * fallback layer ranks below Tailwind, so the page still reads in system colours when opened without it.
+       * fallback layer ranks below Tailwind, so the page still reads in system colours when opened without it. The assembled page links nothing: css and script are inline.
        */
       @layer fallback;
 
