@@ -188,7 +188,7 @@ function episodePage($: CheerioAPI, slides: readonly SlidePage[], context: Episo
   });
   const masthead = `<header class="spec-masthead"><p class="spec-kicker"><a href="../index.html">Design archive</a> · ${slides.length} Slides</p><h1>${escapeHtml(context.title)}</h1></header>`;
   const body = `<div class="spec-shell">${outline(grouped)}<main class="spec-page">${masthead}\n${sections.join('\n')}</main></div>`;
-  const specStyles = $('head style')
+  const specStyles = $('head style:not([data-design-css])')
     .toArray()
     .map((style) => $.html(style))
     .join('\n');

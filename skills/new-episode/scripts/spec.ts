@@ -1,5 +1,4 @@
-// `npm run episode:spec -- <slug | Episode folder>`: compiles the site's globals.css into the Spec's design.css,
-// scanning only the Spec for classes, then serves the Spec for review on `--port`, else the first free port from 4000, never 4382
+// `npm run episode:spec -- <slug | Episode folder>`: serves the Spec (self-contained: spec-assemble inlined its css) for review on `--port`, else the first free port from 4000, never 4382
 // (the dashboard's). Saving the review writes the next feedback round (spec-server.ts).
 
 import { existsSync } from 'node:fs';
@@ -7,7 +6,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { SPEC_FILE } from '../../../src/pipeline/lib/episode-spec-page.pure.ts';
-import { buildDesignCss } from '../../../src/pipeline/lib/spec-css.ts';
 import { startSpecServer, type SpecServer } from '../../../src/pipeline/lib/spec-server.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -52,9 +50,7 @@ if (!existsSync(spec)) {
   console.error(`✖ ${path.relative(ROOT, spec)} does not exist`);
   process.exit(1);
 }
-const css = await buildDesignCss(path.dirname(spec));
 const server = await listen(folder, port);
-console.log(`✔ ${path.relative(ROOT, css)} compiled from src/app/globals.css`);
 console.log(
   `✔ Spec review on http://127.0.0.1:${server.port}/ — Save writes ${path.relative(ROOT, folder)}/feedback/<NN>/feedback.md; Ctrl-C stops`,
 );

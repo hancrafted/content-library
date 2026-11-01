@@ -101,6 +101,18 @@ describe('success cases', () => {
     expect(css).toContain('.border-ai');
     expect(css).toContain('.rounded-full');
   });
+
+  it('writes a self-contained page: the compiled css inline, no link to design.css', () => {
+    // ARRANGE
+    const folder = episode({ 'brief.md': BRIEF });
+    // ACT
+    const run = assemble(folder);
+    // ASSERT
+    expect(run.status).toBe(0);
+    const html = readFileSync(path.join(folder, 'spec/spec.html'), 'utf8');
+    expect(html).toContain('<style data-design-css>');
+    expect(html).not.toMatch(/<link[^>]*design\.css/);
+  });
 });
 
 describe('failure cases', () => {

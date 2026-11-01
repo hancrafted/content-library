@@ -30,6 +30,19 @@ describe('success cases', () => {
       expect(style).toBe(STYLE);
     });
 
+    it("leaves a self-contained Spec's inlined design css out, since the archive links design.css", () => {
+      // ARRANGE
+      const file = 'cash-first/index.html';
+      const spec = INPUT.spec.replace(
+        '<link rel="stylesheet" href="design.css" />',
+        '<style data-design-css>.big{}</style>',
+      );
+      // ACT
+      const styles = page(designArchive({ ...INPUT, spec }).pages, file)('head style').text();
+      // ASSERT
+      expect(styles).not.toContain('.big');
+    });
+
     it('writes one page holding every Slide in Spec order, each with only its own Options and the picked one marked', () => {
       // ARRANGE
       const files = ['cash-first/index.html'];

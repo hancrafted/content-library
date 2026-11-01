@@ -2,7 +2,7 @@
 // first fails, naming file and line, when a term survives in the staging folder (after a rename). Agents supply content
 // only: the Brief, the Dossier, the designers' fragments `.scratch/<slug>/spec/*.html` and the Visual language and
 // Episode page markup `visual-language.html` and `episode-page.html` beside them. The user's feedback rounds lock the
-// user's picks. Compiles `spec/design.css` beside the page. Refuses an approved Spec; runs the Spec contract that
+// user's picks. Compiles `spec/design.css` and inlines it into the page, which stands alone. Refuses an approved Spec; runs the Spec contract that
 // applies to the stage (all of it once Options are present) and reports findings. Real disk; the clock is passed in.
 // The entry point is `npm run episode:spec-assemble`.
 
@@ -13,7 +13,7 @@ import { findForbidden } from './episode-forbid.pure.ts';
 import { assembleSpec } from './episode-spec-assemble.pure.ts';
 import { SPEC_FILE } from './episode-spec-page.pure.ts';
 import { checkSpec } from './episode-spec.pure.ts';
-import { buildDesignCss } from './spec-css.ts';
+import { inlineSpecPage } from './spec-css.ts';
 import { utcSeconds } from './staging-file.pure.ts';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -103,14 +103,14 @@ function assembled(sources: Sources, reviewAsset: string, now: Date): string {
   });
 }
 
-/** Writes the page and its design.css, then checks the Spec contract that applies to the stage reached. */
+/** Writes the self-contained page, then checks the Spec contract that applies to the stage reached. */
 async function written(sources: Sources, reviewAsset: string, html: string): Promise<SpecAssembleReport> {
   const { folder, dossier, fragments } = sources;
   const specPath = path.join(folder, SPEC_FILE);
   mkdirSync(path.dirname(specPath), { recursive: true });
   writeFileSync(specPath, html);
-  // The served design.css holds only the classes it was compiled from, so it follows every write of the page.
-  await buildDesignCss(path.dirname(specPath));
+  // The css holds only the classes it was compiled from, so it follows every write of the page; inlined, the page needs no sibling file.
+  await inlineSpecPage(specPath);
   const options = fragments.length > 0;
   const stage = options ? 'Options' : dossier === undefined ? 'Brief' : 'Dossier';
   const findings = checkSpec(
