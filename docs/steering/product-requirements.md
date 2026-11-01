@@ -3,7 +3,7 @@ type: product-steering
 title: Product requirements
 generated:
   by: claude-code/opus-5.5
-  at: 2026-10-25T22:00:00+01:00
+  at: 2026-11-01T21:00:00+01:00
 verified:
   - { by: human:han, at: 2026-10-25T22:59:56+01:00 }
 stale_after: 2026-11-08T22:59:56+01:00
@@ -94,7 +94,7 @@ flowchart LR
 
 ### Han (author)
 
-- AUT-2.1 Run the content pipeline as a product, first locally, then in the cloud.
+- AUT-2.1 Make Episodes with the Factory (`docs/steering/factory-requirements.md`).
 - AUT-2.2 Grow the evidence layer by research, on its own schedule.
 - AUT-2.3 Promote a Slide to a Shared Slide.
 - AUT-2.4 Publish a public Playlist.
@@ -102,7 +102,6 @@ flowchart LR
 ### Han (maintainer)
 
 - MNT-2.1 Add a skill, record kind or Explorable without changing the existing ones.
-- MNT-2.2 Trace a Run back through its Jobs, Attempts and Scores to see why it produced what it did.
 
 ## Horizon 3: platform (end of 2027)
 

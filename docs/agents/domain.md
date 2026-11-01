@@ -5,7 +5,7 @@ title: Domain Docs
 
 # Domain Docs
 
-How engineering skills should consume this repo's domain documentation when exploring the codebase. This repo is **single-context**.
+How engineering skills should consume this repo's domain documentation when exploring the codebase. This repo is **multi-context**: `GLOSSARY-MAP.md` at the root lists each context's glossary (the content library, the Factory).
 
 ## Two kinds of ADR
 
@@ -37,7 +37,7 @@ status: accepted
 
 ## Before exploring, read
 
-- **`GLOSSARY.md`** at the repo root.
+- **`GLOSSARY-MAP.md`** at the repo root, then the `GLOSSARY.md` of the context you work in.
 - **`docs/adr/`**: read the design-ADRs that touch the area you're about to work in.
 - **`.archgate/adrs/`**: the Archgate ADRs are binding rules; `archgate review-context` gives condensed briefings.
 
@@ -47,7 +47,9 @@ If `GLOSSARY.md` or `docs/adr/` doesn't exist, **proceed silently**. Don't flag 
 
 ```
 /
-├── GLOSSARY.md
+├── GLOSSARY-MAP.md                ← lists the contexts
+├── GLOSSARY.md                    ← content library
+├── tools/factory/GLOSSARY.md      ← Factory
 ├── docs/adr/                      ← design-ADRs (engineering skills)
 │   ├── 0001-some-decision.md
 │   └── 0002-another-decision.md
@@ -57,7 +59,7 @@ If `GLOSSARY.md` or `docs/adr/` doesn't exist, **proceed silently**. Don't flag 
 
 ## Use the glossary's vocabulary
 
-When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, a test name), use the term as defined in `GLOSSARY.md`. Don't drift to synonyms the glossary explicitly avoids.
+When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, a test name), use the term as defined in its context's `GLOSSARY.md`. Don't drift to synonyms the glossary explicitly avoids.
 
 If the concept you need isn't in the glossary yet, that's a signal: either you're inventing language the project doesn't use (reconsider) or there's a real gap (note it for `/domain-modeling`).
 

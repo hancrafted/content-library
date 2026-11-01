@@ -26,7 +26,7 @@ frontmatter:
           allowed:
             - {
                 value: product-steering,
-                intent: 'Product strategy that decides conflicts: the vision (north star, horizons, trade-off rules) or the requirements (capabilities per Audience and horizon).',
+                intent: 'Product strategy that decides conflicts, for the content library and for the Factory that makes it: a vision (north star, horizons, trade-off rules) or its requirements (capabilities per Audience or role, and horizon).',
               }
         title: *title
         generated.by: &generated-by
@@ -284,6 +284,141 @@ frontmatter:
 
 body-structure:
   rules:
+    # The Factory's two steering files carry their contract here, judged by `mh check`, so the
+    # blockquote at the top of each file is a reminder, not the only guard against drift.
+    - ruleId: factory-vision-body
+      fileNames: [factory-vision.md]
+      intent: 'Why the Factory exists and what wins when goals conflict, at a level that survives a rebuild. Fail if a line names a technology, tool, file format, folder or data structure, or would stop being true if the Factory were rebuilt on another stack; that line belongs in a spec, an ADR or a ticket. Fail if a line states what a role can do: that belongs in factory-requirements.md.'
+      undefinedHeadings: forbid
+      headings:
+        - {
+            purpose: heading,
+            level: 1,
+            allowed: [{ title: Factory vision, intent: "The Factory product vision, not the content library's." }],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: North star,
+                  intent: 'One sentence of what the Factory enables, and how its unit of output is defined.',
+                },
+              ],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Problem,
+                  intent: 'The pain of the people the Factory is for, in their terms. Fail if it describes a solution.',
+                },
+              ],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: What the Factory is,
+                  intent: 'What the Factory does and the products it makes, and which steering governs each product. Fail if it names how it is built.',
+                },
+              ],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Users,
+                  intent: 'Who the Factory is for, and from which horizon. Not an Audience: that word belongs to the content library.',
+                },
+              ],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Horizons,
+                  intent: 'Back-to-back horizons, each with its dates and a success measure that can be judged. Fail if two horizons overlap or a success measure cannot be checked.',
+                },
+              ],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Trade-off ranking,
+                  intent: "What wins when goals conflict, per horizon. Fail if a ranking permits a shortcut the content library's Architecture beats delivery forbids.",
+                },
+              ],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Principles across all horizons,
+                  intent: 'Numbered principles that hold in every horizon. Fail if a principle names a technology or holds only for one horizon.',
+                },
+              ],
+          }
+        - { purpose: heading, level: 2, allowed: [{ title: Non-goals, intent: 'What the Factory will not become.' }] }
+    - ruleId: factory-requirements-body
+      fileNames: [factory-requirements.md]
+      intent: 'What each Factory role can do, per horizon of factory-vision.md: one user story per line, "FAC-<horizon>.<n> As a <role>, I can <capability>, so that <outcome>". Fail if a line names a mechanism, tool, file format or acceptance criterion, or if two very different solutions could not both meet it; that belongs in an ADR, a ticket or the spec that refines the id. Fail if a line names a role the Roles section does not define, or an id repeats.'
+      undefinedHeadings: forbid
+      headings:
+        - {
+            purpose: heading,
+            level: 1,
+            allowed: [{ title: Factory requirements, intent: "The Factory requirements, not the content library's." }],
+          }
+        - {
+            purpose: heading,
+            level: 2,
+            allowed:
+              [
+                {
+                  title: Roles,
+                  intent: 'Each role in one line, by what it does, and who holds which role per horizon.',
+                },
+              ],
+          }
+        - purpose: heading
+          level: 2
+          pattern: '^Horizon 1: '
+          intent: 'Horizon 1 user stories, ids FAC-1.<n>, with the dates factory-vision.md gives it.'
+          headings:
+            - {
+                purpose: heading,
+                level: 3,
+                presence: optional,
+                allowed:
+                  [
+                    {
+                      title: Questions the evidence must answer,
+                      intent: 'The questions Horizon 1 evidence must answer, numbered. Fail if a question names a mechanism.',
+                    },
+                  ],
+              }
+        - { purpose: heading, level: 2, pattern: '^Horizon 2: ', intent: 'Horizon 2 user stories, ids FAC-2.<n>.' }
+        - {
+            purpose: heading,
+            level: 2,
+            pattern: '^Horizon 3: ',
+            intent: 'Horizon 3 user stories, ids FAC-3.<n>; directional, they keep doors open.',
+          }
     - ruleId: staging-brief-body
       fileNames: [brief.md]
       intent: 'The sections a Brief must settle, in reading order, so the grill knows what is left and research starts from settled questions. Fail if a section holds what belongs in a different one.'
