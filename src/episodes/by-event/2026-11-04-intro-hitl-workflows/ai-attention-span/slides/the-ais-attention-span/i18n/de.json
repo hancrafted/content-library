@@ -1,0 +1,15 @@
+{
+  "title": "Die Aufmerksamkeitsspanne der KI",
+  "caption": "Jetzt die Ursache: wie die KI einen Chat im Blick behält.",
+  "punchline": "Jetzt drehe ich auf. Hoffentlich bist Du bereit?",
+  "poll": "Noch dabei? Wie steht's um Deine Aufmerksamkeit?",
+  "voiceScript": {
+    "segments": {
+      "why-it-happens": {
+        "title": "Warum das passiert",
+        "keywords": "",
+        "script": "Ich habe dazu ein Tool gebaut, das ich Dir kurz vorstellen möchte, und Du kannst gern selbst damit herumspielen. Links haben wir einen Chat nachgebildet, eine Konversation. Dazu gibt es eine Zeitleiste, auf der wir vor und zurück navigieren können, und sie simuliert den Verlauf des Chats. In diesem Fall haben wir 21 Nachrichten hin- und hergeschrieben."
+      }
+    }
+  }
+}

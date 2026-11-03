@@ -14,6 +14,10 @@ import { cyberforumAiAttentionSpan as _20261028CyberforumAkademieIntroAgenticWor
 import { cyberforumAiGivesYouMoreWork as _20261028CyberforumAkademieIntroAgenticWorkflow__aiGivesYouMoreWork } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/ai-gives-you-more-work/episode';
 import { cyberforumIntro as _20261028CyberforumAkademieIntroAgenticWorkflow__intro } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/intro/episode';
 import { cyberforumOnboardAiEveryTime as _20261028CyberforumAkademieIntroAgenticWorkflow__onboardAiEveryTime } from '@/episodes/by-event/2026-10-28-cyberforum-akademie-intro-agentic-workflow/onboard-ai-every-time/episode';
+import { introHitlAiAttentionSpan as _20261104IntroHitlWorkflows__aiAttentionSpan } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
+import { introHitlAiGivesYouMoreWork as _20261104IntroHitlWorkflows__aiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
+import { introHitlWorkflows as _20261104IntroHitlWorkflows__intro } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode';
+import { introHitlOnboardAiEveryTime as _20261104IntroHitlWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { aiCapability } from '@/episodes/explorable-pages/ai-capability/episode';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
@@ -41,6 +45,10 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
     _20261028CyberforumAkademieIntroAgenticWorkflow__intro,
   '2026-10-28-cyberforum-akademie-intro-agentic-workflow__onboard-ai-every-time':
     _20261028CyberforumAkademieIntroAgenticWorkflow__onboardAiEveryTime,
+  '2026-11-04-intro-hitl-workflows__ai-attention-span': _20261104IntroHitlWorkflows__aiAttentionSpan,
+  '2026-11-04-intro-hitl-workflows__ai-gives-you-more-work': _20261104IntroHitlWorkflows__aiGivesYouMoreWork,
+  '2026-11-04-intro-hitl-workflows__intro': _20261104IntroHitlWorkflows__intro,
+  '2026-11-04-intro-hitl-workflows__onboard-ai-every-time': _20261104IntroHitlWorkflows__onboardAiEveryTime,
   'ai-attention-span': aiAttentionSpan,
   'ai-gives-you-more-work': aiGivesYouMoreWork,
   'ai-token-economy': aiTokenEconomy,

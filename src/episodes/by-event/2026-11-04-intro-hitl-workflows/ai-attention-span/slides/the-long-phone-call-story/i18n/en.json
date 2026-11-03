@@ -1,0 +1,131 @@
+{
+  "title": "The long phone call",
+  "caption": "Called to settle one thing. An hour later you remember the start, the end and one standout, and the one thing you called for is still open.",
+  "call": {
+    "name": "Sister",
+    "duration": "Call ended · 1:21:40"
+  },
+  "bubbles": {
+    "0": "Let's sort out the holidays!",
+    "1": "Yes! But first, did you hear about Mum’s new phone?",
+    "2": "No, what happened?",
+    "3": "She sent me forty photos of her thumb.",
+    "4": "Ha! Did you see the neighbours’ renovation?",
+    "5": "Don’t get me started. And my back hurts again.",
+    "6": "And Pepper ate a whole birthday cake, candles included!",
+    "7": "Did you try that new recipe?",
+    "8": "Not yet. Oh, dinner is ready, I have to run.",
+    "9": "Talk soon, bye!"
+  },
+  "punchline": "…wait, we never fixed the date.",
+  "effects": {
+    "start": {
+      "title": "The start stays sharp",
+      "term": "Primacy effect",
+      "termHref": "https://en.wikipedia.org/wiki/Serial-position_effect#Primacy_effect",
+      "explanation": "the first line sets the frame."
+    },
+    "middle": {
+      "title": "The middle blurs",
+      "term": "Serial-position effect",
+      "termHref": "https://en.wikipedia.org/wiki/Serial-position_effect",
+      "explanation": "mum’s phone, the renovation, the back: said, not kept."
+    },
+    "standout": {
+      "title": "The standout survives",
+      "term": "Von Restorff effect",
+      "termHref": "https://en.wikipedia.org/wiki/Von_Restorff_effect",
+      "explanation": "the cake is unlike the rest of the call."
+    },
+    "end": {
+      "title": "The end stays sharp",
+      "term": "Recency effect",
+      "termHref": "https://en.wikipedia.org/wiki/Serial-position_effect#Recency_effect",
+      "explanation": "the last minutes are still fresh."
+    }
+  },
+  "labNote": "<marker>The pattern is measured on word lists in the lab; that it holds for an hour-long call is an inference</marker>",
+  "notes": {
+    "recall-is-u-shaped": {
+      "header": "Recall is U-shaped",
+      "description": "In free recall of a word list, the first and last items are recalled best and the middle ones worst [1].",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        }
+      }
+    },
+    "why-the-start-sticks": {
+      "header": "Why the start sticks",
+      "description": "People rehearse early items more often than middle ones, and the number of rehearsals predicts recall [1].",
+      "sources": {
+        "rundus-rehearsal": {
+          "title": "Rundus, Analysis of rehearsal processes in free recall"
+        }
+      }
+    },
+    "why-the-end-sticks": {
+      "header": "Why the end sticks",
+      "description": "Delaying recall with a distractor task removes the recency part but leaves the start intact, which points to two separate stores [1]; where recency comes from is still debated [2].",
+      "sources": {
+        "glanzer-cunitz-two-stores": {
+          "title": "Glanzer and Cunitz, Two storage mechanisms in free recall"
+        },
+        "bjork-whitten-recency": {
+          "title": "Bjork and Whitten, Recency-sensitive retrieval processes in long-term free recall"
+        }
+      }
+    },
+    "the-standout-survives": {
+      "header": "The standout survives",
+      "description": "An item that differs from its neighbours is remembered better, and it stands out against its context, not on its own [1][2].",
+      "sources": {
+        "von-restorff-isolation": {
+          "title": "von Restorff, Über die Wirkung von Bereichsbildungen im Spurenfeld"
+        },
+        "hunt-distinctiveness": {
+          "title": "Hunt, The subtlety of distinctiveness: What von Restorff really did"
+        }
+      }
+    },
+    "lab-lists-not-phone-calls": {
+      "header": "Lab lists, not phone calls",
+      "description": "Every study uses word lists or short material, so that the same pattern holds for an hour-long call is an inference, though the effects are textbook findings [1].",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-start-sticks": {
+        "title": "The start sticks",
+        "keywords": "",
+        "script": "Say you call your sister to sort out the holidays. \"Let's sort out the holidays!\" is how it starts, and that first line sets the frame for everything after it, so you still remember it at the end. That is called primacy."
+      },
+      "the-end-sticks": {
+        "title": "The end sticks",
+        "keywords": "",
+        "script": "You also remember how it ended. \"Talk soon, bye\", and the last few minutes before it, because they just happened and are still fresh. That is called recency."
+      },
+      "the-middle-blurs": {
+        "title": "The middle blurs",
+        "keywords": "",
+        "script": "Now the middle. An hour of detail went by, the neighbours' renovation, Mum's new phone, your sister's back pain, and if someone asked you what was in it, you could hardly say. All of it was said, and very little of it stayed."
+      },
+      "one-thing-stands-out": {
+        "title": "One thing stands out",
+        "keywords": "",
+        "script": "Except one thing. Pepper ate a whole birthday cake, candles included. Nobody asked you to keep that, and you can still tell it, because what is different from everything around it survives. That is called the Von Restorff effect, or the isolation effect."
+      },
+      "we-never-fixed-the-date": {
+        "title": "We never fixed the date",
+        "keywords": "",
+        "script": "And then the punchline. Dinner is ready, she has to run, and you realise: we never fixed the date. The one thing you called for never got settled. (pause) Hold on to that, because the question is whether an AI chat does the same."
+      }
+    }
+  },
+  "newTabHint": "opens in a new tab"
+}

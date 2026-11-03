@@ -1,0 +1,23 @@
+{
+  "title": "From execution to management",
+  "caption": "The work does not shrink. It changes, and you move up.",
+  "voiceScript": {
+    "segments": {
+      "the-question": {
+        "title": "The question",
+        "keywords": "",
+        "script": "Imagine a colleague asks you over coffee: will AI reduce my work? Will it speed things up, so that by next year I do less? It is a fair question, and almost everybody starting out with AI asks it."
+      },
+      "the-reframe": {
+        "title": "The reframe",
+        "keywords": "",
+        "script": "But the question rests on a faulty premise, because it assumes the tasks stay the same size. They don't. With AI you can now take on far more complex tasks than you could alone, and managing those tasks is the work AI adds."
+      },
+      "the-payoff": {
+        "title": "The payoff",
+        "keywords": "",
+        "script": "So the better question is what you can now do. You accomplish much more, if you are willing to upskill and learn to manage AI like a team, and today is the chance to start moving in that direction."
+      }
+    }
+  }
+}

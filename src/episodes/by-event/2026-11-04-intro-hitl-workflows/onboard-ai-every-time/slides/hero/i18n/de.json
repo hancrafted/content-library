@@ -1,0 +1,38 @@
+{
+  "caption": "KI kennt jedes Fach und vergisst Dich jedes Mal, also <b>fängt jeder Auftrag bei Tag 1 an</b>.",
+  "badgeRow": "Drei Besucherausweise, einer pro Auftrag, jeder an Tag 1",
+  "badges": {
+    "monday": {
+      "job": "Auftrag 1",
+      "weekday": "Mo",
+      "day": "Tag 1",
+      "task": "Einladungen für 200"
+    },
+    "tuesday": {
+      "job": "Auftrag 2",
+      "weekday": "Di",
+      "day": "Tag 1",
+      "task": "Eine E-Mail an Lieferanten"
+    },
+    "wednesday": {
+      "job": "Freelancer · KI",
+      "weekday": "Mi",
+      "day": "Tag 1"
+    }
+  },
+  "badgeFacts": {
+    "trades": {
+      "term": "Kennt",
+      "value": "jedes Fach"
+    },
+    "company": {
+      "term": "Kennt Deine Firma",
+      "value": "nichts"
+    },
+    "tuesday": {
+      "term": "Erinnert sich an Dienstag",
+      "value": "nichts"
+    }
+  },
+  "sideNote": "Drei Aufträge, drei Ausweise, und auf jedem steht <day>Tag 1</day>. Nichts vom Montag kommt am Mittwoch an."
+}

@@ -11,7 +11,7 @@ generated:
 
 ## Question
 
-Han's Episodes claim that most people still picture AI as a chat box they type questions into, not as a colleague they hand work to. This dataset tests that claim with an anonymous live poll at each Event: four baseline questions at the start, the picture of AI first, a check-in after each theory Episode, and at the end the opening picture question once more and whether that picture changed. One Event is about 14 people, so the counts only mean something once several Events asked the same questions; the register below is therefore frozen. Any change to a question's wording or answers starts v2, and its rows never add up with v1's.
+Han's Episodes claim that most people still picture AI as a chat box they type questions into, not as a colleague they hand work to. This dataset tests that claim with an anonymous live poll at participating Events: four baseline questions at the start, the picture of AI first, a check-in after each theory Episode, and at the end the opening picture question once more and whether that picture changed. One Event is about 14 people, so the counts only mean something once several Events asked the same questions; the register below is therefore frozen. Any change to a question's wording or answers starts v2, and its rows never add up with v1's.
 
 ## Register
 
@@ -32,9 +32,12 @@ Poll v1. Every question is single choice; none takes free text and none asks for
 - The seen scale: `often`: oft / often · `sometimes`: manchmal / sometimes · `never`: nie / never · `forgot`: weiß nicht mehr / can't recall · `unused`: nutze das nicht / don't use it
 - The known scale: `practice`: ja, und ich arbeite so / yes, and I work this way · `heard`: ja, schon gehört / yes, heard of it · `new`: nein, neu für mich / no, new to me
 
+Poll v2 keeps the wording, answers and order of v1, but omits `baseline.scope` and `baseline.model_after`.
+The 2026-11-04 Intro HITL Workflows Event uses v2 for the session only and contributes no results to this dataset.
+
 ## Data file
 
-`responses.csv` beside this file holds one row per Event, question and answer: `event_slug,date,locale,poll_version,question,answer,count,respondents`. `respondents` is how many people answered that question, the denominator of its shares. Copying an Event's counts here is the last step of "Add an Event" in `docs/features/events.md`, within 30 days, because a directpoll poll expires 30 days after it was created or last saved; directpoll exports totals per question only. A question nobody answered at an Event gets no rows: `baseline.model_after` has none for the CyberForum Akademie Event (2026-10-28), which had no respondents for it.
+`responses.csv` beside this file holds one row per participating Event, question and answer: `event_slug,date,locale,poll_version,question,answer,count,respondents`. `respondents` is how many people answered that question, the denominator of its shares. Copying a participating Event's counts here is the last step of "Add an Event" in `docs/features/events.md`, within 30 days, because a directpoll poll expires 30 days after it was created or last saved; directpoll exports totals per question only. A question nobody answered at an Event gets no rows: `baseline.model_after` has none for the CyberForum Akademie Event (2026-10-28), which had no respondents for it.
 
 So the data carries shares per question, and no more. It tests whether most attendees picture AI as a search engine or a chat (`model`), whether they rate themselves higher than they act (the share of `fluency` at `confident` or above against the share of `usage` at `delegate` or above), and whether each Episode's problem is common and its concept new (`.seen`, `.known`). Two questions it cannot answer in v1: whether a session shifts one person's picture, because no answer is linked to the person who gave it, and which attendees combine an intent with a usage level, because two questions' totals cannot be cross-tabulated; the most they give is a bound, at least `a + b − n` people in both groups. `model_after` reports the stated picture at the end, and `shift` the change people say they noticed.
 

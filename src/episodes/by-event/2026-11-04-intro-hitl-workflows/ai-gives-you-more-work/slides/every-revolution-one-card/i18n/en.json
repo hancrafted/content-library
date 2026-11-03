@@ -1,0 +1,168 @@
+{
+  "title": "Every revolution, one card",
+  "caption": "Every machine took over the predictable work and people moved up: the work changed, it did not shrink. AI is the first to take part of the thinking, so <b>this step is the biggest</b>.",
+  "layers": {
+    "machine": "Machine",
+    "people": "↑ People",
+    "ai": "AI · takes part of the thinking",
+    "aiPeople": "↑ You moved up"
+  },
+  "exhibits": {
+    "farming": {
+      "title": "Farming",
+      "era": "Antiquity · the plough",
+      "line": "The first tool to take over the digging.",
+      "machine": "The plough digs",
+      "people": "The farmer plans the harvest"
+    },
+    "steam": {
+      "title": "The steam engine",
+      "era": "1700s–1800s · the factory",
+      "line": "Power took the lifting; the line split in two.",
+      "machine": "The engine does the lifting",
+      "people": "The worker plans the line"
+    },
+    "computer": {
+      "title": "The computer",
+      "era": "1950s onwards · the office",
+      "line": "The machine took the sums and the filing.",
+      "machine": "The computer does the sums",
+      "people": "People judge and advise"
+    },
+    "ai": {
+      "title": "AI",
+      "era": "Today · the desk",
+      "line": "The first machine to take part of the thinking.",
+      "machine": "AI drafts and reasons",
+      "people": "You manage it like a team"
+    }
+  },
+  "ai": {
+    "capabilities": {
+      "language": "language",
+      "reasoning": "reasoning",
+      "ideas": "ideas"
+    },
+    "taskLength": "Tasks of about 50 minutes, doubling every 7 months",
+    "variance": "Same prompt, different answers",
+    "team": "One person, work that took a team"
+  },
+  "fork": {
+    "stayed": "↙ Others stayed on the line",
+    "rose": "↗ Some upskilled to run the plant"
+  },
+  "forkOpen": {
+    "title": "The fork, open again",
+    "beside": "Work beside it",
+    "manage": "Manage it like a team"
+  },
+  "notes": {
+    "cheaper-unit-more-work": {
+      "header": "A cheaper unit does not mean less total work",
+      "description": "Jevons argued Watt's inventions economised heat and that further improvement would accelerate coal use; separately, in Scotland coal per ton of iron fell to under a third while total consumption rose about tenfold [1].",
+      "sources": {
+        "jevons-coal-question": {
+          "title": "Jevons, The Coal Question (1865)"
+        }
+      }
+    },
+    "tool-lifts-the-tasks": {
+      "header": "The tool lifts the tasks left to people",
+      "description": "When ATMs quadrupled, tellers per branch fell by more than a third, yet branches rose by more than 40 percent and tellers moved towards relationship banking [1].",
+      "sources": {
+        "autor-still-so-many-jobs": {
+          "title": "Autor, Why Are There Still So Many Jobs? The History and Future of Workplace Automation"
+        }
+      }
+    },
+    "plough-is-the-weaker-card": {
+      "header": "The plough is the weaker card",
+      "description": "Boserup finds the plough often prevented a fall in output per man-hour rather than raised it, and the extra work came from cropping land more often [1].",
+      "sources": {
+        "boserup-agricultural-growth": {
+          "title": "Boserup, The Conditions of Agricultural Growth"
+        }
+      }
+    },
+    "some-workers-did-rise": {
+      "header": "Some workers did rise, by several routes",
+      "description": "A contemporary defender of the factory system claimed regular, skilled workers could advance to overlooker, manager or partner, and 18 percent of a sample of British mechanics and engineers became hired engineers and managers; but owners found managers by many routes, and no source measures how many came from the shop floor [1][2].",
+      "sources": {
+        "ure-philosophy-of-manufactures": {
+          "title": "Ure, The Philosophy of Manufactures (1835)"
+        },
+        "meisenzahl-mokyr-invention": {
+          "title": "Meisenzahl and Mokyr, The Rate and Direction of Invention in the British Industrial Revolution: Incentives and Institutions"
+        }
+      }
+    },
+    "steam-shifted-the-skill-mix": {
+      "header": "Steam shifted a region's skill mix",
+      "description": "English counties that used more steam engines had a larger share of skilled workers; no study found follows individual adopters rising, and schooling and wage evidence for the period is mixed [1].",
+      "sources": {
+        "de-pleijt-steam-human-capital": {
+          "title": "de Pleijt, Nuvolari and Weisdorf, Human Capital Formation During the First Industrial Revolution: Evidence from the use of Steam Engines"
+        }
+      }
+    },
+    "ai-completes-longer-tasks": {
+      "header": "AI completes longer tasks on its own",
+      "description": "The task length a frontier model completes at 50 percent success was about 50 minutes in early 2025 and has doubled roughly every seven months since 2019 [1].",
+      "sources": {
+        "kwa-long-tasks": {
+          "title": "Kwa et al., Measuring AI Ability to Complete Long Tasks (METR)"
+        }
+      }
+    },
+    "gain-is-conditional": {
+      "header": "The gain is real but conditional",
+      "description": "758 BCG consultants using AI finished 12.2 percent more tasks, 25.1 percent faster, at over 40 percent higher quality inside the model's frontier, and were 19 percentage points less likely to be correct on a task outside it; a trial with 16 experienced developers found a 19 percent slowdown with early-2025 tools [1][2].",
+      "sources": {
+        "dellacqua-jagged-frontier": {
+          "title": "Dell'Acqua et al., Navigating the Jagged Technological Frontier, HBS Working Paper 24-013 (SSRN 4573321)"
+        },
+        "becker-early-2025-ai": {
+          "title": "Becker, Rush, Barnes, Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
+        }
+      }
+    },
+    "same-prompt-answers-differently": {
+      "header": "The same prompt can answer differently",
+      "description": "Across five models and eight tasks run ten times with settings meant to be deterministic, accuracy varied by up to 15 percent between runs, unlike a plough or a steam engine [1].",
+      "sources": {
+        "atil-llm-stability": {
+          "title": "Atil et al., LLM Stability: A detailed analysis with some surprises"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-revolution-one-card": {
+        "title": "Every revolution, one card",
+        "keywords": "",
+        "script": "To see why, look at the three machines you already know: the plough, the steam engine and the computer. Each one took over the predictable work, the lifting, the digging, the calculating, and people moved to the part a machine could not do, which is judging, deciding and coordinating."
+      },
+      "the-climb": {
+        "title": "The climb",
+        "keywords": "",
+        "script": "Now watch what happens under each card. The plough digs, so the farmer plans the harvest. The engine does the lifting, so the worker plans the line. Every time, the machine did more, and you moved up a level, which means the work did not disappear, it changed."
+      },
+      "the-fork-no-judgment": {
+        "title": "The fork, no judgment",
+        "keywords": "",
+        "script": "Here is where it forks, and I want to say it without judgment. Picture two people in the same plant on the same Monday, one still on the line and one at the control desk, and both are doing honest work. What matters for you is that a seismic shift opens that door, and whether you step through it is your call."
+      },
+      "now-it-thinks": {
+        "title": "Now it thinks",
+        "keywords": "",
+        "script": "What is different now is that AI is the first tool that does part of the unpredictable work itself. It works in natural language, it reasons, it is creative, it brainstorms, so for the first time you are managing something that thinks."
+      },
+      "biggest-step": {
+        "title": "Biggest step",
+        "keywords": "",
+        "script": "That is the biggest step on the wall, because one person can now do tasks that used to need a whole team. The fork under the AI card is still open, and this next part is my hypothesis: it opens again, for anyone who wants to step through it."
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "title": "Attention is a budget",
+  "caption": "A hundred units of attention go mostly to the very first lines and the newest messages; everything between, your own first message included, gets what is left, until it is too thin to trust.",
+  "illustrative": "illustrative numbers",
+  "zones": {
+    "note": "<marker>Where the middle gets too thin differs per model and task.</marker>"
+  },
+  "lost": {
+    "kicker": "Known as",
+    "name": "<marker>“Lost in the middle”</marker>",
+    "body": "<start>The very first lines and the newest messages get the attention</start>; <budget>what sits in between, your first message too, fades</budget>."
+  },
+  "notes": {
+    "the-attention-budget": {
+      "header": "The attention budget",
+      "description": "Anthropic describes every token attending to every other, so each added token spreads the same attention thinner; it is a vendor account of the measured drop, not itself measured in the studies [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "the-u-shape-is-measured": {
+      "header": "The U-shape is measured",
+      "description": "a model's attention itself shows a U-shape toward the start and end of the input, whether or not those tokens are relevant [1].",
+      "sources": {
+        "hsieh-found-in-the-middle": {
+          "title": "Hsieh et al., Found in the Middle: Calibrating Positional Attention Bias Improves Long Context Utilization"
+        },
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts (where the name comes from)"
+        }
+      }
+    },
+    "the-start-is-weighted": {
+      "header": "The start is weighted",
+      "description": "the first few tokens draw strong attention as an attention sink even when they carry no meaning [1].",
+      "sources": {
+        "xiao-attention-sinks": {
+          "title": "Xiao et al., Efficient Streaming Language Models with Attention Sinks"
+        }
+      }
+    },
+    "no-single-line": {
+      "header": "No single line",
+      "description": "where the middle gets too thin differs per model and task; when the needle shares no words with the question, 11 of 13 models advertised at 128K or more fell below half of their short-input score at 32K [1].",
+      "sources": {
+        "modarressi-nolima": {
+          "title": "Modarressi et al., NoLiMa: Long-Context Evaluation Beyond Literal Matching"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "a-hundred-units": {
+        "title": "Attention as a budget",
+        "keywords": "",
+        "script": "Think of attention as a budget. On the left is the timeline, in the middle the window as a bar, and on the right the attention each message gets. And I say it plainly: these numbers, the token counts and the window sizes on this slide are illustrative. I made them up to show the shape, so please don't take them as measurements."
+      },
+      "where-it-goes": {
+        "title": "Where it goes",
+        "keywords": "",
+        "script": "Where does the budget go? A big share to the very first lines, the starting instructions, a big share to the newest messages, and what is left is shared out across everything between, your own first message included, thinner and thinner with every message you add. That is why the middle fades."
+      },
+      "a-spike-in-the-middle": {
+        "title": "A spike in the middle",
+        "keywords": "",
+        "script": "But a detail you keep repeating keeps its share, and it shows as a spike in the middle. The 60 vegetarian guests came up again and again, so they stay bright, while the budget, said once, fades."
+      },
+      "smart-zone-and-dumb-zone": {
+        "title": "Smart zone and dumb zone",
+        "keywords": "",
+        "script": "Somewhere, the middle gets too thin to trust. Before that line the AI is in the smart zone, beyond it in the dumb zone. Matt Pocock puts the line at 80K tokens on a 200K window and at 150K on a 1M window. That is his number, a rule of thumb, and you only get the zone names now because you have already seen the middle fade."
+      },
+      "having-it-is-not-using-it": {
+        "title": "Having it is not using it",
+        "keywords": "",
+        "script": "Having it is not the same as using it. Your sister secretly recorded the call, and she still can't find what you said at one hour, 13 minutes and 17 seconds. The recording is complete, and finding one sentence in it is the hard part. A full window works the same way."
+      },
+      "my-own-line": {
+        "title": "My own line",
+        "keywords": "",
+        "script": "My own line sits at 300K tokens, and only on the 1M window. That is one practitioner's habit, not a law. Yours may differ, and that is fine, as long as it is a line you chose on purpose."
+      }
+    }
+  }
+}
