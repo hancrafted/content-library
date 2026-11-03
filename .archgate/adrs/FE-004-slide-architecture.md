@@ -8,29 +8,29 @@ rules: false
 files: ['src/episodes/**', 'src/explorables/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
 # prettier-ignore
 paths: ['src/episodes/**', 'src/explorables/**', 'src/page-assembly/**', 'src/app/**/{episode,episodes,events}/**']
-description: "The architecture map read first: tiers and import direction, the modules an Episode is built from and what each owns, how an Episode record becomes a static page, where text (each owner's Translation files), styling and client code live, where a reused thing goes (Slide pool, Slide library, slide-shared, Explorable explanation), and what an agent may change freely versus only by a new ADR."
+description: 'Read-first architecture map: tiers, Episode modules, static composition, text/style/client homes, reuse and approved presentation boundaries. Detailed rules belong to each concern’s owner.'
 ---
 
 # Slide Architecture
 
 ## Context
 
-This record maps shape and ownership, so agents do not invent a shared Slide type, second container or Episode-local `parts/`. Detailed rules stay with their owners: Episode page, import direction, server/client split, Slide wrapper and Context drawer. On conflict, that owner wins.
+This record maps shape and ownership so agents can locate the right boundary. Detailed rules belong to their concern's owner: Episode page, import direction, server/client boundary, Slide wrapper or Context drawer. On conflict, that owner wins.
 
 **Layers and tiers.** Imports only point down; inside a layer, `components/ → hooks/ → lib/`.
 
 ```mermaid
 flowchart TD
-  app["src/app — routes, one template each"] --> tpl
+  app["src/app — routes"] --> tpl
   subgraph pa["src/page-assembly — flat"]
-    tpl["a folder per template — landing, events-overview, event, episode-overview, episode, resources-overview, resource, dashboard, sitemap"] --> palib["lib/ — page metadata, JSON-LD"]
+    tpl["one folder per page template"] --> palib["lib/ — metadata, JSON-LD"]
     merge["translations.ts — merges every owner's i18n/"]
   end
-  tpl --> episodes["src/episodes — content: ep/ by-event/ slide-pool/ resources/; code: components/ hooks/ lib/"]
+  tpl --> episodes["src/episodes — content and code"]
   tpl --> events["src/events — Events, Playlists: components/ lib/"]
   tpl --> explain["src/explorables — one folder each"]
   tpl --> pipeline["src/pipeline — pipeline, Run log, dashboard"]
-  tpl --> chrome["src/shared/page-chrome — header, footer bar, toggles, contents, drawer"]
+  tpl --> chrome["src/shared/page-chrome"]
   episodes -- "a Slide shows one" --> explain
   episodes -- "the container" --> chrome
   tpl --> store["src/content-store — records, refusals, catalogue/"]
@@ -38,22 +38,22 @@ flowchart TD
   episodes --> store
   events --> store
   store -- "Episode metadata only" --> episodes
-  store --> shared["src/shared — domain-free: components/ hooks/ lib/ i18n/ design-system/"]
+  store --> shared["src/shared — domain-free"]
   explain --> shared
   pipeline --> shared
   chrome --> shared
-  tools["skills/, tools/ — entry points"] -. "an area's lib/, the store's entry" .-> pipeline
+  tools["skills/, tools/"] -. "node-safe entries" .-> pipeline
 ```
 
-Two areas meet only in a template, which hands one's parts to the other as props: the Event template passes Episode cards to the Playlist list.
+Areas meet in page assembly via props: the Event template passes Episode cards to the Playlist list.
 
-**The Episodes area.** `src/episodes/` keeps content (`<ep>/`, `by-event/`, `slide-pool/`, `resources/`) apart from code (`components/`, `lib/`, `hooks/`); no Episode slug takes one of these names.
+**Episodes:** content (`<ep>/`, `by-event/`, `slide-pool/`, `resources/`) stays apart from code (`components/`, `lib/`, `hooks/`); these names are reserved.
 
 **Modules an Episode is built from.** An arrow is an allowed import.
 
 ```mermaid
 flowchart LR
-  ep["episodes/ep — record, sections/ + Slide folders"] --> master["slide-master — frame, layouts, record and kit types"]
+  ep["Episode — record, Sections, Slides"] --> master["slide-master — frame and types"]
   ep --> shared["slide-shared — parts two Slides share"]
   ep -- "sections/ only" --> pool["episodes/slide-pool — content Slides Episodes share"]
   pool --> master
@@ -64,7 +64,8 @@ flowchart LR
   shared --> core
   ep --> ui["ui — primitives"]
   shared --> ui
-  container["episode-page — the one container"] --> master
+  container["episode-page — container and adapters"] --> master
+  container -- "domain-free inputs" --> clock["shared — surface geometry and progress"]
   container --> toc["page chrome: table-of-contents"]
   container --> drawer["page chrome: context-drawer"]
 ```
@@ -82,17 +83,19 @@ flowchart LR
   C --> CH["page chrome: contents, drawer; talk player"]
 ```
 
-**Inside one Slide:** wrapper mechanics and header, then the Scene's Backdrop and Foreground. The Slide wrapper rules hold the detail.
+**Inside one Slide.** The wrapper owns mechanics and presentation hosts; the Scene owns creative content. The Slide wrapper rules hold lifetime and stacking.
 
 ```mermaid
 flowchart LR
-  W["Slide wrapper — mechanics: zone, mount, observer, stacking, entrance"] --> H["Slide header — Eyebrow, title, caption"]
+  W["Slide wrapper"] --> H["Slide header"]
   W --> S["Scene — creative content"]
   S --> B["Backdrop — full-bleed decoration"]
   S --> F["Foreground — inset primary layer"]
+  W --> E["Outgoing edge host — Scene-independent lifetime"]
+  W --> D["Optional rear Backdrop and front decoration"]
 ```
 
-**Server and client.** The tree is server-rendered; interactivity enters only at leaves, and the leaves meet through URL and page state, never the DOM.
+**Server and client.** Server-rendered, interactive leaves only. URL/page state owns active Slide and navigation; the clock and generic CSS signals serve presentation, never DOM-derived Slide identity or tone.
 
 ```mermaid
 flowchart TD
@@ -103,13 +106,19 @@ flowchart TD
   ST --> CL
   ST --> X
   S --> IP["shared magnetic ink — page context + local action leaves"]
+  S --> PA["presentation adapter leaf"]
+  PA --> CK["domain-free geometry clock"]
+  ST -- "navigation lifecycle" --> CK
+  CK --> FX["effect renderer"]
+  CK --> SG["generic CSS signals — single page-tone writer"]
+  SG --> CL
 ```
 
-**Magnetic ink:** drawing and styles in `shared/components/animations/`, attachment and scheduling in `shared/hooks/`, geometry and transitions in `shared/lib/`. Server `SiteShell` composes the page context; hosts register locally. Words and navigation stay with their owners. Design-ADR 0022 holds the behaviour.
+**Magnetic ink:** drawing and styles in `shared/components/animations/`, attachment and scheduling in `shared/hooks/`, geometry and transitions in `shared/lib/`. Server `SiteShell` composes the page context; hosts register locally. Words and navigation stay with their owners. `docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md` holds the behaviour.
 
-Rejected: one schema for every Slide (visuals bent to fit and degraded); per-Episode containers or routes (navigation, anchors and translation drift apart); a flat package tree (the router owns `src/app` positions, and tiers already carry direction).
+Rejected: a shared visual schema (constrains Scenes), per-Episode containers/routes (navigation drift), a flat package tree (router positions and tiers carry direction).
 
-The map serves agents with no session memory.
+Handoff agents have no session memory; the map makes the correct ownership findable.
 
 ## Decision
 
@@ -126,8 +135,8 @@ The map serves agents with no session memory.
 1. `episodes/[by-event/<e>/]<ep>/` owns one Episode: `episode.ts`, text, anchors, Slide folders, `sections/<slug>.ts` per Section.
 2. A Slide folder owns its Scene, widgets, logic, CSS, text, notes, Voice script; imports no other.
 3. `episodes/slide-pool/<slide>/`: content Slides Episodes share, never Title or section; only a Section imports one, via `@/`.
-4. `slide-master/` owns frame, layouts, record and kit types; `slide-shared/`, parts two Slides share.
-5. `episode-page/` owns the one container and Slide mechanics; page chrome is reached from page assembly or the container.
+4. `slide-master/` owns frame, layouts, record, kit and optional presentation types; `slide-shared/`, parts two Slides share.
+5. `episode-page/` owns the one container, composition mechanics and page-scoped presentation adapters. Episodes supplies plain inputs to domain-free shared measurement; it knows no Episode or Title. Page chrome is reached only from page assembly or the container.
 6. `episodes/resources/<slug>/` owns one Resource: an `episode()` record, never an Episode (design-ADR 0019).
 
 ### 4. One pass from Episode to page
@@ -140,12 +149,13 @@ The map serves agents with no session memory.
 1. Text: its owner's `i18n/`: page template, area, page chrome, Episode, Slide, Explorable explanation; one owner per namespace.
 2. Styling: tokens in `globals.css`; an Episode's remap in its scope; a Slide's in its CSS module.
 3. Client code: `*.client.tsx` leaves only; hooks hold browser state.
-4. Page tone: the record MAY declare `tone: 'inverse'`; while the Title slide is `active` the container sets `data-page-tone` on `<html>`, which only page chrome follows; the Slide ends in the landing's ink transition into the first page Slide.
+4. A Slide MAY declare semantic surface tone independently of effects and decorative slots. One container-owned adapter publishes `data-page-tone` on `<html>` from geometry at the supplied viewport sampling line. Page chrome follows; Scenes never style chrome or infer tone from computed colours.
 
 ### 6. What an agent may change
 
 1. Free: Title slide notes and Voice script, a Scene, a Slide folder, a templated Episode, a §7 promotion.
 2. Only a new ADR: a tier, module, second container, route beyond §4.2, shared Slide shape, text or style home.
+3. Optional presentation configuration and the domain-free clock boundary follow `docs/adr/0022-slide-presentation-and-transition-clock.md`. Scene freedom, one container, downward imports and the ADR requirement for other shared-shape/module changes remain binding.
 
 ### 7. Where reuse goes
 
@@ -168,6 +178,8 @@ The map serves agents with no session memory.
 4. **DO** promote a part a second Slide needs into `slide-shared/`, and a whole Slide several Episodes show as-is into the Slide pool, imported by each Section through `@/`. (Decision 3, Decision 7)
 5. **DO** put Slide text in its folder's `i18n/`, Slide CSS in its own module. (Decision 5)
 6. **DO** keep interactivity in the smallest `*.client.tsx` leaf. (Decision 5)
+7. **DO** keep optional presentation types in the Slide master and page-scoped mechanics in the existing container; supply plain inputs to the domain-free clock. (Decision 3, Decision 6)
+8. **DO** publish geometry-driven tone through the container's single presentation adapter. (Decision 5)
 
 ### Don'ts
 
@@ -176,8 +188,9 @@ The map serves agents with no session memory.
 3. **DON'T** render Slide anchors or headings outside the container, or reach page chrome from anywhere but page assembly or the container. (Decisions 3 and 4)
 4. **DON'T** put a published Episode's text in another owner's Translation files. (Decision 5)
 5. **DON'T** style a Slide from `globals.css` or the Episode stylesheet. (Decision 5)
-6. **DON'T** add a tier, module or Slide schema without a new ADR. (Decision 6)
-7. **DON'T** restyle chrome from a Scene or infer tone from the DOM. (Decision 5)
+6. **DON'T** add a tier, module or Slide schema beyond the approved presentation boundary without a new ADR. (Decision 6)
+7. **DON'T** restyle chrome from a Scene or infer semantic tone from computed colours. (Decision 5)
+8. **DON'T** let shared measurement import Episode records or Title policy. (Decision 3)
 
 ## Consequences
 
@@ -205,16 +218,17 @@ The map serves agents with no session memory.
 1. **Dependency rules** (`npm run lint:boundaries`, pre-commit and CI) hold tier direction, Slide-folder and shared reach, the Section → pool Slide edge and its alias, no pool section slide, and page chrome reached only from page assembly or the container.
 2. **Lint** holds the `'use client'` classifier; **types** hold the record, registry and per-Slide text; **unit and post-build tests** hold anchors, folder names, every pool Slide's folder checks and slot order.
 
-**Manual review duties:** a new module, tier or text/style home arrives with an ADR and an updated map; diagrams match the tree.
+**Manual review:** approved module/tier/text/style homes; presentation config governs mechanics, never Scene layout; domain-free measurement; one geometry-driven tone adapter; server defaults and leaf clients. Diagrams express contracts, not completion.
 
 **Exceptions:** raise a separate ADR; human approval required.
 
 ## References
 
+- [Presentation boundary and approval](../../docs/adr/0022-slide-presentation-and-transition-clock.md).
 - [`GLOSSARY.md`](../../GLOSSARY.md) — Episode, Slide, Scene, Page chrome.
-- [`docs/adr/0017-source-tree-follows-the-product.md`](../../docs/adr/0017-source-tree-follows-the-product.md) — why the tree follows the product.
-- [`docs/adr/0001-the-slide-is-a-self-contained-folder.md`](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md) — why a Slide is a folder.
-- [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.
-- [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
-- [`docs/adr/0016-content-data-model.md`](../../docs/adr/0016-content-data-model.md) — the Event routes and the Event-scoped Episode page (§4.2).
-- [`docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md`](../../docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md) — shared action motion, explicit attachment and page coordination.
+- [Source tree](../../docs/adr/0017-source-tree-follows-the-product.md).
+- [Self-contained Slide](../../docs/adr/0001-the-slide-is-a-self-contained-folder.md).
+- [Episode authoring](../../docs/features/episode-migration.md).
+- [Section modules](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md).
+- [Content model and routes](../../docs/adr/0016-content-data-model.md).
+- [Shared magnetic ink](../../docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md).
