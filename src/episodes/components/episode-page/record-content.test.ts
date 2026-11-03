@@ -82,6 +82,9 @@ describe('success cases', () => {
   it('composes the Context Title with independent inverse surface, rear drift and outgoing ink', async () => {
     // ARRANGE
     const expected = { tone: 'inverse', effect: 'liquid', incoming: 'play' };
+    const backdrop = 'data-slot="slide-backdrop"';
+    const mount = 'data-slot="slide-mount"';
+    const motionButton = 'data-hero-motion-button';
     // ACT
     const content = await recordContent(contextWindow, 'de', {
       translatorOf: translatorOf('de'),
@@ -96,8 +99,8 @@ describe('success cases', () => {
     const html = renderToStaticMarkup(
       createElement(SlideWrapper, { id: 'top', presentation: content.titlePresentation }, content.hero),
     );
-    expect(html.indexOf('data-slot="slide-backdrop"')).toBeLessThan(html.indexOf('data-slot="slide-mount"'));
-    expect(html).toContain('data-hero-motion-button');
+    expect(html.indexOf(backdrop)).toBeLessThan(html.indexOf(mount));
+    expect(html).toContain(motionButton);
   });
   it('uses the Episode leave policy and carries single-sided declarations across no-effect neighbours', async () => {
     // ARRANGE
