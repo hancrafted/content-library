@@ -1,5 +1,5 @@
 import { slide } from '@/episodes/components/slide-master/slide';
-import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { ExplorableHero, HeroDecoration } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
 import { HeroMotion } from '@/episodes/components/slide-shared/explorable-hero/hero-motion.client';
 import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/tool-preview';
@@ -37,9 +37,7 @@ export const hero = slide({
   },
   content: ({ t, locale, slideHref }) => (
     <ExplorableHero
-      presentation
-      layers={{ Backdrop: SlideBackdrop, Frame: SlideFrame }}
-      story="context-window"
+      layers={{ Frame: SlideFrame }}
       locale={locale}
       tryIt={{ label: t('tryIt'), href: slideHref('every-part-and-control') }}
       why={{ label: t('why'), href: slideHref('why-how-what') }}
