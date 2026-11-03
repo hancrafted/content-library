@@ -12,6 +12,7 @@ This project is a localized Next.js application which serves to visualize theory
 - Read `docs/steering/product-vision.md` before any decision. Its ranked trade-off rules decide conflicts, and its escalation steps apply whenever a change would trade architecture or agent legibility for delivery.
 - Binding decisions live in Archgate ADRs under `.archgate/adrs/`.
 - Start with `.archgate/adrs/FE-004-slide-architecture.md` for the architecture map.
+- Slide backgrounds, enter/leave transitions and decorative slots: `docs/features/slide-transitions.md` holds proposed contracts and points to their human-approval gate; binding ADRs remain authoritative.
 - `docs/agents/` holds method and procedure, product-agnostic. Feature reference (Episodes, Context drawer, Translation keys) lives in `docs/features/`; start at `docs/features/explorables/README.md` for Explorables and the Explorable floor, `docs/features/resources.md` for the Learn menu and Resource index.
 - An ADR's `files:`/`paths:` name where authors of governed code work, two or three globs, and cover every file its checks fire in. Compliance names kinds of enforcer (types, lint, tests), not config files.
 - For any /grill-with-docs and /wayfinder, using the /grilling skill read the `docs/agents/grilling-format.md`, which overwrites the grill format. Analog for voice sessions read `docs/agents/grilling-voice.md`.
