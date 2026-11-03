@@ -4523,6 +4523,22 @@
               <h3>Install your AI agent</h3>
             </header>
             <p class="spec-purpose">link to the official installer, minimum steps</p>
+            <aside class="spec-card">
+              <h4>Windows enterprise amendment, 2026-11-04</h4>
+              <p>
+                Keep the selected layout and copyable vendor installer. Before it, show a short work-laptop notice: use
+                an organization-approved agent and account; stop for administrator credentials, organization blocks,
+                certificate errors or denied access. Never disable security settings or change networks to bypass a
+                block. Windows shows the selected agent's prerequisites: Claude's native installer needs no
+                administrator; Copilot needs modern PowerShell, not built-in Windows PowerShell 5.1, and available,
+                permitted WinGet; Codex's official command changes process execution policy and needs IT approval on a
+                work laptop; Antigravity needs approved installation. Show a fresh-terminal version check after
+                installation. Put proxy, Zscaler, certificate, WinGet and policy diagnosis in optional help, with an IT
+                handoff listing agent, shell version and sanitized error. Never equate the prompt returning with a
+                successful install. Speaker notes cite the official Microsoft and vendor prerequisites and network
+                documentation, and state that these instructions have not been tested on Windows.
+              </p>
+            </aside>
             <div class="spec-words">
               <input
                 type="radio"
@@ -5232,6 +5248,16 @@
               <h3>Log in</h3>
             </header>
             <p class="spec-purpose">sign in to the agent</p>
+            <aside class="spec-card">
+              <h4>Windows enterprise amendment, 2026-11-04</h4>
+              <p>
+                Retain the new-terminal action, but describe it as the first thing to try, not the only explanation for
+                a missing command. If the version command still fails, return to installation help; do not loop through
+                reopening terminals. Use the organization's approved account and sign-in route on work laptops. Stop at
+                denied service access or certificate errors. Speaker notes cite account-policy and PATH documentation.
+                Help prompts must not request security bypasses and must remind users to redact confidential error data.
+              </p>
+            </aside>
             <div class="spec-words">
               <input type="radio" name="words:log-in" id="log-in--visual-idea" value="visual-idea" checked />
               <label for="log-in--visual-idea">Visual idea</label>
@@ -6573,6 +6599,22 @@
               <h3>Start the agent inside that folder</h3>
             </header>
             <p class="spec-purpose">navigate to the folder and launch the agent</p>
+            <aside class="spec-card">
+              <h4>Windows enterprise amendment, 2026-11-04</h4>
+              <p>
+                Preserve the two-move composition and Mac/Linux route. On Windows, replace the primary right-click menu
+                drawing with an Explorer address-bar drawing: open the extracted folder containing GLOSSARY.md, press
+                Ctrl+L, type powershell and Enter; Copilot uses the already installed pwsh instead. Explain that Open in
+                Terminal and Shift-right-click Open PowerShell window here are alternatives whose availability varies,
+                not universal labels. Before starting the agent, copy Get-Location and the read-only Get-Content
+                -LiteralPath '.\GLOSSARY.md' -TotalCount 3 check. The path must be the actual extracted folder, and the
+                file starts with # hancrafted workshop starter. Never assume Downloads or a username. Optional help
+                explains using Set-Location -LiteralPath with the actual copied absolute path. The working folder helps
+                the agent find the skills; it is not a security boundary. Trust only the expected workshop folder.
+                Launch Antigravity with the now-documented agy command. Speaker notes cite Microsoft's folder/shell
+                documentation and Google's launch instructions, with the no-Windows-test caveat.
+              </p>
+            </aside>
             <div class="spec-words">
               <input
                 type="radio"
