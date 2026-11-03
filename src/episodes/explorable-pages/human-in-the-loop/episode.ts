@@ -13,6 +13,5 @@ export const humanInTheLoop = episode({
   slug: 'human-in-the-loop',
   messages: { en, de },
   title: hero,
-  tone: 'inverse',
   sections: [playSection, aboutSection],
 });
