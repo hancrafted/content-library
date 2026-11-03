@@ -3,7 +3,6 @@
 import { useDockedPageMark, useTalkHostPlacement } from '@/episodes/hooks/use-talk-host-placement';
 import { closeTalkPlayer, openTalkPlayer, registerSlot, useTalkPlayer } from '@/episodes/hooks/use-talk-player';
 import { shouldDock } from '@/episodes/lib/talk-dock.pure';
-import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
 import { useActiveSlide, useUrlState } from '@/shared/hooks/use-url-state';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
@@ -136,7 +135,6 @@ function BackToVideo({ label }: { label: string }) {
   const url = useUrlState();
   const onClick = () => {
     url?.navigateTo(TITLE_ANCHOR);
-    document.getElementById(TITLE_ANCHOR)?.scrollIntoView({ behavior: prefersReducedMotion() ? 'instant' : 'smooth' });
   };
   return (
     <button type="button" id="talk-player-back" onClick={onClick} className={CONTROL}>
