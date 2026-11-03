@@ -10,12 +10,12 @@ import {
 } from './url-state';
 import { createUrlNavigationBrowser } from './url-state-browser';
 
-/** A window that is only what the service touches: a hash, a history that records its writes, and events. */
+/** Only the service's ports: a URL, recorded history writes, and events. */
 function fakeWindow(initialHash = '') {
   const listeners = new Map<string, Set<(event: Event) => void>>();
   const writes: string[] = [];
   const win = {
-    location: { hash: initialHash, pathname: '/episodes/demo', search: '?ref=mail', origin: 'https://example.test' },
+    location: new URL(`https://example.test/episodes/demo?ref=mail${initialHash}`),
     history: {
       state: { as: 'router' } as unknown,
       replaceState(state: unknown, _unused: string, url: string) {
@@ -732,6 +732,181 @@ describe('edge cases', () => {
     expect(initial).toBe(null);
     expect(seen).toEqual(expected);
     expect(state.getSlide()).toBe(expectedSlide);
+  });
+
+  it.each(['popstate', 'hashchange'])(
+    'preserves newer intent and its queued URL write during %s interruption',
+    (event) => {
+      // ARRANGE
+      const { state, win, writes, fire, scrolls } = setup();
+      const expected = { id: 2, target: 'intro', status: 'navigating' };
+      const expectedWrites = ['#outro', '#intro'];
+      const expectedScrolls = ['outro', 'intro'];
+      state.subscribeNavigation((flight) => {
+        if (flight.target === 'outro' && flight.status === 'interrupted') state.navigateTo('intro');
+      });
+      state.navigateTo('outro');
+      win.location.hash = '#restored';
+      // ACT
+      fire(event);
+      const immediateSlide = state.getSlide();
+      state.reportReading('intermediate');
+      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      // ASSERT
+      expect(immediateSlide).toBe(expected.target);
+      expect(state.getSlide()).toBe(expected.target);
+      expect(state.getNavigation()).toEqual(expected);
+      expect(scrolls).toEqual(expectedScrolls);
+      expect(writes).toEqual(expectedWrites);
+      expect(win.location.hash).toBe(expectedWrites.at(-1));
+    },
+  );
+
+  it.each([0, WRITE_INTERVAL_MS])(
+    'preserves newer intent through paired traversal events after %s ms since the last write',
+    (elapsed) => {
+      // ARRANGE
+      vi.setSystemTime(0);
+      const { state, win, writes, fire, scrolls } = setup();
+      const expected = { id: 2, target: 'intro', status: 'navigating' };
+      const expectedWrites = ['#outro', '#intro'];
+      const expectedScrolls = ['outro', 'intro'];
+      const pairedHash = Object.assign(new Event('hashchange'), {
+        oldURL: 'https://example.test/episodes/demo?ref=mail#outro',
+        newURL: 'https://example.test/episodes/demo?ref=mail#restored',
+      });
+      state.subscribeNavigation((flight) => {
+        if (flight.target === 'outro' && flight.status === 'interrupted') state.navigateTo('intro');
+      });
+      state.navigateTo('outro');
+      vi.advanceTimersByTime(elapsed);
+      win.location.hash = '#restored';
+      // ACT
+      fire('popstate');
+      fire('hashchange', pairedHash);
+      const afterPair = state.getNavigation();
+      state.reportReading('intermediate');
+      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      // ASSERT
+      expect(afterPair).toEqual(expected);
+      expect(state.getNavigation()).toEqual(expected);
+      expect(state.getSlide()).toBe(expected.target);
+      expect(scrolls).toEqual(expectedScrolls);
+      expect(writes).toEqual(expectedWrites);
+      expect(win.location.hash).toBe(expectedWrites.at(-1));
+    },
+  );
+
+  it.each([
+    'https://example.test/episodes/demo#',
+    'https://example.test/episodes/demo',
+    'https://example.test/episodes/demo?ref=mail#',
+    'https://example.test/episodes/demo?ref=mail',
+    'https://example.test/episodes/demo?#',
+    'https://example.test/episodes/demo?',
+    'https://example.test/episodes/demo?q=%23%2f+#section%2Fdetail',
+    'https://example.test/episodes/demo?ref=mail#%74op',
+  ])('preserves newer intent and its trailing write through restoration to %s', (href) => {
+    // ARRANGE
+    vi.setSystemTime(0);
+    const { state, win, writes, fire } = setup();
+    const expected = { id: 2, target: 'intro', status: 'navigating' };
+    const expectedWrites = ['#outro', '#intro'];
+    const expectedHash = '#intro';
+    state.subscribeNavigation((flight) => {
+      if (flight.target === 'outro' && flight.status === 'interrupted') state.navigateTo('intro');
+    });
+    state.navigateTo('outro');
+    const pairedHash = Object.assign(new Event('hashchange'), { oldURL: win.location.href, newURL: href });
+    win.location.href = href;
+    // ACT
+    fire('popstate');
+    fire('hashchange', pairedHash);
+    const afterPair = state.getNavigation();
+    const pendingHref = win.location.href;
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    // ASSERT
+    expect(afterPair).toEqual(expected);
+    expect(pendingHref).toBe(href);
+    expect(state.getNavigation()).toEqual(expected);
+    expect(state.getSlide()).toBe(expected.target);
+    expect(writes).toEqual(expectedWrites);
+    expect(win.location.hash).toBe(expectedHash);
+  });
+
+  it('handles a distinct hash-only restoration while a traversal companion is pending', () => {
+    // ARRANGE
+    vi.setSystemTime(0);
+    const { state, win, writes, fire } = setup();
+    const expected = { id: 2, target: 'intro', status: 'interrupted' };
+    const expectedSlide = 'manual';
+    const expectedWrites = ['#outro'];
+    const manual = Object.assign(new Event('hashchange'), {
+      oldURL: 'https://example.test/episodes/demo?ref=mail#restored',
+      newURL: 'https://example.test/episodes/demo?ref=mail#manual',
+    });
+    state.subscribeNavigation((flight) => {
+      if (flight.target === 'outro' && flight.status === 'interrupted') state.navigateTo('intro');
+    });
+    state.navigateTo('outro');
+    win.location.hash = '#restored';
+    // ACT
+    fire('popstate');
+    win.location.hash = `#${expectedSlide}`;
+    fire('hashchange', manual);
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    // ASSERT
+    expect(state.getNavigation()).toEqual(expected);
+    expect(state.getSlide()).toBe(expectedSlide);
+    expect(writes).toEqual(expectedWrites);
+  });
+
+  it('expires an unmatched traversal companion before a later hash-only restoration to the same URL', () => {
+    // ARRANGE
+    vi.setSystemTime(0);
+    const { state, win, writes, fire } = setup();
+    const expected = { id: 2, target: 'intro', status: 'interrupted' };
+    const expectedSlide = 'restored';
+    const expectedWrites = ['#outro', '#intro'];
+    const manual = Object.assign(new Event('hashchange'), {
+      oldURL: 'https://example.test/episodes/demo?ref=mail#intro',
+      newURL: 'https://example.test/episodes/demo?ref=mail#restored',
+    });
+    state.subscribeNavigation((flight) => {
+      if (flight.target === 'outro' && flight.status === 'interrupted') state.navigateTo('intro');
+    });
+    state.navigateTo('outro');
+    win.location.hash = `#${expectedSlide}`;
+    // ACT
+    fire('popstate');
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    win.location.hash = `#${expectedSlide}`;
+    fire('hashchange', manual);
+    // ASSERT
+    expect(state.getNavigation()).toEqual(expected);
+    expect(state.getSlide()).toBe(expectedSlide);
+    expect(writes).toEqual(expectedWrites);
+  });
+
+  it('cancels traversal companion expiry and rejects captured restoration events after disposal', () => {
+    // ARRANGE
+    const { state, win, fire, queued } = setup();
+    const staleRestore = queued('popstate');
+    const seen: SlideNavigation[] = [];
+    state.subscribeNavigation((flight) => seen.push(flight));
+    state.navigateTo('outro');
+    win.location.hash = '#restored';
+    fire('popstate');
+    const before = [...seen];
+    // ACT
+    state.dispose();
+    const releasedTimers = vi.getTimerCount();
+    staleRestore();
+    const staleTimers = vi.getTimerCount();
+    // ASSERT
+    expect(releasedTimers).toBe(0);
+    expect(staleTimers).toBe(0);
+    expect(seen).toEqual(before);
   });
 
   it('correlates repeated same-target intent and ignores a retired flight’s queued completion', () => {

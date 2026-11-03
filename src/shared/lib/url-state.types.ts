@@ -1,6 +1,7 @@
 /** Browser inputs to the page's single URL authority. */
 export interface UrlWindow {
   readonly location: {
+    readonly href: string;
     readonly hash: string;
     readonly pathname: string;
     readonly search: string;

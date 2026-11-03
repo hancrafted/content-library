@@ -3,6 +3,36 @@ import type { UrlLink, UrlNavigationBrowser, UrlWindow } from './url-state.types
 
 const SCROLL_KEYS = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
 const INTERRUPTION_EVENTS = ['wheel', 'touchstart', 'pointerdown'] as const;
+const RESTORATION_EVENTS = ['popstate', 'hashchange'] as const;
+
+/** A traversal's optional hashchange repeats its popstate destination within the same browser task. */
+export function observeRestoration(win: UrlWindow, onRestore: () => void): () => void {
+  let destination: string | null = null;
+  let expiry: ReturnType<typeof setTimeout> | undefined;
+  let live = true;
+  const clear = () => {
+    clearTimeout(expiry);
+    destination = null;
+  };
+  const listener = (event: Event) => {
+    if (!live) return;
+    const isHash = event.type === 'hashchange' && 'newURL' in event;
+    const paired = isHash && event.newURL === destination;
+    clear();
+    if (paired) return;
+    if (event.type === 'popstate') {
+      destination = win.location.href;
+      expiry = setTimeout(clear, 0);
+    }
+    onRestore();
+  };
+  RESTORATION_EVENTS.forEach((type) => win.addEventListener(type, listener));
+  return () => {
+    live = false;
+    clear();
+    RESTORATION_EVENTS.forEach((type) => win.removeEventListener(type, listener));
+  };
+}
 
 /** Event wiring only: the URL authority decides correlation and terminal outcomes. */
 export function observeNavigation(win: UrlWindow, onPosition: () => void, onInterrupt: () => void): () => void {

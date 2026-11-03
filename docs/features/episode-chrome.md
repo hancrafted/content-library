@@ -8,7 +8,7 @@ stale_after: 2027-01-11T00:00:00Z
 
 Read before changing the look, layout or interaction of what surrounds an Episode's Slides: the table of contents, the Context drawer, the video player and where each sits. Binding rules: [FE-010 Context Drawer](../../.archgate/adrs/FE-010-context-drawer.md) and [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); the Context marker is decided in [design-ADR-0013](../adr/0013-context-markers.md). This guide holds the detail that does not bind.
 
-For geometry-driven header tone and Title-departure ToC presentation, read the accepted [Slide presentation contracts](slide-transitions.md); feature implementation remains pending.
+For geometry-driven header tone and Title-departure ToC presentation, read the [Slide presentation contracts](slide-transitions.md).
 
 ## Layers
 
@@ -48,7 +48,7 @@ Page assembly also supplies the current title/route and optional back-link label
 ## Reserved places
 
 - YouTube: one player per Episode and locale, loaded on play, never with the page. An unlisted Episode's Event recording (GLOSSARY: Video) plays on both locale pages; its launcher names the language spoken in it before play (`talkPlayer.recordedIn.<locale>`, `[data-recording-language]`). It plays in a 16:9 talk slot in the Title slide's Foreground through one host that is never re-parented (re-parenting reloads the video). Undocked it is `absolute` at the slot's page coordinates, re-measured on resize, not on scroll, so it scrolls natively and cannot lag. From `lg` it docks, becoming `fixed`, when the active Slide leaves `top`; the glide between the two animates `transform` only, and is instant under `prefers-reduced-motion`. Docked it offers "Back to video" and Close; undocked, Close only. Below `lg` it never docks.
-- Arrow-key Slide navigation: ←/→ step to the previous or next Slide, without wrapping; ignored with a modifier and inside editable fields, tab/menu/listbox/slider/radio widgets, the drawer, open dialogs and iframes. ↑/↓ and PageUp/PageDown scroll natively. The URL follows through the observer, not the keys.
+- Arrow-key Slide navigation: ←/→ step to the previous or next Slide through the page's URL service (`navigateTo`), without wrapping; ignored with a modifier and inside editable fields, tab/menu/listbox/slider/radio widgets, the drawer, open dialogs and iframes. ↑/↓ and PageUp/PageDown scroll natively.
 
 ## Card
 
