@@ -8,7 +8,7 @@ stale_after: 2027-01-11T00:00:00Z
 
 Read before changing the look, layout or interaction of what surrounds an Episode's Slides: the table of contents, the Context drawer, the video player and where each sits. Binding rules: [FE-010 Context Drawer](../../.archgate/adrs/FE-010-context-drawer.md) and [FE-002 Episode Page](../../.archgate/adrs/FE-002-episode-page.md); the Context marker is decided in [design-ADR-0013](../adr/0013-context-markers.md). This guide holds the detail that does not bind.
 
-For proposed geometry-driven header tone and Title-departure ToC presentation, read [Slide presentation contracts](slide-transitions.md) and its approval gate before implementation.
+For geometry-driven header tone and Title-departure ToC presentation, read the accepted [Slide presentation contracts](slide-transitions.md); feature implementation remains pending.
 
 ## Layers
 
