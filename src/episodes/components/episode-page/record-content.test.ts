@@ -1,11 +1,13 @@
 import { episode, slide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
+import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
 import { TRANSLATIONS } from '@/page-assembly/translations';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { createElement, isValidElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { recordContent, type TranslatorOf } from './record-content';
+import { SlideWrapper } from './slide-wrapper';
 
 /*
  * Stand-in for next-intl's site-wide translator: reads the real Translation
@@ -64,6 +66,42 @@ const RECORD = episode({
 });
 
 describe('success cases', () => {
+  it('carries explicit navigation entrance independently of a legacy inverse Title', async () => {
+    // ARRANGE
+    const record = episode({ ...RECORD, tone: 'inverse', tocEntrance: 'visible-from-start' });
+    const expected = 'visible-from-start';
+    // ACT
+    const content = await recordContent(record, 'en', {
+      translatorOf: translatorOf('en'),
+      id: 'ai-token-economy',
+    });
+    // ASSERT
+    expect(content.tocEntrance).toBe(expected);
+    expect(content.titlePresentation).toBeUndefined();
+  });
+  it('composes the Context Title with independent inverse surface, rear drift and outgoing ink', async () => {
+    // ARRANGE
+    const expected = { tone: 'inverse', effect: 'liquid', incoming: 'play' };
+    const backdrop = 'data-slot="slide-backdrop"';
+    const mount = 'data-slot="slide-mount"';
+    const motionButton = 'data-hero-motion-button';
+    // ACT
+    const content = await recordContent(contextWindow, 'de', {
+      translatorOf: translatorOf('de'),
+      id: 'context-window',
+      route: '/explorables/context-window',
+    });
+    // ASSERT
+    expect(content.titlePresentation?.tone).toBe(expected.tone);
+    expect(content.titlePresentation?.rear).toBeDefined();
+    expect(content.transitions.get('top')?.declaration.effect).toBe(expected.effect);
+    expect(content.transitions.get('top')?.incoming).toBe(expected.incoming);
+    const html = renderToStaticMarkup(
+      createElement(SlideWrapper, { id: 'top', presentation: content.titlePresentation }, content.hero),
+    );
+    expect(html.indexOf(backdrop)).toBeLessThan(html.indexOf(mount));
+    expect(html).toContain(motionButton);
+  });
   it('uses the Episode leave policy and carries single-sided declarations across no-effect neighbours', async () => {
     // ARRANGE
     const leave = { effect: 'paper' as const };
