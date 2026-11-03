@@ -1,12 +1,19 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createUrlState, NAVIGATION_TIMEOUT_MS, WRITE_INTERVAL_MS, type UrlWindow } from './url-state';
+import {
+  createUrlState,
+  NAVIGATION_TIMEOUT_MS,
+  WRITE_INTERVAL_MS,
+  type SlideNavigation,
+  type UrlLink,
+  type UrlWindow,
+} from './url-state';
 
 /** A window that is only what the service touches: a hash, a history that records its writes, and events. */
 function fakeWindow(initialHash = '') {
-  const listeners = new Map<string, Set<() => void>>();
+  const listeners = new Map<string, Set<(event: Event) => void>>();
   const writes: string[] = [];
   const win = {
-    location: { hash: initialHash, pathname: '/episodes/demo', search: '?ref=mail' },
+    location: { hash: initialHash, pathname: '/episodes/demo', search: '?ref=mail', origin: 'https://example.test' },
     history: {
       state: { as: 'router' } as unknown,
       replaceState(state: unknown, _unused: string, url: string) {
@@ -17,27 +24,129 @@ function fakeWindow(initialHash = '') {
       },
     },
     failWrites: false,
-    addEventListener: (type: string, listener: () => void) => {
+    addEventListener: (type: string, listener: (event: Event) => void) => {
       listeners.set(type, (listeners.get(type) ?? new Set()).add(listener));
     },
-    removeEventListener: (type: string, listener: () => void) => void listeners.get(type)?.delete(listener),
+    removeEventListener: (type: string, listener: (event: Event) => void) => void listeners.get(type)?.delete(listener),
   };
-  const fire = (type: string) => [...(listeners.get(type) ?? [])].forEach((listener) => listener());
-  return { win, writes, fire, listenerCount: (type: string) => listeners.get(type)?.size ?? 0 };
+  const fire = (type: string, event = new Event(type)) =>
+    [...(listeners.get(type) ?? [])].forEach((listener) => listener(event));
+  const queued = (type: string) => {
+    const callbacks = [...(listeners.get(type) ?? [])];
+    return () => callbacks.forEach((listener) => listener(new Event(type)));
+  };
+  return { win, writes, fire, queued, listenerCount: (type: string) => listeners.get(type)?.size ?? 0 };
 }
 
 function setup(initialHash = '') {
   const fake = fakeWindow(initialHash);
-  const state = createUrlState(fake.win as unknown as UrlWindow);
+  const position = { scroll: 0, top: 2000, offset: 96, maxScroll: 1800 };
+  const scrolls: string[] = [];
+  let linkListener: ((link: UrlLink) => boolean) | null = null;
+  const state = createUrlState(fake.win as unknown as UrlWindow, {
+    readPosition: (id) => (id === 'missing' ? null : position),
+    scrollTo: (id) => {
+      scrolls.push(id);
+    },
+    subscribeLinks: (listener) => {
+      linkListener = listener;
+      return () => {
+        linkListener = null;
+      };
+    },
+  });
   const seen: (string | null)[] = [];
   const unsubscribe = state.subscribe(() => seen.push(state.getSlide()));
-  return { ...fake, state, seen, unsubscribe };
+  const nativeLink = (href: string) => linkListener?.({ href, button: 0 }) ?? false;
+  return { ...fake, position, scrolls, nativeLink, state, seen, unsubscribe };
 }
 
 beforeEach(() => vi.useFakeTimers());
 afterEach(() => vi.useRealTimers());
 
 describe('success cases', () => {
+  it('settles from measured scrolling even when the browser has no scrollend event', () => {
+    // ARRANGE
+    const { state, position, fire } = setup();
+    const expected = { id: 1, target: 'outro', status: 'settled' };
+    state.navigateTo('outro');
+    vi.advanceTimersByTime(0);
+    // ACT
+    position.scroll = 1800;
+    fire('scroll');
+    state.reportReading('after-arrival');
+    // ASSERT
+    expect(state.getNavigation()).toEqual(expected);
+    expect(state.getSlide()).toBe('after-arrival');
+  });
+
+  it('attaches native links once, disposes them and safely reattaches the same page service', () => {
+    // ARRANGE
+    const { state, nativeLink, scrolls, fire } = setup();
+    const expectedScrolls = ['intro', 'outro'];
+    // ACT
+    state.attach();
+    nativeLink('#intro');
+    state.dispose();
+    const disposed = nativeLink('#ignored');
+    state.attach();
+    nativeLink('#outro');
+    fire('wheel');
+    // ASSERT
+    expect(disposed).toBe(false);
+    expect(scrolls).toEqual(expectedScrolls);
+    expect(state.getNavigation()?.status).toBe('interrupted');
+  });
+
+  it('routes native and in-content fragment links through the same authority and scroll policy', () => {
+    // ARRANGE
+    const { state, scrolls } = setup();
+    const expected = { id: 1, target: 'intro--why', status: 'navigating' };
+    // ACT
+    const handled = state.followLink({ href: '#intro--why', button: 0 });
+    // ASSERT
+    expect(handled).toBe(true);
+    expect(state.getNavigation()).toEqual(expected);
+    expect(scrolls).toEqual(['intro--why']);
+  });
+
+  it.each([
+    ['ordinary offset', 'outro', { scroll: 1904, top: 2000, offset: 96, maxScroll: 3000 }],
+    ['document end', 'outro', { scroll: 1800, top: 2000, offset: 96, maxScroll: 1800 }],
+    ['document start', 'intro', { scroll: 0, top: 50, offset: 96, maxScroll: 1800 }],
+    ['offset taller than viewport', 'intro', { scroll: 600, top: 2000, offset: 1400, maxScroll: 1800 }],
+    ['Title document-start policy', 'top', { scroll: 0, top: 300, offset: 96, maxScroll: 1800 }],
+  ])('settles an already-achieved %s landing without waiting for scrollend', (_name, target, geometry) => {
+    // ARRANGE
+    const { state, position } = setup();
+    Object.assign(position, geometry);
+    const expected = { id: 1, target, status: 'settled' };
+    const seen: unknown[] = [];
+    // ACT
+    state.navigateTo(target);
+    const during = state.getNavigation();
+    state.subscribeNavigation((flight) => seen.push(flight));
+    vi.advanceTimersByTime(0);
+    // ASSERT
+    expect(during).toEqual({ id: 1, target, status: 'navigating' });
+    expect(seen).toEqual([expected]);
+    expect(state.getNavigation()).toEqual(expected);
+  });
+
+  it('publishes readable explicit intent separately from reading reports, including the current target', () => {
+    // ARRANGE
+    const { state } = setup('#intro');
+    const expected = { id: 1, target: 'intro', status: 'navigating' };
+    const navigation: SlideNavigation[] = [];
+    state.subscribeNavigation((flight) => navigation.push(flight));
+    // ACT
+    state.reportReading('intro');
+    state.navigateTo('intro');
+    // ASSERT
+    expect(navigation).toEqual([expected]);
+    expect(state.getNavigation()).toEqual(expected);
+  });
+
   describe('reading the hash', () => {
     it('reads a deep-link hash on creation', () => {
       // ARRANGE
@@ -81,8 +190,9 @@ describe('success cases', () => {
 
     it('resumes reports on scrollend', () => {
       // ARRANGE
-      const { state, fire } = setup();
+      const { state, fire, position } = setup();
       state.navigateTo('outro');
+      position.scroll = 1800;
       fire('scrollend');
       // ACT
       state.reportReading('outro--end');
@@ -249,6 +359,86 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('distinguishes browser scrolling keys from keys owned by controls', () => {
+    // ARRANGE
+    const { state, fire } = setup();
+    const key = (key: string, prevented = false) => {
+      const event = Object.assign(new Event('keydown', { cancelable: true }), { key });
+      if (prevented) event.preventDefault();
+      return event;
+    };
+    const expected = { id: 1, target: 'outro', status: 'interrupted' };
+    // ACT
+    state.navigateTo('outro');
+    fire('keydown', key('PageDown', true));
+    fire('keydown', key('x'));
+    const stillFlying = state.getNavigation();
+    fire('keydown', key('PageDown'));
+    // ASSERT
+    expect(stillFlying?.status).toBe('navigating');
+    expect(state.getNavigation()).toEqual(expected);
+  });
+
+  it.each([
+    { metaKey: true },
+    { ctrlKey: true },
+    { altKey: true },
+    { shiftKey: true },
+    { button: 1 },
+    { defaultPrevented: true },
+    { download: true },
+    { target: '_blank' },
+    { href: 'https://other.test/episodes/demo?ref=mail#intro' },
+    { href: '/episodes/other#intro' },
+    { href: '?ref=other#intro' },
+    { href: '#missing' },
+    { href: '#%broken' },
+    { href: '/episodes/demo?ref=mail' },
+    { href: 'http://[' },
+  ])('leaves non-owned link behaviour unchanged: %j', (attributes) => {
+    // ARRANGE
+    const { state, scrolls, writes } = setup();
+    const before = [state.getSlide(), state.getNavigation(), [...scrolls], [...writes]];
+    // ACT
+    const handled = state.followLink({ href: '#intro', button: 0, ...attributes });
+    // ASSERT
+    expect(handled).toBe(false);
+    expect([state.getSlide(), state.getNavigation(), scrolls, writes]).toEqual(before);
+  });
+
+  it.each(['wheel', 'touchstart', 'pointerdown'])(
+    'releases intent on viewer %s interruption without reporting arrival',
+    (event) => {
+      // ARRANGE
+      const { state, fire } = setup();
+      const expected = { id: 1, target: 'outro', status: 'interrupted' };
+      // ACT
+      state.navigateTo('outro');
+      fire(event);
+      state.reportReading('intro');
+      vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
+      // ASSERT
+      expect(state.getNavigation()).toEqual(expected);
+      expect(state.getSlide()).toBe('intro');
+    },
+  );
+
+  it('does not certify arrival from scrollend away from the achievable destination, and reports timeout distinctly', () => {
+    // ARRANGE
+    const { state, fire } = setup();
+    const expected = { id: 1, target: 'outro', status: 'timed-out' };
+    // ACT
+    state.navigateTo('outro');
+    fire('scrollend');
+    const during = state.getNavigation();
+    vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
+    state.reportReading('intro');
+    // ASSERT
+    expect(during?.status).toBe('navigating');
+    expect(state.getNavigation()).toEqual(expected);
+    expect(state.getSlide()).toBe('intro');
+  });
+
   describe('reportReading', () => {
     it('keeps subscribers correct when the browser refuses the write', () => {
       // ARRANGE
@@ -318,6 +508,152 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it.each([false, true])(
+    'keeps intent authoritative for late consumers while the throttled hash lags (settled: %s)',
+    (settled) => {
+      // ARRANGE
+      const { state, unsubscribe, position, fire } = setup();
+      const expected = 'outro';
+      state.reportReading('intro');
+      unsubscribe();
+      // ACT
+      state.navigateTo(expected);
+      if (settled) {
+        position.scroll = 1800;
+        fire('scrollend');
+      }
+      state.subscribe(() => undefined);
+      state.attach();
+      // ASSERT
+      expect(state.getSlide()).toBe(expected);
+      expect(state.getNavigation()?.target).toBe(expected);
+    },
+  );
+
+  it('keeps the single URL writer on the newer intent when an active-Slide consumer redirects', () => {
+    // ARRANGE
+    const { state, writes, scrolls } = setup();
+    const expectedWrites = ['#outro', '#intro'];
+    const expectedScrolls = ['intro'];
+    state.subscribe(() => {
+      if (state.getSlide() === 'outro') state.navigateTo('intro');
+    });
+    // ACT
+    state.navigateTo('outro');
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    // ASSERT
+    expect(writes).toEqual(expectedWrites);
+    expect(scrolls).toEqual(expectedScrolls);
+  });
+
+  it('does not deliver retired intent after a lifecycle consumer synchronously starts a newer flight', () => {
+    // ARRANGE
+    const { state } = setup();
+    const seen: SlideNavigation[] = [];
+    const expected = [
+      { id: 1, target: 'outro', status: 'superseded' },
+      { id: 2, target: 'intro', status: 'navigating' },
+    ];
+    state.subscribeNavigation((flight) => {
+      if (flight.target === 'outro' && flight.status === 'navigating') state.navigateTo('intro');
+    });
+    state.subscribeNavigation((flight) => seen.push(flight));
+    // ACT
+    state.navigateTo('outro');
+    // ASSERT
+    expect(seen).toEqual(expected);
+  });
+
+  it('lets synchronous supersession own scrolling and active state without replaying the retired intent', () => {
+    // ARRANGE
+    const { state, scrolls } = setup();
+    const expectedScrolls = ['intro'];
+    const expected = { id: 2, target: 'intro', status: 'navigating' };
+    state.subscribeNavigation((flight) => {
+      if (flight.target === 'outro' && flight.status === 'navigating') state.navigateTo('intro');
+    });
+    // ACT
+    state.navigateTo('outro');
+    // ASSERT
+    expect(state.getNavigation()).toEqual(expected);
+    expect(state.getSlide()).toBe('intro');
+    expect(scrolls).toEqual(expectedScrolls);
+  });
+
+  it('prevents retired page callbacks from interrupting a reattached page and releases all owned work', () => {
+    // ARRANGE
+    const { state, queued, listenerCount } = setup();
+    const events = ['popstate', 'hashchange', 'scroll', 'scrollend', 'wheel', 'touchstart', 'pointerdown', 'keydown'];
+    const expected = { id: 2, target: 'intro', status: 'navigating' };
+    const notifications: unknown[] = [];
+    state.attach();
+    state.navigateTo('outro');
+    const staleRestore = queued('popstate');
+    const staleArrival = queued('scrollend');
+    const unsubscribe = state.subscribeNavigation((flight) => notifications.push(flight));
+    unsubscribe();
+    const before = [...notifications];
+    // ACT
+    state.dispose();
+    const released = events.map(listenerCount);
+    const timers = vi.getTimerCount();
+    state.attach();
+    state.navigateTo('intro');
+    staleRestore();
+    staleArrival();
+    // ASSERT
+    expect(released).toEqual(events.map(() => 0));
+    expect(timers).toBe(0);
+    expect(notifications).toEqual(before);
+    expect(state.getNavigation()).toEqual(expected);
+  });
+
+  it('reconciles initial fragments and history without inventing explicit intent or leaving a flight active', () => {
+    // ARRANGE
+    const { state, win, fire } = setup('#intro');
+    const seen: unknown[] = [];
+    const expected = [
+      { id: 1, target: 'outro', status: 'navigating' },
+      { id: 1, target: 'outro', status: 'interrupted' },
+    ];
+    state.attach();
+    state.subscribeNavigation((flight) => seen.push(flight));
+    const initial = state.getNavigation();
+    // ACT
+    state.navigateTo('outro');
+    win.location.hash = '#intro';
+    fire('popstate');
+    fire('hashchange');
+    win.location.hash = '#restored';
+    fire('hashchange');
+    vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
+    // ASSERT
+    expect(initial).toBe(null);
+    expect(seen).toEqual(expected);
+    expect(state.getSlide()).toBe('restored');
+  });
+
+  it('correlates repeated same-target intent and ignores a retired flight’s queued completion', () => {
+    // ARRANGE
+    const { state, queued, position } = setup();
+    const expected = [
+      { id: 1, target: 'outro', status: 'navigating' },
+      { id: 1, target: 'outro', status: 'superseded' },
+      { id: 2, target: 'outro', status: 'navigating' },
+    ];
+    const seen: unknown[] = [];
+    state.subscribeNavigation((flight) => seen.push(flight));
+    state.navigateTo('outro');
+    const stale = queued('scrollend');
+    // ACT
+    state.navigateTo('outro');
+    position.scroll = 1800;
+    stale();
+    // ASSERT
+    expect(seen).toEqual(expected);
+    expect(state.getNavigation()).toEqual(expected.at(-1));
+  });
+
   describe('reading the hash', () => {
     it('reads an empty hash as the Title slide', () => {
       // ARRANGE
