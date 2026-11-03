@@ -1,10 +1,31 @@
-import { createElement } from 'react';
+import { SlideIdContext, useSlideZone } from '@/episodes/hooks/use-slide-zone';
+import { createElement, useContext } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { slide } from '../slide-master/slide';
 import { SlideWrapper } from './slide-wrapper';
 
+function IdentityProbe() {
+  const id = useContext(SlideIdContext);
+  const zone = useSlideZone();
+  return createElement('span', { 'data-retained-id': id, 'data-observed-zone': zone });
+}
+
 describe('success cases', () => {
+  it('gives both retained decorations and the Scene their own Slide identity', () => {
+    // ARRANGE
+    const id = 'a--b';
+    const expected = 'data-retained-id="a--b"';
+    const serverZone = 'data-observed-zone="near"';
+    const count = 3;
+    const presentation = { rear: createElement(IdentityProbe), front: createElement(IdentityProbe) };
+    const wrapper = createElement(SlideWrapper, { id, presentation }, createElement(IdentityProbe));
+    // ACT
+    const html = renderToStaticMarkup(createElement(SlideIdContext, { value: 'another-slide' }, wrapper));
+    // ASSERT
+    expect(html.split(expected)).toHaveLength(count + 1);
+    expect(html.split(serverZone)).toHaveLength(count + 1);
+  });
   it('renders independent surface and decorative declarations around free content', () => {
     // ARRANGE
     const declared = slide({

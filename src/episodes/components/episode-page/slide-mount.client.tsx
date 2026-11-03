@@ -34,6 +34,11 @@ interface SlideMountViewProps {
   className?: string;
 }
 
+/** Identity only: retained decoration and removable Scenes read the same existing page zone store. */
+export function SlideIdentity({ id, children }: { id?: string | null; children: ReactNode }) {
+  return <SlideIdContext value={id ?? null}>{children}</SlideIdContext>;
+}
+
 /** What a mount draws for a zone: content only outside `far`, the kept height while far. */
 export function SlideMountView({ id, zone, heldHeight, boxRef, entry, children, className }: SlideMountViewProps) {
   const held = keptHeight(zone, heldHeight);
@@ -46,7 +51,7 @@ export function SlideMountView({ id, zone, heldHeight, boxRef, entry, children, 
       className={cn('flex flex-1 flex-col', className)}
       style={held > 0 ? { minHeight: held } : undefined}
     >
-      <SlideIdContext value={id}>{isMounted(zone) ? children : null}</SlideIdContext>
+      <SlideIdentity id={id}>{isMounted(zone) ? children : null}</SlideIdentity>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { cn } from '@/shared/lib/utils';
 import type { ComponentPropsWithoutRef } from 'react';
 import { SlideBackdrop } from '../slide-master/slide-master';
 import type { SlidePresentation } from '../slide-master/slide-presentation';
-import { SlideMount } from './slide-mount.client';
+import { SlideIdentity, SlideMount } from './slide-mount.client';
 import styles from './slide-presentation.module.css';
 
 /** How tall a Slide is at least: a page Slide fills the viewport, a section slide 40% of it (FE-009 §3). */
@@ -50,7 +50,7 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       style={{ ...presentation?.style, ...style }}
       {...props}
     >
-      <SurfaceLayers presentation={presentation} />
+      <SurfaceLayers id={id} presentation={presentation} />
       <SlideMount id={id} mode={mode} className={presentation ? styles.primary : undefined}>
         {mode === 'shared' ? (
           <SharedContent header={header} scene={scene}>
@@ -60,7 +60,7 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
           children
         )}
       </SlideMount>
-      <FrontLayer presentation={presentation} />
+      <FrontLayer id={id} presentation={presentation} />
     </div>
   );
 }
@@ -79,30 +79,38 @@ function surfaceTone(presentation: SlidePresentation | undefined) {
   return presentation ? (presentation.tone ?? 'normal') : undefined;
 }
 
-function SurfaceLayers({ presentation }: Pick<SlideWrapperProps, 'presentation'>) {
+function SurfaceLayers({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {
   if (!presentation) return null;
   return (
     <>
       <div aria-hidden="true" data-slot="slide-surface" className={styles.surface} />
-      {presentation.rear && (
-        <div
-          aria-hidden="true"
-          inert
-          className={cn(styles.decoration, styles.rear)}
-          data-mobile={presentation.rearMobile || undefined}
-        >
-          <SlideBackdrop mobile={presentation.rearMobile}>{presentation.rear}</SlideBackdrop>
-        </div>
-      )}
+      <RearLayer id={id} presentation={presentation} />
     </>
   );
 }
 
-function FrontLayer({ presentation }: Pick<SlideWrapperProps, 'presentation'>) {
+function RearLayer({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {
+  return presentation?.rear ? (
+    <SlideIdentity id={id}>
+      <div
+        aria-hidden="true"
+        inert
+        className={cn(styles.decoration, styles.rear)}
+        data-mobile={presentation.rearMobile || undefined}
+      >
+        <SlideBackdrop mobile={presentation.rearMobile}>{presentation.rear}</SlideBackdrop>
+      </div>
+    </SlideIdentity>
+  ) : null;
+}
+
+function FrontLayer({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {
   return presentation?.front ? (
-    <div aria-hidden="true" inert data-slot="slide-front" className={cn(styles.decoration, styles.front)}>
-      {presentation.front}
-    </div>
+    <SlideIdentity id={id}>
+      <div aria-hidden="true" inert data-slot="slide-front" className={cn(styles.decoration, styles.front)}>
+        {presentation.front}
+      </div>
+    </SlideIdentity>
   ) : null;
 }
 /** On the shared header: the Slide header, then the Scene in a `display: contents` box the entrance CSS reaches. */
