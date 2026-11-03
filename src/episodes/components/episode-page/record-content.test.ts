@@ -3,7 +3,8 @@ import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
 import { TRANSLATIONS } from '@/page-assembly/translations';
 import type { Locale } from '@/shared/lib/locale.pure';
-import { createElement, isValidElement } from 'react';
+import { load } from 'cheerio';
+import { createElement, Fragment, isValidElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { recordContent, type TranslatorOf } from './record-content';
@@ -66,6 +67,58 @@ const RECORD = episode({
 });
 
 describe('success cases', () => {
+  it.each(['liquid', 'paper', 'glitch', 'goo', 'dither', 'wave'] as const)(
+    'renders repeated %s edges with independent matching filter identities',
+    async (effect) => {
+      // ARRANGE
+      const record = episode({
+        ...RECORD,
+        sections: [
+          [
+            { ...foundations, presentation: { leave: { effect } } },
+            { ...whyATemplate, presentation: { leave: { effect } } },
+            visual,
+          ],
+        ],
+      });
+      const expectedEdges = [
+        'foundations→foundations--why-a-template',
+        'foundations--why-a-template→foundations--visual',
+      ];
+      const edgeCount = 2;
+      // ACT
+      const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+      const tree = createElement(
+        Fragment,
+        null,
+        ...content.slides.map((entry) =>
+          createElement(
+            SlideWrapper,
+            {
+              key: entry.id,
+              id: entry.id,
+              presentation: entry.presentation,
+              transition: content.transitions.get(entry.id),
+            },
+            entry.content,
+          ),
+        ),
+      );
+      const html = renderToStaticMarkup(tree);
+      const $ = load(html);
+      const hosts = $('[data-transition-edge]').toArray();
+      const ids = $('filter[id]')
+        .toArray()
+        .map((filter) => $(filter).attr('id'));
+      const references = hosts.map((host) => $(host).find('[data-ink-scale]').parent().attr('style'));
+      // ASSERT
+      expect(hosts.map((host) => $(host).attr('data-transition-edge'))).toEqual(expectedEdges);
+      expect(ids).toHaveLength(edgeCount);
+      expect(new Set(ids).size).toBe(edgeCount);
+      references.forEach((reference, index) => expect(reference).toContain(`filter:url(#${ids[index]})`));
+      expect(renderToStaticMarkup(tree)).toBe(html);
+    },
+  );
   it('carries explicit navigation entrance independently of a legacy inverse Title', async () => {
     // ARRANGE
     const record = episode({ ...RECORD, tone: 'inverse', tocEntrance: 'visible-from-start' });
