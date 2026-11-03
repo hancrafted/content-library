@@ -4526,17 +4526,18 @@
             <aside class="spec-card">
               <h4>Windows enterprise amendment, 2026-11-04</h4>
               <p>
-                Keep the selected layout and copyable vendor installer. Before it, show a short work-laptop notice: use
-                an organization-approved agent and account; stop for administrator credentials, organization blocks,
-                certificate errors or denied access. Never disable security settings or change networks to bypass a
-                block. Windows shows the selected agent's prerequisites: Claude's native installer needs no
-                administrator; Copilot needs modern PowerShell, not built-in Windows PowerShell 5.1, and available,
-                permitted WinGet; Codex's official command changes process execution policy and needs IT approval on a
-                work laptop; Antigravity needs approved installation. Show a fresh-terminal version check after
-                installation. Put proxy, Zscaler, certificate, WinGet and policy diagnosis in optional help, with an IT
-                handoff listing agent, shell version and sanitized error. Never equate the prompt returning with a
-                successful install. Speaker notes cite the official Microsoft and vendor prerequisites and network
-                documentation, and state that these instructions have not been tested on Windows.
+                Keep the selected layout and copyable vendor installer. Before it, show an OS-specific work-laptop
+                notice: use an organization-approved agent and account; stop for administrator credentials, organization
+                blocks, certificate errors or denied access. Only the Windows variant says Windows; Mac and Linux name
+                their own system. Never disable security settings or change networks to bypass a block. Windows shows
+                the selected agent's prerequisites: Claude's native installer needs no administrator; Copilot needs
+                modern PowerShell, not built-in Windows PowerShell 5.1, and available, permitted WinGet; Codex's
+                official command changes process execution policy and needs IT approval on a work laptop; Antigravity
+                needs approved installation. Show a fresh-terminal version check after installation. Put proxy, Zscaler,
+                certificate, WinGet and policy diagnosis in optional help, with an IT handoff listing agent, shell
+                version and sanitized error. Never equate the prompt returning with a successful install. Speaker notes
+                cite the official Microsoft and vendor prerequisites and network documentation, and state that these
+                instructions have not been tested on Windows.
               </p>
             </aside>
             <div class="spec-words">
@@ -6602,17 +6603,19 @@
             <aside class="spec-card">
               <h4>Windows enterprise amendment, 2026-11-04</h4>
               <p>
-                Preserve the two-move composition and Mac/Linux route. On Windows, replace the primary right-click menu
-                drawing with an Explorer address-bar drawing: open the extracted folder containing GLOSSARY.md, press
-                Ctrl+L, type powershell and Enter; Copilot uses the already installed pwsh instead. Explain that Open in
-                Terminal and Shift-right-click Open PowerShell window here are alternatives whose availability varies,
-                not universal labels. Before starting the agent, copy Get-Location and the read-only Get-Content
-                -LiteralPath '.\GLOSSARY.md' -TotalCount 3 check. The path must be the actual extracted folder, and the
-                file starts with # hancrafted workshop starter. Never assume Downloads or a username. Optional help
-                explains using Set-Location -LiteralPath with the actual copied absolute path. The working folder helps
-                the agent find the skills; it is not a security boundary. Trust only the expected workshop folder.
-                Launch Antigravity with the now-documented agy command. Speaker notes cite Microsoft's folder/shell
-                documentation and Google's launch instructions, with the no-Windows-test caveat.
+                Preserve the two-move composition and Mac/Linux route. On Windows, keep a realistic classic right-click
+                menu with Open PowerShell window here highlighted; hold Shift while right-clicking the extracted starter
+                folder. Label the drawing as a menu example, because menu labels and availability vary. For Copilot,
+                type pwsh in that window before copilot, to use the PowerShell 7 installed earlier. Directly below the
+                menu and terminal, show a closed disclosure: Didn't see Open PowerShell window here? Inside, show the
+                Explorer address-bar fallback: open the actual folder containing GLOSSARY.md, press Ctrl+L, type
+                powershell and Enter; Copilot uses pwsh instead. Put all technical detail in that disclosure:
+                Get-Location, Get-Content -LiteralPath '.\GLOSSARY.md' -TotalCount 3, variable menu labels and shell
+                versions, and Set-Location -LiteralPath with the actual copied absolute path. The file starts with #
+                hancrafted workshop starter. Never assume Downloads or a username. The working folder helps the agent
+                find the skills; it is not a security boundary. Trust only the expected workshop folder. Launch
+                Antigravity with the documented agy command. Speaker notes cite Microsoft's folder/shell documentation
+                and Google's launch instructions, with the no-Windows-test caveat.
               </p>
             </aside>
             <div class="spec-words">
