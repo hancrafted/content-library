@@ -2,12 +2,16 @@ import type { HeaderMode } from '@/episodes/components/slide-master/slide';
 import { SlideHeader, type SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
 import { cn } from '@/shared/lib/utils';
 import type { ComponentPropsWithoutRef } from 'react';
-import { SlideMount } from './slide-mount.client';
+import { SlideBackdrop } from '../slide-master/slide-master';
+import type { SlidePresentation } from '../slide-master/slide-presentation';
+import { SlideIdentity, SlideMount } from './slide-mount.client';
+import styles from './slide-presentation.module.css';
 
 /** How tall a Slide is at least: a page Slide fills the viewport, a section slide 40% of it (FE-009 §3). */
 const MIN_HEIGHT = { page: 'min-h-svh', section: 'min-h-[40svh]' } as const;
 
 export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
+  readonly presentation?: SlidePresentation;
   readonly size?: keyof typeof MIN_HEIGHT;
   /** Who renders the Slide's header; on `shared` the wrapper renders it and plays the entrance once (design-ADR-0012). */
   readonly mode?: HeaderMode;
@@ -33,18 +37,21 @@ export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
  * then the Scene in a `display: contents` box the entrance CSS reaches.
  */
 export function SlideWrapper({ id, className, size = 'page', mode = 'authored', ...rest }: SlideWrapperProps) {
-  const { header, scene, children, ...props } = rest;
+  const { header, scene, children, presentation, style, ...props } = rest;
   // A section slide on the shared header is a full-bleed band, so a new Section reads at a glance.
-  const band = mode === 'shared' && size === 'section' && 'bg-section-band';
+  const frameClass = wrapperClass(mode, size, presentation);
   return (
     <div
       id={id}
       data-slide={id}
       data-size={size}
-      className={cn('relative isolate flex w-full scroll-mt-24 flex-col', MIN_HEIGHT[size], band, className)}
+      data-surface-tone={surfaceTone(presentation)}
+      className={cn(frameClass, className)}
+      style={{ ...presentation?.style, ...style }}
       {...props}
     >
-      <SlideMount id={id} mode={mode}>
+      <SurfaceLayers id={id} presentation={presentation} />
+      <SlideMount id={id} mode={mode} className={presentation ? styles.primary : undefined}>
         {mode === 'shared' ? (
           <SharedContent header={header} scene={scene}>
             {children}
@@ -53,10 +60,59 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
           children
         )}
       </SlideMount>
+      <FrontLayer id={id} presentation={presentation} />
     </div>
   );
 }
 
+function wrapperClass(mode: HeaderMode, size: keyof typeof MIN_HEIGHT, presentation?: SlidePresentation) {
+  const band = mode === 'shared' && size === 'section' && 'bg-section-band';
+  return cn(
+    'relative isolate flex w-full scroll-mt-24 flex-col',
+    MIN_HEIGHT[size],
+    band,
+    presentation && styles.configured,
+  );
+}
+
+function surfaceTone(presentation: SlidePresentation | undefined) {
+  return presentation ? (presentation.tone ?? 'normal') : undefined;
+}
+
+function SurfaceLayers({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {
+  if (!presentation) return null;
+  return (
+    <>
+      <div aria-hidden="true" data-slot="slide-surface" className={styles.surface} />
+      <RearLayer id={id} presentation={presentation} />
+    </>
+  );
+}
+
+function RearLayer({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {
+  return presentation?.rear ? (
+    <SlideIdentity id={id}>
+      <div
+        aria-hidden="true"
+        inert
+        className={cn(styles.decoration, styles.rear)}
+        data-mobile={presentation.rearMobile || undefined}
+      >
+        <SlideBackdrop mobile={presentation.rearMobile}>{presentation.rear}</SlideBackdrop>
+      </div>
+    </SlideIdentity>
+  ) : null;
+}
+
+function FrontLayer({ id, presentation }: Pick<SlideWrapperProps, 'id' | 'presentation'>) {
+  return presentation?.front ? (
+    <SlideIdentity id={id}>
+      <div aria-hidden="true" inert data-slot="slide-front" className={cn(styles.decoration, styles.front)}>
+        {presentation.front}
+      </div>
+    </SlideIdentity>
+  ) : null;
+}
 /** On the shared header: the Slide header, then the Scene in a `display: contents` box the entrance CSS reaches. */
 function SharedContent({ header, scene = 'fill', children }: Pick<SlideWrapperProps, 'header' | 'scene' | 'children'>) {
   return (

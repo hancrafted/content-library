@@ -6,7 +6,28 @@ stale_after: 2026-11-18T00:00:00Z
 
 # Slide presentation contracts
 
-**Accepted architecture contract; feature implementation pending.** [design-ADR-0022](../adr/0022-slide-presentation-and-transition-clock.md) owns human acceptance evidence, the responsibility map and binding-governance pointers. This reference defines the accepted feature contract for [#480](https://github.com/hancrafted/content-library/issues/480); it does not describe shipped APIs or grant an exception beyond the approved boundary.
+**Accepted architecture contract; effect-free surfaces implemented, downstream transition integration pending.** [design-ADR-0022](../adr/0022-slide-presentation-and-transition-clock.md) owns human acceptance evidence, the responsibility map and binding-governance pointers. This reference defines the accepted feature contract for [#480](https://github.com/hancrafted/content-library/issues/480) and the effect-free interface below; it grants no exception beyond the approved boundary.
+
+## Effect-free surface interface
+
+The effect-free path in [#483](https://github.com/hancrafted/content-library/issues/483) uses `Slide.presentation` (`src/episodes/components/slide-master/slide-presentation.ts`). Its optional `tone`, `rear`, `front` and `rearMobile` are independent; `rear` and `front` are decorative JSX, not Scene templates. The Title's declaration is `EpisodeComposition.title.presentation`. The existing `/master-slides/grids/` reference configures `grid-1x2`; production Explorable compositions remain on their Title presentation.
+
+`presentation.style` accepts CSS custom properties, not structural CSS declarations. `--slide-surface` and `--slide-surface-foreground` are live token references. A colour override must retain its authored `tone` semantics. Slots own any additional named motion settings: the Grids reference maps `--surface-reference-duration` to its rear drift duration (default `8s`) and `--surface-reference-displacement` to its drift/front offset (default `1rem`), both rendering-only inputs. Slot hosts enforce pointer pass-through, inert/assistive exclusion, layer containment, reduced-motion displacement removal and print exclusion. CSS loops pause outside `active` and while hidden; imperative decorative islands must also respect the existing zone, document visibility and reduced-motion duties.
+
+Retained rear/front slots receive their wrapper's identity through `SlideIdentity` in `slide-mount.client.tsx`. Their `useSlideZone()` consumers read the existing page zone store, independently of Scene mounting; the provider owns no zone or active-Slide state. The Grids reference's rear decoration uses this hook to start/cancel a Web Animation, with visibility/reduced-motion listeners released on cleanup. Its duration/displacement properties are read when motion starts; controlled edits to this imperative reference take effect at the next start. Front displacement remains CSS-only.
+
+`EpisodeComposition.surfaceSamplingLine` supplies viewport pixels for tone sampling; omission uses the measured header lower edge. The server container supplies only `{id, tone}` descriptors to `surface-clock.client.tsx`. Configured Title wrappers have a minimum `200svh` presentation extent with their primary content occupying at least the opening viewport; tall content remains unrestricted. Legacy Title-only ToC hiding uses `data-title-active`, independently of `data-page-tone`. Progressive ToC entrance and navigation/effect integration belong to their downstream tickets.
+
+The DOM-independent public seam is `createSurfaceClock` in `src/shared/lib/surface-clock.ts`:
+
+- `getSnapshot()` reads semantic `tone` and ordered `edges` (`id`, outgoing/incoming tone, document `top`, effective `start`/`end`, `progress`).
+- `setGeometry(input, position?)` accepts normalized document measurements and can reconcile a measured position atomically; `setPosition(position)` scrubs cached geometry. Adjacent edge ids are `outgoingId→incomingId`; effects are not an input.
+- `subscribe(select, listener, equal?)` notifies only changed selections; read the snapshot for initial state. Its unsubscribe prevents subsequent notification, including removal during another listener's publication.
+- `requestRefresh()` asks the attached driver to remeasure; `dispose()` releases the calculation's subscriptions.
+
+`driveSurfaceClock` (`src/shared/lib/surface-clock-driver.ts`) supplies the scheduling boundary: explicit frame/timer/read ports, coalesced `scroll()`, 500ms-quiet `resize()`, `clock`, and `dispose()`. Dispose the driver to cancel queued frame/timer work as well as the clock. The container attachment additionally releases listeners, observers and owned signals. Geometry refreshes read stable wrappers, anchor scroll margins, root scroll padding and the outgoing wrapper's range properties before publishing. The applicable anchor offset is the wrapper's scroll margin plus root scroll padding (`auto` contributes zero), matching native anchor landing. Range custom properties use finite `px` values (or `0`), with invalid/missing values falling back to zero; invalid authored values produce development diagnostics. Content/Scene remounts, wrapper/header resizing and fonts request refresh. A controlled calculation-input edit dispatches `surface-clock-refresh` on the Episode root; theme-only edits need no refresh.
+
+The adapter writes discrete `data-page-tone` on `<html>` and local `--surface-edge-progress` on each outgoing wrapper. It never writes global continuous progress or React frame state. Signal ownership prevents stale disposal from clearing a successor instance's values. Range resolution from a winning portable effect scope, effect rendering and authoritative navigation-lifecycle consumption belong to [#484](https://github.com/hancrafted/content-library/issues/484).
 
 ## Authoring
 
