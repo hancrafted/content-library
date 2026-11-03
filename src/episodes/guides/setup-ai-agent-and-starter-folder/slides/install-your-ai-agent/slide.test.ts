@@ -132,6 +132,24 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('puts work-laptop stop rules and the selected Windows prerequisite before installation', () => {
+    // ARRANGE
+    const expected = ['administrator', 'certificate', 'IT'];
+    const modernShell = 'PowerShell 7';
+    const html = render('en', { os: 'windows', agent: 'copilot' });
+    // ACT
+    const $ = load(html);
+    const notice = $('[data-work-laptop]').text();
+    const prerequisite = $('[data-windows-prerequisite]').text();
+    const noticeAt = html.indexOf('data-work-laptop');
+    const installAt = html.indexOf('data-copy-line');
+    // ASSERT
+    for (const phrase of expected) expect(notice).toContain(phrase);
+    expect(prerequisite).toContain(modernShell);
+    expect(noticeAt).toBeGreaterThan(-1);
+    expect(noticeAt).toBeLessThan(installAt);
+  });
+
   it('says nothing specific about Antigravity, whose final output is unverified', () => {
     // ARRANGE
     const expected = 'Wait until the prompt comes back, then go on.';
@@ -155,6 +173,20 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('names only the selected operating system in the work-laptop notice', () => {
+    // ARRANGE
+    const expected = { mac: 'macOS', linux: 'Linux', windows: 'Windows' };
+    const wrongSystem = 'Windows';
+    // ACT
+    const notices = Object.fromEntries(
+      Object.keys(expected).map((os) => [os, scene('en', { os })('[data-work-laptop]').text()]),
+    );
+    // ASSERT
+    for (const [os, label] of Object.entries(expected)) expect(notices[os]).toContain(label);
+    expect(notices.mac).not.toContain(wrongSystem);
+    expect(notices.linux).not.toContain(wrongSystem);
+  });
+
   it('speaks German with the same install lines', () => {
     // ARRANGE
     const english = scene('en', { os: 'windows', agent: 'claude-code' })('[data-copy-line]').length;

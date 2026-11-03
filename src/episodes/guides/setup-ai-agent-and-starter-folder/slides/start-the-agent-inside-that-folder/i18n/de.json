@@ -1,6 +1,45 @@
 {
   "title": "Den Agenten in diesem Ordner starten",
-  "caption": "Öffne das Terminal direkt aus dem Ordner und starte dann Deinen KI-Agenten: <b>Er liest nur den Ordner, in dem er startet</b>.",
+  "caption": "Öffne das Terminal im entpackten Starter-Ordner, prüfe Deinen Standort und starte dann Deinen KI-Agenten: <b>So findet er Deine Workshop-Dateien</b>.",
+  "copy": "Kopieren",
+  "copied": "Kopiert",
+  "windows": {
+    "menuLabel": "Beispiel eines Windows-Menüs · Umschalt + Rechtsklick",
+    "menu": { "open": "Öffnen" },
+    "copilot": "Tippe für Copilot zuerst <code>pwsh</code> in dieses Fenster und drücke Enter. So öffnet sich die zuvor installierte PowerShell 7 im selben Ordner.",
+    "helpTitle": "„PowerShell-Fenster hier öffnen“ fehlt? Versuche das",
+    "open": "Öffne im Datei-Explorer den entpackten Ordner mit <code>GLOSSARY.md</code>. Drücke <b>Strg+L</b>, tippe das unten gezeigte Wort in die Adressleiste und drücke <b>Enter</b>.",
+    "addressBar": "Adressleiste im Datei-Explorer · Strg+L",
+    "shellHint": "Copilot nutzt pwsh für die zuvor installierte PowerShell 7. Findet Windows sie nicht, halte an und gehe zum Installationsschritt zurück.",
+    "check": "Prüfe dann, ob Du im richtigen Ordner bist:",
+    "location": "Das Ergebnis muss der tatsächlich entpackte Starter-Ordner sein, nicht Dein Benutzerordner oder die ZIP-Datei. Benutzername und Pfad dürfen von der Zeichnung abweichen.",
+    "file": "Du siehst <code># hancrafted workshop starter</code>. Datei nicht gefunden? Öffne den Ordner mit <code>GLOSSARY.md</code>, nicht einen äußeren Ordner. Starte den Agenten erst, wenn beide Prüfungen funktionieren.",
+    "fallback": "Falscher Standort? Öffne im Explorer den tatsächlichen Ordner mit GLOSSARY.md. Drücke Strg+L und kopiere seinen vollständigen Pfad. Tippe in PowerShell <code>Set-Location -LiteralPath </code>, füge den Pfad in doppelte Anführungszeichen ein und drücke Enter. Prüfe erneut mit Get-Location. Übernimm nicht den Beispiel-Benutzernamen und setze nicht voraus, dass Dein Ordner in Downloads liegt."
+  },
+  "notes": {
+    "windows-folder": {
+      "header": "Den Ordner prüfen, nicht den Menüeintrag",
+      "description": "Microsoft beschreibt den PowerShell-Start aus der Explorer-Adressleiste [1]. Terminal hat konfigurierbare Shells; Im Terminal öffnen garantiert deshalb keine PowerShell 7 [2]. Get-Location zeigt den tatsächlichen Ordner, Get-Content liest die Starter-Datei und Set-Location -LiteralPath nimmt einen wörtlichen Pfad [3][4][5]. Microsoft dokumentiert den PowerShell-Eintrag mit Umschalt+Rechtsklick für Windows 10 [6], garantiert ihn aber nicht für jeden Windows-11- oder Firmenrechner. Menü und Pfad sind Beispiele. Auf aktuellen verwalteten Windows-Rechnern wurden diese Wege nicht getestet.",
+      "sources": {
+        "explorer-shell": { "title": "Microsoft, Shells aus dem Explorer starten" },
+        "terminal": { "title": "Microsoft, Windows-Terminal-Profile" },
+        "location": { "title": "Microsoft, Get-Location" },
+        "content": { "title": "Microsoft, Get-Content" },
+        "set-location": { "title": "Microsoft, Set-Location" },
+        "windows-menu": {
+          "title": "Microsoft, Ankündigung des PowerShell-Kontextmenüs in Windows 10"
+        }
+      }
+    },
+    "agent-working-folder": {
+      "header": "Ein Arbeitsordner ist keine Sicherheitsgrenze",
+      "description": "Die Hersteller beschreiben den Start im Projektordner; Google nennt agy als CLI-Befehl [1][2]. Der Ordner hilft beim Finden der Workshop-Dateien und Skills, begrenzt aber nicht automatisch den Dateizugriff. Vertraue nur dem vorgesehenen Workshop-Ordner und prüfe Befehle vor der Freigabe.",
+      "sources": {
+        "claude-quickstart": { "title": "Anthropic, Claude Code Schnellstart" },
+        "antigravity-start": { "title": "Google, Einstieg in Antigravity" }
+      }
+    }
+  },
   "toolbar": {
     "os": "Dein Computer",
     "agent": "KI-Agent"
@@ -11,10 +50,10 @@
       "title": "Ein Terminal im Ordner öffnen",
       "detail": {
         "mac": "Klicke im Finder mit der rechten Maustaste auf <b>hancrafted-workshop-starter</b>, dann auf <b>Dienste › Neues Terminal beim Ordner</b>. Kein Pfad zum Eintippen.",
-        "windows": "Klicke im Datei-Explorer mit der rechten Maustaste auf <b>hancrafted-workshop-starter</b>, dann auf <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen.",
+        "windows": "Halte im Datei-Explorer <b>Umschalt</b> gedrückt und klicke mit der rechten Maustaste auf den entpackten Ordner <b>hancrafted-workshop-starter</b>. Wähle <b>PowerShell-Fenster hier öffnen</b>.",
         "linux": "Rechtsklick auf den Ordner in Deinem Dateimanager › <b>Im Terminal öffnen</b>. Kein Pfad zum Eintippen."
       },
-      "worked": "Der Ordnername steht direkt vor Deinem Cursor.",
+      "worked": "Vor dem Cursor steht der Ordnername hancrafted-workshop-starter. Dein Benutzername und der übrige Pfad dürfen vom Beispiel abweichen.",
       "menuLabel": "Das Rechtsklick-Menü des Ordners",
       "menu": {
         "mac": {
@@ -33,18 +72,18 @@
           "compress": "In ZIP-Datei komprimieren",
           "copyPath": "Als Pfad kopieren",
           "properties": "Eigenschaften",
-          "terminal": "Im Terminal öffnen",
+          "terminal": "PowerShell-Fenster hier öffnen",
           "more": "Weitere Optionen anzeigen"
         }
       },
       "note": {
         "mac": "Nicht im Menü? Einmal einschalten: <b>Systemeinstellungen › Tastatur › Tastaturkurzbefehle › Dienste</b>, dort <b>Neues Terminal beim Ordner</b> ankreuzen.",
-        "windows": "Windows 10 ohne diesen Eintrag? Öffne den Ordner, klicke in die Adressleiste, tippe <code>powershell</code> und drücke Enter."
+        "windows": "Ein Rechtsklick-Menü kann stattdessen Im Terminal öffnen anbieten; mit Umschalt+Rechtsklick erscheint eventuell PowerShell-Fenster hier öffnen. Beides kann funktionieren, aber Menütext und Shell variieren. Die Adressleiste braucht keinen bestimmten Menüeintrag."
       }
     },
     "start": {
       "title": "Deinen KI-Agenten starten",
-      "detail": "Tippe seinen Namen und drücke Enter. Fragt er, ob Du diesem Ordner vertraust, <b>ist Ja hier richtig</b>.",
+      "detail": "Tippe seinen Namen in dieses Terminal und drücke Enter. Fragt er, ob Du dem Ordner vertraust, prüfe den Pfad: <b>Bestätige nur den entpackten Starter-Ordner</b>.",
       "antigravity": "Starte Antigravity in diesem Ordner so, wie es seine offizielle Seite zeigt.",
       "opensNewTab": "(öffnet in einem neuen Tab)",
       "link": {
@@ -69,7 +108,7 @@
       "go-in-then-start": {
         "title": "Erst hinein, dann starten",
         "keywords": "",
-        "script": "In Deinem Terminal gehst Du zuerst in den entpackten Ordner, und erst dann startest Du Deinen KI-Agenten. Die Seite zeigt Dir das Terminal an jeder Stelle, so kannst Du prüfen, ob der Ordnername vor Deinem Cursor steht, bevor Du startest. Der KI-Agent fragt vielleicht, ob Du diesem Ordner vertraust. Diesem hier vertraust Du, also sag Ja."
+        "script": "Gehe vom entpackten Starter-Ordner aus. Halte unter Windows Umschalt gedrückt und klicke mit der rechten Maustaste darauf. Wähle PowerShell-Fenster hier öffnen. Die Zeichnung ist ein Beispiel. Fehlt der Eintrag bei Dir, öffne die Hilfe direkt darunter für einen anderen Weg. Für Copilot wechselst Du zuerst mit pwsh zur zuvor installierten PowerShell 7. Prüfe, ob die Eingabezeile den Starter-Ordner nennt, und starte den Agenten dort. Vertraue nur dem vorgesehenen Workshop-Ordner."
       },
       "same-folder-every-time": {
         "title": "Jedes Mal derselbe Ordner",
@@ -89,8 +128,8 @@
     "placeholder": "Füge Deinen Fehler ein oder beschreibe, was Du siehst …",
     "copy": "Prompt kopieren",
     "copied": "Prompt kopiert. Füge ihn ins kostenlose ChatGPT ein.",
-    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
-    "prompt": "Ich bin Einsteiger und folge einer Schritt-für-Schritt-Anleitung, um für einen Workshop einen KI-Agenten auf meinem Laptop zum Laufen zu bringen.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nMein Schritt: {step}\n\nDas ist der Fehler oder das, was ich sehe:\n{error}\n\nErkläre mir in einfachen Worten, was schiefgelaufen ist, und sag mir, was ich als Nächstes tun soll, in kleinen Schritten. Geh nicht davon aus, dass ich mich mit dem Terminal auskenne.",
+    "copyTip": "Entferne zuerst Tokens, personenbezogene Daten und vertrauliche Details. Nutze nur eine von Deiner Organisation erlaubte KI.",
+    "prompt": "Ich bin Einsteiger und folge einer Schritt-für-Schritt-Anleitung, um für einen Workshop einen KI-Agenten auf meinem Laptop zum Laufen zu bringen.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nMein Schritt: {step}\n\nDas ist der Fehler oder das, was ich sehe:\n{error}\n\nErkläre mir in einfachen Worten, was schiefgelaufen ist, und sag mir in kleinen Schritten, was ich als Nächstes tun soll. Geh nicht davon aus, dass ich mich mit dem Terminal auskenne. Prüfe den tatsächlichen entpackten Ordner, statt Downloads vorauszusetzen. Schlage keine Umgehung von Firmenrichtlinien, Administrator-Beschränkungen, Ausführungsrichtlinien, TLS-Prüfungen, Proxys oder Sicherheitssoftware vor. Erkläre bei nötiger Freigabe oder Konfiguration, was ich die IT fragen soll. Erinnere mich daran, Geheimnisse und vertrauliche Details zu entfernen.",
     "noError": "(Ich habe keinen Fehler eingefügt; ich komme bei diesem Schritt nicht weiter.)",
     "step": "Schritt 3: Den Agenten in diesem Ordner starten",
     "chats": {

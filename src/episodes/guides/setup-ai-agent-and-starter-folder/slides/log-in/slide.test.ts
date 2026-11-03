@@ -121,14 +121,15 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('names the "not found" failure and its fix', () => {
+  it('tries a fresh window once, then points back to installation rather than promising that fixes every failure', () => {
     // ARRANGE
     const $ = scene('en');
+    const expected = 'installation';
     // ACT
     const text = $('[data-not-found]').text();
     // ASSERT
     expect(text).toContain('command not found');
-    expect(text).toContain('old window');
+    expect(text).toContain(expected);
   });
 });
 

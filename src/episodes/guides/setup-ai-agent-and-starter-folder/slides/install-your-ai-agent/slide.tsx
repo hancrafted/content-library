@@ -1,6 +1,10 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { docsHref, installCommand } from '@/episodes/components/slide-shared/agent-setup-step/agent-commands.pure';
+import {
+  docsHref,
+  installCommand,
+  launchCommand,
+} from '@/episodes/components/slide-shared/agent-setup-step/agent-commands.pure';
 import { CopyLine } from '@/episodes/components/slide-shared/agent-setup-step/copy-line.client';
 import { OfficialLink } from '@/episodes/components/slide-shared/agent-setup-step/official-link';
 import { PickSwitch } from '@/episodes/components/slide-shared/agent-setup-step/pick-switch.client';
@@ -17,6 +21,7 @@ import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/g
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { notes } from './notes';
 
 /*
  * Step 2, first Slide: the first command a first-timer types is the install command of their AI agent. The exact
@@ -27,6 +32,7 @@ import en from './i18n/en.json';
 export const installYourAiAgent = slide({
   slug: 'install-your-ai-agent',
   messages: { en, de },
+  notes,
   segments: [
     { slug: 'your-first-command' },
     { slug: 'official-docs-always' },
@@ -53,7 +59,7 @@ export const installYourAiAgent = slide({
       }}
     />
   ),
-  content: ({ t }) => {
+  content: ({ t, target }) => {
     const words = { copy: t('copy'), copied: t('copied') };
     const code = (chunks: ReactNode) => <code className="font-mono text-foreground">{chunks}</code>;
     const key = (chunks: ReactNode) => (
@@ -65,18 +71,51 @@ export const installYourAiAgent = slide({
       codex: [t.rich('end.codex.one', { code, key }), t.rich('end.codex.two', { code, key })],
       copilot: [t.rich('end.copilot.one', { code, key }), t.rich('end.copilot.two', { code, key })],
     } as const;
+    const shellFailure = (windowsHint: ReactNode) => (
+      <PickSwitch
+        name="os"
+        fallback={DEFAULT_OS}
+        cases={{ mac: t('unixFailure'), linux: t('unixFailure'), windows: windowsHint }}
+      />
+    );
     const happen = {
-      'claude-code': [t.rich('happen.claude-code.one', { code }), t.rich('happen.claude-code.two', { code })],
-      antigravity: [t.rich('happen.antigravity.one', { code }), t.rich('happen.antigravity.two', { code })],
+      'claude-code': [
+        shellFailure(t.rich('happen.claude-code.one', { code })),
+        t.rich('happen.claude-code.two', { code }),
+      ],
+      antigravity: [
+        shellFailure(t.rich('happen.antigravity.one', { code })),
+        t.rich('happen.antigravity.two', { code }),
+      ],
       codex: [t.rich('happen.codex.one', { code }), t.rich('happen.codex.two', { code })],
-      copilot: [t.rich('happen.copilot.one', { code }), t.rich('happen.copilot.two', { code })],
+      copilot: [t.rich('happen.copilot.one', { code }), shellFailure(t.rich('happen.copilot.two', { code }))],
     } as const;
+    const windows = {
+      'claude-code': t.rich('windows.claude-code', { code }),
+      antigravity: t.rich('windows.antigravity', { code }),
+      codex: t.rich('windows.codex', { code }),
+      copilot: t.rich('windows.copilot', { code }),
+    };
     return (
       <SlideFrame>
         <div className="flex flex-col gap-8">
           <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
 
-          <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8">
+          <div
+            className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8"
+            {...target('install')}
+          >
+            <div className="rounded-lg border border-border bg-muted p-4 text-body" data-work-laptop="">
+              <p className="font-semibold">{t('workLaptop.title')}</p>
+              <p className="mt-2">
+                <PickSwitch
+                  name="os"
+                  fallback={DEFAULT_OS}
+                  cases={{ mac: t('workLaptop.mac'), windows: t('workLaptop.windows'), linux: t('workLaptop.linux') }}
+                />{' '}
+                {t('workLaptop.text')}
+              </p>
+            </div>
             <div className="flex flex-col gap-2">
               <p className="text-caption font-semibold uppercase text-primary">{t('firstCommand')}</p>
               <p className="text-body">{t('paste')}</p>
@@ -93,6 +132,12 @@ export const installYourAiAgent = slide({
                     const command = installCommand(agent.id, os.id);
                     return (
                       <div className="flex flex-col gap-3">
+                        {os.id === 'windows' ? (
+                          <div className="flex flex-col gap-2 text-body" data-windows-prerequisite="">
+                            <p>{windows[agent.id as keyof typeof windows]}</p>
+                            <p className="text-caption text-muted-foreground">{t.rich('windows.version', { code })}</p>
+                          </div>
+                        ) : null}
                         <CopyLine text={command.text} where="shell" focal big words={words} />
                         {command.shell === 'powershell' ? (
                           <p className="text-caption text-muted-foreground">{t.rich('powershellHint', { code })}</p>
@@ -137,6 +182,14 @@ export const installYourAiAgent = slide({
                 </div>
 
                 <p className="text-body font-semibold">{t('worked')}</p>
+                <PickSwitch
+                  name="agent"
+                  fallback={DEFAULT_AGENT}
+                  cases={casesOf(AGENTS, (agent) => (
+                    <CopyLine text={`${launchCommand(agent.id).text} --version`} where="shell" words={words} />
+                  ))}
+                />
+                <p className="text-caption text-muted-foreground">{t('versionWorked')}</p>
               </div>
             </DoneStrip>
 
@@ -171,6 +224,12 @@ export const installYourAiAgent = slide({
                   ))}
                 />
                 <p className="text-body font-semibold">{t('helpLine')}</p>
+              </div>
+              <div className="flex flex-col gap-2 text-body">
+                <p className="font-semibold">{t('enterprise.title')}</p>
+                <p>{t('enterprise.network')}</p>
+                <p>{t('enterprise.policy')}</p>
+                <p>{t('enterprise.handoff')}</p>
               </div>
             </MoreHelp>
           </div>

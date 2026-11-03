@@ -9,15 +9,12 @@ import { MacMenu, WindowsMenu } from './folder-menu';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { ExternalIcon, InfoIcon, MoveText, TrustBox } from './move-parts';
+import { notes } from './notes';
 import { type AiAgent, type Os } from './picks.pure';
-import { fallbackCommand, FOLDER, startCommand, terminalPrompt } from './start.pure';
+import { fallbackCommand, FOLDER, startCommand, terminalPrompt, TRUST_PATH } from './start.pure';
 import { PromptLine, TerminalWindow } from './terminal-window';
+import { WindowsFallback } from './windows-fallback';
 
-/*
- * Each AI agent's official start page. Not yet confirmed against each vendor's current docs (the Spec's build notes):
- * Claude Code's quickstart, OpenAI's Codex CLI page, GitHub's Copilot CLI page the Spec's research cites, and
- * Antigravity's docs home.
- */
 const START_PAGES: Readonly<Record<AiAgent, string>> = {
   'claude-code': 'https://code.claude.com/docs/en/quickstart',
   antigravity: 'https://antigravity.google/docs',
@@ -25,19 +22,11 @@ const START_PAGES: Readonly<Record<AiAgent, string>> = {
   copilot: 'https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-copilot-cli',
 };
 
-/** Where the trust question shows the folder, as the AI agent sees it on each OS. */
-const TRUST_PATH = {
-  mac: '~/Downloads/hancrafted-workshop-starter',
-  windows: 'C:\\Users\\han\\Downloads\\hancrafted-workshop-starter',
-  linux: '~/Downloads/hancrafted-workshop-starter',
-} as const;
-
-// Step 3 (second Slide), Option 6a: the terminal opens from the folder's own right-click menu, so a first-timer types no path, then
-// the AI agent starts in that window; each move beside the state the viewer matches on their own screen, a quiet `cd`
-// line as fallback. Both toolbars show. Hover dims the other move (`focus-group--dim-others`). Motion: none.
+// The menu is an example, not a promise about every Windows configuration; the alternative stays in closed help.
 export const startTheAgentInsideThatFolder = slide({
   slug: 'start-the-agent-inside-that-folder',
   messages: { en, de },
+  notes,
   segments: [{ slug: 'go-in-then-start' }, { slug: 'same-folder-every-time' }, { slug: 'chain-so-far' }],
   headerAction: ({ t, template }) => (
     <GuideHelp
@@ -59,7 +48,7 @@ export const startTheAgentInsideThatFolder = slide({
       }}
     />
   ),
-  content: ({ t }) => {
+  content: ({ t, target }) => {
     const terminalTitle = `${t('terminal')} · ${FOLDER}`;
     const byOs = <T,>(of: (os: Os) => T) => ({ mac: of('mac'), windows: of('windows'), linux: of('linux') }) as const;
     const byAgent = <T,>(of: (agent: AiAgent) => T) =>
@@ -80,7 +69,10 @@ export const startTheAgentInsideThatFolder = slide({
       <SlideFrame>
         <div className="flex flex-col gap-8">
           <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
-          <ol className="focus-group focus-group--dim-others flex flex-col gap-8 rounded-3xl border border-border bg-card p-5 md:p-8">
+          <ol
+            className="focus-group focus-group--dim-others flex flex-col gap-8 rounded-3xl border border-border bg-card p-5 md:p-8"
+            {...target('folder')}
+          >
             <li className="focus-group__item grid grid-cols-1 items-start gap-6 md:grid-cols-12">
               <MoveText n={1} title={t('moves.open.title')}>
                 <p>
@@ -121,23 +113,23 @@ export const startTheAgentInsideThatFolder = slide({
                     windows: (
                       <>
                         <WindowsMenu
-                          label={t('moves.open.menuLabel')}
+                          label={t('windows.menuLabel')}
                           folder={FOLDER}
                           before={[
-                            t('moves.open.menu.windows.newTab'),
+                            t('windows.menu.open'),
                             t('moves.open.menu.windows.newWindow'),
-                            t('moves.open.menu.windows.pin'),
-                            t('moves.open.menu.windows.compress'),
                             t('moves.open.menu.windows.copyPath'),
-                            t('moves.open.menu.windows.properties'),
                           ]}
                           pick={t('moves.open.menu.windows.terminal')}
-                          after={t('moves.open.menu.windows.more')}
+                          after={t('moves.open.menu.windows.properties')}
                         />
-                        <p className="flex items-start gap-2 text-caption text-muted-foreground">
-                          <InfoIcon />
-                          <span>{t.rich('moves.open.note.windows')}</span>
-                        </p>
+                        <ByAgent
+                          variants={byAgent((agent) =>
+                            agent === 'copilot' ? (
+                              <p className="text-caption text-muted-foreground">{t.rich('windows.copilot')}</p>
+                            ) : null,
+                          )}
+                        />
                       </>
                     ),
                     linux: null,
@@ -149,17 +141,34 @@ export const startTheAgentInsideThatFolder = slide({
                     <span aria-hidden="true" className="h-5 w-2.5 bg-foreground" />
                   </p>
                 </TerminalWindow>
+                <ByOs
+                  variants={{
+                    mac: null,
+                    linux: null,
+                    windows: (
+                      <WindowsFallback
+                        shell={<ByAgent variants={byAgent((agent) => (agent === 'copilot' ? 'pwsh' : 'powershell'))} />}
+                        copyWords={{ copy: t('copy'), copied: t('copied') }}
+                        words={{
+                          title: t('windows.helpTitle'),
+                          open: t.rich('windows.open'),
+                          addressBar: t('windows.addressBar'),
+                          shellHint: t('windows.shellHint'),
+                          check: t('windows.check'),
+                          location: t('windows.location'),
+                          file: t.rich('windows.file'),
+                          fallback: t.rich('windows.fallback'),
+                          alternate: t.rich('moves.open.note.windows'),
+                        }}
+                      />
+                    ),
+                  }}
+                />
               </div>
             </li>
-            <li className="focus-group__item grid grid-cols-1 items-start gap-6 md:grid-cols-12">
+            <li className="focus-group__item grid grid-cols-1 items-start gap-6 md:grid-cols-12" data-agent-start="">
               <MoveText n={2} title={t('moves.start.title')}>
-                <p>
-                  <ByAgent
-                    variants={byAgent((agent) =>
-                      startCommand(agent) === null ? t('moves.start.antigravity') : t.rich('moves.start.detail'),
-                    )}
-                  />
-                </p>
+                <p>{t.rich('moves.start.detail')}</p>
                 <ByAgent
                   variants={byAgent((agent) => (
                     <a
@@ -201,19 +210,25 @@ export const startTheAgentInsideThatFolder = slide({
                 </TerminalWindow>
               </div>
             </li>
-            <li>
-              <MoreHelp title={t('moreTitle')}>
-                <p className="text-caption text-muted-foreground">
-                  {t.rich('fallback.text', {
-                    command: () => (
-                      <code className="rounded-md bg-muted px-1.5 font-mono text-foreground">
-                        <ByOs variants={byOs(fallbackCommand)} />
-                      </code>
-                    ),
-                  })}
-                </p>
-              </MoreHelp>
-            </li>
+            <ByOs
+              variants={{
+                windows: null,
+                mac: (
+                  <li>
+                    <MoreHelp title={t('moreTitle')}>
+                      {t.rich('fallback.text', { command: () => <code>{fallbackCommand('mac')}</code> })}
+                    </MoreHelp>
+                  </li>
+                ),
+                linux: (
+                  <li>
+                    <MoreHelp title={t('moreTitle')}>
+                      {t.rich('fallback.text', { command: () => <code>{fallbackCommand('linux')}</code> })}
+                    </MoreHelp>
+                  </li>
+                ),
+              }}
+            />
           </ol>
         </div>
       </SlideFrame>

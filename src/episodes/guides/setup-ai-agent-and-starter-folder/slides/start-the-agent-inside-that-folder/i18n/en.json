@@ -1,6 +1,45 @@
 {
   "title": "Start the agent inside that folder",
-  "caption": "Open the terminal from the folder itself, then start your AI agent: <b>it reads only the folder it starts in</b>.",
+  "caption": "Open the terminal in the extracted starter folder, check where you are, then start your AI agent: <b>so it finds your workshop files</b>.",
+  "copy": "Copy",
+  "copied": "Copied",
+  "windows": {
+    "menuLabel": "Example Windows menu · Shift + right-click",
+    "menu": { "open": "Open" },
+    "copilot": "For Copilot, type <code>pwsh</code> in this window and press Enter first. This opens the PowerShell 7 installed earlier in the same folder.",
+    "helpTitle": "Didn't see “Open PowerShell window here”? Try this",
+    "open": "Open the extracted folder containing <code>GLOSSARY.md</code> in File Explorer. Press <b>Ctrl+L</b>, type the word shown below into the address bar, then press <b>Enter</b>.",
+    "addressBar": "File Explorer address bar · Ctrl+L",
+    "shellHint": "Copilot uses pwsh for the PowerShell 7 installed earlier. If Windows cannot find it, stop and return to the installation step.",
+    "check": "Then check that you are in the right folder:",
+    "location": "The result must be the actual extracted starter folder, not your home folder or the ZIP. Your username and path can differ from the drawing.",
+    "file": "You see <code># hancrafted workshop starter</code>. File not found? Open the folder containing <code>GLOSSARY.md</code>, not an outer folder. Do not start the agent until both checks work.",
+    "fallback": "Wrong location? In Explorer, open the actual folder containing GLOSSARY.md. Press Ctrl+L and copy its full path. In PowerShell, type <code>Set-Location -LiteralPath </code>, paste that path inside double quotes, then press Enter. Run Get-Location again. Do not paste the example username or assume your folder is in Downloads."
+  },
+  "notes": {
+    "windows-folder": {
+      "header": "Check the folder, not the menu label",
+      "description": "Microsoft documents launching PowerShell from Explorer's address bar [1]. Terminal hosts configurable shells, so Open in Terminal does not guarantee PowerShell 7 [2]. Get-Location checks the actual directory; Get-Content reads the starter file; Set-Location -LiteralPath accepts a literal path [3][4][5]. Microsoft's Windows 10 announcement documents the Shift-right-click PowerShell entry [6]; it does not guarantee that entry on every Windows 11 or managed machine. The menu and path drawings are examples. These routes have not been tested on current managed Windows machines.",
+      "sources": {
+        "explorer-shell": { "title": "Microsoft, Launching shells from Explorer" },
+        "terminal": { "title": "Microsoft, Windows Terminal profiles" },
+        "location": { "title": "Microsoft, Get-Location" },
+        "content": { "title": "Microsoft, Get-Content" },
+        "set-location": { "title": "Microsoft, Set-Location" },
+        "windows-menu": {
+          "title": "Microsoft, Windows 10 PowerShell context-menu announcement"
+        }
+      }
+    },
+    "agent-working-folder": {
+      "header": "A working folder is not a security boundary",
+      "description": "The vendors instruct users to start in their project directory; Google documents agy as the CLI command [1][2]. The folder helps the agent discover the workshop's files and skills, but does not mean it can access only that directory. Approve only the intended workshop folder and review commands before allowing them.",
+      "sources": {
+        "claude-quickstart": { "title": "Anthropic, Claude Code quickstart" },
+        "antigravity-start": { "title": "Google, Antigravity getting started" }
+      }
+    }
+  },
   "toolbar": {
     "os": "Your computer",
     "agent": "AI agent"
@@ -11,10 +50,10 @@
       "title": "Open a terminal in the folder",
       "detail": {
         "mac": "In Finder, right-click <b>hancrafted-workshop-starter</b>, then <b>Services › New Terminal at Folder</b>. No path to type.",
-        "windows": "In File Explorer, right-click <b>hancrafted-workshop-starter</b>, then <b>Open in Terminal</b>. No path to type.",
+        "windows": "In File Explorer, hold <b>Shift</b> and right-click the extracted <b>hancrafted-workshop-starter</b> folder. Choose <b>Open PowerShell window here</b>.",
         "linux": "Right-click the folder in your file manager › <b>Open in Terminal</b>. No path to type."
       },
-      "worked": "The folder name sits in front of your cursor.",
+      "worked": "The folder name hancrafted-workshop-starter appears before your cursor. Your username and the rest of the path may differ from the example.",
       "menuLabel": "The folder's right-click menu",
       "menu": {
         "mac": {
@@ -33,18 +72,18 @@
           "compress": "Compress to ZIP file",
           "copyPath": "Copy as path",
           "properties": "Properties",
-          "terminal": "Open in Terminal",
+          "terminal": "Open PowerShell window here",
           "more": "Show more options"
         }
       },
       "note": {
         "mac": "Not in the menu? Turn it on once: <b>System Settings › Keyboard › Keyboard Shortcuts › Services</b>, tick <b>New Terminal at Folder</b>.",
-        "windows": "Windows 10 without it? Open the folder, click the address bar, type <code>powershell</code>, press Enter."
+        "windows": "A right-click menu may instead offer Open in Terminal, or Shift+right-click may show Open PowerShell window here. Either can work, but the label and shell vary. The address-bar route avoids needing a particular menu."
       }
     },
     "start": {
       "title": "Start your AI agent",
-      "detail": "Type its name and press Enter. If it asks whether you trust this folder, <b>yes is expected here</b>.",
+      "detail": "Type its name in this terminal and press Enter. If it asks whether you trust the folder, check the path: <b>approve only the extracted starter folder</b>.",
       "antigravity": "Start Antigravity in this folder as its official page shows.",
       "opensNewTab": "(opens in a new tab)",
       "link": {
@@ -69,7 +108,7 @@
       "go-in-then-start": {
         "title": "Go in, then start",
         "keywords": "",
-        "script": "In your terminal you first move into the unzipped folder, and only then you start your AI agent. The page draws the terminal at each point, so you can check that the folder name appears in front of your cursor before you start. The AI agent may ask whether you trust this folder. For this one, you do, so say yes."
+        "script": "Start from the extracted starter folder. On Windows, hold Shift and right-click it, then choose Open PowerShell window here. The menu drawing is an example; if yours has no such entry, open the help directly below it for another route. For Copilot, switch to the PowerShell 7 installed earlier by typing pwsh in that window first. Check that the prompt names the starter folder, then start your agent there. Trust only the intended workshop folder."
       },
       "same-folder-every-time": {
         "title": "Same folder every time",
@@ -89,8 +128,8 @@
     "placeholder": "Paste your error or describe what you see…",
     "copy": "Copy prompt",
     "copied": "Prompt copied. Paste it into free ChatGPT.",
-    "copyTip": "Paste this prompt into an AI you are allowed to use.",
-    "prompt": "I am a beginner following a step-by-step guide to get an AI agent running on my laptop for a workshop.\n\nMy computer: {os}\nMy AI agent: {agent}\nThe step I am on: {step}\n\nThis is the error, or what I see:\n{error}\n\nExplain in plain words what went wrong and tell me what to do next, one small step at a time. Do not assume I know the terminal.",
+    "copyTip": "Remove tokens, personal information and confidential details first. Use only an AI your organization permits.",
+    "prompt": "I am a beginner following a step-by-step guide to get an AI agent running on my laptop for a workshop.\n\nMy computer: {os}\nMy AI agent: {agent}\nThe step I am on: {step}\n\nThis is the error, or what I see:\n{error}\n\nExplain in plain words what went wrong and tell me what to do next, one small step at a time. Do not assume I know the terminal. Check the actual extracted folder rather than assuming a Downloads path. Do not suggest bypassing company policy, administrator restrictions, execution policy, TLS checks, proxies or security software. If this needs organizational approval or configuration, explain what to ask IT. Remind me to redact secrets and confidential details.",
     "noError": "(I have not pasted an error; I am stuck on this step.)",
     "step": "Step 3: Start the agent inside that folder",
     "chats": {

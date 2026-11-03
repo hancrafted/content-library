@@ -92,19 +92,25 @@ interface MacMenuProps {
   readonly other: string;
 }
 
-/** Windows 11: File Explorer's short menu on the folder, no submenu, with "Open in Terminal". */
 export function WindowsMenu({ label, folder, before, pick, after }: WindowsMenuProps) {
   return (
-    <div aria-label={label} role="img" className="grid grid-cols-12 items-start gap-3 rounded-2xl bg-muted p-4 sm:p-5">
-      <div className="col-span-12 sm:col-span-3">
-        <FolderTile name={folder} />
+    <div className="flex flex-col gap-3 rounded-2xl bg-muted p-4 sm:p-5" data-windows-menu="">
+      <p className="text-caption text-muted-foreground">{label}</p>
+      <div role="img" aria-label={label} className="grid grid-cols-12 items-start gap-4">
+        <div className="col-span-12 sm:col-span-4">
+          <FolderTile name={folder} />
+        </div>
+        <ul className="col-span-12 flex flex-col rounded-sm border border-border bg-card py-1 text-caption shadow-lg sm:col-span-8">
+          <Items items={before} />
+          <li aria-hidden="true" className="my-1 h-px bg-border" />
+          <li className="flex items-center gap-2 bg-primary px-3 py-1.5 font-semibold text-primary-foreground">
+            <TerminalIcon />
+            {pick}
+          </li>
+          <li aria-hidden="true" className="my-1 h-px bg-border" />
+          <Items items={[after]} />
+        </ul>
       </div>
-      <ul className={cn(MENU, 'col-span-12 sm:col-span-6')}>
-        <Items items={before} />
-        <li aria-hidden="true" className="my-1 h-px bg-border" />
-        <Pick last>{pick}</Pick>
-        <li className="rounded-md px-3 py-1 text-muted-foreground">{after}</li>
-      </ul>
     </div>
   );
 }
