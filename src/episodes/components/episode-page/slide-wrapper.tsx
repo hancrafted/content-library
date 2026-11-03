@@ -1,7 +1,7 @@
 import type { HeaderMode } from '@/episodes/components/slide-master/slide';
 import { SlideHeader, type SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
 import { cn } from '@/shared/lib/utils';
-import type { ComponentPropsWithoutRef } from 'react';
+import { Fragment, type ComponentPropsWithoutRef } from 'react';
 import { SlideBackdrop } from '../slide-master/slide-master';
 import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
 import { SlideIdentity, SlideMount } from './slide-mount.client';
@@ -42,7 +42,6 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
   const { header, scene, children, presentation, transition, style, ...props } = rest;
   // A section slide on the shared header is a full-bleed band, so a new Section reads at a glance.
   const frameClass = wrapperClass(mode, size, presentation);
-  const primary = primaryClass(presentation, transition);
   return (
     <div
       id={id}
@@ -53,8 +52,34 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       style={{ ...presentation?.style, ...style }}
       {...props}
     >
+      <WrapperLayers
+        id={id}
+        mode={mode}
+        presentation={presentation}
+        transition={transition}
+        header={header}
+        scene={scene}
+      >
+        {children}
+      </WrapperLayers>
+    </div>
+  );
+}
+
+function WrapperLayers({
+  id,
+  mode = 'authored',
+  presentation,
+  transition,
+  header,
+  scene,
+  children,
+}: SlideWrapperProps) {
+  const Provider = presentation?.Provider ?? Fragment;
+  return (
+    <Provider>
       <SurfaceLayers id={id} presentation={presentation} />
-      <SlideMount id={id} mode={mode} className={primary}>
+      <SlideMount id={id} mode={mode} className={primaryClass(presentation, transition)}>
         {mode === 'shared' ? (
           <SharedContent header={header} scene={scene}>
             {children}
@@ -65,7 +90,7 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       </SlideMount>
       {transition && <SlideTransition edge={transition} />}
       <FrontLayer id={id} presentation={presentation} />
-    </div>
+    </Provider>
   );
 }
 

@@ -1,0 +1,31 @@
+/* Individual fixed affordances move without establishing a containing block for the mobile dialog. */
+.entrance > :is([data-testid='toc'], [data-testid='toc-open'], a[data-toc-action]) {
+  opacity: var(--title-departure-progress, 1);
+  translate: 0 calc((1 - var(--title-departure-progress, 1)) * var(--toc-reveal-distance, 0.75rem));
+}
+
+:global([data-title-departure='start'])
+  .entrance
+  > :is([data-testid='toc'], [data-testid='toc-open'], a[data-toc-action]) {
+  visibility: hidden;
+}
+
+:global(html[data-title-active='true']) .legacy {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entrance > :is([data-testid='toc'], [data-testid='toc-open'], a[data-toc-action]) {
+    translate: none;
+    transition: none;
+  }
+}
+
+@media print {
+  .entrance > :is([data-testid='toc'], [data-testid='toc-open'], a[data-toc-action]),
+  .legacy {
+    opacity: 1 !important;
+    translate: none !important;
+    visibility: visible !important;
+  }
+}
