@@ -32,7 +32,7 @@ A projection over the page catalogue's lists, never stored: `resourceIndex()` in
 
 ## Kind filter
 
-`/resources/` (`ResourcesOverviewPage`, design-ADR 0019) renders the index for the visitor's locale as cards, with a search, a kind filter, Tag chips and a grid or list switch. The kind filter is the shared `TagToggles` chip control, one chip per kind with its count (`data-resource-kind-filter`); chips combine with OR within the kind group, and the search, kinds and Tags combine with AND (`resources-overview.pure.ts`). Every card is in the server HTML; filtering only toggles `hidden`. Tests: `tests/post-build/resources.build.test.ts` (every kind with a listed page, chips and counts, both locales) and `tests/browser/resources-filter.browser.test.ts` (a chip narrows to one kind). UX taste of the menu and the filter is held by review only, the product vision's known gap.
+`/resources/` (`ResourcesOverviewPage`, design-ADR 0019) renders the index for the visitor's locale as cards, with a search, a kind filter, Tag chips and a grid or list switch. The kind filter is the shared `TagToggles` chip control, one chip per kind with its count (`data-resource-kind-filter`); chips combine with OR within the kind group, and the search, kinds and Tags combine with AND (`resources-overview.pure.ts`). Every card is in the server HTML; filtering only toggles `hidden`. Tests: `tests/post-build/resources.build.test.ts` (every kind with a listed page, chips and counts, both locales). Manually check that a chip narrows to one kind. UX taste of the menu and the filter is held by review only, the product vision's known gap.
 
 ## Guides
 
