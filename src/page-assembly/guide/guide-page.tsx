@@ -4,6 +4,8 @@ import { EpisodePageContainer } from '@/episodes/components/episode-page/episode
 import { compositionOf } from '@/episodes/lib/registry';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
+import { ROUTES } from '@/shared/lib/static-routes';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 /** A Guide: the page reference carrying its composition's ref. */
@@ -19,15 +21,22 @@ export function guideOf(params: RouteParams<GuideParams>): BuiltGuide {
  * so it has the table of contents, the Context drawer, the page-wide toolbar picks and, from its record's `youtube`,
  * the Video its Title slide plays.
  */
-export function GuidePage({ page, locale }: { page: BuiltGuide; locale: Locale }) {
+export async function GuidePage({ page, locale }: { page: BuiltGuide; locale: Locale }) {
   const { guide } = page;
+  const composition = compositionOf(guide);
+  const t = await getTranslations({ locale, namespace: 'nav' });
   return (
     <EpisodePageContainer
       locale={locale}
       page={guide}
-      episode={compositionOf(guide)}
+      episode={composition}
       video={guideVideo(guide.slug, locale)}
       frame={{ route: routeOf(page) }}
+      tocPage={{
+        title: composition.messages[locale].title,
+        route: routeOf(page),
+        back: { label: t('guides'), route: ROUTES.guides },
+      }}
     />
   );
 }

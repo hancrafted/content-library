@@ -1,7 +1,18 @@
-import type { ReadingTime, TocSection } from '@/shared/lib/table-of-contents.pure';
+import type {
+  ReadingTime,
+  TocCollection,
+  TocPageContext,
+  TocScope,
+  TocSection,
+} from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
 import { useId } from 'react';
-import { ProgressBar, TocHeading, type TocLabels } from './toc-heading';
+import { BackToTop } from '../back-to-top.client';
+import { TocBorder } from './toc-border.client';
+import { TocCollectionView } from './toc-collection.client';
+import { TocHeading, type TocLabels } from './toc-heading';
+import { TocOptions } from './toc-options.client';
+import { ScopeButton } from './toc-scope.client';
 import { SectionEntry } from './toc-section-entry';
 import type { TocView } from './toc-view';
 
@@ -35,7 +46,7 @@ function SectionList({ view, sections, toggleLabel, collapsed }: SectionListProp
   );
 }
 
-/** Progress bar and sections, folded away while the loading box shows. */
+/** Sections, folded away while the loading box shows. */
 function TocBody(props: {
   view: TocView;
   sections: readonly TocSection[];
@@ -52,48 +63,35 @@ function TocBody(props: {
         view.revealed ? 'h-auto' : 'h-0 noscript:h-auto',
       )}
     >
-      <div className="flex min-h-0 flex-col overflow-hidden">
-        <div
-          className={cn(
-            'overflow-hidden motion-reduce:transition-none transition-opacity duration-300 ease-out',
-            collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100',
-          )}
-        >
-          <ProgressBar labels={labels} locale={view.locale} time={props.time} settled={view.settled} />
-        </div>
-        <SectionList view={view} sections={props.sections} toggleLabel={labels.toggle} collapsed={collapsed} />
-      </div>
+      <SectionList view={view} sections={props.sections} toggleLabel={labels.toggle} collapsed={collapsed} />
     </div>
   );
 }
 
-function PanelHeading(props: {
-  view: TocView;
-  labels: TocLabels;
-  time: ReadingTime;
-  collapsed?: boolean;
-  onToggleCollapse?: () => void;
-}) {
+function PanelHeading(props: TocPanelProps) {
   const { view } = props;
   return (
     <TocHeading
       labels={props.labels}
       locale={view.locale}
-      route={view.route}
+      page={props.page}
       topId={view.topId}
       atTop={view.atTop}
       onGlide={view.glideTo}
-      time={props.time}
-      revealed={view.revealed}
       collapsed={props.collapsed}
-      onToggleCollapse={props.onToggleCollapse}
+      actions={
+        <>
+          <ScopeButton {...props} />
+          <TocOptions labels={props.labels} collapsed={props.collapsed} onToggleCollapse={props.onToggleCollapse} />
+        </>
+      }
     />
   );
 }
 
-/** The bounded panel: heading with time left and progress, then the numbered sections. */
-export function TocPanel(props: {
+export interface TocPanelProps {
   view: TocView;
+  page: TocPageContext;
   sections: readonly TocSection[];
   labels: TocLabels;
   time: ReadingTime;
@@ -101,7 +99,50 @@ export function TocPanel(props: {
   onToggleCollapse?: () => void;
   className?: string;
   testId?: string;
-}) {
+  collection?: TocCollection;
+  scope: TocScope;
+  onToggleScope: () => void;
+}
+
+function PanelBody(props: TocPanelProps) {
+  if (props.collection && !props.collapsed && props.scope === 'collection') {
+    return <TocCollectionView collection={props.collection} view={props.view} labels={props.labels} />;
+  }
+  return <TocBody {...props} />;
+}
+
+function PanelActions(props: TocPanelProps) {
+  if (!props.collapsed) return null;
+  return (
+    <div
+      data-toc-actions
+      className={cn(
+        'mt-2 flex shrink-0 items-center justify-between border-t pt-2',
+        props.collapsed && 'flex-col gap-1',
+      )}
+    >
+      <BackToTop
+        label={props.labels.backToTop}
+        locale={props.view.locale}
+        route={props.view.route}
+        compact={props.collapsed}
+      />
+    </div>
+  );
+}
+
+function PanelContents(props: TocPanelProps) {
+  return (
+    <>
+      <PanelHeading {...props} />
+      <PanelBody {...props} />
+      <PanelActions {...props} />
+    </>
+  );
+}
+
+/** The bounded panel: contextual heading, border progress and the numbered outline. */
+export function TocPanel(props: TocPanelProps) {
   const view = { ...props.view, idPrefix: useId() };
   return (
     <nav
@@ -109,16 +150,17 @@ export function TocPanel(props: {
       aria-busy={!view.revealed}
       data-testid={props.testId}
       data-collapsed={props.collapsed ? 'true' : undefined}
+      data-scope={props.scope}
       className={cn(
-        'flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl overflow-hidden',
+        'relative flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl',
         'motion-reduce:transition-none transition-[width] duration-300 ease-out p-3',
         // 3.625rem = 2rem marker + 2 × p-3 + 2px border: the numbers keep their place.
         props.collapsed ? 'w-[3.625rem]' : 'w-full',
         props.className,
       )}
     >
-      <PanelHeading {...props} view={view} />
-      <TocBody {...props} view={view} />
+      <TocBorder labels={props.labels} locale={view.locale} time={props.time} settled={view.settled} />
+      <PanelContents {...props} view={view} />
     </nav>
   );
 }

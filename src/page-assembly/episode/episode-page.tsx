@@ -21,8 +21,11 @@ import { episodeJsonLd } from '@/page-assembly/lib/structured-data.pure';
 import { JsonLdScript } from '@/shared/components/json-ld';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { SITE_URL } from '@/shared/lib/site-url';
+import type { TocPageContext } from '@/shared/lib/table-of-contents.pure';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { episodeContextOf, eventNavigationOf } from './event-navigation.pure';
 
 /**
  * Every page the Episode page template renders, told apart by kind: an Episode's own page under `/episodes/`, and an
@@ -45,15 +48,25 @@ export function eventEpisodePageOf(params: RouteParams<EventEpisodeParams>): Eve
  * Every Episode-shaped page (FE-007 §1), rendered through the one container (FE-002): an Episode's own page with its
  * structured data once published, and an Episode under its Event framed by the Event.
  */
-export function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
+export async function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
+  const t = await getTranslations({ locale, namespace: 'nav' });
+  const context = episodeContextOf(page, locale, t('episodes'));
   return matchPage<EpisodePageRef, ReactNode>(page, {
-    episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} />,
-    'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} />,
+    episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} context={context} />,
+    'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} context={context} />,
   });
 }
 
 /** An Episode's own page: the container, with its recording, and its structured data once published. */
-function OwnEpisodePage({ episode, locale }: { episode: StandaloneRef<EpisodeId>; locale: Locale }) {
+function OwnEpisodePage({
+  episode,
+  locale,
+  context,
+}: {
+  episode: StandaloneRef<EpisodeId>;
+  locale: Locale;
+  context: TocPageContext;
+}) {
   const composition = compositionOf(episode);
   const { title, description } = composition.messages[locale];
   const video = episodeVideo(episode, locale);
@@ -70,7 +83,7 @@ function OwnEpisodePage({ episode, locale }: { episode: StandaloneRef<EpisodeId>
   return (
     <>
       {data && <JsonLdScript data={data} />}
-      <EpisodePageContainer locale={locale} page={episode} episode={composition} video={video} />
+      <EpisodePageContainer locale={locale} page={episode} episode={composition} video={video} tocPage={context} />
     </>
   );
 }
@@ -80,7 +93,15 @@ function OwnEpisodePage({ episode, locale }: { episode: StandaloneRef<EpisodeId>
  * container, framed by the Event's breadcrumb and past notice above the Title slide, "Episode n of m" under the title,
  * and the Playlist walk after the last Slide. Its structured data stays on the Episode's own page.
  */
-function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: Locale }) {
+function EpisodeUnderEvent({
+  page,
+  locale,
+  context,
+}: {
+  page: EventEpisodePage;
+  locale: Locale;
+  context: TocPageContext;
+}) {
   const shown = page.presented;
   const titleOf = (episode: EpisodeRef<EpisodeId>) => compositionOf(episode).messages[locale].title;
   return (
@@ -89,7 +110,11 @@ function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: L
       page={shown.episode}
       episode={compositionOf(shown.episode)}
       video={episodeVideo(shown.episode, locale)}
-      frame={eventEpisodeFrame(shown, { locale, titleOf, buildDay: BUILD_DAY })}
+      tocPage={context}
+      frame={{
+        ...eventEpisodeFrame(shown, { locale, titleOf, buildDay: BUILD_DAY }),
+        navigation: eventNavigationOf(shown.event, locale),
+      }}
     />
   );
 }

@@ -33,7 +33,7 @@
   },
   "tableOfContents": {
     "title": "Inhalt",
-    "progress": "Lesezeit",
+    "progress": "Lesefortschritt",
     "remaining": {
       "one": "noch {count} Min.",
       "other": "noch {count} Min."
@@ -43,7 +43,11 @@
     "open": "Inhalt öffnen",
     "close": "Inhalt schließen",
     "collapse": "Inhalt einklappen",
-    "expand": "Inhalt ausklappen"
+    "expand": "Inhalt ausklappen",
+    "backToTop": "Nach oben",
+    "options": "Navigationsoptionen",
+    "zoomOut": "Zur Veranstaltung herauszoomen",
+    "zoomIn": "Zu dieser Episode hineinzoomen"
   },
   "contextDrawer": {
     "title": "Kontext",

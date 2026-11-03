@@ -1,7 +1,9 @@
 import '@/app/globals.css';
 import type { Locale, LocalesByRoute } from '@/shared/lib/locale.pure';
 import { buildThemeInitScript } from '@/shared/lib/theme.pure';
+import { SiteBackToTop } from '@/shared/page-chrome/back-to-top.client';
 import { SiteHeader } from '@/shared/page-chrome/header/site-header';
+import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
 const THEME_INIT_SCRIPT = buildThemeInitScript();
@@ -15,7 +17,7 @@ const JS_CLASS_SCRIPT = "document.documentElement.classList.add('js')";
  * locales of each page not exported in every locale (`localesByRoute`), for the locale toggle, and the paths a Resource's
  * pages sit under (`navSections`), for the Resources nav link.
  */
-export function SiteShell({
+export async function SiteShell({
   locale,
   localesByRoute,
   navSections,
@@ -26,6 +28,7 @@ export function SiteShell({
   navSections: readonly string[];
   children: ReactNode;
 }) {
+  const t = await getTranslations({ locale, namespace: 'tableOfContents' });
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
@@ -36,6 +39,7 @@ export function SiteShell({
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <SiteHeader locale={locale} localesByRoute={localesByRoute} navSections={navSections} />
         {children}
+        <SiteBackToTop label={t('backToTop')} />
       </body>
     </html>
   );

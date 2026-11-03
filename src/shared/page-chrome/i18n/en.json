@@ -33,7 +33,7 @@
   },
   "tableOfContents": {
     "title": "Contents",
-    "progress": "Reading time",
+    "progress": "Reading progress",
     "remaining": {
       "one": "{count} min left",
       "other": "{count} min left"
@@ -43,7 +43,11 @@
     "open": "Open contents",
     "close": "Close contents",
     "collapse": "Collapse contents",
-    "expand": "Expand contents"
+    "expand": "Expand contents",
+    "backToTop": "Back to top",
+    "options": "Navigation options",
+    "zoomOut": "Zoom out to Event",
+    "zoomIn": "Zoom in to this Episode"
   },
   "contextDrawer": {
     "title": "Context",

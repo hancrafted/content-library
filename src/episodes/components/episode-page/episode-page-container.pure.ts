@@ -8,6 +8,7 @@ import {
 import { TOC_COLLAPSED_ATTR, type TocItem, type TocSection } from '@/shared/lib/table-of-contents.pure';
 import type { LocalizedSlide } from '../slide-master/localized-slide';
 import type { EyebrowText } from '../slide-master/slide-eyebrow';
+import type { LocalizedSlideOutline } from '../slide-master/slide-outline';
 
 /**
  * The size a Slide wrapper gives its Slide: `section` for a shown section slide, `page` for every other. A page Slide
@@ -27,7 +28,7 @@ type OpenSection = TocSection & { items: TocItem[] };
  * its own, its minutes are added to the entry it follows, so the Section's
  * total and the reading-time order both stay honest.
  */
-export function tocSectionsOf(slides: readonly LocalizedSlide[]): TocSection[] {
+export function tocSectionsOf(slides: readonly LocalizedSlideOutline[]): TocSection[] {
   const sections: OpenSection[] = [];
   for (const slide of slides) {
     const { id, minutes } = slide;

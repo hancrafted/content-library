@@ -18,19 +18,29 @@ Read before changing the look, layout or interaction of what surrounds an Episod
 
 On an Event-scoped Episode page the Event's breadcrumb and past notice sit above the Title slide, inside the insets, "Episode n of m" sits under the title, and the Playlist walk follows the last Slide. They scroll with the page; none floats. Detail: [Events](events.md#routes).
 
+The table of contents also offers Event navigation, derived at build time by `src/page-assembly/episode/event-navigation.pure.ts`; the shared chrome receives a plain outline, never records or Scenes. Each page-bearing Episode appears once in first-occurrence Playlist order. Section and Slide links retain the Event route and locale and land directly on their anchors. Decision: [Event navigation is a derived outline](../adr/0021-event-navigation-is-a-derived-outline.md).
+
+The zoom icon left of the top-right ellipsis switches between the current Episode's Sections and Slides and the full Event Episode → Section → Slide tree. Its tooltip appears above and names the destination scope: zoom out to Event, zoom in to this Episode. There is no separate Tree presentation or duplicate Playlist menu item. Collapse/expand appears with its matching icon. The mobile drawer has no collapse command and therefore no empty menu. `TOC_DEFAULT_SCOPE` in `src/shared/lib/table-of-contents.pure.ts` defaults to `page`; scope is transient and resets on a fresh page load, never stored. Switching scope leaves the reader in place. Standalone pages have no Event controls.
+
+Page assembly also supplies the current title/route and optional back-link label/route through `episodeContextOf` in the same module, or the Guide page template. This is page context, not stored Episode metadata or part of the Event tree. The back arrow names and returns to the current Event from an Event Episode, the Episodes overview from a standalone Episode, or Guides from a Guide. The muted parent label stays on one line and truncates with an ellipsis; the full name remains accessible. The collapsed rail shows the arrow alone. Other page kinds keep their supplied title and no invented back destination. The header shows neither remaining-time text nor a redundant Event-title link.
+
 ## Corners
 
 - Top-right: the Context drawer card, never the video.
 - Bottom-left: the table of contents pill, below `md` only; from `lg`, the docked talk player (17rem wide, 1rem from the edges) under the table of contents.
 - Bottom-right: Context drawer trigger.
-- There is no back-to-top button.
+- The table of contents' left-aligned page title returns to the document start, including any Event framing, through the page's URL service. The collapsed rail keeps an explicit up-arrow action; expanded mode has no duplicate footer action.
+- Pages without a table of contents use the site-wide back-to-top button after scrolling more than a viewport; CSS suppresses that fallback wherever a table of contents exists.
+- Mobile back-to-top outside the closed contents drawer is not yet verified: its hit area currently conflicts with the Context trigger. E2E investigation was deferred by request.
 
 ## Table of contents
 
 - Fixed overlay on the left from `md`, taking no layout space; below `md`, the pill opens it as a drawer sliding in from the left.
 - While the talk player is docked, its max-height leaves the player room (`--toc-reserve`) and it scrolls inside itself.
-- The pill shows where the reader is, the current Slide's number and title, plus the remaining reading time.
-- The heading links to the Title slide (`#top`) and is current there. The Title slide has no entry, so nothing is highlighted on `top`.
+- The pill shows where the reader is, the current Slide's number and title, without remaining-time text.
+- The header separates leaving the page (the back arrow and muted parent label) from returning to its top (the page title below). The title link is current on `top`; the Title slide has no entry in the outline.
+- The menu opens to the right of the rail, clamped within the viewport. It portals out of the rail's stacking context; in the mobile native dialog it stays within that dialog's top layer. The mobile drawer omits rail collapse/expand.
+- Reading progress runs clockwise around the current panel border from 12 o'clock. With Voice scripts it is time-weighted; without them it weights every body Slide equally (untitled Slides included), using the active Slide's fraction without claiming remaining minutes. The path is remeasured on resize and has a normalized length, so collapse/expand never turns a percentage into a stale pixel offset. The total includes Title slide script time that is absent from the outline; `readingTime` credits that elapsed introduction once the first body Slide is active, so reaching the bottom completes the border without forcing 100% on entry to the last Slide. At 100% the border transitions to the success green token; reduced motion skips the transition. Section rings are unchanged.
 - It takes pre-translated props from the container.
 
 ## Reserved places

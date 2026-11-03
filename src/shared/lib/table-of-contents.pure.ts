@@ -6,6 +6,11 @@
 /** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
 export const TOC_COLLAPSED_ATTR = 'data-toc-collapsed';
 
+export type TocScope = 'page' | 'collection';
+
+/** Initial scope only; a visitor's override is transient, never a stored preference. */
+export const TOC_DEFAULT_SCOPE: TocScope = 'page';
+
 /** One link; `id` equals the target's data-attribute value and URL fragment. */
 export interface TocItem {
   id: string;
@@ -26,6 +31,27 @@ export interface UnlistedSlide {
 /** A section heading with the items it collapses over; `items` may be empty. */
 export interface TocSection extends TocItem {
   items: readonly TocItem[];
+}
+
+/** A page's outline, ready for navigation without loading its content into the browser. */
+export interface TocPage {
+  readonly route: string;
+  readonly title: string;
+  readonly sections: readonly TocSection[];
+}
+
+/** Related pages in navigation order; page chrome knows only their titles, routes and outlines. */
+export interface TocCollection {
+  readonly title: string;
+  readonly route: string;
+  readonly pages: readonly TocPage[];
+}
+
+/** Context of the page displaying the outline, supplied by its caller rather than inferred from routes. */
+export interface TocPageContext {
+  readonly title: string;
+  readonly route: string;
+  readonly back?: { readonly label: string; readonly route: string };
 }
 
 /**
@@ -142,7 +168,7 @@ export function sectionProgress(
 export interface ReadingTime {
   total: number;
   remaining: number;
-  /** Elapsed share of `total`, 0 to 1, weighted by time rather than scroll distance. */
+  /** Elapsed share, 0 to 1: time-weighted, or equally weighted by Slide when no reading time exists. */
   progress: number;
 }
 
@@ -150,15 +176,23 @@ export interface ReadingTime {
  * Reading time over slides' `minutes` in page order, against the Episode's `total` as
  * the page was given it (the landing card quotes the same number). The active
  * slide counts as read up to `fraction` (clamped to 0–1); `activeIndex` -1
- * means nothing is read yet. An outline with no time at all is fully read.
+ * means nothing is read yet. Time outside the outline (the Title slide) has
+ * elapsed once a body Slide is active. Without reading time, each outlined Slide
+ * has equal weight; its progress never invents a duration.
  */
 export function readingTime(
   { minutes, total }: { readonly minutes: readonly number[]; readonly total: number },
   activeIndex: number,
   fraction: number,
 ): ReadingTime {
+  const into = Math.min(Math.max(fraction, 0), 1);
+  if (total === 0) {
+    const progress = activeIndex < 0 || minutes.length === 0 ? 0 : (activeIndex + into) / minutes.length;
+    return { total, remaining: 0, progress };
+  }
   const before = minutes.slice(0, Math.max(activeIndex, 0)).reduce((sum, value) => sum + value, 0);
-  const current = activeIndex < 0 ? 0 : (minutes[activeIndex] ?? 0) * Math.min(Math.max(fraction, 0), 1);
-  const elapsed = before + current;
-  return { total, remaining: total - elapsed, progress: total === 0 ? 1 : elapsed / total };
+  const current = activeIndex < 0 ? 0 : (minutes[activeIndex] ?? 0) * into;
+  const introduction = activeIndex < 0 ? 0 : Math.max(0, total - minutes.reduce((sum, value) => sum + value, 0));
+  const elapsed = introduction + before + current;
+  return { total, remaining: total - elapsed, progress: elapsed / total };
 }
