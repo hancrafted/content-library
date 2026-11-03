@@ -3,6 +3,7 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { SurfaceReferenceDrift } from './surface-reference.client';
 import surface from './surface-reference.module.css';
 
 interface HalfProps {
@@ -44,7 +45,7 @@ export const grid1x2 = slide({
   messages: { en, de },
   presentation: {
     tone: 'inverse',
-    rear: <div className={surface.rear} />,
+    rear: <SurfaceReferenceDrift className={surface.rear} />,
     rearMobile: true,
     front: <div className={surface.front} />,
   },
