@@ -8,10 +8,10 @@ import type { SlideHeaderProps } from '@/episodes/components/slide-master/slide-
 import type { ComposedPage } from '@/episodes/lib/registry';
 import { DevSlideReporter } from '@/shared/components/design-system-token-editor/dev-slide-reporter';
 import type { Locale } from '@/shared/lib/locale.pure';
-import type { TocCollection, TocSection } from '@/shared/lib/table-of-contents.pure';
+import type { TocCollection, TocPageContext, TocSection } from '@/shared/lib/table-of-contents.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { ContextDrawerSlot } from '@/shared/page-chrome/context-drawer/context-drawer-slot';
-import { TableOfContents, type TocLabels } from '@/shared/page-chrome/table-of-contents/table-of-contents.client';
+import { TableOfContents } from '@/shared/page-chrome/table-of-contents/table-of-contents.client';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ContentArea } from './content-area';
@@ -109,14 +109,14 @@ function titleSlideOf(
   };
 }
 
-function EpisodeToc(props: {
+async function EpisodeToc(props: {
   locale: Locale;
-  route: string;
+  page: TocPageContext;
   sections: readonly TocSection[];
   minutes: number;
-  labels: TocLabels;
   collection?: TocCollection;
 }) {
+  const labels = await tocLabelsOf(props.locale);
   return (
     <aside
       data-slot="toc"
@@ -124,12 +124,12 @@ function EpisodeToc(props: {
     >
       <TableOfContents
         locale={props.locale}
-        route={props.route}
+        page={props.page}
         sections={props.sections}
         total={props.minutes}
         targetAttribute="data-slide"
         topId={TITLE_ANCHOR}
-        labels={props.labels}
+        labels={labels}
         collection={props.collection}
       />
     </aside>
@@ -185,6 +185,17 @@ interface EpisodePageContainerProps {
   video?: Video;
   /** Present when an Event presents the Episode at its own URL; absent on `/episodes/<slug>/`. */
   frame?: Partial<EpisodeFrame>;
+  tocPage?: TocPageContext;
+}
+
+function tocPropsOf(content: EpisodeContent, props: EpisodePageContainerProps, sections: readonly TocSection[]) {
+  return {
+    locale: props.locale,
+    page: props.tocPage ?? { title: content.title, route: props.frame?.route ?? ownRouteOf(props.page.id) },
+    sections,
+    minutes: content.minutes,
+    collection: props.frame?.navigation,
+  };
 }
 
 /**
@@ -204,13 +215,13 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const youtubeId = video?.id;
   const route = frame.route ?? ownRouteOf(id);
   const content = await recordContent(episode, locale, { translatorOf: translatorOf(locale), id, route });
-  const { minutes, slides, titleContext } = content;
+  const { slides, titleContext } = content;
   const sections = tocSectionsOf(slides);
   const header = await pageHeaderOf(content, locale, sections);
   const { talkLabels, recording } = await talkOf(locale, video);
   const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, time: frame.time });
   const drawer = await contextDrawerInput(locale, slides, titleContext);
-  const toc = { locale, route, sections, minutes, labels: await tocLabelsOf(locale), collection: frame.navigation };
+  const toc = tocPropsOf(content, props, sections);
   return (
     <ExplorableHomes page={page} locale={locale}>
       <UrlStateProvider key={`${locale}/${id}`}>

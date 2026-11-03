@@ -17,6 +17,7 @@ import {
   TOC_DEFAULT_PRESENTATION,
   whereAt,
   type TocCollection,
+  type TocPageContext,
   type TocSection,
 } from '@/shared/lib/table-of-contents.pure';
 import { useMemo, useState, useSyncExternalStore } from 'react';
@@ -85,7 +86,7 @@ function DesktopPanel(props: {
 
 export interface TableOfContentsProps {
   locale: Locale;
-  route: string;
+  page: TocPageContext;
   sections: readonly TocSection[];
   /** The whole reading time in minutes, as the landing card quotes it; 0 shows no time. */
   total: number;
@@ -97,11 +98,12 @@ export interface TableOfContentsProps {
 }
 
 function usePanel(props: TableOfContentsProps) {
-  const { view, time } = useTocState(props);
+  const { view, time } = useTocState({ ...props, route: props.page.route });
   const [presentation, setPresentation] = useState(TOC_DEFAULT_PRESENTATION);
   const [zoomedOut, setZoomedOut] = useState(false);
   return {
     view,
+    page: props.page,
     sections: props.sections,
     labels: props.labels,
     time,

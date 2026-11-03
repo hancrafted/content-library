@@ -213,7 +213,7 @@ describe('episode structure', () => {
       // ASSERT: the heading's link to the Title slide comes first
       expect(fragments).toEqual(anchors);
       expect(fragments[0]).toBe(TITLE_ANCHOR);
-      expect(topActions).toEqual([TITLE_ANCHOR]);
+      expect(topActions).toEqual([]);
     });
 
     it('renders an untitled Slide with its content, and lists it nowhere in the table of contents', () => {

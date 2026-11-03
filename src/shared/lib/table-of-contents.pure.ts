@@ -47,6 +47,13 @@ export interface TocCollection {
   readonly pages: readonly TocPage[];
 }
 
+/** Context of the page displaying the outline, supplied by its caller rather than inferred from routes. */
+export interface TocPageContext {
+  readonly title: string;
+  readonly route: string;
+  readonly back?: { readonly label: string; readonly route: string };
+}
+
 /**
  * Every Slide in page order with its own minutes (an entry's total minus what
  * it owns for its unlisted Slides), plus which entry each unlisted Slide

@@ -1,3 +1,4 @@
+import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { UrlState } from '@/shared/lib/url-state';
 import { createContext, useContext, useSyncExternalStore, type MouseEvent } from 'react';
 
@@ -49,6 +50,8 @@ export function useGlideTo(): (event: MouseEvent<HTMLAnchorElement>, id: string)
     event.preventDefault();
     url.navigateTo(id);
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    target.scrollIntoView({ behavior: still ? 'instant' : 'smooth' });
+    const behavior = still ? 'instant' : 'smooth';
+    if (id === TITLE_ANCHOR) window.scrollTo({ top: 0, behavior });
+    else target.scrollIntoView({ behavior });
   };
 }

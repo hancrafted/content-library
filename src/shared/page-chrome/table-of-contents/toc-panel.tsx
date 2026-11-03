@@ -1,13 +1,19 @@
 import { localizePath } from '@/shared/lib/locale.pure';
-import type { ReadingTime, TocCollection, TocPresentation, TocSection } from '@/shared/lib/table-of-contents.pure';
+import type {
+  ReadingTime,
+  TocCollection,
+  TocPageContext,
+  TocPresentation,
+  TocSection,
+} from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
-import { ZoomIn, ZoomOut } from 'lucide-react';
 import Link from 'next/link';
 import { useId } from 'react';
 import { BackToTop } from '../back-to-top.client';
+import { TocBorder } from './toc-border.client';
 import { TocCollectionView } from './toc-collection.client';
-import { ProgressBar, TocHeading, type TocLabels } from './toc-heading';
-import { TocOptions } from './toc-options';
+import { TocHeading, type TocLabels } from './toc-heading';
+import { TocOptions } from './toc-options.client';
 import { SectionEntry } from './toc-section-entry';
 import type { TocView } from './toc-view';
 
@@ -41,7 +47,7 @@ function SectionList({ view, sections, toggleLabel, collapsed }: SectionListProp
   );
 }
 
-/** Progress bar and sections, folded away while the loading box shows. */
+/** Sections, folded away while the loading box shows. */
 function TocBody(props: {
   view: TocView;
   sections: readonly TocSection[];
@@ -58,41 +64,36 @@ function TocBody(props: {
         view.revealed ? 'h-auto' : 'h-0 noscript:h-auto',
       )}
     >
-      <div className="flex min-h-0 flex-col overflow-hidden">
-        <div
-          className={cn(
-            'overflow-hidden motion-reduce:transition-none transition-opacity duration-300 ease-out',
-            collapsed ? 'opacity-0 pointer-events-none' : 'opacity-100',
-          )}
-        >
-          <ProgressBar labels={labels} locale={view.locale} time={props.time} settled={view.settled} />
-        </div>
-        <SectionList view={view} sections={props.sections} toggleLabel={labels.toggle} collapsed={collapsed} />
-      </div>
+      <SectionList view={view} sections={props.sections} toggleLabel={labels.toggle} collapsed={collapsed} />
     </div>
   );
 }
 
-function PanelHeading(props: {
-  view: TocView;
-  labels: TocLabels;
-  time: ReadingTime;
-  collapsed?: boolean;
-  onToggleCollapse?: () => void;
-}) {
+function PanelHeading(props: TocPanelProps) {
   const { view } = props;
   return (
     <TocHeading
       labels={props.labels}
       locale={view.locale}
-      route={view.route}
+      page={props.page}
       topId={view.topId}
       atTop={view.atTop}
       onGlide={view.glideTo}
       time={props.time}
       revealed={view.revealed}
       collapsed={props.collapsed}
-      onToggleCollapse={props.onToggleCollapse}
+      actions={
+        <TocOptions
+          labels={props.labels}
+          mode={props.presentation}
+          onChange={props.onPresentationChange}
+          collapsed={props.collapsed}
+          onToggleCollapse={props.onToggleCollapse}
+          hasCollection={props.collection !== undefined}
+          zoomedOut={props.zoomedOut}
+          onZoomChange={props.onZoomChange}
+        />
+      }
     />
   );
 }
@@ -106,27 +107,9 @@ interface CollectionScopeProps {
   onZoomChange: () => void;
 }
 
-function ZoomScope(props: CollectionScopeProps) {
-  const Icon = props.zoomedOut ? ZoomIn : ZoomOut;
-  const label = props.zoomedOut ? props.labels.zoomIn : props.labels.zoomOut;
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      title={label}
-      aria-pressed={props.zoomedOut}
-      onClick={props.onZoomChange}
-      className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg text-muted-foreground hover:bg-accent focus-visible:outline-2 md:size-8"
-    >
-      <Icon aria-hidden className="size-4" />
-    </button>
-  );
-}
-
 function CollectionScope(props: CollectionScopeProps) {
   return (
     <div className="mb-2 flex shrink-0 items-center gap-1 border-b pb-2">
-      {props.presentation === 'zoom' && <ZoomScope {...props} />}
       <Link
         href={localizePath(props.collection.route, props.view.locale)}
         title={props.collection.title}
@@ -140,6 +123,7 @@ function CollectionScope(props: CollectionScopeProps) {
 
 export interface TocPanelProps {
   view: TocView;
+  page: TocPageContext;
   sections: readonly TocSection[];
   labels: TocLabels;
   time: ReadingTime;
@@ -169,6 +153,7 @@ function PanelBody(props: TocPanelProps) {
 }
 
 function PanelActions(props: TocPanelProps) {
+  if (!props.collapsed) return null;
   return (
     <div
       data-toc-actions
@@ -183,9 +168,6 @@ function PanelActions(props: TocPanelProps) {
         route={props.view.route}
         compact={props.collapsed}
       />
-      {props.collection && (
-        <TocOptions labels={props.labels} mode={props.presentation} onChange={props.onPresentationChange} />
-      )}
     </div>
   );
 }
@@ -212,13 +194,14 @@ export function TocPanel(props: TocPanelProps) {
       data-collapsed={props.collapsed ? 'true' : undefined}
       data-presentation={props.presentation}
       className={cn(
-        'flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl',
+        'relative flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl',
         'motion-reduce:transition-none transition-[width] duration-300 ease-out p-3',
         // 3.625rem = 2rem marker + 2 × p-3 + 2px border: the numbers keep their place.
         props.collapsed ? 'w-[3.625rem]' : 'w-full',
         props.className,
       )}
     >
+      <TocBorder labels={props.labels} locale={view.locale} time={props.time} settled={view.settled} />
       <PanelContents {...props} view={view} />
     </nav>
   );

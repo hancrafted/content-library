@@ -1,28 +1,18 @@
 'use client';
 
-import { useUrlState } from '@/shared/hooks/use-url-state';
+import { useGlideTo } from '@/shared/hooks/use-url-state';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { cn } from '@/shared/lib/utils';
 import { ArrowUp } from 'lucide-react';
 import Link from 'next/link';
-import { useSyncExternalStore, type MouseEvent } from 'react';
+import { useSyncExternalStore } from 'react';
 
 function scrollToStart() {
   window.scrollTo({
     top: 0,
     behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
   });
-}
-
-function useReturnToTop() {
-  const url = useUrlState();
-  return (event: MouseEvent<HTMLAnchorElement>) => {
-    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !url) return;
-    event.preventDefault();
-    url.navigateTo(TITLE_ANCHOR);
-    scrollToStart();
-  };
 }
 
 /** Returns to the document start, including any framing above its Title slide. */
@@ -33,14 +23,14 @@ export function BackToTop(props: {
   compact?: boolean;
   className?: string;
 }) {
-  const onClick = useReturnToTop();
+  const glideTo = useGlideTo();
   return (
     <Link
       href={localizePath(props.route, props.locale, TITLE_ANCHOR)}
       data-toc-action
       aria-label={props.label}
       title={props.label}
-      onClick={onClick}
+      onClick={(event) => glideTo(event, TITLE_ANCHOR)}
       className={cn(
         'inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg text-caption text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-2 md:min-h-8',
         props.compact ? 'size-11 md:size-8' : 'px-2',

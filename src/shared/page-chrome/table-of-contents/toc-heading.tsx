@@ -1,13 +1,14 @@
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import { hasReadingTime, remainingLabel, wholeMinutes, type RemainingTemplates } from '@/shared/lib/speaking-time.pure';
-import type { ReadingTime } from '@/shared/lib/table-of-contents.pure';
+import { hasReadingTime, remainingLabel, type RemainingTemplates } from '@/shared/lib/speaking-time.pure';
+import type { ReadingTime, TocPageContext } from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import type { MouseEvent } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 
 export interface TocLabels {
   title: string;
+  episode: string;
   progress: string;
   /** Time left, per plural category; `{count}` stands for the whole minutes. */
   remaining: RemainingTemplates;
@@ -20,8 +21,7 @@ export interface TocLabels {
   backToTop: string;
   options: string;
   presentation: string;
-  zoom: string;
-  tree: string;
+  showAsTree: string;
   zoomOut: string;
   zoomIn: string;
 }
@@ -36,28 +36,10 @@ function TimeLeft(props: { labels: TocLabels; locale: Locale; time: ReadingTime;
   );
 }
 
-function CollapseToggleButton(props: { labels: TocLabels; collapsed?: boolean; onToggleCollapse?: () => void }) {
-  const { labels, collapsed, onToggleCollapse } = props;
-  if (!onToggleCollapse) return null;
-  const label = collapsed ? labels.expand : labels.collapse;
-  return (
-    <button
-      type="button"
-      onClick={onToggleCollapse}
-      aria-label={label}
-      title={label}
-      data-testid="toc-collapse-toggle"
-      className="grid size-8 shrink-0 cursor-pointer place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:ring-ring"
-    >
-      {collapsed ? <PanelLeftOpen aria-hidden className="size-4" /> : <PanelLeftClose aria-hidden className="size-4" />}
-    </button>
-  );
-}
-
 interface HeadingDetailsProps {
   labels: TocLabels;
   locale: Locale;
-  route: string;
+  page: TocPageContext;
   topId: string;
   atTop: boolean;
   onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
@@ -67,89 +49,68 @@ interface HeadingDetailsProps {
 }
 
 function HeadingDetails(props: HeadingDetailsProps) {
-  const { labels, collapsed } = props;
+  const { collapsed } = props;
   return (
     <div
       aria-hidden={collapsed}
-      className={cn(
-        'flex min-w-0 flex-1 items-center justify-between gap-2 overflow-hidden whitespace-nowrap',
-        'motion-reduce:transition-none transition-[max-width,opacity,margin] duration-300 ease-out',
-        collapsed ? 'mr-0 max-w-0 opacity-0 pointer-events-none' : 'mr-2 max-w-[14rem] opacity-100',
-      )}
+      inert={collapsed}
+      className={cn('min-w-0 overflow-hidden px-2 text-left', collapsed ? 'h-0 opacity-0' : 'pb-3 opacity-100')}
     >
       <Link
-        href={localizePath(props.route, props.locale, props.topId)}
+        href={localizePath(props.page.route, props.locale, props.topId)}
         replace
-        tabIndex={collapsed ? -1 : undefined}
         onClick={(event) => props.onGlide(event, props.topId)}
         aria-current={props.atTop ? 'location' : undefined}
         data-testid="toc-top"
-        className="rounded font-medium tracking-widest uppercase hover:text-foreground focus-visible:outline-2"
+        className="block rounded text-pretty font-medium text-foreground hover:underline focus-visible:outline-2"
       >
-        {labels.title}
+        {props.page.title}
       </Link>
-      <div className="flex shrink-0 items-center gap-1.5">
-        {props.revealed ? null : <span className="animate-pulse noscript:hidden">{labels.loading}</span>}
+      <div className="mt-1 text-muted-foreground">
         <TimeLeft {...props} />
       </div>
     </div>
   );
 }
 
-/**
- * Title on the left, a link to the top of the page (the Title slide), current
- * while the reader is there; time left and the collapse toggle on the right,
- * or "Loading" while the box masks the first settle. When collapsed, details fade
- * out and the toggle centers smoothly.
- */
+function BackLink(props: Pick<HeadingDetailsProps, 'page' | 'locale' | 'collapsed'>) {
+  const back = props.page.back;
+  if (!back) return null;
+  return (
+    <Link
+      href={localizePath(back.route, props.locale)}
+      aria-label={back.label}
+      title={back.label}
+      data-testid="toc-back"
+      className="inline-flex min-h-8 min-w-8 items-center gap-2 rounded-lg px-2 font-medium tracking-widest uppercase hover:bg-accent hover:text-foreground focus-visible:outline-2"
+    >
+      <ArrowLeft aria-hidden className="size-4 shrink-0" />
+      {!props.collapsed && <span>{back.label}</span>}
+    </Link>
+  );
+}
+
+/** Navigation out of the page above its own title, which returns to the document start. */
 export function TocHeading(props: {
   labels: TocLabels;
   locale: Locale;
-  route: string;
+  page: TocPageContext;
   topId: string;
   atTop: boolean;
   onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
   time: ReadingTime;
   revealed: boolean;
   collapsed?: boolean;
-  onToggleCollapse?: () => void;
+  actions: ReactNode;
 }) {
-  const { collapsed, labels, onToggleCollapse } = props;
+  const { collapsed } = props;
   return (
-    <div
-      className={cn(
-        'flex min-h-8 items-center text-caption whitespace-nowrap text-muted-foreground',
-        'motion-reduce:transition-none transition-[padding] duration-300 ease-out',
-        collapsed ? 'justify-center px-0' : 'justify-between px-2',
-      )}
-    >
+    <div data-toc-context className="shrink-0 text-caption text-muted-foreground">
+      <div className={cn('mb-2 flex items-center justify-between gap-1', collapsed && 'flex-col-reverse')}>
+        <BackLink {...props} />
+        <div className={cn('ml-auto', collapsed && 'mx-auto')}>{props.actions}</div>
+      </div>
       <HeadingDetails {...props} />
-      <CollapseToggleButton labels={labels} collapsed={collapsed} onToggleCollapse={onToggleCollapse} />
-    </div>
-  );
-}
-
-/** The time-weighted progress bar beneath the heading; only its spacing where the Episode has no Voice script. */
-export function ProgressBar(props: { labels: TocLabels; locale: Locale; time: ReadingTime; settled: boolean }) {
-  const { time } = props;
-  if (!hasReadingTime(time.total)) return <div className="mb-3" />;
-  return (
-    <div
-      role="progressbar"
-      aria-label={props.labels.progress}
-      aria-valuemin={0}
-      aria-valuemax={wholeMinutes(time.total)}
-      aria-valuenow={Math.round(time.total - time.remaining)}
-      aria-valuetext={remainingLabel(props.labels.remaining, props.locale, time.remaining)}
-      className="mx-2 mt-2 mb-3 h-1 shrink-0 overflow-hidden rounded-full bg-border"
-    >
-      <div
-        className={cn(
-          'h-full origin-left rounded-full bg-foreground motion-reduce:transition-none',
-          props.settled ? 'transition-transform duration-300 ease-out' : 'transition-none',
-        )}
-        style={{ transform: `scaleX(${time.progress})` }}
-      />
     </div>
   );
 }

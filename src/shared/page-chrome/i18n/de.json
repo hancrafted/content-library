@@ -32,6 +32,7 @@
     "label": "Sprache"
   },
   "tableOfContents": {
+    "episode": "Episode",
     "title": "Inhalt",
     "progress": "Lesezeit",
     "remaining": {
@@ -46,9 +47,8 @@
     "expand": "Inhalt ausklappen",
     "backToTop": "Nach oben",
     "options": "Navigationsoptionen",
-    "presentation": "Navigationsansicht",
-    "zoom": "Zoom",
-    "tree": "Baum",
+    "presentation": "Optionen",
+    "showAsTree": "Als Baum anzeigen",
     "zoomOut": "Zur Veranstaltung herauszoomen",
     "zoomIn": "Zu dieser Episode hineinzoomen"
   },
