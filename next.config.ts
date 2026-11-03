@@ -39,7 +39,7 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_TRANSITION_STYLE: transitionStyle,
   },
   // An Explorable's data files (a Claude Code `.jsonl` log, a `.yml` config) are imported as text and parsed at
-  // build time; `vitest.config.ts` loads them the same way (raw-text-files.ts).
+  // build time; `vitest.config.mts` loads them the same way (raw-text-files.mts).
   turbopack: {
     rules: {
       '*.jsonl': { type: 'raw' },
