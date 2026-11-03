@@ -12,6 +12,7 @@ import type { TocCollection, TocPageContext, TocSection } from '@/shared/lib/tab
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { ContextDrawerSlot } from '@/shared/page-chrome/context-drawer/context-drawer-slot';
 import { TableOfContents } from '@/shared/page-chrome/table-of-contents/table-of-contents.client';
+import tocStyles from '@/shared/page-chrome/table-of-contents/toc-entrance.module.css';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import type { ResolvedSlideTransition } from '../slide-master/slide-presentation';
@@ -21,7 +22,7 @@ import { talkOf, tocLabelsOf } from './episode-labels';
 import { eyebrowsOf, pageClassOf, slideSizeOf, sourceFolderOf, tocSectionsOf } from './episode-page-container.pure';
 import { ExplorableHomes } from './explorable-homes';
 import { PagePicksProvider } from './page-picks-provider.client';
-import { PageSurfaceClock } from './page-surface-clock';
+import { PageSurfaceClock, tocEntranceOf, usesSurfaceClock } from './page-surface-clock';
 import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -118,41 +119,11 @@ function titleSlideOf(
     tone: content.tone,
     presentation: content.titlePresentation,
     transition: content.transitions.get(TITLE_ANCHOR),
-    geometricTone: Boolean(content.titlePresentation || content.slides.some((slide) => slide.presentation)),
+    geometricTone: usesSurfaceClock(content),
     inkTarget: content.slides[0]?.id,
     ...talk,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
   };
-}
-
-async function EpisodeToc(props: {
-  locale: Locale;
-  page: TocPageContext;
-  sections: readonly TocSection[];
-  minutes: number;
-  collection?: TocCollection;
-  content: EpisodeContent;
-  samplingLine?: number;
-}) {
-  const labels = await tocLabelsOf(props.locale);
-  return (
-    <aside
-      data-slot="toc"
-      className="motion-reduce:transition-none [html[data-title-active=true]_&]:invisible md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:transition-[width] md:duration-300 md:ease-out md:data-[toc-collapsed=true]:w-[3.5rem]"
-    >
-      <PageSurfaceClock content={props.content} samplingLine={props.samplingLine} />
-      <TableOfContents
-        locale={props.locale}
-        page={props.page}
-        sections={props.sections}
-        total={props.minutes}
-        targetAttribute="data-slide"
-        topId={TITLE_ANCHOR}
-        labels={labels}
-        collection={props.collection}
-      />
-    </aside>
-  );
 }
 
 /** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
@@ -218,6 +189,32 @@ function tocPropsOf(content: EpisodeContent, props: EpisodePageContainerProps, s
   };
 }
 
+/** Navigation presentation is independent of header tone and of the selected edge renderer. */
+async function EpisodeToc(props: ReturnType<typeof tocPropsOf>) {
+  const labels = await tocLabelsOf(props.locale);
+  const policy = tocEntranceOf(props.content);
+  const className = policy === 'title-departure' ? tocStyles.entrance : policy === 'legacy' ? tocStyles.legacy : '';
+  return (
+    <aside
+      data-slot="toc"
+      data-toc-entrance={policy}
+      className={`${className} motion-reduce:transition-none md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:transition-[width] md:duration-300 md:ease-out md:data-[toc-collapsed=true]:w-[3.5rem]`}
+    >
+      <PageSurfaceClock content={props.content} samplingLine={props.samplingLine} />
+      <TableOfContents
+        locale={props.locale}
+        page={props.page}
+        sections={props.sections}
+        total={props.minutes}
+        targetAttribute="data-slide"
+        topId={TITLE_ANCHOR}
+        labels={labels}
+        collection={props.collection}
+      />
+    </aside>
+  );
+}
+
 /** The one Episode shell: localized wrappers, chrome and page-owned services (FE-002, FE-001). */
 export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const { locale, page, episode, video, frame = OWN_PAGE } = props;
@@ -232,10 +229,11 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, time: frame.time });
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   const toc = tocPropsOf(content, props, sections);
+  const className = pageClassOf(content.tone, content.titlePresentation);
   return (
     <ExplorableHomes page={page} locale={locale}>
       <UrlStateProvider key={`${locale}/${id}`}>
-        <div data-slot="episode-page" data-episode={id} className={pageClassOf(content.tone)}>
+        <div data-slot="episode-page" data-episode={id} className={className}>
           <EpisodeToc {...toc} />
           {frame.header}
           <SlideColumn titleSlide={titleSlide} slides={slides} page={header} transitions={content.transitions} />

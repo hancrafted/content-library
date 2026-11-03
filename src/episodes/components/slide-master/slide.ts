@@ -172,6 +172,8 @@ export type HeaderMode = 'shared' | 'authored';
  * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */
 export interface EpisodeComposition<Ep extends string = string> {
+  /** Configured pages reveal navigation on Title departure by default; visible-from-start bypasses only that entrance. */
+  readonly tocEntrance?: 'title-departure' | 'visible-from-start';
   /** One policy for every adjacent edge; incoming enter wins when omitted. */
   readonly transitionPrecedence?: 'enter' | 'leave';
   /** Viewport pixels for semantic tone sampling; absent, the page header's measured lower edge. */

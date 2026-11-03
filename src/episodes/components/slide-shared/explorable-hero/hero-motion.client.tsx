@@ -29,7 +29,7 @@ export interface MotionLabels {
 interface MotionState {
   readonly paused: boolean;
   readonly reduced: boolean;
-  readonly labels: MotionLabels;
+  readonly labels?: MotionLabels;
   readonly toggle: () => void;
 }
 
@@ -67,7 +67,7 @@ function useDocumentHidden(): boolean {
 }
 
 /** Holds the one pause state the background and its button share; renders no element of its own. */
-export function HeroMotion({ labels, children }: { labels: MotionLabels; children: ReactNode }) {
+export function HeroMotion({ labels, children }: { labels?: MotionLabels; children: ReactNode }) {
   const [paused, setPaused] = useState(false);
   const reduced = useReducedMotion();
   const value = { paused, reduced, labels, toggle: () => setPaused((was) => !was) };
@@ -75,8 +75,10 @@ export function HeroMotion({ labels, children }: { labels: MotionLabels; childre
 }
 
 /** The pause and play button: outside the decorative Backdrop, 44px, named in the page's language. */
-export function HeroMotionButton() {
-  const { paused, reduced, labels, toggle } = useMotionState();
+export function HeroMotionButton({ labels: supplied }: { labels?: MotionLabels }) {
+  const { paused, reduced, labels: inherited, toggle } = useMotionState();
+  const labels = supplied ?? inherited;
+  if (!labels) throw new Error('HeroMotionButton requires its Slide’s motion labels.');
   const stopped = paused || reduced;
   const name = stopped ? labels.play : labels.pause;
   const Icon = stopped ? Play : Pause;
