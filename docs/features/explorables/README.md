@@ -28,7 +28,7 @@ Every Explorable meets all five, in a Slide, on a phone and on a wide screen:
 4. **No network, no backend.** It runs with every off-origin request blocked. Customization is a file the visitor uploads and downloads, as the human-in-the-loop Explorable does.
 5. **Short mode is optional.** An Explorable MAY offer one (zoom, progressive disclosure, pagination, carousel) for a 60-second view; none is required.
 
-Test: `tests/browser/explorable-floor.browser.test.ts` (`npm run test:browser`) runs against the `#play` Slide (every option on) of each Explorable page: fit at the Slide frame, 390px and 1440px with no horizontal overflow; axe clean; reduced motion shows the end state; renders with every off-origin request blocked. A new Explorable page adds its slug to `PAGES` in that file and needs no new spec. A case a page fails and that is too large to fix goes in `EXPECTED_FAIL` there, keyed `<slug>:<case>`, with the follow-up issue's URL; delete the entry when the issue closes. Per-Explorable specs stay for corrected behaviour.
+Check the `#play` Slide (every option on) of each Explorable page manually: fit at the Slide frame, 390px and 1440px with no horizontal overflow; accessibility; reduced motion shows the end state; renders with every off-origin request blocked. There is no automated browser suite; use `playwright-cli` for controls and state, and `visual-check` for layout.
 
 ## Explorable page
 

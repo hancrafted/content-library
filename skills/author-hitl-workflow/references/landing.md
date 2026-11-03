@@ -32,9 +32,9 @@ _Done when_ `npm run verify` passes. Prettier formats the YAML too.
 
 _Done when_ every stage the text names exists in the file, in both languages.
 
-## 6. Captures and the browser test
+## 6. Captures and browser checks
 
-The captures `tests/post-build/episode-text/human-in-the-loop.{en,de}.json` hold the diagram text. Delete both, run `npm run build`, then `npm run test:build` twice (the first writes them, the second checks), and read the diff: only the stages you changed may move. Then `npm run test:browser -- src/explorables/human-in-the-loop/human-in-the-loop.browser.test.ts`.
+The captures `tests/post-build/episode-text/human-in-the-loop.{en,de}.json` hold the diagram text. Delete both, run `npm run build`, then `npm run test:build` twice (the first writes them, the second checks), and read the diff: only the stages you changed may move. Then check the changed Workflow in the browser in both locales, using `playwright-cli` for controls and state and `visual-check` for layout.
 
 _Done when_ both pass and the capture diff holds only intended text.
 
