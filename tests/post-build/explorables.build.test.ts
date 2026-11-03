@@ -50,9 +50,30 @@ describe.each(PAGES)('the Explorable page $url title slide', ({ url }) => {
     // ARRANGE
     const $ = exportedPage(url);
     // ACT
-    const tone = $('[data-slot="title-slide"]').attr('data-tone');
+    const title = $('[data-slot="title-slide"]');
+    const tone = title.attr('data-surface-tone') ?? title.attr('data-tone');
     // ASSERT
     expect(tone).toBe('inverse');
+  });
+});
+
+describe.each(LOCALES)('Context presentation in %s', (locale) => {
+  it('retains the rear story and outgoing effect outside removable content with independent navigation', () => {
+    // ARRANGE
+    const $ = exportedPage(localizePath('/explorables/context-window', locale));
+    const title = $('#top');
+    // ACT
+    const edge = title.children('[data-transition-edge]');
+    const rear = title.children().filter((_, node) => $(node).find('[data-hero-motion]').length > 0);
+    // ASSERT
+    expect(edge.attr('data-transition-edge')).toBe('top→play');
+    expect(edge.attr('data-transition-effect')).toBe('liquid');
+    expect(rear.attr('aria-hidden')).toBe('true');
+    expect(rear.is('[inert]')).toBe(true);
+    expect(rear.find('[data-slot="slide-mount"]').length).toBe(0);
+    expect(title.find('[data-slot="slide-mount"] [data-hero-motion-button]').length).toBe(1);
+    expect($('[data-slot="toc"]').attr('data-toc-entrance')).toBe('title-departure');
+    expect($('[data-surface-clock]').length).toBe(1);
   });
 });
 

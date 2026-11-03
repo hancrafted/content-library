@@ -1,5 +1,5 @@
 import type { TransitionStyle } from '@/shared/components/animations/transition-filters';
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 export type PresentationStyle = Readonly<Record<`--${string}`, string | number>>;
 
@@ -22,6 +22,8 @@ export interface ResolvedSlideTransition {
 
 /** Optional mechanics; Scene JSX and layout remain independent. Colour overrides retain the declared tone's contrast. */
 export interface SlidePresentation {
+  /** Shared context around retained slots and removable primary content; renders no layout of its own. */
+  readonly Provider?: ComponentType<{ children: ReactNode }>;
   readonly enter?: SlideTransition;
   readonly leave?: SlideTransition;
   readonly tone?: 'normal' | 'inverse';

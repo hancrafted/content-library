@@ -7,6 +7,7 @@ import type { SurfaceBoundary, SurfaceClock, SurfaceTone } from '@/shared/lib/su
 import { driveSurfaceClock } from '@/shared/lib/surface-clock-driver';
 import type { UrlState } from '@/shared/lib/url-state';
 import { useEffect, useRef } from 'react';
+import { publishTitleDeparture, readTitleReveal, type TitleRevealRange } from './title-departure';
 
 /** Only runtime inputs cross the client boundary, never Slide declarations, kits or Scene functions. */
 export interface SurfaceDescriptor {
@@ -168,20 +169,28 @@ function observe(
 }
 
 /** Page-owned attachment: cached stable wrappers, one passive scroll listener, no active-Slide authority. */
+function geometry(root: HTMLElement, surfaces: readonly SurfaceDescriptor[], samplingLine?: number) {
+  return {
+    surfaces: readSurfaces(surfaces, root),
+    viewport: window.innerHeight,
+    maximum: Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
+    samplingLine:
+      samplingLine ?? document.querySelector('[data-testid="site-header"]')?.getBoundingClientRect().bottom ?? 0,
+  };
+}
+
 function attach(
   root: HTMLElement,
   surfaces: readonly SurfaceDescriptor[],
   { navigation, samplingLine }: { navigation: UrlState | null; samplingLine?: number },
 ) {
+  let reveal: TitleRevealRange = { start: 0, end: 1 };
   const driver = driveSurfaceClock({
     navigation: navigation ?? undefined,
-    readGeometry: () => ({
-      surfaces: readSurfaces(surfaces, root),
-      viewport: window.innerHeight,
-      maximum: Math.max(0, document.documentElement.scrollHeight - window.innerHeight),
-      samplingLine:
-        samplingLine ?? document.querySelector('[data-testid="site-header"]')?.getBoundingClientRect().bottom ?? 0,
-    }),
+    readGeometry: () => {
+      reveal = readTitleReveal(root);
+      return geometry(root, surfaces, samplingLine);
+    },
     readPosition: () => window.scrollY,
     frame: (run) => requestAnimationFrame(run),
     cancelFrame: (id) => cancelAnimationFrame(id),
@@ -189,10 +198,12 @@ function attach(
     cancelTimer: (id) => window.clearTimeout(id),
   });
   const stopPublishing = publish(root, surfaces, driver.clock);
+  const stopDeparture = publishTitleDeparture(root, driver.clock, () => reveal);
   const stopObserving = observe(root, surfaces, driver);
   return () => {
     driver.dispose();
     stopPublishing();
+    stopDeparture();
     stopObserving();
   };
 }
