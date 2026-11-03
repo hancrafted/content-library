@@ -5,7 +5,7 @@
   "newWindow": "The install may not be known to your old window. Close it, open a new one, and only then type the line below.",
   "newWindowHow": {
     "mac": "On a Mac: press Cmd and N in Terminal, or open Terminal again.",
-    "windows": "On Windows: close PowerShell, then open it again from the Start menu.",
+    "windows": "On Windows: close PowerShell and open it again from Start. For Copilot, open PowerShell 7, not Windows PowerShell.",
     "linux": "On Linux: close the terminal, then open it again."
   },
   "backToStep1": "How to open a terminal, step 1",
@@ -15,7 +15,19 @@
   "copy": "Copy",
   "copied": "Copied",
   "failTitle": "Does it say “command not found” or “not recognized”?",
-  "failFix": "You are still in the old window. Close it, open a new one as above, and paste the line again.",
+  "failFix": "An old window may not know the new installation. Try a fresh window once. Still not recognized? Return to the installation step and its version check: the install may have failed or PATH may need fixing. For a company policy or certificate error, stop and ask IT.",
+  "notes": {
+    "approved-account-and-path": {
+      "header": "A new terminal is one fix, not a diagnosis",
+      "description": "Anthropic documents Windows PATH troubleshooting [1]. A fresh terminal can pick up PATH changes but cannot repair a failed or blocked installation. GitHub allows organizations to disable CLI access; OpenAI and Google document organization-specific access controls [2][3][4]. A personal subscription or successful browser sign-in does not override company approval. The approved account and sign-in route take precedence over this guide's generic recommendations.",
+      "sources": {
+        "claude-path": { "title": "Anthropic, Terminal configuration and PATH" },
+        "copilot-access": { "title": "GitHub, Copilot CLI prerequisites and access" },
+        "codex-access": { "title": "OpenAI, Codex plan and enterprise access" },
+        "google-enterprise": { "title": "Google, Antigravity enterprise setup" }
+      }
+    }
+  },
   "flow": {
     "claude-code": "Your browser opens on its own. If it does not, press <code>c</code> in the terminal to copy the link and open it yourself. The page may show a code: copy it and paste it into the terminal.",
     "antigravity": "On your own computer your browser opens on its own. Answer its first questions (colours, trust this folder) in the terminal; if it shows a link and asks for a code, open the link and paste the code back.",
@@ -47,13 +59,13 @@
   "once": "You do this once, and it stays.",
   "openLogin": "{agent} · official login page",
   "newTab": "opens in a new tab",
-  "ownAccount": "Which account fits is on that page. Use your own, not a shared one.",
+  "ownAccount": "On a work laptop, use the account and sign-in route your organization approves, not a personal account to get around a denial. Otherwise use your own eligible account, never a shared one. If access is denied or a certificate error appears, stop and ask IT.",
   "voiceScript": {
     "segments": {
       "open-a-new-window": {
         "title": "Open a new terminal window",
         "keywords": "",
-        "script": "Before you type anything, close your terminal and open a new one. The install put your AI agent on your computer, but the old window does not know it yet. If your terminal says command not found or not recognized, this is why. Step one shows you how to open a terminal."
+        "script": "Open a fresh terminal after installation so it can pick up the new command. For Copilot on Windows, use PowerShell 7. A fresh window fixes one common cause of command not found, not every cause. If the command is still missing, return to the version check in the installation step. If company policy or a certificate blocks you, ask IT rather than changing security settings."
       },
       "second-command": {
         "title": "Your second command",
@@ -73,8 +85,8 @@
     "placeholder": "Paste your error here…",
     "copy": "Copy prompt",
     "copied": "Prompt copied",
-    "copyTip": "Paste this prompt into an AI you are allowed to use.",
-    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
+    "copyTip": "Remove tokens, personal information and confidential details first. Use only an AI your organization permits.",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time. Do not suggest bypassing company policy, administrator restrictions, execution policy, TLS checks, proxies or security software. Use the organization's approved account and sign-in route, not a personal account to bypass a denial. If this needs approval or configuration, explain what to ask IT. Remind me to redact secrets and confidential details.",
     "noError": "(I see no error message, it just does not work.)",
     "step": "Step 2: Log in, your second command",
     "chats": {

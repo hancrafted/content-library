@@ -7,6 +7,12 @@ import { osOf, type AiAgent, type Os } from './picks.pure';
 
 export const FOLDER = 'hancrafted-workshop-starter';
 
+export const TRUST_PATH = {
+  mac: '~/Downloads/hancrafted-workshop-starter',
+  windows: 'C:\\Users\\han\\Downloads\\hancrafted-workshop-starter',
+  linux: '~/Downloads/hancrafted-workshop-starter',
+} as const;
+
 /** Which folder menu move 1 draws: Mac's with its Services submenu, Windows 11's short menu, none on Linux. */
 export function openMenu(os: string): 'services' | 'short' | null {
   const menus = { mac: 'services', windows: 'short', linux: null } as const satisfies Record<Os, string | null>;
@@ -31,22 +37,19 @@ export function terminalPrompt(os: string): TerminalPrompt {
   return PROMPTS[osOf(os)];
 }
 
-/** The quiet fallback: from the home folder step 1 opens, into the unzipped folder. */
-export function fallbackCommand(os: string): string {
-  return osOf(os) === 'windows' ? `cd Downloads\\${FOLDER}` : `cd Downloads/${FOLDER}`;
+/** Windows uses the actual copied path rather than assuming a Downloads location. */
+export function fallbackCommand(os: string): string | null {
+  return osOf(os) === 'windows' ? null : `cd Downloads/${FOLDER}`;
 }
 
-const COMMANDS: Readonly<Record<AiAgent, string | null>> = {
+const COMMANDS: Readonly<Record<AiAgent, string>> = {
   'claude-code': 'claude',
-  antigravity: null,
+  antigravity: 'agy',
   codex: 'codex',
   copilot: 'copilot',
 };
 
-/**
- * The command that starts the picked AI agent in the terminal; `null` for Antigravity, whose start is not confirmed
- * against its official page, so the Slide points to that page instead of inventing a command.
- */
-export function startCommand(agent: AiAgent): string | null {
+/** The documented CLI command that starts the selected AI agent. */
+export function startCommand(agent: AiAgent): string {
   return COMMANDS[agent];
 }

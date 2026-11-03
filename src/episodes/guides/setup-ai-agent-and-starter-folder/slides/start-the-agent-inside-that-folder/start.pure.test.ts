@@ -35,24 +35,21 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('types no command for Antigravity, whose start is not confirmed', () => {
+  it('does not leave the documented Antigravity launch command empty', () => {
     // ARRANGE
     const agent = 'antigravity';
+    const expected = 'agy';
     // ACT
     const command = startCommand(agent);
     // ASSERT
-    expect(command).toBeNull();
+    expect(command).toBe(expected);
   });
 });
 
 describe('edge cases', () => {
   it('writes the fallback path with the separator of the picked OS', () => {
     // ARRANGE
-    const expected = [
-      'cd Downloads/hancrafted-workshop-starter',
-      'cd Downloads\\hancrafted-workshop-starter',
-      'cd Downloads/hancrafted-workshop-starter',
-    ];
+    const expected = ['cd Downloads/hancrafted-workshop-starter', null, 'cd Downloads/hancrafted-workshop-starter'];
     // ACT
     const commands = [fallbackCommand('mac'), fallbackCommand('windows'), fallbackCommand('linux')];
     // ASSERT

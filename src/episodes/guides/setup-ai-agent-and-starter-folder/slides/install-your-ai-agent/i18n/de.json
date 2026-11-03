@@ -12,6 +12,7 @@
   "commandPromptSummary": "Stattdessen in der Eingabeaufforderung?",
   "commandPromptHint": "Die Eingabeaufforderung zeigt etwa <code>C:\\&gt;</code>, ohne <code>PS</code> davor. Füge diese Zeile dort ein.",
   "happenTitle": "Was passieren kann",
+  "unixFailure": "Der Installationsbefehl scheitert? Prüfe, ob oben Dein Computer gewählt ist und Du die ganze Zeile ins Terminal eingefügt hast. Bei einer Firmenbeschränkung halte an und frage die IT.",
   "happen": {
     "claude-code": {
       "one": "Unter Windows heißt <code>'irm' is not recognized</code>: Du bist in der Eingabeaufforderung. Öffne PowerShell oder nimm die Zeile für die Eingabeaufforderung oben.",
@@ -31,7 +32,54 @@
     }
   },
   "helpLine": "Hängst du fest oder siehst rote Schrift, die du nicht verstehst? Drücke oben rechts auf Hilfe und füge den Fehler ein.",
-  "worked": "Geschafft, wenn die Eingabezeile zurückkommt. Öffne als Nächstes ein neues Terminalfenster.",
+  "worked": "Wenn die Installation ohne Fehler endet, schließe das Terminal, öffne ein neues und führe diese Prüfung aus:",
+  "versionWorked": "Du siehst eine Versionsnummer statt einer Fehlermeldung. Dann geht es zur Anmeldung. Wird der Befehl weiterhin nicht erkannt, öffne unten Mehr Hilfe.",
+  "workLaptop": {
+    "title": "Firmenlaptop? Vor der Installation klären.",
+    "mac": "Fragt macOS nach einem Administrator-Passwort, halte an und frage die IT oder Deinen Workshop-Kontakt.",
+    "windows": "Fragt Windows nach einem Administrator-Passwort, halte an und frage die IT oder Deinen Workshop-Kontakt.",
+    "linux": "Fragt Linux nach sudo oder einem Administrator-Passwort, halte an und frage die IT oder Deinen Workshop-Kontakt.",
+    "text": "Nutze einen Agenten und ein Konto, die Deine Organisation freigegeben hat. Halte auch bei Firmensperren oder Zertifikatsfehlern an. Schalte keine Sicherheitseinstellungen ab und wechsle nicht das Netzwerk, um eine Sperre zu umgehen."
+  },
+  "windows": {
+    "claude-code": "Claudes nativer Windows-Installer braucht keine Administratorrechte. Auf einem Firmenlaptop brauchst Du trotzdem die Freigabe Deiner Organisation.",
+    "copilot": "Nutze PowerShell 7, nicht die vorinstallierte Windows PowerShell 5.1. GitHub verlangt PowerShell 6 oder neuer. Fehlt PowerShell 7 oder <code>winget</code>, oder ist etwas blockiert, lass die IT beides und Copilot vor dem Workshop bereitstellen.",
+    "codex": "Lass diesen Befehl auf einem Firmenlaptop zuerst von der IT freigeben: Er enthält <code>-ExecutionPolicy ByPass</code>. Die spätere Windows-Sandbox-Einrichtung kann ebenfalls eine Administrator-Freigabe verlangen. Schalte die Sandbox nicht ab, um weiterzukommen.",
+    "antigravity": "Lass auf einem Firmenlaptop zuerst die CLI-Installation und das Konto von der IT freigeben. Ein Installationsort in Deinem Benutzerordner ist noch keine Freigabe durch die Organisation.",
+    "version": "Welche PowerShell hast Du? Tippe <code>$PSVersionTable.PSVersion</code> und drücke Enter. Die Zahl unter Major ist die Version; PS am Anfang der Eingabezeile allein sagt das nicht."
+  },
+  "enterprise": {
+    "title": "Auf dem Firmenlaptop blockiert?",
+    "network": "Eine Zscaler-Sperrseite, ein Zertifikatsfehler und eine Zeitüberschreitung können verschiedene Lösungen brauchen. Lass die IT die freigegebenen Seiten, den Proxy und das Firmenzertifikat prüfen. Ein funktionierender Browser beweist nicht, dass der Agent eine Verbindung bekommt.",
+    "policy": "„Running scripts is disabled“, „von Ihrer Organisation blockiert“, fehlendes winget oder eine Frage nach dem Administrator-Passwort: Halte an. Ändere keine Ausführungsrichtlinie, schalte keine Zertifikatsprüfung ab und installiere kein anderes Werkzeug, um die Sperre zu umgehen.",
+    "handoff": "Nenne der IT Deinen Agenten, die PowerShell-Version, den Schritt und die genaue Fehlermeldung. Entferne vor dem Teilen von Fehlern oder Screenshots Tokens, personenbezogene Daten und vertrauliche Details. Lass Installation, Anmeldung und eine harmlose Anfrage an den Agenten vor dem Workshop prüfen."
+  },
+  "notes": {
+    "windows-prerequisites": {
+      "header": "Windows-Voraussetzungen getrennt prüfen",
+      "description": "Anthropic dokumentiert die native Windows-Installation ohne Administratorrechte und Git Bash als optional [1]. GitHub verlangt PowerShell 6+; Windows PowerShell 5.1 und PowerShell 7 werden getrennt installiert [2][3]. Diese Anleitung empfiehlt für Copilot eine aktuelle PowerShell 7. OpenAIs offizieller Windows-Befehl enthält eine prozessbezogene Änderung der Ausführungsrichtlinie [4]. Google dokumentiert agy und die Versionsprüfung [5]. Codex' Windows-Sandbox enthält eine Einrichtung mit erhöhten Rechten, getrennt von der CLI-Installation im Benutzerordner [6]. Die Schritte sind anhand der Dokumentation geprüft, nicht auf einem frischen oder verwalteten Windows-PC getestet.",
+      "sources": {
+        "claude-setup": { "title": "Anthropic, Claude Code einrichten" },
+        "copilot-setup": { "title": "GitHub, Copilot CLI installieren" },
+        "powershell": { "title": "Microsoft, PowerShell unter Windows installieren" },
+        "codex-install": { "title": "OpenAI, Codex installieren" },
+        "antigravity-setup": { "title": "Google, Einstieg in Antigravity" },
+        "codex-sandbox": {
+          "title": "OpenAI, Codex-Windows-Sandbox einrichten"
+        }
+      }
+    },
+    "corporate-network": {
+      "header": "Firmensperren mit der IT klären",
+      "description": "Anthropic behandelt Proxy, Zertifikate und erlaubte Endpunkte getrennt [1]. GitHub beschreibt Firmenzertifikate und Zscaler und pflegt eine eigene Freigabeliste [2][3]. Das ist keine Zusicherung für jede CLI in jeder Zscaler-Konfiguration. Laut Microsoft haben Gruppenrichtlinien Vorrang vor lokalen Ausführungsrichtlinien [4]. Anhalten und die IT fragen ist die Sicherheitsempfehlung dieser Anleitung, kein Versprechen einer universellen Lösung.",
+      "sources": {
+        "claude-network": { "title": "Anthropic, Netzwerkkonfiguration im Unternehmen" },
+        "copilot-network": { "title": "GitHub, Copilot-Netzwerkeinstellungen" },
+        "copilot-allowlist": { "title": "GitHub, Copilot-Freigabeliste" },
+        "windows-policy": { "title": "Microsoft, Ausführungsrichtlinien" }
+      }
+    }
+  },
   "voiceScript": {
     "segments": {
       "your-first-command": {
@@ -52,7 +100,7 @@
       "what-might-happen": {
         "title": "Was passieren kann",
         "keywords": "",
-        "script": "Ein paar Dinge können schiefgehen, und sie stehen unter der Zeile für deinen KI-Agenten. Unter Windows ist es meist das falsche Fenster: PowerShell und Eingabeaufforderung brauchen verschiedene Zeilen. Siehst du rote Schrift, die du nicht verstehst, drücke oben rechts auf Hilfe, füge den Fehler ein und frag nach."
+        "script": "Kläre vor der Installation auf einem Firmenlaptop, ob Agent und Konto freigegeben sind. Administrator-Fragen, Firmensperren und Zertifikatsfehler sind Gründe zum Anhalten und Nachfragen bei der IT, nicht zum Ändern der Sicherheitseinstellungen. Prüfe die Windows-Voraussetzungen Deines Agenten und nach der Installation seine Version in einem neuen Terminal. Mehr Hilfe erklärt häufige Blockaden. Entferne vertrauliche Informationen aus Fehlermeldungen, bevor Du sie teilst."
       }
     }
   },
@@ -66,8 +114,8 @@
     "placeholder": "Füge hier deine Fehlermeldung ein …",
     "copy": "Prompt kopieren",
     "copied": "Prompt kopiert",
-    "copyTip": "Füge diesen Prompt in eine KI ein, die Du nutzen darfst.",
-    "prompt": "Ich mache meinen Laptop für einen Workshop startklar und komme nicht weiter. Ich habe noch nie mit einem Terminal gearbeitet.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich gerade bin: {step}\n\nDiese Fehlermeldung sehe ich:\n\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist, und sag mir dann Schritt für Schritt, was ich als Nächstes tun soll.",
+    "copyTip": "Entferne zuerst Tokens, personenbezogene Daten und vertrauliche Details. Nutze nur eine von Deiner Organisation erlaubte KI.",
+    "prompt": "Ich mache meinen Laptop für einen Workshop startklar und komme nicht weiter. Ich habe noch nie mit einem Terminal gearbeitet.\n\nMein Computer: {os}\nMein KI-Agent: {agent}\nWo ich gerade bin: {step}\n\nDiese Fehlermeldung sehe ich:\n\n{error}\n\nErklär mir in einfachen Worten, was schiefgelaufen ist, und sag mir Schritt für Schritt, was ich als Nächstes tun soll. Schlage keine Umgehung von Firmenrichtlinien, Administrator-Beschränkungen, Ausführungsrichtlinien, TLS-Prüfungen, Proxys oder Sicherheitssoftware vor. Erkläre bei nötiger Freigabe oder Konfiguration, was ich die IT fragen soll. Erinnere mich daran, Geheimnisse und vertrauliche Details vor dem Teilen weiterer Fehlerausgaben zu entfernen.",
     "noError": "(Ich sehe keine Fehlermeldung, es funktioniert einfach nicht.)",
     "step": "Schritt 2: Installiere deinen KI-Agenten, dein erster Befehl",
     "chats": {

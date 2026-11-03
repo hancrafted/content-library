@@ -12,6 +12,7 @@
   "commandPromptSummary": "In Command Prompt instead?",
   "commandPromptHint": "Command Prompt shows a prompt like <code>C:\\&gt;</code>, with no <code>PS</code> in front. Paste this line there.",
   "happenTitle": "What might happen",
+  "unixFailure": "The installer command failed? Check that your computer is selected above and that you pasted the whole line into your terminal. For a company restriction, stop and ask IT.",
   "happen": {
     "claude-code": {
       "one": "On Windows, <code>'irm' is not recognized</code> means you are in Command Prompt: open PowerShell, or use the Command Prompt line above.",
@@ -31,7 +32,54 @@
     }
   },
   "helpLine": "Stuck, or red text you do not understand? Press Help at the top right and paste the error.",
-  "worked": "Done when the prompt comes back. Next, open a new terminal window.",
+  "worked": "After the installer finishes without errors, close the terminal, open a new one and run this check:",
+  "versionWorked": "You see a version number, not an error. Then continue to Log in. If the command is still not recognized, open More help below.",
+  "workLaptop": {
+    "title": "Work laptop? Check before you install.",
+    "mac": "If macOS asks for an administrator password, stop and ask IT or your workshop organizer.",
+    "windows": "If Windows asks for an administrator password, stop and ask IT or your workshop organizer.",
+    "linux": "If Linux asks for sudo or an administrator password, stop and ask IT or your workshop organizer.",
+    "text": "Use an agent and account your organization approves. Stop for company blocks or certificate errors too. Do not turn off security settings or switch networks to get around a block."
+  },
+  "windows": {
+    "claude-code": "Claude's native Windows installer does not need administrator rights. You still need your organization's approval on a work laptop.",
+    "copilot": "Use PowerShell 7, not the built-in Windows PowerShell 5.1. GitHub requires PowerShell 6 or newer. If PowerShell 7 or <code>winget</code> is missing or blocked, ask IT to provide them and Copilot before the workshop.",
+    "codex": "On a work laptop, ask IT to approve this command first: it includes <code>-ExecutionPolicy ByPass</code>. Later Windows sandbox setup may also ask for administrator approval. Do not disable the sandbox to continue.",
+    "antigravity": "On a work laptop, have IT approve Antigravity's CLI installation and account first. Installing into your user folder does not mean company policy permits it.",
+    "version": "Not sure which PowerShell you have? Type <code>$PSVersionTable.PSVersion</code> and press Enter. The number under Major is the version; a prompt starting with PS alone does not tell you."
+  },
+  "enterprise": {
+    "title": "Blocked on a company laptop?",
+    "network": "A Zscaler block page, certificate error or connection timeout may need different fixes. Ask IT to check the agent's approved sites, proxy and corporate certificate. A working browser does not prove the agent can connect.",
+    "policy": "“Running scripts is disabled”, “blocked by your organization”, missing winget, or an administrator-password request: stop. Do not change execution policy, disable certificate checks or install a different tool to bypass the block.",
+    "handoff": "Tell IT which agent you chose, your PowerShell version, the step and the exact error. Remove tokens, personal information and confidential details before sharing an error or screenshot. Ask them to verify installation, sign-in and a harmless agent request before workshop day."
+  },
+  "notes": {
+    "windows-prerequisites": {
+      "header": "Windows prerequisites are separate checks",
+      "description": "Anthropic documents a native Windows installer without administrator rights and optional Git Bash [1]. GitHub requires PowerShell 6+, whereas Windows PowerShell 5.1 and PowerShell 7 are separate installations [2][3]; this guide recommends a current PowerShell 7 for Copilot. OpenAI's official Windows install command includes a process execution-policy override [4]. Google documents agy and its version check [5]. Codex's Windows sandbox source includes elevated provisioning, separate from user-scoped CLI installation [6]. These are documentation-verified instructions, not a clean-PC or managed-Windows test.",
+      "sources": {
+        "claude-setup": { "title": "Anthropic, Claude Code setup" },
+        "copilot-setup": { "title": "GitHub, Installing Copilot CLI" },
+        "powershell": { "title": "Microsoft, Install PowerShell on Windows" },
+        "codex-install": { "title": "OpenAI, Codex installation" },
+        "antigravity-setup": { "title": "Google, Antigravity getting started" },
+        "codex-sandbox": {
+          "title": "OpenAI, Codex Windows sandbox setup"
+        }
+      }
+    },
+    "corporate-network": {
+      "header": "Corporate blocks belong with IT",
+      "description": "Anthropic separates proxy, certificate and endpoint configuration [1]. GitHub discusses corporate certificate trust and Zscaler, and maintains a separate allowlist [2][3]; this does not certify every CLI with every Zscaler deployment. Microsoft gives organizational Group Policy precedence over local execution-policy settings [4]. Stopping and asking IT is this guide's safety recommendation, not a promise that every block has one fix.",
+      "sources": {
+        "claude-network": { "title": "Anthropic, Enterprise network configuration" },
+        "copilot-network": { "title": "GitHub, Copilot network settings" },
+        "copilot-allowlist": { "title": "GitHub, Copilot allowlist reference" },
+        "windows-policy": { "title": "Microsoft, About execution policies" }
+      }
+    }
+  },
   "voiceScript": {
     "segments": {
       "your-first-command": {
@@ -52,7 +100,7 @@
       "what-might-happen": {
         "title": "What might happen",
         "keywords": "",
-        "script": "A few things can go wrong, and they are listed under the line for your AI agent. On Windows the usual one is the wrong window: PowerShell and Command Prompt need different lines. If you see red text you do not understand, press Help at the top right, paste the error, and ask."
+        "script": "Before installing on a work laptop, make sure your organization approves the agent and account. Administrator prompts, company blocks and certificate errors are reasons to stop and ask IT, not to change security settings. Check the Windows prerequisites shown for your agent, and use the fresh-terminal version check after installation. More help explains the common blockers. Remove confidential information from errors before sharing them."
       }
     }
   },
@@ -66,8 +114,8 @@
     "placeholder": "Paste your error here…",
     "copy": "Copy prompt",
     "copied": "Prompt copied",
-    "copyTip": "Paste this prompt into an AI you are allowed to use.",
-    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time.",
+    "copyTip": "Remove tokens, personal information and confidential details first. Use only an AI your organization permits.",
+    "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time. Do not suggest bypassing company policy, administrator restrictions, execution policy, TLS checks, proxies or security software. If this needs organizational approval or configuration, explain what to ask IT. Remind me to remove secrets and confidential details before sharing further error output.",
     "noError": "(I see no error message, it just does not work.)",
     "step": "Step 2: Install your AI agent, your first command",
     "chats": {

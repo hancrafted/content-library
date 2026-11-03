@@ -19,6 +19,7 @@ import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { notes } from './notes';
 import { PickOptions } from './pick-options';
 import { RoundTrip } from './round-trip';
 import { SignInCard } from './sign-in-card';
@@ -32,6 +33,7 @@ import { SignInCard } from './sign-in-card';
 export const logIn = slide({
   slug: 'log-in',
   messages: { en, de },
+  notes,
   segments: [{ slug: 'open-a-new-window' }, { slug: 'second-command' }, { slug: 'which-option' }],
   headerAction: ({ t, template }) => (
     <GuideHelp
@@ -53,7 +55,7 @@ export const logIn = slide({
       }}
     />
   ),
-  content: ({ t, locale, slideHref }) => {
+  content: ({ t, locale, slideHref, target }) => {
     const [backPath = '', backAnchor] = slideHref('open-your-terminal').split('#');
     const back = { path: backPath, anchor: backAnchor };
     const words = { copy: t('copy'), copied: t('copied') };
@@ -84,7 +86,7 @@ export const logIn = slide({
         <div className="flex flex-col gap-8">
           <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
 
-          <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8">
+          <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8" {...target('login')}>
             <div className="flex flex-col gap-2 rounded-lg border-2 border-primary p-4" data-new-window="">
               <p className="text-body font-semibold">{t('newWindowTitle')}</p>
               <p className="text-body">{t('newWindow')}</p>
@@ -108,6 +110,7 @@ export const logIn = slide({
             </div>
 
             <div className="flex flex-col gap-3">
+              <p className="text-body">{t('ownAccount')}</p>
               <p className="text-caption font-semibold uppercase text-primary">{t('secondCommand')}</p>
               <p className="text-body">{t('type')}</p>
               <PickSwitch
@@ -227,7 +230,6 @@ export const logIn = slide({
                     />
                   ))}
                 />
-                <p className="text-caption text-muted-foreground">{t('ownAccount')}</p>
               </div>
             </MoreHelp>
           </div>
