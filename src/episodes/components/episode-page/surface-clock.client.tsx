@@ -24,10 +24,16 @@ function pixels(value: string, name: string) {
   return 0;
 }
 
+/** Native root scroll-padding percentages use the scrollport height, as does the navigation authority. */
+function rootPaddingPixels(value: string) {
+  if (value.endsWith('%')) return (Number.parseFloat(value) / 100) * window.innerHeight;
+  return value === 'auto' ? 0 : pixels(value, 'scroll-padding-top');
+}
+
 function readSurfaces(descriptors: readonly SurfaceDescriptor[], root: HTMLElement): SurfaceBoundary[] {
   const scroll = window.scrollY;
   const rootPadding = getComputedStyle(document.documentElement).scrollPaddingTop;
-  const padding = rootPadding === 'auto' ? 0 : pixels(rootPadding, 'scroll-padding-top');
+  const padding = rootPaddingPixels(rootPadding);
   const measurements = descriptors.map((descriptor) => {
     const node = document.getElementById(descriptor.id);
     if (!node || !root.contains(node)) return null;
