@@ -23,6 +23,10 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does a fresh, focused context outperform a long, accumulated chat?](research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md) — A fresh, focused context outperforms a long chat because accuracy falls as input grows and a model that took a wrong turn leans on its own earlier attempts and does not recover.
 - [Why does the claim of 20x productivity from AI rest on estimates rather than measurement?](research/AIE/AIE-0017__twenty-x-productivity-claim/research.md) — The 20x figure is an estimate from interested parties about leading-edge programmers, not a measurement; controlled studies find gains far smaller, and sometimes a slowdown.
 
+### Evals (EVAL)
+
+- [Why does an agent eval need repeated trials, frozen inputs and replayed tool calls before two variants can be compared?](research/EVAL/EVAL-0001__comparable-agent-eval-scores/research.md) — One agent run is one draw and the world it calls drifts, so a score difference means something only with several trials per task on frozen tasks and replayed calls, paired by task with error bars.
+
 ### Large language models (LLM)
 
 - [Why do large language models give different answers to the same prompt?](research/LLM/LLM-0001__llm-output-nondeterminism/research.md) — Models sample each next token from a probability distribution, and even with sampling switched off, server-side numerical effects still change the output between runs.
