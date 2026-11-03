@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { driveSurfaceClock } from './surface-clock-driver';
 import {
   createUrlState,
   NAVIGATION_TIMEOUT_MS,
@@ -66,6 +67,55 @@ beforeEach(() => vi.useFakeTimers());
 afterEach(() => vi.useRealTimers());
 
 describe('success cases', () => {
+  it('lets a late clock consume repeated authoritative flights and hand back to actual geometry', () => {
+    // ARRANGE
+    const { state, position, fire } = setup();
+    const frames: (() => void)[] = [];
+    const expectedHalf = 0.5;
+    state.navigateTo('b');
+    const driver = driveSurfaceClock({
+      navigation: state,
+      readGeometry: () => ({
+        viewport: 800,
+        maximum: 1800,
+        samplingLine: 96,
+        surfaces: [
+          { id: 'a', top: 0, tone: 'normal' },
+          { id: 'b', top: position.top, tone: 'inverse', anchorOffset: 96 },
+        ],
+      }),
+      readPosition: () => position.scroll,
+      frame: (run) => frames.push(run),
+      cancelFrame: () => undefined,
+      timer: (run, ms) => Number(setTimeout(run, ms)),
+      cancelTimer: (id) => clearTimeout(id),
+    });
+    // ACT
+    const late = driver.clock.getSnapshot().suppressed;
+    frames.splice(0).forEach((run) => run());
+    state.navigateTo('b');
+    position.scroll = 1500;
+    fire('wheel');
+    const interrupted = driver.clock.getSnapshot();
+    state.navigateTo('b');
+    position.top = 1000;
+    position.scroll = 904;
+    fire('scrollend');
+    const settled = driver.clock.getSnapshot();
+    position.scroll = 552;
+    driver.scroll();
+    frames.splice(0).forEach((run) => run());
+    const reverse = driver.clock.getSnapshot();
+    driver.dispose();
+    state.dispose();
+    // ASSERT
+    expect(late).toBe(true);
+    expect(interrupted.suppressed).toBe(false);
+    expect(interrupted.edges[0].progress).toBe(expectedHalf);
+    expect(settled.suppressed).toBe(false);
+    expect(settled.edges[0].progress).toBe(1);
+    expect(reverse.edges[0].progress).toBe(expectedHalf);
+  });
   it('returns to document start on an Event recording page whose Title follows Event framing', () => {
     // ARRANGE
     const { win, writes } = fakeWindow('#thought-experiment');

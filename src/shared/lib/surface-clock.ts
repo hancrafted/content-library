@@ -23,8 +23,14 @@ export interface SurfaceEdge {
   readonly progress: number;
 }
 export interface SurfaceSnapshot {
+  readonly suppressed: boolean;
   readonly tone: SurfaceTone;
   readonly edges: readonly SurfaceEdge[];
+}
+/** Presentation consumes correlation/status only, never target or active identity. */
+export interface SurfaceNavigation {
+  readonly id: number;
+  readonly status: 'navigating' | 'settled' | 'interrupted' | 'timed-out' | 'superseded';
 }
 
 const clamp = (value: number, maximum: number) => Math.max(0, Math.min(value, maximum));
@@ -66,7 +72,8 @@ class PageSurfaceClock {
   private geometry: SurfaceGeometry = { surfaces: [], viewport: 0, maximum: 0, samplingLine: 0 };
   private position = 0;
   private disposed = false;
-  private snapshot: SurfaceSnapshot = { tone: 'normal', edges: [] };
+  private snapshot: SurfaceSnapshot = { tone: 'normal', edges: [], suppressed: false };
+  private navigation: SurfaceNavigation | null = null;
   private events: { at: number; index: number }[] = [];
   private active = new Set<number>();
   private subscriptions = new Set<() => void>();
@@ -86,7 +93,11 @@ class PageSurfaceClock {
   private publish(indices: Iterable<number>) {
     const { surfaces, samplingLine } = this.geometry;
     const selected = upperBound(surfaces, this.position + samplingLine, (surface) => surface.top) - 1;
-    this.snapshot = { edges: this.updatedEdges(indices), tone: surfaces[Math.max(0, selected)]?.tone ?? 'normal' };
+    this.snapshot = {
+      edges: this.updatedEdges(indices),
+      tone: surfaces[Math.max(0, selected)]?.tone ?? 'normal',
+      suppressed: this.navigation?.status === 'navigating',
+    };
     for (const notify of [...this.subscriptions]) if (!this.disposed && this.subscriptions.has(notify)) notify();
   }
   setGeometry(input: SurfaceGeometry, position = this.position) {
@@ -112,6 +123,17 @@ class PageSurfaceClock {
     if (next < this.position) this.eventsAt(next).forEach((index) => relevant.add(index));
     this.position = next;
     this.publish(relevant);
+  }
+  setNavigation(navigation: SurfaceNavigation | null) {
+    if (this.disposed || !navigation) return;
+    if (
+      this.navigation &&
+      (navigation.id < this.navigation.id ||
+        (navigation.id === this.navigation.id && this.navigation.status !== 'navigating'))
+    )
+      return;
+    this.navigation = navigation;
+    this.publish([]);
   }
   private eventsAt(position: number) {
     const indices: number[] = [];

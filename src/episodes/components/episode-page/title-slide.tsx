@@ -2,7 +2,7 @@ import type { HeaderMode, PageTone, SlideEntrance } from '@/episodes/components/
 import { HeroTitle, SlideBackdrop, SlideCaption, SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
-import type { SlidePresentation } from '../slide-master/slide-presentation';
+import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type RecordingLanguage, type TalkPlayerLabels } from './talk-player.client';
 import { TitleInk } from './title-ink.client';
@@ -26,6 +26,7 @@ function HeroGlow() {
 }
 
 export interface TitleSlideProps {
+  transition?: ResolvedSlideTransition;
   presentation?: SlidePresentation;
   geometricTone?: boolean;
   title: string;
@@ -90,10 +91,11 @@ function AuthoredTitleSlide(props: TitleSlideProps & { launcher: ReactNode }) {
       data-slot="title-slide"
       data-tone={legacyTone(props)}
       presentation={titleSurface(props)}
+      transition={props.transition}
     >
       <ToneMark {...props} />
       {props.hero ?? <HeroGlow />}
-      {!props.presentation && <ToneInk tone={props.tone} target={props.inkTarget} />}
+      {!props.presentation && !props.transition && <ToneInk tone={props.tone} target={props.inkTarget} />}
       <SlideFrame className="justify-center">
         <HeroTitle {...targetOf('title')}>{props.title}</HeroTitle>
         {props.caption && <SlideCaption {...targetOf('caption')}>{props.caption}</SlideCaption>}
@@ -150,10 +152,11 @@ export function TitleSlide(props: TitleSlideProps) {
       header={header}
       scene="hug"
       presentation={titleSurface(props)}
+      transition={props.transition}
     >
       <ToneMark {...props} />
       {hero ?? <HeroGlow />}
-      {!props.presentation && <ToneInk tone={props.tone} target={props.inkTarget} />}
+      {!props.presentation && !props.transition && <ToneInk tone={props.tone} target={props.inkTarget} />}
     </SlideWrapper>
   );
 }

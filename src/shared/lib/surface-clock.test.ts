@@ -13,6 +13,24 @@ const geometry = {
 };
 
 describe('success cases', () => {
+  it('suppresses only the current explicit flight while geometry remains reversible after settlement', () => {
+    // ARRANGE
+    const clock = createSurfaceClock();
+    const half = 0.5;
+    clock.setGeometry(geometry, 1500);
+    // ACT
+    clock.setNavigation({ id: 1, status: 'navigating' });
+    const navigating = clock.getSnapshot().suppressed;
+    clock.setPosition(1800);
+    clock.setNavigation({ id: 1, status: 'settled' });
+    const arrival = clock.getSnapshot();
+    clock.setPosition(1500);
+    // ASSERT
+    expect(navigating).toBe(true);
+    expect(arrival.suppressed).toBe(false);
+    expect(arrival.edges[0].progress).toBe(1);
+    expect(clock.getSnapshot().edges[0].progress).toBe(half);
+  });
   it('publishes refreshed geometry and current position atomically for late readers', () => {
     // ARRANGE
     const clock = createSurfaceClock();
@@ -121,6 +139,28 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('ignores stale terminals and releases interruption and timeout without latching destination progress', () => {
+    // ARRANGE
+    const clock = createSurfaceClock();
+    const half = 0.5;
+    const statuses = ['interrupted', 'timed-out', 'superseded'] as const;
+    clock.setGeometry(geometry, 1500);
+    // ACT
+    const observations = statuses.map((status, index) => {
+      const id = index + 2;
+      clock.setNavigation({ id, status: 'navigating' });
+      clock.setNavigation({ id: 1, status: 'settled' });
+      const protectedFlight = clock.getSnapshot().suppressed;
+      clock.setNavigation({ id, status });
+      return {
+        protectedFlight,
+        suppressed: clock.getSnapshot().suppressed,
+        progress: clock.getSnapshot().edges[0].progress,
+      };
+    });
+    // ASSERT
+    expect(observations).toEqual(statuses.map(() => ({ protectedFlight: true, suppressed: false, progress: half })));
+  });
   it('ignores invalid range settings and prevents notifications after disposal', () => {
     // ARRANGE
     const clock = createSurfaceClock();
@@ -145,6 +185,33 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('tracks overlapping edge ranges independently through reverse, fast jumps and refreshed offsets', () => {
+    // ARRANGE
+    const clock = createSurfaceClock();
+    const surfaces = [
+      { id: 'a', top: 0, tone: 'normal' as const },
+      { id: 'b', top: 1000, tone: 'inverse' as const, anchorOffset: 100 },
+      { id: 'c', top: 1300, tone: 'normal' as const, anchorOffset: 100 },
+    ];
+    const input = { viewport: 800, maximum: 1500, samplingLine: 76, surfaces };
+    const forward = [5 / 7, 2 / 7];
+    const refreshed = [0.75, 2 / 7];
+    const reverse = [2 / 7, 0];
+    // ACT
+    clock.setGeometry(input, 700);
+    const first = clock.getSnapshot().edges.map((edge) => edge.progress);
+    clock.setGeometry({ ...input, surfaces: [surfaces[0], { ...surfaces[1], startOffset: -100 }, surfaces[2]] });
+    const edited = clock.getSnapshot().edges.map((edge) => edge.progress);
+    clock.setPosition(1500);
+    const jump = clock.getSnapshot().edges.map((edge) => edge.progress);
+    clock.setGeometry(input, 400);
+    const back = clock.getSnapshot().edges.map((edge) => edge.progress);
+    // ASSERT
+    expect(first).toEqual(forward);
+    expect(edited).toEqual(refreshed);
+    expect(jump).toEqual([1, 1]);
+    expect(back).toEqual(reverse);
+  });
   it('completes collapsed ranges and samples distinct surfaces without active state', () => {
     // ARRANGE
     const clock = createSurfaceClock();
