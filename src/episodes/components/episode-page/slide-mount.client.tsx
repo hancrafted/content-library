@@ -3,6 +3,7 @@
 import type { HeaderMode } from '@/episodes/components/slide-master/slide';
 import { SlideIdContext, useEntryOf, useZoneOf } from '@/episodes/hooks/use-slide-zone';
 import { isMounted, keptHeight, type SlideEntry, type SlideZone } from '@/episodes/lib/slide-zone.pure';
+import { cn } from '@/shared/lib/utils';
 import { useEffect, useRef, type ReactNode, type Ref } from 'react';
 
 /** Remembers the box's height while it is mounted, so `far` can hold it. */
@@ -22,15 +23,7 @@ function useMeasuredHeight(mounted: boolean) {
   return { box, height };
 }
 
-/** What a mount draws for a zone: content only outside `far`, the kept height while far. */
-export function SlideMountView({
-  id,
-  zone,
-  heldHeight,
-  boxRef,
-  entry,
-  children,
-}: {
+interface SlideMountViewProps {
   id: string | null;
   zone: SlideZone;
   heldHeight: number;
@@ -38,7 +31,16 @@ export function SlideMountView({
   /** The Slide's entrance; absent on an Episode whose Scenes author their own header, which keeps its zone keyframes. */
   entry?: SlideEntry;
   children: ReactNode;
-}) {
+  className?: string;
+}
+
+/** Identity only: retained decoration and removable Scenes read the same existing page zone store. */
+export function SlideIdentity({ id, children }: { id?: string | null; children: ReactNode }) {
+  return <SlideIdContext value={id ?? null}>{children}</SlideIdContext>;
+}
+
+/** What a mount draws for a zone: content only outside `far`, the kept height while far. */
+export function SlideMountView({ id, zone, heldHeight, boxRef, entry, children, className }: SlideMountViewProps) {
   const held = keptHeight(zone, heldHeight);
   return (
     <div
@@ -46,10 +48,10 @@ export function SlideMountView({
       data-slot="slide-mount"
       data-zone={zone}
       data-entry={entry}
-      className="flex flex-1 flex-col"
+      className={cn('flex flex-1 flex-col', className)}
       style={held > 0 ? { minHeight: held } : undefined}
     >
-      <SlideIdContext value={id}>{isMounted(zone) ? children : null}</SlideIdContext>
+      <SlideIdentity id={id}>{isMounted(zone) ? children : null}</SlideIdentity>
     </div>
   );
 }
@@ -62,7 +64,17 @@ export function SlideMountView({
  * `useSlideZone()` below it reads this Slide's zone. On the shared header it
  * also carries the Slide's entrance state for the play-once CSS (design-ADR-0012).
  */
-export function SlideMount({ id, mode, children }: { id?: string; mode: HeaderMode; children: ReactNode }) {
+export function SlideMount({
+  id,
+  mode,
+  children,
+  className,
+}: {
+  id?: string;
+  mode: HeaderMode;
+  children: ReactNode;
+  className?: string;
+}) {
   const zone = useZoneOf(id ?? null);
   const entry = useEntryOf(id ?? null);
   const { box, height } = useMeasuredHeight(isMounted(zone));
@@ -72,6 +84,7 @@ export function SlideMount({ id, mode, children }: { id?: string; mode: HeaderMo
       zone={zone}
       heldHeight={height.current}
       boxRef={box}
+      className={className}
       entry={mode === 'shared' ? entry : undefined}
     >
       {children}
