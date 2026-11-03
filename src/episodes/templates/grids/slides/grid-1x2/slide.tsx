@@ -3,6 +3,7 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import surface from './surface-reference.module.css';
 
 interface HalfProps {
   index: string;
@@ -41,6 +42,12 @@ function Half({ index, title, caption, side }: HalfProps) {
 export const grid1x2 = slide({
   slug: 'grid-1x2',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    rear: <div className={surface.rear} />,
+    rearMobile: true,
+    front: <div className={surface.front} />,
+  },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
   content: ({ t, target }) => (

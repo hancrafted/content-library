@@ -20,6 +20,7 @@ import { talkOf, tocLabelsOf } from './episode-labels';
 import { eyebrowsOf, pageClassOf, slideSizeOf, sourceFolderOf, tocSectionsOf } from './episode-page-container.pure';
 import { ExplorableHomes } from './explorable-homes';
 import { PagePicksProvider } from './page-picks-provider.client';
+import { PageSurfaceClock } from './page-surface-clock';
 import { recordContent, type EpisodeContent, type TranslatorOf } from './record-content';
 import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
@@ -64,6 +65,7 @@ function SectionSlides({ slides, page }: { slides: readonly LocalizedSlide[]; pa
           size={slideSizeOf(slide)}
           mode={page.mode}
           header={headerOf(slide, page)}
+          presentation={slide.presentation}
         >
           {slide.content}
         </SlideWrapper>
@@ -103,6 +105,8 @@ function titleSlideOf(
     entrance: page.entrance,
     hero: content.hero,
     tone: content.tone,
+    presentation: content.titlePresentation,
+    geometricTone: Boolean(content.titlePresentation || content.slides.some((slide) => slide.presentation)),
     inkTarget: content.slides[0]?.id,
     ...talk,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
@@ -115,13 +119,16 @@ async function EpisodeToc(props: {
   sections: readonly TocSection[];
   minutes: number;
   collection?: TocCollection;
+  content: EpisodeContent;
+  samplingLine?: number;
 }) {
   const labels = await tocLabelsOf(props.locale);
   return (
     <aside
       data-slot="toc"
-      className="motion-reduce:transition-none [html[data-page-tone=inverse]_&]:invisible md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:transition-[width] md:duration-300 md:ease-out md:data-[toc-collapsed=true]:w-[3.5rem]"
+      className="motion-reduce:transition-none [html[data-title-active=true]_&]:invisible md:fixed md:top-24 md:left-4 md:z-40 md:w-[17rem] md:transition-[width] md:duration-300 md:ease-out md:data-[toc-collapsed=true]:w-[3.5rem]"
     >
+      <PageSurfaceClock content={props.content} samplingLine={props.samplingLine} />
       <TableOfContents
         locale={props.locale}
         page={props.page}
@@ -191,6 +198,8 @@ interface EpisodePageContainerProps {
 function tocPropsOf(content: EpisodeContent, props: EpisodePageContainerProps, sections: readonly TocSection[]) {
   return {
     locale: props.locale,
+    content,
+    samplingLine: props.episode.surfaceSamplingLine,
     page: props.tocPage ?? { title: content.title, route: props.frame?.route ?? ownRouteOf(props.page.id) },
     sections,
     minutes: content.minutes,

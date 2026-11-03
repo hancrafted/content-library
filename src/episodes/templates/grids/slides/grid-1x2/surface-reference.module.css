@@ -1,0 +1,23 @@
+.rear {
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background: repeating-linear-gradient(45deg, var(--foreground) 0 1px, transparent 1px 4rem);
+  animation: drift var(--surface-reference-duration, 8s) ease-in-out infinite alternate;
+}
+
+.front {
+  position: absolute;
+  inset: 1rem 1rem auto auto;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--foreground);
+  border-radius: 50%;
+  transform: translateX(var(--surface-reference-displacement, 1rem));
+}
+
+@keyframes drift {
+  to {
+    transform: translateY(var(--surface-reference-displacement, 1rem));
+  }
+}

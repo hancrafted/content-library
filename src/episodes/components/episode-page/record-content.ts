@@ -21,6 +21,7 @@ import { titleLinesOf } from '@/episodes/components/slide-master/title-lines';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
+import type { SlidePresentation } from '../slide-master/slide-presentation';
 
 /*
  * Turns an Episode record (or the composition of a Template or an Explorable page) into what one locale of its page renders: the
@@ -43,6 +44,7 @@ export interface PageContext {
 
 /** What one locale of an Episode renders: the Title slide's text and its Slides in page order. */
 export interface EpisodeContent {
+  readonly titlePresentation?: SlidePresentation;
   readonly title: string;
   readonly caption?: string;
   /** The whole reading time in minutes (`episodeMinutes`): the total the table of contents counts down from. */
@@ -91,6 +93,11 @@ export async function recordContent(
     header: episode.header,
     entrance: record.entrance ?? 'typewriter',
     tone: record.tone,
+    titlePresentation: titlePresentationOf(record),
     slides: episode.placed.map((placed) => localizeSlide(placed, episode)),
   };
+}
+
+function titlePresentationOf(record: EpisodeComposition) {
+  return record.title?.presentation;
 }
