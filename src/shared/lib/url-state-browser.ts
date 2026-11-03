@@ -21,8 +21,7 @@ export function observeRestoration(win: UrlWindow, onRestore: () => void): () =>
     clear();
     if (paired) return;
     if (event.type === 'popstate') {
-      const { origin, pathname, search, hash } = win.location;
-      destination = `${origin}${pathname}${search}${hash}`;
+      destination = win.location.href;
       expiry = setTimeout(clear, 0);
     }
     onRestore();
