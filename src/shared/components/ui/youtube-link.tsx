@@ -1,4 +1,3 @@
-import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { externalHref } from '@/shared/lib/external-link.pure';
 
 /** The strings the video link reads: its accessible name and the new-tab notice (FE-003 §2.2). */
@@ -7,18 +6,23 @@ export interface VideoLabels {
   readonly newTab: string;
 }
 
-/**
- * The Episode's video as a second link on its card, raised above the card's
- * stretched title link so it stays its own target. Drawn only when the card has a video.
- */
-export function YoutubeLink({ card, labels }: { card: EpisodeCard; labels: VideoLabels }) {
-  if (card.youtubeUrl === undefined) return null;
+/** A direct YouTube link for a card, raised above the card's stretched title link. */
+export function YoutubeLink({
+  url,
+  labels,
+  data,
+}: {
+  url: string | undefined;
+  labels: VideoLabels;
+  data?: Record<`data-${string}`, string>;
+}) {
+  if (url === undefined) return null;
   return (
     <a
-      href={externalHref(card.youtubeUrl)}
+      href={externalHref(url)}
       target="_blank"
       rel="noopener noreferrer"
-      data-episode-video
+      {...data}
       className="relative z-20 -m-2.5 inline-flex size-11 items-center justify-center rounded-full text-youtube transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none motion-reduce:hover:scale-100"
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

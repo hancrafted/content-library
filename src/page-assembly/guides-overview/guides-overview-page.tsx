@@ -1,12 +1,13 @@
 import { routeOf } from '@/content-store/catalogue/record-routes';
 import { TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
-import { listedGuides } from '@/content-store/store';
+import { guideVideo, listedGuides } from '@/content-store/store';
 import { compositionOf } from '@/episodes/lib/registry';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import { BadgeList } from '@/shared/components/ui/badge-list';
 import { CardArrow, CardCaption, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
+import { YoutubeLink, type VideoLabels } from '@/shared/components/ui/youtube-link';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { getTranslations } from 'next-intl/server';
 
@@ -15,11 +16,13 @@ function guideCards(locale: Locale) {
   const tagWords = PAGE_WORDS[locale].tags;
   return listedGuides().map(({ page, tags }) => {
     const { title, description } = compositionOf(page.guide).messages[locale];
+    const video = guideVideo(page.guide.slug, locale);
     return {
       slug: page.guide.slug,
       route: routeOf(page),
       title,
       description,
+      youtubeUrl: video === undefined ? undefined : `https://www.youtube.com/watch?v=${video.id}`,
       leadTag: tags[0],
       tags: tags.map((id) => ({ id, label: tagWords[id].name, tooltip: tagWords[id].tooltip })),
     };
@@ -28,8 +31,15 @@ function guideCards(locale: Locale) {
 
 type GuideCard = ReturnType<typeof guideCards>[number];
 
+interface GuideCardViewProps {
+  card: GuideCard;
+  kindLabel: string;
+  locale: Locale;
+  videoLabels: VideoLabels;
+}
+
 /** One Guide as a card, laid out as an Explorable card is: lead Tag icon and accent, kind, title as the one link, description, Tags. */
-function GuideCardView({ card, kindLabel, locale }: { card: GuideCard; kindLabel: string; locale: Locale }) {
+function GuideCardView({ card, kindLabel, locale, videoLabels }: GuideCardViewProps) {
   return (
     <CardShell
       variant="compact"
@@ -43,7 +53,8 @@ function GuideCardView({ card, kindLabel, locale }: { card: GuideCard; kindLabel
       <CardTitle variant="compact" title={card.title} route={card.route} locale={locale} level={2} />
       <CardCaption variant="compact">{card.description}</CardCaption>
       <BadgeList items={card.tags} data={{ 'data-guide-tags': '' }} />
-      <div className="mt-auto flex min-h-11 items-center justify-end pt-2">
+      <div className="mt-auto flex min-h-11 items-center justify-end gap-2 pt-2">
+        <YoutubeLink url={card.youtubeUrl} labels={videoLabels} data={{ 'data-guide-video': '' }} />
         <CardArrow variant="compact" />
       </div>
     </CardShell>
@@ -66,7 +77,12 @@ export async function GuidesOverviewPage({ locale }: { locale: Locale }) {
         <ul className="grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card) => (
             <li key={card.slug} className="flex">
-              <GuideCardView card={card} kindLabel={t('typeLabel')} locale={locale} />
+              <GuideCardView
+                card={card}
+                kindLabel={t('typeLabel')}
+                locale={locale}
+                videoLabels={{ watchVideo: t('watchVideo'), newTab: t('newTab') }}
+              />
             </li>
           ))}
         </ul>

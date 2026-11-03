@@ -12,8 +12,14 @@ import { ROUTES } from '../../src/shared/lib/static-routes';
 import { exportedPage, OUT_DIR, resolveBasePath } from './exported-pages';
 
 const basePath = resolveBasePath();
+const GUIDE_VIDEO_ID = '8BTzjMUCgpc';
+const GUIDE_TITLES = {
+  en: 'Get workshop-ready: your AI agent on your laptop',
+  de: 'Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop',
+} as const;
+const GUIDE_ROUTE = '/guides/setup-ai-agent-and-starter-folder';
 
-/** Every public Guide the catalogue lists, by route: none until the first Guide is scaffolded. */
+/** Every public Guide the catalogue lists, by route. */
 const LISTED_GUIDES = PAGES.filter(({ page, treatment }) => page.kind === 'guide' && treatment.listed).map(({ page }) =>
   routeOf(page),
 );
@@ -52,5 +58,22 @@ describe.each(LOCALES)('the Guides overview in %s', (locale) => {
     // ASSERT
     expect(hrefs).toEqual(expected);
     expect(broken).toEqual([]);
+  });
+
+  it('plays the Guide video and links to it from the card', () => {
+    // ARRANGE
+    const $ = exportedPage(url);
+    const guide = exportedPage(localizePath(GUIDE_ROUTE, locale));
+    const expectedVideoUrl = `https://www.youtube.com/watch?v=${GUIDE_VIDEO_ID}`;
+    const expectedTalkTitle = GUIDE_TITLES[locale];
+    // ACT
+    const launcher = guide('[data-slot="title-slide"] [data-video-id]');
+    const videoLink = $(`[data-guide-card="setup-ai-agent-and-starter-folder"] [data-guide-video]`);
+    // ASSERT
+    expect(launcher.attr('data-video-id')).toBe(GUIDE_VIDEO_ID);
+    expect(launcher.find('[data-talk-title]').text().trim()).toBe(expectedTalkTitle);
+    expect(videoLink.attr('href')).toBe(expectedVideoUrl);
+    expect(videoLink.attr('target')).toBe('_blank');
+    expect(videoLink.attr('rel')).toBe('noopener noreferrer');
   });
 });
