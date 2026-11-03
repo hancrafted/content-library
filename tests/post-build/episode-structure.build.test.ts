@@ -78,6 +78,26 @@ function wrapperIdsBySection($: CheerioAPI): { section: string; ids: string[] }[
 }
 
 describe('episode structure', () => {
+  it.each(LOCALES)('exports independently retained outgoing transition hosts in %s', (locale) => {
+    // ARRANGE
+    const route = localizePath('/master-slides/grids/', locale);
+    const expected = [
+      { host: 'grids--grid-1x1', effect: 'wave', removable: false, inert: true },
+      { host: 'grids--grid-1x2', effect: 'goo', removable: false, inert: true },
+    ];
+    // ACT
+    const $ = exportedPage(route);
+    const edges = $('[data-transition-edge]')
+      .toArray()
+      .map((node) => ({
+        host: $(node).parent().attr('id'),
+        effect: $(node).attr('data-transition-effect'),
+        removable: $(node).parents('[data-slot="slide-mount"]').length > 0,
+        inert: $(node).attr('aria-hidden') === 'true' && $(node).attr('inert') !== undefined,
+      }));
+    // ASSERT
+    expect(edges).toEqual(expected);
+  });
   beforeAll(() => {
     if (!existsSync(OUT_DIR)) {
       throw new Error(`No out/ directory at ${OUT_DIR} — run \`npm run build\` before \`npm run test:build\`.`);
