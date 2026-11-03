@@ -1,6 +1,6 @@
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import { hasReadingTime, remainingLabel, type RemainingTemplates } from '@/shared/lib/speaking-time.pure';
-import type { ReadingTime, TocPageContext } from '@/shared/lib/table-of-contents.pure';
+import type { RemainingTemplates } from '@/shared/lib/speaking-time.pure';
+import type { TocPageContext } from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -20,20 +20,9 @@ export interface TocLabels {
   expand: string;
   backToTop: string;
   options: string;
-  presentation: string;
-  showAsTree: string;
+  showEventPlaylist: string;
   zoomOut: string;
   zoomIn: string;
-}
-
-/** Time left, kept in the HTML for a reader without JavaScript; nothing for an Episode without a Voice script. */
-function TimeLeft(props: { labels: TocLabels; locale: Locale; time: ReadingTime; revealed: boolean }) {
-  if (!hasReadingTime(props.time.total)) return null;
-  return (
-    <span className={cn('tabular-nums', !props.revealed && 'hidden noscript:inline')}>
-      {remainingLabel(props.labels.remaining, props.locale, props.time.remaining)}
-    </span>
-  );
 }
 
 interface HeadingDetailsProps {
@@ -43,8 +32,6 @@ interface HeadingDetailsProps {
   topId: string;
   atTop: boolean;
   onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
-  time: ReadingTime;
-  revealed: boolean;
   collapsed?: boolean;
 }
 
@@ -66,9 +53,6 @@ function HeadingDetails(props: HeadingDetailsProps) {
       >
         {props.page.title}
       </Link>
-      <div className="mt-1 text-muted-foreground">
-        <TimeLeft {...props} />
-      </div>
     </div>
   );
 }
@@ -82,10 +66,9 @@ function BackLink(props: Pick<HeadingDetailsProps, 'page' | 'locale' | 'collapse
       aria-label={back.label}
       title={back.label}
       data-testid="toc-back"
-      className="inline-flex min-h-8 min-w-8 items-center gap-2 rounded-lg px-2 font-medium tracking-widest uppercase hover:bg-accent hover:text-foreground focus-visible:outline-2"
+      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg hover:bg-accent hover:text-foreground focus-visible:outline-2 md:min-h-8 md:min-w-8"
     >
       <ArrowLeft aria-hidden className="size-4 shrink-0" />
-      {!props.collapsed && <span>{back.label}</span>}
     </Link>
   );
 }
@@ -98,8 +81,6 @@ export function TocHeading(props: {
   topId: string;
   atTop: boolean;
   onGlide: (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
-  time: ReadingTime;
-  revealed: boolean;
   collapsed?: boolean;
   actions: ReactNode;
 }) {
@@ -108,7 +89,9 @@ export function TocHeading(props: {
     <div data-toc-context className="shrink-0 text-caption text-muted-foreground">
       <div className={cn('mb-2 flex items-center justify-between gap-1', collapsed && 'flex-col-reverse')}>
         <BackLink {...props} />
-        <div className={cn('ml-auto', collapsed && 'mx-auto')}>{props.actions}</div>
+        <div className={cn('ml-auto flex items-center gap-1', collapsed && 'mx-auto flex-col-reverse')}>
+          {props.actions}
+        </div>
       </div>
       <HeadingDetails {...props} />
     </div>

@@ -20,9 +20,9 @@ On an Event-scoped Episode page the Event's breadcrumb and past notice sit above
 
 The table of contents also offers Event navigation, derived at build time by `src/page-assembly/episode/event-navigation.pure.ts`; the shared chrome receives a plain outline, never records or Scenes. Each page-bearing Episode appears once in first-occurrence Playlist order. Section and Slide links retain the Event route and locale and land directly on their anchors. Decision: [Event navigation is a derived outline](../adr/0021-event-navigation-is-a-derived-outline.md).
 
-The top-right vertical-ellipsis menu holds collapse/expand and the applicable zoom command. Its options group has one **Show as Tree** checkbox: checked selects Tree, unchecked selects Zoom; zoom commands are absent in Tree mode. Zoom switches between the current Episode's Sections and Slides and the Event's Episodes and Sections; Tree adds the Episode level above Sections and Slides. The initial presentation is `TOC_DEFAULT_PRESENTATION` in `src/shared/lib/table-of-contents.pure.ts` (`zoom`); overrides and zoom scope are transient and reset on a fresh page load, never stored. Switching either leaves the reader in place. Standalone pages have no Event controls.
+The zoom icon left of the top-right ellipsis switches between the current Episode's Sections and Slides and the full Event Episode → Section → Slide tree. The menu's standalone **Show Event Playlist** checkbox controls that same scope; there is no separate Tree presentation. Collapse/expand appears with its matching icon, without an options group or a duplicate zoom command. `TOC_DEFAULT_SCOPE` in `src/shared/lib/table-of-contents.pure.ts` defaults to `page`; scope is transient and resets on a fresh page load, never stored. Switching scope leaves the reader in place. Standalone pages have no Event controls.
 
-Page assembly also supplies the current title/route and optional back-link label/route through `episodeContextOf` in the same module. This is page context, not stored Episode metadata or part of the Event tree. `← EPISODE` returns to the current Event from an Event Episode, or the Episodes overview from a standalone Episode. Other page kinds keep their supplied title and no invented back destination.
+Page assembly also supplies the current title/route and optional back-link label/route through `episodeContextOf` in the same module. This is page context, not stored Episode metadata or part of the Event tree. The arrow-only back link returns to the current Event from an Event Episode, or the Episodes overview from a standalone Episode; its label remains accessible without visible text. Other page kinds keep their supplied title and no invented back destination. The header shows neither remaining-time text nor the redundant Event-title link.
 
 ## Corners
 
@@ -37,10 +37,10 @@ Page assembly also supplies the current title/route and optional back-link label
 
 - Fixed overlay on the left from `md`, taking no layout space; below `md`, the pill opens it as a drawer sliding in from the left.
 - While the talk player is docked, its max-height leaves the player room (`--toc-reserve`) and it scrolls inside itself.
-- The pill shows where the reader is, the current Slide's number and title, plus the remaining reading time.
+- The pill shows where the reader is, the current Slide's number and title, without remaining-time text.
 - The header separates leaving the page (the back arrow) from returning to its top (the page title below). The title link is current on `top`; the Title slide has no entry in the outline.
 - The menu opens to the right of the rail, clamped within the viewport. It portals out of the rail's stacking context; in the mobile native dialog it stays within that dialog's top layer. The mobile drawer omits rail collapse/expand.
-- Reading progress runs clockwise around the current panel border from 12 o'clock, using the existing time-weighted Episode percentage. The path is remeasured on resize and has a normalized length, so collapse/expand never turns a percentage into a stale pixel offset. No Voice script means a neutral border; Section rings and remaining reading time are unchanged.
+- Reading progress runs clockwise around the current panel border from 12 o'clock, using the time-weighted Episode percentage. The path is remeasured on resize and has a normalized length, so collapse/expand never turns a percentage into a stale pixel offset. The total includes Title slide script time that is absent from the outline; `readingTime` credits that elapsed introduction once the first body Slide is active, so reaching the bottom completes the border without forcing 100% on entry to the last Slide. No Voice script means a neutral border; Section rings are unchanged.
 - It takes pre-translated props from the container.
 
 ## Reserved places

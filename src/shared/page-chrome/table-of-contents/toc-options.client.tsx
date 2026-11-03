@@ -1,27 +1,26 @@
 'use client';
 
 import { useTocMenu } from '@/shared/hooks/use-toc-menu';
-import type { TocPresentation } from '@/shared/lib/table-of-contents.pure';
+import type { TocScope } from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
-import { Check, EllipsisVertical } from 'lucide-react';
+import { Check, EllipsisVertical, PanelLeftClose, PanelLeftOpen, type LucideIcon } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import type { TocLabels } from './toc-heading';
 
 interface OptionsProps {
   labels: TocLabels;
-  mode: TocPresentation;
-  onChange: (mode: TocPresentation) => void;
+  scope: TocScope;
+  onToggleScope: () => void;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
   hasCollection: boolean;
-  zoomedOut: boolean;
-  onZoomChange: () => void;
 }
 
 interface Command {
   key: string;
   label: string;
   choose: () => void;
+  icon: LucideIcon;
 }
 const ITEM =
   'flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-lg px-3 text-left text-caption hover:bg-accent focus-visible:outline-2';
@@ -33,42 +32,33 @@ function commandsOf(props: OptionsProps): Command[] {
       key: 'collapse',
       label: props.collapsed ? props.labels.expand : props.labels.collapse,
       choose: props.onToggleCollapse,
-    });
-  if (props.hasCollection && props.mode === 'zoom')
-    commands.push({
-      key: 'zoom',
-      label: props.zoomedOut ? props.labels.zoomIn : props.labels.zoomOut,
-      choose: props.onZoomChange,
+      icon: props.collapsed ? PanelLeftOpen : PanelLeftClose,
     });
   return commands;
 }
 
-function TreeOption(props: OptionsProps & { menu: ReturnType<typeof useTocMenu> }) {
+function PlaylistOption(props: OptionsProps & { menu: ReturnType<typeof useTocMenu> }) {
   return (
-    <div role="group" aria-label={props.labels.presentation} className="mt-1 border-t pt-1">
-      <div aria-hidden className="px-3 py-1 text-caption text-muted-foreground">
-        {props.labels.presentation}
-      </div>
-      <button
-        id={`${props.menu.id}-tree`}
-        type="button"
-        role="menuitemcheckbox"
-        aria-checked={props.mode === 'tree'}
-        tabIndex={-1}
-        onClick={() => {
-          props.onChange(props.mode === 'tree' ? 'zoom' : 'tree');
-          props.menu.close();
-        }}
-        className={ITEM}
-      >
-        <Check aria-hidden className={cn('size-4', props.mode !== 'tree' && 'invisible')} />
-        {props.labels.showAsTree}
-      </button>
-    </div>
+    <button
+      id={`${props.menu.id}-playlist`}
+      type="button"
+      role="menuitemcheckbox"
+      aria-checked={props.scope === 'collection'}
+      tabIndex={-1}
+      onClick={() => {
+        props.onToggleScope();
+        props.menu.close();
+      }}
+      className={ITEM}
+    >
+      <Check aria-hidden className={cn('size-4', props.scope !== 'collection' && 'invisible')} />
+      {props.labels.showEventPlaylist}
+    </button>
   );
 }
 
 function CommandItem(props: { command: Command; menu: ReturnType<typeof useTocMenu> }) {
+  const Icon = props.command.icon;
   return (
     <button
       id={`${props.menu.id}-${props.command.key}`}
@@ -81,6 +71,7 @@ function CommandItem(props: { command: Command; menu: ReturnType<typeof useTocMe
         props.menu.close();
       }}
     >
+      <Icon aria-hidden className="size-4 shrink-0" />
       {props.command.label}
     </button>
   );
@@ -101,14 +92,14 @@ function OptionsPopover(props: OptionsProps & { commands: readonly Command[]; me
       {props.commands.map((command) => (
         <CommandItem key={command.key} command={command} menu={menu} />
       ))}
-      {props.hasCollection && <TreeOption {...props} />}
+      {props.hasCollection && <PlaylistOption {...props} />}
     </div>
   );
 }
 
 export function TocOptions(props: OptionsProps) {
   const commands = commandsOf(props);
-  const menu = useTocMenu([...commands.map(({ key }) => key), ...(props.hasCollection ? ['tree'] : [])]);
+  const menu = useTocMenu([...commands.map(({ key }) => key), ...(props.hasCollection ? ['playlist'] : [])]);
   if (commands.length === 0 && !props.hasCollection) return null;
   const popover = <OptionsPopover {...props} commands={commands} menu={menu} />;
   return (

@@ -1,13 +1,12 @@
-import { localizePath } from '@/shared/lib/locale.pure';
 import type {
   ReadingTime,
   TocCollection,
   TocPageContext,
-  TocPresentation,
+  TocScope,
   TocSection,
 } from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
-import Link from 'next/link';
+import { ZoomIn, ZoomOut } from 'lucide-react';
 import { useId } from 'react';
 import { BackToTop } from '../back-to-top.client';
 import { TocBorder } from './toc-border.client';
@@ -79,45 +78,41 @@ function PanelHeading(props: TocPanelProps) {
       topId={view.topId}
       atTop={view.atTop}
       onGlide={view.glideTo}
-      time={props.time}
-      revealed={view.revealed}
       collapsed={props.collapsed}
       actions={
-        <TocOptions
-          labels={props.labels}
-          mode={props.presentation}
-          onChange={props.onPresentationChange}
-          collapsed={props.collapsed}
-          onToggleCollapse={props.onToggleCollapse}
-          hasCollection={props.collection !== undefined}
-          zoomedOut={props.zoomedOut}
-          onZoomChange={props.onZoomChange}
-        />
+        <>
+          <ScopeButton {...props} />
+          <TocOptions
+            labels={props.labels}
+            collapsed={props.collapsed}
+            onToggleCollapse={props.onToggleCollapse}
+            hasCollection={props.collection !== undefined}
+            scope={props.scope}
+            onToggleScope={props.onToggleScope}
+          />
+        </>
       }
     />
   );
 }
 
-interface CollectionScopeProps {
-  view: TocView;
-  collection: TocCollection;
-  labels: TocLabels;
-  presentation: TocPresentation;
-  zoomedOut: boolean;
-  onZoomChange: () => void;
-}
-
-function CollectionScope(props: CollectionScopeProps) {
+function ScopeButton(props: TocPanelProps) {
+  if (!props.collection) return null;
+  const isCollection = props.scope === 'collection';
+  const label = isCollection ? props.labels.zoomIn : props.labels.zoomOut;
+  const Icon = isCollection ? ZoomIn : ZoomOut;
   return (
-    <div className="mb-2 flex shrink-0 items-center gap-1 border-b pb-2">
-      <Link
-        href={localizePath(props.collection.route, props.view.locale)}
-        title={props.collection.title}
-        className="min-w-0 truncate rounded-lg px-2 py-1.5 text-caption text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-2"
-      >
-        {props.collection.title}
-      </Link>
-    </div>
+    <button
+      type="button"
+      aria-label={label}
+      title={label}
+      aria-pressed={isCollection}
+      data-testid="toc-zoom"
+      onClick={props.onToggleScope}
+      className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-2 md:size-8"
+    >
+      <Icon aria-hidden className="size-4" />
+    </button>
   );
 }
 
@@ -132,22 +127,13 @@ export interface TocPanelProps {
   className?: string;
   testId?: string;
   collection?: TocCollection;
-  presentation: TocPresentation;
-  onPresentationChange: (mode: TocPresentation) => void;
-  zoomedOut: boolean;
-  onZoomChange: () => void;
+  scope: TocScope;
+  onToggleScope: () => void;
 }
 
 function PanelBody(props: TocPanelProps) {
-  if (props.collection && !props.collapsed && (props.presentation === 'tree' || props.zoomedOut)) {
-    return (
-      <TocCollectionView
-        collection={props.collection}
-        view={props.view}
-        labels={props.labels}
-        presentation={props.presentation}
-      />
-    );
+  if (props.collection && !props.collapsed && props.scope === 'collection') {
+    return <TocCollectionView collection={props.collection} view={props.view} labels={props.labels} />;
   }
   return <TocBody {...props} />;
 }
@@ -176,14 +162,13 @@ function PanelContents(props: TocPanelProps) {
   return (
     <>
       <PanelHeading {...props} />
-      {props.collection && !props.collapsed && <CollectionScope {...props} collection={props.collection} />}
       <PanelBody {...props} />
       <PanelActions {...props} />
     </>
   );
 }
 
-/** The bounded panel: heading with time left and progress, then the numbered sections. */
+/** The bounded panel: contextual heading, border progress and the numbered outline. */
 export function TocPanel(props: TocPanelProps) {
   const view = { ...props.view, idPrefix: useId() };
   return (
@@ -192,7 +177,7 @@ export function TocPanel(props: TocPanelProps) {
       aria-busy={!view.revealed}
       data-testid={props.testId}
       data-collapsed={props.collapsed ? 'true' : undefined}
-      data-presentation={props.presentation}
+      data-scope={props.scope}
       className={cn(
         'relative flex flex-col border bg-background/70 text-caption shadow-header backdrop-blur-xl backdrop-saturate-150 [interpolate-size:allow-keywords] rounded-2xl',
         'motion-reduce:transition-none transition-[width] duration-300 ease-out p-3',

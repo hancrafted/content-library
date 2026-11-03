@@ -9,12 +9,11 @@ import {
 } from '@/shared/hooks/use-table-of-contents';
 import { useActiveSlide, useGlideTo } from '@/shared/hooks/use-url-state';
 import type { Locale } from '@/shared/lib/locale.pure';
-import { hasReadingTime, remainingLabel } from '@/shared/lib/speaking-time.pure';
 import {
   activeEntry,
   readingOrder,
   readingTime,
-  TOC_DEFAULT_PRESENTATION,
+  TOC_DEFAULT_SCOPE,
   whereAt,
   type TocCollection,
   type TocPageContext,
@@ -99,8 +98,7 @@ export interface TableOfContentsProps {
 
 function usePanel(props: TableOfContentsProps) {
   const { view, time } = useTocState({ ...props, route: props.page.route });
-  const [presentation, setPresentation] = useState(TOC_DEFAULT_PRESENTATION);
-  const [zoomedOut, setZoomedOut] = useState(false);
+  const [scope, setScope] = useState(TOC_DEFAULT_SCOPE);
   return {
     view,
     page: props.page,
@@ -108,18 +106,13 @@ function usePanel(props: TableOfContentsProps) {
     labels: props.labels,
     time,
     collection: props.collection,
-    presentation,
-    onPresentationChange: setPresentation,
-    zoomedOut,
-    onZoomChange: () => setZoomedOut((value) => !value),
+    scope,
+    onToggleScope: () => setScope((value) => (value === 'page' ? 'collection' : 'page')),
   };
 }
 
 function MobilePanel({ panel }: { panel: ReturnType<typeof usePanel> }) {
-  const { view, time, labels } = panel;
-  const remaining = hasReadingTime(time.total)
-    ? remainingLabel(labels.remaining, view.locale, time.remaining)
-    : undefined;
+  const { view, labels } = panel;
   return (
     <>
       {!view.atTop && (
@@ -131,12 +124,7 @@ function MobilePanel({ panel }: { panel: ReturnType<typeof usePanel> }) {
           className="fixed right-20 bottom-4 z-40 rounded-full border bg-background/80 shadow-header backdrop-blur-xl md:hidden"
         />
       )}
-      <TocDrawer
-        labels={labels}
-        where={view.revealed ? whereAt(panel.sections, view.active) : null}
-        revealed={view.revealed}
-        left={remaining}
-      >
+      <TocDrawer labels={labels} where={view.revealed ? whereAt(panel.sections, view.active) : null}>
         <TocPanel {...panel} view={{ ...view, revealed: true }} className="h-full max-h-full bg-background pt-14" />
       </TocDrawer>
     </>

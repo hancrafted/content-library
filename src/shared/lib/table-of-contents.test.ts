@@ -75,6 +75,28 @@ describe('success cases', () => {
     expect(time).toEqual(expected);
   });
 
+  it('reaches complete progress after the last Slide when the total also includes the Title slide', () => {
+    // ARRANGE
+    const minutes = [4];
+    const total = 5;
+    const expected = { total, remaining: 0, progress: 1 };
+    // ACT
+    const time = readingTime({ minutes, total }, 0, 1);
+    // ASSERT
+    expect(time).toEqual(expected);
+  });
+
+  it('credits the Title slide without marking the last Slide complete on entry', () => {
+    // ARRANGE
+    const minutes = [4];
+    const total = 5;
+    const expected = { total, remaining: 4, progress: 0.2 };
+    // ACT
+    const time = readingTime({ minutes, total }, 0, 0);
+    // ASSERT
+    expect(time).toEqual(expected);
+  });
+
   describe('reading order with unlisted Slides', () => {
     it('lists every Slide in page order with its own minutes, and maps unlisted ones to their entry', () => {
       // ARRANGE

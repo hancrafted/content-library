@@ -17,16 +17,18 @@ describe('success cases', () => {
     const title = toc.find('[data-testid="toc-top"]');
     // ASSERT
     expect(back).toBe(expectedBack);
+    expect(toc.find('[data-testid="toc-back"]').text().trim()).toBe('');
     expect(title.text()).toBe(expectedTitle);
     expect(title.attr('href')).toBe(expectedTop);
   });
 
-  it('places navigation commands and one Tree checkbox in the heading menu', () => {
+  it('keeps zoom beside the menu and exposes one Event Playlist scope checkbox', () => {
     // ARRANGE
     const $ = exportedPage(INTRO);
     const toc = $('[data-testid="toc"]');
-    const expectedCommands = ['Inhalt einklappen', 'Zur Veranstaltung herauszoomen'];
-    const expectedCheckbox = 'Als Baum anzeigen';
+    const expectedCommands = ['Inhalt einklappen'];
+    const expectedCheckbox = 'Veranstaltungs-Playlist anzeigen';
+    const expectedZoom = 'Zur Veranstaltung herauszoomen';
     const unchecked = 'false';
     // ACT
     const heading = toc.find('[data-toc-context]');
@@ -34,11 +36,30 @@ describe('success cases', () => {
       .find('[role="menuitem"]')
       .toArray()
       .map((item) => $(item).text().trim());
-    const checkbox = heading.find('[role="group"] [role="menuitemcheckbox"]');
+    const checkbox = heading.find('[role="menuitemcheckbox"]');
+    const zoom = heading.find('[data-testid="toc-zoom"]');
     // ASSERT
     expect(commands).toEqual(expectedCommands);
     expect(checkbox.text().trim()).toBe(expectedCheckbox);
     expect(checkbox.attr('aria-checked')).toBe(unchecked);
+    expect(heading.find('[role="group"]')).toHaveLength(0);
+    expect(heading.find('[role="menuitem"] svg.lucide-panel-left-close')).toHaveLength(1);
+    expect(zoom.attr('aria-label')).toBe(expectedZoom);
+    expect(zoom.text().trim()).toBe('');
+  });
+
+  it('omits remaining-time text and the redundant Event-title link', () => {
+    // ARRANGE
+    const $ = exportedPage('/episodes/onboard-ai-every-time/');
+    const eventPage = exportedPage(INTRO);
+    const remainingTime = /min left|noch \d+ Min\./;
+    const parent = `${EVENT}/`;
+    // ACT
+    const text = $('[data-slot="toc"]').text();
+    const duplicate = eventPage(`[data-testid="toc"] a[href="${parent}"]`).not('[data-testid="toc-back"]');
+    // ASSERT
+    expect(text).not.toMatch(remainingTime);
+    expect(duplicate).toHaveLength(0);
   });
 
   it('exposes normalized reading progress on the ToC border rather than a horizontal bar', () => {
