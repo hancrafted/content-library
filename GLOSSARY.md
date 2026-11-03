@@ -96,7 +96,7 @@ _Avoid_: Catalog entry, template
 **Context drawer**: the floating card beside or over an Episode's Slides that shows the current Slide's Speaker notes and Voice script; a view onto text already in the page.
 _Avoid_: Sidebar, notes panel, teleprompter
 
-**Table of contents**: an Episode's own navigation: its Sections, numbered, with the active Section's page Slides expanded, plus the reading time left.
+**Table of contents**: an Episode's navigation through its Sections and Slides, with the reading time left. Under an Event it can also show that Event's Episodes and their Sections and Slides.
 _Avoid_: Sitenav, sidebar
 
 ## Episode structure

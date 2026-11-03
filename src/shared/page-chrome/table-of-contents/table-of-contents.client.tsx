@@ -14,11 +14,13 @@ import {
   activeEntry,
   readingOrder,
   readingTime,
+  TOC_DEFAULT_PRESENTATION,
   whereAt,
-  type ReadingTime,
+  type TocCollection,
   type TocSection,
 } from '@/shared/lib/table-of-contents.pure';
-import { useMemo, useSyncExternalStore } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
+import { BackToTop } from '../back-to-top.client';
 import { TocCollapseFlag } from './toc-collapse-flag.client';
 import { TocDrawer } from './toc-drawer';
 import type { TocLabels } from './toc-heading';
@@ -70,7 +72,7 @@ function useTocState(props: {
 }
 
 function DesktopPanel(props: {
-  panel: { view: TocView; sections: readonly TocSection[]; labels: TocLabels; time: ReadingTime };
+  panel: Omit<Parameters<typeof TocPanel>[0], 'className' | 'testId'>;
   collapsed: boolean;
   toggleCollapse: () => void;
 }) {
@@ -91,6 +93,52 @@ export interface TableOfContentsProps {
   /** The id of the Slide at the top of the page: no entry is current there, and the heading links to it. */
   topId: string;
   labels: TocLabels;
+  collection?: TocCollection;
+}
+
+function usePanel(props: TableOfContentsProps) {
+  const { view, time } = useTocState(props);
+  const [presentation, setPresentation] = useState(TOC_DEFAULT_PRESENTATION);
+  const [zoomedOut, setZoomedOut] = useState(false);
+  return {
+    view,
+    sections: props.sections,
+    labels: props.labels,
+    time,
+    collection: props.collection,
+    presentation,
+    onPresentationChange: setPresentation,
+    zoomedOut,
+    onZoomChange: () => setZoomedOut((value) => !value),
+  };
+}
+
+function MobilePanel({ panel }: { panel: ReturnType<typeof usePanel> }) {
+  const { view, time, labels } = panel;
+  const remaining = hasReadingTime(time.total)
+    ? remainingLabel(labels.remaining, view.locale, time.remaining)
+    : undefined;
+  return (
+    <>
+      {!view.atTop && (
+        <BackToTop
+          label={labels.backToTop}
+          locale={view.locale}
+          route={view.route}
+          compact
+          className="fixed right-20 bottom-4 z-40 rounded-full border bg-background/80 shadow-header backdrop-blur-xl md:hidden"
+        />
+      )}
+      <TocDrawer
+        labels={labels}
+        where={view.revealed ? whereAt(panel.sections, view.active) : null}
+        revealed={view.revealed}
+        left={remaining}
+      >
+        <TocPanel {...panel} view={{ ...view, revealed: true }} className="h-full max-h-full bg-background pt-14" />
+      </TocDrawer>
+    </>
+  );
 }
 
 /**
@@ -98,25 +146,13 @@ export interface TableOfContentsProps {
  * From `md` it can collapse to show only the numbers, widening the content area.
  */
 export function TableOfContents(props: TableOfContentsProps) {
-  const { view, time } = useTocState(props);
+  const panel = usePanel(props);
   const [collapsed, toggleCollapse] = useTocCollapse();
-  const panel = { view, sections: props.sections, labels: props.labels, time };
-  const remaining = hasReadingTime(time.total)
-    ? remainingLabel(props.labels.remaining, props.locale, time.remaining)
-    : undefined;
-
   return (
     <>
       <TocCollapseFlag collapsed={collapsed} />
       <DesktopPanel panel={panel} collapsed={collapsed} toggleCollapse={toggleCollapse} />
-      <TocDrawer
-        labels={props.labels}
-        where={view.revealed ? whereAt(props.sections, view.active) : null}
-        revealed={view.revealed}
-        left={remaining}
-      >
-        <TocPanel {...panel} view={{ ...view, revealed: true }} className="h-full max-h-full bg-background pt-14" />
-      </TocDrawer>
+      <MobilePanel panel={panel} />
     </>
   );
 }

@@ -18,12 +18,18 @@ Read before changing the look, layout or interaction of what surrounds an Episod
 
 On an Event-scoped Episode page the Event's breadcrumb and past notice sit above the Title slide, inside the insets, "Episode n of m" sits under the title, and the Playlist walk follows the last Slide. They scroll with the page; none floats. Detail: [Events](events.md#routes).
 
+The table of contents also offers Event navigation, derived at build time by `src/page-assembly/episode/event-navigation.pure.ts`; the shared chrome receives a plain outline, never records or Scenes. Each page-bearing Episode appears once in first-occurrence Playlist order. Section and Slide links retain the Event route and locale and land directly on their anchors. Decision: [Event navigation is a derived outline](../adr/0021-event-navigation-is-a-derived-outline.md).
+
+The vertical-ellipsis menu selects **Zoom** or **Tree**. Zoom switches between the current Episode's Sections and Slides and the Event's Episodes and Sections; Tree adds the Episode level above Sections and Slides. The initial presentation is `TOC_DEFAULT_PRESENTATION` in `src/shared/lib/table-of-contents.pure.ts` (`zoom`); overrides and zoom scope are transient and reset on a fresh page load, never stored. Switching either leaves the reader in place. Standalone pages have no Event controls.
+
 ## Corners
 
 - Top-right: the Context drawer card, never the video.
 - Bottom-left: the table of contents pill, below `md` only; from `lg`, the docked talk player (17rem wide, 1rem from the edges) under the table of contents.
 - Bottom-right: Context drawer trigger.
-- There is no back-to-top button.
+- The table of contents has an explicit back-to-top action, including while collapsed. It returns to the document start, including any Event framing, through the page's URL service.
+- Pages without a table of contents use the site-wide back-to-top button after scrolling more than a viewport; CSS suppresses that fallback wherever a table of contents exists.
+- Mobile back-to-top outside the closed contents drawer is not yet verified: its hit area currently conflicts with the Context trigger. E2E investigation was deferred by request.
 
 ## Table of contents
 

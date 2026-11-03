@@ -6,6 +6,11 @@
 /** The attribute set on `[data-slot="episode-page"]` and `[data-slot="toc"]` while the table of contents is collapsed. */
 export const TOC_COLLAPSED_ATTR = 'data-toc-collapsed';
 
+export type TocPresentation = 'zoom' | 'tree';
+
+/** Initial presentation only; a visitor's override is transient, never a stored preference. */
+export const TOC_DEFAULT_PRESENTATION: TocPresentation = 'zoom';
+
 /** One link; `id` equals the target's data-attribute value and URL fragment. */
 export interface TocItem {
   id: string;
@@ -26,6 +31,20 @@ export interface UnlistedSlide {
 /** A section heading with the items it collapses over; `items` may be empty. */
 export interface TocSection extends TocItem {
   items: readonly TocItem[];
+}
+
+/** A page's outline, ready for navigation without loading its content into the browser. */
+export interface TocPage {
+  readonly route: string;
+  readonly title: string;
+  readonly sections: readonly TocSection[];
+}
+
+/** Related pages in navigation order; page chrome knows only their titles, routes and outlines. */
+export interface TocCollection {
+  readonly title: string;
+  readonly route: string;
+  readonly pages: readonly TocPage[];
 }
 
 /**

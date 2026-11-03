@@ -23,6 +23,7 @@ import type { Locale } from '@/shared/lib/locale.pure';
 import { SITE_URL } from '@/shared/lib/site-url';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { eventNavigationOf } from './event-navigation.pure';
 
 /**
  * Every page the Episode page template renders, told apart by kind: an Episode's own page under `/episodes/`, and an
@@ -89,7 +90,10 @@ function EpisodeUnderEvent({ page, locale }: { page: EventEpisodePage; locale: L
       page={shown.episode}
       episode={compositionOf(shown.episode)}
       video={episodeVideo(shown.episode, locale)}
-      frame={eventEpisodeFrame(shown, { locale, titleOf, buildDay: BUILD_DAY })}
+      frame={{
+        ...eventEpisodeFrame(shown, { locale, titleOf, buildDay: BUILD_DAY }),
+        navigation: eventNavigationOf(shown.event, locale),
+      }}
     />
   );
 }

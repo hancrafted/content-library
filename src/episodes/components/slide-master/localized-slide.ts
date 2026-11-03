@@ -147,7 +147,7 @@ function contextOf(
   };
 }
 
-function textOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
+export function slideTextOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
   return {
     slug: slide.slug,
     ...(t.has('title') && { title: t('title') }),
@@ -177,7 +177,7 @@ export function episodeMinutes(record: EpisodeComposition, locale: Locale): numb
   return record.sections
     .flat()
     .reduce(
-      (sum, slide) => sum + textOf(slide, ownTranslator(slide.messages[locale], locale), locale).minutes,
+      (sum, slide) => sum + slideTextOf(slide, ownTranslator(slide.messages[locale], locale), locale).minutes,
       titleContext(record, locale).minutes,
     );
 }
@@ -208,7 +208,7 @@ export function localizeTitleScene(slide: Slide, episode: EpisodeContext): React
 
 /** The title a Section takes from the Slide that names it: its section slide, or the one it declares it has not. */
 const sectionTitleOf = (namer: Slide, locale: Locale) =>
-  requireTitle(namer.slug, textOf(namer, ownTranslator(namer.messages[locale], locale), locale).title);
+  requireTitle(namer.slug, slideTextOf(namer, ownTranslator(namer.messages[locale], locale), locale).title);
 
 /**
  * One placed Slide of an Episode, localized: its text, and its Scene rendered
@@ -222,7 +222,7 @@ export function localizeSlide(
 ): LocalizedSlide {
   const { locale } = episode;
   const t = ownTranslator(slide.messages[locale], locale);
-  const text = textOf(slide, t, locale);
+  const text = slideTextOf(slide, t, locale);
   const shared = episode.header === 'shared';
   const notes = slide.notes.map((note) => note.slug);
   const kit = slideKit(

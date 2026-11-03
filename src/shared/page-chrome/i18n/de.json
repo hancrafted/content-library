@@ -43,7 +43,14 @@
     "open": "Inhalt öffnen",
     "close": "Inhalt schließen",
     "collapse": "Inhalt einklappen",
-    "expand": "Inhalt ausklappen"
+    "expand": "Inhalt ausklappen",
+    "backToTop": "Nach oben",
+    "options": "Navigationsoptionen",
+    "presentation": "Navigationsansicht",
+    "zoom": "Zoom",
+    "tree": "Baum",
+    "zoomOut": "Zur Veranstaltung herauszoomen",
+    "zoomIn": "Zu dieser Episode hineinzoomen"
   },
   "contextDrawer": {
     "title": "Kontext",

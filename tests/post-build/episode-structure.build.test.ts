@@ -59,6 +59,7 @@ function slideAnchors($: CheerioAPI): string[] {
 
 function tocFragments($: CheerioAPI): string[] {
   return $('[data-slot="toc"] [data-testid="toc"] a[href*="#"]')
+    .not('[data-toc-action]')
     .toArray()
     .map((link) => ($(link).attr('href') ?? '').split('#')[1]);
 }
@@ -206,9 +207,13 @@ describe('episode structure', () => {
       // ACT
       const fragments = tocFragments($);
       const anchors = slideAnchors($).filter((anchor) => !untitled.includes(anchor));
+      const topActions = $('[data-testid="toc"] [data-toc-action]')
+        .toArray()
+        .map((link) => ($(link).attr('href') ?? '').split('#')[1]);
       // ASSERT: the heading's link to the Title slide comes first
       expect(fragments).toEqual(anchors);
       expect(fragments[0]).toBe(TITLE_ANCHOR);
+      expect(topActions).toEqual([TITLE_ANCHOR]);
     });
 
     it('renders an untitled Slide with its content, and lists it nowhere in the table of contents', () => {

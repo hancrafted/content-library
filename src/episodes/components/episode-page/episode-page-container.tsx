@@ -7,9 +7,8 @@ import type { EyebrowText } from '@/episodes/components/slide-master/slide-eyebr
 import type { SlideHeaderProps } from '@/episodes/components/slide-master/slide-header';
 import type { ComposedPage } from '@/episodes/lib/registry';
 import { DevSlideReporter } from '@/shared/components/design-system-token-editor/dev-slide-reporter';
-import { readTranslationStrings } from '@/shared/i18n/translation-strings';
 import type { Locale } from '@/shared/lib/locale.pure';
-import type { TocSection } from '@/shared/lib/table-of-contents.pure';
+import type { TocCollection, TocSection } from '@/shared/lib/table-of-contents.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import { ContextDrawerSlot } from '@/shared/page-chrome/context-drawer/context-drawer-slot';
 import { TableOfContents, type TocLabels } from '@/shared/page-chrome/table-of-contents/table-of-contents.client';
@@ -17,6 +16,7 @@ import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 import { ContentArea } from './content-area';
 import { contextDrawerInput } from './context-drawer-input';
+import { talkOf, tocLabelsOf } from './episode-labels';
 import { eyebrowsOf, pageClassOf, slideSizeOf, sourceFolderOf, tocSectionsOf } from './episode-page-container.pure';
 import { ExplorableHomes } from './explorable-homes';
 import { PagePicksProvider } from './page-picks-provider.client';
@@ -25,7 +25,7 @@ import { SlideKeys } from './slide-keys.client';
 import { SlideObserver } from './slide-observer.client';
 import { SlideWrapper } from './slide-wrapper';
 import { SlideZones } from './slide-zones.client';
-import { TalkPlayer, type RecordingLanguage, type TalkPlayerLabels } from './talk-player.client';
+import { TalkPlayer } from './talk-player.client';
 import { isTitleTarget, TitleSlide, type TitleSlideProps } from './title-slide';
 import { UrlStateProvider } from './url-state-provider.client';
 
@@ -115,6 +115,7 @@ function EpisodeToc(props: {
   sections: readonly TocSection[];
   minutes: number;
   labels: TocLabels;
+  collection?: TocCollection;
 }) {
   return (
     <aside
@@ -129,19 +130,10 @@ function EpisodeToc(props: {
         targetAttribute="data-slide"
         topId={TITLE_ANCHOR}
         labels={props.labels}
+        collection={props.collection}
       />
     </aside>
   );
-}
-
-/** The table of contents' labels; `remaining` stays raw, `{count}` unfilled, for the client to fill as the reader scrolls. */
-async function tocLabelsOf(locale: Locale): Promise<TocLabels> {
-  const t = await getTranslations({ locale, namespace: 'tableOfContents' });
-  const strings = await readTranslationStrings(locale, 'tableOfContents', ['remaining']);
-  return {
-    ...strings,
-    remaining: { one: t.raw('remaining.one') as string, other: t.raw('remaining.other') as string },
-  };
 }
 
 /** next-intl's translator for one locale, read by runtime key: the one cast from typed keys. */
@@ -165,6 +157,7 @@ export interface EpisodeFrame {
   readonly footer: ReactNode;
   /** The Event's time, "17:00–19:00 CET", under the title; none when the Event has none. */
   readonly time: string | undefined;
+  readonly navigation?: TocCollection;
 }
 
 /** How the page's Slide headers render: the Episode's header mode and entrance, and each page Slide's Eyebrow. */
@@ -178,18 +171,6 @@ async function pageHeaderOf(
     entrance: content.entrance,
     eyebrows: await eyebrowsFor(locale, content.header, sections),
   };
-}
-
-/** The talk player's labels and, for an Event recording, its language named in the page's language; none without a Video. */
-async function talkOf(
-  locale: Locale,
-  video: Video | undefined,
-): Promise<{ talkLabels?: TalkPlayerLabels; recording?: RecordingLanguage }> {
-  if (video === undefined) return {};
-  const talkLabels = await readTranslationStrings(locale, 'talkPlayer', ['recordedIn']);
-  if (video.recordedIn === undefined) return { talkLabels };
-  const t = await getTranslations({ locale, namespace: 'talkPlayer' });
-  return { talkLabels, recording: { language: video.recordedIn, label: t(`recordedIn.${video.recordedIn}`) } };
 }
 
 /** The Episode at its own URL: no Event frame around it. */
@@ -228,13 +209,13 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const header = await pageHeaderOf(content, locale, sections);
   const { talkLabels, recording } = await talkOf(locale, video);
   const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, time: frame.time });
-  const tocLabels = await tocLabelsOf(locale);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
+  const toc = { locale, route, sections, minutes, labels: await tocLabelsOf(locale), collection: frame.navigation };
   return (
     <ExplorableHomes page={page} locale={locale}>
       <UrlStateProvider key={`${locale}/${id}`}>
         <div data-slot="episode-page" data-episode={id} className={pageClassOf(content.tone)}>
-          <EpisodeToc locale={locale} route={route} sections={sections} minutes={minutes} labels={tocLabels} />
+          <EpisodeToc {...toc} />
           {frame.header}
           <SlideColumn titleSlide={titleSlide} slides={slides} page={header} />
           {frame.footer}

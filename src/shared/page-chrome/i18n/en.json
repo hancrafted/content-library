@@ -43,7 +43,14 @@
     "open": "Open contents",
     "close": "Close contents",
     "collapse": "Collapse contents",
-    "expand": "Expand contents"
+    "expand": "Expand contents",
+    "backToTop": "Back to top",
+    "options": "Navigation options",
+    "presentation": "Navigation view",
+    "zoom": "Zoom",
+    "tree": "Tree",
+    "zoomOut": "Zoom out to Event",
+    "zoomIn": "Zoom in to this Episode"
   },
   "contextDrawer": {
     "title": "Context",

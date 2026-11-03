@@ -17,6 +17,13 @@ export interface TocLabels {
   close: string;
   collapse: string;
   expand: string;
+  backToTop: string;
+  options: string;
+  presentation: string;
+  zoom: string;
+  tree: string;
+  zoomOut: string;
+  zoomIn: string;
 }
 
 /** Time left, kept in the HTML for a reader without JavaScript; nothing for an Episode without a Voice script. */

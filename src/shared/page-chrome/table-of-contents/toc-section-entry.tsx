@@ -24,7 +24,7 @@ export function EntryLink(props: {
   return (
     <Link
       href={localizePath(route, locale, props.id)}
-      replace
+      replace={!props.view.crossPage}
       onClick={(event) => props.view.glideTo(event, props.id)}
       aria-current={active === props.id ? 'location' : undefined}
       data-testid={`toc-${props.id}`}
@@ -71,7 +71,7 @@ function SectionItems({ view, section, collapsed }: { view: TocView; section: To
       )}
     >
       {/* From `md` the list always keeps the expanded panel's width, so its items never rewrap while the panel narrows or widens. */}
-      <ol className={'ml-10 min-h-0 overflow-hidden md:min-w-[12.875rem]'}>
+      <ol className={cn('ml-10 min-h-0 overflow-hidden', !view.nested && 'md:min-w-[12.875rem]')}>
         {section.items.map((item) => (
           <ItemEntry key={item.id} view={view} item={item} />
         ))}
@@ -149,6 +149,7 @@ function SectionTitle(props: { view: TocView; id: string; title: string; collaps
     <EntryLink
       view={view}
       id={id}
+      title={title}
       className={cn(
         'flex-1 rounded-lg text-pretty whitespace-nowrap overflow-hidden text-ellipsis',
         'motion-reduce:transition-none transition-[max-width,opacity,padding,margin] duration-300 ease-out',

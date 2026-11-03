@@ -53,7 +53,12 @@ export function episodeText($: CheerioAPI): EpisodeText {
     description: $('head > meta[name="description"]').attr('content') ?? '',
     toc: $('[data-slot="toc"]')
       .toArray()
-      .map((toc) => textOf(toc))
+      .map((toc) => {
+        const outline = $(toc).clone();
+        // The migration capture pins the outline, not subsequently added chrome actions.
+        outline.find('[data-toc-actions]').remove();
+        return textOf(outline.get(0));
+      })
       .join(' '),
     slides: regions($, '[data-slot="slides"] [data-slide]', 'id'),
     notes: regions($, '#context-panel-notes [data-context-for]', 'data-context-for'),
