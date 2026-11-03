@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
-import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { ExplorableHero } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
+import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { ExplorableHero, HeroDecoration } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
+import { HeroMotion } from '@/episodes/components/slide-shared/explorable-hero/hero-motion.client';
 import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/tool-preview';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -16,11 +17,17 @@ const DISCIPLINES = ['prompting', 'agents', 'workflows', 'factory'] as const;
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    leave: { effect: 'liquid' },
+    rear: <HeroDecoration story="ai-capability" />,
+    rearMobile: true,
+    Provider: HeroMotion,
+  },
   content: ({ t, locale, slideHref }) => {
     return (
       <ExplorableHero
-        layers={{ Backdrop: SlideBackdrop, Frame: SlideFrame }}
-        story="ai-capability"
+        layers={{ Frame: SlideFrame }}
         locale={locale}
         tryIt={{ label: t('tryIt'), href: slideHref('timeline') }}
         why={{ label: t('why'), href: slideHref('why-how-what') }}
