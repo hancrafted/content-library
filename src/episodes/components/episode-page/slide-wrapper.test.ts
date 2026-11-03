@@ -1,9 +1,41 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { slide } from '../slide-master/slide';
 import { SlideWrapper } from './slide-wrapper';
 
 describe('success cases', () => {
+  it('renders independent surface and decorative declarations around free content', () => {
+    // ARRANGE
+    const declared = slide({
+      slug: 'surface',
+      messages: { en: {}, de: {} },
+      presentation: {
+        tone: 'inverse',
+        rear: createElement('span', null, 'rear'),
+        front: createElement('span', null, 'front'),
+      },
+      content: () => createElement('a', { href: '#next' }, 'free content'),
+    });
+    const surface = 'data-surface-tone="inverse"';
+    const rear = 'data-slot="slide-backdrop"';
+    const front = 'data-slot="slide-front"';
+    const text = 'free content';
+    // ACT
+    const html = renderToStaticMarkup(
+      createElement(
+        SlideWrapper,
+        { id: 'surface', presentation: declared.presentation },
+        createElement('a', { href: '#next' }, 'free content'),
+      ),
+    );
+    // ASSERT
+    expect(html).toContain(surface);
+    expect(html).toContain(rear);
+    expect(html).toContain(front);
+    expect(html.indexOf(rear)).toBeLessThan(html.indexOf(text));
+    expect(html.indexOf(front)).toBeGreaterThan(html.indexOf(text));
+  });
   it('satisfies the min-height contract of at least viewport height', () => {
     // ARRANGE
     const wrapper = createElement(SlideWrapper, { id: 'test-slide' }, 'content');

@@ -38,6 +38,23 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('does not apply legacy inverse text tokens over an explicitly normal Title surface', () => {
+    // ARRANGE
+    const props = {
+      ...TEXT,
+      mode: 'shared' as const,
+      entrance: 'none' as const,
+      tone: 'inverse' as const,
+      presentation: { tone: 'normal' as const },
+    };
+    const legacy = 'data-tone="inverse"';
+    const normal = 'data-surface-tone="normal"';
+    // ACT
+    const html = renderToStaticMarkup(createElement(TitleSlide, props));
+    // ASSERT
+    expect(html).toContain(normal);
+    expect(html).not.toContain(legacy);
+  });
   it('never lets an authored hero fill the slide, which would push it to the bottom', () => {
     // ARRANGE
     const fill = 'data-headed="fill"';

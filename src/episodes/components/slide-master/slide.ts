@@ -12,6 +12,7 @@ import type {
   SegmentSpec,
   TitleComponent,
 } from './slide-base';
+import type { SlidePresentation } from './slide-presentation';
 
 /*
  * The Slide (FE-002, `docs/adr/0001-the-slide-is-a-self-contained-folder.md`): one folder
@@ -75,6 +76,7 @@ export interface OwnSlideKit<M extends SlideMessages, N extends NoteSpec> {
  * builds from `messages` for the page's locale.
  */
 export interface Slide<S extends string = string, M extends SlideMessages = SlideMessages> {
+  readonly presentation?: SlidePresentation;
   readonly slug: S;
   readonly messages: PerLocale<M>;
   readonly notes: readonly NoteSpec[];
@@ -95,6 +97,7 @@ export type TitledSlide = Slide<string, { readonly title: string }>;
  * fails `tsc` inside the Slide.
  */
 export interface OwnSlideSpec<S extends string, M extends SlideMessages, N extends NoteSpec> {
+  readonly presentation?: SlidePresentation;
   readonly slug: S;
   readonly messages: { readonly en: M; readonly de: NoInfer<M> };
   readonly notes?: readonly N[];
@@ -117,6 +120,7 @@ export function slide<
   const N extends NoteSpec<OwnNoteSlug<M>> = never,
 >(spec: OwnSlideSpec<S, M, N>): Slide<S, M> {
   return {
+    ...(spec.presentation && { presentation: spec.presentation }),
     slug: spec.slug,
     messages: spec.messages,
     notes: spec.notes ?? [],
@@ -168,6 +172,8 @@ export type HeaderMode = 'shared' | 'authored';
  * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */
 export interface EpisodeComposition<Ep extends string = string> {
+  /** Viewport pixels for semantic tone sampling; absent, the page header's measured lower edge. */
+  readonly surfaceSamplingLine?: number;
   /** Its folder's name: unique among its siblings, so an Event's copy usually keeps its original's (its id holds the Event). */
   readonly slug: Ep;
   readonly messages: PerLocale<EpisodeMessages>;

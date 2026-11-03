@@ -1,0 +1,91 @@
+.surface {
+  position: absolute;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+  background: var(--slide-surface, var(--background));
+}
+
+.configured {
+  color: var(--slide-surface-foreground, var(--foreground));
+}
+
+.configured[data-surface-tone='inverse'] {
+  --slide-surface: var(--tone-paper);
+  --slide-surface-foreground: var(--tone-ink);
+  --foreground: var(--slide-surface-foreground);
+  --muted-foreground: color-mix(in oklab, var(--slide-surface-foreground) 85%, transparent);
+  --border: color-mix(in oklab, var(--slide-surface-foreground) 22%, transparent);
+}
+
+.primary {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+.configured[data-slot='title-slide'] {
+  min-height: 200svh;
+}
+
+.configured[data-slot='title-slide'] > .primary {
+  flex: initial;
+  min-height: 100svh;
+}
+
+.decoration {
+  pointer-events: none;
+}
+
+.decoration * {
+  pointer-events: none !important;
+}
+
+.front {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+}
+
+.decoration * {
+  animation-play-state: paused !important;
+}
+
+.configured:has([data-zone='active']) .decoration * {
+  animation-play-state: running !important;
+}
+
+[data-presentation-hidden='true'] .configured .decoration * {
+  animation-play-state: paused !important;
+}
+
+@media (width < 48rem) {
+  .rear:not([data-mobile]) * {
+    animation-play-state: paused !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decoration,
+  .decoration * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    translate: none !important;
+    rotate: none !important;
+    scale: none !important;
+    offset-path: none !important;
+  }
+}
+
+@media print {
+  .configured {
+    print-color-adjust: exact;
+  }
+
+  .decoration {
+    display: none;
+  }
+}
