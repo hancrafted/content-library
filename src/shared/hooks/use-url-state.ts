@@ -1,4 +1,3 @@
-import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { UrlState } from '@/shared/lib/url-state';
 import { createContext, useContext, useSyncExternalStore, type MouseEvent } from 'react';
 
@@ -30,10 +29,6 @@ export function useActiveSlide(): string | null {
   );
 }
 
-function isPlainClick(event: MouseEvent): boolean {
-  return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
-}
-
 /**
  * A click handler factory: tells the page's URL-state service the reader chose
  * this Slide, then glides to it. Every consumer shows it at once and the
@@ -44,14 +39,19 @@ function isPlainClick(event: MouseEvent): boolean {
  */
 export function useGlideTo(): (event: MouseEvent<HTMLAnchorElement>, id: string) => void {
   const url = useUrlState();
-  return (event, id) => {
-    const target = document.getElementById(id);
-    if (!url || !target || !isPlainClick(event)) return;
-    event.preventDefault();
-    url.navigateTo(id);
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const behavior = still ? 'instant' : 'smooth';
-    if (id === TITLE_ANCHOR) window.scrollTo({ top: 0, behavior });
-    else target.scrollIntoView({ behavior });
+  return (event) => {
+    const anchor = event.currentTarget;
+    const handled = url?.followLink({
+      href: anchor.href,
+      button: event.button,
+      metaKey: event.metaKey,
+      ctrlKey: event.ctrlKey,
+      altKey: event.altKey,
+      shiftKey: event.shiftKey,
+      defaultPrevented: event.defaultPrevented,
+      download: anchor.hasAttribute('download'),
+      target: anchor.target || document.querySelector('base')?.target,
+    });
+    if (handled) event.preventDefault();
   };
 }
