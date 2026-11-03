@@ -1,5 +1,5 @@
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
-import { linkTarget, observeNavigation } from './url-state-browser';
+import { linkTarget, observeNavigation, observeRestoration } from './url-state-browser';
 import type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 export type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 
@@ -33,7 +33,7 @@ class UrlStateStore implements UrlState {
   private lastWrite = -Infinity;
   private detachLinks: (() => void) | null = null;
   private attached = false;
-  private restorationListener: (() => void) | null = null;
+  private detachRestoration: (() => void) | null = null;
   /** The path this page lives at, taken on first subscription: a router writes the URL after the first render. */
   private ownPath: string | null = null;
 
@@ -50,10 +50,10 @@ class UrlStateStore implements UrlState {
     if (this.attached) return;
     this.attached = true;
     this.watchRestoration();
-    const owner = this.restorationListener;
+    const owner = this.detachRestoration;
     this.detachLinks =
       this.browser?.subscribeLinks?.(
-        (link) => this.attached && owner === this.restorationListener && this.followLink(link),
+        (link) => this.attached && owner === this.detachRestoration && this.followLink(link),
       ) ?? null;
     if (this.flight === null) this.resync();
   };
@@ -129,21 +129,17 @@ class UrlStateStore implements UrlState {
   };
 
   private watchRestoration() {
-    if (this.restorationListener) return;
+    if (this.detachRestoration) return;
     this.ownPath ??= this.win.location.pathname;
-    const listener = () => {
-      if (this.restorationListener === listener) this.onPopState();
-    };
-    this.restorationListener = listener;
-    this.win.addEventListener('popstate', listener);
-    this.win.addEventListener('hashchange', listener);
+    const detach = observeRestoration(this.win, () => {
+      if (this.detachRestoration === detach) this.onPopState();
+    });
+    this.detachRestoration = detach;
   }
 
   private unwatchRestoration() {
-    if (!this.restorationListener) return;
-    this.win.removeEventListener('popstate', this.restorationListener);
-    this.win.removeEventListener('hashchange', this.restorationListener);
-    this.restorationListener = null;
+    this.detachRestoration?.();
+    this.detachRestoration = null;
   }
 
   private unwatchIfUnused() {
