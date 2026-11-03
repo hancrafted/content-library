@@ -3,14 +3,16 @@ import { SlideHeader, type SlideHeaderProps } from '@/episodes/components/slide-
 import { cn } from '@/shared/lib/utils';
 import type { ComponentPropsWithoutRef } from 'react';
 import { SlideBackdrop } from '../slide-master/slide-master';
-import type { SlidePresentation } from '../slide-master/slide-presentation';
+import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
 import { SlideIdentity, SlideMount } from './slide-mount.client';
 import styles from './slide-presentation.module.css';
+import { SlideTransition } from './slide-transition';
 
 /** How tall a Slide is at least: a page Slide fills the viewport, a section slide 40% of it (FE-009 §3). */
 const MIN_HEIGHT = { page: 'min-h-svh', section: 'min-h-[40svh]' } as const;
 
 export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
+  readonly transition?: ResolvedSlideTransition;
   readonly presentation?: SlidePresentation;
   readonly size?: keyof typeof MIN_HEIGHT;
   /** Who renders the Slide's header; on `shared` the wrapper renders it and plays the entrance once (design-ADR-0012). */
@@ -37,9 +39,10 @@ export interface SlideWrapperProps extends ComponentPropsWithoutRef<'div'> {
  * then the Scene in a `display: contents` box the entrance CSS reaches.
  */
 export function SlideWrapper({ id, className, size = 'page', mode = 'authored', ...rest }: SlideWrapperProps) {
-  const { header, scene, children, presentation, style, ...props } = rest;
+  const { header, scene, children, presentation, transition, style, ...props } = rest;
   // A section slide on the shared header is a full-bleed band, so a new Section reads at a glance.
   const frameClass = wrapperClass(mode, size, presentation);
+  const primary = primaryClass(presentation, transition);
   return (
     <div
       id={id}
@@ -51,7 +54,7 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       {...props}
     >
       <SurfaceLayers id={id} presentation={presentation} />
-      <SlideMount id={id} mode={mode} className={presentation ? styles.primary : undefined}>
+      <SlideMount id={id} mode={mode} className={primary}>
         {mode === 'shared' ? (
           <SharedContent header={header} scene={scene}>
             {children}
@@ -60,9 +63,14 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
           children
         )}
       </SlideMount>
+      {transition && <SlideTransition edge={transition} />}
       <FrontLayer id={id} presentation={presentation} />
     </div>
   );
+}
+
+function primaryClass(presentation?: SlidePresentation, transition?: ResolvedSlideTransition) {
+  return presentation || transition ? styles.primary : undefined;
 }
 
 function wrapperClass(mode: HeaderMode, size: keyof typeof MIN_HEIGHT, presentation?: SlidePresentation) {
