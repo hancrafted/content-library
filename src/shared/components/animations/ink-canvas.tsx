@@ -8,10 +8,19 @@ interface InkCanvasProps {
   bleed: number | string;
   className?: string;
   controlled?: boolean;
+  filterId?: string;
 }
 
 /** The filtered, bottom-origin ink surface. Progress consumers own only its scale. */
-export function InkCanvas({ inkScaleRef, color, variant, bleed, className, controlled = false }: InkCanvasProps) {
+export function InkCanvas({
+  inkScaleRef,
+  color,
+  variant,
+  bleed,
+  className,
+  controlled = false,
+  filterId = `ink-edge-${variant}`,
+}: InkCanvasProps) {
   const inset = typeof bleed === 'number' ? -bleed : `calc(-1 * ${bleed})`;
   return (
     <div
@@ -21,7 +30,7 @@ export function InkCanvas({ inkScaleRef, color, variant, bleed, className, contr
         left: inset,
         right: inset,
         bottom: inset,
-        filter: `url(#ink-edge-${variant})`,
+        filter: `url(#${filterId})`,
         willChange: 'transform',
       }}
       className={className}

@@ -3,8 +3,6 @@ import { linkTarget, observeNavigation } from './url-state-browser';
 import type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 export type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 
-/** FE-001's page-scoped active-Slide and explicit-navigation authority; the only history writer. */
-
 /** At most one history write per interval: ~67 per 10 s, under WebKit's 100 (research §2). */
 export const WRITE_INTERVAL_MS = 150;
 
@@ -167,7 +165,9 @@ class UrlStateStore implements UrlState {
   }
 
   private onPopState = () => {
+    const request = this.sequence;
     if (this.navigation) this.finishNavigation(this.navigation.id, 'interrupted');
+    if (this.sequence !== request) return;
     this.cancelWrite();
     this.resync();
   };

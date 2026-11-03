@@ -734,6 +734,34 @@ describe('edge cases', () => {
     expect(state.getSlide()).toBe(expectedSlide);
   });
 
+  it.each(['popstate', 'hashchange'])(
+    'preserves newer intent and its queued URL write during %s interruption',
+    (event) => {
+      // ARRANGE
+      const { state, win, writes, fire, scrolls } = setup();
+      const expected = { id: 2, target: 'intro', status: 'navigating' };
+      const expectedWrites = ['#outro', '#intro'];
+      const expectedScrolls = ['outro', 'intro'];
+      state.subscribeNavigation((flight) => {
+        if (flight.target === 'outro' && flight.status === 'interrupted') state.navigateTo('intro');
+      });
+      state.navigateTo('outro');
+      win.location.hash = '#restored';
+      // ACT
+      fire(event);
+      const immediateSlide = state.getSlide();
+      state.reportReading('intermediate');
+      vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+      // ASSERT
+      expect(immediateSlide).toBe(expected.target);
+      expect(state.getSlide()).toBe(expected.target);
+      expect(state.getNavigation()).toEqual(expected);
+      expect(scrolls).toEqual(expectedScrolls);
+      expect(writes).toEqual(expectedWrites);
+      expect(win.location.hash).toBe(expectedWrites.at(-1));
+    },
+  );
+
   it('correlates repeated same-target intent and ignores a retired flight’s queued completion', () => {
     // ARRANGE
     const { state, queued, position } = setup();
