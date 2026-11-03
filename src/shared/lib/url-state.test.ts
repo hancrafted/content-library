@@ -10,12 +10,12 @@ import {
 } from './url-state';
 import { createUrlNavigationBrowser } from './url-state-browser';
 
-/** A window that is only what the service touches: a hash, a history that records its writes, and events. */
+/** Only the service's ports: a URL, recorded history writes, and events. */
 function fakeWindow(initialHash = '') {
   const listeners = new Map<string, Set<(event: Event) => void>>();
   const writes: string[] = [];
   const win = {
-    location: { hash: initialHash, pathname: '/episodes/demo', search: '?ref=mail', origin: 'https://example.test' },
+    location: new URL(`https://example.test/episodes/demo?ref=mail${initialHash}`),
     history: {
       state: { as: 'router' } as unknown,
       replaceState(state: unknown, _unused: string, url: string) {
@@ -796,6 +796,43 @@ describe('edge cases', () => {
       expect(win.location.hash).toBe(expectedWrites.at(-1));
     },
   );
+
+  it.each([
+    'https://example.test/episodes/demo#',
+    'https://example.test/episodes/demo',
+    'https://example.test/episodes/demo?ref=mail#',
+    'https://example.test/episodes/demo?ref=mail',
+    'https://example.test/episodes/demo?#',
+    'https://example.test/episodes/demo?',
+    'https://example.test/episodes/demo?q=%23%2f+#section%2Fdetail',
+    'https://example.test/episodes/demo?ref=mail#%74op',
+  ])('preserves newer intent and its trailing write through restoration to %s', (href) => {
+    // ARRANGE
+    vi.setSystemTime(0);
+    const { state, win, writes, fire } = setup();
+    const expected = { id: 2, target: 'intro', status: 'navigating' };
+    const expectedWrites = ['#outro', '#intro'];
+    const expectedHash = '#intro';
+    state.subscribeNavigation((flight) => {
+      if (flight.target === 'outro' && flight.status === 'interrupted') state.navigateTo('intro');
+    });
+    state.navigateTo('outro');
+    const pairedHash = Object.assign(new Event('hashchange'), { oldURL: win.location.href, newURL: href });
+    win.location.href = href;
+    // ACT
+    fire('popstate');
+    fire('hashchange', pairedHash);
+    const afterPair = state.getNavigation();
+    const pendingHref = win.location.href;
+    vi.advanceTimersByTime(WRITE_INTERVAL_MS);
+    // ASSERT
+    expect(afterPair).toEqual(expected);
+    expect(pendingHref).toBe(href);
+    expect(state.getNavigation()).toEqual(expected);
+    expect(state.getSlide()).toBe(expected.target);
+    expect(writes).toEqual(expectedWrites);
+    expect(win.location.hash).toBe(expectedHash);
+  });
 
   it('handles a distinct hash-only restoration while a traversal companion is pending', () => {
     // ARRANGE
