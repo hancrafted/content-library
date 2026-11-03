@@ -5,7 +5,7 @@
   "slides": [
     {
       "id": "top",
-      "text": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt. Anleitung · 4 Schritte · etwa 20 Minuten Terminal ~ % claude ✻ Dein KI-Agent ist bereit Angemeldet · schreib eine Nachricht KI-Agent > /hancrafted-check-setup Do you want to proceed? › Yes Skill"
+      "text": "Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop Du hast noch nie ein Terminal geöffnet. Am Ende dieser Seite hast Du darin Deinen ersten Skill ausgeführt. Vortrag ansehen Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop Anleitung · 4 Schritte · etwa 20 Minuten Terminal ~ % claude ✻ Dein KI-Agent ist bereit Angemeldet · schreib eine Nachricht KI-Agent > /hancrafted-check-setup Do you want to proceed? › Yes Skill"
     },
     {
       "id": "your-terminal",

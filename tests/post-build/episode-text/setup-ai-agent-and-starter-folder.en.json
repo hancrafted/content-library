@@ -5,7 +5,7 @@
   "slides": [
     {
       "id": "top",
-      "text": "Get workshop-ready: your AI agent on your laptop You've never opened a terminal. By the end of this page you'll have run your first skill in one. Guide · 4 steps · about 20 minutes terminal ~ % claude ✻ Your AI agent is ready Signed in · type a message AI agent > /hancrafted-check-setup Do you want to proceed? › Yes Skill"
+      "text": "Get workshop-ready: your AI agent on your laptop You've never opened a terminal. By the end of this page you'll have run your first skill in one. Watch the talk Get workshop-ready: your AI agent on your laptop Guide · 4 steps · about 20 minutes terminal ~ % claude ✻ Your AI agent is ready Signed in · type a message AI agent > /hancrafted-check-setup Do you want to proceed? › Yes Skill"
     },
     {
       "id": "your-terminal",

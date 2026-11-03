@@ -2,11 +2,11 @@ import { TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { EpisodeLinks } from '@/episodes/components/episode-card/episode-links';
 import { ReleaseDate } from '@/episodes/components/episode-card/episode-release-date';
-import type { VideoLabels } from '@/episodes/components/episode-card/episode-youtube-link';
 import { BadgeList } from '@/shared/components/ui/badge-list';
 import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import { cueOf, isLinked, type CardHeadingLevel, type CardVariant } from '@/shared/components/ui/card-variant.pure';
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
+import type { VideoLabels } from '@/shared/components/ui/youtube-link';
 import type { Locale } from '@/shared/lib/locale.pure';
 
 /** The strings a card draws that are not on the card itself. */
