@@ -21,6 +21,8 @@ function pixels(value: string, name: string) {
 
 function readSurfaces(descriptors: readonly SurfaceDescriptor[], root: HTMLElement): SurfaceBoundary[] {
   const scroll = window.scrollY;
+  const rootPadding = getComputedStyle(document.documentElement).scrollPaddingTop;
+  const padding = rootPadding === 'auto' ? 0 : pixels(rootPadding, 'scroll-padding-top');
   const measurements = descriptors.map((descriptor) => {
     const node = document.getElementById(descriptor.id);
     if (!node || !root.contains(node)) return null;
@@ -34,7 +36,7 @@ function readSurfaces(descriptors: readonly SurfaceDescriptor[], root: HTMLEleme
       {
         ...descriptor,
         top,
-        anchorOffset: pixels(css.scrollMarginTop, 'scroll-margin-top'),
+        anchorOffset: pixels(css.scrollMarginTop, 'scroll-margin-top') + padding,
         startOffset: pixels(
           scope?.getPropertyValue('--slide-transition-start-offset') ?? '',
           '--slide-transition-start-offset',
