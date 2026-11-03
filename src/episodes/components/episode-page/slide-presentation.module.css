@@ -119,6 +119,12 @@
   pointer-events: none !important;
 }
 
+.rear {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+}
+
 .front {
   position: absolute;
   inset: 0;
