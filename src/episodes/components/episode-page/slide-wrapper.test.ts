@@ -12,6 +12,38 @@ function IdentityProbe() {
 }
 
 describe('success cases', () => {
+  it('retains the incoming-declared edge above primary content and below front decoration', () => {
+    // ARRANGE
+    const edge = {
+      id: 'a→b',
+      outgoing: 'a',
+      incoming: 'b',
+      targetSurface: 'var(--tone-paper)',
+      declaration: {
+        effect: 'wave' as const,
+        className: 'portable',
+        style: { '--slide-transition-start-offset': '-40px' },
+      },
+    };
+    const expectedHost = 'data-transition-edge="a→b"';
+    const expectedScope = 'portable';
+    const expectedTarget = 'var(--tone-paper)';
+    const content = 'free-scene';
+    const front = 'front-decoration';
+    const wrapper = createElement(
+      SlideWrapper,
+      { id: 'a', transition: edge, presentation: { front: createElement('span', null, front) } },
+      content,
+    );
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).toContain(expectedHost);
+    expect(html).toContain(expectedScope);
+    expect(html).toContain(expectedTarget);
+    expect(html.indexOf(content)).toBeLessThan(html.indexOf(expectedHost));
+    expect(html.indexOf(expectedHost)).toBeLessThan(html.indexOf(front));
+  });
   it('gives both retained decorations and the Scene their own Slide identity', () => {
     // ARRANGE
     const id = 'a--b';

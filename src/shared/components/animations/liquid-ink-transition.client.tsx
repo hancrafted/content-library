@@ -1,42 +1,24 @@
 'use client';
 
 import { InkFilterDefinition, type TransitionStyle } from '@/shared/components/animations/transition-filters';
+import { INK_PROFILES, inkScale } from '@/shared/lib/ink-transition.pure';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useRef } from 'react';
+import { InkCanvas } from './ink-canvas';
 
 interface StyleConfig {
   bleed: number;
   ease: (p: number) => number;
 }
 
-const STYLE_CONFIGS: Record<TransitionStyle, StyleConfig> = {
-  liquid: {
-    bleed: 300,
-    ease: (p: number) => (p < 0.02 ? (p / 0.02) * 0.18 : 0.18 + ((p - 0.02) / 0.98) * 0.82),
-  },
-  paper: {
-    bleed: 120,
-    ease: (p: number) => (p < 0.02 ? (p / 0.02) * 0.1 : 0.1 + ((p - 0.02) / 0.98) * 0.9),
-  },
-  glitch: {
-    bleed: 200,
-    ease: (p: number) => (p < 0.02 ? (p / 0.02) * 0.15 : 0.15 + ((p - 0.02) / 0.98) * 0.85),
-  },
-  goo: {
-    bleed: 250,
-    ease: (p: number) => (p < 0.02 ? (p / 0.02) * 0.15 : 0.15 + ((p - 0.02) / 0.98) * 0.85),
-  },
-  dither: {
-    bleed: 100,
-    ease: (p: number) => (p < 0.02 ? (p / 0.02) * 0.08 : 0.08 + ((p - 0.02) / 0.98) * 0.92),
-  },
-  wave: {
-    bleed: 180,
-    ease: (p: number) => (p < 0.02 ? (p / 0.02) * 0.12 : 0.12 + ((p - 0.02) / 0.98) * 0.88),
-  },
-};
+const STYLE_CONFIGS = Object.fromEntries(
+  Object.entries(INK_PROFILES).map(([name, profile]) => [
+    name,
+    { bleed: profile.bleed, ease: (p: number) => inkScale(name as TransitionStyle, p) },
+  ]),
+) as Record<TransitionStyle, StyleConfig>;
 
 function resolveStyle(variant?: TransitionStyle): TransitionStyle {
   if (variant && variant in STYLE_CONFIGS) return variant;
@@ -48,43 +30,6 @@ function resolveStyle(variant?: TransitionStyle): TransitionStyle {
 function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
-
-interface InkCanvasProps {
-  inkScaleRef: React.RefObject<HTMLDivElement | null>;
-  color: string;
-  style: TransitionStyle;
-  bleed: number;
-}
-
-function InkCanvas({ inkScaleRef, color, style, bleed }: InkCanvasProps) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: -bleed,
-        left: -bleed,
-        right: -bleed,
-        bottom: -bleed,
-        filter: `url(#ink-edge-${style})`,
-        willChange: 'transform',
-      }}
-    >
-      <div
-        ref={inkScaleRef}
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: color,
-          transformOrigin: 'bottom',
-          willChange: 'transform',
-        }}
-      />
-    </div>
-  );
 }
 
 interface AnimationOptions {
@@ -140,7 +85,7 @@ export function LiquidInkTransition({ targetId, color, variant }: LiquidInkProps
       className="pointer-events-none absolute bottom-0 left-0 right-0 h-screen z-40 overflow-hidden"
     >
       <InkFilterDefinition style={activeStyle} />
-      <InkCanvas inkScaleRef={inkScaleRef} color={activeColor} style={activeStyle} bleed={styleConfig.bleed} />
+      <InkCanvas inkScaleRef={inkScaleRef} color={activeColor} variant={activeStyle} bleed={styleConfig.bleed} />
     </div>
   );
 }

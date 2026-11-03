@@ -20,8 +20,9 @@ import type { RuntimeTranslator } from '@/episodes/components/slide-master/slide
 import { titleLinesOf } from '@/episodes/components/slide-master/title-lines';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
+import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
-import type { SlidePresentation } from '../slide-master/slide-presentation';
+import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
 
 /*
  * Turns an Episode record (or the composition of a Template or an Explorable page) into what one locale of its page renders: the
@@ -44,6 +45,7 @@ export interface PageContext {
 
 /** What one locale of an Episode renders: the Title slide's text and its Slides in page order. */
 export interface EpisodeContent {
+  readonly transitions: ReadonlyMap<string, ResolvedSlideTransition>;
   readonly titlePresentation?: SlidePresentation;
   readonly title: string;
   readonly caption?: string;
@@ -73,17 +75,13 @@ export async function recordContent(
   { translatorOf, id, route = ownRouteOf(id) }: PageContext,
 ): Promise<EpisodeContent> {
   const drawer = await translatorOf('contextDrawer');
-  const episode: EpisodeContext = {
-    episode: id,
-    route,
-    locale,
-    placed: placeSections<Slide>(record.sections).flat(),
-    referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },
-    header: headerModeOf(record),
-  };
+  const episode = contextOf(record, { episode: id, route, locale }, drawer);
   const { title, caption } = record.messages[locale];
   const lines = record.title ? titleLinesOf(record.title, locale) : {};
+  const slides = episode.placed.map((placed) => localizeSlide(placed, episode));
+  const titlePresentation = titlePresentationOf(record);
   return {
+    transitions: transitionsOf(titlePresentation, slides, record.transitionPrecedence),
     title: lines.heading ?? title,
     // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
     caption: lines.caption ?? caption,
@@ -93,8 +91,59 @@ export async function recordContent(
     header: episode.header,
     entrance: record.entrance ?? 'typewriter',
     tone: record.tone,
-    titlePresentation: titlePresentationOf(record),
-    slides: episode.placed.map((placed) => localizeSlide(placed, episode)),
+    titlePresentation,
+    slides,
+  };
+}
+
+function contextOf(
+  record: EpisodeComposition,
+  page: Pick<EpisodeContext, 'episode' | 'route' | 'locale'>,
+  drawer: RuntimeTranslator,
+): EpisodeContext {
+  return {
+    ...page,
+    placed: placeSections<Slide>(record.sections).flat(),
+    header: headerModeOf(record),
+    referenceLabels: { ref: drawer('refNote'), marker: (title) => drawer('markerNote', { title }) },
+  };
+}
+
+function resolveTransitions(
+  surfaces: readonly { id: string; presentation?: SlidePresentation }[],
+  precedence = 'enter',
+): ReadonlyMap<string, ResolvedSlideTransition> {
+  const resolved = new Map<string, ResolvedSlideTransition>();
+  for (let index = 1; index < surfaces.length; index++) {
+    const outgoing = surfaces[index - 1];
+    const incoming = surfaces[index];
+    const declaration = winningDeclaration(outgoing.presentation?.leave, incoming.presentation?.enter, precedence);
+    if (!declaration) continue;
+    resolved.set(outgoing.id, {
+      id: `${outgoing.id}→${incoming.id}`,
+      outgoing: outgoing.id,
+      incoming: incoming.id,
+      declaration,
+      ...transitionTarget(incoming.presentation),
+    });
+  }
+  return resolved;
+}
+
+function transitionsOf(title: SlidePresentation | undefined, slides: readonly LocalizedSlide[], precedence?: string) {
+  return resolveTransitions([{ id: TITLE_ANCHOR, presentation: title }, ...slides], precedence);
+}
+
+function winningDeclaration(leave: SlidePresentation['leave'], enter: SlidePresentation['enter'], precedence: string) {
+  return precedence === 'leave' ? (leave ?? enter) : (enter ?? leave);
+}
+
+function transitionTarget(presentation: SlidePresentation = {}) {
+  return {
+    targetSurface:
+      presentation.style?.['--slide-surface'] ??
+      (presentation.tone === 'inverse' ? 'var(--tone-paper)' : 'var(--background)'),
+    ...(presentation.style && { targetStyle: presentation.style }),
   };
 }
 

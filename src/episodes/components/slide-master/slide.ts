@@ -172,6 +172,8 @@ export type HeaderMode = 'shared' | 'authored';
  * through `compositionOf` (`src/episodes/lib/registry.ts`).
  */
 export interface EpisodeComposition<Ep extends string = string> {
+  /** One policy for every adjacent edge; incoming enter wins when omitted. */
+  readonly transitionPrecedence?: 'enter' | 'leave';
   /** Viewport pixels for semantic tone sampling; absent, the page header's measured lower edge. */
   readonly surfaceSamplingLine?: number;
   /** Its folder's name: unique among its siblings, so an Event's copy usually keeps its original's (its id holds the Event). */
