@@ -7,6 +7,7 @@ import {
   type UrlLink,
   type UrlWindow,
 } from './url-state';
+import { createUrlNavigationBrowser } from './url-state-browser';
 
 /** A window that is only what the service touches: a hash, a history that records its writes, and events. */
 function fakeWindow(initialHash = '') {
@@ -65,25 +66,68 @@ beforeEach(() => vi.useFakeTimers());
 afterEach(() => vi.useRealTimers());
 
 describe('success cases', () => {
+  it('returns to document start on an Event recording page whose Title follows Event framing', () => {
+    // ARRANGE
+    const { win, writes } = fakeWindow('#thought-experiment');
+    const eventPath = '/events/workshop/episodes/attention/';
+    win.location.pathname = eventPath;
+    const titleTop = 221;
+    const margin = 96;
+    const root = { scrollHeight: 4000 };
+    const focusedControl = { id: 'talk-player-back' };
+    const target = {
+      hasAttribute: () => true,
+      getBoundingClientRect: () => ({ top: titleTop - browserWindow.scrollY }),
+      scrollIntoView: () => {
+        browserWindow.scrollY = titleTop - margin;
+      },
+    };
+    const browserWindow = Object.assign(win, {
+      scrollY: 900,
+      innerHeight: 800,
+      document: { documentElement: root, activeElement: focusedControl, getElementById: () => target },
+      getComputedStyle: () => ({ scrollMarginTop: `${margin}px`, scrollPaddingTop: '0px' }),
+      matchMedia: () => ({ matches: true }),
+      scrollTo: ({ top }: { top: number }) => {
+        browserWindow.scrollY = top;
+      },
+    });
+    const state = createUrlState(win, createUrlNavigationBrowser(browserWindow as unknown as Window, 'data-slide'));
+    const expected = { id: 1, target: 'top', status: 'settled' };
+    const expectedUrl = `${eventPath}?ref=mail`;
+    const historyState = win.history.state;
+    // ACT
+    state.navigateTo('top');
+    vi.advanceTimersByTime(0);
+    // ASSERT
+    expect(browserWindow.scrollY).toBe(0);
+    expect(state.getNavigation()).toEqual(expected);
+    expect(writes).toEqual([expectedUrl]);
+    expect(win.history.state).toBe(historyState);
+    expect(browserWindow.document.activeElement).toBe(focusedControl);
+  });
+
   it('settles from measured scrolling even when the browser has no scrollend event', () => {
     // ARRANGE
     const { state, position, fire } = setup();
     const expected = { id: 1, target: 'outro', status: 'settled' };
+    const expectedReading = 'after-arrival';
     state.navigateTo('outro');
     vi.advanceTimersByTime(0);
     // ACT
     position.scroll = 1800;
     fire('scroll');
-    state.reportReading('after-arrival');
+    state.reportReading(expectedReading);
     // ASSERT
     expect(state.getNavigation()).toEqual(expected);
-    expect(state.getSlide()).toBe('after-arrival');
+    expect(state.getSlide()).toBe(expectedReading);
   });
 
   it('attaches native links once, disposes them and safely reattaches the same page service', () => {
     // ARRANGE
     const { state, nativeLink, scrolls, fire } = setup();
     const expectedScrolls = ['intro', 'outro'];
+    const expectedStatus = 'interrupted';
     // ACT
     state.attach();
     nativeLink('#intro');
@@ -95,19 +139,20 @@ describe('success cases', () => {
     // ASSERT
     expect(disposed).toBe(false);
     expect(scrolls).toEqual(expectedScrolls);
-    expect(state.getNavigation()?.status).toBe('interrupted');
+    expect(state.getNavigation()?.status).toBe(expectedStatus);
   });
 
   it('routes native and in-content fragment links through the same authority and scroll policy', () => {
     // ARRANGE
     const { state, scrolls } = setup();
     const expected = { id: 1, target: 'intro--why', status: 'navigating' };
+    const expectedScrolls = ['intro--why'];
     // ACT
     const handled = state.followLink({ href: '#intro--why', button: 0 });
     // ASSERT
     expect(handled).toBe(true);
     expect(state.getNavigation()).toEqual(expected);
-    expect(scrolls).toEqual(['intro--why']);
+    expect(scrolls).toEqual(expectedScrolls);
   });
 
   it.each([
@@ -121,6 +166,7 @@ describe('success cases', () => {
     const { state, position } = setup();
     Object.assign(position, geometry);
     const expected = { id: 1, target, status: 'settled' };
+    const expectedDuring = { id: 1, target, status: 'navigating' };
     const seen: unknown[] = [];
     // ACT
     state.navigateTo(target);
@@ -128,7 +174,7 @@ describe('success cases', () => {
     state.subscribeNavigation((flight) => seen.push(flight));
     vi.advanceTimersByTime(0);
     // ASSERT
-    expect(during).toEqual({ id: 1, target, status: 'navigating' });
+    expect(during).toEqual(expectedDuring);
     expect(seen).toEqual([expected]);
     expect(state.getNavigation()).toEqual(expected);
   });
@@ -368,6 +414,7 @@ describe('failure cases', () => {
       return event;
     };
     const expected = { id: 1, target: 'outro', status: 'interrupted' };
+    const expectedInFlightStatus = 'navigating';
     // ACT
     state.navigateTo('outro');
     fire('keydown', key('PageDown', true));
@@ -375,7 +422,7 @@ describe('failure cases', () => {
     const stillFlying = state.getNavigation();
     fire('keydown', key('PageDown'));
     // ASSERT
-    expect(stillFlying?.status).toBe('navigating');
+    expect(stillFlying?.status).toBe(expectedInFlightStatus);
     expect(state.getNavigation()).toEqual(expected);
   });
 
@@ -412,14 +459,15 @@ describe('failure cases', () => {
       // ARRANGE
       const { state, fire } = setup();
       const expected = { id: 1, target: 'outro', status: 'interrupted' };
+      const expectedReading = 'intro';
       // ACT
       state.navigateTo('outro');
       fire(event);
-      state.reportReading('intro');
+      state.reportReading(expectedReading);
       vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
       // ASSERT
       expect(state.getNavigation()).toEqual(expected);
-      expect(state.getSlide()).toBe('intro');
+      expect(state.getSlide()).toBe(expectedReading);
     },
   );
 
@@ -427,16 +475,18 @@ describe('failure cases', () => {
     // ARRANGE
     const { state, fire } = setup();
     const expected = { id: 1, target: 'outro', status: 'timed-out' };
+    const expectedInFlightStatus = 'navigating';
+    const expectedReading = 'intro';
     // ACT
     state.navigateTo('outro');
     fire('scrollend');
     const during = state.getNavigation();
     vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
-    state.reportReading('intro');
+    state.reportReading(expectedReading);
     // ASSERT
-    expect(during?.status).toBe('navigating');
+    expect(during?.status).toBe(expectedInFlightStatus);
     expect(state.getNavigation()).toEqual(expected);
-    expect(state.getSlide()).toBe('intro');
+    expect(state.getSlide()).toBe(expectedReading);
   });
 
   describe('reportReading', () => {
@@ -576,7 +626,7 @@ describe('edge cases', () => {
     state.navigateTo('outro');
     // ASSERT
     expect(state.getNavigation()).toEqual(expected);
-    expect(state.getSlide()).toBe('intro');
+    expect(state.getSlide()).toBe(expected.target);
     expect(scrolls).toEqual(expectedScrolls);
   });
 
@@ -612,6 +662,7 @@ describe('edge cases', () => {
     // ARRANGE
     const { state, win, fire } = setup('#intro');
     const seen: unknown[] = [];
+    const expectedSlide = 'restored';
     const expected = [
       { id: 1, target: 'outro', status: 'navigating' },
       { id: 1, target: 'outro', status: 'interrupted' },
@@ -624,13 +675,13 @@ describe('edge cases', () => {
     win.location.hash = '#intro';
     fire('popstate');
     fire('hashchange');
-    win.location.hash = '#restored';
+    win.location.hash = `#${expectedSlide}`;
     fire('hashchange');
     vi.advanceTimersByTime(NAVIGATION_TIMEOUT_MS);
     // ASSERT
     expect(initial).toBe(null);
     expect(seen).toEqual(expected);
-    expect(state.getSlide()).toBe('restored');
+    expect(state.getSlide()).toBe(expectedSlide);
   });
 
   it('correlates repeated same-target intent and ignores a retired flight’s queued completion', () => {
