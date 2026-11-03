@@ -11,25 +11,24 @@ describe('success cases', () => {
     const toc = $('[data-testid="toc"]');
     const expectedTitle = 'Generative KI im Arbeitsalltag: agentisch arbeiten';
     const expectedBack = `${EVENT}/`;
+    const expectedParent = 'Generative KI im Arbeitsalltag';
     const expectedTop = `${INTRO}#top`;
     // ACT
     const back = toc.find('[data-testid="toc-back"]').attr('href');
     const title = toc.find('[data-testid="toc-top"]');
     // ASSERT
     expect(back).toBe(expectedBack);
-    expect(toc.find('[data-testid="toc-back"]').text().trim()).toBe('');
+    expect(toc.find('[data-testid="toc-back"]').text().trim()).toBe(expectedParent);
     expect(title.text()).toBe(expectedTitle);
     expect(title.attr('href')).toBe(expectedTop);
   });
 
-  it('keeps zoom beside the menu and exposes one Event Playlist scope checkbox', () => {
+  it('keeps zoom beside the menu without a duplicate Playlist command', () => {
     // ARRANGE
     const $ = exportedPage(INTRO);
     const toc = $('[data-testid="toc"]');
     const expectedCommands = ['Inhalt einklappen'];
-    const expectedCheckbox = 'Veranstaltungs-Playlist anzeigen';
     const expectedZoom = 'Zur Veranstaltung herauszoomen';
-    const unchecked = 'false';
     // ACT
     const heading = toc.find('[data-toc-context]');
     const commands = heading
@@ -40,12 +39,26 @@ describe('success cases', () => {
     const zoom = heading.find('[data-testid="toc-zoom"]');
     // ASSERT
     expect(commands).toEqual(expectedCommands);
-    expect(checkbox.text().trim()).toBe(expectedCheckbox);
-    expect(checkbox.attr('aria-checked')).toBe(unchecked);
+    expect(checkbox).toHaveLength(0);
     expect(heading.find('[role="group"]')).toHaveLength(0);
     expect(heading.find('[role="menuitem"] svg.lucide-panel-left-close')).toHaveLength(1);
     expect(zoom.attr('aria-label')).toBe(expectedZoom);
     expect(zoom.text().trim()).toBe('');
+  });
+
+  it.each([
+    ['/guides/setup-ai-agent-and-starter-folder/', '/guides/', 'Guides'],
+    ['/de/guides/setup-ai-agent-and-starter-folder/', '/de/guides/', 'Anleitungen'],
+    ['/episodes/ai-gives-you-more-work/', '/episodes/', 'Episodes'],
+    ['/de/episodes/ai-gives-you-more-work/', '/de/episodes/', 'Episoden'],
+  ])('returns %s to its named overview', (page, destination, label) => {
+    // ARRANGE
+    const $ = exportedPage(page);
+    // ACT
+    const back = $('[data-testid="toc"] [data-testid="toc-back"]');
+    // ASSERT
+    expect(back.attr('href')).toBe(destination);
+    expect(back.text().trim()).toBe(label);
   });
 
   it('omits remaining-time text and the redundant Event-title link', () => {
@@ -90,12 +103,18 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('leaves the border neutral when the page has no measurable reading time', () => {
-    // ARRANGE
-    const $ = exportedPage('/episode-templates/workshop-template/');
-    // ACT
-    const progress = $('[data-testid="toc"] [role="progressbar"]');
-    // ASSERT
-    expect(progress).toHaveLength(0);
-  });
+  it.each(['/episode-templates/workshop-template/', '/events/2026-11-04-intro-hitl-workflows/episodes/intro/'])(
+    'offers progress without claiming remaining minutes for scriptless %s',
+    (page) => {
+      // ARRANGE
+      const $ = exportedPage(page);
+      const unread = '0';
+      // ACT
+      const progress = $('[data-testid="toc"] [role="progressbar"]');
+      // ASSERT
+      expect(progress).toHaveLength(1);
+      expect(progress.attr('aria-valuenow')).toBe(unread);
+      expect(progress.attr('aria-valuetext')).toBeUndefined();
+    },
+  );
 });

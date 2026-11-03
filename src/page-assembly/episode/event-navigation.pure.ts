@@ -18,7 +18,7 @@ export function episodeContextOf(
     title: compositionOf(page.episode).messages[locale].title,
     route: routeOf(page),
     back: {
-      label: backLabel,
+      label: page.kind === 'event-episode' ? eventCopy(page.presented.event.slug, locale).title : backLabel,
       route: page.kind === 'event-episode' ? eventRoute(page.presented.event.slug) : ROUTES.episodes,
     },
   };

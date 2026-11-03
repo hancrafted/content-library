@@ -10,21 +10,25 @@ describe('success cases', () => {
     // ARRANGE
     const page = episodesPathPageAt({ episode: 'onboard-ai-every-time' })!;
     const expected = '/de/episodes';
-    const label = 'Episode';
+    const label = 'Episoden';
     // ACT
     const context = episodeContextOf(page, 'de', label);
     // ASSERT
     expect(localizePath(context.back!.route, 'de')).toBe(expected);
+    expect(context.back!.label).toBe(label);
   });
 
   it('supplies the Event Episode title and its contextual back destination', () => {
     // ARRANGE
     const page = eventEpisodePageAt({ event: EVENT.slug, episode: 'intro' })!;
-    const label = 'Episode';
+    const label = 'Episoden';
     const expected = {
       title: 'Generative KI im Arbeitsalltag: agentisch arbeiten',
       route: '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/intro',
-      back: { label, route: '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow' },
+      back: {
+        label: 'Generative KI im Arbeitsalltag',
+        route: '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow',
+      },
     };
     // ACT
     const context = episodeContextOf(page, 'de', label);

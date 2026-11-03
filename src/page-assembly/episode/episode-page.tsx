@@ -49,8 +49,8 @@ export function eventEpisodePageOf(params: RouteParams<EventEpisodeParams>): Eve
  * structured data once published, and an Episode under its Event framed by the Event.
  */
 export async function EpisodePage({ page, locale }: { page: EpisodePageRef; locale: Locale }) {
-  const t = await getTranslations({ locale, namespace: 'tableOfContents' });
-  const context = episodeContextOf(page, locale, t('episode'));
+  const t = await getTranslations({ locale, namespace: 'nav' });
+  const context = episodeContextOf(page, locale, t('episodes'));
   return matchPage<EpisodePageRef, ReactNode>(page, {
     episode: ({ episode }) => <OwnEpisodePage episode={episode} locale={locale} context={context} />,
     'event-episode': (eventEpisode) => <EpisodeUnderEvent page={eventEpisode} locale={locale} context={context} />,

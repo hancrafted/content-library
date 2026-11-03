@@ -6,13 +6,13 @@ import type {
   TocSection,
 } from '@/shared/lib/table-of-contents.pure';
 import { cn } from '@/shared/lib/utils';
-import { ZoomIn, ZoomOut } from 'lucide-react';
 import { useId } from 'react';
 import { BackToTop } from '../back-to-top.client';
 import { TocBorder } from './toc-border.client';
 import { TocCollectionView } from './toc-collection.client';
 import { TocHeading, type TocLabels } from './toc-heading';
 import { TocOptions } from './toc-options.client';
+import { ScopeButton } from './toc-scope.client';
 import { SectionEntry } from './toc-section-entry';
 import type { TocView } from './toc-view';
 
@@ -82,37 +82,10 @@ function PanelHeading(props: TocPanelProps) {
       actions={
         <>
           <ScopeButton {...props} />
-          <TocOptions
-            labels={props.labels}
-            collapsed={props.collapsed}
-            onToggleCollapse={props.onToggleCollapse}
-            hasCollection={props.collection !== undefined}
-            scope={props.scope}
-            onToggleScope={props.onToggleScope}
-          />
+          <TocOptions labels={props.labels} collapsed={props.collapsed} onToggleCollapse={props.onToggleCollapse} />
         </>
       }
     />
-  );
-}
-
-function ScopeButton(props: TocPanelProps) {
-  if (!props.collection) return null;
-  const isCollection = props.scope === 'collection';
-  const label = isCollection ? props.labels.zoomIn : props.labels.zoomOut;
-  const Icon = isCollection ? ZoomIn : ZoomOut;
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      title={label}
-      aria-pressed={isCollection}
-      data-testid="toc-zoom"
-      onClick={props.onToggleScope}
-      className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-2 md:size-8"
-    >
-      <Icon aria-hidden className="size-4" />
-    </button>
   );
 }
 

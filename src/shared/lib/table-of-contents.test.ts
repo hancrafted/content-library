@@ -227,13 +227,38 @@ describe('edge cases', () => {
     expect(time).toEqual(unread);
   });
 
-  it('treats an outline with no reading time as fully read', () => {
+  it('uses equal Slide weights when there is no reading time', () => {
     // ARRANGE
-    const done = { total: 0, remaining: 0, progress: 1 };
+    const halfwayThroughFirst = { total: 0, remaining: 0, progress: 0.25 };
     // ACT
-    const time = readingTime({ minutes: [0, 0], total: 0 }, 0, 0);
+    const time = readingTime({ minutes: [0, 0], total: 0 }, 0, 0.5);
     // ASSERT
-    expect(time).toEqual(done);
+    expect(time).toEqual(halfwayThroughFirst);
+  });
+
+  it.each([
+    [-1, 0.5, 0],
+    [1, 0, 0.5],
+    [1, 1, 1],
+    [0, -0.5, 0],
+    [1, 1.5, 1],
+  ])('keeps scriptless progress bounded at index %s and fraction %s', (active, fraction, expected) => {
+    // ARRANGE
+    const outline = { minutes: [0, 0], total: 0 };
+    // ACT
+    const time = readingTime(outline, active, fraction);
+    // ASSERT
+    expect(time.progress).toBe(expected);
+    expect(time.remaining).toBe(0);
+  });
+
+  it('leaves an empty scriptless outline unread', () => {
+    // ARRANGE
+    const outline = { minutes: [], total: 0 };
+    // ACT
+    const time = readingTime(outline, -1, 1);
+    // ASSERT
+    expect(time.progress).toBe(0);
   });
 
   it('leaves the full total remaining, because nothing is read yet', () => {

@@ -1,19 +1,14 @@
 'use client';
 
 import { useTocMenu } from '@/shared/hooks/use-toc-menu';
-import type { TocScope } from '@/shared/lib/table-of-contents.pure';
-import { cn } from '@/shared/lib/utils';
-import { Check, EllipsisVertical, PanelLeftClose, PanelLeftOpen, type LucideIcon } from 'lucide-react';
+import { EllipsisVertical, PanelLeftClose, PanelLeftOpen, type LucideIcon } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import type { TocLabels } from './toc-heading';
 
 interface OptionsProps {
   labels: TocLabels;
-  scope: TocScope;
-  onToggleScope: () => void;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
-  hasCollection: boolean;
 }
 
 interface Command {
@@ -35,26 +30,6 @@ function commandsOf(props: OptionsProps): Command[] {
       icon: props.collapsed ? PanelLeftOpen : PanelLeftClose,
     });
   return commands;
-}
-
-function PlaylistOption(props: OptionsProps & { menu: ReturnType<typeof useTocMenu> }) {
-  return (
-    <button
-      id={`${props.menu.id}-playlist`}
-      type="button"
-      role="menuitemcheckbox"
-      aria-checked={props.scope === 'collection'}
-      tabIndex={-1}
-      onClick={() => {
-        props.onToggleScope();
-        props.menu.close();
-      }}
-      className={ITEM}
-    >
-      <Check aria-hidden className={cn('size-4', props.scope !== 'collection' && 'invisible')} />
-      {props.labels.showEventPlaylist}
-    </button>
-  );
 }
 
 function CommandItem(props: { command: Command; menu: ReturnType<typeof useTocMenu> }) {
@@ -92,15 +67,14 @@ function OptionsPopover(props: OptionsProps & { commands: readonly Command[]; me
       {props.commands.map((command) => (
         <CommandItem key={command.key} command={command} menu={menu} />
       ))}
-      {props.hasCollection && <PlaylistOption {...props} />}
     </div>
   );
 }
 
 export function TocOptions(props: OptionsProps) {
   const commands = commandsOf(props);
-  const menu = useTocMenu([...commands.map(({ key }) => key), ...(props.hasCollection ? ['playlist'] : [])]);
-  if (commands.length === 0 && !props.hasCollection) return null;
+  const menu = useTocMenu(commands.map(({ key }) => key));
+  if (commands.length === 0) return null;
   const popover = <OptionsPopover {...props} commands={commands} menu={menu} />;
   return (
     <div className="relative shrink-0" onKeyDown={menu.onKeyDown}>

@@ -32,9 +32,8 @@
     "label": "Language"
   },
   "tableOfContents": {
-    "episode": "Episode",
     "title": "Contents",
-    "progress": "Reading time",
+    "progress": "Reading progress",
     "remaining": {
       "one": "{count} min left",
       "other": "{count} min left"
@@ -47,7 +46,6 @@
     "expand": "Expand contents",
     "backToTop": "Back to top",
     "options": "Navigation options",
-    "showEventPlaylist": "Show Event Playlist",
     "zoomOut": "Zoom out to Event",
     "zoomIn": "Zoom in to this Episode"
   },

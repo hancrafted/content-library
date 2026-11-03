@@ -63,7 +63,7 @@ function BorderStroke(props: { path: string; progress: number; settled: boolean 
   );
 }
 
-function ReadingBorder(props: BorderProps) {
+export function TocBorder(props: BorderProps) {
   const outline = useOutline();
   const progress = Math.max(0, Math.min(1, props.time.progress));
   return (
@@ -75,14 +75,19 @@ function ReadingBorder(props: BorderProps) {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Math.round(progress * 100)}
-      aria-valuetext={remainingLabel(props.labels.remaining, props.locale, props.time.remaining)}
-      className="pointer-events-none absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] overflow-visible text-foreground print:hidden"
+      aria-valuetext={
+        hasReadingTime(props.time.total)
+          ? remainingLabel(props.labels.remaining, props.locale, props.time.remaining)
+          : undefined
+      }
+      data-complete={progress >= 1 ? 'true' : undefined}
+      className={cn(
+        'pointer-events-none absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] overflow-visible print:hidden motion-reduce:transition-none',
+        props.settled && 'transition-colors duration-300 ease-out',
+        progress >= 1 ? 'text-(--success)' : 'text-foreground',
+      )}
     >
       <BorderStroke path={outline.path} progress={progress} settled={props.settled} />
     </svg>
   );
-}
-
-export function TocBorder(props: BorderProps) {
-  return hasReadingTime(props.time.total) ? <ReadingBorder {...props} /> : null;
 }

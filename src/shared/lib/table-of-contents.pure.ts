@@ -168,7 +168,7 @@ export function sectionProgress(
 export interface ReadingTime {
   total: number;
   remaining: number;
-  /** Elapsed share of `total`, 0 to 1, weighted by time rather than scroll distance. */
+  /** Elapsed share, 0 to 1: time-weighted, or equally weighted by Slide when no reading time exists. */
   progress: number;
 }
 
@@ -177,16 +177,22 @@ export interface ReadingTime {
  * the page was given it (the landing card quotes the same number). The active
  * slide counts as read up to `fraction` (clamped to 0–1); `activeIndex` -1
  * means nothing is read yet. Time outside the outline (the Title slide) has
- * elapsed once a body Slide is active. An outline with no time at all is fully read.
+ * elapsed once a body Slide is active. Without reading time, each outlined Slide
+ * has equal weight; its progress never invents a duration.
  */
 export function readingTime(
   { minutes, total }: { readonly minutes: readonly number[]; readonly total: number },
   activeIndex: number,
   fraction: number,
 ): ReadingTime {
+  const into = Math.min(Math.max(fraction, 0), 1);
+  if (total === 0) {
+    const progress = activeIndex < 0 || minutes.length === 0 ? 0 : (activeIndex + into) / minutes.length;
+    return { total, remaining: 0, progress };
+  }
   const before = minutes.slice(0, Math.max(activeIndex, 0)).reduce((sum, value) => sum + value, 0);
-  const current = activeIndex < 0 ? 0 : (minutes[activeIndex] ?? 0) * Math.min(Math.max(fraction, 0), 1);
+  const current = activeIndex < 0 ? 0 : (minutes[activeIndex] ?? 0) * into;
   const introduction = activeIndex < 0 ? 0 : Math.max(0, total - minutes.reduce((sum, value) => sum + value, 0));
   const elapsed = introduction + before + current;
-  return { total, remaining: total - elapsed, progress: total === 0 ? 1 : elapsed / total };
+  return { total, remaining: total - elapsed, progress: elapsed / total };
 }

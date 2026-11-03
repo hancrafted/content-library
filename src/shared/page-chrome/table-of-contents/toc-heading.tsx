@@ -8,7 +8,6 @@ import type { MouseEvent, ReactNode } from 'react';
 
 export interface TocLabels {
   title: string;
-  episode: string;
   progress: string;
   /** Time left, per plural category; `{count}` stands for the whole minutes. */
   remaining: RemainingTemplates;
@@ -20,7 +19,6 @@ export interface TocLabels {
   expand: string;
   backToTop: string;
   options: string;
-  showEventPlaylist: string;
   zoomOut: string;
   zoomIn: string;
 }
@@ -66,9 +64,13 @@ function BackLink(props: Pick<HeadingDetailsProps, 'page' | 'locale' | 'collapse
       aria-label={back.label}
       title={back.label}
       data-testid="toc-back"
-      className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg hover:bg-accent hover:text-foreground focus-visible:outline-2 md:min-h-8 md:min-w-8"
+      className={cn(
+        'inline-flex min-h-11 min-w-0 items-center gap-2 rounded-lg px-2 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-2 md:min-h-8',
+        props.collapsed ? 'w-8 shrink-0 justify-center px-0' : 'flex-1',
+      )}
     >
       <ArrowLeft aria-hidden className="size-4 shrink-0" />
+      <span className={props.collapsed ? 'hidden' : 'truncate'}>{back.label}</span>
     </Link>
   );
 }
@@ -89,7 +91,7 @@ export function TocHeading(props: {
     <div data-toc-context className="shrink-0 text-caption text-muted-foreground">
       <div className={cn('mb-2 flex items-center justify-between gap-1', collapsed && 'flex-col-reverse')}>
         <BackLink {...props} />
-        <div className={cn('ml-auto flex items-center gap-1', collapsed && 'mx-auto flex-col-reverse')}>
+        <div className={cn('ml-auto flex shrink-0 items-center gap-1', collapsed && 'mx-auto flex-col-reverse')}>
           {props.actions}
         </div>
       </div>
