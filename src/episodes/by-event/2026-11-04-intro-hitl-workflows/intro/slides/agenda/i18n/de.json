@@ -1,0 +1,40 @@
+{
+  "title": "Agenda",
+  "caption": "Theorie und Live-Demos, mit einem Check-in nach jeder Episode.",
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": {
+      "title": "Einstieg"
+    },
+    "first": {
+      "title": "Behandle KI wie einen brillanten Freelancer mit Amnesie"
+    },
+    "grill": {
+      "title": "Live-Demo „Grill me“"
+    },
+    "second": {
+      "title": "Warum KI eine seltsame Aufmerksamkeitsspanne hat, die Du managen lernen musst"
+    },
+    "workflow": {
+      "title": "Live-Demo: ein agentischer Workflow"
+    },
+    "third": {
+      "title": "Nimmt Dir KI Arbeit ab? Sie bringt neue Arbeit: sie zu managen."
+    },
+    "qa": {
+      "title": "Fragen und Puffer"
+    }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theorie",
+    "demo": "Demo",
+    "close": "Abschluss"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Der Ablauf",
+      "description": "Begrüßung, drei Episoden, zwei Live-Demos und Fragen, mit einem Check-in nach jeder Episode."
+    }
+  }
+}

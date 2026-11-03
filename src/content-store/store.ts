@@ -17,6 +17,7 @@ import { FEATURED } from './featured';
 import { GUIDE_RECORDS } from './guide-registry.generated';
 import { playlist as axelAgenticWorkflowPlaylist } from './playlists/axel-agentic-workflow';
 import { playlist as cyberforumAkademieIntroAgenticWorkflowPlaylist } from './playlists/cyberforum-akademie-intro-agentic-workflow';
+import { playlist as introHitlWorkflowsPlaylist } from './playlists/intro-hitl-workflows';
 import { checkRecords, parseRecords, type Content, type ContentInput } from './refusals';
 import type { EpisodeStatus } from './schemas/episode.schema';
 import type { EventInput } from './schemas/event.schema';
@@ -49,6 +50,7 @@ const GUIDES: readonly GuideInput[] = Object.values(GUIDE_RECORDS);
 const PLAYLISTS: readonly PlaylistInput[] = [
   axelAgenticWorkflowPlaylist,
   cyberforumAkademieIntroAgenticWorkflowPlaylist,
+  introHitlWorkflowsPlaylist,
 ];
 
 /** The Episode ids whose metadata says `published`. */

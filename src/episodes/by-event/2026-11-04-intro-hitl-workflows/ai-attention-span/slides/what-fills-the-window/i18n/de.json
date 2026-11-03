@@ -1,0 +1,15 @@
+{
+  "title": "Was das Fenster füllt",
+  "caption": "Deine Nachrichten sind nur ein Teil davon.",
+  "punchline": "Wie geht's dem Kopf? Schon was durchgebrannt? Ich frühstücke 200K.",
+  "poll": "Kurzer Check: Wie voll bist Du?",
+  "voiceScript": {
+    "segments": {
+      "more-in-there-than-you-typed": {
+        "title": "Mehr drin, als Du getippt hast",
+        "keywords": "",
+        "script": "Jetzt wäre interessant zu erfahren, was alles in so ein Fenster hineinkommt und wie schnell es sich füllt. Ich habe versucht, das in einer nicht technischen Ansicht darzustellen. Wenn Du hier klickst, siehst Du die Darstellung, wie sie in technischen Tools erscheint. Letztlich haben wir vier Hauptkategorien."
+      }
+    }
+  }
+}

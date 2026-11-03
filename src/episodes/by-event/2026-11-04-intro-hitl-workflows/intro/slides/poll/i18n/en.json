@@ -1,0 +1,61 @@
+{
+  "title": "Where do you stand?",
+  "caption": "Three questions on your phone.",
+  "poll": {
+    "voteUrl": "https://directpoll.com/v?XEZOmIRN31F-xefHpeeinGF3BqwJqdDif5KaSPtqHSjwKzXgqt7bS0R34Z4Pq3ljedEmOI9Gl68roGhC6toXbkxjgaNqU7KQ",
+    "resultUrl": "https://directpoll.com/r?XE7BgZX2v2his4B7PRyRhIEH9UHp0NIU2IxxEq_M4YSqCa5ABRh00vTWilS61k4hIPubOSZx4bYi3-waORnRAlVFXl4zpeUxyK",
+    "scan": "Scan to vote",
+    "open": "Vote in the browser",
+    "qrLabel": "QR code to the directpoll vote page",
+    "createNote": "Create your poll at directpoll.com",
+    "notice": "anonymous – we only count answers",
+    "showResults": "Show live results",
+    "resultsHint": "Loads from directpoll.com only after the click.",
+    "resultsFallback": "Results in the second tab",
+    "resultsTitle": "Live poll results",
+    "newTabHint": "opens in a new tab"
+  },
+  "questions": {
+    "model": {
+      "question": "What is AI most like for you?",
+      "answers": {
+        "search": "Search engine – just smarter, gives answers",
+        "chat": "Chat – a conversation partner for my questions",
+        "assistant": "Assistant – works along inside my tools",
+        "colleague": "Colleague – I let it take over whole tasks",
+        "team": "Team – several agents I direct",
+        "factory": "Factory – an AI organisation running for me",
+        "unsure": "Can't say yet"
+      }
+    },
+    "fluency": {
+      "question": "How would you rate your AI fluency?",
+      "answers": {
+        "beginner": "Beginner – little experience with AI",
+        "basic": "Basics – chat and simple prompts",
+        "confident": "Confident – context engineering, workflows",
+        "advanced": "Advanced – I build agents and harnesses",
+        "expert": "Expert – run agent systems in production"
+      }
+    },
+    "usage": {
+      "question": "What's the most advanced thing you do with AI today?",
+      "answers": {
+        "none": "Nothing yet – haven't used AI yet",
+        "ask": "Chat – ask questions, have text written",
+        "documents": "My own documents – upload, revise together",
+        "embedded": "In my tools – AI in office, mail, editor",
+        "delegate": "Hand over tasks – AI does several steps",
+        "build": "Build my own agents – workflows for my work",
+        "orchestrate": "Several agents – run and orchestrate in parallel",
+        "product": "Build AI products – for customers or users"
+      }
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Phones out",
+      "description": "Scan the code and answer the three questions. Answers are anonymous; show the results after everyone has voted."
+    }
+  }
+}

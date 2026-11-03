@@ -1,0 +1,22 @@
+{
+  "title": "The thought experiment",
+  "newHire": {
+    "job": "New hire · You",
+    "day": "Day 1"
+  },
+  "questionsLabel": "The questions a new hire needs answered",
+  "questions": {
+    "budget": "Budget?",
+    "signOff": "Who signs off?",
+    "lastTime": "What went wrong last time?"
+  },
+  "voiceScript": {
+    "segments": {
+      "hook-new-job": {
+        "title": "The setup",
+        "keywords": "",
+        "script": "Before we start with AI, I want to ground you with a thought experiment. Here's the setup: you start a new job, and in your first week you get a task. Plan your company's next summer party: 200 employees across five offices in Europe. (pause) Before you book anything, picture every question you would need answered to do it well, because you are about to hear how many there are."
+      }
+    }
+  }
+}

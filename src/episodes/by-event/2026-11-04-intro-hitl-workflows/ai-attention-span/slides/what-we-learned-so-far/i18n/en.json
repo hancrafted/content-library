@@ -1,0 +1,64 @@
+{
+  "title": "What we learned so far",
+  "caption": "Long AI chats show the same effects as long calls, because the AI's attention span is its context window: a limited resource you manage actively.",
+  "call": {
+    "kicker": "Human attention",
+    "label": "The phone call with your sister, the middle faded",
+    "lines": {
+      "holidays": "Let's sort out the holidays!",
+      "mums-phone": "Yes! But first, did you hear about Mum's new phone?",
+      "what-happened": "No, what happened?",
+      "thumb-photos": "She sent me forty photos of her thumb.",
+      "renovation": "Ha! Did you see the neighbours' renovation?",
+      "back-hurts": "Don't get me started. And my back hurts again.",
+      "pepper": "And Pepper ate a whole birthday cake, candles included!",
+      "recipe": "Did you try that new recipe?",
+      "dinner": "Not yet. Oh, dinner is ready, I have to run.",
+      "bye": "Talk soon, bye!"
+    },
+    "line": "Our memory follows the primacy and recency effects: we recall the start, the end and the standout."
+  },
+  "same": "the same shape",
+  "analogy": "<marker>an analogy, not a proof</marker>",
+  "chat": {
+    "kicker": "AI attention (context window)",
+    "learnings": {
+      "middle": "Important information and decisions get lost in the middle.",
+      "compaction": "When the window is full, auto-compaction can drop details without telling you."
+    }
+  },
+  "closing": "Learn to manage attention: optional for you, mandatory for AI.",
+  "notes": {
+    "two-kinds-of-evidence": {
+      "header": "Two kinds of evidence",
+      "description": "the human pattern comes from lab word lists [1], the model pattern from retrieval tests on long inputs [2]; the match between them is an analogy, not a proof.",
+      "sources": {
+        "murdock-serial-position": {
+          "title": "Murdock, The serial position effect of free recall"
+        },
+        "liu-lost-in-the-middle": {
+          "title": "Liu et al., Lost in the Middle: How Language Models Use Long Contexts"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "same-effects": {
+        "title": "Same effects",
+        "keywords": "",
+        "script": "Let's put it together. On the left, human attention: our memory follows the primacy and recency effects, so we recall the start, the end and the standout, and the middle blurs. On the right, AI attention shows the same shape in the context window."
+      },
+      "the-window-is-the-span": {
+        "title": "The window is the span",
+        "keywords": "",
+        "script": "The reason is that the AI's attention span is its context window, a limited space that fills with every message. That gives two lessons: important information and decisions get lost in the middle, and when the window is full, auto-compaction can drop details without telling you. Use the toggle on the window to switch between the plain view and the technical one."
+      },
+      "manage-it": {
+        "title": "Manage it",
+        "keywords": "",
+        "script": "So learn to manage attention. For you it is optional, you will get by with a bad memory; for the AI it is mandatory. The rest of the episode is about what goes into that window, and what you do about it."
+      }
+    }
+  }
+}

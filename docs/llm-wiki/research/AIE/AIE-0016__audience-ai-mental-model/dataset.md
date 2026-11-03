@@ -32,6 +32,9 @@ Poll v1. Every question is single choice; none takes free text and none asks for
 - The seen scale: `often`: oft / often · `sometimes`: manchmal / sometimes · `never`: nie / never · `forgot`: weiß nicht mehr / can't recall · `unused`: nutze das nicht / don't use it
 - The known scale: `practice`: ja, und ich arbeite so / yes, and I work this way · `heard`: ja, schon gehört / yes, heard of it · `new`: nein, neu für mich / no, new to me
 
+Poll v2 keeps the wording, answers and order of v1, but omits `baseline.scope` and `baseline.model_after`.
+The 2026-11-04 Intro HITL Workflows Event uses v2 for the session only and contributes no results to this dataset.
+
 ## Data file
 
 `responses.csv` beside this file holds one row per Event, question and answer: `event_slug,date,locale,poll_version,question,answer,count,respondents`. `respondents` is how many people answered that question, the denominator of its shares. Copying an Event's counts here is the last step of "Add an Event" in `docs/features/events.md`, within 30 days, because a directpoll poll expires 30 days after it was created or last saved; directpoll exports totals per question only. A question nobody answered at an Event gets no rows: `baseline.model_after` has none for the CyberForum Akademie Event (2026-10-28), which had no respondents for it.

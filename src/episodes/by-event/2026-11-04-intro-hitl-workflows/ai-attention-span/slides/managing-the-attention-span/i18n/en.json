@@ -1,0 +1,15 @@
+{
+  "title": "Managing the attention span",
+  "caption": "You can't read a gauge, so you build habits.",
+  "punchline": "Almost there. One more thing, then I compact you.",
+  "poll": "Last check: how's your attention?",
+  "voiceScript": {
+    "segments": {
+      "you-manage-by-habit": {
+        "title": "You manage by habit",
+        "keywords": "",
+        "script": "Almost there. One more thing, then I compact you. You can't read a gauge, so you build habits. First the everyday ones, and then the one for a big project."
+      }
+    }
+  }
+}

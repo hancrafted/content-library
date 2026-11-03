@@ -1,0 +1,102 @@
+{
+  "title": "You were promoted",
+  "caption": "AI moves you from doing the work to stewarding it. The way across is <b>management skills</b> you already use with people.",
+  "rooms": {
+    "execution": {
+      "title": "Execution",
+      "era": "Room 1 · doing it yourself",
+      "line": "Where many still sit",
+      "claim": "You do the work yourself"
+    },
+    "management": {
+      "title": "Management",
+      "era": "Room 2 · with AI",
+      "line": "Where AI has promoted you",
+      "claim": "You manage the work"
+    }
+  },
+  "gap": {
+    "label": "the misalignment",
+    "many": "Many still act as if they do the work"
+  },
+  "stones": {
+    "breakDown": {
+      "title": "Break it down",
+      "detail": "small steps it can correct"
+    },
+    "goals": {
+      "title": "Write clear goals",
+      "detail": "what good looks like"
+    },
+    "review": {
+      "title": "Review",
+      "detail": "check it against the goal"
+    },
+    "delegate": {
+      "title": "Delegate",
+      "detail": "hand over the task"
+    }
+  },
+  "notes": {
+    "many-skip-the-management-steps": {
+      "header": "Many skip the management steps",
+      "description": "In 9,830 Claude.ai conversations, 51.1 percent stated a goal, 15.8 percent questioned the reasoning and 8.7 percent checked facts; no study measures executing versus managing, so the research supports “many”, not “most” [1].",
+      "sources": {
+        "anthropic-ai-fluency-index": {
+          "title": "Anthropic, The AI Fluency Index (February 2026)"
+        }
+      }
+    },
+    "workers-describe-the-shift": {
+      "header": "Workers describe the shift themselves",
+      "description": "In a survey of 319 weekly GenAI users, effort moved from executing tasks to stewarding them and from gathering information to verifying it, while higher confidence in the AI went with less checking [1].",
+      "sources": {
+        "lee-critical-thinking": {
+          "title": "Lee et al., The Impact of Generative AI on Critical Thinking: Self-Reported Reductions in Cognitive Effort and Confidence Effects From a Survey of Knowledge Workers (CHI 2025)"
+        }
+      }
+    },
+    "stepping-stone-break-it-down": {
+      "header": "Stepping stone: break it down",
+      "description": "Users split complex tasks into smaller steps, which creates a feedback loop where the model corrects course [1].",
+      "sources": {
+        "anthropic-economic-index-primitives": {
+          "title": "Anthropic, Economic Index: New building blocks for AI use (January 2026)"
+        }
+      }
+    },
+    "communication-barrier": {
+      "header": "Pocock's words are “communication barrier”",
+      "description": "He says there is a communication barrier between a person and an AI agent, located in vocabulary: they do not share the same language, so you need a shared language; the phrase “language barrier” is not his, and the management reading is this project's inference [1].",
+      "sources": {
+        "pocock-software-fundamentals": {
+          "title": "Matt Pocock, Software Fundamentals Matter More Than Ever (AI Engineer Europe 2026)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "you-were-promoted": {
+        "title": "You were promoted",
+        "keywords": "",
+        "script": "So here is the way to read it. AI promotes you. You move from doing the work to managing the work, and the work doesn't shrink, it changes, so that you can do things that were out of reach before."
+      },
+      "the-misalignment": {
+        "title": "The misalignment",
+        "keywords": "",
+        "script": "That move has a gap, and it is the biggest misalignment people face today. Many of us still sit in the execution box, acting as if we do the work ourselves, when the new job is to manage it."
+      },
+      "four-stepping-stones": {
+        "title": "Four stepping stones",
+        "keywords": "",
+        "script": "The way across is four stepping stones: break it down, write clear goals, review, and delegate. Notice that none of these is a technical skill, you already know them from working with people, and each one makes you more confident with what comes back."
+      },
+      "the-barrier": {
+        "title": "The barrier",
+        "keywords": "",
+        "script": "And there is a reason the gap is real. Picture asking the AI for \"the usual report\" and getting back something polished that answers a question you never asked. Nothing broke, it just had none of the words in your head. So before your next handoff, spend one minute writing down the terms you take for granted, and use them every time."
+      }
+    }
+  }
+}

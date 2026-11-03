@@ -1,0 +1,40 @@
+{
+  "title": "Agenda",
+  "caption": "Theory and live demos, with a check-in after each Episode.",
+  "episode": "Episode {n}",
+  "blocks": {
+    "welcome": {
+      "title": "Welcome"
+    },
+    "first": {
+      "title": "Treat AI like a brilliant freelancer with amnesia"
+    },
+    "grill": {
+      "title": "Live demo: “Grill me”"
+    },
+    "second": {
+      "title": "Why AI has a weird attention span you must learn to manage"
+    },
+    "workflow": {
+      "title": "Live demo: an agentic workflow"
+    },
+    "third": {
+      "title": "Will AI reduce your work? It adds work: managing it."
+    },
+    "qa": {
+      "title": "Questions and buffer"
+    }
+  },
+  "kinds": {
+    "start": "Start",
+    "theory": "Theory",
+    "demo": "Demo",
+    "close": "Wrap-up"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "The session",
+      "description": "Welcome, three Episodes, two live demos and questions, with a check-in after each Episode."
+    }
+  }
+}

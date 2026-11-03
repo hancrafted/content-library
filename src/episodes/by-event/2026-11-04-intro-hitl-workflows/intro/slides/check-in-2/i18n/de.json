@@ -1,0 +1,45 @@
+{
+  "title": "Check-in: die Aufmerksamkeitsspanne",
+  "caption": "Zwei kurze Fragen, bevor es weitergeht.",
+  "poll": {
+    "voteUrl": "https://directpoll.com/v?XEZOmIRN31F-xefHpeeinGF3BqwJqdDif5KaSPtqHSjwKzXgqt7bS0R34Z4Pq3ljedEmOI9Gl68roGhC6toXbkxjgaNqU7KQ",
+    "resultUrl": "https://directpoll.com/r?XE7BgZX2v2his4B7PRyRhIEH9UHp0NIU2IxxEq_M4YSqCa5ABRh00vTWilS61k4hIPubOSZx4bYi3-waORnRAlVFXl4zpeUxyK",
+    "stillOpen": "Handy noch offen?",
+    "scan": "Sonst neu scannen",
+    "open": "Im Browser abstimmen",
+    "qrLabel": "QR-Code zur Abstimmungsseite von directpoll",
+    "createNote": "Create your poll at directpoll.com",
+    "notice": "anonym – nur Antworten werden gezählt",
+    "showResults": "Live-Ergebnisse zeigen",
+    "resultsHint": "Lädt erst nach dem Klick von directpoll.com.",
+    "resultsFallback": "Ergebnisse im zweiten Tab",
+    "resultsTitle": "Live-Ergebnisse der Umfrage",
+    "newTabHint": "öffnet in einem neuen Tab"
+  },
+  "questions": {
+    "seen": {
+      "question": "Wurde ein langer Chat irgendwann schlechter, als hätte die KI den Anfang vergessen?",
+      "answers": {
+        "often": "oft",
+        "sometimes": "manchmal",
+        "never": "nie",
+        "forgot": "weiß nicht mehr",
+        "unused": "nutze das nicht"
+      }
+    },
+    "known": {
+      "question": "Kanntest du das Kontextfenster, also dass die Aufmerksamkeit der KI begrenzt ist?",
+      "answers": {
+        "practice": "ja, und ich arbeite so",
+        "heard": "ja, schon gehört",
+        "new": "nein, neu für mich"
+      }
+    }
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Check-in",
+      "description": "Gehe im Poll zu den Check-in-Fragen. Lass alle antworten und zeige dann die Ergebnisse."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "title": "What fills the window",
+  "caption": "Your messages are only a part of it.",
+  "punchline": "How's the brain? Anything fried yet? I eat 200K for breakfast.",
+  "poll": "Quick check: how full are you?",
+  "voiceScript": {
+    "segments": {
+      "more-in-there-than-you-typed": {
+        "title": "More in there than you typed",
+        "keywords": "",
+        "script": "How's the brain? Anything fried yet? I eat 200K for breakfast. You have seen the window fill with your messages. But your messages are only a part of it, so the next question is what else goes in without you noticing."
+      }
+    }
+  }
+}
