@@ -6,7 +6,7 @@ stale_after: 2026-11-18T00:00:00Z
 
 # Slide presentation contracts
 
-**Proposed; governed implementation blocked.** [design-ADR-0022](../adr/0022-slide-presentation-and-transition-clock.md) owns the approval gate, responsibility map and Archgate reconciliation. This reference defines the proposed feature contract for [#480](https://github.com/hancrafted/content-library/issues/480); it does not describe shipped APIs or grant an ADR exception.
+**Accepted architecture contract; feature implementation pending.** [design-ADR-0022](../adr/0022-slide-presentation-and-transition-clock.md) owns human acceptance evidence, the responsibility map and binding-governance pointers. This reference defines the accepted feature contract for [#480](https://github.com/hancrafted/content-library/issues/480); it does not describe shipped APIs or grant an exception beyond the approved boundary.
 
 ## Authoring
 
@@ -19,7 +19,7 @@ stale_after: 2026-11-18T00:00:00Z
 
 ## Rendering and lifetime
 
-For A → B, A's trailing region always hosts the effect, even when B's enter declaration wins. The effect paints towards **B's declared surface token**. Within A's isolating wrapper the order is surface → rear decoration → primary Scene content → resolved edge effect → front decoration. Local numeric rungs and the unchanged chrome ladder belong to the proposed FE-009 reconciliation in design-ADR-0022.
+For A → B, A's trailing region always hosts the effect, even when B's enter declaration wins. The effect paints towards **B's declared surface token**. Within A's isolating wrapper the order is surface → rear decoration → primary Scene content → resolved edge effect → front decoration. Local numeric rungs and the chrome ladder belong to [FE-009 §8](../../.archgate/adrs/FE-009-slide-wrapper-and-scene.md#8-stacking-ladder).
 
 The host cannot escape the outgoing wrapper or become a page overlay. Several relevant edges retain independent local hosts and progress. Keep both the plan and the rendering surface available for the entire geometric interval: retaining settings while unmounting the renderer is insufficient.
 
@@ -68,7 +68,7 @@ Every authored visual setting has a documented CSS-variable mapping: surface col
 
 The winning declaration carries a transition-specific style scope containing its settings, applied to the outgoing host's effect. It cannot depend on the declaring Scene's ancestors or copy their computed colours. Token references and any needed local token definitions must travel with that scope, including theme variants, without importing another Slide folder.
 
-The following names are proposed mappings, not claims about existing code. Effect-specific mappings must be documented alongside their renderer when implemented.
+The following names are accepted contract mappings, not claims about existing code. Effect-specific mappings must be documented alongside their renderer when implemented.
 
 - **Surface pair:** `--slide-surface`, `--slide-surface-foreground` default to the theme-aware normal pair, inverted only by explicit declaration. CSS-only; semantic changes require matching authored tone.
 - **Effect destination:** `--slide-transition-target-surface` references the incoming declared surface token. CSS-only.
