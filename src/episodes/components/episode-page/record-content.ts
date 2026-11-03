@@ -45,6 +45,7 @@ export interface PageContext {
 
 /** What one locale of an Episode renders: the Title slide's text and its Slides in page order. */
 export interface EpisodeContent {
+  readonly tocEntrance?: EpisodeComposition['tocEntrance'];
   readonly transitions: ReadonlyMap<string, ResolvedSlideTransition>;
   readonly titlePresentation?: SlidePresentation;
   readonly title: string;
@@ -81,6 +82,7 @@ export async function recordContent(
   const slides = episode.placed.map((placed) => localizeSlide(placed, episode));
   const titlePresentation = titlePresentationOf(record);
   return {
+    tocEntrance: record.tocEntrance,
     transitions: transitionsOf(titlePresentation, slides, record.transitionPrecedence),
     title: lines.heading ?? title,
     // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
