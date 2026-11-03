@@ -5,6 +5,12 @@
   background: repeating-linear-gradient(45deg, var(--foreground) 0 1px, transparent 1px 4rem);
 }
 
+.arrival {
+  --reference-entry-start: -64px;
+  --slide-transition-start-offset: var(--reference-entry-start);
+  --slide-transition-bleed: 180px;
+}
+
 .front {
   position: absolute;
   inset: 1rem 1rem auto auto;

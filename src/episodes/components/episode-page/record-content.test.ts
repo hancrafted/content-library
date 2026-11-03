@@ -64,6 +64,58 @@ const RECORD = episode({
 });
 
 describe('success cases', () => {
+  it('uses the Episode leave policy and carries single-sided declarations across no-effect neighbours', async () => {
+    // ARRANGE
+    const leave = { effect: 'paper' as const };
+    const enter = { effect: 'goo' as const };
+    const record = episode({
+      slug: 'ai-token-economy',
+      messages: EPISODE,
+      transitionPrecedence: 'leave',
+      sections: [
+        [
+          { ...foundations, presentation: { leave } },
+          { ...whyATemplate, presentation: { enter, leave } },
+          { ...visual, presentation: { enter } },
+          nextSteps,
+        ],
+      ],
+    });
+    const expected = [
+      ['foundations', leave],
+      ['foundations--why-a-template', leave],
+    ];
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    // ASSERT
+    expect([...content.transitions].map(([host, edge]) => [host, edge.declaration])).toEqual(expected);
+  });
+  it('resolves incoming enter once while retaining the outgoing host and portable token scope', async () => {
+    // ARRANGE
+    const leave = { effect: 'paper' as const };
+    const enter = { effect: 'wave' as const, className: 'portable', style: { '--slide-transition-bleed': '180px' } };
+    const record = episode({
+      slug: 'ai-token-economy',
+      messages: EPISODE,
+      sections: [
+        [
+          { ...foundations, presentation: { leave } },
+          { ...whyATemplate, presentation: { enter, tone: 'inverse' } },
+        ],
+      ],
+    });
+    const expected = {
+      id: 'foundations→foundations--why-a-template',
+      outgoing: 'foundations',
+      incoming: 'foundations--why-a-template',
+      declaration: enter,
+      targetSurface: 'var(--tone-paper)',
+    };
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    // ASSERT
+    expect(content.transitions.get(expected.outgoing)).toEqual(expected);
+  });
   it("reads the Episode's own title and caption in the page's locale", async () => {
     // ARRANGE
     const expected = { title: 'Seitenvorlage', caption: 'Die kleinste Episode.' };
@@ -220,6 +272,27 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('keeps enter-only and leave-only choices independent from tone and decoration and omits undeclared edges', async () => {
+    // ARRANGE
+    const enter = { effect: 'dither' as const };
+    const leave = { effect: 'liquid' as const };
+    const record = episode({
+      slug: 'ai-token-economy',
+      messages: EPISODE,
+      sections: [[foundations, { ...whyATemplate, presentation: { enter, leave } }, visual, nextSteps]],
+    });
+    const hosts = ['foundations', 'foundations--why-a-template'];
+    const choices = [enter, leave];
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    const plain = await recordContent(RECORD, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    // ASSERT
+    expect([...content.transitions.keys()]).toEqual(hosts);
+    expect([...content.transitions.values()].map((edge) => edge.declaration)).toEqual(choices);
+    expect(content.slides[1].presentation?.tone).toBeUndefined();
+    expect(content.slides[1].presentation?.front).toBeUndefined();
+    expect(plain.transitions.size).toBe(0);
+  });
   it("labels a Context reference with the site-wide string in the page's locale", async () => {
     // ARRANGE
     const notes = { de: { title: 'Grundlagen', notes: { why: { header: 'h', description: 'd' } } } };

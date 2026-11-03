@@ -44,6 +44,8 @@ export const grid1x2 = slide({
   slug: 'grid-1x2',
   messages: { en, de },
   presentation: {
+    enter: { effect: 'wave', className: surface.arrival },
+    leave: { effect: 'goo', style: { '--slide-transition-end-offset': '-24px' } },
     tone: 'inverse',
     rear: <SurfaceReferenceDrift className={surface.rear} />,
     rearMobile: true,

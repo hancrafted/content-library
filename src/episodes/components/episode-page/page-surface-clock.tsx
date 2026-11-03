@@ -7,8 +7,16 @@ export function PageSurfaceClock({ content, samplingLine }: { content: EpisodeCo
   const configured = content.titlePresentation || content.slides.some((slide) => slide.presentation);
   if (!configured) return null;
   const surfaces = [
-    { id: TITLE_ANCHOR, tone: content.titlePresentation?.tone ?? content.tone ?? ('normal' as const) },
-    ...content.slides.map((slide) => ({ id: slide.id, tone: slide.presentation?.tone ?? ('normal' as const) })),
+    {
+      id: TITLE_ANCHOR,
+      tone: content.titlePresentation?.tone ?? content.tone ?? ('normal' as const),
+      effect: content.transitions.get(TITLE_ANCHOR)?.declaration.effect,
+    },
+    ...content.slides.map((slide) => ({
+      id: slide.id,
+      tone: slide.presentation?.tone ?? ('normal' as const),
+      effect: content.transitions.get(slide.id)?.declaration.effect,
+    })),
   ];
   return <SurfaceClockAttachment surfaces={surfaces} samplingLine={samplingLine} />;
 }
