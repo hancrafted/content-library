@@ -2,7 +2,7 @@ import { localizePath, stripLocale, type Locale } from '@/shared/lib/locale.pure
 import Link from 'next/link';
 import type { ComponentType, ReactNode } from 'react';
 import type { Story } from './drift.pure';
-import { HeroCanvas, HeroMotion, HeroMotionButton, type MotionLabels } from './hero-motion.client';
+import { HeroCanvas, HeroMotionButton, type MotionLabels } from './hero-motion.client';
 import { ShareLink, type ShareLinkLabels } from './share-link.client';
 
 /** A call to action: its words and where it goes. */
@@ -11,19 +11,14 @@ export interface HeroAction {
   readonly href: string;
 }
 
-/** The Slide master's two layers, which a `slide-shared` part may not import: the Slide hands them in. */
+/** The Slide master's inset frame, supplied by the composing Slide. */
 export interface HeroLayers {
-  readonly Backdrop: ComponentType<{ mobile?: boolean; children?: ReactNode }>;
   readonly Frame: ComponentType<{ className?: string; children: ReactNode }>;
 }
 
 export interface ExplorableHeroProps {
-  /** The wrapper supplies the surface, decoration and shared motion context. */
-  readonly presentation?: boolean;
-  /** `SlideBackdrop` and `SlideFrame`, from the Slide master. */
+  /** `SlideFrame`, from the Slide master. */
   readonly layers: HeroLayers;
-  /** Which Explorable's story the background's subject beat tells. */
-  readonly story: Story;
   /** The page's locale: the action links are localized again here, so every `href` goes through `localizePath` (FE-003). */
   readonly locale: Locale;
   /** "Try it": the page's fully enabled Explorable. */
@@ -69,38 +64,18 @@ function Actions({ tryIt, why, locale }: Pick<ExplorableHeroProps, 'tryIt' | 'wh
 
 /**
  * The Title hero's actions, team-share block and tool preview under the container's headline and lede.
- * Every string belongs to the composing Slide. Wrapper presentation supplies decoration and motion context;
- * a self-contained hero supplies its own Backdrop and context. The pause button shares the canvas's state.
+ * Every string belongs to the composing Slide. Wrapper presentation supplies the surface, decoration
+ * and motion context. The pause button shares the retained canvas's state.
  */
-export function ExplorableHero({
-  layers,
-  story,
-  locale,
-  tryIt,
-  why,
-  share,
-  motion,
-  preview,
-  presentation,
-}: ExplorableHeroProps) {
-  const content = (
-    <>
-      {!presentation && (
-        <layers.Backdrop mobile>
-          <div className="absolute inset-0 bg-(--tone-paper)" />
-          <HeroDecoration story={story} />
-        </layers.Backdrop>
-      )}
-      <layers.Frame className="gap-7 pb-0 md:pb-0">
-        <HeroMotionButton labels={motion} />
-        <Actions tryIt={tryIt} why={why} locale={locale} />
-        <ShareLink title={share.title} text={share.text} labels={share.labels} />
-        <HeroPreview>{preview}</HeroPreview>
-        {!presentation && <div aria-hidden="true" className="h-[45svh]" />}
-      </layers.Frame>
-    </>
+export function ExplorableHero({ layers, locale, tryIt, why, share, motion, preview }: ExplorableHeroProps) {
+  return (
+    <layers.Frame className="gap-7 pb-0 md:pb-0">
+      <HeroMotionButton labels={motion} />
+      <Actions tryIt={tryIt} why={why} locale={locale} />
+      <ShareLink title={share.title} text={share.text} labels={share.labels} />
+      <HeroPreview>{preview}</HeroPreview>
+    </layers.Frame>
   );
-  return presentation ? content : <HeroMotion labels={motion}>{content}</HeroMotion>;
 }
 
 function HeroPreview({ children }: { children: ReactNode }) {
