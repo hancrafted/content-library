@@ -41,7 +41,6 @@ export const checkIn3 = slide({
   messages: { en, de },
   presentation: {
     style: { '--slide-space-before': '160px' },
-    enter: { effect: 'goo', style: { '--slide-transition-start-offset': '-160px' } },
   },
   notes: [{ slug: 'talking-points', target: 'questions' }],
   content: ({ t, target }) => (

@@ -59,8 +59,6 @@ export const poll = slide({
   presentation: {
     tone: 'inverse',
     style: { '--slide-space-before': '160px', '--slide-space-after': '265px' },
-    enter: { effect: 'glitch', style: { '--slide-transition-start-offset': '-160px' } },
-    leave: { effect: 'paper', style: { '--slide-transition-start-offset': '-160px' } },
   },
   notes: [{ slug: 'talking-points', target: 'questions' }],
   content: ({ t, target }) => (

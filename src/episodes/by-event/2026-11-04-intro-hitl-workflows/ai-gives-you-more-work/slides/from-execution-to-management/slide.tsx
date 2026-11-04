@@ -7,6 +7,11 @@ import en from './i18n/en.json';
 export const fromExecutionToManagement = slide({
   slug: 'from-execution-to-management',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-surface': 'var(--section-band)' },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'the-question' }, { slug: 'the-reframe' }, { slug: 'the-payoff' }],
   content: () => null,
 });

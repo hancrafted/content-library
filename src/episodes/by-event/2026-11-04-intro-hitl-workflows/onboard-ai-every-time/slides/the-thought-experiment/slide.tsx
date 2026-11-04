@@ -12,6 +12,11 @@ const QUESTIONS = ['budget', 'signOff', 'lastTime'] as const;
 export const theThoughtExperiment = slide({
   slug: 'the-thought-experiment',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-surface': 'var(--section-band)' },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'hook-new-job' }],
   content: ({ t }) => (
     <SlideFrame>

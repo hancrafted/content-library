@@ -13,6 +13,7 @@ import { Staircase } from './staircase';
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
+  presentation: { leave: { effect: 'liquid' } },
   content: ({ t }) => (
     <>
       <SlideBackdrop mobile />

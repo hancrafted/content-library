@@ -9,6 +9,11 @@ import en from './i18n/en.json';
 export const whatFillsTheWindow = slide({
   slug: 'what-fills-the-window',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-surface': 'var(--section-band)' },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'more-in-there-than-you-typed' }],
   content: ({ t, locale }) => (
     <SlideFrame>

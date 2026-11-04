@@ -9,6 +9,11 @@ import en from './i18n/en.json';
 export const managingTheAttentionSpan = slide({
   slug: 'managing-the-attention-span',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-surface': 'var(--section-band)' },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'you-manage-by-habit' }],
   content: ({ t, locale }) => (
     <SlideFrame>

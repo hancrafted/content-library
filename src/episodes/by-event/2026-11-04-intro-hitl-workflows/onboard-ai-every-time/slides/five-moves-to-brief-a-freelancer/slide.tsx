@@ -12,6 +12,11 @@ const MOVES = ['break', 'requirements', 'interview', 'evaluate', 'fresh'] as con
 export const fiveMovesToBriefAFreelancer = slide({
   slug: 'five-moves-to-brief-a-freelancer',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-surface': 'var(--section-band)' },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'answer-to-the-traits' }],
   content: ({ t }) => (
     <SlideFrame>

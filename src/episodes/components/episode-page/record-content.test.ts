@@ -1,4 +1,7 @@
+import { introHitlAiAttentionSpan } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-attention-span/episode';
+import { introHitlAiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
 import { introHitlWorkflows } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode';
+import { introHitlOnboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
 import { episode, slide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
@@ -70,6 +73,97 @@ const RECORD = episode({
 });
 
 describe('success cases', () => {
+  it.each([
+    [introHitlAiAttentionSpan, 'thought-experiment'],
+    [introHitlAiGivesYouMoreWork, 'from-execution-to-management'],
+    [introHitlOnboardAiEveryTime, 'the-thought-experiment'],
+  ] as const)(
+    'renders Event Title departure independently of the first section enter',
+    async (record, firstSection) => {
+      // ARRANGE
+      const expectedEdge = `top→${firstSection}`;
+      const expectedEffect = 'liquid';
+      const titleOnly = episode({
+        ...record,
+        sections: record.sections.map((section) => [{ ...section[0], presentation: undefined }, ...section.slice(1)]),
+      });
+      // ACT
+      const content = await recordContent(titleOnly, 'en', {
+        translatorOf: translatorOf('en'),
+        id: `2026-11-04-intro-hitl-workflows__${record.slug}`,
+      });
+      const html = renderToStaticMarkup(
+        createElement(SlideWrapper, {
+          id: 'top',
+          presentation: content.titleAppearance.presentation,
+          transition: content.transitions.get('top'),
+        }),
+      );
+      const $ = load(html);
+      // ASSERT
+      expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
+      expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
+    },
+  );
+  it.each([
+    [
+      introHitlAiAttentionSpan,
+      [
+        ['top→thought-experiment', 'var(--section-band)'],
+        ['thought-experiment→thought-experiment--the-long-phone-call-story', 'var(--background)'],
+        ['thought-experiment--ai-forgets-the-middle-too→the-ais-attention-span', 'var(--section-band)'],
+        ['the-ais-attention-span→the-ais-attention-span--the-context-window', 'var(--background)'],
+        ['the-ais-attention-span--what-we-learned-so-far→what-fills-the-window', 'var(--section-band)'],
+        ['what-fills-the-window→what-fills-the-window--whats-really-in-the-window', 'var(--background)'],
+        ['what-fills-the-window--you-cant-watch-the-meter→managing-the-attention-span', 'var(--section-band)'],
+        ['managing-the-attention-span→managing-the-attention-span--everyday-habits', 'var(--background)'],
+      ],
+    ],
+    [
+      introHitlAiGivesYouMoreWork,
+      [
+        ['top→from-execution-to-management', 'var(--section-band)'],
+        ['from-execution-to-management→from-execution-to-management--every-revolution-one-card', 'var(--background)'],
+      ],
+    ],
+    [
+      introHitlOnboardAiEveryTime,
+      [
+        ['top→the-thought-experiment', 'var(--section-band)'],
+        ['the-thought-experiment→the-thought-experiment--you-are-the-new-hire', 'var(--background)'],
+        ['the-thought-experiment--one-prompt→five-moves-to-brief-a-freelancer', 'var(--section-band)'],
+        ['five-moves-to-brief-a-freelancer→five-moves-to-brief-a-freelancer--manage-the-price', 'var(--background)'],
+      ],
+    ],
+  ] as const)(
+    'renders ink into and out of every Event section title, preserving its band',
+    async (record, expected) => {
+      // ARRANGE
+      const expectedEffect = 'liquid';
+      // ACT
+      const content = await recordContent(record, 'en', {
+        translatorOf: translatorOf('en'),
+        id: `2026-11-04-intro-hitl-workflows__${record.slug}`,
+      });
+      const targets = [...content.transitions.values()].map((edge) => [edge.id, edge.targetSurface]);
+      const html = renderToStaticMarkup(
+        createElement(
+          Fragment,
+          null,
+          ...[...content.transitions.values()].map((edge) =>
+            createElement(SlideWrapper, { key: edge.id, id: edge.outgoing, transition: edge }),
+          ),
+        ),
+      );
+      const $ = load(html);
+      const effects = $('[data-transition-effect]')
+        .toArray()
+        .map((host) => $(host).attr('data-transition-effect'));
+      // ASSERT
+      expect(targets).toEqual(expected);
+      effects.forEach((effect) => expect(effect).toBe(expectedEffect));
+    },
+  );
   it('composes inherited authored Title tone for both rendered surface and narrow clock descriptors', async () => {
     // ARRANGE
     const record = episode({
@@ -140,15 +234,10 @@ describe('success cases', () => {
     expect(PageSurfaceClock({ content })).toBeNull();
   });
   it.each(['en', 'de'] as const)(
-    'renders the workshop poll transitions with incoming goo precedence in %s',
+    'omits Intro transitions after its Title without removing authored tones or reading space in %s',
     async (locale) => {
       // ARRANGE
-      const expectedEdges = [
-        ['agenda→poll', 'glitch'],
-        ['poll→check-in-1', 'paper'],
-        ['check-in-1→check-in-2', 'liquid'],
-        ['check-in-2→check-in-3', 'goo'],
-      ];
+      const expectedEdges: string[][] = [];
       const expectedSurfaces = [
         ['agenda', 'normal'],
         ['poll', 'inverse'],
