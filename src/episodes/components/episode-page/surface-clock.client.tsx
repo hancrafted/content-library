@@ -1,6 +1,7 @@
 'use client';
 
 import { useUrlState } from '@/shared/hooks/use-url-state';
+import { anchorOffset } from '@/shared/lib/anchor-geometry.pure';
 import { inkScale, type INK_PROFILES } from '@/shared/lib/ink-transition.pure';
 import { ownSignals } from '@/shared/lib/owned-signals';
 import type { SurfaceBoundary, SurfaceClock, SurfaceTone } from '@/shared/lib/surface-clock';
@@ -25,16 +26,10 @@ function pixels(value: string, name: string) {
   return 0;
 }
 
-/** Native root scroll-padding percentages use the scrollport height, as does the navigation authority. */
-function rootPaddingPixels(value: string) {
-  if (value.endsWith('%')) return (Number.parseFloat(value) / 100) * window.innerHeight;
-  return value === 'auto' ? 0 : pixels(value, 'scroll-padding-top');
-}
-
 function readSurfaces(descriptors: readonly SurfaceDescriptor[], root: HTMLElement): SurfaceBoundary[] {
   const scroll = window.scrollY;
   const rootPadding = getComputedStyle(document.documentElement).scrollPaddingTop;
-  const padding = rootPaddingPixels(rootPadding);
+  const viewport = window.innerHeight;
   const measurements = descriptors.map((descriptor) => {
     const node = document.getElementById(descriptor.id);
     if (!node || !root.contains(node)) return null;
@@ -55,7 +50,7 @@ function readSurfaces(descriptors: readonly SurfaceDescriptor[], root: HTMLEleme
       {
         ...descriptor,
         top,
-        anchorOffset: pixels(css.scrollMarginTop, 'scroll-margin-top') + padding,
+        anchorOffset: anchorOffset({ margin: css.scrollMarginTop, padding: rootPadding, viewport }),
         ...rangeOffsets(scope),
       },
     ];
