@@ -1,80 +1,155 @@
 'use client';
 
 import { Button } from '@/shared/components/ui/button';
+import { stripLocale } from '@/shared/lib/locale.pure';
+import { cn } from '@/shared/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+  type RefObject,
+} from 'react';
+import styles from './header.module.css';
 
-/** Closes the menu on Escape and on a press outside it; menu open is transient (FE-001), so nothing is stored. */
-function useDismiss(open: boolean, close: () => void, root: React.RefObject<HTMLDivElement | null>) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') close();
-    };
-    const onPointer = (event: PointerEvent) => {
-      if (event.target instanceof Node && !root.current?.contains(event.target)) close();
-    };
-    document.addEventListener('keydown', onKey);
-    document.addEventListener('pointerdown', onPointer);
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.removeEventListener('pointerdown', onPointer);
-    };
-  }, [open, close, root]);
+interface HeaderMenuProps {
+  brand: ReactNode;
+  label: string;
+  closeLabel: string;
+  children: ReactNode;
+  settings: ReactNode;
+  social: ReactNode;
+  contact: ReactNode;
 }
 
-const PANEL =
-  'max-lg:absolute max-lg:inset-x-0 max-lg:top-full max-lg:mt-2 max-lg:hidden max-lg:flex-col max-lg:items-start max-lg:gap-4 max-lg:rounded-2xl max-lg:bg-header/95 max-lg:p-4 max-lg:shadow-header max-lg:backdrop-blur-xl max-lg:data-[open=true]:flex lg:contents';
+function useCloseAtDesktop(dialog: RefObject<HTMLDialogElement | null>) {
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 64rem)');
+    const close = () => {
+      if (desktop.matches) dialog.current?.close();
+    };
+    desktop.addEventListener('change', close);
+    return () => desktop.removeEventListener('change', close);
+  }, [dialog]);
+}
 
-function MenuButton({
-  open,
-  panel,
-  label,
-  toggle,
-}: {
-  open: boolean;
-  panel: string;
-  label: string;
-  toggle: () => void;
-}) {
-  const Icon = open ? X : Menu;
+function useHeaderDialog() {
+  const [open, setOpen] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const panel = useId();
+  const page = stripLocale(usePathname());
+  useCloseAtDesktop(dialog);
+  useEffect(() => {
+    dialog.current?.close();
+  }, [page]);
+  const show = () => {
+    dialog.current?.showModal();
+    setOpen(true);
+  };
+  const close = () => dialog.current?.close();
+  return { open, dialog, panel, show, close, setOpen };
+}
+
+function MenuButton({ label, menu }: { label: string; menu: ReturnType<typeof useHeaderDialog> }) {
   return (
     <Button
       type="button"
       variant="ghost"
       size="icon"
-      className="size-11 shrink-0 max-lg:order-last lg:hidden"
-      aria-expanded={open}
-      aria-controls={panel}
+      className={cn(styles.menuButton, 'size-11 shrink-0')}
+      aria-expanded={menu.open}
+      aria-controls={menu.panel}
+      aria-haspopup="dialog"
       aria-label={label}
       data-testid="header-menu"
-      onClick={toggle}
+      onClick={menu.show}
     >
-      <Icon aria-hidden />
+      <Menu aria-hidden />
     </Button>
   );
 }
 
-/**
- * The header's overflow: from `lg` up its children sit inline in the one header row; below it they fold into a panel
- * under a Menu button, so the header never wraps to a second row. The children render once, so every link and toggle
- * keeps one copy in the page.
- */
-export function HeaderMenu({ label, children }: { label: string; children: ReactNode }) {
-  const [openOn, setOpenOn] = useState<string | null>(null);
-  const pathname = usePathname();
-  const root = useRef<HTMLDivElement>(null);
-  const panel = useId();
-  // Following a link closes the menu: it was opened on another page.
-  const open = openOn === pathname;
-  useDismiss(open, () => setOpenOn(null), root);
+function MenuHeading({ brand, closeLabel, close }: { brand: ReactNode; closeLabel: string; close: () => void }) {
   return (
-    <div ref={root} className="contents">
-      <MenuButton open={open} panel={panel} label={label} toggle={() => setOpenOn(open ? null : pathname)} />
-      <div id={panel} data-open={open} className={PANEL}>
-        {children}
-      </div>
+    <div className={styles.menuHeading}>
+      {brand}
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        className="size-11 shrink-0"
+        aria-label={closeLabel}
+        onClick={close}
+      >
+        <X aria-hidden />
+      </Button>
     </div>
+  );
+}
+
+function MenuUtilities({ open, ...props }: HeaderMenuProps & { open: boolean }) {
+  const settings = (
+    <div key="settings" className={styles.settings}>
+      {props.settings}
+    </div>
+  );
+  const social = (
+    <div key="social" className={styles.social}>
+      {props.social}
+    </div>
+  );
+  return (
+    <div className={styles.utilities}>
+      {open ? [settings, social] : [social, settings]}
+      <div className={styles.contact}>{props.contact}</div>
+    </div>
+  );
+}
+
+function dismissOnEscape(event: KeyboardEvent<HTMLDialogElement>) {
+  if (event.key !== 'Escape' || event.currentTarget.querySelector('[role="tooltip"]')) return;
+  // The force-mounted navigation layer would otherwise consume Escape before the native dialog.
+  event.preventDefault();
+  event.stopPropagation();
+  event.currentTarget.close();
+}
+
+function dismissOnDestination(event: MouseEvent<HTMLDialogElement>) {
+  const target = event.target as Element;
+  if (target.closest('[data-testid="site-nav"] a, [data-testid="brand"]')) event.currentTarget.close();
+}
+
+/** One copy of every link, with native modal focus trapping, Escape and focus return on mobile. */
+export function HeaderMenu(props: HeaderMenuProps) {
+  const menu = useHeaderDialog();
+  const navigation = (
+    <div key="navigation" className={styles.menuNavigation}>
+      {props.children}
+    </div>
+  );
+  const utilities = <MenuUtilities key="utilities" {...props} open={menu.open} />;
+  return (
+    <>
+      <div className={styles.brand}>{!menu.open && props.brand}</div>
+      <MenuButton label={props.label} menu={menu} />
+      <dialog
+        ref={menu.dialog}
+        id={menu.panel}
+        role={menu.open ? 'dialog' : 'none'}
+        aria-label={menu.open ? props.label : undefined}
+        className={styles.menu}
+        onKeyDown={dismissOnEscape}
+        onClose={() => menu.setOpen(false)}
+        onClick={dismissOnDestination}
+      >
+        <MenuHeading brand={menu.open ? props.brand : null} closeLabel={props.closeLabel} close={menu.close} />
+        {menu.open ? [utilities, navigation] : [navigation, utilities]}
+      </dialog>
+    </>
   );
 }

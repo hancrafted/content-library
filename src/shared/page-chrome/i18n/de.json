@@ -12,21 +12,37 @@
     "events": "Veranstaltungen",
     "resources": "Ressourcen",
     "dashboard": "Content-Pipeline",
-    "contact": "Mit mir arbeiten",
+    "contact": "Termin buchen",
     "newTab": "öffnet in einem neuen Tab",
-    "menu": "Menü"
+    "menu": "Menü",
+    "close": "Menü schließen",
+    "learnIntro": "Wissen, das Sie einsetzen können.",
+    "descriptions": {
+      "explorables": "KI selbst ausprobieren.",
+      "events": "Gemeinsam lernen und anwenden.",
+      "episodes": "Visuelle Erklärungen, Schritt für Schritt.",
+      "guides": "Vom Verstehen ins praktische Tun.",
+      "resources": "Werkzeuge und Material zum Weiterlernen.",
+      "dashboard": "Die Content-Pipeline verfolgen."
+    }
   },
   "social": {
     "label": "Profile in sozialen Netzwerken",
     "youtube": "YouTube",
     "github": "GitHub",
-    "linkedin": "LinkedIn"
+    "linkedin": "LinkedIn",
+    "descriptions": {
+      "youtube": "Aufgezeichnete Episoden auf meinem YouTube-Kanal ansehen.",
+      "linkedin": "Kontaktieren Sie mich auf LinkedIn.",
+      "github": "Meine Open-Source-Repositories auf GitHub entdecken."
+    }
   },
   "theme": {
     "label": "Farbschema",
     "light": "Hell",
     "dark": "Dunkel",
-    "system": "System"
+    "system": "System",
+    "switch": "Farbschema: {current}. Zu {next} wechseln."
   },
   "locale": {
     "label": "Sprache"

@@ -2,6 +2,7 @@ import { externalHref } from '@/shared/lib/external-link.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { SOCIAL_LINKS, type SocialId } from '@/shared/lib/social-links';
 import { cn } from '@/shared/lib/utils';
+import { HeaderProfileLink } from '@/shared/page-chrome/header/header-profile-link.client';
 import { getTranslations } from 'next-intl/server';
 import type { ReactNode } from 'react';
 
@@ -18,7 +19,31 @@ const MARKS: Record<SocialId, ReactNode> = {
   ),
 };
 
-function SocialLink({ id, url, name, newTab }: { id: SocialId; url: string; name: string; newTab: string }) {
+interface ProfileProps {
+  id: SocialId;
+  url: string;
+  name: string;
+  newTab: string;
+  description: string;
+  header: boolean;
+}
+
+function ProfileMark({ id }: { id: SocialId }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" className="size-5">
+      {MARKS[id]}
+    </svg>
+  );
+}
+
+function SocialLink({ id, url, name, newTab, description, header }: ProfileProps) {
+  if (header) {
+    return (
+      <HeaderProfileLink id={id} url={url} name={name} newTab={newTab} description={description}>
+        <ProfileMark id={id} />
+      </HeaderProfileLink>
+    );
+  }
   return (
     <li>
       <a
@@ -28,9 +53,7 @@ function SocialLink({ id, url, name, newTab }: { id: SocialId; url: string; name
         data-testid={`social-${id}`}
         className="inline-flex size-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false" className="size-5">
-          {MARKS[id]}
-        </svg>
+        <ProfileMark id={id} />
         <span className="sr-only">
           {name} ({newTab})
         </span>
@@ -40,12 +63,28 @@ function SocialLink({ id, url, name, newTab }: { id: SocialId; url: string; name
 }
 
 /** Icon links to the social profiles; the accessible name is "<network> (<newTab hint>)". */
-export async function SocialLinks({ locale, className }: { locale: Locale; className?: string }) {
+export async function SocialLinks({
+  locale,
+  className,
+  header = false,
+}: {
+  locale: Locale;
+  className?: string;
+  header?: boolean;
+}) {
   const t = await getTranslations({ locale });
   return (
     <ul aria-label={t('social.label')} className={cn('flex items-center', className)}>
       {SOCIAL_LINKS.map(({ id, href }) => (
-        <SocialLink key={id} id={id} url={href} name={t(`social.${id}`)} newTab={t('nav.newTab')} />
+        <SocialLink
+          key={id}
+          id={id}
+          url={href}
+          name={t(`social.${id}`)}
+          newTab={t('nav.newTab')}
+          description={t(`social.descriptions.${id}`)}
+          header={header}
+        />
       ))}
     </ul>
   );

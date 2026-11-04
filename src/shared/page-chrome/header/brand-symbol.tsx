@@ -14,7 +14,7 @@ export function BrandSymbol({ className }: { className?: string }) {
         <path d="M78 64V40" />
         <path d="M30 76C18 76 14 66 18 56" />
       </g>
-      <circle cx="57" cy="78" r="6" fill="var(--brand-accent)" />
+      <circle data-brand-dot cx="57" cy="78" r="6" fill="var(--brand-accent)" />
     </svg>
   );
 }
