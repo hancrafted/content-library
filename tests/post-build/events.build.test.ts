@@ -63,6 +63,7 @@ const WORDS: Record<
     previous: string;
     next: string;
     back: string;
+    open: string;
   }
 > = {
   en: {
@@ -78,6 +79,7 @@ const WORDS: Record<
     previous: 'Previous Episode',
     next: 'Next Episode',
     back: 'Back to the Event',
+    open: 'Open Event',
   },
   de: {
     title: 'AXEL Seminar: Agentic Workflows',
@@ -92,6 +94,7 @@ const WORDS: Record<
     previous: 'Vorherige Episode',
     next: 'Nächste Episode',
     back: 'Zurück zur Veranstaltung',
+    open: 'Veranstaltung öffnen',
   },
 };
 
@@ -173,22 +176,41 @@ describe('/events page', () => {
     expect(href).toBe(expected);
   });
 
-  it.each(LOCALES)('draws the Event card with the quiet arrow, its lead Tag and its Tags for %s', (locale) => {
-    // ARRANGE
-    const $ = exportedPage(localizePath(ROUTES.events, locale));
-    const expected = { lead: AXEL.tags[0], tags: [...AXEL.tags] };
-    // ACT
-    const card = $(`[data-event-card][data-event-slug="${AXEL.slug}"]`);
-    const tags = card
-      .find('[data-event-tags] [data-tag]')
-      .toArray()
-      .map((tag) => $(tag).attr('data-tag'));
-    // ASSERT
-    expect(card.attr('data-card-variant')).toBe('event');
-    expect(card.find('[data-open-cue="arrow"]').length).toBe(1);
-    expect(card.attr('data-lead-tag')).toBe(expected.lead);
-    expect(tags).toEqual(expected.tags);
-  });
+  it.each(LOCALES)(
+    'draws Event reading cards with selected artwork, a localized Open cue and Tags for %s',
+    (locale) => {
+      // ARRANGE
+      const $ = exportedPage(localizePath(ROUTES.events, locale));
+      const expected = {
+        lead: AXEL.tags[0],
+        tags: [...AXEL.tags],
+        open: WORDS[locale].open,
+        position: 'left',
+        artwork: 'context-boundary',
+        hidden: 'true',
+        variant: 'event',
+      };
+      // ACT
+      const card = $(`[data-event-card][data-event-slug="${AXEL.slug}"]`);
+      const tags = card
+        .find('[data-event-tags] [data-tag]')
+        .toArray()
+        .map((tag) => $(tag).attr('data-tag'));
+      const cue = card.find('[data-ink-primary]');
+      // ASSERT
+      expect(card.attr('data-card-variant')).toBe(expected.variant);
+      expect(card.attr('data-card-visual-position')).toBe(expected.position);
+      expect(card.find('[data-card-body]').length).toBe(1);
+      expect(card.find('[data-card-visual] [data-card-artwork]').attr('data-card-artwork')).toBe(expected.artwork);
+      expect(card.find('[data-card-media], .bg-linear-to-br').length).toBe(0);
+      expect(cue.text().trim()).toBe(expected.open);
+      expect(cue.attr('aria-hidden')).toBe(expected.hidden);
+      expect(cue.filter('a, button, [tabindex]').length).toBe(0);
+      expect(card.find('a').length).toBe(1);
+      expect(card.attr('data-lead-tag')).toBe(expected.lead);
+      expect(tags).toEqual(expected.tags);
+    },
+  );
 
   it.each(LOCALES)(
     'offers a search and a Tag chip for each Tag a listed Event carries, none pressed, for %s',

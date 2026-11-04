@@ -13,6 +13,7 @@
     "view": "Ansicht",
     "grid": "Karten",
     "list": "Liste",
-    "reset": "Filter zurücksetzen"
+    "reset": "Filter zurücksetzen",
+    "open": "Veranstaltung öffnen"
   }
 }

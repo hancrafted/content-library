@@ -3,6 +3,7 @@
     "title": "Explorables",
     "intro": "Interaktive Erklärungen zum Ausprobieren: eines auswählen, damit spielen und sehen, wie die Idee funktioniert.",
     "typeLabel": "Explorable",
+    "open": "Öffnen",
     "none": "Noch keine Explorables."
   }
 }

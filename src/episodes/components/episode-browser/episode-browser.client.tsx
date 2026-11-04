@@ -171,7 +171,7 @@ interface GridProps {
 function BrowseGrid({ cards, visible, locale, labels, headingLevel }: GridProps) {
   const showFormat = showsFormat(cards);
   return (
-    <ul data-episode-browse className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul data-episode-browse className="grid gap-4 sm:grid-cols-2">
       {cards.map((card) => (
         <li key={card.slug} data-browse-item hidden={!visible.has(card.slug)} className="flex">
           <EpisodeCardView

@@ -28,6 +28,7 @@ export async function EventsOverviewPage({ locale }: { locale: Locale }) {
     grid: t('grid'),
     list: t('list'),
     reset: t('reset'),
+    open: t('open'),
   };
   return (
     <main data-testid="events-index-page" className={PAGE_CONTAINER}>

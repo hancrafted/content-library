@@ -35,6 +35,7 @@ export interface EventBrowserLabels {
   readonly grid: string;
   readonly list: string;
   readonly reset: string;
+  readonly open: string;
 }
 
 type View = 'grid' | 'list';
@@ -68,10 +69,11 @@ interface MonthProps {
   visible: ReadonlySet<string>;
   view: View;
   locale: Locale;
+  open: string;
 }
 
 /** One month: its heading, then its Events as a card grid or as calendar rows; hidden when the filter keeps none. */
-function Month({ group, visible, view, locale }: MonthProps) {
+function Month({ group, visible, view, locale, open }: MonthProps) {
   const shown = group.items.some((card) => visible.has(card.slug));
   return (
     <div data-event-month={group.month} hidden={!shown} className="space-y-4">
@@ -84,7 +86,7 @@ function Month({ group, visible, view, locale }: MonthProps) {
         {group.items.map((card) => (
           <li key={card.slug} data-event-item hidden={!visible.has(card.slug)} className="flex gap-4">
             {view === 'list' && <DayBlock card={card} />}
-            <EventCardView card={card} locale={locale} headingLevel={4} />
+            <EventCardView card={card} locale={locale} headingLevel={4} open={open} />
           </li>
         ))}
       </ul>
@@ -103,10 +105,11 @@ interface SectionProps {
   visible: ReadonlySet<string>;
   view: View;
   locale: Locale;
+  open: string;
 }
 
 /** Upcoming or Past: its heading, its months, and one line saying whether the calendar or the filter left it empty. */
-function Section({ id, title, empty, noMatch, groups, visible, view, locale }: SectionProps) {
+function Section({ id, title, empty, noMatch, groups, visible, view, locale, open }: SectionProps) {
   const any = groups.some((group) => group.items.some((card) => visible.has(card.slug)));
   return (
     <section data-event-section={id} aria-labelledby={`events-${id}`} className="space-y-6">
@@ -114,7 +117,7 @@ function Section({ id, title, empty, noMatch, groups, visible, view, locale }: S
         {title}
       </h2>
       {groups.map((group) => (
-        <Month key={group.month} group={group} visible={visible} view={view} locale={locale} />
+        <Month key={group.month} group={group} visible={visible} view={view} locale={locale} open={open} />
       ))}
       {!any && (
         <p data-event-empty={groups.length === 0 ? 'calendar' : 'filter'} className="text-body text-muted-foreground">
@@ -223,7 +226,7 @@ function Controls({ browse, cards, vocabulary, labels }: ControlsProps) {
 export function EventBrowser({ cards, vocabulary, buildDay, locale, labels }: BrowserProps) {
   const browse = useEventBrowser(cards);
   const sections = groupEventsByMonth(cards, buildDay, locale);
-  const shared = { noMatch: labels.noMatch, visible: browse.visible, view: browse.view, locale };
+  const shared = { noMatch: labels.noMatch, visible: browse.visible, view: browse.view, locale, open: labels.open };
   return (
     <div className="space-y-10">
       <noscript>

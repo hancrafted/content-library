@@ -48,7 +48,7 @@ export interface EventCard {
   readonly day: string;
   readonly weekday: string;
   readonly time?: string;
-  /** The Event's first Tag, which gives its card the icon and accent. */
+  /** The Event's first Tag, which gives its card its accent. */
   readonly leadTag: TagId;
   /** The Event's Tags in its own order, lead Tag first. */
   readonly tags: readonly EventTag[];

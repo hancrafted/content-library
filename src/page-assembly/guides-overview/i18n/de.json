@@ -3,7 +3,8 @@
     "title": "Anleitungen",
     "intro": "Schritt für Schritt eingerichtet: ein Schritt pro Seite, jeder mit einem Ergebnis, das Sie prüfen können.",
     "typeLabel": "Anleitung",
-    "watchVideo": "Video ansehen",
+    "watchVideo": "Auf YouTube ansehen",
+    "open": "Anleitung öffnen",
     "newTab": "öffnet in einem neuen Tab",
     "none": "Noch keine Anleitungen."
   }

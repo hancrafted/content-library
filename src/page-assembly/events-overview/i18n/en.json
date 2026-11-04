@@ -13,6 +13,7 @@
     "view": "View",
     "grid": "Cards",
     "list": "List",
-    "reset": "Reset filters"
+    "reset": "Reset filters",
+    "open": "Open Event"
   }
 }

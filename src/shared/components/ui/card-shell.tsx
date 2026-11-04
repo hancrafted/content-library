@@ -6,13 +6,10 @@ import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
 import { Card } from './card';
 import type { CardHeadingLevel, CardVariant, OpenCue } from './card-variant.pure';
+import { CardPicture, CardVisual, type CardVisualPosition } from './card-visual';
+import visualStyles from './card-visual.module.css';
 
-/*
- * The parts every card is built from, whatever it lists: the frame with its
- * accent wash and faded icon, the title as the card's one stretched link, and
- * the cue that says it opens. What differs per variant is one table row, so a
- * new variant adds a row here and its own body, never a second frame.
- */
+/* One native frame and stretched title link; visual panels, static media and corner art share it. */
 
 /** A colour token's name (`--tag-agentic-ai`, `--primary`): the card draws its icon, ink, wash and edge from it. */
 export type AccentToken = `--${string}`;
@@ -92,59 +89,56 @@ interface ShellProps {
   className?: string;
   children: ReactNode;
   ink?: boolean;
+  visual?: ReactNode;
+  visualPosition?: CardVisualPosition;
 }
 
 /** The card's frame: the shadcn card surface as an `<article>`, its accent token set once for every part inside. */
-export function CardShell({
-  variant,
-  linked,
-  accent,
-  icon,
-  data,
-  media,
-  className = '',
-  children,
-  ink = false,
-}: ShellProps) {
-  const tone = linked ? `${LINKED_FRAME} ${ACCENT.edge}` : UPCOMING_FRAME;
-  const style = { '--card-accent': `var(${accent})` } as CSSProperties;
-  const activeInk = ink && linked;
-  const frame = (
-    <Card asChild className={cn(FRAME, VARIANTS[variant].frame, tone, className, activeInk && 'overflow-visible')}>
-      <article {...data} data-card-variant={variant} style={style}>
-        <CardPicture media={media} variant={variant} linked={linked} icon={icon} />
-        {children}
+export function CardShell(props: ShellProps) {
+  const frame = <CardFrame {...props} />;
+  return props.ink && props.linked ? <MagneticInk kind="card">{frame}</MagneticInk> : frame;
+}
+
+function CardFrame(props: ShellProps) {
+  const tone = props.linked ? `${LINKED_FRAME} ${ACCENT.edge}` : UPCOMING_FRAME;
+  const style = { '--card-accent': `var(${props.accent})` } as CSSProperties;
+  const position = visualPositionOf(props);
+  const classes = cn(
+    FRAME,
+    VARIANTS[props.variant].frame,
+    tone,
+    props.className,
+    props.ink && props.linked && 'overflow-visible',
+    (props.visual || props.visualPosition === 'none') && visualStyles.layout,
+  );
+  return (
+    <Card asChild className={classes}>
+      <article {...props.data} data-card-variant={props.variant} data-card-visual-position={position} style={style}>
+        <CardContents {...props} />
       </article>
     </Card>
   );
-  return activeInk ? <MagneticInk kind="card">{frame}</MagneticInk> : frame;
 }
 
-function CardPicture({ media, variant, linked, icon }: Pick<ShellProps, 'media' | 'variant' | 'linked' | 'icon'>) {
-  if (!media) return linked && <CardArt icon={icon} classes={VARIANTS[variant].art} />;
-  return (
-    <div
-      aria-hidden
-      data-card-media
-      className={`h-24 shrink-0 overflow-hidden bg-primary text-primary-foreground dark:border-b dark:border-border/60 dark:bg-background dark:text-foreground ${VARIANTS[variant].media}`}
-    >
-      {media}
-    </div>
-  );
+function visualPositionOf(props: ShellProps) {
+  if (props.visualPosition === 'none') return 'none';
+  return props.visual ? (props.visualPosition ?? 'left') : undefined;
 }
-/** The corner wash and the large faded icon behind the text; decorative, so they take no clicks and sit under the content. */
-function CardArt({ icon: Icon, classes }: { icon: LucideIcon; classes: string }) {
+
+function CardContents(props: ShellProps) {
+  if (props.visualPosition === 'none') return <CardVisual>{props.children}</CardVisual>;
+  if (props.visual) return <CardVisual visual={props.visual}>{props.children}</CardVisual>;
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]">
-      <span
-        aria-hidden
-        className={`pointer-events-none absolute inset-0 -z-10 bg-linear-to-br ${ACCENT.wash} via-transparent to-transparent`}
+    <>
+      <CardPicture
+        media={props.media}
+        classes={VARIANTS[props.variant]}
+        linked={props.linked}
+        icon={props.icon}
+        accent={ACCENT}
       />
-      <Icon
-        aria-hidden
-        className={`pointer-events-none absolute -z-10 opacity-[0.08] transition-transform duration-500 motion-safe:group-hover:-rotate-3 motion-safe:group-hover:scale-105 motion-reduce:transition-none ${ACCENT.ink} ${classes}`}
-      />
-    </div>
+      {props.children}
+    </>
   );
 }
 
@@ -155,12 +149,13 @@ interface TitleProps {
   route: string | null;
   locale: Locale;
   level: CardHeadingLevel;
+  graphic?: boolean;
 }
 
 /** The title as the one link on a linked card, stretched over the whole card so the card is the target and its name is just the title. */
-export function CardTitle({ variant, title, route, locale, level }: TitleProps) {
+export function CardTitle({ variant, title, route, locale, level, graphic = false }: TitleProps) {
   const Heading = `h${level}` as const;
-  const classes = `text-foreground ${VARIANTS[variant].title}`;
+  const classes = `text-foreground ${graphic ? 'text-body font-semibold' : VARIANTS[variant].title}`;
   if (route === null) return <Heading className={classes}>{title}</Heading>;
   return (
     <Heading className={classes}>
@@ -175,8 +170,16 @@ export function CardTitle({ variant, title, route, locale, level }: TitleProps) 
   );
 }
 
-export function CardCaption({ variant, children }: { variant: CardVariant; children: ReactNode }) {
-  return <p className={`text-muted-foreground ${VARIANTS[variant].caption}`}>{children}</p>;
+export function CardCaption({
+  variant,
+  children,
+  graphic = false,
+}: {
+  variant: CardVariant;
+  children: ReactNode;
+  graphic?: boolean;
+}) {
+  return <p className={`text-muted-foreground ${graphic ? 'text-caption' : VARIANTS[variant].caption}`}>{children}</p>;
 }
 
 const BUTTON =

@@ -42,7 +42,7 @@ export async function ExplorablesOverviewPage({ locale }: { locale: Locale }) {
         <ul className="grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card) => (
             <li key={card.slug} className="flex">
-              <ExplorableCardView card={card} locale={locale} className="w-full" />
+              <ExplorableCardView card={card} locale={locale} open={t('open')} className="w-full" />
             </li>
           ))}
         </ul>

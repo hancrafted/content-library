@@ -3,7 +3,8 @@
     "title": "Guides",
     "intro": "Step-by-step setups: one step per page, each ending in a result you can check.",
     "typeLabel": "Guide",
-    "watchVideo": "Watch the video",
+    "watchVideo": "Watch on YouTube",
+    "open": "Open Guide",
     "newTab": "opens in a new tab",
     "none": "No Guides yet."
   }

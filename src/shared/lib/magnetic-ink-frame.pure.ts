@@ -13,7 +13,7 @@ import {
 } from './magnetic-ink-geometry.pure';
 import type { InkHost, InkInput, InkPoint, InkRect, InkShape, InkState, InkView } from './magnetic-ink.types';
 
-const CARD_TRAVEL_MS = 650 / 1.5;
+const CARD_TRAVEL_MS = 300;
 
 export function newInkState(host: InkHost): InkState {
   return {
@@ -30,7 +30,7 @@ export function newInkState(host: InkHost): InkState {
 function travelInk(state: InkState) {
   const end = state.host.primary!;
   const start = state.contact;
-  const p = smoothInk(state.flight);
+  const p = state.flight ** 2;
   const x = start.x + (end.x + end.width / 2 - start.x) * p;
   const y = start.y + (end.y + end.height / 2 - start.y) * p;
   const fade = 1 - smoothInk((state.flight - 0.8) / 0.2);
@@ -62,6 +62,10 @@ function secondaryGoals(state: InkState, pointer: InkPoint | null) {
 const overInk = (rect: InkRect | undefined, pointer: InkPoint | null) =>
   Boolean(rect && pointer && inkDistance(rect, pointer) <= 0);
 const isTravelling = (state: InkState) => state.inside && state.host.primary !== undefined && state.flight < 1;
+const advanceFlight = (current: number, delta: number) => {
+  const progress = current + delta / CARD_TRAVEL_MS;
+  return progress >= 1 - Number.EPSILON * 8 ? 1 : progress;
+};
 
 function advanceEntry(state: InkState, input: InkInput) {
   const inside = overInk(state.host.surface, input.pointer);
@@ -75,7 +79,7 @@ function advanceEntry(state: InkState, input: InkInput) {
     if (!state.primaryShapes.length) state.contact = inkContact(state.host.surface, input.pointer);
   }
   state.inside = inside;
-  if (inside) state.flight = Math.min(1, state.flight + input.delta / CARD_TRAVEL_MS);
+  if (inside) state.flight = advanceFlight(state.flight, input.delta);
   return isTravelling(state);
 }
 
@@ -106,11 +110,24 @@ function actionStage(state: InkState, secondary: boolean): InkView['stage'] {
 export function inkFrame(state: InkState, input: InkInput, neighbours: InkHost[]): InkView {
   const entryMoving = advanceEntry(state, input);
   const pointer = input.pointer;
-  const primary = interpolateInk(state.primaryShapes, primaryGoals(state, pointer), input.delta);
+  const goals = primaryGoals(state, pointer);
+  const primary = interpolateInk(state.primaryShapes, goals, input.delta);
+  positionFlight(state, primary.shapes, goals);
   const secondary = interpolateInk(state.secondaryShapes, secondaryGoals(state, pointer), input.delta);
   state.primaryShapes = primary.shapes;
   state.secondaryShapes = secondary.shapes;
   return actionFrame({ state, pointer, primary, secondary, entryMoving, input, neighbours });
+}
+
+function positionFlight(state: InkState, shapes: InkShape[], goals: InkShape[]) {
+  if (!state.inside || !state.host.primary) return;
+  // The trajectory owns position; a second easing pass would delay arrival beyond the travel duration.
+  shapes.forEach((shape, index) => {
+    const goal = goals[index];
+    if (!goal) return;
+    shape.x = goal.x;
+    shape.y = goal.y;
+  });
 }
 
 interface DrawInput {
