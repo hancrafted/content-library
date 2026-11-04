@@ -43,7 +43,7 @@ function Placeholder({ note }: { note: string }) {
 function QrTile({ voteUrl, qrLabel }: Pick<PollJoinProps, 'voteUrl' | 'qrLabel'>) {
   const { size, path } = qrModules(voteUrl);
   return (
-    <div className="rounded-xl bg-card p-3 shadow-lg dark:bg-foreground">
+    <div data-tone-flip className="rounded-xl bg-card p-3 shadow-lg dark:bg-foreground">
       <svg
         viewBox={`0 0 ${size} ${size}`}
         className="size-56"

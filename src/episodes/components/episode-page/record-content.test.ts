@@ -1,3 +1,4 @@
+import { introHitlWorkflows } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode';
 import { episode, slide } from '@/episodes/components/slide-master/slide';
 import type { RuntimeKit, RuntimeTranslator } from '@/episodes/components/slide-master/slide-base';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
@@ -67,6 +68,84 @@ const RECORD = episode({
 });
 
 describe('success cases', () => {
+  it.each(['en', 'de'] as const)(
+    'renders the workshop poll transitions with incoming goo precedence in %s',
+    async (locale) => {
+      // ARRANGE
+      const expectedEdges = [
+        ['agenda→poll', 'glitch'],
+        ['poll→check-in-1', 'paper'],
+        ['check-in-1→check-in-2', 'liquid'],
+        ['check-in-2→check-in-3', 'goo'],
+      ];
+      const expectedSurfaces = [
+        ['poll', 'inverse'],
+        ['check-in-2', 'inverse'],
+        ['check-in-3', 'normal'],
+      ];
+      // ACT
+      const content = await recordContent(introHitlWorkflows, locale, {
+        translatorOf: translatorOf(locale),
+        id: '2026-11-04-intro-hitl-workflows__intro',
+        route: '/events/2026-11-04-intro-hitl-workflows/episodes/intro',
+      });
+      const html = renderToStaticMarkup(
+        createElement(
+          Fragment,
+          null,
+          ...content.slides.map((entry) =>
+            createElement(
+              SlideWrapper,
+              {
+                key: entry.id,
+                id: entry.id,
+                presentation: entry.presentation,
+                transition: content.transitions.get(entry.id),
+              },
+              entry.content,
+            ),
+          ),
+        ),
+      );
+      const $ = load(html);
+      const edges = $('[data-transition-edge]')
+        .toArray()
+        .map((host) => [$(host).attr('data-transition-edge'), $(host).attr('data-transition-effect')]);
+      const surfaces = $('[data-surface-tone]')
+        .toArray()
+        .map((host) => [$(host).attr('id'), $(host).attr('data-surface-tone')]);
+      // ASSERT
+      expect(edges).toEqual(expectedEdges);
+      expect(surfaces).toEqual(expectedSurfaces);
+    },
+  );
+  it.each(['en', 'de'] as const)(
+    'renders the workshop Intro Title inverse with liquid departure in %s',
+    async (locale) => {
+      // ARRANGE
+      const expectedTone = 'inverse';
+      const expectedEdge = 'top→grounding';
+      const expectedEffect = 'liquid';
+      // ACT
+      const content = await recordContent(introHitlWorkflows, locale, {
+        translatorOf: translatorOf(locale),
+        id: '2026-11-04-intro-hitl-workflows__intro',
+        route: '/events/2026-11-04-intro-hitl-workflows/episodes/intro',
+      });
+      const html = renderToStaticMarkup(
+        createElement(
+          SlideWrapper,
+          { id: 'top', presentation: content.titlePresentation, transition: content.transitions.get('top') },
+          content.hero,
+        ),
+      );
+      const $ = load(html);
+      // ASSERT
+      expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
+      expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
+      expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
+    },
+  );
   it.each(['liquid', 'paper', 'glitch', 'goo', 'dither', 'wave'] as const)(
     'renders repeated %s edges with independent matching filter identities',
     async (effect) => {
