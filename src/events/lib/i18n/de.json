@@ -1,9 +1,5 @@
 {
   "events": {
-    "breadcrumb": {
-      "label": "Brotkrumen",
-      "events": "Veranstaltungen"
-    },
     "episodeCount": {
       "one": "1 Episode",
       "other": "{count} Episoden"

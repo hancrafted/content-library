@@ -36,7 +36,7 @@ export const checkIn2 = slide({
   messages: { en, de },
   presentation: {
     tone: 'inverse',
-    style: { '--slide-space-before': '160px', '--slide-space-after': '530px' },
+    style: { '--slide-space-before': '160px', '--slide-space-after': '265px' },
     enter: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
     leave: { effect: 'dither', style: { '--slide-transition-start-offset': '-160px' } },
   },

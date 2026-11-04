@@ -3,7 +3,6 @@ import { findEvent, listedEpisodes, treatmentOf, type ServedEvent } from '@/cont
 import { cardLabels, EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
 import { episodeCardMaker } from '@/episodes/components/episode-card/episode-cards';
-import { EventBreadcrumb } from '@/events/components/event-breadcrumb';
 import { PastNotice } from '@/events/components/past-notice';
 import { PlaylistList, type PlaylistEntry } from '@/events/components/playlist-list';
 import { eventCard, type EventCard } from '@/events/lib/event-card.pure';
@@ -149,7 +148,7 @@ interface LayoutProps extends Omit<MainColumnProps, 'related' | 'entries'> {
 
 /** The page's two-column frame: the title, the side panel's top, the main column and the side panel's rest. */
 function EventLayout({ main, ...column }: LayoutProps) {
-  const { card, record, locale, t } = column;
+  const { card, record, t } = column;
   return (
     <main
       data-testid="event-page"
@@ -159,12 +158,7 @@ function EventLayout({ main, ...column }: LayoutProps) {
       )}
     >
       <header className="lg:col-start-1 lg:row-start-1">
-        <EventBreadcrumb
-          locale={locale}
-          labels={EVENT_WORDS[locale].breadcrumb}
-          event={{ slug: record.slug, title: card.title }}
-        />
-        <h1 className="mt-6 text-heading font-semibold text-balance text-foreground">{card.title}</h1>
+        <h1 className="text-heading font-semibold text-balance text-foreground">{card.title}</h1>
       </header>
       <SidePanelTop record={record} t={t} facts={<Facts card={card} record={record} t={t} />} />
       <MainColumn {...column} {...main} />
@@ -175,7 +169,7 @@ function EventLayout({ main, ...column }: LayoutProps) {
 
 /**
  * An Event's own page, (design-ADR 0016, Routes and visibility): two columns from `lg`. The main column holds the
- * breadcrumb, title, description, for a past Event the notice, the Start button, the Episodes its Playlist presents
+ * title, description, for a past Event the notice, the Start button, the Episodes its Playlist presents
  * as a numbered list of compact cards, and other Episodes to watch. The side panel holds the image, the facts, the
  * Organizers, the listing and the references. Every part sits once in the DOM, in the order a screen reader and the
  * stacked page read it: the image and facts right after the title, the Organizers, listing and references after the

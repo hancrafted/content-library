@@ -63,7 +63,7 @@ presentation: {
 }
 ```
 
-The Intro Title uses `320px` trailing space. Its non-Title outgoing Slides (Agenda, Poll, check-in-1 and check-in-2) use `530px`, adding the further `210px` of reading room requested after visual review; leading space remains `160px` where authored. Its selected effects start `160px` before the ordinary range so the filtered ink fills its overscan before the straight incoming surface reaches the viewport. The three Explorable Titles explicitly author their own trailing space and start offset after removal of the fixed second viewport. These are author choices, not renderer defaults.
+The Intro Title uses `160px` trailing space. Its non-Title outgoing Slides (Agenda, Poll, check-in-1 and check-in-2) use `265px`; visual review halved the preceding `320px`/`530px` bottom allowances. Leading space remains `160px` where authored. Its selected effects start `160px` before the ordinary range so the filtered ink fills its overscan before the straight incoming surface reaches the viewport. The three Explorable Titles explicitly author their own trailing space and start offset after removal of the fixed second viewport. These are author choices, not renderer defaults.
 
 Reading space and range offsets solve different problems: space protects the last meaningful content, while a range offset coordinates the ink with the surface seam. Tune them together against the short Title and tall Poll, watching when ink reaches a conclusion or control, not merely when progress first becomes nonzero. The Content area omits its divider on a wrapper marked `data-surface-edge` by a selected outgoing effect; otherwise that straight rule would remain visible through the filtered edge. Non-effect boundaries retain their divider.
 
