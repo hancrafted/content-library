@@ -1,9 +1,5 @@
 {
   "events": {
-    "breadcrumb": {
-      "label": "Breadcrumb",
-      "events": "Events"
-    },
     "episodeCount": {
       "one": "1 Episode",
       "other": "{count} Episodes"

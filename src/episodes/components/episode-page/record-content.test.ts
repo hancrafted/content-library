@@ -85,7 +85,7 @@ describe('success cases', () => {
         ['check-in-2', 'inverse'],
         ['check-in-3', 'normal'],
       ];
-      const expectedTrailingSpace = '--slide-space-after:530px';
+      const expectedTrailingSpace = '--slide-space-after:265px';
       const trailingSlides = ['agenda', 'poll', 'check-in-1', 'check-in-2'];
       const expectedLeadingSpace = '--slide-space-before:160px';
       // ACT
@@ -135,6 +135,7 @@ describe('success cases', () => {
       const expectedEdge = 'top→grounding';
       const expectedEffect = 'liquid';
       const expectedDestination = 'var(--section-band)';
+      const expectedTrailingSpace = '--slide-space-after:160px';
       // ACT
       const content = await recordContent(introHitlWorkflows, locale, {
         translatorOf: translatorOf(locale),
@@ -154,6 +155,7 @@ describe('success cases', () => {
       expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
       expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
       expect(content.transitions.get('top')?.targetSurface).toBe(expectedDestination);
+      expect($('#top').attr('style')).toContain(expectedTrailingSpace);
     },
   );
   it.each(['liquid', 'paper', 'glitch', 'goo', 'dither', 'wave'] as const)(
