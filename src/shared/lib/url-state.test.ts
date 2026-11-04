@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { createSurfaceClock } from './surface-clock';
 import { driveSurfaceClock } from './surface-clock-driver';
 import {
   createUrlState,
@@ -67,6 +68,85 @@ beforeEach(() => vi.useFakeTimers());
 afterEach(() => vi.useRealTimers());
 
 describe('success cases', () => {
+  it.each([
+    [
+      'pixel offsets',
+      { margin: '96px', padding: '32px', top: 2000, maximum: 3000, expectedOffset: 128, expectedLanding: 1872 },
+    ],
+    [
+      'percentage padding',
+      { margin: '96px', padding: '10%', top: 2000, maximum: 3000, expectedOffset: 176, expectedLanding: 1824 },
+    ],
+    [
+      'negative margin',
+      { margin: '-24px', padding: '0px', top: 2000, maximum: 3000, expectedOffset: -24, expectedLanding: 2024 },
+    ],
+    [
+      'automatic padding',
+      { margin: '96px', padding: 'auto', top: 2000, maximum: 3000, expectedOffset: 96, expectedLanding: 1904 },
+    ],
+    [
+      'invalid prefixes',
+      { margin: '96pxjunk', padding: '10junk%', top: 2000, maximum: 3000, expectedOffset: 0, expectedLanding: 2000 },
+    ],
+    [
+      'document start',
+      { margin: '96px', padding: '10%', top: 50, maximum: 3000, expectedOffset: 176, expectedLanding: 0 },
+    ],
+    [
+      'document end',
+      { margin: '96px', padding: '10%', top: 2000, maximum: 1800, expectedOffset: 176, expectedLanding: 1800 },
+    ],
+  ])('settles %s with the real browser adapter and completes the clock at that landing', (_name, input) => {
+    // ARRANGE
+    const { margin, padding, top, maximum, expectedOffset, expectedLanding } = input;
+    const { win } = fakeWindow();
+    const root = { scrollHeight: maximum + 800 };
+    const target = {
+      hasAttribute: () => true,
+      getBoundingClientRect: () => ({ top: top - browserWindow.scrollY }),
+      scrollIntoView: () => {
+        browserWindow.scrollY = expectedLanding;
+      },
+    };
+    const browserWindow = Object.assign(win, {
+      scrollY: 0,
+      innerHeight: 800,
+      document: { documentElement: root, getElementById: () => target },
+      getComputedStyle: (node: unknown) =>
+        node === root ? { scrollPaddingTop: padding } : { scrollMarginTop: margin },
+      matchMedia: () => ({ matches: true }),
+    });
+    const browser = createUrlNavigationBrowser(browserWindow as unknown as Window, 'data-slide');
+    const state = createUrlState(win, browser);
+    const clock = createSurfaceClock();
+    const expected = { id: 1, target: 'b', status: 'settled' };
+    // ACT
+    state.navigateTo('b');
+    vi.advanceTimersByTime(0);
+    const position = browser.readPosition('b')!;
+    clock.setGeometry(
+      {
+        viewport: 800,
+        maximum,
+        samplingLine: 96,
+        surfaces: [
+          { id: 'a', top: 0, tone: 'normal' },
+          { id: 'b', top: position.top, anchorOffset: position.offset, tone: 'inverse' },
+        ],
+      },
+      position.scroll,
+    );
+    const arrival = state.getNavigation();
+    const edge = clock.getSnapshot().edges[0];
+    state.dispose();
+    clock.dispose();
+    // ASSERT
+    expect(position.offset).toBe(expectedOffset);
+    expect(arrival).toEqual(expected);
+    expect(edge.end).toBe(expectedLanding);
+    expect(edge.progress).toBe(1);
+  });
   it('lets a late clock consume repeated authoritative flights and hand back to actual geometry', () => {
     // ARRANGE
     const { state, position, fire } = setup();

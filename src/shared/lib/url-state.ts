@@ -1,4 +1,5 @@
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
+import { anchorLanding } from './anchor-geometry.pure';
 import { linkTarget, observeNavigation, observeRestoration } from './url-state-browser';
 import type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
 export type { SlideNavigation, UrlLink, UrlNavigationBrowser, UrlState, UrlWindow } from './url-state.types';
@@ -195,7 +196,9 @@ class UrlStateStore implements UrlState {
     const position = this.browser?.readPosition(target);
     if (!position) return false;
     const landing =
-      target === TITLE_ANCHOR ? 0 : Math.max(0, Math.min(position.top - position.offset, position.maxScroll));
+      target === TITLE_ANCHOR
+        ? 0
+        : anchorLanding({ top: position.top, offset: position.offset, maximum: position.maxScroll });
     return Math.abs(position.scroll - landing) <= 1;
   }
 

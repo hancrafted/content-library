@@ -1,4 +1,5 @@
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
+import { anchorOffset } from './anchor-geometry.pure';
 import type { UrlLink, UrlNavigationBrowser, UrlWindow } from './url-state.types';
 
 const SCROLL_KEYS = new Set(['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' ']);
@@ -75,12 +76,14 @@ export function linkTarget(location: UrlWindow['location'], link: UrlLink): stri
 
 function readPosition(win: Window, target: HTMLElement) {
   const root = win.document.documentElement;
-  const padding = win.getComputedStyle(root).scrollPaddingTop;
-  const paddingPixels = padding.endsWith('%') ? (parseFloat(padding) / 100) * win.innerHeight : parseFloat(padding);
   return {
     scroll: win.scrollY,
     top: target.getBoundingClientRect().top + win.scrollY,
-    offset: (parseFloat(win.getComputedStyle(target).scrollMarginTop) || 0) + (paddingPixels || 0),
+    offset: anchorOffset({
+      margin: win.getComputedStyle(target).scrollMarginTop,
+      padding: win.getComputedStyle(root).scrollPaddingTop,
+      viewport: win.innerHeight,
+    }),
     maxScroll: Math.max(0, root.scrollHeight - win.innerHeight),
   };
 }

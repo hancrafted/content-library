@@ -1,3 +1,5 @@
+import { anchorLanding } from './anchor-geometry.pure';
+
 export type SurfaceTone = 'normal' | 'inverse';
 export interface SurfaceBoundary {
   readonly id: string;
@@ -40,7 +42,7 @@ const progressAt = (edge: SurfaceEdge, position: number) =>
 
 function edgesOf(input: SurfaceGeometry): SurfaceEdge[] {
   return input.surfaces.slice(1).map((surface, index) => {
-    const landing = clamp(surface.top - finite(surface.anchorOffset), input.maximum);
+    const landing = anchorLanding({ top: surface.top, offset: surface.anchorOffset, maximum: input.maximum });
     const end = clamp(landing + Math.min(0, finite(surface.endOffset)), landing);
     const start = clamp(surface.top - input.viewport + finite(surface.startOffset), end);
     const outgoing = input.surfaces[index];
