@@ -58,7 +58,7 @@ export const poll = slide({
   messages: { en, de },
   presentation: {
     tone: 'inverse',
-    style: { '--slide-space-before': '160px', '--slide-space-after': '320px' },
+    style: { '--slide-space-before': '160px', '--slide-space-after': '530px' },
     enter: { effect: 'glitch', style: { '--slide-transition-start-offset': '-160px' } },
     leave: { effect: 'paper', style: { '--slide-transition-start-offset': '-160px' } },
   },

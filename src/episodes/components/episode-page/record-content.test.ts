@@ -85,7 +85,8 @@ describe('success cases', () => {
         ['check-in-2', 'inverse'],
         ['check-in-3', 'normal'],
       ];
-      const expectedTrailingSpace = '--slide-space-after:320px';
+      const expectedTrailingSpace = '--slide-space-after:530px';
+      const trailingSlides = ['agenda', 'poll', 'check-in-1', 'check-in-2'];
       const expectedLeadingSpace = '--slide-space-before:160px';
       // ACT
       const content = await recordContent(introHitlWorkflows, locale, {
@@ -118,10 +119,11 @@ describe('success cases', () => {
       const surfaces = $('[data-surface-tone]')
         .toArray()
         .map((host) => [$(host).attr('id'), $(host).attr('data-surface-tone')]);
+      const trailingStyles = trailingSlides.map((id) => $(`#${id}`).attr('style'));
       // ASSERT
       expect(edges).toEqual(expectedEdges);
       expect(surfaces).toEqual(expectedSurfaces);
-      expect($('#check-in-2').attr('style')).toContain(expectedTrailingSpace);
+      trailingStyles.forEach((style) => expect(style).toContain(expectedTrailingSpace));
       expect($('#check-in-3').attr('style')).toContain(expectedLeadingSpace);
     },
   );
