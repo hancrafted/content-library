@@ -223,11 +223,11 @@ describe('landing page post-build structure', () => {
   );
 
   it.each(LANDING_PAGES)(
-    'draws the lead card with a button and the cards beside it with the hover arrow, for locale $locale',
+    'draws the lead and companion cards with labelled primary actions, for locale $locale',
     ({ url }) => {
       // ARRANGE
       const $ = getPage(url);
-      const expected = { lead: ['button'], side: ['arrow', 'arrow'] };
+      const expected = { lead: ['button'], side: ['button', 'button'] };
       // ACT
       const cues = (variant: string) =>
         $(`#episodes [data-card-variant="${variant}"] [data-open-cue]`)

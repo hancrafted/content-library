@@ -153,7 +153,7 @@ describe('/episodes index page', () => {
     expect(unsafe.length).toBe(0);
   });
 
-  it.each(LOCALES)('draws every linked card on the /episodes page with the hover arrow for %s', (locale) => {
+  it.each(LOCALES)('draws every linked card on the /episodes page with a labelled primary action for %s', (locale) => {
     // ARRANGE
     const url = localizePath(ROUTES.episodes, locale);
     const $ = exportedPage(url);
@@ -163,11 +163,25 @@ describe('/episodes index page', () => {
     const linked = $(
       '[data-episode-browse] [data-episode-card][data-card-variant="compact"]:not([data-episode-status="upcoming"])',
     );
-    const arrows = linked.find('[data-open-cue="arrow"]');
+    const cues = linked.find('[data-open-cue="button"][data-ink-primary] [data-ink-label]');
 
     // ASSERT
     expect(linked.length).toBe(expected);
-    expect(arrows.length).toBe(expected);
+    expect(cues.length).toBe(expected);
+  });
+  it.each([
+    { locale: 'en', label: 'Watch on YouTube' },
+    { locale: 'de', label: 'Auf YouTube ansehen' },
+  ] as const)('visibly labels the secondary Video action for $locale', ({ locale, label }) => {
+    // ARRANGE
+    const $ = exportedPage(localizePath(ROUTES.episodes, locale));
+    // ACT
+    const labels = $('[data-episode-video][data-ink-secondary] [data-ink-label]')
+      .toArray()
+      .map((el) => $(el).text().trim());
+    // ASSERT
+    expect(labels.length).toBeGreaterThan(0);
+    expect(labels).toEqual(labels.map(() => label));
   });
 
   it.each(LOCALES)('shows each Tag on its card with a tooltip on the /episodes page for %s', (locale) => {

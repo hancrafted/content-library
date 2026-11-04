@@ -66,7 +66,17 @@ export function inkMagnet(size: Size, point: Point, reach: number): InkField {
   const strength = Math.max(0, 1 - contact.gap / reach);
   const at = { x: round(contact.x), y: round(contact.y) };
   if (contact.inside) return { strength, fill: { ...at, r: round(farthestCorner(size, point)) }, droplets: [] };
-  const fill = { ...at, r: round(size.height * Math.max(0, 1 - contact.gap / FILL_REACH)) };
+  return inkAtContact(contact, strength, size.height);
+}
+
+/** The reusable geometry for an outside rounded-surface contact; the caller owns the surface shape. */
+export function inkAtContact(
+  contact: { x: number; y: number; nx: number; ny: number; gap: number },
+  strength: number,
+  height: number,
+): InkField {
+  const at = { x: round(contact.x), y: round(contact.y) };
+  const fill = { ...at, r: round(height * Math.max(0, 1 - contact.gap / FILL_REACH)) };
   if (strength === 0) return { strength, fill, droplets: [] };
   const stretch = MAX_STRETCH * strength * Math.min(1, contact.gap / FILL_REACH);
   const bead = 6 + 12 * strength;

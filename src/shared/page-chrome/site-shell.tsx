@@ -1,4 +1,5 @@
 import '@/app/globals.css';
+import { InkPage } from '@/shared/components/animations/magnetic-ink.client';
 import type { Locale, LocalesByRoute } from '@/shared/lib/locale.pure';
 import { buildThemeInitScript } from '@/shared/lib/theme.pure';
 import { SiteBackToTop } from '@/shared/page-chrome/back-to-top.client';
@@ -37,9 +38,11 @@ export async function SiteShell({
       <body className="min-h-screen antialiased">
         {/* First in <body>: sets the theme class before anything below paints. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
-        <SiteHeader locale={locale} localesByRoute={localesByRoute} navSections={navSections} />
-        {children}
-        <SiteBackToTop label={t('backToTop')} />
+        <InkPage>
+          <SiteHeader locale={locale} localesByRoute={localesByRoute} navSections={navSections} />
+          {children}
+          <SiteBackToTop label={t('backToTop')} />
+        </InkPage>
       </body>
     </html>
   );

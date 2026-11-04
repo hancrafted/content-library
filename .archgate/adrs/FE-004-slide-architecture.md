@@ -15,7 +15,7 @@ description: "The architecture map read first: tiers and import direction, the m
 
 ## Context
 
-An agent opening this repo meets five Episode-shaped records, each deep on one concern. None says which module is which or how the parts meet, so an agent guesses, and guesses grow a shared Slide type, a second container or an Episode-local `parts/` folder. This record is the map: shape and ownership only. Each detailed rule lives with the record that owns its area — the Episode page rules (`episodes/`, `slide-master/`, `slide-shared/`), the import boundary (all of `src/`), the server/client boundary (`*.client.tsx`, hooks), the Slide wrapper rules (`episode-page/`, `slide-master/`) and the Context drawer rules (`context-drawer/`); on conflict, that owner wins.
+This record maps shape and ownership, so agents do not invent a shared Slide type, second container or Episode-local `parts/`. Detailed rules stay with their owners: Episode page, import direction, server/client split, Slide wrapper and Context drawer. On conflict, that owner wins.
 
 **Layers and tiers.** Imports only point down; inside a layer, `components/ → hooks/ → lib/`.
 
@@ -82,7 +82,7 @@ flowchart LR
   C --> CH["page chrome: contents, drawer; talk player"]
 ```
 
-**Inside one Slide.** The wrapper owns the mechanics and renders the Slide header above the Scene, which owns the creative content in two layers; the Slide wrapper rules, governing `episode-page/` and `slide-master/`, hold the detail.
+**Inside one Slide:** wrapper mechanics and header, then the Scene's Backdrop and Foreground. The Slide wrapper rules hold the detail.
 
 ```mermaid
 flowchart LR
@@ -102,11 +102,14 @@ flowchart TD
   M --> ST["page state: active Slide, zones"]
   ST --> CL
   ST --> X
+  S --> IP["shared magnetic ink — page context + local action leaves"]
 ```
+
+**Magnetic ink:** drawing and styles in `shared/components/animations/`, attachment and scheduling in `shared/hooks/`, geometry and transitions in `shared/lib/`. Server `SiteShell` composes the page context; hosts register locally. Words and navigation stay with their owners. Design-ADR 0022 holds the behaviour.
 
 Rejected: one schema for every Slide (visuals bent to fit and degraded); per-Episode containers or routes (navigation, anchors and translation drift apart); a flat package tree (the router owns `src/app` positions, and tiers already carry direction).
 
-For this project the map matters because handoffs run on agents with no session memory: the cheapest correct change is the one the map makes obvious.
+The map serves agents with no session memory.
 
 ## Decision
 
@@ -214,3 +217,4 @@ For this project the map matters because handoffs run on agents with no session 
 - [`docs/features/episode-migration.md`](../../docs/features/episode-migration.md) — building an Episode step by step.
 - [`docs/adr/0008-pipeline-jobs-belong-to-stages.md`](../../docs/adr/0008-pipeline-jobs-belong-to-stages.md) — why each Section is its own `sections/` module.
 - [`docs/adr/0016-content-data-model.md`](../../docs/adr/0016-content-data-model.md) — the Event routes and the Event-scoped Episode page (§4.2).
+- [`docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md`](../../docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md) — shared action motion, explicit attachment and page coordination.

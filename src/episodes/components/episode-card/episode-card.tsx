@@ -41,12 +41,18 @@ interface FooterProps {
 function CardFooter({ card, variant, labels, showFormat }: FooterProps) {
   return (
     <div className="mt-auto flex min-h-11 flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-2">
-      <span className="inline-flex items-center gap-3">
+      <span className="inline-flex flex-wrap items-center gap-3">
         {showFormat && <span className={META}>{card.format.label}</span>}
         <ReleaseDate card={card} className={META} />
         <EpisodeLinks card={card} labels={labels} />
       </span>
-      <CardCue cue={cueOf(card, variant)} variant={variant} open={labels.open} comingSoon={labels.comingSoon} />
+      <CardCue
+        cue={cueOf(card, variant)}
+        variant={variant}
+        open={labels.open}
+        comingSoon={labels.comingSoon}
+        ink={isLinked(card)}
+      />
     </div>
   );
 }
@@ -97,6 +103,7 @@ export function EpisodeCardView({
       icon={NAMED_ICONS[TAG_ICONS[card.leadTag.id]]}
       className={className}
       data={dataOf(card)}
+      ink
     >
       <CardTitle variant={variant} title={card.title} route={card.route} locale={locale} level={headingLevel} />
       {card.caption !== '' && <CardCaption variant={variant}>{card.caption}</CardCaption>}

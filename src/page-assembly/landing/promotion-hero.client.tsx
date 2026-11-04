@@ -1,8 +1,8 @@
 'use client';
 
 import { HeroTitle } from '@/episodes/components/slide-master/slide-master';
+import { useMagneticInk } from '@/shared/hooks/use-magnetic-ink';
 import { usePromotionAnimation } from '@/shared/hooks/use-promotion-animation';
-import { INK_DROPLETS } from '@/shared/lib/ink-magnet.pure';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import type { PaperDrain } from '@/shared/lib/paper-pile.pure';
 import { ArrowDown } from 'lucide-react';
@@ -24,15 +24,6 @@ function promiseTarget(target: EventTarget | null): PaperDrain {
   return target instanceof Element && target.closest('[data-hero-primary]') ? 'primary' : 'none';
 }
 
-function usePointerFollow(follow: (point: { x: number; y: number } | null) => void) {
-  return {
-    onPointerMove: (event: React.PointerEvent<HTMLElement>) => {
-      if (event.pointerType === 'mouse') follow({ x: event.clientX, y: event.clientY });
-    },
-    onPointerLeave: () => follow(null),
-  };
-}
-
 function usePromiseInteraction() {
   const [hovered, setHovered] = useState<PaperDrain>('none');
   const [focused, setFocused] = useState<PaperDrain>('none');
@@ -48,57 +39,6 @@ function usePromiseInteraction() {
     onBlur: () => setFocused('none'),
   };
   return { draining: hovered === 'none' ? focused : hovered, events };
-}
-
-// The ink field reaches 128px past the button on every side (see .inkField); the filters cover it all.
-const INK_REGION = {
-  filterUnits: 'userSpaceOnUse',
-  x: -128,
-  y: -128,
-  width: '100%',
-  height: '100%',
-  colorInterpolationFilters: 'sRGB',
-} as const;
-
-function InkFilters() {
-  return (
-    <defs>
-      <filter id="hero-ink-goo" {...INK_REGION}>
-        <feGaussianBlur stdDeviation="4" />
-        <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 18 -7" />
-      </filter>
-      <filter id="hero-ink-rough" {...INK_REGION}>
-        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves={2} seed={7} result="noise" />
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-      <clipPath id="hero-ink-edge">
-        <rect data-ink-edge />
-      </clipPath>
-    </defs>
-  );
-}
-
-/**
- * The ink the pointer pulls out of Explore why; promotion-ink.ts sizes and moves it. Roughened like the
- * section's liquid ink transition, then gooey, so the beads merge into one irregular body.
- */
-function InkField() {
-  return (
-    <svg className={styles.inkField} aria-hidden="true">
-      <InkFilters />
-      <g transform="translate(128 128)" filter="url(#hero-ink-goo)" fill="var(--primary)">
-        {/* Clipped after roughening, so the front is ragged but the flooded button keeps its edge. */}
-        <g clipPath="url(#hero-ink-edge)">
-          <circle data-ink-fill filter="url(#hero-ink-rough)" r="0" />
-        </g>
-        <g filter="url(#hero-ink-rough)">
-          {Array.from({ length: INK_DROPLETS }, (_, drop) => (
-            <circle key={drop} data-ink-drop r="0" />
-          ))}
-        </g>
-      </g>
-    </svg>
-  );
 }
 
 const EPISODES_SECTION = 'episodes';
@@ -119,9 +59,17 @@ function glideToEpisodes(event: MouseEvent<HTMLAnchorElement>) {
   target.focus({ preventScroll: true });
 }
 
-function PrimaryAction({ locale, label }: { locale: Locale; label: string }) {
+interface HeroInk {
+  enabled: () => boolean;
+  proximity: (strength: number) => void;
+}
+
+function PrimaryAction({ locale, label, ink }: { locale: Locale; label: string; ink: HeroInk }) {
+  const host = useRef<HTMLAnchorElement>(null);
+  useMagneticInk(host, { kind: 'button', reach: 240, enabled: ink.enabled, onProximity: ink.proximity });
   return (
     <Link
+      ref={host}
       onClick={glideToEpisodes}
       data-testid="hero-episodes"
       data-hero-primary
@@ -129,8 +77,7 @@ function PrimaryAction({ locale, label }: { locale: Locale; label: string }) {
       href={localizePath('/', locale, EPISODES_SECTION)}
       className={styles.primary}
     >
-      <InkField />
-      <span className={styles.primaryLabel}>
+      <span data-ink-label className={styles.primaryLabel}>
         {label}
         <ArrowDown size={16} aria-hidden="true" />
       </span>
@@ -138,15 +85,15 @@ function PrimaryAction({ locale, label }: { locale: Locale; label: string }) {
   );
 }
 
-function HeroActions({ locale, labels }: Pick<PromotionHeroProps, 'locale' | 'labels'>) {
+function HeroActions({ locale, labels, ink }: Pick<PromotionHeroProps, 'locale' | 'labels'> & { ink: HeroInk }) {
   return (
     <div data-hero-actions className={styles.actions}>
-      <PrimaryAction locale={locale} label={labels.episodes} />
+      <PrimaryAction locale={locale} label={labels.episodes} ink={ink} />
     </div>
   );
 }
 
-function HeroCopy({ copy }: { copy: PromotionHeroProps }) {
+function HeroCopy({ copy, ink }: { copy: PromotionHeroProps; ink: HeroInk }) {
   return (
     <div className={styles.copy}>
       <p className={styles.eyebrow}>{copy.eyebrow}</p>
@@ -161,7 +108,7 @@ function HeroCopy({ copy }: { copy: PromotionHeroProps }) {
       <p data-hero-caption className={styles.caption}>
         {copy.caption}
       </p>
-      <HeroActions locale={copy.locale} labels={copy.labels} />
+      <HeroActions locale={copy.locale} labels={copy.labels} ink={ink} />
     </div>
   );
 }
@@ -182,18 +129,15 @@ export function PromotionHero(props: PromotionHeroProps) {
   const root = useRef<HTMLElement>(null);
   // Transient: the illustrated workload is not the reader's application state.
   const { draining, events } = usePromiseInteraction();
-  const { burst, finish, follow } = usePromotionAnimation(root, draining);
-  const pointer = usePointerFollow(follow);
+  const { burst, finish, setProximity } = usePromotionAnimation(root, draining);
+  const ink = {
+    enabled: () =>
+      root.current?.dataset.animated === 'interactive' || root.current?.hasAttribute('data-hero-settled') === true,
+    proximity: setProximity,
+  };
   return (
-    <section
-      ref={root}
-      data-promotion-hero
-      aria-labelledby="hero-title"
-      className={styles.hero}
-      {...events}
-      {...pointer}
-    >
-      <HeroCopy copy={props} />
+    <section ref={root} data-promotion-hero aria-labelledby="hero-title" className={styles.hero} {...events}>
+      <HeroCopy copy={props} ink={ink} />
       <div className={styles.scene}>
         {props.scene}
         <SceneControls labels={props.labels} burst={burst} />
