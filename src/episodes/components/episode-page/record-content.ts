@@ -23,6 +23,7 @@ import type { Locale } from '@/shared/lib/locale.pure';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
 import type { ResolvedSlideTransition, SlidePresentation } from '../slide-master/slide-presentation';
+import { slideSizeOf } from './episode-page-container.pure';
 
 /*
  * Turns an Episode record (or the composition of a Template or an Explorable page) into what one locale of its page renders: the
@@ -83,7 +84,10 @@ export async function recordContent(
   const titlePresentation = titlePresentationOf(record);
   return {
     tocEntrance: record.tocEntrance,
-    transitions: transitionsOf(titlePresentation, slides, record.transitionPrecedence),
+    transitions: transitionsOf(titlePresentation, slides, {
+      precedence: record.transitionPrecedence,
+      header: episode.header,
+    }),
     title: lines.heading ?? title,
     // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
     caption: lines.caption ?? caption,
@@ -112,7 +116,7 @@ function contextOf(
 }
 
 function resolveTransitions(
-  surfaces: readonly { id: string; presentation?: SlidePresentation }[],
+  surfaces: readonly { id: string; presentation?: SlidePresentation; surface?: string }[],
   precedence = 'enter',
 ): ReadonlyMap<string, ResolvedSlideTransition> {
   const resolved = new Map<string, ResolvedSlideTransition>();
@@ -126,26 +130,35 @@ function resolveTransitions(
       outgoing: outgoing.id,
       incoming: incoming.id,
       declaration,
-      ...transitionTarget(incoming.presentation),
+      ...transitionTarget(incoming.presentation, incoming.surface),
     });
   }
   return resolved;
 }
 
-function transitionsOf(title: SlidePresentation | undefined, slides: readonly LocalizedSlide[], precedence?: string) {
-  return resolveTransitions([{ id: TITLE_ANCHOR, presentation: title }, ...slides], precedence);
+function transitionsOf(
+  title: SlidePresentation | undefined,
+  slides: readonly LocalizedSlide[],
+  { precedence, header }: { precedence?: string; header: HeaderMode },
+) {
+  const surfaces = slides.map((slide) => ({
+    id: slide.id,
+    presentation: slide.presentation,
+    surface: header === 'shared' && slideSizeOf(slide) === 'section' ? 'var(--section-band)' : 'var(--background)',
+  }));
+  return resolveTransitions([{ id: TITLE_ANCHOR, presentation: title }, ...surfaces], precedence);
 }
 
 function winningDeclaration(leave: SlidePresentation['leave'], enter: SlidePresentation['enter'], precedence: string) {
   return precedence === 'leave' ? (leave ?? enter) : (enter ?? leave);
 }
 
-function transitionTarget(presentation: SlidePresentation = {}) {
+function transitionTarget(presentation: SlidePresentation | undefined, fallback = 'var(--background)') {
+  if (!presentation) return { targetSurface: fallback };
+  const { style, tone } = presentation;
   return {
-    targetSurface:
-      presentation.style?.['--slide-surface'] ??
-      (presentation.tone === 'inverse' ? 'var(--tone-paper)' : 'var(--background)'),
-    ...(presentation.style && { targetStyle: presentation.style }),
+    targetSurface: style?.['--slide-surface'] ?? (tone === 'inverse' ? 'var(--tone-paper)' : 'var(--background)'),
+    ...(style && { targetStyle: style }),
   };
 }
 

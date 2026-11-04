@@ -11,7 +11,11 @@ import en from './i18n/en.json';
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
-  presentation: { tone: 'inverse', leave: { effect: 'liquid' } },
+  presentation: {
+    tone: 'inverse',
+    style: { '--slide-space-after': '320px' },
+    leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
+  },
   content: ({ t }) => (
     <>
       <SlideBackdrop mobile />

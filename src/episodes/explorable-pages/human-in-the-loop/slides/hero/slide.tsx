@@ -23,7 +23,8 @@ export const hero = slide({
   messages: { en, de },
   presentation: {
     tone: 'inverse',
-    leave: { effect: 'liquid' },
+    style: { '--slide-space-after': '320px' },
+    leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
     rear: <HeroDecoration story="human-in-the-loop" />,
     rearMobile: true,
     Provider: HeroMotion,

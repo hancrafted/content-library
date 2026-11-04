@@ -79,10 +79,14 @@ describe('success cases', () => {
         ['check-in-2→check-in-3', 'goo'],
       ];
       const expectedSurfaces = [
+        ['agenda', 'normal'],
         ['poll', 'inverse'],
+        ['check-in-1', 'normal'],
         ['check-in-2', 'inverse'],
         ['check-in-3', 'normal'],
       ];
+      const expectedTrailingSpace = '--slide-space-after:320px';
+      const expectedLeadingSpace = '--slide-space-before:160px';
       // ACT
       const content = await recordContent(introHitlWorkflows, locale, {
         translatorOf: translatorOf(locale),
@@ -117,6 +121,8 @@ describe('success cases', () => {
       // ASSERT
       expect(edges).toEqual(expectedEdges);
       expect(surfaces).toEqual(expectedSurfaces);
+      expect($('#check-in-2').attr('style')).toContain(expectedTrailingSpace);
+      expect($('#check-in-3').attr('style')).toContain(expectedLeadingSpace);
     },
   );
   it.each(['en', 'de'] as const)(
@@ -126,6 +132,7 @@ describe('success cases', () => {
       const expectedTone = 'inverse';
       const expectedEdge = 'top→grounding';
       const expectedEffect = 'liquid';
+      const expectedDestination = 'var(--section-band)';
       // ACT
       const content = await recordContent(introHitlWorkflows, locale, {
         translatorOf: translatorOf(locale),
@@ -144,6 +151,7 @@ describe('success cases', () => {
       expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
       expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
       expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
+      expect(content.transitions.get('top')?.targetSurface).toBe(expectedDestination);
     },
   );
   it.each(['liquid', 'paper', 'glitch', 'goo', 'dither', 'wave'] as const)(

@@ -29,6 +29,7 @@ export function ContentArea({ className, children, ...props }: ContentAreaProps)
         // and a wrapper are `display: contents`, so the rule targets the
         // wrappers, not the grid's direct children.
         '[&_[data-slide]]:border-b [&_[data-slide]]:border-border/60',
+        '[&_[data-slide][data-surface-edge]]:border-b-0',
         className,
       )}
       {...props}

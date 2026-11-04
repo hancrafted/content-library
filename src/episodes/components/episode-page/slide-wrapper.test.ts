@@ -26,6 +26,7 @@ describe('success cases', () => {
       },
     };
     const expectedHost = 'data-transition-edge="a→b"';
+    const expectedBoundary = 'data-surface-edge="true"';
     const expectedScope = 'portable';
     const expectedTarget = 'var(--tone-paper)';
     const content = 'free-scene';
@@ -39,6 +40,7 @@ describe('success cases', () => {
     const html = renderToStaticMarkup(wrapper);
     // ASSERT
     expect(html).toContain(expectedHost);
+    expect(html).toContain(expectedBoundary);
     expect(html).toContain(expectedScope);
     expect(html).toContain(expectedTarget);
     expect(html.indexOf(content)).toBeLessThan(html.indexOf(expectedHost));

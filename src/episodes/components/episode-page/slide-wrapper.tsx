@@ -48,6 +48,7 @@ export function SlideWrapper({ id, className, size = 'page', mode = 'authored', 
       data-slide={id}
       data-size={size}
       data-surface-tone={surfaceTone(presentation)}
+      data-surface-edge={transition ? true : undefined}
       className={cn(frameClass, className)}
       style={{ ...presentation?.style, ...style }}
       {...props}
