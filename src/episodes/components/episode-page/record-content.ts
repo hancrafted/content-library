@@ -44,11 +44,23 @@ export interface PageContext {
   readonly route?: string;
 }
 
+/** Composition's Title appearance, consumed without authored compatibility decisions. */
+export interface TitleAppearance {
+  /** Semantic tone for header sampling and Title-only navigation. */
+  readonly tone: 'normal' | 'inverse';
+  /** Legacy wrapper tokens are present only without an authored Title presentation. */
+  readonly legacyTone?: PageTone;
+  /** Authored mechanics carry the resolved tone; decorative JSX remains server-side. */
+  readonly presentation?: SlidePresentation;
+  /** Selected only for a toned legacy Title with a first Slide and no resolved outgoing edge. */
+  readonly inkTarget?: string;
+}
+
 /** What one locale of an Episode renders: the Title slide's text and its Slides in page order. */
 export interface EpisodeContent {
+  readonly titleAppearance: TitleAppearance;
   readonly tocEntrance?: EpisodeComposition['tocEntrance'];
   readonly transitions: ReadonlyMap<string, ResolvedSlideTransition>;
-  readonly titlePresentation?: SlidePresentation;
   readonly title: string;
   readonly caption?: string;
   /** The whole reading time in minutes (`episodeMinutes`): the total the table of contents counts down from. */
@@ -61,8 +73,6 @@ export interface EpisodeContent {
   /** Whether the Slide wrapper renders each Slide's header (`shared`) or each Scene does (`authored`). */
   readonly header: HeaderMode;
   readonly entrance: SlideEntrance;
-  /** The Title slide's declared tone, when it has one. */
-  readonly tone?: PageTone;
 }
 
 /**
@@ -81,13 +91,10 @@ export async function recordContent(
   const { title, caption } = record.messages[locale];
   const lines = record.title ? titleLinesOf(record.title, locale) : {};
   const slides = episode.placed.map((placed) => localizeSlide(placed, episode));
-  const titlePresentation = titlePresentationOf(record);
+  const transitions = transitionsOf(record, slides, episode.header);
   return {
     tocEntrance: record.tocEntrance,
-    transitions: transitionsOf(titlePresentation, slides, {
-      precedence: record.transitionPrecedence,
-      header: episode.header,
-    }),
+    transitions,
     title: lines.heading ?? title,
     // A title Slide's own caption belongs to its Hero motif, so it takes the Title slide's caption line.
     caption: lines.caption ?? caption,
@@ -96,10 +103,24 @@ export async function recordContent(
     ...(record.title && { hero: localizeTitleScene(record.title, episode) }),
     header: episode.header,
     entrance: record.entrance ?? 'typewriter',
-    tone: record.tone,
-    titlePresentation,
+    titleAppearance: titleAppearanceOf(record, slides, transitions.has(TITLE_ANCHOR)),
     slides,
   };
+}
+
+function titleAppearanceOf(
+  record: EpisodeComposition,
+  slides: readonly LocalizedSlide[],
+  outgoingEdge: boolean,
+): TitleAppearance {
+  const presentation = record.title?.presentation;
+  const tone = presentation?.tone ?? record.tone ?? 'normal';
+  if (presentation) return { tone, presentation: { ...presentation, tone } };
+  return { tone, legacyTone: record.tone, inkTarget: legacyInkTarget(record.tone, slides[0]?.id, outgoingEdge) };
+}
+
+function legacyInkTarget(tone: PageTone | undefined, firstSlide: string | undefined, outgoingEdge: boolean) {
+  return tone && firstSlide && !outgoingEdge ? firstSlide : undefined;
 }
 
 function contextOf(
@@ -136,17 +157,16 @@ function resolveTransitions(
   return resolved;
 }
 
-function transitionsOf(
-  title: SlidePresentation | undefined,
-  slides: readonly LocalizedSlide[],
-  { precedence, header }: { precedence?: string; header: HeaderMode },
-) {
+function transitionsOf(record: EpisodeComposition, slides: readonly LocalizedSlide[], header: HeaderMode) {
   const surfaces = slides.map((slide) => ({
     id: slide.id,
     presentation: slide.presentation,
     surface: header === 'shared' && slideSizeOf(slide) === 'section' ? 'var(--section-band)' : 'var(--background)',
   }));
-  return resolveTransitions([{ id: TITLE_ANCHOR, presentation: title }, ...surfaces], precedence);
+  return resolveTransitions(
+    [{ id: TITLE_ANCHOR, presentation: record.title?.presentation }, ...surfaces],
+    record.transitionPrecedence,
+  );
 }
 
 function winningDeclaration(leave: SlidePresentation['leave'], enter: SlidePresentation['enter'], precedence: string) {
@@ -160,8 +180,4 @@ function transitionTarget(presentation: SlidePresentation | undefined, fallback 
     targetSurface: style?.['--slide-surface'] ?? (tone === 'inverse' ? 'var(--tone-paper)' : 'var(--background)'),
     ...(style && { targetStyle: style }),
   };
-}
-
-function titlePresentationOf(record: EpisodeComposition) {
-  return record.title?.presentation;
 }

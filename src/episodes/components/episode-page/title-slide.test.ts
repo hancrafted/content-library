@@ -7,7 +7,12 @@ const TEXT = { title: 'Page template', caption: 'The smallest Episode.' };
 
 /** The Title slide's static HTML on the shared header, with or without an authored hero Scene. */
 function render(hero?: string) {
-  const props = { ...TEXT, mode: 'shared' as const, entrance: 'none' as const };
+  const props = {
+    ...TEXT,
+    mode: 'shared' as const,
+    entrance: 'none' as const,
+    appearance: { tone: 'normal' as const },
+  };
   return renderToStaticMarkup(
     createElement(TitleSlide, hero === undefined ? props : { ...props, hero: createElement('figure', null, hero) }),
   );
@@ -27,7 +32,12 @@ describe('success cases', () => {
 
   it('marks its wrapper with the declared tone', () => {
     // ARRANGE
-    const props = { ...TEXT, mode: 'shared' as const, entrance: 'none' as const, tone: 'inverse' as const };
+    const props = {
+      ...TEXT,
+      mode: 'shared' as const,
+      entrance: 'none' as const,
+      appearance: { tone: 'inverse' as const, legacyTone: 'inverse' as const },
+    };
     // ACT
     const html = renderToStaticMarkup(createElement(TitleSlide, props));
     // ASSERT
@@ -44,8 +54,7 @@ describe('failure cases', () => {
       ...TEXT,
       mode: 'shared' as const,
       entrance: 'none' as const,
-      tone: 'inverse' as const,
-      presentation: { tone: 'normal' as const },
+      appearance: { tone: 'normal' as const, presentation: { tone: 'normal' as const } },
     };
     const legacy = 'data-tone="inverse"';
     const normal = 'data-surface-tone="normal"';

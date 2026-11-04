@@ -116,11 +116,9 @@ function titleSlideOf(
     mode: page.mode,
     entrance: page.entrance,
     hero: content.hero,
-    tone: content.tone,
-    presentation: content.titlePresentation,
+    appearance: content.titleAppearance,
     transition: content.transitions.get(TITLE_ANCHOR),
     geometricTone: usesSurfaceClock(content),
-    inkTarget: content.slides[0]?.id,
     ...talk,
     targets: content.titleContext.notes.map(({ target }) => target).filter(isTitleTarget),
   };
@@ -229,7 +227,7 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, time: frame.time });
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   const toc = tocPropsOf(content, props, sections);
-  const className = pageClassOf(content.tone, content.titlePresentation);
+  const className = pageClassOf(content.titleAppearance.tone);
   return (
     <ExplorableHomes page={page} locale={locale}>
       <UrlStateProvider key={`${locale}/${id}`}>

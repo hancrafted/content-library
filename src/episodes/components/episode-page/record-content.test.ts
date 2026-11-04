@@ -8,8 +8,10 @@ import { load } from 'cheerio';
 import { createElement, Fragment, isValidElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { PageSurfaceClock, tocEntranceOf, usesSurfaceClock } from './page-surface-clock';
 import { recordContent, type TranslatorOf } from './record-content';
 import { SlideWrapper } from './slide-wrapper';
+import { TitleSlide } from './title-slide';
 
 /*
  * Stand-in for next-intl's site-wide translator: reads the real Translation
@@ -68,6 +70,75 @@ const RECORD = episode({
 });
 
 describe('success cases', () => {
+  it('composes inherited authored Title tone for both rendered surface and narrow clock descriptors', async () => {
+    // ARRANGE
+    const record = episode({
+      ...RECORD,
+      tone: 'inverse',
+      title: slide({
+        slug: 'hero',
+        messages: EPISODE,
+        content: () => null,
+        presentation: { style: { '--slide-space-after': '160px' } },
+      }),
+    });
+    const expected = { tone: 'inverse', presentation: { tone: 'inverse', style: { '--slide-space-after': '160px' } } };
+    const expectedSurfaces = [
+      { id: 'top', tone: 'inverse' },
+      { id: 'foundations', tone: 'normal' },
+      { id: 'foundations--why-a-template', tone: 'normal' },
+      { id: 'foundations--visual', tone: 'normal' },
+      { id: 'next-steps', tone: 'normal' },
+    ];
+    const expectedTone = 'inverse';
+    const policy = 'title-departure';
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    const html = renderToStaticMarkup(
+      createElement(TitleSlide, {
+        title: content.title,
+        mode: content.header,
+        entrance: content.entrance,
+        appearance: content.titleAppearance,
+      }),
+    );
+    const $ = load(html);
+    const clock = PageSurfaceClock({ content });
+    // ASSERT
+    expect(content.titleAppearance).toEqual(expected);
+    expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
+    expect($('#top').attr('data-tone')).toBeUndefined();
+    expect(clock?.props.surfaces).toEqual(expectedSurfaces);
+    expect(tocEntranceOf(content)).toBe(policy);
+  });
+  it('composes a legacy inverse Title with its first Slide as the ink target and no geometry opt-in', async () => {
+    // ARRANGE
+    const record = episode({ ...RECORD, tone: 'inverse' });
+    const expected = { tone: 'inverse', legacyTone: 'inverse', inkTarget: 'foundations' };
+    const legacyEntrance = 'legacy';
+    const inverse = 'inverse';
+    // ACT
+    const content = await recordContent(record, 'en', {
+      translatorOf: translatorOf('en'),
+      id: 'ai-token-economy',
+    });
+    const html = renderToStaticMarkup(
+      createElement(TitleSlide, {
+        title: content.title,
+        mode: content.header,
+        entrance: content.entrance,
+        appearance: content.titleAppearance,
+      }),
+    );
+    const $ = load(html);
+    // ASSERT
+    expect(content.titleAppearance).toEqual(expected);
+    expect($('#top').attr('data-tone')).toBe(inverse);
+    expect($('#top').attr('data-surface-tone')).toBeUndefined();
+    expect(usesSurfaceClock(content)).toBe(false);
+    expect(tocEntranceOf(content)).toBe(legacyEntrance);
+    expect(PageSurfaceClock({ content })).toBeNull();
+  });
   it.each(['en', 'de'] as const)(
     'renders the workshop poll transitions with incoming goo precedence in %s',
     async (locale) => {
@@ -145,7 +216,7 @@ describe('success cases', () => {
       const html = renderToStaticMarkup(
         createElement(
           SlideWrapper,
-          { id: 'top', presentation: content.titlePresentation, transition: content.transitions.get('top') },
+          { id: 'top', presentation: content.titleAppearance.presentation, transition: content.transitions.get('top') },
           content.hero,
         ),
       );
@@ -221,7 +292,7 @@ describe('success cases', () => {
     });
     // ASSERT
     expect(content.tocEntrance).toBe(expected);
-    expect(content.titlePresentation).toBeUndefined();
+    expect(content.titleAppearance.presentation).toBeUndefined();
   });
   it('composes the Context Title with independent inverse surface, rear drift and outgoing ink', async () => {
     // ARRANGE
@@ -236,12 +307,12 @@ describe('success cases', () => {
       route: '/explorables/context-window',
     });
     // ASSERT
-    expect(content.titlePresentation?.tone).toBe(expected.tone);
-    expect(content.titlePresentation?.rear).toBeDefined();
+    expect(content.titleAppearance.presentation?.tone).toBe(expected.tone);
+    expect(content.titleAppearance.presentation?.rear).toBeDefined();
     expect(content.transitions.get('top')?.declaration.effect).toBe(expected.effect);
     expect(content.transitions.get('top')?.incoming).toBe(expected.incoming);
     const html = renderToStaticMarkup(
-      createElement(SlideWrapper, { id: 'top', presentation: content.titlePresentation }, content.hero),
+      createElement(SlideWrapper, { id: 'top', presentation: content.titleAppearance.presentation }, content.hero),
     );
     expect(html.indexOf(backdrop)).toBeLessThan(html.indexOf(mount));
     expect(html).toContain(motionButton);
@@ -406,6 +477,89 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it.each([
+    { inherited: 'inverse', authored: 'normal', expected: 'normal' },
+    { inherited: undefined, authored: 'inverse', expected: 'inverse' },
+  ] as const)(
+    'uses authored $authored Title tone over legacy $inherited in both header modes',
+    async ({ inherited, authored, expected }) => {
+      // ARRANGE
+      const modes = ['shared', 'authored'] as const;
+      const expectedAppearance = { tone: expected, presentation: { tone: expected } };
+      // ACT
+      const observations = await Promise.all(
+        modes.map(async (header) => {
+          const content = await recordContent(
+            episode({
+              ...RECORD,
+              header: header === 'authored' ? header : undefined,
+              tone: inherited,
+              title: slide({ slug: 'hero', messages: EPISODE, content: () => null, presentation: { tone: authored } }),
+            }),
+            'en',
+            { translatorOf: translatorOf('en'), id: 'ai-token-economy' },
+          );
+          const html = renderToStaticMarkup(
+            createElement(TitleSlide, {
+              title: content.title,
+              mode: content.header,
+              entrance: content.entrance,
+              appearance: content.titleAppearance,
+            }),
+          );
+          const $ = load(html);
+          return {
+            appearance: content.titleAppearance,
+            surface: $('#top').attr('data-surface-tone'),
+            legacy: $('#top').attr('data-tone'),
+            clock: PageSurfaceClock({ content })?.props.surfaces[0].tone,
+          };
+        }),
+      );
+      // ASSERT
+      for (const observed of observations) {
+        expect(observed.appearance).toEqual(expectedAppearance);
+        expect(observed.surface).toBe(expected);
+        expect(observed.legacy).toBeUndefined();
+        expect(observed.clock).toBe(expected);
+      }
+    },
+  );
+  it('suppresses legacy ink for an incoming-declared outgoing Title edge without adding a Title surface', async () => {
+    // ARRANGE
+    const record = episode({
+      ...RECORD,
+      tone: 'inverse',
+      sections: [[{ ...foundations, presentation: { enter: { effect: 'wave' } } }, whyATemplate]],
+    });
+    const expected = { tone: 'inverse', legacyTone: 'inverse' };
+    const expectedSurfaces = [
+      { id: 'top', tone: 'inverse', effect: 'wave' },
+      { id: 'foundations', tone: 'normal' },
+      { id: 'foundations--why-a-template', tone: 'normal' },
+    ];
+    const expectedEdge = 'top→foundations';
+    const inverse = 'inverse';
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    const html = renderToStaticMarkup(
+      createElement(TitleSlide, {
+        title: content.title,
+        mode: content.header,
+        entrance: content.entrance,
+        appearance: content.titleAppearance,
+        transition: content.transitions.get('top'),
+        geometricTone: usesSurfaceClock(content),
+      }),
+    );
+    const $ = load(html);
+    // ASSERT
+    expect(content.titleAppearance).toEqual(expected);
+    expect($('#top').attr('data-tone')).toBe(inverse);
+    expect($('#top').attr('data-surface-tone')).toBeUndefined();
+    expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
+    expect(PageSurfaceClock({ content })?.props.surfaces).toEqual(expectedSurfaces);
+  });
   it('rejects a Slide slug used twice in one Episode, as when a copied Slide collides', async () => {
     // ARRANGE
     const record = episode({
@@ -454,6 +608,83 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('keeps non-Title-only presentation opt-in independent of legacy Title ink', async () => {
+    // ARRANGE
+    const record = episode({
+      ...RECORD,
+      tone: 'inverse',
+      sections: [[foundations, { ...whyATemplate, presentation: { tone: 'inverse' } }]],
+    });
+    const expectedAppearance = { tone: 'inverse', legacyTone: 'inverse', inkTarget: 'foundations' };
+    const expectedSurfaces = [
+      { id: 'top', tone: 'inverse' },
+      { id: 'foundations', tone: 'normal' },
+      { id: 'foundations--why-a-template', tone: 'inverse' },
+    ];
+    const policy = 'title-departure';
+    // ACT
+    const content = await recordContent(record, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    // ASSERT
+    expect(content.titleAppearance).toEqual(expectedAppearance);
+    expect(PageSurfaceClock({ content })?.props.surfaces).toEqual(expectedSurfaces);
+    expect(tocEntranceOf(content)).toBe(policy);
+  });
+  it.each(['title-departure', 'visible-from-start'] as const)(
+    'keeps explicit %s geometry independent of an unconfigured Title',
+    async (policy) => {
+      // ARRANGE
+      const expectedAppearance = { tone: 'normal' };
+      const expectedSurfaces = [
+        { id: 'top', tone: 'normal' },
+        { id: 'foundations', tone: 'normal' },
+        { id: 'foundations--why-a-template', tone: 'normal' },
+        { id: 'foundations--visual', tone: 'normal' },
+        { id: 'next-steps', tone: 'normal' },
+      ];
+      // ACT
+      const content = await recordContent(episode({ ...RECORD, tocEntrance: policy }), 'en', {
+        translatorOf: translatorOf('en'),
+        id: 'ai-token-economy',
+      });
+      const html = renderToStaticMarkup(
+        createElement(TitleSlide, {
+          title: content.title,
+          mode: content.header,
+          entrance: content.entrance,
+          appearance: content.titleAppearance,
+        }),
+      );
+      const $ = load(html);
+      // ASSERT
+      expect(content.titleAppearance).toEqual(expectedAppearance);
+      expect($('#top').attr('data-tone')).toBeUndefined();
+      expect($('#top').attr('data-surface-tone')).toBeUndefined();
+      expect(PageSurfaceClock({ content })?.props.surfaces).toEqual(expectedSurfaces);
+      expect(tocEntranceOf(content)).toBe(policy);
+    },
+  );
+  it('keeps an unconfigured Title untoned, without ink or a clock', async () => {
+    // ARRANGE
+    const expectedAppearance = { tone: 'normal' };
+    const policy = 'legacy';
+    // ACT
+    const content = await recordContent(RECORD, 'en', { translatorOf: translatorOf('en'), id: 'ai-token-economy' });
+    const html = renderToStaticMarkup(
+      createElement(TitleSlide, {
+        title: content.title,
+        mode: content.header,
+        entrance: content.entrance,
+        appearance: content.titleAppearance,
+      }),
+    );
+    const $ = load(html);
+    // ASSERT
+    expect(content.titleAppearance).toEqual(expectedAppearance);
+    expect($('#top').attr('data-tone')).toBeUndefined();
+    expect($('#top').attr('data-surface-tone')).toBeUndefined();
+    expect(PageSurfaceClock({ content })).toBeNull();
+    expect(tocEntranceOf(content)).toBe(policy);
+  });
   it('keeps enter-only and leave-only choices independent from tone and decoration and omits undeclared edges', async () => {
     // ARRANGE
     const enter = { effect: 'dither' as const };
