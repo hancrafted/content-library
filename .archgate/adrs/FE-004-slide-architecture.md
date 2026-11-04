@@ -15,7 +15,7 @@ description: 'Read-first architecture map: tiers, Episode modules, static compos
 
 ## Context
 
-This record maps shape and ownership so agents can locate the right boundary. Detailed rules belong to their concern's owner: Episode page, import direction, server/client boundary, Slide wrapper or Context drawer. On conflict, that owner wins.
+Map of shape and ownership. Detailed rules stay with their owner: Episode page, imports, server/client boundary, Slide wrapper, Context drawer. On conflict, the owner wins.
 
 **Layers and tiers.** Imports only point down; inside a layer, `components/ → hooks/ → lib/`.
 
@@ -49,7 +49,7 @@ Areas meet in page assembly via props: the Event template passes Episode cards t
 
 **Episodes:** content (`<ep>/`, `by-event/`, `slide-pool/`, `resources/`) stays apart from code (`components/`, `lib/`, `hooks/`); these names are reserved.
 
-**Modules an Episode is built from.** An arrow is an allowed import.
+**Episode modules.** Arrows are allowed imports.
 
 ```mermaid
 flowchart LR
@@ -70,7 +70,7 @@ flowchart LR
   container --> drawer["page chrome: context-drawer"]
 ```
 
-**From Episode to page,** all at build time; the export is static HTML.
+**Episode to page:** build-time composition, static HTML.
 
 ```mermaid
 flowchart LR
@@ -83,7 +83,7 @@ flowchart LR
   C --> CH["page chrome: contents, drawer; talk player"]
 ```
 
-**Inside one Slide.** The wrapper owns mechanics and presentation hosts; the Scene owns creative content. The Slide wrapper rules hold lifetime and stacking.
+**Inside a Slide:** wrapper owns mechanics and presentation hosts; Scene owns content. Wrapper rules hold lifetime and stacking.
 
 ```mermaid
 flowchart LR
@@ -95,7 +95,7 @@ flowchart LR
   W --> D["Optional rear Backdrop and front decoration"]
 ```
 
-**Server and client.** Server-rendered, interactive leaves only. URL/page state owns active Slide and navigation; the clock and generic CSS signals serve presentation, never DOM-derived Slide identity or tone.
+**Server/client:** interactive leaves only. URL/page state owns identity and navigation; clock/CSS signals own presentation, never DOM-derived identity or tone.
 
 ```mermaid
 flowchart TD
@@ -114,11 +114,11 @@ flowchart TD
   SG --> CL
 ```
 
-**Magnetic ink:** drawing and styles in `shared/components/animations/`, attachment and scheduling in `shared/hooks/`, geometry and transitions in `shared/lib/`. Server `SiteShell` composes the page context; hosts register locally. Words and navigation stay with their owners. `docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md` holds the behaviour.
+**Magnetic ink:** `shared/components/animations/` draws/styles; `shared/hooks/` attaches/schedules; `shared/lib/` calculates geometry/transitions. Server `SiteShell` composes page context; hosts register locally. Words/navigation stay with their owners. Behaviour: `docs/adr/0022-magnetic-ink-is-a-shared-action-effect.md`.
 
-Rejected: a shared visual schema (constrains Scenes), per-Episode containers/routes (navigation drift), a flat package tree (router positions and tiers carry direction).
+Rejected: visual schema (constrains Scenes), per-Episode containers (navigation drift), flat packages (lose tier direction).
 
-Handoff agents have no session memory; the map makes the correct ownership findable.
+Ownership is findable without session memory.
 
 ## Decision
 
@@ -196,15 +196,15 @@ Handoff agents have no session memory; the map makes the correct ownership finda
 
 **Positive:**
 
-1. **One entry point:** an agent learns the whole shape from one short record.
-2. **No overlap:** each rule has one owner; the map only points.
-3. **Refactor-stable:** names outlive function renames.
-4. **Slides travel:** ownership by folder keeps a Slide copyable.
+1. **Entry point:** one map.
+2. **No overlap:** one rule owner.
+3. **Stable names:** outlive function renames.
+4. **Slides travel:** copyable folders.
 
 **Negative:**
 
-1. **Two reads:** a change needs this map plus its owning record.
-2. **Restatement:** some owner rules recur here.
+1. **Two reads:** map plus owner.
+2. **Restatement:** owner rules recur here.
 3. **Diagrams by hand:** Mermaid is not generated.
 4. **A pool fix travels:** a pool Slide change reaches every Episode that composes it; copy it out first to differ.
 
