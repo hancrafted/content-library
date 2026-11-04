@@ -3,6 +3,7 @@ import { ROUTES } from '@/shared/lib/static-routes';
 import { BrandSymbol } from '@/shared/page-chrome/header/brand-symbol';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
+import styles from './header.module.css';
 
 /** Brand symbol plus site name; both lead to the landing page. */
 export async function SiteBrand({ locale }: { locale: Locale }) {
@@ -17,7 +18,7 @@ export async function SiteBrand({ locale }: { locale: Locale }) {
       <BrandSymbol className="size-8 shrink-0" />
       <span className="text-body font-semibold tracking-tight max-[379px]:sr-only">
         {t('name')}
-        <span aria-hidden className="inline-block origin-[0_72%] scale-150 text-brand-accent">
+        <span aria-hidden data-brand-dot className={`${styles.wordmarkDot} text-transparent`}>
           .
         </span>
       </span>

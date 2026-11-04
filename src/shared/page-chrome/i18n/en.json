@@ -12,21 +12,37 @@
     "events": "Events",
     "resources": "Resources",
     "dashboard": "Content pipeline",
-    "contact": "Work with me",
+    "contact": "Book meeting",
     "newTab": "opens in a new tab",
-    "menu": "Menu"
+    "menu": "Menu",
+    "close": "Close menu",
+    "learnIntro": "Knowledge you can put to work.",
+    "descriptions": {
+      "explorables": "Try AI for yourself.",
+      "events": "Learn and apply, together.",
+      "episodes": "Visual explanations, one step at a time.",
+      "guides": "Practical paths from understanding to doing.",
+      "resources": "Tools and material to keep learning.",
+      "dashboard": "Follow the content pipeline."
+    }
   },
   "social": {
     "label": "Social profiles",
     "youtube": "YouTube",
     "github": "GitHub",
-    "linkedin": "LinkedIn"
+    "linkedin": "LinkedIn",
+    "descriptions": {
+      "youtube": "Watch recorded Episodes on my YouTube channel.",
+      "linkedin": "Contact me on LinkedIn.",
+      "github": "Explore my open-source repositories on GitHub."
+    }
   },
   "theme": {
     "label": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "switch": "Theme: {current}. Switch to {next}."
   },
   "locale": {
     "label": "Language"

@@ -30,7 +30,7 @@ function LocaleOption({ option, locale, pathname }: { option: Locale; locale: Lo
       asChild
       size="sm"
       variant="ghost"
-      className={`px-2.5 font-mono text-body font-semibold ${segmentedItem(option === locale)}`}
+      className={`min-h-11 min-w-10 px-2 font-mono text-caption font-medium lg:min-h-9.5 ${segmentedItem(option === locale)}`}
     >
       <Link
         href={localizePath(stripLocale(pathname), option)}

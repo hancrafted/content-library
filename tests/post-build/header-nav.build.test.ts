@@ -1,5 +1,5 @@
-// Post-build check of the header's navigation (spec #404): Explorables, Events, Learn (Episodes, Guides, Resources), then the
-// Dashboard in English only; one copy of every link; Learn as a menu trigger with no page of its own; the active
+// Post-build check of the header's navigation (spec #404): Explorables, Events, Learn (Episodes, Guides, Resources, plus
+// Content pipeline in English only); one copy of every link; Learn as a menu trigger with no page of its own; the active
 // state on an Episode, a Resource and an Explorable page.
 
 import { describe, expect, it } from 'vitest';
@@ -51,7 +51,7 @@ describe.each(LOCALES)('the header nav in %s', (locale) => {
   const labels = LABELS[locale];
   const home = localizePath('/', locale);
 
-  it('reads Explorables, Events, then Learn, with the Dashboard last in English only', () => {
+  it('reads Explorables, Events, then Learn, with Content pipeline last in English only', () => {
     // ARRANGE
     const { $, scope } = nav(home);
     // ACT
@@ -101,6 +101,51 @@ describe.each(LOCALES)('the header nav in %s', (locale) => {
     expect($('a[href*="/learn"]').length).toBe(0);
   });
 
+  it('describes each Learn destination in the current locale', () => {
+    // ARRANGE
+    const expected =
+      locale === 'de'
+        ? [
+            'Visuelle Erklärungen, Schritt für Schritt.',
+            'Vom Verstehen ins praktische Tun.',
+            'Werkzeuge und Material zum Weiterlernen.',
+          ]
+        : [
+            'Visual explanations, one step at a time.',
+            'Practical paths from understanding to doing.',
+            'Tools and material to keep learning.',
+          ];
+    const { $, scope } = nav(home);
+    // ACT
+    const descriptions = ['nav-episodes', 'nav-guides', 'nav-resources'].map((id) => {
+      const description = scope.find(`a[data-testid="${id}"]`).attr('aria-describedby');
+      return description ? $(`[id="${description}"]`).text().trim() : '';
+    });
+    // ASSERT
+    expect(descriptions).toEqual(expected);
+  });
+
+  it('names the mobile theme choices without requiring icon recognition', () => {
+    // ARRANGE
+    const expected = locale === 'de' ? ['Hell', 'Dunkel', 'System'] : ['Light', 'Dark', 'System'];
+    const { $ } = nav(home);
+    // ACT
+    const choices = ['light', 'dark', 'system'].map((theme) => $(`[data-testid="theme-${theme}"]`).text().trim());
+    // ASSERT
+    expect(choices).toEqual(expected);
+  });
+
+  it('offers a meeting booking in the current locale', () => {
+    // ARRANGE
+    const expected =
+      locale === 'de' ? 'Termin buchen (öffnet in einem neuen Tab)' : 'Book meeting (opens in a new tab)';
+    const { $ } = nav(home);
+    // ACT
+    const label = $('[data-testid="header-contact"]').text().trim();
+    // ASSERT
+    expect(label).toBe(expected);
+  });
+
   it.each([
     { where: 'an Episode', path: '/episodes/ai-attention-span', learn: true, active: ['nav-episodes'] },
     { where: 'the Guides overview', path: ROUTES.guides, learn: true, active: ['nav-guides'] },
@@ -117,4 +162,15 @@ describe.each(LOCALES)('the header nav in %s', (locale) => {
     expect(activeLinks).toEqual(active);
     expect(learnActive).toBe(expectedLearn);
   });
+});
+
+it('keeps Content pipeline in Learn and highlights that group on its page', () => {
+  // ARRANGE
+  const { scope, activeLinks, learnActive } = nav(ROUTES.dashboard);
+  // ACT
+  const destination = scope.find('[data-testid="nav-learn"] a[data-testid="nav-dashboard"]');
+  // ASSERT
+  expect(destination.attr('href')).toBe('/dashboard/');
+  expect(activeLinks).toEqual(['nav-dashboard']);
+  expect(learnActive).toBe('true');
 });
