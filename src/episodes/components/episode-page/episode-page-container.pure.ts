@@ -91,11 +91,8 @@ export const INSET_CLASSES =
 export const TOC_RESERVE_CLASS = 'lg:data-[talk-docked=true]:[--toc-reserve:12.5625rem]';
 
 /** The page's own classes: a toned page runs up under the floating header (its Title slide fills that band), any other starts below it. */
-export function pageClassOf(
-  tone: 'normal' | 'inverse' | undefined,
-  presentation?: { readonly tone?: 'normal' | 'inverse' },
-): string {
-  return `${(presentation?.tone ?? tone) === 'inverse' ? '-mt-(--header-block)' : 'mt-6'} ${INSET_CLASSES} ${TOC_RESERVE_CLASS}`;
+export function pageClassOf(tone: 'normal' | 'inverse'): string {
+  return `${tone === 'inverse' ? '-mt-(--header-block)' : 'mt-6'} ${INSET_CLASSES} ${TOC_RESERVE_CLASS}`;
 }
 
 /**

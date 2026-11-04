@@ -3,14 +3,14 @@ import type { EpisodeContent } from './record-content';
 import { SurfaceClockAttachment } from './surface-clock.client';
 
 /** Composition opts into one geometry authority, including explicit entrance policy without an effect. */
-export function usesSurfaceClock(content: Pick<EpisodeContent, 'titlePresentation' | 'slides' | 'tocEntrance'>) {
+export function usesSurfaceClock(content: Pick<EpisodeContent, 'titleAppearance' | 'slides' | 'tocEntrance'>) {
   return Boolean(
-    content.tocEntrance || content.titlePresentation || content.slides.some((slide) => slide.presentation),
+    content.tocEntrance || content.titleAppearance.presentation || content.slides.some((slide) => slide.presentation),
   );
 }
 
 /** Entrance policy depends on composition, never the active Slide or sampled tone. */
-export function tocEntranceOf(content: Pick<EpisodeContent, 'titlePresentation' | 'slides' | 'tocEntrance'>) {
+export function tocEntranceOf(content: Pick<EpisodeContent, 'titleAppearance' | 'slides' | 'tocEntrance'>) {
   return content.tocEntrance ?? (usesSurfaceClock(content) ? 'title-departure' : 'legacy');
 }
 
@@ -24,7 +24,7 @@ function surfacesOf(content: EpisodeContent) {
   const surfaces = [
     {
       id: TITLE_ANCHOR,
-      tone: content.titlePresentation?.tone ?? content.tone ?? ('normal' as const),
+      tone: content.titleAppearance.tone,
       effect: content.transitions.get(TITLE_ANCHOR)?.declaration.effect,
     },
     ...content.slides.map((slide) => ({
