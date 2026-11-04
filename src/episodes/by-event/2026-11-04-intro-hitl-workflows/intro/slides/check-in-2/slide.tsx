@@ -34,6 +34,7 @@ const QUESTIONS = [
 export const checkIn2 = slide({
   slug: 'check-in-2',
   messages: { en, de },
+  presentation: { tone: 'inverse', enter: { effect: 'liquid' }, leave: { effect: 'dither' } },
   notes: [{ slug: 'talking-points', target: 'questions' }],
   content: ({ t, target }) => (
     <SlideFrame className="justify-center">
