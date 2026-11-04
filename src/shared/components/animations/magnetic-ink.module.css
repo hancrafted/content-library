@@ -1,0 +1,124 @@
+.attachment {
+  display: contents;
+}
+.surface {
+  --ink-colour: var(--primary);
+  --ink-paper: var(--background);
+  position: relative;
+  isolation: isolate;
+}
+.surface[data-ink-kind='card'] {
+  --ink-colour: var(--card-accent);
+}
+.field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  color: var(--ink-colour);
+  z-index: 1;
+}
+.field path {
+  fill: currentColor;
+}
+.surface[data-ink-ready='true'][data-ink-kind='button'],
+.surface[data-ink-ready='true'] [data-ink-secondary] {
+  background: var(--ink-paper);
+  color: var(--ink-colour);
+}
+.surface [data-ink-label] {
+  position: relative;
+  z-index: 2;
+}
+.surface[data-ink-kind='card'] [data-ink-primary],
+.surface [data-ink-secondary] {
+  position: relative;
+  isolation: isolate;
+  z-index: 20;
+}
+.surface[data-ink-kind='card'] [data-ink-primary] {
+  background: var(--ink-paper);
+  color: var(--ink-colour);
+  pointer-events: none;
+}
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--ink-colour);
+  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
+}
+.inverse {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  padding: inherit;
+  color: var(--ink-paper);
+  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
+}
+.inverse > span {
+  display: inherit;
+  align-items: inherit;
+}
+.surface[data-ink-kind='card'] > .field {
+  z-index: -1;
+}
+.surface[data-ink-kind='card'][data-ink-ready='true'] [data-ink-primary] {
+  opacity: 0;
+}
+.surface[data-ink-kind='card'][data-ink-ready='true']:is(:hover, :focus-within) [data-ink-primary] {
+  opacity: 1;
+}
+.surface[data-ink-stage='secondary'] [data-ink-primary] {
+  border-color: var(--ink-colour);
+}
+.surface:has([data-card-link]:focus-visible) [data-ink-primary],
+.surface [data-ink-secondary]:focus-visible {
+  background: var(--ink-colour);
+  color: var(--ink-paper);
+}
+.surface:has([data-ink-secondary]:focus-visible) [data-ink-primary] {
+  border-color: var(--ink-colour);
+}
+@media (hover: hover) and (pointer: fine) {
+  .surface[data-ink-ready='false'][data-ink-kind='card']:hover [data-ink-primary],
+  .surface[data-ink-ready='false'] [data-ink-secondary]:hover {
+    background: var(--ink-colour);
+    color: var(--ink-paper);
+  }
+  .surface[data-ink-ready='false']:has([data-ink-secondary]:hover) [data-ink-primary] {
+    background: var(--ink-paper);
+    color: var(--ink-colour);
+    border-color: var(--ink-colour);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .surface [data-ink-primary] {
+    transition:
+      opacity 180ms ease,
+      transform 160ms ease,
+      box-shadow 160ms ease;
+  }
+  .surface[data-ink-open-hover='true'] [data-ink-primary] {
+    transform: translateY(-1px) scale(1.025);
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--ink-colour) 20%, transparent);
+  }
+}
+@media print {
+  .field,
+  .fill,
+  .inverse {
+    display: none;
+  }
+  .surface[data-ink-kind='card'][data-ink-ready='true'] [data-ink-primary] {
+    opacity: 1;
+  }
+}

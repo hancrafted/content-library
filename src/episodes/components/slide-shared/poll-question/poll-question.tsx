@@ -35,7 +35,7 @@ const LOOK: Record<PollTone, { disc: string; chip: string }> = {
 export function PollQuestion({ marker, question, hint, answers, votes, tone }: PollQuestionProps) {
   const look = LOOK[tone];
   return (
-    <li className="flex flex-col gap-2.5 rounded-xl border border-border bg-card p-4 shadow-sm">
+    <li data-tone-flip className="flex flex-col gap-2.5 rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="flex items-center gap-3">
         <span
           className={`flex size-9 shrink-0 items-center justify-center rounded-full text-body font-semibold ${look.disc}`}

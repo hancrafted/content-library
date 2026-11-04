@@ -12,12 +12,21 @@ const MOVES = ['break', 'requirements', 'interview', 'evaluate', 'fresh'] as con
 export const fiveMovesToBriefAFreelancer = slide({
   slug: 'five-moves-to-brief-a-freelancer',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    style: {
+      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+      '--slide-space-after': '265px',
+    },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'answer-to-the-traits' }],
   content: ({ t }) => (
     <SlideFrame>
       <div className="flex max-w-3xl flex-col items-start gap-6 sm:flex-row">
         <VisitorBadge job={t('aiBadge.job')} day={t('aiBadge.day')} ai compact className="w-full rotate-1 sm:w-1/3" />
-        <ol className="flex flex-1 flex-col gap-2 text-body" aria-label={t('movesLabel')}>
+        <ol data-tone-flip className="flex flex-1 flex-col gap-2 text-body" aria-label={t('movesLabel')}>
           {MOVES.map((move) => (
             <li key={move} className="rounded-full border border-border bg-card px-4 py-1">
               {t.rich(`moves.${move}`, {

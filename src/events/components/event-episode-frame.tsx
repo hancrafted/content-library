@@ -8,13 +8,13 @@ import { ArrowLeft, ArrowRight, CornerLeftUp } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { EVENT_WORDS, eventCopy } from '../lib/event-words';
-import { EventBreadcrumb } from './event-breadcrumb';
+import { isPastEvent } from '../lib/events.pure';
 import { PastNotice } from './past-notice';
 
 /**
  * What an Event adds around an Episode it presents at its own URL (design-ADR 0016, Routes and visibility), ready for
- * the Episode page container: the route the page is served at, the header above the Title slide (the breadcrumb, then
- * for a past Event the notice), the Event's time under the title, and the Playlist walk after the last Slide.
+ * the Episode page container: the route the page is served at, a past Event's notice above the Title slide,
+ * the Event's time under the title, and the Playlist walk after the last Slide.
  */
 export interface EventEpisodeFrame {
   /** The logical path of the Episode under its Event; the contents and Slide links point there. */
@@ -60,7 +60,6 @@ interface FrameParts {
   readonly locale: Locale;
   readonly labels: (typeof EVENT_WORDS)[Locale];
   readonly event: { readonly slug: PresentedEpisode['event']['slug']; readonly title: string; readonly date: IsoDate };
-  readonly episode: string;
   readonly previous?: Step;
   readonly next?: Step;
 }
@@ -82,7 +81,6 @@ export function eventEpisodeFrame<Id extends string>(
     locale,
     labels,
     event: { slug: event.slug, title: eventCopy(event.slug, locale).title, date: event.date },
-    episode: titleOf(episode),
     ...(previous && { previous }),
     ...(next && { next }),
   };
@@ -94,12 +92,12 @@ export function eventEpisodeFrame<Id extends string>(
   };
 }
 
-/** Above the Title slide: the breadcrumb ending in the Episode, then, for a past Event, the notice. */
+/** Only a past Event needs a header; an empty wrapper would expose a strip above an inverse Title. */
 function EventEpisodeHeader({ parts, buildDay }: { parts: FrameParts; buildDay: IsoDate }) {
-  const { locale, labels, event, episode } = parts;
+  const { labels, event } = parts;
+  if (!isPastEvent(event.date, buildDay)) return null;
   return (
     <div data-event-episode-header className={cn('flex flex-col gap-4 pt-2 pb-6', INSET)}>
-      <EventBreadcrumb locale={locale} labels={labels.breadcrumb} event={event} episode={episode} />
       <PastNotice date={event.date} buildDay={buildDay} text={labels.pastNotice} />
     </div>
   );

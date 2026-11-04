@@ -1,3 +1,4 @@
+import { MagneticInk } from '@/shared/components/animations/magnetic-ink.client';
 import { localizePath, type Locale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
 import { ArrowRight, ArrowUpRight, type LucideIcon } from 'lucide-react';
@@ -90,36 +91,51 @@ interface ShellProps {
   media?: ReactNode;
   className?: string;
   children: ReactNode;
+  ink?: boolean;
 }
 
 /** The card's frame: the shadcn card surface as an `<article>`, its accent token set once for every part inside. */
-export function CardShell({ variant, linked, accent, icon, data, media, className = '', children }: ShellProps) {
+export function CardShell({
+  variant,
+  linked,
+  accent,
+  icon,
+  data,
+  media,
+  className = '',
+  children,
+  ink = false,
+}: ShellProps) {
   const tone = linked ? `${LINKED_FRAME} ${ACCENT.edge}` : UPCOMING_FRAME;
   const style = { '--card-accent': `var(${accent})` } as CSSProperties;
-  return (
-    <Card asChild className={cn(FRAME, VARIANTS[variant].frame, tone, className)}>
+  const activeInk = ink && linked;
+  const frame = (
+    <Card asChild className={cn(FRAME, VARIANTS[variant].frame, tone, className, activeInk && 'overflow-visible')}>
       <article {...data} data-card-variant={variant} style={style}>
-        {media ? (
-          <div
-            aria-hidden
-            data-card-media
-            className={`h-24 shrink-0 overflow-hidden bg-primary text-primary-foreground dark:border-b dark:border-border/60 dark:bg-background dark:text-foreground ${VARIANTS[variant].media}`}
-          >
-            {media}
-          </div>
-        ) : (
-          linked && <CardArt icon={icon} classes={VARIANTS[variant].art} />
-        )}
+        <CardPicture media={media} variant={variant} linked={linked} icon={icon} />
         {children}
       </article>
     </Card>
   );
+  return activeInk ? <MagneticInk kind="card">{frame}</MagneticInk> : frame;
 }
 
+function CardPicture({ media, variant, linked, icon }: Pick<ShellProps, 'media' | 'variant' | 'linked' | 'icon'>) {
+  if (!media) return linked && <CardArt icon={icon} classes={VARIANTS[variant].art} />;
+  return (
+    <div
+      aria-hidden
+      data-card-media
+      className={`h-24 shrink-0 overflow-hidden bg-primary text-primary-foreground dark:border-b dark:border-border/60 dark:bg-background dark:text-foreground ${VARIANTS[variant].media}`}
+    >
+      {media}
+    </div>
+  );
+}
 /** The corner wash and the large faded icon behind the text; decorative, so they take no clicks and sit under the content. */
 function CardArt({ icon: Icon, classes }: { icon: LucideIcon; classes: string }) {
   return (
-    <>
+    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]">
       <span
         aria-hidden
         className={`pointer-events-none absolute inset-0 -z-10 bg-linear-to-br ${ACCENT.wash} via-transparent to-transparent`}
@@ -128,7 +144,7 @@ function CardArt({ icon: Icon, classes }: { icon: LucideIcon; classes: string })
         aria-hidden
         className={`pointer-events-none absolute -z-10 opacity-[0.08] transition-transform duration-500 motion-safe:group-hover:-rotate-3 motion-safe:group-hover:scale-105 motion-reduce:transition-none ${ACCENT.ink} ${classes}`}
       />
-    </>
+    </div>
   );
 }
 
@@ -177,10 +193,11 @@ interface CueProps {
   variant: CardVariant;
   open: string;
   comingSoon: string;
+  ink?: boolean;
 }
 
 /** What says the card opens, for the eye only: the title's stretched link is the real target. */
-export function CardCue({ cue, variant, open, comingSoon }: CueProps) {
+export function CardCue({ cue, variant, open, comingSoon, ink = false }: CueProps) {
   const place = VARIANTS[variant].cue;
   if (cue === 'coming-soon') {
     return (
@@ -189,6 +206,12 @@ export function CardCue({ cue, variant, open, comingSoon }: CueProps) {
       </span>
     );
   }
+  if (ink) return <InkCue open={open} />;
+  return <PlainCue cue={cue} variant={variant} open={open} />;
+}
+
+function PlainCue({ cue, variant, open }: Pick<CueProps, 'cue' | 'variant' | 'open'>) {
+  const place = VARIANTS[variant].cue;
   if (cue === 'button') {
     return (
       <span aria-hidden data-open-cue={cue} className={`${BUTTON} ${place}`}>
@@ -198,6 +221,22 @@ export function CardCue({ cue, variant, open, comingSoon }: CueProps) {
     );
   }
   return <CardArrow variant={variant} />;
+}
+
+function InkCue({ open }: { open: string }) {
+  return (
+    <span
+      aria-hidden
+      data-open-cue="button"
+      data-ink-primary
+      className="ml-auto inline-flex min-h-11 items-center justify-center rounded-full border border-transparent px-4 py-2 text-caption font-medium"
+    >
+      <span data-ink-label className="inline-flex items-center gap-2">
+        {open}
+        <ArrowRight className="size-4" />
+      </span>
+    </span>
+  );
 }
 
 /** The quiet arrow of a linked card: hover-only on a pointer, always shown on touch. */

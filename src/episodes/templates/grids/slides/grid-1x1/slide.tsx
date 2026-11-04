@@ -37,6 +37,7 @@ function Poster({ title, caption }: { title: string; caption: string }) {
 export const grid1x1 = slide({
   slug: 'grid-1x1',
   messages: { en, de },
+  presentation: { leave: { effect: 'paper', style: { '--slide-transition-start-offset': '-20px' } } },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
   content: ({ t, target }) => (

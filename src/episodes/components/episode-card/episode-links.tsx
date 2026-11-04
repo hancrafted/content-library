@@ -10,7 +10,7 @@ export function EpisodeLinks({ card, labels }: { card: EpisodeCard; labels: Vide
   if (card.youtubeUrl === undefined) return null;
   return (
     <div data-episode-links className="flex items-center gap-2">
-      <YoutubeLink url={card.youtubeUrl} labels={labels} data={{ 'data-episode-video': '' }} />
+      <YoutubeLink url={card.youtubeUrl} labels={labels} data={{ 'data-episode-video': '' }} labelled />
     </div>
   );
 }

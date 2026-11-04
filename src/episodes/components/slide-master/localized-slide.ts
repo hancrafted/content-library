@@ -9,6 +9,7 @@ import type { EpisodeComposition, HeaderMode, Slide, SlideMessages } from './sli
 import type { NoteSpec, RuntimeTranslator, SegmentSpec, SourceSpec } from './slide-base';
 import { headerWithAction, requireTitle, titleTakenBy, type SlideHeaderText } from './slide-header-text';
 import { slideKit, type ReferenceLabels } from './slide-kit';
+import type { SlidePresentation } from './slide-presentation';
 
 /*
  * The Localized Slide: one Slide in one locale, as the page renders it
@@ -23,6 +24,7 @@ import { slideKit, type ReferenceLabels } from './slide-kit';
 
 /** A Slide's text in one locale, before an Episode places it. */
 interface SlideText {
+  readonly presentation?: SlidePresentation;
   readonly slug: string;
   /** Plain text for the table of contents; a purely visual Slide has none and is not listed (FE-002). */
   readonly title?: string;
@@ -149,6 +151,7 @@ function contextOf(
 
 export function slideTextOf(slide: Slide, t: RuntimeTranslator, locale: Locale): SlideText {
   return {
+    presentation: slide.presentation,
     slug: slide.slug,
     ...(t.has('title') && { title: t('title') }),
     ...contextOf(slide, t, locale),

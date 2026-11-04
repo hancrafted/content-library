@@ -83,14 +83,30 @@ export function carriers(scope: Scope, token: Token): HTMLElement[] {
   return [...slide.querySelectorAll<HTMLElement>(token.target), ...(slide.matches(token.target) ? [slide] : [])];
 }
 
-/** Applies the active theme's edits as inline custom properties and clears the rest, so a theme switch shows the right values. */
+const originalProperties = new WeakMap<CSSStyleDeclaration, Map<string, { value: string; priority: string }>>();
+
+function applyProperty(style: CSSStyleDeclaration, name: string, value: string | undefined) {
+  const originals = originalProperties.get(style) ?? new Map<string, { value: string; priority: string }>();
+  if (value !== undefined) {
+    if (!originals.has(name))
+      originals.set(name, { value: style.getPropertyValue(name), priority: style.getPropertyPriority(name) });
+    originalProperties.set(style, originals);
+    style.setProperty(name, value);
+    return;
+  }
+  const original = originals.get(name);
+  if (!original) return;
+  if (original.value === '') style.removeProperty(name);
+  else style.setProperty(name, original.value, original.priority);
+  originals.delete(name);
+  if (originals.size === 0) originalProperties.delete(style);
+}
+
+/** Applies active-theme overrides; clearing an edit restores authored inline values rather than erasing them. */
 export function applyEdits({ scope, tokens }: TokenSet, edits: Edits, theme: Theme) {
   for (const token of tokens) {
     const value = edits[editKey(scope, theme, token)];
-    for (const element of carriers(scope, token)) {
-      if (value === undefined) element.style.removeProperty(token.name);
-      else element.style.setProperty(token.name, value);
-    }
+    for (const element of carriers(scope, token)) applyProperty(element.style, token.name, value);
   }
 }
 

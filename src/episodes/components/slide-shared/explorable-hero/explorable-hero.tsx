@@ -2,7 +2,7 @@ import { localizePath, stripLocale, type Locale } from '@/shared/lib/locale.pure
 import Link from 'next/link';
 import type { ComponentType, ReactNode } from 'react';
 import type { Story } from './drift.pure';
-import { HeroCanvas, HeroMotion, HeroMotionButton, type MotionLabels } from './hero-motion.client';
+import { HeroCanvas, HeroMotionButton, type MotionLabels } from './hero-motion.client';
 import { ShareLink, type ShareLinkLabels } from './share-link.client';
 
 /** A call to action: its words and where it goes. */
@@ -11,17 +11,14 @@ export interface HeroAction {
   readonly href: string;
 }
 
-/** The Slide master's two layers, which a `slide-shared` part may not import: the Slide hands them in. */
+/** The Slide master's inset frame, supplied by the composing Slide. */
 export interface HeroLayers {
-  readonly Backdrop: ComponentType<{ mobile?: boolean; children?: ReactNode }>;
   readonly Frame: ComponentType<{ className?: string; children: ReactNode }>;
 }
 
 export interface ExplorableHeroProps {
-  /** `SlideBackdrop` and `SlideFrame`, from the Slide master. */
+  /** `SlideFrame`, from the Slide master. */
   readonly layers: HeroLayers;
-  /** Which Explorable's story the background's subject beat tells. */
-  readonly story: Story;
   /** The page's locale: the action links are localized again here, so every `href` goes through `localizePath` (FE-003). */
   readonly locale: Locale;
   /** "Try it": the page's fully enabled Explorable. */
@@ -66,33 +63,39 @@ function Actions({ tryIt, why, locale }: Pick<ExplorableHeroProps, 'tryIt' | 'wh
 }
 
 /**
- * The Title slide hero Scene of an Explorable page (a record's `title`): an inverted, full-bleed Backdrop of faint
- * bubbles whose one accent beat tells the Explorable's story, then the actions, the team-share block and the tool
- * preview under the container's headline and lede. It owns no words: every string arrives as a prop, from the Slide
- * that renders it. The pause button sits outside the decorative Backdrop and shares its state with the canvas.
+ * The Title hero's actions, team-share block and tool preview under the container's headline and lede.
+ * Every string belongs to the composing Slide. Wrapper presentation supplies the surface, decoration
+ * and motion context. The pause button shares the retained canvas's state.
  */
-export function ExplorableHero({ layers, story, locale, tryIt, why, share, motion, preview }: ExplorableHeroProps) {
+export function ExplorableHero({ layers, locale, tryIt, why, share, motion, preview }: ExplorableHeroProps) {
   return (
-    <HeroMotion labels={motion}>
-      <layers.Backdrop mobile>
-        <div className="absolute inset-0 bg-(--tone-paper)" />
-        <div className="hero-glow absolute inset-0 text-brand-accent opacity-60" />
-        <div className="hero-glow hero-glow--accent absolute inset-0 text-brand-accent opacity-60" />
-        <HeroCanvas story={story} />
-      </layers.Backdrop>
-      <layers.Frame className="gap-7 pb-0 md:pb-0">
-        <HeroMotionButton />
-        <Actions tryIt={tryIt} why={why} locale={locale} />
-        <ShareLink title={share.title} text={share.text} labels={share.labels} />
-        <div
-          data-hero-preview
-          className="max-h-28 w-full md:max-h-40 max-w-3xl overflow-hidden mask-[linear-gradient(#000_55%,transparent)]"
-        >
-          {preview}
-        </div>
-        {/* Height for the Title slide's ink transition to bleed through, so the preview no longer sits on the Slide's edge. */}
-        <div aria-hidden="true" className="h-[45svh]" />
-      </layers.Frame>
-    </HeroMotion>
+    <layers.Frame className="gap-7 pb-0 md:pb-0">
+      <HeroMotionButton labels={motion} />
+      <Actions tryIt={tryIt} why={why} locale={locale} />
+      <ShareLink title={share.title} text={share.text} labels={share.labels} />
+      <HeroPreview>{preview}</HeroPreview>
+    </layers.Frame>
+  );
+}
+
+function HeroPreview({ children }: { children: ReactNode }) {
+  return (
+    <div
+      data-hero-preview
+      className="max-h-28 w-full md:max-h-40 max-w-3xl overflow-hidden mask-[linear-gradient(#000_55%,transparent)]"
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Decorative story art; its motion context and Slide identity belong to the wrapper. */
+export function HeroDecoration({ story }: { story: Story }) {
+  return (
+    <>
+      <div className="hero-glow absolute inset-0 text-brand-accent opacity-60" />
+      <div className="hero-glow hero-glow--accent absolute inset-0 text-brand-accent opacity-60" />
+      <HeroCanvas story={story} />
+    </>
   );
 }

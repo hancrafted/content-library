@@ -9,6 +9,9 @@ import en from './i18n/en.json';
 export const thoughtExperiment = slide({
   slug: 'thought-experiment',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-surface': 'var(--section-band)', '--slide-space-after': '265px' },
+  },
   segments: [{ slug: 'a-long-chat-is-a-long-call' }],
   content: ({ t, locale }) => (
     <SlideFrame>

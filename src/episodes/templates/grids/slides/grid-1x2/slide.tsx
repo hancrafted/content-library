@@ -3,6 +3,8 @@ import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { useId } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
+import { SurfaceReferenceDrift } from './surface-reference.client';
+import surface from './surface-reference.module.css';
 
 interface HalfProps {
   index: string;
@@ -41,6 +43,14 @@ function Half({ index, title, caption, side }: HalfProps) {
 export const grid1x2 = slide({
   slug: 'grid-1x2',
   messages: { en, de },
+  presentation: {
+    enter: { effect: 'wave', className: surface.arrival },
+    leave: { effect: 'goo', style: { '--slide-transition-end-offset': '-24px' } },
+    tone: 'inverse',
+    rear: <SurfaceReferenceDrift className={surface.rear} />,
+    rearMobile: true,
+    front: <div className={surface.front} />,
+  },
   notes: [{ slug: 'layout', target: 'grid' }],
   segments: [{ slug: 'walkthrough' }],
   content: ({ t, target }) => (

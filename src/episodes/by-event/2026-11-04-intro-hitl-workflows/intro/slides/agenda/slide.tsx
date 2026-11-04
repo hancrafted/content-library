@@ -41,6 +41,7 @@ const BESIDE_DISC = 'flex min-h-12 items-center';
 export const agenda = slide({
   slug: 'agenda',
   messages: { en, de },
+  presentation: { style: { '--slide-space-after': '265px' } },
   notes: [{ slug: 'talking-points', target: 'items' }],
   content: ({ t, target }) => (
     <SlideFrame className="justify-center">
