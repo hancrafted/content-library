@@ -8,7 +8,7 @@ const CARD: ExplorableCard = {
   slug: 'context-window',
   route: '/explorables/context-window',
   typeLabel: 'Explorable',
-  story: 'context-window',
+  artwork: 'intention-capacity',
   title: 'Read the context',
   description: 'See what the model reads.',
   leadTag: 'context-engineering',
@@ -23,16 +23,16 @@ function render(locale: 'en' | 'de' = 'en', open = 'Open') {
 }
 
 describe('success cases', () => {
-  it('places the existing story artwork above the B1 reading surface and explicit cue', () => {
+  it('places the selected intention and capacity artwork above the reading surface and explicit cue', () => {
     // ARRANGE
     const position = 'top';
-    const story = 'context-window';
+    const artwork = 'intention-capacity';
     const open = 'Open';
     // ACT
     const $ = render();
     // ASSERT
     expect($('[data-explorable-card]').attr('data-card-visual-position')).toBe(position);
-    expect($('[data-card-visual] [data-drift-still]').attr('data-drift-still')).toBe(story);
+    expect($('[data-card-visual] [data-card-artwork]').attr('data-card-artwork')).toBe(artwork);
     expect($('[data-card-body] h2').text()).toBe(CARD.title);
     expect($('[data-card-body]').text()).toContain(CARD.description);
     expect($('[data-card-body]').text()).toContain(CARD.typeLabel);

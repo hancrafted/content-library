@@ -1,8 +1,7 @@
 import type { TagId } from '@/content-store/schemas/fields';
 import { TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
-import { DriftStill } from '@/episodes/components/slide-shared/explorable-hero/drift-still';
-import type { Story } from '@/episodes/components/slide-shared/explorable-hero/drift.pure';
 import { BadgeList } from '@/shared/components/ui/badge-list';
+import { CardArtwork, type CardArtworkName } from '@/shared/components/ui/card-artwork';
 import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -14,8 +13,8 @@ export interface ExplorableCard {
   readonly route: string;
   /** The kind's name in the reader's locale ("Explorable"). */
   readonly typeLabel: string;
-  /** Which Message drift the card's top artwork stills. */
-  readonly story: Story;
+  /** The selected concept diagram, independent of the Explorable's hero story. */
+  readonly artwork: CardArtworkName;
   readonly title: string;
   readonly description: string;
   /** The page's first Tag, which gives its card the icon and accent. */
@@ -39,7 +38,7 @@ export function ExplorableCardView(props: CardViewProps) {
       linked
       accent={tagToken(card.leadTag)}
       icon={NAMED_ICONS[TAG_ICONS[card.leadTag]]}
-      visual={<DriftStill story={card.story} />}
+      visual={<CardArtwork name={card.artwork} />}
       visualPosition="top"
       ink
       className={className}

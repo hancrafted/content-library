@@ -65,10 +65,10 @@ describe('success cases', () => {
 
 describe('failure cases', () => {
   it.each(['guide', 'episode-template', 'master-slide'] as ResourceKind[])(
-    'draws %s without a panel, empty rail or corner art even if a story is supplied',
+    'draws %s without a panel, empty rail or corner art even if artwork is supplied',
     (kind) => {
       // ARRANGE
-      const card = { ...CARD, kind, story: 'context-window' as const };
+      const card = { ...CARD, kind, artwork: 'intention-capacity' as const };
       const position = 'none';
       // ACT
       const $ = render(card);
@@ -81,23 +81,23 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('keeps Explorable story identity at the top and localized native whole-card navigation', () => {
+  it('keeps the selected Explorable artwork at the top and localized native whole-card navigation', () => {
     // ARRANGE
     const card: ResourceCard = {
       ...CARD,
       kind: 'explorable-page',
       route: '/explorables/context-window',
-      story: 'context-window',
+      artwork: 'intention-capacity',
     };
     const position = 'top';
-    const story = 'context-window';
+    const artwork = 'intention-capacity';
     const href = '/de/explorables/context-window';
     const open = 'Öffnen';
     // ACT
     const $ = render(card, 'de', open);
     // ASSERT
     expect($('[data-resource-card]').attr('data-card-visual-position')).toBe(position);
-    expect($('[data-card-visual] [data-drift-still]').attr('data-drift-still')).toBe(story);
+    expect($('[data-card-visual] [data-card-artwork]').attr('data-card-artwork')).toBe(artwork);
     expect($('[data-card-link]').attr('href')).toBe(href);
     expect($('a').length).toBe(1);
     expect($('[data-ink-primary]').text()).toBe(open);

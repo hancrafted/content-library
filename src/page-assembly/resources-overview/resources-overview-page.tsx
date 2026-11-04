@@ -1,6 +1,6 @@
 import type { ExplorablePageSlug } from '@/content-store/catalogue/record-routes';
 import { TAG_IDS } from '@/content-store/schemas/fields';
-import { STORY_OF } from '@/page-assembly/lib/explorable-story';
+import { EXPLORABLE_CARD_ARTWORK } from '@/page-assembly/lib/explorable-card-artwork';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -22,7 +22,7 @@ function resourceCards(locale: Locale, t: OverviewT): ResourceCard[] {
       route,
       kind,
       kindLabel: t(`kinds.${kind}`),
-      story: kind === 'explorable-page' ? STORY_OF[slug as ExplorablePageSlug] : undefined,
+      artwork: kind === 'explorable-page' ? EXPLORABLE_CARD_ARTWORK[slug as ExplorablePageSlug] : undefined,
       title,
       description,
       leadTag: tags[0],

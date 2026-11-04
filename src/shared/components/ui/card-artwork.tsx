@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { WIDE_CARD_ARTWORK } from './card-artwork-wide';
 
 const ARTWORK = {
   'handoff-chain': (
@@ -64,21 +65,26 @@ const ARTWORK = {
       <circle cx="170" cy="106" r="8" fill="currentColor" stroke="none" />
     </>
   ),
+  ...WIDE_CARD_ARTWORK,
 } satisfies Record<string, ReactNode>;
 
+export type CardArtworkName = keyof typeof ARTWORK;
+
 /** Named, domain-free signal diagrams. The caller supplies the Tag's accent through currentColor. */
-export function CardArtwork({ name }: { name: keyof typeof ARTWORK }) {
+export function CardArtwork({ name }: { name: CardArtworkName }) {
+  const wide = name in WIDE_CARD_ARTWORK;
   return (
     <svg
       aria-hidden
       focusable="false"
-      viewBox="0 0 340 212"
+      viewBox={wide ? '0 0 560 260' : '0 0 340 212'}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       data-card-artwork={name}
+      data-card-artwork-format={wide ? 'wide' : undefined}
     >
       {ARTWORK[name]}
     </svg>
