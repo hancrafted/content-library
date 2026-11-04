@@ -103,9 +103,8 @@ An entry reads its text from:
 
 An Event is a record in the content store that holds no string ([Events](events.md)). Its text sits with what renders it: `events.*` in the Events area's `src/events/lib/i18n/`, `eventsOverview.*` in the `/events` template's `src/page-assembly/events-overview/i18n/`, `eventPage.*` in the Event page template's `src/page-assembly/event/i18n/`:
 
-- `events.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Event page's `h1`, its breadcrumb's last step and its `<title>`; the description is the page's intro paragraph and its meta description. Each is read one way, through the Events area's word map (`eventCopy`, `src/events/lib/event-words.ts`), keyed by the Event registry's slugs, so a missing pair fails `tsc`.
+- `events.items.<event-slug>.title` and `.description`, one pair per Event slug. The title is the card's heading, the Event page's `h1` and its `<title>`; the description is the page's intro paragraph and its meta description. Each is read one way, through the Events area's word map (`eventCopy`, `src/events/lib/event-words.ts`), keyed by the Event registry's slugs, so a missing pair fails `tsc`.
 - `eventsOverview.title` and `eventsOverview.intro`: the `/events` heading and its one-line intro.
-- `events.breadcrumb.label` and `events.breadcrumb.events`: the breadcrumb's accessible name and its first step.
 - `events.episodeCount.one` and `.other`: the Episode count on a card and on the Event page; `other` keeps a plain `{count}` placeholder.
 - `eventPage.kinds.<kind>` and `eventPage.audiences.<audience>`: the kind and the Audience on the facts line, one per id in `EVENT_KINDS` and `AUDIENCES`.
 - `eventPage.playlist`: the heading of the numbered Episode list on an Event page.

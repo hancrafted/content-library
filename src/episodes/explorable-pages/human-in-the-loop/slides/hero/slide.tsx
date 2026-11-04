@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
-import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { ExplorableHero } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
+import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { ExplorableHero, HeroDecoration } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
+import { HeroMotion } from '@/episodes/components/slide-shared/explorable-hero/hero-motion.client';
 import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/tool-preview';
 import { Check } from 'lucide-react';
 import de from './i18n/de.json';
@@ -20,11 +21,18 @@ const STAGES = ['interview', 'plan', 'epics', 'tickets', 'execute', 'report'] as
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    style: { '--slide-space-after': '320px' },
+    leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
+    rear: <HeroDecoration story="human-in-the-loop" />,
+    rearMobile: true,
+    Provider: HeroMotion,
+  },
   content: ({ t, locale, slideHref }) => {
     return (
       <ExplorableHero
-        layers={{ Backdrop: SlideBackdrop, Frame: SlideFrame }}
-        story="human-in-the-loop"
+        layers={{ Frame: SlideFrame }}
         locale={locale}
         tryIt={{ label: t('tryIt'), href: slideHref('human-in-the-loop') }}
         why={{ label: t('why'), href: slideHref('why-how-what') }}

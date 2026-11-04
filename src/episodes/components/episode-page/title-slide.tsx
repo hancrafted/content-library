@@ -1,7 +1,9 @@
-import type { HeaderMode, PageTone, SlideEntrance } from '@/episodes/components/slide-master/slide';
+import type { HeaderMode, SlideEntrance } from '@/episodes/components/slide-master/slide';
 import { HeroTitle, SlideBackdrop, SlideCaption, SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { TITLE_ANCHOR } from '@/shared/lib/title-anchor.pure';
 import type { ReactNode } from 'react';
+import type { ResolvedSlideTransition } from '../slide-master/slide-presentation';
+import type { TitleAppearance } from './record-content';
 import { SlideWrapper } from './slide-wrapper';
 import { TalkLauncher, type RecordingLanguage, type TalkPlayerLabels } from './talk-player.client';
 import { TitleInk } from './title-ink.client';
@@ -25,6 +27,9 @@ function HeroGlow() {
 }
 
 export interface TitleSlideProps {
+  transition?: ResolvedSlideTransition;
+  appearance: TitleAppearance;
+  geometricTone?: boolean;
   title: string;
   caption?: string;
   /** Who renders the header: on `shared` the Title slide types its `h1` and caption in with `entrance`. */
@@ -38,10 +43,6 @@ export interface TitleSlideProps {
   recording?: RecordingLanguage;
   /** On an Event-scoped Episode page, the Event's time as the venue writes it, "17:00–19:00 CET"; it follows the title. */
   time?: string;
-  /** The record's declared tone (FE-004 §5.4): the Slide carries it and marks the page while it is active. */
-  tone?: PageTone;
-  /** With a tone, the first page Slide's id: the ink transition at the Title slide's foot bleeds into it. */
-  inkTarget?: string;
   /** On an Episode with authored headers, the short names the Title slide's notes target; only these carry a `data-target`. The Slide header marks both. */
   targets?: readonly TitleTarget[];
 }
@@ -56,38 +57,34 @@ function EventTime({ time }: { time: string | undefined }) {
   );
 }
 
-/** The Title slide as an Episode with authored Scene headers renders it: the `h1` and caption over the hero Scene or the glow. */
-/** The page tone mark, when the record declares a tone. */
-function ToneMark({ tone }: { tone: TitleSlideProps['tone'] }) {
-  return tone ? <TitleTone tone={tone} /> : null;
+/** Title-only navigation policy, independent of configured surface sampling. */
+function ToneMark({ appearance, geometricTone }: Pick<TitleSlideProps, 'appearance' | 'geometricTone'>) {
+  return appearance.tone === 'inverse' ? <TitleTone tone={appearance.tone} geometricTone={geometricTone} /> : null;
 }
 
 /** The ink transition into the first page Slide, which a toned Title slide ends in. */
-function ToneInk({ tone, target }: { tone: TitleSlideProps['tone']; target: string | undefined }) {
-  return tone && target ? <TitleInk targetId={target} /> : null;
+function ToneInk({ target }: { target: string | undefined }) {
+  return target ? <TitleInk targetId={target} /> : null;
 }
 
-function AuthoredTitleSlide({
-  title,
-  caption,
-  hero,
-  launcher,
-  targets,
-  time,
-  tone,
-  inkTarget,
-}: TitleSlideProps & { launcher: ReactNode }) {
-  const targetOf = (name: TitleTarget) => (targets?.includes(name) ? { 'data-target': name } : {});
+function AuthoredTitleSlide(props: TitleSlideProps & { launcher: ReactNode }) {
+  const targetOf = (name: TitleTarget) => (props.targets?.includes(name) ? { 'data-target': name } : {});
   return (
-    <SlideWrapper id={TITLE_ANCHOR} data-slot="title-slide" data-tone={tone}>
-      <ToneMark tone={tone} />
-      {hero ?? <HeroGlow />}
-      <ToneInk tone={tone} target={inkTarget} />
+    <SlideWrapper
+      id={TITLE_ANCHOR}
+      data-slot="title-slide"
+      data-tone={props.appearance.legacyTone}
+      presentation={props.appearance.presentation}
+      transition={props.transition}
+    >
+      <ToneMark {...props} />
+      {props.hero ?? <HeroGlow />}
+      <ToneInk target={props.appearance.inkTarget} />
       <SlideFrame className="justify-center">
-        <HeroTitle {...targetOf('title')}>{title}</HeroTitle>
-        {caption && <SlideCaption {...targetOf('caption')}>{caption}</SlideCaption>}
-        <EventTime time={time} />
-        {launcher}
+        <HeroTitle {...targetOf('title')}>{props.title}</HeroTitle>
+        {props.caption && <SlideCaption {...targetOf('caption')}>{props.caption}</SlideCaption>}
+        <EventTime time={props.time} />
+        {props.launcher}
       </SlideFrame>
     </SlideWrapper>
   );
@@ -134,14 +131,16 @@ export function TitleSlide(props: TitleSlideProps) {
     <SlideWrapper
       id={TITLE_ANCHOR}
       data-slot="title-slide"
-      data-tone={props.tone}
+      data-tone={props.appearance.legacyTone}
       mode="shared"
       header={header}
       scene="hug"
+      presentation={props.appearance.presentation}
+      transition={props.transition}
     >
-      <ToneMark tone={props.tone} />
+      <ToneMark {...props} />
       {hero ?? <HeroGlow />}
-      <ToneInk tone={props.tone} target={props.inkTarget} />
+      <ToneInk target={props.appearance.inkTarget} />
     </SlideWrapper>
   );
 }

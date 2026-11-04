@@ -9,6 +9,15 @@ import en from './i18n/en.json';
 export const managingTheAttentionSpan = slide({
   slug: 'managing-the-attention-span',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    style: {
+      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+      '--slide-space-after': '265px',
+    },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'you-manage-by-habit' }],
   content: ({ t, locale }) => (
     <SlideFrame>

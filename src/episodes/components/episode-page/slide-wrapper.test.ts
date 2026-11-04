@@ -1,9 +1,96 @@
-import { createElement } from 'react';
+import { SlideIdContext, useSlideZone } from '@/episodes/hooks/use-slide-zone';
+import { createElement, useContext } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { slide } from '../slide-master/slide';
 import { SlideWrapper } from './slide-wrapper';
 
+function IdentityProbe() {
+  const id = useContext(SlideIdContext);
+  const zone = useSlideZone();
+  return createElement('span', { 'data-retained-id': id, 'data-observed-zone': zone });
+}
+
 describe('success cases', () => {
+  it('retains the incoming-declared edge above primary content and below front decoration', () => {
+    // ARRANGE
+    const edge = {
+      id: 'a→b',
+      outgoing: 'a',
+      incoming: 'b',
+      targetSurface: 'var(--tone-paper)',
+      declaration: {
+        effect: 'wave' as const,
+        className: 'portable',
+        style: { '--slide-transition-start-offset': '-40px' },
+      },
+    };
+    const expectedHost = 'data-transition-edge="a→b"';
+    const expectedBoundary = 'data-surface-edge="true"';
+    const expectedScope = 'portable';
+    const expectedTarget = 'var(--tone-paper)';
+    const content = 'free-scene';
+    const front = 'front-decoration';
+    const wrapper = createElement(
+      SlideWrapper,
+      { id: 'a', transition: edge, presentation: { front: createElement('span', null, front) } },
+      content,
+    );
+    // ACT
+    const html = renderToStaticMarkup(wrapper);
+    // ASSERT
+    expect(html).toContain(expectedHost);
+    expect(html).toContain(expectedBoundary);
+    expect(html).toContain(expectedScope);
+    expect(html).toContain(expectedTarget);
+    expect(html.indexOf(content)).toBeLessThan(html.indexOf(expectedHost));
+    expect(html.indexOf(expectedHost)).toBeLessThan(html.indexOf(front));
+  });
+  it('gives both retained decorations and the Scene their own Slide identity', () => {
+    // ARRANGE
+    const id = 'a--b';
+    const expected = 'data-retained-id="a--b"';
+    const serverZone = 'data-observed-zone="near"';
+    const count = 3;
+    const presentation = { rear: createElement(IdentityProbe), front: createElement(IdentityProbe) };
+    const wrapper = createElement(SlideWrapper, { id, presentation }, createElement(IdentityProbe));
+    // ACT
+    const html = renderToStaticMarkup(createElement(SlideIdContext, { value: 'another-slide' }, wrapper));
+    // ASSERT
+    expect(html.split(expected)).toHaveLength(count + 1);
+    expect(html.split(serverZone)).toHaveLength(count + 1);
+  });
+  it('renders independent surface and decorative declarations around free content', () => {
+    // ARRANGE
+    const declared = slide({
+      slug: 'surface',
+      messages: { en: {}, de: {} },
+      presentation: {
+        tone: 'inverse',
+        rear: createElement('span', null, 'rear'),
+        front: createElement('span', null, 'front'),
+      },
+      content: () => createElement('a', { href: '#next' }, 'free content'),
+    });
+    const surface = 'data-surface-tone="inverse"';
+    const rear = 'data-slot="slide-backdrop"';
+    const front = 'data-slot="slide-front"';
+    const text = 'free content';
+    // ACT
+    const html = renderToStaticMarkup(
+      createElement(
+        SlideWrapper,
+        { id: 'surface', presentation: declared.presentation },
+        createElement('a', { href: '#next' }, 'free content'),
+      ),
+    );
+    // ASSERT
+    expect(html).toContain(surface);
+    expect(html).toContain(rear);
+    expect(html).toContain(front);
+    expect(html.indexOf(rear)).toBeLessThan(html.indexOf(text));
+    expect(html.indexOf(front)).toBeGreaterThan(html.indexOf(text));
+  });
   it('satisfies the min-height contract of at least viewport height', () => {
     // ARRANGE
     const wrapper = createElement(SlideWrapper, { id: 'test-slide' }, 'content');

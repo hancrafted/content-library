@@ -5,12 +5,20 @@ import en from './i18n/en.json';
 
 /**
  * The Title slide's hero Scene (the record's `title`): the Event's location and date, nothing else, so the title is
- * the one thing to read. The frame grows into the free space below, which lifts the title towards the Event's
- * breadcrumb instead of centring it in the viewport. The empty Backdrop is the Title slide's one Backdrop, holding no glow.
+ * the one thing to read. The frame grows into the free space below, keeping the title high instead of centring it
+ * in the viewport. The empty Backdrop is the Title slide's one Backdrop, holding no glow.
  */
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    style: {
+      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+      '--slide-space-after': '160px',
+    },
+    leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
+  },
   content: ({ t }) => (
     <>
       <SlideBackdrop mobile />

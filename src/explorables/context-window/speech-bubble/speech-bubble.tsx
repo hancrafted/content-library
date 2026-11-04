@@ -25,7 +25,7 @@ interface Props {
 
 export function SpeechBubble({ punchline, poll, children }: Props) {
   return (
-    <div className={styles.card} data-bubble="">
+    <div className={styles.card} data-bubble="" data-tone-flip>
       <div className="flex items-start gap-3">
         <span
           className="mt-1 flex size-9 shrink-0 items-center justify-center rounded-full bg-ai/15 ring-1 ring-ai/40"

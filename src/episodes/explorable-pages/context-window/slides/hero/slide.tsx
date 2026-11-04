@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
-import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/slide-master';
-import { ExplorableHero } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
+import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { ExplorableHero, HeroDecoration } from '@/episodes/components/slide-shared/explorable-hero/explorable-hero';
+import { HeroMotion } from '@/episodes/components/slide-shared/explorable-hero/hero-motion.client';
 import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/tool-preview';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -27,10 +28,17 @@ const ATTENTION = [
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    style: { '--slide-space-after': '320px' },
+    leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
+    rear: <HeroDecoration story="context-window" />,
+    rearMobile: true,
+    Provider: HeroMotion,
+  },
   content: ({ t, locale, slideHref }) => (
     <ExplorableHero
-      layers={{ Backdrop: SlideBackdrop, Frame: SlideFrame }}
-      story="context-window"
+      layers={{ Frame: SlideFrame }}
       locale={locale}
       tryIt={{ label: t('tryIt'), href: slideHref('every-part-and-control') }}
       why={{ label: t('why'), href: slideHref('why-how-what') }}

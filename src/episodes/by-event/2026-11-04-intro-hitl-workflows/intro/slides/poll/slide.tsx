@@ -56,6 +56,9 @@ const QUESTIONS = [
 export const poll = slide({
   slug: 'poll',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-space-before': '160px', '--slide-space-after': '265px' },
+  },
   notes: [{ slug: 'talking-points', target: 'questions' }],
   content: ({ t, target }) => (
     <SlideFrame className="justify-center">

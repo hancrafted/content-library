@@ -340,15 +340,14 @@ describe('Event page', () => {
     expect({ href: start.attr('href'), label: start.text() }).toEqual(expected);
   });
 
-  it.each(LOCALES)('leads back up to all Events through the breadcrumb for %s', (locale) => {
+  it.each(LOCALES)('omits breadcrumbs from the Event page for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(eventRoute(AXEL.slug), locale));
-    const expected = { href: `${localizePath(ROUTES.events, locale)}/`, current: WORDS[locale].title };
+    const expected = 0;
     // ACT
     const trail = $('nav[data-event-breadcrumb]');
-    const seen = { href: trail.find('a').first().attr('href'), current: trail.find('[aria-current="page"]').text() };
     // ASSERT
-    expect(seen).toEqual(expected);
+    expect(trail.length).toBe(expected);
   });
 
   it.each(LOCALES)('A past Event says its content may differ from the recording, above its Playlist (%s)', (locale) => {
@@ -513,25 +512,15 @@ describe('Episode pages under an Event', () => {
   });
 
   it.each(PAGES_UNDER_EVENTS)(
-    'leads from $episode.id back up to its Event and to all Events through the breadcrumb for $locale',
+    'omits breadcrumbs from $episode.id under its Event for $locale',
     ({ event, episode, locale }) => {
       // ARRANGE
       const $ = exportedPage(urlOf(event, episode, locale));
-      const expected = {
-        hrefs: [`${localizePath(ROUTES.events, locale)}/`, `${localizePath(eventRoute(event), locale)}/`],
-        current: $('h1 .sr-only').first().text() || $('h1').text(),
-      };
+      const expected = 0;
       // ACT
       const trail = $('nav[data-event-breadcrumb]');
-      const seen = {
-        hrefs: trail
-          .find('a')
-          .map((_, link) => $(link).attr('href'))
-          .get(),
-        current: trail.find('[aria-current="page"]').text(),
-      };
       // ASSERT
-      expect(seen).toEqual(expected);
+      expect(trail.length).toBe(expected);
     },
   );
 

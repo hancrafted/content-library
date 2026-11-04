@@ -1,0 +1,204 @@
+.surface {
+  position: absolute;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+  background: var(--slide-surface, var(--background));
+}
+
+:where(.edge) {
+  --slide-transition-start-offset: 0px;
+  --slide-transition-end-offset: 0px;
+  --slide-transition-bleed: initial;
+  --slide-transition-height: 100svh;
+  --slide-transition-opacity: 1;
+}
+
+.edge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: min(100%, var(--slide-transition-height));
+  z-index: 10;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: var(--slide-transition-opacity);
+}
+
+.target {
+  position: absolute;
+  inset: 0;
+}
+
+.edge [data-ink-scale] {
+  transform: scaleY(0);
+}
+
+.edge *,
+.edge {
+  pointer-events: none !important;
+}
+
+.edge[data-transition-suppressed='true'] {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edge {
+    display: none;
+  }
+}
+
+@media print {
+  .edge {
+    display: none;
+  }
+}
+
+:where(.configured) {
+  --slide-space-before: 0px;
+  --slide-space-after: 0px;
+}
+
+.configured {
+  --slide-space-total: calc(max(0px, var(--slide-space-before)) + max(0px, var(--slide-space-after)));
+
+  min-height: calc(100svh + var(--slide-space-total));
+  color: var(--slide-surface-foreground, var(--foreground));
+}
+
+.configured[data-size='section'] {
+  min-height: calc(40svh + var(--slide-space-total));
+}
+
+.configured::before,
+.configured::after {
+  content: '';
+  flex: none;
+  pointer-events: none;
+}
+
+.configured::before {
+  height: max(0px, var(--slide-space-before));
+}
+
+.configured::after {
+  height: max(0px, var(--slide-space-after));
+}
+
+.configured[data-surface-tone='inverse'] {
+  --slide-surface: var(--tone-paper);
+  --slide-surface-foreground: var(--tone-ink);
+  --foreground: var(--slide-surface-foreground);
+  --muted-foreground: color-mix(in oklab, var(--slide-surface-foreground) 85%, transparent);
+  --border: color-mix(in oklab, var(--slide-surface-foreground) 22%, transparent);
+  --accent: color-mix(in oklab, var(--slide-surface-foreground) 14%, transparent);
+  --accent-foreground: var(--slide-surface-foreground);
+  --primary: var(--slide-surface-foreground);
+  --primary-foreground: var(--slide-surface);
+}
+
+.configured[data-surface-tone='inverse'] [data-tone-flip] {
+  --foreground: var(--tone-paper);
+  --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);
+  --accent: color-mix(in oklab, var(--tone-paper) 8%, transparent);
+  --accent-foreground: var(--tone-paper);
+  --border: color-mix(in oklab, var(--tone-paper) 12%, transparent);
+  --primary: var(--tone-paper);
+  --primary-foreground: var(--tone-ink);
+  color: var(--tone-paper);
+}
+
+.primary {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  isolation: isolate;
+}
+
+.configured[data-slot='title-slide'] > .primary {
+  flex: initial;
+  min-height: 100svh;
+}
+
+.configured[data-slot='title-slide'][data-surface-tone='inverse'] > .primary {
+  padding-top: var(--slide-title-top-space, calc(var(--header-block) + 1rem));
+}
+
+.configured[data-slot='title-slide'][data-surface-tone='inverse'] [data-slot='slide-header'] h1 {
+  max-width: var(--slide-title-measure, 16ch);
+}
+
+.configured[data-slot='title-slide'][data-surface-tone='inverse'] [data-slot='slide-header'] [data-target='caption'] {
+  max-width: var(--slide-title-caption-measure, 40rem);
+}
+
+.decoration {
+  pointer-events: none;
+}
+
+.decoration * {
+  pointer-events: none !important;
+}
+
+.rear {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+}
+
+.front {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  overflow: hidden;
+}
+
+.decoration * {
+  animation-play-state: paused !important;
+}
+
+.configured:has([data-zone='active']) .decoration * {
+  animation-play-state: running !important;
+}
+
+[data-presentation-hidden='true'] .configured .decoration * {
+  animation-play-state: paused !important;
+}
+
+@media (width < 48rem) {
+  .rear:not([data-mobile]) * {
+    animation-play-state: paused !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .decoration,
+  .decoration * {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    translate: none !important;
+    rotate: none !important;
+    scale: none !important;
+    offset-path: none !important;
+  }
+}
+
+@media print {
+  .configured::before,
+  .configured::after {
+    display: none;
+  }
+
+  .configured {
+    --slide-space-total: 0px;
+
+    print-color-adjust: exact;
+  }
+
+  .decoration {
+    display: none;
+  }
+}

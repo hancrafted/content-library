@@ -12,6 +12,9 @@ const QUESTIONS = ['budget', 'signOff', 'lastTime'] as const;
 export const theThoughtExperiment = slide({
   slug: 'the-thought-experiment',
   messages: { en, de },
+  presentation: {
+    style: { '--slide-surface': 'var(--section-band)', '--slide-space-after': '265px' },
+  },
   segments: [{ slug: 'hook-new-job' }],
   content: ({ t }) => (
     <SlideFrame>
@@ -23,7 +26,7 @@ export const theThoughtExperiment = slide({
           compact
           className="w-full -rotate-1 sm:w-2/5"
         />
-        <ul className="flex flex-1 flex-col gap-2 text-body" aria-label={t('questionsLabel')}>
+        <ul data-tone-flip className="flex flex-1 flex-col gap-2 text-body" aria-label={t('questionsLabel')}>
           {QUESTIONS.map((question) => (
             <li
               key={question}
