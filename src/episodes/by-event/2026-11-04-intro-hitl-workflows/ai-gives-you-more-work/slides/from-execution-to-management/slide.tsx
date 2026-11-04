@@ -8,7 +8,8 @@ export const fromExecutionToManagement = slide({
   slug: 'from-execution-to-management',
   messages: { en, de },
   presentation: {
-    style: { '--slide-surface': 'var(--section-band)' },
+    tone: 'inverse',
+    style: { '--slide-space-after': '265px' },
     enter: { effect: 'liquid' },
     leave: { effect: 'liquid' },
   },

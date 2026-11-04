@@ -57,7 +57,6 @@ export const poll = slide({
   slug: 'poll',
   messages: { en, de },
   presentation: {
-    tone: 'inverse',
     style: { '--slide-space-before': '160px', '--slide-space-after': '265px' },
   },
   notes: [{ slug: 'talking-points', target: 'questions' }],

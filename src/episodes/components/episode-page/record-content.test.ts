@@ -78,11 +78,13 @@ describe('success cases', () => {
     [introHitlAiGivesYouMoreWork, 'from-execution-to-management'],
     [introHitlOnboardAiEveryTime, 'the-thought-experiment'],
   ] as const)(
-    'renders Event Title departure independently of the first section enter',
+    'renders inverse Event Titles with trailing reading space and independent ink departure',
     async (record, firstSection) => {
       // ARRANGE
       const expectedEdge = `top→${firstSection}`;
       const expectedEffect = 'liquid';
+      const expectedTone = 'inverse';
+      const expectedSpace = '--slide-space-after:160px';
       const titleOnly = episode({
         ...record,
         sections: record.sections.map((section) => [{ ...section[0], presentation: undefined }, ...section.slice(1)]),
@@ -103,43 +105,48 @@ describe('success cases', () => {
       // ASSERT
       expect($('[data-transition-edge]').attr('data-transition-edge')).toBe(expectedEdge);
       expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
+      expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
+      expect($('#top').attr('style')).toContain(expectedSpace);
     },
   );
   it.each([
     [
       introHitlAiAttentionSpan,
       [
-        ['top→thought-experiment', 'var(--section-band)'],
+        ['top→thought-experiment', 'var(--tone-paper)'],
         ['thought-experiment→thought-experiment--the-long-phone-call-story', 'var(--background)'],
-        ['thought-experiment--ai-forgets-the-middle-too→the-ais-attention-span', 'var(--section-band)'],
+        ['thought-experiment--ai-forgets-the-middle-too→the-ais-attention-span', 'var(--tone-paper)'],
         ['the-ais-attention-span→the-ais-attention-span--the-context-window', 'var(--background)'],
-        ['the-ais-attention-span--what-we-learned-so-far→what-fills-the-window', 'var(--section-band)'],
+        ['the-ais-attention-span--what-we-learned-so-far→what-fills-the-window', 'var(--tone-paper)'],
         ['what-fills-the-window→what-fills-the-window--whats-really-in-the-window', 'var(--background)'],
-        ['what-fills-the-window--you-cant-watch-the-meter→managing-the-attention-span', 'var(--section-band)'],
+        ['what-fills-the-window--you-cant-watch-the-meter→managing-the-attention-span', 'var(--tone-paper)'],
         ['managing-the-attention-span→managing-the-attention-span--everyday-habits', 'var(--background)'],
       ],
     ],
     [
       introHitlAiGivesYouMoreWork,
       [
-        ['top→from-execution-to-management', 'var(--section-band)'],
+        ['top→from-execution-to-management', 'var(--tone-paper)'],
         ['from-execution-to-management→from-execution-to-management--every-revolution-one-card', 'var(--background)'],
       ],
     ],
     [
       introHitlOnboardAiEveryTime,
       [
-        ['top→the-thought-experiment', 'var(--section-band)'],
+        ['top→the-thought-experiment', 'var(--tone-paper)'],
         ['the-thought-experiment→the-thought-experiment--you-are-the-new-hire', 'var(--background)'],
-        ['the-thought-experiment--one-prompt→five-moves-to-brief-a-freelancer', 'var(--section-band)'],
+        ['the-thought-experiment--one-prompt→five-moves-to-brief-a-freelancer', 'var(--tone-paper)'],
         ['five-moves-to-brief-a-freelancer→five-moves-to-brief-a-freelancer--manage-the-price', 'var(--background)'],
       ],
     ],
   ] as const)(
-    'renders ink into and out of every Event section title, preserving its band',
+    'renders inverse Event section Titles with trailing space and ink into and out of their surfaces',
     async (record, expected) => {
       // ARRANGE
       const expectedEffect = 'liquid';
+      const expectedTone = 'inverse';
+      const expectedSpace = '--slide-space-after:265px';
+      const expectedSectionCount = record.sections.length;
       // ACT
       const content = await recordContent(record, 'en', {
         translatorOf: translatorOf('en'),
@@ -150,8 +157,16 @@ describe('success cases', () => {
         createElement(
           Fragment,
           null,
-          ...[...content.transitions.values()].map((edge) =>
-            createElement(SlideWrapper, { key: edge.id, id: edge.outgoing, transition: edge }),
+          createElement(SlideWrapper, { id: 'top', transition: content.transitions.get('top') }),
+          ...content.slides.map((entry) =>
+            createElement(SlideWrapper, {
+              key: entry.id,
+              id: entry.id,
+              mode: content.header,
+              size: entry.level === 'h2' ? 'section' : 'page',
+              presentation: entry.presentation,
+              transition: content.transitions.get(entry.id),
+            }),
           ),
         ),
       );
@@ -159,9 +174,15 @@ describe('success cases', () => {
       const effects = $('[data-transition-effect]')
         .toArray()
         .map((host) => $(host).attr('data-transition-effect'));
+      const sections = $('[data-size="section"]').toArray();
       // ASSERT
       expect(targets).toEqual(expected);
       effects.forEach((effect) => expect(effect).toBe(expectedEffect));
+      expect(sections).toHaveLength(expectedSectionCount);
+      sections.forEach((section) => {
+        expect($(section).attr('data-surface-tone')).toBe(expectedTone);
+        expect($(section).attr('style')).toContain(expectedSpace);
+      });
     },
   );
   it('composes inherited authored Title tone for both rendered surface and narrow clock descriptors', async () => {
@@ -234,15 +255,15 @@ describe('success cases', () => {
     expect(PageSurfaceClock({ content })).toBeNull();
   });
   it.each(['en', 'de'] as const)(
-    'omits Intro transitions after its Title without removing authored tones or reading space in %s',
+    'keeps Intro non-Title Slides normal and effect-free without removing reading space in %s',
     async (locale) => {
       // ARRANGE
       const expectedEdges: string[][] = [];
       const expectedSurfaces = [
         ['agenda', 'normal'],
-        ['poll', 'inverse'],
+        ['poll', 'normal'],
         ['check-in-1', 'normal'],
-        ['check-in-2', 'inverse'],
+        ['check-in-2', 'normal'],
         ['check-in-3', 'normal'],
       ];
       const expectedTrailingSpace = '--slide-space-after:265px';

@@ -10,7 +10,8 @@ export const whatFillsTheWindow = slide({
   slug: 'what-fills-the-window',
   messages: { en, de },
   presentation: {
-    style: { '--slide-surface': 'var(--section-band)' },
+    tone: 'inverse',
+    style: { '--slide-space-after': '265px' },
     enter: { effect: 'liquid' },
     leave: { effect: 'liquid' },
   },

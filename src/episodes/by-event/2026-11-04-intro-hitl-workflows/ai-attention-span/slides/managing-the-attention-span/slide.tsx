@@ -10,7 +10,8 @@ export const managingTheAttentionSpan = slide({
   slug: 'managing-the-attention-span',
   messages: { en, de },
   presentation: {
-    style: { '--slide-surface': 'var(--section-band)' },
+    tone: 'inverse',
+    style: { '--slide-space-after': '265px' },
     enter: { effect: 'liquid' },
     leave: { effect: 'liquid' },
   },

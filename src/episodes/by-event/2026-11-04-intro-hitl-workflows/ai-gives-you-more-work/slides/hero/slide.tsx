@@ -13,12 +13,16 @@ import { Staircase } from './staircase';
 export const hero = slide({
   slug: 'hero',
   messages: { en, de },
-  presentation: { leave: { effect: 'liquid' } },
+  presentation: {
+    tone: 'inverse',
+    style: { '--slide-space-after': '160px' },
+    leave: { effect: 'liquid' },
+  },
   content: ({ t }) => (
     <>
       <SlideBackdrop mobile />
       <SlideFrame className="mt-10">
-        <div className="flex flex-col gap-3 rounded-xl bg-muted p-6 md:max-w-3xl">
+        <div data-tone-flip className="flex flex-col gap-3 rounded-xl bg-muted p-6 md:max-w-3xl">
           <Staircase
             label={t('label')}
             axis={t('axis')}
