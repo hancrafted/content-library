@@ -13,7 +13,10 @@ export const hero = slide({
   messages: { en, de },
   presentation: {
     tone: 'inverse',
-    style: { '--slide-space-after': '160px' },
+    style: {
+      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+      '--slide-space-after': '160px',
+    },
     leave: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
   },
   content: ({ t }) => (

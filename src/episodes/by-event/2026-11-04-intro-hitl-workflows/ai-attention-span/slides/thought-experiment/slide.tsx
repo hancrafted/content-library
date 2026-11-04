@@ -10,10 +10,7 @@ export const thoughtExperiment = slide({
   slug: 'thought-experiment',
   messages: { en, de },
   presentation: {
-    tone: 'inverse',
-    style: { '--slide-space-after': '265px' },
-    enter: { effect: 'liquid' },
-    leave: { effect: 'liquid' },
+    style: { '--slide-surface': 'var(--section-band)', '--slide-space-after': '265px' },
   },
   segments: [{ slug: 'a-long-chat-is-a-long-call' }],
   content: ({ t, locale }) => (

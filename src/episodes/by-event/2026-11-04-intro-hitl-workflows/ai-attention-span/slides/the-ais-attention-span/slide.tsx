@@ -11,7 +11,10 @@ export const theAisAttentionSpan = slide({
   messages: { en, de },
   presentation: {
     tone: 'inverse',
-    style: { '--slide-space-after': '265px' },
+    style: {
+      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+      '--slide-space-after': '265px',
+    },
     enter: { effect: 'liquid' },
     leave: { effect: 'liquid' },
   },

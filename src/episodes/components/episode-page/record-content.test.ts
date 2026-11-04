@@ -85,6 +85,7 @@ describe('success cases', () => {
       const expectedEffect = 'liquid';
       const expectedTone = 'inverse';
       const expectedSpace = '--slide-space-after:160px';
+      const expectedSurface = '--slide-surface:color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))';
       const titleOnly = episode({
         ...record,
         sections: record.sections.map((section) => [{ ...section[0], presentation: undefined }, ...section.slice(1)]),
@@ -107,44 +108,51 @@ describe('success cases', () => {
       expect($('[data-transition-edge]').attr('data-transition-effect')).toBe(expectedEffect);
       expect($('#top').attr('data-surface-tone')).toBe(expectedTone);
       expect($('#top').attr('style')).toContain(expectedSpace);
+      expect($('#top').attr('style')).toContain(expectedSurface);
     },
   );
   it.each([
     [
       introHitlAiAttentionSpan,
       [
-        ['top→thought-experiment', 'var(--tone-paper)'],
-        ['thought-experiment→thought-experiment--the-long-phone-call-story', 'var(--background)'],
-        ['thought-experiment--ai-forgets-the-middle-too→the-ais-attention-span', 'var(--tone-paper)'],
+        ['top→thought-experiment', 'var(--section-band)'],
+        [
+          'thought-experiment--ai-forgets-the-middle-too→the-ais-attention-span',
+          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+        ],
         ['the-ais-attention-span→the-ais-attention-span--the-context-window', 'var(--background)'],
-        ['the-ais-attention-span--what-we-learned-so-far→what-fills-the-window', 'var(--tone-paper)'],
+        [
+          'the-ais-attention-span--what-we-learned-so-far→what-fills-the-window',
+          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+        ],
         ['what-fills-the-window→what-fills-the-window--whats-really-in-the-window', 'var(--background)'],
-        ['what-fills-the-window--you-cant-watch-the-meter→managing-the-attention-span', 'var(--tone-paper)'],
+        [
+          'what-fills-the-window--you-cant-watch-the-meter→managing-the-attention-span',
+          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+        ],
         ['managing-the-attention-span→managing-the-attention-span--everyday-habits', 'var(--background)'],
       ],
     ],
-    [
-      introHitlAiGivesYouMoreWork,
-      [
-        ['top→from-execution-to-management', 'var(--tone-paper)'],
-        ['from-execution-to-management→from-execution-to-management--every-revolution-one-card', 'var(--background)'],
-      ],
-    ],
+    [introHitlAiGivesYouMoreWork, [['top→from-execution-to-management', 'var(--section-band)']]],
     [
       introHitlOnboardAiEveryTime,
       [
-        ['top→the-thought-experiment', 'var(--tone-paper)'],
-        ['the-thought-experiment→the-thought-experiment--you-are-the-new-hire', 'var(--background)'],
-        ['the-thought-experiment--one-prompt→five-moves-to-brief-a-freelancer', 'var(--tone-paper)'],
+        ['top→the-thought-experiment', 'var(--section-band)'],
+        [
+          'the-thought-experiment--one-prompt→five-moves-to-brief-a-freelancer',
+          'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+        ],
         ['five-moves-to-brief-a-freelancer→five-moves-to-brief-a-freelancer--manage-the-price', 'var(--background)'],
       ],
     ],
   ] as const)(
-    'renders inverse Event section Titles with trailing space and ink into and out of their surfaces',
+    'transitions the Event Title into a normal effect-free first section and retains later inverse section edges',
     async (record, expected) => {
       // ARRANGE
       const expectedEffect = 'liquid';
       const expectedTone = 'inverse';
+      const expectedFirstTone = 'normal';
+      const expectedTitleLeave = record.title?.presentation?.leave;
       const expectedSpace = '--slide-space-after:265px';
       const expectedSectionCount = record.sections.length;
       // ACT
@@ -177,10 +185,11 @@ describe('success cases', () => {
       const sections = $('[data-size="section"]').toArray();
       // ASSERT
       expect(targets).toEqual(expected);
+      expect(content.transitions.get('top')?.declaration).toBe(expectedTitleLeave);
       effects.forEach((effect) => expect(effect).toBe(expectedEffect));
       expect(sections).toHaveLength(expectedSectionCount);
-      sections.forEach((section) => {
-        expect($(section).attr('data-surface-tone')).toBe(expectedTone);
+      sections.forEach((section, index) => {
+        expect($(section).attr('data-surface-tone')).toBe(index === 0 ? expectedFirstTone : expectedTone);
         expect($(section).attr('style')).toContain(expectedSpace);
       });
     },
