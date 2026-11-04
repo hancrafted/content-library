@@ -73,6 +73,7 @@ These disciplines remain binding. Any implementation that needs a broader except
 
 ## References
 
+- [Shared Anchor geometry and composed Title selection](0023-shared-anchor-geometry-and-composed-title-selection.md) — accepted follow-up design; shared measurements and composition-owned compatibility, not an implementation claim.
 - [Slide presentation contracts](../features/slide-transitions.md) — accepted feature contract and downstream verification.
 - [Product vision](../steering/product-vision.md) — architecture, agent legibility and escalation.
 - [Domain docs](../agents/domain.md) — distinction between design-ADRs and binding Archgate records.
