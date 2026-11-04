@@ -1,9 +1,7 @@
 import type { TagId } from '@/content-store/schemas/fields';
 import { TAG_ARTWORK, TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
-import { DriftStill } from '@/episodes/components/slide-shared/explorable-hero/drift-still';
-import type { Story } from '@/episodes/components/slide-shared/explorable-hero/drift.pure';
 import { BadgeList } from '@/shared/components/ui/badge-list';
-import { CardArtwork } from '@/shared/components/ui/card-artwork';
+import { CardArtwork, type CardArtworkName } from '@/shared/components/ui/card-artwork';
 import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -20,8 +18,8 @@ export interface ResourceCard {
   readonly kind: ResourceKind;
   /** The kind's name in the reader's locale ("Master slide"). */
   readonly kindLabel: string;
-  /** The Message drift an Explorable page's top panel stills; other kinds have none. */
-  readonly story?: Story;
+  /** The Explorable's selected concept diagram; other kinds select by Tag or have no artwork. */
+  readonly artwork?: CardArtworkName;
   readonly title: string;
   readonly description: string;
   /** The Resource's first Tag, which gives its card the icon and accent. */
@@ -66,7 +64,7 @@ export function ResourceCardView(props: CardViewProps) {
 
 function resourceVisual(card: ResourceCard) {
   if (card.kind === 'episode' || card.kind === 'event') return <CardArtwork name={TAG_ARTWORK[card.leadTag]} />;
-  if (card.kind === 'explorable-page' && card.story) return <DriftStill story={card.story} />;
+  if (card.kind === 'explorable-page' && card.artwork) return <CardArtwork name={card.artwork} />;
   return undefined;
 }
 

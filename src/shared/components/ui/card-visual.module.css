@@ -42,6 +42,13 @@ article.layout[data-card-visual-position='none'] {
 article.layout[data-card-variant='lead'] .panel svg {
   width: 340px;
 }
+article.layout .panel svg[data-card-artwork-format='wide'] {
+  width: 100%;
+  height: 144px;
+}
+.panel svg[data-card-artwork-format='wide'] :is(path, circle, rect) {
+  vector-effect: non-scaling-stroke;
+}
 .body {
   min-width: 0;
   overflow-wrap: anywhere;

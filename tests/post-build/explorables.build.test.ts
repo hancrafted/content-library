@@ -82,17 +82,25 @@ describe.each(PAGES)('retained presentation at $url', ({ url }) => {
 });
 
 describe('the Explorables overview', () => {
-  it.each(LOCALES)("draws each card's drift as a static still, never a canvas, for %s", (locale) => {
+  it.each(LOCALES)('draws each selected concept diagram above its card without a live canvas for %s', (locale) => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.explorables, locale));
+    const expected = [
+      ['ai-capability', 'cumulative-orchestration'],
+      ['context-window', 'intention-capacity'],
+      ['human-in-the-loop', 'review-funnel'],
+    ];
     // ACT
-    const stills = $(
-      '[data-explorable-card][data-card-visual-position="top"] [data-card-visual] svg[data-drift-still]',
-    ).toArray();
-    const canvases = $('[data-explorable-card] canvas').length;
+    const cards = $('[data-explorable-card][data-card-visual-position="top"]').toArray();
+    const artwork = cards
+      .map((card) => [
+        $(card).attr('data-explorable-card'),
+        $(card).find('[data-card-visual] svg').attr('data-card-artwork'),
+      ])
+      .sort(([a], [b]) => (a ?? '').localeCompare(b ?? ''));
     // ASSERT
-    expect(stills.map((still) => $(still).attr('data-drift-still')).sort()).toEqual([...SLUGS].sort());
-    expect(canvases).toBe(0);
+    expect(artwork).toEqual(expected);
+    expect($('[data-explorable-card] canvas, [data-explorable-card] [data-drift-still]').length).toBe(0);
   });
 
   it.each(LOCALES)('lists the three Explorable pages, each linking to its page, for %s', (locale) => {
