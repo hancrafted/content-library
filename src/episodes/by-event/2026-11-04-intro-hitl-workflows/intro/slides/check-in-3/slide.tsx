@@ -39,7 +39,10 @@ const QUESTIONS = [
 export const checkIn3 = slide({
   slug: 'check-in-3',
   messages: { en, de },
-  presentation: { enter: { effect: 'goo' } },
+  presentation: {
+    style: { '--slide-space-before': '160px' },
+    enter: { effect: 'goo', style: { '--slide-transition-start-offset': '-160px' } },
+  },
   notes: [{ slug: 'talking-points', target: 'questions' }],
   content: ({ t, target }) => (
     <SlideFrame className="justify-center">

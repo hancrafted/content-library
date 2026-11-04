@@ -14,7 +14,7 @@ stale_after: 2026-11-18T00:00:00Z
 
 `EpisodeComposition.transitionPrecedence` is `'enter'` by default, optionally `'leave'`. `recordContent()` resolves adjacent declarations in one linear pass into `EpisodeContent.transitions`, keyed by outgoing wrapper id. Each resolved entry retains `id`, `outgoing`, `incoming`, `declaration`, `targetSurface` and optional incoming `targetStyle`. An absent declaration produces no renderer; geometry still exists.
 
-`SlideTransition` renders outside `SlideMount`, inside the outgoing `SlideIdentity`, above its isolated primary content and below front decoration. Its trailing host is at most the wrapper's height and clips only its own filtered ink. The incoming surface's live token reference and custom token definitions travel in a nested destination scope; semantic tone is never discovered from rendered colours. The winning transition scope supplies calculation settings even when its author is the incoming Slide. Host-inherited transition settings are reset to defaults; local class and inline custom properties override those defaults.
+`SlideTransition` renders outside `SlideMount`, inside the outgoing `SlideIdentity`, above its isolated primary content and below front decoration. Its trailing host is at most the wrapper's height and clips only its own filtered ink. The incoming surface's live token reference and custom token definitions travel in a nested destination scope; semantic tone is never discovered from rendered colours. An unconfigured shared-header section slide uses its existing `--section-band` destination rather than the ordinary page background, so a different-coloured strip cannot remain at the seam. The winning transition scope supplies calculation settings even when its author is the incoming Slide. Host-inherited transition settings are reset to defaults; local class and inline custom properties override those defaults.
 
 The shared `InkCanvas` and `INK_PROFILES` preserve the existing named filter, bleed and progress curve. The page attachment subscribes directly to selected clock progress and writes the ink scale without React frame renders or another ScrollTrigger. The landing/legacy `LiquidInkTransition` retains its ScrollTrigger driver and defaults; it does not attach this clock.
 
@@ -43,7 +43,31 @@ Retained rear/front slots receive their wrapper's identity through `SlideIdentit
 
 The retained rear host covers the wrapper independently of its children. Its bounds keep the nested Backdrop full-bleed when compiled reduced-motion resets establish a transform containing block. Check the built export's canvas dimensions as well as its motion state; a paused or reduced canvas must still have a drawable surface.
 
-`EpisodeComposition.surfaceSamplingLine` supplies viewport pixels for tone sampling; omission uses the measured header lower edge. The server container supplies only `{id, tone, effect?}` descriptors to `surface-clock.client.tsx`; declarations and Scene functions stay server-side. Configured Title wrappers have a minimum `200svh` presentation extent with their primary content occupying at least the opening viewport; tall content remains unrestricted. Inverse Title copy clears the header through primary-content padding, with `--slide-title-top-space` defaulting to `calc(var(--header-block) + 1rem)`, `--slide-title-measure` to `16ch` and `--slide-title-caption-measure` to `40rem`. These are rendering-only lengths. Inverse surfaces remap the interactive token pair; a preview marked `data-tone-flip` uses the page's normal pair.
+`EpisodeComposition.surfaceSamplingLine` supplies viewport pixels for tone sampling; omission uses the measured header lower edge. The server container supplies only `{id, tone, effect?}` descriptors to `surface-clock.client.tsx`; declarations and Scene functions stay server-side. Configured Title primary content occupies at least the opening viewport; the wrapper adds only its authored reading space, not a fixed second viewport. Tall content remains unrestricted. Inverse Title copy clears the header through primary-content padding, with `--slide-title-top-space` defaulting to `calc(var(--header-block) + 1rem)`, `--slide-title-measure` to `16ch` and `--slide-title-caption-measure` to `40rem`. These are rendering-only lengths. Inverse surfaces remap the interactive token pair; a fixed-colour child marked `data-tone-flip` uses the page's normal pair.
+
+## Per-Slide reading space
+
+**Accepted refinement:** Han confirmed the shared understanding with “ok” on `2026-11-04T12:07:33.116+08:00`, after choosing real space, individual Slide ownership, additive neighbours and replacement of the two-viewport Title minimum. This refines presentation geometry within the existing wrapper/container boundary; no Scene schema, second measurement owner or navigation policy is added.
+
+`presentation.style` accepts `--slide-space-before` and `--slide-space-after`: nonnegative CSS lengths, both defaulting to `0px` independently on every configured Slide. Use fixed pixels as the tuning starting point, not a fraction of Slide height. Omission adds nothing, even when an effect is declared.
+
+The wrapper renders real, non-shrinking space before and after the primary mount through empty pseudo-elements, painted by its existing full-bleed surface. Both lengths extend the existing page/section minimum height; short content cannot absorb them into unused minimum-height space. Tall primary content still grows naturally. The space survives Scene unmounting without being counted again in the held primary height. It is internal presentation space, not inter-Slide margins, wrapper padding or an anchor-reachability spacer. Print omits the allowances.
+
+Each Slide owns its space independently of transition precedence. A trailing `320px` on A and leading `160px` on B add to `480px`; an incoming effect winning over A's leave does not replace A's layout settings. No shared nonzero spacing policy is imposed.
+
+```tsx
+presentation: {
+  tone: 'inverse',
+  style: { '--slide-space-before': '160px', '--slide-space-after': '320px' },
+  enter: { effect: 'glitch', style: { '--slide-transition-start-offset': '-160px' } },
+}
+```
+
+The Intro authoring example uses `320px` trailing and, where needed, `160px` leading space. Its selected effects start `160px` before the ordinary range so the filtered ink fills its overscan before the straight incoming surface reaches the viewport. The three Explorable Titles explicitly author their own trailing space and start offset after removal of the fixed second viewport. These are author choices, not renderer defaults.
+
+Reading space and range offsets solve different problems: space protects the last meaningful content, while a range offset coordinates the ink with the surface seam. Tune them together against the short Title and tall Poll, watching when ink reaches a conclusion or control, not merely when progress first becomes nonzero. The Content area omits its divider on a wrapper marked `data-surface-edge` by a selected outgoing effect; otherwise that straight rule would remain visible through the filtered edge. Non-effect boundaries retain their divider.
+
+The existing clock still measures stable wrappers and clamps completion to achievable anchor landing. Geometry changes use the existing layout refresh; controlled range-offset edits still dispatch `surface-clock-refresh`. No per-frame content measurement is added. Numeric geometry and seam checks support verification, but the reading comfort of the chosen distances remains a manual UX-review duty.
 
 ## Title-departure navigation
 
@@ -129,6 +153,7 @@ The winning declaration carries a transition-specific style scope containing its
 The following names are accepted contract mappings, not claims about existing code. Effect-specific mappings must be documented alongside their renderer when implemented.
 
 - **Surface pair:** `--slide-surface`, `--slide-surface-foreground` default to the theme-aware normal pair, inverted only by explicit declaration. CSS-only; semantic changes require matching authored tone.
+- **Reading space:** `--slide-space-before`, `--slide-space-after` default to `0px`; nonnegative CSS lengths owned by each Slide, additive across neighbours. Real layout changes use the existing geometry refresh, not per-frame reads.
 - **Effect destination:** `--slide-transition-target-surface` references the incoming declared surface token. CSS-only.
 - **Range start adjustment:** `--slide-transition-start-offset` defaults to `0px`, added to default start before normalization. Requires explicit calculation refresh.
 - **Range end adjustment:** `--slide-transition-end-offset` defaults to `0px`, added to achievable landing then capped at landing. Requires explicit calculation refresh.

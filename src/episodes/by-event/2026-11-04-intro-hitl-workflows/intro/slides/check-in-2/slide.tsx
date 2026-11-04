@@ -34,7 +34,12 @@ const QUESTIONS = [
 export const checkIn2 = slide({
   slug: 'check-in-2',
   messages: { en, de },
-  presentation: { tone: 'inverse', enter: { effect: 'liquid' }, leave: { effect: 'dither' } },
+  presentation: {
+    tone: 'inverse',
+    style: { '--slide-space-before': '160px', '--slide-space-after': '320px' },
+    enter: { effect: 'liquid', style: { '--slide-transition-start-offset': '-160px' } },
+    leave: { effect: 'dither', style: { '--slide-transition-start-offset': '-160px' } },
+  },
   notes: [{ slug: 'talking-points', target: 'questions' }],
   content: ({ t, target }) => (
     <SlideFrame className="justify-center">

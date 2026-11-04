@@ -33,6 +33,8 @@ export interface SlidePresentation {
   readonly style?: Readonly<Record<`--${string}`, string | number>> & {
     '--slide-surface'?: string;
     '--slide-surface-foreground'?: string;
+    '--slide-space-before'?: string;
+    '--slide-space-after'?: string;
     '--slide-transition-start-offset'?: string;
     '--slide-transition-end-offset'?: string;
   };
