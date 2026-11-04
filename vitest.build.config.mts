@@ -7,7 +7,7 @@ export default defineConfig({
   // The content store's entry and its records import through `@/`, as the app does.
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
   test: {
