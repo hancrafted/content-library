@@ -1,7 +1,8 @@
-import { TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
+import { TAG_ARTWORK, TAG_ICONS, tagToken } from '@/content-store/schemas/tag-looks';
 import type { EventCard, EventPlace } from '@/events/lib/event-card.pure';
 import { BadgeList } from '@/shared/components/ui/badge-list';
-import { CardArrow, CardCaption, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
+import { CardArtwork } from '@/shared/components/ui/card-artwork';
+import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -12,6 +13,8 @@ export interface EventCardProps {
   locale: Locale;
   /** The title's heading level, one below the heading the list sits under. */
   headingLevel: CardHeadingLevel;
+  /** The localized primary cue, resolved by the server and passed through the browser. */
+  open: string;
   /** Where the card sits in its grid. */
   className?: string;
 }
@@ -42,27 +45,29 @@ function When({ card }: { card: EventCard }) {
   );
 }
 
-/**
- * One Event as a card, laid out as an Episode card is: the lead Tag's icon and accent, the title as the card's one
- * link, the description, the Tags, then where it takes place, and the day and time at the bottom.
- */
-export function EventCardView({ card, locale, headingLevel, className }: EventCardProps) {
+/** One Event reading card: shared lead-Tag artwork, native link, Tags, place, date and time. */
+export function EventCardView({ card, locale, headingLevel, open, className }: EventCardProps) {
   return (
     <CardShell
       variant="event"
       linked
+      visual={<CardArtwork name={TAG_ARTWORK[card.leadTag]} />}
+      visualPosition="left"
+      ink
       accent={tagToken(card.leadTag)}
       icon={NAMED_ICONS[TAG_ICONS[card.leadTag]]}
       className={className}
       data={{ 'data-event-card': '', 'data-event-slug': card.slug, 'data-lead-tag': card.leadTag }}
     >
-      <CardTitle variant="event" title={card.title} route={card.route} locale={locale} level={headingLevel} />
-      <CardCaption variant="event">{card.description}</CardCaption>
+      <CardTitle variant="event" graphic title={card.title} route={card.route} locale={locale} level={headingLevel} />
+      <CardCaption variant="event" graphic>
+        {card.description}
+      </CardCaption>
       <BadgeList items={card.tags} data={{ 'data-event-tags': '' }} />
       <Place place={card.place} />
-      <div className="mt-auto flex min-h-11 items-center justify-between gap-4 pt-2">
+      <div className="mt-auto flex min-h-11 flex-wrap items-center justify-between gap-4 pt-2">
         <When card={card} />
-        <CardArrow variant="event" />
+        <CardCue variant="event" cue="button" open={open} comingSoon="" ink />
       </div>
     </CardShell>
   );

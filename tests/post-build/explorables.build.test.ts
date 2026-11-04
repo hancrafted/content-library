@@ -61,7 +61,9 @@ describe('the Explorables overview', () => {
     // ARRANGE
     const $ = exportedPage(localizePath(ROUTES.explorables, locale));
     // ACT
-    const stills = $('[data-explorable-card] [data-card-media] svg[data-drift-still]').toArray();
+    const stills = $(
+      '[data-explorable-card][data-card-visual-position="top"] [data-card-visual] svg[data-drift-still]',
+    ).toArray();
     const canvases = $('[data-explorable-card] canvas').length;
     // ASSERT
     expect(stills.map((still) => $(still).attr('data-drift-still')).sort()).toEqual([...SLUGS].sort());

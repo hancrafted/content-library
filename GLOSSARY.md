@@ -37,6 +37,9 @@ _Avoid_: Draft, coming-soon episode, stub
 **Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
 _Avoid_: Topic, category, theme, label, keyword
 
+**Card artwork**: the decorative visual identity of a Resource's card: a symbolic composition, diagram or scene, distinct from its text and actionable controls. A glyph is a small symbol within artwork, not the whole visual.
+_Avoid_: Card glyph (for the whole visual), icon (for the whole visual)
+
 **Event**: a dated workshop or webinar that presents one Playlist. Its slug is its date then its name (`2026-10-23-axel-agentic-workflow`); it records its kind, the Audience it targets, its Organizers (lead first), its Tags (lead Tag first), an optional time, and where it takes place: onsite at a venue, remote on a platform, or hybrid. It owns its Event copies, in `src/episodes/by-event/<event-slug>/`, and no Slides directly, holds no text (its title and description are Translation keys) and has no visibility of its own. One record each in the content store (`src/content-store/events/`); its page is `/events/<event-slug>/`, and each Episode its Playlist lists has an **Event-scoped Episode page** at `/events/<event-slug>/episodes/<episode-slug>/`: the Episode's page with the Event's breadcrumb, past notice, place in the Playlist and walk to the previous and next Episode.
 _Avoid_: Workshop (the old name; its `/workshops/` URLs 301 to the Event), session, occasion, course
 

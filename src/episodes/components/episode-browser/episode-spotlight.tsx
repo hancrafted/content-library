@@ -4,11 +4,11 @@ import type { EpisodeCard } from '@/episodes/components/episode-card/episode-car
 import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 
-/** Where each card sits: the lead spans two thirds and the full height of the stack beside it, and fills the row when nothing sits beside it. */
+/** A broad lead beside readable companion cards; it fills the row when alone. */
 function placement(isLead: boolean, sideCount: number): string {
   if (!isLead) return sideCount === 1 ? 'md:col-span-2 lg:col-span-1' : '';
-  if (sideCount === 0) return 'md:col-span-2 lg:col-span-3';
-  return sideCount === 1 ? 'md:col-span-2 lg:col-span-2' : 'md:col-span-2 lg:col-span-2 lg:row-span-2';
+  if (sideCount === 0) return 'md:col-span-2';
+  return sideCount === 1 ? 'md:col-span-2 lg:col-span-1' : 'md:col-span-2 lg:col-span-1 lg:row-span-2';
 }
 
 interface SpotlightProps {
@@ -29,7 +29,7 @@ export function EpisodeSpotlight({ cards, locale, labels, headingLevel }: Spotli
   if (lead === null) return null;
   const shared = { locale, labels, headingLevel, showFormat: showsFormat(cards) };
   return (
-    <div data-episode-spotlight className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div data-episode-spotlight className="grid gap-4 md:grid-cols-2 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)]">
       <EpisodeCardView card={lead} variant="lead" className={placement(true, side.length)} {...shared} />
       {side.map((card) => (
         <EpisodeCardView

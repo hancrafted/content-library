@@ -5,7 +5,7 @@ import { compositionOf } from '@/episodes/lib/registry';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
 import { BadgeList } from '@/shared/components/ui/badge-list';
-import { CardArrow, CardCaption, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
+import { CardCaption, CardCue, CardShell, CardTitle } from '@/shared/components/ui/card-shell';
 import { NAMED_ICONS } from '@/shared/components/ui/named-icons';
 import { YoutubeLink, type VideoLabels } from '@/shared/components/ui/youtube-link';
 import type { Locale } from '@/shared/lib/locale.pure';
@@ -36,26 +36,31 @@ interface GuideCardViewProps {
   kindLabel: string;
   locale: Locale;
   videoLabels: VideoLabels;
+  open: string;
 }
 
-/** One Guide as a card, laid out as an Explorable card is: lead Tag icon and accent, kind, title as the one link, description, Tags. */
-function GuideCardView({ card, kindLabel, locale, videoLabels }: GuideCardViewProps) {
+/** One text-only Guide reading card: kind, native title link, description, Tags and its optional YouTube action. */
+function GuideCardView({ card, kindLabel, locale, videoLabels, open }: GuideCardViewProps) {
   return (
     <CardShell
       variant="compact"
       linked
+      visualPosition="none"
+      ink
       accent={tagToken(card.leadTag)}
       icon={NAMED_ICONS[TAG_ICONS[card.leadTag]]}
       className="w-full"
       data={{ 'data-guide-card': card.slug, 'data-lead-tag': card.leadTag }}
     >
       <p className="text-caption font-medium tracking-widest text-muted-foreground uppercase">{kindLabel}</p>
-      <CardTitle variant="compact" title={card.title} route={card.route} locale={locale} level={2} />
-      <CardCaption variant="compact">{card.description}</CardCaption>
+      <CardTitle variant="compact" graphic title={card.title} route={card.route} locale={locale} level={2} />
+      <CardCaption variant="compact" graphic>
+        {card.description}
+      </CardCaption>
       <BadgeList items={card.tags} data={{ 'data-guide-tags': '' }} />
-      <div className="mt-auto flex min-h-11 items-center justify-end gap-2 pt-2">
-        <YoutubeLink url={card.youtubeUrl} labels={videoLabels} data={{ 'data-guide-video': '' }} />
-        <CardArrow variant="compact" />
+      <div className="mt-auto flex min-h-11 flex-wrap items-center justify-end gap-2 pt-2">
+        <YoutubeLink url={card.youtubeUrl} labels={videoLabels} labelled data={{ 'data-guide-video': '' }} />
+        <CardCue variant="compact" cue="button" open={open} comingSoon="" ink />
       </div>
     </CardShell>
   );
@@ -63,7 +68,7 @@ function GuideCardView({ card, kindLabel, locale, videoLabels }: GuideCardViewPr
 
 /**
  * The Guides overview, the page at /guides (design-ADR 0019 as amended by #450): a title with a one-line intro, then a
- * card linking each public Guide, as the Explorables overview draws its cards.
+ * text-only reading card linking each public Guide.
  */
 export async function GuidesOverviewPage({ locale }: { locale: Locale }) {
   const t = await getTranslations({ locale, namespace: 'guidesOverview' });
@@ -82,6 +87,7 @@ export async function GuidesOverviewPage({ locale }: { locale: Locale }) {
                 kindLabel={t('typeLabel')}
                 locale={locale}
                 videoLabels={{ watchVideo: t('watchVideo'), newTab: t('newTab') }}
+                open={t('open')}
               />
             </li>
           ))}

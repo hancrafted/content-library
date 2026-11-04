@@ -53,13 +53,13 @@ describe('success cases', () => {
     expect(finished.hosts.get(id)?.primaryFill).toBe(1);
     expect(finished.moving).toBe(false);
   });
-  it('reaches the primary action after about 433 milliseconds of card travel', () => {
+  it('reaches the primary action after 300 milliseconds of card travel', () => {
     // ARRANGE
     const ink = createMagneticInk();
     const id = 'card';
     const pointer = { x: 80, y: 80 };
-    const frameTime = 16;
-    const beforeArrival = 432;
+    const frameTime = 10;
+    const beforeArrival = 290;
     const travelling = 'travelling';
     const arrived = 'primary';
     ink.register(id, { surface: CARD, primary: PRIMARY });
@@ -74,6 +74,27 @@ describe('success cases', () => {
     expect(before).toBe(travelling);
     expect(after?.stage).toBe(arrived);
     expect(after?.primaryFill).toBeGreaterThan(0);
+  });
+  it('starts slowly and accelerates its travelling blob toward the action', () => {
+    // ARRANGE
+    const ink = createMagneticInk();
+    const id = 'card';
+    const pointer = { x: 80, y: 80 };
+    const frameTime = 10;
+    const checkpoints = [100, 200, 300];
+    const distances: number[] = [];
+    ink.register(id, { surface: CARD, primary: PRIMARY });
+    // ACT
+    for (let time = frameTime; time <= checkpoints.at(-1)!; time += frameTime) {
+      const view = ink.frame({ pointer, delta: frameTime, enabled: true }).hosts.get(id)!;
+      if (checkpoints.includes(time)) {
+        const coordinates = (view.paths[0].match(/-?\d+(?:\.\d+)?/g) ?? []).map(Number);
+        distances.push(coordinates[0] ?? PRIMARY.x + PRIMARY.width / 2);
+      }
+    }
+    const [early, middle, late] = distances;
+    // ASSERT
+    expect(late - middle).toBeGreaterThan(middle - early);
   });
   it('fills the secondary action while draining the primary, and restores it on return', () => {
     // ARRANGE

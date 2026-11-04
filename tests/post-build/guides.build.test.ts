@@ -18,6 +18,10 @@ const GUIDE_TITLES = {
   de: 'Bereit für den Workshop: Dein KI-Agent auf Deinem Laptop',
 } as const;
 const GUIDE_ROUTE = '/guides/setup-ai-agent-and-starter-folder';
+const CARD_ACTIONS = {
+  en: { open: 'Open Guide', video: 'Watch on YouTube', newTab: 'opens in a new tab' },
+  de: { open: 'Anleitung öffnen', video: 'Auf YouTube ansehen', newTab: 'öffnet in einem neuen Tab' },
+} as const;
 
 /** Every public Guide the catalogue lists, by route. */
 const LISTED_GUIDES = PAGES.filter(({ page, treatment }) => page.kind === 'guide' && treatment.listed).map(({ page }) =>
@@ -26,6 +30,26 @@ const LISTED_GUIDES = PAGES.filter(({ page, treatment }) => page.kind === 'guide
 
 describe.each(LOCALES)('the Guides overview in %s', (locale) => {
   const url = localizePath(ROUTES.guides, locale);
+
+  it('renders text-only reading cards with decorative localized Open Guide cues and no invented date', () => {
+    // ARRANGE
+    const $ = exportedPage(url);
+    const expected = { ...CARD_ACTIONS[locale], position: 'none', hidden: 'true', cards: LISTED_GUIDES.length };
+    // ACT
+    const cards = $('[data-guide-card]');
+    const cues = cards.find('[data-ink-primary]');
+    const positions = cards.toArray().map((card) => $(card).attr('data-card-visual-position'));
+    // ASSERT
+    expect(positions).toEqual(Array(expected.cards).fill(expected.position));
+    expect(cards.find('[data-card-body]').length).toBe(expected.cards);
+    expect(cards.find('[data-card-visual], [data-card-media], time, .bg-linear-to-br').length).toBe(0);
+    expect(cues.toArray().map((cue) => $(cue).text().trim())).toEqual(Array(expected.cards).fill(expected.open));
+    expect(cues.toArray().map((cue) => $(cue).attr('aria-hidden'))).toEqual(
+      Array(expected.cards).fill(expected.hidden),
+    );
+    expect(cues.filter('a, button, [tabindex]').length).toBe(0);
+    expect(cards.find('h2 a[data-card-link]').length).toBe(expected.cards);
+  });
 
   it('is indexed, canonical at its own URL and in the sitemap', () => {
     // ARRANGE
@@ -66,6 +90,7 @@ describe.each(LOCALES)('the Guides overview in %s', (locale) => {
     const guide = exportedPage(localizePath(GUIDE_ROUTE, locale));
     const expectedVideoUrl = `https://www.youtube.com/watch?v=${GUIDE_VIDEO_ID}`;
     const expectedTalkTitle = GUIDE_TITLES[locale];
+    const expectedActions = CARD_ACTIONS[locale];
     // ACT
     const launcher = guide('[data-slot="title-slide"] [data-video-id]');
     const videoLink = $(`[data-guide-card="setup-ai-agent-and-starter-folder"] [data-guide-video]`);
@@ -75,5 +100,8 @@ describe.each(LOCALES)('the Guides overview in %s', (locale) => {
     expect(videoLink.attr('href')).toBe(expectedVideoUrl);
     expect(videoLink.attr('target')).toBe('_blank');
     expect(videoLink.attr('rel')).toBe('noopener noreferrer');
+    expect(videoLink.attr('data-ink-secondary')).toBe('');
+    expect(videoLink.find('[data-ink-label]').text().trim()).toBe(expectedActions.video);
+    expect(videoLink.text()).toContain(expectedActions.newTab);
   });
 });

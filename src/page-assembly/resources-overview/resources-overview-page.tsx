@@ -32,6 +32,7 @@ function resourceCards(locale: Locale, t: OverviewT): ResourceCard[] {
 
 function browserLabels(t: OverviewT): ResourceBrowserLabels {
   return {
+    open: t('open'),
     none: t('none'),
     noMatch: t('noMatch'),
     search: t('search'),

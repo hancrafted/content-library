@@ -8,6 +8,8 @@ stale_after: 2027-01-11T00:00:00Z
 
 Why the site's colours and type work the way they do, and which tokens exist. The binding rules live in [FE-011 Design Tokens](../../.archgate/adrs/FE-011-design-tokens.md); this guide holds the reasons and the reference. Taste (what looks good) has its own guide, [the design guide](design-guide.md).
 
+Episode card presentation and graphic placement: [Episode cards use a configurable graphic panel](../adr/0023-episode-cards-use-a-configurable-graphic-panel.md).
+
 ## Two layers
 
 A Slide has a **governed frame** and a **free Scene**.

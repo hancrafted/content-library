@@ -16,6 +16,16 @@ export const TAG_ICONS = {
   workflow: 'list-plus',
 } as const satisfies Readonly<Record<TagId, string>>;
 
+/** Selected signal diagram names; geometry stays in the domain-free CardArtwork renderer. */
+export const TAG_ARTWORK = {
+  'context-engineering': 'handoff-chain',
+  'agentic-ai': 'context-boundary',
+  markdown: 'document-stack',
+  cost: 'budget-gauge',
+  sales: 'customer-path',
+  workflow: 'process-loop',
+} as const satisfies Readonly<Record<TagId, string>>;
+
 /** The CSS custom property holding a Tag's colour: `--tag-<id>`, declared under `:root` and `.dark`. */
 export function tagToken(id: TagId): `--tag-${TagId}` {
   return `--tag-${id}`;

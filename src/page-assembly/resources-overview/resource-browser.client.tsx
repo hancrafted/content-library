@@ -21,6 +21,7 @@ import {
 
 /** The strings the overview's leaf draws, resolved on the server so it takes plain values (FE-006 §4). */
 export interface ResourceBrowserLabels {
+  readonly open: string;
   /** The line when no Resource exists. */
   readonly none: string;
   /** The line when Resources exist but the filter hides them all. */
@@ -170,7 +171,7 @@ export function ResourceBrowser({ cards, vocabulary, kinds, locale, labels }: Br
       >
         {cards.map((card) => (
           <li key={card.slug} data-resource-item hidden={!browse.visible.has(card.slug)} className="flex">
-            <ResourceCardView card={card} locale={locale} />
+            <ResourceCardView card={card} locale={locale} open={labels.open} />
           </li>
         ))}
       </ul>
