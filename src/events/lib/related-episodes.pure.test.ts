@@ -32,17 +32,20 @@ describe('success cases', () => {
     const all = [episode('cost-one', ['cost'], '2026-01-01'), episode('sales-one', ['sales'], '2026-01-02')];
     const expected = ['cost-one'];
     // ACT
-    const related = relatedEpisodes(event(['cost', 'workflow']), all);
+    const related = relatedEpisodes(event(['cost', 'agentic-workflow']), all);
     // ASSERT
     expect(slugs(related)).toEqual(expected);
   });
 
   it('leaves out the originals of the Episodes the Playlist copies', () => {
     // ARRANGE
-    const all = [episode('taught', ['workflow'], '2026-01-01'), episode('other', ['workflow'], '2026-01-02')];
+    const all = [
+      episode('taught', ['agentic-workflow'], '2026-01-01'),
+      episode('other', ['agentic-workflow'], '2026-01-02'),
+    ];
     const expected = ['other'];
     // ACT
-    const related = relatedEpisodes(event(['workflow'], 'taught'), all);
+    const related = relatedEpisodes(event(['agentic-workflow'], 'taught'), all);
     // ASSERT
     expect(slugs(related)).toEqual(expected);
   });

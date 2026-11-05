@@ -17,7 +17,15 @@ export type FormatId = (typeof FORMATS)[number];
  * token are in `./tag-looks.ts`, its colour per theme in `src/app/globals.css`; its name and tooltip are the
  * Translation keys `tags.<id>` in page assembly's lib.
  */
-export const TAG_IDS = ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'] as const;
+export const TAG_IDS = [
+  'context-engineering',
+  'agentic-ai',
+  'markdown',
+  'cost',
+  'sales',
+  'agentic-workflow',
+  'overview',
+] as const;
 export type TagId = (typeof TAG_IDS)[number];
 
 /**

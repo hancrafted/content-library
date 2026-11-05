@@ -1,7 +1,6 @@
 {
   "eventPage": {
     "playlist": "Playlist",
-    "start": "Start with Episode {step}",
     "kinds": {
       "workshop": "Workshop",
       "webinar": "Webinar"

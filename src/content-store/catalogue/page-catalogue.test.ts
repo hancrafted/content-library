@@ -22,7 +22,7 @@ const PUBLIC = {
   status: 'published',
   visibility: 'public',
   format: 'foundations',
-  tags: ['workflow'],
+  tags: ['agentic-workflow'],
   publishedOn: '2026-10-20',
 } as const;
 /** The AXEL seminar's unlisted copy of ai-attention-span, in its Event's folder `by-event/<event>/ai-attention-span/`. */
@@ -33,7 +33,7 @@ const UPCOMING = {
   status: 'upcoming',
   visibility: 'public',
   format: 'foundations',
-  tags: ['workflow'],
+  tags: ['agentic-workflow'],
 } as const;
 const AXEL = '2026-10-23-axel-agentic-workflow';
 const CYBERFORUM = '2026-10-28-cyberforum-akademie-intro-agentic-workflow';
@@ -345,7 +345,7 @@ describe('failure cases', () => {
 
   it('pairs each listed Template with its own record Tags, whatever its place among the records', () => {
     // ARRANGE
-    const TAGS = ['workflow', 'cost', 'sales'] as const;
+    const TAGS = ['agentic-workflow', 'cost', 'sales'] as const;
     const records = TEMPLATE_RECORDS.map((record, at) => ({
       ...record,
       tags: [TAGS[at % TAGS.length]],
@@ -442,13 +442,13 @@ const SIX = {
 const TEMPLATE_RECORDS = Object.entries(SIX).map(([slug, type]) => ({
   slug,
   type,
-  tags: ['workflow'],
+  tags: ['agentic-workflow'],
   visibility: 'public',
 }));
 const THREE_EXPLORABLE_PAGES = ['context-window', 'human-in-the-loop', 'ai-capability'];
 const EXPLORABLE_PAGE_RECORDS = THREE_EXPLORABLE_PAGES.map((slug) => ({
   slug,
-  tags: ['workflow'],
+  tags: ['agentic-workflow'],
   visibility: 'public',
 }));
 const WITH_TEMPLATES = {
@@ -466,7 +466,7 @@ const WITH_TEMPLATES = {
  */
 const GUIDE = {
   slug: 'setup-ai-agent-and-starter-folder' as GuideSlug,
-  tags: ['workflow'],
+  tags: ['agentic-workflow'],
   visibility: 'public',
 } as const;
 const WITH_GUIDES = { ...RECORDS, guides: [GUIDE], guideCompositions: [GUIDE.slug] };

@@ -6,6 +6,6 @@ export const episodeMetadata = {
   status: 'published',
   visibility: 'unlisted',
   format: 'foundations',
-  tags: ['agentic-ai', 'workflow'],
+  tags: ['agentic-ai', 'agentic-workflow'],
   publishedOn: '2026-11-04',
 } as const satisfies EpisodeInput;

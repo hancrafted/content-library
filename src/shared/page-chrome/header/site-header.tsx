@@ -109,7 +109,7 @@ export async function SiteHeader({ locale, localesByRoute, navSections }: Header
   return (
     <header
       data-testid="site-header"
-      className={`${styles.frame} sticky top-4 z-50 mx-4 mt-4 flex flex-nowrap items-center bg-header/60 px-3 py-2 backdrop-blur-xl backdrop-saturate-150 sm:px-4`}
+      className={`${styles.frame} sticky top-4 z-50 mx-4 mt-4 flex flex-nowrap items-center rounded-2xl border border-border/50 bg-header/60 px-3 py-2 shadow-header backdrop-blur-xl backdrop-saturate-150 sm:px-4`}
     >
       <HeaderMenu
         brand={<SiteBrand locale={locale} />}

@@ -36,13 +36,13 @@ const HITL = resource('human-in-the-loop', 'master-slide', {
   description: 'Where people step in',
   tags: [
     ['agentic-ai', 'Agentic AI'],
-    ['workflow', 'Workflow'],
+    ['agentic-workflow', 'Agentic workflow'],
   ],
 });
 const TEMPLATE = resource('episode-template', 'episode-template', {
   title: 'Episode template',
   description: 'Start an Episode here',
-  tags: [['workflow', 'Workflow']],
+  tags: [['agentic-workflow', 'Agentic workflow']],
 });
 const ALL: readonly FilterableResource[] = [CONTEXT, HITL, TEMPLATE];
 
@@ -70,7 +70,7 @@ describe('success cases', () => {
     // ARRANGE
     const byTitle = { ...NO_SELECTION, query: '  CONTEXT ' };
     const byDescription = { ...NO_SELECTION, query: 'people step' };
-    const byTag = { ...NO_SELECTION, query: 'workflow' };
+    const byTag = { ...NO_SELECTION, query: 'agentic workflow' };
     // ACT
     const kept = [byTitle, byDescription, byTag].map((selection) => slugs(matchingResources(ALL, selection)));
     // ASSERT
@@ -97,7 +97,7 @@ describe('success cases', () => {
 
   it('combines the search, the Tags and the kinds with AND', () => {
     // ARRANGE
-    const selection = { query: 'loop', tags: ['workflow'], kinds: ['master-slide'] };
+    const selection = { query: 'loop', tags: ['agentic-workflow'], kinds: ['master-slide'] };
     const excluded = { ...selection, kinds: ['episode-template'] };
     // ACT
     const kept = [matchingResources(ALL, selection), matchingResources(ALL, excluded)].map(slugs);
@@ -107,10 +107,10 @@ describe('success cases', () => {
 
   it('offers a chip for each Tag a Resource carries, in the vocabulary order, with its count', () => {
     // ARRANGE
-    const vocabulary = ['workflow', 'sales', 'agentic-ai'] as const;
+    const vocabulary = ['agentic-workflow', 'sales', 'agentic-ai'] as const;
     const carriedByTwo = 2;
     const expected = [
-      { id: 'workflow', label: 'Workflow', count: carriedByTwo },
+      { id: 'agentic-workflow', label: 'Agentic workflow', count: carriedByTwo },
       { id: 'agentic-ai', label: 'Agentic AI', count: carriedByTwo },
     ];
     // ACT
@@ -137,7 +137,7 @@ describe('success cases', () => {
     const guide = resource('setup-ai-agent-and-starter-folder', 'guide', {
       title: 'Get workshop-ready',
       description: 'Your AI agent on your laptop',
-      tags: [['workflow', 'Workflow']],
+      tags: [['agentic-workflow', 'Agentic workflow']],
     });
     const expected = [
       { id: 'guide', label: 'Guides', count: 1 },
@@ -166,7 +166,7 @@ describe('failure cases', () => {
     // ARRANGE
     const none: readonly FilterableResource[] = [];
     // ACT
-    const chips = [resourceTagChoices(none, ['workflow']), resourceKindChoices(none, ['master-slide'], NAMES)];
+    const chips = [resourceTagChoices(none, ['agentic-workflow']), resourceKindChoices(none, ['master-slide'], NAMES)];
     // ASSERT
     expect(chips).toEqual([[], []]);
   });

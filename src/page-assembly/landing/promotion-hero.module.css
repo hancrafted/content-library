@@ -1,5 +1,6 @@
 .hero {
   --hero-accent: var(--brand-accent);
+  --hero-header-overlap: calc(var(--header-block) + 0.25rem);
   --hero-wall: #eceeef;
   --hero-light: #fff1d2;
   --hero-sky-top: #8db6df;
@@ -41,7 +42,9 @@
   overflow: clip;
   background: var(--hero-wall);
   width: 100%;
-  padding: 4rem 1.5rem 3rem;
+  min-height: calc(100svh + 0.25rem);
+  margin-top: calc(-1 * var(--hero-header-overlap));
+  padding: calc(4rem + var(--hero-header-overlap)) 1.5rem 3rem;
 }
 
 :global(.dark) .hero {
@@ -223,7 +226,7 @@
   position: absolute;
   z-index: 3;
   right: 1.5rem;
-  top: 1rem;
+  top: calc(1rem + var(--hero-header-overlap));
   min-height: 44px;
   padding: 0.5rem 0.8rem;
   border: 1px solid var(--hero-line);
@@ -234,8 +237,8 @@
 }
 @media (min-width: 1024px) {
   .hero {
-    min-height: max(680px, calc(100svh - 5rem));
-    padding: 5.5rem max(3.5rem, calc((100% - 84rem) / 2 + 3.5rem)) 9rem;
+    min-height: max(680px, calc(100svh + 0.25rem));
+    padding: calc(5.5rem + var(--hero-header-overlap)) max(3.5rem, calc((100% - 84rem) / 2 + 3.5rem)) 9rem;
   }
   .copy {
     width: 49%;

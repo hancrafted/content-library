@@ -34,7 +34,7 @@ _Avoid_: Episode id string, parsed id
 **Upcoming Episode**: an Episode announced in the Episode browser but not yet published: its video is not out. It may already have a page, reachable by its URL alone; either way its entry links nowhere.
 _Avoid_: Draft, coming-soon episode, stub
 
-**Tag**: the one way Episodes are grouped: an id from a closed vocabulary of six, whose name and tooltip are translated per locale. An Episode carries several; the first is its **lead Tag**, which fixes the icon and accent of its card. A card shows its Tags, and search matches their names.
+**Tag**: the way Episodes and other Resources are grouped: an id from a closed vocabulary, whose name and tooltip are translated per locale. A Resource carries several; the first is its **lead Tag**, which fixes the icon, accent and artwork of its card. The **Overview Tag** identifies introductory content; unlike an Overview page, it is not a listing.
 _Avoid_: Topic, category, theme, label, keyword
 
 **Card artwork**: the decorative visual identity of a Resource's card: a symbolic composition, diagram or scene, distinct from its text and actionable controls. A glyph is a small symbol within artwork, not the whole visual.

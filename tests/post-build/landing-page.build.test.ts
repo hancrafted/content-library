@@ -140,7 +140,7 @@ describe('landing page post-build structure', () => {
   it.each(LANDING_PAGES)('closes on a contact footer with the booking page and email for $locale', ({ url }) => {
     // ARRANGE
     const booking = 'https://calendar.app.google/8KDKbsMjwtDPYTyQ7';
-    const email = 'hello@hancrafted.net';
+    const email = 'hi@hancrafted.net';
     const blankTarget = '_blank';
     // ACT
     const $ = getPage(url);

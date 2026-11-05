@@ -6,7 +6,7 @@ export const episodeMetadata = {
   status: 'published',
   visibility: 'unlisted',
   format: 'foundations',
-  tags: ['agentic-ai', 'workflow'],
+  tags: ['agentic-ai', 'agentic-workflow'],
   publishedOn: '2026-10-23',
   youtube: { id: 'GfdTw1Rhidw', language: 'en' },
 } as const satisfies EpisodeInput;

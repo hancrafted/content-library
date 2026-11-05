@@ -65,6 +65,19 @@ const ARTWORK = {
       <circle cx="170" cy="106" r="8" fill="currentColor" stroke="none" />
     </>
   ),
+  'overview-map': (
+    <>
+      <circle cx="170" cy="106" r="85" fill="currentColor" stroke="none" opacity="0.1" />
+      <rect x="95" y="36" width="150" height="140" rx="10" />
+      <path d="M95 70h150M112 53h38" />
+      <rect x="112" y="87" width="50" height="35" rx="5" />
+      <rect x="178" y="87" width="50" height="35" rx="5" />
+      <rect x="112" y="137" width="50" height="22" rx="5" />
+      <rect x="178" y="137" width="50" height="22" rx="5" />
+      <circle cx="137" cy="104" r="6" fill="currentColor" stroke="none" />
+      <path d="M190 99h26m-26 10h18M125 148h24m42 0h24" />
+    </>
+  ),
   ...WIDE_CARD_ARTWORK,
 } satisfies Record<string, ReactNode>;
 

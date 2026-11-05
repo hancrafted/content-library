@@ -27,7 +27,7 @@ const WEBINAR = filterable('webinar', {
   description: 'Onboarding agents',
   tags: [
     ['agentic-ai', 'Agentic AI'],
-    ['workflow', 'Workflow'],
+    ['agentic-workflow', 'Agentic workflow'],
   ],
 });
 const SEMINAR = filterable('seminar', {
@@ -86,7 +86,7 @@ describe('success cases', () => {
     // ACT
     const title = matchingEvents(ALL, { query: 'axel', tags: [] });
     const description = matchingEvents(ALL, { query: 'CUSTOMERS', tags: [] });
-    const tag = matchingEvents(ALL, { query: 'workflow', tags: [] });
+    const tag = matchingEvents(ALL, { query: 'agentic workflow', tags: [] });
     // ASSERT
     expect({ title: [...title], description: [...description], tag: [...tag] }).toEqual(expected);
   });
@@ -96,10 +96,17 @@ describe('success cases', () => {
     const expected = [
       { id: 'agentic-ai', label: 'Agentic AI', count: 2 },
       { id: 'sales', label: 'Sales', count: 1 },
-      { id: 'workflow', label: 'Workflow', count: 1 },
+      { id: 'agentic-workflow', label: 'Agentic workflow', count: 1 },
     ];
     // ACT
-    const chips = eventTagChoices(ALL, ['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow']);
+    const chips = eventTagChoices(ALL, [
+      'context-engineering',
+      'agentic-ai',
+      'markdown',
+      'cost',
+      'sales',
+      'agentic-workflow',
+    ]);
     // ASSERT
     expect(chips).toEqual(expected);
   });
@@ -139,7 +146,7 @@ describe('edge cases', () => {
     // ARRANGE
     const expected = { chosen: ['webinar', 'sales'], none: ['webinar', 'seminar', 'sales'] };
     // ACT
-    const chosen = matchingEvents(ALL, { query: '', tags: ['workflow', 'sales'] });
+    const chosen = matchingEvents(ALL, { query: '', tags: ['agentic-workflow', 'sales'] });
     const none = matchingEvents(ALL, { query: '  ', tags: [] });
     // ASSERT
     expect({ chosen: [...chosen], none: [...none] }).toEqual(expected);

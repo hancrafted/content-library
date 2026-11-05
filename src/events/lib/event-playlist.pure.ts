@@ -43,11 +43,3 @@ export function eventPlaylistCards<Listed, Card extends PlaylistCard>(
     return { ...card, route, href: localizePath(route, locale) };
   });
 }
-
-/** The first Episode a visitor can open, with its 1-based step in the Playlist; none while every Episode is upcoming. */
-export function startOf<Card extends Pick<PlaylistCard, 'route'>>(
-  cards: readonly Card[],
-): { step: number; card: Card } | undefined {
-  const index = cards.findIndex((card) => card.route !== null);
-  return index === -1 ? undefined : { step: index + 1, card: cards[index] };
-}

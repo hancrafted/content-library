@@ -53,9 +53,13 @@
       "name": "Vertrieb",
       "tooltip": "Kunden finden, gewinnen und halten"
     },
-    "workflow": {
-      "name": "Workflow",
+    "agentic-workflow": {
+      "name": "Agentischer Workflow",
       "tooltip": "Wie Arbeit in Schritte geteilt und zwischen Chats übergeben wird"
+    },
+    "overview": {
+      "name": "Überblick",
+      "tooltip": "Eine Einführung in die behandelten Themen"
     }
   }
 }

@@ -113,7 +113,7 @@ describe('success cases', () => {
 
   it("labels each Tag with its name and tooltip in the reader's locale, in the order the Episode lists them", () => {
     // ARRANGE
-    const entry = { ...PUBLISHED, tags: ['cost', 'workflow'] } as const;
+    const entry = { ...PUBLISHED, tags: ['cost', 'agentic-workflow'] } as const;
     const expected = [
       {
         id: 'cost',
@@ -121,9 +121,9 @@ describe('success cases', () => {
         tooltip: '[tags.cost.tooltip]',
       },
       {
-        id: 'workflow',
-        label: '[tags.workflow.name]',
-        tooltip: '[tags.workflow.tooltip]',
+        id: 'agentic-workflow',
+        label: '[tags.agentic-workflow.name]',
+        tooltip: '[tags.agentic-workflow.tooltip]',
       },
     ];
     // ACT

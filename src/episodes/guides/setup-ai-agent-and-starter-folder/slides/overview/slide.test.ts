@@ -57,7 +57,7 @@ const card = (route: string, title: string) => ({
   route,
   title,
   caption: 'Beschreibung',
-  tags: [{ id: 'workflow', label: 'Workflow' }],
+  tags: [{ id: 'agentic-workflow', label: 'Workflow' }],
   day: '2026-10-28',
   dateLabel: '28. Okt. 2026',
 });
