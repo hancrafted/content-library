@@ -9,7 +9,7 @@ Make the decision understandable, then make responding easy. The output is one H
 
 ## 1. Establish the review
 
-Read the supplied input and the caller's instructions. Set the audience, decision scope, output location, feedback destination and next action. A workflow supplies its destinations; otherwise propose a project-local handoff location and show it in the page, editable by the reviewer.
+Read the supplied input and the caller's instructions. Set the audience, decision scope and output location. Resolve the feedback destination to an absolute filesystem path. A workflow supplies its destinations; a generic page revision owns one numbered feedback file by the [feedback contract](references/feedback-contract.md).
 
 The default role is an **explanatory snapshot**. Only the user or caller can declare an **authoritative Spec**, or a **travelling Spec** that a workflow enriches across Jobs. For an explicit update, read the named HTML and retain its stable identities. The caller owns progression, persistence and approval rules; this skill never starts a Run or implements the reviewed proposal.
 
@@ -37,7 +37,7 @@ Optional guidance, not a requirement: try a centered visual with Option cards in
 
 Apply the [feedback contract](references/feedback-contract.md) to the authored HTML. Each item supports the suitable response type: boolean, single choice or multiple choice, initially unanswered. Provide deselection and per-item reset, comments per Option and per item. With two or more Options, mark exactly one recommended and explain why; a recommendation is not a preselected answer. An item without choices or comments is skipped.
 
-Where an analogy helps, provide an independent show/hide button on that item and explain its limits. At the end, provide an optional **Next action** field and **Copy feedback as prompt**. Enable explicit overall approval only if the caller needs it; choices and saving never imply approval.
+Where an analogy helps, provide an independent show/hide button on that item and explain its limits. Build the end-of-page handoff by the contract, including its preset **Next action**, save/copy controls and global reset. Explain the selected action's approval consequence.
 
 Use ordinary, labelled, editable textareas for comments. Preserve focus and selection through preview/tool changes; accept native insertion, paste and composition events. External dictation supplies text; the page records no audio.
 
@@ -47,13 +47,13 @@ _Done when_ every review action, draft recovery and feedback handoff follows the
 
 ## 4. Deliver and verify
 
-Inline all runtime CSS and JavaScript. CDN tooling may be used during generation, but the delivered page needs no network to render or review; embed required visual assets too. Render diagrams ahead of time or embed their renderer. A snapshot needs no shared runtime, installed package or framework. A travelling Spec uses the caller's existing machinery and file contracts; preserve its Gates and external ownership instead of introducing a second lifecycle.
+Inline all runtime CSS and JavaScript. CDN tooling may be used during generation, but the delivered page needs no network to render or review; embed required visual assets too. Render diagrams ahead of time or embed their renderer. Direct Save uses the [local saving guide](references/local-saving.md); review, Copy and Save As remain independent of the helper. A travelling Spec uses the caller's existing machinery and file contracts; preserve its Gates and external ownership instead of introducing a second lifecycle.
 
 Perform [artifact verification](references/verification.md) against the delivered file, not only isolated previews. Report anything unverified, especially actual external-dictation compatibility and visual taste. Keep check scripts and inspection artifacts outside product code.
 
-Open the HTML using the local platform's opener and print its absolute path or served URL. State its role, feedback destination and how to return feedback. An explicit update changes only the requested artifact; there is no background synchronization or universal revision archive.
+Open the served review URL, or the standalone file when direct saving is unavailable, using the local platform's opener. Print its absolute path or URL, role, feedback destination and continuation instructions. An explicit update follows the contract's revision rules and rebinds any helper to the updated artifact; there is no automatic session resumption or background synchronization.
 
-_Done when_ the delivered file passes its mechanical checks, the user can open it and unresolved limitations are named.
+_Done when_ available mechanical checks pass, blocked checks are named, and the user has the openable artifact plus its feedback destination and continuation.
 
 ## Manual evaluation
 

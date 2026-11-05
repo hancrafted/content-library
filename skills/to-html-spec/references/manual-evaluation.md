@@ -19,7 +19,7 @@ For the first comparison:
 
 Record the skill version/hash, exact variant diff, input hashes, model, declared generation settings, clarifications and artifact locations. If clarification is needed, freeze the answer and supply the same answer to the other arm; otherwise flag that comparison as confounded.
 
-The invocation is outside the frozen task text: explicitly load the selected variant, then supply the case's `prompt.md`. Each run receives its own Spec identity and feedback destination, for example `.scratch/to-html-spec-evals/<round>/<arm>/<case>/feedback/01/handoff.md`. Record these operational substitutions; they are not content changes to the task. Save the rendered HTML before feeding feedback back into generation.
+The invocation is outside the frozen task text: explicitly load the selected variant, then supply the case's `prompt.md`. Each run receives its own Spec identity and absolute feedback destination, for example `/absolute/eval-workspace/<round>/<arm>/<case>/feedback-01.md`. Record these operational substitutions; they are not content changes to the task. Save the rendered HTML before feeding feedback back into generation.
 
 Use the same approved checks for both arms and both cases. Evaluate the original generated artifacts, not just versions repaired through feedback. You may compare them in alternating order and hide arm names while recording human judgment; preserve the mapping separately.
 
