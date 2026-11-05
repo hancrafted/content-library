@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "frozenOn": "2026-11-04",
+  "hashAlgorithm": "sha256",
+  "cases": [
+    {
+      "id": "ink",
+      "kind": "reconstructed-handoff",
+      "source": {
+        "session": "0fe4508f-5cf3-484f-ad3d-876e23ef12ab",
+        "title": "card+ink-refactor",
+        "userTurns": [10, 11],
+        "cutoff": "After user turn 11, before its prototype response. Earlier card constraints are summarized; later refinements are excluded.",
+        "provenanceOnly": ["ink/source.md"],
+        "omitted": "Original image attachments and generated prototypes are not supplied. The handoff states its own visual context."
+      },
+      "prompt": "ink/prompt.md",
+      "attachments": ["ink/handoff.md"],
+      "hashes": {
+        "ink/prompt.md": "bc62aed848430565e8383d9790584b5e21ac5fa14193a6a17e0acbb7cf949872",
+        "ink/handoff.md": "62de185e0bef148182ffb5735ba11a74d1be4f2ed3900fb2fb7323b423bd630d",
+        "ink/source.md": "778019dbf8425e9f2f9e30732ec6fad78dd53af8ad4b6be61a4d1eabc0fe9614"
+      }
+    },
+    {
+      "id": "episode",
+      "kind": "original-approved-brief",
+      "source": {
+        "repository": "hancrafted/content-library",
+        "commit": "acb9909af4e83a74544cacdbca2a90135ae6aaae",
+        "path": "docs/episodes/ai-gives-you-more-work/brief.md",
+        "title": "Why AI gives you more work, and why you'll want it",
+        "copy": "episode/input.md is a byte-for-byte copy of the original approved Brief.",
+        "omitted": "No research answers exist beside the Brief at this commit. No later research, Dossier, Spec or style guide is included."
+      },
+      "prompt": "episode/prompt.md",
+      "attachments": ["episode/input.md"],
+      "hashes": {
+        "episode/prompt.md": "f1ca6c1b4da60d1af7f7bb56b3d20b0e9602e9e324aeb3e9a5fe04bd1b968693",
+        "episode/input.md": "7fc9851e05eeb2e440c1f3b61c5a8a4ca7c42b3723fe622f7240290631d01f6d"
+      }
+    }
+  ]
+}
