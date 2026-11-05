@@ -19,6 +19,17 @@ Check the delivered HTML, with networking disabled, at desktop and landscape-tab
 | Export all response states                                      | The prompt names the exact revision and destination, preserves every comment and carries caller and human next actions separately.                                                                                |
 | Block or corrupt draft storage                                  | Editing and handoff still work, with a truthful recovery warning.                                                                                                                                                 |
 
+For the handoff controls, also exercise:
+
+- The context-derived Next action and its labelled agent preset; changing the action clears the text, including after a draft restores.
+- Saving a preset approval action exports approval of the reviewed revision without a second checkbox. A changed revision cannot inherit the earlier approval.
+- Confirmed Reset all clears current item/Option responses and restores recommended action/text, preserving destination and historical feedback; cancellation changes nothing.
+- Direct Save writes the exact prompt to the displayed absolute path; another Save replaces only that revision's file. Confirm browser fields and drafts survive both.
+- An agent-updated page has a new revision and next unused feedback filename; an old draft or helper cannot redirect it to the previous file.
+- Save As picker success, cancellation and download fallback; Copy prompt success and denial. Do not equate a download starting with confirmed file placement.
+- Helper unavailable, mismatched destination/revision, rejected write and changed HTML: truthful status, usable copy fallback, no claimed save and no lost input.
+- Save/copy/reset icons retain visible, accessible names. The page explains that Save accepts its selected Next action and names the file the creating session should read.
+
 Wait on observable states, not fixed sleeps. Inspect both themes when theme switching is offered. Verify keyboard operation, labelled fields, visible focus, contrast and absence of unintended horizontal overflow. For motion, verify purposeful states and reduced-motion behaviour without claiming a geometry test proves the effect looks liquid.
 
 ## Human checks
