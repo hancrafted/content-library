@@ -75,7 +75,11 @@ require retention. Discard instructions cannot override protection.
 Inspect ignored content: only verified reproducible generated artifacts, such as
 dependency installs and build output, are disposable. Names and `.gitignore`
 entries alone are insufficient. Other ignored content needs specific discard
-authorization. Report paths and counts, not secret contents.
+authorization or verified preservation outside the removal target. Preserve
+same-session handoffs and scratch files in session storage or a repository-scoped
+archive outside the target, verifying copied contents before removal and reporting
+the destination. This preserves files; it does not authorize discarding them.
+Report paths and counts, not secret contents.
 Locked or missing worktrees remain unresolved; lock removal and metadata pruning
 are outside scope.
 
@@ -109,10 +113,23 @@ _Done when:_ every item is classified and each proposed removal is authorized.
 
 ## 4. Execute authorized removals
 
-Recheck evidence immediately before acting. If inside a removable worktree,
-move subsequent execution to the primary worktree. Preserve the cleanup agent,
-its controlling shell, and ancestors; if they cannot release the target, retain
-it and report that cleanup must be rerun from elsewhere.
+Recheck evidence immediately before acting. When cleanup is invoked in the same
+session that completed the work, that session is not an active-work blocker:
+relocate rather than terminate it. Apply the same integration, remaining-file,
+and mode-specific authorization checks.
+
+Before removing the invoking worktree:
+
+1. Preserve its handoffs and scratch files as described above.
+2. Move cleanup execution to the primary worktree using the harness's supported
+   working-directory mechanism. Use an explicit surviving cwd for every later
+   command; a `cd` in a one-shot shell does not relocate the agent.
+3. Keep the cleanup agent, controlling shell, and ancestors alive. Their cwd
+   alone is not a reason to retain the target when the harness can safely
+   continue outside it. Verify continued execution from the surviving checkout.
+
+If the harness cannot continue safely after removal, report that specific
+limitation and retain the target. Another active agent session remains protected.
 
 For each authorized target:
 
