@@ -17,6 +17,7 @@ import type { EpisodeCard } from '@/episodes/components/episode-card/episode-car
 import { SearchInput } from '@/shared/components/filters/search-input';
 import { TagToggles } from '@/shared/components/filters/tag-toggles';
 import { Button } from '@/shared/components/ui/button';
+import { CARD_GRID } from '@/shared/components/ui/card-grid';
 import type { CardHeadingLevel } from '@/shared/components/ui/card-variant.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
@@ -171,7 +172,7 @@ interface GridProps {
 function BrowseGrid({ cards, visible, locale, labels, headingLevel }: GridProps) {
   const showFormat = showsFormat(cards);
   return (
-    <ul data-episode-browse className="grid gap-4 sm:grid-cols-2">
+    <ul data-episode-browse className={CARD_GRID}>
       {cards.map((card) => (
         <li key={card.slug} data-browse-item hidden={!visible.has(card.slug)} className="flex">
           <EpisodeCardView

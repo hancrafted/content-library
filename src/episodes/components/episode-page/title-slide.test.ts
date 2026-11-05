@@ -1,3 +1,4 @@
+import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
@@ -19,6 +20,31 @@ function render(hero?: string) {
 }
 
 describe('success cases', () => {
+  it.each(['shared', 'authored'] as const)(
+    'places an Event notice inside the Title slide above its title on %s headers',
+    (mode) => {
+      // ARRANGE
+      const notice = 'The Event has already taken place.';
+      const props = {
+        ...TEXT,
+        mode,
+        entrance: 'none' as const,
+        appearance: { tone: 'normal' as const },
+        notice: createElement('p', { 'data-past-notice': true }, notice),
+      };
+      // ACT
+      const $ = load(renderToStaticMarkup(createElement(TitleSlide, props)));
+      const slide = $('[data-slot="title-slide"]');
+      const order = slide
+        .find('[data-past-notice], h1')
+        .map((_, element) => element.tagName)
+        .get();
+      // ASSERT
+      expect(slide.find('[data-past-notice]').text()).toBe(notice);
+      expect(order).toEqual(['p', 'h1']);
+    },
+  );
+
   it('sets an authored hero directly under the h1 and caption, the pair centred in the slide', () => {
     // ARRANGE
     const hug = 'data-headed="hug"';

@@ -19,7 +19,7 @@ const CARD: EventCard = {
   leadTag: 'agentic-ai',
   tags: [
     { id: 'agentic-ai', label: 'Agentic AI', tooltip: 'AI that plans and acts' },
-    { id: 'workflow', label: 'Workflow', tooltip: 'Work split into steps' },
+    { id: 'agentic-workflow', label: 'Workflow', tooltip: 'Work split into steps' },
   ],
   place: { format: 'remote', label: 'Online · Zoom' },
   episodeCount: 3,

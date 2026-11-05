@@ -34,6 +34,8 @@ export interface SlideHeaderProps {
   readonly action?: ReactNode;
   readonly entrance?: SlideEntrance;
   readonly className?: string;
+  /** Content above the title, within the Slide header. */
+  readonly leading?: ReactNode;
   /** Rendered after the caption, e.g. the Title slide's talk launcher. */
   readonly children?: ReactNode;
 }
@@ -121,6 +123,7 @@ export function SlideHeader({
       className={cn('flex flex-col gap-(--space-header) pt-16 pb-(--space-header) md:pt-24', rest.className)}
     >
       {eyebrow && <SlideEyebrow eyebrow={eyebrow} delays={delays[0]} next={ends[0]} />}
+      {rest.leading}
       <TitleRow action={action}>
         <TitleGroup {...{ level, title, caption, captionEmphasis, captionNote, delays, ends }} />
       </TitleRow>

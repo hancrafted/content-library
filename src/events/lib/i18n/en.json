@@ -25,7 +25,7 @@
         "description": "How does generative AI work, and how can it genuinely help at work? This interactive introduction gives you a mental model of how AI behaves, whatever the tool: big tasks split into steps, the AI works through them, and you stay captain in between. Prompting basics and meta-prompting come not as theory but as copy-ready prompts, and in the live demo \"Grill me\" the AI helps you find the right question first. To go deeper: the hands-on workshop on 16 November 2026 turns to concrete use cases."
       },
       "2026-11-04-intro-hitl-workflows": {
-        "title": "Intro HITL Workflows",
+        "title": "Intro Human in the Loop Workflow",
         "description": "An introduction to human-in-the-loop workflows in Guangzhou."
       }
     }

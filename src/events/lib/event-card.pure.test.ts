@@ -13,7 +13,7 @@ const listed = (slug: string, anchor?: string) => ({ episode: { slug }, ...(anch
 const RECORD = {
   slug: SLUG,
   date: '2026-10-23',
-  tags: ['agentic-ai', 'workflow'],
+  tags: ['agentic-ai', 'agentic-workflow'],
   format: 'remote',
   platform: 'zoom',
   playlist: { episodes: [listed('alpha'), listed('beta'), listed('gamma')] },
@@ -25,7 +25,8 @@ const TAG_WORDS = {
   markdown: { name: 'Markdown', tooltip: 'Plain-text documents' },
   cost: { name: 'Cost', tooltip: 'What AI costs' },
   sales: { name: 'Sales', tooltip: 'Winning customers' },
-  workflow: { name: 'Workflow', tooltip: 'Work split into steps' },
+  'agentic-workflow': { name: 'Workflow', tooltip: 'Work split into steps' },
+  overview: { name: 'Overview', tooltip: 'Introduction' },
 } as const;
 
 describe('success cases', () => {
@@ -76,7 +77,7 @@ describe('success cases', () => {
       leadTag: 'agentic-ai',
       tags: [
         { id: 'agentic-ai', label: 'Agentic AI', tooltip: 'AI that plans and acts' },
-        { id: 'workflow', label: 'Workflow', tooltip: 'Work split into steps' },
+        { id: 'agentic-workflow', label: 'Workflow', tooltip: 'Work split into steps' },
       ],
     };
     // ACT

@@ -90,7 +90,7 @@ function OwnEpisodePage({
 
 /**
  * An Episode as an Event presents it (design-ADR 0016, Routes and visibility): the Episode's own page through the
- * container, framed by the Event's past notice above the Title slide, "Episode n of m" under the title,
+ * container, framed by the Event's past notice above the Title slide's title,
  * and the Playlist walk after the last Slide. Its structured data stays on the Episode's own page.
  */
 function EpisodeUnderEvent({

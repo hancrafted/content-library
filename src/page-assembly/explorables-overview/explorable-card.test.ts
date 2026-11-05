@@ -14,7 +14,7 @@ const CARD: ExplorableCard = {
   leadTag: 'context-engineering',
   tags: [
     { id: 'context-engineering', label: 'Context engineering', tooltip: 'Context' },
-    { id: 'workflow', label: 'Workflow', tooltip: 'Steps' },
+    { id: 'agentic-workflow', label: 'Workflow', tooltip: 'Steps' },
   ],
 };
 

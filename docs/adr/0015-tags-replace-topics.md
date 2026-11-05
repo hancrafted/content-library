@@ -36,3 +36,9 @@ Events carry Tags too, and the look moves out of the Episodes area, which no oth
 - The accent is no colour family any more but one token per Tag and theme, `--tag-<id>` in `globals.css`, adjustable in the token editor; a card's ink, wash and edge are drawn from it. The palette classes it replaces broke FE-011-design-tokens §4.3.
 - A Tag's name and tooltip are Translation keys `tags.<id>` in page assembly's lib, the one owner above both areas.
 - Decision 3 holds for Episodes. The Events overview offers a chip for every Tag a listed Event carries (_Events overview_).
+
+## Amendment: Overview Tag (2026-11-05)
+
+The vocabulary adds `overview` for introductory content and renames `workflow` to `agentic-workflow`. An intro keeps
+its subject Tags after `overview`; the lead Tag also selects the card artwork. The Episode browser's five filter chips
+remain unchanged, while search matches every Tag name.

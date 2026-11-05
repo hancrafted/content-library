@@ -43,6 +43,8 @@ export interface TitleSlideProps {
   recording?: RecordingLanguage;
   /** On an Event-scoped Episode page, the Event's time as the venue writes it, "17:00–19:00 CET"; it follows the title. */
   time?: string;
+  /** An Event notice above the title, inside the Title slide. */
+  notice?: ReactNode;
   /** On an Episode with authored headers, the short names the Title slide's notes target; only these carry a `data-target`. The Slide header marks both. */
   targets?: readonly TitleTarget[];
 }
@@ -81,6 +83,7 @@ function AuthoredTitleSlide(props: TitleSlideProps & { launcher: ReactNode }) {
       {props.hero ?? <HeroGlow />}
       <ToneInk target={props.appearance.inkTarget} />
       <SlideFrame className="justify-center">
+        {props.notice && <div className="mb-6">{props.notice}</div>}
         <HeroTitle {...targetOf('title')}>{props.title}</HeroTitle>
         {props.caption && <SlideCaption {...targetOf('caption')}>{props.caption}</SlideCaption>}
         <EventTime time={props.time} />
@@ -98,6 +101,7 @@ function sharedHeaderOf(props: TitleSlideProps, launcher: ReactNode) {
     level: 'h1' as const,
     title: props.title,
     caption: props.caption,
+    leading: props.notice,
     entrance,
     // Without a hero Scene the header sits centred over the glow; with one, header and hero sit together, centred.
     className: hero === undefined ? 'my-auto pb-16 md:pb-24' : 'mt-auto',

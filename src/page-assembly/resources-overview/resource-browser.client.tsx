@@ -4,6 +4,7 @@ import type { TagId } from '@/content-store/schemas/fields';
 import { SearchInput } from '@/shared/components/filters/search-input';
 import { TagToggles } from '@/shared/components/filters/tag-toggles';
 import { Button } from '@/shared/components/ui/button';
+import { CARD_GRID } from '@/shared/components/ui/card-grid';
 import { ToggleGroup, ToggleGroupItem } from '@/shared/components/ui/toggle-group';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
@@ -167,7 +168,7 @@ export function ResourceBrowser({ cards, vocabulary, kinds, locale, labels }: Br
       <ul
         data-resource-list
         data-view={browse.view}
-        className={cn(browse.view === 'grid' ? 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3' : 'flex flex-col gap-4')}
+        className={cn(browse.view === 'grid' ? CARD_GRID : 'flex flex-col gap-4')}
       >
         {cards.map((card) => (
           <li key={card.slug} data-resource-item hidden={!browse.visible.has(card.slug)} className="flex">

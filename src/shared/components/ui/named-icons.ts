@@ -1,4 +1,13 @@
-import { Coins, FileText, Handshake, Hourglass, ListPlus, Sparkles, type LucideIcon } from 'lucide-react';
+import {
+  Coins,
+  FileText,
+  Handshake,
+  Hourglass,
+  LayoutDashboard,
+  ListPlus,
+  Sparkles,
+  type LucideIcon,
+} from 'lucide-react';
 
 /*
  * Icons by name, so a record can name one as data and stay free of React. Domain-free: whoever names an icon (a Tag's
@@ -8,6 +17,7 @@ export const NAMED_ICONS = {
   sparkles: Sparkles,
   hourglass: Hourglass,
   'list-plus': ListPlus,
+  'layout-dashboard': LayoutDashboard,
   handshake: Handshake,
   'file-text': FileText,
   coins: Coins,

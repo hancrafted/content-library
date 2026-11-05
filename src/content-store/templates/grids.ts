@@ -3,6 +3,6 @@ import type { TemplateInput } from '../schemas/template.schema';
 export const template = {
   slug: 'grids',
   type: 'master-slide',
-  tags: ['workflow'],
+  tags: ['agentic-workflow'],
   visibility: 'public',
 } as const satisfies TemplateInput;

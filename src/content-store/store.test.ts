@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { episodeRef } from './catalogue/episode-id.pure';
-import { episodeVideo, findEvent, loadContent } from './store';
+import { episodeVideo, findEvent, listEpisodes, loadContent } from './store';
 
 /*
  * The content store's refusals (FE-013 Decision 3, design-ADR 0016): every record is parsed whole or the load
@@ -15,7 +15,7 @@ const EPISODE = {
   status: 'published',
   visibility: 'public',
   format: 'foundations',
-  tags: ['workflow'],
+  tags: ['agentic-workflow'],
   publishedOn: '2026-10-20',
 } as const;
 /** The AXEL seminar's unlisted copy of alpha, in its Event's folder `by-event/<event>/alpha/`. */
@@ -28,7 +28,7 @@ const EVENT = {
   kind: 'workshop',
   organizers: ['axel'],
   audience: 'organization',
-  tags: ['agentic-ai', 'workflow'],
+  tags: ['agentic-ai', 'agentic-workflow'],
   format: 'remote',
   platform: 'zoom',
   playlist: 'axel',
@@ -69,6 +69,22 @@ const SOUND = {
 };
 
 describe('success cases', () => {
+  it('classifies both Event intros as overviews while retaining their subject Tags', () => {
+    // ARRANGE
+    const ids = [
+      '2026-10-28-cyberforum-akademie-intro-agentic-workflow__intro',
+      '2026-11-04-intro-hitl-workflows__intro',
+    ];
+    const expected = ids.map((id) => ({ id, tags: ['overview', 'agentic-workflow', 'agentic-ai'] }));
+    // ACT
+    const intros = listEpisodes()
+      .filter(({ ref }) => ids.includes(ref.id))
+      .map(({ ref, tags }) => ({ id: ref.id, tags }))
+      .sort((a, b) => a.id.localeCompare(b.id));
+    // ASSERT
+    expect(intros).toEqual(expected);
+  });
+
   it('loads a sound set of records whole, each Event holding the Playlist it presents with its Episodes', () => {
     // ARRANGE
     const loaded = { ...EPISODE, ref: episodeRef('alpha') };
@@ -95,7 +111,7 @@ describe('success cases', () => {
       kind: 'workshop',
       organizers: ['axel'],
       audience: 'organization',
-      tags: ['agentic-ai', 'workflow'],
+      tags: ['agentic-ai', 'agentic-workflow'],
       format: 'remote',
       platform: 'zoom',
       playlist: {
@@ -264,7 +280,7 @@ describe('failure cases', () => {
     expect(load).toThrow(expected);
   });
 
-  const TAG_LIST = 'context-engineering, agentic-ai, markdown, cost, sales, workflow';
+  const TAG_LIST = 'context-engineering, agentic-ai, markdown, cost, sales, agentic-workflow, overview';
   const TAG_RECORDS = {
     Episode: [
       'Episode alpha',
@@ -324,12 +340,12 @@ describe('failure cases', () => {
     [
       'with no Tags',
       { ...EVENT, tags: [] },
-      'tags.0 is required, one of context-engineering, agentic-ai, markdown, cost, sales, workflow',
+      'tags.0 is required, one of context-engineering, agentic-ai, markdown, cost, sales, agentic-workflow, overview',
     ],
     [
       'with a Tag outside the vocabulary',
       { ...EVENT, tags: ['ai'] },
-      'tags.0 is "ai", but must be one of context-engineering, agentic-ai, markdown, cost, sales, workflow',
+      'tags.0 is "ai", but must be one of context-engineering, agentic-ai, markdown, cost, sales, agentic-workflow, overview',
     ],
     ['without a format', without(EVENT, 'format'), 'format is required, one of onsite, remote, hybrid'],
     ['onsite with no venue', without(ONSITE, 'venue'), 'venue is required when the format is onsite'],
@@ -687,9 +703,9 @@ describe('failure cases', () => {
 
   it('refuses an Episode listing one Tag twice, and a Tag outside the vocabulary', () => {
     // ARRANGE
-    const twice = { ...EPISODE, tags: ['workflow', 'workflow'] };
+    const twice = { ...EPISODE, tags: ['agentic-workflow', 'agentic-workflow'] };
     const unknown = { ...EPISODE, slug: 'beta', tags: ['astrology'] };
-    const expected = { twice: 'Episode alpha: tags lists workflow twice', unknown: 'Episode beta: tags.0 ' };
+    const expected = { twice: 'Episode alpha: tags lists agentic-workflow twice', unknown: 'Episode beta: tags.0 ' };
     // ACT
     const loadTwice = () => loadContent({ ...SOUND, episodes: [own(twice)] });
     const loadUnknown = () => loadContent({ ...SOUND, episodes: [own(EPISODE), own(unknown)] });
@@ -715,7 +731,7 @@ describe('failure cases', () => {
       status: 'upcoming',
       visibility: 'public',
       format: 'foundations',
-      tags: ['workflow'],
+      tags: ['agentic-workflow'],
     };
     const episodes = [own(EPISODE), own(upcoming), copy(UNLISTED)];
     const input = {
@@ -776,7 +792,7 @@ describe('failure cases', () => {
     // ARRANGE
     const input = {
       ...SOUND,
-      explorablePages: [{ slug: 'timeline-of-nothing', tags: ['workflow'], visibility: 'public' }],
+      explorablePages: [{ slug: 'timeline-of-nothing', tags: ['agentic-workflow'], visibility: 'public' }],
       explorablePageCompositions: ['timeline-of-nothing'],
       explorables: ['context-window'],
     };
@@ -790,7 +806,7 @@ describe('failure cases', () => {
 
   it('refuses an Explorable page with a YouTube id that is no id, and two pages with one slug', () => {
     // ARRANGE
-    const page = { slug: 'context-window', tags: ['workflow'], visibility: 'public' };
+    const page = { slug: 'context-window', tags: ['agentic-workflow'], visibility: 'public' };
     const input = {
       ...SOUND,
       explorablePages: [{ ...page, youtube: { en: 'nope' } }, page],
@@ -807,7 +823,7 @@ describe('failure cases', () => {
     // ARRANGE
     const input = {
       ...SOUND,
-      guides: [{ slug: 'setup-ai-agent-and-starter-folder', tags: ['workflow'], visibility: 'public' }],
+      guides: [{ slug: 'setup-ai-agent-and-starter-folder', tags: ['agentic-workflow'], visibility: 'public' }],
       guideCompositions: [],
     };
     // ACT
@@ -833,7 +849,7 @@ describe('failure cases', () => {
     // ARRANGE
     const input = {
       ...SOUND,
-      guides: [{ slug: 'setup-ai-agent-and-starter-folder', tags: ['workflow'], youtube: { en: 'nope' } }],
+      guides: [{ slug: 'setup-ai-agent-and-starter-folder', tags: ['agentic-workflow'], youtube: { en: 'nope' } }],
       guideCompositions: ['setup-ai-agent-and-starter-folder'],
     };
     // ACT
@@ -978,5 +994,5 @@ describe('edge cases', () => {
  * Templates (design-ADR 0019): a record and its composition folder go together, and the load throws on either one
  * alone.
  */
-const TEMPLATE = { slug: 'grids', type: 'master-slide', tags: ['workflow'], visibility: 'public' } as const;
+const TEMPLATE = { slug: 'grids', type: 'master-slide', tags: ['agentic-workflow'], visibility: 'public' } as const;
 const TEMPLATE_RECORDS = { ...SOUND, templates: [TEMPLATE] };

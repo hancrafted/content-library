@@ -84,7 +84,7 @@ Out of the model: Concept, Research question and Source (the evidence layer, its
 | `/guides/<slug>/`                               | One Guide.                                                                    |
 | `/<type plural>/<resource-slug>/`               | One Resource, by its type's plural: `/episode-templates/`, `/master-slides/`. |
 
-The Event page sits in the same container as the overview pages and is two columns from `lg`, no longer one. The main column holds the title, description, past notice, Start button, Playlist and, last, up to three related Episodes: public, published Episodes sharing a Tag with the Event, without the originals of the Playlist's copies, newest release first, and no section when none remain. The side panel holds the image, the facts line stacked, the Organizers, a link to the `listing` and the `references`. Below `lg` everything stacks, the image after the title. The Event page shows no reading time.
+The Event page sits in the same container as the overview pages and is two columns from `lg`, no longer one. The main column holds the title, description, past notice, Playlist and, last, up to three related Episodes: public, published Episodes sharing a Tag with the Event, without the originals of the Playlist's copies, newest release first, and no section when none remain. The side panel holds the image, the facts line stacked, the Organizers, a link to the `listing` and the `references`. Below `lg` everything stacks, the image after the title. The Event page shows no reading time.
 
 Old `/workshops/` URLs 301 to their Event in `public/_redirects`, both locales (FE-005 forbids `next.config.ts` redirects).
 

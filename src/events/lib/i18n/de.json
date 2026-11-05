@@ -25,7 +25,7 @@
         "description": "Wie funktioniert generative KI, und wie unterstützt sie uns sinnvoll im Arbeitsalltag? In diesem interaktiven Einstieg baust du dir ein Bild im Kopf, wie KI tickt, egal mit welchem Tool: Große Aufgaben werden in Schritte zerlegt, die KI arbeitet sie ab, und du bleibst Kapitän dazwischen. Prompting-Grundlagen und Meta-Prompting bekommst du nicht als Theorie, sondern als fertige Prompts zum Kopieren, und in der Live-Demo „Grill me“ hilft dir die KI, erst die richtige Frage zu finden. Wer tiefer einsteigen will: Der Praxis-Workshop am 16.11.2026 geht in konkrete Use Cases."
       },
       "2026-11-04-intro-hitl-workflows": {
-        "title": "Intro HITL Workflows",
+        "title": "Intro Human in the Loop Workflow",
         "description": "Eine Einführung in Human-in-the-Loop-Workflows in Guangzhou."
       }
     }

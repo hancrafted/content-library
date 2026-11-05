@@ -13,7 +13,8 @@ export const TAG_ICONS = {
   markdown: 'file-text',
   cost: 'coins',
   sales: 'handshake',
-  workflow: 'list-plus',
+  'agentic-workflow': 'list-plus',
+  overview: 'layout-dashboard',
 } as const satisfies Readonly<Record<TagId, string>>;
 
 /** Selected signal diagram names; geometry stays in the domain-free CardArtwork renderer. */
@@ -23,7 +24,8 @@ export const TAG_ARTWORK = {
   markdown: 'document-stack',
   cost: 'budget-gauge',
   sales: 'customer-path',
-  workflow: 'process-loop',
+  'agentic-workflow': 'process-loop',
+  overview: 'overview-map',
 } as const satisfies Readonly<Record<TagId, string>>;
 
 /** The CSS custom property holding a Tag's colour: `--tag-<id>`, declared under `:root` and `.dark`. */

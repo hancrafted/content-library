@@ -7,7 +7,7 @@ export const event = {
   kind: 'workshop',
   organizers: ['axel'],
   audience: 'organization',
-  tags: ['agentic-ai', 'workflow'],
+  tags: ['agentic-ai', 'agentic-workflow'],
   format: 'remote',
   platform: 'zoom',
   playlist: 'axel-agentic-workflow',

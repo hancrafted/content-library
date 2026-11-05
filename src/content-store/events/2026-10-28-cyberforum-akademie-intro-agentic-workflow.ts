@@ -14,7 +14,7 @@ export const event = {
   },
   audience: 'individual',
   time: '17:00–19:00 CET',
-  tags: ['agentic-ai', 'workflow'],
+  tags: ['agentic-ai', 'agentic-workflow'],
   format: 'remote',
   platform: 'zoom',
   playlist: 'cyberforum-akademie-intro-agentic-workflow',

@@ -7,7 +7,7 @@ import { templateSchema } from './schemas/template.schema';
  * words are not fields.
  */
 
-const TEMPLATE = { slug: 'timelines', type: 'master-slide', tags: ['workflow'], visibility: 'public' } as const;
+const TEMPLATE = { slug: 'timelines', type: 'master-slide', tags: ['agentic-workflow'], visibility: 'public' } as const;
 
 /** The record with one field left out, as a file that forgot it would hold it. */
 function withoutKey(record: Record<string, unknown>, key: string): Record<string, unknown> {
@@ -92,9 +92,9 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('keeps the order of several Tags, so the first stays the lead Tag', () => {
     // ARRANGE
-    const expected = ['agentic-ai', 'workflow'];
+    const expected = ['agentic-ai', 'agentic-workflow'];
     // ACT
-    const parsed = templateSchema.parse({ ...TEMPLATE, tags: ['agentic-ai', 'workflow'] });
+    const parsed = templateSchema.parse({ ...TEMPLATE, tags: ['agentic-ai', 'agentic-workflow'] });
     // ASSERT
     expect(parsed.tags).toEqual(expected);
   });

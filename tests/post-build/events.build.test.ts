@@ -56,7 +56,6 @@ const WORDS: Record<
     date: string;
     count: string;
     nav: string;
-    start: string;
     kind: string;
     audience: string;
     notice: string;
@@ -71,7 +70,6 @@ const WORDS: Record<
     date: 'Oct 23, 2026',
     count: '3 Episodes',
     nav: 'Events',
-    start: 'Start with Episode 1',
     kind: 'Workshop',
     audience: 'For organizations',
     notice:
@@ -86,7 +84,6 @@ const WORDS: Record<
     date: '23. Okt. 2026',
     count: '3 Episoden',
     nav: 'Veranstaltungen',
-    start: 'Mit Episode 1 starten',
     kind: 'Workshop',
     audience: 'Für Unternehmen',
     notice:
@@ -327,17 +324,15 @@ describe('Event page', () => {
     expect($('aside[data-event-side] [data-event-organizers]')).toHaveLength(1);
   });
 
-  it.each(LOCALES)('starts at the first Episode under the Event with a primary button for %s', (locale) => {
+  it.each(LOCALES)('keeps Playlist links without a separate start button on every Event in %s', (locale) => {
     // ARRANGE
-    const $ = exportedPage(localizePath(eventRoute(AXEL.slug), locale));
-    const expected = {
-      href: `${localizePath(eventEpisodeRoute(AXEL.slug, AXEL_EPISODES[0]), locale)}/`,
-      label: WORDS[locale].start,
-    };
+    const pages = EVENTS.map((event) => exportedPage(localizePath(eventRoute(event.slug), locale)));
     // ACT
-    const start = $('a[data-event-start]');
+    const starts = pages.map(($) => $('a[data-event-start]').length);
+    const playlists = pages.map(($) => $('ol[data-event-playlist] a').length);
     // ASSERT
-    expect({ href: start.attr('href'), label: start.text() }).toEqual(expected);
+    expect(starts).toEqual(EVENTS.map(() => 0));
+    playlists.forEach((links) => expect(links).toBeGreaterThan(0));
   });
 
   it.each(LOCALES)('omits breadcrumbs from the Event page for %s', (locale) => {
@@ -578,9 +573,14 @@ describe('Episode pages under an Event', () => {
     },
   );
 
-  it.each(LOCALES)('The past notice shows on a past Event’s Episode pages, above the title (%s)', (locale) => {
+  it.each(LOCALES)('The past notice sits inside the Title slide, above the title (%s)', (locale) => {
     // ARRANGE
-    const expected = AXEL_EPISODES.map(() => ({ past: true, notice: WORDS[locale].notice, beforeTitle: true }));
+    const expected = AXEL_EPISODES.map(() => ({
+      past: true,
+      notice: WORDS[locale].notice,
+      beforeTitle: true,
+      insideTitleSlide: 1,
+    }));
     // ACT
     const seen = AXEL_EPISODES.map((episode) => {
       const $ = exportedPage(urlOf(AXEL.slug, episode, locale));
@@ -591,6 +591,7 @@ describe('Episode pages under an Event', () => {
         past: isPastEvent(AXEL.date, TODAY),
         notice: $('[data-past-notice]').text(),
         beforeTitle: order.join() === 'notice,title',
+        insideTitleSlide: $('[data-slot="title-slide"] [data-past-notice]').length,
       };
     });
     // ASSERT
