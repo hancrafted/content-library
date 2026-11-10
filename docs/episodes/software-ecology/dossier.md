@@ -19,7 +19,7 @@ verified:
 #### Voice script
 
 1. **You know this cartoon** — You all know this cartoon. Ten panels, and in every one a different role hears something different, so the swing that comes out is nothing like the one the customer wanted. Nobody in it is a bad actor: it is a game of telephone, where an intent nobody voiced well gets translated at every handoff, which means the fault sits in the system. With AI, the wrong swing gets built ten times faster.
-2. **Now you run it** — Don't take my word for it, run it yourself. Start on the swing, step through Roles and Pipeline, then switch AI on and watch where the water goes.
+2. **Now you run it** — Don't take my word for it, run it yourself. Start on the swing, step through Roles and Pipeline, then switch AI on. The water is the requirement flowing through the team, and the customer on the right sits at the tap, where the result comes out. Watch what reaches the tap.
 
 ### Play {#explorable}
 
@@ -61,9 +61,9 @@ At the tap, the right-hand customer shows what came out and how many: the tire s
 #### Voice script
 
 1. **Map your team** — Look at the graph as if it were your own team, where every node is a role and every pipe is a handoff. Find the narrowest review step, the valve, because that is where the pressure will gather first.
-2. **Check the valve before the pump** — Now switch AI on at one node. The pump got stronger, but the valve after it did not, so ask whether that review step can handle more. Watch the neighbours as well as the node, because the pressure does not stay where you put the pump.
-3. **Clean water first** — Now drop the water clarity. Muddy requirements leave sediment, and the pump carries that sediment to every node after it, faster than before. So write the requirement clearly enough that someone new could act on it, which is the one step that lowers the pressure instead of moving it.
-4. **Hand over the verdict** — Look at the tap. Which swing came out, the one the customer wanted or a wrong one? And in your own team, which node looks like that valve?
+2. **Check the valve before the pump** — Now switch AI on at one node. The pump got stronger, but the valve after it did not, so ask whether that review step can handle more. Watch the neighbours as well as the node. My picture is that the pressure does not stay where you put the pump.
+3. **Clean water first** — Now drop the water clarity. Muddy requirements leave sediment, and the pump carries that sediment to every node after it, faster than before. So write the requirement clearly enough that someone new could act on it. This is my hypothesis: that is the step that lowers the pressure instead of moving it.
+4. **Hand over the verdict** — Look at the customer on the right, at the tap where the result comes out. Which swing came out, the one they wanted or a wrong one? And in your own team, which node looks like that valve? To recap: map the team, check the valve before the pump, write the requirement clearly. It is a way of looking and still early, not a measurement of your team. The Explorable is here whenever you want to run it again.
 
 ## Why, how and what {#about}
 
@@ -96,7 +96,7 @@ Three columns, stacked Why-first on a phone, each with a still from the Explorab
 
 #### Voice script
 
-1. **Why: the problem is the system** — Unclear requirements were always expensive, and nobody in the chain was to blame for that. AI pumps execution faster, so the pressure lands in review and spreads to the neighbours. This next part is my hypothesis: the effort moves into specifying too, because that was always the hard part, and nobody has measured it yet.
+1. **Why: the problem is the system** — Unclear requirements were always expensive, and nobody in the chain was to blame for that. AI pumps execution faster, so the pressure lands in review, and my picture is that it spreads to the neighbours. This next part is my hypothesis: the effort moves into specifying too, because that was always the hard part, and nobody has measured it yet.
 2. **Clean water lowers it** — Clear requirements are the clean water. The pump moves whatever you feed it, so feed it something worth moving.
 3. **How: play it** — Four steps, a few use cases and two dials, and a click on any node opens its card. Play with the dials until the valve backs up.
 4. **What: one shape everywhere** — Every node specifies, executes and reviews, each on a human side and a technical side. AI speeds up the execution. Review stays narrow, so that is where the pressure builds.
