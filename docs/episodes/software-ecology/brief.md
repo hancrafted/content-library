@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-11-10T16:16:55Z
+  - by: human:han
+    at: 2026-11-10T16:22:10Z
 ---
 
 # Why AI relocates the pressure, and why requirements come first

@@ -1,0 +1,1714 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spec · Why AI relocates the pressure, and why requirements come first</title>
+    <!--
+      The Spec's page frame, copied verbatim into every spec/spec.html by write-spec up to the meta block, with only
+      the <title> set to "Spec · <Episode title>". The body it lays out is described in references/write-spec.md step 3.
+    -->
+    <style>
+      /*
+       * The Spec's page frame. design.css (compiled from the site's globals.css, inlined by `npm run episode:spec-assemble`) supplies
+       * the tokens and every utility the mocks use; this block only lays out the review page around them. The
+       * fallback layer ranks below Tailwind, so the page still reads in system colours when opened without it. The assembled page links nothing: css and script are inline.
+       */
+      @layer fallback;
+
+      :root {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font-sans, system-ui, sans-serif);
+        line-height: 1.55;
+        color: var(--foreground, CanvasText);
+        background: color-mix(in oklch, var(--muted, Canvas) 55%, var(--background, Canvas));
+      }
+      code {
+        font-family: var(--font-mono, ui-monospace, monospace);
+        font-size: 0.85em;
+      }
+
+      /* Layout: a sticky outline beside one wide column. */
+      .spec-shell {
+        display: grid;
+        grid-template-columns: 15rem minmax(0, 1fr);
+        gap: 2.5rem;
+        max-width: 96rem;
+        margin: 0 auto;
+        padding: 0 2rem 8rem;
+      }
+      .spec-outline {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        max-height: 100vh;
+        overflow-y: auto;
+        padding: 2rem 0;
+        font-size: 0.8125rem;
+      }
+      .spec-outline ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .spec-outline > ol > li {
+        margin-bottom: 1rem;
+      }
+      .spec-outline .spec-outline-section {
+        display: block;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 0.6875rem;
+        margin-bottom: 0.25rem;
+      }
+      .spec-outline a {
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.375rem;
+        color: inherit;
+        text-decoration: none;
+      }
+      .spec-outline a:hover {
+        background: var(--card, Canvas);
+      }
+      .spec-outline a::before {
+        content: '';
+        flex: none;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 999px;
+        border: 1.5px solid var(--muted-foreground, GrayText);
+        transform: translateY(-0.05rem);
+      }
+      .spec-outline a[data-state='picked']::before {
+        background: var(--success, Highlight);
+        border-color: var(--success, Highlight);
+      }
+      .spec-outline a[data-state='open']::before {
+        border-color: var(--primary, Highlight);
+      }
+
+      .spec-page {
+        min-width: 0;
+        padding-top: 2rem;
+      }
+      .spec-masthead {
+        padding: 3rem 0 2rem;
+      }
+      .spec-kicker {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--primary, Highlight);
+        margin: 0 0 0.75rem;
+      }
+      .spec-masthead h1 {
+        font-size: var(--size-hero, 3rem);
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin: 0 0 1rem;
+      }
+      .spec-masthead p {
+        max-width: 48rem;
+        color: var(--muted-foreground, GrayText);
+        font-size: 1.125rem;
+        margin: 0;
+      }
+
+      /* Cards: Style, Visual language, Episode page and each Slide's words. */
+      .spec-card {
+        background: var(--card, Canvas);
+        border: 1px solid var(--border, GrayText);
+        border-radius: 1rem;
+        padding: 1.5rem 1.75rem;
+      }
+      .spec-intro {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 4rem;
+      }
+      .spec-intro h2,
+      .spec-card h4 {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted-foreground, GrayText);
+        margin: 0 0 0.75rem;
+        border: 0;
+      }
+      .spec-intro ul {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+      .spec-intro li + li {
+        margin-top: 0.4rem;
+      }
+
+      /* A Section opens with a band; its section slide's Voice script sits in it. */
+      [data-spec='section'] {
+        margin-top: 5rem;
+      }
+      .spec-section-band {
+        border-radius: 1.25rem;
+        padding: 2.5rem 2.75rem;
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+      }
+      .spec-section-band h2 {
+        font-size: var(--size-heading, 2.5rem);
+        line-height: 1.1;
+        letter-spacing: -0.015em;
+        margin: 0 0 0.25rem;
+        border: 0;
+      }
+      .spec-section-band .spec-kicker {
+        color: inherit;
+        opacity: 0.6;
+      }
+      .spec-section-band [data-spec='voice-script'] {
+        max-width: 52rem;
+        margin-top: 1.5rem;
+        opacity: 0.85;
+      }
+
+      /* A Slide: header, its words as tabs, the Option stage, then its note. */
+      [data-spec='slide'] {
+        margin-top: 4rem;
+        scroll-margin-top: 1rem;
+      }
+      .spec-slide-head {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+      }
+      .spec-slide-head h3 {
+        font-size: var(--size-subheading, 2rem);
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      .spec-slide-head .spec-number {
+        font-family: var(--font-mono, monospace);
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--primary, Highlight);
+        border: 1.5px solid currentColor;
+        border-radius: 999px;
+        padding: 0.1rem 0.6rem;
+        transform: translateY(-0.3rem);
+      }
+
+      /* Option tabs: built by the script below from the figures; without it the Options stack. */
+      .spec-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+      .spec-tabs button {
+        font: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border, GrayText);
+        background: var(--card, Canvas);
+        color: inherit;
+        cursor: pointer;
+      }
+      .spec-tabs button[aria-selected='true'] {
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+        border-color: transparent;
+      }
+      .spec-tabs .spec-badge {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 0.05rem 0.45rem;
+        border-radius: 999px;
+        background: var(--primary, Highlight);
+        color: var(--primary-foreground, HighlightText);
+      }
+      .spec-tabs .spec-picked {
+        color: var(--success, Highlight);
+      }
+      .spec-options.is-tabbed > [data-spec='option'] {
+        display: none;
+      }
+      .spec-options.is-tabbed > [data-spec='option'][data-active] {
+        display: block;
+      }
+      [data-spec='option'] {
+        margin: 0 0 2rem;
+      }
+      /* The mock is a slide at desktop width: full column, at least 16:9, never clipped. */
+      [data-spec='mock'] {
+        position: relative;
+        min-height: min(40rem, 56.25vw);
+        border-radius: 1rem;
+        border: 1px solid var(--border, GrayText);
+        box-shadow:
+          0 1px 2px color-mix(in oklch, var(--foreground, CanvasText) 6%, transparent),
+          0 24px 48px -24px color-mix(in oklch, var(--foreground, CanvasText) 22%, transparent);
+        background: var(--background, Canvas);
+        overflow: visible;
+      }
+      /*
+       * A Title-slide Option is a set: the Title slide's mock, then a strip of the section slides that echo its
+       * Hero motif, one per Section, so the motif reads across the Episode at a glance.
+       */
+      .spec-echoes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+        gap: 1rem;
+        list-style: none;
+        margin: 1rem 0 0;
+        padding: 0;
+      }
+      .spec-echoes > li > p {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+        margin: 0 0 0.4rem;
+      }
+      .spec-echoes [data-spec='mock'] {
+        min-height: 14rem;
+      }
+      [data-spec='option'] figcaption {
+        font-size: 1rem;
+        max-width: 60rem;
+        margin: 1rem 0 0;
+      }
+      .spec-build {
+        margin-top: 0.75rem;
+        max-width: 60rem;
+      }
+      .spec-build > summary {
+        cursor: pointer;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--muted-foreground, GrayText);
+      }
+      [data-spec='build-notes'] {
+        font-size: 0.8125rem;
+        color: var(--muted-foreground, GrayText);
+        margin-top: 0.5rem;
+      }
+      .spec-pick {
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 1rem;
+        padding: 0.55rem 1rem;
+        border-radius: 0.6rem;
+        border: 1.5px solid var(--primary, Highlight);
+        color: var(--primary, Highlight);
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .spec-pick:has(input:checked) {
+        background: var(--primary, Highlight);
+        color: var(--primary-foreground, HighlightText);
+      }
+
+      /*
+       * A Slide's words as tabs: Visual idea, Voice script, Speaker notes, one panel open. Radio inputs in no form
+       * switch them without script; print shows every panel.
+       */
+      .spec-words {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .spec-words > input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spec-words > label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--border, GrayText);
+        background: var(--card, Canvas);
+        cursor: pointer;
+      }
+      .spec-words > input:checked + label {
+        background: var(--foreground, CanvasText);
+        color: var(--background, Canvas);
+        border-color: transparent;
+      }
+      .spec-words > input:focus-visible + label {
+        outline: 2px solid var(--ring, Highlight);
+        outline-offset: 2px;
+      }
+      .spec-panel {
+        display: none;
+        flex-basis: 100%;
+        max-width: 60rem;
+        box-sizing: border-box;
+      }
+      .spec-words:has(> input[value='visual-idea']:checked) > [data-panel='visual-idea'],
+      .spec-words:has(> input[value='voice-script']:checked) > [data-panel='voice-script'],
+      .spec-words:has(> input[value='speaker-notes']:checked) > [data-panel='speaker-notes'] {
+        display: block;
+      }
+      .spec-panel > h4 {
+        display: none;
+      }
+      .spec-words ol {
+        margin: 0;
+        padding-left: 1.25rem;
+      }
+      [data-spec='voice-script'] > li {
+        margin-bottom: 0.75rem;
+        font-size: 1.0625rem;
+        line-height: 1.6;
+      }
+      [data-spec='speaker-notes'] > li {
+        margin-bottom: 0.9rem;
+        font-size: 0.9375rem;
+      }
+      [data-spec='speaker-notes'] ul {
+        list-style: none;
+        padding: 0;
+        margin: 0.3rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--muted-foreground, GrayText);
+      }
+      [data-spec='speaker-notes'] a {
+        color: inherit;
+        word-break: break-all;
+      }
+      .spec-note {
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 4.5rem;
+        margin-top: 1.25rem;
+        padding: 0.75rem 1rem;
+        font: inherit;
+        border-radius: 0.75rem;
+        border: 1px dashed var(--border, GrayText);
+        background: var(--card, Canvas);
+        color: inherit;
+      }
+      .spec-review {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.9rem 2rem;
+        background: color-mix(in oklch, var(--card, Canvas) 92%, transparent);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid var(--border, GrayText);
+      }
+
+      @media (max-width: 70rem) {
+        .spec-shell {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .spec-outline {
+          display: none;
+        }
+      }
+
+      @media print {
+        .spec-words > input,
+        .spec-words > label,
+        .spec-tabs {
+          display: none;
+        }
+        .spec-panel,
+        .spec-panel > h4,
+        .spec-options.is-tabbed > [data-spec='option'] {
+          display: block;
+        }
+      }
+
+      @layer fallback {
+        [data-spec='mock'] {
+          background: Canvas;
+        }
+      }
+    </style>
+    <style data-design-css>
+      /*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+      @layer properties;
+      @layer theme, base, components, utilities;
+      @layer theme {
+        :root,
+        :host {
+          --font-sans:
+            -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif,
+            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+          --font-mono:
+            ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+          --spacing: 0.25rem;
+          --default-font-family: var(--font-sans);
+          --default-mono-font-family: var(--font-mono);
+        }
+      }
+      @layer base {
+        *,
+        ::after,
+        ::before,
+        ::backdrop,
+        ::file-selector-button {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          border: 0 solid;
+        }
+        html,
+        :host {
+          line-height: 1.5;
+          -webkit-text-size-adjust: 100%;
+          tab-size: 4;
+          font-family: var(
+            --default-font-family,
+            -apple-system,
+            BlinkMacSystemFont,
+            'Segoe UI',
+            Roboto,
+            'Helvetica Neue',
+            'Noto Sans',
+            Arial,
+            sans-serif,
+            'Apple Color Emoji',
+            'Segoe UI Emoji',
+            'Segoe UI Symbol',
+            'Noto Color Emoji'
+          );
+          font-feature-settings: var(--default-font-feature-settings, normal);
+          font-variation-settings: var(--default-font-variation-settings, normal);
+          -webkit-tap-highlight-color: transparent;
+        }
+        hr {
+          height: 0;
+          color: inherit;
+          border-top-width: 1px;
+        }
+        abbr:where([title]) {
+          -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          font-size: inherit;
+          font-weight: inherit;
+        }
+        a {
+          color: inherit;
+          -webkit-text-decoration: inherit;
+          text-decoration: inherit;
+        }
+        b,
+        strong {
+          font-weight: bolder;
+        }
+        code,
+        kbd,
+        samp,
+        pre {
+          font-family: var(
+            --default-mono-font-family,
+            ui-monospace,
+            SFMono-Regular,
+            Menlo,
+            Monaco,
+            Consolas,
+            'Liberation Mono',
+            'Courier New',
+            monospace
+          );
+          font-feature-settings: var(--default-mono-font-feature-settings, normal);
+          font-variation-settings: var(--default-mono-font-variation-settings, normal);
+          font-size: 1em;
+        }
+        small {
+          font-size: 80%;
+        }
+        sub,
+        sup {
+          font-size: 75%;
+          line-height: 0;
+          position: relative;
+          vertical-align: baseline;
+        }
+        sub {
+          bottom: -0.25em;
+        }
+        sup {
+          top: -0.5em;
+        }
+        table {
+          text-indent: 0;
+          border-color: inherit;
+          border-collapse: collapse;
+        }
+        :-moz-focusring:where(:not(iframe)) {
+          outline: auto;
+        }
+        progress {
+          vertical-align: baseline;
+        }
+        summary {
+          display: list-item;
+        }
+        ol,
+        ul,
+        menu {
+          list-style: none;
+        }
+        img,
+        svg,
+        video,
+        canvas,
+        audio,
+        iframe,
+        embed,
+        object {
+          display: block;
+          vertical-align: middle;
+        }
+        img,
+        video {
+          max-width: 100%;
+          height: auto;
+        }
+        button,
+        input,
+        select,
+        optgroup,
+        textarea,
+        ::file-selector-button {
+          font: inherit;
+          font-feature-settings: inherit;
+          font-variation-settings: inherit;
+          letter-spacing: inherit;
+          color: inherit;
+          border-radius: 0;
+          background-color: transparent;
+          opacity: 1;
+        }
+        :where(select:is([multiple], [size])) optgroup {
+          font-weight: bolder;
+        }
+        :where(select:is([multiple], [size])) optgroup option {
+          padding-inline-start: 20px;
+        }
+        ::file-selector-button {
+          margin-inline-end: 4px;
+        }
+        ::placeholder {
+          opacity: 1;
+        }
+        @supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
+          ::placeholder {
+            color: currentcolor;
+            @supports (color: color-mix(in lab, red, red)) {
+              color: color-mix(in oklab, currentcolor 50%, transparent);
+            }
+          }
+        }
+        textarea {
+          resize: vertical;
+        }
+        ::-webkit-search-decoration {
+          -webkit-appearance: none;
+        }
+        ::-webkit-date-and-time-value {
+          min-height: 1lh;
+          text-align: inherit;
+        }
+        ::-webkit-datetime-edit {
+          display: inline-flex;
+        }
+        ::-webkit-datetime-edit-fields-wrapper {
+          padding: 0;
+        }
+        ::-webkit-datetime-edit,
+        ::-webkit-datetime-edit-year-field,
+        ::-webkit-datetime-edit-month-field,
+        ::-webkit-datetime-edit-day-field,
+        ::-webkit-datetime-edit-hour-field,
+        ::-webkit-datetime-edit-minute-field,
+        ::-webkit-datetime-edit-second-field,
+        ::-webkit-datetime-edit-millisecond-field,
+        ::-webkit-datetime-edit-meridiem-field {
+          padding-block: 0;
+        }
+        ::-webkit-calendar-picker-indicator {
+          line-height: 1;
+        }
+        :-moz-ui-invalid {
+          box-shadow: none;
+        }
+        button,
+        input:where([type='button'], [type='reset'], [type='submit']),
+        ::file-selector-button {
+          appearance: button;
+        }
+        ::-webkit-inner-spin-button,
+        ::-webkit-outer-spin-button {
+          height: auto;
+        }
+        [hidden]:where(:not([hidden='until-found'])) {
+          display: none !important;
+        }
+      }
+      @layer utilities {
+        .sticky {
+          position: sticky;
+        }
+        .block {
+          display: block;
+        }
+        .flex {
+          display: flex;
+        }
+        .transform {
+          transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+        }
+        .flex-wrap {
+          flex-wrap: wrap;
+        }
+        .border {
+          border-style: var(--tw-border-style);
+          border-width: 1px;
+        }
+        .outline {
+          outline-style: var(--tw-outline-style);
+          outline-width: 1px;
+        }
+        .backdrop-filter {
+          -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,)
+            var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,)
+            var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+          backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,)
+            var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,)
+            var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+        }
+      }
+      :root {
+        --radius: 0.625rem;
+        --background: oklch(0.985 0 0);
+        --foreground: oklch(0.145 0 0);
+        --primary: oklch(0.205 0 0);
+        --primary-foreground: oklch(0.985 0 0);
+        --card: oklch(1 0 0);
+        --card-foreground: oklch(0.145 0 0);
+        --header: oklch(0.985 0.002 247.8);
+        --destructive: oklch(0.577 0.245 27.325);
+        --destructive-foreground: oklch(0.985 0 0);
+        --success: oklch(0.5 0.13 150);
+        --success-foreground: oklch(0.985 0 0);
+        --warning: oklch(0.52 0.12 65);
+        --warning-foreground: oklch(0.985 0 0);
+        --info: oklch(0.5 0.15 245);
+        --info-foreground: oklch(0.985 0 0);
+        --muted: oklch(0.97 0 0);
+        --section-band: oklch(0.955 0 0);
+        --muted-foreground: oklch(0.556 0 0);
+        --accent: oklch(0.97 0 0);
+        --accent-foreground: oklch(0.205 0 0);
+        --secondary: oklch(0.55 0.18 290);
+        --secondary-foreground: oklch(0.985 0 0);
+        --machine: oklch(0.58 0.16 242);
+        --human: oklch(0.55 0.18 290);
+        --ai: oklch(0.6 0.14 62);
+        --tag-context-engineering: oklch(0.5 0.134 242.749);
+        --tag-agentic-ai: oklch(0.491 0.27 292.581);
+        --tag-markdown: oklch(0.514 0.222 16.935);
+        --tag-cost: oklch(0.555 0.163 48.998);
+        --tag-sales: oklch(0.508 0.118 165.612);
+        --tag-agentic-workflow: oklch(0.205 0 0);
+        --tag-overview: oklch(0.205 0 0);
+        --brand-accent: oklch(0.636 0.171 41.8);
+        --on-brand-accent: oklch(1 0 0);
+        --selected: oklch(0.4 0 0);
+        --selected-foreground: oklch(0.985 0 0);
+        --border: oklch(0.922 0 0);
+        --input: oklch(0.922 0 0);
+        --ring: oklch(0.708 0 0);
+        --highlight-target: oklch(0.5 0.19 260);
+        --youtube: oklch(0.628 0.258 29.2);
+        --overlay: oklch(0 0 0);
+        --drawer-width: 26rem;
+        --size-hero: clamp(2.5rem, 5.2vw, 4.5rem);
+        --size-heading: clamp(2.25rem, 4.2vw, 3.75rem);
+        --size-subheading: clamp(1.875rem, 3.4vw, 3rem);
+        --size-body: 1rem;
+        --size-caption: 0.875rem;
+        --space-header: 1rem;
+        --space-header-tight: calc(var(--space-header) / 2);
+        --leading-hero: 1.05;
+        --leading-heading: 1.1;
+        --leading-subheading: 1.15;
+        --leading-body: 1.6;
+        --leading-caption: 1.5;
+        --tracking-heading: -0.02em;
+        --weight-normal: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+        --font-sans:
+          ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+          'Noto Color Emoji';
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+      }
+      .dark {
+        --background: oklch(0.145 0 0);
+        --foreground: oklch(0.985 0 0);
+        --primary: oklch(0.922 0 0);
+        --primary-foreground: oklch(0.205 0 0);
+        --card: oklch(0.205 0 0);
+        --card-foreground: oklch(0.985 0 0);
+        --header: oklch(0.205 0 0);
+        --destructive: oklch(0.704 0.191 22.216);
+        --destructive-foreground: oklch(0.145 0 0);
+        --success: oklch(0.78 0.16 150);
+        --success-foreground: oklch(0.145 0 0);
+        --warning: oklch(0.82 0.15 80);
+        --warning-foreground: oklch(0.145 0 0);
+        --info: oklch(0.78 0.12 240);
+        --info-foreground: oklch(0.145 0 0);
+        --muted: oklch(0.269 0 0);
+        --section-band: oklch(0.19 0 0);
+        --muted-foreground: oklch(0.708 0 0);
+        --accent: oklch(0.269 0 0);
+        --accent-foreground: oklch(0.985 0 0);
+        --secondary: oklch(0.68 0.16 280);
+        --secondary-foreground: oklch(0.145 0 0);
+        --machine: oklch(0.72 0.14 235);
+        --human: oklch(0.68 0.16 280);
+        --ai: oklch(0.72 0.14 62);
+        --tag-context-engineering: oklch(0.746 0.16 232.661);
+        --tag-agentic-ai: oklch(0.702 0.183 293.541);
+        --tag-markdown: oklch(0.712 0.194 13.428);
+        --tag-cost: oklch(0.828 0.189 84.429);
+        --tag-sales: oklch(0.765 0.177 163.223);
+        --tag-agentic-workflow: oklch(0.922 0 0);
+        --tag-overview: oklch(0.922 0 0);
+        --brand-accent: oklch(0.732 0.146 50.4);
+        --on-brand-accent: oklch(1 0 0);
+        --selected: oklch(0.8 0 0);
+        --selected-foreground: oklch(0.2 0 0);
+        --border: oklch(1 0 0 / 10%);
+        --input: oklch(1 0 0 / 15%);
+        --ring: oklch(0.556 0 0);
+        --highlight-target: oklch(0.75 0.14 260);
+        --youtube: oklch(0.68 0.23 29.2);
+        --overlay: oklch(0 0 0);
+      }
+      @layer base {
+        * {
+          border-color: var(--border);
+          outline-color: var(--ring);
+          @supports (color: color-mix(in lab, red, red)) {
+            outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+          }
+        }
+        body {
+          background-color: var(--background);
+          color: var(--foreground);
+        }
+      }
+      @media screen {
+        [data-context-active],
+        [data-context-pinned] {
+          border-radius: 0.375rem;
+          background-color: var(--highlight-target);
+          @supports (color: color-mix(in lab, red, red)) {
+            background-color: color-mix(in oklab, var(--highlight-target) 14%, transparent);
+          }
+        }
+        [data-context-active]:not([data-note-target]) {
+          box-shadow: 0 0 0 0.25rem var(--highlight-target);
+          @supports (color: color-mix(in lab, red, red)) {
+            box-shadow: 0 0 0 0.25rem color-mix(in oklab, var(--highlight-target) 14%, transparent);
+          }
+        }
+      }
+      @media print {
+        [data-slot='context'],
+        [data-slot='context'] [data-context-panel] {
+          position: static !important;
+          visibility: visible !important;
+          transform: none !important;
+          display: block !important;
+          width: auto !important;
+          height: auto !important;
+          border: 0 !important;
+          box-shadow: none !important;
+          break-before: page;
+        }
+        [data-slot='context'] [role='tabpanel'],
+        [data-slot='context'] [data-context-for] {
+          display: block !important;
+        }
+        [data-slot='context'] {
+          grid-column: 1 / -1;
+        }
+        [data-slot='context'] details::details-content {
+          content-visibility: visible;
+          display: block;
+        }
+        [data-slot='context-trigger'],
+        [data-slot='context-scrim'],
+        [data-slot='slide-backdrop'] {
+          display: none !important;
+        }
+      }
+      @layer components {
+        .card-hover {
+          transition:
+            translate 200ms ease-out,
+            box-shadow 200ms ease-out,
+            border-color 200ms ease-out;
+        }
+        .card-hover--raise:is(:hover, :focus-visible, :focus-within) {
+          --tw-translate-y: calc(var(--spacing) * -1);
+          translate: var(--tw-translate-x) var(--tw-translate-y);
+          --tw-shadow:
+            0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+            0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+          box-shadow:
+            var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+            var(--tw-shadow);
+        }
+        .card-hover--outline:is(:hover, :focus-visible, :focus-within) {
+          border-color: var(--brand-accent);
+        }
+        .focus-group__item {
+          transition: opacity 200ms ease-out;
+        }
+        .focus-group--dim-others:has(.focus-group__item:is(:hover, :focus-visible, :has(:focus-visible)))
+          .focus-group__item:not(:hover, :focus-visible, :has(:focus-visible)) {
+          opacity: 0.4;
+        }
+        .hover-reveal__detail {
+          opacity: 0;
+          transition: opacity 200ms ease-out;
+        }
+        .hover-reveal:is(:hover, :focus-visible, :focus-within) .hover-reveal__detail {
+          opacity: 1;
+        }
+        @media (hover: none), print {
+          .hover-reveal__detail {
+            opacity: 1;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .card-hover,
+          .focus-group__item,
+          .hover-reveal__detail {
+            transition: none;
+          }
+        }
+      }
+      @media screen and (prefers-reduced-motion: no-preference) {
+        .js [data-entry='pending'] > [data-slot='slide-header'],
+        .js [data-entry='pending'] > [data-slot='slide-scene'] > * {
+          opacity: 0;
+        }
+        [data-entry='entering'] > [data-slot='slide-scene'] > * {
+          animation: slide-rise 400ms ease-out backwards;
+        }
+        [data-entry='entering'] > [data-slot='slide-scene'] > [data-slot='slide-backdrop'],
+        [data-entry='entering'] > [data-entrance='fade'] {
+          animation: slide-fade 400ms ease-out backwards;
+        }
+        [data-entry='entering'] > [data-entrance='typewriter'] [data-char] {
+          position: relative;
+          animation: slide-fade 1ms step-end var(--d) backwards;
+        }
+        [data-entry='entering'] > [data-entrance='typewriter'] [data-char]::after {
+          content: '';
+          position: absolute;
+          top: 0.1em;
+          bottom: 0.1em;
+          left: 100%;
+          width: 0.08em;
+          min-width: 2px;
+          background: currentColor;
+          visibility: hidden;
+          animation:
+            slide-caret-on var(--h) step-end var(--d),
+            slide-caret-blink 530ms step-end infinite;
+        }
+      }
+      @keyframes slide-rise {
+        from {
+          opacity: 0;
+          translate: 0 1.5rem;
+        }
+      }
+      @media screen and (prefers-reduced-motion: no-preference) {
+        [data-view-fade='on'] {
+          animation: slide-fade 250ms ease-out;
+        }
+      }
+      @keyframes slide-fade {
+        from {
+          opacity: 0;
+        }
+      }
+      @keyframes slide-caret-on {
+        from,
+        to {
+          visibility: visible;
+        }
+      }
+      @keyframes slide-caret-blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      @keyframes hero-drift {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(16px, -12px) scale(1.04);
+        }
+      }
+      @keyframes hero-drift-alt {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        50% {
+          transform: translate(-14px, 14px) scale(1.05);
+        }
+      }
+      @keyframes s2-flow-travel {
+        from {
+          stroke-dashoffset: 32;
+        }
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes s2-breathe-primary {
+        0%,
+        100% {
+          border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+          box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--primary) 30%, transparent),
+            0 4px 18px -2px color-mix(in srgb, var(--primary) 20%, transparent);
+        }
+        50% {
+          border-color: var(--primary);
+          box-shadow:
+            0 0 0 2px color-mix(in srgb, var(--primary) 65%, transparent),
+            0 8px 24px -2px color-mix(in srgb, var(--primary) 35%, transparent);
+        }
+      }
+      @keyframes s2-breathe-secondary {
+        0%,
+        100% {
+          border-color: color-mix(in srgb, var(--secondary) 50%, transparent);
+          box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--secondary) 30%, transparent),
+            0 4px 18px -2px color-mix(in srgb, var(--secondary) 20%, transparent);
+        }
+        50% {
+          border-color: var(--secondary);
+          box-shadow:
+            0 0 0 2px color-mix(in srgb, var(--secondary) 65%, transparent),
+            0 8px 24px -2px color-mix(in srgb, var(--secondary) 35%, transparent);
+        }
+      }
+      @keyframes s2-breathe-accent {
+        0%,
+        100% {
+          border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+          box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
+            0 4px 18px -2px color-mix(in srgb, var(--accent) 20%, transparent);
+        }
+        50% {
+          border-color: var(--accent);
+          box-shadow:
+            0 0 0 2px color-mix(in srgb, var(--accent) 65%, transparent),
+            0 8px 24px -2px color-mix(in srgb, var(--accent) 35%, transparent);
+        }
+      }
+      @keyframes deck-unsettled {
+        0%,
+        100% {
+          opacity: 0.85;
+          transform: rotate(0deg);
+        }
+        25% {
+          opacity: 1;
+          transform: rotate(-1.5deg) scale(1.02);
+        }
+        75% {
+          opacity: 0.95;
+          transform: rotate(1.5deg) scale(0.99);
+        }
+      }
+      @keyframes venn-ai-running {
+        0%,
+        100% {
+          stroke-opacity: 0.45;
+        }
+        50% {
+          stroke-opacity: 1;
+        }
+      }
+      @keyframes venn-ai-running-dot {
+        0%,
+        100% {
+          opacity: 0.35;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      .s2-arrow-group {
+        transition:
+          opacity 300ms ease,
+          filter 300ms ease;
+      }
+      .s2-flow-dash {
+        opacity: 0;
+        stroke-width: 4;
+        stroke-dasharray: 9 23;
+        stroke-linecap: round;
+        transition: opacity 400ms ease;
+      }
+      .s2-arrows-active .s2-arrow-group.is-active .s2-flow-dash {
+        opacity: 0.95;
+        animation: s2-flow-travel 1.15s linear infinite;
+      }
+      .hero-glow {
+        background: radial-gradient(55% 55% at 22% 18%, currentColor 0%, currentColor 45%, transparent 72%);
+        @supports (color: color-mix(in lab, red, red)) {
+          background: radial-gradient(
+            55% 55% at 22% 18%,
+            color-mix(in oklab, currentColor 26%, transparent) 0%,
+            color-mix(in oklab, currentColor 8%, transparent) 45%,
+            transparent 72%
+          );
+        }
+        animation: hero-drift 28s ease-in-out infinite alternate;
+        will-change: transform;
+      }
+      .hero-glow--accent {
+        background: radial-gradient(50% 50% at 82% 30%, currentColor 0%, currentColor 48%, transparent 74%);
+        @supports (color: color-mix(in lab, red, red)) {
+          background: radial-gradient(
+            50% 50% at 82% 30%,
+            color-mix(in oklab, currentColor 22%, transparent) 0%,
+            color-mix(in oklab, currentColor 7%, transparent) 48%,
+            transparent 74%
+          );
+        }
+        animation: hero-drift-alt 34s ease-in-out infinite alternate;
+      }
+      .deck-unsettled {
+        animation: deck-unsettled 3.2s ease-in-out infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero-glow,
+        .hero-glow--accent,
+        .deck-unsettled,
+        .s2-flow-dash {
+          animation: none !important;
+        }
+        .s2-flow-dash {
+          opacity: 0 !important;
+        }
+      }
+      :root,
+      .dark {
+        --tone-paper: var(--primary);
+        --tone-ink: var(--primary-foreground);
+        --header-block: 4.75rem;
+      }
+      [data-tone='inverse'],
+      html[data-page-tone='inverse'] [data-testid='site-header'] {
+        --foreground: var(--tone-ink);
+        --muted-foreground: var(--tone-ink);
+        @supports (color: color-mix(in lab, red, red)) {
+          --muted-foreground: color-mix(in oklab, var(--tone-ink) 85%, transparent);
+        }
+        --header: var(--tone-paper);
+        --accent: var(--tone-ink);
+        @supports (color: color-mix(in lab, red, red)) {
+          --accent: color-mix(in oklab, var(--tone-ink) 14%, transparent);
+        }
+        --accent-foreground: var(--tone-ink);
+        --border: var(--tone-ink);
+        @supports (color: color-mix(in lab, red, red)) {
+          --border: color-mix(in oklab, var(--tone-ink) 22%, transparent);
+        }
+        --primary: var(--tone-ink);
+        --primary-foreground: var(--tone-paper);
+        color: var(--tone-ink);
+      }
+      html[data-page-tone='inverse'] [data-testid='site-header'] {
+        --background: var(--tone-paper);
+        --muted: var(--tone-ink);
+        @supports (color: color-mix(in lab, red, red)) {
+          --muted: color-mix(in oklab, var(--tone-ink) 18%, transparent);
+        }
+        background-color: var(--tone-paper);
+        @supports (color: color-mix(in lab, red, red)) {
+          background-color: color-mix(in oklab, var(--tone-paper) 88%, transparent);
+        }
+        --selected: var(--tone-ink);
+        --selected-foreground: var(--tone-paper);
+      }
+      [data-tone='inverse'][data-slot='title-slide'] {
+        padding-top: calc(var(--header-block) + 1rem);
+      }
+      [data-tone='inverse'] [data-slot='slide-header'] h1 {
+        max-width: 16ch;
+      }
+      [data-tone='inverse'] [data-slot='slide-header'] [data-target='caption'] {
+        max-width: 40rem;
+      }
+      [data-tone='inverse'] [data-tone-flip] {
+        --foreground: var(--tone-paper);
+        --muted-foreground: var(--tone-paper);
+        @supports (color: color-mix(in lab, red, red)) {
+          --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);
+        }
+        --accent: var(--tone-paper);
+        @supports (color: color-mix(in lab, red, red)) {
+          --accent: color-mix(in oklab, var(--tone-paper) 8%, transparent);
+        }
+        --accent-foreground: var(--tone-paper);
+        --border: var(--tone-paper);
+        @supports (color: color-mix(in lab, red, red)) {
+          --border: color-mix(in oklab, var(--tone-paper) 12%, transparent);
+        }
+        --primary: var(--tone-paper);
+        --primary-foreground: var(--tone-ink);
+        color: var(--tone-paper);
+      }
+      @property --tw-rotate-x {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-rotate-y {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-rotate-z {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-skew-x {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-skew-y {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-border-style {
+        syntax: '*';
+        inherits: false;
+        initial-value: solid;
+      }
+      @property --tw-outline-style {
+        syntax: '*';
+        inherits: false;
+        initial-value: solid;
+      }
+      @property --tw-backdrop-blur {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-brightness {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-contrast {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-grayscale {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-hue-rotate {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-invert {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-opacity {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-saturate {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-backdrop-sepia {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-translate-x {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0;
+      }
+      @property --tw-translate-y {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0;
+      }
+      @property --tw-translate-z {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0;
+      }
+      @property --tw-shadow {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-shadow-color {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-shadow-alpha {
+        syntax: '<percentage>';
+        inherits: false;
+        initial-value: 100%;
+      }
+      @property --tw-inset-shadow {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-inset-shadow-color {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-inset-shadow-alpha {
+        syntax: '<percentage>';
+        inherits: false;
+        initial-value: 100%;
+      }
+      @property --tw-ring-color {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-ring-shadow {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-inset-ring-color {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-inset-ring-shadow {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @property --tw-ring-inset {
+        syntax: '*';
+        inherits: false;
+      }
+      @property --tw-ring-offset-width {
+        syntax: '<length>';
+        inherits: false;
+        initial-value: 0px;
+      }
+      @property --tw-ring-offset-color {
+        syntax: '*';
+        inherits: false;
+        initial-value: #fff;
+      }
+      @property --tw-ring-offset-shadow {
+        syntax: '*';
+        inherits: false;
+        initial-value: 0 0 #0000;
+      }
+      @layer properties {
+        @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or
+          ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+          *,
+          ::before,
+          ::after,
+          ::backdrop {
+            --tw-rotate-x: initial;
+            --tw-rotate-y: initial;
+            --tw-rotate-z: initial;
+            --tw-skew-x: initial;
+            --tw-skew-y: initial;
+            --tw-border-style: solid;
+            --tw-outline-style: solid;
+            --tw-backdrop-blur: initial;
+            --tw-backdrop-brightness: initial;
+            --tw-backdrop-contrast: initial;
+            --tw-backdrop-grayscale: initial;
+            --tw-backdrop-hue-rotate: initial;
+            --tw-backdrop-invert: initial;
+            --tw-backdrop-opacity: initial;
+            --tw-backdrop-saturate: initial;
+            --tw-backdrop-sepia: initial;
+            --tw-translate-x: 0;
+            --tw-translate-y: 0;
+            --tw-translate-z: 0;
+            --tw-shadow: 0 0 #0000;
+            --tw-shadow-color: initial;
+            --tw-shadow-alpha: 100%;
+            --tw-inset-shadow: 0 0 #0000;
+            --tw-inset-shadow-color: initial;
+            --tw-inset-shadow-alpha: 100%;
+            --tw-ring-color: initial;
+            --tw-ring-shadow: 0 0 #0000;
+            --tw-inset-ring-color: initial;
+            --tw-inset-ring-shadow: 0 0 #0000;
+            --tw-ring-inset: initial;
+            --tw-ring-offset-width: 0px;
+            --tw-ring-offset-color: #fff;
+            --tw-ring-offset-shadow: 0 0 #0000;
+          }
+        }
+      }
+    </style>
+    <script>
+      // Option tabs and the outline's pick state. Runs after the page parses; the review form's own script is
+      // the inlined spec-review asset. Without this script every Option shows, stacked.
+      addEventListener('DOMContentLoaded', () => {
+        const outline = document.querySelector('.spec-outline');
+        const refresh = () => {
+          for (const slide of document.querySelectorAll('[data-spec="slide"], [data-spec="title-slide"]')) {
+            const picks = slide.querySelectorAll('.spec-pick input:checked').length;
+            const link = outline?.querySelector(`a[href="#${slide.id}"]`);
+            if (link) link.dataset.state = picks === 1 ? 'picked' : 'open';
+            for (const button of slide.querySelectorAll('.spec-tabs button')) {
+              const box = slide.querySelector(`.spec-pick input[value="${button.dataset.option}"]`);
+              button.querySelector('.spec-picked').textContent = box?.checked ? '✓' : '';
+            }
+          }
+        };
+        for (const options of document.querySelectorAll('.spec-options')) {
+          const figures = [...options.querySelectorAll(':scope > [data-spec="option"]')];
+          const tabs = document.createElement('div');
+          tabs.className = 'spec-tabs';
+          tabs.setAttribute('role', 'tablist');
+          const show = (figure) => {
+            for (const other of figures) other.toggleAttribute('data-active', other === figure);
+            for (const button of tabs.children)
+              button.setAttribute('aria-selected', String(button.dataset.option === figure.dataset.option));
+          };
+          for (const figure of figures) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.setAttribute('role', 'tab');
+            button.dataset.option = figure.dataset.option;
+            button.innerHTML = `Option ${figure.dataset.option}<span class="spec-picked"></span>`;
+            if (figure.hasAttribute('data-recommended')) {
+              const badge = document.createElement('span');
+              badge.className = 'spec-badge';
+              badge.textContent = 'Recommended';
+              button.append(badge);
+            }
+            button.addEventListener('click', () => show(figure));
+            tabs.append(button);
+          }
+          options.before(tabs);
+          options.classList.add('is-tabbed');
+          show(
+            figures.find((f) => f.querySelector('.spec-pick input:checked')) ??
+              figures.find((f) => f.hasAttribute('data-recommended')) ??
+              figures[0],
+          );
+        }
+        document.addEventListener('change', refresh);
+        refresh();
+      });
+    </script>
+    <script type="application/json" id="spec-meta">
+      {
+        "type": "spec",
+        "title": "Why AI relocates the pressure, and why requirements come first",
+        "status": "draft",
+        "generated": {
+          "by": "process:spec-assemble",
+          "at": "2026-11-10T16:17:59Z"
+        },
+        "locale": "en",
+        "brief": "../brief.md"
+      }
+    </script>
+  </head>
+  <body>
+    <div class="spec-shell">
+      <nav class="spec-outline" aria-label="Slides">
+        <ol>
+          <li>
+            <span class="spec-outline-section">Play</span>
+            <ol>
+              <li><a href="#play">1 · Play</a></li>
+            </ol>
+          </li>
+          <li>
+            <span class="spec-outline-section">Why, how and what</span>
+            <ol>
+              <li><a href="#why-how-and-what">2 · Why, how and what</a></li>
+            </ol>
+          </li>
+        </ol>
+      </nav>
+      <main class="spec-page">
+        <header class="spec-masthead">
+          <p class="spec-kicker">Spec · 2 Slides</p>
+          <h1>Why AI relocates the pressure, and why requirements come first</h1>
+          <p>
+            Each Slide shows its words as tabs above its Options, which are tabs too: open each, pick one, and dictate a
+            note where it should change. Save at the bottom when done.
+          </p>
+        </header>
+        <div class="spec-intro">
+          <section id="brief" data-spec="brief-card" class="spec-card">
+            <h2>Brief</h2>
+            <div data-spec="brief-entry" id="brief--learning-goal">
+              <h3>Learning goal</h3>
+              <p>
+                The viewer acquires a systems thinking perspective: they can see where AI will increase the pressure in
+                their own organization, and why clear requirements are the key to reducing it.
+              </p>
+              <textarea
+                class="spec-note"
+                form="spec-review"
+                name="note:brief--learning-goal"
+                placeholder="Note on Learning goal"
+              ></textarea>
+            </div>
+            <div data-spec="brief-entry" id="brief--actionables">
+              <h3>Actionables</h3>
+              <ul>
+                <li>Map your own team as nodes and handoffs, and mark the narrowest review step.</li>
+                <li>Before you speed up a node with AI, check that the review step after it can handle more.</li>
+                <li>
+                  Before you hand a task to AI, write the requirement clearly enough that someone new could act on it.
+                </li>
+              </ul>
+              <textarea
+                class="spec-note"
+                form="spec-review"
+                name="note:brief--actionables"
+                placeholder="Note on Actionables"
+              ></textarea>
+            </div>
+            <div data-spec="brief-entry" id="brief--research-questions">
+              <h3>Research questions</h3>
+              <ul>
+                <li>
+                  Why does the software ecology video (https://www.youtube.com/watch?v=2n41YjR5QfU) treat software as a
+                  socio-technical ecosystem?
+                </li>
+                <li>Why does AI-assisted execution move the bottleneck to specification and review?</li>
+                <li>
+                  Why does AI-assisted execution shift work to specifying and reviewing on the product side: sales,
+                  product management and business analysis?
+                </li>
+                <li>
+                  Why does AI-assisted execution shift work to specifying and reviewing on the software side:
+                  engineering, documentation, operations, billing and support?
+                </li>
+                <li>Why do unclear requirements lead to rework and failed projects?</li>
+                <li>Why does a model's output get worse when its context is muddy (context rot)?</li>
+              </ul>
+              <textarea
+                class="spec-note"
+                form="spec-review"
+                name="note:brief--research-questions"
+                placeholder="Note on Research questions"
+              ></textarea>
+            </div>
+            <div data-spec="brief-entry" id="brief--style">
+              <h3>Style</h3>
+              <p>
+                Editorial: managers are the lead audience, and its meaning colours (<code>human</code>,
+                <code>machine</code>, <code>ai</code>) map onto a node's human and technical sides and the AI pump.
+              </p>
+              <textarea
+                class="spec-note"
+                form="spec-review"
+                name="note:brief--style"
+                placeholder="Note on Style"
+              ></textarea>
+            </div>
+            <div data-spec="brief-entry" id="brief--constraints">
+              <h3>Constraints</h3>
+              <ul>
+                <li>AI is always shown as an accelerator, never as a solution.</li>
+                <li>No bad actors: no role is blamed, the pressure belongs to the system.</li>
+                <li>Every node shows both its human side and its technical side.</li>
+                <li>Reusable across talks: no dated claims and no tool names.</li>
+              </ul>
+              <textarea
+                class="spec-note"
+                form="spec-review"
+                name="note:brief--constraints"
+                placeholder="Note on Constraints"
+              ></textarea>
+            </div>
+          </section>
+          <section id="style" class="spec-card">
+            <h2>Style</h2>
+            <p>
+              Editorial: managers are the lead audience, and its meaning colours (<code>human</code>,
+              <code>machine</code>, <code>ai</code>) map onto a node's human and technical sides and the AI pump.
+            </p>
+          </section>
+        </div>
+
+        <section data-spec="section" id="play">
+          <div class="spec-section-band">
+            <p class="spec-kicker">Section 1 · section slide, drawn in the Title-slide Options</p>
+            <h2>Play</h2>
+          </div>
+          <article data-spec="slide" id="play" data-number="1">
+            <header class="spec-slide-head">
+              <span class="spec-number">1</span>
+              <h3>Play</h3>
+            </header>
+            <p class="spec-purpose">
+              lets the viewer run the whole system themselves, from the familiar cartoon to AI switched on
+            </p>
+            <div class="spec-words">
+              <input type="radio" name="words:play" id="play--visual-idea" value="visual-idea" checked />
+              <label for="play--visual-idea">Visual idea</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p data-spec="visual-idea">
+                  the Explorable with its toolbar: steps Swing, Roles, Pipeline, AI; the use case picker; the pump speed
+                  and water clarity dials; node cards on click. Opens on the Swing step of the tire swing use case
+                </p>
+              </div>
+            </div>
+          </article>
+        </section>
+        <section data-spec="section" id="why-how-and-what">
+          <div class="spec-section-band">
+            <p class="spec-kicker">Section 2 · section slide, drawn in the Title-slide Options</p>
+            <h2>Why, how and what</h2>
+          </div>
+          <article data-spec="slide" id="why-how-and-what" data-number="2">
+            <header class="spec-slide-head">
+              <span class="spec-number">2</span>
+              <h3>Why, how and what</h3>
+            </header>
+            <p class="spec-purpose">
+              explains why it matters (AI pumps execution faster, so pressure moves to specification and review and
+              spreads to neighbours, and how clearer requirements, the clean water, lower it), how to use it (steps, use
+              cases, dials, node cards), and what the Explorable shows (every node specifies, executes and reviews, each
+              with a human and a technical side)
+            </p>
+            <div class="spec-words">
+              <input
+                type="radio"
+                name="words:why-how-and-what"
+                id="why-how-and-what--visual-idea"
+                value="visual-idea"
+                checked
+              />
+              <label for="why-how-and-what--visual-idea">Visual idea</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p data-spec="visual-idea">
+                  three columns, each with a still from the Explorable: the pump pushing sludge, the toolbar, a node's
+                  omega
+                </p>
+              </div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+    <!-- spec-review:start -->
+    <!--
+  The Spec review form, inlined verbatim into every spec/spec.html by write-spec
+  (design-ADR 0011). Its fields sit beside what they review and join it by form="spec-review":
+  per Option a checkbox name="pick:<slide-slug>" value="<option-id>", per Slide a textarea
+  name="note:<slide-slug>", and one textarea name="note:visual-language".
+  npm run episode:spec serves the page and saves the review as the next feedback round.
+-->
+    <form id="spec-review" class="spec-review" method="post">
+      <p>Tick the Options you want under each Slide and dictate a note per Slide. A Slide with no tick needs a note.</p>
+      <output name="status" aria-live="polite"></output>
+      <button type="submit">Save review</button>
+    </form>
+    <script>
+      (() => {
+        // A Slide with no tick needs a note; ticks and notes survive a reload until a save succeeds.
+        const form = document.getElementById('spec-review');
+        const meta = JSON.parse(document.getElementById('spec-meta')?.textContent || '{}');
+        const key = 'spec-review:' + (meta.title || location.pathname);
+        const fields = [...form.elements].filter((field) => /^(pick|note):/.test(field.name));
+        const isBox = (field) => field.type === 'checkbox';
+        const id = (field) => (isBox(field) ? field.name + '=' + field.value : field.name);
+        const ticked = (slug) => fields.some((field) => field.name === 'pick:' + slug && field.checked);
+        const sync = () => {
+          for (const note of fields.filter((field) => !isBox(field))) {
+            const slug = note.name.slice('note:'.length);
+            note.required = slug !== 'visual-language' && !ticked(slug);
+          }
+        };
+        const store = () => {
+          const draft = fields.map((field) => [id(field), isBox(field) ? field.checked : field.value]);
+          localStorage.setItem(key, JSON.stringify(Object.fromEntries(draft)));
+        };
+        const saved = new URLSearchParams(location.search).get('saved');
+        if (saved) {
+          localStorage.removeItem(key);
+          form.elements.status.value = 'Saved as feedback/' + saved + '/feedback.md.';
+          history.replaceState(null, '', location.pathname);
+        } else {
+          const draft = JSON.parse(localStorage.getItem(key) || '{}');
+          for (const field of fields.filter((candidate) => id(candidate) in draft))
+            if (isBox(field)) field.checked = draft[id(field)];
+            else field.value = draft[id(field)];
+        }
+        sync();
+        for (const field of fields)
+          for (const type of ['input', 'change']) field.addEventListener(type, () => (sync(), store()));
+      })();
+    </script>
+    <!-- spec-review:end -->
+  </body>
+</html>
