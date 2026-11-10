@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why does AI-assisted execution shift work to specifying and reviewing in software roles: engineering, documentation, operations, billing and support?'
-description: 'AI speeds up writing code, text and replies, but the saved effort reappears as review, specification and stability work downstream, because the hard part of software was always deciding what to build.'
+title: 'Why does AI-assisted execution shift work to specifying and reviewing in
+  software roles: engineering, documentation, operations, billing and support?'
+description: 'AI speeds up writing code, text and replies, but the saved effort
+  reappears as review, specification and stability work downstream, because the
+  hard part of software was always deciding what to build.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-11-10T00:00:00Z
+  at: 2026-11-10T16:55:33Z
 stale_after: 2027-05-10T00:00:00Z
 sources:
   - id: 1
@@ -12,7 +15,8 @@ sources:
     title: 'Brooks, No Silver Bullet: Essence and Accident in Software Engineering'
   - id: 2
     resource: https://243608892.fs1.hubspotusercontent-na2.net/hubfs/243608892/AI_Engineering_Impact_Report_July_2025_Faros_AI.pdf
-    title: 'Faros AI, What data from 10,000 developers reveals about impact, barriers, and the path forward'
+    title: 'Faros AI, What data from 10,000 developers reveals about impact,
+      barriers, and the path forward'
   - id: 3
     resource: https://services.google.com/fh/files/misc/2025_state_of_ai_assisted_software_development.pdf
     title: 'DORA (Google Cloud), State of AI-assisted Software Development 2025'
@@ -21,7 +25,8 @@ sources:
     title: 'DORA (Google Cloud), 2024 Accelerate State of DevOps Report'
   - id: 5
     resource: https://arxiv.org/abs/2507.09089
-    title: 'Becker, Rush, Barnes and Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity'
+    title: 'Becker, Rush, Barnes and Rein, Measuring the Impact of Early-2025 AI on
+      Experienced Open-Source Developer Productivity'
   - id: 6
     resource: https://www.nber.org/papers/w31161
     title: 'Brynjolfsson, Li and Raymond, Generative AI at Work'
