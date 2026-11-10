@@ -18,11 +18,15 @@
       "prompt": "ink/prompt.md",
       "attachments": ["ink/handoff.md"],
       "calibration": "ink/calibration.md",
+      "checklist": "ink/checklist.json",
+      "probe": "ink/probe.json",
       "hashes": {
         "ink/prompt.md": "bc62aed848430565e8383d9790584b5e21ac5fa14193a6a17e0acbb7cf949872",
         "ink/handoff.md": "62de185e0bef148182ffb5735ba11a74d1be4f2ed3900fb2fb7323b423bd630d",
         "ink/source.md": "778019dbf8425e9f2f9e30732ec6fad78dd53af8ad4b6be61a4d1eabc0fe9614",
-        "ink/calibration.md": "384eb51101b8a3ebd822fabc09d4fd33b46c555e66afcefa2803f71aa7ca0623"
+        "ink/calibration.md": "384eb51101b8a3ebd822fabc09d4fd33b46c555e66afcefa2803f71aa7ca0623",
+        "ink/checklist.json": "97cbeef1e7de96a148818e347e68a36753d3c6b3f7947ad22f8c61b811f96521",
+        "ink/probe.json": "5ef4fd6500a61189184d38e50a50caba2c898e78982cda153e4a20d3179a5324"
       }
     },
     {

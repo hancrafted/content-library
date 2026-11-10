@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": "three-approaches",
+      "question": "Does the neighbouring-card item offer all three approaches as its Options: bounded shared space, nearest only and contour pressure?",
+      "source": { "file": "handoff.md", "quote": "Compare all three unresolved neighbouring-card approaches" }
+    },
+    {
+      "id": "pointer-positions",
+      "question": "Is each neighbouring-card approach's ink shown with the pointer far away, near a card, and between two cards?",
+      "source": {
+        "file": "calibration.md",
+        "quote": "show each approach's ink at a few pointer positions: far, near, and between two cards"
+      }
+    },
+    {
+      "id": "real-card-content",
+      "question": "Do the mocks show Episode cards with real content (a title, caption, tags, release date and a \"Watch on YouTube\" action) rather than placeholder boxes?",
+      "source": { "file": "handoff.md", "quote": "Use representative English card content" }
+    },
+    {
+      "id": "anchored-liquid",
+      "question": "Is the ink drawn as an irregular liquid pool anchored at the card's rounded border, rather than as a fixed shape that grows, zooms or floats free?",
+      "source": { "file": "handoff.md", "quote": "anchor the pool at the nearest point of its rounded border" }
+    },
+    {
+      "id": "no-production",
+      "question": "Does the page say that approving it does not authorise production changes?",
+      "source": { "file": "calibration.md", "quote": "Approving does not authorise production changes." }
+    }
+  ]
+}

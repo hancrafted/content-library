@@ -1,6 +1,6 @@
 # Artifact verification
 
-The grader in `SKILL.md`'s deliver step already checks the page contract, offline loading, the mode's controls, a comment's byte-identical round trip through Copy prompt and Save, and that a denied copy, a failed save or a cancelled Reset all keeps input and claims no success, at 1440 and 1024 px. For everything else, use the repository's browser and inspection tools, or a temporary browser script.
+The grader in `SKILL.md`'s deliver step already checks, at 1440 and 1024 px: the page contract, offline loading, the mode's controls, the depth toggles, layout and accessibility, a comment's byte-identical round trip through Copy prompt and Save, and that a denied copy, a failed save or a cancelled Reset all keeps input and claims no success. For everything else, use the repository's browser and inspection tools, or a temporary browser script.
 
 ## Mechanical checks
 
@@ -24,7 +24,7 @@ For the handoff controls, also exercise:
 - A confirmed Reset all restores the recommended action and its sentences.
 - Save, Copy prompt and reset buttons keep visible, accessible names. The page says that Save accepts the selected Next action and names `<page-id>-r<N>-feedback.md`.
 
-Wait on observable states, not fixed sleeps. Inspect both themes when theme switching is offered. Verify keyboard operation, labelled fields, visible focus, contrast and absence of unintended horizontal overflow. For motion, verify purposeful states and reduced-motion behaviour without claiming a geometry test proves the effect looks liquid.
+Wait on observable states, not fixed sleeps. Inspect both themes when theme switching is offered. Verify keyboard operation beyond focus visibility. For motion, verify purposeful states without claiming a geometry test proves the effect looks liquid.
 
 ## Human checks
 

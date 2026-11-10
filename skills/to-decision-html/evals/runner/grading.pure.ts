@@ -21,6 +21,19 @@ export interface Grading {
     output_chars: number;
   };
   readonly user_notes_summary: { uncertainties: string[]; needs_review: string[]; workarounds: string[] };
+  /** Which models judged and read the page; null when no judge ran. */
+  readonly judge: JudgeRecord | null;
+}
+
+/** The checklist judge's and the reader probe's models, recorded in every run's grading.json. */
+export interface JudgeRecord {
+  readonly cli: 'claude' | 'gemini';
+  readonly judgeModel: string | null;
+  readonly readerModel: string | null;
+  /** True when the judge's family differs from the executor's. */
+  readonly crossFamily: boolean;
+  /** The self-preference risk when judge and executor share a family; null otherwise. */
+  readonly risk: string | null;
 }
 
 /** A report for a run with no gradable page: every check fails with the reason. */
@@ -76,6 +89,7 @@ interface RunOutcome {
   readonly error: string | null;
   /** Things a reviewer should know about the run, such as which page was graded. */
   readonly notes: readonly string[];
+  readonly judge?: JudgeRecord | null;
 }
 
 function countByName(tools: readonly ToolCall[]): Record<string, number> {
@@ -85,7 +99,12 @@ function countByName(tools: readonly ToolCall[]): Record<string, number> {
 }
 
 /** Timing goes to timing.json, where the aggregation also finds the token count. */
-export function gradingOf({ expectations, tools, outputChars, error, notes }: RunOutcome): Grading {
+const riskOf = (judge: JudgeRecord | null): string[] =>
+  judge?.risk == null
+    ? []
+    : [`judge ${judge.judgeModel ?? 'unknown'}, reader ${judge.readerModel ?? 'unknown'}: ${judge.risk}`];
+
+export function gradingOf({ expectations, tools, outputChars, error, notes, judge = null }: RunOutcome): Grading {
   const passed = expectations.filter((expectation) => expectation.passed).length;
   const total = expectations.length;
   return {
@@ -102,6 +121,7 @@ export function gradingOf({ expectations, tools, outputChars, error, notes }: Ru
       errors_encountered: error === null ? 0 : 1,
       output_chars: outputChars,
     },
-    user_notes_summary: { uncertainties: [], needs_review: [...notes], workarounds: [] },
+    user_notes_summary: { uncertainties: riskOf(judge), needs_review: [...notes], workarounds: [] },
+    judge,
   };
 }

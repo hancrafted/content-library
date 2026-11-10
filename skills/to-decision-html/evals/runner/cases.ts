@@ -4,6 +4,8 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { CaseItem, Source } from './judge.pure.ts';
+import { UNKNOWN, type ProbeQuestion } from './probe.pure.ts';
 
 export const CASES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../cases');
 
@@ -13,7 +15,7 @@ interface ManifestCase {
   readonly prompt: string;
   readonly attachments: readonly string[];
   readonly calibration?: string;
-  /** The judge's case items and the reader probe's answer key; graders read them, a run never sees them. */
+  /** The judge's case items and the reader probe with its answer key; grading files the run never sees. */
   readonly checklist?: string;
   readonly probe?: string;
   readonly hashes: Readonly<Record<string, string>>;
@@ -55,36 +57,50 @@ export function loadCase(id: string): EvalCase {
   return { id, evalId: index + 1, mode, prompt, inputs: [...attachments, calibration], hashes };
 }
 
-/** Where a checklist item or probe answer comes from: a file beside it and a verbatim quote of that file. */
-interface Sourced {
-  readonly id: string;
-  readonly source: { readonly file: string; readonly quote: string };
+/** What the judge and the reader probe ask about a case's page: checklist.json's items and probe.json's questions. */
+export interface QualityKeys {
+  readonly checklist: readonly CaseItem[];
+  readonly probe: readonly ProbeQuestion[];
 }
 
-const squash = (text: string) => text.replace(/\s+/g, ' ').trim();
+const readCaseJson = <T>(file: string | undefined, fallback: T): T =>
+  file === undefined ? fallback : (JSON.parse(readFileSync(path.join(CASES, file), 'utf8')) as T);
+
+/** The case's checklist items and probe questions; null when it has neither, so only mechanical graders apply. */
+export function qualityKeys(id: string): QualityKeys | null {
+  const entry = readManifest().cases.find((candidate) => candidate.id === id);
+  if (entry === undefined) throw new Error(`no eval case "${id}"`);
+  if (entry.checklist === undefined && entry.probe === undefined) return null;
+  return {
+    checklist: readCaseJson<{ items: CaseItem[] }>(entry.checklist, { items: [] }).items,
+    probe: readCaseJson<{ questions: ProbeQuestion[] }>(entry.probe, { questions: [] }).questions,
+  };
+}
 
 /**
- * One problem per checklist item or probe question whose quote is not in one of the case's attachments: an answer
- * key comes from the frozen input both arms received, never from calibration answers, a page or memory.
+ * A key must come from what the run itself sees (its prompt, attachments and calibration answers), quoted verbatim,
+ * never from a generated page or a provenance-only file. One problem per key that does not.
  */
-export function answerKeyProblems(
-  entry: Pick<ManifestCase, 'id' | 'attachments' | 'checklist' | 'probe'>,
-  dir: string = CASES,
-): string[] {
-  const keyed = [
-    [entry.checklist, 'items'],
-    [entry.probe, 'questions'],
-  ] as const;
-  return keyed.flatMap(([file, list]) => {
-    if (file === undefined) return [];
-    const sourced = (JSON.parse(readFileSync(path.join(dir, file), 'utf8')) as Record<string, Sourced[]>)[list];
-    return sourced.flatMap(({ id, source }) => {
-      const input = path.join(path.dirname(file), source.file);
-      const name = path.basename(file);
-      if (!entry.attachments.includes(input))
-        return [`${name} ${id} quotes ${source.file}, which is not an input of case "${entry.id}"`];
-      const text = squash(readFileSync(path.join(dir, input), 'utf8'));
-      return text.includes(squash(source.quote)) ? [] : [`${name} ${id} quotes text that ${source.file} does not hold`];
-    });
-  });
+export function keyProblems(dir: string, evalCase: EvalCase, { checklist, probe }: QualityKeys): string[] {
+  const folder = path.dirname(evalCase.prompt);
+  const seen = new Set([evalCase.prompt, ...evalCase.inputs].map((file) => path.basename(file)));
+  const sourced = (label: string, { file, quote }: Source): string[] => {
+    if (!seen.has(file)) return [`${label} quotes ${file}, which the run never sees`];
+    const text = readFileSync(path.join(dir, folder, file), 'utf8');
+    return text.includes(quote) ? [] : [`${label} quotes text not in ${file}: "${quote}"`];
+  };
+  const keyed = ({ id, choices, answer }: ProbeQuestion): string[] => {
+    if (answer.length === 0) return [`probe ${id} has no key`];
+    if (UNKNOWN in choices) return [`probe ${id} offers "${UNKNOWN}", which every question already offers`];
+    return answer
+      .filter((choice) => !(choice in choices))
+      .map((choice) => `probe ${id} keys ${choice}, which is not one of its choices`);
+  };
+  return [
+    ...(checklist.length >= 3 && checklist.length <= 5
+      ? []
+      : [`checklist has ${checklist.length} items; a case has 3 to 5`]),
+    ...checklist.flatMap((item) => sourced(`checklist ${item.id}`, item.source)),
+    ...probe.flatMap((question) => [...sourced(`probe ${question.id}`, question.source), ...keyed(question)]),
+  ];
 }
