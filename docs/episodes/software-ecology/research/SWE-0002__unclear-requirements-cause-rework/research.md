@@ -32,7 +32,7 @@ Asked to support the claim that a vague requirement is paid for later, as rework
 
 ## Answer
 
-Practitioners consistently name incomplete or hidden requirements as their most frequent requirements problem, and they report time overrun, rework after implementation and poor quality as its effects [1]. Rework is large: one often-cited estimate puts avoidable rework at 40 to 50 percent of project effort [2]. The numbers that made requirements famous are disputed, though. The Standish CHAOS success and failure rates measure estimate accuracy, not requirements quality [4], and the rule that a late fix costs 100 times more did not show up in a 171-project dataset [3]. The supported claim is therefore the direction, unclear requirements cost rework and time, not any single multiplier.
+Unclear requirements lead to rework because requirements specified in haste, then accommodated late, break the architecture, design and code already built on them [2]. Practitioners name incomplete or hidden requirements their most frequent requirements problem and report time overrun, rework after implementation and poor quality as its effects [1]. Avoidable rework is large: one often-cited estimate puts it at 40 to 50 percent of project effort [2]. The numbers that made requirements famous are disputed, though. The Standish CHAOS success and challenged rates are criticised as misleading measures [4], and the rule that a late fix costs 100 times more did not show up in a 171-project dataset [3].
 
 ## Findings
 
@@ -40,7 +40,7 @@ Practitioners consistently name incomplete or hidden requirements as their most 
 2. Respondents asked about causes and effects of incomplete or hidden requirements most often cited time overrun (about 10% of reported effects), post-implementation rework (about 9%) and poor product quality (about 9%) [1].
 3. Communication flaws with the customer were rated as leading to project failure more often than incomplete requirements, even though incomplete requirements occurred more often [1].
 4. Boehm and Basili state that current software projects spend about 40 to 50 percent of their effort on avoidable rework, meaning effort spent fixing problems that could have been found earlier and fixed more cheaply, or avoided altogether [2].
-5. The same list says a problem found after delivery is often 100 times more expensive to fix than one found in the requirements and design phase, and names hastily specified requirements as a major source of avoidable rework [2].
+5. The same list says a problem found after delivery is often 100 times more expensive to fix than one found in the requirements and design phase, and names hastily specified requirements as a major source of avoidable rework, because accommodating them late breaks architecture, design and code [2].
 6. The 100x rule is contested: an analysis of 171 projects from 2006 to 2014 found no evidence for the delayed issue effect, fixes in later phases not being consistently or substantially costlier. The authors call it possibly "an historical relic" that holds only in certain kinds of projects [3].
 7. The Standish CHAOS report of 1994 put project success at 16%, challenged at 53% and failed at 31% [4]. Eveleens and Verhoef applied Standish's definitions to 5,457 forecasts from 1,211 projects and found the definitions misleading, one-sided, harmful to estimation practice and the resulting figures meaningless for benchmarking, because success is defined only by on-time, on-budget, as-specified delivery [4].
 
