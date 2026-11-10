@@ -15,7 +15,7 @@ Read before designing, building or adding a use case to the software ecology Exp
 ## Concept
 
 1. **Two layers run through every use case.** Water clarity (requirements and context quality; context rot is sediment) and the socio-technical node (a human side and a technical side). Use cases change only the graph's shape.
-2. **Every node is an omega pipe: specify, execute, review.** AI pulls the execute part down into a big belly; review stays narrow on the human side and becomes the valve. One shape shows "AI moves work from execution to specification and review" at every node, product side included.
+2. **Every node is specify, execute, review.** On the graph it is a stretch of straight pipe with a review valve; with AI on, a pump attaches to the pipe and speeds the flow, while the valve stays narrow. The node card shows the omega: AI pulls the execute part down into a big belly, review stays narrow on the human side. One shape shows "AI moves work from execution to specification and review" at every node, product side included.
 3. **AI is a pump, not a filter.** It speeds up whatever flows, clean water or sludge.
 4. **Pressure spreads along edges** to neighbouring nodes, not only at the node AI touches.
 5. **On the product side, AI floods out material** (templates, docs) that humans cannot consume or review.
@@ -39,13 +39,14 @@ Built for many from day one: each is a structure file and a words pair.
 
 ## Visuals
 
-1. **Node at rest:** role glyph and title with its omega pipe running through it.
+1. **Node at rest:** role glyph and title on a straight pipe, with its review valve. With AI on, a pump attaches to the pipe at the node and the flow through it speeds up (Spec round 1: the omega dip on the graph read as noise).
 2. **Card:** the 2×3 grid (rows human / technical, columns specify / execute / review), one line per cell. With AI on, the execute column hands over to AI and the review column swells and turns to warning. Below it the node's two dials and a live readout ("14 waiting for review", "6 dropped a week"), and the node's own omega, enlarged, animated from the same numbers as the graph.
 3. **Edges are handoffs.** Hover shows the artefact flowing through (brief, spec, pull request, release notes). Two labelled zones: product lifecycle (left) and software lifecycle (right), joined at the spec.
 4. **Leaking.** A pipe past its buffer leaks drops that fall out and fade, so the animation keeps running at a steady state instead of piling up forever.
-5. **Flow, two Options for the Spec**, both with a digital flair:
-   - **Pixel water:** small square particles (data packets) read as liquid from afar. Clear is crisp and bright; sludge is dull and blurry, and some particles stick to the walls as sediment. At a valve they queue and pack into a block. A magnifier lens on hover.
+5. **Flow, two Options for the Spec** (Spec round 1 replaced pixel water, whose dots did not read as pleasing):
+   - **Documents:** small documents (brief, spec, pull request) pass from one node to the next inside the pipe. Clear ones are crisp; sludge ones are smudged. At a valve they stack up; past the buffer they fall out and fade.
    - **Liquid stream:** a continuous ink-like stream, fitting the site's ink motion; sediment coats the walls; pile-up shows as pooling and a bulging pipe.
+   - No magnifier lens in v1.
    - Clicking a pipe segment or valve opens a panel listing what is stuck ("12 PRs waiting for review").
 
 ## Open

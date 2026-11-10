@@ -6,11 +6,11 @@ status: accepted
 
 # Software ecology flow model and use-case files
 
-The software ecology Explorable (`src/explorables/software-ecology/`) shows an organization as plumbing: roles are omega pipes (specify, execute, review), handoffs are the pipes between them, AI is a pump, and requirement quality is water clarity. Every pressure readout, leak and payoff comes from one pure model fed by one data file per use case, so a new use case is data and the numbers on a card always match the picture. The product design (concept, use cases, interaction, visuals) is in [the feature guide](../features/explorables/software-ecology.md); this record binds the contract every use case is written against.
+The software ecology Explorable (`src/explorables/software-ecology/`) shows an organization as plumbing: roles are stretches of pipe that specify, execute and review, handoffs are the pipes between them, AI is a pump, and requirement quality is water clarity. Every pressure readout, leak and payoff comes from one pure model fed by one data file per use case, so a new use case is data and the numbers on a card always match the picture. The product design (concept, use cases, interaction, visuals) is in [the feature guide](../features/explorables/software-ecology.md); this record binds the contract every use case is written against.
 
 ## Human acceptance
 
-Han chose every decision below in the architecture grill of the `software-ecology` Episode Run (`/new-episode`, branch `episode/software-ecology`), on 2026-11-10, answering questions 1 to 24 one by one and leaving each "Decided without asking" line uncontested. He asked for this record with "write adr" and confirmed its scope with "1" to the question of where the design lives.
+Han chose every decision below in the architecture grill of the `software-ecology` Episode Run (`/new-episode`, branch `episode/software-ecology`), on 2026-11-10, answering questions 1 to 24 one by one and leaving each "Decided without asking" line uncontested. He asked for this record with "write adr" and confirmed its scope with "1" to the question of where the design lives. In Spec round 1 (`docs/episodes/software-ecology/feedback/01/feedback.md`) he replaced the omega on the graph with a pump attached to the pipe, named documents and liquid as the two flow Options, and removed the magnifier lens; decisions 18, 19 and 21 carry that.
 
 This accepts the design, not an implementation: none exists yet.
 
@@ -41,10 +41,10 @@ This accepts the design, not an implementation: none exists yet.
 
 ### Rendering
 
-18. **DOM for structure, canvas for flow.** Nodes, edges, cards and the toolbar are DOM/SVG, labelled and keyboard reachable. The flow is one canvas behind a `FlowRenderer` seam (`draw(ctx, model, t)`), reading only the model's numbers, including `leak[n]` for drops that fall and fade. It holds 60fps under a fixed particle cap, pauses off-screen, and draws one static end frame under reduced motion. Pixel water and the liquid stream are two implementations, compared as Spec Options; one ships.
-19. **Inspect targets DOM.** Every inspect action targets a node or an edge and opens one "what is stuck here" panel; a particle lens is decoration, since a canvas particle takes no focus.
+18. **DOM for structure, canvas for flow.** Nodes, edges, cards and the toolbar are DOM/SVG, labelled and keyboard reachable. The flow is one canvas behind a `FlowRenderer` seam (`draw(ctx, model, t)`), reading only the model's numbers, including `leak[n]` for drops that fall and fade. It holds 60fps under a fixed particle cap, pauses off-screen, and draws one static end frame under reduced motion. Documents passing through the pipe and a liquid stream are two implementations, compared as Spec Options; one ships.
+19. **Inspect targets DOM.** Every inspect action targets a node or an edge and opens one "what is stuck here" panel, since a canvas particle takes no focus. No magnifier lens in v1.
 20. **Layout is computed.** A pure layered layout ranks nodes by edges, left to right on a wide container, top to bottom below a breakpoint, with zones as lanes; the file gives only `zone` hints, never coordinates.
-21. **One omega component** with a `scale` prop draws the node on the graph and enlarged on the card, from the same numbers. GSAP, already a dependency, morphs the steps (panels → glyphs → graph) by FLIP. The parent owns all state and each part gets its slice and callbacks (FE-012-explorables §4).
+21. **The graph is a straight pipe; the card holds the omega.** On the graph a node is its glyph and title on the pipe, and with AI on a pump attaches to the pipe at that node and visibly speeds the flow through it; the review valve stays on the pipe after it. The omega (specify, execute, review) is drawn only on the node card, enlarged, from the same numbers. GSAP, already a dependency, morphs the steps (panels → glyphs → graph) by FLIP. The parent owns all state and each part gets its slice and callbacks (FE-012-explorables §4).
 
 ## Alternatives and cost
 
