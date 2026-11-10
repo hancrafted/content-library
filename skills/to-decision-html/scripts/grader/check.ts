@@ -2,7 +2,7 @@
 // the registry finds it by its file, so adding a check never edits another file.
 import type { Page } from '@playwright/test';
 
-// The page contract's closed value sets; SKILL.md's "Page contract" table (step 7) is their source.
+// The page contract's closed value sets; SKILL.md's "Page contract" list (step 7) is their source.
 export const MODES = ['decide', 'explain'] as const;
 export const FIDELITY_RUNGS = ['diagram', 'wireframe', 'mock', 'prototype'] as const;
 export const DEPTHS = ['simple', 'detailed', 'both'] as const;

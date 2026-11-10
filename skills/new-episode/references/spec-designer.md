@@ -6,7 +6,7 @@ A designer of the `write-spec` job designs two or three **Options** per page Sli
 
 Point, never paste: read each file yourself.
 
-- [`to-decision-html`](../../to-decision-html/SKILL.md): compose your Options by its rules under a caller-owned frame (this file, the Spec frame and its review form), in mode `decide`, at the very high fidelity [The mock is the Slide](#the-mock-is-the-slide) sets, with GSAP named as the motion library.
+- [`to-decision-html`](../../to-decision-html/SKILL.md): compose your Options by its rules under a caller-owned frame (this file, the Spec frame and its review form), in mode `decide`, at the very high fidelity [The mock is the Slide](#the-mock-is-the-slide) sets, with GSAP named as the motion library at the repo's pinned `3.15.0`.
 - The Brief, `docs/episodes/<slug>/brief.md`, including its `## Style`.
 - Each design reference the Brief lists, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md` and its page images in `pages/`: the model the user brought.
 - The Dossier, `docs/episodes/<slug>/dossier.md`: each of your Slides' Visual, title, Voice script and Speaker notes.
