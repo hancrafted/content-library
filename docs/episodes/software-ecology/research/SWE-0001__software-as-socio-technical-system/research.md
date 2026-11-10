@@ -25,7 +25,7 @@ sources:
 
 ## Context
 
-The video is a conference talk by Adam Bender, a Google engineer, titled "Software Engineering at the Tipping Point" [1]. It coins nothing: it uses "software ecology" for a real term and applies systems thinking to how AI changes a developer organization. This file answers from its transcript, and adds the primary sources the talk names or rests on. Timestamps are mm:ss in the video.
+The question supports a claim about how to analyse a developer organization: as one connected system of people, handoffs, incentives and tools, not as a set of separate tasks. If that holds, a change that speeds up one node, such as AI writing code faster, adds pressure on its neighbours, so the effect cannot be judged at the node alone. The evidence is a conference talk by Adam Bender, a Google engineer, titled "Software Engineering at the Tipping Point" [1], which uses "software ecology" as an existing term and applies systems thinking to AI in a developer organization. This file answers from its transcript, and adds the primary sources the talk names or rests on. Timestamps are mm:ss in the video.
 
 ## Answer
 
@@ -42,7 +42,7 @@ The talk treats software as a socio-technical ecosystem because the things an or
 7. The talk separates producing code from engineering: "engineering is programming integrated over time" (15:44) [1]. The same line appears in the Google book, which distinguishes programming from software engineering by time, scale and trade-offs, with team organization and practices dominating the complexity at scale [3].
 8. AI is described as an amplifier, a magnitude and not a direction: it gives more tests, documentation and code, but also more confusion, and teams with good fundamentals apply it in useful directions (32:16 to 33:00) [1]. The talk attributes this to DORA, whose report states AI's primary role is as an amplifier of an organization's existing strengths and weaknesses, and that returns come from the underlying organizational system, not the tools [4].
 9. The remedy is systems thinking, not node-by-node fixes: "you can't resolve any of these by just looking at a single node" (30:28). The things to look for are size, effects over time, direction of causality, neighbours, emergence, incentives, capacity, feedback loops and bottlenecks, probed with why and what if (30:28 to 31:30) [1].
-10. The closing image is a forest: managers will manage an ecosystem, not individual trees, and people inside it who see the system can find leverage (38:11 to 39:03) [1].
+10. The closing image is a forest: the speaker says "we are all not just managing a tree, but an entire forest", so everyone is managing an ecosystem and not individual trees, and people inside it who see the system can find leverage (38:11 to 39:03) [1].
 
 ## Caveats
 
