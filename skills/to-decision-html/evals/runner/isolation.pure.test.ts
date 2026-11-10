@@ -221,6 +221,27 @@ describe('isolation', () => {
       expect(problems).toEqual(expected);
     });
 
+    it("lets a run read back its own tool output that the CLI spilled to the run's project folder, and no other", () => {
+      // ARRANGE
+      const own = '/Users/someone/.claude/projects/-private-var-folders-x-T-decision-eval-1/s1/tool-results/b6.txt';
+      const other = '/Users/someone/.claude/projects/-Users-someone-repo/s2/tool-results/c7.txt';
+      const tools = [
+        { name: 'Read', input: { file_path: own } },
+        { name: 'Read', input: { file_path: other } },
+        { name: 'Write', input: { file_path: own, content: '' } },
+      ];
+      const expected = [
+        `Read reads ${other}, outside the run workspace and the system and tool paths`,
+        `Write writes ${own}, outside the run workspace and the temp folder`,
+      ];
+
+      // ACT
+      const problems = isolationProblems(tools, roots);
+
+      // ASSERT
+      expect(problems).toEqual(expected);
+    });
+
     it('allows no folder in the home folder but the Playwright browser cache', () => {
       // ARRANGE
       const tools = [{ name: 'Bash', input: { command: 'ls ~/Library/Caches/other' } }];

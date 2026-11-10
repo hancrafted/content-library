@@ -136,18 +136,26 @@ class Run {
   private readonly own: string[] = [];
   private readonly workspace: readonly string[];
   private readonly temp: readonly string[];
+  /** The CLI's own project folders for this run, where it spills a tool output too long to return inline. */
+  private readonly spills: readonly string[];
 
   /** `roots` are the workspace's spellings; the sandbox sits in the system temp folder, so their parent is it. */
   constructor(roots: readonly string[]) {
     this.workspace = roots.map(canonical);
     this.temp = [...TEMP, ...this.workspace.map((root) => path.posix.dirname(root))];
+    this.spills = roots.map((root) => `/.claude/projects/${root.replace(/[^a-zA-Z0-9]/g, '-')}/`);
   }
 
   private inTemp = (target: string) => this.temp.some((root) => within(target, root));
 
-  /** Where a token points: the home folder cannot be resolved, so it stays a place of its own. */
+  private isToolCache = (token: string) => BROWSERS.test(token) || this.spills.some((spill) => token.includes(spill));
+
+  /**
+   * Where a token points: the home folder cannot be resolved, so it stays a place of its own. The run's spilled tool
+   * output is read like a system path: it holds what the run itself produced, no outside context.
+   */
   private placeOf({ token, from }: Touch): { place: Place; target: string } {
-    if (BROWSERS.test(token)) return { place: 'system', target: token };
+    if (this.isToolCache(token)) return { place: 'system', target: token };
     if (token.startsWith('~')) return { place: 'outside', target: token };
     const target = canonical(path.posix.resolve(from, token));
     if (this.workspace.some((root) => within(target, root)) || DEVICES.includes(target))
