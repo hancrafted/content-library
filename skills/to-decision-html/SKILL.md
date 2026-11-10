@@ -64,6 +64,17 @@ Show before and after for every change, fixes included. The before comes from ev
 
 `diagram` (diagram or sketch) → `wireframe` → `mock` (real-content mock) → `prototype` (interactive). Pick the lowest rung that settles the decision, unless the caller names one. The ladder guides rather than limits. Each item states its rung and why that rung is enough, so the reviewer can ask for a higher one, and a revision may raise it.
 
+### Diagrams and motion
+
+Keep each Mermaid diagram's source word for word in `<script type="text/x-mermaid" data-diagram="<name>">`, so it can be copied into documentation, and render it beside the script, in the same parent element:
+
+- **With a browser tool**, pre-render the source to inline SVG while you build the page.
+- **Without one**, load Mermaid from jsDelivr at an exact version, show the source as text until it renders, and mark `<html data-offline="partial">`.
+
+[Diagrams](references/diagrams.md) gives both procedures.
+
+Animate with CSS transitions and the Web Animations API, and honour `prefers-reduced-motion`. Inline a library only when the caller names it, such as a motion library's core at the caller's pinned version; the Mermaid fallback is the one exception.
+
 ### Confidence bar
 
 An item is finished when a reader can answer from the page alone:
