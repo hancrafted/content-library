@@ -33,7 +33,7 @@ The whole software ecology Explorable fills the Slide with every option on. The 
 
 The toolbar holds the step control Swing, Roles, Pipeline, AI, the use case picker and the two global dials, pump speed and water clarity.
 
-The stage opens on the Swing step of the tire swing use case, with the ten cartoon panels. Roles morphs them into role glyphs, Pipeline into the left-to-right graph with the customer's intake on the left and the tap on the right, every role an omega pipe, every edge a handoff. AI switches the pump on: the pipes fill, the narrow review valve backs up, drops leak and fade, and sludge sticks to the walls when the water clarity is low.
+The stage opens on the Swing step of the tire swing use case, with the ten cartoon panels. Roles morphs them into role glyphs, Pipeline into the left-to-right graph with the customer's intake on the left and the tap on the right, every role a stretch of straight pipe with its review valve, every edge a handoff. AI clamps a pump onto the pipe at a role and speeds the flow through it: the narrow review valve backs up, drops leak and fade, and sludge sticks to the walls when the water clarity is low.
 
 A click on a node opens its card: the 2x3 grid of human and technical against specify, execute and review, the node's own AI and context-rot dials with a live readout, and the node's own enlarged omega.
 
