@@ -6,7 +6,7 @@ frontmatter:
       frontmatter: forbidden
     - ruleId: frozen-eval-prompt
       fileNames: [prompt.md]
-      intent: 'Frozen task prompts are literal manual-evaluation inputs, not evolving product records.'
+      intent: 'Frozen task prompts are literal eval inputs, not evolving product records.'
       frontmatter: forbidden
 body-structure:
   rules:

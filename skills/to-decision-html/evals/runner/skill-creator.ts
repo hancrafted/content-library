@@ -1,10 +1,11 @@
 // Reuses skill-creator's aggregation and viewer in place, from the installed plugin. It never copies them: the
 // benchmark comes from aggregate_benchmark's own functions, then gains the case names, model and run count it
-// cannot know, and the viewer renders it as one static page.
+// cannot know, and the consistency across repeated runs it does not compute; the viewer renders it as one page.
 import { execFileSync, spawnSync } from 'node:child_process';
-import { existsSync, readdirSync, statSync } from 'node:fs';
+import { appendFileSync, existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import path from 'node:path';
+import { consistency, consistencyNotes, consistencyTable, type BenchmarkRun } from './consistency.pure.ts';
 
 const PLUGINS = path.join(homedir(), '.claude', 'plugins', 'cache');
 
@@ -38,15 +39,40 @@ const AGGREGATE = `
 import json, sys
 from pathlib import Path
 sys.path.insert(0, sys.argv[1])
-from aggregate_benchmark import generate_benchmark, generate_markdown
+from aggregate_benchmark import generate_benchmark
 iteration, extra = Path(sys.argv[2]), json.loads(sys.argv[3])
 benchmark = generate_benchmark(iteration, extra["skill_name"], extra["skill_path"])
 benchmark["metadata"].update(extra["metadata"])
 for run in benchmark["runs"]:
     run["eval_name"] = extra["eval_names"].get(str(run["eval_id"]), str(run["eval_id"]))
 (iteration / "benchmark.json").write_text(json.dumps(benchmark, indent=2) + "\\n")
+`;
+
+const MARKDOWN = `
+import json, sys
+from pathlib import Path
+sys.path.insert(0, sys.argv[1])
+from aggregate_benchmark import generate_markdown
+iteration = Path(sys.argv[2])
+benchmark = json.loads((iteration / "benchmark.json").read_text())
 (iteration / "benchmark.md").write_text(generate_markdown(benchmark) + "\\n")
 `;
+
+/** The k of pass^k: how many fresh runs must all pass an assertion. */
+const PASS_K = 3;
+
+/** Adds pass rate per case and arm and pass^k per assertion: `consistency`, and one note per case and arm. */
+function addConsistency(benchmarkFile: string): string {
+  const benchmark = JSON.parse(readFileSync(benchmarkFile, 'utf8')) as { runs: BenchmarkRun[]; notes: string[] };
+  const rows = consistency(benchmark.runs, PASS_K);
+  const augmented = {
+    ...benchmark,
+    notes: [...benchmark.notes, ...consistencyNotes(rows, PASS_K)],
+    consistency: { k: PASS_K, cases: rows },
+  };
+  writeFileSync(benchmarkFile, `${JSON.stringify(augmented, null, 2)}\n`);
+  return consistencyTable(rows, PASS_K);
+}
 
 export interface BenchmarkFacts {
   readonly skillPath: string;
@@ -67,9 +93,12 @@ export function aggregateAndView(iteration: string, facts: BenchmarkFacts): stri
     eval_names: facts.evalNames,
   };
   execFileSync(bin, ['-I', '-c', AGGREGATE, path.join(dir, 'scripts'), iteration, JSON.stringify(extra)]);
+  const benchmark = path.join(iteration, 'benchmark.json');
+  const table = addConsistency(benchmark);
+  execFileSync(bin, ['-I', '-c', MARKDOWN, path.join(dir, 'scripts'), iteration]);
+  appendFileSync(path.join(iteration, 'benchmark.md'), `\n${table}\n`);
   const review = path.join(iteration, 'review.html');
   const viewer = path.join(dir, 'eval-viewer', 'generate_review.py');
-  const benchmark = path.join(iteration, 'benchmark.json');
   execFileSync(bin, [
     '-I',
     viewer,

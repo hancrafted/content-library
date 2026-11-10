@@ -1,11 +1,11 @@
-// `node evals/run.ts [--case ink] [--runs 1]`: runs every case × arm × k headless, each in a fresh sandbox, saves
+// `node evals/run.ts [--case ink] [--runs 3]`: runs every case (default: all in the manifest) × arm × k headless, each in a fresh sandbox, saves
 // the pages, transcript.jsonl and tools.json under evals/workspace/iteration-N/eval-<case>/<arm>/run-k/, grades
 // each run, and writes skill-creator's benchmark and static viewer. Prints the review page's path.
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import { runAgent } from './runner/agent.ts';
-import { CASES, hashProblems, loadCase, type EvalCase } from './runner/cases.ts';
+import { CASES, hashProblems, loadCase, readManifest, type EvalCase } from './runner/cases.ts';
 import type { RunRecord } from './runner/grade-run.ts';
 import { invocation } from './runner/invocation.pure.ts';
 import { finishIteration, nextIteration, SKILL } from './runner/iteration.ts';
@@ -17,7 +17,7 @@ const ARMS: Record<string, string | null> = { with_skill: SKILL, without_skill: 
 
 const { values } = parseArgs({
   options: {
-    case: { type: 'string', multiple: true, default: ['ink'] },
+    case: { type: 'string', multiple: true, default: readManifest().cases.map(({ id }) => id) },
     arm: { type: 'string', multiple: true, default: Object.keys(ARMS) },
     runs: { type: 'string', default: '1' },
     model: { type: 'string' },

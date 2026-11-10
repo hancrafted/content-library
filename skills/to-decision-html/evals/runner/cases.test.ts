@@ -36,6 +36,32 @@ describe('frozen eval cases', () => {
       expect({ id, evalId, mode, prompt, inputs }).toEqual(expected);
     });
 
+    it('gives each new case its mode, prompt, attachments and frozen calibration answers', () => {
+      // ARRANGE
+      const expected = [
+        {
+          id: 'after-grill',
+          mode: 'decide',
+          prompt: 'after-grill/prompt.md',
+          inputs: ['after-grill/grill.md', 'after-grill/calibration.md'],
+        },
+        {
+          id: 'ticket',
+          mode: 'explain',
+          prompt: 'ticket/prompt.md',
+          inputs: ['ticket/issue.md', 'ticket/calibration.md'],
+        },
+      ];
+
+      // ACT
+      const loaded = ['after-grill', 'ticket']
+        .map(loadCase)
+        .map(({ id, mode, prompt, inputs }) => ({ id, mode, prompt, inputs }));
+
+      // ASSERT
+      expect(loaded).toEqual(expected);
+    });
+
     it("draws every case's checklist and probe keys verbatim from what its run sees", () => {
       // ARRANGE
       const keyed = readManifest().cases.filter((entry) => qualityKeys(entry.id) !== null);
@@ -44,7 +70,7 @@ describe('frozen eval cases', () => {
       const problems = keyed.flatMap((entry) => keyProblems(CASES, loadCase(entry.id), qualityKeys(entry.id)!));
 
       // ASSERT
-      expect(keyed.map((entry) => entry.id)).toContain('ink');
+      expect(keyed.map((entry) => entry.id)).toEqual(['ink', 'after-grill', 'ticket']);
       expect(problems).toEqual([]);
     });
   });
@@ -61,17 +87,6 @@ describe('frozen eval cases', () => {
 
       // ASSERT
       expect(problems).toEqual(expected);
-    });
-
-    it('refuses a case without frozen calibration answers', () => {
-      // ARRANGE
-      const expected = 'case "episode" has no mode or calibration answers, so it cannot run headless';
-
-      // ACT
-      const load = () => loadCase('episode');
-
-      // ASSERT
-      expect(load).toThrow(expected);
     });
   });
 
@@ -136,7 +151,7 @@ describe('frozen eval cases', () => {
 
     it('refuses a case the manifest does not list', () => {
       // ARRANGE
-      const expected = 'no eval case "nope"; cases: ink, episode';
+      const expected = 'no eval case "nope"; cases: ink, after-grill, ticket';
 
       // ACT
       const load = () => loadCase('nope');

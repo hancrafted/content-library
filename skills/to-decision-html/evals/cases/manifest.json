@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "frozenOn": "2026-11-04",
+  "frozenOn": "2026-11-10",
   "hashAlgorithm": "sha256",
   "cases": [
     {
@@ -30,21 +30,58 @@
       }
     },
     {
-      "id": "episode",
-      "kind": "original-approved-brief",
+      "id": "after-grill",
+      "kind": "verbatim-grill",
+      "mode": "decide",
+      "source": {
+        "agent": "GitHub Copilot CLI",
+        "session": "8ab4fdeb-2fc6-4069-a1b5-4a152268e9f5",
+        "title": "ui-changes",
+        "repository": "hancrafted/content-library",
+        "commit": "89dd6c7ad4205bba177f8d1a1ab9fc8e4ad43bb7",
+        "turns": "From Han's /grilling request (2026-11-05T01:47:07Z) to the agent's proposed test seams (2026-11-05T01:57:34Z).",
+        "cutoff": "Before Han invoked /to-html-spec on the agreed changes, so no review page, feedback, implementation or later artwork Options are included.",
+        "copy": "grill.md holds every user and agent message of that span verbatim, including the three investigation requests and reports; tool calls and file reads are omitted. The session motivated PR #510.",
+        "omitted": "The site's code at that commit; the file paths quoted in grill.md are its only evidence."
+      },
+      "prompt": "after-grill/prompt.md",
+      "attachments": ["after-grill/grill.md"],
+      "calibration": "after-grill/calibration.md",
+      "checklist": "after-grill/checklist.json",
+      "probe": "after-grill/probe.json",
+      "hashes": {
+        "after-grill/prompt.md": "b72a8fbf587760b4b6588043a7e372e29419a0a4a784bfe26c21707c2b03d373",
+        "after-grill/grill.md": "376035e0daec44c4c05f0fffdae8f7ae2d80ee9dcffade61caab1d79cf98e199",
+        "after-grill/calibration.md": "9e097ebbd9874ff09b4a37d3c1bf1b4a92592804fe46f746e254395dea965c65",
+        "after-grill/checklist.json": "ed6a2d1deeb4600f52fe61365833a98ddf32b04d856e06cb7a878e4726a9057f",
+        "after-grill/probe.json": "ca3cf144f7297fb355a8418ef5fb9f5d57553e5e8636e02939ebeb448ddb0553"
+      }
+    },
+    {
+      "id": "ticket",
+      "kind": "closed-issue",
+      "mode": "explain",
       "source": {
         "repository": "hancrafted/content-library",
-        "commit": "acb9909af4e83a74544cacdbca2a90135ae6aaae",
-        "path": "docs/episodes/ai-gives-you-more-work/brief.md",
-        "title": "Why AI gives you more work, and why you'll want it",
-        "copy": "episode/input.md is a byte-for-byte copy of the original approved Brief.",
-        "omitted": "No research answers exist beside the Brief at this commit. No later research, Dossier, Spec or style guide is included."
+        "issue": 380,
+        "url": "https://github.com/hancrafted/content-library/issues/380",
+        "title": "Save hands-on progress in the browser",
+        "closed": "2026-10-27T08:19:35Z, completed",
+        "fetched": "2026-11-10 with gh issue view 380",
+        "copy": "issue.md is the issue's title, one provenance line and its body unchanged.",
+        "omitted": "Comments, labels, the parent #372, the blocking #378, PR #371 and the State Management ADR."
       },
-      "prompt": "episode/prompt.md",
-      "attachments": ["episode/input.md"],
+      "prompt": "ticket/prompt.md",
+      "attachments": ["ticket/issue.md"],
+      "calibration": "ticket/calibration.md",
+      "checklist": "ticket/checklist.json",
+      "probe": "ticket/probe.json",
       "hashes": {
-        "episode/prompt.md": "f1ca6c1b4da60d1af7f7bb56b3d20b0e9602e9e324aeb3e9a5fe04bd1b968693",
-        "episode/input.md": "7fc9851e05eeb2e440c1f3b61c5a8a4ca7c42b3723fe622f7240290631d01f6d"
+        "ticket/prompt.md": "b612e797eb13f741b2d03298a7c88f3138f51461d7ed5365c78bf56e26bad5fb",
+        "ticket/issue.md": "218f2724590740c730b9503cbe75fedb7b9e47643c15693801a090df046c8989",
+        "ticket/calibration.md": "1f96239d7a8cc7010427cc7d03b0532ad0d881c81dab6fa2b935c2449a7becdb",
+        "ticket/checklist.json": "b7eb398475b20339042ac6fe702a4e7dc6dd96a03008d6adadf95a44f85e9fc1",
+        "ticket/probe.json": "e77773890dfd6677c4d3f3cf8ba720b203f333c9246c7c7fa16cf401f789712f"
       }
     }
   ]

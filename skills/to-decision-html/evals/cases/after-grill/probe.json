@@ -1,0 +1,92 @@
+{
+  "about": "Reader-probe questions for the after-grill page. Each key and quote comes from grill.md; `answer` lists every correct choice.",
+  "questions": [
+    {
+      "id": "laptop-columns",
+      "question": "How many card columns does a 1512px-wide laptop show, and from which width are there three?",
+      "choices": {
+        "a": "Two columns; three from 1920px",
+        "b": "Two columns; three from 1512px",
+        "c": "Three columns; two only on phones",
+        "d": "Two columns at every width"
+      },
+      "answer": ["a"],
+      "source": {
+        "file": "grill.md",
+        "quote": "Card grids use one column on phones, two up to 1919px, and three from 1920px."
+      }
+    },
+    {
+      "id": "copyright-year",
+      "question": "When does the year in the copyright line change?",
+      "choices": {
+        "a": "In the visitor's browser, on the first visit in a new year",
+        "b": "With the first build of the site in a new year",
+        "c": "When someone edits it by hand",
+        "d": "Never; the line carries no year"
+      },
+      "answer": ["b"],
+      "source": {
+        "file": "grill.md",
+        "quote": "Add the build year to the copyright; it advances on the first build of a new year."
+      }
+    },
+    {
+      "id": "overview-episodes",
+      "question": "Which Episodes get Overview as their lead Tag?",
+      "choices": {
+        "a": "The intro Episode of the November 4 Event",
+        "b": "The intro Episode of the October 28 Event",
+        "c": "The first Episode of the October 23 AXEL Event, Onboard AI Every Time",
+        "d": "Every Episode in the November 4 Playlist"
+      },
+      "answer": ["a", "b"],
+      "source": {
+        "file": "grill.md",
+        "quote": "Make it the lead Tag for the November 4 and October 28 intro Episodes, retaining **Agentic workflow** and their other Tags. Leave the October 23 AXEL Episode unchanged."
+      }
+    },
+    {
+      "id": "workflow-tag",
+      "question": "What happens to the workflow Tag?",
+      "choices": {
+        "a": "Only its displayed name changes, to Agentic workflow",
+        "b": "Its displayed name becomes Agentic workflow and its stored ID becomes agentic-workflow",
+        "c": "It is removed from the intro Episodes",
+        "d": "It becomes an Episode Format"
+      },
+      "answer": ["b"],
+      "source": {
+        "file": "grill.md",
+        "quote": "Rename the `workflow` Tag and its stored ID to **Agentic workflow** / `agentic-workflow` throughout the site."
+      }
+    },
+    {
+      "id": "start-button",
+      "question": "What changes on Event pages?",
+      "choices": {
+        "a": "The \"Start with Episode 1\" button is removed",
+        "b": "The Playlist is removed",
+        "c": "The Playlist's Episode links are removed",
+        "d": "Nothing; only the November 4 Event page changes"
+      },
+      "answer": ["a"],
+      "source": {
+        "file": "grill.md",
+        "quote": "Remove the “Start with Episode 1” button from every Event, leaving Playlist navigation intact."
+      }
+    },
+    {
+      "id": "open-before-tests",
+      "question": "What must Han still confirm before tests are written?",
+      "choices": {
+        "a": "The test seams: content store and filters, rendered pages, and visual inspection",
+        "b": "The new contact address",
+        "c": "Whether the AXEL Event gets Overview artwork",
+        "d": "The German title of the November 4 Event"
+      },
+      "answer": ["a"],
+      "source": { "file": "grill.md", "quote": "Before I write tests, please confirm these **test seams**:" }
+    }
+  ]
+}
