@@ -7,6 +7,10 @@ description: Turn decisions into one standalone HTML decision page that a person
 
 A **decision page** is one standalone HTML file. In mode `decide` a person decides open decisions from it with confidence; in mode `explain` a reader understands decisions already made. Every item leads with its decision, and each visual serves that decision. You write the page and stop there: the caller owns what happens next, including implementing what the page proposes.
 
+## When the caller owns the frame
+
+When the caller owns both the frame (the page, its layout and controls) and the feedback (its format, rounds and approval), write content only: the items, their Options and visuals, built by steps 1 to 3 in the caller's markup and at the fidelity it names, handed back where it says. The caller's frame takes the place of steps 4 to 7.
+
 ## 1. Gather the inputs
 
 The caller supplies the domain. Take each input from the caller first:
