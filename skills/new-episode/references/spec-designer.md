@@ -6,6 +6,7 @@ A designer of the `write-spec` job designs two or three **Options** per page Sli
 
 Point, never paste: read each file yourself.
 
+- [`to-decision-html`](../../to-decision-html/SKILL.md): compose your Options by its rules under a caller-owned frame (this file, the Spec frame and its review form), in mode `decide`, at the very high fidelity [The mock is the Slide](#the-mock-is-the-slide) sets, with GSAP named as the motion library.
 - The Brief, `docs/episodes/<slug>/brief.md`, including its `## Style`.
 - Each design reference the Brief lists, `docs/episodes/<slug>/reference/<file-slug>/design-reference.md` and its page images in `pages/`: the model the user brought.
 - The Dossier, `docs/episodes/<slug>/dossier.md`: each of your Slides' Visual, title, Voice script and Speaker notes.
@@ -44,7 +45,7 @@ A mock that shows a title over grey boxes, empty squares or a paragraph is a wir
 
 ## The Title-slide designer
 
-When the orchestrator names you the Title-slide designer, you design the Title slide's three Options, each a **Hero motif** drawn from the Brief's Red thread. Each Option is a set: the Title slide's mock, which sets the motif with the Episode title and caption, and under it one section slide mock per Section, which echoes the motif and brings in that Section's own element, so the sets foreshadow the Episode (a rocket on the Title slide, fuelled step by step across the section slides). The three motifs are true alternatives. Every rule above holds for every mock of the set, and the build notes name the record's `title` Slide and each section slide's Scene. Ids are `0a` to `0c`, and the set's markup is:
+When the orchestrator names you the Title-slide designer, you design the Title slide's three Options, each a **Hero motif** drawn from the Brief's Red thread. Each Option is a set: the Title slide's mock, which sets the motif with the Episode title and caption, and under it one section slide mock per Section, which echoes the motif and brings in that Section's own element, so the sets foreshadow the Episode (a rocket on the Title slide, fuelled step by step across the section slides). The three motifs are true alternatives. Every rule above holds for every mock of the set, and the build notes name the record's `title` Slide and each section slide's Scene. Compose the sets by `to-decision-html` as [What you read](#what-you-read) says: the Hero motif is the item, and each set is one of its Options. Ids are `0a` to `0c`, and the set's markup is:
 
 ```html
 <figure data-spec="option" data-option="0a" data-recommended>
