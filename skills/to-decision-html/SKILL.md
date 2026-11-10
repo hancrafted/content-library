@@ -7,6 +7,10 @@ description: Turn decisions into one standalone HTML decision page that a person
 
 A **decision page** is one standalone HTML file. In mode `decide` a person decides open decisions from it with confidence; in mode `explain` a reader understands decisions already made. Every item leads with its decision, and each visual serves that decision. You write the page and stop there: the caller owns what happens next, including implementing what the page proposes.
 
+## When the caller owns the frame
+
+When the caller owns both the frame (the page, its layout and controls) and the feedback (its format, rounds and approval), write content only: the items, their Options and visuals, built by steps 1 to 3 in the caller's markup and at the fidelity it names, handed back where it says. The caller's frame takes the place of steps 4 to 7.
+
 ## 1. Gather the inputs
 
 The caller supplies the domain. Take each input from the caller first:
@@ -60,6 +64,17 @@ Show before and after for every change, fixes included. The before comes from ev
 
 `diagram` (diagram or sketch) → `wireframe` → `mock` (real-content mock) → `prototype` (interactive). Pick the lowest rung that settles the decision, unless the caller names one. The ladder guides rather than limits. Each item states its rung and why that rung is enough, so the reviewer can ask for a higher one, and a revision may raise it.
 
+### Diagrams and motion
+
+Keep each Mermaid diagram's source word for word in `<script type="text/x-mermaid" data-diagram="<name>">`, so it can be copied into documentation, and render it beside the script, in the same parent element:
+
+- **With a browser tool**, pre-render the source to inline SVG while you build the page.
+- **Without one**, load Mermaid from jsDelivr at an exact version, show the source as text until it renders, and mark `<html data-offline="partial">`.
+
+[Diagrams](references/diagrams.md) gives both procedures.
+
+Animate with CSS transitions and the Web Animations API, and honour `prefers-reduced-motion`. Inline a library only when the caller names it, such as a motion library's core at the caller's pinned version; the Mermaid fallback is the one exception.
+
 ### Confidence bar
 
 An item is finished when a reader can answer from the page alone:
@@ -94,13 +109,23 @@ _Done when_ every item's visual and its comment fields can be seen together at b
 - Above the Next action, a **Before you approve** block asks open questions through lenses the items may have missed, such as security, operations, information architecture and accessibility. The answers are the reviewer's to give, so the page asks and stops.
 - The Next action offers only the allowed Next actions, preset by the [feedback contract](references/feedback-contract.md).
 
-**`explain`** renders decisions already made, without Options to pick or a Next action.
+**`explain`**
 
-_Done when_ every item carries its mode's controls.
+The reader learns decisions someone else already made, such as a ticket's. The page teaches each decision and leaves it settled.
+
+- Each item gives its decision a visual and at least one concrete example: a scenario, a before and after, or a worked case.
+- An item clears confidence-bar questions 1, 2, 3 and 5. Questions 4 and 6 belong to `decide`: a settled decision has no recommendation, door or effort left to weigh.
+- Responses are the reader's questions, so the page carries no Options, choice inputs or Next action.
+- A **reflection** block asks open questions through general non-functional lenses: systems and critical thinking, information architecture, security for engineers, and UX for audience-facing work. Choose the lenses that fit the audience. Each prompt is a question; the reader writes the answer, so the page shows no agent-written answer, hint or answer key beside it.
+- A **Questions?** block holds a labelled comment field with Copy prompt and Save from the [feedback contract](references/feedback-contract.md). It carries the reader's questions to the agent or the decisions' author.
+
+_Done when_ every item carries its mode's controls, and the page holds its mode's blocks: Before you approve and the Next action in `decide`, reflection and Questions? in `explain`.
 
 ## 6. Hand back the feedback
 
-Apply the [feedback contract](references/feedback-contract.md). A caller's own save helper and format take precedence over it.
+Apply the [feedback contract](references/feedback-contract.md): Copy prompt and Save carry the reviewer's responses and comments back to you, verbatim, with no server. A caller's own save helper and format take precedence over it.
+
+_Done when_ the page names its feedback file, `<page-id>-r<N>-feedback.md`, or the caller's destination.
 
 ## 7. Deliver and verify
 
@@ -118,16 +143,25 @@ The page meets the contract below and loads with no network. Inline all CSS and 
 | Each Option, inside its item            | `data-option`      | A stable id, unique in its item.                                             |
 | Each Option                             | `data-recommended` | `true` or `false`.                                                           |
 | Each `<script type="text/x-mermaid">`   | `data-diagram`     | A unique name; the script holds the diagram's source.                        |
-| The Before you approve block (`decide`) | `data-reflection`  | Present once, above the Next action.                                         |
+| The Before you approve/reflection block | `data-reflection`  | Present once; in `decide`, above the Next action.                            |
+| The Questions? block (`explain`)        | `data-questions`   | Present once, holding the editable `<textarea>` for the reader's questions.  |
 | The Next action (`decide`)              | `data-next-action` | Present once, holding the `<select>` or radio inputs that choose the action. |
+| The Copy prompt button                  | `data-copy-prompt` | Present once.                                                                |
+| The Save button                         | `data-save`        | Present once; downloads `<page-id>-r<N>-feedback.md`.                        |
+| The Reset all button (`decide`)         | `data-reset-all`   | Present once; asks with `confirm()` before it clears.                        |
+| Each item's reset button (`decide`)     | `data-reset`       | Inside its item; clears only that item.                                      |
 
 Everything else on the page is yours to shape.
 
 When Node and Playwright are available, run `node scripts/grade.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. Then run the [verification](references/verification.md) checks the grader cannot make.
 
-Open the page with the platform's opener. Print its absolute path, its mode, the feedback destination and how to continue.
+Open the page with the platform's opener, then print:
 
-_Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and knows how their feedback comes back.
+- the page's absolute path and its mode;
+- the feedback filename, `<page-id>-r<N>-feedback.md`, or the caller's destination;
+- how to continue: after Save, say "saved feedback"; after Copy prompt, paste the prompt into this or any agent session.
+
+_Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and those three lines.
 
 ## Evaluation
 
