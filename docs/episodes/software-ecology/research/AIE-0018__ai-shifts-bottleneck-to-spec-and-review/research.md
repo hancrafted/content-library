@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why does AI-assisted execution move the bottleneck to specification and review?'
-description: 'AI speeds up execution but the saved time is re-spent on verification, and review load rises with no company-level gain; the specification half is inferred, not measured.'
+title: 'Why does AI-assisted execution move the bottleneck to specification and
+  review?'
+description: 'AI speeds up execution but the saved time is re-spent on
+  verification, and review load rises with no company-level gain; the
+  specification half is inferred, not measured.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-11-10T00:00:00Z
+  at: 2026-11-10T16:48:51Z
 stale_after: 2027-05-10T00:00:00Z
 sources:
   - id: 1
@@ -18,10 +21,13 @@ sources:
     title: 'DORA, State of AI-assisted Software Development 2025 (overview page)'
   - id: 4
     resource: docs/llm-wiki/research/LLM/LLM-0019__ai-productivity-ceiling-per-level/research.md
-    title: 'content-library research, Why do measured AI productivity gains fall short of the ceilings claimed for prompting, agents, workflows and a factory?'
+    title: 'content-library research, Why do measured AI productivity gains fall
+      short of the ceilings claimed for prompting, agents, workflows and a
+      factory?'
   - id: 5
     resource: docs/episodes/ai-gives-you-more-work/research/AIE-0015__ai-users-execute-instead-of-manage/research.md
-    title: 'content-library research, Why do people working with AI keep executing the work themselves instead of managing it?'
+    title: 'content-library research, Why do people working with AI keep executing
+      the work themselves instead of managing it?'
 ---
 
 # Why does AI-assisted execution move the bottleneck to specification and review?
