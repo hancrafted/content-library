@@ -1,21 +1,26 @@
 ---
 type: research
-title: 'Why does the software ecology video treat software as a socio-technical ecosystem?'
-description: 'The software ecology talk treats software as a socio-technical ecosystem because what an organization builds mirrors its people, culture and tools, so no single node explains or fixes the whole.'
+title: 'Why does the software ecology video treat software as a socio-technical
+  ecosystem?'
+description: 'The software ecology talk treats software as a socio-technical
+  ecosystem because what an organization builds mirrors its people, culture and
+  tools, so no single node explains or fixes the whole.'
 generated:
-  by: claude-code/opus-5.5
-  at: 2026-11-10T00:00:00Z
+  by: claude-code/sonnet-5.5
+  at: 2026-11-10T16:52:59Z
 stale_after: 2027-11-10T00:00:00Z
 sources:
   - id: 1
     resource: https://www.youtube.com/watch?v=2n41YjR5QfU
-    title: 'Adam Bender, Software Engineering at the Tipping Point (conference talk, transcript)'
+    title: 'Adam Bender, Software Engineering at the Tipping Point (conference talk,
+      transcript)'
   - id: 2
     resource: https://www.melconway.com/Home/Committees_Paper.html
     title: 'Melvin Conway, How Do Committees Invent?'
   - id: 3
     resource: https://abseil.io/resources/swe-book/html/ch01.html
-    title: 'Winters, Manshreck and Wright, Software Engineering at Google, chapter 1: What Is Software Engineering?'
+    title: 'Winters, Manshreck and Wright, Software Engineering at Google, chapter
+      1: What Is Software Engineering?'
   - id: 4
     resource: https://dora.dev/dora-report-2025
     title: 'DORA, State of AI-assisted Software Development'
