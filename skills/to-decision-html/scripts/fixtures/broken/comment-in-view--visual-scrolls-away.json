@@ -1,0 +1,5 @@
+{
+  "base": "valid-decide.html",
+  "defect": "The cache store item's visual is not sticky, so typing a comment below it scrolls it out of view.",
+  "replace": [{ "find": ".visual {\n        position: sticky;", "with": ".visual {\n        position: static;" }]
+}
