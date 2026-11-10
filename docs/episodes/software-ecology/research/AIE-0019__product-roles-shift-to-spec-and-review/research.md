@@ -1,30 +1,38 @@
 ---
 type: research
-title: 'Why does AI-assisted execution shift work to specifying and reviewing on the product side: sales, product management and business analysis?'
-description: 'Product roles use AI to draft but stay accountable, so effort moves to checking and customer knowledge; evidence is firm for product managers, thin for sales and analysts.'
+title: 'Why does AI-assisted execution shift work to specifying and reviewing on
+  the product side: sales, product management and business analysis?'
+description: 'Product roles use AI to draft but stay accountable, so effort
+  moves to checking and customer knowledge; evidence is firm for product
+  managers, thin for sales and analysts.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-11-10T00:00:00Z
+  at: 2026-11-10T16:54:23Z
 stale_after: 2027-11-10T00:00:00Z
 sources:
   - id: 1
     resource: https://economics.mit.edu/sites/default/files/inline-files/Noy_Zhang_1.pdf
-    title: 'Noy and Zhang, Experimental Evidence on the Productivity Effects of Generative Artificial Intelligence'
+    title: 'Noy and Zhang, Experimental Evidence on the Productivity Effects of
+      Generative Artificial Intelligence'
   - id: 2
     resource: https://arxiv.org/abs/2510.02504
-    title: 'Ulloa et al., Product Manager Practices for Delegating Work to Generative AI: "Accountability must not be delegated to non-human actors"'
+    title: 'Ulloa et al., Product Manager Practices for Delegating Work to
+      Generative AI: "Accountability must not be delegated to non-human actors"'
   - id: 3
     resource: https://www.nber.org/papers/w33641
-    title: 'Dell''Acqua et al., The Cybernetic Teammate: A Field Experiment on Generative AI Reshaping Teamwork and Expertise'
+    title: 'Dell''Acqua et al., The Cybernetic Teammate: A Field Experiment on
+      Generative AI Reshaping Teamwork and Expertise'
   - id: 4
     resource: https://arxiv.org/abs/2511.01324
-    title: 'Rani, Berntsson Svensson and Feldt, AI for Requirements Engineering: Industry adoption and Practitioner perspectives'
+    title: 'Rani, Berntsson Svensson and Feldt, AI for Requirements Engineering:
+      Industry adoption and Practitioner perspectives'
   - id: 5
     resource: https://assets.ctfassets.net/f43wltp2j5se/2gHMpCURXzpMW7PJ3SlWZJ/3cad8d7e8496abbd3c0f99d5c7f16ef4/salesforce-state-of-sales-report-6-ed.pdf
     title: 'Salesforce, State of Sales, 6th Edition'
   - id: 6
     resource: https://www.nber.org/papers/w33777
-    title: 'Humlum and Vestergaard, Large Language Models, Small Labor Market Effects (later titled Still Waters, Rapid Currents)'
+    title: 'Humlum and Vestergaard, Large Language Models, Small Labor Market
+      Effects (later titled Still Waters, Rapid Currents)'
 ---
 
 # Why does AI-assisted execution shift work to specifying and reviewing on the product side: sales, product management and business analysis?
