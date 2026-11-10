@@ -35,6 +35,8 @@ Wait on observable states, not fixed sleeps. Inspect both themes when theme swit
 
 Read each item as its intended audience. Can they understand the decision and consequences from the visual? Are alternatives genuinely different? Is the recommendation explained? Does an analogy clarify rather than distort? Do before/after pictures tell the same story as the precise details?
 
+On an `explain` page, read each reflection prompt: it opens a question the decisions leave to the reader, and nothing on the page answers it for them.
+
 Visual taste and explanatory usefulness need human judgment. Passing DOM checks is not proof of either.
 
 ## Report
