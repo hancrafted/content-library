@@ -4,7 +4,7 @@ The eval harness runs frozen cases headless, once per arm, grades each run and s
 
 ## Run
 
-First prove the grader: `npm run decision-html:prove` from the repository root grades every fixture and fails when one does not prove its check. Run it before each iteration and after any grader change; at about 35 s it stays out of `npm run verify`.
+First prove the grader: `npm run decision-html:prove` from the repository root grades every fixture and fails when one does not prove its check. Run it before each iteration and after any grader change; at about 20 s per fixture (12 minutes for 34) it stays out of `npm run verify`.
 
 ```sh
 node evals/run.ts --case ink --runs 1
