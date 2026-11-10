@@ -19,7 +19,7 @@ Guard storage reads, parsing and writes. Corrupt or unavailable storage must not
 
 Derive a small set of allowed continuations from the originating conversation or workflow, such as re-grill, revise the Spec or approve implementation. Preset one recommended action and 1-2 editable sentences starting `(recommended by agent)`, naming the proposed skills. Keep the action's identity separate from the optional instructions. Changing the action clears the text instead of substituting another suggestion.
 
-Show the consequence beside the handoff controls: **Save accepts the selected Next action**, including a preset approval action, without another confirmation. Export approval of the exact reviewed revision when that action permits implementation; a missing additional comment does not withdraw it. Merely choosing decision-item Options, retaining a browser draft or resetting the form is not approval.
+Show the consequence beside the handoff controls: **Save As accepts the selected Next action**, including a preset approval action, without another confirmation. Export approval of the exact reviewed revision when that action permits implementation; a missing additional comment does not withdraw it. Merely choosing decision-item Options, retaining a browser draft or resetting the form is not approval.
 
 Copy prompt and Save As transport the same selected-action instruction and must state that returning their output to the agent accepts that action. Agent-recommended text must remain labelled as such, distinct from human comments. A restored approval from an older revision needs reconfirmation: on revision change, choose a non-approval continuation until the reviewer explicitly selects approval again.
 
@@ -27,9 +27,9 @@ Caller constraints win: omit approval actions the workflow does not allow and re
 
 ## Destination and revision
 
-Display and export an absolute filesystem path, not a relative path or `file://` URL. For a generic Spec, propose `feedback-01.md` beside the HTML. Each page revision owns exactly one destination; repeated Save replaces that file. When the agent updates the HTML, assign the next unused numbered filename and a new revision, preserving previous feedback even if its old file was never saved. Keep the assignment in the HTML, not just browser storage; a restored draft must not restore an older revision's destination.
+Display and export an absolute filesystem path, not a relative path or `file://` URL. For a generic Spec, propose `feedback-01.md` beside the HTML. Each page revision owns exactly one destination; repeated Save As replaces that file. When the agent updates the HTML, assign the next unused numbered filename and a new revision, preserving previous feedback even if its old file was never saved. Keep the assignment in the HTML, not just browser storage; a restored draft must not restore an older revision's destination.
 
-The destination may be edited, but direct saving only uses the path assigned when starting the helper. Reconfigure the helper before enabling Save to a changed path; never claim an arbitrary path can be written by browser JavaScript. Save As is the browser-controlled alternative. Existing workflow destinations and round allocation retain their own rules.
+The destination may be edited; browser JavaScript cannot write an arbitrary path, so Save As is the browser-controlled route to it. Existing workflow destinations and round allocation retain their own rules.
 
 ## Responses
 
@@ -45,7 +45,7 @@ Give per-item reset controls reset icons and visible labels stating what is clea
 
 The default handoff is an AI-consumable prompt containing:
 
-1. The instruction to save the complete received prompt verbatim to the absolute destination, without summarizing. Generic Specs allow replacement only of the file assigned to this exact revision; a mismatched existing revision is a stop, not permission to overwrite it. If direct Save already wrote identical text, the receiving agent reads that file instead of making another copy.
+1. The instruction to save the complete received prompt verbatim to the absolute destination, without summarizing. Generic Specs allow replacement only of the file assigned to this exact revision; a mismatched existing revision is a stop, not permission to overwrite it. If Save As already wrote identical text there, the receiving agent reads that file instead of making another copy.
 2. The exact Spec reference: identity, location, revision and relevant fingerprints.
 3. Structured item/Option responses, verbatim comments, skips and reconfirmation records.
 4. The caller's continuation instructions, selected Next action, agent recommendation and optional edited instructions, clearly distinguished. The action refines, rather than overrides, workflow constraints.
@@ -57,13 +57,13 @@ The prompt needs no preceding chat, but it does require access to its referenced
 
 Give **Copy prompt** a copy icon and visible label. Only announce clipboard success after the browser confirms it. If clipboard access is unavailable, expose the complete prompt in a selectable field for manual copying. Success, failure and cancellation all preserve responses and drafts.
 
-## Save and Save As
+## Save As
 
-Put **Save** (save icon) and **Save As** beside Copy prompt. All three serialize the same complete handoff. Save atomically replaces the generic page revision's assigned file through the local helper; it never clears fields or drafts. Confirm the actual absolute saved path before reporting success. On failure expose the copy fallback with the user's input intact.
+Put **Save As** (save icon) beside Copy prompt. Both serialize the same complete handoff and never clear fields or drafts. On failure expose the copy fallback with the user's input intact.
 
-Save As offers a browser save picker where supported, otherwise a download. Report only what the browser confirms: initiating a download does not prove a write to the proposed path. Saving elsewhere does not silently reassign the direct-Save destination.
+Save As offers a browser save picker where supported, otherwise a download. Report only what the browser confirms: initiating a download does not prove a write to the proposed path. Saving elsewhere does not reassign the page revision's destination.
 
-The [local saving guide](local-saving.md) holds setup and the helper protocol. A saved file does not automatically wake the creating session: tell the reviewer to return with "saved feedback" and the path, and tell that session where to look.
+A saved file does not automatically wake the creating session: tell the reviewer to return with "saved feedback" and the path, and tell that session where to look.
 
 ## Workflow saving
 

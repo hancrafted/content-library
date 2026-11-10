@@ -4,7 +4,6 @@
     ".archgate/adrs/*.rules.ts",
     "src/page-assembly/i18n-request.ts",
     "skills/*/scripts/*.pure.ts",
-    "skills/to-html-spec/scripts/serve.ts",
     "skills/{new-episode,episode-promote,author-hitl-workflow}/scripts/*.ts"
   ],
   "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts", "tools/**/*.ts"],

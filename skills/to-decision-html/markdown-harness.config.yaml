@@ -1,6 +1,6 @@
 frontmatter:
   rules:
-    - ruleId: html-spec-reference
+    - ruleId: decision-html-reference
       folders: [references/]
       intent: 'Skill references are instructions reached by a pointer, not metadata-bearing product records.'
       frontmatter: forbidden
