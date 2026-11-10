@@ -1,7 +1,7 @@
 import { episodeRef, type EpisodeRef } from '@/content-store/catalogue/episode-id.pure';
 import type { EpisodeId } from '@/content-store/catalogue/record-routes';
 import { describe, expect, it } from 'vitest';
-import { eventPlaylistCards, startOf, type PlaylistCard } from './event-playlist.pure';
+import { eventPlaylistCards, type PlaylistCard } from './event-playlist.pure';
 
 /** A hand-written stand-in for the card fields an Event's Playlist reads. */
 type Stub = PlaylistCard & { readonly slug: string };
@@ -24,16 +24,6 @@ const axel = (...episodes: ReturnType<typeof entry>[]) =>
 const linkedCard = (episode: { slug: string }): Stub => linked(episode.slug);
 
 describe('success cases', () => {
-  it('starts with the first Episode, as step 1, when it is linked', () => {
-    // ARRANGE
-    const cards = [linked('alpha'), linked('beta')];
-    const expected = { step: 1, slug: 'alpha' };
-    // ACT
-    const start = startOf(cards);
-    // ASSERT
-    expect({ step: start?.step, slug: start?.card.slug }).toEqual(expected);
-  });
-
   it("lists the cards in the Playlist's order", () => {
     // ARRANGE
     const event = axel(
@@ -96,24 +86,5 @@ describe('edge cases', () => {
     const [card] = eventPlaylistCards(event, (episode) => upcoming(episode.slug), 'en');
     // ASSERT
     expect({ route: card.route, href: card.href }).toEqual(expected);
-  });
-
-  it('starts with the first linked Episode and its step number when the opening ones are upcoming', () => {
-    // ARRANGE
-    const cards = [upcoming('alpha'), linked('beta'), linked('gamma')];
-    const expected = { step: 2, slug: 'beta' };
-    // ACT
-    const start = startOf(cards);
-    // ASSERT
-    expect({ step: start?.step, slug: start?.card.slug }).toEqual(expected);
-  });
-
-  it('offers no start when every Episode is still upcoming', () => {
-    // ARRANGE
-    const cards = [upcoming('alpha'), upcoming('beta')];
-    // ACT
-    const start = startOf(cards);
-    // ASSERT
-    expect(start).toBeUndefined();
   });
 });

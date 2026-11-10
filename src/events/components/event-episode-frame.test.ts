@@ -9,7 +9,7 @@ import { eventEpisodeFrame } from './event-episode-frame';
 
 /*
  * The frame an Event-scoped Episode page wears (design-ADR 0016, Routes and visibility), read at the one call page
- * assembly makes: the Episode's place in the Playlist, its past notice above the Title slide, and the
+ * assembly makes: the Episode's place in the Playlist, its past notice above the Title slide's title, and the
  * Playlist walk after the last Slide. The presented Episode is a fixture: three Episodes no repo folder holds, one of
  * them an Event's copy, in a Playlist of three, and their titles a stand-in for the function page assembly hands in.
  * Only the Event is a registered one, any of them: the frame reads its title from the Events area's words, which are
@@ -99,12 +99,12 @@ describe('failure cases', () => {
   it('shows a past Event its notice above the title, and an upcoming one none', () => {
     // ARRANGE
     const past: IsoDate = '2026-10-23';
-    const expected = { past: 1, upcoming: 0, upcomingHeader: 0 };
+    const expected = { past: 1, upcoming: 0, upcomingHeader: '' };
     // ACT
     const seen = {
       past: html(frameOf(MIDDLE, past).header)('[data-past-notice]').length,
       upcoming: html(frameOf(MIDDLE, UPCOMING).header)('[data-past-notice]').length,
-      upcomingHeader: html(frameOf(MIDDLE, UPCOMING).header)('[data-event-episode-header]').length,
+      upcomingHeader: renderToStaticMarkup(frameOf(MIDDLE, UPCOMING).header),
     };
     // ASSERT
     expect(seen).toEqual(expected);
@@ -133,17 +133,13 @@ describe('edge cases', () => {
     });
   });
 
-  it('lines the header and the walk up with the Slides, inside the insets', () => {
+  it('lines the Playlist walk up with the Slides, inside the insets', () => {
     // ARRANGE
     const inset = ['pl-(--inset-l)', 'pr-(--inset-r)'];
-    const past: IsoDate = '2026-10-23';
     // ACT
-    const frame = frameOf(MIDDLE, past);
-    const classes = [
-      html(frame.header)('[data-event-episode-header]').attr('class')?.split(' '),
-      html(frame.footer)('[data-playlist-nav]').attr('class')?.split(' '),
-    ];
+    const frame = frameOf(MIDDLE);
+    const classes = html(frame.footer)('[data-playlist-nav]').attr('class')?.split(' ');
     // ASSERT
-    expect(classes).toEqual([expect.arrayContaining(inset), expect.arrayContaining(inset)]);
+    expect(classes).toEqual(expect.arrayContaining(inset));
   });
 });

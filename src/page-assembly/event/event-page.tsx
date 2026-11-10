@@ -6,20 +6,17 @@ import { episodeCardMaker } from '@/episodes/components/episode-card/episode-car
 import { PastNotice } from '@/events/components/past-notice';
 import { PlaylistList, type PlaylistEntry } from '@/events/components/playlist-list';
 import { eventCard, type EventCard } from '@/events/lib/event-card.pure';
-import { eventPlaylistCards, startOf } from '@/events/lib/event-playlist.pure';
+import { eventPlaylistCards } from '@/events/lib/event-playlist.pure';
 import { EVENT_WORDS, eventCopy } from '@/events/lib/event-words';
 import { relatedEpisodes } from '@/events/lib/related-episodes.pure';
 import { BUILD_DAY } from '@/page-assembly/lib/build-day';
 import type { PageCopy } from '@/page-assembly/lib/page-metadata.pure';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER } from '@/shared/components/page-header';
-import { Button } from '@/shared/components/ui/button';
-import { localizePath, type Locale } from '@/shared/lib/locale.pure';
-import { fillTemplate } from '@/shared/lib/template.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
-import { ArrowRight, CalendarDays, Layers, MapPin, Presentation, Users, Video, type LucideIcon } from 'lucide-react';
+import { CalendarDays, Layers, MapPin, Presentation, Users, Video, type LucideIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 import { RelatedEpisodes } from './event-related';
@@ -86,19 +83,6 @@ function Facts({ card, record, t }: FactsProps) {
   );
 }
 
-/** The primary button, to the first Episode a visitor can open, under the Event; absent while every one is upcoming. */
-function StartButton({ start, locale, t }: { start: ReturnType<typeof startOf>; locale: Locale; t: EventT }) {
-  if (start === undefined || start.card.route === null) return null;
-  return (
-    <Button asChild className="mt-8 h-11 rounded-full px-6 font-semibold">
-      <Link data-event-start href={localizePath(start.card.route, locale)}>
-        {fillTemplate(t.raw('start') as string, { step: start.step })}
-        <ArrowRight aria-hidden />
-      </Link>
-    </Button>
-  );
-}
-
 /** The Playlist's Episodes as entries of the Playlist list, each card a compact Episode card built here. */
 function playlistEntries(cards: readonly EpisodeCard[], locale: Locale, labels: CardLabels): PlaylistEntry[] {
   return cards.map((card) => ({
@@ -122,20 +106,18 @@ function playlistEntries(cards: readonly EpisodeCard[], locale: Locale, labels: 
 interface MainColumnProps {
   card: EventCard;
   record: ServedEvent;
-  episodes: readonly EpisodeCard[];
   entries: readonly PlaylistEntry[];
   related: ReactNode;
   locale: Locale;
   t: EventT;
 }
 
-/** The main column: the description, the past notice, the Start button, the Playlist and the related Episodes. */
-function MainColumn({ card, record, episodes, entries, related, locale, t }: MainColumnProps) {
+/** The main column: the description, the past notice, the Playlist and the related Episodes. */
+function MainColumn({ card, record, entries, related, locale, t }: MainColumnProps) {
   return (
     <div className="lg:col-start-1 lg:row-span-2 lg:row-start-2">
       <p className="mt-8 max-w-prose text-body text-pretty text-foreground lg:mt-6">{card.description}</p>
       <PastNotice date={record.date} buildDay={BUILD_DAY} text={EVENT_WORDS[locale].pastNotice} className="mt-8" />
-      <StartButton start={startOf(episodes)} locale={locale} t={t} />
       <PlaylistList entries={entries} title={t('playlist')} />
       {related}
     </div>
@@ -169,7 +151,7 @@ function EventLayout({ main, ...column }: LayoutProps) {
 
 /**
  * An Event's own page, (design-ADR 0016, Routes and visibility): two columns from `lg`. The main column holds the
- * title, description, for a past Event the notice, the Start button, the Episodes its Playlist presents
+ * title, description, for a past Event the notice, the Episodes its Playlist presents
  * as a numbered list of compact cards, and other Episodes to watch. The side panel holds the image, the facts, the
  * Organizers, the listing and the references. Every part sits once in the DOM, in the order a screen reader and the
  * stacked page read it: the image and facts right after the title, the Organizers, listing and references after the
@@ -188,5 +170,5 @@ export async function EventPage({ slug, locale }: { slug: string; locale: Locale
     entries: playlistEntries(episodes, locale, labels),
     related: <RelatedEpisodes cards={related} locale={locale} labels={labels} t={t} />,
   };
-  return <EventLayout main={main} card={card} record={record} episodes={episodes} locale={locale} t={t} />;
+  return <EventLayout main={main} card={card} record={record} locale={locale} t={t} />;
 }

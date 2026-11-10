@@ -1,7 +1,9 @@
 import { showsFormat } from '@/episodes/components/episode-browser/episode-browser.pure';
 import { EpisodeCardView, type CardLabels } from '@/episodes/components/episode-card/episode-card';
 import type { EpisodeCard } from '@/episodes/components/episode-card/episode-card.pure';
+import { CARD_GRID } from '@/shared/components/ui/card-grid';
 import type { Locale } from '@/shared/lib/locale.pure';
+import { cn } from '@/shared/lib/utils';
 import type { EventT } from './event-translator';
 
 interface RelatedProps {
@@ -18,7 +20,7 @@ export function RelatedEpisodes({ cards, locale, labels, t }: RelatedProps) {
   return (
     <section data-event-related className="mt-12">
       <h2 className="text-subheading font-semibold text-foreground">{t('related')}</h2>
-      <ul className="mt-4 grid gap-4 sm:grid-cols-2">
+      <ul className={cn('mt-4', CARD_GRID)}>
         {cards.map((card) => (
           <li key={card.slug}>
             <EpisodeCardView

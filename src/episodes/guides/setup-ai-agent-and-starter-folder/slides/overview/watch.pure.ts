@@ -8,13 +8,13 @@ export interface WatchEpisode {
   /** The release day, `YYYY-MM-DD`. */
   readonly day: string;
   /** The Tag ids the Episode carries, lead first. */
-  readonly tags: readonly ('context-engineering' | 'agentic-ai' | 'workflow')[];
+  readonly tags: readonly ('context-engineering' | 'agentic-ai' | 'agentic-workflow')[];
 }
 
 const AXEL = '/events/2026-10-23-axel-agentic-workflow/episodes/';
 const AKADEMIE = '/events/2026-10-28-cyberforum-akademie-intro-agentic-workflow/episodes/';
-const FREELANCER = ['context-engineering', 'agentic-ai', 'workflow'] as const;
-const ATTENTION = ['context-engineering', 'workflow'] as const;
+const FREELANCER = ['context-engineering', 'agentic-ai', 'agentic-workflow'] as const;
+const ATTENTION = ['context-engineering', 'agentic-workflow'] as const;
 
 /*
  * English readers get the AXEL copies, German readers the Akademie copies: linked, never copied, each in its own

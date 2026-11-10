@@ -14,6 +14,7 @@ import {
 import { SearchInput } from '@/shared/components/filters/search-input';
 import { TagToggles } from '@/shared/components/filters/tag-toggles';
 import { Button } from '@/shared/components/ui/button';
+import { CARD_GRID } from '@/shared/components/ui/card-grid';
 import { ToggleGroup, ToggleGroupItem } from '@/shared/components/ui/toggle-group';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { cn } from '@/shared/lib/utils';
@@ -78,11 +79,7 @@ function Month({ group, visible, view, locale, open }: MonthProps) {
   return (
     <div data-event-month={group.month} hidden={!shown} className="space-y-4">
       <h3 className="text-caption font-medium tracking-widest text-muted-foreground uppercase">{group.label}</h3>
-      <ul
-        data-event-list
-        data-view={view}
-        className={cn(view === 'grid' ? 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3' : 'flex flex-col gap-4')}
-      >
+      <ul data-event-list data-view={view} className={cn(view === 'grid' ? CARD_GRID : 'flex flex-col gap-4')}>
         {group.items.map((card) => (
           <li key={card.slug} data-event-item hidden={!visible.has(card.slug)} className="flex gap-4">
             {view === 'list' && <DayBlock card={card} />}

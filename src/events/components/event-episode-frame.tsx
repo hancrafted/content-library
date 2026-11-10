@@ -13,7 +13,7 @@ import { PastNotice } from './past-notice';
 
 /**
  * What an Event adds around an Episode it presents at its own URL (design-ADR 0016, Routes and visibility), ready for
- * the Episode page container: the route the page is served at, a past Event's notice above the Title slide,
+ * the Episode page container: the route the page is served at, a past Event's notice above the Title slide's title,
  * the Event's time under the title, and the Playlist walk after the last Slide.
  */
 export interface EventEpisodeFrame {
@@ -86,21 +86,12 @@ export function eventEpisodeFrame<Id extends string>(
   };
   return {
     route: eventEpisodeRoute(event.slug, episode),
-    header: <EventEpisodeHeader parts={parts} buildDay={buildDay} />,
+    header: isPastEvent(event.date, buildDay) ? (
+      <PastNotice date={event.date} buildDay={buildDay} text={labels.pastNotice} />
+    ) : null,
     footer: <PlaylistNav parts={parts} />,
     time: event.time,
   };
-}
-
-/** Only a past Event needs a header; an empty wrapper would expose a strip above an inverse Title. */
-function EventEpisodeHeader({ parts, buildDay }: { parts: FrameParts; buildDay: IsoDate }) {
-  const { labels, event } = parts;
-  if (!isPastEvent(event.date, buildDay)) return null;
-  return (
-    <div data-event-episode-header className={cn('flex flex-col gap-4 pt-2 pb-6', INSET)}>
-      <PastNotice date={event.date} buildDay={buildDay} text={labels.pastNotice} />
-    </div>
-  );
 }
 
 const STEP =

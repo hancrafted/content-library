@@ -53,9 +53,13 @@
       "name": "Sales",
       "tooltip": "Finding, winning and keeping customers"
     },
-    "workflow": {
-      "name": "Workflow",
+    "agentic-workflow": {
+      "name": "Agentic workflow",
       "tooltip": "How work is split into steps and handed between chats"
+    },
+    "overview": {
+      "name": "Overview",
+      "tooltip": "An introduction to the topics covered"
     }
   }
 }

@@ -4,7 +4,9 @@ import { compositionOf } from '@/episodes/lib/registry';
 import { EXPLORABLE_CARD_ARTWORK } from '@/page-assembly/lib/explorable-card-artwork';
 import { PAGE_WORDS } from '@/page-assembly/lib/page-words';
 import { PAGE_CONTAINER, PageHeader } from '@/shared/components/page-header';
+import { CARD_GRID } from '@/shared/components/ui/card-grid';
 import type { Locale } from '@/shared/lib/locale.pure';
+import { cn } from '@/shared/lib/utils';
 import { getTranslations } from 'next-intl/server';
 import { ExplorableCardView, type ExplorableCard } from './explorable-card';
 
@@ -39,7 +41,7 @@ export async function ExplorablesOverviewPage({ locale }: { locale: Locale }) {
       {cards.length === 0 ? (
         <p>{t('none')}</p>
       ) : (
-        <ul className="grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className={cn(CARD_GRID, 'list-none p-0')}>
           {cards.map((card) => (
             <li key={card.slug} className="flex">
               <ExplorableCardView card={card} locale={locale} open={t('open')} className="w-full" />

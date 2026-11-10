@@ -108,7 +108,7 @@ function SlideColumn(props: {
 function titleSlideOf(
   content: EpisodeContent,
   page: PageHeader,
-  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'recording' | 'time'>,
+  talk: Pick<TitleSlideProps, 'youtubeId' | 'talkLabels' | 'recording' | 'time' | 'notice'>,
 ): TitleSlideProps {
   return {
     title: content.title,
@@ -137,7 +137,7 @@ async function eyebrowsFor(locale: Locale, mode: HeaderMode, sections: readonly 
   return eyebrowsOf(sections, (position, count) => t('pageOf', { position, count }));
 }
 
-/** What an Event adds around an Episode it presents: its header above the Title slide, its Playlist walk after the last Slide. */
+/** What an Event adds to an Episode it presents: its notice in the Title slide and Playlist walk after the last Slide. */
 export interface EpisodeFrame {
   /** The logical path the page is served at under the Event; the contents and Slide links point there. */
   readonly route: string;
@@ -224,7 +224,8 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
   const sections = tocSectionsOf(slides);
   const header = await pageHeaderOf(content, locale, sections);
   const { talkLabels, recording } = await talkOf(locale, video);
-  const titleSlide = titleSlideOf(content, header, { youtubeId, talkLabels, recording, time: frame.time });
+  const talk = { youtubeId, talkLabels, recording, time: frame.time, notice: frame.header };
+  const titleSlide = titleSlideOf(content, header, talk);
   const drawer = await contextDrawerInput(locale, slides, titleContext);
   const toc = tocPropsOf(content, props, sections);
   const className = pageClassOf(content.titleAppearance.tone);
@@ -233,7 +234,6 @@ export async function EpisodePageContainer(props: EpisodePageContainerProps) {
       <UrlStateProvider key={`${locale}/${id}`}>
         <div data-slot="episode-page" data-episode={id} className={className}>
           <EpisodeToc {...toc} />
-          {frame.header}
           <SlideColumn titleSlide={titleSlide} slides={slides} page={header} transitions={content.transitions} />
           {frame.footer}
           <ContextDrawerSlot input={drawer} />

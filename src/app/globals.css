@@ -40,7 +40,8 @@
   --tag-markdown: oklch(0.514 0.222 16.935);
   --tag-cost: oklch(0.555 0.163 48.998);
   --tag-sales: oklch(0.508 0.118 165.612);
-  --tag-workflow: oklch(0.205 0 0);
+  --tag-agentic-workflow: oklch(0.205 0 0);
+  --tag-overview: oklch(0.205 0 0);
   /* The brand accent: the hero's 'promotion', About emphasis, method deliverables. `--accent` is shadcn's neutral hover surface. */
   --brand-accent: oklch(0.636 0.171 41.8);
   --on-brand-accent: oklch(1 0 0);
@@ -111,7 +112,8 @@
   --tag-markdown: oklch(0.712 0.194 13.428);
   --tag-cost: oklch(0.828 0.189 84.429);
   --tag-sales: oklch(0.765 0.177 163.223);
-  --tag-workflow: oklch(0.922 0 0);
+  --tag-agentic-workflow: oklch(0.922 0 0);
+  --tag-overview: oklch(0.922 0 0);
   --brand-accent: oklch(0.732 0.146 50.4);
   --on-brand-accent: oklch(1 0 0);
   --selected: oklch(0.8 0 0);

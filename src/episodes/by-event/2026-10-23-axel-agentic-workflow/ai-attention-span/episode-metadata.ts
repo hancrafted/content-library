@@ -6,7 +6,7 @@ export const episodeMetadata = {
   status: 'published',
   visibility: 'unlisted',
   format: 'foundations',
-  tags: ['context-engineering', 'workflow'],
+  tags: ['context-engineering', 'agentic-workflow'],
   publishedOn: '2026-10-23',
   youtube: { id: '0Y3DPTrNhkI', language: 'en' },
 } as const satisfies EpisodeInput;

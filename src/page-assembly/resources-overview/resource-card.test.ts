@@ -15,7 +15,7 @@ const CARD: ResourceCard = {
   leadTag: 'context-engineering',
   tags: [
     { id: 'context-engineering', label: 'Context engineering', tooltip: 'Context' },
-    { id: 'workflow', label: 'Workflow', tooltip: 'Steps' },
+    { id: 'agentic-workflow', label: 'Workflow', tooltip: 'Steps' },
   ],
 };
 
@@ -46,7 +46,7 @@ describe('success cases', () => {
     expect($('[data-card-body]').text()).toContain(CARD.tags[0].label);
     expect($('[data-resource-tags]').text()).toContain(CARD.tags[1].label);
   });
-  it.each(['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'workflow'] as const)(
+  it.each(['context-engineering', 'agentic-ai', 'markdown', 'cost', 'sales', 'agentic-workflow'] as const)(
     'shares selected %s artwork between Episode and Event Resource cards',
     (tag) => {
       // ARRANGE

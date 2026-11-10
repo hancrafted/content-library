@@ -32,7 +32,7 @@ const RECORDS: readonly Episode[] = [
     publishedOn: '2026-10-09',
   },
   { slug: 'rolling-out-ai', status: 'upcoming', visibility: 'public', format: 'foundations', tags: ['agentic-ai'] },
-  { slug: 'ai-in-code-review', status: 'upcoming', visibility: 'public', format: 'short', tags: ['workflow'] },
+  { slug: 'ai-in-code-review', status: 'upcoming', visibility: 'public', format: 'short', tags: ['agentic-workflow'] },
 ];
 const EPISODES: readonly Identified[] = RECORDS.map((episode) => ({ ...episode, ref: episodeRef(episode.slug) }));
 

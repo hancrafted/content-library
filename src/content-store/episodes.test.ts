@@ -79,7 +79,7 @@ describe('success cases', () => {
       status: 'published',
       visibility: 'public',
       format: 'foundations',
-      tags: ['context-engineering', 'agentic-ai', 'workflow'],
+      tags: ['context-engineering', 'agentic-ai', 'agentic-workflow'],
       publishedOn: '2026-10-20',
     };
     // ACT
@@ -99,7 +99,7 @@ describe('success cases', () => {
       status: 'published',
       visibility: 'public',
       format: 'foundations',
-      tags: ['context-engineering', 'workflow'],
+      tags: ['context-engineering', 'agentic-workflow'],
       publishedOn: '2026-10-21',
     };
     // ACT
@@ -119,7 +119,7 @@ describe('success cases', () => {
       status: 'published',
       visibility: 'public',
       format: 'foundations',
-      tags: ['agentic-ai', 'workflow'],
+      tags: ['agentic-ai', 'agentic-workflow'],
       publishedOn: '2026-10-21',
     };
     // ACT

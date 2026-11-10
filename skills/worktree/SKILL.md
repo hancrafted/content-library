@@ -1,6 +1,6 @@
 ---
 name: worktree
-description: Create, finish and health-check git worktrees for this repo. Use when starting work in a worktree, cleaning one up after its PR merged, or when `npm run preflight` fails.
+description: Create, finish and health-check git worktrees for this repo. Use when starting work in a worktree, running the low-level wt:done teardown, or when `npm run preflight` fails. For post-merge or repository-wide cleanup, use cleanup.
 ---
 
 # Worktree
@@ -16,6 +16,11 @@ Worktrees live in `.worktrees/<branch with / as ->`, branched from freshly fetch
 A real `node_modules` is the point: a symlinked one breaks Turbopack, `mh check` and the hooks.
 
 ## Finish
+
+For post-merge cleanup or an inventory of removable branches and worktrees, use
+[cleanup](../cleanup/SKILL.md). It owns approval, integration evidence, remaining
+work, and process-safety decisions; `wt:done` below is the low-level helper with
+different guards, not a substitute for that workflow.
 
 Run `npm run wt:done -- <branch>` from the main checkout once the PR merged. It refuses while any process (a dev server) has its cwd inside the worktree and names it; stop that process and rerun, or add `--kill`: it sends SIGTERM to the listed processes, SIGKILL after 3 seconds, never to itself or its ancestors (your shell), then continues. Never hand-run `pkill` for this; it can kill your own shell. It then removes the worktree and its Claude Desktop folder (`docs/claude-project-context/<branch-slug>/`), deletes the branch when git sees it merged, and fast-forwards local `main`. When local `main` holds unpushed commits it stops and lists them: push them through a PR or move them to a branch, then rerun.
 

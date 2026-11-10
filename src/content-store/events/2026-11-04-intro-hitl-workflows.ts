@@ -7,7 +7,7 @@ export const event = {
   organizers: ['hancrafted'],
   audience: 'organization',
   time: '13:30–14:15 CST',
-  tags: ['agentic-ai', 'workflow'],
+  tags: ['agentic-ai', 'agentic-workflow'],
   format: 'onsite',
   venue: 'Guangzhou, China (UTC+8)',
   playlist: 'intro-hitl-workflows',

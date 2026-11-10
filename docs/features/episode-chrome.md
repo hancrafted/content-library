@@ -18,7 +18,7 @@ For geometry-driven header tone and Title-departure ToC presentation, read the [
 
 ## Under an Event
 
-On an Event-scoped Episode page a past Event's notice sits above the Title slide, inside the insets, "Episode n of m" sits under the title, and the Playlist walk follows the last Slide. There are no breadcrumbs, and a current or upcoming Event reserves no header space above the Title. The notice and walk scroll with the page; neither floats. Detail: [Events](events.md#routes).
+On an Event-scoped Episode page a past Event's notice sits inside the Title slide above its title, inside the insets, and the Playlist walk follows the last Slide. There are no breadcrumbs, and a current or upcoming Event reserves no notice space. The notice and walk scroll with the page; neither floats. Detail: [Events](events.md#routes).
 
 The table of contents also offers Event navigation, derived at build time by `src/page-assembly/episode/event-navigation.pure.ts`; the shared chrome receives a plain outline, never records or Scenes. Each page-bearing Episode appears once in first-occurrence Playlist order. Section and Slide links retain the Event route and locale and land directly on their anchors. Decision: [Event navigation is a derived outline](../adr/0021-event-navigation-is-a-derived-outline.md).
 
