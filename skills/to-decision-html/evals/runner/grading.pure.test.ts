@@ -65,6 +65,7 @@ describe('grading', () => {
           output_chars: 5120,
         },
         user_notes_summary: { uncertainties: [], needs_review: ['two pages; graded page.html'], workarounds: [] },
+        judge: null,
       };
 
       // ACT
@@ -78,6 +79,27 @@ describe('grading', () => {
 
       // ASSERT
       expect(grading).toEqual(expected);
+    });
+
+    it('names the models that judged and read the page, and lists a same-family risk as an uncertainty', () => {
+      // ARRANGE
+      const judge = {
+        cli: 'claude' as const,
+        judgeModel: 'claude-opus-5-5',
+        readerModel: 'claude-opus-5-5',
+        crossFamily: false,
+        risk: 'The judge may prefer its own family.',
+      };
+      const expected = {
+        judge,
+        uncertainties: ['judge claude-opus-5-5, reader claude-opus-5-5: The judge may prefer its own family.'],
+      };
+
+      // ACT
+      const grading = gradingOf({ expectations: [], tools: [], outputChars: 0, error: null, notes: [], judge });
+
+      // ASSERT
+      expect({ judge: grading.judge, uncertainties: grading.user_notes_summary.uncertainties }).toEqual(expected);
     });
   });
 

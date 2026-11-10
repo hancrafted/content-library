@@ -2,7 +2,7 @@ import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CASES, hashProblems, loadCase, readManifest } from './cases.ts';
+import { CASES, hashProblems, keyProblems, loadCase, qualityKeys, readManifest } from './cases.ts';
 
 const HASH_OF_FROZEN = '9c45da1b799a603c167323bd7ed4f52034ec28ea5e04373045a9c11f1ddc5446';
 
@@ -35,6 +35,18 @@ describe('frozen eval cases', () => {
       // ASSERT
       expect({ id, evalId, mode, prompt, inputs }).toEqual(expected);
     });
+
+    it("draws every case's checklist and probe keys verbatim from what its run sees", () => {
+      // ARRANGE
+      const keyed = readManifest().cases.filter((entry) => qualityKeys(entry.id) !== null);
+
+      // ACT
+      const problems = keyed.flatMap((entry) => keyProblems(CASES, loadCase(entry.id), qualityKeys(entry.id)!));
+
+      // ASSERT
+      expect(keyed.map((entry) => entry.id)).toContain('ink');
+      expect(problems).toEqual([]);
+    });
   });
 
   describe('failure cases', () => {
@@ -64,6 +76,52 @@ describe('frozen eval cases', () => {
   });
 
   describe('edge cases', () => {
+    it("names a key quoted from outside the run's inputs, or not found in its file", () => {
+      // ARRANGE
+      const ink = loadCase('ink');
+      const keys = qualityKeys('ink')!;
+      const [first, ...rest] = keys.probe;
+      const broken = {
+        checklist: keys.checklist,
+        probe: [
+          { ...first, source: { file: 'source.md', quote: 'magnetic' } },
+          { ...rest[0], source: { file: 'handoff.md', quote: 'a quote the handoff never makes' } },
+          ...rest.slice(1),
+        ],
+      };
+      const expected = [
+        'probe approach-count quotes source.md, which the run never sees',
+        'probe bounded-shared-space quotes text not in handoff.md: "a quote the handoff never makes"',
+      ];
+
+      // ACT
+      const problems = keyProblems(CASES, ink, broken);
+
+      // ASSERT
+      expect(problems).toEqual(expected);
+    });
+
+    it('names an answer key outside its choices, and a checklist of the wrong size', () => {
+      // ARRANGE
+      const ink = loadCase('ink');
+      const keys = qualityKeys('ink')!;
+      const [first, ...rest] = keys.probe;
+      const broken = {
+        checklist: keys.checklist.slice(0, 2),
+        probe: [{ ...first, answer: ['z'] }, ...rest],
+      };
+      const expected = [
+        'checklist has 2 items; a case has 3 to 5',
+        'probe approach-count keys z, which is not one of its choices',
+      ];
+
+      // ACT
+      const problems = keyProblems(CASES, ink, broken);
+
+      // ASSERT
+      expect(problems).toEqual(expected);
+    });
+
     it('names a frozen file that is missing', () => {
       // ARRANGE
       const dir = mkdtempSync(path.join(tmpdir(), 'eval-case-'));
