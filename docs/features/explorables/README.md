@@ -17,6 +17,7 @@ One feature doc per Explorable, in this folder:
 - `context-window.md`: the context window.
 - `human-in-the-loop.md`: the human-in-the-loop Explorable; `agentic-workflow.md` is the authoring guide for its Workflow files.
 - `ai-capability.md`: the AI capability timeline: four Levels and the rows the toolbar adds.
+- `software-ecology.md`: the software ecology, an organization as plumbing; not built yet.
 
 ## Explorable floor
 
