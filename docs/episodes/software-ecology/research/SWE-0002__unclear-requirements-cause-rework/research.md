@@ -1,27 +1,32 @@
 ---
 type: research
 title: 'Why do unclear requirements lead to rework and failed projects?'
-description: 'Practitioners name incomplete requirements their top problem and report rework and overruns, but the famous failure rates and the 100x late-fix cost are disputed.'
+description: 'Practitioners name incomplete requirements their top problem and
+  report rework and overruns, but the famous failure rates and the 100x late-fix
+  cost are disputed.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-11-10T00:00:00Z
+  at: 2026-11-10T16:54:59Z
 stale_after: 2027-11-10T00:00:00Z
 sources:
   - id: 1
     resource: https://arxiv.org/abs/1611.10288
-    title: 'Méndez Fernández et al., Naming the Pain in Requirements Engineering: Contemporary Problems, Causes, and Effects in Practice'
+    title: 'Méndez Fernández et al., Naming the Pain in Requirements Engineering:
+      Contemporary Problems, Causes, and Effects in Practice'
   - id: 2
     resource: https://www.cs.umd.edu/projects/SoftEng/ESEG/papers/82.78.pdf
     title: 'Boehm, Basili, Software Defect Reduction Top 10 List'
   - id: 3
     resource: https://arxiv.org/abs/1609.04886
-    title: 'Menzies, Nichols, Shull, Layman, Are Delayed Issues Harder to Resolve? Revisiting Cost-to-Fix of Defects throughout the Lifecycle'
+    title: 'Menzies, Nichols, Shull, Layman, Are Delayed Issues Harder to Resolve?
+      Revisiting Cost-to-Fix of Defects throughout the Lifecycle'
   - id: 4
     resource: https://www.cs.vu.nl/~x/the_rise_and_fall_of_the_chaos_report_figures.pdf
     title: 'Eveleens, Verhoef, The Rise and Fall of the Chaos Report Figures'
   - id: 5
     resource: docs/llm-wiki/research/AIE/AIE-0008__written-requirements-reduce-variance/research.md
-    title: 'Why do explicit written requirements reduce the variation in LLM output? (earlier research file)'
+    title: 'Why do explicit written requirements reduce the variation in LLM output?
+      (earlier research file)'
 ---
 
 # Why do unclear requirements lead to rework and failed projects?
