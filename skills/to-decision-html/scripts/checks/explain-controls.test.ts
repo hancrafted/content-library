@@ -73,6 +73,20 @@ describe('explain-controls', () => {
       expect(problems).toEqual(expected);
     });
 
+    it('passes reviewer tools: a theme select outside the items and a show/hide toggle naming what it controls', () => {
+      // ARRANGE
+      const html = `<header><label for="theme">Theme</label><select id="theme"><option>System</option></select></header>
+        <section data-item="a"><label><input type="checkbox" aria-controls="a-analogy" /> Show analogy</label>
+        <p id="a-analogy" hidden>A queue is like a ticket line.</p></section>
+        <div data-reflection><p>Who notices first?</p></div><div data-questions><textarea></textarea></div>`;
+
+      // ACT
+      const problems = check.judge(html);
+
+      // ASSERT
+      expect(problems).toEqual([]);
+    });
+
     it('fails a reflection block that asks no question', () => {
       // ARRANGE
       const html = `<section data-item="a"></section><div data-reflection><p>Consider security.</p></div>

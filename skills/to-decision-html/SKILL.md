@@ -129,7 +129,7 @@ The reader learns decisions someone else already made, such as a ticket's. The p
 
 - Each item gives its decision a visual and at least one concrete example: a scenario, a before and after, or a worked case.
 - An item clears confidence-bar questions 1, 2, 3 and 5. Questions 4 and 6 belong to `decide`: a settled decision has no recommendation, door or effort left to weigh.
-- Responses are the reader's questions, so the page carries no Options, choice inputs or Next action.
+- Responses are the reader's questions, so the page carries no Options, response inputs or Next action. Reviewer tools stay: a theme select or show/hide toggle sits outside the items, or names what it changes with `aria-controls`.
 - A **reflection** block asks open questions through general non-functional lenses: systems and critical thinking, information architecture, security for engineers, and UX for audience-facing work. Choose the lenses that fit the audience. Each prompt is a question; the reader writes the answer, so the page shows no agent-written answer, hint or answer key beside it.
 - A **Questions?** block holds a labelled comment field with Copy prompt and Save from the [feedback contract](references/feedback-contract.md). It carries the reader's questions to the agent or the decisions' author.
 

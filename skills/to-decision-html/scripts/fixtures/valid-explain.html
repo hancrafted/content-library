@@ -16,7 +16,7 @@
         --focus: #b3470e;
       }
       @media (prefers-color-scheme: dark) {
-        :root {
+        :root:not([data-theme='light']) {
           --bg: #161513;
           --surface: #201f1c;
           --text: #f1eee8;
@@ -25,6 +25,15 @@
           --accent: #8db8ef;
           --focus: #f0a46c;
         }
+      }
+      :root[data-theme='dark'] {
+        --bg: #161513;
+        --surface: #201f1c;
+        --text: #f1eee8;
+        --muted: #b9b4aa;
+        --line: #3a3833;
+        --accent: #8db8ef;
+        --focus: #f0a46c;
       }
       * {
         box-sizing: border-box;
@@ -92,6 +101,12 @@
         background: var(--bg);
         border: 1px solid var(--line);
       }
+      select {
+        font: inherit;
+        color: inherit;
+        background: var(--surface);
+        border: 1px solid var(--line);
+      }
       button {
         font: inherit;
         color: inherit;
@@ -128,6 +143,12 @@
         What ticket #42 already decided, for engineers and product managers who did not write it. Mode: explain.
         Revision 1.
       </p>
+      <label for="theme">Theme</label>
+      <select id="theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
     </header>
     <div class="layout">
       <nav aria-label="Items">
@@ -174,6 +195,11 @@
           <p>
             Example: Ana mistypes her password five times at 09:00. At 09:05 her sixth try is refused; at 09:15 she can
             try again.
+          </p>
+          <label><input type="checkbox" id="limit-analogy-toggle" aria-controls="limit-analogy" /> Show analogy</label>
+          <p id="limit-analogy" class="label" hidden>
+            Analogy: a cash machine that keeps the card after three wrong PINs. It breaks down here: the lock lifts by
+            itself after fifteen minutes.
           </p>
         </section>
         <section id="item-message" data-item="message" data-fidelity="mock" data-depth="simple">
@@ -248,6 +274,14 @@
       const status = document.getElementById('status');
       const filename = `${pageId}-r${revision}-feedback.md`;
       const draftKey = `decision-page:${pageId}:questions`;
+
+      // Reviewer tools: they change the view and answer nothing, so they stay out of the handoff.
+      document.getElementById('theme').addEventListener('change', (event) => {
+        root.dataset.theme = event.target.value;
+      });
+      document.getElementById('limit-analogy-toggle').addEventListener('change', (event) => {
+        document.getElementById('limit-analogy').hidden = !event.target.checked;
+      });
 
       try {
         field.value = localStorage.getItem(draftKey) ?? '';
