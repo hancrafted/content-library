@@ -14,7 +14,7 @@ Check the delivered HTML, with networking disabled, at desktop and landscape-tab
 | Focus and paste into each comment type                          | Exact multiline text, including quotes and non-ASCII text, appears in the intended field and reaches the exported payload unchanged.                                                                              |
 | Use preview tools while editing                                 | Focus/text are retained; the relevant visual remains visible while commenting, including long content. Measure viewport intersection and inspect whether the useful subject, not merely an edge, remains visible. |
 | Reload with a draft                                             | Choices and item/Option comments survive; other Specs and evaluation arms do not inherit them.                                                                                                                    |
-| Replace the served HTML with a changed revision and refresh     | Unchanged responses restore; changed/removed responses remain accessible and flagged; changed choices and overall approval require reconfirmation.                                                                |
+| Replace the HTML with a changed revision and refresh            | Unchanged responses restore; changed/removed responses remain accessible and flagged; changed choices and overall approval require reconfirmation.                                                                |
 | Copy/export/save, including a rejected clipboard/save operation | Fields and draft remain intact. Success messages reflect the actual result; fallback text is available on failure.                                                                                                |
 | Export all response states                                      | The prompt names the exact revision and destination, preserves every comment and carries caller and human next actions separately.                                                                                |
 | Block or corrupt draft storage                                  | Editing and handoff still work, with a truthful recovery warning.                                                                                                                                                 |
@@ -24,11 +24,10 @@ For the handoff controls, also exercise:
 - The context-derived Next action and its labelled agent preset; changing the action clears the text, including after a draft restores.
 - Saving a preset approval action exports approval of the reviewed revision without a second checkbox. A changed revision cannot inherit the earlier approval.
 - Confirmed Reset all clears current item/Option responses and restores recommended action/text, preserving destination and historical feedback; cancellation changes nothing.
-- Direct Save writes the exact prompt to the displayed absolute path; another Save replaces only that revision's file. Confirm browser fields and drafts survive both.
-- An agent-updated page has a new revision and next unused feedback filename; an old draft or helper cannot redirect it to the previous file.
+- An agent-updated page has a new revision and next unused feedback filename; an old draft cannot redirect it to the previous file.
 - Save As picker success, cancellation and download fallback; Copy prompt success and denial. Do not equate a download starting with confirmed file placement.
-- Helper unavailable, mismatched destination/revision, rejected write and changed HTML: truthful status, usable copy fallback, no claimed save and no lost input.
-- Save/copy/reset icons retain visible, accessible names. The page explains that Save accepts its selected Next action and names the file the creating session should read.
+- Mismatched destination/revision, rejected or cancelled save and changed HTML: truthful status, usable copy fallback, no claimed save and no lost input.
+- Save/copy/reset icons retain visible, accessible names. The page explains that Save As accepts its selected Next action and names the file the creating session should read.
 
 Wait on observable states, not fixed sleeps. Inspect both themes when theme switching is offered. Verify keyboard operation, labelled fields, visible focus, contrast and absence of unintended horizontal overflow. For motion, verify purposeful states and reduced-motion behaviour without claiming a geometry test proves the effect looks liquid.
 

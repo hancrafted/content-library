@@ -28,7 +28,6 @@
     "skills/episode-promote/scripts",
     "skills/worktree",
     "skills/visual-check",
-    "skills/to-html-spec/scripts",
     "tools",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"

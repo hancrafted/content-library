@@ -1,9 +1,9 @@
 ---
-name: to-html-spec
-description: Turn documents, tickets or a grilled conversation into a standalone visual HTML Spec with structured human feedback. Use to create a visual spec, compare solution Options, or explicitly update an existing HTML Spec, including Episode design and architecture reviews.
+name: to-decision-html
+description: Turn documents, tickets or a grilled conversation into a standalone visual HTML decision page with structured human feedback. Use to create a decision page, compare solution Options, or explicitly update an existing decision page, including Episode design and architecture reviews.
 ---
 
-# To HTML Spec
+# To decision HTML
 
 Make the decision understandable, then make responding easy. The output is one HTML file, not a production implementation or a fixed document template.
 
@@ -47,11 +47,11 @@ _Done when_ every review action, draft recovery and feedback handoff follows the
 
 ## 4. Deliver and verify
 
-Inline all runtime CSS and JavaScript. CDN tooling may be used during generation, but the delivered page needs no network to render or review; embed required visual assets too. Render diagrams ahead of time or embed their renderer. Direct Save uses the [local saving guide](references/local-saving.md); review, Copy and Save As remain independent of the helper. A travelling Spec uses the caller's existing machinery and file contracts; preserve its Gates and external ownership instead of introducing a second lifecycle.
+Inline all runtime CSS and JavaScript. CDN tooling may be used during generation, but the delivered page needs no network to render or review; embed required visual assets too. Render diagrams ahead of time or embed their renderer. Review, Copy prompt and Save As run in the browser alone. A travelling Spec uses the caller's existing machinery and file contracts; preserve its Gates and external ownership instead of introducing a second lifecycle.
 
 Perform [artifact verification](references/verification.md) against the delivered file, not only isolated previews. Report anything unverified, especially actual external-dictation compatibility and visual taste. Keep check scripts and inspection artifacts outside product code.
 
-Open the served review URL, or the standalone file when direct saving is unavailable, using the local platform's opener. Print its absolute path or URL, role, feedback destination and continuation instructions. An explicit update follows the contract's revision rules and rebinds any helper to the updated artifact; there is no automatic session resumption or background synchronization.
+Open the standalone file using the local platform's opener. Print its absolute path, role, feedback destination and continuation instructions. An explicit update follows the contract's revision rules; there is no automatic session resumption or background synchronization.
 
 _Done when_ available mechanical checks pass, blocked checks are named, and the user has the openable artifact plus its feedback destination and continuation.
 
