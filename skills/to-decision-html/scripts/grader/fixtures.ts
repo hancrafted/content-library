@@ -2,10 +2,14 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { Asked } from './check.ts';
 import { applyDefect, type Defect } from './fixtures.pure.ts';
 
 export const FIXTURES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../fixtures');
 const BROKEN = path.join(FIXTURES, 'broken');
+
+/** What every fixture's caller asked for: each valid page builds every item at the diagram rung. */
+export const FIXTURE_ASKED: Asked = { fidelity: 'diagram' };
 
 /** Every fixture name: `valid-<mode>` pages, then `<check-id>--<defect>` records. */
 export function fixtureNames(): string[] {

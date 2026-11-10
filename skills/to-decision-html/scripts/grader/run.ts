@@ -4,7 +4,7 @@
 import { chromium, type Browser, type Page } from '@playwright/test';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { asMode, type Check, type LoadedPage, type Mode } from './check.ts';
+import { applies, asMode, type Asked, type Check, type LoadedPage, type Mode } from './check.ts';
 import { combine, toReport, type Report, type WidthResult } from './report.pure.ts';
 
 /** Desktop and landscape tablet, the widths a decision page is built for. */
@@ -44,24 +44,31 @@ export async function openOffline(browser: Browser, file: string, viewport: View
   return { page, requests: [...requests] };
 }
 
-/** The browser to grade in and the page file. */
+/** A page file to grade and what its caller asked for; untold, a check that needs it skips. */
+export interface GradedPage {
+  readonly file: string;
+  readonly asked?: Asked;
+}
+
+/** The browser to grade in and the page. */
 interface Target {
   readonly browser: Browser;
   readonly file: string;
+  readonly asked: Asked;
 }
 
-async function open({ browser, file }: Target, viewport: Viewport): Promise<LoadedPage> {
+async function open({ browser, file, asked }: Target, viewport: Viewport): Promise<LoadedPage> {
   const { page, requests } = await openOffline(browser, file, viewport);
   const mode = asMode(await page.evaluate(() => document.documentElement.getAttribute('data-mode')));
-  return { page, html: await page.content(), requests, mode, width: viewport.width };
+  return { page, html: await page.content(), requests, mode, width: viewport.width, asked };
 }
 
 /** One check at one width, with the mode the page declared. */
 async function atWidth(target: Target, check: Check, viewport: Viewport): Promise<WidthResult & { mode: Mode | null }> {
   const loaded = await open(target, viewport);
-  const { width, mode } = loaded;
+  const { width, mode, asked } = loaded;
   try {
-    if (check.modes && (mode === null || !check.modes.includes(mode))) return { width, mode, problems: null };
+    if (!applies(check, mode, asked)) return { width, mode, problems: null };
     return { width, mode, problems: check.judge(await check.observe(loaded)) };
   } catch (error) {
     return { width, mode, problems: [`the check crashed: ${(error as Error).message}`] };
@@ -70,12 +77,16 @@ async function atWidth(target: Target, check: Check, viewport: Viewport): Promis
   }
 }
 
-export async function gradeFile(browser: Browser, checks: readonly Check[], file: string): Promise<Report> {
+export async function gradeFile(
+  browser: Browser,
+  checks: readonly Check[],
+  { file, asked = {} }: GradedPage,
+): Promise<Report> {
   const results = [];
   let mode: Mode | null = null;
   for (const check of checks) {
     const widths = [];
-    for (const viewport of VIEWPORTS) widths.push(await atWidth({ browser, file }, check, viewport));
+    for (const viewport of VIEWPORTS) widths.push(await atWidth({ browser, file, asked }, check, viewport));
     mode = widths[0].mode;
     results.push(combine(check, widths));
   }

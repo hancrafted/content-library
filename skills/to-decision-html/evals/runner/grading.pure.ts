@@ -1,7 +1,7 @@
 // Builds a run's grading.json in skill-creator's shape (references/schemas.md in the skill-creator skill): one
 // expectation per grader result, then the summary and execution metrics skill-creator's aggregation reads. Each
 // grader contributes expectations; the run's grading.json concatenates them, mechanical first.
-import type { Check, Mode } from '../../scripts/grader/check.ts';
+import { applies, type Asked, type Check, type Mode } from '../../scripts/grader/check.ts';
 import type { Report } from '../../scripts/grader/report.pure.ts';
 import type { ToolCall } from './transcript.pure.ts';
 
@@ -46,17 +46,26 @@ export function ungradedReport(checks: readonly { id: string; summary: string }[
   };
 }
 
-/** A check as the registry gives it; `modes` omitted means it applies to every page. */
-type ModeScope = Pick<Check, 'id' | 'modes'>;
+/** A check as the registry gives it; `modes` omitted means it applies to every page, `needs` omitted to every case. */
+type Scope = Pick<Check, 'id' | 'modes' | 'needs'>;
 
-const appliesTo = (mode: Mode, { modes }: ModeScope): boolean => modes === undefined || modes.includes(mode);
+/** What a case expects of its pages: their mode, and what its calibration asked that a check compares with. */
+interface CaseExpects {
+  readonly mode: Mode;
+  readonly asked?: Asked;
+}
 
 /**
- * One expectation per check that applies to the case's mode; the others are left out, so both arms of a case are
- * graded on the same checks. A check skipped although it applies means the page declared another mode, and fails.
+ * One expectation per check that applies to the case's mode and what it asked; the others are left out, so both
+ * arms of a case are graded on the same checks. A check skipped although it applies means the page declared another
+ * mode, and fails.
  */
-export function mechanicalExpectations(report: Report, caseMode: Mode, checks: readonly ModeScope[]): Expectation[] {
-  const applying = new Set(checks.filter((check) => appliesTo(caseMode, check)).map((check) => check.id));
+export function mechanicalExpectations(
+  report: Report,
+  { mode: caseMode, asked = {} }: CaseExpects,
+  checks: readonly Scope[],
+): Expectation[] {
+  const applying = new Set(checks.filter((check) => applies(check, caseMode, asked)).map((check) => check.id));
   return report.checks
     .filter(({ id }) => applying.has(id))
     .map(({ id, summary, status, problems }) => {
@@ -73,9 +82,13 @@ export function mechanicalExpectations(report: Report, caseMode: Mode, checks: r
 }
 
 export function isolationExpectation(problems: readonly string[]): Expectation {
-  const text = 'isolation: no tool path outside the run workspace';
+  const text = 'isolation: reads stay in the workspace and tool paths, writes in the workspace and temp';
   return problems.length === 0
-    ? { text, passed: true, evidence: 'every tool path stays in the run workspace' }
+    ? {
+        text,
+        passed: true,
+        evidence: 'every read stays in the workspace or a tool path, every write in the workspace or temp',
+      }
     : { text, passed: false, evidence: problems.join('; ') };
 }
 

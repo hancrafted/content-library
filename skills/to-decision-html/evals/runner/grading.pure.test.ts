@@ -38,7 +38,7 @@ describe('grading', () => {
       ];
 
       // ACT
-      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
+      const expectations = mechanicalExpectations(graded, { mode: 'decide' }, CHECKS);
 
       // ASSERT
       expect(expectations).toEqual(expected);
@@ -117,19 +117,23 @@ describe('grading', () => {
       ];
 
       // ACT
-      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
+      const expectations = mechanicalExpectations(graded, { mode: 'decide' }, CHECKS);
 
       // ASSERT
       expect(expectations).toEqual(expected);
     });
 
-    it('fails isolation with every path that left the workspace', () => {
+    it('fails isolation with every read and write it does not allow', () => {
       // ARRANGE
-      const problems = ['Read touches /a, outside the run workspace', 'Bash touches .., outside the run workspace'];
+      const problems = [
+        'Read reads /a, outside the run workspace and the system and tool paths',
+        'Bash writes .., outside the run workspace and the temp folder',
+      ];
       const expected = {
-        text: 'isolation: no tool path outside the run workspace',
+        text: 'isolation: reads stay in the workspace and tool paths, writes in the workspace and temp',
         passed: false,
-        evidence: 'Read touches /a, outside the run workspace; Bash touches .., outside the run workspace',
+        evidence:
+          'Read reads /a, outside the run workspace and the system and tool paths; Bash writes .., outside the run workspace and the temp folder',
       };
 
       // ACT
@@ -146,7 +150,7 @@ describe('grading', () => {
       const expected = [{ text: 'mechanical offline: Offline.', passed: false, evidence: reason }];
 
       // ACT
-      const expectations = mechanicalExpectations(ungradedReport(checks, reason), 'decide', checks);
+      const expectations = mechanicalExpectations(ungradedReport(checks, reason), { mode: 'decide' }, checks);
       const grading = gradingOf({ expectations, tools: [], outputChars: 0, error: 'timed out', notes: [] });
 
       // ASSERT
@@ -164,18 +168,36 @@ describe('grading', () => {
       ];
 
       // ACT
-      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
+      const expectations = mechanicalExpectations(graded, { mode: 'decide' }, CHECKS);
 
       // ASSERT
       expect(expectations).toEqual(expected);
     });
 
-    it('passes isolation when no path left the workspace', () => {
+    it('grades a check that needs an asked value only for a case that asks it', () => {
+      // ARRANGE
+      const checks = [{ id: 'offline' }, { id: 'fidelity-match', needs: ['fidelity'] as const }];
+      const graded = report('decide', { offline: 'pass', 'fidelity-match': 'fail' });
+      const untold = report('decide', { offline: 'pass', 'fidelity-match': 'skip' });
+
+      // ACT
+      const asked = mechanicalExpectations(graded, { mode: 'decide', asked: { fidelity: 'prototype' } }, checks);
+      const unasked = mechanicalExpectations(untold, { mode: 'decide' }, checks);
+
+      // ASSERT
+      expect(asked.map(({ text, passed }) => [text, passed])).toEqual([
+        ['mechanical offline: offline holds.', true],
+        ['mechanical fidelity-match: fidelity-match holds.', false],
+      ]);
+      expect(unasked.map(({ text }) => text)).toEqual(['mechanical offline: offline holds.']);
+    });
+
+    it('passes isolation when every read and write is allowed', () => {
       // ARRANGE
       const expected = {
-        text: 'isolation: no tool path outside the run workspace',
+        text: 'isolation: reads stay in the workspace and tool paths, writes in the workspace and temp',
         passed: true,
-        evidence: 'every tool path stays in the run workspace',
+        evidence: 'every read stays in the workspace or a tool path, every write in the workspace or temp',
       };
 
       // ACT

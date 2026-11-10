@@ -4,7 +4,7 @@ The eval harness runs frozen cases headless, once per arm, grades each run and s
 
 ## Run
 
-First prove the grader: `npm run decision-html:prove` from the repository root grades every fixture and fails when one does not prove its check. Run it before each iteration and after any grader change; at about 20 s per fixture (12 minutes for 34) it stays out of `npm run verify`.
+First prove the grader: `npm run decision-html:prove` from the repository root grades every fixture and fails when one does not prove its check. Run it before each iteration and after any grader change; at about 20 s per fixture (about 12 minutes for 35) it stays out of `npm run verify`.
 
 ```sh
 node evals/run.ts --case ink --runs 1
@@ -28,6 +28,20 @@ To regrade saved runs after a grader changed, without rerunning any agent:
 node evals/regrade.ts evals/workspace/iteration-N        # every run, then a fresh benchmark and viewer
 node evals/regrade.ts evals/workspace/iteration-N/eval-ink/with_skill/run-1   # one run; prints its grading.json
 ```
+
+## Fidelity sweep
+
+The sweep asks whether the skill honours the fidelity rung it is asked for, and how the rung moves quality. It runs the `ink` case with the skill only, once per rung (`diagram`, `wireframe`, `mock`, `prototype`) × k. Each variant's calibration is the frozen one with only its Fidelity rung rewritten (`runner/calibration.pure.ts`). The sweep stays out of the benchmark, which keeps its three cases.
+
+```sh
+node evals/sweep.ts --runs 3          # 12 sessions; --rung (repeatable) narrows the rungs, --runs 1 tries a change
+node evals/sweep.ts --regrade evals/workspace/sweep-N   # grade and report saved runs again
+```
+
+`--model`, `--parallel` (default 4) and `--timeout-minutes` work as in `run.ts`. It writes `evals/workspace/sweep-N/eval-ink-<rung>/with_skill/run-k/`, laid out like an iteration, then `sweep.md` and `sweep.json` with one row per rung:
+
+- **Rung honoured:** runs whose page passed `mechanical fidelity-match`, every item built at the rung asked.
+- **Judge** and **Probe:** `judge` and `probe` items passed out of items graded, summed over the rung's runs.
 
 ## What a run sees
 
@@ -58,8 +72,8 @@ iteration-N/
 
 `runner/grade-run.ts` reads only the run folder and its case's `checklist.json` and `probe.json`, and writes `grading.json`. Each grader contributes expectations, concatenated in `expectationsOf`:
 
-- **Mechanical:** one expectation per check in `scripts/checks/`, run on the largest page in `pages/`. Checks for another mode than the case's are left out, so both arms face the same checks; a check skipped although it applies means the page declared the wrong mode, and fails. With no page, every check fails.
-- **Isolation:** fails when any path in `tools.json` resolves outside the sandbox. File tools are read by their path fields. Shell commands are read by token, following `cd`, and a token counts as a path only from a real root folder, so markup such as `</script>` does not; each problem names its token for a person to judge. Devices, installed tools and browsers (`/usr/`, `/bin/`, `/opt/homebrew/`, `/Applications/`, Playwright's browser cache) pass.
+- **Mechanical:** one expectation per check in `scripts/checks/`, run on the largest page in `pages/`. Checks for another mode than the case's are left out, so both arms face the same checks; a check skipped although it applies means the page declared the wrong mode, and fails. With no page, every check fails. `fidelity-match` needs the rung the calibration asked: it applies only when the Fidelity line reads `` `<rung>` for every item ``, recorded in `run.json` `asked`.
+- **Isolation:** isolation is about what context reaches the run. Reads may reach only the workspace and system and tool paths (`/usr`, `/bin`, `/sbin`, `/System`, `/Applications`, `/opt/homebrew`, Playwright's browser cache); writes only the workspace and the system temp folder (`/tmp` and the sandbox's parent). In the temp folder a run may read back only what it wrote there, or what a script it wrote names; it may also read the tool output the CLI spills into the run's own folder under `~/.claude/projects/`. Anything else fails: the home folder, `~/.npm`, another repository, another sandbox. File tools are read by their path fields. Shell commands are read by token, following `cd`, and a token counts as a path only from a real root folder, so markup such as `</script>` does not. Whether a token is read or written is a heuristic over the program and redirections, so each problem names its token for a person to judge.
 - **Judge** and **probe:** see [Quality](#quality).
 
 Pages stay out of `outputs/`: the viewer embeds text files inside a `<script>`, which a page's own `</script>` would break.
@@ -88,11 +102,11 @@ A run that lacks an assertion, for example because its judge failed, counts as f
 
 ## Cases
 
-| Case          | Mode      | Input                                                                           |
-| ------------- | --------- | ------------------------------------------------------------------------------- |
-| `ink`         | `decide`  | A reconstructed handoff comparing three interaction approaches, at mock rung.   |
-| `after-grill` | `decide`  | A grilling session verbatim: seven agreed site changes, mixed IA and UX.        |
-| `ticket`      | `explain` | A closed GitHub issue frozen as Markdown, for an engineer who did not write it. |
+| Case          | Mode      | Input                                                                              |
+| ------------- | --------- | ---------------------------------------------------------------------------------- |
+| `ink`         | `decide`  | A reconstructed handoff comparing three interaction approaches, at prototype rung. |
+| `after-grill` | `decide`  | A grilling session verbatim: seven agreed site changes, mixed IA and UX.           |
+| `ticket`      | `explain` | A closed GitHub issue frozen as Markdown, for an engineer who did not write it.    |
 
 `cases/manifest.json` lists each case's prompt, attachments, mode, calibration answers, `checklist` and `probe`, its provenance, and the sha256 of every frozen file. A run refuses a case whose hashes no longer match, and `runner/cases.test.ts` fails on it in the fast suite. A run sees the prompt, attachments and calibration answers, never the checklist or probe.
 

@@ -4,7 +4,7 @@
 import type { Browser } from '@playwright/test';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { Check, Mode } from '../../scripts/grader/check.ts';
+import type { Asked, Check, Mode } from '../../scripts/grader/check.ts';
 import { gradeFile } from '../../scripts/grader/run.ts';
 import {
   gradingOf,
@@ -31,6 +31,8 @@ export interface RunRecord {
   readonly roots: readonly string[];
   /** The skill version the arm ran, or null for the no-skill arm. */
   readonly skillDigest: string | null;
+  /** What the run's calibration asked that a check compares the page with; absent in runs from before it. */
+  readonly asked?: Asked;
 }
 
 const readJson = <T>(file: string): T => JSON.parse(readFileSync(file, 'utf8')) as T;
@@ -70,8 +72,10 @@ function readRun(runDir: string): RunFiles {
 
 async function mechanical({ browser, checks }: Graders, { pages: [page], record }: RunFiles) {
   const report =
-    page === undefined ? ungradedReport(checks, 'the run wrote no .html page') : await gradeFile(browser, checks, page);
-  return mechanicalExpectations(report, record.mode, checks);
+    page === undefined
+      ? ungradedReport(checks, 'the run wrote no .html page')
+      : await gradeFile(browser, checks, { file: page, asked: record.asked });
+  return mechanicalExpectations(report, record, checks);
 }
 
 async function expectationsOf(graders: Graders, run: RunFiles) {
