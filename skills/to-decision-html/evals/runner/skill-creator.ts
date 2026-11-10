@@ -6,6 +6,7 @@ import { appendFileSync, existsSync, readdirSync, readFileSync, statSync, writeF
 import { homedir } from 'node:os';
 import path from 'node:path';
 import { consistency, consistencyNotes, consistencyTable, type BenchmarkRun } from './consistency.pure.ts';
+import { withPageLinks, type PageLinks } from './review-links.pure.ts';
 
 const PLUGINS = path.join(homedir(), '.claude', 'plugins', 'cache');
 
@@ -74,6 +75,19 @@ function addConsistency(benchmarkFile: string): string {
   return consistencyTable(rows, PASS_K);
 }
 
+/** Every run folder's pages/*.html under the iteration, keyed by the viewer's run id. */
+function pageLinks(iteration: string): PageLinks {
+  const pages = readdirSync(iteration, { recursive: true, withFileTypes: true }).filter(
+    (entry) => entry.isFile() && entry.name.endsWith('.html') && path.basename(entry.parentPath) === 'pages',
+  );
+  const links: Record<string, string[]> = {};
+  for (const page of pages) {
+    const run = path.relative(iteration, path.dirname(page.parentPath));
+    (links[run.split(path.sep).join('-')] ??= []).push(path.relative(iteration, path.join(page.parentPath, page.name)));
+  }
+  return links;
+}
+
 export interface BenchmarkFacts {
   readonly skillPath: string;
   readonly model: string;
@@ -110,5 +124,6 @@ export function aggregateAndView(iteration: string, facts: BenchmarkFacts): stri
     '--static',
     review,
   ]);
+  writeFileSync(review, withPageLinks(readFileSync(review, 'utf8'), pageLinks(iteration)));
   return review;
 }

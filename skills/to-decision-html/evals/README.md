@@ -76,7 +76,7 @@ iteration-N/
 - **Isolation:** isolation is about what context reaches the run. Reads may reach only the workspace and system and tool paths (`/usr`, `/bin`, `/sbin`, `/System`, `/Applications`, `/opt/homebrew`, Playwright's browser cache); writes only the workspace and the system temp folder (`/tmp` and the sandbox's parent). In the temp folder a run may read back only what it wrote there, or what a script it wrote names; it may also read the tool output the CLI spills into the run's own folder under `~/.claude/projects/`. Anything else fails: the home folder, `~/.npm`, another repository, another sandbox. File tools are read by their path fields. Shell commands are read by token, following `cd`, and a token counts as a path only from a real root folder, so markup such as `</script>` does not. Whether a token is read or written is a heuristic over the program and redirections, so each problem names its token for a person to judge.
 - **Judge** and **probe:** see [Quality](#quality).
 
-Pages stay out of `outputs/`: the viewer embeds text files inside a `<script>`, which a page's own `</script>` would break.
+Pages stay out of `outputs/`: the viewer embeds text files inside a `<script>`, which a page's own `</script>` would break. Instead `review.html` links each run to its pages above its screenshots.
 
 ## Quality
 
