@@ -1,0 +1,72 @@
+{
+  "questions": [
+    {
+      "id": "approach-count",
+      "question": "How many approaches for neighbouring cards does the page compare?",
+      "choices": { "a": "Two", "b": "Three", "c": "Four", "d": "Five" },
+      "answer": ["b"],
+      "source": { "file": "handoff.md", "quote": "Compare all three unresolved neighbouring-card approaches" }
+    },
+    {
+      "id": "bounded-shared-space",
+      "question": "Under the bounded shared space approach, what happens as two neighbouring cards' pools approach each other?",
+      "choices": {
+        "a": "Both stay anchored and smoothly flatten or broaden, leaving a gap between them",
+        "b": "Only the card nearest the pointer shows a pool",
+        "c": "The pools deform under repulsion between their exposed contours",
+        "d": "The pools merge into one shared pool spanning both cards"
+      },
+      "answer": ["a"],
+      "source": {
+        "file": "handoff.md",
+        "quote": "pools stay anchored and smoothly flatten/broaden as their exposed shapes approach, leaving a gap without obvious clipping"
+      }
+    },
+    {
+      "id": "anchor",
+      "question": "With the pointer outside a card, where is that card's pool anchored?",
+      "choices": {
+        "a": "At the card's centre",
+        "b": "At the pointer's position",
+        "c": "At the nearest point of the card's rounded border",
+        "d": "At the middle of the card's top edge"
+      },
+      "answer": ["c"],
+      "source": {
+        "file": "handoff.md",
+        "quote": "For a pointer outside the card, anchor the pool at the nearest point of its rounded border."
+      }
+    },
+    {
+      "id": "activation-distance",
+      "question": "What does the page say about the activation distance?",
+      "choices": {
+        "a": "It is settled at exactly 200 pixels",
+        "b": "It is configurable, with around 200 pixels as a starting point for comparison",
+        "c": "It always equals the card's width",
+        "d": "It is fixed at 50 pixels"
+      },
+      "answer": ["b"],
+      "source": {
+        "file": "handoff.md",
+        "quote": "A configurable activation distance, for example around 200 pixels, is a starting point for comparison, not a settled measurement."
+      }
+    },
+    {
+      "id": "next-actions",
+      "question": "Which Next actions can the reviewer choose? Pick every one the page offers.",
+      "choices": {
+        "a": "Prototype the picked approach",
+        "b": "Revise this page",
+        "c": "Ship the picked approach to production",
+        "d": "Stop here",
+        "e": "Keep all three as rendering modes"
+      },
+      "answer": ["a", "b", "d"],
+      "source": {
+        "file": "calibration.md",
+        "quote": "\"Prototype the picked approach\", \"Revise this page\", \"Stop here\""
+      }
+    }
+  ]
+}

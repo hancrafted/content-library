@@ -1,10 +1,9 @@
-// Grades one run folder into grading.json. It reads only that folder: run.json (case mode and workspace roots),
-// tools.json, transcript.jsonl and the pages in pages/. Each grader adds expectations; a new grader (the judge,
-// the reader probe) appends its own in `expectationsOf`.
+// Grades one run folder into grading.json. It reads only that folder (run.json for the case, mode and workspace
+// roots, tools.json, transcript.jsonl and the pages in pages/) plus the case's frozen checklist and probe. Each grader
+// adds expectations in `expectationsOf`: mechanical, isolation, then the checklist judge and the reader probe.
 import type { Browser } from '@playwright/test';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 import type { Check } from '../../scripts/grader/check.ts';
 import { gradeFile } from '../../scripts/grader/run.ts';
 import {
@@ -15,6 +14,7 @@ import {
   type Grading,
 } from './grading.pure.ts';
 import { isolationProblems } from './isolation.pure.ts';
+import { gradeQuality } from './quality.ts';
 import { runFacts, type ToolCall } from './transcript.pure.ts';
 
 /** What the runner records about a run before grading; run.json. */
@@ -57,29 +57,21 @@ async function mechanical({ browser, checks }: Graders, pages: string, mode: str
 
 async function expectationsOf(graders: Graders, runDir: string, record: RunRecord) {
   const tools = readJson<ToolCall[]>(path.join(runDir, 'tools.json'));
-  return [
-    ...(await mechanical(graders, path.join(runDir, 'pages'), record.mode)),
+  const pages = path.join(runDir, 'pages');
+  const [page] = pagesOf(pages);
+  const mechanicalAndIsolation = [
+    ...(await mechanical(graders, pages, record.mode)),
     isolationExpectation(isolationProblems(tools, record.roots)),
   ];
-}
-
-/**
- * The viewer shows outputs/. It embeds text files inside a <script>, where a page's own </script> would end it
- * early, so outputs/ holds a screenshot of the graded page on load, offline, at 1440 px.
- */
-async function screenshot({ browser }: Graders, runDir: string): Promise<void> {
-  const [page] = pagesOf(path.join(runDir, 'pages'));
-  if (page === undefined) return;
-  const url = pathToFileURL(path.join(runDir, 'pages', page)).href;
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  try {
-    await context.route('**/*', (route) => (route.request().url() === url ? route.continue() : route.abort()));
-    const tab = await context.newPage();
-    await tab.goto(url, { waitUntil: 'networkidle' });
-    await tab.screenshot({ path: path.join(runDir, 'outputs', page.replace(/\.html$/, '.png')) });
-  } finally {
-    await context.close();
-  }
+  // The quality graders write the views into outputs/: the viewer embeds text files inside a <script>, where a
+  // page's own </script> would end it early, so it shows the page only as screenshots.
+  const quality = await gradeQuality({
+    browser: graders.browser,
+    page: page && path.join(pages, page),
+    runDir,
+    record,
+  });
+  return { expectations: [...mechanicalAndIsolation, ...quality.expectations], quality };
 }
 
 function notesOf(pages: string, error: string | null): string[] {
@@ -94,14 +86,15 @@ export async function gradeRun(graders: Graders, runDir: string): Promise<Gradin
   const record = readJson<RunRecord>(path.join(runDir, 'run.json'));
   const pages = path.join(runDir, 'pages');
   const { error } = runFacts(readFileSync(path.join(runDir, 'transcript.jsonl'), 'utf8').split('\n'));
+  const { expectations, quality } = await expectationsOf(graders, runDir, record);
   const grading = gradingOf({
-    expectations: await expectationsOf(graders, runDir, record),
+    expectations,
     tools: readJson<ToolCall[]>(path.join(runDir, 'tools.json')),
     outputChars: pagesOf(pages).reduce((total, page) => total + statSync(path.join(pages, page)).size, 0),
     error,
-    notes: notesOf(pages, error),
+    notes: [...notesOf(pages, error), ...quality.notes],
+    judge: quality.judge,
   });
   writeFileSync(path.join(runDir, 'grading.json'), `${JSON.stringify(grading, null, 2)}\n`);
-  await screenshot(graders, runDir);
   return grading;
 }
