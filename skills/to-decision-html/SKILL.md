@@ -94,9 +94,17 @@ _Done when_ every item's visual and its comment fields can be seen together at b
 - Above the Next action, a **Before you approve** block asks open questions through lenses the items may have missed, such as security, operations, information architecture and accessibility. The answers are the reviewer's to give, so the page asks and stops.
 - The Next action offers only the allowed Next actions, preset by the [feedback contract](references/feedback-contract.md).
 
-**`explain`** renders decisions already made, without Options to pick or a Next action.
+**`explain`**
 
-_Done when_ every item carries its mode's controls.
+The reader learns decisions someone else already made, such as a ticket's. The page teaches each decision and leaves it settled.
+
+- Each item gives its decision a visual and at least one concrete example: a scenario, a before and after, or a worked case.
+- An item clears confidence-bar questions 1, 2, 3 and 5. Questions 4 and 6 belong to `decide`: a settled decision has no recommendation, door or effort left to weigh.
+- Responses are the reader's questions, so the page carries no Options, choice inputs or Next action.
+- A **reflection** block asks open questions through general non-functional lenses: systems and critical thinking, information architecture, security for engineers, and UX for audience-facing work. Choose the lenses that fit the audience. Each prompt is a question; the reader writes the answer, so the page shows no agent-written answer, hint or answer key beside it.
+- A **Questions?** block holds a labelled comment field with Copy prompt and Save from the [feedback contract](references/feedback-contract.md). It carries the reader's questions to the agent or the decisions' author.
+
+_Done when_ every item carries its mode's controls, and the page holds its mode's blocks: Before you approve and the Next action in `decide`, reflection and Questions? in `explain`.
 
 ## 6. Hand back the feedback
 
@@ -118,7 +126,8 @@ The page meets the contract below and loads with no network. Inline all CSS and 
 | Each Option, inside its item            | `data-option`      | A stable id, unique in its item.                                             |
 | Each Option                             | `data-recommended` | `true` or `false`.                                                           |
 | Each `<script type="text/x-mermaid">`   | `data-diagram`     | A unique name; the script holds the diagram's source.                        |
-| The Before you approve block (`decide`) | `data-reflection`  | Present once, above the Next action.                                         |
+| The Before you approve/reflection block | `data-reflection`  | Present once; in `decide`, above the Next action.                            |
+| The Questions? block (`explain`)        | `data-questions`   | Present once, holding the editable `<textarea>` for the reader's questions.  |
 | The Next action (`decide`)              | `data-next-action` | Present once, holding the `<select>` or radio inputs that choose the action. |
 
 Everything else on the page is yours to shape.
