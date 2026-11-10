@@ -693,6 +693,12 @@
         .flex {
           display: flex;
         }
+        .grid {
+          display: grid;
+        }
+        .hidden {
+          display: none;
+        }
         .transform {
           transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
         }
@@ -702,6 +708,10 @@
         .border {
           border-style: var(--tw-border-style);
           border-width: 1px;
+        }
+        .text-caption {
+          font-size: var(--size-caption);
+          line-height: var(--tw-leading, var(--leading-caption));
         }
         .outline {
           outline-style: var(--tw-outline-style);
@@ -1467,7 +1477,7 @@
         "status": "draft",
         "generated": {
           "by": "process:spec-assemble",
-          "at": "2026-11-10T16:22:24Z"
+          "at": "2026-11-10T17:06:51Z"
         },
         "locale": "en",
         "brief": "../brief.md"
@@ -1495,7 +1505,7 @@
       <main class="spec-page">
         <header class="spec-masthead">
           <p class="spec-kicker">Spec · 2 Slides</p>
-          <h1>Why AI relocates the pressure, and why requirements come first</h1>
+          <h1 id="software-ecology">Why AI relocates the pressure, and why requirements come first</h1>
           <p>
             Each Slide shows its words as tabs above its Options, which are tabs too: open each, pick one, and dictate a
             note where it should change. Save at the bottom when done.
@@ -1571,6 +1581,18 @@
           <div class="spec-section-band">
             <p class="spec-kicker">Section 1 · section slide, drawn in the Title-slide Options</p>
             <h2>Play</h2>
+            <ol data-spec="voice-script">
+              <li>
+                <strong>You know this cartoon</strong> — The tire swing: ten panels, every role hears something
+                different. You all know it. Nobody in it is a bad actor; it is a game of telephone, where an intent
+                nobody voiced well gets translated at every handoff. That is a story about a system. And with AI, the
+                wrong swing gets built ten times faster.
+              </li>
+              <li>
+                <strong>Now you run it</strong> — Hand over to the viewer. Start on the swing, then walk the steps,
+                switch AI on and turn the dials.
+              </li>
+            </ol>
           </div>
           <article data-spec="slide" id="explorable" data-number="1">
             <header class="spec-slide-head">
@@ -1581,14 +1603,151 @@
               lets the viewer run the whole system themselves, from the familiar cartoon to AI switched on
             </p>
             <div class="spec-words">
-              <input type="radio" name="words:play" id="play--visual-idea" value="visual-idea" checked />
-              <label for="play--visual-idea">Visual idea</label>
+              <input type="radio" name="words:explorable" id="explorable--visual-idea" value="visual-idea" checked />
+              <label for="explorable--visual-idea">Visual idea</label>
+              <input type="radio" name="words:explorable" id="explorable--voice-script" value="voice-script" />
+              <label for="explorable--voice-script">Voice script</label>
+              <input type="radio" name="words:explorable" id="explorable--speaker-notes" value="speaker-notes" />
+              <label for="explorable--speaker-notes">Speaker notes</label>
               <div class="spec-card spec-panel" data-panel="visual-idea">
                 <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: none</code></p>
                 <p data-spec="visual-idea">
-                  the Explorable with its toolbar: steps Swing, Roles, Pipeline, AI; the use case picker; the pump speed
-                  and water clarity dials; node cards on click. Opens on the Swing step of the tire swing use case
+                  The whole software ecology Explorable fills the Slide with every option on. The viewer meets it as the
+                  toolbar, the stage and the node card. The design lives in the design-ADR
+                  <code>docs/adr/0024-software-ecology-flow-model-and-use-case-files.md</code> and the feature guide
+                  <code>docs/features/explorables/software-ecology.md</code>; the Spec designers mock it from there.
                 </p>
+                <p data-spec="visual-idea">
+                  The toolbar holds the step control Swing, Roles, Pipeline, AI, the use case picker and the two global
+                  dials, pump speed and water clarity.
+                </p>
+                <p data-spec="visual-idea">
+                  The stage opens on the Swing step of the tire swing use case, with the ten cartoon panels. Roles
+                  morphs them into role glyphs, Pipeline into the left-to-right graph with the customer's intake on the
+                  left and the tap on the right, every role an omega pipe, every edge a handoff. AI switches the pump
+                  on: the pipes fill, the narrow review valve backs up, drops leak and fade, and sludge sticks to the
+                  walls when the water clarity is low.
+                </p>
+                <p data-spec="visual-idea">
+                  A click on a node opens its card: the 2x3 grid of human and technical against specify, execute and
+                  review, the node's own AI and context-rot dials with a live readout, and the node's own enlarged
+                  omega.
+                </p>
+                <p data-spec="visual-idea">
+                  At the tap, the right-hand customer shows what came out and how many: the tire swing with clear water,
+                  a wrong swing with sludge.
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Map your team</strong> — Actionable 1. Read the graph as your own team: nodes and handoffs.
+                    Find the narrowest review step, the valve.
+                  </li>
+                  <li>
+                    <strong>Check the valve before the pump</strong> — Actionable 2. Switch AI on at one node. Does the
+                    review step after it handle more? Watch the neighbours, not only the node.
+                  </li>
+                  <li>
+                    <strong>Clean water first</strong> — Actionable 3. Drop the water clarity and watch sludge travel to
+                    every node after it. Write the requirement so someone new could act on it.
+                  </li>
+                  <li>
+                    <strong>Hand over the verdict</strong> — At the tap, which swing comes out? Which node in your own
+                    team looks like that valve?
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>Pressure travels along the connections</strong> — a change at one node, such as faster code
+                    writing, reaches its neighbours: more code to review, build, test and release. The talk offers this
+                    as a scenario, not a measurement [1] (SWE-0001).
+                    <ul>
+                      <li data-source="1">
+                        [1] Adam Bender, Software Engineering at the Tipping Point (conference talk, transcript) —
+                        <a href="https://www.youtube.com/watch?v=2n41YjR5QfU"
+                          >https://www.youtube.com/watch?v=2n41YjR5QfU</a
+                        >
+                      </li>
+                      <li>target: the pump and the edges in the Pipeline and AI steps</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Review is where the load lands</strong> — on teams with high AI adoption, pull requests
+                    merged rose 98% while review time rose 91% and pull request size 154%, with no significant
+                    company-level gain. Vendor telemetry and an association, not a trial [2] (AIE-0018).
+                    <ul>
+                      <li data-source="2">
+                        [2] Faros AI, The AI Productivity Paradox Report 2025 (23 July 2025) —
+                        <a href="https://www.faros.ai/blog/ai-software-engineering"
+                          >https://www.faros.ai/blog/ai-software-engineering</a
+                        >
+                      </li>
+                      <li>target: the narrow review valve backing up</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Review can be skipped</strong> — in a writing experiment 68% of professionals given a
+                    chatbot submitted its first output unedited. It was a short online task, so it may not hold for work
+                    someone is accountable for [3] (AIE-0019).
+                    <ul>
+                      <li data-source="3">
+                        [3] Noy and Zhang, Experimental Evidence on the Productivity Effects of Generative Artificial
+                        Intelligence —
+                        <a href="https://economics.mit.edu/sites/default/files/inline-files/Noy_Zhang_1.pdf"
+                          >https://economics.mit.edu/sites/default/files/inline-files/Noy_Zhang_1.pdf</a
+                        >
+                      </li>
+                      <li>target: the leaking drops past the valve</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Product managers keep the accountability</strong> — they hesitate to delegate specifications
+                    and say they are still accountable for AI-written output, so their effort moves to checking it. One
+                    company, self-reported [4] (AIE-0019).
+                    <ul>
+                      <li data-source="4">
+                        [4] Ulloa et al., Product Manager Practices for Delegating Work to Generative AI:
+                        &quot;Accountability must not be delegated to non-human actors&quot; —
+                        <a href="https://arxiv.org/abs/2510.02504">https://arxiv.org/abs/2510.02504</a>
+                      </li>
+                      <li>target: the product-side nodes</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Muddy instructions cost accuracy</strong> — instructions that arrive incomplete over several
+                    turns lowered accuracy by 39% on average across tested models. That a clear requirement lowers this
+                    is an inference; no source tests it as an intervention [5] (LLM-0022).
+                    <ul>
+                      <li data-source="5">
+                        [5] Laban et al., LLMs Get Lost In Multi-Turn Conversation —
+                        <a href="https://arxiv.org/abs/2505.06120">https://arxiv.org/abs/2505.06120</a>
+                      </li>
+                      <li>target: the water clarity dial and the sediment on the walls</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Sales and billing cards are inference</strong> — reps spend 30% of a week selling, from a
+                    vendor survey, which says nothing about review work growing. No source measures AI's effect on
+                    billing; the sales and billing card text is the general pattern applied, not evidence [6] (AIE-0019,
+                    AIE-0020).
+                    <ul>
+                      <li data-source="6">
+                        [6] Salesforce, State of Sales, 6th Edition —
+                        <a
+                          href="https://assets.ctfassets.net/f43wltp2j5se/2gHMpCURXzpMW7PJ3SlWZJ/3cad8d7e8496abbd3c0f99d5c7f16ef4/salesforce-state-of-sales-report-6-ed.pdf"
+                          >https://assets.ctfassets.net/f43wltp2j5se/2gHMpCURXzpMW7PJ3SlWZJ/3cad8d7e8496abbd3c0f99d5c7f16ef4/salesforce-state-of-sales-report-6-ed.pdf</a
+                        >
+                      </li>
+                      <li>target: the sales and billing node cards</li>
+                    </ul>
+                  </li>
+                </ol>
               </div>
             </div>
           </article>
@@ -1597,6 +1756,12 @@
           <div class="spec-section-band">
             <p class="spec-kicker">Section 2 · section slide, drawn in the Title-slide Options</p>
             <h2>Why, how and what</h2>
+            <ol data-spec="voice-script">
+              <li>
+                <strong>Why you may leave it</strong> — Hand over from playing to explaining. One slide: why it matters,
+                how to use it, what it shows.
+              </li>
+            </ol>
           </div>
           <article data-spec="slide" id="why-how-what" data-number="2">
             <header class="spec-slide-head">
@@ -1612,18 +1777,111 @@
             <div class="spec-words">
               <input
                 type="radio"
-                name="words:why-how-and-what"
-                id="why-how-and-what--visual-idea"
+                name="words:why-how-what"
+                id="why-how-what--visual-idea"
                 value="visual-idea"
                 checked
               />
-              <label for="why-how-and-what--visual-idea">Visual idea</label>
+              <label for="why-how-what--visual-idea">Visual idea</label>
+              <input type="radio" name="words:why-how-what" id="why-how-what--voice-script" value="voice-script" />
+              <label for="why-how-what--voice-script">Voice script</label>
+              <input type="radio" name="words:why-how-what" id="why-how-what--speaker-notes" value="speaker-notes" />
+              <label for="why-how-what--speaker-notes">Speaker notes</label>
               <div class="spec-card spec-panel" data-panel="visual-idea">
                 <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: grid-1x3 · motion: none</code></p>
                 <p data-spec="visual-idea">
-                  three columns, each with a still from the Explorable: the pump pushing sludge, the toolbar, a node's
-                  omega
+                  Three columns, stacked Why-first on a phone, each with a still from the Explorable. Why: the pump
+                  pushing sludge into a swollen review valve. How: the toolbar with steps, use case picker and the two
+                  dials. What: one node's enlarged omega, specify, execute and review, with its human and technical
+                  side.
                 </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Why: the problem is the system</strong> — Every unclear requirement was always expensive. AI
+                    pumps execution faster, and in review we already see the pressure land and spread to the neighbours.
+                    I infer that the effort moves into specifying too, because that was always the hard part; nobody has
+                    measured that yet.
+                  </li>
+                  <li>
+                    <strong>Clean water lowers it</strong> — Clear requirements are the clean water. The pump moves
+                    whatever you feed it.
+                  </li>
+                  <li><strong>How: play it</strong> — Steps, use cases, the two dials, a click on any node.</li>
+                  <li>
+                    <strong>What: one shape everywhere</strong> — Every node specifies, executes and reviews, on a human
+                    and a technical side. AI takes the execution; review stays narrow.
+                  </li>
+                  <li>
+                    <strong>Take it back to Monday</strong> — Map your team, check the review step, write the
+                    requirement.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes">
+                  <li>
+                    <strong>AI amplifies what is there</strong> — AI's primary role is as an amplifier of an
+                    organization's existing strengths and weaknesses, and the greatest returns come from the underlying
+                    organizational system rather than the tools [1] (AIE-0018).
+                    <ul>
+                      <li data-source="1">
+                        [1] DORA, State of AI-assisted Software Development 2025 (overview page) —
+                        <a href="https://dora.dev/research/2025/dora-report/"
+                          >https://dora.dev/research/2025/dora-report/</a
+                        >
+                      </li>
+                      <li>target: Why column, the pump</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Incomplete requirements are the most named pain</strong> — 48% of 228 companies named
+                    incomplete or hidden requirements their most frequent requirements problem, with rework after
+                    implementation among the reported effects. Self-reported survey; frequency is not cost [2]
+                    (SWE-0002).
+                    <ul>
+                      <li data-source="2">
+                        [2] Méndez Fernández et al., Naming the Pain in Requirements Engineering: Contemporary Problems,
+                        Causes, and Effects in Practice —
+                        <a href="https://arxiv.org/abs/1611.10288">https://arxiv.org/abs/1611.10288</a>
+                      </li>
+                      <li>target: Why column, clean water</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Specifying is the hard part (inference)</strong> — deciding precisely what to build is the
+                    hardest single part of building software. That AI moves the saved effort into specifying is an
+                    inference from this and the review findings; no source measures specification effort rising [3]
+                    (AIE-0018, AIE-0020).
+                    <ul>
+                      <li data-source="3">
+                        [3] Brooks, No Silver Bullet: Essence and Accident in Software Engineering —
+                        <a href="https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf"
+                          >https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf</a
+                        >
+                      </li>
+                      <li>target: What column, the specify part of the omega</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>A node is people and technology</strong> — a socio-technical system is a system made of
+                    people and technology, and an organization's structure shapes what it builds. The definitions are
+                    the speaker's paraphrase [4] (SWE-0001).
+                    <ul>
+                      <li data-source="4">
+                        [4] Adam Bender, Software Engineering at the Tipping Point (conference talk, transcript) —
+                        <a href="https://www.youtube.com/watch?v=2n41YjR5QfU"
+                          >https://www.youtube.com/watch?v=2n41YjR5QfU</a
+                        >
+                      </li>
+                      <li>target: What column, human and technical side</li>
+                    </ul>
+                  </li>
+                </ol>
               </div>
             </div>
           </article>
