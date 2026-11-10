@@ -19,14 +19,15 @@ export function runDirs(root: string): string[] {
     .sort();
 }
 
-/** The next unused iteration folder in the workspace. */
-export function nextIteration(): string {
+/** The next unused `<kind>-N` folder in the workspace: `iteration` for the benchmark, `sweep` for the fidelity sweep. */
+export function nextFolder(kind: 'iteration' | 'sweep'): string {
+  const pattern = new RegExp(`^${kind}-(\\d+)$`);
   const used = existsSync(WORKSPACE)
     ? readdirSync(WORKSPACE)
-        .flatMap((name) => /^iteration-(\d+)$/.exec(name)?.[1] ?? [])
+        .flatMap((name) => pattern.exec(name)?.[1] ?? [])
         .map(Number)
     : [];
-  return path.join(WORKSPACE, `iteration-${Math.max(0, ...used) + 1}`);
+  return path.join(WORKSPACE, `${kind}-${Math.max(0, ...used) + 1}`);
 }
 
 export async function gradeAll(dirs: readonly string[]): Promise<void> {

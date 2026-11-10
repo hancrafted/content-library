@@ -4,7 +4,8 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { asMode, type Mode } from '../../scripts/grader/check.ts';
+import { asMode, type Asked, type FidelityRung, type Mode } from '../../scripts/grader/check.ts';
+import { askedOf, atRung } from './calibration.pure.ts';
 import type { CaseItem } from './judge.pure.ts';
 import { UNKNOWN, type ProbeQuestion } from './probe.pure.ts';
 import type { Source } from './quality.pure.ts';
@@ -32,7 +33,12 @@ export interface EvalCase {
   readonly prompt: string;
   /** The files copied beside the prompt: its attachments, then the calibration answers. */
   readonly inputs: readonly string[];
+  readonly calibration: string;
+  /** Inputs the run gets with other content than their frozen file: a sweep variant's calibration. */
+  readonly rewrites: Readonly<Record<string, string>>;
   readonly hashes: Readonly<Record<string, string>>;
+  /** What the calibration answers ask that a check compares the page with, such as one fidelity rung. */
+  readonly asked: Asked;
 }
 
 export function readManifest(): { cases: ManifestCase[] } {
@@ -57,7 +63,15 @@ export function loadCase(id: string): EvalCase {
   const mode = asMode(cases[index].mode);
   if (mode === null || calibration === undefined)
     throw new Error(`case "${id}" has no known mode or no calibration answers, so it cannot run headless`);
-  return { id, evalId: index + 1, mode, prompt, inputs: [...attachments, calibration], hashes };
+  const asked = askedOf(readFileSync(path.join(CASES, calibration), 'utf8'));
+  const inputs = [...attachments, calibration];
+  return { id, evalId: index + 1, mode, prompt, inputs, calibration, rewrites: {}, hashes, asked };
+}
+
+/** The case with its calibration asking `rung` for every item, and nothing else changed. */
+export function atFidelity(evalCase: EvalCase, rung: FidelityRung): EvalCase {
+  const calibration = atRung(readFileSync(path.join(CASES, evalCase.calibration), 'utf8'), rung);
+  return { ...evalCase, asked: askedOf(calibration), rewrites: { [evalCase.calibration]: calibration } };
 }
 
 /** What the judge and the reader probe ask about a case's page: checklist.json's items and probe.json's questions. */

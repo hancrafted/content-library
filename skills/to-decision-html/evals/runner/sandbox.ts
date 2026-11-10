@@ -1,7 +1,7 @@
-// A run's sandbox: a fresh temp folder holding only the case's prompt and inputs and, for a skill arm, a copy of
+// A run's sandbox: a fresh temp folder holding only the case's prompt and inputs (a variant's rewrites in place) and, for a skill arm, a copy of
 // that arm's skill without its evals. After the agent stops, its pages move into the run folder and the sandbox goes.
 import { createHash } from 'node:crypto';
-import { cpSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync } from 'node:fs';
+import { cpSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { CASES, type EvalCase } from './cases.ts';
@@ -18,8 +18,12 @@ const skillFilter = (skill: string) => (source: string) => path.relative(skill, 
 
 export function makeSandbox(evalCase: EvalCase, skill: string | null): Sandbox {
   const dir = mkdtempSync(path.join(tmpdir(), 'decision-eval-'));
-  for (const file of [evalCase.prompt, ...evalCase.inputs])
-    cpSync(path.join(CASES, file), path.join(dir, path.basename(file)));
+  for (const file of [evalCase.prompt, ...evalCase.inputs]) {
+    const target = path.join(dir, path.basename(file));
+    const rewrite = evalCase.rewrites[file];
+    if (rewrite === undefined) cpSync(path.join(CASES, file), target);
+    else writeFileSync(target, rewrite);
+  }
   if (skill !== null) cpSync(skill, path.join(dir, 'skill'), { recursive: true, filter: skillFilter(skill) });
   return { roots: [dir, realpathSync(dir)], inputs: evalCase.inputs.map((file) => path.basename(file)) };
 }

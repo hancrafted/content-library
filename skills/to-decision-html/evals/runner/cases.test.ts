@@ -62,6 +62,17 @@ describe('frozen eval cases', () => {
       expect(loaded).toEqual(expected);
     });
 
+    it('asks prototype fidelity of every ink item, and no single rung of the other cases', () => {
+      // ARRANGE
+      const expected = [{ fidelity: 'prototype' }, {}, {}];
+
+      // ACT
+      const asked = ['ink', 'after-grill', 'ticket'].map((id) => loadCase(id).asked);
+
+      // ASSERT
+      expect(asked).toEqual(expected);
+    });
+
     it("draws every case's checklist and probe keys verbatim from what its run sees", () => {
       // ARRANGE
       const keyed = readManifest().cases.filter((entry) => qualityKeys(entry.id) !== null);
