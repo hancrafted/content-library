@@ -14,6 +14,14 @@ const report = (mode: string | null, statuses: Record<string, 'pass' | 'fail' | 
   })),
 });
 
+/** The checks as the registry gives them: decide-controls and explain-controls each apply to one mode. */
+const CHECKS = [
+  { id: 'offline' },
+  { id: 'page-attributes' },
+  { id: 'decide-controls', modes: ['decide'] as const },
+  { id: 'explain-controls', modes: ['explain'] as const },
+];
+
 describe('grading', () => {
   describe('success cases', () => {
     it('turns each check into an expectation with its evidence', () => {
@@ -29,7 +37,7 @@ describe('grading', () => {
       ];
 
       // ACT
-      const expectations = mechanicalExpectations(graded, 'decide');
+      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
 
       // ASSERT
       expect(expectations).toEqual(expected);
@@ -86,7 +94,7 @@ describe('grading', () => {
       ];
 
       // ACT
-      const expectations = mechanicalExpectations(graded, 'decide');
+      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
 
       // ASSERT
       expect(expectations).toEqual(expected);
@@ -115,7 +123,7 @@ describe('grading', () => {
       const expected = [{ text: 'mechanical offline: Offline.', passed: false, evidence: reason }];
 
       // ACT
-      const expectations = mechanicalExpectations(ungradedReport(checks, reason), 'decide');
+      const expectations = mechanicalExpectations(ungradedReport(checks, reason), 'decide', checks);
       const grading = gradingOf({ expectations, tools: [], outputChars: 0, error: 'timed out', notes: [] });
 
       // ASSERT
@@ -125,19 +133,15 @@ describe('grading', () => {
   });
 
   describe('edge cases', () => {
-    it('passes a check that does not apply to the mode the case expects', () => {
+    it("leaves out a check that does not apply to the case's mode, whatever the page declares", () => {
       // ARRANGE
-      const graded = report('explain', { 'decide-controls': 'skip' });
+      const graded = report(null, { offline: 'pass', 'explain-controls': 'skip' });
       const expected = [
-        {
-          text: 'mechanical decide-controls: decide-controls holds.',
-          passed: true,
-          evidence: 'does not apply to mode explain',
-        },
+        { text: 'mechanical offline: offline holds.', passed: true, evidence: 'passes at every graded width' },
       ];
 
       // ACT
-      const expectations = mechanicalExpectations(graded, 'explain');
+      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
 
       // ASSERT
       expect(expectations).toEqual(expected);

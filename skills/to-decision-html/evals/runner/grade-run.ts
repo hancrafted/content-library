@@ -52,7 +52,7 @@ async function mechanical({ browser, checks }: Graders, pages: string, mode: str
     page === undefined
       ? ungradedReport(checks, 'the run wrote no .html page')
       : await gradeFile(browser, checks, path.join(pages, page));
-  return mechanicalExpectations(report, mode);
+  return mechanicalExpectations(report, mode, checks);
 }
 
 async function expectationsOf(graders: Graders, runDir: string, record: RunRecord) {

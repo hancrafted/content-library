@@ -47,7 +47,7 @@ iteration-N/
 
 `runner/grade-run.ts` reads only the run folder and writes `grading.json`. Each grader contributes expectations, concatenated in `expectationsOf`:
 
-- **Mechanical:** one expectation per check in `scripts/checks/`, run on the largest page in `pages/`. A check skipped for mode passes only when the page declares the case's mode. With no page, every check fails.
+- **Mechanical:** one expectation per check in `scripts/checks/`, run on the largest page in `pages/`. Checks for another mode than the case's are left out, so both arms face the same checks; a check skipped although it applies means the page declared the wrong mode, and fails. With no page, every check fails.
 - **Isolation:** fails when any path in `tools.json` resolves outside the sandbox. File tools are read by their path fields. Shell commands are read by token, following `cd`, and a token counts as a path only from a real root folder, so markup such as `</script>` does not; each problem names its token for a person to judge. Devices, installed tools and browsers (`/usr/`, `/bin/`, `/opt/homebrew/`, `/Applications/`, Playwright's browser cache) pass.
 
 A new grader, such as a judge or a reader probe, appends its expectations there. Pages stay out of `outputs/`: the viewer embeds text files inside a `<script>`, which a page's own `</script>` would break. skill-creator's aggregation computes pass rate, time and tokens per arm from `grading.json` and `timing.json`.
