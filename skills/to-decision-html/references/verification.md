@@ -1,33 +1,28 @@
 # Artifact verification
 
-The grader in `SKILL.md`'s deliver step already checks the page contract, offline loading, the mode's controls, the depth toggles, layout and accessibility at 1440 and 1024 px. For everything else, use the repository's browser and inspection tools, or a temporary browser script.
+The grader in `SKILL.md`'s deliver step already checks, at 1440 and 1024 px: the page contract, offline loading, the mode's controls, the depth toggles, layout and accessibility, a comment's byte-identical round trip through Copy prompt and Save, and that a denied copy, a failed save or a cancelled Reset all keeps input and claims no success. For everything else, use the repository's browser and inspection tools, or a temporary browser script.
 
 ## Mechanical checks
 
 Check the delivered HTML, with networking disabled, at desktop and landscape-tablet widths. Exercise its actual controls; an isolated mock is not the review page.
 
-| Action                                                          | Required observation                                                                                                                                                                                              |
-| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Open the delivered file offline                                 | Visuals, controls and feedback operate without external assets or runtime CDN requests.                                                                                                                           |
-| Navigate all review items                                       | IDs resolve uniquely; the displayed Option is identifiable separately from choices.                                                                                                                               |
-| Select, deselect and reset                                      | Boolean, single/multiple choice and per-item reset behave as declared; untouched items export as skipped.                                                                                                         |
-| Focus and paste into each comment type                          | Exact multiline text, including quotes and non-ASCII text, appears in the intended field and reaches the exported payload unchanged.                                                                              |
-| Use preview tools while editing                                 | Focus/text are retained; the relevant visual remains visible while commenting, including long content. Measure viewport intersection and inspect whether the useful subject, not merely an edge, remains visible. |
-| Reload with a draft                                             | Choices and item/Option comments survive; other decision pages and evaluation arms do not inherit them.                                                                                                           |
-| Replace the HTML with a changed revision and refresh            | Unchanged responses restore; changed/removed responses remain accessible and flagged; changed choices and overall approval require reconfirmation.                                                                |
-| Copy/export/save, including a rejected clipboard/save operation | Fields and draft remain intact. Success messages reflect the actual result; fallback text is available on failure.                                                                                                |
-| Export all response states                                      | The prompt names the exact revision and destination, preserves every comment and carries caller and human next actions separately.                                                                                |
-| Block or corrupt draft storage                                  | Editing and handoff still work, with a truthful recovery warning.                                                                                                                                                 |
+| Action                           | Required observation                                                                                                                                                                                              |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Open the delivered file offline  | Visuals, controls and feedback operate without external assets or runtime CDN requests.                                                                                                                           |
+| Navigate all review items        | IDs resolve uniquely; the displayed Option is identifiable separately from choices.                                                                                                                               |
+| Select, deselect and reset       | Boolean, single/multiple choice and per-item reset behave as declared; untouched items export as skipped.                                                                                                         |
+| Use preview tools while editing  | Focus/text are retained; the relevant visual remains visible while commenting, including long content. Measure viewport intersection and inspect whether the useful subject, not merely an edge, remains visible. |
+| Reload with a draft              | Choices and item/Option comments survive; other decision pages and evaluation arms do not inherit them.                                                                                                           |
+| Raise `data-revision` and reload | Responses start unanswered and the approval is gone; the earlier revision's feedback shows read-only.                                                                                                             |
+| Export all response states       | The handoff names the page id, revision and destination, keeps every comment, marks untouched items skipped and keeps agent-preset text apart from the reviewer's.                                                |
+| Block or corrupt draft storage   | Editing and handoff still work, with a truthful recovery warning.                                                                                                                                                 |
 
 For the handoff controls, also exercise:
 
-- The context-derived Next action and its labelled agent preset; changing the action clears the text, including after a draft restores.
-- Saving a preset approval action exports approval of the reviewed revision without a second checkbox. A changed revision cannot inherit the earlier approval.
-- Confirmed Reset all clears current item/Option responses and restores recommended action/text, preserving destination and historical feedback; cancellation changes nothing.
-- An agent-updated page has a new revision and next unused feedback filename; an old draft cannot redirect it to the previous file.
-- Save As picker success, cancellation and download fallback; Copy prompt success and denial. Do not equate a download starting with confirmed file placement.
-- Mismatched destination/revision, rejected or cancelled save and changed HTML: truthful status, usable copy fallback, no claimed save and no lost input.
-- Save/copy/reset icons retain visible, accessible names. The page explains that Save As accepts its selected Next action and names the file the creating session should read.
+- The Next action starts on the recommended action with its `(recommended by agent)` sentences; changing the action clears them, including after a draft restores.
+- Saving with an approval action selected exports approval of this revision, with no second confirmation.
+- A confirmed Reset all restores the recommended action and its sentences.
+- Save, Copy prompt and reset buttons keep visible, accessible names. The page says that Save accepts the selected Next action and names `<page-id>-r<N>-feedback.md`.
 
 Wait on observable states, not fixed sleeps. Inspect both themes when theme switching is offered. Verify keyboard operation beyond focus visibility. For motion, verify purposeful states without claiming a geometry test proves the effect looks liquid.
 

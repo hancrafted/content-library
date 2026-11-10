@@ -137,7 +137,9 @@ _Done when_ every item carries its mode's controls, and the page holds its mode'
 
 ## 6. Hand back the feedback
 
-Apply the [feedback contract](references/feedback-contract.md). A caller's own save helper and format take precedence over it.
+Apply the [feedback contract](references/feedback-contract.md): Copy prompt and Save carry the reviewer's responses and comments back to you, verbatim, with no server. A caller's own save helper and format take precedence over it.
+
+_Done when_ the page names its feedback file, `<page-id>-r<N>-feedback.md`, or the caller's destination.
 
 ## 7. Deliver and verify
 
@@ -158,6 +160,10 @@ The page meets the contract below and loads with no network. Inline all CSS and 
 | The Before you approve/reflection block | `data-reflection`   | Present once; in `decide`, above the Next action.                                                                                         |
 | The Questions? block (`explain`)        | `data-questions`    | Present once, holding the editable `<textarea>` for the reader's questions.                                                               |
 | The Next action (`decide`)              | `data-next-action`  | Present once, holding the `<select>` or radio inputs that choose the action.                                                              |
+| The Copy prompt button                  | `data-copy-prompt`  | Present once.                                                                                                                             |
+| The Save button                         | `data-save`         | Present once; downloads `<page-id>-r<N>-feedback.md`.                                                                                     |
+| The Reset all button (`decide`)         | `data-reset-all`    | Present once; asks with `confirm()` before it clears.                                                                                     |
+| Each item's reset button (`decide`)     | `data-reset`        | Inside its item; clears only that item.                                                                                                   |
 | The depth toggle of a `both` item       | `data-depth-toggle` | Exactly one per `both` item, on the control that reveals the detailed layer; none elsewhere.                                              |
 | The visual a comment is about           | `data-visual`       | Optional. Without it, the grader takes the largest `svg`, `img`, `canvas`, `video` or `iframe` in the comment's Option, else in its item. |
 
@@ -165,10 +171,14 @@ Everything else on the page is yours to shape.
 
 When Node and Playwright are available, run `node scripts/grade.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. The grader proves mechanics, not taste: whether the page looks right and explains well is left to human review and, when evaluating this skill, to the checklist judge. Then run the [verification](references/verification.md) checks the grader cannot make.
 
-Open the page with the platform's opener. Print its absolute path, its mode, the feedback destination and how to continue.
+Open the page with the platform's opener, then print:
 
-_Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and knows how their feedback comes back.
+- the page's absolute path and its mode;
+- the feedback filename, `<page-id>-r<N>-feedback.md`, or the caller's destination;
+- how to continue: after Save, say "saved feedback"; after Copy prompt, paste the prompt into this or any agent session.
 
-## Manual evaluation
+_Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and those three lines.
 
-Only when evaluating or improving this skill, follow [manual evaluation](references/manual-evaluation.md).
+## Evaluation
+
+Only when evaluating or improving this skill, follow [evals](evals/README.md).
