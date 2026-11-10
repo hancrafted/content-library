@@ -62,7 +62,7 @@
         border: 1px solid var(--line);
         border-radius: 8px;
       }
-      .visual {
+      section[data-item] > svg {
         position: sticky;
         top: 0;
         z-index: 1;
@@ -144,18 +144,16 @@
             flowchart LR
               Client --> Cache --> Service
           </script>
-          <div class="visual">
-            <svg viewBox="0 0 360 60" role="img" aria-label="Client to cache to service">
-              <rect x="2" y="15" width="90" height="30" />
-              <text x="20" y="35">Client</text>
-              <line x1="92" y1="30" x2="135" y2="30" />
-              <rect x="135" y="15" width="90" height="30" />
-              <text x="155" y="35">Cache</text>
-              <line x1="225" y1="30" x2="268" y2="30" />
-              <rect x="268" y="15" width="90" height="30" />
-              <text x="282" y="35">Service</text>
-            </svg>
-          </div>
+          <svg viewBox="0 0 360 60" role="img" aria-label="Client to cache to service">
+            <rect x="2" y="15" width="90" height="30" />
+            <text x="20" y="35">Client</text>
+            <line x1="92" y1="30" x2="135" y2="30" />
+            <rect x="135" y="15" width="90" height="30" />
+            <text x="155" y="35">Cache</text>
+            <line x1="225" y1="30" x2="268" y2="30" />
+            <rect x="268" y="15" width="90" height="30" />
+            <text x="282" y="35">Service</text>
+          </svg>
           <p class="label">Evidence: the service answers in 800 ms at p95 (load test, 2026-10-02).</p>
           <div class="options">
             <article data-option="memory" data-recommended="true">

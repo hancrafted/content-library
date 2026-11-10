@@ -7,6 +7,10 @@ description: Turn decisions into one standalone HTML decision page that a person
 
 A **decision page** is one standalone HTML file. In mode `decide` a person decides open decisions from it with confidence; in mode `explain` a reader understands decisions already made. Every item leads with its decision, and each visual serves that decision. You write the page and stop there: the caller owns what happens next, including implementing what the page proposes.
 
+## When the caller owns the frame
+
+When the caller owns both the frame (the page, its layout and controls) and the feedback (its format, rounds and approval), write content only: the items, their Options and visuals, built by steps 1 to 3 in the caller's markup and at the fidelity it names, handed back where it says. The caller's frame takes the place of steps 4 to 7.
+
 ## 1. Gather the inputs
 
 The caller supplies the domain. Take each input from the caller first:
@@ -72,6 +76,17 @@ Each item has a depth, set per item like its rung. The simple view alone clears 
 
 Without caller input, propose `both` for an item whose references or technical detail stand behind a simple decision, and `simple` otherwise. Only `both` items carry a depth toggle, and each carries exactly one.
 
+### Diagrams and motion
+
+Keep each Mermaid diagram's source word for word in `<script type="text/x-mermaid" data-diagram="<name>">`, so it can be copied into documentation, and render it beside the script, in the same parent element:
+
+- **With a browser tool**, pre-render the source to inline SVG while you build the page.
+- **Without one**, load Mermaid from jsDelivr at an exact version, show the source as text until it renders, and mark `<html data-offline="partial">`.
+
+[Diagrams](references/diagrams.md) gives both procedures.
+
+Animate with CSS transitions and the Web Animations API, and honour `prefers-reduced-motion`. Inline a library only when the caller names it, such as a motion library's core at the caller's pinned version; the Mermaid fallback is the one exception.
+
 ### Confidence bar
 
 An item is finished when a reader can answer from the page alone:
@@ -108,9 +123,17 @@ _Done when_ every item's visual stays at least half in view beside its comment f
 - Above the Next action, a **Before you approve** block asks open questions through lenses the items may have missed, such as security, operations, information architecture and accessibility. The answers are the reviewer's to give, so the page asks and stops.
 - The Next action offers only the allowed Next actions, preset by the [feedback contract](references/feedback-contract.md).
 
-**`explain`** renders decisions already made, without Options to pick or a Next action.
+**`explain`**
 
-_Done when_ every item carries its mode's controls.
+The reader learns decisions someone else already made, such as a ticket's. The page teaches each decision and leaves it settled.
+
+- Each item gives its decision a visual and at least one concrete example: a scenario, a before and after, or a worked case.
+- An item clears confidence-bar questions 1, 2, 3 and 5. Questions 4 and 6 belong to `decide`: a settled decision has no recommendation, door or effort left to weigh.
+- Responses are the reader's questions, so the page carries no Options, choice inputs or Next action.
+- A **reflection** block asks open questions through general non-functional lenses: systems and critical thinking, information architecture, security for engineers, and UX for audience-facing work. Choose the lenses that fit the audience. Each prompt is a question; the reader writes the answer, so the page shows no agent-written answer, hint or answer key beside it.
+- A **Questions?** block holds a labelled comment field with Copy prompt and Save from the [feedback contract](references/feedback-contract.md). It carries the reader's questions to the agent or the decisions' author.
+
+_Done when_ every item carries its mode's controls, and the page holds its mode's blocks: Before you approve and the Next action in `decide`, reflection and Questions? in `explain`.
 
 ## 6. Hand back the feedback
 
@@ -132,7 +155,8 @@ The page meets the contract below and loads with no network. Inline all CSS and 
 | Each Option, inside its item            | `data-option`       | A stable id, unique in its item.                                                                                                          |
 | Each Option                             | `data-recommended`  | `true` or `false`.                                                                                                                        |
 | Each `<script type="text/x-mermaid">`   | `data-diagram`      | A unique name; the script holds the diagram's source.                                                                                     |
-| The Before you approve block (`decide`) | `data-reflection`   | Present once, above the Next action.                                                                                                      |
+| The Before you approve/reflection block | `data-reflection`   | Present once; in `decide`, above the Next action.                                                                                         |
+| The Questions? block (`explain`)        | `data-questions`    | Present once, holding the editable `<textarea>` for the reader's questions.                                                               |
 | The Next action (`decide`)              | `data-next-action`  | Present once, holding the `<select>` or radio inputs that choose the action.                                                              |
 | The depth toggle of a `both` item       | `data-depth-toggle` | Exactly one per `both` item, on the control that reveals the detailed layer; none elsewhere.                                              |
 | The visual a comment is about           | `data-visual`       | Optional. Without it, the grader takes the largest `svg`, `img`, `canvas`, `video` or `iframe` in the comment's Option, else in its item. |
