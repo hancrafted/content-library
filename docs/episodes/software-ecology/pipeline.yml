@@ -52,7 +52,7 @@
 #       agent       optional; the Claude Code agent type to spawn, general-purpose when omitted
 #       model       the model it runs on, or inherit; SKILL.md's job loop says where it applies
 #       session     optional; subagent (default) or orchestrator, by SKILL.md's job loop
-status: draft
+status: approved
 template: 8cf99b2
 dev_port: 4000
 spec_port: 4001
@@ -82,16 +82,7 @@ jobs:
   - id: categorize-research
     stage: setup
     intent: >-
-      Name one research folder per research question of the Brief, in its
-      order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research
-      categories: pick the category each question belongs to, or, when none
-      fits, add a new category there with its meaning. Number each folder with
-      the next free number of its category, counting every research folder in
-      docs/episodes/*/research/ and docs/llm-wiki/research/*/. When an existing
-      research folder answers the question, reuse its category and number. Write the
-      question's subject, not the Episode, in 20-40 characters of kebab case.
-      Return the names, each beside its question, and any category you added
-      with why no existing one fits.
+      Name one research folder per research question of the Brief, in its order, as `<category>-<####>__<question-slug>` by GLOSSARY.md's Research categories: pick the category each question belongs to, or, when none fits, add a new category there with its meaning. Number each folder with the next free number of its category, counting every research folder in docs/episodes/*/research/ and docs/llm-wiki/research/*/. When an existing research folder answers the question, reuse its category and number. Write the question's subject, not the Episode, in 20-40 characters of kebab case. Return the names, each beside its question, and any category you added with why no existing one fits.
     needs: [brief-grill]
     isolation: worktree
     outputs: []
@@ -120,28 +111,11 @@ jobs:
         references: [references/retrieval.md, docs/episodes/software-ecology/brief.md, docs/llm-wiki/index.md]
         model: inherit
 
-  # Runs `npm run convert-reference` once per file the Brief lists under
-  # References: a script, so no reviewer. A run with no References drops it.
-  - id: convert-references
-    stage: setup
-    needs: [brief-grill]
-    before: [mh-query]
-    outputs: [docs/episodes/software-ecology/reference/*/design-reference.md]
-    checks: [mh, vitest]
-    retries: 1
-    agents:
-      - type: implementor
-        skills: []
-        references: [references/convert-references.md, docs/episodes/software-ecology/brief.md]
-        model: inherit
-        session: orchestrator
-
   # Wants convert-references rather than needing it: a missing conversion tool
   # leaves the design references out instead of blocking the Episode.
   - id: customize-pipeline
     stage: setup
     needs: [retrieval]
-    wants: [convert-references]
     outputs: [docs/episodes/software-ecology/pipeline.yml]
     checks: [vitest]
     retries: 0
@@ -155,40 +129,205 @@ jobs:
           - docs/episodes/software-ecology/research-plan.md
         model: inherit
         session: orchestrator
-
-  # One job per question retrieval lists under Research jobs, new or refresh;
-  # a reused question has none.
-  - id: write-research
+  - id: write-research-software-as-socio-technical-system
     stage: research
-    needs: [customize-pipeline]
+    needs:
+      - customize-pipeline
     isolation: worktree
-    foreach: docs/episodes/software-ecology/research-plan.md#research-jobs
-    before: [mh-query]
-    outputs: [docs/episodes/software-ecology/research/*/research.md]
-    checks: [mh, vitest, sources]
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/software-ecology/research/SWE-0001__software-as-socio-technical-system/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
     retries: 2
     agents:
       - type: implementor
-        skills: [research, writing-for-agents]
+        skills:
+          - research
+          - writing-for-agents
         references:
-          [
-            references/write-research.md,
-            docs/episodes/software-ecology/brief.md,
-            docs/episodes/software-ecology/research-plan.md,
-          ]
+          - references/write-research.md
+          - docs/episodes/software-ecology/brief.md
+          - docs/episodes/software-ecology/research-plan.md
         model: sonnet
       - type: reviewer
         skills: []
-        references: [references/write-research.md]
+        references:
+          - references/write-research.md
         rubric: references/write-research.md#rubric
         model: opus
+    intent: 'Research question 1 of the Brief: "Why does the software ecology video (https://www.youtube.com/watch?v=2n41YjR5QfU) treat software as a socio-technical ecosystem?" Write docs/episodes/software-ecology/research/SWE-0001__software-as-socio-technical-system/research.md. Answer it by parsing the video''s transcript in Claude Code (Han''s instruction), not by web research alone.'
+  - id: write-research-ai-shifts-bottleneck-to-spec-and-review
+    stage: research
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/software-ecology/research/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/software-ecology/brief.md
+          - docs/episodes/software-ecology/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+    intent: 'Research question 2 of the Brief: "Why does AI-assisted execution move the bottleneck to specification and review?" Write docs/episodes/software-ecology/research/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md. Cite docs/episodes/ai-gives-you-more-work/research/AIE-0015__ai-users-execute-instead-of-manage/research.md and docs/llm-wiki/research/LLM/LLM-0019__ai-productivity-ceiling-per-level/research.md as partial Sources.'
+  - id: write-research-product-roles-shift-to-spec-and-review
+    stage: research
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/software-ecology/research/AIE-0019__product-roles-shift-to-spec-and-review/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/software-ecology/brief.md
+          - docs/episodes/software-ecology/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+    intent: 'Research question 3 of the Brief: "Why does AI-assisted execution shift work to specifying and reviewing on the product side: sales, product management and business analysis?" Write docs/episodes/software-ecology/research/AIE-0019__product-roles-shift-to-spec-and-review/research.md. The answer feeds the card cells of those roles in the Explorable.'
+  - id: write-research-software-roles-shift-to-spec-and-review
+    stage: research
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/software-ecology/research/AIE-0020__software-roles-shift-to-spec-and-review/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/software-ecology/brief.md
+          - docs/episodes/software-ecology/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+    intent: 'Research question 4 of the Brief: "Why does AI-assisted execution shift work to specifying and reviewing on the software side: engineering, documentation, operations, billing and support?" Write docs/episodes/software-ecology/research/AIE-0020__software-roles-shift-to-spec-and-review/research.md. The answer feeds the card cells of those roles in the Explorable.'
+  - id: write-research-unclear-requirements-cause-rework
+    stage: research
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/software-ecology/research/SWE-0002__unclear-requirements-cause-rework/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/software-ecology/brief.md
+          - docs/episodes/software-ecology/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+    intent: 'Research question 5 of the Brief: "Why do unclear requirements lead to rework and failed projects?" Write docs/episodes/software-ecology/research/SWE-0002__unclear-requirements-cause-rework/research.md. Cite docs/llm-wiki/research/AIE/AIE-0008__written-requirements-reduce-variance/research.md as a partial Source.'
+  - id: write-research-context-rot-from-muddy-context
+    stage: research
+    needs:
+      - customize-pipeline
+    isolation: worktree
+    before:
+      - mh-query
+    outputs:
+      - docs/episodes/software-ecology/research/LLM-0022__context-rot-from-muddy-context/research.md
+    checks:
+      - mh
+      - vitest
+      - sources
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - research
+          - writing-for-agents
+        references:
+          - references/write-research.md
+          - docs/episodes/software-ecology/brief.md
+          - docs/episodes/software-ecology/research-plan.md
+        model: sonnet
+      - type: reviewer
+        skills: []
+        references:
+          - references/write-research.md
+        rubric: references/write-research.md#rubric
+        model: opus
+    intent: 'Research question 6 of the Brief: "Why does a model''s output get worse when its context is muddy (context rot)?" Write docs/episodes/software-ecology/research/LLM-0022__context-rot-from-muddy-context/research.md. Cite docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md as a partial Source; it covers length, not distractors and contradictions.'
 
   # Wants the research rather than needing it: a blocked question leaves a
   # gap the Dossier works around, instead of blocking the Episode.
   - id: write-dossier
     stage: dossier
     needs: [customize-pipeline]
-    wants: [write-research]
+    wants:
+      - write-research-software-as-socio-technical-system
+      - write-research-ai-shifts-bottleneck-to-spec-and-review
+      - write-research-product-roles-shift-to-spec-and-review
+      - write-research-software-roles-shift-to-spec-and-review
+      - write-research-unclear-requirements-cause-rework
+      - write-research-context-rot-from-muddy-context
     before: [mh-query]
     outputs: [docs/episodes/software-ecology/dossier.md]
     checks: [mh, vitest]
@@ -200,15 +339,26 @@ jobs:
           - references/write-dossier.md
           - docs/episodes/software-ecology/brief.md
           - docs/episodes/software-ecology/research-plan.md
-          - docs/episodes/software-ecology/research/*/research.md
-          - docs/episodes/software-ecology/reference/*/design-reference.md
           - docs/profile/storytelling-guide.md
           - docs/profile/tone-guide.md
           - docs/profile/mental-model-guide.md
+          - docs/episodes/software-ecology/research/SWE-0001__software-as-socio-technical-system/research.md
+          - docs/episodes/software-ecology/research/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md
+          - docs/episodes/software-ecology/research/AIE-0019__product-roles-shift-to-spec-and-review/research.md
+          - docs/episodes/software-ecology/research/AIE-0020__software-roles-shift-to-spec-and-review/research.md
+          - docs/episodes/software-ecology/research/SWE-0002__unclear-requirements-cause-rework/research.md
+          - docs/episodes/software-ecology/research/LLM-0022__context-rot-from-muddy-context/research.md
+          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/features/explorables/software-ecology.md
         model: inherit
       - type: reviewer
         skills: []
-        references: [references/write-dossier.md, docs/episodes/software-ecology/brief.md]
+        references:
+          [
+            references/write-dossier.md,
+            docs/episodes/software-ecology/brief.md,
+            docs/features/explorables/software-ecology.md,
+          ]
         rubric: references/write-dossier.md#rubric
         model: opus
 
@@ -271,7 +421,9 @@ jobs:
           - docs/design/slide-library.md
           - docs/design/design-guide.md
           - docs/design/design-system.md
-          - docs/episodes/software-ecology/reference/*/design-reference.md
+          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/features/explorables/software-ecology.md
+          - docs/features/explorables/README.md
         model: opus
         session: orchestrator
       - type: reviewer
@@ -284,7 +436,9 @@ jobs:
           - docs/episodes/software-ecology/dossier.md
           - docs/design/slide-library.md
           - docs/design/design-guide.md
-          - docs/episodes/software-ecology/reference/*/design-reference.md
+          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/features/explorables/software-ecology.md
+          - docs/features/explorables/README.md
         rubric: references/write-spec.md#rubric
         model: opus
 
@@ -307,6 +461,7 @@ jobs:
           - references/skill-overrides.md
           - docs/episodes/software-ecology/brief.md
           - docs/episodes/software-ecology/spec/spec.html
+          - docs/features/explorables/README.md
         model: opus
       - type: reviewer
         skills: [code-review, vercel-react-best-practices]
@@ -314,32 +469,44 @@ jobs:
           - references/implement-episode-init.md
           - references/skill-overrides.md
           - docs/episodes/software-ecology/spec/spec.html
+          - docs/features/explorables/README.md
         rubric: references/implement-episode-init.md#rubric
         model: opus
         session: orchestrator
-
-  # One job per Section, the h3s under the Brief's Slides, in parallel: each
-  # builds its Slides at its own placement marker.
-  - id: implement-section
+  - id: implement-section-play
     stage: build
-    needs: [implement-episode-init]
+    needs:
+      - implement-episode-init
     isolation: worktree
-    foreach: docs/episodes/software-ecology/brief.md#slides
     outputs: []
-    checks: [verify, build, test:build, impeccable, visual-check]
-    retries: 2
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 3
     agents:
       - type: implementor
-        skills: [tdd, visual-check, vercel-react-best-practices, web-design-guidelines, commit]
+        skills:
+          - to-spec
+          - to-tickets
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
         agent: archgate:developer
         references:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/software-ecology/spec/spec.html
-          - docs/episodes/software-ecology/reference/*/design-reference.md
+          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/features/explorables/software-ecology.md
+          - docs/features/explorables/README.md
+          - .archgate/adrs/FE-012-explorables.md
+          - docs/features/explorables/human-in-the-loop.md
         model: opus
-      # code-review spawns its own subagents, so the reviewer runs in the
-      # orchestrator's session; its subagents give the fresh eyes.
       - type: reviewer
         skills:
           - code-review
@@ -352,14 +519,72 @@ jobs:
           - references/implement-section.md
           - references/skill-overrides.md
           - docs/episodes/software-ecology/spec/spec.html
-          - docs/episodes/software-ecology/reference/*/design-reference.md
+          - docs/adr/0024-software-ecology-flow-model-and-use-case-files.md
+          - docs/features/explorables/software-ecology.md
+          - docs/features/explorables/README.md
+          - .archgate/adrs/FE-012-explorables.md
+          - docs/features/explorables/human-in-the-loop.md
         rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
+    intent: 'Build Section 1 of the Brief, "Play": the Play slide holding the whole software ecology Explorable (src/explorables/software-ecology/) with its toolbar, to its picked Spec Option. Han chose (architecture grill Q22) that this Section builds the Explorable itself inside the Run, the feature way: /to-spec from the design-ADR, the feature guide and the picked Option, then /to-tickets, then /tdd per ticket, in this job''s worktree. The design-ADR binds the model, the use-case files and the rendering.'
+    port: 4002
+  - id: implement-section-why-how-and-what
+    stage: build
+    needs:
+      - implement-episode-init
+    isolation: worktree
+    outputs: []
+    checks:
+      - verify
+      - build
+      - test:build
+      - impeccable
+      - visual-check
+    retries: 2
+    agents:
+      - type: implementor
+        skills:
+          - tdd
+          - visual-check
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - commit
+        agent: archgate:developer
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/software-ecology/spec/spec.html
+          - docs/features/explorables/software-ecology.md
+          - docs/features/explorables/README.md
+        model: opus
+      - type: reviewer
+        skills:
+          - code-review
+          - visual-check
+          - ui-ux-pro-max:ui-ux-pro-max
+          - vercel-react-best-practices
+          - web-design-guidelines
+          - performance-optimization
+        references:
+          - references/implement-section.md
+          - references/skill-overrides.md
+          - docs/episodes/software-ecology/spec/spec.html
+          - docs/features/explorables/software-ecology.md
+          - docs/features/explorables/README.md
+        rubric: references/implement-section.md#rubric
+        model: opus
+        session: orchestrator
+    intent: 'Build Section 2 of the Brief, "Why, how and what": one text Slide in three columns (Why · How · What) with a still of the Explorable in each, to its picked Spec Option. It wants implement-section-play for the stills; with that job blocked, use the Spec''s mocks.'
+    port: 4003
+    wants:
+      - implement-section-play
 
   - id: open-pr
     stage: pr
-    needs: [implement-section]
+    needs:
+      - implement-section-play
+      - implement-section-why-how-and-what
     outputs: []
     checks: []
     retries: 0
