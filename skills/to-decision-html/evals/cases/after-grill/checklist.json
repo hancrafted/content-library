@@ -1,0 +1,36 @@
+{
+  "about": "Case items for the after-grill page, judged yes or no on top of the confidence bar. Each quote comes from grill.md.",
+  "items": [
+    {
+      "id": "seven-changes",
+      "question": "Does the page cover all seven requested changes (card grid columns, contact address, copyright year, the November 4 Event and intro title, the Overview Tag and its artwork, removing the start button, renaming the workflow Tag), each as its own decision or clearly named inside one?",
+      "source": { "file": "grill.md", "quote": "Does this capture your intent?" }
+    },
+    {
+      "id": "settled-answers",
+      "question": "Is every answer the grill settled (one column on phones and two below 1920px, the build-time year, Overview as a lead Tag rather than a Format, the stored ID renamed to agentic-workflow, the AXEL Event unchanged, Agentic workflow kept as a secondary Tag) shown as the agreed or recommended choice, and never contradicted?",
+      "source": { "file": "grill.md", "quote": "Q3: 1\nQ4: 1\nQ5: 1" }
+    },
+    {
+      "id": "overview-meaning",
+      "question": "Does the page keep the new Overview Tag apart from overview as the name of a listing page?",
+      "source": {
+        "file": "grill.md",
+        "quote": "The glossary will need to distinguish the new **Overview** Tag from an Overview listing page."
+      }
+    },
+    {
+      "id": "test-seams",
+      "question": "Does the page ask Han to confirm the three proposed test seams (content store and filters, rendered pages, visual inspection), naming what each one does not catch?",
+      "source": { "file": "grill.md", "quote": "Are these seams acceptable?" }
+    },
+    {
+      "id": "grid-widths",
+      "question": "Does the card-grid item show the grid at a phone width, at 1512px and at 1920px, with one, two and three columns?",
+      "source": {
+        "file": "grill.md",
+        "quote": "Card grids use one column on phones, two up to 1919px, and three from 1920px."
+      }
+    }
+  ]
+}

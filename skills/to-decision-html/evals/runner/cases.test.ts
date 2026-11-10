@@ -2,7 +2,7 @@ import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { CASES, hashProblems, loadCase, readManifest } from './cases.ts';
+import { answerKeyProblems, CASES, hashProblems, loadCase, readManifest } from './cases.ts';
 
 const HASH_OF_FROZEN = '9c45da1b799a603c167323bd7ed4f52034ec28ea5e04373045a9c11f1ddc5446';
 
@@ -14,6 +14,43 @@ describe('frozen eval cases', () => {
 
       // ACT
       const problems = cases.flatMap((entry) => hashProblems(CASES, entry.hashes));
+
+      // ASSERT
+      expect(problems).toEqual([]);
+    });
+
+    it('gives each new case its mode, prompt, attachments and frozen calibration answers', () => {
+      // ARRANGE
+      const expected = [
+        {
+          id: 'after-grill',
+          mode: 'decide',
+          prompt: 'after-grill/prompt.md',
+          inputs: ['after-grill/grill.md', 'after-grill/calibration.md'],
+        },
+        {
+          id: 'ticket',
+          mode: 'explain',
+          prompt: 'ticket/prompt.md',
+          inputs: ['ticket/issue.md', 'ticket/calibration.md'],
+        },
+      ];
+
+      // ACT
+      const loaded = ['after-grill', 'ticket']
+        .map(loadCase)
+        .map(({ id, mode, prompt, inputs }) => ({ id, mode, prompt, inputs }));
+
+      // ASSERT
+      expect(loaded).toEqual(expected);
+    });
+
+    it("freezes every answer key on a quote from the case's own inputs", () => {
+      // ARRANGE
+      const { cases } = readManifest();
+
+      // ACT
+      const problems = cases.flatMap((entry) => answerKeyProblems(entry));
 
       // ASSERT
       expect(problems).toEqual([]);
@@ -51,15 +88,37 @@ describe('frozen eval cases', () => {
       expect(problems).toEqual(expected);
     });
 
-    it('refuses a case without frozen calibration answers', () => {
+    it("names an answer key whose quote is not in the case's inputs", () => {
       // ARRANGE
-      const expected = 'case "episode" has no mode or calibration answers, so it cannot run headless';
+      const dir = mkdtempSync(path.join(tmpdir(), 'eval-case-'));
+      writeFileSync(path.join(dir, 'issue.md'), 'A failed write is caught.\n');
+      writeFileSync(
+        path.join(dir, 'probe.json'),
+        JSON.stringify({
+          questions: [{ id: 'failed-write', source: { file: 'issue.md', quote: 'The page retries.' } }],
+        }),
+      );
+      writeFileSync(
+        path.join(dir, 'checklist.json'),
+        JSON.stringify({ items: [{ id: 'leak', source: { file: 'notes.md', quote: 'x' } }] }),
+      );
+      const entry = {
+        id: 'demo',
+        prompt: 'prompt.md',
+        attachments: ['issue.md'],
+        checklist: 'checklist.json',
+        probe: 'probe.json',
+      };
+      const expected = [
+        'checklist.json leak quotes notes.md, which is not an input of case "demo"',
+        'probe.json failed-write quotes text that issue.md does not hold',
+      ];
 
       // ACT
-      const load = () => loadCase('episode');
+      const problems = answerKeyProblems(entry, dir);
 
       // ASSERT
-      expect(load).toThrow(expected);
+      expect(problems).toEqual(expected);
     });
   });
 
@@ -78,7 +137,7 @@ describe('frozen eval cases', () => {
 
     it('refuses a case the manifest does not list', () => {
       // ARRANGE
-      const expected = 'no eval case "nope"; cases: ink, episode';
+      const expected = 'no eval case "nope"; cases: ink, after-grill, ticket';
 
       // ACT
       const load = () => loadCase('nope');

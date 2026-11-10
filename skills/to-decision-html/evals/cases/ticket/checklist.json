@@ -1,0 +1,34 @@
+{
+  "about": "Case items for the ticket page, judged yes or no on top of the confidence bar. Each quote comes from issue.md.",
+  "items": [
+    {
+      "id": "every-decision",
+      "question": "Does the page explain each decision of the issue: one progress key with one entry per Workflow at human-in-the-loop/<id>; a hash of the English and German files together; resuming after a reload, on another Episode or in the other language; a fresh run and a Download old progress or Discard note when the hash differs, with the old entry kept until the viewer chooses; a failed write caught and the viewer told to download; storage only through the prefs storage module?",
+      "source": {
+        "file": "issue.md",
+        "quote": "A viewer's run is saved under the one progress key, one entry per Workflow (`human-in-the-loop/<id>`), with a hash of the English and German files together."
+      }
+    },
+    {
+      "id": "stale-scenario",
+      "question": "Does the page walk through a stored entry whose hash differs as a concrete scenario or before and after, from the changed Workflow files to the note and the viewer's two choices?",
+      "source": {
+        "file": "issue.md",
+        "quote": "When the stored hash differs, a fresh run starts and a note offers \"Download old progress\" or \"Discard\"; the old entry stays until the viewer chooses."
+      }
+    },
+    {
+      "id": "unknowns",
+      "question": "Does the page mark as unknown what the issue leaves undefined, such as what a run holds, the hash function, and what the referenced issues and the State Management ADR say, rather than filling it in?",
+      "source": {
+        "file": "issue.md",
+        "quote": "Storage goes only through the prefs storage module (State Management ADR, amended on #371)."
+      }
+    },
+    {
+      "id": "criteria-mapped",
+      "question": "Does the page tie each acceptance criterion to the decision it proves?",
+      "source": { "file": "issue.md", "quote": "## Acceptance criteria" }
+    }
+  ]
+}

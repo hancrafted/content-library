@@ -1,0 +1,83 @@
+{
+  "about": "Reader-probe questions for the ticket page. Each key and quote comes from issue.md; `answer` lists every correct choice.",
+  "questions": [
+    {
+      "id": "storage-key",
+      "question": "Where is a viewer's run stored?",
+      "choices": {
+        "a": "Under one progress key, as one entry per Workflow, human-in-the-loop/<id>",
+        "b": "Under its own storage key per Workflow",
+        "c": "Under one key per language",
+        "d": "On the server, per viewer"
+      },
+      "answer": ["a"],
+      "source": {
+        "file": "issue.md",
+        "quote": "A viewer's run is saved under the one progress key, one entry per Workflow (`human-in-the-loop/<id>`)"
+      }
+    },
+    {
+      "id": "pair-hash",
+      "question": "What does the stored hash cover?",
+      "choices": {
+        "a": "The English Workflow file only",
+        "b": "The file in the language being viewed",
+        "c": "The English and German files together",
+        "d": "The viewer's run"
+      },
+      "answer": ["c"],
+      "source": { "file": "issue.md", "quote": "with a hash of the English and German files together" }
+    },
+    {
+      "id": "resume",
+      "question": "Which of these resume the viewer's run rather than starting a fresh one?",
+      "choices": {
+        "a": "Reloading the page",
+        "b": "Opening another Episode",
+        "c": "Switching to the other language",
+        "d": "An edit to the Workflow's files"
+      },
+      "answer": ["a", "b", "c"],
+      "source": { "file": "issue.md", "quote": "A reload, another Episode or the other language resumes the run." }
+    },
+    {
+      "id": "stale-entry",
+      "question": "When the stored hash differs, what happens to the old entry?",
+      "choices": {
+        "a": "It is deleted at once",
+        "b": "It stays until the viewer chooses Download old progress or Discard",
+        "c": "It is migrated into the fresh run",
+        "d": "It is kept forever"
+      },
+      "answer": ["b"],
+      "source": { "file": "issue.md", "quote": "the old entry stays until the viewer chooses" }
+    },
+    {
+      "id": "failed-write",
+      "question": "What happens when saving the run fails?",
+      "choices": {
+        "a": "The page retries silently",
+        "b": "The run is lost without notice",
+        "c": "The failure is caught and the viewer is told to download their progress",
+        "d": "The page reloads"
+      },
+      "answer": ["c"],
+      "source": {
+        "file": "issue.md",
+        "quote": "A failed write is caught and the viewer is told to download their progress."
+      }
+    },
+    {
+      "id": "storage-access",
+      "question": "Which code reads and writes the stored progress?",
+      "choices": {
+        "a": "Any component that needs it",
+        "b": "Only the prefs storage module",
+        "c": "Only the run model",
+        "d": "The archgate check"
+      },
+      "answer": ["b"],
+      "source": { "file": "issue.md", "quote": "Storage goes only through the prefs storage module" }
+    }
+  ]
+}

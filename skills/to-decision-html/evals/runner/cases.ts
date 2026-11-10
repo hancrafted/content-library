@@ -13,6 +13,9 @@ interface ManifestCase {
   readonly prompt: string;
   readonly attachments: readonly string[];
   readonly calibration?: string;
+  /** The judge's case items and the reader probe's answer key; graders read them, a run never sees them. */
+  readonly checklist?: string;
+  readonly probe?: string;
   readonly hashes: Readonly<Record<string, string>>;
 }
 
@@ -50,4 +53,38 @@ export function loadCase(id: string): EvalCase {
   if (mode === undefined || calibration === undefined)
     throw new Error(`case "${id}" has no mode or calibration answers, so it cannot run headless`);
   return { id, evalId: index + 1, mode, prompt, inputs: [...attachments, calibration], hashes };
+}
+
+/** Where a checklist item or probe answer comes from: a file beside it and a verbatim quote of that file. */
+interface Sourced {
+  readonly id: string;
+  readonly source: { readonly file: string; readonly quote: string };
+}
+
+const squash = (text: string) => text.replace(/\s+/g, ' ').trim();
+
+/**
+ * One problem per checklist item or probe question whose quote is not in one of the case's attachments: an answer
+ * key comes from the frozen input both arms received, never from calibration answers, a page or memory.
+ */
+export function answerKeyProblems(
+  entry: Pick<ManifestCase, 'id' | 'attachments' | 'checklist' | 'probe'>,
+  dir: string = CASES,
+): string[] {
+  const keyed = [
+    [entry.checklist, 'items'],
+    [entry.probe, 'questions'],
+  ] as const;
+  return keyed.flatMap(([file, list]) => {
+    if (file === undefined) return [];
+    const sourced = (JSON.parse(readFileSync(path.join(dir, file), 'utf8')) as Record<string, Sourced[]>)[list];
+    return sourced.flatMap(({ id, source }) => {
+      const input = path.join(path.dirname(file), source.file);
+      const name = path.basename(file);
+      if (!entry.attachments.includes(input))
+        return [`${name} ${id} quotes ${source.file}, which is not an input of case "${entry.id}"`];
+      const text = squash(readFileSync(path.join(dir, input), 'utf8'));
+      return text.includes(squash(source.quote)) ? [] : [`${name} ${id} quotes text that ${source.file} does not hold`];
+    });
+  });
 }

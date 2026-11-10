@@ -10,7 +10,8 @@ docs/episodes/*/research/
 skills/linkedin-author-post/examples
 # Frozen evaluation sources retain the original bytes.
 skills/to-decision-html/evals/cases/ink/source.md
-skills/to-decision-html/evals/cases/episode/input.md
+skills/to-decision-html/evals/cases/after-grill/grill.md
+skills/to-decision-html/evals/cases/ticket/issue.md
 .vitest
 .claude/settings.local.json
 .next
