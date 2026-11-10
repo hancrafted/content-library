@@ -2,7 +2,7 @@
 
 ## Frozen inputs
 
-Use the [ink handoff](../assets/evals/ink/prompt.md) and [Episode Brief](../assets/evals/episode/prompt.md). Each case has a frozen input, source provenance and hashes in [the manifest](../assets/evals/manifest.json). These are development cases, not a held-out benchmark.
+Use the [ink handoff](../evals/cases/ink/prompt.md) and [Episode Brief](../evals/cases/episode/prompt.md). Each case has a frozen input, source provenance and hashes in [the manifest](../evals/cases/manifest.json). These are development cases, not a held-out benchmark.
 
 Keep the task text and attachments byte-identical across arms. Supply only the selected skill variant and that case's listed input files as task material. Ordinary tool/safety instructions still apply, but live repository content, later decision pages, implementations and previous feedback are not input references. If the agent needs more information, it must expose that gap rather than fetch changing material.
 

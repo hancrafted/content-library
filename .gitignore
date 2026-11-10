@@ -21,6 +21,9 @@ next-env.d.ts
 # Private profile documents; the shared voice guides sit one level up in docs/profile/.
 docs/profile/han/
 
+# to-decision-html eval runs: transcripts, pages, grading and the benchmark viewer.
+skills/to-decision-html/evals/workspace/
+
 # Per-feature handoffs and agent scratch work (see AGENTS.md).
 .scratch/
 
