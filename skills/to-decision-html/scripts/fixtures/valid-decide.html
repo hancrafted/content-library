@@ -1,0 +1,191 @@
+<!doctype html>
+<!-- Grader fixture: a correct decide page. Every broken fixture in broken/ is this page with one defect. -->
+<html lang="en" data-page-id="cache-layer" data-revision="1" data-mode="decide">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cache layer: decision page</title>
+    <style>
+      :root {
+        --bg: #fbfaf7;
+        --surface: #ffffff;
+        --text: #1d1c1a;
+        --muted: #55524c;
+        --line: #d9d5cc;
+        --accent: #1f5fae;
+        --focus: #b3470e;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #161513;
+          --surface: #201f1c;
+          --text: #f1eee8;
+          --muted: #b9b4aa;
+          --line: #3a3833;
+          --accent: #8db8ef;
+          --focus: #f0a46c;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font:
+          16px/1.5 system-ui,
+          sans-serif;
+      }
+      header {
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--line);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 32px;
+        padding: 24px 32px;
+      }
+      nav {
+        position: sticky;
+        top: 16px;
+        align-self: start;
+      }
+      section[data-item] {
+        margin-bottom: 40px;
+        padding: 24px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+      article[data-option] {
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+      }
+      article[data-recommended='true'] {
+        border-color: var(--accent);
+      }
+      .label {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      textarea,
+      select {
+        width: 100%;
+        font: inherit;
+        color: inherit;
+        background: var(--bg);
+        border: 1px solid var(--line);
+      }
+      :focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 2px;
+      }
+      svg {
+        max-width: 100%;
+        height: auto;
+      }
+      svg text {
+        fill: var(--text);
+      }
+      svg rect,
+      svg line {
+        stroke: var(--text);
+        fill: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Cache layer</h1>
+      <p>Decide where cached responses live. Mode: decide. Revision 1.</p>
+    </header>
+    <div class="layout">
+      <nav aria-label="Items">
+        <ol>
+          <li><a href="#item-store">1. Cache store</a></li>
+          <li><a href="#item-expiry">2. Expiry</a></li>
+          <li><a href="#approve">Before you approve</a></li>
+        </ol>
+      </nav>
+      <main>
+        <section id="item-store" data-item="store" data-fidelity="diagram" data-depth="simple">
+          <h2>1. Where should cached responses live?</h2>
+          <p>Door: one-way. Effort: medium. Rung: diagram, enough because the decision is about data flow, not UI.</p>
+          <script type="text/x-mermaid" data-diagram="store-flow">
+            flowchart LR
+              Client --> Cache --> Service
+          </script>
+          <svg viewBox="0 0 360 60" role="img" aria-label="Client to cache to service">
+            <rect x="2" y="15" width="90" height="30" />
+            <text x="20" y="35">Client</text>
+            <line x1="92" y1="30" x2="135" y2="30" />
+            <rect x="135" y="15" width="90" height="30" />
+            <text x="155" y="35">Cache</text>
+            <line x1="225" y1="30" x2="268" y2="30" />
+            <rect x="268" y="15" width="90" height="30" />
+            <text x="282" y="35">Service</text>
+          </svg>
+          <p class="label">Evidence: the service answers in 800 ms at p95 (load test, 2026-10-02).</p>
+          <div class="options">
+            <article data-option="memory" data-recommended="true">
+              <h3>A. In process memory (recommended)</h3>
+              <p>What changes for you: no new service to run; caches reset on deploy.</p>
+              <p>Why recommended: the evidence shows one instance, so a shared store buys nothing yet.</p>
+              <label><input type="radio" name="store" value="memory" /> Pick A</label>
+              <label for="c-store-memory">Comment on A</label>
+              <textarea id="c-store-memory"></textarea>
+            </article>
+            <article data-option="redis" data-recommended="false">
+              <h3>B. Shared Redis</h3>
+              <p>What changes for you: one more service to operate; caches survive deploys.</p>
+              <label><input type="radio" name="store" value="redis" /> Pick B</label>
+              <label for="c-store-redis">Comment on B</label>
+              <textarea id="c-store-redis"></textarea>
+            </article>
+          </div>
+          <label for="c-store">Comment on this item</label>
+          <textarea id="c-store"></textarea>
+        </section>
+        <section id="item-expiry" data-item="expiry" data-fidelity="wireframe" data-depth="simple">
+          <h2>2. Should entries expire after five minutes?</h2>
+          <p>Door: two-way. Effort: small. Rung: wireframe, enough to see the setting's place.</p>
+          <p class="label">Agent proposal: five minutes matches the upstream data refresh. Unknown: peak traffic.</p>
+          <fieldset>
+            <legend>Expire after five minutes?</legend>
+            <label><input type="radio" name="expiry" value="yes" /> Yes</label>
+            <label><input type="radio" name="expiry" value="no" /> No</label>
+          </fieldset>
+          <label for="c-expiry">Comment on this item</label>
+          <textarea id="c-expiry"></textarea>
+        </section>
+        <section id="approve" aria-labelledby="approve-title">
+          <div data-reflection>
+            <h2 id="approve-title">Before you approve</h2>
+            <ul>
+              <li>What happens to users when the cache serves stale data?</li>
+              <li>Who notices first if the cache stops working?</li>
+            </ul>
+          </div>
+          <div data-next-action>
+            <label for="next-action">Next action</label>
+            <select id="next-action">
+              <option value="approve" selected>Approve and implement</option>
+              <option value="revise">Revise the page</option>
+            </select>
+            <label for="next-text">Instructions</label>
+            <textarea id="next-text">(recommended by agent) Implement option A test-first.</textarea>
+          </div>
+          <p>Files explored: <code>service/handler.ts</code>, <code>docs/load-test.md</code>.</p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

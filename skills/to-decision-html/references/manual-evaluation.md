@@ -4,9 +4,9 @@
 
 Use the [ink handoff](../assets/evals/ink/prompt.md) and [Episode Brief](../assets/evals/episode/prompt.md). Each case has a frozen input, source provenance and hashes in [the manifest](../assets/evals/manifest.json). These are development cases, not a held-out benchmark.
 
-Keep the task text and attachments byte-identical across arms. Supply only the selected skill variant and that case's listed input files as task material. Ordinary tool/safety instructions still apply, but live repository content, later Specs, implementations and previous feedback are not input references. If the agent needs more information, it must expose that gap rather than fetch changing material.
+Keep the task text and attachments byte-identical across arms. Supply only the selected skill variant and that case's listed input files as task material. Ordinary tool/safety instructions still apply, but live repository content, later decision pages, implementations and previous feedback are not input references. If the agent needs more information, it must expose that gap rather than fetch changing material.
 
-The ink handoff is a labelled reconstruction at a pre-prototype cutoff; its raw user statements are provenance, not extra model input. The Episode input is the original approved Brief, not a later Dossier or Spec. Its research questions remain questions: this case evaluates visual specification, not commissioned research or unsupported historical claims.
+The ink handoff is a labelled reconstruction at a pre-prototype cutoff; its raw user statements are provenance, not extra model input. The Episode input is the original approved Brief, not a later Dossier or Episode Spec. Its research questions remain questions: this case evaluates the decision page, not commissioned research or unsupported historical claims.
 
 ## Arms
 
@@ -15,11 +15,11 @@ Keep the canonical skill untouched while preparing copies outside installed-skil
 For the first comparison:
 
 - **Reference:** the complete skill.
-- **Ablated:** delete only the entire `## Workspace proposal` section from `SKILL.md`, up to the next H2. Everything else, including the simultaneous-review requirement, stays identical.
+- **Ablated:** in `SKILL.md`'s layout step, delete only the two sentences starting "One arrangement that works" and "Choose another arrangement". Everything else, including the requirement that the visual stays in view while commenting, stays identical.
 
 Record the skill version/hash, exact variant diff, input hashes, model, declared generation settings, clarifications and artifact locations. If clarification is needed, freeze the answer and supply the same answer to the other arm; otherwise flag that comparison as confounded.
 
-The invocation is outside the frozen task text: explicitly load the selected variant, then supply the case's `prompt.md`. Each run receives its own Spec identity and absolute feedback destination, for example `/absolute/eval-workspace/<round>/<arm>/<case>/feedback-01.md`. Record these operational substitutions; they are not content changes to the task. Save the rendered HTML before feeding feedback back into generation.
+The invocation is outside the frozen task text: explicitly load the selected variant, then supply the case's `prompt.md`. Each run receives its own page identity and absolute feedback destination, for example `/absolute/eval-workspace/<round>/<arm>/<case>/feedback-01.md`. Record these operational substitutions; they are not content changes to the task. Save the rendered HTML before feeding feedback back into generation.
 
 Use the same approved checks for both arms and both cases. Evaluate the original generated artifacts, not just versions repaired through feedback. You may compare them in alternating order and hide arm names while recording human judgment; preserve the mapping separately.
 

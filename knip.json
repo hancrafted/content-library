@@ -4,7 +4,9 @@
     ".archgate/adrs/*.rules.ts",
     "src/page-assembly/i18n-request.ts",
     "skills/*/scripts/*.pure.ts",
-    "skills/{new-episode,episode-promote,author-hitl-workflow}/scripts/*.ts"
+    "skills/{new-episode,episode-promote,author-hitl-workflow}/scripts/*.ts",
+    "skills/to-decision-html/scripts/{grade,prove}.ts",
+    "skills/to-decision-html/scripts/checks/*.ts"
   ],
   "project": ["src/**/*.{ts,tsx,css}", "*.ts", "*.mjs", ".archgate/**/*.ts", "tools/**/*.ts"],
   "ignoreExportsUsedInFile": true,
