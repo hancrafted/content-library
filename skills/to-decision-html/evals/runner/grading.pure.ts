@@ -1,7 +1,7 @@
 // Builds a run's grading.json in skill-creator's shape (references/schemas.md in the skill-creator skill): one
 // expectation per grader result, then the summary and execution metrics skill-creator's aggregation reads. Each
 // grader contributes expectations; the run's grading.json concatenates them, mechanical first.
-import type { Check } from '../../scripts/grader/check.ts';
+import type { Check, Mode } from '../../scripts/grader/check.ts';
 import type { Report } from '../../scripts/grader/report.pure.ts';
 import type { ToolCall } from './transcript.pure.ts';
 
@@ -49,14 +49,13 @@ export function ungradedReport(checks: readonly { id: string; summary: string }[
 /** A check as the registry gives it; `modes` omitted means it applies to every page. */
 type ModeScope = Pick<Check, 'id' | 'modes'>;
 
-const appliesTo = (mode: string, { modes }: ModeScope): boolean =>
-  modes === undefined || (modes as readonly string[]).includes(mode);
+const appliesTo = (mode: Mode, { modes }: ModeScope): boolean => modes === undefined || modes.includes(mode);
 
 /**
  * One expectation per check that applies to the case's mode; the others are left out, so both arms of a case are
  * graded on the same checks. A check skipped although it applies means the page declared another mode, and fails.
  */
-export function mechanicalExpectations(report: Report, caseMode: string, checks: readonly ModeScope[]): Expectation[] {
+export function mechanicalExpectations(report: Report, caseMode: Mode, checks: readonly ModeScope[]): Expectation[] {
   const applying = new Set(checks.filter((check) => appliesTo(caseMode, check)).map((check) => check.id));
   return report.checks
     .filter(({ id }) => applying.has(id))

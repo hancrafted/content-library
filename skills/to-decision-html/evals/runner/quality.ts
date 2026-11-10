@@ -5,11 +5,11 @@ import type { Browser } from '@playwright/test';
 import { copyFileSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import type { Mode } from '../../scripts/grader/check.ts';
 import { qualityKeys, type QualityKeys } from './cases.ts';
 import type { Expectation, JudgeRecord } from './grading.pure.ts';
 import {
   checklistFor,
-  failAll,
   judgeExpectations,
   judgePrompt,
   judgeSchema,
@@ -19,6 +19,7 @@ import {
 import type { CliChoice, Reply } from './model-cli.pure.ts';
 import { ask, judgeCli, type Question } from './model-cli.ts';
 import { probeExpectations, probePrompt, probeSchema, type ReaderAnswer } from './probe.pure.ts';
+import { failAll } from './quality.pure.ts';
 import { captureViews, type Views } from './views.ts';
 
 const PROMPTS = path.resolve(import.meta.dirname, '../judge');
@@ -36,7 +37,7 @@ export interface QualityTarget {
   readonly browser: Browser;
   readonly page: string | undefined;
   readonly runDir: string;
-  readonly record: { readonly case: string; readonly mode: string };
+  readonly record: { readonly case: string; readonly mode: Mode };
 }
 
 /** A model's reply, or why there is none; both null when the question was never asked. */

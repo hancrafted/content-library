@@ -23,8 +23,8 @@ It needs the `claude` CLI logged in, the repo's Playwright Chromium, Python 3.10
 To regrade saved runs after a grader changed, without rerunning any agent:
 
 ```sh
-node evals/grade.ts evals/workspace/iteration-N        # every run, then a fresh benchmark and viewer
-node evals/grade.ts evals/workspace/iteration-N/eval-ink/with_skill/run-1   # one run; prints its grading.json
+node evals/regrade.ts evals/workspace/iteration-N        # every run, then a fresh benchmark and viewer
+node evals/regrade.ts evals/workspace/iteration-N/eval-ink/with_skill/run-1   # one run; prints its grading.json
 ```
 
 ## What a run sees

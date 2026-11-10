@@ -1,16 +1,11 @@
-// `node scripts/grade.ts <page.html>`: grades one decision page against every check in checks/ at 1440 and
+// `node scripts/grade-page.ts <page.html>`: grades one decision page against every check in checks/ at 1440 and
 // 1024 px with networking blocked. Prints the report as JSON; exits 0 when every check passes or skips, 1 when
 // one fails, 2 when the page cannot be graded.
-import { existsSync } from 'node:fs';
+import { onePath } from './grader/cli.ts';
 import { loadChecks } from './grader/registry.ts';
 import { gradeFile, launch } from './grader/run.ts';
 
-const [file, ...extra] = process.argv.slice(2);
-if (file === undefined || extra.length > 0 || !existsSync(file)) {
-  console.error('usage: node scripts/grade.ts <page.html>');
-  process.exit(2);
-}
-
+const file = onePath('node scripts/grade-page.ts <page.html>');
 const browser = await launch();
 try {
   const report = await gradeFile(browser, await loadChecks(), file);

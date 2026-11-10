@@ -1,5 +1,6 @@
 // The grader's JSON: one result per check, problems merged across viewport widths, and the rule that decides
 // whether a fixture proves what its name claims.
+import type { Mode } from './check.ts';
 import { checkOfFixture } from './fixtures.pure.ts';
 
 export type Status = 'pass' | 'fail' | 'skip';
@@ -19,7 +20,8 @@ export interface CheckResult {
 
 export interface Report {
   readonly page: string;
-  readonly mode: string | null;
+  /** The mode the page declared; null when it declared none it may. */
+  readonly mode: Mode | null;
   readonly pass: boolean;
   readonly checks: readonly CheckResult[];
 }
@@ -45,7 +47,7 @@ export function combine({ id, summary }: { id: string; summary: string }, widths
   return { id, summary, status: problems.length === 0 ? 'pass' : 'fail', problems };
 }
 
-export function toReport(page: string, mode: string | null, checks: readonly CheckResult[]): Report {
+export function toReport(page: string, mode: Mode | null, checks: readonly CheckResult[]): Report {
   return { page, mode, pass: checks.every((check) => check.status !== 'fail'), checks };
 }
 

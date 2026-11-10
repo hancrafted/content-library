@@ -169,7 +169,7 @@ The page meets the contract below and loads with no network. Inline all CSS and 
 
 Everything else on the page is yours to shape.
 
-When Node and Playwright are available, run `node scripts/grade.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. The grader proves mechanics, not taste: whether the page looks right and explains well is left to human review and, when evaluating this skill, to the checklist judge. Then run the [verification](references/verification.md) checks the grader cannot make.
+When Node and Playwright are available, run `node scripts/grade-page.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. The grader proves mechanics, not taste: whether the page looks right and explains well is left to human review and, when evaluating this skill, to the checklist judge. Then run the [verification](references/verification.md) checks the grader cannot make.
 
 Open the page with the platform's opener, then print:
 

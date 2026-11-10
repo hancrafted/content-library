@@ -20,7 +20,8 @@ interface Observation {
 }
 
 const INSTANT_MS = 1;
-const SETTLE_MS = 500;
+// A fixed interval, not a wait: motion is change over time, so holding still is measured across it.
+const STILLNESS_MS = 500;
 const REDUCE = 'under prefers-reduced-motion: reduce';
 
 /** Runs in the page: every animation still running after load. */
@@ -59,7 +60,7 @@ const smoothScroll = (): boolean =>
 
 async function moving(page: Page): Promise<boolean> {
   const first = await page.screenshot();
-  await page.waitForTimeout(SETTLE_MS);
+  await page.waitForTimeout(STILLNESS_MS);
   return !first.equals(await page.screenshot());
 }
 

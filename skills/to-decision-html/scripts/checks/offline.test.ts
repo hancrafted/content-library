@@ -72,7 +72,7 @@ describe('offline', () => {
     it('reads partial from the rendered <html>', () => {
       // ARRANGE
       const html = '<html data-offline="partial"><body></body></html>';
-      const loaded = { html, requests: [PINNED], mode: 'decide', width: 1440, page: undefined as never };
+      const loaded = { html, requests: [PINNED], mode: 'decide' as const, width: 1440, page: undefined as never };
       const expected = { partial: true, requests: [PINNED] };
 
       // ACT
