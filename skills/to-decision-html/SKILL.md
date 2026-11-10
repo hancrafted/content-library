@@ -1,60 +1,134 @@
 ---
 name: to-decision-html
-description: Turn documents, tickets or a grilled conversation into a standalone visual HTML decision page with structured human feedback. Use to create a decision page, compare solution Options, or explicitly update an existing decision page, including Episode design and architecture reviews.
+description: Turn decisions into one standalone HTML decision page that a person decides from or understands, and bring their feedback back. Use to let someone pick between Options (decide), to explain decisions already made in a ticket or plan (explain), or to revise a decision page from its feedback.
 ---
 
 # To decision HTML
 
-Make the decision understandable, then make responding easy. The output is one HTML file, not a production implementation or a fixed document template.
+A **decision page** is one standalone HTML file. In mode `decide` a person decides open decisions from it with confidence; in mode `explain` a reader understands decisions already made. Every item leads with its decision, and each visual serves that decision. You write the page and stop there: the caller owns what happens next, including implementing what the page proposes.
 
-## 1. Establish the review
+## 1. Gather the inputs
 
-Read the supplied input and the caller's instructions. Set the audience, decision scope and output location. Resolve the feedback destination to an absolute filesystem path. A workflow supplies its destinations; a generic page revision owns one numbered feedback file by the [feedback contract](references/feedback-contract.md).
+The caller supplies the domain. Take each input from the caller first:
 
-The default role is an **explanatory snapshot**. Only the user or caller can declare an **authoritative Spec**, or a **travelling Spec** that a workflow enriches across Jobs. For an explicit update, read the named HTML and retain its stable identities. The caller owns progression, persistence and approval rules; this skill never starts a Run or implements the reviewed proposal.
+| Input                | What it settles                                                                                             |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Audience             | Who reads the page and what they already know.                                                              |
+| Decisions            | The items: open decisions for `decide`, settled ones for `explain`.                                         |
+| Design guidance      | Styling and design tokens, or compiled CSS to inline.                                                       |
+| Vocabulary           | The domain terms, used exactly as given.                                                                    |
+| Gates                | The approval rules the page keeps.                                                                          |
+| Allowed Next actions | The continuations the reviewer may choose (`decide`).                                                       |
+| Feedback route       | The caller's save helper and format, or the [feedback contract](references/feedback-contract.md)'s default. |
+| Optional             | Mode, motion library, per-item depth and fidelity rung.                                                     |
 
-If a consequential gap blocks useful presentation, ask at most one short round in the repository's grilling format. When no format is supplied, use numbered questions, real alternatives and a recommendation, with "yes" accepting it. Ask about presentation or understanding, not facts you can read. For an analogy, offer three plausible choices when that would help. Then proceed with visible assumptions and unresolved decisions; authority and permission remain unresolved rather than assumed.
+Explore the working folder and any links you are given for evidence. The page lists every file and link you read, so the reader sees what its claims rest on.
 
-_Done when_ the role, audience, paths and unresolved decisions are explicit.
+For a revision of an existing page, read it first: keep its page id and every item and Option id, and raise `data-revision` by one.
 
-## 2. Compose the decisions
+_Done when_ every input is supplied or listed as missing.
 
-Give each review item a visible, numbered ID and a stable machine identity. Numbering may change; identity follows the decision. Distinguish supplied requirements, evidence and agent proposals, preserving source references. Explain technical meaning in plain language; disclose precise details rather than replacing them with an analogy.
+## 2. Calibrate once
 
-Choose the rendering per item using [visual categories](references/visual-categories.md). Show before/after for changes, including fixes. Draw the actual relationships, states or proposed UI; label missing evidence and simulations. True alternatives differ in the decision, not just decoration.
+Skip this step when the caller supplied every input. Otherwise ask one round, only for what is missing, in the repository's grilling format when it has one. Show a table: the page's mode, audience and feedback route, then every item with its depth (`simple`, `detailed` or `both`) and fidelity rung. Propose a value in each cell; "yes" accepts them all.
 
-The common shell is a header with purpose and scope, sticky item navigation and a scrolling review document. Add reviewer tools only where useful: preview width, theme, state or motion controls, for example. Follow supplied/project design guidance; otherwise use a restrained, readable style. Target desktop and landscape tablet, with basic responsiveness.
+Without an answer, proceed, and mark each value you chose as _assumed_ on the page.
 
-While the reviewer types, pastes or dictates feedback, the relevant decision visual must remain visible. Choose a layout that satisfies this at the intended viewport, including tall content and long comments. Viewing an Option and selecting it are separate actions.
+_Done when_ the page has a mode and every item a depth and rung, each confirmed or marked assumed.
 
-_Done when_ every item has an identity and an appropriate visual, with feedback possible while viewing it.
+## 3. Build each item: decision → evidence → rendering
 
-## Workspace proposal
+Order items by consequence, most consequential first. For each item:
 
-Optional guidance, not a requirement: try a centered visual with Option cards in a sticky right-hand rail, containing choices, explanations and comments. Collapse the left navigation to recover width. Use another arrangement when it better preserves simultaneous viewing and feedback.
+1. **Decision.** State it in one sentence, then what changes for the reader: under each Option in `decide`, overall in `explain`.
+2. **Evidence.** Assemble the bundle: examples, visuals, context and references. Label every statement as evidence (with its source), agent proposal or unknown. A research question is not a finding. Explain technical meaning in plain words and keep the precise detail beside it.
+3. **Rendering.** Choose it from the table, at a rung of the fidelity ladder.
 
-## 3. Add review behaviour
+| Decision                 | Rendering that helps a person judge it                                                                                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Software architecture    | Before/after dependency, sequence, UML or ER diagrams; the responsibilities that move and the files affected.               |
+| Information architecture | Before/after folder trees, naming examples, navigation maps or content relationships.                                       |
+| UI or visual design      | Real-content mocks at useful widths, compared at a scale where hierarchy and density can be judged.                         |
+| UX or animation          | Live states and transitions; pointer and keyboard controls, replay, and reduced-motion behaviour where relevant.            |
+| Feature or user story    | A user journey, state diagram or concrete scenario: actors, intended outcome, alternatives and acceptance examples.         |
+| Bug fix                  | Observed against expected behaviour, then the before/after proposal; a reproduced failure told apart from a reconstruction. |
+| Concept or requirement   | A relationship diagram, worked example or process visual; precise detail one step deeper.                                   |
 
-Apply the [feedback contract](references/feedback-contract.md) to the authored HTML. Each item supports the suitable response type: boolean, single choice or multiple choice, initially unanswered. Provide deselection and per-item reset, comments per Option and per item. With two or more Options, mark exactly one recommended and explain why; a recommendation is not a preselected answer. An item without choices or comments is skipped.
+Show before and after for every change, fixes included. The before comes from evidence; when it is unknown, the page says unknown. Graph-shaped relationships get a diagram; when a graph layout hides the point, compose HTML and SVG instead. True alternatives differ in the decision itself. An analogy explains and never proves: give it a show/hide toggle on its item and name where it breaks down.
 
-Where an analogy helps, provide an independent show/hide button on that item and explain its limits. Build the end-of-page handoff by the contract, including its preset **Next action**, save/copy controls and global reset. Explain the selected action's approval consequence.
+### Fidelity ladder
 
-Use ordinary, labelled, editable textareas for comments. Preserve focus and selection through preview/tool changes; accept native insertion, paste and composition events. External dictation supplies text; the page records no audio.
+`diagram` (diagram or sketch) → `wireframe` → `mock` (real-content mock) → `prototype` (interactive). Pick the lowest rung that settles the decision, unless the caller names one. The ladder guides rather than limits. Each item states its rung and why that rung is enough, so the reviewer can ask for a higher one, and a revision may raise it.
 
-Retain browser-local drafts through refresh and explicit HTML updates. Copying, exporting or saving leaves fields and drafts intact. Reconcile changed content by identity, keeping old feedback visible for reconfirmation rather than silently approving a new Option.
+### Confidence bar
 
-_Done when_ every review action, draft recovery and feedback handoff follows the contract, including failure paths.
+An item is finished when a reader can answer from the page alone:
 
-## 4. Deliver and verify
+1. What is the decision, in one sentence?
+2. What changes for me?
+3. Which statements are evidence, which are proposals, which are unknown?
+4. Which Option is recommended, and why? (`decide`)
+5. Is the fidelity enough to judge it?
+6. Is it a one-way or two-way door, and how much effort does it take? (`decide`)
 
-Inline all runtime CSS and JavaScript. CDN tooling may be used during generation, but the delivered page needs no network to render or review; embed required visual assets too. Render diagrams ahead of time or embed their renderer. Review, Copy prompt and Save As run in the browser alone. A travelling Spec uses the caller's existing machinery and file contracts; preserve its Gates and external ownership instead of introducing a second lifecycle.
+_Done when_ every item clears the bar for its mode.
 
-Perform [artifact verification](references/verification.md) against the delivered file, not only isolated previews. Report anything unverified, especially actual external-dictation compatibility and visual taste. Keep check scripts and inspection artifacts outside product code.
+## 4. Lay out the page
 
-Open the standalone file using the local platform's opener. Print its absolute path, role, feedback destination and continuation instructions. An explicit update follows the contract's revision rules; there is no automatic session resumption or background synchronization.
+A header states purpose and scope. Item navigation stays visible while the page scrolls. Build for desktop and landscape tablet with no horizontal scroll.
 
-_Done when_ available mechanical checks pass, blocked checks are named, and the user has the openable artifact plus its feedback destination and continuation.
+While the reviewer types, pastes or dictates a comment, the visual it is about stays in view, even with tall content and long comments. One arrangement that works: the visual centred, with Option cards in a sticky right-hand rail holding choices, explanations and comments, and a collapsible left navigation to win back width. Choose another arrangement when it keeps visual and comment in view together better. Viewing an Option and picking it are separate actions. Add reviewer tools, such as preview width, theme, state or motion controls, where an item needs them.
+
+Follow the caller's design guidance; without it, use a restrained, readable style on design tokens with light and dark themes.
+
+_Done when_ every item's visual and its comment fields can be seen together at both widths.
+
+## 5. Add the mode's controls
+
+**`decide`**
+
+- Each item takes the response that fits it: boolean, single choice or multiple choice. Every response starts unanswered and can be cleared.
+- Every item with Options marks exactly one recommended, with its reason. The reviewer still makes the pick.
+- Each item shows its door (one-way or two-way) and effort.
+- Comments sit on each item and on each Option, unselected Options included.
+- Above the Next action, a **Before you approve** block asks open questions through lenses the items may have missed, such as security, operations, information architecture and accessibility. The answers are the reviewer's to give, so the page asks and stops.
+- The Next action offers only the allowed Next actions, preset by the [feedback contract](references/feedback-contract.md).
+
+**`explain`** renders decisions already made, without Options to pick or a Next action.
+
+_Done when_ every item carries its mode's controls.
+
+## 6. Hand back the feedback
+
+Apply the [feedback contract](references/feedback-contract.md). A caller's own save helper and format take precedence over it.
+
+## 7. Deliver and verify
+
+The page meets the contract below and loads with no network. Inline all CSS and JavaScript, embed every asset, and draw diagrams as inline SVG.
+
+| Where                                   | Attribute          | Values                                                                       |
+| --------------------------------------- | ------------------ | ---------------------------------------------------------------------------- |
+| `<html>`                                | `data-page-id`     | A lowercase slug, stable across revisions.                                   |
+| `<html>`                                | `data-revision`    | A positive integer, starting at 1.                                           |
+| `<html>`                                | `data-mode`        | `decide` or `explain`.                                                       |
+| `<html>`                                | `data-offline`     | `partial`, only while a diagram needs its pinned renderer from the network.  |
+| Each item                               | `data-item`        | A stable id, unique on the page.                                             |
+| Each item                               | `data-fidelity`    | `diagram`, `wireframe`, `mock` or `prototype`.                               |
+| Each item                               | `data-depth`       | `simple`, `detailed` or `both`.                                              |
+| Each Option, inside its item            | `data-option`      | A stable id, unique in its item.                                             |
+| Each Option                             | `data-recommended` | `true` or `false`.                                                           |
+| Each `<script type="text/x-mermaid">`   | `data-diagram`     | A unique name; the script holds the diagram's source.                        |
+| The Before you approve block (`decide`) | `data-reflection`  | Present once, above the Next action.                                         |
+| The Next action (`decide`)              | `data-next-action` | Present once, holding the `<select>` or radio inputs that choose the action. |
+
+Everything else on the page is yours to shape.
+
+When Node and Playwright are available, run `node scripts/grade.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. Then run the [verification](references/verification.md) checks the grader cannot make.
+
+Open the page with the platform's opener. Print its absolute path, its mode, the feedback destination and how to continue.
+
+_Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and knows how their feedback comes back.
 
 ## Manual evaluation
 
-Only when evaluating or improving the skill, follow [manual evaluation](references/manual-evaluation.md). It holds the two frozen inputs, section-ablation procedure and feedback-to-grader loop. Ordinary Spec generation does not load it.
+Only when evaluating or improving this skill, follow [manual evaluation](references/manual-evaluation.md).

@@ -1,6 +1,6 @@
 # Artifact verification
 
-Use the repository's existing browser and inspection tools, or a temporary browser script. No external evaluation framework or product browser suite is required.
+The grader in `SKILL.md`'s deliver step already checks the page contract, offline loading and the mode's controls at 1440 and 1024 px. For everything else, use the repository's browser and inspection tools, or a temporary browser script.
 
 ## Mechanical checks
 
@@ -13,7 +13,7 @@ Check the delivered HTML, with networking disabled, at desktop and landscape-tab
 | Select, deselect and reset                                      | Boolean, single/multiple choice and per-item reset behave as declared; untouched items export as skipped.                                                                                                         |
 | Focus and paste into each comment type                          | Exact multiline text, including quotes and non-ASCII text, appears in the intended field and reaches the exported payload unchanged.                                                                              |
 | Use preview tools while editing                                 | Focus/text are retained; the relevant visual remains visible while commenting, including long content. Measure viewport intersection and inspect whether the useful subject, not merely an edge, remains visible. |
-| Reload with a draft                                             | Choices and item/Option comments survive; other Specs and evaluation arms do not inherit them.                                                                                                                    |
+| Reload with a draft                                             | Choices and item/Option comments survive; other decision pages and evaluation arms do not inherit them.                                                                                                           |
 | Replace the HTML with a changed revision and refresh            | Unchanged responses restore; changed/removed responses remain accessible and flagged; changed choices and overall approval require reconfirmation.                                                                |
 | Copy/export/save, including a rejected clipboard/save operation | Fields and draft remain intact. Success messages reflect the actual result; fallback text is available on failure.                                                                                                |
 | Export all response states                                      | The prompt names the exact revision and destination, preserves every comment and carries caller and human next actions separately.                                                                                |
