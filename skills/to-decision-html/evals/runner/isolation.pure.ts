@@ -33,6 +33,15 @@ const WRITING_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
 /** A heredoc's body is file content, not paths the command touches; its opening line stays. */
 const HEREDOC = /<<-?\s*(['"]?)(\w+)\1([^\n]*)\n[\s\S]*?\n[ \t]*\2[ \t]*(?=\n|$)/g;
 
+/**
+ * An inline script handed to an interpreter: `python3 -c "…"`, `node -e '…'`. Its body is program text, not shell, so
+ * a `;` or `open(` inside it says nothing about a program; each path it names is a `use`.
+ */
+const INLINE_SCRIPT = /(?<=\s)(?:-c|-e|--eval)\s+(["'])([\s\S]*?)\1/g;
+
+/** Stands in for an inline script while the shell around it is parsed; its index names the script. */
+const SCRIPT_MARK = /^@@script(\d+)@@$/;
+
 /** A redirection and its target: `>`, `>>`, `2>`, `&>` write it, `<` reads it. */
 const REDIRECT = /(?:\d|&)?(>>?|<)\s*(['"]?)([^\s'"<>|;&()`]+)\2/g;
 
@@ -85,15 +94,28 @@ function redirections(segment: string): { touches: { token: string; access: Acce
   return { touches, rest: segment.replace(REDIRECT, ' ') };
 }
 
+/** The path tokens an inline script names, each a `use`. */
+const scriptTouches = (body: string, from: string): Touch[] =>
+  body
+    .split(/[\s'"=<>()`,;[\]{}]+/)
+    .filter(isPathToken)
+    .map((token) => ({ token, from, access: 'use' }));
+
 /** Path tokens in order, each resolved from the folder the command's `cd`s have reached by then. */
 function commandTouches(command: string, start: string): Touch[] {
   const touches: Touch[] = [];
+  const scripts: string[] = [];
+  const shell = command
+    .replace(HEREDOC, '$3')
+    .replace(INLINE_SCRIPT, (_match, _quote, body: string) => ` @@script${scripts.push(body) - 1}@@ `);
   let from = start;
-  for (const segment of command.replace(HEREDOC, '$3').split(/&&|\|\||[;|\n]/)) {
+  for (const segment of shell.split(/&&|\|\||[;|\n]/)) {
     const { touches: redirected, rest } = redirections(segment);
     for (const touch of redirected) touches.push({ ...touch, from });
     const tokens = rest.split(/[\s'"=<>()`]+/).filter(Boolean);
     tokens.forEach((token, index) => {
+      const script = SCRIPT_MARK.exec(token);
+      if (script !== null) touches.push(...scriptTouches(scripts[Number(script[1])], from));
       if (isPathToken(token)) touches.push({ token, from, access: accessOf(tokens, index) });
       if (tokens[index - 1] === 'cd' && !token.startsWith('~')) from = path.posix.resolve(from, token);
     });

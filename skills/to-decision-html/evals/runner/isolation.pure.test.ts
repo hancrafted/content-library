@@ -82,6 +82,24 @@ describe('isolation', () => {
       // ASSERT
       expect(problems).toEqual([]);
     });
+
+    it('counts a temp path an inline -c or -e script names as its own, in the same command and after it', () => {
+      // ARRANGE
+      const command = [
+        'python3 -I -c "',
+        "import re;s=open('ink.html').read();open('/tmp/ink-check.js','w').write(s)\" && node --check /tmp/ink-check.js",
+      ].join('\n');
+      const tools = [
+        { name: 'Bash', input: { command } },
+        { name: 'Bash', input: { command: 'cat /tmp/ink-check.js' } },
+      ];
+
+      // ACT
+      const problems = isolationProblems(tools, roots);
+
+      // ASSERT
+      expect(problems).toEqual([]);
+    });
   });
 
   describe('failure cases', () => {
@@ -144,6 +162,20 @@ describe('isolation', () => {
         `Read reads ${TEMP}/decision-eval-2/ink.html, in the temp folder but not written by the run`,
         'Bash reads /tmp/claude-501, in the temp folder but not written by the run',
       ];
+
+      // ACT
+      const problems = isolationProblems(tools, roots);
+
+      // ASSERT
+      expect(problems).toEqual(expected);
+    });
+
+    it('fails a path outside the workspace that an inline script names', () => {
+      // ARRANGE
+      const tools = [
+        { name: 'Bash', input: { command: `python3 -c "print(open('/Users/someone/notes.md').read())"` } },
+      ];
+      const expected = ['Bash reads /Users/someone/notes.md, outside the run workspace and the system and tool paths'];
 
       // ACT
       const problems = isolationProblems(tools, roots);
