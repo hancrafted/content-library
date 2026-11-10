@@ -14,11 +14,11 @@ sources:
     resource: https://243608892.fs1.hubspotusercontent-na2.net/hubfs/243608892/AI_Engineering_Impact_Report_July_2025_Faros_AI.pdf
     title: 'Faros AI, What data from 10,000 developers reveals about impact, barriers, and the path forward'
   - id: 3
-    resource: https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report
-    title: 'Harvey and DeBellis (Google Cloud DORA), Announcing the 2025 DORA Report'
+    resource: https://services.google.com/fh/files/misc/2025_state_of_ai_assisted_software_development.pdf
+    title: 'DORA (Google Cloud), State of AI-assisted Software Development 2025'
   - id: 4
-    resource: https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report
-    title: 'Google Cloud DORA, Announcing the 2024 Accelerate State of DevOps Report'
+    resource: https://dora.dev/research/2024/dora-report/2024-dora-accelerate-state-of-devops-report.pdf
+    title: 'DORA (Google Cloud), 2024 Accelerate State of DevOps Report'
   - id: 5
     resource: https://arxiv.org/abs/2507.09089
     title: 'Becker, Rush, Barnes and Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity'
@@ -35,7 +35,7 @@ Asked to support the claim that AI pressure in a software organization moves fro
 
 ## Answer
 
-Where AI takes over execution (code, text, replies), output rises faster than the capacity to check it, so the work reappears downstream as review, stability and rework. Engineering shows it most clearly: more pull requests, larger ones, and much longer review, with no gain at company level. The root is older than AI: the hard part of software is specifying what to build, not writing it down, so a faster writer sends more unspecified work to the same reviewers. For documentation, operations and support the evidence is partial, and for billing there is none.
+Where AI takes over execution (code, text, replies), the volume of change grows, and the work reappears downstream as review and stability problems. Engineering shows it most clearly, but the evidence is disputed: vendor telemetry from Faros AI finds more and larger pull requests and about 91% longer review with no company-level gain [2], while the DORA 2024 survey finds AI adoption associated with 3.1% faster code review and 1.5% lower delivery throughput [4], and DORA 2025 finds throughput now rising with instability still rising [3]. DORA names the common cause as organizational: AI amplifies the clarity of workflows and alignment of teams that already exist [3]. That the saved effort moves into specifying work, because specifying was always the hard part [1], is an inference from Brooks and these studies; no Finding measures specification effort rising. For documentation, operations and support the evidence is partial, and for billing there is none.
 
 ## Findings
 
@@ -44,15 +44,17 @@ Where AI takes over execution (code, text, replies), output rises faster than th
 3. On the same teams, average pull request size grew by 154% and bugs per developer by 9% [2].
 4. Despite these team-level changes, no significant correlation appeared between AI adoption and company-level delivery measures (the four DORA metrics) [2].
 5. AI adoption has a positive relationship with software delivery throughput in 2025, yet continues to have a negative relationship with delivery stability [3].
-6. DORA's stated mechanism is that AI accelerates development but exposes weaknesses downstream: without strong automated testing, version control and fast feedback loops, more change volume leads to instability, which falls on operations [3].
-7. DORA reports that AI "doesn't fix a team; it amplifies what's already there," and that the largest return comes from the clarity of workflows and the alignment of teams [3].
+6. DORA reads this as systems not yet evolved to manage AI-accelerated development safely: "AI-assisted coding can increase the volume and velocity of changes, which can also lead to more instability" [3].
+7. DORA calls AI "an amplifier" that magnifies the strengths of high-performing organizations and the dysfunctions of struggling ones, and says the greatest returns come from the clarity of workflows and the alignment of teams; without that foundation, AI creates "localized pockets of productivity that are often lost to downstream chaos" [3].
 8. For documentation, a 25% rise in AI adoption was associated with a 7.5% rise in documentation quality, and with a 3.1% rise in code review speed, in the 2024 survey [4].
-9. The same 2024 report associated AI adoption with a 1.5% fall in delivery throughput and a 7.2% fall in delivery stability, and concluded that AI does not remove the need for small batches and robust testing [4].
+9. The same 2024 report associated AI adoption with a 1.5% fall in delivery throughput and a 7.2% fall in delivery stability, and hypothesized, without testing it, that larger changelists explain the drop; it concluded that improving development does not automatically improve delivery without small batch sizes and robust testing [4].
 10. In a randomized trial of 16 experienced open-source developers on 246 tasks, allowing AI increased completion time by 19%, while the developers believed it saved 20% [5].
 11. In customer support, an AI assistant raised issues resolved per hour by 14% on average across 5,179 agents, and by 34% for the least experienced, with minimal impact on the most experienced [6].
 
 ## Caveats
 
+- The shift toward specifying is an inference. Brooks [1] predates AI, and no Finding shows specification effort rising in engineering or any other role; the Answer's link from more output to more specification and review rests on findings 1 to 3. "Rework" is likewise not measured: DORA 2024 only hypothesizes larger changes [4].
+- Faros [2] and DORA 2024 [4] disagree on review and throughput; findings 2 and 8 are both reported, and neither study settles the sign.
 - Billing has no source. Nothing found measures AI's effect on billing or invoicing work; any card text for billing is an inference from the general pattern (findings 5 and 6) and needs a human or a further research job.
 - Documentation and operations rest on survey associations (DORA), not controlled trials; the DORA relationships are associative, not causal. The 2024 and 2025 reports disagree on throughput, so the throughput sign is unstable.
 - Faros AI is a vendor reporting its own telemetry, and its correlations are weak (ρ = 0.08 for review time); read it as direction, not magnitude.
@@ -62,7 +64,7 @@ Where AI takes over execution (code, text, replies), output rises faster than th
 
 [1]: <https://worrydream.com/refs/Brooks_1986_-_No_Silver_Bullet.pdf> "Brooks, No Silver Bullet: Essence and Accident in Software Engineering"
 [2]: <https://243608892.fs1.hubspotusercontent-na2.net/hubfs/243608892/AI_Engineering_Impact_Report_July_2025_Faros_AI.pdf> "Faros AI, What data from 10,000 developers reveals about impact, barriers, and the path forward"
-[3]: <https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report> "Harvey and DeBellis (Google Cloud DORA), Announcing the 2025 DORA Report"
-[4]: <https://cloud.google.com/blog/products/devops-sre/announcing-the-2024-dora-report> "Google Cloud DORA, Announcing the 2024 Accelerate State of DevOps Report"
+[3]: <https://services.google.com/fh/files/misc/2025_state_of_ai_assisted_software_development.pdf> "DORA (Google Cloud), State of AI-assisted Software Development 2025"
+[4]: <https://dora.dev/research/2024/dora-report/2024-dora-accelerate-state-of-devops-report.pdf> "DORA (Google Cloud), 2024 Accelerate State of DevOps Report"
 [5]: <https://arxiv.org/abs/2507.09089> "Becker, Rush, Barnes and Rein, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity"
 [6]: <https://www.nber.org/papers/w31161> "Brynjolfsson, Li and Raymond, Generative AI at Work"
