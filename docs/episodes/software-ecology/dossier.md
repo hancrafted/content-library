@@ -15,10 +15,10 @@ brief: ./brief.md
 
 #### Voice script
 
-1. **You know this cartoon** — The tire swing: ten panels, every role hears something different. Not a story about a bad actor, a story about a system.
+1. **You know this cartoon** — The tire swing: ten panels, every role hears something different. You all know it. Nobody in it is a bad actor; it is a game of telephone, where an intent nobody voiced well gets translated at every handoff. That is a story about a system. And with AI, the wrong swing gets built ten times faster.
 2. **Now you run it** — Hand over to the viewer. Start on the swing, then walk the steps, switch AI on and turn the dials.
 
-### Play {#play}
+### Play {#explorable}
 
 #### Visual
 
@@ -62,13 +62,13 @@ At the tap, the right-hand customer shows what came out and how many: the tire s
 3. **Clean water first** — Actionable 3. Drop the water clarity and watch sludge travel to every node after it. Write the requirement so someone new could act on it.
 4. **Hand over the verdict** — At the tap, which swing comes out? Which node in your own team looks like that valve?
 
-## Why, how and what {#why-how-and-what}
+## Why, how and what {#about}
 
 #### Voice script
 
 1. **Why you may leave it** — Hand over from playing to explaining. One slide: why it matters, how to use it, what it shows.
 
-### Why, how and what {#why-how-and-what}
+### Why, how and what {#why-how-what}
 
 #### Visual
 
@@ -93,7 +93,7 @@ Three columns, stacked Why-first on a phone, each with a still from the Explorab
 
 #### Voice script
 
-1. **Why: the problem is the system** — Every unclear requirement was always expensive. AI pumps execution faster, so the pressure moves to specification and review and spreads to neighbours.
+1. **Why: the problem is the system** — Every unclear requirement was always expensive. AI pumps execution faster, and in review we already see the pressure land and spread to the neighbours. I infer that the effort moves into specifying too, because that was always the hard part; nobody has measured that yet.
 2. **Clean water lowers it** — Clear requirements are the clean water. The pump moves whatever you feed it.
 3. **How: play it** — Steps, use cases, the two dials, a click on any node.
 4. **What: one shape everywhere** — Every node specifies, executes and reviews, on a human and a technical side. AI takes the execution; review stays narrow.
