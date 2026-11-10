@@ -18,8 +18,8 @@ verified:
 
 #### Voice script
 
-1. **You know this cartoon** — The tire swing: ten panels, every role hears something different. You all know it. Nobody in it is a bad actor; it is a game of telephone, where an intent nobody voiced well gets translated at every handoff. That is a story about a system. And with AI, the wrong swing gets built ten times faster.
-2. **Now you run it** — Hand over to the viewer. Start on the swing, then walk the steps, switch AI on and turn the dials.
+1. **You know this cartoon** — You all know this cartoon. Ten panels, and in every one a different role hears something different, so the swing that comes out is nothing like the one the customer wanted. Nobody in it is a bad actor: it is a game of telephone, where an intent nobody voiced well gets translated at every handoff, which means the fault sits in the system. With AI, the wrong swing gets built ten times faster.
+2. **Now you run it** — Don't take my word for it, run it yourself. Start on the swing, step through Roles and Pipeline, then switch AI on and watch where the water goes.
 
 ### Play {#explorable}
 
@@ -60,16 +60,16 @@ At the tap, the right-hand customer shows what came out and how many: the tire s
 
 #### Voice script
 
-1. **Map your team** — Actionable 1. Read the graph as your own team: nodes and handoffs. Find the narrowest review step, the valve.
-2. **Check the valve before the pump** — Actionable 2. Switch AI on at one node. Does the review step after it handle more? Watch the neighbours, not only the node.
-3. **Clean water first** — Actionable 3. Drop the water clarity and watch sludge travel to every node after it. Write the requirement so someone new could act on it.
-4. **Hand over the verdict** — At the tap, which swing comes out? Which node in your own team looks like that valve?
+1. **Map your team** — Look at the graph as if it were your own team, where every node is a role and every pipe is a handoff. Find the narrowest review step, the valve, because that is where the pressure will gather first.
+2. **Check the valve before the pump** — Now switch AI on at one node. The pump got stronger, but the valve after it did not, so ask whether that review step can handle more. Watch the neighbours as well as the node, because the pressure does not stay where you put the pump.
+3. **Clean water first** — Now drop the water clarity. Muddy requirements leave sediment, and the pump carries that sediment to every node after it, faster than before. So write the requirement clearly enough that someone new could act on it, which is the one step that lowers the pressure instead of moving it.
+4. **Hand over the verdict** — Look at the tap. Which swing came out, the one the customer wanted or a wrong one? And in your own team, which node looks like that valve?
 
 ## Why, how and what {#about}
 
 #### Voice script
 
-1. **Why you may leave it** — Hand over from playing to explaining. One slide: why it matters, how to use it, what it shows.
+1. **Why you may leave it** — If you played it, you already have the picture, so this is the short version. One slide covers why it matters, how to use it and what it shows.
 
 ### Why, how and what {#why-how-what}
 
@@ -96,11 +96,11 @@ Three columns, stacked Why-first on a phone, each with a still from the Explorab
 
 #### Voice script
 
-1. **Why: the problem is the system** — Every unclear requirement was always expensive. AI pumps execution faster, and in review we already see the pressure land and spread to the neighbours. I infer that the effort moves into specifying too, because that was always the hard part; nobody has measured that yet.
-2. **Clean water lowers it** — Clear requirements are the clean water. The pump moves whatever you feed it.
-3. **How: play it** — Steps, use cases, the two dials, a click on any node.
-4. **What: one shape everywhere** — Every node specifies, executes and reviews, on a human and a technical side. AI takes the execution; review stays narrow.
-5. **Take it back to Monday** — Map your team, check the review step, write the requirement.
+1. **Why: the problem is the system** — Unclear requirements were always expensive, and nobody in the chain was to blame for that. AI pumps execution faster, so the pressure lands in review and spreads to the neighbours. This next part is my hypothesis: the effort moves into specifying too, because that was always the hard part, and nobody has measured it yet.
+2. **Clean water lowers it** — Clear requirements are the clean water. The pump moves whatever you feed it, so feed it something worth moving.
+3. **How: play it** — Four steps, a few use cases and two dials, and a click on any node opens its card. Play with the dials until the valve backs up.
+4. **What: one shape everywhere** — Every node specifies, executes and reviews, each on a human side and a technical side. AI speeds up the execution. Review stays narrow, so that is where the pressure builds.
+5. **Take it back to Monday** — Map your team, check the review step before you speed anything up, and write the requirement for someone new. If you own that process, where will the pressure land first?
 
 ## Material left out
 
