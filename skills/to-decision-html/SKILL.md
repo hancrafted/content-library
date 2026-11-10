@@ -163,6 +163,6 @@ Open the page with the platform's opener, then print:
 
 _Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and those three lines.
 
-## Manual evaluation
+## Evaluation
 
-Only when evaluating or improving this skill, follow [manual evaluation](references/manual-evaluation.md).
+Only when evaluating or improving this skill, follow [evals](evals/README.md).

@@ -1,0 +1,165 @@
+import { describe, expect, it } from 'vitest';
+import type { Report } from '../../scripts/grader/report.pure.ts';
+import { gradingOf, isolationExpectation, mechanicalExpectations, ungradedReport } from './grading.pure.ts';
+
+const report = (mode: string | null, statuses: Record<string, 'pass' | 'fail' | 'skip'>): Report => ({
+  page: '/runs/ink/page.html',
+  mode,
+  pass: !Object.values(statuses).includes('fail'),
+  checks: Object.entries(statuses).map(([id, status]) => ({
+    id,
+    summary: `${id} holds.`,
+    status,
+    problems: status === 'fail' ? [`${id} is broken`, 'at 1024px: it overflows'] : [],
+  })),
+});
+
+/** The checks as the registry gives them: decide-controls and explain-controls each apply to one mode. */
+const CHECKS = [
+  { id: 'offline' },
+  { id: 'page-attributes' },
+  { id: 'decide-controls', modes: ['decide'] as const },
+  { id: 'explain-controls', modes: ['explain'] as const },
+];
+
+describe('grading', () => {
+  describe('success cases', () => {
+    it('turns each check into an expectation with its evidence', () => {
+      // ARRANGE
+      const graded = report('decide', { offline: 'pass', 'page-attributes': 'fail' });
+      const expected = [
+        { text: 'mechanical offline: offline holds.', passed: true, evidence: 'passes at every graded width' },
+        {
+          text: 'mechanical page-attributes: page-attributes holds.',
+          passed: false,
+          evidence: 'page-attributes is broken; at 1024px: it overflows',
+        },
+      ];
+
+      // ACT
+      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
+
+      // ASSERT
+      expect(expectations).toEqual(expected);
+    });
+
+    it('summarises the expectations and the run in skill-creator grading.json shape', () => {
+      // ARRANGE
+      const expectations = [
+        { text: 'a', passed: true, evidence: 'ok' },
+        { text: 'b', passed: false, evidence: 'no' },
+        { text: 'c', passed: true, evidence: 'ok' },
+      ];
+      const tools = [
+        { name: 'Read', input: {} },
+        { name: 'Write', input: {} },
+        { name: 'Read', input: {} },
+      ];
+      const expected = {
+        expectations,
+        summary: { passed: 2, failed: 1, total: 3, pass_rate: 0.6667 },
+        execution_metrics: {
+          tool_calls: { Read: 2, Write: 1 },
+          total_tool_calls: 3,
+          errors_encountered: 0,
+          output_chars: 5120,
+        },
+        user_notes_summary: { uncertainties: [], needs_review: ['two pages; graded page.html'], workarounds: [] },
+      };
+
+      // ACT
+      const grading = gradingOf({
+        expectations,
+        tools,
+        outputChars: 5120,
+        error: null,
+        notes: ['two pages; graded page.html'],
+      });
+
+      // ASSERT
+      expect(grading).toEqual(expected);
+    });
+  });
+
+  describe('failure cases', () => {
+    it('fails a check skipped because the page declared another mode than the case', () => {
+      // ARRANGE
+      const graded = report(null, { 'decide-controls': 'skip' });
+      const expected = [
+        {
+          text: 'mechanical decide-controls: decide-controls holds.',
+          passed: false,
+          evidence: 'skipped: the page declares mode none, the case expects decide',
+        },
+      ];
+
+      // ACT
+      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
+
+      // ASSERT
+      expect(expectations).toEqual(expected);
+    });
+
+    it('fails isolation with every path that left the workspace', () => {
+      // ARRANGE
+      const problems = ['Read touches /a, outside the run workspace', 'Bash touches .., outside the run workspace'];
+      const expected = {
+        text: 'isolation: no tool path outside the run workspace',
+        passed: false,
+        evidence: 'Read touches /a, outside the run workspace; Bash touches .., outside the run workspace',
+      };
+
+      // ACT
+      const expectation = isolationExpectation(problems);
+
+      // ASSERT
+      expect(expectation).toEqual(expected);
+    });
+
+    it('fails every check when there is no page to grade, and counts the run error', () => {
+      // ARRANGE
+      const checks = [{ id: 'offline', summary: 'Offline.' }];
+      const reason = 'the run wrote no .html page';
+      const expected = [{ text: 'mechanical offline: Offline.', passed: false, evidence: reason }];
+
+      // ACT
+      const expectations = mechanicalExpectations(ungradedReport(checks, reason), 'decide', checks);
+      const grading = gradingOf({ expectations, tools: [], outputChars: 0, error: 'timed out', notes: [] });
+
+      // ASSERT
+      expect(expectations).toEqual(expected);
+      expect(grading.execution_metrics.errors_encountered).toBe(1);
+    });
+  });
+
+  describe('edge cases', () => {
+    it("leaves out a check that does not apply to the case's mode, whatever the page declares", () => {
+      // ARRANGE
+      const graded = report(null, { offline: 'pass', 'explain-controls': 'skip' });
+      const expected = [
+        { text: 'mechanical offline: offline holds.', passed: true, evidence: 'passes at every graded width' },
+      ];
+
+      // ACT
+      const expectations = mechanicalExpectations(graded, 'decide', CHECKS);
+
+      // ASSERT
+      expect(expectations).toEqual(expected);
+    });
+
+    it('passes isolation when no path left the workspace', () => {
+      // ARRANGE
+      const expected = {
+        text: 'isolation: no tool path outside the run workspace',
+        passed: true,
+        evidence: 'every tool path stays in the run workspace',
+      };
+
+      // ACT
+      const expectation = isolationExpectation([]);
+
+      // ASSERT
+      expect(expectation).toEqual(expected);
+    });
+  });
+});

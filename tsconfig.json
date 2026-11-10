@@ -29,6 +29,7 @@
     "skills/worktree",
     "skills/visual-check",
     "skills/to-decision-html/scripts",
+    "skills/to-decision-html/evals",
     "tools",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
