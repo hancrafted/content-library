@@ -26,6 +26,7 @@ describe('checklist judge', () => {
         'bar fidelity',
         'bar fidelity-named',
         'bar door-effort',
+        'bar open-reflection',
         'case three-approaches',
       ];
 
@@ -38,7 +39,14 @@ describe('checklist judge', () => {
 
     it('asks an explain page only the bar questions for settled decisions', () => {
       // ARRANGE
-      const expected = ['bar decision', 'bar consequence', 'bar labels', 'bar fidelity', 'bar fidelity-named'];
+      const expected = [
+        'bar decision',
+        'bar consequence',
+        'bar labels',
+        'bar fidelity',
+        'bar fidelity-named',
+        'bar open-reflection',
+      ];
 
       // ACT
       const checklist = checklistFor('explain', []);
@@ -46,6 +54,7 @@ describe('checklist judge', () => {
       // ASSERT
       expect(checklist.map(({ id }) => id)).toEqual(expected);
       expect(checklist[1].question).toBe('Does every item say what changes for the reader overall?');
+      expect(checklist[5].question).toContain('reflection block ask only open questions');
     });
 
     it('asks the judge every checklist item about the files it can read', () => {

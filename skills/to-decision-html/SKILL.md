@@ -15,16 +15,16 @@ When the caller owns both the frame (the page, its layout and controls) and the 
 
 The caller supplies the domain. Take each input from the caller first:
 
-| Input                | What it settles                                                                                             |
-| -------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Audience             | Who reads the page and what they already know.                                                              |
-| Decisions            | The items: open decisions for `decide`, settled ones for `explain`.                                         |
-| Design guidance      | Styling and design tokens, or compiled CSS to inline.                                                       |
-| Vocabulary           | The domain terms, used exactly as given.                                                                    |
-| Gates                | The approval rules the page keeps.                                                                          |
-| Allowed Next actions | The continuations the reviewer may choose (`decide`).                                                       |
-| Feedback route       | The caller's save helper and format, or the [feedback contract](references/feedback-contract.md)'s default. |
-| Optional             | Mode, motion library, per-item depth and fidelity rung.                                                     |
+| Input                | What it settles                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------- |
+| Audience             | Who reads the page and what they already know.                                      |
+| Decisions            | The items: open decisions for `decide`, settled ones for `explain`.                 |
+| Design guidance      | Styling and design tokens, or compiled CSS to inline.                               |
+| Vocabulary           | The domain terms, used exactly as given.                                            |
+| Gates                | The approval rules the page keeps.                                                  |
+| Allowed Next actions | The continuations the reviewer may choose (`decide`).                               |
+| Feedback route       | How feedback returns, per the [feedback contract](references/feedback-contract.md). |
+| Optional             | Mode, motion library, per-item depth and fidelity rung.                             |
 
 Explore the working folder and any links you are given for evidence. The page lists every file and link you read, so the reader sees what its claims rest on.
 
@@ -34,7 +34,7 @@ _Done when_ every input is supplied or listed as missing.
 
 ## 2. Calibrate once
 
-Skip this step when the caller supplied every input. Otherwise ask one round, only for what is missing, in the repository's grilling format when it has one. Show a table: the page's mode, audience and feedback route, then one row per item with its [depth](#depth) (`simple`, `detailed` or `both`) and fidelity rung. Propose a value in each cell; "yes" accepts them all.
+Skip this step when the caller supplied every input. Otherwise ask one round, in the repository's grilling format when it has one. Show a table: the page's mode, audience and feedback route, then one row per item with its [depth](#depth) (`simple`, `detailed` or `both`) and fidelity rung. A cell the caller supplied shows its value as fixed; propose a value only in each missing cell, and "yes" accepts every proposal.
 
 Without an answer, proceed, and mark each value you chose as _assumed_ on the page.
 
@@ -74,18 +74,13 @@ Each item has a depth, set per item like its rung. The simple view alone clears 
 | `detailed` | The simple view plus context, precise technical detail and references, all shown at once.           | Every reader will verify the claims.                                         |
 | `both`     | The simple view first, and one toggle that reveals the detailed layer.                              | The audience mixes newcomers with readers who verify.                        |
 
-Without caller input, propose `both` for an item whose references or technical detail stand behind a simple decision, and `simple` otherwise. Only `both` items carry a depth toggle, and each carries exactly one.
+Without caller input, propose `both` for an item whose references or technical detail stand behind a simple decision, and `simple` otherwise.
 
 ### Diagrams and motion
 
-Keep each Mermaid diagram's source word for word in `<script type="text/x-mermaid" data-diagram="<name>">`, so it can be copied into documentation, and render it beside the script, in the same parent element:
+Keep each Mermaid diagram's source word for word in `<script type="text/x-mermaid" data-diagram="<name>">`, so it can be copied into documentation, and render it beside the script, in the same parent element. With a browser tool, pre-render the source to inline SVG while you build the page; without one, use the fallback, which shows the source as text until Mermaid renders it. [Diagrams](references/diagrams.md) gives both procedures.
 
-- **With a browser tool**, pre-render the source to inline SVG while you build the page.
-- **Without one**, load Mermaid from jsDelivr at an exact version, show the source as text until it renders, and mark `<html data-offline="partial">`.
-
-[Diagrams](references/diagrams.md) gives both procedures.
-
-Animate with CSS transitions and the Web Animations API, and honour `prefers-reduced-motion`. Inline a library only when the caller names it, such as a motion library's core at the caller's pinned version; the Mermaid fallback is the one exception.
+Animate with CSS transitions and the Web Animations API, and honour `prefers-reduced-motion`. Inline a library only when the caller names it, such as a motion library's core at the caller's pinned version; the diagram fallback is the one exception.
 
 ### Confidence bar
 
@@ -114,68 +109,50 @@ _Done when_ every item's visual stays at least half in view beside its comment f
 
 ## 5. Add the mode's controls
 
+Both modes carry one reflection block of open questions through lenses the items may have missed. The reader writes the answers, so the page shows no agent-written answer, hint or answer key beside a prompt.
+
 **`decide`**
 
-- Each item takes the response that fits it: boolean, single choice or multiple choice. Every response starts unanswered and can be cleared.
+- Each item takes the response that fits it: boolean, single choice or multiple choice, behaving as the [feedback contract](references/feedback-contract.md#responses-resets-and-drafts) says.
 - Every item with Options marks exactly one recommended, with its reason. The reviewer still makes the pick.
 - Each item shows its door (one-way or two-way) and effort.
 - Comments sit on each item and on each Option, unselected Options included.
-- Above the Next action, a **Before you approve** block asks open questions through lenses the items may have missed, such as security, operations, information architecture and accessibility. The answers are the reviewer's to give, so the page asks and stops.
-- The Next action offers only the allowed Next actions, preset by the [feedback contract](references/feedback-contract.md).
+- The reflection block, **Before you approve**, sits above the Next action, through lenses such as security, operations, information architecture and accessibility.
+- The Next action offers only the allowed Next actions, preset as the [feedback contract](references/feedback-contract.md#next-action-and-approval-decide) says.
 
-**`explain`**
-
-The reader learns decisions someone else already made, such as a ticket's. The page teaches each decision and leaves it settled.
-
-- Each item gives its decision a visual and at least one concrete example: a scenario, a before and after, or a worked case.
-- An item clears confidence-bar questions 1, 2, 3 and 5. Questions 4 and 6 belong to `decide`: a settled decision has no recommendation, door or effort left to weigh.
-- Responses are the reader's questions, so the page carries no Options, choice inputs or Next action.
-- A **reflection** block asks open questions through general non-functional lenses: systems and critical thinking, information architecture, security for engineers, and UX for audience-facing work. Choose the lenses that fit the audience. Each prompt is a question; the reader writes the answer, so the page shows no agent-written answer, hint or answer key beside it.
-- A **Questions?** block holds a labelled comment field with Copy prompt and Save from the [feedback contract](references/feedback-contract.md). It carries the reader's questions to the agent or the decisions' author.
+**`explain`** teaches decisions someone else already made, with no picks: follow [explain mode](references/explain-mode.md).
 
 _Done when_ every item carries its mode's controls, and the page holds its mode's blocks: Before you approve and the Next action in `decide`, reflection and Questions? in `explain`.
 
 ## 6. Hand back the feedback
 
-Apply the [feedback contract](references/feedback-contract.md): Copy prompt and Save carry the reviewer's responses and comments back to you, verbatim, with no server. A caller's own save helper and format take precedence over it.
+Apply the [feedback contract](references/feedback-contract.md): Copy prompt and Save carry the reviewer's responses and comments back to you, verbatim, with no server.
 
-_Done when_ the page names its feedback file, `<page-id>-r<N>-feedback.md`, or the caller's destination.
+_Done when_ the page names its [feedback file](references/feedback-contract.md#save) or the caller's destination.
 
 ## 7. Deliver and verify
 
-The page meets the contract below and loads with no network. Inline all CSS and JavaScript, embed every asset, and draw diagrams as inline SVG.
+The page loads with no network: inline all CSS and JavaScript, embed every asset, and draw diagrams as inline SVG.
 
-| Where                                   | Attribute           | Values                                                                                                                                    |
-| --------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `<html>`                                | `data-page-id`      | A lowercase slug, stable across revisions.                                                                                                |
-| `<html>`                                | `data-revision`     | A positive integer, starting at 1.                                                                                                        |
-| `<html>`                                | `data-mode`         | `decide` or `explain`.                                                                                                                    |
-| `<html>`                                | `data-offline`      | `partial`, only while a diagram needs its pinned renderer from the network.                                                               |
-| Each item                               | `data-item`         | A stable id, unique on the page.                                                                                                          |
-| Each item                               | `data-fidelity`     | `diagram`, `wireframe`, `mock` or `prototype`.                                                                                            |
-| Each item                               | `data-depth`        | `simple`, `detailed` or `both`.                                                                                                           |
-| Each Option, inside its item            | `data-option`       | A stable id, unique in its item.                                                                                                          |
-| Each Option                             | `data-recommended`  | `true` or `false`.                                                                                                                        |
-| Each `<script type="text/x-mermaid">`   | `data-diagram`      | A unique name; the script holds the diagram's source.                                                                                     |
-| The Before you approve/reflection block | `data-reflection`   | Present once; in `decide`, above the Next action.                                                                                         |
-| The Questions? block (`explain`)        | `data-questions`    | Present once, holding the editable `<textarea>` for the reader's questions.                                                               |
-| The Next action (`decide`)              | `data-next-action`  | Present once, holding the `<select>` or radio inputs that choose the action.                                                              |
-| The Copy prompt button                  | `data-copy-prompt`  | Present once.                                                                                                                             |
-| The Save button                         | `data-save`         | Present once; downloads `<page-id>-r<N>-feedback.md`.                                                                                     |
-| The Reset all button (`decide`)         | `data-reset-all`    | Present once; asks with `confirm()` before it clears.                                                                                     |
-| Each item's reset button (`decide`)     | `data-reset`        | Inside its item; clears only that item.                                                                                                   |
-| The depth toggle of a `both` item       | `data-depth-toggle` | Exactly one per `both` item, on the control that reveals the detailed layer; none elsewhere.                                              |
-| The visual a comment is about           | `data-visual`       | Optional. Without it, the grader takes the largest `svg`, `img`, `canvas`, `video` or `iframe` in the comment's Option, else in its item. |
+### Page contract
 
-Everything else on the page is yours to shape.
+The page carries these attributes; everything else on it is yours to shape.
 
-When Node and Playwright are available, run `node scripts/grade.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. The grader proves mechanics, not taste: whether the page looks right and explains well is left to human review and, when evaluating this skill, to the checklist judge. Then run the [verification](references/verification.md) checks the grader cannot make.
+- `<html>`: `data-page-id`, a lowercase slug stable across revisions; `data-revision`, a positive integer from 1; `data-mode`, `decide` or `explain`; `data-offline="partial"` only on the [diagram fallback](references/diagrams.md#fallback-without-a-browser-tool).
+- Each item: `data-item`, a stable id unique on the page; `data-fidelity`, `diagram`, `wireframe`, `mock` or `prototype`; `data-depth`, `simple`, `detailed` or `both`. In `decide`, its reset button carries `data-reset` and clears only that item.
+- Each Option, inside its item: `data-option`, a stable id unique in its item; `data-recommended`, `true` or `false`.
+- Each `<script type="text/x-mermaid">`: `data-diagram`, a unique name; the script holds the diagram's source.
+- Each `both` item's depth toggle: `data-depth-toggle`, exactly one per `both` item, on the control that reveals the detailed layer; none elsewhere.
+- Once per page: `data-reflection` on the reflection block, in `decide` above the Next action; `data-copy-prompt` on Copy prompt; `data-save` on Save, which downloads the feedback file.
+- Once in `decide`: `data-next-action` on the block holding the `<select>` or radio inputs that choose the action; `data-reset-all` on Reset all.
+- Once in `explain`: `data-questions` on the Questions? block, holding the editable `<textarea>` for the reader's questions.
+- Optional: `data-visual` on the visual a comment is about. Without it, the grader takes the largest `svg`, `img`, `canvas`, `video` or `iframe` in the comment's Option, else in its item.
 
-Open the page with the platform's opener, then print:
+### Grade and hand over
 
-- the page's absolute path and its mode;
-- the feedback filename, `<page-id>-r<N>-feedback.md`, or the caller's destination;
-- how to continue: after Save, say "saved feedback"; after Copy prompt, paste the prompt into this or any agent session.
+Run the grader only on what is already installed: from this skill's folder, run `node scripts/grade-page.ts <page.html>`. When it cannot resolve a package or a browser, name it unavailable and go on, installing and fetching nothing for it (`npx` included). It prints each check's pass or fail as JSON; fix every failure. The grader proves mechanics, not taste: whether the page looks right and explains well is left to human review and, when evaluating this skill, to the checklist judge. Then run the [verification](references/verification.md) checks the grader cannot make.
+
+Open the page with the platform's opener, then print three lines: the page's absolute path and its mode; the feedback file's name or the caller's destination; and how to continue: after Save, say "saved feedback"; after Copy prompt, paste the prompt into this or any agent session.
 
 _Done when_ the grader passes or is named as unavailable, every check that could not run is named, and the person has the open page and those three lines.
 

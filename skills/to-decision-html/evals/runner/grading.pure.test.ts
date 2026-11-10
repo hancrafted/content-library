@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import type { Mode } from '../../scripts/grader/check.ts';
 import type { Report } from '../../scripts/grader/report.pure.ts';
 import { gradingOf, isolationExpectation, mechanicalExpectations, ungradedReport } from './grading.pure.ts';
 
-const report = (mode: string | null, statuses: Record<string, 'pass' | 'fail' | 'skip'>): Report => ({
+const report = (mode: Mode | null, statuses: Record<string, 'pass' | 'fail' | 'skip'>): Report => ({
   page: '/runs/ink/page.html',
   mode,
   pass: !Object.values(statuses).includes('fail'),

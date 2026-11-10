@@ -1,10 +1,10 @@
 // Grades one page file: for every check and width, a fresh browser context with networking blocked loads the page,
 // the check observes it, and its pure judge rules. A fresh context per check keeps an interacting check from
 // changing what the next one sees.
-import { chromium, type Browser } from '@playwright/test';
+import { chromium, type Browser, type Page } from '@playwright/test';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import type { Check, LoadedPage, Mode } from './check.ts';
+import { asMode, type Check, type LoadedPage, type Mode } from './check.ts';
 import { combine, toReport, type Report, type WidthResult } from './report.pure.ts';
 
 /** Desktop and landscape tablet, the widths a decision page is built for. */
@@ -17,14 +17,18 @@ export const launch = (): Promise<Browser> => chromium.launch();
 
 type Viewport = (typeof VIEWPORTS)[number];
 
-/** The browser to grade in and the page file's URL. */
-interface Target {
-  readonly browser: Browser;
-  readonly url: string;
+/** A page loaded offline, and every request it tried other than its own file; all of them were aborted. */
+export interface OfflinePage {
+  readonly page: Page;
+  readonly requests: readonly string[];
 }
 
-/** Opens the page offline; every request other than the page itself is recorded and aborted. */
-async function open({ browser, url }: Target, viewport: Viewport): Promise<LoadedPage> {
+/**
+ * Opens a page file offline in a fresh context at `viewport`, as the grader and the eval views both see it. Close it
+ * with `page.context().close()`.
+ */
+export async function openOffline(browser: Browser, file: string, viewport: Viewport): Promise<OfflinePage> {
+  const url = pathToFileURL(path.resolve(file)).href;
   const context = await browser.newContext({ viewport, serviceWorkers: 'block' });
   // Routing aborts what it intercepts; the request listener also sees file:// loads, which routing may not.
   const requests = new Set<string>();
@@ -37,20 +41,27 @@ async function open({ browser, url }: Target, viewport: Viewport): Promise<Loade
     if (requested !== url && !/^(data|blob|about):/.test(requested)) requests.add(requested);
   });
   await page.goto(url, { waitUntil: 'networkidle' });
-  const mode = await page.evaluate(() => document.documentElement.getAttribute('data-mode'));
-  return { page, html: await page.content(), requests: [...requests], mode, width: viewport.width };
+  return { page, requests: [...requests] };
+}
+
+/** The browser to grade in and the page file. */
+interface Target {
+  readonly browser: Browser;
+  readonly file: string;
+}
+
+async function open({ browser, file }: Target, viewport: Viewport): Promise<LoadedPage> {
+  const { page, requests } = await openOffline(browser, file, viewport);
+  const mode = asMode(await page.evaluate(() => document.documentElement.getAttribute('data-mode')));
+  return { page, html: await page.content(), requests, mode, width: viewport.width };
 }
 
 /** One check at one width, with the mode the page declared. */
-async function atWidth(
-  { browser, url }: Target,
-  check: Check,
-  viewport: Viewport,
-): Promise<WidthResult & { mode: string | null }> {
-  const loaded = await open({ browser, url }, viewport);
+async function atWidth(target: Target, check: Check, viewport: Viewport): Promise<WidthResult & { mode: Mode | null }> {
+  const loaded = await open(target, viewport);
   const { width, mode } = loaded;
   try {
-    if (check.modes && !check.modes.includes(mode as Mode)) return { width, mode, problems: null };
+    if (check.modes && (mode === null || !check.modes.includes(mode))) return { width, mode, problems: null };
     return { width, mode, problems: check.judge(await check.observe(loaded)) };
   } catch (error) {
     return { width, mode, problems: [`the check crashed: ${(error as Error).message}`] };
@@ -60,12 +71,11 @@ async function atWidth(
 }
 
 export async function gradeFile(browser: Browser, checks: readonly Check[], file: string): Promise<Report> {
-  const url = pathToFileURL(path.resolve(file)).href;
   const results = [];
-  let mode: string | null = null;
+  let mode: Mode | null = null;
   for (const check of checks) {
     const widths = [];
-    for (const viewport of VIEWPORTS) widths.push(await atWidth({ browser, url }, check, viewport));
+    for (const viewport of VIEWPORTS) widths.push(await atWidth({ browser, file }, check, viewport));
     mode = widths[0].mode;
     results.push(combine(check, widths));
   }

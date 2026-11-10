@@ -4,8 +4,10 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { CaseItem, Source } from './judge.pure.ts';
+import { asMode, type Mode } from '../../scripts/grader/check.ts';
+import type { CaseItem } from './judge.pure.ts';
 import { UNKNOWN, type ProbeQuestion } from './probe.pure.ts';
+import type { Source } from './quality.pure.ts';
 
 export const CASES = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../cases');
 
@@ -26,7 +28,7 @@ export interface EvalCase {
   readonly id: string;
   /** skill-creator's numeric eval id: the case's position in the manifest, from 1. */
   readonly evalId: number;
-  readonly mode: string;
+  readonly mode: Mode;
   readonly prompt: string;
   /** The files copied beside the prompt: its attachments, then the calibration answers. */
   readonly inputs: readonly string[];
@@ -51,9 +53,10 @@ export function loadCase(id: string): EvalCase {
   const { cases } = readManifest();
   const index = cases.findIndex((entry) => entry.id === id);
   if (index === -1) throw new Error(`no eval case "${id}"; cases: ${cases.map((entry) => entry.id).join(', ')}`);
-  const { mode, prompt, attachments, calibration, hashes } = cases[index];
-  if (mode === undefined || calibration === undefined)
-    throw new Error(`case "${id}" has no mode or calibration answers, so it cannot run headless`);
+  const { prompt, attachments, calibration, hashes } = cases[index];
+  const mode = asMode(cases[index].mode);
+  if (mode === null || calibration === undefined)
+    throw new Error(`case "${id}" has no known mode or no calibration answers, so it cannot run headless`);
   return { id, evalId: index + 1, mode, prompt, inputs: [...attachments, calibration], hashes };
 }
 

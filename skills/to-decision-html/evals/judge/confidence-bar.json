@@ -1,5 +1,5 @@
 {
-  "about": "SKILL.md's confidence bar (step 3) as yes/no questions about the whole page, plus the fidelity ladder's rule that each item names its rung. `modes` names the modes a question applies to; keep both in step with SKILL.md.",
+  "about": "SKILL.md's confidence bar (step 3) as yes/no questions about the whole page, plus the fidelity ladder's rule that each item names its rung and step 5's rule that reflection prompts carry no answers. `modes` names the modes a question applies to; keep both in step with SKILL.md.",
   "items": [
     {
       "id": "decision",
@@ -40,6 +40,16 @@
       "id": "door-effort",
       "modes": ["decide"],
       "question": "Does every item show whether it is a one-way or two-way door, and how much effort it takes?"
+    },
+    {
+      "id": "open-reflection",
+      "modes": ["decide"],
+      "question": "Does the \"Before you approve\" block ask only open questions, with no agent-written answer, hint or answer key beside any of them?"
+    },
+    {
+      "id": "open-reflection",
+      "modes": ["explain"],
+      "question": "Does the reflection block ask only open questions, with no agent-written answer, hint or answer key beside any of them?"
     }
   ]
 }

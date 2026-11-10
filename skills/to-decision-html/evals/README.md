@@ -4,6 +4,8 @@ The eval harness runs frozen cases headless, once per arm, grades each run and s
 
 ## Run
 
+First prove the grader: `npm run decision-html:prove` from the repository root grades every fixture and fails when one does not prove its check. Run it before each iteration and after any grader change; at about 20 s per fixture (12 minutes for 34) it stays out of `npm run verify`.
+
 ```sh
 node evals/run.ts --case ink --runs 1
 ```
@@ -23,8 +25,8 @@ It needs the `claude` CLI logged in, the repo's Playwright Chromium, Python 3.10
 To regrade saved runs after a grader changed, without rerunning any agent:
 
 ```sh
-node evals/grade.ts evals/workspace/iteration-N        # every run, then a fresh benchmark and viewer
-node evals/grade.ts evals/workspace/iteration-N/eval-ink/with_skill/run-1   # one run; prints its grading.json
+node evals/regrade.ts evals/workspace/iteration-N        # every run, then a fresh benchmark and viewer
+node evals/regrade.ts evals/workspace/iteration-N/eval-ink/with_skill/run-1   # one run; prints its grading.json
 ```
 
 ## What a run sees

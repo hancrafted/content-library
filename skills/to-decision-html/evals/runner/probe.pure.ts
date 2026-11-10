@@ -2,7 +2,7 @@
 // scored against the key we wrote from the frozen case input. A question passes only on the exact set of keyed
 // choices; unknown counts as fail.
 import type { Expectation } from './grading.pure.ts';
-import { fillPrompt, quoted, type Source } from './judge.pure.ts';
+import { fillPrompt, quoted, type Source } from './quality.pure.ts';
 
 /** One question of a case's probe.json. `answer` lists every correct choice; the reader must give exactly those. */
 export interface ProbeQuestion {

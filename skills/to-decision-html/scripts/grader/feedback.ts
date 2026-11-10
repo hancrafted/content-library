@@ -8,8 +8,11 @@ import { COMMENT, COMMENT_MARK } from './feedback.pure.ts';
  * field of an explain page.
  */
 export const COMMENT_FIELD = ':is([data-item], [data-questions]) textarea:not([readonly], [disabled])';
-/** How long a control may take to show its outcome. */
-const SETTLE_MS = 1500;
+/**
+ * The ceiling for a control to show its outcome. Every wait below ends as soon as the outcome shows (a clipboard
+ * write, a download, a status message); only a page that never shows one waits this long.
+ */
+const OUTCOME_TIMEOUT_MS = 1500;
 
 export interface Identity {
   readonly pageId: string;
@@ -57,7 +60,7 @@ export async function copyPrompt(page: Page): Promise<string | null> {
     const written = await page.waitForFunction(
       () => (window as unknown as { __graderClipboard?: string }).__graderClipboard,
       undefined,
-      { timeout: SETTLE_MS },
+      { timeout: OUTCOME_TIMEOUT_MS },
     );
     return (await written.jsonValue()) as string;
   } catch {
@@ -74,7 +77,7 @@ export interface Download {
 export async function save(page: Page): Promise<Download | null> {
   try {
     const [download] = await Promise.all([
-      page.waitForEvent('download', { timeout: SETTLE_MS }),
+      page.waitForEvent('download', { timeout: OUTCOME_TIMEOUT_MS }),
       page.locator('[data-save]').click(),
     ]);
     return { filename: download.suggestedFilename(), text: await readFile(await download.path(), 'utf8') };
@@ -101,7 +104,7 @@ export async function awaitStatus(page: Page): Promise<string> {
       .filter(Boolean)
       .join(' ');
   try {
-    await page.waitForFunction(read, STATUS, { timeout: SETTLE_MS });
+    await page.waitForFunction(read, STATUS, { timeout: OUTCOME_TIMEOUT_MS });
   } catch {
     return '';
   }
