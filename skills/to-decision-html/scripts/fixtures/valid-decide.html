@@ -37,6 +37,9 @@
           16px/1.5 system-ui,
           sans-serif;
       }
+      a {
+        color: var(--accent);
+      }
       header {
         padding: 24px 32px;
         border-bottom: 1px solid var(--line);
@@ -58,6 +61,13 @@
         background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 8px;
+      }
+      section[data-item] > svg {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        padding: 8px 0;
+        background: var(--surface);
       }
       .options {
         display: grid;
@@ -83,6 +93,17 @@
         color: inherit;
         background: var(--bg);
         border: 1px solid var(--line);
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        html {
+          scroll-behavior: smooth;
+        }
+        article[data-option] {
+          transition: transform 150ms ease-out;
+        }
+        article[data-option]:hover {
+          transform: translateY(-2px);
+        }
       }
       :focus-visible {
         outline: 3px solid var(--focus);
@@ -174,10 +195,16 @@
             <span aria-hidden="true">↺</span> Reset this item's picks and comments
           </button>
         </section>
-        <section id="item-expiry" data-item="expiry" data-fidelity="wireframe" data-depth="simple">
+        <section id="item-expiry" data-item="expiry" data-fidelity="wireframe" data-depth="both">
           <h2>2. Should entries expire after five minutes?</h2>
           <p>Door: two-way. Effort: small. Rung: wireframe, enough to see the setting's place.</p>
           <p class="label">Agent proposal: five minutes matches the upstream data refresh. Unknown: peak traffic.</p>
+          <button type="button" data-depth-toggle aria-expanded="false" aria-controls="expiry-detail">
+            Show detail
+          </button>
+          <div id="expiry-detail" hidden>
+            <p>Reference: the upstream feed publishes every five minutes (<code>docs/feed.md</code>).</p>
+          </div>
           <fieldset>
             <legend>Expire after five minutes?</legend>
             <label><input type="radio" name="expiry" value="yes" /> Yes</label>
@@ -228,6 +255,15 @@
       </main>
     </div>
     <script>
+      for (const toggle of document.querySelectorAll('[data-depth-toggle]')) {
+        toggle.addEventListener('click', () => {
+          const detail = document.getElementById(toggle.getAttribute('aria-controls'));
+          const open = toggle.getAttribute('aria-expanded') !== 'true';
+          toggle.setAttribute('aria-expanded', String(open));
+          toggle.textContent = open ? 'Show simple' : 'Show detail';
+          detail.hidden = !open;
+        });
+      }
       // The reply composer, a live preview of the prompt beside Copy prompt, follows html-effectiveness
       // unknowns/03-design-directions.html (Copyright 2026 Anthropic PBC, Apache-2.0).
       (() => {

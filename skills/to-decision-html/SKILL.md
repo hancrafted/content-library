@@ -34,7 +34,7 @@ _Done when_ every input is supplied or listed as missing.
 
 ## 2. Calibrate once
 
-Skip this step when the caller supplied every input. Otherwise ask one round, only for what is missing, in the repository's grilling format when it has one. Show a table: the page's mode, audience and feedback route, then every item with its depth (`simple`, `detailed` or `both`) and fidelity rung. Propose a value in each cell; "yes" accepts them all.
+Skip this step when the caller supplied every input. Otherwise ask one round, only for what is missing, in the repository's grilling format when it has one. Show a table: the page's mode, audience and feedback route, then one row per item with its [depth](#depth) (`simple`, `detailed` or `both`) and fidelity rung. Propose a value in each cell; "yes" accepts them all.
 
 Without an answer, proceed, and mark each value you chose as _assumed_ on the page.
 
@@ -64,6 +64,18 @@ Show before and after for every change, fixes included. The before comes from ev
 
 `diagram` (diagram or sketch) → `wireframe` → `mock` (real-content mock) → `prototype` (interactive). Pick the lowest rung that settles the decision, unless the caller names one. The ladder guides rather than limits. Each item states its rung and why that rung is enough, so the reviewer can ask for a higher one, and a revision may raise it.
 
+### Depth
+
+Each item has a depth, set per item like its rung. The simple view alone clears the confidence bar; the detailed layer adds what a reader needs to verify the item, never the decision itself.
+
+| Depth      | The item shows                                                                                      | Choose it when                                                               |
+| ---------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `simple`   | The decision, what changes, the visual, the labelled evidence and, in `decide`, the recommendation. | The audience is new to the domain, or the item has no detail worth checking. |
+| `detailed` | The simple view plus context, precise technical detail and references, all shown at once.           | Every reader will verify the claims.                                         |
+| `both`     | The simple view first, and one toggle that reveals the detailed layer.                              | The audience mixes newcomers with readers who verify.                        |
+
+Without caller input, propose `both` for an item whose references or technical detail stand behind a simple decision, and `simple` otherwise. Only `both` items carry a depth toggle, and each carries exactly one.
+
 ### Diagrams and motion
 
 Keep each Mermaid diagram's source word for word in `<script type="text/x-mermaid" data-diagram="<name>">`, so it can be copied into documentation, and render it beside the script, in the same parent element:
@@ -90,13 +102,15 @@ _Done when_ every item clears the bar for its mode.
 
 ## 4. Lay out the page
 
-A header states purpose and scope. Item navigation stays visible while the page scrolls. Build for desktop and landscape tablet with no horizontal scroll.
+A banner `<header>` holds the `<h1>` and a sentence stating purpose and scope. A `<nav>` links to every item and stays visible while the page scrolls. Build for desktop (1440 px) and landscape tablet (1024 px): the page never scrolls sideways, and no box clips or spills its text.
 
-While the reviewer types, pastes or dictates a comment, the visual it is about stays in view, even with tall content and long comments. One arrangement that works: the visual centred, with Option cards in a sticky right-hand rail holding choices, explanations and comments, and a collapsible left navigation to win back width. Choose another arrangement when it keeps visual and comment in view together better. Viewing an Option and picking it are separate actions. Add reviewer tools, such as preview width, theme, state or motion controls, where an item needs them.
+While the reviewer types, pastes or dictates a comment, at least half of the visual it is about stays in view, even with tall content and long comments. One arrangement that works: the visual centred, with Option cards in a sticky right-hand rail holding choices, explanations and comments, and a collapsible left navigation to win back width. Choose another arrangement when it keeps visual and comment in view together better. Viewing an Option and picking it are separate actions. Add reviewer tools, such as preview width, theme, state or motion controls, where an item needs them.
 
 Follow the caller's design guidance; without it, use a restrained, readable style on design tokens with light and dark themes.
 
-_Done when_ every item's visual and its comment fields can be seen together at both widths.
+Every field and button has an accessible name, every control shows a visible focus indicator, and text reaches WCAG AA contrast (4.5:1, or 3:1 for large text) in both themes. Under `prefers-reduced-motion: reduce`, nothing animates, moves by transition or scrolls smoothly.
+
+_Done when_ every item's visual stays at least half in view beside its comment fields at both widths, and every control is labelled, shows focus and reads at AA contrast in both themes.
 
 ## 5. Add the mode's controls
 
@@ -131,29 +145,31 @@ _Done when_ the page names its feedback file, `<page-id>-r<N>-feedback.md`, or t
 
 The page meets the contract below and loads with no network. Inline all CSS and JavaScript, embed every asset, and draw diagrams as inline SVG.
 
-| Where                                   | Attribute          | Values                                                                       |
-| --------------------------------------- | ------------------ | ---------------------------------------------------------------------------- |
-| `<html>`                                | `data-page-id`     | A lowercase slug, stable across revisions.                                   |
-| `<html>`                                | `data-revision`    | A positive integer, starting at 1.                                           |
-| `<html>`                                | `data-mode`        | `decide` or `explain`.                                                       |
-| `<html>`                                | `data-offline`     | `partial`, only while a diagram needs its pinned renderer from the network.  |
-| Each item                               | `data-item`        | A stable id, unique on the page.                                             |
-| Each item                               | `data-fidelity`    | `diagram`, `wireframe`, `mock` or `prototype`.                               |
-| Each item                               | `data-depth`       | `simple`, `detailed` or `both`.                                              |
-| Each Option, inside its item            | `data-option`      | A stable id, unique in its item.                                             |
-| Each Option                             | `data-recommended` | `true` or `false`.                                                           |
-| Each `<script type="text/x-mermaid">`   | `data-diagram`     | A unique name; the script holds the diagram's source.                        |
-| The Before you approve/reflection block | `data-reflection`  | Present once; in `decide`, above the Next action.                            |
-| The Questions? block (`explain`)        | `data-questions`   | Present once, holding the editable `<textarea>` for the reader's questions.  |
-| The Next action (`decide`)              | `data-next-action` | Present once, holding the `<select>` or radio inputs that choose the action. |
-| The Copy prompt button                  | `data-copy-prompt` | Present once.                                                                |
-| The Save button                         | `data-save`        | Present once; downloads `<page-id>-r<N>-feedback.md`.                        |
-| The Reset all button (`decide`)         | `data-reset-all`   | Present once; asks with `confirm()` before it clears.                        |
-| Each item's reset button (`decide`)     | `data-reset`       | Inside its item; clears only that item.                                      |
+| Where                                   | Attribute           | Values                                                                                                                                    |
+| --------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `<html>`                                | `data-page-id`      | A lowercase slug, stable across revisions.                                                                                                |
+| `<html>`                                | `data-revision`     | A positive integer, starting at 1.                                                                                                        |
+| `<html>`                                | `data-mode`         | `decide` or `explain`.                                                                                                                    |
+| `<html>`                                | `data-offline`      | `partial`, only while a diagram needs its pinned renderer from the network.                                                               |
+| Each item                               | `data-item`         | A stable id, unique on the page.                                                                                                          |
+| Each item                               | `data-fidelity`     | `diagram`, `wireframe`, `mock` or `prototype`.                                                                                            |
+| Each item                               | `data-depth`        | `simple`, `detailed` or `both`.                                                                                                           |
+| Each Option, inside its item            | `data-option`       | A stable id, unique in its item.                                                                                                          |
+| Each Option                             | `data-recommended`  | `true` or `false`.                                                                                                                        |
+| Each `<script type="text/x-mermaid">`   | `data-diagram`      | A unique name; the script holds the diagram's source.                                                                                     |
+| The Before you approve/reflection block | `data-reflection`   | Present once; in `decide`, above the Next action.                                                                                         |
+| The Questions? block (`explain`)        | `data-questions`    | Present once, holding the editable `<textarea>` for the reader's questions.                                                               |
+| The Next action (`decide`)              | `data-next-action`  | Present once, holding the `<select>` or radio inputs that choose the action.                                                              |
+| The Copy prompt button                  | `data-copy-prompt`  | Present once.                                                                                                                             |
+| The Save button                         | `data-save`         | Present once; downloads `<page-id>-r<N>-feedback.md`.                                                                                     |
+| The Reset all button (`decide`)         | `data-reset-all`    | Present once; asks with `confirm()` before it clears.                                                                                     |
+| Each item's reset button (`decide`)     | `data-reset`        | Inside its item; clears only that item.                                                                                                   |
+| The depth toggle of a `both` item       | `data-depth-toggle` | Exactly one per `both` item, on the control that reveals the detailed layer; none elsewhere.                                              |
+| The visual a comment is about           | `data-visual`       | Optional. Without it, the grader takes the largest `svg`, `img`, `canvas`, `video` or `iframe` in the comment's Option, else in its item. |
 
 Everything else on the page is yours to shape.
 
-When Node and Playwright are available, run `node scripts/grade.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. Then run the [verification](references/verification.md) checks the grader cannot make.
+When Node and Playwright are available, run `node scripts/grade.ts <page.html>` from this skill's folder. It prints each check's pass or fail as JSON; fix every failure. The grader proves mechanics, not taste: whether the page looks right and explains well is left to human review and, when evaluating this skill, to the checklist judge. Then run the [verification](references/verification.md) checks the grader cannot make.
 
 Open the page with the platform's opener, then print:
 
