@@ -1,21 +1,27 @@
 ---
 type: research
-title: 'Why does a language model''s output get worse when its context holds distractors, contradictions or unclear instructions?'
-description: 'Output gets worse when the context holds irrelevant, conflicting or underspecified material, not only when it is long, because early wrong assumptions persist.'
+title: 'Why does a language model''s output get worse when its context holds
+  distractors, contradictions or unclear instructions?'
+description: 'Output gets worse when the context holds irrelevant, conflicting
+  or underspecified material, not only when it is long, because early wrong
+  assumptions persist.'
 generated:
-  by: claude-code/opus-5.5
-  at: 2026-10-12T00:00:00Z
+  by: claude-code/sonnet-5.5
+  at: 2026-11-10T16:51:47Z
 stale_after: 2027-10-12T00:00:00Z
 sources:
   - id: 1
     resource: docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md
-    title: 'content-library research, Why does a language model''s output quality drop as its context window fills?'
+    title: 'content-library research, Why does a language model''s output quality
+      drop as its context window fills?'
   - id: 2
     resource: https://arxiv.org/abs/2302.00093
-    title: 'Shi et al., Large Language Models Can Be Easily Distracted by Irrelevant Context'
+    title: 'Shi et al., Large Language Models Can Be Easily Distracted by Irrelevant
+      Context'
   - id: 3
     resource: https://arxiv.org/abs/2404.10198
-    title: 'Wu, Wu, Zou, ClashEval: Quantifying the tug-of-war between an LLM''s internal prior and external evidence'
+    title: 'Wu, Wu, Zou, ClashEval: Quantifying the tug-of-war between an LLM''s
+      internal prior and external evidence'
   - id: 4
     resource: https://arxiv.org/abs/2401.14887
     title: 'Cuconasu et al., The Power of Noise: Redefining Retrieval for RAG Systems'
