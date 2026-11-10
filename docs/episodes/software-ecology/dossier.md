@@ -4,12 +4,14 @@ title: Where AI pushes the pressure in your team
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-10T17:09:00Z
+  at: 2026-11-10T17:15:56Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-11-10T17:09:00Z
+  - by: process:markdown-harness
+    at: 2026-11-10T17:15:56Z
 ---
 
 # Where AI pushes the pressure in your team {#software-ecology}
