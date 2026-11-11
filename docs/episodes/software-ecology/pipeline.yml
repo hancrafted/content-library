@@ -506,6 +506,9 @@ jobs:
           - docs/features/explorables/README.md
           - .archgate/adrs/FE-012-explorables.md
           - docs/features/explorables/human-in-the-loop.md
+          - docs/episodes/software-ecology/prototype/flow.html
+          - docs/episodes/software-ecology/prototype/HANDOFF.md
+          - docs/episodes/software-ecology/prototype/source/
         model: opus
       - type: reviewer
         skills:
@@ -524,10 +527,13 @@ jobs:
           - docs/features/explorables/README.md
           - .archgate/adrs/FE-012-explorables.md
           - docs/features/explorables/human-in-the-loop.md
+          - docs/episodes/software-ecology/prototype/flow.html
+          - docs/episodes/software-ecology/prototype/HANDOFF.md
+          - docs/episodes/software-ecology/prototype/source/
         rubric: references/implement-section.md#rubric
         model: opus
         session: orchestrator
-    intent: 'Build Section 1 of the Brief, "Play": the Play slide holding the whole software ecology Explorable (src/explorables/software-ecology/) with its toolbar, to its picked Spec Option. Han chose (architecture grill Q22) that this Section builds the Explorable itself inside the Run, the feature way: /to-spec from the design-ADR, the feature guide and the picked Option, then /to-tickets, then /tdd per ticket, in this job''s worktree. The design-ADR binds the model, the use-case files and the rendering.'
+    intent: 'Build Section 1 of the Brief, "Play": the Play slide holding the whole software ecology Explorable (src/explorables/software-ecology/) with its toolbar, to its picked Spec Option. Han chose (architecture grill Q22) that this Section builds the Explorable itself inside the Run, the feature way: /to-spec from the design-ADR, the feature guide and the picked Option, then /to-tickets, then /tdd per ticket, in this job''s worktree. The design-ADR binds the model, the use-case files and the rendering. Han (2026-11-11): the converged prototype docs/episodes/software-ecology/prototype/flow.html is the reference build, and the Explorable must look and behave identical to it: the same model (port source/src/30-model.js and 35-scenario.js with the same seeded streams, so every expect in source/checks7c.out.txt reproduces its value), the same use-case YAML (schema /5), the same toolbar, cards, rack, pile-ups, tours, dashboards and timing; the only differences are the ones the Spec and design-ADR settle (module split, tour claims in plain words, readout colours). The reviewer compares the built Explorable side by side with flow.html in Chrome, state by state (Swing, Roles, Ideal, Realistic, every Tire swing scenario and tour step, a dashboard, Model popover, ⋮ menu), and any visible or behavioural difference not settled by the Spec is a failed line.'
     port: 4002
   - id: implement-section-why-how-and-what
     stage: build
