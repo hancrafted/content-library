@@ -1,6 +1,25 @@
 {
   "title": "Context engineering is requirements engineering for agents",
-  "caption": "What you put in the context window decides whether the agent has <b>the precision and accuracy to work towards.</b>",
+  "caption": "Google’s definition: context engineering is “the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.”",
+  "definitionCard": {
+    "heading": "Read as a requirement",
+    "codebase": {
+      "term": "Codebase",
+      "everyday": "the materials you already have"
+    },
+    "architecture": {
+      "term": "Architecture",
+      "everyday": "how the parts fit together"
+    },
+    "conventions": {
+      "term": "Conventions",
+      "everyday": "the house rules"
+    },
+    "intent": {
+      "term": "Intent",
+      "everyday": "the goal"
+    }
+  },
   "customer": {
     "label": "Customer wants",
     "text": "a city bike to ride to work, by Friday",
@@ -32,6 +51,15 @@
   "quote": "Anthropic: aim for “the smallest possible set of high-signal tokens” <definition>that maximise the chance of the outcome you want</definition>.",
   "limits": "<proposal>A parallel researchers propose</proposal>; unlike a spec, <stops>the window is a budget that changes while the agent works</stops>.",
   "notes": {
+    "googles-definition": {
+      "header": "Google’s definition",
+      "description": "Three Google authors define context engineering as “the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent”, and list six kinds of context: instructions, knowledge, memory, examples, tools and guardrails. It is a practitioner whitepaper, not a study: it frames the term and does not test the parallel to requirements [1].",
+      "sources": {
+        "osmani-new-sdlc": {
+          "title": "Osmani, Saboo, Kartakis (Google), The New SDLC With Vibe Coding: From ad-hoc prompting to Agentic Engineering"
+        }
+      }
+    },
     "the-definition": {
       "header": "The definition",
       "description": "Anthropic defines context engineering as curating and maintaining the optimal set of tokens during inference, guided by \"the smallest possible set of high-signal tokens\" that maximise the chance of the desired outcome [1].",
@@ -74,7 +102,7 @@
       "the-definition": {
         "title": "The definition",
         "keywords": "",
-        "script": "What you add to the context window decides whether the agent has the precision and accuracy to work towards. That is the whole definition, and it is why we call it a requirement."
+        "script": "Here is how three Google engineers define context engineering, in their words: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. Let me translate that from engineering into the workshop. The codebase is the materials you already have. The architecture is how the parts fit together. The conventions are the house rules. And the intent is the goal. Materials, how it fits, house rules, the goal: that is what a good requirement has always said. So what you add to the context window decides whether the agent has the precision and accuracy to work towards, and that is why we call it requirements engineering for agents."
       },
       "same-four-outcomes": {
         "title": "Same four outcomes",

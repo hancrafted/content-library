@@ -55,8 +55,9 @@ const PAGE_SLIDES = ['value-was-always-translation', 'defining-and-building', 'p
 describe('success cases', () => {
   it('lists Slides 4 to 6 after the section slide, in Spec order, titled by their Spec h3', () => {
     // ARRANGE
+    // Han's feedback retitles the section slide on the requirement it argues (the Spec's h2 was "Every product is a translation").
     const expected = [
-      'Every product is a translation',
+      'Why precise and accurate requirements mattered before AI',
       'Value was always translation',
       'Defining and building',
       'Precision and accuracy',

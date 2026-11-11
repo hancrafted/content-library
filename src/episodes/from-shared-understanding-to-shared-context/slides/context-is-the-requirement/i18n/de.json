@@ -1,5 +1,6 @@
 {
   "title": "Kontext ist die Anforderung",
+  "caption": "Context Engineering: entscheiden, was die KI sieht, so wie Anforderungen entscheiden, was ein Team baut.",
   "label": "Die Scheibe im Kontextfenster, daneben statischer und dynamischer Kontext",
   "contextWindow": "Kontextfenster",
   "static": "Statisch",

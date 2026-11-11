@@ -1,5 +1,6 @@
 {
   "title": "Context is the requirement",
+  "caption": "Context engineering: deciding what the AI sees, the way requirements decide what a team builds.",
   "label": "The board inside the context window, with static and dynamic context beside it",
   "contextWindow": "Context window",
   "static": "Static",

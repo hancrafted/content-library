@@ -1,6 +1,6 @@
 {
   "title": "Grill-me",
-  "caption": "The AI asks a round of questions at a time, you answer, and after the last round it writes <b>the spec: a one-page work order</b>.",
+  "caption": "Matt Pocock’s grill-me skill: the AI asks a round of questions at a time, you answer, and after the last round it writes <b>the spec: a one-page work order</b>.",
   "chat": {
     "task": "Spring service week for the bike workshop",
     "roleSwitch": "The AI asks · you answer",
@@ -34,11 +34,26 @@
     "label": "The spec, landing on the bench",
     "title": "Spec · Spring service week",
     "rows": {
-      "for": { "term": "For", "value": "Regulars first" },
-      "must": { "term": "Must", "value": "Every rental bike serviced" },
-      "bookedBy": { "term": "Booked by", "value": "Front desk, phone and walk-in" },
-      "out": { "term": "Out", "value": "E-bikes" },
-      "done": { "term": "Done when", "value": "40 slots, calendar full by 1 March" }
+      "for": {
+        "term": "For",
+        "value": "Regulars first"
+      },
+      "must": {
+        "term": "Must",
+        "value": "Every rental bike serviced"
+      },
+      "bookedBy": {
+        "term": "Booked by",
+        "value": "Front desk, phone and walk-in"
+      },
+      "out": {
+        "term": "Out",
+        "value": "E-bikes"
+      },
+      "done": {
+        "term": "Done when",
+        "value": "40 slots, calendar full by 1 March"
+      }
     }
   },
   "bench": {
@@ -46,6 +61,18 @@
     "drawing": "A clean bike bench with only the work order on it"
   },
   "notes": {
+    "where-grill-me-comes-from": {
+      "header": "Where grill-me comes from",
+      "description": "grill-me is a skill Matt Pocock published in his open collection of agent skills, \"Skills for Real Engineers\" [1]. He presents the collection's end-to-end coding workflow in a video [2].",
+      "sources": {
+        "pocock-skills": {
+          "title": "Matt Pocock, mattpocock/skills: Skills for Real Engineers (GitHub)"
+        },
+        "pocock-skills-video": {
+          "title": "mattpocock/skills: A complete AI Coding workflow, end-to-end (YouTube)"
+        }
+      }
+    },
     "asking-beats-guessing-on-unclear-tasks": {
       "header": "Asking beats guessing, on unclear tasks",
       "description": "on an underspecified variant of SWE-Bench Verified, agents that interacted with the user to fill missing information improved by up to 74% over non-interactive ones; that is a maximum, from simulated users, and models struggled to tell which tasks need a question [1].",

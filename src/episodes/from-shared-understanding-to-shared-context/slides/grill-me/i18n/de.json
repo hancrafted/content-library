@@ -1,6 +1,6 @@
 {
   "title": "Grill-me",
-  "caption": "Die KI stellt eine Runde Fragen nach der anderen, Du antwortest, und nach der letzten Runde schreibt sie <b>die Spec: einen einseitigen Arbeitsauftrag</b>.",
+  "caption": "Matt Pococks grill-me-Skill: Die KI stellt eine Runde Fragen nach der anderen, Du antwortest, und nach der letzten Runde schreibt sie <b>die Spec: einen einseitigen Arbeitsauftrag</b>.",
   "chat": {
     "task": "Frühjahrs-Servicewoche für die Fahrradwerkstatt",
     "roleSwitch": "Die KI fragt · Du antwortest",
@@ -34,11 +34,26 @@
     "label": "Die Spec landet auf der Werkbank",
     "title": "Spec · Frühjahrs-Servicewoche",
     "rows": {
-      "for": { "term": "Für", "value": "Stammkunden zuerst" },
-      "must": { "term": "Muss", "value": "Jedes Leihrad gewartet" },
-      "bookedBy": { "term": "Gebucht von", "value": "Empfang, per Telefon und vor Ort" },
-      "out": { "term": "Nicht dabei", "value": "E-Bikes" },
-      "done": { "term": "Fertig, wenn", "value": "40 Termine, Kalender voll bis 1. März" }
+      "for": {
+        "term": "Für",
+        "value": "Stammkunden zuerst"
+      },
+      "must": {
+        "term": "Muss",
+        "value": "Jedes Leihrad gewartet"
+      },
+      "bookedBy": {
+        "term": "Gebucht von",
+        "value": "Empfang, per Telefon und vor Ort"
+      },
+      "out": {
+        "term": "Nicht dabei",
+        "value": "E-Bikes"
+      },
+      "done": {
+        "term": "Fertig, wenn",
+        "value": "40 Termine, Kalender voll bis 1. März"
+      }
     }
   },
   "bench": {
@@ -46,6 +61,18 @@
     "drawing": "Eine saubere Fahrradwerkbank, nur mit dem Arbeitsauftrag darauf"
   },
   "notes": {
+    "where-grill-me-comes-from": {
+      "header": "Woher grill-me kommt",
+      "description": "grill-me ist ein Skill, den Matt Pocock in seiner offenen Sammlung von Agent-Skills veröffentlicht hat, „Skills for Real Engineers“ [1]. Den kompletten Coding-Workflow der Sammlung stellt er in einem Video vor [2].",
+      "sources": {
+        "pocock-skills": {
+          "title": "Matt Pocock, mattpocock/skills: Skills for Real Engineers (GitHub)"
+        },
+        "pocock-skills-video": {
+          "title": "mattpocock/skills: A complete AI Coding workflow, end-to-end (YouTube)"
+        }
+      }
+    },
     "asking-beats-guessing-on-unclear-tasks": {
       "header": "Fragen schlägt Raten, bei unklaren Aufgaben",
       "description": "auf einer unterspezifizierten Variante von SWE-Bench Verified schnitten Agenten, die fehlende Informationen beim Nutzer erfragten, um bis zu 74 % besser ab als Agenten ohne Rückfrage; das ist ein Höchstwert, gemessen mit simulierten Nutzern, und die Modelle konnten schlecht erkennen, welche Aufgaben eine Frage brauchen [1].",

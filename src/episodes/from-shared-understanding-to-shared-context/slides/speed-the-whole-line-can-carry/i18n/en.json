@@ -25,6 +25,10 @@
     "lead": "Equal bars, short queues.",
     "text": "The returns come from the whole line, <marker>not one station</marker>."
   },
+  "bench": {
+    "caption": "One station up close: the bike bench",
+    "label": "The bike assembly bench, one station of the line, set up for the shift"
+  },
   "notes": {
     "returns-come-from-the-system": {
       "header": "Returns come from the system",
@@ -41,7 +45,7 @@
       "one-fast-station-is-not-the-goal": {
         "title": "One fast station is not the goal",
         "keywords": "",
-        "script": "Picture the same line once more, but this time running at a higher speed and still in balance. Queues stay short and every work centre keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station."
+        "script": "Picture the same line once more, but this time running at a higher speed and still in balance. Queues stay short and every work centre keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station. Now zoom into one station: the bike bench. Keep an eye on this one station; we come back to it."
       },
       "bridge": {
         "title": "Bridge",

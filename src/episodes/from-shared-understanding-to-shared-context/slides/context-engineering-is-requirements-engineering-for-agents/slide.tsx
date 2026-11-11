@@ -12,6 +12,10 @@ const ANTHROPIC = {
 };
 const MA = { slug: 'ma-requirement-driven-llm-use', url: 'https://arxiv.org/abs/2409.08775' };
 const CHEN = { slug: 'chen-promptware-engineering', url: 'https://arxiv.org/abs/2503.02400' };
+const OSMANI = { slug: 'osmani-new-sdlc', url: 'https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding' };
+
+/** The four parts of Google's definition, in its order, each read as what a requirement has always said. */
+const DEFINITION_PARTS = ['codebase', 'architecture', 'conventions', 'intent'] as const;
 
 /**
  * The four outcomes of the dartboard, each as the shared board it lands and the window that produced it: the same
@@ -40,14 +44,17 @@ function UpArrow() {
 }
 
 /**
- * "Context engineering is requirements engineering for agents" (Spec Option 8a): one bike order, four columns, each
+ * "Context engineering is requirements engineering for agents" (Spec Option 8a): Google's definition in the caption, its
+ * four parts read as a requirement on a card (Han's feedback), then one bike order, four columns, each
  * dartboard standing over the context window that produces it. Overrules `grid-1x2` for the four columns; keeps
  * `motion: none`. The boards are the shared `Dartboard` and `Darts`; hover dims the other columns.
  */
 export const contextEngineeringIsRequirementsEngineeringForAgents = slide({
   slug: 'context-engineering-is-requirements-engineering-for-agents',
   messages: { en, de },
+  captionNote: 'googles-definition',
   notes: [
+    { slug: 'googles-definition', target: 'caption', sources: [OSMANI] },
     { slug: 'the-definition', target: 'quote', sources: [ANTHROPIC] },
     { slug: 'input-quality-tracks-output-quality', target: 'customer', sources: [MA] },
     { slug: 'a-proposal-not-a-finding', target: 'limits', sources: [CHEN] },
@@ -56,6 +63,17 @@ export const contextEngineeringIsRequirementsEngineeringForAgents = slide({
   segments: [{ slug: 'the-definition' }, { slug: 'same-four-outcomes' }],
   content: ({ t, target, marker, Marker }) => (
     <SlideFrame className="@container mt-8 gap-6">
+      <div data-definition-card className="flex flex-col gap-3 rounded-xl border border-border bg-card px-5 py-4">
+        <p className="text-caption font-medium text-muted-foreground">{t('definitionCard.heading')}</p>
+        <dl className="grid gap-x-6 gap-y-2 @xl:grid-cols-2 @5xl:grid-cols-4">
+          {DEFINITION_PARTS.map((part) => (
+            <div key={part} data-definition-part={part} className="flex flex-col">
+              <dt className="text-body font-semibold">{t(`definitionCard.${part}.term`)}</dt>
+              <dd className="text-body text-muted-foreground">→ {t(`definitionCard.${part}.everyday`)}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
       <div
         {...target('customer')}
         className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-card px-5 py-3"

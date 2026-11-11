@@ -25,6 +25,10 @@
     "lead": "Gleich hohe Balken, kurze Warteschlangen.",
     "text": "Der Ertrag kommt vom ganzen Band, <marker>nicht von einer Station</marker>."
   },
+  "bench": {
+    "caption": "Eine Station aus der Nähe: die Fahrradwerkbank",
+    "label": "Die Montagewerkbank für Fahrräder, eine Station der Linie, für die Schicht eingerichtet"
+  },
   "notes": {
     "returns-come-from-the-system": {
       "header": "Der Ertrag kommt aus dem System",
@@ -41,7 +45,7 @@
       "one-fast-station-is-not-the-goal": {
         "title": "Eine schnelle Station ist nicht das Ziel",
         "keywords": "",
-        "script": "Stell Dir dasselbe Band noch einmal vor, aber diesmal läuft es schneller und bleibt trotzdem im Gleichgewicht. Die Warteschlangen bleiben kurz und jeder Arbeitsplatz hält mit seinem Nachbarn Schritt. Das ist das Ziel: dauerhaft mehr von dem, was die ganze Organisation schafft, nicht eine einzelne sehr schnelle Station."
+        "script": "Stell Dir dasselbe Band noch einmal vor, aber diesmal läuft es schneller und bleibt trotzdem im Gleichgewicht. Die Warteschlangen bleiben kurz und jeder Arbeitsplatz hält mit seinem Nachbarn Schritt. Das ist das Ziel: dauerhaft mehr von dem, was die ganze Organisation schafft, nicht eine einzelne sehr schnelle Station. Jetzt zoomen wir in eine Station: die Fahrradwerkbank. Behalte diese eine Station im Blick; wir kommen auf sie zurück."
       },
       "bridge": {
         "title": "Die Überleitung",

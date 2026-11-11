@@ -20,6 +20,8 @@ const REPROMPT = 'https://arxiv.org/abs/2601.16507';
 const AMBIG_SWE = 'https://arxiv.org/abs/2502.13069';
 const LABAN = 'https://arxiv.org/abs/2505.06120';
 const ANTHROPIC = 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents';
+const POCOCK_SKILLS = 'https://github.com/mattpocock/skills';
+const POCOCK_VIDEO = 'https://www.youtube.com/watch?v=M6mYodf0dJM';
 
 const PLACED = placeSections<Slide>([creatingContextForAgentsSection]).flat();
 
@@ -92,6 +94,7 @@ describe('success cases', () => {
         { header: 'Prompts generated from requirements', urls: [REPROMPT] },
       ],
       [
+        { header: 'Where grill-me comes from', urls: [POCOCK_SKILLS, POCOCK_VIDEO] },
         { header: 'Asking beats guessing, on unclear tasks', urls: [AMBIG_SWE] },
         { header: 'Rounds are inferred', urls: [LABAN] },
       ],
@@ -125,13 +128,16 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('marks every note target on exactly one element of its Slide', () => {
+  it('marks every note target on exactly one element of its Slide or its caption', () => {
     // ARRANGE
     const expected = PAGE_SLIDES.map((slug) => localized(slug).notes.map(() => 1));
     // ACT
     const counts = PAGE_SLIDES.map((slug) => {
       const $ = sceneOf(slug);
-      return localized(slug).notes.map(({ target }) => $(`[data-target="${target}"]`).length);
+      // A caption note's marker sits in the shared header, outside the Scene.
+      return localized(slug).notes.map(({ target }) =>
+        target === 'caption' ? 1 : $(`[data-target="${target}"]`).length,
+      );
     });
     // ASSERT
     expect(counts).toEqual(expected);

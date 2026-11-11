@@ -16,6 +16,7 @@ import { contextIsTheRequirementSection } from './context-is-the-requirement';
  */
 
 const ANTHROPIC = 'https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents';
+const OSMANI = 'https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding';
 const IBM = 'https://www.youtube.com/watch?v=BwXremQ-i6I';
 const BREUNIG_FAIL = 'https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html';
 
@@ -110,6 +111,8 @@ describe('success cases', () => {
     const expected = [
       ['The window has an attention budget'],
       [
+        // Han's feedback adds Google's definition as the caption's note, ahead of the Spec's four.
+        'Google’s definition',
         'The definition',
         'Input quality tracks output quality',
         'A proposal, not a finding',
@@ -158,16 +161,68 @@ describe('success cases', () => {
     // ASSERT
     expect(markers).toEqual(expected);
   });
+  it('quotes Google’s definition in Slide 8’s caption, cited to the whitepaper, in both locales', () => {
+    // ARRANGE
+    const quote =
+      'the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.';
+    const expected = { en: quote, de: quote, note: 'googles-definition', urls: [OSMANI] };
+    const slug = 'context-engineering-is-requirements-engineering-for-agents';
+    // ACT
+    const actual = {
+      en: localized(slug).header?.caption,
+      de: localized(slug, 'de').header?.caption,
+      note: localized(slug).header?.captionNote?.note,
+      urls: localized(slug)
+        .notes.find(({ slug: note }) => note === 'googles-definition')
+        ?.sources?.map(({ url }) => url),
+    };
+    // ASSERT
+    expect(actual.en).toContain(expected.en);
+    expect(actual.de).toContain(expected.de);
+    expect({ note: actual.note, urls: actual.urls }).toEqual({ note: expected.note, urls: expected.urls });
+  });
+
+  it('reads the definition’s four parts as a requirement on Slide 8’s card', () => {
+    // ARRANGE
+    const expected = {
+      en: [
+        'Codebase→ the materials you already have',
+        'Architecture→ how the parts fit together',
+        'Conventions→ the house rules',
+        'Intent→ the goal',
+      ],
+      de: [
+        'Codebase→ das Material, das schon da ist',
+        'Architektur→ wie die Teile zusammenpassen',
+        'Konventionen→ die Hausregeln',
+        'Absicht→ das Ziel',
+      ],
+    };
+    const slug = 'context-engineering-is-requirements-engineering-for-agents';
+    // ACT
+    const parts = (locale: 'en' | 'de') => {
+      const $ = sceneOf(slug, locale);
+      return $('[data-definition-part]')
+        .toArray()
+        .map((part) => $(part).text());
+    };
+    const actual = { en: parts('en'), de: parts('de') };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
-  it('marks every note target on exactly one element of its Slide', () => {
+  it('marks every note target on exactly one element of its Slide or its caption', () => {
     // ARRANGE
     const expected = PAGE_SLIDES.map((slug) => localized(slug).notes.map(() => 1));
     // ACT
     const counts = PAGE_SLIDES.map((slug) => {
       const $ = sceneOf(slug);
-      return localized(slug).notes.map(({ target }) => $(`[data-target="${target}"]`).length);
+      // A caption note's marker sits in the shared header, outside the Scene.
+      return localized(slug).notes.map(({ target }) =>
+        target === 'caption' ? 1 : $(`[data-target="${target}"]`).length,
+      );
     });
     // ASSERT
     expect(counts).toEqual(expected);

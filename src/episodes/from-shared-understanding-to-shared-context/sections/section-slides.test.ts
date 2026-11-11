@@ -49,7 +49,10 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       { title: 'A thought experiment', segments: ['Imagine your organization as a line', 'Where this is going'] },
-      { title: 'Every product is a translation', segments: ['A new pain', 'Where the Section goes'] },
+      {
+        title: 'Why precise and accurate requirements mattered before AI',
+        segments: ['A new pain', 'Where the Section goes'],
+      },
       { title: 'Context is the requirement', segments: ['The claim', 'The route'] },
       { title: 'Creating context for agents', segments: ['The pain', 'The claim'] },
     ];
@@ -69,6 +72,39 @@ describe('success cases', () => {
     };
     // ACT
     const actual = Object.fromEntries(OPENERS.map(({ slug }) => [slug, sceneOf(slug)('[data-dartboard]').length]));
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('captions Section 2 on the requirement and Section 3 on context engineering, in both locales', () => {
+    // ARRANGE
+    const expected = {
+      en: {
+        'every-product-is-a-translation':
+          'Every product translates intent, so the result was always decided by how precise and accurate the requirement was.',
+        'context-is-the-requirement':
+          'Context engineering: deciding what the AI sees, the way requirements decide what a team builds.',
+      },
+      de: {
+        'every-product-is-a-translation':
+          'Jedes Produkt übersetzt eine Absicht, also hing das Ergebnis schon immer davon ab, wie präzise und genau die Anforderung war.',
+        'context-is-the-requirement':
+          'Context Engineering: entscheiden, was die KI sieht, so wie Anforderungen entscheiden, was ein Team baut.',
+      },
+    };
+    const slugs = ['every-product-is-a-translation', 'context-is-the-requirement'] as const;
+    // ACT
+    const actual = Object.fromEntries(
+      (['en', 'de'] as const).map((locale) => [
+        locale,
+        Object.fromEntries(
+          slugs.map((slug) => {
+            const slide = OPENERS.find((opener) => opener.slug === slug);
+            return [slug, (slide?.messages[locale] as { caption?: string } | undefined)?.caption];
+          }),
+        ),
+      ]),
+    );
     // ASSERT
     expect(actual).toEqual(expected);
   });

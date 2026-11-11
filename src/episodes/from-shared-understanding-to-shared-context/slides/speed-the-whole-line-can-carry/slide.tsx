@@ -1,5 +1,6 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { BikeBench } from '@/episodes/components/slide-shared/bike-bench/bike-bench';
 import { FactoryLine, type StationId } from '@/episodes/components/slide-shared/factory-line/factory-line';
 import { FlowMotion } from '@/episodes/components/slide-shared/factory-line/flow-motion.client';
 import de from './i18n/de.json';
@@ -20,7 +21,8 @@ const BARS_GROW_MS = 700;
  * one line speed, each over the outline of its old pace, above the line running at that pace, every queue holding
  * one document, the customer's request in and the tire swing they wanted out. On the Slide's entrance, and on every
  * hover or focus of the board, the bars grow from the old level to the new one together, then the belts run until
- * each queue holds one.
+ * each queue holds one. Last, one station up close: the shared bike bench, so the Episode's station is set up before
+ * Slide 6 needs it.
  */
 export const speedTheWholeLineCanCarry = slide({
   slug: 'speed-the-whole-line-can-carry',
@@ -53,6 +55,14 @@ export const speedTheWholeLineCanCarry = slide({
           <span className="font-semibold">{t('takeaway.lead')}</span>{' '}
           <span className="text-muted-foreground">{t.rich('takeaway.text', { marker: marker(FROM_THE_SYSTEM) })}</span>
         </p>
+        {/* The last step: one station up close, the bike bench Slides 9 to 14 return to (Han's feedback). */}
+        <figure
+          data-bench-zoom
+          className="flex flex-col gap-3 rounded-xl border border-border bg-card p-5 @2xl:max-w-2xl"
+        >
+          <figcaption className="text-body font-semibold">{t('bench.caption')}</figcaption>
+          <BikeBench label={t('bench.label')} className="w-full" />
+        </figure>
       </div>
     </SlideFrame>
   ),

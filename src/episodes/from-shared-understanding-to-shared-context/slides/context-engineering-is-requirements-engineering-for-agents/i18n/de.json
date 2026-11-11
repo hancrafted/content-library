@@ -1,6 +1,25 @@
 {
   "title": "Context Engineering ist Requirements Engineering für Agenten",
-  "caption": "Was Du ins Kontextfenster legst, entscheidet, ob der Agent <b>die Präzision und Genauigkeit hat, auf die er hinarbeiten kann.</b>",
+  "caption": "Googles Definition: Context Engineering ist „the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.“",
+  "definitionCard": {
+    "heading": "Als Anforderung gelesen",
+    "codebase": {
+      "term": "Codebase",
+      "everyday": "das Material, das schon da ist"
+    },
+    "architecture": {
+      "term": "Architektur",
+      "everyday": "wie die Teile zusammenpassen"
+    },
+    "conventions": {
+      "term": "Konventionen",
+      "everyday": "die Hausregeln"
+    },
+    "intent": {
+      "term": "Absicht",
+      "everyday": "das Ziel"
+    }
+  },
   "customer": {
     "label": "Kunde will",
     "text": "ein Stadtrad für den Weg zur Arbeit, bis Freitag",
@@ -32,6 +51,15 @@
   "quote": "Anthropic: Ziel ist „die kleinstmögliche Menge an Tokens mit hohem Signal“, <definition>die die Chance auf das gewünschte Ergebnis maximiert</definition>.",
   "limits": "<proposal>Eine Parallele, die Forschende vorschlagen</proposal>; anders als eine Spezifikation <stops>ist das Fenster ein Budget, das sich ändert, während der Agent arbeitet</stops>.",
   "notes": {
+    "googles-definition": {
+      "header": "Googles Definition",
+      "description": "Drei Google-Autoren definieren Context Engineering als „the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent“ und nennen sechs Arten von Kontext: Anweisungen, Wissen, Gedächtnis, Beispiele, Werkzeuge und Leitplanken. Es ist ein Whitepaper aus der Praxis, keine Studie: Es prägt den Begriff und prüft die Parallele zu Anforderungen nicht [1].",
+      "sources": {
+        "osmani-new-sdlc": {
+          "title": "Osmani, Saboo, Kartakis (Google), The New SDLC With Vibe Coding: From ad-hoc prompting to Agentic Engineering"
+        }
+      }
+    },
     "the-definition": {
       "header": "Die Definition",
       "description": "Anthropic definiert Context Engineering als das Kuratieren und Pflegen der optimalen Menge an Tokens während der Inferenz, geleitet von „der kleinstmöglichen Menge an Tokens mit hohem Signal“, die die Chance auf das gewünschte Ergebnis maximiert [1].",
@@ -74,7 +102,7 @@
       "the-definition": {
         "title": "Die Definition",
         "keywords": "",
-        "script": "Was Du ins Kontextfenster legst, entscheidet, ob der Agent die Präzision und Genauigkeit hat, auf die er hinarbeiten kann. Das ist die ganze Definition, und deshalb nennen wir es eine Anforderung."
+        "script": "So definieren drei Google-Ingenieure Context Engineering, in ihren eigenen Worten: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. Auf Deutsch: die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben. Und jetzt von der Technik in die Werkstatt: Die Codebase ist das Material, das schon da ist. Die Architektur ist, wie die Teile zusammenpassen. Die Konventionen sind die Hausregeln. Und die Absicht ist das Ziel. Material, Zusammenspiel, Hausregeln, Ziel: genau das hat eine gute Anforderung schon immer gesagt. Was Du ins Kontextfenster legst, entscheidet also, ob der Agent die Präzision und Genauigkeit hat, auf die er hinarbeiten kann. Darum nennen wir es Requirements Engineering für Agenten."
       },
       "same-four-outcomes": {
         "title": "Dieselben vier Ergebnisse",

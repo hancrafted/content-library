@@ -172,6 +172,31 @@ describe('success cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
+
+  it('closes Slide 3 on one station up close, the bike bench, and says it will return', () => {
+    // ARRANGE
+    const expected = {
+      en: { label: 'One station up close: the bike bench', benches: 1 },
+      de: { label: 'Eine Station aus der Nähe: die Fahrradwerkbank', benches: 1 },
+      line: 'Keep an eye on this one station; we come back to it.',
+    };
+    const slug = 'speed-the-whole-line-can-carry';
+    // ACT
+    const zoom = (locale: Locale) => {
+      const $ = sceneOf(slug, locale);
+      return { label: $('[data-bench-zoom] figcaption').text(), benches: $('[data-bench-zoom] svg').length };
+    };
+    const own = aThoughtExperimentSection.find((slide) => slide.slug === slug)?.messages.en as
+      { voiceScript: { segments: Record<string, { script: string }> } } | undefined;
+    const actual = {
+      en: zoom('en'),
+      de: zoom('de'),
+      script: own?.voiceScript.segments['one-fast-station-is-not-the-goal'].script,
+    };
+    // ASSERT
+    expect({ en: actual.en, de: actual.de }).toEqual({ en: expected.en, de: expected.de });
+    expect(actual.script).toContain(expected.line);
+  });
 });
 
 describe('failure cases', () => {
