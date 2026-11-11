@@ -18,6 +18,7 @@ import { introHitlAiAttentionSpan as _20261104IntroHitlWorkflows__aiAttentionSpa
 import { introHitlAiGivesYouMoreWork as _20261104IntroHitlWorkflows__aiGivesYouMoreWork } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/ai-gives-you-more-work/episode';
 import { introHitlWorkflows as _20261104IntroHitlWorkflows__intro } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/intro/episode';
 import { introHitlOnboardAiEveryTime as _20261104IntroHitlWorkflows__onboardAiEveryTime } from '@/episodes/by-event/2026-11-04-intro-hitl-workflows/onboard-ai-every-time/episode';
+import { cyberforumIntro as _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro } from '@/episodes/by-event/2026-11-16-cyberforum-akademie-hands-on-agentic-workflows/intro/episode';
 import type { EpisodeComposition } from '@/episodes/components/slide-master/slide';
 import { aiCapability } from '@/episodes/explorable-pages/ai-capability/episode';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
@@ -50,6 +51,8 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
   '2026-11-04-intro-hitl-workflows__ai-gives-you-more-work': _20261104IntroHitlWorkflows__aiGivesYouMoreWork,
   '2026-11-04-intro-hitl-workflows__intro': _20261104IntroHitlWorkflows__intro,
   '2026-11-04-intro-hitl-workflows__onboard-ai-every-time': _20261104IntroHitlWorkflows__onboardAiEveryTime,
+  '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__intro':
+    _20261116CyberforumAkademieHandsOnAgenticWorkflows__intro,
   'ai-attention-span': aiAttentionSpan,
   'ai-gives-you-more-work': aiGivesYouMoreWork,
   'ai-token-economy': aiTokenEconomy,
