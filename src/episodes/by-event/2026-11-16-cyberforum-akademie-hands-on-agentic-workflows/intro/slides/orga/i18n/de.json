@@ -1,0 +1,23 @@
+{
+  "title": "Organisation",
+  "caption": "Aufzeichnung und Fragen, in zwei Regeln.",
+  "recordingLabel": "Aufgezeichnet",
+  "recording": "Der Theorieteil wird aufgezeichnet und erscheint auf YouTube.",
+  "questionsLabel": "Fragen",
+  "questions": "Fragen: per „Hand heben“ in Zoom, dann pausiere ich die Aufnahme.",
+  "steps": {
+    "hand": "Hand heben",
+    "pause": "Aufnahme pausiert",
+    "ask": "Frage stellen"
+  },
+  "notes": {
+    "talking-points": {
+      "header": "Aufzeichnung und Fragen",
+      "description": "Der Theorieteil wird aufgezeichnet. Wer eine Frage hat, hebt in Zoom die Hand, und ich pausiere die Aufnahme, bevor die Frage kommt."
+    },
+    "pause-first": {
+      "header": "Erst pausieren",
+      "description": "Pausiere die Aufnahme, bevor Du eine Frage annimmst, damit keine Stimme eines Teilnehmenden auf YouTube landet."
+    }
+  }
+}

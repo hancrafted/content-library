@@ -16,6 +16,7 @@ export const EPISODE_IDS = [
   '2026-11-04-intro-hitl-workflows__ai-gives-you-more-work',
   '2026-11-04-intro-hitl-workflows__intro',
   '2026-11-04-intro-hitl-workflows__onboard-ai-every-time',
+  '2026-11-16-cyberforum-akademie-hands-on-agentic-workflows__intro',
   'ai-attention-span',
   'ai-gives-you-more-work',
   'ai-token-economy',
