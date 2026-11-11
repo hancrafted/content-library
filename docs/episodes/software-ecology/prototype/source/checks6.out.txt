@@ -1,0 +1,88 @@
+PASS  0 Fixed handoff time · tire
+      12 belts, every one 0.25 working days; belt lengths 100 to 1402 layout units, so documents ride 14.0× faster on the longest
+PASS  0 Fixed handoff time · gate
+      13 belts, every one 0.25 working days; belt lengths 90 to 2050 layout units, so documents ride 22.8× faster on the longest
+PASS  0 Fixed handoff time · teams
+      13 belts, every one 0.25 working days; belt lengths 90 to 1462 layout units, so documents ride 16.2× faster on the longest
+PASS  1 Ideal 200 weeks · tire
+      largest backlog in weeks 100-200: 1 (≤ 3); fulfilled 1.000× the ideal rate of 9.76 requests a week (1.00 ± 0.03); satisfied 100 %
+PASS  1 Ideal 200 weeks · gate
+      largest backlog in weeks 100-200: 1 (≤ 3); fulfilled 1.000× the ideal rate of 10.00 requests a week (1.00 ± 0.03); satisfied 100 %
+PASS  1 Ideal 200 weeks · teams
+      largest backlog in weeks 100-200: 1 (≤ 3); fulfilled 1.000× the ideal rate of 9.76 requests a week (1.00 ± 0.03); satisfied 100 %
+PASS  1b Realistic output below ideal · tire
+      fulfilled requests: traffic solve 0.94× ideal; simulated mean 0.94× over 10 seeds (< 1), single 40-week windows 0.86-1.00×; documents reaching the Customer 10.9 a week against 9.7 fulfilled requests: extra documents, rework and answers to complaints are not output
+PASS  1b Realistic output below ideal · gate
+      fulfilled requests: traffic solve 0.96× ideal; simulated mean 0.95× over 10 seeds (< 1), single 40-week windows 0.90-1.04×; documents reaching the Customer 10.9 a week against 10.2 fulfilled requests: extra documents, rework and answers to complaints are not output
+PASS  1b Realistic output below ideal · teams
+      fulfilled requests: traffic solve 0.95× ideal; simulated mean 0.92× over 10 seeds (< 1), single 40-week windows 0.86-0.97×; documents reaching the Customer 12.2 a week against 9.4 fulfilled requests: extra documents, rework and answers to complaints are not output
+PASS  11a Realistic stable (batch means, 20 seeds) · tire
+      all backlogs: batches 1-4 mean 9.70 jobs, batch 5 mean 9.00, growth band +2.59; bottleneck eng: 4.83 vs 4.09, growth band +1.96
+PASS  11a Realistic stable (batch means, 20 seeds) · gate
+      all backlogs: batches 1-4 mean 12.36 jobs, batch 5 mean 11.89, growth band +1.95; bottleneck lrev: 2.16 vs 1.51, growth band +0.51
+PASS  11a Realistic stable (batch means, 20 seeds) · teams
+      all backlogs: batches 1-4 mean 11.68 jobs, batch 5 mean 11.36, growth band +3.00; bottleneck plat: 3.83 vs 4.03, growth band +1.78
+PASS  11b Congestion drains after Ideal · tire
+      5 weeks of AI at eng with support, ba at 200 %: peak 3.9 weeks of work at qa; Ideal brings every center to ≤ 1 week in 10.5 weeks (≤ 30).
+      For the hint: after 15 weeks of the same, 10.7 weeks of work at qa; Ideal alone takes 39 weeks; Ideal with qa at 1000 % takes 0 weeks.
+PASS  11b Congestion drains after Ideal · gate
+      5 weeks of AI at e1, e2, e3 with lspec at 200 %: peak 1.0 weeks of work at lrev; Ideal brings every center to ≤ 1 week in 0 weeks (≤ 30).
+      For the hint: after 15 weeks of the same, 2.1 weeks of work at lrev; Ideal alone takes 9 weeks; Ideal with lrev at 1000 % takes 20 weeks.
+PASS  11b Congestion drains after Ideal · teams
+      5 weeks of AI at engA, engB with anA, engB, pm, support at 200 %: peak 7.2 weeks of work at plat; Ideal brings every center to ≤ 1 week in 18.5 weeks (≤ 30).
+      For the hint: after 15 weeks of the same, 16.4 weeks of work at plat; Ideal alone takes 52 weeks; Ideal with plat at 1000 % takes 0.5 weeks.
+PASS  11c ρ < 1 at Realistic · tire
+      nominal: sales 0.68, pm 0.72, support 0.81, ba 0.75, eng 0.89, qa 0.80, ops 0.76; bottleneck eng 0.89 (≈ 0.9), others ≤ 0.81 (≤ 0.85); worst case: none.
+      Realistic efficiencies: sales 88, pm 88, support 140, ba 88, eng 88, qa 88, ops 88
+PASS  11c ρ < 1 at Realistic · gate
+      nominal: sales 0.67, pm 0.74, e1 0.82, e2 0.82, e3 0.82, ops 0.82, person lead 0.90; bottleneck lrev 0.90 (≈ 0.9), others ≤ 0.82 (≤ 0.85); worst case: none.
+      Realistic efficiencies: sales 88, pm 88, lspec 76, e1 94, e2 94, e3 94, lrev 76, ops 89
+PASS  11c ρ < 1 at Realistic · teams
+      nominal: sales 0.67, pm 0.72, support 0.75, anA 0.75, engB 0.82, engA 0.82, plat 0.90; bottleneck plat 0.90 (≈ 0.9), others ≤ 0.82 (≤ 0.85); worst case: none.
+      Realistic efficiencies: sales 88, pm 88, support 150, anA 88, engB 105, engA 97, plat 79
+PASS  11c A file over capacity is refused
+      tire with eng at 60 % efficiency: ["eng: load 1.35 of capacity at Realistic"]
+PASS  11g Follow-up loop under 1 · tire
+      follow-up requests per request: ideal 0.180, realistic 0.181, ai-unbalanced 0.181, ai-compare 0.181, ai-balanced 0.266
+PASS  11g Follow-up loop under 1 · gate
+      follow-up requests per request: ideal 0.200, realistic 0.213, ai-unbalanced 0.213, ai-compare 0.213, ai-balanced 0.310
+PASS  11g Follow-up loop under 1 · teams
+      follow-up requests per request: ideal 0.180, realistic 0.179, ai-unbalanced 0.179, ai-compare 0.179, ai-balanced 0.266
+PASS  11g A file whose follow-ups never settle is refused
+      ["customer.good: the chances add up to 1.1; keep them below 1, or the follow-up requests never end"]
+PASS  11d Conservation across dial changes
+      created 1216 = received or done 1201 + waiting 7 + on belts 3 + in work 5 (gap 0)
+      created 2092 = received or done 1760 + waiting 318 + on belts 11 + in work 3 (gap 0)
+      created 3443 = received or done 2628 + waiting 804 + on belts 7 + in work 4 (gap 0)
+PASS  11e Clear starts empty at day 0
+      after build: day 0, created 0, waiting 0, on belts 0, in work 0
+PASS  11f ai-unbalanced band · tire
+      fulfilled 0.50-0.52× ideal over 5 seeds (below Realistic's 0.94); satisfied 82-87 % (Realistic 94 %); over capacity: qa 1.91, ops 1.52
+PASS  11f ai-balanced band · tire
+      fulfilled 2.54-2.76× ideal over 5 seeds (2-3); satisfied 94-96 % (92-97); max ρ 0.80 (ops); efficiencies pm 125, support 145, ba 220, eng 515, qa 840, ops 795
+PASS  11f ai-unbalanced band · gate
+      fulfilled 0.57-0.58× ideal over 5 seeds (below Realistic's 0.92); satisfied 85-90 % (Realistic 94 %); over capacity: ops 1.43, lead 1.79
+PASS  11f ai-balanced band · gate
+      fulfilled 2.60-2.88× ideal over 5 seeds (2-3); satisfied 94-96 % (92-97); max ρ 0.80 (lead); efficiencies pm 130, lspec 390, e1 280, e2 280, e3 280, lrev 390, ops 385
+PASS  11f ai-unbalanced band · teams
+      fulfilled 0.36-0.41× ideal over 5 seeds (below Realistic's 0.92); satisfied 66-76 % (Realistic 92 %); over capacity: plat 2.52
+PASS  11f ai-balanced band · teams
+      fulfilled 2.55-2.77× ideal over 5 seeds (2-3); satisfied 94-97 % (92-97); max ρ 0.80 (plat); efficiencies pm 125, anA 225, engB 295, engA 560, plat 680
+PASS  3 AI upstream floods downstream · tire
+      backlog grows 7.0 jobs a week, linear fit R² 0.991 (> 0.95); documents out of eng 1.94× Realistic (> 1.25); fulfilled requests 0.51× ideal against Realistic's 1.02× (no gain)
+PASS  3 AI upstream floods downstream · gate
+      backlog grows 4.0 jobs a week, linear fit R² 0.985 (> 0.95); documents out of e1, e2, e3 1.36× Realistic (> 1.25); fulfilled requests 0.56× ideal against Realistic's 1.01× (no gain)
+PASS  3 AI upstream floods downstream · teams
+      backlog grows 12.1 jobs a week, linear fit R² 0.996 (> 0.95); documents out of engA, engB 1.88× Realistic (> 1.25); fulfilled requests 0.38× ideal against Realistic's 0.98× (no gain)
+PASS  5 Bottleneck shift · tire
+      AI unbalanced: qa the bottleneck (16.6 weeks of work at qa); 30 weeks after raising it to 1000 %: qa 0.0 weeks of work; largest backlog now ops (37.0 weeks, downstream); fulfilled 0.48× → 0.67× ideal
+PASS  5 Bottleneck shift · gate
+      AI unbalanced: lspec + lrev the bottleneck (3.4 weeks of work at lrev); 30 weeks after raising it to 1000 %: lspec 0.0, lrev 0.0 weeks of work; largest backlog now ops (29.7 weeks, downstream); fulfilled 0.57× → 0.63× ideal
+PASS  5 Bottleneck shift · teams
+      AI unbalanced: plat the bottleneck (25.3 weeks of work at plat); 30 weeks after raising it to 1000 %: plat 0.0 weeks of work; largest backlog now anA (1.4 weeks); fulfilled 0.45× → 1.10× ideal
+PASS  6 Determinism
+      seed 42: e2863620 and e2863620; seed 43: ab181bd3
+PASS  6 Separate streams
+      163 Customer requests over 20 weeks, with rework on vs off: identical times and targets true; the rest of the state differs true
+
+all passed

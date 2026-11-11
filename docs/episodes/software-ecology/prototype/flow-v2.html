@@ -1,0 +1,2993 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Software ecology flow</title>
+<!-- Prototype of the software ecology Explorable's Play slide, Option 1a "Documents" (feedback-01.md, feedback-02.md, business-review.md).
+     Built by scratchpad proto/build.mjs from style.css, body.html, src/*.js; design.css is the Spec's compiled site tokens, inlined. -->
+<style>
+/*! tailwindcss v4.3.3 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme, base, components, utilities;
+@layer theme {
+  :root, :host {
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    --spacing: 0.25rem;
+    --container-3xl: 48rem;
+    --leading-snug: 1.375;
+    --radius-lg: 0.5rem;
+    --default-font-family: var(--font-sans);
+    --default-mono-font-family: var(--font-mono);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-ai: var(--ai);
+    --color-warning: var(--warning);
+    --color-info: var(--info);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-border: var(--border);
+  }
+}
+@layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+  }
+  html, :host {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    font-family: var(--default-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+    font-feature-settings: var(--default-font-feature-settings, normal);
+    font-variation-settings: var(--default-font-variation-settings, normal);
+    -webkit-tap-highlight-color: transparent;
+  }
+  hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+  abbr:where([title]) {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+  a {
+    color: inherit;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
+  }
+  b, strong {
+    font-weight: bolder;
+  }
+  code, kbd, samp, pre {
+    font-family: var(--default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+    font-feature-settings: var(--default-mono-font-feature-settings, normal);
+    font-variation-settings: var(--default-mono-font-variation-settings, normal);
+    font-size: 1em;
+  }
+  small {
+    font-size: 80%;
+  }
+  sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+  sub {
+    bottom: -0.25em;
+  }
+  sup {
+    top: -0.5em;
+  }
+  table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+  :-moz-focusring:where(:not(iframe)) {
+    outline: auto;
+  }
+  progress {
+    vertical-align: baseline;
+  }
+  summary {
+    display: list-item;
+  }
+  ol, ul, menu {
+    list-style: none;
+  }
+  img, svg, video, canvas, audio, iframe, embed, object {
+    display: block;
+    vertical-align: middle;
+  }
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+  button, input, select, optgroup, textarea, ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    border-radius: 0;
+    background-color: transparent;
+    opacity: 1;
+  }
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+  ::placeholder {
+    opacity: 1;
+  }
+  @supports (not (-webkit-appearance: -apple-pay-button))  or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentcolor;
+      @supports (color: color-mix(in lab, red, red)) {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+  textarea {
+    resize: vertical;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+  button, input:where([type="button"], [type="reset"], [type="submit"]), ::file-selector-button {
+    appearance: button;
+  }
+  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  [hidden]:where(:not([hidden="until-found"])) {
+    display: none !important;
+  }
+}
+@layer utilities {
+  .pointer-events-auto {
+    pointer-events: auto;
+  }
+  .pointer-events-none {
+    pointer-events: none;
+  }
+  .visible {
+    visibility: visible;
+  }
+  .absolute {
+    position: absolute;
+  }
+  .fixed {
+    position: fixed;
+  }
+  .relative {
+    position: relative;
+  }
+  .sticky {
+    position: sticky;
+  }
+  .inset-0 {
+    inset: 0px;
+  }
+  .col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+  .col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+  .col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+  .col-span-4 {
+    grid-column: span 4 / span 4;
+  }
+  .col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+  .col-span-6 {
+    grid-column: span 6 / span 6;
+  }
+  .col-span-8 {
+    grid-column: span 8 / span 8;
+  }
+  .mt-2 {
+    margin-top: calc(var(--spacing) * 2);
+  }
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+  .mt-auto {
+    margin-top: auto;
+  }
+  .mr-1 {
+    margin-right: var(--spacing);
+  }
+  .ml-auto {
+    margin-left: auto;
+  }
+  .block {
+    display: block;
+  }
+  .flex {
+    display: flex;
+  }
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
+  }
+  .inline {
+    display: inline;
+  }
+  .inline-flex {
+    display: inline-flex;
+  }
+  .size-3 {
+    width: calc(var(--spacing) * 3);
+    height: calc(var(--spacing) * 3);
+  }
+  .size-4 {
+    width: calc(var(--spacing) * 4);
+    height: calc(var(--spacing) * 4);
+  }
+  .size-10 {
+    width: calc(var(--spacing) * 10);
+    height: calc(var(--spacing) * 10);
+  }
+  .size-12 {
+    width: calc(var(--spacing) * 12);
+    height: calc(var(--spacing) * 12);
+  }
+  .size-14 {
+    width: calc(var(--spacing) * 14);
+    height: calc(var(--spacing) * 14);
+  }
+  .size-full {
+    width: 100%;
+    height: 100%;
+  }
+  .h-2 {
+    height: calc(var(--spacing) * 2);
+  }
+  .h-3 {
+    height: calc(var(--spacing) * 3);
+  }
+  .h-4 {
+    height: calc(var(--spacing) * 4);
+  }
+  .h-9 {
+    height: calc(var(--spacing) * 9);
+  }
+  .h-auto {
+    height: auto;
+  }
+  .w-1\/3 {
+    width: calc(1 / 3 * 100%);
+  }
+  .w-3 {
+    width: calc(var(--spacing) * 3);
+  }
+  .w-6 {
+    width: calc(var(--spacing) * 6);
+  }
+  .w-11\/12 {
+    width: calc(11 / 12 * 100%);
+  }
+  .w-20 {
+    width: calc(var(--spacing) * 20);
+  }
+  .w-fit {
+    width: fit-content;
+  }
+  .w-full {
+    width: 100%;
+  }
+  .max-w-3xl {
+    max-width: var(--container-3xl);
+  }
+  .shrink-0 {
+    flex-shrink: 0;
+  }
+  .transform {
+    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+  }
+  .grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .grid-cols-5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .grid-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .flex-col {
+    flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .items-baseline {
+    align-items: baseline;
+  }
+  .items-center {
+    align-items: center;
+  }
+  .items-stretch {
+    align-items: stretch;
+  }
+  .justify-between {
+    justify-content: space-between;
+  }
+  .gap-1 {
+    gap: var(--spacing);
+  }
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
+  }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+  .gap-4 {
+    gap: calc(var(--spacing) * 4);
+  }
+  .gap-5 {
+    gap: calc(var(--spacing) * 5);
+  }
+  .gap-6 {
+    gap: calc(var(--spacing) * 6);
+  }
+  .gap-x-6 {
+    column-gap: calc(var(--spacing) * 6);
+  }
+  .gap-y-2 {
+    row-gap: calc(var(--spacing) * 2);
+  }
+  .rounded-full {
+    border-radius: calc(infinity * 1px);
+  }
+  .rounded-lg {
+    border-radius: var(--radius-lg);
+  }
+  .rounded-md {
+    border-radius: calc(var(--radius) - 2px);
+  }
+  .rounded-xl {
+    border-radius: calc(var(--radius) + 4px);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
+  .border-2 {
+    border-style: var(--tw-border-style);
+    border-width: 2px;
+  }
+  .border-t {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 1px;
+  }
+  .border-ai\/40 {
+    border-color: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--ai) 40%, transparent);
+    }
+  }
+  .border-border {
+    border-color: var(--border);
+  }
+  .border-foreground {
+    border-color: var(--foreground);
+  }
+  .border-muted-foreground\/70 {
+    border-color: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--muted-foreground) 70%, transparent);
+    }
+  }
+  .border-primary {
+    border-color: var(--primary);
+  }
+  .border-warning {
+    border-color: var(--warning);
+  }
+  .bg-ai {
+    background-color: var(--ai);
+  }
+  .bg-ai\/10 {
+    background-color: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--ai) 10%, transparent);
+    }
+  }
+  .bg-background {
+    background-color: var(--background);
+  }
+  .bg-card {
+    background-color: var(--card);
+  }
+  .bg-card\/60 {
+    background-color: var(--card);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--card) 60%, transparent);
+    }
+  }
+  .bg-info\/40 {
+    background-color: var(--info);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--info) 40%, transparent);
+    }
+  }
+  .bg-info\/80 {
+    background-color: var(--info);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--info) 80%, transparent);
+    }
+  }
+  .bg-muted {
+    background-color: var(--muted);
+  }
+  .bg-muted-foreground {
+    background-color: var(--muted-foreground);
+  }
+  .bg-primary {
+    background-color: var(--primary);
+  }
+  .bg-primary-foreground {
+    background-color: var(--primary-foreground);
+  }
+  .bg-primary-foreground\/25 {
+    background-color: var(--primary-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--primary-foreground) 25%, transparent);
+    }
+  }
+  .bg-warning {
+    background-color: var(--warning);
+  }
+  .bg-warning\/15 {
+    background-color: var(--warning);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--warning) 15%, transparent);
+    }
+  }
+  .fill-ai {
+    fill: var(--ai);
+  }
+  .fill-ai\/10 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 10%, transparent);
+    }
+  }
+  .fill-ai\/15 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 15%, transparent);
+    }
+  }
+  .fill-ai\/40 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 40%, transparent);
+    }
+  }
+  .fill-ai\/70 {
+    fill: var(--ai);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--ai) 70%, transparent);
+    }
+  }
+  .fill-background {
+    fill: var(--background);
+  }
+  .fill-background\/70 {
+    fill: var(--background);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--background) 70%, transparent);
+    }
+  }
+  .fill-card {
+    fill: var(--card);
+  }
+  .fill-foreground {
+    fill: var(--foreground);
+  }
+  .fill-foreground\/25 {
+    fill: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--foreground) 25%, transparent);
+    }
+  }
+  .fill-foreground\/50 {
+    fill: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--foreground) 50%, transparent);
+    }
+  }
+  .fill-foreground\/60 {
+    fill: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--foreground) 60%, transparent);
+    }
+  }
+  .fill-human {
+    fill: var(--human);
+  }
+  .fill-muted {
+    fill: var(--muted);
+  }
+  .fill-muted-foreground {
+    fill: var(--muted-foreground);
+  }
+  .fill-muted-foreground\/40 {
+    fill: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--muted-foreground) 40%, transparent);
+    }
+  }
+  .fill-none {
+    fill: none;
+  }
+  .fill-primary {
+    fill: var(--primary);
+  }
+  .fill-primary\/15 {
+    fill: var(--primary);
+    @supports (color: color-mix(in lab, red, red)) {
+      fill: color-mix(in oklab, var(--primary) 15%, transparent);
+    }
+  }
+  .fill-warning {
+    fill: var(--warning);
+  }
+  .fill-warning-foreground {
+    fill: var(--warning-foreground);
+  }
+  .stroke-ai {
+    stroke: var(--ai);
+  }
+  .stroke-border {
+    stroke: var(--border);
+  }
+  .stroke-card {
+    stroke: var(--card);
+  }
+  .stroke-current {
+    stroke: currentcolor;
+  }
+  .stroke-foreground {
+    stroke: var(--foreground);
+  }
+  .stroke-foreground\/15 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 15%, transparent);
+    }
+  }
+  .stroke-foreground\/20 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 20%, transparent);
+    }
+  }
+  .stroke-foreground\/25 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 25%, transparent);
+    }
+  }
+  .stroke-foreground\/30 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 30%, transparent);
+    }
+  }
+  .stroke-foreground\/35 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 35%, transparent);
+    }
+  }
+  .stroke-foreground\/45 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 45%, transparent);
+    }
+  }
+  .stroke-foreground\/50 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 50%, transparent);
+    }
+  }
+  .stroke-foreground\/60 {
+    stroke: var(--foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--foreground) 60%, transparent);
+    }
+  }
+  .stroke-muted-foreground {
+    stroke: var(--muted-foreground);
+  }
+  .stroke-muted-foreground\/60 {
+    stroke: var(--muted-foreground);
+    @supports (color: color-mix(in lab, red, red)) {
+      stroke: color-mix(in oklab, var(--muted-foreground) 60%, transparent);
+    }
+  }
+  .stroke-primary {
+    stroke: var(--primary);
+  }
+  .stroke-primary-foreground {
+    stroke: var(--primary-foreground);
+  }
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
+  }
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
+  }
+  .p-6 {
+    padding: calc(var(--spacing) * 6);
+  }
+  .p-10 {
+    padding: calc(var(--spacing) * 10);
+  }
+  .px-1 {
+    padding-inline: var(--spacing);
+  }
+  .px-2 {
+    padding-inline: calc(var(--spacing) * 2);
+  }
+  .px-3 {
+    padding-inline: calc(var(--spacing) * 3);
+  }
+  .px-4 {
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .py-1 {
+    padding-block: var(--spacing);
+  }
+  .py-2 {
+    padding-block: calc(var(--spacing) * 2);
+  }
+  .py-5 {
+    padding-block: calc(var(--spacing) * 5);
+  }
+  .pt-2 {
+    padding-top: calc(var(--spacing) * 2);
+  }
+  .pt-3 {
+    padding-top: calc(var(--spacing) * 3);
+  }
+  .text-left {
+    text-align: left;
+  }
+  .align-middle {
+    vertical-align: middle;
+  }
+  .text-subheading {
+    font-size: var(--size-subheading);
+    line-height: var(--tw-leading, var(--leading-subheading));
+    letter-spacing: var(--tw-tracking, var(--tracking-heading));
+  }
+  .text-body {
+    font-size: var(--size-body);
+    line-height: var(--tw-leading, var(--leading-body));
+  }
+  .text-caption {
+    font-size: var(--size-caption);
+    line-height: var(--tw-leading, var(--leading-caption));
+  }
+  .leading-snug {
+    --tw-leading: var(--leading-snug);
+    line-height: var(--leading-snug);
+  }
+  .font-semibold {
+    --tw-font-weight: var(--weight-semibold);
+    font-weight: var(--weight-semibold);
+  }
+  .whitespace-nowrap {
+    white-space: nowrap;
+  }
+  .text-card {
+    color: var(--card);
+  }
+  .text-human {
+    color: var(--human);
+  }
+  .text-machine {
+    color: var(--machine);
+  }
+  .text-muted-foreground {
+    color: var(--muted-foreground);
+  }
+  .text-primary {
+    color: var(--primary);
+  }
+  .text-primary-foreground {
+    color: var(--primary-foreground);
+  }
+  .text-warning {
+    color: var(--warning);
+  }
+  .text-warning-foreground {
+    color: var(--warning-foreground);
+  }
+  .uppercase {
+    text-transform: uppercase;
+  }
+  .opacity-60 {
+    opacity: 60%;
+  }
+  .shadow-inner {
+    --tw-shadow: inset 0 2px 4px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-md {
+    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-sm {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .outline {
+    outline-style: var(--tw-outline-style);
+    outline-width: 1px;
+  }
+  .backdrop-filter {
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
+}
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --header: oklch(0.985 0.002 247.8);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --success: oklch(0.5 0.13 150);
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.52 0.12 65);
+  --warning-foreground: oklch(0.985 0 0);
+  --info: oklch(0.5 0.15 245);
+  --info-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.97 0 0);
+  --section-band: oklch(0.955 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.55 0.18 290);
+  --secondary-foreground: oklch(0.985 0 0);
+  --machine: oklch(0.58 0.16 242);
+  --human: oklch(0.55 0.18 290);
+  --ai: oklch(0.6 0.14 62);
+  --tag-context-engineering: oklch(0.5 0.134 242.749);
+  --tag-agentic-ai: oklch(0.491 0.27 292.581);
+  --tag-markdown: oklch(0.514 0.222 16.935);
+  --tag-cost: oklch(0.555 0.163 48.998);
+  --tag-sales: oklch(0.508 0.118 165.612);
+  --tag-agentic-workflow: oklch(0.205 0 0);
+  --tag-overview: oklch(0.205 0 0);
+  --brand-accent: oklch(0.636 0.171 41.8);
+  --on-brand-accent: oklch(1 0 0);
+  --selected: oklch(0.4 0 0);
+  --selected-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --highlight-target: oklch(0.5 0.19 260);
+  --youtube: oklch(0.628 0.258 29.2);
+  --overlay: oklch(0 0 0);
+  --drawer-width: 26rem;
+  --size-hero: clamp(2.5rem, 5.2vw, 4.5rem);
+  --size-heading: clamp(2.25rem, 4.2vw, 3.75rem);
+  --size-subheading: clamp(1.875rem, 3.4vw, 3rem);
+  --size-body: 1rem;
+  --size-caption: 0.875rem;
+  --space-header: 1rem;
+  --space-header-tight: calc(var(--space-header) / 2);
+  --leading-hero: 1.05;
+  --leading-heading: 1.1;
+  --leading-subheading: 1.15;
+  --leading-body: 1.6;
+  --leading-caption: 1.5;
+  --tracking-heading: -0.02em;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --header: oklch(0.205 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.145 0 0);
+  --success: oklch(0.78 0.16 150);
+  --success-foreground: oklch(0.145 0 0);
+  --warning: oklch(0.82 0.15 80);
+  --warning-foreground: oklch(0.145 0 0);
+  --info: oklch(0.78 0.12 240);
+  --info-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.269 0 0);
+  --section-band: oklch(0.19 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.68 0.16 280);
+  --secondary-foreground: oklch(0.145 0 0);
+  --machine: oklch(0.72 0.14 235);
+  --human: oklch(0.68 0.16 280);
+  --ai: oklch(0.72 0.14 62);
+  --tag-context-engineering: oklch(0.746 0.16 232.661);
+  --tag-agentic-ai: oklch(0.702 0.183 293.541);
+  --tag-markdown: oklch(0.712 0.194 13.428);
+  --tag-cost: oklch(0.828 0.189 84.429);
+  --tag-sales: oklch(0.765 0.177 163.223);
+  --tag-agentic-workflow: oklch(0.922 0 0);
+  --tag-overview: oklch(0.922 0 0);
+  --brand-accent: oklch(0.732 0.146 50.4);
+  --on-brand-accent: oklch(1 0 0);
+  --selected: oklch(0.8 0 0);
+  --selected-foreground: oklch(0.2 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --highlight-target: oklch(0.75 0.14 260);
+  --youtube: oklch(0.68 0.23 29.2);
+  --overlay: oklch(0 0 0);
+}
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: var(--ring);
+    @supports (color: color-mix(in lab, red, red)) {
+      outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+    }
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+@media screen {
+  [data-context-active],
+  [data-context-pinned] {
+    border-radius: 0.375rem;
+    background-color: var(--highlight-target);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--highlight-target) 14%, transparent);
+    }
+  }
+  [data-context-active]:not([data-note-target]) {
+    box-shadow: 0 0 0 0.25rem var(--highlight-target);
+    @supports (color: color-mix(in lab, red, red)) {
+      box-shadow: 0 0 0 0.25rem color-mix(in oklab, var(--highlight-target) 14%, transparent);
+    }
+  }
+}
+@media print {
+  [data-slot='context'],
+  [data-slot='context'] [data-context-panel] {
+    position: static !important;
+    visibility: visible !important;
+    transform: none !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    break-before: page;
+  }
+  [data-slot='context'] [role='tabpanel'],
+  [data-slot='context'] [data-context-for] {
+    display: block !important;
+  }
+  [data-slot='context'] {
+    grid-column: 1 / -1;
+  }
+  [data-slot='context'] details::details-content {
+    content-visibility: visible;
+    display: block;
+  }
+  [data-slot='context-trigger'],
+  [data-slot='context-scrim'],
+  [data-slot='slide-backdrop'] {
+    display: none !important;
+  }
+}
+@layer components {
+  .card-hover {
+    transition: translate 200ms ease-out,
+      box-shadow 200ms ease-out,
+      border-color 200ms ease-out;
+  }
+  .card-hover--raise:is(:hover, :focus-visible, :focus-within) {
+    --tw-translate-y: calc(var(--spacing) * -1);
+    translate: var(--tw-translate-x) var(--tw-translate-y);
+    --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .card-hover--outline:is(:hover, :focus-visible, :focus-within) {
+    border-color: var(--brand-accent);
+  }
+  .focus-group__item {
+    transition: opacity 200ms ease-out;
+  }
+  .focus-group--dim-others:has(.focus-group__item:is(:hover, :focus-visible, :has(:focus-visible)))
+    .focus-group__item:not(:hover, :focus-visible, :has(:focus-visible)) {
+    opacity: 0.4;
+  }
+  .hover-reveal__detail {
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  .hover-reveal:is(:hover, :focus-visible, :focus-within) .hover-reveal__detail {
+    opacity: 1;
+  }
+  @media (hover: none), print {
+    .hover-reveal__detail {
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card-hover,
+    .focus-group__item,
+    .hover-reveal__detail {
+      transition: none;
+    }
+  }
+}
+@media screen and (prefers-reduced-motion: no-preference) {
+  .js [data-entry='pending'] > [data-slot='slide-header'],
+  .js [data-entry='pending'] > [data-slot='slide-scene'] > * {
+    opacity: 0;
+  }
+  [data-entry='entering'] > [data-slot='slide-scene'] > * {
+    animation: slide-rise 400ms ease-out backwards;
+  }
+  [data-entry='entering'] > [data-slot='slide-scene'] > [data-slot='slide-backdrop'],
+  [data-entry='entering'] > [data-entrance='fade'] {
+    animation: slide-fade 400ms ease-out backwards;
+  }
+  [data-entry='entering'] > [data-entrance='typewriter'] [data-char] {
+    position: relative;
+    animation: slide-fade 1ms step-end var(--d) backwards;
+  }
+  [data-entry='entering'] > [data-entrance='typewriter'] [data-char]::after {
+    content: '';
+    position: absolute;
+    top: 0.1em;
+    bottom: 0.1em;
+    left: 100%;
+    width: 0.08em;
+    min-width: 2px;
+    background: currentColor;
+    visibility: hidden;
+    animation: slide-caret-on var(--h) step-end var(--d),
+      slide-caret-blink 530ms step-end infinite;
+  }
+}
+@keyframes slide-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+@media screen and (prefers-reduced-motion: no-preference) {
+  [data-view-fade='on'] {
+    animation: slide-fade 250ms ease-out;
+  }
+}
+@keyframes slide-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-caret-on {
+  from,
+  to {
+    visibility: visible;
+  }
+}
+@keyframes slide-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes hero-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(16px, -12px) scale(1.04);
+  }
+}
+@keyframes hero-drift-alt {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-14px, 14px) scale(1.05);
+  }
+}
+@keyframes s2-flow-travel {
+  from {
+    stroke-dashoffset: 32;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes s2-breathe-primary {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--primary) 50%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+  50% {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+}
+@keyframes s2-breathe-secondary {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--secondary) 50%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--secondary) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--secondary) 20%, transparent);
+  }
+  50% {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--secondary) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--secondary) 35%, transparent);
+  }
+}
+@keyframes s2-breathe-accent {
+  0%,
+  100% {
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent),
+      0 4px 18px -2px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+  50% {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 65%, transparent),
+      0 8px 24px -2px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+}
+@keyframes deck-unsettled {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: rotate(-1.5deg) scale(1.02);
+  }
+  75% {
+    opacity: 0.95;
+    transform: rotate(1.5deg) scale(0.99);
+  }
+}
+@keyframes venn-ai-running {
+  0%,
+  100% {
+    stroke-opacity: 0.45;
+  }
+  50% {
+    stroke-opacity: 1;
+  }
+}
+@keyframes venn-ai-running-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.s2-arrow-group {
+  transition: opacity 300ms ease,
+    filter 300ms ease;
+}
+.s2-flow-dash {
+  opacity: 0;
+  stroke-width: 4;
+  stroke-dasharray: 9 23;
+  stroke-linecap: round;
+  transition: opacity 400ms ease;
+}
+.s2-arrows-active .s2-arrow-group.is-active .s2-flow-dash {
+  opacity: 0.95;
+  animation: s2-flow-travel 1.15s linear infinite;
+}
+.hero-glow {
+  background: radial-gradient(
+    55% 55% at 22% 18%,
+    currentColor 0%,
+    currentColor 45%,
+    transparent 72%
+  );
+  @supports (color: color-mix(in lab, red, red)) {
+    background: radial-gradient(
+    55% 55% at 22% 18%,
+    color-mix(in oklab, currentColor 26%, transparent) 0%,
+    color-mix(in oklab, currentColor 8%, transparent) 45%,
+    transparent 72%
+  );
+  }
+  animation: hero-drift 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+.hero-glow--accent {
+  background: radial-gradient(
+    50% 50% at 82% 30%,
+    currentColor 0%,
+    currentColor 48%,
+    transparent 74%
+  );
+  @supports (color: color-mix(in lab, red, red)) {
+    background: radial-gradient(
+    50% 50% at 82% 30%,
+    color-mix(in oklab, currentColor 22%, transparent) 0%,
+    color-mix(in oklab, currentColor 7%, transparent) 48%,
+    transparent 74%
+  );
+  }
+  animation: hero-drift-alt 34s ease-in-out infinite alternate;
+}
+.deck-unsettled {
+  animation: deck-unsettled 3.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow,
+  .hero-glow--accent,
+  .deck-unsettled,
+  .s2-flow-dash {
+    animation: none !important;
+  }
+  .s2-flow-dash {
+    opacity: 0 !important;
+  }
+}
+:root,
+.dark {
+  --tone-paper: var(--primary);
+  --tone-ink: var(--primary-foreground);
+  --header-block: 4.75rem;
+}
+[data-tone='inverse'],
+html[data-page-tone='inverse'] [data-testid='site-header'] {
+  --foreground: var(--tone-ink);
+  --muted-foreground: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --muted-foreground: color-mix(in oklab, var(--tone-ink) 85%, transparent);
+  }
+  --header: var(--tone-paper);
+  --accent: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent: color-mix(in oklab, var(--tone-ink) 14%, transparent);
+  }
+  --accent-foreground: var(--tone-ink);
+  --border: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --border: color-mix(in oklab, var(--tone-ink) 22%, transparent);
+  }
+  --primary: var(--tone-ink);
+  --primary-foreground: var(--tone-paper);
+  color: var(--tone-ink);
+}
+html[data-page-tone='inverse'] [data-testid='site-header'] {
+  --background: var(--tone-paper);
+  --muted: var(--tone-ink);
+  @supports (color: color-mix(in lab, red, red)) {
+    --muted: color-mix(in oklab, var(--tone-ink) 18%, transparent);
+  }
+  background-color: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--tone-paper) 88%, transparent);
+  }
+  --selected: var(--tone-ink);
+  --selected-foreground: var(--tone-paper);
+}
+[data-tone='inverse'][data-slot='title-slide'] {
+  padding-top: calc(var(--header-block) + 1rem);
+}
+[data-tone='inverse'] [data-slot='slide-header'] h1 {
+  max-width: 16ch;
+}
+[data-tone='inverse'] [data-slot='slide-header'] [data-target='caption'] {
+  max-width: 40rem;
+}
+[data-tone='inverse'] [data-tone-flip] {
+  --foreground: var(--tone-paper);
+  --muted-foreground: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    --muted-foreground: color-mix(in oklab, var(--tone-paper) 62%, transparent);
+  }
+  --accent: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    --accent: color-mix(in oklab, var(--tone-paper) 8%, transparent);
+  }
+  --accent-foreground: var(--tone-paper);
+  --border: var(--tone-paper);
+  @supports (color: color-mix(in lab, red, red)) {
+    --border: color-mix(in oklab, var(--tone-paper) 12%, transparent);
+  }
+  --primary: var(--tone-paper);
+  --primary-foreground: var(--tone-ink);
+  color: var(--tone-paper);
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-outline-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-border-style: solid;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-outline-style: solid;
+      --tw-backdrop-blur: initial;
+      --tw-backdrop-brightness: initial;
+      --tw-backdrop-contrast: initial;
+      --tw-backdrop-grayscale: initial;
+      --tw-backdrop-hue-rotate: initial;
+      --tw-backdrop-invert: initial;
+      --tw-backdrop-opacity: initial;
+      --tw-backdrop-saturate: initial;
+      --tw-backdrop-sepia: initial;
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+    }
+  }
+}
+
+</style>
+<style>
+/* Prototype styles. Every colour is a design.css token; alphas are color-mix over tokens. */
+:root {
+  --fg-12: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --fg-25: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --fg-45: color-mix(in oklab, var(--foreground) 45%, transparent);
+  --warn-15: color-mix(in oklab, var(--warning) 15%, transparent);
+  --ai-12: color-mix(in oklab, var(--ai) 12%, transparent);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+html { background: var(--background); }
+body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); }
+button, select, input { font: inherit; color: inherit; }
+.muted { color: var(--muted-foreground); }
+.page { max-width: 1280px; margin: 0 auto; padding: 40px 32px 64px; display: flex; flex-direction: column; gap: 28px; }
+@media (max-width: 720px) { .page { padding: 24px 16px 48px; } }
+
+.head { display: flex; flex-direction: column; gap: 8px; }
+.head__row { display: flex; justify-content: space-between; align-items: center; }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); }
+.title { font-size: var(--size-subheading); line-height: var(--leading-subheading); letter-spacing: var(--tracking-heading); font-weight: var(--weight-semibold); }
+.lede { max-width: 46rem; }
+.theme-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 12px; font-size: var(--size-caption); cursor: pointer; }
+
+/* ---------- toolbar ---------- */
+.toolbar { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 24px; align-items: stretch; }
+@media (max-width: 900px) { .toolbar { grid-template-columns: 1fr; } }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.step { display: flex; flex-direction: column; gap: 8px; padding: 8px; text-align: left; border-radius: 12px; border: 1px solid var(--border); background: var(--card); cursor: pointer; transition: border-color 160ms var(--ease), box-shadow 160ms var(--ease), translate 160ms var(--ease); }
+.step:hover:not([aria-disabled='true']) { translate: 0 -2px; box-shadow: 0 6px 14px -6px var(--fg-25); }
+.step[aria-pressed='true'] { border-color: var(--foreground); box-shadow: 0 6px 16px -8px var(--fg-45); }
+.step[aria-disabled='true'] { opacity: 0.45; cursor: not-allowed; }
+.step svg { width: 100%; height: auto; border-radius: 8px; background: var(--muted); }
+.step__label { font-weight: var(--weight-semibold); padding: 0 4px; }
+.step__sub { padding: 0 4px; }
+.usecase { display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.select { appearance: none; border: 1px solid var(--border); border-radius: 10px; background: var(--card); padding: 10px 40px 10px 14px; font-weight: var(--weight-semibold); cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--foreground) 50%), linear-gradient(135deg, var(--foreground) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+/* ---------- controls bar ---------- */
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; padding: 4px 4px 0; }
+.ctl { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; max-width: 100%; }
+.ctl__name { font-size: var(--size-caption); color: var(--muted-foreground); }
+.range { -webkit-appearance: none; appearance: none; width: 160px; height: 4px; border-radius: 999px; background: var(--border); cursor: pointer; }
+.range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--card); border: 2px solid var(--foreground); }
+.range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--card); border: 2px solid var(--foreground); }
+.range--ai::-webkit-slider-thumb { border-color: var(--ai); }
+.ctl__val { font-size: var(--size-caption); font-weight: var(--weight-semibold); min-width: 5.5em; }
+.seg { display: inline-flex; flex-wrap: wrap; max-width: 100%; border: 1px solid var(--border); border-radius: 18px; background: var(--card); padding: 2px; }
+.seg button { border: 0; background: transparent; border-radius: 999px; padding: 4px 12px; font-size: var(--size-caption); cursor: pointer; color: var(--muted-foreground); min-height: 32px; }
+.seg button[aria-pressed='true'] { background: var(--foreground); color: var(--background); }
+.seg--ai button[aria-pressed='true'] { background: var(--ai); color: var(--card); }
+.chip-btn { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 4px 14px; min-height: 34px; font-size: var(--size-caption); cursor: pointer; }
+.chip-btn[aria-pressed='true'] { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.ghost-btn { border: 0; background: transparent; font-size: var(--size-caption); color: var(--muted-foreground); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 34px; }
+
+/* ---------- stage ---------- */
+.graph { display: flex; flex-direction: column; gap: 14px; }
+.stage-wrap { border-radius: 16px; background: var(--muted); padding: 28px 20px 18px; }
+.stage { position: relative; }
+.stage > svg, .stage > canvas { display: block; width: 100%; height: auto; }
+.stage > canvas, .stage > .overlay { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stage > canvas { pointer-events: none; }
+.overlay { overflow: visible; }
+
+.pipe-wall { fill: none; stroke: color-mix(in oklab, var(--foreground) 13%, var(--muted)); stroke-linecap: round; stroke-linejoin: round; }
+.pipe-glass { fill: none; stroke: var(--card); stroke-linecap: round; stroke-linejoin: round; }
+
+/* nodes */
+.node { cursor: pointer; outline: none; transition: opacity 220ms var(--ease); }
+.node__hit { fill: transparent; }
+.node__disc { fill: var(--card); stroke: var(--border); stroke-width: 1.5; transition: stroke 200ms; }
+.node__glyph { fill: none; stroke: var(--foreground); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.node__title { fill: var(--foreground); font-size: 13px; font-weight: var(--weight-semibold); }
+.node__ring { fill: none; stroke: var(--ring); stroke-width: 2; opacity: 0; }
+.node:focus-visible .node__ring { opacity: 1; }
+.node:hover .node__disc, .node.is-selected .node__disc { stroke: var(--foreground); }
+.node.is-selected .node__disc { stroke-width: 2.5; }
+.flange { fill: var(--fg-12); opacity: 0; transition: opacity 220ms; }
+
+/* progressive disclosure: valve, count, leak only under pressure or on hover/focus/selection */
+.reveal { opacity: 0; transition: opacity 260ms var(--ease); pointer-events: none; }
+.node:is(:hover, :focus-visible, .is-selected, .is-pressure) .reveal,
+.node:is(:hover, :focus-visible, .is-selected, .is-pressure) .flange { opacity: 1; }
+.valve__gate { fill: var(--human); transition: fill 200ms; }
+.valve__stem { fill: none; stroke: var(--fg-45); stroke-width: 2.2; }
+.valve__wheel { fill: var(--card); stroke: var(--fg-45); stroke-width: 2; }
+.node.is-hot .valve__gate { fill: var(--warning); }
+.badge__bg { fill: var(--card); stroke: var(--border); stroke-width: 1.2; }
+.badge__tx { fill: var(--foreground); font-size: 12px; font-weight: var(--weight-semibold); }
+.node.is-hot .badge__bg { fill: var(--warning); stroke: var(--warning); }
+.node.is-hot .badge__tx { fill: var(--warning-foreground); }
+
+/* the AI pump */
+.pump { display: none; }
+.node.is-ai .pump { display: inline; }
+.pump__band, .pump__motor, .pump__hub { fill: var(--ai); }
+.pump__house { fill: var(--card); stroke: var(--ai); stroke-width: 2.6; }
+.pump__blades { fill: none; stroke: var(--ai); stroke-width: 2; stroke-linecap: round; }
+.pump__label { fill: var(--card); font-size: 10px; font-weight: var(--weight-semibold); }
+.node.is-ai .node__disc { stroke: var(--ai); }
+
+/* hover a node: the rest steps back */
+.overlay:has(.node:is(:hover, :focus-visible)) .node:not(:hover, :focus-visible, .is-twin) { opacity: 0.45; }
+.node.is-twin .node__disc { stroke: var(--foreground); stroke-dasharray: 3 3; }
+.node.is-twin .node__title { fill: var(--muted-foreground); font-style: italic; }
+
+/* isolation */
+.stage.is-isolating .node { opacity: 1; }
+.node.is-off { opacity: 0.32 !important; }
+.node.is-off .node__disc { stroke-dasharray: 3 3; }
+.stage.is-isolating .node:not(.is-off) .node__disc { stroke: var(--foreground); stroke-width: 2.2; }
+
+/* edges: labels on hover/focus only */
+.edge-hit { fill: none; stroke: transparent; stroke-width: 22; pointer-events: stroke; cursor: help; outline: none; }
+.elabel { opacity: 0; transition: opacity 200ms var(--ease); pointer-events: none; }
+.elabel.is-on { opacity: 1; }
+.elabel__bg { fill: var(--card); stroke: var(--border); }
+.elabel__tx { fill: var(--foreground); font-size: 12px; }
+.elabel__rate { fill: var(--muted-foreground); font-size: 12px; }
+.person-link { fill: none; stroke: var(--fg-25); stroke-width: 1.5; stroke-dasharray: 3 5; opacity: 0; transition: opacity 220ms; }
+.person-link.is-on { opacity: 1; }
+.person-tx { fill: var(--muted-foreground); font-size: 12px; opacity: 0; transition: opacity 220ms; }
+.person-tx.is-on { opacity: 1; }
+
+.cust__disc { fill: var(--card); stroke: var(--border); stroke-width: 1.5; }
+.cust__disc--tap { stroke: var(--primary); }
+.cust__tx { fill: var(--foreground); font-size: 13px; font-weight: var(--weight-semibold); }
+.cust__sub { fill: var(--muted-foreground); font-size: 12px; }
+.tap__metal { fill: var(--fg-45); }
+.tap__spout-wall { fill: none; stroke: var(--fg-25); stroke-linecap: round; stroke-linejoin: round; }
+.tap__spout { fill: none; stroke: var(--card); stroke-linecap: round; stroke-linejoin: round; }
+.intake__box { fill: var(--card); stroke: var(--fg-25); stroke-width: 2; }
+.intake__line { fill: none; stroke: var(--muted-foreground); stroke-width: 2; stroke-linecap: round; }
+
+.stage-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; align-items: center; padding: 0 4px; }
+.status { font-size: var(--size-body); }
+.status b { font-weight: var(--weight-semibold); }
+.status--calm { color: var(--muted-foreground); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; font-size: var(--size-caption); color: var(--muted-foreground); }
+.legend__item { display: inline-flex; align-items: center; gap: 6px; }
+.docicon { width: 16px; height: 20px; display: inline-block; vertical-align: middle; }
+
+/* ---------- card + tap ---------- */
+.below { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+@media (max-width: 900px) { .below { grid-template-columns: 1fr; } }
+.card { border: 1px solid var(--border); background: var(--card); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 8px 24px -16px var(--fg-45); }
+.card--empty { box-shadow: none; background: transparent; border-style: dashed; justify-content: center; color: var(--muted-foreground); min-height: 200px; }
+.card__head { display: flex; align-items: center; gap: 14px; }
+.card__head svg { width: 48px; height: 48px; flex: none; }
+.card__title { font-weight: var(--weight-semibold); }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px; font-size: var(--size-caption); font-weight: var(--weight-semibold); background: var(--muted); color: var(--muted-foreground); white-space: nowrap; }
+.chip--warn { background: var(--warn-15); color: var(--warning); }
+.chip--ai { background: var(--ai-12); color: var(--ai); }
+.icon-btn { border: 0; background: transparent; border-radius: 999px; width: 36px; height: 36px; display: inline-grid; place-items: center; color: var(--muted-foreground); cursor: pointer; }
+.icon-btn:hover { background: var(--muted); }
+.icon-btn svg { width: 16px; height: 16px; }
+.card__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+@media (max-width: 640px) { .card__grid { grid-template-columns: 1fr; } }
+.dial { display: flex; flex-direction: column; gap: 6px; }
+.dial__row { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--size-caption); }
+.dial .range { width: 100%; }
+.dial__help { font-size: var(--size-caption); color: var(--muted-foreground); }
+.switch { display: flex; align-items: center; gap: 12px; cursor: pointer; border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; background: transparent; text-align: left; width: 100%; }
+.switch__track { width: 38px; height: 22px; border-radius: 999px; background: var(--border); position: relative; flex: none; transition: background 160ms; }
+.switch__track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--card); transition: translate 160ms var(--ease); box-shadow: 0 1px 2px var(--fg-25); }
+.switch[aria-checked='true'] { border-color: var(--ai); background: var(--ai-12); }
+.switch[aria-checked='true'] .switch__track { background: var(--ai); }
+.switch[aria-checked='true'] .switch__track::after { translate: 16px 0; }
+.ai-uses { display: flex; flex-direction: column; gap: 6px; font-size: var(--size-caption); }
+.ai-uses li { display: flex; gap: 8px; align-items: baseline; }
+.ai-uses li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--ai); flex: none; translate: 0 -1px; }
+.ai-uses--off li::before { background: var(--border); }
+.readouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.readout { display: flex; flex-direction: column; }
+.readout__n { font-size: 1.75rem; line-height: 1.1; font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums; }
+.readout__n.is-warn { color: var(--warning); }
+.readout__l { font-size: var(--size-caption); color: var(--muted-foreground); }
+.mix { display: flex; flex-direction: column; gap: 6px; }
+.mix__bar { display: flex; height: 8px; border-radius: 999px; overflow: hidden; background: var(--border); }
+.mix__bar i { display: block; height: 100%; }
+.mix__good { background: var(--foreground); }
+.mix__avg { background: var(--muted-foreground); }
+.mix__bad { background: var(--border); }
+.mix__keys { display: flex; gap: 14px; font-size: var(--size-caption); color: var(--muted-foreground); flex-wrap: wrap; }
+.mix__keys span { display: inline-flex; align-items: center; gap: 4px; }
+.mix__keys b { color: var(--foreground); font-variant-numeric: tabular-nums; }
+.sep { border: 0; border-top: 1px solid var(--border); }
+
+.tap-panel { border-radius: 14px; background: var(--primary); color: var(--primary-foreground); padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.tap-panel .eyebrow { color: inherit; opacity: 0.75; }
+.tap-panel__n { font-size: 2.25rem; line-height: 1.05; font-weight: var(--weight-semibold); letter-spacing: var(--tracking-heading); font-variant-numeric: tabular-nums; }
+.tap-panel svg.art { width: 100%; max-width: 260px; height: auto; color: var(--primary-foreground); }
+.tap-panel__cap { font-weight: var(--weight-semibold); }
+.tap-mix { display: flex; height: 8px; border-radius: 999px; overflow: hidden; background: color-mix(in oklab, var(--primary-foreground) 20%, transparent); }
+.tap-mix i { display: block; height: 100%; }
+.tap-mix .g { background: var(--primary-foreground); }
+.tap-mix .a { background: color-mix(in oklab, var(--primary-foreground) 55%, transparent); }
+.tap-keys { display: flex; gap: 12px; font-size: var(--size-caption); flex-wrap: wrap; opacity: 0.9; font-variant-numeric: tabular-nums; }
+
+/* prototype-only strip */
+.proto { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; border-top: 1px dashed var(--border); padding-top: 16px; font-size: var(--size-caption); color: var(--muted-foreground); }
+.proto__tag { text-transform: uppercase; letter-spacing: 0.06em; font-weight: var(--weight-semibold); }
+.proto .seg button { display: inline-flex; align-items: center; gap: 6px; }
+.proto__why { flex-basis: 100%; max-width: 60rem; }
+
+/* swing + roles */
+.panel-box { border-radius: 16px; background: var(--muted); padding: 24px; }
+.panels { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.panels li { display: flex; flex-direction: column; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+.panels li.is-target { border: 2px solid var(--primary); }
+.panels svg { width: 100%; height: auto; }
+.tag { display: inline-flex; width: fit-content; border-radius: 999px; padding: 0 8px; background: var(--muted); color: var(--muted-foreground); font-size: var(--size-caption); margin-top: auto; }
+.tag--primary { background: var(--primary); color: var(--primary-foreground); }
+.roles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .roles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.roles li { display: flex; flex-direction: column; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+.roles svg { width: 52px; height: 52px; }
+.roles__cap { border-top: 1px solid var(--border); padding-top: 8px; margin-top: auto; }
+.art-stroke { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.art-muted { fill: var(--muted); }
+.art-primary { stroke: var(--primary); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .node, .elabel, .step, .switch__track::after { transition: none; }
+}
+
+/* ---------- v2: stations, fittings, lanes, options ---------- */
+.roles-lede { margin-bottom: 16px; }
+.range--short { width: 120px; }
+.stage-wrap { position: relative; }
+.stage-note { position: absolute; top: 8px; right: 16px; color: var(--muted-foreground); font-style: italic; }
+.fitting { fill: color-mix(in oklab, var(--foreground) 13%, var(--muted)); }
+.lane-divider { fill: none; stroke: var(--fg-12); stroke-width: 0.8; stroke-dasharray: 4 3; }
+.pipe-wall--ret { stroke: color-mix(in oklab, var(--foreground) 9%, var(--muted)); }
+.station__box { fill: var(--card); stroke: var(--fg-25); stroke-width: 1.5; transition: stroke 200ms; }
+.station__sep { stroke: var(--fg-12); stroke-width: 1; }
+.station.is-selected .station__box { stroke: var(--foreground); }
+.station.is-ai .station__box { stroke: var(--ai); }
+.station.is-hot .station__box { stroke: var(--warning); stroke-width: 2; }
+.station.is-off { opacity: 0.32; }
+.station.is-out .station__box { stroke-dasharray: 4 3; fill: var(--muted); }
+.node.is-out .node__disc { stroke-dasharray: 4 3; }
+.readout__w { font-size: 1.25rem; line-height: 1.2; font-weight: var(--weight-semibold); font-variant-numeric: tabular-nums; }
+.readout__w.is-warn { color: var(--warning); }
+.card__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 760px) { .card__grid--3 { grid-template-columns: 1fr; } }
+.card__col { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.card__sub { margin-bottom: 6px; }
+.tap-panel__sub { opacity: 0.85; }
+.proto { flex-direction: column; align-items: stretch; }
+.opts { display: flex; flex-direction: column; gap: 14px; }
+.opt { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 4px 16px; align-items: center; }
+.opt__name { font-weight: var(--weight-semibold); color: var(--foreground); }
+.opt__why { grid-column: 2; max-width: 60rem; }
+@media (max-width: 720px) { .opt { grid-template-columns: 1fr; } .opt__why { grid-column: 1; } }
+.proto .seg button[aria-pressed='true'] { background: var(--foreground); color: var(--background); }
+.stage.is-tray .badge { display: none; }
+
+</style>
+</head>
+<body>
+<main class="page" id="app">
+  <header class="head">
+    <div class="head__row">
+      <p class="eyebrow text-caption">Software ecology · Play</p>
+      <button type="button" class="theme-btn" id="theme" aria-pressed="false">Dark</button>
+    </div>
+    <h1 class="title">Play</h1>
+    <p class="lede text-body">Send work through an organization, from the customer's request to what comes out of the tap. Start in balance, then let reality in.</p>
+  </header>
+
+  <div class="toolbar" role="toolbar" aria-label="Software ecology controls">
+    <div class="steps" role="group" aria-label="Step" id="steps"></div>
+    <div class="usecase">
+      <label class="text-caption muted" for="usecase">Use case</label>
+      <select class="select" id="usecase"></select>
+      <p class="text-caption muted" id="usecase-sub"></p>
+    </div>
+  </div>
+
+  <section data-panel="swing" hidden class="panel-box" aria-label="The tire swing cartoon">
+    <ol class="panels" id="panels"></ol>
+  </section>
+
+  <section data-panel="roles" hidden class="panel-box" aria-label="Roles">
+    <p class="text-caption muted roles-lede" id="roles-lede"></p>
+    <ul class="roles" id="roles"></ul>
+  </section>
+
+  <section data-panel="graph" class="graph" aria-label="Pipeline">
+    <div class="controls" id="controls">
+      <div class="ctl">
+        <label class="ctl__name" for="reality">Reality</label>
+        <span class="text-caption muted" aria-hidden="true">Ideal</span>
+        <input type="range" class="range" id="reality" min="0" max="100" step="5" value="0" />
+        <span class="text-caption muted" aria-hidden="true">Messy</span>
+      </div>
+      <div class="ctl">
+        <span class="ctl__name" id="ai-name">AI</span>
+        <div class="seg seg--ai" role="group" aria-labelledby="ai-name" id="ai-preset">
+          <button type="button" data-ai="off" aria-pressed="true">Off</button>
+          <button type="button" data-ai="eng" aria-pressed="false">Engineering only</button>
+          <button type="button" data-ai="all" aria-pressed="false">Every role</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <label class="ctl__name" for="demand">Demand</label>
+        <input type="range" class="range range--short" id="demand" min="2" max="18" step="1" value="6" aria-describedby="demand-val" />
+        <span class="ctl__val" id="demand-val">balanced</span>
+      </div>
+      <div class="ctl">
+        <span class="ctl__name" id="speed-name">Time</span>
+        <div class="seg" role="group" aria-labelledby="speed-name">
+          <button type="button" data-speed="0" aria-pressed="false">Pause</button>
+          <button type="button" data-speed="1" aria-pressed="true">1×</button>
+          <button type="button" data-speed="4" aria-pressed="false">4×</button>
+        </div>
+      </div>
+      <button type="button" class="chip-btn" id="isolate" aria-pressed="false">Isolate roles</button>
+      <button type="button" class="chip-btn" id="follow" aria-pressed="false">Follow a request</button>
+      <button type="button" class="ghost-btn" id="reset">Back to balance</button>
+    </div>
+
+    <div class="stage-wrap">
+      <p class="stage-note text-caption">Illustrative model, not measured</p>
+      <div class="stage" id="stage"></div>
+    </div>
+
+    <div class="stage-foot">
+      <p class="status" id="status" aria-live="polite"></p>
+      <div class="legend" id="legend" aria-label="Legend"></div>
+    </div>
+
+    <div class="proto" id="proto">
+      <p class="proto__tag">Prototype only · choose an Option per row; ★ is the recommendation</p>
+      <div class="opts" id="opts"></div>
+    </div>
+
+    <div class="below">
+      <section class="card card--empty" id="card" aria-live="polite"></section>
+      <aside class="tap-panel" id="tap" aria-label="At the tap"></aside>
+    </div>
+
+  </section>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+  // ---------- Tunables (illustrative, not measured) ----------
+  const WEEK = 4;          // simulated seconds per week
+  const DT = 1 / 60;       // fixed simulation step: same inputs, same picture
+  const V = 62;            // document speed in viewBox units per second
+  const GAP = 13;          // spacing of documents entering a pipe
+  const FOLLOW = 11;       // documents never overtake: min distance behind the one ahead
+  const QGAP = 4.2;        // spacing of documents stacked in a queue
+  const UTIL = 0.78;       // in balance, every role is busy 78 % of the time ...
+  const GATE_UTIL = 0.88;  // ... and the first role, which takes requests in, 88 %
+  const AI_SPEED = 2.5;    // an AI role finishes work 2.5x faster
+  const MAX_DOCS = 420;
+  const BACKLOG_MAX = 24;  // requests the customer leaves waiting before giving up
+  const HALF = 46, VALVE_DX = 30, PUMP_DX = -24, R = 14;
+  const Q = { BAD: 0, AVG: 1, GOOD: 2 };
+
+  // ---------- Glyphs (24-unit box) ----------
+  const GLYPH = {
+    customer: '<circle cx="12" cy="8" r="4" /><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />',
+    sales: '<path d="M3 12l9-9h8v8l-9 9z" /><circle cx="16" cy="8" r="1.5" />',
+    pm: '<path d="M5 21V4" /><path d="M5 4h12l-2.5 4 2.5 4H5" />',
+    ba: '<path d="M12 4L5 21" /><path d="M12 4l7 17" /><path d="M7.5 15h9" /><circle cx="12" cy="4" r="1.6" />',
+    doc: '<path d="M6 3h9l4 4v14H6z" /><path d="M9 11h7M9 15h7M9 7h4" />',
+    eng: '<path d="M8 7l-5 5 5 5" /><path d="M16 7l5 5-5 5" /><path d="M14 4l-4 16" />',
+    ops: '<rect x="4" y="4" width="16" height="6" rx="1.5" /><rect x="4" y="14" width="16" height="6" rx="1.5" /><path d="M8 7h.01M8 17h.01" />',
+    billing: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" /><path d="M9 8h6M9 12h6M9 16h3" />',
+    support: '<path d="M4 15v-3a8 8 0 0 1 16 0v3" /><rect x="3" y="14" width="4" height="6" rx="1.5" /><rect x="17" y="14" width="4" height="6" rx="1.5" />',
+    lead: '<circle cx="12" cy="9" r="3.6" /><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5" /><path d="M8.5 3.6L12 1.8l3.5 1.8" />',
+    qa: '<path d="M12 3l7 3v5c0 5-3.2 8.4-7 10-3.8-1.6-7-5-7-10V6z" /><path d="M8.5 12l2.5 2.5 4.5-5" />',
+  };
+
+
+  // ---------- Cartoon panels (tire swing only) ----------
+  const CROWN = '<path d="M8 38 C0 28 8 12 22 15 C26 3 46 1 52 11 C64 7 74 17 68 29 C74 39 60 47 50 41 C42 49 24 49 18 43 C10 47 4 43 8 38 Z" class="art-muted" stroke-width="1.8" />';
+  const tree = (branch = true) => `<path d="M8 104 H152" opacity=".3" /><path d="M24 104 C27 86 23 64 27 40" /><path d="M36 104 C33 86 37 64 35 40" />${branch ? '<path d="M40 30 C64 22 100 20 146 19" stroke-width="3.2" />' : '<path d="M40 30 C52 26 58 25 64 24" stroke-width="3.2" />'}${CROWN}`;
+  const tire = (cx, cy, cls = '') => `<ellipse cx="${cx}" cy="${cy}" rx="15" ry="6" class="${cls}" stroke-width="5" />`;
+  const PANELS = [
+    { cap: 'How the customer explained it', role: 'Customer', art: `<path d="M74 19 V44 M104 18 V44" /><path d="M66 44 H112" /><path d="M74 44 V60 M104 44 V60" /><path d="M66 60 H112" /><path d="M74 60 V76 M104 60 V76" /><path d="M66 76 H112" />` },
+    { cap: 'How the project leader understood it', role: 'Product manager', node: 'pm', art: `<path d="M86 18 V62" /><path d="M32 62 H100" stroke-width="4" /><path d="M32 54 V70" />` },
+    { cap: 'How the analyst designed it', role: 'Analyst & architect', node: 'ba', art: `<path d="M18 70 L42 64" stroke-width="1.6" stroke-dasharray="3 3" /><path d="M112 20 L114 104 M126 19 L124 104" /><path d="M76 21 V70 M98 20 V70" />${tire(87, 72)}` },
+    { cap: 'How the programmer wrote it', role: 'Engineer', node: 'eng', art: `<path d="M76 19 V52 M100 18 V48" /><path d="M72 58 l6 -6 M96 52 l6 -4" stroke-dasharray="3 3" />${tire(88, 96)}` },
+    { cap: 'How the business consultant described it', role: 'Sales', node: 'sales', art: `<path d="M72 19 V54 M106 18 V54" /><path d="M64 54 H114 V74 H64 Z" /><path d="M64 54 C60 44 70 40 72 54 M114 54 C118 44 108 40 106 54" /><path d="M70 74 V82 M108 74 V82" />` },
+    { cap: 'How the project was documented', role: 'Documentation', node: 'doc', blank: true, art: '' },
+    { cap: 'What operations installed', role: 'Operations', node: 'ops', art: `<path d="M78 19 V58 M98 18 V58" /><rect x="66" y="58" width="44" height="12" rx="6" /><path d="M72 64 h0.1 M104 64 h0.1" stroke-width="3" />` },
+    { cap: 'How the customer was billed', role: 'Billing', node: 'billing', art: `<path d="M88 18 V60" />${tire(88, 66)}<path d="M104 30 L128 30 L134 40 L128 50 L104 50 Z" /><path d="M114 35 V45 M118 36 c-4 -2 -8 0 -4 4 c4 2 0 6 -4 4" stroke-width="1.6" />` },
+    { cap: 'How it was supported', role: 'Support', node: 'support', broken: true, art: `<path d="M64 24 L112 76" stroke-width="3.2" /><path d="M62 18 l6 4 -4 4 6 4" stroke-width="1.4" /><path d="M100 64 V82" />${tire(100, 88)}` },
+    { cap: 'What the customer really needed', role: 'Customer', target: true, art: `<path d="M88 18 V62" />${tire(88, 70)}` },
+  ];
+  const panelArt = (p) => p.blank
+    ? `<rect x="10" y="10" width="140" height="94" rx="6" class="art-stroke" stroke-width="1.5" stroke-dasharray="5 5" opacity=".4" /><text x="80" y="62" text-anchor="middle" fill="currentColor" opacity=".6" font-size="13">(blank)</text>`
+    : `<g class="art-stroke">${tree(!p.broken)}${p.art}</g>`;
+
+
+  Object.assign(GLYPH, {
+    lead: '<circle cx="12" cy="9" r="3.6" /><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5" /><path d="M8.5 3.6L12 1.8l3.5 1.8" />',
+    qa: '<path d="M12 3l7 3v5c0 5-3.2 8.4-7 10-3.8-1.6-7-5-7-10V6z" /><path d="M8.5 12l2.5 2.5 4.5-5" />',
+    calc: '<rect x="5" y="3" width="14" height="18" rx="2" /><path d="M8 7h8M8 11h2M12 11h2M8 15h2M12 15h2M8 18h2M12 18h4" />',
+    bid: '<path d="M6 3h9l4 4v7" /><path d="M6 3v18h7" /><path d="M14 21l6-6 1.5 1.5-6 6H14z" />',
+    plan: '<rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 5v15M14 5v15" />',
+    hat: '<path d="M6 16v-3a6 6 0 0 1 12 0v3" /><path d="M12 7v4" /><path d="M3 16h18v3H3z" />',
+    wrench: '<path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z" />',
+    stamp: '<path d="M9 3h6l-1 7h-4z" /><path d="M5 14h14v3H5z" /><path d="M4 20h16" />',
+  });
+
+  // ---------- Roles: words, what AI does there, how much it writes ----------
+  // fan: documents per handoff at balance; aiFan: what AI multiplies that by; aiSize: how much bigger an AI document is to review.
+  const ROLE = {
+    sales: { title: 'Sales', job: 'Sells what the customer asked for', ai: ['Drafts proposals', 'Summarises calls into deal notes'], fan: 1, aiFan: 2, aiSize: 1.5 },
+    pm: { title: 'Product manager', job: 'Turns the deal into a brief', ai: ['Drafts briefs from interview notes', 'Clusters customer feedback'], fan: 1, aiFan: 2, aiSize: 1.8 },
+    ba: { title: 'Analyst & architect', job: 'Turns the brief into a spec', ai: ['Drafts specs', 'Drafts architecture options'], fan: 1, aiFan: 2, aiSize: 1.8 },
+    doc: { title: 'Documentation', job: 'Writes what users will read', ai: ['Generates help pages from the change', 'Generates release notes'], fan: 5, aiFan: 10, aiSize: 1 },
+    eng: { title: 'Engineer', job: 'Turns the spec into code', ai: ['Drafts the code change', 'Writes tests'], fan: 1, aiFan: 2, aiSize: 2.5 },
+    ops: { title: 'Operations', job: 'Ships and runs the release', ai: ['Writes deploy scripts', 'Triages alerts'], fan: 1, aiFan: 1.5, aiSize: 1.2 },
+    billing: { title: 'Billing', job: 'Bills what was used and agreed', ai: ['Drafts invoices', 'Reconciles usage'], fan: 1, aiFan: 1, aiSize: 1 },
+    support: { title: 'Support', job: 'Answers when it breaks', ai: ['Drafts answers', 'Triages tickets'], fan: 1, aiFan: 1.5, aiSize: 1.2 },
+    lead: { title: 'Tech lead', job: 'Splits the work and reviews every change', ai: ['Breaks a brief into tasks', 'Summarises a pull request for review'], fan: 1, aiFan: 2, aiSize: 1.5 },
+    qa: { title: 'Platform & QA', job: 'Tests, merges and ships both teams’ work', ai: ['Generates test plans', 'Writes deploy scripts'], fan: 1, aiFan: 1.5, aiSize: 1.2 },
+    est: { title: 'Estimating', job: 'Prices the bill of quantities (Kalkulation)', glyph: 'calc', ai: ['Reads the bill of quantities', 'Drafts the estimate'], fan: 1, aiFan: 3, aiSize: 1.5 },
+    bidl: { title: 'Bid lead', job: 'Turns the estimate into an offer (Angebot)', glyph: 'bid', ai: ['Drafts the offer', 'Checks it against the tender'], fan: 1, aiFan: 2, aiSize: 1.5 },
+    pl: { title: 'Project lead', job: 'Owns the contract (Projektleitung)', glyph: 'pm', ai: ['Summarises the contract', 'Drafts the project brief'], fan: 1, aiFan: 2, aiSize: 1.5 },
+    prep: { title: 'Work preparation', job: 'Plans execution (Arbeitsvorbereitung)', glyph: 'plan', ai: ['Drafts plan variants', 'Schedules crews'], fan: 1, aiFan: 3, aiSize: 1.5 },
+    site: { title: 'Site management', job: 'Runs the site (Bauleitung)', glyph: 'hat', ai: ['Writes the site diary', 'Drafts work orders'], fan: 1, aiFan: 2, aiSize: 1.2 },
+    sub: { title: 'Subcontractors', job: 'Build their trade (Nachunternehmer)', glyph: 'wrench', ai: ['Drafts method statements', 'Logs quantities'], fan: 1, aiFan: 2, aiSize: 1.2 },
+    acc: { title: 'Acceptance', job: 'Inspects and signs off (Abnahme)', glyph: 'stamp', ai: ['Drafts the acceptance record', 'Lists defects from photos'], fan: 1, aiFan: 2, aiSize: 1.2 },
+    cbill: { title: 'Billing & change orders', job: 'Invoices and argues change orders (Nachträge)', glyph: 'billing', ai: ['Drafts invoices', 'Drafts change-order claims'], fan: 1, aiFan: 2, aiSize: 1.2 },
+  };
+  const glyphOf = (n) => (n.def.glyph || (ROLE[n.def.role] && ROLE[n.def.role].glyph) || n.def.role);
+
+  // ---------- Use cases ----------
+  // Edge: [from, to, artefact, share (handoffs per finished job), route] ; route: { xm } elbow, { down } drop into the tap, { via: [[x,y]...] } explicit corners.
+  // Every forward pipe also has a return lane: work sent back, complaints, disputes travel there.
+  const USE_CASES = [
+    {
+      id: 'tire', name: 'Tire swing', sub: 'Eight roles as most software firms run them: forks, merges and a loop from Support back to the product manager.', panels: true, demand: 6, vb: [1190, 482], y0: 0,
+      returns: { 'eng-ba': 'clarification', 'ba-pm': 'open questions', 'pm-sales': 'what did we promise?', 'ops-eng': 'rollback', 'billing-sales': 'invoice dispute', 'support-tap': 'complaint', 'ops-tap': 'complaint', 'billing-tap': 'dispute' },
+      nodes: [
+        { id: 'in', kind: 'source', x: 34, y: 250 },
+        { id: 'sales', role: 'sales', x: 150, y: 250, buffer: 6 },
+        { id: 'pm', role: 'pm', x: 300, y: 250, buffer: 6 },
+        { id: 'ba', role: 'ba', x: 450, y: 250, buffer: 6 },
+        { id: 'eng', role: 'eng', x: 600, y: 250, buffer: 8 },
+        { id: 'ops', role: 'ops', x: 760, y: 250, buffer: 6 },
+        { id: 'doc', role: 'doc', x: 680, y: 400, buffer: 6 },
+        { id: 'billing', role: 'billing', x: 940, y: 110, buffer: 6 },
+        { id: 'support', role: 'support', x: 940, y: 400, buffer: 8 },
+        { id: 'tap', kind: 'sink', x: 1090, y: 250 },
+      ],
+      edges: [
+        ['in', 'sales', 'request'], ['sales', 'pm', 'deal + promised scope'], ['sales', 'billing', 'contract & price terms', 1, { via: [[214, 250], [214, 110]] }],
+        ['pm', 'ba', 'brief'], ['ba', 'eng', 'spec'], ['ba', 'doc', 'spec (what changes)', 0.5, { xm: 520 }],
+        ['eng', 'ops', 'pull request'], ['ops', 'tap', 'release'], ['ops', 'billing', 'usage', 0.5, { xm: 838 }],
+        ['ops', 'doc', 'change log', 0.5, { via: [[838, 250], [838, 300], [614, 300], [614, 400]] }],
+        ['ops', 'support', 'known issues', 0.5, { xm: 838 }], ['doc', 'support', 'help pages'],
+        ['billing', 'tap', 'invoice', 1, { down: true }], ['support', 'tap', 'answer', 1, { down: true }],
+        ['support', 'pm', 'bug report', 0.3, { via: [[1010, 400], [1010, 464], [236, 464], [236, 250]] }],
+      ],
+      messy: { sales: [90, 80], pm: [85, 65], ba: [75, 60], doc: [60, 70], eng: [62, 70], ops: [80, 80], support: [70, 80], billing: [90, 85] },
+    },
+    {
+      id: 'gate', name: 'Gatekeeper lead', sub: 'One tech lead writes every spec and reviews every change: one person, two valves.', demand: 6, vb: [1190, 440], y0: 26,
+      returns: { 'lrev-e1': 'changes requested', 'lrev-e2': 'changes requested', 'lrev-e3': 'changes requested', 'e1-lspec': 'clarification', 'e2-lspec': 'clarification', 'e3-lspec': 'clarification', 'ops-tap': 'complaint' },
+      nodes: [
+        { id: 'in', kind: 'source', x: 34, y: 250 },
+        { id: 'sales', role: 'sales', x: 150, y: 250, buffer: 6 },
+        { id: 'pm', role: 'pm', x: 284, y: 250, buffer: 6 },
+        { id: 'lspec', role: 'lead', title: 'Lead · specs', x: 432, y: 250, buffer: 8, person: 'lead' },
+        { id: 'e1', role: 'eng', title: 'Engineer 1', x: 610, y: 110, buffer: 5 },
+        { id: 'e2', role: 'eng', title: 'Engineer 2', x: 610, y: 250, buffer: 5 },
+        { id: 'e3', role: 'eng', title: 'Engineer 3', x: 610, y: 390, buffer: 5 },
+        { id: 'lrev', role: 'lead', title: 'Lead · review', x: 790, y: 250, buffer: 8, person: 'lead', review: true },
+        { id: 'ops', role: 'ops', x: 950, y: 250, buffer: 6 },
+        { id: 'tap', kind: 'sink', x: 1090, y: 250 },
+      ],
+      edges: [
+        ['in', 'sales', 'request'], ['sales', 'pm', 'deal'], ['pm', 'lspec', 'brief'],
+        ['lspec', 'e1', 'task', 1 / 3, { xm: 528 }], ['lspec', 'e2', 'task', 1 / 3], ['lspec', 'e3', 'task', 1 / 3, { xm: 528 }],
+        ['e1', 'lrev', 'pull request', 1, { xm: 700 }], ['e2', 'lrev', 'pull request'], ['e3', 'lrev', 'pull request', 1, { xm: 700 }],
+        ['lrev', 'ops', 'approved change'], ['ops', 'tap', 'release'],
+      ],
+      // peers get equal values: the conditions differ, never the people
+      messy: { sales: [90, 85], pm: [80, 65], lspec: [70, 60], e1: [75, 70], e2: [75, 70], e3: [75, 70], lrev: [65, 80], ops: [85, 85] },
+    },
+    {
+      id: 'teams', name: 'Two teams, one platform', sub: 'Product feeds two teams; team B works without a spec; both ship through one platform team.', demand: 6, vb: [1190, 440], y0: 26,
+      returns: { 'plat-engA': 'failed check', 'plat-engB': 'failed check', 'engA-anA': 'clarification', 'anA-pm': 'open questions', 'engB-pm': 'what did you mean?', 'support-plat': 'known issue?', 'support-tap': 'complaint', 'plat-tap': 'complaint' },
+      nodes: [
+        { id: 'in', kind: 'source', x: 34, y: 250 },
+        { id: 'sales', role: 'sales', x: 150, y: 250, buffer: 6 },
+        { id: 'pm', role: 'pm', x: 290, y: 250, buffer: 6 },
+        { id: 'anA', role: 'ba', title: 'Analyst · team A', x: 460, y: 120, buffer: 6 },
+        { id: 'engA', role: 'eng', title: 'Engineers · team A', x: 676, y: 120, buffer: 6 },
+        { id: 'engB', role: 'eng', title: 'Engineers · team B', x: 520, y: 380, buffer: 6 },
+        { id: 'plat', role: 'qa', x: 834, y: 250, buffer: 7, review: true },
+        { id: 'support', role: 'support', x: 960, y: 380, buffer: 6 },
+        { id: 'tap', kind: 'sink', x: 1090, y: 250 },
+      ],
+      edges: [
+        ['in', 'sales', 'request'], ['sales', 'pm', 'deal'],
+        ['pm', 'anA', 'brief', 0.5, { xm: 380 }], ['pm', 'engB', 'brief', 0.5, { xm: 380 }],
+        ['anA', 'engA', 'spec'], ['engB', 'engA', 'API request', 0.35, { xm: 600 }],
+        ['engA', 'plat', 'pull request', 1, { xm: 760 }], ['engB', 'plat', 'pull request', 1, { xm: 760 }],
+        ['plat', 'tap', 'release'], ['plat', 'support', 'release notes', 0.5, { xm: 896 }], ['support', 'tap', 'answer', 1, { down: true }],
+      ],
+      messy: { sales: [90, 80], pm: [80, 62], anA: [75, 70], engA: [70, 72], engB: [80, 52], plat: [62, 80], support: [70, 85] },
+    },
+    {
+      id: 'tender', name: 'Tender to acceptance', sub: 'A construction firm from bill of quantities to invoice. Hypothesis: same mechanism, not studied in this sector.', demand: 6, vb: [1190, 450], y0: 4,
+      returns: { 'bidl-est': 'misread position', 'site-prep': 'change order (Nachtrag)', 'sub-prep': 'query', 'acc-site': 'defect notice (Mängelanzeige)', 'acc-sub': 'defect notice', 'cbill-pl': 'change-order dispute', 'cbill-tap': 'invoice dispute', 'acc-tap': 'warranty claim' },
+      nodes: [
+        { id: 'in', kind: 'source', x: 34, y: 250 },
+        { id: 'est', role: 'est', x: 150, y: 250, buffer: 6 },
+        { id: 'bidl', role: 'bidl', x: 290, y: 250, buffer: 6 },
+        { id: 'pl', role: 'pl', x: 430, y: 250, buffer: 6 },
+        { id: 'prep', role: 'prep', x: 590, y: 120, buffer: 6 },
+        { id: 'site', role: 'site', x: 720, y: 250, buffer: 7 },
+        { id: 'sub', role: 'sub', x: 720, y: 390, buffer: 6 },
+        { id: 'acc', role: 'acc', x: 870, y: 250, buffer: 6, review: true },
+        { id: 'cbill', role: 'cbill', x: 990, y: 120, buffer: 6 },
+        { id: 'tap', kind: 'sink', x: 1090, y: 250 },
+      ],
+      edges: [
+        ['in', 'est', 'bill of quantities'], ['est', 'bidl', 'estimate'], ['bidl', 'pl', 'contract'],
+        ['pl', 'prep', 'project brief', 1, { xm: 536 }], ['pl', 'cbill', 'contract terms', 1, { via: [[490, 250], [490, 26], [910, 26], [910, 120]] }],
+        ['prep', 'site', 'execution plans', 1, { xm: 660 }], ['prep', 'sub', 'work package', 0.6, { xm: 660 }],
+        ['site', 'acc', 'site diary & take-off'], ['sub', 'acc', 'completed work', 1, { xm: 806 }],
+        ['acc', 'cbill', 'acceptance record', 0.6, { xm: 930 }], ['acc', 'tap', 'handover', 0.6], ['cbill', 'tap', 'invoice', 1, { down: true }],
+      ],
+      messy: { est: [70, 65], bidl: [85, 75], pl: [85, 75], prep: [75, 70], site: [70, 75], sub: [75, 70], acc: [65, 85], cbill: [80, 80] },
+    },
+  ];
+
+  // ---------- Prototype options (Han chooses; letters stay stable between rounds) ----------
+  const OPTS = [
+    { key: 'node', label: 'Role drawn as', rebuild: true, items: [
+      ['pipe', 'A', 'Pipe and valve', 'A · Pipe and valve: the role is a stretch of the pipe with its review valve; quiet, but the work a role does is invisible.'],
+      ['station', 'B', 'Station on the pipe', 'B · Station (recommended): input pipe, then a box sitting on the pipe where each document visibly slides through while it is worked on, then the output pipe. Efficiency is the speed of that slide; idle gaps show a role waiting for work.'],
+    ], rec: 'station' },
+    { key: 'lanes', label: 'Return lane', rebuild: true, items: [
+      ['split', 'A', 'One pipe, two lanes', 'A · Two lanes (recommended): every pipe carries forward work in its lower lane and returns in its upper lane, divided by a hairline. No extra lines; back-and-forth reads as traffic in one pipe.'],
+      ['pipe2', 'B', 'Separate return pipe', 'B · Separate return pipe: a thin pipe under each pipe that can carry returns. Unmistakable, but it doubles the lines on the stage.'],
+    ], rec: 'split' },
+    { key: 'pile', label: 'Work that piles up', items: [
+      ['tower', 'A', 'Tower that tips', 'A · Tower: waiting documents stack upward at the role’s door; near the limit the tower leans, past it documents slide off and are abandoned.'],
+      ['tray', 'B', 'Inbox tray, pipe backs up', 'B · Tray (recommended): waiting work lies in an inbox tray with a count; once the tray is full nothing is dropped: documents stop in the pipe, the role before it cannot hand over and stalls, and the jam travels back to the customer, whose requests wait at the intake until they give up.'],
+      ['swell', 'C', 'Pipe swells, documents age', 'C · Swell: the pipe before the role bulges with waiting work, and documents that wait longer than a week yellow; past the limit the pipe drips.'],
+    ], rec: 'tray' },
+    { key: 'damage', label: 'Bad work downstream', multi: true, items: [
+      ['rework', 'A', 'Rework', 'A · Rework: the next role sends bad work back along the return lane; the sender does it again.'],
+      ['extra', 'B', 'Extra work', 'B · Extra work: a bad or average input takes the next role longer; the document visibly struggles through the station.'],
+      ['contam', 'C', 'Contamination at merges', 'C · Contamination: where pipes merge, one bad input spoils the merged output, so smudge spreads at merges.'],
+      ['escape', 'D', 'Escapes come back as demand', 'D · Escapes: bad work that reaches the customer comes back up the return lane as a complaint or dispute: new work for Support (or whoever shipped it), and from Support on to the product manager.'],
+      ['stamp', 'E', 'Rubber-stamping', 'E · Rubber-stamping: as a reviewer’s queue fills, they send less back and stamp more through; a stamp shows at the role. Needs A.'],
+    ], rec: ['rework', 'contam', 'escape', 'stamp'] },
+    { key: 'aiq', label: 'AI quality effect', items: [
+      ['worse', 'A', 'Worse', 'A · Worse: an AI role’s effectiveness drops 15 points.'],
+      ['same', 'B', 'Same', 'B · Same (default): AI changes speed and volume only, so you see the flow effect alone. Evidence goes both ways.'],
+      ['better', 'C', 'Better', 'C · Better: an AI role’s effectiveness rises 15 points (documentation and support studies point this way).'],
+    ], rec: 'same' },
+    { key: 'enc', label: 'Document quality', items: [
+      ['lines', 'A', 'Lines', 'A · Lines: complete page, missing text, crumpled. Honest, but blurs at pipe speed.'],
+      ['stamp', 'B', 'Stamp', 'B · Stamp: tick, dash, cross. Exact when still, noise when moving.'],
+      ['tone', 'C', 'Tone', 'C · Tone (recommended): white, grey, smudged dark grey. Brightness, not hue; reads in motion; Han’s “white documents”.'],
+    ], rec: 'tone' },
+  ];
+
+  // ---------- Settings: everything the controls set ----------
+  const defaultOpt = () => Object.fromEntries(OPTS.map((o) => [o.key, o.multi ? new Set(o.rec) : o.rec]));
+  const S = { uc: USE_CASES[0], step: 'pipeline', reality: 0, ai: 'off', demand: 6, isolate: false, selected: null, over: {}, speed: 1, opt: defaultOpt(), followArmed: false };
+  const has = (k) => S.opt.damage.has(k);
+  const station = () => S.opt.node === 'station';
+
+  // ---------- Geometry ----------
+  const inX = (d) => (d.kind === 'sink' ? d.x : d.x - HALF);
+  const outX = (d) => (d.kind === 'source' ? d.x + 24 : d.x + HALF);
+  const startX = (d) => (d.kind === 'source' ? d.x + 24 : station() ? d.x + HALF : d.x + VALVE_DX);
+  const entryX = (d) => (d.kind === 'sink' ? d.x : station() ? d.x - HALF : d.x + VALVE_DX);
+
+  function corners(e, A, B) {
+    const ay = A.y, by = B.y, ox = outX(A), ix = inX(B);
+    if (e.opt.via) return [[ox, ay], ...e.opt.via, [ix, by]];
+    if (e.opt.down) return [[ox, ay], [B.x, ay], [B.x, by]];
+    if (ay === by) return [[ox, ay], [ix, by]];
+    const xm = e.opt.xm ?? (ox + ix) / 2;
+    return [[ox, ay], [xm, ay], [xm, by], [ix, by]];
+  }
+  const key = (p) => `${Math.round(p[0])},${Math.round(p[1])}`;
+  const onSeg = (p, a, b) => (a[0] === b[0] ? Math.abs(p[0] - a[0]) < 0.5 && p[1] >= Math.min(a[1], b[1]) - 0.5 && p[1] <= Math.max(a[1], b[1]) + 0.5
+    : Math.abs(p[1] - a[1]) < 0.5 && p[0] >= Math.min(a[0], b[0]) - 0.5 && p[0] <= Math.max(a[0], b[0]) + 0.5);
+  // A corner of one pipe that lies on another pipe is a tee: drawn square, with a fitting.
+  function junctions(edges) {
+    const J = new Map();
+    for (const e of edges) for (let i = 1; i < e.corners.length - 1; i++) {
+      const p = e.corners[i];
+      for (const f of edges) if (f !== e) for (let j = 1; j < f.corners.length; j++) if (onSeg(p, f.corners[j - 1], f.corners[j])) J.set(key(p), p);
+    }
+    return J;
+  }
+  // A dense polyline through orthogonal corners (rounded, except at tees), with its SVG path and normals.
+  function sample(raw, J = new Map()) {
+    const pts = raw.filter((p, i) => i === 0 || Math.hypot(p[0] - raw[i - 1][0], p[1] - raw[i - 1][1]) > 0.01).map((p) => p.slice());
+    const out = [];
+    let d = `M${pts[0][0]} ${pts[0][1]}`;
+    const push = (x, y) => { const l = out[out.length - 1]; if (!l || Math.hypot(l[0] - x, l[1] - y) > 0.01) out.push([x, y]); };
+    const line = (x, y) => { const l = out[out.length - 1]; const n = Math.max(1, Math.ceil(Math.hypot(x - l[0], y - l[1]) / 3)); for (let k = 1; k <= n; k++) push(l[0] + ((x - l[0]) * k) / n, l[1] + ((y - l[1]) * k) / n); };
+    push(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) {
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i], next = pts[i + 1];
+      if (next && !J.has(key([x1, y1]))) {
+        const l1 = Math.hypot(x1 - x0, y1 - y0), l2 = Math.hypot(next[0] - x1, next[1] - y1);
+        const r = Math.min(R, l1 / 2, l2 / 2);
+        const ex = x1 - ((x1 - x0) / l1) * r, ey = y1 - ((y1 - y0) / l1) * r;
+        const fx = x1 + ((next[0] - x1) / l2) * r, fy = y1 + ((next[1] - y1) / l2) * r;
+        line(ex, ey); d += ` L${ex} ${ey} Q${x1} ${y1} ${fx} ${fy}`;
+        for (let k = 1; k <= 8; k++) { const t = k / 8, u = 1 - t; push(u * u * ex + 2 * u * t * x1 + t * t * fx, u * u * ey + 2 * u * t * y1 + t * t * fy); }
+        pts[i] = [fx, fy];
+      } else { line(x1, y1); d += ` L${x1} ${y1}`; }
+    }
+    const cum = [0];
+    for (let i = 1; i < out.length; i++) cum.push(cum[i - 1] + Math.hypot(out[i][0] - out[i - 1][0], out[i][1] - out[i - 1][1]));
+    return { pts: out, cum, L: cum[cum.length - 1], d };
+  }
+  function at(path, s) {
+    const { pts, cum, L } = path;
+    s = Math.max(0, Math.min(L, s));
+    let lo = 0, hi = cum.length - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (cum[m] <= s) lo = m; else hi = m; }
+    const seg = cum[hi] - cum[lo] || 1, t = (s - cum[lo]) / seg;
+    const dx = pts[hi][0] - pts[lo][0], dy = pts[hi][1] - pts[lo][1], l = Math.hypot(dx, dy) || 1;
+    return [pts[lo][0] + dx * t, pts[lo][1] + dy * t, -dy / l, dx / l];
+  }
+  const offsetD = (path, off) => path.pts.map((p, i) => { const [x, y, nx, ny] = at(path, path.cum[i]); return `${i ? 'L' : 'M'}${(x + nx * off).toFixed(1)} ${(y + ny * off).toFixed(1)}`; }).join(' ');
+
+  // ---------- PRNG ----------
+  const mulberry = (a) => () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+
+  // ---------- Model ----------
+  let M = null;
+  function build(uc) {
+    const nodes = new Map();
+    for (const d of uc.nodes) nodes.set(d.id, {
+      def: d, id: d.id, kind: d.kind || 'role', role: d.role ? ROLE[d.role] : null,
+      title: d.title || (d.role ? ROLE[d.role].title : ''), job: d.job || (d.role ? ROLE[d.role].job : ''),
+      buffer: d.buffer || 6, ins: [], outs: [], queue: [], acc: [], lastQ: {},
+      rate: { done: 0, aband: 0, back: 0, out: [0, 0, 0] }, press: 0, busy: 0, lastLeak: -9, stampT: -9, contam: 0,
+    });
+    const edges = uc.edges.map(([from, to, label, share = 1, opt = {}], i) => {
+      const A = nodes.get(from), B = nodes.get(to);
+      const e = { i, id: `${from}-${to}`, from: A, to: B, label, share, opt, fwd: [], back: [], outbox: [], rate: 0, backRate: 0 };
+      e.corners = corners(e, A.def, B.def);
+      e.retLabel = uc.returns?.[`${to}-${from}`] || (B.kind === 'sink' ? 'complaint' : 'sent back');
+      A.outs.push(e); B.ins.push(e);
+      return e;
+    });
+    const J = junctions(edges);
+    for (const e of edges) {
+      e.visual = sample(e.corners, J);
+      const A = e.from.def, B = e.to.def;
+      const full = [[startX(A), A.y], ...e.corners];
+      if (B.kind !== 'sink') full.push([entryX(B), B.y]);
+      e.path = sample(full, J);
+    }
+    // Balanced sizing: token and document rates by fixed-point iteration (the Support loop is a cycle).
+    const src = [...nodes.values()].find((n) => n.kind === 'source');
+    const T = new Map([...nodes.keys()].map((k) => [k, 0])), W = new Map(T);
+    for (let it = 0; it < 80; it++) {
+      const T2 = new Map([...nodes.keys()].map((k) => [k, k === src.id ? uc.demand / WEEK : 0]));
+      const W2 = new Map([...nodes.keys()].map((k) => [k, 0]));
+      for (const e of edges) { const f = e.from.role ? e.from.role.fan : 1; T2.set(e.to.id, T2.get(e.to.id) + T.get(e.from.id) * e.share); W2.set(e.to.id, W2.get(e.to.id) + T.get(e.from.id) * e.share * f); }
+      for (const k of nodes.keys()) { T.set(k, T2.get(k)); W.set(k, W2.get(k)); }
+    }
+    const gates = new Set(src.outs.map((e) => e.to.id));
+    const personW = {};
+    for (const n of nodes.values()) if (n.def.person) personW[n.def.person] = (personW[n.def.person] || 0) + W.get(n.id);
+    for (const n of nodes.values()) {
+      n.jobs = T.get(n.id); n.work = W.get(n.id); n.gate = gates.has(n.id);
+      n.server = n.def.person || n.id;
+      n.capW = (n.def.person ? personW[n.def.person] : n.work) / (n.gate ? GATE_UTIL : UTIL); // documents per second at efficiency 100 %
+      n.acc = n.outs.map(() => 0);
+    }
+    const sink = [...nodes.values()].find((n) => n.kind === 'sink');
+    const balanceTap = sink.ins.reduce((a, e) => a + T.get(e.from.id) * e.share * (e.from.role ? e.from.role.fan : 1), 0) * WEEK;
+    const servers = {};
+    for (const n of nodes.values()) if (n.kind === 'role') (servers[n.server] ||= { busy: null, nodes: [] }).nodes.push(n);
+    return { uc, nodes, edges, J, src, sink, servers, balanceTap, drops: [], drips: [], fx: [], trail: [], t: 0, rng: mulberry(20261111), backlog: 0, backAcc: 0, turned: 0, tap: [0, 0, 0], tapRate: 0, compl: 0, count: 0, spin: 0, follow: null };
+  }
+
+  const roles = () => [...M.nodes.values()].filter((n) => n.kind === 'role');
+  const isEng = (n) => n.def.role === 'eng';
+  // Effective dials: Reality slider -> per-node overrides -> isolation, outage, AI quality setting, contamination.
+  function dials(n) {
+    const o = S.over[n.id] || {};
+    const m = S.uc.messy[n.id] || [100, 100];
+    const k = S.reality / 100;
+    const eff = o.eff ?? Math.round(100 + (m[0] - 100) * k);
+    const base = o.effv ?? Math.round(100 + (m[1] - 100) * k);
+    const on = !S.isolate || !!o.on;
+    const ai = on && (o.ai ?? (S.ai === 'all' || (S.ai === 'eng' && isEng(n))));
+    const aiq = ai ? { worse: -15, same: 0, better: 15 }[S.opt.aiq] : 0;
+    const effv = Math.max(5, Math.min(100, base + aiq));
+    const fan = o.fan ?? n.role.fan;
+    const out = (o.outUntil ?? -1) > M.t;
+    return { eff, effv, base, ai, on, fan, fanEff: Math.max(1, Math.round(fan * (ai ? n.role.aiFan : 1))), size: ai ? n.role.aiSize : 1, out };
+  }
+  function roll(effv) { const r = M.rng(), q = effv / 100; if (r < q) return Q.GOOD; return r < q + (1 - q) * 0.55 ? Q.AVG : Q.BAD; }
+  const decay = (x, dt, tau = 2 * WEEK) => x * Math.exp(-dt / tau);
+  const bump = (tau = 2 * WEEK) => 1 / tau;
+  const qDocs = (n) => n.queue.reduce((a, d) => a + d.n, 0);
+  const serving = (n) => { const b = M.servers[n.server]?.busy; return b && b.node === n ? b : null; };
+  const room = (e) => !e.fwd.length || e.fwd[e.fwd.length - 1].s >= GAP;
+  const blocking = () => S.opt.pile === 'tray';
+  const perWeek = (r) => r * WEEK;
+
+  function abandonAt(n, x, y, doc) {
+    M.drops.push({ x, y: y + 8, vx: (M.rng() - 0.3) * 16, vy: 4, rot: doc.tilt || 0, vr: (M.rng() - 0.5) * 3, life: 1, q: doc.q, ai: doc.ai, n: doc.n });
+    n.rate.aband += bump() * doc.n; n.lastLeak = M.t;
+    if (doc.follow) doc.follow.lost = n.title || 'the intake';
+  }
+  const newDoc = (o) => ({ s: 0, tilt: (M.rng() - 0.5) * 0.4, x: 0, y: 0, nx: 0, ny: 1, bounces: 0, ...o });
+
+  function emit(n, doc, d) {
+    let qIn = doc.rework || doc.complaint ? Q.GOOD : doc.q;
+    if (d.on && has('contam') && n.ins.length > 1) {
+      // a merge: the worst recent input spoils what is built from it
+      const worst = Math.min(...Object.values(n.lastQ));
+      if (worst === Q.BAD || (worst === Q.AVG && M.rng() < 0.5)) qIn = Math.min(qIn, worst);
+    }
+    let passed = false;
+    n.outs.forEach((e, i) => {
+      n.acc[i] += e.share;
+      while (n.acc[i] >= 1 - 1e-9) {
+        n.acc[i] -= 1;
+        const tok = d.on
+          ? { q: Math.min(qIn, roll(d.effv)), ai: d.ai, n: d.fanEff, size: d.size }
+          : { q: doc.q, ai: doc.ai, n: doc.n, size: doc.size };
+        if (doc.follow && !passed) { tok.follow = doc.follow; passed = true; }
+        if (!blocking() && e.outbox.length > 8) { const [x, y] = at(e.path, 2); abandonAt(n, x, y, tok); continue; }
+        e.outbox.push(tok);
+        if (d.on) n.rate.out[tok.q] += bump() * tok.n;
+        if (tok.n >= 2) { const [x, y] = at(e.path, 1); if (!M.fx.some((f) => f.x === x && f.y === y && f.life > 0.4)) M.fx.push({ x, y, k: tok.n, life: 1 }); }
+      }
+    });
+    if (doc.follow && !passed && !n.outs.length) doc.follow.done = M.t;
+  }
+
+  function arrive(B, doc, e) {
+    if (B.kind === 'sink') {
+      M.tap[doc.q] += bump() * doc.n; M.tapRate += bump() * doc.n; M.drips.push({ q: doc.q, ai: doc.ai, n: doc.n, life: 1 });
+      if (doc.follow) doc.follow.done = M.t;
+      if (has('escape') && (doc.q === Q.BAD ? M.rng() < 0.8 : doc.q === Q.AVG && M.rng() < 0.25)) {
+        // the customer sends it back: a complaint up the return lane, new work for whoever shipped it
+        const back = B.ins.find((f) => f.from.def.role === 'support') || e;
+        back.back.push(newDoc({ s: back.path.L - 2, q: Q.GOOD, ai: false, n: 1, size: 1, complaint: true, rev: true }));
+        M.compl += bump();
+      }
+      return true;
+    }
+    const d = dials(B);
+    if (!d.on) { emit(B, doc, d); return true; } // switched off in isolation: passes through untouched
+    if (qDocs(B) >= B.buffer) {
+      if (blocking()) return false; // the tray is full: the document waits in the pipe
+      abandonAt(B, doc.x, doc.y, doc); return true;
+    }
+    B.lastQ[e.i] = doc.q;
+    doc.enq = M.t; doc.edge = e;
+    B.queue.push(doc);
+    return true;
+  }
+  function arriveBack(A, doc) {
+    doc.rev = false;
+    if (A.kind !== 'role') return;
+    if (!doc.complaint) doc.rework = true;
+    doc.enq = M.t; doc.edge = null;
+    if (!blocking() && qDocs(A) >= A.buffer) { const [x, y] = [entryX(A.def), A.def.y]; abandonAt(A, x, y, doc); return; }
+    if (doc.complaint) A.queue.push(doc); else A.queue.unshift(doc);
+  }
+
+  function speedOf(n, d) { return n.capW * (d.eff / 100) * (d.ai ? AI_SPEED : 1); }
+  function serve(dt) {
+    for (const sv of Object.values(M.servers)) {
+      const b = sv.busy;
+      if (b) {
+        const d = dials(b.node);
+        if (!d.out) b.prog += (dt * speedOf(b.node, d)) / b.work;
+        if (b.prog >= 1) {
+          const n = b.node, doc = b.doc;
+          sv.busy = null;
+          if (b.bounce) {
+            doc.rev = true; doc.s = b.edge.path.L - 2; doc.bounces++; b.edge.back.push(doc);
+            n.rate.back += bump(); b.edge.backRate += bump();
+          } else { n.rate.done += bump() * doc.n; emit(n, doc, d); }
+        }
+      }
+      if (!sv.busy) {
+        let pick = null;
+        for (const n of sv.nodes) {
+          const d = dials(n);
+          if (!n.queue.length || !d.on || d.out) continue;
+          if (blocking() && n.outs.some((e) => e.outbox.length >= 2)) continue; // nowhere to put the result
+          if (!pick || qDocs(n) / n.buffer > qDocs(pick) / pick.buffer) pick = n;
+        }
+        if (pick) {
+          const doc = pick.queue.shift();
+          if (doc.follow) doc.follow.wait += M.t - (doc.enq ?? M.t);
+          const from = doc.edge && doc.edge.from;
+          let p = 0;
+          if (has('rework') && from && from.kind === 'role' && dials(from).on && !doc.rework && !doc.complaint && doc.bounces < 2) p = doc.q === Q.BAD ? 0.7 : doc.q === Q.AVG ? 0.2 : 0;
+          if (p && has('stamp')) { const k = Math.max(0, 1 - 1.4 * pick.press); if (k < 0.7) pick.stampT = M.t; p *= k; }
+          const bounce = p > 0 && M.rng() < p;
+          const extra = has('extra') && !doc.rework && !doc.complaint ? [2, 1.4, 1][doc.q] : 1;
+          const work = doc.n * doc.size * extra;
+          sv.busy = { node: pick, doc, prog: 0, work: bounce ? work * 0.3 : work, bounce, edge: doc.edge, struggle: extra > 1 };
+        }
+      }
+    }
+  }
+
+  function step(dt) {
+    M.t += dt;
+    // demand: the customer's requests wait at the intake; past the limit they give up
+    M.backAcc += (S.demand / WEEK) * dt * (0.85 + 0.3 * M.rng());
+    while (M.backAcc >= 1) { M.backAcc -= 1; M.backlog++; if (M.backlog > BACKLOG_MAX) { M.backlog--; M.turned += bump(); } }
+    // the first role pulls the next request when it has room
+    for (const e of M.src.outs) {
+      if (!M.backlog || e.outbox.length || !room(e)) continue;
+      const B = e.to, d = dials(B);
+      if (d.on && qDocs(B) + e.fwd.length >= 2) continue;
+      M.backlog--;
+      const tok = { q: Q.GOOD, ai: false, n: 1, size: 1 };
+      if (S.followArmed) { S.followArmed = false; tok.follow = M.follow = { born: M.t, wait: 0 }; M.trail = []; }
+      e.outbox.push(tok);
+    }
+    for (const e of M.edges) if (e.outbox.length && room(e) && M.count < MAX_DOCS) { e.fwd.push(newDoc(e.outbox.shift())); e.rate += bump() * e.fwd[e.fwd.length - 1].n; }
+    // move forward without overtaking; the front document arrives, or waits if the role's tray is full
+    for (const e of M.edges) {
+      const B = e.to, swell = S.opt.pile === 'swell' && B.kind === 'role' && dials(B).on;
+      for (let i = 0; i < e.fwd.length; i++) {
+        const doc = e.fwd[i], v = V * (doc.ai ? 1.4 : 1) * dt;
+        const stop = i === 0 ? (swell ? e.path.L - 3 - B.queue.length * QGAP : e.path.L) : e.fwd[i - 1].s - FOLLOW;
+        doc.s = Math.min(doc.s + v, Math.max(doc.s, stop));
+        [doc.x, doc.y, doc.nx, doc.ny] = at(e.path, doc.s);
+        if (i === 0 && doc.s >= stop - 0.3 && (!swell || doc.s >= e.path.L - 3 - B.queue.length * QGAP - 0.3)) {
+          if (arrive(B, doc, e)) { e.fwd.shift(); i--; }
+        }
+      }
+      for (let i = e.back.length - 1; i >= 0; i--) {
+        const doc = e.back[i];
+        doc.s -= V * 1.1 * dt;
+        [doc.x, doc.y, doc.nx, doc.ny] = at(e.path, doc.s);
+        if (doc.s <= 0) { e.back.splice(i, 1); arriveBack(e.from, doc); }
+      }
+    }
+    serve(dt);
+    let count = 0;
+    for (const e of M.edges) count += e.fwd.length + e.back.length;
+    M.count = count;
+    for (let i = M.drops.length - 1; i >= 0; i--) { const d = M.drops[i]; d.vy += 110 * dt; d.x += d.vx * dt; d.y += d.vy * dt; d.rot += d.vr * dt; d.life -= dt / 1.5; if (d.life <= 0) M.drops.splice(i, 1); }
+    for (let i = M.drips.length - 1; i >= 0; i--) { M.drips[i].life -= dt / 0.9; if (M.drips[i].life <= 0) M.drips.splice(i, 1); }
+    for (let i = M.fx.length - 1; i >= 0; i--) { M.fx[i].life -= dt / 0.9; if (M.fx[i].life <= 0) M.fx.splice(i, 1); }
+    for (const n of M.nodes.values()) {
+      if (n.kind !== 'role') continue;
+      const r = n.rate; r.done = decay(r.done, dt); r.aband = decay(r.aband, dt); r.back = decay(r.back, dt); r.out = r.out.map((x) => decay(x, dt));
+      n.press += (qDocs(n) / n.buffer - n.press) * Math.min(1, dt * 2.5);
+      n.busy += ((serving(n) ? 1 : 0) - n.busy) * Math.min(1, dt / WEEK);
+      n.contam = has('contam') ? n.contam * Math.exp(-dt / WEEK) : 0;
+    }
+    for (const e of M.edges) { e.rate = decay(e.rate, dt); e.backRate = decay(e.backRate, dt); }
+    M.tap = M.tap.map((x) => decay(x, dt)); M.tapRate = decay(M.tapRate, dt); M.compl = decay(M.compl, dt); M.turned = decay(M.turned, dt);
+  }
+  function warm(seconds) { for (let i = 0, n = Math.round(seconds / DT); i < n; i++) step(DT); }
+
+  // ---------- Stage DOM: structure in SVG, flow in canvas ----------
+  const stage = $('#stage');
+  let canvas, ctx, overlay, nodeEls = new Map(), stEls = new Map(), edgeEls = [], impellers = [];
+  const glyphG = (name, cx, cy, r, cls = 'node__disc', disc = true) => {
+    const s = (r * 1.15) / 24;
+    return `${disc ? `<circle cx="${cx}" cy="${cy}" r="${r}" class="${cls}" />` : ''}<g transform="translate(${cx - 12 * s} ${cy - 12 * s}) scale(${s})" class="node__glyph">${GLYPH[name]}</g>`;
+  };
+  const lanes = () => S.opt.lanes;
+  const canReturn = (e) => (e.to.kind === 'role' && e.from.kind === 'role' && has('rework')) || (e.to.kind === 'sink' && has('escape'));
+  const pumpXY = (d) => (station() ? [d.x + HALF, d.y] : [d.x + PUMP_DX, d.y]);
+  function pumpSvg(n) {
+    const [cx, cy] = pumpXY(n.def), r = 13;
+    const blades = Array.from({ length: 6 }, (_, i) => {
+      const a = (i * Math.PI) / 3;
+      const p = (k, rr) => `${(cx + Math.cos(a + k) * rr).toFixed(1)} ${(cy + Math.sin(a + k) * rr).toFixed(1)}`;
+      return `M${p(0, 3)} Q${p(0.12, r - 6)} ${p(0.75, r - 5)}`;
+    }).join(' ');
+    return `<g class="pump" aria-hidden="true"><rect x="${cx - r - 6}" y="${cy - 13}" width="5" height="26" rx="2" class="pump__band" /><rect x="${cx + r + 1}" y="${cy - 13}" width="5" height="26" rx="2" class="pump__band" />
+      <rect x="${cx - 14}" y="${cy + r + 2}" width="28" height="14" rx="4" class="pump__motor" /><text x="${cx}" y="${cy + r + 12.5}" text-anchor="middle" class="pump__label">AI</text>
+      <circle cx="${cx}" cy="${cy}" r="${r}" class="pump__house" /><g class="pump__imp" data-cx="${cx}" data-cy="${cy}"><path d="${blades}" class="pump__blades" /><circle cx="${cx}" cy="${cy}" r="2.6" class="pump__hub" /></g></g>`;
+  }
+  function valveSvg(n) {
+    const vx = n.def.x + VALVE_DX, y = n.def.y;
+    return `<g class="reveal valve" aria-hidden="true"><path d="M${vx} ${y + 12} V${y + 21}" class="valve__stem" /><circle cx="${vx}" cy="${y + 27}" r="6" class="valve__wheel" />
+      <path d="M${vx - 7} ${y - 13} H${vx + 7} L${vx + 1.8} ${y - 3} H${vx - 1.8} Z M${vx - 7} ${y + 13} H${vx + 7} L${vx + 1.8} ${y + 3} H${vx - 1.8} Z" class="valve__gate" /></g>`;
+  }
+  const badgeXY = (d) => (station() ? [d.x + 14, d.y + 24] : [d.x + VALVE_DX + 9, d.y + 17]);
+
+  function renderStage() {
+    const uc = S.uc, [W, H] = uc.vb, Y0 = uc.y0 ?? 26;
+    nodeEls = new Map(); stEls = new Map(); edgeEls = [];
+    const ns = [...M.nodes.values()], rs = ns.filter((n) => n.kind === 'role');
+    const split = lanes() === 'split', ww = split ? 26 : 22, gw = split ? 20 : 16;
+    const ds = [...M.edges.map((e) => e.visual.d), ...rs.map((n) => `M${inX(n.def)} ${n.def.y} H${outX(n.def)}`)];
+    const rets = lanes() === 'pipe2' ? M.edges.filter(canReturn).map((e) => offsetD(e.visual, 17)) : [];
+    const fittings = [...M.J.values()].map(([x, y]) => `<rect x="${x - ww / 2 - 4}" y="${y - ww / 2 - 4}" width="${ww + 8}" height="${ww + 8}" rx="5" class="fitting" />`).join('');
+    const dividers = split ? M.edges.filter(canReturn).map((e) => `<path d="${e.visual.d}" class="lane-divider" />`).join('') : '';
+    const stations = station() ? rs.map((n) => `<g class="station" data-st="${n.id}"><rect x="${inX(n.def)}" y="${n.def.y - 20}" width="${HALF * 2}" height="40" rx="9" class="station__box" /><path d="M${n.def.x - 14} ${n.def.y - 12} V${n.def.y + 12}" class="station__sep" /></g>`).join('') : '';
+    const base = rets.map((d) => `<path d="${d}" class="pipe-wall pipe-wall--ret" stroke-width="11" />`).join('') + ds.map((d) => `<path d="${d}" class="pipe-wall" stroke-width="${ww}" />`).join('') + fittings +
+      rets.map((d) => `<path d="${d}" class="pipe-glass" stroke-width="6" />`).join('') + ds.map((d) => `<path d="${d}" class="pipe-glass" stroke-width="${gw}" />`).join('') + dividers + stations;
+    const src = M.src.def, sink = M.sink.def;
+    const fp = `M${sink.x} ${sink.y} H${sink.x + 18} Q${sink.x + 30} ${sink.y} ${sink.x + 30} ${sink.y + 12} V${sink.y + 22}`;
+    const ends = `<g aria-hidden="true">${glyphG('customer', src.x, src.y - 62, 17, 'cust__disc')}<text x="${src.x}" y="${src.y - 32}" text-anchor="middle" class="cust__tx">Customer</text>
+      <rect x="${src.x - 24}" y="${src.y - 19}" width="48" height="38" rx="9" class="intake__box" /><text x="${src.x}" y="${src.y + 36}" text-anchor="middle" class="cust__sub">intake</text>
+      <path d="${fp}" class="tap__spout-wall" stroke-width="20" /><path d="${fp}" class="tap__spout" stroke-width="14" /><rect x="${sink.x + 8}" y="${sink.y - 22}" width="18" height="7" rx="2" class="tap__metal" /><path d="M${sink.x + 17} ${sink.y - 15} V${sink.y - 10}" stroke-width="3" class="valve__stem" />
+      ${glyphG('customer', sink.x + 30, sink.y + 96, 17, 'cust__disc cust__disc--tap')}<text x="${sink.x + 30}" y="${sink.y + 134}" text-anchor="middle" class="cust__tx">Customer</text><text x="${sink.x + 30}" y="${sink.y + 150}" text-anchor="middle" class="cust__sub">tap</text></g>`;
+    const hits = M.edges.map((e) => `<path d="${e.visual.d}" class="edge-hit" data-edge="${e.i}" aria-hidden="true" />`).join('');
+    // labels on straight runs, clear of glyphs, titles, valves and each other
+    const boxes = [];
+    for (const n of ns) {
+      const { x, y } = n.def;
+      if (n.kind === 'role') boxes.push(station() ? [x - 58, y - 44, x + 58, y + 22] : [x - 58, y - 84, x + 58, y - 22], [x + 6, y + 8, x + 66, y + 40]);
+      else if (n.kind === 'source') boxes.push([x - 34, y - 84, x + 34, y + 48]);
+      else boxes.push([x - 4, y - 30, x + 64, y + 160]);
+    }
+    const hit = (b) => boxes.some((o) => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+    const place = (e, text) => {
+      const w = text.length * 6.6 + 64, cands = [];
+      const runs = [];
+      for (let i = 1; i < e.corners.length; i++) runs.push([e.corners[i - 1], e.corners[i]]);
+      runs.sort((a, b) => Math.hypot(b[1][0] - b[0][0], b[1][1] - b[0][1]) - Math.hypot(a[1][0] - a[0][0], a[1][1] - a[0][1]));
+      for (const [[x0, y0], [x1, y1]] of runs) {
+        const mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+        if (y0 === y1) for (const f of [0.5, 0.3, 0.7]) { const xx = x0 + (x1 - x0) * f; cands.push({ x: xx, y: my + 30, a: 'middle', b: [xx - w / 2, my + 18, xx + w / 2, my + 42] }, { x: xx, y: my - 28, a: 'middle', b: [xx - w / 2, my - 40, xx + w / 2, my - 16] }); }
+        else for (const f of [0.5, 0.3, 0.7, 0.2, 0.8]) { const yy = y0 + (y1 - y0) * f; cands.push({ x: mx + 18, y: yy, a: 'start', b: [mx + 14, yy - 12, mx + 18 + w, yy + 12] }, { x: mx - 18, y: yy, a: 'end', b: [mx - 18 - w, yy - 12, mx - 14, yy + 12] }); }
+      }
+      const c = cands.find((k) => !hit(k.b)) || cands[0];
+      boxes.push(c.b);
+      return c;
+    };
+    const labels = M.edges.map((e) => {
+      const c = place(e, `${e.label} · 12 a week · ${e.retLabel}`);
+      return `<g class="elabel" data-elabel="${e.i}" data-x="${c.x}" data-y="${c.y}" data-anchor="${c.a}"><rect class="elabel__bg" rx="11" height="22" /><text class="elabel__tx" y="${c.y + 4}"></text></g>`;
+    }).join('');
+    const nodesSvg = rs.map((n) => {
+      const { x, y } = n.def, g = glyphOf(n);
+      const head = station()
+        ? `<rect x="${x - 56}" y="${y - 46}" width="112" height="70" class="node__hit" /><rect x="${inX(n.def) - 3}" y="${y - 23}" width="${HALF * 2 + 6}" height="46" rx="11" class="node__ring" />${glyphG(g, x - 30, y, 15, '', false)}
+           <text x="${x}" y="${y - 28}" text-anchor="middle" class="node__title">${esc(n.title)}</text>`
+        : `<rect x="${x - 54}" y="${y - 86}" width="108" height="112" class="node__hit" />
+           <rect x="${inX(n.def) - 2.5}" y="${y - 15}" width="5" height="30" rx="2" class="flange" /><rect x="${outX(n.def) - 2.5}" y="${y - 15}" width="5" height="30" rx="2" class="flange" />${valveSvg(n)}
+           <circle cx="${x}" cy="${y - 62}" r="22" class="node__ring" />${glyphG(g, x, y - 62, 17)}<text x="${x}" y="${y - 30}" text-anchor="middle" class="node__title">${esc(n.title)}</text>`;
+      const [bx, by] = badgeXY(n.def);
+      return `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.title)}: open card" aria-description="Receives ${esc(n.ins.map((e) => e.label).join(', '))}; hands on ${esc(n.outs.map((e) => e.label).join(', '))}">
+        ${head}${pumpSvg(n)}<g class="reveal badge" aria-hidden="true"><rect x="${bx}" y="${by}" width="28" height="19" rx="9.5" class="badge__bg" /><text x="${bx + 14}" y="${by + 13.5}" text-anchor="middle" class="badge__tx" data-q>0</text></g></g>`;
+    }).join('');
+    stage.innerHTML = `<svg viewBox="0 ${Y0} ${W} ${H}" class="base" aria-hidden="true">${base}</svg><canvas aria-hidden="true"></canvas>
+      <svg viewBox="0 ${Y0} ${W} ${H}" class="overlay" role="group" aria-label="${esc(uc.name)} pipeline: roles between the customer's intake and tap">${ends}${hits}<g>${nodesSvg}</g>${labels}</svg>`;
+    stage.classList.toggle('is-station', station());
+    stage.classList.toggle('is-tray', S.opt.pile === 'tray');
+    canvas = $('canvas', stage); ctx = canvas.getContext('2d'); overlay = $('.overlay', stage);
+    for (const g of $$('.node', overlay)) nodeEls.set(g.dataset.node, g);
+    for (const g of $$('.station', stage)) stEls.set(g.dataset.st, g);
+    edgeEls = $$('.elabel', overlay);
+    impellers = $$('.pump__imp', overlay).map((g) => ({ g, cx: g.dataset.cx, cy: g.dataset.cy, node: g.closest('.node').dataset.node, a: 0 }));
+    wireStage(); measure();
+  }
+
+  function showEdgeLabel(i, on) {
+    const g = edgeEls[i]; if (!g) return;
+    g.classList.toggle('is-on', on);
+    if (!on) return;
+    const e = M.edges[i];
+    const t = $('text', g), x = Number(g.dataset.x), y = Number(g.dataset.y), anchor = g.dataset.anchor;
+    const back = Math.round(perWeek(e.backRate));
+    t.innerHTML = `${esc(e.label)}<tspan class="elabel__rate"> · ${Math.round(perWeek(e.rate))} a week${back ? ` · ↩ ${back} ${esc(e.retLabel)}` : ''}</tspan>`;
+    const w = t.getComputedTextLength() + 22;
+    const x0 = anchor === 'start' ? x : anchor === 'end' ? x - w : x - w / 2;
+    t.setAttribute('x', x0 + 11);
+    const r = $('rect', g); r.setAttribute('x', x0); r.setAttribute('y', y - 11); r.setAttribute('width', w);
+  }
+  let hoverNode = null;
+  function nodeHover(id, on) {
+    hoverNode = on ? id : null;
+    const n = M.nodes.get(id);
+    for (const e of [...n.ins, ...n.outs]) showEdgeLabel(e.i, on);
+    if (n.def.person) for (const t of M.nodes.values()) if (t !== n && t.def.person === n.def.person) {
+      const g = nodeEls.get(t.id); g.classList.toggle('is-twin', on);
+      $('.node__title', g).textContent = on ? 'same person' : t.title;
+    }
+  }
+  function wireStage() {
+    for (const [id, g] of nodeEls) {
+      const act = () => nodeClick(id);
+      g.addEventListener('click', act);
+      g.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); act(); } });
+      g.addEventListener('pointerenter', () => nodeHover(id, true));
+      g.addEventListener('pointerleave', () => nodeHover(id, false));
+      g.addEventListener('focus', () => nodeHover(id, true));
+      g.addEventListener('blur', () => nodeHover(id, false));
+    }
+    for (const h of $$('.edge-hit', overlay)) {
+      const i = Number(h.dataset.edge);
+      h.addEventListener('pointerenter', () => showEdgeLabel(i, true));
+      h.addEventListener('pointerleave', () => showEdgeLabel(i, false));
+    }
+  }
+
+  // ---------- Canvas ----------
+  let C = {};
+  const readColors = () => {
+    const cs = getComputedStyle(document.documentElement);
+    const g = (n) => cs.getPropertyValue(n).trim();
+    const dark = document.documentElement.classList.contains('dark');
+    C = { ink: dark ? g('--background') : g('--foreground'), dull: g('--muted-foreground'), card: dark ? g('--foreground') : g('--card'), ai: g('--ai'), warn: g('--warning'),
+      smudge: dark ? g('--muted') : g('--muted-foreground'), fg: g('--foreground'), wall: g('--border'), primary: g('--primary'), font: cs.getPropertyValue('--font-sans') };
+  };
+  let K = 1, OY = 0, DPR = 1;
+  function measure() {
+    if (!canvas) return false;
+    const r = canvas.getBoundingClientRect();
+    if (r.width < 2) return false;
+    DPR = window.devicePixelRatio || 1;
+    const W = Math.round(r.width * DPR), H = Math.round(r.height * DPR);
+    if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
+    K = r.width / S.uc.vb[0]; OY = -(S.uc.y0 ?? 26) * K;
+    return true;
+  }
+
+  // One document (or a bundle of them), in any of the three quality encodings.
+  function drawDoc(c, x, y, rot, s, q, ai, alpha = 1, e = S.opt.enc, n = 1, aged = 0) {
+    if (n >= 2) { drawDoc(c, x + 2.4 * s, y - 2.4 * s, rot, s, q, ai, alpha * 0.9, e, 1); if (n >= 5) drawDoc(c, x + 1.2 * s, y - 1.2 * s, rot, s, q, ai, alpha * 0.95, e, 1); }
+    const w = 10 * s, h = 13 * s, f = 3.4 * s;
+    c.save(); c.translate(x, y); c.rotate(rot); c.globalAlpha = alpha; c.lineJoin = 'round'; c.lineCap = 'round';
+    const outline = () => { c.beginPath(); c.moveTo(-w / 2, -h / 2); c.lineTo(w / 2 - f, -h / 2); c.lineTo(w / 2, -h / 2 + f); c.lineTo(w / 2, h / 2); c.lineTo(-w / 2, h / 2); c.closePath(); };
+    const crumple = () => { c.beginPath(); c.moveTo(-w / 2, -h / 2); c.lineTo(-w / 6, -h / 2 + 1.2 * s); c.lineTo(w / 2 - f, -h / 2); c.lineTo(w / 2, -h / 2 + f); c.lineTo(w / 2 - 1.2 * s, 0); c.lineTo(w / 2, h / 2); c.lineTo(0, h / 2 - 1.3 * s); c.lineTo(-w / 2, h / 2); c.lineTo(-w / 2 + 1.1 * s, 0); c.closePath(); };
+    const stroke = ai ? C.ai : q === Q.GOOD ? C.ink : C.dull;
+    const lines = (k, a, last = 1) => { c.globalAlpha = alpha * a; c.lineWidth = 0.85 * s; c.beginPath(); for (let i = 0; i < k; i++) { const yy = -h / 2 + (4.4 + i * 2.8) * s; const end = i === k - 1 ? -w / 2 + 2 * s + (w - 4 * s) * last : w / 2 - (i === 0 ? 4.4 : 2) * s; c.moveTo(-w / 2 + 2 * s, yy); c.lineTo(end, yy); } c.stroke(); c.globalAlpha = alpha; };
+    c.lineWidth = (ai ? 1.4 : 0.9) * s;
+    if (e === 'tone') {
+      if (q === Q.BAD) { c.fillStyle = C.smudge; c.globalAlpha = alpha * 0.35; c.beginPath(); c.ellipse(-2.4 * s, 1 * s, w * 0.72, h * 0.44, 0.3, 0, Math.PI * 2); c.fill(); c.globalAlpha = alpha; }
+      outline(); c.fillStyle = C.card; c.fill();
+      if (q !== Q.GOOD) { c.fillStyle = C.smudge; c.globalAlpha = alpha * (q === Q.AVG ? 0.4 : 0.8); c.fill(); c.globalAlpha = alpha; }
+      if (aged) { c.fillStyle = C.warn; c.globalAlpha = alpha * aged; c.fill(); c.globalAlpha = alpha; }
+      c.strokeStyle = stroke; outline(); c.stroke();
+      c.strokeStyle = q === Q.BAD ? C.card : stroke; lines(3, q === Q.GOOD ? 0.6 : q === Q.AVG ? 0.45 : 0.5);
+    } else if (e === 'lines') {
+      (q === Q.BAD ? crumple : outline)(); c.fillStyle = C.card; c.fill();
+      if (aged) { c.fillStyle = C.warn; c.globalAlpha = alpha * aged; c.fill(); c.globalAlpha = alpha; }
+      c.strokeStyle = stroke; c.stroke(); c.strokeStyle = q === Q.GOOD ? C.ink : C.dull;
+      if (q === Q.GOOD) lines(3, 0.75); else if (q === Q.AVG) lines(2, 0.7, 0.35);
+      else { c.globalAlpha = alpha * 0.8; c.lineWidth = 0.9 * s; c.beginPath(); c.moveTo(-w / 2 + 2 * s, 0); c.quadraticCurveTo(-1 * s, -3 * s, 0, 0); c.quadraticCurveTo(1 * s, 3 * s, w / 2 - 2 * s, -1 * s); c.stroke(); c.globalAlpha = alpha; }
+    } else {
+      outline(); c.fillStyle = C.card; c.fill();
+      if (aged) { c.fillStyle = C.warn; c.globalAlpha = alpha * aged; c.fill(); c.globalAlpha = alpha; }
+      c.strokeStyle = stroke; c.stroke();
+      c.strokeStyle = C.ink; c.lineWidth = 1.5 * s; c.beginPath();
+      const cy = 1.2 * s;
+      if (q === Q.GOOD) { c.moveTo(-2.6 * s, cy); c.lineTo(-0.6 * s, cy + 2 * s); c.lineTo(2.8 * s, cy - 2.4 * s); }
+      else if (q === Q.AVG) { c.strokeStyle = C.dull; c.moveTo(-2.4 * s, cy); c.lineTo(2.4 * s, cy); }
+      else { c.moveTo(-2.3 * s, cy - 2.3 * s); c.lineTo(2.3 * s, cy + 2.3 * s); c.moveTo(2.3 * s, cy - 2.3 * s); c.lineTo(-2.3 * s, cy + 2.3 * s); }
+      c.stroke();
+    }
+    if (!(e === 'lines' && q === Q.BAD)) { c.globalAlpha = alpha; c.lineWidth = (ai ? 1.2 : 0.8) * s; c.strokeStyle = stroke; c.beginPath(); c.moveTo(w / 2 - f, -h / 2); c.lineTo(w / 2 - f, -h / 2 + f); c.lineTo(w / 2, -h / 2 + f); c.stroke(); }
+    c.restore(); c.globalAlpha = 1;
+  }
+  // A waiting document seen edge-on: a sliver, so a long queue stays short.
+  function drawSliver(c, x, y, q, ai, ang = 0, aged = 0, len = 14, thick = 2.8) {
+    c.save(); c.translate(x, y); c.rotate(ang);
+    c.beginPath(); c.rect(-thick / 2, -len / 2, thick, len);
+    c.fillStyle = C.card; c.fill();
+    if (S.opt.enc === 'tone' && q !== Q.GOOD) { c.fillStyle = C.smudge; c.globalAlpha = q === Q.AVG ? 0.35 : 0.8; c.fill(); c.globalAlpha = 1; }
+    if (aged) { c.fillStyle = C.warn; c.globalAlpha = aged; c.fill(); c.globalAlpha = 1; }
+    c.lineWidth = 0.8; c.strokeStyle = ai ? C.ai : q === Q.GOOD ? C.ink : C.dull; c.stroke();
+    c.restore();
+  }
+  const ageOf = (d) => (S.opt.pile === 'swell' && d.enq != null ? Math.max(0, Math.min(0.6, ((M.t - d.enq) / WEEK - 1) * 0.6)) : 0);
+  const laneOff = (rev) => (lanes() === 'split' ? (rev ? -5.5 : 4.5) : rev ? 17 : 0);
+  const laneScale = (rev) => (lanes() === 'split' ? 0.85 : rev ? 0.62 : 1.05);
+  const label = (c, text, x, y, color, align = 'left') => { c.font = `600 11px ${C.font}`; c.textAlign = align; c.fillStyle = color; c.fillText(text, x, y); c.textAlign = 'left'; };
+
+  function drawQueue(c, n) {
+    const d = n.def, E = entryX(d), y = d.y, pile = S.opt.pile, q = n.queue, docs = qDocs(n);
+    if (!q.length && pile !== 'tray') return;
+    if (pile === 'swell') {
+      const e = n.ins.find((f) => f.fwd.length || true);
+      const path = e.path, L = path.L;
+      q.forEach((doc, i) => { const [x, yy, nx, ny] = at(path, L - 3 - i * QGAP); drawSliver(c, x, yy, doc.q, doc.ai, Math.atan2(ny, nx) - Math.PI / 2 + Math.PI / 2, ageOf(doc)); });
+      const ratio = docs / n.buffer;
+      if (ratio > 0.3) {
+        const len = Math.min(L - 4, q.length * QGAP + 10), steps = 24, top = [], bot = [], sw = Math.min(1.2, ratio);
+        for (let i = 0; i <= steps; i++) { const f = i / steps, s = L - len * (1 - f), [x, yy, nx, ny] = at(path, s); const r = 11 + sw * 9 * Math.pow(Math.sin(Math.PI * Math.min(1, f * 1.05)), 0.8); top.push([x - nx * r, yy - ny * r]); bot.push([x + nx * r, yy + ny * r]); }
+        c.beginPath(); top.forEach(([x, yy], i) => (i ? c.lineTo(x, yy) : c.moveTo(x, yy))); for (let i = bot.length - 1; i >= 0; i--) c.lineTo(bot[i][0], bot[i][1]); c.closePath();
+        c.strokeStyle = ratio >= 0.85 ? C.warn : C.dull; c.lineWidth = 1.6; c.globalAlpha = 0.85; c.stroke(); c.globalAlpha = 1;
+      }
+    } else if (pile === 'tower') {
+      const ratio = docs / n.buffer, tilt = Math.max(0, ratio - 0.6) * 0.7;
+      c.save(); c.translate(E - 14, y - 12); c.rotate(-tilt);
+      let h = 0;
+      for (const doc of q) { const th = 3.4 * Math.min(4, doc.n); drawSliver(c, 0, -h - th / 2, doc.q, doc.ai, Math.PI / 2, 0, 22, th); h += th + 0.8; }
+      if (docs) label(c, `${docs}`, 14, -h - 4, ratio >= 0.85 ? C.warn : C.dull);
+      c.restore();
+    } else {
+      // the inbox tray: open box with a count; when full, work waits in the pipe instead
+      const [tx, ty, tw, th] = station() ? [d.x - HALF + 2, y + 25, 46, 22] : [d.x + VALVE_DX - 26, y + 16, 52, 24];
+      if (!docs) return;
+      c.strokeStyle = docs >= n.buffer ? C.warn : C.dull; c.lineWidth = 1.4;
+      c.beginPath(); c.moveTo(tx, ty); c.lineTo(tx, ty + th); c.lineTo(tx + tw, ty + th); c.lineTo(tx + tw, ty); c.stroke();
+      let h = 0;
+      for (const doc of q.slice(0, 9)) { const thk = 2.2 * Math.min(3, doc.n); drawSliver(c, tx + tw / 2, ty + th - 2 - h - thk / 2, doc.q, doc.ai, Math.PI / 2, 0, tw - 8, thk); h += thk + 0.5; if (h > th - 4) break; }
+      if (docs) label(c, docs >= n.buffer ? `${docs} · full` : `${docs}`, tx + tw + 5, ty + th - 3, docs >= n.buffer ? C.warn : C.dull);
+    }
+  }
+
+  function draw() {
+    if (!measure()) return;
+    const c = ctx;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, canvas.width, canvas.height);
+    c.setTransform(DPR * K, 0, 0, DPR * K, 0, DPR * OY);
+    // trail of the followed document
+    if (M.trail.length > 1) { c.strokeStyle = C.primary; c.globalAlpha = 0.35; c.lineWidth = 2.5; c.lineJoin = 'round'; c.beginPath(); M.trail.forEach(([x, y], i) => (i ? c.lineTo(x, y) : c.moveTo(x, y))); c.stroke(); c.globalAlpha = 1; }
+    let followed = null;
+    for (const e of M.edges) {
+      for (const d of e.fwd) { const o = laneOff(false); drawDoc(c, d.x + d.nx * o, d.y + d.ny * o, d.tilt * 0.3, 1.05 * laneScale(false), d.q, d.ai, 1, S.opt.enc, d.n); if (d.follow && !d.follow.done) followed = [d.x + d.nx * o, d.y + d.ny * o]; }
+      for (const d of e.back) { const o = laneOff(true); drawDoc(c, d.x + d.nx * o, d.y + d.ny * o, -0.3, laneScale(true), d.q, d.ai, 1, S.opt.enc, d.n); }
+    }
+    for (const n of M.nodes.values()) {
+      if (n.kind !== 'role') continue;
+      drawQueue(c, n);
+      for (const doc of n.queue) if (doc.follow && !doc.follow.done) followed = [entryX(n.def) - 8, n.def.y];
+      const b = serving(n);
+      if (b) {
+        const x = station() ? n.def.x - 8 + 38 * Math.min(1, b.prog) : n.def.x + VALVE_DX - 2;
+        const j = b.struggle && !reduce.matches ? Math.sin(M.t * 38) * 1.3 : 0;
+        drawDoc(c, x, n.def.y + j, j * 0.05, 1.05, b.doc.q, b.doc.ai, 1, S.opt.enc, b.doc.n);
+        if (b.doc.follow && !b.doc.follow.done) followed = [x, n.def.y];
+      }
+      if (has('stamp') && M.t - n.stampT < 0.8) {
+        const sx = station() ? n.def.x + 30 : n.def.x + VALVE_DX + 12, sy = n.def.y + (station() ? 36 : -30);
+        c.save(); c.translate(sx, sy); c.rotate(-0.25); c.strokeStyle = C.warn; c.lineWidth = 1.4; c.globalAlpha = 0.95; c.strokeRect(-14, -6, 28, 12); label(c, 'OK', 0, 4, C.warn, 'center'); c.restore(); c.globalAlpha = 1;
+      }
+    }
+    // intake backlog: the customer's waiting requests
+    const sd = M.src.def;
+    for (let i = 0; i < Math.min(10, M.backlog); i++) drawSliver(c, sd.x - 14 + (i % 10) * 3, sd.y + 2, Q.GOOD, false, 0, 0, 22, 2.2);
+    if (M.backlog > 2) label(c, `${M.backlog} waiting`, sd.x, sd.y + 52, M.backlog >= BACKLOG_MAX ? C.warn : C.dull, 'center');
+    for (const f of M.fx) {
+      const k = Math.min(7, f.k), spread = 1 - f.life;
+      for (let i = 0; i < k; i++) { const a = -0.9 + (1.8 * i) / Math.max(1, k - 1); drawDoc(c, f.x + Math.cos(a - Math.PI / 2) * 16 * spread, f.y + 12 - Math.sin(a - Math.PI / 2) * 16 * spread, a * 0.4, 0.6, Q.GOOD, false, f.life * 0.8, S.opt.enc); }
+      label(c, `×${f.k}`, f.x + 14, f.y + 26 * spread + 30, C.fg, 'center');
+    }
+    for (const d of M.drops) drawDoc(c, d.x, d.y, d.rot, 1, d.q, d.ai, Math.max(0, d.life) * 0.85, S.opt.enc, d.n);
+    const sk = M.sink.def;
+    for (const d of M.drips) drawDoc(c, sk.x + 30, sk.y + 30 + (1 - d.life) * 32, 0, 0.8, d.q, d.ai, Math.max(0, d.life), S.opt.enc, d.n);
+    if (followed) {
+      M.trail.push(followed); if (M.trail.length > 400) M.trail.shift();
+      c.strokeStyle = C.primary; c.lineWidth = 2; c.beginPath(); c.arc(followed[0], followed[1], 11, 0, Math.PI * 2); c.stroke();
+    }
+  }
+
+  // ---------- DOM state sync ----------
+  function syncNodes() {
+    for (const [id, g] of nodeEls) {
+      const n = M.nodes.get(id), d = dials(n);
+      const leaking = M.t - n.lastLeak < 1.5;
+      const pressure = d.on && (n.press >= 0.5 || leaking);
+      const hot = d.on && (n.press >= 0.85 || leaking);
+      const cls = { 'is-pressure': pressure, 'is-hot': hot, 'is-ai': d.ai, 'is-off': S.isolate && !d.on, 'is-out': d.out, 'is-selected': S.selected === id && !S.isolate };
+      for (const [k, v] of Object.entries(cls)) { g.classList.toggle(k, v); stEls.get(id)?.classList.toggle(k, v); }
+      g.setAttribute('aria-label', S.isolate ? `${n.title}: ${d.on ? 'on' : 'off'}, press to switch` : `${n.title}: open card`);
+      if (S.isolate) g.setAttribute('aria-pressed', String(d.on)); else g.removeAttribute('aria-pressed');
+      $('[data-q]', g).textContent = String(qDocs(n) + (serving(n) ? serving(n).doc.n : 0));
+    }
+    stage.classList.toggle('is-isolating', S.isolate);
+  }
+  function spin(dt) {
+    for (const im of impellers) {
+      if (!dials(M.nodes.get(im.node)).ai) continue;
+      im.a = (im.a + dt * 360 * 1.4) % 360;
+      im.g.setAttribute('transform', `rotate(${im.a.toFixed(1)} ${im.cx} ${im.cy})`);
+    }
+  }
+
+  // ---------- Words for numbers: bands over false precision ----------
+  const band = (r) => (r <= 0.01 ? 'none' : r < 0.34 ? 'a few' : r < 0.67 ? 'building up' : r < 1 ? 'nearly full' : 'full');
+  const rel = (x, base) => { if (!base) return ''; const k = x / base; return k > 0.8 && k < 1.2 ? 'about as much as in balance' : k < 0.6 ? `about ${k < 0.4 ? 'a third' : 'half'} of the balance` : `${k.toFixed(1)}× the balance`; };
+  const goodBand = (g) => (g >= 0.75 ? 'mostly good' : g >= 0.4 ? 'mixed' : 'mostly bad');
+
+  function nodeClick(id) {
+    if (S.isolate) { const o = (S.over[id] ||= {}); o.on = !o.on; S.selected = id; changed(); return; }
+    S.selected = S.selected === id ? null : id;
+    renderCard(); syncNodes();
+  }
+
+  const isBalanced = () => S.reality === 0 && S.ai === 'off' && !S.isolate && S.demand === S.uc.demand && Object.values(S.over).every((o) => Object.keys(o).length === 0);
+  function renderStatus() {
+    const el = $('#status');
+    const f = M.follow;
+    let follow = '';
+    if (f) {
+      const age = ((f.done ?? M.t) - f.born) / WEEK, wait = f.wait / WEEK;
+      follow = f.lost ? `<b>Followed request</b> abandoned at ${esc(f.lost)} after ${age.toFixed(1)} weeks. ` : f.done ? `<b>Followed request</b> reached the customer after ${age.toFixed(1)} weeks, ${wait.toFixed(1)} of them waiting. ` : `<b>Following a request:</b> ${age.toFixed(1)} weeks in, ${wait.toFixed(1)} waiting. `;
+    }
+    if (isBalanced() && !f) { el.className = 'status status--calm'; el.textContent = 'A simplified organization in balance: every handoff is good and nothing piles up. We all know reality is messier.'; return; }
+    el.className = 'status';
+    const rs = roles();
+    const backed = rs.filter((n) => dials(n).on && n.press >= 0.6).map((n) => n.title);
+    const ab = Math.round(perWeek(rs.reduce((a, n) => a + n.rate.aband, 0) + M.turned));
+    const back = Math.round(perWeek(rs.reduce((a, n) => a + n.rate.back, 0)));
+    const parts = [];
+    if (S.isolate) parts.push(`<b>Isolation:</b> ${rs.filter((n) => dials(n).on).length} of ${rs.length} roles on; off roles pass work through untouched`);
+    parts.push(backed.length ? `<b>Backing up:</b> ${esc(backed.join(', '))}` : 'Nothing backing up');
+    if (ab) parts.push(`about <b>${ab}</b> abandoned a week`);
+    if (back) parts.push(`<b>${back}</b> sent back a week`);
+    if (M.backlog >= 6) parts.push(`<b>${M.backlog}</b> requests waiting at the intake`);
+    el.innerHTML = follow + parts.join(' · ');
+  }
+
+  function iconCanvas(q, ai = false, e = S.opt.enc, n = 1) {
+    const cv = document.createElement('canvas'), dpr = window.devicePixelRatio || 1;
+    cv.width = 18 * dpr; cv.height = 20 * dpr; cv.className = 'docicon'; cv.setAttribute('aria-hidden', 'true');
+    const c = cv.getContext('2d'); c.scale(dpr, dpr); drawDoc(c, 8, 11, 0, 1.15, q, ai, 1, e, n);
+    return cv;
+  }
+  function renderLegend() {
+    const el = $('#legend'); el.innerHTML = '';
+    const item = (cv, text) => { const s = document.createElement('span'); s.className = 'legend__item'; s.append(cv, text); el.append(s); };
+    item(iconCanvas(Q.GOOD), 'good'); item(iconCanvas(Q.AVG), 'average'); item(iconCanvas(Q.BAD), 'bad'); item(iconCanvas(Q.GOOD, true), 'written with AI'); item(iconCanvas(Q.GOOD, false, S.opt.enc, 5), 'a bundle');
+    const hint = document.createElement('span'); hint.textContent = 'Upper lane: sent back'; el.append(hint);
+  }
+
+  function renderCard() {
+    const el = $('#card');
+    const n = S.selected && M.nodes.get(S.selected);
+    if (!n) { el.className = 'card card--empty'; el.innerHTML = `<p>${S.isolate ? 'Isolation is on: click roles to switch them on or off.' : 'Click a role to open its card: its dials, its AI switch and what waits there.'}</p>`; return; }
+    const d = dials(n);
+    el.className = 'card';
+    el.innerHTML = `<header class="card__head">
+        <svg viewBox="0 0 48 48" aria-hidden="true">${glyphG(glyphOf(n), 24, 24, 21)}</svg>
+        <div><h2 class="card__title text-body">${esc(n.title)}</h2><p class="text-caption muted">${esc(n.job)}</p></div>
+        <span class="chip card__chip" data-r="chip"></span>
+        <button type="button" class="icon-btn" data-r="close" aria-label="Close card"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></button>
+      </header>
+      <div class="card__grid card__grid--3">
+        <div class="dial"><div class="dial__row"><label for="d-eff">Efficiency <span class="muted">· output</span></label><b data-r="eff">${d.eff} %</b></div>
+          <input type="range" class="range" id="d-eff" min="25" max="200" step="5" value="${d.eff}" /><p class="dial__help" data-r="effhelp"></p></div>
+        <div class="dial"><div class="dial__row"><label for="d-effv">Effectiveness <span class="muted">· outcome</span></label><b data-r="effv">${d.base} %</b></div>
+          <input type="range" class="range" id="d-effv" min="20" max="100" step="5" value="${d.base}" /><p class="dial__help">Chance a handoff leaves here good, given the conditions: time, tools, clear input.</p></div>
+        <div class="dial"><div class="dial__row"><label for="d-fan">Output per input</label><b data-r="fan">${d.fan}</b></div>
+          <input type="range" class="range" id="d-fan" min="1" max="20" step="1" value="${d.fan}" /><p class="dial__help" data-r="fanhelp"></p></div>
+      </div>
+      <div class="card__grid">
+        <div class="readouts">
+          <div class="readout"><span class="readout__w" data-r="wait">none</span><span class="readout__l">waiting <span data-r="waitn"></span></span></div>
+          <div class="readout"><span class="readout__w" data-r="done">0</span><span class="readout__l">documents done a week</span></div>
+          <div class="readout"><span class="readout__w" data-r="aband">0</span><span class="readout__l" data-r="abandl">abandoned a week</span></div>
+        </div>
+        <div class="mix"><span class="text-caption muted">What it hands on</span><div class="mix__bar" data-r="bar"><i class="mix__good"></i><i class="mix__avg"></i><i class="mix__bad"></i></div><div class="mix__keys" data-r="keys"></div></div>
+      </div>
+      <hr class="sep" />
+      <div class="card__grid">
+        <div class="card__col">
+          <button type="button" role="switch" class="switch" data-r="ai" aria-checked="${d.ai}" ${d.on ? '' : 'disabled'}><span class="switch__track" aria-hidden="true"></span><span><b class="text-body">AI at this role</b><br /><span class="text-caption muted">${AI_SPEED}× faster, ${n.role.aiFan}× the documents${n.role.aiSize > 1 ? `, each ${n.role.aiSize}× the size to review` : ''}; quality: ${S.opt.aiq}</span></span></button>
+          <button type="button" class="chip-btn" data-r="outage">Out for two weeks</button>
+        </div>
+        <div><p class="text-caption muted card__sub">Where AI helps here</p><ul class="ai-uses ${d.ai ? '' : 'ai-uses--off'}" data-r="uses">${n.role.ai.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></div>
+      </div>`;
+    const r = (k) => $(`[data-r="${k}"]`, el);
+    r('close').addEventListener('click', () => { S.selected = null; renderCard(); syncNodes(); nodeEls.get(n.id)?.focus(); });
+    const setOver = (k, v) => { (S.over[n.id] ||= {})[k] = v; changed(false); };
+    $('#d-eff', el).addEventListener('input', (ev) => { setOver('eff', Number(ev.target.value)); r('eff').textContent = `${ev.target.value} %`; });
+    $('#d-effv', el).addEventListener('input', (ev) => { setOver('effv', Number(ev.target.value)); r('effv').textContent = `${ev.target.value} %`; });
+    $('#d-fan', el).addEventListener('input', (ev) => { setOver('fan', Number(ev.target.value)); r('fan').textContent = ev.target.value; });
+    r('ai').addEventListener('click', () => { const on = !dials(n).ai; setOver('ai', on); r('ai').setAttribute('aria-checked', String(on)); r('uses').classList.toggle('ai-uses--off', !on); });
+    r('outage').addEventListener('click', () => { setOver('outUntil', M.t + 2 * WEEK); });
+    updateCard();
+  }
+  function updateCard() {
+    const el = $('#card'); const n = S.selected && M.nodes.get(S.selected);
+    if (!n || el.classList.contains('card--empty')) return;
+    const r = (k) => $(`[data-r="${k}"]`, el), d = dials(n);
+    const docs = qDocs(n), ratio = docs / n.buffer;
+    r('wait').textContent = band(ratio); r('wait').classList.toggle('is-warn', ratio >= 0.85);
+    r('waitn').textContent = docs ? `(${docs})` : '';
+    r('done').textContent = Math.round(perWeek(n.rate.done));
+    const ab = Math.round(perWeek(n.rate.aband)), back = Math.round(perWeek(n.rate.back));
+    r('aband').textContent = back ? `${ab} · ${back}` : ab; r('aband').classList.toggle('is-warn', ab > 0);
+    r('abandl').textContent = back ? 'abandoned · sent back a week' : 'abandoned a week';
+    const can = perWeek(speedOf(n, d)) / (n.def.person ? 2 : 1), busy = Math.round(n.busy * 100);
+    r('effhelp').textContent = d.out ? 'Out: nothing gets done here for two weeks.' : busy < 55
+      ? `Busy ${busy} %: mostly waiting for work. Faster here changes nothing downstream until more arrives; raise Demand or speed up the role before it.`
+      : `Busy ${busy} %. Can finish about ${Math.round(can)} documents a week${n.def.person ? ' (shared with their other role)' : ''}; balance needs ${Math.round(perWeek(n.work))}.`;
+    r('fanhelp').textContent = `${d.fanEff} document${d.fanEff > 1 ? 's' : ''} per handoff${d.ai && n.role.aiFan > 1 ? ` (AI ×${n.role.aiFan})` : ''}. More documents mean more to read next door.`;
+    const out = n.rate.out, tot = out[0] + out[1] + out[2] || 1;
+    const [b, a, g] = out.map((x) => x / tot);
+    const bar = $$('i', r('bar')); bar[0].style.width = `${g * 100}%`; bar[1].style.width = `${a * 100}%`; bar[2].style.width = `${b * 100}%`;
+    const keys = r('keys'); keys.innerHTML = '';
+    for (const [q, v, l] of [[Q.GOOD, g, 'good'], [Q.AVG, a, 'average'], [Q.BAD, b, 'bad']]) { const s = document.createElement('span'); s.append(iconCanvas(q)); s.insertAdjacentHTML('beforeend', `<b>${Math.round(v * 100)} %</b> ${l}`); keys.append(s); }
+    const leaking = M.t - n.lastLeak < 1.5;
+    const [txt, cls] = !d.on ? ['Off', ''] : d.out ? ['Out', 'chip--warn'] : leaking ? ['Abandoning work', 'chip--warn'] : n.press >= 0.6 ? ['Backed up', 'chip--warn'] : busy < 55 ? ['Waiting for work', ''] : d.ai ? ['AI on · keeping up', 'chip--ai'] : ['Keeping up', ''];
+    r('chip').textContent = txt; r('chip').className = `chip card__chip ${cls}`;
+  }
+
+  function renderTap() {
+    const el = $('#tap');
+    const tot = M.tap[0] + M.tap[1] + M.tap[2] || 1e-9;
+    const g = M.tap[2] / tot, a = M.tap[1] / tot, b = M.tap[0] / tot;
+    const rate = perWeek(M.tapRate);
+    let panel = PANELS[9], cap = 'The tire swing the customer asked for';
+    if (g < 0.75) {
+      const rs = roles().filter((r) => dials(r).on);
+      const worst = rs.reduce((w, r) => (!w || dials(r).effv < dials(w).effv ? r : w), null);
+      const byRole = S.uc.panels ? PANELS.find((p) => p.node === worst?.id) : null;
+      panel = byRole || PANELS[3]; cap = `A wrong swing: ${panel.cap.charAt(0).toLowerCase()}${panel.cap.slice(1)}`;
+    }
+    const compl = Math.round(perWeek(M.compl));
+    el.innerHTML = `<p class="eyebrow text-caption">At the tap</p>
+      <p class="tap-panel__n">${rel(rate, M.balanceTap).replace(/^./, (c) => c.toUpperCase())}</p>
+      <p class="text-caption tap-panel__sub">about ${Math.round(rate)} documents a week, ${goodBand(g)}</p>
+      <svg viewBox="0 0 160 110" class="art" role="img" aria-label="${esc(cap)}">${panelArt(panel)}</svg>
+      <p class="tap-panel__cap">${esc(cap)}</p>
+      <div class="tap-mix" aria-hidden="true"><i class="g" style="width:${g * 100}%"></i><i class="a" style="width:${a * 100}%"></i></div>
+      <p class="tap-keys"><span>${Math.round(g * 100)} % good</span><span>${Math.round(a * 100)} % average</span><span>${Math.round(b * 100)} % bad</span></p>
+      ${compl ? `<p class="text-caption">About ${compl} a week come back as complaints.</p>` : ''}`;
+  }
+
+  // ---------- Steps, use cases, swing and roles ----------
+  const THUMB = {
+    swing: Array.from({ length: 10 }, (_, i) => {
+      const x = 6 + (i % 5) * 30, y = 6 + Math.floor(i / 5) * 28, t = i === 9;
+      return `<rect x="${x}" y="${y}" width="26" height="24" rx="3" fill="var(--card)" stroke="${t ? 'var(--primary)' : 'var(--border)'}" /><path d="M${x + 5} ${y + 21} V${y + 5} H${x + 22} M${x + 15} ${y + 5} V${y + 13}" fill="none" stroke="var(--muted-foreground)" stroke-width="1.2" /><ellipse cx="${x + 15}" cy="${y + 15}" rx="3.5" ry="1.6" fill="none" stroke="${t ? 'var(--primary)' : 'var(--muted-foreground)'}" stroke-width="1.4" />`;
+    }).join(''),
+    roles: Array.from({ length: 8 }, (_, i) => { const x = 20 + (i % 4) * 38, y = 18 + Math.floor(i / 4) * 26; return `<circle cx="${x}" cy="${y}" r="9" fill="var(--card)" stroke="var(--border)" stroke-width="1.2" /><circle cx="${x}" cy="${y}" r="2.5" fill="var(--muted-foreground)" />`; }).join(''),
+    pipeline: `<path d="M6 32 H154" fill="none" stroke="var(--border)" stroke-width="10" stroke-linecap="round" /><path d="M6 32 H154" fill="none" stroke="var(--card)" stroke-width="7" stroke-linecap="round" />${[34, 80, 126].map((x) => `<rect x="${x - 12}" y="24" width="24" height="16" rx="4" fill="var(--card)" stroke="var(--muted-foreground)" stroke-width="1" />`).join('')}${[8, 52, 60, 98, 142].map((x) => `<rect x="${x}" y="29" width="5" height="6" rx="1" fill="var(--card)" stroke="var(--foreground)" stroke-width=".8" />`).join('')}`,
+  };
+  const STEPS = [
+    { id: 'swing', label: '1 · Swing', sub: 'Ten cartoon panels' },
+    { id: 'roles', label: '2 · Roles', sub: 'Who does the work' },
+    { id: 'pipeline', label: '3 · Pipeline', sub: 'Work flowing through' },
+  ];
+  function renderSteps() {
+    $('#steps').innerHTML = STEPS.map((s) => {
+      const dis = s.id === 'swing' && !S.uc.panels;
+      return `<button type="button" class="step" data-step="${s.id}" aria-pressed="${S.step === s.id}" ${dis ? 'aria-disabled="true" title="Only the tire swing has cartoon panels"' : ''}>
+        <svg viewBox="0 0 160 62" aria-hidden="true">${THUMB[s.id]}</svg><span class="step__label">${s.label}</span><span class="step__sub text-caption muted">${s.sub}</span></button>`;
+    }).join('');
+    for (const b of $$('[data-step]')) b.addEventListener('click', () => { if (b.getAttribute('aria-disabled') === 'true') return; S.step = b.dataset.step; applyStep(); });
+  }
+  function applyStep() {
+    for (const b of $$('[data-step]')) b.setAttribute('aria-pressed', String(b.dataset.step === S.step));
+    const panel = S.step === 'pipeline' ? 'graph' : S.step;
+    for (const p of $$('[data-panel]')) p.hidden = p.dataset.panel !== panel;
+    if (panel === 'graph') { measure(); draw(); start(); }
+  }
+  function renderViews() {
+    $('#panels').innerHTML = PANELS.map((p) => `<li class="${p.target ? 'is-target' : ''}"><svg viewBox="0 0 160 110" role="img" aria-label="${esc(p.cap)}">${panelArt(p)}</svg><p class="text-caption panels__cap">${esc(p.cap)}</p><span class="tag ${p.target ? 'tag--primary' : ''}">${esc(p.role)}</span></li>`).join('');
+    $('#roles-lede').textContent = `${S.uc.name}: the customer stands at both ends, the intake on the left and the tap on the right. ${roles().length} roles sit between.`;
+    $('#roles').innerHTML = roles().map((n) => {
+      const p = S.uc.panels ? PANELS.find((x) => x.node === n.id) : null;
+      return `<li><svg viewBox="0 0 52 52" aria-hidden="true">${glyphG(glyphOf(n), 26, 26, 23)}</svg><div><p class="text-body roles__title">${esc(n.title)}</p><p class="text-caption muted">${esc(n.job)}</p></div>${p ? `<p class="roles__cap text-caption muted">${esc(p.cap)}</p>` : ''}</li>`;
+    }).join('');
+  }
+  function renderUseCases() {
+    const sel = $('#usecase');
+    sel.innerHTML = USE_CASES.map((u) => `<option value="${u.id}">${esc(u.name)}</option>`).join('');
+    sel.value = S.uc.id;
+    sel.addEventListener('change', () => {
+      S.uc = USE_CASES.find((u) => u.id === sel.value); S.over = {}; S.selected = null; S.demand = S.uc.demand;
+      if (S.step === 'swing' && !S.uc.panels) S.step = 'roles';
+      boot();
+    });
+  }
+
+  // ---------- Prototype options strip ----------
+  function renderOpts() {
+    const box = $('#opts'); box.innerHTML = '';
+    for (const o of OPTS) {
+      const row = document.createElement('div'); row.className = 'opt';
+      const sel = (id) => (o.multi ? S.opt[o.key].has(id) : S.opt[o.key] === id);
+      const isRec = (id) => (o.multi ? o.rec.includes(id) : o.rec === id);
+      row.innerHTML = `<span class="opt__name" id="opt-${o.key}">${esc(o.label)}</span>
+        <div class="seg" role="group" aria-labelledby="opt-${o.key}">${o.items.map(([id, L, name]) => `<button type="button" data-opt="${o.key}" data-v="${id}" aria-pressed="${sel(id)}">${L} · ${esc(name)}${isRec(id) ? ' ★' : ''}</button>`).join('')}</div>
+        <p class="opt__why">${o.items.filter(([id]) => sel(id)).map((it) => esc(it[3])).join(' ') || 'None on: bad work only spreads by “garbage in, garbage out”.'}</p>`;
+      box.append(row);
+    }
+    for (const b of $$('[data-enc-icons]')) b.remove();
+    for (const b of $$('[data-opt="enc"]')) b.prepend(iconCanvas(Q.GOOD, false, b.dataset.v), iconCanvas(Q.AVG, false, b.dataset.v), iconCanvas(Q.BAD, false, b.dataset.v));
+    for (const b of $$('[data-opt]', box)) b.addEventListener('click', () => {
+      const o = OPTS.find((x) => x.key === b.dataset.opt), v = b.dataset.v;
+      if (o.multi) { const s = S.opt[o.key]; s.has(v) ? s.delete(v) : s.add(v); } else S.opt[o.key] = v;
+      writeHash(); renderOpts(); renderLegend();
+      if (o.rebuild) { boot(); return; }
+      renderStage(); syncNodes(); renderCard(); draw();
+    });
+  }
+  function writeHash() {
+    const p = new URLSearchParams();
+    for (const o of OPTS) p.set(o.key, o.multi ? [...S.opt[o.key]].join(',') : S.opt[o.key]);
+    p.set('uc', S.uc.id);
+    try { history.replaceState(null, '', `#${p}`); } catch { /* file:// in some browsers */ }
+  }
+  function readHash() {
+    const p = new URLSearchParams(location.hash.slice(1));
+    for (const o of OPTS) { const v = p.get(o.key); if (v == null) continue; if (o.multi) S.opt[o.key] = new Set(v ? v.split(',') : []); else if (o.items.some(([id]) => id === v)) S.opt[o.key] = v; }
+    const uc = USE_CASES.find((u) => u.id === p.get('uc')); if (uc) { S.uc = uc; S.demand = uc.demand; }
+  }
+
+  // ---------- Controls ----------
+  function syncControls() {
+    $('#reality').value = S.reality; $('#reality').setAttribute('aria-valuetext', S.reality === 0 ? 'Ideal' : `Messy ${S.reality} %`);
+    $('#demand').value = S.demand; $('#demand-val').textContent = S.demand === S.uc.demand ? 'balanced' : S.demand > S.uc.demand ? `${(S.demand / S.uc.demand).toFixed(1)}× more` : `${(S.demand / S.uc.demand).toFixed(1)}×`;
+    for (const b of $$('[data-ai]')) b.setAttribute('aria-pressed', String(b.dataset.ai === S.ai));
+    for (const b of $$('[data-speed]')) b.setAttribute('aria-pressed', String(Number(b.dataset.speed) === S.speed));
+    $('#isolate').setAttribute('aria-pressed', String(S.isolate));
+    $('#follow').setAttribute('aria-pressed', String(S.followArmed || (M && M.follow && !M.follow.done && !M.follow.lost)));
+  }
+  function wireControls() {
+    $('#reality').addEventListener('input', (e) => { S.reality = Number(e.target.value); for (const o of Object.values(S.over)) { delete o.eff; delete o.effv; } changed(); });
+    $('#demand').addEventListener('input', (e) => { S.demand = Number(e.target.value); changed(false); });
+    for (const b of $$('[data-ai]')) b.addEventListener('click', () => { S.ai = b.dataset.ai; for (const o of Object.values(S.over)) delete o.ai; changed(); });
+    for (const b of $$('[data-speed]')) b.addEventListener('click', () => { S.speed = Number(b.dataset.speed); syncControls(); start(); });
+    $('#isolate').addEventListener('click', () => { S.isolate = !S.isolate; for (const o of Object.values(S.over)) delete o.on; changed(); });
+    $('#follow').addEventListener('click', () => { S.followArmed = true; M.follow = null; M.trail = []; syncControls(); });
+    $('#reset').addEventListener('click', () => { S.reality = 0; S.ai = 'off'; S.isolate = false; S.over = {}; S.selected = null; S.demand = S.uc.demand; boot(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && S.selected) { const id = S.selected; S.selected = null; renderCard(); syncNodes(); nodeEls.get(id)?.focus(); } });
+    const tb = $('#theme');
+    const setTheme = (dark) => { document.documentElement.classList.toggle('dark', dark); tb.setAttribute('aria-pressed', String(dark)); tb.textContent = dark ? 'Light' : 'Dark'; readColors(); renderLegend(); renderOpts(); draw(); };
+    tb.addEventListener('click', () => setTheme(!document.documentElement.classList.contains('dark')));
+    if (matchMedia('(prefers-color-scheme: dark)').matches) setTheme(true);
+  }
+  // A control changed: live in motion; under reduced motion, re-run from the seed so the still frame is the steady state.
+  function changed(full = true) {
+    syncControls();
+    if (reduce.matches) { M = build(S.uc); warm(60); }
+    syncNodes(); renderStatus();
+    if (full) renderCard();
+    draw(); start();
+  }
+
+  // ---------- Loop: fixed-step simulation, 60 fps paint, paused off-screen ----------
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  let running = false, last = 0, acc = 0, slow = 0, visible = true;
+  function frame(now) {
+    const dt = last ? Math.min(0.1, (now - last) / 1000) : DT; last = now;
+    acc += dt * S.speed;
+    let n = 0;
+    while (acc >= DT && n < 600) { step(DT); acc -= DT; n++; }
+    if (S.speed) spin(dt);
+    draw();
+    slow += dt;
+    if (slow > 0.25) { slow = 0; syncNodes(); updateCard(); renderStatus(); renderTap(); syncControls(); if (hoverNode) nodeHover(hoverNode, true); }
+    if (visible && !reduce.matches && S.step === 'pipeline' && !document.hidden) requestAnimationFrame(frame); else { running = false; last = 0; }
+  }
+  function start() {
+    if (reduce.matches || S.step !== 'pipeline') { draw(); renderTap(); syncNodes(); return; }
+    if (running || !visible) return;
+    running = true; requestAnimationFrame(frame);
+  }
+  const io = new IntersectionObserver((es) => { visible = es[0].isIntersecting; start(); });
+  new ResizeObserver(() => { if (M) draw(); }).observe(stage);
+  document.addEventListener('visibilitychange', start);
+  reduce.addEventListener('change', start);
+
+  function boot() {
+    M = build(S.uc);
+    $('#usecase').value = S.uc.id;
+    $('#usecase-sub').textContent = S.uc.sub;
+    $('#demand').min = 2; $('#demand').max = S.uc.demand * 3;
+    renderStage(); renderSteps(); renderViews(); syncControls();
+    warm(60);
+    syncNodes(); renderStatus(); renderCard(); renderTap(); renderLegend(); writeHash();
+    applyStep(); draw(); start();
+  }
+
+  readColors(); readHash();
+  renderUseCases(); wireControls(); renderOpts();
+  boot();
+  io.observe(stage);
+  window.__eco = { S, get M() { return M; }, dials, perWeek, qDocs,
+    probe(cfg, secs = 120) {
+      const keep = { uc: S.uc, reality: S.reality, ai: S.ai, over: S.over, isolate: S.isolate, demand: S.demand, opt: S.opt }, keepM = M;
+      const uc = USE_CASES.find((u) => u.id === (cfg.uc || 'tire'));
+      Object.assign(S, { uc, reality: cfg.reality ?? 0, ai: cfg.ai ?? 'off', over: JSON.parse(JSON.stringify(cfg.over || {})), isolate: false, demand: cfg.demand ?? uc.demand,
+        opt: { ...defaultOpt(), ...(cfg.opt || {}), damage: new Set(cfg.damage ?? [...defaultOpt().damage]) } });
+      M = build(S.uc); warm(secs);
+      const rs = roles();
+      const out = { tap: +perWeek(M.tapRate).toFixed(1), good: Math.round((M.tap[2] / (M.tap[0] + M.tap[1] + M.tap[2] || 1)) * 100), backlog: M.backlog,
+        aband: +perWeek(rs.reduce((a, n) => a + n.rate.aband, 0) + M.turned).toFixed(1), back: +perWeek(rs.reduce((a, n) => a + n.rate.back, 0)).toFixed(1), compl: +perWeek(M.compl).toFixed(1),
+        q: rs.map((n) => `${n.id}:${qDocs(n)}/${n.buffer}${n.busy > 0.95 ? '!' : ''}`).join(' ') };
+      Object.assign(S, keep); M = keepM; return out;
+    } };
+})();
+
+</script>
+</body>
+</html>

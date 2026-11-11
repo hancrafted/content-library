@@ -1,0 +1,127 @@
+# Tire swing: master data for one use case (schema software-ecology-factory/5). Words live in tire.en.yaml / tire.de.yaml.
+id: tire
+panels: true               # the tire swing cartoon exists for this use case
+layout: { width: 1400, height: 700, top: 0 }
+mechanics:                 # strength of each mechanic while its toolbar toggle is on
+  rework: 0.4              # chance a work center sends bad input back (0 to 1)
+  churn: 1.2               # bad input that is kept: it hands on this many times the documents (1 to 4)
+# One Customer: sends requests, receives what ships. These are the Ideal values; presets override them.
+# mix: where requests go (weights). good / bad: the chance a good or bad release brings a new request, and where it goes;
+# a bad release's request is a complaint. releases: the work centers whose shipments are releases (the rest are answers).
+customer: { at: [90, 370], rate: 8, mix: { sales: 30, pm: 50, support: 20 }, good: { pm: 0.2 }, bad: {}, releases: [ops] }
+# company: service (only the Customer asks) or product (roles also write tickets of their own: the sources below).
+company: product
+sources:                   # Product company: own tickets a week, written into a role's backlog and handed on like a request
+  - { id: roadmap, at: pm, rate: 2 }     # roadmap items: the product manager to the analyst
+  - { id: leads, at: sales, rate: 1 }    # leads: Sales to the product manager
+  - { id: debt, at: eng, rate: 1 }       # tech debt: the engineer to quality assurance
+bottleneck: eng            # at Realistic this center runs near 85 % busy; every other at most 70 % (Q121)
+# A work center: id, role from the catalog, position, its dials at Realistic [efficiency, effectiveness],
+# and spawns: what one finished job creates downstream ({ to, n }, { to, p } or choose: [{ to, w }]); the first one carries the request.
+# Optional: service: exponential (default normal), buffer: n (the sender blocks when it is full),
+# inspection: true with stampUnderPressure, person: (one person runs several centers), dials: { efficiency, effectiveness, fanout, ai }.
+centers:
+  - { id: sales, role: sales, at: [400, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }, { to: ba, p: 0.3 }] }
+  - { id: pm, role: pm, at: [400, 370], realistic: [88, 94], spawns: [{ to: ba, n: 1 }] }
+  - { id: support, role: support, at: [400, 580], realistic: [90, 95], spawns: [{ choose: [{ to: eng, w: 0.4 }, { to: customer, w: 0.6 }] }] }
+  - { id: ba, role: ba, at: [790, 160], realistic: [88, 93], spawns: [{ to: eng, n: 1 }] }
+  - { id: eng, role: eng, at: [790, 580], realistic: [88, 91], spawns: [{ to: qa, n: 1 }] }
+  - { id: qa, role: qa, at: [1180, 580], inspection: true, stampUnderPressure: 0.8, realistic: [88, 98], spawns: [{ to: ops, n: 1 }] }
+  - { id: ops, role: ops, at: [1180, 160], realistic: [88, 98], spawns: [{ to: customer, n: 1 }] }
+# Routes of the belts, keyed from-to: out / in (port: left, right, top, bottom), via (corners), xm (elbow x), over (crosses on a bridge).
+routes:
+  customer-sales: { xm: 215 }
+  customer-support: { xm: 215 }
+  sales-pm: { out: bottom, in: top }
+  pm-ba: { xm: 560 }
+  ba-eng: { out: bottom, in: top }
+  qa-ops: { out: top, in: bottom }
+  ops-customer: { out: top, in: top, via: [[1216, 36], [90, 36]] }
+  support-customer: { out: bottom, in: bottom, via: [[436, 668], [90, 668]] }
+# States. Swing, Roles, Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: swing | roles | factory.
+# reality: 0 Ideal to 100 Realistic. ai: all, or a list of center ids. dials: per-center overrides (efficiency, effectiveness,
+# fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer above. start: clear (day 0) or
+# warm (the default: 60 weeks settled). speed: 1, 2, 5 or 10.
+# tour: steps, each { set (dials, customer, ai, reality), run: weeks from the start, card: where the caption points, expect };
+# check: one step without a caption. expect: { "<customer or center>.<measure>": test }, judged headless by checks7.mjs.
+presets:
+  - { id: swing, view: swing }
+  - { id: roles, view: roles }
+  - { id: ideal, view: factory, check: { run: 12, expect: { customer.output: "0.95–1.05", customer.headroom: "1.35–1.5", customer.leadDays: "<5", eng.weeksWaiting: "<0.2", qa.weeksWaiting: "<0.2" } } }
+  - { id: realistic, view: factory, reality: 100, customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }, check: { run: 12, expect: { customer.output: "0.85–1.15", customer.sat: ">0.85", customer.headroom: "1.05–1.2", support.weeksWaiting: "<2" } } }
+  - id: speed-up
+    view: factory
+    reality: 100
+    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
+    tour:
+      - { run: 6, card: eng, expect: { customer.output: "0.85–1.15", eng.weeksWaiting: "<1" } }
+      - { set: { dials: { eng: { efficiency: 200 } } }, run: 16, card: eng, expect: { customer.output: "0.85–1.15", eng.weeksWaiting: "<0.2" } }
+      - { run: 24, card: customer, expect: { customer.output: "0.85–1.15", customer.headroom: ">1.3" } }
+  - id: ai-unbalanced
+    view: factory
+    reality: 100
+    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
+    tour:
+      - { run: 4, card: eng, expect: { customer.output: "0.85–1.15", qa.weeksWaiting: "<0.5" } }
+      - { set: { ai: [eng], dials: { eng: { aiExtra: 2 } } }, run: 8, card: qa, expect: { qa.weeksWaiting: ">2", customer.headroom: "<0.6" } }
+      - { run: 20, card: customer, expect: { customer.output: "0.4–0.75", qa.weeksWaiting: ">8" } }
+  - id: ai-compare
+    view: factory
+    reality: 100
+    ai: [eng]
+    dials: { eng: { aiExtra: 2 } }
+    compare: [ba, eng, qa]
+    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
+    tour:
+      - { run: 2, card: eng, expect: { eng.weeksWaiting: "<0.2", qa.weeksWaiting: ">20" } }
+      - { run: 8, card: qa, expect: { customer.output: "0.3–0.6" } }
+      - { run: 16, card: qa, expect: { qa.weeksWaiting: rises } }
+  - id: ai-everywhere
+    view: factory
+    reality: 100
+    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
+    tour:
+      - { run: 4, card: customer, expect: { customer.output: "0.85–1.15", customer.headroom: "1.05–1.2" } }
+      - { set: { ai: all }, run: 12, card: customer, expect: { customer.output: "0.9–1.25", customer.leadDays: falls, customer.headroom: ">2" } }
+      - { run: 20, card: eng, expect: { customer.leadDays: "<4", eng.weeksWaiting: "<0.2", qa.weeksWaiting: "<0.2" } }
+  - id: ai-balanced
+    view: factory
+    reality: 100
+    ai: all
+    customer: { rate: 20, mix: { sales: 25, pm: 45, support: 30 }, good: { pm: 0.3 }, bad: { support: 0.6 } }
+    dials: { support: { aiSpeed: 3 }, eng: { aiSpeed: 3 }, qa: { aiSpeed: 3 } }   # balanced: a little more AI speed-up where the load is highest; 1x extra tasks everywhere
+    tour:
+      - { run: 4, card: customer, expect: { customer.output: "2.2–2.8" } }
+      - { run: 12, card: qa, expect: { customer.sat: ">0.9", qa.weeksWaiting: "<0.5" } }
+      - { run: 20, card: customer, expect: { customer.output: "2.2–2.8", customer.sat: "0.9–1", customer.headroom: ">1" } }
+  - id: bug-spiral
+    view: factory
+    reality: 100
+    start: clear
+    speed: 10
+    dials: { eng: { effectiveness: 65 } }
+    customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
+    tour:
+      - { run: 8, card: customer, expect: { customer.output: "0.4–0.8", customer.bugsPerWeek: ">0.3" } }
+      - { run: 20, card: eng, expect: { eng.weeksWaiting: ">1.5", eng.rush: ">10" } }
+      - { run: 40, card: eng, expect: { eng.weeksWaiting: rises, customer.leadDays: rises, customer.output: "<0.85" } }
+      - { run: 80, card: customer, expect: { customer.output: "0.6–0.85", customer.leadDays: rises, eng.weeksWaiting: ">8" } }
+  - id: fix-orders
+    view: factory
+    reality: 100
+    start: clear
+    customer: { rate: 9, mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
+    dials: { support: { efficiency: 130 }, ba: { effectiveness: 75 } }
+    tour:
+      - { run: 6, card: eng, expect: { eng.rework: ">0.15", customer.headroom: "<1" } }
+      - { set: { dials: { ba: { effectiveness: 98 } } }, run: 20, card: eng, expect: { eng.rework: falls, customer.headroom: ">1" } }
+      - { run: 36, card: customer, expect: { eng.weeksWaiting: falls, customer.leadDays: falls } }
+  - id: move-bottleneck
+    view: factory
+    reality: 100
+    customer: { rate: 11, mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
+    dials: { support: { efficiency: 130 } }
+    tour:
+      - { run: 10, card: eng, expect: { eng.weeksWaiting: ">1.5", qa.weeksWaiting: "<0.5" } }
+      - { set: { dials: { eng: { efficiency: 200 } } }, run: 22, card: qa, expect: { eng.weeksWaiting: "<0.2", qa.weeksWaiting: ">1" } }
+      - { set: { dials: { qa: { efficiency: 200 } } }, run: 34, card: customer, expect: { qa.weeksWaiting: "<0.2", customer.leadDays: falls, customer.headroom: ">1" } }
