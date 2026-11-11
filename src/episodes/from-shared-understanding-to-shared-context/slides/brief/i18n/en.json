@@ -1,0 +1,67 @@
+{
+  "title": "BRIEF",
+  "caption": "The five moves from the freelancer Episode, and <b>today's session runs all five</b>.",
+  "callback": {
+    "chip": "Freelancer · AI · Day 1",
+    "episode": "Callback: Onboard AI every time"
+  },
+  "movesLabel": "The five BRIEF moves, mapped to today's session",
+  "todayLabel": "Today:",
+  "moves": {
+    "break": {
+      "letter": "B",
+      "move": "Break it down",
+      "today": "the line, each station, and the requirement it needs"
+    },
+    "requirements": {
+      "letter": "R",
+      "move": "Requirements first",
+      "today": "context is the requirement, so it comes before the work"
+    },
+    "interview": {
+      "letter": "I",
+      "move": "Interview with AI",
+      "today": "the grill, in rounds of questions"
+    },
+    "evaluate": {
+      "letter": "E",
+      "move": "Evaluate each step",
+      "today": "read the spec before you trust it"
+    },
+    "fresh": {
+      "letter": "F",
+      "move": "Fresh chat",
+      "today": "carry the spec into a new chat, not the long one"
+    }
+  },
+  "notes": {
+    "why-a-fresh-chat": {
+      "header": "Why a fresh chat",
+      "description": "Anthropic describes compaction as summarising the contents and starting a new context window with the summary, warns that overly aggressive compaction can lose subtle but critical context, and recommends sub-agents with clean windows that return a condensed summary [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "callback": {
+        "title": "Callback",
+        "keywords": "",
+        "script": "You may have seen the freelancer Episode. You hired a freelancer who is fast, well read and tireless, and who forgets everything after each conversation. So you have to onboard that freelancer every single time, which is what the AI interview does for you."
+      },
+      "map-to-today": {
+        "title": "Map to today",
+        "keywords": "",
+        "script": "Here is the whole session in five letters. B is the line and the requirement: break it down. R is requirements first. I is the interview, the grill. E is evaluating each step, which is reading the spec before you trust it. F is the fresh chat. That is what we do today."
+      },
+      "close": {
+        "title": "Close",
+        "keywords": "",
+        "script": "So the second thing to take with you: move that result into a fresh chat instead of continuing the long one. To sum up: the line only runs as well as what it receives, context is the requirement, the bench has to stay clean, and the interview builds it for you. I cannot promise it fits every task, and it is early days for all of this. If you try it, I would love to hear how it went. Thank you."
+      }
+    }
+  }
+}

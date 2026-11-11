@@ -9,9 +9,10 @@ import type { ReactNode } from 'react';
 /**
  * A document's look: `crisp` a clear one, `dull` a vague one drawn toward `muted-foreground` (quality is never a hue
  * of its own), `vague` the same dashed and greyed for a sheet that leaves most open, `queued` one waiting in a
- * pile-up, in `warning`, `miss` a clear one that misses its target, in `warning`, and `ai` one an AI station turns out.
+ * pile-up, in `warning`, `miss` a clear one that misses its target, in `warning`, `ai` one an AI station turns out, and
+ * `machine` one the AI reads, such as a work order.
  */
-export type DocumentTone = 'crisp' | 'dull' | 'vague' | 'queued' | 'miss' | 'ai';
+export type DocumentTone = 'crisp' | 'dull' | 'vague' | 'queued' | 'miss' | 'ai' | 'machine';
 
 interface DocumentLook {
   readonly page: string;
@@ -41,6 +42,7 @@ const DOCUMENT: Record<DocumentTone, DocumentLook> = {
   },
   miss: { page: 'fill-card stroke-(--warning)', fold: 'stroke-(--warning)', lines: 'stroke-(--warning)' },
   ai: { page: 'fill-card stroke-ai', fold: 'stroke-ai', lines: 'stroke-ai' },
+  machine: { page: 'fill-machine/15 stroke-machine', fold: 'stroke-machine', lines: 'stroke-machine/50' },
 };
 
 /** The unit that moves down the line: a sheet with a folded corner and three lines of text; a vague one has two, dashed. */

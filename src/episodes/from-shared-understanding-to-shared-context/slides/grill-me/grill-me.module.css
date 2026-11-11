@@ -1,0 +1,18 @@
+/*
+ * The spec card's one emphasis motion: while `data-play` is set (once on the Slide's first `active`, and on every mouse
+ * enter and keyboard focus) the card slides in from the chat on its left and settles on the bench. The base rule is the
+ * settled card, which is also what reduced motion shows.
+ */
+
+@keyframes land {
+  from {
+    opacity: 0;
+    translate: -3rem -2rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spec[data-play] {
+    animation: land 700ms cubic-bezier(0.22, 1, 0.36, 1) 300ms backwards;
+  }
+}

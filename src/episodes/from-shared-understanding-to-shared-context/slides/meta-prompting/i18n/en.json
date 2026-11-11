@@ -1,0 +1,74 @@
+{
+  "title": "Meta prompting",
+  "caption": "A separate session writes the context for you: the AI asks, you answer, and the line gets <b>one clean work order</b>.",
+  "office": {
+    "label": "Planning office · separate chat",
+    "exchange": {
+      "q1": "What must be ready before the spring rush?",
+      "a1": "Every rental bike serviced and 40 repair slots bookable.",
+      "q2": "Who books the slots, and how?",
+      "a2": "The front desk, by phone and walk-in."
+    },
+    "you": "<b>You</b> only answer. No prompt to write from scratch.",
+    "answerBetter": "You answer better than you write",
+    "residue": "Stays in the office: questions, half-ideas, drafts"
+  },
+  "handOff": {
+    "label": "Fresh chat",
+    "note": "only the work order crosses"
+  },
+  "workOrder": {
+    "title": "Work order · Spring service week",
+    "rows": {
+      "goal": { "term": "Goal", "value": "Rental fleet serviced, 40 slots open" },
+      "who": { "term": "Who", "value": "Front desk books, two mechanics" },
+      "must": { "term": "Must", "value": "Brakes and tyres on every bike" },
+      "done": { "term": "Done when", "value": "Calendar full by 1 March" }
+    },
+    "source": "Written from your answers"
+  },
+  "bench": {
+    "label": "The line · bike bench",
+    "drawing": "The bike bench with only the work order on it",
+    "worker": "The AI worker starts from one page, not the whole conversation."
+  },
+  "notes": {
+    "users-answer-better-than-they-write": {
+      "header": "Users answer better than they write",
+      "description": "when a model elicits preferences with open-ended questions, the user's answers are often more informative than prompts they wrote unaided, and users report it takes less effort [1].",
+      "sources": {
+        "li-eliciting-human-preferences": {
+          "title": "Li et al., Eliciting Human Preferences with Language Models"
+        }
+      }
+    },
+    "prompts-generated-from-requirements": {
+      "header": "Prompts generated from requirements",
+      "description": "REprompt builds a multi-agent prompt optimiser from requirements-engineering principles; the abstract reports effective optimisation without numbers, and it is an early preprint [1].",
+      "sources": {
+        "shi-reprompt": {
+          "title": "Shi, Sun, Chen, Wu, Chen, Jin, Liu, REprompt: Prompt Generation for Intelligent Software Development Guided by Requirements Engineering"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "separate-session": {
+        "title": "Separate session",
+        "keywords": "",
+        "script": "A separate session creates the high-signal context for you. High-signal means the smallest set of what matters, enough to get the job done and nothing that drags it down."
+      },
+      "fresh-chat-clean-work-order": {
+        "title": "Fresh chat, clean work order",
+        "keywords": "",
+        "script": "Then take the result into a fresh chat instead of continuing the long one. The line gets one clean work order, not the whole conversation that led to it."
+      },
+      "why-a-separate-office": {
+        "title": "Why a separate office",
+        "keywords": "",
+        "script": "Why a separate office? Because the planning chat is full of questions, half-ideas and drafts, and in the bench's terms that is rot. The work order is not. So keep the office and the bench apart."
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "title": "Vom geteilten Verständnis zum geteilten Kontext · hancrafted",
   "description": "Warum KI jede Station beschleunigt, aber nicht das Ergebnis, wie Du statischen von dynamischem Kontext unterscheidest, wie Du erkennst, wann Kontext kippt, und wie Du Dich von einer KI in Fragerunden interviewen lässt, um Kontext mit hohem Signal zu bauen und ihn dann in einen frischen Chat mitzunehmen.",
-  "toc": "Episoden Inhalt einklappen Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung Wert war immer Übersetzung Festlegen und bauen Präzision und Genauigkeit 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen Inhalt öffnen : Inhalt Episoden Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung Wert war immer Übersetzung Festlegen und bauen Präzision und Genauigkeit 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen",
+  "toc": "Episoden Inhalt einklappen Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung Wert war immer Übersetzung Festlegen und bauen Präzision und Genauigkeit 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen Meta-Prompting Grill-me BRIEF Inhalt öffnen : Inhalt Episoden Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung Wert war immer Übersetzung Festlegen und bauen Präzision und Genauigkeit 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen Meta-Prompting Grill-me BRIEF",
   "slides": [
     {
       "id": "top",
@@ -58,7 +58,19 @@
       "id": "context-is-the-requirement--keeping-the-bench-clean",
       "text": "Kontext ist die Anforderung (6/6) Seite 6 von 6 Die Werkbank sauber halten Eine Aufräumaktion pro Chaos, und manchmal ist die sauberste Lösung eine saubere Werkbank. Vier Lösungen, gepaart wie im Video von IBM Technology Es gibt auch andere Lösungen Ein falscher Fakt, der hängen bleibt Prüfen Die Anweisung an einem echten Rad prüfen Zu viel Vorgeschichte Verdichten Den Ordner durch eine einseitige Zusammenfassung ersetzen Zu viele ähnliche Werkzeuge Auswählen Nur die Schraubenschlüssel behalten, die der Auftrag braucht Zwei Anweisungen, die sich widersprechen Ausmisten Die alten Anweisungen abhängen Die sauberste Lösung Fang an einer sauberen Werkbank an: Öffne einen frischen Chat und nimm nur das Ergebnis mit, nicht die ganze Vorgeschichte. Langer Chat, mitsamt Resten Alter Chat 128K von 200K · 64 % Frischer Chat mit dem Ergebnis Neuer Chat 38K von 200K · 19 %"
     },
-    { "id": "creating-context-for-agents", "text": "Kontext für Agenten erstellen Runde 1 Runde 2 Runde 3 → die Spec" }
+    { "id": "creating-context-for-agents", "text": "Kontext für Agenten erstellen Runde 1 Runde 2 Runde 3 → die Spec" },
+    {
+      "id": "creating-context-for-agents--meta-prompting",
+      "text": "Kontext für Agenten erstellen (1/3) Seite 1 von 3 Meta-Prompting Eine eigene Sitzung schreibt den Kontext für Dich: Die KI fragt, Du antwortest, und das Band bekommt einen sauberen Arbeitsauftrag. Planungsbüro · eigener Chat Was muss vor dem Frühlingsansturm fertig sein? Jedes Leihrad gewartet und 40 Reparaturtermine buchbar. Wer bucht die Termine, und wie? Der Empfang, per Telefon und vor Ort. Du antwortest nur. Kein Prompt, den Du von null schreiben musst. Du antwortest besser, als Du schreibst Bleibt im Büro: Fragen, halbe Ideen, Entwürfe Frischer Chat nur der Arbeitsauftrag geht hinüber Das Band · Fahrradwerkbank Arbeitsauftrag · Frühjahrs-Servicewoche Ziel Leihflotte gewartet, 40 Termine frei Wer Empfang bucht, zwei Mechaniker Muss Bremsen und Reifen an jedem Rad Fertig, wenn Kalender voll bis 1. März Aus Deinen Antworten geschrieben Der KI-Arbeiter startet mit einer Seite, nicht mit dem ganzen Gespräch."
+    },
+    {
+      "id": "creating-context-for-agents--grill-me",
+      "text": "Kontext für Agenten erstellen (2/3) Seite 2 von 3 Grill-me Die KI stellt eine Runde Fragen nach der anderen, Du antwortest, und nach der letzten Runde schreibt sie die Spec: einen einseitigen Arbeitsauftrag. Frühjahrs-Servicewoche für die Fahrradwerkstatt Die KI fragt · Du antwortest Runde 1 · das Ziel Für wen ist die Woche: Stammkunden oder neue Fahrer? Was muss vor dem Frühlingsansturm fertig sein? Woran misst Du, dass die Woche ein Erfolg war? 1. Stammkunden zuerst. 2. Jedes Leihrad gewartet. 3. 40 Reparaturtermine gebucht. Runde 2 · die Grenzen Wer bucht die Termine, und wie? Welche Räder gehören nicht dazu? 1. Der Empfang, per Telefon und vor Ort. 2. E-Bikes, die gehen an die Partnerwerkstatt. Runde 3 · fertig, wenn „Kalender voll bis 1. März.“ in Runden, nicht einzeln Keine Lücken mehr. Ich schreibe die Spec. Spec · Frühjahrs-Servicewoche Für Stammkunden zuerst Muss Jedes Leihrad gewartet Gebucht von Empfang, per Telefon und vor Ort Nicht dabei E-Bikes Fertig, wenn 40 Termine, Kalender voll bis 1. März Erste Seite auf einer sauberen Werkbank"
+    },
+    {
+      "id": "creating-context-for-agents--brief",
+      "text": "Kontext für Agenten erstellen (3/3) Seite 3 von 3 BRIEF Die fünf Schritte aus der Freelancer-Episode, und die heutige Session geht alle fünf. Freelancer · KI · Tag 1 Rückblick: Onboarde die KI jedes Mal B Brich es auf Heute: das Band, jede Station und die Anforderung, die sie braucht R Requirements zuerst Heute: Kontext ist die Anforderung, also kommt er vor der Arbeit I Interview mit KI Heute: das Grillen, in Runden von Fragen E Evaluiere jeden Schritt Heute: lies die Spec, bevor Du ihr traust F Frischer Chat Heute: nimm die Spec in einen neuen Chat mit, nicht in den langen"
+    }
   ],
   "notes": [
     {
@@ -125,6 +137,18 @@
     {
       "id": "creating-context-for-agents",
       "text": "Kontext für Agenten erstellen Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "creating-context-for-agents--meta-prompting",
+      "text": "Meta-Prompting Antworten gelingt besser als Schreiben wenn ein Modell Präferenzen mit offenen Fragen erhebt, sind die Antworten der Nutzer oft aussagekräftiger als Prompts, die sie allein geschrieben haben, und die Nutzer empfinden es als weniger aufwendig 1 . Quellen (1) Li et al., Eliciting Human Preferences with Language Models ( öffnet in neuem Tab ) arxiv.org Prompts aus Anforderungen erzeugt REprompt baut einen Multi-Agenten-Prompt-Optimierer nach Prinzipien des Requirements Engineering; der Abstract berichtet eine wirksame Optimierung ohne Zahlen, und es ist ein früher Preprint 1 . Quellen (1) Shi, Sun, Chen, Wu, Chen, Jin, Liu, REprompt: Prompt Generation for Intelligent Software Development Guided by Requirements Engineering ( öffnet in neuem Tab ) arxiv.org"
+    },
+    {
+      "id": "creating-context-for-agents--grill-me",
+      "text": "Grill-me Fragen schlägt Raten, bei unklaren Aufgaben auf einer unterspezifizierten Variante von SWE-Bench Verified schnitten Agenten, die fehlende Informationen beim Nutzer erfragten, um bis zu 74 % besser ab als Agenten ohne Rückfrage; das ist ein Höchstwert, gemessen mit simulierten Nutzern, und die Modelle konnten schlecht erkennen, welche Aufgaben eine Frage brauchen 1 . Quellen (1) Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering ( öffnet in neuem Tab ) arxiv.org Die Runden sind gefolgert die Forschung stützt, vor der Aufgabe klärende Fragen zu stellen; „in Runden“ ist eine Schlussfolgerung. Davon getrennt fielen die Ergebnisse im Schnitt um 39 %, wenn eine Anweisung über mehrere Züge verteilt ankam; das misst stückweise Anweisungen, nicht klärende Fragen 1 . Quellen (1) Laban et al., LLMs Get Lost In Multi-Turn Conversation ( öffnet in neuem Tab ) arxiv.org"
+    },
+    {
+      "id": "creating-context-for-agents--brief",
+      "text": "BRIEF Warum ein frischer Chat Anthropic beschreibt Compaction als Zusammenfassen des Inhalts und Neustart eines Kontextfensters mit dieser Zusammenfassung, warnt, dass zu aggressives Verdichten feinen, aber entscheidenden Kontext verlieren kann, und empfiehlt Sub-Agenten mit sauberen Fenstern, die eine verdichtete Zusammenfassung zurückgeben 1 . Quellen (1) Anthropic, Effective context engineering for AI agents ( öffnet in neuem Tab ) anthropic.com"
     }
   ],
   "script": [
@@ -195,6 +219,18 @@
     {
       "id": "creating-context-for-agents",
       "text": "Kontext für Agenten erstellen 0:00 – 0:19 Der Schmerz Präzisen, genauen Kontext zu erstellen, der nicht verrottet, fühlt sich nach viel Arbeit an. Wer hat Zeit, das für jede Aufgabe zu schreiben? Die meisten von uns lassen es weg, und dann stehen wir wieder bei der Reifenschaukel. 0:19 – 0:35 Die These Deshalb die These: Lass die KI fragen, und Du antwortest. Du weißt gut, was Du willst, wenn Dir jemand die richtige Frage stellt. Weniger gut bist Du darin, alles ungefragt aufzuschreiben."
+    },
+    {
+      "id": "creating-context-for-agents--meta-prompting",
+      "text": "Meta-Prompting 0:00 – 0:14 Eigene Sitzung Eine eigene Sitzung erstellt den aussagekräftigen Kontext für Dich. Aussagekräftig heißt: die kleinste Menge dessen, was zählt, genug, um die Aufgabe zu erledigen, und nichts, was sie herunterzieht. 0:14 – 0:28 Frischer Chat, sauberer Arbeitsauftrag Dann nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Das Band bekommt einen sauberen Arbeitsauftrag, nicht das ganze Gespräch, das zu ihm geführt hat. 0:28 – 0:46 Warum ein eigenes Büro Warum ein eigenes Büro? Weil der Planungschat voller Fragen, halber Ideen und Entwürfe ist, und in der Sprache der Werkbank ist das Context Rot. Der Arbeitsauftrag ist es nicht. Also halte Büro und Werkbank getrennt."
+    },
+    {
+      "id": "creating-context-for-agents--grill-me",
+      "text": "Grill-me 0:00 – 0:31 Der Skill von Matt Pocock Grill-me ist eine fertige Anleitung, die Matt Pocock einen Skill nennt, und sie bringt die KI dazu, Dich zu befragen, bevor sie loslegt. Das funktioniert, weil die Lücken, die Du gelassen hast, mit Deinen eigenen Antworten gefüllt werden. Statt zu raten, was Du gemeint hast, fragt sie Dich, und am Ende schreibt sie die Aufgabe als Spec auf, als einseitigen Arbeitsauftrag. 0:31 – 0:42 Die nächsten 30 Minuten Probier es an einer Aufgabe aus Deiner eigenen Arbeit: Lass Dich von der KI in Runden grillen, und lass sie dann die Spec schreiben. 0:42 – 0:56 Erste Handlungsempfehlung Das Erste zum Mitnehmen also: Lass Dich vor Deiner nächsten komplexen Aufgabe von der KI in Runden von Fragen interviewen, und mach aus dem Ergebnis eine Spec."
+    },
+    {
+      "id": "creating-context-for-agents--brief",
+      "text": "BRIEF 0:00 – 0:21 Rückblick Vielleicht hast Du die Freelancer-Episode gesehen. Du hast einen Freelancer eingestellt, der schnell, belesen und unermüdlich ist und der nach jedem Gespräch alles vergisst. Also musst Du diesen Freelancer jedes einzelne Mal einarbeiten, und genau das erledigt das KI-Interview für Dich. 0:21 – 0:47 Übertragen auf heute Hier ist die ganze Session in fünf Buchstaben. B ist das Band und die Anforderung: Brich es auf. R steht für Requirements zuerst. I ist das Interview, das Grillen. E ist das Evaluieren jedes Schritts, also die Spec zu lesen, bevor Du ihr traust. F ist der frische Chat. Das machen wir heute. 0:47 – 1:26 Abschluss Das Zweite zum Mitnehmen also: Nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Zusammengefasst: Das Band läuft nur so gut wie das, was bei ihm ankommt, Kontext ist die Anforderung, die Werkbank muss sauber bleiben, und das Interview baut ihn für Dich. Ich kann nicht versprechen, dass es zu jeder Aufgabe passt, und bei alldem stehen wir noch am Anfang. Wenn Du es ausprobierst, würde ich gern hören, wie es gelaufen ist. Danke."
     }
   ]
 }
