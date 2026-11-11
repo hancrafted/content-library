@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideBackdrop, SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { AimBoard } from './aim-board';
+import styles from './hero.module.css';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 
@@ -15,7 +16,7 @@ const HITS = [
 /**
  * The Title slide's hero Scene (the record's `title`), the Hero motif of picked Option 0c: the dartboard. What you
  * hand the agent sets the aim, AI speeds every throw, and the documents land on the bull, the intent. The shared header
- * renders the `h1` and this Slide's caption above it; the board sits in the right half, as the mock's six columns do.
+ * renders the `h1` and this Slide's caption above it; from `xl` the board sits beside it in the right column, as the mock shows (`hero.module.css`).
  * Each section slide echoes the board. On the inverse surface the board sits on a `data-tone-flip` card, so its
  * darts keep the page's own contrast. The empty Backdrop is the Title slide's one Backdrop, holding no glow.
  */
@@ -33,9 +34,9 @@ export const hero = slide({
   content: ({ t }) => (
     <>
       <SlideBackdrop mobile />
-      <SlideFrame className="mt-10">
-        <div className="grid grid-cols-1 md:grid-cols-12">
-          <div data-tone-flip className="rounded-xl bg-card p-6 md:col-span-6 md:col-start-7">
+      <SlideFrame className={`mt-10 ${styles.beside}`}>
+        <div data-hero-beside>
+          <div data-tone-flip className="rounded-xl bg-card p-6 md:max-w-xl xl:max-w-none">
             <AimBoard
               label={t('label')}
               handover={t('handover')}
