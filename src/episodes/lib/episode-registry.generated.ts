@@ -22,6 +22,7 @@ import type { EpisodeComposition } from '@/episodes/components/slide-master/slid
 import { aiCapability } from '@/episodes/explorable-pages/ai-capability/episode';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
 import { humanInTheLoop } from '@/episodes/explorable-pages/human-in-the-loop/episode';
+import { softwareEcology } from '@/episodes/explorable-pages/software-ecology/episode';
 import { setupAiAgentAndStarterFolder } from '@/episodes/guides/setup-ai-agent-and-starter-folder/episode';
 import { maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai/episode';
 import { neverTooEarlySales } from '@/episodes/never-too-early-sales/episode';
@@ -71,6 +72,7 @@ export const EXPLORABLE_PAGES: { readonly [S in ExplorablePageSlug]: EpisodeComp
   'ai-capability': aiCapability,
   'context-window': contextWindow,
   'human-in-the-loop': humanInTheLoop,
+  'software-ecology': softwareEcology,
 };
 
 /** Every Guide's Slides by slug: composed like an Episode, rendered by the same container, but no Episode. */

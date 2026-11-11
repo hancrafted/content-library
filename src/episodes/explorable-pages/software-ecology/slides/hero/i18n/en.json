@@ -1,0 +1,35 @@
+{
+  "heading": "Where AI pushes the pressure in your team",
+  "caption": "What the customer really wanted: the AI edition.",
+  "tryIt": "Try it",
+  "why": "Why it matters",
+  "share": {
+    "title": "Show it to your team",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "text": "Put it on the screen before you speed up a role: check the inspection first."
+  },
+  "motion": {
+    "pause": "Pause background animation",
+    "play": "Play background animation",
+    "stilled": "The background is still: reduced motion is on"
+  },
+  "preview": {
+    "label": "Stylised preview of the Software ecology Explorable, an illustrative model, not measured: AI at the engineer pushes AI-made work into quality assurance, whose rack is full with {weeks} weeks of work waiting, while operations starves and the Customer gets {output} output at {satisfied} satisfied.",
+    "title": "Software ecology · AI unbalanced, week 20",
+    "tag": "AI at the engineer",
+    "illustrative": "Illustrative model, not measured",
+    "customer": "Customer",
+    "output": "{value}×",
+    "satisfied": "{value} satisfied",
+    "waiting": "{center} · {weeks} weeks",
+    "centers": {
+      "sales": "Sales",
+      "product": "Product",
+      "analyst": "Analyst",
+      "engineer": "Engineer",
+      "qa": "QA",
+      "operations": "Operations"
+    }
+  }
+}

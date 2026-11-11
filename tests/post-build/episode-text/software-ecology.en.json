@@ -1,0 +1,35 @@
+{
+  "title": "Software ecology · hancrafted",
+  "description": "An interactive factory of your organization: run it from the tire swing cartoon to AI at one work center, see where the pressure lands, and why clear requirements lower it.",
+  "toc": "Collapse contents Where AI pushes the pressure in your team 1 Play 2 Why, how and what Open contents : Contents Where AI pushes the pressure in your team 1 Play 2 Why, how and what",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Where AI pushes the pressure in your team What the customer really wanted: the AI edition. Try it Why it matters Show it to your team Put it on the screen before you speed up a role: check the inspection first. Copy link Software ecology · AI unbalanced, week 20 Illustrative model, not measured AI at the engineer Customer 0.5× 67% satisfied Sales Product Analyst Engineer QA · 10 weeks +217 Operations"
+    },
+    { "id": "play", "text": "Play" },
+    { "id": "about", "text": "Why, how and what" }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "play", "text": "Play No speaker notes for this Slide." },
+    { "id": "about", "text": "Why, how and what No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "play",
+      "text": "Play 0:00 – 0:31 You know this cartoon tire swing cartoon game of telephone no bad actors ten times faster You all know this cartoon. Ten panels, and in every one a different role hears something different, so the swing that comes out is nothing like the one the customer wanted. Nobody in it is a bad actor: it is a game of telephone, where an intent nobody voiced well gets translated at every handoff, which means the fault sits in the system. With AI, the wrong swing gets built ten times faster. 0:31 – 0:56 The factory runs live runs live Swing Roles factory AI on Customer This one runs live, so nothing here rests on my word. It starts on the swing, steps through Roles into the factory, and then AI goes on. Every document on the belts is a task, the requests come from the Customer on the left, and the releases go back to the Customer. Watch what the Customer gets."
+    },
+    {
+      "id": "about",
+      "text": "Why, how and what 0:00 – 0:12 Why you may leave it short version why how what If you played it, you already have the picture, so this is the short version. One slide covers why it matters, how to use it and what it shows."
+    }
+  ]
+}

@@ -14,6 +14,11 @@ const SHAPED = EXPORTED_EPISODE_SHAPED_PAGES.filter(
 const COLUMNS = ['why', 'how', 'what'];
 /** The AI disciplines page cites the evidence behind its hero's "20x" headline in one more note. */
 const CLAIM_NOTE_PAGE = 'ai-capability';
+/**
+ * Pages whose hero rear is the two glow layers alone, with no drift canvas: the software ecology hero has no drift
+ * story, its motif lives in the factory preview (its approved Spec, Title-slide Option 0a's build notes).
+ */
+const GLOW_ONLY_PAGES: readonly string[] = ['software-ecology'];
 const TEMPLATE_FOLDER = 'templates/explorable-page';
 /** What only the page template may ship: its placeholder source URL and its "Replace with ..." words. */
 const PLACEHOLDER = /example\.com\/replace-with-a-source|replace with/i;
@@ -60,7 +65,7 @@ describe('explorable page shape', () => {
     SHAPED.filter(({ folder }) => folder !== TEMPLATE_FOLDER).flatMap(({ slug, route }) =>
       LOCALES.map((locale) => ({ slug, locale, url: localizePath(route, locale) })),
     ),
-  )('hero of $url', ({ url }) => {
+  )('hero of $url', ({ url, slug }) => {
     const play = `${url.replace(/\/$/, '')}/#play`;
     const about = `${url.replace(/\/$/, '')}/#about`;
 
@@ -104,8 +109,8 @@ describe('explorable page shape', () => {
     it('draws its background on its canvas layers inside the Backdrop and requests nothing from the network', () => {
       // ARRANGE
       const $ = exportedPage(url);
-      // The faint field, its blurred half and the accent beat: one drawing, three layers.
-      const layers = 3;
+      // The faint field, its blurred half and the accent beat: one drawing, three layers; none on a glow-only hero.
+      const layers = GLOW_ONLY_PAGES.includes(slug) ? 0 : 3;
       // ACT
       const canvases = $('[data-slot="title-slide"] [data-slot="slide-backdrop"] canvas').length;
       const remote = $('[data-slot="title-slide"] [src^="http"], [data-slot="title-slide"] [srcset]').length;

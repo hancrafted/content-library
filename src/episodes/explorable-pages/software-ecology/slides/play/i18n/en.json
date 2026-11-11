@@ -1,0 +1,17 @@
+{
+  "title": "Play",
+  "voiceScript": {
+    "segments": {
+      "you-know-this-cartoon": {
+        "title": "You know this cartoon",
+        "keywords": "tire swing cartoon, game of telephone, no bad actors, ten times faster",
+        "script": "You all know this cartoon. Ten panels, and in every one a different role hears something different, so the swing that comes out is nothing like the one the customer wanted. Nobody in it is a bad actor: it is a game of telephone, where an intent nobody voiced well gets translated at every handoff, which means the fault sits in the system. With AI, the wrong swing gets built ten times faster."
+      },
+      "the-factory-runs-live": {
+        "title": "The factory runs live",
+        "keywords": "runs live, Swing, Roles, factory, AI on, Customer",
+        "script": "This one runs live, so nothing here rests on my word. It starts on the swing, steps through Roles into the factory, and then AI goes on. Every document on the belts is a task, the requests come from the Customer on the left, and the releases go back to the Customer. Watch what the Customer gets."
+      }
+    }
+  }
+}

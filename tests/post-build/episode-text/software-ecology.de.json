@@ -1,0 +1,35 @@
+{
+  "title": "Software-Ökosystem · hancrafted",
+  "description": "Eine interaktive Fabrik Deiner Organisation: Lass sie vom Reifenschaukel-Cartoon bis zur KI an einem Arbeitsplatz laufen, sieh, wo der Druck landet, und warum klare Anforderungen ihn senken.",
+  "toc": "Inhalt einklappen Wohin KI den Druck in Deinem Team schiebt 1 Ausprobieren 2 Warum, wie und was Inhalt öffnen : Inhalt Wohin KI den Druck in Deinem Team schiebt 1 Ausprobieren 2 Warum, wie und was",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Wohin KI den Druck in Deinem Team schiebt Was der Kunde wirklich wollte: die KI-Ausgabe. Ausprobieren Warum es wichtig ist Zeig es Deinem Team Zeig es auf dem Bildschirm, bevor Du eine Rolle beschleunigst: Schau zuerst, ob die Prüfung danach mitkommt. Link kopieren Software-Ökosystem · KI unausgewogen, Woche 20 Illustratives Modell, nicht gemessen KI in der Entwicklung Kunde 0,5× 67 % zufrieden Vertrieb Produkt Analyse Entwicklung QS · 10 Wochen +217 Betrieb"
+    },
+    { "id": "play", "text": "Ausprobieren" },
+    { "id": "about", "text": "Warum, wie und was" }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "play", "text": "Ausprobieren Keine Sprechernotizen für diese Folie." },
+    { "id": "about", "text": "Warum, wie und was Keine Sprechernotizen für diese Folie." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "play",
+      "text": "Ausprobieren 0:00 – 0:34 Ihr kennt diesen Cartoon Reifenschaukel Stille Post keine Schuldigen zehnmal schneller Ihr kennt alle diesen Cartoon. Zehn Bilder, und in jedem versteht eine andere Rolle etwas anderes, sodass die Schaukel am Ende nichts mit der zu tun hat, die der Kunde wollte. Niemand darin handelt böswillig: Es ist Stille Post, eine Absicht, die nie gut ausgesprochen wurde, wird bei jeder Übergabe neu übersetzt. Der Fehler liegt also im System. Mit KI wird die falsche Schaukel zehnmal schneller gebaut. 0:34 – 1:01 Die Fabrik läuft live läuft live Schaukel Rollen Fabrik KI an Kunde Das hier läuft live, Ihr müsst mir also nichts glauben. Es beginnt mit der Schaukel, geht über die Rollen in die Fabrik, und dann wird KI eingeschaltet. Jedes Dokument auf den Bändern ist eine Aufgabe, die Anfragen kommen vom Kunden links, und die Releases gehen zurück zum Kunden. Achtet darauf, was beim Kunden ankommt."
+    },
+    {
+      "id": "about",
+      "text": "Warum, wie und was 0:00 – 0:14 Warum Ihr hier aufhören dürft Kurzfassung warum wie was Wer es ausprobiert hat, hat das Bild schon, deshalb hier nur die Kurzfassung. Eine Folie zeigt, warum es wichtig ist, wie man es bedient und was es zeigt."
+    }
+  ]
+}

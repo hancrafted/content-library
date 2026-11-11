@@ -1,0 +1,12 @@
+{
+  "title": "Warum, wie und was",
+  "voiceScript": {
+    "segments": {
+      "why-you-may-leave-it": {
+        "title": "Warum Ihr hier aufhören dürft",
+        "keywords": "Kurzfassung, warum, wie, was",
+        "script": "Wer es ausprobiert hat, hat das Bild schon, deshalb hier nur die Kurzfassung. Eine Folie zeigt, warum es wichtig ist, wie man es bedient und was es zeigt."
+      }
+    }
+  }
+}
