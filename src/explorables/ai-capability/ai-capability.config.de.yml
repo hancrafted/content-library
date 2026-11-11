@@ -6,28 +6,63 @@ presets:
   recap:
     autoplay: false
     lit: workflows
-ceilings:
+productivity:
   prompting: { claimed: [1.5, 2], measured: [1.1, 1.6] }
   agents: { claimed: [2, 3], measured: [0.8, 1.2] }
   workflows: { claimed: [5, 10] }
   factory: { claimed: [10, 30] }
+# The two layer rows: each item spans from one Level edge (start, mid, end) to another; Oversight's fade along their
+# span (stops: [where 0–1 along it, strength 0–1]). Tone is a global token: info, accent or muted.
+layers:
+  disciplines:
+    - { id: prompt, tone: info, from: { level: prompting, at: start }, to: { level: factory, at: end } }
+    - { id: context, tone: info, from: { level: prompting, at: mid }, to: { level: factory, at: end } }
+    - { id: harness, tone: accent, from: { level: agents, at: mid }, to: { level: factory, at: end } }
+    - { id: loop, tone: accent, emerging: true, from: { level: agents, at: mid }, to: { level: factory, at: end } }
+    - {
+        id: graph,
+        tone: accent,
+        emerging: true,
+        from: { level: workflows, at: start },
+        to: { level: factory, at: end },
+      }
+  oversight:
+    - id: hitl
+      tone: info
+      from: { level: agents, at: start }
+      to: { level: factory, at: mid }
+      stops: [[0, 0.75], [0.45, 1], [1, 0.12]]
+    - id: hotl
+      tone: accent
+      from: { level: agents, at: mid }
+      to: { level: factory, at: mid }
+      stops: [[0, 0.3], [0.5, 1], [1, 0.5]]
+    - id: hootl
+      tone: muted
+      from: { level: factory, at: start }
+      to: { level: factory, at: end }
+      stops: [[0, 0.35], [1, 1]]
 words:
-  comparable: Vergleichbar mit
   definition: Definition
   flip: 'Klicken: Definition'
   source: Quelle
   newTab: öffnet in neuem Tab
   rows:
     label: Zeigen
-    role: Rolle
-    ceiling: Obergrenze
-    mismatch: Diskrepanz
+    effort: Führungsaufwand
+    productivity: Produktivitätssteigerung
+    adoption: Verbreitung
+    disciplines: KI-Disziplinen
+    oversight: Aufsicht
     explain: Erklären
   hypothesis: Hypothese
   measured: Gemessen
   promise: 20×-Versprechen
-  here: Hier sind die meisten
+  emerging: entsteht
+  noData: Noch keine Daten
   expect: Das erwarten Führungskräfte
+  expectation: 27 % der CEOs erwarten, dass ihre Organisation bis 2028 überwiegend ohne menschliches Eingreifen arbeitet
+  expectationSource: Gartner, April 2026, eine Herstellerumfrage
   previous: Vorherige Stufe
   next: Nächste Stufe
   playAll: Alle abspielen
@@ -37,10 +72,13 @@ words:
       name: Prompting
       line: Ihr schreibt, die KI antwortet. Der Einstieg.
       scale: einer Aufgabe
-      ceiling: '1,5–2×'
+      productivity: '1,5–2×'
       measured: '1,1–1,6× bei passenden Aufgaben; im Alltag ca. 3 % Zeit gespart'
-      gap: 'Die meiste KI-Nutzung ist noch Chat: Rat, Texte, Suche'
-      gapSource: abgeleitet aus Nutzungsumfragen
+      adoption:
+        stat: 30 %
+        what: nutzen KI mehrmals pro Woche oder öfter
+        population: alle Beschäftigten in den USA
+        source: Gallup, Mai 2026
       interface: Chat
       interfaceHint: 'ein Gespräch: Sie schreiben, es antwortet, Nachricht für Nachricht'
       definition: Prompting heißt, dem Modell wirksame Anweisungen zu schreiben, damit es verlässlich liefert, was ihr braucht.
@@ -51,24 +89,30 @@ words:
       name: Agenten
       line: Die KI nutzt Werkzeuge und arbeitet in einer Schleife.
       scale: einer Fachkraft
-      ceiling: '2–3×'
+      productivity: '2–3×'
       measured: '0,8–1,2× in Studien; gefühlt 20 % schneller, gemessen 19 % langsamer (METR)'
-      gap: '16 % der KI-Nutzenden sind Frontier Professionals mit mehrstufigen Agenten-Workflows'
-      gapSource: Microsoft Work Trend Index 2026
+      adoption:
+        stat: 59 %
+        what: nutzen KI-Agenten
+        population: Entwickler:innen
+        source: Stack Overflow, Oktober 2026
       interface: Harness
       interfaceHint: 'die Software drumherum: Rechte, Werkzeuge, eine Schleife bis zum Ziel'
       definition: Ein Agent ist ein Sprachmodell, das Werkzeuge in einer Schleife nutzt und selbst entscheidet, wie es ein Ziel erreicht.
       sourceLabel: Anthropic, Building effective agents (2024)
       sourceUrl: https://www.anthropic.com/engineering/building-effective-agents
     workflows:
-      year: 2024–25
+      year: 2024–26
       name: Workflows
       line: Mehrere Agenten, Schritt für Schritt nach Plan.
       scale: einem Team
-      ceiling: '5–10×'
+      productivity: '5–10×'
       measured: noch keine Studie
-      gap: 'Mit Agenten vertraut: 40 % der Beschäftigten, 67 % der Führungskräfte'
-      gapSource: Microsoft Work Trend Index 2025
+      adoption:
+        stat: 16 %
+        what: bauen Multi-Agenten-Workflows
+        population: KI-Nutzende
+        source: Microsoft Work Trend Index, Mai 2026
       interface: Ablaufplan
       interfaceHint: ein Graph aus Agenten, mit dem Menschen in oder an der Schleife
       definition: Ein Workflow verkettet Modell- und Werkzeugschritte nach einem vorher festgelegten Ablauf.
@@ -77,15 +121,18 @@ words:
     factory:
       year: 2026 → · entsteht
       name: Factory?
-      line: Anfragen rein, Ergebnis raus. Wie es innen aussieht, ist offen.
+      line: Agenten führen den Lebenszyklus, von der Spezifikation bis zum Release. Menschen geben an den Toren frei.
       scale: einer Organisation
-      ceiling: '10×+'
+      productivity: '10×+'
       measured: noch keine Studie; nur Herstellerangaben
-      gap: '96 % der C-Level-Führungskräfte erwarten mehr Produktivität durch KI'
-      gapSource: Upwork 2024, eine Herstellerumfrage
-      interface: End-to-End
-      interfaceHint: Kundenanfragen rein, Magie passiert, Ergebnisse raus, 24/7/365
-      definition: 'Eine Factory macht aus Anforderungen Software, als Blackbox: Agenten arbeiten die ganze Strecke ab, kein Mensch schreibt oder prüft jeden Schritt.'
+      adoption:
+        stat: ''
+        what: noch keine Umfrage misst es
+        population: keine
+        source: ''
+      interface: Lebenszyklus
+      interfaceHint: Anfragen rein, Agenten in jeder Phase, Menschen an den Toren
+      definition: Eine Factory führt den ganzen Entwicklungszyklus mit Agenten, von der Spezifikation bis zum Release; Menschen setzen die Ziele und geben an den Toren frei.
       sourceLabel: Shapiro, The Five Levels (2026)
       sourceUrl: https://www.danshapiro.com/blog/2026/01/the-five-levels-from-spicy-autocomplete-to-the-software-factory/
   scenes:
@@ -98,7 +145,11 @@ words:
     loop: Schleife
     loopDone: fertig
     agent: Agent
-    factory: Eine Fabrik mit Fragezeichen, Anfragen gehen hinein, Ergebnisse kommen heraus
+    factory: 'Ein Lebenszyklus: Anfragen gehen hinein, Agenten bauen und testen, Menschen geben Spezifikation und Release frei, Ergebnisse kommen heraus'
+    spec: Spezifikation
+    build: Bau
+    test: Test
+    release: Release
   llm:
     kicker: Das Fundament, unter jeder Stufe
     name: Large Language Model (LLM)
@@ -110,3 +161,58 @@ words:
     sourceLabel: Brown et al. 2020, „Language Models are Few-Shot Learners“
     sourceUrl: https://arxiv.org/abs/2005.14165
     tokens: [Neue, Tech, nik, bringt, neue, Dis, zi, plinen]
+  layers:
+    disciplines:
+      hint: 'Fahr über eine Karte oder tipp sie an: Jede Stufe bringt eine Disziplin dazu. Klick für Definition und Quelle.'
+      items:
+        prompt:
+          name: Prompt Engineering
+          line: Du schreibst die Anweisung.
+          definition: Ein Modell mit den Worten steuern, die man ihm gibt, ohne das Modell selbst zu ändern.
+          sourceLabel: Weng, Prompt Engineering (2023)
+          sourceUrl: https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/
+        context:
+          name: Context Engineering
+          line: Du wählst, was das Modell sieht.
+          definition: Die bestmögliche Menge an Tokens kuratieren und pflegen, die das Modell beim Arbeiten sieht.
+          sourceLabel: Anthropic, Effective context engineering for AI agents (2025)
+          sourceUrl: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+        harness:
+          name: Harness Engineering
+          line: Du baust Werkzeuge und Regeln drumherum.
+          definition: Alles um das Modell bauen, seine Werkzeuge, Regeln und Prüfungen, damit ein Agent einen Fehler nie wiederholt.
+          sourceLabel: Böckeler, Harness engineering, martinfowler.com (2026)
+          sourceUrl: https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html
+        loop:
+          name: Loop Engineering
+          line: Du entwirfst die Schleife, nicht jeden Prompt.
+          definition: 'Sich selbst als die Person ersetzen, die den Agenten anweist: Man entwirft das System, das es stattdessen tut.'
+          sourceLabel: Osmani, Loop engineering (2026)
+          sourceUrl: https://addyosmani.com/blog/loop-engineering/
+        graph:
+          name: Graph Engineering
+          line: Du legst die Arbeit als Knoten und Kanten an.
+          definition: Agentenarbeit als ausdrückliche Knoten, Kanten und Zustand anlegen; LangChain nennt es den neuesten Namen für einen bewährten Ansatz.
+          sourceLabel: Turing Post, Is graph engineering real? (2026)
+          sourceUrl: https://www.turingpost.com/p/is-graph-engineering-real-why-everyone-is-talking-about-it
+    oversight:
+      hint: 'Fahr über eine Karte oder tipp sie an: wo der Mensch im Ablauf sitzt. Klick für die Bedeutung und woher der Begriff stammt.'
+      origin: Die Begriffe stammen aus der Debatte über autonome Waffen.
+      sourceLabel: Human Rights Watch und Harvard IHRC, Losing Humanity (2012)
+      sourceUrl: https://www.hrw.org/report/2012/11/19/losing-humanity/case-against-killer-robots
+      items:
+        hitl:
+          name: HITL · Human in the Loop
+          line: Ein Mensch gibt jeden Schritt frei.
+          definition: Ein Mensch muss jede Aktion freigeben, bevor das System sie ausführt.
+          quote: Robots that can select targets and deliver force only with a human command.
+        hotl:
+          name: HOTL · Human on the Loop
+          line: Ein Mensch schaut zu und kann stoppen.
+          definition: Ein Mensch beobachtet, wie das System handelt, und kann es übersteuern.
+          quote: …under the oversight of a human operator who can override the robots’ actions.
+        hootl:
+          name: HOOTL · Human out of the Loop
+          line: Kein Mensch im Ablauf.
+          definition: Das System handelt ohne jede menschliche Eingabe oder Mitwirkung.
+          quote: …without any human input or interaction.

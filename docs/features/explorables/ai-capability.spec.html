@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI capability spec</title>
+<!--
+  Living spec of the AI capability Explorable (src/explorables/ai-capability/).
+  Guide: docs/features/explorables/ai-capability.md. Update this file in place with /to-html-spec;
+  keep each review item's `id` stable and bump its `rev` when its content changes.
+-->
+<style>
+/* Tokens copied from src/app/globals.css */
+:root {
+  --background: oklch(0.985 0 0); --foreground: oklch(0.145 0 0); --card: oklch(1 0 0);
+  --muted: oklch(0.97 0 0); --muted-foreground: oklch(0.556 0 0); --border: oklch(0.922 0 0);
+  --info: oklch(0.5 0.15 245); --brand-accent: oklch(0.636 0.171 41.8); --ai: oklch(0.6 0.14 62);
+  --warning: oklch(0.52 0.12 65); --destructive: oklch(0.577 0.245 27.325); --success: oklch(0.52 0.13 150);
+  --radius: 0.625rem; --body: 1rem; --caption: 0.875rem; --sub: 1.5rem;
+  --font: ui-sans-serif, system-ui, sans-serif; --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --pv-bg: oklch(0.94 0 0); color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --background: oklch(0.145 0 0); --foreground: oklch(0.985 0 0); --card: oklch(0.205 0 0);
+  --muted: oklch(0.269 0 0); --muted-foreground: oklch(0.708 0 0); --border: oklch(1 0 0 / 10%);
+  --info: oklch(0.78 0.12 240); --brand-accent: oklch(0.732 0.146 50.4); --ai: oklch(0.72 0.14 62);
+  --warning: oklch(0.82 0.15 80); --destructive: oklch(0.704 0.191 22.216); --success: oklch(0.75 0.14 150);
+  --pv-bg: oklch(0.1 0 0); color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --background: oklch(0.145 0 0); --foreground: oklch(0.985 0 0); --card: oklch(0.205 0 0);
+  --muted: oklch(0.269 0 0); --muted-foreground: oklch(0.708 0 0); --border: oklch(1 0 0 / 10%);
+  --info: oklch(0.78 0.12 240); --brand-accent: oklch(0.732 0.146 50.4); --ai: oklch(0.72 0.14 62);
+  --warning: oklch(0.82 0.15 80); --destructive: oklch(0.704 0.191 22.216); --success: oklch(0.75 0.14 150);
+  --pv-bg: oklch(0.1 0 0); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; font-family: var(--font); color: var(--foreground); background: var(--pv-bg); font-size: var(--body); line-height: 1.5; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--info); outline-offset: 2px; }
+code { font-family: var(--mono); font-size: .85em; }
+
+/* ================= Spec shell (not part of the design) ================= */
+.spec-head { display: flex; gap: 24px; align-items: flex-end; justify-content: space-between; flex-wrap: wrap;
+  padding: 12px 20px; background: var(--card); border-bottom: 1px solid var(--border); }
+.spec-head .kicker { margin: 0; font-size: 12px; color: var(--muted-foreground); letter-spacing: .04em; }
+.spec-head h1 { margin: 2px 0; font-size: 1.25rem; letter-spacing: -0.01em; }
+.spec-head .purpose { margin: 0; font-size: var(--caption); color: var(--muted-foreground); max-width: 80ch; }
+.spec-head .meta { font-size: 12px; color: var(--muted-foreground); display: grid; gap: 2px; }
+.ws { display: grid; grid-template-columns: 190px minmax(0, 1fr) 400px; height: calc(100vh - var(--head-h, 96px)); }
+.ws.nav-collapsed { grid-template-columns: 0 minmax(0, 1fr) 400px; }
+.items-nav { overflow: auto; border-right: 1px solid var(--border); background: var(--card); font-size: var(--caption); padding: 12px 8px; }
+.ws.nav-collapsed .items-nav { visibility: hidden; padding: 0; border: 0; }
+.items-nav a { display: flex; gap: 8px; padding: 6px 8px; border-radius: 6px; color: var(--foreground); text-decoration: none; }
+.items-nav a:hover, .items-nav a.on { background: var(--muted); }
+.items-nav a .st { margin-left: auto; font-size: 11px; color: var(--muted-foreground); }
+.items-nav a .st[data-s="yes"] { color: var(--success); } .items-nav a .st[data-s="no"] { color: var(--destructive); }
+.viewer { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.vbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); background: var(--card); font-size: var(--caption); }
+.vbar .grp { display: inline-flex; gap: 4px; align-items: center; }
+.vbar .sep { width: 1px; height: 20px; background: var(--border); margin: 0 6px; }
+.vbar button { border: 1px solid var(--border); background: var(--background); border-radius: 999px; padding: 3px 10px; cursor: pointer; min-height: 30px; }
+.vbar button[aria-pressed="true"] { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.stagewrap { flex: 1; overflow: auto; padding: 16px; display: flex; justify-content: center; align-items: flex-start; }
+.pv-frame { position: relative; background: var(--background); border: 1px solid var(--border); border-radius: 12px; overflow: auto; box-shadow: 0 10px 40px oklch(0 0 0 / 12%); width: 100%; }
+.pv-frame[data-frame="phone"] { width: 390px; height: 844px; flex: none; }
+.pv-frame[data-frame="short"] { width: 405px; height: 720px; flex: none; }
+.rail { overflow: auto; border-left: 1px solid var(--border); background: var(--card); padding: 12px 14px 40px; font-size: var(--caption); }
+.rail h2 { font-size: var(--body); margin: 8px 0; }
+.banner { border: 1px solid var(--warning); color: var(--warning); border-radius: 8px; padding: 6px 10px; margin-bottom: 10px; display: none; }
+.banner.show { display: block; }
+.item { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin: 0 0 12px; scroll-margin-top: 8px; background: var(--background); }
+.item.active { border-color: var(--info); box-shadow: 0 0 0 2px color-mix(in oklch, var(--info) 25%, transparent); }
+.item h3 { margin: 0 0 4px; font-size: var(--body); display: flex; gap: 8px; align-items: baseline; }
+.item h3 .num { font-family: var(--mono); font-size: 12px; color: var(--muted-foreground); }
+.item .kind { display: inline-block; font-size: 11px; border-radius: 999px; padding: 0 7px; border: 1px solid var(--border); color: var(--muted-foreground); margin-right: 4px; }
+.item .kind.decided { border-color: var(--success); color: var(--success); }
+.item .kind.proposal { border-color: var(--brand-accent); color: var(--brand-accent); border-style: dashed; }
+.item .kind.evidence { border-color: var(--warning); color: var(--warning); }
+.item p { margin: 6px 0; }
+.ba { display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; font-size: 12px; margin: 6px 0; }
+.ba b { color: var(--muted-foreground); font-weight: 500; }
+.item .src { font-size: 12px; color: var(--muted-foreground); }
+.item .show { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 2px 10px; cursor: pointer; font-size: 12px; }
+.resp { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin: 8px 0 6px; }
+.resp label { display: inline-flex; gap: 4px; align-items: center; border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px; cursor: pointer; }
+.resp label:has(input:checked) { border-color: var(--foreground); background: var(--muted); }
+.resp .reset { margin-left: auto; border: 0; background: none; color: var(--muted-foreground); text-decoration: underline; cursor: pointer; font-size: 12px; }
+.item textarea, .final textarea { width: 100%; min-height: 64px; resize: vertical; border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; background: var(--card); }
+.item label.c, .final label.c { display: block; font-size: 12px; color: var(--muted-foreground); margin-top: 4px; }
+.stale { border: 1px dashed var(--warning); border-radius: 8px; padding: 6px 8px; margin: 6px 0; font-size: 12px; }
+.stale b { color: var(--warning); }
+.final { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 16px; }
+.final input[type="text"] { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; background: var(--card); font-family: var(--mono); font-size: 12px; }
+.copy { margin-top: 10px; width: 100%; border: 0; border-radius: 8px; padding: 8px; background: var(--foreground); color: var(--background); font-weight: 600; cursor: pointer; }
+.copymsg { font-size: 12px; margin-top: 6px; min-height: 1.2em; }
+#fallback { display: none; width: 100%; min-height: 160px; font-family: var(--mono); font-size: 11px; margin-top: 6px; }
+.notes { font-size: 12px; color: var(--muted-foreground); }
+.notes li { margin: 3px 0; }
+@media (max-width: 1100px) { .ws, .ws.nav-collapsed { grid-template-columns: 0 minmax(0, 1fr) 360px; } .items-nav { visibility: hidden; padding: 0; border: 0; } }
+@media (max-width: 820px) { .ws, .ws.nav-collapsed { display: block; height: auto; } .viewer { position: sticky; top: 0; height: 55vh; z-index: 2; } .rail { border-left: 0; } }
+
+/* Change markers, switched by the viewer's "Mark changes" button. */
+.pv-frame.marks [data-changed] { outline: 2px dashed var(--brand-accent); outline-offset: 2px; position: relative; }
+.pv-frame.marks [data-changed]::after { content: attr(data-changed); position: absolute; top: -9px; right: 6px; z-index: 5; font-size: 10px; font-weight: 600;
+  background: var(--brand-accent); color: var(--card); border-radius: 999px; padding: 0 6px; line-height: 16px; pointer-events: none; }
+.flash { animation: flash 1.2s ease-out; }
+@keyframes flash { 0%, 40% { box-shadow: 0 0 0 4px color-mix(in oklch, var(--info) 55%, transparent); } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* ================= Simulated site chrome ================= */
+.site-header { height: 52px; display: flex; align-items: center; gap: 24px; padding: 0 24px; border-bottom: 1px solid var(--border); font-size: var(--caption); color: var(--muted-foreground); }
+.site-header b { color: var(--foreground); }
+.page { max-width: 1104px; margin: 0 auto; padding: 18px 24px 40px; }
+.pv-frame[data-frame="short"] .site-header, .pv-frame[data-frame="short"] .page-head, .pv-frame[data-frame="short"] details.readme { display: none; }
+.pv-frame[data-frame="short"] .page, .pv-frame[data-frame="phone"] .page { padding: 12px; }
+.page-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+.page-head h1 { margin: 0; font-size: 2.25rem; letter-spacing: -0.02em; line-height: 1.1; }
+.page-head p { margin: 0; color: var(--muted-foreground); font-size: var(--caption); }
+details.readme { margin: 8px 0 14px; font-size: var(--caption); color: var(--muted-foreground); }
+details.readme summary { cursor: pointer; color: var(--foreground); font-weight: 500; }
+details.readme div { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; padding: 8px 0; }
+
+/* ================= The Explorable ================= */
+.xp { container: xp / inline-size; display: flex; flex-direction: column; gap: 10px; }
+.toolbar { display: flex; align-items: center; gap: 8px; }
+.toolbar .label { font-size: var(--caption); color: var(--muted-foreground); white-space: nowrap; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; flex: 1; padding: 2px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; border: 1px solid var(--border); background: var(--card);
+  border-radius: 999px; padding: 4px 12px; font-size: var(--caption); font-weight: 500; cursor: pointer; color: var(--muted-foreground);
+  transition: background .2s, color .2s, border-color .2s; min-height: 32px; }
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid currentColor; }
+.chip[aria-pressed="true"] { color: var(--foreground); border-color: var(--foreground); }
+.chip[aria-pressed="true"]::before { background: currentColor; }
+.play { border: 1px solid var(--border); background: none; border-radius: 999px; padding: 4px 12px; font-size: var(--caption); color: var(--muted-foreground); cursor: pointer; white-space: nowrap; min-height: 32px; }
+
+.prompting { --tone: var(--info); } .agents, .workflows { --tone: var(--brand-accent); } .factory { --tone: var(--muted-foreground); }
+
+/* Wide: four columns on one subgrid. Row lines: 1 head, 2 role, 3 productivity, 4 adoption, 5 engineering, 6 oversight, 7 scene, 8 wire. */
+.levels { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(8, auto); column-gap: 12px; padding: 0; margin: 0; }
+.levels::before { content: ""; position: absolute; top: 9px; left: 12.5%; right: 12.5%; height: 3px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--info), var(--brand-accent) 65%, var(--muted-foreground)); }
+.level { grid-row: 1 / span 8; display: grid; grid-template-rows: subgrid; transition: opacity .25s; }
+/* Each Level pinned to its column: the spanning rows are placed explicitly, so auto-placement would push Levels into implicit columns. */
+.level.prompting { grid-column: 1; } .level.agents { grid-column: 2; } .level.workflows { grid-column: 3; } .level.factory { grid-column: 4; }
+.levels:has(.level:hover) .level:not(:hover) { opacity: .45; }
+.cell { margin-bottom: 8px; min-width: 0; }
+.cell[data-row="role"] { grid-row: 2; } .cell[data-row="productivity"] { grid-row: 3; } .cell[data-row="adoption"] { grid-row: 4; }
+.cell[data-row="disciplines"] { grid-row: 5; } .cell[data-row="oversight"] { grid-row: 6; }
+.cell[data-row="explain"].scene-cell { grid-row: 7; } .cell[data-row="explain"].wire-cell { grid-row: 8; margin-bottom: 0; }
+.span-row[data-row="disciplines"] { grid-row: 5; } .span-row[data-row="oversight"] { grid-row: 6; }
+.xp:not([data-rows~="role"]) [data-row="role"],
+.xp:not([data-rows~="productivity"]) [data-row="productivity"],
+.xp:not([data-rows~="adoption"]) [data-row="adoption"],
+.xp:not([data-rows~="disciplines"]) [data-row="disciplines"],
+.xp:not([data-rows~="oversight"]) [data-row="oversight"],
+.xp:not([data-rows~="explain"]) [data-row="explain"] { display: none; }
+[data-row] { animation: blend .35s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes blend { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { [data-row], .flash { animation: none !important; } .level, .lcard { transition: none !important; } }
+
+/* Level header: dot on the rail, year, name, one line; click turns it to the definition. */
+.head { text-align: left; cursor: pointer; background: none; border: 0; padding: 0; width: 100%; }
+.dot-year { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-bottom: 6px; }
+.dot { position: relative; z-index: 1; width: 21px; height: 21px; border-radius: 50%; background: var(--background); border: 3px solid var(--tone); display: grid; place-items: center; }
+.dot::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--tone); }
+.year { font-size: var(--caption); font-weight: 500; color: var(--tone); font-variant-numeric: tabular-nums; }
+.namecard { border: 1px solid var(--border); background: var(--card); border-radius: var(--radius); padding: 10px 12px; min-height: 84px; }
+.factory .namecard { border-style: dashed; }
+.name { font-weight: 600; color: var(--tone); display: flex; justify-content: space-between; gap: 8px; }
+.name small { font-weight: 400; font-size: 12px; color: var(--muted-foreground); }
+.line, .def { font-size: var(--caption); margin: 2px 0 0; }
+.def { display: none; }
+.def .s { color: var(--muted-foreground); font-size: 12px; text-decoration: underline; }
+.head[aria-pressed="true"] .line { display: none; }
+.head[aria-pressed="true"] .def { display: block; }
+
+/* Per-Level row cards. */
+.rowcard { border: 1px solid var(--border); background: var(--card); border-radius: var(--radius); padding: 8px 12px; height: 100%; position: relative; }
+.rowlabel { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-foreground); }
+.role { display: flex; align-items: center; gap: 10px; }
+.role svg { width: 22px; height: 22px; color: var(--tone); flex: none; }
+.role b { font-weight: 500; }
+.ceil-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.big { font-size: var(--sub); font-weight: 600; line-height: 1.1; color: var(--tone); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.tag { font-size: 11px; border: 1px dashed currentColor; border-radius: 999px; padding: 0 6px; color: var(--muted-foreground); white-space: nowrap; }
+.tag.solid { border-style: solid; }
+.track { position: relative; height: 18px; margin: 8px 0 2px; }
+.track::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 4px; border-radius: 4px; background: var(--muted); }
+.claimed { position: absolute; top: 5px; height: 8px; border-radius: 8px; background: var(--tone); opacity: .9; }
+.factory .claimed { background: linear-gradient(90deg, var(--tone), transparent); }
+.measured { position: absolute; top: 14px; height: 4px; border-radius: 4px; background: var(--foreground); }
+.promise { position: absolute; top: 0; height: 18px; border-left: 2px dotted var(--destructive); }
+.scale { position: relative; height: 14px; font-size: 10px; color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+.scale span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
+.scale span:first-child { transform: none; }
+.meas { font-size: 12px; color: var(--muted-foreground); margin: 4px 0 0; }
+.meas b { color: var(--foreground); font-weight: 500; }
+
+/* Adoption: one number and its population per Level; no bars, since the populations differ. */
+.adopt .stat { font-size: var(--sub); font-weight: 600; line-height: 1.1; color: var(--tone); font-variant-numeric: tabular-nums; }
+.adopt .stat.none { font-size: var(--body); color: var(--muted-foreground); font-weight: 500; }
+.adopt .what { margin: 2px 0 4px; font-size: var(--caption); }
+.adopt .pop { font-size: 11px; border-radius: 999px; padding: 0 7px; background: var(--muted); color: var(--foreground); }
+.adopt .src { font-size: 11px; color: var(--muted-foreground); margin: 4px 0 0; }
+.adopt .expect { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); font-size: 12px; }
+.adopt .expect b::before { content: "◆ "; color: var(--destructive); }
+
+/* Layer rows (AI disciplines, Oversight) share one look: each item is a card spanning its Levels, one lane per item,
+   with a mini workflow that shows where it acts. Wide: one element across the columns. Narrow: sliced into each Level card. */
+.span-row { grid-column: 1 / -1; margin-bottom: 8px; border: 1px solid var(--border); background: var(--card); border-radius: var(--radius); padding: 8px 0 10px; position: relative; z-index: 1; }
+.span-head { display: flex; gap: 8px; align-items: baseline; padding: 0 12px 6px; flex-wrap: wrap; position: relative; }
+.cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 12px; pointer-events: none; }
+.cols i { background: color-mix(in srgb, var(--muted) 70%, transparent); border-radius: 4px; }
+.cols i:nth-child(2n) { background: transparent; }
+.lanes { position: relative; display: grid; gap: 6px; }
+.lane { position: relative; height: 58px; }
+.lcard { position: absolute; top: 0; height: 58px; margin: 0; padding: 6px 10px; container-type: inline-size; display: flex; gap: 10px; align-items: center;
+  border: 1px solid color-mix(in srgb, var(--hue) 45%, var(--border)); border-radius: 8px; cursor: pointer; text-align: left; overflow: hidden;
+  color: var(--foreground); background: var(--card); background-image: linear-gradient(90deg, var(--fade)); transition: opacity .2s, box-shadow .2s; }
+.lcard svg { flex: none; width: 104px; height: 40px; }
+.lcard .tx { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.lcard .nm { font-size: 12px; font-weight: 600; line-height: 1.3; }
+.lcard .em { font-weight: 400; font-style: italic; color: var(--muted-foreground); margin-left: 4px; }
+.lcard .ln { font-size: 12px; color: var(--muted-foreground); line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lcard .more { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--hue); }
+@container (max-width: 300px) { .lcard .ln { display: none; } }
+@container (max-width: 165px) { .lcard svg { display: none; } }
+.lanes:has(.lcard.lit) .lcard:not(.lit) { opacity: .35; }
+.lcard.lit { box-shadow: 0 0 0 2px var(--hue); }
+.lcard[aria-expanded="true"] { outline: 2px solid var(--foreground); outline-offset: 2px; }
+.span-detail { margin: 8px 12px 0; font-size: var(--caption); min-height: 2.8em; color: var(--muted-foreground); position: relative; }
+.span-detail .t { color: var(--foreground); font-weight: 600; }
+.span-detail .d { color: var(--foreground); }
+.span-detail .q { margin: 6px 0 0; padding: 6px 10px; border-left: 3px solid var(--ai); background: color-mix(in srgb, var(--ai) 8%, var(--card)); border-radius: 0 6px 6px 0; color: var(--foreground); }
+.span-detail .q small { display: block; color: var(--muted-foreground); }
+.slice { padding: 8px 0; }
+.slice .span-head { padding: 0 10px 6px; }
+.slice .lanes { padding: 0 8px; }
+.slice .span-detail { margin: 6px 10px 0; }
+
+/* Explain: the scene, its interface label as footer, the wire to the model. */
+.scene { border: 1px solid color-mix(in srgb, var(--tone) 35%, var(--border)); background: color-mix(in srgb, var(--tone) 6%, var(--card)); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; height: 100%; }
+.stage { min-height: 150px; display: grid; place-items: center; padding: 10px; }
+.iface { border-top: 1px solid color-mix(in srgb, var(--tone) 25%, var(--border)); padding: 6px 10px; font-size: 12px; color: var(--muted-foreground); }
+.iface b { color: var(--tone); font-weight: 600; margin-right: 4px; }
+.wire { height: 16px; width: 0; margin: 0 auto; border-left: 2px dashed var(--tone); opacity: .7; }
+.bubble { font-size: 12px; padding: 4px 8px; border-radius: 8px; max-width: 85%; }
+.chat { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+.me { align-self: flex-end; background: var(--tone); color: var(--card); }
+.ai { align-self: flex-start; background: var(--muted); }
+.tool { align-self: center; font-size: 11px; border: 1px dashed var(--tone); color: var(--tone); border-radius: 999px; padding: 1px 8px; }
+.scene svg { width: 100%; height: 130px; }
+
+/* Model band, compact. */
+.llm { border: 1px solid color-mix(in srgb, var(--ai) 45%, var(--border)); background: color-mix(in srgb, var(--ai) 14%, var(--card)); border-radius: var(--radius);
+  padding: 10px 14px; display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.llm .kick { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--warning); font-weight: 600; }
+.llm .n { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+.llm p { margin: 2px 0 0; font-size: var(--caption); max-width: 60ch; }
+.llm .tok { display: flex; gap: 4px; flex-wrap: wrap; }
+.llm .tok span { font-size: 12px; font-family: var(--mono); border: 1px solid var(--border); background: var(--card); border-radius: 4px; padding: 1px 6px; }
+
+.nav { display: none; }
+.slice-cell { display: none; }
+
+/* Narrow container (phone, Shorts): a carousel, one Level per card, rows stacked inside; spanning rows become slices. */
+@container xp (max-width: 47.99rem) {
+  .levels { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding: 0 9% 4px; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .levels::before { display: none; }
+  .levels:has(.level:hover) .level:not(:hover) { opacity: 1; }
+  .level { flex: 0 0 82%; scroll-snap-align: center; display: flex; flex-direction: column; grid-row: auto; border-top: 3px solid var(--tone); padding-top: 8px; }
+  .span-row { display: none !important; }
+  .slice-cell { display: block; }
+  .xp:not([data-rows~="disciplines"]) .slice-cell[data-row="disciplines"],
+  .xp:not([data-rows~="oversight"]) .slice-cell[data-row="oversight"] { display: none; }
+  .dot-year { flex-direction: row; justify-content: flex-start; }
+  .stage { min-height: 140px; }
+  .nav { display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .nav button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); cursor: pointer; }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .dots i.on { background: var(--foreground); }
+  .llm .tok { display: none; }
+  .play { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="spec-head" id="spechead">
+  <div>
+    <p class="kicker">SPEC · AI capability Explorable · <span id="revlabel"></span></p>
+    <h1>AI capability: six rows, Explain first</h1>
+    <p class="purpose">Review the reworked Explorable before implementation. Decisions come from the grill of 11 Nov 2026 (Q1–Q24); numbers and definitions come from three research passes in <code>.scratch/ai-capability/research-*.md</code>, to be filed as LLM-0023 to LLM-0025. Everything shown is a static mock: motion is today's, not redrawn here.</p>
+  </div>
+  <div class="meta">
+    <span>Role: explanatory snapshot (living spec, updated in place)</span>
+    <span>Location: <code>docs/features/explorables/ai-capability.spec.html</code></span>
+    <span>Handoff: <code>.scratch/ai-capability/handoff.md</code></span>
+  </div>
+</header>
+
+<div class="ws" id="ws">
+  <nav class="items-nav" id="itemsnav" aria-label="Review items"></nav>
+
+  <section class="viewer" aria-label="Preview">
+    <div class="vbar" role="toolbar" aria-label="Preview tools">
+      <button id="navtoggle" aria-pressed="false" title="Collapse the item list">☰ Items</button>
+      <span class="sep"></span>
+      <span class="grp" role="group" aria-label="Width">
+        <button data-set="wide" aria-pressed="true">Wide</button>
+        <button data-set="phone" aria-pressed="false">Phone 390</button>
+        <button data-set="short" aria-pressed="false">Short 9:16</button>
+      </span>
+      <span class="sep"></span>
+      <button id="marks" aria-pressed="true">Mark changes</button>
+      <button id="allrows" aria-pressed="false">All rows</button>
+      <button id="theme" aria-pressed="false">Dark</button>
+    </div>
+    <div class="stagewrap" id="stagewrap">
+      <div class="pv-frame marks" id="frame" data-frame="wide">
+        <header class="site-header"><b>hancrafted</b><span>Episodes</span><span>Explorables</span><span>Learn</span></header>
+        <main class="page">
+          <div class="page-head">
+            <h1>AI capability</h1>
+            <p>Four Levels of working with AI, on one language model</p>
+          </div>
+          <details class="readme">
+            <summary>Read me</summary>
+            <div>
+              <p><b>What it shows.</b> Four Levels on one model, each with the scene that plays how it reaches the model. The toolbar adds rows that tell the same timeline from other angles.</p>
+              <p><b>What to try.</b> Switch on AI disciplines, then hover a card: each Level adds a discipline. Switch on Oversight to see where people stay in, on or out of the loop.</p>
+              <p><b>What to notice.</b> The 20× promise sits right of where most people work.</p>
+            </div>
+          </details>
+
+          <section class="xp" id="xp" data-rows="explain" aria-label="AI capability">
+            <div class="toolbar" data-changed="Explain first">
+              <span class="label">Show</span>
+              <div class="chips" id="chips" role="group" aria-label="Rows"></div>
+              <button class="play" type="button">▶ Play all</button>
+            </div>
+            <div class="levels" id="levels" role="list"></div>
+            <div class="nav" aria-label="Levels">
+              <button type="button" id="prev" aria-label="Previous Level">‹</button>
+              <div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i></div>
+              <button type="button" id="next" aria-label="Next Level">›</button>
+            </div>
+            <div class="llm">
+              <div>
+                <div class="kick">The foundation, under every Level</div>
+                <div class="n">Large language model (LLM)</div>
+                <p>It predicts, <u>token</u> by token, which word piece most likely comes next. ChatGPT, Copilot, Claude.</p>
+              </div>
+              <div class="tok"><span>New</span><span>tech</span><span>nology</span><span>brings</span><span>new</span><span>…</span></div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <aside class="rail" id="rail" aria-label="Review">
+    <div class="banner" id="storewarn">Draft recovery is unavailable in this browser: your answers live only in this tab. Copy the feedback before closing it.</div>
+    <h2>Review items</h2>
+    <p class="notes">Answer each item with Accept or Change it, and comment where you want something different. Untouched items are exported as skipped. Drafts are kept in this browser across reloads.</p>
+    <div id="items"></div>
+
+    <div class="final">
+      <h2>Evidence still second-hand</h2>
+      <ul class="notes">
+        <li>Re-open at the primary page before filing: OpenAI harness post (403), DoD Directive 3000.09 (403), McKinsey State of AI 2026 (timeout), JetBrains and Gartner (403).</li>
+        <li>Steinberger, Karpathy, Lütke and Husain posts and both arXiv papers were read through other sources or abstracts.</li>
+        <li>Adoption numbers come from different populations; each cell names its own.</li>
+      </ul>
+      <label class="c" for="dest">Feedback destination (the receiving agent saves your prompt here)</label>
+      <input type="text" id="dest" value=".scratch/ai-capability/spec-feedback.md" />
+      <label class="c" for="nextaction">Next action (optional, yours)</label>
+      <textarea id="nextaction" placeholder="e.g. apply the accepted items to the handoff, then start implementation"></textarea>
+      <button class="copy" id="copy" type="button">Copy feedback as prompt</button>
+      <div class="copymsg" id="copymsg" role="status" aria-live="polite"></div>
+      <textarea id="fallback" readonly aria-label="Feedback prompt to copy by hand"></textarea>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* ======================= Content (mirrors the config pair) ======================= */
+const SPEC = { id: 'ai-capability-spec', location: 'docs/features/explorables/ai-capability.spec.html', revision: '2026-11-11.3', role: 'explanatory snapshot' };
+const ROWS = ['role', 'productivity', 'adoption', 'disciplines', 'oversight', 'explain'];      // stacking order
+const CHIP_ORDER = ['explain', 'role', 'productivity', 'adoption', 'disciplines', 'oversight']; // toolbar order
+const CHIP_WORDS = { explain: 'Explain', role: 'Managing effort', productivity: 'Productivity increase', adoption: 'Adoption', disciplines: 'AI disciplines', oversight: 'Oversight' };
+const OPENING_ROWS = ['explain'];
+const LEVEL_INDEX = { prompting: 0, agents: 1, workflows: 2, factory: 3 };
+const EDGE = { start: 0, mid: 0.5, end: 1 };
+const pos = ([level, at]) => LEVEL_INDEX[level] + EDGE[at];
+
+const ICONS = {
+  task: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+  person: '<circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/>',
+  team: '<circle cx="12" cy="6" r="3"/><circle cx="5" cy="9" r="2.5"/><circle cx="19" cy="9" r="2.5"/><path d="M6 21c0-3.5 2.7-6 6-6s6 2.5 6 6M1 19c0-2.5 1.8-4 4-4M23 19c0-2.5-1.8-4-4-4"/>',
+  org: '<path d="M2 21V10l6 4V10l6 4V6h4v15z"/><path d="M6 17h2M11 17h2M16 17h2"/>',
+};
+
+const LEVELS = [
+  { id: 'prompting', n: 1, year: '2022–23', name: 'Prompting', line: 'You write, the AI answers. The entry point.',
+    def: 'Prompting is writing effective instructions so the model reliably gives you what you need.', src: 'OpenAI, prompt engineering guide',
+    role: 'a task', icon: 'task',
+    prod: { label: '1.5–2×', claimed: [1.5, 2], measured: [1.1, 1.6], text: '1.1–1.6× on suited tasks; about 3 % of hours saved in the field' },
+    adopt: { stat: '30 %', what: 'use AI a few times a week or more', pop: 'all US employees', src: 'Gallup, May 2026' },
+    scene: 'chat', iface: ['Chat', 'a conversation, message by message'] },
+  { id: 'agents', n: 2, year: '2024–25', name: 'Agents', line: 'The AI uses tools and works in a loop.',
+    def: 'An agent is a language model that uses tools in a loop and decides for itself how to reach a goal.', src: 'Anthropic, Building effective agents (2024)',
+    role: 'a specialist', icon: 'person',
+    prod: { label: '2–3×', claimed: [2, 3], measured: [0.8, 1.2], text: '0.8–1.2× in trials; felt 20 % faster, measured 19 % slower (METR)' },
+    adopt: { stat: '59 %', what: 'use AI agents', pop: 'developers', src: 'Stack Overflow, Oct 2026' },
+    scene: 'agent', iface: ['Harness', 'tools, permissions and a loop until done'] },
+  { id: 'workflows', n: 3, year: '2024–26', yearChanged: true, name: 'Workflows', line: 'Several agents, step by step, to a plan.',
+    def: 'A workflow chains model and tool steps along a path fixed in advance.', src: 'Anthropic, Building effective agents (2024)',
+    role: 'a team', icon: 'team',
+    prod: { label: '5–10×', claimed: [5, 10], text: 'no study yet' },
+    adopt: { stat: '16 %', what: 'build multi-agent workflows', pop: 'AI users', src: 'Microsoft Work Trend Index, May 2026' },
+    scene: 'workflow', iface: ['Flowchart', 'a graph of agents with a human in or on the loop'] },
+  { id: 'factory', n: 4, year: '2026 → · emerging', name: 'Factory?', line: 'Agents run the lifecycle, spec to release. People pass the gates.', lineChanged: true,
+    def: 'A factory runs the whole development lifecycle with agents, spec to release; people set goals and pass its gates.', src: 'Shapiro, The Five Levels (2026) · AI-SDLC source to add',
+    role: 'an organisation', icon: 'org',
+    prod: { label: '10×+', claimed: [10, 30], text: 'no study yet; vendor claims only' },
+    adopt: { stat: null, what: 'no data yet', pop: 'no survey measures it',
+      expect: { text: '27 % of CEOs expect their organisation to run mostly without human intervention by 2028', src: 'Gartner, Apr 2026 (vendor survey)' } },
+    scene: 'factory', iface: ['Lifecycle', 'requests in, agents at every stage, people at the gates'] },
+];
+
+/* Layer rows: AI disciplines and Oversight share one shape. Each item spans Level edges, may fade (stops: 0..1 along
+   its span → strength), and carries a mini workflow (`flow`) showing where it acts. */
+const LAYERS = {
+  disciplines: { label: 'AI disciplines', tag: null, hint: 'Hover or tap a card: each Level adds a discipline. Click for its definition and source.', items: [
+    { id: 'prompt', name: 'Prompt', full: 'Prompt engineering', hue: 'var(--info)', from: ['prompting', 'start'], to: ['factory', 'end'],
+      line: 'You write the instruction.', def: 'Steering a model with the words you give it, without changing the model itself.', src: 'Weng, Prompt Engineering (Mar 2023)' },
+    { id: 'context', name: 'Context', full: 'Context engineering', hue: 'var(--info)', from: ['prompting', 'mid'], to: ['factory', 'end'],
+      line: 'You choose what the model sees.', def: 'Curating and maintaining the best set of tokens the model sees while it works.', src: 'Anthropic, Effective context engineering (Sep 2025)' },
+    { id: 'harness', name: 'Harness', full: 'Harness engineering', hue: 'var(--brand-accent)', from: ['agents', 'mid'], to: ['factory', 'end'],
+      line: 'You build the tools and rules around it.', def: 'Building everything around the model (tools, rules, checks) so an agent never repeats a mistake.', src: 'Hashimoto, My AI Adoption Journey (Feb 2026); Böckeler, martinfowler.com (2026)' },
+    { id: 'loop', name: 'Loop', full: 'Loop engineering', emerging: true, hue: 'var(--brand-accent)', from: ['agents', 'mid'], to: ['factory', 'end'],
+      line: 'You design the loop, not each prompt.', def: 'Replacing yourself as the person who prompts the agent: you design the system that does it instead.', src: 'Osmani, Loop engineering (Jun 2026); IBM (Jul 2026)' },
+    { id: 'graph', name: 'Graph', full: 'Graph engineering', emerging: true, hue: 'var(--brand-accent)', from: ['workflows', 'start'], to: ['factory', 'end'],
+      line: 'You lay the work out as nodes and edges.', def: 'Laying agent work out as explicit nodes, edges and state. LangChain calls it “the latest name for a well established approach”.', src: 'Turing Post (Jul 2026); Feng et al., arXiv 2608.21156 (Aug 2026)' },
+  ] },
+  oversight: { label: 'Oversight', tag: 'hypothesis', hint: 'Hover or tap a card: where a person sits in the workflow. Click for the origin of the term.', items: [
+    { id: 'hitl', name: 'HITL', full: 'Human in the loop', hue: 'var(--info)', from: ['agents', 'start'], to: ['factory', 'mid'], stops: [[0, 0.75], [0.45, 1], [1, 0.12]],
+      line: 'A person approves every step.', def: 'A person must approve each action before the system takes it.',
+      quote: 'Robots that can select targets and deliver force only with a human command.' },
+    { id: 'hotl', name: 'HOTL', full: 'Human on the loop', hue: 'var(--brand-accent)', from: ['agents', 'mid'], to: ['factory', 'mid'], stops: [[0, 0.3], [0.5, 1], [1, 0.5]],
+      line: 'A person watches and can stop it.', def: 'A person watches the system act and can override it.',
+      quote: '…under the oversight of a human operator who can override the robots’ actions.' },
+    { id: 'hootl', name: 'HOOTL', full: 'Human out of the loop', hue: 'var(--muted-foreground)', from: ['factory', 'start'], to: ['factory', 'end'], stops: [[0, 0.35], [1, 1]],
+      line: 'No person in the run.', def: 'The system acts without any human input or interaction.',
+      quote: '…without any human input or interaction.' },
+  ] },
+};
+const OVERSIGHT_SOURCE = 'Human Rights Watch & Harvard IHRC, Losing Humanity (19 Nov 2012): the terms come from the debate on weapon autonomy.';
+
+/* ======================= Review items ======================= */
+const ITEMS = [
+  { id: 'toolbar-explain-first', rev: 3, kind: 'decided', show: ['explain'], target: '.toolbar',
+    title: 'Explain is the first chip and starts on',
+    before: 'Chips Role · Ceiling · Mismatch; Explain always shown.',
+    after: 'Chips Explain · Managing effort · Productivity increase · Adoption · AI disciplines · Oversight; Explain starts on and can be switched off. Its row still stacks last, right above the model band, so the wire never crosses another row.',
+    src: 'Grill Q2, Q13; spec feedback (renames). Code: CHIP_ORDER beside ROWS in rows.pure.ts.' },
+  { id: 'row-managing-effort', rev: 1, kind: 'decided', show: ['role'], target: '[data-row="role"]',
+    title: '“Role” becomes “Managing effort”',
+    before: 'Chip “Role”, card label “Comparable to”: a task, a specialist, a team, an organisation.',
+    after: 'Chip and card label “Managing effort” (de “Führungsaufwand”), code key effort; values unchanged. It ties into the promotion story: from doing a task to managing a specialist, a team, an organisation.',
+    src: 'Spec feedback 2026-11-11.' },
+  { id: 'row-productivity', rev: 1, kind: 'decided', show: ['productivity'], target: '[data-row="productivity"]',
+    title: '“Ceiling” becomes “Productivity increase”',
+    before: 'Chip and row “Ceiling”, code key ceiling.',
+    after: 'Chip and row “Productivity increase” (de “Produktivitätssteigerung”), code key productivity. Numbers unchanged.',
+    src: 'Grill: decided without asking (legibility). Evidence LLM-0019.' },
+  { id: 'row-adoption', rev: 1, kind: 'decided', show: ['adoption'], target: '[data-row="adoption"]',
+    title: 'Adoption replaces Mismatch',
+    before: 'One dashed band across all four columns, “Most people are here” to “Leaders expect this”.',
+    after: 'Each Level shows one number and the population it was measured in; no bars, since the populations differ. Factory: “no data yet”, plus the “Leaders expect this” marker tagged hypothesis with Gartner 2026 as support.',
+    src: 'Grill Q4, Q12, Q22. Research: research-adoption-per-level.md (filed as LLM-0025).' },
+  { id: 'layer-rows-shared', rev: 1, kind: 'proposal', show: ['disciplines', 'oversight'], target: '.span-row[data-row="disciplines"]',
+    title: 'Both layer rows share one look: span cards with a mini workflow',
+    before: 'Disciplines as a thin staircase of strips; Oversight as thin fading bars; two different looks.',
+    after: 'One SpanRow look for both: each item is a card spanning its Levels, one lane per item, with a 120×40 mini workflow drawn in one vocabulary (boxes are steps, the item’s part in its colour), its name and a one-line meaning. Hover or focus lights it; click shows definition and source below the row. A card narrower than 250 px drops its line, narrower than 165 px its drawing.',
+    src: 'Spec feedback 2 and 3. Proposed here: the drawings, the one-liners, card height 58 px.' },
+  { id: 'row-engineering', rev: 2, kind: 'decided', show: ['disciplines'], target: '.span-row[data-row="disciplines"]',
+    title: 'AI disciplines: five cards that step up',
+    before: 'Row “Engineering”, a staircase of thin strips.',
+    after: 'Row and chip “AI disciplines” (de “KI-Disziplinen”), code key disciplines. Five cards; each starts where its discipline begins, so together they still step up: Prompt (Prompting start), Context (Prompting mid), Harness and Loop (Agents mid), Graph (Workflows start), all to Factory end. Loop and Graph carry “emerging”.',
+    src: 'Grill Q6, Q10, Q11, Q14, Q18; spec feedback 1. Research: research-engineering-disciplines.md (LLM-0023).' },
+  { id: 'row-oversight', rev: 2, kind: 'decided', show: ['oversight'], target: '.span-row[data-row="oversight"]',
+    title: 'Oversight: where the person sits in the workflow',
+    before: 'Three thin fading bars, text only.',
+    after: 'Three cards on the same three-step workflow: HITL a person at a gate between every step; HOTL a person above, watching, with a stop button; HOOTL the steps run alone, the person only faint outside. Spans and fades unchanged: HITL Agents start → Factory mid, HOTL Agents mid (faint) → Factory mid, HOOTL Factory start → end. Row tagged hypothesis; origin quote (Human Rights Watch 2012) in the Context drawer.',
+    src: 'Grill Q5, Q9, Q16, Q19–Q21, Q24; spec feedback 3. Research: research-oversight-modes.md (LLM-0024).' },
+  { id: 'factory-lifecycle', rev: 1, kind: 'decided', show: ['explain'], target: '.level.factory',
+    title: 'Factory is an AI-run development lifecycle',
+    before: 'A black box with a question mark; “no person writing or reviewing each step”; interface “End to end … magic happens”.',
+    after: 'Card: agents run every stage, spec to release; people set goals and pass the gates. Scene: request → spec (person) → build (agent) → test (agent) → release (person) → result. Interface “Lifecycle”. “Factory?” and “emerging” stay.',
+    src: 'Grill Q17, Q23. An AI-SDLC source is still to be found for the card.' },
+  { id: 'workflows-years', rev: 1, kind: 'decided', show: [], target: '.level.workflows .year',
+    title: 'Workflows reads 2024–26',
+    before: '2024–25, the same as Agents.', after: '2024–26: Workflows are the current Level.',
+    src: 'Grill Q3.' },
+  { id: 'carousel-slices', rev: 2, kind: 'proposal', show: ['disciplines', 'oversight'], frame: 'phone', target: '.level.prompting .slice-cell',
+    title: 'Phone and Shorts: each card shows its slice of a span',
+    before: 'The Mismatch band was drawn per card with hand-set edges.',
+    after: 'Each Level card lists only the layer cards active in it, cut to that Level, with › where a span carries on into the next card. Same hover and click as wide. Opens at Phone width.',
+    src: 'Grill Q7. Proposed here: the › marker and dropping empty lanes in a slice.' },
+  { id: 'fit-1440', rev: 2, kind: 'proposal', show: ['explain', 'disciplines'], target: '.xp',
+    title: 'Open: the 1440×900 fit with taller layer cards',
+    before: 'Toolbar to model band fits 1440×900 with one row on.',
+    after: 'With cards instead of strips, AI disciplines is about 380 px tall (five lanes), so it plus Explain no longer fits 1440×900. Options: accept scrolling for this row; or show three lanes and fold the rest behind “+2”; or shrink cards to 44 px with the drawing only. Say which in the comment.',
+    src: 'Feature guide, Tests. Consequence of spec feedback 3.' },
+];
+
+/* ======================= Rendering the Explorable ======================= */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const TRACK_END = 30;
+const pct = (m) => (m <= 1 ? 0 : Math.min(100, (Math.log(m) / Math.log(TRACK_END)) * 100));
+/* x of a position p (0..4) on the four columns with a 12px gap. */
+const colIdx = (p) => Math.min(Math.floor(p), 3);
+const xCalc = (p) => `calc(${p} * (100% - 36px) / 4 + ${colIdx(p)} * 12px)`;
+const wCalc = (a, b) => `calc(${b - a} * (100% - 36px) / 4 + ${colIdx(b) - colIdx(a)} * 12px)`;
+
+function scene(l) {
+  if (l.scene === 'chat') return `<div class="chat"><span class="bubble me">Summarise this report in 3 points.</span><span class="bubble ai">Sure: 1. … 2. … 3. …</span></div>`;
+  if (l.scene === 'agent') return `<div class="chat"><span class="bubble me">Plan the team's trip to the trade fair.</span><span class="tool">⟳ Open the web</span><span class="tool">⟳ Search flights</span><span class="bubble ai">Three options, cheapest first.</span></div>`;
+  if (l.scene === 'workflow') return `<svg viewBox="0 0 200 130" aria-hidden="true">
+      <g stroke="var(--tone)" stroke-width="1.5" opacity=".5" fill="none"><path d="M100 20 L40 65 L100 110 L160 65 Z M100 20 L100 110"/></g>
+      <g fill="var(--tone)"><rect x="86" y="10" width="28" height="20" rx="4"/><rect x="26" y="55" width="28" height="20" rx="4"/><rect x="86" y="55" width="28" height="20" rx="4"/><rect x="146" y="55" width="28" height="20" rx="4"/><rect x="86" y="100" width="28" height="20" rx="4"/></g>
+      <g stroke="var(--card)" stroke-width="2.5" fill="none"><path d="M94 20l4 4 8-8M34 65l4 4 8-8M94 65l4 4 8-8M154 65l4 4 8-8M94 110l4 4 8-8"/></g></svg>`;
+  // Factory: the lifecycle, agents at every stage, people at the spec and release gates.
+  const stage = (x, label, who) => `
+      <rect x="${x}" y="66" width="34" height="22" rx="4" fill="${who === 'person' ? 'var(--card)' : 'color-mix(in oklch, var(--brand-accent) 22%, var(--card))'}" stroke="${who === 'person' ? 'var(--info)' : 'var(--brand-accent)'}" stroke-width="1.5" ${who === 'person' ? 'stroke-dasharray="3 2"' : ''}/>
+      <text x="${x + 17}" y="81" font-size="8.5" text-anchor="middle" fill="var(--foreground)" font-family="system-ui">${label}</text>
+      ${who === 'person'
+        ? `<g transform="translate(${x + 9} 34)" fill="none" stroke="var(--info)" stroke-width="1.8"><circle cx="8" cy="6" r="4.5"/><path d="M0 24c0-5 3.6-8.5 8-8.5s8 3.5 8 8.5"/></g>`
+        : `<g transform="translate(${x + 8} 38)" fill="none" stroke="var(--brand-accent)" stroke-width="1.8"><rect x="0" y="5" width="18" height="15" rx="3"/><path d="M9 0v5"/><circle cx="5.5" cy="12" r="1.3" fill="var(--brand-accent)"/><circle cx="12.5" cy="12" r="1.3" fill="var(--brand-accent)"/></g>`}`;
+  return `<svg viewBox="0 0 200 130" role="img" aria-label="A lifecycle: requests go in, agents build and test, people approve the spec and the release, results come out">
+      <path d="M6 77 H194" stroke="var(--tone)" stroke-width="1.5" stroke-dasharray="2 3" fill="none"/>
+      <rect x="4" y="71" width="12" height="12" rx="2" fill="var(--info)"/>
+      <text x="10" y="100" font-size="8" text-anchor="middle" fill="var(--muted-foreground)" font-family="system-ui">req</text>
+      ${stage(20, 'spec', 'person')}${stage(60, 'build', 'agent')}${stage(100, 'test', 'agent')}${stage(140, 'release', 'person')}
+      <rect x="184" y="71" width="12" height="12" rx="2" fill="var(--brand-accent)"/>
+      <text x="190" y="100" font-size="8" text-anchor="middle" fill="var(--muted-foreground)" font-family="system-ui">result</text>
+      <text x="100" y="118" font-size="8.5" text-anchor="middle" fill="var(--muted-foreground)" font-family="system-ui">people at the gates · agents at every stage</text></svg>`;
+}
+
+function prodCell(l) {
+  const p = l.prod;
+  const claimed = `<span class="claimed" style="left:${pct(p.claimed[0])}%;width:${pct(p.claimed[1]) - pct(p.claimed[0])}%"></span>`;
+  const measured = p.measured ? `<span class="measured" style="left:${pct(p.measured[0])}%;width:${pct(p.measured[1]) - pct(p.measured[0])}%"></span>` : '';
+  return `<div class="rowcard"><div class="rowlabel">Productivity increase</div>
+    <div class="ceil-top"><span class="big">${p.label}</span><span class="tag">hypothesis</span></div>
+    <div class="track">${claimed}${measured}<span class="promise" style="left:${pct(20)}%"></span></div>
+    <div class="scale"><span style="left:0">1×</span><span style="left:${pct(20)}%;color:var(--destructive)">20× promise</span></div>
+    <p class="meas"><b>Measured</b> ${p.text}</p></div>`;
+}
+
+function adoptCell(l) {
+  const a = l.adopt;
+  const stat = a.stat ? `<div class="stat">${a.stat}</div>` : `<div class="stat none">No data yet</div>`;
+  const expect = a.expect ? `<div class="expect"><b>Leaders expect this</b> <span class="tag">hypothesis</span><br>${a.expect.text}<div class="src">${a.expect.src}</div></div>` : '';
+  return `<div class="rowcard adopt"><div class="rowlabel">Adoption</div>${stat}
+    ${a.stat ? `<p class="what">${a.what}</p>` : ''}<span class="pop">${a.pop}</span>
+    ${a.src ? `<p class="src">${a.src}</p>` : ''}${expect}</div>`;
+}
+
+/* Mini workflows, 120×40. One shared vocabulary: steps are boxes, the part an item acts on is drawn in its hue. */
+const M = 'var(--muted-foreground)', H = 'var(--hue)';
+const box = (x, y, w, h, on, dash) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${on ? 'color-mix(in srgb, var(--hue) 22%, var(--card))' : 'var(--card)'}" stroke="${on ? H : M}" stroke-width="1.3" ${dash ? 'stroke-dasharray="3 2"' : ''}/>`;
+const arrow = (x1, x2, y, c = M) => `<path d="M${x1} ${y}H${x2 - 1}" stroke="${c}" stroke-width="1.2"/><path d="M${x2 - 4} ${y - 2.5}L${x2} ${y}L${x2 - 4} ${y + 2.5}" fill="none" stroke="${c}" stroke-width="1.2"/>`;
+const person = (x, y, c = H, o = 1) => `<g opacity="${o}" fill="none" stroke="${c}" stroke-width="1.4"><circle cx="${x}" cy="${y}" r="3"/><path d="M${x - 5} ${y + 10}c0-3.5 2.3-5.5 5-5.5s5 2 5 5.5"/></g>`;
+const steps = (on) => box(4, 22, 22, 12, on) + arrow(26, 49, 28) + box(49, 22, 22, 12, on) + arrow(71, 94, 28) + box(94, 22, 22, 12, on);
+const FLOWS = {
+  prompt: () => `${box(4, 20, 30, 16, true)}<path d="M9 25h20M9 29h16M9 33h12" stroke="${H}" stroke-width="1.2"/>${arrow(34, 52, 28)}${box(52, 18, 24, 20, false)}<text x="64" y="31" font-size="7" text-anchor="middle" fill="${M}" font-family="system-ui">LLM</text>${arrow(76, 94, 28)}${box(94, 22, 22, 12, false)}`,
+  context: () => `${[0, 1, 2].map((i) => box(6 + i * 4, 4 + i * 4, 18, 14, true)).join('')}<path d="M30 20 Q44 20 52 27" fill="none" stroke="${H}" stroke-width="1.3"/>${box(52, 18, 24, 20, false)}<text x="64" y="31" font-size="7" text-anchor="middle" fill="${M}" font-family="system-ui">LLM</text>${arrow(76, 94, 28)}${box(94, 22, 22, 12, false)}`,
+  harness: () => `${box(4, 22, 18, 12, false)}${arrow(22, 38, 28)}<rect x="38" y="6" width="50" height="32" rx="5" fill="none" stroke="${H}" stroke-width="1.4" stroke-dasharray="3 2"/>${box(50, 18, 26, 16, false)}<text x="63" y="29" font-size="7" text-anchor="middle" fill="${M}" font-family="system-ui">LLM</text><rect x="42" y="9" width="7" height="7" rx="1.5" fill="${H}"/><rect x="77" y="9" width="7" height="7" rx="1.5" fill="${H}"/>${arrow(88, 100, 28)}${box(100, 22, 16, 12, false)}`,
+  loop: () => `${box(4, 22, 18, 12, false)}${arrow(22, 46, 28)}${box(46, 20, 28, 16, false)}<text x="60" y="31" font-size="7" text-anchor="middle" fill="${M}" font-family="system-ui">agent</text><path d="M74 24 C92 4, 28 4, 46 24" fill="none" stroke="${H}" stroke-width="1.5"/><path d="M43 19 L46 24 L50 20" fill="none" stroke="${H}" stroke-width="1.5"/>${arrow(74, 98, 30)}${box(98, 24, 18, 12, false)}`,
+  graph: () => `${box(4, 15, 16, 10, true)}<path d="M20 20 L44 8 M20 20 L44 32 M60 8 L84 20 M60 32 L84 20" stroke="${H}" stroke-width="1.3"/>${box(44, 3, 16, 10, true)}${box(44, 27, 16, 10, true)}${box(84, 15, 16, 10, true)}<path d="M100 20H116" stroke="${M}" stroke-width="1.2"/>`,
+  hitl: () => `${steps(false)}${person(37.5, 4)}${person(82.5, 4)}<path d="M37.5 16v8M82.5 16v8" stroke="${H}" stroke-width="1.3"/><path d="M34 27l2.5 2.5 4.5-4.5M79 27l2.5 2.5 4.5-4.5" fill="none" stroke="${H}" stroke-width="1.4"/>`,
+  hotl: () => `${steps(false)}${person(60, 3)}<path d="M54 15 L18 21 M60 15 V21 M66 15 L102 21" stroke="${H}" stroke-width="1" stroke-dasharray="2 2"/><rect x="72" y="2" width="9" height="9" rx="1.5" fill="none" stroke="${H}" stroke-width="1.3"/><rect x="75" y="5" width="3" height="3" fill="${H}"/>`,
+  hootl: () => `${steps(true)}${person(9, 5, M, 0.35)}<path d="M4 40h112" stroke="${H}" stroke-width="1" stroke-dasharray="1 3"/>`,
+};
+
+/* The cards of one layer between positions lo..hi (0..4). `local` draws a carousel slice; spans running on get a ›. */
+function lanes(kind, lo, hi, local) {
+  const span = hi - lo;
+  const x = (p) => (local ? `${((p - lo) / span) * 100}%` : xCalc(p));
+  const w = (a, b) => (local ? `${((b - a) / span) * 100}%` : wCalc(a, b));
+  return LAYERS[kind].items.map((m) => {
+    const f = pos(m.from), t = pos(m.to);
+    const a = Math.max(f, lo), b = Math.min(t, hi);
+    if (b <= a) return local ? '' : '<div class="lane"></div>';
+    const stops = m.stops || [[0, 0.6], [1, 0.6]];
+    const at = (p) => (p - f) / (t - f);
+    const s = (q) => { for (let i = 1; i < stops.length; i++) if (q <= stops[i][0]) { const [q0, s0] = stops[i - 1], [q1, s1] = stops[i]; return s0 + ((q - q0) / (q1 - q0)) * (s1 - s0); } return stops[stops.length - 1][1]; };
+    const qa = at(a), qb = at(b);
+    const pts = [[qa, s(qa)], ...stops.filter(([q]) => q > qa && q < qb), [qb, s(qb)]];
+    const fade = pts.map(([q, v]) => `color-mix(in srgb, ${m.hue} ${Math.round(4 + v * 26)}%, transparent) ${((q - qa) / (qb - qa)) * 100}%`).join(', ');
+    const more = local && t > hi ? '<span class="more" aria-hidden="true">›</span>' : '';
+    return `<div class="lane"><button type="button" class="lcard" data-span="${m.id}" aria-expanded="false"
+      style="left:${x(a)};width:${w(a, b)};--hue:${m.hue};--fade:${fade}"
+      aria-label="${esc(m.full)}${m.emerging ? ', emerging' : ''}: ${esc(m.line)} From ${m.from.join(' ')} to ${m.to.join(' ')}">
+      <svg viewBox="0 0 120 40" aria-hidden="true">${FLOWS[m.id]()}</svg>
+      <span class="tx"><span class="nm">${m.full === `${m.name} engineering` ? m.full : `${m.name} · ${m.full}`}${m.emerging ? '<span class="em">emerging</span>' : ''}</span><span class="ln">${esc(m.line)}</span></span>${more}</button></div>`;
+  }).join('');
+}
+
+function spanBlock(kind, lo, hi, local) {
+  const L = LAYERS[kind];
+  return `<div class="span-head"><span class="rowlabel">${L.label}</span>${L.tag ? `<span class="tag">${L.tag}</span>` : ''}</div>
+    <div class="lanes">${lanes(kind, lo, hi, local) || '<p class="meas" style="margin:0 4px">None at this Level.</p>'}</div>
+    <div class="span-detail" aria-live="polite" data-hint="${esc(L.hint)}">${esc(L.hint)}</div>`;
+}
+
+function render() {
+  $('#chips').innerHTML = CHIP_ORDER.map((r) => `<button class="chip" type="button" data-row-toggle="${r}" aria-pressed="false">${CHIP_WORDS[r]}</button>`).join('');
+  const lv = LEVELS.map((l, i) => `
+    <div class="level ${l.id}" role="listitem">
+      <div class="cell"><button class="head" type="button" aria-pressed="false" ${l.lineChanged ? 'data-changed="Lifecycle"' : ''}>
+        <div class="dot-year"><span class="dot"></span><span class="year" ${l.yearChanged ? 'data-changed="Year"' : ''}>${l.year}</span></div>
+        <div class="namecard"><div class="name">${l.name} <small>Level ${l.n}</small></div>
+          <p class="line">${l.line}</p><p class="def">${l.def} <span class="s">${l.src}</span></p></div>
+      </button></div>
+      <div class="cell" data-row="role"><div class="rowcard role"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${ICONS[l.icon]}</svg>
+        <div><div class="rowlabel">Managing effort</div><b>${l.role}</b></div></div></div>
+      <div class="cell" data-row="productivity" ${i === 0 ? 'data-changed="Renamed"' : ''}>${prodCell(l)}</div>
+      <div class="cell" data-row="adoption" ${i === 0 ? 'data-changed="New"' : ''}>${adoptCell(l)}</div>
+      <div class="cell slice-cell" data-row="disciplines"><div class="rowcard slice" data-slice="disciplines">${spanBlock('disciplines', i, i + 1, true)}</div></div>
+      <div class="cell slice-cell" data-row="oversight"><div class="rowcard slice" data-slice="oversight">${spanBlock('oversight', i, i + 1, true)}</div></div>
+      <div class="cell scene-cell" data-row="explain"><div class="scene" ${l.id === 'factory' ? 'data-changed="Lifecycle"' : ''}>
+        <div class="stage">${scene(l)}</div><div class="iface"><b>${l.iface[0]}</b>${l.iface[1]}</div></div></div>
+      <div class="cell wire-cell" data-row="explain"><div class="wire"></div></div>
+    </div>`).join('');
+  const spans = ['disciplines', 'oversight'].map((k) => `
+    <div class="span-row" data-row="${k}" data-changed="New">
+      <div class="cols" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      ${spanBlock(k, 0, 4, false)}
+    </div>`).join('');
+  $('#levels').innerHTML = lv + spans;
+}
+render();
+
+/* ======================= Explorable behaviour ======================= */
+const xp = $('#xp');
+const frame = $('#frame');
+const levels = $('#levels');
+let shown = [...OPENING_ROWS];
+function setRows(next) {
+  shown = ROWS.filter((r) => next.includes(r));
+  xp.dataset.rows = shown.join(' ');
+  document.querySelectorAll('[data-row-toggle]').forEach((b) => b.setAttribute('aria-pressed', String(shown.includes(b.dataset.rowToggle))));
+}
+setRows(shown);
+$('#chips').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-row-toggle]'); if (!b) return;
+  const r = b.dataset.rowToggle;
+  setRows(shown.includes(r) ? shown.filter((x) => x !== r) : [...shown, r]);
+});
+levels.addEventListener('click', (e) => {
+  const h = e.target.closest('.head'); if (h) h.setAttribute('aria-pressed', String(h.getAttribute('aria-pressed') !== 'true'));
+});
+
+/* Spanning rows: hover or focus lights a span; click pins its definition. */
+const DEFS = Object.fromEntries(Object.values(LAYERS).flatMap((L) => L.items.map((m) => [m.id, m])));
+const fmt = (s) => `${s[0][0].toUpperCase()}${s[0].slice(1)} ${s[1]}`;
+function detailHTML(id, pinned) {
+  const d = DEFS[id];
+  const head = `<span class="t">${esc(d.full)}</span>${d.emerging ? ' <span class="tag">emerging</span>' : ''} · ${fmt(d.from)} → ${fmt(d.to)}`;
+  if (!pinned) return `${head}<br><span class="d">${esc(d.def)}</span>`;
+  const quote = d.quote ? `<div class="q">“${esc(d.quote)}”<small>Context drawer · origin: ${esc(OVERSIGHT_SOURCE)}</small></div>` : `<br><span>Source: ${esc(d.src)}</span>`;
+  return `${head}<br><span class="d">${esc(d.def)}</span>${quote}`;
+}
+function scopeOf(el) { return el.closest('.span-row, .slice'); }
+function light(el, on) {
+  const scope = scopeOf(el); if (!scope) return;
+  const pinned = scope.querySelector('[aria-expanded="true"]');
+  scope.querySelectorAll('[data-span]').forEach((s) => s.classList.toggle('lit', on ? s.dataset.span === el.dataset.span : pinned ? s === pinned : false));
+  const det = scope.querySelector('.span-detail');
+  const which = on ? el : pinned;
+  det.innerHTML = which ? detailHTML(which.dataset.span, which.getAttribute('aria-expanded') === 'true') : esc(det.dataset.hint);
+}
+levels.addEventListener('pointerover', (e) => { const s = e.target.closest('[data-span]'); if (s) light(s, true); });
+levels.addEventListener('pointerout', (e) => { const s = e.target.closest('[data-span]'); if (s && !s.contains(e.relatedTarget)) light(s, false); });
+levels.addEventListener('focusin', (e) => { const s = e.target.closest('[data-span]'); if (s) light(s, true); });
+levels.addEventListener('focusout', (e) => { const s = e.target.closest('[data-span]'); if (s) light(s, false); });
+levels.addEventListener('click', (e) => {
+  const s = e.target.closest('[data-span]'); if (!s) return;
+  const scope = scopeOf(s);
+  const open = s.getAttribute('aria-expanded') !== 'true';
+  scope.querySelectorAll('[data-span]').forEach((x) => x.setAttribute('aria-expanded', 'false'));
+  s.setAttribute('aria-expanded', String(open));
+  light(s, true);
+});
+levels.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const s = e.target.closest('[data-span]'); if (!s) return;
+  s.setAttribute('aria-expanded', 'false'); light(s, true);
+});
+
+/* Carousel: arrows step one Level, dots follow the card in view. */
+const cards = () => [...levels.querySelectorAll('.level')];
+const dots = [...document.querySelectorAll('#dots i')];
+const step = (d) => {
+  const cs = cards();
+  const i = Math.round(levels.scrollLeft / (cs[0].offsetWidth + 12));
+  cs[Math.max(0, Math.min(3, i + d))].scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+};
+$('#prev').onclick = () => step(-1);
+$('#next').onclick = () => step(1);
+const io = new IntersectionObserver((es) => es.forEach((e) => {
+  if (e.isIntersecting) dots.forEach((d, i) => d.classList.toggle('on', i === cards().indexOf(e.target)));
+}), { root: levels, threshold: 0.6 });
+cards().forEach((c) => io.observe(c));
+
+/* ======================= Viewer tools ======================= */
+function setFrame(f) {
+  document.querySelectorAll('[data-set]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.set === f)));
+  frame.dataset.frame = f;
+}
+document.querySelectorAll('[data-set]').forEach((b) => b.addEventListener('click', () => setFrame(b.dataset.set)));
+$('#marks').onclick = (e) => { const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', String(on)); frame.classList.toggle('marks', on); };
+$('#allrows').onclick = (e) => { const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', String(on)); setRows(on ? ROWS : OPENING_ROWS); };
+$('#theme').onclick = (e) => { const dark = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', String(dark)); document.documentElement.dataset.theme = dark ? 'dark' : 'light'; };
+$('#navtoggle').onclick = (e) => { const on = e.currentTarget.getAttribute('aria-pressed') !== 'true'; e.currentTarget.setAttribute('aria-pressed', String(on)); $('#ws').classList.toggle('nav-collapsed', on); };
+const sizeHead = () => document.documentElement.style.setProperty('--head-h', `${$('#spechead').offsetHeight}px`);
+sizeHead(); addEventListener('resize', sizeHead);
+
+/* ======================= Review: state, drafts, export ======================= */
+function hash(s) { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); }
+const fingerprint = (it) => hash(JSON.stringify([it.rev, it.title, it.before, it.after, it.src]));
+const STORE_KEY = `to-html-spec:${SPEC.id}`;
+let storeOK = true;
+function load() { try { const raw = localStorage.getItem(STORE_KEY); return raw ? JSON.parse(raw) : null; } catch { storeOK = false; return null; } }
+function save() {
+  if (!storeOK) return;
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch { storeOK = false; $('#storewarn').classList.add('show'); }
+}
+const saved = load();
+const state = { revision: SPEC.revision, items: {}, stale: {}, next: '', dest: '' };
+if (saved && typeof saved === 'object') {
+  state.next = saved.next || ''; state.dest = saved.dest || '';
+  for (const it of ITEMS) {
+    const old = saved.items && saved.items[it.id];
+    if (!old) continue;
+    if (old.fp === fingerprint(it)) state.items[it.id] = old;
+    else state.stale[it.id] = { ...old, fromRevision: saved.revision };
+  }
+  for (const [id, v] of Object.entries(saved.stale || {})) if (!state.stale[id] && ITEMS.some((i) => i.id === id)) state.stale[id] = v;
+  for (const [id, v] of Object.entries(saved.items || {})) if (!ITEMS.some((i) => i.id === id)) state.stale[id] = { ...v, removed: true, fromRevision: saved.revision };
+}
+if (!storeOK) $('#storewarn').classList.add('show');
+$('#revlabel').textContent = `revision ${SPEC.revision}`;
+
+const KIND = { decided: ['decided', 'Decided in the grill'], proposal: ['proposal', 'Agent proposal'], evidence: ['evidence', 'Evidence'] };
+function renderItems() {
+  $('#items').innerHTML = ITEMS.map((it, i) => {
+    const r = state.items[it.id] || {};
+    const st = state.stale[it.id];
+    const [kc, kt] = KIND[it.kind];
+    return `<article class="item" id="item-${it.id}" data-item="${it.id}">
+      <h3><span class="num">D${i + 1}</span>${esc(it.title)}</h3>
+      <span class="kind ${kc}">${kt}</span>
+      <div class="ba"><b>Before</b><span>${esc(it.before)}</span><b>After</b><span>${esc(it.after)}</span></div>
+      <p class="src">${esc(it.src)}</p>
+      <button type="button" class="show" data-show="${it.id}">Show in preview</button>
+      ${st ? `<div class="stale"><b>Needs review:</b> this item changed since your answer (revision ${esc(st.fromRevision || '?')}). Earlier choice: <b>${esc(st.choice || 'none')}</b>${st.comment ? `; earlier comment: “${esc(st.comment)}”` : ''}. Answer again to confirm.</div>` : ''}
+      <fieldset class="resp" style="border:0;padding:0">
+        <legend class="c" style="font-size:12px;color:var(--muted-foreground)">Your answer</legend>
+        <label><input type="radio" name="r-${it.id}" value="yes" ${r.choice === 'yes' ? 'checked' : ''}> Accept</label>
+        <label><input type="radio" name="r-${it.id}" value="no" ${r.choice === 'no' ? 'checked' : ''}> Change it</label>
+        <button type="button" class="reset" data-reset="${it.id}">Reset this item (clears answer and comment)</button>
+      </fieldset>
+      <label class="c" for="c-${it.id}">Comment on D${i + 1}</label>
+      <textarea id="c-${it.id}" data-comment="${it.id}">${esc(r.comment || '')}</textarea>
+    </article>`;
+  }).join('') + Object.entries(state.stale).filter(([, v]) => v.removed).map(([id, v]) => `<div class="stale"><b>Removed item ${esc(id)}:</b> your earlier answer ${esc(v.choice || 'none')}${v.comment ? `, comment “${esc(v.comment)}”` : ''} is kept and exported.</div>`).join('');
+  $('#itemsnav').innerHTML = ITEMS.map((it, i) => `<a href="#item-${it.id}" data-nav="${it.id}"><span>D${i + 1}</span><span>${esc(it.title.split(':')[0].slice(0, 26))}</span><span class="st" data-s="${state.items[it.id]?.choice || ''}">${state.items[it.id]?.choice === 'yes' ? '✓' : state.items[it.id]?.choice === 'no' ? '✎' : ''}</span></a>`).join('');
+}
+renderItems();
+$('#nextaction').value = state.next;
+if (state.dest) $('#dest').value = state.dest;
+
+function touch(id) {
+  const it = ITEMS.find((x) => x.id === id);
+  state.items[id] = state.items[id] || { fp: fingerprint(it) };
+  state.items[id].fp = fingerprint(it);
+  return state.items[id];
+}
+function updateNav(id) {
+  const st = $(`[data-nav="${id}"] .st`); if (!st) return;
+  const c = state.items[id]?.choice || '';
+  st.dataset.s = c; st.textContent = c === 'yes' ? '✓' : c === 'no' ? '✎' : '';
+}
+$('#items').addEventListener('change', (e) => {
+  const m = e.target.name && e.target.name.match(/^r-(.+)$/); if (!m) return;
+  touch(m[1]).choice = e.target.value; delete state.stale[m[1]]; save(); updateNav(m[1]);
+});
+$('#items').addEventListener('input', (e) => {
+  const id = e.target.dataset.comment; if (!id) return;
+  touch(id).comment = e.target.value; save();
+});
+$('#items').addEventListener('click', (e) => {
+  const rs = e.target.closest('[data-reset]');
+  if (rs) {
+    const id = rs.dataset.reset; delete state.items[id]; save();
+    document.querySelectorAll(`[name="r-${id}"]`).forEach((x) => (x.checked = false));
+    $(`[data-comment="${id}"]`).value = ''; updateNav(id); return;
+  }
+  const sh = e.target.closest('[data-show]');
+  if (sh) showItem(sh.dataset.show);
+});
+$('#itemsnav').addEventListener('click', (e) => { const a = e.target.closest('[data-nav]'); if (a) showItem(a.dataset.nav, false); });
+$('#items').addEventListener('focusin', (e) => { const a = e.target.closest('[data-item]'); if (a) activate(a.dataset.item); });
+function activate(id) {
+  document.querySelectorAll('.item').forEach((x) => x.classList.toggle('active', x.dataset.item === id));
+  document.querySelectorAll('[data-nav]').forEach((x) => x.classList.toggle('on', x.dataset.nav === id));
+}
+function showItem(id, fromButton = true) {
+  const it = ITEMS.find((x) => x.id === id); if (!it) return;
+  activate(id);
+  if (it.frame) setFrame(it.frame); else if (fromButton && frame.dataset.frame !== 'wide' && !it.frame) setFrame('wide');
+  if (it.show.length) setRows([...new Set([...shown, ...it.show])]);
+  requestAnimationFrame(() => {
+    const t = [...frame.querySelectorAll(it.target)].find((el) => el.offsetParent !== null) || frame.querySelector(it.target);
+    if (!t) return;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center', inline: 'center' });
+    t.classList.remove('flash'); void t.offsetWidth; t.classList.add('flash');
+  });
+}
+$('#nextaction').addEventListener('input', (e) => { state.next = e.target.value; save(); });
+$('#dest').addEventListener('input', (e) => { state.dest = e.target.value; save(); });
+
+function buildPrompt() {
+  const dest = $('#dest').value.trim() || '.scratch/ai-capability/spec-feedback.md';
+  const payload = {
+    spec: { ...SPEC },
+    items: ITEMS.map((it, i) => {
+      const r = state.items[it.id];
+      const out = { id: it.id, number: `D${i + 1}`, title: it.title, fingerprint: fingerprint(it) };
+      if (!r || (!r.choice && !r.comment)) out.response = 'skipped';
+      else { out.response = r.choice === 'yes' ? 'accept' : r.choice === 'no' ? 'change' : 'comment-only'; if (r.comment) out.comment = r.comment; }
+      if (state.stale[it.id]) out.needsReconfirmation = state.stale[it.id];
+      return out;
+    }),
+    removedItems: Object.entries(state.stale).filter(([, v]) => v.removed).map(([id, v]) => ({ id, ...v })),
+    callerContinuation: 'Fold accepted and changed items into .scratch/ai-capability/handoff.md, update this Spec in place with /to-html-spec if anything changes, then implement in worktree feat/ai-capability-layers with /tdd.',
+    reviewerNextAction: $('#nextaction').value,
+    overallApproval: null,
+  };
+  return [
+    `Save this complete prompt verbatim to ${dest}. Do not summarise it. If that file already exists, keep it and choose a new file name instead of overwriting.`,
+    `Then read the referenced Spec at ${SPEC.location} (id ${SPEC.id}, revision ${SPEC.revision}). If its revision or an item's fingerprint differs from the payload, stop for that item: do not apply the feedback to changed content.`,
+    'No overall approval is given by this feedback; per-item answers are not an approval of the Spec.',
+    '<<<FEEDBACK_JSON',
+    JSON.stringify(payload, null, 2),
+    'FEEDBACK_JSON>>>',
+  ].join('\n');
+}
+$('#copy').addEventListener('click', async () => {
+  const text = buildPrompt();
+  const msg = $('#copymsg'), fb = $('#fallback');
+  try {
+    if (!navigator.clipboard) throw new Error('no clipboard');
+    await navigator.clipboard.writeText(text);
+    msg.textContent = 'Copied. Paste it into the agent session.'; fb.style.display = 'none';
+  } catch {
+    msg.textContent = 'The browser refused the clipboard. Select the text below and copy it by hand.';
+    fb.value = text; fb.style.display = 'block'; fb.focus(); fb.select();
+  }
+});
+</script>
+</body>
+</html>

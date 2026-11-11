@@ -44,6 +44,18 @@
   display: none;
 }
 @container (min-width: 48rem) {
+  .columns > [data-level='prompting'] {
+    grid-column: 1;
+  }
+  .columns > [data-level='agents'] {
+    grid-column: 2;
+  }
+  .columns > [data-level='workflows'] {
+    grid-column: 3;
+  }
+  .columns > [data-level='factory'] {
+    grid-column: 4;
+  }
   .columns {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -56,7 +68,7 @@
   }
   .column {
     display: grid;
-    grid-row: span var(--rows);
+    grid-row: 1 / span var(--rows);
     grid-template-rows: subgrid;
   }
   .rail {
@@ -67,6 +79,13 @@
   }
   .narrow {
     display: none;
+  }
+  /* The column keeps an empty cell for a layer row, so its subgrid rows stay in step; the wide row draws over it. */
+  .columns .slices > * {
+    display: none;
+  }
+  .layerRow {
+    grid-column: 1 / -1;
   }
 }
 
@@ -81,36 +100,12 @@
   }
 }
 
-/* The Ceiling track: the claimed range in the Level's colour, fading out past the factory's open end. */
+/* The Productivity increase track: the claimed range in the Level's colour, fading out past the factory's open end. */
 .claimed {
   background: var(--tone);
 }
 .factory .claimed {
   background: linear-gradient(90deg, var(--tone), var(--muted));
-}
-
-/* The Mismatch band runs on through the gaps between the Levels, from the first Level's centre to the last one's. */
-.band {
-  left: -0.5rem;
-  right: -0.5rem;
-}
-[data-gap-end='here'] .band {
-  left: 50%;
-}
-[data-gap-end='expect'] .band {
-  right: 50%;
-}
-.pin {
-  left: calc(50% - 0.625rem);
-}
-[data-gap-end='here'] .pin {
-  background: var(--foreground);
-  border: 3px solid var(--card);
-  box-shadow: 0 0 0 2px var(--foreground);
-}
-[data-gap-end='expect'] .pin {
-  background: var(--card);
-  border: 3px dashed var(--destructive);
 }
 
 /* The rail behind the dots, from the first level's colour to the last: its middle on the dots' centres (a dot is 1rem). */
@@ -204,20 +199,12 @@
   }
 }
 
-/* The factory: one request slides in, one result slides out, smoke rises while it works. */
+/* The factory: one request slides in, one result slides out. */
 .enter {
   animation: feed 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 .leave {
   animation: ship 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-.running .smoke {
-  animation: smoke 2.4s ease-out infinite;
-}
-.smoke {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
 }
 @keyframes feed {
   0% {
@@ -247,17 +234,6 @@
     opacity: 0;
   }
 }
-@keyframes smoke {
-  from {
-    transform: translateY(0) scale(0.6);
-    opacity: 0.8;
-  }
-  to {
-    transform: translateY(-14px) scale(1.4);
-    opacity: 0;
-  }
-}
-
 /* The next token the model is about to pick, blinking. */
 .next {
   animation: blink 1s steps(2) infinite;
@@ -302,7 +278,6 @@
   .pop,
   .enter,
   .leave,
-  .running .smoke,
   .next,
   .gloss .tip,
   .load {
@@ -405,5 +380,93 @@
   .chips button::before,
   .play {
     transition: none;
+  }
+}
+
+/*
+ * The two layer rows, AI disciplines and Oversight: one card per item, one lane each, on eight half-Level tracks, so a
+ * span may start or end mid-Level. `--hue` is the card's tone, a global token; its tint fades along the card with the
+ * strength stops the view sets inline as a gradient of `--hue` over `--card`.
+ */
+.info {
+  --hue: var(--info);
+}
+.accent {
+  --hue: var(--brand-accent);
+}
+.muted {
+  --hue: var(--muted-foreground);
+}
+.layerRow {
+  gap: 0.25rem;
+}
+.lanes {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  column-gap: 0.5rem;
+  row-gap: 0.4rem;
+}
+.slices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.layerCard {
+  container-type: inline-size;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid color-mix(in oklch, var(--hue) 35%, var(--border));
+  border-radius: 0.9rem;
+  background-color: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+  transition:
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out,
+    transform 150ms ease-out;
+}
+.layerCard.emerging {
+  border-style: dashed;
+}
+.layerCard[data-on='true'],
+.layerCard[aria-pressed='true'] {
+  border-color: var(--hue);
+  box-shadow: 0 0 0 2px color-mix(in oklch, var(--hue) 30%, transparent);
+}
+.layerCard[data-on='true'] {
+  transform: translateY(-1px);
+}
+.layerCard:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+/* A card too narrow for its drawing beside its words stacks them, and drops its one-liner. */
+.cardBody {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+@container (max-width: 18rem) {
+  .cardBody {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+  .oneLiner {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .layerCard {
+    transition: none;
+  }
+  .layerCard[data-on='true'] {
+    transform: none;
   }
 }
