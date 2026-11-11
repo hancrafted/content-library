@@ -140,8 +140,9 @@ First the four classic dartboards (precise and accurate, precise but off target,
 1. **Missing requirements show up as wrong output** — in 55 historic aerospace software incidents, 85% produced wrong output instead of stopping, only 16% were errors of traditional programming, and 40% came from absent code, meaning missing requirements or unanticipated situations [1].
    - sources: [1] Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance — https://ntrs.nasa.gov/api/citations/20230012909/downloads/Historical%20Aerospace%20Software%20Errors.pdf
    - target: the "precise but off target" board
-2. **Limits** — the 40% mixes missing requirements with unanticipated situations, the categories were assigned in hindsight, and the author doubts that more requirements would have averted many of these errors. A survey of specifications found that how much quality matters depends on the project [1].
-   - sources: [1] Mund, Femmer, Méndez Fernández, Eckhardt, Does Quality of Requirements Specifications matter? Combined Results of Two Empirical Studies — https://arxiv.org/abs/1702.07656
+2. **Limits** — the 40% mixes missing requirements with unanticipated situations, the categories were assigned in hindsight, and the author doubts that more requirements would have averted many of these errors [1]. A survey of specifications found that how much quality matters depends on the project [2].
+   - sources: [1] Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance — https://ntrs.nasa.gov/api/citations/20230012909/downloads/Historical%20Aerospace%20Software%20Errors.pdf
+   - sources: [2] Mund, Femmer, Méndez Fernández, Eckhardt, Does Quality of Requirements Specifications matter? Combined Results of Two Empirical Studies — https://arxiv.org/abs/1702.07656
 
 #### Voice script
 
@@ -198,7 +199,6 @@ The dartboard from the earlier Slide beside a context window, the same four outc
 
 1. **The definition** — What you add to the context window decides whether the agent has the precision and accuracy to work towards.
 2. **Same four outcomes** — Same dartboard, same four outcomes, different object. Your requirement document is now a context window.
-3. **Calibrated candour** — Where it breaks: a window is a budget. This is my framing, researchers propose it, nobody has measured it.
 
 ### Static and dynamic context {#static-and-dynamic-context}
 
@@ -230,8 +230,9 @@ A person at the bike bench sorting what lands on it, with the AI worker beside t
 
 #### Speaker notes
 
-1. **More is not safer** — stating all requirements at once lowered compliance (98.7% for one requirement alone against 85.0% for gpt-4o with 19), and repository context files that restated discoverable information did not generally improve coding-agent success [1].
+1. **More is not safer** — stating all requirements at once lowered compliance (98.7% for one requirement alone against 85.0% for gpt-4o with 19) [1], and repository context files that restated discoverable information did not generally improve coding-agent success [2].
    - sources: [1] Why do explicit written requirements reduce the variation in LLM output? (earlier research file) — docs/llm-wiki/research/AIE/AIE-0008__written-requirements-reduce-variance/research.md
+   - sources: [2] Gloaguen, Mündler-Sasahara, Müller, Raychev, Vechev, Evaluating AGENTS.md: Are Repository-Level Context Files Helpful for Coding Agents? (v3, 2026-09-29) — https://arxiv.org/abs/2602.11988
 
 #### Voice script
 
@@ -246,7 +247,7 @@ master: grid-2x2 · motion: none
 
 title: Context rot at the bench
 
-The bike bench as a grid with two rows and four columns. Static row: a wrong screw size on the instruction sheet, a binder of every bike model, fifty near-identical wrenches, old and new instruction sheets both pinned up. Dynamic row: a mislabelled box of screws, colleagues dropping by with questions, ten crates of similar parts, "rush it" against "check every piece". Each column's label is plain: a wrong fact stuck in, too much history, too many similar tools, two instructions that disagree. The four IBM terms appear only as small captions.
+Nearest frame component is a 2x2 grid, but the wanted layout is the bike bench as a grid with two rows and four columns (eight cells; the library has no 2x4 grid). Static row: a wrong screw size on the instruction sheet, a binder of every bike model, fifty near-identical wrenches, old and new instruction sheets both pinned up. Dynamic row: a mislabelled box of screws, colleagues dropping by with questions, ten crates of similar parts, "rush it" against "check every piece". Each column's label is plain: a wrong fact stuck in, too much history, too many similar tools, two instructions that disagree. The four IBM terms appear only as small captions.
 
 #### Speaker notes
 
@@ -286,7 +287,7 @@ The same bench, each of four fixes clearing one mess: checking the sheet against
 
 #### Voice script
 
-1. **Four cleanups** — Validate, compact, curate, prune: one cleanup per mess. This is the video's framing, and I still need to confirm it.
+1. **Four cleanups** — Validate, compact, curate, prune: one cleanup per mess.
 2. **Fresh chat** — Sometimes the cleanest fix is a clean bench: start a fresh chat and bring only the result. That is the second actionable, and I come back to it.
 
 ## Creating context for agents {#creating-context-for-agents}
