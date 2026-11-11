@@ -3,11 +3,12 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { memo, type ReactNode } from 'react';
 import styles from './ai-capability.module.css';
-import type { Ceiling, LevelWords, SceneWords } from './ai-capability.types';
+import type { LayerRow, LevelWords, Productivity, SceneWords } from './ai-capability.types';
 import { Flip } from './flip.client';
+import { LayerSlices, type LayerRowProps } from './layer-row.client';
 import { CardBackView, CardFrontView, type CardLabels } from './level-card-view';
 import { LevelSceneView } from './level-scene-view';
-import { CeilingCellView, MismatchCellView, RoleCellView, type GapEnd } from './row-cells-view';
+import { AdoptionCellView, EffortCellView, ProductivityCellView, type AdoptionLabels } from './row-cells-view';
 import type { Row } from './rows.pure';
 import type { Frame, Level } from './scene-frames.pure';
 
@@ -30,36 +31,40 @@ export interface LevelColumnProps {
   readonly marker?: ReactNode;
   /** The rows the toolbar adds, in stacking order, and what they need. */
   readonly shown: readonly Row[];
-  readonly ceiling: Ceiling;
-  readonly gapEnd: GapEnd;
+  readonly productivity: Productivity;
   readonly rowLabels: RowLabels;
+  /** The two layer rows, their slices drawn in this Level's card while the container is narrow. */
+  readonly layers: Readonly<Record<LayerRow, LayerRowProps>>;
 }
 
 /** The labels the added rows share across the four Levels. */
-export interface RowLabels {
-  readonly comparable: string;
-  readonly hypothesis: string;
+export interface RowLabels extends AdoptionLabels {
+  readonly effort: string;
   readonly measured: string;
   readonly promise: string;
-  readonly here: string;
-  readonly expect: string;
 }
+
+/** The Level whose Adoption cell carries what leaders expect. */
+const EXPECTED: Level = 'factory';
 
 /** One added row of this Level, by its key, handed only what the rows read. */
 function AddedRow(
   props: { readonly row: Exclude<Row, 'explain'> } & Pick<
     LevelColumnProps,
-    'level' | 'words' | 'rowLabels' | 'ceiling' | 'gapEnd'
+    'level' | 'words' | 'rowLabels' | 'productivity' | 'layers'
   >,
 ) {
   const { row, level, words, rowLabels } = props;
-  if (row === 'role') return <RoleCellView level={level} label={rowLabels.comparable} scale={words.scale} />;
-  if (row === 'ceiling') return <CeilingCellView words={words} ceiling={props.ceiling} labels={rowLabels} />;
-  return <MismatchCellView words={words} end={props.gapEnd} labels={rowLabels} />;
+  if (row === 'effort') return <EffortCellView level={level} label={rowLabels.effort} scale={words.scale} />;
+  if (row === 'productivity')
+    return <ProductivityCellView words={words} range={props.productivity} labels={rowLabels} />;
+  if (row === 'adoption')
+    return <AdoptionCellView words={words.adoption} expected={level === EXPECTED} labels={rowLabels} />;
+  return <LayerSlices {...props.layers[row]} level={level} />;
 }
 
 /** What an added row needs beyond the Level's words. */
-const pick = ({ ceiling, gapEnd }: LevelColumnProps) => ({ ceiling, gapEnd });
+const pick = ({ productivity, layers }: LevelColumnProps) => ({ productivity, layers });
 
 /** Hover and focus light the column; leaving it puts the light out. */
 const lighting = (level: Level, onLight: LevelColumnProps['onLight']) => ({

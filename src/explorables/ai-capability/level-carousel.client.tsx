@@ -4,10 +4,13 @@ import { prefersReducedMotion } from '@/shared/hooks/prefers-reduced-motion';
 import { useCallback, useEffect, useState, type RefObject } from 'react';
 import styles from './ai-capability.module.css';
 
+/** The Level cards of the list, without the layer rows that span them in a wide container. */
+const cards = (list: HTMLElement) => [...list.querySelectorAll<HTMLElement>(':scope > [data-level]')];
+
 /** The card whose centre sits nearest the list's centre: the one in view. */
 function centred(list: HTMLElement): number {
   const middle = list.scrollLeft + list.clientWidth / 2;
-  const items = [...list.children] as HTMLElement[];
+  const items = cards(list);
   const distances = items.map((item) => Math.abs(item.offsetLeft + item.offsetWidth / 2 - middle));
   return distances.indexOf(Math.min(...distances));
 }
@@ -21,8 +24,10 @@ export function useCarousel(list: RefObject<HTMLElement | null>) {
   const step = useCallback(
     (by: number) => {
       const element = list.current;
-      const target = element?.children[Math.max(0, Math.min(element.children.length - 1, index + by))];
-      if (!(target instanceof HTMLElement) || element === null) return;
+      if (element === null) return;
+      const items = cards(element);
+      const target = items[Math.max(0, Math.min(items.length - 1, index + by))];
+      if (target === undefined) return;
       const left = target.offsetLeft - (element.clientWidth - target.offsetWidth) / 2;
       element.scrollTo({ left, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     },
