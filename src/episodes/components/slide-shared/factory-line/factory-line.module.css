@@ -1,0 +1,205 @@
+/*
+ * The factory line's layout and flow. On a narrow column the line runs top to bottom: each station a row, each belt a
+ * short vertical track with its documents and queue beside it. Once its column is wide enough it runs left to right,
+ * as the Spec draws it: the compact preset from 34rem, the line with customer ends from 46rem. Colours and type come
+ * from tokens in the markup; nothing here sets a colour, size or weight.
+ *
+ * The flow plays under any `[data-play]` ancestor (`FlowMotion`): documents ride in along the belts, then the queued
+ * ones arrive and stack, after an optional `--flow-delay`. Nothing loops; the base rules are the end state, which is
+ * also what reduced motion shows.
+ */
+
+.frame {
+  container-type: inline-size;
+}
+
+.compact,
+.wide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding-top: 0.75rem;
+}
+
+.belt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.docs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.rail {
+  flex-direction: column;
+  width: 0.75rem;
+  height: 2.5rem;
+  padding: 0.25rem 0;
+}
+
+.queue {
+  display: flex;
+  align-items: flex-end;
+}
+
+.station {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* Room above the label for the AI chip, which sits astride the card's top edge. */
+  padding: 1rem 0.75rem 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.end {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@container (min-width: 34rem) {
+  .compact {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .compact .belt {
+    flex: 1 1 0;
+    min-width: 1.25rem;
+    align-items: flex-end;
+    gap: 0.25rem;
+    min-height: 0;
+    padding-bottom: 2rem;
+  }
+
+  .compact .track {
+    flex: 1 1 0;
+    min-width: 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .compact .docs {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    height: 1.5rem;
+  }
+
+  .compact .rail {
+    flex-direction: row;
+    width: auto;
+    height: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .compact .queue {
+    padding-bottom: 0.25rem;
+  }
+
+  .compact .station {
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 0.25rem;
+    min-width: 4rem;
+    margin-top: 0;
+    padding: 0.75rem 0.25rem 0.5rem;
+  }
+}
+
+@container (min-width: 46rem) {
+  .wide {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .wide .belt {
+    flex: 1 1 0;
+    min-width: 1.25rem;
+    align-items: flex-end;
+    gap: 0.25rem;
+    min-height: 0;
+    padding-bottom: 2rem;
+  }
+
+  .wide .track {
+    flex: 1 1 0;
+    min-width: 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .wide .docs {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: center;
+    height: 1.5rem;
+  }
+
+  .wide .rail {
+    flex-direction: row;
+    width: auto;
+    height: 0.75rem;
+    padding: 0 0.25rem;
+  }
+
+  .wide .queue {
+    padding-bottom: 0.25rem;
+  }
+
+  .wide .station {
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 0.25rem;
+    min-width: 5rem;
+    margin-top: 0;
+    padding: 0.75rem 0.25rem 0.5rem;
+  }
+
+  .wide .end {
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 0.25rem;
+    width: 6rem;
+  }
+}
+
+@keyframes ride {
+  from {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+}
+
+@keyframes stack {
+  from {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-play]) .beltDoc {
+    display: inline-block;
+    animation: ride 600ms ease-out backwards;
+    animation-delay: calc(var(--flow-delay, 0ms) + var(--i, 0) * 140ms);
+  }
+
+  :global([data-play]) .pileDoc {
+    animation: stack 420ms ease-out backwards;
+    animation-delay: calc(var(--flow-delay, 0ms) + 500ms + var(--i, 0) * 90ms);
+  }
+}

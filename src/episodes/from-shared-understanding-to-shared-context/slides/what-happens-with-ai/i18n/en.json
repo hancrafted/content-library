@@ -1,0 +1,75 @@
+{
+  "title": "What happens with AI",
+  "heading": "What happens when every station gets AI",
+  "caption": "Every station runs faster, and documents <b>pile up where the work gets checked</b>.",
+  "locator": {
+    "title": "The line",
+    "label": "Where the zoom sits: Review, between AI stations"
+  },
+  "stations": {
+    "sales": "Sales",
+    "design": "Design",
+    "build": "Build",
+    "review": "Review",
+    "delivery": "Delivery"
+  },
+  "arriving": {
+    "title": "Arriving from the AI stations",
+    "tasks": "+21%",
+    "tasksLabel": "tasks finished",
+    "size": "+154%",
+    "sizeLabel": "bigger, each one"
+  },
+  "pile": "28 documents piled up in front of Review",
+  "review": {
+    "title": "Review",
+    "figure": "+91%",
+    "label": "<marker>time each review takes</marker>",
+    "waiting": "28 waiting"
+  },
+  "out": "Out: no gain for the company",
+  "scope": "Teams with high AI adoption, 2025. Time saved creating is <spent>re-spent on checking</spent>; the move to review is measured, a move to specification <inferred>only inferred</inferred>.",
+  "notes": {
+    "measured-the-load-moves-to-review": {
+      "header": "Measured: the load moves to review",
+      "description": "On teams with high AI adoption, developers completed 21% more tasks and merged 98% more pull requests, while review time rose 91% and pull requests grew 154%; the report finds no significant company-level gain [1].",
+      "sources": {
+        "faros-ai-productivity-paradox-2025": {
+          "title": "Faros AI, The AI Productivity Paradox Report 2025 (23 July 2025)"
+        }
+      }
+    },
+    "engineers-say-the-same": {
+      "header": "Engineers say the same",
+      "description": "Google engineers report that the time saved in creating is re-spent on auditing and verifying, and DORA reads this as work moving from authors to reviewers [1].",
+      "sources": {
+        "dora-balancing-ai-tensions": {
+          "title": "DORA, Balancing AI tensions"
+        }
+      }
+    },
+    "what-is-measured-and-what-is-inferred": {
+      "header": "What is measured and what is inferred",
+      "description": "The shift to review is measured; the shift to specification is an inference from it, because no source shows unclear specifications limiting AI-sped output. It is correlational, vendor and self-reported data about software teams [1].",
+      "sources": {
+        "faros-ai-productivity-paradox-2025": {
+          "title": "Faros AI, The AI Productivity Paradox Report 2025 (23 July 2025)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-station-faster": {
+        "title": "Every station faster",
+        "keywords": "",
+        "script": "So now give every station AI. Each one runs faster, which sounds like good news, but the line was only ever as fast as its slowest station, and that station cannot keep up with what arrives. You can see this in the market right now."
+      },
+      "moving-bottleneck": {
+        "title": "Moving bottleneck",
+        "keywords": "",
+        "script": "For a long time the slow part was making the thing in the first place, because a person can only make so much in a day, and that pace set the speed of everything after it. AI takes that limit away. The cost did not vanish, it moved to the next station, and it compounds there."
+      }
+    }
+  }
+}

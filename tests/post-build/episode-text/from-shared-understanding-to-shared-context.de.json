@@ -1,13 +1,25 @@
 {
   "title": "Vom geteilten Verständnis zum geteilten Kontext · hancrafted",
   "description": "Warum KI jede Station beschleunigt, aber nicht das Ergebnis, wie Du statischen von dynamischem Kontext unterscheidest, wie Du erkennst, wann Kontext kippt, und wie Du Dich von einer KI in Fragerunden interviewen lässt, um Kontext mit hohem Signal zu bauen und ihn dann in einen frischen Chat mitzunehmen.",
-  "toc": "Episoden Inhalt einklappen Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen Inhalt öffnen : Inhalt Episoden Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen",
+  "toc": "Episoden Inhalt einklappen Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen Inhalt öffnen : Inhalt Episoden Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen",
   "slides": [
     {
       "id": "top",
       "text": "Vom geteilten Verständnis zum geteilten Kontext KI wirft jeden Pfeil schneller. Wo sie landen, entscheidet das, was Du dem Agenten übergibst, und ein KI-Interview schärft dieses Ziel mit Dir. Die Absicht Was Du dem Agenten übergibst setzt das Ziel KI jeder Wurf schneller"
     },
     { "id": "a-thought-experiment", "text": "Ein Gedankenexperiment KI 10× die Würfe" },
+    {
+      "id": "a-thought-experiment--what-the-customer-really-wanted",
+      "text": "Ein Gedankenexperiment (1/3) Seite 1 von 3 Was der Kunde wirklich wollte KI baut nicht die richtige Schaukel, aber sie kann die falsche zehnmal schneller bauen. Das hat hier jeder schon erlebt Wie der Kunde es erklärt hat Wie der Vertrieb es verstanden hat Wie es gebaut wurde Was der Kunde wirklich wollte Wenn Deine Organisation so arbeiten würde 10 rein · 10 raus Vertrieb Entwurf Bau Prüfung Versand Wie es wirklich läuft ( ) 10 rein · 4 raus Vertrieb Entwurf Bau Prüfung Versand Effizienz Effektivität Vervielfachung"
+    },
+    {
+      "id": "a-thought-experiment--what-happens-with-ai",
+      "text": "Ein Gedankenexperiment (2/3) Seite 2 von 3 Was passiert, wenn jede Station KI bekommt Jede Station arbeitet schneller, und die Dokumente stauen sich dort, wo die Arbeit geprüft wird. Das Band Vertrieb Entwurf Bau Prüfung Versand Was von den KI-Stationen ankommt +21 % erledigte Aufgaben +154 % größer, jedes einzelne Prüfung +91 % Zeit pro Prüfung ( ) 28 warten Raus: kein Gewinn für das Unternehmen Teams mit hoher KI-Nutzung, 2025. Die beim Erstellen gesparte Zeit geht ins Prüfen ( ) ; die Verschiebung zur Prüfung ist gemessen, eine Verschiebung zur Spezifikation nur gefolgert ( ) ."
+    },
+    {
+      "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+      "text": "Ein Gedankenexperiment (3/3) Seite 3 von 3 Tempo, das das ganze Band trägt Das Ziel ist ein schnelleres Band, das im Gleichgewicht bleibt, nicht eine sehr schnelle Station. Tempo pro Station, Dokumente am Tag vor der KI: 10 Bandtempo mit KI: 20 Vertrieb 20 am Tag Entwurf 20 am Tag Bau 20 am Tag Prüfung 20 am Tag Versand 20 am Tag „Eine Schaukel für meine Kinder“ Kunde KI Vertrieb KI Entwurf KI Bau KI Prüfung KI Versand Die Reifenschaukel Kunde Gleich hohe Balken, kurze Warteschlangen. Der Ertrag kommt vom ganzen Band, nicht von einer Station ( ) ."
+    },
     { "id": "every-product-is-a-translation", "text": "Jedes Produkt ist eine Übersetzung Beides Präzise Genau Keins" },
     { "id": "context-is-the-requirement", "text": "Kontext ist die Anforderung Kontextfenster Statisch Dynamisch" },
     {
@@ -42,6 +54,18 @@
       "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
     },
     { "id": "a-thought-experiment", "text": "Ein Gedankenexperiment Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "a-thought-experiment--what-the-customer-really-wanted",
+      "text": "Was der Kunde wirklich wollte Warum das Band aus dem Gleichgewicht gerät Laut der Übersichtsseite zum DORA-Bericht 2025 wirkt KI vor allem als Verstärker: Sie vergrößert die Stärken und Schwächen, die eine Organisation schon hat. Den größten Ertrag bringt der Blick auf das System der Organisation, nicht auf die Werkzeuge. Das ist eine Übersichtsseite; den Berichtstext selbst haben wir nicht gelesen 1 . Quellen (1) DORA, State of AI-assisted Software Development 2025 (Übersichtsseite) ( öffnet in neuem Tab ) dora.dev"
+    },
+    {
+      "id": "a-thought-experiment--what-happens-with-ai",
+      "text": "Was mit KI passiert Gemessen: Die Last wandert zur Prüfung In Teams mit hoher KI-Nutzung erledigten Entwickler 21 % mehr Aufgaben und führten 98 % mehr Pull Requests zusammen; gleichzeitig stieg die Prüfzeit um 91 % und die Pull Requests wurden um 154 % größer. Einen deutlichen Gewinn auf Unternehmensebene findet der Bericht nicht 1 . Quellen (1) Faros AI, The AI Productivity Paradox Report 2025 (23. Juli 2025) ( öffnet in neuem Tab ) faros.ai Entwickler sagen dasselbe Entwickler bei Google berichten, dass die beim Erstellen gesparte Zeit ins Prüfen und Absichern fließt; DORA liest das als Arbeit, die von den Autoren zu den Prüfenden wandert 1 . Quellen (1) DORA, Balancing AI tensions ( öffnet in neuem Tab ) dora.dev Was gemessen ist und was gefolgert Die Verschiebung zur Prüfung ist gemessen; die Verschiebung zur Spezifikation ist daraus gefolgert, denn keine Quelle zeigt, dass unklare Spezifikationen die durch KI beschleunigte Arbeit bremsen. Die Daten sind korrelativ, stammen von einem Anbieter, sind selbst berichtet und betreffen Softwareteams 1 . Quellen (1) Faros AI, The AI Productivity Paradox Report 2025 (23. Juli 2025) ( öffnet in neuem Tab ) faros.ai"
+    },
+    {
+      "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+      "text": "Tempo, das das ganze Band trägt Der Ertrag kommt aus dem System Laut der Übersichtsseite von DORA bringt KI den größten Ertrag, wenn eine Organisation gezielt auf ihr zugrunde liegendes System schaut, nicht auf die Werkzeuge. Das ist eine Übersichtsseite, also eher ein Hinweis als ein Beleg 1 . Quellen (1) DORA, State of AI-assisted Software Development 2025 (Übersichtsseite) ( öffnet in neuem Tab ) dora.dev"
+    },
     {
       "id": "every-product-is-a-translation",
       "text": "Jedes Produkt ist eine Übersetzung Keine Sprechernotizen für diese Folie."
@@ -87,6 +111,18 @@
     {
       "id": "a-thought-experiment",
       "text": "Ein Gedankenexperiment 0:00 – 0:35 Stell Dir Deine Organisation als Fließband vor KI baut Dir nicht die richtige Schaukel, aber sie kann Dir die falsche zehnmal schneller bauen. Stell Dir Deine eigene Organisation als Fließband vor: Dokumente wandern von einem Arbeitsplatz zum nächsten, hier eine Anfrage, dort ein Entwurf, am Ende ein fertiges Ergebnis. Das Bild kennst Du schon, denn jeder hier im Raum hat den Reifenschaukel-Cartoon erlebt, in dem jede Station ihre eigene Version dessen gebaut hat, was der Kunde wollte. 0:35 – 1:03 Wohin es geht Bevor wir starten, hier der Weg. Zuerst geben wir jeder Station am Band eine KI und schauen, was passiert. Dann sehen wir uns an, was Du dem Agenten übergibst, denn das entscheidet über das Ergebnis. Und zum Schluss siehst Du, wie ein KI-Interview diese Übergabe für Dich baut, damit Du sie nicht allein schreiben musst."
+    },
+    {
+      "id": "a-thought-experiment--what-the-customer-really-wanted",
+      "text": "Was der Kunde wirklich wollte 0:00 – 0:15 Der Aufhänger Das ist der Satz von eben: zehn falsche Schaukeln, schneller gebaut. Behalte ihn im Kopf, denn der Rest dieser Episode handelt davon, warum er stimmt und was Du dagegen tust. 0:15 – 0:37 Vom Cartoon zum ausgeglichenen Band Stell Dir jetzt vor, der Cartoon wird zu einem echten Fließband. Die Arbeit kommt in gleichmäßigem Takt herein, jede Station hält mit der nächsten Schritt, der Ausstoß ist stetig und die Qualität hoch. Wenn Deine Organisation so arbeiten würde, bräuchtest Du diese Episode nicht. 0:37 – 1:03 Die Wirklichkeit Aber Du weißt, dass es so nicht läuft, denn Du hast gesehen, was passiert, wenn jede Station schneller werden soll. Es bilden sich Engpässe, Dokumente stauen sich vor einer Station, während die nächste leer läuft. Schau Dir also das Band an, an dem Du arbeitest, und frag Dich: Welche Station ist Deine?"
+    },
+    {
+      "id": "a-thought-experiment--what-happens-with-ai",
+      "text": "Was mit KI passiert 0:00 – 0:23 Jede Station schneller Geben wir also jeder Station eine KI. Jede arbeitet schneller, das klingt nach einer guten Nachricht. Aber das Band war immer nur so schnell wie seine langsamste Station, und diese Station kommt mit dem, was ankommt, nicht mehr hinterher. Genau das sieht man gerade am Markt. 0:23 – 0:47 Der wandernde Engpass Lange Zeit war das Herstellen selbst der langsame Teil, denn ein Mensch schafft nur so viel an einem Tag, und dieses Tempo hat alles danach bestimmt. KI nimmt diese Grenze weg. Die Kosten sind nicht verschwunden, sie sind zur nächsten Station gewandert, und dort wachsen sie weiter."
+    },
+    {
+      "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+      "text": "Tempo, das das ganze Band trägt 0:00 – 0:24 Eine schnelle Station ist nicht das Ziel Stell Dir dasselbe Band noch einmal vor, aber diesmal läuft es schneller und bleibt trotzdem im Gleichgewicht. Die Warteschlangen bleiben kurz und jeder Arbeitsplatz hält mit seinem Nachbarn Schritt. Das ist das Ziel: dauerhaft mehr von dem, was die ganze Organisation schafft, nicht eine einzelne sehr schnelle Station. 0:24 – 0:46 Die Überleitung Was sorgt also dafür, dass jede Station Schritt hält? Das, was an der ersten Station ankommt. Ist das unklar, baut alles danach schneller das Falsche. Was dort ankommt, ist die Anforderung, und das wirft die naheliegende Frage auf: Was macht eine Anforderung gut?"
     },
     {
       "id": "every-product-is-a-translation",

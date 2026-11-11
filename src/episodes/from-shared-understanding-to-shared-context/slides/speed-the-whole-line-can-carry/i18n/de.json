@@ -1,0 +1,53 @@
+{
+  "title": "Tempo, das das ganze Band trägt",
+  "caption": "Das Ziel ist <b>ein schnelleres Band, das im Gleichgewicht bleibt</b>, nicht eine sehr schnelle Station.",
+  "chart": {
+    "label": "Jede Station im doppelten Tempo, und das Band bleibt im Gleichgewicht",
+    "axis": "Tempo pro Station, Dokumente am Tag",
+    "before": "vor der KI: 10",
+    "after": "Bandtempo mit KI: 20",
+    "stations": "Stationen"
+  },
+  "stations": {
+    "sales": "Vertrieb",
+    "design": "Entwurf",
+    "build": "Bau",
+    "review": "Prüfung",
+    "delivery": "Versand"
+  },
+  "pace": "20 am Tag",
+  "ai": "KI",
+  "line": "Das Band, ausgeglichen bei doppeltem Tempo",
+  "request": "„Eine Schaukel für meine Kinder“",
+  "result": "Die Reifenschaukel",
+  "customer": "Kunde",
+  "takeaway": {
+    "lead": "Gleich hohe Balken, kurze Warteschlangen.",
+    "text": "Der Ertrag kommt vom ganzen Band, <marker>nicht von einer Station</marker>."
+  },
+  "notes": {
+    "returns-come-from-the-system": {
+      "header": "Der Ertrag kommt aus dem System",
+      "description": "Laut der Übersichtsseite von DORA bringt KI den größten Ertrag, wenn eine Organisation gezielt auf ihr zugrunde liegendes System schaut, nicht auf die Werkzeuge. Das ist eine Übersichtsseite, also eher ein Hinweis als ein Beleg [1].",
+      "sources": {
+        "dora-2025-overview": {
+          "title": "DORA, State of AI-assisted Software Development 2025 (Übersichtsseite)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-fast-station-is-not-the-goal": {
+        "title": "Eine schnelle Station ist nicht das Ziel",
+        "keywords": "",
+        "script": "Stell Dir dasselbe Band noch einmal vor, aber diesmal läuft es schneller und bleibt trotzdem im Gleichgewicht. Die Warteschlangen bleiben kurz und jeder Arbeitsplatz hält mit seinem Nachbarn Schritt. Das ist das Ziel: dauerhaft mehr von dem, was die ganze Organisation schafft, nicht eine einzelne sehr schnelle Station."
+      },
+      "bridge": {
+        "title": "Die Überleitung",
+        "keywords": "",
+        "script": "Was sorgt also dafür, dass jede Station Schritt hält? Das, was an der ersten Station ankommt. Ist das unklar, baut alles danach schneller das Falsche. Was dort ankommt, ist die Anforderung, und das wirft die naheliegende Frage auf: Was macht eine Anforderung gut?"
+      }
+    }
+  }
+}

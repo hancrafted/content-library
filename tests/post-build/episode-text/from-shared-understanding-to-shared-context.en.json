@@ -1,13 +1,25 @@
 {
   "title": "From shared understanding to shared context · hancrafted",
   "description": "Why AI speeds up every station but not the result, how to tell static from dynamic context, how to spot context that goes bad, and how to let an AI interview you in rounds of questions to build high-signal context, then move it into a fresh chat.",
-  "toc": "Episodes Collapse contents From shared understanding to shared context 1 A thought experiment 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents Open contents : Contents Episodes From shared understanding to shared context 1 A thought experiment 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents",
+  "toc": "Episodes Collapse contents From shared understanding to shared context 1 A thought experiment What the customer really wanted What happens with AI Speed the whole line can carry 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents Open contents : Contents Episodes From shared understanding to shared context 1 A thought experiment What the customer really wanted What happens with AI Speed the whole line can carry 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents",
   "slides": [
     {
       "id": "top",
       "text": "From shared understanding to shared context AI throws every dart faster. Where they land is set by what you hand the agent, and an AI interview sharpens that aim with you. The intent What you hand the agent sets the aim AI every throw faster"
     },
     { "id": "a-thought-experiment", "text": "A thought experiment AI 10× the throws" },
+    {
+      "id": "a-thought-experiment--what-the-customer-really-wanted",
+      "text": "A thought experiment (1/3) Page 1 of 3 What the customer really wanted AI doesn’t build the right swing, but it can build the wrong one ten times faster. Everyone here has lived this How the customer explained it How sales understood it How it was built What the customer really wanted If your organization worked like this 10 in · 10 out Sales Design Build Review Delivery How it really works ( ) 10 in · 4 out Sales Design Build Review Delivery Efficiency Effectiveness Multiplication"
+    },
+    {
+      "id": "a-thought-experiment--what-happens-with-ai",
+      "text": "A thought experiment (2/3) Page 2 of 3 What happens when every station gets AI Every station runs faster, and documents pile up where the work gets checked. The line Sales Design Build Review Delivery Arriving from the AI stations +21% tasks finished +154% bigger, each one Review +91% time each review takes ( ) 28 waiting Out: no gain for the company Teams with high AI adoption, 2025. Time saved creating is re-spent on checking ( ) ; the move to review is measured, a move to specification only inferred ( ) ."
+    },
+    {
+      "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+      "text": "A thought experiment (3/3) Page 3 of 3 Speed the whole line can carry The goal is a faster line that stays in balance, not one very fast station. Pace per station, documents a day before AI: 10 line speed with AI: 20 Sales 20 a day Design 20 a day Build 20 a day Review 20 a day Delivery 20 a day “A swing for my kids” Customer AI Sales AI Design AI Build AI Review AI Delivery The tire swing Customer Equal bars, short queues. The returns come from the whole line, not one station ( ) ."
+    },
     { "id": "every-product-is-a-translation", "text": "Every product is a translation Both Precise Accurate Neither" },
     { "id": "context-is-the-requirement", "text": "Context is the requirement Context window Static Dynamic" },
     {
@@ -42,6 +54,18 @@
       "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
     },
     { "id": "a-thought-experiment", "text": "A thought experiment No speaker notes for this Slide." },
+    {
+      "id": "a-thought-experiment--what-the-customer-really-wanted",
+      "text": "What the customer really wanted Why the line gets out of balance DORA's 2025 report overview says AI's primary role is as an amplifier, magnifying an organization's existing strengths and weaknesses, and that the greatest returns come from a focus on the organizational system rather than the tools. It is an overview page; the report text was not read 1 . Sources (1) DORA, State of AI-assisted Software Development 2025 (overview page) ( opens in a new tab ) dora.dev"
+    },
+    {
+      "id": "a-thought-experiment--what-happens-with-ai",
+      "text": "What happens with AI Measured: the load moves to review On teams with high AI adoption, developers completed 21% more tasks and merged 98% more pull requests, while review time rose 91% and pull requests grew 154%; the report finds no significant company-level gain 1 . Sources (1) Faros AI, The AI Productivity Paradox Report 2025 (23 July 2025) ( opens in a new tab ) faros.ai Engineers say the same Google engineers report that the time saved in creating is re-spent on auditing and verifying, and DORA reads this as work moving from authors to reviewers 1 . Sources (1) DORA, Balancing AI tensions ( opens in a new tab ) dora.dev What is measured and what is inferred The shift to review is measured; the shift to specification is an inference from it, because no source shows unclear specifications limiting AI-sped output. It is correlational, vendor and self-reported data about software teams 1 . Sources (1) Faros AI, The AI Productivity Paradox Report 2025 (23 July 2025) ( opens in a new tab ) faros.ai"
+    },
+    {
+      "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+      "text": "Speed the whole line can carry Returns come from the system DORA's overview reports that the greatest returns from AI come from a strategic focus on the underlying organizational system, not the tools. This is an overview page, so treat it as a pointer 1 . Sources (1) DORA, State of AI-assisted Software Development 2025 (overview page) ( opens in a new tab ) dora.dev"
+    },
     {
       "id": "every-product-is-a-translation",
       "text": "Every product is a translation No speaker notes for this Slide."
@@ -81,6 +105,18 @@
     {
       "id": "a-thought-experiment",
       "text": "A thought experiment 0:00 – 0:33 Imagine your organization as a line AI doesn't build the right swing for you, but it can build the wrong one ten times faster. Imagine your own organization as a factory line, with documents moving from one work centre to the next, a request here, a design there, a finished result at the end. You already know this picture, because everyone in this room has lived the tire swing cartoon, where each station built its own version of what the customer asked for. 0:33 – 0:58 Where this is going Before we start, here is the route. First we give every station on that line an AI and watch what happens. Then we look at what you hand the agent, because that decides the result. And last, you will see how an AI interview builds that handover for you, so you do not have to write it alone."
+    },
+    {
+      "id": "a-thought-experiment--what-the-customer-really-wanted",
+      "text": "What the customer really wanted 0:00 – 0:15 The Hook That is the line from a moment ago: ten wrong swings, built faster. Keep it in mind, because the rest of this Episode is about why it is true and what you do about it. 0:15 – 0:35 Cartoon to balanced line Now picture the cartoon turning into a real factory line. Input comes in at a constant rate, every station keeps pace with the next, the output is steady and the quality is high. If this was how your organization worked, you would not need this Episode. 0:35 – 0:58 Reality But you know it does not work like that, because you have seen what happens when every station is pushed to go faster. Bottlenecks form, documents queue up in front of one station while the next one sits idle. So look at the line you work in and ask yourself: which station is yours?"
+    },
+    {
+      "id": "a-thought-experiment--what-happens-with-ai",
+      "text": "What happens with AI 0:00 – 0:19 Every station faster So now give every station AI. Each one runs faster, which sounds like good news, but the line was only ever as fast as its slowest station, and that station cannot keep up with what arrives. You can see this in the market right now. 0:19 – 0:43 Moving bottleneck For a long time the slow part was making the thing in the first place, because a person can only make so much in a day, and that pace set the speed of everything after it. AI takes that limit away. The cost did not vanish, it moved to the next station, and it compounds there."
+    },
+    {
+      "id": "a-thought-experiment--speed-the-whole-line-can-carry",
+      "text": "Speed the whole line can carry 0:00 – 0:21 One fast station is not the goal Picture the same line once more, but this time running at a higher speed and still in balance. Queues stay short and every work centre keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station. 0:21 – 0:39 Bridge So what makes every station keep pace? Whatever arrives at the first station. If that is unclear, everything downstream builds the wrong thing faster. That arrival is the requirement, which raises the obvious question: what makes a requirement a good one?"
     },
     {
       "id": "every-product-is-a-translation",
