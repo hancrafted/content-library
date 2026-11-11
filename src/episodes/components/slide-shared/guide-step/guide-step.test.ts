@@ -2,7 +2,7 @@ import { load } from 'cheerio';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { DoneStrip, MoreHelp } from './guide-step';
+import { DoneStrip, MoreHelp, StepDoneBadge } from './guide-step';
 
 /* The step frame's two pieces as the static export renders them: the result strip and the closed help. */
 
@@ -28,6 +28,15 @@ describe('success cases', () => {
     // ASSERT
     expect(found).toEqual({ summary: title, open: undefined });
   });
+
+  it('says the step is done and need not be repeated once the check reported ready', () => {
+    // ARRANGE
+    const expected = 'Done, no need to repeat';
+    // ACT
+    const $ = load(renderToStaticMarkup(createElement(StepDoneBadge, { ready: true, label: expected })));
+    // ASSERT
+    expect($('[data-step-done]').text()).toBe(expected);
+  });
 });
 
 describe('failure cases', () => {
@@ -38,6 +47,15 @@ describe('failure cases', () => {
     const $ = load(renderToStaticMarkup(createElement(MoreHelp, { title: 'More', children: body })));
     // ASSERT
     expect($('details').text()).toContain(body);
+  });
+
+  it('renders nothing before the check reported ready', () => {
+    // ARRANGE
+    const expected = '';
+    // ACT
+    const html = renderToStaticMarkup(createElement(StepDoneBadge, { ready: false, label: 'Done, no need to repeat' }));
+    // ASSERT
+    expect(html).toBe(expected);
   });
 });
 

@@ -45,7 +45,6 @@ export const overview = slide({
   content: ({ t, locale, slideHref, target, marker }) => {
     const steps: ChecklistStep[] = STEPS.map((n: StepNumber) => ({
       n,
-      section: t(`checklist.steps.${n}.section`),
       title: t(`checklist.steps.${n}.title`),
       boxes: Object.fromEntries(
         BOXES.filter((box) => box.step === n).map((box) => [box.id, t(`checklist.boxes.${box.id}`)]),

@@ -10,13 +10,13 @@
   "docsWhy": "Immer da, auch wenn sich diese Zeile einmal ändert. Manche Installationsseiten muss man scrollen, darum steht die Zeile hier.",
   "powershellHint": "Nimm unter Windows PowerShell: Die Eingabezeile beginnt mit <code>PS C:\\</code>.",
   "commandPromptSummary": "Stattdessen in der Eingabeaufforderung?",
-  "commandPromptHint": "Die Eingabeaufforderung zeigt etwa <code>C:\\&gt;</code>, ohne <code>PS</code> davor. Füge diese Zeile dort ein.",
+  "commandPromptHint": "Die Eingabeaufforderung zeigt etwa <code>C:\\></code>, ohne <code>PS</code> davor. Füge diese Zeile dort ein.",
   "happenTitle": "Was passieren kann",
   "unixFailure": "Der Installationsbefehl scheitert? Prüfe, ob oben Dein Computer gewählt ist und Du die ganze Zeile ins Terminal eingefügt hast. Bei einer Firmenbeschränkung halte an und frage die IT.",
   "happen": {
     "claude-code": {
       "one": "Unter Windows heißt <code>'irm' is not recognized</code>: Du bist in der Eingabeaufforderung. Öffne PowerShell oder nimm die Zeile für die Eingabeaufforderung oben.",
-      "two": "Claude Code braucht einen bezahlten Claude-Tarif. Der kostenlose enthält es nicht, und die Anmeldung auf der nächsten Folie sagt es dir."
+      "two": "Claude Code braucht einen bezahlten Claude-Tarif. Der kostenlose enthält es nicht, und die Anmeldung im Starterordner sagt es dir."
     },
     "antigravity": {
       "one": "Unter Windows heißt <code>'irm' is not recognized</code>: Du bist in der Eingabeaufforderung, nicht in PowerShell. Öffne PowerShell und füge erneut ein.",
@@ -27,13 +27,13 @@
       "two": "Die Zeile bricht mit roter Schrift ab: Dafür ist Hilfe da."
     },
     "copilot": {
-      "one": "GitHub Copilot braucht ein aktives Copilot-Abo auf deinem GitHub-Konto. Ohne scheitert die Anmeldung auf der nächsten Folie.",
+      "one": "GitHub Copilot braucht ein aktives Copilot-Abo auf deinem GitHub-Konto. Ohne scheitert die Anmeldung im Starterordner.",
       "two": "Unter Windows verlangt GitHub PowerShell 6 oder höher, und <code>winget</code> muss vorhanden sein. Heißt es, es sei nicht erkannt: Nimm Hilfe."
     }
   },
   "helpLine": "Hängst du fest oder siehst rote Schrift, die du nicht verstehst? Drücke oben rechts auf Hilfe und füge den Fehler ein.",
   "worked": "Wenn die Installation ohne Fehler endet, schließe das Terminal, öffne ein neues und führe diese Prüfung aus:",
-  "versionWorked": "Du siehst eine Versionsnummer statt einer Fehlermeldung. Dann geht es zur Anmeldung. Wird der Befehl weiterhin nicht erkannt, öffne unten Mehr Hilfe.",
+  "versionWorked": "Du siehst eine Versionsnummer statt einer Fehlermeldung. Dann geht es weiter mit Dein Ordner. Wird der Befehl weiterhin nicht erkannt, öffne unten Mehr Hilfe.",
   "workLaptop": {
     "title": "Firmenlaptop? Vor der Installation klären.",
     "mac": "Fragt macOS nach einem Administrator-Passwort, halte an und frage die IT oder Deinen Workshop-Kontakt.",
@@ -59,11 +59,21 @@
       "header": "Windows-Voraussetzungen getrennt prüfen",
       "description": "Anthropic dokumentiert die native Windows-Installation ohne Administratorrechte und Git Bash als optional [1]. GitHub verlangt PowerShell 6+; Windows PowerShell 5.1 und PowerShell 7 werden getrennt installiert [2][3]. Diese Anleitung empfiehlt für Copilot eine aktuelle PowerShell 7. OpenAIs offizieller Windows-Befehl enthält eine prozessbezogene Änderung der Ausführungsrichtlinie [4]. Google dokumentiert agy und die Versionsprüfung [5]. Codex' Windows-Sandbox enthält eine Einrichtung mit erhöhten Rechten, getrennt von der CLI-Installation im Benutzerordner [6]. Die Schritte sind anhand der Dokumentation geprüft, nicht auf einem frischen oder verwalteten Windows-PC getestet.",
       "sources": {
-        "claude-setup": { "title": "Anthropic, Claude Code einrichten" },
-        "copilot-setup": { "title": "GitHub, Copilot CLI installieren" },
-        "powershell": { "title": "Microsoft, PowerShell unter Windows installieren" },
-        "codex-install": { "title": "OpenAI, Codex installieren" },
-        "antigravity-setup": { "title": "Google, Einstieg in Antigravity" },
+        "claude-setup": {
+          "title": "Anthropic, Claude Code einrichten"
+        },
+        "copilot-setup": {
+          "title": "GitHub, Copilot CLI installieren"
+        },
+        "powershell": {
+          "title": "Microsoft, PowerShell unter Windows installieren"
+        },
+        "codex-install": {
+          "title": "OpenAI, Codex installieren"
+        },
+        "antigravity-setup": {
+          "title": "Google, Einstieg in Antigravity"
+        },
         "codex-sandbox": {
           "title": "OpenAI, Codex-Windows-Sandbox einrichten"
         }
@@ -73,10 +83,18 @@
       "header": "Firmensperren mit der IT klären",
       "description": "Anthropic behandelt Proxy, Zertifikate und erlaubte Endpunkte getrennt [1]. GitHub beschreibt Firmenzertifikate und Zscaler und pflegt eine eigene Freigabeliste [2][3]. Das ist keine Zusicherung für jede CLI in jeder Zscaler-Konfiguration. Laut Microsoft haben Gruppenrichtlinien Vorrang vor lokalen Ausführungsrichtlinien [4]. Anhalten und die IT fragen ist die Sicherheitsempfehlung dieser Anleitung, kein Versprechen einer universellen Lösung.",
       "sources": {
-        "claude-network": { "title": "Anthropic, Netzwerkkonfiguration im Unternehmen" },
-        "copilot-network": { "title": "GitHub, Copilot-Netzwerkeinstellungen" },
-        "copilot-allowlist": { "title": "GitHub, Copilot-Freigabeliste" },
-        "windows-policy": { "title": "Microsoft, Ausführungsrichtlinien" }
+        "claude-network": {
+          "title": "Anthropic, Netzwerkkonfiguration im Unternehmen"
+        },
+        "copilot-network": {
+          "title": "GitHub, Copilot-Netzwerkeinstellungen"
+        },
+        "copilot-allowlist": {
+          "title": "GitHub, Copilot-Freigabeliste"
+        },
+        "windows-policy": {
+          "title": "Microsoft, Ausführungsrichtlinien"
+        }
       }
     }
   },
@@ -95,7 +113,7 @@
       "what-you-will-see": {
         "title": "Was du am Ende siehst",
         "keywords": "",
-        "script": "Am Ende der Installation stellt dein Terminal vielleicht eine Frage. Bei Codex auf Mac und Linux ist es Start Codex now mit y oder N: Tippe y und drücke Enter, dann geht es direkt zur Anmeldung. Nur Enter heißt nein, dann öffnest du ein neues Terminal und tippst codex. Bei GitHub Copilot antwortest du mit y, wenn es fragt, ob es sich in deine Shell-Datei eintragen soll. Die letzte Zeile nennt copilot help, du tippst aber copilot. Bei Claude Code siehst du Installation complete, öffne ein neues Terminal und tippe claude."
+        "script": "Am Ende der Installation stellt dein Terminal vielleicht eine Frage. Bei Codex auf Mac und Linux ist es Start Codex now mit y oder N: Tippe N und drücke Enter, denn du startest es später im Starterordner. Bei GitHub Copilot antwortest du mit y, wenn es fragt, ob es sich in deine Shell-Datei eintragen soll. Bei Claude Code siehst du Installation complete. Egal welchen Agenten du gewählt hast, starte ihn noch nicht: Sein erster Start passiert im Starterordner, damit er nur deine Workshop-Dateien sieht."
       },
       "what-might-happen": {
         "title": "Was passieren kann",
@@ -127,16 +145,16 @@
   "end": {
     "generic": "Warte, bis die Eingabezeile zurückkommt, und mach dann weiter.",
     "codex": {
-      "one": "Auf Mac und Linux fragt die letzte Zeile <code>Start Codex now? [y/N]</code>. Tippe <key>y</key> und drücke <key>Enter</key>, dann geht es direkt weiter zur Anmeldung.",
-      "two": "Nur <key>Enter</key> heißt nein. Öffne dann ein neues Terminal und tippe <code>codex</code>."
+      "one": "Auf Mac und Linux fragt die letzte Zeile <code>Start Codex now? [y/N]</code>. Tippe <key>N</key> und drücke <key>Enter</key>: Du startest es später, im Starterordner.",
+      "two": "Schon <key>y</key> getippt? Dann startet Codex hier, außerhalb des Ordners. Beende es mit <key>Strg</key> <key>C</key> und mach weiter; Du startest es im Starterordner neu."
     },
     "claude-code": {
       "one": "Der Installer endet mit <code>Installation complete</code>. Spricht ein Block <code>Setup notes</code> von deinem PATH, folge der Lösung, die er dort ausgibt.",
-      "two": "Öffne dann ein neues Terminalfenster und tippe <code>claude</code>."
+      "two": "Starte es noch nicht: Du startest <code>claude</code> zum ersten Mal im Starterordner, zwei Folien weiter."
     },
     "copilot": {
       "one": "Auf Mac und Linux fragt es vielleicht <code>Would you like to add it to … ? [y/N]</code>. Tippe <key>y</key> und drücke <key>Enter</key>.",
-      "two": "Die letzte Zeile nennt <code>copilot help</code>, aber dein nächster Schritt ist nur <code>copilot</code>, in einem neuen Terminal."
+      "two": "Die letzte Zeile nennt <code>copilot help</code>. Starte <code>copilot</code> noch nicht: Du startest es zum ersten Mal im Starterordner."
     }
   },
   "doneLabel": "So sieht „fertig“ aus",

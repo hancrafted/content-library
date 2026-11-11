@@ -39,20 +39,16 @@
     "intro": "Tick what you already have. The card on the right shows where to start.",
     "steps": {
       "1": {
-        "section": "Your terminal",
-        "title": "Open your terminal"
+        "title": "Your terminal"
       },
       "2": {
-        "section": "Your AI agent",
-        "title": "Install and log in to your AI agent"
+        "title": "Your AI agent"
       },
       "3": {
-        "section": "Your folder",
-        "title": "Download the folder and start the agent in it"
+        "title": "Your folder"
       },
       "4": {
-        "section": "Your first skill",
-        "title": "Run your first skill"
+        "title": "Your first skill"
       }
     },
     "boxes": {

@@ -10,13 +10,13 @@
   "docsWhy": "Always there, even if this line ever changes. Some install pages need scrolling, so the line is here.",
   "powershellHint": "On Windows, use PowerShell: its prompt starts with <code>PS C:\\</code>.",
   "commandPromptSummary": "In Command Prompt instead?",
-  "commandPromptHint": "Command Prompt shows a prompt like <code>C:\\&gt;</code>, with no <code>PS</code> in front. Paste this line there.",
+  "commandPromptHint": "Command Prompt shows a prompt like <code>C:\\></code>, with no <code>PS</code> in front. Paste this line there.",
   "happenTitle": "What might happen",
   "unixFailure": "The installer command failed? Check that your computer is selected above and that you pasted the whole line into your terminal. For a company restriction, stop and ask IT.",
   "happen": {
     "claude-code": {
       "one": "On Windows, <code>'irm' is not recognized</code> means you are in Command Prompt: open PowerShell, or use the Command Prompt line above.",
-      "two": "Claude Code needs a paid Claude plan. The free plan does not include it, and the sign-in on the next Slide says so."
+      "two": "Claude Code needs a paid Claude plan. The free plan does not include it, and the sign-in in the starter folder says so."
     },
     "antigravity": {
       "one": "On Windows, <code>'irm' is not recognized</code> means you are in Command Prompt, not PowerShell: open PowerShell and paste again.",
@@ -27,13 +27,13 @@
       "two": "The line stops with red text: that is what Help is for."
     },
     "copilot": {
-      "one": "GitHub Copilot needs an active Copilot subscription on your GitHub account; without it, the sign-in on the next Slide fails.",
+      "one": "GitHub Copilot needs an active Copilot subscription on your GitHub account; without it, the sign-in in the starter folder fails.",
       "two": "On Windows, GitHub asks for PowerShell 6 or higher, and <code>winget</code> must exist. A message saying it is not recognized: use Help."
     }
   },
   "helpLine": "Stuck, or red text you do not understand? Press Help at the top right and paste the error.",
   "worked": "After the installer finishes without errors, close the terminal, open a new one and run this check:",
-  "versionWorked": "You see a version number, not an error. Then continue to Log in. If the command is still not recognized, open More help below.",
+  "versionWorked": "You see a version number, not an error. Then continue to Your folder. If the command is still not recognized, open More help below.",
   "workLaptop": {
     "title": "Work laptop? Check before you install.",
     "mac": "If macOS asks for an administrator password, stop and ask IT or your workshop organizer.",
@@ -59,11 +59,21 @@
       "header": "Windows prerequisites are separate checks",
       "description": "Anthropic documents a native Windows installer without administrator rights and optional Git Bash [1]. GitHub requires PowerShell 6+, whereas Windows PowerShell 5.1 and PowerShell 7 are separate installations [2][3]; this guide recommends a current PowerShell 7 for Copilot. OpenAI's official Windows install command includes a process execution-policy override [4]. Google documents agy and its version check [5]. Codex's Windows sandbox source includes elevated provisioning, separate from user-scoped CLI installation [6]. These are documentation-verified instructions, not a clean-PC or managed-Windows test.",
       "sources": {
-        "claude-setup": { "title": "Anthropic, Claude Code setup" },
-        "copilot-setup": { "title": "GitHub, Installing Copilot CLI" },
-        "powershell": { "title": "Microsoft, Install PowerShell on Windows" },
-        "codex-install": { "title": "OpenAI, Codex installation" },
-        "antigravity-setup": { "title": "Google, Antigravity getting started" },
+        "claude-setup": {
+          "title": "Anthropic, Claude Code setup"
+        },
+        "copilot-setup": {
+          "title": "GitHub, Installing Copilot CLI"
+        },
+        "powershell": {
+          "title": "Microsoft, Install PowerShell on Windows"
+        },
+        "codex-install": {
+          "title": "OpenAI, Codex installation"
+        },
+        "antigravity-setup": {
+          "title": "Google, Antigravity getting started"
+        },
         "codex-sandbox": {
           "title": "OpenAI, Codex Windows sandbox setup"
         }
@@ -73,10 +83,18 @@
       "header": "Corporate blocks belong with IT",
       "description": "Anthropic separates proxy, certificate and endpoint configuration [1]. GitHub discusses corporate certificate trust and Zscaler, and maintains a separate allowlist [2][3]; this does not certify every CLI with every Zscaler deployment. Microsoft gives organizational Group Policy precedence over local execution-policy settings [4]. Stopping and asking IT is this guide's safety recommendation, not a promise that every block has one fix.",
       "sources": {
-        "claude-network": { "title": "Anthropic, Enterprise network configuration" },
-        "copilot-network": { "title": "GitHub, Copilot network settings" },
-        "copilot-allowlist": { "title": "GitHub, Copilot allowlist reference" },
-        "windows-policy": { "title": "Microsoft, About execution policies" }
+        "claude-network": {
+          "title": "Anthropic, Enterprise network configuration"
+        },
+        "copilot-network": {
+          "title": "GitHub, Copilot network settings"
+        },
+        "copilot-allowlist": {
+          "title": "GitHub, Copilot allowlist reference"
+        },
+        "windows-policy": {
+          "title": "Microsoft, About execution policies"
+        }
       }
     }
   },
@@ -95,7 +113,7 @@
       "what-you-will-see": {
         "title": "What you will see at the end",
         "keywords": "",
-        "script": "At the end of the install, your terminal may ask you a question. For Codex on Mac and Linux it is Start Codex now, with y or N: type y and press Enter to go straight to the sign-in. Just pressing Enter means no, and then you open a new terminal and type codex. For GitHub Copilot, answer y if it asks to add itself to your shell file; the last line says copilot help, but you type copilot. For Claude Code you see Installation complete; open a new terminal and type claude."
+        "script": "At the end of the install, your terminal may ask you a question. For Codex on Mac and Linux it is Start Codex now, with y or N: type N and press Enter, because you start it later, inside the starter folder. For GitHub Copilot, answer y if it asks to add itself to your shell file. For Claude Code you see Installation complete. Whichever agent you picked, do not start it yet: its first start happens inside the starter folder, so it only sees your workshop files."
       },
       "what-might-happen": {
         "title": "What might happen",
@@ -127,16 +145,16 @@
   "end": {
     "generic": "Wait until the prompt comes back, then go on.",
     "codex": {
-      "one": "On Mac and Linux the last line asks <code>Start Codex now? [y/N]</code>. Type <key>y</key> and press <key>Enter</key> to go straight on to the sign-in.",
-      "two": "Pressing only <key>Enter</key> means no. Then open a new terminal and type <code>codex</code>."
+      "one": "On Mac and Linux the last line asks <code>Start Codex now? [y/N]</code>. Type <key>N</key> and press <key>Enter</key>: you start it later, inside the starter folder.",
+      "two": "Typed <key>y</key> already? Codex starts here, outside the folder. Quit it with <key>Ctrl</key> <key>C</key> and go on; you start it again inside the starter folder."
     },
     "claude-code": {
       "one": "The installer ends with <code>Installation complete</code>. If a <code>Setup notes</code> block talks about your PATH, follow the fix it prints there.",
-      "two": "Then open a new terminal window and type <code>claude</code>."
+      "two": "Don't start it yet: you start <code>claude</code> for the first time inside the starter folder, two Slides on."
     },
     "copilot": {
       "one": "On Mac and Linux it may ask <code>Would you like to add it to … ? [y/N]</code>. Type <key>y</key> and press <key>Enter</key>.",
-      "two": "The last line says <code>copilot help</code>, but your next step is just <code>copilot</code>, in a new terminal."
+      "two": "The last line says <code>copilot help</code>. Don't start <code>copilot</code> yet: you start it for the first time inside the starter folder."
     }
   },
   "doneLabel": "Done looks like",

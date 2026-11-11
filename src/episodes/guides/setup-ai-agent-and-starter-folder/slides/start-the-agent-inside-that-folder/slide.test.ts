@@ -29,10 +29,10 @@ function scene(locale: Locale, os: string, agent: string) {
 }
 
 describe('success cases', () => {
-  it('keeps the PowerShell menu primary and the agent-specific address-bar route in closed help', () => {
+  it("picks Windows 11's Open in Terminal in the menu and keeps the address-bar route in closed help", () => {
     // ARRANGE
     const expected = ['powershell', 'pwsh'];
-    const menuLabel = 'Open PowerShell window here';
+    const menuLabel = 'Open in Terminal';
     // ACT
     const shells = ['claude-code', 'copilot'].map((agent) =>
       scene('en', 'windows', agent)('[data-explorer-shell]').text(),
@@ -41,7 +41,7 @@ describe('success cases', () => {
     const fallback = $('[data-folder-check]').closest('details');
     // ASSERT
     expect(shells).toEqual(expected);
-    expect($('[data-windows-menu]').text()).toContain(menuLabel);
+    expect($('[data-windows-menu] li.bg-primary').text()).toBe(menuLabel);
     expect(fallback).toHaveLength(1);
     expect(fallback.attr('open')).toBeUndefined();
     expect(fallback.find('[data-explorer-shell]')).toHaveLength(1);
@@ -68,6 +68,28 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('names Shift + right-click Open PowerShell window here as the Windows 10 route', () => {
+    // ARRANGE
+    const expected = ['Windows 10', 'Shift', 'Open PowerShell window here'];
+    // ACT
+    const text = scene('en', 'windows', 'claude-code')('[data-move="open"]').text();
+    // ASSERT
+    for (const phrase of expected) expect(text).toContain(phrase);
+  });
+
+  it('explains "command not found" in closed help on every system, since the agent is first started here', () => {
+    // ARRANGE
+    const systems = ['mac', 'windows', 'linux'];
+    // ACT
+    const helps = systems.map((os) => scene('en', os, 'claude-code')('[data-not-found]').closest('details'));
+    // ASSERT
+    for (const help of helps) {
+      expect(help.text()).toContain('command not found');
+      expect(help.text()).toContain('installation');
+      expect(help.attr('open')).toBeUndefined();
+    }
+  });
+
   it('does not send Windows users to an assumed Downloads path', () => {
     // ARRANGE
     const wrongCommand = 'cd Downloads\\hancrafted-workshop-starter';

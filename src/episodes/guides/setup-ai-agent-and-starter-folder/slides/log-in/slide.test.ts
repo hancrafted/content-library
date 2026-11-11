@@ -10,18 +10,21 @@ import { describe, expect, it } from 'vitest';
 import { logIn } from './slide';
 
 const SECTION = slide({
-  slug: 'your-ai-agent',
-  messages: { en: { title: 'Your AI agent' }, de: { title: 'Dein KI-Agent' } },
+  slug: 'your-folder',
+  messages: { en: { title: 'Your folder' }, de: { title: 'Dein Ordner' } },
   content: () => null,
 });
-const TERMINAL = slide({
-  slug: 'open-your-terminal',
-  messages: { en: { title: 'Open your terminal' }, de: { title: 'Öffne dein Terminal' } },
+const START = slide({
+  slug: 'start-the-agent-inside-that-folder',
+  messages: {
+    en: { title: 'Start the agent inside that folder' },
+    de: { title: 'Starte den Agenten in diesem Ordner' },
+  },
   content: () => null,
 });
 
 function localized(locale: Locale): LocalizedSlide {
-  const placed = placeSections<Slide>([[SECTION, TERMINAL, logIn]]).flat();
+  const placed = placeSections<Slide>([[SECTION, START, logIn]]).flat();
   return localizeSlide(placed[2] as never, {
     episode: 'setup-ai-agent-and-starter-folder',
     route: '/guides/setup-ai-agent-and-starter-folder',
@@ -46,29 +49,18 @@ const scene = (locale: Locale, picks: Record<string, string> = {}) => load(rende
  */
 
 describe('success cases', () => {
-  it('speaks its three Voice script segments, in order', () => {
+  it('speaks its two Voice script segments, in order', () => {
     // ARRANGE
-    const expected = ['open-a-new-window', 'second-command', 'which-option'];
+    const expected = ['sign-in', 'which-option'];
     // ACT
     const segments = localized('en').voiceScript.map(({ slug }) => slug);
     // ASSERT
     expect(segments).toEqual(expected);
   });
 
-  it('puts the new-window warning before the launch line', () => {
+  it("copies no launch command, since the agent already runs, and only GitHub Copilot's /login inside it", () => {
     // ARRANGE
-    const html = render('en');
-    // ACT
-    const warning = html.indexOf('data-new-window');
-    const firstLine = html.indexOf('data-copy-line');
-    // ASSERT
-    expect(warning).toBeGreaterThan(-1);
-    expect(warning).toBeLessThan(firstLine);
-  });
-
-  it("copies each AI agent's launch command, and GitHub Copilot's /login inside it", () => {
-    // ARRANGE
-    const expected = [['claude'], ['agy'], ['codex'], ['copilot', '/login']];
+    const expected = [[], [], [], ['/login']];
     // ACT
     const actual = ['claude-code', 'antigravity', 'codex', 'copilot'].map((agent) =>
       scene('de', { agent })('[data-copy-line]')
@@ -77,15 +69,6 @@ describe('success cases', () => {
     );
     // ASSERT
     expect(actual).toEqual(expected);
-  });
-
-  it('links back to the Slide that opens a terminal', () => {
-    // ARRANGE
-    const $ = scene('en');
-    // ACT
-    const href = $('[data-new-window] a').attr('href');
-    // ASSERT
-    expect(href).toContain('your-ai-agent');
   });
 
   it('lists the real Codex sign-in labels in order and marks only ChatGPT as the one to pick', () => {
@@ -121,15 +104,13 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('tries a fresh window once, then points back to installation rather than promising that fixes every failure', () => {
+  it('shows no new-window card, because the terminal was opened in the folder after installing', () => {
     // ARRANGE
     const $ = scene('en');
-    const expected = 'installation';
     // ACT
-    const text = $('[data-not-found]').text();
+    const card = $('[data-new-window]');
     // ASSERT
-    expect(text).toContain('command not found');
-    expect(text).toContain(expected);
+    expect(card).toHaveLength(0);
   });
 });
 
@@ -151,16 +132,5 @@ describe('edge cases', () => {
     const counts = agents.map((agent) => scene('de', { agent })('[data-pick] [data-recommended]').length);
     // ASSERT
     expect(counts.every((count) => count >= 1)).toBe(true);
-  });
-
-  it('says how to open a new window on each of the three systems', () => {
-    // ARRANGE
-    const expected = { mac: 'On a Mac', windows: 'On Windows', linux: 'On Linux' };
-    // ACT
-    const actual = Object.fromEntries(
-      Object.keys(expected).map((os) => [os, scene('en', { os })('[data-new-window]').text()]),
-    );
-    // ASSERT
-    for (const [os, phrase] of Object.entries(expected)) expect(actual[os]).toContain(phrase);
   });
 });

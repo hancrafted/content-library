@@ -5,17 +5,11 @@ import { CopyLine } from '@/episodes/components/slide-shared/agent-setup-step/co
 import { DoneMark } from '@/episodes/components/slide-shared/agent-setup-step/done-mark';
 import { OfficialLink } from '@/episodes/components/slide-shared/agent-setup-step/official-link';
 import { PickSwitch } from '@/episodes/components/slide-shared/agent-setup-step/pick-switch.client';
-import {
-  AGENTS,
-  casesOf,
-  DEFAULT_AGENT,
-  DEFAULT_OS,
-} from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
+import { AGENTS, casesOf, DEFAULT_AGENT } from '@/episodes/components/slide-shared/agent-setup-step/picks.pure';
 import { TerminalWindow } from '@/episodes/components/slide-shared/agent-setup-step/terminal-window';
 import { GuideHelp } from '@/episodes/components/slide-shared/guide-help/guide-help';
 import { DoneStrip, MoreHelp } from '@/episodes/components/slide-shared/guide-step/guide-step';
 import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/guide-toolbar';
-import { localizePath, stripLocale } from '@/shared/lib/locale.pure';
 import type { ReactNode } from 'react';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -25,16 +19,15 @@ import { RoundTrip } from './round-trip';
 import { SignInCard } from './sign-in-card';
 
 /*
- * Step 2, second Slide: the second command a first-timer types starts the AI agent and signs them in. First it says to
- * open a NEW terminal window, because the install may not be on the old window's PATH (Claude Code's docs say so;
- * Antigravity's say to restart the terminal on Windows), with the failure ("command not found") and its fix, per
- * system. Then the login as a round trip, terminal to browser and back. The official login link is outlined.
+ * Step 3, last Slide: the AI agent already runs inside the starter folder (the Slide before started it there), and
+ * asks the first-timer to sign in. The login as a round trip, terminal to browser and back; GitHub Copilot's /login is
+ * the only line to copy. The official login link is outlined.
  */
 export const logIn = slide({
   slug: 'log-in',
   messages: { en, de },
   notes,
-  segments: [{ slug: 'open-a-new-window' }, { slug: 'second-command' }, { slug: 'which-option' }],
+  segments: [{ slug: 'sign-in' }, { slug: 'which-option' }],
   headerAction: ({ t, template }) => (
     <GuideHelp
       step={t('help.step')}
@@ -55,9 +48,7 @@ export const logIn = slide({
       }}
     />
   ),
-  content: ({ t, locale, slideHref, target }) => {
-    const [backPath = '', backAnchor] = slideHref('open-your-terminal').split('#');
-    const back = { path: backPath, anchor: backAnchor };
+  content: ({ t, target }) => {
     const words = { copy: t('copy'), copied: t('copied') };
     const code = (chunks: ReactNode) => <code className="font-mono text-foreground">{chunks}</code>;
     const key = (chunks: ReactNode) => (
@@ -87,46 +78,18 @@ export const logIn = slide({
           <GuideToolbar active={['os', 'agent']} labels={{ os: t('toolbar.os'), agent: t('toolbar.agent') }} />
 
           <div className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8" {...target('login')}>
-            <div className="flex flex-col gap-2 rounded-lg border-2 border-primary p-4" data-new-window="">
-              <p className="text-body font-semibold">{t('newWindowTitle')}</p>
-              <p className="text-body">{t('newWindow')}</p>
-              <p className="text-caption text-muted-foreground">
-                <PickSwitch
-                  name="os"
-                  fallback={DEFAULT_OS}
-                  cases={{
-                    mac: t('newWindowHow.mac'),
-                    windows: t('newWindowHow.windows'),
-                    linux: t('newWindowHow.linux'),
-                  }}
-                />{' '}
-                <a
-                  href={localizePath(stripLocale(back.path), locale, back.anchor)}
-                  className="font-semibold text-primary underline-offset-2 hover:underline"
-                >
-                  {t('backToStep1')}
-                </a>
-              </p>
-            </div>
-
             <div className="flex flex-col gap-3">
               <p className="text-body">{t('ownAccount')}</p>
-              <p className="text-caption font-semibold uppercase text-primary">{t('secondCommand')}</p>
-              <p className="text-body">{t('type')}</p>
+              <p className="text-body">{t('signIn')}</p>
               <PickSwitch
                 name="agent"
                 fallback={DEFAULT_AGENT}
                 cases={casesOf(AGENTS, (agent) => {
-                  const launch = launchCommand(agent.id);
-                  return (
+                  const inside = launchCommand(agent.id).inside;
+                  return inside === undefined ? null : (
                     <div className="flex flex-col gap-3">
-                      <CopyLine text={launch.text} where="shell" focal big words={words} />
-                      {launch.inside === undefined ? null : (
-                        <>
-                          <p className="text-body">{t('insideTitle', { agent: agent.name })}</p>
-                          <CopyLine text={launch.inside} where="agent" big words={words} />
-                        </>
-                      )}
+                      <p className="text-body">{t('insideTitle', { agent: agent.name })}</p>
+                      <CopyLine text={inside} where="agent" big words={words} />
                     </div>
                   );
                 })}
@@ -204,11 +167,6 @@ export const logIn = slide({
                   </div>
                 }
               />
-
-              <div className="rounded-lg border border-border bg-background p-4" data-not-found="">
-                <p className="text-body font-semibold">{t('failTitle')}</p>
-                <p className="mt-1 text-body">{t('failFix')}</p>
-              </div>
 
               <PickOptions
                 title={t('pick.title')}

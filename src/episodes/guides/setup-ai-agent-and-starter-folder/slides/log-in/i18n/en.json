@@ -1,30 +1,26 @@
 {
   "title": "Log in",
-  "caption": "Your second command starts your AI agent and signs you in. Use a new terminal window.",
-  "newWindowTitle": "Open a new terminal window first",
-  "newWindow": "The install may not be known to your old window. Close it, open a new one, and only then type the line below.",
-  "newWindowHow": {
-    "mac": "On a Mac: press Cmd and N in Terminal, or open Terminal again.",
-    "windows": "On Windows: close PowerShell and open it again from Start. For Copilot, open PowerShell 7, not Windows PowerShell.",
-    "linux": "On Linux: close the terminal, then open it again."
-  },
-  "backToStep1": "How to open a terminal, step 1",
-  "secondCommand": "Your second command",
-  "type": "Paste this line and press Enter.",
+  "caption": "Your AI agent now runs inside the starter folder and asks you to sign in. You do this once.",
   "insideTitle": "Then, inside {agent}, type",
   "copy": "Copy",
   "copied": "Copied",
-  "failTitle": "Does it say “command not found” or “not recognized”?",
-  "failFix": "An old window may not know the new installation. Try a fresh window once. Still not recognized? Return to the installation step and its version check: the install may have failed or PATH may need fixing. For a company policy or certificate error, stop and ask IT.",
   "notes": {
     "approved-account-and-path": {
       "header": "A new terminal is one fix, not a diagnosis",
       "description": "Anthropic documents Windows PATH troubleshooting [1]. A fresh terminal can pick up PATH changes but cannot repair a failed or blocked installation. GitHub allows organizations to disable CLI access; OpenAI and Google document organization-specific access controls [2][3][4]. A personal subscription or successful browser sign-in does not override company approval. The approved account and sign-in route take precedence over this guide's generic recommendations.",
       "sources": {
-        "claude-path": { "title": "Anthropic, Terminal configuration and PATH" },
-        "copilot-access": { "title": "GitHub, Copilot CLI prerequisites and access" },
-        "codex-access": { "title": "OpenAI, Codex plan and enterprise access" },
-        "google-enterprise": { "title": "Google, Antigravity enterprise setup" }
+        "claude-path": {
+          "title": "Anthropic, Terminal configuration and PATH"
+        },
+        "copilot-access": {
+          "title": "GitHub, Copilot CLI prerequisites and access"
+        },
+        "codex-access": {
+          "title": "OpenAI, Codex plan and enterprise access"
+        },
+        "google-enterprise": {
+          "title": "Google, Antigravity enterprise setup"
+        }
       }
     }
   },
@@ -60,22 +56,18 @@
   "openLogin": "{agent} · official login page",
   "newTab": "opens in a new tab",
   "ownAccount": "On a work laptop, use the account and sign-in route your organization approves, not a personal account to get around a denial. Otherwise use your own eligible account, never a shared one. If access is denied or a certificate error appears, stop and ask IT.",
+  "signIn": "Your AI agent asks you to sign in as it starts. Follow its prompt in the terminal.",
   "voiceScript": {
     "segments": {
-      "open-a-new-window": {
-        "title": "Open a new terminal window",
+      "sign-in": {
+        "title": "Sign in",
         "keywords": "",
-        "script": "Open a fresh terminal after installation so it can pick up the new command. For Copilot on Windows, use PowerShell 7. A fresh window fixes one common cause of command not found, not every cause. If the command is still missing, return to the version check in the installation step. If company policy or a certificate blocks you, ask IT rather than changing security settings."
-      },
-      "second-command": {
-        "title": "Your second command",
-        "keywords": "",
-        "script": "Your second command starts your AI agent. Press Copy, paste it and press Enter. Your browser opens for the sign-in; if it does not, the terminal shows a link you can open yourself. Log in with your own account, not a shared one. You do this once, and it stays."
+        "script": "Your AI agent is now running inside the starter folder, and the first thing it asks is that you sign in. Your browser opens for the sign-in; if it does not, the terminal shows a link you can open yourself. Log in with your own account, not a shared one. You do this once, and it stays."
       },
       "which-option": {
         "title": "Which option do I pick?",
         "keywords": "",
-        "script": "The sign-in asks you to choose, and the page lists the options in the order your AI agent shows them, with one marked Pick this. For Codex it is Sign in with ChatGPT, if you pay for ChatGPT. For Claude Code it is your Claude account. For GitHub Copilot you choose GitHub.com and then the device code. For Antigravity you use your personal Google Account. Afterwards you may be asked whether you trust the folder: say yes only for the starter folder."
+        "script": "The sign-in asks you to choose, and the page lists the options in the order your AI agent shows them, with one marked Pick this. For Codex it is Sign in with ChatGPT, if you pay for ChatGPT. For Claude Code it is your Claude account. For GitHub Copilot you choose GitHub.com and then the device code. For Antigravity you use your personal Google Account. If it asks again whether you trust the folder, say yes: you are in the starter folder."
       }
     }
   },
@@ -88,7 +80,7 @@
     "copyTip": "Remove tokens, personal information and confidential details first. Use only an AI your organization permits.",
     "prompt": "I am getting my laptop ready for a workshop and I am stuck. I have never used a terminal before.\n\nMy computer: {os}\nMy AI agent: {agent}\nWhere I am: {step}\n\nThis is the error I see:\n\n{error}\n\nExplain in plain words what went wrong, then tell me what to do next, one small step at a time. Do not suggest bypassing company policy, administrator restrictions, execution policy, TLS checks, proxies or security software. Use the organization's approved account and sign-in route, not a personal account to bypass a denial. If this needs approval or configuration, explain what to ask IT. Remind me to redact secrets and confidential details.",
     "noError": "(I see no error message, it just does not work.)",
-    "step": "Step 2: Log in, your second command",
+    "step": "Step 3: Log in, inside the starter folder",
     "chats": {
       "openAIChats": "Open an AI chat",
       "openAIChatTip": "Open an empty {chat} chat in a new tab, then paste the prompt",
