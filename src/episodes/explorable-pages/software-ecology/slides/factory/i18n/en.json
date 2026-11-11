@@ -1,0 +1,93 @@
+{
+  "title": "The tire swing factory",
+  "voiceScript": {
+    "segments": {
+      "you-know-this-cartoon": {
+        "title": "You know this cartoon",
+        "keywords": "tire swing cartoon, game of telephone, no bad actors, ten times faster",
+        "script": "You all know this cartoon. Ten panels, and in every one a different role hears something different, so the swing that comes out is nothing like the one the customer wanted. Nobody in it is a bad actor: it is a game of telephone, where an intent nobody voiced well gets translated at every handoff, which means the fault sits in the system. With AI, the wrong swing gets built ten times faster."
+      },
+      "the-factory-runs-live": {
+        "title": "The factory runs live",
+        "keywords": "runs live, Swing, Roles, factory, AI on, Customer",
+        "script": "This one runs live, so nothing here rests on my word. It starts on the swing, steps through Roles into the factory, and then AI goes on. Every document on the belts is a task, the requests come from the Customer on the left, and the releases go back to the Customer. Watch what the Customer gets."
+      },
+      "map-your-team": {
+        "title": "Map your team",
+        "keywords": "your own team, work center is a role, belt is a handoff, slowest review step, inspection",
+        "script": "Look at the factory as if it were your own team, where every work center is a role and every belt is a handoff. Find the slowest review step, the inspection, because that is where the work will pile up first."
+      },
+      "check-the-inspection-before-the-turbo": {
+        "title": "Check the inspection before the turbo",
+        "keywords": "AI on one work center, inspection after it, review step, neighbours, pressure",
+        "script": "Now switch AI on at one work center. It got faster, but the inspection after it did not, so ask whether that review step can handle more. Watch the neighbours as well as the work center. My picture is that the pressure does not stay where you put the AI."
+      },
+      "fix-the-orders-first": {
+        "title": "Fix the orders first",
+        "keywords": "analyst's effectiveness, unclear requirements, bad work, rework, complaints, write the requirement clearly",
+        "script": "Now drop the analyst's effectiveness. Unclear requirements turn into bad work, and AI carries that bad work to every work center after it, faster than before, until it comes back as rework and complaints. So write the requirement clearly enough that someone new could act on it. This is my hypothesis: that is the step that lowers the pressure instead of moving it."
+      },
+      "what-the-customer-got": {
+        "title": "What the Customer got",
+        "keywords": "Customer card, releases, satisfied, recap, early, not a measurement",
+        "script": "The Customer card is where the releases come back: what they got, and how satisfied they are. In most teams one work center looks like that inspection. To recap: map the team, check the inspection before the turbo, write the requirement clearly. It is a way of looking and still early, not a measurement of your team. The Explorable is here whenever you want to run it again."
+      }
+    }
+  },
+  "notes": {
+    "pressure-travels": {
+      "header": "Pressure travels along the connections",
+      "description": "A change at one work center, such as faster code writing, reaches its neighbours: more code to review, build, test and release. The talk offers this as a scenario, not a measurement [1] (SWE-0001).",
+      "sources": {
+        "bender-tipping-point": {
+          "title": "Adam Bender, Software Engineering at the Tipping Point (conference talk, transcript)"
+        }
+      }
+    },
+    "review-load": {
+      "header": "Review is where the load lands",
+      "description": "On teams with high AI adoption, pull requests merged rose 98% while review time rose 91% and pull request size 154%, with no significant company-level gain. Vendor telemetry and an association, not a trial [1] (AIE-0018).",
+      "sources": {
+        "faros-productivity-paradox": {
+          "title": "Faros AI, The AI Productivity Paradox Report 2025 (23 July 2025)"
+        }
+      }
+    },
+    "review-skipped": {
+      "header": "Review can be skipped",
+      "description": "In a writing experiment 68% of professionals given a chatbot submitted its first output unedited. It was a short online task, so it may not hold for work someone is accountable for [1] (AIE-0019).",
+      "sources": {
+        "noy-zhang-productivity": {
+          "title": "Noy and Zhang, Experimental Evidence on the Productivity Effects of Generative Artificial Intelligence"
+        }
+      }
+    },
+    "pm-accountability": {
+      "header": "Product managers keep the accountability",
+      "description": "They hesitate to delegate specifications and say they are still accountable for AI-written output, so their effort moves to checking it. One company, self-reported [1] (AIE-0019).",
+      "sources": {
+        "ulloa-pm-delegation": {
+          "title": "Ulloa et al., Product Manager Practices for Delegating Work to Generative AI: “Accountability must not be delegated to non-human actors”"
+        }
+      }
+    },
+    "muddy-instructions": {
+      "header": "Muddy instructions cost accuracy",
+      "description": "Instructions that arrive incomplete over several turns lowered accuracy by 39% on average across tested models. That a clear requirement lowers this is an inference; no source tests it as an intervention [1] (LLM-0022).",
+      "sources": {
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    },
+    "sales-billing-inference": {
+      "header": "Sales and billing cards are inference",
+      "description": "Reps spend 30% of a week selling, from a vendor survey, which says nothing about review work growing. No source measures AI's effect on billing; the sales and billing card text is the general pattern applied, not evidence [1] (AIE-0019, AIE-0020).",
+      "sources": {
+        "salesforce-state-of-sales": {
+          "title": "Salesforce, State of Sales, 6th Edition"
+        }
+      }
+    }
+  }
+}

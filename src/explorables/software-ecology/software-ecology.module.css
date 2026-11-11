@@ -1,0 +1,720 @@
+/*
+ * The factory's stage, cards, toolbar and readouts, ported from the reference build's stylesheet (design-ADR 0024).
+ * Colours are tokens and mixes of tokens; sizes and weights come from the type roles in the markup (FE-011).
+ */
+.root {
+  --fg-8: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --fg-12: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --fg-25: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --fg-45: color-mix(in oklab, var(--foreground) 45%, transparent);
+  --good-tint: color-mix(in oklab, var(--success) 22%, var(--card));
+  --bad-tint: color-mix(in oklab, var(--destructive) 22%, var(--card));
+  --rail: color-mix(in oklab, var(--foreground) 22%, var(--muted));
+  --belt: color-mix(in oklab, var(--foreground) 6%, var(--card));
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+:global(.dark) .root {
+  --good-tint: color-mix(in oklab, var(--success) 22%, var(--foreground));
+  --bad-tint: color-mix(in oklab, var(--destructive) 22%, var(--foreground));
+  --belt: color-mix(in oklab, var(--foreground) 10%, var(--card));
+}
+
+/* ---------- toolbar ---------- */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.tbRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+.tbTools {
+  justify-content: flex-start;
+}
+.states {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.state {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 6px 14px;
+  min-height: 36px;
+  cursor: pointer;
+  transition:
+    background 160ms var(--ease),
+    border-color 160ms var(--ease);
+}
+.state:hover {
+  border-color: var(--fg-45);
+}
+.state[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+.usecase {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.usecaseSub {
+  max-width: 60rem;
+}
+.select {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: inherit;
+  padding: 8px 36px 8px 12px;
+  cursor: pointer;
+  min-height: 36px;
+  min-width: 0;
+  max-width: 100%;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--foreground) 50%),
+    linear-gradient(135deg, var(--foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 13px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+.tgroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  flex-wrap: wrap;
+}
+.tbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  border-radius: 9px;
+  min-height: 36px;
+  min-width: 36px;
+  padding: 4px 10px;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  justify-content: center;
+  transition:
+    background 140ms var(--ease),
+    color 140ms var(--ease);
+}
+.tbtn:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+.tbtn[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.speed {
+  padding: 4px 8px;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 760px) {
+  .tbtnLabel {
+    display: none;
+  }
+}
+.clock {
+  font-variant-numeric: tabular-nums;
+  padding: 0 10px;
+  min-width: 9.5rem;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+.ico {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.gly {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* ---------- the floor ---------- */
+.viewWrap {
+  position: relative;
+  border-radius: 16px;
+  background: var(--muted);
+  padding: 28px 12px 12px;
+  height: 80vh;
+  min-height: 460px;
+  display: flex;
+  flex-direction: column;
+}
+.stageNote {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.stage > svg,
+.stage > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.stage > canvas {
+  pointer-events: none;
+  z-index: 3;
+}
+.stage > .overlay {
+  z-index: 4;
+  pointer-events: none;
+  overflow: visible;
+}
+.floor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.beltRail {
+  fill: none;
+  stroke: var(--rail);
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+}
+.beltSurface {
+  fill: none;
+  stroke: var(--belt);
+  stroke-linejoin: round;
+}
+.beltSlats {
+  fill: none;
+  stroke: var(--fg-8);
+  stroke-dasharray: 1.6 10.4;
+  stroke-linejoin: round;
+}
+.plate {
+  fill: var(--rail);
+}
+.ret {
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+.ret[data-on='true'] {
+  opacity: 1;
+}
+.edgeHit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 20;
+  pointer-events: stroke;
+  cursor: help;
+}
+.elabel {
+  opacity: 0;
+  transition: opacity 180ms var(--ease);
+  pointer-events: none;
+}
+.edgeHit:hover + .elabel {
+  opacity: 1;
+}
+.elabelBg {
+  fill: var(--card);
+  stroke: var(--border);
+}
+.elabelTx {
+  fill: var(--foreground);
+}
+.elabelRate {
+  fill: var(--muted-foreground);
+}
+
+/* ---------- work center cards ---------- */
+.card {
+  box-sizing: border-box;
+  position: absolute;
+  pointer-events: auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  border: 1px solid var(--fg-25);
+  border-radius: 12px;
+  background: var(--card);
+  transition:
+    border-color 200ms var(--ease),
+    box-shadow 200ms var(--ease);
+}
+.card[data-ai='true'] {
+  background: color-mix(in oklab, var(--ai) 4%, var(--card));
+  border-color: var(--ai);
+}
+.head {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  min-width: 0;
+  padding: 0 7px;
+  gap: 5px;
+  border-bottom: 1px solid var(--fg-12);
+  background: var(--card);
+  border-radius: 11px 11px 0 0;
+}
+.card[data-kind='role'] .head {
+  margin-left: 50px;
+  border-radius: 0 11px 0 0;
+  border-left: 1px solid var(--fg-12);
+}
+.title {
+  line-height: 1.1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.insp {
+  display: inline-grid;
+  margin-left: auto;
+  color: var(--muted-foreground);
+}
+.insp .ico {
+  width: 13px;
+  height: 13px;
+}
+.body {
+  flex: 1;
+  position: relative;
+}
+.card[data-kind='role'] .body {
+  margin-left: 50px;
+}
+.status {
+  position: absolute;
+  bottom: 3px;
+  left: 4px;
+  right: 6px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
+  line-height: 1.15;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.status b {
+  color: var(--foreground);
+}
+.card[data-piling='true'] .status,
+.card[data-piling='true'] .status b {
+  color: var(--destructive);
+}
+.bugs {
+  color: var(--destructive);
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.signs {
+  position: absolute;
+  right: -6px;
+  top: -23px;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+}
+.sign {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+  border: 1px solid var(--destructive);
+  color: var(--destructive);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 220ms var(--ease),
+    transform 220ms var(--ease);
+}
+.sign .ico {
+  width: 12px;
+  height: 12px;
+}
+.sign[data-on='true'] {
+  opacity: 1;
+  transform: none;
+}
+.turbo {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+  color: var(--ai);
+  width: 30px;
+  height: 14px;
+  left: calc(100% + 6px);
+  top: 13px;
+  overflow: hidden;
+}
+.turbo svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.card[data-ai='true'] .turbo {
+  display: block;
+}
+.chev {
+  animation: chev 0.5s linear infinite;
+}
+.view[data-paused='true'] .chev {
+  animation-play-state: paused;
+}
+@keyframes chev {
+  from {
+    transform: translateX(-8px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* the Customer card */
+.card[data-kind='customer'] {
+  background: color-mix(in oklab, var(--success) 8%, var(--card));
+}
+.card[data-kind='customer'] .head {
+  justify-content: center;
+}
+.bodyCust {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 9px;
+  color: var(--muted-foreground);
+}
+.custRow {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  gap: 6px;
+  align-items: center;
+}
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 3px;
+  height: 80px;
+}
+.grid12 i,
+.dockGrid i {
+  border-radius: 2px;
+  border: 1px solid var(--fg-12);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: var(--destructive);
+}
+.grid12 i[data-q='good'],
+.dockGrid i[data-q='good'] {
+  background: var(--good-tint);
+}
+.grid12 i[data-q='bad'],
+.dockGrid i[data-q='bad'] {
+  background: var(--bad-tint);
+}
+.grid12 .ico {
+  width: 10px;
+  height: 10px;
+  stroke-width: 2.4;
+}
+.rel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 1.05;
+}
+.rel b {
+  font-variant-numeric: tabular-nums;
+}
+.sat {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 4px;
+  white-space: nowrap;
+}
+.sat b {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.card[data-unhappy='true'] .sat[data-r='sat'] b,
+.card[data-full='true'] .sat[data-r='head'] b {
+  color: var(--destructive);
+}
+.dials {
+  margin: 0;
+  text-align: center;
+  border-top: 1px solid var(--fg-12);
+  padding-top: 5px;
+}
+.dials b {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- below the stage ---------- */
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 24px;
+  align-items: center;
+  padding: 0 4px;
+}
+.statusLine {
+  margin: 0;
+  min-height: 1.6em;
+}
+.statusLine[data-calm='true'] {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: center;
+  color: var(--muted-foreground);
+}
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.docicon {
+  width: 18px;
+  height: 21px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.below {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .below {
+    grid-template-columns: 1fr;
+  }
+}
+.dock {
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dock p {
+  margin: 0;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+}
+.dockRow {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.dockGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 34px);
+  grid-auto-rows: 26px;
+  gap: 4px;
+}
+.dockGrid .ico {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.2;
+}
+.dockOut {
+  flex: 1;
+  min-width: 10rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dockK {
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-heading);
+}
+.dockSub {
+  color: var(--muted-foreground);
+}
+.dockSat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dockSatHead {
+  display: flex;
+  justify-content: space-between;
+}
+.dockSatHead b {
+  font-variant-numeric: tabular-nums;
+}
+.satbar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bad-tint);
+  overflow: hidden;
+}
+.satbar i {
+  display: block;
+  height: 100%;
+  background: var(--success);
+  border-radius: 999px;
+  transition: width 400ms var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chev {
+    animation: none;
+  }
+}
+
+/* the legend's documents: the canvas's colours (doc-sprites.ts) */
+.root {
+  --doc-paper: var(--card);
+  --doc-edge: color-mix(in oklab, var(--foreground) 45%, var(--card));
+}
+:global(.dark) .root {
+  --doc-paper: color-mix(in oklab, var(--foreground) 92%, var(--background));
+  --doc-edge: color-mix(in oklab, var(--background) 60%, var(--foreground));
+}
+.dSheet {
+  fill: var(--doc-paper);
+  stroke: var(--doc-edge);
+}
+.dAiSheet {
+  fill: color-mix(in oklab, var(--ai) 20%, var(--doc-paper));
+  stroke: var(--ai);
+}
+.dFold {
+  fill: none;
+  stroke: var(--doc-edge);
+}
+.dPaper {
+  fill: var(--doc-paper);
+}
+.dDestr {
+  fill: var(--destructive);
+}
+.dAi {
+  fill: var(--ai);
+}
+
+/* tooltips: hover or keyboard focus, as the reference build shows them */
+.root [data-tip] {
+  position: relative;
+}
+.root [data-tip]:is(:hover, :focus-visible)::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  translate: -50% 0;
+  z-index: 40;
+  width: max-content;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--foreground);
+  color: var(--background);
+  line-height: 1.4;
+  white-space: normal;
+  text-align: left;
+  pointer-events: none;
+  box-shadow: 0 6px 18px -8px var(--fg-45);
+}
+.card [data-tip]:is(:hover, :focus-visible)::after {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+/* Context spots a Slide may mark: the rack's place on a card, a sign, a belt's label */
+.rackSpot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+}
+.spotMarker {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 2px);
+  display: flex;
+  pointer-events: auto;
+}
+.beltSpot {
+  position: absolute;
+  pointer-events: auto;
+  translate: -50% -50%;
+}
+
+.root :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}

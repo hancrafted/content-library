@@ -1,0 +1,102 @@
+# The software ecology Explorable's own words (FE-012 §1): the toolbar, the stage, the cards, the Customer card and the
+# At the Customer panel. A use case's words (its centers, belts and scenarios) live in its own words pair; the German
+# twin of this file holds the same keys. `{name}` placeholders are filled by fillTemplate.
+toolbar:
+  label: Factory controls
+  states: States
+  useCase: Use case
+  fromFile: (from file)
+  speed: Speed
+  pause: Pause
+  speedN: 'Speed {n}×'
+  speedTips:
+    '1': '1×: a working day takes about 3 seconds'
+    '2': '2×: a working day takes about 1.6 seconds'
+    '5': '5×: a working day takes about 0.6 seconds'
+    '10': '10×: a working day takes about 0.3 seconds'
+  clear: Clear
+  clearTip: 'Clear: an empty factory at day 0 with the current settings, to watch it fill'
+  day: 'Day {n}'
+  week: 'Week {w} · Day {d}'
+  warming: Warming up
+  clockTip: Simulated time in working days; every handoff takes a quarter day
+stage:
+  label: The factory
+  note: Illustrative model, not measured
+  warming: 'Warming up · day {day} of {of}'
+  blocked: blocked
+  aWeek: '{n} a week'
+  sentBack: sent back
+  back: '↩ {n} {what}'
+  status:
+    warming: 'Settling the line: {weeks} simulated weeks, then it runs live.'
+    calm: 'A simplified organization in Ideal: every handoff is good and nothing piles up. We all know reality is messier.'
+    bottleneck: Bottleneck
+    busiest: Busiest
+    waiting: '{title}, {weeks} weeks of work waiting'
+    growing: 'growing by about {n} jobs a week; raise its efficiency, or send less its way'
+    clearsWeek: 'clears in about a week at this pace; raising its efficiency clears it faster'
+    clearsWeeks: 'clears in about {n} weeks at this pace; raising its efficiency clears it faster'
+    also: 'also {titles}'
+    coping: 'Busy but coping: no work center has a week of work waiting'
+    sentBack: 'sent back a week'
+    behind: 'this device is behind: time runs slower than the speed says'
+  legend:
+    label: Legend
+    good: good
+    bad: bad
+    warn: complaint or rework
+    ai: AI-made
+    pile: past six waiting, the rack’s top slot turns red and work piles up at the belt end
+    merged: '×n: documents riding together'
+    handoff: every handoff takes a quarter day
+card:
+  waiting: waiting
+  onBugs: '{n} % on bugs'
+  openDashboard: '{title}: open its dashboard'
+  openSettings: '{title}: open its settings'
+  inspection: 'Inspection: reviews the work it receives'
+  signs:
+    rework: 'Rework: this center sent bad work back'
+    churn: 'Churn: it kept bad input and made more documents from it'
+    unread: 'Passing unread: its queue is so full that bad work goes through unchecked'
+    complaint: A customer complaint arrived here
+customer:
+  lastReleases: The last 12 releases
+  ofIdeal: of ideal
+  outputTip: 'Output: fulfilled requests a week, relative to ideal'
+  satisfied: Satisfied
+  satTip: 'Customer satisfaction: good releases minus complaints, out of the last 12'
+  leadTime: Lead time
+  leadTip: 'Lead time: working days from a request to its release, over about six weeks (Little’s law: requests in the line ÷ requests finished a week).'
+  couldServe: Could serve
+  headroomTip: How many times today’s demand the line could serve before its most loaded work center is full (from the expected flows at these settings).
+  bugs: Bugs a week
+  bugsTip: 'Bugs reported a week: complaints after bad releases. Each is failure demand: work that adds no value.'
+  own: Own, a week
+  ownTip: 'Product company: tickets the company writes itself (roadmap, leads, tech debt) that shipped, a week. Counted apart from the Customer’s requests; both share the same backlogs.'
+  rateTip: How many requests the Customer sends a week. Ideal sizes every work center for the file’s rate; more than that fills the line.
+  aWeek: '{n} a week'
+  days: '{n} days'
+  demand: '{n}× demand'
+  steady: steady
+  random: random
+dock:
+  label: At the Customer
+  eyebrow: At the Customer · the last 12 releases
+  grid: '{good} of the last 12 releases good, {complaints} brought complaints'
+  output: Output relative to ideal
+  sub: '{relative}: about {n} requests fulfilled a week'
+  same: About as much as in Ideal
+  half: About half of Ideal
+  third: About a third of Ideal
+  times: '{k}× Ideal'
+  satisfaction: Customer satisfaction
+  satNote: good releases minus complaints, out of the last 12
+  verdicts:
+    moreUnhappier: More output, an unhappier customer
+    unhappy: The customer is unhappy
+    fewer: Fewer requests fulfilled than the customer asked for
+    asked: What the customer asked for
+  note: 'Output counts fulfilled requests only: never the extra documents, rework or answers to complaints.'
+  complaints: 'About {n} complaints a week come back: failure demand, not new value.'

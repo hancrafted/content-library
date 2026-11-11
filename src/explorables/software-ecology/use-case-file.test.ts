@@ -5,6 +5,8 @@ import gateWords from './gate.words.yml';
 import gate from './gate.yml';
 import rolesWordsDe from './roles.words.de.yml';
 import rolesWords from './roles.words.yml';
+import configDe from './software-ecology.config.de.yml';
+import configEn from './software-ecology.config.yml';
 import teamsWordsDe from './teams.words.de.yml';
 import teamsWords from './teams.words.yml';
 import teams from './teams.yml';
@@ -22,6 +24,7 @@ const PAIRS = [
   ['gate', gateWords, gateWordsDe],
   ['teams', teamsWords, teamsWordsDe],
   ['roles', rolesWords, rolesWordsDe],
+  ['config', configEn, configDe],
 ] as const;
 
 /** Every key path of a parsed document, list items by index. */

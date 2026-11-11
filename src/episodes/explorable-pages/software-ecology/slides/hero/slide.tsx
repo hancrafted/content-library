@@ -64,7 +64,7 @@ export const hero = slide({
       <ExplorableHero
         layers={{ Frame: SlideFrame }}
         locale={locale}
-        tryIt={{ label: t('tryIt'), href: slideHref('play') }}
+        tryIt={{ label: t('tryIt'), href: slideHref('factory') }}
         why={{ label: t('why'), href: slideHref('about') }}
         share={{
           title: t('share.title'),

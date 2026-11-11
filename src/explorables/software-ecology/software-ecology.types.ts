@@ -206,3 +206,10 @@ export interface Settings {
   mech: Record<Mechanic, boolean>;
   strength: Partial<Record<Strength, number>>;
 }
+
+/** The role catalog's words in one locale: per role, and the names of the presets and scenarios every use case shares. */
+export interface CatalogWords {
+  readonly roles: Readonly<Record<string, RoleWords>>;
+  readonly presets: Readonly<Record<string, string>>;
+  readonly scenarios?: Readonly<Record<string, ScenarioWords>>;
+}

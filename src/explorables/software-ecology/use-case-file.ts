@@ -80,3 +80,6 @@ export const readExchange = (
     },
   };
 };
+
+/** The Explorable's own words in one locale (`software-ecology.config.yml` or its German twin). */
+export const readConfig = <T>(text: string): T => read(text) as T;

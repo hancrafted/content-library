@@ -1,0 +1,100 @@
+# Die eigenen Wörter des Software-Ökologie-Explorables (FE-012 §1), dieselben Schlüssel wie software-ecology.config.yml.
+toolbar:
+  label: Steuerung der Fabrik
+  states: Zustände
+  useCase: Anwendungsfall
+  fromFile: (aus Datei)
+  speed: Tempo
+  pause: Pause
+  speedN: 'Tempo {n}×'
+  speedTips:
+    '1': '1×: ein Arbeitstag dauert etwa 3 Sekunden'
+    '2': '2×: ein Arbeitstag dauert etwa 1,6 Sekunden'
+    '5': '5×: ein Arbeitstag dauert etwa 0,6 Sekunden'
+    '10': '10×: ein Arbeitstag dauert etwa 0,3 Sekunden'
+  clear: Leeren
+  clearTip: 'Leeren: eine leere Fabrik an Tag 0 mit den aktuellen Einstellungen, damit Ihr zuseht, wie sie sich füllt'
+  day: 'Tag {n}'
+  week: 'Woche {w} · Tag {d}'
+  warming: Läuft warm
+  clockTip: Simulierte Zeit in Arbeitstagen; jede Übergabe dauert einen Vierteltag
+stage:
+  label: Die Fabrik
+  note: Illustratives Modell, nicht gemessen
+  warming: 'Läuft warm · Tag {day} von {of}'
+  blocked: blockiert
+  aWeek: '{n} pro Woche'
+  sentBack: zurückgeschickt
+  back: '↩ {n} {what}'
+  status:
+    warming: 'Die Linie spielt sich ein: {weeks} simulierte Wochen, dann läuft sie live.'
+    calm: 'Eine vereinfachte Organisation im Ideal: Jede Übergabe ist gut, und nichts staut sich. Wir alle wissen, dass die Wirklichkeit unordentlicher ist.'
+    bottleneck: Engpass
+    busiest: Am stärksten ausgelastet
+    waiting: '{title}, {weeks} Wochen Arbeit warten'
+    growing: 'wächst um etwa {n} Aufgaben pro Woche; erhöht die Effizienz oder schickt weniger dorthin'
+    clearsWeek: 'in etwa einer Woche abgebaut bei diesem Tempo; mehr Effizienz baut ihn schneller ab'
+    clearsWeeks: 'in etwa {n} Wochen abgebaut bei diesem Tempo; mehr Effizienz baut ihn schneller ab'
+    also: 'außerdem {titles}'
+    coping: 'Ausgelastet, aber es reicht: Bei keinem Arbeitsplatz wartet eine Woche Arbeit'
+    sentBack: 'pro Woche zurückgeschickt'
+    behind: 'dieses Gerät kommt nicht hinterher: Die Zeit läuft langsamer, als das Tempo sagt'
+  legend:
+    label: Legende
+    good: gut
+    bad: schlecht
+    warn: Reklamation oder Nacharbeit
+    ai: von KI erstellt
+    pile: ab sechs Wartenden wird das oberste Fach rot, und die Arbeit staut sich am Bandende
+    merged: '×n: Dokumente, die zusammen fahren'
+    handoff: jede Übergabe dauert einen Vierteltag
+card:
+  waiting: warten
+  onBugs: '{n} % für Fehler'
+  openDashboard: '{title}: Dashboard öffnen'
+  openSettings: '{title}: Einstellungen öffnen'
+  inspection: 'Prüfung: prüft die Arbeit, die ankommt'
+  signs:
+    rework: 'Nacharbeit: Dieser Arbeitsplatz hat schlechte Arbeit zurückgeschickt'
+    churn: 'Wildwuchs: Er hat schlechte Eingaben behalten und mehr Dokumente daraus gemacht'
+    unread: 'Ungelesen durchgewinkt: Die Warteschlange ist so voll, dass schlechte Arbeit ungeprüft durchgeht'
+    complaint: Hier ist eine Kundenreklamation angekommen
+customer:
+  lastReleases: Die letzten 12 Releases
+  ofIdeal: vom Ideal
+  outputTip: 'Output: erfüllte Anfragen pro Woche, im Verhältnis zum Ideal'
+  satisfied: Zufrieden
+  satTip: 'Kundenzufriedenheit: gute Releases minus Reklamationen, von den letzten 12'
+  leadTime: Durchlaufzeit
+  leadTip: 'Durchlaufzeit: Arbeitstage von einer Anfrage bis zu ihrem Release, über etwa sechs Wochen (Littles Gesetz: Anfragen in der Linie ÷ erledigte Anfragen pro Woche).'
+  couldServe: Könnte bedienen
+  headroomTip: Wie oft die heutige Nachfrage die Linie bedienen könnte, bevor ihr am stärksten belasteter Arbeitsplatz voll ist (aus den erwarteten Flüssen bei diesen Einstellungen).
+  bugs: Fehler pro Woche
+  bugsTip: 'Gemeldete Fehler pro Woche: Reklamationen nach schlechten Releases. Jede ist Fehlernachfrage: Arbeit ohne Mehrwert.'
+  own: Eigene, pro Woche
+  ownTip: 'Produktfirma: Tickets, die die Firma selbst schreibt (Roadmap, Leads, technische Schulden) und die ausgeliefert wurden, pro Woche. Getrennt von den Anfragen des Kunden gezählt; beide teilen sich dieselben Backlogs.'
+  rateTip: Wie viele Anfragen der Kunde pro Woche schickt. Das Ideal bemisst jeden Arbeitsplatz für die Rate der Datei; mehr füllt die Linie.
+  aWeek: '{n} pro Woche'
+  days: '{n} Tage'
+  demand: '{n}× Nachfrage'
+  steady: gleichmäßig
+  random: zufällig
+dock:
+  label: Beim Kunden
+  eyebrow: Beim Kunden · die letzten 12 Releases
+  grid: '{good} der letzten 12 Releases gut, {complaints} brachten Reklamationen'
+  output: Output im Verhältnis zum Ideal
+  sub: '{relative}: etwa {n} erfüllte Anfragen pro Woche'
+  same: Etwa so viel wie im Ideal
+  half: Etwa die Hälfte des Ideals
+  third: Etwa ein Drittel des Ideals
+  times: '{k}× Ideal'
+  satisfaction: Kundenzufriedenheit
+  satNote: gute Releases minus Reklamationen, von den letzten 12
+  verdicts:
+    moreUnhappier: Mehr Output, ein unzufriedenerer Kunde
+    unhappy: Der Kunde ist unzufrieden
+    fewer: Weniger Anfragen erfüllt, als der Kunde wollte
+    asked: Was der Kunde wollte
+  note: 'Output zählt nur erfüllte Anfragen: nie die zusätzlichen Dokumente, Nacharbeit oder Antworten auf Reklamationen.'
+  complaints: 'Etwa {n} Reklamationen pro Woche kommen zurück: Fehlernachfrage, kein neuer Wert.'
