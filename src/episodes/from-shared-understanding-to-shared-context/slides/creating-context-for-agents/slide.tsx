@@ -44,33 +44,45 @@ const ROUNDS: readonly { round: string; tone: DartTone; r: number; darts: readon
 export const creatingContextForAgents = slide({
   slug: 'creating-context-for-agents',
   messages: { en, de },
+  presentation: {
+    tone: 'inverse',
+    style: {
+      '--slide-surface': 'color-mix(in oklab, var(--tone-paper) 88%, var(--tone-ink))',
+      '--slide-space-after': '265px',
+    },
+    enter: { effect: 'liquid' },
+    leave: { effect: 'liquid' },
+  },
   segments: [{ slug: 'the-pain' }, { slug: 'the-claim' }],
   content: ({ t }) => (
     <SlideFrame>
-      <svg viewBox="0 0 300 150" className="w-full max-w-xl" role="img" aria-label={t('label')}>
-        <Dartboard cx={190} cy={76} r={66} rings={3} bull={8} />
-        {ROUNDS.map(({ round, tone, r, darts }) => (
-          <Darts key={round} points={darts} tone={tone} r={r} />
-        ))}
-        <path
-          d="M146 38 Q156 46 160 52 M172 62 Q180 68 182 70"
-          className="fill-none stroke-primary"
-          strokeWidth={1.5}
-          strokeDasharray="3 3"
-        />
-        <text x={10} y={34} className="fill-muted-foreground text-caption">
-          {t('round1')}
-        </text>
-        <text x={10} y={62} className="fill-ai text-caption font-medium">
-          {t('round2')}
-        </text>
-        <text x={10} y={90} className="fill-primary text-caption font-semibold">
-          {t('round3')}
-        </text>
-        <text x={10} y={130} className="fill-primary text-caption font-semibold">
-          {t('spec')}
-        </text>
-      </svg>
+      {/* On the inverse surface the board flips back to the page's own tone, on a card, so every dart keeps its contrast. */}
+      <div data-tone-flip className="max-w-xl rounded-xl bg-card p-6">
+        <svg viewBox="0 0 300 150" className="w-full" role="img" aria-label={t('label')}>
+          <Dartboard cx={190} cy={76} r={66} rings={3} bull={8} />
+          {ROUNDS.map(({ round, tone, r, darts }) => (
+            <Darts key={round} points={darts} tone={tone} r={r} />
+          ))}
+          <path
+            d="M146 38 Q156 46 160 52 M172 62 Q180 68 182 70"
+            className="fill-none stroke-primary"
+            strokeWidth={1.5}
+            strokeDasharray="3 3"
+          />
+          <text x={10} y={34} className="fill-muted-foreground text-caption">
+            {t('round1')}
+          </text>
+          <text x={10} y={62} className="fill-ai text-caption font-medium">
+            {t('round2')}
+          </text>
+          <text x={10} y={90} className="fill-primary text-caption font-semibold">
+            {t('round3')}
+          </text>
+          <text x={10} y={130} className="fill-primary text-caption font-semibold">
+            {t('spec')}
+          </text>
+        </svg>
+      </div>
     </SlideFrame>
   ),
 });

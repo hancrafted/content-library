@@ -72,9 +72,39 @@ describe('success cases', () => {
     // ASSERT
     expect(actual).toEqual(expected);
   });
+
+  it('inks the Title slide out, and every later section slide in and out on an inverse surface', () => {
+    // ARRANGE
+    const ink = 'liquid';
+    const expected = {
+      hero: { tone: 'inverse', enter: undefined, leave: ink },
+      'every-product-is-a-translation': { tone: 'inverse', enter: ink, leave: ink },
+      'context-is-the-requirement': { tone: 'inverse', enter: ink, leave: ink },
+      'creating-context-for-agents': { tone: 'inverse', enter: ink, leave: ink },
+    };
+    const slides = [fromSharedUnderstandingToSharedContext.title as Slide, ...OPENERS.slice(1)];
+    // ACT
+    const actual = Object.fromEntries(
+      slides.map(({ slug, presentation }) => [
+        slug,
+        { tone: presentation?.tone, enter: presentation?.enter?.effect, leave: presentation?.leave?.effect },
+      ]),
+    );
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('failure cases', () => {
+  it('gives the first section slide no ink, so the Title slide inks straight onto its section band', () => {
+    // ARRANGE
+    const expected = undefined;
+    // ACT
+    const actual = OPENERS[0].presentation;
+    // ASSERT
+    expect(actual).toBe(expected);
+  });
+
   it('declares no Speaker note on a section slide, since the picked Option shows no Context marker', () => {
     // ARRANGE
     const expected = OPENERS.map(() => 0);
