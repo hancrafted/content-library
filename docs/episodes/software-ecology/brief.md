@@ -4,12 +4,14 @@ title: Why AI relocates the pressure, and why requirements come first
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-10T16:16:55Z
+  at: 2026-11-11T08:27:11Z
 verified:
   - by: process:markdown-harness
     at: 2026-11-10T16:16:55Z
   - by: human:han
     at: 2026-11-10T16:22:10Z
+  - by: process:markdown-harness
+    at: 2026-11-11T08:27:11Z
 ---
 
 # Why AI relocates the pressure, and why requirements come first
@@ -24,7 +26,7 @@ Both Audiences, leaning Organization. Managers know their org chart but not how 
 
 ## Style
 
-Editorial: managers are the lead audience, and its meaning colours (`human`, `machine`, `ai`) map onto a node's human and technical sides and the AI pump.
+Editorial: managers are the lead audience, and its meaning colours (`human`, `machine`, `ai`) map onto a work center's human and technical sides and the AI that speeds it up.
 
 ## Learning goal
 
@@ -46,7 +48,7 @@ The cartoon was never about bad actors, it's about the system: a game of telepho
 
 ## Analogy
 
-The organization is plumbing. Roles are stretches of pipe, handoffs are the pipes between them, and review is the narrow valve. AI is the pump that moves whatever you feed it, faster. Clear requirements are clean water; context rot is sediment on the pipe walls.
+The organization is a factory. Orders come in, conveyor belts carry documents between work centers, work waits in queues, inspection is the review, and results leave from the shipping dock. AI makes a work center put out more, whatever its quality. Clear requirements are good orders; bad work comes back as rework or costs the next work center extra work.
 
 ## Constraints
 
@@ -59,11 +61,11 @@ The organization is plumbing. Roles are stretches of pipe, handoffs are the pipe
 
 ### Play
 
-1. **Play** — lets the viewer run the whole system themselves, from the familiar cartoon to AI switched on. _Visual:_ the Explorable with its toolbar: steps Swing, Roles, Pipeline, AI; the use case picker; the pump speed and water clarity dials; node cards on click. Opens on the Swing step of the tire swing use case. _Research:_ 1, 2, 3, 4, 5, 6
+1. **Play** — lets the viewer run the whole system themselves, from the familiar cartoon to AI switched on. _Visual:_ the Explorable with its toolbar: states Swing, Roles, Balance, Reality and AI; the use case picker; per work center the efficiency and effectiveness dials and an AI switch; a work-center dashboard on click and a compare view of up to three work centers. Opens on the Swing state of the tire swing use case. _Research:_ 1, 2, 3, 4, 5, 6
 
 ### Why, how and what
 
-2. **Why, how and what** — explains why it matters (AI pumps execution faster, so pressure moves to specification and review and spreads to neighbours, and how clearer requirements, the clean water, lower it), how to use it (steps, use cases, dials, node cards), and what the Explorable shows (every node specifies, executes and reviews, each with a human and a technical side). _Visual:_ three columns, each with a still from the Explorable: the pump pushing sludge, the toolbar, a node's omega. _Research:_ 1, 2, 5
+2. **Why, how and what** — explains why it matters (AI speeds up execution, so work piles up at specification and review and spreads to the next work centers, and how clearer requirements, the good orders, lower it), how to use it (states, use cases, dials, work-center dashboards), and what the Explorable shows (every work center turns input into output, with an efficiency and an effectiveness of its own). _Visual:_ three columns, each with a still from the Explorable: AI at one work center flooding the next inspection, the toolbar, a work-center dashboard. _Research:_ 1, 2, 5
 
 ## Research questions
 
@@ -76,7 +78,7 @@ The organization is plumbing. Roles are stretches of pipe, handoffs are the pipe
 
 ## Open ideas
 
-- Conway's law as a later use case: module teams, several nodes per role, re-plumbing the organization.
+- Conway's law as a later use case: module teams, several nodes per role, re-arranging the factory.
 - Per-card animation beyond the enlarged omega.
 - Replace the landing hero with this Explorable.
 - Drop Style from the Brief for Explorable pages, since they share one format.
