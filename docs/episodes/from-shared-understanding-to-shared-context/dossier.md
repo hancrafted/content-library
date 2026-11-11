@@ -3,10 +3,13 @@ type: dossier
 title: From shared understanding to shared context
 status: draft
 generated:
-  by: claude-code/sonnet-5.5
-  at: 2026-01-01T00:00:00Z
+  by: claude-code/opus-5.5
+  at: 2026-11-11T13:27:44Z
 locale: en
 brief: ./brief.md
+verified:
+  - by: process:markdown-harness
+    at: 2026-11-11T13:27:44Z
 ---
 
 # From shared understanding to shared context {#from-shared-understanding-to-shared-context}
