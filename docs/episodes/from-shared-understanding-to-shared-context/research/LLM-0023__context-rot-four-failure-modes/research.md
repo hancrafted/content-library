@@ -1,7 +1,7 @@
 ---
 type: research
 title: 'Why does more context make a language model worse, and which failure modes and fixes does the research name?'
-description: 'More context makes models worse because length and clutter degrade output; Breunig names four failure modes, poisoning, distraction, confusion and clash, each with a fix.'
+description: 'More context makes models worse because length and clutter degrade output; Breunig names four failure modes, and an IBM video pairs each with one fix, but the fixes overlap.'
 generated:
   by: claude-code/sonnet-5.5
   at: 1970-01-01T00:00:00Z
@@ -48,14 +48,14 @@ More context makes output worse for two reasons: length itself degrades results,
 7. Clash: new information conflicts with what is already in the context, which Breunig calls a more serious form of confusion. In a Microsoft and Salesforce study of piecemeal ("sharded") prompts, scores fell 39% on average and o3 fell from 98.1 to 64.1, because early wrong answers stayed in the context [3]; the 39% average also appears in the multi-turn study summarised in [1].
 8. The IBM Technology video pairs the modes with fixes: poisoning with validate (check a conclusion against real tests before saving it), distraction with compact (condense history into summaries or external files), confusion with curate (keep only the tools the job needs), and clash with prune (remove outdated material or start a fresh window) [5].
 9. Breunig's companion post lists six fixes: RAG, tool loadout ("selecting only relevant tool definitions"), context quarantine, context pruning ("removing irrelevant or otherwise unneeded information"), context summarization and context offloading [4]. His tool-loadout figures: picking under 30 tools improved selection accuracy up to threefold, and a tool recommender raised Llama 3.1 8b by 44% on the Berkeley leaderboard [4].
-10. Anthropic describes compaction as "summarizing its contents, and reinitiating a new context window with the summary", warns that "overly aggressive compaction can result in the loss of subtle but critical context", and recommends sub-agents with clean windows that return a condensed summary [6]. Starting a fresh window is the common thread behind compact and prune.
+10. Anthropic describes compaction as "summarizing its contents, and reinitiating a new context window with the summary", warns that "overly aggressive compaction can result in the loss of subtle but critical context", and recommends sub-agents with clean windows that return a condensed summary [6].
 
 ## Caveats
 
-- The YouTube page could not be read: its text, channel and date were not retrievable, and no transcript was available. Finding 8, and the claim that the video presents Breunig's four modes, rest on a secondary summary on daily.dev (https://daily.dev/posts/context-engineering-for-ai-agents-4-failure-modes-to-avoid-zreztqdfs) that names IBM Technology as the channel. A human should confirm against the video before Slide 12 states the pairing as IBM's.
+- The YouTube page could not be read: its text, channel and date were not retrievable, and no transcript was available. Finding 8, and the claim that the video presents Breunig's four modes, rest on a secondary summary on daily.dev (https://daily.dev/posts/context-engineering-for-ai-agents-4-failure-modes-to-avoid-zreztqdfs) that names IBM Technology as the channel. A human should confirm against the video before the pairing is stated as IBM's.
 - Breunig's taxonomy is a practitioner blog post, not a peer-reviewed result. The studies it cites measure retrieval, tool selection or multi-turn tasks; reading them as four separate failure modes is his framing, and a given failure can fit more than one mode.
 - Breunig's descriptions of the Gemini 2.5 Pokémon agent come from his post; the Gemini report itself was not read here.
-- The one-fix-per-mode pairing is a teaching simplification. Compaction can launder a bad fact into a clean summary, so it does not repair poisoning; this is inference from the definitions [3][4][6], not a measured result.
+- The one-fix-per-mode pairing is a teaching simplification. Compaction can launder a bad fact into a clean summary, so it does not repair poisoning; this is inference from the definitions [3][4][6], not a measured result. Likewise, that a fresh window is the common thread behind compact and prune is inference; Anthropic [6] does not say it.
 - Counter-evidence to "more irrelevant text is always worse": random documents helped in one retrieval setting [1].
 - Findings concern models of 2024 and 2025; effect sizes differ by model and task.
 
