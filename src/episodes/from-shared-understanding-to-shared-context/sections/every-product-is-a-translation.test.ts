@@ -83,9 +83,10 @@ describe('success cases', () => {
 
   it('speaks the Spec Voice script word for word', () => {
     // ARRANGE
+    // Han's proofread replaces the restaurant picture in Slide 4's second segment with the commuter the Slide shows.
     const expected = {
       layer:
-        'Think of a restaurant guest who had to walk into the kitchen and cook from the raw ingredients. The menu and the waiter are the translation. Software works the same way: if your customer had to give orders straight to the storeroom where the data lives, in the language of that storeroom, they would not need the screens you built for them. The translation is the work. And this is my hypothesis, not a measured result: the translation is the hard part, not the typing.',
+        'Take the commuter. His wish is “don’t arrive sweaty.” Someone has to turn that wish into a bike with a motor, or a lease with a shower at the office, or a talk on cycling to work in a suit. That turning is the work. The hard part is deciding what to build, not building it. That is my hypothesis from experience, not a measurement.',
       foreshadow:
         'Remember that last thought, because it comes back. Defining is exactly where the AI can help, by asking you questions the way a good interviewer would. That has a name, meta prompting, and we get to it in the last Section.',
       art: 'Now, honesty about the craft. Writing a good requirement is an art, not a science. You only know whether it was precise and accurate after you have tried it, and that is why this Section sits where it does.',
@@ -167,6 +168,22 @@ describe('success cases', () => {
         .toArray()
         .map((station) => $(station).find('[data-queued-document]').length),
       facts: $('[data-fact]').length,
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('maps the Frame, Assemble and Test ride stations onto the line, so defining is Sales and Design and building is Build to Delivery', () => {
+    // ARRANGE
+    // Han's proofread: Slide 5 names new stations, so it says once how they sit on the line Section 1 drew.
+    const expected = {
+      en: 'Defining is Sales and Design, building is Build to Delivery.',
+      de: 'Festlegen ist Vertrieb und Entwurf, Bauen ist Bau bis Versand.',
+    };
+    // ACT
+    const actual = {
+      en: sceneOf('defining-and-building', 'en')('[data-station-mapping]').text(),
+      de: sceneOf('defining-and-building', 'de')('[data-station-mapping]').text(),
     };
     // ASSERT
     expect(actual).toEqual(expected);

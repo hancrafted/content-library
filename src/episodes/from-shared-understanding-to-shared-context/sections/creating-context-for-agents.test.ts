@@ -174,7 +174,8 @@ describe('failure cases', () => {
 describe('edge cases', () => {
   it('asks in three rounds, the last collapsed, then writes a five-row spec', () => {
     // ARRANGE
-    const expected = { rounds: 3, collapsed: 1, questions: 5, specRows: 5, orderRows: 4 };
+    // Han's proofread moves the done-when question from round 1 to round 3: the open rounds list 2 and 2 questions, the collapsed one its own line.
+    const expected = { rounds: 3, collapsed: 1, questions: 4, specRows: 5, orderRows: 4 };
     // ACT
     const grill = sceneOf('grill-me');
     const actual = {
@@ -184,6 +185,51 @@ describe('edge cases', () => {
       specRows: grill('[data-spec-card] dt').length,
       orderRows: sceneOf('meta-prompting')('[data-work-order] dt').length,
     };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('asks the done-when question in round 3, not in round 1', () => {
+    // ARRANGE
+    // Han's proofread: round 1 drops "What would make the week a success?" and round 3, the "done when" round, asks how we will know.
+    const expected = {
+      en: { round3: 'How will we know it’s done?', round1: 2 },
+      de: { round3: 'Woran erkennen wir, dass es fertig ist?', round1: 2 },
+    };
+    // ACT
+    const read = (locale: Locale) => {
+      const grill = sceneOf('grill-me', locale);
+      return {
+        round3: grill('[data-round="done"] [data-collapsed-question]').text(),
+        round1: grill('[data-round="goal"] li').length,
+      };
+    };
+    const actual = { en: read('en'), de: read('de') };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('shows three of the five BRIEF moves today (R, I and F); B and E read "not today"', () => {
+    // ARRANGE
+    // Han's proofread: "today's session runs all five" overclaimed, so only R, I and F carry the Today column.
+    const expected = {
+      en: { shown: ['R', 'I', 'F'], notToday: ['B', 'E'], label: 'Not today' },
+      de: { shown: ['R', 'I', 'F'], notToday: ['B', 'E'], label: 'Nicht heute' },
+    };
+    // ACT
+    const read = (locale: Locale) => {
+      const $ = sceneOf('brief', locale);
+      const letters = (state: string) =>
+        $(`[data-move]:has([data-today="${state}"]) [data-move-letter]`)
+          .toArray()
+          .map((letter) => $(letter).text());
+      return {
+        shown: letters('shown'),
+        notToday: letters('not-today'),
+        label: $('[data-today="not-today"]').first().text(),
+      };
+    };
+    const actual = { en: read('en'), de: read('de') };
     // ASSERT
     expect(actual).toEqual(expected);
   });

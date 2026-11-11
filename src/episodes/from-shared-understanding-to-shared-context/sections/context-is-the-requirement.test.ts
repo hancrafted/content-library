@@ -91,9 +91,10 @@ describe('success cases', () => {
 
   it('speaks the Spec Voice script word for word', () => {
     // ARRANGE
+    // Han's proofread changes Slide 7's callback: the window is a desk that fills up with every message, and it holds what the AI knows about your task, not everything it works from.
     const expected = {
       callback:
-        'If you saw the context window Episode, you have met the context window before. Everything the AI works from is what sits in the window, nothing more and nothing less, and that window is a bar that fills up with every turn.',
+        'If you saw the context window Episode, you have met the context window before. What the AI knows about your task is what sits in the window, and that window is like a desk that fills up with every message.',
       freshChat:
         'Sometimes the cleanest fix is a clean bench. Start a fresh chat and bring only the result, not the whole history. That is the second actionable, and I come back to it in the last Section.',
     };
@@ -163,9 +164,12 @@ describe('success cases', () => {
   });
   it('quotes Google’s definition in Slide 8’s caption, cited to the whitepaper, in both locales', () => {
     // ARRANGE
+    // Han's proofread shows the German caption in German, marked as a translation; the English quote stays in the Speaker note.
     const quote =
       'the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.';
-    const expected = { en: quote, de: quote, note: 'googles-definition', urls: [OSMANI] };
+    const german =
+      'die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben.';
+    const expected = { en: quote, de: german, note: 'googles-definition', urls: [OSMANI] };
     const slug = 'context-engineering-is-requirements-engineering-for-agents';
     // ACT
     const actual = {
@@ -179,6 +183,8 @@ describe('success cases', () => {
     // ASSERT
     expect(actual.en).toContain(expected.en);
     expect(actual.de).toContain(expected.de);
+    expect(actual.de).toContain('übersetzt');
+    expect(actual.de).not.toContain(quote);
     expect({ note: actual.note, urls: actual.urls }).toEqual({ note: expected.note, urls: expected.urls });
   });
 
@@ -296,6 +302,31 @@ describe('edge cases', () => {
       benches: sceneOf('static-and-dynamic-context')('[data-bench-item="bench"]').length,
       workers: sceneOf('you-run-the-bench')('[data-bench-worker]').length,
     };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('names the third rot column for what does not belong, and the bench fix that fits it, in both locales', () => {
+    // ARRANGE
+    // Han's proofread: the old "Too much history" did not fit "a binder of every bike model"; the column and its fix now say what does not belong.
+    const expected = {
+      en: { column: 'Too much that does not belong', compact: 'Too much that does not belong' },
+      de: { column: 'Zu viel, was nicht hierher gehört', compact: 'Zu viel, was nicht hierher gehört' },
+    };
+    // ACT
+    const read = (locale: Locale) => ({
+      column: sceneOf(
+        'context-rot',
+        locale,
+      )('[data-cell="distraction"], [data-cell="binder"]')
+        .first()
+        .find('p')
+        .first()
+        .text()
+        .split(' · ')[0],
+      compact: sceneOf('keeping-the-bench-clean', locale)('[data-fix="compact"]').find('p').first().text(),
+    });
+    const actual = { en: read('en'), de: read('de') };
     // ASSERT
     expect(actual).toEqual(expected);
   });

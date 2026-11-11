@@ -66,7 +66,16 @@ describe('success cases', () => {
 
   it('names the handover, the aim, the AI, the speed and the intent in English', () => {
     // ARRANGE
-    const expected = ['The intent', 'What you', 'hand the agent', 'sets the aim', 'AI', 'every throw faster'];
+    // Han's proofread names the agent by its everyday word first: the handover reads "What you hand the AI (the agent)".
+    const expected = [
+      'The intent',
+      'What you',
+      'hand the AI',
+      '(the agent)',
+      'sets the aim',
+      'AI',
+      'every throw faster',
+    ];
     // ACT
     const $ = sceneOf('en');
     const words = $('text, tspan')
@@ -90,9 +99,10 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('breaks the German handover onto two lines, as the English does', () => {
+  it('breaks the German handover onto three lines, as the English does', () => {
     // ARRANGE
-    const expected = ['Was Du dem', 'Agenten übergibst'];
+    // Han's proofread: "Was Du der KI (dem Agenten) übergibst", on three lines.
+    const expected = ['Was Du der KI', '(dem Agenten)', 'übergibst'];
     // ACT
     const $ = sceneOf('de');
     const lines = $('tspan')

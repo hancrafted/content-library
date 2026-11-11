@@ -47,11 +47,12 @@ function scriptOf(slide: Slide, locale: Locale) {
 describe('success cases', () => {
   it('opens the four Sections in Spec order, each titled and scripted as the Spec writes it', () => {
     // ARRANGE
+    // Han's proofread renames the Section 2 opener's first segment: the pain is old, since the Section is about before AI.
     const expected = [
       { title: 'A thought experiment', segments: ['Imagine your organization as a line', 'Where this is going'] },
       {
         title: 'Why precise and accurate requirements mattered before AI',
-        segments: ['A new pain', 'Where the Section goes'],
+        segments: ['An old pain', 'Where the Section goes'],
       },
       { title: 'Context is the requirement', segments: ['The claim', 'The route'] },
       { title: 'Creating context for agents', segments: ['The pain', 'The claim'] },
@@ -78,16 +79,17 @@ describe('success cases', () => {
 
   it('captions Section 2 on the requirement and Section 3 on context engineering, in both locales', () => {
     // ARRANGE
+    // Han's proofread rewrites the Section 2 caption: it no longer uses "precise" and "accurate" before the Section defines them.
     const expected = {
       en: {
         'every-product-is-a-translation':
-          'Every product translates intent, so the result was always decided by how precise and accurate the requirement was.',
+          'Every product translates an intent. How well that translation is written down decides the result.',
         'context-is-the-requirement':
           'Context engineering: deciding what the AI sees, the way requirements decide what a team builds.',
       },
       de: {
         'every-product-is-a-translation':
-          'Jedes Produkt übersetzt eine Absicht, also hing das Ergebnis schon immer davon ab, wie präzise und genau die Anforderung war.',
+          'Jedes Produkt übersetzt eine Absicht. Wie gut diese Übersetzung aufgeschrieben ist, entscheidet über das Ergebnis.',
         'context-is-the-requirement':
           'Context Engineering: entscheiden, was die KI sieht, so wie Anforderungen entscheiden, was ein Team baut.',
       },
