@@ -1,0 +1,30 @@
+{
+  "title": "What the AI actually sees",
+  "caption": "The AI reads the window, and only the window: <b>if you did not put it there, it does not exist.</b>",
+  "window": "Context window",
+  "notes": {
+    "the-window-has-an-attention-budget": {
+      "header": "The window has an attention budget",
+      "description": "Anthropic says recall decreases as the number of tokens in the window increases, so context has diminishing marginal returns and an attention budget [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "callback": {
+        "title": "Callback",
+        "keywords": "",
+        "script": "If you saw the context window Episode, you have met the context window before. Everything the AI works from is what sits in the window, nothing more and nothing less, and that window is a bar that fills up with every turn."
+      },
+      "not-your-mind": {
+        "title": "Not your mind",
+        "keywords": "",
+        "script": "The AI cannot read your mind. It reads what is in the window, and only that. If you did not put it in the window, then as far as the AI is concerned it does not exist."
+      }
+    }
+  }
+}

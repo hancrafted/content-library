@@ -41,6 +41,15 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('dulls the bull when asked, so darts in primary still read on it', () => {
+    // ARRANGE
+    const expected = 'fill-muted-foreground/40';
+    // ACT
+    const { bullClass } = board({ cx: 100, cy: 100, r: 92, rings: 3, bull: 18, bullTone: 'muted' });
+    // ASSERT
+    expect(bullClass).toBe(expected);
+  });
+
   it('alternates card and muted fills from the outer ring, the hero tone ringing the outer edge in foreground', () => {
     // ARRANGE
     const expected = [
