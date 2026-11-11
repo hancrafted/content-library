@@ -38,7 +38,7 @@ Asked to support the claim that "context engineering is requirements engineering
 
 ## Answer
 
-The parallel holds on the core job: both disciplines decide, before the work starts, which information the worker is given. Anthropic frames it as finding "the smallest possible set of high-signal tokens", and requirements-oriented prompt research finds that the quality of the stated requirements tracks the quality of the output. The parallel is drawn explicitly by researchers, but as a proposal; no source found states "context engineering is requirements engineering" as a finding. It breaks in three places: context is a finite budget that degrades as it fills, it changes during a run instead of being signed off once, and the reader is a probabilistic model, not a team that can push back.
+The parallel holds on the core job: both disciplines decide, before the work starts, which information the worker is given. Anthropic frames it as finding "the smallest possible set of high-signal tokens", and requirements-oriented prompt research finds that the quality of the stated requirements tracks the quality of the output. The parallel is drawn explicitly by researchers, but as a proposal; no source found states "context engineering is requirements engineering" as a finding. It breaks in three places: context is a finite budget that degrades as it fills, it changes during a run instead of being signed off once, and stating more is not safer, because piling on requirements lowered compliance.
 
 ## Findings
 
