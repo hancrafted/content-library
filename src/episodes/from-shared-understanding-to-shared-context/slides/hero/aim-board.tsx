@@ -1,4 +1,5 @@
 import { Dartboard } from '@/episodes/components/slide-shared/dartboard/dartboard';
+import { Darts, type Point } from '@/episodes/components/slide-shared/dartboard/darts';
 
 export interface AimBoardProps {
   /** The SVG's accessible name. */
@@ -10,7 +11,7 @@ export interface AimBoardProps {
   readonly speed: string;
   readonly intent: string;
   /** Where each document lands, by its top-left corner. */
-  readonly hits: readonly { readonly x: number; readonly y: number }[];
+  readonly hits: readonly Point[];
 }
 
 const BOARD = { cx: 364, cy: 220, r: 150, rings: 4, bull: 14 } as const;
@@ -22,11 +23,6 @@ const WORK_ORDER_LINES = [
   [198, 48],
   [214, 34],
 ] as const;
-
-/** A document dart: a page with a folded corner, crisp in `primary` on a `card` edge. */
-function DocumentDart({ x, y }: { x: number; y: number }) {
-  return <path data-hit d={`M${x} ${y} h14 l6 6 v18 h-20 z`} className="fill-primary stroke-card" strokeWidth={2} />;
-}
 
 /** The work order you hand the agent, raised on hover so the presenter can point at it, and its label. */
 function Handover({ handover, aim }: Pick<AimBoardProps, 'handover' | 'aim'>) {
@@ -89,9 +85,7 @@ export function AimBoard({ label, handover, aim, ai, speed, intent, hits }: AimB
       <Handover handover={handover} aim={aim} />
       <Throw ai={ai} speed={speed} />
       <g>
-        {hits.map(({ x, y }) => (
-          <DocumentDart key={`${x}-${y}`} x={x} y={y} />
-        ))}
+        <Darts points={hits} tone="primary" shape="document" edge />
       </g>
     </svg>
   );

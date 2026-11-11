@@ -1,6 +1,7 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
 import { Dartboard } from '@/episodes/components/slide-shared/dartboard/dartboard';
+import { Darts, type DartTone, type Point } from '@/episodes/components/slide-shared/dartboard/darts';
 import { cn } from '@/shared/lib/utils';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
@@ -9,51 +10,51 @@ type Outcome = 'both' | 'precise' | 'accurate' | 'neither';
 
 /**
  * The four classic boards: where each cluster lands, relative to its board's centre, and how it is drawn. On the bull
- * is `ai`, a tight cluster off target is `warning`, a loose one is dulled toward `muted-foreground`.
+ * is `ai` on a `card` edge, a tight cluster off target is `warning`, a loose one is dulled toward `muted-foreground`.
  */
-const BOARDS: readonly { outcome: Outcome; cx: number; darts: readonly (readonly [number, number])[]; dart: string }[] =
-  [
-    {
-      outcome: 'both',
-      cx: 40,
-      darts: [
-        [-4, -4],
-        [5, -2],
-        [-1, 5],
-      ],
-      dart: 'fill-ai stroke-card',
-    },
-    {
-      outcome: 'precise',
-      cx: 113,
-      darts: [
-        [13, -16],
-        [19, -13],
-        [14, -9],
-      ],
-      dart: 'fill-(--warning)',
-    },
-    {
-      outcome: 'accurate',
-      cx: 187,
-      darts: [
-        [-17, -6],
-        [16, -10],
-        [3, 18],
-      ],
-      dart: 'fill-muted-foreground',
-    },
-    {
-      outcome: 'neither',
-      cx: 260,
-      darts: [
-        [-20, -18],
-        [16, 16],
-        [-12, 20],
-      ],
-      dart: 'fill-(--warning)',
-    },
-  ];
+const BOARDS: readonly { outcome: Outcome; cx: number; darts: readonly Point[]; tone: DartTone; edge?: boolean }[] = [
+  {
+    outcome: 'both',
+    cx: 40,
+    darts: [
+      { x: -4, y: -4 },
+      { x: 5, y: -2 },
+      { x: -1, y: 5 },
+    ],
+    tone: 'ai',
+    edge: true,
+  },
+  {
+    outcome: 'precise',
+    cx: 113,
+    darts: [
+      { x: 13, y: -16 },
+      { x: 19, y: -13 },
+      { x: 14, y: -9 },
+    ],
+    tone: 'warning',
+  },
+  {
+    outcome: 'accurate',
+    cx: 187,
+    darts: [
+      { x: -17, y: -6 },
+      { x: 16, y: -10 },
+      { x: 3, y: 18 },
+    ],
+    tone: 'dulled',
+  },
+  {
+    outcome: 'neither',
+    cx: 260,
+    darts: [
+      { x: -20, y: -18 },
+      { x: 16, y: 16 },
+      { x: -12, y: 20 },
+    ],
+    tone: 'warning',
+  },
+];
 const CY = 62;
 
 // The section slide of "Every product is a translation", echoing the Hero motif: the four classic dartboards,
@@ -65,12 +66,10 @@ export const everyProductIsATranslation = slide({
   content: ({ t }) => (
     <SlideFrame>
       <svg viewBox="0 20 300 104" className="w-full max-w-xl" role="img" aria-label={t('label')}>
-        {BOARDS.map(({ outcome, cx, darts, dart }) => (
+        {BOARDS.map(({ outcome, cx, darts, tone, edge }) => (
           <g key={outcome}>
             <Dartboard cx={cx} cy={CY} r={30} rings={2} bull={6} tone="hero" />
-            {darts.map(([dx, dy]) => (
-              <circle key={`${dx}-${dy}`} data-dart cx={cx + dx} cy={CY + dy} r={3.5} className={dart} />
-            ))}
+            <Darts points={darts.map(({ x, y }) => ({ x: cx + x, y: CY + y }))} tone={tone} edge={edge} r={3.5} />
             <text
               data-board-label
               x={cx}
