@@ -25,7 +25,7 @@ This guide holds the product design, from Han's voice session of 2026-11-10 and 
 
 1. **The organization is a factory.** Orders come in, conveyor belts carry documents between work centers, work waits in inbound queues, inspection is the review, and results leave from the shipping dock.
 2. **Balance first, then reality.** The opening state is an ideal factory in balance: only good documents move, evenly, and nothing piles up. Then the bridge, "reality is messier": efficiency and effectiveness drop, and queues, bad work and rework appear.
-3. **Efficiency is output; effectiveness is outcome.** A faster work center pushes more work into the next one, which can become the bottleneck. A less effective one hands on more bad documents, and bad work does damage downstream through rework, extra work, escapes and rubber-stamping.
+3. **Efficiency is output; effectiveness is outcome.** A faster work center pushes more work into the next one, which can become the bottleneck. A less effective one hands on more bad documents, and bad work does damage downstream through rework, churn, extra work, customer complaints and inspections that pass it unread.
 4. **AI raises output, not quality.** At a work center, AI makes it faster and multiplies what it fans out (one spec, five pages of documentation; with AI, fifty). With mediocre effectiveness it produces more bad work, faster, and the next work center pays.
 5. **Pressure travels along the belts.** Speeding up one work center rarely speeds up the shipping dock: the work piles up at the next inspection.
 
@@ -57,30 +57,32 @@ Each use case is one use-case file plus its words pair. Every use case outside s
 ## Interaction
 
 1. **State row in the toolbar:** the use case's presets in order, e.g. Swing, Roles, Balance, Reality, AI at engineering, AI everywhere. Swing and Roles show the work-center cards as a row with no belts; the other states place each card on the line as a station. Turning a dial after picking a state marks the state "modified".
-2. **Use case picker, damage toggles, compare widget, speed (pause, 1×, 4×) and Download YAML** stay visible in the toolbar, each with a tooltip. Upload works by dropping a YAML file. Everything else sits in a "Model" popover: demand, damage strengths, AI quality effect, isolate roles, and follow a request.
+2. **Use case picker, compare widget, speed (pause, 1× to 4×) and Download YAML** stay visible in the toolbar, each with a tooltip; a ⋮ menu holds belt motion and theme. Upload works by dropping a YAML file. Everything else sits in a "Model" popover (reality, AI, demand, damage strengths, AI quality effect), each setting with a tooltip saying what it does to the factory.
 3. **Work-center dashboard:** a click on a work center opens its dashboard as a popover anchored to it. It holds:
-   - status and the efficiency, effectiveness, fan-out and AI dials
+   - a traffic light and its signals, and trend charts of output, outcome and queue
+   - an AI toggle; the efficiency, effectiveness and fan-out dials sit in a collapsed Settings section
    - the role's classic artefacts and execution tasks
    - what AI does there, to inspire the audience about their own department (e.g. sales turns leads into deals and requirements for the product manager and analyst)
      A help button at the top right turns help text on for every card; otherwise the controls carry tooltips.
 4. **Compare downstream:** turn compare mode on (or shift-click) and pick up to three work centers, then press Compare. The factory flattens into a three-column stream: each column shows its station above its dashboard, a gap marks skipped stations, and an overview strip and Exit sit on top. A preset can open this stream directly.
-5. **What ships:** the dock shows the rate in bands relative to balance, and what comes out: the tire swing when most of the work is good, otherwise the weakest role's wrong swing.
+5. **What ships:** the dock shows a 3×4 grid of the last twelve shipments, good or bad with complaints marked, the customer satisfaction rate under it and output relative to balance beside it, and the tire swing or the weakest role's wrong swing.
 
 ## Visuals
 
 1. **At rest, only the essentials:** belts, work centers (glyph and title) and moving documents. Queue trays, counts and damage signs appear under pressure or on hover, with a gap between the show and hide thresholds so nothing flickers.
-2. **Documents** show quality by their lines (a full page, missing text, a crumpled page) and by a pale tint: green for good, none for average, red for bad. AI-made documents carry a mark of their own; the Spec picks one of the prototype's Options.
-3. **AI drawing:** the Spec picks the pump on the belt (spins faster with more AI), a robot arm on the work center or a belt turbo.
+2. **Documents** are good or bad: a plain document is good, a red minus marks bad, a red warning marks a complaint or rework, and AI-made documents have an orange border, a light orange fill and a star. The Spec picks between this and two alternative icon sets. A document parks inside a station while a progress ring fills.
+3. **AI drawing:** a turbo on the belt, and a faster `ai`-tinted progress ring with a soft pulse inside the station.
 4. **Damage signs:**
-   - rework: a document rides the return lane back
+   - rework: a document rides a separate return belt back
+   - churn: a bad input leaves the next station as several documents
    - extra work: a longer progress ring at the next station
-   - escape: a parcel coming back from the dock into support
-   - rubber-stamp: an "OK" stamp on a bad document at a full inspection
-5. **Pile-up and return lane:** the Spec picks from the prototype's Options; the recommended ones are a queue tray that fills and backs work up the belt, and a two-lane belt.
+   - customer complaints: a warning document from the customer into support
+   - passing unread: an inspection under pressure lets bad documents through; its dashboard says so
+5. **Pile-up:** a queue tray that fills and backs work up the belt. Every station keeps a minimum gap of belt before and after it.
 
 ## Open
 
-- Which AI drawing, AI mark, pile-up and return lane ship (Spec Options).
+- Which document icon set ships (Spec Options).
 - Each role's catalog entry: research questions 3 and 4 of the Brief feed its tasks and AI examples.
 - The Dossier's Voice scripts and Speaker note targets move to the factory vocabulary.
 - Later: this Explorable replacing the landing hero.
