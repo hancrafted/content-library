@@ -77,6 +77,16 @@ function Demand({ r, words: w }: Pick<CustomerCardProps, 'r' | 'words'>) {
   );
 }
 
+function Head({ title, marker }: { readonly title: string; readonly marker?: ReactNode }) {
+  return (
+    <div className={styles.head}>
+      <Glyph name="customer" className={styles.gly} />
+      <span className={`${styles.title} font-semibold`}>{title}</span>
+      {marker}
+    </div>
+  );
+}
+
 /** The Customer on the floor (design-ADR 0024 §14): its last twelve releases, output against Ideal, and its readouts. */
 export const CustomerCardView = memo(function CustomerCardView({
   box,
@@ -90,16 +100,13 @@ export const CustomerCardView = memo(function CustomerCardView({
     <div
       className={`${styles.card} text-caption`}
       data-kind="customer"
+      data-id="customer"
       data-unhappy={r.sat < 0.6}
       data-full={r.headroom < 1}
       style={boxStyle(box)}
       {...target}
     >
-      <div className={styles.head}>
-        <Glyph name="customer" className={styles.gly} />
-        <span className={`${styles.title} font-semibold`}>{title}</span>
-        {marker}
-      </div>
+      <Head title={title} marker={marker} />
       <div className={`${styles.body} ${styles.bodyCust}`}>
         <Output r={r} words={w} />
         <Readouts r={r} words={w} />

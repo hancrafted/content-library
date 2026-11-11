@@ -4,7 +4,7 @@
  * second. It pauses outside the active Slide (the Slide mount's `data-zone`, FE-009), on a hidden page and under
  * reduced motion, where it warms at once and shows one steady frame. Reached only from the Explorable's client leaf.
  */
-import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { layoutFactory, type FactoryLayout } from './factory-layout.pure.ts';
 import { FactoryPainter } from './factory-painter.ts';
 import { DEFAULT_SPEED, FactoryRun, presetOf, SPEED_1X } from './factory-run.pure.ts';
@@ -37,6 +37,8 @@ export interface FactoryView {
   readonly canvas: RefObject<HTMLCanvasElement | null>;
   readonly floor: RefObject<HTMLDivElement | null>;
   readonly controls: FactoryControls;
+  /** Places the floor on the stage and paints one frame now: after a switch into the factory view. */
+  repaint(): void;
 }
 
 interface Build {
@@ -66,6 +68,8 @@ const paint = (x: { v: Pick<FactoryView, 'stage' | 'canvas' | 'floor'>; painter:
 type Painted = Pick<FactoryView, 'stage' | 'canvas' | 'floor'>;
 type DrawAt = Parameters<FactoryPainter['draw']>[1];
 interface Live {
+  /** The factory view is shown: time runs. In Swing and Roles only the warm-up runs, as in the reference build. */
+  readonly flowing: boolean;
   readonly speed: number;
   readonly words: FactoryWords;
   readonly pile: PileStyle;
@@ -142,7 +146,7 @@ function useLoop(x: {
     const tick = (now: number) => {
       const dt = last ? Math.min(0.1, (now - last) / 1000) : 1 / 60;
       last = now;
-      if (run.advance(dt, live.current.speed)) painter.attach();
+      if ((live.current.flowing || run.warming) && run.advance(dt, live.current.speed)) painter.attach();
       paint({ v, painter, at: drawAt(run, { live: live.current, reduced: false, now }) });
       slow += dt;
       if (slow > READ_SECS) {
@@ -156,7 +160,23 @@ function useLoop(x: {
   }, [playing, run, painter, v, live, read]);
 }
 
-export function useFactory(x: { B: Bundle; preset: string; words: FactoryWords; pile?: PileStyle }): FactoryView {
+/** The settings the frame loop reads every frame, kept current without restarting it. */
+function useLive(now: Live): RefObject<Live> {
+  const live = useRef<Live>(now);
+  useEffect(() => {
+    live.current = now;
+  });
+  return live;
+}
+
+export function useFactory(x: {
+  B: Bundle;
+  preset: string;
+  words: FactoryWords;
+  pile?: PileStyle;
+  /** False in Swing and Roles: the model only finishes warming. */
+  flowing?: boolean;
+}): FactoryView {
   const { run, controls } = useRun(x.B, x.preset);
   const layout = useMemo(() => layoutFactory(run.m), [run]);
   const painter = useMemo(() => new FactoryPainter(run.m, layout), [run, layout]);
@@ -166,16 +186,15 @@ export function useFactory(x: { B: Bundle; preset: string; words: FactoryWords; 
     floor = useRef<HTMLDivElement>(null);
   const v = useMemo(() => ({ stage, canvas, floor }), []);
   const { playing, reduced } = usePlaying(stage);
-  const live = useRef<Live>({ speed: controls.speed, words: x.words, pile: x.pile ?? 'heap' });
-  useEffect(() => {
-    live.current = { speed: controls.speed, words: x.words, pile: x.pile ?? 'heap' };
-  });
+  const live = useLive({ flowing: x.flowing ?? true, speed: controls.speed, words: x.words, pile: x.pile ?? 'heap' });
   useStill({ run, painter, v, live, playing, reduced, read: setSnap });
   useLoop({ run, painter, v, live, playing, read: setSnap });
-  useRecolor(painter, () =>
-    paint({ v, painter, at: drawAt(run, { live: live.current, reduced, now: performance.now() }) }),
-  );
-  return { run, layout, snap, stage, canvas, floor, controls };
+  const repaint = useCallback(() => {
+    if (!run.warming) painter.attach();
+    paint({ v, painter, at: drawAt(run, { live: live.current, reduced, now: performance.now() }) });
+  }, [run, painter, v, reduced]);
+  useRecolor(painter, repaint);
+  return { run, layout, snap, stage, canvas, floor, controls, repaint };
 }
 
 /** Re-reads the token colours when the theme flips, and repaints. */

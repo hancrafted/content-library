@@ -98,3 +98,22 @@ dock:
     asked: Was der Kunde wollte
   note: 'Output zählt nur erfüllte Anfragen: nie die zusätzlichen Dokumente, Nacharbeit oder Antworten auf Reklamationen.'
   complaints: 'Etwa {n} Reklamationen pro Woche kommen zurück: Fehlernachfrage, kein neuer Wert.'
+# Swing und Rollen: die Bildunterschriften des Reifenschaukel-Cartoons nach Panel-ID und die Wörter drumherum.
+cartoon:
+  captions:
+    explained: Wie der Kunde es erklärt hat
+    pm: Wie der Projektleiter es verstanden hat
+    ba: Wie der Analytiker es entworfen hat
+    eng: Wie der Programmierer es geschrieben hat
+    sales: Wie der Unternehmensberater es beschrieben hat
+    doc: Wie das Projekt dokumentiert wurde
+    ops: Was der Betrieb installiert hat
+    billing: Wie es dem Kunden in Rechnung gestellt wurde
+    support: Wie es betreut wurde
+    needed: Was der Kunde wirklich gebraucht hätte
+  blank: (leer)
+  notHere: '{role} · hier kein Arbeitsplatz'
+  artefacts: Artefakte
+  jobs:
+    doc: 'Zu breit für eine Rolle: Dokumentation schreiben alle.'
+    billing: 'Zu eng für einen Arbeitsplatz: Die Abrechnung folgt dem Abschluss.'

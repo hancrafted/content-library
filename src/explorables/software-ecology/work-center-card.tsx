@@ -1,0 +1,70 @@
+import type { TargetProps } from '@/shared/lib/context-link.pure';
+import type { KeyboardEvent, MouseEvent } from 'react';
+import { RoleCardView, SwingCardView, type CartoonCardProps } from './cartoon-card-view';
+import { CustomerCardView, type CustomerCardProps } from './customer-card-view';
+import styles from './software-ecology.module.css';
+import { StationCardView, type StationCardProps } from './station-card-view';
+
+/*
+ * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the cartoon
+ * (`swing`), the role (`role`) or the station on the line (`station`); the dashboard view joins with the popover
+ * (#542). Every view keeps the card's id on its root, so the parent can morph one view's box into the next.
+ */
+
+export type CardView = 'swing' | 'role' | 'station';
+
+interface Opens {
+  readonly id: string;
+  /** "{title}: open its dashboard", the card's name as a button. */
+  readonly label: string;
+  /** A click or Enter/Space on the card; `shift` for a compare pick. */
+  readonly onOpen?: (id: string, shift: boolean) => void;
+}
+
+export type WorkCenterCardProps =
+  | (Opens & {
+      readonly cardView: 'swing' | 'role';
+      readonly kind: 'role' | 'customer';
+      readonly cell: readonly [number, number];
+      /** A work center the cartoon leaves out sits out Swing; its cell stays empty. */
+      readonly hidden?: boolean;
+      /** A Slide's Context target on the card. */
+      readonly target?: TargetProps;
+      /** Targets the station places on its rack or a sign; here they cover the card, so a note still lights it. */
+      readonly stationTargets?: readonly TargetProps[];
+      readonly cartoon: CartoonCardProps;
+    })
+  | (Opens & { readonly cardView: 'station'; readonly kind: 'role'; readonly station: StationCardProps })
+  | (Opens & { readonly cardView: 'station'; readonly kind: 'customer'; readonly customer: CustomerCardProps });
+
+const keyOpen = (p: Opens) => (e: KeyboardEvent) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  e.preventDefault();
+  p.onOpen?.(p.id, e.shiftKey);
+};
+
+export function WorkCenterCard(p: WorkCenterCardProps) {
+  if (p.cardView === 'station')
+    return p.kind === 'customer' ? <CustomerCardView {...p.customer} /> : <StationCardView {...p.station} />;
+  return (
+    <div
+      className={styles.cartoon}
+      data-card-view={p.cardView}
+      data-id={p.id}
+      data-kind={p.kind}
+      hidden={p.hidden}
+      style={{ gridColumn: p.cell[0], gridRow: p.cell[1] }}
+      role="button"
+      tabIndex={0}
+      aria-label={p.label}
+      onClick={(e: MouseEvent) => p.onOpen?.(p.id, e.shiftKey)}
+      onKeyDown={keyOpen(p)}
+      {...p.target}
+    >
+      {p.cardView === 'swing' ? <SwingCardView {...p.cartoon} /> : <RoleCardView {...p.cartoon} />}
+      {p.stationTargets?.map((t) => (
+        <span key={t['data-target']} className={styles.spotFill} {...t} />
+      ))}
+    </div>
+  );
+}

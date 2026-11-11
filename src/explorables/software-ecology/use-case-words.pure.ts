@@ -39,3 +39,6 @@ export const titlesOf = (x: WordsIn): Record<string, string> => ({
   customer: customerTitle(x),
   ...Object.fromEntries(x.B.data.centers.map((c) => [c.id, centerTitle(x, c)])),
 });
+
+/** What the Customer does, for its Roles card. */
+export const customerJob = (x: WordsIn): string => own(x).customer?.job ?? roleWords(x, 'customer').job ?? '';

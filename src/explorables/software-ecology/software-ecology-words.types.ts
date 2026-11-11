@@ -106,12 +106,24 @@ export interface DockWords {
   readonly complaints: string;
 }
 
+/** Swing and Roles: the cartoon's captions by panel id, and the words around the panels. */
+export interface CartoonWords {
+  readonly captions: Readonly<Record<string, string>>;
+  readonly blank: string;
+  /** "{role} · not a work center here", on a tile. */
+  readonly notHere: string;
+  readonly artefacts: string;
+  /** Why a tile is no work center, in Roles, by panel id. */
+  readonly jobs: Readonly<Record<string, string>>;
+}
+
 export interface Words {
   readonly toolbar: ToolbarWords;
   readonly stage: StageWords;
   readonly card: CardWords;
   readonly customer: CustomerWords;
   readonly dock: DockWords;
+  readonly cartoon: CartoonWords;
 }
 
 /** Any word of the Explorable, key by key: what a Slide says differently. */

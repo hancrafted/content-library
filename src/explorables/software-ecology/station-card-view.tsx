@@ -12,6 +12,7 @@ export type Box = readonly [number, number, number, number];
 export const boxStyle = (b: Box) => ({ left: b[0], top: b[1], width: b[2], height: b[3] });
 
 export interface StationCardProps {
+  readonly id: string;
   readonly box: Box;
   readonly title: string;
   readonly icon: string;
@@ -110,6 +111,7 @@ export const StationCardView = memo(function StationCardView(p: StationCardProps
     <div
       className={`${styles.card} text-caption`}
       data-kind="role"
+      data-id={p.id}
       data-ai={p.r.ai}
       data-piling={p.r.piling}
       style={boxStyle(p.box)}

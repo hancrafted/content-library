@@ -19,6 +19,29 @@ describe('success cases', () => {
     expect(html).toContain(note);
   });
 
+  it('opens on Swing: the cartoon panels at their work centers and the tiles for Documentation, Billing and the wanted swing', () => {
+    // ARRANGE
+    const cartoon = wordsFor('en').cartoon;
+    const shown = [cartoon.captions.explained, cartoon.captions.eng, cartoon.captions.doc, cartoon.captions.needed];
+    const swing = 'data-card-view="swing"';
+    // ACT
+    const html = render({ locale: 'en' });
+    // ASSERT
+    for (const t of shown) expect(html).toContain(`>${t}<`);
+    expect(html).toContain(swing);
+  });
+
+  it('shows each role’s job and artefacts in Roles, and why Documentation is no work center', () => {
+    // ARRANGE
+    const job = 'Turns the spec into code';
+    const artefact = 'pull request';
+    const why = wordsFor('en').cartoon.jobs.doc as string;
+    // ACT
+    const html = render({ locale: 'en', preset: 'roles' });
+    // ASSERT
+    for (const t of [job, artefact, why]) expect(html).toContain(`>${t}<`);
+  });
+
   it('renders the German words at /de', () => {
     // ARRANGE
     const german = wordsFor('de');
@@ -34,7 +57,12 @@ describe('success cases', () => {
     const target = { 'data-target': 'qa-rack' };
     const marker = 'MARKER-QA-UNREAD';
     // ACT
-    const html = render({ locale: 'en', targets: { 'qa:rack': target }, markers: { 'qa:unread': marker } });
+    const html = render({
+      locale: 'en',
+      preset: 'ideal',
+      targets: { 'qa:rack': target },
+      markers: { 'qa:unread': marker },
+    });
     // ASSERT
     expect(html).toContain('data-target="qa-rack"');
     expect(html).toContain(marker);
@@ -42,6 +70,17 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('draws no cartoon panel for a use case without the cartoon', () => {
+    // ARRANGE
+    const roles = 'data-card-view="role"';
+    const panel = wordsFor('en').cartoon.captions.explained as string;
+    // ACT
+    const html = render({ locale: 'en', useCase: 'gate', preset: 'roles' });
+    // ASSERT
+    expect(html).toContain(roles);
+    expect(html).not.toContain(panel);
+  });
+
   it('falls back to English for a locale it has no words for', () => {
     // ARRANGE
     const english = wordsFor('en');

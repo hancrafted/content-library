@@ -100,3 +100,22 @@ dock:
     asked: What the customer asked for
   note: 'Output counts fulfilled requests only: never the extra documents, rework or answers to complaints.'
   complaints: 'About {n} complaints a week come back: failure demand, not new value.'
+# Swing and Roles: the tire swing cartoon's panel captions by panel id, and the words around them.
+cartoon:
+  captions:
+    explained: How the customer explained it
+    pm: How the project leader understood it
+    ba: How the analyst designed it
+    eng: How the programmer wrote it
+    sales: How the business consultant described it
+    doc: How the project was documented
+    ops: What operations installed
+    billing: How the customer was billed
+    support: How it was supported
+    needed: What the customer really needed
+  blank: (blank)
+  notHere: '{role} · not a work center here'
+  artefacts: Artefacts
+  jobs:
+    doc: 'Too broad for one role: everyone writes documentation.'
+    billing: 'Too narrow for a work center: billing follows the deal.'

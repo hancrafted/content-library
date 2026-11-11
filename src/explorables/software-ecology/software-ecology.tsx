@@ -15,7 +15,7 @@ import { SoftwareEcologyClient, type Spots } from './software-ecology.client';
 export interface SoftwareEcologyProps {
   /** The use case it opens on; the picker offers every shipped one. */
   readonly useCase?: string;
-  /** The preset it opens on. */
+  /** The preset it opens on; Swing by default, the cartoon first. */
   readonly preset?: string;
   /** The URL locale; the German words for `de`, the English ones otherwise. */
   readonly locale: string;
@@ -27,7 +27,7 @@ export interface SoftwareEcologyProps {
 
 export function SoftwareEcology({
   useCase = 'tire',
-  preset = 'ideal',
+  preset = 'swing',
   locale,
   words,
   targets,
