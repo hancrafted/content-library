@@ -4,7 +4,7 @@ title: From shared understanding to shared context
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-11T13:35:12Z
+  at: 2026-11-11T14:50:01Z
 locale: en
 brief: ./brief.md
 verified:
@@ -12,6 +12,8 @@ verified:
     at: 2026-11-11T13:27:44Z
   - by: process:markdown-harness
     at: 2026-11-11T13:35:12Z
+  - by: process:markdown-harness
+    at: 2026-11-11T14:50:01Z
 ---
 
 # From shared understanding to shared context {#from-shared-understanding-to-shared-context}
@@ -38,7 +40,7 @@ The factory Explorable, shown in three states one after another. First the tire 
 
 #### Voice script
 
-1. **The Hook** — AI doesn't produce the correct swing, but it can build the wrong one ten times faster. Keep that one in mind, because the rest of this Episode is about why it is true and what you do about it.
+1. **The Hook** — That is the line from a moment ago: ten wrong swings, built faster. Keep it in mind, because the rest of this Episode is about why it is true and what you do about it.
 2. **Cartoon to balanced line** — Now picture the cartoon turning into a real factory line. Input comes in at a constant rate, every station keeps pace with the next, the output is steady and the quality is high. If this was how your organization worked, you would not need this Episode.
 3. **Reality** — But you know it does not work like that, because you have seen what happens when every station is pushed to go faster. Bottlenecks form, documents queue up in front of one station while the next one sits idle. So look at the line you work in and ask yourself: which station is yours?
 
@@ -152,7 +154,7 @@ First the four classic dartboards (precise and accurate, precise but off target,
 #### Voice script
 
 1. **Precision** — Start with precision. A document is precise when someone else could execute it without asking you a single question. Nothing is left to guess.
-2. **Accuracy** — Accuracy is a different thing: the result matches what you intended and solves the actual problem. A document can be precise and not accurate, and then you have the ten wrong swings, built faster and with great care.
+2. **Accuracy** — Accuracy is a different thing: the result matches what you intended and solves the actual problem. Picture a dartboard: precision is darts landing close together, accuracy is darts landing on the bull. A document can be precise and not accurate, and then you have the ten wrong swings, built faster and with great care.
 3. **Art, not a science** — Now, honesty about the craft. Writing a good requirement is an art, not a science. You only know whether it was precise and accurate after you have tried it, and that is why this Section sits where it does.
 
 ## Context is the requirement {#context-is-the-requirement}
@@ -242,7 +244,7 @@ A person at the bike bench sorting what lands on it, with the AI worker beside t
 #### Voice script
 
 1. **Human manages the context** — You run the bench. You manage what goes on it, and you steer the agent in the right direction. Think of the AI as a hire: how would you brief a brand new colleague on their first day, and what would you not bother them with?
-2. **Not how the AI works inside** — The human manages two things: what lands on the bench, and where the work is heading. What happens inside the worker is not your job. That is why you can learn this today, without engineering knowledge, and it raises the obvious question: how does a bench go bad?
+2. **Not how the AI works inside** — The human manages two things: what lands on the bench, and where the work is heading. What happens inside the worker is not your job. That is why you can learn this today, without engineering knowledge. So what does a bench look like when it goes bad?
 
 ### Context rot {#context-rot}
 
@@ -260,7 +262,7 @@ Nearest frame component is a 2x2 grid, but the wanted layout is the bike bench a
    - sources: [2] content-library research, Why does a language model's output quality drop as its context window fills? — docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md
 2. **The four names** — Drew Breunig named context poisoning, distraction, confusion and clash in June 2025: poisoning is an error that gets saved and reused, distraction a long history that steers the model, confusion superfluous material such as surplus tools, clash conflicting material in the window [3].
    - sources: [3] Drew Breunig, How Long Contexts Fail — https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html
-3. **Credit and limit** — the IBM Technology video presents the same four; its page could not be read, so that statement rests on a secondary summary and needs confirming against the video. The taxonomy is a practitioner blog post and a failure can fit more than one mode [5].
+3. **Credit and limit** — the IBM Technology video presents the same four. The taxonomy is a practitioner blog post and a failure can fit more than one mode [5].
    - sources: [5] IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid — https://www.youtube.com/watch?v=BwXremQ-i6I
 4. **Numbers for confusion and clash** — on the Berkeley Function-Calling Leaderboard every model does worse with more than one tool, a quantized Llama 3.1 8b failed with 46 tools and succeeded with 19; piecemeal prompts cut scores by 39% on average [3].
    - sources: [3] Drew Breunig, How Long Contexts Fail — https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html
@@ -283,7 +285,7 @@ The same bench, each of four fixes clearing one mess: checking the sheet against
 
 #### Speaker notes
 
-1. **The video's framing** — the IBM Technology video pairs each mode with one fix: validate, compact, curate, prune. This pairing is from a summary of the video and is unconfirmed; it needs confirming before it is stated as IBM's [5].
+1. **The video's framing** — the IBM Technology video pairs each mode with one fix: validate, compact, curate, prune. Its closing line says all four fixes work by throwing something away [5].
    - sources: [5] IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid — https://www.youtube.com/watch?v=BwXremQ-i6I
 2. **Breunig lists other fixes** — his companion post names six: RAG, tool loadout, context quarantine, pruning, summarization and offloading. Picking fewer than 30 tools improved selection accuracy up to threefold [4].
    - sources: [4] Drew Breunig, How to Fix Your Context — https://www.dbreunig.com/2025/06/26/how-to-fix-your-context.html
@@ -342,7 +344,7 @@ A chat asking a round of questions at a time, the person answering each round, a
 #### Voice script
 
 1. **Matt Pocock's skill** — Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI question you before it starts. It works because the gaps you left get filled with your own answers. Instead of guessing what you meant, it asks you, and at the end it writes the job down as a spec, a one-page work order.
-2. **Next 30 minutes** — In the next 30 minutes you will practise exactly that. You pick a use case from your own work, let the AI grill you in rounds of questions, and at the end it turns the session into that spec.
+2. **Next 30 minutes** — Try it on one task from your own work: let the AI grill you in rounds, then have it write the spec.
 3. **Actionable one** — So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a spec.
 
 ### BRIEF {#brief}
@@ -351,13 +353,13 @@ A chat asking a round of questions at a time, the person answering each round, a
 
 master: horizontal-rail · motion: none
 
-The five letters on one axis, each mapped to a step of today's session: Break it down, Requirements first, Interview with AI, Evaluate each step, Fresh chat.
+The five letters on one axis, each mapped to a step of today's session: Break it down, Requirements first, Interview yourself with AI, Evaluate each step, Fresh start for each piece.
 
 #### Speaker notes
 
 1. **Why a fresh chat** — Anthropic describes compaction as summarising the contents and starting a new context window with the summary, warns that overly aggressive compaction can lose subtle but critical context, and recommends sub-agents with clean windows that return a condensed summary [6].
    - sources: [6] Anthropic, Effective context engineering for AI agents — https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
-   - target: the F, Fresh chat
+   - target: the F, Fresh start for each piece
 
 #### Voice script
 
