@@ -6,54 +6,74 @@ status: accepted
 
 # Software ecology flow model and use-case files
 
-The software ecology Explorable (`src/explorables/software-ecology/`) shows an organization as plumbing: roles are stretches of pipe that specify, execute and review, handoffs are the pipes between them, AI is a pump, and requirement quality is water clarity. Every pressure readout, leak and payoff comes from one pure model fed by one data file per use case, so a new use case is data and the numbers on a card always match the picture. The product design (concept, use cases, interaction, visuals) is in [the feature guide](../features/explorables/software-ecology.md); this record binds the contract every use case is written against.
+The software ecology Explorable (`src/explorables/software-ecology/`) shows an organization as a factory. Orders come in, conveyor belts carry documents between work centers, work waits in inbound queues, inspection is the review, and results leave from a shipping dock. Each role is a work center with two dials, efficiency (how much it puts out) and effectiveness (how likely a handoff is good). AI raises a work center's output and leaves its quality alone. Every queue, rework loop and shipment comes from one model fed by one data file per use case. A new use case is therefore data, and the numbers on a card always match the picture. The product design (concept, use cases, interaction, visuals) is in [the feature guide](../features/explorables/software-ecology.md); this record binds the contract every use case is written against.
 
 ## Human acceptance
 
-Han chose every decision below in the architecture grill of the `software-ecology` Episode Run (`/new-episode`, branch `episode/software-ecology`), on 2026-11-10, answering questions 1 to 24 one by one and leaving each "Decided without asking" line uncontested. He asked for this record with "write adr" and confirmed its scope with "1" to the question of where the design lives. In Spec round 1 (`docs/episodes/software-ecology/feedback/01/feedback.md`) he replaced the omega on the graph with a pump attached to the pipe, named documents and liquid as the two flow Options, and removed the magnifier lens; decisions 18, 19 and 21 carry that.
+Han chose these decisions in three grills of the `software-ecology` Episode Run (`/new-episode`, branch `episode/software-ecology`):
 
-This accepts the design, not an implementation: none exists yet.
+- **2026-11-10, architecture grill:** questions 1 to 24, answered one by one, with each "Decided without asking" line left uncontested. He asked for this record with "write adr".
+- **Spec round 1** (`docs/episodes/software-ecology/feedback/01/feedback.md`): he replaced the omega on the graph with a pump.
+- **2026-11-11, prototype rounds** (`.scratch/software-ecology/prototype/feedback-01.md` to `feedback-03.md`) and the **factory grill**, questions 25 to 38. These moved the analogy from plumbing to a factory, the model from water clarity to efficiency and effectiveness, and the layout to one card component with four views. He confirmed the factory grill's shared understanding with "yes, go ahead".
+
+This accepts the design, not an implementation: only a throwaway prototype exists, at `.scratch/software-ecology/prototype/flow.html`.
 
 ## Decision
 
 ### Model
 
-1. **One pure steady-state model.** `flow-model.pure.ts` takes a use case and the dials (global pump and clarity, per-node AI and context rot) and returns numbers per node and per edge: inflow, throughput, waiting, leak, ratio of load to capacity, clarity. Same inputs, same numbers. It recomputes only when an input changes; the animation reads the cached result and never feeds it.
-2. **A node is a role.** People are optional clusters of node ids; a person's pressure is the sum of their roles'. The two customers are node kinds `source` (intake) and `sink` (tap), with no card and no omega, pinned to the two ends.
-3. **Flow runs downstream with backpressure, then leaks.** Within its buffer a node over capacity queues work and throttles the node upstream of it; past the buffer it leaks the excess at the valve itself. So `waiting ≤ buffer` everywhere, every steady state is finite, and the animation can loop. Buffer and leak threshold are set per node in the use-case file, over use-case defaults.
-4. **A leak is lost work and lost meaning.** It lowers throughput to the tap and dims clarity downstream of the leaking node.
-5. **Clarity is a number from 0 to 1.** It multiplies along each edge by every node's context rot and leak, in the same pass as pressure. AI never changes clarity: the pump scales rates only (Brief Constraint: AI is an accelerator, never a solution).
-6. **Sediment narrows the pipe in the model.** Context rot lowers a node's capacity as well as its clarity, so the narrowed pipe and the readout agree.
-7. **AI acts through a per-node profile.** `ai: { execute, volume, reviewLoad }` multipliers over the use case's `aiDefaults`, scaled by the pump and the node's own AI dial. `volume` carries the product side's flood of material nobody can review.
-8. **Readouts count over a period.** The use-case file names its `period` (e.g. `week`). A card shows counts ("14 waiting for review", "6 dropped a week"); the graph shows the ratio as pipe fill.
-9. **The tap shows outcome and rate.** Outcome bands in the use-case file map clarity at the tap to a payoff asset (the tire swing, a wrong swing); throughput gives how many per period.
+1. **One seeded, time-stepped model.** `flow-model.pure.ts` advances the factory in fixed steps from a fixed seed and warms up before the first frame. Every combination of use case, preset and dials therefore shows one defined picture at rest, and chaos can still emerge from the dials. The renderer reads the model's state; it never feeds it.
+2. **A node is a work center, one per role.** People are optional clusters of node ids, and a person's load is the sum of their roles'. Order intake (`source`) and the shipping dock (`sink`) are node kinds pinned to the two ends. The intake has a Demand dial and a backlog; customers give up when it is full.
+3. **Two dials per work center, plus fan-out.**
+   - **Efficiency** sets the work center's speed, so raising it pushes more work downstream and can make the next work center the bottleneck.
+   - **Effectiveness** sets the chance that a handoff is good, average or bad.
+   - **Output per input (fan-out)** sets how many documents one input becomes (one spec, five documentation pages).
+   - A handoff's quality is the worse of what came in and the work center's own result.
+4. **Queues are bounded.** Each work center's inbound queue has a buffer set in the use-case file. Past it, work backs up the belt to the work center upstream and, at the end of the line, to the intake. Every steady state stays finite.
+5. **Bad work does damage downstream through four mechanics.** Each has a strength in the use-case file (0 turns it off) and a visible sign at the work center:
+   - **rework:** a bad document rides the return lane back.
+   - **extra work:** a bad document takes the next work center longer.
+   - **escape:** a bad shipment comes back as a complaint into support.
+   - **rubber-stamp:** a full inspection queue sends less back and lets bad work through.
+6. **AI raises output and leaves quality alone.** Per work center, AI multiplies speed and fan-out by the role's profile in the role catalog. Effectiveness stays as it was (Brief Constraint: AI is an accelerator, never a solution). An "AI quality effect" setting in the model, default `same`, lets a scenario show AI improving or worsening quality, so the model never implies that AI cannot raise quality.
+7. **Readouts are bands, not counts.** Every number on screen is relative to the use case's balance ("1.8× the balance", "full"), and the stage reads "Illustrative model, not measured". The constants are tuned to tell the story; nobody measured them.
 
 ### Files
 
-10. **One structure file per use case, one words pair.** `<use-case>.yml` holds ids, `steps`, `panels`, `period`, `aiDefaults`, nodes (`kind`, `zone`, capacities, `buffer`, `leak`, `ai`), `people`, edges and outcome bands. `<use-case>.words.yml` and `<use-case>.words.de.yml` hold every word keyed by id (FE-012-explorables §1: same keys, words differ).
-11. **Edges are `{ from, to, artefact }`.** The artefact's name sits in the words pair under its id; the spec edge carries `joinsZones: true` for the label joining the product and software lifecycles.
-12. **Card cells.** Each node's words give a 2×3 grid (`human`/`technical` × `specify`/`execute`/`review`), one line per cell, plus an optional `withAi` line on the cells whose meaning changes.
-13. **Steps are use-case data.** `steps` lists which of Swing → Roles → Pipeline → AI a use case offers; the toolbar shows only those. Only a use case with `panels` (each mapped to a node) offers Swing.
-14. **Presets live in the Explorable's config pair**, `software-ecology.config.yml` and `.config.de.yml`: `{ useCase, step, pump, clarity, nodes: { <id>: { ai, rot } }, selected?, controls }`.
-15. **The pump is the one source of truth for AI.** The AI step only sets the pump (to the Preset's value when it is zero); the pump dial stays live in Pipeline.
-16. **Checks.** A zod schema test per structure file, the FE-012-explorables pair test per words pair, and the build throws on any broken shipped file, as the human-in-the-loop Workflows do. `flow-model.pure.test.ts` holds characterisation cases per use case.
-17. **No upload in v1.** Visitors cannot load their own use case yet; the format stays upload-ready (structure and words merge into one file), and an issue tracks it.
+8. **One use-case file and its locale pair.** `<use-case>.yml` holds the master data: work centers (`role`, position hints, enabled dials and their defaults, buffer), belts `{ from, to, artefact }` with return lanes, damage strengths, AI profile overrides and `presets`. `<use-case>.words.yml` and `<use-case>.words.de.yml` hold every word keyed by id ([FE-012-explorables](../../.archgate/adrs/FE-012-explorables.md) §1: same keys, words differ).
+9. **A shared role catalog.** `roles.yml` and its words pair give each role its classic artefacts, its execution tasks and its AI examples, e.g. sales turns leads into deals and requirements for the product manager and analyst. A use case names a role by id and overrides only what differs.
+10. **Presets are one ordered row of states.** `presets: [{ id, view, reality, dials?, ai?, compare? }]` render in order as the toolbar's state row. `view` is `swing`, `roles` or `factory`. `compare` lists up to three work centers and opens the compare stream.
+11. **Download and Upload exchange one file.** Download writes the current state as one YAML with every language at its root, `i18n: { en: {…}, de: {…} }`. Upload validates such a file with the zod schema, splits it in the browser and loads it. The shipped source stays the use-case file plus its locale pair, picked at build time, so FE-012-explorables §1 holds; the exchange file is runtime data a visitor brings. Upload ships in v1 with an issue tracking its validation errors.
+12. **Checks.** A zod schema test per use-case file and for the exchange format, the FE-012-explorables pair test per words pair, and the build throws on any broken shipped file. `flow-model.pure.test.ts` holds characterisation cases per use case: balance ships only good work; a slower engineer becomes the bottleneck; AI at engineering raises output and leaves the share of good work unchanged.
 
 ### Rendering
 
-18. **DOM for structure, canvas for flow.** Nodes, edges, cards and the toolbar are DOM/SVG, labelled and keyboard reachable. The flow is one canvas behind a `FlowRenderer` seam (`draw(ctx, model, t)`), reading only the model's numbers, including `leak[n]` for drops that fall and fade. It holds 60fps under a fixed particle cap, pauses off-screen, and draws one static end frame under reduced motion. Documents passing through the pipe and a liquid stream are two implementations, compared as Spec Options; one ships.
-19. **Inspect targets DOM.** Every inspect action targets a node or an edge and opens one "what is stuck here" panel, since a canvas particle takes no focus. No magnifier lens in v1.
-20. **Layout is computed.** A pure layered layout ranks nodes by edges, left to right on a wide container, top to bottom below a breakpoint, with zones as lanes; the file gives only `zone` hints, never coordinates.
-21. **The graph is a straight pipe; the card holds the omega.** On the graph a node is its glyph and title on the pipe, and with AI on a pump attaches to the pipe at that node and visibly speeds the flow through it; the review valve stays on the pipe after it. The omega (specify, execute, review) is drawn only on the node card, enlarged, from the same numbers. GSAP, already a dependency, morphs the steps (panels → glyphs → graph) by FLIP. The parent owns all state and each part gets its slice and callbacks (FE-012-explorables §4).
+13. **One card component with four views.** `WorkCenterCard` takes `cardView: swing | role | station | dashboard`.
+    - **Swing and Roles:** a responsive row of cards with no belts.
+    - **Factory:** places each card on the line as a station; a GSAP FLIP morph carries each card from the row to its station.
+    - **Dashboard:** status, dials, the role's artefacts and tasks, and what AI does there.
+      The name is not `renderMode`, which FE-012-explorables §4.3 reserves for Simple and Technical.
+14. **DOM for structure, canvas for flow.** Work centers, belts, cards and the toolbar are DOM/SVG, labelled and keyboard reachable. The documents on the belts are one canvas behind a `FlowRenderer` seam (`draw(ctx, state, t)`). The flow holds 60fps under a fixed cap, pauses off-screen and shows one steady frame under reduced motion. A document stays visible as it slides through a station.
+15. **Document icons show quality and origin.** A document shows its quality by its lines and a pale tint: good is green, average is untinted, bad is red, both low-saturation. AI-made documents carry a mark of their own. The Spec picks the AI mark and the AI drawing (pump, robot arm or belt turbo) from the prototype's Options.
+16. **Selection and compare.**
+    - **One work center:** clicking it opens its dashboard as a popover anchored to it, which closes on a second click, × or Esc.
+    - **Compare mode** (a toolbar toggle, or shift-click): select up to three work centers. The Compare button flattens them into a three-column stream, with the station view above the dashboard view in each column, a "+n stations" gap for skipped ones, an overview strip, and Exit to return.
+    - The parent owns the selection, the compare set and the help toggle; each part gets its slice and callbacks (FE-012-explorables §4).
+17. **Progressive disclosure.** At rest only belts, work centers and documents show. Queue trays, counts and damage signs appear under pressure, with a gap between showing and hiding so they never flicker, or on hover and focus. Help text shows on every card while the shared help toggle is on; otherwise controls carry tooltips.
+18. **Layout is data plus computation.** The use-case file gives position hints; a pure layout places the work centers on a wide stage and stacks them below a breakpoint, and the compare stream is a computed linear layout.
 
 ## Alternatives and cost
 
-- **A time-stepped particle simulation** gives emergent queues but readouts that depend on how long the tab is open, so a Preset has no defined view at rest.
-- **Downstream flow only** never reaches a neighbour upstream; **diffusion** spreads pressure with no real mechanism behind it.
-- **A full locale pair per use case**, as human-in-the-loop does, writes every number twice; it wins only once uploads ship, and decision 17 keeps that door open.
-- **Authored coordinates** need a second set for phones and break the floor's any-width rule.
+- **The plumbing analogy** (this record's first version) had nothing that read as rework or extra work, and in the prototype its dotted water read as clutter. Han knows those mechanics from manufacturing.
+- **A steady-state model** (the first version) gave defined numbers, but a faster upstream work center simply idled, so the dials changed nothing visible.
+- **Words inside the shipped use-case file** under `i18n:` would break FE-012-explorables §1 and ship German into every English page; only the exchange file carries them.
+- **Damage mechanics as prototype switches** would hide the very effects Han wants managers to see.
 
-The cost: the model's backpressure pass and leak make it more than a one-pass sum, and its numbers are illustrative, tuned per use case to tell the story, not measured.
+The cost:
+
+- The time-stepped model needs its seed, warm-up and characterisation tests to stay presentable.
+- Upload adds a validation surface.
+- The Brief's Analogy and the Dossier's spoken words are rewritten in the factory vocabulary.
 
 ## Relationship to binding rules
 
