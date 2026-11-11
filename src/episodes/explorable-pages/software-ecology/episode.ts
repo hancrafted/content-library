@@ -11,6 +11,7 @@ import { hero } from './slides/hero/slide';
  */
 export const softwareEcology = episode({
   slug: 'software-ecology',
+  // Needs human: approve the `description` in i18n/{en,de}.json; it is written from the Brief, not taken from it.
   messages: { en, de },
   title: hero,
   sections: [playSection, aboutSection],
