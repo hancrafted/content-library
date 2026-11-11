@@ -36,8 +36,8 @@ The viewer acquires a systems thinking perspective: they can see where AI will i
 
 ## Actionables
 
-1. Map your own team as nodes and handoffs, and mark the narrowest review step.
-2. Before you speed up a node with AI, check that the review step after it can handle more.
+1. Map your own team as work centers and handoffs, and mark the narrowest review step.
+2. Before you speed up a work center with AI, check that the review step after it can handle more.
 3. Before you hand a task to AI, write the requirement clearly enough that someone new could act on it.
 
 ## Hook
@@ -56,14 +56,14 @@ The organization is a factory. Orders come in, conveyor belts carry documents be
 
 - AI is always shown as an accelerator, never as a solution.
 - No bad actors: no role is blamed, the pressure belongs to the system.
-- Every node shows both its human side and its technical side.
+- Every work center shows both its human side and its technical side.
 - Reusable across talks: no dated claims and no tool names.
 
 ## Slides
 
 ### Play
 
-1. **Play** — lets the viewer run the whole system themselves, from the familiar cartoon to AI switched on. _Visual:_ the Explorable with its toolbar: states Swing, Roles, Balance, Reality and AI; the use case picker; per work center the efficiency and effectiveness dials and an AI switch; a work-center dashboard on click and a compare view of up to three work centers. Opens on the Swing state of the tire swing use case. _Research:_ 1, 2, 3, 4, 5, 6
+1. **Play** — lets the viewer run the whole system themselves, from the familiar cartoon to AI switched on. _Visual:_ the Explorable with its toolbar: states Swing, Roles, Ideal and Realistic, and a Scenarios menu with guided tours; the use case picker; per work center the efficiency and effectiveness dials and an AI switch; a work-center dashboard on click and a compare view of up to three work centers. Opens on the Swing state of the tire swing use case. _Research:_ 1, 2, 3, 4, 5, 6
 
 ### Why, how and what
 
@@ -80,7 +80,7 @@ The organization is a factory. Orders come in, conveyor belts carry documents be
 
 ## Open ideas
 
-- Conway's law as a later use case: module teams, several nodes per role, re-arranging the factory.
-- Per-card animation beyond the enlarged omega.
+- Conway's law as a later use case: module teams, several work centers per role, re-arranging the factory.
+- Per-card animation beyond the station's rack and document in work.
 - Replace the landing hero with this Explorable.
 - Drop Style from the Brief for Explorable pages, since they share one format.
