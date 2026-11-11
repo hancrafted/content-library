@@ -1,10 +1,12 @@
 ---
 type: research
 title: 'Why does context engineering for agents work like requirements engineering?'
-description: 'Both decide what an agent is told before it works, and prompt-requirements research shows input quality drives output quality, but context is also dynamic, finite and unfixed by a signed-off document.'
+description: 'Both decide what an agent is told before it works, and
+  prompt-requirements research shows input quality drives output quality, but
+  context is also dynamic, finite and unfixed by a signed-off document.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 1970-01-01T00:00:00Z
+  at: 2026-11-11T13:16:11Z
 stale_after: 2027-05-11T00:00:00Z
 sources:
   - id: 1
@@ -12,22 +14,28 @@ sources:
     title: 'Anthropic, Effective context engineering for AI agents'
   - id: 2
     resource: https://arxiv.org/abs/2409.08775
-    title: 'Ma, Peng, Yang, Shen, Koedinger, Wu, What Should We Engineer in Prompts? Training Humans in Requirement-Driven LLM Use'
+    title: 'Ma, Peng, Yang, Shen, Koedinger, Wu, What Should We Engineer in Prompts?
+      Training Humans in Requirement-Driven LLM Use'
   - id: 3
     resource: https://arxiv.org/abs/2503.02400
-    title: 'Chen, Wang, Sun, Liu, Zhang, Liu, Promptware Engineering: Software Engineering for Prompt-Enabled Systems'
+    title: 'Chen, Wang, Sun, Liu, Zhang, Liu, Promptware Engineering: Software
+      Engineering for Prompt-Enabled Systems'
   - id: 4
     resource: https://arxiv.org/abs/2601.04556
-    title: 'Yu, Zhao, 4D-ARE: Bridging the Attribution Gap in LLM Agent Requirements Engineering'
+    title: 'Yu, Zhao, 4D-ARE: Bridging the Attribution Gap in LLM Agent Requirements
+      Engineering'
   - id: 5
     resource: https://arxiv.org/abs/2601.16507
-    title: 'Shi, Sun, Chen, Wu, Chen, Jin, Liu, REprompt: Prompt Generation for Intelligent Software Development Guided by Requirements Engineering'
+    title: 'Shi, Sun, Chen, Wu, Chen, Jin, Liu, REprompt: Prompt Generation for
+      Intelligent Software Development Guided by Requirements Engineering'
   - id: 6
     resource: docs/llm-wiki/research/AIE/AIE-0004__context-and-brief-improve-ai-output/research.md
-    title: 'Why does richer context and a clearer brief measurably improve AI output? (earlier research file)'
+    title: 'Why does richer context and a clearer brief measurably improve AI
+      output? (earlier research file)'
   - id: 7
     resource: docs/llm-wiki/research/AIE/AIE-0008__written-requirements-reduce-variance/research.md
-    title: 'Why do explicit written requirements reduce the variation in LLM output? (earlier research file)'
+    title: 'Why do explicit written requirements reduce the variation in LLM output?
+      (earlier research file)'
 ---
 
 # Why does context engineering for agents work like requirements engineering?
