@@ -5,7 +5,7 @@ export interface WindowCardProps {
   readonly order: string;
   readonly verdict: string;
   /** A clear window is crisp; a vague one is drawn dulled toward `muted-foreground`, never a hue of its own. */
-  readonly quality: 'crisp' | 'dull';
+  readonly quality: 'crisp' | 'vague';
   /** The window misses the customer's target: its verdict is trouble, in `warning`. */
   readonly miss: boolean;
 }
@@ -15,6 +15,7 @@ export function WindowCard({ label, order, verdict, quality, miss }: WindowCardP
   const crisp = quality === 'crisp';
   return (
     <div
+      data-window={quality}
       className={cn(
         'flex flex-col gap-2 rounded-lg border-2 bg-card p-3 shadow-md',
         crisp ? 'border-machine' : 'border-dashed border-muted-foreground/40',

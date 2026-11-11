@@ -7,12 +7,12 @@ import type { ReactNode } from 'react';
  */
 
 /**
- * A document's look: `crisp` a clear one, `dull` a vague one drawn toward `muted-foreground` (quality is never a hue
- * of its own), `vague` the same dashed and greyed for a sheet that leaves most open, `queued` one waiting in a
- * pile-up, in `warning`, `miss` a clear one that misses its target, in `warning`, `ai` one an AI station turns out, and
- * `machine` one the AI reads, such as a work order.
+ * A document's look: `crisp` a clear one, `vague` one that leaves most open, dashed and dulled toward
+ * `muted-foreground` (quality is never a hue of its own), `queued` one waiting in a pile-up, in `warning`, `miss` a
+ * clear one that misses its target, in `warning`, `ai` one an AI station turns out, and `machine` one the AI reads,
+ * such as a work order.
  */
-export type DocumentTone = 'crisp' | 'dull' | 'vague' | 'queued' | 'miss' | 'ai' | 'machine';
+export type DocumentTone = 'crisp' | 'vague' | 'queued' | 'miss' | 'ai' | 'machine';
 
 interface DocumentLook {
   readonly page: string;
@@ -24,11 +24,6 @@ interface DocumentLook {
 
 const DOCUMENT: Record<DocumentTone, DocumentLook> = {
   crisp: { page: 'fill-card stroke-foreground', fold: 'stroke-foreground', lines: 'stroke-foreground/50' },
-  dull: {
-    page: 'fill-card stroke-muted-foreground',
-    fold: 'stroke-muted-foreground',
-    lines: 'stroke-muted-foreground/50',
-  },
   vague: {
     page: 'fill-muted stroke-muted-foreground',
     fold: 'stroke-muted-foreground',

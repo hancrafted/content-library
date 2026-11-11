@@ -211,9 +211,14 @@ describe('failure cases', () => {
     expect(counts).toEqual(expected);
   });
 
-  it('outlines only the precise and accurate cell in primary, and draws its darts in primary', () => {
+  it('outlines only the precise and accurate cell in primary, draws its darts in primary and the loose cluster dulled', () => {
     // ARRANGE
-    const expected = { outlined: ['precise-accurate'], primaryDarts: 4, warningCells: ['precise-off', 'neither'] };
+    const expected = {
+      outlined: ['precise-accurate'],
+      primaryDarts: 4,
+      warningCells: ['precise-off', 'neither'],
+      looseDarts: ['fill-muted-foreground stroke-card'],
+    };
     // ACT
     const $ = sceneOf('precision-and-accuracy');
     const actual = {
@@ -224,6 +229,13 @@ describe('failure cases', () => {
       warningCells: $('[data-outcome]:has([data-dart][class*="warning"])')
         .toArray()
         .map((cell) => $(cell).attr('data-outcome')),
+      looseDarts: [
+        ...new Set(
+          $('[data-outcome-board="accurate-scattered"] [data-dart]')
+            .toArray()
+            .map((dart) => $(dart).attr('class')),
+        ),
+      ],
     };
     // ASSERT
     expect(actual).toEqual(expected);

@@ -1,68 +1,21 @@
-import { Dartboard } from '@/episodes/components/slide-shared/dartboard/dartboard';
-import { Darts, type DartTone, type Point } from '@/episodes/components/slide-shared/dartboard/darts';
+import { OutcomeBoard, type PrecisionOutcome } from '@/episodes/components/slide-shared/dartboard/outcome-board';
 import { DocumentIcon } from '@/episodes/components/slide-shared/factory-line/icons';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { cn } from '@/shared/lib/utils';
 import type { ReactNode } from 'react';
 
-/** The four outcomes, in the quadrant's reading order: precise row on top, the intent hit on the right. */
-export type Outcome = 'precise-off' | 'precise-accurate' | 'neither' | 'accurate-scattered';
+/** The four outcomes, the shared board's names; the Slide lays them out in the quadrant's reading order. */
+export type Outcome = PrecisionOutcome;
 
-interface OutcomeLook {
-  /** Where the four darts land on the 120 by 120 board. */
-  readonly darts: readonly Point[];
-  readonly tone: DartTone;
-  /** A crisp sheet leaves nothing to ask; a vague one is dashed and dulled. */
-  readonly crisp: boolean;
-  /** Off the intent: the name and a crisp sheet are drawn in `warning`. */
-  readonly miss: boolean;
-}
-
-export const OUTCOMES: Record<Outcome, OutcomeLook> = {
-  'precise-off': {
-    darts: [
-      { x: 86, y: 32 },
-      { x: 92, y: 36 },
-      { x: 88, y: 39 },
-      { x: 93, y: 30 },
-    ],
-    tone: 'warning',
-    crisp: true,
-    miss: true,
-  },
-  'precise-accurate': {
-    darts: [
-      { x: 57, y: 58 },
-      { x: 63, y: 61 },
-      { x: 59, y: 64 },
-      { x: 62, y: 56 },
-    ],
-    tone: 'primary',
-    crisp: true,
-    miss: false,
-  },
-  neither: {
-    darts: [
-      { x: 22, y: 30 },
-      { x: 96, y: 70 },
-      { x: 80, y: 22 },
-      { x: 34, y: 94 },
-    ],
-    tone: 'warning',
-    crisp: false,
-    miss: true,
-  },
-  'accurate-scattered': {
-    darts: [
-      { x: 40, y: 50 },
-      { x: 78, y: 44 },
-      { x: 55, y: 86 },
-      { x: 74, y: 76 },
-    ],
-    tone: 'foreground',
-    crisp: false,
-    miss: false,
-  },
+/**
+ * How each outcome's work order reads: a crisp sheet leaves nothing to ask, a vague one is dashed and dulled; off the
+ * intent, the name and a crisp sheet are drawn in `warning`.
+ */
+const SHEETS: Record<Outcome, { readonly crisp: boolean; readonly miss: boolean }> = {
+  'precise-off': { crisp: true, miss: true },
+  'precise-accurate': { crisp: true, miss: false },
+  neither: { crisp: false, miss: true },
+  'accurate-scattered': { crisp: false, miss: false },
 };
 
 /** A right-pointing arrow before the bench line: the sheet arrives at the bike bench. */
@@ -89,20 +42,9 @@ export interface OutcomeWords {
   readonly bench: string;
 }
 
-/** The outcome's dartboard: the shared board with a dulled bull, four darts in the outcome's tone. */
-function OutcomeBoard({ outcome }: { outcome: Outcome }) {
-  const { darts, tone } = OUTCOMES[outcome];
-  return (
-    <svg viewBox="0 0 120 120" className="size-20 shrink-0 @3xl:size-28" aria-hidden="true">
-      <Dartboard cx={60} cy={60} r={56} rings={3} bull={10} tone="hero" bullTone="muted" />
-      <Darts points={darts} tone={tone} r={5} edge />
-    </svg>
-  );
-}
-
 /** The work order that arrives at the bench: a crisp sheet in full ink, a vague one dashed and dulled. */
 function WorkOrder({ outcome, label, sheet }: { outcome: Outcome; label: string; sheet: string }) {
-  const { crisp, miss } = OUTCOMES[outcome];
+  const { crisp, miss } = SHEETS[outcome];
   return (
     <div
       data-work-order={crisp ? 'crisp' : 'vague'}
@@ -121,9 +63,7 @@ function WorkOrder({ outcome, label, sheet }: { outcome: Outcome; label: string;
 function OutcomeText({ outcome, words, marker }: { outcome: Outcome; words: OutcomeWords; marker?: ReactNode }) {
   return (
     <div className="flex min-w-0 flex-1 flex-col gap-3">
-      <p
-        className={cn('flex items-center gap-1 text-body font-semibold', OUTCOMES[outcome].miss && 'text-(--warning)')}
-      >
+      <p className={cn('flex items-center gap-1 text-body font-semibold', SHEETS[outcome].miss && 'text-(--warning)')}>
         {words.name}
         {marker}
       </p>
@@ -158,7 +98,7 @@ export function OutcomeCell(props: {
         outcome === 'precise-accurate' ? 'border-2 border-primary shadow-md' : 'border border-border',
       )}
     >
-      <OutcomeBoard outcome={outcome} />
+      <OutcomeBoard outcome={outcome} className="size-20 shrink-0 @3xl:size-28" />
       <OutcomeText outcome={outcome} words={words} marker={marker} />
     </li>
   );
