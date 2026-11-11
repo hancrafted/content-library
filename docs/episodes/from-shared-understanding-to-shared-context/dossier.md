@@ -4,12 +4,14 @@ title: From shared understanding to shared context
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-11T13:27:44Z
+  at: 2026-11-11T13:35:12Z
 locale: en
 brief: ./brief.md
 verified:
   - by: process:markdown-harness
     at: 2026-11-11T13:27:44Z
+  - by: process:markdown-harness
+    at: 2026-11-11T13:35:12Z
 ---
 
 # From shared understanding to shared context {#from-shared-understanding-to-shared-context}
