@@ -1,10 +1,13 @@
 ---
 type: research
-title: 'Why does requirements engineering decide the outcome more than execution does?'
-description: 'Brooks calls deciding what to build the hardest and costliest-to-fix part, and aerospace incident data traces 40% of failures to absent code and requirements, though the evidence is thin.'
+title: 'Why does requirements engineering decide the outcome more than execution
+  does?'
+description: 'Brooks calls deciding what to build the hardest and
+  costliest-to-fix part, and aerospace incident data traces 40% of failures to
+  absent code and requirements, though the evidence is thin.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 2026-11-11T00:00:00Z
+  at: 2026-11-11T13:17:06Z
 stale_after: 2027-11-11T00:00:00Z
 sources:
   - id: 1
@@ -12,13 +15,16 @@ sources:
     title: 'Brooks, No Silver Bullet: Essence and Accidents of Software Engineering'
   - id: 2
     resource: https://ntrs.nasa.gov/api/citations/20230012909/downloads/Historical%20Aerospace%20Software%20Errors.pdf
-    title: 'Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance'
+    title: 'Prokop, Historical Aerospace Software Errors Categorized to Influence
+      Fault Tolerance'
   - id: 3
     resource: https://arxiv.org/abs/1702.07656
-    title: 'Mund, Femmer, Méndez Fernández, Eckhardt, Does Quality of Requirements Specifications matter? Combined Results of Two Empirical Studies'
+    title: 'Mund, Femmer, Méndez Fernández, Eckhardt, Does Quality of Requirements
+      Specifications matter? Combined Results of Two Empirical Studies'
   - id: 4
     resource: docs/llm-wiki/research/SWE/SWE-0002__unclear-requirements-cause-rework/research.md
-    title: 'Why do unclear requirements lead to rework and failed projects? (earlier research file)'
+    title: 'Why do unclear requirements lead to rework and failed projects? (earlier
+      research file)'
 ---
 
 # Why does requirements engineering decide the outcome more than execution does?
