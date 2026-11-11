@@ -18,7 +18,7 @@ verified:
 
 #### Voice script
 
-1. **Imagine your organization as a line** — Imagine your own organization as a factory line, with documents moving from one work centre to the next, a request here, a design there, a finished result at the end. You already know this picture, because everyone in this room has lived the tire swing cartoon, where each station built its own version of what the customer asked for.
+1. **Imagine your organization as a line** — AI doesn't build the right swing for you, but it can build the wrong one ten times faster. Imagine your own organization as a factory line, with documents moving from one work centre to the next, a request here, a design there, a finished result at the end. You already know this picture, because everyone in this room has lived the tire swing cartoon, where each station built its own version of what the customer asked for.
 2. **Where this is going** — Before we start, here is the route. First we give every station on that line an AI and watch what happens. Then we look at what you hand the agent, because that decides the result. And last, you will see how an AI interview builds that handover for you, so you do not have to write it alone.
 
 ### What the customer really wanted {#what-the-customer-really-wanted}
@@ -36,9 +36,9 @@ The factory Explorable, shown in three states one after another. First the tire 
 
 #### Voice script
 
-1. **The Hook** — AI doesn't produce the correct swing, but it can build the wrong one ten times faster. Hold on to that sentence, because the rest of this Episode is about why it is true and what you do about it.
+1. **The Hook** — AI doesn't produce the correct swing, but it can build the wrong one ten times faster. Keep that one in mind, because the rest of this Episode is about why it is true and what you do about it.
 2. **Cartoon to balanced line** — Now picture the cartoon turning into a real factory line. Input comes in at a constant rate, every station keeps pace with the next, the output is steady and the quality is high. If this was how your organization worked, you would not need this Episode.
-3. **Reality** — But you know it does not work like that, because you have seen what happens when you crank the dials. Bottlenecks form, documents queue up in front of one station while the next one sits idle. So look at the line you work in and ask yourself: which station is yours?
+3. **Reality** — But you know it does not work like that, because you have seen what happens when every station is pushed to go faster. Bottlenecks form, documents queue up in front of one station while the next one sits idle. So look at the line you work in and ask yourself: which station is yours?
 
 ### What happens with AI {#what-happens-with-ai}
 
@@ -63,7 +63,7 @@ The same Explorable with the AI dial turned up on every work centre. The station
 #### Voice script
 
 1. **Every station faster** — So now give every station AI. Each one runs faster, which sounds like good news, but the line was only ever as fast as its slowest station, and that station cannot keep up with what arrives. You can see this in the market right now.
-2. **Moving bottleneck** — Writing was the brake, because you could only produce as much as someone could type, and that held the whole line in check. That brake is gone. The cost did not vanish, it moved to the next station, and it compounds there.
+2. **Moving bottleneck** — For a long time the slow part was making the thing in the first place, because a person can only make so much in a day, and that pace set the speed of everything after it. AI takes that limit away. The cost did not vanish, it moved to the next station, and it compounds there.
 
 ### Speed the whole line can carry {#speed-the-whole-line-can-carry}
 
@@ -80,8 +80,8 @@ The factory Explorable with the line running at a higher speed and still balance
 
 #### Voice script
 
-1. **One fast station is not the goal** — Here is the same line again, but this time running at a higher speed and still in balance. Queues stay short and every work centre keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station.
-2. **Bridge** — So what makes every station keep pace? Whatever arrives at the first station. If that is unclear, everything downstream builds the wrong thing faster. That arrival is the requirement, and the next Section is about it.
+1. **One fast station is not the goal** — Picture the same line once more, but this time running at a higher speed and still in balance. Queues stay short and every work centre keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station.
+2. **Bridge** — So what makes every station keep pace? Whatever arrives at the first station. If that is unclear, everything downstream builds the wrong thing faster. That arrival is the requirement, which raises the obvious question: what makes a requirement a good one?
 
 ## Every product is a translation {#every-product-is-a-translation}
 
@@ -108,7 +108,7 @@ A person's speech bubble on one side, and on the other a box, a handshake and a 
 #### Voice script
 
 1. **Every effort is a translation** — Whatever you make, a product, a service or a lecture, you are doing the same thing: you translate what a human wanted into something that solves the actual problem. The product is only the last form of that intent.
-2. **A translation layer** — If your customer could write SQL straight to the database, they would not need the front end you built for them. The translation is the work. And this is my hypothesis, not a measured result: the translation is the hard part, not the typing.
+2. **A translation layer** — Think of a restaurant guest who had to walk into the kitchen and cook from the raw ingredients. The menu and the waiter are the translation. Software works the same way: if your customer had to give orders straight to the storeroom where the data lives, in the language of that storeroom, they would not need the screens you built for them. The translation is the work. And this is my hypothesis, not a measured result: the translation is the hard part, not the typing.
 
 ### Defining and building {#defining-and-building}
 
@@ -128,7 +128,7 @@ The factory line split in two halves, a defining half and a building half, with 
 #### Voice script
 
 1. **Two halves** — Every effort splits into two halves, defining what to make and building it. AI speeds up building a great deal, and it can also assist with defining, but only as far as it can guess what is in your head.
-2. **Foreshadow** — Remember that last thought, because it comes back. Defining is exactly where the AI can help you define, which is called meta prompting, and we get to it in the last Section.
+2. **Foreshadow** — Remember that last thought, because it comes back. Defining is exactly where the AI can help, by asking you questions the way a good interviewer would. That has a name, meta prompting, and we get to it in the last Section.
 
 ### Precision and accuracy {#precision-and-accuracy}
 
@@ -176,8 +176,8 @@ The Context window Explorable (`src/explorables/context-window/`), called back f
 
 #### Voice script
 
-1. **Callback** — If you saw the context window Episode, you have met this picture before. Everything the AI works from is what sits in the window, nothing more and nothing less, and that window is a bar that fills up with every turn.
-2. **Not your mind** — The AI cannot read your mind. It reads this, and only this. If you did not put it in the window, then as far as the AI is concerned it does not exist.
+1. **Callback** — If you saw the context window Episode, you have met the context window before. Everything the AI works from is what sits in the window, nothing more and nothing less, and that window is a bar that fills up with every turn.
+2. **Not your mind** — The AI cannot read your mind. It reads what is in the window, and only that. If you did not put it in the window, then as far as the AI is concerned it does not exist.
 
 ### Context engineering is requirements engineering for agents {#context-engineering-is-requirements-engineering-for-agents}
 
@@ -240,7 +240,7 @@ A person at the bike bench sorting what lands on it, with the AI worker beside t
 #### Voice script
 
 1. **Human manages the context** — You run the bench. You manage what goes on it, and you steer the agent in the right direction. Think of the AI as a hire: how would you brief a brand new colleague on their first day, and what would you not bother them with?
-2. **Not how the AI works inside** — The human manages two things: what lands on the bench, and where the work is heading. What happens inside the worker is not your job. That is why you can learn this today, without engineering knowledge, and the next Slide shows how a bench goes bad.
+2. **Not how the AI works inside** — The human manages two things: what lands on the bench, and where the work is heading. What happens inside the worker is not your job. That is why you can learn this today, without engineering knowledge, and it raises the obvious question: how does a bench go bad?
 
 ### Context rot {#context-rot}
 
@@ -339,8 +339,8 @@ A chat asking a round of questions at a time, the person answering each round, a
 
 #### Voice script
 
-1. **Matt Pocock's skill** — Grill-me is Matt Pocock's skill. It works because it replaces the model's guesses about what you left out with your own answers. The AI stops filling the gaps with the most likely thing and asks you about them.
-2. **Next 30 minutes** — In the next 30 minutes you will practise exactly that. You pick a use case from your own work, let the AI grill you in rounds of questions, and at the end it turns the session into a spec.
+1. **Matt Pocock's skill** — Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI question you before it starts. It works because the gaps you left get filled with your own answers. Instead of guessing what you meant, it asks you, and at the end it writes the job down as a spec, a one-page work order.
+2. **Next 30 minutes** — In the next 30 minutes you will practise exactly that. You pick a use case from your own work, let the AI grill you in rounds of questions, and at the end it turns the session into that spec.
 3. **Actionable one** — So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a spec.
 
 ### BRIEF {#brief}
@@ -361,7 +361,7 @@ The five letters on one axis, each mapped to a step of today's session: Break it
 
 1. **Callback** — You may have seen the freelancer Episode. You hired a freelancer who is fast, well read and tireless, and who forgets everything after each conversation. So you have to onboard that freelancer every single time, which is what the AI interview does for you.
 2. **Map to today** — Here is the whole session in five letters. B is the line and the requirement: break it down. R is requirements first. I is the interview, the grill. E is evaluating each step, which is reading the spec before you trust it. F is the fresh chat. That is what we do today.
-3. **Close** — So the second thing to take with you: move that result into a fresh chat instead of continuing the long one. The tool is here, and you decide what the line gets. It is early days for all of this, and I would love to hear what you build. Thank you.
+3. **Close** — So the second thing to take with you: move that result into a fresh chat instead of continuing the long one. To sum up: the line only runs as well as what it receives, context is the requirement, the bench has to stay clean, and the interview builds it for you. I cannot promise it fits every task, and it is early days for all of this. If you try it, I would love to hear how it went. Thank you.
 
 ## Material left out
 
