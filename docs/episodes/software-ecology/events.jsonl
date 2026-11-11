@@ -676,3 +676,5 @@
 {"kind":"event","t":"2026-11-11T08:25:28Z","seq":676,"trace_id":"9c5f2762438172bb050a874e8a7b0f8e","span_id":"91c88b3d3d13e12b","source":"measured","name":"file.read","attributes":{"file.path":"docs/adr/0024-software-ecology-flow-model-and-use-case-files.md"}}
 {"kind":"event","t":"2026-11-11T08:25:39Z","seq":677,"trace_id":"9c5f2762438172bb050a874e8a7b0f8e","span_id":"e1879a832ae0ccb3","source":"measured","name":"skill.invoke","attributes":{"skill.name":"ui-ux-pro-max:ui-ux-pro-max"}}
 {"kind":"event","t":"2026-11-11T08:26:09Z","seq":678,"trace_id":"9c5f2762438172bb050a874e8a7b0f8e","span_id":"91c88b3d3d13e12b","source":"measured","name":"file.read","attributes":{"file.path":"docs/features/explorables/software-ecology.md"}}
+{"kind":"event","t":"2026-11-11T08:28:05Z","seq":679,"trace_id":"9c5f2762438172bb050a874e8a7b0f8e","span_id":"91c88b3d3d13e12b","source":"measured","name":"skill.invoke","attributes":{"skill.name":"pipeline-feedback"}}
+{"kind":"event","t":"2026-11-11T08:28:08Z","seq":680,"trace_id":"9c5f2762438172bb050a874e8a7b0f8e","span_id":"91c88b3d3d13e12b","source":"measured","name":"skill.invoke","attributes":{"skill.name":"writing-for-agents"}}

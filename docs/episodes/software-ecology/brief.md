@@ -12,6 +12,8 @@ verified:
     at: 2026-11-10T16:22:10Z
   - by: process:markdown-harness
     at: 2026-11-11T08:27:11Z
+  - by: human:han
+    at: 2026-11-11T08:30:28Z
 ---
 
 # Why AI relocates the pressure, and why requirements come first
