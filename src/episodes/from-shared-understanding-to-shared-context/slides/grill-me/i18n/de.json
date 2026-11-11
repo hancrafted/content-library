@@ -1,0 +1,87 @@
+{
+  "title": "Grill-me",
+  "caption": "Die KI stellt eine Runde Fragen nach der anderen, Du antwortest, und nach der letzten Runde schreibt sie <b>die Spec: einen einseitigen Arbeitsauftrag</b>.",
+  "chat": {
+    "task": "Frühjahrs-Servicewoche für die Fahrradwerkstatt",
+    "roleSwitch": "Die KI fragt · Du antwortest",
+    "rounds": {
+      "goal": {
+        "label": "Runde 1 · das Ziel",
+        "questions": {
+          "q1": "Für wen ist die Woche: Stammkunden oder neue Fahrer?",
+          "q2": "Was muss vor dem Frühlingsansturm fertig sein?",
+          "q3": "Woran misst Du, dass die Woche ein Erfolg war?"
+        },
+        "answer": "1. Stammkunden zuerst. 2. Jedes Leihrad gewartet. 3. 40 Reparaturtermine gebucht."
+      },
+      "limits": {
+        "label": "Runde 2 · die Grenzen",
+        "questions": {
+          "q1": "Wer bucht die Termine, und wie?",
+          "q2": "Welche Räder gehören nicht dazu?"
+        },
+        "answer": "1. Der Empfang, per Telefon und vor Ort. 2. E-Bikes, die gehen an die Partnerwerkstatt."
+      },
+      "done": {
+        "label": "Runde 3 · fertig, wenn",
+        "answer": "„Kalender voll bis 1. März.“"
+      }
+    },
+    "closing": "Keine Lücken mehr. Ich schreibe die Spec.",
+    "roundsNote": "in Runden, nicht einzeln"
+  },
+  "spec": {
+    "label": "Die Spec landet auf der Werkbank",
+    "title": "Spec · Frühjahrs-Servicewoche",
+    "rows": {
+      "for": { "term": "Für", "value": "Stammkunden zuerst" },
+      "must": { "term": "Muss", "value": "Jedes Leihrad gewartet" },
+      "bookedBy": { "term": "Gebucht von", "value": "Empfang, per Telefon und vor Ort" },
+      "out": { "term": "Nicht dabei", "value": "E-Bikes" },
+      "done": { "term": "Fertig, wenn", "value": "40 Termine, Kalender voll bis 1. März" }
+    }
+  },
+  "bench": {
+    "label": "Erste Seite auf einer sauberen Werkbank",
+    "drawing": "Eine saubere Fahrradwerkbank, nur mit dem Arbeitsauftrag darauf"
+  },
+  "notes": {
+    "asking-beats-guessing-on-unclear-tasks": {
+      "header": "Fragen schlägt Raten, bei unklaren Aufgaben",
+      "description": "auf einer unterspezifizierten Variante von SWE-Bench Verified schnitten Agenten, die fehlende Informationen beim Nutzer erfragten, um bis zu 74 % besser ab als Agenten ohne Rückfrage; das ist ein Höchstwert, gemessen mit simulierten Nutzern, und die Modelle konnten schlecht erkennen, welche Aufgaben eine Frage brauchen [1].",
+      "sources": {
+        "vijayvargiya-ambig-swe": {
+          "title": "Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering"
+        }
+      }
+    },
+    "rounds-are-inferred": {
+      "header": "Die Runden sind gefolgert",
+      "description": "die Forschung stützt, vor der Aufgabe klärende Fragen zu stellen; „in Runden“ ist eine Schlussfolgerung. Davon getrennt fielen die Ergebnisse im Schnitt um 39 %, wenn eine Anweisung über mehrere Züge verteilt ankam; das misst stückweise Anweisungen, nicht klärende Fragen [1].",
+      "sources": {
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "matt-pococks-skill": {
+        "title": "Der Skill von Matt Pocock",
+        "keywords": "",
+        "script": "Grill-me ist eine fertige Anleitung, die Matt Pocock einen Skill nennt, und sie bringt die KI dazu, Dich zu befragen, bevor sie loslegt. Das funktioniert, weil die Lücken, die Du gelassen hast, mit Deinen eigenen Antworten gefüllt werden. Statt zu raten, was Du gemeint hast, fragt sie Dich, und am Ende schreibt sie die Aufgabe als Spec auf, als einseitigen Arbeitsauftrag."
+      },
+      "next-30-minutes": {
+        "title": "Die nächsten 30 Minuten",
+        "keywords": "",
+        "script": "Probier es an einer Aufgabe aus Deiner eigenen Arbeit: Lass Dich von der KI in Runden grillen, und lass sie dann die Spec schreiben."
+      },
+      "actionable-one": {
+        "title": "Erste Handlungsempfehlung",
+        "keywords": "",
+        "script": "Das Erste zum Mitnehmen also: Lass Dich vor Deiner nächsten komplexen Aufgabe von der KI in Runden von Fragen interviewen, und mach aus dem Ergebnis eine Spec."
+      }
+    }
+  }
+}
