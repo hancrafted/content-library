@@ -8,6 +8,8 @@ generated:
 verified:
   - by: process:markdown-harness
     at: 2026-11-11T12:36:44Z
+  - by: human:han
+    at: 2026-11-11T12:46:49Z
 ---
 
 # From shared understanding to shared context
