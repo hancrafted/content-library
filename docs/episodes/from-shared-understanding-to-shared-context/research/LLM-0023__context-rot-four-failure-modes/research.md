@@ -1,18 +1,24 @@
 ---
 type: research
-title: 'Why does more context make a language model worse, and which failure modes and fixes does the research name?'
-description: 'More context makes models worse because length and clutter degrade output; Breunig names four failure modes, and an IBM video pairs each with one fix, but the fixes overlap.'
+title: 'Why does more context make a language model worse, and which failure
+  modes and fixes does the research name?'
+description: 'More context makes models worse because length and clutter degrade
+  output; Breunig names four failure modes, and an IBM video pairs each with one
+  fix, but the fixes overlap.'
 generated:
   by: claude-code/sonnet-5.5
-  at: 1970-01-01T00:00:00Z
+  at: 2026-11-11T13:16:34Z
 stale_after: 2027-11-11T00:00:00Z
 sources:
   - id: 1
     resource: docs/llm-wiki/research/LLM/LLM-0022__context-rot-from-muddy-context/research.md
-    title: 'content-library research, Why does a language model''s output get worse when its context holds distractors, contradictions or unclear instructions?'
+    title: 'content-library research, Why does a language model''s output get worse
+      when its context holds distractors, contradictions or unclear
+      instructions?'
   - id: 2
     resource: docs/episodes/ai-attention-span/research/LLM-0007__context-rot-as-window-fills/research.md
-    title: 'content-library research, Why does a language model''s output quality drop as its context window fills?'
+    title: 'content-library research, Why does a language model''s output quality
+      drop as its context window fills?'
   - id: 3
     resource: https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html
     title: 'Drew Breunig, How Long Contexts Fail'
@@ -21,7 +27,8 @@ sources:
     title: 'Drew Breunig, How to Fix Your Context'
   - id: 5
     resource: https://www.youtube.com/watch?v=BwXremQ-i6I
-    title: 'IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid'
+    title: 'IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to
+      Avoid'
   - id: 6
     resource: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
     title: 'Anthropic, Effective context engineering for AI agents'
