@@ -1,7 +1,7 @@
 {
   "title": "From shared understanding to shared context · hancrafted",
   "description": "Why AI speeds up every station but not the result, how to tell static from dynamic context, how to spot context that goes bad, and how to let an AI interview you in rounds of questions to build high-signal context, then move it into a fresh chat.",
-  "toc": "Episodes Collapse contents From shared understanding to shared context 1 A thought experiment What the customer really wanted What happens with AI Speed the whole line can carry 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents Open contents : Contents Episodes From shared understanding to shared context 1 A thought experiment What the customer really wanted What happens with AI Speed the whole line can carry 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents",
+  "toc": "Episodes Collapse contents From shared understanding to shared context 1 A thought experiment What the customer really wanted What happens with AI Speed the whole line can carry 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents Meta prompting Grill-me BRIEF Open contents : Contents Episodes From shared understanding to shared context 1 A thought experiment What the customer really wanted What happens with AI Speed the whole line can carry 2 Every product is a translation 3 Context is the requirement What the AI actually sees Context engineering is requirements engineering for agents Static and dynamic context You run the bench Context rot Keeping the bench clean 4 Creating context for agents Meta prompting Grill-me BRIEF",
   "slides": [
     {
       "id": "top",
@@ -46,7 +46,19 @@
       "id": "context-is-the-requirement--keeping-the-bench-clean",
       "text": "Context is the requirement (6/6) Page 6 of 6 Keeping the bench clean One cleanup per mess, and sometimes the cleanest fix is a clean bench. Four fixes, paired as in the IBM Technology video Other fixes exist too A wrong fact stuck in Validate Check the sheet against a real bike Too much history Compact Replace the binder with a one-page summary Too many similar tools Curate Keep only the wrenches the job needs Two instructions that disagree Prune Pull the old sheets down The cleanest fix Start at a clean bench: open a fresh chat and bring only the result, not the whole history. Long chat, leftovers and all Old chat 128K of 200K · 64% Fresh chat with the result Fresh chat 38K of 200K · 19%"
     },
-    { "id": "creating-context-for-agents", "text": "Creating context for agents Round 1 Round 2 Round 3 → the spec" }
+    { "id": "creating-context-for-agents", "text": "Creating context for agents Round 1 Round 2 Round 3 → the spec" },
+    {
+      "id": "creating-context-for-agents--meta-prompting",
+      "text": "Creating context for agents (1/3) Page 1 of 3 Meta prompting A separate session writes the context for you: the AI asks, you answer, and the line gets one clean work order. Planning office · separate chat What must be ready before the spring rush? Every rental bike serviced and 40 repair slots bookable. Who books the slots, and how? The front desk, by phone and walk-in. You only answer. No prompt to write from scratch. You answer better than you write Stays in the office: questions, half-ideas, drafts Fresh chat only the work order crosses The line · bike bench Work order · Spring service week Goal Rental fleet serviced, 40 slots open Who Front desk books, two mechanics Must Brakes and tyres on every bike Done when Calendar full by 1 March Written from your answers The AI worker starts from one page, not the whole conversation."
+    },
+    {
+      "id": "creating-context-for-agents--grill-me",
+      "text": "Creating context for agents (2/3) Page 2 of 3 Grill-me The AI asks a round of questions at a time, you answer, and after the last round it writes the spec: a one-page work order. Spring service week for the bike workshop The AI asks · you answer Round 1 · the goal Who is the week for: regulars or new riders? What must be ready before the spring rush? What would make the week a success? 1. Regulars first. 2. Every rental bike serviced. 3. 40 repair slots booked. Round 2 · the limits Who books the slots, and how? Which bikes are out of scope? 1. Front desk, by phone and walk-in. 2. E-bikes, they go to the partner shop. Round 3 · done when “Calendar full by 1 March.” in rounds, not one by one No gaps left. Writing the spec. Spec · Spring service week For Regulars first Must Every rental bike serviced Booked by Front desk, phone and walk-in Out E-bikes Done when 40 slots, calendar full by 1 March First page on a clean bench"
+    },
+    {
+      "id": "creating-context-for-agents--brief",
+      "text": "Creating context for agents (3/3) Page 3 of 3 BRIEF The five moves from the freelancer Episode, and today's session runs all five. Freelancer · AI · Day 1 Callback: Onboard AI every time B Break it down Today: the line, each station, and the requirement it needs R Requirements first Today: context is the requirement, so it comes before the work I Interview with AI Today: the grill, in rounds of questions E Evaluate each step Today: read the spec before you trust it F Fresh chat Today: carry the spec into a new chat, not the long one"
+    }
   ],
   "notes": [
     {
@@ -95,7 +107,19 @@
       "id": "context-is-the-requirement--keeping-the-bench-clean",
       "text": "Keeping the bench clean The video's framing the IBM Technology video pairs each mode with one fix: validate, compact, curate, prune. Its closing line says all four fixes work by throwing something away 1 . Sources (1) IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid ( opens in a new tab ) youtube.com Breunig lists other fixes his companion post names six: RAG, tool loadout, context quarantine, pruning, summarization and offloading. Picking fewer than 30 tools improved selection accuracy up to threefold 1 . Sources (1) Drew Breunig, How to Fix Your Context ( opens in a new tab ) dbreunig.com One fix per mode is a simplification compaction can launder a bad fact into a clean summary, so it does not repair poisoning; that a fresh window is the thread behind compact and prune is inference, and Anthropic warns overly aggressive compaction loses subtle but critical context 1 . Sources (1) Anthropic, Effective context engineering for AI agents ( opens in a new tab ) anthropic.com"
     },
-    { "id": "creating-context-for-agents", "text": "Creating context for agents No speaker notes for this Slide." }
+    { "id": "creating-context-for-agents", "text": "Creating context for agents No speaker notes for this Slide." },
+    {
+      "id": "creating-context-for-agents--meta-prompting",
+      "text": "Meta prompting Users answer better than they write when a model elicits preferences with open-ended questions, the user's answers are often more informative than prompts they wrote unaided, and users report it takes less effort 1 . Sources (1) Li et al., Eliciting Human Preferences with Language Models ( opens in a new tab ) arxiv.org Prompts generated from requirements REprompt builds a multi-agent prompt optimiser from requirements-engineering principles; the abstract reports effective optimisation without numbers, and it is an early preprint 1 . Sources (1) Shi, Sun, Chen, Wu, Chen, Jin, Liu, REprompt: Prompt Generation for Intelligent Software Development Guided by Requirements Engineering ( opens in a new tab ) arxiv.org"
+    },
+    {
+      "id": "creating-context-for-agents--grill-me",
+      "text": "Grill-me Asking beats guessing, on unclear tasks on an underspecified variant of SWE-Bench Verified, agents that interacted with the user to fill missing information improved by up to 74% over non-interactive ones; that is a maximum, from simulated users, and models struggled to tell which tasks need a question 1 . Sources (1) Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering ( opens in a new tab ) arxiv.org Rounds are inferred the research backs asking clarifying questions before the task; \"in rounds\" is an inference. Separately, scores fell 39% on average when an instruction arrived over several turns, which measures piecemeal instructions and not clarifying questions 1 . Sources (1) Laban et al., LLMs Get Lost In Multi-Turn Conversation ( opens in a new tab ) arxiv.org"
+    },
+    {
+      "id": "creating-context-for-agents--brief",
+      "text": "BRIEF Why a fresh chat Anthropic describes compaction as summarising the contents and starting a new context window with the summary, warns that overly aggressive compaction can lose subtle but critical context, and recommends sub-agents with clean windows that return a condensed summary 1 . Sources (1) Anthropic, Effective context engineering for AI agents ( opens in a new tab ) anthropic.com"
+    }
   ],
   "script": [
     {
@@ -153,6 +177,18 @@
     {
       "id": "creating-context-for-agents",
       "text": "Creating context for agents 0:00 – 0:17 The pain Creating precise, accurate context that stays free of rot feels like a lot of work. Who has time to write that for every task? Most of us will skip it, and then we are back at the tire swing. 0:17 – 0:34 The claim So here is the claim: let the AI do the interviewing, and you do the answering. You are good at knowing what you want when someone asks you the right question. You are less good at writing it all down unprompted."
+    },
+    {
+      "id": "creating-context-for-agents--meta-prompting",
+      "text": "Meta prompting 0:00 – 0:12 Separate session A separate session creates the high-signal context for you. High-signal means the smallest set of what matters, enough to get the job done and nothing that drags it down. 0:12 – 0:25 Fresh chat, clean work order Then take the result into a fresh chat instead of continuing the long one. The line gets one clean work order, not the whole conversation that led to it. 0:25 – 0:40 Why a separate office Why a separate office? Because the planning chat is full of questions, half-ideas and drafts, and in the bench's terms that is rot. The work order is not. So keep the office and the bench apart."
+    },
+    {
+      "id": "creating-context-for-agents--grill-me",
+      "text": "Grill-me 0:00 – 0:26 Matt Pocock's skill Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI question you before it starts. It works because the gaps you left get filled with your own answers. Instead of guessing what you meant, it asks you, and at the end it writes the job down as a spec, a one-page work order. 0:26 – 0:35 Next 30 minutes Try it on one task from your own work: let the AI grill you in rounds, then have it write the spec. 0:35 – 0:48 Actionable one So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a spec."
+    },
+    {
+      "id": "creating-context-for-agents--brief",
+      "text": "BRIEF 0:00 – 0:19 Callback You may have seen the freelancer Episode. You hired a freelancer who is fast, well read and tireless, and who forgets everything after each conversation. So you have to onboard that freelancer every single time, which is what the AI interview does for you. 0:19 – 0:42 Map to today Here is the whole session in five letters. B is the line and the requirement: break it down. R is requirements first. I is the interview, the grill. E is evaluating each step, which is reading the spec before you trust it. F is the fresh chat. That is what we do today. 0:42 – 1:16 Close So the second thing to take with you: move that result into a fresh chat instead of continuing the long one. To sum up: the line only runs as well as what it receives, context is the requirement, the bench has to stay clean, and the interview builds it for you. I cannot promise it fits every task, and it is early days for all of this. If you try it, I would love to hear how it went. Thank you."
     }
   ]
 }

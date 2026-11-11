@@ -8,9 +8,9 @@ import type { ReactNode } from 'react';
 
 /**
  * A document's look: `crisp` a clear one, `dull` a vague one drawn toward `muted-foreground` (quality is never a hue
- * of its own), `queued` one waiting in a pile-up, in `warning`.
+ * of its own), `queued` one waiting in a pile-up, in `warning`, `machine` one the AI reads, such as a work order.
  */
-export type DocumentTone = 'crisp' | 'dull' | 'queued';
+export type DocumentTone = 'crisp' | 'dull' | 'queued' | 'machine';
 
 const DOCUMENT: Record<DocumentTone, { page: string; fold: string; lines: string }> = {
   crisp: { page: 'fill-card stroke-foreground', fold: 'stroke-foreground', lines: 'stroke-foreground/50' },
@@ -24,6 +24,7 @@ const DOCUMENT: Record<DocumentTone, { page: string; fold: string; lines: string
     fold: 'stroke-(--warning)',
     lines: 'stroke-(--warning)/60',
   },
+  machine: { page: 'fill-machine/15 stroke-machine', fold: 'stroke-machine', lines: 'stroke-machine/50' },
 };
 
 /** The unit that moves down the line: a sheet with a folded corner and three lines of text. */
