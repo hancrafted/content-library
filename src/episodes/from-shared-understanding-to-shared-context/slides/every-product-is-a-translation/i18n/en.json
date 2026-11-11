@@ -1,6 +1,6 @@
 {
   "title": "Why precise and accurate requirements mattered before AI",
-  "caption": "Every product translates intent, so the result was always decided by how precise and accurate the requirement was.",
+  "caption": "Every product translates an intent. How well that translation is written down decides the result.",
   "label": "Four boards: precise and accurate, precise only, accurate only, neither",
   "both": "Both",
   "precise": "Precise",
@@ -9,7 +9,7 @@
   "voiceScript": {
     "segments": {
       "a-new-pain": {
-        "title": "A new pain",
+        "title": "An old pain",
         "keywords": "",
         "script": "Think of the last time you got back exactly what you asked for, and it was still wrong. Nobody was lazy and nothing was broken. The building went fine, so the failure sat somewhere else, and that is the pain this Section is about."
       },

@@ -48,7 +48,7 @@
       "verdict": "Vague and off target."
     }
   },
-  "quote": "Anthropic: aim for “the smallest possible set of high-signal tokens” <definition>that maximise the chance of the outcome you want</definition>.",
+  "quote": "Anthropic: aim for “the smallest possible set of high-signal tokens” <definition>that maximize the chance of the outcome you want</definition>.",
   "limits": "<proposal>A parallel researchers propose</proposal>; unlike a spec, <stops>the window is a budget that changes while the agent works</stops>.",
   "notes": {
     "googles-definition": {
@@ -62,7 +62,7 @@
     },
     "the-definition": {
       "header": "The definition",
-      "description": "Anthropic defines context engineering as curating and maintaining the optimal set of tokens during inference, guided by \"the smallest possible set of high-signal tokens\" that maximise the chance of the desired outcome [1].",
+      "description": "Anthropic defines context engineering as curating and maintaining the optimal set of tokens during inference, guided by \"the smallest possible set of high-signal tokens\" that maximize the chance of the desired outcome [1].",
       "sources": {
         "anthropic-effective-context-engineering": {
           "title": "Anthropic, Effective context engineering for AI agents"
@@ -102,7 +102,7 @@
       "the-definition": {
         "title": "The definition",
         "keywords": "",
-        "script": "Here is how three Google engineers define context engineering, in their words: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. Let me translate that from engineering into the workshop. The codebase is the materials you already have. The architecture is how the parts fit together. The conventions are the house rules. And the intent is the goal. Materials, how it fits, house rules, the goal: that is what a good requirement has always said. So what you add to the context window decides whether the agent has the precision and accuracy to work towards, and that is why we call it requirements engineering for agents."
+        "script": "Here is how three Google engineers define context engineering, in their words: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. That was written for software, but the logic is the same. Let me translate that from engineering into the workshop. The codebase is the materials you already have. The architecture is how the parts fit together. The conventions are the house rules. And the intent is the goal. Materials, how it fits, house rules, the goal: that is what a good requirement has always said. So what you add to the context window decides whether the agent has the precision and accuracy to work towards, and that is why we call it requirements engineering for agents."
       },
       "same-four-outcomes": {
         "title": "Same four outcomes",

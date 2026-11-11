@@ -51,7 +51,7 @@
       "why-it-matters": {
         "title": "Warum das wichtig ist",
         "keywords": "",
-        "script": "Warum ist der Unterschied wichtig? Weil beides auf derselben Werkbank landet. Die KI kann die Anweisung, die Du geschrieben hast, nicht von der Kiste unterscheiden, die jemand abgestellt hat. Die Werkbank muss also halten, egal, auf welchem Weg etwas ankommt."
+        "script": "Warum ist der Unterschied wichtig? Weil beides auf derselben Werkbank landet. Die KI kann die Anweisung, die Du geschrieben hast, nicht von der Kiste unterscheiden, die jemand abgestellt hat. Die Werkbank muss also halten, egal, auf welchem Weg etwas ankommt. Den statischen Teil schreibst Du selbst, also kannst Du ihn prüfen. Dynamisches Material kommt ungebeten, also prüfe, was es mitbringt."
       }
     }
   }

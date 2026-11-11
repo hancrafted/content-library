@@ -11,12 +11,12 @@
   },
   "balanced": {
     "title": "If your organization worked like this",
-    "rate": "10 in · 10 out",
+    "rate": "10 documents in · 10 out",
     "line": "Balanced line"
   },
   "reality": {
     "title": "<marker>How it really works</marker>",
-    "rate": "10 in · 4 out",
+    "rate": "10 documents in · only 4 out",
     "line": "Line out of balance: documents queue in front of Design and Review"
   },
   "stations": {
@@ -47,7 +47,7 @@
       "the-hook": {
         "title": "The Hook",
         "keywords": "",
-        "script": "That is the line from a moment ago: ten wrong swings, built faster. Keep it in mind, because the rest of this Episode is about why it is true and what you do about it."
+        "script": "That is the sentence from a moment ago: ten wrong swings, built faster. Keep it in mind, because the rest of this Episode is about why it is true and what you do about it."
       },
       "cartoon-to-balanced-line": {
         "title": "Cartoon to balanced line",
@@ -57,7 +57,7 @@
       "reality": {
         "title": "Reality",
         "keywords": "",
-        "script": "But you know it does not work like that, because you have seen what happens when every station is pushed to go faster. Bottlenecks form, documents queue up in front of one station while the next one sits idle. So look at the line you work in and ask yourself: which station is yours?"
+        "script": "But you know it does not work like that, because you have seen what happens when every station is pushed to go faster. Bottlenecks form, documents queue up in front of one station while the next one sits idle. Efficiency, effectiveness and multiplication are the three dials on this line: turn them all up, and the line stops flowing. So look at the line you work in and ask yourself: which station is yours?"
       }
     }
   }

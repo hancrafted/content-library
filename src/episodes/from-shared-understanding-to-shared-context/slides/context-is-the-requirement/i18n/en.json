@@ -15,7 +15,7 @@
       "the-route": {
         "title": "The route",
         "keywords": "",
-        "script": "The route has four stops. First what the AI sees, then the two kinds of context, static and dynamic, then how it goes wrong, and finally how to keep it clean."
+        "script": "The route has four stops. First what the AI sees: think of the context window as the desk the AI works at. Then the two kinds of context, static and dynamic: what you set up before the work starts, and what arrives while it runs. Next then how it goes wrong, and finally how to keep it clean."
       }
     }
   }

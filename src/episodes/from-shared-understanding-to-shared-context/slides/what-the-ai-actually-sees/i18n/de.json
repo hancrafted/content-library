@@ -1,6 +1,6 @@
 {
   "title": "Was die KI wirklich sieht",
-  "caption": "Die KI liest das Fenster, und nur das Fenster: <b>Was Du nicht hineingelegt hast, gibt es für sie nicht.</b>",
+  "caption": "Die KI arbeitet mit dem Fenster: <b>Was sie über Deine Aufgabe wissen muss, weiß sie nur, wenn es im Fenster steht.</b>",
   "window": "Kontextfenster",
   "notes": {
     "the-window-has-an-attention-budget": {
@@ -18,12 +18,12 @@
       "callback": {
         "title": "Rückblick",
         "keywords": "",
-        "script": "Wenn Du die Episode zum Kontextfenster gesehen hast, kennst Du das Kontextfenster schon. Alles, womit die KI arbeitet, ist das, was im Fenster steht, nicht mehr und nicht weniger, und dieses Fenster ist ein Balken, der sich mit jedem Schritt füllt."
+        "script": "Wenn Du die Episode zum Kontextfenster gesehen hast, kennst Du das Kontextfenster schon. Was die KI über Deine Aufgabe weiß, ist das, was im Fenster steht, und dieses Fenster ist wie ein Schreibtisch, der sich mit jeder Nachricht füllt."
       },
       "not-your-mind": {
         "title": "Nicht Deine Gedanken",
         "keywords": "",
-        "script": "Die KI kann keine Gedanken lesen. Sie liest, was im Fenster steht, und nur das. Wenn Du es nicht ins Fenster gelegt hast, dann gibt es das für die KI schlicht nicht."
+        "script": "Die KI kann keine Gedanken lesen. Sie arbeitet mit dem, was im Fenster steht. Was sie über Deine Aufgabe wissen muss, weiß sie nur, wenn es im Fenster steht."
       }
     }
   }

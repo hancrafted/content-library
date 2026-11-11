@@ -5,7 +5,7 @@
   "credit": "Namen nach Drew Breunig und IBM",
   "columns": {
     "poisoning": { "label": "Ein falscher Fakt, der hängen bleibt", "term": "Poisoning" },
-    "distraction": { "label": "Zu viel Vorgeschichte", "term": "Distraction" },
+    "distraction": { "label": "Zu viel, was nicht hierher gehört", "term": "Distraction" },
     "confusion": { "label": "Zu viele ähnliche Werkzeuge", "term": "Confusion" },
     "clash": { "label": "Zwei Anweisungen, die sich widersprechen", "term": "Clash" }
   },
@@ -27,7 +27,7 @@
         "mislabelled-box": "Eine falsch beschriftete Schraubenkiste",
         "colleagues": "Kollegen, die mit Fragen vorbeikommen",
         "crates": "Zehn Kisten mit ähnlichen Teilen",
-        "rush-vs-check": "„Mach schnell“ gegen „Prüf jedes Teil“"
+        "rush-vs-check": "Ein Zuruf „Mach schnell“ gegen die Anweisung „Prüf jedes Teil“"
       }
     }
   },
@@ -74,7 +74,7 @@
       "junk-drawer-meeting-two-bosses": {
         "title": "Krimskramsschublade, Meeting, zwei Chefs",
         "keywords": "",
-        "script": "Zuerst Bilder aus dem Alltag, denn die Fachbegriffe kommen später. Ein falscher Fakt im Rezept, nach dem Du dann jedes Mal kochst. Ein langes Meeting, das die Entscheidung vergisst. Eine Krimskramsschublade voller Schlüssel, in der Du den einen nicht findest. Zwei Chefs mit gegensätzlichen Anweisungen."
+        "script": "Zuerst Vergleiche aus dem Alltag, denn die Fachbegriffe kommen später. Stell Dir ein Rezept mit einem falschen Fakt vor: Du kochst dann jedes Mal danach. Stell Dir ein langes Meeting vor, das die eigene Entscheidung vergisst. Stell Dir eine Krimskramsschublade voller Schlüssel vor, in der Du den einen nicht findest. Stell Dir zwei Chefs mit gegensätzlichen Anweisungen vor. Behalte diese vier im Kopf; jetzt legen wir sie auf die Werkbank."
       },
       "static-row": {
         "title": "Statische Zeile",
@@ -84,7 +84,7 @@
       "dynamic-row": {
         "title": "Dynamische Zeile",
         "keywords": "",
-        "script": "Dieselben vier kommen auch während der Schicht an. Eine falsch beschriftete Schraubenkiste, Kollegen, die mit Fragen vorbeikommen, zehn Kisten mit ähnlichen Teilen, jemand ruft „Mach schnell“, während die Anweisung sagt „Prüf jedes Teil“. Die Namen dafür sind Poisoning, Distraction, Confusion und Clash. Die Namen sind das Etikett, die Werkbank ist das Bild."
+        "script": "Dieselben vier kommen auch während der Schicht an. Eine falsch beschriftete Schraubenkiste, Kollegen, die mit Fragen vorbeikommen, zehn Kisten mit ähnlichen Teilen, jemand ruft „Mach schnell“, während die Anweisung an der Wand sagt „Prüf jedes Teil“. Die Namen dafür sind Poisoning, Distraction, Confusion und Clash. Die Namen sind das Etikett, die Werkbank ist das Bild."
       },
       "more-context-worse-result": {
         "title": "Mehr Kontext, schlechteres Ergebnis",

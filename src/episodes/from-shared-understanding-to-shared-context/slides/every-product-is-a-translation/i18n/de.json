@@ -1,6 +1,6 @@
 {
   "title": "Warum präzise und genaue Anforderungen schon vor der KI zählten",
-  "caption": "Jedes Produkt übersetzt eine Absicht, also hing das Ergebnis schon immer davon ab, wie präzise und genau die Anforderung war.",
+  "caption": "Jedes Produkt übersetzt eine Absicht. Wie gut diese Übersetzung aufgeschrieben ist, entscheidet über das Ergebnis.",
   "label": "Vier Scheiben: präzise und genau, nur präzise, nur genau, keins von beidem",
   "both": "Beides",
   "precise": "Präzise",
@@ -9,7 +9,7 @@
   "voiceScript": {
     "segments": {
       "a-new-pain": {
-        "title": "Ein neuer Schmerz",
+        "title": "Ein alter Schmerz",
         "keywords": "",
         "script": "Denk an das letzte Mal, als Du genau das zurückbekommen hast, worum Du gebeten hattest, und es trotzdem falsch war. Niemand war faul, nichts war kaputt. Gebaut wurde sauber, also lag der Fehler woanders, und genau um diesen Schmerz geht es in diesem Abschnitt."
       },

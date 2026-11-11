@@ -5,7 +5,7 @@
   "credit": "Names after Drew Breunig and IBM",
   "columns": {
     "poisoning": { "label": "A wrong fact stuck in", "term": "poisoning" },
-    "distraction": { "label": "Too much history", "term": "distraction" },
+    "distraction": { "label": "Too much that does not belong", "term": "distraction" },
     "confusion": { "label": "Too many similar tools", "term": "confusion" },
     "clash": { "label": "Two instructions that disagree", "term": "clash" }
   },
@@ -24,10 +24,10 @@
       "label": "Dynamic",
       "when": "arrives during the shift",
       "cells": {
-        "mislabelled-box": "A mislabelled box of screws",
+        "mislabelled-box": "A mislabeled box of screws",
         "colleagues": "Colleagues dropping by with questions",
         "crates": "Ten crates of similar parts",
-        "rush-vs-check": "“Rush it” against “check every piece”"
+        "rush-vs-check": "A shout of “rush it” against the sheet’s “check every piece”"
       }
     }
   },
@@ -74,7 +74,7 @@
       "junk-drawer-meeting-two-bosses": {
         "title": "Junk drawer, meeting, two bosses",
         "keywords": "",
-        "script": "Everyday pictures first, because the technical names come later. A wrong fact in a recipe, which you then cook from every time. A long meeting that forgets the decision. A junk drawer of keys, where you cannot find the one you need. Two bosses with opposite instructions."
+        "script": "Everyday comparisons first, because the technical names come later. Imagine a recipe with one wrong fact in it: you then cook from it every time. Imagine a long meeting that forgets its own decision. Imagine a junk drawer of keys, where you cannot find the one you need. Imagine two bosses with opposite instructions. Keep those four in mind; now we put them on the bench."
       },
       "static-row": {
         "title": "Static row",
@@ -84,7 +84,7 @@
       "dynamic-row": {
         "title": "Dynamic row",
         "keywords": "",
-        "script": "The same four arrive during the shift too. A mislabelled box of screws, colleagues dropping by with questions, ten crates of similar parts, someone shouting rush it while the sheet says check every piece. The names for these are poisoning, distraction, confusion and clash. The names are the label, and the bench is the picture."
+        "script": "The same four arrive during the shift too. A mislabeled box of screws, colleagues dropping by with questions, ten crates of similar parts, someone shouting rush it, while the sheet on the wall says check every piece. The names for these are poisoning, distraction, confusion and clash. The names are the label, and the bench is the picture."
       },
       "more-context-worse-result": {
         "title": "More context, worse result",

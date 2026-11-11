@@ -20,15 +20,15 @@
     "size": "+154%",
     "sizeLabel": "bigger, each one"
   },
-  "pile": "28 documents piled up in front of Review",
+  "pile": "For example, 28 documents piled up in front of Review",
   "review": {
     "title": "Review",
     "figure": "+91%",
     "label": "<marker>time each review takes</marker>",
-    "waiting": "28 waiting"
+    "waiting": "e.g. 28 waiting"
   },
   "out": "Out: no gain for the company",
-  "scope": "Teams with high AI adoption, 2025. Time saved creating is <spent>re-spent on checking</spent>; the move to review is measured, a move to specification <inferred>only inferred</inferred>.",
+  "scope": "Teams with high AI adoption, 2025. Time saved creating is <spent>re-spent on checking</spent>; the move to review is measured; that the cause lies upstream is <inferred>only inferred</inferred>.",
   "notes": {
     "measured-the-load-moves-to-review": {
       "header": "Measured: the load moves to review",
@@ -63,12 +63,12 @@
       "every-station-faster": {
         "title": "Every station faster",
         "keywords": "",
-        "script": "So now give every station AI. Each one runs faster, which sounds like good news, but the line was only ever as fast as its slowest station, and that station cannot keep up with what arrives. You can see this in the market right now."
+        "script": "So now give every station AI. Each one runs faster, which sounds like good news, but the line was only ever as fast as its slowest station, and that station cannot keep up with what arrives. Studies of software teams show this right now."
       },
       "moving-bottleneck": {
         "title": "Moving bottleneck",
         "keywords": "",
-        "script": "For a long time the slow part was making the thing in the first place, because a person can only make so much in a day, and that pace set the speed of everything after it. AI takes that limit away. The cost did not vanish, it moved to the next station, and it compounds there."
+        "script": "For a long time the slow part was making the thing in the first place, because a person can only make so much in a day, and that pace set the speed of everything after it. AI takes that limit away. The cost did not vanish, it moved to the next station, and it grows there."
       }
     }
   }

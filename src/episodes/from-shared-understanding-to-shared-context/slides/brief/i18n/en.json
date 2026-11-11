@@ -1,17 +1,17 @@
 {
   "title": "BRIEF",
-  "caption": "The five moves from the freelancer Episode, and <b>today's session runs all five</b>.",
+  "caption": "The five moves from the freelancer Episode, and <b>today's session shows three of the five: R, I and F</b>.",
   "callback": {
     "chip": "Freelancer · AI · Day 1",
     "episode": "Callback: Onboard AI every time"
   },
   "movesLabel": "The five BRIEF moves, mapped to today's session",
   "todayLabel": "Today:",
+  "notToday": "Not today",
   "moves": {
     "break": {
       "letter": "B",
-      "move": "Break it down",
-      "today": "the line, each station, and the requirement it needs"
+      "move": "Break it down"
     },
     "requirements": {
       "letter": "R",
@@ -25,8 +25,7 @@
     },
     "evaluate": {
       "letter": "E",
-      "move": "Evaluate each step",
-      "today": "read the spec before you trust it"
+      "move": "Evaluate each step"
     },
     "fresh": {
       "letter": "F",
@@ -37,7 +36,7 @@
   "notes": {
     "why-a-fresh-chat": {
       "header": "Why a fresh chat",
-      "description": "Anthropic describes compaction as summarising the contents and starting a new context window with the summary, warns that overly aggressive compaction can lose subtle but critical context, and recommends sub-agents with clean windows that return a condensed summary [1].",
+      "description": "Anthropic describes compaction as summarizing the contents and starting a new context window with the summary, warns that overly aggressive compaction can lose subtle but critical context, and recommends sub-agents with clean windows that return a condensed summary [1].",
       "sources": {
         "anthropic-effective-context-engineering": {
           "title": "Anthropic, Effective context engineering for AI agents"
@@ -55,7 +54,7 @@
       "map-to-today": {
         "title": "Map to today",
         "keywords": "",
-        "script": "Here is the whole session in five letters. B is the line and the requirement: break it down. R is requirements first. I is the interview, the grill. E is evaluating each step, which is reading the spec before you trust it. F is the fresh chat. That is what we do today."
+        "script": "Here are the five letters, and today's session shows three of them. R is requirements first. I is the interview, the grill. F is the fresh chat. B, break it down, and E, evaluate each step, stay on the list, but they are not today's focus."
       },
       "close": {
         "title": "Close",

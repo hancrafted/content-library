@@ -20,15 +20,15 @@
     "size": "+154 %",
     "sizeLabel": "größer, jedes einzelne"
   },
-  "pile": "28 Dokumente stauen sich vor der Prüfung",
+  "pile": "Zum Beispiel 28 Dokumente, die sich vor der Prüfung stauen",
   "review": {
     "title": "Prüfung",
     "figure": "+91 %",
     "label": "<marker>Zeit pro Prüfung</marker>",
-    "waiting": "28 warten"
+    "waiting": "z. B. 28 warten"
   },
   "out": "Raus: kein Gewinn für das Unternehmen",
-  "scope": "Teams mit hoher KI-Nutzung, 2025. Die beim Erstellen gesparte Zeit <spent>geht ins Prüfen</spent>; die Verschiebung zur Prüfung ist gemessen, eine Verschiebung zur Spezifikation <inferred>nur gefolgert</inferred>.",
+  "scope": "Teams mit hoher KI-Nutzung, 2025. Die beim Erstellen gesparte Zeit <spent>geht ins Prüfen</spent>; die Verschiebung zur Prüfung ist gemessen; dass die Ursache weiter vorn liegt, ist <inferred>nur gefolgert</inferred>.",
   "notes": {
     "measured-the-load-moves-to-review": {
       "header": "Gemessen: Die Last wandert zur Prüfung",
@@ -63,7 +63,7 @@
       "every-station-faster": {
         "title": "Jede Station schneller",
         "keywords": "",
-        "script": "Geben wir also jeder Station eine KI. Jede arbeitet schneller, das klingt nach einer guten Nachricht. Aber das Band war immer nur so schnell wie seine langsamste Station, und diese Station kommt mit dem, was ankommt, nicht mehr hinterher. Genau das sieht man gerade am Markt."
+        "script": "Geben wir also jeder Station eine KI. Jede arbeitet schneller, das klingt nach einer guten Nachricht. Aber das Band war immer nur so schnell wie seine langsamste Station, und diese Station kommt mit dem, was ankommt, nicht mehr hinterher. Genau das zeigen Studien an Softwareteams gerade."
       },
       "moving-bottleneck": {
         "title": "Der wandernde Engpass",

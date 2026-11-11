@@ -1,6 +1,6 @@
 {
   "title": "Festlegen und bauen",
-  "caption": "Jede Arbeit teilt sich in <b>festlegen, was entsteht</b>, und es bauen. KI beschleunigt das Bauen und kann beim Festlegen helfen, nur so weit, wie sie erraten kann, was in Deinem Kopf ist.",
+  "caption": "Jede Arbeit teilt sich in <b>festlegen, was entsteht</b>, und es bauen. KI beschleunigt das Bauen. Beim Festlegen kann sie nur raten, was in Deinem Kopf ist, es sei denn, sie fragt.",
   "defining": {
     "name": "Festlegen",
     "aim": "Entscheiden, was entsteht. KI hilft, indem sie fragt.",
@@ -19,7 +19,8 @@
       "assemble": "Montage",
       "test": "Probefahrt"
     },
-    "footnote": "Mehr Dokumente pro Stunde an jeder Station."
+    "footnote": "Mehr Dokumente pro Stunde an jeder Station.",
+    "mapping": "Festlegen ist Vertrieb und Entwurf, Bauen ist Bau bis Versand."
   },
   "facts": {
     "upfront": {
@@ -28,7 +29,7 @@
     },
     "survey": {
       "lead": "48 %",
-      "text": "von 228 Firmen nennen unvollständige oder versteckte Anforderungen ihr größtes Problem; Nacharbeit frisst 40 bis 50 % des Aufwands"
+      "text": "von 228 Firmen nennen unvollständige oder versteckte Anforderungen ihr größtes Problem"
     }
   },
   "notes": {
@@ -56,7 +57,7 @@
       "two-halves": {
         "title": "Zwei Hälften",
         "keywords": "",
-        "script": "Jede Arbeit teilt sich in zwei Hälften: festlegen, was entstehen soll, und es bauen. KI beschleunigt das Bauen enorm, und sie kann auch beim Festlegen helfen, aber nur so weit, wie sie erraten kann, was in Deinem Kopf ist."
+        "script": "Jede Arbeit teilt sich in zwei Hälften: festlegen, was entstehen soll, und es bauen. KI beschleunigt das Bauen enorm. Beim Festlegen kann sie nur raten, was in Deinem Kopf ist, es sei denn, sie fragt. Am Band von vorhin ist Festlegen Vertrieb und Entwurf, und Bauen ist Bau bis Versand."
       },
       "foreshadow": {
         "title": "Vorausblick",

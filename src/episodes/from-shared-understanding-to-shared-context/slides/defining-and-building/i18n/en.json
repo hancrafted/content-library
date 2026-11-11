@@ -1,6 +1,6 @@
 {
   "title": "Defining and building",
-  "caption": "Every effort splits into <b>defining what to make</b> and building it. AI speeds up building and can assist defining, only as far as it can guess what is in your head.",
+  "caption": "Every effort splits into <b>defining what to make</b> and building it. AI speeds up building. For defining it can only guess what is in your head, unless it asks.",
   "defining": {
     "name": "Defining",
     "aim": "Deciding what to make. AI can assist by asking.",
@@ -19,7 +19,8 @@
       "assemble": "Assemble",
       "test": "Test ride"
     },
-    "footnote": "More documents per hour at every station."
+    "footnote": "More documents per hour at every station.",
+    "mapping": "Defining is Sales and Design, building is Build to Delivery."
   },
   "facts": {
     "upfront": {
@@ -28,7 +29,7 @@
     },
     "survey": {
       "lead": "48%",
-      "text": "of 228 companies name incomplete or hidden requirements as their top problem; rework eats 40–50% of effort"
+      "text": "of 228 companies name incomplete or hidden requirements as their top problem"
     }
   },
   "notes": {
@@ -56,7 +57,7 @@
       "two-halves": {
         "title": "Two halves",
         "keywords": "",
-        "script": "Every effort splits into two halves, defining what to make and building it. AI speeds up building a great deal, and it can also assist with defining, but only as far as it can guess what is in your head."
+        "script": "Every effort splits into two halves, defining what to make and building it. AI speeds up building a great deal. For defining it can only guess what is in your head, unless it asks. On the line from before, defining is Sales and Design, and building is Build to Delivery."
       },
       "foreshadow": {
         "title": "Foreshadow",

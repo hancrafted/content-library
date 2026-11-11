@@ -47,11 +47,7 @@ export const grillMe = slide({
                     <Marker note="asking-beats-guessing-on-unclear-tasks" placement="beside" />
                   </>
                 ),
-                questions: [
-                  t('chat.rounds.goal.questions.q1'),
-                  t('chat.rounds.goal.questions.q2'),
-                  t('chat.rounds.goal.questions.q3'),
-                ],
+                questions: [t('chat.rounds.goal.questions.q1'), t('chat.rounds.goal.questions.q2')],
                 answer: t('chat.rounds.goal.answer'),
                 collapsed: false,
                 target: target('first-round'),
@@ -66,7 +62,7 @@ export const grillMe = slide({
               {
                 slug: 'done',
                 label: t('chat.rounds.done.label'),
-                questions: [],
+                questions: [t('chat.rounds.done.questions.q1')],
                 answer: t('chat.rounds.done.answer'),
                 collapsed: true,
               },

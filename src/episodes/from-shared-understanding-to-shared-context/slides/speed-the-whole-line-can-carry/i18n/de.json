@@ -27,7 +27,7 @@
   },
   "bench": {
     "caption": "Eine Station aus der Nähe: die Fahrradwerkbank",
-    "label": "Die Montagewerkbank für Fahrräder, eine Station der Linie, für die Schicht eingerichtet"
+    "label": "Die Montagewerkbank für Fahrräder, eine Station des Bandes, für die Schicht eingerichtet"
   },
   "notes": {
     "returns-come-from-the-system": {
@@ -50,7 +50,7 @@
       "bridge": {
         "title": "Die Überleitung",
         "keywords": "",
-        "script": "Was sorgt also dafür, dass jede Station Schritt hält? Das, was an der ersten Station ankommt. Ist das unklar, baut alles danach schneller das Falsche. Was dort ankommt, ist die Anforderung, und das wirft die naheliegende Frage auf: Was macht eine Anforderung gut?"
+        "script": "Tempo allein reicht nicht. Was an der ersten Station ankommt, bestimmt die Arbeit aller folgenden. Ist es unklar, bauen alle schneller das Falsche, und die Prüfung hat mehr abzufangen. Was dort ankommt, ist die Anforderung, und das wirft die naheliegende Frage auf: Was macht eine Anforderung gut?"
       }
     }
   }

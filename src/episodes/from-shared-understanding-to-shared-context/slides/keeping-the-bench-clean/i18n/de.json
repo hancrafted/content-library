@@ -6,13 +6,13 @@
   "fixes": {
     "validate": {
       "mess": "Ein falscher Fakt, der hängen bleibt",
-      "verb": "Prüfen",
-      "how": "Die Anweisung an einem echten Rad prüfen",
+      "verb": "Gegenprüfen",
+      "how": "Die Anweisung an einem echten Rad gegenprüfen",
       "before": "Eine falsche Schraubengröße in der Arbeitsanweisung",
-      "after": "Die Anweisung, an einem echten Rad geprüft"
+      "after": "Die Anweisung, an einem echten Rad gegengeprüft"
     },
     "compact": {
-      "mess": "Zu viel Vorgeschichte",
+      "mess": "Zu viel, was nicht hierher gehört",
       "verb": "Verdichten",
       "how": "Den Ordner durch eine einseitige Zusammenfassung ersetzen",
       "before": "Ein Ordner mit jedem Radmodell, für ein Rad",
@@ -42,7 +42,7 @@
   "notes": {
     "the-videos-framing": {
       "header": "Die Einteilung im Video",
-      "description": "das Video von IBM Technology ordnet jeder Art eine Lösung zu: prüfen, verdichten, auswählen, ausmisten. Sein Schlusssatz: Alle vier Lösungen wirken, indem sie etwas wegwerfen [1].",
+      "description": "das Video von IBM Technology ordnet jeder Art eine Lösung zu: gegenprüfen, verdichten, auswählen, ausmisten. Sein Schlusssatz: Alle vier Lösungen wirken, indem sie etwas wegwerfen [1].",
       "sources": {
         "ibm-context-engineering-failure-modes": {
           "title": "IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid"
@@ -73,7 +73,7 @@
       "four-cleanups": {
         "title": "Vier Aufräumaktionen",
         "keywords": "",
-        "script": "Es gibt vier Aufräumaktionen, eine für jedes Chaos. Prüfen: die Anweisung an einem echten Rad kontrollieren. Verdichten: den Ordner durch eine einseitige Zusammenfassung ersetzen. Auswählen: nur die Schraubenschlüssel behalten, die der Auftrag braucht. Ausmisten: die alten Anweisungen abhängen."
+        "script": "Es gibt vier Aufräumaktionen, eine für jedes Chaos. Gegenprüfen: die Anweisung an einem echten Rad kontrollieren. Verdichten: den Ordner durch eine einseitige Zusammenfassung ersetzen. Auswählen: nur die Schraubenschlüssel behalten, die der Auftrag braucht. Ausmisten: die alten Anweisungen abhängen."
       },
       "fresh-chat": {
         "title": "Frischer Chat",

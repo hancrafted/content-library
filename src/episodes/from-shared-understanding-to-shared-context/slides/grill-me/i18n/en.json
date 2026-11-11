@@ -9,10 +9,9 @@
         "label": "Round 1 · the goal",
         "questions": {
           "q1": "Who is the week for: regulars or new riders?",
-          "q2": "What must be ready before the spring rush?",
-          "q3": "What would make the week a success?"
+          "q2": "What must be ready before the spring rush?"
         },
-        "answer": "1. Regulars first. 2. Every rental bike serviced. 3. 40 repair slots booked."
+        "answer": "1. Regulars first. 2. Every rental bike serviced."
       },
       "limits": {
         "label": "Round 2 · the limits",
@@ -24,7 +23,10 @@
       },
       "done": {
         "label": "Round 3 · done when",
-        "answer": "“Calendar full by 1 March.”"
+        "questions": {
+          "q1": "How will we know it’s done?"
+        },
+        "answer": "“40 repair slots booked, calendar full by 1 March.”"
       }
     },
     "closing": "No gaps left. Writing the spec.",
@@ -97,7 +99,7 @@
       "matt-pococks-skill": {
         "title": "Matt Pocock's skill",
         "keywords": "",
-        "script": "Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI question you before it starts. It works because the gaps you left get filled with your own answers. Instead of guessing what you meant, it asks you, and at the end it writes the job down as a spec, a one-page work order."
+        "script": "Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI question you before it starts, in rounds rather than one question at a time, so you can answer in your own flow. It works because the gaps you left get filled with your own answers. Instead of guessing what you meant, it asks you, and at the end it writes the job down as a spec, a one-page work order."
       },
       "next-30-minutes": {
         "title": "Next 30 minutes",

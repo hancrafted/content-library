@@ -113,6 +113,9 @@ export const definingAndBuilding = slide({
           </div>
         </Half>
       </div>
+      <p data-station-mapping className="text-caption text-muted-foreground">
+        {t('building.mapping')}
+      </p>
       <div className="grid gap-4 @3xl:grid-cols-2">
         {(['upfront', 'survey'] as const).map((fact) => (
           <p

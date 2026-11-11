@@ -11,12 +11,12 @@
   },
   "balanced": {
     "title": "Wenn Deine Organisation so arbeiten würde",
-    "rate": "10 rein · 10 raus",
+    "rate": "10 Dokumente rein · 10 raus",
     "line": "Ausgeglichenes Band"
   },
   "reality": {
     "title": "<marker>Wie es wirklich läuft</marker>",
-    "rate": "10 rein · 4 raus",
+    "rate": "10 Dokumente rein · nur 4 raus",
     "line": "Band aus dem Gleichgewicht: Dokumente stauen sich vor Entwurf und Prüfung"
   },
   "stations": {
@@ -57,7 +57,7 @@
       "reality": {
         "title": "Die Wirklichkeit",
         "keywords": "",
-        "script": "Aber Du weißt, dass es so nicht läuft, denn Du hast gesehen, was passiert, wenn jede Station schneller werden soll. Es bilden sich Engpässe, Dokumente stauen sich vor einer Station, während die nächste leer läuft. Schau Dir also das Band an, an dem Du arbeitest, und frag Dich: Welche Station ist Deine?"
+        "script": "Aber Du weißt, dass es so nicht läuft, denn Du hast gesehen, was passiert, wenn jede Station schneller werden soll. Es bilden sich Engpässe, Dokumente stauen sich vor einer Station, während die nächste leer läuft. Effizienz, Effektivität und Vervielfachung sind die drei Regler an diesem Band: Dreh sie alle hoch, und das Band hört auf zu fließen. Schau Dir also das Band an, an dem Du arbeitest, und frag Dich: Welche Station ist Deine?"
       }
     }
   }

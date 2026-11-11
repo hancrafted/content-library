@@ -45,12 +45,12 @@
       "one-fast-station-is-not-the-goal": {
         "title": "One fast station is not the goal",
         "keywords": "",
-        "script": "Picture the same line once more, but this time running at a higher speed and still in balance. Queues stay short and every work centre keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station. Now zoom into one station: the bike bench. Keep an eye on this one station; we come back to it."
+        "script": "Picture the same line once more, but this time running at a higher speed and still in balance. Queues stay short and every work center keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station. Now zoom into one station: the bike bench. Keep an eye on this one station; we come back to it."
       },
       "bridge": {
         "title": "Bridge",
         "keywords": "",
-        "script": "So what makes every station keep pace? Whatever arrives at the first station. If that is unclear, everything downstream builds the wrong thing faster. That arrival is the requirement, which raises the obvious question: what makes a requirement a good one?"
+        "script": "Pace is not the only thing that has to match. Whatever arrives at the first station sets the work for every station after it. If that is unclear, all of them build the wrong thing faster, and review has more to catch. That arrival is the requirement, which raises the obvious question: what makes a requirement a good one?"
       }
     }
   }

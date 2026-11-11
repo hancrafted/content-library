@@ -1,11 +1,11 @@
 {
   "title": "Meta-Prompting",
-  "caption": "Eine eigene Sitzung schreibt den Kontext für Dich: Die KI fragt, Du antwortest, und das Band bekommt <b>einen sauberen Arbeitsauftrag</b>.",
+  "caption": "Eine eigene Sitzung schreibt den Kontext für Dich: Die KI fragt, Du antwortest, und die Werkbank bekommt <b>einen sauberen Arbeitsauftrag</b>.",
   "office": {
     "label": "Planungsbüro · eigener Chat",
     "exchange": {
       "q1": "Was muss vor dem Frühlingsansturm fertig sein?",
-      "a1": "Jedes Leihrad gewartet und 40 Reparaturtermine buchbar.",
+      "a1": "Jedes Leihrad gewartet und 40 Reparaturtermine gebucht.",
       "q2": "Wer bucht die Termine, und wie?",
       "a2": "Der Empfang, per Telefon und vor Ort."
     },
@@ -20,7 +20,7 @@
   "workOrder": {
     "title": "Arbeitsauftrag · Frühjahrs-Servicewoche",
     "rows": {
-      "goal": { "term": "Ziel", "value": "Leihflotte gewartet, 40 Termine frei" },
+      "goal": { "term": "Ziel", "value": "Leihflotte gewartet, 40 Termine gebucht" },
       "who": { "term": "Wer", "value": "Empfang bucht, zwei Mechaniker" },
       "must": { "term": "Muss", "value": "Bremsen und Reifen an jedem Rad" },
       "done": { "term": "Fertig, wenn", "value": "Kalender voll bis 1. März" }
@@ -57,12 +57,12 @@
       "separate-session": {
         "title": "Eigene Sitzung",
         "keywords": "",
-        "script": "Eine eigene Sitzung erstellt den aussagekräftigen Kontext für Dich. Aussagekräftig heißt: die kleinste Menge dessen, was zählt, genug, um die Aufgabe zu erledigen, und nichts, was sie herunterzieht."
+        "script": "Meta-Prompting heißt: Ein KI-Chat schreibt den Auftrag für einen anderen. Die eigene Sitzung erstellt den Kontext für Dich, und der soll aussagekräftig sein: die kleinste Menge dessen, was zählt, genug, um die Aufgabe zu erledigen, und nichts, was sie herunterzieht."
       },
       "fresh-chat-clean-work-order": {
         "title": "Frischer Chat, sauberer Arbeitsauftrag",
         "keywords": "",
-        "script": "Dann nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Das Band bekommt einen sauberen Arbeitsauftrag, nicht das ganze Gespräch, das zu ihm geführt hat."
+        "script": "Dann nimm das Ergebnis in einen frischen Chat mit, statt den langen weiterzuführen. Die Werkbank ist der Ort, an dem der Kontext der KI liegt, und sie bekommt einen sauberen Arbeitsauftrag, nicht das ganze Gespräch, das zu ihm geführt hat."
       },
       "why-a-separate-office": {
         "title": "Warum ein eigenes Büro",

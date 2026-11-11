@@ -7,8 +7,10 @@ export interface BriefMove {
   readonly slug: MoveSlug;
   readonly letter: string;
   readonly move: string;
-  /** Today's step, its "Today:" label already in place. */
+  /** Today's step with its "Today:" label in place, or "not today" for a move today's session leaves out. */
   readonly today: ReactNode;
+  /** Whether today's session shows this move. */
+  readonly isToday: boolean;
   /** The one lit move, in `primary`. */
   readonly focus: boolean;
   /** A Context marker beside the letter, where a Speaker note points at the move. */
@@ -65,7 +67,12 @@ function MoveCard({ move }: { move: BriefMove }) {
       <p data-move-name className="text-body font-semibold">
         {move.move}
       </p>
-      <p className="border-t border-border pt-2 text-caption text-muted-foreground">{move.today}</p>
+      <p
+        data-today={move.isToday ? 'shown' : 'not-today'}
+        className={cn('border-t border-border pt-2 text-caption text-muted-foreground', !move.isToday && 'italic')}
+      >
+        {move.today}
+      </p>
     </div>
   );
 }

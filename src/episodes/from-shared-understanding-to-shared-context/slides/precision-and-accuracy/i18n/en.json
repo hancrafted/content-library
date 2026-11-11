@@ -33,7 +33,7 @@
       "bench": "Right in the end, after a dozen questions."
     }
   },
-  "evidence": "Precise but wrong is the costly one: a missing requirement does not stop the line, <wrong>it ships the wrong bike</wrong>.",
+  "evidence": "A requirement that is wrong or missing does not stop the line, <wrong>it ships the wrong bike</wrong>.",
   "limits": "How much that costs <limits>depends on the job</limits>.",
   "notes": {
     "missing-requirements-show-up-as-wrong-output": {
@@ -68,7 +68,7 @@
       "accuracy": {
         "title": "Accuracy",
         "keywords": "",
-        "script": "Accuracy is a different thing: the result matches what you intended and solves the actual problem. Picture a dartboard: precision is darts landing close together, accuracy is darts landing on the bull. A document can be precise and not accurate, and then you have the ten wrong swings, built faster and with great care."
+        "script": "Accuracy is a different thing: the result matches what you intended and solves the actual problem. Picture a dartboard: precision is darts landing close together, accuracy is darts landing on the bull. A tight cluster means everyone who builds it ends up in the same place. A document can be precise and not accurate, and then you have the ten wrong swings, built faster and with great care."
       },
       "art-not-a-science": {
         "title": "Art, not a science",

@@ -4,10 +4,10 @@
   "axes": {
     "tight": "Eng",
     "loose": "Locker",
-    "off": "Neben der Absicht",
-    "on": "Auf der Absicht",
+    "off": "Verfehlt die Absicht",
+    "on": "Trifft die Absicht",
     "precision": "Nach oben: <b>Präzision</b>, wie wenige Fragen das Blatt offen lässt",
-    "accuracy": "Nach rechts: <b>Genauigkeit</b>, ob es trifft, was der Fahrer wollte"
+    "accuracy": "Nach rechts: <b>Genauigkeit</b>, ob es trifft, was der Radfahrer wollte"
   },
   "workOrder": "Arbeitsauftrag",
   "atTheBench": "An der Werkbank:",
@@ -33,7 +33,7 @@
       "bench": "Am Ende richtig, nach einem Dutzend Fragen."
     }
   },
-  "evidence": "Präzise, aber falsch ist der teure Fall: Eine fehlende Anforderung hält das Band nicht an, <wrong>sie liefert das falsche Rad aus</wrong>.",
+  "evidence": "Eine falsche oder fehlende Anforderung hält das Band nicht an, <wrong>sie liefert das falsche Rad aus</wrong>.",
   "limits": "Wie viel das kostet, <limits>hängt vom Auftrag ab</limits>.",
   "notes": {
     "missing-requirements-show-up-as-wrong-output": {
@@ -68,7 +68,7 @@
       "accuracy": {
         "title": "Genauigkeit",
         "keywords": "",
-        "script": "Genauigkeit ist etwas anderes: Das Ergebnis trifft, was Du beabsichtigt hast, und löst das eigentliche Problem. Stell Dir eine Dartscheibe vor: Präzision heißt, die Pfeile landen dicht beieinander, Genauigkeit heißt, sie landen im Bullseye. Ein Dokument kann präzise sein und nicht genau, und dann hast Du die zehn falschen Schaukeln, schneller gebaut und mit großer Sorgfalt."
+        "script": "Genauigkeit ist etwas anderes: Das Ergebnis trifft, was Du beabsichtigt hast, und löst das eigentliche Problem. Stell Dir eine Dartscheibe vor: Präzision heißt, die Pfeile landen dicht beieinander, Genauigkeit heißt, sie landen im Bullseye. Ein enger Cluster heißt: Jeder, der es baut, landet am selben Ort. Ein Dokument kann präzise sein und nicht genau, und dann hast Du die zehn falschen Schaukeln, schneller gebaut und mit großer Sorgfalt."
       },
       "art-not-a-science": {
         "title": "Kunst, keine Wissenschaft",

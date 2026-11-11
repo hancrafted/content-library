@@ -1,6 +1,6 @@
 {
   "title": "What the AI actually sees",
-  "caption": "The AI reads the window, and only the window: <b>if you did not put it there, it does not exist.</b>",
+  "caption": "The AI works from the window: <b>what it must know about your task, it only knows if it is in the window.</b>",
   "window": "Context window",
   "notes": {
     "the-window-has-an-attention-budget": {
@@ -18,12 +18,12 @@
       "callback": {
         "title": "Callback",
         "keywords": "",
-        "script": "If you saw the context window Episode, you have met the context window before. Everything the AI works from is what sits in the window, nothing more and nothing less, and that window is a bar that fills up with every turn."
+        "script": "If you saw the context window Episode, you have met the context window before. What the AI knows about your task is what sits in the window, and that window is like a desk that fills up with every message."
       },
       "not-your-mind": {
         "title": "Not your mind",
         "keywords": "",
-        "script": "The AI cannot read your mind. It reads what is in the window, and only that. If you did not put it in the window, then as far as the AI is concerned it does not exist."
+        "script": "The AI cannot read your mind. It works from what is in the window. What it must know about your task, it only knows if it is in the window."
       }
     }
   }

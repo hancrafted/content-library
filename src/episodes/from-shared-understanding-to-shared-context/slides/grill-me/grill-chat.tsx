@@ -6,7 +6,7 @@ export interface GrillRound {
   readonly label: ReactNode;
   readonly questions: readonly string[];
   readonly answer: string;
-  /** A collapsed round shows its label and answer on one line, without its questions. */
+  /** A collapsed round shows its label, its question and its answer on one compact line, not as a bubble each. */
   readonly collapsed: boolean;
   /** The `data-target` the round's questions carry, where a Speaker note points at them. */
   readonly target?: { readonly 'data-target': string };
@@ -48,6 +48,11 @@ function CollapsedRound({ round, note }: { round: GrillRound; note: ReactNode })
       className="flex flex-wrap items-center gap-3 text-caption text-muted-foreground"
     >
       <span className="rounded-full border border-border px-3 py-1">{round.label}</span>
+      {round.questions.map((question) => (
+        <span key={question} data-collapsed-question className="font-semibold text-foreground">
+          {question}
+        </span>
+      ))}
       <span>{round.answer}</span>
       <span className="ml-auto inline-flex items-center gap-1">{note}</span>
     </section>

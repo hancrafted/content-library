@@ -1,6 +1,6 @@
 {
   "title": "You run the bench",
-  "caption": "You decide what lands on the bench and where the work is heading; <b>the AI works with what you hand it.</b>",
+  "caption": "You set up the bench, decide what the AI may fetch and steer when it drifts; <b>the AI works with what you hand it.</b>",
   "drawing": "A person at the bench hands parts to the AI worker",
   "you": "You",
   "ai": "AI worker",
@@ -10,7 +10,7 @@
   },
   "heldBack": {
     "label": "Held back:",
-    "text": "sheet version 1, the catalogue of every model"
+    "text": "sheet version 1, the catalog of every model"
   },
   "yours": {
     "label": "Your job",
@@ -25,9 +25,9 @@
   },
   "stat": {
     "label": "More is not safer",
-    "alone": "<figure>98.7%</figure> of one rule followed, alone",
-    "together": "<figure>85.0%</figure> when 19 rules come at once",
-    "detail": "gpt-4o; context files that repeat what the agent can find did not help either."
+    "alone": "Asked to follow one rule, the AI does it <figure>99%</figure> of the time",
+    "together": "Asked to follow 19 at once: <figure>85%</figure>",
+    "detail": "Repeating things the AI can find on its own did not help either."
   },
   "notes": {
     "more-is-not-safer": {
@@ -48,7 +48,7 @@
       "human-manages-the-context": {
         "title": "Human manages the context",
         "keywords": "",
-        "script": "You run the bench. You manage what goes on it, and you steer the agent in the right direction. Think of the AI as a hire: how would you brief a brand new colleague on their first day, and what would you not bother them with?"
+        "script": "You run the bench. You manage what goes on it and what the AI may fetch, and you steer it in the right direction. Think of the AI as a hire: how would you brief a brand new colleague on their first day, and what would you not bother them with?"
       },
       "not-how-the-ai-works-inside": {
         "title": "Not how the AI works inside",

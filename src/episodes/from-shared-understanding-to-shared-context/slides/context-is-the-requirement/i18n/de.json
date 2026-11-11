@@ -15,7 +15,7 @@
       "the-route": {
         "title": "Der Weg",
         "keywords": "",
-        "script": "Der Weg hat vier Stationen. Zuerst, was die KI sieht, dann die zwei Arten von Kontext, statisch und dynamisch, dann, wie er kippt, und zum Schluss, wie Du ihn sauber hältst."
+        "script": "Der Weg hat vier Stationen. Zuerst, was die KI sieht: Stell Dir das Kontextfenster als den Schreibtisch vor, an dem die KI arbeitet. Dann die zwei Arten von Kontext, statisch und dynamisch: was Du vor der Arbeit einrichtest und was währenddessen dazukommt. Danach dann, wie er kippt, und zum Schluss, wie Du ihn sauber hältst."
       }
     }
   }

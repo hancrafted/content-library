@@ -1,6 +1,6 @@
 {
   "title": "Wert war immer Übersetzung",
-  "caption": "Ein Produkt, eine Dienstleistung oder ein Vortrag: Jedes <b>übersetzt, was ein Mensch wollte</b>, in etwas, das das eigentliche Problem löst. Schwer ist, zu entscheiden, was gebaut wird, eine Hypothese aus Erfahrung, keine Messung.",
+  "caption": "Ein Produkt, eine Dienstleistung oder ein Vortrag: Jedes <b>übersetzt, was ein Mensch wollte</b>, in etwas, das das eigentliche Problem löst.",
   "intent": {
     "index": "01",
     "label": "Was ein Mensch wollte",
@@ -14,8 +14,8 @@
     "statement": "Drei Übersetzungen.",
     "items": {
       "product": { "kind": "Produkt", "name": "E-Bike" },
-      "service": { "kind": "Dienstleistung", "name": "Bike-Fitting" },
-      "lecture": { "kind": "Vortrag", "name": "Fahrkurs" }
+      "service": { "kind": "Dienstleistung", "name": "Bike-Leasing mit Dusche im Büro" },
+      "lecture": { "kind": "Vortrag", "name": "Im Anzug mit dem Rad zur Arbeit" }
     }
   },
   "notes": {
@@ -48,7 +48,7 @@
       "a-translation-layer": {
         "title": "Eine Übersetzungsschicht",
         "keywords": "",
-        "script": "Stell Dir einen Restaurantgast vor, der in die Küche gehen und aus den rohen Zutaten selbst kochen müsste. Die Speisekarte und der Kellner sind die Übersetzung. Software funktioniert genauso: Müsste Dein Kunde seine Aufträge direkt ans Lager geben, in dem die Daten liegen, in der Sprache dieses Lagers, bräuchte er die Bildschirme nicht, die Du für ihn gebaut hast. Die Übersetzung ist die Arbeit. Und das ist meine Hypothese, kein gemessenes Ergebnis: Die Übersetzung ist der schwere Teil, nicht das Tippen."
+        "script": "Nimm den Pendler. Sein Wunsch ist: nicht verschwitzt ankommen. Jemand muss diesen Wunsch in ein Rad mit Motor übersetzen, oder in ein Leasing mit Dusche im Büro, oder in einen Vortrag darüber, wie man im Anzug mit dem Rad zur Arbeit kommt. Dieses Übersetzen ist die Arbeit. Schwer ist, zu entscheiden, was gebaut wird, nicht, es zu bauen. Das ist meine Hypothese aus Erfahrung, keine Messung."
       }
     }
   }

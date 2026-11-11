@@ -1,6 +1,6 @@
 {
   "title": "Context Engineering ist Requirements Engineering für Agenten",
-  "caption": "Googles Definition: Context Engineering ist „the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent.“",
+  "caption": "Googles Definition, übersetzt aus dem Englischen: Context Engineering ist „die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben.“",
   "definitionCard": {
     "heading": "Als Anforderung gelesen",
     "codebase": {
@@ -102,7 +102,7 @@
       "the-definition": {
         "title": "Die Definition",
         "keywords": "",
-        "script": "So definieren drei Google-Ingenieure Context Engineering, in ihren eigenen Worten: the practice of providing AI agents with rich, structured information about your codebase, architecture, conventions, and intent. Auf Deutsch: die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben. Und jetzt von der Technik in die Werkstatt: Die Codebase ist das Material, das schon da ist. Die Architektur ist, wie die Teile zusammenpassen. Die Konventionen sind die Hausregeln. Und die Absicht ist das Ziel. Material, Zusammenspiel, Hausregeln, Ziel: genau das hat eine gute Anforderung schon immer gesagt. Was Du ins Kontextfenster legst, entscheidet also, ob der Agent die Präzision und Genauigkeit hat, auf die er hinarbeiten kann. Darum nennen wir es Requirements Engineering für Agenten."
+        "script": "So definieren drei Google-Ingenieure Context Engineering: die Praxis, KI-Agenten reichhaltige, strukturierte Informationen über Deine Codebase, Architektur, Konventionen und Absicht zu geben. Das ist für Software geschrieben, aber die Logik ist dieselbe. Und jetzt von der Technik in die Werkstatt: Die Codebase ist das Material, das schon da ist. Die Architektur ist, wie die Teile zusammenpassen. Die Konventionen sind die Hausregeln. Und die Absicht ist das Ziel. Material, Zusammenspiel, Hausregeln, Ziel: genau das hat eine gute Anforderung schon immer gesagt. Was Du ins Kontextfenster legst, entscheidet also, ob der Agent die Präzision und Genauigkeit hat, auf die er hinarbeiten kann. Darum nennen wir es Requirements Engineering für Agenten."
       },
       "same-four-outcomes": {
         "title": "Dieselben vier Ergebnisse",
