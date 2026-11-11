@@ -1,0 +1,109 @@
+import { localizeSlide } from '@/episodes/components/slide-master/localized-slide';
+import type { Slide } from '@/episodes/components/slide-master/slide';
+import { placeSections } from '@/episodes/lib/episode.pure';
+import type { Locale } from '@/shared/lib/locale.pure';
+import { load } from 'cheerio';
+import { createElement, Fragment } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it } from 'vitest';
+import { fromSharedUnderstandingToSharedContext } from '../episode';
+
+/*
+ * The section slides of "From shared understanding to shared context", as the approved Spec gives them: one per Section,
+ * in Spec order, each titled by its Section's h2, carrying its Voice script segments, and each Scene one echo of the
+ * dartboard (picked Title-slide Option 0c). The Spec gives these Slides no Speaker notes.
+ */
+
+const SECTIONS = fromSharedUnderstandingToSharedContext.sections;
+const OPENERS = SECTIONS.map(([opener]) => opener as Slide);
+const PLACED = placeSections<Slide>(SECTIONS.map(([opener]) => [opener as Slide])).flat();
+
+/** A section slide's Scene as the page renders it under the shared Slide header. */
+function sceneOf(slug: string, locale: Locale = 'en') {
+  const own = PLACED.find((entry) => entry.slide.slug === slug);
+  if (own === undefined) throw new Error(`No section slide "${slug}".`);
+  const localized = localizeSlide(own, {
+    episode: 'from-shared-understanding-to-shared-context',
+    locale,
+    placed: PLACED,
+    referenceLabels: { ref: 'opens speaker note', marker: (title) => `Speaker note: ${title}` },
+    header: 'shared',
+  });
+  return load(renderToStaticMarkup(createElement(Fragment, null, localized.content)));
+}
+
+/** A section slide's title and Voice script segment titles in one locale. */
+function scriptOf(slide: Slide, locale: Locale) {
+  const messages = slide.messages[locale] as {
+    title: string;
+    voiceScript: { segments: Record<string, { title: string }> };
+  };
+  return {
+    title: messages.title,
+    segments: slide.segments.map(({ slug }) => messages.voiceScript.segments[slug]?.title),
+  };
+}
+
+describe('success cases', () => {
+  it('opens the four Sections in Spec order, each titled and scripted as the Spec writes it', () => {
+    // ARRANGE
+    const expected = [
+      { title: 'A thought experiment', segments: ['Imagine your organization as a line', 'Where this is going'] },
+      { title: 'Every product is a translation', segments: ['A new pain', 'Where the Section goes'] },
+      { title: 'Context is the requirement', segments: ['The claim', 'The route'] },
+      { title: 'Creating context for agents', segments: ['The pain', 'The claim'] },
+    ];
+    // ACT
+    const actual = OPENERS.map((slide) => scriptOf(slide, 'en'));
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('draws one dartboard per section slide, the echo of the Hero motif', () => {
+    // ARRANGE
+    const expected = {
+      'a-thought-experiment': 1,
+      'every-product-is-a-translation': 4,
+      'context-is-the-requirement': 1,
+      'creating-context-for-agents': 1,
+    };
+    // ACT
+    const actual = Object.fromEntries(OPENERS.map(({ slug }) => [slug, sceneOf(slug)('[data-dartboard]').length]));
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('failure cases', () => {
+  it('declares no Speaker note on a section slide, since the picked Option shows no Context marker', () => {
+    // ARRANGE
+    const expected = OPENERS.map(() => 0);
+    // ACT
+    const actual = OPENERS.map((slide) => slide.notes.length);
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('edge cases', () => {
+  it('scripts every German section slide segment by segment, as English does', () => {
+    // ARRANGE
+    const expected = OPENERS.map((slide) => slide.segments.length);
+    // ACT
+    const actual = OPENERS.map((slide) => scriptOf(slide, 'de').segments.filter((title) => Boolean(title)).length);
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('labels the four boards of the translation Section in German', () => {
+    // ARRANGE
+    const expected = ['Beides', 'Präzise', 'Genau', 'Keins'];
+    // ACT
+    const $ = sceneOf('every-product-is-a-translation', 'de');
+    const labels = $('[data-board-label]')
+      .toArray()
+      .map((label) => $(label).text());
+    // ASSERT
+    expect(labels).toEqual(expected);
+  });
+});

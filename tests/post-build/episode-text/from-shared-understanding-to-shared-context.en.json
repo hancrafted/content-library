@@ -1,0 +1,50 @@
+{
+  "title": "From shared understanding to shared context · hancrafted",
+  "description": "Why AI speeds up every station but not the result, how to tell static from dynamic context, how to spot context that goes bad, and how to let an AI interview you in rounds of questions to build high-signal context, then move it into a fresh chat.",
+  "toc": "Episodes Collapse contents From shared understanding to shared context 1 A thought experiment 2 Every product is a translation 3 Context is the requirement 4 Creating context for agents Open contents : Contents Episodes From shared understanding to shared context 1 A thought experiment 2 Every product is a translation 3 Context is the requirement 4 Creating context for agents",
+  "slides": [
+    {
+      "id": "top",
+      "text": "From shared understanding to shared context AI throws every dart faster. Where they land is set by what you hand the agent, and an AI interview sharpens that aim with you. The intent What you hand the agent sets the aim AI every throw faster"
+    },
+    { "id": "a-thought-experiment", "text": "A thought experiment AI 10× the throws" },
+    { "id": "every-product-is-a-translation", "text": "Every product is a translation Both Precise Accurate Neither" },
+    { "id": "context-is-the-requirement", "text": "Context is the requirement Context window Static Dynamic" },
+    { "id": "creating-context-for-agents", "text": "Creating context for agents Round 1 Round 2 Round 3 → the spec" }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    { "id": "a-thought-experiment", "text": "A thought experiment No speaker notes for this Slide." },
+    {
+      "id": "every-product-is-a-translation",
+      "text": "Every product is a translation No speaker notes for this Slide."
+    },
+    { "id": "context-is-the-requirement", "text": "Context is the requirement No speaker notes for this Slide." },
+    { "id": "creating-context-for-agents", "text": "Creating context for agents No speaker notes for this Slide." }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "This panel shows the speaker notes and voice script for the Slide you are reading, and follows you as you scroll. Press Alt+N to open or close it."
+    },
+    {
+      "id": "a-thought-experiment",
+      "text": "A thought experiment 0:00 – 0:33 Imagine your organization as a line AI doesn't build the right swing for you, but it can build the wrong one ten times faster. Imagine your own organization as a factory line, with documents moving from one work centre to the next, a request here, a design there, a finished result at the end. You already know this picture, because everyone in this room has lived the tire swing cartoon, where each station built its own version of what the customer asked for. 0:33 – 0:58 Where this is going Before we start, here is the route. First we give every station on that line an AI and watch what happens. Then we look at what you hand the agent, because that decides the result. And last, you will see how an AI interview builds that handover for you, so you do not have to write it alone."
+    },
+    {
+      "id": "every-product-is-a-translation",
+      "text": "Every product is a translation 0:00 – 0:19 A new pain Think of the last time you got back exactly what you asked for, and it was still wrong. Nobody was lazy and nothing was broken. The building went fine, so the failure sat somewhere else, and that is the pain this Section is about. 0:19 – 0:30 Where the Section goes We take three steps. First what value actually is, then where it splits into two halves, and then what makes a requirement a good one."
+    },
+    {
+      "id": "context-is-the-requirement",
+      "text": "Context is the requirement 0:00 – 0:18 The claim So here is the claim, and I want you to treat it as a claim: context engineering is requirements engineering for agents. What you hand the agent decides the result, in the same way a requirement decides the result for a human team. 0:18 – 0:32 The route The route has four stops. First what the AI sees, then the two kinds of context, static and dynamic, then how it goes wrong, and finally how to keep it clean."
+    },
+    {
+      "id": "creating-context-for-agents",
+      "text": "Creating context for agents 0:00 – 0:17 The pain Creating precise, accurate context that stays free of rot feels like a lot of work. Who has time to write that for every task? Most of us will skip it, and then we are back at the tire swing. 0:17 – 0:34 The claim So here is the claim: let the AI do the interviewing, and you do the answering. You are good at knowing what you want when someone asks you the right question. You are less good at writing it all down unprompted."
+    }
+  ]
+}

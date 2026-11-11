@@ -1,0 +1,75 @@
+import { slide } from '@/episodes/components/slide-master/slide';
+import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { Dartboard } from '@/episodes/components/slide-shared/dartboard/dartboard';
+import de from './i18n/de.json';
+import en from './i18n/en.json';
+
+/** Each interview round's cluster, closing on the bull: loose and dulled, then `ai`, then on target. */
+const ROUNDS = [
+  {
+    round: 'round1',
+    dart: 'fill-muted-foreground',
+    r: 4,
+    darts: [
+      [140, 30],
+      [150, 24],
+      [134, 40],
+    ],
+  },
+  {
+    round: 'round2',
+    dart: 'fill-ai',
+    r: 4,
+    darts: [
+      [166, 54],
+      [172, 48],
+      [162, 60],
+    ],
+  },
+  {
+    round: 'round3',
+    dart: 'fill-foreground',
+    r: 3.5,
+    darts: [
+      [186, 74],
+      [193, 72],
+      [190, 80],
+    ],
+  },
+] as const;
+
+// The section slide of "Creating context for agents", echoing the Hero motif: each interview round moves the cluster
+// closer to the bull, and the last one becomes the spec.
+export const creatingContextForAgents = slide({
+  slug: 'creating-context-for-agents',
+  messages: { en, de },
+  segments: [{ slug: 'the-pain' }, { slug: 'the-claim' }],
+  content: ({ t }) => (
+    <SlideFrame>
+      <svg viewBox="0 0 300 150" className="w-full max-w-xl" role="img" aria-label={t('label')}>
+        <Dartboard cx={190} cy={76} r={66} rings={3} bull={8} />
+        {ROUNDS.flatMap(({ round, dart, r, darts }) =>
+          darts.map(([cx, cy]) => <circle key={`${round}-${cx}`} data-dart cx={cx} cy={cy} r={r} className={dart} />),
+        )}
+        <path
+          d="M146 38 Q156 46 160 52 M172 62 Q180 68 182 70"
+          className="fill-none stroke-primary"
+          strokeWidth={1.5}
+          strokeDasharray="3 3"
+        />
+        <text x={10} y={34} className="fill-muted-foreground text-caption">
+          {t('round1')}
+        </text>
+        <text x={10} y={62} className="fill-ai text-caption font-medium">
+          {t('round2')}
+        </text>
+        <text x={10} y={90} className="fill-primary text-caption font-semibold">
+          {t('round3')}
+        </text>
+        <text x={10} y={130} className="fill-primary text-caption font-semibold">
+          {t('spec')}
+        </text>
+      </svg>
+    </SlideFrame>
+  ),
+});

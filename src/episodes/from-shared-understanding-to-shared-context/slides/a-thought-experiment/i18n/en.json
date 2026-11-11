@@ -1,0 +1,20 @@
+{
+  "title": "A thought experiment",
+  "label": "Ten times the throws, scattered off the bull",
+  "ai": "AI",
+  "moreThrows": "10× the throws",
+  "voiceScript": {
+    "segments": {
+      "imagine-your-organization-as-a-line": {
+        "title": "Imagine your organization as a line",
+        "keywords": "",
+        "script": "AI doesn't build the right swing for you, but it can build the wrong one ten times faster. Imagine your own organization as a factory line, with documents moving from one work centre to the next, a request here, a design there, a finished result at the end. You already know this picture, because everyone in this room has lived the tire swing cartoon, where each station built its own version of what the customer asked for."
+      },
+      "where-this-is-going": {
+        "title": "Where this is going",
+        "keywords": "",
+        "script": "Before we start, here is the route. First we give every station on that line an AI and watch what happens. Then we look at what you hand the agent, because that decides the result. And last, you will see how an AI interview builds that handover for you, so you do not have to write it alone."
+      }
+    }
+  }
+}

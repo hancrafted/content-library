@@ -22,6 +22,7 @@ import type { EpisodeComposition } from '@/episodes/components/slide-master/slid
 import { aiCapability } from '@/episodes/explorable-pages/ai-capability/episode';
 import { contextWindow } from '@/episodes/explorable-pages/context-window/episode';
 import { humanInTheLoop } from '@/episodes/explorable-pages/human-in-the-loop/episode';
+import { fromSharedUnderstandingToSharedContext } from '@/episodes/from-shared-understanding-to-shared-context/episode';
 import { setupAiAgentAndStarterFolder } from '@/episodes/guides/setup-ai-agent-and-starter-folder/episode';
 import { maintainingMarkdownForAi } from '@/episodes/maintaining-markdown-for-ai/episode';
 import { neverTooEarlySales } from '@/episodes/never-too-early-sales/episode';
@@ -52,6 +53,7 @@ export const EPISODES: { readonly [I in EpisodeId]: EpisodeComposition & { reado
   'ai-attention-span': aiAttentionSpan,
   'ai-gives-you-more-work': aiGivesYouMoreWork,
   'ai-token-economy': aiTokenEconomy,
+  'from-shared-understanding-to-shared-context': fromSharedUnderstandingToSharedContext,
   'maintaining-markdown-for-ai': maintainingMarkdownForAi,
   'never-too-early-sales': neverTooEarlySales,
   'onboard-ai-every-time': onboardAiEveryTime,

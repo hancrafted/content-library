@@ -1,0 +1,21 @@
+{
+  "title": "Kontext ist die Anforderung",
+  "label": "Die Scheibe im Kontextfenster, daneben statischer und dynamischer Kontext",
+  "contextWindow": "Kontextfenster",
+  "static": "Statisch",
+  "dynamic": "Dynamisch",
+  "voiceScript": {
+    "segments": {
+      "the-claim": {
+        "title": "Die These",
+        "keywords": "",
+        "script": "Hier ist die These, und ich möchte, dass Du sie als These nimmst: Context Engineering ist Requirements Engineering für Agenten. Was Du dem Agenten übergibst, entscheidet über das Ergebnis, genauso wie eine Anforderung das Ergebnis für ein menschliches Team entscheidet."
+      },
+      "the-route": {
+        "title": "Der Weg",
+        "keywords": "",
+        "script": "Der Weg hat vier Stationen. Zuerst, was die KI sieht, dann die zwei Arten von Kontext, statisch und dynamisch, dann, wie er kippt, und zum Schluss, wie Du ihn sauber hältst."
+      }
+    }
+  }
+}

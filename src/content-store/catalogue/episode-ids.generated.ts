@@ -19,6 +19,7 @@ export const EPISODE_IDS = [
   'ai-attention-span',
   'ai-gives-you-more-work',
   'ai-token-economy',
+  'from-shared-understanding-to-shared-context',
   'maintaining-markdown-for-ai',
   'never-too-early-sales',
   'onboard-ai-every-time',

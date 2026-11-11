@@ -1,0 +1,21 @@
+{
+  "title": "Context is the requirement",
+  "label": "The board inside the context window, with static and dynamic context beside it",
+  "contextWindow": "Context window",
+  "static": "Static",
+  "dynamic": "Dynamic",
+  "voiceScript": {
+    "segments": {
+      "the-claim": {
+        "title": "The claim",
+        "keywords": "",
+        "script": "So here is the claim, and I want you to treat it as a claim: context engineering is requirements engineering for agents. What you hand the agent decides the result, in the same way a requirement decides the result for a human team."
+      },
+      "the-route": {
+        "title": "The route",
+        "keywords": "",
+        "script": "The route has four stops. First what the AI sees, then the two kinds of context, static and dynamic, then how it goes wrong, and finally how to keep it clean."
+      }
+    }
+  }
+}

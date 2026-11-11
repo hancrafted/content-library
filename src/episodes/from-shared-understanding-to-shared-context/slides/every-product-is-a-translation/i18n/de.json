@@ -1,0 +1,22 @@
+{
+  "title": "Jedes Produkt ist eine Übersetzung",
+  "label": "Vier Scheiben: präzise und genau, nur präzise, nur genau, keins von beidem",
+  "both": "Beides",
+  "precise": "Präzise",
+  "accurate": "Genau",
+  "neither": "Keins",
+  "voiceScript": {
+    "segments": {
+      "a-new-pain": {
+        "title": "Ein neuer Schmerz",
+        "keywords": "",
+        "script": "Denk an das letzte Mal, als Du genau das zurückbekommen hast, worum Du gebeten hattest, und es trotzdem falsch war. Niemand war faul, nichts war kaputt. Gebaut wurde sauber, also lag der Fehler woanders, und genau um diesen Schmerz geht es in diesem Abschnitt."
+      },
+      "where-the-section-goes": {
+        "title": "Wohin der Abschnitt geht",
+        "keywords": "",
+        "script": "Wir gehen drei Schritte. Zuerst, was Wert eigentlich ist, dann, wo er sich in zwei Hälften teilt, und dann, was eine gute Anforderung ausmacht."
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Every product is a translation",
+  "label": "Four boards: precise and accurate, precise only, accurate only, neither",
+  "both": "Both",
+  "precise": "Precise",
+  "accurate": "Accurate",
+  "neither": "Neither",
+  "voiceScript": {
+    "segments": {
+      "a-new-pain": {
+        "title": "A new pain",
+        "keywords": "",
+        "script": "Think of the last time you got back exactly what you asked for, and it was still wrong. Nobody was lazy and nothing was broken. The building went fine, so the failure sat somewhere else, and that is the pain this Section is about."
+      },
+      "where-the-section-goes": {
+        "title": "Where the Section goes",
+        "keywords": "",
+        "script": "We take three steps. First what value actually is, then where it splits into two halves, and then what makes a requirement a good one."
+      }
+    }
+  }
+}

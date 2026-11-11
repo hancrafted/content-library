@@ -1,0 +1,56 @@
+{
+  "title": "Vom geteilten Verständnis zum geteilten Kontext · hancrafted",
+  "description": "Warum KI jede Station beschleunigt, aber nicht das Ergebnis, wie Du statischen von dynamischem Kontext unterscheidest, wie Du erkennst, wann Kontext kippt, und wie Du Dich von einer KI in Fragerunden interviewen lässt, um Kontext mit hohem Signal zu bauen und ihn dann in einen frischen Chat mitzunehmen.",
+  "toc": "Episoden Inhalt einklappen Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung 4 Kontext für Agenten erstellen Inhalt öffnen : Inhalt Episoden Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung 4 Kontext für Agenten erstellen",
+  "slides": [
+    {
+      "id": "top",
+      "text": "Vom geteilten Verständnis zum geteilten Kontext KI wirft jeden Pfeil schneller. Wo sie landen, entscheidet das, was Du dem Agenten übergibst, und ein KI-Interview schärft dieses Ziel mit Dir. Die Absicht Was Du dem Agenten übergibst setzt das Ziel KI jeder Wurf schneller"
+    },
+    { "id": "a-thought-experiment", "text": "Ein Gedankenexperiment KI 10× die Würfe" },
+    { "id": "every-product-is-a-translation", "text": "Jedes Produkt ist eine Übersetzung Beides Präzise Genau Keins" },
+    { "id": "context-is-the-requirement", "text": "Kontext ist die Anforderung Kontextfenster Statisch Dynamisch" },
+    { "id": "creating-context-for-agents", "text": "Kontext für Agenten erstellen Runde 1 Runde 2 Runde 3 → die Spec" }
+  ],
+  "notes": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    { "id": "a-thought-experiment", "text": "Ein Gedankenexperiment Keine Sprechernotizen für diese Folie." },
+    {
+      "id": "every-product-is-a-translation",
+      "text": "Jedes Produkt ist eine Übersetzung Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "context-is-the-requirement",
+      "text": "Kontext ist die Anforderung Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "creating-context-for-agents",
+      "text": "Kontext für Agenten erstellen Keine Sprechernotizen für diese Folie."
+    }
+  ],
+  "script": [
+    {
+      "id": "top",
+      "text": "Dieses Fenster zeigt die Sprechernotizen und den Sprechtext zur Folie, die Sie gerade lesen, und folgt Ihnen beim Scrollen. Mit Alt+N öffnen und schließen Sie es."
+    },
+    {
+      "id": "a-thought-experiment",
+      "text": "Ein Gedankenexperiment 0:00 – 0:35 Stell Dir Deine Organisation als Fließband vor KI baut Dir nicht die richtige Schaukel, aber sie kann Dir die falsche zehnmal schneller bauen. Stell Dir Deine eigene Organisation als Fließband vor: Dokumente wandern von einem Arbeitsplatz zum nächsten, hier eine Anfrage, dort ein Entwurf, am Ende ein fertiges Ergebnis. Das Bild kennst Du schon, denn jeder hier im Raum hat den Reifenschaukel-Cartoon erlebt, in dem jede Station ihre eigene Version dessen gebaut hat, was der Kunde wollte. 0:35 – 1:03 Wohin es geht Bevor wir starten, hier der Weg. Zuerst geben wir jeder Station am Band eine KI und schauen, was passiert. Dann sehen wir uns an, was Du dem Agenten übergibst, denn das entscheidet über das Ergebnis. Und zum Schluss siehst Du, wie ein KI-Interview diese Übergabe für Dich baut, damit Du sie nicht allein schreiben musst."
+    },
+    {
+      "id": "every-product-is-a-translation",
+      "text": "Jedes Produkt ist eine Übersetzung 0:00 – 0:22 Ein neuer Schmerz Denk an das letzte Mal, als Du genau das zurückbekommen hast, worum Du gebeten hattest, und es trotzdem falsch war. Niemand war faul, nichts war kaputt. Gebaut wurde sauber, also lag der Fehler woanders, und genau um diesen Schmerz geht es in diesem Abschnitt. 0:22 – 0:34 Wohin der Abschnitt geht Wir gehen drei Schritte. Zuerst, was Wert eigentlich ist, dann, wo er sich in zwei Hälften teilt, und dann, was eine gute Anforderung ausmacht."
+    },
+    {
+      "id": "context-is-the-requirement",
+      "text": "Kontext ist die Anforderung 0:00 – 0:20 Die These Hier ist die These, und ich möchte, dass Du sie als These nimmst: Context Engineering ist Requirements Engineering für Agenten. Was Du dem Agenten übergibst, entscheidet über das Ergebnis, genauso wie eine Anforderung das Ergebnis für ein menschliches Team entscheidet. 0:20 – 0:36 Der Weg Der Weg hat vier Stationen. Zuerst, was die KI sieht, dann die zwei Arten von Kontext, statisch und dynamisch, dann, wie er kippt, und zum Schluss, wie Du ihn sauber hältst."
+    },
+    {
+      "id": "creating-context-for-agents",
+      "text": "Kontext für Agenten erstellen 0:00 – 0:19 Der Schmerz Präzisen, genauen Kontext zu erstellen, der nicht verrottet, fühlt sich nach viel Arbeit an. Wer hat Zeit, das für jede Aufgabe zu schreiben? Die meisten von uns lassen es weg, und dann stehen wir wieder bei der Reifenschaukel. 0:19 – 0:35 Die These Deshalb die These: Lass die KI fragen, und Du antwortest. Du weißt gut, was Du willst, wenn Dir jemand die richtige Frage stellt. Weniger gut bist Du darin, alles ungefragt aufzuschreiben."
+    }
+  ]
+}
