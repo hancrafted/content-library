@@ -39,20 +39,16 @@
     "intro": "Hake ab, was Du schon hast. Die Karte rechts zeigt Dir, wo Du anfängst.",
     "steps": {
       "1": {
-        "section": "Dein Terminal",
-        "title": "Öffne Dein Terminal"
+        "title": "Dein Terminal"
       },
       "2": {
-        "section": "Dein KI-Agent",
-        "title": "Installiere Deinen KI-Agenten"
+        "title": "Dein KI-Agent"
       },
       "3": {
-        "section": "Dein Ordner",
-        "title": "Lade den Starter-Ordner herunter, starte Deinen KI-Agenten darin und melde Dich an"
+        "title": "Dein Ordner"
       },
       "4": {
-        "section": "Dein erster Skill",
-        "title": "Führe Deinen ersten Skill aus"
+        "title": "Dein erster Skill"
       }
     },
     "boxes": {

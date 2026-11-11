@@ -81,11 +81,11 @@ function viewOf(search: string, onReopen?: () => void) {
 }
 
 describe('success cases', () => {
-  it('lists logging in under step 3, where the AI agent first starts inside the folder', () => {
+  it('names each step exactly as its Section, and lists logging in under step 3, the folder step', () => {
     // ARRANGE
     const expected = {
-      two: 'Install your AI agent',
-      three: 'Download the starter folder, start your AI agent in it and log in',
+      two: 'Your AI agent',
+      three: 'Your folder',
       loginStep: '3',
     };
     // ACT

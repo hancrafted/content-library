@@ -1,4 +1,4 @@
-import type { ReadyFlags } from '@/episodes/lib/guide-ready-flags.pure';
+import { isReady, type ReadyFlags } from '@/episodes/lib/guide-ready-flags.pure';
 
 export type MissingPiece = 'skills' | 'localSetup';
 
@@ -14,7 +14,7 @@ export function decideView(flags: ReadyFlags): OverviewView {
   if (flags.skills === false) missing.push('skills');
   if (flags.localSetup === false) missing.push('localSetup');
   if (missing.length > 0) return { kind: 'missing', flags, missing };
-  if (flags.skills === true && flags.localSetup === true) return { kind: 'ready' };
+  if (isReady(flags)) return { kind: 'ready' };
   return { kind: 'normal' };
 }
 
