@@ -73,7 +73,7 @@ export const startTheAgentInsideThatFolder = slide({
             className="focus-group focus-group--dim-others flex flex-col gap-8 rounded-3xl border border-border bg-card p-5 md:p-8"
             {...target('folder')}
           >
-            <li className="focus-group__item grid grid-cols-1 items-start gap-6 md:grid-cols-12">
+            <li className="focus-group__item grid grid-cols-1 items-start gap-6 md:grid-cols-12" data-move="open">
               <MoveText n={1} title={t('moves.open.title')}>
                 <p>
                   <ByOs
@@ -184,6 +184,9 @@ export const startTheAgentInsideThatFolder = slide({
                   ))}
                 />
                 <DoneStrip label={t('doneLabel')}>{t('moves.start.worked')}</DoneStrip>
+                <MoreHelp title={t('notFound.title')}>
+                  <p data-not-found="">{t('notFound.fix')}</p>
+                </MoreHelp>
               </MoveText>
               <div className="md:col-span-8">
                 <TerminalWindow title={terminalTitle} ai>

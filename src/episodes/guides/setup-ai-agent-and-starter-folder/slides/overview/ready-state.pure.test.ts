@@ -1,16 +1,8 @@
+import { parseReadyFlags } from '@/episodes/lib/guide-ready-flags.pure';
 import { describe, expect, it } from 'vitest';
-import { decideView, parseReadyFlags, viewFor } from './ready-state.pure';
+import { decideView, viewFor } from './ready-state.pure';
 
 describe('success cases', () => {
-  it('reads both flags from the query string', () => {
-    // ARRANGE
-    const expected = { skills: true, localSetup: false };
-    // ACT
-    const flags = parseReadyFlags('?skills=true&local-setup=false');
-    // ASSERT
-    expect(flags).toEqual(expected);
-  });
-
   it('is ready when both flags are true', () => {
     // ARRANGE
     const flags = parseReadyFlags('?skills=true&local-setup=true');
@@ -31,15 +23,6 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
-  it('treats anything but exact true or false as unknown', () => {
-    // ARRANGE
-    const expected = { skills: undefined, localSetup: undefined };
-    // ACT
-    const flags = parseReadyFlags('?skills=TRUE&local-setup=1');
-    // ASSERT
-    expect(flags).toEqual(expected);
-  });
-
   it('stays normal when a flag is true and the other is unknown', () => {
     // ARRANGE
     const flags = parseReadyFlags('?skills=true&local-setup=maybe');

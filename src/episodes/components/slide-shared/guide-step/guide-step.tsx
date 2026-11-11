@@ -43,3 +43,24 @@ export function MoreHelp({ title, children }: MoreHelpProps) {
     </details>
   );
 }
+
+interface StepDoneBadgeProps {
+  /** Whether the check skill reported the setup as working. */
+  readonly ready: boolean;
+  /** The badge's words, for example "Done, no need to repeat". */
+  readonly label: string;
+}
+
+/** Beside a step's "Step n" pill once the check reported ready, so a viewer scrolling past the ready card does not redo the step. */
+export function StepDoneBadge({ ready, label }: StepDoneBadgeProps) {
+  if (!ready) return null;
+  return (
+    <p
+      className="inline-flex items-center gap-2 self-start rounded-full border border-(--success) bg-(--success)/10 px-3 py-1 text-caption font-semibold"
+      data-step-done=""
+    >
+      <DoneMark />
+      {label}
+    </p>
+  );
+}

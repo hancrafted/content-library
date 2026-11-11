@@ -3,6 +3,7 @@
   "caption": "A place for the AI agent to work.",
   "filesLabel": "What the starter folder holds",
   "steps": "Step 3",
+  "stepDone": "Done, no need to repeat",
   "window": "terminal",
   "prompt": "hancrafted-workshop-starter %",
   "voiceScript": {

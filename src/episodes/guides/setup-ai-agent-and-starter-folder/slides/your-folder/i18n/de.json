@@ -3,6 +3,7 @@
   "caption": "Ein Ort, an dem der KI-Agent arbeiten kann.",
   "filesLabel": "Was der Starter-Ordner enthält",
   "steps": "Schritt 3",
+  "stepDone": "Erledigt, nicht noch einmal nötig",
   "window": "Terminal",
   "prompt": "hancrafted-workshop-starter %",
   "voiceScript": {

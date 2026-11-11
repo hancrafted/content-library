@@ -1,8 +1,9 @@
 import { WatchCard, type WatchCardProps } from '@/episodes/components/slide-shared/watch-card/watch-card';
+import type { ReadyFlags } from '@/episodes/lib/guide-ready-flags.pure';
 import { type Locale } from '@/shared/lib/locale.pure';
 import { ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
-import type { OverviewView, ReadyFlags } from './ready-state.pure';
+import type { OverviewView } from './ready-state.pure';
 
 export interface ReadinessWords {
   readonly readyTitle: string;

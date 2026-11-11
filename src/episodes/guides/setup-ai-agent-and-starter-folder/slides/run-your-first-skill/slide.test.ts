@@ -103,6 +103,21 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('copies /hancrafted-check-setup de on the German page, so the check opens the German Guide', () => {
+    // ARRANGE
+    const expected = { en: '/hancrafted-check-setup', de: '/hancrafted-check-setup de' };
+    // ACT
+    const actual = {
+      en: scene('en')('[data-copy-line]').first().attr('data-copy-line'),
+      de: scene('de')('[data-copy-line]').first().attr('data-copy-line'),
+    };
+    const typed = scene('de').text();
+    // ASSERT
+    expect(actual).toEqual(expected);
+    expect(typed).toContain('> /hancrafted-check-setup de');
+    expect(typed).not.toMatch(/> \/hancrafted-check-setup(?! de)/);
+  });
+
   it('marks Claude Code as the picked AI agent before the viewer picks', () => {
     // ARRANGE
     const expected = ['Claude Code'];

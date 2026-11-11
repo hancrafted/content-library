@@ -1,8 +1,4 @@
-/** The two readiness flags the check skill puts on the Guide link: `?skills=true&local-setup=true`. */
-export interface ReadyFlags {
-  readonly skills: boolean | undefined;
-  readonly localSetup: boolean | undefined;
-}
+import type { ReadyFlags } from '@/episodes/lib/guide-ready-flags.pure';
 
 export type MissingPiece = 'skills' | 'localSetup';
 
@@ -11,19 +7,6 @@ export type OverviewView =
   | { readonly kind: 'normal' }
   | { readonly kind: 'ready' }
   | { readonly kind: 'missing'; readonly flags: ReadyFlags; readonly missing: readonly MissingPiece[] };
-
-/** Only the exact words `true` and `false` count; anything else, or no value, is unknown. */
-function flag(value: string | null): boolean | undefined {
-  if (value === 'true') return true;
-  if (value === 'false') return false;
-  return undefined;
-}
-
-/** Reads the flags from a `location.search` string, with or without the leading `?`. */
-export function parseReadyFlags(search: string): ReadyFlags {
-  const params = new URLSearchParams(search);
-  return { skills: flag(params.get('skills')), localSetup: flag(params.get('local-setup')) };
-}
 
 /** `ready` when both flags are true, `missing` when at least one is false, otherwise `normal`. */
 export function decideView(flags: ReadyFlags): OverviewView {

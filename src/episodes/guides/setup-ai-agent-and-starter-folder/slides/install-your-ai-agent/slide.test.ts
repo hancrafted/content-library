@@ -107,27 +107,25 @@ describe('success cases', () => {
     expect(scene('en')('[data-happen]').text()).toContain('Press Help');
   });
 
-  it('tells Codex that Enter alone answers no to "Start Codex now? [y/N]", and what to type instead', () => {
+  it('tells Codex to answer N to "Start Codex now? [y/N]", because it starts later inside the starter folder', () => {
     // ARRANGE
     const question = 'Start Codex now? [y/N]';
-    const fallback = 'codex';
+    const later = 'starter folder';
     // ACT
     const block = scene('en', { agent: 'codex' })('[data-end]');
     // ASSERT
     expect(block.text()).toContain(question);
-    expect(block.find('kbd').first().text()).toBe('y');
-    expect(block.text()).toContain(fallback);
+    expect(block.find('kbd').first().text()).toBe('N');
+    expect(block.text()).toContain(later);
   });
 
-  it('tells Copilot that the next step is copilot, not the copilot help of the last line', () => {
+  it('tells every AI agent not to start yet, since its first start is inside the starter folder', () => {
     // ARRANGE
-    const expected = ['copilot help', 'copilot'];
+    const agents = ['claude-code', 'codex', 'copilot'];
     // ACT
-    const codes = scene('en', { agent: 'copilot' })('[data-end] code')
-      .map((_, el) => scene('en')(el).text())
-      .get();
+    const texts = agents.map((agent) => scene('en', { agent })('[data-end]').text());
     // ASSERT
-    expect(codes).toEqual(expect.arrayContaining(expected));
+    for (const text of texts) expect(text).toContain('starter folder');
   });
 });
 
@@ -173,6 +171,20 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('shows the Command Prompt as C:\\> with a real angle bracket, in both languages', () => {
+    // ARRANGE
+    const expected = 'C:\\>';
+    // ACT
+    const texts = (['en', 'de'] as const).map((locale) =>
+      scene(locale, { os: 'windows', agent: 'claude-code' })('[data-command-prompt]').text(),
+    );
+    // ASSERT
+    for (const text of texts) {
+      expect(text).toContain(expected);
+      expect(text).not.toContain('&gt;');
+    }
+  });
+
   it('names only the selected operating system in the work-laptop notice', () => {
     // ARRANGE
     const expected = { mac: 'macOS', linux: 'Linux', windows: 'Windows' };
