@@ -26,7 +26,7 @@ This guide holds the product design, from Han's voice session of 2026-11-10 and 
 1. **The organization is a factory.** The Customer's requests come in, conveyor belts carry documents between work centers, work waits in each center's backlog, inspection is the review, and releases go back to the Customer.
 2. **Ideal first, then reality.** The opening state is the ideal factory: only good documents move, every work center has slack, and nothing piles up. Then the bridge, "reality is messier": in Realistic, efficiency and effectiveness drop, work arrives at random, and the factory is busy but coping, with short backlogs, bad work and rework.
 3. **Efficiency is output; effectiveness is outcome.** A faster work center pushes more work into the next one, which can become the bottleneck. A less effective one hands on more bad documents, and bad work does damage downstream through rework, churn, extra work, customer complaints and inspections that pass it unread.
-4. **AI raises output, not quality.** At a work center, AI makes it faster and multiplies what it fans out (one spec, five pages of documentation; with AI, fifty). With mediocre effectiveness it produces more bad work, faster, and the next work center pays.
+4. **AI raises output, not quality.** At a work center, AI makes it faster and can multiply the tasks it hands on (one spec, five pages of documentation; with AI, fifty). AI everywhere frees capacity: output stays at the Customer's demand while lead time falls. AI at one role alone floods the next one, and with mediocre effectiveness it produces more bad work, faster, and the next work center pays.
 5. **Pressure travels along the belts.** Speeding up one work center rarely speeds up what reaches the Customer: the work piles up at the next inspection. Under the hood the factory is a queueing network: a work center whose arrivals exceed its capacity grows a backlog without end, and relieving it moves the bottleneck downstream.
 
 ## Messages
@@ -42,7 +42,7 @@ These are ranked. Evidence status comes from the business review, `.scratch/soft
 
 Each use case is one use-case file plus its words pair. Every use case outside software is captioned as a hypothesis, since all the research covers software or language models.
 
-1. **Tire swing.** One Customer and seven roles: sales, product manager, analyst / architect, support, engineer, quality assurance, operations (layout: `.scratch/software-ecology/prototype/layout-han-06.png`). The Customer's requests go to sales, the product manager and support; work runs through the analyst to the engineer, then quality assurance and operations, which releases back to the Customer. Support answers directly or hands a bug to the engineer. Quality assurance is the inspection. Documentation and billing are cartoon panels, not work centers. It is the only use case with cartoon panels and the Swing view.
+1. **Tire swing.** One Customer and seven roles: sales, product manager, analyst / architect, support, engineer, quality assurance, operations (layout: `.scratch/software-ecology/prototype/layout-han-06.png`). The Customer's requests go to sales, the product manager and support; work runs through the analyst to the engineer, then quality assurance and operations, which releases back to the Customer. Support answers directly or hands a bug to the engineer. Quality assurance is the inspection. Documentation and billing are cartoon panels, not work centers. It is the only use case with cartoon panels and the Swing view. It runs as a Product company by default: the product manager, sales and engineering also create work of their own (roadmap, leads, tech debt). A Model toggle switches to Service provider, where only the Customer creates work; Gatekeeper lead and Two teams default to that.
 2. **Gatekeeper lead.** One lead both writes the specs and reviews three engineers' work, so every pull request drains back through one person. The peer engineers have equal values: no bad actors.
 3. **Two teams, one platform.** Product feeds team A, which has an analyst, and team B, which has none. Both teams drain through one shared platform & QA work center.
 4. **Later:**
@@ -56,17 +56,29 @@ Each use case is one use-case file plus its words pair. Every use case outside s
 
 ## Interaction
 
-1. **State row in the toolbar:** the use case's presets in order: Swing and Roles (the ten cartoon panels in two rows of five), Ideal, Realistic, AI unbalanced (AI only where one role adopts it, e.g. engineering: no more output, a new bottleneck), AI compare, AI balanced (AI where needed and capacities matched: 2–3× output, about 95 % satisfied). Swing and Roles show the cards five per row with no belts, each with its tire-swing panel and its artefacts; the other states place each card on the line as a station. Turning a dial after picking a state marks the state "modified".
-2. **Use case picker, compare widget, Pause, Clear (an empty factory from day 0), speed (1×, 2×, 5× by default, 10×), the clock ("Day n") and Download YAML** stay visible in the toolbar, each with a tooltip; a ⋮ menu holds belt motion and theme. Upload works by dropping a YAML file. Everything else sits in a "Model" popover (Ideal … Realistic, AI, damage strengths, AI quality effect), each setting with a tooltip saying what it does to the factory. The Customer card opens a small dashboard with its request rate, Steady or Random arrivals, the request mix and the chance that a good or a bad release triggers a new request.
-3. **Work-center dashboard:** a click on a work center opens its dashboard as a popover anchored to it. It holds:
+1. **State row in the toolbar:** Swing, Roles, Ideal and Realistic, then a Scenarios menu and a Tour button. Swing and Roles keep every card at its factory position with its tire-swing panel and artefacts, the cartoon panels without a work center filling the empty cells, so switching to the factory only fades belts and panels in. Turning a dial after picking a state marks it "modified".
+2. **Scenarios** (Tire swing; each with a one-line "what to watch" caption and a guided tour of three to five steps that set the dials, run to a week, pause and point at a card):
+   1. Speed up one team: engineering at 200 %; quality assurance piles up and output stays flat.
+   2. AI unbalanced: AI at engineering only; more documents, fewer requests fulfilled.
+   3. AI compare: the same, opened in the compare stream.
+   4. AI everywhere: output stays at 1.0×, lead time falls, headroom grows.
+   5. AI balanced: demand 2.5×, capacities matched, about 95 % satisfied.
+   6. Bug spiral: from day 0 at 10×, engineering at 70 % effectiveness; bad releases, complaints through support and bugs back to engineering slow everything down over time.
+   7. Fix the orders first: analyst effectiveness 98 %; rework falls and output rises.
+   8. Move the bottleneck: relieve the bottleneck and watch it move downstream.
+
+   Gatekeeper lead and Two teams have Ideal, Realistic, Speed up one team and AI unbalanced, without tours. Every tour step states what the model must show, and a check runs it on the model alone.
+
+3. **Use case picker, compare widget, Pause, Clear (an empty factory from day 0), speed (1×, 2×, 5× by default, 10×), the clock ("Day n") and Download YAML** stay visible in the toolbar, each with a tooltip; a ⋮ menu holds belt motion and theme. Upload works by dropping a YAML file. Everything else sits in a "Model" popover (Ideal … Realistic, AI, damage strengths, AI quality effect), each setting with a tooltip saying what it does to the factory. The Customer card opens a small dashboard with its request rate, Steady or Random arrivals, the request mix and the chance that a good or a bad release triggers a new request.
+4. **Work-center dashboard:** a click on a work center opens its dashboard as a popover anchored to it. It holds:
    - a traffic light and its signals, and trend charts of output, outcome and queue
-   - an AI toggle; the efficiency (10 % to 1000 %), effectiveness and fan-out dials sit in a collapsed Settings section
+   - an AI toggle; a collapsed Settings section of sliders, each showing its set and effective value: efficiency (10 % to 1000 %), effectiveness, tasks handed on per task, and, while AI is on, AI's speed-up and extra tasks
    - a collapsed "How it flows" section with utilisation, throughput, backlog and lead time in plain words
    - the role's classic artefacts and execution tasks
    - what AI does there, to inspire the audience about their own department (e.g. sales turns leads into deals and requirements for the product manager and analyst)
      A help button at the top right turns help text on for every card; otherwise the controls carry tooltips.
-4. **Compare downstream:** turn compare mode on (or shift-click) and pick up to three work centers, then press Compare. The factory flattens into a three-column stream: each column shows its station above its dashboard, a gap marks skipped stations, and an overview strip and Exit sit on top. A preset can open this stream directly.
-5. **What ships:** the Customer card shows a 3×4 grid of the last twelve releases, good or bad with complaints marked, the customer satisfaction rate under it and output relative to ideal beside it, and the tire swing or the weakest role's wrong swing.
+5. **Compare downstream:** turn compare mode on (or shift-click) and pick up to three work centers, then press Compare. The factory flattens into a three-column stream: each column shows its station above its dashboard, a gap marks skipped stations, and an overview strip and Exit sit on top. A preset can open this stream directly.
+6. **What ships:** the Customer card shows a 3×4 grid of the last twelve releases, good or bad with complaints marked, the customer satisfaction rate under it and output relative to ideal beside it, the headroom ("could serve 2.4× the demand"), the lead time in days, bugs reported a week, and, as a Product company, own roadmap shipped apart from customer requests.
 
 ## Visuals
 
@@ -79,7 +91,7 @@ Each use case is one use-case file plus its words pair. Every use case outside s
    - extra work: a longer progress ring at the next station
    - customer complaints: a warning document from the customer into support
    - passing unread: an inspection under pressure lets bad documents through; its dashboard says so
-5. **Pile-up:** past six waiting, the rack's top slot turns red with "+n" beside it; the dashboard reads weeks of work waiting, amber from one and red from two. Every handoff takes the same quarter day, so belts never act as queues. Every station keeps a minimum gap of belt before and after it.
+5. **Pile-up:** past six waiting, the rack's top slot turns red with "+n" beside it and the surplus piles up at the end of the incoming belt, growing with the backlog and drawn differently per station; the dashboard reads weeks of work waiting, amber from one and red from two. Every handoff takes the same quarter day, so belts never act as queues; on screen it takes 0.6 s at any speed. Every station keeps a minimum gap of belt before and after it.
 6. **Stage:** the factory fills the viewport below a sticky toolbar, in rows, with cards large enough to read.
 
 ## Open
