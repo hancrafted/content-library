@@ -1,0 +1,69 @@
+name: Tire swing
+sub: Seven roles as most software firms run them, and one Customer. Requests go to Sales, the product manager or Support; Operations releases back to the Customer.
+centers:
+  qa: { title: Quality assurance }
+belts:
+  customer-sales: { label: new customer }
+  customer-pm: { label: feature or change request }
+  customer-support: { label: bug or support ticket }
+  sales-pm: { label: deal + promised scope, back: what did we promise? }
+  sales-ba: { label: requirements, back: what did you mean? }
+  pm-ba: { label: brief, back: open questions }
+  ba-eng: { label: spec, back: clarification }
+  support-eng: { label: bug report, back: cannot reproduce }
+  support-customer: { label: answer }
+  eng-qa: { label: pull request, back: changes requested }
+  qa-ops: { label: tested change, back: does not deploy }
+  ops-customer: { label: release }
+customer: { title: Customer, job: Sends requests and receives releases and answers }
+# Scenarios: a "what to watch" line and one caption per tour step (the steps and their checks live in tire.yaml).
+scenarios:
+  speed-up:
+    watch: Make the engineer twice as fast. Watch the Customer card – does more ship?
+    steps:
+      - At Realistic the engineer is the busiest work center, about 85 % busy. Next, it gets twice as fast.
+      - Twice as fast, and nothing waits at the engineer any more. Look at the Customer card next.
+      - 'The Customer gets the same output as before. The engineer was not holding anything up – the Customer only asks for so much. What grew is room: the line could now serve more demand.'
+  ai-unbalanced:
+    watch: AI on the engineer only, writing twice the pull requests. Watch quality assurance.
+    steps:
+      - Realistic, without AI. Quality assurance keeps up. Next, the engineer gets AI that writes two pull requests per task.
+      - The engineer is faster than ever, and quality assurance now gets twice the pull requests to read. Its rack fills.
+      - Quality assurance has weeks of work waiting, and the Customer gets about half of what it asked for. Faster at one station made the whole line slower.
+  ai-compare:
+    watch: The same AI-unbalanced line, flattened into a stream of three stations.
+    steps:
+      - The engineer, with AI, has nothing waiting.
+      - Quality assurance is the one with weeks of work. Its pile is the engineer's extra pull requests.
+      - The pile still grows. More output at one station is more input at the next.
+  ai-everywhere:
+    watch: AI on every station, at the demand the line is sized for. Watch the lead time on the Customer card.
+    steps:
+      - Realistic, without AI. Note the lead time on the Customer card.
+      - AI everywhere. The Customer gets the same output – it only asks for so much – but the lead time falls, and the line could serve more than twice the demand.
+      - Nothing waits anywhere. AI made room, not output; the room is worth something only if more demand comes.
+  ai-balanced:
+    watch: Two and a half times the demand, with AI on every station. Watch satisfaction stay high.
+    steps:
+      - The Customer asks two and a half times as much, and gets it.
+      - Quality assurance keeps up, because AI there makes room for the extra work from upstream.
+      - About 95 % satisfied at two and a half times the output. Balanced AI scales the whole line, not one station.
+  bug-spiral:
+    watch: The engineer ships more bad pull requests (effectiveness 65 %). Watch bugs a week, the engineer's backlog and the lead time.
+    steps:
+      - An empty factory at day 0, running at 10×. More bad pull requests reach quality assurance, and some reach the Customer as bugs.
+      - Bugs come back as support tickets, and their fixes jump the engineer's queue. With more than a week of work waiting, the engineer rushes – its effectiveness drops by up to 15 points, so even more bad pull requests.
+      - The engineer rushes flat out, and its backlog keeps growing. Output sits well below demand.
+      - Lead time has exploded to more than two months. Output stays at about 70 % – it neither recovers nor collapses. The spiral costs time, not volume.
+  fix-orders:
+    watch: Unclear specs (analyst effectiveness 75 %) at 9 requests a week, from an empty factory. Watch the engineer's rework, then the backlog.
+    steps:
+      - The engineer sends about a fifth of the specs back, and the line cannot serve the demand.
+      - The analyst now writes specs that are 98 % right. Rework at the engineer falls, and the line could serve the demand again. The backlog that piled up still has to drain.
+      - The engineer's backlog drains and the lead time falls. Fixing the orders did more than a faster engineer would.
+  move-bottleneck:
+    watch: Eleven requests a week. Make the bottleneck faster and watch where the work waits next.
+    steps:
+      - The engineer is the bottleneck, with weeks of work waiting. Next, it gets twice as fast.
+      - The engineer has nothing waiting – quality assurance has it now. The bottleneck moved downstream.
+      - Quality assurance twice as fast too. The lead time falls; the next bottleneck is wherever the work waits now.

@@ -1,0 +1,93 @@
+# Two teams, one platform: team B works without a spec; both ship through one platform team (schema software-ecology-factory/5).
+id: teams
+layout: { width: 1520, height: 700, top: 0 }
+mechanics: { rework: 0.4, churn: 1.2 }
+customer:
+  { at: [90, 370], rate: 8, mix: { sales: 30, pm: 50, support: 20 }, good: { pm: 0.2 }, bad: {}, releases: [plat] }
+company: service
+sources: # Product company (Model): own tickets a week
+  - { id: roadmap, at: pm, rate: 2 }
+  - { id: leads, at: sales, rate: 1 }
+  - { id: debt, at: engA, rate: 1 }
+bottleneck: plat
+centers:
+  - { id: sales, role: sales, at: [400, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }] }
+  - {
+      id: pm,
+      role: pm,
+      at: [400, 370],
+      realistic: [88, 94],
+      spawns: [{ choose: [{ to: anA, w: 1 }, { to: engB, w: 1 }] }],
+    }
+  - {
+      id: support,
+      role: support,
+      at: [400, 580],
+      realistic: [88, 95],
+      spawns: [{ choose: [{ to: engB, w: 0.4 }, { to: customer, w: 0.6 }] }],
+    }
+  - { id: anA, role: ba, at: [710, 160], realistic: [88, 93], spawns: [{ to: engA, n: 1 }] }
+  - { id: engB, role: eng, at: [710, 370], realistic: [105, 85], spawns: [{ to: plat, n: 1 }, { to: engA, p: 0.35 }] }
+  - { id: engA, role: eng, at: [1020, 160], realistic: [97, 91], spawns: [{ to: plat, n: 1 }] }
+  - {
+      id: plat,
+      role: qa,
+      at: [1330, 160],
+      inspection: true,
+      stampUnderPressure: 0.8,
+      realistic: [79, 98],
+      spawns: [{ to: customer, n: 1 }],
+    }
+routes:
+  customer-sales: { xm: 215 }
+  customer-support: { xm: 215 }
+  sales-pm: { out: bottom, in: top }
+  pm-anA: { xm: 555 }
+  support-engB: { xm: 555 }
+  engB-engA: { xm: 865 }
+  engB-plat: { in: bottom, via: [[1366, 370]] }
+  plat-customer: { out: top, in: top, via: [[1366, 36], [90, 36]] }
+  support-customer: { out: bottom, in: bottom, via: [[436, 668], [90, 668]] }
+presets:
+  - { id: roles, view: roles }
+  - {
+      id: ideal,
+      view: factory,
+      check:
+        { run: 12, expect: { customer.output: '0.95–1.05', customer.headroom: '1.35–1.5', plat.weeksWaiting: '<0.2' } },
+    }
+  - {
+      id: realistic,
+      view: factory,
+      reality: 100,
+      customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } },
+      check:
+        {
+          run: 12,
+          expect:
+            {
+              customer.output: '0.85–1.15',
+              customer.sat: '>0.85',
+              customer.headroom: '1.05–1.2',
+              plat.weeksWaiting: '<1.5',
+            },
+        },
+    }
+  - {
+      id: speed-up,
+      view: factory,
+      reality: 100,
+      customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } },
+      dials: { engB: { efficiency: 200 } },
+      check:
+        { run: 16, expect: { customer.output: '0.85–1.15', engB.weeksWaiting: '<0.2', customer.headroom: '1.05–1.2' } },
+    }
+  - {
+      id: ai-unbalanced,
+      view: factory,
+      reality: 100,
+      ai: [engA, engB],
+      dials: { engA: { aiExtra: 2 }, engB: { aiExtra: 2 } },
+      customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } },
+      check: { run: 16, expect: { customer.output: '0.3–0.7', plat.weeksWaiting: '>10', customer.headroom: '<0.6' } },
+    }
