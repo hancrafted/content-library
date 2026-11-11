@@ -2449,7 +2449,7 @@
         "status": "draft",
         "generated": {
           "by": "process:spec-assemble",
-          "at": "2026-11-11T21:57:20Z"
+          "at": "2026-11-11T22:02:20Z"
         },
         "locale": "en",
         "brief": "../brief.md"
@@ -2640,7 +2640,7 @@
             Section, which echoes the motif and brings in its own Section. Picking an Option picks the set.
           </p>
           <div class="spec-options">
-            <figure data-spec="option" data-option="0a" data-recommended="">
+            <figure data-spec="option" data-option="0a" data-recommended="" data-picked="">
               <div data-spec="mock" class="p-0">
                 <div class="relative overflow-hidden rounded-xl bg-primary">
                   <div data-tone="inverse" class="relative flex flex-col gap-7 px-16 pt-24 text-foreground">
@@ -3651,7 +3651,7 @@
                 </div>
               </details>
               <label class="spec-pick"
-                ><input type="checkbox" form="spec-review" name="pick:top" value="0a" /> Pick 0a</label
+                ><input type="checkbox" form="spec-review" name="pick:top" value="0a" checked="" /> Pick 0a</label
               >
             </figure>
 
@@ -11151,7 +11151,7 @@
                               text-anchor="end"
                               font-size="10.5"
                               font-weight="600"
-                              class="fill-destructive"
+                              class="fill-foreground"
                             >
                               0.5× demand
                             </text>
@@ -11544,22 +11544,22 @@
                     <code>stroke-primary</code> with 0.5× and 67 % in <code>fill-primary</code> as the Slide's one focal
                     point, the Why accent stub <code>bg-primary</code>, the others <code>bg-foreground</code>; pressure
                     by design-ADR 0024 decisions 7 and 14: a full rack’s top slot, its "+217", "223 waiting" (10 weeks
-                    of work, past two) and "could serve 0.5× demand" <code>destructive</code>, <code>warning</code> only
-                    for a work center between one and two weeks of work waiting (none in this still); every still is
-                    captioned "AI unbalanced, week 20" with "Illustrative model, not measured"; the dashboard's People
-                    label <code>text-human</code>, Tools &amp; artefacts <code>text-machine</code>, With AI here
-                    <code>text-ai</code>, its effectiveness tile <code>border-primary</code>; the tour caption a
-                    dark-bordered card at <code>-rotate-1</code>. Hover: columns are <code>focus-group__item</code>s of
-                    a <code>focus-group--dim-others</code>, each <code>card-hover card-hover--raise</code>, so pointing
-                    at one column dims the others while presenting. Each column is
-                    <code>row-span-4 grid grid-rows-subgrid</code> (word, still, title, caption) in the parent grid, so
-                    the three titles share a row and line up whatever the stills' heights, with no fixed height
-                    (FE-009); stacked below <code>md</code>, the subgrid falls back to one column. Context markers
-                    (<code>ContextMarker</code> via <code>marker()</code>): after "already is" opens "AI amplifies what
-                    is there"; after "most named pain" opens "Incomplete requirements are the most named pain"; after
-                    "the hard part" opens "Specifying is the hard part (inference)"; after "people and tools" opens "A
-                    work center is people and technology". The How column carries no sourced fact. i18n keys:
-                    <code>title</code>, <code>caption</code>, <code>words.{why,how,what}</code>,
+                    of work, past two) <code>destructive</code>; "could serve 0.5× demand" plain, as on Slide 1,
+                    <code>warning</code> only for a work center between one and two weeks of work waiting (none in this
+                    still); every still is captioned "AI unbalanced, week 20" with "Illustrative model, not measured";
+                    the dashboard's People label <code>text-human</code>, Tools &amp; artefacts
+                    <code>text-machine</code>, With AI here <code>text-ai</code>, its effectiveness tile
+                    <code>border-primary</code>; the tour caption a dark-bordered card at <code>-rotate-1</code>. Hover:
+                    columns are <code>focus-group__item</code>s of a <code>focus-group--dim-others</code>, each
+                    <code>card-hover card-hover--raise</code>, so pointing at one column dims the others while
+                    presenting. Each column is <code>row-span-4 grid grid-rows-subgrid</code> (word, still, title,
+                    caption) in the parent grid, so the three titles share a row and line up whatever the stills'
+                    heights, with no fixed height (FE-009); stacked below <code>md</code>, the subgrid falls back to one
+                    column. Context markers (<code>ContextMarker</code> via <code>marker()</code>): after "already is"
+                    opens "AI amplifies what is there"; after "most named pain" opens "Incomplete requirements are the
+                    most named pain"; after "the hard part" opens "Specifying is the hard part (inference)"; after
+                    "people and tools" opens "A work center is people and technology". The How column carries no sourced
+                    fact. i18n keys: <code>title</code>, <code>caption</code>, <code>words.{why,how,what}</code>,
                     <code>columns.{why,how,what}.{title,caption}</code>,
                     <code
                       >stills.pileUp.{label,customer,ofIdeal,satisfied,leadTime,couldServe,bugs,analyst,engineer,qa,ops,spec,rework,passedUnread,release,prsPerTask,waiting}</code
@@ -11580,7 +11580,7 @@
                   ><input type="checkbox" form="spec-review" name="pick:why-how-what" value="2a" /> Pick 2a</label
                 >
               </figure>
-              <figure data-spec="option" data-option="2b">
+              <figure data-spec="option" data-option="2b" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div>
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -12723,7 +12723,7 @@
                           text-anchor="end"
                           font-size="9.3"
                           font-weight="600"
-                          class="fill-destructive"
+                          class="fill-foreground"
                         >
                           0.5× demand
                         </text>
@@ -13054,7 +13054,8 @@
                   </div>
                 </details>
                 <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:why-how-what" value="2b" /> Pick 2b</label
+                  ><input type="checkbox" form="spec-review" name="pick:why-how-what" value="2b" checked="" /> Pick
+                  2b</label
                 >
               </figure>
               <figure data-spec="option" data-option="2c">
