@@ -7,38 +7,65 @@ import type { ReactNode } from 'react';
  */
 
 /**
- * A document's look: `crisp` a clear one, `dull` a vague one drawn toward `muted-foreground` (quality is never a hue
- * of its own), `queued` one waiting in a pile-up, in `warning`, `machine` one the AI reads, such as a work order.
+ * A document's look: `crisp` a clear one, `vague` one that leaves most open, dashed and dulled toward
+ * `muted-foreground` (quality is never a hue of its own), `queued` one waiting in a pile-up, in `warning`, `miss` a
+ * clear one that misses its target, in `warning`, `ai` one an AI station turns out, and `machine` one the AI reads,
+ * such as a work order.
  */
-export type DocumentTone = 'crisp' | 'dull' | 'queued' | 'machine';
+export type DocumentTone = 'crisp' | 'vague' | 'queued' | 'miss' | 'ai' | 'machine';
 
-const DOCUMENT: Record<DocumentTone, { page: string; fold: string; lines: string }> = {
+interface DocumentLook {
+  readonly page: string;
+  readonly fold: string;
+  readonly lines: string;
+  /** Dashes the outline and the text lines: a sheet with gaps in it. */
+  readonly dashed?: boolean;
+}
+
+const DOCUMENT: Record<DocumentTone, DocumentLook> = {
   crisp: { page: 'fill-card stroke-foreground', fold: 'stroke-foreground', lines: 'stroke-foreground/50' },
-  dull: {
-    page: 'fill-card stroke-muted-foreground',
+  vague: {
+    page: 'fill-muted stroke-muted-foreground',
     fold: 'stroke-muted-foreground',
-    lines: 'stroke-muted-foreground/50',
+    lines: 'stroke-muted-foreground',
+    dashed: true,
   },
   queued: {
     page: 'fill-(--warning)/40 stroke-(--warning)',
     fold: 'stroke-(--warning)',
     lines: 'stroke-(--warning)/60',
   },
+  miss: { page: 'fill-card stroke-(--warning)', fold: 'stroke-(--warning)', lines: 'stroke-(--warning)' },
+  ai: { page: 'fill-card stroke-ai', fold: 'stroke-ai', lines: 'stroke-ai' },
   machine: { page: 'fill-machine/15 stroke-machine', fold: 'stroke-machine', lines: 'stroke-machine/50' },
 };
 
-/** The unit that moves down the line: a sheet with a folded corner and three lines of text. */
+/** The unit that moves down the line: a sheet with a folded corner and three lines of text; a vague one has two, dashed. */
 export function DocumentIcon({ tone, className }: { tone: DocumentTone; className?: string }) {
   const look = DOCUMENT[tone];
+  const dash = look.dashed ? '2 1.5' : undefined;
   return (
     <svg viewBox="0 0 20 24" className={cn('shrink-0', className)} aria-hidden="true">
-      <path d="M2 1.5h10.5l5.5 5.5v15.5H2z" className={look.page} strokeWidth={1.5} strokeLinejoin="round" />
-      <path d="M12.5 1.5V7H18" className={cn('fill-none', look.fold)} strokeWidth={1.5} strokeLinejoin="round" />
       <path
-        d="M5 11.5h10M5 15h10M5 18.5h6"
+        d="M2 1.5h10.5l5.5 5.5v15.5H2z"
+        className={look.page}
+        strokeWidth={1.5}
+        strokeLinejoin="round"
+        strokeDasharray={dash}
+      />
+      <path
+        d="M12.5 1.5V7H18"
+        className={cn('fill-none', look.fold)}
+        strokeWidth={1.5}
+        strokeLinejoin="round"
+        strokeDasharray={dash}
+      />
+      <path
+        d={look.dashed ? 'M5 12h7M5 16h4' : 'M5 11.5h10M5 15h10M5 18.5h6'}
         className={cn('fill-none', look.lines)}
         strokeWidth={1.5}
         strokeLinecap="round"
+        strokeDasharray={look.dashed ? '1.5 2' : undefined}
       />
     </svg>
   );

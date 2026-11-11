@@ -175,7 +175,7 @@ describe('failure cases', () => {
 
   it('draws no warning on the board whose darts land on the bull', () => {
     // ARRANGE
-    const expected = { warningDarts: 0, primaryDarts: 5 };
+    const expected = { warningDarts: 0, primaryDarts: 4 };
     // ACT
     const $ = sceneOf('context-engineering-is-requirements-engineering-for-agents');
     const board = $('[data-outcome="both"]');
@@ -195,6 +195,34 @@ describe('edge cases', () => {
     // ACT
     const slide = localized('context-rot');
     const actual = { onScreen: slide.header?.title, contents: slide.title };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
+  it('draws the four outcomes as Slide 6 does: one board each, a loose cluster dulled, a vague window dashed', () => {
+    // ARRANGE
+    const expected = {
+      boards: ['precise-accurate', 'precise-off', 'accurate-scattered', 'neither'],
+      looseDarts: ['fill-muted-foreground stroke-card'],
+      windows: ['crisp', 'crisp', 'vague', 'vague'],
+    };
+    // ACT
+    const $ = sceneOf('context-engineering-is-requirements-engineering-for-agents');
+    const actual = {
+      boards: $('[data-outcome-board]')
+        .toArray()
+        .map((board) => $(board).attr('data-outcome-board')),
+      looseDarts: [
+        ...new Set(
+          $('[data-outcome-board="accurate-scattered"] [data-dart]')
+            .toArray()
+            .map((dart) => $(dart).attr('class')),
+        ),
+      ],
+      windows: $('[data-window]')
+        .toArray()
+        .map((window) => $(window).attr('data-window')),
+    };
     // ASSERT
     expect(actual).toEqual(expected);
   });

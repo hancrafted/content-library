@@ -1,9 +1,9 @@
 import { slide } from '@/episodes/components/slide-master/slide';
 import { SlideFrame } from '@/episodes/components/slide-master/slide-master';
+import { OutcomeBoard } from '@/episodes/components/slide-shared/dartboard/outcome-board';
 import { cn } from '@/shared/lib/utils';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
-import { OutcomeBoard } from './outcome-board';
 import { WindowCard } from './window-card';
 
 const ANTHROPIC = {
@@ -13,12 +13,15 @@ const ANTHROPIC = {
 const MA = { slug: 'ma-requirement-driven-llm-use', url: 'https://arxiv.org/abs/2409.08775' };
 const CHEN = { slug: 'chen-promptware-engineering', url: 'https://arxiv.org/abs/2503.02400' };
 
-/** The four outcomes of the dartboard, each as the board it lands and the window that produced it. */
+/**
+ * The four outcomes of the dartboard, each as the shared board it lands and the window that produced it: the same
+ * boards Slide 6 draws, so one outcome looks the same on both.
+ */
 const OUTCOMES = [
-  { key: 'both', spread: 'tight', onTarget: true, quality: 'crisp', miss: false },
-  { key: 'precise', spread: 'tight', onTarget: false, quality: 'crisp', miss: true },
-  { key: 'accurate', spread: 'loose', onTarget: true, quality: 'dull', miss: false },
-  { key: 'neither', spread: 'loose', onTarget: false, quality: 'dull', miss: true },
+  { key: 'both', board: 'precise-accurate', quality: 'crisp', miss: false },
+  { key: 'precise', board: 'precise-off', quality: 'crisp', miss: true },
+  { key: 'accurate', board: 'accurate-scattered', quality: 'vague', miss: false },
+  { key: 'neither', board: 'neither', quality: 'vague', miss: true },
 ] as const;
 
 /** Down the column, from the window to the board it lands. */
@@ -67,7 +70,7 @@ export const contextEngineeringIsRequirementsEngineeringForAgents = slide({
         </span>
       </div>
       <div className="focus-group focus-group--dim-others grid gap-4 @xl:grid-cols-2 @5xl:grid-cols-4">
-        {OUTCOMES.map(({ key, spread, onTarget, quality, miss }) => (
+        {OUTCOMES.map(({ key, board, quality, miss }) => (
           <div
             key={key}
             data-outcome={key}
@@ -79,7 +82,7 @@ export const contextEngineeringIsRequirementsEngineeringForAgents = slide({
             <p className={cn('text-body font-semibold', key === 'both' && 'text-primary')}>
               {t(`outcomes.${key}.label`)}
             </p>
-            <OutcomeBoard spread={spread} onTarget={onTarget} />
+            <OutcomeBoard outcome={board} className="mx-auto h-auto w-3/4" />
             <UpArrow />
             <WindowCard
               label={t('window')}
