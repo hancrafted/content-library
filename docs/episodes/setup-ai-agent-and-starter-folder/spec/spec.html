@@ -2680,14 +2680,14 @@
             <span class="spec-outline-section">Your AI agent</span>
             <ol>
               <li><a href="#install-your-ai-agent">3 · Install your AI agent</a></li>
-              <li><a href="#log-in">4 · Log in</a></li>
             </ol>
           </li>
           <li>
             <span class="spec-outline-section">Your folder</span>
             <ol>
-              <li><a href="#download-and-unzip-the-starter-folder">5 · Download and unzip the starter folder</a></li>
-              <li><a href="#start-the-agent-inside-that-folder">6 · Start the agent inside that folder</a></li>
+              <li><a href="#download-and-unzip-the-starter-folder">4 · Download and unzip the starter folder</a></li>
+              <li><a href="#start-the-agent-inside-that-folder">5 · Start the agent inside that folder</a></li>
+              <li><a href="#log-in">6 · Log in</a></li>
             </ol>
           </li>
           <li>
@@ -4634,6 +4634,17 @@
               opens with the Hook, then what needs to be done, with skip links: &quot;AI agent already installed? Jump
               to step 5&quot;, &quot;Want the technical route? Jump to the last Section.&quot;
             </p>
+            <aside class="spec-card">
+              <h4>Start-order amendment, 2026-11-11</h4>
+              <p>
+                The checklist follows the new order: 1 Your terminal, 2 Your AI agent (install only), 3 Your folder
+                (download and unzip, start the agent inside that folder, log in), 4 Your first skill. Each step title
+                equals its Section title word for word. Checkbox ids stay; “I'm logged in” moves under step 3. In the
+                ready state, every step Section header below the Overview shows “✓ Done, no need to repeat”, so a
+                visitor who scrolls past the success message knows not to redo the steps; the steps stay visible as
+                reference.
+              </p>
+            </aside>
             <div class="spec-words">
               <input type="radio" name="words:overview" id="overview--visual-idea" value="visual-idea" checked />
               <label for="overview--visual-idea">Visual idea</label>
@@ -5662,6 +5673,16 @@
               <h3>Open your terminal</h3>
             </header>
             <p class="spec-purpose">find and open Terminal or PowerShell for the first time</p>
+            <aside class="spec-card">
+              <h4>Start-order amendment, 2026-11-11</h4>
+              <p>
+                On Windows, name Terminal first: press the Windows key, type Terminal, press Enter (the Windows 11
+                default); Windows 10 opens PowerShell. This holds for the toolbar label, the find-it drawing, the copy
+                and the Voice script; the prompt inside stays PS C:\…. On the “What you're looking at” Slide, “You can't
+                break anything” becomes “Looking around and closing the window breaks nothing” in the caption, the info
+                card, its explanation and the Voice script, in both locales.
+              </p>
+            </aside>
             <div class="spec-words">
               <input
                 type="radio"
@@ -6656,6 +6677,15 @@
             </header>
             <p class="spec-purpose">link to the official installer, minimum steps</p>
             <aside class="spec-card">
+              <h4>Start-order amendment, 2026-11-11</h4>
+              <p>
+                This step installs the agent and ends at the version check in a fresh terminal; it never starts the
+                agent, because its first start belongs inside the starter folder. For Codex, answer N to “Start Codex
+                now?”. The Voice script says the agent is installed here and first started in the folder step. The
+                Command Prompt hint renders a literal C:\&gt; (never the escaped entity).
+              </p>
+            </aside>
+            <aside class="spec-card">
               <h4>Windows enterprise amendment, 2026-11-04</h4>
               <p>
                 Keep the selected layout and copyable vendor installer. Before it, show an OS-specific work-laptop
@@ -7375,511 +7405,6 @@
               placeholder="Note on Slide 3"
             ></textarea>
           </article>
-          <article data-spec="slide" id="log-in" data-number="4">
-            <header class="spec-slide-head">
-              <span class="spec-number">4</span>
-              <h3>Log in</h3>
-            </header>
-            <p class="spec-purpose">sign in to the agent</p>
-            <aside class="spec-card">
-              <h4>Windows enterprise amendment, 2026-11-04</h4>
-              <p>
-                Retain the new-terminal action, but describe it as the first thing to try, not the only explanation for
-                a missing command. If the version command still fails, return to installation help; do not loop through
-                reopening terminals. Use the organization's approved account and sign-in route on work laptops. Stop at
-                denied service access or certificate errors. Speaker notes cite account-policy and PATH documentation.
-                Help prompts must not request security bypasses and must remind users to redact confidential error data.
-              </p>
-            </aside>
-            <div class="spec-words">
-              <input type="radio" name="words:log-in" id="log-in--visual-idea" value="visual-idea" checked />
-              <label for="log-in--visual-idea">Visual idea</label>
-              <input type="radio" name="words:log-in" id="log-in--voice-script" value="voice-script" />
-              <label for="log-in--voice-script">Voice script</label>
-              <input type="radio" name="words:log-in" id="log-in--speaker-notes" value="speaker-notes" />
-              <label for="log-in--speaker-notes">Speaker notes</label>
-              <div class="spec-card spec-panel" data-panel="visual-idea">
-                <h4>Visual idea</h4>
-                <p class="text-caption"><code>master: basic-page · motion: none</code></p>
-                <p data-spec="visual-idea">
-                  The AI agent toolbar shows here (Claude Code, Antigravity, Codex, GitHub Copilot) and the OS toolbar
-                  does not, since login does not differ by OS. Under each pick the step shows one picture of the sign-in
-                  screen the AI agent opens and a link to that AI agent's official login page, with one line on what to
-                  do: sign in with the account and come back. The troubleshooting box below wraps the pasted error with
-                  the OS, the picked AI agent and &quot;Step 4: Log in&quot;.
-                </p>
-              </div>
-              <div class="spec-card spec-panel" data-panel="voice-script">
-                <h4>Voice script</h4>
-                <ol data-spec="voice-script">
-                  <li>
-                    <strong>Sign in once</strong> — Now the AI agent needs to know who you are. It opens a sign-in for
-                    you the first time, you log in, and you come back to the terminal. You do this once, and it stays.
-                  </li>
-                  <li>
-                    <strong>Your own account</strong> — Which account fits which AI agent differs, and the official page
-                    of your AI agent says it better than I could, so the link is right here. Use your own account, not a
-                    shared one, so that the AI agent is yours to run.
-                  </li>
-                </ol>
-              </div>
-              <div class="spec-card spec-panel" data-panel="speaker-notes">
-                <h4>Speaker notes</h4>
-                <ol data-spec="speaker-notes"></ol>
-              </div>
-            </div>
-            <div class="spec-options">
-              <figure data-spec="option" data-option="4a" data-recommended="" data-picked="">
-                <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
-                  <div class="flex flex-col gap-4">
-                    <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Your AI agent</span><span>2 / 2</span>
-                    </p>
-                    <div>
-                      <h3 class="text-subheading font-semibold">Log in</h3>
-                      <p class="mt-2 text-body text-muted-foreground">
-                        Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal.
-                      </p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                      <span class="rounded-full border border-border px-3 py-1 text-caption text-muted-foreground"
-                        >Step 4 of 8</span
-                      >
-                      <ol class="flex flex-1 gap-1" aria-label="Progress">
-                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
-                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
-                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
-                        <li class="h-1 flex-1 rounded-full bg-primary/40"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                      </ol>
-                    </div>
-                  </div>
-
-                  <div class="flex items-center gap-3">
-                    <span class="text-caption text-muted-foreground">AI agent</span>
-                    <div class="flex rounded-full border border-border bg-muted p-1">
-                      <span
-                        class="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1 text-caption font-semibold shadow-md shadow-ai/30 ring-1 ring-ai/50"
-                        ><span class="size-2 rounded-full bg-ai"></span>Claude Code</span
-                      >
-                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Antigravity</span>
-                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Codex</span>
-                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">GitHub Copilot</span>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col gap-6 rounded-xl border border-border bg-card p-8">
-                    <div class="grid grid-cols-12 items-start gap-4">
-                      <div class="col-span-4 flex flex-col gap-2">
-                        <p class="text-caption uppercase text-muted-foreground">1 · In your terminal</p>
-                        <div
-                          class="overflow-hidden rounded-xl border border-ai/40 bg-background shadow-md shadow-ai/20"
-                        >
-                          <div class="flex items-center gap-2 border-b border-border bg-muted px-4 py-2">
-                            <span class="size-2.5 rounded-full bg-muted-foreground/30"></span
-                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span
-                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span>
-                            <span class="ml-3 text-caption text-muted-foreground">Claude Code</span>
-                          </div>
-                          <div class="flex flex-col gap-2 p-5 font-mono text-caption">
-                            <p><span class="text-ai">✻</span> Claude Code</p>
-                            <p class="text-muted-foreground">Opens a sign-in in your browser…</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-span-1 flex flex-col items-center gap-10 self-center">
-                        <svg viewBox="0 0 60 24" class="w-full" aria-hidden="true">
-                          <path
-                            d="M4 12 H50"
-                            class="fill-none stroke-muted-foreground"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                          ></path>
-                          <path
-                            d="M44 5 L54 12 L44 19"
-                            class="fill-none stroke-muted-foreground"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          ></path>
-                        </svg>
-                        <svg viewBox="0 0 60 24" class="w-full" aria-hidden="true">
-                          <path
-                            d="M56 12 H10"
-                            class="fill-none stroke-primary"
-                            stroke-width="2.5"
-                            stroke-linecap="round"
-                          ></path>
-                          <path
-                            d="M16 5 L6 12 L16 19"
-                            class="fill-none stroke-primary"
-                            stroke-width="2.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          ></path>
-                        </svg>
-                      </div>
-
-                      <div class="col-span-4 flex flex-col gap-2">
-                        <p class="text-caption font-semibold uppercase text-primary">2 · In your browser</p>
-                        <div class="overflow-hidden rounded-xl border border-border bg-background shadow-md">
-                          <div class="flex items-center gap-2 border-b border-border bg-muted px-4 py-2">
-                            <span class="size-2.5 rounded-full bg-muted-foreground/30"></span
-                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span
-                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span>
-                            <span
-                              class="ml-3 flex-1 rounded-full bg-card px-3 py-0.5 text-caption text-muted-foreground"
-                              >Sign-in page</span
-                            >
-                          </div>
-                          <div class="flex flex-col items-center gap-3 p-5 text-center">
-                            <span
-                              class="flex size-9 items-center justify-center rounded-full bg-ai/15 text-ai ring-1 ring-ai/40"
-                              >✻</span
-                            >
-                            <p class="text-body font-semibold">Sign in to Claude Code</p>
-                            <span
-                              class="w-full rounded-full bg-primary py-2 text-caption font-semibold text-primary-foreground"
-                              >Sign in</span
-                            >
-                            <p class="text-caption text-muted-foreground">Use your own account</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="col-span-3 flex flex-col gap-2">
-                        <p class="text-caption uppercase text-muted-foreground">3 · Back in your terminal</p>
-                        <div class="flex flex-col gap-2 rounded-xl border border-border bg-background p-5">
-                          <p class="inline-flex items-center gap-2 text-body font-semibold">
-                            <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
-                              <path
-                                d="M3 8.5 6.5 12 13 4.5"
-                                class="fill-none stroke-success"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              ></path>
-                            </svg>
-                            Logged in
-                          </p>
-                          <p class="text-caption text-muted-foreground">You do this once, and it stays.</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="flex flex-wrap items-center gap-4 border-t border-border pt-6">
-                      <a
-                        class="card-hover card-hover--raise inline-flex items-center gap-2 rounded-full border border-primary px-4 py-2 text-caption font-semibold text-primary"
-                      >
-                        Claude Code · official login page
-                        <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
-                          <path
-                            d="M6 3H3.5A.5.5 0 0 0 3 3.5v9a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V10M9 3h4v4M13 3 7.5 8.5"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          ></path>
-                        </svg>
-                      </a>
-                      <p class="text-caption text-muted-foreground">
-                        Which account fits is on that page. Use your own, not a shared one.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col gap-3 rounded-xl border border-border p-6">
-                    <div class="flex items-baseline justify-between gap-4">
-                      <p class="text-body font-semibold">Stuck?</p>
-                      <p class="text-caption text-muted-foreground">
-                        Paste the error, copy the prompt, ask free ChatGPT.
-                      </p>
-                    </div>
-                    <div class="flex items-stretch gap-4">
-                      <div
-                        class="flex-1 rounded-md border border-dashed border-border bg-muted px-4 py-3 font-mono text-caption text-muted-foreground"
-                      >
-                        Paste your error here…
-                      </div>
-                      <span
-                        class="card-hover card-hover--outline inline-flex items-center gap-2 self-center rounded-full border border-border bg-card px-4 py-2 text-caption font-semibold"
-                      >
-                        <svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
-                          <rect
-                            x="5"
-                            y="5"
-                            width="8"
-                            height="9"
-                            rx="1.5"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                          ></rect>
-                          <path
-                            d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                          ></path>
-                        </svg>
-                        Copy prompt
-                      </span>
-                    </div>
-                    <p class="flex flex-wrap items-center gap-2 text-caption text-muted-foreground">
-                      The prompt adds
-                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Windows</span>
-                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Claude Code</span>
-                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Step 4: Log in</span>
-                    </p>
-                  </div>
-                </div>
-                <figcaption>
-                  <b>4a</b> The login as a round trip, terminal to browser and back, the browser's Sign in button the
-                  one lit thing: a first-timer sees in advance that the terminal sends them away and expects them back.
-                  Recommended over 4b because the round trip is the part first-timers lose; the picture alone does not
-                  show it. Build cost: Scene.
-                </figcaption>
-                <details class="spec-build">
-                  <summary>Build notes</summary>
-                  <div data-spec="build-notes">
-                    Keeps <code>basic-page</code>, motion none; a Scene under the shared Slide header. The OS toolbar is
-                    left out (<code>PickToolbar show={['agent']}</code>), but the Stuck box still wraps the page's OS
-                    pick. Shares <code>StepProgress</code>, <code>PickToolbar</code>, <code>OfficialLink</code> (its
-                    outlined variant here and in 4b, so the Sign in button stays the one <code>primary</code> fill),
-                    <code>TerminalWindow</code> and <code>StuckBox</code> with Slide 3 (3a's props). New part
-                    <code>RoundTrip</code> (<code>{ terminal: ReactNode; browser: ReactNode; back: ReactNode }</code>),
-                    arrows inline SVG, out in <code>stroke-muted-foreground</code>, the way back in
-                    <code>stroke-primary</code>. The browser window is a drawn sign-in card per agent, not a screenshot;
-                    its terminal line and card title come from a per-agent <code>*.pure.ts</code> table
-                    <code>{ loginHref: string; signInTitle: string; terminalLine: string }</code> that
-                    <code>implement</code> fills and rechecks against each vendor's page (no research file of this Run
-                    holds the login pages yet). Hover: <code>card-hover--raise</code> on the official pill,
-                    <code>card-hover--outline</code> on Copy prompt. i18n keys <code>title</code>, <code>caption</code>,
-                    <code>trip.terminal</code>, <code>trip.browser</code>, <code>trip.back</code>, <code>once</code>,
-                    <code>openLogin</code>, <code>ownAccount</code>, <code>stuck.*</code>. No Context markers.
-                  </div>
-                </details>
-                <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:log-in" value="4a" checked="" /> Pick 4a</label
-                >
-              </figure>
-
-              <figure data-spec="option" data-option="4b">
-                <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
-                  <div class="flex flex-col gap-4">
-                    <p class="flex justify-between text-caption uppercase text-muted-foreground">
-                      <span>Your AI agent</span><span>2 / 2</span>
-                    </p>
-                    <div>
-                      <h3 class="text-subheading font-semibold">Log in</h3>
-                      <p class="mt-2 text-body text-muted-foreground">
-                        Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal.
-                      </p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                      <span class="rounded-full border border-border px-3 py-1 text-caption text-muted-foreground"
-                        >Step 4 of 8</span
-                      >
-                      <ol class="flex flex-1 gap-1" aria-label="Progress">
-                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
-                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
-                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
-                        <li class="h-1 flex-1 rounded-full bg-primary/40"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                        <li class="h-1 flex-1 rounded-full bg-border"></li>
-                      </ol>
-                    </div>
-                  </div>
-
-                  <div class="flex items-center gap-3">
-                    <span class="text-caption text-muted-foreground">AI agent</span>
-                    <div class="flex rounded-full border border-border bg-muted p-1">
-                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Claude Code</span>
-                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Antigravity</span>
-                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Codex</span>
-                      <span
-                        class="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1 text-caption font-semibold shadow-md shadow-ai/30 ring-1 ring-ai/50"
-                        ><span class="size-2 rounded-full bg-ai"></span>GitHub Copilot</span
-                      >
-                    </div>
-                  </div>
-
-                  <div class="grid grid-cols-12 gap-8 rounded-xl bg-muted p-8">
-                    <div class="col-span-7 overflow-hidden rounded-xl border border-border bg-background shadow-lg">
-                      <div class="flex items-center gap-2 border-b border-border bg-card px-4 py-2">
-                        <span class="size-2.5 rounded-full bg-muted-foreground/30"></span
-                        ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span
-                        ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span>
-                        <span class="ml-3 flex-1 rounded-full bg-muted px-3 py-0.5 text-caption text-muted-foreground"
-                          >GitHub · sign-in page</span
-                        >
-                      </div>
-                      <div class="flex flex-col items-center gap-4 px-10 py-10 text-center">
-                        <span class="flex size-12 items-center justify-center rounded-full bg-ai/15 ring-1 ring-ai/40">
-                          <svg viewBox="0 0 24 24" class="size-6" aria-hidden="true">
-                            <rect
-                              x="4"
-                              y="7"
-                              width="16"
-                              height="11"
-                              rx="5"
-                              class="fill-none stroke-ai"
-                              stroke-width="1.8"
-                            ></rect>
-                            <circle cx="9.5" cy="12.5" r="1.4" class="fill-ai"></circle>
-                            <circle cx="14.5" cy="12.5" r="1.4" class="fill-ai"></circle>
-                          </svg>
-                        </span>
-                        <p class="text-body font-semibold">Sign in to use GitHub Copilot</p>
-                        <div class="flex w-2/3 flex-col gap-2">
-                          <span
-                            class="rounded-md border border-border px-3 py-2 text-left text-caption text-muted-foreground"
-                            >Your account</span
-                          >
-                          <span class="rounded-full bg-primary py-2 text-caption font-semibold text-primary-foreground"
-                            >Sign in</span
-                          >
-                        </div>
-                        <p class="text-caption text-muted-foreground">
-                          The page your AI agent opens may look a little different.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="col-span-5 flex flex-col justify-between gap-6">
-                      <ol class="focus-group focus-group--dim-others flex flex-col gap-4">
-                        <li class="focus-group__item flex gap-4">
-                          <span
-                            class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-caption font-semibold"
-                            >1</span
-                          >
-                          <div>
-                            <p class="text-body font-semibold">It opens a sign-in</p>
-                            <p class="text-caption text-muted-foreground">
-                              The first time you start it, in your browser.
-                            </p>
-                          </div>
-                        </li>
-                        <li class="focus-group__item flex gap-4">
-                          <span
-                            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-caption font-semibold text-primary-foreground"
-                            >2</span
-                          >
-                          <div>
-                            <p class="text-body font-semibold">Sign in with your own account</p>
-                            <p class="text-caption text-muted-foreground">
-                              Not a shared one, so the AI agent is yours to run.
-                            </p>
-                          </div>
-                        </li>
-                        <li class="focus-group__item flex gap-4">
-                          <span
-                            class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-caption font-semibold"
-                            >3</span
-                          >
-                          <div>
-                            <p class="text-body font-semibold">Come back to the terminal</p>
-                            <p class="text-caption text-muted-foreground">You do this once, and it stays.</p>
-                          </div>
-                        </li>
-                      </ol>
-                      <div class="flex flex-col gap-2 rounded-xl border border-border bg-card p-4">
-                        <p class="text-caption text-muted-foreground">Which account fits GitHub Copilot:</p>
-                        <a
-                          class="card-hover card-hover--raise inline-flex items-center gap-2 self-start rounded-full border border-primary bg-card px-4 py-2 text-caption font-semibold text-primary"
-                        >
-                          GitHub Copilot · official login page
-                          <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
-                            <path
-                              d="M6 3H3.5A.5.5 0 0 0 3 3.5v9a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V10M9 3h4v4M13 3 7.5 8.5"
-                              class="fill-none stroke-current"
-                              stroke-width="1.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                            ></path>
-                          </svg>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col gap-3 rounded-xl border border-border p-6">
-                    <div class="flex items-baseline justify-between gap-4">
-                      <p class="text-body font-semibold">Stuck?</p>
-                      <p class="text-caption text-muted-foreground">
-                        Paste the error, copy the prompt, ask free ChatGPT.
-                      </p>
-                    </div>
-                    <div class="flex items-stretch gap-4">
-                      <div
-                        class="flex-1 rounded-md border border-dashed border-border bg-muted px-4 py-3 font-mono text-caption text-muted-foreground"
-                      >
-                        Paste your error here…
-                      </div>
-                      <span
-                        class="card-hover card-hover--outline inline-flex items-center gap-2 self-center rounded-full border border-border bg-card px-4 py-2 text-caption font-semibold"
-                      >
-                        <svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
-                          <rect
-                            x="5"
-                            y="5"
-                            width="8"
-                            height="9"
-                            rx="1.5"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                          ></rect>
-                          <path
-                            d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
-                            class="fill-none stroke-current"
-                            stroke-width="1.5"
-                            stroke-linecap="round"
-                          ></path>
-                        </svg>
-                        Copy prompt
-                      </span>
-                    </div>
-                    <p class="flex flex-wrap items-center gap-2 text-caption text-muted-foreground">
-                      The prompt adds
-                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Mac</span>
-                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">GitHub Copilot</span>
-                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Step 4: Log in</span>
-                    </p>
-                  </div>
-                </div>
-                <figcaption>
-                  <b>4b</b> The sign-in screen large as the focal picture, with three short numbered lines beside it:
-                  the viewer recognises the screen when it appears. Build cost: Scene.
-                </figcaption>
-                <details class="spec-build">
-                  <summary>Build notes</summary>
-                  <div data-spec="build-notes">
-                    Keeps <code>basic-page</code>, motion none; a Scene under the shared Slide header, the sign-in
-                    picture and the list a <code>grid-cols-12</code> split (7 / 5) on a <code>bg-muted</code> stage.
-                    Agent toolbar only, as 4a. Shares <code>StepProgress</code>, <code>PickToolbar</code>,
-                    <code>OfficialLink</code> and <code>StuckBox</code> with Slide 3. New parts
-                    <code>SignInPicture</code> (<code>{ agent: AgentId }</code>; a drawn browser card per agent with its
-                    <code>ai</code> mark, never a screenshot, captioned that the real page may differ) and the numbered
-                    list from the page's <code>StepList</code> (<code
-                      >{ items: { title: string; body: string }[]; current: number }</code
-                    >), the current line in <code>bg-primary</code>. Per-agent table as 4a. Hover:
-                    <code>focus-group--dim-others</code> on the list, <code>card-hover--raise</code> on the official
-                    pill. i18n keys <code>title</code>, <code>caption</code>, <code>items.*</code>,
-                    <code>accountFits</code>, <code>openLogin</code>, <code>stuck.*</code>. No Context markers.
-                  </div>
-                </details>
-                <label class="spec-pick"
-                  ><input type="checkbox" form="spec-review" name="pick:log-in" value="4b" /> Pick 4b</label
-                >
-              </figure>
-            </div>
-            <textarea class="spec-note" form="spec-review" name="note:log-in" placeholder="Note on Slide 4"></textarea>
-          </article>
         </section>
         <section data-spec="section" id="your-folder">
           <div class="spec-section-band">
@@ -7893,9 +7418,9 @@
               </li>
             </ol>
           </div>
-          <article data-spec="slide" id="download-and-unzip-the-starter-folder" data-number="5">
+          <article data-spec="slide" id="download-and-unzip-the-starter-folder" data-number="4">
             <header class="spec-slide-head">
-              <span class="spec-number">5</span>
+              <span class="spec-number">4</span>
               <h3>Download and unzip the starter folder</h3>
             </header>
             <p class="spec-purpose">one link to the zip</p>
@@ -7956,7 +7481,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="5a" data-recommended="" data-picked="">
+              <figure data-spec="option" data-option="4a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -8187,10 +7712,10 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>5a</b> The two facing halves the Dossier asks for, download then folder, with the per-OS unzip
+                  <b>4a</b> The two facing halves the Dossier asks for, download then folder, with the per-OS unzip
                   drawn as the real right-click menu on the zip: the Windows trap is the loudest thing on the Slide.
-                  Recommended over 5b and 5c: it shows the exact menu the viewer will see and the result beside it,
-                  where 5b hides the trap in a station and 5c spreads three moves across one busy window. Build cost:
+                  Recommended over 4b and 4c: it shows the exact menu the viewer will see and the result beside it,
+                  where 4b hides the trap in a station and 4c spreads three moves across one busy window. Build cost:
                   Master slide copy of <code>grid-1x2</code>.
                 </figcaption>
                 <details class="spec-build">
@@ -8246,13 +7771,13 @@
                     type="checkbox"
                     form="spec-review"
                     name="pick:download-and-unzip-the-starter-folder"
-                    value="5a"
+                    value="4a"
                     checked=""
                   />
-                  Pick 5a</label
+                  Pick 4a</label
                 >
               </figure>
-              <figure data-spec="option" data-option="5b">
+              <figure data-spec="option" data-option="4b">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -8431,8 +7956,8 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>5b</b> Three stations joined by dashed arrows, download, unzip, folder, with the middle one (the
-                  OS-dependent move) outlined as the step in focus; calmer than 5a but the Windows trap is only a
+                  <b>4b</b> Three stations joined by dashed arrows, download, unzip, folder, with the middle one (the
+                  OS-dependent move) outlined as the step in focus; calmer than 4a but the Windows trap is only a
                   swapped label. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
@@ -8459,7 +7984,7 @@
                     </p>
                     <p>
                       Tokens: <code>bg-primary</code> (download), <code>border-primary</code> (the station in focus),
-                      <code>bg-muted</code>, <code>fill-primary/20</code>. No Context markers. Placeholders as in 5a:
+                      <code>bg-muted</code>, <code>fill-primary/20</code>. No Context markers. Placeholders as in 4a:
                       <code>starter-folder.zip</code>, its file list, and files at the zip's root.
                     </p>
                     <p>
@@ -8475,12 +8000,12 @@
                     type="checkbox"
                     form="spec-review"
                     name="pick:download-and-unzip-the-starter-folder"
-                    value="5b"
+                    value="4b"
                   />
-                  Pick 5b</label
+                  Pick 4b</label
                 >
               </figure>
-              <figure data-spec="option" data-option="5c">
+              <figure data-spec="option" data-option="4c">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -8669,7 +8194,7 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>5c</b> One large file-manager window as the stage, with numbered marks on the zip, the menu action
+                  <b>4c</b> One large file-manager window as the stage, with numbered marks on the zip, the menu action
                   and the new folder, and the three moves listed beside it: the most literal picture of the viewer's own
                   screen, but the menu it draws differs per OS, and on a Mac there is no menu to point at. Build cost:
                   Scene.
@@ -8699,7 +8224,7 @@
                     <p>
                       Tokens: <code>bg-card</code>, <code>bg-primary</code> (download and the menu action),
                       <code>border-primary</code> + <code>bg-primary/10</code> (the new folder),
-                      <code>bg-foreground</code> number chips. No Context markers. Placeholders as in 5a.
+                      <code>bg-foreground</code> number chips. No Context markers. Placeholders as in 4a.
                     </p>
                     <p>
                       i18n keys: <code>title</code>, <code>caption</code>, <code>window.sidebar.*</code>,
@@ -8713,9 +8238,9 @@
                     type="checkbox"
                     form="spec-review"
                     name="pick:download-and-unzip-the-starter-folder"
-                    value="5c"
+                    value="4c"
                   />
-                  Pick 5c</label
+                  Pick 4c</label
                 >
               </figure>
             </div>
@@ -8726,12 +8251,22 @@
               placeholder="Note on Slide 5"
             ></textarea>
           </article>
-          <article data-spec="slide" id="start-the-agent-inside-that-folder" data-number="6">
+          <article data-spec="slide" id="start-the-agent-inside-that-folder" data-number="5">
             <header class="spec-slide-head">
-              <span class="spec-number">6</span>
+              <span class="spec-number">5</span>
               <h3>Start the agent inside that folder</h3>
             </header>
             <p class="spec-purpose">navigate to the folder and launch the agent</p>
+            <aside class="spec-card">
+              <h4>Start-order amendment, 2026-11-11</h4>
+              <p>
+                This is where the agent first starts. On Windows, lead with Windows 11's right-click Open in Terminal
+                (In Terminal öffnen); Shift + right-click Open PowerShell window here becomes the Windows 10 fallback.
+                The trust prompt (“Do you trust the files in this folder?”) is answered here: Yes, because this is the
+                starter folder. The Slide ends with the agent running in the folder; sign-in follows on the next Slide.
+                The Voice script follows this order.
+              </p>
+            </aside>
             <aside class="spec-card">
               <h4>Windows enterprise amendment, 2026-11-04</h4>
               <p>
@@ -8813,7 +8348,7 @@
               </div>
             </div>
             <div class="spec-options">
-              <figure data-spec="option" data-option="6a" data-recommended="" data-picked="">
+              <figure data-spec="option" data-option="5a" data-recommended="" data-picked="">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -9059,10 +8594,10 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>6a</b> The terminal opens from the folder's own right-click menu, so a first-timer never types or
+                  <b>5a</b> The terminal opens from the folder's own right-click menu, so a first-timer never types or
                   describes a path, the step most likely to fail; then the AI agent starts in that window, each move
                   beside the state the viewer matches on their own screen, with a quiet <code>cd</code> line as
-                  fallback. Recommended over 6b and 6c because the right-click picture is the same gesture on every OS
+                  fallback. Recommended over 5b and 5c because the right-click picture is the same gesture on every OS
                   (Mac Services, Windows "Open in Terminal", Linux "Open in Terminal") and checks itself by the folder
                   name in the prompt. Build cost: Scene.
                 </figcaption>
@@ -9105,7 +8640,7 @@
                       no menu drawing: "Right-click the folder in your file manager › Open in Terminal." Fallback per
                       OS: <code>cd Downloads/starter-folder</code> (Mac, Linux),
                       <code>cd Downloads\starter-folder</code> (Windows), assuming the terminal opens in the home folder
-                      (step 2) and the zip unzips without a nested top folder (see 5a).
+                      (step 2) and the zip unzips without a nested top folder (see 4a).
                     </p>
                     <p>
                       Sources and what is verified. Apple, Terminal User Guide, "Open new Terminal windows and tabs"
@@ -9145,13 +8680,13 @@
                     type="checkbox"
                     form="spec-review"
                     name="pick:start-the-agent-inside-that-folder"
-                    value="6a"
+                    value="5a"
                     checked=""
                   />
-                  Pick 6a</label
+                  Pick 5a</label
                 >
               </figure>
-              <figure data-spec="option" data-option="6b">
+              <figure data-spec="option" data-option="5b">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -9330,7 +8865,7 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>6b</b> One whole terminal session as a single window, opened from the folder's right-click menu and
+                  <b>5b</b> One whole terminal session as a single window, opened from the folder's right-click menu and
                   annotated in the margin with leader lines: compact and true to how the screen really looks, but the
                   right-click itself is only words, not drawn, and the viewer maps three notes onto one window. Build
                   cost: Scene.
@@ -9348,14 +8883,14 @@
                       <code>{ n: number; title: string; detail: string; tone: 'primary' | 'ai' }</code>, the leader as
                       an inline <code>&lt;svg&gt;</code> stub (<code>stroke-primary</code>; the AI agent's note
                       <code>stroke-ai</code>); the session is the shared terminal window with a
-                      <code>TerminalLine[]</code> as in 6a. Below <code>md</code> the notes stack under the window and
+                      <code>TerminalLine[]</code> as in 5a. Below <code>md</code> the notes stack under the window and
                       drop their leaders.
                     </p>
                     <p>
-                      Per pick as in 6a: note 1 per OS is 6a's move 1 in words (Mac Services › New Terminal at Folder
+                      Per pick as in 5a: note 1 per OS is 5a's move 1 in words (Mac Services › New Terminal at Folder
                       with its setup line, Windows "Open in Terminal" with the Windows 10 address-bar line, Linux "Open
                       in Terminal"); the fallback line per OS is <code>cd Downloads/starter-folder</code> or
-                      <code>cd Downloads\starter-folder</code>. Sources and unverified labels: see 6a. Copilot CLI
+                      <code>cd Downloads\starter-folder</code>. Sources and unverified labels: see 5a. Copilot CLI
                       asking to confirm trust for the launch directory is documented (research LLM-0021, finding 9); the
                       dialog's wording here is illustrative.
                       <b
@@ -9376,12 +8911,12 @@
                     type="checkbox"
                     form="spec-review"
                     name="pick:start-the-agent-inside-that-folder"
-                    value="6b"
+                    value="5b"
                   />
-                  Pick 6b</label
+                  Pick 5b</label
                 >
               </figure>
-              <figure data-spec="option" data-option="6c">
+              <figure data-spec="option" data-option="5c">
                 <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
                   <div class="flex flex-col gap-2">
                     <p class="flex justify-between text-caption uppercase text-muted-foreground">
@@ -9619,10 +9154,10 @@
                   </div>
                 </div>
                 <figcaption>
-                  <b>6c</b> Folder and terminal side by side: the file window on the left with its right-click menu, the
+                  <b>5c</b> Folder and terminal side by side: the file window on the left with its right-click menu, the
                   terminal it opens on the right, and under both a strip of the same move on all three computers at
                   once, so a mixed room sees its own menu item without switching the toolbar; the cost is a busier Slide
-                  than 6a and only one menu drawn, the other two in words. <code>cd</code> and drag-onto-terminal stay a
+                  than 5a and only one menu drawn, the other two in words. <code>cd</code> and drag-onto-terminal stay a
                   quiet fallback line. Build cost: Scene.
                 </figcaption>
                 <details class="spec-build">
@@ -9643,7 +9178,7 @@
                       (the picked folder in <code>border-primary</code>, the menu a
                       <code>bg-card shadow-md -rotate-1</code> card with the picked item on <code>bg-foreground</code>);
                       a solid inline <code>&lt;svg&gt;</code> arrow (<code>stroke-primary</code>) from the folder column
-                      into the first terminal window; two terminal windows as in 6a, the second with the
+                      into the first terminal window; two terminal windows as in 5a, the second with the
                       <code>ai</code> edge; Slide-own <code>OsStrip</code>
                       <code
                         >{ cards: { os: 'mac' | 'windows' | 'linux'; app: string; path: ReactNode }[]; current: 'mac' |
@@ -9652,12 +9187,12 @@
                       muted <code>Fallback</code> line under it.
                     </p>
                     <p>
-                      Primary route per OS, as 6a's move 1: <b>Mac</b> Finder › right-click › Services › New Terminal at
-                      Folder (with 6a's setup note when it is missing); <b>Windows</b> File Explorer › right-click ›
+                      Primary route per OS, as 5a's move 1: <b>Mac</b> Finder › right-click › Services › New Terminal at
+                      Folder (with 5a's setup note when it is missing); <b>Windows</b> File Explorer › right-click ›
                       Open in Terminal (Windows 11; Windows 10 with Windows Terminal), prompt
                       <code>PS C:\Users\han\Downloads\starter-folder&gt;</code>, the Windows 10 address-bar
                       <code>powershell</code> line in the Windows pick's fallback; <b>Linux</b> Files › right-click ›
-                      Open in Terminal (shown). Sources and unverified labels: see 6a.
+                      Open in Terminal (shown). Sources and unverified labels: see 5a.
                     </p>
                     <p>
                       Fallback line, secondary and muted: <code>cd Downloads/starter-folder</code> (Mac, Linux) or
@@ -9682,9 +9217,9 @@
                     type="checkbox"
                     form="spec-review"
                     name="pick:start-the-agent-inside-that-folder"
-                    value="6c"
+                    value="5c"
                   />
-                  Pick 6c</label
+                  Pick 5c</label
                 >
               </figure>
             </div>
@@ -9694,6 +9229,520 @@
               name="note:start-the-agent-inside-that-folder"
               placeholder="Note on Slide 6"
             ></textarea>
+          </article>
+          <article data-spec="slide" id="log-in" data-number="6">
+            <header class="spec-slide-head">
+              <span class="spec-number">6</span>
+              <h3>Log in</h3>
+            </header>
+            <p class="spec-purpose">sign in to the agent</p>
+            <aside class="spec-card">
+              <h4>Start-order amendment, 2026-11-11</h4>
+              <p>
+                This Slide moves to the end of the Your folder Section, after Start the agent inside that folder; its
+                anchor becomes your-folder--log-in. The “Open a new terminal window first” card goes: opening the
+                terminal inside the folder after installing already gives a fresh window. The trust prompt moves to
+                Start the agent inside that folder. The sign-in flow per agent stays.
+              </p>
+            </aside>
+            <aside class="spec-card">
+              <h4>Windows enterprise amendment, 2026-11-04</h4>
+              <p>
+                Retain the new-terminal action, but describe it as the first thing to try, not the only explanation for
+                a missing command. If the version command still fails, return to installation help; do not loop through
+                reopening terminals. Use the organization's approved account and sign-in route on work laptops. Stop at
+                denied service access or certificate errors. Speaker notes cite account-policy and PATH documentation.
+                Help prompts must not request security bypasses and must remind users to redact confidential error data.
+              </p>
+            </aside>
+            <div class="spec-words">
+              <input type="radio" name="words:log-in" id="log-in--visual-idea" value="visual-idea" checked />
+              <label for="log-in--visual-idea">Visual idea</label>
+              <input type="radio" name="words:log-in" id="log-in--voice-script" value="voice-script" />
+              <label for="log-in--voice-script">Voice script</label>
+              <input type="radio" name="words:log-in" id="log-in--speaker-notes" value="speaker-notes" />
+              <label for="log-in--speaker-notes">Speaker notes</label>
+              <div class="spec-card spec-panel" data-panel="visual-idea">
+                <h4>Visual idea</h4>
+                <p class="text-caption"><code>master: basic-page · motion: none</code></p>
+                <p data-spec="visual-idea">
+                  The AI agent toolbar shows here (Claude Code, Antigravity, Codex, GitHub Copilot) and the OS toolbar
+                  does not, since login does not differ by OS. Under each pick the step shows one picture of the sign-in
+                  screen the AI agent opens and a link to that AI agent's official login page, with one line on what to
+                  do: sign in with the account and come back. The troubleshooting box below wraps the pasted error with
+                  the OS, the picked AI agent and &quot;Step 4: Log in&quot;.
+                </p>
+              </div>
+              <div class="spec-card spec-panel" data-panel="voice-script">
+                <h4>Voice script</h4>
+                <ol data-spec="voice-script">
+                  <li>
+                    <strong>Sign in once</strong> — Now the AI agent needs to know who you are. It opens a sign-in for
+                    you the first time, you log in, and you come back to the terminal. You do this once, and it stays.
+                  </li>
+                  <li>
+                    <strong>Your own account</strong> — Which account fits which AI agent differs, and the official page
+                    of your AI agent says it better than I could, so the link is right here. Use your own account, not a
+                    shared one, so that the AI agent is yours to run.
+                  </li>
+                </ol>
+              </div>
+              <div class="spec-card spec-panel" data-panel="speaker-notes">
+                <h4>Speaker notes</h4>
+                <ol data-spec="speaker-notes"></ol>
+              </div>
+            </div>
+            <div class="spec-options">
+              <figure data-spec="option" data-option="6a" data-recommended="" data-picked="">
+                <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
+                  <div class="flex flex-col gap-4">
+                    <p class="flex justify-between text-caption uppercase text-muted-foreground">
+                      <span>Your AI agent</span><span>2 / 2</span>
+                    </p>
+                    <div>
+                      <h3 class="text-subheading font-semibold">Log in</h3>
+                      <p class="mt-2 text-body text-muted-foreground">
+                        Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal.
+                      </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                      <span class="rounded-full border border-border px-3 py-1 text-caption text-muted-foreground"
+                        >Step 4 of 8</span
+                      >
+                      <ol class="flex flex-1 gap-1" aria-label="Progress">
+                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
+                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
+                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
+                        <li class="h-1 flex-1 rounded-full bg-primary/40"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                      </ol>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <span class="text-caption text-muted-foreground">AI agent</span>
+                    <div class="flex rounded-full border border-border bg-muted p-1">
+                      <span
+                        class="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1 text-caption font-semibold shadow-md shadow-ai/30 ring-1 ring-ai/50"
+                        ><span class="size-2 rounded-full bg-ai"></span>Claude Code</span
+                      >
+                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Antigravity</span>
+                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Codex</span>
+                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">GitHub Copilot</span>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col gap-6 rounded-xl border border-border bg-card p-8">
+                    <div class="grid grid-cols-12 items-start gap-4">
+                      <div class="col-span-4 flex flex-col gap-2">
+                        <p class="text-caption uppercase text-muted-foreground">1 · In your terminal</p>
+                        <div
+                          class="overflow-hidden rounded-xl border border-ai/40 bg-background shadow-md shadow-ai/20"
+                        >
+                          <div class="flex items-center gap-2 border-b border-border bg-muted px-4 py-2">
+                            <span class="size-2.5 rounded-full bg-muted-foreground/30"></span
+                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span
+                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span>
+                            <span class="ml-3 text-caption text-muted-foreground">Claude Code</span>
+                          </div>
+                          <div class="flex flex-col gap-2 p-5 font-mono text-caption">
+                            <p><span class="text-ai">✻</span> Claude Code</p>
+                            <p class="text-muted-foreground">Opens a sign-in in your browser…</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-span-1 flex flex-col items-center gap-10 self-center">
+                        <svg viewBox="0 0 60 24" class="w-full" aria-hidden="true">
+                          <path
+                            d="M4 12 H50"
+                            class="fill-none stroke-muted-foreground"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                          ></path>
+                          <path
+                            d="M44 5 L54 12 L44 19"
+                            class="fill-none stroke-muted-foreground"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                        <svg viewBox="0 0 60 24" class="w-full" aria-hidden="true">
+                          <path
+                            d="M56 12 H10"
+                            class="fill-none stroke-primary"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                          ></path>
+                          <path
+                            d="M16 5 L6 12 L16 19"
+                            class="fill-none stroke-primary"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </div>
+
+                      <div class="col-span-4 flex flex-col gap-2">
+                        <p class="text-caption font-semibold uppercase text-primary">2 · In your browser</p>
+                        <div class="overflow-hidden rounded-xl border border-border bg-background shadow-md">
+                          <div class="flex items-center gap-2 border-b border-border bg-muted px-4 py-2">
+                            <span class="size-2.5 rounded-full bg-muted-foreground/30"></span
+                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span
+                            ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span>
+                            <span
+                              class="ml-3 flex-1 rounded-full bg-card px-3 py-0.5 text-caption text-muted-foreground"
+                              >Sign-in page</span
+                            >
+                          </div>
+                          <div class="flex flex-col items-center gap-3 p-5 text-center">
+                            <span
+                              class="flex size-9 items-center justify-center rounded-full bg-ai/15 text-ai ring-1 ring-ai/40"
+                              >✻</span
+                            >
+                            <p class="text-body font-semibold">Sign in to Claude Code</p>
+                            <span
+                              class="w-full rounded-full bg-primary py-2 text-caption font-semibold text-primary-foreground"
+                              >Sign in</span
+                            >
+                            <p class="text-caption text-muted-foreground">Use your own account</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-span-3 flex flex-col gap-2">
+                        <p class="text-caption uppercase text-muted-foreground">3 · Back in your terminal</p>
+                        <div class="flex flex-col gap-2 rounded-xl border border-border bg-background p-5">
+                          <p class="inline-flex items-center gap-2 text-body font-semibold">
+                            <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
+                              <path
+                                d="M3 8.5 6.5 12 13 4.5"
+                                class="fill-none stroke-success"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              ></path>
+                            </svg>
+                            Logged in
+                          </p>
+                          <p class="text-caption text-muted-foreground">You do this once, and it stays.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 border-t border-border pt-6">
+                      <a
+                        class="card-hover card-hover--raise inline-flex items-center gap-2 rounded-full border border-primary px-4 py-2 text-caption font-semibold text-primary"
+                      >
+                        Claude Code · official login page
+                        <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
+                          <path
+                            d="M6 3H3.5A.5.5 0 0 0 3 3.5v9a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V10M9 3h4v4M13 3 7.5 8.5"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></path>
+                        </svg>
+                      </a>
+                      <p class="text-caption text-muted-foreground">
+                        Which account fits is on that page. Use your own, not a shared one.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col gap-3 rounded-xl border border-border p-6">
+                    <div class="flex items-baseline justify-between gap-4">
+                      <p class="text-body font-semibold">Stuck?</p>
+                      <p class="text-caption text-muted-foreground">
+                        Paste the error, copy the prompt, ask free ChatGPT.
+                      </p>
+                    </div>
+                    <div class="flex items-stretch gap-4">
+                      <div
+                        class="flex-1 rounded-md border border-dashed border-border bg-muted px-4 py-3 font-mono text-caption text-muted-foreground"
+                      >
+                        Paste your error here…
+                      </div>
+                      <span
+                        class="card-hover card-hover--outline inline-flex items-center gap-2 self-center rounded-full border border-border bg-card px-4 py-2 text-caption font-semibold"
+                      >
+                        <svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                          <rect
+                            x="5"
+                            y="5"
+                            width="8"
+                            height="9"
+                            rx="1.5"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                          ></rect>
+                          <path
+                            d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                          ></path>
+                        </svg>
+                        Copy prompt
+                      </span>
+                    </div>
+                    <p class="flex flex-wrap items-center gap-2 text-caption text-muted-foreground">
+                      The prompt adds
+                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Windows</span>
+                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Claude Code</span>
+                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Step 4: Log in</span>
+                    </p>
+                  </div>
+                </div>
+                <figcaption>
+                  <b>6a</b> The login as a round trip, terminal to browser and back, the browser's Sign in button the
+                  one lit thing: a first-timer sees in advance that the terminal sends them away and expects them back.
+                  Recommended over 6b because the round trip is the part first-timers lose; the picture alone does not
+                  show it. Build cost: Scene.
+                </figcaption>
+                <details class="spec-build">
+                  <summary>Build notes</summary>
+                  <div data-spec="build-notes">
+                    Keeps <code>basic-page</code>, motion none; a Scene under the shared Slide header. The OS toolbar is
+                    left out (<code>PickToolbar show={['agent']}</code>), but the Stuck box still wraps the page's OS
+                    pick. Shares <code>StepProgress</code>, <code>PickToolbar</code>, <code>OfficialLink</code> (its
+                    outlined variant here and in 6b, so the Sign in button stays the one <code>primary</code> fill),
+                    <code>TerminalWindow</code> and <code>StuckBox</code> with Slide 3 (3a's props). New part
+                    <code>RoundTrip</code> (<code>{ terminal: ReactNode; browser: ReactNode; back: ReactNode }</code>),
+                    arrows inline SVG, out in <code>stroke-muted-foreground</code>, the way back in
+                    <code>stroke-primary</code>. The browser window is a drawn sign-in card per agent, not a screenshot;
+                    its terminal line and card title come from a per-agent <code>*.pure.ts</code> table
+                    <code>{ loginHref: string; signInTitle: string; terminalLine: string }</code> that
+                    <code>implement</code> fills and rechecks against each vendor's page (no research file of this Run
+                    holds the login pages yet). Hover: <code>card-hover--raise</code> on the official pill,
+                    <code>card-hover--outline</code> on Copy prompt. i18n keys <code>title</code>, <code>caption</code>,
+                    <code>trip.terminal</code>, <code>trip.browser</code>, <code>trip.back</code>, <code>once</code>,
+                    <code>openLogin</code>, <code>ownAccount</code>, <code>stuck.*</code>. No Context markers.
+                  </div>
+                </details>
+                <label class="spec-pick"
+                  ><input type="checkbox" form="spec-review" name="pick:log-in" value="6a" checked="" /> Pick 6a</label
+                >
+              </figure>
+
+              <figure data-spec="option" data-option="6b">
+                <div data-spec="mock" class="flex flex-col gap-8 bg-background p-12">
+                  <div class="flex flex-col gap-4">
+                    <p class="flex justify-between text-caption uppercase text-muted-foreground">
+                      <span>Your AI agent</span><span>2 / 2</span>
+                    </p>
+                    <div>
+                      <h3 class="text-subheading font-semibold">Log in</h3>
+                      <p class="mt-2 text-body text-muted-foreground">
+                        Your AI agent opens a sign-in once. Log in with your own account and come back to the terminal.
+                      </p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                      <span class="rounded-full border border-border px-3 py-1 text-caption text-muted-foreground"
+                        >Step 4 of 8</span
+                      >
+                      <ol class="flex flex-1 gap-1" aria-label="Progress">
+                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
+                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
+                        <li class="h-1 flex-1 rounded-full bg-primary"></li>
+                        <li class="h-1 flex-1 rounded-full bg-primary/40"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                        <li class="h-1 flex-1 rounded-full bg-border"></li>
+                      </ol>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-3">
+                    <span class="text-caption text-muted-foreground">AI agent</span>
+                    <div class="flex rounded-full border border-border bg-muted p-1">
+                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Claude Code</span>
+                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Antigravity</span>
+                      <span class="rounded-full px-4 py-1 text-caption text-muted-foreground">Codex</span>
+                      <span
+                        class="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1 text-caption font-semibold shadow-md shadow-ai/30 ring-1 ring-ai/50"
+                        ><span class="size-2 rounded-full bg-ai"></span>GitHub Copilot</span
+                      >
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-12 gap-8 rounded-xl bg-muted p-8">
+                    <div class="col-span-7 overflow-hidden rounded-xl border border-border bg-background shadow-lg">
+                      <div class="flex items-center gap-2 border-b border-border bg-card px-4 py-2">
+                        <span class="size-2.5 rounded-full bg-muted-foreground/30"></span
+                        ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span
+                        ><span class="size-2.5 rounded-full bg-muted-foreground/30"></span>
+                        <span class="ml-3 flex-1 rounded-full bg-muted px-3 py-0.5 text-caption text-muted-foreground"
+                          >GitHub · sign-in page</span
+                        >
+                      </div>
+                      <div class="flex flex-col items-center gap-4 px-10 py-10 text-center">
+                        <span class="flex size-12 items-center justify-center rounded-full bg-ai/15 ring-1 ring-ai/40">
+                          <svg viewBox="0 0 24 24" class="size-6" aria-hidden="true">
+                            <rect
+                              x="4"
+                              y="7"
+                              width="16"
+                              height="11"
+                              rx="5"
+                              class="fill-none stroke-ai"
+                              stroke-width="1.8"
+                            ></rect>
+                            <circle cx="9.5" cy="12.5" r="1.4" class="fill-ai"></circle>
+                            <circle cx="14.5" cy="12.5" r="1.4" class="fill-ai"></circle>
+                          </svg>
+                        </span>
+                        <p class="text-body font-semibold">Sign in to use GitHub Copilot</p>
+                        <div class="flex w-2/3 flex-col gap-2">
+                          <span
+                            class="rounded-md border border-border px-3 py-2 text-left text-caption text-muted-foreground"
+                            >Your account</span
+                          >
+                          <span class="rounded-full bg-primary py-2 text-caption font-semibold text-primary-foreground"
+                            >Sign in</span
+                          >
+                        </div>
+                        <p class="text-caption text-muted-foreground">
+                          The page your AI agent opens may look a little different.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="col-span-5 flex flex-col justify-between gap-6">
+                      <ol class="focus-group focus-group--dim-others flex flex-col gap-4">
+                        <li class="focus-group__item flex gap-4">
+                          <span
+                            class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-caption font-semibold"
+                            >1</span
+                          >
+                          <div>
+                            <p class="text-body font-semibold">It opens a sign-in</p>
+                            <p class="text-caption text-muted-foreground">
+                              The first time you start it, in your browser.
+                            </p>
+                          </div>
+                        </li>
+                        <li class="focus-group__item flex gap-4">
+                          <span
+                            class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-caption font-semibold text-primary-foreground"
+                            >2</span
+                          >
+                          <div>
+                            <p class="text-body font-semibold">Sign in with your own account</p>
+                            <p class="text-caption text-muted-foreground">
+                              Not a shared one, so the AI agent is yours to run.
+                            </p>
+                          </div>
+                        </li>
+                        <li class="focus-group__item flex gap-4">
+                          <span
+                            class="flex size-8 shrink-0 items-center justify-center rounded-full border border-border bg-card text-caption font-semibold"
+                            >3</span
+                          >
+                          <div>
+                            <p class="text-body font-semibold">Come back to the terminal</p>
+                            <p class="text-caption text-muted-foreground">You do this once, and it stays.</p>
+                          </div>
+                        </li>
+                      </ol>
+                      <div class="flex flex-col gap-2 rounded-xl border border-border bg-card p-4">
+                        <p class="text-caption text-muted-foreground">Which account fits GitHub Copilot:</p>
+                        <a
+                          class="card-hover card-hover--raise inline-flex items-center gap-2 self-start rounded-full border border-primary bg-card px-4 py-2 text-caption font-semibold text-primary"
+                        >
+                          GitHub Copilot · official login page
+                          <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
+                            <path
+                              d="M6 3H3.5A.5.5 0 0 0 3 3.5v9a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V10M9 3h4v4M13 3 7.5 8.5"
+                              class="fill-none stroke-current"
+                              stroke-width="1.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            ></path>
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-col gap-3 rounded-xl border border-border p-6">
+                    <div class="flex items-baseline justify-between gap-4">
+                      <p class="text-body font-semibold">Stuck?</p>
+                      <p class="text-caption text-muted-foreground">
+                        Paste the error, copy the prompt, ask free ChatGPT.
+                      </p>
+                    </div>
+                    <div class="flex items-stretch gap-4">
+                      <div
+                        class="flex-1 rounded-md border border-dashed border-border bg-muted px-4 py-3 font-mono text-caption text-muted-foreground"
+                      >
+                        Paste your error here…
+                      </div>
+                      <span
+                        class="card-hover card-hover--outline inline-flex items-center gap-2 self-center rounded-full border border-border bg-card px-4 py-2 text-caption font-semibold"
+                      >
+                        <svg viewBox="0 0 16 16" class="size-4" aria-hidden="true">
+                          <rect
+                            x="5"
+                            y="5"
+                            width="8"
+                            height="9"
+                            rx="1.5"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                          ></rect>
+                          <path
+                            d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"
+                            class="fill-none stroke-current"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                          ></path>
+                        </svg>
+                        Copy prompt
+                      </span>
+                    </div>
+                    <p class="flex flex-wrap items-center gap-2 text-caption text-muted-foreground">
+                      The prompt adds
+                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Mac</span>
+                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">GitHub Copilot</span>
+                      <span class="rounded-full bg-muted px-2 py-0.5 text-foreground">Step 4: Log in</span>
+                    </p>
+                  </div>
+                </div>
+                <figcaption>
+                  <b>6b</b> The sign-in screen large as the focal picture, with three short numbered lines beside it:
+                  the viewer recognises the screen when it appears. Build cost: Scene.
+                </figcaption>
+                <details class="spec-build">
+                  <summary>Build notes</summary>
+                  <div data-spec="build-notes">
+                    Keeps <code>basic-page</code>, motion none; a Scene under the shared Slide header, the sign-in
+                    picture and the list a <code>grid-cols-12</code> split (7 / 5) on a <code>bg-muted</code> stage.
+                    Agent toolbar only, as 6a. Shares <code>StepProgress</code>, <code>PickToolbar</code>,
+                    <code>OfficialLink</code> and <code>StuckBox</code> with Slide 3. New parts
+                    <code>SignInPicture</code> (<code>{ agent: AgentId }</code>; a drawn browser card per agent with its
+                    <code>ai</code> mark, never a screenshot, captioned that the real page may differ) and the numbered
+                    list from the page's <code>StepList</code> (<code
+                      >{ items: { title: string; body: string }[]; current: number }</code
+                    >), the current line in <code>bg-primary</code>. Per-agent table as 6a. Hover:
+                    <code>focus-group--dim-others</code> on the list, <code>card-hover--raise</code> on the official
+                    pill. i18n keys <code>title</code>, <code>caption</code>, <code>items.*</code>,
+                    <code>accountFits</code>, <code>openLogin</code>, <code>stuck.*</code>. No Context markers.
+                  </div>
+                </details>
+                <label class="spec-pick"
+                  ><input type="checkbox" form="spec-review" name="pick:log-in" value="6b" /> Pick 6b</label
+                >
+              </figure>
+            </div>
+            <textarea class="spec-note" form="spec-review" name="note:log-in" placeholder="Note on Slide 4"></textarea>
           </article>
         </section>
         <section data-spec="section" id="your-first-skill">
@@ -9718,6 +9767,13 @@
               browser; if the command fails, it prints the link. &quot;You just ran a skill. See you at the workshop;
               meanwhile browse hancrafted.&quot;
             </p>
+            <aside class="spec-card">
+              <h4>Start-order amendment, 2026-11-11</h4>
+              <p>
+                On the German page the typed line, the Copy button and the Voice script read /hancrafted-check-setup de,
+                so the check opens the German Guide; the English page keeps the bare command.
+              </p>
+            </aside>
             <div class="spec-words">
               <input
                 type="radio"

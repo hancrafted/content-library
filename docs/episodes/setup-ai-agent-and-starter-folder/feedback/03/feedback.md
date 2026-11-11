@@ -13,10 +13,10 @@ via: app
 - `your-terminal--overview` · content — Reorder the steps so the AI agent first starts inside the starter folder: 1 Your terminal → 2 Your AI agent (install only) → 3 Your folder (download and unzip, start the agent inside that folder, log in) → 4 Your first skill. Checkbox ids stay as they are; `agent-logged-in` moves under step 3.
 - `your-terminal--overview` · content — Name each checklist step exactly as its Section title, so the ready state and the Sections below it read as the same steps.
 - `your-terminal--overview` · design — In the ready state, show "✓ Done, no need to repeat" on every step Section header below the Overview, so a visitor scrolling past the success message knows not to redo the steps.
-- `your-ai-agent--log-in` · content — Move this Slide to the end of the Your folder Section, after `start-the-agent-inside-that-folder`; its anchor becomes `your-folder--log-in`.
-- `your-ai-agent--log-in` · implementation — Update `published-anchors.json` for the move: `your-ai-agent--log-in` is removed on purpose (nothing links it; the check skill links only `#your-terminal--overview`).
-- `your-ai-agent--log-in` · content — Drop the "Open a new terminal window first" card; opening the terminal inside the folder after installing already gives a fresh window.
-- `your-ai-agent--log-in` · content — Move the trust prompt ("Do you trust the files in this folder?") from this Slide to `start-the-agent-inside-that-folder`.
+- `your-folder--log-in` · content — Move this Slide to the end of the Your folder Section, after `start-the-agent-inside-that-folder`; its anchor becomes `your-folder--log-in`.
+- `your-folder--log-in` · implementation — Update `published-anchors.json` for the move: `your-folder--log-in` is removed on purpose (nothing links it; the check skill links only `#your-terminal--overview`).
+- `your-folder--log-in` · content — Drop the "Open a new terminal window first" card; opening the terminal inside the folder after installing already gives a fresh window.
+- `your-folder--log-in` · content — Move the trust prompt ("Do you trust the files in this folder?") from this Slide to `start-the-agent-inside-that-folder`.
 - `your-ai-agent--install-your-ai-agent` · content — End the Slide at the version check in a fresh window, without starting the agent: for Codex, answer N to "Start Codex now?".
 - `your-ai-agent--install-your-ai-agent` · content — Rewrite the Voice script to the new order: the agent is installed here and first started in the folder step.
 - `your-ai-agent--install-your-ai-agent` · content — `commandPromptHint` renders `C:\&gt;` literally in both locales: write a literal `>`, and assert the rendered text shows `C:\>`.
