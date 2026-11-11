@@ -1,0 +1,68 @@
+{
+  "title": "Festlegen und bauen",
+  "caption": "Jede Arbeit teilt sich in <b>festlegen, was entsteht</b>, und es bauen. KI beschleunigt das Bauen und kann beim Festlegen helfen, nur so weit, wie sie erraten kann, was in Deinem Kopf ist.",
+  "defining": {
+    "name": "Festlegen",
+    "aim": "Entscheiden, was entsteht. KI hilft, indem sie fragt.",
+    "exchange": {
+      "q1": "Wie weit ist Dein Arbeitsweg?",
+      "q2": "Hügelig oder flach?",
+      "a1": "12 km, ein großer Berg."
+    },
+    "bubble": "„…solange KI keine Gedanken lesen kann.“"
+  },
+  "building": {
+    "name": "Bauen",
+    "aim": "Es herstellen. KI beschleunigt das stark.",
+    "stations": {
+      "frame": "Rahmen",
+      "assemble": "Montage",
+      "test": "Probefahrt"
+    },
+    "footnote": "Mehr Dokumente pro Stunde an jeder Station."
+  },
+  "facts": {
+    "upfront": {
+      "lead": "Kunden können es nicht vorab sagen:",
+      "text": "Sie merken erst an ausprobierten Versionen, was sie wollen"
+    },
+    "survey": {
+      "lead": "48 %",
+      "text": "von 228 Firmen nennen unvollständige oder versteckte Anforderungen ihr größtes Problem; Nacharbeit frisst 40 bis 50 % des Aufwands"
+    }
+  },
+  "notes": {
+    "clients-cannot-state-it-up-front": {
+      "header": "Kunden können es nicht vorab sagen",
+      "description": "Brooks zufolge wissen Kunden nicht, was sie wollen, und können es nicht vollständig und richtig festlegen, bevor sie Versionen des Produkts ausprobiert haben. Anforderungen schrittweise zu verfeinern ist deshalb das Wichtigste, was Entwickler für sie tun [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    },
+    "practitioners-name-it-too": {
+      "header": "Auch die Praxis sagt das",
+      "description": "In einer Umfrage unter 228 Firmen waren unvollständige oder versteckte Anforderungen das meistgenannte Anforderungsproblem (48 %), und vermeidbare Nacharbeit wird auf 40 bis 50 Prozent des Projektaufwands geschätzt. Die Regel, dass ein später Fix 100-mal teurer ist, und die CHAOS-Ausfallquoten sind dagegen umstritten [1].",
+      "sources": {
+        "unclear-requirements-cause-rework": {
+          "title": "Warum führen unklare Anforderungen zu Nacharbeit und gescheiterten Projekten? (frühere Recherche)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-halves": {
+        "title": "Zwei Hälften",
+        "keywords": "",
+        "script": "Jede Arbeit teilt sich in zwei Hälften: festlegen, was entstehen soll, und es bauen. KI beschleunigt das Bauen enorm, und sie kann auch beim Festlegen helfen, aber nur so weit, wie sie erraten kann, was in Deinem Kopf ist."
+      },
+      "foreshadow": {
+        "title": "Vorausblick",
+        "keywords": "",
+        "script": "Merk Dir diesen letzten Gedanken, denn er kommt wieder. Beim Festlegen kann die KI genau helfen, indem sie Dir Fragen stellt, wie es eine gute Interviewerin tun würde. Das hat einen Namen, Meta-Prompting, und dazu kommen wir im letzten Abschnitt."
+      }
+    }
+  }
+}

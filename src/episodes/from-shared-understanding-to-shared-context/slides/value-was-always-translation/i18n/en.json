@@ -1,0 +1,55 @@
+{
+  "title": "Value was always translation",
+  "caption": "A product, a service or a lecture: each <b>translates what a person wanted</b> into something that solves the actual problem. The hard part is deciding what to build, a hypothesis from experience, not a measurement.",
+  "intent": {
+    "index": "01",
+    "label": "What a person wanted",
+    "who": "The customer",
+    "quote": "“I want to get to work without arriving sweaty.”",
+    "statement": "One intent."
+  },
+  "results": {
+    "index": "02",
+    "label": "What it was translated into",
+    "statement": "Three translations.",
+    "items": {
+      "product": { "kind": "Product", "name": "E-bike" },
+      "service": { "kind": "Service", "name": "Fitting" },
+      "lecture": { "kind": "Lecture", "name": "Riding class" }
+    }
+  },
+  "notes": {
+    "the-hard-part-is-the-concept": {
+      "header": "The hard part is the concept",
+      "description": "Brooks argues the hard part of building software is deciding what to build, the conceptual construct, and not the labor of representing it in code; an error in the concept cripples the result and is hardest to rectify later [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    },
+    "how-strong-the-evidence-is": {
+      "header": "How strong the evidence is",
+      "description": "this is one author's argument from experience, written in 1986 about human-built software. No source compares requirements and execution on the same projects, and that it holds when an AI builds is an inference [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "every-effort-is-a-translation": {
+        "title": "Every effort is a translation",
+        "keywords": "",
+        "script": "Whatever you make, a product, a service or a lecture, you are doing the same thing: you translate what a human wanted into something that solves the actual problem. The product is only the last form of that intent."
+      },
+      "a-translation-layer": {
+        "title": "A translation layer",
+        "keywords": "",
+        "script": "Think of a restaurant guest who had to walk into the kitchen and cook from the raw ingredients. The menu and the waiter are the translation. Software works the same way: if your customer had to give orders straight to the storeroom where the data lives, in the language of that storeroom, they would not need the screens you built for them. The translation is the work. And this is my hypothesis, not a measured result: the translation is the hard part, not the typing."
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
   "title": "Vom geteilten Verständnis zum geteilten Kontext · hancrafted",
   "description": "Warum KI jede Station beschleunigt, aber nicht das Ergebnis, wie Du statischen von dynamischem Kontext unterscheidest, wie Du erkennst, wann Kontext kippt, und wie Du Dich von einer KI in Fragerunden interviewen lässt, um Kontext mit hohem Signal zu bauen und ihn dann in einen frischen Chat mitzunehmen.",
-  "toc": "Episoden Inhalt einklappen Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen Inhalt öffnen : Inhalt Episoden Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen",
+  "toc": "Episoden Inhalt einklappen Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung Wert war immer Übersetzung Festlegen und bauen Präzision und Genauigkeit 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen Inhalt öffnen : Inhalt Episoden Vom geteilten Verständnis zum geteilten Kontext 1 Ein Gedankenexperiment Was der Kunde wirklich wollte Was mit KI passiert Tempo, das das ganze Band trägt 2 Jedes Produkt ist eine Übersetzung Wert war immer Übersetzung Festlegen und bauen Präzision und Genauigkeit 3 Kontext ist die Anforderung Was die KI wirklich sieht Context Engineering ist Requirements Engineering für Agenten Statischer und dynamischer Kontext Du führst die Werkbank Context Rot Die Werkbank sauber halten 4 Kontext für Agenten erstellen",
   "slides": [
     {
       "id": "top",
@@ -21,6 +21,18 @@
       "text": "Ein Gedankenexperiment (3/3) Seite 3 von 3 Tempo, das das ganze Band trägt Das Ziel ist ein schnelleres Band, das im Gleichgewicht bleibt, nicht eine sehr schnelle Station. Tempo pro Station, Dokumente am Tag vor der KI: 10 Bandtempo mit KI: 20 Vertrieb 20 am Tag Entwurf 20 am Tag Bau 20 am Tag Prüfung 20 am Tag Versand 20 am Tag „Eine Schaukel für meine Kinder“ Kunde KI Vertrieb KI Entwurf KI Bau KI Prüfung KI Versand Die Reifenschaukel Kunde Gleich hohe Balken, kurze Warteschlangen. Der Ertrag kommt vom ganzen Band, nicht von einer Station ( ) ."
     },
     { "id": "every-product-is-a-translation", "text": "Jedes Produkt ist eine Übersetzung Beides Präzise Genau Keins" },
+    {
+      "id": "every-product-is-a-translation--value-was-always-translation",
+      "text": "Jedes Produkt ist eine Übersetzung (1/3) Seite 1 von 3 Wert war immer Übersetzung Ein Produkt, eine Dienstleistung oder ein Vortrag: Jedes übersetzt, was ein Mensch wollte, in etwas, das das eigentliche Problem löst. Schwer ist, zu entscheiden, was gebaut wird, eine Hypothese aus Erfahrung, keine Messung. 01 · Was ein Mensch wollte Der Kunde „Ich will zur Arbeit kommen, ohne verschwitzt anzukommen.“ Eine Absicht. 02 · Worin sie übersetzt wurde Produkt E-Bike Dienstleistung Bike-Fitting Vortrag Fahrkurs Drei Übersetzungen."
+    },
+    {
+      "id": "every-product-is-a-translation--defining-and-building",
+      "text": "Jedes Produkt ist eine Übersetzung (2/3) Seite 2 von 3 Festlegen und bauen Jede Arbeit teilt sich in festlegen, was entsteht, und es bauen. KI beschleunigt das Bauen und kann beim Festlegen helfen, nur so weit, wie sie erraten kann, was in Deinem Kopf ist. 01 Festlegen Entscheiden, was entsteht. KI hilft, indem sie fragt. Wie weit ist Dein Arbeitsweg? Hügelig oder flach? 12 km, ein großer Berg. „…solange KI keine Gedanken lesen kann.“ 02 Bauen Es herstellen. KI beschleunigt das stark. Rahmen Montage Probefahrt Mehr Dokumente pro Stunde an jeder Station. Kunden können es nicht vorab sagen: Sie merken erst an ausprobierten Versionen, was sie wollen 48 % von 228 Firmen nennen unvollständige oder versteckte Anforderungen ihr größtes Problem; Nacharbeit frisst 40 bis 50 % des Aufwands"
+    },
+    {
+      "id": "every-product-is-a-translation--precision-and-accuracy",
+      "text": "Jedes Produkt ist eine Übersetzung (3/3) Seite 3 von 3 Präzision und Genauigkeit Präzise: Jemand anderes könnte es ohne eine einzige Frage bauen. Genau: Das Ergebnis trifft die Absicht und löst das eigentliche Problem. Du brauchst beides. Eng Locker Präzise, daneben Arbeitsauftrag Rennrad · Rahmen M · Carbon · ohne Schutzbleche An der Werkbank: Das falsche Rad, perfekt gebaut. Präzise und genau Arbeitsauftrag Pendel-E-Bike · Rahmen M · 500 Wh · Schutzbleche · Gepäckträger An der Werkbank: Das richtige Rad, keine Fragen. Keins von beidem Arbeitsauftrag Ein schönes Rad, und schnell. An der Werkbank: Falsch und voller Fragen. Genau, gestreut Arbeitsauftrag Irgendwas für den Arbeitsweg, mit Motor? An der Werkbank: Am Ende richtig, nach einem Dutzend Fragen. Neben der Absicht Auf der Absicht Nach oben: Präzision , wie wenige Fragen das Blatt offen lässt Nach rechts: Genauigkeit , ob es trifft, was der Fahrer wollte Präzise, aber falsch ist der teure Fall: Eine fehlende Anforderung hält das Band nicht an, sie liefert das falsche Rad aus ( ) . Wie viel das kostet, hängt vom Auftrag ab ( ) ."
+    },
     { "id": "context-is-the-requirement", "text": "Kontext ist die Anforderung Kontextfenster Statisch Dynamisch" },
     {
       "id": "context-is-the-requirement--what-the-ai-actually-sees",
@@ -69,6 +81,18 @@
     {
       "id": "every-product-is-a-translation",
       "text": "Jedes Produkt ist eine Übersetzung Keine Sprechernotizen für diese Folie."
+    },
+    {
+      "id": "every-product-is-a-translation--value-was-always-translation",
+      "text": "Wert war immer Übersetzung Schwer ist das Konzept Brooks hält das Schwere an Software für die Entscheidung, was gebaut wird, das gedankliche Konstrukt, nicht die Arbeit, es in Code darzustellen. Ein Fehler im Konzept verdirbt das Ergebnis und lässt sich später am schwersten beheben 1 . Quellen (1) Brooks, No Silver Bullet: Essence and Accidents of Software Engineering ( öffnet in neuem Tab ) cgl.ucsf.edu Wie belastbar das ist Das ist das Argument eines einzelnen Autors aus Erfahrung, 1986 über von Menschen gebaute Software geschrieben. Keine Quelle vergleicht Anforderungen und Umsetzung an denselben Projekten, und dass es auch gilt, wenn eine KI baut, ist ein Schluss 1 . Quellen (1) Brooks, No Silver Bullet: Essence and Accidents of Software Engineering ( öffnet in neuem Tab ) cgl.ucsf.edu"
+    },
+    {
+      "id": "every-product-is-a-translation--defining-and-building",
+      "text": "Festlegen und bauen Kunden können es nicht vorab sagen Brooks zufolge wissen Kunden nicht, was sie wollen, und können es nicht vollständig und richtig festlegen, bevor sie Versionen des Produkts ausprobiert haben. Anforderungen schrittweise zu verfeinern ist deshalb das Wichtigste, was Entwickler für sie tun 1 . Quellen (1) Brooks, No Silver Bullet: Essence and Accidents of Software Engineering ( öffnet in neuem Tab ) cgl.ucsf.edu Auch die Praxis sagt das In einer Umfrage unter 228 Firmen waren unvollständige oder versteckte Anforderungen das meistgenannte Anforderungsproblem (48 %), und vermeidbare Nacharbeit wird auf 40 bis 50 Prozent des Projektaufwands geschätzt. Die Regel, dass ein später Fix 100-mal teurer ist, und die CHAOS-Ausfallquoten sind dagegen umstritten 1 . Quellen (1) Warum führen unklare Anforderungen zu Nacharbeit und gescheiterten Projekten? (frühere Recherche) ( öffnet in neuem Tab ) github.com"
+    },
+    {
+      "id": "every-product-is-a-translation--precision-and-accuracy",
+      "text": "Präzision und Genauigkeit Fehlende Anforderungen zeigen sich als falsches Ergebnis Von 55 historischen Softwarevorfällen in der Luft- und Raumfahrt lieferten 85 % ein falsches Ergebnis, statt anzuhalten. Nur 16 % waren klassische Programmierfehler, 40 % gingen auf fehlenden Code zurück, also auf fehlende Anforderungen oder nicht vorhergesehene Situationen 1 . Quellen (1) Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance ( öffnet in neuem Tab ) ntrs.nasa.gov Grenzen Die 40 % vermischen fehlende Anforderungen mit unvorhergesehenen Situationen, die Kategorien wurden im Nachhinein vergeben, und der Autor bezweifelt, dass mehr Anforderungen viele dieser Fehler verhindert hätten 1 . Eine Untersuchung von Spezifikationen fand, dass es vom Projekt abhängt, wie sehr ihre Qualität zählt 2 . Quellen (2) Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance ( öffnet in neuem Tab ) ntrs.nasa.gov Mund, Femmer, Méndez Fernández, Eckhardt, Does Quality of Requirements Specifications matter? Combined Results of Two Empirical Studies ( öffnet in neuem Tab ) arxiv.org"
     },
     {
       "id": "context-is-the-requirement",
@@ -127,6 +151,18 @@
     {
       "id": "every-product-is-a-translation",
       "text": "Jedes Produkt ist eine Übersetzung 0:00 – 0:22 Ein neuer Schmerz Denk an das letzte Mal, als Du genau das zurückbekommen hast, worum Du gebeten hattest, und es trotzdem falsch war. Niemand war faul, nichts war kaputt. Gebaut wurde sauber, also lag der Fehler woanders, und genau um diesen Schmerz geht es in diesem Abschnitt. 0:22 – 0:34 Wohin der Abschnitt geht Wir gehen drei Schritte. Zuerst, was Wert eigentlich ist, dann, wo er sich in zwei Hälften teilt, und dann, was eine gute Anforderung ausmacht."
+    },
+    {
+      "id": "every-product-is-a-translation--value-was-always-translation",
+      "text": "Wert war immer Übersetzung 0:00 – 0:19 Jede Arbeit ist eine Übersetzung Was auch immer Du machst, ein Produkt, eine Dienstleistung oder einen Vortrag, Du tust immer dasselbe: Du übersetzt, was ein Mensch wollte, in etwas, das das eigentliche Problem löst. Das Produkt ist nur die letzte Form dieser Absicht. 0:19 – 1:00 Eine Übersetzungsschicht Stell Dir einen Restaurantgast vor, der in die Küche gehen und aus den rohen Zutaten selbst kochen müsste. Die Speisekarte und der Kellner sind die Übersetzung. Software funktioniert genauso: Müsste Dein Kunde seine Aufträge direkt ans Lager geben, in dem die Daten liegen, in der Sprache dieses Lagers, bräuchte er die Bildschirme nicht, die Du für ihn gebaut hast. Die Übersetzung ist die Arbeit. Und das ist meine Hypothese, kein gemessenes Ergebnis: Die Übersetzung ist der schwere Teil, nicht das Tippen."
+    },
+    {
+      "id": "every-product-is-a-translation--defining-and-building",
+      "text": "Festlegen und bauen 0:00 – 0:20 Zwei Hälften Jede Arbeit teilt sich in zwei Hälften: festlegen, was entstehen soll, und es bauen. KI beschleunigt das Bauen enorm, und sie kann auch beim Festlegen helfen, aber nur so weit, wie sie erraten kann, was in Deinem Kopf ist. 0:20 – 0:40 Vorausblick Merk Dir diesen letzten Gedanken, denn er kommt wieder. Beim Festlegen kann die KI genau helfen, indem sie Dir Fragen stellt, wie es eine gute Interviewerin tun würde. Das hat einen Namen, Meta-Prompting, und dazu kommen wir im letzten Abschnitt."
+    },
+    {
+      "id": "every-product-is-a-translation--precision-and-accuracy",
+      "text": "Präzision und Genauigkeit 0:00 – 0:13 Präzision Fangen wir mit Präzision an. Ein Dokument ist präzise, wenn jemand anderes es umsetzen könnte, ohne Dir eine einzige Frage zu stellen. Nichts bleibt zu raten. 0:13 – 0:41 Genauigkeit Genauigkeit ist etwas anderes: Das Ergebnis trifft, was Du beabsichtigt hast, und löst das eigentliche Problem. Stell Dir eine Dartscheibe vor: Präzision heißt, die Pfeile landen dicht beieinander, Genauigkeit heißt, sie landen im Bullseye. Ein Dokument kann präzise sein und nicht genau, und dann hast Du die zehn falschen Schaukeln, schneller gebaut und mit großer Sorgfalt. 0:41 – 1:00 Kunst, keine Wissenschaft Jetzt ehrlich zum Handwerk. Eine gute Anforderung zu schreiben ist eine Kunst, keine Wissenschaft. Ob sie präzise und genau war, weißt Du erst, wenn Du es ausprobiert hast, und genau deshalb steht dieser Abschnitt an dieser Stelle."
     },
     {
       "id": "context-is-the-requirement",

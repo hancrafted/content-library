@@ -1,0 +1,68 @@
+{
+  "title": "Defining and building",
+  "caption": "Every effort splits into <b>defining what to make</b> and building it. AI speeds up building and can assist defining, only as far as it can guess what is in your head.",
+  "defining": {
+    "name": "Defining",
+    "aim": "Deciding what to make. AI can assist by asking.",
+    "exchange": {
+      "q1": "How far is your commute?",
+      "q2": "Hills, or flat?",
+      "a1": "12 km, one big hill."
+    },
+    "bubble": "“…as long as AI can’t read our minds.”"
+  },
+  "building": {
+    "name": "Building",
+    "aim": "Making it. AI speeds it up a great deal.",
+    "stations": {
+      "frame": "Frame",
+      "assemble": "Assemble",
+      "test": "Test ride"
+    },
+    "footnote": "More documents per hour at every station."
+  },
+  "facts": {
+    "upfront": {
+      "lead": "Clients can’t state it up front:",
+      "text": "they find out what they want by trying versions"
+    },
+    "survey": {
+      "lead": "48%",
+      "text": "of 228 companies name incomplete or hidden requirements as their top problem; rework eats 40–50% of effort"
+    }
+  },
+  "notes": {
+    "clients-cannot-state-it-up-front": {
+      "header": "Clients cannot state it up front",
+      "description": "Brooks holds that clients do not know what they want and cannot specify it completely and correctly before they have tried versions of the product, so refining requirements iteratively is what builders do most for them [1].",
+      "sources": {
+        "brooks-no-silver-bullet": {
+          "title": "Brooks, No Silver Bullet: Essence and Accidents of Software Engineering"
+        }
+      }
+    },
+    "practitioners-name-it-too": {
+      "header": "Practitioners name it too",
+      "description": "in a survey of 228 companies, incomplete or hidden requirements were the most cited requirements problem (48%), and avoidable rework is estimated at 40 to 50 percent of project effort, though the 100x late-fix rule and the CHAOS failure rates are disputed [1].",
+      "sources": {
+        "unclear-requirements-cause-rework": {
+          "title": "Why do unclear requirements lead to rework and failed projects? (earlier research file)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "two-halves": {
+        "title": "Two halves",
+        "keywords": "",
+        "script": "Every effort splits into two halves, defining what to make and building it. AI speeds up building a great deal, and it can also assist with defining, but only as far as it can guess what is in your head."
+      },
+      "foreshadow": {
+        "title": "Foreshadow",
+        "keywords": "",
+        "script": "Remember that last thought, because it comes back. Defining is exactly where the AI can help, by asking you questions the way a good interviewer would. That has a name, meta prompting, and we get to it in the last Section."
+      }
+    }
+  }
+}
