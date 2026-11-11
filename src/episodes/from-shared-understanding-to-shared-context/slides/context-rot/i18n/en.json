@@ -1,0 +1,96 @@
+{
+  "title": "Context rot",
+  "heading": "Context rot at the bench",
+  "caption": "A fuller bench can be a worse bench: <b>four messes, set up before the shift or arriving during it.</b>",
+  "credit": "Names after Drew Breunig and IBM",
+  "columns": {
+    "poisoning": { "label": "A wrong fact stuck in", "term": "poisoning" },
+    "distraction": { "label": "Too much history", "term": "distraction" },
+    "confusion": { "label": "Too many similar tools", "term": "confusion" },
+    "clash": { "label": "Two instructions that disagree", "term": "clash" }
+  },
+  "rows": {
+    "static": {
+      "label": "Static",
+      "when": "set up before the shift",
+      "cells": {
+        "wrong-screw": "A wrong screw size on the instruction sheet",
+        "binder": "A binder of every bike model, when you build one",
+        "wrenches": "Fifty near-identical wrenches",
+        "two-sheets": "Old and new sheets both pinned up"
+      }
+    },
+    "dynamic": {
+      "label": "Dynamic",
+      "when": "arrives during the shift",
+      "cells": {
+        "mislabelled-box": "A mislabelled box of screws",
+        "colleagues": "Colleagues dropping by with questions",
+        "crates": "Ten crates of similar parts",
+        "rush-vs-check": "“Rush it” against “check every piece”"
+      }
+    }
+  },
+  "notes": {
+    "length-alone-does-part-of-the-damage": {
+      "header": "Length alone does part of the damage",
+      "description": "output quality falls as the window fills, even with perfect retrieval [1].",
+      "sources": {
+        "context-rot-as-window-fills": {
+          "title": "content-library research, Why does a language model's output quality drop as its context window fills?"
+        }
+      }
+    },
+    "the-four-names": {
+      "header": "The four names",
+      "description": "Drew Breunig named context poisoning, distraction, confusion and clash in June 2025: poisoning is an error that gets saved and reused, distraction a long history that steers the model, confusion superfluous material such as surplus tools, clash conflicting material in the window [1].",
+      "sources": {
+        "breunig-how-long-contexts-fail": {
+          "title": "Drew Breunig, How Long Contexts Fail"
+        }
+      }
+    },
+    "credit-and-limit": {
+      "header": "Credit and limit",
+      "description": "the IBM Technology video presents the same four. The taxonomy is a practitioner blog post and a failure can fit more than one mode [1].",
+      "sources": {
+        "ibm-context-engineering-failure-modes": {
+          "title": "IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid"
+        }
+      }
+    },
+    "numbers-for-confusion-and-clash": {
+      "header": "Numbers for confusion and clash",
+      "description": "on the Berkeley Function-Calling Leaderboard every model does worse with more than one tool, a quantized Llama 3.1 8b failed with 46 tools and succeeded with 19; piecemeal prompts cut scores by 39% on average [1].",
+      "sources": {
+        "breunig-how-long-contexts-fail": {
+          "title": "Drew Breunig, How Long Contexts Fail"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "junk-drawer-meeting-two-bosses": {
+        "title": "Junk drawer, meeting, two bosses",
+        "keywords": "",
+        "script": "Everyday pictures first, because the technical names come later. A wrong fact in a recipe, which you then cook from every time. A long meeting that forgets the decision. A junk drawer of keys, where you cannot find the one you need. Two bosses with opposite instructions."
+      },
+      "static-row": {
+        "title": "Static row",
+        "keywords": "",
+        "script": "Now the same four at the bench, on the static side, set up before the shift. A wrong screw size on the instruction sheet. A binder with every bike model, when you build one. Fifty near-identical wrenches. Old and new instruction sheets pinned up side by side."
+      },
+      "dynamic-row": {
+        "title": "Dynamic row",
+        "keywords": "",
+        "script": "The same four arrive during the shift too. A mislabelled box of screws, colleagues dropping by with questions, ten crates of similar parts, someone shouting rush it while the sheet says check every piece. The names for these are poisoning, distraction, confusion and clash. The names are the label, and the bench is the picture."
+      },
+      "more-context-worse-result": {
+        "title": "More context, worse result",
+        "keywords": "",
+        "script": "More is not safer. A fuller bench can be a worse bench. Adding one more document to be on the safe side is exactly how most of these messes begin."
+      }
+    }
+  }
+}

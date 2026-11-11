@@ -1,0 +1,86 @@
+{
+  "title": "Context Engineering ist Requirements Engineering für Agenten",
+  "caption": "Was Du ins Kontextfenster legst, entscheidet, ob der Agent <b>die Präzision und Genauigkeit hat, auf die er hinarbeiten kann.</b>",
+  "customer": {
+    "label": "Kunde will",
+    "text": "ein Stadtrad für den Weg zur Arbeit, bis Freitag",
+    "same": "Dieselben vier Ergebnisse wie bei der Dartscheibe"
+  },
+  "window": "Kontextfenster",
+  "outcomes": {
+    "both": {
+      "label": "Präzise und genau",
+      "order": "„Stadtrad, 54-cm-Rahmen, 7-Gang-Nabe, schwarz, fertig Freitag.“",
+      "verdict": "Nichts zu fragen, nichts zu raten."
+    },
+    "precise": {
+      "label": "Präzise, nicht genau",
+      "order": "„Rennrad, 58-cm-Carbonrahmen, 22 Gänge, fertig Freitag.“",
+      "verdict": "Klar, aber der Kunde wollte ein Stadtrad."
+    },
+    "accurate": {
+      "label": "Genau, nicht präzise",
+      "order": "„Ein bequemes Rad für den Weg zur Arbeit.“",
+      "verdict": "Richtige Idee, zehn Fragen offen."
+    },
+    "neither": {
+      "label": "Keins von beiden",
+      "order": "„Irgendwas Sportliches, Du weißt schon.“",
+      "verdict": "Vage und daneben."
+    }
+  },
+  "quote": "Anthropic: Ziel ist „die kleinstmögliche Menge an Tokens mit hohem Signal“, <definition>die die Chance auf das gewünschte Ergebnis maximiert</definition>.",
+  "limits": "<proposal>Eine Parallele, die Forschende vorschlagen</proposal>; anders als eine Spezifikation <stops>ist das Fenster ein Budget, das sich ändert, während der Agent arbeitet</stops>.",
+  "notes": {
+    "the-definition": {
+      "header": "Die Definition",
+      "description": "Anthropic definiert Context Engineering als das Kuratieren und Pflegen der optimalen Menge an Tokens während der Inferenz, geleitet von „der kleinstmöglichen Menge an Tokens mit hohem Signal“, die die Chance auf das gewünschte Ergebnis maximiert [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    },
+    "input-quality-tracks-output-quality": {
+      "header": "Gute Eingabe, gutes Ergebnis",
+      "description": "in einem randomisierten Experiment mit 30 Laien schlug ein Training im anforderungsorientierten Prompten das klassische Prompt-Engineering-Training (20 % gegen 1 % Zuwachs), und die Autoren berichten, dass die Qualität der Anforderungen mit der Qualität der Ausgabe zusammenhängt. Es ist eine kleine Studie mit einem Reiseberater-Chatbot, keine Studie zu Coding-Agenten [1].",
+      "sources": {
+        "ma-requirement-driven-llm-use": {
+          "title": "Ma, Peng, Yang, Shen, Koedinger, Wu, What Should We Engineer in Prompts? Training Humans in Requirement-Driven LLM Use"
+        }
+      }
+    },
+    "a-proposal-not-a-finding": {
+      "header": "Ein Vorschlag, kein Befund",
+      "description": "Forschende ziehen die Parallele ausdrücklich, aber keine Quelle hat sie gemessen; dass beide Disziplinen dieselbe Aufgabe haben, ist eine Schlussfolgerung [1].",
+      "sources": {
+        "chen-promptware-engineering": {
+          "title": "Chen, Wang, Sun, Liu, Zhang, Liu, Promptware Engineering: Software Engineering for Prompt-Enabled Systems"
+        }
+      }
+    },
+    "where-the-parallel-stops": {
+      "header": "Wo die Parallele endet",
+      "description": "ein Anforderungsdokument gewinnt durch Vollständigkeit, ein Kontextfenster dagegen ist ein begrenztes Budget und kann dadurch verlieren; außerdem ändert sich Kontext während eines Laufs, statt einmal abgenommen zu werden [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "the-definition": {
+        "title": "Die Definition",
+        "keywords": "",
+        "script": "Was Du ins Kontextfenster legst, entscheidet, ob der Agent die Präzision und Genauigkeit hat, auf die er hinarbeiten kann. Das ist die ganze Definition, und deshalb nennen wir es eine Anforderung."
+      },
+      "same-four-outcomes": {
+        "title": "Dieselben vier Ergebnisse",
+        "keywords": "",
+        "script": "Erinnerst Du Dich an die Dartscheibe mit ihren vier Ergebnissen? Es ist dieselbe Scheibe, mit denselben vier Ergebnissen, nur ein anderes Objekt. Dein Anforderungsdokument ist jetzt ein Kontextfenster, und es kann präzise landen, genau, beides oder keins von beiden."
+      }
+    }
+  }
+}

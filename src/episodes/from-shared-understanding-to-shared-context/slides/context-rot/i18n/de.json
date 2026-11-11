@@ -1,0 +1,96 @@
+{
+  "title": "Context Rot",
+  "heading": "Context Rot an der Werkbank",
+  "caption": "Eine vollere Werkbank kann eine schlechtere sein: <b>vier Arten von Chaos, vor der Schicht eingerichtet oder währenddessen angekommen.</b>",
+  "credit": "Namen nach Drew Breunig und IBM",
+  "columns": {
+    "poisoning": { "label": "Ein falscher Fakt, der hängen bleibt", "term": "Poisoning" },
+    "distraction": { "label": "Zu viel Vorgeschichte", "term": "Distraction" },
+    "confusion": { "label": "Zu viele ähnliche Werkzeuge", "term": "Confusion" },
+    "clash": { "label": "Zwei Anweisungen, die sich widersprechen", "term": "Clash" }
+  },
+  "rows": {
+    "static": {
+      "label": "Statisch",
+      "when": "vor der Schicht eingerichtet",
+      "cells": {
+        "wrong-screw": "Eine falsche Schraubengröße in der Arbeitsanweisung",
+        "binder": "Ein Ordner mit jedem Radmodell, obwohl Du eins baust",
+        "wrenches": "Fünfzig fast gleiche Schraubenschlüssel",
+        "two-sheets": "Alte und neue Anweisung hängen beide"
+      }
+    },
+    "dynamic": {
+      "label": "Dynamisch",
+      "when": "kommt während der Schicht",
+      "cells": {
+        "mislabelled-box": "Eine falsch beschriftete Schraubenkiste",
+        "colleagues": "Kollegen, die mit Fragen vorbeikommen",
+        "crates": "Zehn Kisten mit ähnlichen Teilen",
+        "rush-vs-check": "„Mach schnell“ gegen „Prüf jedes Teil“"
+      }
+    }
+  },
+  "notes": {
+    "length-alone-does-part-of-the-damage": {
+      "header": "Schon die Länge richtet Schaden an",
+      "description": "die Qualität der Ausgabe sinkt, je voller das Fenster wird, selbst wenn die KI alles Relevante findet [1].",
+      "sources": {
+        "context-rot-as-window-fills": {
+          "title": "content-library research, Why does a language model's output quality drop as its context window fills?"
+        }
+      }
+    },
+    "the-four-names": {
+      "header": "Die vier Namen",
+      "description": "Drew Breunig hat im Juni 2025 Context Poisoning, Distraction, Confusion und Clash benannt: Poisoning ist ein Fehler, der gespeichert und wiederverwendet wird, Distraction eine lange Vorgeschichte, die das Modell lenkt, Confusion überflüssiges Material wie überzählige Werkzeuge, Clash widersprüchliches Material im Fenster [1].",
+      "sources": {
+        "breunig-how-long-contexts-fail": {
+          "title": "Drew Breunig, How Long Contexts Fail"
+        }
+      }
+    },
+    "credit-and-limit": {
+      "header": "Herkunft und Grenze",
+      "description": "das Video von IBM Technology stellt dieselben vier vor. Die Einteilung stammt aus einem Blogbeitrag aus der Praxis, und ein Fehler kann zu mehr als einer Art passen [1].",
+      "sources": {
+        "ibm-context-engineering-failure-modes": {
+          "title": "IBM Technology, Context Engineering for AI Agents: 4 Failure Modes to Avoid"
+        }
+      }
+    },
+    "numbers-for-confusion-and-clash": {
+      "header": "Zahlen zu Confusion und Clash",
+      "description": "auf dem Berkeley Function-Calling Leaderboard schneidet jedes Modell mit mehr als einem Werkzeug schlechter ab; ein quantisiertes Llama 3.1 8b scheiterte mit 46 Werkzeugen und schaffte es mit 19; stückweise gelieferte Prompts senkten die Werte im Schnitt um 39 % [1].",
+      "sources": {
+        "breunig-how-long-contexts-fail": {
+          "title": "Drew Breunig, How Long Contexts Fail"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "junk-drawer-meeting-two-bosses": {
+        "title": "Krimskramsschublade, Meeting, zwei Chefs",
+        "keywords": "",
+        "script": "Zuerst Bilder aus dem Alltag, denn die Fachbegriffe kommen später. Ein falscher Fakt im Rezept, nach dem Du dann jedes Mal kochst. Ein langes Meeting, das die Entscheidung vergisst. Eine Krimskramsschublade voller Schlüssel, in der Du den einen nicht findest. Zwei Chefs mit gegensätzlichen Anweisungen."
+      },
+      "static-row": {
+        "title": "Statische Zeile",
+        "keywords": "",
+        "script": "Jetzt dieselben vier an der Werkbank, auf der statischen Seite, vor der Schicht eingerichtet. Eine falsche Schraubengröße in der Arbeitsanweisung. Ein Ordner mit jedem Radmodell, obwohl Du eins baust. Fünfzig fast gleiche Schraubenschlüssel. Alte und neue Anweisung hängen nebeneinander."
+      },
+      "dynamic-row": {
+        "title": "Dynamische Zeile",
+        "keywords": "",
+        "script": "Dieselben vier kommen auch während der Schicht an. Eine falsch beschriftete Schraubenkiste, Kollegen, die mit Fragen vorbeikommen, zehn Kisten mit ähnlichen Teilen, jemand ruft „Mach schnell“, während die Anweisung sagt „Prüf jedes Teil“. Die Namen dafür sind Poisoning, Distraction, Confusion und Clash. Die Namen sind das Etikett, die Werkbank ist das Bild."
+      },
+      "more-context-worse-result": {
+        "title": "Mehr Kontext, schlechteres Ergebnis",
+        "keywords": "",
+        "script": "Mehr ist nicht sicherer. Eine vollere Werkbank kann eine schlechtere Werkbank sein. Noch ein Dokument dazuzulegen, nur zur Sicherheit, ist genau der Anfang der meisten dieser Probleme."
+      }
+    }
+  }
+}
