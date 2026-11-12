@@ -87,6 +87,9 @@ export const ROLE: readonly Rule<RoleAt>[] = [
     mapOf(raw).aiFan !== undefined &&
     `roles.${k}.aiFan: retired in schema /5; set AI per work center (dials aiSpeed, aiExtra)`,
   ({ k, raw }) => !absentOr(mapOf(raw).origin, (v) => oneOf(v, DEFECT_KEYS)) && `roles.${k}.origin: spec or code`,
+  ({ k, raw }) =>
+    !absentOr(mapOf(raw).aiCatch, (v) => isNum(v, 0, 1)) &&
+    `roles.${k}.aiCatch: 0 to 1, how much of its catch holds while AI checks`,
   ({ k, raw }) => {
     const icon = mapOf(raw).icon;
     return (

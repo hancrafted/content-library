@@ -32,7 +32,7 @@ export const unretired = <T>(v: T): T | typeof ROLES_STATE => (v === RETIRED_STA
 export const VIEWS = [ROLES_STATE, 'factory'];
 const MECHS = ['rework', 'churn', 'complaints'];
 const EXPECT_KEYS =
-  'customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush>';
+  'customer.<output|sat|headroom|leadDays|bugsPerWeek|changesPerWeek|own|backlog> or <center>.<weeksWaiting|busy|bugShare|backlog|done|rework|rush|unread>';
 
 const aiOk = (ids: Set<string>) => (ai: unknown) =>
   ai === 'all' || ai === 'off' || (Array.isArray(ai) && ai.every((x) => ids.has(x as string)));

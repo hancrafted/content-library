@@ -73,7 +73,10 @@ const verdictOf = (m: Factory, n: FactoryNode, x: { e: Belt; t: number }): Verdi
   if (J.q !== Q.BAD || J.fl & (FROM_SRC | REDO)) return AS_IS;
   const elig = x.e.returns && J.b < constOf(m.s, 'maxBounces'),
     p = catchOf(m.s, { n, d: m.dc[n.idx] }, DEFECTS[kindOf(J.fl, x.e.from.origin)] ?? 'code');
-  return n.def.inspection ? inspect(m, n, { elig, t: x.t, p }) : keepOrSendBack(m, n, { elig, t: x.t, p });
+  const v = n.def.inspection ? inspect(m, n, { elig, t: x.t, p }) : keepOrSendBack(m, n, { elig, t: x.t, p });
+  n.rate.badIn += BUMP;
+  if (!v.bounce) n.rate.badPass += BUMP;
+  return v;
 };
 
 /** The result is rolled when work starts, so the station can stamp it as the job ends. */

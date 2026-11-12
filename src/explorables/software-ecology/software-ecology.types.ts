@@ -103,6 +103,8 @@ export interface RoleDef {
   readonly aiSize?: number;
   /** The kind of defect the role makes: `spec` up to Analysis, `code` from Engineering on. */
   readonly origin?: Defect;
+  /** How much of its catch holds while AI does its checking, 0 to 1 (1 by default): AI review that is simply trusted. */
+  readonly aiCatch?: number;
 }
 
 /** The master data of one use case. */

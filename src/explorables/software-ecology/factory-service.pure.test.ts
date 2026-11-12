@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { startSettings } from './factory-dials.pure.ts';
 import { createFactory } from './factory-model.pure.ts';
-import type { Bundle, CenterDef, Settings } from './software-ecology.types';
+import type { Bundle, CenterDef, RoleDef, Settings } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 
 /*
@@ -11,7 +11,7 @@ import { builtinBundle } from './use-case-data.ts';
  */
 const SEED = 11;
 const WEEKS = 40;
-const MEASURES = ['customer.changesPerWeek', 'customer.bugsPerWeek', 'ba.rework', 'eng.rework'];
+const MEASURES = ['customer.changesPerWeek', 'customer.bugsPerWeek', 'ba.rework', 'eng.rework', 'qa.unread'];
 
 /** Tire swing with one work center's fields changed. */
 const changed = (id: string, patch: Partial<CenterDef>): Bundle => {
@@ -20,11 +20,17 @@ const changed = (id: string, patch: Partial<CenterDef>): Bundle => {
   return { ...B, data: { ...B.data, centers } };
 };
 
-/** In practice with one work center's effectiveness set, run WEEKS: the measures read then. */
-const readAt = (B: Bundle, effective: Record<string, number>): Record<string, number> => {
+/** Tire swing with one role's profile changed. */
+const withRole = (id: string, patch: Partial<RoleDef>): Bundle => {
+  const B = builtinBundle('tire');
+  return { ...B, roles: { ...B.roles, [id]: { ...(B.roles[id] as RoleDef), ...patch } } };
+};
+
+/** In practice with work centers' effectiveness set (and AI where `ai` says), run WEEKS: the measures read then. */
+const readAt = (B: Bundle, effective: Record<string, number>, ai: Settings['ai'] = 'off'): Record<string, number> => {
   const s: Settings = startSettings(B, B.data.presets.find((p) => p.id === 'realistic') as never);
   const over = Object.fromEntries(Object.entries(effective).map(([id, effv]) => [id, { effv }]));
-  const f = createFactory(B, { ...s, over }, SEED);
+  const f = createFactory(B, { ...s, over, ai }, SEED);
   f.step(WEEKS);
   return f.read({ measures: MEASURES }).measures;
 };
@@ -70,6 +76,16 @@ describe('success cases', () => {
     // ASSERT
     expect(m['ba.rework']).toBeGreaterThan(0);
   });
+
+  it('passes more bad code unread at quality assurance when its AI review is trusted', () => {
+    // ARRANGE
+    const trusted = withRole('qa', { aiCatch: 0.3 }),
+      careful = withRole('qa', { aiCatch: 1 });
+    // ACT
+    const [a, b] = [readAt(trusted, { ...PERFECT, eng: 60 }, ['qa']), readAt(careful, { ...PERFECT, eng: 60 }, ['qa'])];
+    // ASSERT
+    expect(a['qa.unread']).toBeGreaterThan(b['qa.unread'] ?? 0);
+  });
 });
 
 describe('failure cases', () => {
@@ -84,6 +100,24 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('reads nothing unread where no bad work arrives', () => {
+    // ARRANGE
+    const B = withRole('qa', { aiCatch: 0.3 });
+    // ACT
+    const m = readAt(B, PERFECT, ['qa']);
+    // ASSERT
+    expect(m['qa.unread']).toBe(0);
+  });
+
+  it('leaves the catch alone while AI is off, whatever the AI review profile', () => {
+    // ARRANGE
+    const B = withRole('qa', { aiCatch: 0 });
+    // ACT
+    const m = readAt(B, { ...PERFECT, eng: 60 });
+    // ASSERT
+    expect(m['qa.unread']).toBeLessThan(1);
+  });
+
   it('sends a kind back at the catch chance, over the mechanics rework strength', () => {
     // ARRANGE
     const low = changed('eng', { catch: { spec: 0.1 } }),
