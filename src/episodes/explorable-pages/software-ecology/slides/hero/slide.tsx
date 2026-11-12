@@ -15,9 +15,9 @@ import de from './i18n/de.json';
 import en from './i18n/en.json';
 
 /*
- * The model's readouts at the AI unbalanced tour's step 3, week 20, read from the same headless run the Why How What
+ * The model's readouts at week 20 of In practice with AI at Engineering (PLAY), read from the same headless run the Why How What
  * stills draw (`factoryStillState`), so the hero never claims what the model does not show: an illustrative model, not
- * measured, and labelled so on the preview. The Play Section pins the same readouts as `expect:` claims on that step.
+ * measured, and labelled so on the preview.
  */
 
 /** The main path a request rides, left to right: the preview's key, the work center's id and what marks it. */
@@ -30,13 +30,19 @@ const CENTERS = [
   { key: 'operations', id: 'ops' },
 ] as const;
 
-/** The scenario the hero shows: the AI unbalanced tour's last step. */
 const USE_CASE = 'tire';
-const SCENARIO = 'ai-unbalanced';
+/**
+ * What the hero shows, as the Why How What stills do: In practice, AI at Engineering from week 4 writing two pull requests per task, run to week 20.
+ * The AI-unbalanced tour this was, before the eval grill deleted the scenarios: the same settings, the same numbers.
+ */
+const PLAY = {
+  start: 'realistic',
+  steps: [{ run: 4 }, { set: { ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, run: 8 }, { run: 20 }],
+} as const;
 
 /** The readings at that step: the Customer, each station by id, and the Customer's releases oldest first. */
 function readoutsOf() {
-  const snap = scenarioLastStep(USE_CASE, SCENARIO).f.read({});
+  const snap = scenarioLastStep(USE_CASE, PLAY).f.read({});
   const customer: CustomerReadout = snap.customer;
   const releases = customer.releases
     .filter((release) => release !== null)

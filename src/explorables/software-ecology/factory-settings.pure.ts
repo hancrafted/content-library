@@ -106,14 +106,18 @@ export interface AiChoice {
   readonly label: string;
 }
 
-/** The Model's AI choices: off, each set of work centers a preset names, everywhere. `label` is filled by the caller for off and everywhere. */
+/** Every list of work centers a preset or one of its tour steps puts AI at, in file order. */
+const aiListsOf = (B: Bundle): (readonly string[])[] =>
+  B.data.presets.flatMap((p) => [p.ai, ...(p.tour ?? []).map((st) => st.set?.ai)]).filter((x) => Array.isArray(x));
+
+/** The Model's AI choices: off, each set of work centers a preset or a tour step names, everywhere. `label` is filled by the caller for off and everywhere. */
 export const aiChoicesOf = (B: Bundle, title: (id: string) => string): AiChoice[] => {
   const seen = new Set<string>(),
     sets: AiChoice[] = [];
-  for (const p of B.data.presets) {
-    if (!Array.isArray(p.ai) || seen.has(p.ai.join())) continue;
-    seen.add(p.ai.join());
-    sets.push({ id: `ai:${p.ai.join(',')}`, ai: [...p.ai], label: p.ai.map(title).join(', ') });
+  for (const ai of aiListsOf(B)) {
+    if (seen.has(ai.join())) continue;
+    seen.add(ai.join());
+    sets.push({ id: `ai:${ai.join(',')}`, ai: [...ai], label: ai.map(title).join(', ') });
   }
   return [{ id: 'off', ai: 'off', label: '' }, ...sets, { id: 'ai:all', ai: 'all', label: '' }];
 };
@@ -128,7 +132,7 @@ const sameSet = (a: readonly string[], b: readonly string[]) => a.length === b.l
 export const aiKeyOf = (B: Bundle, s: Settings): string => {
   if (s.ai === 'off') return 'off';
   if (s.ai === 'all') return 'ai:all';
-  const cur = s.ai;
-  const p = B.data.presets.find((x) => Array.isArray(x.ai) && sameSet(x.ai, cur));
-  return p && Array.isArray(p.ai) ? `ai:${p.ai.join(',')}` : '';
+  const cur = s.ai,
+    found = aiListsOf(B).find((x) => sameSet(x, cur));
+  return found ? `ai:${found.join(',')}` : '';
 };

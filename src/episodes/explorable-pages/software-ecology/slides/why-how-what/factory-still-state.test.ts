@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { factoryStillState } from './factory-still-state';
 
 /*
- * The stills read the Explorable's own model at the AI-unbalanced tour's last step. The expected values are the
- * figures the approved Spec (Option 2b's build notes, rechecked against the retuned model) and the tour's `expect:`
- * claims give for week 20, so the stills can never show a state the Explorable does not reach.
+ * The stills read the Explorable's own model at week 20 of In practice with AI at Engineering. The expected values are the
+ * figures the approved Spec (Option 2b's build notes, rechecked against the retuned model) gives for week 20, so the
+ * stills can never show a state the Explorable does not reach.
  */
 describe('success cases', () => {
-  it('stands on week 20 of the AI-unbalanced tour, AI at the engineer only', () => {
+  it('stands on week 20 of In practice with AI at the engineer only', () => {
     // ARRANGE
     const expected = { week: 20, ai: ['eng'] };
     // ACT

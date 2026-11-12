@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { DTW, SPEEDS, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
+import type { Bundle, Preset } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
+
+/** Tire swing with one more state: from day 0, at 20×, as a scenario may start. */
+const withClearFast = (): Bundle => {
+  const B = builtinBundle('tire');
+  const p: Preset = { id: 'clear-fast', view: 'factory', reality: 100, start: 'clear', speed: 20 };
+  return { ...B, data: { ...B.data, presets: [...B.data.presets, p] } };
+};
 
 describe('success cases', () => {
   it('warms a preset 60 weeks at once when asked to', () => {
@@ -73,10 +81,10 @@ describe('edge cases', () => {
 
   it('starts empty at day 0 on Clear and on a preset that starts clear', () => {
     // ARRANGE
-    const B = builtinBundle('tire');
+    const B = withClearFast();
     // ACT
     const cleared = new FactoryRun({ B, preset: 'ideal', now: true, clear: true });
-    const spiral = new FactoryRun({ B, preset: 'bug-spiral', now: true });
+    const spiral = new FactoryRun({ B, preset: 'clear-fast', now: true });
     // ASSERT
     expect(cleared.weeks).toBe(0);
     expect(spiral.weeks).toBe(0);
@@ -114,12 +122,12 @@ describe('edge cases', () => {
 
   it('starts the page at 1×, unless the state names its own speed', () => {
     // ARRANGE
-    const B = builtinBundle('tire');
+    const B = withClearFast();
     const viewer = 1,
       spiral = 20;
     // ACT
     const atRoles = startSpeedOf(B, 'roles'),
-      atSpiral = startSpeedOf(B, 'bug-spiral');
+      atSpiral = startSpeedOf(B, 'clear-fast');
     // ASSERT
     expect(atRoles).toBe(viewer);
     expect(atSpiral).toBe(spiral);

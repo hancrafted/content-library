@@ -134,8 +134,6 @@ describe('success cases', () => {
     // ARRANGE
     const expected = [
       'toolbar.state.ideal',
-      'toolbar.scenarios',
-      'toolbar.scenario.ai-unbalanced',
       'toolbar.tour',
       'toolbar.compare',
       'toolbar.pause',
@@ -150,7 +148,6 @@ describe('success cases', () => {
       'settings.mechanics.help',
       'settings.ai.all',
       'settings.ai.off',
-      'settings.ai.eng',
       'settings.ai-quality.same',
       'settings.rework',
       'settings.rework.strength',

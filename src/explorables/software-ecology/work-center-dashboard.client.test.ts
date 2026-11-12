@@ -14,6 +14,11 @@ import { WorkCenterDashboard } from './work-center-dashboard.client';
 
 const INTERACTIVE =
   'button, input, select, textarea, summary, [role="button"], [role="switch"], [role="menuitemradio"]';
+/** In practice with AI at Engineering writing twice the work, run to week 20. */
+const AI_AT_ENG = {
+  start: 'realistic',
+  steps: [{ run: 4 }, { set: { ai: ['eng'], dials: { eng: { aiExtra: 2 } } }, run: 8 }, { run: 20 }],
+};
 const noop = () => undefined;
 
 const controlsOf = (html: string) =>
@@ -22,7 +27,7 @@ const controlsOf = (html: string) =>
     .map((el) => ({ tag: el.tagName, control: el.attribs['data-control'], label: el.attribs['aria-label'] ?? '' }));
 
 const center = (id: string, scope?: 'node' | 'compare') => {
-  const { f } = scenarioLastStep('tire', 'ai-unbalanced');
+  const { f } = scenarioLastStep('tire', AI_AT_ENG);
   const snap = f.read({ watch: ['pm', 'eng'] });
   return renderToStaticMarkup(
     createElement(WorkCenterDashboard, {

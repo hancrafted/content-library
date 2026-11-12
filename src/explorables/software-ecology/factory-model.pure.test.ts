@@ -105,10 +105,10 @@ describe('success cases', () => {
     expect(rest).toBeLessThanOrEqual(others);
   });
 
-  it('moves the bottleneck downstream when tire AI unbalanced raises quality assurance to 1000 %', () => {
+  it('moves the bottleneck downstream when tire in practice, AI at Engineering, raises quality assurance to 1000 %', () => {
     // ARRANGE
     const B = builtinBundle('tire');
-    const f = createFactory(B, endState(B, 'ai-unbalanced'));
+    const f = createFactory(B, { ...endState(B, 'realistic'), ai: ['eng'], over: { eng: { aiExtra: 2 } } });
     const expected = { before: { id: 'qa', weeks: '16.8' }, after: { id: 'ops', weeks: '36.5' }, qa: '0.0' };
     // ACT
     f.step(30);

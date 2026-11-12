@@ -9,12 +9,12 @@ import { builtinBundle } from './use-case-data.ts';
 
 const CATALOGS = { en: catalogWordsFor('en'), de: catalogWordsFor('de') };
 
-/** Tire swing at AI, unbalanced, a dial turned and two work centers in the stream: a state with something in every key. */
+/** Tire swing in practice, AI at Engineering, dials turned and two work centers in the stream: something in every key. */
 const busyPage = (): PageState => {
   const B = builtinBundle('tire');
-  const p = B.data.presets.find((x) => x.id === 'ai-unbalanced');
-  if (!p) throw new Error('tire has no ai-unbalanced preset');
-  const s = startSettings(B, p);
+  const p = B.data.presets.find((x) => x.id === 'realistic');
+  if (!p) throw new Error('tire has no realistic preset');
+  const s = { ...startSettings(B, p), ai: ['eng'], over: { eng: { aiExtra: 2 } } };
   return {
     preset: p.id,
     view: 'factory',
@@ -57,7 +57,7 @@ describe('success cases', () => {
       centers: 7,
       belts: 12,
       page: {
-        preset: 'ai-unbalanced',
+        preset: 'realistic',
         speed: 10,
         beltMotion: true,
         pile: 'drift',
