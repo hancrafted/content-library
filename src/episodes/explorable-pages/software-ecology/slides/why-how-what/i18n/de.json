@@ -22,15 +22,15 @@
     }
   },
   "still": {
-    "label": "Die Reifenschaukel-Fabrik im Szenario KI unausgewogen in Woche {week}: KI beim Entwickler, in der Qualitätssicherung warten {waiting}, der Kunde bei {output} des Ideals",
+    "label": "Die Reifenschaukel-Fabrik im Szenario KI unausgewogen in Woche {week}: KI in der Entwicklung, in der Qualitätssicherung warten {waiting}, der Kunde bei {output} des Ideals",
     "at": "KI unausgewogen, Woche {week}",
     "overflow": "+{n}",
     "aiExtra": "{n} Pull Requests pro Aufgabe",
-    "openHint": "ein Klick auf den Analysten öffnet sein Dashboard"
+    "openHint": "ein Klick auf die Analyse öffnet ihr Dashboard"
   },
   "stills": {
     "dashboard": {
-      "label": "Das Dashboard des Analysten in Woche {week} des Szenarios KI unausgewogen",
+      "label": "Das Dashboard der Analyse in Woche {week} des Szenarios KI unausgewogen",
       "aiLeavesIt": "· KI lässt sie",
       "people": "Menschen",
       "tools": "Werkzeuge & Artefakte",

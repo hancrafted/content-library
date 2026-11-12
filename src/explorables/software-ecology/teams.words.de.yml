@@ -4,7 +4,7 @@ centers:
   anA: { title: Analyse · Team A }
   engA: { title: Entwicklung · Team A }
   engB: { title: Entwicklung · Team B }
-  plat: { title: Plattform & QS }
+  plat: { title: Plattform }
 belts:
   customer-sales: { label: Neukunde }
   customer-pm: { label: Feature- oder Änderungswunsch }

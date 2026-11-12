@@ -98,7 +98,7 @@ function BeltLabels({ state }: { state: FactoryStillState }) {
     ));
 }
 
-/** Quality assurance's pin sits over the pile-up at its belt's end, the analyst's on its card's corner. */
+/** Quality assurance's pin sits over the pile-up at its belt's end, Analysis's on its card's corner. */
 const pinAt = (state: FactoryStillState, at: Pin['at']): [number, number] => {
   const s = state.stations.find((x) => x.id === at);
   if (!s) return [0, 0];

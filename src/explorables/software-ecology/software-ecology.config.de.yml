@@ -223,7 +223,7 @@ model:
   tips:
     reality: 'Von Ideal zu Realistisch: senkt Effizienz und Effektivität jedes Arbeitsplatzes auf seine realistischen Werte. Mehr schlechte Dokumente gehen hinaus, werden zurückgeschickt oder vervielfachen sich; der Engpass läuft nahe 90 % ausgelastet.'
     ai: 'Wo KI arbeitet: diese Arbeitsplätze laufen schneller (2,5×, solange ein Dashboard nichts anderes sagt) und schreiben vielleicht zusätzliche Aufgaben; KI-Dokumente brauchen am nächsten Arbeitsplatz etwas länger zum Lesen. Beschleunigung und Zusatzaufgaben stellt Ihr pro Arbeitsplatz in seinem Dashboard ein.'
-    company: 'Dienstleister: nur der Kunde fragt Arbeit an. Produktunternehmen: der Produktmanager schreibt zusätzlich Roadmap-Punkte, der Vertrieb bringt Leads und der Engineer schreibt Tickets zu technischen Schulden. Sie teilen dieselben Rückstände; jeder Arbeitsplatz wird neu bemessen, damit Ideal bei 70 % Auslastung bleibt.'
+    company: 'Dienstleister: nur der Kunde fragt Arbeit an. Produktunternehmen: das Produktmanagement schreibt zusätzlich Roadmap-Punkte, der Vertrieb bringt Leads und die Entwicklung schreibt Tickets zu technischen Schulden. Sie teilen dieselben Rückstände; jeder Arbeitsplatz wird neu bemessen, damit Ideal bei 70 % Auslastung bleibt.'
     aiq: 'Was KI mit der Chance macht, dass ein Dokument gut hinausgeht: Schlechter senkt sie um 15 Punkte, Besser hebt sie um 15. Gleich lässt sie.'
     reset: 'Zurück zu dem, was die Anwendungsfall-Datei für diesen Zustand festlegt: Einstellungen, Tempo und Anzeige.'
 # Die Spalte Anzeige im Einstellungs-Popover: wie die Fabrik gezeichnet wird.
@@ -246,10 +246,10 @@ display:
 dash:
   own:
     title: Eigene Arbeit
-    tip: 'Tickets, die diese Rolle sich selbst schreibt, nicht für einen Kunden: eine Roadmap, Leads, technische Schulden. Sie reihen sich in dieselbe Warteschlange ein wie Kundenanfragen, wer zuerst kommt, wird zuerst bearbeitet. Nur ein Produktunternehmen hat sie; ein Dienstleister schaltet sie alle ab.'
+    tip: 'Tickets, die diese Abteilung sich selbst schreibt, nicht für einen Kunden: eine Roadmap, Leads, technische Schulden. Sie reihen sich in dieselbe Warteschlange ein wie Kundenanfragen, wer zuerst kommt, wird zuerst bearbeitet. Nur ein Produktunternehmen hat sie; ein Dienstleister schaltet sie alle ab.'
     help: 'Über {name}'
     rate: Tickets pro Woche
-    rateTip: 'Wie viele eigene Tickets diese Rolle pro Woche schreibt, 0 bis 50. 0 schaltet sie ab. Der Wert der Datei ist der Startwert; „Auf Standard zurücksetzen“ stellt ihn wieder her.'
+    rateTip: 'Wie viele eigene Tickets diese Abteilung pro Woche schreibt, 0 bis 50. 0 schaltet sie ab. Der Wert der Datei ist der Startwert; „Auf Standard zurücksetzen“ stellt ihn wieder her.'
     perWeek: '{n} pro Woche'
     arrivals: Eintreffen
     arrivalsTip: 'Gleichmäßig: ein Ticket alle 1/Rate einer Woche, im festen Takt. Zufällig: im Schnitt gleich viele, aber mal gehäuft, mal dünn, wie echte Tickets.'
@@ -344,7 +344,7 @@ custDash:
   steady: Gleichmäßig
   random: Zufällig
   mix: Anfragemix
-  mixTip: 'Wohin neue Anfragen gehen: neue Kunden zum Vertrieb, Feature- und Änderungswünsche zum Produktmanager, Bugs und Supporttickets zum Support.'
+  mixTip: 'Wohin neue Anfragen gehen: neue Kunden zum Vertrieb, Feature- und Änderungswünsche zum Produktmanagement, Bugs und Supporttickets zum Support.'
   follow: Ein Release bringt eine neue Anfrage
   followTip: 'Jedes Release kann sofort eine neue Anfrage bringen. Ein gutes Release bringt einen Änderungswunsch, ein schlechtes eine Beschwerde (einen Bug oder eine Supportanfrage, mit der roten Warnung markiert). Zusammen unter 1 gehalten, damit sich die Anfragen einpendeln.'
   good: 'Gut · {title}'

@@ -23,7 +23,7 @@ const FRAME = 'flex flex-col gap-3 rounded-xl border border-border bg-muted p-4 
 
 /**
  * The page's one text Slide (Spec Option 2b, which overrules `master: grid-1x3`): one annotated still of the factory at
- * the AI-unbalanced tour's last step, its toolbar above it and the analyst's dashboard under it, beside three numbered
+ * the AI-unbalanced tour's last step, its toolbar above it and the Analysis dashboard under it, beside three numbered
  * notes, Why, How and What, whose numbers match the still's pins. The stills read the Explorable's own model at that
  * step at build time (`factory-still-state.ts`), so they show the state a viewer reaches with Tour. Below `md` the
  * notes stack Why first and the dashboard drops under them. No motion of its own.

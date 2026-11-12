@@ -22,15 +22,15 @@
     }
   },
   "still": {
-    "label": "The Tire swing factory in the AI-unbalanced scenario at week {week}: AI at the engineer, quality assurance with {waiting} waiting, the Customer at {output} of ideal",
+    "label": "The Tire swing factory in the AI-unbalanced scenario at week {week}: AI at Engineering, quality assurance with {waiting} waiting, the Customer at {output} of ideal",
     "at": "AI unbalanced, week {week}",
     "overflow": "+{n}",
     "aiExtra": "{n} pull requests per task",
-    "openHint": "a click on the analyst opens its dashboard"
+    "openHint": "a click on Analysis opens its dashboard"
   },
   "stills": {
     "dashboard": {
-      "label": "The analyst's dashboard at week {week} of the AI-unbalanced scenario",
+      "label": "The Analysis dashboard at week {week} of the AI-unbalanced scenario",
       "aiLeavesIt": "· AI leaves it",
       "people": "People",
       "tools": "Tools & artefacts",
