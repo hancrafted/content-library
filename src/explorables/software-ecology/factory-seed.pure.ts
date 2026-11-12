@@ -2,19 +2,17 @@
  * A loaded start for the factory model (feedback 09): weeks of work put into work centers' backlogs at once, as the
  * requests they would be had the Customer sent them. Model-internal: `createFactory`'s handle exposes it as `pile`.
  */
-import { pressAt, Q, speedOf } from './factory-dials.pure.ts';
+import { Q, speedOf } from './factory-dials.pure.ts';
 import { Run } from './factory-docs.pure.ts';
 import { FROM_SRC, MAIN, pushBack } from './factory-flow.pure.ts';
-import { level } from './factory-step.pure.ts';
+import { waitState } from './factory-wait.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 
 /** The node's waiting time, level and average, as the averages would read them: at once, not after they catch up. */
 const showPile = (m: Factory, n: FactoryNode, w: number): void => {
   const d = m.dc[n.idx];
   n.Lavg = n.L;
-  n.Ws = d ? n.L / speedOf(n, d) : w;
-  n.press = pressAt(n.Ws);
-  n.lvl = level(n.lvl, n.Ws);
+  waitState(n, d ? n.L / speedOf(n, d) : w);
 };
 
 /** Jobs a pile of `w` weeks holds: weeks times the center's Ideal capacity; none at the Customer or at a stranger. */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { catches, passShareOf, pressAt, pressureOf, RED } from './factory-dials.pure.ts';
+import { catches, passShareOf, pressureOf, RED } from './factory-dials.pure.ts';
 import type { FactoryNode } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
 import type { CenterDef, Settings } from './software-ecology.types';
@@ -12,9 +12,8 @@ const S = { strength: { rework: 0.4 }, consts: {} } as unknown as Settings;
 /** `mechanics.pressure` at its default. */
 const PRESSURE = constOf(S, 'pressure');
 
-/** A station with `weeks` of work waiting, its pressure as the model's averages set it. */
-const station = (weeks: number, def: Partial<CenterDef> = {}): FactoryNode =>
-  ({ Ws: weeks, press: pressAt(weeks), def }) as never;
+/** A station with `weeks` of work waiting, its pressure read from `Ws`. */
+const station = (weeks: number, def: Partial<CenterDef> = {}): FactoryNode => ({ Ws: weeks, def }) as never;
 
 describe('success cases', () => {
   it('bites by mechanics.pressure times the strength times the pile’s pressure', () => {

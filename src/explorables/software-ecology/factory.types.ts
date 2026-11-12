@@ -109,7 +109,6 @@ export interface FactoryNode extends Streams {
   Lavg: number;
   Ws: number;
   lvl: number;
-  press: number;
   readonly sign: Signs;
   readonly hist: History;
   server: Server | null;
