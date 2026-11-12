@@ -12,6 +12,7 @@ import { ScenarioNotes, ScenariosMenu, TourButton, type ScenarioChoice } from '.
 import { SettingsMenu } from './settings-menu.client';
 import type { SettingsWords, ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
+import { STEP_MARKS } from './step-marks.pure';
 import { TimeControls } from './time-controls.client';
 import { ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
@@ -66,8 +67,6 @@ interface MenuState {
 const nextMenu = (cur: MenuId, id: Exclude<MenuId, null>, on: boolean): MenuId => (on ? id : cur === id ? null : cur);
 
 /** One state button; the active one carries a dot once a dial was turned after picking it. */
-/** The circled digits before the three steps' names. */
-const STEP_MARKS = ['①', '②', '③'];
 
 interface StateButtonProps {
   readonly s: Choice;

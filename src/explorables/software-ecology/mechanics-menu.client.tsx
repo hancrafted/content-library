@@ -2,7 +2,7 @@
 
 import { MECH_DEFAULTS, MECH_RANGE, STRENGTHS } from './factory-dials.pure.ts';
 import { withMech, withStrength } from './factory-settings.pure.ts';
-import { SliderControl, SwitchField } from './settings-field.client';
+import { SliderControl, SwitchField, Value } from './settings-field.client';
 import type { ToolbarWords } from './software-ecology-words.types';
 import type { Mechanic, Settings, Strength } from './software-ecology.types';
 
@@ -31,7 +31,7 @@ function MechField(p: MechanicsMenuProps & { k: Mechanic }) {
       tip={p.mechs[k].tip}
       on={on}
       onFlip={() => p.onSettings(withMech(p.settings, k))}
-      value={isStrength(k) ? <output className="text-caption font-semibold">{now.toFixed(1)}</output> : undefined}
+      value={isStrength(k) ? (l) => <Value labelId={l}>{now.toFixed(1)}</Value> : undefined}
     >
       {(l) =>
         isStrength(k) ? (

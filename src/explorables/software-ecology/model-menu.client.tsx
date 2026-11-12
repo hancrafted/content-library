@@ -2,7 +2,7 @@
 
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { aiKeyOf, withAi, withAiq, withCompany, withReality, type AiChoice } from './factory-settings.pure.ts';
-import { Field, Segmented, SliderControl } from './settings-field.client';
+import { Field, Segmented, SliderControl, Value } from './settings-field.client';
 import type { ModelWords } from './software-ecology-words.types';
 import type { AiQuality, Bundle, Company, Settings } from './software-ecology.types';
 
@@ -28,11 +28,7 @@ function Reality(p: ModelMenuProps) {
     r = p.settings.reality,
     text = r ? fillTemplate(w.realityText, { n: r }) : w.ideal;
   return (
-    <Field
-      label={w.reality}
-      tip={w.tips.reality}
-      trailing={<output className="text-caption font-semibold">{text}</output>}
-    >
+    <Field label={w.reality} tip={w.tips.reality} trailing={(l) => <Value labelId={l}>{text}</Value>}>
       {(l) => (
         <SliderControl
           labelId={l}

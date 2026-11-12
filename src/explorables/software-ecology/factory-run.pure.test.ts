@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
-import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, SPEEDS, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
+import { DTW, SPEEDS, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, startSpeedOf, WARM_CHUNK } from './factory-run.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 describe('success cases', () => {

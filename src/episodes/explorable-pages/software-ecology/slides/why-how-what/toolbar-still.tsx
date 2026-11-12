@@ -1,4 +1,5 @@
 import { Glyph } from '@/explorables/software-ecology/factory-glyph-view';
+import { STEP_MARKS } from '@/explorables/software-ecology/step-marks.pure';
 import { ContextIcon } from '@/shared/components/ui/context-icon';
 import type { ReactNode } from 'react';
 
@@ -19,8 +20,6 @@ export interface ToolbarStillProps {
   readonly pin: ReactNode;
 }
 
-/** The circled digits before the three steps' names, as the live toolbar draws them. */
-const STEP_MARKS = ['①', '②', '③'];
 const PILL = 'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-caption';
 const LINE = 'border border-border bg-card text-foreground';
 const PICKED = 'bg-foreground font-semibold text-background';

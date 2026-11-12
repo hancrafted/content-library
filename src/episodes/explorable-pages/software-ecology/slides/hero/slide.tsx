@@ -4,7 +4,11 @@ import { ExplorableHero } from '@/episodes/components/slide-shared/explorable-he
 import { HeroMotion } from '@/episodes/components/slide-shared/explorable-hero/hero-motion.client';
 import { ToolPreview } from '@/episodes/components/slide-shared/explorable-hero/tool-preview';
 import { scenarioLastStep } from '@/explorables/software-ecology/scenario-last-step';
-import type { CustomerReadout, StationReadout } from '@/explorables/software-ecology/stage-readouts.pure';
+import {
+  LEVEL_RED,
+  type CustomerReadout,
+  type StationReadout,
+} from '@/explorables/software-ecology/stage-readouts.pure';
 import { FactoryPreview } from './factory-preview';
 import { rackOf, type Release } from './factory-preview.pure';
 import de from './i18n/de.json';
@@ -100,7 +104,7 @@ export const hero = slide({
               centers={CENTERS.map(({ id, ...center }) => ({
                 ...center,
                 waiting: station(id)?.waiting ?? 0,
-                full: (station(id)?.level ?? 0) === 2,
+                full: (station(id)?.level ?? 0) === LEVEL_RED,
                 label:
                   center.key === 'qa'
                     ? t('preview.waiting', { center: t('preview.centers.qa'), weeks })

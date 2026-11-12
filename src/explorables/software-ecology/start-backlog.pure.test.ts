@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { displayOf } from './display-defaults.pure.ts';
 import { FactoryRun, presetOf } from './factory-run.pure.ts';
 import { playSteps, scenarioStart } from './factory-scenario.pure.ts';
-import type { Preset, StepSet } from './software-ecology.types';
-import { displayOf, startBacklogOf } from './start-backlog.pure.ts';
+import type { Bundle, Preset, StepSet } from './software-ecology.types';
+import { startBacklogOf } from './start-backlog.pure.ts';
 import { defaultsOf } from './state-defaults.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
@@ -15,20 +16,26 @@ const backlogOf = (f: Parameters<typeof measuresOf>[0], id: string): number =>
   measuresOf(f, [`${id}.backlog`])[`${id}.backlog`] as number;
 
 /** Where the work waits longest `weeks` after Realistic's loaded start, once `set` is applied. */
-const afterSet = (set: StepSet, weeks: number): { before: number; qa: number; worst: string } => {
-  const f = scenarioStart(tire, presetOf(tire, 'realistic')),
-    ids = tire.data.centers.map((c) => c.id);
+const afterSet = (x: {
+  B: Bundle;
+  at: string;
+  set: StepSet;
+  weeks: number;
+}): { before: number; after: number; worst: string } => {
+  const { B, at, set, weeks } = x;
+  const f = scenarioStart(B, presetOf(B, 'realistic')),
+    ids = B.data.centers.map((c) => c.id);
   const waits = () =>
     measuresOf(
       f,
       ids.map((i) => `${i}.weeksWaiting`),
     );
-  const before = waits()['qa.weeksWaiting'] as number;
-  Array.from(playSteps(f, tire, [{ set, run: weeks }]));
-  const after = waits();
-  const wait = (id: string) => after[`${id}.weeksWaiting`] as number;
+  const before = waits()[`${at}.weeksWaiting`] as number;
+  Array.from(playSteps(f, B, [{ set, run: weeks }]));
+  const seen = waits();
+  const wait = (id: string) => seen[`${id}.weeksWaiting`] as number;
   const worst = [...ids].sort((a, b) => wait(b) - wait(a))[0] as string;
-  return { before, qa: wait('qa'), worst };
+  return { before, after: wait(at), worst };
 };
 
 describe('success cases', () => {
@@ -65,8 +72,9 @@ describe('success cases', () => {
     const qa = backlogOf(realistic, 'qa'),
       qaIdeal = backlogOf(ideal, 'qa');
     const waiting = measuresOf(realistic, ['qa.weeksWaiting'])['qa.weeksWaiting'] as number;
+    const surplus = qa - qaIdeal;
     // ASSERT
-    expect(qa).toBeGreaterThan(qaIdeal + pile);
+    expect(surplus).toBeGreaterThan(pile);
     expect(waiting).toBeGreaterThan(weeksWaiting);
   });
 
@@ -78,24 +86,67 @@ describe('success cases', () => {
       third = 3;
     // ACT
     f.step(weeks);
+    const drained = backlogOf(f, 'qa'),
+      limit = full / third;
     // ASSERT
-    expect(backlogOf(f, 'qa')).toBeLessThan(full / third);
+    expect(drained).toBeLessThan(limit);
   });
 
   it.each([
-    ['AI at quality assurance', { ai: ['qa'] }, 2],
-    ['quality assurance at twice the efficiency', { dials: { qa: { efficiency: 200 } } }, 3],
-  ] as const)('clears the bottleneck pile with %s and moves the largest backlog downstream', (_name, set, weeks) => {
+    { name: 'Tire swing: AI at quality assurance', id: 'tire', at: 'qa', set: { ai: ['qa'] }, weeks: 2, next: 'ops' },
+    {
+      name: 'Tire swing: quality assurance at twice the efficiency',
+      id: 'tire',
+      at: 'qa',
+      set: { dials: { qa: { efficiency: 200 } } },
+      weeks: 3,
+      next: 'ops',
+    },
+    {
+      name: 'Gatekeeper lead: AI at the lead reviewer',
+      id: 'gate',
+      at: 'lrev',
+      set: { ai: ['lrev'] },
+      weeks: 2,
+      next: 'ops',
+    },
+    {
+      name: 'Gatekeeper lead: the lead reviewer at twice the efficiency',
+      id: 'gate',
+      at: 'lrev',
+      set: { dials: { lrev: { efficiency: 200 } } },
+      weeks: 3,
+      next: 'ops',
+    },
+  ] as const)('clears the bottleneck pile with $name and moves the largest backlog downstream', (c) => {
     // ARRANGE
-    const downstream = 'ops',
+    const B = builtinBundle(c.id),
       pile = 2,
       cleared = 0.5;
     // ACT
-    const seen = afterSet(set, weeks);
+    const seen = afterSet({ B, at: c.at, set: c.set as StepSet, weeks: c.weeks });
     // ASSERT
     expect(seen.before).toBeGreaterThan(pile);
-    expect(seen.qa).toBeLessThan(cleared);
-    expect(seen.worst).toBe(downstream);
+    expect(seen.after).toBeLessThan(cleared);
+    expect(seen.worst).toBe(c.next);
+  });
+
+  it.each([
+    { name: 'AI at the platform', set: { ai: ['plat'] } },
+    { name: 'the platform at twice the efficiency', set: { dials: { plat: { efficiency: 200 } } } },
+  ] as const)('at Two teams, clears the shared platform with $name and moves the largest backlog off it', (c) => {
+    // ARRANGE: the platform is the last work center, so downstream is the Customer, who holds no backlog
+    const B = builtinBundle('teams'),
+      weeks = 3,
+      pile = 2,
+      cleared = 0.5,
+      platform = 'plat';
+    // ACT
+    const seen = afterSet({ B, at: platform, set: c.set as StepSet, weeks });
+    // ASSERT
+    expect(seen.before).toBeGreaterThan(pile);
+    expect(seen.after).toBeLessThan(cleared);
+    expect(seen.worst).not.toBe(platform);
   });
 });
 
@@ -146,10 +197,13 @@ describe('edge cases', () => {
     const real = defaultsOf(B, 'realistic'),
       faster = defaultsOf(B, 'speed-up'),
       roles = defaultsOf(B, 'roles');
+    const idealDisplay = displayOf(tire, presetOf(tire, 'ideal')),
+      rolesReality = roles.s.reality,
+      noReality = 0;
     // ASSERT
     expect(real).toMatchObject(page);
     expect(faster).toMatchObject(fast);
-    expect(roles.s.reality).toBe(0);
-    expect(displayOf(tire, presetOf(tire, 'ideal'))).toEqual(plain);
+    expect(rolesReality).toBe(noReality);
+    expect(idealDisplay).toEqual(plain);
   });
 });

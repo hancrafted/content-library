@@ -4,9 +4,9 @@
  * header's switch (feedback 08), so it is no setting here.
  */
 import { useState } from 'react';
+import { displayOf } from './display-defaults.pure.ts';
 import { presetOf } from './factory-run.pure.ts';
 import type { Bundle, PileStyle } from './software-ecology.types';
-import { displayOf } from './start-backlog.pure.ts';
 
 export interface Display {
   readonly beltMotion: boolean;

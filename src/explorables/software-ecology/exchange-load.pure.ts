@@ -3,6 +3,7 @@
  * stability for each company the file can run as, refuse it with the path to fix, or turn it into a bundle and the page
  * state it was saved from. The rushing and worst-case warnings come back for Upload to show (Q122).
  */
+import { displayOf } from './display-defaults.pure.ts';
 import { NO_OVERLAYS, OVER_OUT, type Overlays, type PageState } from './exchange-file.pure.ts';
 import { startSettings } from './factory-dials.pure.ts';
 import { createFactory } from './factory-model.pure.ts';
@@ -23,7 +24,6 @@ import type {
   UseCaseWords,
   ViewId,
 } from './software-ecology.types';
-import { displayOf } from './start-backlog.pure.ts';
 
 /** What an exchange file's `state` may hold; the schema checked each value it holds. */
 export interface SavedState {

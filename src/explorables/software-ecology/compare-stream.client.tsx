@@ -11,7 +11,7 @@ import type { TopoNode, Topology } from './factory-model.pure.ts';
 import type { CardWords, CompareWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import { cardsOf, type CardPart } from './stage-parts.pure.ts';
-import type { ColumnReadout, StationReadout } from './stage-readouts.pure.ts';
+import { LEVEL_RED, type ColumnReadout, type StationReadout } from './stage-readouts.pure.ts';
 import { beltWords, type WordsIn } from './use-case-words.pure.ts';
 
 /*
@@ -50,7 +50,7 @@ function StripNode({ n, p }: { n: TopoNode; p: StripProps }) {
   const [x, y, w, h] = boxOf(n.def),
     on = p.ids.includes(n.id);
   return (
-    <g className={styles.stripN} data-on={on} data-hot={n.kind === 'role' && p.stations[n.id]?.level === 2}>
+    <g className={styles.stripN} data-on={on} data-hot={n.kind === 'role' && p.stations[n.id]?.level === LEVEL_RED}>
       <rect x={x} y={y + NODE_HEAD} width={w} height={h - NODE_HEAD} rx="8" />
       {on ? (
         <text

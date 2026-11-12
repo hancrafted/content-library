@@ -26,7 +26,8 @@ describe('success cases', () => {
     // ACT
     const g = gridOf(m);
     // ASSERT
-    expect({ cols: g.cols, rows: g.rows }).toEqual(size);
+    const seen = { cols: g.cols, rows: g.rows };
+    expect(seen).toEqual(size);
     expect(g.at).toEqual(cells);
   });
 
@@ -47,12 +48,21 @@ describe('success cases', () => {
   it('keeps a use case without the cartoon at its factory columns and rows', () => {
     // ARRANGE
     const m = factoryOf('gate');
+    const expected = {
+      customer: [1, 2],
+      sales: [2, 1],
+      pm: [2, 2],
+      lspec: [3, 2],
+      e1: [4, 1],
+      e2: [4, 2],
+      e3: [4, 3],
+      lrev: [5, 2],
+      ops: [5, 1],
+    };
     // ACT
     const g = gridOf(m);
     // ASSERT
-    expect(g.at.customer).toEqual([1, expect.any(Number)]);
-    expect(Object.values(g.at).every((c) => c[0] >= 1 && c[1] >= 1)).toBe(true);
-    expect(Object.keys(g.at)).toContain('lspec');
+    expect(g.at).toEqual(expected);
   });
 });
 

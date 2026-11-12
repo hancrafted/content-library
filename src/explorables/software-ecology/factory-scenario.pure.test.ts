@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { judge, runScenario, type ScenarioRow } from './factory-scenario.pure.ts';
+import { judge, runScenario, stepsOf, type ScenarioRow } from './factory-scenario.pure.ts';
 import type { Bundle, Preset } from './software-ecology.types';
 import { BUILTIN, builtinBundle } from './use-case-data.ts';
 
@@ -197,6 +197,19 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('names only scenarios the files still have, with as many steps as the reference build ran', () => {
+    // ARRANGE
+    const refs = Object.entries(REFERENCE_WEEKS);
+    // ACT
+    const stepCounts = refs.map(([k, weeks]) => {
+      const [useCase = '', preset = ''] = k.split('/');
+      const p = builtinBundle(useCase).data.presets.find((x) => x.id === preset);
+      return { key: k, steps: p ? stepsOf(p).length : -1, ran: weeks.length };
+    });
+    // ASSERT
+    expect(stepCounts.filter((c) => c.steps !== c.ran)).toEqual([]);
+  });
+
   it('judges rises as failing on the first step, which has nothing before it', () => {
     // ARRANGE
     const value = 3;

@@ -2,8 +2,9 @@
 
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useEffect, useRef } from 'react';
+import { SPEEDS } from './factory-dials.pure.ts';
 import { Glyph } from './factory-glyph-view';
-import { DEFAULT_SPEED, SPEEDS } from './factory-run.pure.ts';
+import { DEFAULT_SPEED } from './factory-run.pure.ts';
 import type { ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import { MenuFace, ToolbarMenu } from './toolbar-menu.client';

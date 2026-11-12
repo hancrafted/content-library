@@ -147,7 +147,7 @@ presets:
           set: { ai: all },
           run: 12,
           card: customer,
-          expect: { customer.output: '>1.5', customer.leadDays: falls, customer.headroom: '>2' },
+          expect: { customer.output: '1.9–2.5', customer.leadDays: falls, customer.headroom: '>2' },
         }
       - { run: 32, card: eng, expect: { customer.leadDays: '<4', eng.weeksWaiting: '<0.2', qa.weeksWaiting: '<0.2' } }
   - id: ai-balanced
@@ -157,7 +157,7 @@ presets:
     customer: { rate: 20, mix: { sales: 25, pm: 45, support: 30 }, good: { pm: 0.3 }, bad: { support: 0.6 } }
     dials: { support: { aiSpeed: 3 }, eng: { aiSpeed: 3 }, qa: { aiSpeed: 3 } } # balanced: a little more AI speed-up where the load is highest; 1x extra tasks everywhere
     tour:
-      - { run: 4, card: customer, expect: { customer.output: '>2.8' } } # the seeded piles drain: output above the 2.5 demand
+      - { run: 4, card: customer, expect: { customer.output: '2.9–3.6' } } # the seeded piles drain: output above the 2.5 demand
       - { run: 12, card: qa, expect: { customer.sat: '>0.9', qa.weeksWaiting: '<0.5' } }
       - {
           run: 32,

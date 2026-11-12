@@ -11,7 +11,7 @@ import { presetOf, type FactoryRun } from './factory-run.pure.ts';
 import { Stage } from './factory-stage.client';
 import { tourCard } from './factory-tour.pure.ts';
 import { OpenDashboard } from './open-dashboard.client';
-import { resetter } from './reset-state.ts';
+import { dismissOverlays, resetToDefault } from './reset-state.ts';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
@@ -165,8 +165,7 @@ function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
   const apply = (bundle: typeof B, id: string) => compare.reset(presetOf(bundle, id).compare);
   return {
     onPreset: (id: string) => {
-      dash.dismiss();
-      tour.end();
+      dismissOverlays(x, { tour });
       show(viewOf(B, id));
       apply(B, id);
       f.controls.setPreset(id);
@@ -178,8 +177,12 @@ function useHandlers(x: Parts, f: FactoryView, tour: TourActions) {
       apply(B, id);
       tour.start(id);
     },
-    onReset: resetter(x, { f, tour, show, apply, viewOf }),
-    onUseCase: (id: string) => (dash.dismiss(), tour.end(), apply(x.bundleOf(id), f.controls.preset), x.setUseCase(id)),
+    onReset: resetToDefault(x, { f, tour, show, apply, viewOf }),
+    onUseCase: (id: string) => {
+      dismissOverlays(x, { tour });
+      apply(x.bundleOf(id), f.controls.preset);
+      x.setUseCase(id);
+    },
     onClear: () => (tour.end(), f.controls.clear()),
     onCard: cardClick(x, { f }),
   };

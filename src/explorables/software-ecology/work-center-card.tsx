@@ -9,8 +9,8 @@ import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-cente
 /*
  * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the role with its
  * cartoon panel (`role`, not clickable since feedback 09), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
- * and the compare stream's columns show. Every floor view keeps the card's id on its root, so the parent can morph one
- * view's box into the next.
+ * and the compare stream's columns show. Every floor view keeps the card's id on its root, so a view change keeps one
+ * card's identity.
  */
 
 type CardView = 'role' | 'station' | 'dashboard';

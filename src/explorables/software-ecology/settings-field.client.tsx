@@ -32,11 +32,27 @@ export function HelpTip(p: { readonly name: string; readonly tip: string }) {
   );
 }
 
+/** What sits at the end of a label line; a function gets the label's id, to name the slider its value reads. */
+type Trailing = ReactNode | ((labelId: string) => ReactNode);
+const trailingOf = (t: Trailing, labelId: string): ReactNode => (typeof t === 'function' ? t(labelId) : t);
+
+/** The id of the control a label names: the slider its value `<output>` reads. */
+const controlIdOf = (labelId: string) => `${labelId}-control`;
+
+/** A slider's value on the label line, an `<output>` that reads the slider. */
+export function Value(p: { readonly labelId: string; readonly children: ReactNode }) {
+  return (
+    <output htmlFor={controlIdOf(p.labelId)} className="text-caption font-semibold">
+      {p.children}
+    </output>
+  );
+}
+
 export interface FieldProps {
   readonly label: string;
   readonly tip: string;
   /** What sits at the end of the label line: a value, a switch. */
-  readonly trailing?: ReactNode;
+  readonly trailing?: Trailing;
   /** The control; it names itself by the label's id. */
   readonly children?: (labelId: string) => ReactNode;
 }
@@ -50,7 +66,7 @@ export function Field(p: FieldProps) {
           {p.label}
         </span>
         <HelpTip name={p.label} tip={p.tip} />
-        {p.trailing ? <span className={styles.fieldEnd}>{p.trailing}</span> : null}
+        {p.trailing ? <span className={styles.fieldEnd}>{trailingOf(p.trailing, id)}</span> : null}
       </div>
       {p.children?.(id)}
     </div>
@@ -83,7 +99,7 @@ export function SwitchField(p: {
   readonly tip: string;
   readonly on: boolean;
   readonly onFlip: (on: boolean) => void;
-  readonly value?: ReactNode;
+  readonly value?: Trailing;
   readonly children?: (labelId: string) => ReactNode;
 }) {
   const id = useId();
@@ -95,7 +111,7 @@ export function SwitchField(p: {
         </span>
         <HelpTip name={p.label} tip={p.tip} />
         <span className={styles.fieldEnd}>
-          {p.value}
+          {p.value ? trailingOf(p.value, id) : null}
           <SwitchControl on={p.on} labelId={id} onFlip={p.onFlip} />
         </span>
       </div>
@@ -142,6 +158,7 @@ export function SliderControl(p: {
   return (
     <input
       type="range"
+      id={controlIdOf(p.labelId)}
       className={styles.fslider}
       aria-labelledby={p.labelId}
       min={p.min}
