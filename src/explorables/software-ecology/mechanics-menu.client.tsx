@@ -28,6 +28,7 @@ function MechField(p: MechanicsMenuProps & { k: Mechanic }) {
   return (
     <SwitchField
       label={p.mechs[k].label}
+      control={`settings.${k}`}
       tip={p.mechs[k].tip}
       on={on}
       onFlip={() => p.onSettings(withMech(p.settings, k))}
@@ -37,6 +38,7 @@ function MechField(p: MechanicsMenuProps & { k: Mechanic }) {
         isStrength(k) ? (
           <SliderControl
             labelId={l}
+            control={`settings.${k}.strength`}
             min={MECH_RANGE[k][0]}
             max={MECH_RANGE[k][1]}
             step={0.1}

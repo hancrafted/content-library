@@ -10,19 +10,21 @@ import { ToolTip } from './toolbar-tip.client';
  * tooltip, on hover and on keyboard focus; a sign that is off is hidden and out of the tab order.
  */
 export function StationSigns({
+  id,
   signs,
   r,
   words,
   targets,
-}: Pick<StationCardProps, 'signs' | 'r' | 'words' | 'targets'>) {
+}: Pick<StationCardProps, 'id' | 'signs' | 'r' | 'words' | 'targets'>) {
   return (
     <div className={styles.signs}>
       {signs.map((k) => (
-        <ToolTip key={k} tip={r.signs[k] ? words.signs[k] : ''}>
+        <ToolTip key={k} side="top" tip={r.signs[k] ? words.signs[k] : ''}>
           <button
             type="button"
             className={styles.sign}
             data-sign={k}
+            data-control={`node.${id}.sign.${k}`}
             data-on={r.signs[k]}
             aria-label={words.signs[k]}
             aria-hidden={r.signs[k] ? undefined : true}

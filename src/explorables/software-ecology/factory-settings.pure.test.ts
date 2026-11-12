@@ -4,6 +4,7 @@ import { createFactory } from './factory-model.pure.ts';
 import { presetOf } from './factory-run.pure.ts';
 import {
   aiChoicesOf,
+  aiHookOf,
   aiKeyOf,
   pageSettings,
   withAi,
@@ -51,6 +52,15 @@ describe('success cases', () => {
     expect(choices.at(-1)?.id).toBe('ai:all');
     expect(choices.map((c) => c.label)).toContain('Engineer');
     expect(key).toBe('ai:eng');
+  });
+
+  it('names an AI choice by a stable hook: off, all, or the sorted work center ids dash-joined', () => {
+    // ARRANGE
+    const expected = ['off', 'all', 'eng-qa'];
+    // ACT
+    const hooks = [{ ai: 'off' as const }, { ai: 'all' as const }, { ai: ['qa', 'eng'] }].map(aiHookOf);
+    // ASSERT
+    expect(hooks).toEqual(expected);
   });
 });
 

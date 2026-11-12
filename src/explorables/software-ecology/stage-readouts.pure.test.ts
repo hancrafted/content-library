@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { SHELF } from './factory-flow.pure.ts';
 import type { FactoryHandle } from './factory-model.pure.ts';
 import { scenarioStart, settingsAfter } from './factory-scenario.pure.ts';
-import { relativeOf, verdictOf } from './stage-readouts.pure.ts';
+import { SHELF_COLS, SHELF_ROWS, relativeOf, verdictOf } from './stage-readouts.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 const SEED = 20261111;
@@ -48,6 +48,15 @@ describe('success cases', () => {
     if (!qa || !eng) throw new Error('no qa or eng');
     // ASSERT
     expect([qa.piling, eng.ai, qa.ai]).toEqual([true, true, false]);
+  });
+
+  it('lays the twenty releases out in 4 rows by 5 columns (feedback 11)', () => {
+    // ARRANGE
+    const expected = { rows: 4, cols: 5 };
+    // ACT
+    const grid = { rows: SHELF_ROWS, cols: SHELF_COLS };
+    // ASSERT
+    expect(grid).toEqual(expected);
   });
 });
 

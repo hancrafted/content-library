@@ -53,6 +53,7 @@ export function ScenarioMenu(p: ScenarioMenuProps) {
           key={s.id}
           type="button"
           className={`${styles.scnI} text-caption`}
+          data-control={`toolbar.scenario.${s.id}`}
           role="menuitemradio"
           aria-checked={p.preset === s.id}
           onClick={() => p.onPick(s.id)}
@@ -83,6 +84,7 @@ export function ScenariosMenu(
     <ToolbarMenu
       open={p.open}
       onOpen={p.onOpen}
+      control="toolbar.scenarios"
       face={<MenuFace text={p.words.scenarios} />}
       buttonClass={`${styles.state} ${styles.stateMenu} text-caption font-medium`}
       tip=""
@@ -124,6 +126,7 @@ export function TourButton(p: {
       <button
         type="button"
         className={`${styles.state} ${styles.stateTour} text-caption font-medium`}
+        data-control="toolbar.tour"
         aria-disabled={!p.canTour}
         aria-pressed={p.touring}
         onClick={() => {

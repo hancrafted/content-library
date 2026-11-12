@@ -28,7 +28,12 @@ export interface SettingsMenuProps {
 }
 
 /** A section: its bold title, with a help icon when it has a description, and its form fields. */
-function Section(p: { readonly title: string; readonly tip?: string; readonly children: ReactNode }) {
+function Section(p: {
+  readonly title: string;
+  readonly control: string;
+  readonly tip?: string;
+  readonly children: ReactNode;
+}) {
   const id = useId();
   return (
     <section className={styles.setSec} aria-labelledby={id}>
@@ -36,7 +41,7 @@ function Section(p: { readonly title: string; readonly tip?: string; readonly ch
         <p id={id} className={`${styles.setSecTitle} m-0 text-body font-semibold`}>
           {p.title}
         </p>
-        {p.tip ? <HelpTip name={p.title} tip={p.tip} /> : null}
+        {p.tip ? <HelpTip name={p.title} tip={p.tip} control={`settings.${p.control}.help`} /> : null}
       </div>
       {p.children}
     </section>
@@ -48,7 +53,13 @@ function Header(p: Pick<SettingsMenuProps, 'words' | 'onClose'>) {
     <header className={styles.setHead}>
       <p className={`${styles.setTitle} m-0 text-body font-semibold`}>{p.words.label}</p>
       <ToolTip tip={p.words.close}>
-        <button type="button" className={styles.iconBtn} aria-label={p.words.close} onClick={p.onClose}>
+        <button
+          type="button"
+          className={styles.iconBtn}
+          data-control="settings.close"
+          aria-label={p.words.close}
+          onClick={p.onClose}
+        >
           <X size={16} aria-hidden="true" />
         </button>
       </ToolTip>
@@ -61,7 +72,12 @@ function Foot(p: Pick<SettingsMenuProps, 'model' | 'exchange'>) {
   return (
     <footer className={styles.setFoot}>
       <ToolTip tip={w.tips.reset}>
-        <button type="button" className={`${styles.tbtn} ${styles.tbtnLine} text-caption`} onClick={p.model.onReset}>
+        <button
+          type="button"
+          className={`${styles.tbtn} ${styles.tbtnLine} text-caption`}
+          data-control="settings.reset"
+          onClick={p.model.onReset}
+        >
           <RotateCcw size={16} aria-hidden="true" />
           <span>{w.reset}</span>
         </button>
@@ -78,15 +94,15 @@ export function SettingsMenu(p: SettingsMenuProps) {
       <Header words={w} onClose={p.onClose} />
       <div className={styles.setCols}>
         <div className={styles.setCol}>
-          <Section title={w.model} tip={p.model.words.note}>
+          <Section title={w.model} control="model" tip={p.model.words.note}>
             <ModelMenu {...p.model} />
           </Section>
         </div>
         <div className={styles.setCol}>
-          <Section title={w.mechanics} tip={w.mechanicsNote}>
+          <Section title={w.mechanics} control="mechanics" tip={w.mechanicsNote}>
             <MechanicsMenu {...p.mechanics} />
           </Section>
-          <Section title={w.display}>
+          <Section title={w.display} control="display">
             <DisplayMenu {...p.display} />
           </Section>
         </div>

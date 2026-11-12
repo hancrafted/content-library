@@ -61,6 +61,8 @@ type CenterIn = Pick<OpenDashboardProps, 'f' | 'dash' | 'words' | 'w' | 'markers
 const centerDash = (p: CenterIn, x: { n: TopoNode; r: DashboardReadout }): WorkCenterDashboardProps => {
   const c = p.f.controls;
   return {
+    id: p.id,
+    scope: p.closable === false ? 'compare' : 'node',
     title: centerTitle(p.w, { id: x.n.id, role: x.n.roleId }),
     icon: x.n.role.icon ?? x.n.roleId,
     role: roleWords(p.w, x.n.roleId),

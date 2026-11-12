@@ -58,22 +58,6 @@ describe('success cases', () => {
     }).toEqual(expected);
   });
 
-  it("shows the live toolbar's row at that step: the states, paused at the tour's 20×, the tour clock, the use case", () => {
-    // ARRANGE
-    const expected = {
-      states: ['Who does what', 'In theory', 'In practice'],
-      speed: '20×',
-      clock: 'Week 20 · Day 1',
-      useCase: 'Tire swing',
-    };
-    // ACT
-    const { toolbar } = factoryStillState('en');
-    // ASSERT
-    expect({ states: toolbar.states, speed: toolbar.speed, clock: toolbar.clock, useCase: toolbar.useCase }).toEqual(
-      expected,
-    );
-  });
-
   it('names the work centers in the page locale', () => {
     // ARRANGE
     const expected = ['Quality assurance', 'Qualitätssicherung'];

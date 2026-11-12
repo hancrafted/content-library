@@ -22,9 +22,15 @@ export function DisplayMenu(p: DisplayMenuProps) {
   const items = PILES.map((k) => ({ id: k, label: w.piles[k].name, tip: w.piles[k].note }));
   return (
     <>
-      <SwitchField label={w.beltMotion} tip={w.beltMotionNote} on={p.beltMotion} onFlip={p.onBeltMotion} />
-      <Field label={w.pile} tip={w.pileTip}>
-        {(l) => <Segmented labelId={l} items={items} on={p.pile} onPick={p.onPile} />}
+      <SwitchField
+        label={w.beltMotion}
+        control="settings.belt-motion"
+        tip={w.beltMotionNote}
+        on={p.beltMotion}
+        onFlip={p.onBeltMotion}
+      />
+      <Field label={w.pile} control="settings.pile" tip={w.pileTip}>
+        {(l) => <Segmented labelId={l} control="settings.pile" items={items} on={p.pile} onPick={p.onPile} />}
       </Field>
     </>
   );

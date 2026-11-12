@@ -34,6 +34,7 @@ export const readColors = (doc: Document): Colors => {
     aiFill: tok(mix('var(--ai)', 20, paper)),
     good: tok('var(--success)'),
     warn: tok('var(--warning)'),
+    ...{ bulb: tok('var(--bulb)'), bulbEdge: tok('var(--bulb-edge)') },
     dull: tok('var(--muted-foreground)'),
     border: tok('var(--border)'),
     destr: tok('var(--destructive)'),
@@ -50,6 +51,9 @@ const DW = 9,
 
 /** A drawn document's height in sprite units, at `s: 1.05` on a sprite cell: what `makeSheet` draws. */
 export const DOC_H = DH * 1.05;
+
+/** The bulb's glyph spans y -2.3 to 3.9 around its point, so this centres it on the sheet's (0, 0). */
+export const BULB_AT = { x: 0, y: -0.8 };
 
 const sheetPath = (c: Ctx) => {
   c.beginPath();
@@ -118,7 +122,7 @@ const sheetDoc = (p: { c: Ctx; C: Colors }, d: DocKind, fill?: number) => {
   c.fill();
   if (fill !== undefined) fillIn(c, C, { ai: d.ai, fill });
   outline(c, C, d.ai);
-  if (d.own) bulb(c, C, { x: 0.2, y: -2.4 });
+  if (d.own) bulb(c, C, BULB_AT);
   if (fill === undefined) marks(c, C, d);
   if (d.ai) star(c, { x: -DW / 2 + 0.3, y: -DH / 2 + 0.3, r: 3.4 }, C.ai);
 };

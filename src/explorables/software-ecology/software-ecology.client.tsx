@@ -16,7 +16,7 @@ import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
 import { BelowView } from './stage-foot-view';
-import { tourClockText, TourPanel } from './tour-panel';
+import { tourClockAt, tourClockText, TourPanel } from './tour-panel';
 import { useCaseName, useCaseSub } from './use-case-words.pure.ts';
 import { useChoices, type Choices } from './use-choices.ts';
 import { useCompare, useWatch } from './use-compare.ts';
@@ -94,6 +94,7 @@ const tourRowOf = (t: ToolbarIn) => {
     scenarioMarkers: scenarioSpots(t.p.markers),
     tour: { can: !!presetOf(t.x.B, preset).tour?.length, on: !!t.tour.tour, start: t.h.onTour },
     tourClock: tourClockText(t.tour, t.p.words),
+    tourClockAt: tourClockAt(t.tour),
   };
 };
 

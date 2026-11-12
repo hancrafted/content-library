@@ -31,8 +31,14 @@ const runningText = (run: FactoryRun, t: Tour, words: Words): string | null => {
 
 /** The clock while a tour runs: "Week 8 · Day 1"; undefined while the line warms or no tour runs. */
 export const tourClockText = (tour: TourActions, words: Words): string | undefined => {
-  const c = tour.tour && tour.run ? tourClock(tour.run, tour.tour) : null;
+  const c = tourClockAt(tour);
   return c ? fillTemplate(words.toolbar.week, { w: c.week, d: c.day }) : undefined;
+};
+
+/** The tour's clock as numbers, for the eval read-outs `data-readout-week` and `-day`. */
+export const tourClockAt = (tour: TourActions): { week: number; day: number } | undefined => {
+  const c = tour.tour && tour.run ? tourClock(tour.run, tour.tour) : null;
+  return c ?? undefined;
 };
 
 export function TourPanel(p: TourPanelProps) {

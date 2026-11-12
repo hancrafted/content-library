@@ -61,6 +61,7 @@ export function WorkCenterCard(p: WorkCenterCardProps) {
       data-card-view={p.cardView}
       data-id={p.id}
       data-kind={p.kind}
+      data-control={`node.${p.id}`}
       style={rowsAt(p.cell)}
       {...p.target}
     >

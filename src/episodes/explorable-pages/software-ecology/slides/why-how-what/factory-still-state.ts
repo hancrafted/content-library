@@ -21,7 +21,6 @@ import type {
   Snapshot,
 } from '@/explorables/software-ecology/factory-model.pure';
 import { at, type Path } from '@/explorables/software-ecology/factory-paths.pure';
-import { TOUR_SPEED } from '@/explorables/software-ecology/factory-tour.pure';
 import { GAP } from '@/explorables/software-ecology/paint-belts';
 import { RACK_W, rackX, SLOT, slotY } from '@/explorables/software-ecology/paint-station';
 import { scenarioLastStep } from '@/explorables/software-ecology/scenario-last-step';
@@ -36,22 +35,13 @@ import {
   type CardPart,
 } from '@/explorables/software-ecology/stage-parts.pure';
 import { RACK } from '@/explorables/software-ecology/stage-readouts.pure';
-import {
-  presetName,
-  roleWords,
-  scenarioWords,
-  useCaseName,
-  type WordsIn,
-} from '@/explorables/software-ecology/use-case-words.pure';
-import { fillTemplate } from '@/shared/lib/template.pure';
+import { roleWords, type WordsIn } from '@/explorables/software-ecology/use-case-words.pure';
 import type { FactoryStillState, StillBelt, StillDoc, StillStation } from './factory-still.types';
 
 const USE_CASE = 'tire';
 const SCENARIO = 'ai-unbalanced';
 /** The work center whose dashboard the What pin opens. */
 const DASHBOARD = 'ba';
-/** The states the Explorable's toolbar shows on its row, in its order; the Scenarios menu holds the rest. */
-const ROW_STATES = ['roles', 'ideal', 'realistic'] as const;
 
 export type * from './factory-still.types';
 
@@ -170,20 +160,6 @@ function dashboardIn(x: Read, title: string): FactoryStillState['dashboard'] {
   };
 }
 
-function toolbarIn(x: Read): FactoryStillState['toolbar'] {
-  const scenario = scenarioWords(x.w, SCENARIO);
-  return {
-    states: ROW_STATES.map((id) => presetName(x.w, id)),
-    scenario: presetName(x.w, x.run.preset.id),
-    caption: scenario.steps?.[x.run.last] ?? '',
-    // the tour pauses on its step and Play resumes at the speed it ran between steps
-    speed: `${TOUR_SPEED}×`,
-    // the step's week, on its first working day, as the tour's clock counts from the tour's start
-    clock: fillTemplate(x.words.toolbar.week, { w: x.run.week, d: 1 }),
-    useCase: useCaseName(x.w),
-  };
-}
-
 function build(run: Run, lc: Locale): FactoryStillState {
   const topo = run.f.topology,
     w: WordsIn = { B: run.B, locale: lc, catalog: catalogWordsFor(lc) };
@@ -206,7 +182,6 @@ function build(run: Run, lc: Locale): FactoryStillState {
     stations,
     customer: { ...x.snap.customer, title: customerCardOf(topo, w).title, box: boxOf(topo.cust.def) },
     dashboard: dashboardIn(x, title),
-    toolbar: toolbarIn(x),
     words: x.words,
   };
 }

@@ -17,13 +17,13 @@ export const star = (c: Ctx, at: { x: number; y: number; r: number }, color: str
   c.fill();
 };
 
-/** The lightbulb of own work: an amber bulb on a small base, at (x, y). */
+/** The lightbulb of own work: a yellow bulb with a darker outline on a small base; the glyph spans y -2.3 to 3.9 around (x, y). */
 export const bulb = (c: Ctx, C: Colors, at: { x: number; y: number }) => {
   c.save();
   c.translate(at.x, at.y);
-  c.fillStyle = C.warn;
-  c.strokeStyle = C.fg;
-  c.lineWidth = 0.55;
+  c.fillStyle = C.bulb;
+  c.strokeStyle = C.bulbEdge;
+  c.lineWidth = 0.7;
   c.beginPath();
   c.arc(0, 0, 2.3, 0, Math.PI * 2);
   c.fill();

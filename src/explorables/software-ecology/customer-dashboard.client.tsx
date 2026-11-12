@@ -57,6 +57,7 @@ function Chance(p: CustomerDashboardProps & { kind: Kind; to: string }) {
       <input
         type="range"
         className={styles.range}
+        data-control={`customer.${p.kind}.${p.to}`}
         min={0}
         max={row.max}
         step={row.step}
@@ -78,6 +79,7 @@ function Rate(p: CustomerDashboardProps) {
       <input
         type="range"
         className={styles.range}
+        data-control="customer.rate"
         id={id}
         min={0}
         max={p.r.max}
@@ -104,6 +106,7 @@ function Mode(p: CustomerDashboardProps) {
             key={m}
             type="button"
             className="text-caption"
+            data-control={`customer.arrivals.${m}`}
             aria-pressed={p.r.cust.mode === m}
             onClick={() => p.onChange({ kind: 'mode', v: m })}
           >
@@ -137,6 +140,7 @@ function Head(p: CustomerDashboardProps) {
           type="button"
           className={styles.iconBtn}
           aria-label={p.close.close}
+          data-control="customer.close"
           data-tip={p.close.closeTip}
           onClick={p.onClose}
         >

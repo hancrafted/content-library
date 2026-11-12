@@ -41,6 +41,8 @@ export interface ToolbarMenuProps {
   readonly tip: string;
   /** The menu group's name. */
   readonly label: string;
+  /** The button's eval hook, `toolbar.<name>`. */
+  readonly control: string;
   /** The button's classes. */
   readonly buttonClass: string;
   /** Pressed while one of its entries is on (the Scenarios button). */
@@ -112,6 +114,7 @@ function MenuButton(p: ToolbarMenuProps & { btn: RefObject<HTMLButtonElement | n
         ref={p.btn}
         type="button"
         className={p.buttonClass}
+        data-control={p.control}
         aria-expanded={p.open}
         aria-controls={p.menuId}
         aria-haspopup={p.role}

@@ -5,12 +5,13 @@
  */
 import { DAYS, Q, custOf, dials, speedOf } from './factory-dials.pure.ts';
 import { SHELF } from './factory-flow.pure.ts';
+import { CENTER_MEASURES } from './factory-readouts.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 import type { Arrivals, Settings } from './software-ecology.types';
 
-/** The release shelf is drawn this many cells across; its rows follow from SHELF. */
-export const SHELF_COLS = 4;
-export const SHELF_ROWS = Math.ceil(SHELF / SHELF_COLS);
+/** The release shelf is drawn this many cells down (4 rows); its columns follow from SHELF (5 across). */
+export const SHELF_ROWS = 4;
+export const SHELF_COLS = Math.ceil(SHELF / SHELF_ROWS);
 
 /** A sign stays this many weeks after its last event, so it does not blink. */
 export const SIGN_HOLD = 1.5;
@@ -32,6 +33,8 @@ export interface StationReadout {
   readonly level: number;
   /** Share of its busy time on bugs, shown from 5 %; 0 below. */
   readonly bugShare: number;
+  /** Share of its arrivals that are sent-back work, to two decimals so a read changes only when the card shows it. */
+  readonly rework: number;
   readonly signs: Readonly<Record<SignKind, boolean>>;
 }
 
@@ -75,6 +78,7 @@ export const stationOf = (n: FactoryNode, x: { m: Factory; s: Settings }): Stati
   piling: n.L > RACK,
   level: n.lvl,
   bugShare: n.u.busy > 0.02 ? n.u.fail / n.u.busy : 0,
+  rework: Math.round(CENTER_MEASURES.rework(n) * 100) / 100,
   signs: Object.fromEntries(SIGNS.map((k) => [k, signOn(n, k, x)])) as Record<SignKind, boolean>,
 });
 

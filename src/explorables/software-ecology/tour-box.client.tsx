@@ -99,13 +99,14 @@ function Buttons(p: TourBoxProps) {
   const shown = p.running === null;
   return (
     <div className={styles.tourBtns}>
-      <button type="button" className={`${styles.ghostBtn} text-caption`} onClick={p.onClose}>
+      <button type="button" className={`${styles.ghostBtn} text-caption`} data-control="tour.close" onClick={p.onClose}>
         {p.words.close}
       </button>
       <span />
       <button
         type="button"
         className={`${styles.ghostBtn} text-caption`}
+        data-control="tour.back"
         disabled={!p.canBack || !shown}
         onClick={p.onBack}
       >
@@ -114,6 +115,7 @@ function Buttons(p: TourBoxProps) {
       <button
         type="button"
         className={`${styles.tbtn} ${styles.tbtnSolid} text-caption`}
+        data-control="tour.next"
         disabled={!shown}
         onClick={p.onNext}
       >

@@ -12,8 +12,7 @@ import { ScenarioNotes, ScenariosMenu, TourButton, type ScenarioChoice } from '.
 import { SettingsMenu } from './settings-menu.client';
 import type { SettingsWords, ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
-import { STEP_MARKS } from './step-marks.pure';
-import { TimeControls } from './time-controls.client';
+import { TimeControls, type ClockAt } from './time-controls.client';
 import { ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
 
@@ -37,6 +36,7 @@ export interface ToolbarProps {
   readonly onSpeed: (n: number) => void;
   readonly onClear: () => void;
   readonly clock: string;
+  readonly clockAt: ClockAt;
   readonly statesTarget?: TargetProps;
   readonly statesMarker?: ReactNode;
   /** Every state off the row, for the Scenarios menu, and the markers a Slide places beside its entries. */
@@ -63,6 +63,9 @@ interface MenuState {
   readonly opener: Opener;
 }
 
+/** The circled digits before the three state steps' names. */
+const STEP_MARKS = ['①', '②', '③'] as const;
+
 /** A close never undoes the other menu's open: the outside click that opens one closes only the other. */
 const nextMenu = (cur: MenuId, id: Exclude<MenuId, null>, on: boolean): MenuId => (on ? id : cur === id ? null : cur);
 
@@ -84,6 +87,7 @@ function StateButton(p: StateButtonProps) {
       <button
         type="button"
         className={`${styles.state} text-caption font-medium`}
+        data-control={`toolbar.state.${p.s.id}`}
         aria-pressed={p.on}
         onClick={p.onPick}
       >
@@ -142,12 +146,13 @@ function UseCase(p: Pick<ToolbarProps, 'words' | 'useCases' | 'useCase' | 'onUse
         <Glyph name="factory" className={styles.ico} />
         <select
           className={`${styles.select} text-caption font-semibold`}
+          data-control="toolbar.use-case"
           aria-label={p.words.useCase}
           value={p.useCase}
           onChange={(e) => p.onUseCase(e.target.value)}
         >
           {p.useCases.map((u) => (
-            <option key={u.id} value={u.id}>
+            <option key={u.id} value={u.id} data-control={`toolbar.use-case.${u.id}`}>
               {u.name}
             </option>
           ))}
@@ -165,6 +170,7 @@ function Settings(p: ToolbarProps & MenuState) {
       open={p.open === 'settings'}
       onOpen={p.opener('settings')}
       face={<Glyph name="settings" className={styles.ico} />}
+      control="toolbar.settings"
       ariaLabel={w.button}
       tip={w.tip}
       buttonClass={`${styles.tbtn} ${styles.tbtnLine} text-caption`}
@@ -204,6 +210,7 @@ export function FactoryToolbar(p: ToolbarProps) {
         onSpeed={p.onSpeed}
         onClear={p.onClear}
         clock={p.clock}
+        clockAt={p.clockAt}
         open={open === 'speed'}
         onOpen={opener('speed')}
       />

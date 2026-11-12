@@ -28,7 +28,7 @@ export const openerProps = (label: string | undefined, open: boolean | undefined
     : { 'data-open': open, 'data-toured': toured || undefined };
 
 /** What the signs above a station card need. */
-export type SignsProps = Pick<StationCardProps, 'signs' | 'r' | 'words' | 'targets'>;
+export type SignsProps = Pick<StationCardProps, 'id' | 'signs' | 'r' | 'words' | 'targets'>;
 
 export interface StationCardProps {
   readonly id: string;
@@ -112,6 +112,10 @@ export const StationCardView = memo(function StationCardView(p: StationCardProps
       {...openerProps(p.label, p.open, p.toured)}
       data-ai={p.r.ai}
       data-piling={p.r.piling}
+      data-control={`node.${p.id}`}
+      data-readout-waiting={p.r.waiting}
+      data-readout-weeks-waiting={p.r.weeks.toFixed(1)}
+      data-readout-rework={p.r.rework.toFixed(2)}
       data-picked={p.picked || undefined}
       style={boxStyle(p.box)}
       {...p.targets?.card}
@@ -121,7 +125,7 @@ export const StationCardView = memo(function StationCardView(p: StationCardProps
       <div className={styles.body}>
         <Status r={p.r} words={p.words} />
       </div>
-      <p.Signs signs={p.signs} r={p.r} words={p.words} targets={p.targets} />
+      <p.Signs id={p.id} signs={p.signs} r={p.r} words={p.words} targets={p.targets} />
       <Turbo />
     </div>
   );
