@@ -13,6 +13,7 @@ import type {
   Cust,
   Dials,
   Over,
+  OwnSet,
   Preset,
   Settings,
   Strength,
@@ -108,13 +109,24 @@ export const speedOf = (n: FactoryNode, d: Dials): number => n.mu * (d.eff / 100
 export const rushOf = (n: FactoryNode): number =>
   RUSH_MAX * Math.max(0, Math.min(1, (n.Ws - RUSH_FROM) / (RUSH_TO - RUSH_FROM)));
 export const effvNow = (n: FactoryNode, d: Dials): number => Math.max(5, d.effv - rushOf(n)) / 100;
+interface OwnSource {
+  readonly id: string;
+  readonly rate: number;
+  readonly arrivals?: Arrivals;
+}
+/** A source's values as the file gives them; the state's arrivals fill what the file leaves out. */
+export const fileOwnOf = (src: OwnSource, state: Arrivals): Required<OwnSet> => ({
+  rate: src.rate,
+  arrivals: src.arrivals ?? state,
+});
 /** A source's tickets a week and its arrivals at these settings: the dashboard's, else the file's, else the state's. */
 export const ownOf = (
-  src: { readonly id: string; readonly rate: number; readonly arrivals?: Arrivals },
+  src: OwnSource,
   x: { readonly s: Pick<Settings, 'own'>; readonly mode: Arrivals },
-): { rate: number; mode: Arrivals } => {
-  const o = x.s.own[src.id] ?? {};
-  return { rate: firstOf(o.rate, src.rate), mode: firstOf<Arrivals>(o.mode, src.arrivals, x.mode) };
+): Required<OwnSet> => {
+  const o: OwnSet = x.s.own[src.id] ?? {},
+    file = fileOwnOf(src, x.mode);
+  return { rate: firstOf(o.rate, file.rate), arrivals: firstOf(o.arrivals, file.arrivals) };
 };
 /** Own tickets scale with the role's AI extra tasks. */
 export const srcRate = (rate: number, d: Dials): number => rate * (d.ai ? d.aiExtra : 1);

@@ -152,7 +152,8 @@ export const spriteIdx = (k: {
 
 /** A sprite index at or above this is a gift box. */
 export const GIFT = 16;
-const KINDS = 32;
+/** The kinds of document sprite: quality, AI, warning, own work, and plain or gift. */
+export const KINDS = 32;
 
 /** The thirty-two kinds drawn once at `px` pixels a cell. */
 export const makeSheet = (doc: Document, C: Colors, px: number): HTMLCanvasElement => {

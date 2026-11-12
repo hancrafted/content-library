@@ -1,11 +1,11 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { memo } from 'react';
+import { memo, type CSSProperties } from 'react';
 import { Glyph } from './factory-glyph-view';
 import type { Snapshot } from './factory-model.pure.ts';
 import type { CustomerWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
-import type { Release } from './stage-readouts.pure.ts';
+import { SHELF_COLS, SHELF_ROWS, type Release } from './stage-readouts.pure.ts';
 import { boxStyle, openerProps, type Box } from './station-card-view';
 
 export interface CustomerCardProps {
@@ -21,6 +21,12 @@ export interface CustomerCardProps {
   /** A tour caption points at it. */
   readonly toured?: boolean;
 }
+
+/** The shelf grid's size as CSS custom properties: `SHELF_COLS` across. */
+export const shelfGrid = {
+  '--shelf-cols': SHELF_COLS,
+  '--shelf-rows': SHELF_ROWS,
+} as CSSProperties;
 
 /** The twenty release cells, newest first: good or bad, a complaint marked. */
 export function ReleaseCells({ releases }: { readonly releases: readonly (Release | null)[] }) {
@@ -63,7 +69,7 @@ function Readouts({ r, words: w }: Pick<CustomerCardProps, 'r' | 'words'>) {
 function Output({ r, words: w }: Pick<CustomerCardProps, 'r' | 'words'>) {
   return (
     <div className={styles.custRow}>
-      <div className={styles.grid20} role="img" aria-label={w.lastReleases}>
+      <div className={styles.grid20} style={shelfGrid} role="img" aria-label={w.lastReleases}>
         <ReleaseCells releases={r.releases} />
       </div>
       <div className={styles.rel} data-tip={w.outputTip}>

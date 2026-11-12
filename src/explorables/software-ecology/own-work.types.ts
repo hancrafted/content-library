@@ -16,9 +16,12 @@ export interface Source {
 
 /** One source's own-work setting from its dashboard: tickets a week and Steady or Random; unset means the file's. */
 export interface OwnSet {
-  rate?: number;
-  mode?: Arrivals;
+  readonly rate?: number;
+  readonly arrivals?: Arrivals;
 }
+
+/** The most tickets a week a source may write; the file's validation and the dashboard's slider share it. */
+export const OWN_RATE_MAX = 50;
 
 /** A work center's own-work section. */
 export interface OwnWorkWords {

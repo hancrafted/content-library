@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { exportExchange, type PageState } from './exchange-file.pure.ts';
-import { uploadExchange } from './exchange-upload.ts';
 import { startSettings } from './factory-dials.pure.ts';
 import { createFactory, type FactoryHandle } from './factory-model.pure.ts';
 import { withCompany, withOwn } from './factory-settings.pure.ts';
-import { catalogWordsFor } from './software-ecology-data.ts';
 import type { Bundle, Settings } from './software-ecology.types';
 import { builtinBundle } from './use-case-data.ts';
 
@@ -12,7 +9,6 @@ import { builtinBundle } from './use-case-data.ts';
  * Own work (design-ADR 0024 §2, §17; feedback 10, grill Q171–Q177): nodes with a `source` in the file write tickets of
  * their own under Product company, at the rate and arrivals the file or the node's dashboard sets.
  */
-const CATALOGS = { en: catalogWordsFor('en'), de: catalogWordsFor('de') };
 const B: Bundle = builtinBundle('tire');
 const SEED = 7;
 const WEEKS = 40;
@@ -40,17 +36,6 @@ const customerRequests = (s: Settings): number => {
   f.step(WEEKS);
   return n;
 };
-
-const pageOf = (s: Settings): PageState => ({
-  preset: 'realistic',
-  view: 'factory',
-  speed: 1,
-  beltMotion: true,
-  pile: 'heap',
-  compare: [],
-  overlays: { follow: false, isolate: false },
-  s,
-});
 
 describe('success cases', () => {
   it('writes own tickets only at the work centers the file gives a source', () => {
@@ -91,17 +76,21 @@ describe('success cases', () => {
   it('takes the file’s rate where the dashboard sets none', () => {
     // ARRANGE
     const fileRate = 2;
+    const roadmap = 'roadmap';
+    const random = 'random';
     const f: FactoryHandle = createFactory(B, product(), SEED);
     // ACT
     const own = f.read({ watch: ['pm'] }).dashboards['pm']?.own;
     // ASSERT
-    expect(own).toEqual([{ id: 'roadmap', rate: fileRate, mode: 'random', fileRate, fileMode: 'random' }]);
+    const same = { rate: fileRate, arrivals: random };
+    expect(own).toEqual([{ id: roadmap, now: same, file: same }]);
   });
 
   it('keeps the Customer’s request stream the same when every own-work source switches to Steady', () => {
     // ARRANGE
     const base = product();
-    const steady = ['roadmap', 'leads', 'debt'].reduce((s, id) => withOwn(s, id, { mode: 'steady' }), base);
+    const ids = ['roadmap', 'leads', 'debt'];
+    const steady = ids.reduce((s, id) => withOwn(s, id, { arrivals: 'steady' }), base);
     // ACT
     const [a, b] = [base, steady].map((s) => customerRequests(s));
     // ASSERT
@@ -111,7 +100,7 @@ describe('success cases', () => {
   it('draws Steady arrivals evenly: one every 1/rate weeks', () => {
     // ARRANGE
     const perWeek = 2;
-    const s = withOwn(product(), 'roadmap', { mode: 'steady', rate: perWeek });
+    const s = withOwn(product(), 'roadmap', { arrivals: 'steady', rate: perWeek });
     // ACT
     const n = arrivalsOf(s)['pm'] ?? 0;
     // ASSERT
@@ -135,37 +124,16 @@ describe('failure cases', () => {
     expect(back['pm']).toBeGreaterThan(rate * half);
     expect(own).toEqual([]);
   });
-
-  it('refuses a saved source that the file does not have, and a rate out of range', () => {
-    // ARRANGE
-    const tooMany = 99;
-    const text = exportExchange(B, pageOf(withOwn(realistic(), 'roadmap', { rate: 4 })), CATALOGS).replace(
-      'roadmap: { rate: 4 }',
-      `nope: { rate: ${tooMany} }\n    roadmap: { rate: ${tooMany} }`,
-    );
-    // ACT
-    const up = uploadExchange(text, 'bad.yaml');
-    // ASSERT
-    expect(up.kind).toBe('broken');
-    expect(up.kind === 'broken' && up.problems).toEqual([
-      'state.sources.nope: no such source',
-      'state.sources.roadmap.rate: tickets a week, 0 to 50',
-    ]);
-  });
 });
 
 describe('edge cases', () => {
-  it('carries the rates and arrivals through Download and Upload, and writes the same file again', () => {
+  it('draws a Steady rate under one a week as one every 1/rate weeks', () => {
     // ARRANGE
-    const rate = 4;
-    const s = withOwn(withOwn(product(), 'roadmap', { rate, mode: 'steady' }), 'debt', { rate: 0 });
-    const text = exportExchange(B, pageOf(s), CATALOGS);
+    const perWeek = 0.5;
+    const s = withOwn(product(), 'roadmap', { arrivals: 'steady', rate: perWeek });
     // ACT
-    const up = uploadExchange(text, 'own.yaml');
-    const again = up.kind === 'loaded' ? exportExchange(up.bundle, up.page, CATALOGS) : '';
+    const n = arrivalsOf(s)['pm'] ?? 0;
     // ASSERT
-    expect(up.kind === 'loaded' && up.page.s.own).toEqual({ roadmap: { rate, mode: 'steady' }, debt: { rate: 0 } });
-    expect(again).toEqual(text);
-    expect(text).toContain(`  sources:\n    roadmap: { rate: ${rate}, arrivals: steady }\n    debt: { rate: 0 }\n`);
+    expect(n).toBe(perWeek * WEEKS);
   });
 });

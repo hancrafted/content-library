@@ -455,6 +455,8 @@
   pointer-events: none;
 }
 .sign {
+  padding: 0;
+  cursor: help;
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -539,8 +541,8 @@
 }
 .grid20 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(var(--shelf-cols), 1fr);
+  grid-template-rows: repeat(var(--shelf-rows), 1fr);
   gap: 3px;
   height: 80px;
 }
@@ -673,7 +675,7 @@
 }
 .dockGrid {
   display: grid;
-  grid-template-columns: repeat(4, 34px);
+  grid-template-columns: repeat(var(--shelf-cols), 34px);
   grid-auto-rows: 26px;
   gap: 4px;
 }

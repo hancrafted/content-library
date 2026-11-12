@@ -89,7 +89,7 @@ const tickets = (m: Factory, src: TicketSource, x: { t0: number; t1: number }): 
   const n = src.n,
     own = ownOf(src, { s: m.s, mode: m.cs.mode }),
     rs = srcRate(own.rate, m.dc[n.idx]),
-    mode = own.mode;
+    mode = own.arrivals;
   if (rs !== src.seen || mode !== src.modeSeen) {
     src.seen = rs;
     src.modeSeen = mode;

@@ -3,7 +3,7 @@
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { Fragment, useId } from 'react';
 import type { OwnReadout } from './dashboard-readouts.pure.ts';
-import type { OwnSet, OwnWorkWords } from './own-work.types';
+import { OWN_RATE_MAX, type OwnSet, type OwnWorkWords } from './own-work.types';
 import { Field, HelpNameProvider, HelpTip, Segmented, SliderControl, Value } from './settings-field.client';
 import styles from './software-ecology.module.css';
 
@@ -19,9 +19,6 @@ export interface OwnWorkSectionProps {
   readonly onChange: (id: string, patch: OwnSet) => void;
 }
 
-/** The slider's top: 10 a week, or the file's own rate when that is higher. */
-const maxOf = (x: OwnReadout): number => Math.max(10, Math.ceil(Math.max(x.rate, x.fileRate)));
-
 interface SourceProps {
   readonly x: OwnReadout;
   readonly words: OwnWorkWords;
@@ -30,16 +27,16 @@ interface SourceProps {
 
 function RateField(p: SourceProps) {
   const { x, words: w } = p,
-    shown = fillTemplate(w.perWeek, { n: x.rate });
+    shown = fillTemplate(w.perWeek, { n: x.now.rate });
   return (
     <Field label={w.rate} tip={w.rateTip} trailing={(id) => <Value labelId={id}>{shown}</Value>}>
       {(id) => (
         <SliderControl
           labelId={id}
           min={0}
-          max={maxOf(x)}
+          max={OWN_RATE_MAX}
           step={0.5}
-          value={x.rate}
+          value={x.now.rate}
           valueText={shown}
           onChange={(v) => p.onChange(x.id, { rate: v })}
         />
@@ -59,8 +56,8 @@ function ArrivalsField(p: SourceProps) {
             { id: 'steady', label: w.steady },
             { id: 'random', label: w.random },
           ]}
-          on={p.x.mode}
-          onPick={(mode) => p.onChange(p.x.id, { mode })}
+          on={p.x.now.arrivals}
+          onPick={(arrivals) => p.onChange(p.x.id, { arrivals })}
         />
       )}
     </Field>

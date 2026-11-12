@@ -251,7 +251,7 @@ dash:
     tip: 'Tickets this role writes for itself, not for a customer: a roadmap, leads, tech debt. They join the same queue as customer requests, first in, first out. Only a Product company has them; a Service provider turns them all off.'
     help: 'About {name}'
     rate: Tickets per week
-    rateTip: 'How many own tickets this role writes a week, 0 to 10. 0 switches it off. The file’s rate is where it starts; Reset to default restores it.'
+    rateTip: 'How many own tickets this role writes a week, 0 to 50. 0 switches it off. The file’s rate is where it starts; Reset to default restores it.'
     perWeek: '{n} a week'
     arrivals: Arrivals
     arrivalsTip: 'Steady: one ticket every 1/rate of a week, evenly. Random: the same on average, but they bunch up and thin out, as real tickets do.'

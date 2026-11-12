@@ -118,7 +118,7 @@ const ownOut = (own: Settings['own']): Doc => {
   for (const [id, o] of Object.entries(own)) {
     const c: Doc = {};
     if (o.rate !== undefined) c.rate = o.rate;
-    if (o.mode !== undefined) c.arrivals = o.mode;
+    if (o.arrivals !== undefined) c.arrivals = o.arrivals;
     if (Object.keys(c).length) out[id] = c;
   }
   return Object.keys(out).length ? { sources: out } : {};

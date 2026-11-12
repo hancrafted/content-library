@@ -75,7 +75,7 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
-  it('shows twelve empty release cells, full satisfaction and no lead time on a cleared factory at day 0', () => {
+  it('shows twenty (SHELF) empty release cells, full satisfaction and no lead time on a cleared factory at day 0', () => {
     // ARRANGE
     const m = at('bug-spiral');
     const empty = Array.from({ length: SHELF }, () => null);

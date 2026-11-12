@@ -4,9 +4,10 @@
  * reads its settings and the follow-ups a request brings. Plain data the views turn into words; ported from the
  * reference build's `signals`, `leadTime`, `drainText`, `sparkline` and `syncDashboard`.
  */
-import { AMBER, custOf, dials, ownOf, productCo, RED, speedOf } from './factory-dials.pure.ts';
+import { AMBER, custOf, dials, fileOwnOf, ownOf, productCo, RED, speedOf } from './factory-dials.pure.ts';
 import type { Dials, Factory, FactoryNode } from './factory.types';
-import type { Arrivals, Cust, Settings } from './software-ecology.types';
+import type { OwnSet } from './own-work.types';
+import type { Cust, Settings } from './software-ecology.types';
 import { drainOf } from './stage-readouts.pure.ts';
 
 export type Level = 'red' | 'amber' | 'green';
@@ -29,10 +30,10 @@ export interface TrendPaths {
 /** One source of own work at a work center (Product company): its tickets a week and arrivals, now and in the file. */
 export interface OwnReadout {
   readonly id: string;
-  readonly rate: number;
-  readonly mode: Arrivals;
-  readonly fileRate: number;
-  readonly fileMode: Arrivals;
+  /** The settings now: the visitor's, else the file's. */
+  readonly now: Required<OwnSet>;
+  /** The file's own values, where Reset to default goes. */
+  readonly file: Required<OwnSet>;
 }
 
 export interface DashboardReadout {
@@ -142,9 +143,7 @@ export const ownReadoutsOf = (m: Factory, n: FactoryNode, s: Settings): OwnReado
   return m.srcs
     .filter((x) => x.n === n)
     .map((x) => {
-      const now = ownOf(x, { s, mode }),
-        file = ownOf(x, { s: { own: {} }, mode });
-      return { id: x.id, rate: now.rate, mode: now.mode, fileRate: file.rate, fileMode: file.mode };
+      return { id: x.id, now: ownOf(x, { s, mode }), file: fileOwnOf(x, mode) };
     });
 };
 

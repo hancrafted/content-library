@@ -4,6 +4,7 @@
  */
 import { SPEEDS } from './factory-dials.pure.ts';
 import { validKey, validTest } from './factory-scenario.pure.ts';
+import { OWN_RATE_MAX } from './own-work.types';
 import {
   absentOr,
   apply,
@@ -149,7 +150,7 @@ const stateSources = (st: Map_, sources: Set<string>, E: Sink): void => {
     if (!sources.has(id)) E(`${p}: no such source`);
     else if (!isMap(o)) E(`${p}: a map { rate, arrivals }`);
     else {
-      if (!absentOr(o.rate, (v) => isNum(v, 0, 50))) E(`${p}.rate: tickets a week, 0 to 50`);
+      if (!absentOr(o.rate, (v) => isNum(v, 0, OWN_RATE_MAX))) E(`${p}.rate: tickets a week, 0 to ${OWN_RATE_MAX}`);
       if (!absentOr(o.arrivals, (v) => oneOf(v, ['steady', 'random']))) E(`${p}.arrivals: steady or random`);
     }
   }

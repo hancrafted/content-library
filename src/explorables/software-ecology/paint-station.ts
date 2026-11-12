@@ -17,7 +17,7 @@ import type {
   NodeDef,
 } from './factory-model.pure.ts';
 import type { Pt } from './factory-paths.pure.ts';
-import { docKind, HANDOFF_SECS, RELEASE_SECS, WORK_S, type ScreenTimes } from './paint-belts.ts';
+import { docKind, handoffSecs, WORK_S, type ScreenTimes } from './paint-belts.ts';
 import { RACK } from './stage-readouts.pure.ts';
 
 export const RACK_W = 44,
@@ -148,7 +148,7 @@ export class Stations {
   landAll() {
     for (let i = this.lands.length - 1; i >= 0; i--) {
       const l = this.lands[i] as Landing;
-      if (this.clock.now - l.vr < (l.e.release ? RELEASE_SECS : HANDOFF_SECS) * 1000) continue;
+      if (this.clock.now - l.vr < handoffSecs(l.e.release) * 1000) continue;
       this.lands.splice(i, 1);
       if (!l.n) continue;
       const v = this.of(l.n);

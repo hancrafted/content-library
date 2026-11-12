@@ -4,15 +4,17 @@
  * closer than GAP merge into one sprite with "×n". A document leaving a station shrinks from its in-work size over the
  * stretch inside the card. Ported from the reference build's `drawBelt`.
  */
-import { badge, DOC_H, GIFT, SPR, spriteIdx, type Colors, type Ctx } from './doc-sprites.ts';
+import { badge, DOC_H, GIFT, KINDS, SPR, spriteIdx, type Colors, type Ctx } from './doc-sprites.ts';
 import { BELT_W, RETURN_W } from './factory-layout.pure.ts';
 import type { FloorDoc, FloorList } from './factory-model.pure.ts';
 import { at, type Path } from './factory-paths.pure.ts';
 
 /** A handoff animates this long on screen at any speed; the model keeps the quarter day. */
-export const HANDOFF_SECS = 0.6;
+const HANDOFF_SECS = 0.6;
 /** A release to the Customer takes twice as long, so it reads as the moment that counts (feedback 10). */
-export const RELEASE_SECS = 1.2;
+const RELEASE_SECS = 1.2;
+/** How long a handoff plays on screen: a release takes `RELEASE_SECS`, anything else `HANDOFF_SECS`. */
+export const handoffSecs = (release: boolean): number => (release ? RELEASE_SECS : HANDOFF_SECS);
 /** A gift box is this many times a document on the same belt. */
 export const GIFT_SCALE = 1.5;
 /** A drawn document takes this much belt; closer ones of the same kind merge. */
@@ -97,7 +99,6 @@ export interface Lane {
   readonly gift: boolean;
 }
 
-const KINDS = 32;
 const MERGE = new Float64Array(KINDS * 2);
 
 /** A travelling document's size, as a share of a sprite cell: `BELT_FILL` of the belt, or of the return lane. */

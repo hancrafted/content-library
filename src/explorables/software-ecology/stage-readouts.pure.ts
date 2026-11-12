@@ -8,6 +8,10 @@ import { SHELF } from './factory-flow.pure.ts';
 import type { Factory, FactoryNode } from './factory.types';
 import type { Arrivals, Settings } from './software-ecology.types';
 
+/** The release shelf is drawn this many cells across; its rows follow from SHELF. */
+export const SHELF_COLS = 4;
+export const SHELF_ROWS = Math.ceil(SHELF / SHELF_COLS);
+
 /** A sign stays this many weeks after its last event, so it does not blink. */
 export const SIGN_HOLD = 1.5;
 /** The rack holds six; past six the top slot turns red and work piles up. */

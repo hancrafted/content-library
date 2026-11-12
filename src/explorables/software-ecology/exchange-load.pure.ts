@@ -124,7 +124,7 @@ const overFrom = (centers: SavedState['centers']): Settings['over'] =>
 
 const ownFrom = (sources: SavedState['sources']): Settings['own'] =>
   Object.fromEntries(
-    Object.entries(sources ?? {}).map(([id, o]) => [id, defined({ rate: o.rate, mode: o.arrivals }) as OwnSet]),
+    Object.entries(sources ?? {}).map(([id, o]) => [id, defined({ rate: o.rate, arrivals: o.arrivals }) as OwnSet]),
   );
 
 /** The settings the file was saved at, over its preset's (the first one when it names none). */
