@@ -199,7 +199,7 @@ presets:
           run: 15,
           card: pm,
           claim: bad-things-faster,
-          expect: { customer.output: rises, customer.changesPerWeek: rises, pm.weeksWaiting: rises },
+          expect: { customer.output: '>1.3', customer.changesPerWeek: rises, pm.weeksWaiting: rises },
         }
       - {
           set: { dials: { ba: { effectiveness: 95 }, pm: { effectiveness: 95 } } },
