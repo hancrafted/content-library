@@ -26,7 +26,7 @@ describe('success cases', () => {
   it('writes the reference build’s state block for Tire swing at Ideal', () => {
     // ARRANGE: the lines flow.html's Download YAML writes right after it loads
     const expected = [
-      '# What the page shows right now. speed: 0 pause, 1, 2, 5 or 10. customer: its rate, arrivals, mix and follow-up chances. centers: per-center dial overrides. overlays: Follow an order and Isolate, kept for later (no effect yet).',
+      '# What the page shows right now. speed: 0 pause, 1, 2, 5, 10 or 20. customer: its rate, arrivals, mix and follow-up chances. centers: per-center dial overrides. overlays: Follow an order and Isolate, kept for later (no effect yet).',
       'state:',
       '  preset: ideal',
       '  view: factory',

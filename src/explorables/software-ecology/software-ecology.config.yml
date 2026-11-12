@@ -12,10 +12,11 @@ toolbar:
   speedMenuTip: How fast simulated time runs
   play: Play
   speedTips:
-    '1': '1×: a working day takes about 3 seconds'
-    '2': '2×: a working day takes about 1.6 seconds'
-    '5': '5×: a working day takes about 0.6 seconds'
-    '10': '10×: a working day takes about 0.3 seconds'
+    '1': '1×: a working day takes about 6 seconds'
+    '2': '2×: a working day takes about 3 seconds'
+    '5': '5×: a working day takes about 1.3 seconds'
+    '10': '10×: a working day takes about 0.6 seconds'
+    '20': '20×: a working day takes about 0.3 seconds'
   clear: Clear
   clearTip: 'Clear: an empty factory at day 0 with the current settings, to watch it fill'
   day: 'Day {n}'

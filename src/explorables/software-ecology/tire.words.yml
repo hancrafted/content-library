@@ -51,7 +51,7 @@ scenarios:
   bug-spiral:
     watch: The engineer ships more bad pull requests (effectiveness 65 %). Watch bugs a week, the engineer's backlog and the lead time.
     steps:
-      - An empty factory at day 0, running at 10×. More bad pull requests reach quality assurance, and some reach the Customer as bugs.
+      - An empty factory at day 0, running at 20×. More bad pull requests reach quality assurance, and some reach the Customer as bugs.
       - Bugs come back as support tickets, and their fixes jump the engineer's queue. With more than a week of work waiting, the engineer rushes – its effectiveness drops by up to 15 points, so even more bad pull requests.
       - The engineer rushes flat out, and its backlog keeps growing. Output sits well below demand.
       - Lead time has exploded to more than two months. Output stays at about 70 % – it neither recovers nor collapses. The spiral costs time, not volume.

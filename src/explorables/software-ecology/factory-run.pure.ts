@@ -4,7 +4,7 @@
  * frame drops time instead of spiralling. It reaches the model only through its handle (§1). No DOM: the hook drives
  * it and the painter draws it. Ported from the reference build's `rebuild`, `clearFactory` and `frame`.
  */
-import { DAYS, DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DAYS, DTW, SPEEDS, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import {
   createFactory,
   DEFAULT_SEED,
@@ -18,10 +18,10 @@ import {
 import type { Bundle, Preset, Settings } from './software-ecology.types';
 import { unretired } from './use-case-preset-checks.pure.ts';
 
-/** Weeks a real second at 1×; 5× plays a working day in about 0.6 s. */
-export const SPEED_1X = 1 / 16;
-export const SPEEDS = [0, 1, 2, 5, 10] as const;
-/** The page starts at 1× (feedback 08); a tour runs at 10× between its steps. */
+/** Weeks a real second at 1×; 10× plays a working day in about 0.6 s. */
+export const SPEED_1X = 1 / 32;
+export { SPEEDS };
+/** The page starts at 1× (feedback 08); a tour runs at 20× between its steps. */
 export const DEFAULT_SPEED = 1;
 /** Model steps a frame at most; beyond that the frame drops time. */
 export const MAX_STEPS = 40;

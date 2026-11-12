@@ -58,11 +58,11 @@ describe('success cases', () => {
     }).toEqual(expected);
   });
 
-  it("shows the live toolbar's row at that step: the states, paused at the tour's 10×, the tour clock, the use case", () => {
+  it("shows the live toolbar's row at that step: the states, paused at the tour's 20×, the tour clock, the use case", () => {
     // ARRANGE
     const expected = {
       states: ['Tire swing 2.0', 'Ideal', 'Realistic'],
-      speed: '10×',
+      speed: '20×',
       clock: 'Week 20 · Day 1',
       useCase: 'Tire swing',
     };

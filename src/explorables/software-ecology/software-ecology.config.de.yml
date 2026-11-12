@@ -10,10 +10,11 @@ toolbar:
   speedMenuTip: Wie schnell die simulierte Zeit läuft
   play: Abspielen
   speedTips:
-    '1': '1×: ein Arbeitstag dauert etwa 3 Sekunden'
-    '2': '2×: ein Arbeitstag dauert etwa 1,6 Sekunden'
-    '5': '5×: ein Arbeitstag dauert etwa 0,6 Sekunden'
-    '10': '10×: ein Arbeitstag dauert etwa 0,3 Sekunden'
+    '1': '1×: ein Arbeitstag dauert etwa 6 Sekunden'
+    '2': '2×: ein Arbeitstag dauert etwa 3 Sekunden'
+    '5': '5×: ein Arbeitstag dauert etwa 1,3 Sekunden'
+    '10': '10×: ein Arbeitstag dauert etwa 0,6 Sekunden'
+    '20': '20×: ein Arbeitstag dauert etwa 0,3 Sekunden'
   clear: Leeren
   clearTip: 'Leeren: eine leere Fabrik an Tag 0 mit den aktuellen Einstellungen, damit Ihr zuseht, wie sie sich füllt'
   day: 'Tag {n}'

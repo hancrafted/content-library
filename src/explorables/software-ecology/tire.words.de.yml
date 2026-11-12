@@ -50,7 +50,7 @@ scenarios:
   bug-spiral:
     watch: Der Entwickler liefert mehr schlechte Pull Requests (Wirksamkeit 65 %). Achte auf Fehler pro Woche, den Rückstau beim Entwickler und die Durchlaufzeit.
     steps:
-      - Eine leere Fabrik an Tag 0, bei 10×. Mehr schlechte Pull Requests erreichen die Qualitätssicherung, manche den Kunden als Fehler.
+      - Eine leere Fabrik an Tag 0, bei 20×. Mehr schlechte Pull Requests erreichen die Qualitätssicherung, manche den Kunden als Fehler.
       - Fehler kommen als Support-Tickets zurück, und ihre Behebung drängelt sich beim Entwickler vor. Wartet mehr als eine Woche Arbeit, hetzt er – seine Wirksamkeit sinkt um bis zu 15 Punkte, also noch mehr schlechte Pull Requests.
       - Der Entwickler hetzt am Anschlag, und sein Rückstau wächst weiter. Der Output liegt deutlich unter der Nachfrage.
       - Die Durchlaufzeit ist auf über zwei Monate explodiert. Der Output bleibt bei etwa 70 % – er erholt sich nicht und bricht nicht ein. Die Spirale kostet Zeit, nicht Menge.

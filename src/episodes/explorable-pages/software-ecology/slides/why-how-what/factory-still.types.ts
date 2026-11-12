@@ -74,7 +74,7 @@ export interface FactoryStillState {
     readonly states: readonly string[];
     readonly scenario: string;
     readonly caption: string;
-    /** The speed menu's face, the speed Play resumes at: "10×". */
+    /** The speed menu's face, the speed Play resumes at: "20×". */
     readonly speed: string;
     /** The tour's clock: "Week 20 · Day 1". */
     readonly clock: string;

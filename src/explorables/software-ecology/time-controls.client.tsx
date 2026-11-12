@@ -10,8 +10,8 @@ import { MenuFace, ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
 
 /*
- * The toolbar's time controls (feature guide, Interaction 1; feedback 08): Pause, a speed menu of 1×, 2×, 5× and 10×
- * (the page starts at 1×), Clear and the clock, plain text. Pause gives back the speed last picked; a tour sets 10×
+ * The toolbar's time controls (feature guide, Interaction 1; feedback 08): Pause, a speed menu of 1×, 2×, 5×, 10× and 20×
+ * (the page starts at 1×), Clear and the clock, plain text. Pause gives back the speed last picked; a tour sets 20×
  * between its steps and gives the viewer's speed back when it ends.
  */
 

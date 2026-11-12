@@ -56,7 +56,7 @@ routes:
 # States. Roles (its name in the words), Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: roles | factory.
 # reality: 0 Ideal to 100 Realistic. ai: all, or a list of center ids. dials: per-center overrides (efficiency, effectiveness,
 # fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer above. start: clear (day 0) or
-# warm (the default: 60 weeks settled). speed: 1, 2, 5 or 10.
+# warm (the default: 60 weeks settled). speed: 1, 2, 5, 10 or 20.
 # tour: steps, each { set (dials, customer, ai, reality), run: weeks from the start, card: where the caption points, expect };
 # check: one step without a caption. expect: { "<customer or center>.<measure>": test }, judged headless by factory-scenario.pure.test.ts.
 presets:
@@ -162,7 +162,7 @@ presets:
     view: factory
     reality: 100
     start: clear
-    speed: 10
+    speed: 20
     dials: { eng: { effectiveness: 65 } }
     customer: { mix: { sales: 25, pm: 45, support: 30 }, bad: { support: 0.6 } }
     tour:

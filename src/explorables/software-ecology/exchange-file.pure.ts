@@ -62,7 +62,7 @@ const NOTES: Readonly<Record<string, string>> = {
     'States. The roles state, Ideal and Realistic sit on the toolbar; the rest under Scenarios. view: roles | factory (a retired swing reads as roles). reality: 0 (Ideal) to 100 (Realistic). ai: all, off or a list of center ids. dials: per-center overrides (efficiency, effectiveness, fanout, aiSpeed, aiExtra). compare: up to three ids. customer: overrides of the Customer. start: clear or warm. speed. tour: steps { set, run (weeks from the start), card, expect }; check: one step. expect: { "<customer or center>.<measure>": test }, e.g. { qa.weeksWaiting: ">2", customer.output: "0.9–1.1" }.',
   '#roles': 'Roles used here. fan: tasks handed on per task; aiSize: how much longer an AI document takes to read.',
   '#state':
-    'What the page shows right now. speed: 0 pause, 1, 2, 5 or 10. customer: its rate, arrivals, mix and follow-up chances. centers: per-center dial overrides. overlays: Follow an order and Isolate, kept for later (no effect yet).',
+    'What the page shows right now. speed: 0 pause, 1, 2, 5, 10 or 20. customer: its rate, arrivals, mix and follow-up chances. centers: per-center dial overrides. overlays: Follow an order and Isolate, kept for later (no effect yet).',
   '#i18n': 'Words per locale. Titles of centers default to their role title.',
 };
 
