@@ -1,17 +1,3 @@
 {
-  "title": "Ausprobieren",
-  "voiceScript": {
-    "segments": {
-      "you-know-this-cartoon": {
-        "title": "Ihr kennt diesen Cartoon",
-        "keywords": "Reifenschaukel, Stille Post, keine Schuldigen, zehnmal schneller",
-        "script": "Ihr kennt alle diesen Cartoon. Zehn Bilder, und in jedem versteht eine andere Rolle etwas anderes, sodass die Schaukel am Ende nichts mit der zu tun hat, die der Kunde wollte. Niemand darin handelt böswillig: Es ist Stille Post, eine Absicht, die nie gut ausgesprochen wurde, wird bei jeder Übergabe neu übersetzt. Der Fehler liegt also im System. Mit KI wird die falsche Schaukel zehnmal schneller gebaut."
-      },
-      "the-factory-runs-live": {
-        "title": "Die Fabrik läuft live",
-        "keywords": "läuft live, Schaukel, Rollen, Fabrik, KI an, Kunde",
-        "script": "Das hier läuft live, Ihr müsst mir also nichts glauben. Es beginnt mit der Schaukel, geht über die Rollen in die Fabrik, und dann wird KI eingeschaltet. Jedes Dokument auf den Bändern ist eine Aufgabe, die Anfragen kommen vom Kunden links, und die Releases gehen zurück zum Kunden. Achtet darauf, was beim Kunden ankommt."
-      }
-    }
-  }
+  "title": "Ausprobieren"
 }
