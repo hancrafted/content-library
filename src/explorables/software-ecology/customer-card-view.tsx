@@ -32,7 +32,8 @@ export function ReleaseCells({ releases }: { readonly releases: readonly (Releas
   ));
 }
 
-const lead = (d: number | null, words: CustomerWords) =>
+/** A lead time as the Customer card shows it: one decimal below ten days, whole days above, a dash before any release. */
+export const leadTimeText = (d: number | null, words: CustomerWords) =>
   d === null ? '–' : fillTemplate(words.days, { n: d < 10 ? d.toFixed(1) : Math.round(d) });
 
 function Row({ label, tip, value, r }: { label: string; tip: string; value: string; r?: string }) {
@@ -47,7 +48,7 @@ function Readouts({ r, words: w }: Pick<CustomerCardProps, 'r' | 'words'>) {
   return (
     <>
       <Row label={w.satisfied} tip={w.satTip} value={`${Math.round(r.sat * 100)} %`} r="sat" />
-      <Row label={w.leadTime} tip={w.leadTip} value={lead(r.leadDays, w)} />
+      <Row label={w.leadTime} tip={w.leadTip} value={leadTimeText(r.leadDays, w)} />
       <Row
         label={w.couldServe}
         tip={w.headroomTip}

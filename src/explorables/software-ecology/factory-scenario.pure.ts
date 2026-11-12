@@ -116,21 +116,29 @@ export const scenarioStart = (B: Bundle, p: Preset, seed: number = DEFAULT_SEED)
   return f;
 };
 
+/** Plays a started model through `steps`: each sets its dials, then runs to its week; yields after each. */
+export function* playSteps(f: FactoryHandle, B: Bundle, steps: readonly TourStep[]): Generator<TourStep> {
+  const k0 = Math.round(f.weeks / DTW);
+  let k = k0;
+  for (const st of steps) {
+    f.set(settingsAfter(st.set, B, f.settings));
+    const kk = k0 + stepsTo(st.run);
+    f.step((kk - k) * DTW);
+    k = Math.max(k, kk);
+    yield st;
+  }
+}
+
 /** Runs every step of one preset headless, with a fixed seed: one row per step, each expect judged. */
 export const runScenario = (B: Bundle, id: string, opts: { seed?: number } = {}): ScenarioRow[] => {
   const p = B.data.presets.find((x) => x.id === id);
   if (!p) throw new Error(`no preset ${id}`);
   const f = scenarioStart(B, p, opts.seed),
-    k0 = Math.round(f.weeks / DTW),
     steps = stepsOf(p);
   const keys = [...new Set(steps.flatMap((st) => Object.keys(st.expect ?? {})))];
-  let prev: Record<string, number> = {},
-    k = k0;
-  return steps.map((st, i) => {
-    f.set(settingsAfter(st.set, B, f.settings));
-    const kk = k0 + stepsTo(st.run);
-    f.step((kk - k) * DTW);
-    k = Math.max(k, kk);
+  const rows: ScenarioRow[] = [];
+  let prev: Record<string, number> = {};
+  for (const st of playSteps(f, B, steps)) {
     const vals = f.read({ measures: keys }).measures as Record<string, number>;
     const checks = Object.entries(st.expect ?? {}).map(([key, test]) => ({
       key,
@@ -140,6 +148,7 @@ export const runScenario = (B: Bundle, id: string, opts: { seed?: number } = {})
       ok: judge(vals[key], test, prev[key]),
     }));
     prev = vals;
-    return { i, week: st.run, checks };
-  });
+    rows.push({ i: rows.length, week: st.run, checks });
+  }
+  return rows;
 };
