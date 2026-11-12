@@ -20,10 +20,12 @@ class Station implements FloorStation {
     stampGood: false,
     doc: { ai: 0, good: true, complaint: false, redo: false, fromCustomer: false, own: false },
   };
-  constructor(
-    private readonly n: FactoryNode,
-    private readonly m: Factory,
-  ) {}
+  private readonly n: FactoryNode;
+  private readonly m: Factory;
+  constructor(n: FactoryNode, m: Factory) {
+    this.n = n;
+    this.m = m;
+  }
   get node(): TopoNode {
     return this.n;
   }

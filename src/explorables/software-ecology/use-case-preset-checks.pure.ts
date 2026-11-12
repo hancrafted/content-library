@@ -4,7 +4,7 @@
  */
 import { SPEEDS } from './factory-dials.pure.ts';
 import { validKey, validTest } from './factory-scenario.pure.ts';
-import { OWN_RATE_MAX } from './own-work.types';
+import { OWN_RATE_MAX } from './own-work.types.ts';
 import {
   absentOr,
   apply,

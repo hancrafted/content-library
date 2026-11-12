@@ -106,6 +106,10 @@ Every interactive control carries a unique, stable `data-control`, so an eval ag
 - **Compare:** `toolbar.compare` toggles it; `compare.slot.<id>`, `compare.show`, `compare.exit`, `compare.exit-stream`. **Tour box:** `tour.close`, `tour.back`, `tour.next`.
 - **Read-outs** (plain values on the element, written only when they change, design-ADR 0024 §14): the Customer card (`node.customer`) `data-readout-output` (times ideal), `-satisfied` (0 to 1), `-headroom` (times today's demand the line could serve, one decimal), `-bugs-week` (one decimal), `-lead-days`; each station card `data-readout-waiting` (the backlog), `-weeks-waiting` and `-rework` (share of arrivals sent back, 0 to 1, two decimals); card flags `data-piling` and `data-ai` on a station card and `data-on` on a sign; the clock `data-readout-week` (a tour only) and `-day`.
 
+## Headless eval
+
+`npm run ecology:sim -- <use-case> <scenario> [--seed n | --seeds n] [--json]` judges a scenario's beats on the model alone, with no rendering (design-ADR 0024 §12). It plays the scenario on ten seeds in a row from the shipped one unless told otherwise, and reads each measure a beat names as the mean over its last 2 weeks. `rises` and `falls` compare that mean with the same seed's beat before, and `settles:` is read 40 weeks after its beat. It prints each beat's claim, its per-seed readings, their mean and its verdict. A beat passes on 8 of 10 seeds, and a beat with a claim also runs 6 to 9 weeks. The command exits 1 when a beat fails. The judge is `judgeScenario` in `factory-scenario.pure.ts`, the shell is `tools/ecology/sim.ts`, and the page's tour still reads one seed.
+
 ## Open
 
 - The ten cartoon panels redrawn as coloured SVG, as close to the original as possible, in a pass of their own (Spec Options against the line drawings); the licence check on the PR checklist covers the redraw.
