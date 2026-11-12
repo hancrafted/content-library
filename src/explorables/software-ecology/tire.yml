@@ -129,7 +129,7 @@ presets:
         expect: { customer.sat: '<0.5', qa.backlog: '>200' },
       }
   # Eval scenarios (grill 11, design-ADR 0024 §20). Each beat runs 6 to 9 weeks and names Han's claim (tire.words.yml);
-  # its expect and settles ranges are proposals awaiting his approval (.scratch/software-ecology/eval/scenarios.md).
+  # its expect and settles ranges are proposals awaiting his approval.
   - id: ai-spiral
     view: factory
     reality: 0

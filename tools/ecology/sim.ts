@@ -1,6 +1,8 @@
 // `npm run ecology:sim -- <use-case> <scenario> [--seed n | --seeds n] [--json]`: judges a software ecology scenario's
 // beats headless, across seeds (ten by default), with no rendering, and prints each beat's per-seed readings, their
 // means and its verdict, or the verdict as JSON. Exits 1 on a failing beat or a bad call (design-ADR 0024 §12, §20).
+// A shell only, as tools/deploy/redirect-stubs.ts is: it reads files and sets the exit code. Everything it calls (the
+// arguments, the run, the text) is tested in src/explorables/software-ecology/ecology-sim.node.test.ts.
 import { readFileSync } from 'node:fs';
 import { formatVerdict, parseSimArgs, simulate } from '../../src/explorables/software-ecology/ecology-sim.node.ts';
 
