@@ -2,7 +2,7 @@
  * The traffic solve (design-ADR 0024 §4): the expected flows at given settings, the traffic equations of
  * factory-traffic.pure.ts iterated to a fixed point, then each center's load against its capacity.
  */
-import { custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
+import { constOf, custOf, dials, mechOf, ownOf, productCo, RUSH_MAX, speedOf } from './factory-dials.pure.ts';
 import { NF_, trafficPass, type Ctx, type Pass } from './factory-traffic.pure.ts';
 import type { Dials, Factory } from './factory.types';
 import type { Settings } from './software-ecology.types';
@@ -50,6 +50,12 @@ const context = (m: Factory, s: Settings, opts: { worst: boolean; rush: boolean 
     badP: complOn ? sum(Object.values(cu.bad)) : 0,
     srcs: productCo(s) ? m.srcs.map((x) => ({ n: x.n, rate: ownOf(x, { s, mode: cu.mode }).rate })) : [],
     worst: opts.worst,
+    k: {
+      inspect: constOf(s, 'inspect'),
+      redo: constOf(s, 'redo'),
+      keepExtra: constOf(s, 'keepExtra'),
+      maxBounces: constOf(s, 'maxBounces'),
+    },
   };
 };
 

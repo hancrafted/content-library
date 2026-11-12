@@ -4,7 +4,7 @@
  * document carries (0 nothing, 1 a customer request, 2 an own ticket). The loops run in the reference build's order, so
  * every sum adds in the same order and the numbers match to the last bit.
  */
-import { EXTRA, INSPECT, srcRate } from './factory-dials.pure.ts';
+import { srcRate } from './factory-dials.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, TicketSource } from './factory.types';
 import type { Cust } from './software-ecology.types';
 
@@ -44,6 +44,13 @@ export interface Ctx {
   readonly badP: number;
   readonly srcs: readonly Pick<TicketSource, 'n' | 'rate'>[];
   readonly worst: boolean;
+  /** The file's constants (design-ADR 0024 §5). */
+  readonly k: {
+    readonly inspect: number;
+    readonly redo: number;
+    readonly keepExtra: number;
+    readonly maxBounces: number;
+  };
 }
 
 /** One pass: the flows it reads (F) and writes (NF), redo jobs per belt (R), each node's load and jobs. */
@@ -161,9 +168,9 @@ interface Arrival {
 
 /** The share of bad documents arriving on a belt that are sent back. */
 const backShare = (ctx: Ctx, a: Arrival): number => {
-  if (!(a.e.returns && a.c.b < 2)) return 0;
+  if (!(a.e.returns && a.c.b < ctx.k.maxBounces)) return 0;
   if (!a.n.def.inspection) return ctx.rework;
-  return ctx.worst ? 0 : Math.min(0.95, ctx.rework * INSPECT);
+  return ctx.worst ? 0 : Math.min(0.95, ctx.rework * ctx.k.inspect);
 };
 
 /** Bad documents arriving: some sent back, the rest kept and worked on longer (an inspection: as long as good ones). */
@@ -171,10 +178,10 @@ const arriveBad = (ctx: Ctx, p: Pass, a: Arrival): void => {
   const { n, d, e, sz, c, r } = a,
     Bk = r * backShare(ctx, a),
     kept = r - Bk;
-  p.load[n.idx] += Bk * 0.3 * sz;
+  p.load[n.idx] += Bk * ctx.k.redo * sz;
   if (Bk) p.R[e.i][c.f * 9 + Math.min(2, c.b + 1) * 3 + c.mn] += Bk;
   const insp = !!n.def.inspection;
-  p.load[n.idx] += insp ? kept * sz : kept * sz * (1 + EXTRA);
+  p.load[n.idx] += insp ? kept * sz : kept * sz * (1 + ctx.k.keepExtra);
   spawnOut(p, { n, d, r: kept, qIn: 0, f: c.f, mn: c.mn, mult: insp ? d.fanEff : d.fanEff * ctx.churn });
 };
 

@@ -2,9 +2,9 @@
  * What a use-case file's work centers, spawns, routes, sources and mechanics must hold (schema
  * software-ecology-factory/5), ported from the reference build's validate(), messages and order unchanged.
  */
-import { MECH_RANGE, STRENGTHS } from './factory-dials.pure.ts';
+import { MECH_KEYS, MECH_RANGE } from './factory-dials.pure.ts';
 import { OWN_RATE_MAX } from './own-work.types.ts';
-import type { Strength } from './software-ecology.types';
+import type { MechKey } from './software-ecology.types';
 import {
   absentOr,
   apply,
@@ -111,9 +111,9 @@ const SOURCE: readonly Rule<SourceAt>[] = [
 ];
 
 const mechanicProblem = (k: string, v: unknown): string | false => {
-  const range = MECH_RANGE[k as Strength];
+  const range = MECH_RANGE[k as MechKey];
   if (!range)
-    return `mechanics.${k}: unknown (one of ${STRENGTHS.join(', ')}; complaints take their chance from customer.bad)`;
+    return `mechanics.${k}: unknown (one of ${MECH_KEYS.join(', ')}; complaints take their chance from customer.bad)`;
   return !isNum(v, range[0], range[1]) && `mechanics.${k}: ${range[0]} to ${range[1]}`;
 };
 

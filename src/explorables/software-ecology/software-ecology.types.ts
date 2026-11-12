@@ -5,20 +5,24 @@
  */
 
 import type { Arrivals, OwnSet, Source } from './own-work.types';
+import type { AiSet, CenterDials, Chances, CustomerPatch, TourStep } from './scenario.types';
 
 export type { Arrivals, OwnSet, Source } from './own-work.types';
+export type { AiSet, CenterDials, Chances, CustomerPatch, StepSet, TourStep } from './scenario.types';
 export type XY = readonly [number, number];
 export type Locale = 'en' | 'de';
 /** The roles state (Swing and Roles merged in feedback 08) or the factory. */
 export type ViewId = 'roles' | 'factory';
 export type Company = 'service' | 'product';
 export type AiQuality = 'worse' | 'same' | 'better';
-/** Where AI works: nowhere, everywhere, or at the listed work centers. */
-export type AiSet = 'off' | 'all' | readonly string[];
 /** How a pile-up looks past the rack: a tumbling heap, a leaning stack or scattered drift. */
 export type PileStyle = 'heap' | 'stack' | 'drift';
 export type Mechanic = 'rework' | 'churn' | 'complaints';
 export type Strength = 'rework' | 'churn';
+/** The model's constants a use-case file may tune (design-ADR 0024 §5): no switch and no slider, each with a default. */
+export type Constant = 'inspect' | 'redo' | 'keepExtra' | 'maxBounces' | 'pressure';
+/** Everything under a file's `mechanics`: the strengths and the constants. */
+export type MechKey = Strength | Constant;
 
 /** What a finished job creates downstream: `{ to, n }`, `{ to, p }` or `{ choose: [{ to, w }] }`. */
 export interface Spawn {
@@ -26,16 +30,6 @@ export interface Spawn {
   readonly n?: number;
   readonly p?: number;
   readonly choose?: readonly { readonly to: string; readonly w?: number }[];
-}
-
-/** A work center's dial defaults in the file, or a preset's overrides of them. */
-export interface CenterDials {
-  readonly efficiency?: number;
-  readonly effectiveness?: number;
-  readonly fanout?: number;
-  readonly ai?: boolean;
-  readonly aiSpeed?: number;
-  readonly aiExtra?: number;
 }
 
 export interface CenterDef {
@@ -54,8 +48,6 @@ export interface CenterDef {
   readonly enabled?: readonly string[];
 }
 
-export type Chances = Readonly<Record<string, number>>;
-
 export interface CustomerDef {
   readonly at: XY;
   readonly rate: number;
@@ -64,35 +56,6 @@ export interface CustomerDef {
   readonly good?: Chances;
   readonly bad?: Chances;
   readonly releases?: readonly string[];
-}
-
-/** A preset's or a tour step's changes to the Customer. */
-export interface CustomerPatch {
-  readonly rate?: number;
-  readonly arrivals?: Arrivals;
-  readonly mix?: Chances;
-  readonly good?: Chances;
-  readonly bad?: Chances;
-}
-
-/** A tour step's `set`: dials per center, the Customer, where AI works, the reality. */
-export interface StepSet {
-  readonly dials?: Readonly<Record<string, CenterDials>>;
-  readonly customer?: CustomerPatch;
-  readonly ai?: AiSet;
-  readonly reality?: number;
-}
-
-/** One step of a tour, or a check: settings, the week it runs to, the card its caption points at, its claims. */
-export interface TourStep {
-  readonly set?: StepSet;
-  readonly run: number;
-  readonly card?: string;
-  readonly expect?: Readonly<Record<string, string>>;
-  /** Han's claim for this beat: a key of the scenario's `claims` in the words. */
-  readonly claim?: string;
-  /** Checked headless only, after the beat's settings run SETTLE_WEEKS more. */
-  readonly settles?: Readonly<Record<string, string>>;
 }
 
 /** What a state shows by default: the pile-up style and whether the belts move. */
@@ -140,7 +103,7 @@ export interface UseCaseData {
   readonly id: string;
   readonly panels?: boolean;
   readonly layout: { readonly width: number; readonly height: number; readonly top?: number };
-  readonly mechanics?: Partial<Record<Strength, number>>;
+  readonly mechanics?: Partial<Record<MechKey, number>>;
   readonly customer: CustomerDef;
   readonly company?: Company;
   readonly sources?: readonly Source[];
@@ -224,7 +187,8 @@ export interface Settings {
   own: Record<string, OwnSet>;
   cust: Cust | null;
   mech: Record<Mechanic, boolean>;
-  strength: Partial<Record<Strength, number>>;
+  /** The mechanics' strengths and constants (the file's, then the page's sliders). */
+  strength: Partial<Record<MechKey, number>>;
 }
 
 /** The role catalog's words in one locale: per role, and the names of the presets and scenarios every use case shares. */
