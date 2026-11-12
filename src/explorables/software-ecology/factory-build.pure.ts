@@ -141,14 +141,17 @@ export const markLoops = (nodes: Iterable<FactoryNode>, cust: FactoryNode, edges
 
 /** Spawn rules, resolved to belts. */
 export const resolveSpawns = (c: CenterDef, edgeOf: (k: string) => Belt): SpawnRule[] =>
-  c.spawns.map((sp) =>
-    sp.choose
+  c.spawns.map((sp, j) => {
+    const pass =
+      j === 0 && c.escalate ? { pass: { e: edgeOf(`${c.id}-${c.escalate.to}`), under: c.escalate.underPressure } } : {};
+    return sp.choose
       ? {
           choose: sp.choose.map((ch) => ({ e: edgeOf(`${c.id}-${ch.to}`), w: ch.w ?? 1 })),
           W: sp.choose.reduce((a, ch) => a + (ch.w ?? 1), 0),
+          ...pass,
         }
-      : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p },
-  );
+      : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p, ...pass };
+  });
 
 const newServer = (id: string): Server => ({
   id,
@@ -162,6 +165,7 @@ const newServer = (id: string): Server => ({
   bounce: false,
   churn: 1,
   preQ: 1,
+  pass: false,
 });
 
 /** Servers: one per work center, or one per person who runs several. */

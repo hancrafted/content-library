@@ -1,8 +1,10 @@
 /*
  * Where a finished job's spawns go (design-ADR 0024 §3): Ideal routes steadily (a chance spawn every so often, a choice
- * in turn), Realistic rolls the dice; and how many documents each hands on.
+ * in turn), Realistic rolls the dice; how many documents each hands on; and whether a ticket is passed on under pressure.
  */
+import { pressureOf } from './factory-dials.pure.ts';
 import type { Belt, ChooseRule, FactoryNode, SpawnRule } from './factory.types';
+import type { Settings } from './software-ecology.types';
 
 export interface Pick {
   readonly e: Belt;
@@ -50,6 +52,31 @@ export const pickBelt = (n: FactoryNode, sp: SpawnRule, steady: boolean): Pick =
   const e = sp.e as Belt;
   if (sp.n !== undefined) return { e, base: sp.n };
   return { e, base: steady ? everyOther(sp) : n.rr() < (sp.p as number) ? 1 : 0 };
+};
+
+/**
+ * Whether one ticket is passed on, at a share from 0 to 1: Ideal takes turns (carried over until it adds up to one),
+ * Realistic rolls. A share of 0 draws nothing and carries nothing over.
+ */
+const passByShare = (n: FactoryNode, sp: SpawnRule, x: { share: number; steady: boolean }): boolean => {
+  if (x.share <= 0) return false;
+  if (!x.steady) return n.rr() < x.share;
+  sp.pacc = (sp.pacc || 0) + x.share;
+  if (sp.pacc < 1 - 1e-9) return false;
+  sp.pacc -= 1;
+  return true;
+};
+
+/**
+ * Pass-on under pressure (design-ADR 0024 §5, grill 11 Q220): whether a station with `escalate` passes the ticket it
+ * takes up on to `escalate.to` unanswered, at a share that rises with its pressure (`pressureOf`, the same term as an
+ * inspection's `stampUnderPressure`), up to all of them. Nothing is drawn while no work waits, so its routing is
+ * unchanged then.
+ */
+export const passesOn = (s: Settings, n: FactoryNode): boolean => {
+  const sp = n.spawns[0];
+  if (!sp?.pass) return false;
+  return passByShare(n, sp, { share: pressureOf(s, n, sp.pass.under), steady: s.reality === 0 });
 };
 
 /** How many documents a spawn hands on: whole ones, and a fraction carried over (Ideal) or rolled (Realistic). */

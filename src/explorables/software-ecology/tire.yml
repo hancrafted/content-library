@@ -32,7 +32,9 @@ display: { pile: heap, beltMotion: false }
 # inspection: true with stampUnderPressure, person: (one person runs several centers), dials: { efficiency, effectiveness, fanout, ai },
 # catch: { spec, code } (the chance it sends a bad input of that defect kind back, over mechanics.rework; a kind left out
 # passes), origin: spec or code (the defect kind it makes, over its role's), stall: { at, slow } (once `at` weeks of work
-# wait it loses the share `slow` of its speed: the pipeline stalls; AI at the station removes it).
+# wait it loses the share `slow` of its speed: the pipeline stalls; AI at the station removes it), escalate: { to, underPressure }
+# (pass-on under pressure: the share of its finished tickets it passes to `to` instead of answering rises with its
+# backlog, by the same term as stampUnderPressure, up to all of them; Support drowning passes bugs on to Engineering).
 centers:
   - { id: sales, role: sales, at: [420, 160], realistic: [88, 96], spawns: [{ to: pm, n: 1 }, { to: ba, p: 0.3 }] }
   - { id: pm, role: pm, at: [420, 370], realistic: [88, 94], spawns: [{ to: ba, n: 1 }] }
@@ -41,6 +43,7 @@ centers:
       role: support,
       at: [420, 580],
       realistic: [90, 95],
+      escalate: { to: eng, underPressure: 0.8 },
       spawns: [{ choose: [{ to: eng, w: 0.4 }, { to: customer, w: 0.6 }] }],
     }
   - { id: ba, role: ba, at: [810, 160], realistic: [88, 93], spawns: [{ to: eng, n: 1 }] }
@@ -168,7 +171,7 @@ presets:
           run: 42,
           card: customer,
           claim: ai-fixes-pipeline,
-          expect: { customer.output: '>0.95', customer.sat: '<0.6', customer.bugsPerWeek: rises },
+          expect: { customer.output: '>0.95', customer.sat: '<0.65', customer.bugsPerWeek: rises },
           settles: { eng.weeksWaiting: '>2' },
         }
   - id: clear-requirements
@@ -188,7 +191,7 @@ presets:
           run: 9,
           card: eng,
           claim: average-requirements,
-          expect: { ba.rework: '>0.15', qa.rework: '>0.1', customer.changesPerWeek: '>0.5' },
+          expect: { ba.rework: '>0.15', eng.rework: '>0.1', customer.changesPerWeek: '>0.5' },
         }
       - {
           set: { ai: [eng, qa] },

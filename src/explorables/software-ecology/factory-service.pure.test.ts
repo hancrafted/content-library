@@ -41,6 +41,18 @@ const readAt = (B: Bundle, effective: Record<string, number>, ai: Settings['ai']
   f.step(WEEKS);
   return f.read({ measures: MEASURES }).measures;
 };
+/** Tire swing with Support passing finished tickets on to Engineering under pressure (grill 11 Q220), or not. */
+const escalating = (underPressure?: number): Bundle =>
+  changed('support', { escalate: underPressure === undefined ? undefined : { to: 'eng', underPressure } });
+
+/** A preset's state with work centers' efficiency set, run WEEKS: the measures read then. */
+const readSlowed = (B: Bundle, x: { preset: string; eff: Record<string, number> }): Record<string, number> => {
+  const s: Settings = startSettings(B, B.data.presets.find((p) => p.id === x.preset) as never);
+  const over = Object.fromEntries(Object.entries(x.eff).map(([id, eff]) => [id, { eff }]));
+  const f = createFactory(B, { ...s, over }, SEED);
+  f.step(WEEKS);
+  return f.read({ measures: [...MEASURES, 'eng.done', 'support.done', 'support.weeksWaiting'] }).measures;
+};
 const PERFECT = { sales: 100, pm: 100, support: 100, ba: 100, eng: 100, qa: 100, ops: 100 };
 
 describe('success cases', () => {
@@ -92,6 +104,15 @@ describe('success cases', () => {
     const [a, b] = [readAt(trusted, { ...PERFECT, eng: 60 }, ['qa']), readAt(careful, { ...PERFECT, eng: 60 }, ['qa'])];
     // ASSERT
     expect(a['qa.unread']).toBeGreaterThan(b['qa.unread'] ?? 0);
+  });
+
+  it('passes more of a drowning Support’s tickets on to Engineering as its backlog fills', () => {
+    // ARRANGE
+    const drowning = { preset: 'realistic', eff: { support: 40 } };
+    // ACT
+    const [answering, passing] = [readSlowed(escalating(), drowning), readSlowed(escalating(0.8), drowning)];
+    // ASSERT
+    expect(passing['eng.done']).toBeGreaterThan(answering['eng.done'] ?? 0);
   });
 
   it('slows a stalled station by its share once its weeks waiting reach the mark', () => {
@@ -161,6 +182,15 @@ describe('edge cases', () => {
     const [a, b] = [readAt(low, { ...PERFECT, ba: 60 }), readAt(high, { ...PERFECT, ba: 60 })];
     // ASSERT
     expect(b['ba.rework']).toBeGreaterThan(a['ba.rework'] ?? 0);
+  });
+
+  it('answers as its choose says while no work waits, pass-on or not', () => {
+    // ARRANGE
+    const clear = { preset: 'ideal', eff: {} };
+    // ACT
+    const [plain, passing] = [readSlowed(escalating(), clear), readSlowed(escalating(0.8), clear)];
+    // ASSERT
+    expect(passing).toEqual(plain);
   });
 
   it('loses no speed while the work waiting stays below the mark', () => {

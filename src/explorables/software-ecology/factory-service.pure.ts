@@ -4,11 +4,22 @@
  * hands on its spawns, or blocks while the next center's buffer is full.
  */
 import type { Defect } from './defect.types';
-import { catches, catchOf, CV, effvNow, firstOf, mechOf, Q, speedOf, stallOf } from './factory-dials.pure.ts';
+import {
+  catches,
+  catchOf,
+  CV,
+  effvNow,
+  firstOf,
+  mechOf,
+  pressureOf,
+  Q,
+  speedOf,
+  stallOf,
+} from './factory-dials.pure.ts';
 import { kindBit, kindOf } from './factory-docs.pure.ts';
 import { BUMP, FAIL, FROM_SRC, MAIN, OWN, popJob, REDO, send, sendBack } from './factory-flow.pure.ts';
 import { binom, expo, normal } from './factory-random.pure.ts';
-import { countOf, pickBelt } from './factory-routing.pure.ts';
+import { countOf, passesOn, pickBelt, type Pick } from './factory-routing.pure.ts';
 import type { Belt, Dials, Factory, FactoryNode, Job, Server, SpawnRule } from './factory.types';
 import { constOf } from './mechanics.pure.ts';
 
@@ -50,7 +61,7 @@ interface Judged {
 /** An inspection sends bad work back, but passes more of it unread as its backlog fills. */
 const inspect = (m: Factory, n: FactoryNode, x: Judged): Verdict => {
   const p0 = x.elig ? x.chance : 0,
-    k = Math.max(0, 1 - constOf(m.s, 'pressure') * firstOf(n.def.stampUnderPressure, 0.8) * n.press),
+    k = 1 - pressureOf(m.s, n, firstOf(n.def.stampUnderPressure, 0.8)),
     r = n.rr();
   const bounce = r < p0 * k;
   if (!bounce && r < p0) {
@@ -93,6 +104,10 @@ const rollQuality = (n: FactoryNode, d: Dials, J: Job): number => {
   return fresh && n.rq() < effvNow(n, d) ? Q.GOOD : Q.BAD;
 };
 
+/** A ticket is passed on unanswered under pressure (`passesOn`), never redone work or work it sends back. */
+const passing = (m: Factory, x: { n: FactoryNode; J: Job; v: Verdict }): boolean =>
+  !x.v.bounce && !(x.J.fl & REDO) && passesOn(m.s, x.n);
+
 const startJob = (m: Factory, sv: Server, x: { n: FactoryNode; t: number }): void => {
   const { n, t } = x,
     J = sv.J,
@@ -100,7 +115,9 @@ const startJob = (m: Factory, sv: Server, x: { n: FactoryNode; t: number }): voi
   popJob(n, J);
   const e = m.edges[J.e],
     v = verdictOf(m, n, { e, t });
-  const size = (J.fl & (REDO | FROM_SRC) ? 1 : J.ai ? e.aiSize : 1) * v.grow;
+  sv.pass = passing(m, { n, J, v });
+  const grow = sv.pass ? constOf(m.s, 'redo') : v.grow;
+  const size = (J.fl & (REDO | FROM_SRC) ? 1 : J.ai ? e.aiSize : 1) * grow;
   sv.preQ = rollQuality(n, d, J);
   sv.n = n;
   sv.bounce = v.bounce;
@@ -144,10 +161,16 @@ const besides = (m: Factory, h: Hand, x: { e: Belt; k: number }): void => {
   n.rate.out[0] += (k - g) * BUMP;
 };
 
+/** Where a spawn goes: the pass-on belt for a ticket passed on unanswered, else as the spawn routes it. */
+const beltFor = (h: Hand, x: { sp: SpawnRule; j: number; steady: boolean }): Pick => {
+  const pass = x.j === 0 && h.sv.pass ? x.sp.pass : undefined;
+  return pass ? { e: pass.e, base: 1 } : pickBelt(h.sv.n as FactoryNode, x.sp, x.steady);
+};
+
 const handOn = (m: Factory, h: Hand, x: { sp: SpawnRule; j: number }): void => {
   const n = h.sv.n as FactoryNode,
     steady = m.s.reality === 0;
-  const { e, base } = pickBelt(n, x.sp, steady);
+  const { e, base } = beltFor(h, { ...x, steady });
   if (!base) return;
   const k = countOf(n, x.sp, { f: base * h.d.fanEff * h.sv.churn, steady });
   if (!k) return;

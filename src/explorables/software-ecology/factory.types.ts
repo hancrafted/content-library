@@ -64,6 +64,9 @@ export interface SpawnRule {
   readonly p?: number;
   acc?: number;
   facc?: number;
+  /** The first spawn's pass-on under pressure: the belt to `escalate.to` and its strength; `pacc` its Ideal turns. */
+  readonly pass?: { readonly e: Belt; readonly under: number };
+  pacc?: number;
 }
 
 export interface Server {
@@ -78,6 +81,8 @@ export interface Server {
   bounce: boolean;
   churn: number;
   preQ: number;
+  /** Whether the job in work is passed on unanswered under pressure (a station's `escalate`). */
+  pass: boolean;
 }
 
 /** A work center, or the Customer. */
