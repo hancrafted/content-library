@@ -60,7 +60,7 @@ function List({ items, dot }: { items: readonly string[]; dot: string }) {
   );
 }
 
-/** The traffic light and the AI switch, off: AI works at the engineer only. */
+/** The traffic light and the AI switch, off: AI works at Engineering only. */
 function Status({ d, w, light }: { d: Dashboard; w: DashWords; light: string }) {
   return (
     <div className="flex items-center gap-2">

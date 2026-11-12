@@ -26,8 +26,8 @@
       },
       "fix-the-orders-first": {
         "title": "Fix the orders first",
-        "keywords": "analyst's effectiveness, unclear requirements, bad work, rework, complaints, write the requirement clearly",
-        "script": "Now drop the analyst's effectiveness. Unclear requirements turn into bad work, and AI carries that bad work to every work center after it, faster than before, until it comes back as rework and complaints. So write the requirement clearly enough that someone new could act on it. This is my hypothesis: that is the step that lowers the pressure instead of moving it."
+        "keywords": "Analysis effectiveness, unclear requirements, bad work, rework, complaints, write the requirement clearly",
+        "script": "Now drop Analysis effectiveness. Unclear requirements turn into bad work, and AI carries that bad work to every work center after it, faster than before, until it comes back as rework and complaints. So write the requirement clearly enough that someone new could act on it. This is my hypothesis: that is the step that lowers the pressure instead of moving it."
       },
       "what-the-customer-got": {
         "title": "What the Customer got",

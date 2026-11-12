@@ -1,5 +1,5 @@
 name: Reifenschaukel
-sub: Sieben Rollen, wie die meisten Softwarefirmen sie besetzen, und ein Kunde. Anfragen gehen an den Vertrieb, das Produktmanagement oder den Support; der Betrieb liefert an den Kunden zurück.
+sub: Sieben Abteilungen, wie die meisten Softwarefirmen sie besetzen, und ein Kunde. Anfragen gehen an den Vertrieb, das Produktmanagement oder den Support; der Betrieb liefert an den Kunden zurück.
 belts:
   customer-sales: { label: Neukunde }
   customer-pm: { label: Feature- oder Änderungswunsch }
@@ -16,22 +16,22 @@ belts:
 customer: { title: Kunde, job: Schickt Anfragen und bekommt Releases und Antworten }
 scenarios:
   speed-up:
-    watch: Der Entwickler wird doppelt so schnell. Achte auf die Kundenkarte – kommt mehr an?
+    watch: Die Entwicklung wird doppelt so schnell. Achte auf die Kundenkarte – kommt mehr an?
     steps:
-      - Realistisch ist der Entwickler die am stärksten ausgelastete Station, etwa 85 %, und der volle Start hat dort einen Stapel wartend. Gleich wird er doppelt so schnell.
-      - Doppelt so schnell, und beim Entwickler wartet nichts mehr. Schau als Nächstes auf die Kundenkarte.
-      - 'Beim Kunden kommt so viel an wie vorher. Der Entwickler hat nichts aufgehalten – der Kunde fragt nur so viel an. Gewachsen ist die Luft: Die Linie könnte jetzt mehr Nachfrage bedienen.'
+      - Realistisch ist die Entwicklung die am stärksten ausgelastete Station, etwa 85 %, und der volle Start hat dort einen Stapel wartend. Gleich wird sie doppelt so schnell.
+      - Doppelt so schnell, und bei der Entwicklung wartet nichts mehr. Schau als Nächstes auf die Kundenkarte.
+      - 'Beim Kunden kommt so viel an wie vorher. Die Entwicklung hat nichts aufgehalten – der Kunde fragt nur so viel an. Gewachsen ist die Luft: Die Linie könnte jetzt mehr Nachfrage bedienen.'
   ai-unbalanced:
-    watch: KI nur beim Entwickler, der zwei Pull Requests pro Aufgabe schreibt. Achte auf die Qualitätssicherung.
+    watch: KI nur in der Entwicklung, die zwei Pull Requests pro Aufgabe schreibt. Achte auf die Qualitätssicherung.
     steps:
-      - Realistisch, ohne KI. Der Start ist voll, und die Qualitätssicherung hat den größten Stapel und arbeitet ihn ab. Gleich bekommt der Entwickler KI.
-      - Der Entwickler ist schneller denn je, und die Qualitätssicherung muss doppelt so viele Pull Requests lesen. Ihr Regal füllt sich.
+      - Realistisch, ohne KI. Der Start ist voll, und die Qualitätssicherung hat den größten Stapel und arbeitet ihn ab. Gleich bekommt die Entwicklung KI.
+      - Die Entwicklung ist schneller denn je, und die Qualitätssicherung muss doppelt so viele Pull Requests lesen. Ihr Regal füllt sich.
       - In der Qualitätssicherung warten Wochen an Arbeit, und beim Kunden kommt etwa die Hälfte an. Schneller an einer Station hat die ganze Linie langsamer gemacht.
   ai-compare:
     watch: Dieselbe unausgewogene Linie, als Strom aus drei Stationen.
     steps:
-      - Beim Entwickler mit KI wartet nichts.
-      - In der Qualitätssicherung warten Wochen an Arbeit – die zusätzlichen Pull Requests des Entwicklers.
+      - Bei der Entwicklung mit KI wartet nichts.
+      - In der Qualitätssicherung warten Wochen an Arbeit – die zusätzlichen Pull Requests der Entwicklung.
       - Der Stapel wächst weiter. Mehr Output an einer Station ist mehr Input an der nächsten.
   ai-everywhere:
     watch: KI an jeder Station, bei der Nachfrage, für die die Linie ausgelegt ist. Achte auf die Durchlaufzeit.
@@ -46,21 +46,21 @@ scenarios:
       - Die Qualitätssicherung kommt hinterher, weil KI dort Platz für die zusätzliche Arbeit schafft.
       - Etwa 95 % zufrieden bei zweieinhalbfachem Output. Ausgewogene KI skaliert die ganze Linie.
   bug-spiral:
-    watch: Der Entwickler liefert mehr schlechte Pull Requests (Wirksamkeit 65 %). Achte auf Fehler pro Woche, den Rückstau beim Entwickler und die Durchlaufzeit.
+    watch: Die Entwicklung liefert mehr schlechte Pull Requests (Wirksamkeit 65 %). Achte auf Fehler pro Woche, den Rückstau in der Entwicklung und die Durchlaufzeit.
     steps:
       - Eine leere Fabrik an Tag 0, bei 20×. Mehr schlechte Pull Requests erreichen die Qualitätssicherung, manche den Kunden als Fehler.
-      - Fehler kommen als Support-Tickets zurück, und ihre Behebung drängelt sich beim Entwickler vor. Wartet mehr als eine Woche Arbeit, hetzt er – seine Wirksamkeit sinkt um bis zu 15 Punkte, also noch mehr schlechte Pull Requests.
-      - Der Entwickler hetzt am Anschlag, und sein Rückstau wächst weiter. Der Output liegt deutlich unter der Nachfrage.
+      - Fehler kommen als Support-Tickets zurück, und ihre Behebung drängelt sich in der Entwicklung vor. Wartet mehr als eine Woche Arbeit, hetzt sie – ihre Wirksamkeit sinkt um bis zu 15 Punkte, also noch mehr schlechte Pull Requests.
+      - Die Entwicklung hetzt am Anschlag, und ihr Rückstau wächst weiter. Der Output liegt deutlich unter der Nachfrage.
       - Die Durchlaufzeit ist auf über zwei Monate explodiert. Der Output bleibt bei etwa 70 % – er erholt sich nicht und bricht nicht ein. Die Spirale kostet Zeit, nicht Menge.
   fix-orders:
-    watch: Unklare Spezifikationen (Wirksamkeit des Analysten 75 %) bei 9 Anfragen pro Woche, ab einer leeren Fabrik. Achte auf die Nacharbeit beim Entwickler.
+    watch: Unklare Spezifikationen (Wirksamkeit der Analyse 75 %) bei 9 Anfragen pro Woche, ab einer leeren Fabrik. Achte auf die Nacharbeit in der Entwicklung.
     steps:
-      - Der Entwickler schickt etwa ein Fünftel der Spezifikationen zurück, und die Linie kann die Nachfrage nicht bedienen.
-      - Der Analyst schreibt jetzt zu 98 % richtige Spezifikationen. Die Nacharbeit sinkt, und die Linie könnte die Nachfrage wieder bedienen. Der aufgelaufene Rückstau muss sich noch abbauen.
-      - Der Rückstau beim Entwickler baut sich ab, die Durchlaufzeit sinkt.
+      - Die Entwicklung schickt etwa ein Fünftel der Spezifikationen zurück, und die Linie kann die Nachfrage nicht bedienen.
+      - Die Analyse schreibt jetzt zu 98 % richtige Spezifikationen. Die Nacharbeit sinkt, und die Linie könnte die Nachfrage wieder bedienen. Der aufgelaufene Rückstau muss sich noch abbauen.
+      - Der Rückstau in der Entwicklung baut sich ab, die Durchlaufzeit sinkt.
   move-bottleneck:
     watch: Elf Anfragen pro Woche. Mach den Engpass schneller und achte darauf, wo die Arbeit als Nächstes wartet.
     steps:
-      - Der Entwickler ist der Engpass, mit Wochen an wartender Arbeit; die Qualitätssicherung hat einen eigenen Stapel. Gleich wird er doppelt so schnell.
-      - Beim Entwickler wartet nichts mehr – jetzt bei der Qualitätssicherung. Der Engpass ist weitergewandert.
+      - Die Entwicklung ist der Engpass, mit Wochen an wartender Arbeit; die Qualitätssicherung hat einen eigenen Stapel. Gleich wird er doppelt so schnell.
+      - In der Entwicklung wartet nichts mehr – jetzt bei der Qualitätssicherung. Der Engpass ist weitergewandert.
       - Auch die Qualitätssicherung doppelt so schnell. Die Durchlaufzeit sinkt; der nächste Engpass ist dort, wo die Arbeit jetzt wartet.

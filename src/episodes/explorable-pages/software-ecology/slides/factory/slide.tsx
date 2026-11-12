@@ -22,8 +22,8 @@ const SALESFORCE_STATE_OF_SALES = {
 
 /**
  * The Play Section's page Slide: the whole software ecology Explorable (master basic-page, no motion of its own). Its
- * Speaker notes sit on what they explain: the belts, quality assurance's rack and its passing-unread sign, the product
- * manager and analyst, the Fix the orders first entry beside the state row and the Sales card.
+ * Speaker notes sit on what they explain: the belts, quality assurance's rack and its passing-unread sign, Product
+ * management and Analysis, the Fix the orders first entry beside the state row and the Sales card.
  */
 export const factory = slide({
   slug: 'factory',

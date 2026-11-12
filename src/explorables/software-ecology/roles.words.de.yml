@@ -82,4 +82,4 @@ scenarios:
   speed-up:
     watch: Ein Team doppelt so schnell. Achte auf die Kundenkarte – kommt mehr an?
   ai-unbalanced:
-    watch: KI nur bei den Entwicklern, die doppelt so viele Pull Requests schreiben. Achte auf den Stau im Review.
+    watch: KI nur in der Entwicklung, die doppelt so viele Pull Requests schreiben. Achte auf den Stau im Review.

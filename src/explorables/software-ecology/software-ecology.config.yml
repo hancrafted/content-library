@@ -225,7 +225,7 @@ model:
   tips:
     reality: 'From Ideal to Realistic: lowers every work center’s efficiency and effectiveness toward its realistic values. More bad documents go out, get sent back or multiply; the bottleneck runs near 90 % busy.'
     ai: 'Where AI works: those centers run faster (2.5× unless a dashboard says otherwise) and may write extra tasks; AI-made documents take the next center a little longer to read. Set the speed-up and extra tasks per work center on its dashboard.'
-    company: 'Service provider: only the Customer asks for work. Product company: the product manager also writes roadmap items, Sales brings leads and the engineer writes tech debt tickets. They share the same backlogs; every center is sized again so Ideal stays 70 % busy.'
+    company: 'Service provider: only the Customer asks for work. Product company: Product management also writes roadmap items, Sales brings leads and Engineering writes tech debt tickets. They share the same backlogs; every center is sized again so Ideal stays 70 % busy.'
     aiq: 'What AI does to the chance a document leaves good: Worse lowers it by 15 points, Better raises it by 15. Same leaves it.'
     reset: 'Back to what the use-case file defines for this state: its settings, speed and display.'
 # The Settings popover's Display column: how the factory is drawn.
@@ -248,10 +248,10 @@ display:
 dash:
   own:
     title: Own work
-    tip: 'Tickets this role writes for itself, not for a customer: a roadmap, leads, tech debt. They join the same queue as customer requests, first in, first out. Only a Product company has them; a Service provider turns them all off.'
+    tip: 'Tickets this department writes for itself, not for a customer: a roadmap, leads, tech debt. They join the same queue as customer requests, first in, first out. Only a Product company has them; a Service provider turns them all off.'
     help: 'About {name}'
     rate: Tickets per week
-    rateTip: 'How many own tickets this role writes a week, 0 to 50. 0 switches it off. The file’s rate is where it starts; Reset to default restores it.'
+    rateTip: 'How many own tickets this department writes a week, 0 to 50. 0 switches it off. The file’s rate is where it starts; Reset to default restores it.'
     perWeek: '{n} a week'
     arrivals: Arrivals
     arrivalsTip: 'Steady: one ticket every 1/rate of a week, evenly. Random: the same on average, but they bunch up and thin out, as real tickets do.'
@@ -346,7 +346,7 @@ custDash:
   steady: Steady
   random: Random
   mix: Request mix
-  mixTip: 'Where new requests go: new customers to Sales, feature and change requests to the product manager, bugs and support tickets to Support.'
+  mixTip: 'Where new requests go: new customers to Sales, feature and change requests to Product management, bugs and support tickets to Support.'
   follow: A release brings a new request
   followTip: 'Each release may bring a new request at once. A good release brings a change request; a bad one a complaint (a bug or support request, marked with the red warning). Kept below 1 in total, so the requests settle.'
   good: 'Good · {title}'

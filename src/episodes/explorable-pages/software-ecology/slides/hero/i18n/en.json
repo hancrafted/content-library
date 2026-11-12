@@ -15,9 +15,9 @@
     "stilled": "The background is still: reduced motion is on"
   },
   "preview": {
-    "label": "Stylised preview of the Software ecology Explorable, an illustrative model, not measured: AI at the engineer pushes AI-made work into quality assurance, whose rack is full with {weeks} weeks of work waiting, while operations starves and the Customer gets {output} output at {satisfied} satisfied.",
+    "label": "Stylised preview of the Software ecology Explorable, an illustrative model, not measured: AI at Engineering pushes AI-made work into quality assurance, whose rack is full with {weeks} weeks of work waiting, while operations starves and the Customer gets {output} output at {satisfied} satisfied.",
     "title": "Software ecology · AI unbalanced, week 20",
-    "tag": "AI at the engineer",
+    "tag": "AI at Engineering",
     "illustrative": "Illustrative model, not measured",
     "customer": "Customer",
     "output": "{value}×",

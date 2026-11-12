@@ -11,7 +11,7 @@ roles:
     job: Turns leads into deals
     artefacts: [deal, promised scope, contract & price terms]
     tasks: [qualifies leads, writes the offer, negotiates terms]
-    ai: [drafts proposals, summarises calls into deal notes, writes requirements for the product manager and analyst]
+    ai: [drafts proposals, summarises calls into deal notes, writes requirements for Product management and Analysis]
   pm:
     title: Product management
     job: Turns the deal into a brief
@@ -83,4 +83,4 @@ scenarios:
   speed-up:
     watch: Make one team twice as fast. Watch the Customer card – does more ship?
   ai-unbalanced:
-    watch: AI on the engineers only, writing twice the pull requests. Watch the review pile up.
+    watch: AI at Engineering only, writing twice the pull requests. Watch the review pile up.
