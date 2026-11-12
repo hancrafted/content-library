@@ -10,6 +10,7 @@ A scenario is a tour of beats in a use-case file (`src/explorables/software-ecol
 ## The contract
 
 - **Numbers only.** Change numeric values in the use-case YAML: dials, `realistic`, `catch`, `stall`, `aiCatch` under `roles:`, `mechanics`, customer chances, `backlog`, a beat's `run` week. Leave code, the role catalog, the words and every key's shape alone.
+- **Han's numbers are fixed.** A number Han names in a claim or in a settled grill item (`docs/episodes/software-ecology/prototype/grill-*.md`) stays as he named it, e.g. Clear Requirements' 75 % rising to 95 % (grill 11 Q230). Tune the numbers around it; when it blocks a beat, propose a change to it in the report, with the readings that show why.
 - **Ranges are Han's claim.** An `expect:` or `settles:` range stays as written, approved or still proposed: tuning makes the model meet the range, never the range meet the model. A range that cannot hold becomes a proposal in the report, with the readings that show why.
 - **Model changes escalate.** When no numbers make a beat hold, the report names the mechanic that is missing or wrong and what it would take; the model stays as it is.
 - **Done** is every beat passing on 8 of 10 seeds, each beat with a claim running 6 to 9 weeks.

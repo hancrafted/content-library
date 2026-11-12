@@ -180,8 +180,8 @@ presets:
     reality: 100
     dials:
       {
-        ba: { effectiveness: 72 },
-        pm: { effectiveness: 72 },
+        ba: { effectiveness: 75 },
+        pm: { effectiveness: 75 },
         eng: { effectiveness: 100 },
         ops: { efficiency: 200, effectiveness: 100 },
         sales: { effectiveness: 100 },
@@ -202,7 +202,7 @@ presets:
           expect: { customer.output: rises, customer.changesPerWeek: rises, pm.weeksWaiting: rises },
         }
       - {
-          set: { dials: { ba: { effectiveness: 97 }, pm: { effectiveness: 97 } } },
+          set: { dials: { ba: { effectiveness: 95 }, pm: { effectiveness: 95 } } },
           run: 24,
           card: eng,
           claim: clear-requirements,

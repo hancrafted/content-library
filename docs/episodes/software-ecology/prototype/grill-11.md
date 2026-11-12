@@ -81,3 +81,15 @@ Q229: ok
 21. A station passes tickets on only once it is drowning: from a threshold of weeks waiting (2, where a pile turns red), so In practice is unchanged (Q227).
 22. The still's settings stand: AI at Engineering from the start at 55 % effectiveness, bad code to Support at 0.9 (Q228).
 23. The agent's beat settings stand: Bug Spiral beat 6 Operations AI 5×; Clear Requirements Operations efficiency 200 %, 9 requests a week, bad specs to the Product manager at 0.85 (Q229).
+
+## Eval round 3 (after `run-03.md` and its review)
+
+Q230: ok
+Q231: ok
+Q232: ok
+Q233: ok
+
+24. Clear Requirements uses Han's numbers, Analysis and Product manager at 75 % rising to 95 %; a number Han names in a claim or a settled item is fixed for the eval agent, never tuned (Q230).
+25. Pass-on ramps: nothing below 2 weeks waiting, a share rising to all at 4 weeks (Q231).
+26. Two pins accepted where Support drowns on top of In practice: Operations 43.7 weeks after quality assurance at 1000 %, the compare stream's quality assurance 785 waiting (Q232).
+27. In practice's 8 of 10 seeds on output stands (Q233).
