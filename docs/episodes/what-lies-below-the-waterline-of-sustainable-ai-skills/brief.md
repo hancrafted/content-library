@@ -4,10 +4,10 @@ title: What lies below the waterline of sustainable AI skills
 status: draft
 generated:
   by: claude-code/opus-5.5
-  at: 2026-11-12T15:08:35Z
+  at: 2026-11-12T15:21:00Z
 verified:
   - by: process:markdown-harness
-    at: 2026-11-12T15:08:35Z
+    at: 2026-11-12T15:21:00Z
 ---
 
 # What lies below the waterline of sustainable AI skills
@@ -99,7 +99,7 @@ The iceberg is the Episode's style, not a second analogy: each Section sits at i
 
 ### What stays beside
 
-17. **Beside the card** — project details stay outside the skill, in files it reads when it runs. Caption: "Project details can stay beside the skill, in files it reads when it runs." _Visual:_ Slide 15's mistake, fixed. The card now says "descend to the depth in today's dive plan", and a line runs from that step to the expedition brief on the wall: "Site 4: 40 m. Site 7: 120 m." Coding-agent view: the step pointing to a project file such as `CONTEXT.md`. Motion: this time the robot reaches the seabed at 120 m.
+17. **Beside the card** — project details can stay outside the skill, in files it reads when it runs. Caption: "Project details can stay beside the skill, in files it reads when it runs." _Visual:_ Slide 15's mistake, fixed. The card now says "descend to the depth in today's dive plan", and a line runs from that step to the expedition brief on the wall: "Site 4: 40 m. Site 7: 120 m." Coding-agent view: the step pointing to a project file such as `CONTEXT.md`. Motion: this time the robot reaches the seabed at 120 m.
 18. **Who uses it, and where** — the decision tool, as a rule of thumb that the governance Slide later expands. Caption: "Who uses a skill, and where, decides what goes inside it and how much care it needs." _Visual:_ a simple 2×2, readable at rest and labelled "rule of thumb", with axes in organisational words, personal or shared and general use or project-specific, and small expedition pictures in each square. Personal and project-specific: details written straight in, no upkeep. Personal and general: details kept beside, your own toolkit. Shared and project-specific: details can live in its extras, owned by the project team. Shared and general: details beside, with an owner, a version and evals. Motion: one card moving from your notebook to the fleet manual, losing its scribbled details and gaining an owner tag. _Research:_ 7
 19. **How grill-me and grill-with-docs work** — showcase of inside and beside together, on the real files, closing with one mention that a skill can run other skills. Caption: "The interview stays the same; what it learns about your project is written beside it for the next run." _Visual:_ three parts, left to right: grill-me's real `SKILL.md` with the interview steps highlighted as the procedure; grill-with-docs, which uses grill-me and adds domain modelling; and the files it writes beside itself, `GLOSSARY.md` and decision records, with an arrow back to the next run reading them. A small key in the corner maps them to the card and the expedition brief. A closing line: a skill can also run other skills, with no settled name for it yet. Motion: `GLOSSARY.md` gaining a new term after a session.
 
