@@ -76,7 +76,6 @@ export const makeNode = (spec: NodeSpec, idx: number, seed: number): FactoryNode
   Lavg: 0,
   Ws: 0,
   lvl: 0,
-  press: 0,
   sign: { rework: -99, churn: -99, unread: -99, complaint: -99 },
   hist: { out: [], good: [], wait: [], L: [] },
   server: null,

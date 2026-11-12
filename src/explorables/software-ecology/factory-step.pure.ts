@@ -4,15 +4,12 @@
  * build's, so the same seed gives the same run.
  */
 import {
-  AMBER,
   custOf,
   dials,
   DTW,
   ownOf,
-  pressAt,
   productCo,
   Q,
-  RED,
   RET_HIDE,
   RET_SHOW,
   speedOf,
@@ -24,6 +21,7 @@ import { Run } from './factory-docs.pure.ts';
 import { BUMP, deliver, deliverBack, FAIL, FROM_SRC, MAIN, OWN, pushBack, send } from './factory-flow.pure.ts';
 import { expo } from './factory-random.pure.ts';
 import { runServer } from './factory-service.pure.ts';
+import { waitState } from './factory-wait.pure.ts';
 import type { Belt, Factory, FactoryNode, Streams, TicketSource } from './factory.types';
 import type { Arrivals, Cust } from './software-ecology.types';
 
@@ -142,13 +140,6 @@ const deliveries = (m: Factory, t1: number): void => {
   }
 };
 
-/** Weeks of work waiting: amber from one week, red from two, with a gap so it never blinks. */
-export const level = (lvl: number, w: number): number => {
-  if (lvl === 0) return w >= AMBER ? 1 : 0;
-  if (lvl === 1) return w >= RED ? 2 : w < AMBER * 0.85 ? 0 : 1;
-  return w < RED * 0.9 ? 1 : 2;
-};
-
 const sample = (n: FactoryNode): void => {
   const h = n.hist,
     r_ = n.rate,
@@ -198,9 +189,7 @@ const average = (m: Factory, n: FactoryNode, k: Decay): void => {
   u.blocked += (x.blocked - u.blocked) * g;
   u.starved += (x.starved - u.starved) * g;
   n.Lavg += (n.L - n.Lavg) * g;
-  n.Ws += (n.L / speedOf(n, m.dc[n.idx]) - n.Ws) * k.a;
-  n.press = pressAt(n.Ws);
-  n.lvl = level(n.lvl, n.Ws);
+  waitState(n, n.Ws + (n.L / speedOf(n, m.dc[n.idx]) - n.Ws) * k.a);
   if (k.sampleNow) sample(n);
 };
 
