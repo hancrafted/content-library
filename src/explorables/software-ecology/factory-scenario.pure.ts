@@ -7,83 +7,16 @@
  * CUSTOMER_MEASURES and CENTER_MEASURES; test ">2", "<0.5", ">=1", "<=3", "0.9–1.1" (en dash or hyphen), "rises" or
  * "falls" (against the step before).
  */
-import { custOf, DTW, firstOf, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import { copySettings, createFactory, DEFAULT_SEED, type FactoryHandle } from './factory-model.pure.ts';
-import type { Bundle, Cust, Over, Preset, Settings, StepSet, TourStep } from './software-ecology.types';
+import { applySet } from './scenario-set.pure.ts';
+import { judge } from './scenario-tests.pure.ts';
+import type { Bundle, Preset, Settings, StepSet, TourStep } from './software-ecology.types';
 import { startBacklogOf } from './start-backlog.pure.ts';
 
 export { validKey } from './factory-model.pure.ts';
-
-export type Comparison = '>' | '<' | '>=' | '<=';
-/** A test, parsed: a comparison with a bound, a range, or a trend against the step before. */
-export type Test =
-  | { readonly kind: 'compare'; readonly op: Comparison; readonly k: number }
-  | { readonly kind: 'range'; readonly lo: number; readonly hi: number }
-  | { readonly kind: 'rises' | 'falls' };
-
-/** Parses a test, or null when it is not one. */
-export const parseTest = (test: string): Test | null => {
-  const t = String(test).trim();
-  if (t === 'rises' || t === 'falls') return { kind: t };
-  const c = /^(>=|<=|>|<)\s*(-?[\d.]+)$/.exec(t);
-  if (c) return { kind: 'compare', op: c[1] as Comparison, k: Number(c[2]) };
-  const r = /^(-?[\d.]+)\s*[–-]\s*(-?[\d.]+)$/.exec(t);
-  return r ? { kind: 'range', lo: Number(r[1]), hi: Number(r[2]) } : null;
-};
-
-const COMPARE: Readonly<Record<Comparison, (v: number, k: number) => boolean>> = {
-  '>': (v, k) => v > k,
-  '<': (v, k) => v < k,
-  '>=': (v, k) => v >= k,
-  '<=': (v, k) => v <= k,
-};
-
-/** Judges one value against a test; `prev` is the same measure at the step before (for rises / falls). */
-export const judge = (v: number, test: string, prev?: number): boolean => {
-  const t = parseTest(test);
-  if (!t) throw new Error(`unknown test "${test}"`);
-  if (t.kind === 'compare') return COMPARE[t.op](v, t.k);
-  if (t.kind === 'range') return v >= t.lo && v <= t.hi;
-  if (prev === undefined) return false;
-  return t.kind === 'rises' ? v > prev : v < prev;
-};
-
-export const validTest = (t: string): boolean => parseTest(t) !== null;
-
-const SET_IN: Readonly<Record<string, keyof Over>> = {
-  efficiency: 'eff',
-  effectiveness: 'effv',
-  fanout: 'fan',
-  ai: 'ai',
-  aiSpeed: 'aiSpeed',
-  aiExtra: 'aiExtra',
-};
-
-const setDials = (dials: StepSet['dials'], s: Settings): void => {
-  for (const [id, o] of Object.entries(dials ?? {})) {
-    const x = (s.over[id] ??= {}) as Record<string, number | boolean>;
-    for (const [k, v] of Object.entries(o)) x[SET_IN[k]] = v as number | boolean;
-  }
-};
-
-/** The Customer after a step's changes: given fields replace, the rest stay as they are now. */
-const setCustomer = (c: NonNullable<StepSet['customer']>, cu: Cust): Cust => ({
-  ...cu,
-  mix: { ...firstOf(c.mix, cu.mix) },
-  good: { ...firstOf(c.good, cu.good) },
-  bad: { ...firstOf(c.bad, cu.bad) },
-  ...(c.rate !== undefined ? { rate: c.rate } : {}),
-  ...(c.arrivals ? { mode: c.arrivals } : {}),
-});
-
-/** Applies a step's `set` to the settings in place: dials per center, the Customer, where AI works, the reality. */
-export const applySet = (set: StepSet | undefined, m: { readonly B: Bundle }, s: Settings): void => {
-  if (!set) return;
-  if (set.reality !== undefined) s.reality = set.reality;
-  if (set.ai !== undefined) s.ai = Array.isArray(set.ai) ? [...set.ai] : set.ai;
-  setDials(set.dials, s);
-  if (set.customer) s.cust = setCustomer(set.customer, custOf(m, s));
-};
+export { applySet } from './scenario-set.pure.ts';
+export { judge, parseTest, validTest } from './scenario-tests.pure.ts';
 
 /** The steps of a preset: its tour, or its check as one step. */
 export const stepsOf = (p: Preset): readonly TourStep[] => (p.tour ? p.tour : p.check ? [p.check] : []);
@@ -154,4 +87,154 @@ export const runScenario = (B: Bundle, id: string, opts: { seed?: number } = {})
     rows.push({ i: rows.length, week: st.run, checks });
   }
   return rows;
+};
+
+/*
+ * Judging across seeds (design-ADR 0024 §12): the model stays stochastic, so one seed's reading proves little. A beat's
+ * reading is the mean of each measure over its last WINDOW weeks; `rises` and `falls` compare those means with the
+ * same seed's beat before; `settles:` is read after the beat's settings run SETTLE_WEEKS more, replayed from the start
+ * with the same seed. A beat passes when at least needOf(seeds) seeds pass all its checks, and a beat with a `claim:`
+ * also runs BEAT_WEEKS long.
+ */
+
+/** Weeks at a beat's end its readings are averaged over. */
+export const WINDOW = 2;
+/** Samples a week inside the window. */
+const SAMPLES_A_WEEK = 8;
+/** Weeks a `settles:` range waits after its beat. */
+export const SETTLE_WEEKS = 40;
+/** A beat with a claim runs this many weeks: 10 to 15 s at 20×. */
+export const BEAT_WEEKS = [6, 9] as const;
+/** The seeds a scenario is judged on by default: ten in a row from the shipped one. */
+export const SEEDS = Array.from({ length: 10 }, (_, k) => DEFAULT_SEED + k);
+
+/** Seeds a beat must pass on: 8 of 10, and every seed of fewer than five. */
+export const needOf = (seeds: number): number => (seeds < 5 ? seeds : Math.ceil(seeds * 0.8));
+
+type Values = Record<string, number>;
+
+/** Runs a started model `weeks` on, averaging the measures over the last WINDOW weeks of it. */
+const runAveraged = (f: FactoryHandle, weeks: number, keys: readonly string[]): Values => {
+  const k = stepsTo(weeks),
+    w = Math.min(k, stepsTo(WINDOW)),
+    every = Math.max(1, Math.round(1 / SAMPLES_A_WEEK / DTW));
+  f.step((k - w) * DTW);
+  const sum: Values = Object.fromEntries(keys.map((x) => [x, 0]));
+  let n = 0;
+  for (let done = 0; done < w;) {
+    const by = Math.min(every, w - done);
+    f.step(by * DTW);
+    done += by;
+    const v = f.read({ measures: keys }).measures;
+    for (const x of keys) sum[x] += v[x] ?? 0;
+    n++;
+  }
+  return Object.fromEntries(keys.map((x) => [x, n ? sum[x] / n : 0]));
+};
+
+/** One seed's readings of one beat: the means at its end, and those SETTLE_WEEKS later when it has `settles:`. */
+export interface BeatReading {
+  readonly values: Values;
+  readonly settled: Values | null;
+}
+
+const keysIn = (steps: readonly TourStep[], field: 'expect' | 'settles'): string[] => [
+  ...new Set(steps.flatMap((st) => Object.keys(st[field] ?? {}))),
+];
+
+/** The model of a preset played to the end of beat `upTo`, each beat set and run to its week. */
+const playTo = (B: Bundle, p: Preset, x: { seed: number; upTo: number }): FactoryHandle => {
+  const f = scenarioStart(B, p, x.seed),
+    steps = stepsOf(p).slice(0, x.upTo + 1);
+  Array.from(playSteps(f, B, steps));
+  return f;
+};
+
+/** Every beat of a preset on one seed, read as means. */
+export const readBeats = (B: Bundle, p: Preset, seed: number): BeatReading[] => {
+  const steps = stepsOf(p),
+    keys = keysIn(steps, 'expect'),
+    settleKeys = keysIn(steps, 'settles'),
+    f = scenarioStart(B, p, seed);
+  let last = 0;
+  return steps.map((st, i) => {
+    f.set(settingsAfter(st.set, B, f.settings));
+    const values = runAveraged(f, st.run - last, keys);
+    last = st.run;
+    if (!st.settles) return { values, settled: null };
+    const g = playTo(B, p, { seed, upTo: i });
+    return { values, settled: runAveraged(g, SETTLE_WEEKS, settleKeys) };
+  });
+};
+
+/** One check of a beat across seeds: its mean on each seed, and whether it held there. */
+export interface SeedCheck {
+  readonly key: string;
+  readonly test: string;
+  readonly kind: 'expect' | 'settles';
+  readonly means: readonly number[];
+  readonly prev: readonly (number | undefined)[];
+  readonly held: readonly boolean[];
+}
+
+export interface BeatVerdict {
+  readonly i: number;
+  readonly claim?: string;
+  readonly week: number;
+  /** Weeks since the beat before. */
+  readonly length: number;
+  /** Whether a beat with a claim runs BEAT_WEEKS long; true for a beat without one. */
+  readonly lengthOk: boolean;
+  readonly checks: readonly SeedCheck[];
+  /** Seeds on which every check held. */
+  readonly passed: number;
+  readonly of: number;
+  readonly ok: boolean;
+}
+
+export interface ScenarioVerdict {
+  readonly id: string;
+  readonly seeds: readonly number[];
+  readonly need: number;
+  readonly beats: readonly BeatVerdict[];
+  readonly ok: boolean;
+}
+
+const checksOf = (st: TourStep, x: { i: number; runs: readonly BeatReading[][] }): SeedCheck[] => {
+  const one = (kind: SeedCheck['kind']) => (key: string, test: string) => {
+    const means = x.runs.map((r) => (kind === 'expect' ? r[x.i]?.values : r[x.i]?.settled)?.[key] ?? NaN);
+    const prev = x.runs.map((r) => (kind === 'expect' && x.i > 0 ? r[x.i - 1]?.values[key] : undefined));
+    return { key, test, kind, means, prev, held: means.map((v, s) => judge(v, test, prev[s])) };
+  };
+  return [
+    ...Object.entries(st.expect ?? {}).map(([k, t]) => one('expect')(k, t)),
+    ...Object.entries(st.settles ?? {}).map(([k, t]) => one('settles')(k, t)),
+  ];
+};
+
+/** Judges every beat of a preset across seeds. */
+export const judgeScenario = (B: Bundle, id: string, opts: { seeds?: readonly number[] } = {}): ScenarioVerdict => {
+  const p = B.data.presets.find((x) => x.id === id);
+  if (!p) throw new Error(`no preset ${id}`);
+  const seeds = opts.seeds ?? SEEDS,
+    need = needOf(seeds.length),
+    runs = seeds.map((seed) => readBeats(B, p, seed));
+  const beats = stepsOf(p).map((st, i, all): BeatVerdict => {
+    const checks = checksOf(st, { i, runs }),
+      length = st.run - (all[i - 1]?.run ?? 0),
+      lengthOk = !st.claim || (length >= BEAT_WEEKS[0] && length <= BEAT_WEEKS[1]),
+      passed = seeds.filter((_, s) => checks.every((c) => c.held[s])).length;
+    return {
+      i,
+      claim: st.claim,
+      week: st.run,
+      length,
+      lengthOk,
+      checks,
+      passed,
+      of: seeds.length,
+      ok: lengthOk && passed >= need,
+    };
+  });
+  return { id, seeds, need, beats, ok: beats.every((b) => b.ok) };
 };

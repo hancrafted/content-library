@@ -13,6 +13,7 @@ import {
   displayProblems,
   isMap,
   isNum,
+  isWord,
   listOf,
   mapOf,
   oneOf,
@@ -67,6 +68,19 @@ const expectProblems = (st: Map_, at: Omit<At, 'x'>, E: Sink): void => {
   }
 };
 
+const settlesOk = (t: unknown): boolean => validTest(String(t)) && !['rises', 'falls'].includes(String(t).trim());
+
+/** Han's claim, a words key, and `settles:`, a bound or range read 40 weeks after the beat. */
+const claimProblems = (st: Map_, at: Omit<At, 'x'>, E: Sink): void => {
+  if (!absentOr(st.claim, isWord)) E(`${at.p}.claim: a words key, such as clean-line`);
+  if (!absentOr(st.settles, isMap)) E(`${at.p}.settles: a map { "qa.weeksWaiting": "<0.5" }`);
+  for (const [k, t] of Object.entries(mapOf(st.settles))) {
+    if (!validKey(k, at.ids)) E(`${at.p}.settles.${k}: ${EXPECT_KEYS}`);
+    if (!settlesOk(t))
+      E(`${at.p}.settles.${k}: a bound or a range such as ">2" or "0.9–1.1"; settles has no beat before it`);
+  }
+};
+
 /** One tour step or check; returns the week it runs to when valid, else the week before. */
 const stepProblems = (raw: unknown, at: Omit<At, 'x'> & { last: number }, E: Sink): number => {
   if (!isMap(raw)) return (E(`${at.p}: a map { set, run, card, expect }`), at.last);
@@ -76,6 +90,7 @@ const stepProblems = (raw: unknown, at: Omit<At, 'x'> & { last: number }, E: Sin
     E(`${at.p}.card: customer or a work center`);
   if (raw.set !== undefined) setProblems(raw.set, at, E);
   expectProblems(raw, at, E);
+  claimProblems(raw, at, E);
   return runs ? (raw.run as number) : at.last;
 };
 

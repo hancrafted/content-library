@@ -89,6 +89,10 @@ export interface TourStep {
   readonly run: number;
   readonly card?: string;
   readonly expect?: Readonly<Record<string, string>>;
+  /** Han's claim for this beat: a key of the scenario's `claims` in the words. */
+  readonly claim?: string;
+  /** Checked headless only, after the beat's settings run SETTLE_WEEKS more. */
+  readonly settles?: Readonly<Record<string, string>>;
 }
 
 /** What a state shows by default: the pile-up style and whether the belts move. */
@@ -163,6 +167,8 @@ export interface RoleWords {
 export interface ScenarioWords {
   readonly watch?: string;
   readonly steps?: readonly string[];
+  /** Han's claims, by the key a beat's `claim:` names. */
+  readonly claims?: Readonly<Record<string, string>>;
 }
 
 /** A use case's words in one locale: names, belt labels, scenario captions, and any role words it says differently. */
