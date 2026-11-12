@@ -34,13 +34,13 @@
   border-bottom: 1px solid var(--border);
 }
 /* sticky under the site header, as the reference build's toolbar is under the page top; below the header (z 50) and
-   the Context drawer (z 40), which both draw over it. A phone keeps it in the flow: wrapped, it is taller than half
-   the screen. */
+   the Context drawer (z 40), which both draw over it, and above the tour caption box (z 30), so a toolbar menu opens
+   over the caption. A phone keeps it in the flow: wrapped, it is taller than half the screen. */
 @media (min-width: 768px) {
   .toolbar {
     position: sticky;
     top: calc(var(--header-block) + 0.5rem);
-    z-index: 30;
+    z-index: 35;
     background: var(--background);
   }
 }
@@ -1779,6 +1779,10 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
+}
+/* in the fixed stage the stream's parts keep their own heights (the strip its 170px) and the stream scrolls instead */
+.viewWrap[data-compare='true'] > .compare > * {
+  flex-shrink: 0;
 }
 .compare {
   display: flex;
