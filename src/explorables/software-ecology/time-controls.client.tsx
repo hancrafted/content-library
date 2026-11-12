@@ -1,19 +1,18 @@
 'use client';
 
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Glyph } from './factory-glyph-view';
 import { DEFAULT_SPEED, SPEEDS } from './factory-run.pure.ts';
-import { MenuFace } from './scenario-menu';
 import type { ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
-import { ToolbarMenu } from './toolbar-menu.client';
+import { MenuFace, ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
 
 /*
  * The toolbar's time controls (feature guide, Interaction 1; feedback 08): Pause, a speed menu of 1×, 2×, 5× and 10×
- * (the page starts at 1×), Clear and the clock. Pause gives back the speed last picked; a tour sets 10× between its
- * steps and gives the viewer's speed back when it ends.
+ * (the page starts at 1×), Clear and the clock, plain text. Pause gives back the speed last picked; a tour sets 10×
+ * between its steps and gives the viewer's speed back when it ends.
  */
 
 export interface TimeControlsProps {
@@ -27,22 +26,25 @@ export interface TimeControlsProps {
   readonly onOpen: (open: boolean) => void;
 }
 
-/** The speed a paused run resumes at: the last one running, the page's 1× at first. */
+/** The speed a paused run resumes at: the running one, else the last one running, the page's 1× at first. */
 function useResume(speed: number) {
-  const [resume, setResume] = useState(speed || DEFAULT_SPEED);
-  if (speed && speed !== resume) setResume(speed);
-  return resume;
+  const last = useRef(speed || DEFAULT_SPEED);
+  useEffect(() => {
+    if (speed) last.current = speed;
+  }, [speed]);
+  return speed || last.current;
 }
 
 function PauseButton(p: TimeControlsProps & { resume: number }) {
-  const paused = !p.speed;
+  const paused = !p.speed,
+    name = paused ? p.words.play : p.words.pause;
+  // the button names what it does next, and its tooltip says the same
   return (
-    <ToolTip tip={paused ? p.words.play : p.words.pause}>
+    <ToolTip tip={name}>
       <button
         type="button"
         className={`${styles.tbtn} text-caption`}
-        aria-pressed={paused}
-        aria-label={p.words.pause}
+        aria-label={name}
         onClick={() => p.onSpeed(paused ? p.resume : 0)}
       >
         <Glyph name={paused ? 'play' : 'pause'} className={styles.ico} />
@@ -101,11 +103,7 @@ export function TimeControls(p: TimeControlsProps) {
           <Glyph name="clear" className={styles.ico} />
         </button>
       </ToolTip>
-      <ToolTip tip={w.clockTip}>
-        <span className={`${styles.clock} text-caption font-semibold`} tabIndex={0} aria-live="off">
-          {p.clock}
-        </span>
-      </ToolTip>
+      <span className={`${styles.clock} text-caption font-semibold`}>{p.clock}</span>
     </div>
   );
 }

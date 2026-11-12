@@ -14,7 +14,6 @@ export type { TourCheckWords, TourWords } from './tour-words.types';
 
 /** The Settings popover's Model column. */
 export interface ModelWords {
-  readonly label: string;
   readonly reality: string;
   readonly ideal: string;
   readonly realistic: string;
@@ -29,15 +28,13 @@ export interface ModelWords {
   readonly worse: string;
   readonly same: string;
   readonly better: string;
-  readonly strengths: string;
   readonly note: string;
   readonly reset: string;
   readonly tips: Readonly<Record<'reality' | 'ai' | 'company' | 'aiq' | 'rework' | 'churn' | 'reset', string>>;
 }
 
 /** The Settings popover's Display column. */
-export interface MoreWords {
-  readonly label: string;
+export interface DisplayWords {
   readonly beltMotion: string;
   readonly beltMotionNote: string;
   readonly pile: string;
@@ -227,7 +224,7 @@ export interface Words {
   readonly dock: DockWords;
   readonly cartoon: CartoonWords;
   readonly model: ModelWords;
-  readonly more: MoreWords;
+  readonly display: DisplayWords;
   readonly dash: DashWords;
   readonly custDash: CustDashWords;
   readonly compare: CompareWords;

@@ -7,7 +7,6 @@ export interface ToolbarWords {
   readonly fromFile: string;
   readonly speed: string;
   readonly pause: string;
-  readonly speedN: string;
   /** The speed menu's button, "Speed: {n}×", and its tooltip. */
   readonly speedMenu: string;
   readonly speedMenuTip: string;
@@ -19,7 +18,6 @@ export interface ToolbarWords {
   readonly day: string;
   readonly week: string;
   readonly warming: string;
-  readonly clockTip: string;
   readonly mechs: Readonly<Record<'rework' | 'churn' | 'complaints', { readonly label: string; readonly tip: string }>>;
   /** The Scenarios menu: its button, its name, and each entry's "{n}-step tour". */
   readonly scenarios: string;

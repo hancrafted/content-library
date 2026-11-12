@@ -3,7 +3,7 @@ import type { KeyboardEvent, ReactNode } from 'react';
 import { Glyph } from './factory-glyph-view';
 import type { ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
-import { ToolbarMenu } from './toolbar-menu.client';
+import { MenuFace, ToolbarMenu } from './toolbar-menu.client';
 import { ToolTip } from './toolbar-tip.client';
 
 /*
@@ -66,14 +66,6 @@ export function ScenarioMenu(p: ScenarioMenuProps) {
   );
 }
 
-/** A menu button's text and its ▾. */
-export const MenuFace = ({ text }: { readonly text: string }) => (
-  <>
-    <span>{text}</span>
-    <span aria-hidden="true">▾</span>
-  </>
-);
-
 /** The Scenarios button on the state row and its menu; pressed while one of its states is on. */
 export function ScenariosMenu(
   p: Omit<ScenarioMenuProps, 'tourSteps'> & {
@@ -83,6 +75,10 @@ export function ScenariosMenu(
   },
 ) {
   if (!p.scenarios.length) return null;
+  const pick = (id: string) => {
+    p.onOpen(false);
+    p.onPick(id);
+  };
   return (
     <ToolbarMenu
       open={p.open}
@@ -95,7 +91,7 @@ export function ScenariosMenu(
       role="menu"
       menuClass={styles.scn}
     >
-      <ScenarioMenu {...p} tourSteps={p.words.tourSteps} onPick={(id) => (p.onOpen(false), p.onPick(id))} />
+      <ScenarioMenu {...p} tourSteps={p.words.tourSteps} onPick={pick} />
     </ToolbarMenu>
   );
 }

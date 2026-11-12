@@ -6,6 +6,7 @@ import { aiKeyOf, withAi, withAiq, withCompany, withReality, type AiChoice } fro
 import type { ModelWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { AiQuality, Bundle, Company, Settings } from './software-ecology.types';
+import { ToolTip } from './toolbar-tip.client';
 
 /*
  * The Settings popover's Model column (feature guide, Interaction 3): Ideal to Realistic, where AI works, the company,
@@ -55,9 +56,11 @@ function Reality(p: ModelMenuProps) {
     r = p.settings.reality;
   return (
     <div className={styles.mrow}>
-      <label htmlFor={id} className={styles.tipL} data-tip={w.tips.reality}>
-        {w.reality}
-      </label>
+      <ToolTip tip={w.tips.reality}>
+        <label htmlFor={id} className={styles.tipL}>
+          {w.reality}
+        </label>
+      </ToolTip>
       <span className="text-muted-foreground">{w.ideal}</span>
       <input
         type="range"
@@ -79,9 +82,11 @@ function Row(p: { label: string; tip: string; children: (labelId: string) => Rea
   const id = useId();
   return (
     <div className={styles.mrow}>
-      <span id={id} className={styles.tipL} data-tip={p.tip}>
-        {p.label}
-      </span>
+      <ToolTip tip={p.tip}>
+        <span id={id} className={styles.tipL}>
+          {p.label}
+        </span>
+      </ToolTip>
       {p.children(id)}
     </div>
   );
@@ -139,14 +144,11 @@ export function ModelMenu(p: ModelMenuProps) {
       <Aiq {...p} />
       <p className="m-0 text-caption text-muted-foreground">{p.words.note}</p>
       <div className={styles.mrow}>
-        <button
-          type="button"
-          className={`${styles.ghostBtn} text-caption`}
-          data-tip={p.words.tips.reset}
-          onClick={p.onReset}
-        >
-          {p.words.reset}
-        </button>
+        <ToolTip tip={p.words.tips.reset}>
+          <button type="button" className={`${styles.ghostBtn} text-caption`} onClick={p.onReset}>
+            {p.words.reset}
+          </button>
+        </ToolTip>
       </div>
     </>
   );

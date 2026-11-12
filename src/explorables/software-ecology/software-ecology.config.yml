@@ -8,7 +8,6 @@ toolbar:
   fromFile: (from file)
   speed: Speed
   pause: Pause
-  speedN: 'Speed {n}×'
   speedMenu: 'Speed: {n}×'
   speedMenuTip: How fast simulated time runs
   play: Play
@@ -22,7 +21,6 @@ toolbar:
   day: 'Day {n}'
   week: 'Week {w} · Day {d}'
   warming: Warming up
-  clockTip: Simulated time in working days; every handoff takes a quarter day
   mechs:
     rework:
       label: Rework
@@ -204,9 +202,8 @@ cartoon:
   jobs:
     doc: 'Too broad for one role: everyone writes documentation.'
     billing: 'Too narrow for a work center: billing follows the deal.'
-# The Model popover: the whole factory's settings, each with a tooltip saying what it does.
+# The Settings popover's Model column: the whole factory's settings, each with a tooltip saying what it does.
 model:
-  label: Model settings
   reality: Realism
   ideal: Ideal
   realistic: Realistic
@@ -221,7 +218,6 @@ model:
   worse: Worse
   same: Same
   better: Better
-  strengths: Strength of each mechanic
   note: 'The Customer’s rate, request mix and follow-up chances sit on its card: click the Customer on the left.'
   reset: Back to the state
   tips:
@@ -233,8 +229,7 @@ model:
     churn: 'When bad input is kept, the center hands on this many times its usual documents: it guesses, and writes more.'
     reset: Undo every change made since you picked the state.
 # The Settings popover's Display column: how the factory is drawn.
-more:
-  label: Display settings
+display:
   beltMotion: Belt motion
   beltMotionNote: The belts' slats move. Off is calmer; the documents still travel.
   pile: Pile-up past the rack

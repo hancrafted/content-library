@@ -4,16 +4,16 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/components/ui/
 import type { ReactElement } from 'react';
 
 /*
- * The site's tooltip on a toolbar control (feedback 08): it opens on hover and on keyboard focus, so an icon button's
- * name is readable without a pointer. The control keeps its own accessible name; the tooltip repeats or extends it. A
- * child that is no focusable element (the Context marker's host) still opens it, as focus bubbles to the trigger.
+ * The site's tooltip on a toolbar or Settings control (feedback 08): it opens on hover and on keyboard focus, so an icon
+ * button's name is readable without a pointer, and it is portaled, so the Settings popover's overflow never clips it.
+ * The control keeps its own accessible name; the tooltip repeats or extends it. An empty tip shows nothing but keeps the
+ * same tree, so a control whose tip comes and goes (the active state's dot) is never remounted and keeps its focus.
  */
 export function ToolTip({ tip, children }: { readonly tip: string; readonly children: ReactElement }) {
-  if (!tip) return children;
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent side="bottom">{tip}</TooltipContent>
+      {tip ? <TooltipContent side="bottom">{tip}</TooltipContent> : null}
     </Tooltip>
   );
 }

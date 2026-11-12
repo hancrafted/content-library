@@ -7,6 +7,7 @@ import { MenuSwitch } from './menu-switch';
 import type { ModelWords, ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Mechanic, Settings, Strength } from './software-ecology.types';
+import { ToolTip } from './toolbar-tip.client';
 
 /*
  * The Settings popover's Mechanics column (feature guide, Interaction 3): what bad work does downstream. A switch per
@@ -29,19 +30,20 @@ function StrengthRow(p: MechanicsMenuProps & { k: Strength }) {
     now = { ...MECH_DEFAULTS(), ...p.settings.strength }[p.k];
   return (
     <div className={styles.mrow}>
-      <input
-        type="range"
-        className={styles.range}
-        id={id}
-        min={MECH_RANGE[p.k][0]}
-        max={MECH_RANGE[p.k][1]}
-        step={0.1}
-        value={now}
-        disabled={!p.settings.mech[p.k]}
-        aria-label={p.mechs[p.k].label}
-        data-tip={p.tips[p.k]}
-        onChange={(e) => p.onSettings(withStrength(p.settings, p.k, Number(e.target.value)))}
-      />
+      <ToolTip tip={p.tips[p.k]}>
+        <input
+          type="range"
+          className={styles.range}
+          id={id}
+          min={MECH_RANGE[p.k][0]}
+          max={MECH_RANGE[p.k][1]}
+          step={0.1}
+          value={now}
+          disabled={!p.settings.mech[p.k]}
+          aria-label={p.mechs[p.k].label}
+          onChange={(e) => p.onSettings(withStrength(p.settings, p.k, Number(e.target.value)))}
+        />
+      </ToolTip>
       <output htmlFor={id} className="font-semibold">
         {now.toFixed(1)}
       </output>

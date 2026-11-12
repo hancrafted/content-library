@@ -1,4 +1,5 @@
 import styles from './software-ecology.module.css';
+import { ToolTip } from './toolbar-tip.client';
 
 /** A setting that is on or off, with its name, an optional note under it and an optional tooltip. */
 export function MenuSwitch(p: {
@@ -9,19 +10,20 @@ export function MenuSwitch(p: {
   readonly tip?: string;
 }) {
   return (
-    <button
-      type="button"
-      role="switch"
-      className={styles.mswitch}
-      aria-checked={p.on}
-      data-tip={p.tip}
-      onClick={() => p.onFlip(!p.on)}
-    >
-      <span className={styles.switchTrack} aria-hidden="true" />
-      <span>
-        <b className="font-semibold">{p.title}</b>
-        {p.note ? <span className="text-muted-foreground">{p.note}</span> : null}
-      </span>
-    </button>
+    <ToolTip tip={p.tip ?? ''}>
+      <button
+        type="button"
+        role="switch"
+        className={styles.mswitch}
+        aria-checked={p.on}
+        onClick={() => p.onFlip(!p.on)}
+      >
+        <span className={styles.switchTrack} aria-hidden="true" />
+        <span>
+          <b className="font-semibold">{p.title}</b>
+          {p.note ? <span className="text-muted-foreground">{p.note}</span> : null}
+        </span>
+      </button>
+    </ToolTip>
   );
 }

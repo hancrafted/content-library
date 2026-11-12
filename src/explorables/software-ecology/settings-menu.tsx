@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
+import { DisplayMenu, type DisplayMenuProps } from './display-menu';
 import { ExchangeButtons, type ExchangeButtonsProps } from './exchange-buttons';
 import { MechanicsMenu, type MechanicsMenuProps } from './mechanics-menu.client';
 import { ModelMenu, type ModelMenuProps } from './model-menu.client';
-import { MoreMenu, type MoreMenuProps } from './more-menu';
 import type { SettingsWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 
@@ -15,7 +15,7 @@ export interface SettingsMenuProps {
   readonly words: SettingsWords;
   readonly model: ModelMenuProps;
   readonly mechanics: MechanicsMenuProps;
-  readonly display: MoreMenuProps;
+  readonly display: DisplayMenuProps;
   readonly exchange: ExchangeButtonsProps;
 }
 
@@ -41,7 +41,7 @@ export function SettingsMenu(p: SettingsMenuProps) {
           <MechanicsMenu {...p.mechanics} />
         </Column>
         <Column title={w.display}>
-          <MoreMenu {...p.display} />
+          <DisplayMenu {...p.display} />
         </Column>
       </div>
       <footer className={styles.setFoot} aria-label={w.file}>

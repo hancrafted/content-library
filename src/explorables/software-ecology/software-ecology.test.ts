@@ -7,6 +7,10 @@ import { wordsFor } from './software-ecology-data';
 const render = (props: Parameters<typeof SoftwareEcology>[0]): string =>
   renderToStaticMarkup(createElement(SoftwareEcology, props));
 
+/** A pressed button whose text is `name`, whatever attributes follow `aria-pressed`. */
+const pressed = (name: string): RegExp =>
+  new RegExp(`aria-pressed="true"[^>]*>${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}<`);
+
 describe('success cases', () => {
   it('renders the factory with its toolbar, every work center and the Customer in English', () => {
     // ARRANGE
@@ -24,31 +28,35 @@ describe('success cases', () => {
     const cartoon = wordsFor('en').cartoon;
     const quotes = [cartoon.captions.explained, cartoon.captions.eng, cartoon.captions.doc, cartoon.captions.needed];
     const shown = ['Tire swing 2.0', 'Engineering', 'Turns the spec into code', 'Analysis', 'ADR'];
+    const captions = quotes.map((t) => `>${t}</figcaption>`);
+    const texts = shown.map((t) => `>${t}<`);
+    const active = pressed('Tire swing 2.0');
+    const retiredView = 'data-card-view="swing"';
     // ACT
     const html = render({ locale: 'en' });
     // ASSERT
-    for (const t of quotes) expect(html).toContain(`>${t}</figcaption>`);
-    for (const t of shown) expect(html).toContain(`>${t}<`);
-    expect(html).toContain('aria-pressed="true">Tire swing 2.0<');
-    expect(html).not.toContain('data-card-view="swing"');
+    for (const c of captions) expect(html).toContain(c);
+    for (const t of texts) expect(html).toContain(t);
+    expect(html).toMatch(active);
+    expect(html).not.toContain(retiredView);
   });
 
   it('labels the roles state Roles on a use case without the cartoon', () => {
     // ARRANGE
-    const label = 'aria-pressed="true">Roles<';
+    const label = pressed('Roles');
     // ACT
     const html = render({ locale: 'en', useCase: 'gate' });
     // ASSERT
-    expect(html).toContain(label);
+    expect(html).toMatch(label);
   });
 
   it('opens a Slide still naming swing on the roles state', () => {
     // ARRANGE
-    const label = 'aria-pressed="true">Reifenschaukel 2.0<';
+    const label = pressed('Reifenschaukel 2.0');
     // ACT
     const html = render({ locale: 'de', preset: 'swing' });
     // ASSERT
-    expect(html).toContain(label);
+    expect(html).toMatch(label);
   });
 
   it('shows each role’s job and artefacts in the roles state, and why Documentation is no work center', () => {
@@ -60,6 +68,15 @@ describe('success cases', () => {
     const html = render({ locale: 'en', preset: 'roles' });
     // ASSERT
     for (const t of [job, artefact, why]) expect(html).toContain(`>${t}<`);
+  });
+
+  it('names Pause by what it does next: Pause while the factory runs', () => {
+    // ARRANGE
+    const pause = `aria-label="${wordsFor('en').toolbar.pause}"`;
+    // ACT
+    const html = render({ locale: 'en' });
+    // ASSERT
+    expect(html).toContain(pause);
   });
 
   it('renders the German words at /de', () => {

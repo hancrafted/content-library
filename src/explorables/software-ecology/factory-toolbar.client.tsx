@@ -3,11 +3,11 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { useState, type ReactNode } from 'react';
 import { CompareWidget, type CompareWidgetProps } from './compare-widget';
+import type { DisplayMenuProps } from './display-menu';
 import type { ExchangeButtonsProps } from './exchange-buttons';
 import { Glyph } from './factory-glyph-view';
 import type { MechanicsMenuProps } from './mechanics-menu.client';
 import type { ModelMenuProps } from './model-menu.client';
-import type { MoreMenuProps } from './more-menu';
 import { ScenarioNotes, ScenariosMenu, TourButton, type ScenarioChoice } from './scenario-menu';
 import { SettingsMenu } from './settings-menu';
 import type { SettingsWords, ToolbarWords } from './software-ecology-words.types';
@@ -48,7 +48,7 @@ export interface ToolbarProps {
   readonly modified: boolean;
   readonly model: ModelMenuProps;
   readonly mechanics: MechanicsMenuProps;
-  readonly display: MoreMenuProps;
+  readonly display: DisplayMenuProps;
   /** Compare mode: the toggle, the picked slots, Show and Exit. */
   readonly compare: CompareWidgetProps;
   /** Download YAML and Upload, at the Settings popover's foot. */
@@ -149,13 +149,13 @@ function Settings(p: ToolbarProps & MenuState) {
     <ToolbarMenu
       open={p.open === 'settings'}
       onOpen={p.opener('settings')}
-      face={<Glyph name="model" className={styles.ico} />}
+      face={<Glyph name="settings" className={styles.ico} />}
       ariaLabel={w.button}
       tip={w.tip}
       buttonClass={`${styles.tbtn} ${styles.tbtnLine} text-caption`}
       label={w.label}
-      role="group"
-      settings
+      role="dialog"
+      placement="window"
     >
       <SettingsMenu words={w} model={p.model} mechanics={p.mechanics} display={p.display} exchange={p.exchange} />
     </ToolbarMenu>

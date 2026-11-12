@@ -108,7 +108,7 @@ export function Controls(p: ControlsProps) {
       {...stateRowOf(p)}
       model={modelOf(p)}
       mechanics={mechanicsOf(p)}
-      display={{ ...p.display, words: p.words.more }}
+      display={{ ...p.display, words: p.words.display }}
       compare={p.compare}
       exchange={p.exchange}
     />

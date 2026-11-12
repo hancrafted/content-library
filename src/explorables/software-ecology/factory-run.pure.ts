@@ -16,6 +16,7 @@ import {
   type Topology,
 } from './factory-model.pure.ts';
 import type { Bundle, Preset, Settings } from './software-ecology.types';
+import { unretired } from './use-case-preset-checks.pure.ts';
 
 /** Weeks a real second at 1×; 5× plays a working day in about 0.6 s. */
 export const SPEED_1X = 1 / 16;
@@ -28,10 +29,10 @@ export const MAX_STEPS = 40;
 export const WARM_CHUNK = 2000;
 const WARM_STEPS = Math.round(WARM_WEEKS / DTW);
 
-export const presetOf = (B: Bundle, id: string): Preset => {
+export const presetOf = (B: Bundle, wanted: string): Preset => {
   const ps = B.data.presets;
-  // Swing and Roles merged into the roles state (feedback 08): a link or a Slide still naming swing opens it
-  if (id === 'swing') id = 'roles';
+  // a link or a Slide still naming the retired swing opens the roles state
+  const id = unretired(wanted);
   const p = ps.find((x) => x.id === id) ?? ps.find((x) => x.view === 'factory') ?? ps[0];
   if (!p) throw new Error(`use case ${B.data.id} has no presets`);
   return p;

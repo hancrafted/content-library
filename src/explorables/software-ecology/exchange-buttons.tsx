@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import type { ExchangeWords } from './exchange-words.types';
 import { Glyph } from './factory-glyph-view';
 import styles from './software-ecology.module.css';
+import { ToolTip } from './toolbar-tip.client';
 
 /*
  * Download YAML and Upload, at the foot of the Settings popover (feedback 08). Upload opens the file picker; the parent
@@ -18,15 +19,12 @@ const ACCEPT = '.yaml,.yml,text/yaml,application/yaml';
 
 function FileButton(p: { icon: string; label: string; tip: string; onClick: () => void }) {
   return (
-    <button
-      type="button"
-      className={`${styles.tbtn} ${styles.tbtnLine} text-caption`}
-      data-tip={p.tip}
-      onClick={p.onClick}
-    >
-      <Glyph name={p.icon} className={styles.ico} />
-      <span>{p.label}</span>
-    </button>
+    <ToolTip tip={p.tip}>
+      <button type="button" className={`${styles.tbtn} ${styles.tbtnLine} text-caption`} onClick={p.onClick}>
+        <Glyph name={p.icon} className={styles.ico} />
+        <span>{p.label}</span>
+      </button>
+    </ToolTip>
   );
 }
 

@@ -8,7 +8,7 @@ import { z } from 'zod';
 import type { Locale, RoleDef, UseCaseData, UseCaseWords } from './software-ecology.types';
 import { isMap } from './use-case-checks.pure.ts';
 import { dataProblems } from './use-case-network-checks.pure.ts';
-import { presetProblems, stateProblems } from './use-case-preset-checks.pure.ts';
+import { presetProblems, stateProblems, unretired } from './use-case-preset-checks.pure.ts';
 
 type Doc = Record<string, unknown>;
 
@@ -37,11 +37,6 @@ export const exchangeSchema = (catalog: readonly string[]) => schemaOf({ catalog
 
 const read = (text: string): unknown => parse(text) as unknown;
 
-/** Swing and Roles merged into the roles state (feedback 08): the retired `swing` id or view reads as `roles`. */
-const RETIRED = 'swing';
-const ROLES_STATE = 'roles';
-const unretired = (v: unknown): unknown => (v === RETIRED ? ROLES_STATE : v);
-
 /** A preset or saved state with `swing` in its id or view, as the roles state. */
 const renamed = (x: Doc): Doc => ({
   ...x,
@@ -56,7 +51,12 @@ const presetsOf = (presets: unknown): unknown => {
   const seen = new Set<unknown>();
   return presets
     .map((x) => (isMap(x) ? renamed(x) : x))
-    .filter((x) => !isMap(x) || (seen.has(x.id) ? false : (seen.add(x.id), true)));
+    .filter((x) => {
+      if (!isMap(x)) return true;
+      if (seen.has(x.id)) return false;
+      seen.add(x.id);
+      return true;
+    });
 };
 
 /** A document of schema /5 with every retired name read as today's. */

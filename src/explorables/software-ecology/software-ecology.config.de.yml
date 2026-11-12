@@ -6,7 +6,6 @@ toolbar:
   fromFile: (aus Datei)
   speed: Tempo
   pause: Pause
-  speedN: 'Tempo {n}×'
   speedMenu: 'Tempo: {n}×'
   speedMenuTip: Wie schnell die simulierte Zeit läuft
   play: Abspielen
@@ -20,7 +19,6 @@ toolbar:
   day: 'Tag {n}'
   week: 'Woche {w} · Tag {d}'
   warming: Läuft warm
-  clockTip: Simulierte Zeit in Arbeitstagen; jede Übergabe dauert einen Vierteltag
   mechs:
     rework:
       label: Nacharbeit
@@ -202,9 +200,8 @@ cartoon:
   jobs:
     doc: 'Zu breit für eine Rolle: Dokumentation schreiben alle.'
     billing: 'Zu eng für einen Arbeitsplatz: Die Abrechnung folgt dem Abschluss.'
-# Das Modell-Popover: die Einstellungen der ganzen Fabrik, jede mit einem Tooltip, was sie bewirkt.
+# Die Spalte Modell im Einstellungs-Popover: die Einstellungen der ganzen Fabrik, jede mit einem Tooltip, was sie bewirkt.
 model:
-  label: Modelleinstellungen
   reality: Realitätsnähe
   ideal: Ideal
   realistic: Realistisch
@@ -219,7 +216,6 @@ model:
   worse: Schlechter
   same: Gleich
   better: Besser
-  strengths: Stärke jedes Mechanismus
   note: 'Rate, Anfragemix und Folgewahrscheinlichkeiten des Kunden stehen auf seiner Karte: klickt links auf den Kunden.'
   reset: Zurück zum Zustand
   tips:
@@ -231,8 +227,7 @@ model:
     churn: 'Wird schlechter Input behalten, gibt der Arbeitsplatz so viel Mal seine üblichen Dokumente weiter: er rät und schreibt mehr.'
     reset: Macht jede Änderung rückgängig, seit Ihr den Zustand gewählt habt.
 # Die Spalte Anzeige im Einstellungs-Popover: wie die Fabrik gezeichnet wird.
-more:
-  label: Anzeigeeinstellungen
+display:
   beltMotion: Bandbewegung
   beltMotionNote: Die Lamellen der Bänder bewegen sich. Aus ist ruhiger; die Dokumente wandern trotzdem.
   pile: Stau hinter dem Regal

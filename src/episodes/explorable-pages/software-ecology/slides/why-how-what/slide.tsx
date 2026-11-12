@@ -58,7 +58,9 @@ export const whyHowWhat = slide({
               states={state.toolbar.states}
               scenarios={state.words.toolbar.scenarios}
               tour={state.words.toolbar.tour}
-              watch={state.toolbar.watch}
+              speed={state.toolbar.speed}
+              clock={state.toolbar.clock}
+              useCase={state.toolbar.useCase}
               pin={<PinNumber n={2} />}
             />
             <div className="rounded-lg bg-card/60 p-2">

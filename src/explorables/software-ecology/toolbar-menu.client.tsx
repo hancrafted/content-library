@@ -17,9 +17,18 @@ import { ToolTip } from './toolbar-tip.client';
 /*
  * A toolbar dropdown, as the reference build's `wireMenu` makes its menus: its button toggles it, a click outside or
  * Escape closes it, and Escape hands focus back to its button. Escape closes an open menu before anything else, so it
- * stops there. Which menu is open belongs to the toolbar: one at a time. The Settings popover is fixed to the window
- * and placed by `placeSettings`, so it stays inside it (feedback 08); the others hang under their button.
+ * stops there. Which menu is open belongs to the toolbar: one at a time. A `window` menu (the Settings popover) is
+ * fixed to the window and placed by `placeSettings`, so it stays inside it (feedback 08); a `below` menu hangs under
+ * its button.
  */
+
+/** A menu button's text and its ▾. */
+export const MenuFace = ({ text }: { readonly text: string }) => (
+  <>
+    <span>{text}</span>
+    <span aria-hidden="true">▾</span>
+  </>
+);
 
 export interface ToolbarMenuProps {
   readonly open: boolean;
@@ -36,10 +45,13 @@ export interface ToolbarMenuProps {
   readonly buttonClass: string;
   /** Pressed while one of its entries is on (the Scenarios button). */
   readonly pressed?: boolean;
-  /** `menu` for a list of choices, `group` for a panel of controls. */
-  readonly role: 'menu' | 'group';
-  /** The Settings popover: fixed to the window, up to 720 px wide, kept inside it. */
-  readonly settings?: boolean;
+  /** `menu` for a list of choices, `dialog` for a panel of controls (the Settings popover). */
+  readonly role: 'menu' | 'dialog';
+  /**
+   * `below` hangs under the button (the default); `window` is fixed to the window, up to 720 px wide and kept inside
+   * it (the Settings popover).
+   */
+  readonly placement?: 'below' | 'window';
   /** Extra classes on the menu box. */
   readonly menuClass?: string;
   readonly children: ReactNode;
@@ -101,7 +113,7 @@ function MenuButton(p: ToolbarMenuProps & { btn: RefObject<HTMLButtonElement | n
         className={p.buttonClass}
         aria-expanded={p.open}
         aria-controls={p.menuId}
-        aria-haspopup={p.role === 'menu' ? 'menu' : 'dialog'}
+        aria-haspopup={p.role}
         aria-pressed={p.pressed}
         aria-label={p.ariaLabel}
         onClick={() => p.onOpen(!p.open)}
@@ -116,14 +128,15 @@ export function ToolbarMenu(p: ToolbarMenuProps) {
   const id = useId(),
     anchor = useRef<HTMLDivElement>(null);
   const btn = useDismiss(p, anchor);
-  const place = usePlace(p.open, !!p.settings, btn);
+  const inWindow = p.placement === 'window';
+  const place = usePlace(p.open, inWindow, btn);
   return (
     <div ref={anchor} className={styles.menuAnchor}>
       <MenuButton {...p} btn={btn} menuId={id} />
       <div
         id={id}
-        className={`${styles.menu} ${p.settings ? styles.menuSettings : ''} ${p.menuClass ?? ''} text-caption shadow-md`}
-        role={p.role === 'menu' ? 'menu' : 'dialog'}
+        className={`${styles.menu} ${inWindow ? styles.menuSettings : ''} ${p.menuClass ?? ''} text-caption shadow-md`}
+        role={p.role}
         aria-label={p.label}
         hidden={!p.open}
         style={boxStyle(place)}
