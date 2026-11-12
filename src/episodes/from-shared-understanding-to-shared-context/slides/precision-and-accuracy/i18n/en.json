@@ -1,0 +1,80 @@
+{
+  "title": "Precision and accuracy",
+  "caption": "<b>Precise:</b> someone else could build it without a single question. <b>Accurate:</b> the result matches the intent and solves the actual problem. You need both.",
+  "axes": {
+    "tight": "Tight",
+    "loose": "Loose",
+    "off": "Off the intent",
+    "on": "On the intent",
+    "precision": "Up: <b>precision</b>, how few questions the sheet leaves open",
+    "accuracy": "Right: <b>accuracy</b>, whether it hits what the rider wanted"
+  },
+  "workOrder": "Work order",
+  "atTheBench": "At the bench:",
+  "outcomes": {
+    "precise-off": {
+      "name": "Precise, off target",
+      "sheet": "Road racer · frame M · carbon · no mudguards",
+      "bench": "The wrong bike, built perfectly."
+    },
+    "precise-accurate": {
+      "name": "Precise and accurate",
+      "sheet": "Commuter e-bike · frame M · 500 Wh · mudguards · rack",
+      "bench": "The right bike, no questions."
+    },
+    "neither": {
+      "name": "Neither",
+      "sheet": "A nice bike, quickly.",
+      "bench": "Wrong, and full of questions."
+    },
+    "accurate-scattered": {
+      "name": "Accurate, scattered",
+      "sheet": "Something for the commute, with a motor?",
+      "bench": "Right in the end, after a dozen questions."
+    }
+  },
+  "evidence": "A requirement that is wrong or missing does not stop the line, <wrong>it ships the wrong bike</wrong>.",
+  "limits": "How much that costs <limits>depends on the job</limits>.",
+  "notes": {
+    "missing-requirements-show-up-as-wrong-output": {
+      "header": "Missing requirements show up as wrong output",
+      "description": "in 55 historic aerospace software incidents, 85% produced wrong output instead of stopping, only 16% were errors of traditional programming, and 40% came from absent code, meaning missing requirements or unanticipated situations [1].",
+      "sources": {
+        "prokop-historical-aerospace-software-errors": {
+          "title": "Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance"
+        }
+      }
+    },
+    "limits": {
+      "header": "Limits",
+      "description": "the 40% mixes missing requirements with unanticipated situations, the categories were assigned in hindsight, and the author doubts that more requirements would have averted many of these errors [1]. A survey of specifications found that how much quality matters depends on the project [2].",
+      "sources": {
+        "prokop-historical-aerospace-software-errors": {
+          "title": "Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance"
+        },
+        "mund-quality-of-requirements-specifications": {
+          "title": "Mund, Femmer, Méndez Fernández, Eckhardt, Does Quality of Requirements Specifications matter? Combined Results of Two Empirical Studies"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "precision": {
+        "title": "Precision",
+        "keywords": "",
+        "script": "Start with precision. A document is precise when someone else could execute it without asking you a single question. Nothing is left to guess."
+      },
+      "accuracy": {
+        "title": "Accuracy",
+        "keywords": "",
+        "script": "Accuracy is a different thing: the result matches what you intended and solves the actual problem. Picture a dartboard: precision is darts landing close together, accuracy is darts landing on the bull. A tight cluster means everyone who builds it ends up in the same place. A document can be precise and not accurate, and then you have the ten wrong swings, built faster and with great care."
+      },
+      "art-not-a-science": {
+        "title": "Art, not a science",
+        "keywords": "",
+        "script": "Now, honesty about the craft. Writing a good requirement is an art, not a science. You only know whether it was precise and accurate after you have tried it, and that is why this Section sits where it does."
+      }
+    }
+  }
+}

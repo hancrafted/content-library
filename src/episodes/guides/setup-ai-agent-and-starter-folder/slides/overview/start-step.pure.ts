@@ -6,9 +6,9 @@ export type StepNumber = (typeof STEPS)[number];
 export const BOXES = [
   { id: 'terminal-open', step: 1 },
   { id: 'agent-installed', step: 2 },
-  { id: 'agent-logged-in', step: 2 },
   { id: 'folder-unzipped', step: 3 },
   { id: 'agent-in-folder', step: 3 },
+  { id: 'agent-logged-in', step: 3 },
   { id: 'skill-ran', step: 4 },
 ] as const satisfies readonly { id: string; step: StepNumber }[];
 export type BoxId = (typeof BOXES)[number]['id'];

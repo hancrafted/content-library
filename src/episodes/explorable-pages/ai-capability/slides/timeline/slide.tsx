@@ -12,11 +12,14 @@ import en from './i18n/en.json';
 export const timeline = slide({
   slug: 'timeline',
   messages: { en, de },
-  notes: [{ slug: 'timeline', target: 'timeline' }],
+  notes: [
+    { slug: 'timeline', target: 'timeline' },
+    { slug: 'oversight-origin', target: 'oversight-origin' },
+  ],
   content: ({ t, locale, target }) => (
     <SlideFrame className="mt-6 gap-6">
       <div {...target('timeline')}>
-        <AiCapability preset="timeline" locale={locale} />
+        <AiCapability preset="timeline" locale={locale} rowTargets={{ oversight: target('oversight-origin') }} />
       </div>
       <PresetReadme
         heading={t('readme.heading')}

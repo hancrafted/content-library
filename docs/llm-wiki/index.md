@@ -22,6 +22,7 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why does checking intermediate steps catch errors that a review of only the final result misses?](research/AIE/AIE-0010__checking-intermediate-steps/research.md) — A correct-looking final answer can rest on flawed reasoning, so step-level checks find errors that final-result checks pass, though models cannot reliably find those errors in themselves.
 - [Why does a fresh, focused context outperform a long, accumulated chat?](research/AIE/AIE-0011__fresh-context-beats-long-chat/research.md) — A fresh, focused context outperforms a long chat because accuracy falls as input grows and a model that took a wrong turn leans on its own earlier attempts and does not recover.
 - [Why does the claim of 20x productivity from AI rest on estimates rather than measurement?](research/AIE/AIE-0017__twenty-x-productivity-claim/research.md) — The 20x figure is an estimate from interested parties about leading-edge programmers, not a measurement; controlled studies find gains far smaller, and sometimes a slowdown.
+- [Why does AI-assisted execution move the bottleneck to specification and review?](research/AIE/AIE-0018__ai-shifts-bottleneck-to-spec-and-review/research.md) — AI speeds up execution but the saved time is re-spent on verification, and review load rises with no company-level gain; the specification half is inferred, not measured.
 
 ### Large language models (LLM)
 
@@ -40,6 +41,10 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 - [Why are a model, prompting, an agent, a workflow and a factory distinct layers of working with AI?](research/LLM/LLM-0018__ai-layers-model-to-factory/research.md) — A large language model is the foundation; prompting, agents and workflows have first-party definitions, while "factory" is a 2026 practitioner label with no settled definition.
 - [Why do measured AI productivity gains fall short of the ceilings claimed for prompting, agents, workflows and a factory?](research/LLM/LLM-0019__ai-productivity-ceiling-per-level/research.md) — Randomised studies measure about 1.1 to 1.6x for chat-style prompting and 0.8 to 1.2x for coding agents; no study measures a workflow or a factory.
 - [Why is there a gap between how workers use AI and what leaders expect from it?](research/LLM/LLM-0020__ai-usage-gap-workers-leaders/research.md) — Surveys show a minority of AI users work with agents and leaders are more familiar with agents and more optimistic than employees, but no source measures leaders expecting factory-scale gains.
+- [Why does a language model's output get worse when its context holds distractors, contradictions or unclear instructions?](research/LLM/LLM-0022__context-rot-from-muddy-context/research.md) — Output gets worse when the context holds irrelevant, conflicting or underspecified material, not only when it is long, because early wrong assumptions persist.
+- [Why do prompt, context, harness, loop and graph engineering matter at different AI capability Levels?](research/LLM/LLM-0023__ai-disciplines-prompt-to-graph/research.md) — Prompt and context engineering are older practice, harness, loop and graph engineering are 2026 names; loop and graph have thin primary evidence and graph is contested as a discipline.
+- [Why do human-in, human-on and human-out-of-the-loop mark different AI capability Levels?](research/LLM/LLM-0024__human-in-on-out-of-the-loop/research.md) — The three terms come from military autonomy policy and the EU 2019 ethics guidelines; applied to LLM agents they are used loosely, and the evidence supports the product owner's ordering only in part.
+- [Why do workers, AI users and leaders sit at different AI capability Levels?](research/LLM/LLM-0025__ai-adoption-per-capability-level/research.md) — Per-Level adoption numbers for Prompting, Agents, Workflows and Factory with the population stated for each, plus one direct source for leaders expecting autonomous operation.
 
 ### Organizations (ORG)
 
@@ -57,3 +62,8 @@ Research any Episode can cite, one file per question. The retrieval job reads ea
 ### Startups (START)
 
 - [Why does revenue typically lag the costs that generate it in an early-stage startup?](research/START/START-0001__revenue-lags-costs-in-startups/research.md) — Revenue lags costs because a startup pays for building, hiring and selling before customers exist, then waits through deal closing, invoicing and payment terms before cash arrives.
+
+### Software engineering (SWE)
+
+- [Why does the software ecology video treat software as a socio-technical ecosystem?](research/SWE/SWE-0001__software-as-socio-technical-system/research.md) — The software ecology talk treats software as a socio-technical ecosystem because what an organization builds mirrors its people, culture and tools, so no single node explains or fixes the whole.
+- [Why do unclear requirements lead to rework and failed projects?](research/SWE/SWE-0002__unclear-requirements-cause-rework/research.md) — Practitioners name incomplete requirements their top problem and report rework and overruns, but the famous failure rates and the 100x late-fix cost are disputed.

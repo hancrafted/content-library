@@ -1,6 +1,7 @@
 import { localizeSlide, type LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import { slide, type Slide } from '@/episodes/components/slide-master/slide';
 import { placeSections } from '@/episodes/lib/episode.pure';
+import { parseReadyFlags } from '@/episodes/lib/guide-ready-flags.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
 import { createElement, Fragment } from 'react';
@@ -8,7 +9,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import en from './i18n/en.json';
 import { ViewBody, type ReadinessWords } from './readiness';
-import { decideView, parseReadyFlags } from './ready-state.pure';
+import { decideView } from './ready-state.pure';
 import { overview } from './slide';
 
 /*
@@ -80,6 +81,24 @@ function viewOf(search: string, onReopen?: () => void) {
 }
 
 describe('success cases', () => {
+  it('names each step exactly as its Section, and lists logging in under step 3, the folder step', () => {
+    // ARRANGE
+    const expected = {
+      two: 'Your AI agent',
+      three: 'Your folder',
+      loginStep: '3',
+    };
+    // ACT
+    const $ = scene('en');
+    const actual = {
+      two: $('[data-step="2"] span.text-body.font-semibold').text(),
+      three: $('[data-step="3"] span.text-body.font-semibold').text(),
+      loginStep: $('li[data-step]:contains("I\'m logged in")').attr('data-step'),
+    };
+    // ASSERT
+    expect(actual).toEqual(expected);
+  });
+
   it('lists the Spec title in the table of contents and shows its own heading and the Hook on screen', () => {
     // ARRANGE
     const expected = {

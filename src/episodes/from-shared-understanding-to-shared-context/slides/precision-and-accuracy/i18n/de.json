@@ -1,0 +1,80 @@
+{
+  "title": "Präzision und Genauigkeit",
+  "caption": "<b>Präzise:</b> Jemand anderes könnte es ohne eine einzige Frage bauen. <b>Genau:</b> Das Ergebnis trifft die Absicht und löst das eigentliche Problem. Du brauchst beides.",
+  "axes": {
+    "tight": "Eng",
+    "loose": "Locker",
+    "off": "Verfehlt die Absicht",
+    "on": "Trifft die Absicht",
+    "precision": "Nach oben: <b>Präzision</b>, wie wenige Fragen das Blatt offen lässt",
+    "accuracy": "Nach rechts: <b>Genauigkeit</b>, ob es trifft, was der Radfahrer wollte"
+  },
+  "workOrder": "Arbeitsauftrag",
+  "atTheBench": "An der Werkbank:",
+  "outcomes": {
+    "precise-off": {
+      "name": "Präzise, daneben",
+      "sheet": "Rennrad · Rahmen M · Carbon · ohne Schutzbleche",
+      "bench": "Das falsche Rad, perfekt gebaut."
+    },
+    "precise-accurate": {
+      "name": "Präzise und genau",
+      "sheet": "Pendel-E-Bike · Rahmen M · 500 Wh · Schutzbleche · Gepäckträger",
+      "bench": "Das richtige Rad, keine Fragen."
+    },
+    "neither": {
+      "name": "Keins von beidem",
+      "sheet": "Ein schönes Rad, und schnell.",
+      "bench": "Falsch und voller Fragen."
+    },
+    "accurate-scattered": {
+      "name": "Genau, gestreut",
+      "sheet": "Irgendwas für den Arbeitsweg, mit Motor?",
+      "bench": "Am Ende richtig, nach einem Dutzend Fragen."
+    }
+  },
+  "evidence": "Eine falsche oder fehlende Anforderung hält das Band nicht an, <wrong>sie liefert das falsche Rad aus</wrong>.",
+  "limits": "Wie viel das kostet, <limits>hängt vom Auftrag ab</limits>.",
+  "notes": {
+    "missing-requirements-show-up-as-wrong-output": {
+      "header": "Fehlende Anforderungen zeigen sich als falsches Ergebnis",
+      "description": "Von 55 historischen Softwarevorfällen in der Luft- und Raumfahrt lieferten 85 % ein falsches Ergebnis, statt anzuhalten. Nur 16 % waren klassische Programmierfehler, 40 % gingen auf fehlenden Code zurück, also auf fehlende Anforderungen oder nicht vorhergesehene Situationen [1].",
+      "sources": {
+        "prokop-historical-aerospace-software-errors": {
+          "title": "Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance"
+        }
+      }
+    },
+    "limits": {
+      "header": "Grenzen",
+      "description": "Die 40 % vermischen fehlende Anforderungen mit unvorhergesehenen Situationen, die Kategorien wurden im Nachhinein vergeben, und der Autor bezweifelt, dass mehr Anforderungen viele dieser Fehler verhindert hätten [1]. Eine Untersuchung von Spezifikationen fand, dass es vom Projekt abhängt, wie sehr ihre Qualität zählt [2].",
+      "sources": {
+        "prokop-historical-aerospace-software-errors": {
+          "title": "Prokop, Historical Aerospace Software Errors Categorized to Influence Fault Tolerance"
+        },
+        "mund-quality-of-requirements-specifications": {
+          "title": "Mund, Femmer, Méndez Fernández, Eckhardt, Does Quality of Requirements Specifications matter? Combined Results of Two Empirical Studies"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "precision": {
+        "title": "Präzision",
+        "keywords": "",
+        "script": "Fangen wir mit Präzision an. Ein Dokument ist präzise, wenn jemand anderes es umsetzen könnte, ohne Dir eine einzige Frage zu stellen. Nichts bleibt zu raten."
+      },
+      "accuracy": {
+        "title": "Genauigkeit",
+        "keywords": "",
+        "script": "Genauigkeit ist etwas anderes: Das Ergebnis trifft, was Du beabsichtigt hast, und löst das eigentliche Problem. Stell Dir eine Dartscheibe vor: Präzision heißt, die Pfeile landen dicht beieinander, Genauigkeit heißt, sie landen im Bullseye. Ein enger Cluster heißt: Jeder, der es baut, landet am selben Ort. Ein Dokument kann präzise sein und nicht genau, und dann hast Du die zehn falschen Schaukeln, schneller gebaut und mit großer Sorgfalt."
+      },
+      "art-not-a-science": {
+        "title": "Kunst, keine Wissenschaft",
+        "keywords": "",
+        "script": "Jetzt ehrlich zum Handwerk. Eine gute Anforderung zu schreiben ist eine Kunst, keine Wissenschaft. Ob sie präzise und genau war, weißt Du erst, wenn Du es ausprobiert hast, und genau deshalb steht dieser Abschnitt an dieser Stelle."
+      }
+    }
+  }
+}

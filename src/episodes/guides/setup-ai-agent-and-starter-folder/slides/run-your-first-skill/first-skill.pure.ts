@@ -1,3 +1,5 @@
+import type { Locale } from '@/shared/lib/locale.pure';
+
 /** The operating systems the page-wide OS pick names; the Slide hides its toggle but reads the pick. */
 export const OSES = ['mac', 'windows', 'linux'] as const;
 export type Os = (typeof OSES)[number];
@@ -25,6 +27,14 @@ export function osOf(pick: string): Os {
 /** The page pick read as an AI agent; anything else is the default. */
 export function agentOf(pick: string): Agent {
   return (AGENTS as readonly string[]).includes(pick) ? (pick as Agent) : DEFAULT_AGENT;
+}
+
+/**
+ * What the viewer types to run the check skill. German adds `de`, so the skill opens the German Guide; the bare
+ * command opens English, as starter folders handed out earlier expect.
+ */
+export function skillCommand(locale: Locale): string {
+  return locale === 'de' ? '/hancrafted-check-setup de' : '/hancrafted-check-setup';
 }
 
 /* The command each OS opens a URL with in the default browser (Spec Option 7a build notes). */

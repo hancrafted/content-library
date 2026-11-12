@@ -1,0 +1,58 @@
+{
+  "title": "Static and dynamic context",
+  "caption": "Static is set up before the shift, dynamic arrives during it: <b>both land on the same bench.</b>",
+  "before": {
+    "time": "07:00",
+    "label": "Before the shift",
+    "kind": "Static",
+    "drawing": "The bench before the shift"
+  },
+  "during": {
+    "time": "10:30",
+    "label": "During the shift",
+    "kind": "Dynamic",
+    "drawing": "The bench during the shift"
+  },
+  "rows": {
+    "before": {
+      "memory": { "thing": "The pinned instruction sheet", "name": "Memory files" },
+      "system": { "thing": "The standing rules", "name": "System prompt" },
+      "initial": { "thing": "The first work order", "name": "Initial prompt" }
+    },
+    "during": {
+      "retrieval": { "thing": "Parts fetched from the storeroom", "name": "Retrieval" },
+      "web": { "thing": "A call to a supplier", "name": "Web search" },
+      "folder": { "thing": "The folder of the current job", "name": "Project folder" }
+    }
+  },
+  "notes": {
+    "dynamic-means-loaded-at-run-time": {
+      "header": "Dynamic means loaded at run time",
+      "description": "agents keep lightweight identifiers such as file paths and links and load data into context at run time using tools, instead of loading everything up front [1].",
+      "sources": {
+        "anthropic-effective-context-engineering": {
+          "title": "Anthropic, Effective context engineering for AI agents"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "before-the-shift": {
+        "title": "Before the shift",
+        "keywords": "",
+        "script": "Static context is everything you set up before the work starts. Picture the bench before the shift: the instruction sheet, the standing rules and the first work order. For an agent that means memory files, system prompts and your initial prompt."
+      },
+      "during-the-shift": {
+        "title": "During the shift",
+        "keywords": "",
+        "script": "Dynamic context is what arrives during the shift. A worker fetches parts from the storeroom, phones a supplier, opens the folder of the current job. For an agent that means retrieval, web search and your project folder, pulled in on its own while it works."
+      },
+      "why-it-matters": {
+        "title": "Why it matters",
+        "keywords": "",
+        "script": "Why does the difference matter? Because both land on the same bench. The AI cannot tell the sheet you wrote from the box someone dropped off, so the bench has to hold up, whichever way things arrive. You write the static part, so you can check it. Dynamic material arrives uninvited, so check what it brings."
+      }
+    }
+  }
+}

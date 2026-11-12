@@ -1,6 +1,6 @@
 {
   "title": "Was Du da siehst",
-  "caption": "Fünf Teile, mehr nicht. Zeig auf eins, dann siehst Du, was es tut: <b>Du kannst hier nichts kaputt machen.</b>",
+  "caption": "Fünf Teile, mehr nicht. Zeig auf eins, dann siehst Du, was es tut: <b>Umschauen und das Fenster schließen machen nichts kaputt.</b>",
   "toolbar": {
     "os": "Dein Computer",
     "agent": "KI-Agent"
@@ -35,11 +35,11 @@
     },
     "close": {
       "name": "Schließen-Knopf",
-      "explanation": "Wenn Du das Fenster schließt, endet alles darin. Nichts, was Du hier probierst, kann Deinen Computer kaputt machen, und das Fenster zu schließen ist immer der Ausweg."
+      "explanation": "Wenn Du das Fenster schließt, endet alles darin, und das Fenster zu schließen ist immer der Ausweg."
     }
   },
   "safe": {
-    "title": "Du kannst hier nichts kaputt machen",
+    "title": "Umschauen und das Fenster schließen machen nichts kaputt",
     "text": "Schließt Du das Fenster, ist alles beendet. Zum Verlassen schließt Du das Fenster wie jedes andere."
   },
   "notes": {
@@ -66,9 +66,9 @@
         "script": "Zeig auf ein Teil oder tipp es an, dann erscheint eine kurze Erklärung. Wenn Du magst, geh mit Weiter und Zurück Teil für Teil durch. Die Eingabezeile sagt, dass sie bereit ist, der Cursor zeigt, wo Dein Text landet, und die Antwort kommt direkt unter Deinem Befehl."
       },
       "you-cant-break-it": {
-        "title": "Du kannst nichts kaputt machen",
+        "title": "Umschauen macht nichts kaputt",
         "keywords": "",
-        "script": "Das hier möchte ich Dir mitgeben: Du kannst nichts kaputt machen, wenn Du Dich hier umschaust. Wenn Du Dich verloren fühlst, schließ das Fenster, und alles darin ist beendet. Ein neues kannst Du jederzeit öffnen."
+        "script": "Das hier möchte ich Dir mitgeben: Dich hier umzuschauen und das Fenster zu schließen, macht nichts kaputt. Wenn Du Dich verloren fühlst, schließ das Fenster, und alles darin ist beendet. Ein neues kannst Du jederzeit öffnen."
       }
     }
   },

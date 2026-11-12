@@ -1,0 +1,57 @@
+{
+  "title": "Speed the whole line can carry",
+  "caption": "The goal is <b>a faster line that stays in balance</b>, not one very fast station.",
+  "chart": {
+    "label": "Every station at twice the pace, and the line still in balance",
+    "axis": "Pace per station, documents a day",
+    "before": "before AI: 10",
+    "after": "line speed with AI: 20",
+    "stations": "Stations"
+  },
+  "stations": {
+    "sales": "Sales",
+    "design": "Design",
+    "build": "Build",
+    "review": "Review",
+    "delivery": "Delivery"
+  },
+  "pace": "20 a day",
+  "ai": "AI",
+  "line": "The line, balanced at twice the speed",
+  "request": "“A swing for my kids”",
+  "result": "The tire swing",
+  "customer": "Customer",
+  "takeaway": {
+    "lead": "Equal bars, short queues.",
+    "text": "The returns come from the whole line, <marker>not one station</marker>."
+  },
+  "bench": {
+    "caption": "One station up close: the bike bench",
+    "label": "The bike assembly bench, one station of the line, set up for the shift"
+  },
+  "notes": {
+    "returns-come-from-the-system": {
+      "header": "Returns come from the system",
+      "description": "DORA's overview reports that the greatest returns from AI come from a strategic focus on the underlying organizational system, not the tools. This is an overview page, so treat it as a pointer [1].",
+      "sources": {
+        "dora-2025-overview": {
+          "title": "DORA, State of AI-assisted Software Development 2025 (overview page)"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "one-fast-station-is-not-the-goal": {
+        "title": "One fast station is not the goal",
+        "keywords": "",
+        "script": "Picture the same line once more, but this time running at a higher speed and still in balance. Queues stay short and every work center keeps pace with its neighbour. That is the goal: a sustainable increase in what the whole organization gets done, not one very fast station. Now zoom into one station: the bike bench. Keep an eye on this one station; we come back to it."
+      },
+      "bridge": {
+        "title": "Bridge",
+        "keywords": "",
+        "script": "Pace is not the only thing that has to match. Whatever arrives at the first station sets the work for every station after it. If that is unclear, all of them build the wrong thing faster, and review has more to catch. That arrival is the requirement, which raises the obvious question: what makes a requirement a good one?"
+      }
+    }
+  }
+}

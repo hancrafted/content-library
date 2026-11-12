@@ -91,10 +91,10 @@ describe('success cases', () => {
     expect(found).toEqual(expected);
   });
 
-  it('says you cannot break anything and how to leave', () => {
+  it('says looking around and closing the window break nothing, without claiming a terminal is harmless', () => {
     // ARRANGE
     const expected =
-      "You can't break anything hereClosing the window ends it. To leave, close the window like any other.";
+      'Looking around and closing the window break nothingClosing the window ends it. To leave, close the window like any other.';
     // ACT
     const text = scene('en')('[data-target="safe"]').text().replace(/\s+/g, ' ').trim();
     // ASSERT
@@ -139,6 +139,21 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("never claims you can't break anything, in either language", () => {
+    // ARRANGE
+    const claims = ["can't break anything", 'cannot break anything', 'nichts kaputt machen'];
+    // ACT
+    const texts = (['en', 'de'] as const).map((locale) => {
+      const slideText = scene(locale).text();
+      const spoken = localized(locale)
+        .voiceScript.map(({ title, script }) => `${title} ${script}`)
+        .join(' ');
+      return `${slideText} ${spoken}`;
+    });
+    // ASSERT
+    for (const text of texts) for (const claim of claims) expect(text).not.toContain(claim);
+  });
+
   it('shows the same five parts and the same notes and segments in German', () => {
     // ARRANGE
     const expected = {

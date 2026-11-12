@@ -1,0 +1,19 @@
+/*
+ * The pace bars' growth: under `[data-play]` (the factory line's `FlowMotion`) every bar grows from its old pace, the
+ * share `--from` of its new height, to the new one, all together; the line's documents ride in after it. The base rule
+ * is the end state, which is also what reduced motion shows.
+ */
+
+@keyframes grow {
+  from {
+    transform: scaleY(var(--from, 0.5));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-play]) .bar {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: grow 700ms ease-out backwards;
+  }
+}

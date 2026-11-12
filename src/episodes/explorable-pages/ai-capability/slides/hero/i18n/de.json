@@ -15,7 +15,7 @@
     "stilled": "Der Hintergrund steht still: Bewegung reduzieren ist aktiv"
   },
   "preview": {
-    "label": "Stilisierte Vorschau des Explorables KI-Fähigkeiten: vier Stufen, Prompting, Agenten, Workflows und die Factory, jede mit ihrem Jahr und einer Leitung hinab zu einem Sprachmodell, das das nächste Token vorhersagt.",
+    "label": "Stilisierte Vorschau des Explorables KI-Fähigkeiten: vier Stufen, Chat, Agenten, Workflows und die Factory, jede mit ihrem Jahr und einer Leitung hinab zu einem Sprachmodell, das das nächste Token vorhersagt.",
     "title": "KI-Fähigkeiten",
     "tag": "2022–2026",
     "model": "Sprachmodell",
@@ -23,7 +23,7 @@
     "cards": {
       "prompting": {
         "year": "2022–23",
-        "name": "Prompting",
+        "name": "Chat",
         "like": "wie eine Aufgabe"
       },
       "agents": {

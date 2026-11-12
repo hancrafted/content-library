@@ -15,7 +15,7 @@
     "stilled": "The background is still: reduced motion is on"
   },
   "preview": {
-    "label": "Stylised preview of the AI capability Explorable: four Levels, prompting, agents, workflows and the factory, each with its year and a wire down to a language model that predicts the next token.",
+    "label": "Stylised preview of the AI capability Explorable: four Levels, chat, agents, workflows and the factory, each with its year and a wire down to a language model that predicts the next token.",
     "title": "AI capability",
     "tag": "2022–2026",
     "model": "Language model",
@@ -23,7 +23,7 @@
     "cards": {
       "prompting": {
         "year": "2022–23",
-        "name": "Prompting",
+        "name": "Chat",
         "like": "like a task"
       },
       "agents": {

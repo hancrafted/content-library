@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
 import styles from './ai-capability.module.css';
-import type { Ceiling, LevelWords } from './ai-capability.types';
+import type { LevelWords, Productivity } from './ai-capability.types';
 import { TRACK_TICKS, trackPercent } from './rows.pure';
 import type { Level } from './scene-frames.pure';
 
 /*
- * The three rows the toolbar adds to a Level's column (pure views): Role, Ceiling and Mismatch. Each is one card in the
- * column's grid row, so the four Levels' cards of one row end level. The column decides which are shown.
+ * The three per-Level rows the toolbar adds to a column (pure views): Managing effort, Productivity increase and Adoption.
+ * Each is one card in the column's grid row, so the four Levels' cards of one row end level. The column decides which
+ * are shown; the two layer rows that span Levels live in layer-row-view.tsx.
  */
 
 const CARD = 'relative rounded-2xl border border-border bg-card px-4 py-3';
@@ -49,10 +50,10 @@ const ICONS: Record<Level, ReactNode> = {
   ),
 };
 
-/** The Role row: what the Level is comparable to, a task up to an organisation. */
-export function RoleCellView(props: { readonly level: Level; readonly label: string; readonly scale: string }) {
+/** The Managing effort row: what the Level asks you to manage, a task up to an organisation, as in a promotion. */
+export function EffortCellView(props: { readonly level: Level; readonly label: string; readonly scale: string }) {
   return (
-    <div data-row="role" className={`${CARD} ${styles.blend} flex items-center gap-3`}>
+    <div data-row="effort" className={`${CARD} ${styles.blend} flex items-center gap-3`}>
       <span className="text-(--tone)">{ICONS[props.level]}</span>
       <span className="flex flex-col">
         <span className={LABEL}>{props.label}</span>
@@ -63,7 +64,7 @@ export function RoleCellView(props: { readonly level: Level; readonly label: str
 }
 
 /** A dashed tag that marks a claim no study backs yet. */
-function Hypothesis({ children }: { readonly children: string }) {
+export function Hypothesis({ children }: { readonly children: string }) {
   return (
     <span className="rounded-full border border-dashed border-muted-foreground px-2 text-caption text-muted-foreground">
       {children}
@@ -87,14 +88,14 @@ const TICK_ALIGN: Record<(typeof TRACK_TICKS)[number], string> = {
 };
 
 /** The log track from 1× to past the promise: the claimed range, the measured one under it, and the promise's tick. */
-function Track({ ceiling, promise }: { readonly ceiling: Ceiling; readonly promise: string }) {
+function Track({ range, promise }: { readonly range: Productivity; readonly promise: string }) {
   return (
     <>
       <div aria-hidden="true" className="relative h-5">
         <span className="absolute inset-x-0 top-2 h-1 rounded-full bg-muted" />
-        <span className={`${styles.claimed} absolute top-1.5 h-2 rounded-full`} style={span(ceiling.claimed)} />
-        {ceiling.measured && (
-          <span className="absolute top-4 h-1 rounded-full bg-foreground" style={span(ceiling.measured)} />
+        <span className={`${styles.claimed} absolute top-1.5 h-2 rounded-full`} style={span(range.claimed)} />
+        {range.measured && (
+          <span className="absolute top-4 h-1 rounded-full bg-foreground" style={span(range.measured)} />
         )}
         <span
           className="absolute inset-y-0 border-l-2 border-dotted border-destructive"
@@ -116,20 +117,20 @@ function Track({ ceiling, promise }: { readonly ceiling: Ceiling; readonly promi
   );
 }
 
-/** The Ceiling row: the claimed range, labelled a hypothesis, on a log track to the 20× promise, and what was measured. */
-export function CeilingCellView(props: {
-  readonly words: Pick<LevelWords, 'ceiling' | 'measured'>;
-  readonly ceiling: Ceiling;
+/** The Productivity increase row: the claimed range, a hypothesis, on a log track to the 20× promise, and what was measured. */
+export function ProductivityCellView(props: {
+  readonly words: Pick<LevelWords, 'productivity' | 'measured'>;
+  readonly range: Productivity;
   readonly labels: { readonly hypothesis: string; readonly measured: string; readonly promise: string };
 }) {
-  const { ceiling, labels } = props;
+  const { range, labels } = props;
   return (
-    <div data-row="ceiling" className={`${CARD} ${styles.blend} flex flex-col gap-1.5`}>
+    <div data-row="productivity" className={`${CARD} ${styles.blend} flex flex-col gap-1.5`}>
       <p className="flex flex-wrap items-baseline gap-2">
-        <span className="text-body font-semibold text-(--tone) tabular-nums">{props.words.ceiling}</span>
+        <span className="text-body font-semibold text-(--tone) tabular-nums">{props.words.productivity}</span>
         <Hypothesis>{labels.hypothesis}</Hypothesis>
       </p>
-      <Track ceiling={ceiling} promise={labels.promise} />
+      <Track range={range} promise={labels.promise} />
       <p className="text-caption text-muted-foreground">
         <span className="font-medium text-foreground">{labels.measured}</span> {props.words.measured}
       </p>
@@ -137,35 +138,56 @@ export function CeilingCellView(props: {
   );
 }
 
-/** Which marker a Level carries on the gap band: most people at its start, what leaders expect at its end. */
-export type GapEnd = 'here' | 'expect' | null;
+/** The Adoption row's shared labels: a Level no survey measures, and the leaders' expectation marked on one Level. */
+export interface AdoptionLabels {
+  readonly noData: string;
+  readonly hypothesis: string;
+  readonly expect: string;
+  readonly expectation: string;
+  readonly expectationSource: string;
+}
+
+/** What leaders expect, marked on the Level they expect it at, tagged a hypothesis. */
+function Expectation({ labels }: { readonly labels: AdoptionLabels }) {
+  return (
+    <p className="mt-1 flex flex-col gap-1 border-t border-dashed border-border pt-2 text-caption">
+      <span className="flex flex-wrap items-baseline gap-2 font-semibold">
+        <span aria-hidden="true" className="text-destructive">
+          ◆
+        </span>
+        {labels.expect}
+        <Hypothesis>{labels.hypothesis}</Hypothesis>
+      </span>
+      <span>{labels.expectation}</span>
+      <span className="text-muted-foreground">{labels.expectationSource}</span>
+    </p>
+  );
+}
 
 /**
- * The Mismatch row: one dashed band across the four Levels, from where most people are to what leaders expect, with
- * this Level's evidence and its source under its stretch of the band.
+ * The Adoption row: how many people work at this Level, with the population it was measured in, since every Level's
+ * number comes from a different survey. No bars, so no one compares across populations. The Level leaders expect
+ * carries their expectation, tagged a hypothesis.
  */
-export function MismatchCellView(props: {
-  readonly words: Pick<LevelWords, 'gap' | 'gapSource'>;
-  readonly end: GapEnd;
-  readonly labels: { readonly here: string; readonly expect: string; readonly hypothesis: string };
+export function AdoptionCellView(props: {
+  readonly words: LevelWords['adoption'];
+  readonly expected: boolean;
+  readonly labels: AdoptionLabels;
 }) {
-  const { end, labels } = props;
+  const { words, labels } = props;
   return (
-    <div data-row="mismatch" data-gap-end={end ?? undefined} className={`${CARD} ${styles.blend} pt-8`}>
-      <span
-        aria-hidden="true"
-        className={`${styles.band} absolute top-3.5 border-t-3 border-dashed border-destructive/60`}
-      />
-      {end !== null && <span aria-hidden="true" className={`${styles.pin} absolute top-1.5 size-5 rounded-full`} />}
-      {end === 'here' && <p className="text-body font-semibold">{labels.here}</p>}
-      {end === 'expect' && (
-        <p className="flex flex-wrap items-baseline gap-2 text-body font-semibold">
-          {labels.expect}
-          <Hypothesis>{labels.hypothesis}</Hypothesis>
-        </p>
+    <div data-row="adoption" className={`${CARD} ${styles.blend} flex flex-col gap-1`}>
+      {words.stat ? (
+        <>
+          <span className="text-subheading font-semibold text-(--tone) tabular-nums">{words.stat}</span>
+          <span className="text-caption">{words.what}</span>
+        </>
+      ) : (
+        <span className="text-body font-medium text-muted-foreground">{labels.noData}</span>
       )}
-      <p className="text-caption">{props.words.gap}</p>
-      <p className="text-caption text-muted-foreground">{props.words.gapSource}</p>
+      <span className="w-fit rounded-full bg-muted px-2 text-caption">{words.population}</span>
+      {words.source ? <span className="text-caption text-muted-foreground">{words.source}</span> : null}
+      {props.expected ? <Expectation labels={labels} /> : null}
     </div>
   );
 }

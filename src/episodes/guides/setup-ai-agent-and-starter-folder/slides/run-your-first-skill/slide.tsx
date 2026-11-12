@@ -7,14 +7,13 @@ import { GuideToolbar } from '@/episodes/components/slide-shared/guide-toolbar/g
 import type { ReactNode } from 'react';
 import { AgentView } from './agent-view.client';
 import { BrowserWindow, Homepage } from './browser-window';
-import { AGENT_NAMES, type Agent } from './first-skill.pure';
+import { AGENT_NAMES, skillCommand, type Agent } from './first-skill.pure';
 import de from './i18n/de.json';
 import en from './i18n/en.json';
 import { OpenCommand } from './open-command.client';
 import { Approval, Choices, PermissionPrompt } from './permission-prompt';
 
 /* The homepage the skill opens; the Slide draws it, it links nowhere. */
-const SKILL_COMMAND = '/hancrafted-check-setup';
 const HOMEPAGE = 'https://hancrafted.net';
 
 const CLAUDE_CODE_PERMISSIONS = { slug: 'claude-code-permissions', url: 'https://code.claude.com/docs/en/permissions' };
@@ -106,7 +105,7 @@ export const runYourFirstSkill = slide({
       }}
     />
   ),
-  content: ({ t, marker, Marker, target }) => {
+  content: ({ t, locale, marker, Marker, target }) => {
     const corner = <Marker note="the-prompt-is-a-safeguard" placement="beside" />;
     const command = <OpenCommand url={HOMEPAGE} />;
     const prompt = (agent: Agent, dialog: ReactNode) => (
@@ -158,7 +157,13 @@ export const runYourFirstSkill = slide({
               <p className="text-caption font-semibold uppercase text-primary">{t('doLabel')}</p>
               <p className="text-body">{t('doText')}</p>
             </div>
-            <CopyLine text={SKILL_COMMAND} where="agent" focal big words={{ copy: t('copy'), copied: t('copied') }} />
+            <CopyLine
+              text={skillCommand(locale)}
+              where="agent"
+              focal
+              big
+              words={{ copy: t('copy'), copied: t('copied') }}
+            />
           </div>
           <DoneStrip label={t('doneLabel')}>{t.rich('result.done')}</DoneStrip>
 

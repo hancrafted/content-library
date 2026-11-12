@@ -27,6 +27,10 @@
       "2026-11-04-intro-hitl-workflows": {
         "title": "Intro Human in the Loop Workflow",
         "description": "An introduction to human-in-the-loop workflows in Guangzhou."
+      },
+      "2026-11-16-cyberforum-akademie-hands-on-agentic-workflows": {
+        "title": "Hands-on workshop: Introduction to agentic workflows",
+        "description": "Agentic AI workflows open up a new way of working with AI: instead of single tasks, agents support whole workflows, question requirements, develop solutions on their own and accompany you through the build. In this hands-on workshop you learn the basics of agentic workflows and apply them straight away: how to define tasks precisely and steer agents through context engineering, working with a modern coding agent on your own questions. Prerequisite: a coding agent set up with a subscription, such as Claude Code or Codex CLI."
       }
     }
   }

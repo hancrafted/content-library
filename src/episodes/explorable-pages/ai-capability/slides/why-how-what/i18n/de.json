@@ -13,7 +13,7 @@
     },
     "how": {
       "title": "Jede Ebene fügt demselben Modell eine Sache hinzu.",
-      "caption": "<marker>Prompting schreibt Anweisungen; ein Agent steuert seine Werkzeugnutzung selbst in einer Schleife; ein Workflow verkettet Schritte auf einem vorab festgelegten Weg.</marker>"
+      "caption": "<marker>Ein Chat heißt, Anweisungen zu schreiben und eine Antwort zu bekommen; ein Agent steuert seine Werkzeugnutzung selbst in einer Schleife; ein Workflow verkettet Schritte auf einem vorab festgelegten Weg.</marker>"
     },
     "what": {
       "title": "Vier Stufen auf einer Zeitleiste, von 2022 bis 2026.",
@@ -35,7 +35,7 @@
     },
     "why": {
       "header": "Die Begriffe sind nicht gefestigt",
-      "description": "Prompting, Agenten und Workflows haben Definitionen der Anbieter selbst, aber „Fabrik“ ist ein Begriff von Praktikern aus 2026 [1], und seine Definitionen unterscheiden sich darin, wie viel menschliche Kontrolle bleibt [2] (Recherche LLM-0018).",
+      "description": "Chat, Agenten und Workflows haben Definitionen der Anbieter selbst, aber „Fabrik“ ist ein Begriff von Praktikern aus 2026 [1], und seine Definitionen unterscheiden sich darin, wie viel menschliche Kontrolle bleibt [2] (Recherche LLM-0018).",
       "sources": {
         "strongdm-software-factory": {
           "title": "StrongDM, The Software Factory"

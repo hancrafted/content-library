@@ -1,0 +1,116 @@
+{
+  "title": "Grill-me",
+  "caption": "Matt Pocock’s grill-me skill: the AI asks a round of questions at a time, you answer, and after the last round it writes <b>the spec: a one-page work order</b>.",
+  "chat": {
+    "task": "Spring service week for the bike workshop",
+    "roleSwitch": "The AI asks · you answer",
+    "rounds": {
+      "goal": {
+        "label": "Round 1 · the goal",
+        "questions": {
+          "q1": "Who is the week for: regulars or new riders?",
+          "q2": "What must be ready before the spring rush?"
+        },
+        "answer": "1. Regulars first. 2. Every rental bike serviced."
+      },
+      "limits": {
+        "label": "Round 2 · the limits",
+        "questions": {
+          "q1": "Who books the slots, and how?",
+          "q2": "Which bikes are out of scope?"
+        },
+        "answer": "1. Front desk, by phone and walk-in. 2. E-bikes, they go to the partner shop."
+      },
+      "done": {
+        "label": "Round 3 · done when",
+        "questions": {
+          "q1": "How will we know it’s done?"
+        },
+        "answer": "“40 repair slots booked, calendar full by 1 March.”"
+      }
+    },
+    "closing": "No gaps left. Writing the spec.",
+    "roundsNote": "in rounds, not one by one"
+  },
+  "spec": {
+    "label": "The spec, landing on the bench",
+    "title": "Spec · Spring service week",
+    "rows": {
+      "for": {
+        "term": "For",
+        "value": "Regulars first"
+      },
+      "must": {
+        "term": "Must",
+        "value": "Every rental bike serviced"
+      },
+      "bookedBy": {
+        "term": "Booked by",
+        "value": "Front desk, phone and walk-in"
+      },
+      "out": {
+        "term": "Out",
+        "value": "E-bikes"
+      },
+      "done": {
+        "term": "Done when",
+        "value": "40 slots, calendar full by 1 March"
+      }
+    }
+  },
+  "bench": {
+    "label": "First page on a clean bench",
+    "drawing": "A clean bike bench with only the work order on it"
+  },
+  "notes": {
+    "where-grill-me-comes-from": {
+      "header": "Where grill-me comes from",
+      "description": "grill-me is a skill Matt Pocock published in his open collection of agent skills, \"Skills for Real Engineers\" [1]. He presents the collection's end-to-end coding workflow in a video [2].",
+      "sources": {
+        "pocock-skills": {
+          "title": "Matt Pocock, mattpocock/skills: Skills for Real Engineers (GitHub)"
+        },
+        "pocock-skills-video": {
+          "title": "mattpocock/skills: A complete AI Coding workflow, end-to-end (YouTube)"
+        }
+      }
+    },
+    "asking-beats-guessing-on-unclear-tasks": {
+      "header": "Asking beats guessing, on unclear tasks",
+      "description": "on an underspecified variant of SWE-Bench Verified, agents that interacted with the user to fill missing information improved by up to 74% over non-interactive ones; that is a maximum, from simulated users, and models struggled to tell which tasks need a question [1].",
+      "sources": {
+        "vijayvargiya-ambig-swe": {
+          "title": "Vijayvargiya et al., Ambig-SWE: Interactive Agents to Overcome Underspecificity in Software Engineering"
+        }
+      }
+    },
+    "rounds-are-inferred": {
+      "header": "Rounds are inferred",
+      "description": "the research backs asking clarifying questions before the task; \"in rounds\" is an inference. Separately, scores fell 39% on average when an instruction arrived over several turns, which measures piecemeal instructions and not clarifying questions [1].",
+      "sources": {
+        "laban-lost-in-multi-turn": {
+          "title": "Laban et al., LLMs Get Lost In Multi-Turn Conversation"
+        }
+      }
+    }
+  },
+  "voiceScript": {
+    "segments": {
+      "matt-pococks-skill": {
+        "title": "Matt Pocock's skill",
+        "keywords": "",
+        "script": "Grill-me is a ready-made set of instructions, which Matt Pocock calls a skill, that makes the AI question you before it starts, in rounds rather than one question at a time, so you can answer in your own flow. It works because the gaps you left get filled with your own answers. Instead of guessing what you meant, it asks you, and at the end it writes the job down as a spec, a one-page work order."
+      },
+      "next-30-minutes": {
+        "title": "Next 30 minutes",
+        "keywords": "",
+        "script": "Try it on one task from your own work: let the AI grill you in rounds, then have it write the spec."
+      },
+      "actionable-one": {
+        "title": "Actionable one",
+        "keywords": "",
+        "script": "So the first thing to take with you: before your next complex task, let the AI interview you in rounds of questions, then turn the result into a spec."
+      }
+    }
+  }
+}

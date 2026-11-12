@@ -1,5 +1,6 @@
 import { localizeSlide, type LocalizedSlide } from '@/episodes/components/slide-master/localized-slide';
 import { slide, type Slide } from '@/episodes/components/slide-master/slide';
+import { withPagePicks } from '@/episodes/components/slide-shared/guide-toolbar/with-page-picks.client';
 import { placeSections } from '@/episodes/lib/episode.pure';
 import type { Locale } from '@/shared/lib/locale.pure';
 import { load } from 'cheerio';
@@ -33,7 +34,9 @@ function localized(locale: Locale): LocalizedSlide {
   });
 }
 
-const scene = (locale: Locale) => load(renderToStaticMarkup(createElement(Fragment, null, localized(locale).content)));
+/** The Scene as the page renders it, with the viewer's toolbar picks; none picked reads the defaults. */
+const scene = (locale: Locale, picks: Record<string, string> = {}) =>
+  load(renderToStaticMarkup(withPagePicks(createElement(Fragment, null, localized(locale).content), picks)));
 
 /** The Help button and panel the Slide gives the header, as the header renders them. */
 const help = (locale: Locale) =>
@@ -65,7 +68,7 @@ describe('success cases', () => {
       {
         title: 'One window, one cursor',
         script:
-          'Pick your system in the toolbar, then open Terminal on a Mac, PowerShell on Windows, or the terminal on Linux. It takes one shortcut and a few letters. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you.',
+          'Pick your system in the toolbar, then open Terminal on a Mac, Terminal on Windows 11 or PowerShell on Windows 10, or the terminal on Linux. It takes one shortcut and a few letters. You will see a mostly empty window with a blinking cursor, and that is exactly what success looks like here. It is not frozen, it is waiting for you.',
       },
       {
         title: 'Stuck? Paste it',
@@ -171,6 +174,22 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it("searches for Windows 11's Terminal on Windows, and names PowerShell for Windows 10", () => {
+    // ARRANGE
+    const expected = { query: 'Terminal', prompt: 'PS C:\\Users\\you>' };
+    // ACT
+    const $ = scene('en', { os: 'windows' });
+    const view = {
+      query: $('[data-find] [data-query]').text(),
+      prompt: $('[data-open-window] [data-prompt-line]').text(),
+    };
+    const line = $('[data-os-line]').text();
+    // ASSERT
+    expect(view).toEqual(expected);
+    expect(line).toContain('Windows 10');
+    expect(line).toContain('PowerShell');
+  });
+
   it('shows the Mac way in and this step in German, with the same notes and segments', () => {
     // ARRANGE
     const expected = {

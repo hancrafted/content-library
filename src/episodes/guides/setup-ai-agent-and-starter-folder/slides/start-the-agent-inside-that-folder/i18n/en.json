@@ -4,10 +4,12 @@
   "copy": "Copy",
   "copied": "Copied",
   "windows": {
-    "menuLabel": "Example Windows menu · Shift + right-click",
-    "menu": { "open": "Open" },
+    "menuLabel": "Example Windows 11 menu · right-click",
+    "menu": {
+      "open": "Open"
+    },
     "copilot": "For Copilot, type <code>pwsh</code> in this window and press Enter first. This opens the PowerShell 7 installed earlier in the same folder.",
-    "helpTitle": "Didn't see “Open PowerShell window here”? Try this",
+    "helpTitle": "Didn't see “Open in Terminal”? Try this",
     "open": "Open the extracted folder containing <code>GLOSSARY.md</code> in File Explorer. Press <b>Ctrl+L</b>, type the word shown below into the address bar, then press <b>Enter</b>.",
     "addressBar": "File Explorer address bar · Ctrl+L",
     "shellHint": "Copilot uses pwsh for the PowerShell 7 installed earlier. If Windows cannot find it, stop and return to the installation step.",
@@ -21,11 +23,21 @@
       "header": "Check the folder, not the menu label",
       "description": "Microsoft documents launching PowerShell from Explorer's address bar [1]. Terminal hosts configurable shells, so Open in Terminal does not guarantee PowerShell 7 [2]. Get-Location checks the actual directory; Get-Content reads the starter file; Set-Location -LiteralPath accepts a literal path [3][4][5]. Microsoft's Windows 10 announcement documents the Shift-right-click PowerShell entry [6]; it does not guarantee that entry on every Windows 11 or managed machine. The menu and path drawings are examples. These routes have not been tested on current managed Windows machines.",
       "sources": {
-        "explorer-shell": { "title": "Microsoft, Launching shells from Explorer" },
-        "terminal": { "title": "Microsoft, Windows Terminal profiles" },
-        "location": { "title": "Microsoft, Get-Location" },
-        "content": { "title": "Microsoft, Get-Content" },
-        "set-location": { "title": "Microsoft, Set-Location" },
+        "explorer-shell": {
+          "title": "Microsoft, Launching shells from Explorer"
+        },
+        "terminal": {
+          "title": "Microsoft, Windows Terminal profiles"
+        },
+        "location": {
+          "title": "Microsoft, Get-Location"
+        },
+        "content": {
+          "title": "Microsoft, Get-Content"
+        },
+        "set-location": {
+          "title": "Microsoft, Set-Location"
+        },
         "windows-menu": {
           "title": "Microsoft, Windows 10 PowerShell context-menu announcement"
         }
@@ -35,8 +47,12 @@
       "header": "A working folder is not a security boundary",
       "description": "The vendors instruct users to start in their project directory; Google documents agy as the CLI command [1][2]. The folder helps the agent discover the workshop's files and skills, but does not mean it can access only that directory. Approve only the intended workshop folder and review commands before allowing them.",
       "sources": {
-        "claude-quickstart": { "title": "Anthropic, Claude Code quickstart" },
-        "antigravity-start": { "title": "Google, Antigravity getting started" }
+        "claude-quickstart": {
+          "title": "Anthropic, Claude Code quickstart"
+        },
+        "antigravity-start": {
+          "title": "Google, Antigravity getting started"
+        }
       }
     }
   },
@@ -50,7 +66,7 @@
       "title": "Open a terminal in the folder",
       "detail": {
         "mac": "In Finder, right-click <b>hancrafted-workshop-starter</b>, then <b>Services › New Terminal at Folder</b>. No path to type.",
-        "windows": "In File Explorer, hold <b>Shift</b> and right-click the extracted <b>hancrafted-workshop-starter</b> folder. Choose <b>Open PowerShell window here</b>.",
+        "windows": "In File Explorer, right-click the extracted <b>hancrafted-workshop-starter</b> folder and choose <b>Open in Terminal</b>. On Windows 10, hold <b>Shift</b> while you right-click and choose <b>Open PowerShell window here</b>.",
         "linux": "Right-click the folder in your file manager › <b>Open in Terminal</b>. No path to type."
       },
       "worked": "The folder name hancrafted-workshop-starter appears before your cursor. Your username and the rest of the path may differ from the example.",
@@ -72,13 +88,13 @@
           "compress": "Compress to ZIP file",
           "copyPath": "Copy as path",
           "properties": "Properties",
-          "terminal": "Open PowerShell window here",
+          "terminal": "Open in Terminal",
           "more": "Show more options"
         }
       },
       "note": {
         "mac": "Not in the menu? Turn it on once: <b>System Settings › Keyboard › Keyboard Shortcuts › Services</b>, tick <b>New Terminal at Folder</b>.",
-        "windows": "A right-click menu may instead offer Open in Terminal, or Shift+right-click may show Open PowerShell window here. Either can work, but the label and shell vary. The address-bar route avoids needing a particular menu."
+        "windows": "On Windows 10, or with an older menu, hold Shift while you right-click and choose Open PowerShell window here. Either opens PowerShell in this folder. The address-bar route needs neither menu entry."
       }
     },
     "start": {
@@ -92,7 +108,7 @@
         "codex": "Codex CLI",
         "copilot": "GitHub Copilot CLI"
       },
-      "worked": "Your AI agent starts and waits for you to type."
+      "worked": "Your AI agent starts here for the first time and asks you to sign in. The next Slide walks you through it."
     }
   },
   "trust": {
@@ -108,7 +124,7 @@
       "go-in-then-start": {
         "title": "Go in, then start",
         "keywords": "",
-        "script": "Start from the extracted starter folder. On Windows, hold Shift and right-click it, then choose Open PowerShell window here. The menu drawing is an example; if yours has no such entry, open the help directly below it for another route. For Copilot, switch to the PowerShell 7 installed earlier by typing pwsh in that window first. Check that the prompt names the starter folder, then start your agent there. Trust only the intended workshop folder."
+        "script": "Start from the extracted starter folder. On Windows 11, right-click it and choose Open in Terminal; on Windows 10, hold Shift while you right-click and choose Open PowerShell window here. The menu drawing is an example; if yours has no such entry, open the help directly below it for another route. For Copilot, switch to the PowerShell 7 installed earlier by typing pwsh in that window first. Check that the prompt names the starter folder, then start your agent there: this is its very first start. If it asks whether you trust the folder, say yes, because this is the starter folder."
       },
       "same-folder-every-time": {
         "title": "Same folder every time",
@@ -139,5 +155,9 @@
     }
   },
   "doneLabel": "Done looks like",
-  "moreTitle": "More help: if the menu won't work"
+  "moreTitle": "More help: if the menu won't work",
+  "notFound": {
+    "title": "Does it say “command not found” or “not recognized”?",
+    "fix": "Close this window and open the terminal in the folder once more: a window opened before the install may not know the new command. Still not recognized? Return to the installation step and its version check: the install may have failed or PATH may need fixing. For a company policy or certificate error, stop and ask IT."
+  }
 }

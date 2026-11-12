@@ -3,6 +3,7 @@
   "caption": "The AI agent that lives in it.",
   "ready": "✻ Your AI agent is ready",
   "steps": "Step 2",
+  "stepDone": "Done, no need to repeat",
   "window": "terminal",
   "prompt": "~ %",
   "hint": "Signed in · type a message",
