@@ -141,7 +141,7 @@ describe('success cases', () => {
   it('reports a brief-- item for a heading the Brief card lacks, or without a note', () => {
     // ARRANGE
     const files = folder({
-      [FEEDBACK_PATH]: feedback('spec', ['- `brief--hook` · design — Louder.', '- `brief--style` · design —']),
+      [FEEDBACK_PATH]: feedback('spec', ['- `brief--open-ideas` · design — Louder.', '- `brief--style` · design —']),
     });
     // ACT
     const findings = checkStagingFolder(files, KNOWN_VISUALS, REVIEW_ASSET);
