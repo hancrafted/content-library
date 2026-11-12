@@ -18,6 +18,121 @@ export interface ToolbarWords {
   readonly week: string;
   readonly warming: string;
   readonly clockTip: string;
+  readonly mechanics: string;
+  readonly mechs: Readonly<Record<'rework' | 'churn' | 'complaints', { readonly label: string; readonly tip: string }>>;
+  readonly model: string;
+  readonly modelTip: string;
+  readonly more: string;
+  readonly moreTip: string;
+}
+
+/** The Model popover. */
+export interface ModelWords {
+  readonly label: string;
+  readonly reality: string;
+  readonly ideal: string;
+  readonly realistic: string;
+  readonly realityText: string;
+  readonly ai: string;
+  readonly off: string;
+  readonly everywhere: string;
+  readonly company: string;
+  readonly service: string;
+  readonly product: string;
+  readonly aiq: string;
+  readonly worse: string;
+  readonly same: string;
+  readonly better: string;
+  readonly strengths: string;
+  readonly note: string;
+  readonly reset: string;
+  readonly tips: Readonly<Record<'reality' | 'ai' | 'company' | 'aiq' | 'rework' | 'churn' | 'reset', string>>;
+}
+
+/** The ⋮ menu. */
+export interface MoreWords {
+  readonly label: string;
+  readonly beltMotion: string;
+  readonly beltMotionNote: string;
+  readonly dark: string;
+  readonly pile: string;
+  readonly pileLabel: string;
+  readonly piles: Readonly<Record<'heap' | 'stack' | 'drift', { readonly name: string; readonly note: string }>>;
+}
+
+interface TrendWords {
+  readonly title: string;
+  readonly unit: string;
+  readonly help: string;
+}
+
+interface RowWords {
+  readonly label: string;
+  readonly sub: string;
+  readonly help: string;
+}
+
+/** A work center's dashboard. */
+export interface DashWords {
+  readonly help: string;
+  readonly close: string;
+  readonly closeTip: string;
+  readonly ai: string;
+  readonly aiTip: string;
+  readonly lightTip: string;
+  readonly status: string;
+  readonly levels: Readonly<Record<'red' | 'amber' | 'green', string>>;
+  readonly signals: Readonly<
+    Record<'backing' | 'bottleneck' | 'overloaded' | 'rework' | 'unread' | 'starved' | 'ok', string>
+  >;
+  readonly grows: string;
+  readonly clearsWeek: string;
+  readonly clearsWeeks: string;
+  readonly trends: Readonly<Record<'out' | 'good' | 'wait', TrendWords>>;
+  readonly settings: string;
+  readonly withAi: string;
+  readonly rows: Readonly<Record<'eff' | 'effv' | 'fan' | 'aiSpeed' | 'aiExtra', RowWords>>;
+  readonly flows: string;
+  readonly flowsSub: string;
+  readonly busy: string;
+  readonly blocked: string;
+  readonly starved: string;
+  readonly util: string;
+  readonly throughput: string;
+  readonly throughputNote: string;
+  readonly arriving: string;
+  readonly arrivingNote: string;
+  readonly capacity: string;
+  readonly capacityNote: string;
+  readonly backlog: string;
+  readonly backlogNote: string;
+  readonly lead: string;
+  readonly leadWeeks: string;
+  readonly leadPending: string;
+  readonly leadNote: string;
+  readonly artefacts: string;
+  readonly tasks: string;
+  readonly withAiHere: string;
+}
+
+/** The Customer's dashboard. */
+export interface CustDashWords {
+  readonly requests: string;
+  readonly arrivals: string;
+  readonly modeTip: string;
+  readonly steady: string;
+  readonly random: string;
+  readonly mix: string;
+  readonly mixTip: string;
+  readonly follow: string;
+  readonly followTip: string;
+  readonly good: string;
+  readonly bad: string;
+  readonly complaint: string;
+  readonly sizedFor: string;
+  readonly times: string;
+  readonly gain: string;
+  readonly off: string;
 }
 
 export interface StatusWords {
@@ -124,6 +239,10 @@ export interface Words {
   readonly customer: CustomerWords;
   readonly dock: DockWords;
   readonly cartoon: CartoonWords;
+  readonly model: ModelWords;
+  readonly more: MoreWords;
+  readonly dash: DashWords;
+  readonly custDash: CustDashWords;
 }
 
 /** Any word of the Explorable, key by key: what a Slide says differently. */

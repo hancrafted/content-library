@@ -6,7 +6,7 @@ import type { Snapshot } from './run-snapshot.pure.ts';
 import type { CustomerWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Release } from './stage-readouts.pure.ts';
-import { boxStyle, type Box } from './station-card-view';
+import { boxStyle, openerProps, type Box } from './station-card-view';
 
 export interface CustomerCardProps {
   readonly box: Box;
@@ -15,6 +15,10 @@ export interface CustomerCardProps {
   readonly words: CustomerWords;
   readonly marker?: ReactNode;
   readonly target?: TargetProps;
+  /** "{title}: open its settings", the card's name as a button. */
+  readonly label?: string;
+  /** Its dashboard is open. */
+  readonly open?: boolean;
 }
 
 /** The twelve release cells, newest first: good or bad, a complaint marked. */
@@ -95,12 +99,15 @@ export const CustomerCardView = memo(function CustomerCardView({
   words: w,
   marker,
   target,
+  label,
+  open,
 }: CustomerCardProps) {
   return (
     <div
       className={`${styles.card} text-caption`}
       data-kind="customer"
       data-id="customer"
+      {...openerProps(label, open)}
       data-unhappy={r.sat < 0.6}
       data-full={r.headroom < 1}
       style={boxStyle(box)}

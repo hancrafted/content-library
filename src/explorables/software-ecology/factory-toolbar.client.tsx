@@ -2,11 +2,15 @@
 
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { useId, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { Glyph } from './factory-glyph-view';
 import { SPEEDS } from './factory-run.pure.ts';
+import { ModelMenu, type ModelMenuProps } from './model-menu';
+import { MoreMenu, type MoreMenuProps } from './more-menu';
 import type { ToolbarWords } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
+import type { Mechanic } from './software-ecology.types';
+import { ToolbarMenu } from './toolbar-menu.client';
 
 export interface Choice {
   readonly id: string;
@@ -28,7 +32,13 @@ export interface ToolbarProps {
   readonly clock: string;
   readonly statesTarget?: TargetProps;
   readonly statesMarker?: ReactNode;
+  readonly mech: Readonly<Record<Mechanic, boolean>>;
+  readonly onMech: (k: Mechanic) => void;
+  readonly model: ModelMenuProps;
+  readonly more: MoreMenuProps;
 }
+
+const MECHS: readonly Mechanic[] = ['rework', 'churn', 'complaints'];
 
 function States(p: Pick<ToolbarProps, 'words' | 'states' | 'preset' | 'onPreset' | 'statesTarget' | 'statesMarker'>) {
   return (
@@ -100,7 +110,67 @@ function Speed(p: Pick<ToolbarProps, 'words' | 'speed' | 'onSpeed' | 'onClear' |
   );
 }
 
-/** The toolbar's #540 part (design-ADR 0024 §16): the states, the use case, speed, Clear and the day clock. */
+function Mechs(p: Pick<ToolbarProps, 'words' | 'mech' | 'onMech'>) {
+  return (
+    <div className={styles.tgroup} role="group" aria-label={p.words.mechanics}>
+      {MECHS.map((k) => (
+        <button
+          key={k}
+          type="button"
+          className={`${styles.tbtn} ${styles.mech} text-caption`}
+          aria-pressed={p.mech[k]}
+          data-tip={p.words.mechs[k].tip}
+          onClick={() => p.onMech(k)}
+        >
+          <Glyph name={k} className={styles.ico} />
+          <span className={styles.tbtnLabel}>{p.words.mechs[k].label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+type MenuId = 'model' | 'more' | null;
+
+/** A close never undoes the other menu's open: the outside click that opens one closes only the other. */
+const nextMenu = (cur: MenuId, id: Exclude<MenuId, null>, on: boolean): MenuId => (on ? id : cur === id ? null : cur);
+
+/** The Model and ⋮ menus: one open at a time. */
+function Menus(p: Pick<ToolbarProps, 'words' | 'model' | 'more'>) {
+  const [open, setOpen] = useState<MenuId>(null);
+  const opener = (id: Exclude<MenuId, null>) => (on: boolean) => setOpen((cur) => nextMenu(cur, id, on)),
+    w = p.words;
+  return (
+    <>
+      <ToolbarMenu
+        open={open === 'model'}
+        onOpen={opener('model')}
+        icon="model"
+        text={w.model}
+        tip={w.modelTip}
+        label={p.model.words.label}
+      >
+        <ModelMenu {...p.model} />
+      </ToolbarMenu>
+      <ToolbarMenu
+        open={open === 'more'}
+        onOpen={opener('more')}
+        icon="kebab"
+        ariaLabel={w.more}
+        tip={w.moreTip}
+        label={p.more.words.label}
+        end
+      >
+        <MoreMenu {...p.more} />
+      </ToolbarMenu>
+    </>
+  );
+}
+
+/**
+ * The toolbar (design-ADR 0024 §16): the states and the use case; what bad work does downstream, speed, Clear and the
+ * day clock, the Model menu and the ⋮ menu.
+ */
 export function FactoryToolbar(p: ToolbarProps) {
   return (
     <div className={styles.toolbar} role="toolbar" aria-label={p.words.label}>
@@ -109,7 +179,9 @@ export function FactoryToolbar(p: ToolbarProps) {
         <UseCase {...p} />
       </div>
       <div className={`${styles.tbRow} ${styles.tbTools}`}>
+        <Mechs {...p} />
         <Speed {...p} />
+        <Menus {...p} />
       </div>
       <p className={`${styles.usecaseSub} m-0 text-caption text-muted-foreground`}>{p.sub}</p>
     </div>

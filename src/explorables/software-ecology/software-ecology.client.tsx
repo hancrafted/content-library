@@ -1,20 +1,24 @@
 'use client';
 
+import { useTheme } from '@/shared/hooks/use-theme';
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
 import { useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { BeltLabelsView, BeltsView } from './belts-view';
 import { DockView } from './dock-view';
+import { Controls } from './factory-controls';
 import { Floor, type SpotProps, type Spots } from './factory-floor';
 import { presetOf } from './factory-run.pure.ts';
-import { FactoryToolbar, type Choice } from './factory-toolbar.client';
-import type { Snapshot } from './run-snapshot.pure.ts';
+import type { Choice } from './factory-toolbar.client';
+import { OpenDashboard } from './open-dashboard';
 import type { Words } from './software-ecology-words.types';
 import styles from './software-ecology.module.css';
 import type { Bundle, CatalogWords, Locale, ViewId } from './software-ecology.types';
 import { LegendView, StatusLineView } from './stage-foot-view';
 import { beltsOf, cardsOf, rateText } from './stage-parts.pure.ts';
 import { presetName, titlesOf, useCaseName, useCaseSub, type WordsIn } from './use-case-words.pure.ts';
+import { useDashboard } from './use-dashboard.ts';
+import { useDisplay } from './use-display.ts';
 import { useFactory, type FactoryView, type FactoryWords } from './use-factory.ts';
 import { useMorph } from './use-morph.ts';
 
@@ -69,37 +73,34 @@ interface StageProps {
   readonly spots: SpotProps;
   readonly view: ViewId;
   readonly viewEl: RefObject<HTMLDivElement | null>;
+  readonly wrap: RefObject<HTMLElement | null>;
+  readonly open: string | null;
+  readonly beltMotion: boolean;
   readonly onCard: (id: string, shift: boolean) => void;
 }
 
 function Stage(p: StageProps) {
   const { cards, belts, retOn, labels } = useStageParts(p.f, p);
   return (
-    <section className={styles.viewWrap} data-view={p.view} aria-label={p.words.stage.label}>
+    <section ref={p.wrap} className={styles.viewWrap} data-view={p.view} aria-label={p.words.stage.label}>
       <p className={`${styles.stageNote} text-caption`}>{p.words.stage.note}</p>
-      <div ref={p.viewEl} className={styles.view} data-view={p.view} data-paused={p.f.controls.speed === 0}>
+      <div
+        ref={p.viewEl}
+        className={styles.view}
+        data-view={p.view}
+        data-paused={p.f.controls.speed === 0}
+        data-belts-move={p.beltMotion}
+      >
         <div ref={p.f.stage} className={styles.stage} {...p.spots.targets?.belts}>
           <BeltsView layout={p.f.layout} retOn={retOn} />
           <canvas ref={p.f.canvas} aria-hidden="true" />
           <BeltLabelsView layout={p.f.layout} labels={labels} />
         </div>
-        <Floor
-          f={p.f}
-          view={p.view}
-          cards={cards}
-          belts={belts}
-          w={p.w}
-          words={p.words}
-          spots={p.spots}
-          onCard={p.onCard}
-        />
+        <Floor {...p} cards={cards} belts={belts} />
       </div>
     </section>
   );
 }
-
-const clockOf = (snap: Snapshot, w: Words): string =>
-  snap.warming ? w.toolbar.warming : fillTemplate(w.toolbar.day, { n: snap.day });
 
 function useWords(p: SoftwareEcologyClientProps, B: Bundle) {
   const w = useMemo<WordsIn>(() => ({ B, locale: p.locale, catalog: p.catalog }), [B, p.locale, p.catalog]);
@@ -147,59 +148,86 @@ function useShow(x: {
   };
 }
 
-interface ControlsProps {
-  readonly p: SoftwareEcologyClientProps;
-  readonly f: FactoryView;
-  readonly words: ReturnType<typeof useWords>;
-  readonly useCase: string;
-  readonly onUseCase: (id: string) => void;
-  readonly onPreset: (id: string) => void;
-}
+type Parts = ReturnType<typeof useParts>;
 
-function Controls({ p, f, words, useCase, onUseCase, onPreset }: ControlsProps) {
-  const c = f.controls;
+function Toolbar(t: {
+  p: SoftwareEcologyClientProps;
+  x: Parts;
+  f: FactoryView;
+  words: ReturnType<typeof useWords>;
+  onPreset: (id: string) => void;
+  onUseCase: (id: string) => void;
+}) {
+  const { p, x, words } = t;
   return (
-    <FactoryToolbar
-      words={p.words.toolbar}
+    <Controls
+      B={x.B}
+      f={t.f}
+      words={p.words}
       states={words.states}
-      preset={c.preset}
-      onPreset={onPreset}
       useCases={words.useCases}
-      useCase={useCase}
-      onUseCase={onUseCase}
+      useCase={x.useCase}
       sub={useCaseSub(words.w)}
-      speed={c.speed}
-      onSpeed={c.setSpeed}
-      onClear={c.clear}
-      clock={clockOf(f.snap, p.words)}
+      titles={words.titles}
+      display={x.display}
+      onUseCase={t.onUseCase}
+      onPreset={t.onPreset}
       statesTarget={p.targets?.states}
       statesMarker={p.markers?.states}
     />
   );
 }
 
-/** The software ecology factory with its toolbar, stage, status line, legend and At the Customer panel. */
-export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
+function useParts(p: SoftwareEcologyClientProps) {
   const [useCase, setUseCase] = useState(p.useCase);
   const B = p.bundles.find((b) => b.data.id === useCase) ?? (p.bundles[0] as Bundle);
-  const words = useWords(p, B);
   const [chosen, setChosen] = useState<ViewId>(() => viewOf(B, p.preset));
   const view: ViewId = chosen === 'swing' && !B.data.panels ? 'roles' : chosen;
-  const f = useFactory({ B, preset: p.preset, words: words.fw, flowing: view === 'factory' });
-  const viewEl = useRef<HTMLDivElement>(null);
-  const show = useShow({ view, f, viewEl, set: setChosen });
+  const wrap = useRef<HTMLElement>(null),
+    viewEl = useRef<HTMLDivElement>(null);
+  return {
+    useCase,
+    setUseCase,
+    B,
+    view,
+    setChosen,
+    wrap,
+    viewEl,
+    dash: useDashboard(wrap),
+    display: useDisplay(useTheme()),
+  };
+}
+
+const watchOf = (x: Parts) => ({ watch: x.dash.watch, pile: x.display.pile });
+
+const stageOf = (x: Parts) => ({
+  view: x.view,
+  viewEl: x.viewEl,
+  wrap: x.wrap,
+  open: x.dash.open,
+  beltMotion: x.display.beltMotion,
+});
+
+/** The software ecology factory with its toolbar, stage, dashboards, status line, legend and At the Customer panel. */
+export function SoftwareEcologyClient(p: SoftwareEcologyClientProps) {
+  const x = useParts(p),
+    { B, view, dash } = x;
+  const words = useWords(p, B);
+  const f = useFactory({ B, preset: p.preset, words: words.fw, flowing: view === 'factory', ...watchOf(x) });
+  const show = useShow({ view, f, viewEl: x.viewEl, set: x.setChosen });
   const onPreset = (id: string) => {
+    dash.dismiss();
     show(viewOf(B, id));
     f.controls.setPreset(id);
   };
-  // a card in Swing or Roles opens the factory; in the factory its dashboard joins with #542
-  const onCard = () => {
-    if (view !== 'factory') show('factory');
-  };
+  const onUseCase = (id: string) => (dash.dismiss(), x.setUseCase(id));
+  // a card in Swing or Roles opens the factory; in the factory it opens or closes its dashboard (shift: #544)
+  const onCard = (id: string) => (view === 'factory' ? dash.toggle(id) : show('factory'));
   return (
     <div className={styles.root}>
-      <Controls p={p} f={f} words={words} useCase={useCase} onUseCase={setUseCase} onPreset={onPreset} />
-      <Stage f={f} words={p.words} w={words.w} spots={p} view={view} viewEl={viewEl} onCard={onCard} />
+      <Toolbar p={p} x={x} f={f} words={words} onPreset={onPreset} onUseCase={onUseCase} />
+      <Stage f={f} words={p.words} w={words.w} spots={p} {...stageOf(x)} onCard={onCard} />
+      <OpenDashboard f={f} dash={dash} words={p.words} w={words.w} wrap={x.wrap} />
       <Below f={f} words={p.words} titles={words.titles} />
     </div>
   );

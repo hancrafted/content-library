@@ -20,6 +20,21 @@ toolbar:
   week: 'Week {w} · Day {d}'
   warming: Warming up
   clockTip: Simulated time in working days; every handoff takes a quarter day
+  mechanics: What bad work does downstream
+  mechs:
+    rework:
+      label: Rework
+      tip: 'Rework: a work center sends bad input back on its return belt, to the front of the sender’s backlog, and it is done again. Sign at the station: the arrow.'
+    churn:
+      label: Churn
+      tip: 'Churn: bad input that is kept multiplies; the center hands on more documents than usual, and the work takes longer. Sign at the station: the fan.'
+    complaints:
+      label: Complaints
+      tip: 'Customer complaints: a bad release may bring a complaint, a bug or support request marked with the red warning: work that adds no value. The Customer’s grid marks it; its chance is on the Customer card.'
+  model: Model
+  modelTip: Ideal to Realistic, where AI works, AI quality, strength of each mechanic
+  more: 'More: belt motion, pile-up, theme'
+  moreTip: Belt motion, pile-up, theme
 stage:
   label: The factory
   note: Illustrative model, not measured
@@ -119,3 +134,148 @@ cartoon:
   jobs:
     doc: 'Too broad for one role: everyone writes documentation.'
     billing: 'Too narrow for a work center: billing follows the deal.'
+# The Model popover: the whole factory's settings, each with a tooltip saying what it does.
+model:
+  label: Model settings
+  reality: Model
+  ideal: Ideal
+  realistic: Realistic
+  realityText: 'Realistic {n} %'
+  ai: AI
+  off: 'Off'
+  everywhere: Everywhere
+  company: Company
+  service: Service provider
+  product: Product company
+  aiq: AI quality effect
+  worse: Worse
+  same: Same
+  better: Better
+  strengths: Strength of each mechanic
+  note: 'The Customer’s rate, request mix and follow-up chances sit on its card: click the Customer on the left.'
+  reset: Back to the state
+  tips:
+    reality: 'From Ideal to Realistic: lowers every work center’s efficiency and effectiveness toward its realistic values. More bad documents go out, get sent back or multiply; the bottleneck runs near 90 % busy.'
+    ai: 'Where AI works: those centers run faster (2.5× unless a dashboard says otherwise) and may write extra tasks; AI-made documents take the next center a little longer to read. Set the speed-up and extra tasks per work center on its dashboard.'
+    company: 'Service provider: only the Customer asks for work. Product company: the product manager also writes roadmap items, Sales brings leads and the engineer writes tech debt tickets. They share the same backlogs; every center is sized again so Ideal stays 70 % busy.'
+    aiq: 'What AI does to the chance a document leaves good: Worse lowers it by 15 points, Better raises it by 15. Same leaves it.'
+    rework: Chance a work center sends a bad document back on the return belt. It goes to the front of the sender’s backlog and costs time twice.
+    churn: 'When bad input is kept, the center hands on this many times its usual documents: it guesses, and writes more.'
+    reset: Undo every change made since you picked the state.
+# The ⋮ menu: how the factory is drawn.
+more:
+  label: Display settings
+  beltMotion: Belt motion
+  beltMotionNote: The belts' slats move. Off is calmer; the documents still travel.
+  dark: Dark theme
+  pile: Pile-up past the rack
+  pileLabel: Pile-up animation
+  piles:
+    heap:
+      name: Tumbling heap
+      note: documents drop onto a heap at the belt end and settle at an angle
+    stack:
+      name: Leaning stack
+      note: a stack of sheets grows up from the belt end, leaning and swaying a little
+    drift:
+      name: Scattered drift
+      note: documents scatter around the belt end and jiggle, like a drift against a wall
+# A work center's dashboard: a monitor, its dials folded away in Settings.
+dash:
+  help: Explain the charts
+  close: Close
+  closeTip: Close (Esc)
+  ai: AI
+  aiTip: AI speeds this center up (2.5× unless you change it below) and may make it write extra tasks; AI-made documents take the next center a little longer to read. Its quality effect is set in Model.
+  lightTip: 'Green: keeping up. Amber: a week of work or more waiting, a lot of work coming back, passing bad work unread, or mostly waiting for work. Red: two weeks of work or more waiting, or blocked.'
+  status: 'Status {level}: {signals}'
+  levels:
+    red: red
+    amber: amber
+    green: green
+  signals:
+    backing: 'Blocked: finished work cannot leave, the next center is full'
+    bottleneck: 'Bottleneck: {n} weeks of work waiting'
+    overloaded: 'Busy: {n} weeks of work waiting'
+    rework: 'Rework-heavy: {n} % of its work comes back'
+    unread: 'Passing unread: bad work goes through unchecked'
+    starved: 'Starved: mostly waiting for work'
+    ok: Keeping up
+  grows: 'Its backlog grows by about {n} jobs a week. Raise its efficiency, or send less its way.'
+  clearsWeek: At this pace its backlog clears in about a week. Raising its efficiency clears it faster.
+  clearsWeeks: 'At this pace its backlog clears in about {n} weeks. Raising its efficiency clears it faster.'
+  trends:
+    out:
+      title: Output
+      unit: a week
+      help: Jobs finished a week. The dashed line is Ideal.
+    good:
+      title: Outcome
+      unit: '% good'
+      help: Share of what it hands on that is good. The dashed line is 100 %.
+    wait:
+      title: Waiting
+      unit: weeks of work
+      help: 'Weeks of work waiting: the backlog divided by what this center finishes in a week. Amber from one week, red from two.'
+  settings: Settings
+  withAi: '{set} → {eff} with AI'
+  rows:
+    eff:
+      label: Efficiency
+      sub: · output
+      help: 'Efficiency is output: how fast this center finishes a document, 10 % to 1000 %. Faster only helps if work is waiting for it; then the bottleneck moves downstream.'
+    effv:
+      label: Effectiveness
+      sub: · outcome
+      help: 'Effectiveness is outcome: the chance a document leaves good, given the conditions here (time, tools, clear input).'
+    fan:
+      label: Tasks handed on per task
+      sub: ''
+      help: 'Tasks handed on per task: every document is a task, so this is how many tasks one finished task creates downstream. More tasks mean more work at the next center.'
+    aiSpeed:
+      label: AI speed-up
+      sub: ''
+      help: 'AI speed-up: how much faster this center works with AI, 1× to 5×.'
+    aiExtra:
+      label: AI extra tasks
+      sub: · per task
+      help: 'Extra tasks per task with AI: 1× hands on what it would anyway; 2× hands on twice the tasks (more pull requests, more documents) for the next center.'
+  flows: How it flows
+  flowsSub: for the queueing-minded
+  busy: busy
+  blocked: blocked
+  starved: waiting for work
+  util: 'Busy {busy}, blocked {blocked}, waiting for work {starved}'
+  throughput: Throughput
+  throughputNote: jobs it finishes a week
+  arriving: Arriving
+  arrivingNote: jobs that reach it a week
+  capacity: Capacity
+  capacityNote: jobs it could finish a week
+  backlog: Average backlog
+  backlogNote: jobs waiting, over two weeks
+  lead: Lead time
+  leadWeeks: '{n} wk'
+  leadPending: 'shown once the backlog is steady (Little’s law: backlog ÷ throughput)'
+  leadNote: 'how long a job waits and is worked on here (Little’s law: backlog ÷ throughput)'
+  artefacts: Artefacts
+  tasks: Tasks
+  withAiHere: With AI here
+# The Customer's dashboard: how many requests, how they arrive, where they go and what a release brings back.
+custDash:
+  requests: Requests a week
+  arrivals: Arrivals
+  modeTip: 'Steady: one request every 1/rate. Random: the same rate on average, but requests come in bursts and gaps (a Poisson process), the way real requests arrive.'
+  steady: Steady
+  random: Random
+  mix: Request mix
+  mixTip: 'Where new requests go: new customers to Sales, feature and change requests to the product manager, bugs and support tickets to Support.'
+  follow: A release brings a new request
+  followTip: 'Each release may bring a new request at once. A good release brings a change request; a bad one a complaint (a bug or support request, marked with the red warning). Kept below 1 in total, so the requests settle.'
+  good: 'Good · {title}'
+  bad: 'Bad · {title}'
+  complaint: (complaint)
+  sizedFor: Ideal sizes every work center for this rate.
+  times: '{k}× the rate Ideal is sized for.'
+  gain: 'Follow-ups: about {g} new requests per request{off}.'
+  off: ' (complaints are off in the toolbar)'

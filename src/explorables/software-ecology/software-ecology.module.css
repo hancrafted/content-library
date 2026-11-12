@@ -896,3 +896,686 @@
     transition: none;
   }
 }
+
+/* ---------- #542: open cards, mechanics, belt motion ---------- */
+.card[role='button'] {
+  cursor: pointer;
+}
+.card[role='button']:hover {
+  border-color: var(--foreground);
+}
+.card[data-open='true'] {
+  border-color: var(--foreground);
+  box-shadow: 0 0 0 2px var(--foreground);
+}
+.mech[aria-pressed='false'] .ico {
+  opacity: 0.55;
+}
+.tbtn[aria-expanded='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.view[data-belts-move='true'] .beltSlats {
+  animation: slats var(--belt-dur, 0.19s) linear infinite;
+}
+.view[data-belts-move='true'] .beltSlats[data-back='true'] {
+  animation-direction: reverse;
+}
+.view[data-paused='true'] .beltSlats {
+  animation-play-state: paused;
+}
+@keyframes slats {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+/* ---------- the popover and the toolbar menus: they share the factory's tints, and the popover lives outside .root ---------- */
+.root,
+.popover,
+.menu {
+  --warn-15: color-mix(in oklab, var(--warning) 15%, transparent);
+  --ai-12: color-mix(in oklab, var(--ai) 12%, transparent);
+  --bad-14: color-mix(in oklab, var(--destructive) 14%, transparent);
+}
+.popover {
+  --fg-8: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --fg-12: color-mix(in oklab, var(--foreground) 12%, transparent);
+  --fg-25: color-mix(in oklab, var(--foreground) 25%, transparent);
+  --fg-45: color-mix(in oklab, var(--foreground) 45%, transparent);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  position: fixed;
+  z-index: 20;
+  pointer-events: auto;
+  box-sizing: border-box;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  max-height: min(78vh, 720px);
+  overflow: auto;
+  line-height: 1.4;
+}
+.popover:focus {
+  outline: none;
+}
+.popover::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  rotate: 45deg;
+}
+.popover[data-side='right']::before {
+  left: -8px;
+  top: calc(var(--tail) - 7px);
+  border-right: 0;
+  border-top: 0;
+}
+.popover[data-side='left']::before {
+  right: -8px;
+  top: calc(var(--tail) - 7px);
+  border-left: 0;
+  border-bottom: 0;
+}
+.popover[data-side='above']::before {
+  bottom: -8px;
+  left: calc(var(--tail) - 7px);
+  border-left: 0;
+  border-top: 0;
+}
+.popover[data-side='below']::before {
+  top: -8px;
+  left: calc(var(--tail) - 7px);
+  border-right: 0;
+  border-bottom: 0;
+}
+/* tooltips inside the popover: it is portaled outside .root */
+.popover [data-tip] {
+  position: relative;
+}
+.popover [data-tip]:is(:hover, :focus-visible)::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  translate: -50% 0;
+  z-index: 40;
+  width: max-content;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--foreground);
+  color: var(--background);
+  line-height: 1.4;
+  white-space: normal;
+  text-align: left;
+  pointer-events: none;
+}
+.popover :focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.menuAnchor {
+  position: relative;
+}
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 35;
+  width: min(420px, 92vw);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.menu[hidden] {
+  display: none;
+}
+.menuEnd {
+  left: auto;
+  right: 0;
+  width: min(360px, 92vw);
+}
+.mrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.mrow > label,
+.mrow > span:first-child {
+  min-width: 7.5rem;
+  color: var(--muted-foreground);
+}
+.mrow .range {
+  flex: 1;
+  min-width: 120px;
+}
+.mrow b {
+  font-variant-numeric: tabular-nums;
+}
+.mfs {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px 10px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.mfs legend {
+  padding: 0 4px;
+  color: var(--muted-foreground);
+}
+.tipL {
+  text-decoration: underline dotted var(--fg-45);
+  text-underline-offset: 3px;
+  cursor: help;
+}
+.range {
+  appearance: none;
+  width: 160px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border);
+  cursor: pointer;
+}
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--card);
+  padding: 2px;
+}
+.seg button {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  padding: 4px 12px;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  min-height: 32px;
+}
+.seg button[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.segAi button[aria-pressed='true'] {
+  background: var(--ai);
+  color: var(--card);
+}
+.ghostBtn {
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  min-height: 34px;
+  padding: 0;
+}
+.iconBtn {
+  border: 0;
+  background: transparent;
+  border-radius: 999px;
+  width: 34px;
+  height: 34px;
+  display: inline-grid;
+  place-items: center;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  flex: none;
+}
+.iconBtn:hover {
+  background: var(--muted);
+}
+.iconBtn[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px 4px 6px;
+  background: transparent;
+  text-align: left;
+  min-height: 34px;
+  flex: none;
+}
+.switchTrack {
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--border);
+  position: relative;
+  flex: none;
+  transition: background 160ms;
+}
+.switchTrack::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--card);
+  transition: translate 160ms var(--ease);
+  box-shadow: 0 1px 2px var(--fg-25);
+}
+.switch[aria-checked='true'] {
+  border-color: var(--ai);
+  background: var(--ai-12);
+  color: var(--ai);
+}
+.switch[aria-checked='true'] .switchTrack {
+  background: var(--ai);
+}
+.switch[aria-checked='true'] .switchTrack::after,
+.mswitch[aria-checked='true'] .switchTrack::after {
+  translate: 14px 0;
+}
+.mswitch {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: 8px;
+  min-height: 40px;
+}
+.mswitch:hover {
+  background: var(--muted);
+}
+.mswitch > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mswitch[aria-checked='true'] .switchTrack {
+  background: var(--foreground);
+}
+.moreOpts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+/* ---------- a dashboard: a monitor ---------- */
+.dash {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dash[data-kind='customer'] {
+  gap: 14px;
+  min-width: 300px;
+}
+.dashHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dashT {
+  flex: 1;
+  min-width: 0;
+}
+.light {
+  display: inline-flex;
+  gap: 3px;
+  padding: 4px 6px;
+  border-radius: 999px;
+  background: var(--muted);
+  flex: none;
+}
+.light i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fg-12);
+}
+.light[data-level='red'] [data-l='red'] {
+  background: var(--destructive);
+}
+.light[data-level='amber'] [data-l='amber'] {
+  background: var(--warning);
+}
+.light[data-level='green'] [data-l='green'] {
+  background: var(--success);
+}
+.sigs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sig {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  padding: 2px 10px 2px 6px;
+  background: var(--muted);
+}
+.sig .ico {
+  width: 14px;
+  height: 14px;
+}
+.sig[data-level='green'] .ico {
+  color: var(--success);
+}
+.sig[data-level='amber'] {
+  background: var(--warn-15);
+}
+.sig[data-level='amber'] .ico {
+  color: var(--warning);
+}
+.sig[data-level='red'] {
+  background: var(--bad-14);
+}
+.sig[data-level='red'] .ico {
+  color: var(--destructive);
+}
+.drain {
+  margin: -6px 0 0;
+}
+.trends {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 8px 6px;
+  margin: 0;
+  min-width: 0;
+}
+.trend figcaption {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.trend figcaption b {
+  font-variant-numeric: tabular-nums;
+}
+.trendT {
+  width: 100%;
+  cursor: help;
+}
+.trend svg {
+  width: 100%;
+  height: 36px;
+  display: block;
+  overflow: visible;
+}
+.trendLine {
+  fill: none;
+  stroke: var(--foreground);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+.trendArea {
+  fill: var(--fg-8);
+  stroke: none;
+}
+.trendRef {
+  fill: none;
+  stroke: var(--fg-45);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+}
+.trend[data-level='1'] .trendLine {
+  stroke: var(--warning);
+}
+.trend[data-level='1'] .trendArea {
+  fill: var(--warn-15);
+}
+.trend[data-level='2'] .trendLine {
+  stroke: var(--destructive);
+}
+.trend[data-level='2'] .trendArea {
+  fill: var(--bad-14);
+}
+.settings {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.settings summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  min-height: 36px;
+  cursor: pointer;
+  list-style: none;
+}
+.settings summary::-webkit-details-marker {
+  display: none;
+}
+.settings summary::after {
+  content: '▾';
+  margin-left: 4px;
+  color: var(--muted-foreground);
+}
+.settings[open] summary::after {
+  content: '▴';
+}
+.settings summary .ico {
+  width: 16px;
+  height: 16px;
+}
+.settingsSum {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 4px 10px 10px;
+}
+.step {
+  display: grid;
+  grid-template-columns: 10.5rem minmax(90px, 1fr) 10rem;
+  align-items: center;
+  gap: 4px;
+}
+.step .range {
+  width: 100%;
+}
+.step .help {
+  grid-column: 1 / -1;
+}
+.stepL[data-tip] {
+  cursor: help;
+}
+.step[data-ai='true'] .stepL {
+  color: var(--ai);
+}
+.stepV {
+  min-width: 4.2rem;
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.help {
+  display: none;
+  margin: 0;
+  color: var(--muted-foreground);
+}
+.dash[data-help='true'] .help {
+  display: block;
+}
+.flowsBody {
+  padding: 4px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.util {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--fg-8);
+}
+.util i,
+.utilLegend i {
+  display: block;
+  height: 100%;
+}
+.utilLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+.utilLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.utilLegend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  display: inline-block;
+}
+.utilLegend b {
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+.util [data-u='busy'],
+.utilLegend [data-u='busy'] {
+  background: var(--foreground);
+}
+/* blocked reads warning, not destructive: red is kept for two weeks of work waiting (the Spec's token rule) */
+.util [data-u='blocked'],
+.utilLegend [data-u='blocked'] {
+  background: var(--warning);
+}
+.util [data-u='starved'],
+.utilLegend [data-u='starved'] {
+  background: var(--fg-25);
+}
+.flowsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.flowsList li {
+  display: grid;
+  grid-template-columns: 8.5rem 3.6rem 1fr;
+  gap: 6px;
+  align-items: baseline;
+}
+.flowsList b {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.dashHl {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.popover .dashHl {
+  grid-template-columns: 1fr 1fr;
+}
+.popover .dashHl .hl:first-child {
+  grid-column: 1 / -1;
+}
+.hlList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hlList li {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.hlList li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--fg-45);
+  flex: none;
+  translate: 0 -2px;
+}
+.hlList[data-ai='true'] li::before {
+  background: var(--ai);
+}
+@media (max-width: 560px) {
+  .popover .dashHl {
+    grid-template-columns: 1fr;
+  }
+  .trends {
+    gap: 6px;
+  }
+  .step {
+    grid-template-columns: 1fr minmax(90px, 1.4fr) auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .view[data-belts-move='true'] .beltSlats {
+    animation: none;
+  }
+  .switchTrack,
+  .switchTrack::after {
+    transition: none;
+  }
+}

@@ -2,16 +2,19 @@ import type { TargetProps } from '@/shared/lib/context-link.pure';
 import type { KeyboardEvent, MouseEvent } from 'react';
 import { RoleCardView, SwingCardView, type CartoonCardProps } from './cartoon-card-view';
 import { CustomerCardView, type CustomerCardProps } from './customer-card-view';
+import { CustomerDashboard, type CustomerDashboardProps } from './customer-dashboard';
 import styles from './software-ecology.module.css';
 import { StationCardView, type StationCardProps } from './station-card-view';
+import { WorkCenterDashboard, type WorkCenterDashboardProps } from './work-center-dashboard';
 
 /*
  * One card per work center, and the Customer, in every view (design-ADR 0024 §13): `cardView` picks the cartoon
- * (`swing`), the role (`role`) or the station on the line (`station`); the dashboard view joins with the popover
- * (#542). Every view keeps the card's id on its root, so the parent can morph one view's box into the next.
+ * (`swing`), the role (`role`), the station on the line (`station`) or its dashboard (`dashboard`), which the popover
+ * shows and, later, the compare stream. Every floor view keeps the card's id on its root, so the parent can morph one
+ * view's box into the next.
  */
 
-export type CardView = 'swing' | 'role' | 'station';
+export type CardView = 'swing' | 'role' | 'station' | 'dashboard';
 
 interface Opens {
   readonly id: string;
@@ -35,7 +38,9 @@ export type WorkCenterCardProps =
       readonly cartoon: CartoonCardProps;
     })
   | (Opens & { readonly cardView: 'station'; readonly kind: 'role'; readonly station: StationCardProps })
-  | (Opens & { readonly cardView: 'station'; readonly kind: 'customer'; readonly customer: CustomerCardProps });
+  | (Opens & { readonly cardView: 'station'; readonly kind: 'customer'; readonly customer: CustomerCardProps })
+  | { readonly cardView: 'dashboard'; readonly kind: 'role'; readonly dashboard: WorkCenterDashboardProps }
+  | { readonly cardView: 'dashboard'; readonly kind: 'customer'; readonly dashboard: CustomerDashboardProps };
 
 const keyOpen = (p: Opens) => (e: KeyboardEvent) => {
   if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -43,9 +48,21 @@ const keyOpen = (p: Opens) => (e: KeyboardEvent) => {
   p.onOpen?.(p.id, e.shiftKey);
 };
 
+type PanelProps = Extract<WorkCenterCardProps, { cardView: 'station' | 'dashboard' }>;
+
+/** The views that are not on the cartoon grid: the station on the line and the dashboard. */
+function Panel(p: PanelProps) {
+  if (p.cardView === 'dashboard')
+    return p.kind === 'customer' ? <CustomerDashboard {...p.dashboard} /> : <WorkCenterDashboard {...p.dashboard} />;
+  return p.kind === 'customer' ? (
+    <CustomerCardView {...p.customer} label={p.label} />
+  ) : (
+    <StationCardView {...p.station} label={p.label} />
+  );
+}
+
 export function WorkCenterCard(p: WorkCenterCardProps) {
-  if (p.cardView === 'station')
-    return p.kind === 'customer' ? <CustomerCardView {...p.customer} /> : <StationCardView {...p.station} />;
+  if (p.cardView === 'dashboard' || p.cardView === 'station') return <Panel {...p} />;
   return (
     <div
       className={styles.cartoon}

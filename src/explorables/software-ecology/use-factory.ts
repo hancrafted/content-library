@@ -7,11 +7,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { layoutFactory, type FactoryLayout } from './factory-layout.pure.ts';
 import { FactoryPainter } from './factory-painter.ts';
-import { DEFAULT_SPEED, FactoryRun, presetOf, SPEED_1X } from './factory-run.pure.ts';
+import { SPEED_1X, type FactoryRun } from './factory-run.pure.ts';
 import type { PileStyle } from './paint-pile.ts';
 import { snapshotOf, snapshotWarm, type Snapshot } from './run-snapshot.pure.ts';
 import type { Bundle } from './software-ecology.types';
 import { usePlaying } from './use-playing.ts';
+import { useRun, type FactoryControls } from './use-run.ts';
+
+export type { FactoryControls };
 
 const READ_SECS = 0.25;
 
@@ -19,14 +22,6 @@ export interface FactoryWords {
   /** "Warming up · day {day} of {of}", filled. */
   readonly warming: (day: number, of: number) => string;
   readonly blocked: string;
-}
-
-export interface FactoryControls {
-  readonly preset: string;
-  readonly speed: number;
-  setPreset(id: string): void;
-  setSpeed(n: number): void;
-  clear(): void;
 }
 
 export interface FactoryView {
@@ -39,12 +34,6 @@ export interface FactoryView {
   readonly controls: FactoryControls;
   /** Places the floor on the stage and paints one frame now: after a switch into the factory view. */
   repaint(): void;
-}
-
-interface Build {
-  readonly preset: string;
-  readonly clear: boolean;
-  readonly n: number;
 }
 
 const placeFloor = (floor: HTMLDivElement | null, fit: { k: number; ox: number; oy: number }) => {
@@ -73,29 +62,12 @@ interface Live {
   readonly speed: number;
   readonly words: FactoryWords;
   readonly pile: PileStyle;
+  /** The dashboards on show, read with every readout. */
+  readonly watch: readonly string[];
 }
 
-/** The run, rebuilt on a preset or Clear, and the controls that rebuild it. */
-function useRun(B: Bundle, preset: string): { run: FactoryRun; controls: FactoryControls } {
-  const [build, setBuild] = useState<Build>({ preset, clear: false, n: 0 });
-  const [speed, setSpeed] = useState(() => presetOf(B, preset).speed ?? DEFAULT_SPEED);
-  const run = useMemo(() => new FactoryRun({ B, preset: build.preset, now: false, clear: build.clear }), [B, build]);
-  const controls = useMemo<FactoryControls>(
-    () => ({
-      preset: run.preset.id,
-      speed,
-      setPreset: (id) => {
-        const p = presetOf(B, id);
-        if (p.speed) setSpeed(p.speed);
-        setBuild((b) => ({ preset: p.id, clear: false, n: b.n + 1 }));
-      },
-      setSpeed,
-      clear: () => setBuild((b) => ({ ...b, clear: true, n: b.n + 1 })),
-    }),
-    [run, speed, B],
-  );
-  return { run, controls };
-}
+/** Reads the run into React: the readouts, and the dashboards on show; charts only when asked. */
+type Read = (run: FactoryRun, charts?: boolean) => void;
 
 const drawAt = (run: FactoryRun, x: { live: Live; reduced: boolean; now: number }): DrawAt => {
   const w = snapshotWarm(run);
@@ -117,7 +89,7 @@ function useStill(x: {
   live: RefObject<Live>;
   playing: boolean;
   reduced: boolean;
-  read: (s: Snapshot) => void;
+  read: Read;
 }) {
   const { run, painter, v, live, playing, reduced, read } = x;
   useEffect(() => {
@@ -125,7 +97,7 @@ function useStill(x: {
     if (reduced || document.hidden) run.finishWarm();
     if (!run.warming) painter.attach();
     paint({ v, painter, at: drawAt(run, { live: live.current, reduced, now: performance.now() }) });
-    read(snapshotOf(run));
+    read(run);
   }, [playing, reduced, run, painter, v, live, read]);
 }
 
@@ -136,13 +108,13 @@ function useLoop(x: {
   v: Painted;
   live: RefObject<Live>;
   playing: boolean;
-  read: (s: Snapshot) => void;
+  read: Read;
 }) {
   const { run, painter, v, live, playing, read } = x;
   useEffect(() => {
     if (!playing) return;
     if (!run.warming) painter.attach();
-    let [raf, last, slow] = [0, 0, 0];
+    let [raf, last, slow, ticks] = [0, 0, 0, 0];
     const tick = (now: number) => {
       const dt = last ? Math.min(0.1, (now - last) / 1000) : 1 / 60;
       last = now;
@@ -151,7 +123,7 @@ function useLoop(x: {
       slow += dt;
       if (slow > READ_SECS) {
         slow = 0;
-        read(snapshotOf(run));
+        read(run, ++ticks % 2 === 0);
       }
       raf = requestAnimationFrame(tick);
     };
@@ -169,6 +141,17 @@ function useLive(now: Live): RefObject<Live> {
   return live;
 }
 
+/** The readouts in React state, and the one way to refresh them; a new watch list reads at once. */
+function useReadouts(run: FactoryRun, live: RefObject<Live>, watchKey: string) {
+  const [snap, setSnap] = useState(() => snapshotOf(run));
+  const read = useCallback<Read>(
+    (r, charts = true) => setSnap((prev) => snapshotOf(r, { watch: live.current.watch, charts, prev })),
+    [live],
+  );
+  useEffect(() => read(run), [read, run, watchKey]);
+  return { snap, read };
+}
+
 export function useFactory(x: {
   B: Bundle;
   preset: string;
@@ -176,26 +159,52 @@ export function useFactory(x: {
   pile?: PileStyle;
   /** False in Swing and Roles: the model only finishes warming. */
   flowing?: boolean;
+  /** Work centers (or `customer`) whose dashboards are on show. */
+  watch?: readonly string[];
 }): FactoryView {
-  const { run, controls } = useRun(x.B, x.preset);
+  const v = useViews(),
+    { stage, canvas, floor } = v;
+  const { playing, reduced } = usePlaying(stage);
+  const { run, controls: base } = useRun({ B: x.B, preset: x.preset, reduced });
+  const watch = x.watch ?? NONE;
+  const live = useLive({ ...liveOf(x), speed: base.speed, watch });
+  const { snap, read } = useReadouts(run, live, watch.join());
   const layout = useMemo(() => layoutFactory(run.m), [run]);
   const painter = useMemo(() => new FactoryPainter(run.m, layout), [run, layout]);
-  const [snap, setSnap] = useState(() => snapshotOf(run));
-  const stage = useRef<HTMLDivElement>(null),
-    canvas = useRef<HTMLCanvasElement>(null),
-    floor = useRef<HTMLDivElement>(null);
-  const v = useMemo(() => ({ stage, canvas, floor }), []);
-  const { playing, reduced } = usePlaying(stage);
-  const live = useLive({ flowing: x.flowing ?? true, speed: controls.speed, words: x.words, pile: x.pile ?? 'heap' });
-  useStill({ run, painter, v, live, playing, reduced, read: setSnap });
-  useLoop({ run, painter, v, live, playing, read: setSnap });
+  const controls = withRead(base, () => read(run));
+  useStill({ run, painter, v, live, playing, reduced, read });
+  useLoop({ run, painter, v, live, playing, read });
   const repaint = useCallback(() => {
     if (!run.warming) painter.attach();
     paint({ v, painter, at: drawAt(run, { live: live.current, reduced, now: performance.now() }) });
-  }, [run, painter, v, reduced]);
+  }, [run, painter, v, reduced, live]);
   useRecolor(painter, repaint);
   return { run, layout, snap, stage, canvas, floor, controls, repaint };
 }
+
+const NONE: readonly string[] = [];
+
+const liveOf = (x: { flowing?: boolean; words: FactoryWords; pile?: PileStyle }) => ({
+  flowing: x.flowing ?? true,
+  words: x.words,
+  pile: x.pile ?? 'heap',
+});
+
+function useViews() {
+  const stage = useRef<HTMLDivElement>(null),
+    canvas = useRef<HTMLCanvasElement>(null),
+    floor = useRef<HTMLDivElement>(null);
+  return useMemo(() => ({ stage, canvas, floor }), []);
+}
+
+/** A dial turned while paused shows at once: the readouts re-read after every settings change. */
+const withRead = (base: FactoryControls, reread: () => void): FactoryControls => ({
+  ...base,
+  setSettings: (n) => {
+    base.setSettings(n);
+    reread();
+  },
+});
 
 /** Re-reads the token colours when the theme flips, and repaints. */
 function useRecolor(painter: FactoryPainter, repaint: () => void) {

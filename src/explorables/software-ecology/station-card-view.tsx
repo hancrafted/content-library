@@ -11,6 +11,12 @@ export type Box = readonly [number, number, number, number];
 
 export const boxStyle = (b: Box) => ({ left: b[0], top: b[1], width: b[2], height: b[3] });
 
+/** A station card as a button that opens its dashboard; the floor hears its click, Enter and Space. */
+export const openerProps = (label: string | undefined, open: boolean | undefined) =>
+  label
+    ? { role: 'button', tabIndex: 0, 'aria-label': label, 'aria-expanded': !!open, 'data-open': open }
+    : { 'data-open': open };
+
 export interface StationCardProps {
   readonly id: string;
   readonly box: Box;
@@ -24,6 +30,10 @@ export interface StationCardProps {
   /** Context targets and markers by spot: `card`, `rack`, or a sign's kind. */
   readonly targets?: Readonly<Partial<Record<string, TargetProps>>>;
   readonly markers?: Readonly<Partial<Record<string, ReactNode>>>;
+  /** "{title}: open its dashboard", the card's name as a button; the floor handles the click. */
+  readonly label?: string;
+  /** Its dashboard is open. */
+  readonly open?: boolean;
 }
 
 function Status({ r, words }: Pick<StationCardProps, 'r' | 'words'>) {
@@ -112,6 +122,7 @@ export const StationCardView = memo(function StationCardView(p: StationCardProps
       className={`${styles.card} text-caption`}
       data-kind="role"
       data-id={p.id}
+      {...openerProps(p.label, p.open)}
       data-ai={p.r.ai}
       data-piling={p.r.piling}
       style={boxStyle(p.box)}

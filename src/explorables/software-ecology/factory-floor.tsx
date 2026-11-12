@@ -1,6 +1,6 @@
 import type { TargetProps } from '@/shared/lib/context-link.pure';
 import { fillTemplate } from '@/shared/lib/template.pure';
-import { useMemo, type CSSProperties, type ReactNode } from 'react';
+import { useMemo, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { TileView } from './cartoon-card-view';
 import { cartoonCardsOf, tilePartsOf, type CartoonCardPart } from './cartoon-parts.pure.ts';
 import { gridOf } from './factory-grid.pure.ts';
@@ -72,6 +72,8 @@ export interface FloorProps {
   readonly words: Words;
   readonly spots: SpotProps;
   readonly onCard: (id: string, shift: boolean) => void;
+  /** The card whose dashboard is open. */
+  readonly open?: string | null;
 }
 
 const labelOf = (words: Words, kind: 'role' | 'customer', title: string) =>
@@ -91,6 +93,7 @@ function CustomerStation(p: FloorProps) {
         words: p.words.customer,
         target: p.spots.targets?.customer,
         marker: p.spots.markers?.customer,
+        open: p.open === 'customer',
       }}
     />
   );
@@ -114,6 +117,7 @@ function StationCards(p: FloorProps) {
             ...own[c.id],
             r: p.f.snap.stations[c.id] as Snapshot['stations'][string],
             words: p.words.card,
+            open: p.open === c.id,
           }}
         />
       ))}
@@ -158,6 +162,23 @@ function CartoonCards(p: FloorProps & { view: 'swing' | 'roles' }) {
   );
 }
 
+/** The station cards stay handler-free views: the floor hears their clicks and Enter or Space on a focused card. */
+const stationOf = (e: { target: EventTarget }) =>
+  (e.target as Element).closest<HTMLElement>('[data-id][role="button"]');
+
+const floorHandlers = (p: FloorProps) => ({
+  onClick: (e: MouseEvent) => {
+    const card = stationOf(e);
+    if (card?.dataset.id) p.onCard(card.dataset.id, e.shiftKey);
+  },
+  onKeyDown: (e: KeyboardEvent) => {
+    const card = stationOf(e);
+    if ((e.key !== 'Enter' && e.key !== ' ') || card !== e.target || !card.dataset.id) return;
+    e.preventDefault();
+    p.onCard(card.dataset.id, e.shiftKey);
+  },
+});
+
 export function Floor(p: FloorProps & { view: ViewId }) {
   const { layout, run } = p.f;
   const cols = useMemo(() => gridOf(run.m).cols, [run]);
@@ -170,6 +191,7 @@ export function Floor(p: FloorProps & { view: ViewId }) {
           ? { width: layout.width, height: layout.height }
           : ({ '--cols': String(cols) } as CSSProperties)
       }
+      {...(p.view === 'factory' ? floorHandlers(p) : {})}
     >
       {p.view === 'factory' ? <StationCards {...p} /> : <CartoonCards {...p} view={p.view} />}
     </div>

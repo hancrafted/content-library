@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { DTW, WARM_WEEKS } from './factory-dials.pure.ts';
-import { FactoryRun, MAX_STEPS, SPEED_1X, WARM_CHUNK } from './factory-run.pure.ts';
+import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
+import { FactoryRun, MAX_STEPS, presetOf, SPEED_1X, WARM_CHUNK } from './factory-run.pure.ts';
 import { builtinBundle } from './use-case-data.ts';
 
 describe('success cases', () => {
@@ -49,6 +49,18 @@ describe('failure cases', () => {
 });
 
 describe('edge cases', () => {
+  it('starts from the settings it is given, so Clear keeps a dial the viewer turned', () => {
+    // ARRANGE
+    const B = builtinBundle('tire');
+    const turned = { ...startSettings(B, presetOf(B, 'ideal')), over: { qa: { eff: 300 } } };
+    const eff = 300;
+    // ACT
+    const run = new FactoryRun({ B, preset: 'ideal', now: false, clear: true, s: turned });
+    // ASSERT
+    expect(run.m.s.over.qa?.eff).toBe(eff);
+    expect(run.m.t).toBe(0);
+  });
+
   it('starts empty at day 0 on Clear and on a preset that starts clear', () => {
     // ARRANGE
     const B = builtinBundle('tire');

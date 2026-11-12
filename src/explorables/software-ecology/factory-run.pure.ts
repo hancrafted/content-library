@@ -8,7 +8,7 @@ import { DTW, startSettings, WARM_WEEKS } from './factory-dials.pure.ts';
 import { buildFactory } from './factory-model.pure.ts';
 import { step } from './factory-step.pure.ts';
 import type { Factory } from './factory.types';
-import type { Bundle, Preset } from './software-ecology.types';
+import type { Bundle, Preset, Settings } from './software-ecology.types';
 
 /** Weeks a real second at 1×; 5× (the default) plays a working day in about 0.6 s. */
 export const SPEED_1X = 1 / 16;
@@ -35,6 +35,8 @@ export interface RunOptions {
   /** Clear: an empty factory at day 0, no warm-up. */
   readonly clear?: boolean;
   readonly seed?: number;
+  /** The settings it starts from; the preset's own by default. */
+  readonly s?: Settings;
 }
 
 export class FactoryRun {
@@ -46,7 +48,7 @@ export class FactoryRun {
 
   constructor(o: RunOptions) {
     this.preset = presetOf(o.B, o.preset);
-    this.m = buildFactory(o.B, { s: startSettings(o.B, this.preset), seed: o.seed });
+    this.m = buildFactory(o.B, { s: o.s ?? startSettings(o.B, this.preset), seed: o.seed });
     if (o.clear || this.preset.start === 'clear') return;
     this.warmLeft = WARM_STEPS;
     if (o.now) this.finishWarm();

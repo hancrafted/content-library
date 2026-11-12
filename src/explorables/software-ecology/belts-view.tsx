@@ -21,7 +21,7 @@ function Lanes({ belts, retOn }: { belts: readonly BeltLayout[]; retOn: Readonly
           <g key={b.key} className={styles.ret} data-on={!!retOn[b.key]}>
             <path d={d} className={styles.beltRail} strokeWidth="13" />
             <path d={d} className={styles.beltSurface} strokeWidth="10" />
-            <path d={d} className={styles.beltSlats} strokeWidth="8" />
+            <path d={d} className={styles.beltSlats} strokeWidth="8" data-back="true" />
           </g>
         );
       })}
