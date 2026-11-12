@@ -3,6 +3,7 @@
  * naming the path and what belongs there. Ported from the reference build's validate(), messages and order unchanged;
  * the presets and the saved state are checked in use-case-preset-checks.pure.ts.
  */
+import { firstSpawn } from './first-spawn.pure.ts';
 
 export const SCHEMA_ID = 'software-ecology-factory/5';
 /** The glyphs a role may name. */
@@ -224,9 +225,10 @@ export const CENTER: readonly Rule<CenterAt>[] = [
 
 export const FIRST_SPAWN: Rule<CenterAt> = ({ c, p }) => {
   const spawns = itemsOf(c.spawns),
-    f = mapOf(spawns[0]);
+    first = firstSpawn(spawns),
+    f = mapOf(first);
   if (!spawns.length) return `${p}.spawns: what a finished job creates, e.g. [{ to: ops, n: 1 }]`;
-  return isMap(spawns[0]) && f.choose === undefined && f.n === undefined
+  return isMap(first) && f.choose === undefined && f.n === undefined
     ? `${p}.spawns[0]: the first spawn carries the request on, so it is { to, n } or choose`
     : false;
 };

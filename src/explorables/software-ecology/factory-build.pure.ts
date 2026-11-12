@@ -8,6 +8,7 @@ import { HANDOFF } from './factory-dials.pure.ts';
 import { Job } from './factory-docs.pure.ts';
 import { Ring, streams } from './factory-random.pure.ts';
 import type { Belt, BeltKind, CustomerNode, FactoryNode, NodeKind, Server, SpawnRule } from './factory.types';
+import { firstSpawn } from './first-spawn.pure.ts';
 import type { Bundle, CenterDef, RoleDef, UseCaseData } from './software-ecology.types';
 
 export interface Pair {
@@ -148,11 +149,15 @@ const resolveSpawn = (c: CenterDef, sp: CenterDef['spawns'][number], edgeOf: (k:
       }
     : { e: edgeOf(`${c.id}-${sp.to}`), n: sp.n, p: sp.p };
 
-/** Spawn rules, resolved to belts; a center's `escalate` rides on its first spawn (`firstSpawn`). */
+/** Spawn rules, resolved to belts; a center's `escalate` rides on its first spawn. */
 export const resolveSpawns = (c: CenterDef, edgeOf: (k: string) => Belt): SpawnRule[] => {
-  const [first, ...rest] = c.spawns.map((sp) => resolveSpawn(c, sp, edgeOf));
-  if (!first || !c.escalate) return first ? [first, ...rest] : [];
-  return [{ ...first, pass: { e: edgeOf(`${c.id}-${c.escalate.to}`), under: c.escalate.underPressure } }, ...rest];
+  const spawns = c.spawns.map((sp) => resolveSpawn(c, sp, edgeOf)),
+    first = firstSpawn(spawns),
+    esc = c.escalate;
+  if (!esc) return spawns;
+  return spawns.map((sp) =>
+    sp === first ? { ...sp, pass: { e: edgeOf(`${c.id}-${esc.to}`), under: esc.underPressure } } : sp,
+  );
 };
 
 const newServer = (id: string): Server => ({

@@ -4,6 +4,7 @@
  */
 import { passShareOf } from './factory-dials.pure.ts';
 import type { Belt, ChooseRule, FactoryNode, SpawnRule } from './factory.types';
+import { firstSpawn } from './first-spawn.pure.ts';
 import type { Settings } from './software-ecology.types';
 
 export interface Pick {
@@ -67,16 +68,13 @@ const passByShare = (n: FactoryNode, sp: SpawnRule, x: { share: number; steady: 
   return true;
 };
 
-/** A station's first spawn: the one its `escalate` resolves onto, and the belt a ticket passed on rides from. */
-export const firstSpawn = (n: FactoryNode): SpawnRule | undefined => n.spawns[0];
-
 /**
  * Pass-on under pressure (design-ADR 0024 §5, grill 11 Q220, Q227): whether a station with `escalate` passes the ticket
  * it takes up on to `escalate.to` unanswered, at the share `passShareOf` gives: none until its pile turns red, then
  * rising with its pressure up to all of them. Below the mark nothing is drawn, so its routing is unchanged there.
  */
 export const passesOn = (s: Settings, n: FactoryNode): boolean => {
-  const sp = firstSpawn(n);
+  const sp = firstSpawn(n.spawns);
   if (!sp?.pass) return false;
   return passByShare(n, sp, { share: passShareOf(s, n, sp.pass.under), steady: s.reality === 0 });
 };
