@@ -1,6 +1,6 @@
+import { Download, Upload, type LucideIcon } from 'lucide-react';
 import { useRef } from 'react';
 import type { ExchangeWords } from './exchange-words.types';
-import { Glyph } from './factory-glyph-view';
 import styles from './software-ecology.module.css';
 import { ToolTip } from './toolbar-tip.client';
 
@@ -17,11 +17,11 @@ export interface ExchangeButtonsProps {
 
 const ACCEPT = '.yaml,.yml,text/yaml,application/yaml';
 
-function FileButton(p: { icon: string; label: string; tip: string; onClick: () => void }) {
+function FileButton(p: { icon: LucideIcon; label: string; tip: string; onClick: () => void }) {
   return (
     <ToolTip tip={p.tip}>
       <button type="button" className={`${styles.tbtn} ${styles.tbtnLine} text-caption`} onClick={p.onClick}>
-        <Glyph name={p.icon} className={styles.ico} />
+        <p.icon size={16} aria-hidden="true" />
         <span>{p.label}</span>
       </button>
     </ToolTip>
@@ -33,8 +33,8 @@ export function ExchangeButtons(p: ExchangeButtonsProps) {
   const w = p.words;
   return (
     <div className={styles.fileRow}>
-      <FileButton icon="download" label={w.download} tip={w.downloadTip} onClick={p.onDownload} />
-      <FileButton icon="upload" label={w.upload} tip={w.uploadTip} onClick={() => file.current?.click()} />
+      <FileButton icon={Download} label={w.download} tip={w.downloadTip} onClick={p.onDownload} />
+      <FileButton icon={Upload} label={w.upload} tip={w.uploadTip} onClick={() => file.current?.click()} />
       <input
         ref={file}
         type="file"

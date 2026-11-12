@@ -37,7 +37,7 @@ toolbar:
   tourTip: 'Eine geführte Tour durch dieses Szenario: Regler setzen, bis zu einer Woche laufen lassen, anhalten, lesen, worauf es ankommt'
   modified: geändert
   modifiedTip: Nach der Wahl dieses Zustands wurde ein Regler gedreht; wählt ihn erneut, um zurückzusetzen
-# Das Einstellungs-Popover: ein Knopf am Ende der Leiste, drei Spalten und die Datei am Fuß.
+# Das Einstellungs-Popover: ein Knopf am Ende der Leiste, Kopf, zwei Spalten, am Fuß Zurücksetzen und die Datei.
 settings:
   button: Einstellungen
   tip: 'Einstellungen: das Modell, was schlechte Arbeit weiter unten anrichtet, wie die Fabrik gezeichnet wird, und die Datei'
@@ -46,7 +46,8 @@ settings:
   mechanics: Mechanismen
   mechanicsNote: Was schlechte Arbeit weiter unten anrichtet
   display: Anzeige
-  file: Datei
+  close: Schließen
+  help: 'Hilfe zu {name}'
 tour:
   label: Geführte Tour
   step: '· Schritt {i} von {n} · Woche {w}'
@@ -160,7 +161,7 @@ customer:
   rateTip: Wie viele Anfragen der Kunde pro Woche schickt. Das Ideal bemisst jeden Arbeitsplatz für die Rate der Datei; mehr füllt die Linie.
   aWeek: '{n} pro Woche'
   days: '{n} Tage'
-  demand: '{n}× Nachfrage'
+  demand: '{n}× Bedarf'
   steady: gleichmäßig
   random: zufällig
 dock:
@@ -218,21 +219,19 @@ model:
   same: Gleich
   better: Besser
   note: 'Rate, Anfragemix und Folgewahrscheinlichkeiten des Kunden stehen auf seiner Karte: klickt links auf den Kunden.'
-  reset: Zurück zum Zustand
+  reset: Auf Standard zurücksetzen
   tips:
     reality: 'Von Ideal zu Realistisch: senkt Effizienz und Effektivität jedes Arbeitsplatzes auf seine realistischen Werte. Mehr schlechte Dokumente gehen hinaus, werden zurückgeschickt oder vervielfachen sich; der Engpass läuft nahe 90 % ausgelastet.'
     ai: 'Wo KI arbeitet: diese Arbeitsplätze laufen schneller (2,5×, solange ein Dashboard nichts anderes sagt) und schreiben vielleicht zusätzliche Aufgaben; KI-Dokumente brauchen am nächsten Arbeitsplatz etwas länger zum Lesen. Beschleunigung und Zusatzaufgaben stellt Ihr pro Arbeitsplatz in seinem Dashboard ein.'
     company: 'Dienstleister: nur der Kunde fragt Arbeit an. Produktunternehmen: der Produktmanager schreibt zusätzlich Roadmap-Punkte, der Vertrieb bringt Leads und der Engineer schreibt Tickets zu technischen Schulden. Sie teilen dieselben Rückstände; jeder Arbeitsplatz wird neu bemessen, damit Ideal bei 70 % Auslastung bleibt.'
     aiq: 'Was KI mit der Chance macht, dass ein Dokument gut hinausgeht: Schlechter senkt sie um 15 Punkte, Besser hebt sie um 15. Gleich lässt sie.'
-    rework: Chance, dass ein Arbeitsplatz ein schlechtes Dokument über das Rückband zurückschickt. Es landet vorn im Rückstand des Absenders und kostet zweimal Zeit.
-    churn: 'Wird schlechter Input behalten, gibt der Arbeitsplatz so viel Mal seine üblichen Dokumente weiter: er rät und schreibt mehr.'
-    reset: Macht jede Änderung rückgängig, seit Ihr den Zustand gewählt habt.
+    reset: 'Zurück zu dem, was die Anwendungsfall-Datei für diesen Zustand festlegt: Einstellungen, Tempo und Anzeige.'
 # Die Spalte Anzeige im Einstellungs-Popover: wie die Fabrik gezeichnet wird.
 display:
   beltMotion: Bandbewegung
   beltMotionNote: Die Lamellen der Bänder bewegen sich. Aus ist ruhiger; die Dokumente wandern trotzdem.
   pile: Stau hinter dem Regal
-  pileLabel: Animation des Staus
+  pileTip: 'Wie sich Dokumente hinter einem vollen Regal stauen. Fahrt über einen Stil, um ihn zu sehen.'
   piles:
     heap:
       name: Kippender Haufen

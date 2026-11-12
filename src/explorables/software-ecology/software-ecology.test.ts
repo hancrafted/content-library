@@ -7,30 +7,30 @@ import { wordsFor } from './software-ecology-data';
 const render = (props: Parameters<typeof SoftwareEcology>[0]): string =>
   renderToStaticMarkup(createElement(SoftwareEcology, props));
 
-/** A pressed button whose text is `name`, whatever attributes follow `aria-pressed`. */
+/** A pressed step button whose text is `name`, after its number badge. */
 const pressed = (name: string): RegExp =>
-  new RegExp(`aria-pressed="true"[^>]*>${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}<`);
+  new RegExp(`aria-pressed="true"[^>]*><span[^>]*>[①②③]</span>${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}<`);
 
 describe('success cases', () => {
   it('renders the factory with its toolbar, every work center and the Customer in English', () => {
     // ARRANGE
-    const titles = ['Customer', 'Quality assurance', 'Ideal', 'Realistic', 'Tire swing'];
+    const titles = ['Customer', 'Quality assurance', 'In theory', 'In practice', 'Tire swing'];
     const note = 'Illustrative model, not measured';
     // ACT
-    const html = render({ locale: 'en' });
+    const html = render({ locale: 'en', preset: 'ideal' });
     // ASSERT
     for (const t of titles) expect(html).toContain(`>${t}<`);
     expect(html).toContain(note);
   });
 
-  it('opens on Tire swing 2.0: each department with its job, its cartoon panel and the quote under it, and the three tiles', () => {
+  it('opens on Who does what: each department with its job, its cartoon panel and the quote under it, and the three tiles', () => {
     // ARRANGE
     const cartoon = wordsFor('en').cartoon;
     const quotes = [cartoon.captions.explained, cartoon.captions.eng, cartoon.captions.doc, cartoon.captions.needed];
-    const shown = ['Tire swing 2.0', 'Engineering', 'Turns the spec into code', 'Analysis', 'ADR'];
+    const shown = ['Who does what', 'Engineering', 'Turns the spec into code', 'Analysis', 'ADR'];
     const captions = quotes.map((t) => `>${t}</figcaption>`);
     const texts = shown.map((t) => `>${t}<`);
-    const active = pressed('Tire swing 2.0');
+    const active = pressed('Who does what');
     const retiredView = 'data-card-view="swing"';
     // ACT
     const html = render({ locale: 'en' });
@@ -41,9 +41,9 @@ describe('success cases', () => {
     expect(html).not.toContain(retiredView);
   });
 
-  it('labels the roles state Roles on a use case without the cartoon', () => {
+  it('labels the roles state Who does what on a use case without the cartoon', () => {
     // ARRANGE
-    const label = pressed('Roles');
+    const label = pressed('Who does what');
     // ACT
     const html = render({ locale: 'en', useCase: 'gate' });
     // ASSERT
@@ -52,7 +52,7 @@ describe('success cases', () => {
 
   it('opens a Slide still naming swing on the roles state', () => {
     // ARRANGE
-    const label = pressed('Reifenschaukel 2.0');
+    const label = pressed('Wer macht was');
     // ACT
     const html = render({ locale: 'de', preset: 'swing' });
     // ASSERT
@@ -107,6 +107,19 @@ describe('success cases', () => {
 });
 
 describe('failure cases', () => {
+  it('makes the roles state’s cards no buttons and no tab stops, and shows no Quality assurance card there', () => {
+    // ARRANGE
+    const cards = /<div[^>]*data-card-view="role"[^>]*>/g;
+    const tenCards = 10;
+    // ACT
+    const html = render({ locale: 'en', preset: 'roles' });
+    const found = html.match(cards) ?? [];
+    // ASSERT
+    expect(found.length).toBeGreaterThanOrEqual(tenCards);
+    for (const c of found) expect(c).not.toMatch(/role="button"|tabindex/i);
+    expect(html).not.toContain('>Quality assurance<');
+  });
+
   it('draws no cartoon panel for a use case without the cartoon', () => {
     // ARRANGE
     const roles = 'data-card-view="role"';

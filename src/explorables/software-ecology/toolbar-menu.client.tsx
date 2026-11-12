@@ -48,13 +48,14 @@ export interface ToolbarMenuProps {
   /** `menu` for a list of choices, `dialog` for a panel of controls (the Settings popover). */
   readonly role: 'menu' | 'dialog';
   /**
-   * `below` hangs under the button (the default); `window` is fixed to the window, up to 720 px wide and kept inside
+   * `below` hangs under the button (the default); `window` is fixed to the window, up to 760 px wide and kept inside
    * it (the Settings popover).
    */
   readonly placement?: 'below' | 'window';
   /** Extra classes on the menu box. */
   readonly menuClass?: string;
-  readonly children: ReactNode;
+  /** The menu's body; a function gets `close`, which closes the menu and hands focus back to its button. */
+  readonly children: ReactNode | ((close: () => void) => ReactNode);
 }
 
 function useDismiss(p: ToolbarMenuProps, anchor: RefObject<HTMLDivElement | null>) {
@@ -129,6 +130,10 @@ export function ToolbarMenu(p: ToolbarMenuProps) {
     anchor = useRef<HTMLDivElement>(null);
   const btn = useDismiss(p, anchor);
   const inWindow = p.placement === 'window';
+  const close = () => {
+    p.onOpen(false);
+    btn.current?.focus();
+  };
   const place = usePlace(p.open, inWindow, btn);
   return (
     <div ref={anchor} className={styles.menuAnchor}>
@@ -141,7 +146,7 @@ export function ToolbarMenu(p: ToolbarMenuProps) {
         hidden={!p.open}
         style={boxStyle(place)}
       >
-        {p.children}
+        {typeof p.children === 'function' ? p.children(close) : p.children}
       </div>
     </div>
   );

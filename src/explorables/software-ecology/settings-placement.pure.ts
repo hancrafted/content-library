@@ -1,6 +1,6 @@
 /*
  * Where the Settings popover opens (feature guide, Interaction 3; feedback 08): under the Settings button, its right
- * edge on the button's, up to 720 px wide and kept 8 px inside the window on every side, so it never runs out of view
+ * edge on the button's, up to 760 px wide and kept 8 px inside the window on every side, so it never runs out of view
  * as the old Model menu did. When the room under the button is short, it rises so at least 420 px stay to scroll in.
  * Boxes are viewport coordinates; no DOM.
  */
@@ -15,8 +15,8 @@ export interface SettingsPlace {
   readonly maxHeight: number;
 }
 
-/** The widest the popover grows: three columns. */
-export const SETTINGS_MAX = 720;
+/** The widest the popover grows: two columns of about 360 px. */
+export const SETTINGS_MAX = 760;
 /** The least height it keeps before it rises over the toolbar. */
 const ROOM = 420;
 const EDGE = 8;

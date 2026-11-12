@@ -1,7 +1,5 @@
 name: Reifenschaukel
 sub: Sieben Rollen, wie die meisten Softwarefirmen sie besetzen, und ein Kunde. Anfragen gehen an den Vertrieb, das Produktmanagement oder den Support; der Betrieb liefert an den Kunden zurück.
-# Der Name des Rollen-Zustands in diesem Anwendungsfall: der Cartoon, als Fabrik erzählt.
-presets: { roles: Reifenschaukel 2.0 }
 belts:
   customer-sales: { label: Neukunde }
   customer-pm: { label: Feature- oder Änderungswunsch }

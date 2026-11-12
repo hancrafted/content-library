@@ -1,10 +1,12 @@
 /*
  * How the factory is drawn, from the Settings popover's Display column: belt motion and the pile-up style, both
- * transient (FE-001 §1; the reference build starts with the belts still and the heap). The theme follows the site
+ * transient (FE-001 §1) and both starting at what the use-case file defines (its `display`, a state's own over it). The theme follows the site
  * header's switch (feedback 08), so it is no setting here.
  */
 import { useState } from 'react';
-import type { PileStyle } from './software-ecology.types';
+import { presetOf } from './factory-run.pure.ts';
+import type { Bundle, PileStyle } from './software-ecology.types';
+import { displayOf } from './start-backlog.pure.ts';
 
 export interface Display {
   readonly beltMotion: boolean;
@@ -13,8 +15,9 @@ export interface Display {
   readonly onPile: (p: PileStyle) => void;
 }
 
-export function useDisplay(): Display {
-  const [beltMotion, onBeltMotion] = useState(false);
-  const [pile, onPile] = useState<PileStyle>('heap');
+/** Starts at what the use-case file defines for the state the page opens on (feedback 09). */
+export function useDisplay(B: Bundle, preset: string): Display {
+  const [beltMotion, onBeltMotion] = useState(() => displayOf(B, presetOf(B, preset)).beltMotion);
+  const [pile, onPile] = useState<PileStyle>(() => displayOf(B, presetOf(B, preset)).pile);
   return { beltMotion, onBeltMotion, pile, onPile };
 }

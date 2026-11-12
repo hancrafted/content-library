@@ -30,7 +30,7 @@ export interface ModelWords {
   readonly better: string;
   readonly note: string;
   readonly reset: string;
-  readonly tips: Readonly<Record<'reality' | 'ai' | 'company' | 'aiq' | 'rework' | 'churn' | 'reset', string>>;
+  readonly tips: Readonly<Record<'reality' | 'ai' | 'company' | 'aiq' | 'reset', string>>;
 }
 
 /** The Settings popover's Display column. */
@@ -38,7 +38,7 @@ export interface DisplayWords {
   readonly beltMotion: string;
   readonly beltMotionNote: string;
   readonly pile: string;
-  readonly pileLabel: string;
+  readonly pileTip: string;
   readonly piles: Readonly<Record<'heap' | 'stack' | 'drift', { readonly name: string; readonly note: string }>>;
 }
 

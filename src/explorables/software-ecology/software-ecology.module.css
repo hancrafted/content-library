@@ -51,7 +51,7 @@
   align-items: center;
   gap: 6px;
 }
-/* the roles state, Ideal and Realistic as one segmented group */
+/* the three steps, Who does what, In theory and In practice, as one segmented group */
 .stateSeg {
   display: inline-flex;
   align-items: center;
@@ -61,12 +61,24 @@
   border-radius: 999px;
   background: var(--card);
 }
+@media (max-width: 480px) {
+  /* a long step name wraps the steps inside their frame rather than running off a phone */
+  .stateSeg {
+    flex-wrap: wrap;
+    max-width: 100%;
+    border-radius: 18px;
+  }
+}
 .stateSeg .state {
   border: 0;
   min-height: 32px;
-  padding: 4px 10px;
+  padding: 4px 6px;
   background: transparent;
   white-space: nowrap;
+}
+/* the step's number, a circled digit before its name */
+.stepNo {
+  margin-right: 4px;
 }
 /* a dial was turned after picking the state */
 .modDot {
@@ -94,7 +106,7 @@
   border: 1px solid var(--border);
   background: var(--card);
   border-radius: 999px;
-  padding: 6px 10px;
+  padding: 6px 8px;
   min-height: 38px;
   white-space: nowrap;
   cursor: pointer;
@@ -131,7 +143,7 @@
   cursor: pointer;
   min-height: 36px;
   min-width: 0;
-  max-width: 10rem;
+  max-width: 8.5rem;
   text-overflow: ellipsis;
   background-image:
     linear-gradient(45deg, transparent 50%, var(--foreground) 50%),
@@ -182,6 +194,11 @@
   padding: 4px 8px;
   font-variant-numeric: tabular-nums;
 }
+/* the time controls sit close together: one row at laptop width */
+.tgroup .tbtn {
+  min-width: 32px;
+  padding: 4px 6px;
+}
 /* a lone toolbar button with its own frame: Settings, and the file buttons */
 .tbtnLine {
   border: 1px solid var(--border);
@@ -193,7 +210,6 @@
 .clock {
   font-variant-numeric: tabular-nums;
   padding: 0 6px;
-  min-width: 6.75rem;
   color: var(--foreground);
   white-space: nowrap;
 }
@@ -241,10 +257,6 @@
   height: 100%;
   transition: opacity 260ms var(--ease);
 }
-/* while the cards morph into stations, the belts stay hidden, then fade in */
-.view[data-morphing='true'] .stage {
-  opacity: 0;
-}
 .view:not([data-view='factory']) .stage {
   display: none;
 }
@@ -279,11 +291,19 @@
   pointer-events: auto;
   display: grid;
   grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr));
-  gap: 14px;
-  align-items: start;
+  /* three lines per card row (head, panel, artefacts): each card is a subgrid over them, so every card in a row has
+     one height, its panel at one y and its artefacts at the bottom */
+  grid-template-rows: repeat(calc(var(--rows, 2) * 3), auto);
+  column-gap: 14px;
+  row-gap: 0;
   z-index: 1;
 }
 @media (max-width: 1000px) {
+  .view:not([data-view='factory']) .floor {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
   .view:not([data-view='factory']) .floor > * {
     grid-column: auto !important;
     grid-row: auto !important;
@@ -373,11 +393,6 @@
   border-bottom: 1px solid var(--fg-12);
   background: var(--card);
   border-radius: 11px 11px 0 0;
-}
-.card[data-kind='role'] .head {
-  margin-left: 50px;
-  border-radius: 0 11px 0 0;
-  border-left: 1px solid var(--fg-12);
 }
 .title {
   line-height: 1.1;
@@ -776,7 +791,7 @@
 .rackSpot {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 28px;
   bottom: 0;
   width: 50px;
 }
@@ -811,8 +826,18 @@
   border-radius: 12px;
   background: var(--card);
   transform-origin: 0 0;
-  cursor: pointer;
   transition: opacity 260ms var(--ease);
+}
+/* in the roles grid a card spans three lines of the floor and lays its head, panel and artefacts on them */
+.view:not([data-view='factory']) .floor > .cartoon {
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: 8px;
+  margin-bottom: 14px;
+  align-content: stretch;
+}
+.artSlot {
+  align-self: end;
 }
 /* a station's rack or sign target, spread over its cartoon card */
 .spotFill {
@@ -856,6 +881,10 @@
 }
 .cartoon .art {
   max-height: 110px;
+}
+.capMark {
+  display: inline-flex;
+  vertical-align: middle;
 }
 .glyMd {
   width: 28px;
@@ -1088,25 +1117,208 @@
   overflow: auto;
   overscroll-behavior: contain;
   z-index: 45;
-  gap: 14px;
+}
+/* the Settings popover (feedback 09): a header, two columns of form fields, and the foot */
+.menuSettings {
+  padding: 0;
+  gap: 0;
+}
+.setHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 10px 20px;
+  border-bottom: 1px solid var(--border);
 }
 .setCols {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-@media (max-width: 760px) {
-  .setCols {
-    grid-template-columns: minmax(0, 1fr);
-  }
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .setCol {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   min-width: 0;
 }
-.setCol .mrow {
+.setCol + .setCol {
+  border-left: 1px solid var(--border);
+}
+.setSec {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 20px 18px;
+}
+.setSec + .setSec {
+  border-top: 1px solid var(--border);
+}
+.setSecHead {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.setFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+}
+.fileRow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+/* below 800 px the columns stack, one rule between them */
+@media (max-width: 800px) {
+  .setCols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .setCol + .setCol {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+}
+
+/* one form field: the label and its (?) help on a line, the control full width beneath */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.fieldHead {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 24px;
+}
+.fieldLabel {
+  color: var(--foreground);
+}
+.fieldEnd {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.helpBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: help;
+  flex: none;
+}
+.helpBtn:hover {
+  color: var(--foreground);
+  background: var(--muted);
+}
+.fslider {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin: 8px 0;
+  border-radius: 999px;
+  background: var(--fg-25);
+  cursor: pointer;
+}
+.fslider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.fslider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--foreground);
+}
+.fslider:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.fswitch {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  flex: none;
+}
+.fswitchTrack {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--fg-45);
+  position: relative;
+  transition: background 160ms;
+}
+.fswitchTrack::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--card);
+  transition: translate 160ms var(--ease);
+  box-shadow: 0 1px 2px var(--fg-25);
+}
+.fswitch[aria-checked='true'] .fswitchTrack {
+  background: var(--foreground);
+}
+.fswitch[aria-checked='true'] .fswitchTrack::after {
+  translate: 16px 0;
+}
+.segFull {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+}
+.segFull button {
+  border: 0;
+  background: transparent;
+  border-radius: 10px;
+  padding: 4px 8px;
+  min-height: 32px;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  text-align: center;
+  line-height: 1.2;
+}
+.segFull button:hover {
+  background: var(--muted);
+  color: var(--foreground);
+}
+.segFull button[aria-pressed='true'] {
+  background: var(--foreground);
+  color: var(--background);
+}
+.segFull[data-tone='ai'] button[aria-pressed='true'] {
+  background: var(--ai);
+  color: var(--card);
+}
+.mrow {
   gap: 4px 8px;
 }
 .setCol .mrow > label,
@@ -1115,17 +1327,6 @@
   flex-basis: 100%;
 }
 
-.setH {
-  color: var(--muted-foreground);
-}
-.mechRow {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.mechRow .mrow {
-  padding-left: 48px;
-}
 .setFoot {
   display: flex;
   flex-wrap: wrap;
@@ -1295,39 +1496,8 @@
 .switch[aria-checked='true'] .switchTrack {
   background: var(--ai);
 }
-.switch[aria-checked='true'] .switchTrack::after,
-.mswitch[aria-checked='true'] .switchTrack::after {
+.switch[aria-checked='true'] .switchTrack::after {
   translate: 14px 0;
-}
-.mswitch {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border: 0;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
-  padding: 6px 4px;
-  border-radius: 8px;
-  min-height: 40px;
-}
-.mswitch:hover {
-  background: var(--muted);
-}
-.mswitch > span:last-child {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.mswitch[aria-checked='true'] .switchTrack {
-  background: var(--foreground);
-}
-.moreOpts {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  border-top: 1px solid var(--border);
-  padding-top: 10px;
 }
 
 /* ---------- a dashboard: a monitor ---------- */
