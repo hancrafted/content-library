@@ -67,3 +67,17 @@ Q224: ok
 16. Bug Spiral beat 6 checks satisfaction `<0.65` (Q221). Clear Requirements beat 1 reads `eng.rework >0.1` in place of `qa.rework` (Q222).
 17. The tuned numbers stand (Q223): quality assurance `aiCatch` 0.1, Operations `stall: { at: 6, slow: 0.4 }`, In practice Engineering catching spec 0.6, bad spec to the Product manager 0.5, bad code to Support 0.5.
 18. A tour's checks on the page use the same 2-week means as the headless judge (Q224).
+
+## Eval round 2 (after `run-02.md` and its review)
+
+Q225: 1
+Q226: ok
+Q227: 1
+Q228: ok
+Q229: ok
+
+19. Clear Requirements beat 1 drops its `eng.rework` check; `ba.rework` and change requests carry the claim (Q225).
+20. Bug Spiral beat 2 reads "massive amounts of code" as twice the pull requests from an engineer who is not faster (`aiSpeed: 1`) (Q226).
+21. A station passes tickets on only once it is drowning: from a threshold of weeks waiting (2, where a pile turns red), so In practice is unchanged (Q227).
+22. The still's settings stand: AI at Engineering from the start at 55 % effectiveness, bad code to Support at 0.9 (Q228).
+23. The agent's beat settings stand: Bug Spiral beat 6 Operations AI 5×; Clear Requirements Operations efficiency 200 %, 9 requests a week, bad specs to the Product manager at 0.85 (Q229).

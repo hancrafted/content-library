@@ -55,8 +55,9 @@ export interface CenterDef {
   /** Once `at` weeks of work wait, it loses the share `slow` of its speed; AI at the station removes the stall. */
   readonly stall?: { readonly at: number; readonly slow: number };
   /**
-   * Pass-on under pressure: the share of its finished tickets it passes to `to` instead of answering rises with its
-   * backlog, by the same pressure term as an inspection's `stampUnderPressure`, up to all of them.
+   * Pass-on under pressure: once it is drowning, from RED weeks of work waiting where its pile turns red, the share of
+   * the tickets it takes up that it passes to `to` unanswered rises by the same pressure term as an inspection's
+   * `stampUnderPressure`, up to all of them; below that it answers every one (grill 11 Q227).
    */
   readonly escalate?: { readonly to: string; readonly underPressure: number };
 }

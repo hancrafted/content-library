@@ -41,7 +41,7 @@ const readAt = (B: Bundle, effective: Record<string, number>, ai: Settings['ai']
   f.step(WEEKS);
   return f.read({ measures: MEASURES }).measures;
 };
-/** Tire swing with Support passing finished tickets on to Engineering under pressure (grill 11 Q220), or not. */
+/** Tire swing with Support passing the tickets it takes up on to Engineering once it drowns (grill 11 Q220, Q227), or not. */
 const escalating = (underPressure?: number): Bundle =>
   changed('support', { escalate: underPressure === undefined ? undefined : { to: 'eng', underPressure } });
 

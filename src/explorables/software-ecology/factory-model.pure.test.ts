@@ -44,7 +44,7 @@ describe('success cases', () => {
   it('gives the same state for the same seed, and the reference build’s hashes after 100 weeks of tire Realistic', () => {
     // ARRANGE
     const weeks = 100;
-    const expected = ['eedc0187', 'eedc0187', '8951cade'];
+    const expected = ['173452ef', '173452ef', '4415a63f'];
     // ACT
     const hashes = [42, 42, 43].map((seed) => {
       const f = realistic(seed);
@@ -60,9 +60,9 @@ describe('success cases', () => {
     const f = realistic();
     const s = f.settings;
     const expected = [
-      { created: 1986, consumed: 1966, backlog: 9, transit: 6, work: 5, gap: 0 },
-      { created: 2641, consumed: 2610, backlog: 24, transit: 4, work: 3, gap: 0 },
-      { created: 3864, consumed: 3804, backlog: 51, transit: 6, work: 3, gap: 0 },
+      { created: 1965, consumed: 1948, backlog: 6, transit: 6, work: 5, gap: 0 },
+      { created: 2594, consumed: 2570, backlog: 18, transit: 3, work: 3, gap: 0 },
+      { created: 3799, consumed: 3753, backlog: 38, transit: 5, work: 3, gap: 0 },
     ];
     // ACT
     f.step(20);
@@ -106,10 +106,10 @@ describe('success cases', () => {
   });
 
   it('moves the bottleneck downstream when tire in practice, AI at Engineering, raises quality assurance to 1000 %', () => {
-    // ARRANGE
+    // ARRANGE: after the raise its flood's bugs drown Support, which passes some on to Engineering (grill 11 Q227)
     const B = builtinBundle('tire');
     const f = createFactory(B, { ...endState(B, 'realistic'), ai: ['eng'], over: { eng: { aiExtra: 2 } } });
-    const expected = { before: { id: 'qa', weeks: '17.2' }, after: { id: 'ops', weeks: '45.7' }, qa: '0.0' };
+    const expected = { before: { id: 'qa', weeks: '16.9' }, after: { id: 'ops', weeks: '43.7' }, qa: '0.0' };
     // ACT
     f.step(30);
     const before = worst(f);

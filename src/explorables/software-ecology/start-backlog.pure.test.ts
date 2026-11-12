@@ -95,6 +95,14 @@ describe('success cases', () => {
   it.each([
     { name: 'Tire swing: AI at quality assurance', id: 'tire', at: 'qa', set: { ai: ['qa'] }, weeks: 2, next: 'ops' },
     {
+      name: 'Tire swing: quality assurance at twice the efficiency',
+      id: 'tire',
+      at: 'qa',
+      set: { dials: { qa: { efficiency: 200 } } },
+      weeks: 3,
+      next: 'ops',
+    },
+    {
       name: 'Gatekeeper lead: AI at the lead reviewer',
       id: 'gate',
       at: 'lrev',
@@ -121,21 +129,6 @@ describe('success cases', () => {
     expect(seen.before).toBeGreaterThan(pile);
     expect(seen.after).toBeLessThan(cleared);
     expect(seen.worst).toBe(c.next);
-  });
-
-  it('at Tire swing, clears quality assurance at twice the efficiency, and its flood’s bugs come back to Engineering', () => {
-    // ARRANGE: the releases it lets through bring bugs to Support, which passes them on under pressure (grill 11 Q220)
-    const B = builtinBundle('tire'),
-      weeks = 3,
-      pile = 2,
-      cleared = 0.5,
-      engineering = 'eng';
-    // ACT
-    const seen = afterSet({ B, at: 'qa', set: { dials: { qa: { efficiency: 200 } } }, weeks });
-    // ASSERT
-    expect(seen.before).toBeGreaterThan(pile);
-    expect(seen.after).toBeLessThan(cleared);
-    expect(seen.worst).toBe(engineering);
   });
 
   it.each([
